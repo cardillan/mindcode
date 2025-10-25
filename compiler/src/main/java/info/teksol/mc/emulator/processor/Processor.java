@@ -506,7 +506,7 @@ public class Processor extends AbstractMessageEmitter {
             }
             condition = logicCondition.evaluate(a, b);
         }
-        MindustryVariable target = getOrCreateVariable(ix.getResult());
+        MindustryVariable target = getOrCreateVariable(ix.getResultValue());
         MindustryVariable value = getExistingVariable(condition ? ix.getTrueValue() : ix.getFalseValue());
         target.assign(value);
         return true;

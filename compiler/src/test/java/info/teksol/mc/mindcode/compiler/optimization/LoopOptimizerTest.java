@@ -85,6 +85,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         .add("Variable 'state' is not initialized.")
                         .add("Variable 'i' is not initialized."),
                 """
+                        #set emulate-strict-not-equal = false;
                         while state === 0 do
                             print(i);
                             state = @unit.@dead;
@@ -97,6 +98,25 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                 createInstruction(PRINT, "i"),
                 createInstruction(SENSOR, "state", "@unit", "@dead"),
                 createInstruction(JUMP, var(1003), "strictEqual", "state", "0")
+        );
+    }
+
+
+    @Test
+    void optimizesWhileLoopStrictEqualTarget8() {
+        assertCompilesTo("""
+                        noinit volatile state, i;
+                        while state === 0 do
+                            print(i);
+                            state = @unit.@dead;
+                        end;
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(JUMP, "__start__", "strictNotEqual", ".state", "0"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(PRINT, ".i"),
+                createInstruction(SENSOR, ".state", "@unit", "@dead"),
+                createInstruction(JUMP, label(3), "strictEqual", ".state", "0")
         );
     }
 
@@ -123,6 +143,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesWhileLoopWithInitializationAndStrictEqual() {
         assertCompilesTo("""
+                        #set emulate-strict-not-equal = false;
                         while @unit.@dead === 0 do
                             print("Got unit!");
                         end;
@@ -135,6 +156,23 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                 createInstruction(PRINT, q("Got unit!")),
                 createInstruction(SENSOR, var(0), "@unit", "@dead"),
                 createInstruction(JUMP, var(1003), "strictEqual", var(0), "0")
+        );
+    }
+
+    @Test
+    void optimizesWhileLoopWithInitializationAndStrictEqualTarget8() {
+        assertCompilesTo("""
+                        while @unit.@dead === 0 do
+                            print("Got unit!");
+                        end;
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                createInstruction(JUMP, "__start__", "strictNotEqual", tmp(0), "0"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(PRINT, q("Got unit!")),
+                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                createInstruction(JUMP, label(3), "strictEqual", tmp(0), "0")
         );
     }
 

@@ -25,6 +25,7 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
     @Test
     void optimizesBreakInWhileLoop() {
         assertCompilesTo("""
+                        #set emulate-strict-not-equal = false;
                         #set dead-code-elimination = advanced;
                         #set single-step-elimination = advanced;
                         #set jump-optimization = advanced;
@@ -44,6 +45,31 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
                 createInstruction(JUMP, var(1002), "strictEqual", var(0), "0"),
                 createInstruction(JUMP, var(1000), "always"),
                 createInstruction(LABEL, var(1002)),
+                createInstruction(PRINT, q("Out of loop"))
+        );
+    }
+
+    @Test
+    void optimizesBreakInWhileLoopTarget8() {
+        assertCompilesTo("""
+                        #set dead-code-elimination = advanced;
+                        #set single-step-elimination = advanced;
+                        #set jump-optimization = advanced;
+                        #set jump-straightening = advanced;
+                        while true do
+                            print("In loop");
+                            if @unit.@dead === 0 then
+                                break;
+                            end;
+                        end;
+                        print("Out of loop");
+                        """,
+                createInstruction(LABEL, label(0)),
+                createInstruction(JUMP, label(2), "equal", "true", "false"),
+                createInstruction(PRINT, q("In loop")),
+                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                createInstruction(JUMP, label(0), "strictNotEqual", tmp(0), "0"),
+                createInstruction(LABEL, label(2)),
                 createInstruction(PRINT, q("Out of loop"))
         );
     }
@@ -88,6 +114,7 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
 
     @Test
     void ignoresStrictEqual() {
+        profile.setEmulateStrictNotEqual(false);
         assertDoesNotOptimize(
                 createInstruction(LABEL, label0),
                 createInstruction(JUMP, label1, Condition.STRICT_EQUAL, a, b),

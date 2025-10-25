@@ -185,11 +185,11 @@ class IfExpressionOptimizer extends BaseOptimizer {
                 replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
                         invertedJump.getCondition(), invertedJump.getX(), invertedJump.getY(),
                         false);
-            } else if (jump.getCondition().hasInverse()) {
+            } else if (jump.getCondition().hasInverse(getGlobalProfile())) {
                 // The compiler inverts the if condition because the jump leads to the false branch
                 // Here we invert it back, so true and false values remain the same
                 replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
-                        jump.getCondition().inverse(), jump.getX(), jump.getY(),
+                        jump.getCondition().inverse(getGlobalProfile()), jump.getX(), jump.getY(),
                         false);
             } else {
                 // The compiler inverts the if condition because the jump leads to the false branch
@@ -301,9 +301,9 @@ class IfExpressionOptimizer extends BaseOptimizer {
                     } else if (falseBranch.realSize() == 1 && !isVolatile(resFalse) && isSafe(trueBranch, updatedResVar)) {
                         moveFalseBranch(condition, trueBranch, falseBranch, jump);
                         swappable = false;
-                    } else if (invertedJump == null && trueBranch.realSize() == 1 && jump.getCondition().hasInverse()
+                    } else if (invertedJump == null && trueBranch.realSize() == 1 && jump.getCondition().hasInverse(getGlobalProfile())
                                && !isVolatile(resTrue) && isSafe(falseBranch, updatedResVar)) {
-                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
+                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(getGlobalProfile()), false);
                         swappable = false;
                     }
                 }
@@ -385,12 +385,12 @@ class IfExpressionOptimizer extends BaseOptimizer {
     private @Nullable JumpInstruction negateCompoundCondition(LogicList condition) {
         if (condition.getFromEnd(0) instanceof JumpInstruction jump
             && condition.getFromEnd(1) instanceof OpInstruction op
-            && op.getOperation().isCondition() && op.getResult().isTemporaryVariable()
+            && op.getOperation().isCondition(getGlobalProfile()) && op.getResult().isTemporaryVariable()
             && jump.getCondition() == Condition.EQUAL && jump.getX().equals(op.getResult())
             && jump.getY().equals(LogicBoolean.FALSE)
             && instructionCount(ix -> ix.usesAsInput(op.getResult())) == 1) {
 
-            return createJump(jump.getAstContext(), jump.getTarget(), op.getOperation().toExistingCondition(), op.getX(), op.getY());
+            return createJump(jump.getAstContext(), jump.getTarget(), op.getOperation().toExistingCondition(getGlobalProfile()), op.getX(), op.getY());
         } else {
             return null;
         }

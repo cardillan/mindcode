@@ -52,11 +52,12 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     }
 
 
-    protected void assertOptimizesTo(List<LogicInstruction> instructions, List<LogicInstruction> expected, ExpectedMessages expectedMessages) {
+    protected void assertOptimizesTo(CompilerProfile compilerProfile, List<LogicInstruction> instructions,
+            List<LogicInstruction> expected, ExpectedMessages expectedMessages) {
         // This method cannot be used to test optimizers that rely on AST context structure, because
         // at this moment the AST context is not built for manually created instructions
         List<MindcodeMessage> messages = new ArrayList<>();
-        new MindcodeCompiler(messages::add, createCompilerProfile(), InputFiles.create());
+        new MindcodeCompiler(messages::add, compilerProfile, InputFiles.create());
         List<LogicInstruction> actual = optimizeInstructions(messages::add, instructions);
         assertAll(
                 () -> evaluateResults(expected, actual, messages),
@@ -65,12 +66,17 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     }
 
     protected void assertOptimizesTo(List<LogicInstruction> instructions, List<LogicInstruction> expected) {
-        assertOptimizesTo(instructions, expected, expectedMessages());
+        assertOptimizesTo(createCompilerProfile(), instructions, expected, expectedMessages());
+    }
+
+    protected void assertDoesNotOptimize(CompilerProfile compilerProfile, LogicInstruction... instructions) {
+        List<LogicInstruction> list = List.of(instructions);
+        assertOptimizesTo(compilerProfile, list, list, expectedMessages());
     }
 
     protected void assertDoesNotOptimize(LogicInstruction... instructions) {
         List<LogicInstruction> list = List.of(instructions);
-        assertOptimizesTo(list, list, expectedMessages());
+        assertOptimizesTo(createCompilerProfile(), list, list, expectedMessages());
     }
 
     protected OptimizationCoordinator createMindcodeOptimizer(MessageConsumer messageConsumer) {

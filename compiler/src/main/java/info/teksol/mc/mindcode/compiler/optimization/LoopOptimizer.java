@@ -96,22 +96,22 @@ class LoopOptimizer extends BaseOptimizer {
             final BiFunction<AstContext, LogicLabel, JumpInstruction> newJumpCreator;
 
             if (condition.getFromEnd(1) instanceof OpInstruction op
-                    && op.getOperation().isCondition() && op.getResult().isTemporaryVariable()
+                    && op.getOperation().isCondition(getGlobalProfile()) && op.getResult().isTemporaryVariable()
                     && jump.getCondition() == Condition.EQUAL && jump.getX().equals(op.getResult())
                     && jump.getY().equals(LogicBoolean.FALSE)) {
 
                 // This is an inverse jump
                 conditionEvaluation = condition.subList(1, condition.size() - 2); // Remove the op as well
                 newJumpCreator = (astContext, target) -> createJump(astContext, target,
-                        op.getOperation().toExistingCondition(), op.getX(), op.getY());
+                        op.getOperation().toExistingCondition(getGlobalProfile()), op.getX(), op.getY());
             } else {
-                if (!jump.getCondition().hasInverse()) {
+                if (!jump.getCondition().hasInverse(getGlobalProfile())) {
                     // Inverting the condition wouldn't save execution time
                     return null;
                 }
                 conditionEvaluation = condition.subList(1, condition.size() - 1);
                 newJumpCreator = (astContext, target) -> createJump(astContext, target,
-                        jump.getCondition().inverse(), jump.getX(), jump.getY());
+                        jump.getCondition().inverse(getGlobalProfile()), jump.getX(), jump.getY());
             }
 
             int cost = conditionEvaluation.realSize();

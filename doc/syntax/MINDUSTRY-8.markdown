@@ -119,7 +119,7 @@ myPrintNumber(floor(rand(100000)));
 
 Note: `formatNumber` and `printNumber` functions, identical to those above, are part of the [system library](SYSTEM-LIBRARY.markdown).
 
-### Print merging optimization
+#### Print merging optimization
 
 The [Print Merging optimization](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging) was enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language targets earlier than `8` compiles into
 
@@ -213,7 +213,19 @@ To make using the `printchar()` function easier, [character literals](SYNTAX.mar
 
 Since the **v8 Build 150 Beta** pre-release, Mindustry supports the `select` instruction facilitating conditional assignments.
 
-Mindcode doesn't provide direct access to the select instruction, but optimizes conditional expressions [to use the `select` instruction](SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) when possible. Using the ternary operator with simple values (`variable = condition ? trueValue : falseValue`) in Mindcode typically results in the `select` instruction being used.  
+> [!NOTE]
+> The Mindcode target which supports the `select` instruction is `8.1`.
+
+Mindcode doesn't provide direct access to the select instruction, but optimizes conditional expressions [to use the `select` instruction](SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) when possible. Using the ternary operator with simple values (`variable = condition ? trueValue : falseValue`) in Mindcode typically results in the `select` instruction being used.
+
+### Implementing strict nonequality using `select`
+
+The `strictNotEqual` condition is supported neither in the `op`, nor in the `jump` instructions, and prior to the `select` instruction, this condition needs to be evaluated in two instructions. The `select` instruction allows to simplify it:
+
+* `op strictNotEqual resul a b` can be expressed as `select result strictEqual a b false true`.
+* `jump target strictNotEqual resul a b` can be expressed as `select @counter strictEqual a b @counter target`.
+
+The `jump strictNotEqual` instruction can't be emulated using a `select` instruction when [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) are used, as symbolic label can't be used with the `select` instruction. Furthermore, it is possible to deactivate this mechanism using the [`emulate-strict-not-equal` option](SYNTAX-5-OTHER.markdown#option-emulate-strict-not-equal).
 
 ## `read` and `write` enhancements
 
@@ -305,7 +317,7 @@ Figuring out the correct transformations isn't always easy. Issuing incorrect on
 
 ## Other standard processor instructions
 
-Note: these new instructions map either to functions or to operators. When compiling for Mindustry 7, the new operators are available by default, and the new functions are available through system libraries `graphics` and `math`, implemented in a backwards compatible way. This way you can start using these operators and functions when compiling for Mindustry 7 and seamlessly transition to Mindustry 8 without having to update your code. 
+Note: these new instructions map either to functions or to operators. When compiling for Mindustry 7, the new operators are available by default, and the new functions are available through system libraries `graphics` and `math`, implemented in a backwards compatible way. When the function is provided by the target processor, it is used instead of the library implementation. This way you can start using these operators and functions when compiling for Mindustry 7 and seamlessly transition to Mindustry 8 without having to update your code. 
 
 ### `unpackcolor`
 
@@ -313,11 +325,13 @@ Reverses the `packcolor` instruction. Prior to version 8, the same operation may
 
 ### `op emod`
 
-Positive modulo: like modulo, except when the divisor is positive and the dividend is negative, still returns a positive number. The instruction is mapped to the `%%` operator.
+Positive modulo: like modulo, except when the divisor is positive and the dividend is negative, still returns a positive number. The instruction is mapped to the [`%%` operator](SYNTAX-2-EXPRESSIONS.markdown#multiplicative-operators). Prior to version 8, the operator is emulated using available instructions.
 
 ### `op ushr`
 
 Unsigned right-shift operator. The difference between the signed (`>>`) and unsigned (`>>>`) right shift operators concerns negative numbers: the signed operator copies the value of the leftmost bit (the sign bit) to lower bits when shifting, while the unsigned operator shifts in zeroes.
+
+The instruction is mapped to the [`>>>` operator](SYNTAX-2-EXPRESSIONS.markdown#shift-operators). Prior to version 8, the operator is emulated using available instructions.
 
 ### `op logn`
 

@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -12,6 +13,7 @@ public enum Condition implements LogicArgument {
     GREATER_THAN    ( "greaterThan",   ">",      false),
     GREATER_THAN_EQ ( "greaterThanEq", ">=",     false),
     STRICT_EQUAL    ( "strictEqual",   "===",    true),
+    STRICT_NOT_EQUAL( "strictNotEqual","!==",    true),
     ALWAYS          ( "always",        "always", false);
 
 
@@ -44,15 +46,15 @@ public enum Condition implements LogicArgument {
         return mindcode;
     }
 
-    public boolean hasInverse() {
-        return this != ALWAYS && this != STRICT_EQUAL;
+    public boolean hasInverse(GlobalCompilerProfile profile) {
+        return ordinal() < (profile.useEmulatedStrictNotEqual() ? ALWAYS.ordinal() : STRICT_EQUAL.ordinal());
     }
 
     public boolean isEquality() {
         return equality;
     }
 
-    public Condition inverse() {
+    public Condition inverse(GlobalCompilerProfile profile) {
         return switch (this) {
             case EQUAL -> NOT_EQUAL;
             case NOT_EQUAL -> EQUAL;
@@ -60,8 +62,15 @@ public enum Condition implements LogicArgument {
             case GREATER_THAN_EQ -> LESS_THAN;
             case LESS_THAN_EQ -> GREATER_THAN;
             case GREATER_THAN -> LESS_THAN_EQ;
+            case STRICT_EQUAL -> requireSelect(profile, STRICT_NOT_EQUAL);
+            case STRICT_NOT_EQUAL -> requireSelect(profile, STRICT_EQUAL);
             default -> throw new MindcodeInternalError(this + " has no inverse.");
         };
+    }
+
+    private Condition requireSelect(GlobalCompilerProfile profile, Condition condition) {
+        if (profile.useEmulatedStrictNotEqual()) return condition;
+        throw new MindcodeInternalError(this + " has no inverse.");
     }
 
     public Operation toOperation() {
@@ -73,6 +82,7 @@ public enum Condition implements LogicArgument {
             case GREATER_THAN -> Operation.GREATER_THAN;
             case GREATER_THAN_EQ -> Operation.GREATER_THAN_EQ;
             case STRICT_EQUAL -> Operation.STRICT_EQUAL;
+            case STRICT_NOT_EQUAL -> Operation.STRICT_NOT_EQUAL;
             case ALWAYS -> throw new MindcodeInternalError("No operation for 'always'");
         };
     }

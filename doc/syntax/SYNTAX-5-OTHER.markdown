@@ -425,6 +425,38 @@ Activates/deactivates automatic flushing of print output. Possible values are:
 
 This feature is meant for small, test scripts, where a call to `printflush()` is easily missed. This situation would otherwise require new compilation and code injection into the mlog processor when detected.
 
+### Option `emulate-strict-not-equal`
+
+**Option scope: [global](#global-scope)**
+
+Allows or disallows using the `select` instruction to emulate a `jump strictNotEqual` instruction.
+
+* `false`: the `select` instruction won't be used to emulate an unsupported `jump` instruction.
+* `true` (the default value): when possible, a `select` instruction can be used to emulate an unsupported `jump` instruction.
+
+Example:
+
+```Mindcode
+#set target = 8;
+
+while @unit.@dead === 1 do
+    ubind(@mono);
+end;
+
+print("Found!");
+```
+
+compiles to
+
+```
+sensor *tmp0 @unit @dead
+select @counter strictEqual *tmp0 1 @counter 5
+ubind @mono
+sensor *tmp0 @unit @dead
+jump 2 strictEqual *tmp0 1
+print "Found!"
+```
+
 ### Option `boundary-checks`
 
 **Option scope: [local](#local-scope)**

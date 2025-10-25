@@ -52,6 +52,8 @@ class MindustryOpcodeVariantsTest {
 
         // Test that there aren't unknown instruction opcodes
         for (OpcodeVariant variant : variants) {
+            if (variant.virtual()) continue;
+
             String keyword = variant.namedParameters().get(index).name();
             if (!keywords.contains(keyword) && !keywords.contains("@" + keyword)) {
                 errors.add("Unknown opcode variant for processor version " + processorVersion + ", opcode '" + opcode.opcode() + "' and selector '" + keyword + "'");

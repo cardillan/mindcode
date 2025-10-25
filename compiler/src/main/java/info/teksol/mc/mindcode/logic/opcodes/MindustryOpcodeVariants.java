@@ -37,6 +37,11 @@ public class MindustryOpcodeVariants {
         variants.add(new OpcodeVariant(versionFrom, versionTo, edition, functionMapping, opcode, arguments));
     }
 
+    private void virtual(List<OpcodeVariant> variants, ProcessorVersion versionFrom, ProcessorVersion versionTo,
+            ProcessorEdition edition, FunctionMapping functionMapping, Opcode opcode, NamedParameter... arguments) {
+        variants.add(OpcodeVariant.virtual(versionFrom, versionTo, edition, functionMapping, opcode, arguments));
+    }
+
     private List<OpcodeVariant> initialize() {
         List<OpcodeVariant> list = new ArrayList<>();
         add(list, V6,  MAX, S, NONE, Opcode.NOOP);
@@ -102,6 +107,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("greaterThan"),  res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("greaterThanEq"),res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("strictEqual"),  res("result"),  in("a"), in("b"));
+    virtual(list, V8B, MAX, S, NONE, Opcode.OP,       op("strictNotEqual"), res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("shl"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("shr"),          res("result"),  in("a"), in("b"));
         add(list, V8B, MAX, S, NONE, Opcode.OP,         op("ushr"),         res("result"),  in("a"), in("b"));
@@ -158,6 +164,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.JUMP,       label("label"), cond("greaterThan"),   in("x"), in("y"));
         add(list, V6,  MAX, S, NONE, Opcode.JUMP,       label("label"), cond("greaterThanEq"), in("x"), in("y"));
         add(list, V6,  MAX, S, NONE, Opcode.JUMP,       label("label"), cond("strictEqual"),   in("x"), in("y"));
+    virtual(list, V8B, MAX, S, NONE, Opcode.JUMP,       label("label"), cond("strictNotEqual"),in("x"), in("y"));
         add(list, V6,  MAX, S, NONE, Opcode.JUMP,       label("label"), cond("always"));
 
         add(list, V6,  MAX, S, FUNC, Opcode.UBIND,      unit("type"));

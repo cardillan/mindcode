@@ -287,7 +287,7 @@ prints `-1` and `15`.
 Notes on the unsigned right-shift operator (`>>>`):
 
 * The operator is natively supported in Mindustry Logic 8 or higher. For targets preceding `8`, the operator is compiled into a sequence of up to seven instructions.
-* Right-shifting a negative number by at least one will produce a positive number. It is possible that the positive number will be outside the safe integer range, even though the original number was initially within the safe integer range. Example:
+* Right-shifting a negative number using the unsinged operator will produce a positive number. It is possible that the positive number will be outside the safe integer range, even though the original number was initially within the safe integer range. Example:
 
 ```Mindcode
 require printing;
@@ -307,7 +307,7 @@ FFFFFFFFFFFFFFFF
 4000000000000000
 ```
 
-The exact result, without precision loss, would be `7FFFFFFFFFFFFFFF` and `3FFFFFFFFFFFFFFF` respectively. In the first case, only the lower bits are affected. In the second case, the double conversion, while introducing a small difference in terms of absolute value, changes the binary representation dramatically. 
+The exact result, without precision loss, would be `7FFFFFFFFFFFFFFF` and `3FFFFFFFFFFFFFFF` respectively. In the first case, no precision loss occurs. In the second case, the double conversion, while introducing a small difference in terms of absolute value, changes the binary representation dramatically. 
 
 ## Bitwise AND, OR, XOR operators
 

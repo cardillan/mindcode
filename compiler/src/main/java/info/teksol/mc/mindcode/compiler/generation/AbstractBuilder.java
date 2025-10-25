@@ -17,6 +17,7 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
@@ -45,6 +46,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     private final CodeGenerator codeGenerator;
 
     protected final CodeGeneratorContext context;
+    protected final GlobalCompilerProfile globalProfile;
     protected final InstructionProcessor processor;
     protected final NameCreator nameCreator;
     protected final MindustryMetadata metadata;
@@ -59,6 +61,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         this.codeGenerator = codeGenerator;
         this.context = context;
 
+        globalProfile = context.globalCompilerProfile();
         processor = context.instructionProcessor();
         nameCreator = context.nameCreator();
         metadata = context.metadata();
@@ -74,6 +77,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         this.codeGenerator = builder.codeGenerator;
         this.context = builder.context;
 
+        globalProfile = context.globalCompilerProfile();
         processor = context.instructionProcessor();
         nameCreator = context.nameCreator();
         metadata = context.metadata();
@@ -265,7 +269,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     }
 
     protected Condition outsideRangeCondition(AstRange range) {
-        return insideRangeCondition(range).inverse();
+        return insideRangeCondition(range).inverse(globalProfile);
     }
 
     protected LogicVariable createOperation(AstMindcodeNode node, Operation operation, LogicVariable tmp, LogicValue left, LogicValue right) {

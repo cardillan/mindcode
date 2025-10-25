@@ -100,6 +100,7 @@ public class ExpressionEvaluator {
         map.put(Operation.GREATER_THAN,     (r, a, b) -> r.setBooleanValue(a.getDoubleValue() > b.getDoubleValue()));
         map.put(Operation.GREATER_THAN_EQ,  (r, a, b) -> r.setBooleanValue(a.getDoubleValue() >= b.getDoubleValue()));
         map.put(Operation.STRICT_EQUAL,     (r, a, b) -> r.setBooleanValue(strictlyEquals(a, b)));
+        map.put(Operation.STRICT_NOT_EQUAL, (r, a, b) -> r.setBooleanValue(!strictlyEquals(a, b)));
 
         map.put(Operation.SHL,              (r, a, b) -> r.setLongValue(a.getLongValue() <<  b.getLongValue()));
         map.put(Operation.SHR,              (r, a, b) -> r.setLongValue(a.getLongValue() >>  b.getLongValue()));

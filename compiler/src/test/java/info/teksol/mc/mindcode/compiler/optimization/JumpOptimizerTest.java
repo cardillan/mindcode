@@ -96,6 +96,7 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
     @Test
     void preservesStrictEqualConditions() {
         assertCompilesTo("""
+                        #set emulate-strict-not-equal = false;
                         #set dead-code-elimination = advanced;
                         #set temp-variables-elimination = advanced;
                         if @unit.@dead === 0 then
@@ -113,6 +114,24 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
         );
     }
 
+
+    @Test
+    void OptimizesStrictEqualConditionsInTarget8() {
+        assertCompilesTo("""
+                        #set dead-code-elimination = advanced;
+                        #set temp-variables-elimination = advanced;
+                        if @unit.@dead === 0 then
+                            print(alive);
+                        end;
+                        """,
+                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                createInstruction(JUMP, label(0), "strictNotEqual", tmp(0), "0"),
+                createInstruction(PRINT, ":alive"),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(LABEL, label(1))
+        );
+    }
 
     @Test
     void optimizesMinimalSequence() {
@@ -157,6 +176,7 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
 
     @Test
     void ignoresWrongConditions() {
+        profile.setEmulateStrictNotEqual(false);
         assertDoesNotOptimize(
                 createInstruction(OP, Operation.STRICT_EQUAL, tmp0, a, b),
                 createInstruction(JUMP, label0, Condition.EQUAL, tmp0, LogicBoolean.FALSE),

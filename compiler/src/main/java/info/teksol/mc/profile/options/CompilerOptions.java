@@ -6,6 +6,7 @@ import org.jspecify.annotations.NullMarked;
 public enum CompilerOptions {
     AUTO_PRINTFLUSH,
     BOUNDARY_CHECKS,
+    EMULATE_STRICT_NOT_EQUAL,
     REMARKS,
     SYNTAX,
     TARGET_GUARD,

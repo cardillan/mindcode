@@ -13,7 +13,7 @@ import java.util.List;
 
 @NullMarked
 public class BaseResultInstruction extends BaseInstruction implements LogicResultInstruction {
-    private final int resultIndex;
+    protected final int resultIndex;
 
     BaseResultInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, opcode, args, params);

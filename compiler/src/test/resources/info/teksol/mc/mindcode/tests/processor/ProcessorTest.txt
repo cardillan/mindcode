@@ -1,7 +1,7 @@
 Name                                     Instructions    Steps   Coverage   Source CRC         Compiled CRC    
 assignments-in-expressions.mnd:                    13       13     100.0%   3E55A40DD17DEC43   E4D6FFC453A390B8
 complex-case-expression.mnd:                       49      295      97.9%   E6AA465B5328A02F   02434E9DEBAA37FD
-equality-comparisons.mnd:                          69       69     100.0%   16DB5681427420C5   1BAC94646F7A9ADC
+equality-comparisons.mnd:                          69       69     100.0%   16DB5681427420C5   EF9FA7BAE0428CEF
 executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   DA836CDEF7D4597E
 expression-evaluation-compile-time.mnd:            79       79     100.0%   1CFFE222D3784C4B   754F69281A12ADE7
 expression-evaluation-runtime.mnd:                168      168     100.0%   1DA9B18201BEBB8A   FF8F337FAC1995A1

@@ -160,6 +160,12 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 RuntimeChecks.NONE));
 
+        list.add(new BooleanCompilerOptionValue(CompilerOptions.EMULATE_STRICT_NOT_EQUAL, "",
+                "use the 'select' instruction to emulate jump with the !== (strict not equal) condition",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
         list.add(new EnumCompilerOptionValue<>(CompilerOptions.REMARKS, "r",
                 "controls remarks propagation to the compiled code: none (remarks are removed), " +
                 "comments (included as mlog comments), passive (included as 'print' but not not executed), or " +

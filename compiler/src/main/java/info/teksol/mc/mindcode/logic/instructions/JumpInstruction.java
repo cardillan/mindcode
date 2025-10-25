@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -50,14 +51,14 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
                 : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getArgumentTypes()).copyInfo(this);
     }
 
-    public JumpInstruction invert() {
-        if (!isInvertible()) {
+    public JumpInstruction invert(GlobalCompilerProfile profile) {
+        if (!isInvertible(profile)) {
             throw new MindcodeInternalError("Jump is not invertible. " + this);
         }
 
         assert getArgumentTypes() != null;
         return new JumpInstruction(getAstContext(),
-                List.of(getTarget(), getCondition().inverse(), getX(), getY()), getArgumentTypes()).copyInfo(this);
+                List.of(getTarget(), getCondition().inverse(profile), getX(), getY()), getArgumentTypes()).copyInfo(this);
     }
 
     @Override
@@ -65,8 +66,8 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
         return isUnconditional();
     }
 
-    public boolean isInvertible() {
-        return getCondition().hasInverse();
+    public boolean isInvertible(GlobalCompilerProfile profile) {
+        return getCondition().hasInverse(profile);
     }
 
     public final LogicLabel getTarget() {

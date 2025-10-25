@@ -159,7 +159,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.TRUE));
                             return;
                         }
-                        case NOT_EQUAL, LESS_THAN, GREATER_THAN -> {
+                        case NOT_EQUAL, STRICT_NOT_EQUAL, LESS_THAN, GREATER_THAN -> {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.FALSE));
                             return;
                         }

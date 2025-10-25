@@ -46,7 +46,7 @@ class JumpStraightening extends BaseOptimizer {
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 if (iterator.next() instanceof JumpInstruction jump
-                        && jump.getCondition().hasInverse()
+                        && jump.getCondition().hasInverse(getGlobalProfile())
                         && iterator.hasNext() && iterator.peek(0) instanceof JumpInstruction next
                         && next.isUnconditional()) {
 
@@ -57,7 +57,7 @@ class JumpStraightening extends BaseOptimizer {
                                 LogicInstruction instruction = inner.next();
                                 if (instruction instanceof LabelInstruction label) {
                                     if (label.getLabel().equals(jump.getTarget())) {
-                                        iterator.set(jump.invert().withTarget(next.getTarget()));
+                                        iterator.set(jump.invert(getGlobalProfile()).withTarget(next.getTarget()));
                                         AstContext astContext = iterator.next().getAstContext();
                                         iterator.set(createEmpty(astContext));
                                         break;

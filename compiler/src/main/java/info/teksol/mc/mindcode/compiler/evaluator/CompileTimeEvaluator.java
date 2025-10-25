@@ -154,7 +154,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                 ExpressionValue left = ExpressionValue.create(builtinEvaluation, processor, evaluateNode(node.getLeft(), local));
                 ExpressionValue right = ExpressionValue.create(builtinEvaluation, processor, evaluateNode(node.getRight(), local));
                 if (left.isString() || right.isString()) {
-                    if (operation.isCondition()) {
+                    if (operation.isCompileTimeCondition()) {
                         if (left.isString() && right.isString()) {
                             Result result = new Result();
                             eval.execute(result, left, right);

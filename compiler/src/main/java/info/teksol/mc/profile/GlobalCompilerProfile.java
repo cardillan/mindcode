@@ -82,6 +82,12 @@ public interface GlobalCompilerProfile {
         return getBooleanValue(CompilerOptions.AUTO_PRINTFLUSH);
     }
 
+    default boolean isEmulateStrictNotEqual() {
+        return getBooleanValue(CompilerOptions.EMULATE_STRICT_NOT_EQUAL);
+    }
+
+    boolean useEmulatedStrictNotEqual();
+
     SyntacticMode getSyntacticMode();
 
     default boolean isTargetGuard() {

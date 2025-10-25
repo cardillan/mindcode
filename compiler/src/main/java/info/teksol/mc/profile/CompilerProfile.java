@@ -128,6 +128,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return webApplication ? 1000 : 10_000;
     }
 
+    @Override
     public boolean useTextJumpTables() {
         return isTextJumpTables() && !isSymbolicLabels() && getProcessorVersion().atLeast(ProcessorVersion.V8A);
     }
@@ -243,6 +244,15 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     public CompilerProfile setBoundaryChecks(RuntimeChecks boundaryChecks) {
         getOption(CompilerOptions.BOUNDARY_CHECKS).setValue(boundaryChecks);
         return this;
+    }
+
+    public CompilerProfile setEmulateStrictNotEqual(boolean emulateStrictNotEqual) {
+        getOption(CompilerOptions.EMULATE_STRICT_NOT_EQUAL).setValue(emulateStrictNotEqual);
+        return this;
+    }
+
+    public boolean useEmulatedStrictNotEqual() {
+        return isEmulateStrictNotEqual() && getProcessorVersion().atLeast(ProcessorVersion.V8B) && !isSymbolicLabels();
     }
 
     public CompilerProfile setRemarks(Remarks remarks) {

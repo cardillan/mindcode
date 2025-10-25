@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.logic.arguments;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -19,7 +20,7 @@ public enum Operation implements LogicArgument {
     GREATER_THAN    (2, true, "greaterThan",   MindcodeLexer.GREATER_THAN),
     GREATER_THAN_EQ (2, true, "greaterThanEq", MindcodeLexer.GREATER_THAN_EQUAL),
     STRICT_EQUAL    (2, true, "strictEqual",   MindcodeLexer.STRICT_EQUAL),
-    STRICT_NOT_EQUAL(2, true, null,            MindcodeLexer.STRICT_NOT_EQUAL, null),
+    STRICT_NOT_EQUAL(2, true, "strictNotEqual",MindcodeLexer.STRICT_NOT_EQUAL, ProcessorVersion.V8B),
 
     ADD             (2, true, "add",  MindcodeLexer.PLUS),
     SUB             (2, true, "sub",  MindcodeLexer.MINUS),
@@ -161,8 +162,12 @@ public enum Operation implements LogicArgument {
         return function;
     }
 
-    public boolean isCondition() {
-        return ordinal() <= STRICT_EQUAL.ordinal();
+    public boolean isCompileTimeCondition() {
+        return ordinal() <= STRICT_NOT_EQUAL.ordinal();
+    }
+
+    public boolean isCondition(GlobalCompilerProfile profile) {
+        return ordinal() <= STRICT_EQUAL.ordinal() || this == STRICT_NOT_EQUAL && profile.useEmulatedStrictNotEqual();
     }
 
     public boolean isDeterministic() {
@@ -178,13 +183,13 @@ public enum Operation implements LogicArgument {
 
     public boolean isCommutative() {
         return switch(this) {
-            case EQUAL, NOT_EQUAL, STRICT_EQUAL, BITWISE_AND, BITWISE_OR, BOOLEAN_AND, BOOLEAN_OR, LOGICAL_AND, LOGICAL_OR, ADD, MUL,
-                 BITWISE_XOR, MIN, MAX -> true;
+            case EQUAL, NOT_EQUAL, STRICT_EQUAL, STRICT_NOT_EQUAL, BITWISE_AND, BITWISE_OR, BOOLEAN_AND, BOOLEAN_OR,
+                 LOGICAL_AND, LOGICAL_OR, ADD, MUL, BITWISE_XOR, MIN, MAX -> true;
             default -> false;
         };
     }
 
-    public @Nullable Condition toCondition() {
+    public @Nullable Condition toCondition(GlobalCompilerProfile profile) {
         return switch (this) {
             case EQUAL -> Condition.EQUAL;
             case NOT_EQUAL -> Condition.NOT_EQUAL;
@@ -193,19 +198,20 @@ public enum Operation implements LogicArgument {
             case GREATER_THAN -> Condition.GREATER_THAN;
             case GREATER_THAN_EQ -> Condition.GREATER_THAN_EQ;
             case STRICT_EQUAL -> Condition.STRICT_EQUAL;
+            case STRICT_NOT_EQUAL -> profile.useEmulatedStrictNotEqual() ? Condition.STRICT_NOT_EQUAL : null;
             default -> null;
         };
     }
 
-    public Condition toExistingCondition() {
-        return Objects.requireNonNull(toCondition(), "Operation " + this + " is not a condition");
+    public Condition toExistingCondition(GlobalCompilerProfile profile) {
+        return Objects.requireNonNull(toCondition(profile), "Operation " + this + " is not a condition");
     }
 
-    public boolean hasInverse() {
-        return ordinal() < STRICT_EQUAL.ordinal();
+    public boolean hasInverse(GlobalCompilerProfile profile) {
+        return ordinal() < STRICT_EQUAL.ordinal() || (ordinal() <= STRICT_NOT_EQUAL.ordinal() && profile.useEmulatedStrictNotEqual());
     }
 
-    public Operation inverse() {
+    public Operation inverse(GlobalCompilerProfile profile) {
         return switch (this) {
             case EQUAL -> NOT_EQUAL;
             case NOT_EQUAL -> EQUAL;
@@ -213,8 +219,15 @@ public enum Operation implements LogicArgument {
             case GREATER_THAN_EQ -> LESS_THAN;
             case LESS_THAN_EQ -> GREATER_THAN;
             case GREATER_THAN -> LESS_THAN_EQ;
+            case STRICT_EQUAL -> requireSelect(profile, STRICT_NOT_EQUAL);
+            case STRICT_NOT_EQUAL -> requireSelect(profile, STRICT_EQUAL);
             default -> throw new MindcodeInternalError(this + " has no inverse.");
         };
+    }
+
+    private Operation requireSelect(GlobalCompilerProfile profile, Operation operation) {
+        if (profile.getProcessorVersion().atLeast(ProcessorVersion.V8B)) return operation;
+        throw new MindcodeInternalError(this + " has no inverse.");
     }
 
     public @Nullable Operation swapped() {

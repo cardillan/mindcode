@@ -107,8 +107,9 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void compilesEqualities() {
+        void compilesEqualitiesInTarget7() {
             assertCompilesTo("""
+                            #set target = 7;
                             a == b;
                             c != d;
                             e === f;
@@ -119,6 +120,21 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(OP, "strictEqual", var(2), "e", "f"),
                     createInstruction(OP, "strictEqual", var(4), "g", "h"),
                     createInstruction(OP, "equal", var(3), var(4), "false")
+            );
+        }
+
+        @Test
+        void compilesEqualitiesInTarget8() {
+            assertCompilesTo("""
+                            a == b;
+                            c != d;
+                            e === f;
+                            g !== h;
+                            """,
+                    createInstruction(OP, "equal", tmp(0), ":a", ":b"),
+                    createInstruction(OP, "notEqual", tmp(1), ":c", ":d"),
+                    createInstruction(OP, "strictEqual", tmp(2), ":e", ":f"),
+                    createInstruction(OP, "strictNotEqual", tmp(3), ":g", ":h")
             );
         }
 
@@ -147,7 +163,7 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(OP, "and", tmp(0), tmp(0), "0x7FFFFFFFFFFFFFFF"),
                     createInstruction(OP, "sub", tmp(1), tmp(1), "1"),
                     createInstruction(OP, "shr", tmp(0), tmp(0), tmp(1)),
-                    createInstruction(LABEL, label(0))            );
+                    createInstruction(LABEL, label(0)));
         }
     }
 

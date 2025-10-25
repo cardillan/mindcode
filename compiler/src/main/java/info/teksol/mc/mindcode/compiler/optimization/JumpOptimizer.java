@@ -61,11 +61,11 @@ class JumpOptimizer extends BaseOptimizer {
                     // Not exactly two instructions
                     if (list.size() == 2 || identicalInstructions(list, lastOp, jump)) {
                         Operation operation = jump.getCondition() == Condition.EQUAL
-                                ? lastOp.getOperation().hasInverse() ? lastOp.getOperation().inverse() : null
-                                : lastOp.getOperation().toCondition() != null ? lastOp.getOperation() : null;
+                                ? lastOp.getOperation().hasInverse(getGlobalProfile()) ? lastOp.getOperation().inverse(getGlobalProfile()) : null
+                                : lastOp.getOperation().toCondition(getGlobalProfile()) != null ? lastOp.getOperation() : null;
 
                         if (operation != null) {
-                            iterator.set(createJump(jump.getAstContext(), jump.getTarget(), operation.toExistingCondition(),
+                            iterator.set(createJump(jump.getAstContext(), jump.getTarget(), operation.toExistingCondition(getGlobalProfile()),
                                     lastOp.getX(), lastOp.getY()));
                             removeInstruction(lastOpIndex);
                         }

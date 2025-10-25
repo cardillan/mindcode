@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.arguments.Operation.ADD;
+import static info.teksol.mc.mindcode.logic.arguments.Operation.STRICT_NOT_EQUAL;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 import static info.teksol.mc.util.CollectionUtils.indexOf;
 
@@ -253,8 +254,20 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
 
         switch (instruction) {
             case EmptyInstruction ix -> { }
+            case JumpInstruction ix -> {
+                consumer.accept(ix.getCondition() == Condition.STRICT_NOT_EQUAL
+                        ? createSelect(astContext, LogicBuiltIn.COUNTER, Condition.STRICT_EQUAL,
+                        ix.getX(), ix.getY(), LogicBuiltIn.COUNTER, ix.getTarget())
+                        : ix);
+            }
             case MultiLabelInstruction ix -> { }
             case LabelInstruction ix -> { }
+            case OpInstruction ix -> {
+                consumer.accept(ix.getOperation() == STRICT_NOT_EQUAL
+                        ? createSelect(astContext, ix.getResult(), Condition.STRICT_EQUAL,
+                            ix.getX(), ix.getY(), LogicBoolean.FALSE, LogicBoolean.TRUE)
+                        : ix);
+            }
             case PushInstruction ix -> {
                 consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
                 consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));

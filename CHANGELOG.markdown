@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+* Added support for implementing the `!==` operator using a [`select stricEqual` instruction](/doc/syntax/MINDUSTRY-8.markdown#implementing-strict-nonequality-using-select) in target `8`.
+* Added the [`emulate-strict-not-equal` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulate-strict-not-equal) to allow/disallow using `select` instead of `jump strictNotEqual`. 
 * Added new internal array implementations using new Mindustry 8 logic capabilities:
   * [compact `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#compact-tables),
   * [folded `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#folded-tables),

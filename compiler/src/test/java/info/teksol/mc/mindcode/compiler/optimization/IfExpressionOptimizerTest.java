@@ -157,19 +157,20 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void swapsBranchesForCompoundConditions() {
         assertCompilesTo("""
+                        #set emulate-strict-not-equal = false;
                         if @unit.@dead === 0 then
                             print("alive");
                         else
                             print("dead");
                         end;
                         """,
-                createInstruction(SENSOR, var(0), "@unit", "@dead"),
-                createInstruction(JUMP, var(1000), "strictEqual", var(0), "0"),
+                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                createInstruction(JUMP, label(0), "strictEqual", tmp(0), "0"),
                 createInstruction(PRINT, q("dead")),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
                 createInstruction(PRINT, q("alive")),
-                createInstruction(LABEL, var(1001))
+                createInstruction(LABEL, label(1))
         );
     }
 
