@@ -2,8 +2,8 @@ package info.teksol.mindcode.webapp;
 
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.options.Target;
 import info.teksol.mindcode.samples.Sample;
 import info.teksol.mindcode.samples.Samples;
 import info.teksol.schemacode.SchemacodeCompiler;
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Instant;
 import java.util.*;
@@ -33,9 +35,9 @@ public class SchematicsController {
     private SourceRepository sourceRepository;
 
     @PostMapping("/compile")
-    public String postCompile(@RequestParam(required = false) String id,
+    public RedirectView postCompile(@RequestParam(required = false) String id,
                               @RequestParam String source,
-                              @RequestParam(required = false) String optimizationLevel) {
+                              @RequestParam(required = false) String compilerTarget) {
         Source schematicDto;
         if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
@@ -47,13 +49,20 @@ public class SchematicsController {
             schematicDto = sourceRepository.save(new Source(source, Instant.now()));
         }
 
-        return "redirect:/schematics?optimizationLevel=" + optimizationLevel + "&s=" + schematicDto.getId().toString();
+        String targetUrl = UriComponentsBuilder
+                .fromPath("/schematics")
+                .queryParam("compilerTarget", compilerTarget)
+                .queryParam("s", schematicDto.getId().toString())
+                .build()
+                .toUriString();
+
+        return new RedirectView(targetUrl);
     }
 
     @GetMapping
     public ModelAndView getHomePage(@RequestParam(name = "s", defaultValue = "") String id,
-                                    @RequestParam(name = "optimizationLevel", defaultValue = "EXPERIMENTAL") String optimizationLevel) {
-        OptimizationLevel level = OptimizationLevel.byName(optimizationLevel, OptimizationLevel.EXPERIMENTAL);
+                                    @RequestParam(name = "compilerTarget", defaultValue = "7s") String compilerTarget) {
+        Target target = new Target(compilerTarget);
         final String sampleName;
         final String sourceCode;
         if (samples.containsKey(id)) {
@@ -79,11 +88,11 @@ public class SchematicsController {
         final long start = System.nanoTime();
         final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(
                 InputFiles.fromSource(sourceCode),
-                CompilerProfile.forOptimizations(true, level));
+                CompilerProfile.fullOptimizations(true).setTarget(target));
         final long end = System.nanoTime();
         logger.info("performance built_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
-        final String compiledCode = result.output();
+        final String compiledCode = result.getStringOutput();
         return new ModelAndView(
                 "schematic",
                 "model",
@@ -97,7 +106,7 @@ public class SchematicsController {
                         result.errors(WebappMessage::transform),
                         result.warnings(WebappMessage::transform),
                         result.infos(WebappMessage::transform),
-                        optimizationLevel,
+                        target.webpageTargetName(),
                         null,
                         0)
         );

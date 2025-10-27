@@ -38,7 +38,7 @@
             <@com.codeareas mlogWatcher="N" sourceTitle="Schemacode definition:" targetTitle="Encoded schematic:" sourceLines="Y" targetLines="N" />
             <div>
                 <div class="flex-wrap items-center space-x-2">
-                    <@com.optimizationSettings />
+                    <@com.targetSettings />
                     <input type="submit" value="Build" class="px-4 py-2 bg-gray-600 text-white my-2 rounded"/>
                     <@com.link href="/schematics?s=clean">Start with a new schematic</@com.link>
                 </div>

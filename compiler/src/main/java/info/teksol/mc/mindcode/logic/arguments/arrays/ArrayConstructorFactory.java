@@ -9,19 +9,17 @@ import info.teksol.mc.mindcode.logic.instructions.WriteArrInstruction;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
-
 @NullMarked
 public class ArrayConstructorFactory {
-    private static @Nullable ArrayConstructorContext context = null;
+    private static final ThreadLocal<@Nullable ArrayConstructorContext> context = new ThreadLocal<>();
 
     private static ArrayConstructorContext context() {
-        if (MindcodeCompiler.initialized()) return MindcodeCompiler.getContext();
-        return Objects.requireNonNull(context);
+        ArrayConstructorContext context1 = context.get();
+        return context1 == null ? MindcodeCompiler.getContext() : context1;
     }
 
     public static void setContext(@Nullable ArrayConstructorContext context) {
-        ArrayConstructorFactory.context = context;
+        ArrayConstructorFactory.context.set(context);
     }
 
     public static ArrayConstructor create(ArrayAccessInstruction instruction) {

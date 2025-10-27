@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed the compiler not rejecting integer and double compiler option values outside their allowed range.
 * Fixed the compiler not stopping the compilation when an error in compiler directive gets detected.
 * Fixed rare internal error in Jump Threading optimization.
+* Fixed broken reporting of source file positions when compiling Mindcode within a schematic.
 
 ### Added
 
@@ -30,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added the [`debug` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-debug) for compiling code with debug support.
 * Added [debug code blocks](/doc/syntax/TROUBLESHOOTING.markdown#debug-specific-code). Compiled only when `debug` is set to true.
 * Added [debug functions](/doc/syntax/TROUBLESHOOTING.markdown#debug-specific-code). Calls to debug functions are ignored unless `debug` is set to true.
+* Added target selection to the Mindcode Compiler and Schematics Builder pages in the web app.
 
 ### Changed
 
@@ -53,6 +55,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Removed
 
 * The `loop` keyword, deprecated earlier and optional in the `do while` loop syntax, has been removed.
+* The optimization level setting was removed from the user interface on the web page.
 
 ## 3.8.0 - 2025-09-25
 

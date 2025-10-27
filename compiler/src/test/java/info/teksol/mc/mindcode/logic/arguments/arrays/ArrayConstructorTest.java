@@ -13,7 +13,6 @@ import info.teksol.mc.mindcode.logic.instructions.ArrayOrganization;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -33,11 +32,6 @@ class ArrayConstructorTest extends AbstractCodeGeneratorTest {
 //                consumer.accept(createRemoteArray(size));
 //                consumer.accept(createSharedArray(size));
             }).toList();
-
-    @BeforeEach
-    void setUp() {
-        ArrayConstructorFactory.setContext(this);
-    }
 
     private LogicArray createLocalArray(int size) {
         InternalArray array = InternalArray.create(ip, nameCreator, new AstIdentifier(EMPTY, "a"),
@@ -103,11 +97,13 @@ class ArrayConstructorTest extends AbstractCodeGeneratorTest {
     }
 
     protected void testConstructors(Consumer<ArrayAccessInstruction> decorator) {
+        ArrayConstructorFactory.setContext(this);
         for (LogicArray array : arrays) {
             ArrayAccessInstruction ix = ip.createReadArr(mockAstContext, tmp0, array, tmp1);
             decorator.accept(ix);
             testInstruction(ix);
         }
+        ArrayConstructorFactory.setContext(null);
     }
     
     private Consumer<ArrayAccessInstruction> decorator(ArrayOrganization organization, ArrayConstruction construction, boolean folded) {

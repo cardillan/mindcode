@@ -4,10 +4,10 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.messages.ListMessageLogger;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
-import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.options.Target;
 import info.teksol.mindcode.samples.Sample;
 import info.teksol.mindcode.samples.Samples;
 import org.slf4j.Logger;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Instant;
 import java.util.*;
@@ -38,9 +40,9 @@ public class HomeController {
     private SourceRepository sourceRepository;
 
     @PostMapping("/compile")
-    public String postCompile(@RequestParam(required = false) String id,
+    public RedirectView postCompile(@RequestParam(required = false) String id,
             @RequestParam String source,
-            @RequestParam(required = false) String optimizationLevel) {
+            @RequestParam(required = false) String compilerTarget) {
         Source sourceDto;
         if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
@@ -52,13 +54,20 @@ public class HomeController {
             sourceDto = sourceRepository.save(new Source(source, Instant.now()));
         }
 
-        return "redirect:/?optimizationLevel=" + optimizationLevel + "&s=" + sourceDto.getId().toString();
+        String targetUrl = UriComponentsBuilder
+                .fromPath("/")
+                .queryParam("compilerTarget", compilerTarget)
+                .queryParam("s", sourceDto.getId().toString())
+                .build()
+                .toUriString();
+
+        return new RedirectView(targetUrl);
     }
 
     @PostMapping("/compileandrun")
-    public String postCompileAndRun(@RequestParam(required = false) String id,
+    public RedirectView postCompileAndRun(@RequestParam(required = false) String id,
             @RequestParam String source,
-            @RequestParam(required = false) String optimizationLevel) {
+            @RequestParam(required = false) String compilerTarget) {
         Source sourceDto;
         if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
@@ -70,17 +79,25 @@ public class HomeController {
             sourceDto = sourceRepository.save(new Source(source, Instant.now()));
         }
 
-        return "redirect:/?optimizationLevel=" + optimizationLevel + "&s=" + sourceDto.getId().toString() + "&run=true";
+        String targetUrl = UriComponentsBuilder
+                .fromPath("/")
+                .queryParam("compilerTarget", compilerTarget)
+                .queryParam("s", sourceDto.getId().toString())
+                .queryParam("run", "true")
+                .build()
+                .toUriString();
+
+        return new RedirectView(targetUrl);
     }
 
     @GetMapping
     public ModelAndView getHomePage(
             @RequestParam(name = "s", defaultValue = "") String id,
             @RequestParam(name = "mindcode", defaultValue = "") String src,
-            @RequestParam(name = "optimizationLevel", defaultValue = "EXPERIMENTAL") String optimizationLevel,
+            @RequestParam(name = "compilerTarget", defaultValue = "7s") String compilerTarget,
             @RequestParam(name = "run", defaultValue = "false") String compileAndRun
     ) {
-        OptimizationLevel level = OptimizationLevel.byName(optimizationLevel, OptimizationLevel.EXPERIMENTAL);
+        Target target = new Target(compilerTarget);
         boolean run = "true".equals(compileAndRun);
         final String sampleName;
         final String sourceCode;
@@ -114,7 +131,7 @@ public class HomeController {
         ListMessageLogger messageLogger = new ListMessageLogger();
         MindcodeCompiler compiler = new MindcodeCompiler(
                 messageLogger,
-                CompilerProfile.forOptimizations(true, level).setRun(run),
+                CompilerProfile.fullOptimizations(true).setTarget(target).setRun(run),
                 InputFiles.fromSource(sourceCode));
 
         final long start = System.nanoTime();
@@ -136,7 +153,7 @@ public class HomeController {
                         errors(compiler),
                         warnings(compiler),
                         messages(compiler),
-                        optimizationLevel,
+                        target.webpageTargetName(),
                         processRunOutput(compiler),
                         compiler.getSteps())
         );

@@ -255,13 +255,17 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     /// Suspends code execution. Used by remote processors to wait until a remote call is initiated.
     /// The current implementation uses a very long wait (over 30,000 years)
     public void suspendExecution() {
-        createInstruction(WAIT, LogicNumber.create(processor, "1e12"));
+        if (processor.isSupported(WAIT)) {
+            createInstruction(WAIT, LogicNumber.create(processor, "1e12"));
+        }
     }
 
     /// Yields the execution for the rest of the tick. Used when waiting for a remote processor to update variables
     /// or provide results.
-    public LogicInstruction createYieldExecution() {
-        return createInstruction(WAIT, LogicNumber.create(processor, "1e-15"));
+    public void createYieldExecution() {
+        if (processor.isSupported(WAIT)) {
+            createInstruction(WAIT, LogicNumber.create(processor, "1e-15"));
+        }
     }
 
     public LogicLabel createNextLabel() {

@@ -1,7 +1,6 @@
 package info.teksol.mindcode.webapp;
 
 import info.teksol.mc.common.CompilerOutput;
-import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.schemacode.SchematicsDecompiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +63,7 @@ public class DecompilerController {
         final long end = System.nanoTime();
         logger.info("performance decompiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
-        final String compiledCode = result.output() == null ? "" : result.output();
+        final String compiledCode = result.getStringOutput();
         return new ModelAndView(
                 "decompiler",
                 "model",
@@ -78,7 +77,7 @@ public class DecompilerController {
                         result.errors(WebappMessage::transform),
                         result.warnings(WebappMessage::transform),
                         result.infos(WebappMessage::transform),
-                        OptimizationLevel.EXPERIMENTAL.name(),
+                        "",
                         null,
                         0)
         );

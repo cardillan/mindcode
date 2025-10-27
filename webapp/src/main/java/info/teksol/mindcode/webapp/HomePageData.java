@@ -15,13 +15,13 @@ public class HomePageData {
     private final List<WebappMessage> errors;
     private final List<WebappMessage> warnings;
     private final List<WebappMessage> messages;
-    private final String optimizationLevel;
+    private final String compilerTarget;
     private final String runOutput;
     private final int runSteps;
 
     HomePageData(String id, String sample, String source, int sourceLoc, String compiled, int compiledLoc,
                  List<WebappMessage> errors, List<WebappMessage> warnings, List<WebappMessage> messages,
-                 String optimizationLevel, String runOutput, int runSteps) {
+                 String compilerTarget, String runOutput, int runSteps) {
         this.id = id;
         this.sample = sample;
         this.source = source;
@@ -31,7 +31,7 @@ public class HomePageData {
         this.errors = errors;
         this.warnings = warnings;
         this.messages = messages;
-        this.optimizationLevel = optimizationLevel;
+        this.compilerTarget = compilerTarget;
         this.runOutput = runOutput;
         this.runSteps = runSteps;
     }
@@ -88,8 +88,8 @@ public class HomePageData {
         return false;
     }
 
-    public String getOptimizationLevel() {
-        return optimizationLevel;
+    public String getCompilerTarget() {
+        return compilerTarget;
     }
 
     public String getRunOutput() {

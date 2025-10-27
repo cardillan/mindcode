@@ -67,12 +67,13 @@
 </button>
 </#macro>
 
-<#macro optimizationSettings >
-    <select aria-label="Optimization level" name="optimizationLevel" id="optimization" class="border-2 border-black dark:border-gray-600 p-2 my-2 rounded">
-        <option class="dark:bg-gray-800" value="OFF"          <#if model.optimizationLevel == "OFF"          >selected</#if>>No optimization</option>
-        <option class="dark:bg-gray-800" value="BASIC"        <#if model.optimizationLevel == "BASIC"        >selected</#if>>Basic optimization</option>
-        <option class="dark:bg-gray-800" value="ADVANCED"     <#if model.optimizationLevel == "ADVANCED"     >selected</#if>>Advanced optimization</option>
-        <option class="dark:bg-gray-800" value="EXPERIMENTAL" <#if model.optimizationLevel == "EXPERIMENTAL" >selected</#if>>Experimental optimization</option>
+<#macro targetSettings >
+    <select aria-label="Compiler Target" name="compilerTarget" id="target" class="border-2 border-black dark:border-gray-600 p-2 my-2 rounded">
+        <option class="dark:bg-gray-800" value="6"  <#if model.compilerTarget == "6" >selected</#if>>Target: Mindustry 6</option>
+        <option class="dark:bg-gray-800" value="7"  <#if model.compilerTarget == "7" >selected</#if>>Target: Mindustry 7</option>
+        <option class="dark:bg-gray-800" value="7w" <#if model.compilerTarget == "7w">selected</#if>>Target: Mindustry 7 WP</option>
+        <option class="dark:bg-gray-800" value="8"  <#if model.compilerTarget == "8" >selected</#if>>Target: Mindustry 8</option>
+        <option class="dark:bg-gray-800" value="8w" <#if model.compilerTarget == "8w">selected</#if>>Target: Mindustry 8 WP</option>
     </select>
 </#macro>
 

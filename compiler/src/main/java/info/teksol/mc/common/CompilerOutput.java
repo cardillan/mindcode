@@ -34,6 +34,10 @@ public record CompilerOutput<T extends @Nullable Object>(T output, String fileNa
         messages.add(message);
     }
 
+    public String getStringOutput() {
+        return output == null ? "" : output.toString();
+    }
+
     public List<String> getPrintOutput() {
         return textBuffer != null ? textBuffer.getPrintOutput() : List.of();
     }

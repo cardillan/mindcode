@@ -31,7 +31,7 @@
             <@com.codeareas mlogWatcher="Y" sourceTitle="Mindcode Source Code:" targetTitle="Mindustry Logic:" sourceLines="Y" targetLines="Y" />
             <div>
                 <div class="flex-wrap items-center space-x-2">
-                    <@com.optimizationSettings />
+                    <@com.targetSettings />
                     <input type="submit" value="Compile" class="px-4 py-2 bg-gray-600 text-white my-2 rounded"/>
                     <input type="submit" value="Compile and Run" class="px-4 py-2 bg-gray-600 text-white my-2 rounded" formaction="/compileandrun"/>
                     <@com.link href="/?s=clean">Start with a new script</@com.link>

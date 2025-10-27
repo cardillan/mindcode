@@ -80,6 +80,10 @@ public final class Target {
         return version.versionName() + edition.editionName();
     }
 
+    public String webpageTargetName() {
+        return version.major + (edition == ProcessorEdition.S ? "" : edition.editionName());
+    }
+
     @Override
     public String toString() {
         return "Target[" +

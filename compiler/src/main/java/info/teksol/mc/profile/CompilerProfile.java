@@ -53,6 +53,8 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     @SuppressWarnings("unchecked")
     private CompilerProfile(CompilerProfile other, boolean includeUnstable) {
         this.webApplication = other.webApplication;
+        this.libraryPrecedence = other.libraryPrecedence;
+        this.positionTranslator = other.positionTranslator;
         this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
         for (CompilerOptionValue<?> option : other.options.values()) {
             if (option.option != OptimizationOptions.OPTIMIZATION && (includeUnstable || option.stability == SemanticStability.STABLE)) {
