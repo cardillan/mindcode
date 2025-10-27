@@ -232,9 +232,9 @@ public class CompilerOptionFactory {
 
         list.add(new BooleanCompilerOptionValue(OptimizationOptions.MLOG_BLOCK_OPTIMIZATION, "",
                 "allows (limited) optimization of code inside mlog blocks",
-                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                 OptionAvailability.UNIVERSAL, category,
-                false).setConstValue(true));
+                true));
 
         list.add(new BooleanCompilerOptionValue(OptimizationOptions.TEXT_TABLES, "",
                 "when active, generates jump tables by encoding instruction addresses into a single String value, and uses " +
@@ -302,6 +302,12 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 0, 2, 0));
+
+        list.add(new BooleanCompilerOptionValue(DebuggingOptions.DEBUG, "",
+                "activates or deactivates generation of debug code",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.UNSTABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
 
         list.add(new IntegerCompilerOptionValue(DebuggingOptions.DEBUG_MESSAGES, "d",
                 "sets the detail level of debug messages, 0 = off",

@@ -224,6 +224,16 @@ public class CallGraphCreator extends AbstractMessageEmitter {
             warn(function.getSourcePosition(), WARN.DEPRECATED_USE_OF_REMOTE);
         }
 
+        if (function.isDebug()) {
+            if (!function.isVoid()) {
+                error(function.getSourcePosition(), ERR.FUNCTION_DEBUG_MUST_BE_VOID);
+            }
+
+            if (function.getDeclaredParameters().stream().anyMatch(p -> p.isOutput() && !p.isInput())) {
+                error(function.getSourcePosition(), ERR.FUNCTION_DEBUG_NO_OUTPUTS);
+            }
+        }
+
         List<AstFunctionParameter> params = function.getDeclaredParameters();
         if (!params.isEmpty()) {
             // Find duplicated parameters

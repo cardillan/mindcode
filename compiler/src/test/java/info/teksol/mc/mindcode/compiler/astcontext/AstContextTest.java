@@ -31,10 +31,10 @@ class AstContextTest {
     private final CallGraph callGraph = CallGraph.createEmpty(MAIN_MODULE);
     private final AstFunctionDeclaration functionDeclaration1 = new AstFunctionDeclaration( EMPTY, null,
             new AstIdentifier(EMPTY, "test1"), DataType.VAR,
-            List.of(), List.of(), CallType.NONE);
+            List.of(), List.of(), CallType.NONE, false);
     private final AstFunctionDeclaration functionDeclaration2 = new AstFunctionDeclaration( EMPTY, null,
             new AstIdentifier(EMPTY, "test2"), DataType.VAR,
-            List.of(), List.of(), CallType.NONE);
+            List.of(), List.of(), CallType.NONE, false);
     private MindcodeFunction function1;
     private MindcodeFunction function2;
     private AstContext context;

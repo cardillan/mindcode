@@ -514,7 +514,7 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
         return count;
     }
 
-    //@Test
+    @Test
     <T> void verifyOptionList() {
         for (OptionCategory optionCategory : OptionCategory.values()) {
             verifyOptionListInCategory(optionCategory);

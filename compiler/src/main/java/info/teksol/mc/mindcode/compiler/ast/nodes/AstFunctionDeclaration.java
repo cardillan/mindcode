@@ -23,15 +23,17 @@ public class AstFunctionDeclaration extends AstDeclaration {
     private final List<AstMindcodeNode> body;
     private final CallType callType;
     private final List<AstDirectiveSet> directives = new ArrayList<>();
+    private final boolean debug;
 
     public AstFunctionDeclaration(SourcePosition sourcePosition, @Nullable AstDocComment docComment, AstIdentifier identifier,
-            DataType dataType, List<AstFunctionParameter> parameters, List<AstMindcodeNode> body, CallType callType) {
+            DataType dataType, List<AstFunctionParameter> parameters, List<AstMindcodeNode> body, CallType callType, boolean debug) {
         super(sourcePosition, children(list(identifier), parameters, body), docComment);
         this.identifier = identifier;
         this.dataType = dataType;
         this.parameters = parameters;
         this.body = body;
         this.callType = callType;
+        this.debug = debug;
     }
 
     public void addDirectives(List<AstDirectiveSet> directives) {
@@ -68,6 +70,10 @@ public class AstFunctionDeclaration extends AstDeclaration {
 
     public CallType getCallType() {
         return callType;
+    }
+
+    public boolean isDebug() {
+        return debug;
     }
 
     public boolean canEvaluate() {

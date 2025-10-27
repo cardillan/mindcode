@@ -236,7 +236,12 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstCodeBlock visitAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx) {
-        return new AstCodeBlock(pos(ctx), processBody(ctx.exp));
+        return new AstCodeBlock(pos(ctx), processBody(ctx.exp), false);
+    }
+
+    @Override
+    public AstCodeBlock visitAstDebugBlock(MindcodeParser.AstDebugBlockContext ctx) {
+        return new AstCodeBlock(pos(ctx), processBody(ctx.exp), true);
     }
 
     @Override
@@ -443,7 +448,9 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 dataType,
                 processParameterList(ctx.parameterList()),
                 processBody(ctx.body),
-                ctx.callType == null ? CallType.NONE : CallType.fromToken(ctx.callType.getType()));
+                ctx.callType == null ? CallType.NONE : CallType.fromToken(ctx.callType.getType()),
+                ctx.debug != null
+        );
     }
 
     private List<AstFunctionParameter> processParameterList(MindcodeParser.ParameterListContext ctx) {

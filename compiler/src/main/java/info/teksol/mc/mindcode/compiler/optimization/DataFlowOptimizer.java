@@ -176,7 +176,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             switch (instruction.getOpcode()) {
                 case SET, SELECT, SETADDR, OP, PACKCOLOR, READ, READARR -> {
                     BaseResultInstruction ix = (BaseResultInstruction) instruction;
-                    if (ix.getResult().isVolatile()) break;
+                    if (isVolatile(ix, ix.getResult())) break;
 
                     if (!keep.contains(instruction) || useless.contains(instruction)) {
                         int index = instructionIndex(instruction);
@@ -999,7 +999,7 @@ class DataFlowOptimizer extends BaseOptimizer {
     /// @param variable    variable being inspected
     /// @return true if this assignment can be safely eliminated
     boolean canEliminate(LogicInstruction instruction, LogicVariable variable) {
-        if (variable.isVolatile()) return false;
+        if (isVolatile(instruction, variable)) return false;
         if (variable.getType() == ArgumentType.FUNCTION_RETVAL
                 && (instruction.getOpcode() == Opcode.CALL || instruction.getOpcode() == Opcode.CALLREC)) return false;
 

@@ -75,7 +75,14 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         if (matches.size() == 1) {
             // Exactly one match by name: process the function
             // If it was a loose match, the call will provide detailed error messages on argument mismatches
-            return processMatchedFunctionCall(matches.getFirst(), call, target, arguments, async);
+            MindcodeFunction function = matches.getFirst();
+            boolean active = assembler.isActive();
+            if (function.isDebug() && !call.getProfile().isDebug()) {
+                assembler.setActive(false);
+            }
+            ValueStore result = processMatchedFunctionCall(function, call, target, arguments, async);
+            assembler.setActive(active);
+            return result;
         } else {
             // No matches or multiple matches.
             error(call.getIdentifier(), target == null

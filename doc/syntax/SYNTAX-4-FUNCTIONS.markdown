@@ -911,6 +911,23 @@ found = ulocate(:ore, @copper, out x, out y);    // Also calls the user-defined 
 
 It is not possible to call a Mindustry Logic function if a matching user-defined function exists.
 
+## Debugging functions
+
+It is possible to declare a function as `debug`. In this case, calls to the function will only be compiled when the [`debug` option](SYNTAX-5-OTHER.markdown#option-debug) is set to true. Example:
+
+```Mindcode
+debug inline void pause(in switch)
+    // Pauses the execution of the program until the switch passed in is deactivated - clicked by the user
+    // Allows the user to inspect the state of the program - the variables at the place where it was called.  
+    switch.enabled = true;
+    do while not switch1.enabled;
+end;
+```
+
+A debug function must not return a value - must be declared `void` - and must not contain any parameter declared `out`. Other modifiers (`in`, `in out` and `ref`) are allowed.
+
+The `debug` keyword must precede the `inline`, `noinline`, or `export` keywords (when used) and the `void` keyword. 
+
 ---
 
 [« Previous: Control flow statements](SYNTAX-3-STATEMENTS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Compiler directives »](SYNTAX-5-OTHER.markdown)

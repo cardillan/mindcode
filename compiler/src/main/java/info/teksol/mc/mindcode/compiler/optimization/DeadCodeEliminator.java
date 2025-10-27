@@ -84,12 +84,13 @@ class DeadCodeEliminator extends BaseOptimizer {
     private void removeUselessWrites() {
         final Set<LogicVariable> uselessWrites = new HashSet<>(writes.keySet());
         uselessWrites.removeAll(reads);
-        for (LogicVariable key : uselessWrites) {
+        for (LogicVariable variable : uselessWrites) {
+            List<LogicInstruction> instructions = writes.get(variable);
             // Preserve volatile variables
-            if (key.isVolatile()) continue;
+            if (variable.isVolatile() || instructions.stream().anyMatch(ix -> isVolatile(ix, variable))) continue;
 
             // Remove instructions with all writes unread
-            Objects.requireNonNull(writes.get(key)).stream()
+            Objects.requireNonNull(instructions).stream()
                     .filter(LogicInstruction::isSafe)
                     .filter(this::allWritesUnread)
                     .filter(ix -> !ix.getAstContext().matches(AstContextType.JUMPS))

@@ -24,7 +24,13 @@ public class StatementListsBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitCodeBlock(AstCodeBlock node) {
         // The accumulator ensures we'll evaluate all nodes and return the last node evaluation as the result
-        return evaluateBody(node.getExpressions());
+        boolean active = assembler.isActive();
+        if (node.isDebug() && !node.getProfile().isDebug()) {
+            assembler.setActive(false);
+        }
+        ValueStore result = evaluateBody(node.getExpressions());
+        assembler.setActive(active);
+        return result;
     }
 
     @Override

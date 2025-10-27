@@ -136,7 +136,8 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
                 DataType.VOID,
                 List.of(),
                 List.of(),
-                CallType.NONE);
+                CallType.NONE,
+                false);
     }
 }
 

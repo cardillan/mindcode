@@ -42,6 +42,65 @@ You can ask for help here even if you don't suspect there's an error in Mindcode
 
 Mindcode provides several tools for making debugging the compiled code a bit easier.
 
+### Debug-specific code
+
+As Mindcode doesn't provide a debugger, you can only inspect the state of your running program by including specific code to output important information onto message blocks, or by watching variables in the actual processor in the Vars screen. In the first case, you'll probably need to add message blocks to your design to output the information onto, in the second case, you'll probably need to pause or stop the program execution to be able to inspect the values of your variables at a defined state.
+
+This requires to add a code that is only used for the actual debugging process. Mindcode provides the following tools for including the debug-specific code only when needed:
+
+* A debug code block: `debug <some code> end;`. Debug block is not compiled, unless `debug` is set to `true`.
+* A debug function: `debug void foo() <some code> end;`. Calls to debug functions are not compiled, unless `debug` is set to `true`.
+
+By setting the [`debug` compiler option](SYNTAX-5-OTHER.markdown#option-debug) to `true`, the code gets compiled with debug support. The compiler ensures the following: 
+ 
+* All user-defined variables are preserved and not removed by optimizations. It is possible to inspect all variables on the Vars screen.
+* Statements in debug blocks are included in the compiled code.
+* Calls to debug functions are compiled.
+
+Compiling code with debug support enabled may result in larger code (both due to additional code in debug blocks and debug functions, and due to some optimizations not being performed to preserve user-defined variables). At the same time, loops may not get unrolled in debug mode.
+
+When entering the processor screen while the program is running doesn't stop program execution. To get a meaningful insight nto the state of the program, you may need to stop it. Stopping the program is possible in several ways:
+
+* By pausing the game. In this case, it might be difficult to stop the program at a well-defined time.
+* By including a `stop` instruction in the program (provided by the `stopProcessor()` or `error()` functions, or by compiler-generated [runtime checks](SYNTAX-5-OTHER.markdown#option-error-reporting)). However, once stopped, the program execution can't be resumed, the whole processor needs to be restarted.
+* By implementing a pause functionality. The program might wait for some user-interaction, for example until a switch is pressed by the user. This allows to stop the program at a well-defined point while maintaining the ability to resume its execution. The easiest way for this is to declare the function performing the pause as `debug` - this way the program will only pause when compiled with debug support enabled. 
+
+Example:
+
+```Mindcode
+#set debug = true;          // Activating debug mode
+
+require units;
+
+debug void pause(in switch)
+    // Pauses the execution of the program until the switch passed in is deactivated - clicked by the user
+    // Allows the user to inspect the state of the program - the variables at the place where it was called.  
+    switch.enabled = true;
+    do while not switch1.enabled;
+end;
+
+begin
+    unit = findFreeUnit(@flare, 10);
+    
+    debug
+        // Debug code - will only be compiled in debug
+        if unit == null then
+            print("No free unit found!");
+            printflush(message1);
+            pause(switch1);
+        end;
+    end;
+    
+    do
+        move(@thisx, @thisy);
+    while !within(@thisx, @thisy, 1);
+    
+    print("Unit moved to processor");
+    printflush(message1);
+    pause(switch1);
+end;
+```
+
 ### The `error()` function
 
 The built-in `error()` function serves for logging diagnostic information when an unexpected situation is encountered by the program. The infromation is stored in special variables or displayed in-game, and the processor is stopped.

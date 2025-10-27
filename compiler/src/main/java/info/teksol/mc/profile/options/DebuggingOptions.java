@@ -5,6 +5,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public enum DebuggingOptions {
     CASE_CONFIGURATION,
+    DEBUG,
     DEBUG_MESSAGES,
     DEBUG_OUTPUT,
     PARSE_TREE,

@@ -101,7 +101,8 @@ statement
     | PARAM name = IDENTIFIER ASSIGN value = expression                                 # astParameter
     | REQUIRE file = STRING (REMOTE processors = identifierList)?                       # astRequireFile
     | REQUIRE library = IDENTIFIER (REMOTE processors = identifierList)?                # astRequireLibrary
-    | callType = (INLINE | NOINLINE | EXPORT | REMOTE)? type = (VOID | DEF) name = IDENTIFIER
+    | debug = DEBUG? callType = (INLINE | NOINLINE | EXPORT | REMOTE)?
+        type = (VOID | DEF) name = IDENTIFIER
         params = parameterList body = astStatementList? END                             # astFunctionDeclaration
     | (label = IDENTIFIER COLON)? FOR iterators = iteratorsValuesGroups
         DO body = astStatementList? END                                                 # astForEachLoopStatement
@@ -118,6 +119,7 @@ statement
     | CONTINUE label = IDENTIFIER?                                                      # astContinueStatement
     | RETURN value = expression?                                                        # astReturnStatement
     | BEGIN exp = astStatementList? END                                                 # astCodeBlock
+    | DEBUG exp = astStatementList? END                                                 # astDebugBlock
     | MLOG variables = mlogVariableList? LBRACE block = mlogBlock                       # astMlogBlock
                 // No RBRACE: RBRACE is converted to semicolon to serve as statement separator
     ;

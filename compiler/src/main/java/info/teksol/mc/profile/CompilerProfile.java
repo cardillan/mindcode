@@ -348,6 +348,11 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return this;
     }
 
+    public CompilerProfile setDebug(boolean debug) {
+        getOption(DebuggingOptions.DEBUG).setValue(debug);
+        return this;
+    }
+
     public CompilerProfile setDebugMessages(int debugMessages) {
         getOption(DebuggingOptions.DEBUG_MESSAGES).setValue(debugMessages);
         return this;

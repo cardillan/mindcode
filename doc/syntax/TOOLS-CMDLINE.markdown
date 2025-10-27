@@ -100,25 +100,25 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
                 [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
                 [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization [{true,false}]] [--text-tables {true,false}]
-                [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}] [-O {0..4}]
-                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
-                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
-                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL]
+                [--mlog-block-optimization {true,false}] [--text-tables {true,false}] [--use-lookup-arrays {true,false}]
+                [--use-short-arrays {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
+                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
+                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
+                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
+                [--stack-optimization LEVEL] [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
-                [-p {0..2}] [-d {0..3}] [--print-code-size {true,false}] [-u [{none,plain,flat-ast,deep-ast,source}]]
-                [-s] [--run [{true,false}]] [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
-                [--trace-execution {true,false}] [--dump-variables-on-stop {true,false}]
-                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
-                [--stop-on-program-end {true,false}] [--err-invalid-counter {true,false}]
-                [--err-invalid-identifier {true,false}] [--err-unsupported-opcode {true,false}]
-                [--err-uninitialized-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
-                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
+                [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]] [--run-steps {0..1000000000}]
+                [--output-profiling [{true,false}]] [--trace-execution {true,false}]
+                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
+                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
+                [--err-invalid-counter {true,false}] [--err-invalid-identifier {true,false}]
+                [--err-unsupported-opcode {true,false}] [--err-uninitialized-var {true,false}]
+                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
+                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
                 [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
                 [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
@@ -223,7 +223,7 @@ Optimization options:
                          sets the strength of case switching optimization:  higher number means more case configurations
                          are considered, potentially producing a more efficient  code, at the cost of longer compilation
                          time
-  --mlog-block-optimization [{true,false}]
+  --mlog-block-optimization {true,false}
                          allows (limited) optimization of code inside mlog blocks
   --text-tables {true,false}
                          when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
@@ -300,6 +300,8 @@ Debugging options:
                          GLOBALS MAIN LOCALS are used.
   -p, --parse-tree {0..2}
                          sets the detail level of parse tree output into the log file, 0 = off
+  --debug [{true,false}]
+                         activates or deactivates generation of debug code
   -d, --debug-messages {0..3}
                          sets the detail level of debug messages, 0 = off
   --print-code-size {true,false}
@@ -395,25 +397,25 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
                 [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
                 [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization [{true,false}]] [--text-tables {true,false}]
-                [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}] [-O {0..4}]
-                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
-                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
-                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL]
+                [--mlog-block-optimization {true,false}] [--text-tables {true,false}] [--use-lookup-arrays {true,false}]
+                [--use-short-arrays {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
+                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
+                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
+                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
+                [--stack-optimization LEVEL] [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
-                [-p {0..2}] [-d {0..3}] [--print-code-size {true,false}] [-u [{none,plain,flat-ast,deep-ast,source}]]
-                [-s] [--run [{true,false}]] [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
-                [--trace-execution {true,false}] [--dump-variables-on-stop {true,false}]
-                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
-                [--stop-on-program-end {true,false}] [--err-invalid-counter {true,false}]
-                [--err-invalid-identifier {true,false}] [--err-unsupported-opcode {true,false}]
-                [--err-uninitialized-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
-                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
+                [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]] [--run-steps {0..1000000000}]
+                [--output-profiling [{true,false}]] [--trace-execution {true,false}]
+                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
+                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
+                [--err-invalid-counter {true,false}] [--err-invalid-identifier {true,false}]
+                [--err-unsupported-opcode {true,false}] [--err-uninitialized-var {true,false}]
+                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
+                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
                 [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
                 [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
@@ -507,7 +509,7 @@ Optimization options:
                          sets the strength of case switching optimization:  higher number means more case configurations
                          are considered, potentially producing a more efficient  code, at the cost of longer compilation
                          time
-  --mlog-block-optimization [{true,false}]
+  --mlog-block-optimization {true,false}
                          allows (limited) optimization of code inside mlog blocks
   --text-tables {true,false}
                          when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
@@ -584,6 +586,8 @@ Debugging options:
                          GLOBALS MAIN LOCALS are used.
   -p, --parse-tree {0..2}
                          sets the detail level of parse tree output into the log file, 0 = off
+  --debug [{true,false}]
+                         activates or deactivates generation of debug code
   -d, --debug-messages {0..3}
                          sets the detail level of debug messages, 0 = off
   --print-code-size {true,false}

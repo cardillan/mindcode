@@ -39,6 +39,10 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
         this.debugOutput = getGlobalProfile().isDebugOutput();
     }
 
+    protected boolean isVolatile(LogicInstruction instruction, LogicArgument variable) {
+        return variable.isVolatile() || variable.isUserVariable() && instruction.getAstContext().getCompilerProfile().isDebug();
+    }
+
     @Override
     public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments) {
         return instructionProcessor.createInstruction(astContext, opcode, arguments);
@@ -133,7 +137,7 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
 
     //<editor-fold desc="Inspecting instructions">
     protected boolean isVolatile(LogicInstruction instruction) {
-        return instruction.inputArgumentsStream().anyMatch(LogicArgument::isVolatile);
+        return instruction.inputArgumentsStream().anyMatch(variable -> isVolatile(instruction, variable));
     }
     //</editor-fold>
 

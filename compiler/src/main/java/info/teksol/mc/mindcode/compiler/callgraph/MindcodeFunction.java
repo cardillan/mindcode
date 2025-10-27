@@ -182,6 +182,10 @@ public class MindcodeFunction {
         return declaration.isNoinline() || declaration.isRemote();
     }
 
+    public boolean isDebug() {
+        return declaration.isDebug();
+    }
+
     public boolean isVarargs() {
         List<AstFunctionParameter> parameters = getDeclaredParameters();
         return !parameters.isEmpty() && parameters.getLast().isVarargs();

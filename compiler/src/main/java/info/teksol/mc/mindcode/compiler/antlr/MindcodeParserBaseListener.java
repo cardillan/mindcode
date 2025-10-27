@@ -533,6 +533,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAstDebugBlock(MindcodeParser.AstDebugBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstDebugBlock(MindcodeParser.AstDebugBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAstMlogBlock(MindcodeParser.AstMlogBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -13,10 +13,12 @@ import java.util.Objects;
 @AstNode
 public class AstCodeBlock extends AstExpression {
     private final List<AstMindcodeNode> expressions;
+    private final boolean debug;
 
-    public AstCodeBlock(SourcePosition sourcePosition, List<AstMindcodeNode> expressions) {
+    public AstCodeBlock(SourcePosition sourcePosition, List<AstMindcodeNode> expressions, boolean debug) {
         super(sourcePosition, expressions);
         this.expressions = Objects.requireNonNull(expressions);
+        this.debug = debug;
     }
 
     @Override
@@ -26,6 +28,10 @@ public class AstCodeBlock extends AstExpression {
 
     public List<AstMindcodeNode> getExpressions() {
         return expressions;
+    }
+
+    public boolean isDebug() {
+        return debug;
     }
 
     @Override

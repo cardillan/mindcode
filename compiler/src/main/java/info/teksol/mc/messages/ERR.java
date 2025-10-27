@@ -92,6 +92,8 @@ public class ERR {
     public static final String FUNCTION_CALL_WRONG_NUMBER_OF_ARGS = "Function '%s': wrong number of arguments (expected %s, found %d).";
     public static final String FUNCTION_CONFLICT = "Function '%s' conflicts with function '%s'%s.";
     public static final String FUNCTION_CONFLICT_REMOTE = "Remote function '%s' conflicts with remote function '%s': names of remote functions must be unique.";
+    public static final String FUNCTION_DEBUG_MUST_BE_VOID = "Debug function must be declared 'void'.";
+    public static final String FUNCTION_DEBUG_NO_OUTPUTS = "Debug function must not have any `out` parameters.";
     public static final String FUNCTION_RECURSIVE_INLINE = "Recursive function '%s' declared 'inline'.";
     public static final String FUNCTION_RECURSIVE_NO_STACK = "Function '%s' is recursive and no stack was allocated.";
     public static final String FUNCTION_RECURSIVE_REMOTE = "Recursive function '%s' declared 'remote'.";

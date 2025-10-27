@@ -38,6 +38,7 @@ CACHED                  : 'cached' ;
 CASE                    : 'case' ;
 CONST                   : 'const' ;
 CONTINUE                : 'continue' ;
+DEBUG                   : 'debug' ;
 DESCENDING              : 'descending' ;
 DEF                     : 'def' ;
 DO                      : 'do' ;

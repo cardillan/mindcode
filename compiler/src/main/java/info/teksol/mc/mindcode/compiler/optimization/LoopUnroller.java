@@ -364,11 +364,11 @@ class LoopUnroller extends BaseOptimizer {
 
             // Instructions saved per loop:
             // Set address
-            // Set iterator(s)
+            // Set iterator(s) -- not in debug mode
             // Jump to body (except the last iteration)
             // Go to next iteration
-            // Read out iterator(s)
-            return iterations * (assignments + 3) - 1;
+            // Read out iterator(s) -- not in debug mode
+            return iterations * (assignments + (loop.getLocalProfile().isDebug() ? 1 : 3)) - 1;
         } else {
             throw new MindcodeInternalError("Expected AstForEachLoopStatement, got " + loop);
         }

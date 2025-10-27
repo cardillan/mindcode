@@ -391,10 +391,9 @@ which compiles to
 
 ```mlog
 set address @counter
-set .i 1
 print 0
 printflush message1
-jump m1_finish greaterThan .i 10
+jump m1_finish greaterThan 1 10
 set @counter address
 m1_finish:
 print "Final value: 1"
@@ -402,8 +401,6 @@ printflush message1
 ```
 
 By accessing the `@counter`, a loop was created in a way which Mindcode doesn't understand. Due to this, the expressions manipulating `i` were removed and replaced by constant values that would be correct had the loop not been there.
-
-The variable `i` is still set, because it is read inside the mlog block, and we did let Mindcode know.
 
 ---
 

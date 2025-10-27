@@ -69,13 +69,6 @@ public class Variables extends AbstractMessageEmitter {
         return nameCreator;
     }
 
-    public List<LogicVariable> getVolatileVariables() {
-        return globalVariables.values().stream()
-                .filter(LogicVariable.class::isInstance)
-                .map(LogicVariable.class::cast)
-                .filter(LogicVariable::isVolatile).toList();
-    }
-
     public void setHeapTracker(HeapTracker heapTracker) {
         this.heapTracker = heapTracker;
     }

@@ -225,7 +225,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             end;
                             """,
                     List.of(
-                            new AstCodeBlock(EMPTY, List.of(identifier))
+                            new AstCodeBlock(EMPTY, List.of(identifier), false)
                     )
             );
         }
@@ -237,7 +237,20 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             end;
                             """,
                     List.of(
-                            new AstCodeBlock(EMPTY, List.of())
+                            new AstCodeBlock(EMPTY, List.of(), false)
+                    )
+            );
+        }
+
+        @Test
+        void buildsDebugBlocks() {
+            assertBuildsTo("""
+                            debug
+                                identifier;
+                            end;
+                            """,
+                    List.of(
+                            new AstCodeBlock(EMPTY, List.of(identifier), true)
                     )
             );
         }
@@ -1642,7 +1655,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             /** Comment2 */
                             /** Comment3 */
                             inline def b(ref a, b...) b; end;
-                            noinline void c(in a, out b, in out c, out in d) a + b; end;
+                            debug noinline void c(in a, out b, in out c, out in d) a + b; end;
                             export def d() end;
                             """,
                     List.of(
@@ -1652,7 +1665,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     DataType.VAR,
                                     List.of(),
                                     List.of(),
-                                    CallType.NONE),
+                                    CallType.NONE,
+                                    false),
                             new AstFunctionDeclaration(EMPTY,
                                     new AstDocComment(EMPTY, "/** Comment3 */"),
                                     b,
@@ -1662,7 +1676,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstFunctionParameter(EMPTY, b, false, false, false, true)
                                     ),
                                     List.of(b),
-                                    CallType.INLINE),
+                                    CallType.INLINE,
+                                    false),
                             new AstFunctionDeclaration(EMPTY,
                                     null,
                                     c,
@@ -1674,14 +1689,16 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstFunctionParameter(EMPTY, d, true, true, false, false)
                                     ),
                                     List.of(new AstOperatorBinary(EMPTY, ADD, a, b)),
-                                    CallType.NOINLINE),
+                                    CallType.NOINLINE,
+                                    true),
                             new AstFunctionDeclaration(EMPTY,
                                     null,
                                     d,
                                     DataType.VAR,
                                     List.of(),
                                     List.of(),
-                                    CallType.EXPORT)
+                                    CallType.EXPORT,
+                                    false)
                     )
             );
         }

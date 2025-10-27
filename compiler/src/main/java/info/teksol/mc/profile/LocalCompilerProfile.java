@@ -4,10 +4,7 @@ import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
-import info.teksol.mc.profile.options.CompilerOptionValue;
-import info.teksol.mc.profile.options.CompilerOptions;
-import info.teksol.mc.profile.options.OptimizationOptions;
-import info.teksol.mc.profile.options.Target;
+import info.teksol.mc.profile.options.*;
 import org.jspecify.annotations.NullMarked;
 
 /// Provides access to module/local compiler options.
@@ -37,6 +34,12 @@ public interface LocalCompilerProfile {
     Target getTarget();
 
     boolean useTextJumpTables();
+    //</editor-fold>
+
+    //<editor-fold desc="Debugging Options">
+    default boolean isDebug() {
+        return getBooleanValue(DebuggingOptions.DEBUG);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Compiler Options">

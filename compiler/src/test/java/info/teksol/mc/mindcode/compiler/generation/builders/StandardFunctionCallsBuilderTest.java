@@ -125,6 +125,41 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Nested
+    class DebugFunctions {
+        @Test
+        void compilesDebugFunctionWithDebug() {
+            assertCompilesTo("""
+                            #set debug;
+                            
+                            debug void foo()
+                                print("foo");
+                            end;
+                            
+                            foo();
+                            print("bar");
+                            """,
+                    createInstruction(PRINT, q("foo")),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, q("bar"))
+            );
+        }
+
+        @Test
+        void skipsDebugFunctionWithoutDebug() {
+            assertCompilesTo("""
+                            debug void foo()
+                                print("foo");
+                            end;
+                            
+                            foo();
+                            print("bar");
+                            """,
+                    createInstruction(PRINT, q("bar"))
+            );
+        }
+    }
+
+    @Nested
     class Errors {
         @Test
         void refusesUppercaseFunctionParameter() {

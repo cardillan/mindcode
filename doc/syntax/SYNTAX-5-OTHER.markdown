@@ -47,7 +47,7 @@ Some compiler options may change the semantic of the affected code. For example,
 Semantically unstable compiler options are handled specifically in these contexts:
 
 * The values of these options aren't inherited from the global scope for modules. Unless explicitly set within a module, the semantic-altering options have their default values.
-* When a function is declared `inline`, the semantically unstable options keep the values effective for the function declaration.
+* When a function is declared `inline`, the semantically unstable options keep the values effective at the function declaration.
 
 # Option reference
 
@@ -730,11 +730,32 @@ Options to activate debugging features or additional output from the compiler.
 
 | Option                                                                                       | Scope  | Semantic stability |
 |----------------------------------------------------------------------------------------------|--------|--------------------|
+| [debug](#option-debug)                                                                       | local  | unstable           |
 | [debug-messages](#option-debug-messages)                                                     | global | stable             |
 | [parse-tree](#option-parse-tree)                                                             | global | stable             |
 | [print-code-size](#option-print-code-size)                                                   | global | stable             |
 | [print-unresolved](#option-print-unresolved)                                                 | global | stable             |
 | [sort-variables](#option-sort-variables)                                                     | global | stable             |
+
+### Option `debug`
+
+**Option scope: [local](#local-scope)**
+
+This option controls whether the code is compiled with debug support. Possible values are:
+* 
+* `false` (the default value): no debug support.
+* `true` or omitted: the code is compiled with debug support.
+
+Code compiled with debug support enabled has these properties:
+
+* All user-defined variables are preserved and not removed by optimizations. It is therefore possible to inspect all variables on the Vars screen.
+* [Debug code blocks](TROUBLESHOOTING.markdown#debug-specific-code) are included in the compiled code.
+* Calls to [debug functions](TROUBLESHOOTING.markdown#debug-specific-code) are compiled and included in the code.
+
+The `debug` option is local. It is therefore possible to activate debugging for some parts of code only (e.g., for a specific function).
+
+> [!NOTE]
+> Currently, activating the debug support may preclude loops from being unrolled. 
 
 ### Option `debug-messages`
 

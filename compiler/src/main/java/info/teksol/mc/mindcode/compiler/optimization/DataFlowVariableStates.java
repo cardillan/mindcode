@@ -360,7 +360,7 @@ class DataFlowVariableStates {
 
                 if (instruction instanceof SetInstruction set) {
                     if (reuseValue && set.getResult() == variable && set.getValue() instanceof LogicVariable variable2
-                            && !variable.isVolatile() && !variable2.isVolatile()) {
+                            && !optimizer.isVolatile(instruction, variable) && !optimizer.isVolatile(instruction, variable2)) {
                         trace(() -> "    Adding direct equivalence " + variable.toMlog() + " == " + variable2.toMlog());
                         equivalences.put(variable, variable2);
                     }

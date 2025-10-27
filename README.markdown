@@ -14,7 +14,7 @@
 </div>
 <br>
 
-**Mindcode** is a high-level programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, arrays (including `@counter` arrays), conditional statements and loops, functions, modules, remote function calls, system library etc. Mindcode generates fairly well optimized mlog code, using available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself.
+**Mindcode** is a high-level procedural programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, arrays (including `@counter` arrays), conditional statements and loops, functions, modules, remote variables and function calls (synchronous and asynchronous), system library, user libraries, debugging support, and others. Mindcode generates fairly well optimized mlog code, using available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself.
 
 **Schemacode**, an extension built over Mindcode, is a specialized definition language designed for creating a complete Mindustry schematic from a text file. [Schematics Builder](doc/syntax/SCHEMACODE.markdown) compiles these definition files directly into Mindustry schematics, either into binary `.msch` file, or into the text representation. Processors can be included in these schematics, complete with the code (specified either in Mindcode or mlog) and linked blocks.
 
@@ -49,6 +49,7 @@ The most important recent changes to Mindcode include:
 * Mindustry Logic 8
   * Complete support for [the latest Mindustry 8 pre-release](/doc/syntax/MINDUSTRY-8.markdown).
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
+  * [Array implementations](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization) using the Mindustry 8 Logic capabilities. 
   * New string/character-based instructions and character literals.
   * Support for named color literals: `%[red]`.
 * Language features
@@ -57,8 +58,8 @@ The most important recent changes to Mindcode include:
   * Improved optimization of `case` expressions, including `case` expression over block types, unit types, items or liquids.
   * Passing arguments (including arrays) to inline functions by reference.
   * Support for passing mlog keywords as arguments to inline functions.
-  * External and internal arrays (`@counter` arrays), including basic array optimizations.
 * Other functionality
+  * Reporting compiled code size broken down by function.  
   * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
   * Using Mindustry Logic metadata corresponding to the target selected for compilation.
   * Profiling information for code executed using the built-in processor emulator.
@@ -84,7 +85,7 @@ Alternatively, you can download the command-line compiler and use Mindcode [from
 
 Mindcode can interface with the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) to inject the compiled code into the selected processor in Mindustry World directly, avoiding the use of the clipboard.
 
-The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), available for Mindustry 7/8, allows efficient [array-bounds checking](/doc/syntax/SYNTAX-5-OTHER.markdown#option-boundary-checks) for both internal and external arrays, making this kind of bugs easier to detect. 
+The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), available for Mindustry 7/8, allows efficient [array-bounds checking](/doc/syntax/SYNTAX-5-OTHER.markdown#option-error-reporting) for both internal and external arrays, making this kind of bugs easier to detect. 
 
 ## Mindustry Logic References
 

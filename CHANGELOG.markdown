@@ -8,11 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed the compiler not rejecting integer and double compiler option values outside the allowed range.
+* Fixed the compiler not rejecting integer and double compiler option values outside their allowed range.
 * Fixed the compiler not stopping the compilation when an error in compiler directive gets detected. 
 
 ### Added
 
+* **Breaking**: new keywords have been added to the language: `debug` and `export`. Code that uses any of these keywords as a function or variable name will not compile, and the variable or function will have to be renamed.
 * Added support for implementing the `!==` operator using a [`select stricEqual` instruction](/doc/syntax/MINDUSTRY-8.markdown#implementing-strict-nonequality-using-select) in target `8`.
 * Added the [`emulate-strict-not-equal` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulate-strict-not-equal) to allow/disallow using `select` instead of `jump strictNotEqual`. 
 * Added new internal array implementations using new Mindustry 8 logic capabilities:
@@ -24,6 +25,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added warnings when a name specified by the `mlog` modifier collides with another user-defined variable or array element in the current processor.
 * Added the ability to output the final code size broken down by function and an accompanying [`print-code-size`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-print-code-size) options.
 * Added the [`error()` function](/doc/syntax/TROUBLESHOOTING.markdown#the-error-function), which can be used to report errors detected at runtime.
+* Added the [`debug` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-debug) for compiling code with debug support.
+* Added [debug code blocks](/doc/syntax/TROUBLESHOOTING.markdown#debug-specific-code). Compiled only when `debug` is set to true.
+* Added [debug functions](/doc/syntax/TROUBLESHOOTING.markdown#debug-specific-code). Calls to debug functions are ignored unless `debug` is set to true.
 
 ### Changed
 
@@ -36,7 +40,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * The `mlog` modifier accepts multiple expressions, allowing to specify names for individual array elements.
 * The `mlog` modifier also accepts one of the lookup keywords (`:block`, `:unit`, `:item`, `:liquid` or `:team`) in array declarations, allowing to specify the lookup type used by the array.
 * The `cached` and `noinit cached` modifiers can be used with variables declared `remote`, with the same effect as in case of variables declared `external`.
-* Warnings are no longer issued for unused volatile variables. It is assumed that an unused volatile variable will be accessed indirectly.  
+* Warnings are no longer issued for unused volatile variables. It is assumed that an unused volatile variable will be accessed indirectly.
+* Changed the default value of the `mlog-block-optimization` from `false` to `true`.
 
 ### Deprecated
 
@@ -199,6 +204,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Added
 
+* **Breaking**: new keyword has been added to the language: `mlog`. Code that uses this keyword as a function or variable name will not compile, and the variable or function will have to be renamed.
 * Added [mlog blocks](/doc/syntax/SYNTAX-EXTENSIONS.markdown#mlog-blocks) for embedding complex mlog logic into Mindcode sources.
 * Added a [storage specification clause](/doc/syntax/SYNTAX-1-VARIABLES.markdown#remote-variables) to remote variables.
 * Added an [mlog clause](/doc/syntax/SYNTAX-1-VARIABLES.markdown#regular-variables) to regular variables, allowing to specify an mlog name for the variable to use.

@@ -124,6 +124,7 @@ class MlogBlocksBuilderTest extends AbstractCodeGeneratorTest {
     @Test
     void compilesMlogBlockWithVariables() {
         assertCompilesTo("""
+                        #set mlog-block-optimization = false;
                         var foo = 5, bar = 10;
                         mlog (in foo, out baz) {
                             print foo
@@ -146,6 +147,7 @@ class MlogBlocksBuilderTest extends AbstractCodeGeneratorTest {
     @Test
     void processesKeywordTokens() {
         assertCompilesTo("""
+                        #set mlog-block-optimization = false;
                         var foo = 10;
                         mlog (in foo) {
                             :print :"Hello"         // Supports string literals as raw tokens
@@ -167,7 +169,6 @@ class MlogBlocksBuilderTest extends AbstractCodeGeneratorTest {
     @Test
     void optimizesMlogBlockVariables() {
         assertCompilesTo("""
-                        #set mlog-block-optimization = true;
                         foo = 10;
                         mlog {
                             print $foo

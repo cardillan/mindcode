@@ -155,7 +155,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                         }
                                     },
                                     callType = NONE,
-                                    directives = null
+                                    directives = null,
+                                    debug = false
                                 },
                                 AstFunctionCall {
                                     object = null,
