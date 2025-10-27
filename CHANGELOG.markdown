@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
+* Fixed error on the Schematic Decompiler page ([#288](https://github.com/cardillan/mindcode/issues/288)).
 * Fixed the compiler not rejecting integer and double compiler option values outside their allowed range.
 * Fixed the compiler not stopping the compilation when an error in compiler directive gets detected.
 * Fixed rare internal error in Jump Threading optimization.

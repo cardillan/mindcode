@@ -64,7 +64,7 @@ public class DecompilerController {
         final long end = System.nanoTime();
         logger.info("performance decompiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
-        final String compiledCode = result.output();
+        final String compiledCode = result.output() == null ? "" : result.output();
         return new ModelAndView(
                 "decompiler",
                 "model",
@@ -83,5 +83,4 @@ public class DecompilerController {
                         0)
         );
     }
-
 }
