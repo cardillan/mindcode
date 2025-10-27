@@ -48,9 +48,11 @@ class JumpThreading extends BaseOptimizer {
                         if (jump.isUnconditional() && setAddress != null) {
                             replaceInstruction(setAddress, setAddress.withLabel(redirection.target));
                             lastCall.setCallReturn(redirection.target);
-                            setAddress = null;
                             callCount++;
                         }
+
+                        // Any jump needs to reset the setAddress
+                        setAddress = null;
 
                         if (!redirection.target.equals(jump.getTarget())) {
                             // Update the target of the original jump
