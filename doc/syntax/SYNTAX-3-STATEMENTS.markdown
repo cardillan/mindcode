@@ -502,18 +502,7 @@ end;
 
 ### `null` values
 
-When a `null` literal is used as a value in the `when` clause, Mindcode generates a strict comparison to that literal:
-
-```Mindcode
-case sorter1.config
-    when null then print("Nothing selected");
-    when @coal then print("Coal selected");
-    when @lead then print("Lead selected");
-    else print("Some other item selected");
-end; 
-```
-
-If both a zero literal and a `null` literal are present in your `when` values, both `0` and `null` are matched using strict comparison:
+When a `null` literal is used as a value in the `when` clause, Mindcode generates a strict comparison to that literal. If both a zero literal and a `null` literal are present in your `when` values, both `0` and `null` are matched using strict comparison:
 
 ```Mindcode
 var text = case number
@@ -528,7 +517,9 @@ var text = case number
 end;
 ```
 
-If the `when` clause contains an expression that evaluates to `null` or zero (as opposed to a `null` or zero literal), strict comparison isn't used. 
+If the `when null` clause is not used, or the `when` clause contains an expression that evaluates to `null` or zero (as opposed to a `null` or zero literal), `null` and zero are not distinguished by the case statement.
+
+While the [Case Switching optimization](SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) can alter case expressions heavily, the original behavior described here is preserved. 
 
 ### Additional considerations
 

@@ -56,12 +56,12 @@ Semantically unstable compiler options are handled specifically in these context
 Options to specify the target environment for the code being compiled. This includes the Mindustry version,
 as well as prescribing which specific processor features may or may not be used.
 
-| Option                                                                                       | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------------------|--------|--------------------|
-| [builtin-evaluation](#option-builtin-evaluation)                                             | global | stable             |
-| [instruction-limit](#option-instruction-limit)                                               | global | stable             |
-| [null-counter-is-noop](#option-null-counter-is-noop)                                         | global | stable             |
-| [target](#option-target)                                                                     | module | stable             |
+| Option                                               | Scope  | Semantic stability |
+|------------------------------------------------------|--------|--------------------|
+| [builtin-evaluation](#option-builtin-evaluation)     | global | stable             |
+| [instruction-limit](#option-instruction-limit)       | global | stable             |
+| [null-counter-is-noop](#option-null-counter-is-noop) | global | stable             |
+| [target](#option-target)                             | module | stable             |
 
 ### Option `builtin-evaluation`
 
@@ -204,11 +204,11 @@ Future targets will be compatible with all higher targets, unless a backwards-in
 
 Options determining how the mlog code is generated and formatted.
 
-| Option                                                                                       | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------------------|--------|--------------------|
-| [function-prefix](#option-function-prefix)                                                   | global | stable             |
-| [mlog-indent](#option-mlog-indent)                                                           | global | stable             |
-| [symbolic-labels](#option-symbolic-labels)                                                   | global | stable             |
+| Option                                     | Scope  | Semantic stability |
+|--------------------------------------------|--------|--------------------|
+| [function-prefix](#option-function-prefix) | global | stable             |
+| [mlog-indent](#option-mlog-indent)         | global | stable             |
+| [symbolic-labels](#option-symbolic-labels) | global | stable             |
 
 ### Option `function-prefix`
 
@@ -406,16 +406,16 @@ label_3:
 
 Options which affect the way the source code is compiled.
 
-| Option                                                                                       | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------------------|--------|--------------------|
-| [auto-printflush](#option-auto-printflush)                                                   | global | stable             |
-| [boundary-checks](#option-boundary-checks)                                                   | local  | stable             |
-| [emulate-strict-not-equal](#option-emulate-strict-not-equal)                                 | global | stable             |
-| [error-function](#option-error-function)                                                     | local  | stable             |
-| [error-reporting](#option-error-reporting)                                                   | local  | stable             |
-| [remarks](#option-remarks)                                                                   | local  | stable             |
-| [syntax](#option-syntax)                                                                     | module | stable             |
-| [target-guard](#option-target-guard)                                                         | global | stable             |
+| Option                                                       | Scope  | Semantic stability |
+|--------------------------------------------------------------|--------|--------------------|
+| [auto-printflush](#option-auto-printflush)                   | global | stable             |
+| [boundary-checks](#option-boundary-checks)                   | local  | stable             |
+| [emulate-strict-not-equal](#option-emulate-strict-not-equal) | global | stable             |
+| [error-function](#option-error-function)                     | local  | stable             |
+| [error-reporting](#option-error-reporting)                   | local  | stable             |
+| [remarks](#option-remarks)                                   | local  | stable             |
+| [syntax](#option-syntax)                                     | module | stable             |
+| [target-guard](#option-target-guard)                         | global | stable             |
 
 ### Option `auto-printflush`
 
@@ -560,17 +560,18 @@ The jump target (`0`) is replaced with proper instruction address when it's not 
 Options guiding the overall optimization of the compiled code or activating/deactivating specific
 optimization actions.
 
-| Option                                                                                       | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------------------|--------|--------------------|
-| [case-optimization-strength](#option-case-optimization-strength)                             | local  | stable             |
-| [goal](#option-goal)                                                                         | local  | stable             |
-| [mlog-block-optimization](#option-mlog-block-optimization)                                   | local  | stable             |
-| [passes](#option-passes)                                                                     | global | stable             |
-| [text-tables](#option-text-tables)                                                           | local  | stable             |
-| [unsafe-case-optimization](#option-unsafe-case-optimization)                                 | local  | unstable           |
-| [use-lookup-arrays](#option-use-lookup-arrays)                                               | global | stable             |
-| [use-short-arrays](#option-use-short-arrays)                                                 | global | stable             |
-| [weight](#option-weight)                                                                     | local  | stable             |
+| Option                                                           | Scope  | Semantic stability |
+|------------------------------------------------------------------|--------|--------------------|
+| [case-optimization-strength](#option-case-optimization-strength) | local  | stable             |
+| [goal](#option-goal)                                             | local  | stable             |
+| [mlog-block-optimization](#option-mlog-block-optimization)       | local  | stable             |
+| [passes](#option-passes)                                         | global | stable             |
+| [unsafe-case-optimization](#option-unsafe-case-optimization)     | local  | unstable           |
+| [use-lookup-arrays](#option-use-lookup-arrays)                   | global | stable             |
+| [use-short-arrays](#option-use-short-arrays)                     | global | stable             |
+| [use-text-jump-tables](#option-use-text-jump-tables)             | local  | stable             |
+| [use-text-translations](#option-use-text-translations)           | local  | stable             |
+| [weight](#option-weight)                                         | local  | stable             |
 
 ### Option `case-optimization-strength`
 
@@ -620,17 +621,6 @@ The default value is 5 for the web application and 25 for the command line tool.
 
 A more complex code can usually benefit from more optimization passes. On the other hand, each optimization pass can take some time to complete. Limiting the total number can prevent optimization from taking too much time or consuming too many resources.
 
-### Option `text-tables`
-
-**Option scope: [local](#local-scope)**
-
-The Mindustry 8 Logic ability to [read values from strings](MINDUSTRY-8.markdown#reading-characters-from-strings) makes it possible to encode instruction addresses into a string. This option governs whether the compiler will use this possibility. Possible values are:
-
-* `false`: text-based jump tables won't be generated.
-* `true` (the default value): the compiler generates text-based jump tables where possible.
-
-Text-based jump tables allow very efficient encoding of jump tables, both in terms of program size and execution time. The functionality, however, often requires storing unprintable characters in the string. If this poses a problem, the option can be set to `false` to disable text-based jump tables.
-
 ### Option `unsafe-case-optimization`
 
 **Option scope: [local](#local-scope)**
@@ -660,6 +650,26 @@ This option activates or deactivates using [specialized implementation for short
 * `false`: short arrays won't be generated.
 * `true` (the default value): the compiler generates short arrays when it's appropriate.
 
+### Option `use-text-jump-tables`
+
+**Option scope: [local](#local-scope)**
+
+The Mindustry 8 Logic ability to [read values from strings](MINDUSTRY-8.markdown#reading-characters-from-strings) makes it possible to encode instruction addresses into a string. This option governs whether the compiler will use this possibility. Possible values are:
+
+* `false`: text-based jump tables won't be generated.
+* `true` (the default value): the compiler generates text-based jump tables where possible.
+
+Text-based jump tables allow very efficient encoding of jump tables, both in terms of program size and execution time. The functionality, however, often requires storing unprintable characters in the string. If this poses a problem, the option can be set to `false` to disable text-based jump tables.
+
+### Option `use-text-translations`
+
+**Option scope: [local](#local-scope)**
+
+This option specifies whether the compiler may create strings (potentially containing unprintable characters) to implement [text translations](SYNTAX-6-OPTIMIZATIONS.markdown#value-translation). Possible values are:  
+
+* `false`: text translation won't be used.
+* `true` (the default value): the compiler generates text translation where possible.
+
 ### Option `weight`
 
 **Option scope: [local](#local-scope)**
@@ -673,30 +683,30 @@ While it is possible to set the code weight globally using the `#set` directive,
 Options specifying the global and individual optimization levels. Individual optimizers use global level
 when not explicitly set. Available optimization levels are {none,basic,advanced, experimental}.
 
-| Option                                                                                       | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------------------|--------|--------------------|
-| [optimization](#option-optimization)                                                         | local  | stable             |
-| [array-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization)                     | local  | stable             |
-| [case-expression-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#case-expression-optimization) | local  | stable             |
-| [case-switching](SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)                             | local  | stable             |
-| [data-flow-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization)             | local  | stable             |
-| [dead-code-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#dead-code-elimination)               | local  | stable             |
-| [expression-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization)           | local  | stable             |
-| [function-inlining](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining)                       | local  | stable             |
-| [if-expression-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization)     | local  | stable             |
-| [jump-normalization](SYNTAX-6-OPTIMIZATIONS.markdown#jump-normalization)                     | local  | stable             |
-| [jump-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#jump-optimization)                       | local  | stable             |
-| [jump-straightening](SYNTAX-6-OPTIMIZATIONS.markdown#jump-straightening)                     | local  | stable             |
-| [jump-threading](SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading)                             | local  | stable             |
-| [loop-hoisting](SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting)                               | local  | stable             |
-| [loop-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#loop-optimization)                       | local  | stable             |
-| [loop-unrolling](SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling)                             | local  | stable             |
-| [print-merging](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging)                               | local  | stable             |
-| [return-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#return-optimization)                   | local  | stable             |
-| [single-step-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination)           | local  | stable             |
-| [stack-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization)                     | local  | stable             |
-| [temp-variables-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#temp-variables-elimination)     | local  | stable             |
-| [unreachable-code-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination) | local  | stable             |
+| Option                                                                                       | Scope | Semantic stability |
+|----------------------------------------------------------------------------------------------|-------|--------------------|
+| [optimization](#option-optimization)                                                         | local | stable             |
+| [array-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization)                     | local | stable             |
+| [case-expression-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#case-expression-optimization) | local | stable             |
+| [case-switching](SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)                             | local | stable             |
+| [data-flow-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization)             | local | stable             |
+| [dead-code-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#dead-code-elimination)               | local | stable             |
+| [expression-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization)           | local | stable             |
+| [function-inlining](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining)                       | local | stable             |
+| [if-expression-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization)     | local | stable             |
+| [jump-normalization](SYNTAX-6-OPTIMIZATIONS.markdown#jump-normalization)                     | local | stable             |
+| [jump-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#jump-optimization)                       | local | stable             |
+| [jump-straightening](SYNTAX-6-OPTIMIZATIONS.markdown#jump-straightening)                     | local | stable             |
+| [jump-threading](SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading)                             | local | stable             |
+| [loop-hoisting](SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting)                               | local | stable             |
+| [loop-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#loop-optimization)                       | local | stable             |
+| [loop-unrolling](SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling)                             | local | stable             |
+| [print-merging](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging)                               | local | stable             |
+| [return-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#return-optimization)                   | local | stable             |
+| [single-step-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination)           | local | stable             |
+| [stack-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization)                     | local | stable             |
+| [temp-variables-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#temp-variables-elimination)     | local | stable             |
+| [unreachable-code-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination) | local | stable             |
 
 **Option scope: [local](#local-scope)** (for all options in this category)
 
@@ -728,14 +738,14 @@ Some optimizations performed on the `experimental` level have a global scope and
 
 Options to activate debugging features or additional output from the compiler.
 
-| Option                                                                                       | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------------------|--------|--------------------|
-| [debug](#option-debug)                                                                       | local  | unstable           |
-| [debug-messages](#option-debug-messages)                                                     | global | stable             |
-| [parse-tree](#option-parse-tree)                                                             | global | stable             |
-| [print-code-size](#option-print-code-size)                                                   | global | stable             |
-| [print-unresolved](#option-print-unresolved)                                                 | global | stable             |
-| [sort-variables](#option-sort-variables)                                                     | global | stable             |
+| Option                                       | Scope  | Semantic stability |
+|----------------------------------------------|--------|--------------------|
+| [debug](#option-debug)                       | local  | unstable           |
+| [debug-messages](#option-debug-messages)     | global | stable             |
+| [parse-tree](#option-parse-tree)             | global | stable             |
+| [print-code-size](#option-print-code-size)   | global | stable             |
+| [print-unresolved](#option-print-unresolved) | global | stable             |
+| [sort-variables](#option-sort-variables)     | global | stable             |
 
 ### Option `debug`
 
@@ -839,10 +849,10 @@ processor is much faster than Mindustry processors, but can't run instructions w
 from the Mindustry World. Sole exceptions are memory cells ('cell1' to 'cell9') and memory banks
 ('bank1' to 'bank9'), which can be read and written.
 
-| Option                                                                                       | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------------------|--------|--------------------|
-| [output-profiling](#option-output-profiling)                                                 | global | stable             |
-| [run](#option-run)                                                                           | global | stable             |
+| Option                                       | Scope  | Semantic stability |
+|----------------------------------------------|--------|--------------------|
+| [output-profiling](#option-output-profiling) | global | stable             |
+| [run](#option-run)                           | global | stable             |
 
 ### Option `output-profiling`
 

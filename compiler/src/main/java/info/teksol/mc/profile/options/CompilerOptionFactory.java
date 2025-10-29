@@ -236,13 +236,6 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 true));
 
-        list.add(new BooleanCompilerOptionValue(OptimizationOptions.TEXT_TABLES, "",
-                "when active, generates jump tables by encoding instruction addresses into a single String value, and uses " +
-                "a single 'read' instruction to directly set the counter to the target address (target 8 or higher required)",
-                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
-                OptionAvailability.UNIVERSAL, category,
-                true));
-
         list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_LOOKUP_ARRAYS, "",
                 "allows using the lookup mechanism for implementing internal arrays",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
@@ -252,6 +245,19 @@ public class CompilerOptionFactory {
         list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_SHORT_ARRAYS, "",
                 "allows using specialized implementation of short arrays (2-4 elements)",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_TEXT_JUMP_TABLES, "",
+                "when active, generates jump tables by encoding instruction addresses into a single String value, and uses " +
+                        "a single 'read' instruction to directly set the counter to the target address (target 8 or higher required)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_TEXT_TRANSLATIONS, "",
+                "allows using 'read' instruction to implement simple case expressions",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                 OptionAvailability.UNIVERSAL, category,
                 true));
     }

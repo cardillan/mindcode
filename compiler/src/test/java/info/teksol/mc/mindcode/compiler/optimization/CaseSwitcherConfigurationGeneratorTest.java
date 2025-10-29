@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher.ConvertCaseExpressionAction;
 import info.teksol.mc.mindcode.compiler.optimization.cases.CaseSwitcherConfigurations;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.util.StringUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -30,6 +31,11 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
     private record StrengthStatistic(int configurations, double improvement) {}
 
     private static final Map<String, List<StrengthStatistic>> results = new ConcurrentHashMap<>();
+
+    @Override
+    protected CompilerProfile createCompilerProfile() {
+        return super.createCompilerProfile().setUseTextJumpTables(false).setUseTextTranslations(false);
+    }
 
     @AfterAll
     static void done() throws IOException {

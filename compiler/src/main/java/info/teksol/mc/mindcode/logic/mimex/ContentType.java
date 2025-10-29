@@ -41,8 +41,11 @@ public enum ContentType {
         this.hasLookup = false;
     }
 
-    public @Nullable String getLookupKeyword() {
-        return hasLookup ? name().toLowerCase() : null;
+    public String getLookupKeyword() {
+        if (!hasLookup) {
+            throw new IllegalStateException("Lookup not supported");
+        }
+        return name().toLowerCase();
     }
 
     private static final Map<String, ContentType> VALUE_MAP = createValueMap();

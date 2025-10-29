@@ -34,7 +34,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
         void processesBasicSwitch() {
             assertCompilesTo("""
                             #set case-optimization-strength = 0;
-                            #set text-tables = false;
+                            #set use-text-jump-tables = false;
                             i = rand(10);
                             case i
                                 when 0 then print(0);
@@ -114,7 +114,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
         void processesBasicSwitchNoElse() {
             assertCompilesTo("""
                             #set case-optimization-strength = 0;
-                            #set text-tables = false;
+                            #set use-text-jump-tables = false;
                             i = rand(10);
                             case i
                                 when 0 then print(0);
@@ -193,7 +193,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
         void processesReturningSwitchWithElse() {
             assertCompilesTo("""
                             #set case-optimization-strength = 0;
-                            #set text-tables = false;
+                            #set use-text-jump-tables = false;
                             value = floor(rand(20));
                             text = case value
                                 when 0 then "None";
@@ -256,7 +256,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
         void processesUnsafeCaseExpression() {
             assertCompilesTo("""
                             #set unsafe-case-optimization = true;
-                            #set text-tables = false;
+                            #set use-text-jump-tables = false;
                             param p = 0;
                             print(case p
                                 when 0 then "0";
@@ -416,7 +416,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
         @Test
         void processesItemCaseExpression() {
             assertCompilesTo("""
-                            #set text-tables = false;
+                            #set use-text-jump-tables = false;
                             param p = @coal;
                             print(case p
                                 when @copper,
@@ -472,7 +472,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
         void processesSplitJumpTable() {
             assertCompilesTo("""
                             #set instruction-limit = 60;
-                            #set text-tables = false;
+                            #set use-text-jump-tables = false;
                             param p = 0;
                             print(case p
                                 when 0, 2, 4, 6, 50, 52, 54, 56 then "A";
@@ -612,7 +612,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
         void processesCompressedSplitJumpTable() {
             assertCompilesTo("""
                             #set instruction-limit = 60;
-                            #set text-tables = false;
+                            #set use-text-jump-tables = false;
                             param p = 0;
                             print(case p
                                 when 0, 2, 4, 6, 8, 50, 52 then "A";

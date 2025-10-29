@@ -283,7 +283,7 @@ Jumps and labels can be used in an mlog block. Labels must be unique within a bl
 Mindcode analyzes all `jump` instructions in an mlog block and inspects their labels; any label not defined in the current mlog block causes an error.
 
 > [!NOTE]
-> Mindcode tries to prevent creating jumps or other means of control transfer from one mlog block to another. When this protection is circumvented and jumps between different code blocks are realized, the resulting behavior of the program [is undefined](#jumping-between-mlog-blocks).
+> Mindcode tries to prevent creating jumps or other means of control transfer from one mlog block to another. When this protection is circumvented and jumps between different code blocks are realized, the resulting behavior of the program [is undefined](#example-of-invalid-code---jumping-between-mlog-blocks).
 
 When a label appears as a token in _any_ instruction, it is replaced with the prefixed version. This ensures proper handling of possible future instructions referencing labels (say, `call label`). Naturally, any new, unknown instruction using labels won't be recognized by Mindcode and therefore can't be inspected to verify their labels are local.
 
@@ -311,12 +311,12 @@ Block comments (`/* A comment */`) are not supported in an mlog block.
 
 ### Optimization
 
-The code in an mlog block is not optimized at all. Optimizations such as unreachable code elimination, print merging, and others are not applied to an mlog block. Only the following processing is applied to mlog blocks:
+The code in an mlog block is generally not optimized. Optimizations such as unreachable code elimination, print merging, and others are not applied to an mlog block. Only the following processing is applied to mlog blocks:
 
 * A completely unreachable mlog block is removed by [Unreachable Code elimination](SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination). However, Mindcode can't detect when an mlog block itself makes the code following it unreachable (e.g., by using an infinite loop or the `end` instruction), and doesn't ever remove the code following an mlog block.
 * If the mlog block contains an `end` instruction, Mindcode assumes the instruction may or may not be executed and updates the surrounding code accordingly.
 * The mlog block is always treated as if it manipulates the text buffer: no print merging across the block will occur. 
-* It is possible to activate a limited [Data Flow optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) of mlog blocks by setting `mlog-block-optimization` to `true`. Currently, the optimization is only able to propagate constant values to the mlog block when possible. Correctly declaring output variables is vital for this optimization to produce valid code. 
+* A limited [Data Flow optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) is applied to mlog blocks. Currently, the optimization is only able to propagate constant values to the mlog block. Correctly declaring output variables is vital for this optimization to produce valid code. This optimization can be turned off by setting `mlog-block-optimization` to `false`.
 
 ### Example
 
@@ -367,7 +367,7 @@ print *tmp0
 printflush message1
 ```
 
-#### Jumping between mlog blocks
+#### Example of invalid code - jumping between mlog blocks
 
 To better understand how problems may arise from flow control structures introduced into the code in ways not understood by Mindcode, let's consider this:
 

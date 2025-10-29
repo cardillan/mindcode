@@ -16,8 +16,8 @@ public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentC
 
     private int configurationCount = 0;
 
-    public CombinatorialSegmentConfigurationGenerator(Targets targets, boolean logicConversion, int strength) {
-        this.partitions = splitToPartitions(targets, logicConversion);
+    public CombinatorialSegmentConfigurationGenerator(CaseStatement caseStatement, boolean logicConversion, int strength) {
+        this.partitions = splitToPartitions(caseStatement, logicConversion);
         this.strength = (1 << strength) >> 1;
     }
 

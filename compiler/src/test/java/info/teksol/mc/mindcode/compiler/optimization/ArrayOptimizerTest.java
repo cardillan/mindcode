@@ -247,7 +247,7 @@ class ArrayOptimizerTest {
         void inlinesRegularArrays() {
             assertCompilesTo("""
                             #set builtin-evaluation = none;
-                            #set text-tables = false;
+                            #set use-text-jump-tables = false;
                             var array[5];
                             param p = 0;
                             

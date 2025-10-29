@@ -23,10 +23,6 @@ public interface LocalCompilerProfile {
     <T extends Enum<T>> T getEnumValue(Enum<?> option);
 
     //<editor-fold desc="Environment Options">
-    default boolean isTextJumpTables() {
-        return getBooleanValue(OptimizationOptions.TEXT_TABLES);
-    }
-
     ProcessorVersion getProcessorVersion();
 
     ProcessorEdition getProcessorEdition();
@@ -81,6 +77,14 @@ public interface LocalCompilerProfile {
 
     default boolean isUnsafeCaseOptimization() {
         return getBooleanValue(OptimizationOptions.UNSAFE_CASE_OPTIMIZATION);
+    }
+
+    default boolean isUseTextJumpTables() {
+        return getBooleanValue(OptimizationOptions.USE_TEXT_JUMP_TABLES);
+    }
+
+    default boolean isUseTextTranslations() {
+        return getBooleanValue(OptimizationOptions.USE_TEXT_TRANSLATIONS);
     }
     //</editor-fold>
 

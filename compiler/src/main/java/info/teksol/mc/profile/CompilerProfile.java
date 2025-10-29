@@ -132,7 +132,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
 
     @Override
     public boolean useTextJumpTables() {
-        return isTextJumpTables() && !isSymbolicLabels() && getProcessorVersion().atLeast(ProcessorVersion.V8A);
+        return isUseTextJumpTables() && !isSymbolicLabels() && getProcessorVersion().atLeast(ProcessorVersion.V8A);
     }
 
     public CompilerProfile decode(String encoded) {
@@ -209,8 +209,13 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return this;
     }
 
-    public CompilerProfile setTextJumpTables(boolean textJumpTables) {
-        getOption(OptimizationOptions.TEXT_TABLES).setValue(textJumpTables);
+    public CompilerProfile setUseTextJumpTables(boolean textJumpTables) {
+        getOption(OptimizationOptions.USE_TEXT_JUMP_TABLES).setValue(textJumpTables);
+        return this;
+    }
+
+    public CompilerProfile setUseTextTranslations(boolean textJumpTables) {
+        getOption(OptimizationOptions.USE_TEXT_TRANSLATIONS).setValue(textJumpTables);
         return this;
     }
     //</editor-fold>

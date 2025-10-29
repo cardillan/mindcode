@@ -13,6 +13,7 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SortCategory;
+import info.teksol.mc.util.Utf8Utils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -229,13 +230,11 @@ public class LogicInstructionLabelResolver {
         }
     }
 
-    private static final Set<Integer> invalidAddresses = Set.of(0, (int) '\r',  (int) '"', (int) '\\');
-
     private void calculateAddresses(List<LogicInstruction> program) {
         int instructionPointer = 0;
         for (int i = 0; i < program.size(); i++) {
             final LogicInstruction instruction = program.get(i);
-            if (instruction.isJumpTarget() && invalidAddresses.contains(instructionPointer)) {
+            if (instruction.isJumpTarget() && Utf8Utils.INVALID_CHARS.contains(instructionPointer)) {
                 program.add(i++, processor.createInstruction(instruction.getAstContext(), Opcode.NOOP));
                 instructionPointer++;
             }
@@ -266,6 +265,10 @@ public class LogicInstructionLabelResolver {
         } else {
             return argument;
         }
+    }
+
+    private int resolveAddress(LogicLabel label) {
+        return ((LogicLabel) resolveLabel(label)).getAddress();
     }
 
     private List<LogicInstruction> resolveAddresses(List<LogicInstruction> program) {
@@ -341,13 +344,8 @@ public class LogicInstructionLabelResolver {
     }
 
     private LogicInstruction buildTextTableJump(MultiTargetInstruction ix, List<LogicLabel> jumpTable) {
-        // Build the string jump table
-        StringBuilder sbr = new StringBuilder(jumpTable.size() + 1);
-        for (LogicLabel label : jumpTable) {
-            int address = ((LogicLabel) resolveLabel(label)).getAddress();
-            sbr.append(address == 10 ? "\\n" : (char) address);
-        }
-        LogicString jumpTableString = LogicString.create(ix.sourcePosition(), sbr.toString());
+        LogicString jumpTableString = LogicString.create(ix.sourcePosition(),
+                Utf8Utils.encode(jumpTable.stream().mapToInt(this::resolveAddress)));
         return processor.createInstruction(ix.getAstContext(), READ, LogicBuiltIn.COUNTER,
                 jumpTableString, ix.getTarget());
     }

@@ -136,14 +136,14 @@ public abstract class AbstractCommandLineTest {
         class TextJumpTablesArgumentTest {
             @Test
             public void longArgumentTrue() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--text-tables true");
-                assertTrue(profile.isTextJumpTables());
+                CompilerProfile profile = parseToProfile("--use-text-jump-tables true");
+                assertTrue(profile.isUseTextJumpTables());
             }
 
             @Test
             public void longArgumentFalse() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--text-tables false");
-                assertFalse(profile.isTextJumpTables());
+                CompilerProfile profile = parseToProfile("--use-text-jump-tables false");
+                assertFalse(profile.isUseTextJumpTables());
             }
         }
 

@@ -249,9 +249,9 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
     @Test
     void processesDirectiveTextJumpTables() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        profile.setTextJumpTables(false);
-        processDirective(profile, "text-tables", "false");
-        assertFalse(profile.isTextJumpTables());
+        profile.setUseTextJumpTables(false);
+        processDirective(profile, "use-text-jump-tables", "false");
+        assertFalse(profile.isUseTextJumpTables());
     }
 
     @Test

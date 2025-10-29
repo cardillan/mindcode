@@ -100,8 +100,9 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
                 [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
                 [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization {true,false}] [--text-tables {true,false}] [--use-lookup-arrays {true,false}]
-                [--use-short-arrays {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
+                [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
+                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
+                [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
                 [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
@@ -225,14 +226,16 @@ Optimization options:
                          time
   --mlog-block-optimization {true,false}
                          allows (limited) optimization of code inside mlog blocks
-  --text-tables {true,false}
-                         when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
-                         value, and uses a single 'read' instruction to  directly  set the counter to the target address
-                         (target 8 or higher required)
   --use-lookup-arrays {true,false}
                          allows using the lookup mechanism for implementing internal arrays
   --use-short-arrays {true,false}
                          allows using specialized implementation of short arrays (2-4 elements)
+  --use-text-jump-tables {true,false}
+                         when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
+                         value, and uses a single 'read' instruction to  directly  set the counter to the target address
+                         (target 8 or higher required)
+  --use-text-translations {true,false}
+                         allows using 'read' instruction to implement simple case expressions
 
 Optimization levels:
   Options specifying the global and individual  optimization  levels.  Individual  optimizers  use global level when not
@@ -397,8 +400,9 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
                 [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
                 [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization {true,false}] [--text-tables {true,false}] [--use-lookup-arrays {true,false}]
-                [--use-short-arrays {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
+                [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
+                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
+                [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
                 [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
@@ -511,14 +515,16 @@ Optimization options:
                          time
   --mlog-block-optimization {true,false}
                          allows (limited) optimization of code inside mlog blocks
-  --text-tables {true,false}
-                         when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
-                         value, and uses a single 'read' instruction to  directly  set the counter to the target address
-                         (target 8 or higher required)
   --use-lookup-arrays {true,false}
                          allows using the lookup mechanism for implementing internal arrays
   --use-short-arrays {true,false}
                          allows using specialized implementation of short arrays (2-4 elements)
+  --use-text-jump-tables {true,false}
+                         when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
+                         value, and uses a single 'read' instruction to  directly  set the counter to the target address
+                         (target 8 or higher required)
+  --use-text-translations {true,false}
+                         allows using 'read' instruction to implement simple case expressions
 
 Optimization levels:
   Options specifying the global and individual  optimization  levels.  Individual  optimizers  use global level when not

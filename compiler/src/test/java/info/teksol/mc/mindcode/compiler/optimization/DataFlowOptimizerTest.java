@@ -36,7 +36,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         void handlesArrays() {
             assertCompilesTo("""
                             #set target = 8.0;
-                            #set text-tables = false;
+                            #set use-text-jump-tables = false;
                             #set array-optimization = none;
                             const SIZE = 2;
                             param LIMIT = SIZE;
@@ -164,7 +164,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         @Test
         void handlesCaseExpressions() {
             assertCompilesTo("""
-                            #set text-tables = false;
+                            #set use-text-translations = false;
+                            #set use-text-jump-tables = false;
                             a = case cell1[0]
                                 when 0, 1, 2 then 10;
                                 when 10 .. 20 then 20;

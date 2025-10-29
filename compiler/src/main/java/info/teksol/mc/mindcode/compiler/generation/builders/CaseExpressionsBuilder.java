@@ -82,7 +82,7 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
         }
 
         assembler.setSubcontextType(AstSubcontextType.ELSE, multiplier);
-        ValueStore elseValue = evaluateBody(node.getElseBranch());
+        ValueStore elseValue = node.getElseBranch().isEmpty() ? LogicNull.NULL : evaluateBody(node.getElseBranch());
         assembler.createSet(resultVar, elseValue.getValue(assembler));
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
         assembler.createLabel(exitLabel);

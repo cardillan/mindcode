@@ -1,4 +1,4 @@
-#set target = 7;
+#set target = 8;
 #set builtin-evaluation = full;
 #set err-invalid-content = false;
 #set single-step-elimination = none;
@@ -8,39 +8,40 @@
 
 def identifyBlock(block)
     case block
-        when null                                                                   then "A";
-        when @kiln                                                                  then "B";
-        when @plastanium-compressor                                                 then "C";
-        when @phase-weaver                                                          then "D";
-        when @cryofluid-mixer                                                       then "E";
-        when @pyratite-mixer                                                        then "F";
-        when @blast-mixer                                                           then "G";
-        when @melter                                                                then "H";
-        when @separator                                                             then "I";
-        when @disassembler                                                          then "J";
-        when @spore-press                                                           then "K";
-        when @door, @door-large                                                     then "L";
-        when @scrap-wall, @scrap-wall-large, @scrap-wall-huge, @scrap-wall-gigantic then "M";
-        when @conveyor, @titanium-conveyor, @plastanium-conveyor, @armored-conveyor then "N";
-        when @conduit, @pulse-conduit, @plated-conduit, @liquid-router              then "O";
-        when @liquid-tank, @liquid-junction, @liquid-container                      then "P";
-        when @disperse                                                              then "Q";
-        when @unit-repair-tower                                                     then "R";
-        when @diffuse                                                               then "S";
-        when @prime-refabricator                                                    then "T";
-        when @tank-refabricator                                                     then "U";
-        when @mech-refabricator                                                     then "V";
-        when @ship-refabricator                                                     then "W";
-        when @slag-heater                                                           then "X";
-        when @lustre                                                                then "Y";
-        when @scathe                                                                then "Z";
-        else "";
+        when null                                                                   then 'A';
+        when @kiln                                                                  then 'B';
+        when @plastanium-compressor                                                 then 'C';
+        when @phase-weaver                                                          then 'D';
+        when @cryofluid-mixer                                                       then 'E';
+        when @pyratite-mixer                                                        then 'F';
+        when @blast-mixer                                                           then 'G';
+        when @melter                                                                then 'H';
+        when @separator                                                             then 'I';
+        when @disassembler                                                          then 'J';
+        when @spore-press                                                           then 'K';
+        when @door, @door-large                                                     then 'L';
+        when @scrap-wall, @scrap-wall-large, @scrap-wall-huge, @scrap-wall-gigantic then 'M';
+        when @conveyor, @titanium-conveyor, @plastanium-conveyor, @armored-conveyor then 'N';
+        when @conduit, @pulse-conduit, @plated-conduit, @liquid-router              then 'O';
+        when @liquid-tank, @liquid-junction, @liquid-container                      then 'P';
+        when @disperse                                                              then 'Q';
+        when @unit-repair-tower                                                     then 'R';
+        when @diffuse                                                               then 'S';
+        when @prime-refabricator                                                    then 'T';
+        when @tank-refabricator                                                     then 'U';
+        when @mech-refabricator                                                     then 'V';
+        when @ship-refabricator                                                     then 'W';
+        when @slag-heater                                                           then 'X';
+        when @lustre                                                                then 'Y';
+        when @scathe                                                                then 'Z';
+        else '0';
     end;
 end;
 
 void printAll()
-    for i in -1 ... @blockCount do
-        print(identifyBlock(lookup(:block, i)));
+    for var i in -1 ... @blockCount do
+        var char = identifyBlock(lookup(:block, i));
+        if char != '0' then printchar(char); end;
     end;
 end;
 

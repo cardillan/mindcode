@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode;
 
-import info.teksol.mc.emulator.processor.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
@@ -8,13 +7,11 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.AbstractAstBuilderTest;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
-import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
-import info.teksol.mc.profile.options.*;
 import info.teksol.mc.util.StringUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -27,7 +24,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -512,57 +512,5 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
         }
 
         return count;
-    }
-
-    @Test
-    <T> void verifyOptionList() {
-        for (OptionCategory optionCategory : OptionCategory.values()) {
-            verifyOptionListInCategory(optionCategory);
-        }
-    }
-
-    private void verifyOptionListInCategory(OptionCategory category) {
-        Map<Enum<?>, CompilerOptionValue<?>> compilerOptions = CompilerOptionFactory.createCompilerOptions(false);
-        List<CompilerOption> list = compilerOptions.values().stream()
-                .map(CompilerOption.class::cast)
-                .filter(option -> option.getCategory() == category && !HIDDEN_OPTIONS.contains(option.getOption()))
-                .filter(option -> option.getAvailability() == OptionAvailability.UNIVERSAL || option.getAvailability() == OptionAvailability.DIRECTIVE)
-                .sorted(Comparator.comparingInt(this::getOptionPrecedence).thenComparing(CompilerOption::getOptionName))
-                .toList();
-
-        if (!list.isEmpty()) {
-            final String TEMPLATE = "| %-92s | %-6s | %-18s |%n";
-            System.out.println("## " + category.title);
-            System.out.println();
-            System.out.println(category.description);
-            System.out.printf(TEMPLATE, "Option", "Scope", "Semantic stability");
-            System.out.printf("|----------------------------------------------------------------------------------------------|--------|--------------------|%n");
-            list.forEach(option -> System.out.printf(TEMPLATE, getOptionLink(option),
-                    option.getScope().name().toLowerCase(), option.getStability().name().toLowerCase()));
-
-            System.out.println();
-        }
-    }
-
-    private String getOptionLink(CompilerOption option) {
-        return switch (option.getOption()) {
-            case Optimization o ->
-                    "[" + option.getOptionName() + "](" + "SYNTAX-6-OPTIMIZATIONS.markdown#" + option.getOptionName() + ")";
-//            case ExecutionFlag e -> "[" + option.getOptionName() + "](" + "#option-" + option.getOptionName() + ")";
-            default -> "[" + option.getOptionName() + "](" + "#option-" + option.getOptionName() + ")";
-        };
-    }
-
-    private static final Set<Enum<?>> HIDDEN_OPTIONS = Set.of(
-            DebuggingOptions.CASE_CONFIGURATION,
-            DebuggingOptions.DEBUG_OUTPUT
-    );
-
-    private int getOptionPrecedence(CompilerOption option) {
-        return switch (option.getOption()) {
-            case Optimization o -> 1;
-            case ExecutionFlag o -> 1;
-            default -> 0;
-        };
     }
 }

@@ -48,7 +48,8 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
 
     public AbstractProcessorTest() {
         this.symbolicLabels = getClass().getSimpleName().contains("SymbolicLabels");
-        logSuffix = symbolicLabels ? "-symbolic.log" : ".log";
+        boolean translartion = getClass().getSimpleName().contains("Translation");
+        logSuffix = symbolicLabels ? "-symbolic.log" : translartion ? "-translation.log" : ".log";
     }
 
     @Override
@@ -71,6 +72,10 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
     }
 
     protected abstract String getScriptsDirectory();
+
+    protected String getLogDirectory() {
+        return getScriptsDirectory();
+    }
 
     private static final Map<String, String> headers = new ConcurrentHashMap<>();
     private static final Map<String, Queue<String>> results = new ConcurrentHashMap<>();

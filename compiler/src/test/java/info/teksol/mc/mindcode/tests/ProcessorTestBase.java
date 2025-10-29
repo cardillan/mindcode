@@ -23,6 +23,33 @@ public abstract class ProcessorTestBase extends AbstractProcessorTest {
     }
 
     @Test
+    void processesCaseExpressions() {
+        testCode("""
+                        #set use-text-translations = false;
+                        param x = 1;
+                        a = case x
+                            when 0 then 0;
+                        end;
+                        print(a);
+                        """,
+                "null"
+        );
+    }
+
+    @Test
+    void processesTranslatedCaseExpressions() {
+        testCode("""
+                        param x = 1;
+                        a = case x
+                            when 0 then 0;
+                        end;
+                        print(a);
+                        """,
+                "null"
+        );
+    }
+
+    @Test
     void processesBasicCode() {
         testCode("""
                 allocate heap in bank1[0...512];

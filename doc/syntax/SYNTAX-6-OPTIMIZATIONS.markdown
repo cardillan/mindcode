@@ -297,7 +297,7 @@ In Mindustry 8, it is possible to [read character values from a string](MINDUSTR
 
 * The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version `8` or higher.
 * The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive.
-* The [text-tables](SYNTAX-5-OTHER.markdown#option-text-tables) option must be active.
+* The [use-text-jump-tables](SYNTAX-5-OTHER.markdown#option-use-text-jump-tables) option must be active.
 
 When text-based table dispatch is possible, it is always used by the compiler, as it always performs better in terms of both code size and execution time, compared to alternatives. When used with inlined tables, text-based table dispatch even compensates for the disadvantage of folded tables, making them perform identically to unfolded tables while halving the table size.
 
@@ -543,7 +543,7 @@ The optimization is performed only when the following conditions are met:
 
 Case Switching is a [dynamic optimization](#static-and-dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
 
-Case expressions are normally compiled to a sequence of conditional jumps: for each `when` branch the entry condition(s) of that clause is evaluated; when it is `false`, the control is transferred to the next `when` branch, and eventually to the `else` branch or end of the expression. This means the case expression evaluates—on average—half of all existing conditions, assuming even distribution of the case expression input values. (If some input values of the case expressions are more frequent, it is possible to achieve better average execution times by placing those values first.)
+[Case expressions](SYNTAX-3-STATEMENTS.markdown#case-expressions) are normally compiled to a sequence of conditional jumps: for each `when` branch the entry condition(s) of that clause is evaluated; when it is `false`, the control is transferred to the next `when` branch, and eventually to the `else` branch or end of the expression. This means the case expression evaluates—on average—half of all existing conditions, assuming even distribution of the case expression input values. (If some input values of the case expressions are more frequent, it is possible to achieve better average execution times by placing those values first.)
 
 The Case Switching optimization improves case expressions which branch on integer values of the expression, or on Mindustry content objects.
 
@@ -596,13 +596,13 @@ In Mindustry 8, it is possible to [read character values from a string](MINDUSTR
 
 * The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version `8` or higher.
 * The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive.
-* The [text-tables](SYNTAX-5-OTHER.markdown#option-text-tables) option must be active.
+* The [use-text-jump-tables](SYNTAX-5-OTHER.markdown#option-use-text-jump-tables) option must be active.
 
 When all these conditions are met, the case expression is always converted to a text-based jump table. This is the most efficient implementation of the case expression possible, both in terms of execution speed and code size.
 
 ### Range check elimination
 
-When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable of determining this is the case and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, you inform Mindcode that all input values are handled by case expressions. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
+When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable of determining this is the case and keeps these jumps in place by default. By setting the [`unsafe-case-optimization`](SYNTAX-5-OTHER.markdown#option-unsafe-case-optimization) compiler directive to `true`, you inform Mindcode that all input values are handled by case expressions. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
 
 Putting an `else` branch into a case expression indicates not all input values are handled, and doing so disables the unsafe case optimization: the basic optimization may still happen, but the out-of-range checks will remain.
 
@@ -662,6 +662,95 @@ When the jump table starts at zero value, it is possible to generate a faster co
 Similarly, when the Mindustry content conversion is applied, the `builtin-evaluation` option is set to `full` and the jump table ends at the largest ID of the respective Mindustry content, a jump instruction handling values larger than the end of the table can be omitted, as the optimizer knows no larger values may occur.
 
 When the jump table doesn't start or end at these values naturally, Mindcode may pad the table at either end with additional jumps to the `else` branch. The optimizer considers the possibility of padding the table at the low end, high end, or both, and chooses the option that gives the best performance given the instruction space limit.
+
+### Value translation
+
+When the case expression assigns a single new value to a variable in each branch, and the values can be represented as integers in a reasonable range, the entire expression can be encoded as a `read` from a string containing the encoded values. The basic case is:
+
+```
+output = case input
+    when 0 then 'A';
+    when 1 then 'B';
+    when 2 then 'C';
+end;
+```
+which would produce
+```
+read output "ABC" input
+```
+
+Note that input values other than `0`, `1`, or `2` will result in a `null`, which is what the original case expression does too.
+
+Further on, we call the input values explicitly handled by the case expression "keys" and the possible values assigned to `output` "output values."
+
+Now, assuming the case statement can be converted to text translation, several factors may complicate things:
+
+1. Input different from an integer range starting at 0:
+   1. `input` is a Mindustry content: additional mapping fom content to logic ID needed,
+   2. `input` is an integer, and `min(keys)` is negative: `input` is offset by `-min(keys)`,
+   3. `input` is an integer, and `min(keys)` is above zero:
+      1. the translation table is padded by `else` values up to `min(keys)`, if possible, or
+      2. `input` is offset by `-min(keys)`.
+2. Output values are not representable in a string: an offset is added to output values which must then be subtracted. Unfortunately, this subtraction damages null values naturally produced by the `read` instruction, may need to be compensated for later on.
+3. Keys contain `null` (meaning a null value of `input` needs to be specifically handled):
+   1. `null` maps to the same value as zero: no action needed,
+   2. otherwise, a `null`-handling `select` will be added after translation.
+4. One of the output values is `null`:
+   1. `null` is on the else branch only, and the set of keys covers all possible input values: this is the basic case above, no handling needed,
+   2. otherwise the null-producing keys are mapped to an unused output value, and a `select` converts it into a `null`.
+5. Handling of values outside the mapping string (these values are always handed by the else branch):
+   1. the else branch doesn't output `null`: a `select` instruction converts the `null` produced by translation to the actual output value,
+   2. the else branch does output `null`, but this value is damaged by subtracting offset: the same instruction as above.
+6. Output values are a Mindustry content: additional mapping from logic ID to content is added.
+
+As has been mentioned in case 1.3.1, the translation table can be padded on the lower end to avoid the need to offset the input value. Similarly, when the Mindustry content conversion is applied, the `builtin-evaluation` option is set to `full`, the translation table may be padded on the high end up to the largest ID of the respective Mindustry content, possibly avoiding the need to handle case 5 above. 
+
+Instructions corresponding to the above cases:
+
+| Case | Instruction                                                      |
+|:----:|:-----------------------------------------------------------------|
+|  1   | `sensor tmp input @id` or `op sub tmp input minKeys`             |
+|  -   | `read origOutput "translation" input`                            |
+|  2   | `op sub output origOutput offset`                                |
+|  3   | `select output strictEqual input null nullOutput prevOutput`     |
+|  4   | `select output strictEqual prevOutput nullValue null prevOutput` | 
+|  5   | `select output strictEqual origOutput null elseValue prevOutput` | 
+|  6   | `lookup <contentType> output prevOutput`                         |
+
+Note: `prevOutput` holds the output value from the previous step, `origOutput` or `output` is the output from the current step. The last output value produced by the code is the resulting value of the translation.
+
+When [`unsafe-case-optimization`](SYNTAX-5-OTHER.markdown#option-unsafe-case-optimization) is set to `true`, the handling of case 5 and sometimes case 4 may be omitted, as it is supposed not to occur. However, if you activate the `unsafe-case-optimization` directive, and an unhandled input value is encountered, the behavior of the generated code is undefined.
+
+The most complex case consists of seven instructions. When the optimization goal is speed, another solution will probably perform better than the more complex cases. When optimizing for size, though, even the most complex translation might be smaller than alternatives, so it is possible it gets generated:
+
+```Mindcode
+#set target = 8;
+#set goal = size;
+param input = @copper;
+volatile var output = case input
+    when @copper      then @silicon;              
+    when null         then @lead;                   // causes case 2
+    when @coal        then @copper;                 // causes case 3
+    when @lead        then null;                    // causes case 4
+    else @scrap;                                    // causes case 5
+end;
+```
+
+produces
+
+```mlog
+set input @copper
+sensor *tmp1 input @id
+read *tmp2 "9:8880" *tmp1
+op sub *tmp3 *tmp2 48
+select *tmp4 strictEqual *tmp1 null @lead *tmp3
+select *tmp5 strictEqual *tmp4 10 null *tmp4
+select *tmp6 strictEqual *tmp2 null @scrap *tmp5
+lookup item .output *tmp6
+```
+
+> [!NOTE]
+> The text translation optimization works best when using readable characters as values produced by the case expression. This can be done easily by using character literals Mindcode provides (as seen in the first translation example [here](#value-translation)).
 
 ### Example
 

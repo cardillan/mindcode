@@ -49,14 +49,8 @@ public abstract class CaseSwitcherProcessorTestBase extends AbstractProcessorTes
         return fileName.replace(".mnd", String.format(" (limit %4d)", codeSize));
     }
 
-    private IntStream codeSizes(String fileName) {
-        int i = fileName.indexOf("-");
-        return switch(fileName.substring(0, i)) {
-            case "distinct" -> IntStream.of(0, 110, 200, 500);
-            case "mixed" -> IntStream.of(0, 140, 230, 500);
-            case "homogenous" -> IntStream.of(0, 60, 100, 500);
-            default -> throw new IllegalArgumentException("Unknown test name: " + fileName);
-        };
+    protected IntStream codeSizes(String fileName) {
+        return IntStream.of(0, 500);
     }
 
     @TestFactory
