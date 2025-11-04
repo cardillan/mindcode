@@ -587,7 +587,8 @@ Notes:
 The following conditions must be met for a case expression to be processed by this optimization:
 
 * All values used in `when` clauses must be effectively constant.
-* All values used in `when` clauses must be integers, or must be convertible to integers (see [Mindustry content conversion](#mindustry-content-conversion)). Specifically, no `null` values may be used.
+* All values used in `when` clauses must be integers, or must be convertible to integers (see [Mindustry content conversion](#mindustry-content-conversion)).
+* `null` values in `when` clauses are fully supported for Mindustry content. In case the `null` values in when branches are used alongside integer values, only the [value translation optimization](#value-translation) is available.
 * Values used in `when` clauses must be unique; when ranges are used, they must not overlap with other ranges or standalone values.
 
 #### Text-based jump tables
@@ -637,7 +638,7 @@ Mindcode arranges the code to only perform checks distinguishing between `null` 
 
 ### Jump table compression
 
-When a text-based jump table cannot be used, a regular jump table is considered instead. Building a single jump table for the entire case expression often produces the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations described here into account as well. To locate the segment handling a particular input value, a bisection search is used.
+When a text-based jump table cannot be used, a regular jump table is considered instead. Building a single jump table for the entire case expression often produces the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. To locate the segment handling a particular input value, a bisection search is used. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects the best one according to the current [optimization goal](#static-and-dynamic-optimizations).
 
 The total number of possible segment arrangements can be quite large. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) can be used to control the number of considered arrangements. Setting this option to `0` disables jump table compression entirely.
 
@@ -648,8 +649,7 @@ Jump table compression is, for example, particularly useful when using block typ
 Notes:
 
 * Jump table compression is not performed when range checks for the given case expression are eliminated via the `unsafe-case-optimization` option, or when the [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) option has been set to 0.
-* When a compressed jump table is smaller, but slower than a full, or a less compressed jump table, it will only be selected when there isn't enough instruction space for the larger jump table.
-* Compressing a jump table may, under some circumstances, produce a code which is on average faster than a full jump table, while still being smaller. When this is the case, the optimizer will select the smaller version over the faster version, even when there is plenty of instruction space.
+* The optimizer will sometimes choose a smaller implementation version over a larger one, even when the optimization goal is speed and there is plenty of instruction space. This happens when the smaller implementation is actually faster than the larger one, when the performance of the else branch is considered.
 * Since the bisection search provides better execution time than a linear search, it may be applied even to case expressions too small for a full jump table optimization.
 
 ### Jump table padding
@@ -665,63 +665,73 @@ When the jump table doesn't start or end at these values naturally, Mindcode may
 
 ### Value translation
 
-When the case expression assigns a single new value to a variable in each branch, and the values can be represented as integers in a reasonable range, the entire expression can be encoded as a `read` from a string containing the encoded values. The basic case is:
+When the case expression assigns a single new value to a variable in each branch, and the values can be represented as integers in a reasonable range, the entire expression can be encoded as a `read` from a string containing the encoded values. 
 
-```
-output = case input
+> [!NOTE]
+> This optimization requires target `8.1` or higher. 
+
+The basic case is:
+
+```Mindcode
+#set target = 8;
+volatile output = case input
     when 0 then 'A';
     when 1 then 'B';
     when 2 then 'C';
 end;
 ```
-which would produce
-```
-read output "ABC" input
+
+which produces
+
+```mlog
+read .output "ABC" :input
 ```
 
-Note that input values other than `0`, `1`, or `2` will result in a `null`, which is what the original case expression does too.
+Note that input values other than `0`, `1`, or `2` result in a `null`, which is what the original case expression does too.
 
 Further on, we call the input values explicitly handled by the case expression "keys" and the possible values assigned to `output` "output values."
 
-Now, assuming the case statement can be converted to text translation, several factors may complicate things:
+Assuming the case statement can be implemented using value translation, several factors may complicate things:
 
 1. Input different from an integer range starting at 0:
-   1. `input` is a Mindustry content: additional mapping fom content to logic ID needed,
+   1. `input` is a Mindustry content: additional mapping fom content to logic ID is needed,
    2. `input` is an integer, and `min(keys)` is negative: `input` is offset by `-min(keys)`,
    3. `input` is an integer, and `min(keys)` is above zero:
       1. the translation table is padded by `else` values up to `min(keys)`, if possible, or
       2. `input` is offset by `-min(keys)`.
-2. Output values are not representable in a string: an offset is added to output values which must then be subtracted. Unfortunately, this subtraction damages null values naturally produced by the `read` instruction, may need to be compensated for later on.
+2. Output values cannot be mapped to characters valid for a string literal: an offset is added to output values which must then be subtracted. Unfortunately, this subtraction damages null values naturally produced by the `read` instruction, may need to be compensated for later on.
 3. Keys contain `null` (meaning a null value of `input` needs to be specifically handled):
    1. `null` maps to the same value as zero: no action needed,
    2. otherwise, a `null`-handling `select` will be added after translation.
 4. One of the output values is `null`:
-   1. `null` is on the else branch only, and the set of keys covers all possible input values: this is the basic case above, no handling needed,
-   2. otherwise the null-producing keys are mapped to an unused output value, and a `select` converts it into a `null`.
+   1. `null` is on the else branch only, and no position in the map maps to the else branch: this is the basic case above, no handling needed,
+   2. otherwise the null-producing keys are mapped to an unused output value (a null placeholder), and a `select` converts it into a `null`.
 5. Handling of values outside the mapping string (these values are always handed by the else branch):
    1. the else branch doesn't output `null`: a `select` instruction converts the `null` produced by translation to the actual output value,
    2. the else branch does output `null`, but this value is damaged by subtracting offset: the same instruction as above.
-6. Output values are a Mindustry content: additional mapping from logic ID to content is added.
+6. When an offset is used for values in the map (as per case 2), the else branch produces `null` (case 5.2), and nn additional branch produces `null` or there is a position in the key mapping to the else branch (case 4.2), the `null` value is represented by a placeholder lower than all other values in the map and instructions 4 and 5 are replaced by a single instruction. This instruction sets the output to null when the result of `read` is less than or equal to the placeholder. This can happen in two ways - either `read` produces null or the null placeholder.  
+7. Output values are a Mindustry content: additional mapping from logic ID to content is added.
 
-As has been mentioned in case 1.3.1, the translation table can be padded on the lower end to avoid the need to offset the input value. Similarly, when the Mindustry content conversion is applied, the `builtin-evaluation` option is set to `full`, the translation table may be padded on the high end up to the largest ID of the respective Mindustry content, possibly avoiding the need to handle case 5 above. 
+As has been mentioned in point 1.3.1, the translation table can be padded on the lower end to avoid the need to offset the input value. Similarly, when the Mindustry content conversion is applied, the `builtin-evaluation` option is set to `full`, the translation table may be padded on the high end up to the largest ID of the respective Mindustry content, possibly avoiding the need to handle point 5 above. 
 
 Instructions corresponding to the above cases:
 
-| Case | Instruction                                                      |
-|:----:|:-----------------------------------------------------------------|
-|  1   | `sensor tmp input @id` or `op sub tmp input minKeys`             |
-|  -   | `read origOutput "translation" input`                            |
-|  2   | `op sub output origOutput offset`                                |
-|  3   | `select output strictEqual input null nullOutput prevOutput`     |
-|  4   | `select output strictEqual prevOutput nullValue null prevOutput` | 
-|  5   | `select output strictEqual origOutput null elseValue prevOutput` | 
-|  6   | `lookup <contentType> output prevOutput`                         |
+| Case | Instruction                                                                | Note              |
+|:----:|:---------------------------------------------------------------------------|:------------------|
+|  1   | `sensor tmp input @id` or `op sub tmp input minKeys`                       |                   |
+|  -   | `read origOutput "translation" input`                                      |                   |
+|  2   | `op sub output origOutput offset`                                          |                   |
+|  3   | `select output strictEqual input null nullOutput prevOutput`               |                   |
+|  4   | `select output equal origOutput nullPlaceholder null prevOutput`           |                   | 
+|  5   | `select output strictEqual origOutput null elseValue prevOutput`           |                   | 
+|  6   | `select output lessThanEq origOutput nullPlaceholder elseValue prevOutput` | Precludes 4 and 5 | 
+|  7   | `lookup <contentType> output prevOutput`                                   |                   |
 
 Note: `prevOutput` holds the output value from the previous step, `origOutput` or `output` is the output from the current step. The last output value produced by the code is the resulting value of the translation.
 
 When [`unsafe-case-optimization`](SYNTAX-5-OTHER.markdown#option-unsafe-case-optimization) is set to `true`, the handling of case 5 and sometimes case 4 may be omitted, as it is supposed not to occur. However, if you activate the `unsafe-case-optimization` directive, and an unhandled input value is encountered, the behavior of the generated code is undefined.
 
-The most complex case consists of seven instructions. When the optimization goal is speed, another solution will probably perform better than the more complex cases. When optimizing for size, though, even the most complex translation might be smaller than alternatives, so it is possible it gets generated:
+The most complex value translations consist of seven instructions. When the optimization goal is speed, another solution will probably perform better than the more complex cases. When optimizing for size, though, even the largest value translations are easily smaller than any of the alternatives:
 
 ```Mindcode
 #set target = 8;
@@ -744,13 +754,13 @@ sensor *tmp1 input @id
 read *tmp2 "9:8880" *tmp1
 op sub *tmp3 *tmp2 48
 select *tmp4 strictEqual *tmp1 null @lead *tmp3
-select *tmp5 strictEqual *tmp4 10 null *tmp4
+select *tmp5 equal *tmp2 58 null *tmp4
 select *tmp6 strictEqual *tmp2 null @scrap *tmp5
 lookup item .output *tmp6
 ```
 
 > [!NOTE]
-> The text translation optimization works best when using readable characters as values produced by the case expression. This can be done easily by using character literals Mindcode provides (as seen in the first translation example [here](#value-translation)).
+> The text translation optimization works best when using readable characters as values produced by the case expression. This can be easily achieved by using character literals Mindcode provides (as seen in the first translation example [here](#value-translation)).
 
 ### Example
 

@@ -665,10 +665,10 @@ Text-based jump tables allow very efficient encoding of jump tables, both in ter
 
 **Option scope: [local](#local-scope)**
 
-This option specifies whether the compiler may create strings (potentially containing unprintable characters) to implement [text translations](SYNTAX-6-OPTIMIZATIONS.markdown#value-translation). Possible values are:  
+This option specifies whether the compiler may create strings (potentially containing unprintable characters) to implement [value translations](SYNTAX-6-OPTIMIZATIONS.markdown#value-translation). Possible values are:  
 
-* `false`: text translation won't be used.
-* `true` (the default value): the compiler generates text translation where possible.
+* `false`: value translations won't be used.
+* `true` (the default value): the compiler generates value translations where possible.
 
 ### Option `weight`
 

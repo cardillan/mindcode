@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* A new [value translation optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#value-translation), which reads values encoded into a text string using the `read` instruction, is possible for case expressions.
+* A new [value translation optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#value-translation), which reads values encoded into a text string using the `read` instruction, is possible for case expressions ([#289](https://github.com/cardillan/mindcode/issues/289)).
 * Added the [`use-text-translations` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-text-translations) to allow/disallow using encoding values into a text string for the above optimization.
 
 ### Changed

@@ -695,4 +695,188 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
             );
         }
     }
+
+    @Nested
+    class ValueTranslations {
+        @Test
+        void processesBasicCase() {
+            assertCompilesTo("""
+                            param input = 0;
+                            print(case input
+                                when 0 then 'A';
+                                when 1 then 'B';
+                                when 2 then 'C';
+                            end);
+                            """,
+                    createInstruction(SET, "input", "0"),
+                    createInstruction(READ, tmp(0), q("ABC"), "input"),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void processesOutputOffsetToNull() {
+            assertCompilesTo("""
+                            param input = 0;
+                            print(case input
+                                when 0 then 2;
+                                when 1 then 1;
+                                when 2 then 0;
+                            end);
+                            """,
+                    createInstruction(SET, "input", "0"),
+                    createInstruction(READ, tmp(1), q("210"), "input"),
+                    createInstruction(OP, "sub", tmp(2), tmp(1), "48"),
+                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "null", tmp(2)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void processesOutputOffsetToNumber() {
+            assertCompilesTo("""
+                            param input = 0;
+                            print(case input
+                                when 0 then 2;
+                                when 1 then 1;
+                                when 2 then 0;
+                                else 4;
+                            end);
+                            """,
+                    createInstruction(SET, "input", "0"),
+                    createInstruction(READ, tmp(1), q("210"), "input"),
+                    createInstruction(OP, "sub", tmp(2), tmp(1), "48"),
+                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "4", tmp(2)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void processesOutputNull() {
+            assertCompilesTo("""
+                            param input = 0;
+                            print(case input
+                                when 0 then null;
+                                when 1 then 'A';
+                                when 2 then 'B';
+                            end);
+                            """,
+                    createInstruction(SET, "input", "0"),
+                    createInstruction(READ, tmp(1), q("CAB"), "input"),
+                    createInstruction(SELECT, tmp(0), "equal", tmp(1), "67", "null", tmp(1)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void processesOutputNullAndOffset() {
+            assertCompilesTo("""
+                            param input = 0;
+                            print(case input
+                                when 0 then null;
+                                when 1 then 2;
+                                when 2 then 1;
+                            end);
+                            """,
+                    createInstruction(SET, "input", "0"),
+                    createInstruction(READ, tmp(1), q(""), "input"),
+                    createInstruction(SELECT, tmp(0), "equal", tmp(1), "3", "null", tmp(1)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void processesNonNullElse() {
+            assertCompilesTo("""
+                            param input = 0;
+                            print(case input
+                                when 0 then 'a';
+                                when 1 then 'b';
+                                when 2 then 'c';
+                                else 'd';
+                            end);
+                            """,
+                    createInstruction(SET, "input", "0"),
+                    createInstruction(READ, tmp(1), q("abc"), "input"),
+                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "100", tmp(1)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void processesNonNullElseAndOffset() {
+            assertCompilesTo("""
+                            param input = 0;
+                            print(case input
+                                when 0 then 0;
+                                when 1 then 1;
+                                when 2 then 2;
+                                else 3;
+                            end);
+                            """,
+                    createInstruction(SET, "input", "0"),
+                    createInstruction(READ, tmp(1), q("012"), "input"),
+                    createInstruction(OP, "sub", tmp(2), tmp(1), "48"),
+                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "3", tmp(2)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void processesNonNullElseAndNUllBranch() {
+            assertCompilesTo("""
+                            param input = 0;
+                            print(case input
+                                when 0 then 'a';
+                                when 1 then null;
+                                when 4 then 'b';
+                                else 'c';
+                            end);
+                            """,
+                    createInstruction(SET, "input", "0"),
+                    createInstruction(READ, tmp(1), q("adccb"), "input"),
+                    createInstruction(SELECT, tmp(2), "equal", tmp(1), "100", "null", tmp(1)),
+                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "99", tmp(2)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void processesNonNullElseNullBranchAndOffset() {
+            assertCompilesTo("""
+                            #set goal = size;
+                            param input = 0;
+                            print(case input
+                                when 0 then 1;
+                                when 1 then null;
+                                when 4 then 2;
+                                else 0;
+                            end);
+                            """,
+                    createInstruction(SET, "input", "0"),
+                    createInstruction(READ, tmp(1), q("13002"), "input"),
+                    createInstruction(OP, "sub", tmp(2), tmp(1), "48"),
+                    createInstruction(SELECT, tmp(3), "equal", tmp(1), "51", "null", tmp(2)),
+                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "0", tmp(3)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void processesDiscontinuousElseWithOffset() {
+            assertCompilesTo("""
+                            param input = 0;
+                            print(case input
+                                when 0, 1, 2 then 0;
+                                when 4, 5, 6 then 1;
+                            end);
+                            """,
+                    createInstruction(SET, "input", "0"),
+                    createInstruction(READ, tmp(1), q("000 111"), "input"),
+                    createInstruction(OP, "sub", tmp(2), tmp(1), "48"),
+                    createInstruction(SELECT, tmp(0), "lessThanEq", tmp(1), "32", "null", tmp(2)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+    }
 }

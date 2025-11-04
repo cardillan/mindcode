@@ -595,6 +595,13 @@ public class CaseSwitcher extends BaseOptimizer {
         boolean noOutsideRange = (firstKey == 0 || paddingLow) && paddingHigh;
         boolean handleMapExtras = !unsafe && (outputOffset != 0 || !nullOnElseBranch && !noOutsideRange);
 
+        boolean combinedElseNullHandling = handleOutputNull && handleMapExtras && analyzer.getMin() + outputOffset > 1
+                && statement.getElseBranch().getAssignValue() == LogicNull.NULL;
+        if (combinedElseNullHandling) {
+            handleOutputNull = false;
+            handleMapExtras = false;
+        }
+
         boolean outputContent = analyzer.isMindustryContent();
 
         int originalSize = contextInstructions(param.context).realSize();
@@ -604,6 +611,7 @@ public class CaseSwitcher extends BaseOptimizer {
                 + flag(nullKey)
                 + flag(handleOutputNull)
                 + flag(handleMapExtras)
+                + flag(combinedElseNullHandling)
                 + flag(outputContent);
 
         int originalSteps = param.originalSteps + 2 * statement.size() + statement.getElseValues();
@@ -612,7 +620,7 @@ public class CaseSwitcher extends BaseOptimizer {
         double benefit = rawBenefit * param.context.totalWeight();
 
         return new TranslateCaseExpressionAction(param.duplicate(), analyzer, outputVariable, paddingLow, paddingHigh,
-                inputOffset, nullKey, outputOffset, handleOutputNull, handleMapExtras, outputContent, size,
+                inputOffset, nullKey, outputOffset, handleOutputNull, handleMapExtras, combinedElseNullHandling, outputContent, size,
                 size - originalSize, originalSteps, benefit);
     }
 
@@ -632,6 +640,7 @@ public class CaseSwitcher extends BaseOptimizer {
         private final int outputOffset;
         private final boolean handleOutputNull;
         private final boolean handleMapExtras;
+        private final boolean combinedElseNullHandling;
         private final boolean outputContent;
         private final int nullPlaceholder;
 
@@ -642,8 +651,8 @@ public class CaseSwitcher extends BaseOptimizer {
 
         public TranslateCaseExpressionAction(ConvertCaseActionParameters param, ValueAnalyzer analyzer,
                 LogicVariable outputVariable, boolean paddingLow, boolean paddingHigh, boolean inputOffset, boolean nullKey,
-                int outputOffset, boolean handleOutputNull, boolean handleMapExtras, boolean outputContent,
-                int size, int cost, int originalSteps, double benefit) {
+                int outputOffset, boolean handleOutputNull, boolean handleMapExtras, boolean combinedElseNullHandling,
+                boolean outputContent, int size, int cost, int originalSteps, double benefit) {
             super(param.context, cost, benefit);
             this.param = param;
             this.analyzer = analyzer;
@@ -655,8 +664,11 @@ public class CaseSwitcher extends BaseOptimizer {
             this.outputOffset = outputOffset;
             this.handleOutputNull = handleOutputNull;
             this.handleMapExtras = handleMapExtras;
+            this.combinedElseNullHandling = combinedElseNullHandling;
             this.outputContent = outputContent;
-            this.nullPlaceholder = analyzer.getMax() + 1;
+            this.nullPlaceholder = combinedElseNullHandling
+                    ? analyzer.getMin() + outputOffset > 32 ? 32 : 1
+                    : outputOffset + analyzer.getMax() + 1;
 
             this.size = size;
             this.originalSteps = originalSteps;
@@ -666,9 +678,6 @@ public class CaseSwitcher extends BaseOptimizer {
         public OptimizationResult apply(int costLimit) {
             return applyOptimization(this::translateCaseExpression, toString());
         }
-
-        private @Nullable LogicVariable caseVariable;
-        private int index;
 
         @Override
         public int getId() {
@@ -700,6 +709,9 @@ public class CaseSwitcher extends BaseOptimizer {
             return "CaseSwitcher" + param.group;
         }
 
+        private @Nullable LogicInstruction lastInstruction;
+        private int index;
+
         private OptimizationResult translateCaseExpression() {
             final CaseStatement statement = param.statement;
 
@@ -710,9 +722,9 @@ public class CaseSwitcher extends BaseOptimizer {
             index = firstInstructionIndex(matcher);
             AstContext newAstContext = astContext.existingParent().createChild(astContext.existingNode(), AstContextType.BODY);
             LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(instructionProcessor,
-                    newAstContext, instruction -> optimizationContext.insertInstruction(index++, instruction));
+                    newAstContext, instruction -> optimizationContext.insertInstruction(index++, lastInstruction = instruction));
 
-            // Remove original code entirely
+            // Remove the original code entirely
             removeMatchingInstructions(matcher);
             applied = true;
 
@@ -730,11 +742,6 @@ public class CaseSwitcher extends BaseOptimizer {
                 input = tmp;
             }
 
-            if (outputOffset == 0 && !nullKey && !handleOutputNull && !handleMapExtras && !outputContent) {
-                creator.createRead(outputVariable, createTranslationString(), input);
-                return OptimizationResult.REALIZED;
-            }
-
             LogicVariable origOutput = creator.nextTemp();
             LogicVariable prevOutput = origOutput;
             creator.createRead(origOutput, createTranslationString(), input);
@@ -742,65 +749,52 @@ public class CaseSwitcher extends BaseOptimizer {
             // CASE 2: subtracting offset
             LogicVariable output = outputOffset != 0 ? creator.nextTemp() : prevOutput;
             if (outputOffset != 0) {
-                if (!nullKey && !handleOutputNull && !handleMapExtras && !outputContent) {
-                    creator.createOp(Operation.SUB, outputVariable, prevOutput, LogicNumber.create(outputOffset));
-                    return OptimizationResult.REALIZED;
-                } else {
-                    creator.createOp(Operation.SUB, output, prevOutput, LogicNumber.create(outputOffset));
-                }
+                creator.createOp(Operation.SUB, output, prevOutput, LogicNumber.create(outputOffset));
             }
 
-            // CASE 3: providing value for null key
+            // CASE 3: providing value for a null key
             if (nullKey) {
                 prevOutput = output;
                 output = creator.nextTemp();
-
-                if (!handleOutputNull && !handleMapExtras && !outputContent) {
-                    creator.createSelect(outputVariable, Condition.STRICT_EQUAL, input, LogicNull.NULL,
-                            statement.getNullOrElseBranch().getAssignValue(), prevOutput);
-                    return OptimizationResult.REALIZED;
-                } else {
-                    creator.createSelect(output, Condition.STRICT_EQUAL, input, LogicNull.NULL,
-                            statement.getNullOrElseBranch().getAssignValue(), prevOutput);
-                }
+                creator.createSelect(output, Condition.STRICT_EQUAL, input, LogicNull.NULL,
+                        statement.getNullOrElseBranch().getAssignValue(), prevOutput);
             }
 
             // CASE 4: handling null as an output value
             if (handleOutputNull) {
                 prevOutput = output;
                 output = creator.nextTemp();
-
-                LogicValue outputNullValue = LogicNumber.create(nullPlaceholder);   // Translated value representing null
-                if (!handleMapExtras && !outputContent) {
-                    creator.createSelect(outputVariable, Condition.STRICT_EQUAL, prevOutput, outputNullValue,
-                            LogicNull.NULL, prevOutput);
-                    return OptimizationResult.REALIZED;
-                } else {
-                    creator.createSelect(output, Condition.STRICT_EQUAL, prevOutput, outputNullValue,
-                            LogicNull.NULL, prevOutput);
-                }
+                LogicValue nullPlaceholderValue = LogicNumber.create(nullPlaceholder);   // Translated value representing null
+                creator.createSelect(output, Condition.EQUAL, origOutput, nullPlaceholderValue,
+                        LogicNull.NULL, prevOutput);
             }
 
-            // CASE 5: handling non-null else branch
+            // CASE 5: setting the value of the else branch
             if (handleMapExtras) {
                 prevOutput = output;
                 output = creator.nextTemp();
-
-                if (!outputContent) {
-                    creator.createSelect(outputVariable, Condition.STRICT_EQUAL, origOutput, LogicNull.NULL,
-                            statement.getElseBranch().getAssignValue(), prevOutput);
-                    return OptimizationResult.REALIZED;
-                } else {
-                    creator.createSelect(output, Condition.STRICT_EQUAL, origOutput, LogicNull.NULL,
-                            statement.getElseBranch().getAssignValue(), prevOutput);
-                }
+                creator.createSelect(output, Condition.STRICT_EQUAL, origOutput, LogicNull.NULL,
+                        statement.getElseBranch().getAssignValue(), prevOutput);
             }
 
-            // CASE 6: mapping to logic content
-            assert outputContent;
-            assert analyzer.contentType != null;
-            LogicKeyword keyword = LogicKeyword.create(analyzer.contentType.getLookupKeyword());
-            creator.createLookup(keyword, outputVariable, output);
+            // CASE 6: handling null AND the else value (replaces 4 + 5)
+            if (combinedElseNullHandling) {
+                prevOutput = output;
+                output = creator.nextTemp();
+                LogicValue nullPlaceholderValue = LogicNumber.create(nullPlaceholder);   // Translated value representing null
+                creator.createSelect(output, Condition.LESS_THAN_EQ, origOutput, nullPlaceholderValue,
+                        statement.getElseBranch().getAssignValue(), prevOutput);
+            }
+
+            // CASE 7: mapping to logic content
+            if (outputContent) {
+                LogicKeyword keyword = LogicKeyword.create(Objects.requireNonNull(analyzer.contentType).getLookupKeyword());
+                creator.createLookup(keyword, outputVariable, output);
+            } else {
+                assert lastInstruction != null;
+                BaseResultInstruction resultInstruction = ((BaseResultInstruction) lastInstruction).withResult(outputVariable);
+                replaceInstruction(index - 1, resultInstruction);
+            }
 
             return OptimizationResult.REALIZED;
         }
@@ -815,7 +809,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
         private int mapKeyToValue(int key) {
             Integer value = param.statement.getBranch(key).getIntegerValue();
-            return outputOffset + (value == null ?  nullPlaceholder : value);
+            return value == null ?  nullPlaceholder : outputOffset + value;
         }
 
         @Override
