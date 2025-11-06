@@ -11,9 +11,9 @@ import java.util.Objects;
 @NullMarked
 public abstract class AbstractSegmentConfigurationGenerator implements SegmentConfigurationGenerator {
 
-    static List<Partition> splitToPartitions(CaseStatement caseStatement, boolean logicConversion) {
+    static List<Partition> splitToPartitions(CaseStatement caseStatement, boolean handleNulls) {
         LogicLabel zeroTarget = caseStatement.get(0);
-        if (logicConversion && zeroTarget != null) {
+        if (handleNulls && zeroTarget != null) {
             // We need to handle zero separately because of possible null
             // Use INVALID as a placeholder
             caseStatement.addBranchKey(0, LogicLabel.INVALID);

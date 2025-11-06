@@ -347,16 +347,10 @@ public class CaseSwitcher extends BaseOptimizer {
             actions.add(translationAction);
         }
 
-        if (analyzer.hasNull && analyzer.contentType == ContentType.UNKNOWN) {
-            result.addAll(actions);
-            return;
-        }
-
-        boolean logicConversion = analyzer.isMindustryContent();
         int caseOptimizationStrength = context.getLocalProfile().getCaseOptimizationStrength();
 
         SegmentConfigurationGenerator segmentConfigurationGenerator = new CombinatorialSegmentConfigurationGenerator(caseStatement,
-                logicConversion, caseOptimizationStrength);
+                param.handleNulls(), caseOptimizationStrength);
 
         // When no range checking, don't bother trying to merge segments.
         Set<SegmentConfiguration> configurations = removeRangeCheck
@@ -405,7 +399,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
     private void createOptimizationActions(ConvertCaseActionParameters param, List<ConvertCaseExpressionAction> actions,
             SegmentConfiguration segmentConfiguration) {
-        List<Segment> segments = segmentConfiguration.createSegments(param.removeRangeCheck, param.mindustryContent,
+        List<Segment> segments = segmentConfiguration.createSegments(param.removeRangeCheck, param.handleNulls(),
                 param.symbolic, param.statement);
 
         addOptimizationAction(actions, param, segments, "");
@@ -541,6 +535,10 @@ public class CaseSwitcher extends BaseOptimizer {
 
         public ConvertCaseActionParameters duplicate() {
             return new ConvertCaseActionParameters(this);
+        }
+
+        public boolean handleNulls() {
+            return mindustryContent || statement.hasNullKey();
         }
     }
 
@@ -958,7 +956,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
             // Account for null handling: an instruction per zero value
             // Note: null handling when zero is not there is accounted for in individual segments
-            if (param.mindustryContent && param.statement.hasNullOrZeroKey()) {
+            if (param.handleNulls() && param.statement.hasNullOrZeroKey()) {
                 if (param.statement.hasZeroKey()) {
                     // There's a handler on the `0` branch
                     double nullHandling = 1.0 / param.statement.getTotalSize();
@@ -1354,7 +1352,7 @@ public class CaseSwitcher extends BaseOptimizer {
         // Either nulls cannot appear, or the zero target is not shared with anything else.
         private boolean canEmbedZero() {
             // No nulls
-            if (!param.mindustryContent) return true;
+            if (!param.handleNulls()) return true;
 
             // No zero target: zero cannot be embedded (won't be even attempted, so it is meaningless).
             LogicLabel zeroLabel = param.statement.get(0);
@@ -1511,7 +1509,11 @@ public class CaseSwitcher extends BaseOptimizer {
                 caseVariable = instructionProcessor.nextTemp();
                 insertInstruction(createSensor(Objects.requireNonNull(param.context.parent()),
                         caseVariable, param.variable, LogicBuiltIn.ID));
+            } else {
+                caseVariable = param.variable;
+            }
 
+            if (param.handleNulls()) {
                 // We need to install a null check
                 LogicLabel zeroLabel = param.statement.get(0);
                 if (zeroLabel == null) {
@@ -1545,8 +1547,6 @@ public class CaseSwitcher extends BaseOptimizer {
                     optimizationContext.insertInstruction(zeroIndex, createJump(zeroLabelIx.getAstContext(),
                             param.statement.getNullTarget(), Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
                 }
-            } else {
-                caseVariable = param.variable;
             }
 
             generateBisectionTable(segments, finalLabel);
@@ -1565,7 +1565,6 @@ public class CaseSwitcher extends BaseOptimizer {
     private class ValueAnalyzer {
         private final AstContext context;
         private boolean first = true;
-        private boolean hasNull = false;
         private @Nullable ContentType contentType;        // ContentType.UNKNOWN represents an integer
         private @Nullable Integer lastValue;
 
@@ -1580,7 +1579,6 @@ public class CaseSwitcher extends BaseOptimizer {
         public boolean inspect(LogicValue value) {
             if (value == LogicNull.NULL) {
                 lastValue = null;
-                hasNull = true;
                 return true;
             }
 

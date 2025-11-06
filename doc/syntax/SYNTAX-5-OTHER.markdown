@@ -255,7 +255,7 @@ The following features are affected when activating symbolic labels:
 * Regular internal array element access (inlined array access is not affected):
   * the size of a jump table and execution time of array access are increased by one,
   * instructions setting up a function return address cannot be hoisted.
-* Optimized case expressions: the size and execution time of an optimized case expression may increase.
+* Optimized case expressions: the size and execution time of an [optimized case expression](SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) may increase significantly.
 
 Example of a program compiled with mlog comments and symbolic labels:
 

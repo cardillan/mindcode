@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * **Breaking**: the `text-tables` compiler option has been renamed (yet again - sorry) to [`use-text-jump-tables`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-text-jump-tables).
+* The [Case Switcher optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#null-values) was updated to fully support `null` values in `when` branches (even in integer expressions). 
 
 ## 3.9.0 - 2025-10-27
 
