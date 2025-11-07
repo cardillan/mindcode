@@ -11,7 +11,7 @@
    630 instructions added by Loop Unrolling (16 iterations).
      2 loops unrolled by Loop Unrolling.
     90 instructions eliminated by Case Switching (16 iterations).
-    10 case expressions converted to switched jumps Case Switching.
+    10 case expressions converted to switched jumps by Case Switching.
     28 instructions eliminated by Jump Straightening (2 passes, 5 iterations).
     52 instructions updated by Jump Threading.
    201 instructions eliminated by Unreachable Code Elimination (2 iterations).

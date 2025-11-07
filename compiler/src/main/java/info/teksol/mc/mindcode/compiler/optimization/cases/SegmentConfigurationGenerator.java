@@ -10,6 +10,4 @@ public interface SegmentConfigurationGenerator {
     List<Partition> getPartitions();
 
     Set<SegmentConfiguration> createSegmentConfigurations();
-
-    int getConfigurationCount();
 }

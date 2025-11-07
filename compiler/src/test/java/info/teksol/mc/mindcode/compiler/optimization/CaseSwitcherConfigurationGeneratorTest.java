@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher.ConvertCaseExpressionAction;
 import info.teksol.mc.mindcode.compiler.optimization.cases.CaseSwitcherConfigurations;
+import info.teksol.mc.mindcode.compiler.optimization.cases.ConvertCaseOptimizationAction;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.util.StringUtils;
 import org.jspecify.annotations.NullMarked;
@@ -83,22 +83,22 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
 
     TestResult executeCaseSwitchingTest(String fileContent, int strength) {
         List<CaseSwitcherConfigurations> configurations = new ArrayList<>();
-        List<ConvertCaseExpressionAction> actions = new ArrayList<>();
+        List<ConvertCaseOptimizationAction> actions = new ArrayList<>();
         String source = "#set case-optimization-strength = " + strength + ";\n" + fileContent;
         compile(expectedMessages(), source, compiler -> {
             configurations.addAll(compiler.getDiagnosticData(CaseSwitcherConfigurations.class));
-            actions.addAll(compiler.getDiagnosticData(ConvertCaseExpressionAction.class));
+            actions.addAll(compiler.getDiagnosticData(ConvertCaseOptimizationAction.class));
             if (configurations.isEmpty() || actions.isEmpty()) {
                 throw new IllegalStateException("No diagnostic data found.");
             }
         });
 
-        actions.sort(Comparator.comparingInt(ConvertCaseExpressionAction::rawCost));
+        actions.sort(Comparator.comparingInt(ConvertCaseOptimizationAction::rawCost));
         int max = actions.getLast().rawCost() + 1;
 
         int[] result = new int[max];
         Arrays.fill(result, actions.getLast().originalSteps());
-        for (ConvertCaseExpressionAction d : actions) {
+        for (ConvertCaseOptimizationAction d : actions) {
             Arrays.fill(result, d.rawCost(), max, d.executionSteps());
         }
 

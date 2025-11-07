@@ -7,7 +7,7 @@
      1 instructions eliminated by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
     61 instructions eliminated by Case Switching (3 iterations).
-     1 case expressions converted to switched jumps Case Switching.
+     1 case expressions converted to switched jumps by Case Switching.
     66 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 373):

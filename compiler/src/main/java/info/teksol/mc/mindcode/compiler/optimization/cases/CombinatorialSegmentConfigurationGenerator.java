@@ -26,10 +26,6 @@ public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentC
         return partitions;
     }
 
-    public int getConfigurationCount() {
-        return configurationCount;
-    }
-
     @Override
     public Set<SegmentConfiguration> createSegmentConfigurations() {
         Set<SegmentConfiguration> configurations = new LinkedHashSet<>();

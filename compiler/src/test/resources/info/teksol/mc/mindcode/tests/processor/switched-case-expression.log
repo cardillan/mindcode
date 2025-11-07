@@ -8,7 +8,7 @@
      1 instructions eliminated by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
      7 instructions eliminated by Case Switching (3 iterations).
-     1 case expressions converted to switched jumps Case Switching.
+     1 case expressions converted to switched jumps by Case Switching.
     10 instructions eliminated by Jump Straightening (4 iterations).
     51 instructions after optimizations.
 

@@ -47,7 +47,7 @@ class DataFlowVariableStates {
     /// merged when two or more code branches merge. Merging operations may produce variables with multiple definitions.
     /// When merging two instances prescribing conflicting values/expressions to the same variable,
     /// the values/expressions are purged.
-    class VariableStates {
+    public class VariableStates {
         private final int id;
 
         /// Modification counter for change detection
@@ -679,7 +679,7 @@ class DataFlowVariableStates {
         }
     }
 
-    class VariableValue {
+    public class VariableValue {
         /// Variable containing the result of the expression.
         private final LogicVariable variable;
 

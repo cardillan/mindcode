@@ -10,7 +10,7 @@
      3 instructions added by Loop Optimization (3 iterations).
      4 loops improved by Loop Optimization.
    137 instructions added by Case Switching (5 iterations).
-     1 case expressions converted to switched jumps Case Switching.
+     1 case expressions converted to switched jumps by Case Switching.
     11 instructions eliminated by Jump Straightening (2 passes, 5 iterations).
      2 instructions updated by Jump Threading.
     22 instructions eliminated by Print Merging.

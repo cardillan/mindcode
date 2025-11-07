@@ -17,7 +17,7 @@ import static info.teksol.mc.mindcode.logic.arguments.LogicNull.NULL;
 import static info.teksol.mc.mindcode.logic.arguments.Operation.*;
 
 @NullMarked
-class OptimizerExpressionEvaluator {
+public class OptimizerExpressionEvaluator {
 
     private final InstructionProcessor ixProcessor;
 

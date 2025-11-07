@@ -34,7 +34,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @NullMarked
-class OptimizationContext {
+public class OptimizationContext {
     private final CompilerProfile globalProfile;
     private final MessageConsumer messageConsumer;
     private final OptimizerExpressionEvaluator expressionEvaluator;
@@ -98,6 +98,8 @@ class OptimizationContext {
         adjustWeights();
     }
 
+
+
     public void rebuildLabelReferences() {
         labels.clear();
         labelReferences.clear();
@@ -119,7 +121,7 @@ class OptimizationContext {
         return globalProfile;
     }
 
-    InstructionProcessor getInstructionProcessor() {
+    public InstructionProcessor getInstructionProcessor() {
         return instructionProcessor;
     }
 
@@ -698,7 +700,7 @@ class OptimizationContext {
     ///
     /// @param index index of the instruction
     /// @return the instruction at given index
-    LogicInstruction instructionAt(int index) {
+    public LogicInstruction instructionAt(int index) {
         if (index < 0 || index >= program.size()) {
             throw new IndexOutOfBoundsException("Index " + index + " is out of bounds for length " + program.size());
         }
@@ -743,7 +745,7 @@ class OptimizationContext {
     /// @param fromInstruction first instruction in the list
     /// @param toInstruction last instruction in the list (inclusive)
     /// @return a List containing given instructions.
-    protected List<LogicInstruction> instructionSubList(LogicInstruction fromInstruction, LogicInstruction toInstruction) {
+    public List<LogicInstruction> instructionSubList(LogicInstruction fromInstruction, LogicInstruction toInstruction) {
         return instructionSubList(instructionIndex(fromInstruction), instructionIndex(toInstruction) + 1);
     }
 
@@ -787,7 +789,7 @@ class OptimizationContext {
     /// @param startIndex index to start search from, inclusive
     /// @param matcher predicate matching sought instruction
     /// @return index of the first instruction matching the predicate
-    protected int firstInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
+    public int firstInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
         return CollectionUtils.indexOf(program, startIndex, matcher);
     }
 
@@ -796,7 +798,7 @@ class OptimizationContext {
     ///
     /// @param matcher predicate matching sought instruction
     /// @return index of the first instruction matching the predicate
-    protected int firstInstructionIndex(Predicate<LogicInstruction> matcher) {
+    public int firstInstructionIndex(Predicate<LogicInstruction> matcher) {
         return CollectionUtils.indexOf(program, 0, matcher);
     }
 
@@ -806,7 +808,7 @@ class OptimizationContext {
     /// @param startIndex index to end search at, inclusive
     /// @param matcher predicate matching sought instruction
     /// @return index of the last instruction matching the predicate, up to the specified index
-    protected int lastInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
+    public int lastInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
         return CollectionUtils.lastIndexOf(program, startIndex, matcher);
     }
 
@@ -815,7 +817,7 @@ class OptimizationContext {
     ///
     /// @param matcher predicate matching sought instruction
     /// @return index of the last instruction matching the predicate
-    protected int lastInstructionIndex(Predicate<LogicInstruction> matcher) {
+    public int lastInstructionIndex(Predicate<LogicInstruction> matcher) {
         return CollectionUtils.lastIndexOf(program, program.size() - 1, matcher);
     }
 
@@ -825,7 +827,7 @@ class OptimizationContext {
     ///
     /// @param label target label
     /// @return first non-label instruction following the label
-    protected int labeledInstructionIndex(LogicLabel label) {
+    public int labeledInstructionIndex(LogicLabel label) {
         LabelInstruction labelInstruction = getLabelInstruction(label);
         int labelIndex = firstInstructionIndex(ix -> ix == labelInstruction);
         if (labelIndex < 0) {
@@ -840,7 +842,7 @@ class OptimizationContext {
     /// @param startIndex index to start search from, inclusive
     /// @param matcher predicate matching sought instruction
     /// @return the first instruction matching the predicate
-    protected @Nullable LogicInstruction firstInstruction(int startIndex, Predicate<LogicInstruction> matcher) {
+    public @Nullable LogicInstruction firstInstruction(int startIndex, Predicate<LogicInstruction> matcher) {
         int result = firstInstructionIndex(startIndex, matcher);
         return result < 0 ? null : program.get(result);
     }
@@ -849,7 +851,7 @@ class OptimizationContext {
     ///
     /// @param matcher predicate matching sought instruction
     /// @return the first instruction in the entire program matching the predicate
-    protected @Nullable LogicInstruction firstInstruction(Predicate<LogicInstruction> matcher) {
+    public @Nullable LogicInstruction firstInstruction(Predicate<LogicInstruction> matcher) {
         int result = firstInstructionIndex(matcher);
         return result < 0 ? null : program.get(result);
     }
@@ -860,7 +862,7 @@ class OptimizationContext {
     /// @param startIndex index to end search at, inclusive
     /// @param matcher predicate matching sought instruction
     /// @return index of the last instruction matching the predicate, up to the specified index
-    protected @Nullable LogicInstruction lastInstruction(int startIndex, Predicate<LogicInstruction> matcher) {
+    public @Nullable LogicInstruction lastInstruction(int startIndex, Predicate<LogicInstruction> matcher) {
         int result = lastInstructionIndex(startIndex, matcher);
         return result < 0 ? null : program.get(result);
     }
@@ -869,14 +871,14 @@ class OptimizationContext {
     ///
     /// @param matcher predicate matching sought instruction
     /// @return the last instruction matching the predicate
-    protected @Nullable LogicInstruction lastInstruction(Predicate<LogicInstruction> matcher) {
+    public @Nullable LogicInstruction lastInstruction(Predicate<LogicInstruction> matcher) {
         int result = lastInstructionIndex(matcher);
         return result < 0 ? null : program.get(result);
     }
 
     /// Finds a first non-label instruction following a label.
     /// Return null when not found
-    protected @Nullable LogicInstruction labeledInstruction(LogicLabel label) {
+    public @Nullable LogicInstruction labeledInstruction(LogicLabel label) {
         int index = labeledInstructionIndex(label);
         return index < 0 ? null : instructionAt(index);
     }
@@ -885,7 +887,7 @@ class OptimizationContext {
     ///
     /// @param matcher predicate matching sought instructions
     /// @return list of all instructions matching the predicate.
-    protected List<LogicInstruction> instructions(Predicate<LogicInstruction> matcher) {
+    public List<LogicInstruction> instructions(Predicate<LogicInstruction> matcher) {
         return program.stream().filter(matcher).toList();
     }
 
@@ -893,7 +895,7 @@ class OptimizationContext {
     ///
     /// @param matcher predicate matching sought instructions
     /// @return list of all predicate-matching instructions indexes.
-    protected List<Integer> instructionIndexes(Predicate<LogicInstruction> matcher) {
+    public List<Integer> instructionIndexes(Predicate<LogicInstruction> matcher) {
         return IntStream.range(0, program.size())
                 .filter(i -> matcher.test(program.get(i)))
                 .boxed()
@@ -904,7 +906,7 @@ class OptimizationContext {
     ///
     /// @param matcher predicate matching sought instructions
     /// @return number of matching instructions;
-    protected int instructionCount(Predicate<LogicInstruction> matcher) {
+    public int instructionCount(Predicate<LogicInstruction> matcher) {
         return (int) program.stream().filter(matcher).count();
     }
     //</editor-fold>
@@ -915,7 +917,7 @@ class OptimizationContext {
     ///
     /// @param codeBlock code block to inspect
     /// @return true if the code block always exits though its last instruction.
-    protected boolean isContained(List<LogicInstruction> codeBlock) {
+    public boolean isContained(List<LogicInstruction> codeBlock) {
         Set<LogicLabel> localLabels = codeBlock.stream()
                 .filter(LabeledInstruction.class::isInstance)
                 .map(LabeledInstruction.class::cast)
@@ -937,7 +939,7 @@ class OptimizationContext {
     ///
     /// @param logicList code block to inspect
     /// @return true if the code block always exits though its last instruction.
-    protected boolean isContained(LogicList logicList) {
+    public boolean isContained(LogicList logicList) {
         return isContained(logicList.instructions);
     }
 
@@ -990,7 +992,7 @@ class OptimizationContext {
     /// @param index where to place the instruction
     /// @param instruction instruction to add
     /// @throws MindcodeInternalError when the new instruction is already present elsewhere in the program
-    protected void insertInstruction(int index, LogicInstruction instruction) {
+    public void insertInstruction(int index, LogicInstruction instruction) {
         for (LogicInstruction logicInstruction : program) {
             if (logicInstruction == instruction) {
                 throw new MindcodeInternalError("Trying to insert the same instruction twice.\n" + instruction);
@@ -1007,7 +1009,7 @@ class OptimizationContext {
     /// @param index where to place the instruction
     /// @param instruction instruction to add
     /// @throws MindcodeInternalError when the new instruction is already present elsewhere in the program
-    protected void insertInstructionUnchecked(int index, LogicInstruction instruction) {
+    public void insertInstructionUnchecked(int index, LogicInstruction instruction) {
         iterators.forEach(iterator -> iterator.instructionAdded(index));
         program.add(index, instruction);
         instructionAdded(instruction);
@@ -1021,7 +1023,7 @@ class OptimizationContext {
     /// @param index where to place the instructions
     /// @param instructions instructions to add
     /// @throws MindcodeInternalError when any of the new instructions is already present elsewhere in the program
-    protected void insertInstructions(int index, LogicList instructions) {
+    public void insertInstructions(int index, LogicList instructions) {
         for (LogicInstruction instruction : instructions) {
             insertInstruction(index++, instruction);
         }
@@ -1038,7 +1040,7 @@ class OptimizationContext {
     /// @return the new instruction
     /// @throws MindcodeInternalError when trying to replace an instruction with itself, or when the replaced
     /// instruction is already present elsewhere in the program
-    protected LogicInstruction replaceInstruction(int index, LogicInstruction replacement) {
+    public LogicInstruction replaceInstruction(int index, LogicInstruction replacement) {
         for (LogicInstruction logicInstruction : program) {
             if (logicInstruction == replacement) {
                 throw new MindcodeInternalError("Trying to insert the same instruction twice.\n" + replacement);
@@ -1063,7 +1065,7 @@ class OptimizationContext {
     /// Removes an instruction at the given index.
     ///
     /// @param index index of an instruction to be removed
-    protected void removeInstruction(int index) {
+    public void removeInstruction(int index) {
         iterators.forEach(iterator -> iterator.instructionRemoved(index));
         LogicInstruction instruction = program.remove(index);
         instructionRemoved(instruction);
@@ -1080,7 +1082,7 @@ class OptimizationContext {
     ///
     /// @param anchor instruction before which to place the new instruction
     /// @param inserted instruction to add
-    protected void insertBefore(LogicInstruction anchor, LogicInstruction inserted) {
+    public void insertBefore(LogicInstruction anchor, LogicInstruction inserted) {
         insertInstruction(existingInstructionIndex(anchor), inserted);
     }
 
@@ -1090,7 +1092,7 @@ class OptimizationContext {
     ///
     /// @param anchor instruction before which to place the new instruction
     /// @param instructions instructions to add
-    protected void insertBefore(LogicInstruction anchor, LogicList instructions) {
+    public void insertBefore(LogicInstruction anchor, LogicList instructions) {
         insertInstructions(existingInstructionIndex(anchor), instructions);
     }
 
@@ -1103,7 +1105,7 @@ class OptimizationContext {
     ///
     /// @param anchor instruction after which to place the new instruction
     /// @param inserted instruction to add
-    protected void insertAfter(LogicInstruction anchor, LogicInstruction inserted) {
+    public void insertAfter(LogicInstruction anchor, LogicInstruction inserted) {
         insertInstruction(existingInstructionIndex(anchor) + 1, inserted);
     }
 
@@ -1115,11 +1117,11 @@ class OptimizationContext {
     /// @param original index of an instruction to be replaced
     /// @param replacement new instruction to replace the old one
     /// @return the new instruction
-    protected LogicInstruction replaceInstruction(LogicInstruction original, LogicInstruction replacement) {
+    public LogicInstruction replaceInstruction(LogicInstruction original, LogicInstruction replacement) {
         return replaceInstruction(existingInstructionIndex(original), replacement);
     }
 
-    protected LogicInstruction replaceInstructionArguments(LogicInstruction instruction, List<LogicArgument> newArgs) {
+    public LogicInstruction replaceInstructionArguments(LogicInstruction instruction, List<LogicArgument> newArgs) {
         return replaceInstruction(instruction, instructionProcessor.replaceArgs(instruction, newArgs));
     }
 
@@ -1127,7 +1129,7 @@ class OptimizationContext {
     /// Removes an existing instruction from the program. If the instruction isn't found, an exception is thrown.
     ///
     /// @param instruction instruction to be removed
-    protected void removeInstruction(LogicInstruction instruction) {
+    public void removeInstruction(LogicInstruction instruction) {
         removeInstruction(existingInstructionIndex(instruction));
     }
 
@@ -1135,7 +1137,7 @@ class OptimizationContext {
     /// If the given instruction isn't found, an exception is thrown.
     ///
     /// @param anchor the reference instruction
-    protected void removePrevious(LogicInstruction anchor) {
+    public void removePrevious(LogicInstruction anchor) {
         removeInstruction(existingInstructionIndex(anchor) - 1);
     }
 
@@ -1143,14 +1145,14 @@ class OptimizationContext {
     /// If the given instruction isn't found, an exception is thrown.
     ///
     /// @param anchor the reference instruction
-    protected void removeFollowing(LogicInstruction anchor) {
+    public void removeFollowing(LogicInstruction anchor) {
         removeInstruction(existingInstructionIndex(anchor) + 1);
     }
 
     /// Removes all instructions matching the given predicate.
     ///
     /// @param matcher predicate to match instructions to be removed
-    protected void removeMatchingInstructions(Predicate<LogicInstruction> matcher) {
+    public void removeMatchingInstructions(Predicate<LogicInstruction> matcher) {
         for (int index = 0; index < program.size(); index++) {
             if (matcher.test(program.get(index))) {
                 removeInstruction(index);
@@ -1166,7 +1168,7 @@ class OptimizationContext {
     /// Note that the label must belong directly to the given context to be reused; labels belonging to
     /// child contexts aren't considered. Care needs to be taken to provide the correct context; for nodes modeled
     /// with subcontexts a subcontext should always be provided.
-    protected LogicLabel obtainContextLabel(AstContext astContext) {
+    public LogicLabel obtainContextLabel(AstContext astContext) {
         LogicInstruction instruction = Objects.requireNonNull(firstInstruction(astContext));
         if (instruction instanceof LabelInstruction label && label.getAstContext() == astContext) {
             return label.getLabel();
@@ -1184,7 +1186,7 @@ class OptimizationContext {
     /// Creates a new LogicIterator positioned at the start of the program.
     ///
     /// @return a new LogicIterator instance
-    protected LogicIterator createIterator() {
+    public LogicIterator createIterator() {
         return createIteratorAtIndex(0);
     }
 
@@ -1202,7 +1204,7 @@ class OptimizationContext {
     ///
     /// @param instruction target instruction
     /// @return LogicIterator positioned at the given instruction
-    protected LogicIterator createIteratorAtInstruction(LogicInstruction instruction) {
+    public LogicIterator createIteratorAtInstruction(LogicInstruction instruction) {
         return createIteratorAtIndex(existingInstructionIndex(instruction));
     }
 
@@ -1210,7 +1212,7 @@ class OptimizationContext {
     ///
     /// @param context target context
     /// @return LogicIterator positioned at the beginning of the given context
-    protected LogicIterator createIteratorAtContext(AstContext context) {
+    public LogicIterator createIteratorAtContext(AstContext context) {
         return createIteratorAtIndex(firstInstructionIndex(context));
     }
 
@@ -1220,7 +1222,7 @@ class OptimizationContext {
     /// some instructions are removed or added at positions preceding that of the LogicIterator.
     /// This is true regardless of how the modification was done (e.g., even by modifications made though
     /// different LogicIterator instance, or by calling methods).
-    protected class LogicIterator implements ListIterator<LogicInstruction>, AutoCloseable {
+    public class LogicIterator implements ListIterator<LogicInstruction>, AutoCloseable {
         private int cursor;
         private boolean closed = false;
         private int lastRet = -1;
@@ -1413,7 +1415,7 @@ class OptimizationContext {
     //</editor-fold>
 
     //<editor-fold desc="Finding contexts">
-    protected boolean hasSubcontexts(AstContext context, AstSubcontextType... types) {
+    public boolean hasSubcontexts(AstContext context, AstSubcontextType... types) {
         if (context.children().size() == types.length) {
             for (int i = 0; i < types.length; i++) {
                 if (context.child(i).subcontextType() != types[i]) {
@@ -1443,28 +1445,28 @@ class OptimizationContext {
         return List.copyOf(result);
     }
 
-    protected <T> List<T> forEachContext(Predicate<AstContext> matcher, Function<AstContext, @Nullable T> action) {
+    public <T> List<T> forEachContext(Predicate<AstContext> matcher, Function<AstContext, @Nullable T> action) {
         return forEachContext(rootContext, matcher, action);
     }
 
-    protected <T> List<T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
+    public <T> List<T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
             Function<AstContext, @Nullable T> action) {
         return forEachContext(rootContext, c -> c.matches(contextType, subcontextType), action);
     }
 
-    protected List<AstContext> contexts(AstContext astContext, Predicate<AstContext> matcher) {
+    public List<AstContext> contexts(AstContext astContext, Predicate<AstContext> matcher) {
         List<AstContext> contexts = new ArrayList<>();
         forEachContext(astContext, matcher, contexts::add);
         return List.copyOf(contexts);
     }
 
-    protected List<AstContext> contexts(Predicate<AstContext> matcher) {
+    public List<AstContext> contexts(Predicate<AstContext> matcher) {
         List<AstContext> contexts = new ArrayList<>();
         forEachContext(rootContext, matcher, contexts::add);
         return List.copyOf(contexts);
     }
 
-    protected @Nullable AstContext context(Predicate<AstContext> matcher) {
+    public @Nullable AstContext context(Predicate<AstContext> matcher) {
         List<AstContext> contexts = contexts(matcher);
         return switch (contexts.size()) {
             case 0 -> null;
@@ -1473,7 +1475,7 @@ class OptimizationContext {
         };
     }
 
-    protected AstContext existingContext(Predicate<AstContext> matcher) {
+    public AstContext existingContext(Predicate<AstContext> matcher) {
         List<AstContext> contexts = contexts(matcher);
         if (contexts.size() == 1) {
             return contexts.getFirst();
@@ -1485,47 +1487,47 @@ class OptimizationContext {
     /// Creates a list of AST contexts representing inline functions.
     ///
     /// @return list of inline function node contexts
-    protected List<AstContext> getInlineFunctions() {
+    public List<AstContext> getInlineFunctions() {
         return contexts(c -> c.subcontextType() == AstSubcontextType.INLINE_CALL);
     }
 
-    protected List<AstContext> getOutOfLineFunctions() {
+    public List<AstContext> getOutOfLineFunctions() {
         return contexts(c -> c.contextType() == AstContextType.FUNCTION_DEF);
     }
     //</editor-fold>
 
 
     //<editor-fold desc="Finding instructions by context">
-    protected LogicList contextInstructions(@Nullable AstContext astContext) {
+    public LogicList contextInstructions(@Nullable AstContext astContext) {
         return astContext == null ? EMPTY :
                 new LogicList(astContext, List.copyOf(instructionStream().filter(ix -> ix.belongsTo(astContext)).toList()));
     }
 
-    protected Stream<LogicInstruction> contextStream(@Nullable AstContext astContext) {
+    public Stream<LogicInstruction> contextStream(@Nullable AstContext astContext) {
         return astContext == null ? Stream.empty() : instructionStream().filter(ix -> ix.belongsTo(astContext));
     }
 
-    protected @Nullable LogicInstruction firstInstruction(@Nullable AstContext astContext) {
+    public @Nullable LogicInstruction firstInstruction(@Nullable AstContext astContext) {
         return firstInstruction(ix -> ix.belongsTo(astContext));
     }
 
-    protected int firstInstructionIndex(AstContext astContext) {
+    public int firstInstructionIndex(AstContext astContext) {
         return firstInstructionIndex(ix -> ix.belongsTo(astContext));
     }
 
-    protected @Nullable LogicInstruction lastInstruction(AstContext astContext) {
+    public @Nullable LogicInstruction lastInstruction(AstContext astContext) {
         return lastInstruction(ix -> ix.belongsTo(astContext));
     }
 
-    protected int lastInstructionIndex(AstContext astContext) {
+    public int lastInstructionIndex(AstContext astContext) {
         return lastInstructionIndex(ix -> ix.belongsTo(astContext));
     }
 
-    protected LogicInstruction instructionBefore(AstContext astContext) {
+    public LogicInstruction instructionBefore(AstContext astContext) {
         return instructionAt(firstInstructionIndex(ix -> ix.belongsTo(astContext)) - 1);
     }
 
-    protected @Nullable LogicInstruction instructionAfter(AstContext astContext) {
+    public @Nullable LogicInstruction instructionAfter(AstContext astContext) {
         int index = lastInstructionIndex(ix -> ix.belongsTo(astContext)) + 1;
         while (index < program.size()
                && (instructionAt(index) instanceof LabelInstruction ix && !isActive(ix.getLabel())
@@ -1537,11 +1539,11 @@ class OptimizationContext {
     //</editor-fold>
 
     //<editor-fold desc="Logic list">
-    protected LogicList buildLogicList(AstContext context, List<LogicInstruction> instructions) {
+    public LogicList buildLogicList(AstContext context, List<LogicInstruction> instructions) {
         return new LogicList(context, instructions);
     }
 
-    protected LogicList createLogicList(AstContext context) {
+    public LogicList createLogicList(AstContext context) {
         return new LogicList(context, List.of());
     }
 
@@ -1549,7 +1551,7 @@ class OptimizationContext {
 
     /// Class for accessing context instructions in an organized manner.
     /// Is always created from a specific AST context.
-    protected class LogicList implements Iterable<LogicInstruction>, ContextfulInstructionCreator, ContextlessInstructionCreator {
+    public class LogicList implements Iterable<LogicInstruction>, ContextfulInstructionCreator, ContextlessInstructionCreator {
         private final @Nullable AstContext astContext;
         private final ArrayList<LogicInstruction> instructions;
 

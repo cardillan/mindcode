@@ -14,7 +14,7 @@
     17 loops unrolled by Loop Unrolling.
    345 instructions added by Function Inlining (28 iterations).
     16 function calls inlined by Function Inlining.
-     2 case expressions converted to switched jumps Case Switching.
+     2 case expressions converted to switched jumps by Case Switching.
      6 instructions eliminated by Jump Straightening (6 iterations).
    145 instructions updated by Jump Threading.
    324 instructions eliminated by Unreachable Code Elimination (2 iterations).
