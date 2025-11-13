@@ -70,6 +70,7 @@ public class CaseSwitcher extends BaseOptimizer {
     private int invocations = 0;
     private int switchedCount = 0;
     private int translatedCount = 0;
+    private int fastDispatchedCount = 0;
 
     private int groupCount = 0;
 
@@ -82,6 +83,9 @@ public class CaseSwitcher extends BaseOptimizer {
         }
         if (translatedCount > 0) {
             emitMessage(MessageLevel.INFO, "%6d case expressions converted to value translations by %s.", translatedCount, getName());
+        }
+        if (fastDispatchedCount > 0) {
+            emitMessage(MessageLevel.INFO, "%6d case expressions converted to fast dispatch by %s.", translatedCount, getName());
         }
     }
 
@@ -104,16 +108,23 @@ public class CaseSwitcher extends BaseOptimizer {
         return super.isDebugOutput() && (caseConfiguration == actionCounter || actionCounter == 0);
     }
 
-    private OptimizationResult applyTranslatedOptimization(Supplier<OptimizationResult> optimization, String title) {
+    private OptimizationResult applyOptimization(Supplier<OptimizationResult> optimization, String title, Runnable counter) {
         OptimizationResult optimizationResult = super.applyOptimization(optimization, title);
-        if (optimizationResult == OptimizationResult.REALIZED) translatedCount++;
+        if (optimizationResult == OptimizationResult.REALIZED) counter.run();
         return optimizationResult;
     }
 
+
     private OptimizationResult applySwitchedOptimization(Supplier<OptimizationResult> optimization, String title) {
-        OptimizationResult optimizationResult = super.applyOptimization(optimization, title);
-        if (optimizationResult == OptimizationResult.REALIZED) switchedCount++;
-        return optimizationResult;
+        return applyOptimization(optimization, title, () -> switchedCount++);
+    }
+
+    private OptimizationResult applyTranslatedOptimization(Supplier<OptimizationResult> optimization, String title) {
+        return applyOptimization(optimization, title, () -> translatedCount++);
+    }
+
+    private OptimizationResult applyFastDispatchOptimization(Supplier<OptimizationResult> optimization, String title) {
+        return applyOptimization(optimization, title, () -> fastDispatchedCount++);
     }
 
     private void findPossibleCaseSwitches(AstContext context, int costLimit, List<OptimizationAction> result) {
@@ -123,20 +134,25 @@ public class CaseSwitcher extends BaseOptimizer {
         boolean removeRangeCheck = context.getLocalProfile().isUnsafeCaseOptimization() && !declaredElseBranch;
 
         ValueAnalyzer analyzer = new ValueAnalyzer(getGlobalProfile(), metadata, advanced(context));
-        CaseStatement caseStatement = CaseStatement.analyze(optimizationContext, analyzer, context, declaredElseBranch);
-        if (caseStatement == null || analyzer.getContentType() == null) return;
+        CaseExpression caseExpression = CaseExpression.analyze(optimizationContext, analyzer, context, declaredElseBranch);
+        if (caseExpression == null || analyzer.getContentType() == null) return;
 
-        ConvertCaseActionParameters param = new ConvertCaseActionParameters(groupCount, context, caseStatement.getVariable(), caseStatement,
-                caseStatement.getOriginalCost(), caseStatement.getOriginalSteps(), analyzer.isMindustryContent(), removeRangeCheck,
-                getGlobalProfile().isSymbolicLabels(), caseStatement.hasDeclaredElseBranch() && caseStatement.getElseValues() > 0);
+        ConvertCaseActionParameters param = new ConvertCaseActionParameters(groupCount, context, caseExpression.getVariable(), caseExpression,
+                caseExpression.getOriginalCost(), caseExpression.getOriginalSteps(), analyzer.isMindustryContent(), removeRangeCheck,
+                getGlobalProfile().isSymbolicLabels(), caseExpression.hasDeclaredElseBranch() && caseExpression.getElseValues() > 0);
 
         List<ConvertCaseOptimizationAction> actions = new ArrayList<>();
-        TranslateCaseOptimizationAction.createTranslationAction(++actionCounter, optimizationContext,
+        TranslateCaseOptimizationAction.create(++actionCounter, optimizationContext,
                 this::applyTranslatedOptimization, param).ifPresent(actions::add);
+
+        if (getGlobalProfile().isNullCounterIsNoop() && context.getLocalProfile().useTextJumpTables()) {
+            actions.add(new FastDispatchOptimizationAction(++actionCounter, optimizationContext,
+                    this::applyFastDispatchOptimization, this::isDebugOutput, param));
+        }
 
         int caseOptimizationStrength = context.getLocalProfile().getCaseOptimizationStrength();
 
-        SegmentConfigurationGenerator segmentConfigurationGenerator = new CombinatorialSegmentConfigurationGenerator(caseStatement,
+        SegmentConfigurationGenerator segmentConfigurationGenerator = new CombinatorialSegmentConfigurationGenerator(caseExpression,
                 param.handleNulls(), caseOptimizationStrength);
 
         // When no range checking, don't bother trying to merge segments.
@@ -187,7 +203,7 @@ public class CaseSwitcher extends BaseOptimizer {
     private void createOptimizationActions(ConvertCaseActionParameters param, List<ConvertCaseOptimizationAction> actions,
             SegmentConfiguration segmentConfiguration) {
         List<Segment> segments = segmentConfiguration.createSegments(param.removeRangeCheck(), param.handleNulls(),
-                param.symbolic(), param.statement());
+                param.symbolic(), param.caseExpression());
 
         addOptimizationAction(actions, param, segments, "");
 
@@ -252,7 +268,7 @@ public class CaseSwitcher extends BaseOptimizer {
     private List<Segment> padHigh(List<Segment> segments, ConvertCaseActionParameters parameters, int index) {
         List<Segment> newSegments = new ArrayList<>(segments);
         Segment curr = newSegments.get(index);
-        newSegments.set(index, curr.padHigh(parameters.statement().getTotalSize()));
+        newSegments.set(index, curr.padHigh(parameters.caseExpression().getTotalSize()));
         if (index < segments.size() - 1) {
             if (index != segments.size() - 2) throw new MindcodeInternalError("Pad high segment not the last one");
             newSegments.removeLast();
@@ -289,7 +305,7 @@ public class CaseSwitcher extends BaseOptimizer {
         // It can only be the very last segment
         int lastPossibleIndex = segments.getLast().type() == SegmentType.JUMP_TABLE ? segments.size() - 1 : segments.size() - 2;
         Segment segment = segments.get(lastPossibleIndex);
-        if (segment.to() <= parameters.statement().getTotalSize() && segment.type() == SegmentType.JUMP_TABLE
+        if (segment.to() <= parameters.caseExpression().getTotalSize() && segment.type() == SegmentType.JUMP_TABLE
                 && (segments.getLast() == segment || segments.getLast().empty())) {
             return lastPossibleIndex;
         }

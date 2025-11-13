@@ -34,6 +34,7 @@ public class OptimizationCoordinator {
     public static final boolean SYSTEM_OUT = false;
 
     public static final boolean IGNORE_UNINITIALIZED = false;
+    public static final boolean IGNORE_UNKNOWN_LABELS = false;
 
     private final List<LogicInstruction> program = new ArrayList<>();
     private final InstructionProcessor instructionProcessor;
@@ -212,7 +213,9 @@ public class OptimizationCoordinator {
                     optimizationContext.debugPrintProgram(String.format("%n*** Performing Data Flow optimization after %s ***%n", selectedAction), true);
                     Optimizer optimizer = optimizers.get(Optimization.DATA_FLOW_OPTIMIZATION);
                     if (optimizer != null) {
+                        optimizationContext.prepare();
                         optimizer.optimize(phase, pass);
+                        optimizationContext.finish();
                     }
                     modified = true;
                 } else {
@@ -275,7 +278,7 @@ public class OptimizationCoordinator {
     private static final Comparator<OptimizationAction> SPEED_GOAL_COMPARATOR =
             Comparator.comparingDouble(OptimizationAction::speedEfficiency)
                     .thenComparingDouble(OptimizationAction::benefit)
-                    .thenComparingInt(OptimizationAction::cost).reversed();
+                    .thenComparing(Comparator.comparingInt(OptimizationAction::cost).reversed()).reversed();
 
     /// Selects an optimization action, taking action groups into account.
     private @Nullable OptimizationAction selectActionForSpeed(List<OptimizationAction> possibleOptimizations, int costLimit, Set<OptimizationAction> considered) {

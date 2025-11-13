@@ -9,13 +9,13 @@ While typically just a handful of possible configurations, which get tested duri
 It therefore makes a lot of sense to test non-typical configurations. Furthermore, the _intention_ is for every possible compiler/optimizer configuration to be correctly handled by Mindcode. To help achieve this goal, a separate testing tool is provided.
 
 > [!TIP]
-> It is not expected that regular Mindcode users will use the testing tool. The tool is intended for Mindcode language developers, and possibly for interested users that might want to extensively test their own code for added safety.
+> It is not expected that regular Mindcode users will use the testing tool. The tool is intended for Mindcode language developers and possibly for interested users that might want to extensively test their own code for added safety.
 
 ### Setting up the testing tool
 
 The testing tool can be set up in the following way:
 
-1. Download and install [Eclipse Temurin version 17](https://adoptium.net/temurin/releases/?version=17).
+1. Download and install [Eclipse Temurin version 22](https://adoptium.net/temurin/releases/?version=22).
 2. Download `mindcode-exttest.jar` from the [Releases page](https://github.com/cardillan/mindcode/releases) and place it in a directory on your computer.
 3. To run the testing tool, use `java.exe -jar mindcode-exttest.jar`. Provide full paths to the `java.exe` file from the Eclipse Temurin installation created in the first step, and to the `mindcode.jar` file downloaded in the second step. The testing tool takes no arguments:
 
@@ -146,7 +146,7 @@ The code to be tested should conform to these requirements:
 
 ### Testing failures
 
-When a test produces a failure, it is recorded in the results file for current test (the name of the results file is `result-<source-file-name>.mnd`). When encountering a test failure, please report the bug [by creating an issue](https://github.com/cardillan/mindcode/issues/new). Include the exact source code and the `settings.yaml` file that produced the error.    
+When a test produces a failure, it is recorded in the results' file for current test (the name of the results' file is `result-<source-file-name>.mnd`). When encountering a test failure, please report the bug [by creating an issue](https://github.com/cardillan/mindcode/issues/new). Include the exact source code and the `settings.yaml` file that produced the error.
 
 ## Unit testing support
 

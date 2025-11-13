@@ -1,25 +1,26 @@
    497 instructions before optimizations.
-    27 instructions eliminated by Temp Variables Elimination (7 iterations).
+    27 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instructions eliminated by Case Expression Optimization.
     40 instructions eliminated by Dead Code Elimination (6 iterations).
-    65 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
-    22 instructions eliminated by Jump Optimization (6 iterations).
-    42 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
-     2 instructions modified by Expression Optimization (4 iterations).
-     2 instructions eliminated by If Expression Optimization (4 iterations).
-   289 instructions eliminated by Data Flow Optimization (23 passes, 75 iterations).
-     4 instructions eliminated by Loop Optimization (4 iterations).
+    51 instructions eliminated by Jump Normalization (5 iterations).
+    22 instructions eliminated by Jump Optimization (5 iterations).
+    43 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+     2 instructions modified by Expression Optimization (3 iterations).
+     2 instructions eliminated by If Expression Optimization (3 iterations).
+   252 instructions eliminated by Data Flow Optimization (23 passes, 74 iterations).
+     4 instructions eliminated by Loop Optimization (3 iterations).
      7 loops improved by Loop Optimization.
-   623 instructions added by Loop Unrolling (27 iterations).
-    17 loops unrolled by Loop Unrolling.
-   298 instructions added by Function Inlining (27 iterations).
-    15 function calls inlined by Function Inlining.
-     2 case expressions converted to switched jumps by Case Switching.
-     6 instructions eliminated by Jump Straightening (6 iterations).
-   141 instructions updated by Jump Threading.
-   335 instructions eliminated by Unreachable Code Elimination (2 iterations).
+   690 instructions added by Loop Unrolling (26 iterations).
+    18 loops unrolled by Loop Unrolling.
+   227 instructions added by Function Inlining (26 iterations).
+    14 function calls inlined by Function Inlining.
+    12 instructions eliminated by Case Switching (26 iterations).
+     0 case expressions converted to fast dispatch by Case Switching.
+     6 instructions eliminated by Jump Straightening (5 iterations).
+   136 instructions updated by Jump Threading.
+   299 instructions eliminated by Unreachable Code Elimination (2 iterations).
      5 instructions eliminated by Print Merging.
-   580 instructions after optimizations.
+   650 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 625):
   * Unroll iteration loop at *printing:22:5                      size    -5, benefit       11.0, efficiency   Infinity (-5 instructions)
@@ -68,8 +69,7 @@ Pass 1: speed optimization selection (cost limit 625):
     Inline function call at line 37:38                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 38:39                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 39:40                           size   +24, benefit        3.5, efficiency      0.146
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 630):
     Unroll iteration loop at *printing:343:5                     size    +5, benefit        7.0, efficiency      1.400
@@ -117,8 +117,7 @@ Pass 1: speed optimization selection (cost limit 630):
     Inline function call at line 37:38                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 38:39                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 39:40                           size   +24, benefit        3.5, efficiency      0.146
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 540):
     Unroll iteration loop at *printing:343:5                     size  +185, benefit        7.0, efficiency      0.038
@@ -165,8 +164,7 @@ Pass 1: speed optimization selection (cost limit 540):
     Inline function call at line 37:38                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 38:39                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 39:40                           size   +24, benefit        3.5, efficiency      0.146
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 516):
     Unroll iteration loop at *printing:343:5                     size  +185, benefit        7.0, efficiency      0.038
@@ -212,8 +210,7 @@ Pass 1: speed optimization selection (cost limit 516):
     Inline function call at line 37:38                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 38:39                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 39:40                           size   +24, benefit        3.5, efficiency      0.146
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 463):
     Unroll iteration loop at *printing:343:5                     size  +185, benefit        7.0, efficiency      0.038
@@ -258,8 +255,7 @@ Pass 1: speed optimization selection (cost limit 463):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 436):
     Unroll iteration loop at *printing:343:5                     size  +185, benefit        7.0, efficiency      0.038
@@ -303,8 +299,7 @@ Pass 1: speed optimization selection (cost limit 436):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 419):
   * Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000 (+1 instructions)
@@ -347,8 +342,7 @@ Pass 1: speed optimization selection (cost limit 419):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 418):
   * Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000 (+1 instructions)
@@ -390,8 +384,7 @@ Pass 1: speed optimization selection (cost limit 418):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 417):
   * Unroll loop at *printing:112:5                               size    -2, benefit      100.0, efficiency   Infinity (-3 instructions)
@@ -433,8 +426,7 @@ Pass 1: speed optimization selection (cost limit 417):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-    Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 420):
   * Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000 (+1 instructions)
@@ -475,8 +467,7 @@ Pass 1: speed optimization selection (cost limit 420):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 419):
   * Unroll loop at *printing:112:5                               size    -2, benefit      100.0, efficiency   Infinity (-3 instructions)
@@ -517,8 +508,7 @@ Pass 1: speed optimization selection (cost limit 419):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-    Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 422):
     Unroll iteration loop at *printing:343:5                     size  +185, benefit        7.0, efficiency      0.038
@@ -558,8 +548,7 @@ Pass 1: speed optimization selection (cost limit 422):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 344):
   * Unroll loop at *printing:48:5                                size    +6, benefit      100.0, efficiency     16.667 (+3 instructions)
@@ -594,8 +583,7 @@ Pass 1: speed optimization selection (cost limit 344):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 341):
   * Unroll loop at *printing:48:5                                size    +6, benefit      100.0, efficiency     16.667 (+3 instructions)
@@ -629,8 +617,7 @@ Pass 1: speed optimization selection (cost limit 341):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 338):
   * Unroll loop at *printing:48:5                                size   +15, benefit      150.0, efficiency     10.000 (+11 instructions)
@@ -663,8 +650,7 @@ Pass 1: speed optimization selection (cost limit 338):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 327):
     Unroll iteration loop at *printing:343:5                     size  +185, benefit        7.0, efficiency      0.038
@@ -696,8 +682,7 @@ Pass 1: speed optimization selection (cost limit 327):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 234):
   * Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439 (+110 instructions)
@@ -728,18 +713,10 @@ Pass 1: speed optimization selection (cost limit 234):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 124):
   ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
@@ -767,15 +744,9 @@ Pass 1: speed optimization selection (cost limit 124):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 14):
   ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
@@ -803,12 +774,8 @@ Pass 1: speed optimization selection (cost limit 14):
   ! Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-    Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-    Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-    Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
-    Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-    Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-    Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+    Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
+    Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 17):
   ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
@@ -835,15 +802,11 @@ Pass 1: speed optimization selection (cost limit 17):
   ! Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-  * Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity (+0 instructions)
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  * Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity (-6 instructions)
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 17):
-  ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
+Pass 1: speed optimization selection (cost limit 23):
+  ! Unroll loop at *printing:169:5                               size  +169, benefit      500.0, efficiency      2.959
   ! Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439
   ! Unroll iteration loop at *printing:343:5                     size  +185, benefit        7.0, efficiency      0.038
   ! Unroll iteration loop at *printing:368:5                     size   +57, benefit        7.0, efficiency      0.123
@@ -867,13 +830,11 @@ Pass 1: speed optimization selection (cost limit 17):
   ! Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-  o Convert case at *printing:171:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
-  o Convert case at *printing:171:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
-  * Convert case at *printing:171:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity (+0 instructions)
+  * Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity (-6 instructions)
 
-Pass 1: speed optimization selection (cost limit 17):
-  ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
-  ! Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439
+Pass 1: speed optimization selection (cost limit 29):
+  ! Unroll loop at *printing:169:5                               size  +169, benefit      500.0, efficiency      2.959
+  ! Unroll loop at *printing:169:5                               size   +93, benefit      300.0, efficiency      3.226
   ! Unroll iteration loop at *printing:343:5                     size  +185, benefit        7.0, efficiency      0.038
   ! Unroll iteration loop at *printing:368:5                     size   +57, benefit        7.0, efficiency      0.123
   ! Inline function call at line 20:22                           size   +72, benefit        3.5, efficiency      0.049
@@ -897,11 +858,11 @@ Pass 1: speed optimization selection (cost limit 17):
   ! Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
 
-Pass 2: speed optimization selection (cost limit 78):
-  ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
-  ! Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439
+Pass 2: speed optimization selection (cost limit 92):
+  ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
+  * Unroll loop at *printing:169:5                               size   +88, benefit      300.0, efficiency      3.409 (+81 instructions)
   ! Unroll iteration loop at *printing:343:5                     size  +183, benefit        7.0, efficiency      0.038
-  * Unroll iteration loop at *printing:368:5                     size   +55, benefit        7.0, efficiency      0.127 (-5 instructions)
+    Unroll iteration loop at *printing:368:5                     size   +55, benefit        7.0, efficiency      0.127
     Inline function call at line 20:22                           size   +72, benefit        3.5, efficiency      0.049
     Inline function call at line 21:19                           size   +72, benefit        3.5, efficiency      0.049
     Inline function call at line 22:19                           size   +72, benefit        3.5, efficiency      0.049
@@ -923,35 +884,12 @@ Pass 2: speed optimization selection (cost limit 78):
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
 
-Pass 2: speed optimization selection (cost limit 83):
-  ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
-  ! Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439
+Pass 2: speed optimization selection (cost limit 11):
+  ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
+  * Unroll loop at *printing:184:5                               size    -2, benefit      100.0, efficiency   Infinity (-3 instructions)
   ! Unroll iteration loop at *printing:343:5                     size  +183, benefit        7.0, efficiency      0.038
-  * Inline function call at line 20:22                           size   +72, benefit        3.5, efficiency      0.049 (+50 instructions)
-    Inline function call at line 21:19                           size   +72, benefit        3.5, efficiency      0.049
-    Inline function call at line 22:19                           size   +72, benefit        3.5, efficiency      0.049
-    Inline function call at line 23:35                           size   +72, benefit        3.5, efficiency      0.049
-    Inline function call at line 24:35                           size   +72, benefit        3.5, efficiency      0.049
-    Inline function call at line 25:22                           size   +72, benefit        3.5, efficiency      0.049
-    Inline function call at line 26:30                           size   +72, benefit        3.5, efficiency      0.049
-    Inline function call at line 27:38                           size   +72, benefit        3.5, efficiency      0.049
-    Inline function call at line 28:40                           size   +72, benefit        3.5, efficiency      0.049
-    Inline function call at line 29:41                           size   +72, benefit        3.5, efficiency      0.049
-    Inline function call at line 30:22                           size   +77, benefit        3.5, efficiency      0.045
-    Inline function call at line 31:19                           size   +77, benefit        3.5, efficiency      0.045
-    Inline function call at line 32:35                           size   +77, benefit        3.5, efficiency      0.045
-    Inline function call at line 33:35                           size   +77, benefit        3.5, efficiency      0.045
-    Inline function call at line 34:35                           size   +77, benefit        3.5, efficiency      0.045
-    Inline function call at line 35:38                           size   +77, benefit        3.5, efficiency      0.045
-    Inline function call at line 36:35                           size   +77, benefit        3.5, efficiency      0.045
-    Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
-    Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
-    Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
-
-Pass 2: speed optimization selection (cost limit 33):
-  ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
-  ! Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439
-  ! Unroll iteration loop at *printing:343:5                     size  +183, benefit        7.0, efficiency      0.038
+  ! Unroll iteration loop at *printing:368:5                     size   +55, benefit        7.0, efficiency      0.127
+  ! Inline function call at line 20:22                           size   +72, benefit        3.5, efficiency      0.049
   ! Inline function call at line 21:19                           size   +72, benefit        3.5, efficiency      0.049
   ! Inline function call at line 22:19                           size   +72, benefit        3.5, efficiency      0.049
   ! Inline function call at line 23:35                           size   +72, benefit        3.5, efficiency      0.049
@@ -972,10 +910,11 @@ Pass 2: speed optimization selection (cost limit 33):
   ! Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
 
-Pass 3: speed optimization selection (cost limit 47):
-  ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
-  ! Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439
+Pass 2: speed optimization selection (cost limit 14):
+  ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   ! Unroll iteration loop at *printing:343:5                     size  +183, benefit        7.0, efficiency      0.038
+  ! Unroll iteration loop at *printing:368:5                     size   +55, benefit        7.0, efficiency      0.127
+  ! Inline function call at line 20:22                           size   +72, benefit        3.5, efficiency      0.049
   ! Inline function call at line 21:19                           size   +72, benefit        3.5, efficiency      0.049
   ! Inline function call at line 22:19                           size   +72, benefit        3.5, efficiency      0.049
   ! Inline function call at line 23:35                           size   +72, benefit        3.5, efficiency      0.049
@@ -996,10 +935,11 @@ Pass 3: speed optimization selection (cost limit 47):
   ! Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
 
-Pass 4: speed optimization selection (cost limit 47):
-  ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
-  ! Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439
+Pass 3: speed optimization selection (cost limit 14):
+  ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   ! Unroll iteration loop at *printing:343:5                     size  +183, benefit        7.0, efficiency      0.038
+  ! Unroll iteration loop at *printing:368:5                     size   +55, benefit        7.0, efficiency      0.127
+  ! Inline function call at line 20:22                           size   +72, benefit        3.5, efficiency      0.049
   ! Inline function call at line 21:19                           size   +72, benefit        3.5, efficiency      0.049
   ! Inline function call at line 22:19                           size   +72, benefit        3.5, efficiency      0.049
   ! Inline function call at line 23:35                           size   +72, benefit        3.5, efficiency      0.049
@@ -1130,558 +1070,675 @@ Final code before resolving virtual instructions:
   105:  op floor :formatHexNumber:n 0x1234567890 0
         label *label570
   106:  op mod :formatHexNumber:digit :formatHexNumber:n 16
-  107:  jump *label873 greaterThanEq :formatHexNumber:digit 10
-  108:  jump *label872 lessThan :formatHexNumber:digit 0
-  109:  format "{2}{1}"
-  110:  format :formatHexNumber:digit
-  111:  jump *label586 always 0 0
-        label *label873
-  112:  jump *label874 greaterThanEq :formatHexNumber:digit 13
-  113:  jump *label574 lessThan :formatHexNumber:digit 11
-  114:  jump *label578 greaterThanEq :formatHexNumber:digit 12
-  115:  format "{2}B"
+  107:  multijump :formatHexNumber:digit 0 0
+        multilabel *label881
+  108:  jump *label586 always 0 0
+        multilabel *label875
+  109:  format "{2}A"
+  110:  jump *label586 always 0 0
+        multilabel *label876
+  111:  format "{2}B"
+  112:  jump *label586 always 0 0
+        multilabel *label877
+  113:  format "{2}C"
+  114:  jump *label586 always 0 0
+        multilabel *label878
+  115:  format "{2}D"
   116:  jump *label586 always 0 0
-        label *label874
-  117:  jump *label875 greaterThanEq :formatHexNumber:digit 15
-  118:  jump *label582 greaterThanEq :formatHexNumber:digit 14
-  119:  format "{2}D"
+        multilabel *label879
+  117:  format "{2}E"
+  118:  jump *label586 always 0 0
+        multilabel *label880
+  119:  format "{2}F"
   120:  jump *label586 always 0 0
-        label *label875
-  121:  jump *label584 lessThan :formatHexNumber:digit 16
-  122:  jump *label872 always 0 0
-        label *label574
-  123:  format "{2}A"
-  124:  jump *label586 always 0 0
-        label *label578
-  125:  format "{2}C"
-  126:  jump *label586 always 0 0
-        label *label582
-  127:  format "{2}E"
-  128:  jump *label586 always 0 0
-        label *label584
-  129:  format "{2}F"
-        label *label872
+        multilabel *label874
+  121:  format "{2}{1}"
+  122:  format :formatHexNumber:digit
         label *label586
-  130:  op shr :formatHexNumber:n :formatHexNumber:n 4
-  131:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  132:  jump *label570 greaterThan :formatHexNumber:n 0
-  133:  jump *label592 lessThanEq :formatHexNumber:digits 0
+  123:  op shr :formatHexNumber:n :formatHexNumber:n 4
+  124:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
+  125:  jump *label570 greaterThan :formatHexNumber:n 0
+  126:  jump *label592 lessThanEq :formatHexNumber:digits 0
         label *label590
-  134:  format "{2}0"
-  135:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  136:  jump *label590 greaterThan :formatHexNumber:digits 0
+  127:  format "{2}0"
+  128:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
+  129:  jump *label590 greaterThan :formatHexNumber:digits 0
         label *label592
-  137:  format "0x"
-  138:  assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
-  139:  assertflush
-  140:  print "{2}"
-  141:  format "{2}C"
-  142:  format "{2}C"
-  143:  format "{2}B"
-  144:  format "{2}B"
-  145:  format "{2}A"
-  146:  format "{2}A"
-  147:  format "{2}0"
-  148:  format "{2}0"
-  149:  format "0x"
-  150:  assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
-  151:  assertflush
-  152:  print "{2}"
-  153:  set :formatHexNumber:digits 8
-  154:  format "-{2}"
-  155:  op floor :formatHexNumber:n 11189196 0
-        label *label626
-  156:  op mod :formatHexNumber:digit :formatHexNumber:n 16
-  157:  jump *label877 greaterThanEq :formatHexNumber:digit 10
-  158:  jump *label876 lessThan :formatHexNumber:digit 0
-  159:  format "{2}{1}"
-  160:  format :formatHexNumber:digit
-  161:  jump *label642 always 0 0
-        label *label877
-  162:  jump *label878 greaterThanEq :formatHexNumber:digit 13
-  163:  jump *label630 lessThan :formatHexNumber:digit 11
-  164:  jump *label634 greaterThanEq :formatHexNumber:digit 12
-  165:  format "{2}B"
-  166:  jump *label642 always 0 0
-        label *label878
-  167:  jump *label879 greaterThanEq :formatHexNumber:digit 15
-  168:  jump *label638 greaterThanEq :formatHexNumber:digit 14
-  169:  format "{2}D"
-  170:  jump *label642 always 0 0
-        label *label879
-  171:  jump *label640 lessThan :formatHexNumber:digit 16
-  172:  jump *label876 always 0 0
-        label *label630
-  173:  format "{2}A"
-  174:  jump *label642 always 0 0
-        label *label634
-  175:  format "{2}C"
-  176:  jump *label642 always 0 0
-        label *label638
-  177:  format "{2}E"
-  178:  jump *label642 always 0 0
-        label *label640
-  179:  format "{2}F"
-        label *label876
-        label *label642
-  180:  op shr :formatHexNumber:n :formatHexNumber:n 4
-  181:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  182:  jump *label626 greaterThan :formatHexNumber:n 0
-  183:  jump *label648 lessThanEq :formatHexNumber:digits 0
-        label *label646
-  184:  format "{2}0"
-  185:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  186:  jump *label646 greaterThan :formatHexNumber:digits 0
-        label *label648
-  187:  format "0x"
-  188:  assertprints "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
-  189:  assertflush
-  190:  op abs *tmp42 null 0
-  191:  print null
-  192:  assertprints "null" "printExactFast(null)"
-  193:  assertflush
-  194:  set :printExactFast:n 0
-  195:  setaddr :printExactFast*retaddr *label30
-  196:  call *label6 *invalid :printExactFast*retval
-        label *label30
-  197:  assertprints "0" "printExactFast(0)"
-  198:  assertflush
-  199:  set :printExactFast:n 1
-  200:  setaddr :printExactFast*retaddr *label31
-  201:  call *label6 *invalid :printExactFast*retval
-        label *label31
-  202:  assertprints "1" "printExactFast(1)"
-  203:  assertflush
-  204:  set :printExactFast:n 1.0000001
-  205:  setaddr :printExactFast*retaddr *label32
-  206:  call *label6 *invalid :printExactFast*retval
-        label *label32
-  207:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
-  208:  assertflush
-  209:  set :printExactFast:n 3.00000007
-  210:  setaddr :printExactFast*retaddr *label33
-  211:  call *label6 *invalid :printExactFast*retval
-        label *label33
-  212:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
-  213:  assertflush
-  214:  set :printExactFast:n 3E50
-  215:  setaddr :printExactFast*retaddr *label34
-  216:  call *label6 *invalid :printExactFast*retval
-        label *label34
-  217:  assertprints "3E50" "printExactFast(3e50)"
-  218:  assertflush
-  219:  set :printExactFast:n 1.0123456789
-  220:  setaddr :printExactFast*retaddr *label35
-  221:  call *label6 *invalid :printExactFast*retval
-        label *label35
-  222:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
-  223:  assertflush
-  224:  set :printExactFast:n 10000001E13
-  225:  setaddr :printExactFast*retaddr *label36
-  226:  call *label6 *invalid :printExactFast*retval
-        label *label36
-  227:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
-  228:  assertflush
-  229:  set :printExactFast:n 12345E-54
-  230:  setaddr :printExactFast*retaddr *label37
-  231:  call *label6 *invalid :printExactFast*retval
-        label *label37
-  232:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
-  233:  assertflush
-  234:  set :printExactFast:n -12345E-54
-  235:  setaddr :printExactFast*retaddr *label38
-  236:  call *label6 *invalid :printExactFast*retval
-        label *label38
-  237:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
-  238:  assertflush
-  239:  set :printExactSlow:n null
-  240:  setaddr :printExactSlow*retaddr *label39
-  241:  call *label7 *invalid :printExactSlow*retval
-        label *label39
-  242:  assertprints "null" "printExactSlow(null)"
-  243:  assertflush
-  244:  set :printExactSlow:n 0
-  245:  setaddr :printExactSlow*retaddr *label40
-  246:  call *label7 *invalid :printExactSlow*retval
-        label *label40
-  247:  assertprints "0" "printExactSlow(0)"
-  248:  assertflush
-  249:  set :printExactSlow:n 1
-  250:  setaddr :printExactSlow*retaddr *label41
-  251:  call *label7 *invalid :printExactSlow*retval
-        label *label41
-  252:  assertprints "1.000000000000000" "printExactSlow(1)"
+  130:  format "0x"
+  131:  assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
+  132:  assertflush
+  133:  print "{2}"
+  134:  format "{2}C"
+  135:  format "{2}C"
+  136:  format "{2}B"
+  137:  format "{2}B"
+  138:  format "{2}A"
+  139:  format "{2}A"
+  140:  format "{2}0"
+  141:  format "{2}0"
+  142:  format "0x"
+  143:  assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
+  144:  assertflush
+  145:  print "{2}"
+  146:  format "-{2}"
+  147:  op mod :formatHexNumber:digit 11189196 16
+  148:  multijump :formatHexNumber:digit 0 0
+        multilabel *label893
+  149:  jump *label915 always 0 0
+        multilabel *label896
+  150:  format "{2}A"
+  151:  jump *label915 always 0 0
+        multilabel *label899
+  152:  format "{2}B"
+  153:  jump *label915 always 0 0
+        multilabel *label902
+  154:  format "{2}C"
+  155:  jump *label915 always 0 0
+        multilabel *label905
+  156:  format "{2}D"
+  157:  jump *label915 always 0 0
+        multilabel *label908
+  158:  format "{2}E"
+  159:  jump *label915 always 0 0
+        multilabel *label911
+  160:  format "{2}F"
+  161:  jump *label915 always 0 0
+        multilabel *label913
+  162:  format "{2}{1}"
+  163:  format 12
+        label *label915
+  164:  op mod :formatHexNumber:digit 699324 16
+  165:  multijump :formatHexNumber:digit 0 0
+        multilabel *label919
+  166:  jump *label941 always 0 0
+        multilabel *label922
+  167:  format "{2}A"
+  168:  jump *label941 always 0 0
+        multilabel *label925
+  169:  format "{2}B"
+  170:  jump *label941 always 0 0
+        multilabel *label928
+  171:  format "{2}C"
+  172:  jump *label941 always 0 0
+        multilabel *label931
+  173:  format "{2}D"
+  174:  jump *label941 always 0 0
+        multilabel *label934
+  175:  format "{2}E"
+  176:  jump *label941 always 0 0
+        multilabel *label937
+  177:  format "{2}F"
+  178:  jump *label941 always 0 0
+        multilabel *label939
+  179:  format "{2}{1}"
+  180:  format 12
+        label *label941
+  181:  op mod :formatHexNumber:digit 43707 16
+  182:  multijump :formatHexNumber:digit 0 0
+        multilabel *label945
+  183:  jump *label967 always 0 0
+        multilabel *label948
+  184:  format "{2}A"
+  185:  jump *label967 always 0 0
+        multilabel *label951
+  186:  format "{2}B"
+  187:  jump *label967 always 0 0
+        multilabel *label954
+  188:  format "{2}C"
+  189:  jump *label967 always 0 0
+        multilabel *label957
+  190:  format "{2}D"
+  191:  jump *label967 always 0 0
+        multilabel *label960
+  192:  format "{2}E"
+  193:  jump *label967 always 0 0
+        multilabel *label963
+  194:  format "{2}F"
+  195:  jump *label967 always 0 0
+        multilabel *label965
+  196:  format "{2}{1}"
+  197:  format 11
+        label *label967
+  198:  op mod :formatHexNumber:digit 2731 16
+  199:  multijump :formatHexNumber:digit 0 0
+        multilabel *label971
+  200:  jump *label993 always 0 0
+        multilabel *label974
+  201:  format "{2}A"
+  202:  jump *label993 always 0 0
+        multilabel *label977
+  203:  format "{2}B"
+  204:  jump *label993 always 0 0
+        multilabel *label980
+  205:  format "{2}C"
+  206:  jump *label993 always 0 0
+        multilabel *label983
+  207:  format "{2}D"
+  208:  jump *label993 always 0 0
+        multilabel *label986
+  209:  format "{2}E"
+  210:  jump *label993 always 0 0
+        multilabel *label989
+  211:  format "{2}F"
+  212:  jump *label993 always 0 0
+        multilabel *label991
+  213:  format "{2}{1}"
+  214:  format 11
+        label *label993
+  215:  op mod :formatHexNumber:digit 170 16
+  216:  multijump :formatHexNumber:digit 0 0
+        multilabel *label997
+  217:  jump *label1019 always 0 0
+        multilabel *label1000
+  218:  format "{2}A"
+  219:  jump *label1019 always 0 0
+        multilabel *label1003
+  220:  format "{2}B"
+  221:  jump *label1019 always 0 0
+        multilabel *label1006
+  222:  format "{2}C"
+  223:  jump *label1019 always 0 0
+        multilabel *label1009
+  224:  format "{2}D"
+  225:  jump *label1019 always 0 0
+        multilabel *label1012
+  226:  format "{2}E"
+  227:  jump *label1019 always 0 0
+        multilabel *label1015
+  228:  format "{2}F"
+  229:  jump *label1019 always 0 0
+        multilabel *label1017
+  230:  format "{2}{1}"
+  231:  format 10
+        label *label1019
+  232:  op mod :formatHexNumber:digit 10 16
+  233:  multijump :formatHexNumber:digit 0 0
+        multilabel *label1023
+  234:  jump *label1045 always 0 0
+        multilabel *label1026
+  235:  format "{2}A"
+  236:  jump *label1045 always 0 0
+        multilabel *label1029
+  237:  format "{2}B"
+  238:  jump *label1045 always 0 0
+        multilabel *label1032
+  239:  format "{2}C"
+  240:  jump *label1045 always 0 0
+        multilabel *label1035
+  241:  format "{2}D"
+  242:  jump *label1045 always 0 0
+        multilabel *label1038
+  243:  format "{2}E"
+  244:  jump *label1045 always 0 0
+        multilabel *label1041
+  245:  format "{2}F"
+  246:  jump *label1045 always 0 0
+        multilabel *label1043
+  247:  format "{2}{1}"
+  248:  format 10
+        label *label1045
+  249:  format "{2}0"
+  250:  format "{2}0"
+  251:  format "0x"
+  252:  assertprints "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
   253:  assertflush
-  254:  set :printExactSlow:n 1.0000001
-  255:  setaddr :printExactSlow*retaddr *label42
-  256:  call *label7 *invalid :printExactSlow*retval
-        label *label42
-  257:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
+  254:  set :printExactFast:n null
+  255:  setaddr :printExactFast*retaddr *label29
+  256:  call *label6 *invalid :printExactFast*retval
+        label *label29
+  257:  assertprints "null" "printExactFast(null)"
   258:  assertflush
-  259:  set :printExactSlow:n 3.00000007
-  260:  setaddr :printExactSlow*retaddr *label43
-  261:  call *label7 *invalid :printExactSlow*retval
-        label *label43
-  262:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
+  259:  set :printExactFast:n 0
+  260:  setaddr :printExactFast*retaddr *label30
+  261:  call *label6 *invalid :printExactFast*retval
+        label *label30
+  262:  assertprints "0" "printExactFast(0)"
   263:  assertflush
-  264:  set :printExactSlow:n 3E50
-  265:  setaddr :printExactSlow*retaddr *label44
-  266:  call *label7 *invalid :printExactSlow*retval
-        label *label44
-  267:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
+  264:  set :printExactFast:n 1
+  265:  setaddr :printExactFast*retaddr *label31
+  266:  call *label6 *invalid :printExactFast*retval
+        label *label31
+  267:  assertprints "1" "printExactFast(1)"
   268:  assertflush
-  269:  set :printExactSlow:n 1.0123456789
-  270:  setaddr :printExactSlow*retaddr *label45
-  271:  call *label7 *invalid :printExactSlow*retval
-        label *label45
-  272:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
+  269:  set :printExactFast:n 1.0000001
+  270:  setaddr :printExactFast*retaddr *label32
+  271:  call *label6 *invalid :printExactFast*retval
+        label *label32
+  272:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
   273:  assertflush
-  274:  set :printExactSlow:n 10000001E13
-  275:  setaddr :printExactSlow*retaddr *label46
-  276:  call *label7 *invalid :printExactSlow*retval
-        label *label46
-  277:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+  274:  set :printExactFast:n 3.00000007
+  275:  setaddr :printExactFast*retaddr *label33
+  276:  call *label6 *invalid :printExactFast*retval
+        label *label33
+  277:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
   278:  assertflush
-  279:  set :printExactSlow:n 12345E-54
-  280:  setaddr :printExactSlow*retaddr *label47
-  281:  call *label7 *invalid :printExactSlow*retval
-        label *label47
-  282:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
+  279:  set :printExactFast:n 3E50
+  280:  setaddr :printExactFast*retaddr *label34
+  281:  call *label6 *invalid :printExactFast*retval
+        label *label34
+  282:  assertprints "3E50" "printExactFast(3e50)"
   283:  assertflush
-  284:  set :printExactSlow:n -12345E-54
-  285:  setaddr :printExactSlow*retaddr *label48
-  286:  call *label7 *invalid :printExactSlow*retval
-        label *label48
-  287:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
+  284:  set :printExactFast:n 1.0123456789
+  285:  setaddr :printExactFast*retaddr *label35
+  286:  call *label6 *invalid :printExactFast*retval
+        label *label35
+  287:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
   288:  assertflush
-  289:  op shr :printExactBinary:t -1035087118336 32
-  290:  setaddr *tmp1 *label53
-  291:  jump *label50 always 0 0
+  289:  set :printExactFast:n 10000001E13
+  290:  setaddr :printExactFast*retaddr *label36
+  291:  call *label6 *invalid :printExactFast*retval
+        label *label36
+  292:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
+  293:  assertflush
+  294:  set :printExactFast:n 12345E-54
+  295:  setaddr :printExactFast*retaddr *label37
+  296:  call *label6 *invalid :printExactFast*retval
+        label *label37
+  297:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
+  298:  assertflush
+  299:  set :printExactFast:n -12345E-54
+  300:  setaddr :printExactFast*retaddr *label38
+  301:  call *label6 *invalid :printExactFast*retval
+        label *label38
+  302:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
+  303:  assertflush
+  304:  set :printExactSlow:n null
+  305:  setaddr :printExactSlow*retaddr *label39
+  306:  call *label7 *invalid :printExactSlow*retval
+        label *label39
+  307:  assertprints "null" "printExactSlow(null)"
+  308:  assertflush
+  309:  set :printExactSlow:n 0
+  310:  setaddr :printExactSlow*retaddr *label40
+  311:  call *label7 *invalid :printExactSlow*retval
+        label *label40
+  312:  assertprints "0" "printExactSlow(0)"
+  313:  assertflush
+  314:  set :printExactSlow:n 1
+  315:  setaddr :printExactSlow*retaddr *label41
+  316:  call *label7 *invalid :printExactSlow*retval
+        label *label41
+  317:  assertprints "1.000000000000000" "printExactSlow(1)"
+  318:  assertflush
+  319:  set :printExactSlow:n 1.0000001
+  320:  setaddr :printExactSlow*retaddr *label42
+  321:  call *label7 *invalid :printExactSlow*retval
+        label *label42
+  322:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
+  323:  assertflush
+  324:  set :printExactSlow:n 3.00000007
+  325:  setaddr :printExactSlow*retaddr *label43
+  326:  call *label7 *invalid :printExactSlow*retval
+        label *label43
+  327:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
+  328:  assertflush
+  329:  set :printExactSlow:n 3E50
+  330:  setaddr :printExactSlow*retaddr *label44
+  331:  call *label7 *invalid :printExactSlow*retval
+        label *label44
+  332:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
+  333:  assertflush
+  334:  set :printExactSlow:n 1.0123456789
+  335:  setaddr :printExactSlow*retaddr *label45
+  336:  call *label7 *invalid :printExactSlow*retval
+        label *label45
+  337:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
+  338:  assertflush
+  339:  set :printExactSlow:n 10000001E13
+  340:  setaddr :printExactSlow*retaddr *label46
+  341:  call *label7 *invalid :printExactSlow*retval
+        label *label46
+  342:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+  343:  assertflush
+  344:  set :printExactSlow:n 12345E-54
+  345:  setaddr :printExactSlow*retaddr *label47
+  346:  call *label7 *invalid :printExactSlow*retval
+        label *label47
+  347:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
+  348:  assertflush
+  349:  set :printExactSlow:n -12345E-54
+  350:  setaddr :printExactSlow*retaddr *label48
+  351:  call *label7 *invalid :printExactSlow*retval
+        label *label48
+  352:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
+  353:  assertflush
+  354:  op shr :printExactBinary:t -1035087118336 32
+  355:  setaddr *tmp1 *label53
+  356:  jump *label50 always 0 0
         multilabel *label53
-  292:  op and :printExactBinary:t -1035087118336 0xFFFFFFFF
-  293:  setaddr *tmp1 *label54
+  357:  op and :printExactBinary:t -1035087118336 0xFFFFFFFF
+  358:  setaddr *tmp1 *label54
         label *label50
-  294:  op shr *tmp4 :printExactBinary:t 31
-  295:  op and *tmp5 *tmp4 1
-  296:  print *tmp5
-  297:  op shr *tmp4 :printExactBinary:t 30
-  298:  op and *tmp5 *tmp4 1
-  299:  print *tmp5
-  300:  op shr *tmp4 :printExactBinary:t 29
-  301:  op and *tmp5 *tmp4 1
-  302:  print *tmp5
-  303:  op shr *tmp4 :printExactBinary:t 28
-  304:  op and *tmp5 *tmp4 1
-  305:  print *tmp5
-  306:  op shr *tmp4 :printExactBinary:t 27
-  307:  op and *tmp5 *tmp4 1
-  308:  print *tmp5
-  309:  op shr *tmp4 :printExactBinary:t 26
-  310:  op and *tmp5 *tmp4 1
-  311:  print *tmp5
-  312:  op shr *tmp4 :printExactBinary:t 25
-  313:  op and *tmp5 *tmp4 1
-  314:  print *tmp5
-  315:  op shr *tmp4 :printExactBinary:t 24
-  316:  op and *tmp5 *tmp4 1
-  317:  print *tmp5
-  318:  op shr *tmp4 :printExactBinary:t 23
-  319:  op and *tmp5 *tmp4 1
-  320:  print *tmp5
-  321:  op shr *tmp4 :printExactBinary:t 22
-  322:  op and *tmp5 *tmp4 1
-  323:  print *tmp5
-  324:  op shr *tmp4 :printExactBinary:t 21
-  325:  op and *tmp5 *tmp4 1
-  326:  print *tmp5
-  327:  op shr *tmp4 :printExactBinary:t 20
-  328:  op and *tmp5 *tmp4 1
-  329:  print *tmp5
-  330:  op shr *tmp4 :printExactBinary:t 19
-  331:  op and *tmp5 *tmp4 1
-  332:  print *tmp5
-  333:  op shr *tmp4 :printExactBinary:t 18
-  334:  op and *tmp5 *tmp4 1
-  335:  print *tmp5
-  336:  op shr *tmp4 :printExactBinary:t 17
-  337:  op and *tmp5 *tmp4 1
-  338:  print *tmp5
-  339:  op shr *tmp4 :printExactBinary:t 16
-  340:  op and *tmp5 *tmp4 1
-  341:  print *tmp5
-  342:  op shr *tmp4 :printExactBinary:t 15
-  343:  op and *tmp5 *tmp4 1
-  344:  print *tmp5
-  345:  op shr *tmp4 :printExactBinary:t 14
-  346:  op and *tmp5 *tmp4 1
-  347:  print *tmp5
-  348:  op shr *tmp4 :printExactBinary:t 13
-  349:  op and *tmp5 *tmp4 1
-  350:  print *tmp5
-  351:  op shr *tmp4 :printExactBinary:t 12
-  352:  op and *tmp5 *tmp4 1
-  353:  print *tmp5
-  354:  op shr *tmp4 :printExactBinary:t 11
-  355:  op and *tmp5 *tmp4 1
-  356:  print *tmp5
-  357:  op shr *tmp4 :printExactBinary:t 10
-  358:  op and *tmp5 *tmp4 1
-  359:  print *tmp5
-  360:  op shr *tmp4 :printExactBinary:t 9
-  361:  op and *tmp5 *tmp4 1
-  362:  print *tmp5
-  363:  op shr *tmp4 :printExactBinary:t 8
-  364:  op and *tmp5 *tmp4 1
-  365:  print *tmp5
-  366:  op shr *tmp4 :printExactBinary:t 7
-  367:  op and *tmp5 *tmp4 1
-  368:  print *tmp5
-  369:  op shr *tmp4 :printExactBinary:t 6
-  370:  op and *tmp5 *tmp4 1
-  371:  print *tmp5
-  372:  op shr *tmp4 :printExactBinary:t 5
-  373:  op and *tmp5 *tmp4 1
-  374:  print *tmp5
-  375:  op shr *tmp4 :printExactBinary:t 4
-  376:  op and *tmp5 *tmp4 1
-  377:  print *tmp5
-  378:  op shr *tmp4 :printExactBinary:t 3
-  379:  op and *tmp5 *tmp4 1
-  380:  print *tmp5
-  381:  op shr *tmp4 :printExactBinary:t 2
-  382:  op and *tmp5 *tmp4 1
-  383:  print *tmp5
-  384:  op shr *tmp4 :printExactBinary:t 1
-  385:  op and *tmp5 *tmp4 1
-  386:  print *tmp5
-  387:  op and *tmp5 :printExactBinary:t 1
+  359:  op shr *tmp4 :printExactBinary:t 31
+  360:  op and *tmp5 *tmp4 1
+  361:  print *tmp5
+  362:  op shr *tmp4 :printExactBinary:t 30
+  363:  op and *tmp5 *tmp4 1
+  364:  print *tmp5
+  365:  op shr *tmp4 :printExactBinary:t 29
+  366:  op and *tmp5 *tmp4 1
+  367:  print *tmp5
+  368:  op shr *tmp4 :printExactBinary:t 28
+  369:  op and *tmp5 *tmp4 1
+  370:  print *tmp5
+  371:  op shr *tmp4 :printExactBinary:t 27
+  372:  op and *tmp5 *tmp4 1
+  373:  print *tmp5
+  374:  op shr *tmp4 :printExactBinary:t 26
+  375:  op and *tmp5 *tmp4 1
+  376:  print *tmp5
+  377:  op shr *tmp4 :printExactBinary:t 25
+  378:  op and *tmp5 *tmp4 1
+  379:  print *tmp5
+  380:  op shr *tmp4 :printExactBinary:t 24
+  381:  op and *tmp5 *tmp4 1
+  382:  print *tmp5
+  383:  op shr *tmp4 :printExactBinary:t 23
+  384:  op and *tmp5 *tmp4 1
+  385:  print *tmp5
+  386:  op shr *tmp4 :printExactBinary:t 22
+  387:  op and *tmp5 *tmp4 1
   388:  print *tmp5
-  389:  multijump *tmp1 0 0
+  389:  op shr *tmp4 :printExactBinary:t 21
+  390:  op and *tmp5 *tmp4 1
+  391:  print *tmp5
+  392:  op shr *tmp4 :printExactBinary:t 20
+  393:  op and *tmp5 *tmp4 1
+  394:  print *tmp5
+  395:  op shr *tmp4 :printExactBinary:t 19
+  396:  op and *tmp5 *tmp4 1
+  397:  print *tmp5
+  398:  op shr *tmp4 :printExactBinary:t 18
+  399:  op and *tmp5 *tmp4 1
+  400:  print *tmp5
+  401:  op shr *tmp4 :printExactBinary:t 17
+  402:  op and *tmp5 *tmp4 1
+  403:  print *tmp5
+  404:  op shr *tmp4 :printExactBinary:t 16
+  405:  op and *tmp5 *tmp4 1
+  406:  print *tmp5
+  407:  op shr *tmp4 :printExactBinary:t 15
+  408:  op and *tmp5 *tmp4 1
+  409:  print *tmp5
+  410:  op shr *tmp4 :printExactBinary:t 14
+  411:  op and *tmp5 *tmp4 1
+  412:  print *tmp5
+  413:  op shr *tmp4 :printExactBinary:t 13
+  414:  op and *tmp5 *tmp4 1
+  415:  print *tmp5
+  416:  op shr *tmp4 :printExactBinary:t 12
+  417:  op and *tmp5 *tmp4 1
+  418:  print *tmp5
+  419:  op shr *tmp4 :printExactBinary:t 11
+  420:  op and *tmp5 *tmp4 1
+  421:  print *tmp5
+  422:  op shr *tmp4 :printExactBinary:t 10
+  423:  op and *tmp5 *tmp4 1
+  424:  print *tmp5
+  425:  op shr *tmp4 :printExactBinary:t 9
+  426:  op and *tmp5 *tmp4 1
+  427:  print *tmp5
+  428:  op shr *tmp4 :printExactBinary:t 8
+  429:  op and *tmp5 *tmp4 1
+  430:  print *tmp5
+  431:  op shr *tmp4 :printExactBinary:t 7
+  432:  op and *tmp5 *tmp4 1
+  433:  print *tmp5
+  434:  op shr *tmp4 :printExactBinary:t 6
+  435:  op and *tmp5 *tmp4 1
+  436:  print *tmp5
+  437:  op shr *tmp4 :printExactBinary:t 5
+  438:  op and *tmp5 *tmp4 1
+  439:  print *tmp5
+  440:  op shr *tmp4 :printExactBinary:t 4
+  441:  op and *tmp5 *tmp4 1
+  442:  print *tmp5
+  443:  op shr *tmp4 :printExactBinary:t 3
+  444:  op and *tmp5 *tmp4 1
+  445:  print *tmp5
+  446:  op shr *tmp4 :printExactBinary:t 2
+  447:  op and *tmp5 *tmp4 1
+  448:  print *tmp5
+  449:  op shr *tmp4 :printExactBinary:t 1
+  450:  op and *tmp5 *tmp4 1
+  451:  print *tmp5
+  452:  op and *tmp5 :printExactBinary:t 1
+  453:  print *tmp5
+  454:  multijump *tmp1 0 0
         multilabel *label54
-  390:  assertprints "1111111111111111111111110000111100000000000000000000000000000000" "printExactBinary(0xFFFFFF0F << 32)"
-  391:  assertflush
-  392:  read *tmp12 "0123456789ABCDEF" 15
-  393:  printchar *tmp12
-  394:  read *tmp12 "0123456789ABCDEF" 15
-  395:  printchar *tmp12
-  396:  read *tmp12 "0123456789ABCDEF" 15
-  397:  printchar *tmp12
-  398:  read *tmp12 "0123456789ABCDEF" 15
-  399:  printchar *tmp12
-  400:  read *tmp12 "0123456789ABCDEF" 15
-  401:  printchar *tmp12
-  402:  read *tmp12 "0123456789ABCDEF" 15
-  403:  printchar *tmp12
-  404:  read *tmp12 "0123456789ABCDEF" 0
-  405:  printchar *tmp12
-  406:  read *tmp12 "0123456789ABCDEF" 15
-  407:  printchar *tmp12
-  408:  read *tmp12 "0123456789ABCDEF" 0
-  409:  printchar *tmp12
-  410:  read *tmp12 "0123456789ABCDEF" 0
-  411:  printchar *tmp12
-  412:  read *tmp12 "0123456789ABCDEF" 0
-  413:  printchar *tmp12
-  414:  read *tmp12 "0123456789ABCDEF" 0
-  415:  printchar *tmp12
-  416:  read *tmp12 "0123456789ABCDEF" 0
-  417:  printchar *tmp12
-  418:  read *tmp12 "0123456789ABCDEF" 0
-  419:  printchar *tmp12
-  420:  read *tmp12 "0123456789ABCDEF" 0
-  421:  printchar *tmp12
-  422:  read *tmp12 "0123456789ABCDEF" 0
-  423:  printchar *tmp12
-  424:  assertprints "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
-  425:  stop
-  426:  end
+  455:  assertprints "1111111111111111111111110000111100000000000000000000000000000000" "printExactBinary(0xFFFFFF0F << 32)"
+  456:  assertflush
+  457:  op shr :printExactHex:t -1035087118336 32
+  458:  setaddr *tmp6 *label62
+  459:  jump *label59 always 0 0
+        multilabel *label62
+  460:  op and :printExactHex:t -1035087118336 0xFFFFFFFF
+  461:  setaddr *tmp6 *label63
+        label *label59
+  462:  op shr *tmp10 :printExactHex:t 28
+  463:  op and :printExactHex:digit *tmp10 0xF
+  464:  read *tmp12 "0123456789ABCDEF" :printExactHex:digit
+  465:  printchar *tmp12
+  466:  op shr *tmp10 :printExactHex:t 24
+  467:  op and :printExactHex:digit *tmp10 0xF
+  468:  read *tmp12 "0123456789ABCDEF" :printExactHex:digit
+  469:  printchar *tmp12
+  470:  op shr *tmp10 :printExactHex:t 20
+  471:  op and :printExactHex:digit *tmp10 0xF
+  472:  read *tmp12 "0123456789ABCDEF" :printExactHex:digit
+  473:  printchar *tmp12
+  474:  op shr *tmp10 :printExactHex:t 16
+  475:  op and :printExactHex:digit *tmp10 0xF
+  476:  read *tmp12 "0123456789ABCDEF" :printExactHex:digit
+  477:  printchar *tmp12
+  478:  op shr *tmp10 :printExactHex:t 12
+  479:  op and :printExactHex:digit *tmp10 0xF
+  480:  read *tmp12 "0123456789ABCDEF" :printExactHex:digit
+  481:  printchar *tmp12
+  482:  op shr *tmp10 :printExactHex:t 8
+  483:  op and :printExactHex:digit *tmp10 0xF
+  484:  read *tmp12 "0123456789ABCDEF" :printExactHex:digit
+  485:  printchar *tmp12
+  486:  op shr *tmp10 :printExactHex:t 4
+  487:  op and :printExactHex:digit *tmp10 0xF
+  488:  read *tmp12 "0123456789ABCDEF" :printExactHex:digit
+  489:  printchar *tmp12
+  490:  op and :printExactHex:digit :printExactHex:t 0xF
+  491:  read *tmp12 "0123456789ABCDEF" :printExactHex:digit
+  492:  printchar *tmp12
+  493:  multijump *tmp6 0 0
+        multilabel *label63
+  494:  assertprints "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
+  495:  stop
+  496:  end
         label *label6
-  427:  op abs *tmp42 :printExactFast:n 0
-  428:  jump *label116 greaterThan *tmp42 0
-  429:  print :printExactFast:n
-  430:  return :printExactFast*retaddr
+  497:  op abs *tmp42 :printExactFast:n 0
+  498:  jump *label116 greaterThan *tmp42 0
+  499:  print :printExactFast:n
+  500:  return :printExactFast*retaddr
         label *label116
-  431:  jump *label118 greaterThanEq :printExactFast:n 0
-  432:  print "-"
-  433:  op abs :printExactFast:n :printExactFast:n 0
+  501:  jump *label118 greaterThanEq :printExactFast:n 0
+  502:  print "-"
+  503:  op abs :printExactFast:n :printExactFast:n 0
         label *label118
-  434:  op log10 *tmp48 :printExactFast:n 0
-  435:  op floor :printExactFast:exp *tmp48 0
-  436:  op sub *tmp50 0 :printExactFast:exp
-  437:  op pow *tmp51 10 *tmp50
-  438:  op mul :printExactFast:base :printExactFast:n *tmp51
-  439:  op add *tmp54 :printExactFast:base 0.5
-  440:  op floor *tmp53 *tmp54 0
-  441:  op sub *tmp56 :printExactFast:base *tmp53
-  442:  op abs :printExactFast:cmp *tmp56 0
-  443:  jump *label121 greaterThan :printExactFast:cmp 0
-  444:  print :printExactFast:base
-  445:  jump *label122 always 0 0
+  504:  op log10 *tmp48 :printExactFast:n 0
+  505:  op floor :printExactFast:exp *tmp48 0
+  506:  op sub *tmp50 0 :printExactFast:exp
+  507:  op pow *tmp51 10 *tmp50
+  508:  op mul :printExactFast:base :printExactFast:n *tmp51
+  509:  op add *tmp54 :printExactFast:base 0.5
+  510:  op floor *tmp53 *tmp54 0
+  511:  op sub *tmp56 :printExactFast:base *tmp53
+  512:  op abs :printExactFast:cmp *tmp56 0
+  513:  jump *label121 greaterThan :printExactFast:cmp 0
+  514:  print :printExactFast:base
+  515:  jump *label122 always 0 0
         label *label121
-  446:  jump *label123 lessThanEq :printExactFast:cmp 0.00001
-  447:  print :printExactFast:base
-  448:  jump *label124 always 0 0
+  516:  jump *label123 lessThanEq :printExactFast:cmp 0.00001
+  517:  print :printExactFast:base
+  518:  jump *label124 always 0 0
         label *label123
-  449:  op floor *tmp62 :printExactFast:base 0
-  450:  print *tmp62
-  451:  print "."
-  452:  op mod *tmp63 :printExactFast:base 1
-  453:  op mul :printExactFast:base *tmp63 100000
-  454:  op floor :printExactFast:t :printExactFast:base 0
-  455:  jump *label304 greaterThanEq :printExactFast:t 100
-  456:  jump *label302 greaterThanEq :printExactFast:t 10
-  457:  print "0000"
-  458:  jump *label309 always 0 0
+  519:  op floor *tmp62 :printExactFast:base 0
+  520:  print *tmp62
+  521:  print "."
+  522:  op mod *tmp63 :printExactFast:base 1
+  523:  op mul :printExactFast:base *tmp63 100000
+  524:  op floor :printExactFast:t :printExactFast:base 0
+  525:  jump *label304 greaterThanEq :printExactFast:t 100
+  526:  jump *label302 greaterThanEq :printExactFast:t 10
+  527:  print "0000"
+  528:  jump *label309 always 0 0
         label *label302
-  459:  print "000"
-  460:  jump *label309 always 0 0
+  529:  print "000"
+  530:  jump *label309 always 0 0
         label *label304
-  461:  jump *label305 greaterThanEq :printExactFast:t 1000
-  462:  print "00"
-  463:  jump *label308 always 0 0
+  531:  jump *label305 greaterThanEq :printExactFast:t 1000
+  532:  print "00"
+  533:  jump *label308 always 0 0
         label *label305
-  464:  jump *label306 greaterThanEq :printExactFast:t 10000
-  465:  print "0"
+  534:  jump *label306 greaterThanEq :printExactFast:t 10000
+  535:  print "0"
         label *label306
         label *label308
         label *label309
-  466:  print :printExactFast:t
-  467:  op mod *tmp63 :printExactFast:base 1
-  468:  op mul :printExactFast:base *tmp63 100000
-  469:  op floor :printExactFast:t :printExactFast:base 0
-  470:  jump *label315 greaterThanEq :printExactFast:t 100
-  471:  jump *label313 greaterThanEq :printExactFast:t 10
-  472:  print "0000"
-  473:  jump *label320 always 0 0
+  536:  print :printExactFast:t
+  537:  op mod *tmp63 :printExactFast:base 1
+  538:  op mul :printExactFast:base *tmp63 100000
+  539:  op floor :printExactFast:t :printExactFast:base 0
+  540:  jump *label315 greaterThanEq :printExactFast:t 100
+  541:  jump *label313 greaterThanEq :printExactFast:t 10
+  542:  print "0000"
+  543:  jump *label320 always 0 0
         label *label313
-  474:  print "000"
-  475:  jump *label320 always 0 0
+  544:  print "000"
+  545:  jump *label320 always 0 0
         label *label315
-  476:  jump *label316 greaterThanEq :printExactFast:t 1000
-  477:  print "00"
-  478:  jump *label319 always 0 0
+  546:  jump *label316 greaterThanEq :printExactFast:t 1000
+  547:  print "00"
+  548:  jump *label319 always 0 0
         label *label316
-  479:  jump *label317 greaterThanEq :printExactFast:t 10000
-  480:  print "0"
+  549:  jump *label317 greaterThanEq :printExactFast:t 10000
+  550:  print "0"
         label *label317
         label *label319
         label *label320
-  481:  print :printExactFast:t
-  482:  op mod *tmp63 :printExactFast:base 1
-  483:  op mul :printExactFast:base *tmp63 100000
-  484:  op floor :printExactFast:t :printExactFast:base 0
-  485:  jump *label326 greaterThanEq :printExactFast:t 100
-  486:  jump *label324 greaterThanEq :printExactFast:t 10
-  487:  print "0000"
-  488:  jump *label331 always 0 0
+  551:  print :printExactFast:t
+  552:  op mod *tmp63 :printExactFast:base 1
+  553:  op mul :printExactFast:base *tmp63 100000
+  554:  op floor :printExactFast:t :printExactFast:base 0
+  555:  jump *label326 greaterThanEq :printExactFast:t 100
+  556:  jump *label324 greaterThanEq :printExactFast:t 10
+  557:  print "0000"
+  558:  jump *label331 always 0 0
         label *label324
-  489:  print "000"
-  490:  jump *label331 always 0 0
+  559:  print "000"
+  560:  jump *label331 always 0 0
         label *label326
-  491:  jump *label327 greaterThanEq :printExactFast:t 1000
-  492:  print "00"
-  493:  jump *label330 always 0 0
+  561:  jump *label327 greaterThanEq :printExactFast:t 1000
+  562:  print "00"
+  563:  jump *label330 always 0 0
         label *label327
-  494:  jump *label328 greaterThanEq :printExactFast:t 10000
-  495:  print "0"
+  564:  jump *label328 greaterThanEq :printExactFast:t 10000
+  565:  print "0"
         label *label328
         label *label330
         label *label331
-  496:  print :printExactFast:t
+  566:  print :printExactFast:t
         label *label124
         label *label122
-  497:  jump *label137 equal :printExactFast:exp 0
-  498:  print "E"
-  499:  print :printExactFast:exp
+  567:  jump *label137 equal :printExactFast:exp 0
+  568:  print "E"
+  569:  print :printExactFast:exp
         label *label137
-  500:  return :printExactFast*retaddr
+  570:  return :printExactFast*retaddr
         label *label7
-  501:  op abs *tmp78 :printExactSlow:n 0
-  502:  jump *label141 greaterThan *tmp78 0
-  503:  print :printExactSlow:n
-  504:  return :printExactSlow*retaddr
+  571:  op abs *tmp78 :printExactSlow:n 0
+  572:  jump *label141 greaterThan *tmp78 0
+  573:  print :printExactSlow:n
+  574:  return :printExactSlow*retaddr
         label *label141
-  505:  jump *label143 greaterThanEq :printExactSlow:n 0
-  506:  print "-"
-  507:  op abs :printExactSlow:n :printExactSlow:n 0
+  575:  jump *label143 greaterThanEq :printExactSlow:n 0
+  576:  print "-"
+  577:  op abs :printExactSlow:n :printExactSlow:n 0
         label *label143
-  508:  op log10 *tmp84 :printExactSlow:n 0
-  509:  op floor :printExactSlow:exp *tmp84 0
-  510:  op sub *tmp86 0 :printExactSlow:exp
-  511:  op pow *tmp87 10 *tmp86
-  512:  op mul :printExactSlow:base :printExactSlow:n *tmp87
-  513:  op floor *tmp89 :printExactSlow:base 0
-  514:  print *tmp89
-  515:  print "."
-  516:  op mod *tmp90 :printExactSlow:base 1
-  517:  op mul :printExactSlow:base *tmp90 10
-  518:  op floor *tmp93 :printExactSlow:base 0
-  519:  print *tmp93
-  520:  op mod *tmp90 :printExactSlow:base 1
-  521:  op mul :printExactSlow:base *tmp90 10
-  522:  op floor *tmp93 :printExactSlow:base 0
-  523:  print *tmp93
-  524:  op mod *tmp90 :printExactSlow:base 1
-  525:  op mul :printExactSlow:base *tmp90 10
-  526:  op floor *tmp93 :printExactSlow:base 0
-  527:  print *tmp93
-  528:  op mod *tmp90 :printExactSlow:base 1
-  529:  op mul :printExactSlow:base *tmp90 10
-  530:  op floor *tmp93 :printExactSlow:base 0
-  531:  print *tmp93
-  532:  op mod *tmp90 :printExactSlow:base 1
-  533:  op mul :printExactSlow:base *tmp90 10
-  534:  op floor *tmp93 :printExactSlow:base 0
-  535:  print *tmp93
-  536:  op mod *tmp90 :printExactSlow:base 1
-  537:  op mul :printExactSlow:base *tmp90 10
-  538:  op floor *tmp93 :printExactSlow:base 0
-  539:  print *tmp93
-  540:  op mod *tmp90 :printExactSlow:base 1
-  541:  op mul :printExactSlow:base *tmp90 10
-  542:  op floor *tmp93 :printExactSlow:base 0
-  543:  print *tmp93
-  544:  op mod *tmp90 :printExactSlow:base 1
-  545:  op mul :printExactSlow:base *tmp90 10
-  546:  op floor *tmp93 :printExactSlow:base 0
-  547:  print *tmp93
-  548:  op mod *tmp90 :printExactSlow:base 1
-  549:  op mul :printExactSlow:base *tmp90 10
-  550:  op floor *tmp93 :printExactSlow:base 0
-  551:  print *tmp93
-  552:  op mod *tmp90 :printExactSlow:base 1
-  553:  op mul :printExactSlow:base *tmp90 10
-  554:  op floor *tmp93 :printExactSlow:base 0
-  555:  print *tmp93
-  556:  op mod *tmp90 :printExactSlow:base 1
-  557:  op mul :printExactSlow:base *tmp90 10
-  558:  op floor *tmp93 :printExactSlow:base 0
-  559:  print *tmp93
-  560:  op mod *tmp90 :printExactSlow:base 1
-  561:  op mul :printExactSlow:base *tmp90 10
-  562:  op floor *tmp93 :printExactSlow:base 0
-  563:  print *tmp93
-  564:  op mod *tmp90 :printExactSlow:base 1
-  565:  op mul :printExactSlow:base *tmp90 10
-  566:  op floor *tmp93 :printExactSlow:base 0
-  567:  print *tmp93
-  568:  op mod *tmp90 :printExactSlow:base 1
-  569:  op mul :printExactSlow:base *tmp90 10
-  570:  op floor *tmp93 :printExactSlow:base 0
-  571:  print *tmp93
-  572:  op mod *tmp90 :printExactSlow:base 1
-  573:  op mul :printExactSlow:base *tmp90 10
-  574:  op floor *tmp93 :printExactSlow:base 0
-  575:  print *tmp93
-  576:  jump *label149 equal :printExactSlow:exp 0
-  577:  print "E"
-  578:  print :printExactSlow:exp
+  578:  op log10 *tmp84 :printExactSlow:n 0
+  579:  op floor :printExactSlow:exp *tmp84 0
+  580:  op sub *tmp86 0 :printExactSlow:exp
+  581:  op pow *tmp87 10 *tmp86
+  582:  op mul :printExactSlow:base :printExactSlow:n *tmp87
+  583:  op floor *tmp89 :printExactSlow:base 0
+  584:  print *tmp89
+  585:  print "."
+  586:  op mod *tmp90 :printExactSlow:base 1
+  587:  op mul :printExactSlow:base *tmp90 10
+  588:  op floor *tmp93 :printExactSlow:base 0
+  589:  print *tmp93
+  590:  op mod *tmp90 :printExactSlow:base 1
+  591:  op mul :printExactSlow:base *tmp90 10
+  592:  op floor *tmp93 :printExactSlow:base 0
+  593:  print *tmp93
+  594:  op mod *tmp90 :printExactSlow:base 1
+  595:  op mul :printExactSlow:base *tmp90 10
+  596:  op floor *tmp93 :printExactSlow:base 0
+  597:  print *tmp93
+  598:  op mod *tmp90 :printExactSlow:base 1
+  599:  op mul :printExactSlow:base *tmp90 10
+  600:  op floor *tmp93 :printExactSlow:base 0
+  601:  print *tmp93
+  602:  op mod *tmp90 :printExactSlow:base 1
+  603:  op mul :printExactSlow:base *tmp90 10
+  604:  op floor *tmp93 :printExactSlow:base 0
+  605:  print *tmp93
+  606:  op mod *tmp90 :printExactSlow:base 1
+  607:  op mul :printExactSlow:base *tmp90 10
+  608:  op floor *tmp93 :printExactSlow:base 0
+  609:  print *tmp93
+  610:  op mod *tmp90 :printExactSlow:base 1
+  611:  op mul :printExactSlow:base *tmp90 10
+  612:  op floor *tmp93 :printExactSlow:base 0
+  613:  print *tmp93
+  614:  op mod *tmp90 :printExactSlow:base 1
+  615:  op mul :printExactSlow:base *tmp90 10
+  616:  op floor *tmp93 :printExactSlow:base 0
+  617:  print *tmp93
+  618:  op mod *tmp90 :printExactSlow:base 1
+  619:  op mul :printExactSlow:base *tmp90 10
+  620:  op floor *tmp93 :printExactSlow:base 0
+  621:  print *tmp93
+  622:  op mod *tmp90 :printExactSlow:base 1
+  623:  op mul :printExactSlow:base *tmp90 10
+  624:  op floor *tmp93 :printExactSlow:base 0
+  625:  print *tmp93
+  626:  op mod *tmp90 :printExactSlow:base 1
+  627:  op mul :printExactSlow:base *tmp90 10
+  628:  op floor *tmp93 :printExactSlow:base 0
+  629:  print *tmp93
+  630:  op mod *tmp90 :printExactSlow:base 1
+  631:  op mul :printExactSlow:base *tmp90 10
+  632:  op floor *tmp93 :printExactSlow:base 0
+  633:  print *tmp93
+  634:  op mod *tmp90 :printExactSlow:base 1
+  635:  op mul :printExactSlow:base *tmp90 10
+  636:  op floor *tmp93 :printExactSlow:base 0
+  637:  print *tmp93
+  638:  op mod *tmp90 :printExactSlow:base 1
+  639:  op mul :printExactSlow:base *tmp90 10
+  640:  op floor *tmp93 :printExactSlow:base 0
+  641:  print *tmp93
+  642:  op mod *tmp90 :printExactSlow:base 1
+  643:  op mul :printExactSlow:base *tmp90 10
+  644:  op floor *tmp93 :printExactSlow:base 0
+  645:  print *tmp93
+  646:  jump *label149 equal :printExactSlow:exp 0
+  647:  print "E"
+  648:  print :printExactSlow:exp
         label *label149
-  579:  return :printExactSlow*retaddr
+  649:  return :printExactSlow*retaddr
 
 
 stop instruction encountered, dumping variable values:
-*tmp1: 390.0
+*tmp1: 455.0
+*tmp10: 0.0
 *tmp12: 48.0
 *tmp4: 0.0
 *tmp42: 1.2345E-50
@@ -1692,6 +1749,7 @@ stop instruction encountered, dumping variable values:
 *tmp53: 1.0
 *tmp54: 1.7345000000000002
 *tmp56: 0.23450000000000015
+*tmp6: 494.0
 *tmp62: 1.0
 *tmp63: 0.9999983634211276
 *tmp78: 1.2345E-50
@@ -1702,18 +1760,20 @@ stop instruction encountered, dumping variable values:
 *tmp90: 0.015276668818842154
 *tmp93: 0.0
 :formatHexNumber:digit: 10.0
-:formatHexNumber:digits: 0.0
+:formatHexNumber:digits: -10.0
 :formatHexNumber:n: 0.0
 :formatNumber:n: 1.0
 :printExactBinary:t: 0.0
-:printExactFast*retaddr: 237.0
+:printExactFast*retaddr: 302.0
 :printExactFast:base: 1.2345000000000002
 :printExactFast:cmp: 0.23450000000000015
 :printExactFast:exp: -50.0
 :printExactFast:n: 1.2345E-50
 :printExactFast:t: 99999.0
-:printExactSlow*retaddr: 287.0
+:printExactHex:digit: 0.0
+:printExactHex:t: 0.0
+:printExactSlow*retaddr: 352.0
 :printExactSlow:base: 0.15276668818842154
 :printExactSlow:exp: -50.0
 :printExactSlow:n: 1.2345E-50
-@counter: 426.0
+@counter: 496.0

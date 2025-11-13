@@ -51,4 +51,23 @@ public class IntegerCompilerOptionValue extends CompilerOptionValue<Integer> {
     public String acceptedValuesDescription() {
         return "{" + min + ".." + max + "}";
     }
+
+    private static final int MAX_RANGE = 100_000;
+
+    @Override
+    public int encodeSize() {
+        return max > MAX_RANGE ? 1 : max - min + 1;
+    }
+
+    @Override
+    public int encode() {
+        return max > MAX_RANGE ? 0 : getValue() - min;
+    }
+
+    @Override
+    public void decode(int encoded) {
+        if (max <= MAX_RANGE) {
+            setValue(min + encoded);
+        }
+    }
 }

@@ -10,7 +10,7 @@
      5 instructions modified by Loop Optimization (3 iterations).
      5 loops improved by Loop Optimization.
      3 instructions eliminated by Case Switching (5 iterations).
-     1 case expressions converted to switched jumps by Case Switching.
+     0 case expressions converted to fast dispatch by Case Switching.
      4 instructions eliminated by Jump Straightening (5 iterations).
      1 instructions updated by Jump Threading.
     14 instructions eliminated by Print Merging.
@@ -18,10 +18,10 @@
 
 Pass 1: speed optimization selection (cost limit 798):
   * Replicate loop condition at line 91:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-  o Convert case at line 17:9 (segments: 1, padded low)          size    -3, benefit      312.5, efficiency   Infinity
+  o Fast-dispatch case at line 17:9                              size    -4, benefit      937.5, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 797):
-  * Convert case at line 17:9 (segments: 1, padded low)          size    -3, benefit      312.5, efficiency   Infinity (-3 instructions)
+  * Fast-dispatch case at line 17:9                              size    -4, benefit      937.5, efficiency   Infinity (-3 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -1269,41 +1269,42 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    189 getlink :driver :n
    190 sensor *tmp81 :driver @type
 
-Modifications by Convert case at line 17:9 (segments: 1, padded low) (-3 instructions):
+Modifications by Fast-dispatch case at line 17:9 (-3 instructions):
  
     18 print :block
     19 print "\n"
     20 sensor *tmp6 :block @type
 -    * jump *label7 notEqual *tmp6 @message
 +   21 sensor *tmp149 *tmp6 @id
-+   22 jump *label63 greaterThanEq *tmp149 146
-+   23 multijump *tmp149 0 0 (m:*label64)
-+   24 multilabel *label66 (m:*label64)
-    25 label *label8
-    26 set .MESSAGE :block
-    27 jump *label6 always
-    28 label *label7
++   22 multijump *tmp149 0 0 (m:*label64)
++   23 multilabel *label70 (m:*label64)
++   24 multilabel *label65 (m:*label64)
++   25 label *label63
++   26 jump *label6 always
++   27 multilabel *label66 (m:*label64)
+    28 label *label8
+    29 set .MESSAGE :block
+    30 jump *label6 always
+    31 label *label7
 -    * jump *label9 notEqual *tmp6 @switch
-+   29 multilabel *label67 (m:*label64)
-    30 label *label10
-    31 set .SWITCH :block
-    32 jump *label6 always
-    33 label *label9
++   32 multilabel *label67 (m:*label64)
+    33 label *label10
+    34 set .SWITCH :block
+    35 jump *label6 always
+    36 label *label9
 -    * jump *label12 equal *tmp6 @logic-display
 -    * jump *label11 notEqual *tmp6 @large-logic-display
-+   34 multilabel *label69 (m:*label64)
-    35 label *label12
-    36 set .DISPLAY :block
-    37 jump *label6 always
-    38 label *label11
++   37 multilabel *label69 (m:*label64)
+    38 label *label12
+    39 set .DISPLAY :block
+    40 jump *label6 always
+    41 label *label11
 -    * jump *label14 equal *tmp6 @memory-bank
 -    * jump *label13 notEqual *tmp6 @memory-cell
-+   39 multilabel *label68 (m:*label64)
-    40 label *label14
-    41 set .MEMORY :block
-    42 label *label13
-+   43 multilabel *label65 (m:*label64)
-+   44 label *label63
++   42 multilabel *label68 (m:*label64)
+    43 label *label14
+    44 set .MEMORY :block
+-    * label *label13
     45 label *label6
     46 label *label4
     47 jump *label59 greaterThan :n 0
@@ -1368,29 +1369,29 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     12 label *label59
     13 op sub :n :n 1
  
-    20 jump *label63 greaterThanEq *tmp149 146
-    21 multijump *tmp149 0 0 (m:*label64)
-    22 multilabel *label66 (m:*label64)
+    20 multijump *tmp149 0 0 (m:*label64)
+    21 multilabel *label70 (m:*label64)
+    22 multilabel *label65 (m:*label64)
+-    * label *label63
+    23 jump *label6 always
+    24 multilabel *label66 (m:*label64)
 -    * label *label8
-    23 set .MESSAGE :block
-    24 jump *label6 always
+    25 set .MESSAGE :block
+    26 jump *label6 always
 -    * label *label7
-    25 multilabel *label67 (m:*label64)
+    27 multilabel *label67 (m:*label64)
 -    * label *label10
-    26 set .SWITCH :block
-    27 jump *label6 always
+    28 set .SWITCH :block
+    29 jump *label6 always
 -    * label *label9
-    28 multilabel *label69 (m:*label64)
+    30 multilabel *label69 (m:*label64)
 -    * label *label12
-    29 set .DISPLAY :block
-    30 jump *label6 always
+    31 set .DISPLAY :block
+    32 jump *label6 always
 -    * label *label11
-    31 multilabel *label68 (m:*label64)
+    33 multilabel *label68 (m:*label64)
 -    * label *label14
-    32 set .MEMORY :block
--    * label *label13
-    33 multilabel *label65 (m:*label64)
-    34 label *label63
+    34 set .MEMORY :block
     35 label *label6
 -    * label *label4
     36 jump *label59 greaterThan :n 0
@@ -1550,7 +1551,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
 +   16 format :block
     17 sensor *tmp6 :block @type
     18 sensor *tmp149 *tmp6 @id
-    19 jump *label63 greaterThanEq *tmp149 146
+    19 multijump *tmp149 0 0 (m:*label64)
  
     34 label *label6
     35 jump *label59 greaterThan :n 0
@@ -1618,21 +1619,21 @@ print "Found: {0}\n"
 format :block
 sensor *tmp6 :block @type
 sensor *tmp149 *tmp6 @id
-jump *label63 greaterThanEq *tmp149 146
 multijump *tmp149 0 0
+multilabel *label70
+multilabel *label65
+jump *label6 always
 multilabel *label66
-set .MESSAGE :block
+set .MESSAGE :block                     # Origin: 16, keys: 137
 jump *label6 always
 multilabel *label67
-set .SWITCH :block
+set .SWITCH :block                      # Origin: 16, keys: 138
 jump *label6 always
 multilabel *label69
-set .DISPLAY :block
+set .DISPLAY :block                     # Origin: 16, keys: 144, 145
 jump *label6 always
 multilabel *label68
-set .MEMORY :block
-multilabel *label65
-label *label63
+set .MEMORY :block                      # Origin: 16, keys: 142, 143
 label *label6
 jump *label59 greaterThan :n 0
 label *label5

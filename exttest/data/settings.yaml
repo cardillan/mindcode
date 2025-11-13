@@ -23,7 +23,6 @@ full-tests: false
 # and just increase the multiplier for longer, more comprehensive tests
 sample-multiplier: 1
 
-
 # DEFAULT TEST SETTINGS
 
 # All values specified here may be overridden for specific tests
@@ -93,6 +92,7 @@ run-test:
   case-switching-test: false
 
   # List of optimization levels for each given optimization
+  array-optimization: [ none, basic, experimental ]
   data-flow-optimization: [ none, basic ]
   dead-code-elimination: [ none, basic ]
   expression-optimization: [ none, basic, advanced ]
@@ -128,6 +128,9 @@ case-switching-defaults:
   # 'true' to compile, optimize and run the code, 'false' to just compile and optimize.
   run: true
 
+  # This setting disables fast dispatch optimization, which would otherwise always take precedence over case-switching
+  null-counter-is-noop: [ false ]
+
   # List of goal settings to use
   goal: [ speed ]
 
@@ -138,6 +141,7 @@ case-switching-defaults:
   case-switching-test: true
 
   # List of optimization levels for each given optimization
+  array-optimization: [ experimental ]
   data-flow-optimization: [ experimental ]
   dead-code-elimination: [ experimental ]
   expression-optimization: [ experimental ]
@@ -163,7 +167,7 @@ case-switching-defaults:
 # LIST OF SOURCES
 
 # A single file to be tested.
-# Unspecified settings are inherited from default.
+# Unspecified settings are inherited from the defaults.
 single-source:
   - source: case-variable.mnd
     defaults: case-switching-defaults

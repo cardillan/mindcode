@@ -188,6 +188,10 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
         throw new UnsupportedOperationException();
     }
 
+    public void discardObject() {
+        isObject = false;
+    }
+
     public long getLongValue() {
         return (long) getDoubleValue();
     }

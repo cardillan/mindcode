@@ -7,12 +7,21 @@
     10 instructions eliminated by Single Step Elimination (5 iterations).
      2 instructions modified by Expression Optimization (2 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
-     2 instructions eliminated by Data Flow Optimization (4 iterations).
+     2 instructions eliminated by Data Flow Optimization (6 iterations).
+     3 instructions eliminated by Case Switching (4 iterations).
+     0 case expressions converted to fast dispatch by Case Switching.
      7 instructions eliminated by Jump Straightening (4 iterations).
      2 instructions updated by Jump Threading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
      2 instructions eliminated by Print Merging.
-   100 instructions after optimizations.
+    97 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 897):
+  * Fast-dispatch case at line 19:16                             size    -2, benefit        6.3, efficiency   Infinity (-2 instructions)
+  o Fast-dispatch case at line 60:13                             size    -2, benefit        6.3, efficiency   Infinity
+
+Pass 1: speed optimization selection (cost limit 899):
+  * Fast-dispatch case at line 60:13                             size    -2, benefit        6.3, efficiency   Infinity (-1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
  
@@ -580,30 +589,109 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     64 op greaterThan *tmp24 :items 0
     65 op or *tmp25 *tmp23 *tmp24
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+Modifications by Fast-dispatch case at line 19:16 (-2 instructions):
  
+     3 label *label0
      4 sensor *tmp2 switch2 @enabled
      5 jump *label3 equal *tmp2 false
-     6 jump *label6 notEqual .UNIT @flare
--    * label *label7
-     7 set *tmp4 @mono
-     8 jump *label5 always
-     9 label *label6
-    10 jump *label8 notEqual .UNIT @mono
--    * label *label9
-    11 set *tmp4 @poly
-    12 jump *label5 always
-    13 label *label8
-    14 jump *label10 notEqual .UNIT @poly
--    * label *label11
-    15 set *tmp4 @mega
+-    * jump *label6 notEqual .UNIT @flare
++    6 sensor *tmp65 .UNIT @id
++    7 multijump *tmp65 0 0 (m:*label46)
++    8 multilabel *label52 (m:*label46)
++    9 multilabel *label47 (m:*label46)
++   10 label *label45
++   11 set *tmp4 null
++   12 jump *label5 always
++   13 multilabel *label48 (m:*label46)
+    14 label *label7
+    15 set *tmp4 @mono
     16 jump *label5 always
-    17 label *label10
-    18 jump *label12 notEqual .UNIT @mega
--    * label *label13
-    19 set *tmp4 @flare
+    17 label *label6
+-    * jump *label8 notEqual .UNIT @mono
++   18 multilabel *label49 (m:*label46)
+    19 label *label9
+    20 set *tmp4 @poly
+    21 jump *label5 always
+    22 label *label8
+-    * jump *label10 notEqual .UNIT @poly
++   23 multilabel *label50 (m:*label46)
+    24 label *label11
+    25 set *tmp4 @mega
+    26 jump *label5 always
+    27 label *label10
+-    * jump *label12 notEqual .UNIT @mega
++   28 multilabel *label51 (m:*label46)
+    29 label *label13
+    30 set *tmp4 @flare
+-    * jump *label5 always
+-    * label *label12
+-    * set *tmp4 null
+    31 label *label5
+    32 set .UNIT *tmp4
+    33 set :first_unit null
+
+Modifications by Fast-dispatch case at line 60:13 (-1 instructions):
+ 
+    75 jump *label22 equal *tmp30 false
+    76 print "\n"
+    77 print :index
+-    * jump *label25 notEqual :controlled @ctrlProcessor
++   78 multijump :controlled 0 0 (m:*label54)
++   79 multilabel *label59 (m:*label54)
++   80 multilabel *label55 (m:*label54)
++   81 label *label53
++   82 jump *label24 always
++   83 multilabel *label56 (m:*label54)
+    84 label *label26
+    85 sensor :controller @unit @controller
+    86 sensor *tmp35 :controller @x
+ 
+    93 print :y
+    94 jump *label24 always
+    95 label *label25
+-    * jump *label27 notEqual :controlled @ctrlPlayer
++   96 multilabel *label57 (m:*label54)
+    97 label *label28
+    98 print ", player"
+    99 jump *label24 always
+   100 label *label27
+-    * jump *label29 notEqual :controlled @ctrlCommand
++  101 multilabel *label58 (m:*label54)
+   102 label *label30
+   103 print ", command"
+-    * label *label29
+   104 label *label24
+   105 jump *label31 equal :flag 0
+   106 print ", F"
+
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+ 
+     7 multijump *tmp65 0 0 (m:*label46)
+     8 multilabel *label52 (m:*label46)
+     9 multilabel *label47 (m:*label46)
+-    * label *label45
+    10 set *tmp4 null
+    11 jump *label5 always
+    12 multilabel *label48 (m:*label46)
+-    * label *label7
+    13 set *tmp4 @mono
+    14 jump *label5 always
+-    * label *label6
+    15 multilabel *label49 (m:*label46)
+-    * label *label9
+    16 set *tmp4 @poly
+    17 jump *label5 always
+-    * label *label8
+    18 multilabel *label50 (m:*label46)
+-    * label *label11
+    19 set *tmp4 @mega
     20 jump *label5 always
-    21 label *label12
+-    * label *label10
+    21 multilabel *label51 (m:*label46)
+-    * label *label13
+    22 set *tmp4 @flare
+    23 label *label5
+    24 set .UNIT *tmp4
  
     27 print *tmp4
     28 print ": gathering information..."
@@ -623,57 +711,61 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     51 sensor :flag @unit @flag
     52 sensor :items @unit @totalItems
  
-    65 print "\n"
-    66 print :index
-    67 jump *label25 notEqual :controlled @ctrlProcessor
+    67 multijump :controlled 0 0 (m:*label54)
+    68 multilabel *label59 (m:*label54)
+    69 multilabel *label55 (m:*label54)
+-    * label *label53
+    70 jump *label24 always
+    71 multilabel *label56 (m:*label54)
 -    * label *label26
-    68 sensor :controller @unit @controller
-    69 sensor *tmp35 :controller @x
-    70 op floor :x *tmp35
+    72 sensor :controller @unit @controller
+    73 sensor *tmp35 :controller @x
+    74 op floor :x *tmp35
  
-    77 jump *label24 always
-    78 label *label25
-    79 jump *label27 notEqual :controlled @ctrlPlayer
--    * label *label28
-    80 print ", player"
+    79 print ";"
+    80 print :y
     81 jump *label24 always
-    82 label *label27
-    83 jump *label29 notEqual :controlled @ctrlCommand
+-    * label *label25
+    82 multilabel *label57 (m:*label54)
+-    * label *label28
+    83 print ", player"
+    84 jump *label24 always
+-    * label *label27
+    85 multilabel *label58 (m:*label54)
 -    * label *label30
-    84 print ", command"
-    85 label *label29
-    86 label *label24
- 
-    88 print ", F"
-    89 print :flag
-    90 label *label31
+    86 print ", command"
+    87 label *label24
+    88 jump *label31 equal :flag 0
+    89 print ", F"
+    90 print :flag
+    91 label *label31
 -    * label *label32
-    91 jump *label33 lessThanEq :items 0
-    92 print ", "
-    93 print :items
-    94 print " "
-    95 print :item
-    96 label *label33
+    92 jump *label33 lessThanEq :items 0
+    93 print ", "
+    94 print :items
+    95 print " "
+    96 print :item
+    97 label *label33
 -    * label *label34
-    97 label *label22
+    98 label *label22
 -    * label *label23
-    98 op equal *tmp43 :controlled 0
-    99 sensor *tmp44 switch1 @enabled
-   100 op land *tmp45 *tmp43 *tmp44
+    99 op equal *tmp43 :controlled 0
+   100 sensor *tmp44 switch1 @enabled
+   101 op land *tmp45 *tmp43 *tmp44
  
-   120 ucontrol approach @thisx @thisy 4
-   121 label *label44
-   122 label *label41
+   121 ucontrol approach @thisx @thisy 4
+   122 label *label44
+   123 label *label41
 -    * label *label42
-   123 label *label38
-   124 label *label35
+   124 label *label38
+   125 label *label35
 -    * label *label36
-   125 op add :index :index 1
-   126 label *label15
+   126 op add :index :index 1
+   127 label *label15
 -    * label *label1
-   127 jump *label0 always
+   128 jump *label0 always
 -    * label *label2
-   128 end
+   129 end
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  
@@ -686,68 +778,68 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
     37 op strictEqual *tmp9 @unit :first_unit
     38 op strictEqual *tmp10 :first_unit null
  
-   105 ucontrol within .CORE_X .CORE_Y 8 *tmp51
-   106 jump *label39 equal *tmp51 false
-   107 ucontrol itemDrop .CORE :items
+   106 ucontrol within .CORE_X .CORE_Y 8 *tmp51
+   107 jump *label39 equal *tmp51 false
+   108 ucontrol itemDrop .CORE :items
 -    * jump *label40 always
-+  108 jump *label38 always
-   109 label *label39
-   110 ucontrol approach .CORE_X .CORE_Y 4
-   111 label *label40
++  109 jump *label38 always
+   110 label *label39
+   111 ucontrol approach .CORE_X .CORE_Y 4
+   112 label *label40
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
-   108 jump *label38 always
-   109 label *label39
-   110 ucontrol approach .CORE_X .CORE_Y 4
+   109 jump *label38 always
+   110 label *label39
+   111 ucontrol approach .CORE_X .CORE_Y 4
 -    * label *label40
-   111 jump *label38 always
-   112 label *label37
-   113 jump *label41 equal :flag 0
+   112 jump *label38 always
+   113 label *label37
+   114 jump *label41 equal :flag 0
  
-   122 label *label38
-   123 label *label35
-   124 op add :index :index 1
+   123 label *label38
+   124 label *label35
+   125 op add :index :index 1
 -    * label *label15
-   125 jump *label0 always
+   126 jump *label0 always
 -    * end
 
 Modifications by Final phase, Temp Variables Elimination, iteration 1:
  
-   101 jump *label35 equal *tmp45 false
-   102 jump *label37 lessThanEq :items 0
-   103 ucontrol flag 1
+   102 jump *label35 equal *tmp45 false
+   103 jump *label37 lessThanEq :items 0
+   104 ucontrol flag 1
 -    * ulocate building core false @copper .CORE_X .CORE_Y *tmp50 .CORE
-+  104 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
-   105 ucontrol within .CORE_X .CORE_Y 8 *tmp51
-   106 jump *label39 equal *tmp51 false
-   107 ucontrol itemDrop .CORE :items
++  105 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
+   106 ucontrol within .CORE_X .CORE_Y 8 *tmp51
+   107 jump *label39 equal *tmp51 false
+   108 ucontrol itemDrop .CORE :items
 
 Modifications by Final phase, Print Merging, iteration 1 (-2 instructions):
  
-    70 op floor :x *tmp35
-    71 sensor *tmp37 :controller @y
-    72 op floor :y *tmp37
+    74 op floor :x *tmp35
+    75 sensor *tmp37 :controller @y
+    76 op floor :y *tmp37
 -    * print ", "
 -    * print :x
 -    * print ";"
-+   73 print ", {0};"
-+   74 format :x
-    75 print :y
-    76 jump *label24 always
-    77 label *label25
++   77 print ", {0};"
++   78 format :x
+    79 print :y
+    80 jump *label24 always
+    81 multilabel *label57 (m:*label54)
  
-    88 print :flag
-    89 label *label31
-    90 jump *label33 lessThanEq :items 0
+    89 print :flag
+    90 label *label31
+    91 jump *label33 lessThanEq :items 0
 -    * print ", "
 -    * print :items
 -    * print " "
-+   91 print ", {0} "
-+   92 format :items
-    93 print :item
-    94 label *label33
-    95 label *label22
++   92 print ", {0} "
++   93 format :items
+    94 print :item
+    95 label *label33
+    96 label *label22
 
 Final code before resolving virtual instructions:
 
@@ -757,23 +849,23 @@ set :index 1
 label *label0
 sensor *tmp2 switch2 @enabled
 jump *label3 equal *tmp2 false
-jump *label6 notEqual .UNIT @flare
-set *tmp4 @mono
+sensor *tmp65 .UNIT @id
+multijump *tmp65 0 0
+multilabel *label52
+multilabel *label47
+set *tmp4 null                          # Origin: 6, keys: 0 .. 14, 16 .. 19
 jump *label5 always
-label *label6
-jump *label8 notEqual .UNIT @mono
-set *tmp4 @poly
+multilabel *label48
+set *tmp4 @mono                         # Origin: 6, keys: 15
 jump *label5 always
-label *label8
-jump *label10 notEqual .UNIT @poly
-set *tmp4 @mega
+multilabel *label49
+set *tmp4 @poly                         # Origin: 6, keys: 20
 jump *label5 always
-label *label10
-jump *label12 notEqual .UNIT @mega
-set *tmp4 @flare
+multilabel *label50
+set *tmp4 @mega                         # Origin: 6, keys: 21
 jump *label5 always
-label *label12
-set *tmp4 null
+multilabel *label51
+set *tmp4 @flare                        # Origin: 6, keys: 22
 label *label5
 set .UNIT *tmp4
 set :first_unit null
@@ -818,8 +910,12 @@ op or *tmp30 *tmp25 *tmp29
 jump *label22 equal *tmp30 false
 print "\n"
 print :index
-jump *label25 notEqual :controlled @ctrlProcessor
-sensor :controller @unit @controller
+multijump :controlled 0 0
+multilabel *label59
+multilabel *label55
+jump *label24 always
+multilabel *label56
+sensor :controller @unit @controller    # Origin: 56, keys: 1
 sensor *tmp35 :controller @x
 op floor :x *tmp35
 sensor *tmp37 :controller @y
@@ -828,14 +924,11 @@ print ", {0};"
 format :x
 print :y
 jump *label24 always
-label *label25
-jump *label27 notEqual :controlled @ctrlPlayer
-print ", player"
+multilabel *label57
+print ", player"                        # Origin: 56, keys: 2
 jump *label24 always
-label *label27
-jump *label29 notEqual :controlled @ctrlCommand
-print ", command"
-label *label29
+multilabel *label58
+print ", command"                       # Origin: 56, keys: 3
 label *label24
 jump *label31 equal :flag 0
 print ", F"

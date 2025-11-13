@@ -7,19 +7,28 @@
     28 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
     12 instructions eliminated by If Expression Optimization (4 iterations).
-     6 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
+     6 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
-     7 instructions eliminated by Case Switching (3 iterations).
-     1 case expressions converted to switched jumps by Case Switching.
+    10 instructions eliminated by Case Switching (5 iterations).
+     0 case expressions converted to fast dispatch by Case Switching.
     11 instructions eliminated by Jump Straightening (4 iterations).
-    10 instructions updated by Jump Threading.
+    12 instructions updated by Jump Threading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     39 instructions eliminated by Print Merging.
-   354 instructions after optimizations.
+   351 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 598):
-  * Convert case at line 419:9 (segments: 1, padded low)         size    -7, benefit     1562.5, efficiency   Infinity (-8 instructions)
+  o Fast-dispatch case at line 210:16                            size    -2, benefit       25.0, efficiency   Infinity
+  o Fast-dispatch case at line 236:5                             size    -2, benefit       25.0, efficiency   Infinity
+  * Fast-dispatch case at line 419:9                             size    -8, benefit     2187.5, efficiency   Infinity (-8 instructions)
+
+Pass 1: speed optimization selection (cost limit 606):
+  * Fast-dispatch case at line 210:16                            size    -2, benefit       25.0, efficiency   Infinity (-2 instructions)
+  o Fast-dispatch case at line 236:5                             size    -2, benefit       25.0, efficiency   Infinity
+
+Pass 1: speed optimization selection (cost limit 608):
+  * Fast-dispatch case at line 236:5                             size    -2, benefit       25.0, efficiency   Infinity (-1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-4 instructions):
  
@@ -1812,30 +1821,33 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 2
    227 op idiv *tmp89 *tmp87 0.9523809523809523
    228 op max :neededPower *tmp89 1000
 
-Modifications by Convert case at line 419:9 (segments: 1, padded low) (-7 instructions):
+Modifications by Fast-dispatch case at line 419:9 (-7 instructions):
  
    444 label *label120
    445 getlink :block :n
    446 sensor *tmp204 :block @type
 -    * jump *label106 notEqual *tmp204 @impact-reactor
 +  447 sensor *tmp391 *tmp204 @id
-+  448 jump *label121 greaterThanEq *tmp391 83
-+  449 multijump *tmp391 0 0 (m:*label122)
-+  450 multilabel *label126 (m:*label122)
-   451 label *label107
-   452 op add :reactors :reactors 1
-   453 op lessThanEq :enabled :reactors .REACTORS_ON
++  448 multijump *tmp391 0 0 (m:*label122)
++  449 multilabel *label127 (m:*label122)
++  450 multilabel *label123 (m:*label122)
++  451 label *label121
++  452 jump *label105 always
++  453 multilabel *label126 (m:*label122)
+   454 label *label107
+   455 op add :reactors :reactors 1
+   456 op lessThanEq :enabled :reactors .REACTORS_ON
  
-   459 label *label109
-   460 jump *label105 always
-   461 label *label106
+   462 label *label109
+   463 jump *label105 always
+   464 label *label106
 -    * jump *label111 equal *tmp204 @overdrive-projector
 -    * jump *label110 notEqual *tmp204 @overdrive-dome
-+  462 multilabel *label124 (m:*label122)
-   463 label *label111
-   464 control enabled :block .OVERDRIVE
-   465 jump *label105 always
-   466 label *label110
++  465 multilabel *label124 (m:*label122)
+   466 label *label111
+   467 control enabled :block .OVERDRIVE
+   468 jump *label105 always
+   469 label *label110
 -    * jump *label113 equal *tmp204 @conduit
 -    * jump *label113 equal *tmp204 @pulse-conduit
 -    * jump *label113 equal *tmp204 @plated-conduit
@@ -1843,12 +1855,10 @@ Modifications by Convert case at line 419:9 (segments: 1, padded low) (-7 instru
 -    * jump *label113 equal *tmp204 @titanium-conveyor
 -    * jump *label113 equal *tmp204 @plastanium-conveyor
 -    * jump *label112 notEqual *tmp204 @armored-conveyor
-+  467 multilabel *label125 (m:*label122)
-   468 label *label113
-   469 control enabled :block :startup
-   470 label *label112
-+  471 multilabel *label123 (m:*label122)
-+  472 label *label121
++  470 multilabel *label125 (m:*label122)
+   471 label *label113
+   472 control enabled :block :startup
+-    * label *label112
    473 label *label105
    474 label *label103
    475 op add :n :n 1
@@ -1871,6 +1881,80 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    443 label *label120
    444 getlink :block :n
    445 sensor *tmp204 :block @type
+
+Modifications by Fast-dispatch case at line 210:16 (-2 instructions):
+ 
+   114 label *label21
+   115 label *label18
+   116 label *label19
+-    * jump *label27 notEqual .MODE 0
++  117 multijump .MODE 0 0 (m:*label129)
++  118 multilabel *label133 (m:*label129)
++  119 label *label128
++  120 set *tmp62 null
++  121 jump *label26 always
++  122 multilabel *label130 (m:*label129)
+   123 label *label28
+   124 set *tmp62 "[salmon]SHUTDOWN[]"
+   125 jump *label26 always
+   126 label *label27
+-    * jump *label29 notEqual .MODE 1
++  127 multilabel *label131 (m:*label129)
+   128 label *label30
+   129 set *tmp62 "[gold]STARTUP[]"
+   130 jump *label26 always
+   131 label *label29
+-    * jump *label31 notEqual .MODE 2
++  132 multilabel *label132 (m:*label129)
+   133 label *label32
+   134 set *tmp62 "[green]RUNNING[]"
+-    * jump *label26 always
+-    * label *label31
+-    * set *tmp62 null
+   135 label *label26
+   136 print *tmp62
+   137 print ","
+
+Modifications by Fast-dispatch case at line 236:5 (-1 instructions):
+ 
+   195 print :net_power
+   196 print "["
+   197 print "]"
+-    * jump *label42 notEqual .MODE 0
++  198 multijump .MODE 0 0 (m:*label135)
++  199 multilabel *label139 (m:*label135)
++  200 label *label134
++  201 jump *label41 always
++  202 multilabel *label136 (m:*label135)
+   203 label *label43
+   204 set .REACTORS_ON 0
+   205 set .OVERDRIVE 0
+ 
+   224 label *label45
+   225 jump *label41 always
+   226 label *label42
+-    * jump *label46 notEqual .MODE 1
++  227 multilabel *label137 (m:*label135)
+   228 label *label47
+   229 select *tmp296 notEqual .OUTPUT_2 false battery4 battery3
+   230 select *tmp85 notEqual .OUTPUT_1 false *tmp296 battery2
+ 
+   305 label *label53
+   306 jump *label41 always
+   307 label *label46
+-    * jump *label72 notEqual .MODE 2
++  308 multilabel *label138 (m:*label135)
+   309 label *label73
+   310 sensor *tmp131 tank1 @totalLiquids
+   311 op lessThan *tmp132 *tmp131 750
+ 
+   426 label *label101
+   427 label *label98
+   428 label *label99
+-    * label *label72
+   429 label *label41
+   430 print "\n"
+   431 print .STARTUPS
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
@@ -1925,110 +2009,118 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
    106 label *label21
    107 label *label18
 -    * label *label19
-   108 jump *label27 notEqual .MODE 0
+   108 multijump .MODE 0 0 (m:*label129)
+   109 multilabel *label133 (m:*label129)
+-    * label *label128
+   110 set *tmp62 null
+   111 jump *label26 always
+   112 multilabel *label130 (m:*label129)
 -    * label *label28
-   109 set *tmp62 "[salmon]SHUTDOWN[]"
-   110 jump *label26 always
-   111 label *label27
-   112 jump *label29 notEqual .MODE 1
--    * label *label30
-   113 set *tmp62 "[gold]STARTUP[]"
+   113 set *tmp62 "[salmon]SHUTDOWN[]"
    114 jump *label26 always
-   115 label *label29
-   116 jump *label31 notEqual .MODE 2
+-    * label *label27
+   115 multilabel *label131 (m:*label129)
+-    * label *label30
+   116 set *tmp62 "[gold]STARTUP[]"
+   117 jump *label26 always
+-    * label *label29
+   118 multilabel *label132 (m:*label129)
 -    * label *label32
-   117 set *tmp62 "[green]RUNNING[]"
-   118 jump *label26 always
-   119 label *label31
+   119 set *tmp62 "[green]RUNNING[]"
+   120 label *label26
+   121 print *tmp62
  
-   137 print :multiplier
-   138 print "x[])"
-   139 label *label33
+   136 print :multiplier
+   137 print "x[])"
+   138 label *label33
 -    * label *label34
-   140 print "\n=================================="
-   141 sensor *tmp70 tank1 @totalLiquids
-   142 jump *label35 greaterThanEq *tmp70 750
-   143 print "\n[salmon]Cryofluid level critical![]"
-   144 label *label35
+   139 print "\n=================================="
+   140 sensor *tmp70 tank1 @totalLiquids
+   141 jump *label35 greaterThanEq *tmp70 750
+   142 print "\n[salmon]Cryofluid level critical![]"
+   143 label *label35
 -    * label *label36
-   145 sensor *tmp73 vault1 @blast-compound
-   146 jump *label37 greaterThanEq *tmp73 700
-   147 print "\n[salmon]Blast compound level critical![]"
-   148 label *label37
+   144 sensor *tmp73 vault1 @blast-compound
+   145 jump *label37 greaterThanEq *tmp73 700
+   146 print "\n[salmon]Blast compound level critical![]"
+   147 label *label37
 -    * label *label38
-   149 jump *label39 notEqual :enough_battery false
-   150 print "\n[salmon]Insufficient battery storage![]"
-   151 print "\n"
+   148 jump *label39 notEqual :enough_battery false
+   149 print "\n[salmon]Insufficient battery storage![]"
+   150 print "\n"
  
-   154 print " "
-   155 print "K[] of additional storage to internal battery."
-   156 label *label39
+   153 print " "
+   154 print "K[] of additional storage to internal battery."
+   155 label *label39
 -    * label *label40
-   157 print "\n"
-   158 print "Internal battery:    [gold]"
-   159 print :battery_level_str
+   156 print "\n"
+   157 print "Internal battery:    [gold]"
+   158 print :battery_level_str
  
-   178 print "["
-   179 print "]"
-   180 jump *label42 notEqual .MODE 0
+   178 print "]"
+   179 multijump .MODE 0 0 (m:*label135)
+   180 multilabel *label139 (m:*label135)
+-    * label *label134
+   181 jump *label41 always
+   182 multilabel *label136 (m:*label135)
 -    * label *label43
-   181 set .REACTORS_ON 0
-   182 set .OVERDRIVE 0
-   183 set .OUTPUT_1 0
+   183 set .REACTORS_ON 0
+   184 set .OVERDRIVE 0
+   185 set .OUTPUT_1 0
  
-   198 set .GENERATOR true
-   199 set .REASON "Unknown -- out of power?"
-   200 label *label44
+   200 set .GENERATOR true
+   201 set .REASON "Unknown -- out of power?"
+   202 label *label44
 -    * label *label45
-   201 jump *label41 always
-   202 label *label42
-   203 jump *label46 notEqual .MODE 1
+   203 jump *label41 always
+-    * label *label42
+   204 multilabel *label137 (m:*label135)
 -    * label *label47
-   204 select *tmp296 notEqual .OUTPUT_2 false battery4 battery3
-   205 select *tmp85 notEqual .OUTPUT_1 false *tmp296 battery2
-   206 sensor *tmp87 *tmp85 @powerNetOut
+   205 select *tmp296 notEqual .OUTPUT_2 false battery4 battery3
+   206 select *tmp85 notEqual .OUTPUT_1 false *tmp296 battery2
+   207 sensor *tmp87 *tmp85 @powerNetOut
  
-   232 print "["
-   233 print "]"
-   234 label *label56
+   233 print "["
+   234 print "]"
+   235 label *label56
 -    * label *label57
-   235 select .OVERDRIVE greaterThan :net_power 100 true .OVERDRIVE
-   236 op lessThan *tmp102 .REACTORS_ON :reactors
-   237 op greaterThan *tmp103 :net_power 1000
+   236 select .OVERDRIVE greaterThan :net_power 100 true .OVERDRIVE
+   237 op lessThan *tmp102 .REACTORS_ON :reactors
+   238 op greaterThan *tmp103 :net_power 1000
  
-   243 set .OUTPUT_2 .OUTPUT_1
-   244 set .OUTPUT_1 1
-   245 label *label60
+   244 set .OUTPUT_2 .OUTPUT_1
+   245 set .OUTPUT_1 1
+   246 label *label60
 -    * label *label61
-   246 jump *label62 notEqual .OUTPUT_1 0
-   247 op mul :availablePower 6300 :boosts
-   248 op div :ratio :neededPower :availablePower
-   249 jump *label64 greaterThanEq :ratio 1
-   250 op add :nextStart @time 2000
-   251 label *label64
+   247 jump *label62 notEqual .OUTPUT_1 0
+   248 op mul :availablePower 6300 :boosts
+   249 op div :ratio :neededPower :availablePower
+   250 jump *label64 greaterThanEq :ratio 1
+   251 op add :nextStart @time 2000
+   252 label *label64
 -    * label *label65
-   252 label *label62
+   253 label *label62
 -    * label *label63
-   253 op greaterThan *tmp116 @time :nextStart
-   254 op land *tmp117 :canStart *tmp116
-   255 jump *label66 equal *tmp117 false
+   254 op greaterThan *tmp116 @time :nextStart
+   255 op land *tmp117 :canStart *tmp116
+   256 jump *label66 equal *tmp117 false
  
-   259 op min .REACTORS_ON *tmp121 :reactors
-   260 op add :nextStart @time 2000
-   261 label *label66
+   260 op min .REACTORS_ON *tmp121 :reactors
+   261 op add :nextStart @time 2000
+   262 label *label66
 -    * label *label67
-   262 op greaterThanEq *tmp124 .REACTORS_ON :reactors
-   263 op greaterThan *tmp125 @time :nextStart
-   264 op land *tmp126 *tmp124 *tmp125
+   263 op greaterThanEq *tmp124 .REACTORS_ON :reactors
+   264 op greaterThan *tmp125 @time :nextStart
+   265 op land *tmp126 *tmp124 *tmp125
  
-   271 set .FUEL_FLAG 0
-   272 set .GENERATOR false
-   273 label *label70
+   272 set .FUEL_FLAG 0
+   273 set .GENERATOR false
+   274 label *label70
 -    * label *label71
-   274 label *label53
-   275 jump *label41 always
-   276 label *label46
-   277 jump *label72 notEqual .MODE 2
+   275 label *label53
+   276 jump *label41 always
+-    * label *label46
+   277 multilabel *label138 (m:*label135)
 -    * label *label73
    278 sensor *tmp131 tank1 @totalLiquids
    279 op lessThan *tmp132 *tmp131 750
@@ -2092,66 +2184,75 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
    387 label *label101
    388 label *label98
 -    * label *label99
-   389 label *label72
-   390 label *label41
-   391 print "\n"
+   389 label *label41
+   390 print "\n"
+   391 print .STARTUPS
  
-   404 set :reactors 0
-   405 set :boosts 0
-   406 set :n .START
+   403 set :reactors 0
+   404 set :boosts 0
+   405 set :n .START
 -    * label *label102
-   407 jump *label104 greaterThanEq .START @links
-   408 label *label120
-   409 getlink :block :n
+   406 jump *label104 greaterThanEq .START @links
+   407 label *label120
+   408 getlink :block :n
  
-   412 jump *label121 greaterThanEq *tmp391 83
-   413 multijump *tmp391 0 0 (m:*label122)
-   414 multilabel *label126 (m:*label122)
+   411 multijump *tmp391 0 0 (m:*label122)
+   412 multilabel *label127 (m:*label122)
+   413 multilabel *label123 (m:*label122)
+-    * label *label121
+   414 jump *label105 always
+   415 multilabel *label126 (m:*label122)
 -    * label *label107
-   415 op add :reactors :reactors 1
-   416 op lessThanEq :enabled :reactors .REACTORS_ON
-   417 control enabled :block :enabled
+   416 op add :reactors :reactors 1
+   417 op lessThanEq :enabled :reactors .REACTORS_ON
+   418 control enabled :block :enabled
  
-   419 sensor *tmp210 :block @timescale
-   420 op add :boosts :boosts *tmp210
-   421 label *label108
+   420 sensor *tmp210 :block @timescale
+   421 op add :boosts :boosts *tmp210
+   422 label *label108
 -    * label *label109
-   422 jump *label105 always
+   423 jump *label105 always
 -    * label *label106
-   423 multilabel *label124 (m:*label122)
+   424 multilabel *label124 (m:*label122)
 -    * label *label111
-   424 control enabled :block .OVERDRIVE
-   425 jump *label105 always
+   425 control enabled :block .OVERDRIVE
+   426 jump *label105 always
 -    * label *label110
-   426 multilabel *label125 (m:*label122)
+   427 multilabel *label125 (m:*label122)
 -    * label *label113
-   427 control enabled :block :startup
--    * label *label112
-   428 multilabel *label123 (m:*label122)
-   429 label *label121
-   430 label *label105
+   428 control enabled :block :startup
+   429 label *label105
 -    * label *label103
-   431 op add :n :n 1
-   432 jump *label120 lessThan :n @links
-   433 label *label104
+   430 op add :n :n 1
+   431 jump *label120 lessThan :n @links
+   432 label *label104
  
-   440 read *tmp221 cell2 4
-   441 op add :boosts :boosts *tmp221
-   442 label *label114
+   439 read *tmp221 cell2 4
+   440 op add :boosts :boosts *tmp221
+   441 label *label114
 -    * label *label115
-   443 op min .REACTORS_ON .REACTORS_ON :reactors
-   444 jump *label116 notEqual cell1 null
-   445 set .STARTUPS 0
+   442 op min .REACTORS_ON .REACTORS_ON :reactors
+   443 jump *label116 notEqual cell1 null
+   444 set .STARTUPS 0
  
-   459 write .RESETS cell1 9
-   460 write .COMMITS cell1 10
-   461 label *label117
+   458 write .RESETS cell1 9
+   459 write .COMMITS cell1 10
+   460 label *label117
 -    * label *label16
-   462 jump *label15 always
+   461 jump *label15 always
 -    * label *label17
-   463 end
+   462 end
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
+ 
+    75 jump *label20 notEqual *tmp45 false
+    76 set .MODE 0
+    77 set .REASON "Manual power off"
+-    * jump *label21 always
++   78 multijump .MODE 0 0 (m:*label129)
+    79 label *label20
+    80 op mul :min_consumption .REACTORS_ON 1200
+    81 op lessThan :failure1 :consumption :min_consumption
  
     89 op add :failure_cnt :failure_cnt 1
     90 read *tmp57 cell2 1
@@ -2162,39 +2263,48 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
     94 control enabled switch1 false
     95 set .REASON "Unknown -- out of power?"
  
-   190 print .REASON
-   191 print "[]"
-   192 sensor *tmp83 switch1 @enabled
+    99 print :min_consumption
+   100 printflush message2
+   101 label *label24
+-    * jump *label23 always
++  102 multijump .MODE 0 0 (m:*label129)
+   103 label *label22
+   104 set :failure_cnt 0
+   105 label *label23
+ 
+   192 print .REASON
+   193 print "[]"
+   194 sensor *tmp83 switch1 @enabled
 -    * jump *label44 equal *tmp83 false
-+  193 jump *label41 equal *tmp83 false
-   194 set .MODE 1
-   195 op add .STARTUPS .STARTUPS 1
-   196 set :nextStart 0
++  195 jump *label41 equal *tmp83 false
+   196 set .MODE 1
+   197 op add .STARTUPS .STARTUPS 1
+   198 set :nextStart 0
  
-   210 jump *label54 lessThan :total_battery 25000
-   211 set .REACTORS_ON 1
-   212 op add :nextStart @time 2000
+   211 jump *label54 lessThan :total_battery 25000
+   212 set .REACTORS_ON 1
+   213 op add :nextStart @time 2000
 -    * jump *label55 always
-+  213 jump *label41 always
-   214 label *label54
-   215 print "\nRequired startup energy: [gold]"
-   216 print 25
-   217 print " K[]"
-   218 label *label55
++  214 jump *label41 always
+   215 label *label54
+   216 print "\nRequired startup energy: [gold]"
+   217 print 25
+   218 print " K[]"
+   219 label *label55
 -    * jump *label53 always
-+  219 jump *label41 always
-   220 label *label52
-   221 op add *tmp96 .OUTPUT_1 .OUTPUT_2
-   222 op add :outputs *tmp96 .OUTPUT_3
++  220 jump *label41 always
+   221 label *label52
+   222 op add *tmp96 .OUTPUT_1 .OUTPUT_2
+   223 op add :outputs *tmp96 .OUTPUT_3
  
-   264 op land *tmp126 *tmp124 *tmp125
-   265 op greaterThan *tmp127 .OUTPUT_3 0
-   266 op land *tmp128 *tmp126 *tmp127
+   265 op land *tmp126 *tmp124 *tmp125
+   266 op greaterThan *tmp127 .OUTPUT_3 0
+   267 op land *tmp128 *tmp126 *tmp127
 -    * jump *label70 equal *tmp128 false
-+  267 jump *label41 equal *tmp128 false
-   268 set .MODE 2
-   269 op add :nextDecommit @time 6000
-   270 set .COOLANT_FLAG 0
++  268 jump *label41 equal *tmp128 false
+   269 set .MODE 2
+   270 op add :nextDecommit @time 6000
+   271 set .COOLANT_FLAG 0
  
    333 set .OVERDRIVE true
    334 set .REACTORS_ON :reactors
@@ -2217,23 +2327,23 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
    358 op add .COMMITS .COMMITS 1
    359 set .CAN_COMMIT false
  
-   415 op add :reactors :reactors 1
-   416 op lessThanEq :enabled :reactors .REACTORS_ON
-   417 control enabled :block :enabled
+   416 op add :reactors :reactors 1
+   417 op lessThanEq :enabled :reactors .REACTORS_ON
+   418 control enabled :block :enabled
 -    * jump *label108 equal :enabled false
-+  418 jump *label105 equal :enabled false
-   419 sensor *tmp210 :block @timescale
-   420 op add :boosts :boosts *tmp210
-   421 label *label108
++  419 jump *label105 equal :enabled false
+   420 sensor *tmp210 :block @timescale
+   421 op add :boosts :boosts *tmp210
+   422 label *label108
  
-   445 set .STARTUPS 0
-   446 set .RESETS 0
-   447 set .COMMITS 0
+   444 set .STARTUPS 0
+   445 set .RESETS 0
+   446 set .COMMITS 0
 -    * jump *label117 always
-+  448 jump *label15 always
-   449 label *label116
-   450 write .MODE cell1 0
-   451 write .OUTPUT_1 cell1 1
++  447 jump *label15 always
+   448 label *label116
+   449 write .MODE cell1 0
+   450 write .OUTPUT_1 cell1 1
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
@@ -2241,17 +2351,22 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
     99 print :min_consumption
    100 printflush message2
 -    * label *label24
-   101 jump *label23 always
+   101 multijump .MODE 0 0 (m:*label129)
    102 label *label22
    103 set :failure_cnt 0
+   104 label *label23
+-    * label *label21
+   105 label *label18
+   106 multijump .MODE 0 0 (m:*label129)
+   107 multilabel *label133 (m:*label129)
  
-   196 set :failure_cnt 0
-   197 set .GENERATOR true
-   198 set .REASON "Unknown -- out of power?"
+   197 set :failure_cnt 0
+   198 set .GENERATOR true
+   199 set .REASON "Unknown -- out of power?"
 -    * label *label44
-   199 jump *label41 always
-   200 label *label42
-   201 jump *label46 notEqual .MODE 1
+   200 jump *label41 always
+   201 multilabel *label137 (m:*label135)
+   202 select *tmp296 notEqual .OUTPUT_2 false battery4 battery3
  
    213 print "\nRequired startup energy: [gold]"
    214 print 25
@@ -2267,18 +2382,18 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
 -    * label *label70
 -    * label *label53
    270 jump *label41 always
-   271 label *label46
-   272 jump *label72 notEqual .MODE 2
+   271 multilabel *label138 (m:*label135)
+   272 sensor *tmp131 tank1 @totalLiquids
  
-   352 op add .REACTORS_ON .REACTORS_ON 1
-   353 op add .COMMITS .COMMITS 1
-   354 set .CAN_COMMIT false
+   351 op add .REACTORS_ON .REACTORS_ON 1
+   352 op add .COMMITS .COMMITS 1
+   353 set .CAN_COMMIT false
 -    * label *label92
 -    * label *label89
 -    * label *label85
-   355 jump *label79 always
-   356 label *label78
-   357 sensor *tmp187 switch2 @enabled
+   354 jump *label79 always
+   355 label *label78
+   356 sensor *tmp187 switch2 @enabled
  
    410 jump *label105 equal :enabled false
    411 sensor *tmp210 :block @timescale
@@ -2288,11 +2403,11 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
    414 multilabel *label124 (m:*label122)
    415 control enabled :block .OVERDRIVE
  
-   449 write .STARTUPS cell1 8
-   450 write .RESETS cell1 9
-   451 write .COMMITS cell1 10
+   447 write .STARTUPS cell1 8
+   448 write .RESETS cell1 9
+   449 write .COMMITS cell1 10
 -    * label *label117
-   452 jump *label15 always
+   450 jump *label15 always
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-39 instructions):
@@ -2319,11 +2434,11 @@ Modifications by Final phase, Print Merging, iteration 1 (-39 instructions):
 +   96 format :consumption
     97 print :min_consumption
     98 printflush message2
-    99 jump *label23 always
+    99 multijump .MODE 0 0 (m:*label129)
  
-   117 set *tmp62 null
-   118 label *label26
-   119 print *tmp62
+   115 set *tmp62 "[green]RUNNING[]"
+   116 label *label26
+   117 print *tmp62
 -    * print ","
 -    * print " reactors [green]"
 -    * print .REACTORS_ON
@@ -2331,36 +2446,36 @@ Modifications by Final phase, Print Merging, iteration 1 (-39 instructions):
 -    * print :reactors
 -    * print "["
 -    * print "]"
-+  120 print ", reactors [green]{0}/{0}[]"
-+  121 format .REACTORS_ON
-+  122 format :reactors
-   123 jump *label33 equal .OVERDRIVE false
-   124 op mul *tmp65 100 :boosts
-   125 op div *tmp66 *tmp65 .REACTORS_ON
-   126 op add *tmp67 *tmp66 0.5
-   127 op floor *tmp68 *tmp67
-   128 op div :multiplier *tmp68 100
++  118 print ", reactors [green]{0}/{0}[]"
++  119 format .REACTORS_ON
++  120 format :reactors
+   121 jump *label33 equal .OVERDRIVE false
+   122 op mul *tmp65 100 :boosts
+   123 op div *tmp66 *tmp65 .REACTORS_ON
+   124 op add *tmp67 *tmp66 0.5
+   125 op floor *tmp68 *tmp67
+   126 op div :multiplier *tmp68 100
 -    * print " ([gold]"
 -    * print :multiplier
 -    * print "x[])"
-+  129 print " ([gold]{0}x[])"
-+  130 format :multiplier
-   131 label *label33
-   132 print "\n=================================="
-   133 sensor *tmp70 tank1 @totalLiquids
++  127 print " ([gold]{0}x[])"
++  128 format :multiplier
+   129 label *label33
+   130 print "\n=================================="
+   131 sensor *tmp70 tank1 @totalLiquids
  
-   139 print "\n[salmon]Blast compound level critical![]"
-   140 label *label37
-   141 jump *label39 notEqual :enough_battery false
+   137 print "\n[salmon]Blast compound level critical![]"
+   138 label *label37
+   139 jump *label39 notEqual :enough_battery false
 -    * print "\n[salmon]Insufficient battery storage![]"
 -    * print "\n"
 -    * print "Link [gold]"
 -    * print :missing_battery
 -    * print " "
 -    * print "K[] of additional storage to internal battery."
-+  142 print "\n[salmon]Insufficient battery storage![]\nLink [gold]{0} K[] of additional storage to internal battery."
-+  143 format :missing_battery
-   144 label *label39
++  140 print "\n[salmon]Insufficient battery storage![]\nLink [gold]{0} K[] of additional storage to internal battery."
++  141 format :missing_battery
+   142 label *label39
 -    * print "\n"
 -    * print "Internal battery:    [gold]"
 -    * print :battery_level_str
@@ -2384,27 +2499,27 @@ Modifications by Final phase, Print Merging, iteration 1 (-39 instructions):
 -    * print :net_power
 -    * print "["
 -    * print "]"
-+  145 print "\nInternal battery:    [gold]{0}[]/[green]50[] K\nTotal battery:        [gold]{0}[]/[green]{0}[] K\nBattery change:     [gold]{0}[]\nPower balance:       [gold]{0}[]"
-+  146 format :battery_level_str
-+  147 format :total_battery_str
-+  148 format :total_capacity_str
-+  149 format :battery_change
-+  150 format :net_power
-   151 jump *label42 notEqual .MODE 0
-   152 set .REACTORS_ON 0
-   153 set .OVERDRIVE 0
++  143 print "\nInternal battery:    [gold]{0}[]/[green]50[] K\nTotal battery:        [gold]{0}[]/[green]{0}[] K\nBattery change:     [gold]{0}[]\nPower balance:       [gold]{0}[]"
++  144 format :battery_level_str
++  145 format :total_battery_str
++  146 format :total_capacity_str
++  147 format :battery_change
++  148 format :net_power
+   149 multijump .MODE 0 0 (m:*label135)
+   150 multilabel *label139 (m:*label135)
+   151 jump *label41 always
  
-   157 op greaterThanEq *tmp80 :net_power -150
-   158 op lessThan *tmp81 :total_battery 47500
-   159 op land .GENERATOR *tmp80 *tmp81
+   158 op greaterThanEq *tmp80 :net_power -150
+   159 op lessThan *tmp81 :total_battery 47500
+   160 op land .GENERATOR *tmp80 *tmp81
 -    * print "\nShutdown reason: [gold]"
 -    * print .REASON
 -    * print "[]"
-+  160 print "\nShutdown reason: [gold]{0}[]"
-+  161 format .REASON
-   162 sensor *tmp83 switch1 @enabled
-   163 jump *label41 equal *tmp83 false
-   164 set .MODE 1
++  161 print "\nShutdown reason: [gold]{0}[]"
++  162 format .REASON
+   163 sensor *tmp83 switch1 @enabled
+   164 jump *label41 equal *tmp83 false
+   165 set .MODE 1
  
    181 op add :nextStart @time 2000
    182 jump *label41 always
@@ -2436,20 +2551,20 @@ Modifications by Final phase, Print Merging, iteration 1 (-39 instructions):
    195 select .OVERDRIVE greaterThan :net_power 100 true .OVERDRIVE
    196 op lessThan *tmp102 .REACTORS_ON :reactors
  
-   343 label *label98
-   344 label *label72
-   345 label *label41
+   341 label *label101
+   342 label *label98
+   343 label *label41
 -    * print "\n"
 -    * print .STARTUPS
 -    * print "-"
 -    * print .RESETS
 -    * print "-"
-+  346 print "\n{0}-{0}-"
-+  347 format .STARTUPS
-+  348 format .RESETS
-   349 print .COMMITS
-   350 printflush message1
-   351 control enabled diode1 .OUTPUT_1
++  344 print "\n{0}-{0}-"
++  345 format .STARTUPS
++  346 format .RESETS
+   347 print .COMMITS
+   348 printflush message1
+   349 control enabled diode1 .OUTPUT_1
 
 Final code before resolving virtual instructions:
 
@@ -2530,7 +2645,7 @@ sensor *tmp45 switch1 @enabled
 jump *label20 notEqual *tmp45 false
 set .MODE 0
 set .REASON "Manual power off"
-jump *label21 always
+multijump .MODE 0 0
 label *label20
 op mul :min_consumption .REACTORS_ON 1200
 op lessThan :failure1 :consumption :min_consumption
@@ -2552,25 +2667,23 @@ print "Consumption: {0}\nMin. consumption: "
 format :consumption
 print :min_consumption
 printflush message2
-jump *label23 always
+multijump .MODE 0 0
 label *label22
 set :failure_cnt 0
 label *label23
-label *label21
 label *label18
-jump *label27 notEqual .MODE 0
-set *tmp62 "[salmon]SHUTDOWN[]"
-jump *label26 always
-label *label27
-jump *label29 notEqual .MODE 1
-set *tmp62 "[gold]STARTUP[]"
-jump *label26 always
-label *label29
-jump *label31 notEqual .MODE 2
-set *tmp62 "[green]RUNNING[]"
-jump *label26 always
-label *label31
+multijump .MODE 0 0
+multilabel *label133
 set *tmp62 null
+jump *label26 always
+multilabel *label130
+set *tmp62 "[salmon]SHUTDOWN[]"         # Origin: 68, keys: 0
+jump *label26 always
+multilabel *label131
+set *tmp62 "[gold]STARTUP[]"            # Origin: 68, keys: 1
+jump *label26 always
+multilabel *label132
+set *tmp62 "[green]RUNNING[]"           # Origin: 68, keys: 2
 label *label26
 print *tmp62
 print ", reactors [green]{0}/{0}[]"
@@ -2604,8 +2717,11 @@ format :total_battery_str
 format :total_capacity_str
 format :battery_change
 format :net_power
-jump *label42 notEqual .MODE 0
-set .REACTORS_ON 0
+multijump .MODE 0 0
+multilabel *label139
+jump *label41 always
+multilabel *label136
+set .REACTORS_ON 0                      # Origin: 127, keys: 0
 set .OVERDRIVE 0
 set .OUTPUT_1 0
 set .OUTPUT_2 0
@@ -2624,9 +2740,8 @@ set :failure_cnt 0
 set .GENERATOR true
 set .REASON "Unknown -- out of power?"
 jump *label41 always
-label *label42
-jump *label46 notEqual .MODE 1
-select *tmp296 notEqual .OUTPUT_2 false battery4 battery3
+multilabel *label137
+select *tmp296 notEqual .OUTPUT_2 false battery4 battery3 # Origin: 127, keys: 1
 select *tmp85 notEqual .OUTPUT_1 false *tmp296 battery2
 sensor *tmp87 *tmp85 @powerNetOut
 op idiv *tmp89 *tmp87 0.9523809523809523
@@ -2687,9 +2802,8 @@ set .COOLANT_FLAG 0
 set .FUEL_FLAG 0
 set .GENERATOR false
 jump *label41 always
-label *label46
-jump *label72 notEqual .MODE 2
-sensor *tmp131 tank1 @totalLiquids
+multilabel *label138
+sensor *tmp131 tank1 @totalLiquids      # Origin: 127, keys: 2
 op lessThan *tmp132 *tmp131 750
 op land *tmp133 .COOLANT_FLAG *tmp132
 jump *label74 equal *tmp133 false
@@ -2797,7 +2911,6 @@ label *label100
 print "\n*** [gold]Surge tower 2 offline[] ***"
 label *label101
 label *label98
-label *label72
 label *label41
 print "\n{0}-{0}-"
 format .STARTUPS
@@ -2818,10 +2931,12 @@ label *label120
 getlink :block :n
 sensor *tmp204 :block @type
 sensor *tmp391 *tmp204 @id
-jump *label121 greaterThanEq *tmp391 83
 multijump *tmp391 0 0
+multilabel *label127
+multilabel *label123
+jump *label105 always
 multilabel *label126
-op add :reactors :reactors 1
+op add :reactors :reactors 1            # Origin: 311, keys: 82
 op lessThanEq :enabled :reactors .REACTORS_ON
 control enabled :block :enabled
 jump *label105 equal :enabled false
@@ -2829,12 +2944,10 @@ sensor *tmp210 :block @timescale
 op add :boosts :boosts *tmp210
 jump *label105 always
 multilabel *label124
-control enabled :block .OVERDRIVE
+control enabled :block .OVERDRIVE       # Origin: 311, keys: 37, 38
 jump *label105 always
 multilabel *label125
-control enabled :block :startup
-multilabel *label123
-label *label121
+control enabled :block :startup         # Origin: 311, keys: 41 .. 44, 60 .. 62
 label *label105
 op add :n :n 1
 jump *label120 lessThan :n @links

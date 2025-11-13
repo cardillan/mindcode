@@ -9,7 +9,7 @@ public record ConvertCaseActionParameters(
         int group,
         AstContext context,
         LogicVariable variable,
-        CaseStatement statement,
+        CaseExpression caseExpression,
         int originalCost,
         int originalSteps,
         boolean mindustryContent,
@@ -18,7 +18,7 @@ public record ConvertCaseActionParameters(
         boolean considerElse) {
 
     private ConvertCaseActionParameters(ConvertCaseActionParameters other) {
-        this(other.group, other.context, other.variable, other.statement.duplicate(), other.originalCost, other.originalSteps,
+        this(other.group, other.context, other.variable, other.caseExpression.duplicate(), other.originalCost, other.originalSteps,
                 other.mindustryContent, other.removeRangeCheck, other.symbolic, other.considerElse);
     }
 
@@ -27,6 +27,6 @@ public record ConvertCaseActionParameters(
     }
 
     public boolean handleNulls() {
-        return mindustryContent || statement.hasNullKey();
+        return mindustryContent || caseExpression.hasNullKey();
     }
 }

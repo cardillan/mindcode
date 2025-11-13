@@ -300,32 +300,32 @@ print .c*8
 print .c*9
 assertprints "9876543210" "Array sort 2"
 end
-select .a*elem lessThan .a*ind 3 ".a*0" ".a*3"
+select .a*elem lessThan .a*ind 3 ".a*0" ".a*3" # Origin: 7, keys: 0, 3
 set @counter .a*ret
-select .a*elem lessThan .a*ind 3 ".a*1" ".a*4"
+select .a*elem lessThan .a*ind 3 ".a*1" ".a*4" # Origin: 7, keys: 1, 4
 set @counter .a*ret
-set .a*elem ".a*2"
+set .a*elem ".a*2"                      # Origin: 7, keys: 2
 set @counter .a*ret
 end
-select .b*elem lessThan .b*ind 5 ".b*0" ".b*5"
+select .b*elem lessThan .b*ind 5 ".b*0" ".b*5" # Origin: 24, 41, 48, ..., keys: 0, 5
 set @counter .b*ret
-select .b*elem lessThan .b*ind 5 ".b*1" ".b*6"
+select .b*elem lessThan .b*ind 5 ".b*1" ".b*6" # Origin: 24, 41, 48, ..., keys: 1, 6
 set @counter .b*ret
-select .b*elem lessThan .b*ind 5 ".b*2" ".b*7"
+select .b*elem lessThan .b*ind 5 ".b*2" ".b*7" # Origin: 24, 41, 48, ..., keys: 2, 7
 set @counter .b*ret
-select .b*elem lessThan .b*ind 5 ".b*3" ".b*8"
+select .b*elem lessThan .b*ind 5 ".b*3" ".b*8" # Origin: 24, 41, 48, ..., keys: 3, 8
 set @counter .b*ret
-select .b*elem lessThan .b*ind 5 ".b*4" ".b*9"
+select .b*elem lessThan .b*ind 5 ".b*4" ".b*9" # Origin: 24, 41, 48, ..., keys: 4, 9
 set @counter .b*ret
 end
-select .c*elem lessThan .c*ind 5 ".c*0" ".c*5"
+select .c*elem lessThan .c*ind 5 ".c*0" ".c*5" # Origin: 30, 198, 206, ..., keys: 0, 5
 set @counter .c*ret
-select .c*elem lessThan .c*ind 5 ".c*1" ".c*6"
+select .c*elem lessThan .c*ind 5 ".c*1" ".c*6" # Origin: 30, 198, 206, ..., keys: 1, 6
 set @counter .c*ret
-select .c*elem lessThan .c*ind 5 ".c*2" ".c*7"
+select .c*elem lessThan .c*ind 5 ".c*2" ".c*7" # Origin: 30, 198, 206, ..., keys: 2, 7
 set @counter .c*ret
-select .c*elem lessThan .c*ind 5 ".c*3" ".c*8"
+select .c*elem lessThan .c*ind 5 ".c*3" ".c*8" # Origin: 30, 198, 206, ..., keys: 3, 8
 set @counter .c*ret
-select .c*elem lessThan .c*ind 5 ".c*4" ".c*9"
+select .c*elem lessThan .c*ind 5 ".c*4" ".c*9" # Origin: 30, 198, 206, ..., keys: 4, 9
 set @counter .c*ret
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

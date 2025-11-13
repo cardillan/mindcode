@@ -8,13 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+* A new [fast dispatch optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#fast-dispatch) is available for case expressions. Fast dispatch uses just a single instruction to transfer the control to the desired branch of a case expression, including the `else` branch.
 * A new [value translation optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#value-translation), which reads values encoded into a text string using the `read` instruction, is possible for case expressions ([#289](https://github.com/cardillan/mindcode/issues/289)).
 * Added the [`use-text-translations` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-text-translations) to allow/disallow using encoding values into a text string for the above optimization.
 
 ### Changed
 
 * **Breaking**: the `text-tables` compiler option has been renamed (yet again - sorry) to [`use-text-jump-tables`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-text-jump-tables).
-* The [Case Switcher optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#null-values) was updated to fully support `null` values in `when` branches (even in integer expressions). 
+* The [Case Switcher optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#null-values) was updated to fully support `null` values in `when` branches (even in integer expressions).
+* The Extended testing tool now accepts values for any compiler directive in the settings file.
 
 ## 3.9.0 - 2025-10-27
 

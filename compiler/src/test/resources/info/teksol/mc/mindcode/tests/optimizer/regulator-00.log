@@ -4,14 +4,14 @@
     27 instructions eliminated by Dead Code Elimination (7 iterations).
      1 instructions eliminated by Jump Normalization (5 iterations).
     10 instructions eliminated by Jump Optimization (5 iterations).
-     7 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+     8 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      2 instructions modified by Expression Optimization (3 iterations).
      9 instructions eliminated by If Expression Optimization (4 iterations).
      7 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
-    15 instructions eliminated by Case Switching (5 iterations).
-     1 case expressions converted to switched jumps by Case Switching.
+    14 instructions eliminated by Case Switching (5 iterations).
+     0 case expressions converted to fast dispatch by Case Switching.
      7 instructions eliminated by Jump Straightening (5 iterations).
      2 instructions updated by Jump Threading.
     35 instructions eliminated by Print Merging.
@@ -19,10 +19,10 @@
 
 Pass 1: speed optimization selection (cost limit 825):
   * Replicate loop condition at line 72:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-  o Convert case at line 26:9 (segments: 1, padded low)          size   -15, benefit     4062.5, efficiency   Infinity
+  o Fast-dispatch case at line 26:9                              size   -16, benefit     4687.5, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 824):
-  * Convert case at line 26:9 (segments: 1, padded low)          size   -15, benefit     4062.5, efficiency   Infinity (-15 instructions)
+  * Fast-dispatch case at line 26:9                              size   -16, benefit     4687.5, efficiency   Infinity (-14 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -937,93 +937,126 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    200 getlink :block :n
    201 control enabled :block .ON
 
-Modifications by Convert case at line 26:9 (segments: 1, padded low) (-15 instructions):
+Modifications by Fast-dispatch case at line 26:9 (-14 instructions):
  
     19 print :block
     20 print "\n"
     21 sensor *tmp5 :block @type
 -    * jump *label7 notEqual *tmp5 @message
 +   22 sensor *tmp71 *tmp5 @id
-+   23 jump *label55 greaterThanEq *tmp71 147
-+   24 multijump *tmp71 0 0 (m:*label56)
-+   25 multilabel *label63 (m:*label56)
-    26 label *label8
-    27 set .MESSAGE :block
-    28 jump *label6 always
-    29 label *label7
++   23 multijump *tmp71 0 0 (m:*label56)
++   24 multilabel *label65 (m:*label56)
++   25 multilabel *label57 (m:*label56)
++   26 label *label55
++   27 jump *label6 always
++   28 multilabel *label63 (m:*label56)
+    29 label *label8
+    30 set .MESSAGE :block
+    31 jump *label6 always
+    32 label *label7
 -    * jump *label9 notEqual *tmp5 @switch
-+   30 multilabel *label64 (m:*label56)
-    31 label *label10
-    32 set .SWITCH :block
-    33 jump *label6 always
-    34 label *label9
++   33 multilabel *label64 (m:*label56)
+    34 label *label10
+    35 set .SWITCH :block
+    36 jump *label6 always
+    37 label *label9
 -    * jump *label12 equal *tmp5 @sorter
 -    * jump *label12 equal *tmp5 @inverted-sorter
 -    * jump *label11 notEqual *tmp5 @unloader
-+   35 multilabel *label58 (m:*label56)
-    36 label *label12
-    37 set .SORTER :block
-    38 jump *label6 always
-    39 label *label11
++   38 multilabel *label58 (m:*label56)
+    39 label *label12
+    40 set .SORTER :block
+    41 jump *label6 always
+    42 label *label11
 -    * jump *label14 equal *tmp5 @vault
 -    * jump *label14 equal *tmp5 @container
 -    * jump *label14 equal *tmp5 @core-shard
 -    * jump *label14 equal *tmp5 @core-foundation
 -    * jump *label13 notEqual *tmp5 @core-nucleus
-+   40 multilabel *label62 (m:*label56)
-    41 label *label14
-    42 set .CONTAINER :block
-    43 set .SENSOR @totalItems
- 
-    45 op add .START :n 1
-    46 jump *label6 always
-    47 label *label13
++   43 jump *label6 always
++   44 label *label13
++   45 multilabel *label59 (m:*label56)
++   46 label *label16
++   47 set .CONTAINER :block
++   48 set .SENSOR @totalLiquids
++   49 set .MAXIMUM @liquidCapacity
++   50 op add .START :n 1
++   51 jump *label6 always
++   52 label *label15
++   53 multilabel *label61 (m:*label56)
++   54 label *label18
++   55 set .CONTAINER :block
++   56 set .SENSOR @totalPower
++   57 set .MAXIMUM @powerCapacity
++   58 op add .START :n 1
++   59 jump *label6 always
++   60 label *label17
++   61 multilabel *label60 (m:*label56)
++   62 label *label20
++   63 set .CONTAINER :block
++   64 set .SENSOR @powerNetStored
++   65 set .MAXIMUM @powerNetCapacity
++   66 op add .START :n 1
++   67 jump *label6 always
++   68 multilabel *label62 (m:*label56)
+    69 label *label14
+    70 set .CONTAINER :block
+    71 set .SENSOR @totalItems
+    72 set .MAXIMUM @itemCapacity
+    73 op add .START :n 1
+-    * jump *label6 always
+-    * label *label13
 -    * jump *label16 equal *tmp5 @liquid-tank
 -    * jump *label16 equal *tmp5 @liquid-container
 -    * jump *label15 notEqual *tmp5 @liquid-router
-+   48 multilabel *label59 (m:*label56)
-    49 label *label16
-    50 set .CONTAINER :block
-    51 set .SENSOR @totalLiquids
- 
-    53 op add .START :n 1
-    54 jump *label6 always
-    55 label *label15
+-    * label *label16
+-    * set .CONTAINER :block
+-    * set .SENSOR @totalLiquids
+-    * set .MAXIMUM @liquidCapacity
+-    * op add .START :n 1
+-    * jump *label6 always
+-    * label *label15
 -    * jump *label18 equal *tmp5 @battery
 -    * jump *label17 notEqual *tmp5 @battery-large
-+   56 multilabel *label61 (m:*label56)
-    57 label *label18
-    58 set .CONTAINER :block
-    59 set .SENSOR @totalPower
- 
-    61 op add .START :n 1
-    62 jump *label6 always
-    63 label *label17
+-    * label *label18
+-    * set .CONTAINER :block
+-    * set .SENSOR @totalPower
+-    * set .MAXIMUM @powerCapacity
+-    * op add .START :n 1
+-    * jump *label6 always
+-    * label *label17
 -    * jump *label20 equal *tmp5 @power-node
 -    * jump *label20 equal *tmp5 @power-node-large
 -    * jump *label19 notEqual *tmp5 @surge-tower
-+   64 multilabel *label60 (m:*label56)
-    65 label *label20
-    66 set .CONTAINER :block
-    67 set .SENSOR @powerNetStored
-    68 set .MAXIMUM @powerNetCapacity
-    69 op add .START :n 1
-    70 label *label19
-+   71 multilabel *label57 (m:*label56)
-+   72 label *label55
-    73 label *label6
-    74 label *label4
-    75 jump *label52 greaterThan :n 0
+-    * label *label20
+-    * set .CONTAINER :block
+-    * set .SENSOR @powerNetStored
+-    * set .MAXIMUM @powerNetCapacity
+-    * op add .START :n 1
+-    * label *label19
+    74 label *label6
+    75 label *label4
+    76 jump *label52 greaterThan :n 0
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
  
-    97 label *label2
-    98 sensor *tmp14 .SORTER @type
-    99 op strictEqual .INVERTED *tmp14 @inverted-sorter
+    98 label *label2
+    99 sensor *tmp14 .SORTER @type
+   100 op strictEqual .INVERTED *tmp14 @inverted-sorter
 -    * jump *label24 equal null true
-   100 set .STATE true
-   101 op add .CYCLES 0 1
-   102 op xor .ON .INVERTED true
+   101 set .STATE true
+   102 op add .CYCLES 0 1
+   103 op xor .ON .INVERTED true
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
+ 
+    38 multilabel *label58 (m:*label56)
+    39 label *label12
+    40 set .SORTER :block
+-    * jump *label6 always
+    41 label *label11
+    42 jump *label6 always
+    43 label *label13
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
@@ -1098,56 +1131,56 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     14 label *label52
     15 op sub :n :n 1
  
-    22 jump *label55 greaterThanEq *tmp71 147
-    23 multijump *tmp71 0 0 (m:*label56)
-    24 multilabel *label63 (m:*label56)
+    22 multijump *tmp71 0 0 (m:*label56)
+    23 multilabel *label65 (m:*label56)
+    24 multilabel *label57 (m:*label56)
+-    * label *label55
+    25 jump *label6 always
+    26 multilabel *label63 (m:*label56)
 -    * label *label8
-    25 set .MESSAGE :block
-    26 jump *label6 always
+    27 set .MESSAGE :block
+    28 jump *label6 always
 -    * label *label7
-    27 multilabel *label64 (m:*label56)
+    29 multilabel *label64 (m:*label56)
 -    * label *label10
-    28 set .SWITCH :block
-    29 jump *label6 always
+    30 set .SWITCH :block
+    31 jump *label6 always
 -    * label *label9
-    30 multilabel *label58 (m:*label56)
+    32 multilabel *label58 (m:*label56)
 -    * label *label12
-    31 set .SORTER :block
-    32 jump *label6 always
+    33 set .SORTER :block
 -    * label *label11
-    33 multilabel *label62 (m:*label56)
--    * label *label14
-    34 set .CONTAINER :block
-    35 set .SENSOR @totalItems
-    36 set .MAXIMUM @itemCapacity
-    37 op add .START :n 1
-    38 jump *label6 always
+    34 jump *label6 always
 -    * label *label13
-    39 multilabel *label59 (m:*label56)
+    35 multilabel *label59 (m:*label56)
 -    * label *label16
-    40 set .CONTAINER :block
-    41 set .SENSOR @totalLiquids
-    42 set .MAXIMUM @liquidCapacity
-    43 op add .START :n 1
-    44 jump *label6 always
+    36 set .CONTAINER :block
+    37 set .SENSOR @totalLiquids
+    38 set .MAXIMUM @liquidCapacity
+    39 op add .START :n 1
+    40 jump *label6 always
 -    * label *label15
-    45 multilabel *label61 (m:*label56)
+    41 multilabel *label61 (m:*label56)
 -    * label *label18
-    46 set .CONTAINER :block
-    47 set .SENSOR @totalPower
-    48 set .MAXIMUM @powerCapacity
-    49 op add .START :n 1
-    50 jump *label6 always
+    42 set .CONTAINER :block
+    43 set .SENSOR @totalPower
+    44 set .MAXIMUM @powerCapacity
+    45 op add .START :n 1
+    46 jump *label6 always
 -    * label *label17
-    51 multilabel *label60 (m:*label56)
+    47 multilabel *label60 (m:*label56)
 -    * label *label20
-    52 set .CONTAINER :block
-    53 set .SENSOR @powerNetStored
-    54 set .MAXIMUM @powerNetCapacity
-    55 op add .START :n 1
--    * label *label19
-    56 multilabel *label57 (m:*label56)
-    57 label *label55
+    48 set .CONTAINER :block
+    49 set .SENSOR @powerNetStored
+    50 set .MAXIMUM @powerNetCapacity
+    51 op add .START :n 1
+    52 jump *label6 always
+    53 multilabel *label62 (m:*label56)
+-    * label *label14
+    54 set .CONTAINER :block
+    55 set .SENSOR @totalItems
+    56 set .MAXIMUM @itemCapacity
+    57 op add .START :n 1
     58 label *label6
 -    * label *label4
     59 jump *label52 greaterThan :n 0
@@ -1288,7 +1321,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 +   18 format :block
     19 sensor *tmp5 :block @type
     20 sensor *tmp71 *tmp5 @id
-    21 jump *label55 greaterThanEq *tmp71 147
+    21 multijump *tmp71 0 0 (m:*label56)
  
     57 label *label6
     58 jump *label52 greaterThan :n 0
@@ -1418,42 +1451,42 @@ print "Found: {0}\n"
 format :block
 sensor *tmp5 :block @type
 sensor *tmp71 *tmp5 @id
-jump *label55 greaterThanEq *tmp71 147
 multijump *tmp71 0 0
+multilabel *label65
+multilabel *label57
+jump *label6 always
 multilabel *label63
-set .MESSAGE :block
+set .MESSAGE :block                     # Origin: 18, keys: 137
 jump *label6 always
 multilabel *label64
-set .SWITCH :block
+set .SWITCH :block                      # Origin: 18, keys: 138
 jump *label6 always
 multilabel *label58
-set .SORTER :block
-jump *label6 always
-multilabel *label62
-set .CONTAINER :block
-set .SENSOR @totalItems
-set .MAXIMUM @itemCapacity
-op add .START :n 1
+set .SORTER :block                      # Origin: 18, keys: 48, 49, 95
 jump *label6 always
 multilabel *label59
-set .CONTAINER :block
+set .CONTAINER :block                   # Origin: 18, keys: 63, 64, 146
 set .SENSOR @totalLiquids
 set .MAXIMUM @liquidCapacity
 op add .START :n 1
 jump *label6 always
 multilabel *label61
-set .CONTAINER :block
+set .CONTAINER :block                   # Origin: 18, keys: 72, 73
 set .SENSOR @totalPower
 set .MAXIMUM @powerCapacity
 op add .START :n 1
 jump *label6 always
 multilabel *label60
-set .CONTAINER :block
+set .CONTAINER :block                   # Origin: 18, keys: 68 .. 70
 set .SENSOR @powerNetStored
 set .MAXIMUM @powerNetCapacity
 op add .START :n 1
-multilabel *label57
-label *label55
+jump *label6 always
+multilabel *label62
+set .CONTAINER :block                   # Origin: 18, keys: 90 .. 94
+set .SENSOR @totalItems
+set .MAXIMUM @itemCapacity
+op add .START :n 1
 label *label6
 jump *label52 greaterThan :n 0
 label *label5

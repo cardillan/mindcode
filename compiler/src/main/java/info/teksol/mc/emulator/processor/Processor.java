@@ -189,6 +189,8 @@ public class Processor extends AbstractMessageEmitter {
                             .forEach(v -> info("   out %s", v));
                 }
 
+                counter.discardObject();
+
                 // Report possible wrong jump and @counter assignments at the errant instruction
                 if (!counter.isInteger()) {
                     throw new ExecutionException(ERR_INVALID_COUNTER, "Non-integer value of of '@counter' (%s) .", counter.printExact());

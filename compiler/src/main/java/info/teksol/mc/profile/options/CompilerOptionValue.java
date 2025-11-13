@@ -168,6 +168,10 @@ public abstract class CompilerOptionValue<T> implements CompilerOption {
         return multiplicity.matchesMultiple() ? List.copyOf(defaultValues) : defaultValues.getFirst();
     }
 
+    public boolean isDefault() {
+        return values.equals(defaultValues);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

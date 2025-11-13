@@ -27,4 +27,8 @@ public class Utf8Utils {
         });
         return sbr.toString();
     }
+
+    public static String encode(int[] values) {
+        return encode(IntStream.of(values));
+    }
 }

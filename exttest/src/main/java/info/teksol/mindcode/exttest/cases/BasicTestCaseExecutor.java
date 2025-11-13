@@ -44,18 +44,18 @@ public class BasicTestCaseExecutor implements TestCaseExecutor {
 
             if (success) {
                 if (compiler.globalCompilerProfile().isRun() && compiler.getAssertions().isEmpty()) {
-                    progress.reportError(new ErrorResult(testCaseId,
-                            compiler.compilerProfile(), "", null, "No assertions found."));
+                    progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(), -1,
+                            "", null, "No assertions found."));
                 } else {
                     progress.reportSuccess();
                 }
             } else {
-                progress.reportError(new ErrorResult(testCaseId,
-                        compiler.compilerProfile(), unexpectedMessages, compiler.getExecutionException(), failedTests));
+                progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(), -1,
+                        unexpectedMessages, compiler.getExecutionException(), failedTests));
             }
         } catch (Exception e) {
-            progress.reportError(new ErrorResult(testCaseId,
-                    compiler.compilerProfile(), "", null, "Exception: " + e));
+            progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(), -1,
+                    "", null, "Exception: " + e));
         }
     }
 }

@@ -10,8 +10,11 @@ import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.options.*;
 import org.jspecify.annotations.NullMarked;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.SequencedMap;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /// Represents the configuration profile for a compiler/schematics builder/processor emulator, encapsulating various
@@ -29,7 +32,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     public static final String SIGNATURE = "Compiled by Mindcode - github.com/cardillan/mindcode";
 
     private final boolean webApplication;
-    private final Map<Enum<?>, CompilerOptionValue<?>> options;
+    private final SequencedMap<Enum<?>, CompilerOptionValue<?>> options;
 
     // System library functions take precedence over built-in mlog functions
     // Only used to generate library documentation
@@ -135,31 +138,42 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return isUseTextJumpTables() && !isSymbolicLabels() && getProcessorVersion().atLeast(ProcessorVersion.V8A);
     }
 
+    private static final Set<Enum<?>> skippedOptions = Set.of(
+            OptimizationOptions.OPTIMIZATION_LEVEL,
+            OptimizationOptions.OPTIMIZATION,
+            MlogFormatOptions.MLOG_INDENT
+    );
+
     public CompilerProfile decode(String encoded) {
-        GenerationGoal[] goals = GenerationGoal.values();
-        OptimizationLevel[] levels = OptimizationLevel.values();
-        int len = levels.length;
-        long value = Long.parseLong(encoded);
-        setSymbolicLabels(value % 2 == 1);
-        value /= 2;
-        setGoal(goals[(int) (value % goals.length)]);
-        value /= goals.length;
-        for (int i = Optimization.LIST.size() - 1; i >= 0; i--) {
-            setOptimizationLevel(Optimization.LIST.get(i), levels[(int) (value % len)]);
-            value /= len;
+        BigInteger value = new BigInteger(encoded, Character.MAX_RADIX);
+        for (CompilerOption option : options.values()) {
+            int intSize = option.encodeSize();
+            if (intSize > 1 && !option.getMultiplicity().matchesMultiple() && !skippedOptions.contains(option.getOption())) {
+                BigInteger size = BigInteger.valueOf(intSize);
+                int current = option.encode();
+                int decoded = value.mod(size).intValue();
+                option.decode(decoded);
+                value = value.divide(size);
+                if (current != decoded) {
+                    System.out.println("Option changed by decode(): " + option);
+                }
+            }
         }
         return this;
     }
 
     public String encode() {
-        int len = OptimizationLevel.values().length;
-        long value = 0;
-        for (Optimization optimization : Optimization.LIST) {
-            value = value * len + getOptimizationLevel(optimization).ordinal();
+        BigInteger multiple = BigInteger.ONE;
+        BigInteger encoded = BigInteger.ZERO;
+        for (CompilerOption option : options.values()) {
+            int size = option.encodeSize();
+            if (size > 1 && !option.getMultiplicity().matchesMultiple() && !skippedOptions.contains(option.getOption())) {
+                BigInteger next = multiple.multiply(BigInteger.valueOf(option.encode()));
+                encoded = encoded.add(next);
+                multiple = multiple.multiply(BigInteger.valueOf(size));
+            }
         }
-        value = value * GenerationGoal.values().length + getGoal().ordinal();
-        value = value * 2 + (isSymbolicLabels() ? 1 : 0);
-        return Long.toString(value);
+        return encoded.toString(Character.MAX_RADIX);
     }
 
     //<editor-fold desc="Input/output options">

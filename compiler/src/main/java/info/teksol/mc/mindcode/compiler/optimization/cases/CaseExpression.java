@@ -16,13 +16,14 @@ import java.util.*;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
 @NullMarked
-public class CaseStatement {
+public class CaseExpression {
     private static final int MAX_CASE_RANGE = 1000;
 
     private final boolean declaredElseBranch;
     private final Set<LogicLabel> movableLabels = new HashSet<>();
     private final Map<LogicLabel, Branch> branches = new HashMap<>();
     private final NavigableMap<Integer, Branch> targets = new TreeMap<>();
+    private final List<Branch> branchList = new ArrayList<>();
     private boolean hasZeroKey;
 
     private @Nullable LogicLabel nullTarget;        // Handles null only
@@ -45,15 +46,16 @@ public class CaseStatement {
     private int originalCost;
     private int originalSteps;
 
-    public CaseStatement(boolean declaredElseBranch) {
+    public CaseExpression(boolean declaredElseBranch) {
         this.declaredElseBranch = declaredElseBranch;
     }
 
-    private CaseStatement(CaseStatement other) {
+    private CaseExpression(CaseExpression other) {
         this.declaredElseBranch = other.declaredElseBranch;
         this.movableLabels.addAll(other.movableLabels);
         this.branches.putAll(other.branches);
         this.targets.putAll(other.targets);
+        this.branchList.addAll(other.branchList);
         this.hasZeroKey = other.hasZeroKey;
         this.nullTarget = other.nullTarget;
         this.nullOrElseTarget = other.nullOrElseTarget;
@@ -71,8 +73,8 @@ public class CaseStatement {
         this.originalSteps = other.originalSteps;
     }
 
-    public CaseStatement duplicate() {
-        return new CaseStatement(this);
+    public CaseExpression duplicate() {
+        return new CaseExpression(this);
     }
 
     private void computeElseValues(ContentType contentType, MindustryMetadata metadata, boolean fullBuiltinEvaluation) {
@@ -158,6 +160,17 @@ public class CaseStatement {
         return branches.values();
     }
 
+    public List<Branch> getRegularBranches() {
+        return branchList;
+    }
+
+    public Branch findMaxCardinalityBranch() {
+        return branchList.stream()
+                .filter(b -> b != getBranch(0) && b != nullBranch)
+                .max(Comparator.comparingInt(Branch::getCardinality))
+                .orElse(branchList.getLast());
+    }
+
     /// Returns the number of active targets contained in the given segment
     public int targetCount(Segment segment) {
         return targetCount(segment.from(), segment.to());
@@ -173,8 +186,10 @@ public class CaseStatement {
         if (branch == null || !branch.label.equals(target)) {
             branch = new Branch(target);
             branches.put(target, branch);
+            branchList.add(branch);
         }
 
+        branch.cardinality++;
         if (key == null) {
             if (nullBranch != null) return false;
             nullTarget = target;
@@ -190,8 +205,10 @@ public class CaseStatement {
         if (branch == null || !branch.label.equals(target)) {
             branch = new Branch(target);
             branches.put(target, branch);
+            branchList.add(branch);
         }
 
+        branch.cardinality += rangeHighValue - rangeLowValue;
         for (int i = rangeLowValue; i < rangeHighValue; i++) {
             if (targets.put(i, branch) != null) return false;
         }
@@ -245,11 +262,11 @@ public class CaseStatement {
         return targets.isEmpty() ? null : targets.firstEntry().getValue().label;
     }
 
-    public Integer firstKey() {
+    public int firstKey() {
         return targets.firstKey();
     }
 
-    public Integer lastKey() {
+    public int lastKey() {
         return targets.lastKey();
     }
 
@@ -301,7 +318,7 @@ public class CaseStatement {
     }
 
     public int getBranchSize(LogicLabel label) {
-        return branches.get(label).size;
+        return branches.get(label).codeSize;
     }
 
     public static class Branch {
@@ -312,7 +329,11 @@ public class CaseStatement {
         private @Nullable LogicValue assignValue = null;
         private @Nullable Integer integerValue = null;
 
-        private int size;
+        // Cardinality of the set of keys leading to this branch
+        private int cardinality;
+
+        // Code size of this branch
+        private int codeSize;
 
         public Branch(LogicLabel label) {
             this.label = label;
@@ -333,7 +354,11 @@ public class CaseStatement {
         }
 
         private void addSize(int size) {
-            this.size += size;
+            this.codeSize += size;
+        }
+
+        public int getCardinality() {
+            return cardinality;
         }
 
         public LogicVariable getAssignTarget() {
@@ -355,7 +380,7 @@ public class CaseStatement {
 
     private enum ExpState {CONDITION, BODY, FLOW}
 
-    public static @Nullable CaseStatement analyze(OptimizationContext optimizationContext, ValueAnalyzer analyzer, AstContext context,
+    public static @Nullable CaseExpression analyze(OptimizationContext optimizationContext, ValueAnalyzer analyzer, AstContext context,
             boolean declaredElseBranch) {
         return new CaseStatementCreator(optimizationContext, analyzer, declaredElseBranch).analyze(context);
     }
@@ -386,13 +411,13 @@ public class CaseStatement {
             }
         }
 
-        private @Nullable CaseStatement analyze(AstContext context) {
+        private @Nullable CaseExpression analyze(AstContext context) {
             List<AstContext> conditionContexts = context.findSubcontexts(CONDITION);
             List<AstContext> bodyContexts = context.findSubcontexts(BODY);
             List<AstContext> elseContexts = context.findSubcontexts(ELSE);
             if (conditionContexts.isEmpty() || bodyContexts.isEmpty() || elseContexts.isEmpty()) return null;
 
-            CaseStatement caseStatement = new CaseStatement(declaredElseBranch);
+            CaseExpression caseExpression = new CaseExpression(declaredElseBranch);
 
             ContextMatcher conditionMatcher = new ContextMatcher(conditionContexts);
             ContextMatcher bodyMatcher = new ContextMatcher(bodyContexts);
@@ -460,7 +485,7 @@ public class CaseStatement {
                                     if (target == null) return null;
                                 }
 
-                                if (!caseStatement.addBranchKey(analyzer.getLastValue(), target)) return null;
+                                if (!caseExpression.addBranchKey(analyzer.getLastValue(), target)) return null;
 
                                 savedSteps += values;
                                 if (analyzer.getLastValue() != null) values++;  // We do not count nulls
@@ -493,7 +518,7 @@ public class CaseStatement {
                                     if (!analyzer.inspectRange(rangeLowValue, rangeHighValue)) return null;
 
                                     // Add in all targets
-                                    if (!caseStatement.addBranchKeys(rangeLowValue, rangeHighValue, target)) return null;
+                                    if (!caseExpression.addBranchKeys(rangeLowValue, rangeHighValue, target)) return null;
 
                                     // Each value comes through these two jumps
                                     values += 2 * range;
@@ -506,10 +531,10 @@ public class CaseStatement {
                         }
                     } else if (bodyMatcher.matches(ix.getAstContext())) {
                         expState = ExpState.BODY;
-                        if (!caseStatement.addBranchInstruction(ix)) return null;
+                        if (!caseExpression.addBranchInstruction(ix)) return null;
                     } else if (elseMatcher.matches(ix.getAstContext())) {
-                        if (lastLabel == null || !caseStatement.setElseBranch(lastLabel)) return null;      // Unexpected structure
-                        if (!caseStatement.addBranchInstruction(ix)) return null;
+                        if (lastLabel == null || !caseExpression.setElseBranch(lastLabel)) return null;      // Unexpected structure
+                        if (!caseExpression.addBranchInstruction(ix)) return null;
                     } else if (ix.getAstContext().parent() == context && ix.getAstContext().matches(FLOW_CONTROL)) {
                         if (expState == ExpState.BODY) {
                             // First instruction after a body
@@ -522,7 +547,7 @@ public class CaseStatement {
                             expState = ix instanceof JumpInstruction jump && jump.isUnconditional() ? ExpState.FLOW : null;
                         } else if (ix instanceof LabelInstruction labelInstruction) {
                             if (expState == ExpState.FLOW) {
-                                caseStatement.addMovableLabel(target);
+                                caseExpression.addMovableLabel(target);
                             }
                             lastLabel = labelInstruction.getLabel();
                         } else {
@@ -540,18 +565,18 @@ public class CaseStatement {
             }
 
             // Unsupported case expressions: no input variable, inconsistent types, no branches or range too large
-            if (variable == null || analyzer.getContentType() == null || caseStatement.isEmpty() || caseStatement.range() > MAX_CASE_RANGE) {
+            if (variable == null || analyzer.getContentType() == null || caseExpression.isEmpty() || caseExpression.range() > MAX_CASE_RANGE) {
                 return null;
             }
 
-            caseStatement.computeElseValues(analyzer.getContentType(), optimizationContext.getInstructionProcessor().getMetadata(),
+            caseExpression.computeElseValues(analyzer.getContentType(), optimizationContext.getInstructionProcessor().getMetadata(),
                     optimizationContext.getGlobalProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL);
 
-            caseStatement.variable = variable;
-            caseStatement.originalCost = jumps;
-            caseStatement.originalSteps = jumps * values - savedSteps + (declaredElseBranch ? caseStatement.getElseValues() * jumps : 0);
+            caseExpression.variable = variable;
+            caseExpression.originalCost = jumps;
+            caseExpression.originalSteps = jumps * values - savedSteps + (declaredElseBranch ? caseExpression.getElseValues() * jumps : 0);
 
-            return caseStatement;
+            return caseExpression;
         }
     }
 }

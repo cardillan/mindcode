@@ -293,10 +293,10 @@ lookup block :block :i
 sensor *tmp13 :block @id
 multijump *tmp13 0 0
 multilabel *label13
-set *tmp2 true
+set *tmp2 true                          # Origin: 4, keys: 17 .. 28, 31 .. 34, 203, 204, 206, 207, 220, 221, 225, 234
 jump *label4 always
 multilabel *label12
-set *tmp2 false
+set *tmp2 false                         # Origin: 4, keys: 0 .. 16, 29, 30, 35 .. 202, 205, 208 .. 219, 222 .. 224, 226 .. 233, 235 .. 259
 label *label4
 jump *label7 equal *tmp2 false
 op mul *tmp5 :hash 31

@@ -65,16 +65,17 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
             }
 
             if (!Objects.equals(originalOutput, newOutput)) {
-                progress.reportError(new ErrorResult(testCaseId,
-                        compiler.compilerProfile(), "", compiler.getExecutionException(),
+                progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
+                        compiler.compilerProfile().getCaseConfiguration(), "", compiler.getExecutionException(),
                         "The original and optimized outputs differ:\n" + originalOutput + "\n" + newOutput));
             }
 
             List<ConvertCaseOptimizationAction> diagnosticData = compiler.getDiagnosticData(ConvertCaseOptimizationAction.class)
                     .stream().filter(ConvertCaseOptimizationAction::applied).toList();
             if (diagnosticData.size() != 1) {
-                progress.reportError(new ErrorResult(testCaseId,
-                        compiler.compilerProfile(), "", compiler.getExecutionException(), "No Case-Switching diagnostic information found."));
+                progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
+                        compiler.compilerProfile().getCaseConfiguration(),"", compiler.getExecutionException(),
+                        "No Case-Switching diagnostic information found."));
             } else {
                 ConvertCaseOptimizationAction action = diagnosticData.getFirst();
                 int blockCount = compiler.metadata().getBlockCount();
@@ -84,8 +85,8 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
 
                 if (stepDifference != expectedStepDifference) {
                     success = false;
-                    progress.reportError(new ErrorResult(testCaseId,
-                            compiler.compilerProfile(), "", compiler.getExecutionException(),
+                    progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
+                            compiler.compilerProfile().getCaseConfiguration(), "", compiler.getExecutionException(),
                             String.format("Original steps: %d, new steps: %d, difference: %d (expected %d).",
                                     originalSteps, newSteps, stepDifference, expectedStepDifference)));
                 }
@@ -94,16 +95,16 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 int expectedSizeDifference = action.cost();
                 if (sizeDifference != expectedSizeDifference) {
                     success = false;
-                    progress.reportError(new ErrorResult(testCaseId,
-                            compiler.compilerProfile(), "", compiler.getExecutionException(),
+                    progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
+                            compiler.compilerProfile().getCaseConfiguration(), "", compiler.getExecutionException(),
                             String.format("Original size: %d, new size: %d, difference: %d (expected %d)",
                                     originalSize, newSize, sizeDifference, expectedSizeDifference)));
                 }
 
                 if (compiler.getEmulator().getNoopSteps() > 1) {
                     success = false;
-                    progress.reportError(new ErrorResult(testCaseId,
-                            compiler.compilerProfile(), "", compiler.getExecutionException(),
+                    progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
+                            compiler.compilerProfile().getCaseConfiguration(), "", compiler.getExecutionException(),
                             String.format("Unexpected noop executions: %d (expected at most 1).", compiler.getEmulator().getNoopSteps())));
                 }
 
@@ -112,8 +113,8 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 }
             }
         } catch (Exception e) {
-            progress.reportError(new ErrorResult(testCaseId,
-                    compiler.compilerProfile(), "", null, "Exception: " + e));
+            progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
+                    compiler.compilerProfile().getCaseConfiguration(), "", null, "Exception: " + e));
         }
     }
 
@@ -133,8 +134,8 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
         boolean success = unexpectedMessages.isEmpty() && failedTests.isEmpty() && compiler.getExecutionException() == null;
 
         if (!success) {
-            progress.reportError(new ErrorResult(testCaseId,
-                    compiler.compilerProfile(), unexpectedMessages, compiler.getExecutionException(), failedTests));
+            progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
+                    compiler.compilerProfile().getCaseConfiguration(), unexpectedMessages, compiler.getExecutionException(), failedTests));
         }
 
         return success;

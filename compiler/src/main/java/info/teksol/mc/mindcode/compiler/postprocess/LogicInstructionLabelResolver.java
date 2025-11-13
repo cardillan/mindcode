@@ -7,12 +7,14 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SortCategory;
+import info.teksol.mc.util.StringUtils;
 import info.teksol.mc.util.Utf8Utils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -31,6 +33,8 @@ public class LogicInstructionLabelResolver {
     private final Map<LogicLabel, LogicInstruction> labelInstructions = new HashMap<>();
     private final Map<LogicLabel, LogicLabel> addresses = new HashMap<>();
     private final Map<Integer, AstContext> addressContexts = new HashMap<>();
+    private final Map<Integer, Set<LogicInstruction>> textJumpOrigins = new HashMap<>();
+    private final Map<Integer, Set<Integer>> textJumpKeys = new HashMap<>();
 
     public LogicInstructionLabelResolver(GlobalCompilerProfile profile, InstructionProcessor processor, AstContext rootAstContext) {
         this.processor = processor;
@@ -155,6 +159,8 @@ public class LogicInstructionLabelResolver {
         calculateAddresses(program);
         program = resolveAddresses(resolveVirtualInstructions(program));
 
+        addTargetComments(program);
+
         Set<LogicVariable> missingVariables = new LinkedHashSet<>(forcedVariables);
         program.forEach(ix -> missingVariables.addAll(ix.getIndirectVariables()));
 
@@ -186,50 +192,6 @@ public class LogicInstructionLabelResolver {
         return new RemarksResolver().resolveRemarks(program);
     }
 
-    private class RemarksResolver {
-        private final List<LogicInstruction> result = new ArrayList<>();
-        private @Nullable LabelInstruction activeLabel;
-
-        private List<LogicInstruction> resolveRemarks(List<LogicInstruction> program) {
-            for (LogicInstruction ix : program) {
-                if (ix instanceof RemarkInstruction r) {
-                    switch (r.getAstContext().getLocalProfile().getRemarks()) {
-                        case NONE       -> { /* do nothing */ }
-                        case COMMENTS   -> add(processor.createComment(r.getAstContext(), r.getValue()), false);
-                        case PASSIVE    -> add(processor.createPrint(r.getAstContext(), r.getValue()),false);
-                        case ACTIVE     -> add(processor.createPrint(r.getAstContext(), r.getValue()),true);
-                    }
-                } else {
-                    add(ix, true);
-                }
-            }
-
-            if (activeLabel != null) {
-                result.add(activeLabel);
-                result.add(processor.createEnd(activeLabel.getAstContext()));
-            }
-
-            return result;
-        }
-
-        private void add(LogicInstruction instruction, boolean active) {
-            if (!(instruction instanceof CommentInstruction)) {
-                if (active) {
-                    if (activeLabel != null) {
-                        result.add(activeLabel);
-                        activeLabel = null;
-                    }
-                } else if (activeLabel == null) {
-                    LogicLabel label = processor.nextLabel();
-                    activeLabel = processor.createLabel(instruction.getAstContext(), label);
-                    result.add(processor.createJumpUnconditional(instruction.getAstContext(), label));
-                }
-            }
-
-            result.add(instruction);
-        }
-    }
-
     private void calculateAddresses(List<LogicInstruction> program) {
         int instructionPointer = 0;
         for (int i = 0; i < program.size(); i++) {
@@ -257,9 +219,12 @@ public class LogicInstructionLabelResolver {
     private LogicArgument resolveLabel(LogicArgument argument) {
         if (argument instanceof LogicLabel label) {
             if (!addresses.containsKey(label)) {
-                throw new MindcodeInternalError("Unknown jump label target: '%s' was not previously discovered in program.", label);
-//                System.out.println("Unknown label " + label);
-//                return LogicLabel.absolute(-1);
+                if (OptimizationCoordinator.IGNORE_UNKNOWN_LABELS) {
+                    System.out.println("Unknown label " + label);
+                    return LogicLabel.absolute(10000);
+                } else {
+                    throw new MindcodeInternalError("Unknown jump label target: '%s' was not previously discovered in program.", label);
+                }
             }
             return addresses.get(label);
         } else {
@@ -343,11 +308,37 @@ public class LogicInstructionLabelResolver {
         return result;
     }
 
+    private void addTargetComments(List<LogicInstruction> program) {
+        for (Map.Entry<Integer, Set<Integer>> entry : textJumpKeys.entrySet()) {
+            int address = entry.getKey();
+            if (address >= 0 && address < program.size()) {
+                List<String> origins = textJumpOrigins.get(address).stream()
+                        .map(program::indexOf).sorted().limit(3).map(String::valueOf)
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+                if (origins.size() < textJumpOrigins.get(address).size()) {
+                    origins.add("...");
+                }
+
+                program.get(address).setComment("# Origin: " + String.join(", ", origins)
+                        + ", keys: " + StringUtils.joinCompressedRanges(entry.getValue()));
+            }
+        }
+    }
+
     private LogicInstruction buildTextTableJump(MultiTargetInstruction ix, List<LogicLabel> jumpTable) {
-        LogicString jumpTableString = LogicString.create(ix.sourcePosition(),
-                Utf8Utils.encode(jumpTable.stream().mapToInt(this::resolveAddress)));
-        return processor.createInstruction(ix.getAstContext(), READ, LogicBuiltIn.COUNTER,
+        int[] addresses = jumpTable.stream().mapToInt(this::resolveAddress).toArray();
+        LogicString jumpTableString = LogicString.create(ix.sourcePosition(), Utf8Utils.encode(addresses));
+
+        LogicInstruction instruction = processor.createInstruction(ix.getAstContext(), READ, LogicBuiltIn.COUNTER,
                 jumpTableString, ix.getTarget());
+
+        for (int i = 0; i < addresses.length; i++) {
+            textJumpOrigins.computeIfAbsent(addresses[i], _ -> new HashSet<>()).add(instruction);
+            textJumpKeys.computeIfAbsent(addresses[i], _ -> new HashSet<>()).add(i);
+        }
+
+        return instruction;
     }
 
     private List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {
@@ -412,4 +403,47 @@ public class LogicInstructionLabelResolver {
         }
     }
 
+    private class RemarksResolver {
+        private final List<LogicInstruction> result = new ArrayList<>();
+        private @Nullable LabelInstruction activeLabel;
+
+        private List<LogicInstruction> resolveRemarks(List<LogicInstruction> program) {
+            for (LogicInstruction ix : program) {
+                if (ix instanceof RemarkInstruction r) {
+                    switch (r.getAstContext().getLocalProfile().getRemarks()) {
+                        case NONE       -> { /* do nothing */ }
+                        case COMMENTS   -> add(processor.createComment(r.getAstContext(), r.getValue()), false);
+                        case PASSIVE    -> add(processor.createPrint(r.getAstContext(), r.getValue()),false);
+                        case ACTIVE     -> add(processor.createPrint(r.getAstContext(), r.getValue()),true);
+                    }
+                } else {
+                    add(ix, true);
+                }
+            }
+
+            if (activeLabel != null) {
+                result.add(activeLabel);
+                result.add(processor.createEnd(activeLabel.getAstContext()));
+            }
+
+            return result;
+        }
+
+        private void add(LogicInstruction instruction, boolean active) {
+            if (!(instruction instanceof CommentInstruction)) {
+                if (active) {
+                    if (activeLabel != null) {
+                        result.add(activeLabel);
+                        activeLabel = null;
+                    }
+                } else if (activeLabel == null) {
+                    LogicLabel label = processor.nextLabel();
+                    activeLabel = processor.createLabel(instruction.getAstContext(), label);
+                    result.add(processor.createJumpUnconditional(instruction.getAstContext(), label));
+                }
+            }
+
+            result.add(instruction);
+        }
+    }
 }

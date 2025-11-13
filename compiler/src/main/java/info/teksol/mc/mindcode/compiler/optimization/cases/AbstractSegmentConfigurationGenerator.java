@@ -11,22 +11,22 @@ import java.util.Objects;
 @NullMarked
 public abstract class AbstractSegmentConfigurationGenerator implements SegmentConfigurationGenerator {
 
-    static List<Partition> splitToPartitions(CaseStatement caseStatement, boolean handleNulls) {
-        LogicLabel zeroTarget = caseStatement.get(0);
+    static List<Partition> splitToPartitions(CaseExpression caseExpression, boolean handleNulls) {
+        LogicLabel zeroTarget = caseExpression.get(0);
         if (handleNulls && zeroTarget != null) {
             // We need to handle zero separately because of possible null
             // Use INVALID as a placeholder
-            caseStatement.addBranchKey(0, LogicLabel.INVALID);
+            caseExpression.addBranchKey(0, LogicLabel.INVALID);
         }
 
         List<Partition> partitions = new ArrayList<>();
 
-        LogicLabel label = Objects.requireNonNull(caseStatement.firstLabel());
-        int start = caseStatement.firstKey();
-        int last = caseStatement.firstKey();
+        LogicLabel label = Objects.requireNonNull(caseExpression.firstLabel());
+        int start = caseExpression.firstKey();
+        int last = caseExpression.firstKey();
 
         // Else branch gaps
-        for (Map.Entry<Integer, CaseStatement.Branch> entry : caseStatement.entrySet()) {
+        for (Map.Entry<Integer, CaseExpression.Branch> entry : caseExpression.entrySet()) {
             int key = entry.getKey();
 
             if (key - last > 1) {
@@ -46,7 +46,7 @@ public abstract class AbstractSegmentConfigurationGenerator implements SegmentCo
 
         partitions.add(new Partition(start, last + 1, label));
 
-        if (zeroTarget != null) caseStatement.addBranchKey(0, zeroTarget);
+        if (zeroTarget != null) caseExpression.addBranchKey(0, zeroTarget);
 
         return List.copyOf(partitions);
     }

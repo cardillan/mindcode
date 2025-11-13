@@ -12,7 +12,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.SequencedMap;
 import java.util.stream.Collectors;
 
 @NullMarked
@@ -37,7 +37,7 @@ public class CompilerOptionFactory {
     public static final int MAX_STEP_LIMIT_CMDLINE = 1_000_000_000;
     public static final int MAX_STEP_LIMIT_WEBAPP = 100_000_000;
 
-    public static Map<Enum<?>, CompilerOptionValue<?>> createCompilerOptions(boolean webApp) {
+    public static SequencedMap<Enum<?>, CompilerOptionValue<?>> createCompilerOptions(boolean webApp) {
         List<CompilerOptionValue<?>> list = new ArrayList<>();
 
         addInputOutputOptions(list, webApp);

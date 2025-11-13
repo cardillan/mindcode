@@ -573,7 +573,7 @@ All optimization techniques fully support [`null` values in the `when` clauses](
 
 This behavior is identical to the behavior of an unoptimized case expression.
 
-Mindcode arranges the code to only perform checks distinguishing between `null` and the zero value where both of these values can occur. When a code path is known not to possibly handle both `null` and `0`, these checks are eliminated. As a result, an optimized `case` expressions checking for `null` in `when` branches is typically more efficient than handling the `null` values in the `else` branch, or checking for them prior to the case expression itself.
+Mindcode arranges the code to only perform checks distinguishing between `null` and the zero value where both of these values can occur. When a code path is known to not possibly handle both `null` and `0`, these checks are eliminated. As a result, an optimized `case` expressions checking for `null` in `when` branches is typically more efficient than letting the `null` value go into the `else` branch and checking it explicitly there, or checking for them prior to the case expression itself.
 
 ### Mindustry content conversion
 
@@ -710,6 +710,8 @@ lookup item .output *tmp6
 ### Fast dispatch
 
 In Mindustry 8, [character values can be read from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation directly into the `@counter` variable. This allows encoding target instruction addresses into strings, similarly to encoding the actual values in [value translations](#value-translation). Furthermore, since assigning `@null` to `@counter` is ignored by the processor, values outside the range covered by the string jump table cause the next instruction to be executed. This can be leveraged by placing the `else` branch just after the `read` instruction, ensuring that the control is transferred to the proper branch by just this one instruction.
+
+Additionally, the branch handling the highest number of input values is moved to the end of the case expression. As all branches except the last one need to execute additional jump to the end of the case expression; this ensures that the most frequented branch will use this benefit. 
 
 The following prerequisites need to be met for this optimization to be applied:
 

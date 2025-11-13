@@ -139,8 +139,8 @@ See also [`formatBinaryNumber`](#formatbinarynumber)
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                  38 |                 32 |
-| Function body                            |                  39 |                 33 |
+| Inlined function                         |                  32 |                 32 |
+| Function body                            |                  33 |                 33 |
 | Function call                            |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
@@ -166,8 +166,8 @@ Nulls are printed as zero values.
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                  39 |                 34 |
-| Function body                            |                  40 |                 35 |
+| Inlined function                         |                  32 |                 32 |
+| Function body                            |                  33 |                 33 |
 | Function call                            |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.

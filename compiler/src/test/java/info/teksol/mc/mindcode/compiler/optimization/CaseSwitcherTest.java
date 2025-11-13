@@ -29,7 +29,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
     }
 
     @Nested
-    class CompilerTests {
+    class CaseSwitcherTests {
         @Test
         void processesBasicSwitch() {
             assertCompilesTo("""
@@ -295,6 +295,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
         @Test
         void avoidsUnsafeCaseExpressionWithElse() {
             assertCompilesTo("""
+                            #set null-counter-is-noop = false;
                             #set unsafe-case-optimization = true;
                             param p = 0;
                             print(case p
@@ -697,7 +698,178 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
     }
 
     @Nested
-    class ValueTranslations {
+    class FastDispatchTests {
+        @Test
+        void processesBasicCase() {
+            assertCompilesTo("""
+                            param input = 0;
+                            print(case input
+                                when 0 then "A";
+                                when 1 then "B";
+                                when 2 then "C";
+                                else "D";
+                            end);
+                            """,
+                    createInstruction(SET, "input", "0"),
+                    createInstruction(MULTIJUMP, "input", "0", "0"),
+                    createInstruction(MULTILABEL, label(12)),
+                    createInstruction(SET, tmp(0), q("D")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(9)),
+                    createInstruction(SET, tmp(0), q("A")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(10)),
+                    createInstruction(SET, tmp(0), q("B")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(11)),
+                    createInstruction(SET, tmp(0), q("C")),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void contentNoNullOrZero() {
+            assertCompilesTo("""
+                            param input = @water;
+                            print(case input
+                                when @slag, @oil, @cryofluid then "A";
+                                when @gallium, @hydrogen, @nitrogen then "B";
+                                when @ozone, @cyanogen then "C";
+                                else "E";
+                            end);
+                            """,
+                    createInstruction(SET, "input", "@water"),
+                    createInstruction(SENSOR, tmp(1), "input", "@id"),
+                    createInstruction(MULTIJUMP, tmp(1), "0", "0"),
+                    createInstruction(MULTILABEL, label(13)),
+                    createInstruction(MULTILABEL, label(9)),
+                    createInstruction(SET, tmp(0), q("E")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(11)),
+                    createInstruction(SET, tmp(0), q("B")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(12)),
+                    createInstruction(SET, tmp(0), q("C")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(10)),
+                    createInstruction(SET, tmp(0), q("A")),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void contentNullNoZero() {
+            assertCompilesTo("""
+                            param input = @water;
+                            print(case input
+                                when @slag, @oil, @cryofluid then "A";
+                                when @gallium, @hydrogen, @nitrogen then "B";
+                                when @ozone, @cyanogen then "C";
+                                when null then "D";
+                                else "E";
+                            end);
+                            """,
+                    createInstruction(SET, "input", "@water"),
+                    createInstruction(SENSOR, tmp(1), "input", "@id"),
+                    createInstruction(MULTIJUMP, tmp(1), "0", "0"),
+                    createInstruction(MULTILABEL, label(16)),
+                    createInstruction(MULTILABEL, label(13)),
+                    createInstruction(LABEL, label(9)),
+                    createInstruction(SET, tmp(0), q("E")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(14)),
+                    createInstruction(SET, tmp(0), q("B")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(15)),
+                    createInstruction(SET, tmp(0), q("C")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(11)),
+                    createInstruction(JUMP, label(9), "strictEqual", tmp(1), "0"),
+                    createInstruction(SET, tmp(0), q("D")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(12)),
+                    createInstruction(SET, tmp(0), q("A")),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void contentZeroNoNull() {
+            assertCompilesTo("""
+                            param input = @water;
+                            print(case input
+                                when @water, @slag, @oil, @cryofluid then "A";
+                                when @gallium, @hydrogen, @nitrogen then "B";
+                                when @ozone, @cyanogen then "C";
+                                else "E";
+                            end);
+                            """,
+                    createInstruction(SET, "input", "@water"),
+                    createInstruction(SENSOR, tmp(1), "input", "@id"),
+                    createInstruction(MULTIJUMP, tmp(1), "0", "0"),
+                    createInstruction(MULTILABEL, label(15)),
+                    createInstruction(MULTILABEL, label(12)),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(SET, tmp(0), q("E")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(13)),
+                    createInstruction(SET, tmp(0), q("B")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(14)),
+                    createInstruction(SET, tmp(0), q("C")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(10)),
+                    createInstruction(JUMP, label(7), "strictEqual", tmp(1), "null"),
+                    createInstruction(MULTILABEL, label(11)),
+                    createInstruction(SET, tmp(0), q("A")),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void contentNullAndZero() {
+            assertCompilesTo("""
+                            param input = @water;
+                            print(case input
+                                when @water, @slag, @oil, @cryofluid then "A";
+                                when @gallium, @hydrogen, @nitrogen then "B";
+                                when @ozone, @cyanogen then "C";
+                                when null then "D";
+                                else "E";
+                            end);
+                            """,
+                    createInstruction(SET, "input", "@water"),
+                    createInstruction(SENSOR, tmp(1), "input", "@id"),
+                    createInstruction(MULTIJUMP, tmp(1), "0", "0"),
+                    createInstruction(MULTILABEL, label(17)),
+                    createInstruction(MULTILABEL, label(14)),
+                    createInstruction(SET, tmp(0), q("E")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(15)),
+                    createInstruction(SET, tmp(0), q("B")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(16)),
+                    createInstruction(SET, tmp(0), q("C")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(8)),
+                    createInstruction(SET, tmp(0), q("D")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(12)),
+                    createInstruction(JUMP, label(8), "strictEqual", tmp(1), "null"),
+                    createInstruction(MULTILABEL, label(13)),
+                    createInstruction(SET, tmp(0), q("A")),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+    }
+
+    @Nested
+    class ValueTranslationTests {
         @Test
         void processesBasicCase() {
             assertCompilesTo("""

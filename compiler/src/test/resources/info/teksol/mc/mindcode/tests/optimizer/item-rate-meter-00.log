@@ -6,16 +6,22 @@
      8 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
      2 instructions eliminated by If Expression Optimization (3 iterations).
-     3 instructions modified by Data Flow Optimization (4 iterations).
+     3 instructions modified by Data Flow Optimization (5 iterations).
      4 instructions modified by Loop Optimization (2 iterations).
      4 loops improved by Loop Optimization.
+     1 instructions eliminated by Case Switching (4 iterations).
+     0 case expressions converted to fast dispatch by Case Switching.
      5 instructions eliminated by Jump Straightening (4 iterations).
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     23 instructions eliminated by Print Merging.
-    95 instructions after optimizations.
+    94 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 881):
   * Replicate loop condition at line 57:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  o Fast-dispatch case at line 13:9                              size    -2, benefit      312.5, efficiency   Infinity
+
+Pass 1: speed optimization selection (cost limit 880):
+  * Fast-dispatch case at line 13:9                              size    -2, benefit      312.5, efficiency   Infinity (-1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
  
@@ -645,6 +651,40 @@ Modifications by Replicate loop condition at line 57:1 (+1 instructions):
    160 control enabled switch1 0
    161 end
 
+Modifications by Fast-dispatch case at line 13:9 (-1 instructions):
+ 
+    14 print "\nFound: "
+    15 print :block
+    16 sensor *tmp6 :block @type
+-    * jump *label7 notEqual *tmp6 @message
++   17 sensor *tmp69 *tmp6 @id
++   18 multijump *tmp69 0 0 (m:*label45)
++   19 multilabel *label50 (m:*label45)
++   20 multilabel *label46 (m:*label45)
++   21 label *label44
++   22 jump *label6 always
++   23 multilabel *label47 (m:*label45)
+    24 label *label8
+    25 set .MESSAGE :block
+    26 jump *label6 always
+    27 label *label7
+-    * jump *label9 notEqual *tmp6 @switch
++   28 multilabel *label48 (m:*label45)
+    29 label *label10
+    30 set .SWITCH :block
+    31 jump *label6 always
+    32 label *label9
+-    * jump *label12 equal *tmp6 @memory-bank
+-    * jump *label11 notEqual *tmp6 @memory-cell
++   33 multilabel *label49 (m:*label45)
+    34 label *label12
+    35 set .TARGET_MEMORY .SOURCE_MEMORY
+    36 set .SOURCE_MEMORY :block
+-    * label *label11
+    37 label *label6
+    38 label *label4
+    39 jump *label41 greaterThan :n 0
+
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
      2 set .TARGET_MEMORY null
@@ -659,21 +699,25 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      9 label *label41
     10 op sub :n :n 1
  
-    13 print :block
-    14 sensor *tmp6 :block @type
-    15 jump *label7 notEqual *tmp6 @message
+    16 multijump *tmp69 0 0 (m:*label45)
+    17 multilabel *label50 (m:*label45)
+    18 multilabel *label46 (m:*label45)
+-    * label *label44
+    19 jump *label6 always
+    20 multilabel *label47 (m:*label45)
 -    * label *label8
-    16 set .MESSAGE :block
-    17 jump *label6 always
-    18 label *label7
-    19 jump *label9 notEqual *tmp6 @switch
+    21 set .MESSAGE :block
+    22 jump *label6 always
+-    * label *label7
+    23 multilabel *label48 (m:*label45)
 -    * label *label10
-    20 set .SWITCH :block
-    21 jump *label6 always
-    22 label *label9
- 
-    27 set .SOURCE_MEMORY :block
-    28 label *label11
+    24 set .SWITCH :block
+    25 jump *label6 always
+-    * label *label9
+    26 multilabel *label49 (m:*label45)
+-    * label *label12
+    27 set .TARGET_MEMORY .SOURCE_MEMORY
+    28 set .SOURCE_MEMORY :block
     29 label *label6
 -    * label *label4
     30 jump *label41 greaterThan :n 0
@@ -865,20 +909,20 @@ getlink :block :n
 print "\nFound: "
 print :block
 sensor *tmp6 :block @type
-jump *label7 notEqual *tmp6 @message
-set .MESSAGE :block
+sensor *tmp69 *tmp6 @id
+multijump *tmp69 0 0
+multilabel *label50
+multilabel *label46
 jump *label6 always
-label *label7
-jump *label9 notEqual *tmp6 @switch
-set .SWITCH :block
+multilabel *label47
+set .MESSAGE :block                     # Origin: 14, keys: 137
 jump *label6 always
-label *label9
-jump *label12 equal *tmp6 @memory-bank
-jump *label11 notEqual *tmp6 @memory-cell
-label *label12
-set .TARGET_MEMORY .SOURCE_MEMORY
+multilabel *label48
+set .SWITCH :block                      # Origin: 14, keys: 138
+jump *label6 always
+multilabel *label49
+set .TARGET_MEMORY .SOURCE_MEMORY       # Origin: 14, keys: 142, 143
 set .SOURCE_MEMORY :block
-label *label11
 label *label6
 jump *label41 greaterThan :n 0
 label *label5

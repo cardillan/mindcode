@@ -22,4 +22,19 @@ public class IntOptimizationLevelCompilerValue extends IntegerCompilerOptionValu
         List<OptimizationLevel> list = values.stream().map(OptimizationLevel::byIndex).toList();
         delegates.forEach(delegate -> delegate.setValues(list));
     }
+
+    @Override
+    public int encodeSize() {
+        return 1;
+    }
+
+    @Override
+    public int encode() {
+        return 0;
+    }
+
+    @Override
+    public void decode(int encoded) {
+        // Do nothing
+    }
 }

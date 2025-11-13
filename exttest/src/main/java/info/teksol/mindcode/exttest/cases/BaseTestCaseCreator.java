@@ -23,7 +23,7 @@ public abstract class BaseTestCaseCreator implements TestCaseCreator {
         InputFiles inputFiles = getInputFiles(testRunNumber);
         CompilerProfile profile = getCompilerProfile(testRunNumber);
         if (configuration.isCaseSwitchingTest()) {
-            String caseId = getTestCaseId(testRunNumber) + (profile.getCaseConfiguration() == 0 ? "" : " (#set case-configuration = " + profile.getCaseConfiguration() + ")" );
+            String caseId = getTestCaseId(testRunNumber);
             return new CaseSwitchingTestCaseExecutor(caseId, inputFiles.getMainInputFile(),
                     () -> createCompiler(inputFiles, testRunNumber),
                     caseSwitching -> updateConfiguration(configuration.withCaseSwitching(caseSwitching))

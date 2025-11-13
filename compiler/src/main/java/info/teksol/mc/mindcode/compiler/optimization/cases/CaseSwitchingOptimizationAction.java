@@ -160,9 +160,9 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
         cost = jumpTableCost + symbolicCost + contentCost;
 
         int averageSteps = 2 + symbolicCost + contentCost;          // 1x multiJump, 1x jump table, additional costs
-        rawBenefit = (double) param.originalSteps() / param.statement().getTotalSize() - averageSteps;
+        rawBenefit = (double) param.originalSteps() / param.caseExpression().getTotalSize() - averageSteps;
         benefit = rawBenefit * param.context().totalWeight();
-        executionSteps = averageSteps * param.statement().size();
+        executionSteps = averageSteps * param.caseExpression().size();
 
         debugOutput("Original steps: %d, new steps: %d", param.originalSteps(), executionSteps);
         debugOutput("Original size: %d, new size: %d, cost: %d", param.originalCost(), cost, cost - param.originalCost());
@@ -176,26 +176,26 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
     int elseSteps = 0;
 
     private void computeCostAndBenefit() {
-//            if (caseConfiguration == actionCounter) {
-//                System.out.print(""); // For breakpoint
-//            }
+        if (optimizationContext.getGlobalProfile().getCaseConfiguration() == id) {
+            System.out.print(""); // For breakpoint
+        }
 
         // One time costs
         int contentCost = param.mindustryContent() ? 1 : 0;   // Cost of converting type to logic ID
         cost = contentCost;
-        targetSteps = contentCost * param.statement().size();
-        elseSteps = contentCost * param.statement().getElseValues();
+        targetSteps = contentCost * param.caseExpression().size();
+        elseSteps = contentCost * param.caseExpression().getElseValues();
 
         debugOutput(this);
         debugOutput("Case expression initialization: instructions: %d, average steps: %d, total steps: %d",
-                contentCost, contentCost, contentCost * param.statement().getTotalSize());
+                contentCost, contentCost, contentCost * param.caseExpression().getTotalSize());
 
         // Account for null handling: an instruction per zero value
         // Note: null handling when zero is not there is accounted for in individual segments
-        if (param.handleNulls() && param.statement().hasNullOrZeroKey()) {
-            if (param.statement().hasZeroKey()) {
+        if (param.handleNulls() && param.caseExpression().hasNullOrZeroKey()) {
+            if (param.caseExpression().hasZeroKey()) {
                 // There's a handler on the `0` branch
-                double nullHandling = 1.0 / param.statement().getTotalSize();
+                double nullHandling = 1.0 / param.caseExpression().getTotalSize();
                 if (isDebugOutput())
                     debugOutput("Null handling: instructions: 1, average steps: %g, total steps: 1", nullHandling);
                 targetSteps++;
@@ -213,9 +213,9 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
         if (moveAllBodies) {
             Set<LogicLabel> moved = new HashSet<>();
             for (Segment segment : segments) {
-                LogicLabel label = segment.endLabel() == LogicLabel.INVALID ? param.statement().getExisting(0) : segment.endLabel();
+                LogicLabel label = segment.endLabel() == LogicLabel.INVALID ? param.caseExpression().getExisting(0) : segment.endLabel();
                 if (segment.embedded() && !moved.add(label)) {
-                    segment.setEmbeddingSize(param.statement().getBranchSize(label) + 1);
+                    segment.setEmbeddingSize(param.caseExpression().getBranchSize(label) + 1);
                 }
             }
         }
@@ -226,14 +226,14 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
             debugOutput("Original steps: %d, new steps: %d (target: %d, else: %d; bisection: %s)",
                     param.originalSteps(), targetSteps + elseSteps, targetSteps, elseSteps, bisectionSteps);
 
-            rawBenefit = (double) (param.originalSteps() - targetSteps - elseSteps) / param.statement().getTotalSize();
+            rawBenefit = (double) (param.originalSteps() - targetSteps - elseSteps) / param.caseExpression().getTotalSize();
             executionSteps = targetSteps + elseSteps;
         } else {
             // We disregard else steps in both computations
             debugOutput("Original steps: %d, new steps: %d (target: %d, disregarding else; bisection: %d)", param.originalSteps(),
                     targetSteps, targetSteps, bisectionSteps);
 
-            rawBenefit = (double) (param.originalSteps() - targetSteps) / param.statement().size();
+            rawBenefit = (double) (param.originalSteps() - targetSteps) / param.caseExpression().size();
             executionSteps = targetSteps;
         }
         benefit = rawBenefit * param.context().totalWeight();
@@ -249,7 +249,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
     private int index;
 
     private void computeSegmentCostAndBenefit(Segment segment) {
-        int activeTargets = param.statement().targetCount(segment);
+        int activeTargets = param.caseExpression().targetCount(segment);
 
         SegmentStats stats = switch (segment.type()) {
             case SINGLE -> computeSingleSegment(segment, activeTargets);
@@ -309,8 +309,8 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
 
     private LogicLabel findSingleSegmentTarget(Segment segment, LogicLabel finalLabel) {
         return segment.empty()
-                ? segment.handleNulls() ? param.statement().getNullOrElseTarget() : finalLabel
-                : segment.majorityLabel() == LogicLabel.INVALID ? param.statement().getExisting(0) : segment.majorityLabel();
+                ? segment.handleNulls() ? param.caseExpression().getNullOrElseTarget() : finalLabel
+                : segment.majorityLabel() == LogicLabel.INVALID ? param.caseExpression().getExisting(0) : segment.majorityLabel();
     }
 
     private void generateSingleSegment(Segment segment, LogicLabel finalLabel) {
@@ -358,7 +358,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
                     elseValues * (activeTargets + finalJump) + nullHandling);
         } else {
             // Majority branch is a when branch
-            int majorityTargets = (int) param.statement().entrySet().stream().filter(
+            int majorityTargets = (int) param.caseExpression().entrySet().stream().filter(
                     e -> segment.contains(e.getKey()) && segment.majorityLabel().equals(e.getValue().label)).count();
             int activeSteps = 0;
             int elseSteps = 0;
@@ -369,7 +369,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
             // values will see.
             int size = 0;
             for (int value = segment.to() - 1; value >= segment.from(); value--) {
-                LogicLabel target = param.statement().get(value);
+                LogicLabel target = param.caseExpression().get(value);
                 if (target == null) {
                     // Here is a jump to an else branch. It adds a step and is counted.
                     size++;
@@ -408,7 +408,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
 
         LogicLabel majorityTarget = majorityIsElse ? finalLabel : segment.majorityLabel();
         for (int value = segment.from(); value < segment.to(); value++) {
-            LogicLabel target = param.statement().getOrDefault(value, finalLabel);
+            LogicLabel target = param.caseExpression().getOrDefault(value, finalLabel);
             if (!majorityTarget.equals(target)) {
                 insertInstruction(createJump(newAstContext, target, Condition.EQUAL, caseVariable, LogicNumber.create(value)));
             }
@@ -418,7 +418,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
             moveBody(segment.endLabel());
         } else {
             if (segment.handleNulls() && majorityIsElse) {
-                insertInstruction(createJumpUnconditional(newAstContext, param.statement().getNullOrElseTarget()));
+                insertInstruction(createJumpUnconditional(newAstContext, param.caseExpression().getNullOrElseTarget()));
             } else {
                 insertInstruction(createJumpUnconditional(newAstContext, majorityTarget));
             }
@@ -472,8 +472,8 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
             List<LogicLabel> labels = new ArrayList<>();
             Map<LogicLabel, LogicLabel> labelMap = new HashMap<>();
             for (int i = 0; i < segment.to(); i++) {
-                LogicLabel target = param.statement().getOrDefault(i, finalLabel);
-                LogicLabel updatedTarget = i == 0 && target == finalLabel ? param.statement().getNullOrElseTarget() : target;
+                LogicLabel target = param.caseExpression().getOrDefault(i, finalLabel);
+                LogicLabel updatedTarget = i == 0 && target == finalLabel ? param.caseExpression().getNullOrElseTarget() : target;
                 if (!labelMap.containsKey(updatedTarget)) {
                     LabelInstruction labelInstruction = optimizationContext.getLabelInstruction(updatedTarget);
                     LogicLabel jumpLabel = instructionProcessor.nextLabel();
@@ -491,8 +491,8 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
 
             for (int i = 0; i < end; i++) {
                 insertInstruction(createMultiLabel(newAstContext, labels.get(i), marker));
-                LogicLabel target = param.statement().getOrDefault(segment.from() + i, finalLabel);
-                LogicLabel updatedTarget = segment.from() + i == 0 && target == finalLabel ? param.statement().getNullOrElseTarget() : target;
+                LogicLabel target = param.caseExpression().getOrDefault(segment.from() + i, finalLabel);
+                LogicLabel updatedTarget = segment.from() + i == 0 && target == finalLabel ? param.caseExpression().getNullOrElseTarget() : target;
                 insertInstruction(createJumpUnconditional(newAstContext, updatedTarget));
             }
 
@@ -508,7 +508,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
     private final Map<LogicLabel, BranchContents> branches = new HashMap<>();
 
     private void moveBody(LogicLabel endLabel) {
-        LogicLabel label = endLabel == LogicLabel.INVALID ? param.statement().getExisting(0) : endLabel;
+        LogicLabel label = endLabel == LogicLabel.INVALID ? param.caseExpression().getExisting(0) : endLabel;
         BranchContents branch = branches.get(label);
 
         if (branch == null) {
@@ -558,7 +558,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
 
     private void computeEmbedding() {
         // If we can't embed, remember the label to avoid
-        LogicLabel avoidLabel = canEmbedZero() ? null : param.statement().get(0);
+        LogicLabel avoidLabel = canEmbedZero() ? null : param.caseExpression().get(0);
 
         Map<LogicLabel, Segment> bestSegments = new HashMap<>();
         for (Segment segment : segments) {
@@ -566,11 +566,11 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
             if (segment.type() == SegmentType.JUMP_TABLE && param.context().getLocalProfile().useTextJumpTables())
                 continue;
 
-            LogicLabel label = segment.endLabel() == LogicLabel.INVALID ? param.statement().getExisting(0) : segment.endLabel();
+            LogicLabel label = segment.endLabel() == LogicLabel.INVALID ? param.caseExpression().getExisting(0) : segment.endLabel();
 
             // We won't embed the else branch: we'd save a jump to the else branch,
             // but we'd need another jump to the end of the case statement anyway.
-            if (label == LogicLabel.EMPTY || label == avoidLabel || !param.statement().isMovableLabel(label)) continue;
+            if (label == LogicLabel.EMPTY || label == avoidLabel || !param.caseExpression().isMovableLabel(label)) continue;
 
             segment.setMoveable();
             if (moveAllBodies) {
@@ -595,11 +595,11 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
         if (!param.handleNulls()) return true;
 
         // No zero target: zero cannot be embedded (won't be even attempted, so it is meaningless).
-        LogicLabel zeroLabel = param.statement().get(0);
+        LogicLabel zeroLabel = param.caseExpression().get(0);
         if (zeroLabel == null) return false;
 
         // Return true if the zero target is not shared with anything else
-        return param.statement().entrySet().stream().noneMatch(e -> e.getKey() != 0 && e.getValue().label == zeroLabel);
+        return param.caseExpression().entrySet().stream().noneMatch(e -> e.getKey() != 0 && e.getValue().label == zeroLabel);
     }
 
     private int computeBisectionTable(List<Segment> segments, int depth) {
@@ -675,7 +675,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
         } else {
             for (Segment segment : segments) {
                 debugOutput("Building segment %s, size: %d, targets: %d", segment, segment.size(),
-                        param.statement().subMap(segment.from(), segment.to()).size());
+                        param.caseExpression().subMap(segment.from(), segment.to()).size());
                 switch (segment.type()) {
                     case SINGLE -> generateSingleSegment(segment, finalLabel);
                     case MIXED -> generateMixedSegment(segment, finalLabel);
@@ -745,7 +745,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
         AstContext finalContext = elseContext != null ? elseContext : Objects.requireNonNull(param.context().lastChild());
         LogicLabel finalLabel = optimizationContext.obtainContextLabel(finalContext);
 
-        param.statement().setNullOrElseTarget(finalLabel);
+        param.caseExpression().setNullOrElseTarget(finalLabel);
 
         newAstContext = param.context().createSubcontext(FLOW_CONTROL, 1.0);
 
@@ -759,9 +759,9 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
 
         if (param.handleNulls()) {
             // We need to install a null check
-            LogicLabel zeroLabel = param.statement().get(0);
+            LogicLabel zeroLabel = param.caseExpression().get(0);
             if (zeroLabel == null) {
-                if (param.statement().getNullTarget() != null) {
+                if (param.caseExpression().getNullTarget() != null) {
                     // There's an explicit null branch, and no `0` branch
                     // Install a null check on the else branch:
                     // a 'jump strictEqual null' instruction in front of the else branch which jumps to the null branch
@@ -769,27 +769,27 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
                     // The finalLabel skips this check and is to be used by code that is known not to handle nulls
                     int elseIndex = optimizationContext.getLabelInstructionIndex(finalLabel);
                     LogicInstruction elseLabelIx = optimizationContext.instructionAt(elseIndex);
-                    param.statement().setNullOrElseTarget(instructionProcessor.nextLabel());
+                    param.caseExpression().setNullOrElseTarget(instructionProcessor.nextLabel());
                     optimizationContext.insertInstruction(elseIndex++, createLabel(elseLabelIx.getAstContext(),
-                            param.statement().getNullOrElseTarget()));
+                            param.caseExpression().getNullOrElseTarget()));
                     optimizationContext.insertInstruction(elseIndex, createJump(elseLabelIx.getAstContext(),
-                            param.statement().getNullTarget(), Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
+                            param.caseExpression().getNullTarget(), Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
                 }
             } else {
                 // There's a zero branch. Need to install the handler there
-                if (param.statement().getNullTarget() == null) {
-                    param.statement().setNullTarget(finalLabel);
+                if (param.caseExpression().getNullTarget() == null) {
+                    param.caseExpression().setNullTarget(finalLabel);
                 }
 
                 LogicLabel nullOrZeroTarget = instructionProcessor.nextLabel();
-                param.statement().addBranchKey(0, nullOrZeroTarget);
+                param.caseExpression().addBranchKey(0, nullOrZeroTarget);
 
                 int zeroIndex = optimizationContext.getLabelInstructionIndex(zeroLabel);
                 LogicInstruction zeroLabelIx = optimizationContext.instructionAt(zeroIndex);
                 optimizationContext.insertInstruction(zeroIndex++, createLabel(zeroLabelIx.getAstContext(),
                         nullOrZeroTarget));
                 optimizationContext.insertInstruction(zeroIndex, createJump(zeroLabelIx.getAstContext(),
-                        param.statement().getNullTarget(), Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
+                        param.caseExpression().getNullTarget(), Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
             }
         }
 

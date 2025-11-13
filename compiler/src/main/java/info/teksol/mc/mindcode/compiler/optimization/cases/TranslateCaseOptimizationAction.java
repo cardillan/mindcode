@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationResult;
+import info.teksol.mc.mindcode.compiler.optimization.cases.CaseExpression.Branch;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.BaseResultInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
@@ -152,7 +153,7 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
 
     private OptimizationResult translateCaseExpression() {
         final AstContext astContext = param.context();
-        final CaseStatement statement = param.statement();
+        final CaseExpression statement = param.caseExpression();
 
         AstContext initContext = astContext.findSubcontext(INIT);
         Predicate<LogicInstruction> matcher = ix -> ix.belongsTo(astContext) && !ix.belongsTo(initContext);
@@ -239,15 +240,15 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
     }
 
     private LogicString createTranslationString() {
-        int firstKey = paddingLow ? 0 : param.statement().firstKey();
-        int lastKey = paddingHigh ? param.statement().getTotalSize() - 1 : param.statement().lastKey();
+        int firstKey = paddingLow ? 0 : param.caseExpression().firstKey();
+        int lastKey = paddingHigh ? param.caseExpression().getTotalSize() - 1 : param.caseExpression().lastKey();
 
         String encoded = Utf8Utils.encode(IntStream.rangeClosed(firstKey, lastKey).map(this::mapKeyToValue));
         return LogicString.create(encoded);
     }
 
     private int mapKeyToValue(int key) {
-        Integer value = param.statement().getBranch(key).getIntegerValue();
+        Integer value = param.caseExpression().getBranch(key).getIntegerValue();
         return value == null ?  nullPlaceholder : outputOffset + value;
     }
 
@@ -257,18 +258,18 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
         return "Translate case at " + Objects.requireNonNull(param.context().node()).sourcePosition().formatForLog() + strId;
     }
 
-    public static Optional<TranslateCaseOptimizationAction> createTranslationAction(int id, OptimizationContext optimizationContext,
+    public static Optional<TranslateCaseOptimizationAction> create(int id, OptimizationContext optimizationContext,
             BiFunction<Supplier<OptimizationResult>, String, OptimizationResult> optimizationApplier, ConvertCaseActionParameters param) {
         CompilerProfile globalProfile = optimizationContext.getGlobalProfile();
 
         if (!globalProfile.getProcessorVersion().atLeast(ProcessorVersion.V8B)
                 || !param.context().getLocalProfile().isUseTextTranslations()) return Optional.empty();
 
-        CaseStatement statement = param.statement();
-        Collection<CaseStatement.Branch> branches = statement.getBranches();
+        CaseExpression statement = param.caseExpression();
+        Collection<Branch> branches = statement.getBranches();
 
         // Do all branches assign to the same variable?
-        List<LogicVariable> variables = branches.stream().map(CaseStatement.Branch::getAssignTarget).distinct().toList();
+        List<LogicVariable> variables = branches.stream().map(Branch::getAssignTarget).distinct().toList();
         if (variables.size() != 1 || variables.getFirst() == LogicVariable.INVALID) return Optional.empty();
         LogicVariable outputVariable = variables.getFirst();
 
@@ -301,7 +302,7 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
         // We need to compensate for the offset of the input value
         boolean inputOffset = firstKey != 0 && !paddingLow;
 
-        Integer zeroValue = Optional.of(statement.getBranch(0)).map(CaseStatement.Branch::getIntegerValue).orElse(null);
+        Integer zeroValue = Optional.of(statement.getBranch(0)).map(Branch::getIntegerValue).orElse(null);
         Integer nullValue = statement.getNullOrElseBranch().getIntegerValue();
         boolean nullKey = (statement.hasNullKey() || param.mindustryContent()) && !Objects.equals(zeroValue, nullValue);
 
@@ -333,7 +334,7 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
 
         int originalSteps = param.originalSteps() + 2 * statement.size() + statement.getElseValues();
         // We're executing every instruction: steps == size
-        double rawBenefit = (double) originalSteps / param.statement().getTotalSize() - size;
+        double rawBenefit = (double) originalSteps / param.caseExpression().getTotalSize() - size;
         double benefit = rawBenefit * param.context().totalWeight();
 
         return Optional.of(new TranslateCaseOptimizationAction( id, optimizationContext, optimizationApplier,

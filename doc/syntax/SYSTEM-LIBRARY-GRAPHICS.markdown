@@ -69,8 +69,8 @@ color channels and repackaging them back. When compiled for target 8, the unpack
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                  26 |                 24 |
-| Function body                            |                  27 |                 25 |
+| Inlined function                         |                  22 |                 22 |
+| Function body                            |                  23 |                 23 |
 | Function call                            |                   7 |                  7 |
 
 Creates a packed color using the HSV color model. The individual components (hue, saturation, value, alpha)

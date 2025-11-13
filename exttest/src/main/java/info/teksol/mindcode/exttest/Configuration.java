@@ -1,10 +1,7 @@
 package info.teksol.mindcode.exttest;
 
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.mindcode.compiler.optimization.Optimization;
-import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.CompilerProfile;
-import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mindcode.exttest.cases.TestCaseCreator;
 import info.teksol.mindcode.exttest.cases.TestCaseCreatorFull;
 import info.teksol.mindcode.exttest.cases.TestCaseCreatorSampled;
@@ -13,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.SequencedMap;
 
 @NullMarked
 public record Configuration(
@@ -31,9 +29,7 @@ public record Configuration(
     public void addTestConfiguration(
             String sourceFileName,
             InputFiles inputFiles,
-            Map<Optimization, List<OptimizationLevel>> optimizationLevels,
-            List<GenerationGoal> generationGoals,
-            List<Boolean> symbolicLabels,
+            SequencedMap<Enum<?>, List<Object>> settings,
             int sampleCount,
             int failureLimit,
             int caseSwitching,
@@ -42,9 +38,7 @@ public record Configuration(
         configurations.add(new SingleTestConfiguration(
                 sourceFileName,
                 inputFiles,
-                optimizationLevels,
-                generationGoals,
-                symbolicLabels,
+                settings,
                 sampleCount * sampleMultiplier,
                 failureLimit,
                 caseSwitching,
@@ -59,9 +53,7 @@ public record Configuration(
         private final String sourceFileName;
         private final InputFiles inputFiles;
         private final Path resultPath;
-        private final Map<Optimization, List<OptimizationLevel>> optimizationLevels;
-        private final List<GenerationGoal> generationGoals;
-        private final List<Boolean> symbolicLabels;
+        private final SequencedMap<Enum<?>, List<Object>> settings;
         private final int sampleCount;
         private final int totalCases;
         private final int failureLimit;
@@ -73,27 +65,21 @@ public record Configuration(
         public SingleTestConfiguration(
                 String sourceFileName,
                 InputFiles inputFiles,
-                Map<Optimization, List<OptimizationLevel>> optimizationLevels,
-                List<GenerationGoal> generationGoals,
-                List<Boolean> symbolicLabels,
+                SequencedMap<Enum<?>, List<Object>> settings,
                 int sampleCount,
                 int failureLimit,
                 int caseSwitching,
                 boolean run) {
             this.sourceFileName = sourceFileName;
             this.inputFiles = inputFiles;
-            this.optimizationLevels = optimizationLevels;
-            this.generationGoals = generationGoals;
-            this.symbolicLabels = symbolicLabels;
+            this.settings = settings;
             this.sampleCount = sampleCount;
             this.failureLimit = failureLimit;
             this.caseSwitching = caseSwitching;
             this.run = run;
 
-            this.totalCases = optimizationLevels.values().stream()
+            this.totalCases = settings.values().stream()
                     .mapToInt(List::size).reduce(1, Configuration::product)
-                    * generationGoals.size()
-                    * symbolicLabels.size()
                     * (caseSwitching + 1);
 
             this.testCaseCreator = fullTests || sampleCount >= totalCases
@@ -152,18 +138,8 @@ public record Configuration(
         }
 
         @Override
-        public Map<Optimization, List<OptimizationLevel>> getOptimizationLevels() {
-            return optimizationLevels;
-        }
-
-        @Override
-        public List<GenerationGoal> getGenerationGoals() {
-            return generationGoals;
-        }
-
-        @Override
-        public List<Boolean> getSymbolicLabels() {
-            return symbolicLabels;
+        public boolean containsSetting(Enum<?> setting, Object value) {
+            return settings.getOrDefault(setting, List.of()).contains(value);
         }
 
         @Override
@@ -176,8 +152,7 @@ public record Configuration(
         }
 
         public TestConfiguration withCaseSwitching(int caseSwitching) {
-            return new SingleTestConfiguration(sourceFileName, inputFiles, optimizationLevels, generationGoals,
-                    symbolicLabels, sampleCount, failureLimit, caseSwitching, run);
+            return new SingleTestConfiguration(sourceFileName, inputFiles, settings, sampleCount, failureLimit, caseSwitching, run);
         }
 
         @Override
@@ -187,29 +162,19 @@ public record Configuration(
                     .setAutoPrintflush(false)
                     .setRun(run);
 
-            // Goal first
-            int goal = testCase % generationGoals.size();
-            profile.setGoal(generationGoals.get(goal));
-            int remainder = testCase / generationGoals.size();
-
-            // Symbolic labels second
-            int labels = remainder % symbolicLabels.size();
-            profile.setSymbolicLabels(symbolicLabels.get(labels));
-            remainder /= symbolicLabels.size();
-
-            // Case switching third
-            int caseConfiguration = remainder % (caseSwitching + 1);
-            profile.setCaseConfiguration(caseConfiguration);
-            remainder /= (caseSwitching + 1);
-
-            for (Optimization optimization : Optimization.LIST) {
-                List<OptimizationLevel> levels = optimizationLevels.get(optimization);
-                int index = remainder % levels.size();
-                profile.setOptimizationLevel(optimization, levels.get(index));
-                remainder /= levels.size();
+            int current = testCase;
+            for (Map.Entry<Enum<?>, List<Object>> entry : settings.entrySet()) {
+                int index = current % entry.getValue().size();
+                profile.getOption(entry.getKey()).setValue(entry.getValue().get(index));
+                current /= entry.getValue().size();
             }
 
-            if (remainder != 0) {
+            // And case switching
+            int caseConfiguration = current % (caseSwitching + 1);
+            profile.setCaseConfiguration(caseConfiguration);
+            current /= (caseSwitching + 1);
+
+            if (current != 0) {
                 throw new IllegalArgumentException("Invalid test case number " + testCase);
             }
 

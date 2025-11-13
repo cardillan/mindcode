@@ -699,20 +699,21 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
 
         if (localContext.findSubcontext(CONDITION) == null) {
+            // This is an optimized case expression
             BranchedVariableStates branchedStates = new BranchedVariableStates(localContext, variableStates);
-            boolean hasElse = false;
+            boolean first = true;
 
             // The context has been optimized by CaseSwitcher
             while (iterator.hasNext()) {
                 AstContext child = iterator.next();
                 switch (child.subcontextType()) {
-                    case BODY -> {
+                    case BODY, ELSE -> {
+                        if (first) {
+                            first = false;
+                        } else {
+                            branchedStates.newBranch(localContext, "[case when]", true);
+                        }
                         branchedStates.processContext(localContext, child, modifyInstructions);
-                        branchedStates.newBranch(localContext, "[case when]", true);
-                    }
-                    case ELSE -> {
-                        branchedStates.processContext(localContext, child, modifyInstructions);
-                        hasElse = true;
                     }
                     case FLOW_CONTROL -> {
                         branchedStates.processContext(localContext, child, modifyInstructions);
@@ -722,9 +723,9 @@ class DataFlowOptimizer extends BaseOptimizer {
             }
 
             // If there's no else branch, start a new, empty branch representing the missing else.
-            if (!hasElse) {
-                branchedStates.newBranch(localContext, "[case default else]", true);
-            }
+//            if (!hasElse) {
+//                branchedStates.newBranch(localContext, "[case default else]", true);
+//            }
 
             return branchedStates.getFinalStates(localContext);
         } else {

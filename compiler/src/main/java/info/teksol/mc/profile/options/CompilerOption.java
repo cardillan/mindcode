@@ -20,4 +20,19 @@ public interface CompilerOption {
     OptionScope getScope();
 
     OptionMultiplicity getMultiplicity();
+
+    boolean isDefault();
+
+    // By default, options do not encode themselves
+    default int encodeSize() {
+        return 1;
+    }
+
+    default int encode() {
+        return 0;
+    }
+
+    default void decode(int encoded) {
+        // Do nothing
+    }
 }

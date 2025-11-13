@@ -3,6 +3,7 @@ package info.teksol.mindcode.exttest;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.GenerationGoal;
+import info.teksol.mc.profile.options.OptimizationOptions;
 import info.teksol.mc.util.StringUtils;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
@@ -135,9 +136,9 @@ public class BasicTestProgress extends AbstractTestProgress {
         writer.println();
 
         writer.printf("%-35s", "");
-        for (GenerationGoal level : GenerationGoal.values()) {
-            if (configuration.getGenerationGoals().contains(level)) {
-                writer.printf("%14.1f%%", 100d * goalStatistics.get(level).get() / errors);
+        for (GenerationGoal goal : GenerationGoal.values()) {
+            if (configuration.containsSetting(OptimizationOptions.GOAL, goal)) {
+                writer.printf("%14.1f%%", 100d * goalStatistics.get(goal).get() / errors);
             } else {
                 writer.printf("%15s", "-");
             }
@@ -152,10 +153,9 @@ public class BasicTestProgress extends AbstractTestProgress {
         writer.println();
 
         for (Optimization optimization : Optimization.values()) {
-            List<OptimizationLevel> validLevels = configuration.getOptimizationLevels().get(optimization);
             writer.printf("%-35s", optimization.getName());
             for (OptimizationLevel level : OptimizationLevel.values()) {
-                if (validLevels.contains(level)) {
+                if (configuration.containsSetting(optimization, level)) {
                     writer.printf("%14.1f%%", 100d * statistics.get(optimization).get(level).get() / errors);
                 } else {
                     writer.printf("%15s", "-");

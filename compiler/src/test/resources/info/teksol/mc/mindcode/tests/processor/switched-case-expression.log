@@ -7,13 +7,13 @@
     26 instructions modified by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
-     7 instructions eliminated by Case Switching (3 iterations).
-     1 case expressions converted to switched jumps by Case Switching.
+     8 instructions eliminated by Case Switching (3 iterations).
+     0 case expressions converted to fast dispatch by Case Switching.
     10 instructions eliminated by Jump Straightening (4 iterations).
-    51 instructions after optimizations.
+    50 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 941):
-  * Convert case at line 27:5 (segments: 1)                      size    -7, benefit     1562.5, efficiency   Infinity (-7 instructions)
+  * Fast-dispatch case at line 27:5                              size    -9, benefit     2812.5, efficiency   Infinity (-8 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -411,77 +411,77 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     78 assertequals 11 .S0 "Unexpected value of S0"
     79 assertequals 21 .S1 "Unexpected value of S1"
 
-Modifications by Convert case at line 27:5 (segments: 1) (-7 instructions):
+Modifications by Fast-dispatch case at line 27:5 (-8 instructions):
  
     15 jump *label6 lessThanEq :processNumber:n 0
     16 label *label30
     17 op mod :processDigit:n :processNumber:n 10
 -    * jump *label9 notEqual :processDigit:n 0
-+   18 jump *label31 lessThan :processDigit:n 0
-+   19 jump *label31 greaterThanEq :processDigit:n 10
-+   20 multijump :processDigit:n 0 0 (m:*label32)
-+   21 multilabel *label33 (m:*label32)
-    22 label *label10
-    23 op add .S0 .S0 1
-    24 jump *label8 always
-    25 label *label9
++   18 multijump :processDigit:n 0 0 (m:*label32)
++   19 multilabel *label43 (m:*label32)
++   20 label *label31
++   21 jump *label8 always
++   22 multilabel *label33 (m:*label32)
+    23 label *label10
+    24 op add .S0 .S0 1
+    25 jump *label8 always
+    26 label *label9
 -    * jump *label11 notEqual :processDigit:n 1
-+   26 multilabel *label34 (m:*label32)
-    27 label *label12
-    28 op add .S1 .S1 1
-    29 jump *label8 always
-    30 label *label11
++   27 multilabel *label34 (m:*label32)
+    28 label *label12
+    29 op add .S1 .S1 1
+    30 jump *label8 always
+    31 label *label11
 -    * jump *label13 notEqual :processDigit:n 2
-+   31 multilabel *label35 (m:*label32)
-    32 label *label14
-    33 op add .S2 .S2 1
-    34 jump *label8 always
-    35 label *label13
++   32 multilabel *label35 (m:*label32)
+    33 label *label14
+    34 op add .S2 .S2 1
+    35 jump *label8 always
+    36 label *label13
 -    * jump *label15 notEqual :processDigit:n 3
-+   36 multilabel *label36 (m:*label32)
-    37 label *label16
-    38 op add .S3 .S3 1
-    39 jump *label8 always
-    40 label *label15
++   37 multilabel *label36 (m:*label32)
+    38 label *label16
+    39 op add .S3 .S3 1
+    40 jump *label8 always
+    41 label *label15
 -    * jump *label17 notEqual :processDigit:n 4
-+   41 multilabel *label37 (m:*label32)
-    42 label *label18
-    43 op add .S4 .S4 1
-    44 jump *label8 always
-    45 label *label17
++   42 multilabel *label37 (m:*label32)
+    43 label *label18
+    44 op add .S4 .S4 1
+    45 jump *label8 always
+    46 label *label17
 -    * jump *label19 notEqual :processDigit:n 5
-+   46 multilabel *label38 (m:*label32)
-    47 label *label20
-    48 op add .S5 .S5 1
-    49 jump *label8 always
-    50 label *label19
++   47 multilabel *label38 (m:*label32)
+    48 label *label20
+    49 op add .S5 .S5 1
+    50 jump *label8 always
+    51 label *label19
 -    * jump *label21 notEqual :processDigit:n 6
-+   51 multilabel *label39 (m:*label32)
-    52 label *label22
-    53 op add .S6 .S6 1
-    54 jump *label8 always
-    55 label *label21
++   52 multilabel *label39 (m:*label32)
+    53 label *label22
+    54 op add .S6 .S6 1
+    55 jump *label8 always
+    56 label *label21
 -    * jump *label23 notEqual :processDigit:n 7
-+   56 multilabel *label40 (m:*label32)
-    57 label *label24
-    58 op add .S7 .S7 1
-    59 jump *label8 always
-    60 label *label23
++   57 multilabel *label40 (m:*label32)
+    58 label *label24
+    59 op add .S7 .S7 1
+    60 jump *label8 always
+    61 label *label23
 -    * jump *label25 notEqual :processDigit:n 8
-+   61 multilabel *label41 (m:*label32)
-    62 label *label26
-    63 op add .S8 .S8 1
-    64 jump *label8 always
-    65 label *label25
++   62 multilabel *label41 (m:*label32)
+    63 label *label26
+    64 op add .S8 .S8 1
+    65 jump *label8 always
+    66 label *label25
 -    * jump *label27 notEqual :processDigit:n 9
-+   66 multilabel *label42 (m:*label32)
-    67 label *label28
-    68 op add .S9 .S9 1
-    69 label *label27
-+   70 label *label31
-    71 label *label8
-    72 label *label7
-    73 op idiv :processNumber:n :processNumber:n 10
++   67 multilabel *label42 (m:*label32)
+    68 label *label28
+    69 op add .S9 .S9 1
+-    * label *label27
+    70 label *label8
+    71 label *label7
+    72 op idiv :processNumber:n :processNumber:n 10
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -492,7 +492,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   15 jump *label6 lessThanEq :i 0
     16 label *label30
     17 op mod :processDigit:n :processNumber:n 10
-    18 jump *label31 lessThan :processDigit:n 0
+    18 multijump :processDigit:n 0 0 (m:*label32)
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
@@ -506,9 +506,10 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     13 jump *label6 lessThanEq :i 0
     14 label *label30
     15 op mod :processDigit:n :processNumber:n 10
- 
-    17 jump *label31 greaterThanEq :processDigit:n 10
-    18 multijump :processDigit:n 0 0 (m:*label32)
+    16 multijump :processDigit:n 0 0 (m:*label32)
+    17 multilabel *label43 (m:*label32)
+-    * label *label31
+    18 jump *label8 always
     19 multilabel *label33 (m:*label32)
 -    * label *label10
     20 op add .S0 .S0 1
@@ -557,28 +558,26 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     46 multilabel *label42 (m:*label32)
 -    * label *label28
     47 op add .S9 .S9 1
--    * label *label27
-    48 label *label31
-    49 label *label8
+    48 label *label8
 -    * label *label7
-    50 op idiv :processNumber:n :processNumber:n 10
+    49 op idiv :processNumber:n :processNumber:n 10
 -    * label *label5
-    51 jump *label30 greaterThan :processNumber:n 0
-    52 label *label6
+    50 jump *label30 greaterThan :processNumber:n 0
+    51 label *label6
 -    * label *label3
 -    * label *label1
-    53 op add :i :i 1
-    54 jump *label29 lessThanEq :i 100
+    52 op add :i :i 1
+    53 jump *label29 lessThanEq :i 100
 -    * label *label2
-    55 assertequals 11 .S0 "Unexpected value of S0"
-    56 assertequals 21 .S1 "Unexpected value of S1"
-    57 assertequals 20 .S2 "Unexpected value of S2"
+    54 assertequals 11 .S0 "Unexpected value of S0"
+    55 assertequals 21 .S1 "Unexpected value of S1"
+    56 assertequals 20 .S2 "Unexpected value of S2"
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
-    63 assertequals 20 .S8 "Unexpected value of S8"
-    64 assertequals 20 .S9 "Unexpected value of S9"
-    65 stop
+    62 assertequals 20 .S8 "Unexpected value of S8"
+    63 assertequals 20 .S9 "Unexpected value of S9"
+    64 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -599,39 +598,38 @@ set :processNumber:n :i
 jump *label6 lessThanEq :i 0
 label *label30
 op mod :processDigit:n :processNumber:n 10
-jump *label31 lessThan :processDigit:n 0
-jump *label31 greaterThanEq :processDigit:n 10
 multijump :processDigit:n 0 0
+multilabel *label43
+jump *label8 always
 multilabel *label33
-op add .S0 .S0 1
+op add .S0 .S0 1                        # Origin: 14, keys: 0
 jump *label8 always
 multilabel *label34
-op add .S1 .S1 1
+op add .S1 .S1 1                        # Origin: 14, keys: 1
 jump *label8 always
 multilabel *label35
-op add .S2 .S2 1
+op add .S2 .S2 1                        # Origin: 14, keys: 2
 jump *label8 always
 multilabel *label36
-op add .S3 .S3 1
+op add .S3 .S3 1                        # Origin: 14, keys: 3
 jump *label8 always
 multilabel *label37
-op add .S4 .S4 1
+op add .S4 .S4 1                        # Origin: 14, keys: 4
 jump *label8 always
 multilabel *label38
-op add .S5 .S5 1
+op add .S5 .S5 1                        # Origin: 14, keys: 5
 jump *label8 always
 multilabel *label39
-op add .S6 .S6 1
+op add .S6 .S6 1                        # Origin: 14, keys: 6
 jump *label8 always
 multilabel *label40
-op add .S7 .S7 1
+op add .S7 .S7 1                        # Origin: 14, keys: 7
 jump *label8 always
 multilabel *label41
-op add .S8 .S8 1
+op add .S8 .S8 1                        # Origin: 14, keys: 8
 jump *label8 always
 multilabel *label42
-op add .S9 .S9 1
-label *label31
+op add .S9 .S9 1                        # Origin: 14, keys: 9
 label *label8
 op idiv :processNumber:n :processNumber:n 10
 jump *label30 greaterThan :processNumber:n 0

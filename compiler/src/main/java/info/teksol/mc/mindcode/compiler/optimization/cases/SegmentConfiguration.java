@@ -38,7 +38,7 @@ public final class SegmentConfiguration {
         return segments;
     }
 
-    public List<Segment> createSegments(boolean removeRangeCheck, boolean handleNulls, boolean symbolicLabels, CaseStatement caseStatement) {
+    public List<Segment> createSegments(boolean removeRangeCheck, boolean handleNulls, boolean symbolicLabels, CaseExpression caseExpression) {
         if (singleSegment) {
             return List.of(Segment.jumpTable(partitions));
         }
@@ -64,7 +64,7 @@ public final class SegmentConfiguration {
 
         result.sort(null);
         if (!removeRangeCheck) {
-            caseStatement.addLimitSegments(result);
+            caseExpression.addLimitSegments(result);
         }
 
         // Null handling:
@@ -73,7 +73,7 @@ public final class SegmentConfiguration {
         //  Yes     No     --> Handler at the `else` branch, needs routing in segments <--
         //  No      Yes    Handler at the `zero` branch, no handling in segments
         //  Yes     Yes    Handler at the `zero` branch, no handling in segments
-        if (handleNulls && caseStatement.hasNullKey() && !caseStatement.hasZeroKey()) {
+        if (handleNulls && caseExpression.hasNullKey() && !caseExpression.hasZeroKey()) {
             result.stream().filter(s -> s.from() >= 0).findFirst().ifPresent(Segment::setHandleNulls);
         }
 

@@ -152,6 +152,10 @@ public abstract class AbstractInstruction implements LogicInstruction {
         for (Map.Entry<InstructionInfo, Object> entry : info.entrySet()) {
             if (entry.getValue() instanceof LogicLabel label && labelMap.containsKey(label)) {
                 entry.setValue(labelMap.get(label));
+            } else if (entry.getValue() instanceof List<?> list) {
+                entry.setValue(list.stream()
+                        .map(e -> e instanceof LogicLabel label ? labelMap.getOrDefault(label, label) : e)
+                        .toList());
             }
         }
         return this;

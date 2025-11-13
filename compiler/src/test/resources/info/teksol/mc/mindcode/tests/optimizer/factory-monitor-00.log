@@ -18,9 +18,11 @@
 
 Pass 1: speed optimization selection (cost limit 628):
   * Replicate loop condition at line 160:1                       size    +1, benefit       25.0, efficiency     25.000 (-5 instructions)
+  o Fast-dispatch case at line 20:9                              size    -9, benefit     4899.0, efficiency   Infinity
   o Convert case at line 20:9 (segments: 1, padded low)          size    -8, benefit     5141.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 633):
+  o Fast-dispatch case at line 20:9                              size    -9, benefit     4899.0, efficiency   Infinity
   * Convert case at line 20:9 (segments: 1, padded low)          size    -8, benefit     5141.8, efficiency   Infinity (-8 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -2429,16 +2431,16 @@ sensor *tmp261 *tmp8 @id
 jump *label87 greaterThanEq *tmp261 146
 multijump *tmp261 0 0
 multilabel *label97
-set .MESSAGE :block
+set .MESSAGE :block                     # Origin: 24, keys: 137
 jump *label6 always
 multilabel *label98
-set .SWITCH :block
+set .SWITCH :block                      # Origin: 24, keys: 138
 jump *label6 always
 multilabel *label99
-set .DISPLAY :block
+set .DISPLAY :block                     # Origin: 24, keys: 144, 145
 jump *label6 always
 multilabel *label90
-set .TYPE @silicon-smelter
+set .TYPE @silicon-smelter              # Origin: 24, keys: 2
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @sand
 set .RES2 @coal
@@ -2449,7 +2451,7 @@ set .MUL1 .MUL3
 set .OUTPUT @silicon
 jump *label6 always
 multilabel *label91
-set .TYPE @silicon-crucible
+set .TYPE @silicon-crucible             # Origin: 24, keys: 3
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @sand
 set .RES2 @coal
@@ -2460,7 +2462,7 @@ set .MUL1 .MUL3
 set .OUTPUT @silicon
 jump *label6 always
 multilabel *label92
-set .TYPE @kiln
+set .TYPE @kiln                         # Origin: 24, keys: 4
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @sand
 set .RES2 @lead
@@ -2471,7 +2473,7 @@ set .MUL1 .MUL3
 set .OUTPUT @metaglass
 jump *label6 always
 multilabel *label94
-set .TYPE @phase-weaver
+set .TYPE @phase-weaver                 # Origin: 24, keys: 6
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @sand
 set .RES2 @thorium
@@ -2482,7 +2484,7 @@ set .MUL1 .MUL3
 set .OUTPUT @phase-fabric
 jump *label6 always
 multilabel *label95
-set .TYPE @pyratite-mixer
+set .TYPE @pyratite-mixer               # Origin: 24, keys: 8
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @sand
 set .RES2 @coal
@@ -2493,7 +2495,7 @@ set .MUL1 .MUL3
 set .OUTPUT @pyratite
 jump *label6 always
 multilabel *label96
-set .TYPE @blast-mixer
+set .TYPE @blast-mixer                  # Origin: 24, keys: 9
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @pyratite
 set .RES2 @spore-pod
@@ -2504,7 +2506,7 @@ set .MUL1 .MUL3
 set .OUTPUT @blast-compound
 jump *label6 always
 multilabel *label93
-set .TYPE @plastanium-compressor
+set .TYPE @plastanium-compressor        # Origin: 24, keys: 5
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @titanium
 set .RES2 @oil
@@ -2517,7 +2519,7 @@ set .OUTPUT @plastanium
 jump *label6 always
 multilabel *label89
 label *label87
-print "\n  {0} not supported"
+print "\n  {0} not supported"           # Origin: 24, keys: 0, 1, 7, 10 .. 136, 139 .. 143
 format :block
 label *label6
 jump *label84 greaterThan :n 0

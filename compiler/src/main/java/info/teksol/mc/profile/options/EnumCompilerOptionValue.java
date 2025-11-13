@@ -44,4 +44,19 @@ public class EnumCompilerOptionValue<E extends Enum<E>> extends CompilerOptionVa
     private E[] getEnumConstants(Class<E> enumType) {
         return enumType.getEnumConstants();
     }
+
+    @Override
+    public int encodeSize() {
+        return valueType.getEnumConstants().length;
+    }
+
+    @Override
+    public int encode() {
+        return getValue().ordinal();
+    }
+
+    @Override
+    public void decode(int encoded) {
+        setValue(valueType.getEnumConstants()[encoded]);
+    }
 }

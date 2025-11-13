@@ -3,7 +3,7 @@
      1 instructions eliminated by Case Expression Optimization.
      3 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Optimization (5 iterations).
-     1 instructions eliminated by Single Step Elimination (6 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
     14 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
      2 loops improved by Loop Hoisting.
@@ -13,13 +13,13 @@
      1 loops unrolled by Loop Unrolling.
      2 instructions eliminated by Function Inlining (6 iterations).
      3 function calls inlined by Function Inlining.
-     6 instructions eliminated by Case Switching (6 iterations).
-     1 case expressions converted to switched jumps by Case Switching.
+     8 instructions eliminated by Case Switching (6 iterations).
+     0 case expressions converted to fast dispatch by Case Switching.
      2 instructions eliminated by Jump Straightening (5 iterations).
      4 instructions updated by Jump Threading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     12 instructions modified by Print Merging.
-    55 instructions after optimizations.
+    52 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 946):
   * Unroll loop at line 24:9                                     size   +19, benefit     5000.0, efficiency    263.158 (+16 instructions)
@@ -27,20 +27,17 @@ Pass 1: speed optimization selection (cost limit 946):
     Inline function call at line 31:9                            size    +2, benefit       87.5, efficiency     43.750
     Inline function call at line 32:9                            size    +2, benefit       87.5, efficiency     43.750
     Inline function call at line 33:9                            size    +2, benefit       87.5, efficiency     43.750
-  o Convert case at line 7:5 (segments: 1, padded low)           size    -7, benefit     1986.6, efficiency   Infinity
-  o Convert case at line 7:5 (segments: 2, padded low)           size    -6, benefit     2276.8, efficiency   Infinity
+  o Fast-dispatch case at line 7:5                               size    -9, benefit     3236.6, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 930):
   * Inline function 'printbyte' defined at line 15:1             size    +3, benefit      262.5, efficiency     87.500 (-3 instructions)
     Inline function call at line 31:9                            size    +2, benefit       87.5, efficiency     43.750
     Inline function call at line 32:9                            size    +2, benefit       87.5, efficiency     43.750
     Inline function call at line 33:9                            size    +2, benefit       87.5, efficiency     43.750
-  o Convert case at line 7:5 (segments: 1, padded low)           size    -7, benefit     1986.6, efficiency   Infinity
-  o Convert case at line 7:5 (segments: 2, padded low)           size    -6, benefit     2276.8, efficiency   Infinity
+  o Fast-dispatch case at line 7:5                               size    -9, benefit     3236.6, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 933):
-  o Convert case at line 7:5 (segments: 1, padded low)           size    -7, benefit     1986.6, efficiency   Infinity
-  * Convert case at line 7:5 (segments: 2, padded low)           size    -6, benefit     2276.8, efficiency   Infinity (-6 instructions)
+  * Fast-dispatch case at line 7:5                               size    -9, benefit     3236.6, efficiency   Infinity (-8 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -570,7 +567,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     79 op and :printbyte:ch :decode64:bytes 0xFF
     80 jump *label51 equal :printbyte:ch false
 
-Modifications by Convert case at line 7:5 (segments: 2, padded low) (-6 instructions):
+Modifications by Fast-dispatch case at line 7:5 (-8 instructions):
  
     90 assertprints "All Hail the King!" "Decoded value"
     91 end
@@ -579,19 +576,33 @@ Modifications by Convert case at line 7:5 (segments: 2, padded low) (-6 instruct
 -    * jump *label16 lessThanEq :charToInt:ch 90
 -    * label *label17
 -    * jump *label15 always
-+   93 jump *label55 greaterThanEq :charToInt:ch 97
-+   94 jump *label54 lessThan :charToInt:ch 0
-+   95 multijump :charToInt:ch 0 0 (m:*label56)
-+   96 label *label55
-+   97 jump *label54 greaterThanEq :charToInt:ch 123
-+   98 label *label19
-+   99 op sub *tmp7 :charToInt:ch 71
-+  100 jump *label14 always
-+  101 multilabel *label60 (m:*label56)
-   102 label *label16
-   103 op sub *tmp7 :charToInt:ch 65
-   104 jump *label14 always
-   105 label *label15
++   93 multijump :charToInt:ch 0 0 (m:*label55)
++   94 multilabel *label61 (m:*label55)
++   95 multilabel *label56 (m:*label55)
++   96 label *label54
++   97 set *tmp7 null
++   98 jump *label14 always
++   99 jump *label14 always
++  100 label *label15
++  101 multilabel *label60 (m:*label55)
++  102 label *label19
++  103 op sub *tmp7 :charToInt:ch 71
++  104 jump *label14 always
++  105 label *label18
++  106 multilabel *label57 (m:*label55)
++  107 label *label22
++  108 set *tmp7 62
++  109 jump *label14 always
++  110 label *label21
++  111 multilabel *label58 (m:*label55)
++  112 label *label24
++  113 set *tmp7 63
++  114 jump *label14 always
++  115 multilabel *label59 (m:*label55)
+   116 label *label16
+   117 op sub *tmp7 :charToInt:ch 65
+-    * jump *label14 always
+-    * label *label15
 -    * jump *label20 lessThan :charToInt:ch 97
 -    * jump *label19 lessThanEq :charToInt:ch 122
 -    * label *label20
@@ -599,26 +610,33 @@ Modifications by Convert case at line 7:5 (segments: 2, padded low) (-6 instruct
 -    * label *label19
 -    * op sub *tmp7 :charToInt:ch 71
 -    * jump *label14 always
-   106 label *label18
+-    * label *label18
 -    * jump *label22 equal :charToInt:ch 43
 -    * jump *label21 notEqual :charToInt:ch 45
-+  107 multilabel *label58 (m:*label56)
-   108 label *label22
-   109 set *tmp7 62
-   110 jump *label14 always
-   111 label *label21
+-    * label *label22
+-    * set *tmp7 62
+-    * jump *label14 always
+-    * label *label21
 -    * jump *label24 equal :charToInt:ch 95
 -    * jump *label23 notEqual :charToInt:ch 47
-+  112 multilabel *label59 (m:*label56)
-   113 label *label24
-   114 set *tmp7 63
-   115 jump *label14 always
-   116 label *label23
-+  117 multilabel *label57 (m:*label56)
-+  118 label *label54
-   119 set *tmp7 null
-   120 label *label14
-   121 set :charToInt*retval *tmp7
+-    * label *label24
+-    * set *tmp7 63
+-    * jump *label14 always
+-    * label *label23
+-    * set *tmp7 null
+   118 label *label14
+   119 set :charToInt*retval *tmp7
+   120 label *label13
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
+ 
+    95 multilabel *label56 (m:*label55)
+    96 label *label54
+    97 set *tmp7 null
+-    * jump *label14 always
+    98 jump *label14 always
+    99 label *label15
+   100 multilabel *label60 (m:*label55)
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
@@ -665,40 +683,39 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-4
     38 call *label0 *invalid :charToInt*retval (m:*label37) (h:*label37)
     39 label *label37
  
-    93 label *label55
-    94 jump *label54 greaterThanEq :charToInt:ch 123
-    95 label *label19
--    * op sub *tmp7 :charToInt:ch 71
-+   96 op sub :charToInt*retval :charToInt:ch 71
-    97 jump *label14 always
-    98 multilabel *label60 (m:*label56)
-    99 label *label16
--    * op sub *tmp7 :charToInt:ch 65
-+  100 op sub :charToInt*retval :charToInt:ch 65
-   101 jump *label14 always
-   102 label *label15
-   103 label *label18
-   104 multilabel *label58 (m:*label56)
-   105 label *label22
--    * set *tmp7 62
-+  106 set :charToInt*retval 62
-   107 jump *label14 always
-   108 label *label21
-   109 multilabel *label59 (m:*label56)
-   110 label *label24
--    * set *tmp7 63
-+  111 set :charToInt*retval 63
-   112 jump *label14 always
-   113 label *label23
-   114 multilabel *label57 (m:*label56)
-   115 label *label54
+    91 multilabel *label61 (m:*label55)
+    92 multilabel *label56 (m:*label55)
+    93 label *label54
 -    * set *tmp7 null
-+  116 set :charToInt*retval null
-   117 label *label14
++   94 set :charToInt*retval null
+    95 jump *label14 always
+    96 label *label15
+    97 multilabel *label60 (m:*label55)
+    98 label *label19
+-    * op sub *tmp7 :charToInt:ch 71
++   99 op sub :charToInt*retval :charToInt:ch 71
+   100 jump *label14 always
+   101 label *label18
+   102 multilabel *label57 (m:*label55)
+   103 label *label22
+-    * set *tmp7 62
++  104 set :charToInt*retval 62
+   105 jump *label14 always
+   106 label *label21
+   107 multilabel *label58 (m:*label55)
+   108 label *label24
+-    * set *tmp7 63
++  109 set :charToInt*retval 63
+   110 jump *label14 always
+   111 multilabel *label59 (m:*label55)
+   112 label *label16
+-    * op sub *tmp7 :charToInt:ch 65
++  113 op sub :charToInt*retval :charToInt:ch 65
+   114 label *label14
 -    * set :charToInt*retval *tmp7
-   118 label *label13
-   119 return :charToInt*retaddr
-   120 end
+   115 label *label13
+   116 return :charToInt*retaddr
+   117 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
  
@@ -796,67 +813,65 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     64 assertprints "All Hail the King!" "Decoded value"
     65 end
     66 label *label0
- 
-    69 multijump :charToInt:ch 0 0 (m:*label56)
-    70 label *label55
-    71 jump *label54 greaterThanEq :charToInt:ch 123
--    * label *label19
-    72 op sub :charToInt*retval :charToInt:ch 71
-    73 jump *label14 always
-    74 multilabel *label60 (m:*label56)
--    * label *label16
-    75 op sub :charToInt*retval :charToInt:ch 65
-    76 jump *label14 always
+    67 multijump :charToInt:ch 0 0 (m:*label55)
+    68 multilabel *label61 (m:*label55)
+    69 multilabel *label56 (m:*label55)
+-    * label *label54
+    70 set :charToInt*retval null
+    71 jump *label14 always
 -    * label *label15
+    72 multilabel *label60 (m:*label55)
+-    * label *label19
+    73 op sub :charToInt*retval :charToInt:ch 71
+    74 jump *label14 always
 -    * label *label18
-    77 multilabel *label58 (m:*label56)
+    75 multilabel *label57 (m:*label55)
 -    * label *label22
-    78 set :charToInt*retval 62
-    79 jump *label14 always
+    76 set :charToInt*retval 62
+    77 jump *label14 always
 -    * label *label21
-    80 multilabel *label59 (m:*label56)
+    78 multilabel *label58 (m:*label55)
 -    * label *label24
-    81 set :charToInt*retval 63
-    82 jump *label14 always
--    * label *label23
-    83 multilabel *label57 (m:*label56)
-    84 label *label54
-    85 set :charToInt*retval null
-    86 label *label14
+    79 set :charToInt*retval 63
+    80 jump *label14 always
+    81 multilabel *label59 (m:*label55)
+-    * label *label16
+    82 op sub :charToInt*retval :charToInt:ch 65
+    83 label *label14
 -    * label *label13
-    87 return :charToInt*retaddr
-    88 end
+    84 return :charToInt*retaddr
+    85 end
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  
-    70 label *label55
-    71 jump *label54 greaterThanEq :charToInt:ch 123
-    72 op sub :charToInt*retval :charToInt:ch 71
+    68 multilabel *label61 (m:*label55)
+    69 multilabel *label56 (m:*label55)
+    70 set :charToInt*retval null
 -    * jump *label14 always
-+   73 return :charToInt*retaddr
-    74 multilabel *label60 (m:*label56)
-    75 op sub :charToInt*retval :charToInt:ch 65
++   71 return :charToInt*retaddr
+    72 multilabel *label60 (m:*label55)
+    73 op sub :charToInt*retval :charToInt:ch 71
 -    * jump *label14 always
-+   76 return :charToInt*retaddr
-    77 multilabel *label58 (m:*label56)
-    78 set :charToInt*retval 62
++   74 return :charToInt*retaddr
+    75 multilabel *label57 (m:*label55)
+    76 set :charToInt*retval 62
 -    * jump *label14 always
-+   79 return :charToInt*retaddr
-    80 multilabel *label59 (m:*label56)
-    81 set :charToInt*retval 63
++   77 return :charToInt*retaddr
+    78 multilabel *label58 (m:*label55)
+    79 set :charToInt*retval 63
 -    * jump *label14 always
-+   82 return :charToInt*retaddr
-    83 multilabel *label57 (m:*label56)
-    84 label *label54
-    85 set :charToInt*retval null
++   80 return :charToInt*retaddr
+    81 multilabel *label59 (m:*label55)
+    82 op sub :charToInt*retval :charToInt:ch 65
+    83 label *label14
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
  
-    83 multilabel *label57 (m:*label56)
-    84 label *label54
-    85 set :charToInt*retval null
+    80 return :charToInt*retaddr
+    81 multilabel *label59 (m:*label55)
+    82 op sub :charToInt*retval :charToInt:ch 65
 -    * label *label14
-    86 return :charToInt*retaddr
+    83 return :charToInt*retaddr
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1:
@@ -961,26 +976,23 @@ printchar :printbyte:ch
 label *label51
 jump *label3 notEqual :decode64:src null
 printflush message1
-assertprints "All Hail the King!" "Decoded value"
+assertprints "All Hail the King!" "Decoded value" # Origin: 46, keys: 97 .. 122
 end
 label *label0
-jump *label55 greaterThanEq :charToInt:ch 97
-jump *label54 lessThan :charToInt:ch 0
 multijump :charToInt:ch 0 0
-label *label55
-jump *label54 greaterThanEq :charToInt:ch 123
-op sub :charToInt*retval :charToInt:ch 71
+multilabel *label61
+multilabel *label56
+set :charToInt*retval null
 return :charToInt*retaddr
 multilabel *label60
-op sub :charToInt*retval :charToInt:ch 65
-return :charToInt*retaddr
-multilabel *label58
-set :charToInt*retval 62
-return :charToInt*retaddr
-multilabel *label59
-set :charToInt*retval 63
+op sub :charToInt*retval :charToInt:ch 71
 return :charToInt*retaddr
 multilabel *label57
-label *label54
-set :charToInt*retval null
+set :charToInt*retval 62
+return :charToInt*retaddr
+multilabel *label58
+set :charToInt*retval 63
+return :charToInt*retaddr
+multilabel *label59
+op sub :charToInt*retval :charToInt:ch 65
 return :charToInt*retaddr

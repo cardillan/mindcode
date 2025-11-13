@@ -165,16 +165,23 @@ public class OptimizationContext {
         return updated;
     }
 
+    public String getProgramText() {
+        BitSet unreachables = computeUnreachableInstructions();
+        return LogicInstructionPrinter.toStringWithSourceCode(instructionProcessor, program,
+                index -> String.format(" [%c] cx#%-4d", unreachables.get(index) ? ' ' : 'x', program.get(index).getAstContext().id));
+    }
+
+    public String getProgramTextFullAst() {
+        return LogicInstructionPrinter.toStringWithContextsFull(instructionProcessor, program);
+    }
+
     void debugPrintProgram(String title, boolean outputTitle) {
         if (OptimizationCoordinator.DEBUG_PRINT && traceActive) {
             if (!OptimizationCoordinator.TRACE || outputTitle) {
                 traceFile.outputProgram(title);
             }
-            BitSet unreachables = computeUnreachableInstructions();
             traceFile.outputProgram("Program before optimization:");
-            String text = LogicInstructionPrinter.toStringWithSourceCode(instructionProcessor, program,
-                    index -> String.format(" [%c] cx#%-4d", unreachables.get(index) ? ' ' : 'x', program.get(index).getAstContext().id));
-            traceFile.outputProgram(text);
+            traceFile.outputProgram(getProgramText());
         }
     }
 
@@ -1736,6 +1743,10 @@ public class OptimizationContext {
             return transformToContext(newContext, functionInlining, ix -> ix);
         }
 
+        public LogicList duplicateToContext(AstContext newContext, boolean remapLabels, boolean functionInlining) {
+            return transformToContext(newContext, remapLabels, functionInlining, ix -> ix);
+        }
+
         public @Nullable LogicList duplicateToContext(AstContext newContext, boolean functionInlining,
                 Predicate<LogicInstruction> matcher) {
             return transformToContext(newContext, functionInlining, ix -> matcher.test(ix) ? ix : null);
@@ -1743,12 +1754,17 @@ public class OptimizationContext {
 
         public LogicList transformToContext(AstContext newContext, boolean functionInlining,
                 Function<LogicInstruction, @Nullable LogicInstruction> transformer) {
+            return transformToContext(newContext, true, functionInlining, transformer);
+        }
+
+        public LogicList transformToContext(AstContext newContext, boolean remapLabels,
+                boolean functionInlining, Function<LogicInstruction, @Nullable LogicInstruction> transformer) {
             if (astContext == null) {
                 throw new MindcodeInternalError("No astContext");
             }
 
-            // Duplicate labels
-            Map<LogicLabel, LogicLabel> labelMap = duplicateLabels();
+            // Duplicate labels?
+            Map<LogicLabel, LogicLabel> labelMap = remapLabels ? duplicateLabels() : Map.of();
 
             Map<AstContext, AstContext> contextMap = astContext.copyChildrenTo(newContext, functionInlining);
             return new LogicList(contextMap.get(astContext), stream()

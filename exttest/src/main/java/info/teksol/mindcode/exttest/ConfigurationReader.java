@@ -2,9 +2,9 @@ package info.teksol.mindcode.exttest;
 
 import com.amihaiemil.eoyaml.*;
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.mindcode.compiler.optimization.Optimization;
-import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mc.profile.GenerationGoal;
+import info.teksol.mc.profile.options.CompilerOptionFactory;
+import info.teksol.mc.profile.options.CompilerOptionValue;
+import info.teksol.mc.profile.options.RunOptions;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -12,10 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @NullMarked
@@ -75,9 +72,7 @@ public class ConfigurationReader {
         inputFiles.registerLibraryFile(Path.of("__tmp" + sourceCounter.incrementAndGet()),
                 Files.readString(Path.of(source)));
 
-        Map<Optimization, List<OptimizationLevel>> optimizationLevels = getOptimizationLevels(mapping, defaults);
-        List<GenerationGoal> generationGoals = getGenerationGoals(mapping, defaults);
-        List<Boolean> symbolicLabels = getSymbolicLabels(mapping, defaults);
+        SequencedMap<Enum<?>, List<Object>> settings = getSettings(mapping, defaults);
         int sampleCount = integer(mapping, defaults, "samples");
         int failureLimit = integer(mapping, defaults, "failure-limit");
         boolean caseSwitchingTest = bool(mapping, defaults, "case-switching-test");
@@ -86,28 +81,30 @@ public class ConfigurationReader {
         configuration.addTestConfiguration(
                 source,
                 inputFiles,
-                optimizationLevels,
-                generationGoals,
-                symbolicLabels,
+                settings,
                 sampleCount,
                 failureLimit,
                 caseSwitchingTest ? 1 : 0,
                 run);
     }
 
-    private static Map<Optimization, List<OptimizationLevel>> getOptimizationLevels(YamlMapping mapping, YamlMapping defaults) {
-        Map<Optimization, List<OptimizationLevel>> result = new HashMap<>();
-        for (Optimization optimization : Optimization.values()) {
-            YamlSequence values = sequence(mapping, defaults, optimization.getOptionName());
-            if (values == null) {
-                result.put(optimization, List.of(OptimizationLevel.NONE));
-            } else {
-                result.put(optimization,
+    private static final Set<Enum<?>> ignoredOptions = Set.of(RunOptions.RUN);
+
+    private static SequencedMap<Enum<?>, List<Object>> getSettings(YamlMapping mapping, YamlMapping defaults) {
+        SequencedMap<Enum<?>, List<Object>> result = new LinkedHashMap<>();
+        Map<Enum<?>, CompilerOptionValue<?>> compilerOptions = CompilerOptionFactory.createCompilerOptions(false);
+
+        for (CompilerOptionValue<?> option : compilerOptions.values()) {
+            if (ignoredOptions.contains(option.getOption())) continue;
+
+            YamlSequence values = sequence(mapping, defaults, option.getOptionName());
+            if (values != null) {
+                result.put(option.getOption(),
                         values.values().stream()
                                 .map(YamlNode::asScalar)
                                 .map(Scalar::value)
                                 .map(String::trim)
-                                .map(s -> parseLevel(optimization.getOptionName(), s))
+                                .map(value -> parseSetting(option, value))
                                 .toList());
             }
         }
@@ -115,48 +112,12 @@ public class ConfigurationReader {
         return result;
     }
 
-    private static OptimizationLevel parseLevel(String settings, String level) throws ParseSettingException {
-        OptimizationLevel optimizationLevel = OptimizationLevel.byName(level);
-        if (optimizationLevel == null) {
-            throw new ParseSettingException(settings, level);
+    private static Object parseSetting(CompilerOptionValue<?> option, String value) throws ParseSettingException {
+        Object converted = option.convert(value);
+        if (converted == null) {
+            throw new ParseSettingException(option.getOptionName(), value);
         }
-        return optimizationLevel;
-    }
-
-    private static List<GenerationGoal> getGenerationGoals(YamlMapping mapping, YamlMapping defaults) {
-        YamlSequence values = sequence(mapping, defaults, "goal");
-        if (values == null) {
-            return List.of(GenerationGoal.SPEED);
-        } else {
-            return values.values().stream()
-                    .map(YamlNode::asScalar)
-                    .map(Scalar::value)
-                    .map(String::trim)
-                    .map(s -> parseGoal("goal", s))
-                    .toList();
-        }
-    }
-
-    private static List<Boolean> getSymbolicLabels(YamlMapping mapping, YamlMapping defaults) {
-        YamlSequence values = sequence(mapping, defaults, "symbolic-labels");
-        if (values == null) {
-            return List.of(Boolean.FALSE);
-        } else {
-            return values.values().stream()
-                    .map(YamlNode::asScalar)
-                    .map(Scalar::value)
-                    .map(String::trim)
-                    .map(Boolean::parseBoolean)
-                    .toList();
-        }
-    }
-
-    private static GenerationGoal parseGoal(String settings, String goal) throws ParseSettingException {
-        GenerationGoal generationGoal = GenerationGoal.byName(goal);
-        if (generationGoal == null) {
-            throw new ParseSettingException(settings, goal);
-        }
-        return generationGoal;
+        return converted;
     }
 
     private static @Nullable YamlNode node(YamlMapping mapping, YamlMapping defaults, String setting) {

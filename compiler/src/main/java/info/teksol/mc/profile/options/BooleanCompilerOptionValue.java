@@ -65,4 +65,19 @@ public class BooleanCompilerOptionValue extends CompilerOptionValue<Boolean> {
     public List<String> acceptedValues() {
         return List.of(trueValue, falseValue);
     }
+
+    @Override
+    public int encodeSize() {
+        return 2;
+    }
+
+    @Override
+    public int encode() {
+        return getValue() ? 1 : 0;
+    }
+
+    @Override
+    public void decode(int encoded) {
+        setValue(encoded == 1);
+    }
 }
