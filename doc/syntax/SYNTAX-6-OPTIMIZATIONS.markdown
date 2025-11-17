@@ -305,7 +305,7 @@ When text-based table dispatch is possible, it is always used by the compiler, a
 
 There's no jump in the last branch of an inlined table, saving one instruction execution when accessing elements served by the last branch. When arranged in natural order, the last branch contains the last element for unfolded tables, and the last element plus the middle one for folded tables. However, if the array has an odd number of elements, the last branch of a folded table serves only one element of the array.
 
-When text-based table dispatch is used, the branches can be arranged in any order. Therefore, branches in inlined tables are reversed with text-based table dispatch. This way, it is guaranteed that the last branch of a folded table will serve two elements (the first one and the middle one), and in case of unfolded tables, it will serve the first element. This brings small improvement to odd-sized arrays implemented by folded tables, and a possible improvement from putting the first array element on the best path (as the first element is accessed the most often by most algorithms, certainly more often than the last element).    
+When text-based table dispatch is used, the branches can be arranged in any order. Therefore, branches in inlined tables are reversed with text-based table dispatch. This way, it is guaranteed that the last branch of a folded table will serve two elements (the first one and the middle one), and in the case of unfolded tables, it will serve the first element. This brings a small improvement to odd-sized arrays implemented by folded tables, and a possible improvement from putting the first array element on the best path; as the first element is accessed the most often by most algorithms, certainly more often than the last element.    
 
 ### Code size and performance
 
@@ -399,7 +399,7 @@ The "setup index" instruction either multiplies the index by two or passes it as
 
 #### Non-inlined regular tables
 
-In case of regular arrays, the table accessing the elements for reading may be folded, if the array is not remote. Different shared jump tables exist for both read and write operations and are generated on demand. If both jump tables are generated, both count towards the size requirement.
+In the case of regular arrays, the table accessing the elements for reading may be folded if the array is not remote. Different shared jump tables exist for both read and write operations and are generated on demand. If both jump tables are generated, both count towards the size requirement.
 
 **Array access code size**
 
@@ -608,7 +608,7 @@ Mindcode may use [Jump table padding](#jump-table-padding) to be able to remove 
 
 ### Value translation
 
-In Mindustry 8, it is possible to [read character values from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. When the case expression assigns a single new value to a variable in each branch, and the values can be represented as integers in a reasonable range, the entire expression can be encoded as a `read` from a string containing the encoded values. In the basic case, the entire case expression can be replaced by a single `read` instruction. In more complex cases, additional instructions may be needed to handle some more specific cases. 
+In Mindustry 8, it is possible to [read character values from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. When the case expression assigns a single new value to a variable in each branch, and the values can be represented as integers in a reasonable range, the entire expression can be encoded as a `read` from a string containing the encoded values. In the basic case, the entire case expression can be replaced by a single `read` instruction. In more complex case expressions, additional instructions may be needed to handle some more specific cases. 
 
 Assuming the case expression conforms to the requirements described above, the following prerequisites need to be met for this optimization to be applied:
 
@@ -643,69 +643,111 @@ Assuming the case statement can be implemented using value translation, several 
     2. `input` is an integer, and `min(keys)` is negative: `input` is offset by `-min(keys)`,
     3. `input` is an integer, and `min(keys)` is above zero:
         1. the translation table is padded by `else` values up to `min(keys)`, if possible, or
-        2. `input` is offset by `-min(keys)`.
+        2. `input` is offset by `- min(keys)`.
 2. Output values cannot be mapped to characters valid for a string literal: an offset is added to output values which must then be subtracted. (Unfortunately, this subtraction damages null values naturally produced by the `read` instruction, may need to be compensated for later on.)
-3. Keys contain `null` (meaning a null value of `input` needs to be specifically handled):
-    1. `null` maps to the same value as zero: no action needed,
-    2. otherwise, a `null`-handling `select` will be added after translation.
-4. One of the output values is `null`:
-    1. `null` is on the else branch only, and no position in the map maps to the else branch: no handling needed,
-    2. otherwise the null-producing keys are mapped to an unused output value (a null placeholder), and a `select` converts it into a `null`.
+3. Keys contain `null` and the `null` key maps to a different value than the zero key (meaning a null value of `input` needs to be specifically handled):
+    1. `null` maps to a non-null value: `null`-handling `select` will be added after translation.
+    2. `null` maps to a branch which doesn't assign a new value: a `select` is used to restore the original value of the variable. 
+4. Some output values need special handling:
+    1. some keys produce `null`: the null-producing keys are mapped to an unused output value (a null placeholder), and a `select` converts it into a `null`.
+    2. some keys map to branches which don't assign a new value: the corresponding key is mapped to an unused output value (a void placeholder), and a `select` is later used to convert it back to the original variable. 
 5. Handling of values outside the mapping string (these values are always handed by the `else` branch):
-    1. the `else` branch doesn't output `null`: a `select` instruction converts the `null` produced by translation to the actual output value,
-    2. the `else` branch does output `null`, but this value is damaged by subtracting offset: the same handling as above.
-6. When an offset is used for values in the map (as per case 2), the else branch produces `null` (case 5.2), and an additional branch produces `null` or there is a position in the translation table mapping the key to the else branch (case 4.2), the `null` value is represented by a placeholder lower than all other values in the map and instructions 4 and 5 are replaced by a single instruction. This instruction sets the output to null when the result of `read` is less than or equal to the placeholder. This can happen in two ways - either `read` produces `null` or it produces the null placeholder.
+    1. the `else` branch doesn't output `null`, or it does output `null`, but this value is damaged by subtracting offset: a `select` instruction replaces the original `null` value produced by translation to the actual output value,
+    2. the `else` branch doesn't change the variable value: a `select` instruction handles the `null` produced by translation to restore the original variable.
+6. When the minimal output value in the translation map is greater than `1` (either naturally or because of the applied offset), it is possible to map the `else` values within the map to a value lower than all other output values. The `else` branch then produces values lower than the minimal output value (as `null` equals to `0` in non-strict comparisons), and just a single `select` instruction is needed to convert them to the actual output values. Two possible cases are handled this way:     
+    1. The else branch produces `null` (case 6.1), and an additional branch produces `null` or there is a position in the translation table mapping the key to the else branch (case 4.2): the `null` value is represented by a placeholder lower than all other values in the map, and case 4.2 and 6.1 are replaced by a single instruction.
+   2. The else branch doesn't modify the output variable (case 6.2), and there are positions in the map that also do not modify the output variable (case 5): the original variable value is represented by a placeholder lower than all other values in the map, and case 5 and 6.2 are replaced by a single instruction.
 7. Output values are a Mindustry content: additional mapping from logic ID to content is added.
 
-As has been mentioned in case 1.iii.a, the translation table can be padded on the lower end to avoid the need to offset the input value. Similarly, when the Mindustry content conversion is applied and the `builtin-evaluation` option is set to `full`, the translation table may be padded on the high end up to the largest ID of the respective Mindustry content, possibly avoiding the need to handle the situation in case 5.
+As has been mentioned in case 1.iii.a, the translation table can be padded on the lower end to avoid the need to offset the input value. Similarly, when the Mindustry content conversion is applied and the `builtin-evaluation` option is set to `full`, the translation table may be padded on the high end up to the largest ID of the respective Mindustry content, possibly avoiding the need to handle case 6.
 
-Instructions corresponding to the above cases:
+Instructions corresponding to the above cases (in the order in which they're generated):
 
-| Case | Instruction                                                                | Note              |
-|:----:|:---------------------------------------------------------------------------|:------------------|
-|  1   | `sensor tmp input @id` or `op sub tmp input minKeys`                       |                   |
-|  -   | `read origOutput "translation" input`                                      |                   |
-|  2   | `op sub output origOutput offset`                                          |                   |
-|  3   | `select output strictEqual input null nullOutput prevOutput`               |                   |
-|  4   | `select output equal origOutput nullPlaceholder null prevOutput`           |                   | 
-|  5   | `select output strictEqual origOutput null elseValue prevOutput`           |                   | 
-|  6   | `select output lessThanEq origOutput nullPlaceholder elseValue prevOutput` | Precludes 4 and 5 | 
-|  7   | `lookup <contentType> output prevOutput`                                   |                   |
+| Case | Instruction                                                                    | Note                 |
+|:----:|:-------------------------------------------------------------------------------|:---------------------|
+|  1   | `sensor tmp input @id` or `op sub tmp input minKeys`                           |                      |
+|  -   | `read origOutput "translation" input`                                          |                      |
+|  2   | `op sub output origOutput offset`                                              |                      |
+| 3.1  | `select output strictEqual input null nullOutput prevOutput`                   |                      |
+| 4.1  | `select output equal origOutput nullPlaceholder null prevOutput`               |                      | 
+| 5.1  | `select output strictEqual origOutput null elseValue prevOutput`               |                      | 
+| 6.1  | `select output lessThanEq origOutput nullPlaceholder elseValue prevOutput`     | Combines 4.1 and 5.1 | 
+|  7   | `lookup <contentType> output prevOutput`                                       |                      |
+| 3.2  | `select output strictEqual input null initialOutput prevOutput`                |                      |
+| 4.2  | `select output equal origOutput voidPlaceholder initialOutput prevOutput`      |                      | 
+| 5.2  | `select output strictEqual origOutput null initialOutput prevOutput`           |                      | 
+| 6.2  | `select output lessThanEq origOutput voidPlaceholder initialOutput prevOutput` | Combines 4.2 and 5.2 | 
 
-Note: `prevOutput` holds the output value from the previous step, `origOutput` or `output` is the output from the current step. The last output value produced by the code is the resulting value of the translation.
+Description of the variable names used in the table above:
+* `initialOutput`: the original value of the output variable,
+* `prevOutput`: holds the output value from the previous step,
+* `origOutput` or `output` is the output from the current step.
 
-When [`unsafe-case-optimization`](SYNTAX-5-OTHER.markdown#option-unsafe-case-optimization) is set to `true`, the handling of case 5 and sometimes case 4 may be omitted, as it is supposed not to occur.
+The last output value produced by the code is the resulting value of the translation. Instructions which restore the initial value of the output variable are placed after the `lookup` instruction to avoid the need to convert the input value to logic id first. 
 
-The most complex value translations consist of seven instructions. When the optimization goal is speed, another solution will probably perform better than the more complex cases. When optimizing for size, though, even the largest value translations are easily smaller than any of the alternatives:
+When [`unsafe-case-optimization`](SYNTAX-5-OTHER.markdown#option-unsafe-case-optimization) is set to `true`, the handling of case 6 and sometimes case 4 may be omitted, as it is supposed not to occur.
+
+The most complex value translations consist of up to eight instructions. When the optimization goal is speed, another solution will probably perform better than the more complex cases. When optimizing for size, though, even the largest value translations may be smaller than any of the alternatives:
 
 ```Mindcode
 #set target = 8;
 #set goal = size;
-param input = @copper;
-volatile var output = case input
-    when @copper      then @silicon;              
-    when null         then @lead;                   // causes case 2
-    when @coal        then @copper;                 // causes case 3
-    when @lead        then null;                    // causes case 4
-    else @scrap;                                    // causes case 5
+volatile var value;
+case value
+    when @copper      then value = @silicon;
+    when null         then value = @lead;                   // causes case 2
+    when @coal        then value = @copper;                 // causes case 3.1
+    when @lead        then value = null;                    // causes case 4.1
+    when @silicon     then null;                            // causes case 4.2
+    else value = @scrap;                                    // causes case 5.1
 end;
 ```
 
 produces
 
 ```mlog
-set input @copper
-sensor *tmp1 input @id
-read *tmp2 "9:8880" *tmp1
-op sub *tmp3 *tmp2 48
-select *tmp4 strictEqual *tmp1 null @lead *tmp3
-select *tmp5 equal *tmp2 58 null *tmp4
-select *tmp6 strictEqual *tmp2 null @scrap *tmp5
-lookup item .output *tmp6
+sensor *tmp2 .value @id
+read *tmp3 "9:8880888;" *tmp2
+op sub *tmp4 *tmp3 48
+select *tmp5 strictEqual *tmp2 null 1 *tmp4
+select *tmp6 equal *tmp3 58 null *tmp5
+select *tmp7 strictEqual *tmp3 null 8 *tmp6
+lookup item *tmp8 *tmp7
+select .value equal *tmp3 59 .value *tmp8
+```
+
+**Multiple value translations**
+
+When a single case expression assigns new values to several distinct variables, the optimization may be applied to each of them separately. Handling of the input value (e.g., translating it to logic id or applying an offset) is performed just once and shared by all translated variables. Example:
+
+```Mindcode
+#set target = 8;
+#set goal = size;
+a = '0';
+while true do
+    case a
+        when '0' then a = '1'; b = 'a';
+        when '1' then a = '2'; b = 'b';
+        when '2' then a = '0'; b = 'c';
+    end;
+    printchar(a);
+    printchar(b);
+end;
+```
+compiles to:
+```mlog
+set :a 48
+read *tmp2 "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!abc" :a
+select :b lessThanEq *tmp2 33 :b *tmp2
+read *tmp4 "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!120" :a
+select :a lessThanEq *tmp4 33 :a *tmp4
+printchar :a
+printchar :b
+jump 1 always 0 0
 ```
 
 > [!NOTE]
-> The text translation optimization works best when using readable characters as values produced by the case expression. This can be easily achieved by using character literals Mindcode provides (as seen in the first translation example [here](#value-translation)).
+> The text translation optimization works best when using readable characters as values produced by the case expression. This can be easily achieved by using character literals Mindcode provides, as demonstrated in the last example.
 
 ### Fast dispatch
 
@@ -1220,7 +1262,7 @@ Function Inlining is a [dynamic optimization](#static-and-dynamic-optimizations)
 
 Function inlining converts out-of-line function calls into inline function calls. This conversion alone saves a few execution steps: storing the return address, jumping to the function body, and jumping back at the original address. However, additional optimizations might be available once a function is inlined, especially if the inlined function call is using constant argument values. In such a situation, many other powerful optimizations, such as constant folding or loop unrolling, may become available.
 
-User-defined, non-recursive function which is called just once in the entire program, is automatically inlined, and this cannot be prevented except by the `noinline` keyword: such code is always both faster and smaller. It is also possible to declare individual functions using the `inline` keyword, forcing all calls of such functions to be inlined.
+User-defined, non-recursive function which is called just once in the entire program is automatically inlined, and this cannot be prevented except by the `noinline` keyword: such code is always both faster and smaller. It is also possible to declare individual functions using the `inline` keyword, forcing all calls of such functions to be inlined.
 
 ### Automatic function inlining
 

@@ -4,7 +4,7 @@
     62 instructions eliminated by Dead Code Elimination (6 iterations).
      3 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
      9 instructions eliminated by Jump Optimization (5 iterations).
-    33 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
+    34 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
    278 instructions eliminated by Data Flow Optimization (4 passes, 27 iterations).
      6 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -16,7 +16,7 @@
     51 instructions updated by Jump Threading.
    251 instructions eliminated by Unreachable Code Elimination (2 iterations).
     14 instructions eliminated by Print Merging.
-   595 instructions after optimizations.
+   594 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 630):
     Replicate loop condition at line 58:1                        size    +7, benefit       25.0, efficiency      3.571
@@ -8186,7 +8186,7 @@ Modifications by Jumps phase, Dead Code Elimination, pass 4, iteration 1:
    788 multijump *tmp35 0 0 (m:marker1)
    789 multilabel *label68 (m:marker1)
 
-Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-24 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-25 instructions):
  
     77 # "Function: inline def eraseImages(in first_column)"
     78 draw color 0 0 80 255
@@ -8257,49 +8257,57 @@ Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-24 
    125 set :index 0
    126 set :item @sand
  
-   321 op sub :displayItem:x :x 11
-   322 op idiv :displayItem:amount :displayItem:amount 10
-   323 jump *label82 equal :displayItem:amount 0
+   212 jump *label162 always
+   213 label *label78
+   214 draw color 0 255 0 255
+-    * jump *label162 always
+   215 label *label162
+   216 op mod *tmp133 :displayItem:amount 10
+   217 # "Function: inline def drawDigit(in x, in y, in digit)"
+ 
+   320 op sub :displayItem:x :x 11
+   321 op idiv :displayItem:amount :displayItem:amount 10
+   322 jump *label82 equal :displayItem:amount 0
 -    * jump *label212 always
-   324 label *label212
-   325 op mod *tmp133 :displayItem:amount 10
-   326 # "Function: inline def drawDigit(in x, in y, in digit)"
+   323 label *label212
+   324 op mod *tmp133 :displayItem:amount 10
+   325 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   429 op sub :displayItem:x :x 22
-   430 op idiv :displayItem:amount :displayItem:amount 10
-   431 jump *label82 equal :displayItem:amount 0
+   428 op sub :displayItem:x :x 22
+   429 op idiv :displayItem:amount :displayItem:amount 10
+   430 jump *label82 equal :displayItem:amount 0
 -    * jump *label262 always
-   432 label *label262
-   433 op mod *tmp133 :displayItem:amount 10
-   434 # "Function: inline def drawDigit(in x, in y, in digit)"
+   431 label *label262
+   432 op mod *tmp133 :displayItem:amount 10
+   433 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   537 op sub :displayItem:x :x 33
-   538 op idiv :displayItem:amount :displayItem:amount 10
-   539 jump *label82 equal :displayItem:amount 0
+   536 op sub :displayItem:x :x 33
+   537 op idiv :displayItem:amount :displayItem:amount 10
+   538 jump *label82 equal :displayItem:amount 0
 -    * jump *label312 always
-   540 label *label312
-   541 op mod *tmp133 :displayItem:amount 10
-   542 # "Function: inline def drawDigit(in x, in y, in digit)"
+   539 label *label312
+   540 op mod *tmp133 :displayItem:amount 10
+   541 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   645 op sub :displayItem:x :x 44
-   646 op idiv :displayItem:amount :displayItem:amount 10
-   647 jump *label82 equal :displayItem:amount 0
+   644 op sub :displayItem:x :x 44
+   645 op idiv :displayItem:amount :displayItem:amount 10
+   646 jump *label82 equal :displayItem:amount 0
 -    * jump *label362 always
-   648 label *label362
-   649 op mod *tmp133 :displayItem:amount 10
-   650 # "Function: inline def drawDigit(in x, in y, in digit)"
+   647 label *label362
+   648 op mod *tmp133 :displayItem:amount 10
+   649 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   759 set :x 157
-   760 # "Function: inline def eraseNumbers(in first_column)"
-   761 draw color 0 0 80 255
+   758 set :x 157
+   759 # "Function: inline def eraseNumbers(in first_column)"
+   760 draw color 0 0 80 255
 -    * jump *label134 always
-   762 label *label134
-   763 draw rect 109 0 176 176
-   764 label *label131
+   761 label *label134
+   762 draw rect 109 0 176 176
+   763 label *label131
  
-   782 op equal *tmp17 .LINKS @links
-   783 op land *tmp18 *tmp16 *tmp17
-   784 jump *label486 notEqual *tmp18 false
+   781 op equal *tmp17 .LINKS @links
+   782 op land *tmp18 *tmp16 *tmp17
+   783 jump *label486 notEqual *tmp18 false
 -    * end
 
 Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
@@ -8356,45 +8364,45 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
    108 set :item @sand
    109 op add *tmp35 @counter 1
  
-   303 op sub :displayItem:x :x 11
-   304 op idiv :displayItem:amount :displayItem:amount 10
-   305 jump *label82 equal :displayItem:amount 0
+   302 op sub :displayItem:x :x 11
+   303 op idiv :displayItem:amount :displayItem:amount 10
+   304 jump *label82 equal :displayItem:amount 0
 -    * label *label212
-   306 op mod *tmp133 :displayItem:amount 10
-   307 # "Function: inline def drawDigit(in x, in y, in digit)"
-   308 multijump *label525 *tmp133 0 (m:*label524)
+   305 op mod *tmp133 :displayItem:amount 10
+   306 # "Function: inline def drawDigit(in x, in y, in digit)"
+   307 multijump *label525 *tmp133 0 (m:*label524)
  
-   410 op sub :displayItem:x :x 22
-   411 op idiv :displayItem:amount :displayItem:amount 10
-   412 jump *label82 equal :displayItem:amount 0
+   409 op sub :displayItem:x :x 22
+   410 op idiv :displayItem:amount :displayItem:amount 10
+   411 jump *label82 equal :displayItem:amount 0
 -    * label *label262
-   413 op mod *tmp133 :displayItem:amount 10
-   414 # "Function: inline def drawDigit(in x, in y, in digit)"
-   415 multijump *label549 *tmp133 0 (m:*label548)
+   412 op mod *tmp133 :displayItem:amount 10
+   413 # "Function: inline def drawDigit(in x, in y, in digit)"
+   414 multijump *label549 *tmp133 0 (m:*label548)
  
-   517 op sub :displayItem:x :x 33
-   518 op idiv :displayItem:amount :displayItem:amount 10
-   519 jump *label82 equal :displayItem:amount 0
+   516 op sub :displayItem:x :x 33
+   517 op idiv :displayItem:amount :displayItem:amount 10
+   518 jump *label82 equal :displayItem:amount 0
 -    * label *label312
-   520 op mod *tmp133 :displayItem:amount 10
-   521 # "Function: inline def drawDigit(in x, in y, in digit)"
-   522 multijump *label573 *tmp133 0 (m:*label572)
+   519 op mod *tmp133 :displayItem:amount 10
+   520 # "Function: inline def drawDigit(in x, in y, in digit)"
+   521 multijump *label573 *tmp133 0 (m:*label572)
  
-   624 op sub :displayItem:x :x 44
-   625 op idiv :displayItem:amount :displayItem:amount 10
-   626 jump *label82 equal :displayItem:amount 0
+   623 op sub :displayItem:x :x 44
+   624 op idiv :displayItem:amount :displayItem:amount 10
+   625 jump *label82 equal :displayItem:amount 0
 -    * label *label362
-   627 op mod *tmp133 :displayItem:amount 10
-   628 # "Function: inline def drawDigit(in x, in y, in digit)"
-   629 multijump *label597 *tmp133 0 (m:*label596)
+   626 op mod *tmp133 :displayItem:amount 10
+   627 # "Function: inline def drawDigit(in x, in y, in digit)"
+   628 multijump *label597 *tmp133 0 (m:*label596)
  
-   737 set :x 157
-   738 # "Function: inline def eraseNumbers(in first_column)"
-   739 draw color 0 0 80 255
+   736 set :x 157
+   737 # "Function: inline def eraseNumbers(in first_column)"
+   738 draw color 0 0 80 255
 -    * label *label134
-   740 draw rect 109 0 176 176
-   741 label *label131
-   742 multijump *tmp35 0 0 (m:marker1)
+   739 draw rect 109 0 176 176
+   740 label *label131
+   741 multijump *tmp35 0 0 (m:marker1)
 
 Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
  
@@ -8450,20 +8458,20 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
     52 printflush .MESSAGE
     53 jump *label0 equal .CONTAINER null
  
-   734 drawflush display1
-   735 op sub *tmp233 @time :start
-   736 op floor :elapsed *tmp233
+   733 drawflush display1
+   734 op sub *tmp233 @time :start
+   735 op floor :elapsed *tmp233
 -    * print "Storage Display"
 -    * print "\n"
 -    * print "Elapsed: "
 -    * print :elapsed
 -    * print " "
 -    * print "ms"
-+  737 print "Storage Display\nElapsed: {0} ms"
-+  738 format :elapsed
-   739 printflush message1
-   740 sensor *tmp12 .CONTAINER @dead
-   741 op equal *tmp13 *tmp12 0
++  736 print "Storage Display\nElapsed: {0} ms"
++  737 format :elapsed
+   738 printflush message1
+   739 sensor *tmp12 .CONTAINER @dead
+   740 op equal *tmp13 *tmp12 0
 
 Final code before resolving virtual instructions:
 
@@ -8654,7 +8662,6 @@ draw color 255 80 80 255
 jump *label162 always
 label *label78
 draw color 0 255 0 255
-jump *label162 always
 label *label162
 op mod *tmp133 :displayItem:amount 10
 # "Function: inline def drawDigit(in x, in y, in digit)"

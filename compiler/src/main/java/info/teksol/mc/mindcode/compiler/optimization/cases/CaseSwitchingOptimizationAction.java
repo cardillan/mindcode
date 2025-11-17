@@ -252,7 +252,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
         int activeTargets = param.caseExpression().targetCount(segment);
 
         SegmentStats stats = switch (segment.type()) {
-            case SINGLE -> computeSingleSegment(segment, activeTargets);
+            case SINGLE -> computeSingleSegment(segment);
             case MIXED -> computeMixedSegment(segment, activeTargets);
             case JUMP_TABLE -> computeJumpTable(segment, activeTargets);
         };
@@ -295,7 +295,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
         return best;
     }
 
-    private SegmentStats computeSingleSegment(Segment segment, int activeTargets) {
+    private SegmentStats computeSingleSegment(Segment segment) {
         int size = segment.inline() || segment.embedded() ? 0 : 1;
         int steps = segment.inline() || segment.embedded() ? 0 : segment.size();
         int nullSteps = segment.handleNulls() ? segment.size() : 0;  // Only for empty segments, these can't be direct
@@ -478,14 +478,15 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
                     LabelInstruction labelInstruction = optimizationContext.getLabelInstruction(updatedTarget);
                     LogicLabel jumpLabel = instructionProcessor.nextLabel();
                     labelMap.put(updatedTarget, jumpLabel);
-                    optimizationContext.insertBefore(labelInstruction, createMultiLabel(labelInstruction.getAstContext(), jumpLabel, marker).setJumpTarget());
+                    optimizationContext.insertBefore(labelInstruction, createMultiLabel(labelInstruction.getAstContext(), jumpLabel, marker)
+                            .setJumpTarget().setFixedMultilabel(false));
                 }
                 labels.add(labelMap.get(updatedTarget));
             }
 
             insertInstruction(createMultiJump(newAstContext, caseVariable, marker).setJumpTable(labels));
         } else {
-            List<LogicLabel> labels = IntStream.range(segment.from(), segment.to()).mapToObj(i -> instructionProcessor.nextLabel()).toList();
+            List<LogicLabel> labels = IntStream.range(segment.from(), segment.to()).mapToObj(_ -> instructionProcessor.nextLabel()).toList();
             insertInstruction(createMultiJump(newAstContext, labels.getFirst(), caseVariable, LogicNumber.create(segment.from()), marker));
             int end = labels.size() - (segment.embedded() ? 1 : 0);
 
@@ -589,16 +590,16 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
     }
 
     // Returns true if the zero key can be retargeted:
-    // Either nulls cannot appear, or the zero target is not shared with anything else.
+    // Either nulls cannot appear, or the `0` target is not shared with anything else.
     private boolean canEmbedZero() {
         // No nulls
         if (!param.handleNulls()) return true;
 
-        // No zero target: zero cannot be embedded (won't be even attempted, so it is meaningless).
+        // No `0` target: zero cannot be embedded (won't be even attempted, so it is meaningless).
         LogicLabel zeroLabel = param.caseExpression().get(0);
         if (zeroLabel == null) return false;
 
-        // Return true if the zero target is not shared with anything else
+        // Return true if the `0` target is not shared with anything else
         return param.caseExpression().entrySet().stream().noneMatch(e -> e.getKey() != 0 && e.getValue().label == zeroLabel);
     }
 

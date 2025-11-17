@@ -99,7 +99,7 @@ public class CaseSwitcher extends BaseOptimizer {
         invocations++;
         List<OptimizationAction> result = new ArrayList<>();
         forEachContext(AstContextType.CASE, BASIC,
-                returningNull((context -> findPossibleCaseSwitches(context, costLimit, result))));
+                returningNull((context -> findPossibleCaseSwitches(context, result))));
         return result;
     }
 
@@ -127,7 +127,7 @@ public class CaseSwitcher extends BaseOptimizer {
         return applyOptimization(optimization, title, () -> fastDispatchedCount++);
     }
 
-    private void findPossibleCaseSwitches(AstContext context, int costLimit, List<OptimizationAction> result) {
+    private void findPossibleCaseSwitches(AstContext context, List<OptimizationAction> result) {
         groupCount++;
 
         boolean declaredElseBranch = !(context.node() instanceof AstCaseExpression exp) || exp.isElseDefined();
@@ -142,8 +142,10 @@ public class CaseSwitcher extends BaseOptimizer {
                 getGlobalProfile().isSymbolicLabels(), caseExpression.hasDeclaredElseBranch() && caseExpression.getElseValues() > 0);
 
         List<ConvertCaseOptimizationAction> actions = new ArrayList<>();
-        TranslateCaseOptimizationAction.create(++actionCounter, optimizationContext,
-                this::applyTranslatedOptimization, param).ifPresent(actions::add);
+        if (caseExpression.supportsTranslation()) {
+            TranslateCaseOptimizationAction.create(++actionCounter, optimizationContext,
+                    this::applyTranslatedOptimization, param).ifPresent(actions::add);
+        }
 
         if (getGlobalProfile().isNullCounterIsNoop() && context.getLocalProfile().useTextJumpTables()) {
             actions.add(new FastDispatchOptimizationAction(++actionCounter, optimizationContext,

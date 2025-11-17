@@ -266,14 +266,14 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end);
                             """,
                     createInstruction(SET, "p", "0"),
-                    createInstruction(MULTIJUMP, label(10), "p", "0"),
-                    createInstruction(MULTILABEL, label(10)),
-                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTIJUMP, label(11), "p", "0"),
                     createInstruction(MULTILABEL, label(11)),
-                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(JUMP, label(2), "always"),
                     createInstruction(MULTILABEL, label(12)),
-                    createInstruction(JUMP, label(6), "always"),
+                    createInstruction(JUMP, label(4), "always"),
                     createInstruction(MULTILABEL, label(13)),
+                    createInstruction(JUMP, label(6), "always"),
+                    createInstruction(MULTILABEL, label(14)),
                     createInstruction(JUMP, label(8), "always"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(SET, tmp(0), q("0")),
@@ -286,7 +286,6 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(8)),
                     createInstruction(SET, tmp(0), q("3")),
-                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, tmp(0))
             );
@@ -390,25 +389,24 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end);
                             """,
                     createInstruction(SET, "p", "5"),
-                    createInstruction(MULTIJUMP, label(6), "p", "4"),
-                    createInstruction(MULTILABEL, label(6)),
-                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTIJUMP, label(7), "p", "4"),
                     createInstruction(MULTILABEL, label(7)),
-                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(JUMP, label(2), "always"),
                     createInstruction(MULTILABEL, label(8)),
-                    createInstruction(JUMP, label(2), "always"),
-                    createInstruction(MULTILABEL, label(9)),
                     createInstruction(JUMP, label(4), "always"),
-                    createInstruction(MULTILABEL, label(10)),
+                    createInstruction(MULTILABEL, label(9)),
                     createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTILABEL, label(10)),
+                    createInstruction(JUMP, label(4), "always"),
                     createInstruction(MULTILABEL, label(11)),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTILABEL, label(12)),
                     createInstruction(JUMP, label(4), "always"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(SET, tmp(0), q("A")),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(4)),
                     createInstruction(SET, tmp(0), q("B")),
-                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, tmp(0))
             );
@@ -1044,10 +1042,140 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end);
                             """,
                     createInstruction(SET, "input", "0"),
-                    createInstruction(READ, tmp(1), q("000 111"), "input"),
+                    createInstruction(READ, tmp(1), q("000!111"), "input"),
                     createInstruction(OP, "sub", tmp(2), tmp(1), "48"),
-                    createInstruction(SELECT, tmp(0), "lessThanEq", tmp(1), "32", "null", tmp(2)),
+                    createInstruction(SELECT, tmp(0), "lessThanEq", tmp(1), "33", "null", tmp(2)),
                     createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void processesVoids() {
+            assertCompilesTo("""
+                            volatile a = '0';
+                            case a
+                                when '0' then a = '1';
+                                when '1' then a = '2';
+                                when '2' then a = '0';
+                            end;
+                            """,
+                    createInstruction(SET, ".a", "48"),
+                    createInstruction(READ, tmp(2), q("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!120"), ".a"),
+                    createInstruction(SELECT, ".a", "lessThanEq", tmp(2), "33", ".a", tmp(2))
+            );
+        }
+
+        @Test
+        void processesVoidsWithContent() {
+            assertCompilesTo("""
+                            #set goal = size;
+                            noinit volatile a;
+                            case a
+                                when @copper then a = @lead;
+                                when @lead then a = @metaglass;
+                                when @metaglass then a = @copper;
+                            end;
+                            """,
+                    createInstruction(SENSOR, tmp(2), ".a", "@id"),
+                    createInstruction(READ, tmp(3), q("120"), tmp(2)),
+                    createInstruction(OP, "sub", tmp(4), tmp(3), "48"),
+                    createInstruction(LOOKUP, "item", tmp(5), tmp(4)),
+                    createInstruction(SELECT, tmp(6), "strictEqual", tmp(2), "null", ".a", tmp(5)),
+                    createInstruction(SELECT, ".a", "lessThanEq", tmp(3), "33", ".a", tmp(6))
+            );
+        }
+
+        @Test
+        void processesNullVoidsWithContent() {
+            assertCompilesTo("""
+                            #set goal = size;
+                            noinit volatile a;
+                            case a
+                                when null then null;
+                                when @copper then a = @lead;
+                                when @lead then a = @metaglass;
+                                when @metaglass then a = @copper;
+                                else a = @silicon;
+                            end;
+                            """,
+                    createInstruction(SENSOR, tmp(2), ".a", "@id"),
+                    createInstruction(READ, tmp(3), q("120"), tmp(2)),
+                    createInstruction(OP, "sub", tmp(4), tmp(3), "48"),
+                    createInstruction(SELECT, tmp(5), "strictEqual", tmp(3), "null", "9", tmp(4)),
+                    createInstruction(LOOKUP, "item", tmp(6), tmp(5)),
+                    createInstruction(SELECT, tmp(7), "strictEqual", tmp(2), "null", ".a", tmp(6)),
+                    createInstruction(SELECT, ".a", "equal", tmp(3), "59", ".a", tmp(7))
+            );
+        }
+
+        @Test
+        void processesKeyVoidsWithContent() {
+            assertCompilesTo("""
+                            #set goal = size;
+                            noinit volatile a;
+                            case a
+                                when @copper then a = @lead;
+                                when @lead then null;
+                                when @metaglass then a = @copper;
+                                else a = @silicon;
+                            end;
+                            """,
+                    createInstruction(SENSOR, tmp(2), ".a", "@id"),
+                    createInstruction(READ, tmp(3), q("1;0"), tmp(2)),
+                    createInstruction(OP, "sub", tmp(4), tmp(3), "48"),
+                    createInstruction(SELECT, tmp(5), "strictEqual", tmp(2), "null", "9", tmp(4)),
+                    createInstruction(SELECT, tmp(6), "strictEqual", tmp(3), "null", "9", tmp(5)),
+                    createInstruction(LOOKUP, "item", tmp(7), tmp(6)),
+                    createInstruction(SELECT, ".a", "equal", tmp(3), "59", ".a", tmp(7))
+            );
+        }
+
+        @Test
+        void processesKeyElseVoidsWithContent() {
+            assertCompilesTo("""
+                            #set goal = size;
+                            noinit volatile a;
+                            case a
+                                when @copper then a = @lead;
+                                when @lead then null;
+                                when @metaglass then a = @copper;
+                            end;
+                            """,
+                    createInstruction(SENSOR, tmp(2), ".a", "@id"),
+                    createInstruction(READ, tmp(3), q("1!0"), tmp(2)),
+                    createInstruction(OP, "sub", tmp(4), tmp(3), "48"),
+                    createInstruction(LOOKUP, "item", tmp(5), tmp(4)),
+                    createInstruction(SELECT, tmp(6), "strictEqual", tmp(2), "null", ".a", tmp(5)),
+                    createInstruction(SELECT, ".a", "lessThanEq", tmp(3), "33", ".a", tmp(6))
+            );
+        }
+
+        @Test
+        void processesMultipleTranslations() {
+            assertCompilesTo("""
+                            #set target = 8;
+                            #set goal = size;
+                            a = b = '0';
+                            while true do
+                                case a
+                                    when '0' then a = 'b'; b = '1';
+                                    when '1' then a = 'c'; b = '2';
+                                    when '2' then a = 'a'; b = '3';
+                                end;
+                                printchar(a);
+                                printchar(b);
+                            end;
+                            """,
+                    createInstruction(SET, ":b", "48"),
+                    createInstruction(SET, ":a", "48"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(READ, tmp(2), q("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!123"), ":a"),
+                    createInstruction(SELECT, ":b", "lessThanEq", tmp(2), "33", ":b", tmp(2)),
+                    createInstruction(READ, tmp(4), q("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!bca"), ":a"),
+                    createInstruction(SELECT, ":a", "lessThanEq", tmp(4), "33", ":a", tmp(4)),
+                    createInstruction(PRINTCHAR, ":a"),
+                    createInstruction(PRINTCHAR, ":b"),
+                    createInstruction(JUMP, label(0), "always")
             );
         }
     }

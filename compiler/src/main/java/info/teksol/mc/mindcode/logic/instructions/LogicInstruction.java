@@ -37,8 +37,6 @@ public interface LogicInstruction extends MlogInstruction {
 
     @Nullable AstContext findContextOfType(AstContextType contextType);
 
-    @Nullable AstContext findTopContextOfType(AstContextType contextType);
-
     default boolean affectsControlFlow() {
         return false;
     }
@@ -61,11 +59,11 @@ public interface LogicInstruction extends MlogInstruction {
     /// resolved to more (or less) real instructions.
     ///
     /// Some instructions might implicitly generate code that can be shared among several different instructions
-    /// (e.g. internal array jump tables). Instructions create an unambiguous identifier for each such structure,
+    /// (e.g., internal array jump tables). Instructions create an unambiguous identifier for each such structure
     /// and put the size of each such structure into the sharedStructures map.
     ///
     /// @param sharedStructures map to keep the shared structure size. An instruction may increase the size of the
-    ///                         shared structure, but not decrease it. When null, the caller isn't interested
+    ///                         shared structure but not decrease it. When null, the caller isn't interested
     ///                         in shared structure calculation.
     /// @return real size of the instruction
     default int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
@@ -173,6 +171,22 @@ public interface LogicInstruction extends MlogInstruction {
 
     default LogicInstruction setSelectOperation() {
         return setInfo(InstructionInfo.SELECT_OPERATION, true);
+    }
+
+    default boolean isFallThrough() {
+        return (boolean) getInfo(InstructionInfo.FALL_THROUGH);
+    }
+
+    default LogicInstruction setFallThrough(boolean fallThrough) {
+        return setInfo(InstructionInfo.FALL_THROUGH, fallThrough);
+    }
+
+    default boolean isFixedMultilabel() {
+        return (boolean) getInfo(InstructionInfo.FIXED_MULTILABEL);
+    }
+
+    default LogicInstruction setFixedMultilabel(boolean fixedMultilabel) {
+        return setInfo(InstructionInfo.FIXED_MULTILABEL, fixedMultilabel);
     }
 
     default LocalCompilerProfile getLocalProfile() {

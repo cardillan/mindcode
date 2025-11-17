@@ -45,12 +45,12 @@ public class ValueAnalyzer {
 
         ContentType category = categorize(value);
 
-        if (first) {
+        if (first || category == null) {
             contentType = category;
             first = false;
         }
 
-        return getContentType() == category && getContentType() != null;
+        return contentType != null;
     }
 
     public boolean inspectRange(int rangeLowValue, int rangeHighValue) {
@@ -67,7 +67,7 @@ public class ValueAnalyzer {
     }
 
     public @Nullable ContentType categorize(LogicValue value) {
-        if (value.isNumericConstant() && value.isInteger()) {
+        if (value.isNumericConstant() && value.isInteger() && value.getIntValue() < Integer.MAX_VALUE) {
             registerValue(value.getIntValue());
             return ContentType.UNKNOWN;
         } else if (allowMindustryContent && value instanceof LogicBuiltIn builtIn && builtIn.getObject() != null && canConvert(builtIn)) {

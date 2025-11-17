@@ -12,6 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
@@ -25,6 +26,9 @@ public class CaseExpression {
     private final NavigableMap<Integer, Branch> targets = new TreeMap<>();
     private final List<Branch> branchList = new ArrayList<>();
     private boolean hasZeroKey;
+
+    // Can translation be used?
+    private boolean translation = true;
 
     private @Nullable LogicLabel nullTarget;        // Handles null only
     private @Nullable LogicLabel nullOrElseTarget;  // Handles else or null
@@ -57,6 +61,7 @@ public class CaseExpression {
         this.targets.putAll(other.targets);
         this.branchList.addAll(other.branchList);
         this.hasZeroKey = other.hasZeroKey;
+        this.translation = other.translation;
         this.nullTarget = other.nullTarget;
         this.nullOrElseTarget = other.nullOrElseTarget;
         this.branch = other.branch;
@@ -78,7 +83,6 @@ public class CaseExpression {
     }
 
     private void computeElseValues(ContentType contentType, MindustryMetadata metadata, boolean fullBuiltinEvaluation) {
-        final LogicLabel label = LogicLabel.EMPTY;
         int count = 0;
         for (int key : targets.keySet()) {
             targetCount.put(key, count++);
@@ -226,6 +230,14 @@ public class CaseExpression {
         }
     }
 
+    private void disableTranslation() {
+        translation = false;
+    }
+
+    public boolean supportsTranslation() {
+        return translation;
+    }
+
     public Branch getElseBranch() {
         return Objects.requireNonNull(elseBranch);
     }
@@ -299,7 +311,7 @@ public class CaseExpression {
         if (ix instanceof SetInstruction set) {
             branch.addAssignment(set.getResult(), set.getValue());
         } else if (size > 0) {
-            branch.resetAssignments();
+            disableTranslation();
         }
 
         return true;
@@ -321,13 +333,16 @@ public class CaseExpression {
         return branches.get(label).codeSize;
     }
 
-    public static class Branch {
+    public Set<LogicVariable> getAssignmentTargets() {
+        return branches.values().stream().flatMap(b -> b.assignments.keySet().stream()).collect(Collectors.toSet());
+    }
+
+    public class Branch {
         public final LogicLabel label;
 
         // If the branch assigns a single value to a single variable, it will be recorded here
-        private @Nullable LogicVariable assignTarget = null;
-        private @Nullable LogicValue assignValue = null;
-        private @Nullable Integer integerValue = null;
+        private final Map<LogicVariable, LogicValue> assignments = new HashMap<>();
+        private final Map<LogicVariable, Integer> integerValues = new HashMap<>();
 
         // Cardinality of the set of keys leading to this branch
         private int cardinality;
@@ -340,17 +355,13 @@ public class CaseExpression {
         }
 
         private void addAssignment(LogicVariable target, LogicValue value) {
-            if (assignTarget == null) {
-                assignTarget = target;
-                assignValue = value;
-            } else if (!assignTarget.equals(target) || !Objects.equals(assignValue, value)) {
-                resetAssignments();
+            // If target equals value, it is a no-op
+            if (!target.equals(value)) {
+                LogicValue previous = assignments.put(target, value);
+                if (previous != null && !previous.equals(value)) {
+                    disableTranslation();
+                }
             }
-        }
-
-        private void resetAssignments() {
-            assignTarget = LogicVariable.INVALID;
-            assignValue = LogicVoid.VOID;
         }
 
         private void addSize(int size) {
@@ -361,20 +372,27 @@ public class CaseExpression {
             return cardinality;
         }
 
-        public LogicVariable getAssignTarget() {
-            return assignTarget == null ? LogicVariable.INVALID : assignTarget;
+        public LogicValue getAssignedValue(LogicVariable variable) {
+            return assignments.getOrDefault(variable, LogicVoid.VOID);
         }
 
-        public LogicValue getAssignValue() {
-            return assignValue == null ? LogicVoid.VOID : assignValue;
+        public LogicValue getAssignedValueLiteral(LogicVariable variable, boolean mindustryContent) {
+            if (mindustryContent) {
+                Integer integer = integerValues.get(variable);
+                return integer == null ? LogicNull.NULL : LogicNumber.create(integer);
+            } else {
+                return Objects.requireNonNull(assignments.get(variable));
+            }
         }
 
-        public @Nullable Integer getIntegerValue() {
-            return integerValue;
+        public @Nullable Integer getIntegerValue(LogicVariable variable) {
+            return integerValues.get(variable);
         }
 
-        public void setIntegerValue(@Nullable Integer integerValue) {
-            this.integerValue = integerValue;
+        public void setIntegerValue(LogicVariable variable, @Nullable Integer integerValue) {
+            if (integerValue != null) {
+                integerValues.put(variable, integerValue);
+            }
         }
     }
 

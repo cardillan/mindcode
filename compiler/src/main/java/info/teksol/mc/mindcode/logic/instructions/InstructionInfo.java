@@ -68,6 +68,13 @@ public enum InstructionInfo {
 
     /// This operation instruction was already processed by a select optimization
     SELECT_OPERATION(Boolean.FALSE),
+
+    /// This is a fall-through multijump or multicall instruction. It must not be jump-threaded.
+    FALL_THROUGH(Boolean.FALSE),
+
+    /// This is a multilabel that is targeted by an arithmetic operation on @counter. The jumps above or below
+    /// must not be removed.
+    FIXED_MULTILABEL(Boolean.TRUE),
     ;
 
     public final Object defaultValue;

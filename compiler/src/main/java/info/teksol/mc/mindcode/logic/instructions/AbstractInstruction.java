@@ -118,10 +118,6 @@ public abstract class AbstractInstruction implements LogicInstruction {
         return astContext.findContextOfType(contextType);
     }
 
-    public @Nullable AstContext findTopContextOfType(AstContextType contextType) {
-        return astContext.findTopContextOfType(contextType);
-    }
-
     public @Nullable AstContext findTopContextOfTypes(AstContextType... contextTypes) {
         return astContext.findTopContextOfTypes(contextTypes);
     }

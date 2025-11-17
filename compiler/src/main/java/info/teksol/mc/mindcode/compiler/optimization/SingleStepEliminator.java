@@ -26,17 +26,17 @@ class SingleStepEliminator extends BaseOptimizer {
             JumpInstruction lastJump = null;
 
             // Target of the last encountered jump instruction.
-            // Reset when it is determined lastJump cannot target next instruction.
+            // Reset when it is determined lastJump cannot target the next instruction.
             LogicLabel targetLabel = null;
 
-            // Indicates last jump was determined to target next effective instruction. Set to true when
-            // targetLabel is encountered.
+            // Indicates the last jump was determined to target the next effective instruction. Set to true when
+            //  the targetLabel is encountered.
             boolean isJumpToNext = false;
 
             // There were no effective instructions since lastJump (active labels ignored)
             boolean noEffective = false;
 
-            // Last jump is eligible for sequential remove: there were no flow control instructions
+            // The last jump is eligible for sequential remove: there were no flow control instructions
             // since lastJump and no instructions modifying lastJump's condition
             boolean sequential = false;
 
@@ -44,15 +44,17 @@ class SingleStepEliminator extends BaseOptimizer {
                 LogicInstruction ix = iterator.next();
 
                 if (ix instanceof MultiLabelInstruction) {
-                    // MultiLabel instruction may be a part of jump tables which must not be affected
-                    lastJump = null;
+                    sequential = false;
+
+                    // MultiLabel instruction may be a part of jump tables that must not be affected
+                     if (ix.isFixedMultilabel()) lastJump = null;
                 } else if (ix instanceof LabeledInstruction il) {
                     if (il.getLabel().equals(targetLabel)) {
                         // lastJump is targeting the next executable instruction
                         isJumpToNext = true;
                     }
                     if (optimizationContext.isActive(il.getLabel())) {
-                        // An active label breaks sequential flow
+                        // An active label breaks the sequential flow
                         sequential = false;
                     }
                 } else if (!(ix instanceof EmptyInstruction)) {
@@ -66,24 +68,26 @@ class SingleStepEliminator extends BaseOptimizer {
                     if (ix instanceof JumpInstruction jump) {
                         if (jump.equals(lastJump)) {
                             if (noEffective) {
-                                // Removing previous jump when  identical to this one and no effective instructions between them
+                                // Removing a previous jump when the next jump is identical to this one and no effective instructions between them
                                 removableJumps.add(lastJump);
 
                                 // This becomes the last jump, other properties remain unchanged
                                 lastJump = jump;
+                                continue;
                             } else if (sequential) {
                                 // Removing jump identical to the previous one with effective instructions between them,
                                 // but these instructions are safe.
                                 // Keeping lastJump intact
                                 removableJumps.add(jump);
+                                continue;
                             }
-                        } else {
-                            // We got a new jump, remember it
-                            lastJump = jump;
-                            targetLabel = jump.getTarget();
-                            noEffective = true;
-                            sequential = jump.isUnconditional() || !jump.getX().isVolatile() && !jump.getY().isVolatile();
                         }
+
+                        // We got a new jump, remember it
+                        lastJump = jump;
+                        targetLabel = jump.getTarget();
+                        noEffective = true;
+                        sequential = jump.isUnconditional() || !jump.getX().isVolatile() && !jump.getY().isVolatile();
                     } else {
                         targetLabel = null;
                         noEffective = false;

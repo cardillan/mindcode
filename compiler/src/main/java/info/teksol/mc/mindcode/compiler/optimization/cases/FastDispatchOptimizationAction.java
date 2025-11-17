@@ -260,12 +260,13 @@ public class FastDispatchOptimizationAction implements ConvertCaseOptimizationAc
                 LabelInstruction labelInstruction = optimizationContext.getLabelInstruction(updatedTarget);
                 LogicLabel jumpLabel = instructionProcessor.nextLabel();
                 labelMap.put(updatedTarget, jumpLabel);
-                optimizationContext.insertBefore(labelInstruction, createMultiLabel(labelInstruction.getAstContext(), jumpLabel, marker).setJumpTarget());
+                optimizationContext.insertBefore(labelInstruction, createMultiLabel(labelInstruction.getAstContext(), jumpLabel, marker)
+                        .setJumpTarget().setFixedMultilabel(false));
             }
             labels.add(labelMap.get(updatedTarget));
         }
 
-        insertInstruction(createMultiJump(newAstContext, caseVariable, marker).setJumpTable(labels));
+        insertInstruction(createMultiJump(newAstContext, caseVariable, marker).setJumpTable(labels).setFallThrough(true));
         insertInstruction(createMultiLabel(newAstContext, instructionProcessor.nextLabel(), marker));
     }
 
@@ -320,10 +321,6 @@ public class FastDispatchOptimizationAction implements ConvertCaseOptimizationAc
         insertInstruction(createJumpUnconditional(flowContext, lastInstruction.getLabel()));
         flowList.forEach(this::insertInstruction);
         bodyList.forEach(this::insertInstruction);
-    }
-
-    private void debugOutput(Object message) {
-        if (isDebugOutput()) System.out.println(message);
     }
 
     private void debugOutput(@PrintFormat String format, Object... args) {

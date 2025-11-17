@@ -3,7 +3,7 @@
      2 instructions eliminated by Dead Code Elimination (4 iterations).
      5 instructions eliminated by Jump Normalization (6 iterations).
      1 instructions eliminated by Jump Optimization (6 iterations).
-    17 instructions eliminated by Single Step Elimination (3 passes, 18 iterations).
+    17 instructions eliminated by Single Step Elimination (4 passes, 19 iterations).
     20 instructions eliminated by Expression Optimization (4 iterations).
     75 instructions eliminated by Data Flow Optimization (4 passes, 33 iterations).
      1 instructions eliminated by Loop Optimization (4 iterations).
@@ -1103,6 +1103,36 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-5 ins
     99 label *label75
    100 label *label76
 
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-5 instructions):
+ 
+    75 set .array*4 .array*5
+    76 set .array*5 :reverse:i
+    77 label *label50
+-    * jump *label6 always
+    78 label *label51
+    79 label *label52
+    80 label *label53
+    81 label *label56
+-    * jump *label6 always
+    82 label *label57
+    83 label *label58
+    84 label *label59
+    85 label *label62
+-    * jump *label6 always
+    86 label *label63
+    87 label *label64
+    88 label *label65
+    89 label *label68
+-    * jump *label6 always
+    90 label *label69
+    91 label *label70
+    92 label *label71
+    93 label *label74
+-    * jump *label6 always
+    94 label *label75
+    95 label *label76
+    96 label *label77
+
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-21 instructions):
      0 label *label81
      1 label *label82
@@ -1408,7 +1438,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 14 (-
 -    * set .array*4 .array*5
     62 set .array*5 :reverse:i
     63 label *label50
-    64 jump *label6 always
+    64 label *label51
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 15:
  
@@ -1418,12 +1448,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 15:
 -    * set .array*5 :reverse:i
 +   62 set .array*5 4
     63 label *label50
-    64 jump *label6 always
-    65 label *label51
+    64 label *label51
+    65 label *label52
  
-    88 label *label6
-    89 label *label3
-    90 assertflush
+    83 label *label6
+    84 label *label3
+    85 assertflush
 -    * print .array*0
 -    * print .array*1
 -    * print .array*2
@@ -1434,18 +1464,18 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 15:
 -    * print .array*7
 -    * print .array*8
 -    * print .array*9
-+   91 print 9
-+   92 print 8
-+   93 print 7
-+   94 print 6
-+   95 print 5
-+   96 print 4
-+   97 print 3
-+   98 print 2
-+   99 print 1
-+  100 print 0
-   101 assertprints "9876543210" "reverse array"
-   102 end
++   86 print 9
++   87 print 8
++   88 print 7
++   89 print 6
++   90 print 5
++   91 print 4
++   92 print 3
++   93 print 2
++   94 print 1
++   95 print 0
+    96 assertprints "9876543210" "reverse array"
+    97 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 16 (-11 instructions):
      0 label *label81
@@ -1487,10 +1517,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 16 (-
     51 label *label47
 -    * set .array*5 4
     52 label *label50
-    53 jump *label6 always
-    54 label *label51
+    53 label *label51
+    54 label *label52
 
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-6 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
     45 label *label41
     46 label *label44
@@ -1499,31 +1529,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-
     48 label *label45
     49 label *label46
     50 label *label47
-    51 label *label50
--    * jump *label6 always
-    52 label *label51
-    53 label *label52
-    54 label *label53
-    55 label *label56
--    * jump *label6 always
-    56 label *label57
-    57 label *label58
-    58 label *label59
-    59 label *label62
--    * jump *label6 always
-    60 label *label63
-    61 label *label64
-    62 label *label65
-    63 label *label68
--    * jump *label6 always
-    64 label *label69
-    65 label *label70
-    66 label *label71
-    67 label *label74
--    * jump *label6 always
-    68 label *label75
-    69 label *label76
-    70 label *label77
 
 Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 2 (-1 instructions):
  

@@ -83,7 +83,8 @@ class JumpThreading extends BaseOptimizer {
     private boolean canMoveTarget(LogicInstruction target) {
         return target instanceof ReturnInstruction
                 || !getGlobalProfile().isSymbolicLabels()
-                && (target instanceof MultiJumpInstruction || target instanceof MultiCallInstruction);
+                && (target instanceof MultiJumpInstruction || target instanceof MultiCallInstruction)
+                && !target.isFallThrough();
     }
 
     private boolean hasStartLabel() {

@@ -14,6 +14,7 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SortCategory;
+import info.teksol.mc.util.CollectionUtils;
 import info.teksol.mc.util.StringUtils;
 import info.teksol.mc.util.Utf8Utils;
 import org.jspecify.annotations.NullMarked;
@@ -210,7 +211,7 @@ public class LogicInstructionLabelResolver {
                 addresses.put(ix.getLabel(), LogicLabel.absolute(instructionPointer));
                 labelInstructions.put(ix.getLabel(), instruction);
 
-                addressContexts.compute(instructionPointer, (k, v) -> v == null ? ix.getAstContext()
+                addressContexts.compute(instructionPointer, (_, v) -> v == null ? ix.getAstContext()
                         : v.level() < ix.getAstContext().level() ? v : ix.getAstContext());
             }
         }
@@ -313,7 +314,8 @@ public class LogicInstructionLabelResolver {
             int address = entry.getKey();
             if (address >= 0 && address < program.size()) {
                 List<String> origins = textJumpOrigins.get(address).stream()
-                        .map(program::indexOf).sorted().limit(3).map(String::valueOf)
+                        .map(ix -> CollectionUtils.indexOf(program, px -> ix == px))
+                        .sorted().limit(3).map(String::valueOf)
                         .collect(Collectors.toCollection(ArrayList::new));
 
                 if (origins.size() < textJumpOrigins.get(address).size()) {
@@ -334,7 +336,7 @@ public class LogicInstructionLabelResolver {
                 jumpTableString, ix.getTarget());
 
         for (int i = 0; i < addresses.length; i++) {
-            textJumpOrigins.computeIfAbsent(addresses[i], _ -> new HashSet<>()).add(instruction);
+            textJumpOrigins.computeIfAbsent(addresses[i], _ -> Collections.newSetFromMap(new IdentityHashMap<>())).add(instruction);
             textJumpKeys.computeIfAbsent(addresses[i], _ -> new HashSet<>()).add(i);
         }
 

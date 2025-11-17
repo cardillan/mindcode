@@ -3,7 +3,7 @@
     12 instructions eliminated by Dead Code Elimination (4 iterations).
     18 instructions eliminated by Jump Normalization (5 iterations).
      2 instructions eliminated by Jump Optimization (5 iterations).
-    27 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+    43 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
    450 instructions eliminated by Expression Optimization (3 iterations).
    194 instructions eliminated by Data Flow Optimization (9 passes, 30 iterations).
      7 instructions eliminated by Loop Optimization (3 iterations).
@@ -15,7 +15,7 @@
     16 instructions updated by Jump Threading.
     18 instructions eliminated by Unreachable Code Elimination (2 iterations).
      4 instructions eliminated by Print Merging.
-   406 instructions after optimizations.
+   390 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 806):
   * Unroll loop at *arrays:23:5                                  size    -1, benefit      250.0, efficiency   Infinity (+9 instructions)
@@ -130,412 +130,396 @@ Final code before resolving virtual instructions:
    65:  jump *label77 always 0 0
         label *label73
    66:  set :bubblesort:a .b*1
-   67:  jump *label77 always 0 0
         label *label77
-   68:  op greaterThan *tmp19 :bubblesort:a .b*2
-   69:  jump *label79 equal *tmp19 false
-   70:  set .b*1 .b*2
-   71:  set .b*2 :bubblesort:a
-   72:  set :bubblesort:flag true
-   73:  jump *label83 always 0 0
+   67:  op greaterThan *tmp19 :bubblesort:a .b*2
+   68:  jump *label79 equal *tmp19 false
+   69:  set .b*1 .b*2
+   70:  set .b*2 :bubblesort:a
+   71:  set :bubblesort:flag true
+   72:  jump *label83 always 0 0
         label *label79
-   74:  set :bubblesort:a .b*2
-   75:  jump *label83 always 0 0
+   73:  set :bubblesort:a .b*2
         label *label83
-   76:  op greaterThan *tmp19 :bubblesort:a .b*3
-   77:  jump *label85 equal *tmp19 false
-   78:  set .b*2 .b*3
-   79:  set .b*3 :bubblesort:a
-   80:  set :bubblesort:flag true
-   81:  jump *label89 always 0 0
+   74:  op greaterThan *tmp19 :bubblesort:a .b*3
+   75:  jump *label85 equal *tmp19 false
+   76:  set .b*2 .b*3
+   77:  set .b*3 :bubblesort:a
+   78:  set :bubblesort:flag true
+   79:  jump *label89 always 0 0
         label *label85
-   82:  set :bubblesort:a .b*3
-   83:  jump *label89 always 0 0
+   80:  set :bubblesort:a .b*3
         label *label89
-   84:  op greaterThan *tmp19 :bubblesort:a .b*4
-   85:  jump *label91 equal *tmp19 false
-   86:  set .b*3 .b*4
-   87:  set .b*4 :bubblesort:a
-   88:  set :bubblesort:flag true
-   89:  jump *label95 always 0 0
+   81:  op greaterThan *tmp19 :bubblesort:a .b*4
+   82:  jump *label91 equal *tmp19 false
+   83:  set .b*3 .b*4
+   84:  set .b*4 :bubblesort:a
+   85:  set :bubblesort:flag true
+   86:  jump *label95 always 0 0
         label *label91
-   90:  set :bubblesort:a .b*4
-   91:  jump *label95 always 0 0
+   87:  set :bubblesort:a .b*4
         label *label95
-   92:  op greaterThan *tmp19 :bubblesort:a .b*5
-   93:  jump *label97 equal *tmp19 false
-   94:  set .b*4 .b*5
-   95:  set .b*5 :bubblesort:a
-   96:  set :bubblesort:flag true
-   97:  jump *label101 always 0 0
+   88:  op greaterThan *tmp19 :bubblesort:a .b*5
+   89:  jump *label97 equal *tmp19 false
+   90:  set .b*4 .b*5
+   91:  set .b*5 :bubblesort:a
+   92:  set :bubblesort:flag true
+   93:  jump *label101 always 0 0
         label *label97
-   98:  set :bubblesort:a .b*5
-   99:  jump *label101 always 0 0
+   94:  set :bubblesort:a .b*5
         label *label101
-  100:  op greaterThan *tmp19 :bubblesort:a .b*6
-  101:  jump *label103 equal *tmp19 false
-  102:  set .b*5 .b*6
-  103:  set .b*6 :bubblesort:a
-  104:  set :bubblesort:flag true
-  105:  jump *label107 always 0 0
+   95:  op greaterThan *tmp19 :bubblesort:a .b*6
+   96:  jump *label103 equal *tmp19 false
+   97:  set .b*5 .b*6
+   98:  set .b*6 :bubblesort:a
+   99:  set :bubblesort:flag true
+  100:  jump *label107 always 0 0
         label *label103
-  106:  set :bubblesort:a .b*6
-  107:  jump *label107 always 0 0
+  101:  set :bubblesort:a .b*6
         label *label107
-  108:  op greaterThan *tmp19 :bubblesort:a .b*7
-  109:  jump *label109 equal *tmp19 false
-  110:  set .b*6 .b*7
-  111:  set .b*7 :bubblesort:a
-  112:  set :bubblesort:flag true
-  113:  jump *label113 always 0 0
+  102:  op greaterThan *tmp19 :bubblesort:a .b*7
+  103:  jump *label109 equal *tmp19 false
+  104:  set .b*6 .b*7
+  105:  set .b*7 :bubblesort:a
+  106:  set :bubblesort:flag true
+  107:  jump *label113 always 0 0
         label *label109
-  114:  set :bubblesort:a .b*7
-  115:  jump *label113 always 0 0
+  108:  set :bubblesort:a .b*7
         label *label113
-  116:  op greaterThan *tmp19 :bubblesort:a .b*8
-  117:  jump *label115 equal *tmp19 false
-  118:  set .b*7 .b*8
-  119:  set .b*8 :bubblesort:a
-  120:  set :bubblesort:flag true
-  121:  jump *label119 always 0 0
+  109:  op greaterThan *tmp19 :bubblesort:a .b*8
+  110:  jump *label115 equal *tmp19 false
+  111:  set .b*7 .b*8
+  112:  set .b*8 :bubblesort:a
+  113:  set :bubblesort:flag true
+  114:  jump *label119 always 0 0
         label *label115
-  122:  set :bubblesort:a .b*8
-  123:  jump *label119 always 0 0
+  115:  set :bubblesort:a .b*8
         label *label119
-  124:  op greaterThan *tmp19 :bubblesort:a .b*9
-  125:  jump *label121 equal *tmp19 false
-  126:  set .b*8 .b*9
-  127:  set .b*9 :bubblesort:a
-  128:  set :bubblesort:flag true
+  116:  op greaterThan *tmp19 :bubblesort:a .b*9
+  117:  jump *label121 equal *tmp19 false
+  118:  set .b*8 .b*9
+  119:  set .b*9 :bubblesort:a
+  120:  set :bubblesort:flag true
         label *label121
-  129:  jump *label11 equal :bubblesort:flag false
-  130:  set :bubblesort:a .b*9
-  131:  op lessThan *tmp32 .b*9 .b*8
-  132:  jump *label128 equal *tmp32 false
-  133:  set .b*9 .b*8
-  134:  set .b*8 :bubblesort:a
-  135:  set :bubblesort:flag true
-  136:  jump *label132 always 0 0
+  121:  jump *label11 equal :bubblesort:flag false
+  122:  set :bubblesort:a .b*9
+  123:  op lessThan *tmp32 .b*9 .b*8
+  124:  jump *label128 equal *tmp32 false
+  125:  set .b*9 .b*8
+  126:  set .b*8 :bubblesort:a
+  127:  set :bubblesort:flag true
+  128:  jump *label132 always 0 0
         label *label128
-  137:  set :bubblesort:a .b*8
-  138:  jump *label132 always 0 0
+  129:  set :bubblesort:a .b*8
         label *label132
-  139:  op lessThan *tmp32 :bubblesort:a .b*7
-  140:  jump *label134 equal *tmp32 false
-  141:  set .b*8 .b*7
-  142:  set .b*7 :bubblesort:a
-  143:  set :bubblesort:flag true
-  144:  jump *label138 always 0 0
+  130:  op lessThan *tmp32 :bubblesort:a .b*7
+  131:  jump *label134 equal *tmp32 false
+  132:  set .b*8 .b*7
+  133:  set .b*7 :bubblesort:a
+  134:  set :bubblesort:flag true
+  135:  jump *label138 always 0 0
         label *label134
-  145:  set :bubblesort:a .b*7
-  146:  jump *label138 always 0 0
+  136:  set :bubblesort:a .b*7
         label *label138
-  147:  op lessThan *tmp32 :bubblesort:a .b*6
-  148:  jump *label140 equal *tmp32 false
-  149:  set .b*7 .b*6
-  150:  set .b*6 :bubblesort:a
-  151:  set :bubblesort:flag true
-  152:  jump *label144 always 0 0
+  137:  op lessThan *tmp32 :bubblesort:a .b*6
+  138:  jump *label140 equal *tmp32 false
+  139:  set .b*7 .b*6
+  140:  set .b*6 :bubblesort:a
+  141:  set :bubblesort:flag true
+  142:  jump *label144 always 0 0
         label *label140
-  153:  set :bubblesort:a .b*6
-  154:  jump *label144 always 0 0
+  143:  set :bubblesort:a .b*6
         label *label144
-  155:  op lessThan *tmp32 :bubblesort:a .b*5
-  156:  jump *label146 equal *tmp32 false
-  157:  set .b*6 .b*5
-  158:  set .b*5 :bubblesort:a
-  159:  set :bubblesort:flag true
-  160:  jump *label150 always 0 0
+  144:  op lessThan *tmp32 :bubblesort:a .b*5
+  145:  jump *label146 equal *tmp32 false
+  146:  set .b*6 .b*5
+  147:  set .b*5 :bubblesort:a
+  148:  set :bubblesort:flag true
+  149:  jump *label150 always 0 0
         label *label146
-  161:  set :bubblesort:a .b*5
-  162:  jump *label150 always 0 0
+  150:  set :bubblesort:a .b*5
         label *label150
-  163:  op lessThan *tmp32 :bubblesort:a .b*4
-  164:  jump *label152 equal *tmp32 false
-  165:  set .b*5 .b*4
-  166:  set .b*4 :bubblesort:a
-  167:  set :bubblesort:flag true
-  168:  jump *label156 always 0 0
+  151:  op lessThan *tmp32 :bubblesort:a .b*4
+  152:  jump *label152 equal *tmp32 false
+  153:  set .b*5 .b*4
+  154:  set .b*4 :bubblesort:a
+  155:  set :bubblesort:flag true
+  156:  jump *label156 always 0 0
         label *label152
-  169:  set :bubblesort:a .b*4
-  170:  jump *label156 always 0 0
+  157:  set :bubblesort:a .b*4
         label *label156
-  171:  op lessThan *tmp32 :bubblesort:a .b*3
-  172:  jump *label158 equal *tmp32 false
-  173:  set .b*4 .b*3
-  174:  set .b*3 :bubblesort:a
-  175:  set :bubblesort:flag true
-  176:  jump *label162 always 0 0
+  158:  op lessThan *tmp32 :bubblesort:a .b*3
+  159:  jump *label158 equal *tmp32 false
+  160:  set .b*4 .b*3
+  161:  set .b*3 :bubblesort:a
+  162:  set :bubblesort:flag true
+  163:  jump *label162 always 0 0
         label *label158
-  177:  set :bubblesort:a .b*3
-  178:  jump *label162 always 0 0
+  164:  set :bubblesort:a .b*3
         label *label162
-  179:  op lessThan *tmp32 :bubblesort:a .b*2
-  180:  jump *label164 equal *tmp32 false
-  181:  set .b*3 .b*2
-  182:  set .b*2 :bubblesort:a
-  183:  set :bubblesort:flag true
-  184:  jump *label168 always 0 0
+  165:  op lessThan *tmp32 :bubblesort:a .b*2
+  166:  jump *label164 equal *tmp32 false
+  167:  set .b*3 .b*2
+  168:  set .b*2 :bubblesort:a
+  169:  set :bubblesort:flag true
+  170:  jump *label168 always 0 0
         label *label164
-  185:  set :bubblesort:a .b*2
-  186:  jump *label168 always 0 0
+  171:  set :bubblesort:a .b*2
         label *label168
-  187:  op lessThan *tmp32 :bubblesort:a .b*1
-  188:  jump *label170 equal *tmp32 false
-  189:  set .b*2 .b*1
-  190:  set .b*1 :bubblesort:a
-  191:  set :bubblesort:flag true
-  192:  jump *label174 always 0 0
+  172:  op lessThan *tmp32 :bubblesort:a .b*1
+  173:  jump *label170 equal *tmp32 false
+  174:  set .b*2 .b*1
+  175:  set .b*1 :bubblesort:a
+  176:  set :bubblesort:flag true
+  177:  jump *label174 always 0 0
         label *label170
-  193:  set :bubblesort:a .b*1
-  194:  jump *label174 always 0 0
+  178:  set :bubblesort:a .b*1
         label *label174
-  195:  op lessThan *tmp32 :bubblesort:a .b*0
-  196:  jump *label176 equal *tmp32 false
-  197:  set .b*1 .b*0
-  198:  set .b*0 :bubblesort:a
-  199:  set :bubblesort:flag true
+  179:  op lessThan *tmp32 :bubblesort:a .b*0
+  180:  jump *label176 equal *tmp32 false
+  181:  set .b*1 .b*0
+  182:  set .b*0 :bubblesort:a
+  183:  set :bubblesort:flag true
         label *label176
-  200:  jump *label12 notEqual :bubblesort:flag false
+  184:  jump *label12 notEqual :bubblesort:flag false
         label *label11
-  201:  assertflush
-  202:  print .b*0
-  203:  print .b*1
-  204:  print .b*2
-  205:  print .b*3
-  206:  print .b*4
-  207:  print .b*5
-  208:  print .b*6
-  209:  print .b*7
-  210:  print .b*8
-  211:  print .b*9
-  212:  assertprints "0123456789" "Array sort 1"
+  185:  assertflush
+  186:  print .b*0
+  187:  print .b*1
+  188:  print .b*2
+  189:  print .b*3
+  190:  print .b*4
+  191:  print .b*5
+  192:  print .b*6
+  193:  print .b*7
+  194:  print .b*8
+  195:  print .b*9
+  196:  assertprints "0123456789" "Array sort 1"
         label *label32
-  213:  set :bubblesort.1:flag false
-  214:  set :bubblesort.1:a .b*0
-  215:  op lessThan *tmp43 .b*0 .b*1
-  216:  jump *label183 equal *tmp43 false
-  217:  set .b*0 .b*1
-  218:  set .b*1 :bubblesort.1:a
-  219:  set :bubblesort.1:v .c*0
-  220:  set .c*0 .c*1
-  221:  set .c*1 :bubblesort.1:v
-  222:  set :bubblesort.1:flag true
-  223:  jump *label184 always 0 0
+  197:  set :bubblesort.1:flag false
+  198:  set :bubblesort.1:a .b*0
+  199:  op lessThan *tmp43 .b*0 .b*1
+  200:  jump *label183 equal *tmp43 false
+  201:  set .b*0 .b*1
+  202:  set .b*1 :bubblesort.1:a
+  203:  set :bubblesort.1:v .c*0
+  204:  set .c*0 .c*1
+  205:  set .c*1 :bubblesort.1:v
+  206:  set :bubblesort.1:flag true
+  207:  jump *label184 always 0 0
         label *label183
-  224:  set :bubblesort.1:a .b*1
+  208:  set :bubblesort.1:a .b*1
         label *label184
-  225:  op lessThan *tmp43 :bubblesort.1:a .b*2
-  226:  jump *label189 equal *tmp43 false
-  227:  set .b*1 .b*2
-  228:  set .b*2 :bubblesort.1:a
-  229:  set :bubblesort.1:v .c*1
-  230:  set .c*1 .c*2
-  231:  set .c*2 :bubblesort.1:v
-  232:  set :bubblesort.1:flag true
-  233:  jump *label190 always 0 0
+  209:  op lessThan *tmp43 :bubblesort.1:a .b*2
+  210:  jump *label189 equal *tmp43 false
+  211:  set .b*1 .b*2
+  212:  set .b*2 :bubblesort.1:a
+  213:  set :bubblesort.1:v .c*1
+  214:  set .c*1 .c*2
+  215:  set .c*2 :bubblesort.1:v
+  216:  set :bubblesort.1:flag true
+  217:  jump *label190 always 0 0
         label *label189
-  234:  set :bubblesort.1:a .b*2
+  218:  set :bubblesort.1:a .b*2
         label *label190
-  235:  op lessThan *tmp43 :bubblesort.1:a .b*3
-  236:  jump *label195 equal *tmp43 false
-  237:  set .b*2 .b*3
-  238:  set .b*3 :bubblesort.1:a
-  239:  set :bubblesort.1:v .c*2
-  240:  set .c*2 .c*3
-  241:  set .c*3 :bubblesort.1:v
-  242:  set :bubblesort.1:flag true
-  243:  jump *label196 always 0 0
+  219:  op lessThan *tmp43 :bubblesort.1:a .b*3
+  220:  jump *label195 equal *tmp43 false
+  221:  set .b*2 .b*3
+  222:  set .b*3 :bubblesort.1:a
+  223:  set :bubblesort.1:v .c*2
+  224:  set .c*2 .c*3
+  225:  set .c*3 :bubblesort.1:v
+  226:  set :bubblesort.1:flag true
+  227:  jump *label196 always 0 0
         label *label195
-  244:  set :bubblesort.1:a .b*3
+  228:  set :bubblesort.1:a .b*3
         label *label196
-  245:  op lessThan *tmp43 :bubblesort.1:a .b*4
-  246:  jump *label201 equal *tmp43 false
-  247:  set .b*3 .b*4
-  248:  set .b*4 :bubblesort.1:a
-  249:  set :bubblesort.1:v .c*3
-  250:  set .c*3 .c*4
-  251:  set .c*4 :bubblesort.1:v
-  252:  set :bubblesort.1:flag true
-  253:  jump *label202 always 0 0
+  229:  op lessThan *tmp43 :bubblesort.1:a .b*4
+  230:  jump *label201 equal *tmp43 false
+  231:  set .b*3 .b*4
+  232:  set .b*4 :bubblesort.1:a
+  233:  set :bubblesort.1:v .c*3
+  234:  set .c*3 .c*4
+  235:  set .c*4 :bubblesort.1:v
+  236:  set :bubblesort.1:flag true
+  237:  jump *label202 always 0 0
         label *label201
-  254:  set :bubblesort.1:a .b*4
+  238:  set :bubblesort.1:a .b*4
         label *label202
-  255:  op lessThan *tmp43 :bubblesort.1:a .b*5
-  256:  jump *label207 equal *tmp43 false
-  257:  set .b*4 .b*5
-  258:  set .b*5 :bubblesort.1:a
-  259:  set :bubblesort.1:v .c*4
-  260:  set .c*4 .c*5
-  261:  set .c*5 :bubblesort.1:v
-  262:  set :bubblesort.1:flag true
-  263:  jump *label208 always 0 0
+  239:  op lessThan *tmp43 :bubblesort.1:a .b*5
+  240:  jump *label207 equal *tmp43 false
+  241:  set .b*4 .b*5
+  242:  set .b*5 :bubblesort.1:a
+  243:  set :bubblesort.1:v .c*4
+  244:  set .c*4 .c*5
+  245:  set .c*5 :bubblesort.1:v
+  246:  set :bubblesort.1:flag true
+  247:  jump *label208 always 0 0
         label *label207
-  264:  set :bubblesort.1:a .b*5
+  248:  set :bubblesort.1:a .b*5
         label *label208
-  265:  op lessThan *tmp43 :bubblesort.1:a .b*6
-  266:  jump *label213 equal *tmp43 false
-  267:  set .b*5 .b*6
-  268:  set .b*6 :bubblesort.1:a
-  269:  set :bubblesort.1:v .c*5
-  270:  set .c*5 .c*6
-  271:  set .c*6 :bubblesort.1:v
-  272:  set :bubblesort.1:flag true
-  273:  jump *label214 always 0 0
+  249:  op lessThan *tmp43 :bubblesort.1:a .b*6
+  250:  jump *label213 equal *tmp43 false
+  251:  set .b*5 .b*6
+  252:  set .b*6 :bubblesort.1:a
+  253:  set :bubblesort.1:v .c*5
+  254:  set .c*5 .c*6
+  255:  set .c*6 :bubblesort.1:v
+  256:  set :bubblesort.1:flag true
+  257:  jump *label214 always 0 0
         label *label213
-  274:  set :bubblesort.1:a .b*6
+  258:  set :bubblesort.1:a .b*6
         label *label214
-  275:  op lessThan *tmp43 :bubblesort.1:a .b*7
-  276:  jump *label219 equal *tmp43 false
-  277:  set .b*6 .b*7
-  278:  set .b*7 :bubblesort.1:a
-  279:  set :bubblesort.1:v .c*6
-  280:  set .c*6 .c*7
-  281:  set .c*7 :bubblesort.1:v
-  282:  set :bubblesort.1:flag true
-  283:  jump *label220 always 0 0
+  259:  op lessThan *tmp43 :bubblesort.1:a .b*7
+  260:  jump *label219 equal *tmp43 false
+  261:  set .b*6 .b*7
+  262:  set .b*7 :bubblesort.1:a
+  263:  set :bubblesort.1:v .c*6
+  264:  set .c*6 .c*7
+  265:  set .c*7 :bubblesort.1:v
+  266:  set :bubblesort.1:flag true
+  267:  jump *label220 always 0 0
         label *label219
-  284:  set :bubblesort.1:a .b*7
+  268:  set :bubblesort.1:a .b*7
         label *label220
-  285:  op lessThan *tmp43 :bubblesort.1:a .b*8
-  286:  jump *label225 equal *tmp43 false
-  287:  set .b*7 .b*8
-  288:  set .b*8 :bubblesort.1:a
-  289:  set :bubblesort.1:v .c*7
-  290:  set .c*7 .c*8
-  291:  set .c*8 :bubblesort.1:v
-  292:  set :bubblesort.1:flag true
-  293:  jump *label226 always 0 0
+  269:  op lessThan *tmp43 :bubblesort.1:a .b*8
+  270:  jump *label225 equal *tmp43 false
+  271:  set .b*7 .b*8
+  272:  set .b*8 :bubblesort.1:a
+  273:  set :bubblesort.1:v .c*7
+  274:  set .c*7 .c*8
+  275:  set .c*8 :bubblesort.1:v
+  276:  set :bubblesort.1:flag true
+  277:  jump *label226 always 0 0
         label *label225
-  294:  set :bubblesort.1:a .b*8
+  278:  set :bubblesort.1:a .b*8
         label *label226
-  295:  op lessThan *tmp43 :bubblesort.1:a .b*9
-  296:  jump *label231 equal *tmp43 false
-  297:  set .b*8 .b*9
-  298:  set .b*9 :bubblesort.1:a
-  299:  set :bubblesort.1:v .c*8
-  300:  set .c*8 .c*9
-  301:  set .c*9 :bubblesort.1:v
-  302:  set :bubblesort.1:flag true
+  279:  op lessThan *tmp43 :bubblesort.1:a .b*9
+  280:  jump *label231 equal *tmp43 false
+  281:  set .b*8 .b*9
+  282:  set .b*9 :bubblesort.1:a
+  283:  set :bubblesort.1:v .c*8
+  284:  set .c*8 .c*9
+  285:  set .c*9 :bubblesort.1:v
+  286:  set :bubblesort.1:flag true
         label *label231
-  303:  jump *label31 equal :bubblesort.1:flag false
-  304:  set :bubblesort.1:a .b*9
-  305:  op greaterThan *tmp66 .b*9 .b*8
-  306:  jump *label238 equal *tmp66 false
-  307:  set .b*9 .b*8
-  308:  set .b*8 :bubblesort.1:a
-  309:  set :bubblesort.1:v.1 .c*9
-  310:  set .c*9 .c*8
-  311:  set .c*8 :bubblesort.1:v.1
-  312:  set :bubblesort.1:flag true
-  313:  jump *label239 always 0 0
+  287:  jump *label31 equal :bubblesort.1:flag false
+  288:  set :bubblesort.1:a .b*9
+  289:  op greaterThan *tmp66 .b*9 .b*8
+  290:  jump *label238 equal *tmp66 false
+  291:  set .b*9 .b*8
+  292:  set .b*8 :bubblesort.1:a
+  293:  set :bubblesort.1:v.1 .c*9
+  294:  set .c*9 .c*8
+  295:  set .c*8 :bubblesort.1:v.1
+  296:  set :bubblesort.1:flag true
+  297:  jump *label239 always 0 0
         label *label238
-  314:  set :bubblesort.1:a .b*8
+  298:  set :bubblesort.1:a .b*8
         label *label239
-  315:  op greaterThan *tmp66 :bubblesort.1:a .b*7
-  316:  jump *label244 equal *tmp66 false
-  317:  set .b*8 .b*7
-  318:  set .b*7 :bubblesort.1:a
-  319:  set :bubblesort.1:v.1 .c*8
-  320:  set .c*8 .c*7
-  321:  set .c*7 :bubblesort.1:v.1
-  322:  set :bubblesort.1:flag true
-  323:  jump *label245 always 0 0
+  299:  op greaterThan *tmp66 :bubblesort.1:a .b*7
+  300:  jump *label244 equal *tmp66 false
+  301:  set .b*8 .b*7
+  302:  set .b*7 :bubblesort.1:a
+  303:  set :bubblesort.1:v.1 .c*8
+  304:  set .c*8 .c*7
+  305:  set .c*7 :bubblesort.1:v.1
+  306:  set :bubblesort.1:flag true
+  307:  jump *label245 always 0 0
         label *label244
-  324:  set :bubblesort.1:a .b*7
+  308:  set :bubblesort.1:a .b*7
         label *label245
-  325:  op greaterThan *tmp66 :bubblesort.1:a .b*6
-  326:  jump *label250 equal *tmp66 false
-  327:  set .b*7 .b*6
-  328:  set .b*6 :bubblesort.1:a
-  329:  set :bubblesort.1:v.1 .c*7
-  330:  set .c*7 .c*6
-  331:  set .c*6 :bubblesort.1:v.1
-  332:  set :bubblesort.1:flag true
-  333:  jump *label251 always 0 0
+  309:  op greaterThan *tmp66 :bubblesort.1:a .b*6
+  310:  jump *label250 equal *tmp66 false
+  311:  set .b*7 .b*6
+  312:  set .b*6 :bubblesort.1:a
+  313:  set :bubblesort.1:v.1 .c*7
+  314:  set .c*7 .c*6
+  315:  set .c*6 :bubblesort.1:v.1
+  316:  set :bubblesort.1:flag true
+  317:  jump *label251 always 0 0
         label *label250
-  334:  set :bubblesort.1:a .b*6
+  318:  set :bubblesort.1:a .b*6
         label *label251
-  335:  op greaterThan *tmp66 :bubblesort.1:a .b*5
-  336:  jump *label256 equal *tmp66 false
-  337:  set .b*6 .b*5
-  338:  set .b*5 :bubblesort.1:a
-  339:  set :bubblesort.1:v.1 .c*6
-  340:  set .c*6 .c*5
-  341:  set .c*5 :bubblesort.1:v.1
-  342:  set :bubblesort.1:flag true
-  343:  jump *label257 always 0 0
+  319:  op greaterThan *tmp66 :bubblesort.1:a .b*5
+  320:  jump *label256 equal *tmp66 false
+  321:  set .b*6 .b*5
+  322:  set .b*5 :bubblesort.1:a
+  323:  set :bubblesort.1:v.1 .c*6
+  324:  set .c*6 .c*5
+  325:  set .c*5 :bubblesort.1:v.1
+  326:  set :bubblesort.1:flag true
+  327:  jump *label257 always 0 0
         label *label256
-  344:  set :bubblesort.1:a .b*5
+  328:  set :bubblesort.1:a .b*5
         label *label257
-  345:  op greaterThan *tmp66 :bubblesort.1:a .b*4
-  346:  jump *label262 equal *tmp66 false
-  347:  set .b*5 .b*4
-  348:  set .b*4 :bubblesort.1:a
-  349:  set :bubblesort.1:v.1 .c*5
-  350:  set .c*5 .c*4
-  351:  set .c*4 :bubblesort.1:v.1
-  352:  set :bubblesort.1:flag true
-  353:  jump *label263 always 0 0
+  329:  op greaterThan *tmp66 :bubblesort.1:a .b*4
+  330:  jump *label262 equal *tmp66 false
+  331:  set .b*5 .b*4
+  332:  set .b*4 :bubblesort.1:a
+  333:  set :bubblesort.1:v.1 .c*5
+  334:  set .c*5 .c*4
+  335:  set .c*4 :bubblesort.1:v.1
+  336:  set :bubblesort.1:flag true
+  337:  jump *label263 always 0 0
         label *label262
-  354:  set :bubblesort.1:a .b*4
+  338:  set :bubblesort.1:a .b*4
         label *label263
-  355:  op greaterThan *tmp66 :bubblesort.1:a .b*3
-  356:  jump *label268 equal *tmp66 false
-  357:  set .b*4 .b*3
-  358:  set .b*3 :bubblesort.1:a
-  359:  set :bubblesort.1:v.1 .c*4
-  360:  set .c*4 .c*3
-  361:  set .c*3 :bubblesort.1:v.1
-  362:  set :bubblesort.1:flag true
-  363:  jump *label269 always 0 0
+  339:  op greaterThan *tmp66 :bubblesort.1:a .b*3
+  340:  jump *label268 equal *tmp66 false
+  341:  set .b*4 .b*3
+  342:  set .b*3 :bubblesort.1:a
+  343:  set :bubblesort.1:v.1 .c*4
+  344:  set .c*4 .c*3
+  345:  set .c*3 :bubblesort.1:v.1
+  346:  set :bubblesort.1:flag true
+  347:  jump *label269 always 0 0
         label *label268
-  364:  set :bubblesort.1:a .b*3
+  348:  set :bubblesort.1:a .b*3
         label *label269
-  365:  op greaterThan *tmp66 :bubblesort.1:a .b*2
-  366:  jump *label274 equal *tmp66 false
-  367:  set .b*3 .b*2
-  368:  set .b*2 :bubblesort.1:a
-  369:  set :bubblesort.1:v.1 .c*3
-  370:  set .c*3 .c*2
-  371:  set .c*2 :bubblesort.1:v.1
-  372:  set :bubblesort.1:flag true
-  373:  jump *label275 always 0 0
+  349:  op greaterThan *tmp66 :bubblesort.1:a .b*2
+  350:  jump *label274 equal *tmp66 false
+  351:  set .b*3 .b*2
+  352:  set .b*2 :bubblesort.1:a
+  353:  set :bubblesort.1:v.1 .c*3
+  354:  set .c*3 .c*2
+  355:  set .c*2 :bubblesort.1:v.1
+  356:  set :bubblesort.1:flag true
+  357:  jump *label275 always 0 0
         label *label274
-  374:  set :bubblesort.1:a .b*2
+  358:  set :bubblesort.1:a .b*2
         label *label275
-  375:  op greaterThan *tmp66 :bubblesort.1:a .b*1
-  376:  jump *label280 equal *tmp66 false
-  377:  set .b*2 .b*1
-  378:  set .b*1 :bubblesort.1:a
-  379:  set :bubblesort.1:v.1 .c*2
-  380:  set .c*2 .c*1
-  381:  set .c*1 :bubblesort.1:v.1
-  382:  set :bubblesort.1:flag true
-  383:  jump *label281 always 0 0
+  359:  op greaterThan *tmp66 :bubblesort.1:a .b*1
+  360:  jump *label280 equal *tmp66 false
+  361:  set .b*2 .b*1
+  362:  set .b*1 :bubblesort.1:a
+  363:  set :bubblesort.1:v.1 .c*2
+  364:  set .c*2 .c*1
+  365:  set .c*1 :bubblesort.1:v.1
+  366:  set :bubblesort.1:flag true
+  367:  jump *label281 always 0 0
         label *label280
-  384:  set :bubblesort.1:a .b*1
+  368:  set :bubblesort.1:a .b*1
         label *label281
-  385:  op greaterThan *tmp66 :bubblesort.1:a .b*0
-  386:  jump *label286 equal *tmp66 false
-  387:  set .b*1 .b*0
-  388:  set .b*0 :bubblesort.1:a
-  389:  set :bubblesort.1:v.1 .c*1
-  390:  set .c*1 .c*0
-  391:  set .c*0 :bubblesort.1:v.1
-  392:  set :bubblesort.1:flag true
+  369:  op greaterThan *tmp66 :bubblesort.1:a .b*0
+  370:  jump *label286 equal *tmp66 false
+  371:  set .b*1 .b*0
+  372:  set .b*0 :bubblesort.1:a
+  373:  set :bubblesort.1:v.1 .c*1
+  374:  set .c*1 .c*0
+  375:  set .c*0 :bubblesort.1:v.1
+  376:  set :bubblesort.1:flag true
         label *label286
-  393:  jump *label32 notEqual :bubblesort.1:flag false
+  377:  jump *label32 notEqual :bubblesort.1:flag false
         label *label31
-  394:  assertflush
-  395:  print .c*0
-  396:  print .c*1
-  397:  print .c*2
-  398:  print .c*3
-  399:  print .c*4
-  400:  print .c*5
-  401:  print .c*6
-  402:  print .c*7
-  403:  print .c*8
-  404:  print .c*9
-  405:  assertprints "9876543210" "Array sort 2"
+  378:  assertflush
+  379:  print .c*0
+  380:  print .c*1
+  381:  print .c*2
+  382:  print .c*3
+  383:  print .c*4
+  384:  print .c*5
+  385:  print .c*6
+  386:  print .c*7
+  387:  print .c*8
+  388:  print .c*9
+  389:  assertprints "9876543210" "Array sort 2"
