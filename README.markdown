@@ -14,13 +14,13 @@
 </div>
 <br>
 
-**Mindcode** is a high-level procedural programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, arrays (including `@counter` arrays), conditional statements and loops, functions, modules, remote variables and function calls (synchronous and asynchronous), system library, user libraries, debugging support, and others. Mindcode generates fairly well optimized mlog code, using available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself.
+**Mindcode** is a high-level procedural programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, arrays (including `@counter` arrays), conditional statements and loops, functions, modules, remote variables and function calls (synchronous and asynchronous), system library, user libraries, debugging support, and others. Mindcode generates fairly well-optimized mlog code, using available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself.
 
 **Schemacode**, an extension built over Mindcode, is a specialized definition language designed for creating a complete Mindustry schematic from a text file. [Schematics Builder](doc/syntax/SCHEMACODE.markdown) compiles these definition files directly into Mindustry schematics, either into binary `.msch` file, or into the text representation. Processors can be included in these schematics, complete with the code (specified either in Mindcode or mlog) and linked blocks.
 
 ## Supported Mindustry versions
 
-Mindcode can generate code for several Mindustry versions:
+Mindcode can generate code for several Mindustry versions. The target can be selected in the web app using a combobox or by including one of the following commands in the source code: 
 
 * **6.0 Build 126.2**: use `#set target = 6;` to select it.
 * **7.0 Build 146** (the default one): use `#set target = 7;` to explicitly select it.  
@@ -55,7 +55,7 @@ The most important recent changes to Mindcode include:
 * Language features
   * Local compiler options
   * Support for `null` values in the `case` expression.
-  * Improved optimization of `case` expressions, including `case` expression over block types, unit types, items or liquids.
+  * Significantly improved optimization of `case` expressions, including `case` expression over block types, unit types, items or liquids.
   * Passing arguments (including arrays) to inline functions by reference.
   * Support for passing mlog keywords as arguments to inline functions.
 * Other functionality
