@@ -86,7 +86,6 @@ class MlogBlocksBuilderTest extends AbstractCodeGeneratorTest {
         );
     }
 
-
     @Test
     void compilesMlogBlockWithLabels() {
         assertCompilesTo("""
@@ -175,6 +174,21 @@ class MlogBlocksBuilderTest extends AbstractCodeGeneratorTest {
                         }
                         """,
                 customInstruction("print", "10")
+        );
+    }
+
+    @Test
+    void supportsLocalJumps() {
+        assertCompilesTo("""
+                        mlog {
+                            jump label always
+                            label:
+                            print "Hello World!"
+                        }
+                        """,
+                customInstruction("jump", "m0_label", "always"),
+                customInstruction("m0_label:"),
+                customInstruction("print", q("Hello World!"))
         );
     }
 

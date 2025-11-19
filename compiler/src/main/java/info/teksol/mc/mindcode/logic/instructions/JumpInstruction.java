@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
@@ -39,7 +40,7 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
     @Override
     protected void validate() {
         super.validate();
-        if (astContext.subcontextType() == AstSubcontextType.BODY) {
+        if (astContext.subcontextType() == AstSubcontextType.BODY && astContext.contextType() != AstContextType.MLOG) {
             throw new MindcodeInternalError("Jump instruction not allowed in BODY subcontext." + this);
         }
     }
