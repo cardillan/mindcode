@@ -50,6 +50,6 @@ public class AstCodeBlock extends AstExpression {
 
     @Override
     public AstContextType getContextType() {
-        return AstContextType.BODY;
+        return AstContextType.CODE;
     }
 }

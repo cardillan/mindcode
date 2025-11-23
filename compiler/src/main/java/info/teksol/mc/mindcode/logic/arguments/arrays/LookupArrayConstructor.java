@@ -64,7 +64,7 @@ public class LookupArrayConstructor extends TablelessArrayConstructor {
         generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1 );
         LogicKeyword type = instruction.getArrayLookupType();
 
-        AstContextType contextType = AstContextType.BODY;
+        AstContextType contextType = AstContextType.CODE;
         AstContext astContext = this.instruction.getAstContext().createChild(instruction.getAstContext().existingNode(),
                 contextType, AstSubcontextType.BASIC);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);

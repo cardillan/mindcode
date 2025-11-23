@@ -882,19 +882,23 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
-    public AstOperatorBinary visitAstOperatorBinaryLogicalAnd(MindcodeParser.AstOperatorBinaryLogicalAndContext ctx) {
-        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
-                operation(ctx.op),
-                visitAstExpression(ctx.left),
-                visitAstExpression(ctx.right));
+    public AstExpression visitAstOperatorBinaryAnd(MindcodeParser.AstOperatorBinaryAndContext ctx) {
+        return processBooleanOperator(ctx.op, ctx.left, ctx.right);
     }
 
     @Override
-    public AstOperatorBinary visitAstOperatorBinaryLogicalOr(MindcodeParser.AstOperatorBinaryLogicalOrContext ctx) {
-        return new AstOperatorBinary(pos(ctx.left.start, ctx.right.stop, ctx.op),
-                operation(ctx.op),
-                visitAstExpression(ctx.left),
-                visitAstExpression(ctx.right));
+    public AstExpression visitAstOperatorBinaryOr(MindcodeParser.AstOperatorBinaryOrContext ctx) {
+        return processBooleanOperator(ctx.op, ctx.left, ctx.right);
+    }
+
+    private AstExpression processBooleanOperator(Token op, ExpressionContext left, ExpressionContext right) {
+        SourcePosition position = pos(left.start, right.stop, op);
+        Operation operation = operation(op);
+        AstExpression leftExp = visitAstExpression(left);
+        AstExpression rightExp = visitAstExpression(right);
+        return operation.isShortCircuiting()
+                ? new AstOperatorShortCircuiting(position, operation, leftExp, rightExp)
+                :new AstOperatorBinary(position, operation, leftExp, rightExp);
     }
     //</editor-fold>
 

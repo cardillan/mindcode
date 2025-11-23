@@ -7,7 +7,7 @@
      2 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions modified by Data Flow Optimization (4 iterations).
      5 instructions eliminated by Case Switching (3 iterations).
-     0 case expressions converted to fast dispatch by Case Switching.
+     1 case expressions converted to fast dispatch by Case Switching.
      7 instructions eliminated by Jump Straightening (4 iterations).
      7 instructions updated by Jump Threading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).

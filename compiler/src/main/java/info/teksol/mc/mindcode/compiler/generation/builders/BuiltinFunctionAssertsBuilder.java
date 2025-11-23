@@ -4,7 +4,7 @@ import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionArgument;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
@@ -18,7 +18,7 @@ import java.util.Objects;
 @NullMarked
 public class BuiltinFunctionAssertsBuilder extends AbstractFunctionBuilder {
 
-    public BuiltinFunctionAssertsBuilder(AbstractBuilder builder) {
+    public BuiltinFunctionAssertsBuilder(AbstractCodeBuilder builder) {
         super(builder);
     }
 

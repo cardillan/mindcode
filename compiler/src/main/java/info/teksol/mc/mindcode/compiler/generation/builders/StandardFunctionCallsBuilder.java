@@ -8,7 +8,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.functions.BaseFunctionMapper;
 import info.teksol.mc.mindcode.compiler.functions.FunctionMapper;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.compiler.preprocess.DirectivePreprocessor;
@@ -28,7 +28,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     private final FunctionMapper functionMapper;
     private final StackTracker stackTracker;
 
-    public StandardFunctionCallsBuilder(AbstractBuilder builder) {
+    public StandardFunctionCallsBuilder(AbstractCodeBuilder builder) {
         super(builder);
         functionMapper = new BaseFunctionMapper(context);
         stackTracker = context.stackTracker();
@@ -621,4 +621,3 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     private record RemoteFunction(MindcodeFunction function, LogicVariable processor) {
     }
 }
-

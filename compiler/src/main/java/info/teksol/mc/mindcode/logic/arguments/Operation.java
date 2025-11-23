@@ -72,8 +72,8 @@ public enum Operation implements LogicArgument {
     ATAN            (1, true,  "atan"),
     ;
 
-    /// For operators, we keep the information about minimal required target here. It duplicates the information
-    /// in MindustryOpcodeVariants, but is kept like this for easier usage.
+    /// For operators, we keep the information about the minimal required target here. It duplicates the information
+    /// in MindustryOpcodeVariants but is kept like this for easier usage.
     /// A `null` here means the operator is not available in any target and needs to be emulated always.
     private final @Nullable ProcessorVersion processorVersion;
 
@@ -144,6 +144,20 @@ public enum Operation implements LogicArgument {
 
     public int getOperands() {
         return operands;
+    }
+
+    public boolean isShortCircuiting() {
+        return switch(this) {
+            case LOGICAL_AND, LOGICAL_OR -> true;
+            default -> false;
+        };
+    }
+
+    public boolean isBooleanNegation() {
+        return switch(this) {
+            case BOOLEAN_NOT, LOGICAL_NOT -> true;
+            default -> false;
+        };
     }
 
     @Override

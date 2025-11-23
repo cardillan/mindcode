@@ -5,7 +5,7 @@ import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.FormattableContent;
@@ -18,7 +18,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.Optional;
 
 @NullMarked
-public class LiteralsBuilder extends AbstractBuilder implements
+public class LiteralsBuilder extends AbstractCodeBuilder implements
         AstFormattableLiteralVisitor<ValueStore>,
         AstFormattablePlaceholderVisitor<ValueStore>,
         AstLiteralBinaryVisitor<ValueStore>,

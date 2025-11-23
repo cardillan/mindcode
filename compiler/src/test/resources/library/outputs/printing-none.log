@@ -474,12 +474,12 @@ Final code before resolving virtual instructions:
   360:  op abs *tmp42 :isZero:x 0
   361:  op lessThanEq *tmp43 *tmp42 0
   362:  set *tmp41 *tmp43
-        label *label115
-  363:  jump *label116 equal *tmp41 false
+        label *label117
+  363:  jump *label115 equal *tmp41 false
   364:  print :printExactFast:n
   365:  set *tmp44 :printExactFast:n
-  366:  jump *label117 always 0 0
-        label *label116
+  366:  jump *label116 always 0 0
+        label *label115
   367:  op lessThan *tmp45 :printExactFast:n 0
   368:  jump *label118 equal *tmp45 false
   369:  print "-"
@@ -582,7 +582,7 @@ Final code before resolving virtual instructions:
   446:  set *tmp76 null
         label *label138
   447:  set *tmp44 *tmp76
-        label *label117
+        label *label116
         label *label114
   448:  return :printExactFast*retaddr
   449:  end
@@ -591,12 +591,12 @@ Final code before resolving virtual instructions:
   451:  op abs *tmp78 :isZero.1:x 0
   452:  op lessThanEq *tmp79 *tmp78 0
   453:  set *tmp77 *tmp79
-        label *label140
-  454:  jump *label141 equal *tmp77 false
+        label *label142
+  454:  jump *label140 equal *tmp77 false
   455:  print :printExactSlow:n
   456:  set *tmp80 :printExactSlow:n
-  457:  jump *label142 always 0 0
-        label *label141
+  457:  jump *label141 always 0 0
+        label *label140
   458:  op lessThan *tmp81 :printExactSlow:n 0
   459:  jump *label143 equal *tmp81 false
   460:  print "-"
@@ -642,7 +642,7 @@ Final code before resolving virtual instructions:
   493:  set *tmp95 null
         label *label150
   494:  set *tmp80 *tmp95
-        label *label142
+        label *label141
         label *label139
   495:  return :printExactSlow*retaddr
   496:  end

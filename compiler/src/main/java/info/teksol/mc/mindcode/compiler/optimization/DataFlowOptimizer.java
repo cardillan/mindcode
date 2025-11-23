@@ -362,11 +362,11 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
-    /// Recursively processes contexts and their instructions. Jumps outside local context are specifically handled.
-    /// Context to be processed is either the same as the local context, or a direct child of the local context.
+    /// Recursively processes contexts and their instructions. Jumps outside the local context are specifically handled.
+    /// Context to be processed is either the same as the local context or a direct child of the local context.
     ///
     /// @param localContext       context which is considered local (jumps outside local context handling)
-    /// @param context            context to be processed
+    /// @param context            context to be processed; typically either localContext or a child of localContext
     /// @param variableStates     variable states at the beginning of the context
     /// @param modifyInstructions true if instructions may be modified in this run based on known variable states
     /// @return the resulting variable states
@@ -382,12 +382,13 @@ class DataFlowOptimizer extends BaseOptimizer {
             result = processDefaultContext(localContext, context, variableStates, modifyInstructions);
         } else {
             result = switch (context.contextType()) {
-                case LOOP   -> processLoopContext(context, variableStates, modifyInstructions);
-                case EACH   -> processIterationLoopContext(context, variableStates, modifyInstructions);
-                case IF     -> processIfContext(context, variableStates, modifyInstructions);
-                case CASE   -> processCaseContext(context, variableStates, modifyInstructions);
-                case JUMPS  -> processJumpsContext(context, variableStates, modifyInstructions);
-                default     -> processDefaultContext(localContext, context, variableStates, modifyInstructions);
+                case LOOP           -> processLoopContext(context, variableStates, modifyInstructions);
+                case EACH           -> processIterationLoopContext(context, variableStates, modifyInstructions);
+                case IF             -> processIfContext(context, variableStates, modifyInstructions);
+                case CASE           -> processCaseContext(context, variableStates, modifyInstructions);
+                case JUMPS          -> processJumpsContext(context, variableStates, modifyInstructions);
+                case SHORT_CIRCUIT  -> processShortCircuitingContext(context, variableStates, modifyInstructions);
+                default             -> processDefaultContext(localContext, context, variableStates, modifyInstructions);
             };
         }
         indentDec();
@@ -469,7 +470,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 // propagateUninitialized = false;
             } else if (jumps == 1 && last instanceof JumpInstruction jump) {
                 // If the jump evaluates to false, it means it doesn't skip over the loop body
-                LogicBoolean initialValue = optimizationContext.evaluateLoopConditionJump(jump, localContext);
+                LogicBoolean initialValue = evaluateLoopConditionJump(jump, localContext);
                 propagateUninitialized = initialValue != LogicBoolean.FALSE;
             } else {
                 // We don't understand the condition structure, and therefore cannot guarantee the loop will be executed at least once
@@ -615,26 +616,13 @@ class DataFlowOptimizer extends BaseOptimizer {
         // Data flow optimization might have fixed the value of the condition. It has two possible outcomes: either
         // the condition was false, in which case the jump in the condition is turned to unconditional jump, or the
         // condition was true, in which case the jump was entirely removed. We want to reachably process the body
-        // corresponding to the actual value of the condition: first one if the condition was true, and second one
-        // if the condition was false.
-        boolean[] reachable = {true, true};
+        // corresponding to the actual value of the condition: the first one if the condition was true, and the
+        // second one if the condition was false.
+        boolean[] reachable = new boolean[2];
 
-        OptimizationContext.LogicList condInstructions = contextInstructions(condition);
-
-        // If there are more jumps in condition context, we don't understand it and can't evaluate it
-        // Jump normalization will solve it for us (maybe)
-        // TODO Will need better condition processing after implementing short-circuit boolean eval
-        //      Maybe could just process the contexts based on unreachable code information like the case expression.
-        long jumps = condInstructions.stream().filter(JumpInstruction.class::isInstance).count();
-        LogicBoolean jumpResult = jumps == 0 ? LogicBoolean.FALSE :
-                jumps == 1 && (condInstructions.getFromEnd(0) instanceof JumpInstruction jump)
-                        ? evaluateJumpInstruction(jump)     // Evaluate the jump
-                        : null;                             // We don't know
-
-        if (jumpResult != null) {
-            reachable[0] = jumpResult == LogicBoolean.FALSE;    // No jump, process first only
-            reachable[1] = jumpResult == LogicBoolean.TRUE;     // Jump, process second only
-        }
+        LogicBoolean jumpResult = optimizationContext.evaluateConditionJump(condition);
+        reachable[0] = jumpResult != LogicBoolean.FALSE;
+        reachable[1] = jumpResult != LogicBoolean.TRUE;
 
         BranchedVariableStates branchedStates = new BranchedVariableStates(localContext, variableStates);
         boolean wasBody = false;
@@ -670,8 +658,8 @@ class DataFlowOptimizer extends BaseOptimizer {
             // There's more than one body: since this is an if statement, both branches have been processed
             // Needs the merged result
             return branchedStates.getFinalStates(localContext);
-        } else if (jumpResult == LogicBoolean.FALSE) {
-            // There's only one body, and we know it was processed (jumpResult is false, meaning there was no jump
+        } else if (jumpResult == LogicBoolean.TRUE) {
+            // There's only one body, and we know it was processed (jumpResult is TRUE, meaning there was no jump
             // around the body): we need the current state. However, there might have been a flow control context
             // before the body, which would have been processed as unreachable. It can be safely merged with the
             // current context --> we can retrieve the final state.
@@ -722,11 +710,6 @@ class DataFlowOptimizer extends BaseOptimizer {
                 }
             }
 
-            // If there's no else branch, start a new, empty branch representing the missing else.
-//            if (!hasElse) {
-//                branchedStates.newBranch(localContext, "[case default else]", true);
-//            }
-
             return branchedStates.getFinalStates(localContext);
         } else {
             CasedVariableStates casedStates = new CasedVariableStates(variableStates);
@@ -737,7 +720,6 @@ class DataFlowOptimizer extends BaseOptimizer {
             return casedStates.getOutgoingStates();
         }
     }
-
 
     /// Specialized processing of a JUMPS context - a jump table. The subcontext must be ARRAY.
     /// The jump table is expected to have all its effects expressed as side effects stored in the first instruction.
@@ -779,6 +761,16 @@ class DataFlowOptimizer extends BaseOptimizer {
         return result;
     }
 
+    /// Specialized processing of a short-circuiting context.
+    ///
+    /// @param localContext       context to process (must be an CASE context)
+    /// @param variableStates     variable states at the beginning of the context
+    /// @param modifyInstructions true if instructions may be modified in this run based on known variable states
+    /// @return the resulting variable states
+    private VariableStates processShortCircuitingContext(AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
+        return new ShortCircuitedVariableStates().processContext(localContext, variableStates, modifyInstructions);
+    }
+
     /// Processes instructions inside a given context. Jumps outside the local context are processed by associating
     /// the current variable state with the target label. Local context might be the context being processed,
     /// or a parent context when jumps within that context are handled specifically (such as by processIfContext).
@@ -790,6 +782,11 @@ class DataFlowOptimizer extends BaseOptimizer {
     /// @return the resulting variable states
     private VariableStates processDefaultContext(AstContext localContext, AstContext context,
             VariableStates variableStates, boolean modifyInstructions) {
+        return processDefaultContext(localContext, context, variableStates, modifyInstructions, this::processJumps);
+    }
+
+    private VariableStates processDefaultContext(AstContext localContext, AstContext context,
+            VariableStates variableStates, boolean modifyInstructions, DataFlowInstructionProcessor dfoProcessor) {
         assert iterator != null;
         assert unreachables != null;
 
@@ -799,25 +796,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 break;
             }
 
-            // This needs to be done for each active context: do not move this code into processInstruction
-            // Jumps inside a RETURN context are caused by the return instruction and do not leave the local context,
-            // but they do break the control flow and therefore need to be handled here.
-            if (!variableStates.isIsolated() && instruction instanceof JumpInstruction jump
-                    && !context.matches(ARRAY, REMOTE_INIT)
-                    && !jump.getAstContext().matches(ARRAY, REMOTE_INIT)
-                    && (context.matches(AstContextType.RETURN, FLOW_CONTROL) ||
-                        !getLabelInstruction(jump.getTarget()).belongsTo(localContext))) {
-
-                if (jump.getTarget().isStateTransfer()) {
-                    VariableStates copy = variableStates.copy("nonlocal jump");
-                    copy.print("*** Storing variable states for label " + jump.getTarget().toMlog());
-                    labelStates.computeIfAbsent(jump.getTarget(), ix -> new ArrayList<>()).add(copy);
-                }
-
-                if (jump.isUnconditional()) {
-                    variableStates.setDead(false);
-                }
-            }
+            variableStates = dfoProcessor.processInstruction(localContext, context, variableStates, instruction);
 
             if (instruction.getAstContext() == context) {
                 boolean reachable = !unreachables.get(iterator.nextIndex());
@@ -837,6 +816,34 @@ class DataFlowOptimizer extends BaseOptimizer {
                 if (iterator.currentIndex() == position) {
                     throw new MindcodeInternalError("No progress on context.");
                 }
+            }
+        }
+
+        return variableStates;
+    }
+
+    private interface DataFlowInstructionProcessor {
+        VariableStates processInstruction(AstContext localContext, AstContext context, VariableStates variableStates, LogicInstruction instruction);
+    }
+
+    private VariableStates processJumps(AstContext localContext, AstContext context, VariableStates variableStates, LogicInstruction instruction) {
+        // This needs to be done for each active context: do not move this code into processInstruction
+        // Jumps inside a RETURN context are caused by the return instruction and do not leave the local context,
+        // but they do break the control flow and therefore need to be handled here.
+        if (!variableStates.isIsolated() && instruction instanceof JumpInstruction jump
+                && !context.matches(ARRAY, REMOTE_INIT)
+                && !jump.getAstContext().matches(ARRAY, REMOTE_INIT)
+                && (context.matches(AstContextType.RETURN, FLOW_CONTROL) ||
+                    !getLabelInstruction(jump.getTarget()).belongsTo(localContext))) {
+
+            if (jump.getTarget().isStateTransfer()) {
+                VariableStates copy = variableStates.copy("nonlocal jump");
+                copy.print("*** Storing variable states for label " + jump.getTarget().toMlog());
+                labelStates.computeIfAbsent(jump.getTarget(), ix -> new ArrayList<>()).add(copy);
+            }
+
+            if (jump.isUnconditional()) {
+                variableStates.setDead(false);
             }
         }
 
@@ -1065,7 +1072,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
-    /// Helper class to manage variable states of branching statements (if, switched case).
+    /// Helper class to manage variable states of branching statements (ifs, switched cases).
     private class BranchedVariableStates {
         /// The initial state of the statement, before branching. Set by constructor.
         private final VariableStates initial;
@@ -1211,6 +1218,58 @@ class DataFlowOptimizer extends BaseOptimizer {
                 throw new MindcodeInternalError("Unexpected case statement structure (missing FLOW)");
             }
             return outgoing;
+        }
+    }
+
+    /// Helper class to manage variable states of short-circuiting expression
+    private class ShortCircuitedVariableStates {
+        /// Variable states valid at given labels. States are stored for all jump targets; states for labels lying
+        /// outside the short-circuiting context are all merged in at the end of the context.
+        private final Map<LogicLabel, VariableStates> labelStates = new HashMap<>();
+
+        private ShortCircuitedVariableStates() {
+        }
+
+        /// Processes the given case statement subcontext.
+        ///
+        /// @param context            context which is considered local
+        /// @param modifyInstructions true if instructions may be modified in this run based on known variable states
+        private VariableStates processContext(AstContext context, VariableStates variableStates, boolean modifyInstructions) {
+            variableStates = DataFlowOptimizer.this.processDefaultContext(context, context, variableStates, modifyInstructions,
+                    this::processInstruction);
+            return getFinalStates(variableStates);
+        }
+
+        private VariableStates processInstruction(AstContext localContext, AstContext context, VariableStates variableStates, LogicInstruction instruction) {
+            if (instruction.getAstContext() == context) {
+                switch (instruction) {
+                    case JumpInstruction jump -> {
+                        VariableStates stored = labelStates.get(jump.getTarget());
+                        if (stored == null) {
+                            labelStates.put(jump.getTarget(), variableStates.copy("short-circuiting jump to " + jump.getTarget().toMlog()));
+                        } else {
+                            stored.merge(variableStates, true, "short-circuiting jump to " + jump.getTarget().toMlog());
+                        }
+                    }
+                    case LabelInstruction label -> {
+                        VariableStates stored = labelStates.remove(label.getLabel());
+                        if (stored != null) {
+                            variableStates.merge(stored, true, "short-circuiting label " + label.getLabel().toMlog());
+                        }
+                    }
+                    default -> {}
+                }
+            }
+            return variableStates;
+        }
+
+        /// @return outgoing variable states of the case expression
+        private VariableStates getFinalStates(VariableStates variableStates) {
+            trace(() -> "Getting final states");
+
+            labelStates.values().forEach(
+                    state -> variableStates.merge(state, true, "merging outside labels"));
+            return variableStates;
         }
     }
 }

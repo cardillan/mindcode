@@ -6,7 +6,7 @@ import info.teksol.mc.generated.ast.visitors.*;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.*;
@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
 
 @NullMarked
-public class IdentifiersBuilder extends AbstractBuilder implements
+public class IdentifiersBuilder extends AbstractCodeBuilder implements
         AstArrayAccessVisitor<ValueStore>,
         AstBuiltInIdentifierVisitor<ValueStore>,
         AstIdentifierVisitor<ValueStore>,

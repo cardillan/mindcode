@@ -10,7 +10,7 @@
      4 instructions modified by Loop Optimization (2 iterations).
      4 loops improved by Loop Optimization.
      1 instructions eliminated by Case Switching (4 iterations).
-     0 case expressions converted to fast dispatch by Case Switching.
+     1 case expressions converted to fast dispatch by Case Switching.
      5 instructions eliminated by Jump Straightening (4 iterations).
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     23 instructions eliminated by Print Merging.

@@ -422,6 +422,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstLiteralNamedColor(MindcodeParser.AstLiteralNamedColorContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astOperatorBinaryOr}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstOperatorBinaryOr(MindcodeParser.AstOperatorBinaryOrContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astOperatorBinaryAdd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -449,6 +456,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAstOperatorBinaryEquality(MindcodeParser.AstOperatorBinaryEqualityContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astOperatorBinaryAnd}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstOperatorBinaryAnd(MindcodeParser.AstOperatorBinaryAndContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code astOperatorTernary}
 	 * labeled alternative in {@link MindcodeParser#expression}.
@@ -632,26 +646,12 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstLiteralColor(MindcodeParser.AstLiteralColorContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code astOperatorBinaryLogicalOr}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAstOperatorBinaryLogicalOr(MindcodeParser.AstOperatorBinaryLogicalOrContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code astOperatorIncDecPrefix}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAstOperatorIncDecPrefix(MindcodeParser.AstOperatorIncDecPrefixContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code astOperatorBinaryLogicalAnd}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAstOperatorBinaryLogicalAnd(MindcodeParser.AstOperatorBinaryLogicalAndContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code astAssignment}
 	 * labeled alternative in {@link MindcodeParser#expression}.

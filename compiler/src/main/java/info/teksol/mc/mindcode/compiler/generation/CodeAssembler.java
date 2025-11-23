@@ -168,7 +168,7 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
 
     public void enterAstNode(AstMindcodeNode node, AstContextType contextType) {
         if (active) {
-            if (node.getContextType() != AstContextType.NONE) {
+            if (contextType != AstContextType.NONE) {
                 astContext = astContext.createChild(node, contextType);
             }
         }
@@ -187,8 +187,12 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     }
 
     public void exitAstNode(AstMindcodeNode node) {
+        exitAstNode(node, node.getContextType());
+    }
+
+    public void exitAstNode(AstMindcodeNode node, AstContextType contextType) {
         if (active) {
-            if (node.getContextType() != AstContextType.NONE) {
+            if (contextType != AstContextType.NONE) {
                 if (astContext.subcontextType() != node.getSubcontextType() || astContext.node() != node) {
                     throw new MindcodeInternalError("Unexpected AST context " + astContext);
                 }

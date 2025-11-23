@@ -5,7 +5,7 @@ import info.teksol.mc.generated.ast.visitors.AstMlogStatementVisitor;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
@@ -21,7 +21,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 @NullMarked
-public class MlogBlocksBuilder extends AbstractBuilder implements
+public class MlogBlocksBuilder extends AbstractCodeBuilder implements
         AstMlogBlockVisitor<ValueStore>,
         AstMlogStatementVisitor<ValueStore> {
     public MlogBlocksBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {

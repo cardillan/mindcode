@@ -1680,13 +1680,13 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
             assertCompilesTo("""
                             a = rand(10) > 5;
                             b = a > 5;
-                            c = b or a < 5;
+                            c = b && a < 5;
                             d = a;
                             
                             while true do
                                 if c then
                                     d += 1;
-                                    c = b or d < 5;
+                                    c = b && d < 5;
                                 end;
                             end;
                             """,
@@ -1694,13 +1694,13 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(OP, "greaterThan", ":a", tmp(0), "5"),
                     createInstruction(OP, "greaterThan", ":b", ":a", "5"),
                     createInstruction(OP, "lessThan", tmp(3), ":a", "5"),
-                    createInstruction(OP, "or", ":c", ":b", tmp(3)),
+                    createInstruction(OP, "land", ":c", ":b", tmp(3)),
                     createInstruction(SET, ":d", ":a"),
                     createInstruction(LABEL, label(0)),
                     createInstruction(JUMP, label(0), "equal", ":c", "false"),
                     createInstruction(OP, "add", ":d", ":d", "1"),
                     createInstruction(OP, "lessThan", tmp(6), ":d", "5"),
-                    createInstruction(OP, "or", ":c", ":b", tmp(6)),
+                    createInstruction(OP, "land", ":c", ":b", tmp(6)),
                     createInstruction(JUMP, label(0), "always")
             );
         }

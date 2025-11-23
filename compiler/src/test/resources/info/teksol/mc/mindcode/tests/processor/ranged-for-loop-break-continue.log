@@ -24,13 +24,13 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructi
     22 print "|"
  
     28 op equal *tmp7 :test:i *tmp6
-    29 jump *label10 equal *tmp7 false
+    29 jump *label9 equal *tmp7 false
     30 jump *label6 always
 -    * set *tmp8 null
-    31 jump *label11 always
-    32 label *label10
+    31 jump *label10 always
+    32 label *label9
 -    * set *tmp8 null
-    33 label *label11
+    33 label *label10
     34 label *label5
     35 op add :test:i :test:i 1
     36 jump *label4 always
@@ -52,15 +52,15 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
     12 label *label4
     13 jump *label6 greaterThanEq :test:i *tmp3
  
-    23 setaddr :d*retaddr *label9 (h:*label9)
-    24 call *label0 *invalid :d*retval (m:*label9) (h:*label9)
-    25 label *label9
+    23 setaddr :d*retaddr *label11 (h:*label11)
+    24 call *label0 *invalid :d*retval (m:*label11) (h:*label11)
+    25 label *label11
 -    * set *tmp6 :d*retval
 -    * op equal *tmp7 :test:i *tmp6
 +   26 op equal *tmp7 :test:i :d*retval
-    27 jump *label10 equal *tmp7 false
+    27 jump *label9 equal *tmp7 false
     28 jump *label6 always
-    29 jump *label11 always
+    29 jump *label10 always
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  
@@ -74,15 +74,15 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 inst
     16 jump *label8 always
     17 label *label7
  
-    22 setaddr :d*retaddr *label9 (h:*label9)
-    23 call *label0 *invalid :d*retval (m:*label9) (h:*label9)
-    24 label *label9
+    22 setaddr :d*retaddr *label11 (h:*label11)
+    23 call *label0 *invalid :d*retval (m:*label11) (h:*label11)
+    24 label *label11
 -    * op equal *tmp7 :test:i :d*retval
--    * jump *label10 equal *tmp7 false
-+   25 jump *label10 notEqual :test:i :d*retval
+-    * jump *label9 equal *tmp7 false
++   25 jump *label9 notEqual :test:i :d*retval
     26 jump *label6 always
-    27 jump *label11 always
-    28 label *label10
+    27 jump *label10 always
+    28 label *label9
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
@@ -94,12 +94,12 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     17 label *label8
     18 print :test:i
  
-    23 label *label9
-    24 jump *label10 notEqual :test:i :d*retval
+    23 label *label11
+    24 jump *label9 notEqual :test:i :d*retval
     25 jump *label6 always
--    * jump *label11 always
-    26 label *label10
-    27 label *label11
+-    * jump *label10 always
+    26 label *label9
+    27 label *label10
     28 label *label5
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
@@ -112,7 +112,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     16 jump *label5 always
     17 label *label7
  
-    28 label *label11
+    28 label *label10
     29 label *label5
     30 op add :test:i :test:i 1
 -    * jump *label4 always
@@ -148,10 +148,10 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     18 print "|"
     19 set :d:n 5
  
-    23 jump *label10 notEqual :test:i :d*retval
+    23 jump *label9 notEqual :test:i :d*retval
     24 jump *label6 always
-    25 label *label10
--    * label *label11
+    25 label *label9
+-    * label *label10
     26 label *label5
     27 op add :test:i :test:i 1
     28 jump *label13 lessThan :test:i *tmp3
@@ -178,13 +178,13 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-2 instru
     16 print :test:i
     17 print "|"
  
-    19 setaddr :d*retaddr *label9 (h:*label9)
-    20 call *label0 *invalid :d*retval (m:*label9) (h:*label9)
-    21 label *label9
--    * jump *label10 notEqual :test:i :d*retval
+    19 setaddr :d*retaddr *label11 (h:*label11)
+    20 call *label0 *invalid :d*retval (m:*label11) (h:*label11)
+    21 label *label11
+-    * jump *label9 notEqual :test:i :d*retval
 -    * jump *label6 always
 +   22 jump *label6 equal :test:i :d*retval
-    23 label *label10
+    23 label *label9
     24 label *label5
     25 op add :test:i :test:i 1
 
@@ -198,10 +198,10 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
     16 print "|"
     17 set :d:n 5
  
-    19 call *label0 *invalid :d*retval (m:*label9) (h:*label9)
-    20 label *label9
+    19 call *label0 *invalid :d*retval (m:*label11) (h:*label11)
+    20 label *label11
     21 jump *label6 equal :test:i :d*retval
--    * label *label10
+-    * label *label9
     22 label *label5
     23 op add :test:i :test:i 1
     24 jump *label13 lessThan :test:i *tmp3
@@ -233,9 +233,9 @@ jump *label5 equal :test:i 3
 print :test:i
 print "|"
 set :d:n 5
-setaddr :d*retaddr *label9
+setaddr :d*retaddr *label11
 call *label0 *invalid :d*retval
-label *label9
+label *label11
 jump *label6 equal :test:i :d*retval
 label *label5
 op add :test:i :test:i 1

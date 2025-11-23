@@ -7,7 +7,7 @@ public enum AstContextType {
     NONE            ("NONE"),
     ROOT            ("ROOT"),
     INIT            ("INIT"),
-    BODY            ("BODY"),
+    CODE            ("CODE"),
     MLOG            ("MLOG"),
     FUNCTION_DEF    ("FNDF"),
     FUNCTION_BODY   ("FUNC"),
@@ -20,6 +20,7 @@ public enum AstContextType {
     EACH            ("EACH", true),
     BREAK           ("BREA", true),
     CONTINUE        ("CONT", true),
+    SHORT_CIRCUIT   ("SHCT", true),
 
     // Non-control flow
     ASSIGNMENT      ("ASGN"),

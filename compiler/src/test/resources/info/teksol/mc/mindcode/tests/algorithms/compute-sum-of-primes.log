@@ -72,35 +72,35 @@ Pass 1: speed optimization selection (cost limit 670):
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-11 instructions):
  
     15 set *tmp4 :testAndSetMultiples*retval
-    16 jump *label7 equal *tmp4 false
+    16 jump *label6 equal *tmp4 false
     17 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
 -    * set *tmp5 :sumPrimesUpTo:sum
-    18 jump *label8 always
-    19 label *label7
+    18 jump *label7 always
+    19 label *label6
 -    * set *tmp5 null
-    20 label *label8
+    20 label *label7
     21 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
     22 set :testAndSetMultiples:n :sumPrimesUpTo:i
  
     27 set *tmp6 :testAndSetMultiples*retval
-    28 jump *label10 equal *tmp6 false
+    28 jump *label9 equal *tmp6 false
     29 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
 -    * set *tmp7 :sumPrimesUpTo:sum
-    30 jump *label11 always
-    31 label *label10
+    30 jump *label10 always
+    31 label *label9
 -    * set *tmp7 null
-    32 label *label11
+    32 label *label10
     33 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 4
     34 label *label4
  
     46 op equal *tmp11 *tmp10 false
-    47 jump *label16 equal *tmp11 false
+    47 jump *label15 equal *tmp11 false
     48 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
 -    * set *tmp12 :sumPrimesUpTo:sum
-    49 jump *label17 always
-    50 label *label16
+    49 jump *label16 always
+    50 label *label15
 -    * set *tmp12 null
-    51 label *label17
+    51 label *label16
     52 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
     53 op idiv *tmp13 :sumPrimesUpTo:i 2
  
@@ -108,10 +108,10 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-11 instruct
     67 set *tmp18 null
     68 label *label22
 -    * set *tmp16 *tmp18
-    69 jump *label20 always
-    70 label *label19
+    69 jump *label19 always
+    70 label *label18
 -    * set *tmp16 null
-    71 label *label20
+    71 label *label19
     72 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 4
     73 label *label13
  
@@ -125,10 +125,10 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-11 instruct
    120 jump *label28 always
    121 label *label30
 -    * set *tmp27 null
-   122 jump *label27 always
-   123 label *label26
+   122 jump *label26 always
+   123 label *label25
 -    * set *tmp27 null
-   124 label *label27
+   124 label *label26
    125 set :testAndSetMultiples*retval :testAndSetMultiples:result
    126 label *label24
 
@@ -142,8 +142,8 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructi
     65 label *label21
 -    * set *tmp18 null
     66 label *label22
-    67 jump *label20 always
-    68 label *label19
+    67 jump *label19 always
+    68 label *label18
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 instructions):
  
@@ -157,25 +157,25 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 ins
      7 op lessThanEq *tmp3 :sumPrimesUpTo:i :sumPrimesUpTo:sqrtMax
      8 jump *label5 equal *tmp3 false
  
-    11 setaddr :testAndSetMultiples*retaddr *label6 (h:*label6)
-    12 call *label1 *invalid :testAndSetMultiples*retval (m:*label6) (h:*label6)
-    13 label *label6
+    11 setaddr :testAndSetMultiples*retaddr *label8 (h:*label8)
+    12 call *label1 *invalid :testAndSetMultiples*retval (m:*label8) (h:*label8)
+    13 label *label8
 -    * set *tmp4 :testAndSetMultiples*retval
--    * jump *label7 equal *tmp4 false
-+   14 jump *label7 equal :testAndSetMultiples*retval false
+-    * jump *label6 equal *tmp4 false
++   14 jump *label6 equal :testAndSetMultiples*retval false
     15 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-    16 jump *label8 always
-    17 label *label7
+    16 jump *label7 always
+    17 label *label6
  
-    22 setaddr :testAndSetMultiples*retaddr *label9 (h:*label9)
-    23 call *label1 *invalid :testAndSetMultiples*retval (m:*label9) (h:*label9)
-    24 label *label9
+    22 setaddr :testAndSetMultiples*retaddr *label11 (h:*label11)
+    23 call *label1 *invalid :testAndSetMultiples*retval (m:*label11) (h:*label11)
+    24 label *label11
 -    * set *tmp6 :testAndSetMultiples*retval
--    * jump *label10 equal *tmp6 false
-+   25 jump *label10 equal :testAndSetMultiples*retval false
+-    * jump *label9 equal *tmp6 false
++   25 jump *label9 equal :testAndSetMultiples*retval false
     26 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-    27 jump *label11 always
-    28 label *label10
+    27 jump *label10 always
+    28 label *label9
  
     34 label *label12
     35 op lessThanEq *tmp8 :sumPrimesUpTo:i :sumPrimesUpTo:maximum
@@ -183,28 +183,28 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 ins
 -    * op idiv *tmp9 :sumPrimesUpTo:i 2
 -    * set :getBit:bitIndex *tmp9
 +   37 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
-    38 setaddr :getBit*retaddr *label15 (h:*label15)
-    39 call *label0 *invalid :getBit*retval (m:*label15) (h:*label15)
-    40 label *label15
+    38 setaddr :getBit*retaddr *label17 (h:*label17)
+    39 call *label0 *invalid :getBit*retval (m:*label17) (h:*label17)
+    40 label *label17
 -    * set *tmp10 :getBit*retval
 -    * op equal *tmp11 *tmp10 false
 +   41 op equal *tmp11 :getBit*retval false
-    42 jump *label16 equal *tmp11 false
+    42 jump *label15 equal *tmp11 false
     43 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-    44 jump *label17 always
-    45 label *label16
-    46 label *label17
+    44 jump *label16 always
+    45 label *label15
+    46 label *label16
     47 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
 -    * op idiv *tmp13 :sumPrimesUpTo:i 2
 -    * set :getBit:bitIndex *tmp13
 +   48 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
-    49 setaddr :getBit*retaddr *label18 (h:*label18)
-    50 call *label0 *invalid :getBit*retval (m:*label18) (h:*label18)
-    51 label *label18
+    49 setaddr :getBit*retaddr *label20 (h:*label20)
+    50 call *label0 *invalid :getBit*retval (m:*label20) (h:*label20)
+    51 label *label20
 -    * set *tmp14 :getBit*retval
 -    * op equal *tmp15 *tmp14 false
 +   52 op equal *tmp15 :getBit*retval false
-    53 jump *label19 equal *tmp15 false
+    53 jump *label18 equal *tmp15 false
     54 op lessThanEq *tmp17 :sumPrimesUpTo:i :sumPrimesUpTo:maximum
     55 jump *label21 equal *tmp17 false
  
@@ -227,13 +227,13 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 ins
 -    * op idiv *tmp25 :testAndSetMultiples:n 2
 -    * set :getBit:bitIndex *tmp25
 +   82 op idiv :getBit:bitIndex :testAndSetMultiples:n 2
-    83 setaddr :getBit*retaddr *label25 (h:*label25)
-    84 call *label0 *invalid :getBit*retval (m:*label25) (h:*label25)
-    85 label *label25
+    83 setaddr :getBit*retaddr *label27 (h:*label27)
+    84 call *label0 *invalid :getBit*retval (m:*label27) (h:*label27)
+    85 label *label27
 -    * op equal *tmp26 :getBit*retval false
 -    * set :testAndSetMultiples:result *tmp26
 +   86 op equal :testAndSetMultiples:result :getBit*retval false
-    87 jump *label26 equal :testAndSetMultiples:result false
+    87 jump *label25 equal :testAndSetMultiples:result false
 -    * op idiv *tmp28 :testAndSetMultiples:maximum 2
 -    * set :testAndSetMultiples:max *tmp28
 +   88 op idiv :testAndSetMultiples:max :testAndSetMultiples:maximum 2
@@ -262,7 +262,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 inst
 +    7 jump *label5 greaterThan :sumPrimesUpTo:i :sumPrimesUpTo:sqrtMax
      8 set :testAndSetMultiples:n :sumPrimesUpTo:i
      9 set :testAndSetMultiples:maximum :sumPrimesUpTo:maximum
-    10 setaddr :testAndSetMultiples*retaddr *label6 (h:*label6)
+    10 setaddr :testAndSetMultiples*retaddr *label8 (h:*label8)
  
     31 jump *label3 always
     32 label *label5
@@ -271,24 +271,24 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 inst
 -    * jump *label14 equal *tmp8 false
 +   34 jump *label14 greaterThan :sumPrimesUpTo:i :sumPrimesUpTo:maximum
     35 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
-    36 setaddr :getBit*retaddr *label15 (h:*label15)
-    37 call *label0 *invalid :getBit*retval (m:*label15) (h:*label15)
-    38 label *label15
+    36 setaddr :getBit*retaddr *label17 (h:*label17)
+    37 call *label0 *invalid :getBit*retval (m:*label17) (h:*label17)
+    38 label *label17
 -    * op equal *tmp11 :getBit*retval false
--    * jump *label16 equal *tmp11 false
-+   39 jump *label16 notEqual :getBit*retval false
+-    * jump *label15 equal *tmp11 false
++   39 jump *label15 notEqual :getBit*retval false
     40 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-    41 jump *label17 always
-    42 label *label16
+    41 jump *label16 always
+    42 label *label15
  
-    46 setaddr :getBit*retaddr *label18 (h:*label18)
-    47 call *label0 *invalid :getBit*retval (m:*label18) (h:*label18)
-    48 label *label18
+    46 setaddr :getBit*retaddr *label20 (h:*label20)
+    47 call *label0 *invalid :getBit*retval (m:*label20) (h:*label20)
+    48 label *label20
 -    * op equal *tmp15 :getBit*retval false
--    * jump *label19 equal *tmp15 false
+-    * jump *label18 equal *tmp15 false
 -    * op lessThanEq *tmp17 :sumPrimesUpTo:i :sumPrimesUpTo:maximum
 -    * jump *label21 equal *tmp17 false
-+   49 jump *label19 notEqual :getBit*retval false
++   49 jump *label18 notEqual :getBit*retval false
 +   50 jump *label21 greaterThan :sumPrimesUpTo:i :sumPrimesUpTo:maximum
     51 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
     52 jump *label22 always
@@ -306,47 +306,47 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 inst
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-6 instructions):
  
-    12 label *label6
-    13 jump *label7 equal :testAndSetMultiples*retval false
+    12 label *label8
+    13 jump *label6 equal :testAndSetMultiples*retval false
     14 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
--    * jump *label8 always
-    15 label *label7
-    16 label *label8
+-    * jump *label7 always
+    15 label *label6
+    16 label *label7
     17 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
  
-    22 label *label9
-    23 jump *label10 equal :testAndSetMultiples*retval false
+    22 label *label11
+    23 jump *label9 equal :testAndSetMultiples*retval false
     24 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
--    * jump *label11 always
-    25 label *label10
-    26 label *label11
+-    * jump *label10 always
+    25 label *label9
+    26 label *label10
     27 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 4
  
-    36 label *label15
-    37 jump *label16 notEqual :getBit*retval false
+    36 label *label17
+    37 jump *label15 notEqual :getBit*retval false
     38 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
--    * jump *label17 always
-    39 label *label16
-    40 label *label17
+-    * jump *label16 always
+    39 label *label15
+    40 label *label16
     41 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
  
-    46 jump *label19 notEqual :getBit*retval false
+    46 jump *label18 notEqual :getBit*retval false
     47 jump *label21 greaterThan :sumPrimesUpTo:i :sumPrimesUpTo:maximum
     48 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
 -    * jump *label22 always
     49 label *label21
     50 label *label22
--    * jump *label20 always
-    51 label *label19
-    52 label *label20
+-    * jump *label19 always
+    51 label *label18
+    52 label *label19
     53 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 4
  
     92 op add :testAndSetMultiples:i :testAndSetMultiples:i :testAndSetMultiples:n
     93 jump *label28 always
     94 label *label30
--    * jump *label27 always
-    95 label *label26
-    96 label *label27
+-    * jump *label26 always
+    95 label *label25
+    96 label *label26
     97 set :testAndSetMultiples*retval :testAndSetMultiples:result
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
@@ -364,18 +364,18 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      8 set :testAndSetMultiples:n :sumPrimesUpTo:i
 -    * set :testAndSetMultiples:maximum :sumPrimesUpTo:maximum
 +    9 set :testAndSetMultiples:maximum 500
-    10 setaddr :testAndSetMultiples*retaddr *label6 (h:*label6)
-    11 call *label1 *invalid :testAndSetMultiples*retval (m:*label6) (h:*label6)
-    12 label *label6
+    10 setaddr :testAndSetMultiples*retaddr *label8 (h:*label8)
+    11 call *label1 *invalid :testAndSetMultiples*retval (m:*label8) (h:*label8)
+    12 label *label8
  
-    16 label *label8
+    16 label *label7
     17 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
     18 set :testAndSetMultiples:n :sumPrimesUpTo:i
 -    * set :testAndSetMultiples:maximum :sumPrimesUpTo:maximum
 +   19 set :testAndSetMultiples:maximum 500
-    20 setaddr :testAndSetMultiples*retaddr *label9 (h:*label9)
-    21 call *label1 *invalid :testAndSetMultiples*retval (m:*label9) (h:*label9)
-    22 label *label9
+    20 setaddr :testAndSetMultiples*retaddr *label11 (h:*label11)
+    21 call *label1 *invalid :testAndSetMultiples*retval (m:*label11) (h:*label11)
+    22 label *label11
  
     29 jump *label3 always
     30 label *label5
@@ -383,12 +383,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * jump *label14 greaterThan :sumPrimesUpTo:i :sumPrimesUpTo:maximum
 +   32 jump *label14 greaterThan :sumPrimesUpTo:i 500
     33 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
-    34 setaddr :getBit*retaddr *label15 (h:*label15)
-    35 call *label0 *invalid :getBit*retval (m:*label15) (h:*label15)
+    34 setaddr :getBit*retaddr *label17 (h:*label17)
+    35 call *label0 *invalid :getBit*retval (m:*label17) (h:*label17)
  
-    44 call *label0 *invalid :getBit*retval (m:*label18) (h:*label18)
-    45 label *label18
-    46 jump *label19 notEqual :getBit*retval false
+    44 call *label0 *invalid :getBit*retval (m:*label20) (h:*label20)
+    45 label *label20
+    46 jump *label18 notEqual :getBit*retval false
 -    * jump *label21 greaterThan :sumPrimesUpTo:i :sumPrimesUpTo:maximum
 +   47 jump *label21 greaterThan :sumPrimesUpTo:i 500
     48 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
@@ -451,9 +451,9 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 +    4 label *label32
      5 set :testAndSetMultiples:n :sumPrimesUpTo:i
      6 set :testAndSetMultiples:maximum 500
-     7 setaddr :testAndSetMultiples*retaddr *label6 (h:*label6)
+     7 setaddr :testAndSetMultiples*retaddr *label8 (h:*label8)
  
-    23 label *label11
+    23 label *label10
     24 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 4
     25 label *label4
 -    * jump *label3 always
@@ -463,10 +463,10 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     29 jump *label14 greaterThan :sumPrimesUpTo:i 500
 +   30 label *label33
     31 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
-    32 setaddr :getBit*retaddr *label15 (h:*label15)
-    33 call *label0 *invalid :getBit*retval (m:*label15) (h:*label15)
+    32 setaddr :getBit*retaddr *label17 (h:*label17)
+    33 call *label0 *invalid :getBit*retval (m:*label17) (h:*label17)
  
-    50 label *label20
+    50 label *label19
     51 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 4
     52 label *label13
 -    * jump *label12 always
@@ -489,17 +489,17 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 -    * jump *label28 always
 +   90 jump *label34 lessThanEq :testAndSetMultiples:i :testAndSetMultiples:max
     91 label *label30
-    92 label *label26
-    93 label *label27
+    92 label *label25
+    93 label *label26
 
 Modifications by Inline function 'getBit' defined at line 10:1 (+2 instructions):
  
     29 jump *label14 greaterThan :sumPrimesUpTo:i 500
     30 label *label33
     31 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
--    * setaddr :getBit*retaddr *label15 (h:*label15)
--    * call *label0 *invalid :getBit*retval (m:*label15) (h:*label15)
--    * label *label15
+-    * setaddr :getBit*retaddr *label17 (h:*label17)
+-    * call *label0 *invalid :getBit*retval (m:*label17) (h:*label17)
+-    * label *label17
 +   32 label *label35
 +   33 op idiv *tmp20 :getBit:bitIndex 48
 +   34 op mod *tmp22 :getBit:bitIndex 48
@@ -507,15 +507,15 @@ Modifications by Inline function 'getBit' defined at line 10:1 (+2 instructions)
 +   36 read *tmp21 BITMAP *tmp20
 +   37 op and :getBit*retval *tmp21 *tmp23
 +   38 label *label36
-    39 jump *label16 notEqual :getBit*retval false
+    39 jump *label15 notEqual :getBit*retval false
     40 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-    41 label *label16
-    42 label *label17
+    41 label *label15
+    42 label *label16
     43 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
     44 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
--    * setaddr :getBit*retaddr *label18 (h:*label18)
--    * call *label0 *invalid :getBit*retval (m:*label18) (h:*label18)
--    * label *label18
+-    * setaddr :getBit*retaddr *label20 (h:*label20)
+-    * call *label0 *invalid :getBit*retval (m:*label20) (h:*label20)
+-    * label *label20
 +   45 label *label37
 +   46 op idiv *tmp20 :getBit:bitIndex 48
 +   47 op mod *tmp22 :getBit:bitIndex 48
@@ -523,7 +523,7 @@ Modifications by Inline function 'getBit' defined at line 10:1 (+2 instructions)
 +   49 read *tmp21 BITMAP *tmp20
 +   50 op and :getBit*retval *tmp21 *tmp23
 +   51 label *label38
-    52 jump *label19 notEqual :getBit*retval false
+    52 jump *label18 notEqual :getBit*retval false
     53 jump *label21 greaterThan :sumPrimesUpTo:i 500
     54 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
  
@@ -541,9 +541,9 @@ Modifications by Inline function 'getBit' defined at line 10:1 (+2 instructions)
 -    * end
     67 label *label1
     68 op idiv :getBit:bitIndex :testAndSetMultiples:n 2
--    * setaddr :getBit*retaddr *label25 (h:*label25)
--    * call *label0 *invalid :getBit*retval (m:*label25) (h:*label25)
--    * label *label25
+-    * setaddr :getBit*retaddr *label27 (h:*label27)
+-    * call *label0 *invalid :getBit*retval (m:*label27) (h:*label27)
+-    * label *label27
 +   69 label *label39
 +   70 op idiv *tmp20 :getBit:bitIndex 48
 +   71 op mod *tmp22 :getBit:bitIndex 48
@@ -552,7 +552,7 @@ Modifications by Inline function 'getBit' defined at line 10:1 (+2 instructions)
 +   74 op and :getBit*retval *tmp21 *tmp23
 +   75 label *label40
     76 op equal :testAndSetMultiples:result :getBit*retval false
-    77 jump *label26 equal :testAndSetMultiples:result false
+    77 jump *label25 equal :testAndSetMultiples:result false
     78 op idiv :testAndSetMultiples:max :testAndSetMultiples:maximum 2
 
 Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+15 instructions):
@@ -560,9 +560,9 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+15
      4 label *label32
      5 set :testAndSetMultiples:n :sumPrimesUpTo:i
      6 set :testAndSetMultiples:maximum 500
--    * setaddr :testAndSetMultiples*retaddr *label6 (h:*label6)
--    * call *label1 *invalid :testAndSetMultiples*retval (m:*label6) (h:*label6)
--    * label *label6
+-    * setaddr :testAndSetMultiples*retaddr *label8 (h:*label8)
+-    * call *label1 *invalid :testAndSetMultiples*retval (m:*label8) (h:*label8)
+-    * label *label8
 +    7 label *label41
 +    8 op idiv :getBit:bitIndex :testAndSetMultiples:n 2
 +    9 label *label42
@@ -595,16 +595,16 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+15
 +   36 label *label50
 +   37 set :testAndSetMultiples*retval :testAndSetMultiples:result
 +   38 label *label51
-    39 jump *label7 equal :testAndSetMultiples*retval false
+    39 jump *label6 equal :testAndSetMultiples*retval false
     40 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-    41 label *label7
+    41 label *label6
  
     43 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
     44 set :testAndSetMultiples:n :sumPrimesUpTo:i
     45 set :testAndSetMultiples:maximum 500
--    * setaddr :testAndSetMultiples*retaddr *label9 (h:*label9)
--    * call *label1 *invalid :testAndSetMultiples*retval (m:*label9) (h:*label9)
--    * label *label9
+-    * setaddr :testAndSetMultiples*retaddr *label11 (h:*label11)
+-    * call *label1 *invalid :testAndSetMultiples*retval (m:*label11) (h:*label11)
+-    * label *label11
 +   46 label *label52
 +   47 op idiv :getBit:bitIndex :testAndSetMultiples:n 2
 +   48 label *label53
@@ -637,9 +637,9 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+15
 +   75 label *label61
 +   76 set :testAndSetMultiples*retval :testAndSetMultiples:result
 +   77 label *label62
-    78 jump *label10 equal :testAndSetMultiples*retval false
+    78 jump *label9 equal :testAndSetMultiples*retval false
     79 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-    80 label *label10
+    80 label *label9
  
    122 assertequals 21536 :sumPrimesUpTo:sum "sumPrimesUpTo(500)"
    123 stop
@@ -654,7 +654,7 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+15
 -    * op and :getBit*retval *tmp21 *tmp23
 -    * label *label40
 -    * op equal :testAndSetMultiples:result :getBit*retval false
--    * jump *label26 equal :testAndSetMultiples:result false
+-    * jump *label25 equal :testAndSetMultiples:result false
 -    * op idiv :testAndSetMultiples:max :testAndSetMultiples:maximum 2
 -    * op mul *tmp29 :testAndSetMultiples:n :testAndSetMultiples:n
 -    * op idiv :testAndSetMultiples:i *tmp29 2
@@ -672,8 +672,8 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+15
 -    * op add :testAndSetMultiples:i :testAndSetMultiples:i :testAndSetMultiples:n
 -    * jump *label34 lessThanEq :testAndSetMultiples:i :testAndSetMultiples:max
 -    * label *label30
+-    * label *label25
 -    * label *label26
--    * label *label27
 -    * set :testAndSetMultiples*retval :testAndSetMultiples:result
 -    * label *label24
 -    * return :testAndSetMultiples*retaddr
@@ -717,11 +717,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     36 label *label50
     37 set :testAndSetMultiples*retval :testAndSetMultiples:result
     38 label *label51
--    * jump *label7 equal :testAndSetMultiples*retval false
-+   39 jump *label7 equal :testAndSetMultiples:result false
+-    * jump *label6 equal :testAndSetMultiples*retval false
++   39 jump *label6 equal :testAndSetMultiples:result false
     40 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-    41 label *label7
-    42 label *label8
+    41 label *label6
+    42 label *label7
  
     44 set :testAndSetMultiples:n :sumPrimesUpTo:i
     45 set :testAndSetMultiples:maximum 500
@@ -759,11 +759,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     75 label *label61
     76 set :testAndSetMultiples*retval :testAndSetMultiples:result
     77 label *label62
--    * jump *label10 equal :testAndSetMultiples*retval false
-+   78 jump *label10 equal :testAndSetMultiples:result false
+-    * jump *label9 equal :testAndSetMultiples*retval false
++   78 jump *label9 equal :testAndSetMultiples:result false
     79 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-    80 label *label10
-    81 label *label11
+    80 label *label9
+    81 label *label10
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-8 instructions):
  
@@ -789,10 +789,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-8
     33 label *label50
 -    * set :testAndSetMultiples*retval :testAndSetMultiples:result
     34 label *label51
-    35 jump *label7 equal :testAndSetMultiples:result false
+    35 jump *label6 equal :testAndSetMultiples:result false
     36 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-    37 label *label7
-    38 label *label8
+    37 label *label6
+    38 label *label7
     39 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
 -    * set :testAndSetMultiples:n :sumPrimesUpTo:i
 -    * set :testAndSetMultiples:maximum 500
@@ -813,7 +813,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-8
     68 label *label61
 -    * set :testAndSetMultiples*retval :testAndSetMultiples:result
     69 label *label62
-    70 jump *label10 equal :testAndSetMultiples:result false
+    70 jump *label9 equal :testAndSetMultiples:result false
     71 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
 
 Modifications by Unroll loop at line 29:5 (+131 instructions):
@@ -852,10 +852,10 @@ Modifications by Unroll loop at line 29:5 (+131 instructions):
 -    * label *label49
 -    * label *label50
 -    * label *label51
--    * jump *label7 equal :testAndSetMultiples:result false
+-    * jump *label6 equal :testAndSetMultiples:result false
 -    * op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
+-    * label *label6
 -    * label *label7
--    * label *label8
 -    * op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
 -    * label *label52
 -    * op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
@@ -887,10 +887,10 @@ Modifications by Unroll loop at line 29:5 (+131 instructions):
 -    * label *label60
 -    * label *label61
 -    * label *label62
--    * jump *label10 equal :testAndSetMultiples:result false
+-    * jump *label9 equal :testAndSetMultiples:result false
 -    * op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
+-    * label *label9
 -    * label *label10
--    * label *label11
 -    * op add :sumPrimesUpTo:i :sumPrimesUpTo:i 4
 -    * label *label4
 -    * jump *label32 lessThanEq :sumPrimesUpTo:i 23
@@ -7535,10 +7535,10 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    451 read *tmp21 BITMAP *tmp20
    452 op and :getBit*retval *tmp21 *tmp23
 -    * label *label36
-   453 jump *label16 notEqual :getBit*retval false
+   453 jump *label15 notEqual :getBit*retval false
    454 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-   455 label *label16
--    * label *label17
+   455 label *label15
+-    * label *label16
    456 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
    457 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
 -    * label *label37
@@ -7548,13 +7548,13 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    461 read *tmp21 BITMAP *tmp20
    462 op and :getBit*retval *tmp21 *tmp23
 -    * label *label38
-   463 jump *label19 notEqual :getBit*retval false
+   463 jump *label18 notEqual :getBit*retval false
    464 jump *label21 greaterThan :sumPrimesUpTo:i 500
    465 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
    466 label *label21
 -    * label *label22
-   467 label *label19
--    * label *label20
+   467 label *label18
+-    * label *label19
    468 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 4
 -    * label *label13
    469 jump *label33 lessThanEq :sumPrimesUpTo:i 500
@@ -8246,9 +8246,9 @@ op mod *tmp22 :getBit:bitIndex 48
 op shl *tmp23 1 *tmp22
 read *tmp21 BITMAP *tmp20
 op and :getBit*retval *tmp21 *tmp23
-jump *label16 notEqual :getBit*retval false
+jump *label15 notEqual :getBit*retval false
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-label *label16
+label *label15
 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
 op idiv *tmp20 :getBit:bitIndex 48
@@ -8256,11 +8256,11 @@ op mod *tmp22 :getBit:bitIndex 48
 op shl *tmp23 1 *tmp22
 read *tmp21 BITMAP *tmp20
 op and :getBit*retval *tmp21 *tmp23
-jump *label19 notEqual :getBit*retval false
+jump *label18 notEqual :getBit*retval false
 jump *label21 greaterThan :sumPrimesUpTo:i 500
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
 label *label21
-label *label19
+label *label18
 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 4
 jump *label33 lessThanEq :sumPrimesUpTo:i 500
 assertequals 21536 :sumPrimesUpTo:sum "sumPrimesUpTo(500)"

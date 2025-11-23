@@ -3,7 +3,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 import info.teksol.mc.generated.ast.visitors.AstCaseExpressionVisitor;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
@@ -11,7 +11,7 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseExpressionVisitor<ValueStore> {
+public class CaseExpressionsBuilder extends AbstractCodeBuilder implements AstCaseExpressionVisitor<ValueStore> {
     public CaseExpressionsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
     }

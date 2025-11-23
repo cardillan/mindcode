@@ -3,7 +3,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.MissingFunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
@@ -17,7 +17,7 @@ import java.util.List;
 @NullMarked
 public class BuiltinFunctionMlogBuilder extends AbstractFunctionBuilder {
 
-    public BuiltinFunctionMlogBuilder(AbstractBuilder builder) {
+    public BuiltinFunctionMlogBuilder(AbstractCodeBuilder builder) {
         super(builder);
     }
 

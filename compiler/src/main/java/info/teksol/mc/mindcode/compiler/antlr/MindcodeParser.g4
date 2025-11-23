@@ -236,8 +236,8 @@ expression
     | left = expression
         op = (NOT_EQUAL | EQUAL | STRICT_NOT_EQUAL | STRICT_EQUAL)
         right = expression                                                              # astOperatorBinaryEquality
-    | left = expression op = (BOOLEAN_AND | LOGICAL_AND) right = expression             # astOperatorBinaryLogicalAnd
-    | left = expression op = (BOOLEAN_OR | LOGICAL_OR) right = expression               # astOperatorBinaryLogicalOr
+    | left = expression op = (BOOLEAN_AND | LOGICAL_AND) right = expression             # astOperatorBinaryAnd
+    | left = expression op = (BOOLEAN_OR | LOGICAL_OR) right = expression               # astOperatorBinaryOr
 //    | left = expression op = IN firstValue = expression
 //        operator = (DOT2 | DOT3) lastValue = expression                                 # astOperatorBinaryInRange
     | <assoc = right> condition = expression

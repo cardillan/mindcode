@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.generated.ast.visitors.*;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
@@ -10,7 +10,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class StatementListsBuilder extends AbstractBuilder implements
+public class StatementListsBuilder extends AbstractCodeBuilder implements
         AstCodeBlockVisitor<ValueStore>,
         AstModuleVisitor<ValueStore>,
         AstParenthesesVisitor<ValueStore>,

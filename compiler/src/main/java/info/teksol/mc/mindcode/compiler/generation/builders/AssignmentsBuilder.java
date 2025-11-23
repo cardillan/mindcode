@@ -10,7 +10,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstLiteralDecimal;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorIncDec;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
@@ -27,7 +27,7 @@ import static info.teksol.mc.mindcode.logic.arguments.LogicNull.NULL;
 import static info.teksol.mc.mindcode.logic.arguments.LogicVoid.VOID;
 
 @NullMarked
-public class AssignmentsBuilder extends AbstractBuilder implements AstAssignmentVisitor<ValueStore>, AstOperatorIncDecVisitor<ValueStore> {
+public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssignmentVisitor<ValueStore>, AstOperatorIncDecVisitor<ValueStore> {
 
     public AssignmentsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);

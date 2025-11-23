@@ -246,17 +246,17 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
             throw new MindcodeInternalError("Program is empty.");
         }
 
-        if (globalProfile.getParseTreeLevel() > 0) {
-            debug("Parse tree:");
-            debug(new AstIndentedPrinter().print(astProgram));
-            debug("");
-        }
-
         long compileStart = System.nanoTime();
 
         DirectivePreprocessor.processGlobalDirectives(this, globalProfile, astProgram.getMainModule());
         astProgram.getModules().stream().filter(m -> !m.isMain())
                 .forEach(module -> DirectivePreprocessor.processModuleDirectives(this, globalProfile, module));
+
+        if (globalProfile.getParseTreeLevel() > 0) {
+            debug("Parse tree:");
+            debug(new AstIndentedPrinter().print(astProgram));
+            debug("");
+        }
 
         DirectivePreprocessor.processLocalDirectives(this, globalProfile, astProgram);
 

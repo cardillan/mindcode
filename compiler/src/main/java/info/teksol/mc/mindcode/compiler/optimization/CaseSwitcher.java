@@ -85,7 +85,7 @@ public class CaseSwitcher extends BaseOptimizer {
             emitMessage(MessageLevel.INFO, "%6d case expressions converted to value translations by %s.", translatedCount, getName());
         }
         if (fastDispatchedCount > 0) {
-            emitMessage(MessageLevel.INFO, "%6d case expressions converted to fast dispatch by %s.", translatedCount, getName());
+            emitMessage(MessageLevel.INFO, "%6d case expressions converted to fast dispatch by %s.", fastDispatchedCount, getName());
         }
     }
 

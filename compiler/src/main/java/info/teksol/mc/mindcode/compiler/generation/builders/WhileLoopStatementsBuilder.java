@@ -7,12 +7,9 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import org.jspecify.annotations.NullMarked;
-
-import static info.teksol.mc.mindcode.logic.arguments.LogicBoolean.FALSE;
 
 @NullMarked
 public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements AstWhileLoopStatementVisitor<ValueStore> {
@@ -42,13 +39,12 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         visitBody(node.getBody());
 
         // Continue label
-        // The label needs to be part of loop body so that it gets copied on loop unrolling
+        // The label needs to be part of the loop body so that it gets copied on loop unrolling
         assembler.createLabel(loopLabels.continueLabel());
 
         // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
-        final ValueStore condition = evaluate(node.getCondition());
-        assembler.createJump(beginLabel, Condition.NOT_EQUAL, condition.getValue(assembler), FALSE);
+        evaluateInvertedCondition(node.getCondition(), beginLabel, loopLabels.breakLabel());
 
         // Exit
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1);
@@ -64,17 +60,16 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         assembler.createLabel(beginLabel);
-        final ValueStore condition = evaluate(node.getCondition());
-        assembler.createJump(loopLabels.breakLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
+        evaluateCondition(node.getCondition(), loopLabels.breakLabel());
 
         // Loop body
         assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         visitBody(node.getBody());
 
-        // Continue label
-        // The label needs to be part of loop body so that it gets copied on loop unrolling
+        // Continue label:
+        // The label needs to be part of the loop body so that it gets copied on loop unrolling.
         // The label cannot be placed in front of the entry condition, as the entry condition might
-        // get moved to the end of the loop
+        // get moved to the end of the loop.
         assembler.createLabel(loopLabels.continueLabel());
 
         // Flow control

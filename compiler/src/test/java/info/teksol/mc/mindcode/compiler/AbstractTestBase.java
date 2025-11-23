@@ -157,7 +157,7 @@ public abstract class AbstractTestBase extends AbstractMessageEmitter implements
 
     protected final AstContext mockAstRootContext = AstContext.createRootNode(profile);
     //protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.MOCK, 1.0);
-    protected final AstContext mockAstContext = mockAstRootContext.createChild(testNode, AstContextType.BODY);
+    protected final AstContext mockAstContext = mockAstRootContext.createChild(testNode, AstContextType.CODE);
 
     protected static LogicArgument _logic(String str) {
         return new GenericArgument(str);

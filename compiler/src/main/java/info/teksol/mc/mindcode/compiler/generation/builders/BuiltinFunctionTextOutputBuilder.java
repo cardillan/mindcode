@@ -5,7 +5,7 @@ import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstEnhancedComment;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.variables.FormattableContent;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
@@ -29,7 +29,7 @@ import static info.teksol.mc.messages.ERR.*;
 public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
     private static final Pattern PLACEHOLDER_MATCHER = Pattern.compile("\\{\\d}");
 
-    public BuiltinFunctionTextOutputBuilder(AbstractBuilder builder) {
+    public BuiltinFunctionTextOutputBuilder(AbstractCodeBuilder builder) {
         super(builder);
     }
 

@@ -9,7 +9,7 @@ import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.IntermediateValue;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.*;
@@ -27,7 +27,7 @@ import static info.teksol.mc.mindcode.compiler.Modifier.*;
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
 
 @NullMarked
-public class DeclarationsBuilder extends AbstractBuilder implements
+public class DeclarationsBuilder extends AbstractCodeBuilder implements
         AstAllocationVisitor<ValueStore>,
         AstAllocationsVisitor<ValueStore>,
         AstDirectiveSetVisitor<ValueStore>,

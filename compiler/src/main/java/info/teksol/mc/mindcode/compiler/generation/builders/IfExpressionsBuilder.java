@@ -6,7 +6,7 @@ import info.teksol.mc.generated.ast.visitors.AstOperatorTernaryVisitor;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
@@ -15,10 +15,8 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
-import static info.teksol.mc.mindcode.logic.arguments.LogicBoolean.FALSE;
-
 @NullMarked
-public class IfExpressionsBuilder extends AbstractBuilder implements
+public class IfExpressionsBuilder extends AbstractCodeBuilder implements
         AstIfExpressionVisitor<ValueStore>,
         AstOperatorTernaryVisitor<ValueStore>
 {
@@ -36,27 +34,26 @@ public class IfExpressionsBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitOperatorTernary(AstOperatorTernary node) {
+        final LogicLabel falseLabel = assembler.nextLabel();
+        final LogicLabel endLabel = assembler.nextLabel();
+
         assembler.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
-        final ValueStore condition = variables.excludeVariablesFromTracking(() -> evaluate(node.getCondition()));
+        evaluateCondition(node.getCondition(), falseLabel);
 
         final LogicVariable tmp = assembler.nextNodeResultTemp();
-        final LogicLabel elseBranch = assembler.nextLabel();
-        final LogicLabel endBranch = assembler.nextLabel();
-
-        assembler.createJump(elseBranch, Condition.EQUAL, condition.getValue(assembler), FALSE);
 
         assembler.setSubcontextType(AstSubcontextType.BODY, 0.5);
         final ValueStore trueBranch = evaluate(node.getTrueBranch());
         assembler.createSet(tmp, handleVoid(trueBranch.getValue(assembler)));
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
-        assembler.createJumpUnconditional(endBranch);
-        assembler.createLabel(elseBranch);
+        assembler.createJumpUnconditional(endLabel);
 
+        assembler.createLabel(falseLabel);
         assembler.setSubcontextType(AstSubcontextType.BODY, 0.5);
         final ValueStore falseBranch = evaluate(node.getFalseBranch());
         assembler.createSet(tmp, handleVoid(falseBranch.getValue(assembler)));
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
-        assembler.createLabel(endBranch);
+        assembler.createLabel(endLabel);
 
         assembler.clearSubcontextType();
         return tmp;

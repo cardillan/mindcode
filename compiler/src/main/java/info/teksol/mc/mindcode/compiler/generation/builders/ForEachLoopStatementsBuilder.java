@@ -6,7 +6,7 @@ import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.AbstractStandaloneBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
@@ -51,7 +51,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         private final boolean symbolicLabels;
         private final boolean nullCounterNoop;
 
-        public ForEachLoopBuilder(AbstractBuilder builder, AstForEachLoopStatement node) {
+        public ForEachLoopBuilder(AbstractCodeBuilder builder, AstForEachLoopStatement node) {
             super(builder, node);
             symbolicLabels = node.getProfile().isSymbolicLabels();
             nullCounterNoop = node.getProfile().isNullCounterIsNoop();

@@ -12,8 +12,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
-import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.IF;
-import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.OPERATOR;
+import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.*;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 import static java.util.Objects.requireNonNull;
 
@@ -25,8 +24,8 @@ class IfExpressionOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        if (experimentalGlobal() && instructionProcessor.isSupported(Opcode.SELECT)) {
-            List<AstContext> contexts = contexts(ctx -> ctx.matches(IF, BASIC));
+        if (instructionProcessor.isSupported(Opcode.SELECT)) {
+            List<AstContext> contexts = contexts(ctx -> experimental(ctx) && ctx.matches(IF, BASIC));
             List<Boolean> result = contexts.stream().map(this::applySelectOptimization).toList();
             if (result.stream().anyMatch(Boolean::booleanValue)) return true;
         }
@@ -176,7 +175,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
         LogicList flowControl = contextInstructions(ifExpression.child(2));
         if (flowControl.getFirst() instanceof JumpInstruction jump2 && jump2.isUnconditional()
                 || (falseContent.isEmpty() && flowControl.getFirst() instanceof EmptyInstruction)) {
-            AstContext targetContext = Objects.requireNonNull(ifExpression.parent()).createChild(ifExpression.existingNode(), OPERATOR);
+            AstContext targetContext = requireNonNull(ifExpression.parent()).createChild(ifExpression.existingNode(), OPERATOR);
             LogicList instructions = condition.subList(0, condition.size() - 1).duplicateToContext(targetContext, false);
 
             JumpInstruction invertedJump = negateCompoundCondition(condition);
@@ -242,7 +241,8 @@ class IfExpressionOptimizer extends BaseOptimizer {
         }
 
         LogicList condition = contextInstructions(ifExpression.child(0));
-        if (!(condition.getLast() instanceof JumpInstruction jump && jump.isConditional())) {
+        JumpInstruction jump = optimizationContext.getLastConditionJump(condition);
+        if (jump == null) {
             return;
         }
 
@@ -260,8 +260,9 @@ class IfExpressionOptimizer extends BaseOptimizer {
         // Both branches set the same variable to some value as the last statement
         // Expensive tests last
         if (lastTrue instanceof LogicResultInstruction resTrue && lastFalse instanceof LogicResultInstruction resFalse
-            && resTrue.getResult().equals(resFalse.getResult())
-            && isContained(trueBranch.toList()) && isContained(falseBranch.toList())) {
+                && resTrue.getResult().equals(resFalse.getResult())
+                && !resTrue.isUpdating() && !resFalse.isUpdating()
+                && isContained(trueBranch.toList()) && isContained(falseBranch.toList())) {
 
             LogicVariable resVar = resTrue.getResult();
             LogicInstruction instructionAfter;
@@ -296,14 +297,14 @@ class IfExpressionOptimizer extends BaseOptimizer {
 
                 if (globalSafe && condition.stream().noneMatch(ix -> ix.usesAsInput(updatedResVar))) {
                     if (invertedJump != null && trueBranch.realSize() == 1 && !isVolatile(resTrue) && isSafe(falseBranch, updatedResVar)) {
-                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
+                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump, invertedJump, true);
                         swappable = false;
                     } else if (falseBranch.realSize() == 1 && !isVolatile(resFalse) && isSafe(trueBranch, updatedResVar)) {
                         moveFalseBranch(condition, trueBranch, falseBranch, jump);
                         swappable = false;
                     } else if (invertedJump == null && trueBranch.realSize() == 1 && jump.getCondition().hasInverse(getGlobalProfile())
                                && !isVolatile(resTrue) && isSafe(falseBranch, updatedResVar)) {
-                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(getGlobalProfile()), false);
+                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump, jump.invert(getGlobalProfile()), false);
                         swappable = false;
                     }
                 }
@@ -383,8 +384,8 @@ class IfExpressionOptimizer extends BaseOptimizer {
     }
 
     private @Nullable JumpInstruction negateCompoundCondition(LogicList condition) {
-        if (condition.getFromEnd(0) instanceof JumpInstruction jump
-            && condition.getFromEnd(1) instanceof OpInstruction op
+        if (condition.getRealFromEnd(0) instanceof JumpInstruction jump
+            && condition.getRealFromEnd(1) instanceof OpInstruction op
             && op.getOperation().isCondition(getGlobalProfile()) && op.getResult().isTemporaryVariable()
             && jump.getCondition() == Condition.EQUAL && jump.getX().equals(op.getResult())
             && jump.getY().equals(LogicBoolean.FALSE)
@@ -396,19 +397,29 @@ class IfExpressionOptimizer extends BaseOptimizer {
         }
     }
 
-    private void moveTrueBranchUsingJump(LogicList condition, LogicList trueBranch, LogicList falseBranch, JumpInstruction invertedJump,
-            boolean compoundCondition) {
+    private void moveTrueBranchUsingJump(LogicList condition, LogicList trueBranch, LogicList falseBranch,
+            JumpInstruction jump, JumpInstruction invertedJump, boolean compoundCondition) {
         // Move body
         int bodyIndex = instructionIndex(requireNonNull(trueBranch.getFirst()));
         trueBranch.forEach(ix -> removeInstruction(bodyIndex)); // Removes the body
         removeInstruction(bodyIndex);   // Removes the jump
         insertBefore(requireNonNull(condition.getFirst()), trueBranch);
 
-        // Get final label (blind cast since the `if` structure was verified)
+        // Get the final label (blind cast since the `if` structure was verified)
         LabelInstruction labelInstruction = (LabelInstruction) instructionAfter(requireNonNull(falseBranch.getLast()));
+        LogicLabel oldLabel = jump.getTarget();
+        LogicLabel newLabel = requireNonNull(labelInstruction).getLabel();
 
         // Update condition
-        int conditionIndex = instructionIndex(requireNonNull(condition.getLast()));
+        int conditionIndex = instructionIndex(jump);
+
+        // Update all jumps in condition (for short-circuiting)
+        condition.stream()
+                .filter(JumpInstruction.class::isInstance)
+                .map(JumpInstruction.class::cast)
+                .filter(j -> j.getTarget().equals(oldLabel))
+                .forEach(j -> replaceInstruction(j, j.withTarget(newLabel)));
+
         replaceInstruction(conditionIndex, invertedJump.withTarget(requireNonNull(labelInstruction).getLabel()));
 
         // If it was a compound condition, remove it
@@ -419,7 +430,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
     }
 
     private void moveFalseBranch(LogicList condition, LogicList trueBranch, LogicList falseBranch, JumpInstruction jump) {
-        // Get final label (blind cast since the `if` structure was verified)
+        // Get the final label (blind cast since the `if` structure was verified)
         LabelInstruction labelInstruction = (LabelInstruction) instructionAfter(requireNonNull(falseBranch.getLast()));
 
         // Move body
@@ -428,9 +439,17 @@ class IfExpressionOptimizer extends BaseOptimizer {
         removeInstruction(bodyIndex - 1);     // Removes the previous jump
         insertBefore(requireNonNull(condition.getFirst()), falseBranch);
 
-        replaceInstruction(jump, jump.withTarget(requireNonNull(labelInstruction).getLabel()));
-    }
+        // New label
+        LogicLabel oldLabel = jump.getTarget();
+        LogicLabel newLabel = requireNonNull(labelInstruction).getLabel();
 
+        // Update all jumps in condition (for short-circuiting)
+        condition.stream()
+                .filter(JumpInstruction.class::isInstance)
+                .map(JumpInstruction.class::cast)
+                .filter(j -> j.getTarget().equals(oldLabel))
+                .forEach(j -> replaceInstruction(j, j.withTarget(newLabel)));
+    }
 
     private void swapBranches(LogicList condition, LogicList trueBranch, LogicList falseBranch, JumpInstruction invertedJump) {
         if (isContinuous(trueBranch) && isContinuous(falseBranch)) {
@@ -444,9 +463,24 @@ class IfExpressionOptimizer extends BaseOptimizer {
             insertInstructions(instructionIndex(requireNonNull(falseAnchor)), trueBranch);
 
             // Negate compound condition
-            int conditionIndex = instructionIndex(requireNonNull(condition.getLast()));
-            replaceInstruction(conditionIndex, invertedJump);
-            removeInstruction(conditionIndex - 1);
+            if (invertedJump.getAstContext().matches(SHORT_CIRCUIT)) {
+                JumpInstruction originalJump = (JumpInstruction) requireNonNull(condition.getRealFromEnd(0));
+                LabelInstruction trueLabel = (LabelInstruction) requireNonNull(condition.getLast());
+                LabelInstruction falseLabel = getLabelInstruction(originalJump.getTarget());
+
+                // Swap labels
+                int trueLabelIndex = instructionIndex(trueLabel);
+                int falseLabelIndex = instructionIndex(falseLabel);
+                invalidateInstruction(trueLabelIndex);
+                invalidateInstruction(falseLabelIndex);
+                replaceInstruction(trueLabelIndex, trueLabel.withLabel(falseLabel.getLabel()));
+                replaceInstruction(falseLabelIndex, falseLabel.withLabel(trueLabel.getLabel()));
+                replaceInstruction(originalJump, invertedJump.withTarget(trueLabel.getLabel()));
+            } else {
+                int conditionIndex = instructionIndex(requireNonNull(condition.getLast()));
+                replaceInstruction(conditionIndex, invertedJump);
+                removeInstruction(conditionIndex - 1);
+            }
         }
     }
 

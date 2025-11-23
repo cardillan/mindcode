@@ -66,15 +66,15 @@ class SingleStepEliminator extends BaseOptimizer {
 
                     isJumpToNext = false;
                     if (ix instanceof JumpInstruction jump) {
-                        if (jump.equals(lastJump)) {
+                        if (lastJump != null && supersedes(lastJump, jump)) {
                             if (noEffective) {
-                                // Removing a previous jump when the next jump is identical to this one and no effective instructions between them
+                                // Removing a previous jump when the next jump supersedes it, and there are no effective instructions in between
                                 removableJumps.add(lastJump);
 
                                 // This becomes the last jump, other properties remain unchanged
                                 lastJump = jump;
                                 continue;
-                            } else if (sequential) {
+                            } else if (sequential && jump.equals(lastJump)) {
                                 // Removing jump identical to the previous one with effective instructions between them,
                                 // but these instructions are safe.
                                 // Keeping lastJump intact
@@ -135,5 +135,9 @@ class SingleStepEliminator extends BaseOptimizer {
         }
 
         return instruction instanceof EndInstruction;
+    }
+
+    private boolean supersedes(JumpInstruction lastJump, JumpInstruction jump) {
+        return lastJump.equals(jump) || lastJump.getTarget().equals(jump.getTarget()) && jump.isUnconditional();
     }
 }

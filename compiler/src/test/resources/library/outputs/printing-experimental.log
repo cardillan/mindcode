@@ -15,7 +15,7 @@
    274 instructions added by Function Inlining (28 iterations).
     15 function calls inlined by Function Inlining.
     12 instructions eliminated by Case Switching (28 iterations).
-     0 case expressions converted to fast dispatch by Case Switching.
+     2 case expressions converted to fast dispatch by Case Switching.
      6 instructions eliminated by Jump Straightening (5 iterations).
    140 instructions updated by Jump Threading.
    288 instructions eliminated by Unreachable Code Elimination (2 iterations).
@@ -1586,10 +1586,10 @@ Final code before resolving virtual instructions:
   490:  end
         label *label6
   491:  op abs *tmp42 :printExactFast:n 0
-  492:  jump *label116 greaterThan *tmp42 0
+  492:  jump *label115 greaterThan *tmp42 0
   493:  print :printExactFast:n
   494:  return :printExactFast*retaddr
-        label *label116
+        label *label115
   495:  jump *label118 greaterThanEq :printExactFast:n 0
   496:  print "-"
   497:  op abs :printExactFast:n :printExactFast:n 0
@@ -1686,10 +1686,10 @@ Final code before resolving virtual instructions:
   564:  return :printExactFast*retaddr
         label *label7
   565:  op abs *tmp78 :printExactSlow:n 0
-  566:  jump *label141 greaterThan *tmp78 0
+  566:  jump *label140 greaterThan *tmp78 0
   567:  print :printExactSlow:n
   568:  return :printExactSlow*retaddr
-        label *label141
+        label *label140
   569:  jump *label143 greaterThanEq :printExactSlow:n 0
   570:  print "-"
   571:  op abs :printExactSlow:n :printExactSlow:n 0

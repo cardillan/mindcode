@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.BASIC;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.CONDITION;
+import static info.teksol.mc.mindcode.logic.arguments.LogicBoolean.FALSE;
 import static info.teksol.mc.mindcode.logic.arguments.Operation.*;
 
 /// Base class for code builders. Each builder generates code for a subset os AST node types.
@@ -42,7 +43,7 @@ import static info.teksol.mc.mindcode.logic.arguments.Operation.*;
 /// Foremost, there's a `visit(AstMindcodeNode node)` method, which is used to evaluate a child node using
 /// all registered builders (potentially including the current one).
 @NullMarked
-public abstract class AbstractBuilder extends AbstractMessageEmitter {
+public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
     private final CodeGenerator codeGenerator;
 
     protected final CodeGeneratorContext context;
@@ -56,7 +57,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     protected final ReturnStack returnStack;
     protected final CompileTimeEvaluator evaluator;
 
-    protected AbstractBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
+    protected AbstractCodeBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(context.messageConsumer());
         this.codeGenerator = codeGenerator;
         this.context = context;
@@ -72,7 +73,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         evaluator = context.compileTimeEvaluator();
     }
 
-    protected AbstractBuilder(AbstractBuilder builder) {
+    protected AbstractCodeBuilder(AbstractCodeBuilder builder) {
         super(builder.context.messageConsumer());
         this.codeGenerator = builder.codeGenerator;
         this.context = builder.context;
@@ -293,6 +294,99 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         }
 
         return tmp;
+    }
+
+    protected void evaluateCondition(AstExpression condition, LogicLabel falseLabel) {
+        UnwrappedNode unwrapped = unwrapNegation(condition);
+
+        if (unwrapped.expression instanceof AstOperatorShortCircuiting shortCircuitingNode) {
+            assembler.enterAstNode(shortCircuitingNode, AstContextType.SHORT_CIRCUIT);
+            LogicLabel trueLabel = assembler.nextLabel();
+            evaluateShortCircuitingOperator(shortCircuitingNode, trueLabel, falseLabel, unwrapped.negated);
+            assembler.createLabel(trueLabel);
+            assembler.exitAstNode(shortCircuitingNode, AstContextType.SHORT_CIRCUIT);
+        } else {
+            final LogicValue value = variables.excludeVariablesFromTracking(() -> evaluate(condition).getValue(assembler));
+            assembler.createJump(falseLabel, Condition.EQUAL, value, FALSE);
+        }
+    }
+
+    protected void evaluateInvertedCondition(AstExpression condition, LogicLabel trueLabel, LogicLabel falseLabel) {
+        UnwrappedNode unwrapped = unwrapNegation(condition);
+
+        if (unwrapped.expression instanceof AstOperatorShortCircuiting shortCircuitingNode) {
+            assembler.enterAstNode(shortCircuitingNode, AstContextType.SHORT_CIRCUIT);
+            evaluateShortCircuitingOperator(shortCircuitingNode, trueLabel, falseLabel, unwrapped.negated);
+            assembler.exitAstNode(shortCircuitingNode, AstContextType.SHORT_CIRCUIT);
+        } else {
+            final LogicValue value = evaluate(condition).getValue(assembler);
+            assembler.createJump(trueLabel, Condition.NOT_EQUAL, value, FALSE);
+        }
+    }
+
+    private void evaluateShortCircuitingOperator(AstOperatorShortCircuiting node, LogicLabel trueLabel, LogicLabel falseLabel,
+            boolean negated) {
+        if (node.getOperation() == LOGICAL_OR ^ negated) {
+            evaluateShortCircuit(node, trueLabel, falseLabel);
+        } else {
+            evaluateShortCircuit(node, falseLabel, trueLabel);
+        }
+    }
+
+    private void evaluateShortCircuit(AstOperatorShortCircuiting node, LogicLabel shortCircuitLabel, LogicLabel fullEvaluationLabel) {
+        LogicLabel intraNodeNextLabel = assembler.nextLabel();
+        evaluateShortCircuitNode(node, node.getLeft(), shortCircuitLabel, intraNodeNextLabel);
+        assembler.createLabel(intraNodeNextLabel);
+
+        evaluateShortCircuitNode(node, node.getRight(), shortCircuitLabel, fullEvaluationLabel);
+        assembler.createJumpUnconditional(fullEvaluationLabel);
+    }
+
+    private void evaluateShortCircuitNode(AstOperatorShortCircuiting parentNode, AstExpression child, LogicLabel shortCircuitLabel,
+            LogicLabel fullEvaluationLabel) {
+        UnwrappedNode unwrapped = unwrapNegation(child);
+        AstExpression node = unwrapped.expression;
+
+        if (node instanceof AstOperatorShortCircuiting subnode) {
+            if (subnode.getOperation() == parentNode.getOperation() ^ unwrapped.negated) {
+                // Chaining identical operations
+                evaluateShortCircuit(subnode, shortCircuitLabel, fullEvaluationLabel);
+            } else {
+                // Opposite operation: when the child short-circuits, transfer control to the next node
+                // When it evaluates fully, the parent can short-circuit
+                evaluateShortCircuit(subnode, fullEvaluationLabel, shortCircuitLabel);
+            }
+        } else {
+            final ValueStore value = evaluate(node);
+            // Short-circuiting jump
+            final Condition condition = (parentNode.getOperation() == LOGICAL_AND) ? Condition.EQUAL : Condition.NOT_EQUAL;
+            assembler.createJump(shortCircuitLabel, condition, value.getValue(assembler), LogicBoolean.FALSE);
+        }
+    }
+
+    protected record UnwrappedNode(AstExpression expression, boolean negated) { }
+
+    protected UnwrappedNode unwrapNegation(AstExpression original) {
+        boolean negated = false;
+        AstExpression node = original;
+        while (true) {
+            node = unwrapParentheses(node);
+            if (node instanceof AstOperatorShortCircuiting) {
+                return new UnwrappedNode(node, negated);
+            } else if (node instanceof AstOperatorUnary unary && unary.getOperation().isBooleanNegation()) {
+                negated = !negated;
+                node = unwrapParentheses(unary.getOperand());
+            } else {
+                return new UnwrappedNode(original, false);
+            }
+        }
+    }
+
+    protected AstExpression unwrapParentheses(AstExpression node) {
+        while (node instanceof AstParentheses parentheses) {
+            node = parentheses.getExpression();
+        }
+        return node;
     }
 
     private void emulateStrictNotEqual(AstMindcodeNode node, LogicVariable tmp, LogicValue left, LogicValue right) {

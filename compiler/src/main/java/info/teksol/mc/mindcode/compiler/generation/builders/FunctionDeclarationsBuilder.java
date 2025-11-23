@@ -3,7 +3,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
@@ -16,7 +16,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 
 @NullMarked
-public class FunctionDeclarationsBuilder extends AbstractBuilder {
+public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
     public FunctionDeclarationsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
     }
@@ -111,7 +111,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         }
 
         assembler.createLabel(returnStack.getReturnLabel());
-        assembler.exitAstNode(function.getDeclaration());
+        assembler.exitAstNode(function.getDeclaration(), AstContextType.FUNCTION_BODY);
     }
 
     private void appendRecursiveFunctionDeclaration(MindcodeFunction function) {

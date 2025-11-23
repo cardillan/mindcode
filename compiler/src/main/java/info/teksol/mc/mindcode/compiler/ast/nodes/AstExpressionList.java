@@ -44,6 +44,6 @@ public class AstExpressionList extends AstExpression {
 
     @Override
     public AstContextType getContextType() {
-        return AstContextType.BODY;
+        return AstContextType.CODE;
     }
 }

@@ -1,8 +1,8 @@
 ﻿# Ideas
 
-This documents servers as a scratch pad to track ideas and possible enhancements to Mindcode. The document isn't updated consistently and many ideas present here might be stale. 
+This documents servers as a scratch pad to track ideas and possible enhancements to Mindcode. The document isn't updated consistently, and ideas present here might be stale.
 
-Mindcode currently undergoes significant changes to the syntax, which are being discussed [here](https://github.com/cardillan/mindcode/discussions/142). Comments and suggestions are welcome.
+A more relevant list of ideas and planned changes to Mindcode found [here](https://github.com/cardillan/mindcode/discussions/142).
 
 # Mindcode
 
@@ -23,20 +23,6 @@ Mindcode currently undergoes significant changes to the syntax, which are being 
 
 * Warn when the generated code goes over 1000 Mindustry instructions.
 * Warn when a potentially non-numeric value is being pushed on the stack.
-
-### #set local compiler directive/statement
-
-```
-#set local compiler-option = value, compiler-option = value, ...;
-```
-
-Compiles the next statement/expression applying certain compiler options (e.g., `goal`) to it. Some compiler options
-(`target`, `optimization`) will remain global and won't be available in `#set local`. The intended purpose is to 
-provide means to compile different parts of code for size or speed.
-
-The specific options would probably have to be stored in AST contexts.
-
-## Syntax extensions
 
 ## Function pointers
 
@@ -65,13 +51,13 @@ The specific options would probably have to be stored in AST contexts.
     `__fgN_argM` for individual arguments ("fg" as in "function group").
   * When making a call, return address and arguments will be stored in the `__fgN` variables. Calls of recursive and
     stackless functions through a function pointer are the same.
-  * A function callable through function pointer will be prepended a header that copies the `__fgN` arguments and
+  * A function callable through a function pointer will be prepended a header that copies the `__fgN` arguments and
     return variable to actual `__fnX` arguments and return variable. If it is a recursive function, the header
     will store `__fgN_retaddr` on stack to emulate a recursive call.
   * Return address will be set to a code region after the function body which copies the `__fnN` variables to the 
     `_fgN` ones and then returns to the caller. 
   * Specific optimizers for function pointer calls
-    * If the return value is not used, function return address will be set directly to the caller's return address. 
+    * If the return value is not used, the function return address will be set directly to the caller's return address. 
     * If the function is only called through a function pointer, copying `__fgN` variables to `__fpN` variables 
       might be avoided, if the values are preserved.
   * Function call graph will need to be built upon function groups too.
@@ -101,7 +87,7 @@ Stack stored in processor variables, similar to internal arrays.
 
 ### Short-circuit boolean evaluation
 
-* The `and` and `or` operators will be subject to short-circuiting. All other, including `&&` and `||`, will always
+* The `and` and `or` operators will be subject to short-circuiting. All others, including `&&` and `||`, will always
   be evaluated fully.
 * Short-circuiting will be done by the compiler. Optimizers will look for opportunities to avoid short-circuiting
   for smaller or faster code.
@@ -220,8 +206,7 @@ Stack stored in processor variables, similar to internal arrays.
   it.
 * When a read-only parameter is always passed the same argument value (a literal), globally replace the parameter
   with that literal, saving the assignment. In combination with the above point.
-* When a function always returns the same value, replace the return value variable with that value. Handle specific
-  case of function always returning one of its input arguments.
+* When a function always returns the same value, replace the return value variable with that value. Handle a specific case of a function always returning one of its input arguments.
 
 ### Recursive function optimization
 
@@ -230,20 +215,13 @@ Stack stored in processor variables, similar to internal arrays.
   push/pop protection, revert the operation after the function call returns. Implement strict/relaxed math model to
   let the user block this in case the reversed operation produces result not equal to the original one.
 
-### Case Switching
-
-* Only perform the optimization when the input value is a known integer
-* Support ranges in when branches
-* Omit range checking where possible (requires invariant inferring)
-* On `advanced` level, convert switches that have overlapping values.
-
 ### Loop unrolling
 
-* Loop peeling - unroll first n iterations (possibly with conditions in between), followed by the loop. Especially
+* Loop peeling—unroll first n iterations (possibly with conditions in between), followed by the loop. Especially
   useful if the loop is known to iterate at least n times.
 * Jump-to-middle loop unrolling
   * Using a jump table.
-  * Loops with fixed end condition
+  * Loops with a fixed end condition
   * Loops with fixed start that can run backwards (e.g., `for i in 0 .. n cell1[i] = 0 end` - jump to position
     corresponding to `n` and proceed to `0`).
     * Need a limit on highest possible value of `n`
@@ -332,8 +310,9 @@ doing them isn't clear yet.
 
 ## Parallel comparison
 
-Most useful for (or perhaps only supported in) case expressions, where similar functionality cannot be easily achieved 
-right now:
+Not compatible with current case expression optimizations.
+
+Most useful for (or perhaps only supported in) case expressions, where similar functionality cannot be easily achieved right now:
 
 ```
 case (a, b)
@@ -366,9 +345,8 @@ There are no plans to do any of these. We keep them around just in case.
   * Pro: storing return address is avoided on non-recursive calls (such as the first call of the function)
   * Pro: it would be possible to eliminate callrec and return instruction, making stackless and recursive calls more 
     similar.
-  * Con: recursive calls are costlier (callrec + return have 6 instructions in total, while call + push + pop + goto 
-    have 8).
-  * In case of recursive-heavy algorithms (e.g., quicksort) the penalty is substantial. Recursive functions are 
+  * Con: recursive calls are costlier (callrec + return has 6 instructions in total, while call + push + pop + goto has 8).
+  * In the case of recursive-heavy algorithms (e.g., quicksort), the penalty is significant. Recursive functions are 
     generally not very useful, and if someone is compelled to use them anyway, let's make them as efficient as 
     possible. 
 * Make EOL an expression separator in addition to a semicolon and make expression separator compulsory.

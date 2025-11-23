@@ -3,7 +3,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstBreakStatement;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstContinueStatement;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstLabeledStatement;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
@@ -11,7 +11,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public abstract class AbstractLoopBuilder extends AbstractBuilder {
+public abstract class AbstractLoopBuilder extends AbstractCodeBuilder {
     protected static final int LOOP_REPETITIONS = 25;             // Estimated number of repetitions for normal loops
 
     protected AbstractLoopBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {

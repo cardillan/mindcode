@@ -137,7 +137,7 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
 
         // We'll completely replace the case statement with a new body
         index = optimizationContext.firstInstructionIndex(matcher);
-        AstContext newAstContext = astContext.existingParent().createChild(astContext.existingNode(), AstContextType.BODY);
+        AstContext newAstContext = astContext.existingParent().createChild(astContext.existingNode(), AstContextType.CODE);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(optimizationContext.getInstructionProcessor(),
                 newAstContext, instruction -> optimizationContext.insertInstruction(index++, lastInstruction = instruction));
 

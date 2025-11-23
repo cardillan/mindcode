@@ -7,12 +7,9 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import org.jspecify.annotations.NullMarked;
-
-import static info.teksol.mc.mindcode.logic.arguments.LogicBoolean.FALSE;
 
 @NullMarked
 public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implements AstIteratedForLoopStatementVisitor<ValueStore> {
@@ -34,8 +31,7 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         assembler.createLabel(beginLabel);
         if (node.getCondition() != null) {
-            final ValueStore condition = evaluate(node.getCondition());
-            assembler.createJump(loopLabels.breakLabel(), Condition.EQUAL, condition.getValue(assembler), FALSE);
+            evaluateCondition(node.getCondition(), loopLabels.breakLabel());
         }
 
         // Loop body
@@ -43,7 +39,7 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
         visitBody(node.getBody());
 
         // Continue label
-        // The label needs to be part of loop body so that it gets copied on loop unrolling
+        // The label needs to be part of the loop body so that it gets copied on loop unrolling
         assembler.createLabel(loopLabels.continueLabel());
 
         // Update

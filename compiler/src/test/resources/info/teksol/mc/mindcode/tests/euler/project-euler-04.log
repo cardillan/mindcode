@@ -20,9 +20,9 @@ Pass 3: speed optimization selection (cost limit 978):
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
-    31 label *label12
+    31 label *label8
     32 set *tmp9 null
-    33 label *label13
+    33 label *label9
 -    * set *tmp2 *tmp9
     34 jump *label7 always
     35 label *label6
@@ -34,13 +34,13 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructi
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
  
     26 op equal *tmp8 :num *tmp3
-    27 jump *label12 equal *tmp8 false
+    27 jump *label8 equal *tmp8 false
     28 set :max :num
 -    * set *tmp9 :max
-    29 jump *label13 always
-    30 label *label12
+    29 jump *label9 always
+    30 label *label8
 -    * set *tmp9 null
-    31 label *label13
+    31 label *label9
     32 jump *label7 always
     33 label *label6
 
@@ -56,15 +56,15 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
      9 jump *label6 equal *tmp1 false
     10 set :revert:num :num
  
-    14 jump *label11 equal *tmp4 false
+    14 jump *label13 equal *tmp4 false
     15 op mul *tmp5 10 :revert:res
     16 op mod *tmp6 :revert:num 10
 -    * op add *tmp7 *tmp5 *tmp6
 -    * set :revert:res *tmp7
 +   17 op add :revert:res *tmp5 *tmp6
     18 op idiv :revert:num :revert:num 10
-    19 label *label10
-    20 jump *label9 always
+    19 label *label12
+    20 jump *label11 always
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-3 instructions):
  
@@ -76,32 +76,32 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-3 inst
 +    8 jump *label6 lessThanEq :num :max
      9 set :revert:num :num
     10 set :revert:res 0
-    11 label *label9
+    11 label *label11
 -    * op greaterThan *tmp4 :revert:num 0
--    * jump *label11 equal *tmp4 false
-+   12 jump *label11 lessThanEq :revert:num 0
+-    * jump *label13 equal *tmp4 false
++   12 jump *label13 lessThanEq :revert:num 0
     13 op mul *tmp5 10 :revert:res
     14 op mod *tmp6 :revert:num 10
     15 op add :revert:res *tmp5 *tmp6
  
-    19 label *label11
+    19 label *label13
     20 set *tmp3 :revert:res
-    21 label *label8
+    21 label *label10
 -    * op equal *tmp8 :num *tmp3
--    * jump *label12 equal *tmp8 false
-+   22 jump *label12 notEqual :num *tmp3
+-    * jump *label8 equal *tmp8 false
++   22 jump *label8 notEqual :num *tmp3
     23 set :max :num
-    24 jump *label13 always
-    25 label *label12
+    24 jump *label9 always
+    25 label *label8
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
-    21 label *label8
-    22 jump *label12 notEqual :num *tmp3
+    21 label *label10
+    22 jump *label8 notEqual :num *tmp3
     23 set :max :num
--    * jump *label13 always
-    24 label *label12
-    25 label *label13
+-    * jump *label9 always
+    24 label *label8
+    25 label *label9
 -    * jump *label7 always
     26 label *label6
     27 label *label7
@@ -109,23 +109,23 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    19 label *label11
+    19 label *label13
     20 set *tmp3 :revert:res
-    21 label *label8
--    * jump *label12 notEqual :num *tmp3
-+   22 jump *label12 notEqual :num :revert:res
+    21 label *label10
+-    * jump *label8 notEqual :num *tmp3
++   22 jump *label8 notEqual :num :revert:res
     23 set :max :num
-    24 label *label12
-    25 label *label13
+    24 label *label8
+    25 label *label9
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-    17 label *label10
-    18 jump *label9 always
-    19 label *label11
+    17 label *label12
+    18 jump *label11 always
+    19 label *label13
 -    * set *tmp3 :revert:res
-    20 label *label8
-    21 jump *label12 notEqual :num :revert:res
+    20 label *label10
+    21 jump *label8 notEqual :num :revert:res
     22 set :max :num
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
@@ -142,19 +142,19 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
      9 jump *label6 lessThanEq :num :max
     10 set :revert:num :num
     11 set :revert:res 0
-    12 label *label9
-    13 jump *label11 lessThanEq :revert:num 0
+    12 label *label11
+    13 jump *label13 lessThanEq :revert:num 0
 +   14 label *label16
     15 op mul *tmp5 10 :revert:res
     16 op mod *tmp6 :revert:num 10
     17 op add :revert:res *tmp5 *tmp6
     18 op idiv :revert:num :revert:num 10
-    19 label *label10
--    * jump *label9 always
+    19 label *label12
+-    * jump *label11 always
 +   20 jump *label16 greaterThan :revert:num 0
-    21 label *label11
-    22 label *label8
-    23 jump *label12 notEqual :num :revert:res
+    21 label *label13
+    22 label *label10
+    23 jump *label8 notEqual :num :revert:res
  
     28 label *label7
     29 label *label4
@@ -177,21 +177,21 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
      9 jump *label6 lessThanEq :num :max
 -    * set :revert:num :num
 -    * set :revert:res 0
--    * label *label9
--    * jump *label11 lessThanEq :revert:num 0
+-    * label *label11
+-    * jump *label13 lessThanEq :revert:num 0
 -    * label *label16
 -    * op mul *tmp5 10 :revert:res
 -    * op mod *tmp6 :revert:num 10
 -    * op add :revert:res *tmp5 *tmp6
 -    * op idiv :revert:num :revert:num 10
--    * label *label10
--    * jump *label16 greaterThan :revert:num 0
--    * label *label11
--    * label *label8
--    * jump *label12 notEqual :num :revert:res
--    * set :max :num
 -    * label *label12
+-    * jump *label16 greaterThan :revert:num 0
 -    * label *label13
+-    * label *label10
+-    * jump *label8 notEqual :num :revert:res
+-    * set :max :num
+-    * label *label8
+-    * label *label9
 +   10 set :revert:num :num
 +   11 set :revert:res 0
 +   12 label *label17

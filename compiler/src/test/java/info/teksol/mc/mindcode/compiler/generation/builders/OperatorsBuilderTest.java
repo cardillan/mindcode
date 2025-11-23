@@ -67,11 +67,9 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a & b;
                             c && d;
-                            e and f;
                             """,
                     createInstruction(OP, "and", var(0), "a", "b"),
-                    createInstruction(OP, "land", var(1), "c", "d"),
-                    createInstruction(OP, "land", var(2), "e", "f")
+                    createInstruction(OP, "land", var(1), "c", "d")
             );
         }
 
@@ -80,14 +78,12 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a | b;
                             c || d;
-                            e or f;
-                            g ^ h;
+                            e ^ f;
                             """,
                     createInstruction(OP, "or", var(0), "a", "b"),
                     createInstruction(OP, "or", var(2), "c", "d"),
                     createInstruction(OP, "notEqual", var(1), var(2), "false"),
-                    createInstruction(OP, "or", var(3), "e", "f"),
-                    createInstruction(OP, "xor", var(4), "g", "h")
+                    createInstruction(OP, "xor", var(3), "e", "f")
             );
         }
 
@@ -165,6 +161,43 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(OP, "shr", tmp(0), tmp(0), tmp(1)),
                     createInstruction(LABEL, label(0)));
         }
+    }
+
+    @Nested
+    class ShortCircuitingOperators {
+
+        @Test
+        void compilesAnd() {
+            assertCompilesTo("a and b;",
+                    createInstruction(JUMP, label(0), "equal", ":a", "false"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(JUMP, label(0), "equal", ":b", "false"),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(0), "true"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(0), "false"),
+                    createInstruction(LABEL, label(1))
+            );
+        }
+
+        @Test
+        void compilesOr() {
+            assertCompilesTo("a or b;",
+                    createInstruction(JUMP, label(2), "notEqual", ":a", "false"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(JUMP, label(2), "notEqual", ":b", "false"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(0), "true"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(0), "false"),
+                    createInstruction(LABEL, label(1))
+            );
+        }
+
     }
 
     @Nested

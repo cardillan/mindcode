@@ -86,13 +86,13 @@ class LoopOptimizer extends BaseOptimizer {
                 && next.getFromEnd(1) instanceof JumpInstruction backJump
                 && backJump.isUnconditional()) {
 
-            // Remove the opening jump, if the loop is known to be executed at least once
+            // Remove the opening jump if the loop is known to be executed at least once
             boolean removeOriginal = evaluateLoopConditionJump(jump, loop) == LogicBoolean.FALSE;
 
             // Keeps condition instructions without the label and jump (possibly empty)
             final LogicList conditionEvaluation;
 
-            // Creates the new jump when label is known
+            // Creates the new jump when the label is known
             final BiFunction<AstContext, LogicLabel, JumpInstruction> newJumpCreator;
 
             if (condition.getFromEnd(1) instanceof OpInstruction op

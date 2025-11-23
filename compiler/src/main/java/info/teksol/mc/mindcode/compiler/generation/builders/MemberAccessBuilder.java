@@ -5,7 +5,7 @@ import info.teksol.mc.generated.ast.visitors.AstPropertyAccessVisitor;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMemberAccess;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstPropertyAccess;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.Property;
@@ -18,7 +18,7 @@ import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class MemberAccessBuilder extends AbstractBuilder implements
+public class MemberAccessBuilder extends AbstractCodeBuilder implements
         AstMemberAccessVisitor<ValueStore>,
         AstPropertyAccessVisitor<ValueStore> {
 

@@ -30,4 +30,9 @@ public class LabelInstruction extends BaseInstruction implements LabeledInstruct
     public LogicLabel getLabel() {
         return (LogicLabel) getArg(0);
     }
+
+    public LabelInstruction withLabel(LogicLabel label) {
+        return getLabel() == label ? this
+                : new LabelInstruction(getAstContext(), List.of(label), getArgumentTypes()).copyInfo(this);
+    }
 }

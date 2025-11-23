@@ -11,7 +11,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstReturnStatement;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.ReturnStack;
@@ -30,7 +30,7 @@ import java.util.function.Function;
 import static info.teksol.mc.messages.ERR.FUNCTION_CALL_WRONG_NUMBER_OF_ARGS;
 
 @NullMarked
-public class FunctionCallsBuilder extends AbstractBuilder implements
+public class FunctionCallsBuilder extends AbstractCodeBuilder implements
         AstEnhancedCommentVisitor<ValueStore>,
         AstFunctionCallVisitor<ValueStore>,
         AstReturnStatementVisitor<ValueStore>

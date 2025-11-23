@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
@@ -18,7 +18,7 @@ import static info.teksol.mc.messages.ERR.FUNCTION_CALL_WRONG_NUMBER_OF_ARGS;
 @NullMarked
 public class BuiltinFunctionVarargsBuilder extends AbstractFunctionBuilder {
 
-    public BuiltinFunctionVarargsBuilder(AbstractBuilder builder) {
+    public BuiltinFunctionVarargsBuilder(AbstractCodeBuilder builder) {
         super(builder);
     }
 

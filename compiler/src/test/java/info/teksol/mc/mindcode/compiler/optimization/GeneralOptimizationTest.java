@@ -127,16 +127,17 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         silicon = reconstructor1.@silicon;
                         graphite = reconstructor1.@graphite;
                         capacity = reconstructor1.@itemCapacity;
-                        conveyor1.enabled = !( silicon < capacity or graphite < capacity );
+                        conveyor1.enabled = !( silicon < capacity || graphite < capacity );
                         """,
-                createInstruction(SENSOR, "silicon", "reconstructor1", "@silicon"),
-                createInstruction(SENSOR, "graphite", "reconstructor1", "@graphite"),
-                createInstruction(SENSOR, "capacity", "reconstructor1", "@itemCapacity"),
-                createInstruction(OP, "lessThan", tmp(3), "silicon", "capacity"),
-                createInstruction(OP, "lessThan", tmp(4), "graphite", "capacity"),
-                createInstruction(OP, "or", tmp(5), tmp(3), tmp(4)),
-                createInstruction(OP, "equal", tmp(6), tmp(5), "false"),
-                createInstruction(CONTROL, "enabled", "conveyor1", tmp(6))
+                createInstruction(SENSOR, ":silicon", "reconstructor1", "@silicon"),
+                createInstruction(SENSOR, ":graphite", "reconstructor1", "@graphite"),
+                createInstruction(SENSOR, ":capacity", "reconstructor1", "@itemCapacity"),
+                createInstruction(OP, "lessThan", tmp(4), ":silicon", ":capacity"),
+                createInstruction(OP, "lessThan", tmp(5), ":graphite", ":capacity"),
+                createInstruction(OP, "or", tmp(7), tmp(4), tmp(5)),
+                createInstruction(OP, "notEqual", tmp(6), tmp(7), "false"),
+                createInstruction(OP, "equal", tmp(8), tmp(6), "false"),
+                createInstruction(CONTROL, "enabled", "conveyor1", tmp(8))
         );
     }
 

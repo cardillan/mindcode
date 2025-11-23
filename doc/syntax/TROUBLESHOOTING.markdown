@@ -142,15 +142,14 @@ gets compiled to
 # Pay closer attention to sections of the program manipulating @counter
     set max 8
     set i 10
-    op lessThan *tmp0 i 0
-    op greaterThan *tmp1 i max
-    op or *tmp2 *tmp0 *tmp1
-    jump label_10 equal *tmp2 false
+    jump label_4 lessThan i 0
+    jump label_8 lessThanEq i max
+label_4:
         set *ERROR_0 "Index [[1] of array foo is out of bounds (0, [[2])!"
         set *ERROR_1 i
         set *ERROR_2 max
         stop
-    label_10:
+    label_8:
     print i
 ```
 

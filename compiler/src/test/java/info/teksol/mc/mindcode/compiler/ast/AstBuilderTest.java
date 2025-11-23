@@ -387,15 +387,15 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         void buildsBooleanOperations() {
             assertBuildsTo("""
                             left&&right;
-                            left and right;
                             left||right;
+                            left and right;
                             left or right;
                             """,
                     List.of(
                             new AstOperatorBinary(EMPTY, Operation.BOOLEAN_AND, left, right),
-                            new AstOperatorBinary(EMPTY, Operation.LOGICAL_AND, left, right),
                             new AstOperatorBinary(EMPTY, Operation.BOOLEAN_OR, left, right),
-                            new AstOperatorBinary(EMPTY, Operation.LOGICAL_OR, left, right)
+                            new AstOperatorShortCircuiting(EMPTY, Operation.LOGICAL_AND, left, right),
+                            new AstOperatorShortCircuiting(EMPTY, Operation.LOGICAL_OR, left, right)
                     )
             );
         }

@@ -614,7 +614,6 @@ public class OptimizationContext {
         return evaluateConditionalInstruction(jump, loopVariables.get(loopContext));
     }
 
-
     private @Nullable LogicBoolean evaluateConditionalInstruction(ConditionalInstruction jump, VariableStates vs) {
         if (jump.isUnconditional()) {
             return LogicBoolean.TRUE;
@@ -632,6 +631,126 @@ public class OptimizationContext {
         }
 
         return null;
+    }
+
+    /// Returns the last condition jump for valid conditions. Makes sure the last jump occurs at the expected place
+    /// within the context.
+    /// Conditions become invalid when resolved by optimization. Invalid conditions do not alter control flow
+    /// and must not be processed by optimizations aimed at the control flow.
+    public @Nullable JumpInstruction getLastConditionJump(LogicList conditionInstructions) {
+        AstContext conditionContext = Objects.requireNonNull(conditionInstructions.getAstContext());
+        if (conditionContext.children().size() == 1 && conditionContext.children().getFirst().matches(AstContextType.SHORT_CIRCUIT)) {
+            if (!(conditionInstructions.getLast() instanceof LabelInstruction)) return null;
+
+            // Short-circuiting condition: valid if it contains at least one conditional jump
+            AstContext shortCircuitContext = conditionContext.children().getFirst();
+            return conditionInstructions.stream()
+                    .filter(JumpInstruction.class::isInstance)
+                    .map(JumpInstruction.class::cast)
+                    .filter(jump -> jump.getAstContext() == shortCircuitContext && jump.isConditional())
+                    .reduce((first, second) -> second).orElse(null);
+        } else {
+            // Standard condition: valid if the last instruction is a conditional jump
+            return conditionInstructions.getLast() instanceof JumpInstruction jump && jump.isConditional() ? jump : null;
+        }
+    }
+
+    public @Nullable LogicBoolean evaluateConditionJump(AstContext conditionContext) {
+        if (!conditionContext.matches(AstSubcontextType.CONDITION)) {
+            throw new IllegalArgumentException("Expected condition context, got " + conditionContext);
+        }
+
+        LogicList instructions = contextInstructions(conditionContext);
+        if (conditionContext.children().size() == 1 && conditionContext.children().getFirst().matches(AstContextType.SHORT_CIRCUIT)) {
+            AstContext shortCircuitContext = conditionContext.children().getFirst();
+
+            // Simple control-flow analysis
+            // We know only forward jumps are possible
+            LogicInstruction lastInstruction = instructions.getLast();
+            Set<LogicLabel> activeTargets = new HashSet<>();
+            boolean active = true;
+
+            for (LogicInstruction ix : instructions) {
+                if (ix.getAstContext() != shortCircuitContext) continue;
+
+                switch (ix) {
+                    case JumpInstruction jump -> {
+                        // When waiting for a specific target, skip jump
+                        if (active) {
+                            LogicBoolean jumpResult = evaluateJumpInstruction(jump);
+                            if (jumpResult == LogicBoolean.TRUE) {
+                                activeTargets.add(jump.getTarget());
+                                active = false;
+                                println(jump + ": TRUE, control flow inactive");
+                                printActiveTargets(activeTargets);
+                            } else if (jumpResult == null) {
+                                println(jump + ": unknown, adding active target");
+                                activeTargets.add(jump.getTarget());
+                                printActiveTargets(activeTargets);
+                            } else {
+                                println(jump + ": FALSE");
+                            }
+                        }
+                    }
+                    case LabelInstruction l -> {
+                        if (l == lastInstruction) {
+                            // The last label in the context, if it exists, is the resulting label
+                            if (active) {
+                                activeTargets.add(l.getLabel());
+                                println(l + ": arrived at final target while active");
+                                printActiveTargets(activeTargets);
+                            }
+                        } else {
+                            boolean removed = activeTargets.remove(l.getLabel());
+                            println(l + (removed ? ": active target, control flow activated" : ": inactive target"));
+                            printActiveTargets(activeTargets);
+                            if (removed) active = true;
+                        }
+                    }
+                    case EmptyInstruction noop -> { }
+                    default -> throw new MindcodeInternalError("Unexpected instruction in short-circuit context: " + ix);
+                }
+            }
+
+            LogicBoolean result = switch (activeTargets.size()) {
+                case 0 -> LogicBoolean.TRUE;  // If there's no active target, the condition flows into the true branch naturally
+                case 1 -> activeTargets.stream().findFirst()
+                        .map(l -> LogicBoolean.get(getLabelInstruction(l).getAstContext() == shortCircuitContext)).get();
+                default -> null;
+            };
+
+            println("RESULT: " + result + "\n\n");
+            return result;
+        } else {
+//            int jumps = (int) instructions.stream().filter(JumpInstruction.class::isInstance).count();
+//            return switch (jumps) {
+//                case 0 -> LogicBoolean.TRUE;
+//                case 1 -> instructions.getLast() instanceof JumpInstruction jump && jump.getAstContext() == conditionContext
+//                        ? negate(evaluateJumpInstruction(jump))     // Evaluate the jump
+//                        : null;                                     // We don't know
+//                default -> null;
+//            };
+            long jumps = instructions.stream().filter(JumpInstruction.class::isInstance).count();
+            LogicBoolean jumpResult = jumps == 0 ? LogicBoolean.FALSE :
+                    jumps == 1 && (instructions.getFromEnd(0) instanceof JumpInstruction jump)
+                            ? evaluateJumpInstruction(jump)     // Evaluate the jump
+                            : null;                             // We don't know
+
+            return negate(jumpResult);
+        }
+    }
+
+    private void println(String message) {
+//        System.out.println(message);
+    }
+
+    private void printActiveTargets(Set<LogicLabel> possibleTargets) {
+        println(possibleTargets.stream().map(LogicLabel::toMlog).sorted()
+                .collect(Collectors.joining(", ", "    Active targets: [", "]")));
+    }
+
+    private @Nullable LogicBoolean negate(@Nullable LogicBoolean value) {
+        return value == null ? null : value.not();
     }
     //</editor-fold>
 
@@ -1665,6 +1784,17 @@ public class OptimizationContext {
 
         public @Nullable LogicInstruction getFromEnd(int index) {
             return index >= 0 && index < size() ? instructions.get(size() - index - 1) : null;
+        }
+
+        public @Nullable LogicInstruction getRealFromEnd(int index) {
+            for (int i = size() - 1; i >= 0; i--) {
+                LogicInstruction ix = instructions.get(i);
+                if (ix.isReal() && index-- <= 0) {
+                    return ix;
+                }
+            }
+
+            return null;
         }
 
         public int indexOf(LogicInstruction o) {

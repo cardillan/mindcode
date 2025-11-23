@@ -4,7 +4,7 @@ import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionArgument;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
-import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import org.jspecify.annotations.NullMarked;
@@ -14,9 +14,9 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 @NullMarked
-public abstract class AbstractFunctionBuilder extends AbstractBuilder {
+public abstract class AbstractFunctionBuilder extends AbstractCodeBuilder {
 
-    public AbstractFunctionBuilder(AbstractBuilder builder) {
+    public AbstractFunctionBuilder(AbstractCodeBuilder builder) {
         super(builder);
     }
 
