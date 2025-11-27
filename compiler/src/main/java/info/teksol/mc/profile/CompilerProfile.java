@@ -235,6 +235,11 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     //</editor-fold>
 
     //<editor-fold desc="Mlog FormatOptions">
+    public CompilerProfile setNoArgumentPadding(boolean noArgumentPadding) {
+        getOption(MlogFormatOptions.NO_ARGUMENT_PADDING).setValue(noArgumentPadding);
+        return this;
+    }
+
     public CompilerProfile setMlogIndent(int mlogIndent) {
         getOption(MlogFormatOptions.MLOG_INDENT).setValue(mlogIndent);
         return this;

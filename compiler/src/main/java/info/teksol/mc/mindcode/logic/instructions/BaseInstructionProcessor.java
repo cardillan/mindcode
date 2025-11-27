@@ -42,6 +42,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     private final NameCreator nameCreator;
     private @Nullable MindustryMetadata metadata;
     private final boolean instructionValidation;
+    private final boolean noArgumentPadding;
     private final List<OpcodeVariant> opcodeVariants;
     private final Map<Opcode, List<OpcodeVariant>> variantsByOpcode;
     private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
@@ -58,11 +59,13 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             ProcessorEdition edition,
             NameCreator nameCreator,
             boolean instructionValidation,
+            boolean noArgumentPadding,
             List<OpcodeVariant> opcodeVariants) {
 
         public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version, ProcessorEdition edition,
-                NameCreator nameCreator, boolean instructionValidation) {
-            this(messageConsumer, version, edition, nameCreator, instructionValidation, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
+                NameCreator nameCreator, boolean instructionValidation, boolean noArgumentPadding) {
+            this(messageConsumer, version, edition, nameCreator, instructionValidation, noArgumentPadding,
+                    MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
         }
     }
 
@@ -72,6 +75,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         this.processorEdition = parameters.edition;
         this.nameCreator = parameters.nameCreator;
         this.instructionValidation = parameters.instructionValidation;
+        this.noArgumentPadding = parameters.noArgumentPadding;
         this.opcodeVariants = parameters.opcodeVariants;
         variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode));
         opcodeKeywordPosition = variantsByOpcode.keySet().stream().collect(Collectors.toMap(k -> k,
@@ -340,7 +344,6 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     public <T extends LogicInstruction> T replaceAllArgs(T instruction, Map<LogicArgument, LogicArgument> argumentMap) {
         Function<LogicArgument, LogicArgument> mapper = arg -> argumentMap.getOrDefault(arg, arg);
         return replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
-
     }
 
     @Override
@@ -356,8 +359,8 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
 
     @Override
     public int getPrintArgumentCount(LogicInstruction instruction) {
-        if (instruction instanceof CustomInstruction ix) {
-            return ix.getArgs().size();
+        if (instruction instanceof CustomInstruction || noArgumentPadding) {
+            return instruction.getArgs().size();
         } else {
             return instructionSizes.computeIfAbsent(instruction.getOpcode(), this::computePrintArgumentCount);
         }

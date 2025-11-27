@@ -17,28 +17,28 @@ public class InstructionProcessorFactory {
 
     public static InstructionProcessor getInstructionProcessor(MessageConsumer messageConsumer, NameCreator nameCreator, CompilerProfile profile) {
         return create(new InstructionProcessorParameters(messageConsumer, profile.getProcessorVersion(),
-                profile.getProcessorEdition(), nameCreator, true));
+                profile.getProcessorEdition(), nameCreator, true, profile.isNoArgumentPadding()));
     }
 
     public static InstructionProcessor getInstructionProcessorNoValidate(MessageConsumer messageConsumer, NameCreator nameCreator, CompilerProfile profile) {
         return create(new InstructionProcessorParameters(messageConsumer, profile.getProcessorVersion(),
-                profile.getProcessorEdition(), nameCreator, false));
+                profile.getProcessorEdition(), nameCreator, false, profile.isNoArgumentPadding()));
     }
 
     public static InstructionProcessor getInstructionProcessor(MessageConsumer messageConsumer,
             ProcessorVersion version, ProcessorEdition edition, NameCreator nameCreator) {
-        return create(new InstructionProcessorParameters(messageConsumer, version, edition, nameCreator, false));
+        return create(new InstructionProcessorParameters(messageConsumer, version, edition, nameCreator, false, false));
     }
 
     public static InstructionProcessor getInstructionProcessor(ProcessorVersion version, ProcessorEdition edition, NameCreator nameCreator) {
-        return create(new InstructionProcessorParameters(nullMessageConsumer, version, edition, nameCreator, true));
+        return create(new InstructionProcessorParameters(nullMessageConsumer, version, edition, nameCreator, true, false));
     }
 
     // To be used by unit tests - returns new, non-cached instances based off whatever processor is given
     public static InstructionProcessor getInstructionProcessor(ProcessorVersion version, ProcessorEdition edition,
             NameCreator nameCreator, List<OpcodeVariant> opcodeVariants) {
         return create(new InstructionProcessorParameters(nullMessageConsumer, version, edition,
-                nameCreator, true, opcodeVariants));
+                nameCreator, true, false, opcodeVariants));
     }
 
     private static InstructionProcessor create(InstructionProcessorParameters parameters) {

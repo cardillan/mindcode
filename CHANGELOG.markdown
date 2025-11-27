@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.11.0 - Unreleased
 
+### Added
+
+* Added the [`no-argument-padding` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-no-argument-padding). When activated, instructions are not padded to the maximum number of arguments.
+
 ### Changed
 
 * The [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY-COMPATIBILITY.markdown) now also performs a test to find out whether assigning `null` to `@counter` is ignored by the processor.

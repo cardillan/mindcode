@@ -121,6 +121,12 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 0, MAX_MLOG_INDENT, -1));
 
+        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.NO_ARGUMENT_PADDING, "",
+                "when set, mlog instructions emitted by the compiler are not padded with zeroes for unused arguments",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
         list.add(new BooleanCompilerOptionValue(MlogFormatOptions.FUNCTION_PREFIX, "",
                 "specifies the how the function prefix of local variables is generated (either a short common prefix " +
                 "for all functions, or a potentially long prefix derived from function name)",

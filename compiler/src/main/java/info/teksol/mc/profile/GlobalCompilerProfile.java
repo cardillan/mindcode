@@ -58,6 +58,10 @@ public interface GlobalCompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Mlog FormatOptions">
+    default boolean isNoArgumentPadding() {
+        return getBooleanValue(MlogFormatOptions.NO_ARGUMENT_PADDING);
+    }
+
     default int getMlogIndent() {
         int mlogIndent = getIntValue(MlogFormatOptions.MLOG_INDENT);
         boolean symbolicLabels = getBooleanValue(MlogFormatOptions.SYMBOLIC_LABELS);

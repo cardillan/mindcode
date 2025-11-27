@@ -94,12 +94,13 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
                 [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
-                [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--function-prefix {short,long}]
-                [--no-signature] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
-                [--boundary-checks {true,false}] [--emulate-strict-not-equal {true,false}]
-                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
-                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
-                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
+                [--function-prefix {short,long}] [--no-signature] [-y {strict,mixed,relaxed}]
+                [--target-guard [{true,false}]] [--boundary-checks {true,false}]
+                [--emulate-strict-not-equal {true,false}] [--error-function {true,false}]
+                [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
+                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
+                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
                 [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
                 [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
@@ -177,6 +178,9 @@ Mlog formatting options:
   --symbolic-labels [{true,false}]
                          generate symbolic labels for jump instructions where possible
   --mlog-indent {0..8}   the amount of indenting applied to logical blocks in the compiled mlog code
+  --no-argument-padding [{true,false}]
+                         when set, mlog instructions emitted  by  the  compiler  are  not  padded with zeroes for unused
+                         arguments
   --function-prefix {short,long}
                          specifies the how the function prefix of  local  variables  is generated (either a short common
                          prefix for all functions, or a potentially long prefix derived from function name)
@@ -394,12 +398,13 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]]
                 [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
-                [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--function-prefix {short,long}]
-                [--no-signature] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
-                [--boundary-checks {true,false}] [--emulate-strict-not-equal {true,false}]
-                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
-                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
-                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
+                [--function-prefix {short,long}] [--no-signature] [-y {strict,mixed,relaxed}]
+                [--target-guard [{true,false}]] [--boundary-checks {true,false}]
+                [--emulate-strict-not-equal {true,false}] [--error-function {true,false}]
+                [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
+                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
+                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
                 [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
                 [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
@@ -466,6 +471,9 @@ Mlog formatting options:
   --symbolic-labels [{true,false}]
                          generate symbolic labels for jump instructions where possible
   --mlog-indent {0..8}   the amount of indenting applied to logical blocks in the compiled mlog code
+  --no-argument-padding [{true,false}]
+                         when set, mlog instructions emitted  by  the  compiler  are  not  padded with zeroes for unused
+                         arguments
   --function-prefix {short,long}
                          specifies the how the function prefix of  local  variables  is generated (either a short common
                          prefix for all functions, or a potentially long prefix derived from function name)

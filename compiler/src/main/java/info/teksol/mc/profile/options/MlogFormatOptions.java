@@ -6,6 +6,7 @@ import org.jspecify.annotations.NullMarked;
 public enum MlogFormatOptions {
     FUNCTION_PREFIX,
     MLOG_INDENT,
+    NO_ARGUMENT_PADDING,
     SIGNATURE,
     SYMBOLIC_LABELS,
 }

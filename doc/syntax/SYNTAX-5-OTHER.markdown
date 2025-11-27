@@ -204,11 +204,12 @@ Future targets will be compatible with all higher targets, unless a backwards-in
 
 Options determining how the mlog code is generated and formatted.
 
-| Option                                     | Scope  | Semantic stability |
-|--------------------------------------------|--------|--------------------|
-| [function-prefix](#option-function-prefix) | global | stable             |
-| [mlog-indent](#option-mlog-indent)         | global | stable             |
-| [symbolic-labels](#option-symbolic-labels) | global | stable             |
+| Option                                             | Scope  | Semantic stability |
+|----------------------------------------------------|--------|--------------------|
+| [function-prefix](#option-function-prefix)         | global | stable             |
+| [mlog-indent](#option-mlog-indent)                 | global | stable             |
+| [no-argument-padding](#option-no-argument-padding) | global | stable             |
+| [symbolic-labels](#option-symbolic-labels)         | global | stable             |
 
 ### Option `function-prefix`
 
@@ -230,6 +231,15 @@ Allows setting the length of an indenting prefix (the number of spaces) applied 
 Default value is `0` when `symbolic-labels` is set to `false`, and `4` when `symbolic-labels` is set to `true`.
 
 For an example of an indented mlog code, see the [`symbolic-labels` option](#option-symbolic-labels).
+
+### Option `no-argument-padding`
+
+**Option scope: [global](#global-scope)**
+
+Disables padding unused arguments in generated instructions with zero values. Possible values are:
+
+* `false` (the default value): instructions in the compiled code are padded with zero values in unused arguments. The format of the instructions generated this way matches the format produced by Mindustry when copying code from a processor to the clipboard.
+* `true`: instructions in the compiled code won't contain unused arguments. Generally, this makes the code more readable.
 
 ### Option `symbolic-labels`
 
