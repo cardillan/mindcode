@@ -263,7 +263,8 @@ MLOG_UNKNOWN            : . ;
 mode InDirective;
 
 // Identifiers/values can start with numbers and contain the dash in Directive mode
-DIRECTIVEVALUE          : [-a-zA-Z0-9_.]+ ;
+DIRECTIVEVALUE          : [-a-zA-Z0-9_.]+
+                        | '"' ~[\r\n"]* '"' ;
 DIRECTIVEASSIGN         : '=' ;
 DIRECTIVECOMMA          : ',' ;
 

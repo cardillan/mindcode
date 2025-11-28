@@ -49,7 +49,7 @@ public class DocValidatorTest {
     @TestFactory
     @Execution(ExecutionMode.CONCURRENT)
     public DynamicNode validateDocumentation() {
-        final File[] files = new File(SYNTAX_REL_PATH).listFiles((dir, name) -> name.endsWith(".markdown"));
+        final File[] files = new File(SYNTAX_REL_PATH).listFiles((_, name) -> name.endsWith(".markdown"));
         assertNotNull(files);
         assertTrue(files.length > 0, "Expected to find at least one markdown file in " + SYNTAX_REL_PATH + "; found none");
 
@@ -114,7 +114,9 @@ public class DocValidatorTest {
         assertions.add(() -> assertTrue(message.isEmpty(), "Found errors or warnings in " + uriString(file, line) + ":\n" + message));
 
         if (mlog != null) {
-            assertions.add(() -> assertEquals(mlog, compiler.getOutput().trim(),
+            String signature = "\nprint \"" + CompilerProfile.SIGNATURE + '"';
+            String strippedMlog = mlog.endsWith(signature) ? mlog.substring(0, mlog.length() - signature.length()) : mlog;
+            assertions.add(() -> assertEquals(strippedMlog, compiler.getOutput().trim(),
                     "Compiler output doesn't match mlog block in " + uriString(file, line)));
         }
     }
@@ -192,7 +194,7 @@ public class DocValidatorTest {
 
     private String getOptionLink(CompilerOption option) {
         return switch (option.getOption()) {
-            case Optimization o ->
+            case Optimization _ ->
                     "[" + option.getOptionName() + "](" + "SYNTAX-6-OPTIMIZATIONS.markdown#" + option.getOptionName() + ")";
 //            case ExecutionFlag e -> "[" + option.getOptionName() + "](" + "#option-" + option.getOptionName() + ")";
             default -> "[" + option.getOptionName() + "](" + "#option-" + option.getOptionName() + ")";
@@ -206,8 +208,7 @@ public class DocValidatorTest {
 
     private int getOptionPrecedence(CompilerOption option) {
         return switch (option.getOption()) {
-            case Optimization o -> 1;
-            case ExecutionFlag o -> 1;
+            case Optimization _, ExecutionFlag _ -> 1;
             default -> 0;
         };
     }

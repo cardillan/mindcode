@@ -182,6 +182,11 @@ public class LogicInstructionLabelResolver {
             }
         }
 
+        if (addSignature && !profile.getAuthors().isEmpty() && program.size() < profile.getInstructionLimit()) {
+            String attribution = "Created by " + StringUtils.joinUsingAnd(profile.getAuthors());
+            program.add(processor.createPrint(last.getAstContext(), LogicString.create(attribution)));
+        }
+
         if (addSignature && profile.isSignature() && program.size() < profile.getInstructionLimit()) {
             program.add(processor.createPrint(last.getAstContext(), LogicString.create(CompilerProfile.SIGNATURE)));
         }

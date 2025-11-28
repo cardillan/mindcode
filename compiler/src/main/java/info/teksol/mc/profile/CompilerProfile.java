@@ -246,7 +246,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     }
 
     public CompilerProfile setSignature(boolean signature) {
-        getOption(MlogFormatOptions.SIGNATURE).setValue(signature);
+        getOption(CompilerOptions.SIGNATURE).setValue(signature);
         return this;
     }
 

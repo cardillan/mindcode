@@ -195,10 +195,11 @@ Target compatibility matrix:
 | 7.0           | 7.0                       |
 | 7.1           | 7.1 or higher             |
 | 8.0           | 8.0 or higher             |
+| 8.1           | 8.1 or higher             |
 
 Note: the incompatibility between 7.0 and 7.1 is caused by different instruction mappings.
 
-Future targets will be compatible with all higher targets, unless a backwards-incompatible feature is introduced to Mindustry Logic or Mindcode.
+Generally, a module target is compatible with the same or higher global target, unless a backwards-incompatible feature is introduced to Mindustry Logic or Mindcode.
 
 ## Mlog formatting options
 
@@ -418,6 +419,7 @@ Options which affect the way the source code is compiled.
 
 | Option                                                       | Scope  | Semantic stability |
 |--------------------------------------------------------------|--------|--------------------|
+| [author](#option-author)                                     | global | stable             |
 | [auto-printflush](#option-auto-printflush)                   | global | stable             |
 | [boundary-checks](#option-boundary-checks)                   | local  | stable             |
 | [emulate-strict-not-equal](#option-emulate-strict-not-equal) | global | stable             |
@@ -426,6 +428,37 @@ Options which affect the way the source code is compiled.
 | [remarks](#option-remarks)                                   | local  | stable             |
 | [syntax](#option-syntax)                                     | module | stable             |
 | [target-guard](#option-target-guard)                         | global | stable             |
+
+### Option `author`
+
+Adds an author to the list of the program's authors. The author list is added to the end of the program alongside the signature if there's enough instruction space and the program doesn't loop naturally. Multiple authors can be listed in a single directive. The author's name is normally enclosed in double quotes. Double quotes are optional if the name consists only of alphanumerical characters and underscores (no spaces).   
+
+The `author` directive can be specified multiple times, and can be included in a module or library. When such a module is required by the main program, the authors are added to the list of the main program's authors.
+
+Example:
+
+```Mindcode
+#set target = 8;
+#set author = cardillan, "Mickey Mouse";
+#set author = "Rameses Niblick the Third";
+
+noinline void foo()
+    print("foo");
+end;
+foo();
+```
+
+compiles to
+
+```mlog
+set :foo*retaddr 2
+jump 3 always 0 0
+end
+print "foo"
+set @counter :foo*retaddr
+print "Created by cardillan, Mickey Mouse and Rameses Niblick the Third"
+print "Compiled by Mindcode - github.com/cardillan/mindcode"
+```
 
 ### Option `auto-printflush`
 

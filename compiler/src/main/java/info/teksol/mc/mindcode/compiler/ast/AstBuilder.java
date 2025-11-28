@@ -278,7 +278,11 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstDirectiveValue visitAstDirectiveValue(MindcodeParser.AstDirectiveValueContext ctx) {
-        return new AstDirectiveValue(pos(ctx), ctx.DIRECTIVEVALUE().getText());
+        return new AstDirectiveValue(pos(ctx), unwrapValue(ctx.DIRECTIVEVALUE().getText()));
+    }
+
+    private String unwrapValue(String value) {
+        return value.startsWith("\"") && value.endsWith("\"") ? value.substring(1, value.length() - 1) : value;
     }
 
     @Override

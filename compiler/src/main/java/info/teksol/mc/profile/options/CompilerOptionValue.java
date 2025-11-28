@@ -26,6 +26,7 @@ public abstract class CompilerOptionValue<T> implements CompilerOption {
     private final List<T> values = new ArrayList<>();
     private final List<T> constValues = new ArrayList<>();
 
+    private boolean additive = false;
     private Function<@Nullable List<T>, List<T>> valueProcessor = list -> list == null ? List.of() : list;
 
     public CompilerOptionValue(Enum<?> option, String optionName, String flag, String description, Class<T> valueType,
@@ -121,6 +122,11 @@ public abstract class CompilerOptionValue<T> implements CompilerOption {
         return this;
     }
 
+    public CompilerOptionValue<T> setAdditive() {
+        additive = true;
+        return this;
+    }
+
     public abstract @Nullable T convert(String value);
 
     public boolean accepts(T value, Consumer<String> errorReporter) {
@@ -155,7 +161,7 @@ public abstract class CompilerOptionValue<T> implements CompilerOption {
         processed.forEach(value -> accepts(value, _ -> {
             throw new IllegalArgumentException("Trying to set unacceptable value " + value);
         }));
-        this.values.clear();
+        if (!additive) this.values.clear();
         this.values.addAll(processed);
     }
 

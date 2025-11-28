@@ -95,22 +95,22 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
-                [--function-prefix {short,long}] [--no-signature] [-y {strict,mixed,relaxed}]
-                [--target-guard [{true,false}]] [--boundary-checks {true,false}]
-                [--emulate-strict-not-equal {true,false}] [--error-function {true,false}]
-                [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
-                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
-                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
-                [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
-                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
-                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
-                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
-                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
-                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
-                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
-                [--stack-optimization LEVEL] [--print-merging LEVEL]
+                [--function-prefix {short,long}] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
+                [--boundary-checks {true,false}] [--emulate-strict-not-equal {true,false}]
+                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
+                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [--author author [author ...]]
+                [--no-signature] [-g {size,neutral,speed}] [-e {1..1000}] [--unsafe-case-optimization [{true,false}]]
+                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}]
+                [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}]
+                [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
+                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
+                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
+                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
+                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]] [--run-steps {0..1000000000}]
@@ -184,8 +184,6 @@ Mlog formatting options:
   --function-prefix {short,long}
                          specifies the how the function prefix of  local  variables  is generated (either a short common
                          prefix for all functions, or a potentially long prefix derived from function name)
-  --no-signature         prevents appending a signature 'Compiled  by  Mindcode  - github.com/cardillan/mindcode' at the
-                         end of the final code
 
 Compiler options:
   Options which affect the way the source code is compiled.
@@ -212,6 +210,11 @@ Compiler options:
   --auto-printflush {true,false}
                          automatically add a 'printflush message1'  instruction  at  the  end  of  the program if one is
                          missing
+  --author author [author ...]
+                         adds an author to  the  list  of  authors  which  is  then  output  similarly to the compiler's
+                         signature
+  --no-signature         prevents appending a signature 'Compiled  by  Mindcode  - github.com/cardillan/mindcode' at the
+                         end of the final code
 
 Optimization options:
   Options guiding the  overall  optimization  of  the  compiled  code  or  activating/deactivating specific optimization
@@ -399,22 +402,22 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
-                [--function-prefix {short,long}] [--no-signature] [-y {strict,mixed,relaxed}]
-                [--target-guard [{true,false}]] [--boundary-checks {true,false}]
-                [--emulate-strict-not-equal {true,false}] [--error-function {true,false}]
-                [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
-                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
-                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
-                [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
-                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
-                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
-                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
-                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
-                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
-                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
-                [--stack-optimization LEVEL] [--print-merging LEVEL]
+                [--function-prefix {short,long}] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
+                [--boundary-checks {true,false}] [--emulate-strict-not-equal {true,false}]
+                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
+                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [--author author [author ...]]
+                [--no-signature] [-g {size,neutral,speed}] [-e {1..1000}] [--unsafe-case-optimization [{true,false}]]
+                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}]
+                [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}]
+                [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
+                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
+                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
+                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
+                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]] [--run-steps {0..1000000000}]
@@ -477,8 +480,6 @@ Mlog formatting options:
   --function-prefix {short,long}
                          specifies the how the function prefix of  local  variables  is generated (either a short common
                          prefix for all functions, or a potentially long prefix derived from function name)
-  --no-signature         prevents appending a signature 'Compiled  by  Mindcode  - github.com/cardillan/mindcode' at the
-                         end of the final code
 
 Compiler options:
   Options which affect the way the source code is compiled.
@@ -505,6 +506,11 @@ Compiler options:
   --auto-printflush {true,false}
                          automatically add a 'printflush message1'  instruction  at  the  end  of  the program if one is
                          missing
+  --author author [author ...]
+                         adds an author to  the  list  of  authors  which  is  then  output  similarly to the compiler's
+                         signature
+  --no-signature         prevents appending a signature 'Compiled  by  Mindcode  - github.com/cardillan/mindcode' at the
+                         end of the final code
 
 Optimization options:
   Options guiding the  overall  optimization  of  the  compiled  code  or  activating/deactivating specific optimization
