@@ -255,34 +255,34 @@ Modifications by Convert case at line 11:5 (segments: 17) (-5 instructions):
 -    * jump *label8 equal :block @carbide-wall-large
 -    * jump *label8 equal :block @tile-logic-display
 -    * jump *label7 always
-+    7 sensor *tmp13 :block @id
-+    8 jump *label12 greaterThanEq *tmp13 203
-+    9 jump *label10 greaterThanEq *tmp13 35
-+   10 jump *label13 greaterThanEq *tmp13 17
-+   11 jump *label10 greaterThanEq *tmp13 1
++    7 sensor *tmp9 :block @id
++    8 jump *label12 greaterThanEq *tmp9 203
++    9 jump *label10 greaterThanEq *tmp9 35
++   10 jump *label13 greaterThanEq *tmp9 17
++   11 jump *label10 greaterThanEq *tmp9 1
 +   12 jump *label11 always
 +   13 label *label13
-+   14 jump *label8 lessThan *tmp13 29
-+   15 jump *label8 greaterThanEq *tmp13 31
++   14 jump *label8 lessThan *tmp9 29
++   15 jump *label8 greaterThanEq *tmp9 31
 +   16 jump *label10 always
 +   17 label *label12
-+   18 jump *label14 greaterThanEq *tmp13 234
-+   19 jump *label15 greaterThanEq *tmp13 220
-+   20 jump *label10 greaterThanEq *tmp13 208
-+   21 jump *label8 lessThan *tmp13 205
-+   22 jump *label8 greaterThanEq *tmp13 206
++   18 jump *label14 greaterThanEq *tmp9 234
++   19 jump *label15 greaterThanEq *tmp9 220
++   20 jump *label10 greaterThanEq *tmp9 208
++   21 jump *label8 lessThan *tmp9 205
++   22 jump *label8 greaterThanEq *tmp9 206
 +   23 jump *label10 always
 +   24 label *label15
-+   25 jump *label10 greaterThanEq *tmp13 226
-+   26 jump *label8 lessThan *tmp13 222
-+   27 jump *label10 lessThan *tmp13 225
++   25 jump *label10 greaterThanEq *tmp9 226
++   26 jump *label8 lessThan *tmp9 222
++   27 jump *label10 lessThan *tmp9 225
 +   28 jump *label8 always
 +   29 label *label14
-+   30 jump *label8 lessThan *tmp13 235
-+   31 jump *label10 lessThan *tmp13 259
++   30 jump *label8 lessThan *tmp9 235
++   31 jump *label10 lessThan *tmp9 259
 +   32 jump *label8 always
 +   33 label *label11
-+   34 jump *label8 strictEqual *tmp13 null
++   34 jump *label8 strictEqual *tmp9 null
     35 label *label8
     36 set *tmp2 true
     37 jump *label6 always
@@ -332,34 +332,34 @@ set :i -1
 label *label9
 lookup block :block :i
 # "Function: def isWall(in block)"
-sensor *tmp13 :block @id
-jump *label12 greaterThanEq *tmp13 203
-jump *label10 greaterThanEq *tmp13 35
-jump *label13 greaterThanEq *tmp13 17
-jump *label10 greaterThanEq *tmp13 1
+sensor *tmp9 :block @id
+jump *label12 greaterThanEq *tmp9 203
+jump *label10 greaterThanEq *tmp9 35
+jump *label13 greaterThanEq *tmp9 17
+jump *label10 greaterThanEq *tmp9 1
 jump *label11 always
 label *label13
-jump *label8 lessThan *tmp13 29
-jump *label8 greaterThanEq *tmp13 31
+jump *label8 lessThan *tmp9 29
+jump *label8 greaterThanEq *tmp9 31
 jump *label10 always
 label *label12
-jump *label14 greaterThanEq *tmp13 234
-jump *label15 greaterThanEq *tmp13 220
-jump *label10 greaterThanEq *tmp13 208
-jump *label8 lessThan *tmp13 205
-jump *label8 greaterThanEq *tmp13 206
+jump *label14 greaterThanEq *tmp9 234
+jump *label15 greaterThanEq *tmp9 220
+jump *label10 greaterThanEq *tmp9 208
+jump *label8 lessThan *tmp9 205
+jump *label8 greaterThanEq *tmp9 206
 jump *label10 always
 label *label15
-jump *label10 greaterThanEq *tmp13 226
-jump *label8 lessThan *tmp13 222
-jump *label10 lessThan *tmp13 225
+jump *label10 greaterThanEq *tmp9 226
+jump *label8 lessThan *tmp9 222
+jump *label10 lessThan *tmp9 225
 jump *label8 always
 label *label14
-jump *label8 lessThan *tmp13 235
-jump *label10 lessThan *tmp13 259
+jump *label8 lessThan *tmp9 235
+jump *label10 lessThan *tmp9 259
 jump *label8 always
 label *label11
-jump *label8 strictEqual *tmp13 null
+jump *label8 strictEqual *tmp9 null
 label *label8
 set *tmp2 true
 jump *label6 always

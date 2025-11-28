@@ -69,9 +69,9 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
 
             List<LogicLabel> branchLabels = new ArrayList<>();
             if (useTextTables) {
-                creator.createMultiJump(instruction.getIndex(), marker).setSideEffects(createSideEffects()).setJumpTable(branchLabels);
+                creator.withSideEffects(createSideEffects()).createMultiJump(instruction.getIndex(), marker).setJumpTable(branchLabels);
             } else {
-                creator.createMultiJump(firstLabel, tmp, LogicNumber.ZERO, marker).setSideEffects(createSideEffects());
+                creator.withSideEffects(createSideEffects()).createMultiJump(firstLabel, tmp, LogicNumber.ZERO, marker);
             }
 
             Runnable createExit = () -> creator.createJumpUnconditional(finalLabel);

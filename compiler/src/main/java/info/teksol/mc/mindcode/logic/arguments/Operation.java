@@ -234,7 +234,7 @@ public enum Operation implements LogicArgument {
             case LESS_THAN_EQ -> GREATER_THAN;
             case GREATER_THAN -> LESS_THAN_EQ;
             case STRICT_EQUAL -> requireSelect(profile, STRICT_NOT_EQUAL);
-            case STRICT_NOT_EQUAL -> requireSelect(profile, STRICT_EQUAL);
+            case STRICT_NOT_EQUAL -> STRICT_EQUAL;
             default -> throw new MindcodeInternalError(this + " has no inverse.");
         };
     }

@@ -504,8 +504,8 @@ Modifications by Convert case at line 11:5 (segments: 1) (+208 instructions):
      6 # "Function: def identifyBlock(in block)"
 -    * jump *label6 strictEqual :block null
 -    * jump *label5 always
-+    7 sensor *tmp10 :block @id
-+    8 multijump *label65 *tmp10 0 (m:*label64)
++    7 sensor *tmp8 :block @id
++    8 multijump *label65 *tmp8 0 (m:*label64)
 +    9 multilabel *label65 (m:*label64)
 +   10 jump *label63 always
 +   11 multilabel *label66 (m:*label64)
@@ -1035,7 +1035,7 @@ Modifications by Convert case at line 11:5 (segments: 1) (+208 instructions):
 -    * jump *label8 equal :block @graphite-press
 -    * jump *label7 always
 +  535 label *label63
-+  536 jump *label6 strictEqual *tmp10 null
++  536 jump *label6 strictEqual *tmp8 null
    537 label *label8
    538 set *tmp2 2
    539 jump *label4 always
@@ -1215,7 +1215,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
    531 jump *label4 always
 -    * label *label5
    532 label *label63
-   533 jump *label6 strictEqual *tmp10 null
+   533 jump *label6 strictEqual *tmp8 null
 -    * label *label8
    534 set *tmp2 2
    535 jump *label4 always
@@ -1343,8 +1343,8 @@ set :i -1
 label *label61
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
-sensor *tmp10 :block @id
-multijump *label65 *tmp10 0
+sensor *tmp8 :block @id
+multijump *label65 *tmp8 0
 multilabel *label65
 jump *label63 always
 multilabel *label66
@@ -1870,7 +1870,7 @@ label *label6
 set *tmp2 1
 jump *label4 always
 label *label63
-jump *label6 strictEqual *tmp10 null
+jump *label6 strictEqual *tmp8 null
 set *tmp2 2
 jump *label4 always
 label *label10

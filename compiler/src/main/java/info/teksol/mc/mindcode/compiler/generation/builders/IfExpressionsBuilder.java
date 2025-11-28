@@ -5,6 +5,7 @@ import info.teksol.mc.generated.ast.visitors.AstIfExpressionVisitor;
 import info.teksol.mc.generated.ast.visitors.AstOperatorTernaryVisitor;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
@@ -38,7 +39,7 @@ public class IfExpressionsBuilder extends AbstractCodeBuilder implements
         final LogicLabel endLabel = assembler.nextLabel();
 
         assembler.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
-        evaluateCondition(node.getCondition(), falseLabel);
+        evaluateCondition(node.getCondition(), falseLabel, AstContextType.SCBE_COND);
 
         final LogicVariable tmp = assembler.nextNodeResultTemp();
 

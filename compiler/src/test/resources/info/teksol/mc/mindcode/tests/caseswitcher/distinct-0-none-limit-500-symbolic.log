@@ -463,8 +463,8 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (+214 inst
      6 # "Function: def identifyBlock(in block)"
 -    * jump *label6 equal :block @copper-wall
 -    * jump *label5 always
-+    7 sensor *tmp10 :block @id
-+    8 multijump *label58 *tmp10 0 (m:*label57)
++    7 sensor *tmp8 :block @id
++    8 multijump *label58 *tmp8 0 (m:*label57)
 +    9 multilabel *label58 (m:*label57)
 +   10 jump *label56 always
 +   11 multilabel *label59 (m:*label57)
@@ -1263,8 +1263,8 @@ set :i -1
 label *label55
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
-sensor *tmp10 :block @id
-multijump *label58 *tmp10 0
+sensor *tmp8 :block @id
+multijump *label58 *tmp8 0
 multilabel *label58
 jump *label56 always
 multilabel *label59

@@ -477,8 +477,8 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (+213 inst
      6 # "Function: def identifyBlock(in block)"
 -    * jump *label6 strictEqual :block null
 -    * jump *label5 always
-+    7 sensor *tmp10 :block @id
-+    8 multijump *label61 *tmp10 0 (m:*label60)
++    7 sensor *tmp8 :block @id
++    8 multijump *label61 *tmp8 0 (m:*label60)
 +    9 multilabel *label61 (m:*label60)
 +   10 jump *label59 always
 +   11 multilabel *label62 (m:*label60)
@@ -1148,7 +1148,7 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (+213 inst
    627 jump *label4 always
    628 label *label53
 +  629 label *label59
-+  630 jump *label6 strictEqual *tmp10 null
++  630 jump *label6 strictEqual *tmp8 null
 +  631 label *label58
    632 set *tmp2 0
    633 label *label4
@@ -1264,7 +1264,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
    602 jump *label4 always
 -    * label *label53
    603 label *label59
-   604 jump *label6 strictEqual *tmp10 null
+   604 jump *label6 strictEqual *tmp8 null
    605 label *label58
    606 set *tmp2 0
    607 label *label4
@@ -1291,8 +1291,8 @@ set :i -1
 label *label57
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
-sensor *tmp10 :block @id
-multijump *label61 *tmp10 0
+sensor *tmp8 :block @id
+multijump *label61 *tmp8 0
 multilabel *label61
 jump *label59 always
 multilabel *label62
@@ -1889,7 +1889,7 @@ label *label54
 set *tmp2 26
 jump *label4 always
 label *label59
-jump *label6 strictEqual *tmp10 null
+jump *label6 strictEqual *tmp8 null
 label *label58
 set *tmp2 0
 label *label4

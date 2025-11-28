@@ -53,6 +53,8 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     private int labelIndex = 0;
     private int markerIndex = 0;
 
+    private @Nullable SideEffects sideEffects;
+
     record InstructionProcessorParameters(
             MessageConsumer messageConsumer,
             ProcessorVersion version,
@@ -144,6 +146,12 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
+    public BaseInstructionProcessor withSideEffects(SideEffects sideEffects) {
+        this.sideEffects = sideEffects;
+        return this;
+    }
+
+    @Override
     public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments) {
         return validate(createInstructionUnchecked(astContext, opcode, arguments));
     }
@@ -152,7 +160,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     public LogicInstruction createInstructionUnchecked(AstContext astContext, Opcode opcode, List<LogicArgument> args) {
         List<InstructionParameterType> params = getParameters(opcode, args);
 
-        return switch (opcode) {
+        LogicInstruction instruction = switch (opcode) {
             case CALL        -> new CallInstruction(astContext, args, params);
             case CALLREC     -> new CallRecInstruction(astContext, args, params);
             case COMMENT     -> new CommentInstruction(astContext, args, params);
@@ -191,6 +199,13 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case WRITEARR    -> new WriteArrInstruction(astContext, args, params);
             default          ->  createGenericInstruction(astContext, opcode, args, params);
         };
+
+        if (sideEffects != null) {
+            instruction.setSideEffects(sideEffects);
+            sideEffects = null;
+        }
+
+        return instruction;
     }
 
     @Override
@@ -352,6 +367,15 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 arg -> arg instanceof LogicLabel label ? labelMap.getOrDefault(label, label) : arg;
         T ix = replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
         ix.remapInfoLabels(labelMap);
+        return ix;
+    }
+
+    @Override
+    public <T extends LogicInstruction> T replaceArguments(T instruction, Map<? extends LogicValue, LogicValue> valueMap) {
+        Function<LogicArgument, LogicArgument> mapper =
+                arg -> arg instanceof LogicValue value ? valueMap.getOrDefault(value, value) : arg;
+        T ix = replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
+        ix.remapInfoValues(valueMap);
         return ix;
     }
 

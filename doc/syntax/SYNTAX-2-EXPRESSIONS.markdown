@@ -399,11 +399,14 @@ printflush(message1);
 * `&&` and `and` represent boolean and logical AND operation, 
 * `||` and `or` represent boolean and logical OR operation.
 
-Boolean operators are guaranteed to always return `0` or `1`.
+Logical operators may return any numeric value or `null`. `null` and zero represent `false`, any other value represents `true`. Logical operators always perform a [short-circuit evaluation](https://en.wikipedia.org/wiki/Short-circuit_evaluation), i.e., skip evaluating the second operand if the value of the operation is decided by the first operand alone:
+* when evaluating `or`: the value of the first operand is true,
+* when evaluating `and`: the value of the first operand is false.
 
-Logical operators may return any numeric value or `null`. `null` and zero represent `false`, any other value represents `true`. 
+> [!NOTE]
+> The [Select Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) may turn a short-circuit operation into a full evaluation, if it doesn't change the semantics of the operation and the result is compatible with the optimization goal. 
 
-Boolean operators may be a little bit less effective, as additional operations might need to be performed to ensure the resulting value is always `0` or `1`.
+Boolean operators are guaranteed to always return `0` or `1`. They're always evaluated fully. Boolean operators may be a little bit less effective, as additional operations might need to be performed to ensure the resulting value is always `0` or `1`.
 
 > [!TIP]
 > For evaluating conditions, using the logical operators (`and`/`or`) is preferred. Only use the boolean operators when you need to limit the output values to `0` or `1`, e.g., `count += active || reactor.heat > 0.5`. Using boolean operators where logical operators would be adequate, for example in `if` conditions, may result in less optimal compiled code.

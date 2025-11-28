@@ -474,8 +474,8 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (-47 instr
      5 lookup block :block :i
 -    * jump *label6 strictEqual :block null
 -    * jump *label5 always
-+    6 sensor *tmp10 :block @id
-+    7 multijump *tmp10 0 0 (m:*label60)
++    6 sensor *tmp8 :block @id
++    7 multijump *tmp8 0 0 (m:*label60)
      8 label *label6
      9 set *tmp2 1
     10 jump *label4 always
@@ -650,7 +650,7 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (-47 instr
    131 label *label53
 +  132 multilabel *label61 (m:*label60)
 +  133 label *label59
-+  134 jump *label6 strictEqual *tmp10 null
++  134 jump *label6 strictEqual *tmp8 null
 +  135 multilabel *label62 (m:*label60)
 +  136 label *label58
    137 set *tmp2 0
@@ -664,7 +664,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 -    * label *label0
      3 label *label57
      4 lookup block :block :i
-     5 sensor *tmp10 :block @id
+     5 sensor *tmp8 :block @id
  
      7 label *label6
      8 set *tmp2 1
@@ -792,7 +792,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 -    * label *label53
     82 multilabel *label61 (m:*label60)
 -    * label *label59
-    83 jump *label6 strictEqual *tmp10 null
+    83 jump *label6 strictEqual *tmp8 null
     84 multilabel *label62 (m:*label60)
 -    * label *label58
     85 set *tmp2 0
@@ -819,8 +819,8 @@ set :total 0
 set :i -1
 label *label57
 lookup block :block :i
-sensor *tmp10 :block @id
-multijump *tmp10 0 0
+sensor *tmp8 :block @id
+multijump *tmp8 0 0
 label *label6
 set *tmp2 1
 jump *label4 always
@@ -897,7 +897,7 @@ multilabel *label86
 set *tmp2 26                            # Origin: 5, keys: 234
 jump *label4 always
 multilabel *label61
-jump *label6 strictEqual *tmp10 null
+jump *label6 strictEqual *tmp8 null
 multilabel *label62
 set *tmp2 0                             # Origin: 5, keys: 1 .. 16, 29, 30, 35 .. 202, 205, 208 .. 219, 222 .. 224, 226 .. 233, 235 .. 259
 label *label4

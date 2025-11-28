@@ -65,6 +65,7 @@ defaults:
   print-merging: [ none, basic, advanced ]
   return-optimization: [ none, basic ]
   single-step-elimination: [ none, basic ]
+  select-elimination: [ none, basic ]
   stack-optimization: [ none, basic ]
   temp-variables-elimination: [ none, basic ]
   unreachable-code-elimination: [ none, basic ]

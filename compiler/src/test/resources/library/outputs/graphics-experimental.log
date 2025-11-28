@@ -4,7 +4,7 @@
     15 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Jump Optimization (4 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
-     6 instructions eliminated by If Expression Optimization (4 iterations).
+     6 instructions eliminated by Select Optimization (4 iterations).
     32 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
      2 instructions eliminated by Function Inlining (3 iterations).
      2 function calls inlined by Function Inlining.
@@ -19,12 +19,12 @@ Pass 1: speed optimization selection (cost limit 909):
 Final code before resolving virtual instructions:
 
     0:  sensor :displaySize:type display1 @type
-    1:  select *tmp35 equal :displaySize:type @large-logic-display 176 null
-    2:  select *tmp32 equal :displaySize:type @logic-display 80 *tmp35
+    1:  select *tmp34 equal :displaySize:type @large-logic-display 176 null
+    2:  select *tmp32 equal :displaySize:type @logic-display 80 *tmp34
     3:  assertequals 176 *tmp32 "large display size"
     4:  sensor :displaySize:type display5 @type
-    5:  select *tmp35 equal :displaySize:type @large-logic-display 176 null
-    6:  select *tmp32 equal :displaySize:type @logic-display 80 *tmp35
+    5:  select *tmp34 equal :displaySize:type @large-logic-display 176 null
+    6:  select *tmp32 equal :displaySize:type @logic-display 80 *tmp34
     7:  assertequals 80 *tmp32 "small display size"
     8:  assertequals 0.2 0.2 "red channel"
     9:  assertequals 0.4 0.4 "green channel"

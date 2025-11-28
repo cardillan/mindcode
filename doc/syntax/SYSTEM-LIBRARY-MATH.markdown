@@ -65,8 +65,8 @@ Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                   2 |                  6 |
-| Function body                            |                   3 |                  7 |
+| Inlined function                         |                   2 |                  2 |
+| Function body                            |                   3 |                  3 |
 | Function call                            |                   4 |                  4 |
 
 Returns the sign of the number. The return value is `0` precisely when `x == 0`
@@ -298,9 +298,9 @@ Returns the median of five values.
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Ten arguments in total                   |                 643 |                 88 |
-| Fifteen arguments in total               |                 138 |                118 |
-| Twenty arguments in total                |                 178 |                148 |
+| Ten arguments in total                   |                 673 |                 87 |
+| Fifteen arguments in total               |                 141 |                117 |
+| Twenty arguments in total                |                 181 |                147 |
 
 Computes the median of the given arguments using a generic algorithm. The algorithm generates quite a large code
 and is fairly slow as it doesn't modify the input array.

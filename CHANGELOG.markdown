@@ -19,7 +19,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
+* **Breaking:** The [`and` and `or` operators](/doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#boolean-and-logical-and-or-operators) now perform [short-circuit evaluation](https://en.wikipedia.org/wiki/Short-circuit_evaluation).
 * The [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY-COMPATIBILITY.markdown) now also performs a test to find out whether assigning `null` to `@counter` is ignored by the processor.
+* The [Select Optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) has been extracted from the If Expression Optimization and is now a separate optimization type.  
 
 ## 3.10.0 - 2025-11-17
 

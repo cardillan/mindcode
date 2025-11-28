@@ -21,6 +21,12 @@ public interface ContextfulInstructionCreator {
 
     InstructionProcessor getProcessor();
 
+    /// Applies the provided side effects to the next instruction to be created.
+    default ContextfulInstructionCreator withSideEffects(SideEffects sideEffects) {
+        getProcessor().withSideEffects(sideEffects);
+        return this;
+    }
+
     /// Allocates a new temporary variable.
     ///
     /// @return a new temporary variable

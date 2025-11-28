@@ -10,9 +10,9 @@ Block-related functions (just the `findLinkedBlocks` function at this moment).
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Linking two blocks                       |                  25 |                 27 |
-| Linking four blocks                      |                  34 |                 40 |
-| Linking six blocks                       |                  43 |                 53 |
+| Linking two blocks                       |                  25 |                 23 |
+| Linking four blocks                      |                  34 |                 32 |
+| Linking six blocks                       |                  43 |                 41 |
 
 Searches blocks linked to the processor for blocks of requested types and assigns them to given variables if found.
 The function tries to locate blocks repeatedly until all required blocks are found.

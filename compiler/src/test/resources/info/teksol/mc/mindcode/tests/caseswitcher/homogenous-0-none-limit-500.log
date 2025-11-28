@@ -238,8 +238,8 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (-23 instr
 -    * jump *label8 equal :block @carbide-wall
 -    * jump *label8 equal :block @carbide-wall-large
 -    * jump *label7 always
-+    5 sensor *tmp13 :block @id
-+    6 multijump *tmp13 0 0 (m:*label11)
++    5 sensor *tmp9 :block @id
++    6 multijump *tmp9 0 0 (m:*label11)
 +    7 multilabel *label13 (m:*label11)
      8 label *label8
      9 set *tmp2 true
@@ -257,8 +257,8 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 -    * label *label0
      2 label *label9
      3 lookup block :block :i
-     4 sensor *tmp13 :block @id
-     5 multijump *tmp13 0 0 (m:*label11)
+     4 sensor *tmp9 :block @id
+     5 multijump *tmp9 0 0 (m:*label11)
      6 multilabel *label13 (m:*label11)
 -    * label *label8
      7 set *tmp2 true
@@ -290,8 +290,8 @@ set :hash 0
 set :i -1
 label *label9
 lookup block :block :i
-sensor *tmp13 :block @id
-multijump *tmp13 0 0
+sensor *tmp9 :block @id
+multijump *tmp9 0 0
 multilabel *label13
 set *tmp2 true                          # Origin: 4, keys: 17 .. 28, 31 .. 34, 203, 204, 206, 207, 220, 221, 225, 234
 jump *label6 always

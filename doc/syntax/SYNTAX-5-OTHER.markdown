@@ -647,8 +647,8 @@ See [Dynamic optimizations](SYNTAX-6-OPTIMIZATIONS.markdown#static-and-dynamic-o
 
 Activates/deactivates a limited [Data Flow optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) inside [mlog blocks](SYNTAX-EXTENSIONS.markdown#mlog-blocks). Possible values are:
 
-* `false` (the default value): no optimization is applied to the mlog blocks.
-* `true`: the Data Flow Optimization may replace input/output mlog variables used in instructions with different variables/values.
+* `false`: no optimization is applied to the mlog blocks.
+* `true` (the default value): the Data Flow Optimization may replace input/output mlog variables used in instructions with different variables/values.
 
 ### Option `passes`
 
@@ -660,9 +660,9 @@ Use the `passes` option to set the maximum number of optimization passes to be d
 #set passes = 10;
 ```
 
-The default value is 5 for the web application and 25 for the command line tool. The number of optimization passes can be limited to a value between 1 and 1000 (inclusive).
+The default value is `5` for the web application and `25` for the command line tool. The number of optimization passes can be limited to a value between `1` and `1000` (inclusive).
 
-A more complex code can usually benefit from more optimization passes. On the other hand, each optimization pass can take some time to complete. Limiting the total number can prevent optimization from taking too much time or consuming too many resources.
+A more complex code can usually benefit from more optimization passes. On the other hand, each optimization pass can take some time to complete. Limiting the total number can prevent optimization from taking too much time.
 
 ### Option `unsafe-case-optimization`
 
@@ -746,6 +746,7 @@ when not explicitly set. Available optimization levels are {none,basic,advanced,
 | [loop-unrolling](SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling)                             | local | stable             |
 | [print-merging](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging)                               | local | stable             |
 | [return-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#return-optimization)                   | local | stable             |
+| [select-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization)                   | local | stable             |
 | [single-step-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination)           | local | stable             |
 | [stack-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization)                     | local | stable             |
 | [temp-variables-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#temp-variables-elimination)     | local | stable             |

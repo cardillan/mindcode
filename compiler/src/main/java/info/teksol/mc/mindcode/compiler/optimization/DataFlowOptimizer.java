@@ -387,7 +387,8 @@ class DataFlowOptimizer extends BaseOptimizer {
                 case IF             -> processIfContext(context, variableStates, modifyInstructions);
                 case CASE           -> processCaseContext(context, variableStates, modifyInstructions);
                 case JUMPS          -> processJumpsContext(context, variableStates, modifyInstructions);
-                case SHORT_CIRCUIT  -> processShortCircuitingContext(context, variableStates, modifyInstructions);
+                case SCBE_COND,
+                     SCBE_OPER      -> processShortCircuitingContext(context, variableStates, modifyInstructions);
                 default             -> processDefaultContext(localContext, context, variableStates, modifyInstructions);
             };
         }

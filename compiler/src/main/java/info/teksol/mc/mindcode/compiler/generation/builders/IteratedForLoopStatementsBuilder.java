@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.generated.ast.visitors.AstIteratedForLoopStatementVisitor;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIteratedForLoopStatement;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
@@ -31,7 +32,7 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         assembler.createLabel(beginLabel);
         if (node.getCondition() != null) {
-            evaluateCondition(node.getCondition(), loopLabels.breakLabel());
+            evaluateCondition(node.getCondition(), loopLabels.breakLabel(), AstContextType.SCBE_COND);
         }
 
         // Loop body

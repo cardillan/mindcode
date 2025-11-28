@@ -48,8 +48,8 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
 
     public AbstractProcessorTest() {
         this.symbolicLabels = getClass().getSimpleName().contains("SymbolicLabels");
-        boolean translartion = getClass().getSimpleName().contains("Translation");
-        logSuffix = symbolicLabels ? "-symbolic.log" : translartion ? "-translation.log" : ".log";
+        boolean translation = getClass().getSimpleName().contains("Translation");
+        logSuffix = symbolicLabels ? "-symbolic.log" : translation ? "-translation.log" : ".log";
     }
 
     @Override

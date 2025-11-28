@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.generated.ast.visitors.AstWhileLoopStatementVisitor;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstWhileLoopStatement;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
@@ -60,7 +61,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         assembler.createLabel(beginLabel);
-        evaluateCondition(node.getCondition(), loopLabels.breakLabel());
+        evaluateCondition(node.getCondition(), loopLabels.breakLabel(), AstContextType.SCBE_COND);
 
         // Loop body
         assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);

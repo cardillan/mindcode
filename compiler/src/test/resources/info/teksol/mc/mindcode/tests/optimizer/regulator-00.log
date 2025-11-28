@@ -6,7 +6,7 @@
     12 instructions eliminated by Jump Optimization (5 iterations).
      8 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      2 instructions modified by Expression Optimization (3 iterations).
-     9 instructions eliminated by If Expression Optimization (4 iterations).
+     9 instructions eliminated by Select Optimization (4 iterations).
      7 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -882,7 +882,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    222 print "[]"
    223 print "\n"
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-9 instructions):
+Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-9 instructions):
  
    107 set .STATE true
    108 op add .CYCLES 0 1
@@ -962,8 +962,8 @@ Modifications by Fast-dispatch case at line 26:9 (-14 instructions):
     20 print "\n"
     21 sensor *tmp5 :block @type
 -    * jump *label7 notEqual *tmp5 @message
-+   22 sensor *tmp70 *tmp5 @id
-+   23 multijump *tmp70 0 0 (m:*label58)
++   22 sensor *tmp55 *tmp5 @id
++   23 multijump *tmp55 0 0 (m:*label58)
 +   24 multilabel *label67 (m:*label58)
 +   25 multilabel *label59 (m:*label58)
 +   26 label *label57
@@ -1150,7 +1150,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     14 label *label54
     15 op sub :n :n 1
  
-    22 multijump *tmp70 0 0 (m:*label58)
+    22 multijump *tmp55 0 0 (m:*label58)
     23 multilabel *label67 (m:*label58)
     24 multilabel *label59 (m:*label58)
 -    * label *label57
@@ -1346,8 +1346,8 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 +   17 print "Found: {0}\n"
 +   18 format :block
     19 sensor *tmp5 :block @type
-    20 sensor *tmp70 *tmp5 @id
-    21 multijump *tmp70 0 0 (m:*label58)
+    20 sensor *tmp55 *tmp5 @id
+    21 multijump *tmp55 0 0 (m:*label58)
  
     57 label *label6
     58 jump *label54 greaterThan :n 0
@@ -1476,8 +1476,8 @@ getlink :block :n
 print "Found: {0}\n"
 format :block
 sensor *tmp5 :block @type
-sensor *tmp70 *tmp5 @id
-multijump *tmp70 0 0
+sensor *tmp55 *tmp5 @id
+multijump *tmp55 0 0
 multilabel *label67
 multilabel *label59
 jump *label6 always

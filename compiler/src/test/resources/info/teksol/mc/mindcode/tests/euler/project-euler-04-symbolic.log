@@ -3,7 +3,7 @@
      4 instructions eliminated by Dead Code Elimination (5 iterations).
      3 instructions eliminated by Jump Optimization (5 iterations).
      3 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     1 instructions eliminated by If Expression Optimization (4 iterations).
+     1 instructions eliminated by Select Optimization (4 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -172,7 +172,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     38 assertequals 9009 :max "Project Euler 4"
     39 stop
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-1 instructions):
  
      7 label *label15
      8 op mul :num :i :j

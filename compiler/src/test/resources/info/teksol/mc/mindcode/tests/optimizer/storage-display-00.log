@@ -5081,8 +5081,8 @@ Modifications by Fast-dispatch case at line 17:9 (-5 instructions):
     16 print "\n"
     17 sensor *tmp5 :block @type
 -    * jump *label7 notEqual *tmp5 @message
-+   18 sensor *tmp233 *tmp5 @id
-+   19 multijump *tmp233 0 0 (m:*label492)
++   18 sensor *tmp232 *tmp5 @id
++   19 multijump *tmp232 0 0 (m:*label492)
 +   20 multilabel *label498 (m:*label492)
 +   21 multilabel *label493 (m:*label492)
 +   22 label *label491
@@ -6280,7 +6280,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     10 label *label141
     11 op sub :n :n 1
  
-    18 multijump *tmp233 0 0 (m:*label492)
+    18 multijump *tmp232 0 0 (m:*label492)
     19 multilabel *label498 (m:*label492)
     20 multilabel *label493 (m:*label492)
 -    * label *label491
@@ -8506,8 +8506,8 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
 +   13 print "Found: {0}\n"
 +   14 format :block
     15 sensor *tmp5 :block @type
-    16 sensor *tmp233 *tmp5 @id
-    17 multijump *tmp233 0 0 (m:*label492)
+    16 sensor *tmp232 *tmp5 @id
+    17 multijump *tmp232 0 0 (m:*label492)
  
     32 label *label6
     33 jump *label141 greaterThan :n 0
@@ -8571,8 +8571,8 @@ getlink :block :n
 print "Found: {0}\n"
 format :block
 sensor *tmp5 :block @type
-sensor *tmp233 *tmp5 @id
-multijump *tmp233 0 0
+sensor *tmp232 *tmp5 @id
+multijump *tmp232 0 0
 multilabel *label498
 multilabel *label493
 jump *label6 always

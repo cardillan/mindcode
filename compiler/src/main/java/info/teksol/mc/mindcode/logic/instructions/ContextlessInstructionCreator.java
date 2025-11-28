@@ -19,6 +19,13 @@ public interface ContextlessInstructionCreator {
 
     InstructionProcessor getProcessor();
 
+    /// Applies the provided side effects to the next instruction to be created.
+    default ContextlessInstructionCreator withSideEffects(SideEffects sideEffects) {
+        getProcessor().withSideEffects(sideEffects);
+        return this;
+    }
+
+
     LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments);
 
     default LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments) {

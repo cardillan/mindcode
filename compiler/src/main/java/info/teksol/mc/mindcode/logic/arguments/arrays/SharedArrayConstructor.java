@@ -111,7 +111,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             prepareTableCall(creator);
             creator.createOp(Operation.MUL, arrayInd, instruction.getIndex(), LogicNumber.TWO);
             generateBoundsCheck(astContext, consumer, arrayInd, 2);
-            creator.createCallStackless(jumpTable.label(), arrayRet, LogicVariable.INVALID).setSideEffects(createCallSideEffects());
+            creator.withSideEffects(createCallSideEffects()).createCallStackless(jumpTable.label(), arrayRet, LogicVariable.INVALID);
         }
 
         finishTableCall(creator);
@@ -136,8 +136,9 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
                 LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
                 creator.createOp(Operation.MOD, branch, index, modulo);
             }
-            creator.createMultiCall(jumpTable.label(), branch, jumpTable.marker())
-                    .setSideEffects(createCallSideEffects()).setHoistId(marker2);
+            creator.withSideEffects(createCallSideEffects())
+                    .createMultiCall(jumpTable.label(), branch, jumpTable.marker())
+                    .setHoistId(marker2);
             creator.createLabel(returnLabel);
         }
 
@@ -158,7 +159,8 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             if (folded) {
                 creator.createSet(arrayInd, instruction.getIndex());
             }
-            creator.createMultiCall(instruction.getIndex(), jumpTable.marker()).setSideEffects(createCallSideEffects())
+            creator.withSideEffects(createCallSideEffects())
+                    .createMultiCall(instruction.getIndex(), jumpTable.marker())
                     .setHoistId(marker2).setJumpTable(jumpTable.branchLabels());
             creator.createLabel(returnLabel);
         }

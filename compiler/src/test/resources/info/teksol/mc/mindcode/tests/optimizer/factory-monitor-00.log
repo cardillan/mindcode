@@ -5,7 +5,8 @@
     26 instructions eliminated by Jump Optimization (5 iterations).
     15 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
-    11 instructions eliminated by If Expression Optimization (4 iterations).
+     8 instructions eliminated by Select Optimization (4 iterations).
+     3 instructions eliminated by If Expression Optimization (3 iterations).
     20 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -1697,7 +1698,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    455 drawflush .DISPLAY
    456 op sub *tmp173 @time :start
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-8 instructions):
+Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-8 instructions):
  
    337 op sub *tmp114 100 :output
    338 op lessThan *tmp115 *tmp114 :minimum
@@ -1754,7 +1755,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    414 set :blue 0
    415 label *label82
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 2 (-3 instructions):
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-3 instructions):
  
    190 set :crx 0
    191 op sub :clw 82 2
@@ -1883,9 +1884,9 @@ Modifications by Convert case at line 20:9 (segments: 1, padded low) (-8 instruc
     28 getlink :block :n
     29 sensor *tmp7 :block @type
 -    * jump *label9 notEqual *tmp7 @message
-+   30 sensor *tmp258 *tmp7 @id
-+   31 jump *label92 greaterThanEq *tmp258 146
-+   32 multijump *tmp258 0 0 (m:*label93)
++   30 sensor *tmp175 *tmp7 @id
++   31 jump *label92 greaterThanEq *tmp175 146
++   32 multijump *tmp175 0 0 (m:*label93)
 +   33 multilabel *label102 (m:*label93)
     34 label *label10
     35 set .MESSAGE :block
@@ -2049,8 +2050,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     24 label *label89
     25 op sub :n :n 1
  
-    29 jump *label92 greaterThanEq *tmp258 146
-    30 multijump *tmp258 0 0 (m:*label93)
+    29 jump *label92 greaterThanEq *tmp175 146
+    30 multijump *tmp175 0 0 (m:*label93)
     31 multilabel *label102 (m:*label93)
 -    * label *label10
     32 set .MESSAGE :block
@@ -2447,9 +2448,9 @@ label *label89
 op sub :n :n 1
 getlink :block :n
 sensor *tmp7 :block @type
-sensor *tmp258 *tmp7 @id
-jump *label92 greaterThanEq *tmp258 146
-multijump *tmp258 0 0
+sensor *tmp175 *tmp7 @id
+jump *label92 greaterThanEq *tmp175 146
+multijump *tmp175 0 0
 multilabel *label102
 set .MESSAGE :block                     # Origin: 26, keys: 137
 jump *label8 always

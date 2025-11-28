@@ -3,7 +3,9 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
+import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.profile.LocalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
@@ -11,6 +13,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 @NullMarked
 public interface LogicInstruction extends MlogInstruction {
@@ -31,6 +35,8 @@ public interface LogicInstruction extends MlogInstruction {
 
     LogicInstruction remapInfoLabels(Map<LogicLabel, LogicLabel> labelMap);
 
+    LogicInstruction remapInfoValues(Map<? extends LogicValue, LogicValue> valueMap);
+
     <T extends LogicInstruction> T copyInfo(T other);
 
     boolean belongsTo(@Nullable AstContext astContext);
@@ -47,6 +53,22 @@ public interface LogicInstruction extends MlogInstruction {
 
     default boolean endsCodePath() {
         return false;
+    }
+
+    default void processAllModifications(Consumer<LogicArgument> action) {
+        outputArgumentsStream().forEach(action);
+        getSideEffects().resets().forEach(action);
+        getSideEffects().writes().forEach(action);
+    }
+
+    default Stream<LogicArgument> getAllReads() {
+        List<LogicVariable> reads = getSideEffects().reads();
+        return reads.isEmpty() ? inputOnlyArgumentsStream() : Stream.concat(inputArgumentsStream(), reads.stream());
+    }
+
+    default Stream<LogicArgument> getAllArguments() {
+        List<LogicVariable> all = getSideEffects().all();
+        return all.isEmpty() ? inputOutputArgumentsStream() : Stream.concat(inputArgumentsStream(), all.stream());
     }
 
     /// Indicates the instruction is real - produces an actual code. Non-real (virtual) instructions

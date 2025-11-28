@@ -1,23 +1,24 @@
   1540 instructions before optimizations.
-    71 instructions eliminated by Temp Variables Elimination (9 iterations).
+    71 instructions eliminated by Temp Variables Elimination (8 iterations).
    124 instructions eliminated by Dead Code Elimination (5 iterations).
-     2 instructions modified by Jump Normalization (8 iterations).
-    66 instructions eliminated by Jump Optimization (8 iterations).
-    41 instructions eliminated by Single Step Elimination (3 passes, 11 iterations).
-    12 instructions modified by Expression Optimization (3 passes, 6 iterations).
-    47 instructions eliminated by If Expression Optimization (4 passes, 14 iterations).
-   283 instructions eliminated by Data Flow Optimization (12 passes, 41 iterations).
-    84 instructions added by Loop Unrolling (16 iterations).
-    10 loops unrolled by Loop Unrolling.
-    30 instructions updated by Jump Threading.
+    28 instructions modified by Jump Normalization (7 iterations).
+    66 instructions eliminated by Jump Optimization (7 iterations).
+    81 instructions eliminated by Single Step Elimination (3 passes, 12 iterations).
+     8 instructions modified by Expression Optimization (5 iterations).
+    24 instructions eliminated by Select Optimization (2 passes, 7 iterations).
+     5 instructions eliminated by If Expression Optimization (5 iterations).
+   256 instructions eliminated by Data Flow Optimization (9 passes, 32 iterations).
+    79 instructions added by Loop Unrolling (13 iterations).
+     8 loops unrolled by Loop Unrolling.
+    32 instructions updated by Jump Threading.
      4 instructions eliminated by Unreachable Code Elimination (2 iterations).
    988 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 3):
+Pass 1: speed optimization selection (cost limit 0):
     Unroll iteration loop at *math:121:5                         size    -5, benefit        7.0, efficiency   Infinity
     Unroll iteration loop at *math:133:5                         size    -5, benefit        7.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:241:5                         size  +115, benefit       23.0, efficiency      0.200
-  * Unroll iteration loop at *math:259:5                         size   -23, benefit      575.0, efficiency   Infinity (-13 instructions)
+  ! Unroll iteration loop at *math:241:5                         size  +145, benefit       23.0, efficiency      0.159
+  * Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity (+3 instructions)
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
@@ -28,8 +29,8 @@ Pass 1: speed optimization selection (cost limit 3):
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +115, benefit       23.0, efficiency      0.200
-    Unroll iteration loop at *math:259:5                         size   -23, benefit      575.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:241:5                         size  +145, benefit       23.0, efficiency      0.159
+    Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
@@ -56,39 +57,39 @@ Pass 1: speed optimization selection (cost limit 3):
   ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
   ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
 
-Pass 1: speed optimization selection (cost limit 16):
+Pass 1: speed optimization selection (cost limit 0):
     Unroll iteration loop at *math:121:5                         size    -5, benefit        7.0, efficiency   Infinity
     Unroll iteration loop at *math:133:5                         size    -5, benefit        7.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +115, benefit       23.0, efficiency      0.200
-  * Unroll iteration loop at *math:259:5                         size   -23, benefit      575.0, efficiency   Infinity (-13 instructions)
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +145, benefit       23.0, efficiency      0.159
+  * Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity (+3 instructions)
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-    Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
   ! Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
   ! Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
@@ -98,88 +99,127 @@ Pass 1: speed optimization selection (cost limit 16):
   ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
   ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
 
-Pass 1: speed optimization selection (cost limit 29):
+Pass 1: speed optimization selection (cost limit 0):
   * Unroll iteration loop at *math:121:5                         size    -5, benefit        7.0, efficiency   Infinity (-8 instructions)
     Unroll iteration loop at *math:133:5                         size    -5, benefit        7.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-    Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
 
-Pass 1: speed optimization selection (cost limit 37):
+Pass 1: speed optimization selection (cost limit 0):
   * Unroll iteration loop at *math:133:5                         size    -5, benefit        7.0, efficiency   Infinity (-9 instructions)
-    Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-    Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-    Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
 
-Pass 1: speed optimization selection (cost limit 46):
+Pass 1: speed optimization selection (cost limit 4):
+  ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
+  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
+  ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
+  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
+
+Pass 2: speed optimization selection (cost limit 48):
     Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
     Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
@@ -203,22 +243,22 @@ Pass 1: speed optimization selection (cost limit 46):
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
     Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
+  ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
     Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
+    Inline function call at line 57:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 58:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 59:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 60:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 61:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 62:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
 
-Pass 1: speed optimization selection (cost limit 33):
+Pass 2: speed optimization selection (cost limit 35):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
     Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
@@ -241,22 +281,22 @@ Pass 1: speed optimization selection (cost limit 33):
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
     Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
+  ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
     Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
+    Inline function call at line 57:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 58:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 59:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 60:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 61:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 62:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
 
-Pass 1: speed optimization selection (cost limit 20):
+Pass 2: speed optimization selection (cost limit 22):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
     Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
@@ -276,22 +316,22 @@ Pass 1: speed optimization selection (cost limit 20):
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
     Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
+  ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
     Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-    Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
-    Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
+    Inline function call at line 57:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 58:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 59:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 60:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 61:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 62:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
+    Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
 
-Pass 1: speed optimization selection (cost limit 7):
+Pass 2: speed optimization selection (cost limit 9):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
   * Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143 (+7 instructions)
@@ -309,22 +349,22 @@ Pass 1: speed optimization selection (cost limit 7):
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
+  ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 57:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 58:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 59:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 60:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 61:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 62:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
 
-Pass 1: speed optimization selection (cost limit 0):
+Pass 2: speed optimization selection (cost limit 2):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
   ! Unroll iteration loop at *math:241:5                         size  +265, benefit       23.0, efficiency      0.087
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
@@ -341,38 +381,6 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
-
-Pass 2: speed optimization selection (cost limit 10):
-  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +253, benefit       23.0, efficiency      0.091
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-  * Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500 (+5 instructions)
-  ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -388,9 +396,9 @@ Pass 2: speed optimization selection (cost limit 10):
   ! Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
   ! Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
 
-Pass 2: speed optimization selection (cost limit 5):
+Pass 3: speed optimization selection (cost limit 6):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +241, benefit       23.0, efficiency      0.095
+  ! Unroll iteration loop at *math:241:5                         size  +259, benefit       23.0, efficiency      0.089
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
@@ -400,9 +408,8 @@ Pass 2: speed optimization selection (cost limit 5):
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
+  ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
@@ -421,87 +428,20 @@ Pass 2: speed optimization selection (cost limit 5):
   ! Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
   ! Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
 
-Pass 3: speed optimization selection (cost limit 7):
+Pass 4: speed optimization selection (cost limit 6):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +241, benefit       23.0, efficiency      0.095
+  ! Unroll iteration loop at *math:241:5                         size  +259, benefit       23.0, efficiency      0.089
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-  * Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143 (+5 instructions)
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
-  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 57:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 58:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 59:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 60:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 61:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 62:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
-
-Pass 3: speed optimization selection (cost limit 2):
-  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +241, benefit       23.0, efficiency      0.095
-  ! Unroll iteration loop at *math:241:5                         size  +265, benefit       23.0, efficiency      0.087
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
-  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 57:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 58:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 59:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 60:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 61:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 62:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
-
-Pass 4: speed optimization selection (cost limit 4):
-  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +241, benefit       23.0, efficiency      0.095
-  ! Unroll iteration loop at *math:241:5                         size  +253, benefit       23.0, efficiency      0.091
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
@@ -522,8 +462,9 @@ Pass 4: speed optimization selection (cost limit 4):
 
 Pass 5: speed optimization selection (cost limit 6):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +241, benefit       23.0, efficiency      0.095
-  ! Unroll iteration loop at *math:241:5                         size  +241, benefit       23.0, efficiency      0.095
+  ! Unroll iteration loop at *math:241:5                         size  +259, benefit       23.0, efficiency      0.089
+  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
@@ -531,43 +472,8 @@ Pass 5: speed optimization selection (cost limit 6):
   ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
-  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 57:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 58:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 59:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 60:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 61:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 62:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
-  ! Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
-
-Pass 6: speed optimization selection (cost limit 6):
-  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +241, benefit       23.0, efficiency      0.095
-  ! Unroll iteration loop at *math:241:5                         size  +241, benefit       23.0, efficiency      0.095
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +223, benefit       23.0, efficiency      0.103
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
-  ! Unroll iteration loop at *math:241:5                         size  +496, benefit       35.0, efficiency      0.071
   ! Unroll iteration loop at *math:241:5                         size  +415, benefit       35.0, efficiency      0.084
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
@@ -790,147 +696,143 @@ Final code before resolving virtual instructions:
   172:  set :_median.1:i 5
   173:  setaddr *tmp88 *label86
         label *label78
-  174:  select *tmp654 greaterThan 1 :_median.1:i 1 0
-  175:  select :_isMedian.1:lt lessThan 1 :_median.1:i 1 0
-  176:  select :_isMedian.1:gt lessThan 1 :_median.1:i 0 *tmp654
-  177:  jump *label781 greaterThanEq 1 :_median.1:i
-  178:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  179:  jump *label784 always 0 0
-        label *label781
-  180:  jump *label782 lessThanEq 1 :_median.1:i
-  181:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label782
-        label *label784
-  182:  jump *label789 greaterThanEq 1 :_median.1:i
-  183:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  184:  jump *label792 always 0 0
-        label *label789
-  185:  jump *label790 lessThanEq 1 :_median.1:i
-  186:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label790
-        label *label792
-  187:  jump *label797 greaterThanEq 1 :_median.1:i
-  188:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  189:  jump *label800 always 0 0
-        label *label797
-  190:  jump *label798 lessThanEq 1 :_median.1:i
-  191:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label798
-        label *label800
-  192:  jump *label805 greaterThanEq 1 :_median.1:i
-  193:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  194:  jump *label808 always 0 0
-        label *label805
-  195:  jump *label806 lessThanEq 1 :_median.1:i
-  196:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label806
-        label *label808
-  197:  jump *label813 greaterThanEq 5 :_median.1:i
-  198:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  199:  jump *label816 always 0 0
-        label *label813
-  200:  jump *label814 lessThanEq 5 :_median.1:i
-  201:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label814
-        label *label816
-  202:  op sub *tmp95 :_isMedian.1:gt :_isMedian.1:lt
-  203:  op abs :_isMedian.1:dif *tmp95 0
-  204:  op add *tmp97 :_isMedian.1:gt :_isMedian.1:lt
-  205:  op equal *tmp366 :_isMedian.1:gt :_isMedian.1:lt
-  206:  select *tmp100 greaterThanEq *tmp97 5 *tmp366 false
-  207:  jump *label87 equal *tmp100 false
-  208:  set *tmp87 :_median.1:i
-  209:  jump *label77 always 0 0
+  174:  set :_isMedian.1:lt 0
+  175:  set :_isMedian.1:gt 0
+  176:  jump *label821 greaterThanEq 1 :_median.1:i
+  177:  set :_isMedian.1:lt 1
+  178:  jump *label824 always 0 0
+        label *label821
+  179:  select :_isMedian.1:gt greaterThan 1 :_median.1:i 1 0
+        label *label824
+  180:  jump *label829 greaterThanEq 1 :_median.1:i
+  181:  op add :_isMedian.1:lt :_isMedian.1:lt 1
+  182:  jump *label832 always 0 0
+        label *label829
+  183:  jump *label830 lessThanEq 1 :_median.1:i
+  184:  op add :_isMedian.1:gt :_isMedian.1:gt 1
+        label *label830
+        label *label832
+  185:  jump *label837 greaterThanEq 1 :_median.1:i
+  186:  op add :_isMedian.1:lt :_isMedian.1:lt 1
+  187:  jump *label840 always 0 0
+        label *label837
+  188:  jump *label838 lessThanEq 1 :_median.1:i
+  189:  op add :_isMedian.1:gt :_isMedian.1:gt 1
+        label *label838
+        label *label840
+  190:  jump *label845 greaterThanEq 1 :_median.1:i
+  191:  op add :_isMedian.1:lt :_isMedian.1:lt 1
+  192:  jump *label848 always 0 0
+        label *label845
+  193:  jump *label846 lessThanEq 1 :_median.1:i
+  194:  op add :_isMedian.1:gt :_isMedian.1:gt 1
+        label *label846
+        label *label848
+  195:  jump *label853 greaterThanEq 1 :_median.1:i
+  196:  op add :_isMedian.1:lt :_isMedian.1:lt 1
+  197:  jump *label856 always 0 0
+        label *label853
+  198:  jump *label854 lessThanEq 1 :_median.1:i
+  199:  op add :_isMedian.1:gt :_isMedian.1:gt 1
+        label *label854
+        label *label856
+  200:  jump *label861 greaterThanEq 5 :_median.1:i
+  201:  op add :_isMedian.1:lt :_isMedian.1:lt 1
+  202:  jump *label864 always 0 0
+        label *label861
+  203:  jump *label862 lessThanEq 5 :_median.1:i
+  204:  op add :_isMedian.1:gt :_isMedian.1:gt 1
+        label *label862
+        label *label864
+  205:  op sub *tmp95 :_isMedian.1:gt :_isMedian.1:lt
+  206:  op abs :_isMedian.1:dif *tmp95 0
+  207:  op add *tmp97 :_isMedian.1:gt :_isMedian.1:lt
+  208:  op equal *tmp362 :_isMedian.1:gt :_isMedian.1:lt
+  209:  select *tmp100 greaterThanEq *tmp97 5 *tmp362 false
+  210:  jump *label87 equal *tmp100 false
+  211:  set *tmp87 :_median.1:i
+  212:  jump *label77 always 0 0
         label *label87
-  210:  jump *label105 greaterThanEq :_isMedian.1:dif :_median.1:bestDif
-  211:  set :_median.1:bestDif :_isMedian.1:dif
-  212:  set :_median.1:best :_median.1:i
-  213:  set :_median.1:count 1
-  214:  multijump *tmp88 0 0
+  213:  jump *label105 greaterThanEq :_isMedian.1:dif :_median.1:bestDif
+  214:  set :_median.1:bestDif :_isMedian.1:dif
+  215:  set :_median.1:best :_median.1:i
+  216:  set :_median.1:count 1
+  217:  multijump *tmp88 0 0
         label *label105
-  215:  jump *label107 greaterThan :_isMedian.1:dif :_median.1:bestDif
-  216:  op add :_median.1:best :_median.1:best :_median.1:i
-  217:  op add :_median.1:count :_median.1:count 1
+  218:  jump *label107 greaterThan :_isMedian.1:dif :_median.1:bestDif
+  219:  op add :_median.1:best :_median.1:best :_median.1:i
+  220:  op add :_median.1:count :_median.1:count 1
         label *label107
-  218:  multijump *tmp88 0 0
+  221:  multijump *tmp88 0 0
         multilabel *label86
-  219:  op div *tmp87 :_median.1:best :_median.1:count
+  222:  op div *tmp87 :_median.1:best :_median.1:count
         label *label77
-  220:  assertequals 1 *tmp87 "median(1,1,1,1,1,5)"
-  221:  set :_median.2:bestDif 10000000000
-  222:  set :_median.2:best null
-  223:  set :_median.2:count 1
-  224:  set :_median.2:i 1
-  225:  setaddr *tmp110 *label114
-  226:  jump *label111 always 0 0
-        multilabel *label114
+  223:  assertequals 1 *tmp87 "median(1,1,1,1,1,5)"
+  224:  set :_median.2:bestDif 10000000000
+  225:  set :_median.2:best null
+  226:  set :_median.2:count 1
   227:  set :_median.2:i 1
-  228:  setaddr *tmp110 *label115
+  228:  setaddr *tmp110 *label114
   229:  jump *label111 always 0 0
-        multilabel *label115
+        multilabel *label114
   230:  set :_median.2:i 1
-  231:  setaddr *tmp110 *label116
+  231:  setaddr *tmp110 *label115
   232:  jump *label111 always 0 0
-        multilabel *label116
+        multilabel *label115
   233:  set :_median.2:i 1
-  234:  setaddr *tmp110 *label117
+  234:  setaddr *tmp110 *label116
   235:  jump *label111 always 0 0
-        multilabel *label117
-  236:  set :_median.2:i 5
-  237:  setaddr *tmp110 *label118
+        multilabel *label116
+  236:  set :_median.2:i 1
+  237:  setaddr *tmp110 *label117
   238:  jump *label111 always 0 0
-        multilabel *label118
+        multilabel *label117
   239:  set :_median.2:i 5
-  240:  setaddr *tmp110 *label119
+  240:  setaddr *tmp110 *label118
+  241:  jump *label111 always 0 0
+        multilabel *label118
+  242:  set :_median.2:i 5
+  243:  setaddr *tmp110 *label119
         label *label111
-  241:  select *tmp1371 greaterThan 1 :_median.2:i 1 0
-  242:  select :_isMedian.2:lt lessThan 1 :_median.2:i 1 0
-  243:  select :_isMedian.2:gt lessThan 1 :_median.2:i 0 *tmp1371
-  244:  jump *label903 greaterThanEq 1 :_median.2:i
-  245:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  246:  jump *label906 always 0 0
-        label *label903
-  247:  jump *label904 lessThanEq 1 :_median.2:i
-  248:  op add :_isMedian.2:gt :_isMedian.2:gt 1
-        label *label904
-        label *label906
-  249:  jump *label911 greaterThanEq 1 :_median.2:i
-  250:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  251:  jump *label914 always 0 0
-        label *label911
-  252:  jump *label912 lessThanEq 1 :_median.2:i
-  253:  op add :_isMedian.2:gt :_isMedian.2:gt 1
-        label *label912
-        label *label914
-  254:  jump *label919 greaterThanEq 1 :_median.2:i
-  255:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  256:  jump *label922 always 0 0
-        label *label919
-  257:  jump *label920 lessThanEq 1 :_median.2:i
-  258:  op add :_isMedian.2:gt :_isMedian.2:gt 1
-        label *label920
-        label *label922
-  259:  jump *label927 greaterThanEq 5 :_median.2:i
-  260:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  261:  jump *label930 always 0 0
-        label *label927
-  262:  jump *label928 lessThanEq 5 :_median.2:i
-  263:  op add :_isMedian.2:gt :_isMedian.2:gt 1
-        label *label928
-        label *label930
-  264:  jump *label935 greaterThanEq 5 :_median.2:i
-  265:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  266:  jump *label938 always 0 0
-        label *label935
-  267:  jump *label936 lessThanEq 5 :_median.2:i
-  268:  op add :_isMedian.2:gt :_isMedian.2:gt 1
-        label *label936
-        label *label938
+  244:  set :_isMedian.2:lt 0
+  245:  set :_isMedian.2:gt 0
+  246:  set :_isMedian.2:i 1
+  247:  setaddr *tmp112 *label126
+  248:  jump *label123 always 0 0
+        multilabel *label126
+  249:  set :_isMedian.2:i 1
+  250:  setaddr *tmp112 *label127
+  251:  jump *label123 always 0 0
+        multilabel *label127
+  252:  set :_isMedian.2:i 1
+  253:  setaddr *tmp112 *label128
+  254:  jump *label123 always 0 0
+        multilabel *label128
+  255:  set :_isMedian.2:i 1
+  256:  setaddr *tmp112 *label129
+  257:  jump *label123 always 0 0
+        multilabel *label129
+  258:  set :_isMedian.2:i 5
+  259:  setaddr *tmp112 *label130
+  260:  jump *label123 always 0 0
+        multilabel *label130
+  261:  set :_isMedian.2:i 5
+  262:  setaddr *tmp112 *label131
+        label *label123
+  263:  jump *label132 greaterThanEq :_isMedian.2:i :_median.2:i
+  264:  op add :_isMedian.2:lt :_isMedian.2:lt 1
+  265:  multijump *tmp112 0 0
+        label *label132
+  266:  jump *label134 lessThanEq :_isMedian.2:i :_median.2:i
+  267:  op add :_isMedian.2:gt :_isMedian.2:gt 1
+        label *label134
+  268:  multijump *tmp112 0 0
+        multilabel *label131
   269:  op sub *tmp117 :_isMedian.2:gt :_isMedian.2:lt
   270:  op abs :_isMedian.2:dif *tmp117 0
   271:  op add *tmp119 :_isMedian.2:gt :_isMedian.2:lt
-  272:  op equal *tmp371 :_isMedian.2:gt :_isMedian.2:lt
-  273:  select *tmp122 greaterThanEq *tmp119 5 *tmp371 false
+  272:  op equal *tmp363 :_isMedian.2:gt :_isMedian.2:lt
+  273:  select *tmp122 greaterThanEq *tmp119 5 *tmp363 false
   274:  jump *label120 equal *tmp122 false
   275:  set *tmp109 :_median.2:i
   276:  jump *label110 always 0 0
@@ -1013,8 +915,8 @@ Final code before resolving virtual instructions:
   333:  op sub *tmp139 :_isMedian.3:gt :_isMedian.3:lt
   334:  op abs :_isMedian.3:dif *tmp139 0
   335:  op add *tmp141 :_isMedian.3:gt :_isMedian.3:lt
-  336:  op equal *tmp376 :_isMedian.3:gt :_isMedian.3:lt
-  337:  select *tmp144 greaterThanEq *tmp141 5 *tmp376 false
+  336:  op equal *tmp364 :_isMedian.3:gt :_isMedian.3:lt
+  337:  select *tmp144 greaterThanEq *tmp141 5 *tmp364 false
   338:  jump *label153 equal *tmp144 false
   339:  set *tmp131 :_median.3:i
   340:  jump *label143 always 0 0
@@ -1097,8 +999,8 @@ Final code before resolving virtual instructions:
   397:  op sub *tmp161 :_isMedian.4:gt :_isMedian.4:lt
   398:  op abs :_isMedian.4:dif *tmp161 0
   399:  op add *tmp163 :_isMedian.4:gt :_isMedian.4:lt
-  400:  op equal *tmp381 :_isMedian.4:gt :_isMedian.4:lt
-  401:  select *tmp166 greaterThanEq *tmp163 5 *tmp381 false
+  400:  op equal *tmp365 :_isMedian.4:gt :_isMedian.4:lt
+  401:  select *tmp166 greaterThanEq *tmp163 5 *tmp365 false
   402:  jump *label186 equal *tmp166 false
   403:  set *tmp153 :_median.4:i
   404:  jump *label176 always 0 0
@@ -1181,8 +1083,8 @@ Final code before resolving virtual instructions:
   461:  op sub *tmp183 :_isMedian.5:gt :_isMedian.5:lt
   462:  op abs :_isMedian.5:dif *tmp183 0
   463:  op add *tmp185 :_isMedian.5:gt :_isMedian.5:lt
-  464:  op equal *tmp386 :_isMedian.5:gt :_isMedian.5:lt
-  465:  select *tmp188 greaterThanEq *tmp185 5 *tmp386 false
+  464:  op equal *tmp366 :_isMedian.5:gt :_isMedian.5:lt
+  465:  select *tmp188 greaterThanEq *tmp185 5 *tmp366 false
   466:  jump *label219 equal *tmp188 false
   467:  set *tmp175 :_median.5:i
   468:  jump *label209 always 0 0
@@ -1274,465 +1176,459 @@ Final code before resolving virtual instructions:
   532:  set :_median.7:i 9
   533:  setaddr *tmp220 *label287
         label *label276
-  534:  select *tmp685 greaterThan 1 :_median.7:i 1 0
-  535:  select :_isMedian.7:lt lessThan 1 :_median.7:i 1 0
-  536:  select :_isMedian.7:gt lessThan 1 :_median.7:i 0 *tmp685
-  537:  jump *label562 greaterThanEq 2 :_median.7:i
-  538:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  539:  jump *label565 always 0 0
-        label *label562
-  540:  jump *label563 lessThanEq 2 :_median.7:i
-  541:  op add :_isMedian.7:gt :_isMedian.7:gt 1
-        label *label563
-        label *label565
-  542:  jump *label570 greaterThanEq 3 :_median.7:i
-  543:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  544:  jump *label573 always 0 0
-        label *label570
-  545:  jump *label571 lessThanEq 3 :_median.7:i
-  546:  op add :_isMedian.7:gt :_isMedian.7:gt 1
-        label *label571
-        label *label573
-  547:  jump *label578 greaterThanEq 4 :_median.7:i
-  548:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  549:  jump *label581 always 0 0
-        label *label578
-  550:  jump *label579 lessThanEq 4 :_median.7:i
-  551:  op add :_isMedian.7:gt :_isMedian.7:gt 1
-        label *label579
-        label *label581
-  552:  jump *label586 greaterThanEq 5 :_median.7:i
-  553:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  554:  jump *label589 always 0 0
-        label *label586
-  555:  jump *label587 lessThanEq 5 :_median.7:i
-  556:  op add :_isMedian.7:gt :_isMedian.7:gt 1
-        label *label587
-        label *label589
-  557:  jump *label594 greaterThanEq 6 :_median.7:i
-  558:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  559:  jump *label597 always 0 0
-        label *label594
-  560:  jump *label595 lessThanEq 6 :_median.7:i
-  561:  op add :_isMedian.7:gt :_isMedian.7:gt 1
-        label *label595
-        label *label597
-  562:  jump *label602 greaterThanEq 7 :_median.7:i
-  563:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  564:  jump *label605 always 0 0
+  534:  set :_isMedian.7:lt 0
+  535:  set :_isMedian.7:gt 0
+  536:  jump *label602 greaterThanEq 1 :_median.7:i
+  537:  set :_isMedian.7:lt 1
+  538:  jump *label605 always 0 0
         label *label602
-  565:  jump *label603 lessThanEq 7 :_median.7:i
-  566:  op add :_isMedian.7:gt :_isMedian.7:gt 1
-        label *label603
+  539:  select :_isMedian.7:gt greaterThan 1 :_median.7:i 1 0
         label *label605
-  567:  jump *label610 greaterThanEq 8 :_median.7:i
-  568:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  569:  jump *label613 always 0 0
+  540:  jump *label610 greaterThanEq 2 :_median.7:i
+  541:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  542:  jump *label613 always 0 0
         label *label610
-  570:  jump *label611 lessThanEq 8 :_median.7:i
-  571:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+  543:  jump *label611 lessThanEq 2 :_median.7:i
+  544:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label611
         label *label613
-  572:  jump *label618 greaterThanEq 9 :_median.7:i
-  573:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  574:  jump *label621 always 0 0
+  545:  jump *label618 greaterThanEq 3 :_median.7:i
+  546:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  547:  jump *label621 always 0 0
         label *label618
-  575:  jump *label619 lessThanEq 9 :_median.7:i
-  576:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+  548:  jump *label619 lessThanEq 3 :_median.7:i
+  549:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label619
         label *label621
-  577:  op sub *tmp227 :_isMedian.7:gt :_isMedian.7:lt
-  578:  op abs :_isMedian.7:dif *tmp227 0
-  579:  op add *tmp229 :_isMedian.7:gt :_isMedian.7:lt
-  580:  op equal *tmp393 :_isMedian.7:gt :_isMedian.7:lt
-  581:  select *tmp232 greaterThanEq *tmp229 8 *tmp393 false
-  582:  jump *label288 equal *tmp232 false
-  583:  set *tmp219 :_median.7:i
-  584:  jump *label275 always 0 0
-        label *label288
-  585:  jump *label309 greaterThanEq :_isMedian.7:dif :_median.7:bestDif
-  586:  set :_median.7:bestDif :_isMedian.7:dif
-  587:  set :_median.7:best :_median.7:i
-  588:  set :_median.7:count 1
-  589:  multijump *tmp220 0 0
-        label *label309
-  590:  jump *label311 greaterThan :_isMedian.7:dif :_median.7:bestDif
-  591:  op add :_median.7:best :_median.7:best :_median.7:i
-  592:  op add :_median.7:count :_median.7:count 1
-        label *label311
-  593:  multijump *tmp220 0 0
-        multilabel *label287
-  594:  op div *tmp219 :_median.7:best :_median.7:count
-        label *label275
-  595:  assertequals 5 *tmp219 "median(1,2,3,4,5,6,7,8,9)"
-  596:  set :_median.8:bestDif 10000000000
-  597:  set :_median.8:best null
-  598:  set :_median.8:count 1
-  599:  set :_median.8:i 9
-  600:  setaddr *tmp242 *label318
-  601:  jump *label315 always 0 0
-        multilabel *label318
-  602:  set :_median.8:i 8
-  603:  setaddr *tmp242 *label319
-  604:  jump *label315 always 0 0
-        multilabel *label319
-  605:  set :_median.8:i 7
-  606:  setaddr *tmp242 *label320
-  607:  jump *label315 always 0 0
-        multilabel *label320
-  608:  set :_median.8:i 6
-  609:  setaddr *tmp242 *label321
-  610:  jump *label315 always 0 0
-        multilabel *label321
-  611:  set :_median.8:i 5
-  612:  setaddr *tmp242 *label322
-  613:  jump *label315 always 0 0
-        multilabel *label322
-  614:  set :_median.8:i 4
-  615:  setaddr *tmp242 *label323
-  616:  jump *label315 always 0 0
-        multilabel *label323
-  617:  set :_median.8:i 3
-  618:  setaddr *tmp242 *label324
-  619:  jump *label315 always 0 0
-        multilabel *label324
-  620:  set :_median.8:i 2
-  621:  setaddr *tmp242 *label325
-  622:  jump *label315 always 0 0
-        multilabel *label325
-  623:  set :_median.8:i 1
-  624:  setaddr *tmp242 *label326
-        label *label315
-  625:  select *tmp704 greaterThan 9 :_median.8:i 1 0
-  626:  select :_isMedian.8:lt lessThan 9 :_median.8:i 1 0
-  627:  select :_isMedian.8:gt lessThan 9 :_median.8:i 0 *tmp704
-  628:  jump *label635 greaterThanEq 8 :_median.8:i
-  629:  op add :_isMedian.8:lt :_isMedian.8:lt 1
-  630:  jump *label638 always 0 0
+  550:  jump *label626 greaterThanEq 4 :_median.7:i
+  551:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  552:  jump *label629 always 0 0
+        label *label626
+  553:  jump *label627 lessThanEq 4 :_median.7:i
+  554:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+        label *label627
+        label *label629
+  555:  jump *label634 greaterThanEq 5 :_median.7:i
+  556:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  557:  jump *label637 always 0 0
+        label *label634
+  558:  jump *label635 lessThanEq 5 :_median.7:i
+  559:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label635
-  631:  jump *label636 lessThanEq 8 :_median.8:i
-  632:  op add :_isMedian.8:gt :_isMedian.8:gt 1
-        label *label636
-        label *label638
-  633:  jump *label643 greaterThanEq 7 :_median.8:i
-  634:  op add :_isMedian.8:lt :_isMedian.8:lt 1
-  635:  jump *label646 always 0 0
+        label *label637
+  560:  jump *label642 greaterThanEq 6 :_median.7:i
+  561:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  562:  jump *label645 always 0 0
+        label *label642
+  563:  jump *label643 lessThanEq 6 :_median.7:i
+  564:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label643
-  636:  jump *label644 lessThanEq 7 :_median.8:i
-  637:  op add :_isMedian.8:gt :_isMedian.8:gt 1
-        label *label644
-        label *label646
-  638:  jump *label651 greaterThanEq 6 :_median.8:i
-  639:  op add :_isMedian.8:lt :_isMedian.8:lt 1
-  640:  jump *label654 always 0 0
+        label *label645
+  565:  jump *label650 greaterThanEq 7 :_median.7:i
+  566:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  567:  jump *label653 always 0 0
+        label *label650
+  568:  jump *label651 lessThanEq 7 :_median.7:i
+  569:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label651
-  641:  jump *label652 lessThanEq 6 :_median.8:i
-  642:  op add :_isMedian.8:gt :_isMedian.8:gt 1
-        label *label652
-        label *label654
-  643:  jump *label659 greaterThanEq 5 :_median.8:i
-  644:  op add :_isMedian.8:lt :_isMedian.8:lt 1
-  645:  jump *label662 always 0 0
+        label *label653
+  570:  jump *label658 greaterThanEq 8 :_median.7:i
+  571:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  572:  jump *label661 always 0 0
+        label *label658
+  573:  jump *label659 lessThanEq 8 :_median.7:i
+  574:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label659
-  646:  jump *label660 lessThanEq 5 :_median.8:i
-  647:  op add :_isMedian.8:gt :_isMedian.8:gt 1
-        label *label660
-        label *label662
-  648:  jump *label667 greaterThanEq 4 :_median.8:i
-  649:  op add :_isMedian.8:lt :_isMedian.8:lt 1
-  650:  jump *label670 always 0 0
+        label *label661
+  575:  jump *label666 greaterThanEq 9 :_median.7:i
+  576:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  577:  jump *label669 always 0 0
+        label *label666
+  578:  jump *label667 lessThanEq 9 :_median.7:i
+  579:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label667
-  651:  jump *label668 lessThanEq 4 :_median.8:i
-  652:  op add :_isMedian.8:gt :_isMedian.8:gt 1
-        label *label668
-        label *label670
-  653:  jump *label675 greaterThanEq 3 :_median.8:i
-  654:  op add :_isMedian.8:lt :_isMedian.8:lt 1
-  655:  jump *label678 always 0 0
+        label *label669
+  580:  op sub *tmp227 :_isMedian.7:gt :_isMedian.7:lt
+  581:  op abs :_isMedian.7:dif *tmp227 0
+  582:  op add *tmp229 :_isMedian.7:gt :_isMedian.7:lt
+  583:  op equal *tmp367 :_isMedian.7:gt :_isMedian.7:lt
+  584:  select *tmp232 greaterThanEq *tmp229 8 *tmp367 false
+  585:  jump *label288 equal *tmp232 false
+  586:  set *tmp219 :_median.7:i
+  587:  jump *label275 always 0 0
+        label *label288
+  588:  jump *label309 greaterThanEq :_isMedian.7:dif :_median.7:bestDif
+  589:  set :_median.7:bestDif :_isMedian.7:dif
+  590:  set :_median.7:best :_median.7:i
+  591:  set :_median.7:count 1
+  592:  multijump *tmp220 0 0
+        label *label309
+  593:  jump *label311 greaterThan :_isMedian.7:dif :_median.7:bestDif
+  594:  op add :_median.7:best :_median.7:best :_median.7:i
+  595:  op add :_median.7:count :_median.7:count 1
+        label *label311
+  596:  multijump *tmp220 0 0
+        multilabel *label287
+  597:  op div *tmp219 :_median.7:best :_median.7:count
+        label *label275
+  598:  assertequals 5 *tmp219 "median(1,2,3,4,5,6,7,8,9)"
+  599:  set :_median.8:bestDif 10000000000
+  600:  set :_median.8:best null
+  601:  set :_median.8:count 1
+  602:  set :_median.8:i 9
+  603:  setaddr *tmp242 *label318
+  604:  jump *label315 always 0 0
+        multilabel *label318
+  605:  set :_median.8:i 8
+  606:  setaddr *tmp242 *label319
+  607:  jump *label315 always 0 0
+        multilabel *label319
+  608:  set :_median.8:i 7
+  609:  setaddr *tmp242 *label320
+  610:  jump *label315 always 0 0
+        multilabel *label320
+  611:  set :_median.8:i 6
+  612:  setaddr *tmp242 *label321
+  613:  jump *label315 always 0 0
+        multilabel *label321
+  614:  set :_median.8:i 5
+  615:  setaddr *tmp242 *label322
+  616:  jump *label315 always 0 0
+        multilabel *label322
+  617:  set :_median.8:i 4
+  618:  setaddr *tmp242 *label323
+  619:  jump *label315 always 0 0
+        multilabel *label323
+  620:  set :_median.8:i 3
+  621:  setaddr *tmp242 *label324
+  622:  jump *label315 always 0 0
+        multilabel *label324
+  623:  set :_median.8:i 2
+  624:  setaddr *tmp242 *label325
+  625:  jump *label315 always 0 0
+        multilabel *label325
+  626:  set :_median.8:i 1
+  627:  setaddr *tmp242 *label326
+        label *label315
+  628:  set :_isMedian.8:lt 0
+  629:  set :_isMedian.8:gt 0
+  630:  jump *label675 greaterThanEq 9 :_median.8:i
+  631:  set :_isMedian.8:lt 1
+  632:  jump *label678 always 0 0
         label *label675
-  656:  jump *label676 lessThanEq 3 :_median.8:i
-  657:  op add :_isMedian.8:gt :_isMedian.8:gt 1
-        label *label676
+  633:  select :_isMedian.8:gt greaterThan 9 :_median.8:i 1 0
         label *label678
-  658:  jump *label683 greaterThanEq 2 :_median.8:i
-  659:  op add :_isMedian.8:lt :_isMedian.8:lt 1
-  660:  jump *label686 always 0 0
+  634:  jump *label683 greaterThanEq 8 :_median.8:i
+  635:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  636:  jump *label686 always 0 0
         label *label683
-  661:  jump *label684 lessThanEq 2 :_median.8:i
-  662:  op add :_isMedian.8:gt :_isMedian.8:gt 1
+  637:  jump *label684 lessThanEq 8 :_median.8:i
+  638:  op add :_isMedian.8:gt :_isMedian.8:gt 1
         label *label684
         label *label686
-  663:  jump *label691 greaterThanEq 1 :_median.8:i
-  664:  op add :_isMedian.8:lt :_isMedian.8:lt 1
-  665:  jump *label694 always 0 0
+  639:  jump *label691 greaterThanEq 7 :_median.8:i
+  640:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  641:  jump *label694 always 0 0
         label *label691
-  666:  jump *label692 lessThanEq 1 :_median.8:i
-  667:  op add :_isMedian.8:gt :_isMedian.8:gt 1
+  642:  jump *label692 lessThanEq 7 :_median.8:i
+  643:  op add :_isMedian.8:gt :_isMedian.8:gt 1
         label *label692
         label *label694
-  668:  op sub *tmp249 :_isMedian.8:gt :_isMedian.8:lt
-  669:  op abs :_isMedian.8:dif *tmp249 0
-  670:  op add *tmp251 :_isMedian.8:gt :_isMedian.8:lt
-  671:  op equal *tmp398 :_isMedian.8:gt :_isMedian.8:lt
-  672:  select *tmp254 greaterThanEq *tmp251 8 *tmp398 false
-  673:  jump *label327 equal *tmp254 false
-  674:  set *tmp241 :_median.8:i
-  675:  jump *label314 always 0 0
-        label *label327
-  676:  jump *label348 greaterThanEq :_isMedian.8:dif :_median.8:bestDif
-  677:  set :_median.8:bestDif :_isMedian.8:dif
-  678:  set :_median.8:best :_median.8:i
-  679:  set :_median.8:count 1
-  680:  multijump *tmp242 0 0
-        label *label348
-  681:  jump *label350 greaterThan :_isMedian.8:dif :_median.8:bestDif
-  682:  op add :_median.8:best :_median.8:best :_median.8:i
-  683:  op add :_median.8:count :_median.8:count 1
-        label *label350
-  684:  multijump *tmp242 0 0
-        multilabel *label326
-  685:  op div *tmp241 :_median.8:best :_median.8:count
-        label *label314
-  686:  assertequals 5 *tmp241 "median(9,8,7,6,5,4,3,2,1)"
-  687:  set :_median.9:bestDif 10000000000
-  688:  set :_median.9:best null
-  689:  set :_median.9:count 1
-  690:  set :_median.9:i 1
-  691:  setaddr *tmp264 *label357
-  692:  jump *label354 always 0 0
-        multilabel *label357
-  693:  set :_median.9:i 3
-  694:  setaddr *tmp264 *label358
-  695:  jump *label354 always 0 0
-        multilabel *label358
-  696:  set :_median.9:i 5
-  697:  setaddr *tmp264 *label359
-  698:  jump *label354 always 0 0
-        multilabel *label359
-  699:  set :_median.9:i 7
-  700:  setaddr *tmp264 *label360
-  701:  jump *label354 always 0 0
-        multilabel *label360
-  702:  set :_median.9:i 9
-  703:  setaddr *tmp264 *label361
-  704:  jump *label354 always 0 0
-        multilabel *label361
-  705:  set :_median.9:i 2
-  706:  setaddr *tmp264 *label362
-  707:  jump *label354 always 0 0
-        multilabel *label362
-  708:  set :_median.9:i 4
-  709:  setaddr *tmp264 *label363
-  710:  jump *label354 always 0 0
-        multilabel *label363
-  711:  set :_median.9:i 6
-  712:  setaddr *tmp264 *label364
-  713:  jump *label354 always 0 0
-        multilabel *label364
-  714:  set :_median.9:i 8
-  715:  setaddr *tmp264 *label365
-        label *label354
-  716:  select *tmp723 greaterThan 1 :_median.9:i 1 0
-  717:  select :_isMedian.9:lt lessThan 1 :_median.9:i 1 0
-  718:  select :_isMedian.9:gt lessThan 1 :_median.9:i 0 *tmp723
-  719:  jump *label708 greaterThanEq 3 :_median.9:i
-  720:  op add :_isMedian.9:lt :_isMedian.9:lt 1
-  721:  jump *label711 always 0 0
+  644:  jump *label699 greaterThanEq 6 :_median.8:i
+  645:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  646:  jump *label702 always 0 0
+        label *label699
+  647:  jump *label700 lessThanEq 6 :_median.8:i
+  648:  op add :_isMedian.8:gt :_isMedian.8:gt 1
+        label *label700
+        label *label702
+  649:  jump *label707 greaterThanEq 5 :_median.8:i
+  650:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  651:  jump *label710 always 0 0
+        label *label707
+  652:  jump *label708 lessThanEq 5 :_median.8:i
+  653:  op add :_isMedian.8:gt :_isMedian.8:gt 1
         label *label708
-  722:  jump *label709 lessThanEq 3 :_median.9:i
-  723:  op add :_isMedian.9:gt :_isMedian.9:gt 1
-        label *label709
-        label *label711
-  724:  jump *label716 greaterThanEq 5 :_median.9:i
-  725:  op add :_isMedian.9:lt :_isMedian.9:lt 1
-  726:  jump *label719 always 0 0
+        label *label710
+  654:  jump *label715 greaterThanEq 4 :_median.8:i
+  655:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  656:  jump *label718 always 0 0
+        label *label715
+  657:  jump *label716 lessThanEq 4 :_median.8:i
+  658:  op add :_isMedian.8:gt :_isMedian.8:gt 1
         label *label716
-  727:  jump *label717 lessThanEq 5 :_median.9:i
-  728:  op add :_isMedian.9:gt :_isMedian.9:gt 1
-        label *label717
-        label *label719
-  729:  jump *label724 greaterThanEq 7 :_median.9:i
-  730:  op add :_isMedian.9:lt :_isMedian.9:lt 1
-  731:  jump *label727 always 0 0
+        label *label718
+  659:  jump *label723 greaterThanEq 3 :_median.8:i
+  660:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  661:  jump *label726 always 0 0
+        label *label723
+  662:  jump *label724 lessThanEq 3 :_median.8:i
+  663:  op add :_isMedian.8:gt :_isMedian.8:gt 1
         label *label724
-  732:  jump *label725 lessThanEq 7 :_median.9:i
-  733:  op add :_isMedian.9:gt :_isMedian.9:gt 1
-        label *label725
-        label *label727
-  734:  jump *label732 greaterThanEq 9 :_median.9:i
-  735:  op add :_isMedian.9:lt :_isMedian.9:lt 1
-  736:  jump *label735 always 0 0
+        label *label726
+  664:  jump *label731 greaterThanEq 2 :_median.8:i
+  665:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  666:  jump *label734 always 0 0
+        label *label731
+  667:  jump *label732 lessThanEq 2 :_median.8:i
+  668:  op add :_isMedian.8:gt :_isMedian.8:gt 1
         label *label732
-  737:  jump *label733 lessThanEq 9 :_median.9:i
-  738:  op add :_isMedian.9:gt :_isMedian.9:gt 1
-        label *label733
-        label *label735
-  739:  jump *label740 greaterThanEq 2 :_median.9:i
-  740:  op add :_isMedian.9:lt :_isMedian.9:lt 1
-  741:  jump *label743 always 0 0
+        label *label734
+  669:  jump *label739 greaterThanEq 1 :_median.8:i
+  670:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  671:  jump *label742 always 0 0
+        label *label739
+  672:  jump *label740 lessThanEq 1 :_median.8:i
+  673:  op add :_isMedian.8:gt :_isMedian.8:gt 1
         label *label740
-  742:  jump *label741 lessThanEq 2 :_median.9:i
-  743:  op add :_isMedian.9:gt :_isMedian.9:gt 1
-        label *label741
-        label *label743
-  744:  jump *label748 greaterThanEq 4 :_median.9:i
-  745:  op add :_isMedian.9:lt :_isMedian.9:lt 1
-  746:  jump *label751 always 0 0
+        label *label742
+  674:  op sub *tmp249 :_isMedian.8:gt :_isMedian.8:lt
+  675:  op abs :_isMedian.8:dif *tmp249 0
+  676:  op add *tmp251 :_isMedian.8:gt :_isMedian.8:lt
+  677:  op equal *tmp368 :_isMedian.8:gt :_isMedian.8:lt
+  678:  select *tmp254 greaterThanEq *tmp251 8 *tmp368 false
+  679:  jump *label327 equal *tmp254 false
+  680:  set *tmp241 :_median.8:i
+  681:  jump *label314 always 0 0
+        label *label327
+  682:  jump *label348 greaterThanEq :_isMedian.8:dif :_median.8:bestDif
+  683:  set :_median.8:bestDif :_isMedian.8:dif
+  684:  set :_median.8:best :_median.8:i
+  685:  set :_median.8:count 1
+  686:  multijump *tmp242 0 0
+        label *label348
+  687:  jump *label350 greaterThan :_isMedian.8:dif :_median.8:bestDif
+  688:  op add :_median.8:best :_median.8:best :_median.8:i
+  689:  op add :_median.8:count :_median.8:count 1
+        label *label350
+  690:  multijump *tmp242 0 0
+        multilabel *label326
+  691:  op div *tmp241 :_median.8:best :_median.8:count
+        label *label314
+  692:  assertequals 5 *tmp241 "median(9,8,7,6,5,4,3,2,1)"
+  693:  set :_median.9:bestDif 10000000000
+  694:  set :_median.9:best null
+  695:  set :_median.9:count 1
+  696:  set :_median.9:i 1
+  697:  setaddr *tmp264 *label357
+  698:  jump *label354 always 0 0
+        multilabel *label357
+  699:  set :_median.9:i 3
+  700:  setaddr *tmp264 *label358
+  701:  jump *label354 always 0 0
+        multilabel *label358
+  702:  set :_median.9:i 5
+  703:  setaddr *tmp264 *label359
+  704:  jump *label354 always 0 0
+        multilabel *label359
+  705:  set :_median.9:i 7
+  706:  setaddr *tmp264 *label360
+  707:  jump *label354 always 0 0
+        multilabel *label360
+  708:  set :_median.9:i 9
+  709:  setaddr *tmp264 *label361
+  710:  jump *label354 always 0 0
+        multilabel *label361
+  711:  set :_median.9:i 2
+  712:  setaddr *tmp264 *label362
+  713:  jump *label354 always 0 0
+        multilabel *label362
+  714:  set :_median.9:i 4
+  715:  setaddr *tmp264 *label363
+  716:  jump *label354 always 0 0
+        multilabel *label363
+  717:  set :_median.9:i 6
+  718:  setaddr *tmp264 *label364
+  719:  jump *label354 always 0 0
+        multilabel *label364
+  720:  set :_median.9:i 8
+  721:  setaddr *tmp264 *label365
+        label *label354
+  722:  set :_isMedian.9:lt 0
+  723:  set :_isMedian.9:gt 0
+  724:  jump *label748 greaterThanEq 1 :_median.9:i
+  725:  set :_isMedian.9:lt 1
+  726:  jump *label751 always 0 0
         label *label748
-  747:  jump *label749 lessThanEq 4 :_median.9:i
-  748:  op add :_isMedian.9:gt :_isMedian.9:gt 1
-        label *label749
+  727:  select :_isMedian.9:gt greaterThan 1 :_median.9:i 1 0
         label *label751
-  749:  jump *label756 greaterThanEq 6 :_median.9:i
-  750:  op add :_isMedian.9:lt :_isMedian.9:lt 1
-  751:  jump *label759 always 0 0
+  728:  jump *label756 greaterThanEq 3 :_median.9:i
+  729:  op add :_isMedian.9:lt :_isMedian.9:lt 1
+  730:  jump *label759 always 0 0
         label *label756
-  752:  jump *label757 lessThanEq 6 :_median.9:i
-  753:  op add :_isMedian.9:gt :_isMedian.9:gt 1
+  731:  jump *label757 lessThanEq 3 :_median.9:i
+  732:  op add :_isMedian.9:gt :_isMedian.9:gt 1
         label *label757
         label *label759
-  754:  jump *label764 greaterThanEq 8 :_median.9:i
-  755:  op add :_isMedian.9:lt :_isMedian.9:lt 1
-  756:  jump *label767 always 0 0
+  733:  jump *label764 greaterThanEq 5 :_median.9:i
+  734:  op add :_isMedian.9:lt :_isMedian.9:lt 1
+  735:  jump *label767 always 0 0
         label *label764
-  757:  jump *label765 lessThanEq 8 :_median.9:i
-  758:  op add :_isMedian.9:gt :_isMedian.9:gt 1
+  736:  jump *label765 lessThanEq 5 :_median.9:i
+  737:  op add :_isMedian.9:gt :_isMedian.9:gt 1
         label *label765
         label *label767
-  759:  op sub *tmp271 :_isMedian.9:gt :_isMedian.9:lt
-  760:  op abs :_isMedian.9:dif *tmp271 0
-  761:  op add *tmp273 :_isMedian.9:gt :_isMedian.9:lt
-  762:  op equal *tmp403 :_isMedian.9:gt :_isMedian.9:lt
-  763:  select *tmp276 greaterThanEq *tmp273 8 *tmp403 false
-  764:  jump *label366 equal *tmp276 false
-  765:  set *tmp263 :_median.9:i
-  766:  jump *label353 always 0 0
+  738:  jump *label772 greaterThanEq 7 :_median.9:i
+  739:  op add :_isMedian.9:lt :_isMedian.9:lt 1
+  740:  jump *label775 always 0 0
+        label *label772
+  741:  jump *label773 lessThanEq 7 :_median.9:i
+  742:  op add :_isMedian.9:gt :_isMedian.9:gt 1
+        label *label773
+        label *label775
+  743:  jump *label780 greaterThanEq 9 :_median.9:i
+  744:  op add :_isMedian.9:lt :_isMedian.9:lt 1
+  745:  jump *label783 always 0 0
+        label *label780
+  746:  jump *label781 lessThanEq 9 :_median.9:i
+  747:  op add :_isMedian.9:gt :_isMedian.9:gt 1
+        label *label781
+        label *label783
+  748:  jump *label788 greaterThanEq 2 :_median.9:i
+  749:  op add :_isMedian.9:lt :_isMedian.9:lt 1
+  750:  jump *label791 always 0 0
+        label *label788
+  751:  jump *label789 lessThanEq 2 :_median.9:i
+  752:  op add :_isMedian.9:gt :_isMedian.9:gt 1
+        label *label789
+        label *label791
+  753:  jump *label796 greaterThanEq 4 :_median.9:i
+  754:  op add :_isMedian.9:lt :_isMedian.9:lt 1
+  755:  jump *label799 always 0 0
+        label *label796
+  756:  jump *label797 lessThanEq 4 :_median.9:i
+  757:  op add :_isMedian.9:gt :_isMedian.9:gt 1
+        label *label797
+        label *label799
+  758:  jump *label804 greaterThanEq 6 :_median.9:i
+  759:  op add :_isMedian.9:lt :_isMedian.9:lt 1
+  760:  jump *label807 always 0 0
+        label *label804
+  761:  jump *label805 lessThanEq 6 :_median.9:i
+  762:  op add :_isMedian.9:gt :_isMedian.9:gt 1
+        label *label805
+        label *label807
+  763:  jump *label812 greaterThanEq 8 :_median.9:i
+  764:  op add :_isMedian.9:lt :_isMedian.9:lt 1
+  765:  jump *label815 always 0 0
+        label *label812
+  766:  jump *label813 lessThanEq 8 :_median.9:i
+  767:  op add :_isMedian.9:gt :_isMedian.9:gt 1
+        label *label813
+        label *label815
+  768:  op sub *tmp271 :_isMedian.9:gt :_isMedian.9:lt
+  769:  op abs :_isMedian.9:dif *tmp271 0
+  770:  op add *tmp273 :_isMedian.9:gt :_isMedian.9:lt
+  771:  op equal *tmp369 :_isMedian.9:gt :_isMedian.9:lt
+  772:  select *tmp276 greaterThanEq *tmp273 8 *tmp369 false
+  773:  jump *label366 equal *tmp276 false
+  774:  set *tmp263 :_median.9:i
+  775:  jump *label353 always 0 0
         label *label366
-  767:  jump *label387 greaterThanEq :_isMedian.9:dif :_median.9:bestDif
-  768:  set :_median.9:bestDif :_isMedian.9:dif
-  769:  set :_median.9:best :_median.9:i
-  770:  set :_median.9:count 1
-  771:  multijump *tmp264 0 0
+  776:  jump *label387 greaterThanEq :_isMedian.9:dif :_median.9:bestDif
+  777:  set :_median.9:bestDif :_isMedian.9:dif
+  778:  set :_median.9:best :_median.9:i
+  779:  set :_median.9:count 1
+  780:  multijump *tmp264 0 0
         label *label387
-  772:  jump *label389 greaterThan :_isMedian.9:dif :_median.9:bestDif
-  773:  op add :_median.9:best :_median.9:best :_median.9:i
-  774:  op add :_median.9:count :_median.9:count 1
+  781:  jump *label389 greaterThan :_isMedian.9:dif :_median.9:bestDif
+  782:  op add :_median.9:best :_median.9:best :_median.9:i
+  783:  op add :_median.9:count :_median.9:count 1
         label *label389
-  775:  multijump *tmp264 0 0
+  784:  multijump *tmp264 0 0
         multilabel *label365
-  776:  op div *tmp263 :_median.9:best :_median.9:count
+  785:  op div *tmp263 :_median.9:best :_median.9:count
         label *label353
-  777:  assertequals 5 *tmp263 "median(1,3,5,7,9,2,4,6,8)"
-  778:  set :_median.10:bestDif 10000000000
-  779:  set :_median.10:best null
-  780:  set :_median.10:count 1
-  781:  set :_median.10:i 7
-  782:  setaddr *tmp286 *label396
-  783:  jump *label393 always 0 0
-        multilabel *label396
-  784:  set :_median.10:i 4
-  785:  setaddr *tmp286 *label397
-  786:  jump *label393 always 0 0
-        multilabel *label397
-  787:  set :_median.10:i 2
-  788:  setaddr *tmp286 *label398
-  789:  jump *label393 always 0 0
-        multilabel *label398
-  790:  set :_median.10:i 8
-  791:  setaddr *tmp286 *label399
+  786:  assertequals 5 *tmp263 "median(1,3,5,7,9,2,4,6,8)"
+  787:  set :_median.10:bestDif 10000000000
+  788:  set :_median.10:best null
+  789:  set :_median.10:count 1
+  790:  set :_median.10:i 7
+  791:  setaddr *tmp286 *label396
   792:  jump *label393 always 0 0
-        multilabel *label399
-  793:  set :_median.10:i 1
-  794:  setaddr *tmp286 *label400
+        multilabel *label396
+  793:  set :_median.10:i 4
+  794:  setaddr *tmp286 *label397
   795:  jump *label393 always 0 0
-        multilabel *label400
-  796:  set :_median.10:i 5
-  797:  setaddr *tmp286 *label401
+        multilabel *label397
+  796:  set :_median.10:i 2
+  797:  setaddr *tmp286 *label398
   798:  jump *label393 always 0 0
-        multilabel *label401
-  799:  set :_median.10:i 6
-  800:  setaddr *tmp286 *label402
+        multilabel *label398
+  799:  set :_median.10:i 8
+  800:  setaddr *tmp286 *label399
   801:  jump *label393 always 0 0
-        multilabel *label402
-  802:  set :_median.10:i 9
-  803:  setaddr *tmp286 *label403
+        multilabel *label399
+  802:  set :_median.10:i 1
+  803:  setaddr *tmp286 *label400
   804:  jump *label393 always 0 0
+        multilabel *label400
+  805:  set :_median.10:i 5
+  806:  setaddr *tmp286 *label401
+  807:  jump *label393 always 0 0
+        multilabel *label401
+  808:  set :_median.10:i 6
+  809:  setaddr *tmp286 *label402
+  810:  jump *label393 always 0 0
+        multilabel *label402
+  811:  set :_median.10:i 9
+  812:  setaddr *tmp286 *label403
+  813:  jump *label393 always 0 0
         multilabel *label403
-  805:  set :_median.10:i 3
-  806:  setaddr *tmp286 *label404
+  814:  set :_median.10:i 3
+  815:  setaddr *tmp286 *label404
         label *label393
-  807:  select *tmp1074 greaterThan 7 :_median.10:i 1 0
-  808:  select :_isMedian.10:lt lessThan 7 :_median.10:i 1 0
-  809:  select :_isMedian.10:gt lessThan 7 :_median.10:i 0 *tmp1074
-  810:  jump *label830 greaterThanEq 4 :_median.10:i
-  811:  op add :_isMedian.10:lt :_isMedian.10:lt 1
-  812:  jump *label833 always 0 0
-        label *label830
-  813:  jump *label831 lessThanEq 4 :_median.10:i
-  814:  op add :_isMedian.10:gt :_isMedian.10:gt 1
-        label *label831
-        label *label833
-  815:  jump *label838 greaterThanEq 2 :_median.10:i
-  816:  op add :_isMedian.10:lt :_isMedian.10:lt 1
-  817:  jump *label841 always 0 0
-        label *label838
-  818:  jump *label839 lessThanEq 2 :_median.10:i
-  819:  op add :_isMedian.10:gt :_isMedian.10:gt 1
-        label *label839
-        label *label841
-  820:  jump *label846 greaterThanEq 8 :_median.10:i
-  821:  op add :_isMedian.10:lt :_isMedian.10:lt 1
-  822:  jump *label849 always 0 0
-        label *label846
-  823:  jump *label847 lessThanEq 8 :_median.10:i
-  824:  op add :_isMedian.10:gt :_isMedian.10:gt 1
-        label *label847
-        label *label849
-  825:  jump *label854 greaterThanEq 1 :_median.10:i
-  826:  op add :_isMedian.10:lt :_isMedian.10:lt 1
-  827:  jump *label857 always 0 0
-        label *label854
-  828:  jump *label855 lessThanEq 1 :_median.10:i
-  829:  op add :_isMedian.10:gt :_isMedian.10:gt 1
-        label *label855
-        label *label857
-  830:  jump *label862 greaterThanEq 5 :_median.10:i
-  831:  op add :_isMedian.10:lt :_isMedian.10:lt 1
-  832:  jump *label865 always 0 0
-        label *label862
-  833:  jump *label863 lessThanEq 5 :_median.10:i
-  834:  op add :_isMedian.10:gt :_isMedian.10:gt 1
-        label *label863
-        label *label865
-  835:  jump *label870 greaterThanEq 6 :_median.10:i
-  836:  op add :_isMedian.10:lt :_isMedian.10:lt 1
-  837:  jump *label873 always 0 0
-        label *label870
-  838:  jump *label871 lessThanEq 6 :_median.10:i
-  839:  op add :_isMedian.10:gt :_isMedian.10:gt 1
-        label *label871
-        label *label873
-  840:  jump *label878 greaterThanEq 9 :_median.10:i
-  841:  op add :_isMedian.10:lt :_isMedian.10:lt 1
-  842:  jump *label881 always 0 0
-        label *label878
-  843:  jump *label879 lessThanEq 9 :_median.10:i
-  844:  op add :_isMedian.10:gt :_isMedian.10:gt 1
-        label *label879
-        label *label881
-  845:  jump *label886 greaterThanEq 3 :_median.10:i
-  846:  op add :_isMedian.10:lt :_isMedian.10:lt 1
-  847:  jump *label889 always 0 0
-        label *label886
-  848:  jump *label887 lessThanEq 3 :_median.10:i
-  849:  op add :_isMedian.10:gt :_isMedian.10:gt 1
-        label *label887
-        label *label889
+  816:  set :_isMedian.10:lt 0
+  817:  set :_isMedian.10:gt 0
+  818:  set :_isMedian.10:i 7
+  819:  setaddr *tmp288 *label411
+  820:  jump *label408 always 0 0
+        multilabel *label411
+  821:  set :_isMedian.10:i 4
+  822:  setaddr *tmp288 *label412
+  823:  jump *label408 always 0 0
+        multilabel *label412
+  824:  set :_isMedian.10:i 2
+  825:  setaddr *tmp288 *label413
+  826:  jump *label408 always 0 0
+        multilabel *label413
+  827:  set :_isMedian.10:i 8
+  828:  setaddr *tmp288 *label414
+  829:  jump *label408 always 0 0
+        multilabel *label414
+  830:  set :_isMedian.10:i 1
+  831:  setaddr *tmp288 *label415
+  832:  jump *label408 always 0 0
+        multilabel *label415
+  833:  set :_isMedian.10:i 5
+  834:  setaddr *tmp288 *label416
+  835:  jump *label408 always 0 0
+        multilabel *label416
+  836:  set :_isMedian.10:i 6
+  837:  setaddr *tmp288 *label417
+  838:  jump *label408 always 0 0
+        multilabel *label417
+  839:  set :_isMedian.10:i 9
+  840:  setaddr *tmp288 *label418
+  841:  jump *label408 always 0 0
+        multilabel *label418
+  842:  set :_isMedian.10:i 3
+  843:  setaddr *tmp288 *label419
+        label *label408
+  844:  jump *label420 greaterThanEq :_isMedian.10:i :_median.10:i
+  845:  op add :_isMedian.10:lt :_isMedian.10:lt 1
+  846:  multijump *tmp288 0 0
+        label *label420
+  847:  jump *label422 lessThanEq :_isMedian.10:i :_median.10:i
+  848:  op add :_isMedian.10:gt :_isMedian.10:gt 1
+        label *label422
+  849:  multijump *tmp288 0 0
+        multilabel *label419
   850:  op sub *tmp293 :_isMedian.10:gt :_isMedian.10:lt
   851:  op abs :_isMedian.10:dif *tmp293 0
   852:  op add *tmp295 :_isMedian.10:gt :_isMedian.10:lt
-  853:  op equal *tmp408 :_isMedian.10:gt :_isMedian.10:lt
-  854:  select *tmp298 greaterThanEq *tmp295 8 *tmp408 false
+  853:  op equal *tmp370 :_isMedian.10:gt :_isMedian.10:lt
+  854:  select *tmp298 greaterThanEq *tmp295 8 *tmp370 false
   855:  jump *label405 equal *tmp298 false
   856:  set *tmp285 :_median.10:i
   857:  jump *label392 always 0 0
@@ -1839,8 +1735,8 @@ Final code before resolving virtual instructions:
   932:  op sub *tmp315 :_isMedian.11:gt :_isMedian.11:lt
   933:  op abs :_isMedian.11:dif *tmp315 0
   934:  op add *tmp317 :_isMedian.11:gt :_isMedian.11:lt
-  935:  op equal *tmp413 :_isMedian.11:gt :_isMedian.11:lt
-  936:  select *tmp320 greaterThanEq *tmp317 8 *tmp413 false
+  935:  op equal *tmp371 :_isMedian.11:gt :_isMedian.11:lt
+  936:  select *tmp320 greaterThanEq *tmp317 8 *tmp371 false
   937:  jump *label444 equal *tmp320 false
   938:  set *tmp307 :_median.11:i
   939:  jump *label431 always 0 0
@@ -1909,16 +1805,15 @@ Final code before resolving virtual instructions:
 
 stop instruction encountered, dumping variable values:
 *tmp100: 0.0
-*tmp1074: 1.0
 *tmp109: 1.0
 *tmp110: 286.0
+*tmp112: 269.0
 *tmp117: -4.0
 *tmp119: 4.0
 *tmp122: 0.0
 *tmp131: 3.0
 *tmp132: 350.0
 *tmp134: 333.0
-*tmp1371: 0.0
 *tmp139: -3.0
 *tmp141: 3.0
 *tmp144: 0.0
@@ -1942,17 +1837,18 @@ stop instruction encountered, dumping variable values:
 *tmp229: 8.0
 *tmp232: 1.0
 *tmp241: 5.0
-*tmp242: 614.0
+*tmp242: 617.0
 *tmp249: 0.0
 *tmp251: 8.0
 *tmp254: 1.0
 *tmp263: 5.0
-*tmp264: 699.0
+*tmp264: 705.0
 *tmp271: 0.0
 *tmp273: 8.0
 *tmp276: 1.0
 *tmp285: 5.0
-*tmp286: 799.0
+*tmp286: 808.0
+*tmp288: 850.0
 *tmp293: 0.0
 *tmp295: 8.0
 *tmp298: 1.0
@@ -1967,28 +1863,25 @@ stop instruction encountered, dumping variable values:
 *tmp340: 4.0
 *tmp341: 6.0
 *tmp342: 10.0
+*tmp362: 0.0
+*tmp363: 0.0
+*tmp364: 0.0
+*tmp365: 0.0
 *tmp366: 0.0
-*tmp371: 0.0
-*tmp376: 0.0
-*tmp381: 0.0
-*tmp386: 0.0
-*tmp393: 1.0
-*tmp398: 1.0
-*tmp403: 1.0
-*tmp408: 1.0
-*tmp413: 1.0
+*tmp367: 1.0
+*tmp368: 1.0
+*tmp369: 1.0
+*tmp370: 1.0
+*tmp371: 1.0
 *tmp65: 1.0
-*tmp654: 0.0
 *tmp66: 152.0
-*tmp685: 0.0
-*tmp704: 1.0
-*tmp723: 0.0
 *tmp87: 1.0
-*tmp88: 219.0
+*tmp88: 222.0
 *tmp95: -5.0
 *tmp97: 5.0
 :_isMedian.10:dif: 0.0
 :_isMedian.10:gt: 4.0
+:_isMedian.10:i: 3.0
 :_isMedian.10:lt: 4.0
 :_isMedian.11:dif: 0.0
 :_isMedian.11:gt: 4.0
@@ -1999,6 +1892,7 @@ stop instruction encountered, dumping variable values:
 :_isMedian.1:lt: 5.0
 :_isMedian.2:dif: 4.0
 :_isMedian.2:gt: 0.0
+:_isMedian.2:i: 5.0
 :_isMedian.2:lt: 4.0
 :_isMedian.3:dif: 3.0
 :_isMedian.3:gt: 0.0

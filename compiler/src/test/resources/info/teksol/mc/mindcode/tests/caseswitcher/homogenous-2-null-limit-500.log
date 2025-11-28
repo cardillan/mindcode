@@ -243,8 +243,8 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (-23 instr
 -    * jump *label8 equal :block @carbide-wall
 -    * jump *label8 equal :block @carbide-wall-large
 -    * jump *label7 always
-+    5 sensor *tmp13 :block @id
-+    6 multijump *tmp13 0 0 (m:*label12)
++    5 sensor *tmp9 :block @id
++    6 multijump *tmp9 0 0 (m:*label12)
 +    7 multilabel *label15 (m:*label12)
      8 label *label8
      9 set *tmp2 true
@@ -252,7 +252,7 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (-23 instr
     11 label *label7
 +   12 multilabel *label13 (m:*label12)
 +   13 label *label11
-+   14 jump *label8 strictEqual *tmp13 null
++   14 jump *label8 strictEqual *tmp9 null
 +   15 multilabel *label14 (m:*label12)
 +   16 label *label10
     17 set *tmp2 false
@@ -265,7 +265,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 -    * label *label0
      2 label *label9
      3 lookup block :block :i
-     4 sensor *tmp13 :block @id
+     4 sensor *tmp9 :block @id
  
      7 label *label8
      8 set *tmp2 true
@@ -273,7 +273,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 -    * label *label7
     10 multilabel *label13 (m:*label12)
 -    * label *label11
-    11 jump *label8 strictEqual *tmp13 null
+    11 jump *label8 strictEqual *tmp9 null
     12 multilabel *label14 (m:*label12)
 -    * label *label10
     13 set *tmp2 false
@@ -300,14 +300,14 @@ set :hash 0
 set :i -1
 label *label9
 lookup block :block :i
-sensor *tmp13 :block @id
-multijump *tmp13 0 0
+sensor *tmp9 :block @id
+multijump *tmp9 0 0
 multilabel *label15
 label *label8
 set *tmp2 true                          # Origin: 4, keys: 17 .. 28, 31 .. 34, 203, 204, 206, 207, 220, 221, 225, 234
 jump *label6 always
 multilabel *label13
-jump *label8 strictEqual *tmp13 null
+jump *label8 strictEqual *tmp9 null
 multilabel *label14
 set *tmp2 false                         # Origin: 4, keys: 1 .. 16, 29, 30, 35 .. 202, 205, 208 .. 219, 222 .. 224, 226 .. 233, 235 .. 259
 label *label6

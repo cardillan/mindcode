@@ -281,7 +281,6 @@ class ExpressionOptimizer extends BaseOptimizer {
     private void processSetInstruction(LogicIterator logicIterator, SetInstruction ix) {
         if (ix.getResult().equals(ix.getValue())) {
             logicIterator.set(createEmpty(ix.getAstContext()));
-            logicIterator.next();
         }
     }
 

@@ -105,12 +105,12 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
                 [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
                 [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
-                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--select-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
+                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
+                [--stack-optimization LEVEL] [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]] [--run-steps {0..1000000000}]
@@ -268,6 +268,9 @@ Optimization levels:
                          sets the optimization level of eliminating jumps to the next instruction
   --expression-optimization LEVEL
                          sets the optimization level of optimizing some common mathematical expressions
+  --select-optimization LEVEL
+                         sets  the  optimization  level  of  expressing   conditional  expressions  using  the  'select'
+                         instruction
   --if-expression-optimization LEVEL
                          sets the optimization level of improving ternary/if expressions
   --data-flow-optimization LEVEL
@@ -412,12 +415,12 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
                 [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
                 [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
-                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--select-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
+                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
+                [--stack-optimization LEVEL] [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]] [--run-steps {0..1000000000}]
@@ -564,6 +567,9 @@ Optimization levels:
                          sets the optimization level of eliminating jumps to the next instruction
   --expression-optimization LEVEL
                          sets the optimization level of optimizing some common mathematical expressions
+  --select-optimization LEVEL
+                         sets  the  optimization  level  of  expressing   conditional  expressions  using  the  'select'
+                         instruction
   --if-expression-optimization LEVEL
                          sets the optimization level of improving ternary/if expressions
   --data-flow-optimization LEVEL

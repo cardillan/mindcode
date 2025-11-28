@@ -21,6 +21,8 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -141,6 +143,33 @@ abstract class BaseOptimizer extends AbstractOptimizer {
             emitMessage(MessageLevel.INFO, "%6d instructions %s by %s%s.",
                     count, verb, getName(), visits);
         }
+    }
+
+    protected boolean hasDependencyCycle(Map<LogicVariable, Set<LogicVariable>> dependencies) {
+        propagateAllDependencies(dependencies);
+        return dependencies.entrySet().stream().anyMatch(e -> e.getValue().contains(e.getKey()));
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    protected void propagateAllDependencies(Map<LogicVariable, Set<LogicVariable>> dependencies) {
+        while (propagateDependencies(dependencies));
+    }
+
+    protected boolean propagateDependencies(Map<LogicVariable, Set<LogicVariable>> dependencies) {
+        boolean modified = false;
+        for (LogicVariable variable : dependencies.keySet()) {
+            Set<LogicVariable> variableDependencies = dependencies.get(variable);
+            for (LogicVariable v : List.copyOf(variableDependencies)) {
+                if (!v.equals(variable)) {
+                    Set<LogicVariable> newDependencies = dependencies.get(v);
+                    if (newDependencies != null && variableDependencies.addAll(newDependencies)) {
+                        modified = true;
+                    }
+                }
+            }
+        }
+
+        return modified;
     }
 
     public void indentInc() {

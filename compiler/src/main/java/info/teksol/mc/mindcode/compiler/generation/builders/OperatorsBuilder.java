@@ -77,7 +77,7 @@ public class OperatorsBuilder extends AbstractCodeBuilder implements AstOperator
         LogicLabel endLabel = assembler.nextLabel();
 
         assembler.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
-        evaluateCondition(node, falseLabel);
+        evaluateCondition(node, falseLabel, AstContextType.SCBE_OPER);
 
         LogicVariable tmp = assembler.nextNodeResultTemp();
 

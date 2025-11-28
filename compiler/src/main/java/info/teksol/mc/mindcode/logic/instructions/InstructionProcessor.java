@@ -3,10 +3,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.MessageEmitter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import org.jspecify.annotations.NullMarked;
@@ -110,6 +107,8 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @param <T>         type of instruction being processed
     /// @return a modified instruction (original one if modification wasn't necessary)
     <T extends LogicInstruction> T replaceLabels(T instruction, Map<LogicLabel, LogicLabel> labelMap);
+
+    <T extends LogicInstruction> T replaceArguments(T instruction, Map<? extends LogicValue, LogicValue> valueMap);
 
     /// Determines the number of arguments needed to print the instruction
     ///

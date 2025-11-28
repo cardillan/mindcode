@@ -75,7 +75,7 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
         try (Stream<Path> stream = Files.list(Paths.get(LIBRARY_DIRECTORY))) {
             List<Path> files = stream
                     .filter(f -> f.toString().endsWith(".mnd"))
-                    //.filter(f -> f.toString().endsWith("units.mnd"))
+                    //.filter(f -> f.toString().endsWith("printing.mnd"))
                     .sorted()
                     .toList();
             assertFalse(files.isEmpty(), "Expected to find at least one script in " + LIBRARY_DIRECTORY + "; found none");
@@ -415,7 +415,10 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
             code.append(additionalOutputs.stream().collect(Collectors.joining(",", "print(", ");\n")));
         }
 
-        //System.out.println(code);
+//        System.out.println(declaration.getName());
+//        if (declaration.getName().equals("formatNumber")) {
+//            System.out.println(code);
+//        }
 
         CompilerProfile profile = createCompilerProfile()
                 .setTarget(ProcessorVersion.MAX, ProcessorEdition.W)
@@ -425,21 +428,19 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
                 .setLibraryPrecedence(true);
 
         MindcodeCompiler compiler = new MindcodeCompiler(CompilationPhase.ALL,
-                expectedMessages().add("The 'loop' keyword is deprecated. Use just 'while' instead.").ignored(),
+                expectedMessages(),
                 profile,
                 createInputFiles(code.toString()));
 
-        compiler.compile();
+        try {
+            compiler.compile();
+        } catch (Exception e) {
+            throw new RuntimeException("Error compiling code:\n" + code, e);
+        }
 
         int size = (int) compiler.getInstructions().stream()
                 .filter(i -> i.getAstContext().contextType() != AstContextType.JUMPS && i.getAstContext().contextType() != AstContextType.CREATE_VARS)
                 .count();
-
-//        System.out.println();
-//        System.out.println(footprintConfig + " with goal " + goal);
-//        compiler.getInstructions().stream()
-//                .filter(i -> i.getAstContext().contextType() != AstContextType.JUMPS && i.getAstContext().contextType() != AstContextType.CREATE_VARS)
-//                .forEach(System.out::println);
 
         return size
                - (declaration.getDataType() == DataType.VOID ? 0 : 1)

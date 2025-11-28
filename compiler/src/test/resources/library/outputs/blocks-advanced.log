@@ -1,28 +1,29 @@
    148 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (6 iterations).
+     2 instructions eliminated by Temp Variables Elimination (8 iterations).
      6 instructions eliminated by Dead Code Elimination (5 iterations).
-     4 instructions eliminated by Jump Normalization (5 iterations).
-     4 instructions eliminated by Jump Optimization (5 iterations).
-    10 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
-     3 instructions eliminated by Expression Optimization (3 iterations).
-    69 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
-     1 instructions modified by Loop Optimization (3 iterations).
+     3 instructions eliminated by Jump Normalization (7 iterations).
+     4 instructions eliminated by Jump Optimization (7 iterations).
+     6 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
+     7 instructions eliminated by Expression Optimization (2 passes, 5 iterations).
+     5 instructions eliminated by Select Optimization (2 passes, 7 iterations).
+    68 instructions eliminated by Data Flow Optimization (5 passes, 18 iterations).
+     1 instructions modified by Loop Optimization (5 iterations).
      1 loops improved by Loop Optimization.
-    14 instructions added by Loop Unrolling (6 iterations).
+    10 instructions added by Loop Unrolling (8 iterations).
      3 loops unrolled by Loop Unrolling.
     19 instructions eliminated by Print Merging.
-    45 instructions after optimizations.
+    38 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 904):
+Pass 1: speed optimization selection (cost limit 905):
     Unroll iteration loop at *blocks:59:9                        size   -39, benefit      975.0, efficiency   Infinity
-  * Unroll iteration loop at *blocks:68:13                       size   -19, benefit    24375.0, efficiency   Infinity (-4 instructions)
+  * Unroll iteration loop at *blocks:68:13                       size   -24, benefit    24375.0, efficiency   Infinity (-4 instructions)
     Unroll iteration loop at *blocks:77:9                        size    -4, benefit      975.0, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 908):
+Pass 1: speed optimization selection (cost limit 909):
   * Unroll iteration loop at *blocks:59:9                        size   -39, benefit      975.0, efficiency   Infinity (-11 instructions)
     Unroll iteration loop at *blocks:77:9                        size    -4, benefit      975.0, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 919):
+Pass 1: speed optimization selection (cost limit 920):
   * Unroll iteration loop at *blocks:77:9                        size    -4, benefit      975.0, efficiency   Infinity (-3 instructions)
 
 Final code before resolving virtual instructions:
@@ -42,41 +43,30 @@ Final code before resolving virtual instructions:
    10:  print "\nFound: "
    11:  print :findLinkedBlocks:block
    12:  sensor :findLinkedBlocks:type :findLinkedBlocks:block @type
-   13:  set :findLinkedBlocks:variable :display
-   14:  jump *label41 notEqual @large-logic-display :findLinkedBlocks:type
-   15:  set :findLinkedBlocks:variable :findLinkedBlocks:block
-        label *label41
-   16:  set :display :findLinkedBlocks:variable
-   17:  set :findLinkedBlocks:variable :message
-   18:  jump *label49 notEqual @message :findLinkedBlocks:type
-   19:  set :findLinkedBlocks:variable :findLinkedBlocks:block
-   20:  set :findLinkedBlocks:message :findLinkedBlocks:block
-        label *label49
-   21:  set :message :findLinkedBlocks:variable
-   22:  set :findLinkedBlocks:variable :switch
-   23:  jump *label57 notEqual @switch :findLinkedBlocks:type
-   24:  set :findLinkedBlocks:variable :findLinkedBlocks:block
-        label *label57
-   25:  set :switch :findLinkedBlocks:variable
-   26:  set :findLinkedBlocks:variable :memory
-   27:  jump *label65 notEqual @memory-bank :findLinkedBlocks:type
-   28:  set :findLinkedBlocks:variable :findLinkedBlocks:block
-        label *label65
-   29:  jump *label73 notEqual @memory-cell :findLinkedBlocks:type
-   30:  set :findLinkedBlocks:variable :findLinkedBlocks:block
-        label *label73
-   31:  set :memory :findLinkedBlocks:variable
-   32:  jump *label37 greaterThan :findLinkedBlocks:n 0
+   13:  select :findLinkedBlocks:variable equal @large-logic-display :findLinkedBlocks:type :findLinkedBlocks:block :display
+   14:  set :display :findLinkedBlocks:variable
+   15:  set :findLinkedBlocks:variable :message
+   16:  jump *label45 notEqual @message :findLinkedBlocks:type
+   17:  set :findLinkedBlocks:variable :findLinkedBlocks:block
+   18:  set :findLinkedBlocks:message :findLinkedBlocks:block
+        label *label45
+   19:  set :message :findLinkedBlocks:variable
+   20:  select :findLinkedBlocks:variable equal @switch :findLinkedBlocks:type :findLinkedBlocks:block :switch
+   21:  set :switch :findLinkedBlocks:variable
+   22:  select :findLinkedBlocks:variable equal @memory-bank :findLinkedBlocks:type :findLinkedBlocks:block :memory
+   23:  select :findLinkedBlocks:variable equal @memory-cell :findLinkedBlocks:type :findLinkedBlocks:block :findLinkedBlocks:variable
+   24:  set :memory :findLinkedBlocks:variable
+   25:  jump *label37 greaterThan :findLinkedBlocks:n 0
         label *label14
-   33:  print "\nDisplay: {0}\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nMemory: "
-   34:  format :display
-   35:  op and :findLinkedBlocks:foundAll 1 :display
-   36:  format :message
-   37:  format :switch
-   38:  format :memory
-   39:  op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :memory
-   40:  print :memory
-   41:  op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :memory
-   42:  printflush :findLinkedBlocks:message
-   43:  jump *label1 equal :findLinkedBlocks:foundAll false
-   44:  assertequals :message message1 "Located message1 block"
+   26:  print "\nDisplay: {0}\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nMemory: "
+   27:  format :display
+   28:  op and :findLinkedBlocks:foundAll 1 :display
+   29:  format :message
+   30:  format :switch
+   31:  format :memory
+   32:  op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :memory
+   33:  print :memory
+   34:  op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :memory
+   35:  printflush :findLinkedBlocks:message
+   36:  jump *label1 equal :findLinkedBlocks:foundAll false
+   37:  assertequals :message message1 "Located message1 block"

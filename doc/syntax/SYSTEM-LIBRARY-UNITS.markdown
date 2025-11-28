@@ -24,8 +24,8 @@ but is slower. If you already control the current unit, use `within()` instead.
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                  15 |                 16 |
-| Function body                            |                  16 |                 17 |
+| Inlined function                         |                  15 |                 15 |
+| Function body                            |                  16 |                 16 |
 | Function call                            |                   5 |                  5 |
 
 Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
@@ -46,8 +46,8 @@ The function doesn't use units that are controlled by a player or a different pr
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                  30 |                 31 |
-| Function body                            |                  31 |                 32 |
+| Inlined function                         |                  30 |                 29 |
+| Function body                            |                  31 |                 30 |
 | Function call                            |                   7 |                  7 |
 
 Searches for and binds a free unit of the given type closest to the coordinates on the map given.

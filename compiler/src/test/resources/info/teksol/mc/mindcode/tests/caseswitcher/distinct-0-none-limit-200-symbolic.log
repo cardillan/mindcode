@@ -463,10 +463,10 @@ Modifications by Convert case at line 11:5 (segments: 4, padded low) (+24 instru
      6 # "Function: def identifyBlock(in block)"
 -    * jump *label6 equal :block @copper-wall
 -    * jump *label5 always
-+    7 sensor *tmp10 :block @id
-+    8 jump *label57 greaterThanEq *tmp10 203
-+    9 jump *label56 greaterThanEq *tmp10 35
-+   10 multijump *label59 *tmp10 0 (m:*label58)
++    7 sensor *tmp8 :block @id
++    8 jump *label57 greaterThanEq *tmp8 203
++    9 jump *label56 greaterThanEq *tmp8 35
++   10 multijump *label59 *tmp8 0 (m:*label58)
 +   11 multilabel *label59 (m:*label58)
 +   12 jump *label56 always
 +   13 multilabel *label60 (m:*label58)
@@ -540,9 +540,9 @@ Modifications by Convert case at line 11:5 (segments: 4, padded low) (+24 instru
 +   81 set *tmp2 18
 +   82 jump *label4 always
 +   83 label *label57
-+   84 jump *label56 greaterThanEq *tmp10 235
-+   85 jump *label38 lessThan *tmp10 204
-+   86 multijump *label95 *tmp10 204 (m:*label94)
++   84 jump *label56 greaterThanEq *tmp8 235
++   85 jump *label38 lessThan *tmp8 204
++   86 multijump *label95 *tmp8 204 (m:*label94)
 +   87 multilabel *label95 (m:*label94)
 +   88 jump *label40 always
 +   89 multilabel *label96 (m:*label94)
@@ -893,10 +893,10 @@ set :i -1
 label *label55
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
-sensor *tmp10 :block @id
-jump *label57 greaterThanEq *tmp10 203
-jump *label56 greaterThanEq *tmp10 35
-multijump *label59 *tmp10 0
+sensor *tmp8 :block @id
+jump *label57 greaterThanEq *tmp8 203
+jump *label56 greaterThanEq *tmp8 35
+multijump *label59 *tmp8 0
 multilabel *label59
 jump *label56 always
 multilabel *label60
@@ -969,9 +969,9 @@ multilabel *label93
 set *tmp2 18
 jump *label4 always
 label *label57
-jump *label56 greaterThanEq *tmp10 235
-jump *label38 lessThan *tmp10 204
-multijump *label95 *tmp10 204
+jump *label56 greaterThanEq *tmp8 235
+jump *label38 lessThan *tmp8 204
+multijump *label95 *tmp8 204
 multilabel *label95
 jump *label40 always
 multilabel *label96

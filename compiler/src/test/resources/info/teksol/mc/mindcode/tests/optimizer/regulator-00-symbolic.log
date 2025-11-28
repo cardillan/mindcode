@@ -6,7 +6,7 @@
     12 instructions eliminated by Jump Optimization (5 iterations).
      7 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      2 instructions modified by Expression Optimization (3 iterations).
-     9 instructions eliminated by If Expression Optimization (4 iterations).
+     9 instructions eliminated by Select Optimization (4 iterations).
      7 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -900,7 +900,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    225 print "[]"
    226 print "\n"
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-9 instructions):
+Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-9 instructions):
  
    108 set .STATE true
    109 op add .CYCLES 0 1
@@ -980,9 +980,9 @@ Modifications by Convert case at line 26:9 (segments: 1, padded low) (+131 instr
     20 print "\n"
     21 sensor *tmp5 :block @type
 -    * jump *label7 notEqual *tmp5 @message
-+   22 sensor *tmp70 *tmp5 @id
-+   23 jump *label57 greaterThanEq *tmp70 147
-+   24 multijump *label59 *tmp70 0 (m:*label58)
++   22 sensor *tmp55 *tmp5 @id
++   23 jump *label57 greaterThanEq *tmp55 147
++   24 multijump *label59 *tmp55 0 (m:*label58)
 +   25 multilabel *label59 (m:*label58)
 +   26 jump *label57 always
 +   27 multilabel *label60 (m:*label58)
@@ -1607,8 +1607,8 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 +   17 print "Found: {0}\n"
 +   18 format :block
     19 sensor *tmp5 :block @type
-    20 sensor *tmp70 *tmp5 @id
-    21 jump *label57 greaterThanEq *tmp70 147
+    20 sensor *tmp55 *tmp5 @id
+    21 jump *label57 greaterThanEq *tmp55 147
  
    349 label *label6
    350 jump *label54 greaterThan :n 0
@@ -1737,9 +1737,9 @@ getlink :block :n
 print "Found: {0}\n"
 format :block
 sensor *tmp5 :block @type
-sensor *tmp70 *tmp5 @id
-jump *label57 greaterThanEq *tmp70 147
-multijump *label59 *tmp70 0
+sensor *tmp55 *tmp5 @id
+jump *label57 greaterThanEq *tmp55 147
+multijump *label59 *tmp55 0
 multilabel *label59
 jump *label57 always
 multilabel *label60

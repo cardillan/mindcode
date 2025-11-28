@@ -71,7 +71,7 @@ public class OptimizationCoordinator {
         Map<Optimization, Optimizer> result = new LinkedHashMap<>();
         for (Optimization optimization : Optimization.LIST) {
             OptimizationLevel level = globalProfile.getOptimizationLevel(optimization);
-            if (level != OptimizationLevel.NONE) {
+            if (level != OptimizationLevel.NONE && optimization.isAvailable(optimizationContext)) {
                 Optimizer optimizer = optimization.getInstanceCreator().apply(optimizationContext);
                 optimizer.setDebugPrinter(debugPrinter);
                 optimizer.setLevel(level);
@@ -112,8 +112,8 @@ public class OptimizationCoordinator {
             if (arrayExpander.analyze(program)) {
                 for (int index = 0; index < program.size(); index++) {
                     if (program.get(index) instanceof ArrayAccessInstruction ix) {
-                        List<LogicInstruction> expanded = arrayExpander.expand(ix);
                         optimizationContext.removeInstruction(index);
+                        List<LogicInstruction> expanded = arrayExpander.expand(ix);
                         for (LogicInstruction instruction : expanded) {
                             optimizationContext.insertInstructionUnchecked(index++, instruction);
                         }
@@ -165,7 +165,7 @@ public class OptimizationCoordinator {
         boolean modified = false;
         for (Optimization optimization : phase.optimizations) {
             if (phase.breaksContextStructure()) {
-                optimizationContext.rebuildLabelReferences();
+                optimizationContext.rebuildIndexes();
                 optimizationContext.removeInactiveInstructions();
             }
 

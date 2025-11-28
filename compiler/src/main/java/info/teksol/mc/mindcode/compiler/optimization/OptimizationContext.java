@@ -71,6 +71,9 @@ public class OptimizationContext {
     /// are removed from the program after each iteration finishes.
     private final Map<LogicLabel, List<LogicInstruction>> labelReferences = new HashMap<>();
 
+    /// Tracks instructions in which variables appear (including side effects).
+    private final Map<LogicVariable, List<LogicInstruction>> variableReferences = new HashMap<>();
+
     private int currentRun = 0;
     private int modifications = 0;
     private int insertions = 0;
@@ -94,15 +97,14 @@ public class OptimizationContext {
 
         expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
 
-        rebuildLabelReferences();
+        rebuildIndexes();
         adjustWeights();
     }
 
-
-
-    public void rebuildLabelReferences() {
+    public void rebuildIndexes() {
         labels.clear();
         labelReferences.clear();
+        variableReferences.clear();
 
         instructionStream()
                 .filter(LabelInstruction.class::isInstance)
@@ -110,7 +112,7 @@ public class OptimizationContext {
                 .forEach(this::addLabelInstruction);
 
         /* Create label references */
-        instructionStream().forEachOrdered(this::addLabelReferences);
+        instructionStream().forEachOrdered(this::addReferences);
     }
 
     public MessageConsumer getMessageConsumer() {
@@ -271,7 +273,10 @@ public class OptimizationContext {
                     }
                     case JUMP -> {
                         JumpInstruction jump = (JumpInstruction) ix;
-                        heads.offer(findLabelIndex(jump.getTarget()));
+                        int labelIndex = findLabelIndex(jump.getTarget());
+                        if (labelIndex >= 0) {
+                            heads.offer(labelIndex);
+                        }
                         if (jump.isUnconditional()) {
                             continue MainLoop;
                         }
@@ -312,7 +317,7 @@ public class OptimizationContext {
     private int findLabelIndex(LogicLabel label) {
         int index = firstInstructionIndex(ix -> ix instanceof LabelInstruction l && l.getLabel().equals(label));
         if (index < 0) {
-            throw new IllegalArgumentException("Illegal label: " + label);
+            //throw new IllegalArgumentException("Illegal label: " + label);
         }
         return index;
     }
@@ -489,8 +494,8 @@ public class OptimizationContext {
         }
     }
 
-    private void addLabelReferences(LogicInstruction instruction) {
-        final Function<LogicLabel, List<LogicInstruction>> mappingFunction = v -> new ArrayList<>();
+    private void addReferences(LogicInstruction instruction) {
+        final Function<LogicLabel, List<LogicInstruction>> mappingFunction = _ -> new ArrayList<>();
         switch (instruction) {
             case JumpInstruction ix         -> labelReferences.computeIfAbsent(ix.getTarget(), mappingFunction).add(ix);
             case SetAddressInstruction ix   -> labelReferences.computeIfAbsent(ix.getLabel(), mappingFunction).add(ix);
@@ -507,9 +512,15 @@ public class OptimizationContext {
             }
             default -> { }
         }
+
+        instruction.getAllArguments()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .distinct()
+                .forEach(v -> variableReferences.computeIfAbsent(v, _ -> new ArrayList<>()).add(instruction));
     }
 
-    private void removeLabelReferences(LogicInstruction instruction) {
+    private void removeReferences(LogicInstruction instruction) {
         switch (instruction) {
             case JumpInstruction ix         -> clearReferences(ix.getTarget(), ix);
             case SetAddressInstruction ix   -> clearReferences(ix.getLabel(), ix);
@@ -526,6 +537,12 @@ public class OptimizationContext {
             }
             default -> { }
         }
+
+        instruction.getAllArguments()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .distinct()
+                .forEach(v -> variableReferences.get(v).remove(instruction));
     }
 
     private void clearReferences(LogicLabel label, LogicInstruction reference) {
@@ -558,6 +575,14 @@ public class OptimizationContext {
 
     public List<LogicInstruction> getLabelReferences(LogicLabel label) {
         return labelReferences.getOrDefault(label, List.of());
+    }
+
+    public List<LogicInstruction> getVariableReferences(LogicVariable variable) {
+        return variableReferences.getOrDefault(variable, List.of());
+    }
+
+    public boolean isUsedOutsideOf(LogicVariable variable, AstContext context) {
+        return getVariableReferences(variable).stream().anyMatch(ix -> !ix.getAstContext().belongsTo(context));
     }
 
     public Set<LogicVariable> getUninitializedVariables() {
@@ -633,35 +658,14 @@ public class OptimizationContext {
         return null;
     }
 
-    /// Returns the last condition jump for valid conditions. Makes sure the last jump occurs at the expected place
-    /// within the context.
-    /// Conditions become invalid when resolved by optimization. Invalid conditions do not alter control flow
-    /// and must not be processed by optimizations aimed at the control flow.
-    public @Nullable JumpInstruction getLastConditionJump(LogicList conditionInstructions) {
-        AstContext conditionContext = Objects.requireNonNull(conditionInstructions.getAstContext());
-        if (conditionContext.children().size() == 1 && conditionContext.children().getFirst().matches(AstContextType.SHORT_CIRCUIT)) {
-            if (!(conditionInstructions.getLast() instanceof LabelInstruction)) return null;
-
-            // Short-circuiting condition: valid if it contains at least one conditional jump
-            AstContext shortCircuitContext = conditionContext.children().getFirst();
-            return conditionInstructions.stream()
-                    .filter(JumpInstruction.class::isInstance)
-                    .map(JumpInstruction.class::cast)
-                    .filter(jump -> jump.getAstContext() == shortCircuitContext && jump.isConditional())
-                    .reduce((first, second) -> second).orElse(null);
-        } else {
-            // Standard condition: valid if the last instruction is a conditional jump
-            return conditionInstructions.getLast() instanceof JumpInstruction jump && jump.isConditional() ? jump : null;
-        }
-    }
-
     public @Nullable LogicBoolean evaluateConditionJump(AstContext conditionContext) {
         if (!conditionContext.matches(AstSubcontextType.CONDITION)) {
             throw new IllegalArgumentException("Expected condition context, got " + conditionContext);
         }
 
         LogicList instructions = contextInstructions(conditionContext);
-        if (conditionContext.children().size() == 1 && conditionContext.children().getFirst().matches(AstContextType.SHORT_CIRCUIT)) {
+        if (conditionContext.children().size() == 1 && conditionContext.children().getFirst().matches(
+                AstContextType.SCBE_COND, AstContextType.SCBE_OPER)) {
             AstContext shortCircuitContext = conditionContext.children().getFirst();
 
             // Simple control-flow analysis
@@ -708,7 +712,7 @@ public class OptimizationContext {
                         }
                     }
                     case EmptyInstruction noop -> { }
-                    default -> throw new MindcodeInternalError("Unexpected instruction in short-circuit context: " + ix);
+                    default -> { }
                 }
             }
 
@@ -1090,7 +1094,7 @@ public class OptimizationContext {
         if (instruction instanceof LabelInstruction label) {
             addLabelInstruction(label);
         }
-        addLabelReferences(instruction);
+        addReferences(instruction);
 
         instruction.outputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
@@ -1103,7 +1107,7 @@ public class OptimizationContext {
         if (instruction instanceof LabelInstruction label) {
             removeLabelInstruction(label);
         }
-        removeLabelReferences(instruction);
+        removeReferences(instruction);
 
         instruction.outputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
@@ -1687,6 +1691,12 @@ public class OptimizationContext {
         }
 
         @Override
+        public LogicList withSideEffects(SideEffects sideEffects) {
+            instructionProcessor.withSideEffects(sideEffects);
+            return this;
+        }
+
+        @Override
         public InstructionProcessor getProcessor() {
             return instructionProcessor;
         }
@@ -1710,6 +1720,10 @@ public class OptimizationContext {
         public void addToContext(List<? extends LogicInstruction> instructions) {
             AstContext context = Objects.requireNonNull(astContext);
             instructions.forEach(ix -> this.instructions.add(ix.withContext(context)));
+        }
+
+        public void addKeepingContext(LogicInstruction instruction) {
+            instructions.add(instruction);
         }
 
         public LogicInstruction remove(int index) {
@@ -1750,6 +1764,10 @@ public class OptimizationContext {
 
         public @Nullable LogicInstruction get(int index) {
             return index >= 0 && index < size() ? instructions.get(index) : null;
+        }
+
+        public LogicInstruction getExisting(int index) {
+            return instructions.get(index);
         }
 
         public @Nullable LogicInstruction getFirst() {

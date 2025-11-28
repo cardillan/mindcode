@@ -4,7 +4,7 @@
      6 instructions eliminated by Jump Normalization (5 iterations).
     50 instructions eliminated by Jump Optimization (5 iterations).
     31 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-    12 instructions eliminated by If Expression Optimization (4 iterations).
+    12 instructions eliminated by Select Optimization (4 iterations).
      2 instructions eliminated by Data Flow Optimization (2 passes, 11 iterations).
      6 instructions added by Loop Optimization (3 iterations).
      6 loops improved by Loop Optimization.
@@ -1654,7 +1654,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    327 set .LAST_ITEM .ITEM
    328 set :state 1
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-12 instructions):
+Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-12 instructions):
  
    176 jump *label49 always
    177 label *label51

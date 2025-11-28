@@ -253,11 +253,11 @@ Modifications by Translate case at line 11:5 (-24 instructions):
 -    * label *label7
 -    * set *tmp2 false
 -    * label *label6
-+    6 sensor *tmp13 :block @id
-+    7 read *tmp14 "00000000000000000111111111111001111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000110110000000000001100010000000010000000000000000000000000" *tmp13
-+    8 op sub *tmp15 *tmp14 48
-+    9 select *tmp16 strictEqual *tmp13 null true *tmp15
-+   10 select *tmp2 strictEqual *tmp14 null false *tmp16
++    6 sensor *tmp9 :block @id
++    7 read *tmp10 "00000000000000000111111111111001111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000110110000000000001100010000000010000000000000000000000000" *tmp9
++    8 op sub *tmp11 *tmp10 48
++    9 select *tmp12 strictEqual *tmp9 null true *tmp11
++   10 select *tmp2 strictEqual *tmp10 null false *tmp12
     11 label *label5
     12 jump *label3 equal *tmp2 false
     13 op mul *tmp5 :hash 31
@@ -270,9 +270,9 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      3 lookup block :block :i
      4 # "Function: def isWall(in block)"
  
-     7 op sub *tmp15 *tmp14 48
-     8 select *tmp16 strictEqual *tmp13 null true *tmp15
-     9 select *tmp2 strictEqual *tmp14 null false *tmp16
+     7 op sub *tmp11 *tmp10 48
+     8 select *tmp12 strictEqual *tmp9 null true *tmp11
+     9 select *tmp2 strictEqual *tmp10 null false *tmp12
 -    * label *label5
     10 jump *label3 equal *tmp2 false
     11 op mul *tmp5 :hash 31
@@ -296,11 +296,11 @@ set :i -1
 label *label9
 lookup block :block :i
 # "Function: def isWall(in block)"
-sensor *tmp13 :block @id
-read *tmp14 "00000000000000000111111111111001111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000110110000000000001100010000000010000000000000000000000000" *tmp13
-op sub *tmp15 *tmp14 48
-select *tmp16 strictEqual *tmp13 null true *tmp15
-select *tmp2 strictEqual *tmp14 null false *tmp16
+sensor *tmp9 :block @id
+read *tmp10 "00000000000000000111111111111001111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000110110000000000001100010000000010000000000000000000000000" *tmp9
+op sub *tmp11 *tmp10 48
+select *tmp12 strictEqual *tmp9 null true *tmp11
+select *tmp2 strictEqual *tmp10 null false *tmp12
 jump *label3 equal *tmp2 false
 op mul *tmp5 :hash 31
 op add *tmp6 *tmp5 :i

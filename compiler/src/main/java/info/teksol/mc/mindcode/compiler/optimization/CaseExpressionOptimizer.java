@@ -38,8 +38,8 @@ class CaseExpressionOptimizer extends BaseOptimizer {
             while (it.hasNext()) {
                 if (it.next() instanceof SetInstruction ix && ix.getResult().getType() == ArgumentType.AST_VARIABLE) {
                     LogicVariable result = ix.getResult();
-                    List<LogicInstruction> list = instructions(
-                            in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
+                    List<LogicInstruction> list = optimizationContext.getVariableReferences(result)
+                                    .stream().filter(in -> !(in instanceof PushOrPopInstruction)).toList();
 
                     // The set instruction is not the first one
                     if (list.getFirst() != ix) continue;
@@ -47,10 +47,10 @@ class CaseExpressionOptimizer extends BaseOptimizer {
                     // Some of the other instructions aren't part of the case expression
                     if (!list.stream().skip(1).allMatch(in -> isStandardCaseWhenInstruction(in, result))) continue;
 
-                    // Replace __ast with actual value in all case branches
+                    // Replace __ast with an actual value in all case branches
                     list.stream().skip(1).forEach(in -> replaceInstruction(in, replaceAllArgs(in, result, ix.getValue())));
 
-                    // This doesn't break AST context structure. The set instruction is in a standalone context.
+                    // This doesn't break the AST context structure. The set instruction is in a standalone context.
                     it.remove();
                 }
             }

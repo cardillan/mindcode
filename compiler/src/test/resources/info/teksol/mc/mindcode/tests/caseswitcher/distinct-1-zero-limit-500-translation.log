@@ -625,11 +625,11 @@ Modifications by Translate case at line 11:5 (-96 instructions):
 -    * label *label53
 -    * set *tmp2 0
 -    * label *label4
-+    7 sensor *tmp10 :block @id
-+    8 read *tmp11 "200000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J0000000000000000000000000" *tmp10
-+    9 op sub *tmp12 *tmp11 48
-+   10 select *tmp13 strictEqual *tmp10 null 0 *tmp12
-+   11 select *tmp2 strictEqual *tmp11 null 0 *tmp13
++    7 sensor *tmp8 :block @id
++    8 read *tmp9 "200000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J0000000000000000000000000" *tmp8
++    9 op sub *tmp10 *tmp9 48
++   10 select *tmp11 strictEqual *tmp8 null 0 *tmp10
++   11 select *tmp2 strictEqual *tmp9 null 0 *tmp11
     12 label *label3
     13 op shl :bit 1 *tmp2
     14 op and *tmp5 :total :bit
@@ -643,9 +643,9 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      4 lookup block :block :i
      5 # "Function: def identifyBlock(in block)"
  
-     8 op sub *tmp12 *tmp11 48
-     9 select *tmp13 strictEqual *tmp10 null 0 *tmp12
-    10 select *tmp2 strictEqual *tmp11 null 0 *tmp13
+     8 op sub *tmp10 *tmp9 48
+     9 select *tmp11 strictEqual *tmp8 null 0 *tmp10
+    10 select *tmp2 strictEqual *tmp9 null 0 *tmp11
 -    * label *label3
     11 op shl :bit 1 *tmp2
     12 op and *tmp5 :total :bit
@@ -669,11 +669,11 @@ set :i -1
 label *label57
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
-sensor *tmp10 :block @id
-read *tmp11 "200000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J0000000000000000000000000" *tmp10
-op sub *tmp12 *tmp11 48
-select *tmp13 strictEqual *tmp10 null 0 *tmp12
-select *tmp2 strictEqual *tmp11 null 0 *tmp13
+sensor *tmp8 :block @id
+read *tmp9 "200000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J0000000000000000000000000" *tmp8
+op sub *tmp10 *tmp9 48
+select *tmp11 strictEqual *tmp8 null 0 *tmp10
+select *tmp2 strictEqual *tmp9 null 0 *tmp11
 op shl :bit 1 *tmp2
 op and *tmp5 :total :bit
 jump *label55 lessThanEq *tmp5 1

@@ -118,8 +118,7 @@ class LoopHoisting extends BaseOptimizer {
                 .flatMap(LogicList::stream)
                 .forEachOrdered(ix -> addDependencies(loop, inspectedContext, dependencies, ix));
 
-        //noinspection StatementWithEmptyBody
-        while (propagateDependencies(dependencies));
+        propagateAllDependencies(dependencies);
 
         // Handle variables modified by functions called from this loop
         Map<MindcodeFunction, Set<LogicVariable>> functionWrites = optimizationContext.getAllFunctionWrites();
@@ -200,23 +199,6 @@ class LoopHoisting extends BaseOptimizer {
                     .map(LogicVariable.class::cast)
                     .forEach(arg -> dependencies.computeIfAbsent(arg, a -> new HashSet<>()).add(arg));
         }
-    }
-
-    private boolean propagateDependencies(Map<LogicVariable, Set<LogicVariable>> dependencies) {
-        boolean modified = false;
-        for (LogicVariable variable : dependencies.keySet()) {
-            Set<LogicVariable> variableDependencies = dependencies.get(variable);
-            for (LogicVariable v : List.copyOf(variableDependencies)) {
-                if (!v.equals(variable)) {
-                    Set<LogicVariable> newDependencies = dependencies.get(v);
-                    if (newDependencies != null && variableDependencies.addAll(newDependencies)) {
-                        modified = true;
-                    }
-                }
-            }
-        }
-
-        return modified;
     }
 
     private AstContext getInitContext(AstContext loop) {

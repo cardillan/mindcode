@@ -5,30 +5,23 @@ set :switch null
 set :memory null
 print "Example program.\nTrying to locate linked blocks"
 set :findLinkedBlocks:n @links
-jump 33 lessThanEq :findLinkedBlocks:n 0
+jump 26 lessThanEq :findLinkedBlocks:n 0
 op sub :findLinkedBlocks:n :findLinkedBlocks:n 1
 getlink :findLinkedBlocks:block :findLinkedBlocks:n
 print "\nFound: "
 print :findLinkedBlocks:block
 sensor :findLinkedBlocks:type :findLinkedBlocks:block @type
-set :findLinkedBlocks:variable :display
-jump 16 notEqual @large-logic-display :findLinkedBlocks:type
-set :findLinkedBlocks:variable :findLinkedBlocks:block
+select :findLinkedBlocks:variable equal @large-logic-display :findLinkedBlocks:type :findLinkedBlocks:block :display
 set :display :findLinkedBlocks:variable
 set :findLinkedBlocks:variable :message
-jump 21 notEqual @message :findLinkedBlocks:type
+jump 19 notEqual @message :findLinkedBlocks:type
 set :findLinkedBlocks:variable :findLinkedBlocks:block
 set :findLinkedBlocks:message :findLinkedBlocks:block
 set :message :findLinkedBlocks:variable
-set :findLinkedBlocks:variable :switch
-jump 25 notEqual @switch :findLinkedBlocks:type
-set :findLinkedBlocks:variable :findLinkedBlocks:block
+select :findLinkedBlocks:variable equal @switch :findLinkedBlocks:type :findLinkedBlocks:block :switch
 set :switch :findLinkedBlocks:variable
-set :findLinkedBlocks:variable :memory
-jump 29 notEqual @memory-bank :findLinkedBlocks:type
-set :findLinkedBlocks:variable :findLinkedBlocks:block
-jump 31 notEqual @memory-cell :findLinkedBlocks:type
-set :findLinkedBlocks:variable :findLinkedBlocks:block
+select :findLinkedBlocks:variable equal @memory-bank :findLinkedBlocks:type :findLinkedBlocks:block :memory
+select :findLinkedBlocks:variable equal @memory-cell :findLinkedBlocks:type :findLinkedBlocks:block :findLinkedBlocks:variable
 set :memory :findLinkedBlocks:variable
 jump 8 greaterThan :findLinkedBlocks:n 0
 print "\nDisplay: {0}\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nMemory: "

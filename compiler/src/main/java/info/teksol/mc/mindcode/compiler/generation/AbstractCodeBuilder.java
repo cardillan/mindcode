@@ -296,15 +296,15 @@ public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
         return tmp;
     }
 
-    protected void evaluateCondition(AstExpression condition, LogicLabel falseLabel) {
+    protected void evaluateCondition(AstExpression condition, LogicLabel falseLabel, AstContextType contextType) {
         UnwrappedNode unwrapped = unwrapNegation(condition);
 
         if (unwrapped.expression instanceof AstOperatorShortCircuiting shortCircuitingNode) {
-            assembler.enterAstNode(shortCircuitingNode, AstContextType.SHORT_CIRCUIT);
+            assembler.enterAstNode(shortCircuitingNode, contextType);
             LogicLabel trueLabel = assembler.nextLabel();
             evaluateShortCircuitingOperator(shortCircuitingNode, trueLabel, falseLabel, unwrapped.negated);
             assembler.createLabel(trueLabel);
-            assembler.exitAstNode(shortCircuitingNode, AstContextType.SHORT_CIRCUIT);
+            assembler.exitAstNode(shortCircuitingNode, contextType);
         } else {
             final LogicValue value = variables.excludeVariablesFromTracking(() -> evaluate(condition).getValue(assembler));
             assembler.createJump(falseLabel, Condition.EQUAL, value, FALSE);
@@ -312,12 +312,13 @@ public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
     }
 
     protected void evaluateInvertedCondition(AstExpression condition, LogicLabel trueLabel, LogicLabel falseLabel) {
+        AstContextType contextType = AstContextType.SCBE_COND;
         UnwrappedNode unwrapped = unwrapNegation(condition);
 
         if (unwrapped.expression instanceof AstOperatorShortCircuiting shortCircuitingNode) {
-            assembler.enterAstNode(shortCircuitingNode, AstContextType.SHORT_CIRCUIT);
+            assembler.enterAstNode(shortCircuitingNode, contextType);
             evaluateShortCircuitingOperator(shortCircuitingNode, trueLabel, falseLabel, unwrapped.negated);
-            assembler.exitAstNode(shortCircuitingNode, AstContextType.SHORT_CIRCUIT);
+            assembler.exitAstNode(shortCircuitingNode, contextType);
         } else {
             final LogicValue value = evaluate(condition).getValue(assembler);
             assembler.createJump(trueLabel, Condition.NOT_EQUAL, value, FALSE);

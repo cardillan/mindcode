@@ -5,7 +5,8 @@
     12 instructions eliminated by Jump Optimization (4 iterations).
      8 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
-     2 instructions eliminated by If Expression Optimization (3 iterations).
+     1 instructions eliminated by Select Optimization (3 iterations).
+     1 instructions eliminated by If Expression Optimization (2 iterations).
      3 instructions modified by Data Flow Optimization (5 iterations).
      4 instructions modified by Loop Optimization (2 iterations).
      4 loops improved by Loop Optimization.
@@ -604,7 +605,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    112 op sub :amount :curr :prev
    113 op sub :time :currTick :prevTick
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-1 instructions):
  
     50 label *label1
     51 jump *label40 equal .SOURCE_MEMORY null
@@ -618,7 +619,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     55 sensor *tmp13 .TARGET_MEMORY @type
     56 jump *label18 notEqual *tmp13 @memory-cell
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 2 (-1 instructions):
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
    108 label *label31
    109 op sub :amount :curr :prev
@@ -657,8 +658,8 @@ Modifications by Fast-dispatch case at line 13:9 (-1 instructions):
     15 print :block
     16 sensor *tmp6 :block @type
 -    * jump *label7 notEqual *tmp6 @message
-+   17 sensor *tmp69 *tmp6 @id
-+   18 multijump *tmp69 0 0 (m:*label45)
++   17 sensor *tmp55 *tmp6 @id
++   18 multijump *tmp55 0 0 (m:*label45)
 +   19 multilabel *label50 (m:*label45)
 +   20 multilabel *label46 (m:*label45)
 +   21 label *label44
@@ -699,7 +700,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      9 label *label41
     10 op sub :n :n 1
  
-    16 multijump *tmp69 0 0 (m:*label45)
+    16 multijump *tmp55 0 0 (m:*label45)
     17 multilabel *label50 (m:*label45)
     18 multilabel *label46 (m:*label45)
 -    * label *label44
@@ -909,8 +910,8 @@ getlink :block :n
 print "\nFound: "
 print :block
 sensor *tmp6 :block @type
-sensor *tmp69 *tmp6 @id
-multijump *tmp69 0 0
+sensor *tmp55 *tmp6 @id
+multijump *tmp55 0 0
 multilabel *label50
 multilabel *label46
 jump *label6 always

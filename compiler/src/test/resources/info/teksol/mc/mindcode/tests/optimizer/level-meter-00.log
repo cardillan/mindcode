@@ -5,7 +5,7 @@
      1 instructions eliminated by Jump Normalization (4 iterations).
      8 instructions eliminated by Jump Optimization (4 iterations).
      6 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions eliminated by If Expression Optimization (3 iterations).
+     1 instructions eliminated by Select Optimization (3 iterations).
     20 instructions modified by Data Flow Optimization (7 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
@@ -614,7 +614,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    172 sensor :amount .CONTAINER .SENSOR
    173 sensor :max .CONTAINER .MAXIMUM
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-1 instructions):
  
    175 op div *tmp39 *tmp38 :max
    176 op add :scaled 10 *tmp39
@@ -653,8 +653,8 @@ Modifications by Fast-dispatch case at line 34:9 (-10 instructions):
     27 print :block
     28 sensor *tmp5 :block @type
 -    * jump *label7 notEqual *tmp5 @message
-+   29 sensor *tmp53 *tmp5 @id
-+   30 multijump *tmp53 0 0 (m:*label43)
++   29 sensor *tmp51 *tmp5 @id
++   30 multijump *tmp51 0 0 (m:*label43)
 +   31 multilabel *label53 (m:*label43)
 +   32 multilabel *label44 (m:*label43)
 +   33 label *label42
@@ -744,7 +744,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     22 label *label39
     23 op sub :n :n 1
  
-    29 multijump *tmp53 0 0 (m:*label43)
+    29 multijump *tmp51 0 0 (m:*label43)
     30 multilabel *label53 (m:*label43)
     31 multilabel *label44 (m:*label43)
 -    * label *label42
@@ -1014,8 +1014,8 @@ getlink :block :n
 print "\nFound: "
 print :block
 sensor *tmp5 :block @type
-sensor *tmp53 *tmp5 @id
-multijump *tmp53 0 0
+sensor *tmp51 *tmp5 @id
+multijump *tmp51 0 0
 multilabel *label53
 multilabel *label44
 jump *label6 always

@@ -6,7 +6,7 @@
     13 instructions eliminated by Jump Optimization (4 iterations).
     13 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      2 instructions modified by Expression Optimization (2 iterations).
-     1 instructions eliminated by If Expression Optimization (3 iterations).
+     1 instructions eliminated by Select Optimization (3 iterations).
      2 instructions eliminated by Data Flow Optimization (6 iterations).
      3 instructions eliminated by Case Switching (4 iterations).
      2 case expressions converted to fast dispatch by Case Switching.
@@ -637,7 +637,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
      2 set :index 1
      3 label *label0
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-1 instructions):
  
     58 sensor :flag @unit @flag
     59 sensor :items @unit @totalItems
@@ -659,8 +659,8 @@ Modifications by Fast-dispatch case at line 19:16 (-2 instructions):
      4 sensor *tmp2 switch2 @enabled
      5 jump *label3 equal *tmp2 false
 -    * jump *label6 notEqual .UNIT @flare
-+    6 sensor *tmp54 .UNIT @id
-+    7 multijump *tmp54 0 0 (m:*label54)
++    6 sensor *tmp52 .UNIT @id
++    7 multijump *tmp52 0 0 (m:*label54)
 +    8 multilabel *label60 (m:*label54)
 +    9 multilabel *label55 (m:*label54)
 +   10 label *label53
@@ -730,7 +730,7 @@ Modifications by Fast-dispatch case at line 60:13 (-1 instructions):
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
-     7 multijump *tmp54 0 0 (m:*label54)
+     7 multijump *tmp52 0 0 (m:*label54)
      8 multilabel *label60 (m:*label54)
      9 multilabel *label55 (m:*label54)
 -    * label *label53
@@ -956,8 +956,8 @@ set :index 1
 label *label0
 sensor *tmp2 switch2 @enabled
 jump *label3 equal *tmp2 false
-sensor *tmp54 .UNIT @id
-multijump *tmp54 0 0
+sensor *tmp52 .UNIT @id
+multijump *tmp52 0 0
 multilabel *label60
 multilabel *label55
 set *tmp4 null                          # Origin: 6, keys: 0 .. 14, 16 .. 19

@@ -162,7 +162,7 @@ class ArrayOptimizer extends BaseOptimizer {
                     ArrayAccessInstruction copy = instructionProcessor.copy(ix)
                             .setArrayOrganization(ArrayOrganization.LOOKUP, ArrayConstruction.COMPACT)
                             .setArrayLookupType(lookupType);
-                    replaceInstruction(instructionIndex(ix), copy);
+                    replaceInstruction(ix, copy);
                 }
             }
         }

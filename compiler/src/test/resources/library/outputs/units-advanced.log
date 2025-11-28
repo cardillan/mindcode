@@ -4,11 +4,12 @@
      3 instructions eliminated by Jump Normalization (5 iterations).
     15 instructions eliminated by Jump Optimization (5 iterations).
     14 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+     2 instructions eliminated by Select Optimization (4 iterations).
     23 instructions eliminated by Data Flow Optimization (6 iterations).
      6 instructions updated by Jump Threading.
      7 instructions eliminated by Unreachable Code Elimination (2 iterations).
      8 instructions eliminated by Print Merging.
-    79 instructions after optimizations.
+    77 instructions after optimizations.
 
 Final code before resolving virtual instructions:
 
@@ -34,77 +35,73 @@ Final code before resolving virtual instructions:
    17:  jump *label1 always 0 0
         label *label7
    18:  sensor *tmp13 :findFreeUnit:first_unit @dead
-   19:  jump *label9 notEqual *tmp13 1
-   20:  set :findFreeUnit:first_unit @unit
-        label *label9
-   21:  ubind null
-   22:  jump *label4 notEqual :findFreeUnit:first_unit @unit
-   23:  set *tmp7 null
+   19:  select :findFreeUnit:first_unit equal *tmp13 1 @unit :findFreeUnit:first_unit
+   20:  ubind null
+   21:  jump *label4 notEqual :findFreeUnit:first_unit @unit
+   22:  set *tmp7 null
         label *label1
-   24:  print *tmp7
-   25:  print "\n"
+   23:  print *tmp7
+   24:  print "\n"
         label *label12
-   26:  ubind null
-   27:  jump *label15 notEqual @unit null
-   28:  set *tmp18 null
-   29:  jump *label11 always 0 0
+   25:  ubind null
+   26:  jump *label15 notEqual @unit null
+   27:  set *tmp18 null
+   28:  jump *label11 always 0 0
         label *label15
-   30:  set :findClosestUnit:first_unit @unit
-   31:  set :findClosestUnit:best_unit null
-   32:  set :findClosestUnit:best_distance 10000000000
+   29:  set :findClosestUnit:first_unit @unit
+   30:  set :findClosestUnit:best_unit null
+   31:  set :findClosestUnit:best_distance 10000000000
         label *label17
-   33:  sensor *tmp21 @unit @controlled
-   34:  jump *label20 notEqual *tmp21 0
-   35:  sensor *tmp24 @unit @x
-   36:  op sub *tmp25 *tmp24 null
-   37:  sensor *tmp26 @unit @y
-   38:  op sub *tmp27 *tmp26 null
-   39:  op len :findClosestUnit:distance *tmp25 *tmp27
-   40:  jump *label21 greaterThanEq :findClosestUnit:distance :findClosestUnit:best_distance
-   41:  set :findClosestUnit:best_distance :findClosestUnit:distance
-   42:  set :findClosestUnit:best_unit @unit
-   43:  jump *label21 always 0 0
+   32:  sensor *tmp21 @unit @controlled
+   33:  jump *label20 notEqual *tmp21 0
+   34:  sensor *tmp24 @unit @x
+   35:  op sub *tmp25 *tmp24 null
+   36:  sensor *tmp26 @unit @y
+   37:  op sub *tmp27 *tmp26 null
+   38:  op len :findClosestUnit:distance *tmp25 *tmp27
+   39:  jump *label21 greaterThanEq :findClosestUnit:distance :findClosestUnit:best_distance
+   40:  set :findClosestUnit:best_distance :findClosestUnit:distance
+   41:  set :findClosestUnit:best_unit @unit
+   42:  jump *label21 always 0 0
         label *label20
-   44:  sensor *tmp32 :findClosestUnit:first_unit @dead
-   45:  jump *label24 notEqual *tmp32 1
-   46:  set :findClosestUnit:first_unit @unit
-        label *label24
+   43:  sensor *tmp32 :findClosestUnit:first_unit @dead
+   44:  select :findClosestUnit:first_unit equal *tmp32 1 @unit :findClosestUnit:first_unit
         label *label21
-   47:  ubind null
-   48:  jump *label17 notEqual :findClosestUnit:first_unit @unit
-   49:  jump *label26 notEqual :findClosestUnit:best_unit null
-   50:  set *tmp18 null
-   51:  jump *label11 always 0 0
+   45:  ubind null
+   46:  jump *label17 notEqual :findClosestUnit:first_unit @unit
+   47:  jump *label26 notEqual :findClosestUnit:best_unit null
+   48:  set *tmp18 null
+   49:  jump *label11 always 0 0
         label *label26
-   52:  sensor *tmp39 :findClosestUnit:best_unit @controlled
-   53:  jump *label12 notEqual *tmp39 0
-   54:  ubind :findClosestUnit:best_unit
-   55:  ucontrol flag null 0 0 0 0
-   56:  set *tmp18 :findClosestUnit:best_unit
+   50:  sensor *tmp39 :findClosestUnit:best_unit @controlled
+   51:  jump *label12 notEqual *tmp39 0
+   52:  ubind :findClosestUnit:best_unit
+   53:  ucontrol flag null 0 0 0 0
+   54:  set *tmp18 :findClosestUnit:best_unit
         label *label11
-   57:  print *tmp18
-   58:  print "\n"
+   55:  print *tmp18
+   56:  print "\n"
         label *label31
-   59:  ubind null
-   60:  jump *label31 equal @unit null
-   61:  sensor *tmp45 @unit @controlled
-   62:  jump *label31 notEqual *tmp45 0
-   63:  ucontrol flag null 0 0 0 0
-   64:  print @unit
-   65:  print "\n"
+   57:  ubind null
+   58:  jump *label31 equal @unit null
+   59:  sensor *tmp45 @unit @controlled
+   60:  jump *label31 notEqual *tmp45 0
+   61:  ucontrol flag null 0 0 0 0
+   62:  print @unit
+   63:  print "\n"
         label *label39
-   66:  ubind null
-   67:  jump *label42 notEqual @unit null
-   68:  print "nullNo unit of type null found."
-   69:  printflush null
-   70:  jump *label39 always 0 0
+   64:  ubind null
+   65:  jump *label42 notEqual @unit null
+   66:  print "nullNo unit of type null found."
+   67:  printflush null
+   68:  jump *label39 always 0 0
         label *label42
-   71:  sensor *tmp51 @unit @controlled
-   72:  jump *label44 equal *tmp51 0
-   73:  print "nullLooking for a free null..."
-   74:  printflush null
-   75:  jump *label39 always 0 0
+   69:  sensor *tmp51 @unit @controlled
+   70:  jump *label44 equal *tmp51 0
+   71:  print "nullLooking for a free null..."
+   72:  printflush null
+   73:  jump *label39 always 0 0
         label *label44
-   76:  ucontrol flag null 0 0 0 0
-   77:  print @unit
-   78:  print "\n"
+   74:  ucontrol flag null 0 0 0 0
+   75:  print @unit
+   76:  print "\n"

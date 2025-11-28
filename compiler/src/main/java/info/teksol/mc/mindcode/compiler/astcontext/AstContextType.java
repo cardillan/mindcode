@@ -20,7 +20,8 @@ public enum AstContextType {
     EACH            ("EACH", true),
     BREAK           ("BREA", true),
     CONTINUE        ("CONT", true),
-    SHORT_CIRCUIT   ("SHCT", true),
+    SCBE_COND       ("SCIF", true),
+    SCBE_OPER       ("SCOP", true),
 
     // Non-control flow
     ASSIGNMENT      ("ASGN"),

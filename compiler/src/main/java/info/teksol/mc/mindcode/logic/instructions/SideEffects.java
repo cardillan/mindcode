@@ -11,8 +11,8 @@ import java.util.function.Consumer;
 /// Contains information about instruction's side effects and applies it when necessary. A side effect causes
 /// variables other than function arguments to be read or written when the instruction is executed.
 @NullMarked
-public record SideEffects(List<LogicVariable> reads, List<LogicVariable> writes, List<LogicVariable> resets) {
-    public static final SideEffects NONE = new SideEffects(List.of(), List.of(), List.of());
+public record SideEffects(List<LogicVariable> reads, List<LogicVariable> writes, List<LogicVariable> resets, List<LogicVariable> all) {
+    public static final SideEffects NONE = new SideEffects(List.of(), List.of(), List.of(), List.of());
 
     /// Applies the side effect by passing read variables into the `reads` consumer, written variables
     /// into the `writes` consumer and reset variables into the `resets` consumer. The actual values being read
@@ -27,16 +27,17 @@ public record SideEffects(List<LogicVariable> reads, List<LogicVariable> writes,
         this.resets.forEach(resets);
     }
 
-    public SideEffects replaceVariables(Map<LogicVariable, LogicValue> valueReplacements) {
+    public SideEffects replaceVariables(Map<? extends LogicValue, LogicValue> valueReplacements) {
         List<LogicVariable> reads = replaceVariables(this.reads, valueReplacements);
         List<LogicVariable> writes = replaceVariables(this.writes, valueReplacements);
         List<LogicVariable> resets = replaceVariables(this.resets, valueReplacements);
+        List<LogicVariable> all = replaceVariables(this.all, valueReplacements);
         return reads.isEmpty() && writes.isEmpty() && resets.isEmpty() ? NONE
                 : reads == this.reads && writes == this.writes && resets == this.resets ? this
-                : new SideEffects(reads, writes, resets);
+                : new SideEffects(reads, writes, resets, all);
     }
 
-    private List<LogicVariable> replaceVariables(List<LogicVariable> variables, Map<LogicVariable, LogicValue> valueReplacements) {
+    private static List<LogicVariable> replaceVariables(List<LogicVariable> variables, Map<? extends LogicValue, LogicValue> valueReplacements) {
         if (variables.stream().anyMatch(valueReplacements::containsKey)) {
             return variables.stream()
                     .map(v -> valueReplacements.getOrDefault(v, v))
@@ -48,38 +49,49 @@ public record SideEffects(List<LogicVariable> reads, List<LogicVariable> writes,
         }
     }
 
+    public boolean hasWrites() {
+        return !writes.isEmpty() || !resets.isEmpty();
+    }
+
     /// Creates a side effect which reads all variables from the list
     public static SideEffects reads(List<LogicVariable> variables) {
-        return new SideEffects(variables, List.of(), List.of());
+        return new SideEffects(variables, List.of(), List.of(), variables);
     }
 
     /// Creates a side effect which reads the variable
     public static SideEffects reads(LogicVariable variable) {
-        return new SideEffects(List.of(variable), List.of(), List.of());
+        return new SideEffects(List.of(variable), List.of(), List.of(), List.of(variable));
     }
 
     /// Creates a side effect which writes all variables from the list
     public static SideEffects writes(List<LogicVariable> variables) {
-        return new SideEffects(List.of(), variables, List.of());
+        return new SideEffects(List.of(), variables, List.of(), variables);
     }
 
     /// Creates a side effect which writes the variable
     public static SideEffects writes(LogicVariable variable) {
-        return new SideEffects(List.of(), List.of(variable), List.of());
+        return new SideEffects(List.of(), List.of(variable), List.of(), List.of(variable));
     }
 
     /// Creates a side effect which resets all variables from the list
     public static SideEffects resets(List<LogicVariable> variables) {
-        return new SideEffects(List.of(), List.of(), variables);
+        return new SideEffects(List.of(), List.of(), variables, variables);
     }
 
     /// Creates a side effect which resets the variable
     public static SideEffects resets(LogicVariable variable) {
-        return new SideEffects(List.of(), List.of(), List.of(variable));
+        return new SideEffects(List.of(), List.of(), List.of(variable), List.of(variable));
     }
 
     /// Creates a side effect with reads, writes and resets
     public static SideEffects of(List<LogicVariable> reads, List<LogicVariable> writes, List<LogicVariable> resets) {
-        return new SideEffects(reads,writes,resets);
+        return new SideEffects(reads, writes, resets, union(reads, writes, resets));
+    }
+
+    private static List<LogicVariable> union(List<LogicVariable> reads, List<LogicVariable> writes, List<LogicVariable> resets) {
+        List<LogicVariable> union = new java.util.ArrayList<>(reads);
+        union.addAll(writes);
+        union.addAll(resets);
+        return union;
     }
 }

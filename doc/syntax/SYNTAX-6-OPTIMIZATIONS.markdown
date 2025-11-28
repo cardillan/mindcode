@@ -5,7 +5,7 @@ Most of the optimizations Mindcode performs are fairly simple: they're relativel
 Mindcode provides the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal) to specify which dynamic optimizations to apply:
 
 * `speed` (the default value): Mindcode applies dynamic optimizations that make the resulting code larger, but faster, while adhering to the current [instruction limit](SYNTAX-5-OTHER.markdown#option-instruction-limit). When several possible optimizations of this kind are available, the ones having the best effect (the highest speedup per additional instruction generated) are applied first until the instruction limit is reached.
-* `neutral`: Mindcode applies dynamic optimizations making the code either smaller or faster (or both) than the original code.
+* `neutral`: Mindcode applies dynamic optimizations improving at least one of the aspects (code size, performance, or both) while not making the other aspect worse.
 * `size`: Mindcode applies dynamic optimizations leading to the smallest code possible, even at the expense of execution speed.
 
 The `goal` option's scope is local, and it is possible to set the desired goal for individual functions, statements, or blocks of code (see [Option scopes](SYNTAX-5-OTHER.markdown#option-scope)). As a consequence, dynamic optimizations matching two or even all three goals may be available. The optimizer performs all possible `size` optimizations first, then all possible `neutral` optimizations, and finally all possible `speed` optimizations.
@@ -1274,81 +1274,7 @@ It is therefore no longer necessary to use the `inline` keyword, except in cases
 
 ## If Expression Optimization
 
-This optimization consists of three types of modifications performed on blocks of code created by if/ternary expressions. All possible optimizations are done independently.
-
-### `select` optimization
-
-If expressions which assign a value to variables depending on a condition are replaced by the `select` instruction, if the level is set to `experimental` and the target is `8.1` or higher. Example:
-
-```Mindcode
-#set target = 8.1;
-print(rand(10) < 5 ? "low" : "high");
-```
-
-compiles to
-
-```mlog
-op rand *tmp0 10 0
-select *tmp2 lessThan *tmp0 5 "low" "high"
-print *tmp2
-```
-
-The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch. It is applied if the average execution time is improved by the optimization, unless the optimization goal is set to `size`, in which case the optimization is always applied. (The code size is always reduced thanks to avoiding any jumps.)
-
-```Mindcode
-#set target = 8;
-
-volatile var a, b, c;
-
-if switch1.enabled then
-    a = "on";
-    b = @coal;
-    c = 50;
-else
-    a = "off";
-end;
-
-if switch2.enabled then
-  a = 1;
-end;
-```
-
-compiles to:
-
-```mlog
-sensor *tmp0 switch1 @enabled
-select .a notEqual *tmp0 false "on" "off"
-select .b notEqual *tmp0 false @coal .b
-select .c notEqual *tmp0 false 50 .c
-sensor *tmp2 switch2 @enabled
-select .a notEqual *tmp2 false 1 .a
-```
-
-Even when the assignments modify both variables used in the branch condition, or a simple single expression is used in one of the branches, the `select` optimization can still be applied:
-
-```Mindcode
-#set target = 8;
-
-noinit var a, b;
-
-if a > b then
-    a = 10; b = 20;
-else
-    a = 20; b = 10;
-end;
-
-col(a > 0 ? packcolor(0, b, b, 1) : %[red]);
-```
-compiles to:
-
-```mlog
-set *tmp5 .a
-select .a greaterThan .a .b 10 20
-select .b greaterThan *tmp5 .b 20 10
-packcolor *tmp6 0 .b .b 1
-select *tmp3 greaterThan .a 0 *tmp6 %[red]
-draw col *tmp3 0 0 0 0 0
-```
+This optimization consists of several types of modifications performed on blocks of code created by if/ternary expressions. All possible optimizations are performed independently.
 
 ### Value propagation
 
@@ -1510,9 +1436,6 @@ print "alive"
 ```
 
 ### Chained if-else statements
-
-> [!TIP]
-> This optimization only applies when the [`select` optimization](#select-optimization) is not available, or when the expression is too complex for the `select` optimization.
 
 The `elsif` statements are equivalent to nesting the elsif part in the `else` branch of the outer expression. Optimizations of these nested statements work as expected:
 
@@ -1797,14 +1720,11 @@ which produces:
 
 ```mlog
 sensor *tmp0 switch1 @enabled
+jump 6 equal *tmp0 false
 sensor *tmp1 switch2 @enabled
-op land *tmp2 *tmp0 *tmp1
-jump 9 equal *tmp2 false
+jump 6 equal *tmp1 false
 print "Doing something."
-sensor *tmp0 switch1 @enabled
-sensor *tmp1 switch2 @enabled
-op land *tmp2 *tmp0 *tmp1
-jump 4 notEqual *tmp2 false
+jump 0 always 0 0
 print "A switch has been reset."
 ```
 
@@ -2183,6 +2103,83 @@ Return Optimization is a [dynamic optimization](#static-and-dynamic-optimization
 The Return Optimization is simple: whenever there's an unconditional jump to the final sequence of instructions representing a return from the call (which is always three instructions long), the jump is replaced by the entire return sequence. The jump execution is avoided at the price of two additional instructions.
 
 The impact of this optimization is probably marginal. Recursive functions are of limited use by themselves, and this optimization only applies in a rather specific context.
+
+## Select Optimization
+
+This optimization replaces conditional expressions, which assign a value to variables depending on a condition, by the `select` instruction, if the target is `8.1` or higher. Example:
+
+```Mindcode
+#set target = 8.1;
+print(rand(10) < 5 ? "low" : "high");
+```
+
+compiles to
+
+```mlog
+op rand *tmp0 10 0
+select *tmp2 lessThan *tmp0 5 "low" "high"
+print *tmp2
+```
+
+The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch. It is applied if the average execution time is improved by the optimization, unless the optimization goal is set to `size`, in which case the optimization is always applied. (The code size is always reduced thanks to avoiding any jumps.)
+
+```Mindcode
+#set target = 8;
+
+if switch1.enabled then
+    a = "on";
+    b = @coal;
+    c = 50;
+else
+    a = "off";
+end;
+
+if switch2.enabled then
+  a = "paused";
+end;
+
+print(a, b, c);
+```
+
+compiles to:
+
+```mlog
+sensor *tmp0 switch1 @enabled
+select :a notEqual *tmp0 false "on" "off"
+select :b notEqual *tmp0 false @coal :b
+select :c notEqual *tmp0 false 50 :c
+sensor *tmp2 switch2 @enabled
+select :a notEqual *tmp2 false "paused" :a
+print :a
+print :b
+print :c
+```
+
+Even when the assignments modify both variables used in the branch condition, or a simple single expression is used in one of the branches, the `select` optimization can compensate for that:
+
+```Mindcode
+#set target = 8;
+
+noinit var a, b;
+
+if a > b then
+    a = 10; b = 20;
+else
+    a = 20; b = 10;
+end;
+
+col(a > 0 ? packcolor(0, b, b, 1) : %[red]);
+```
+compiles to:
+
+```mlog
+op lessThanEq *tmp5 .a .b
+select .a equal *tmp5 false 10 20
+select .b equal *tmp5 false 20 10
+packcolor *tmp6 0 .b .b 1
+select *tmp3 greaterThan .a 0 *tmp6 %[red]
+draw col *tmp3 0 0 0 0 0
+```
 
 ## Single Step Elimination
 

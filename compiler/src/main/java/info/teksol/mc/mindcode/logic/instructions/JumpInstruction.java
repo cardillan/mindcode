@@ -41,7 +41,7 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
     protected void validate() {
         super.validate();
         if (astContext.subcontextType() == AstSubcontextType.BODY && astContext.contextType() != AstContextType.MLOG) {
-            throw new MindcodeInternalError("Jump instruction not allowed in BODY subcontext." + this);
+            throw new MindcodeInternalError("Jump instruction not allowed in BODY subcontext: " + astContext);
         }
     }
 

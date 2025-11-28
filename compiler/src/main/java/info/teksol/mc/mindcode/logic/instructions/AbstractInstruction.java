@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
 import org.jspecify.annotations.NullMarked;
@@ -144,6 +145,7 @@ public abstract class AbstractInstruction implements LogicInstruction {
         return this;
     }
 
+    @Override
     public LogicInstruction remapInfoLabels(Map<LogicLabel, LogicLabel> labelMap) {
         for (Map.Entry<InstructionInfo, Object> entry : info.entrySet()) {
             if (entry.getValue() instanceof LogicLabel label && labelMap.containsKey(label)) {
@@ -152,6 +154,22 @@ public abstract class AbstractInstruction implements LogicInstruction {
                 entry.setValue(list.stream()
                         .map(e -> e instanceof LogicLabel label ? labelMap.getOrDefault(label, label) : e)
                         .toList());
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public LogicInstruction remapInfoValues(Map<? extends LogicValue, LogicValue> valueMap) {
+        for (Map.Entry<InstructionInfo, Object> entry : info.entrySet()) {
+            if (entry.getValue() instanceof LogicValue value && valueMap.containsKey(value)) {
+                entry.setValue(valueMap.get(value));
+            } else if (entry.getValue() instanceof List<?> list) {
+                entry.setValue(list.stream()
+                        .map(e -> e instanceof LogicValue value ? valueMap.getOrDefault(value, value) : e)
+                        .toList());
+            } else if (entry.getValue() instanceof SideEffects sideEffects) {
+                entry.setValue(sideEffects.replaceVariables(valueMap));
             }
         }
         return this;

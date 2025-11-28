@@ -101,8 +101,8 @@ Clears the processor's graphics buffer without outputting the contents into any 
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                   3 |                  7 |
-| Function body                            |                   4 |                  8 |
+| Inlined function                         |                   3 |                  3 |
+| Function body                            |                   4 |                  4 |
 | Function call                            |                   4 |                  4 |
 
 Returns the actual display size based on the type of display passed in as an argument.

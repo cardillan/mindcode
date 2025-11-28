@@ -2,7 +2,7 @@
     75 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
-     3 instructions eliminated by If Expression Optimization (4 iterations).
+     3 instructions eliminated by Select Optimization (4 iterations).
    201 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
     11 instructions added by Function Inlining (4 iterations).
      6 function calls inlined by Function Inlining.
@@ -1855,7 +1855,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1
    245 label *label74
    246 op sub :a 2 zero
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-3 instructions):
+Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-3 instructions):
  
    265 assertequals true :a "||="
    266 assertequals %ff0000ff %ff0000 "short color literals"

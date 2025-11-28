@@ -271,12 +271,12 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     protected void createCompactAccessInstruction(LocalContextfulInstructionsCreator creator, LogicValue storageProcessor,
             LogicVariable arrayElem) {
         switch (instruction) {
-            case ReadArrInstruction rix -> creator.createRead(rix.getResult(), storageProcessor, arrayElem)
-                    .setSideEffects(SideEffects.reads(arrayElements()))
+            case ReadArrInstruction rix -> creator.withSideEffects(SideEffects.reads(arrayElements()))
+                    .createRead(rix.getResult(), storageProcessor, arrayElem)
                     .setIndirectVariables(arrayElements());
 
-            case WriteArrInstruction wix -> creator.createWrite(wix.getValue(), storageProcessor, arrayElem)
-                    .setSideEffects(SideEffects.resets(arrayElements()))
+            case WriteArrInstruction wix -> creator.withSideEffects(SideEffects.resets(arrayElements()))
+                    .createWrite(wix.getValue(), storageProcessor, arrayElem)
                     .setIndirectVariables(arrayElements());
 
             default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");

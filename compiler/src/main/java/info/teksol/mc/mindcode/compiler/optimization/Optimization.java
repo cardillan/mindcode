@@ -1,9 +1,11 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 // The optimizations are applied in the declared order, i.e. ConditionalJumpsNormalizer gets instructions from the
 // compiler, makes optimizations and passes them onto the next optimizer.
@@ -36,6 +38,11 @@ public enum Optimization {
     EXPRESSION_OPTIMIZATION("Expression Optimization",
             ExpressionOptimizer::new,
             "optimizing some common mathematical expressions"),
+
+    SELECT_OPTIMIZATION("Select Optimization",
+            context -> context.getInstructionProcessor().isSupported(Opcode.SELECT),
+            SelectOptimizer::new,
+            "expressing conditional expressions using the 'select' instruction"),
 
     IF_EXPRESSION_OPTIMIZATION("If Expression Optimization",
             IfExpressionOptimizer::new,
@@ -98,12 +105,23 @@ public enum Optimization {
     private final Function<OptimizationContext, Optimizer> instanceCreator;
     private final String optionName;
     private final String description;
+    private final Predicate<OptimizationContext> availability;
 
     Optimization(String name, Function<OptimizationContext, Optimizer> instanceCreator, String description) {
         this.name = name;
         this.optionName = name.toLowerCase().replace(' ', '-');
         this.instanceCreator = instanceCreator;
         this.description = description;
+        this.availability = _ -> true;
+    }
+
+    Optimization(String name, Predicate<OptimizationContext> availability,
+            Function<OptimizationContext, Optimizer> instanceCreator, String description) {
+        this.name = name;
+        this.optionName = name.toLowerCase().replace(' ', '-');
+        this.instanceCreator = instanceCreator;
+        this.description = description;
+        this.availability = availability;
     }
 
     public String getName() {
@@ -120,6 +138,10 @@ public enum Optimization {
 
     Function<OptimizationContext, Optimizer> getInstanceCreator() {
         return instanceCreator;
+    }
+
+    public boolean isAvailable(OptimizationContext optimizationContext) {
+        return availability.test(optimizationContext);
     }
 
     public static final List<Optimization> LIST = List.of(values());

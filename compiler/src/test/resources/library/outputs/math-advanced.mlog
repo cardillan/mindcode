@@ -55,35 +55,35 @@ set :median:x2 4
 set :median:x3 6
 set :median:x4 8
 set :median*retaddr 58
-jump 960 always 0 0
+jump 953 always 0 0
 assertequals 5 :median*retval "median(2,4,6,8)"
 set :median:x1 8
 set :median:x2 6
 set :median:x3 4
 set :median:x4 2
 set :median*retaddr 65
-jump 960 always 0 0
+jump 953 always 0 0
 assertequals 5 :median*retval "median(8,6,4,2)"
 set :median:x1 4
 set :median:x2 8
 set :median:x3 2
 set :median:x4 6
 set :median*retaddr 72
-jump 960 always 0 0
+jump 953 always 0 0
 assertequals 5 :median*retval "median(4,8,2,6)"
 set :median:x1 2
 set :median:x2 6
 set :median:x3 4
 set :median:x4 8
 set :median*retaddr 79
-jump 960 always 0 0
+jump 953 always 0 0
 assertequals 5 :median*retval "median(2,6,4,8)"
 set :median:x1 6
 set :median:x2 2
 set :median:x3 8
 set :median:x4 4
 set :median*retaddr 86
-jump 960 always 0 0
+jump 953 always 0 0
 assertequals 5 :median*retval "median(6,2,8,4)"
 set :median.1:x1 1
 set :median.1:x2 2
@@ -91,41 +91,41 @@ set :median.1:x3 3
 set :median.1:x4 4
 set :median.1:x5 5
 set :median.1*retaddr 94
-jump 977 always 0 0
+jump 970 always 0 0
 assertequals 3 :median.1*retval "median(1,2,3,4,5)"
 set :median.1:x1 5
 set :median.1:x2 4
 set :median.1:x4 2
 set :median.1:x5 1
 set :median.1*retaddr 101
-jump 977 always 0 0
+jump 970 always 0 0
 assertequals 3 :median.1*retval "median(5,4,3,2,1)"
 set :median.1:x1 1
 set :median.1:x2 1
 set :median.1:x3 1
 set :median.1:x4 1
 set :median.1*retaddr 108
-jump 977 always 0 0
+jump 970 always 0 0
 assertequals 1 :median.1*retval "median(1,1,1,1,1)"
 set :median.1:x5 5
 set :median.1*retaddr 112
-jump 977 always 0 0
+jump 970 always 0 0
 assertequals 1 :median.1*retval "median(1,1,1,1,5)"
 set :median.1:x4 5
 set :median.1*retaddr 116
-jump 977 always 0 0
+jump 970 always 0 0
 assertequals 1 :median.1*retval "median(1,1,1,5,5)"
 set :median.1:x3 5
 set :median.1*retaddr 120
-jump 977 always 0 0
+jump 970 always 0 0
 assertequals 5 :median.1*retval "median(1,1,5,5,5)"
 set :median.1:x2 5
 set :median.1*retaddr 124
-jump 977 always 0 0
+jump 970 always 0 0
 assertequals 5 :median.1*retval "median(1,5,5,5,5)"
 set :median.1:x1 5
 set :median.1*retaddr 128
-jump 977 always 0 0
+jump 970 always 0 0
 assertequals 5 :median.1*retval "median(5,5,5,5,5)"
 set :_median:bestDif 10000000000
 set :_median:best null
@@ -171,47 +171,52 @@ set :_median.1:i 1
 set *tmp88 172
 jump 174 always 0 0
 set :_median.1:i 5
-set *tmp88 217
+set *tmp88 222
 set :_isMedian.1:lt 0
 set :_isMedian.1:gt 0
-set :_isMedian.1:i 1
-set *tmp90 179
-jump 193 always 0 0
-set :_isMedian.1:i 1
-set *tmp90 182
-jump 193 always 0 0
-set :_isMedian.1:i 1
-set *tmp90 185
-jump 193 always 0 0
-set :_isMedian.1:i 1
-set *tmp90 188
-jump 193 always 0 0
-set :_isMedian.1:i 1
-set *tmp90 191
-jump 193 always 0 0
-set :_isMedian.1:i 5
-set *tmp90 199
-jump 196 greaterThanEq :_isMedian.1:i :_median.1:i
+jump 179 greaterThanEq 1 :_median.1:i
+set :_isMedian.1:lt 1
+jump 180 always 0 0
+select :_isMedian.1:gt greaterThan 1 :_median.1:i 1 0
+jump 183 greaterThanEq 1 :_median.1:i
 op add :_isMedian.1:lt :_isMedian.1:lt 1
-set @counter *tmp90
-jump 198 lessThanEq :_isMedian.1:i :_median.1:i
+jump 185 always 0 0
+jump 185 lessThanEq 1 :_median.1:i
 op add :_isMedian.1:gt :_isMedian.1:gt 1
-set @counter *tmp90
+jump 188 greaterThanEq 1 :_median.1:i
+op add :_isMedian.1:lt :_isMedian.1:lt 1
+jump 190 always 0 0
+jump 190 lessThanEq 1 :_median.1:i
+op add :_isMedian.1:gt :_isMedian.1:gt 1
+jump 193 greaterThanEq 1 :_median.1:i
+op add :_isMedian.1:lt :_isMedian.1:lt 1
+jump 195 always 0 0
+jump 195 lessThanEq 1 :_median.1:i
+op add :_isMedian.1:gt :_isMedian.1:gt 1
+jump 198 greaterThanEq 1 :_median.1:i
+op add :_isMedian.1:lt :_isMedian.1:lt 1
+jump 200 always 0 0
+jump 200 lessThanEq 1 :_median.1:i
+op add :_isMedian.1:gt :_isMedian.1:gt 1
+jump 203 greaterThanEq 5 :_median.1:i
+op add :_isMedian.1:lt :_isMedian.1:lt 1
+jump 205 always 0 0
+jump 205 lessThanEq 5 :_median.1:i
+op add :_isMedian.1:gt :_isMedian.1:gt 1
 op sub *tmp95 :_isMedian.1:gt :_isMedian.1:lt
 op abs :_isMedian.1:dif *tmp95 0
-set *tmp100 false
 op add *tmp97 :_isMedian.1:gt :_isMedian.1:lt
-jump 205 lessThan *tmp97 5
-op equal *tmp100 :_isMedian.1:gt :_isMedian.1:lt
-jump 208 equal *tmp100 false
+op equal *tmp362 :_isMedian.1:gt :_isMedian.1:lt
+select *tmp100 greaterThanEq *tmp97 5 *tmp362 false
+jump 213 equal *tmp100 false
 set *tmp87 :_median.1:i
-jump 218 always 0 0
-jump 213 greaterThanEq :_isMedian.1:dif :_median.1:bestDif
+jump 223 always 0 0
+jump 218 greaterThanEq :_isMedian.1:dif :_median.1:bestDif
 set :_median.1:bestDif :_isMedian.1:dif
 set :_median.1:best :_median.1:i
 set :_median.1:count 1
 set @counter *tmp88
-jump 216 greaterThan :_isMedian.1:dif :_median.1:bestDif
+jump 221 greaterThan :_isMedian.1:dif :_median.1:bestDif
 op add :_median.1:best :_median.1:best :_median.1:i
 op add :_median.1:count :_median.1:count 1
 set @counter *tmp88
@@ -221,62 +226,61 @@ set :_median.2:bestDif 10000000000
 set :_median.2:best null
 set :_median.2:count 1
 set :_median.2:i 1
-set *tmp110 225
-jump 239 always 0 0
+set *tmp110 230
+jump 244 always 0 0
 set :_median.2:i 1
-set *tmp110 228
-jump 239 always 0 0
+set *tmp110 233
+jump 244 always 0 0
 set :_median.2:i 1
-set *tmp110 231
-jump 239 always 0 0
+set *tmp110 236
+jump 244 always 0 0
 set :_median.2:i 1
-set *tmp110 234
-jump 239 always 0 0
+set *tmp110 239
+jump 244 always 0 0
 set :_median.2:i 5
-set *tmp110 237
-jump 239 always 0 0
+set *tmp110 242
+jump 244 always 0 0
 set :_median.2:i 5
-set *tmp110 282
+set *tmp110 286
 set :_isMedian.2:lt 0
 set :_isMedian.2:gt 0
 set :_isMedian.2:i 1
-set *tmp112 244
-jump 258 always 0 0
+set *tmp112 249
+jump 263 always 0 0
 set :_isMedian.2:i 1
-set *tmp112 247
-jump 258 always 0 0
+set *tmp112 252
+jump 263 always 0 0
 set :_isMedian.2:i 1
-set *tmp112 250
-jump 258 always 0 0
+set *tmp112 255
+jump 263 always 0 0
 set :_isMedian.2:i 1
-set *tmp112 253
-jump 258 always 0 0
+set *tmp112 258
+jump 263 always 0 0
 set :_isMedian.2:i 5
-set *tmp112 256
-jump 258 always 0 0
+set *tmp112 261
+jump 263 always 0 0
 set :_isMedian.2:i 5
-set *tmp112 264
-jump 261 greaterThanEq :_isMedian.2:i :_median.2:i
+set *tmp112 269
+jump 266 greaterThanEq :_isMedian.2:i :_median.2:i
 op add :_isMedian.2:lt :_isMedian.2:lt 1
 set @counter *tmp112
-jump 263 lessThanEq :_isMedian.2:i :_median.2:i
+jump 268 lessThanEq :_isMedian.2:i :_median.2:i
 op add :_isMedian.2:gt :_isMedian.2:gt 1
 set @counter *tmp112
 op sub *tmp117 :_isMedian.2:gt :_isMedian.2:lt
 op abs :_isMedian.2:dif *tmp117 0
-set *tmp122 false
 op add *tmp119 :_isMedian.2:gt :_isMedian.2:lt
-jump 270 lessThan *tmp119 5
-op equal *tmp122 :_isMedian.2:gt :_isMedian.2:lt
-jump 273 equal *tmp122 false
+op equal *tmp363 :_isMedian.2:gt :_isMedian.2:lt
+select *tmp122 greaterThanEq *tmp119 5 *tmp363 false
+jump 277 equal *tmp122 false
 set *tmp109 :_median.2:i
-jump 283 always 0 0
-jump 278 greaterThanEq :_isMedian.2:dif :_median.2:bestDif
+jump 287 always 0 0
+jump 282 greaterThanEq :_isMedian.2:dif :_median.2:bestDif
 set :_median.2:bestDif :_isMedian.2:dif
 set :_median.2:best :_median.2:i
 set :_median.2:count 1
 set @counter *tmp110
-jump 281 greaterThan :_isMedian.2:dif :_median.2:bestDif
+jump 285 greaterThan :_isMedian.2:dif :_median.2:bestDif
 op add :_median.2:best :_median.2:best :_median.2:i
 op add :_median.2:count :_median.2:count 1
 set @counter *tmp110
@@ -286,62 +290,61 @@ set :_median.3:bestDif 10000000000
 set :_median.3:best null
 set :_median.3:count 1
 set :_median.3:i 1
-set *tmp132 290
-jump 304 always 0 0
+set *tmp132 294
+jump 308 always 0 0
 set :_median.3:i 1
-set *tmp132 293
-jump 304 always 0 0
+set *tmp132 297
+jump 308 always 0 0
 set :_median.3:i 1
-set *tmp132 296
-jump 304 always 0 0
+set *tmp132 300
+jump 308 always 0 0
 set :_median.3:i 5
-set *tmp132 299
-jump 304 always 0 0
+set *tmp132 303
+jump 308 always 0 0
 set :_median.3:i 5
-set *tmp132 302
-jump 304 always 0 0
+set *tmp132 306
+jump 308 always 0 0
 set :_median.3:i 5
-set *tmp132 347
+set *tmp132 350
 set :_isMedian.3:lt 0
 set :_isMedian.3:gt 0
 set :_isMedian.3:i 1
-set *tmp134 309
-jump 323 always 0 0
+set *tmp134 313
+jump 327 always 0 0
 set :_isMedian.3:i 1
-set *tmp134 312
-jump 323 always 0 0
+set *tmp134 316
+jump 327 always 0 0
 set :_isMedian.3:i 1
-set *tmp134 315
-jump 323 always 0 0
+set *tmp134 319
+jump 327 always 0 0
 set :_isMedian.3:i 5
-set *tmp134 318
-jump 323 always 0 0
+set *tmp134 322
+jump 327 always 0 0
 set :_isMedian.3:i 5
-set *tmp134 321
-jump 323 always 0 0
+set *tmp134 325
+jump 327 always 0 0
 set :_isMedian.3:i 5
-set *tmp134 329
-jump 326 greaterThanEq :_isMedian.3:i :_median.3:i
+set *tmp134 333
+jump 330 greaterThanEq :_isMedian.3:i :_median.3:i
 op add :_isMedian.3:lt :_isMedian.3:lt 1
 set @counter *tmp134
-jump 328 lessThanEq :_isMedian.3:i :_median.3:i
+jump 332 lessThanEq :_isMedian.3:i :_median.3:i
 op add :_isMedian.3:gt :_isMedian.3:gt 1
 set @counter *tmp134
 op sub *tmp139 :_isMedian.3:gt :_isMedian.3:lt
 op abs :_isMedian.3:dif *tmp139 0
-set *tmp144 false
 op add *tmp141 :_isMedian.3:gt :_isMedian.3:lt
-jump 335 lessThan *tmp141 5
-op equal *tmp144 :_isMedian.3:gt :_isMedian.3:lt
-jump 338 equal *tmp144 false
+op equal *tmp364 :_isMedian.3:gt :_isMedian.3:lt
+select *tmp144 greaterThanEq *tmp141 5 *tmp364 false
+jump 341 equal *tmp144 false
 set *tmp131 :_median.3:i
-jump 348 always 0 0
-jump 343 greaterThanEq :_isMedian.3:dif :_median.3:bestDif
+jump 351 always 0 0
+jump 346 greaterThanEq :_isMedian.3:dif :_median.3:bestDif
 set :_median.3:bestDif :_isMedian.3:dif
 set :_median.3:best :_median.3:i
 set :_median.3:count 1
 set @counter *tmp132
-jump 346 greaterThan :_isMedian.3:dif :_median.3:bestDif
+jump 349 greaterThan :_isMedian.3:dif :_median.3:bestDif
 op add :_median.3:best :_median.3:best :_median.3:i
 op add :_median.3:count :_median.3:count 1
 set @counter *tmp132
@@ -351,62 +354,61 @@ set :_median.4:bestDif 10000000000
 set :_median.4:best null
 set :_median.4:count 1
 set :_median.4:i 1
-set *tmp154 355
-jump 369 always 0 0
-set :_median.4:i 1
 set *tmp154 358
-jump 369 always 0 0
-set :_median.4:i 5
+jump 372 always 0 0
+set :_median.4:i 1
 set *tmp154 361
-jump 369 always 0 0
+jump 372 always 0 0
 set :_median.4:i 5
 set *tmp154 364
-jump 369 always 0 0
+jump 372 always 0 0
 set :_median.4:i 5
 set *tmp154 367
-jump 369 always 0 0
+jump 372 always 0 0
 set :_median.4:i 5
-set *tmp154 412
+set *tmp154 370
+jump 372 always 0 0
+set :_median.4:i 5
+set *tmp154 414
 set :_isMedian.4:lt 0
 set :_isMedian.4:gt 0
 set :_isMedian.4:i 1
-set *tmp156 374
-jump 388 always 0 0
-set :_isMedian.4:i 1
 set *tmp156 377
-jump 388 always 0 0
-set :_isMedian.4:i 5
+jump 391 always 0 0
+set :_isMedian.4:i 1
 set *tmp156 380
-jump 388 always 0 0
+jump 391 always 0 0
 set :_isMedian.4:i 5
 set *tmp156 383
-jump 388 always 0 0
+jump 391 always 0 0
 set :_isMedian.4:i 5
 set *tmp156 386
-jump 388 always 0 0
+jump 391 always 0 0
 set :_isMedian.4:i 5
-set *tmp156 394
-jump 391 greaterThanEq :_isMedian.4:i :_median.4:i
+set *tmp156 389
+jump 391 always 0 0
+set :_isMedian.4:i 5
+set *tmp156 397
+jump 394 greaterThanEq :_isMedian.4:i :_median.4:i
 op add :_isMedian.4:lt :_isMedian.4:lt 1
 set @counter *tmp156
-jump 393 lessThanEq :_isMedian.4:i :_median.4:i
+jump 396 lessThanEq :_isMedian.4:i :_median.4:i
 op add :_isMedian.4:gt :_isMedian.4:gt 1
 set @counter *tmp156
 op sub *tmp161 :_isMedian.4:gt :_isMedian.4:lt
 op abs :_isMedian.4:dif *tmp161 0
-set *tmp166 false
 op add *tmp163 :_isMedian.4:gt :_isMedian.4:lt
-jump 400 lessThan *tmp163 5
-op equal *tmp166 :_isMedian.4:gt :_isMedian.4:lt
-jump 403 equal *tmp166 false
+op equal *tmp365 :_isMedian.4:gt :_isMedian.4:lt
+select *tmp166 greaterThanEq *tmp163 5 *tmp365 false
+jump 405 equal *tmp166 false
 set *tmp153 :_median.4:i
-jump 413 always 0 0
-jump 408 greaterThanEq :_isMedian.4:dif :_median.4:bestDif
+jump 415 always 0 0
+jump 410 greaterThanEq :_isMedian.4:dif :_median.4:bestDif
 set :_median.4:bestDif :_isMedian.4:dif
 set :_median.4:best :_median.4:i
 set :_median.4:count 1
 set @counter *tmp154
-jump 411 greaterThan :_isMedian.4:dif :_median.4:bestDif
+jump 413 greaterThan :_isMedian.4:dif :_median.4:bestDif
 op add :_median.4:best :_median.4:best :_median.4:i
 op add :_median.4:count :_median.4:count 1
 set @counter *tmp154
@@ -416,62 +418,61 @@ set :_median.5:bestDif 10000000000
 set :_median.5:best null
 set :_median.5:count 1
 set :_median.5:i 1
-set *tmp176 420
-jump 434 always 0 0
+set *tmp176 422
+jump 436 always 0 0
 set :_median.5:i 5
-set *tmp176 423
-jump 434 always 0 0
+set *tmp176 425
+jump 436 always 0 0
 set :_median.5:i 5
-set *tmp176 426
-jump 434 always 0 0
+set *tmp176 428
+jump 436 always 0 0
 set :_median.5:i 5
-set *tmp176 429
-jump 434 always 0 0
+set *tmp176 431
+jump 436 always 0 0
 set :_median.5:i 5
-set *tmp176 432
-jump 434 always 0 0
+set *tmp176 434
+jump 436 always 0 0
 set :_median.5:i 5
-set *tmp176 477
+set *tmp176 478
 set :_isMedian.5:lt 0
 set :_isMedian.5:gt 0
 set :_isMedian.5:i 1
-set *tmp178 439
-jump 453 always 0 0
+set *tmp178 441
+jump 455 always 0 0
 set :_isMedian.5:i 5
-set *tmp178 442
-jump 453 always 0 0
+set *tmp178 444
+jump 455 always 0 0
 set :_isMedian.5:i 5
-set *tmp178 445
-jump 453 always 0 0
+set *tmp178 447
+jump 455 always 0 0
 set :_isMedian.5:i 5
-set *tmp178 448
-jump 453 always 0 0
+set *tmp178 450
+jump 455 always 0 0
 set :_isMedian.5:i 5
-set *tmp178 451
-jump 453 always 0 0
+set *tmp178 453
+jump 455 always 0 0
 set :_isMedian.5:i 5
-set *tmp178 459
-jump 456 greaterThanEq :_isMedian.5:i :_median.5:i
+set *tmp178 461
+jump 458 greaterThanEq :_isMedian.5:i :_median.5:i
 op add :_isMedian.5:lt :_isMedian.5:lt 1
 set @counter *tmp178
-jump 458 lessThanEq :_isMedian.5:i :_median.5:i
+jump 460 lessThanEq :_isMedian.5:i :_median.5:i
 op add :_isMedian.5:gt :_isMedian.5:gt 1
 set @counter *tmp178
 op sub *tmp183 :_isMedian.5:gt :_isMedian.5:lt
 op abs :_isMedian.5:dif *tmp183 0
-set *tmp188 false
 op add *tmp185 :_isMedian.5:gt :_isMedian.5:lt
-jump 465 lessThan *tmp185 5
-op equal *tmp188 :_isMedian.5:gt :_isMedian.5:lt
-jump 468 equal *tmp188 false
+op equal *tmp366 :_isMedian.5:gt :_isMedian.5:lt
+select *tmp188 greaterThanEq *tmp185 5 *tmp366 false
+jump 469 equal *tmp188 false
 set *tmp175 :_median.5:i
-jump 478 always 0 0
-jump 473 greaterThanEq :_isMedian.5:dif :_median.5:bestDif
+jump 479 always 0 0
+jump 474 greaterThanEq :_isMedian.5:dif :_median.5:bestDif
 set :_median.5:bestDif :_isMedian.5:dif
 set :_median.5:best :_median.5:i
 set :_median.5:count 1
 set @counter *tmp176
-jump 476 greaterThan :_isMedian.5:dif :_median.5:bestDif
+jump 477 greaterThan :_isMedian.5:dif :_median.5:bestDif
 op add :_median.5:best :_median.5:best :_median.5:i
 op add :_median.5:count :_median.5:count 1
 set @counter *tmp176
@@ -480,23 +481,23 @@ assertequals 5 *tmp175 "median(1,5,5,5,5,5)"
 set :_median.6:bestDif 10000000000
 set :_median.6:best null
 set :_median.6:count 1
-set *tmp198 484
-jump 493 always 0 0
-set *tmp198 486
-jump 493 always 0 0
-set *tmp198 488
-jump 493 always 0 0
-set *tmp198 490
-jump 493 always 0 0
-set *tmp198 492
-jump 493 always 0 0
-set *tmp198 502
-jump 498 greaterThanEq 0 :_median.6:bestDif
+set *tmp198 485
+jump 494 always 0 0
+set *tmp198 487
+jump 494 always 0 0
+set *tmp198 489
+jump 494 always 0 0
+set *tmp198 491
+jump 494 always 0 0
+set *tmp198 493
+jump 494 always 0 0
+set *tmp198 503
+jump 499 greaterThanEq 0 :_median.6:bestDif
 set :_median.6:bestDif 0
 set :_median.6:best 5
 set :_median.6:count 1
 set @counter *tmp198
-jump 501 greaterThan 0 :_median.6:bestDif
+jump 502 greaterThan 0 :_median.6:bestDif
 op add :_median.6:best :_median.6:best 5
 op add :_median.6:count :_median.6:count 1
 set @counter *tmp198
@@ -506,38 +507,37 @@ set :_median.7:bestDif 10000000000
 set :_median.7:best null
 set :_median.7:count 1
 set :_median.7:i 1
-set *tmp220 510
-jump 533 always 0 0
+set *tmp220 511
+jump 534 always 0 0
 set :_median.7:i 2
-set *tmp220 513
-jump 533 always 0 0
+set *tmp220 514
+jump 534 always 0 0
 set :_median.7:i 3
-set *tmp220 516
-jump 533 always 0 0
+set *tmp220 517
+jump 534 always 0 0
 set :_median.7:i 4
-set *tmp220 519
-jump 533 always 0 0
+set *tmp220 520
+jump 534 always 0 0
 set :_median.7:i 5
-set *tmp220 522
-jump 533 always 0 0
+set *tmp220 523
+jump 534 always 0 0
 set :_median.7:i 6
-set *tmp220 525
-jump 533 always 0 0
+set *tmp220 526
+jump 534 always 0 0
 set :_median.7:i 7
-set *tmp220 528
-jump 533 always 0 0
+set *tmp220 529
+jump 534 always 0 0
 set :_median.7:i 8
-set *tmp220 531
-jump 533 always 0 0
+set *tmp220 532
+jump 534 always 0 0
 set :_median.7:i 9
-set *tmp220 598
+set *tmp220 597
 set :_isMedian.7:lt 0
 set :_isMedian.7:gt 0
-jump 538 greaterThanEq 1 :_median.7:i
+jump 539 greaterThanEq 1 :_median.7:i
 set :_isMedian.7:lt 1
 jump 540 always 0 0
-jump 540 lessThanEq 1 :_median.7:i
-set :_isMedian.7:gt 1
+select :_isMedian.7:gt greaterThan 1 :_median.7:i 1 0
 jump 543 greaterThanEq 2 :_median.7:i
 op add :_isMedian.7:lt :_isMedian.7:lt 1
 jump 545 always 0 0
@@ -580,19 +580,18 @@ jump 580 lessThanEq 9 :_median.7:i
 op add :_isMedian.7:gt :_isMedian.7:gt 1
 op sub *tmp227 :_isMedian.7:gt :_isMedian.7:lt
 op abs :_isMedian.7:dif *tmp227 0
-set *tmp232 false
 op add *tmp229 :_isMedian.7:gt :_isMedian.7:lt
-jump 586 lessThan *tmp229 8
-op equal *tmp232 :_isMedian.7:gt :_isMedian.7:lt
-jump 589 equal *tmp232 false
+op equal *tmp367 :_isMedian.7:gt :_isMedian.7:lt
+select *tmp232 greaterThanEq *tmp229 8 *tmp367 false
+jump 588 equal *tmp232 false
 set *tmp219 :_median.7:i
-jump 599 always 0 0
-jump 594 greaterThanEq :_isMedian.7:dif :_median.7:bestDif
+jump 598 always 0 0
+jump 593 greaterThanEq :_isMedian.7:dif :_median.7:bestDif
 set :_median.7:bestDif :_isMedian.7:dif
 set :_median.7:best :_median.7:i
 set :_median.7:count 1
 set @counter *tmp220
-jump 597 greaterThan :_isMedian.7:dif :_median.7:bestDif
+jump 596 greaterThan :_isMedian.7:dif :_median.7:bestDif
 op add :_median.7:best :_median.7:best :_median.7:i
 op add :_median.7:count :_median.7:count 1
 set @counter *tmp220
@@ -602,93 +601,91 @@ set :_median.8:bestDif 10000000000
 set :_median.8:best null
 set :_median.8:count 1
 set :_median.8:i 9
-set *tmp242 606
-jump 629 always 0 0
+set *tmp242 605
+jump 628 always 0 0
 set :_median.8:i 8
-set *tmp242 609
-jump 629 always 0 0
+set *tmp242 608
+jump 628 always 0 0
 set :_median.8:i 7
-set *tmp242 612
-jump 629 always 0 0
+set *tmp242 611
+jump 628 always 0 0
 set :_median.8:i 6
-set *tmp242 615
-jump 629 always 0 0
+set *tmp242 614
+jump 628 always 0 0
 set :_median.8:i 5
-set *tmp242 618
-jump 629 always 0 0
+set *tmp242 617
+jump 628 always 0 0
 set :_median.8:i 4
-set *tmp242 621
-jump 629 always 0 0
+set *tmp242 620
+jump 628 always 0 0
 set :_median.8:i 3
-set *tmp242 624
-jump 629 always 0 0
+set *tmp242 623
+jump 628 always 0 0
 set :_median.8:i 2
-set *tmp242 627
-jump 629 always 0 0
+set *tmp242 626
+jump 628 always 0 0
 set :_median.8:i 1
-set *tmp242 694
+set *tmp242 691
 set :_isMedian.8:lt 0
 set :_isMedian.8:gt 0
-jump 634 greaterThanEq 9 :_median.8:i
+jump 633 greaterThanEq 9 :_median.8:i
 set :_isMedian.8:lt 1
-jump 636 always 0 0
-jump 636 lessThanEq 9 :_median.8:i
-set :_isMedian.8:gt 1
-jump 639 greaterThanEq 8 :_median.8:i
+jump 634 always 0 0
+select :_isMedian.8:gt greaterThan 9 :_median.8:i 1 0
+jump 637 greaterThanEq 8 :_median.8:i
 op add :_isMedian.8:lt :_isMedian.8:lt 1
-jump 641 always 0 0
-jump 641 lessThanEq 8 :_median.8:i
+jump 639 always 0 0
+jump 639 lessThanEq 8 :_median.8:i
 op add :_isMedian.8:gt :_isMedian.8:gt 1
-jump 644 greaterThanEq 7 :_median.8:i
+jump 642 greaterThanEq 7 :_median.8:i
 op add :_isMedian.8:lt :_isMedian.8:lt 1
-jump 646 always 0 0
-jump 646 lessThanEq 7 :_median.8:i
+jump 644 always 0 0
+jump 644 lessThanEq 7 :_median.8:i
 op add :_isMedian.8:gt :_isMedian.8:gt 1
-jump 649 greaterThanEq 6 :_median.8:i
+jump 647 greaterThanEq 6 :_median.8:i
 op add :_isMedian.8:lt :_isMedian.8:lt 1
-jump 651 always 0 0
-jump 651 lessThanEq 6 :_median.8:i
+jump 649 always 0 0
+jump 649 lessThanEq 6 :_median.8:i
 op add :_isMedian.8:gt :_isMedian.8:gt 1
-jump 654 greaterThanEq 5 :_median.8:i
+jump 652 greaterThanEq 5 :_median.8:i
 op add :_isMedian.8:lt :_isMedian.8:lt 1
-jump 656 always 0 0
-jump 656 lessThanEq 5 :_median.8:i
+jump 654 always 0 0
+jump 654 lessThanEq 5 :_median.8:i
 op add :_isMedian.8:gt :_isMedian.8:gt 1
-jump 659 greaterThanEq 4 :_median.8:i
+jump 657 greaterThanEq 4 :_median.8:i
 op add :_isMedian.8:lt :_isMedian.8:lt 1
-jump 661 always 0 0
-jump 661 lessThanEq 4 :_median.8:i
+jump 659 always 0 0
+jump 659 lessThanEq 4 :_median.8:i
 op add :_isMedian.8:gt :_isMedian.8:gt 1
-jump 664 greaterThanEq 3 :_median.8:i
+jump 662 greaterThanEq 3 :_median.8:i
 op add :_isMedian.8:lt :_isMedian.8:lt 1
-jump 666 always 0 0
-jump 666 lessThanEq 3 :_median.8:i
+jump 664 always 0 0
+jump 664 lessThanEq 3 :_median.8:i
 op add :_isMedian.8:gt :_isMedian.8:gt 1
-jump 669 greaterThanEq 2 :_median.8:i
+jump 667 greaterThanEq 2 :_median.8:i
 op add :_isMedian.8:lt :_isMedian.8:lt 1
-jump 671 always 0 0
-jump 671 lessThanEq 2 :_median.8:i
+jump 669 always 0 0
+jump 669 lessThanEq 2 :_median.8:i
 op add :_isMedian.8:gt :_isMedian.8:gt 1
-jump 674 greaterThanEq 1 :_median.8:i
+jump 672 greaterThanEq 1 :_median.8:i
 op add :_isMedian.8:lt :_isMedian.8:lt 1
-jump 676 always 0 0
-jump 676 lessThanEq 1 :_median.8:i
+jump 674 always 0 0
+jump 674 lessThanEq 1 :_median.8:i
 op add :_isMedian.8:gt :_isMedian.8:gt 1
 op sub *tmp249 :_isMedian.8:gt :_isMedian.8:lt
 op abs :_isMedian.8:dif *tmp249 0
-set *tmp254 false
 op add *tmp251 :_isMedian.8:gt :_isMedian.8:lt
-jump 682 lessThan *tmp251 8
-op equal *tmp254 :_isMedian.8:gt :_isMedian.8:lt
-jump 685 equal *tmp254 false
+op equal *tmp368 :_isMedian.8:gt :_isMedian.8:lt
+select *tmp254 greaterThanEq *tmp251 8 *tmp368 false
+jump 682 equal *tmp254 false
 set *tmp241 :_median.8:i
-jump 695 always 0 0
-jump 690 greaterThanEq :_isMedian.8:dif :_median.8:bestDif
+jump 692 always 0 0
+jump 687 greaterThanEq :_isMedian.8:dif :_median.8:bestDif
 set :_median.8:bestDif :_isMedian.8:dif
 set :_median.8:best :_median.8:i
 set :_median.8:count 1
 set @counter *tmp242
-jump 693 greaterThan :_isMedian.8:dif :_median.8:bestDif
+jump 690 greaterThan :_isMedian.8:dif :_median.8:bestDif
 op add :_median.8:best :_median.8:best :_median.8:i
 op add :_median.8:count :_median.8:count 1
 set @counter *tmp242
@@ -698,93 +695,91 @@ set :_median.9:bestDif 10000000000
 set :_median.9:best null
 set :_median.9:count 1
 set :_median.9:i 1
-set *tmp264 702
-jump 725 always 0 0
+set *tmp264 699
+jump 722 always 0 0
 set :_median.9:i 3
-set *tmp264 705
-jump 725 always 0 0
+set *tmp264 702
+jump 722 always 0 0
 set :_median.9:i 5
-set *tmp264 708
-jump 725 always 0 0
+set *tmp264 705
+jump 722 always 0 0
 set :_median.9:i 7
-set *tmp264 711
-jump 725 always 0 0
+set *tmp264 708
+jump 722 always 0 0
 set :_median.9:i 9
-set *tmp264 714
-jump 725 always 0 0
+set *tmp264 711
+jump 722 always 0 0
 set :_median.9:i 2
-set *tmp264 717
-jump 725 always 0 0
+set *tmp264 714
+jump 722 always 0 0
 set :_median.9:i 4
-set *tmp264 720
-jump 725 always 0 0
+set *tmp264 717
+jump 722 always 0 0
 set :_median.9:i 6
-set *tmp264 723
-jump 725 always 0 0
+set *tmp264 720
+jump 722 always 0 0
 set :_median.9:i 8
-set *tmp264 790
+set *tmp264 785
 set :_isMedian.9:lt 0
 set :_isMedian.9:gt 0
-jump 730 greaterThanEq 1 :_median.9:i
+jump 727 greaterThanEq 1 :_median.9:i
 set :_isMedian.9:lt 1
-jump 732 always 0 0
-jump 732 lessThanEq 1 :_median.9:i
-set :_isMedian.9:gt 1
-jump 735 greaterThanEq 3 :_median.9:i
+jump 728 always 0 0
+select :_isMedian.9:gt greaterThan 1 :_median.9:i 1 0
+jump 731 greaterThanEq 3 :_median.9:i
 op add :_isMedian.9:lt :_isMedian.9:lt 1
-jump 737 always 0 0
-jump 737 lessThanEq 3 :_median.9:i
+jump 733 always 0 0
+jump 733 lessThanEq 3 :_median.9:i
 op add :_isMedian.9:gt :_isMedian.9:gt 1
-jump 740 greaterThanEq 5 :_median.9:i
+jump 736 greaterThanEq 5 :_median.9:i
 op add :_isMedian.9:lt :_isMedian.9:lt 1
-jump 742 always 0 0
-jump 742 lessThanEq 5 :_median.9:i
+jump 738 always 0 0
+jump 738 lessThanEq 5 :_median.9:i
 op add :_isMedian.9:gt :_isMedian.9:gt 1
-jump 745 greaterThanEq 7 :_median.9:i
+jump 741 greaterThanEq 7 :_median.9:i
 op add :_isMedian.9:lt :_isMedian.9:lt 1
-jump 747 always 0 0
-jump 747 lessThanEq 7 :_median.9:i
+jump 743 always 0 0
+jump 743 lessThanEq 7 :_median.9:i
 op add :_isMedian.9:gt :_isMedian.9:gt 1
-jump 750 greaterThanEq 9 :_median.9:i
+jump 746 greaterThanEq 9 :_median.9:i
 op add :_isMedian.9:lt :_isMedian.9:lt 1
-jump 752 always 0 0
-jump 752 lessThanEq 9 :_median.9:i
+jump 748 always 0 0
+jump 748 lessThanEq 9 :_median.9:i
 op add :_isMedian.9:gt :_isMedian.9:gt 1
-jump 755 greaterThanEq 2 :_median.9:i
+jump 751 greaterThanEq 2 :_median.9:i
 op add :_isMedian.9:lt :_isMedian.9:lt 1
-jump 757 always 0 0
-jump 757 lessThanEq 2 :_median.9:i
+jump 753 always 0 0
+jump 753 lessThanEq 2 :_median.9:i
 op add :_isMedian.9:gt :_isMedian.9:gt 1
-jump 760 greaterThanEq 4 :_median.9:i
+jump 756 greaterThanEq 4 :_median.9:i
 op add :_isMedian.9:lt :_isMedian.9:lt 1
-jump 762 always 0 0
-jump 762 lessThanEq 4 :_median.9:i
+jump 758 always 0 0
+jump 758 lessThanEq 4 :_median.9:i
 op add :_isMedian.9:gt :_isMedian.9:gt 1
-jump 765 greaterThanEq 6 :_median.9:i
+jump 761 greaterThanEq 6 :_median.9:i
 op add :_isMedian.9:lt :_isMedian.9:lt 1
-jump 767 always 0 0
-jump 767 lessThanEq 6 :_median.9:i
+jump 763 always 0 0
+jump 763 lessThanEq 6 :_median.9:i
 op add :_isMedian.9:gt :_isMedian.9:gt 1
-jump 770 greaterThanEq 8 :_median.9:i
+jump 766 greaterThanEq 8 :_median.9:i
 op add :_isMedian.9:lt :_isMedian.9:lt 1
-jump 772 always 0 0
-jump 772 lessThanEq 8 :_median.9:i
+jump 768 always 0 0
+jump 768 lessThanEq 8 :_median.9:i
 op add :_isMedian.9:gt :_isMedian.9:gt 1
 op sub *tmp271 :_isMedian.9:gt :_isMedian.9:lt
 op abs :_isMedian.9:dif *tmp271 0
-set *tmp276 false
 op add *tmp273 :_isMedian.9:gt :_isMedian.9:lt
-jump 778 lessThan *tmp273 8
-op equal *tmp276 :_isMedian.9:gt :_isMedian.9:lt
-jump 781 equal *tmp276 false
+op equal *tmp369 :_isMedian.9:gt :_isMedian.9:lt
+select *tmp276 greaterThanEq *tmp273 8 *tmp369 false
+jump 776 equal *tmp276 false
 set *tmp263 :_median.9:i
-jump 791 always 0 0
-jump 786 greaterThanEq :_isMedian.9:dif :_median.9:bestDif
+jump 786 always 0 0
+jump 781 greaterThanEq :_isMedian.9:dif :_median.9:bestDif
 set :_median.9:bestDif :_isMedian.9:dif
 set :_median.9:best :_median.9:i
 set :_median.9:count 1
 set @counter *tmp264
-jump 789 greaterThan :_isMedian.9:dif :_median.9:bestDif
+jump 784 greaterThan :_isMedian.9:dif :_median.9:bestDif
 op add :_median.9:best :_median.9:best :_median.9:i
 op add :_median.9:count :_median.9:count 1
 set @counter *tmp264
@@ -794,80 +789,79 @@ set :_median.10:bestDif 10000000000
 set :_median.10:best null
 set :_median.10:count 1
 set :_median.10:i 7
-set *tmp286 798
-jump 821 always 0 0
+set *tmp286 793
+jump 816 always 0 0
 set :_median.10:i 4
-set *tmp286 801
-jump 821 always 0 0
+set *tmp286 796
+jump 816 always 0 0
 set :_median.10:i 2
-set *tmp286 804
-jump 821 always 0 0
+set *tmp286 799
+jump 816 always 0 0
 set :_median.10:i 8
-set *tmp286 807
-jump 821 always 0 0
+set *tmp286 802
+jump 816 always 0 0
 set :_median.10:i 1
-set *tmp286 810
-jump 821 always 0 0
+set *tmp286 805
+jump 816 always 0 0
 set :_median.10:i 5
-set *tmp286 813
-jump 821 always 0 0
+set *tmp286 808
+jump 816 always 0 0
 set :_median.10:i 6
-set *tmp286 816
-jump 821 always 0 0
+set *tmp286 811
+jump 816 always 0 0
 set :_median.10:i 9
-set *tmp286 819
-jump 821 always 0 0
+set *tmp286 814
+jump 816 always 0 0
 set :_median.10:i 3
-set *tmp286 873
+set *tmp286 867
 set :_isMedian.10:lt 0
 set :_isMedian.10:gt 0
 set :_isMedian.10:i 7
-set *tmp288 826
-jump 849 always 0 0
+set *tmp288 821
+jump 844 always 0 0
 set :_isMedian.10:i 4
-set *tmp288 829
-jump 849 always 0 0
+set *tmp288 824
+jump 844 always 0 0
 set :_isMedian.10:i 2
-set *tmp288 832
-jump 849 always 0 0
+set *tmp288 827
+jump 844 always 0 0
 set :_isMedian.10:i 8
-set *tmp288 835
-jump 849 always 0 0
+set *tmp288 830
+jump 844 always 0 0
 set :_isMedian.10:i 1
-set *tmp288 838
-jump 849 always 0 0
+set *tmp288 833
+jump 844 always 0 0
 set :_isMedian.10:i 5
-set *tmp288 841
-jump 849 always 0 0
+set *tmp288 836
+jump 844 always 0 0
 set :_isMedian.10:i 6
-set *tmp288 844
-jump 849 always 0 0
+set *tmp288 839
+jump 844 always 0 0
 set :_isMedian.10:i 9
-set *tmp288 847
-jump 849 always 0 0
+set *tmp288 842
+jump 844 always 0 0
 set :_isMedian.10:i 3
-set *tmp288 855
-jump 852 greaterThanEq :_isMedian.10:i :_median.10:i
+set *tmp288 850
+jump 847 greaterThanEq :_isMedian.10:i :_median.10:i
 op add :_isMedian.10:lt :_isMedian.10:lt 1
 set @counter *tmp288
-jump 854 lessThanEq :_isMedian.10:i :_median.10:i
+jump 849 lessThanEq :_isMedian.10:i :_median.10:i
 op add :_isMedian.10:gt :_isMedian.10:gt 1
 set @counter *tmp288
 op sub *tmp293 :_isMedian.10:gt :_isMedian.10:lt
 op abs :_isMedian.10:dif *tmp293 0
-set *tmp298 false
 op add *tmp295 :_isMedian.10:gt :_isMedian.10:lt
-jump 861 lessThan *tmp295 8
-op equal *tmp298 :_isMedian.10:gt :_isMedian.10:lt
-jump 864 equal *tmp298 false
+op equal *tmp370 :_isMedian.10:gt :_isMedian.10:lt
+select *tmp298 greaterThanEq *tmp295 8 *tmp370 false
+jump 858 equal *tmp298 false
 set *tmp285 :_median.10:i
-jump 874 always 0 0
-jump 869 greaterThanEq :_isMedian.10:dif :_median.10:bestDif
+jump 868 always 0 0
+jump 863 greaterThanEq :_isMedian.10:dif :_median.10:bestDif
 set :_median.10:bestDif :_isMedian.10:dif
 set :_median.10:best :_median.10:i
 set :_median.10:count 1
 set @counter *tmp286
-jump 872 greaterThan :_isMedian.10:dif :_median.10:bestDif
+jump 866 greaterThan :_isMedian.10:dif :_median.10:bestDif
 op add :_median.10:best :_median.10:best :_median.10:i
 op add :_median.10:count :_median.10:count 1
 set @counter *tmp286
@@ -877,80 +871,79 @@ set :_median.11:bestDif 10000000000
 set :_median.11:best null
 set :_median.11:count 1
 set :_median.11:i 1
+set *tmp308 875
+jump 898 always 0 0
+set :_median.11:i 1
+set *tmp308 878
+jump 898 always 0 0
+set :_median.11:i 1
 set *tmp308 881
-jump 904 always 0 0
+jump 898 always 0 0
 set :_median.11:i 1
 set *tmp308 884
-jump 904 always 0 0
-set :_median.11:i 1
+jump 898 always 0 0
+set :_median.11:i 9
 set *tmp308 887
-jump 904 always 0 0
-set :_median.11:i 1
+jump 898 always 0 0
+set :_median.11:i 9
 set *tmp308 890
-jump 904 always 0 0
+jump 898 always 0 0
 set :_median.11:i 9
 set *tmp308 893
-jump 904 always 0 0
+jump 898 always 0 0
 set :_median.11:i 9
 set *tmp308 896
-jump 904 always 0 0
-set :_median.11:i 9
-set *tmp308 899
-jump 904 always 0 0
-set :_median.11:i 9
-set *tmp308 902
-jump 904 always 0 0
+jump 898 always 0 0
 set :_median.11:i 5
-set *tmp308 956
+set *tmp308 949
 set :_isMedian.11:lt 0
 set :_isMedian.11:gt 0
 set :_isMedian.11:i 1
+set *tmp310 903
+jump 926 always 0 0
+set :_isMedian.11:i 1
+set *tmp310 906
+jump 926 always 0 0
+set :_isMedian.11:i 1
 set *tmp310 909
-jump 932 always 0 0
+jump 926 always 0 0
 set :_isMedian.11:i 1
 set *tmp310 912
-jump 932 always 0 0
-set :_isMedian.11:i 1
+jump 926 always 0 0
+set :_isMedian.11:i 9
 set *tmp310 915
-jump 932 always 0 0
-set :_isMedian.11:i 1
+jump 926 always 0 0
+set :_isMedian.11:i 9
 set *tmp310 918
-jump 932 always 0 0
+jump 926 always 0 0
 set :_isMedian.11:i 9
 set *tmp310 921
-jump 932 always 0 0
+jump 926 always 0 0
 set :_isMedian.11:i 9
 set *tmp310 924
-jump 932 always 0 0
-set :_isMedian.11:i 9
-set *tmp310 927
-jump 932 always 0 0
-set :_isMedian.11:i 9
-set *tmp310 930
-jump 932 always 0 0
+jump 926 always 0 0
 set :_isMedian.11:i 5
-set *tmp310 938
-jump 935 greaterThanEq :_isMedian.11:i :_median.11:i
+set *tmp310 932
+jump 929 greaterThanEq :_isMedian.11:i :_median.11:i
 op add :_isMedian.11:lt :_isMedian.11:lt 1
 set @counter *tmp310
-jump 937 lessThanEq :_isMedian.11:i :_median.11:i
+jump 931 lessThanEq :_isMedian.11:i :_median.11:i
 op add :_isMedian.11:gt :_isMedian.11:gt 1
 set @counter *tmp310
 op sub *tmp315 :_isMedian.11:gt :_isMedian.11:lt
 op abs :_isMedian.11:dif *tmp315 0
-set *tmp320 false
 op add *tmp317 :_isMedian.11:gt :_isMedian.11:lt
-jump 944 lessThan *tmp317 8
-op equal *tmp320 :_isMedian.11:gt :_isMedian.11:lt
-jump 947 equal *tmp320 false
+op equal *tmp371 :_isMedian.11:gt :_isMedian.11:lt
+select *tmp320 greaterThanEq *tmp317 8 *tmp371 false
+jump 940 equal *tmp320 false
 set *tmp307 :_median.11:i
-jump 957 always 0 0
-jump 952 greaterThanEq :_isMedian.11:dif :_median.11:bestDif
+jump 950 always 0 0
+jump 945 greaterThanEq :_isMedian.11:dif :_median.11:bestDif
 set :_median.11:bestDif :_isMedian.11:dif
 set :_median.11:best :_median.11:i
 set :_median.11:count 1
 set @counter *tmp308
-jump 955 greaterThan :_isMedian.11:dif :_median.11:bestDif
+jump 948 greaterThan :_isMedian.11:dif :_median.11:bestDif
 op add :_median.11:best :_median.11:best :_median.11:i
 op add :_median.11:count :_median.11:count 1
 set @counter *tmp308
@@ -960,13 +953,13 @@ stop
 end
 op max :median:y2 :median:x1 :median:x2
 op min :median:y3 :median:x3 :median:x4
-jump 966 greaterThan :median:y2 :median:y3
+jump 959 greaterThan :median:y2 :median:y3
 op add *tmp332 :median:y2 :median:y3
 op div :median*retval *tmp332 2
 set @counter :median*retaddr
 op min :median:y1 :median:x1 :median:x2
 op max :median:y4 :median:x3 :median:x4
-jump 972 lessThan :median:y1 :median:y4
+jump 965 lessThan :median:y1 :median:y4
 op add *tmp338 :median:y1 :median:y4
 op div :median*retval *tmp338 2
 set @counter :median*retaddr
@@ -979,18 +972,18 @@ op min :median.1:y1 :median.1:x1 :median.1:x2
 op max :median.1:y2 :median.1:x1 :median.1:x2
 op min :median.1:y4 :median.1:x4 :median.1:x5
 op max :median.1:y5 :median.1:x4 :median.1:x5
-jump 986 greaterThanEq :median.1:y4 :median.1:y1
+jump 979 greaterThanEq :median.1:y4 :median.1:y1
 set :median.1:y4 :median.1:y1
 set :_swap.1:t :median.1:y2
 set :median.1:y2 :median.1:y5
 set :median.1:y5 :_swap.1:t
-jump 991 lessThanEq :median.1:x3 :median.1:y2
+jump 984 lessThanEq :median.1:x3 :median.1:y2
 op min :median.1*retval :median.1:y2 :median.1:y5
-jump 994 greaterThanEq :median.1:y2 :median.1:y4
+jump 987 greaterThanEq :median.1:y2 :median.1:y4
 op min :median.1*retval :median.1:x3 :median.1:y4
 set @counter :median.1*retaddr
 op min :median.1*retval :median.1:y2 :median.1:y4
-jump 994 lessThanEq :median.1:x3 :median.1:y4
+jump 987 lessThanEq :median.1:x3 :median.1:y4
 op min :median.1*retval :median.1:x3 :median.1:y5
 set @counter :median.1*retaddr
 print "Compiled by Mindcode - github.com/cardillan/mindcode"
