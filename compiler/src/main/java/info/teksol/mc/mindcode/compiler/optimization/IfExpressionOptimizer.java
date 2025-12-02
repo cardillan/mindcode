@@ -254,24 +254,28 @@ class IfExpressionOptimizer extends BaseOptimizer {
         LogicInstruction lastFalse = getLastRealInstruction(falseBranch);
         JumpInstruction invertedJump = negateCompoundCondition(condition);
         boolean swappable = true;
-        boolean canMoveForward = true;
 
         // Can we rearrange branches?
         // Both branches set the same variable to some value as the last statement
         // Expensive tests last
         if (lastTrue instanceof LogicResultInstruction resTrue && lastFalse instanceof LogicResultInstruction resFalse
                 && resTrue.getResult().equals(resFalse.getResult())
-                && !resTrue.isUpdating() && !resFalse.isUpdating()
+                && !resTrue.isUpdating() && !resFalse.isUpdating() && !resTrue.getResult().isVolatile()
                 && isContained(trueBranch.toList()) && isContained(falseBranch.toList())) {
 
             LogicVariable resVar = resTrue.getResult();
-            LogicInstruction instructionAfter;
+            List<LogicInstruction> references = optimizationContext.getVariableReferences(resVar);
+            LogicInstruction instructionAfter = requireNonNull(instructionAfter(ifExpression));
+            boolean canMoveForward = resVar.isTemporaryVariable()
+                    ? references.stream().filter(LogicResultInstruction.class::isInstance)
+                            .map(LogicResultInstruction.class::cast).noneMatch(ix -> ix.getResult().isVolatile())
+                    : !resVar.isVolatile();
 
             // Replace the temporary variable with the actual target
             // Only if the temporary variable is not reused anywhere
             if (resVar.isTemporaryVariable()
-                    && isReplaceable(requireNonNull(instructionAfter = instructionAfter(ifExpression)), resVar)
-                    && instructionCount(ix -> ix.usesAsInput(resVar)) == 1) {
+                    && references.stream().filter(ix -> ix.usesAsInput(resVar)).toList().equals(List.of(instructionAfter))
+                    && isReplaceable(instructionAfter, resVar)) {
                 if (instructionAfter instanceof SetInstruction finalSet) {
                     resTrue = replaceInstruction(resTrue, resTrue.withResult(finalSet.getResult()));
                     resFalse = replaceInstruction(resFalse, resFalse.withResult(finalSet.getResult()));

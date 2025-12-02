@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.11.0 - Unreleased
 
+### Fixed
+
+* Some `select` optimizations were not applied when optimizing for size. As a result, code optimized for size might end up larger than code optimized for speed.
+* Some `select` optimizations may have been incorrect. Due to the previous bug, the probability of them being applied was low ([#290](https://github.com/cardillan/mindcode/issues/290)).
+* Fixed the wrong optimization of volatile variables in [If Expression Optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) ([#291](https://github.com/cardillan/mindcode/issues/291)).
+
 ### Added
 
 * Added the [`no-argument-padding` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-no-argument-padding). When activated, instructions are not padded to the maximum number of arguments.
