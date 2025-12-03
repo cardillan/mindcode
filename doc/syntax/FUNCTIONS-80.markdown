@@ -1,4 +1,4 @@
-# Function reference for Mindustry Logic 8.0
+# Function reference for target 8.0
 
 This document contains function reference for all built-in Mindcode functions. Functions are grouped by the
 instruction they encapsulate so that functions with similar logic are listed together. The Mindcode source
@@ -679,4 +679,4 @@ Add map locale property value to the text buffer. To set map locale bundles in m
 
 ---
 
-[« Previous: Function reference for Mindustry Logic 7.1](FUNCTIONS-71.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 8.1 »](FUNCTIONS-81.markdown)
+[« Previous: Function reference for target 7.1](FUNCTIONS-71.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for target 8.1 »](FUNCTIONS-81.markdown)

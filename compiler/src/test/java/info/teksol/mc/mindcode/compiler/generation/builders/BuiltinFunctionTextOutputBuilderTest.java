@@ -34,8 +34,8 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             a = ascii("AA");
                             b = ascii("BB");
                             """,
-                    createInstruction(SET, "a", "65"),
-                    createInstruction(SET, "b", "66")
+                    createInstruction(SET, ":a", "65"),
+                    createInstruction(SET, ":b", "66")
             );
         }
     }
@@ -177,12 +177,12 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             /// Iteration $i, value ${a + b}.
                             """,
-                    createInstruction(OP, "add", var(0), ":a", ":b"),
+                    createInstruction(OP, "add", tmp(0), ":a", ":b"),
                     createInstruction(REMARK, q("Iteration ")),
                     createInstruction(REMARK, ":i"),
                     createInstruction(REMARK, q(",")),
                     createInstruction(REMARK, q(" value ")),
-                    createInstruction(REMARK, var(0)),
+                    createInstruction(REMARK, tmp(0)),
                     createInstruction(REMARK, q("."))
             );
         }
@@ -193,9 +193,9 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             print($"Values: $first$second$third.");
                             """,
                     createInstruction(PRINT, q("Values: ")),
-                    createInstruction(PRINT, "first"),
-                    createInstruction(PRINT, "second"),
-                    createInstruction(PRINT, "third"),
+                    createInstruction(PRINT, ":first"),
+                    createInstruction(PRINT, ":second"),
+                    createInstruction(PRINT, ":third"),
                     createInstruction(PRINT, q("."))
             );
         }
@@ -218,9 +218,9 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             remark($"Value: $.", a * b);
                             """,
-                    createInstruction(OP, "mul", var(0), "a", "b"),
+                    createInstruction(OP, "mul", tmp(0), "a", "b"),
                     createInstruction(REMARK, q("Value: ")),
-                    createInstruction(REMARK, var(0)),
+                    createInstruction(REMARK, tmp(0)),
                     createInstruction(REMARK, q("."))
             );
         }
@@ -231,8 +231,8 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             remark($"Value: ${}$.", a, b);
                             """,
                     createInstruction(REMARK, q("Value: ")),
-                    createInstruction(REMARK, "a"),
-                    createInstruction(REMARK, "b"),
+                    createInstruction(REMARK, ":a"),
+                    createInstruction(REMARK, ":b"),
                     createInstruction(REMARK, q("."))
             );
         }
@@ -246,13 +246,13 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             
                             foo(10, 20);
                             """,
-                    createInstruction(SET, "__fn0_x", "10"),
-                    createInstruction(SET, "__fn0_y", "20"),
-                    createInstruction(OP, "add", var(0), "__fn0_x", "__fn0_y"),
+                    createInstruction(SET, ":foo:x", "10"),
+                    createInstruction(SET, ":foo:y", "20"),
+                    createInstruction(OP, "add", tmp(0), ":foo:x", ":foo:y"),
                     createInstruction(PRINT, q("Value: ")),
-                    createInstruction(PRINT, var(0)),
+                    createInstruction(PRINT, tmp(0)),
                     createInstruction(PRINT, q(".")),
-                    createInstruction(LABEL, var(1000))
+                    createInstruction(LABEL, label(0))
 
             );
         }
@@ -263,9 +263,9 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             const fmt = $"Value: ${x + y}.";
                             print(fmt);
                             """,
-                    createInstruction(OP, "add", var(0), "x", "y"),
+                    createInstruction(OP, "add", tmp(0), ":x", ":y"),
                     createInstruction(PRINT, q("Value: ")),
-                    createInstruction(PRINT, var(0)),
+                    createInstruction(PRINT, tmp(0)),
                     createInstruction(PRINT, q("."))
             );
         }
@@ -282,18 +282,18 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             x = y = 5;
                             print(fmt);
                             """,
-                    createInstruction(SET, "__fn0_x", "10"),
-                    createInstruction(SET, "__fn0_y", "20"),
-                    createInstruction(OP, "add", var(0), "__fn0_x", "__fn0_y"),
+                    createInstruction(SET, ":foo:x", "10"),
+                    createInstruction(SET, ":foo:y", "20"),
+                    createInstruction(OP, "add", tmp(0), ":foo:x", ":foo:y"),
                     createInstruction(PRINT, q("Value: ")),
-                    createInstruction(PRINT, var(0)),
+                    createInstruction(PRINT, tmp(0)),
                     createInstruction(PRINT, q(".")),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "y", "5"),
-                    createInstruction(SET, "x", "y"),
-                    createInstruction(OP, "add", var(1), "x", "y"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":y", "5"),
+                    createInstruction(SET, ":x", ":y"),
+                    createInstruction(OP, "add", tmp(1), ":x", ":y"),
                     createInstruction(PRINT, q("Value: ")),
-                    createInstruction(PRINT, var(1)),
+                    createInstruction(PRINT, tmp(1)),
                     createInstruction(PRINT, q("."))
             );
         }
@@ -315,13 +315,13 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, q("Value: ")),
                     createInstruction(PRINT, "3"),
                     createInstruction(PRINT, q(".")),
-                    createInstruction(SET, "__fn0_x", "10"),
-                    createInstruction(SET, "__fn0_y", "20"),
-                    createInstruction(OP, "add", var(0), "__fn0_x", "__fn0_y"),
+                    createInstruction(SET, ":foo:x", "10"),
+                    createInstruction(SET, ":foo:y", "20"),
+                    createInstruction(OP, "add", tmp(0), ":foo:x", ":foo:y"),
                     createInstruction(PRINT, q("Value: ")),
-                    createInstruction(PRINT, var(0)),
+                    createInstruction(PRINT, tmp(0)),
                     createInstruction(PRINT, q(".")),
-                    createInstruction(LABEL, var(1000))
+                    createInstruction(LABEL, label(0))
             );
         }
     }
@@ -364,9 +364,9 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             remark(a, b, c);
                             """,
-                    createInstruction(REMARK, "a"),
-                    createInstruction(REMARK, "b"),
-                    createInstruction(REMARK, "c")
+                    createInstruction(REMARK, ":a"),
+                    createInstruction(REMARK, ":b"),
+                    createInstruction(REMARK, ":c")
             );
         }
     }
@@ -378,9 +378,9 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             printf(format, name, value);
                             """,
-                    createInstruction(PRINT, "format"),
-                    createInstruction(FORMAT, "name"),
-                    createInstruction(FORMAT, "value")
+                    createInstruction(PRINT, ":format"),
+                    createInstruction(FORMAT, ":name"),
+                    createInstruction(FORMAT, ":value")
             );
         }
 

@@ -147,8 +147,8 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                         a = "A" + "B";
                         print(a);
                         """,
-                createInstruction(SET, "a", q("AB")),
-                createInstruction(PRINT, "a")
+                createInstruction(SET, ":a", q("AB")),
+                createInstruction(PRINT, ":a")
         );
     }
 
@@ -159,8 +159,8 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                         a = A + "B";
                         print(a);
                         """,
-                createInstruction(SET, "a", q("AB")),
-                createInstruction(PRINT, "a")
+                createInstruction(SET, ":a", q("AB")),
+                createInstruction(PRINT, ":a")
         );
     }
 
@@ -170,8 +170,8 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                         a = "[]" + ITEM_COAL;
                         print(a);
                         """,
-                createInstruction(SET, "a", q("[]" + ip.getMetadata().getIcons().getIconValue("ITEM_COAL").format(null))),
-                createInstruction(PRINT, "a")
+                createInstruction(SET, ":a", q("[]" + ip.getMetadata().getIcons().getIconValue("ITEM_COAL").format(null))),
+                createInstruction(PRINT, ":a")
         );
     }
 
@@ -182,8 +182,8 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                         a = "Total: " + COUNT;
                         print(a);
                         """,
-                createInstruction(SET, "a", q("Total: 10")),
-                createInstruction(PRINT, "a")
+                createInstruction(SET, ":a", q("Total: 10")),
+                createInstruction(PRINT, ":a")
         );
     }
 
@@ -194,8 +194,8 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                         a = TRUTH + " is true";
                         print(a);
                         """,
-                createInstruction(SET, "a", q("1 is true")),
-                createInstruction(PRINT, "a")
+                createInstruction(SET, ":a", q("1 is true")),
+                createInstruction(PRINT, ":a")
         );
     }
 
@@ -204,7 +204,7 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessage(
                 "Unsupported string expression.",
                 """
-                        a = "A" - "B";
+                        a = ":A" - ":B";
                         print(a);
                         """
         );
@@ -215,7 +215,7 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessage(
                 "Unsupported string expression.",
                 """
-                        a = "A" + B;
+                        a = ":A" + B;
                         print(a);
                         """
         );
@@ -226,7 +226,7 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessage(
                 "Unsupported string expression.",
                 """
-                        a = max("A", "B");
+                        a = max(":A", ":B");
                         print(a);
                         """
         );
@@ -250,7 +250,7 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessage(
                 "Unsupported string expression.",
                 """
-                        a = max("A", 0);
+                        a = max(":A", 0);
                         print(a);
                         """
         );
@@ -261,7 +261,7 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessage(
                 "Unsupported string expression.",
                 """
-                        a = not "A";
+                        a = not ":A";
                         print(a);
                         """
         );
@@ -281,16 +281,16 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                         i = 1 / 10000;
                         j = 0 === null;
                         """,
-                createInstruction(SET, "a", "3"),
-                createInstruction(SET, "b", "null"),
-                createInstruction(SET, "c", "3"),
-                createInstruction(SET, "d", "b"),
-                createInstruction(SET, "e", "3"),
-                createInstruction(SET, "f", "-2"),
-                createInstruction(SET, "g", "true"),
-                createInstruction(SET, "h", "-5"),
-                createInstruction(SET, "i", "0.0001"),
-                createInstruction(SET, "j", "false")
+                createInstruction(SET, ":a", "3"),
+                createInstruction(SET, ":b", "null"),
+                createInstruction(SET, ":c", "3"),
+                createInstruction(SET, ":d", ":b"),
+                createInstruction(SET, ":e", "3"),
+                createInstruction(SET, ":f", "-2"),
+                createInstruction(SET, ":g", "true"),
+                createInstruction(SET, ":h", "-5"),
+                createInstruction(SET, ":i", "0.0001"),
+                createInstruction(SET, ":j", "false")
         );
     }
 

@@ -35,11 +35,11 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end;
                         print("Done.");
                         """,
-                createInstruction(SET, "i", "0"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(WRITE, "1", "cell1", "i"),
-                createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1003), "lessThan", "i", "1000"),
+                createInstruction(SET, ":i", "0"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(WRITE, "1", "cell1", ":i"),
+                createInstruction(OP, "add", ":i", ":i", "1"),
+                createInstruction(JUMP, label(3), "lessThan", ":i", "1000"),
                 createInstruction(PRINT, q("Done."))
         );
     }
@@ -53,11 +53,11 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                             i -= 1;
                         end;
                         """,
-                createInstruction(SET, "i", "1000"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(PRINT, "i"),
-                createInstruction(OP, "sub", "i", "i", "1"),
-                createInstruction(JUMP, var(1003), "greaterThan", "i", "0")
+                createInstruction(SET, ":i", "1000"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(PRINT, ":i"),
+                createInstruction(OP, "sub", ":i", ":i", "1"),
+                createInstruction(JUMP, label(3), "greaterThan", ":i", "0")
         );
     }
 
@@ -70,11 +70,11 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end;
                         print(block);
                         """,
-                createInstruction(SET, "block", "null"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(GETLINK, "block", "1"),
-                createInstruction(JUMP, var(1003), "equal", "block", "null"),
-                createInstruction(PRINT, "block")
+                createInstruction(SET, ":block", "null"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(GETLINK, ":block", "1"),
+                createInstruction(JUMP, label(3), "equal", ":block", "null"),
+                createInstruction(PRINT, ":block")
         );
     }
 
@@ -92,12 +92,12 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end;
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(OP, "strictEqual", var(0), "state", "0"),
-                createInstruction(JUMP, "__start__", "equal", var(0), "false"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(PRINT, "i"),
-                createInstruction(SENSOR, "state", "@unit", "@dead"),
-                createInstruction(JUMP, var(1003), "strictEqual", "state", "0")
+                createInstruction(OP, "strictEqual", tmp(0), ":state", "0"),
+                createInstruction(JUMP, "__start__", "equal", tmp(0), "false"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(PRINT, ":i"),
+                createInstruction(SENSOR, ":state", "@unit", "@dead"),
+                createInstruction(JUMP, label(3), "strictEqual", ":state", "0")
         );
     }
 
@@ -129,14 +129,14 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end;
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(SET, "count", "0"),
-                createInstruction(SENSOR, var(0), "switch1", "@enabled"),
-                createInstruction(JUMP, "__start__", "equal", var(0), "false"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(OP, "add", "count", "count", "1"),
-                createInstruction(PRINT, "count"),
-                createInstruction(SENSOR, var(0), "switch1", "@enabled"),
-                createInstruction(JUMP, var(1003), "notEqual", var(0), "false")
+                createInstruction(SET, ":count", "0"),
+                createInstruction(SENSOR, tmp(0), "switch1", "@enabled"),
+                createInstruction(JUMP, "__start__", "equal", tmp(0), "false"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(OP, "add", ":count", ":count", "1"),
+                createInstruction(PRINT, ":count"),
+                createInstruction(SENSOR, tmp(0), "switch1", "@enabled"),
+                createInstruction(JUMP, label(3), "notEqual", tmp(0), "false")
         );
     }
 
@@ -149,13 +149,13 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end;
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(SENSOR, var(0), "@unit", "@dead"),
-                createInstruction(OP, "strictEqual", var(1), var(0), "0"),
-                createInstruction(JUMP, "__start__", "equal", var(1), "false"),
-                createInstruction(LABEL, var(1003)),
+                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                createInstruction(OP, "strictEqual", tmp(1), tmp(0), "0"),
+                createInstruction(JUMP, "__start__", "equal", tmp(1), "false"),
+                createInstruction(LABEL, label(3)),
                 createInstruction(PRINT, q("Got unit!")),
-                createInstruction(SENSOR, var(0), "@unit", "@dead"),
-                createInstruction(JUMP, var(1003), "strictEqual", var(0), "0")
+                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                createInstruction(JUMP, label(3), "strictEqual", tmp(0), "0")
         );
     }
 
@@ -187,12 +187,12 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end;
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(SET, "i", "1"),
-                createInstruction(LABEL, var(1005)),
-                createInstruction(PRINT, "i"),
-                createInstruction(JUMP, "__start__", "greaterThan", "i", "5"),
-                createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1005), "lessThanEq", "i", "1000")
+                createInstruction(SET, ":i", "1"),
+                createInstruction(LABEL, label(5)),
+                createInstruction(PRINT, ":i"),
+                createInstruction(JUMP, "__start__", "greaterThan", ":i", "5"),
+                createInstruction(OP, "add", ":i", ":i", "1"),
+                createInstruction(JUMP, label(5), "lessThanEq", ":i", "1000")
         );
     }
 
@@ -208,13 +208,13 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                             print(i);
                         end;
                         """,
-                createInstruction(SET, "i", "1000"),
-                createInstruction(LABEL, var(1005)),
-                createInstruction(OP, "sub", "i", "i", "1"),
-                createInstruction(JUMP, var(1001), "equal", "i", "4"),
-                createInstruction(PRINT, "i"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(JUMP, var(1005), "greaterThan", "i", "0")
+                createInstruction(SET, ":i", "1000"),
+                createInstruction(LABEL, label(5)),
+                createInstruction(OP, "sub", ":i", ":i", "1"),
+                createInstruction(JUMP, label(1), "equal", ":i", "4"),
+                createInstruction(PRINT, ":i"),
+                createInstruction(LABEL, label(1)),
+                createInstruction(JUMP, label(5), "greaterThan", ":i", "0")
         );
     }
 
@@ -247,11 +247,11 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                             print(i);
                         end;
                         """,
-                createInstruction(SET, "i", "1"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(PRINT, "i"),
-                createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1003), "lessThanEq", "i", "2000")
+                createInstruction(SET, ":i", "1"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(PRINT, ":i"),
+                createInstruction(OP, "add", ":i", ":i", "1"),
+                createInstruction(JUMP, label(3), "lessThanEq", ":i", "2000")
         );
     }
 }

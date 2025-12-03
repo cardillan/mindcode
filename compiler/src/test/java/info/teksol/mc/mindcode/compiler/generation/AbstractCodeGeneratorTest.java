@@ -12,7 +12,10 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -22,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @NullMarked
 public class AbstractCodeGeneratorTest extends AbstractTestBase {
+    private static final boolean FORCE_EXACT_MATCH = false;
+    private static final Pattern variablePattern = Pattern.compile("^[.:*][a-zA-Z_][^*]*");
 
     @Override
     protected CompilationPhase getTargetPhase() {
@@ -100,11 +105,6 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
                 return;
             }
         }
-
-        if (!expectedToActual.keySet().containsAll(registered) && registered.containsAll(expectedToActual.keySet())) {
-            // This is not a failed test, this is a bug in test code
-            throw new RuntimeException("Expected all value holes to be used but some were not.");
-        }
     }
 
     protected String createDifferentCodeSizeMessage(List<LogicInstruction> actual, List<MindcodeMessage> messages) {
@@ -143,7 +143,7 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
             final LogicInstruction instruction = result.get(i);
             final List<String> newArgs = _str(instruction.getArgs());
             if (newArgs.stream().anyMatch(s -> s.startsWith("___"))) {
-                newArgs.replaceAll(arg -> arg.startsWith("___") ? "var(" + arg.substring(3) + ")" : arg);
+                newArgs.replaceAll(arg -> arg.startsWith("___") ? "tmp(" + arg.substring(3) + ")" : arg);
                 result.set(i, createInstructionStr(instruction.getOpcode(), newArgs));
             }
         }
@@ -165,7 +165,6 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
     }
 
 
-    private final Set<String> registered = new HashSet<>();
     private final Map<String, String> expectedToActual = new LinkedHashMap<>();
     private final Map<String, String> actualToExpected = new LinkedHashMap<>();
 
@@ -180,12 +179,10 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
                         Collectors.joining("\n", "\nGenerated messages:\n", ""));
     }
 
-    private static final Pattern variablePattern = Pattern.compile("^[.:*]?[a-zA-Z_][^*]*");
-
     private boolean evaluateDirectly(String value) {
         // Everything except variables needs to be evaluated directly
         // Variables can be substituted, EXCEPT indexed variables
-        return !variablePattern.matcher(value).matches();
+        return FORCE_EXACT_MATCH || !variablePattern.matcher(value).matches();
     }
 
 
@@ -243,22 +240,12 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
         return str.toString();
     }
 
-    protected String var(int id) {
-        String key = "___" + id;
-        registered.add(key);
-        return key;
-    }
-
     protected String tmp(int id) {
-        String key = "*tmp" + id;
-        registered.add(key);
-        return key;
+        return "*tmp" + id;
     }
 
     protected String label(int id) {
-        String key = "*label" + id;
-        registered.add(key);
-        return key;
+        return "*label" + id;
     }
 
     private String escape(String value) {

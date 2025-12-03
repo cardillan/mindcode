@@ -29,13 +29,12 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                             end();
                         end;
                         """,
-                createInstruction(OP, "equal", var(0), "x", "3"),
-                createInstruction(JUMP, var(1000), "equal", var(0), "false"),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
+                createInstruction(OP, "equal", tmp(0), "x", "3"),
+                createInstruction(JUMP, label(0), "equal", tmp(0), "false"),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
                 createInstruction(END),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(END)
+                createInstruction(LABEL, label(1))
         );
     }
 
@@ -49,16 +48,15 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         end;
                         move(73, n);
                         """,
-                createInstruction(OP, "equal", var(0), "x", "3"),
-                createInstruction(JUMP, var(1000), "equal", var(0), "false"),
-                createInstruction(SET, var(1), "1"),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(SET, var(1), "41"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(SET, "n", var(1)),
-                createInstruction(UCONTROL, "move", "73", "n"),
-                createInstruction(END)
+                createInstruction(OP, "equal", tmp(0), ":x", "3"),
+                createInstruction(JUMP, label(0), "equal", tmp(0), "false"),
+                createInstruction(SET, tmp(1), "1"),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(SET, tmp(1), "41"),
+                createInstruction(LABEL, label(1)),
+                createInstruction(SET, ":n", tmp(1)),
+                createInstruction(UCONTROL, "move", "73", ":n")
         );
     }
 
@@ -77,26 +75,26 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                             end;
                         end;
                         """,
-                createInstruction(URADAR, "enemy", "ground", "any", "health", "0", ".MIN_TO_MAX", var(0)),
-                createInstruction(SET, ":target", var(0)),
-                createInstruction(OP, "notEqual", var(1), ":target", "null"),
-                createInstruction(JUMP, var(1000), "equal", var(1), "false"),
-                createInstruction(SENSOR, var(3), ":target", "@x"),
-                createInstruction(SENSOR, var(4), ":target", "@y"),
-                createInstruction(UCONTROL, "approach", var(3), var(4), "10"),
-                createInstruction(SENSOR, var(5), ":target", "@x"),
-                createInstruction(SENSOR, var(6), ":target", "@y"),
-                createInstruction(UCONTROL, "within", var(5), var(6), "10", var(7)),
-                createInstruction(JUMP, var(1002), "equal", var(7), "false"),
-                createInstruction(SENSOR, var(9), ":target", "@x"),
-                createInstruction(SENSOR, var(10), ":target", "@y"),
-                createInstruction(UCONTROL, "target", var(9), var(10), ".SHOOT"),
-                createInstruction(JUMP, var(1003), "always"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1001))
+                createInstruction(URADAR, "enemy", "ground", "any", "health", "0", ".MIN_TO_MAX", tmp(0)),
+                createInstruction(SET, ":target", tmp(0)),
+                createInstruction(OP, "notEqual", tmp(1), ":target", "null"),
+                createInstruction(JUMP, label(0), "equal", tmp(1), "false"),
+                createInstruction(SENSOR, tmp(3), ":target", "@x"),
+                createInstruction(SENSOR, tmp(4), ":target", "@y"),
+                createInstruction(UCONTROL, "approach", tmp(3), tmp(4), "10"),
+                createInstruction(SENSOR, tmp(5), ":target", "@x"),
+                createInstruction(SENSOR, tmp(6), ":target", "@y"),
+                createInstruction(UCONTROL, "within", tmp(5), tmp(6), "10", tmp(7)),
+                createInstruction(JUMP, label(2), "equal", tmp(7), "false"),
+                createInstruction(SENSOR, tmp(9), ":target", "@x"),
+                createInstruction(SENSOR, tmp(10), ":target", "@y"),
+                createInstruction(UCONTROL, "target", tmp(9), tmp(10), ".SHOOT"),
+                createInstruction(JUMP, label(3), "always"),
+                createInstruction(LABEL, label(2)),
+                createInstruction(LABEL, label(3)),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(LABEL, label(1))
         );
     }
 
@@ -117,15 +115,14 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         outbuilding = ulocate(:damaged, out x, out y, out found);
                         approach(x, y, 4);
                         """,
-                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "x", "y", var(0), var(1)),
+                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "x", "y", tmp(0), tmp(1)),
                 createInstruction(UCONTROL, "approach", "x", "y", "4"),
-                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "x", "y", "found", var(2)),
+                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "x", "y", "found", tmp(2)),
                 createInstruction(UCONTROL, "approach", "x", "y", "4"),
-                createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "x", "y", "found", var(3)),
+                createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "x", "y", "found", tmp(3)),
                 createInstruction(UCONTROL, "approach", "x", "y", "4"),
-                createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "x", "y", "found", var(4)),
-                createInstruction(UCONTROL, "approach", "x", "y", "4"),
-                createInstruction(END)
+                createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "x", "y", "found", tmp(4)),
+                createInstruction(UCONTROL, "approach", "x", "y", "4")
         );
     }
 
@@ -152,9 +149,8 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         ulocate(:ore, @surge-alloy, out a, out b);
                         approach(x, y, 4);
                         """,
-                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "x", "y", var(0), var(1)),
-                createInstruction(UCONTROL, "approach", "x", "y", "4"),
-                createInstruction(END)
+                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "x", "y", tmp(0), tmp(1)),
+                createInstruction(UCONTROL, "approach", "x", "y", "4")
         );
     }
 
@@ -170,10 +166,9 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         outbuilding = ulocate(:building, :core, ENEMY, out x, out y, out found);
                         print(outbuilding);
                         """,
-                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "x", "y", "found", var(0)),
-                createInstruction(SET, "outbuilding", var(0)),
-                createInstruction(PRINT, "outbuilding"),
-                createInstruction(END)
+                createInstruction(ULOCATE, "building", "core", ".ENEMY", "@copper", ":x", ":y", ":found", tmp(0)),
+                createInstruction(SET, ":outbuilding", tmp(0)),
+                createInstruction(PRINT, ":outbuilding")
         );
     }
 
@@ -266,8 +261,7 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         print(b);
                         """,
                 createInstruction(SET, "b", "2"),
-                createInstruction(PRINT, "b"),
-                createInstruction(END)
+                createInstruction(PRINT, "b")
         );
     }
 }

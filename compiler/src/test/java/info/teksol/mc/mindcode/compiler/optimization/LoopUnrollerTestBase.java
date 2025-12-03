@@ -80,17 +80,17 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
                             print(i);
                         end;
                         """,
-                createInstruction(SET, "i", "0"),
-                createInstruction(LABEL, var(1005)),
-                createInstruction(OP, "mod", var(1), "i", "2"),
-                createInstruction(JUMP, var(1003), "equal", var(1), "false"),
-                createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1004), "always"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(OP, "add", "i", "i", "2"),
-                createInstruction(LABEL, var(1004)),
-                createInstruction(PRINT, "i"),
-                createInstruction(JUMP, var(1005), "lessThan", "i", "10")
+                createInstruction(SET, ":i", "0"),
+                createInstruction(LABEL, label(5)),
+                createInstruction(OP, "mod", tmp(1), ":i", "2"),
+                createInstruction(JUMP, label(3), "equal", tmp(1), "false"),
+                createInstruction(OP, "add", ":i", ":i", "1"),
+                createInstruction(JUMP, label(4), "always"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(OP, "add", ":i", ":i", "2"),
+                createInstruction(LABEL, label(4)),
+                createInstruction(PRINT, ":i"),
+                createInstruction(JUMP, label(5), "lessThan", ":i", "10")
         );
     }
 
@@ -98,7 +98,7 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     void preservesEmptyLoops() {
         assertCompilesTo("""
                 for i = -5; i < -10; i += 1 do
-                    print("a");
+                    print(":a");
                 end;
                 """
         );
@@ -115,15 +115,15 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
                             print(i);
                         end;
                         """,
-                createInstruction(SET, "i", "0"),
-                createInstruction(LABEL, var(1006)),
-                createInstruction(JUMP, var(1005), "greaterThanEq", "i", "5"),
-                createInstruction(LABEL, var(1007)),
-                createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1007), "lessThan", "i", "5"),
-                createInstruction(LABEL, var(1005)),
-                createInstruction(PRINT, "i"),
-                createInstruction(JUMP, var(1006), "lessThan", "i", "10")
+                createInstruction(SET, ":i", "0"),
+                createInstruction(LABEL, label(6)),
+                createInstruction(JUMP, label(5), "greaterThanEq", ":i", "5"),
+                createInstruction(LABEL, label(7)),
+                createInstruction(OP, "add", ":i", ":i", "1"),
+                createInstruction(JUMP, label(7), "lessThan", ":i", "5"),
+                createInstruction(LABEL, label(5)),
+                createInstruction(PRINT, ":i"),
+                createInstruction(JUMP, label(6), "lessThan", ":i", "10")
         );
     }
 

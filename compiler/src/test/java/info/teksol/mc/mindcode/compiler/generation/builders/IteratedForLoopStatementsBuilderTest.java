@@ -19,16 +19,16 @@ class IteratedForLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 j += i;
                             end;
                             """,
-                    createInstruction(SET, "i", "0"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(OP, "lessThan", var(0), "i", "10"),
-                    createInstruction(JUMP, var(1003), "equal", var(0), "false"),
-                    createInstruction(OP, "add", "j", "j", "i"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(SET, var(1), "i"),
-                    createInstruction(OP, "add", "i", "i", "1"),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1003))
+                    createInstruction(SET, ":i", "0"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "lessThan", tmp(0), ":i", "10"),
+                    createInstruction(JUMP, label(3), "equal", tmp(0), "false"),
+                    createInstruction(OP, "add", ":j", ":j", ":i"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(1), ":i"),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(3))
             );
         }
 
@@ -39,11 +39,11 @@ class IteratedForLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 j += i;
                             end;
                             """,
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(OP, "add", "j", "j", "i"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1003))
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "add", ":j", ":j", ":i"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(3))
             );
         }
 
@@ -54,17 +54,17 @@ class IteratedForLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 cell1[i] = i;
                             end;
                             """,
-                    createInstruction(SET, "i", "0"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(OP, "lessThan", var(0), "i", "10"),
-                    createInstruction(JUMP, var(1003), "equal", var(0), "false"),
-                    createInstruction(SET, var(1), "i"),
-                    createInstruction(WRITE, "i", "cell1", var(1)),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(SET, var(3), "i"),
-                    createInstruction(OP, "add", "i", "i", "1"),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1003))
+                    createInstruction(SET, ":i", "0"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "lessThan", tmp(0), ":i", "10"),
+                    createInstruction(JUMP, label(3), "equal", tmp(0), "false"),
+                    createInstruction(SET, tmp(1), ":i"),
+                    createInstruction(WRITE, ":i", "cell1", tmp(1)),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(3), ":i"),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(3))
             );
         }
     }

@@ -46,11 +46,11 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
 
     private static final String[] navigation = {
             "Extending Mindcode", "SYNTAX-EXTENSIONS.markdown",
-            "Function reference for Mindustry Logic 6.0", "FUNCTIONS-60.markdown",
-            "Function reference for Mindustry Logic 7.0", "FUNCTIONS-70.markdown",
-            "Function reference for Mindustry Logic 7.1", "FUNCTIONS-71.markdown",
-            "Function reference for Mindustry Logic 8.0", "FUNCTIONS-80.markdown",
-            "Function reference for Mindustry Logic 8.1", "FUNCTIONS-81.markdown",
+            "Function reference for target 6.0", "FUNCTIONS-60.markdown",
+            "Function reference for target 7.0", "FUNCTIONS-70.markdown",
+            "Function reference for target 7.1", "FUNCTIONS-71.markdown",
+            "Function reference for target 8.0", "FUNCTIONS-80.markdown",
+            "Function reference for target 8.1", "FUNCTIONS-81.markdown",
             "System Library", "SYSTEM-LIBRARY.markdown",
     };
 
@@ -94,7 +94,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
         List<FunctionSample> samples = assertDoesNotThrow(mapper::generateSamples);
 
         try (final PrintWriter w = new PrintWriter(SYNTAX_REL_PATH + "FUNCTIONS-" + version.major + version.minor + ".markdown", StandardCharsets.UTF_8)) {
-            w.println("# Function reference for Mindustry Logic " + version.major + "." + version.minor);
+            w.println("# Function reference for target " + version.major + "." + version.minor);
             w.println();
             w.print(PREAMBLE.replaceAll("\n", System.lineSeparator()));
             w.println();

@@ -20,11 +20,11 @@ public class LoopUnrollerBasicTest extends LoopUnrollerTestBase {
                             print(i);
                         end;
                         """,
-                createInstruction(SET, "i", "0"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(PRINT, "i"),
-                createInstruction(OP, "add", "i", "i", "0.1"),
-                createInstruction(JUMP, var(1003), "lessThanEq", "i", "1")
+                createInstruction(SET, ":i", "0"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(PRINT, ":i"),
+                createInstruction(OP, "add", ":i", ":i", "0.1"),
+                createInstruction(JUMP, label(3), "lessThanEq", ":i", "1")
         );
     }
 
@@ -35,12 +35,12 @@ public class LoopUnrollerBasicTest extends LoopUnrollerTestBase {
                             print($" $k");
                         end;
                         """,
-                createInstruction(SET, "k", "1"),
-                createInstruction(LABEL, var(1003)),
+                createInstruction(SET, ":k", "1"),
+                createInstruction(LABEL, label(3)),
                 createInstruction(PRINT, q(" ")),
-                createInstruction(PRINT, "k"),
-                createInstruction(OP, "shl", "k", "k", "1"),
-                createInstruction(JUMP, var(1003), "lessThan", "k", "100000")
+                createInstruction(PRINT, ":k"),
+                createInstruction(OP, "shl", ":k", ":k", "1"),
+                createInstruction(JUMP, label(3), "lessThan", ":k", "100000")
         );
     }
 }

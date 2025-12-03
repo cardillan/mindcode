@@ -148,10 +148,10 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         print(level);
                         conveyor1.enabled = level < 10;
                         """,
-                createInstruction(SENSOR, "level", "nucleus1", "@coal"),
-                createInstruction(PRINT, "level"),
-                createInstruction(OP, "lessThan", tmp(0), "level", "10"),
-                createInstruction(CONTROL, "enabled", "conveyor1", tmp(0))
+                createInstruction(SENSOR, ":level", "nucleus1", "@coal"),
+                createInstruction(PRINT, ":level"),
+                createInstruction(OP, "lessThan", tmp(2), ":level", "10"),
+                createInstruction(CONTROL, "enabled", "conveyor1", tmp(2))
         );
     }
 

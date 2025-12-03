@@ -27,12 +27,10 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertOptimizesTo(
                 List.of(
                         createInstruction(SENSOR, tmp0, vault1, coal),
-                        createInstruction(SET, var, tmp0),
-                        createInstruction(END)
+                        createInstruction(SET, var, tmp0)
                 ),
                 List.of(
-                        createInstruction(SENSOR, var, vault1, coal),
-                        createInstruction(END)
+                        createInstruction(SENSOR, var, vault1, coal)
                 )
         );
     }
@@ -56,13 +54,11 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertOptimizesTo(
                 List.of(
                         createInstruction(SENSOR, var, vault1, coal),
-                        createInstruction(SET, result, var),
-                        createInstruction(END)
+                        createInstruction(SET, result, var)
                 ),
                 List.of(
                         createInstruction(SENSOR, var, vault1, coal),
-                        createInstruction(SET, result, var),
-                        createInstruction(END)
+                        createInstruction(SET, result, var)
                 )
         );
     }
@@ -73,14 +69,12 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
                 List.of(
                         createInstruction(SENSOR, tmp0, vault1, coal),
                         createInstruction(SET, result, tmp0),
-                        createInstruction(SET, another, tmp0),
-                        createInstruction(END)
+                        createInstruction(SET, another, tmp0)
                 ),
                 List.of(
                         createInstruction(SENSOR, tmp0, vault1, coal),
                         createInstruction(SET, result, tmp0),
-                        createInstruction(SET, another, tmp0),
-                        createInstruction(END)
+                        createInstruction(SET, another, tmp0)
                 )
         );
     }
@@ -91,14 +85,12 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
                 List.of(
                         createInstruction(PRINT, P1),
                         createInstruction(SET, result, tmp0),
-                        createInstruction(SENSOR, tmp0, vault1, coal),
-                        createInstruction(END)
+                        createInstruction(SENSOR, tmp0, vault1, coal)
                 ),
                 List.of(
                         createInstruction(PRINT, P1),
                         createInstruction(SET, result, tmp0),
-                        createInstruction(SENSOR, tmp0, vault1, coal),
-                        createInstruction(END)
+                        createInstruction(SENSOR, tmp0, vault1, coal)
                 )
         );
     }
@@ -108,12 +100,10 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertOptimizesTo(
                 List.of(
                         createInstruction(SET, tmp0, a),
-                        createInstruction(SET, b, tmp0),
-                        createInstruction(END)
+                        createInstruction(SET, b, tmp0)
                 ),
                 List.of(
-                        createInstruction(SET, b, a),
-                        createInstruction(END)
+                        createInstruction(SET, b, a)
                 )
         );
     }
@@ -123,13 +113,11 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertOptimizesTo(
                 List.of(
                         createInstruction(SET, tmp0, a),
-                        createInstruction(SET, tmp0, b),
-                        createInstruction(END)
+                        createInstruction(SET, tmp0, b)
                 ),
                 List.of(
                         createInstruction(SET, unused, a),
-                        createInstruction(SET, unused, b),
-                        createInstruction(END)
+                        createInstruction(SET, unused, b)
                 )
         );
     }
@@ -139,13 +127,11 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertOptimizesTo(
                 List.of(
                         createInstruction(SENSOR, tmp1, vault1, tmp0),
-                        createInstruction(SET, result, tmp0),
-                        createInstruction(END)
+                        createInstruction(SET, result, tmp0)
                 ),
                 List.of(
                         createInstruction(SENSOR, unused, vault1, tmp0),
-                        createInstruction(SET, result, tmp0),
-                        createInstruction(END)
+                        createInstruction(SET, result, tmp0)
                 )
         );
     }
@@ -157,8 +143,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertCompilesTo("""
                         target = getlink(0);
                         """,
-                createInstruction(GETLINK, "target", "0"),
-                createInstruction(END)
+                createInstruction(GETLINK, ":target", "0")
         );
     }
 
@@ -204,8 +189,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertCompilesTo("""
                         r = rand(100);
                         """,
-                createInstruction(OP, "rand", "r", "100"),
-                createInstruction(END)
+                createInstruction(OP, "rand", "r", "100")
         );
     }
 
@@ -214,9 +198,8 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertCompilesTo("""
                         state = min(max(state, MIN), MAX);
                         """,
-                createInstruction(OP, "max", var(0), "state", "MIN"),
-                createInstruction(OP, "min", "state", var(0), "MAX"),
-                createInstruction(END)
+                createInstruction(OP, "max", tmp(0), "state", "MIN"),
+                createInstruction(OP, "min", "state", tmp(0), "MAX")
         );
     }
 
@@ -225,8 +208,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertCompilesTo("""
                         remaining = capacity - current;
                         """,
-                createInstruction(OP, "sub", "remaining", "capacity", "current"),
-                createInstruction(END)
+                createInstruction(OP, "sub", "remaining", "capacity", "current")
         );
     }
 
@@ -237,8 +219,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertCompilesTo("""
                         boo = cell1[0];
                         """,
-                createInstruction(READ, "boo", "cell1", "0"),
-                createInstruction(END)
+                createInstruction(READ, ":boo", "cell1", "0")
         );
     }
 
@@ -246,8 +227,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     void leavesReadThenSetButOtherValueAlone() {
         assertDoesNotOptimize(
                 createInstruction(READ, a, cell1, P1),
-                createInstruction(SET, b, P1),
-                createInstruction(END)
+                createInstruction(SET, b, P1)
         );
     }
 
@@ -258,8 +238,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertCompilesTo("""
                         numsilicon = STORAGE.@silicon;
                         """,
-                createInstruction(SENSOR, "numsilicon", "STORAGE", "@silicon"),
-                createInstruction(END)
+                createInstruction(SENSOR, ":numsilicon", ".STORAGE", "@silicon")
         );
     }
 
@@ -269,9 +248,8 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
                         numgraphite = container1.@graphite;
                         numcoal = container1.@coal;
                         """,
-                createInstruction(SENSOR, "numgraphite", "container1", "@graphite"),
-                createInstruction(SENSOR, "numcoal", "container1", "@coal"),
-                createInstruction(END)
+                createInstruction(SENSOR, ":numgraphite", "container1", "@graphite"),
+                createInstruction(SENSOR, ":numcoal", "container1", "@coal")
         );
     }
 

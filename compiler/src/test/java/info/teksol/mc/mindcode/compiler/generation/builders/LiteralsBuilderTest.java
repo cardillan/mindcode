@@ -16,9 +16,9 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                         a = %ABCDEF00;
                         a = %abcdefff;
                         """,
-                createInstruction(SET, "a", "%ABCDEF"),
-                createInstruction(SET, "a", "%ABCDEF00"),
-                createInstruction(SET, "a", "%abcdefff")
+                createInstruction(SET, ":a", "%ABCDEF"),
+                createInstruction(SET, ":a", "%ABCDEF00"),
+                createInstruction(SET, ":a", "%abcdefff")
         );
     }
 
@@ -41,8 +41,8 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                         a = "";
                         a = "A string literal";
                         """,
-                createInstruction(SET, "a", q("")),
-                createInstruction(SET, "a", q("A string literal"))
+                createInstruction(SET, ":a", q("")),
+                createInstruction(SET, ":a", q("A string literal"))
         );
     }
 
@@ -67,23 +67,23 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                         a = 1.5E+30;
                         a = 1.5E-30;
                         """,
-                createInstruction(SET, "a", "1"),
-                createInstruction(SET, "a", "0"),
-                createInstruction(SET, "a", "0.5"),
-                createInstruction(SET, "a", "100000"),
-                createInstruction(SET, "a", "100000"),
-                createInstruction(SET, "a", "0.00001"),
-                createInstruction(SET, "a", "10000000000"),
-                createInstruction(SET, "a", "10000000000"),
-                createInstruction(SET, "a", "0.0000000001"),
-                createInstruction(SET, "a", "25000000000"),
-                createInstruction(SET, "a", "25000000000"),
-                createInstruction(SET, "a", "0.00000000025"),
-                createInstruction(SET, "a", "5000000000"),
-                createInstruction(SET, "a", "5000000000"),
-                createInstruction(SET, "a", "0.00000000005"),
-                createInstruction(SET, "a", "15E29"),
-                createInstruction(SET, "a", "15E-31")
+                createInstruction(SET, ":a", "1"),
+                createInstruction(SET, ":a", "0"),
+                createInstruction(SET, ":a", "0.5"),
+                createInstruction(SET, ":a", "100000"),
+                createInstruction(SET, ":a", "100000"),
+                createInstruction(SET, ":a", "0.00001"),
+                createInstruction(SET, ":a", "10000000000"),
+                createInstruction(SET, ":a", "10000000000"),
+                createInstruction(SET, ":a", "0.0000000001"),
+                createInstruction(SET, ":a", "25000000000"),
+                createInstruction(SET, ":a", "25000000000"),
+                createInstruction(SET, ":a", "0.00000000025"),
+                createInstruction(SET, ":a", "5000000000"),
+                createInstruction(SET, ":a", "5000000000"),
+                createInstruction(SET, ":a", "0.00000000005"),
+                createInstruction(SET, ":a", "15E29"),
+                createInstruction(SET, ":a", "15E-31")
         );
     }
 
@@ -108,23 +108,23 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                         a = -1.5E+30;
                         a = -1.5E-30;
                         """,
-                createInstruction(SET, "a", "-1"),
-                createInstruction(SET, "a", "0"),
-                createInstruction(SET, "a", "-0.5"),
-                createInstruction(SET, "a", "-100000"),
-                createInstruction(SET, "a", "-100000"),
-                createInstruction(SET, "a", "-0.00001"),
-                createInstruction(SET, "a", "-10000000000"),
-                createInstruction(SET, "a", "-10000000000"),
-                createInstruction(SET, "a", "-0.0000000001"),
-                createInstruction(SET, "a", "-25000000000"),
-                createInstruction(SET, "a", "-25000000000"),
-                createInstruction(SET, "a", "-0.00000000025"),
-                createInstruction(SET, "a", "-5000000000"),
-                createInstruction(SET, "a", "-5000000000"),
-                createInstruction(SET, "a", "-0.00000000005"),
-                createInstruction(SET, "a", "-15E29"),
-                createInstruction(SET, "a", "-15E-31")
+                createInstruction(SET, ":a", "-1"),
+                createInstruction(SET, ":a", "0"),
+                createInstruction(SET, ":a", "-0.5"),
+                createInstruction(SET, ":a", "-100000"),
+                createInstruction(SET, ":a", "-100000"),
+                createInstruction(SET, ":a", "-0.00001"),
+                createInstruction(SET, ":a", "-10000000000"),
+                createInstruction(SET, ":a", "-10000000000"),
+                createInstruction(SET, ":a", "-0.0000000001"),
+                createInstruction(SET, ":a", "-25000000000"),
+                createInstruction(SET, ":a", "-25000000000"),
+                createInstruction(SET, ":a", "-0.00000000025"),
+                createInstruction(SET, ":a", "-5000000000"),
+                createInstruction(SET, ":a", "-5000000000"),
+                createInstruction(SET, ":a", "-0.00000000005"),
+                createInstruction(SET, ":a", "-15E29"),
+                createInstruction(SET, ":a", "-15E-31")
         );
     }
 
@@ -149,23 +149,23 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                         a = +1.5E+30;
                         a = +1.5E-30;
                         """,
-                createInstruction(SET, "a", "1"),
-                createInstruction(SET, "a", "0"),
-                createInstruction(SET, "a", "0.5"),
-                createInstruction(SET, "a", "100000"),
-                createInstruction(SET, "a", "100000"),
-                createInstruction(SET, "a", "0.00001"),
-                createInstruction(SET, "a", "10000000000"),
-                createInstruction(SET, "a", "10000000000"),
-                createInstruction(SET, "a", "0.0000000001"),
-                createInstruction(SET, "a", "25000000000"),
-                createInstruction(SET, "a", "25000000000"),
-                createInstruction(SET, "a", "0.00000000025"),
-                createInstruction(SET, "a", "5000000000"),
-                createInstruction(SET, "a", "5000000000"),
-                createInstruction(SET, "a", "0.00000000005"),
-                createInstruction(SET, "a", "15E29"),
-                createInstruction(SET, "a", "15E-31")
+                createInstruction(SET, ":a", "1"),
+                createInstruction(SET, ":a", "0"),
+                createInstruction(SET, ":a", "0.5"),
+                createInstruction(SET, ":a", "100000"),
+                createInstruction(SET, ":a", "100000"),
+                createInstruction(SET, ":a", "0.00001"),
+                createInstruction(SET, ":a", "10000000000"),
+                createInstruction(SET, ":a", "10000000000"),
+                createInstruction(SET, ":a", "0.0000000001"),
+                createInstruction(SET, ":a", "25000000000"),
+                createInstruction(SET, ":a", "25000000000"),
+                createInstruction(SET, ":a", "0.00000000025"),
+                createInstruction(SET, ":a", "5000000000"),
+                createInstruction(SET, ":a", "5000000000"),
+                createInstruction(SET, ":a", "0.00000000005"),
+                createInstruction(SET, ":a", "15E29"),
+                createInstruction(SET, ":a", "15E-31")
         );
     }
 
@@ -236,10 +236,10 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                         a = false;
                         a = 'A';
                         """,
-                createInstruction(SET, "a", "null"),
-                createInstruction(SET, "a", "true"),
-                createInstruction(SET, "a", "false"),
-                createInstruction(SET, "a", "65")
+                createInstruction(SET, ":a", "null"),
+                createInstruction(SET, ":a", "true"),
+                createInstruction(SET, ":a", "false"),
+                createInstruction(SET, ":a", "65")
         );
     }
 

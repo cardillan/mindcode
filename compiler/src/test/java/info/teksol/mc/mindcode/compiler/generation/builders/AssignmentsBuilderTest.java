@@ -130,8 +130,8 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             c = a **= b;
                             """,
-                    createInstruction(OP, "pow", "a", "a", "b"),
-                    createInstruction(SET, "c", "a")
+                    createInstruction(OP, "pow", ":a", ":a", ":b"),
+                    createInstruction(SET, ":c", ":a")
             );
         }
 
@@ -195,8 +195,8 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             g ^= h;
                             """,
                     createInstruction(OP, "or", "a", "a", "b"),
-                    createInstruction(OP, "or", var(1), "c", "d"),
-                    createInstruction(OP, "notEqual", "c", var(1), "false"),
+                    createInstruction(OP, "or", tmp(1), "c", "d"),
+                    createInstruction(OP, "notEqual", "c", tmp(1), "false"),
                     createInstruction(OP, "xor", "g", "g", "h")
             );
         }
@@ -253,10 +253,10 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             a = ++b;
                             c = --d;
                             """,
-                    createInstruction(OP, "add", "b", "b", "1"),
-                    createInstruction(SET, "a", "b"),
-                    createInstruction(OP, "sub", "d", "d", "1"),
-                    createInstruction(SET, "c", "d")
+                    createInstruction(OP, "add", ":b", ":b", "1"),
+                    createInstruction(SET, ":a", ":b"),
+                    createInstruction(OP, "sub", ":d", ":d", "1"),
+                    createInstruction(SET, ":c", ":d")
             );
         }
 
@@ -266,12 +266,12 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             a = b++;
                             c = d--;
                             """,
-                    createInstruction(SET, var(0), "b"),
-                    createInstruction(OP, "add", "b", "b", "1"),
-                    createInstruction(SET, "a", var(0)),
-                    createInstruction(SET, var(1), "d"),
-                    createInstruction(OP, "sub", "d", "d", "1"),
-                    createInstruction(SET, "c", var(1))
+                    createInstruction(SET, tmp(0), ":b"),
+                    createInstruction(OP, "add", ":b", ":b", "1"),
+                    createInstruction(SET, ":a", tmp(0)),
+                    createInstruction(SET, tmp(1), ":d"),
+                    createInstruction(OP, "sub", ":d", ":d", "1"),
+                    createInstruction(SET, ":c", tmp(1))
             );
         }
 
@@ -280,11 +280,11 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a = b++ * --c;
                             """,
-                    createInstruction(SET, var(0), "b"),
-                    createInstruction(OP, "add", "b", "b", "1"),
-                    createInstruction(OP, "sub", "c", "c", "1"),
-                    createInstruction(OP, "mul", var(1), var(0), "c"),
-                    createInstruction(SET, "a", var(1))
+                    createInstruction(SET, tmp(0), ":b"),
+                    createInstruction(OP, "add", ":b", ":b", "1"),
+                    createInstruction(OP, "sub", ":c", ":c", "1"),
+                    createInstruction(OP, "mul", tmp(1), tmp(0), ":c"),
+                    createInstruction(SET, ":a", tmp(1))
             );
         }
 
@@ -311,18 +311,18 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             cell1[a] = cell2[b]++ * --cell3[c];
                             """,
-                    createInstruction(SET, var(0), "a"),
-                    createInstruction(SET, var(2), "b"),
-                    createInstruction(READ, var(3), "cell2", var(2)),
-                    createInstruction(SET, var(4), var(3)),
-                    createInstruction(OP, "add", var(3), var(3), "1"),
-                    createInstruction(WRITE, var(3), "cell2", var(2)),
-                    createInstruction(SET, var(5), "c"),
-                    createInstruction(READ, var(6), "cell3", var(5)),
-                    createInstruction(OP, "sub", var(7), var(6), "1"),
-                    createInstruction(WRITE, var(7), "cell3", var(5)),
-                    createInstruction(OP, "mul", var(8), var(4), var(7)),
-                    createInstruction(WRITE, var(8), "cell1", var(0))
+                    createInstruction(SET, tmp(0), ":a"),
+                    createInstruction(SET, tmp(2), ":b"),
+                    createInstruction(READ, tmp(3), "cell2", tmp(2)),
+                    createInstruction(SET, tmp(4), tmp(3)),
+                    createInstruction(OP, "add", tmp(3), tmp(3), "1"),
+                    createInstruction(WRITE, tmp(3), "cell2", tmp(2)),
+                    createInstruction(SET, tmp(5), ":c"),
+                    createInstruction(READ, tmp(6), "cell3", tmp(5)),
+                    createInstruction(OP, "sub", tmp(7), tmp(6), "1"),
+                    createInstruction(WRITE, tmp(7), "cell3", tmp(5)),
+                    createInstruction(OP, "mul", tmp(8), tmp(4), tmp(7)),
+                    createInstruction(WRITE, tmp(8), "cell1", tmp(0))
             );
         }
 
@@ -332,19 +332,19 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             cell1[a++]++;
                             cell2[--a]--;
                             """,
-                    createInstruction(SET, var(0), "a"),
-                    createInstruction(OP, "add", "a", "a", "1"),
-                    createInstruction(SET, var(1), var(0)),
-                    createInstruction(READ, var(2), "cell1", var(1)),
-                    createInstruction(SET, var(3), var(2)),
-                    createInstruction(OP, "add", var(2), var(2), "1"),
-                    createInstruction(WRITE, var(2), "cell1", var(1)),
-                    createInstruction(OP, "sub", "a", "a", "1"),
-                    createInstruction(SET, var(4), "a"),
-                    createInstruction(READ, var(5), "cell2", var(4)),
-                    createInstruction(SET, var(6), var(5)),
-                    createInstruction(OP, "sub", var(5), var(5), "1"),
-                    createInstruction(WRITE, var(5), "cell2", var(4))
+                    createInstruction(SET, tmp(0), ":a"),
+                    createInstruction(OP, "add", ":a", ":a", "1"),
+                    createInstruction(SET, tmp(1), tmp(0)),
+                    createInstruction(READ, tmp(2), "cell1", tmp(1)),
+                    createInstruction(SET, tmp(3), tmp(2)),
+                    createInstruction(OP, "add", tmp(2), tmp(2), "1"),
+                    createInstruction(WRITE, tmp(2), "cell1", tmp(1)),
+                    createInstruction(OP, "sub", ":a", ":a", "1"),
+                    createInstruction(SET, tmp(4), ":a"),
+                    createInstruction(READ, tmp(5), "cell2", tmp(4)),
+                    createInstruction(SET, tmp(6), tmp(5)),
+                    createInstruction(OP, "sub", tmp(5), tmp(5), "1"),
+                    createInstruction(WRITE, tmp(5), "cell2", tmp(4))
             );
         }
 
@@ -431,15 +431,15 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
     class SimpleAssignments {
         @Test
         void compilesLiteralAssignments() {
-            assertCompilesTo("a = 0b101;", createInstruction(SET, "a", "0b101"));
-            assertCompilesTo("a = true;", createInstruction(SET, "a", "true"));
-            assertCompilesTo("a = false;", createInstruction(SET, "a", "false"));
-            assertCompilesTo("a = 10;", createInstruction(SET, "a", "10"));
-            assertCompilesTo("a = 1.05;", createInstruction(SET, "a", "1.05"));
-            assertCompilesTo("a = 1.50e10;", createInstruction(SET, "a", "15000000000"));
-            assertCompilesTo("a = 1.50e80;", createInstruction(SET, "a", "15E79"));
-            assertCompilesTo("a = 0x10;", createInstruction(SET, "a", "0x10"));
-            assertCompilesTo("a = null;", createInstruction(SET, "a", "null"));
+            assertCompilesTo("a = 0b101;", createInstruction(SET, ":a", "0b101"));
+            assertCompilesTo("a = true;", createInstruction(SET, ":a", "true"));
+            assertCompilesTo("a = false;", createInstruction(SET, ":a", "false"));
+            assertCompilesTo("a = 10;", createInstruction(SET, ":a", "10"));
+            assertCompilesTo("a = 1.05;", createInstruction(SET, ":a", "1.05"));
+            assertCompilesTo("a = 1.50e10;", createInstruction(SET, ":a", "15000000000"));
+            assertCompilesTo("a = 1.50e80;", createInstruction(SET, ":a", "15E79"));
+            assertCompilesTo("a = 0x10;", createInstruction(SET, ":a", "0x10"));
+            assertCompilesTo("a = null;", createInstruction(SET, ":a", "null"));
         }
 
         @Test
@@ -447,7 +447,7 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a = -10;
                             """,
-                    createInstruction(SET, "a", "-10"));
+                    createInstruction(SET, ":a", "-10"));
         }
 
         @Test
@@ -473,7 +473,7 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a = "Hello";
                             """,
-                    createInstruction(SET, "a", AbstractCodeGeneratorTest.q("Hello")));
+                    createInstruction(SET, ":a", AbstractCodeGeneratorTest.q("Hello")));
         }
 
         @Test
@@ -481,8 +481,8 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a = b = 10;
                             """,
-                    createInstruction(SET, "b", "10"),
-                    createInstruction(SET, "a", "b")
+                    createInstruction(SET, ":b", "10"),
+                    createInstruction(SET, ":a", ":b")
             );
         }
 
@@ -491,9 +491,9 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a = b = c + d;
                             """,
-                    createInstruction(OP, "add", var(0), "c", "d"),
-                    createInstruction(SET, "b", var(0)),
-                    createInstruction(SET, "a", "b")
+                    createInstruction(OP, "add", tmp(0), ":c", ":d"),
+                    createInstruction(SET, ":b", tmp(0)),
+                    createInstruction(SET, ":a", ":b")
             );
         }
 

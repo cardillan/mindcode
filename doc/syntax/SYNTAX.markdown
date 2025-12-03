@@ -18,11 +18,11 @@ The more advanced Mindcode features are described here:
 
 Function reference for individual [Mindcode targets](SYNTAX-5-OTHER.markdown#option-target):
 
-* [Function reference for Mindustry Logic 6.0](FUNCTIONS-60.markdown)
-* [Function reference for Mindustry Logic 7.0](FUNCTIONS-70.markdown)
-* [Function reference for Mindustry Logic 7.1](FUNCTIONS-71.markdown)
-* [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown)
-* [Function reference for Mindustry Logic 8.1](FUNCTIONS-81.markdown)
+* [Function reference for target 6.0](FUNCTIONS-60.markdown)
+* [Function reference for target 7.0](FUNCTIONS-70.markdown)
+* [Function reference for target 7.1](FUNCTIONS-71.markdown)
+* [Function reference for target 8.0](FUNCTIONS-80.markdown)
+* [Function reference for target 8.1](FUNCTIONS-81.markdown)
 
 Mindcode comes with several libraries containing useful functions:
 

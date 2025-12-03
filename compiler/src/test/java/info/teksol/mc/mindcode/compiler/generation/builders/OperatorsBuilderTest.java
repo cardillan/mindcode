@@ -17,7 +17,7 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a ** b;
                             """,
-                    createInstruction(OP, "pow", var(0), "a", "b")
+                    createInstruction(OP, "pow", tmp(0), ":a", ":b")
             );
         }
 
@@ -30,11 +30,11 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                             g % h;
                             i %% j;
                             """,
-                    createInstruction(OP, "mul", var(0), "a", "b"),
-                    createInstruction(OP, "div", var(1), "c", "d"),
-                    createInstruction(OP, "idiv", var(2), "e", "f"),
-                    createInstruction(OP, "mod", var(3), "g", "h"),
-                    createInstruction(OP, "emod", var(4), "i", "j")
+                    createInstruction(OP, "mul", tmp(0), ":a", ":b"),
+                    createInstruction(OP, "div", tmp(1), ":c", ":d"),
+                    createInstruction(OP, "idiv", tmp(2), ":e", ":f"),
+                    createInstruction(OP, "mod", tmp(3), ":g", ":h"),
+                    createInstruction(OP, "emod", tmp(4), ":i", ":j")
             );
         }
 
@@ -44,8 +44,8 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                             a + b;
                             c - d;
                             """,
-                    createInstruction(OP, "add", var(0), "a", "b"),
-                    createInstruction(OP, "sub", var(1), "c", "d")
+                    createInstruction(OP, "add", tmp(0), ":a", ":b"),
+                    createInstruction(OP, "sub", tmp(1), ":c", ":d")
             );
         }
 
@@ -56,9 +56,9 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                             c >> d;
                             e >>> f;
                             """,
-                    createInstruction(OP, "shl", var(0), ":a", ":b"),
-                    createInstruction(OP, "shr", var(1), ":c", ":d"),
-                    createInstruction(OP, "ushr", var(2), ":e", ":f")
+                    createInstruction(OP, "shl", tmp(0), ":a", ":b"),
+                    createInstruction(OP, "shr", tmp(1), ":c", ":d"),
+                    createInstruction(OP, "ushr", tmp(2), ":e", ":f")
             );
         }
 
@@ -68,8 +68,8 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                             a & b;
                             c && d;
                             """,
-                    createInstruction(OP, "and", var(0), "a", "b"),
-                    createInstruction(OP, "land", var(1), "c", "d")
+                    createInstruction(OP, "and", tmp(0), ":a", ":b"),
+                    createInstruction(OP, "land", tmp(1), ":c", ":d")
             );
         }
 
@@ -80,10 +80,10 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                             c || d;
                             e ^ f;
                             """,
-                    createInstruction(OP, "or", var(0), "a", "b"),
-                    createInstruction(OP, "or", var(2), "c", "d"),
-                    createInstruction(OP, "notEqual", var(1), var(2), "false"),
-                    createInstruction(OP, "xor", var(3), "e", "f")
+                    createInstruction(OP, "or", tmp(0), ":a", ":b"),
+                    createInstruction(OP, "or", tmp(2), ":c", ":d"),
+                    createInstruction(OP, "notEqual", tmp(1), tmp(2), "false"),
+                    createInstruction(OP, "xor", tmp(3), ":e", ":f")
             );
         }
 
@@ -95,10 +95,10 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                             e > f;
                             g >= h;
                             """,
-                    createInstruction(OP, "lessThan", var(0), "a", "b"),
-                    createInstruction(OP, "lessThanEq", var(1), "c", "d"),
-                    createInstruction(OP, "greaterThan", var(2), "e", "f"),
-                    createInstruction(OP, "greaterThanEq", var(3), "g", "h")
+                    createInstruction(OP, "lessThan", tmp(0), ":a", ":b"),
+                    createInstruction(OP, "lessThanEq", tmp(1), ":c", ":d"),
+                    createInstruction(OP, "greaterThan", tmp(2), ":e", ":f"),
+                    createInstruction(OP, "greaterThanEq", tmp(3), ":g", ":h")
             );
         }
 
@@ -111,11 +111,11 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                             e === f;
                             g !== h;
                             """,
-                    createInstruction(OP, "equal", var(0), "a", "b"),
-                    createInstruction(OP, "notEqual", var(1), "c", "d"),
-                    createInstruction(OP, "strictEqual", var(2), "e", "f"),
-                    createInstruction(OP, "strictEqual", var(4), "g", "h"),
-                    createInstruction(OP, "equal", var(3), var(4), "false")
+                    createInstruction(OP, "equal", tmp(0), ":a", ":b"),
+                    createInstruction(OP, "notEqual", tmp(1), ":c", ":d"),
+                    createInstruction(OP, "strictEqual", tmp(2), ":e", ":f"),
+                    createInstruction(OP, "strictEqual", tmp(4), ":g", ":h"),
+                    createInstruction(OP, "equal", tmp(3), tmp(4), "false")
             );
         }
 
@@ -205,39 +205,39 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesUnaryMinus() {
             assertCompilesTo("a = -b;",
-                    createInstruction(OP, "sub", var(0), "0", "b"),
-                    createInstruction(SET, "a", var(0))
+                    createInstruction(OP, "sub", tmp(0), "0", ":b"),
+                    createInstruction(SET, ":a", tmp(0))
             );
         }
 
         @Test
         void compilesUnaryPlus() {
             assertCompilesTo("a = +b;",
-                    createInstruction(SET, "a", "b")
+                    createInstruction(SET, ":a", ":b")
             );
         }
 
         @Test
         void compilesBitwiseNot() {
             assertCompilesTo("a = ~b;",
-                    createInstruction(OP, "not", var(0), "b"),
-                    createInstruction(SET, "a", var(0))
+                    createInstruction(OP, "not", tmp(0), ":b"),
+                    createInstruction(SET, ":a", tmp(0))
             );
         }
 
         @Test
         void compilesBooleanNot() {
             assertCompilesTo("a = !b;",
-                    createInstruction(OP, "equal", var(0), "b", "false"),
-                    createInstruction(SET, "a", var(0))
+                    createInstruction(OP, "equal", tmp(0), ":b", "false"),
+                    createInstruction(SET, ":a", tmp(0))
             );
         }
 
         @Test
         void compilesLogicalNot() {
             assertCompilesTo("a = not b;",
-                    createInstruction(OP, "equal", var(0), "b", "false"),
-                    createInstruction(SET, "a", var(0))
+                    createInstruction(OP, "equal", tmp(0), ":b", "false"),
+                    createInstruction(SET, ":a", tmp(0))
             );
         }
     }

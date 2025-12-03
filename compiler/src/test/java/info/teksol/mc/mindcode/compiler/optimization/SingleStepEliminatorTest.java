@@ -31,9 +31,9 @@ class SingleStepEliminatorTest extends AbstractOptimizerTest<SingleStepEliminato
                             print(1);
                         end;
                         """,
-                createInstruction(JUMP, var(1000), "equal", "x", "false"),
+                createInstruction(JUMP, label(0), "equal", ":x", "false"),
                 createInstruction(PRINT, "1"),
-                createInstruction(LABEL, var(1000))
+                createInstruction(LABEL, label(0))
         );
     }
 
@@ -46,11 +46,11 @@ class SingleStepEliminatorTest extends AbstractOptimizerTest<SingleStepEliminato
                             end;
                         end;
                         """,
-                createInstruction(JUMP, var(1000), "equal", "x", "false"),
-                createInstruction(JUMP, var(1002), "equal", "y", "false"),
+                createInstruction(JUMP, label(0), "equal", ":x", "false"),
+                createInstruction(JUMP, label(2), "equal", ":y", "false"),
                 createInstruction(PRINT, "1"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(LABEL, var(1000))
+                createInstruction(LABEL, label(2)),
+                createInstruction(LABEL, label(0))
         );
     }
 
@@ -63,12 +63,12 @@ class SingleStepEliminatorTest extends AbstractOptimizerTest<SingleStepEliminato
                             print(b);
                         end;
                         """,
-                createInstruction(JUMP, var(1000), "equal", "x", "false"),
-                createInstruction(PRINT, "a"),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(PRINT, "b"),
-                createInstruction(LABEL, var(1001))
+                createInstruction(JUMP, label(0), "equal", ":x", "false"),
+                createInstruction(PRINT, ":a"),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(PRINT, ":b"),
+                createInstruction(LABEL, label(1))
         );
     }
 
@@ -88,15 +88,15 @@ class SingleStepEliminatorTest extends AbstractOptimizerTest<SingleStepEliminato
                         """,
                 createInstruction(SET, "x", "4"),
                 createInstruction(SET, ":sum", "x"),
-                createInstruction(JUMP, var(1002), "greaterThan", "x", "10"),
+                createInstruction(JUMP, label(2), "greaterThan", "x", "10"),
                 createInstruction(OP, "add", ":sum", "x", "x"),
-                createInstruction(JUMP, var(1002), "greaterThan", ":sum", "10"),
+                createInstruction(JUMP, label(2), "greaterThan", ":sum", "10"),
                 createInstruction(OP, "add", ":sum", ":sum", "x"),
-                createInstruction(JUMP, var(1002), "greaterThan", ":sum", "10"),
+                createInstruction(JUMP, label(2), "greaterThan", ":sum", "10"),
                 createInstruction(OP, "add", ":sum", ":sum", "x"),
-                createInstruction(JUMP, var(1002), "greaterThan", ":sum", "10"),
+                createInstruction(JUMP, label(2), "greaterThan", ":sum", "10"),
                 createInstruction(OP, "add", ":sum", ":sum", "x"),
-                createInstruction(LABEL, var(1002)),
+                createInstruction(LABEL, label(2)),
                 createInstruction(PRINT, ":sum")
         );
     }

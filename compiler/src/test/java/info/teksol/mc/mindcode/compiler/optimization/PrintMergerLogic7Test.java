@@ -34,8 +34,7 @@ class PrintMergerLogic7Test extends AbstractOptimizerTest<PrintMerger> {
                         print("a");
                         print("b");
                         """,
-                createInstruction(PRINT, "\"ab\""),
-                createInstruction(END)
+                createInstruction(PRINT, q("ab"))
         );
     }
 
@@ -46,8 +45,7 @@ class PrintMergerLogic7Test extends AbstractOptimizerTest<PrintMerger> {
                         print("b");
                         print("c");
                         """,
-                createInstruction(PRINT, "\"abc\""),
-                createInstruction(END)
+                createInstruction(PRINT, q("abc"))
         );
     }
 
@@ -66,8 +64,7 @@ class PrintMergerLogic7Test extends AbstractOptimizerTest<PrintMerger> {
                         print("D");
                         print(MAX);
                         """,
-                createInstruction(PRINT, "\"15.79684A1B700CnullflareD999\""),
-                createInstruction(END)
+                createInstruction(PRINT, q("15.79684A1B700CnullflareD999"))
         );
     }
 
@@ -79,32 +76,30 @@ class PrintMergerLogic7Test extends AbstractOptimizerTest<PrintMerger> {
                          print("c");
                          print("d");
                         """,
-                createInstruction(PRINT, "\"a\""),
-                createInstruction(PRINT, "x"),
-                createInstruction(PRINT, "\"cd\""),
-                createInstruction(END)
+                createInstruction(PRINT, q("a")),
+                createInstruction(PRINT, ":x"),
+                createInstruction(PRINT, q("cd"))
         );
     }
 
     @Test
     void skipsJumps() {
         assertCompilesTo("""
-                        print("a");
+                        print(":a");
                         if x then
                           print(x);
                         end;
-                        print("b");
+                        print(":b");
                         """,
-                createInstruction(PRINT, "\"a\""),
-                createInstruction(JUMP, var(1000), "equal", "x", "false"),
-                createInstruction(PRINT, "x"),
-                createInstruction(SET, var(1), "x"),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(SET, var(1), "null"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "\"b\""),
-                createInstruction(END)
+                createInstruction(PRINT, q(":a")),
+                createInstruction(JUMP, label(0), "equal", ":x", "false"),
+                createInstruction(PRINT, ":x"),
+                createInstruction(SET, tmp(1), ":x"),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(SET, tmp(1), "null"),
+                createInstruction(LABEL, label(1)),
+                createInstruction(PRINT, q(":b"))
         );
     }
 
@@ -114,13 +109,12 @@ class PrintMergerLogic7Test extends AbstractOptimizerTest<PrintMerger> {
                         println("Rate: ", rate, " items/sec");
                         println("Elapsed: ", @time - start, " ms");
                         """,
-                createInstruction(PRINT, "\"Rate: \""),
-                createInstruction(PRINT, "rate"),
-                createInstruction(OP, "sub", var(0), "@time", "start"),
-                createInstruction(PRINT, "\" items/sec\\nElapsed: \""),
-                createInstruction(PRINT, var(0)),
-                createInstruction(PRINT, "\" ms\\n\""),
-                createInstruction(END)
+                createInstruction(PRINT, q("Rate: ")),
+                createInstruction(PRINT, ":rate"),
+                createInstruction(OP, "sub", tmp(0), "@time", ":start"),
+                createInstruction(PRINT, q(" items/sec\nElapsed: ")),
+                createInstruction(PRINT, tmp(0)),
+                createInstruction(PRINT, q(" ms\n"))
         );
     }
 
@@ -132,8 +126,7 @@ class PrintMergerLogic7Test extends AbstractOptimizerTest<PrintMerger> {
                         remark("bar");
                         """,
                 createInstruction(REMARK, q("Processing: mono")),
-                createInstruction(REMARK, q("bar")),
-                createInstruction(END)
+                createInstruction(REMARK, q("bar"))
         );
     }
 }

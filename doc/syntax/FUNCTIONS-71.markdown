@@ -1,4 +1,4 @@
-# Function reference for Mindustry Logic 7.1
+# Function reference for target 7.1
 
 This document contains function reference for all built-in Mindcode functions. Functions are grouped by the
 instruction they encapsulate so that functions with similar logic are listed together. The Mindcode source
@@ -536,4 +536,4 @@ Sets a property of a unit or building.
 
 ---
 
-[« Previous: Function reference for Mindustry Logic 7.0](FUNCTIONS-70.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 8.0 »](FUNCTIONS-80.markdown)
+[« Previous: Function reference for target 7.0](FUNCTIONS-70.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for target 8.0 »](FUNCTIONS-80.markdown)

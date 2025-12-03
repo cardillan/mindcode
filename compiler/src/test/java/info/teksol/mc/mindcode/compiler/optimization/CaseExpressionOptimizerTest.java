@@ -36,19 +36,18 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
                         end;
                         print(x);
                         """,
-                createInstruction(JUMP, var(1001), "notEqual", "UNIT", "@poly"),
-                createInstruction(SET, var(0), "1"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(JUMP, var(1003), "notEqual", "UNIT", "@mega"),
-                createInstruction(SET, var(0), "2"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(SET, var(0), "3"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(SET, "x", var(0)),
-                createInstruction(PRINT, "x"),
-                createInstruction(END)
+                createInstruction(JUMP, label(1), "notEqual", ".UNIT", "@poly"),
+                createInstruction(SET, tmp(0), "1"),
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(LABEL, label(1)),
+                createInstruction(JUMP, label(3), "notEqual", ".UNIT", "@mega"),
+                createInstruction(SET, tmp(0), "2"),
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(SET, tmp(0), "3"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(SET, ":x", tmp(0)),
+                createInstruction(PRINT, ":x")
         );
     }
 
@@ -62,20 +61,19 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
                         end;
                         print(x);
                         """,
-                createInstruction(SENSOR, var(0), "vault1", "@firstItem"),
-                createInstruction(JUMP, var(1001), "notEqual", var(0), "@lead"),
-                createInstruction(SET, var(1), "1"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(JUMP, var(1003), "notEqual", var(0), "@coal"),
-                createInstruction(SET, var(1), "2"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(SET, var(1), "3"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(SET, "x", var(1)),
-                createInstruction(PRINT, "x"),
-                createInstruction(END)
+                createInstruction(SENSOR, tmp(1), "vault1", "@firstItem"),
+                createInstruction(JUMP, label(1), "notEqual", tmp(1), "@lead"),
+                createInstruction(SET, tmp(0), "1"),
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(LABEL, label(1)),
+                createInstruction(JUMP, label(3), "notEqual", tmp(1), "@coal"),
+                createInstruction(SET, tmp(0), "2"),
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(SET, tmp(0), "3"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(SET, ":x", tmp(0)),
+                createInstruction(PRINT, ":x")
         );
     }
 
@@ -89,16 +87,14 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
                         createInstruction(JUMP, label0, EQUAL, ast0, lead),
                         createInstruction(JUMP, label1, EQUAL, ast0, coal),
                         createInstruction(LABEL, label0),
-                        createInstruction(LABEL, label1),
-                        createInstruction(END)
+                        createInstruction(LABEL, label1)
                 ),
                 List.of(
                         createInstruction(SENSOR, var, vault1, firstItem),
                         createInstruction(JUMP, label0, EQUAL, var, lead),
                         createInstruction(JUMP, label1, EQUAL, var, coal),
                         createInstruction(LABEL, label0),
-                        createInstruction(LABEL, label1),
-                        createInstruction(END)
+                        createInstruction(LABEL, label1)
                 )
         );
     }
@@ -110,8 +106,7 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
                 createInstruction(JUMP, label0, NOT_EQUAL, var, lead),
                 createInstruction(JUMP, label1, NOT_EQUAL, var, coal),
                 createInstruction(LABEL, label0),
-                createInstruction(LABEL, label1),
-                createInstruction(END)
+                createInstruction(LABEL, label1)
         );
     }
 
@@ -123,8 +118,7 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
                 createInstruction(JUMP, label0, NOT_EQUAL, ast0, lead),
                 createInstruction(JUMP, label1, NOT_EQUAL, coal, ast0),
                 createInstruction(LABEL, label0),
-                createInstruction(LABEL, label1),
-                createInstruction(END)
+                createInstruction(LABEL, label1)
         );
     }
 
@@ -136,8 +130,7 @@ class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpressionOp
                 createInstruction(SET, ast0, var),
                 createInstruction(JUMP, label1, NOT_EQUAL, ast0, coal),
                 createInstruction(LABEL, label0),
-                createInstruction(LABEL, label1),
-                createInstruction(END)
+                createInstruction(LABEL, label1)
         );
     }
 }

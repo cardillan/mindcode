@@ -38,13 +38,13 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
                         end;
                         print("Out of loop");
                         """,
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "equal", "true", "false"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(JUMP, label(2), "equal", "true", "false"),
                 createInstruction(PRINT, q("In loop")),
-                createInstruction(SENSOR, var(0), "@unit", "@dead"),
-                createInstruction(JUMP, var(1002), "strictEqual", var(0), "0"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1002)),
+                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                createInstruction(JUMP, label(2), "strictEqual", tmp(0), "0"),
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(LABEL, label(2)),
                 createInstruction(PRINT, q("Out of loop"))
         );
     }
@@ -87,10 +87,10 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
                         end;
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(SENSOR, "__fn0_amount", "vault1", "@coal"),
-                createInstruction(JUMP, "__start__", "equal", "__fn0_amount", "0"),
-                createInstruction(OP, "mod", var(4), "__fn0_amount", "10"),
-                createInstruction(PRINT, var(4))
+                createInstruction(SENSOR, ":displayItem:amount", "vault1", "@coal"),
+                createInstruction(JUMP, "__start__", "equal", ":displayItem:amount", "0"),
+                createInstruction(OP, "mod", tmp(3), ":displayItem:amount", "10"),
+                createInstruction(PRINT, tmp(3))
         );
     }
 
@@ -101,13 +101,11 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
                         createInstruction(LABEL, label0),
                         createInstruction(JUMP, label1, Condition.EQUAL, a, b),
                         createInstruction(JUMP, label0, Condition.ALWAYS),
-                        createInstruction(LABEL, label1),
-                        createInstruction(END)
+                        createInstruction(LABEL, label1)
                 ),
                 List.of(
                         createInstruction(LABEL, label0),
-                        createInstruction(JUMP, label0, Condition.NOT_EQUAL, a, b),
-                        createInstruction(END)
+                        createInstruction(JUMP, label0, Condition.NOT_EQUAL, a, b)
                 )
         );
     }
@@ -119,8 +117,7 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
                 createInstruction(LABEL, label0),
                 createInstruction(JUMP, label1, Condition.STRICT_EQUAL, a, b),
                 createInstruction(JUMP, label0, Condition.ALWAYS),
-                createInstruction(LABEL, label1),
-                createInstruction(END)
+                createInstruction(LABEL, label1)
         );
     }
 
@@ -131,8 +128,7 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
                 createInstruction(JUMP, label1, Condition.STRICT_EQUAL, a, b),
                 createInstruction(JUMP, label0, Condition.ALWAYS),
                 createInstruction(PRINT, a),
-                createInstruction(LABEL, label1),
-                createInstruction(END)
+                createInstruction(LABEL, label1)
         );
     }
 
@@ -142,8 +138,7 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
                 createInstruction(LABEL, label0),
                 createInstruction(JUMP, label1, Condition.EQUAL, a, b),
                 createInstruction(JUMP, label0, Condition.EQUAL, c, d),
-                createInstruction(LABEL, label1),
-                createInstruction(END)
+                createInstruction(LABEL, label1)
         );
     }
 }

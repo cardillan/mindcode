@@ -37,12 +37,12 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
                         end;
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, "__start__", "equal", "a", "false"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(JUMP, var(1000), "equal", "b", "false"),
-                createInstruction(PRINT, "b"),
-                createInstruction(JUMP, var(1003), "always")
+                createInstruction(LABEL, label(0)),
+                createInstruction(JUMP, "__start__", "equal", ":a", "false"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(JUMP, label(0), "equal", ":b", "false"),
+                createInstruction(PRINT, ":b"),
+                createInstruction(JUMP, label(3), "always")
         );
     }
 
@@ -55,8 +55,8 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
                         end;
                         print(c);
                         """,
-                createInstruction(PRINT, "a"),
-                createInstruction(PRINT, "c")
+                createInstruction(PRINT, ":a"),
+                createInstruction(PRINT, ":c")
         );
     }
 

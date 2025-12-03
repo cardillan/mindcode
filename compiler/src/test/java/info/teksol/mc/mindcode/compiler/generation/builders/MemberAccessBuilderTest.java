@@ -17,9 +17,9 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             switch1.enabled = !switch1.enabled;
                             """,
-                    createInstruction(SENSOR, var(1), "switch1", "@enabled"),
-                    createInstruction(OP, "equal", var(2), var(1), "false"),
-                    createInstruction(CONTROL, "enabled", "switch1", var(2))
+                    createInstruction(SENSOR, tmp(1), "switch1", "@enabled"),
+                    createInstruction(OP, "equal", tmp(2), tmp(1), "false"),
+                    createInstruction(CONTROL, "enabled", "switch1", tmp(2))
             );
         }
 
@@ -32,9 +32,9 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
                             
                             foo(out switch1.enabled);
                             """,
-                    createInstruction(SET, "__fn0_value", "false"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(CONTROL, "enabled", "switch1", "__fn0_value")
+                    createInstruction(SET, ":foo:value", "false"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(CONTROL, "enabled", "switch1", ":foo:value")
             );
         }
 
@@ -49,12 +49,12 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
                             A = switch1;
                             foo(out A.enabled);
                             """,
-                    createInstruction(SET, "A", "switch1"),
-                    createInstruction(SET, var(0), "A"),
-                    createInstruction(SET, "__fn0_value", "false"),
-                    createInstruction(SET, "A", "switch2"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(CONTROL, "enabled", var(0), "__fn0_value")
+                    createInstruction(SET, ".A", "switch1"),
+                    createInstruction(SET, tmp(0), ".A"),
+                    createInstruction(SET, ":foo:value", "false"),
+                    createInstruction(SET, ".A", "switch2"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(CONTROL, "enabled", tmp(0), ":foo:value")
             );
         }
     }
@@ -117,8 +117,8 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             amount = vault1.@blast-compound;
                             """,
-                    createInstruction(SENSOR, var(0), "vault1", "@blast-compound"),
-                    createInstruction(SET, "amount", var(0))
+                    createInstruction(SENSOR, tmp(0), "vault1", "@blast-compound"),
+                    createInstruction(SET, ":amount", tmp(0))
             );
         }
 
@@ -127,9 +127,9 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             id = vault1.@firstItem.@id;
                             """,
-                    createInstruction(SENSOR, var(0), "vault1", "@firstItem"),
-                    createInstruction(SENSOR, var(1), var(0), "@id"),
-                    createInstruction(SET, "id", var(1))
+                    createInstruction(SENSOR, tmp(0), "vault1", "@firstItem"),
+                    createInstruction(SENSOR, tmp(1), tmp(0), "@id"),
+                    createInstruction(SET, ":id", tmp(1))
             );
         }
 

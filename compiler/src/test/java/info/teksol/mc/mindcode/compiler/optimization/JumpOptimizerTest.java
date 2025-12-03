@@ -34,16 +34,16 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
                             n += 1;
                         end;
                         """,
-                createInstruction(READ, var(0), "cell1", "4"),
-                createInstruction(JUMP, var(1000), "notEqual", var(0), "0"),
-                createInstruction(SET, var(2), "false"),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
+                createInstruction(READ, tmp(0), "cell1", "4"),
+                createInstruction(JUMP, label(0), "notEqual", tmp(0), "0"),
+                createInstruction(SET, tmp(2), "false"),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
                 createInstruction(WRITE, "true", "cell1", "4"),
-                createInstruction(OP, "add", "n", "n", "1"),
-                createInstruction(SET, var(2), "n"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(SET, "value", var(2))
+                createInstruction(OP, "add", ":n", ":n", "1"),
+                createInstruction(SET, tmp(2), ":n"),
+                createInstruction(LABEL, label(1)),
+                createInstruction(SET, ":value", tmp(2))
         );
     }
 
@@ -57,18 +57,18 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
                             n++;
                         end;
                         """,
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "lessThanEq", "n", "0"),
-                createInstruction(SET, var(1), "n"),
-                createInstruction(OP, "add", "n", "n", "1"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(JUMP, var(1005), "notEqual", "n", "null"),
-                createInstruction(SET, var(3), "n"),
-                createInstruction(OP, "add", "n", "n", "1"),
-                createInstruction(JUMP, var(1003), "always"),
-                createInstruction(LABEL, var(1005))
+                createInstruction(LABEL, label(0)),
+                createInstruction(JUMP, label(2), "lessThanEq", ":n", "0"),
+                createInstruction(SET, tmp(1), ":n"),
+                createInstruction(OP, "add", ":n", ":n", "1"),
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(LABEL, label(2)),
+                createInstruction(LABEL, label(3)),
+                createInstruction(JUMP, label(5), "notEqual", ":n", "null"),
+                createInstruction(SET, tmp(3), ":n"),
+                createInstruction(OP, "add", ":n", ":n", "1"),
+                createInstruction(JUMP, label(3), "always"),
+                createInstruction(LABEL, label(5))
         );
     }
 
@@ -79,17 +79,16 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
                         #set temp-variables-elimination = advanced;
                         alive = @unit.@dead === 0;
                         if alive then
-                            print(alive);
+                            print("alive");
                         end;
                         """,
-                createInstruction(SENSOR, var(0), "@unit", "@dead"),
-                createInstruction(OP, "strictEqual", "alive", var(0), "0"),
-                createInstruction(JUMP, var(1000), "equal", "alive", "false"),
-                createInstruction(PRINT, "alive"),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(END)
+                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                createInstruction(OP, "strictEqual", ":alive", tmp(0), "0"),
+                createInstruction(JUMP, label(0), "equal", ":alive", "false"),
+                createInstruction(PRINT, q("alive")),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(LABEL, label(1))
         );
     }
 
@@ -100,17 +99,16 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
                         #set dead-code-elimination = advanced;
                         #set temp-variables-elimination = advanced;
                         if @unit.@dead === 0 then
-                            print(alive);
+                            print("alive");
                         end;
                         """,
-                createInstruction(SENSOR, var(0), "@unit", "@dead"),
-                createInstruction(OP, "strictEqual", var(1), var(0), "0"),
-                createInstruction(JUMP, var(1000), "equal", var(1), "false"),
-                createInstruction(PRINT, "alive"),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(END)
+                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                createInstruction(OP, "strictEqual", tmp(1), tmp(0), "0"),
+                createInstruction(JUMP, label(0), "equal", tmp(1), "false"),
+                createInstruction(PRINT, q("alive")),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(LABEL, label(1))
         );
     }
 
@@ -140,14 +138,12 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
                         createInstruction(OP, Operation.STRICT_EQUAL, tmp0, a, b),
                         createInstruction(JUMP, label0, Condition.NOT_EQUAL, tmp0, LogicBoolean.FALSE),
                         createInstruction(PRINT, message),
-                        createInstruction(LABEL, label0),
-                        createInstruction(END)
+                        createInstruction(LABEL, label0)
                 ),
                 List.of(
                         createInstruction(JUMP, label0, Operation.STRICT_EQUAL, a, b),
                         createInstruction(PRINT, message),
-                        createInstruction(LABEL, label0),
-                        createInstruction(END)
+                        createInstruction(LABEL, label0)
                 )
         );
     }
@@ -158,8 +154,7 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
                 createInstruction(OP, Operation.STRICT_EQUAL, c, a, b),
                 createInstruction(JUMP, label0, Condition.NOT_EQUAL, c, LogicBoolean.FALSE),
                 createInstruction(PRINT, message),
-                createInstruction(LABEL, label0),
-                createInstruction(END)
+                createInstruction(LABEL, label0)
         );
     }
 
@@ -169,8 +164,7 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
                 createInstruction(OP, Operation.STRICT_EQUAL, tmp0, a, b),
                 createInstruction(JUMP, label0, Condition.NOT_EQUAL, tmp1, LogicBoolean.FALSE),
                 createInstruction(PRINT, message),
-                createInstruction(LABEL, label0),
-                createInstruction(END)
+                createInstruction(LABEL, label0)
         );
     }
 
@@ -181,8 +175,7 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
                 createInstruction(OP, Operation.STRICT_EQUAL, tmp0, a, b),
                 createInstruction(JUMP, label0, Condition.EQUAL, tmp0, LogicBoolean.FALSE),
                 createInstruction(PRINT, message),
-                createInstruction(LABEL, label0),
-                createInstruction(END)
+                createInstruction(LABEL, label0)
         );
     }
 
@@ -192,8 +185,7 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
                 createInstruction(JUMP, label0, Condition.NOT_EQUAL, tmp0, LogicBoolean.FALSE),
                 createInstruction(OP, Operation.STRICT_EQUAL, tmp0, a, b),
                 createInstruction(PRINT, message),
-                createInstruction(LABEL, label0),
-                createInstruction(END)
+                createInstruction(LABEL, label0)
         );
     }
 
@@ -206,16 +198,14 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
                         """,
                 createInstruction(SET, "a", "0"),
                 createInstruction(SET, "b", "1"),
-                createInstruction(OP, "or", var(0), "a", "b"),
-                createInstruction(JUMP, var(1000), "equal", var(0), "false"),
+                createInstruction(OP, "or", tmp(1), "a", "b"),
+                createInstruction(JUMP, label(0), "equal", tmp(1), "false"),
                 createInstruction(PRINT, q("yes")),
-                createInstruction(SET, var(2), q("yes")),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(SET, var(2), "null"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(END)
-
+                createInstruction(SET, tmp(2), q("yes")),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(SET, tmp(2), "null"),
+                createInstruction(LABEL, label(1))
         );
     }
 
@@ -231,9 +221,9 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
                         end;
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(OP, "rand", var(0), "10"),
-                createInstruction(OP, "abs", var(2), var(0)),
-                createInstruction(JUMP, "__start__", "greaterThan", var(2), "0"),
+                createInstruction(OP, "rand", tmp(0), "10"),
+                createInstruction(OP, "abs", tmp(2), tmp(0)),
+                createInstruction(JUMP, "__start__", "greaterThan", tmp(2), "0"),
                 createInstruction(PRINT, q("yes"))
 
 

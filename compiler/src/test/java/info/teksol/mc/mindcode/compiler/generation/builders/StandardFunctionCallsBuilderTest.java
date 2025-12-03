@@ -30,9 +30,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, ".a*0"),
                     createInstruction(PRINT, ".a*1"),
                     createInstruction(PRINT, ".a*2"),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, "1"),
-                    createInstruction(LABEL, var(1001))
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -57,7 +57,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, ".b*0"),
                     createInstruction(PRINT, ".b*1"),
                     createInstruction(PRINT, ".b*2"),
-                    createInstruction(LABEL, var(1000))
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -79,17 +79,17 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, ".a*2", "3"),
                     createInstruction(PRINT, q("vararg")),
                     createInstruction(PRINT, "0"),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(SET, ":fn1:a", ".a*2"),
                     createInstruction(PRINT, q("one")),
-                    createInstruction(LABEL, var(1001)),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(SET, ":fn2:a", ".a*1"),
                     createInstruction(SET, ":fn2:b", ".a*2"),
                     createInstruction(PRINT, q("two")),
-                    createInstruction(LABEL, var(1002)),
+                    createInstruction(LABEL, label(2)),
                     createInstruction(PRINT, q("vararg")),
                     createInstruction(PRINT, "3"),
-                    createInstruction(LABEL, var(1003))
+                    createInstruction(LABEL, label(3))
             );
         }
 
@@ -489,7 +489,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, ":fn0:x", q("Hello")),
                     createInstruction(PRINT, ":fn0:x"),
-                    createInstruction(LABEL, var(1000))
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -505,10 +505,10 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, ":fn0:x", q("Hello, ")),
                     createInstruction(PRINT, ":fn0:x"),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(SET, ":fn1:x", q("Dolly")),
                     createInstruction(PRINT, ":fn1:x"),
-                    createInstruction(LABEL, var(1001))
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -642,14 +642,14 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(lancer1);
                             """,
                     createInstruction(SET, ":fn0:block", "lancer1"),
-                    createInstruction(RADAR, "enemy", "any", "any", "distance", ":fn0:block", "1", var(1)),
-                    createInstruction(PRINT, var(1)),
-                    createInstruction(RADAR, "ally", "flying", "any", "health", ":fn0:block", "1", var(2)),
-                    createInstruction(PRINT, var(2)),
-                    createInstruction(RADAR, "enemy", "boss", "any", "distance", "lancer1", "1", var(3)),
-                    createInstruction(PRINT, var(3)),
-                    createInstruction(SET, var(0), var(3)),
-                    createInstruction(LABEL, var(1000))
+                    createInstruction(RADAR, "enemy", "any", "any", "distance", ":fn0:block", "1", tmp(1)),
+                    createInstruction(PRINT, tmp(1)),
+                    createInstruction(RADAR, "ally", "flying", "any", "health", ":fn0:block", "1", tmp(2)),
+                    createInstruction(PRINT, tmp(2)),
+                    createInstruction(RADAR, "enemy", "boss", "any", "distance", "lancer1", "1", tmp(3)),
+                    createInstruction(PRINT, tmp(3)),
+                    createInstruction(SET, tmp(0), tmp(3)),
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -673,7 +673,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             setx(7);
                             """,
                     ix -> ix instanceof SetInstruction set && set.getResult().getName().equals("X"),
-                    createInstruction(SET, "X", ":fn0:x")
+                    createInstruction(SET, ".X", ":fn0:x")
             );
         }
 
@@ -698,14 +698,14 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(1, 1);
                             """,
                     createInstruction(PRINT, "0"),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(SET, ":fn1:a", "1"),
                     createInstruction(PRINT, "1"),
-                    createInstruction(LABEL, var(1001)),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(SET, ":fn2:a", "1"),
                     createInstruction(SET, ":fn2:b", "1"),
                     createInstruction(PRINT, "2"),
-                    createInstruction(LABEL, var(1002))
+                    createInstruction(LABEL, label(2))
             );
         }
     }
@@ -722,8 +722,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(out z);
                             """,
                     createInstruction(SET, ":fn0:x", "10"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "z", ":fn0:x")
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":z", ":fn0:x")
             );
         }
 
@@ -738,11 +738,11 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(out z);
                             """,
                     createInstruction(SET, ":fn0:x", "10"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "y", ":fn0:x"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":y", ":fn0:x"),
                     createInstruction(SET, ":fn1:x", "10"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, "z", ":fn1:x")
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, ":z", ":fn1:x")
             );
         }
 
@@ -758,10 +758,10 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             
                             foo(out $z);
                             """,
-                    createInstruction(LABEL, var(1111)),
-                    createInstruction(JUMP, var(1111), "equal", "bank1", "null"),
+                    createInstruction(LABEL, tmp(1111)),
+                    createInstruction(JUMP, tmp(1111), "equal", "bank1", "null"),
                     createInstruction(SET, ":fn0:x", "10"),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(WRITE, ":fn0:x", "bank1", "0")
             );
         }
@@ -801,11 +801,11 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             
                             foo(out cell2[cell1[0]]);
                             """,
-                    createInstruction(READ, var(0), "cell1", "0"),
-                    createInstruction(SET, var(1), var(0)),
+                    createInstruction(READ, tmp(0), "cell1", "0"),
+                    createInstruction(SET, tmp(1), tmp(0)),
                     createInstruction(SET, ":fn0:x", "10"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(WRITE, ":fn0:x", "cell2", var(1))
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(WRITE, ":fn0:x", "cell2", tmp(1))
             );
         }
 
@@ -903,11 +903,11 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             z = 10;
                             foo(out z);
                             """,
-                    createInstruction(SET, "z", "10"),
-                    createInstruction(SET, ":fn0:x", "z"),
+                    createInstruction(SET, ":z", "10"),
+                    createInstruction(SET, ":fn0:x", ":z"),
                     createInstruction(OP, "add", ":fn0:x", ":fn0:x", "10"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "z", ":fn0:x")
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":z", ":fn0:x")
             );
         }
 
@@ -922,16 +922,16 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(out y);
                             foo(out z);
                             """,
-                    createInstruction(SET, "z", "10"),
-                    createInstruction(SET, "y", "z"),
-                    createInstruction(SET, ":fn0:x", "y"),
+                    createInstruction(SET, ":z", "10"),
+                    createInstruction(SET, ":y", ":z"),
+                    createInstruction(SET, ":fn0:x", ":y"),
                     createInstruction(OP, "add", ":fn0:x", ":fn0:x", "10"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "y", ":fn0:x"),
-                    createInstruction(SET, ":fn1:x", "z"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":y", ":fn0:x"),
+                    createInstruction(SET, ":fn1:x", ":z"),
                     createInstruction(OP, "add", ":fn1:x", ":fn1:x", "10"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, "z", ":fn1:x")
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, ":z", ":fn1:x")
 
             );
         }
@@ -948,13 +948,13 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             
                             foo(out $z);
                             """,
-                    createInstruction(LABEL, var(1111)),
-                    createInstruction(JUMP, var(1111), "equal", "bank1", "null"),
-                    createInstruction(READ, var(0), "bank1", "0"),
-                    createInstruction(SET, var(1), var(0)),
-                    createInstruction(SET, ":fn0:x", var(1)),
+                    createInstruction(LABEL, tmp(1111)),
+                    createInstruction(JUMP, tmp(1111), "equal", "bank1", "null"),
+                    createInstruction(READ, tmp(0), "bank1", "0"),
+                    createInstruction(SET, tmp(1), tmp(0)),
+                    createInstruction(SET, ":fn0:x", tmp(1)),
                     createInstruction(OP, "add", ":fn0:x", ":fn0:x", "10"),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(WRITE, ":fn0:x", "bank1", "0")
             );
         }
@@ -1334,21 +1334,21 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             
                             print(foo(rand(10)));
                             """,
-                    createInstruction(OP, "rand", var(0), "10"),
-                    createInstruction(SET, ":fn0:x", var(0)),
-                    createInstruction(OP, "equal", var(2), ":fn0:x", "0"),
-                    createInstruction(JUMP, var(1001), "equal", var(2), "false"),
-                    createInstruction(SET, var(1), "10"),
-                    createInstruction(JUMP, var(1000), "always"),
-                    createInstruction(SET, var(3), "null"),
-                    createInstruction(JUMP, var(1002), "always"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, var(3), "null"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(OP, "sub", var(4), ":fn0:x", "20"),
-                    createInstruction(SET, var(1), var(4)),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(PRINT, var(1))
+                    createInstruction(OP, "rand", tmp(0), "10"),
+                    createInstruction(SET, ":fn0:x", tmp(0)),
+                    createInstruction(OP, "equal", tmp(2), ":fn0:x", "0"),
+                    createInstruction(JUMP, label(1), "equal", tmp(2), "false"),
+                    createInstruction(SET, tmp(1), "10"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(SET, tmp(3), "null"),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, tmp(3), "null"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(OP, "sub", tmp(4), ":fn0:x", "20"),
+                    createInstruction(SET, tmp(1), tmp(4)),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, tmp(1))
             );
         }
 
@@ -1453,8 +1453,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             unit = ubind(@poly);
                             """,
                     createInstruction(UBIND, "@poly"),
-                    createInstruction(SET, var(0), "@unit"),
-                    createInstruction(SET, "unit", var(0))
+                    createInstruction(SET, tmp(0), "@unit"),
+                    createInstruction(SET, ":unit", tmp(0))
             );
         }
 
@@ -1462,15 +1462,14 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         void compilesEndFunctionCall() {
             assertCompilesTo(
                     "if some_cond == false then end(); end;",
-                    createInstruction(OP, "equal", var(0), "some_cond", "false"),
-                    createInstruction(JUMP, var(1000), "equal", var(0), "false"),
+                    createInstruction(OP, "equal", tmp(0), "some_cond", "false"),
+                    createInstruction(JUMP, label(0), "equal", tmp(0), "false"),
                     createInstruction(END),
-                    createInstruction(SET, var(1), "null"),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, var(1), "null"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(END)
+                    createInstruction(SET, tmp(1), "null"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(1), "null"),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -1479,8 +1478,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             building = getBlock(20, 30, out type, out floor);
                             """,
-                    createInstruction(UCONTROL, "getBlock", "20", "30", "type", var(0), "floor"),
-                    createInstruction(SET, "building", var(0))
+                    createInstruction(UCONTROL, "getBlock", "20", "30", ":type", tmp(0), ":floor"),
+                    createInstruction(SET, ":building", tmp(0))
             );
         }
 
@@ -1491,12 +1490,12 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             allocate heap in bank1;
                             $building = getBlock(20, 30, out $type, out $floor);
                             """,
-                    createInstruction(LABEL, var(1111)),
-                    createInstruction(JUMP, var(1111), "equal", "bank1", "null"),
-                    createInstruction(UCONTROL, "getBlock", "20", "30", var(2), var(5), var(4)),
-                    createInstruction(WRITE, var(2), "bank1", "1"),
-                    createInstruction(WRITE, var(4), "bank1", "2"),
-                    createInstruction(WRITE, var(5), "bank1", "0")
+                    createInstruction(LABEL, tmp(1111)),
+                    createInstruction(JUMP, tmp(1111), "equal", "bank1", "null"),
+                    createInstruction(UCONTROL, "getBlock", "20", "30", tmp(2), tmp(5), tmp(4)),
+                    createInstruction(WRITE, tmp(2), "bank1", "1"),
+                    createInstruction(WRITE, tmp(4), "bank1", "2"),
+                    createInstruction(WRITE, tmp(5), "bank1", "0")
             );
         }
 
@@ -1504,16 +1503,15 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         void compilesComplexMathExpression() {
             assertCompilesTo(
                     "x = ceil(floor(sin(log(cos(abs(tan(rand(1))))))));",
-                    createInstruction(OP, "rand", var(0), "1"),
-                    createInstruction(OP, "tan", var(1), var(0)),
-                    createInstruction(OP, "abs", var(2), var(1)),
-                    createInstruction(OP, "cos", var(3), var(2)),
-                    createInstruction(OP, "log", var(4), var(3)),
-                    createInstruction(OP, "sin", var(5), var(4)),
-                    createInstruction(OP, "floor", var(6), var(5)),
-                    createInstruction(OP, "ceil", var(7), var(6)),
-                    createInstruction(SET, "x", var(7)),
-                    createInstruction(END)
+                    createInstruction(OP, "rand", tmp(0), "1"),
+                    createInstruction(OP, "tan", tmp(1), tmp(0)),
+                    createInstruction(OP, "abs", tmp(2), tmp(1)),
+                    createInstruction(OP, "cos", tmp(3), tmp(2)),
+                    createInstruction(OP, "log", tmp(4), tmp(3)),
+                    createInstruction(OP, "sin", tmp(5), tmp(4)),
+                    createInstruction(OP, "floor", tmp(6), tmp(5)),
+                    createInstruction(OP, "ceil", tmp(7), tmp(6)),
+                    createInstruction(SET, ":x", tmp(7))
             );
         }
 
@@ -1542,8 +1540,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             getlink(1).printflush();
                             """,
-                    createInstruction(GETLINK, var(0), "1"),
-                    createInstruction(PRINTFLUSH, var(0))
+                    createInstruction(GETLINK, tmp(0), "1"),
+                    createInstruction(PRINTFLUSH, tmp(0))
             );
         }
 
@@ -1582,18 +1580,17 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             image(x, y, @copper, size, rotation);
                             drawflush(display1);
                             """,
-                    createInstruction(DRAW, "clear", "r", "g", "b"),
-                    createInstruction(DRAW, "color", "r", "g", "b", "alpha"),
+                    createInstruction(DRAW, "clear", ":r", ":g", ":b"),
+                    createInstruction(DRAW, "color", ":r", ":g", ":b", "alpha"),
                     createInstruction(DRAW, "stroke", "width"),
                     createInstruction(DRAW, "line", "x1", "y1", "x2", "y2"),
-                    createInstruction(DRAW, "rect", "x", "y", "w", "h"),
-                    createInstruction(DRAW, "lineRect", "x", "y", "w", "h"),
-                    createInstruction(DRAW, "poly", "x", "y", "sides", "radius", "rotation"),
-                    createInstruction(DRAW, "linePoly", "x", "y", "sides", "radius", "rotation"),
+                    createInstruction(DRAW, "rect", ":x", ":y", ":w", ":h"),
+                    createInstruction(DRAW, "lineRect", ":x", ":y", ":w", ":h"),
+                    createInstruction(DRAW, "poly", ":x", ":y", "sides", "radius", "rotation"),
+                    createInstruction(DRAW, "linePoly", ":x", ":y", "sides", "radius", "rotation"),
                     createInstruction(DRAW, "triangle", "x1", "y1", "x2", "y2", "x3", "y3"),
-                    createInstruction(DRAW, "image", "x", "y", "@copper", "size", "rotation"),
-                    createInstruction(DRAWFLUSH, "display1"),
-                    createInstruction(END)
+                    createInstruction(DRAW, "image", ":x", ":y", "@copper", "size", "rotation"),
+                    createInstruction(DRAWFLUSH, "display1")
             );
         }
 
@@ -1608,30 +1605,30 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                                 end;
                             end;
                             """,
-                    createInstruction(URADAR, "enemy", "ground", "any", "health", "0", ".MIN_TO_MAX", var(0)),
-                    createInstruction(SET, ":target", var(0)),
-                    createInstruction(OP, "notEqual", var(1), ":target", "null"),
-                    createInstruction(JUMP, var(1000), "equal", var(1), "false"),
-                    createInstruction(SENSOR, var(3), ":target", "@x"),
-                    createInstruction(SENSOR, var(4), ":target", "@y"),
-                    createInstruction(UCONTROL, "approach", var(3), var(4), "10"),
-                    createInstruction(SENSOR, var(5), ":target", "@x"),
-                    createInstruction(SENSOR, var(6), ":target", "@y"),
-                    createInstruction(UCONTROL, "within", var(5), var(6), "10", var(7)),
-                    createInstruction(JUMP, var(1002), "equal", var(7), "false"),
-                    createInstruction(SENSOR, var(9), ":target", "@x"),
-                    createInstruction(SENSOR, var(10), ":target", "@y"),
-                    createInstruction(UCONTROL, "target", var(9), var(10), ".SHOOT"),
-                    createInstruction(SET, var(8), "null"),
-                    createInstruction(JUMP, var(1003), "always"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(SET, var(8), "null"),
-                    createInstruction(LABEL, var(1003)),
-                    createInstruction(SET, var(2), var(8)),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, var(2), "null"),
-                    createInstruction(LABEL, var(1001))
+                    createInstruction(URADAR, "enemy", "ground", "any", "health", "0", ".MIN_TO_MAX", tmp(0)),
+                    createInstruction(SET, ":target", tmp(0)),
+                    createInstruction(OP, "notEqual", tmp(1), ":target", "null"),
+                    createInstruction(JUMP, label(0), "equal", tmp(1), "false"),
+                    createInstruction(SENSOR, tmp(3), ":target", "@x"),
+                    createInstruction(SENSOR, tmp(4), ":target", "@y"),
+                    createInstruction(UCONTROL, "approach", tmp(3), tmp(4), "10"),
+                    createInstruction(SENSOR, tmp(5), ":target", "@x"),
+                    createInstruction(SENSOR, tmp(6), ":target", "@y"),
+                    createInstruction(UCONTROL, "within", tmp(5), tmp(6), "10", tmp(7)),
+                    createInstruction(JUMP, label(2), "equal", tmp(7), "false"),
+                    createInstruction(SENSOR, tmp(9), ":target", "@x"),
+                    createInstruction(SENSOR, label(10), ":target", "@y"),
+                    createInstruction(UCONTROL, "target", tmp(9), label(10), ".SHOOT"),
+                    createInstruction(SET, tmp(8), "null"),
+                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(8), "null"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, tmp(2), tmp(8)),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(2), "null"),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -1643,13 +1640,13 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             building = ulocate(:spawn, out x, out y);
                             building = ulocate(:damaged, out x, out y);
                             """,
-                    createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", ":x", ":y", var(0), var(1)),
-                    createInstruction(ULOCATE, "building", "core", ".ENEMY", "@copper", ":x", ":y", var(3), var(2)),
-                    createInstruction(SET, ":building", var(2)),
-                    createInstruction(ULOCATE, "spawn", "core", "true", "@copper", ":x", ":y", var(5), var(4)),
-                    createInstruction(SET, ":building", var(4)),
-                    createInstruction(ULOCATE, "damaged", "core", "true", "@copper", ":x", ":y", var(7), var(6)),
-                    createInstruction(SET, ":building", var(6))
+                    createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", ":x", ":y", tmp(0), tmp(1)),
+                    createInstruction(ULOCATE, "building", "core", ".ENEMY", "@copper", ":x", ":y", tmp(3), tmp(2)),
+                    createInstruction(SET, ":building", tmp(2)),
+                    createInstruction(ULOCATE, "spawn", "core", "true", "@copper", ":x", ":y", tmp(5), tmp(4)),
+                    createInstruction(SET, ":building", tmp(4)),
+                    createInstruction(ULOCATE, "damaged", "core", "true", "@copper", ":x", ":y", tmp(7), tmp(6)),
+                    createInstruction(SET, ":building", tmp(6))
             );
         }
 
@@ -1661,14 +1658,13 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             src = salvo1;
                             block = radar(:enemy, :any, :any, :distance, src, 1);
                             """,
-                    createInstruction(RADAR, "enemy", "any", "any", "distance", "salvo1", "1", var(0)),
-                    createInstruction(SET, "block", var(0)),
-                    createInstruction(RADAR, "ally", "flying", "any", "health", "lancer1", "1", var(1)),
-                    createInstruction(SET, "block", var(1)),
-                    createInstruction(SET, "src", "salvo1"),
-                    createInstruction(RADAR, "enemy", "any", "any", "distance", "src", "1", var(2)),
-                    createInstruction(SET, "block", var(2)),
-                    createInstruction(END)
+                    createInstruction(RADAR, "enemy", "any", "any", "distance", "salvo1", "1", tmp(0)),
+                    createInstruction(SET, ":block", tmp(0)),
+                    createInstruction(RADAR, "ally", "flying", "any", "health", "lancer1", "1", tmp(1)),
+                    createInstruction(SET, ":block", tmp(1)),
+                    createInstruction(SET, ":src", "salvo1"),
+                    createInstruction(RADAR, "enemy", "any", "any", "distance", ":src", "1", tmp(2)),
+                    createInstruction(SET, ":block", tmp(2))
             );
         }
 
@@ -1681,8 +1677,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(WAIT, "1"),
                     createInstruction(WAIT, "0.001"),
-                    createInstruction(WAIT, "1000"),
-                    createInstruction(END)
+                    createInstruction(WAIT, "1000")
             );
         }
 
@@ -1701,25 +1696,24 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             building = getBlock(x, y);
                             print(building, result);
                             """,
-                    createInstruction(DRAW, "col", "color"),
-                    createInstruction(OP, "asin", var(0), "a"),
-                    createInstruction(SET, "result", var(0)),
-                    createInstruction(OP, "acos", var(1), "a"),
-                    createInstruction(SET, "result", var(1)),
-                    createInstruction(OP, "atan", var(2), "a"),
-                    createInstruction(SET, "result", var(2)),
-                    createInstruction(LOOKUP, "block", var(3), "index"),
-                    createInstruction(SET, "result", var(3)),
-                    createInstruction(PACKCOLOR, var(4), "r", "g", "b", "a"),
-                    createInstruction(SET, "result", var(4)),
-                    createInstruction(WAIT, "sec"),
+                    createInstruction(DRAW, "col", ":color"),
+                    createInstruction(OP, "asin", tmp(0), ":a"),
+                    createInstruction(SET, ":result", tmp(0)),
+                    createInstruction(OP, "acos", tmp(1), ":a"),
+                    createInstruction(SET, ":result", tmp(1)),
+                    createInstruction(OP, "atan", tmp(2), ":a"),
+                    createInstruction(SET, ":result", tmp(2)),
+                    createInstruction(LOOKUP, "block", tmp(3), ":index"),
+                    createInstruction(SET, ":result", tmp(3)),
+                    createInstruction(PACKCOLOR, tmp(4), ":r", ":g", ":b", ":a"),
+                    createInstruction(SET, ":result", tmp(4)),
+                    createInstruction(WAIT, ":sec"),
                     createInstruction(UCONTROL, "payEnter"),
                     createInstruction(UCONTROL, "unbind"),
-                    createInstruction(UCONTROL, "getBlock", "x", "y", var(6), var(5), var(7)),
-                    createInstruction(SET, "building", var(5)),
-                    createInstruction(PRINT, "building"),
-                    createInstruction(PRINT, "result"),
-                    createInstruction(END)
+                    createInstruction(UCONTROL, "getBlock", ":x", ":y", tmp(6), tmp(5), tmp(7)),
+                    createInstruction(SET, ":building", tmp(5)),
+                    createInstruction(PRINT, ":building"),
+                    createInstruction(PRINT, ":result")
             );
         }
 
@@ -1728,8 +1722,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             pathfind(50, 50);
                             """,
-                    createInstruction(UCONTROL, "pathfind", "50", "50"),
-                    createInstruction(END)
+                    createInstruction(UCONTROL, "pathfind", "50", "50")
             );
         }
 
@@ -1738,8 +1731,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             autoPathfind();
                             """,
-                    createInstruction(UCONTROL, "autoPathfind"),
-                    createInstruction(END)
+                    createInstruction(UCONTROL, "autoPathfind")
             );
         }
 
@@ -1777,8 +1769,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(DRAW, "translate", "3", "4"),
                     createInstruction(DRAW, "scale", "-1", "1"),
                     createInstruction(DRAW, "rotate", "0", "0", "90"),
-                    createInstruction(DRAW, "reset"),
-                    createInstruction(END)
+                    createInstruction(DRAW, "reset")
             );
         }
 
@@ -1791,11 +1782,10 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             weatherset(@rain, true);
                             weatherset(@fluffyBunny, false);
                             """,
-                    createInstruction(WEATHERSENSE, var(0), "@snow"),
-                    createInstruction(SET, "active", var(0)),
+                    createInstruction(WEATHERSENSE, tmp(0), "@snow"),
+                    createInstruction(SET, ":active", tmp(0)),
                     createInstruction(WEATHERSET, "@rain", "true"),
-                    createInstruction(WEATHERSET, "@fluffyBunny", "false"),
-                    createInstruction(END)
+                    createInstruction(WEATHERSET, "@fluffyBunny", "false")
             );
         }
 
@@ -1806,8 +1796,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             playsound(false, @sfx-laser, 1, 1, 0.5, false);
                             """,
                     createInstruction(PLAYSOUND, "true", "@sfx-railgun", "1", "1", "0", "100", "10", "true"),
-                    createInstruction(PLAYSOUND, "false", "@sfx-laser", "1", "1", "0.5", "0", "0", "false"),
-                    createInstruction(END)
+                    createInstruction(PLAYSOUND, "false", "@sfx-laser", "1", "1", "0.5", "0", "0", "false")
             );
         }
 
@@ -1867,8 +1856,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             makemarker(:shapeText, id, x, y, replace);
                             """,
-                    createInstruction(MAKEMARKER, "shapeText", "id", "x", "y", "replace"),
-                    createInstruction(END)
+                    createInstruction(MAKEMARKER, "shapeText", "id", ":x", ":y", "replace")
             );
         }
 
@@ -1877,8 +1865,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             localeprint(property);
                             """,
-                    createInstruction(LOCALEPRINT, "property"),
-                    createInstruction(END)
+                    createInstruction(LOCALEPRINT, ":property")
             );
         }
 
@@ -1919,9 +1906,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             result = getblock(:floor, x, y);
                             """,
-                    createInstruction(GETBLOCK, "floor", var(0), "x", "y"),
-                    createInstruction(SET, "result", var(0)),
-                    createInstruction(END)
+                    createInstruction(GETBLOCK, "floor", tmp(0), ":x", ":y"),
+                    createInstruction(SET, ":result", tmp(0))
             );
         }
 
@@ -1932,10 +1918,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             setblock(:ore, to, x, y);
                             setblock(:block, to, x, y, team, rotation);
                             """,
-                    createInstruction(SETBLOCK, "floor", "to", "x", "y"),
-                    createInstruction(SETBLOCK, "ore", "to", "x", "y"),
-                    createInstruction(SETBLOCK, "block", "to", "x", "y", "team", "rotation"),
-                    createInstruction(END)
+                    createInstruction(SETBLOCK, "floor", "to", ":x", ":y"),
+                    createInstruction(SETBLOCK, "ore", "to", ":x", ":y"),
+                    createInstruction(SETBLOCK, "block", "to", ":x", ":y", "team", "rotation")
             );
         }
 
@@ -1944,9 +1929,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             result = spawn(unit, x, y, rotation, team);
                             """,
-                    createInstruction(SPAWN, "unit", "x", "y", "rotation", "team", var(0)),
-                    createInstruction(SET, "result", var(0)),
-                    createInstruction(END)
+                    createInstruction(SPAWN, ":unit", ":x", ":y", ":rotation", ":team", tmp(0)),
+                    createInstruction(SET, ":result", tmp(0))
             );
         }
 
@@ -1957,8 +1941,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             clearStatus(:freezing, unit);
                             """,
                     createInstruction(STATUS, "false", "burning", "unit", "duration"),
-                    createInstruction(STATUS, "true", "freezing", "unit"),
-                    createInstruction(END)
+                    createInstruction(STATUS, "true", "freezing", "unit")
             );
         }
 
@@ -1967,8 +1950,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             spawnwave(x, y, natural);
                             """,
-                    createInstruction(SPAWNWAVE, "x", "y", "natural"),
-                    createInstruction(END)
+                    createInstruction(SPAWNWAVE, ":x", ":y", ":natural")
             );
         }
 
@@ -2008,7 +1990,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SETRULE, "enemyCoreBuildRadius", "value"),
                     createInstruction(SETRULE, "dropZoneRadius", "value"),
                     createInstruction(SETRULE, "unitCap", "value"),
-                    createInstruction(SETRULE, "mapArea", "0", "x", "y", "width", "height"),
+                    createInstruction(SETRULE, "mapArea", "0", ":x", ":y", "width", "height"),
                     createInstruction(SETRULE, "lighting", "value"),
                     createInstruction(SETRULE, "ambientLight", "value"),
                     createInstruction(SETRULE, "solarMultiplier", "value"),
@@ -2019,8 +2001,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SETRULE, "blockHealth", "value", "team"),
                     createInstruction(SETRULE, "blockDamage", "value", "team"),
                     createInstruction(SETRULE, "rtsMinWeight", "value", "team"),
-                    createInstruction(SETRULE, "rtsMinSquad", "value", "team"),
-                    createInstruction(END)
+                    createInstruction(SETRULE, "rtsMinSquad", "value", "team")
             );
         }
 
@@ -2034,9 +2015,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(MESSAGE, "notify", "0", "@wait"),
                     createInstruction(MESSAGE, "mission", "0", "@wait"),
-                    createInstruction(MESSAGE, "announce", "duration", "result"),
-                    createInstruction(MESSAGE, "toast", "duration", "result"),
-                    createInstruction(END)
+                    createInstruction(MESSAGE, "announce", "duration", ":result"),
+                    createInstruction(MESSAGE, "toast", "duration", ":result")
             );
         }
 
@@ -2047,10 +2027,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             cutscene(:zoom, level);
                             cutscene(:stop);
                             """,
-                    createInstruction(CUTSCENE, "pan", "x", "y", "speed"),
+                    createInstruction(CUTSCENE, "pan", ":x", ":y", "speed"),
                     createInstruction(CUTSCENE, "zoom", "level"),
-                    createInstruction(CUTSCENE, "stop"),
-                    createInstruction(END)
+                    createInstruction(CUTSCENE, "stop")
             );
         }
 
@@ -2059,8 +2038,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             explosion(team, x, y, radius, damage, air, ground, pierce, true);
                             """,
-                    createInstruction(EXPLOSION, "team", "x", "y", "radius", "damage", "air", "ground", "pierce", "true"),
-                    createInstruction(END)
+                    createInstruction(EXPLOSION, ":team", ":x", ":y", ":radius", ":damage", ":air", ":ground", ":pierce", "true")
             );
         }
 
@@ -2069,8 +2047,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             setrate(ipt);
                             """,
-                    createInstruction(SETRATE, "ipt"),
-                    createInstruction(END)
+                    createInstruction(SETRATE, ":ipt")
             );
         }
 
@@ -2086,22 +2063,22 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             result = fetch(:core, team, index);
                             result = fetch(:build, team, index, type);
                             """,
-                    createInstruction(FETCH, "unitCount", var(0), ":team", "0", ":type"),
-                    createInstruction(SET, ":result", var(0)),
-                    createInstruction(FETCH, "playerCount", var(1), ":team"),
-                    createInstruction(SET, ":result", var(1)),
-                    createInstruction(FETCH, "coreCount", var(2), ":team"),
-                    createInstruction(SET, ":result", var(2)),
-                    createInstruction(FETCH, "buildCount", var(3), ":team", "0", ":type"),
-                    createInstruction(SET, ":result", var(3)),
-                    createInstruction(FETCH, "unit", var(4), ":team", ":index", ":type"),
-                    createInstruction(SET, ":result", var(4)),
-                    createInstruction(FETCH, "player", var(5), ":team", ":index"),
-                    createInstruction(SET, ":result", var(5)),
-                    createInstruction(FETCH, "core", var(6), ":team", ":index"),
-                    createInstruction(SET, ":result", var(6)),
-                    createInstruction(FETCH, "build", var(7), ":team", ":index", ":type"),
-                    createInstruction(SET, ":result", var(7))
+                    createInstruction(FETCH, "unitCount", tmp(0), ":team", "0", ":type"),
+                    createInstruction(SET, ":result", tmp(0)),
+                    createInstruction(FETCH, "playerCount", tmp(1), ":team"),
+                    createInstruction(SET, ":result", tmp(1)),
+                    createInstruction(FETCH, "coreCount", tmp(2), ":team"),
+                    createInstruction(SET, ":result", tmp(2)),
+                    createInstruction(FETCH, "buildCount", tmp(3), ":team", "0", ":type"),
+                    createInstruction(SET, ":result", tmp(3)),
+                    createInstruction(FETCH, "unit", tmp(4), ":team", ":index", ":type"),
+                    createInstruction(SET, ":result", tmp(4)),
+                    createInstruction(FETCH, "player", tmp(5), ":team", ":index"),
+                    createInstruction(SET, ":result", tmp(5)),
+                    createInstruction(FETCH, "core", tmp(6), ":team", ":index"),
+                    createInstruction(SET, ":result", tmp(6)),
+                    createInstruction(FETCH, "build", tmp(7), ":team", ":index", ":type"),
+                    createInstruction(SET, ":result", tmp(7))
             );
         }
 
@@ -2110,9 +2087,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             result = getflag(flag);
                             """,
-                    createInstruction(GETFLAG, var(0), "flag"),
-                    createInstruction(SET, "result", var(0)),
-                    createInstruction(END)
+                    createInstruction(GETFLAG, tmp(0), ":flag"),
+                    createInstruction(SET, ":result", tmp(0))
             );
         }
 
@@ -2121,8 +2097,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             setflag(flag, value);
                             """,
-                    createInstruction(SETFLAG, "flag", "value"),
-                    createInstruction(END)
+                    createInstruction(SETFLAG, ":flag", ":value")
             );
         }
 
@@ -2131,8 +2106,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             object.setprop(property, value);
                             """,
-                    createInstruction(SETPROP, "property", "object", "value"),
-                    createInstruction(END)
+                    createInstruction(SETPROP, ":property", ":object", ":value")
             );
         }
 
@@ -2142,8 +2116,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             volatile global;
                             sync(global);
                             """,
-                    createInstruction(SYNC, "global"),
-                    createInstruction(END)
+                    createInstruction(SYNC, ".global")
             );
         }
 
@@ -2200,40 +2173,39 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             effect(:wave, x, y, size, color);
                             effect(:bubble, x, y);
                             """,
-                    createInstruction(EFFECT, "warn", "x", "y"),
-                    createInstruction(EFFECT, "cross", "x", "y"),
-                    createInstruction(EFFECT, "blockFall", "x", "y", "0", "0", "@vault"),
-                    createInstruction(EFFECT, "placeBlock", "x", "y", "size"),
-                    createInstruction(EFFECT, "placeBlockSpark", "x", "y", "size"),
-                    createInstruction(EFFECT, "breakBlock", "x", "y", "size"),
-                    createInstruction(EFFECT, "spawn", "x", "y"),
-                    createInstruction(EFFECT, "trail", "x", "y", "size", "color"),
-                    createInstruction(EFFECT, "breakProp", "x", "y", "size", "color"),
-                    createInstruction(EFFECT, "smokeCloud", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "vapor", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "hit", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "hitSquare", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "shootSmall", "x", "y", "rotation", "color"),
-                    createInstruction(EFFECT, "shootBig", "x", "y", "rotation", "color"),
-                    createInstruction(EFFECT, "smokeSmall", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "smokeBig", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "smokeColor", "x", "y", "rotation", "color"),
-                    createInstruction(EFFECT, "smokeSquare", "x", "y", "rotation", "color"),
-                    createInstruction(EFFECT, "smokeSquareBig", "x", "y", "rotation", "color"),
-                    createInstruction(EFFECT, "spark", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "sparkBig", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "sparkShoot", "x", "y", "rotation", "color"),
-                    createInstruction(EFFECT, "sparkShootBig", "x", "y", "rotation", "color"),
-                    createInstruction(EFFECT, "drill", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "drillBig", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "lightBlock", "x", "y", "size", "color"),
-                    createInstruction(EFFECT, "explosion", "x", "y", "size"),
-                    createInstruction(EFFECT, "smokePuff", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "sparkExplosion", "x", "y", "0", "color"),
-                    createInstruction(EFFECT, "crossExplosion", "x", "y", "size", "color"),
-                    createInstruction(EFFECT, "wave", "x", "y", "size", "color"),
-                    createInstruction(EFFECT, "bubble", "x", "y"),
-                    createInstruction(END)
+                    createInstruction(EFFECT, "warn", ":x", ":y"),
+                    createInstruction(EFFECT, "cross", ":x", ":y"),
+                    createInstruction(EFFECT, "blockFall", ":x", ":y", "0", "0", "@vault"),
+                    createInstruction(EFFECT, "placeBlock", ":x", ":y", "size"),
+                    createInstruction(EFFECT, "placeBlockSpark", ":x", ":y", "size"),
+                    createInstruction(EFFECT, "breakBlock", ":x", ":y", "size"),
+                    createInstruction(EFFECT, "spawn", ":x", ":y"),
+                    createInstruction(EFFECT, "trail", ":x", ":y", "size", "color"),
+                    createInstruction(EFFECT, "breakProp", ":x", ":y", "size", "color"),
+                    createInstruction(EFFECT, "smokeCloud", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "vapor", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "hit", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "hitSquare", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "shootSmall", ":x", ":y", "rotation", "color"),
+                    createInstruction(EFFECT, "shootBig", ":x", ":y", "rotation", "color"),
+                    createInstruction(EFFECT, "smokeSmall", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "smokeBig", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "smokeColor", ":x", ":y", "rotation", "color"),
+                    createInstruction(EFFECT, "smokeSquare", ":x", ":y", "rotation", "color"),
+                    createInstruction(EFFECT, "smokeSquareBig", ":x", ":y", "rotation", "color"),
+                    createInstruction(EFFECT, "spark", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "sparkBig", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "sparkShoot", ":x", ":y", "rotation", "color"),
+                    createInstruction(EFFECT, "sparkShootBig", ":x", ":y", "rotation", "color"),
+                    createInstruction(EFFECT, "drill", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "drillBig", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "lightBlock", ":x", ":y", "size", "color"),
+                    createInstruction(EFFECT, "explosion", ":x", ":y", "size"),
+                    createInstruction(EFFECT, "smokePuff", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "sparkExplosion", ":x", ":y", "0", "color"),
+                    createInstruction(EFFECT, "crossExplosion", ":x", ":y", "size", "color"),
+                    createInstruction(EFFECT, "wave", ":x", ":y", "size", "color"),
+                    createInstruction(EFFECT, "bubble", ":x", ":y")
             );
         }
 
@@ -2281,18 +2253,18 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, ":fn0:n", "10"),
                     createInstruction(SET, ":fn0:m", "20"),
-                    createInstruction(SET, var(0), ":fn0:m"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "b", ":fn0:m"),
+                    createInstruction(SET, tmp(0), ":fn0:m"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":b", ":fn0:m"),
                     createInstruction(SET, ":fn1:n", "10"),
                     createInstruction(SET, ":fn1:m", "20"),
-                    createInstruction(SET, var(1), ":fn1:m"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, "a", ":fn1:n"),
+                    createInstruction(SET, tmp(1), ":fn1:m"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, ":a", ":fn1:n"),
                     createInstruction(SET, ":fn2:n", "10"),
                     createInstruction(SET, ":fn2:m", "20"),
-                    createInstruction(SET, var(2), ":fn2:m"),
-                    createInstruction(LABEL, var(1002))
+                    createInstruction(SET, tmp(2), ":fn2:m"),
+                    createInstruction(LABEL, label(2))
             );
         }
 
@@ -2386,26 +2358,26 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(out a, in b);
                             foo(in a, out b);
                             """,
-                    createInstruction(SET, "b", "1"),
-                    createInstruction(SET, "a", "b"),
-                    createInstruction(SET, ":fn0:n", "a"),
-                    createInstruction(SET, ":fn0:m", "b"),
+                    createInstruction(SET, ":b", "1"),
+                    createInstruction(SET, ":a", ":b"),
+                    createInstruction(SET, ":fn0:n", ":a"),
+                    createInstruction(SET, ":fn0:m", ":b"),
                     createInstruction(PRINT, ":fn0:m"),
                     createInstruction(PRINT, ":fn0:n"),
                     createInstruction(OP, "mul", ":fn0:n", ":fn0:n", "2"),
                     createInstruction(OP, "mul", ":fn0:m", ":fn0:m", "2"),
-                    createInstruction(SET, var(0), ":fn0:m"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "a", ":fn0:n"),
-                    createInstruction(SET, ":fn1:n", "a"),
-                    createInstruction(SET, ":fn1:m", "b"),
+                    createInstruction(SET, tmp(0), ":fn0:m"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":a", ":fn0:n"),
+                    createInstruction(SET, ":fn1:n", ":a"),
+                    createInstruction(SET, ":fn1:m", ":b"),
                     createInstruction(PRINT, ":fn1:m"),
                     createInstruction(PRINT, ":fn1:n"),
                     createInstruction(OP, "mul", ":fn1:n", ":fn1:n", "2"),
                     createInstruction(OP, "mul", ":fn1:m", ":fn1:m", "2"),
-                    createInstruction(SET, var(1), ":fn1:m"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, "b", ":fn1:m")
+                    createInstruction(SET, tmp(1), ":fn1:m"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, ":b", ":fn1:m")
             );
         }
 
@@ -2516,9 +2488,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, "1"),
                     createInstruction(PRINT, "2"),
                     createInstruction(PRINT, "3"),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, "1"),
-                    createInstruction(LABEL, var(1001))
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -2539,9 +2511,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, "1"),
                     createInstruction(PRINT, "2"),
                     createInstruction(PRINT, "3"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(END)
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -2559,17 +2530,17 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(PRINT, q("vararg")),
                     createInstruction(PRINT, "0"),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(SET, ":fn1:a", "1"),
                     createInstruction(PRINT, q("one")),
-                    createInstruction(LABEL, var(1001)),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(SET, ":fn2:a", "1"),
                     createInstruction(SET, ":fn2:b", "2"),
                     createInstruction(PRINT, q("two")),
-                    createInstruction(LABEL, var(1002)),
+                    createInstruction(LABEL, label(2)),
                     createInstruction(PRINT, q("vararg")),
                     createInstruction(PRINT, "3"),
-                    createInstruction(LABEL, var(1003))
+                    createInstruction(LABEL, label(3))
             );
         }
 
@@ -2624,8 +2595,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo();
                             """,
                     createInstruction(PRINT, q("foo")),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(END)
+                    createInstruction(LABEL, label(1))
             );
         }
 

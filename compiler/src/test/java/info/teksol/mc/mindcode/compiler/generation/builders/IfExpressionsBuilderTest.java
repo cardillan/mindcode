@@ -17,13 +17,13 @@ class IfExpressionsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a = b ? c : d;
                             """,
-                    createInstruction(JUMP, var(1001), "equal", "b", "false"),
-                    createInstruction(SET, var(0), "c"),
-                    createInstruction(JUMP, var(1002), "always"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, var(0), "d"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(SET, "a", var(0))
+                    createInstruction(JUMP, label(1), "equal", ":b", "false"),
+                    createInstruction(SET, tmp(0), ":c"),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, tmp(0), ":d"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, ":a", tmp(0))
             );
         }
 
@@ -32,14 +32,14 @@ class IfExpressionsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a = b > c ? b : c;
                             """,
-                    createInstruction(OP, "greaterThan", var(0), "b", "c"),
-                    createInstruction(JUMP, var(1000), "equal", var(0), "false"),
-                    createInstruction(SET, var(1), "b"),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, var(1), "c"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, "a", var(1))
+                    createInstruction(OP, "greaterThan", tmp(0), ":b", ":c"),
+                    createInstruction(JUMP, label(0), "equal", tmp(0), "false"),
+                    createInstruction(SET, tmp(1), ":b"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(1), ":c"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, ":a", tmp(1))
             );
         }
 
@@ -47,22 +47,21 @@ class IfExpressionsBuilderTest extends AbstractCodeGeneratorTest {
         void compilesNestedTernaryOperators() {
             assertCompilesTo(
                     "a = (b > c) ? 1 : (d > e) ? 2 : 3;",
-                    createInstruction(OP, "greaterThan", var(0), "b", "c"),
-                    createInstruction(JUMP, var(1000), "equal", var(0), "false"),
-                    createInstruction(SET, var(1), "1"),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(OP, "greaterThan", var(2), "d", "e"),
-                    createInstruction(JUMP, var(1002), "equal", var(2), "false"),
-                    createInstruction(SET, var(3), "2"),
-                    createInstruction(JUMP, var(1003), "always"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(SET, var(3), "3"),
-                    createInstruction(LABEL, var(1003)),
-                    createInstruction(SET, var(1), var(3)),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, "a", var(1)),
-                    createInstruction(END)
+                    createInstruction(OP, "greaterThan", tmp(0), ":b", ":c"),
+                    createInstruction(JUMP, label(0), "equal", tmp(0), "false"),
+                    createInstruction(SET, tmp(1), "1"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "greaterThan", tmp(2), ":d", ":e"),
+                    createInstruction(JUMP, label(2), "equal", tmp(2), "false"),
+                    createInstruction(SET, tmp(3), "2"),
+                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(3), "3"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, tmp(1), tmp(3)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, ":a", tmp(1))
             );
         }
 
@@ -75,13 +74,13 @@ class IfExpressionsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a = if b then c; else d; end;
                             """,
-                    createInstruction(JUMP, var(1001), "equal", "b", "false"),
-                    createInstruction(SET, var(0), "c"),
-                    createInstruction(JUMP, var(1002), "always"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, var(0), "d"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(SET, "a", var(0))
+                    createInstruction(JUMP, label(1), "equal", ":b", "false"),
+                    createInstruction(SET, tmp(0), ":c"),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, tmp(0), ":d"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, ":a", tmp(0))
             );
         }
 
@@ -96,19 +95,19 @@ class IfExpressionsBuilderTest extends AbstractCodeGeneratorTest {
                                 D;
                             end;
                             """,
-                    createInstruction(JUMP, var(1001), "equal", "b", "false"),
-                    createInstruction(SET, var(0), "B"),
-                    createInstruction(JUMP, var(1002), "always"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(JUMP, var(1003), "equal", "c", "false"),
-                    createInstruction(SET, var(1), "C"),
-                    createInstruction(JUMP, var(1004), "always"),
-                    createInstruction(LABEL, var(1003)),
-                    createInstruction(SET, var(1), "D"),
-                    createInstruction(LABEL, var(1004)),
-                    createInstruction(SET, var(0), var(1)),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(SET, "a", var(0))
+                    createInstruction(JUMP, label(1), "equal", ":b", "false"),
+                    createInstruction(SET, tmp(0), ":B"),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(3), "equal", ":c", "false"),
+                    createInstruction(SET, tmp(1), ":C"),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, tmp(1), ":D"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(SET, tmp(0), tmp(1)),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, ":a", tmp(0))
             );
         }
 
@@ -148,25 +147,25 @@ class IfExpressionsBuilderTest extends AbstractCodeGeneratorTest {
                                 x = 2;
                             end;
                             """,
-                    createInstruction(SET, var(0), "a"),
-                    createInstruction(OP, "sub", "a", "a", "1"),
-                    createInstruction(JUMP, var(1001), "equal", var(0), "false"),
-                    createInstruction(SET, "x", "1"),
-                    createInstruction(SET, var(1), "x"),
-                    createInstruction(JUMP, var(1002), "always"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, var(2), "i"),
-                    createInstruction(OP, "add", "i", "i", "1"),
-                    createInstruction(OP, "lessThan", var(3), var(2), "10"),
-                    createInstruction(JUMP, var(1003), "equal", var(3), "false"),
-                    createInstruction(SET, "x", "2"),
-                    createInstruction(SET, var(4), "x"),
-                    createInstruction(JUMP, var(1004), "always"),
-                    createInstruction(LABEL, var(1003)),
-                    createInstruction(SET, var(4), "null"),
-                    createInstruction(LABEL, var(1004)),
-                    createInstruction(SET, var(1), var(4)),
-                    createInstruction(LABEL, var(1002))
+                    createInstruction(SET, tmp(0), ":a"),
+                    createInstruction(OP, "sub", ":a", ":a", "1"),
+                    createInstruction(JUMP, label(1), "equal", tmp(0), "false"),
+                    createInstruction(SET, ":x", "1"),
+                    createInstruction(SET, tmp(1), ":x"),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, tmp(2), ":i"),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(OP, "lessThan", tmp(3), tmp(2), "10"),
+                    createInstruction(JUMP, label(3), "equal", tmp(3), "false"),
+                    createInstruction(SET, ":x", "2"),
+                    createInstruction(SET, tmp(4), ":x"),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, tmp(4), "null"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(SET, tmp(1), tmp(4)),
+                    createInstruction(LABEL, label(2))
             );
         }
     }

@@ -1,7 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
-import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
@@ -24,10 +23,10 @@ class BuiltinFunctionVarargsBuilderTest extends AbstractCodeGeneratorTest {
                             print(length(10));
                             """,
                 createInstruction(PRINT, "0"),
-                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, label(0)),
                 createInstruction(PRINT, "6"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(LABEL, var(1001)),
+                createInstruction(LABEL, label(2)),
+                createInstruction(LABEL, label(1)),
                 createInstruction(PRINT, "1")
         );
     }
@@ -36,9 +35,9 @@ class BuiltinFunctionVarargsBuilderTest extends AbstractCodeGeneratorTest {
     void compilesMinMaxFunctions() {
         assertCompilesTo(
                 "r = min(x, max(y, 2));",
-                createInstruction(OP, "max", var(0), "y", "2"),
-                createInstruction(OP, "min", var(1), "x", var(0)),
-                createInstruction(SET, "r", var(1))
+                createInstruction(OP, "max", tmp(0), ":y", "2"),
+                createInstruction(OP, "min", tmp(1), ":x", tmp(0)),
+                createInstruction(SET, ":r", tmp(1))
         );
     }
 
@@ -48,14 +47,14 @@ class BuiltinFunctionVarargsBuilderTest extends AbstractCodeGeneratorTest {
                         x = min(a, b, c, d);
                         y = max(a, b, c, d);
                         """,
-                createInstruction(OP, "min", var(0), "a", "b"),
-                createInstruction(OP, "min", var(0), var(0), "c"),
-                createInstruction(OP, "min", var(0), var(0), "d"),
-                createInstruction(SET, "x", var(0)),
-                createInstruction(OP, "max", var(1), "a", "b"),
-                createInstruction(OP, "max", var(1), var(1), "c"),
-                createInstruction(OP, "max", var(1), var(1), "d"),
-                createInstruction(Opcode.SET, "y", var(1))
+                createInstruction(OP, "min", tmp(0), ":a", ":b"),
+                createInstruction(OP, "min", tmp(0), tmp(0), ":c"),
+                createInstruction(OP, "min", tmp(0), tmp(0), ":d"),
+                createInstruction(SET, ":x", tmp(0)),
+                createInstruction(OP, "max", tmp(1), ":a", ":b"),
+                createInstruction(OP, "max", tmp(1), tmp(1), ":c"),
+                createInstruction(OP, "max", tmp(1), tmp(1), ":d"),
+                createInstruction(SET, ":y", tmp(1))
         );
     }
 

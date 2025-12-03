@@ -27,12 +27,11 @@ class JumpNormalizerTest extends AbstractOptimizerTest<JumpNormalizer> {
                             print("Here");
                         end;
                         """,
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "always"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(JUMP, label(2), "always"),
                 createInstruction(PRINT, q("Here")),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(END)
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(LABEL, label(2))
         );
     }
 
@@ -43,9 +42,8 @@ class JumpNormalizerTest extends AbstractOptimizerTest<JumpNormalizer> {
                             1;
                         end;
                         """,
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(END)
+                createInstruction(LABEL, label(0)),
+                createInstruction(JUMP, label(0), "always")
         );
     }
 

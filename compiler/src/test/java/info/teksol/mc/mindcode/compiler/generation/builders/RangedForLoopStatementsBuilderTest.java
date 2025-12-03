@@ -127,14 +127,14 @@ class RangedForLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 j += i;
                             end;
                             """,
-                    createInstruction(SET, "i", "1"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(JUMP, var(1003), "greaterThanEq", "i", "10"),
-                    createInstruction(OP, "add", "j", "j", "i"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(OP, "add", "i", "i", "1"),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1003))
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(3), "greaterThanEq", ":i", "10"),
+                    createInstruction(OP, "add", ":j", ":j", ":i"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(3))
             );
         }
 
@@ -145,14 +145,14 @@ class RangedForLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 j += i;
                             end;
                             """,
-                    createInstruction(SET, "i", "1"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(JUMP, var(1003), "greaterThan", "i", "10"),
-                    createInstruction(OP, "add", "j", "j", "i"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(OP, "add", "i", "i", "1"),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1003))
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(3), "greaterThan", ":i", "10"),
+                    createInstruction(OP, "add", ":j", ":j", ":i"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(3))
             );
         }
 
@@ -210,15 +210,15 @@ class RangedForLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 j += i;
                             end;
                             """,
-                    createInstruction(SET, var(0), "b"),
-                    createInstruction(SET, "i", "a"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(JUMP, var(1003), "greaterThan", "i", var(0)),
-                    createInstruction(OP, "add", "j", "j", "i"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(OP, "add", "i", "i", "1"),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1003))
+                    createInstruction(SET, tmp(0), ":b"),
+                    createInstruction(SET, ":i", ":a"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(3), "greaterThan", ":i", tmp(0)),
+                    createInstruction(OP, "add", ":j", ":j", ":i"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(3))
             );
         }
 

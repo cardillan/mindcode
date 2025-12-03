@@ -31,8 +31,7 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
                         """,
                 createInstruction(PRINT, q("a")),
                 createInstruction(DRAW, "print", "0", "0", "@center"),
-                createInstruction(PRINT, q("b")),
-                createInstruction(END)
+                createInstruction(PRINT, q("b"))
         );
     }
 
@@ -42,8 +41,7 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
                          print("a", x, "c", "d");
                         """,
                 createInstruction(PRINT, q("a{0}cd")),
-                createInstruction(FORMAT, "x"),
-                createInstruction(END)
+                createInstruction(FORMAT, ":x")
         );
     }
 

@@ -36,15 +36,14 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
                         end;
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(JUMP, "__start__", "equal", "a", "false"),
-                createInstruction(JUMP, var(1002), "equal", "b", "false"),
-                createInstruction(PRINT, "b"),
-                createInstruction(JUMP, var(1003), "always"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(PRINT, "a"),
-                createInstruction(JUMP, "__start__", "always"),
-                createInstruction(END)
+                createInstruction(JUMP, "__start__", "equal", ":a", "false"),
+                createInstruction(JUMP, label(2), "equal", ":b", "false"),
+                createInstruction(PRINT, ":b"),
+                createInstruction(JUMP, label(3), "always"),
+                createInstruction(LABEL, label(2)),
+                createInstruction(LABEL, label(3)),
+                createInstruction(PRINT, ":a"),
+                createInstruction(JUMP, "__start__", "always")
         );
     }
 
@@ -59,16 +58,15 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
                         end;
                         print("Done");
                         """,
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "notEqual", "c", "null"),
-                createInstruction(GETLINK, "c", "1"),
-                createInstruction(JUMP, var(1002), "notEqual", "c", "null"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(JUMP, label(2), "notEqual", ":c", "null"),
+                createInstruction(GETLINK, ":c", "1"),
+                createInstruction(JUMP, label(2), "notEqual", ":c", "null"),
                 createInstruction(PRINT, q("Not found")),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(PRINT, q("Done")),
-                createInstruction(END)
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(LABEL, label(2)),
+                createInstruction(PRINT, q("Done"))
         );
     }
 
@@ -83,16 +81,15 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
                         end;
                         print("Done");
                         """,
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "greaterThanEq", "@time", "wait"),
-                createInstruction(OP, "add", "n", "n", "1"),
-                createInstruction(JUMP, var(1000), "greaterThanEq", "@time", "wait"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(JUMP, label(2), "greaterThanEq", "@time", "wait"),
+                createInstruction(OP, "add", ":n", ":n", "1"),
+                createInstruction(JUMP, label(0), "greaterThanEq", "@time", "wait"),
                 createInstruction(PRINT, q("Waiting")),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(PRINT, q("Done")),
-                createInstruction(END)
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(LABEL, label(2)),
+                createInstruction(PRINT, q("Done"))
         );
     }
 

@@ -554,17 +554,17 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                             for i in a[5 .. 6] do print(i); end;
                             """,
                     createInstruction(SET, ":i", ".a*5"),
-                    createInstruction(SETADDR, var(0), var(1003)),
-                    createInstruction(JUMP, var(1000), "always"),
-                    createInstruction(MULTILABEL, var(1003)),
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
                     createInstruction(SET, ":i", ".a*6"),
-                    createInstruction(SETADDR, var(0), var(1004)),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, ":i"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(MULTIJUMP, var(0), "0", "0"),
-                    createInstruction(MULTILABEL, var(1004)),
-                    createInstruction(LABEL, var(1002))
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0"),
+                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(LABEL, label(2))
             );
         }
 

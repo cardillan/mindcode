@@ -29,12 +29,10 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, mul, tmp0, value, K1000),
-                        createInstruction(OP, floor, result, tmp0),
-                        createInstruction(END)
+                        createInstruction(OP, floor, result, tmp0)
                 ),
                 List.of(
-                        createInstruction(OP, idiv, result, value, K0001),
-                        createInstruction(END)
+                        createInstruction(OP, idiv, result, value, K0001)
                 )
         );
     }
@@ -44,12 +42,10 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, mul, tmp0, K1000, value),
-                        createInstruction(OP, floor, result, tmp0),
-                        createInstruction(END)
+                        createInstruction(OP, floor, result, tmp0)
                 ),
                 List.of(
-                        createInstruction(OP, idiv, result, value, K0001),
-                        createInstruction(END)
+                        createInstruction(OP, idiv, result, value, K0001)
                 )
         );
     }
@@ -59,12 +55,10 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, div, tmp0, value, K1000),
-                        createInstruction(OP, floor, result, tmp0),
-                        createInstruction(END)
+                        createInstruction(OP, floor, result, tmp0)
                 ),
                 List.of(
-                        createInstruction(OP, idiv, result, value, K1000),
-                        createInstruction(END)
+                        createInstruction(OP, idiv, result, value, K1000)
                 )
         );
     }
@@ -74,13 +68,11 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, div, tmp0, value, divisor),
-                        createInstruction(OP, floor, result, tmp0),
-                        createInstruction(END)
+                        createInstruction(OP, floor, result, tmp0)
                 ),
 
                 List.of(
-                        createInstruction(OP, idiv, result, value, divisor),
-                        createInstruction(END)
+                        createInstruction(OP, idiv, result, value, divisor)
                 )
         );
     }
@@ -89,8 +81,7 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
     void ignoresNonTemporaryVariables() {
         assertDoesNotOptimize(
                 createInstruction(OP, div, foo, value, K1000),
-                createInstruction(OP, floor, result, foo),
-                createInstruction(END)
+                createInstruction(OP, floor, result, foo)
         );
     }
 
@@ -99,8 +90,7 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertDoesNotOptimize(
                 createInstruction(OP, div, tmp0, value, K1000),
                 createInstruction(OP, floor, result, tmp0),
-                createInstruction(SET, another, tmp0),
-                createInstruction(END)
+                createInstruction(SET, another, tmp0)
         );
     }
 
@@ -108,8 +98,7 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
     void ignoresInstructionsInWrongOrder() {
         assertDoesNotOptimize(
                 createInstruction(OP, floor, result, tmp0),
-                createInstruction(OP, div, tmp0, value, K1000),
-                createInstruction(END)
+                createInstruction(OP, div, tmp0, value, K1000)
         );
     }
 
@@ -117,8 +106,7 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
     void ignoresNonConstantMultiplicands() {
         assertDoesNotOptimize(
                 createInstruction(OP, mul, tmp0, value, divisor),
-                createInstruction(OP, floor, result, tmp0),
-                createInstruction(END)
+                createInstruction(OP, floor, result, tmp0)
         );
     }
 
@@ -127,13 +115,11 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(SET, tmp0, tmp0),
-                        createInstruction(SET, tmp1, tmp0),
-                        createInstruction(END)
+                        createInstruction(SET, tmp1, tmp0)
                 ),
 
                 List.of(
-                        createInstruction(SET, tmp1, tmp0),
-                        createInstruction(END)
+                        createInstruction(SET, tmp1, tmp0)
                 )
         );
     }
@@ -143,14 +129,12 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(SENSOR, tmp0, This, x),
-                        createInstruction(SENSOR, tmp1, This, y),
-                        createInstruction(END)
+                        createInstruction(SENSOR, tmp1, This, y)
                 ),
 
                 List.of(
                         createInstruction(SET, tmp0, thisx),
-                        createInstruction(SET, tmp1, thisy),
-                        createInstruction(END)
+                        createInstruction(SET, tmp1, thisy)
                 )
         );
     }
@@ -160,13 +144,11 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(SENSOR, tmp0, lead, id),
-                        createInstruction(SENSOR, tmp1, oreCoal, name),
-                        createInstruction(END)
+                        createInstruction(SENSOR, tmp1, oreCoal, name)
                 ),
                 List.of(
                         createInstruction(SET, tmp0, P1),
-                        createInstruction(SET, tmp1, LogicString.create("ore-coal")),
-                        createInstruction(END)
+                        createInstruction(SET, tmp1, LogicString.create("ore-coal"))
                 )
         );
     }
@@ -175,13 +157,11 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
     void optimizesLookup() {
         assertOptimizesTo(
                 List.of(
-                        createInstruction(LOOKUP, item, tmp0, P1),
-                        createInstruction(END)
+                        createInstruction(LOOKUP, item, tmp0, P1)
                 ),
 
                 List.of(
-                        createInstruction(SET, tmp0, lead),
-                        createInstruction(END)
+                        createInstruction(SET, tmp0, lead)
                 )
         );
     }
@@ -191,14 +171,12 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, Operation.MUL, tmp0, a, P0),
-                        createInstruction(OP, Operation.MUL, tmp1, P0, b),
-                        createInstruction(END)
+                        createInstruction(OP, Operation.MUL, tmp1, P0, b)
                 ),
 
                 List.of(
                         createInstruction(SET, tmp0, P0),
-                        createInstruction(SET, tmp1, P0),
-                        createInstruction(END)
+                        createInstruction(SET, tmp1, P0)
                 )
         );
     }
@@ -208,14 +186,12 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, Operation.MUL, tmp0, a, P1),
-                        createInstruction(OP, Operation.MUL, tmp1, P1, b),
-                        createInstruction(END)
+                        createInstruction(OP, Operation.MUL, tmp1, P1, b)
                 ),
 
                 List.of(
                         createInstruction(SET, tmp0, a),
-                        createInstruction(SET, tmp1, b),
-                        createInstruction(END)
+                        createInstruction(SET, tmp1, b)
                 )
         );
     }
@@ -225,14 +201,12 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, Operation.DIV, tmp0, a, P1),
-                        createInstruction(OP, Operation.DIV, tmp1, P1, b),
-                        createInstruction(END)
+                        createInstruction(OP, Operation.DIV, tmp1, P1, b)
                 ),
 
                 List.of(
                         createInstruction(SET, tmp0, a),
-                        createInstruction(OP, Operation.DIV, tmp1, P1, b),
-                        createInstruction(END)
+                        createInstruction(OP, Operation.DIV, tmp1, P1, b)
                 )
         );
     }
@@ -242,14 +216,12 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, Operation.ADD, tmp0, a, P0),
-                        createInstruction(OP, Operation.ADD, tmp1, P0, b),
-                        createInstruction(END)
+                        createInstruction(OP, Operation.ADD, tmp1, P0, b)
                 ),
 
                 List.of(
                         createInstruction(SET, tmp0, a),
-                        createInstruction(SET, tmp1, b),
-                        createInstruction(END)
+                        createInstruction(SET, tmp1, b)
                 )
         );
     }
@@ -259,14 +231,12 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, Operation.SUB, tmp0, a, P0),
-                        createInstruction(OP, Operation.SUB, tmp1, P0, b),
-                        createInstruction(END)
+                        createInstruction(OP, Operation.SUB, tmp1, P0, b)
                 ),
 
                 List.of(
                         createInstruction(SET, tmp0, a),
-                        createInstruction(OP, Operation.SUB, tmp1, P0, b),
-                        createInstruction(END)
+                        createInstruction(OP, Operation.SUB, tmp1, P0, b)
                 )
         );
     }
@@ -278,16 +248,14 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
                         createInstruction(OP, Operation.EQUAL, tmp0, a, a),
                         createInstruction(OP, Operation.LESS_THAN_EQ, tmp1, a, a),
                         createInstruction(OP, Operation.GREATER_THAN_EQ, tmp2, a, a),
-                        createInstruction(OP, Operation.STRICT_EQUAL, tmp3, a, a),
-                        createInstruction(END)
+                        createInstruction(OP, Operation.STRICT_EQUAL, tmp3, a, a)
                 ),
 
                 List.of(
                         createInstruction(SET, tmp0, LogicBoolean.TRUE),
                         createInstruction(SET, tmp1, LogicBoolean.TRUE),
                         createInstruction(SET, tmp2, LogicBoolean.TRUE),
-                        createInstruction(SET, tmp3, LogicBoolean.TRUE),
-                        createInstruction(END)
+                        createInstruction(SET, tmp3, LogicBoolean.TRUE)
                 )
         );
     }
@@ -298,15 +266,13 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
                 List.of(
                         createInstruction(OP, Operation.NOT_EQUAL, tmp0, a, a),
                         createInstruction(OP, Operation.LESS_THAN, tmp1, a, a),
-                        createInstruction(OP, Operation.GREATER_THAN, tmp2, a, a),
-                        createInstruction(END)
+                        createInstruction(OP, Operation.GREATER_THAN, tmp2, a, a)
                 ),
 
                 List.of(
                         createInstruction(SET, tmp0, LogicBoolean.FALSE),
                         createInstruction(SET, tmp1, LogicBoolean.FALSE),
-                        createInstruction(SET, tmp2, LogicBoolean.FALSE),
-                        createInstruction(END)
+                        createInstruction(SET, tmp2, LogicBoolean.FALSE)
                 )
         );
     }
@@ -316,13 +282,11 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, Operation.SUB, tmp0, a, a),
-                        createInstruction(OP, Operation.BITWISE_XOR, tmp1, a, a),
-                        createInstruction(END)
+                        createInstruction(OP, Operation.BITWISE_XOR, tmp1, a, a)
                 ),
                 List.of(
                         createInstruction(SET, tmp0, P0),
-                        createInstruction(SET, tmp1, P0),
-                        createInstruction(END)
+                        createInstruction(SET, tmp1, P0)
                 )
         );
     }
@@ -331,12 +295,10 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
     void optimizesPackColor() {
         assertOptimizesTo(
                 List.of(
-                        createInstruction(PACKCOLOR, tmp0, P0_5, P0, P1, P1),
-                        createInstruction(END)
+                        createInstruction(PACKCOLOR, tmp0, P0_5, P0, P1, P1)
                 ),
                 List.of(
-                        createInstruction(SET, tmp0, LogicColor.create(EMPTY, "%7f00ff")),
-                        createInstruction(END)
+                        createInstruction(SET, tmp0, LogicColor.create(EMPTY, "%7f00ff"))
                 )
         );
     }

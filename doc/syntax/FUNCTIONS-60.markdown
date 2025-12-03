@@ -1,4 +1,4 @@
-# Function reference for Mindustry Logic 6.0
+# Function reference for target 6.0
 
 This document contains function reference for all built-in Mindcode functions. Functions are grouped by the
 instruction they encapsulate so that functions with similar logic are listed together. The Mindcode source
@@ -230,4 +230,4 @@ Locate a specific type of position/building anywhere on the map. Requires a boun
 
 ---
 
-[« Previous: Extending Mindcode](SYNTAX-EXTENSIONS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 7.0 »](FUNCTIONS-70.markdown)
+[« Previous: Extending Mindcode](SYNTAX-EXTENSIONS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for target 7.0 »](FUNCTIONS-70.markdown)

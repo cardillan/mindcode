@@ -119,7 +119,7 @@ class FunctionDeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             end;
                             x = 10;
                             """,
-                    createInstruction(SET, "x", "10")
+                    createInstruction(SET, ":x", "10")
             );
         }
 

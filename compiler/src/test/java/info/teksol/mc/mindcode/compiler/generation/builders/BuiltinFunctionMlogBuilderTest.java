@@ -17,9 +17,9 @@ class BuiltinFunctionMlogBuilderTest extends AbstractCodeGeneratorTest {
                         mlog("foo", "bar", in "baz", in a, out b, 0, null, true);
                         print(b);
                         """,
-                createInstruction(SET, "a", "10"),
-                customInstruction("foo", "bar", q("baz"), "a", "b", "0", "null", "true"),
-                createInstruction(PRINT, "b")
+                createInstruction(SET, ":a", "10"),
+                customInstruction("foo", "bar", q("baz"), ":a", ":b", "0", "null", "true"),
+                createInstruction(PRINT, ":b")
         );
     }
 

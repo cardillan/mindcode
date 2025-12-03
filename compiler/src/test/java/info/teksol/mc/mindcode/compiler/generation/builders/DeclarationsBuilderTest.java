@@ -96,48 +96,48 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
     class ConstantDeclarations {
         @Test
         void compilesBinaryLiteralConstants() {
-            assertCompilesTo("const c = 0b101; a = c;", createInstruction(SET, "a", "0b101"));
+            assertCompilesTo("const c = 0b101; a = c;", createInstruction(SET, ":a", "0b101"));
         }
 
         @Test
         void compilesBooleanLiteralConstants() {
-            assertCompilesTo("const c = true; a = c;", createInstruction(SET, "a", "true"));
-            assertCompilesTo("const c = false; a = c;", createInstruction(SET, "a", "false"));
+            assertCompilesTo("const c = true; a = c;", createInstruction(SET, ":a", "true"));
+            assertCompilesTo("const c = false; a = c;", createInstruction(SET, ":a", "false"));
         }
 
         @Test
         void compilesDecimalLiteralConstants() {
-            assertCompilesTo("const c = 10; a = c;", createInstruction(SET, "a", "10"));
+            assertCompilesTo("const c = 10; a = c;", createInstruction(SET, ":a", "10"));
         }
 
         @Test
         void compilesFloatLiteralConstants() {
-            assertCompilesTo("const c = 1e70; a = c;", createInstruction(SET, "a", "1E70"));
+            assertCompilesTo("const c = 1e70; a = c;", createInstruction(SET, ":a", "1E70"));
         }
 
         @Test
         void compilesNullLiteralConstants() {
-            assertCompilesTo("const c = null; a = c;", createInstruction(SET, "a", "null"));
+            assertCompilesTo("const c = null; a = c;", createInstruction(SET, ":a", "null"));
         }
 
         @Test
         void compilesBuiltInConstants() {
-            assertCompilesTo("const c = @coal; a = c;", createInstruction(SET, "a", "@coal"));
+            assertCompilesTo("const c = @coal; a = c;", createInstruction(SET, ":a", "@coal"));
         }
 
         @Test
         void compilesBlockConstants() {
-            assertCompilesTo("const c = cell1; a = c;", createInstruction(SET, "a", "cell1"));
+            assertCompilesTo("const c = cell1; a = c;", createInstruction(SET, ":a", "cell1"));
         }
 
         @Test
         void compilesExpressionConstantsFromLiterals() {
-            assertCompilesTo("const c = 10 + 20; a = c;", createInstruction(SET, "a", "30"));
+            assertCompilesTo("const c = 10 + 20; a = c;", createInstruction(SET, ":a", "30"));
         }
 
         @Test
         void compilesExpressionConstantsFromConstants() {
-            assertCompilesTo("const b = 10; const c = b + 20; a = c;", createInstruction(SET, "a", "30"));
+            assertCompilesTo("const b = 10; const c = b + 20; a = c;", createInstruction(SET, ":a", "30"));
         }
 
         @Test
@@ -175,7 +175,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             end;
                             """,
                     createInstruction(PRINT, "10"),
-                    createInstruction(LABEL, var(1001))
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -189,9 +189,9 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             end;
                             foo(5);
                             """,
-                    createInstruction(SET, "__fn0_a", "5"),
-                    createInstruction(PRINT, "__fn0_a"),
-                    createInstruction(LABEL, var(1000))
+                    createInstruction(SET, ":foo:a", "5"),
+                    createInstruction(PRINT, ":foo:a"),
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -770,16 +770,16 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
     class VariableDeclarations {
         @Test
         void compilesVariableDeclarationWithLiteralInitializations() {
-            assertCompilesTo("var a = 0b101;", createInstruction(SET, "a", "0b101"));
-            assertCompilesTo("var a = true;", createInstruction(SET, "a", "true"));
-            assertCompilesTo("var a = false;", createInstruction(SET, "a", "false"));
-            assertCompilesTo("var a = 10;", createInstruction(SET, "a", "10"));
-            assertCompilesTo("var a = null;", createInstruction(SET, "a", "null"));
+            assertCompilesTo("var a = 0b101;", createInstruction(SET, ":a", "0b101"));
+            assertCompilesTo("var a = true;", createInstruction(SET, ":a", "true"));
+            assertCompilesTo("var a = false;", createInstruction(SET, ":a", "false"));
+            assertCompilesTo("var a = 10;", createInstruction(SET, ":a", "10"));
+            assertCompilesTo("var a = null;", createInstruction(SET, ":a", "null"));
         }
 
         @Test
         void compilesVariableDeclarationWithBuiltInInitializations() {
-            assertCompilesTo("var a = @coal;", createInstruction(SET, "a", "@coal"));
+            assertCompilesTo("var a = @coal;", createInstruction(SET, ":a", "@coal"));
         }
 
         @Test
@@ -818,10 +818,10 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             guarded switch1, message1;
                             printflush(message1);
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "switch1", "null"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(JUMP, var(1001), "equal", "message1", "null"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", "switch1", "null"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(1), "equal", "message1", "null"),
                     createInstruction(PRINTFLUSH, "message1")
             );
         }
@@ -839,10 +839,10 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, ":fn0:a", "10"),
                     createInstruction(PRINT, ":fn0:a"),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(SET, ":fn1:a", "10"),
                     createInstruction(PRINT, ":fn1:a"),
-                    createInstruction(LABEL, var(1001))
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -863,7 +863,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, ".a"),
                     createInstruction(SET, ":fn0:a", "10"),
                     createInstruction(PRINT, ":fn0:a"),
-                    createInstruction(LABEL, var(1000))
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -890,18 +890,18 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         void compilesRemoteVariables() {
             assertCompilesTo("""
                             remote(processor1) a, x;
-                            remote(processor1) mlog("b") b;
+                            remote(processor1) mlog(":b") b;
                             remote(processor1) var c, y;
-                            remote(processor1) mlog("d") var d;
+                            remote(processor1) mlog(":d") var d;
                             print(a, b, c, d);
                             """,
                     createInstruction(READ, tmp(0), "processor1", q(".a")),
                     createInstruction(PRINT, tmp(0)),
-                    createInstruction(READ, tmp(1), "processor1", q("b")),
+                    createInstruction(READ, tmp(1), "processor1", q(":b")),
                     createInstruction(PRINT, tmp(1)),
                     createInstruction(READ, tmp(2), "processor1", q(".c")),
                     createInstruction(PRINT, tmp(2)),
-                    createInstruction(READ, tmp(4), "processor1", q("d")),
+                    createInstruction(READ, tmp(4), "processor1", q(":d")),
                     createInstruction(PRINT, tmp(4))
             );
         }
@@ -960,7 +960,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, ":a", "10"),
                     createInstruction(PRINT, ":a"),
                     createInstruction(PRINT, ".a"),
-                    createInstruction(LABEL, var(1000))
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -1096,10 +1096,10 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             guarded switch1, message1;
                             begin printflush(message1); end;
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "switch1", "null"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(JUMP, var(1001), "equal", "message1", "null"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", "switch1", "null"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(1), "equal", "message1", "null"),
                     createInstruction(PRINTFLUSH, "message1")
             );
         }
@@ -1120,10 +1120,10 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, ":fn0:a", "10"),
                     createInstruction(PRINT, ":fn0:a"),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(SET, ":fn1:a", "10"),
                     createInstruction(PRINT, ":fn1:a"),
-                    createInstruction(LABEL, var(1001))
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -1147,7 +1147,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, ".a"),
                     createInstruction(SET, ":fn0:a", "10"),
                     createInstruction(PRINT, ":fn0:a"),
-                    createInstruction(LABEL, var(1000))
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -1175,19 +1175,19 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             #set syntax = strict;
                             linked processor1;
                             remote(processor1) a, x;
-                            remote(processor1) mlog("b") b;
+                            remote(processor1) mlog(":b") b;
                             remote(processor1) var c, y;
-                            remote(processor1) mlog("d" + "0") var d;
+                            remote(processor1) mlog(":d" + "0") var d;
                             begin print(a, b, c, d); end;
                             """,
                     createInstruction(READ, tmp(0), "processor1", q(".a")),
                     createInstruction(PRINT, tmp(0)),
-                    createInstruction(READ, tmp(1), "processor1", q("b")),
-                    createInstruction(PRINT, tmp(1)),
-                    createInstruction(READ, tmp(2), "processor1", q(".c")),
+                    createInstruction(READ, tmp(2), "processor1", q(":b")),
                     createInstruction(PRINT, tmp(2)),
-                    createInstruction(READ, tmp(4), "processor1", q("d0")),
-                    createInstruction(PRINT, tmp(4))
+                    createInstruction(READ, tmp(3), "processor1", q(".c")),
+                    createInstruction(PRINT, tmp(3)),
+                    createInstruction(READ, tmp(6), "processor1", q(":d0")),
+                    createInstruction(PRINT, tmp(6))
             );
         }
 
@@ -1211,7 +1211,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, ":a", "10"),
                     createInstruction(PRINT, ":a"),
                     createInstruction(PRINT, ".a"),
-                    createInstruction(LABEL, var(1000))
+                    createInstruction(LABEL, label(0))
             );
         }
 
