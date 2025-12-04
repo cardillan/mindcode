@@ -50,4 +50,4 @@ When the communication with Mlog Watcher fails, Mindcode compiler writes out an 
 
 ---
 
-[« Previous: Processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Schematics Refresher »](TOOLS-REFRESHER.markdown)
+[&#xAB; Previous: Processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Schematics Refresher &#xBB;](TOOLS-REFRESHER.markdown)

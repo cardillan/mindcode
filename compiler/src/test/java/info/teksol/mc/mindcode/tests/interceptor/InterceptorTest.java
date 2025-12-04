@@ -95,16 +95,17 @@ public class InterceptorTest extends AbstractInterceptorTest {
     @Test
     void solveCurrentProblem() {
         testCode("""
-                        param x = 1;
-                        y = 3;
-                        if x > 5 then
-                            y = 1;
-                        elsif x > 3 then
-                            y = 2;
+                        param x = 4;
+                        sum = 0;
+                        for i in 0 ... 5 do
+                            sum += x;
+                            if sum > 10 then
+                                break;
+                            end;
                         end;
-                        print(y);
+                        print(sum);
                         """,
-                "3"
+                "12"
         );
     }
 }

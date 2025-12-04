@@ -8,7 +8,7 @@ Active optimizations:
     function-inlining = advanced,
     if-expression-optimization = advanced,
     jump-normalization = advanced,
-    jump-optimization = none,
+    condition-optimization = none,
     jump-straightening = none,
     jump-threading = none,
     loop-hoisting = advanced,

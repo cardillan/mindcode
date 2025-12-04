@@ -36,7 +36,49 @@ import static org.junit.jupiter.api.Assertions.*;
 @Order(6)
 public class DocValidatorTest {
     private static final String SYNTAX_REL_PATH = ".." + File.separatorChar + "doc" + File.separatorChar + "syntax" + File.separatorChar;
-    private static final String OPTIONS_FILE = SYNTAX_REL_PATH + File.separatorChar + "SYNTAX-5-OTHER.markdown";
+    private static final String OPTIMIZATIONS_PATH = SYNTAX_REL_PATH + "optimizations";
+    private static final String OPTIONS_FILE = SYNTAX_REL_PATH + "SYNTAX-5-OTHER.markdown";
+    private static final String OPTIMIZATIONS_FILE = SYNTAX_REL_PATH + "SYNTAX-6-OPTIMIZATIONS.markdown";
+
+    private final String[] MAIN_SEQUENCE = {
+            "SYNTAX-1-VARIABLES.markdown",
+            "SYNTAX-2-EXPRESSIONS.markdown",
+            "SYNTAX-3-STATEMENTS.markdown",
+            "SYNTAX-4-FUNCTIONS.markdown",
+            "FUNCTIONS.markdown",
+            "SYSTEM-LIBRARY.markdown",
+            "MINDUSTRY-8.markdown",
+            "REMOTE-CALLS.markdown",
+            "SYNTAX-5-OTHER.markdown",
+            "SYNTAX-6-OPTIMIZATIONS.markdown",
+            "SYNTAX-EXTENSIONS.markdown",
+            "SCHEMACODE.markdown",
+            "TOOLS-IDE-INTEGRATION.markdown",
+            "TOOLS-CMDLINE.markdown",
+            "TOOLS-PROCESSOR-EMULATOR.markdown",
+            "TOOLS-MLOG-WATCHER.markdown",
+            "TOOLS-REFRESHER.markdown",
+            "TOOLS-MLOG-DECOMPILER.markdown",
+            "TOOLS-TESTING-TOOL.markdown",
+            "TROUBLESHOOTING.markdown",
+            "PERFORMANCE-TIPS.markdown",
+            "MINDUSTRY-TIPS-N-TRICKS.markdown",
+    };
+
+    private final String[] LIBRARY_SEQUENCE = {
+            "SYSTEM-LIBRARY-ARRAYS.markdown",
+            "SYSTEM-LIBRARY-BLOCKS.markdown",
+            "SYSTEM-LIBRARY-COMPATIBILITY.markdown",
+            "SYSTEM-LIBRARY-GRAPHICS.markdown",
+            "SYSTEM-LIBRARY-MATH.markdown",
+            "SYSTEM-LIBRARY-PRINTING.markdown",
+            "SYSTEM-LIBRARY-UNITS.markdown",
+    };
+
+    private final Set<String> IGNORED_FILES = Set.of(
+            "SYNTAX.markdown",
+            "TUTORIAL-MINDCODE.markdown"
+    );
 
     private CompilerProfile createCompilerProfile() {
         return CompilerProfile.fullOptimizations(false)
@@ -44,6 +86,25 @@ public class DocValidatorTest {
                 .setAutoPrintflush(false)
                 .setSignature(false)
                 .setRun(false);
+    }
+
+    private static void doesEqual(String expected, String actual, String message) {
+        assertEquals(expected, actual, message);
+    }
+
+    @Test
+    public void noUnknownFiles() {
+        final File[] files = new File(SYNTAX_REL_PATH).listFiles((_, name) -> name.endsWith(".markdown"));
+        assertNotNull(files);
+        assertTrue(files.length > 0, "Expected to find at least one markdown file in " + SYNTAX_REL_PATH + "; found none");
+
+        HashSet<String> fileNameSet = Arrays.stream(files).map(File::getName).collect(Collectors.toCollection(HashSet::new));
+        fileNameSet.removeAll(IGNORED_FILES);
+        Arrays.asList(LIBRARY_SEQUENCE).forEach(fileNameSet::remove);
+        Arrays.asList(MAIN_SEQUENCE).forEach(fileNameSet::remove);
+        fileNameSet.removeIf(s -> s.startsWith("FUNCTIONS-"));
+
+        assertTrue(fileNameSet.isEmpty(), "Found unknown files: " + fileNameSet);
     }
 
     @TestFactory
@@ -175,27 +236,27 @@ public class DocValidatorTest {
 
         int start = CollectionUtils.indexOf(fileContent, 0, title::equals);
         if (start < 0) {
-            assertions.add(() -> assertEquals(expected, "","Section " + title + " not found in " + file.getName()));
+            assertions.add(() -> doesEqual(expected, "","Section " + title + " not found in " + file.getName()));
             return;
         }
 
         int end = CollectionUtils.indexOf(fileContent, start + 1,
                 line -> line.startsWith("##") || line.startsWith("**Option scope"));
         if (end < 0) {
-            assertions.add(() -> assertEquals(expected, "","Section " + title + " empty in " + uriString(file, start + 1)));
+            assertions.add(() -> doesEqual(expected, "","Section " + title + " empty in " + uriString(file, start + 1)));
             return;
         }
 
         String actual = IntStream.range(start, end).mapToObj(i -> fileContent.get(i).trim()).collect(Collectors.joining("\n"));
 
-        assertions.add(() -> assertEquals(expected, actual,
+        assertions.add(() -> doesEqual(expected, actual,
                 "Incorrect content of section " + title + " in " + uriString(file, start + 1)));
     }
 
     private String getOptionLink(CompilerOption option) {
         return switch (option.getOption()) {
             case Optimization _ ->
-                    "[" + option.getOptionName() + "](" + "SYNTAX-6-OPTIMIZATIONS.markdown#" + option.getOptionName() + ")";
+                    "[" + option.getOptionName() + "](" + "optimizations/" + option.getOptionName().toUpperCase() + ".markdown)";
 //            case ExecutionFlag e -> "[" + option.getOptionName() + "](" + "#option-" + option.getOptionName() + ")";
             default -> "[" + option.getOptionName() + "](" + "#option-" + option.getOptionName() + ")";
         };
@@ -211,5 +272,130 @@ public class DocValidatorTest {
             case Optimization _, ExecutionFlag _ -> 1;
             default -> 0;
         };
+    }
+
+    @Test
+    public void validateOptimizationsDocumentation() throws IOException {
+        final String title = "## Individual Mindcode optimizations";
+
+        File file = new File(OPTIMIZATIONS_FILE);
+        List<Executable> assertions = new ArrayList<>();
+        List<String> fileContent = Files.readAllLines(file.toPath());
+
+        String expected = Stream.of(Optimization.values())
+                .sorted(Comparator.comparing(Optimization::getName))
+                .map(o -> String.format("* [%s](optimizations/%s.markdown): %s.", o.getName(), o.getOptionName().toUpperCase(),
+                        o.getDescription().replace('\'', '`')))
+                .collect(Collectors.joining("\n"));
+
+        int start = CollectionUtils.indexOf(fileContent, 0, title::equals);
+        int start2 = CollectionUtils.indexOf(fileContent, start + 1, line -> line.startsWith("*"));
+        if (start < 0 || start2 < 0) {
+            assertions.add(() -> doesEqual(expected, "","Section " + title + " not found in " + file.getName()));
+            return;
+        }
+
+        int end = CollectionUtils.indexOf(fileContent, start2, line -> !line.startsWith("*"));
+        if (end < 0) {
+            assertions.add(() -> doesEqual(expected, "","Section " + title + " empty in " + uriString(file, start + 1)));
+            return;
+        }
+
+        String actual = IntStream.range(start2, end).mapToObj(i -> fileContent.get(i).trim()).collect(Collectors.joining("\n"));
+
+        assertions.add(() -> doesEqual(expected, actual,
+                "Incorrect content of section " + title + " in " + uriString(file, start + 1)));
+
+        assertAll(assertions);
+    }
+
+    @TestFactory
+    @Execution(ExecutionMode.CONCURRENT)
+    public DynamicNode validateMainSequenceLinks() {
+        return validateSequenceLinks(MAIN_SEQUENCE, "[Up: Contents](SYNTAX.markdown)");
+    }
+
+    public DynamicNode validateSequenceLinks(String[] files, String upReference) {
+        List<LinkFile> linkFiles = Stream.of(files)
+                .map(file -> loadFile(SYNTAX_REL_PATH, file))
+                .toList();
+
+        return DynamicContainer.dynamicContainer(
+                "Documentation validation",
+                IntStream.range(0, linkFiles.size()).boxed()
+                        .map(index -> DynamicTest.dynamicTest("Validating " + linkFiles.get(index).title,
+                                null, () -> validateLinks(linkFiles, index, upReference))
+                        )
+        );
+    }
+
+
+    @TestFactory
+    @Execution(ExecutionMode.CONCURRENT)
+    public DynamicNode validateOptimizationSequenceLinks() {
+        final String upReference = "[Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown)";
+        List<LinkFile> linkFiles = Stream.of(Optimization.values())
+                .sorted(Comparator.comparing(Optimization::getName))
+                .map(o -> loadFile(OPTIMIZATIONS_PATH, o.getName(), o.getOptionName().toUpperCase() + ".markdown"))
+                .toList();
+
+        return DynamicContainer.dynamicContainer(
+                "Documentation validation",
+                        IntStream.range(0, linkFiles.size()).boxed()
+                        .map(index -> DynamicTest.dynamicTest("Validating " + linkFiles.get(index).title,
+                                null, () -> validateLinksAndTitle(linkFiles, index, upReference))
+                        )
+        );
+    }
+
+    private void validateLinks(List<LinkFile> linkFiles, int index, String upReference) {
+        LinkFile linkFile = linkFiles.get(index);
+
+        String expected = (index > 0 ? previous(linkFiles.get(index - 1)) : "") +
+                upReference +
+                (index < linkFiles.size() - 1 ? next(linkFiles.get(index + 1)) : "");
+
+        int lineIndex = CollectionUtils.lastIndexOf(linkFile.lines, line -> !line.isBlank());
+        String actual = linkFile.lines.get(lineIndex).trim();
+
+        doesEqual(expected, actual, "Incorrect link in " + uriString(linkFile.file, lineIndex));
+    }
+
+    private void validateLinksAndTitle(List<LinkFile> linkFiles, int index, String upReference) {
+        LinkFile f = linkFiles.get(index);
+        assertAll(
+                () -> doesEqual("# " + f.title, f.lines.getFirst(), "Incorrect title in " + uriString(f.file, 1)),
+                () -> validateLinks(linkFiles, index, upReference)
+        );
+    }
+
+    private String previous(LinkFile linkFile) {
+        return String.format("[&#xAB; Previous: %s](%s) &nbsp; | &nbsp; ", linkFile.title, linkFile.fileName);
+    }
+
+    private String next(LinkFile linkFile) {
+        return String.format(" &nbsp; | &nbsp; [Next: %s &#xBB;](%s)", linkFile.title, linkFile.fileName);
+    }
+
+    private record LinkFile(File file, String title, String fileName, List<String> lines) {
+    }
+
+    private static LinkFile loadFile(String directory, String title, String fileName) {
+        try {
+            File file = new File(directory, fileName);
+            return new LinkFile(file, title, fileName, Files.readAllLines(file.toPath()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static LinkFile loadFile(String directory, String fileName) {
+        try {
+            File file = new File(directory, fileName);
+            List<String> lines = Files.readAllLines(file.toPath());
+            return new LinkFile(file, lines.getFirst().substring(2).trim(), fileName, lines);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

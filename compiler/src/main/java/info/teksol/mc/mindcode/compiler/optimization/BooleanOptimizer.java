@@ -19,9 +19,9 @@ import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
 
 @NullMarked
-class SelectOptimizer extends AbstractConditionalOptimizer {
-    public SelectOptimizer(OptimizationContext optimizationContext) {
-        super(Optimization.SELECT_OPTIMIZATION, optimizationContext);
+class BooleanOptimizer extends AbstractConditionalOptimizer {
+    public BooleanOptimizer(OptimizationContext optimizationContext) {
+        super(Optimization.BOOLEAN_OPTIMIZATION, optimizationContext);
     }
 
     @Override
@@ -310,7 +310,7 @@ class SelectOptimizer extends AbstractConditionalOptimizer {
 
             if (jump.getCondition().hasInverse(getGlobalProfile())) {
                 // The compiler inverts the if condition because the jump leads to the false branch
-                // Here we invert it back, so true and false values remain the same
+                // Here we invert it back so that true and false values remain the same
                 replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
                         jump.getCondition().inverse(getGlobalProfile()), jump.getX(), jump.getY(),
                         false);

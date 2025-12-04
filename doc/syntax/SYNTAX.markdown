@@ -1,22 +1,16 @@
 # Mindcode
 
-Mindcode is a high-level language for [Mindustry](https://github.com/anuke/mindustry). The language design was inspired mostly by Ruby, but there are quite a few differences. Mindcode aims to provide programmatic access to full Mindustry Logic functionality. Mindustry Logic instructions interacting with Mindustry World are available through functions (see [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown)). Other instructions are used by expressions, control structures, and other statements in Mindcode.
+Mindcode is a high-level language for [Mindustry](https://github.com/anuke/mindustry). The language design was inspired mostly by Ruby, but there are quite a few differences. Mindcode aims to provide programmatic access to full Mindustry Logic functionality. The mlog instructions interacting with the Mindustry World are available as [Logic functions](FUNCTIONS.markdown). Other instructions are used by expressions, control structures, and other statements in Mindcode.
 
 This documentation covers the basics of Mindcode syntax:
 
-* [Mindcode basics](#mindcode-basics)
+* [Mindcode Basics](#mindcode-basics)
 * [Variables](SYNTAX-1-VARIABLES.markdown)
 * [Expressions](SYNTAX-2-EXPRESSIONS.markdown)
-* [Control flow statements](SYNTAX-3-STATEMENTS.markdown)
+* [Control Flow Statements](SYNTAX-3-STATEMENTS.markdown)
 * [Functions](SYNTAX-4-FUNCTIONS.markdown)
 
-The more advanced Mindcode features are described here:
-
-* [Compiler options](SYNTAX-5-OTHER.markdown)
-* [Code optimization](SYNTAX-6-OPTIMIZATIONS.markdown)
-* [Extending Mindcode](SYNTAX-EXTENSIONS.markdown) 
-
-Function reference for individual [Mindcode targets](SYNTAX-5-OTHER.markdown#option-target):
+Mindcode provides access to most mlog instructions via [Logic functions](FUNCTIONS.markdown):
 
 * [Function reference for target 6.0](FUNCTIONS-60.markdown)
 * [Function reference for target 7.0](FUNCTIONS-70.markdown)
@@ -24,21 +18,26 @@ Function reference for individual [Mindcode targets](SYNTAX-5-OTHER.markdown#opt
 * [Function reference for target 8.0](FUNCTIONS-80.markdown)
 * [Function reference for target 8.1](FUNCTIONS-81.markdown)
 
-Mindcode comes with several libraries containing useful functions:
+A [System Library](SYSTEM-LIBRARY.markdown), consisting of several separate modules, is available:
 
-* [System Library](SYSTEM-LIBRARY.markdown), consisting of several separate modules:
-  * [Arrays](SYSTEM-LIBRARY-ARRAYS.markdown)
-  * [Blocks](SYSTEM-LIBRARY-BLOCKS.markdown)
-  * [Compatibility](SYSTEM-LIBRARY-COMPATIBILITY.markdown)
-  * [Graphics](SYSTEM-LIBRARY-GRAPHICS.markdown)
-  * [Math](SYSTEM-LIBRARY-MATH.markdown)
-  * [Printing](SYSTEM-LIBRARY-PRINTING.markdown)
-  * [Units](SYSTEM-LIBRARY-UNITS.markdown)
+* [Arrays](SYSTEM-LIBRARY-ARRAYS.markdown)
+* [Blocks](SYSTEM-LIBRARY-BLOCKS.markdown)
+* [Compatibility](SYSTEM-LIBRARY-COMPATIBILITY.markdown)
+* [Graphics](SYSTEM-LIBRARY-GRAPHICS.markdown)
+* [Math](SYSTEM-LIBRARY-MATH.markdown)
+* [Printing](SYSTEM-LIBRARY-PRINTING.markdown)
+* [Units](SYSTEM-LIBRARY-UNITS.markdown)
 
 For Mindustry Logic 8 and later, new mlog instructions are supported:
 
 * [Mindustry Logic 8](MINDUSTRY-8.markdown)
 * [Remote functions and variables](REMOTE-CALLS.markdown)
+
+The more advanced Mindcode features are described here:
+
+* [Compiler Options](SYNTAX-5-OTHER.markdown)
+* [Code Optimization](SYNTAX-6-OPTIMIZATIONS.markdown)
+* [Extending Mindcode](SYNTAX-EXTENSIONS.markdown)
 
 Schemacode, a schematic definition language, is covered here:
 
@@ -62,7 +61,7 @@ Additional information on Mindcode and Mindustry Logic:
 
 ---
 
-# Mindcode basics
+# Mindcode Basics
 
 ## Program structure
 
@@ -338,7 +337,7 @@ Examples of mlog keywords are `add` in `op add result a 10`, or the first occurr
 > [!TIP]
 > Like built-in variables, mlog keywords may consist of multiple words. Most of the time the multi-word keywords are specified in camelCase convention (`:bottomLeft`), but at least one of currently existing keywords follows a kebab-case convention (`:spore-slowed`).
 
-Some of these keywords do not occur in Mindcode, for example, all mlog keywords that can appear in an `op` instruction are mapped to Mindcode functions and operators. In other cases, mlog keywords must be specified as arguments to the Mindustry Logic functions. To make a distinction between an mlog keyword and an identifier in Mindcode, the keywords are prefixed with a colon, e.g., `:building`. The function call corresponding to the `ulocate` instruction above is:
+Some of these keywords do not occur in Mindcode, for example, all mlog keywords that can appear in an `op` instruction are mapped to Mindcode functions and operators. In other cases, mlog keywords must be specified as arguments to the Logic functions. To make a distinction between an mlog keyword and an identifier in Mindcode, the keywords are prefixed with a colon, e.g., `:building`. The function call corresponding to the `ulocate` instruction above is:
 
 ```Mindcode
 building = ulocate(:building, :core, enemy, out outx, out outy, out found);
@@ -511,4 +510,4 @@ The last three examples show the loss of precision when the number needs to be e
 
 ---
 
-[Next: Variables and constants »](SYNTAX-1-VARIABLES.markdown)
+[Next: Variables and constants &#xBB;](SYNTAX-1-VARIABLES.markdown)

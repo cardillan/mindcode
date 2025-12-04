@@ -9,23 +9,23 @@ import java.util.List;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
-class SelectOptimizerTest extends AbstractOptimizerTest<SelectOptimizer> {
+class BooleanOptimizerTest extends AbstractOptimizerTest<BooleanOptimizer> {
 
     @Override
-    protected Class<SelectOptimizer> getTestedClass() {
-        return SelectOptimizer.class;
+    protected Class<BooleanOptimizer> getTestedClass() {
+        return BooleanOptimizer.class;
     }
 
     @Override
     protected List<Optimization> getAllOptimizations() {
         return List.of(
                 Optimization.DEAD_CODE_ELIMINATION,
-                Optimization.JUMP_OPTIMIZATION,
+                Optimization.CONDITION_OPTIMIZATION,
                 Optimization.SINGLE_STEP_ELIMINATION,
                 Optimization.JUMP_STRAIGHTENING,
                 Optimization.TEMP_VARIABLES_ELIMINATION,
                 Optimization.UNREACHABLE_CODE_ELIMINATION,
-                Optimization.SELECT_OPTIMIZATION
+                Optimization.BOOLEAN_OPTIMIZATION
 
         );
     }

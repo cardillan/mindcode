@@ -1,12 +1,12 @@
     42 instructions before optimizations.
-     7 instructions eliminated by Temp Variables Elimination (6 iterations).
+     7 instructions eliminated by Temp Variables Elimination (7 iterations).
      2 instructions eliminated by Dead Code Elimination (4 iterations).
-     2 instructions eliminated by Jump Optimization (5 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     2 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-     3 instructions modified by Loop Optimization (3 iterations).
+     2 instructions eliminated by Condition Optimization (2 passes, 6 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
+     2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+     3 instructions modified by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
-     1 instructions eliminated by Jump Straightening (5 iterations).
+     1 instructions eliminated by Jump Straightening (6 iterations).
     26 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
@@ -62,7 +62,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 inst
     26 label *label1
     27 op add :i :i 1
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-2 instructions):
  
      6 read :item ARRAY :i
      7 op sub :j :i 1
@@ -175,7 +175,18 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     33 read *tmp15 FINAL :i
     34 read *tmp17 ARRAY :i
 
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+Modifications by Iterated phase, Condition Optimization, pass 3, iteration 1:
+ 
+     7 read :item ARRAY :i
+     8 op sub :j :i 1
+     9 label *label3
+-    * jump *label5 lessThan :j 0
++   10 jump *label5 lessThan :i 1
+    11 label *label12
+    12 read :a ARRAY :j
+    13 jump *label6 greaterThan :a :item
+
+Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
  
      1 set ARRAY bank2
      2 set FINAL bank3
@@ -186,7 +197,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
      6 read :item ARRAY :i
      7 op sub :j :i 1
 -    * label *label3
-     8 jump *label5 lessThan :j 0
+     8 jump *label5 lessThan :i 1
      9 label *label12
     10 read :a ARRAY :j
     11 jump *label6 greaterThan :a :item
@@ -217,9 +228,9 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     31 jump *label13 lessThan :i SIZE
     32 label *label10
 
-Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-1 instructions):
  
-     8 jump *label5 lessThan :j 0
+     8 jump *label5 lessThan :i 1
      9 label *label12
     10 read :a ARRAY :j
 -    * jump *label6 greaterThan :a :item
@@ -229,7 +240,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-1 instru
     13 op add *tmp8 :j 1
     14 write :a ARRAY *tmp8
 
-Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
+Modifications by Jumps phase, Condition Optimization, pass 5, iteration 1:
  
      9 label *label12
     10 read :a ARRAY :j
@@ -239,7 +250,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
     13 write :a ARRAY *tmp8
     14 op sub :j :j 1
 
-Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
     29 jump *label13 lessThan :i SIZE
     30 label *label10
@@ -256,7 +267,7 @@ jump *label2 greaterThanEq 1 SIZE
 label *label11
 read :item ARRAY :i
 op sub :j :i 1
-jump *label5 lessThan :j 0
+jump *label5 lessThan :i 1
 label *label12
 read :a ARRAY :j
 jump *label5 lessThanEq :a :item

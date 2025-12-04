@@ -19,7 +19,7 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
     protected List<Optimization> getAllOptimizations() {
         return List.of(
                 Optimization.DEAD_CODE_ELIMINATION,
-                Optimization.JUMP_OPTIMIZATION,
+                Optimization.CONDITION_OPTIMIZATION,
                 Optimization.JUMP_THREADING,
                 Optimization.TEMP_VARIABLES_ELIMINATION
         );

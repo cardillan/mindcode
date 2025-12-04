@@ -294,4 +294,4 @@ itself, except the conversion of the number from a `double` to a 64-bit integer 
 
 ---
 
-[« Previous: Math](SYSTEM-LIBRARY-MATH.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Units »](SYSTEM-LIBRARY-UNITS.markdown)
+[&#xAB; Previous: Math](SYSTEM-LIBRARY-MATH.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Units &#xBB;](SYSTEM-LIBRARY-UNITS.markdown)

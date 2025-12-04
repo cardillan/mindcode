@@ -1,4 +1,4 @@
-# Compiler options
+# Compiler Options
 
 Mindcode allows you to alter some compiler options in the source code using special `#set` and `#setlocal` directives. The basic syntax is: 
 
@@ -12,7 +12,7 @@ or
 
 Some of the compiler options can be also specified as parameters of the command line compiler. A compiler option specified in the source file using the `#set` directive takes precedence over the option specified as a parameter of the command line compiler. The `#set` directives can be placed anywhere in the source file. We suggest placing them at the very top of each file, before every other directive or statement.
 
-When the same option is set multiple times (either on the command line, or in the source file), the last occurrence of the option is used.
+When the same option is set multiple times (either on the command line or in the source file), the last occurrence of the option is used.
 
 ## Option scope
 
@@ -266,7 +266,7 @@ The following features are affected when activating symbolic labels:
 * Regular internal array element access (inlined array access is not affected):
   * the size of a jump table and execution time of array access are increased by one,
   * instructions setting up a function return address cannot be hoisted.
-* Optimized case expressions: the size and execution time of an [optimized case expression](SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) may increase significantly.
+* Optimized case expressions: the size and execution time of an [optimized case expression](optimizations/CASE-SWITCHING.markdown) may increase significantly.
 
 Example of a program compiled with mlog comments and symbolic labels:
 
@@ -620,14 +620,14 @@ optimization actions.
 
 **Option scope: [local](#local-scope)**
 
-This option affects the number of segment arrangements considered when the Case Switching optimization performs [jump table compression](SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression). The higher the number, the more segment arrangements are considered, but the more time is needed for generating and evaluating them. The default value of this option is `2` for the web application, and `3` for the command-line tool. The maximal possible value is `4` for the web application, and `6` for the command-line tool. Values larger than `4` typically only bring additional benefits for case expressions with a very complex structure. Increasing the value by one may significantly increase both the number of segment arrangements and the optimization time.
+This option affects the number of segment arrangements considered when the Case Switching optimization performs [jump table compression](optimizations/CASE-SWITCHING.markdown#jump-table-compression). The higher the number, the more segment arrangements are considered, but the more time is needed for generating and evaluating them. The default value of this option is `2` for the web application, and `3` for the command-line tool. The maximal possible value is `4` for the web application, and `6` for the command-line tool. Values larger than `4` typically only bring additional benefits for case expressions with a very complex structure. Increasing the value by one may significantly increase both the number of segment arrangements and the optimization time.
 
 Setting the optimization strength to `0` causes the optimizer to forgo considering any segment arrangements and only consider turning the entire case statement into a jump table.
 
 Setting the optimization strength to `6` may lead to a very long compilation time (from tens of seconds to minutes or more), and only improves the efficiency of the most complex case expressions.
 
 > [!NOTE]
-> This option only improves [compressed jump tables](SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression). If there's enough instruction space for a full jump table, and the [optimization goal](#option-goal) is set to `speed`, increasing the value of this option cannot bring additional benefit, but still increases the compilation time.
+> This option only improves [compressed jump tables](optimizations/CASE-SWITCHING.markdown#jump-table-compression). If there's enough instruction space for a full jump table, and the [optimization goal](#option-goal) is set to `speed`, increasing the value of this option cannot bring additional benefit, but still increases the compilation time.
 
 ### Option `goal`
 
@@ -645,7 +645,7 @@ See [Dynamic optimizations](SYNTAX-6-OPTIMIZATIONS.markdown#static-and-dynamic-o
 
 **Option scope: [local](#local-scope)**
 
-Activates/deactivates a limited [Data Flow optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) inside [mlog blocks](SYNTAX-EXTENSIONS.markdown#mlog-blocks). Possible values are:
+Activates/deactivates a limited [Data Flow optimization](optimizations/DATA-FLOW-OPTIMIZATION.markdown) inside [mlog blocks](SYNTAX-EXTENSIONS.markdown#mlog-blocks). Possible values are:
 
 * `false`: no optimization is applied to the mlog blocks.
 * `true` (the default value): the Data Flow Optimization may replace input/output mlog variables used in instructions with different variables/values.
@@ -668,7 +668,7 @@ A more complex code can usually benefit from more optimization passes. On the ot
 
 **Option scope: [local](#local-scope)**
 
-This option instructs the compiler to drop range checking when performing case expression optimization. For more information, [Range check elimination](SYNTAX-6-OPTIMIZATIONS.markdown#range-check-elimination).
+This option instructs the compiler to drop range checking when performing case expression optimization. For more information, [Range check elimination](optimizations/CASE-SWITCHING.markdown#range-check-elimination).
 
 > [!NOTE]
 > The `unsafe-case-optimization` is _semantically unstable_: when applied to an unsuitable case expression, the compiler may generate incorrect code. It is recommended to always use the option locally, by using `#setlocal` immediately before the case expression on which it is meant to be applied. 
@@ -677,7 +677,7 @@ This option instructs the compiler to drop range checking when performing case e
 
 **Option scope: [global](#global-scope)**
 
-This option activates or deactivates the lookup mechanism for arrays. [Lookup arrays](SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays) use the Mindustry 8 Logic ability to [read variables from processors](MINDUSTRY-8.markdown#reading-and-writing-processor-variables) for array implementation different from the usual `@counter` array mechanism. Possible values are:
+This option activates or deactivates the lookup mechanism for arrays. [Lookup arrays](optimizations/ARRAY-OPTIMIZATION.markdown#lookup-arrays) use the Mindustry 8 Logic ability to [read variables from processors](MINDUSTRY-8.markdown#reading-and-writing-processor-variables) for array implementation different from the usual `@counter` array mechanism. Possible values are:
 
 * `false`: lookup arrays won't be generated.
 * `true` (the default value): the compiler generates lookup arrays if possible.
@@ -688,7 +688,7 @@ Note that [declaring an array explicitly to use the lookup mechanism](SYNTAX-1-V
 
 **Option scope: [global](#global-scope)**
 
-This option activates or deactivates using [specialized implementation for short arrays](SYNTAX-6-OPTIMIZATIONS.markdown#short-arrays). Possible values are:
+This option activates or deactivates using [specialized implementation for short arrays](optimizations/ARRAY-OPTIMIZATION.markdown#short-arrays). Possible values are:
 
 * `false`: short arrays won't be generated.
 * `true` (the default value): the compiler generates short arrays when it's appropriate.
@@ -702,13 +702,13 @@ The Mindustry 8 Logic ability to [read values from strings](MINDUSTRY-8.markdown
 * `false`: text-based jump tables won't be generated.
 * `true` (the default value): the compiler generates text-based jump tables where possible.
 
-Text-based jump tables allow very efficient encoding of jump tables, both in terms of program size and execution time. The functionality, however, often requires storing unprintable characters in the string. If this poses a problem, the option can be set to `false` to disable text-based jump tables.
+Text-based jump tables allow very efficient encoding of jump tables used by internal arrays and some `case` expressions, both in terms of program size and execution time. The functionality, however, often requires storing unprintable characters in the string. If this poses a problem, the option can be set to `false` to disable text-based jump tables.
 
 ### Option `use-text-translations`
 
 **Option scope: [local](#local-scope)**
 
-This option specifies whether the compiler may create strings (potentially containing unprintable characters) to implement [value translations](SYNTAX-6-OPTIMIZATIONS.markdown#value-translation). Possible values are:  
+This option specifies whether the compiler may create strings (potentially containing unprintable characters) to implement [value translations](optimizations/CASE-SWITCHING.markdown#value-translation). Possible values are:  
 
 * `false`: value translations won't be used.
 * `true` (the default value): the compiler generates value translations where possible.
@@ -724,33 +724,33 @@ While it is possible to set the code weight globally using the `#set` directive,
 ## Optimization levels
 
 Options specifying the global and individual optimization levels. Individual optimizers use global level
-when not explicitly set. Available optimization levels are {none,basic,advanced, experimental}.
+when not explicitly set. Available optimization levels are {none, basic, advanced, experimental}.
 
-| Option                                                                                       | Scope | Semantic stability |
-|----------------------------------------------------------------------------------------------|-------|--------------------|
-| [optimization](#option-optimization)                                                         | local | stable             |
-| [array-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization)                     | local | stable             |
-| [case-expression-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#case-expression-optimization) | local | stable             |
-| [case-switching](SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)                             | local | stable             |
-| [data-flow-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization)             | local | stable             |
-| [dead-code-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#dead-code-elimination)               | local | stable             |
-| [expression-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization)           | local | stable             |
-| [function-inlining](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining)                       | local | stable             |
-| [if-expression-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization)     | local | stable             |
-| [jump-normalization](SYNTAX-6-OPTIMIZATIONS.markdown#jump-normalization)                     | local | stable             |
-| [jump-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#jump-optimization)                       | local | stable             |
-| [jump-straightening](SYNTAX-6-OPTIMIZATIONS.markdown#jump-straightening)                     | local | stable             |
-| [jump-threading](SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading)                             | local | stable             |
-| [loop-hoisting](SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting)                               | local | stable             |
-| [loop-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#loop-optimization)                       | local | stable             |
-| [loop-unrolling](SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling)                             | local | stable             |
-| [print-merging](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging)                               | local | stable             |
-| [return-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#return-optimization)                   | local | stable             |
-| [select-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization)                   | local | stable             |
-| [single-step-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination)           | local | stable             |
-| [stack-optimization](SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization)                     | local | stable             |
-| [temp-variables-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#temp-variables-elimination)     | local | stable             |
-| [unreachable-code-elimination](SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination) | local | stable             |
+| Option                                                                              | Scope | Semantic stability |
+|-------------------------------------------------------------------------------------|-------|--------------------|
+| [optimization](#option-optimization)                                                | local | stable             |
+| [array-optimization](optimizations/ARRAY-OPTIMIZATION.markdown)                     | local | stable             |
+| [boolean-optimization](optimizations/BOOLEAN-OPTIMIZATION.markdown)                 | local | stable             |
+| [case-expression-optimization](optimizations/CASE-EXPRESSION-OPTIMIZATION.markdown) | local | stable             |
+| [case-switching](optimizations/CASE-SWITCHING.markdown)                             | local | stable             |
+| [condition-optimization](optimizations/CONDITION-OPTIMIZATION.markdown)             | local | stable             |
+| [data-flow-optimization](optimizations/DATA-FLOW-OPTIMIZATION.markdown)             | local | stable             |
+| [dead-code-elimination](optimizations/DEAD-CODE-ELIMINATION.markdown)               | local | stable             |
+| [expression-optimization](optimizations/EXPRESSION-OPTIMIZATION.markdown)           | local | stable             |
+| [function-inlining](optimizations/FUNCTION-INLINING.markdown)                       | local | stable             |
+| [if-expression-optimization](optimizations/IF-EXPRESSION-OPTIMIZATION.markdown)     | local | stable             |
+| [jump-normalization](optimizations/JUMP-NORMALIZATION.markdown)                     | local | stable             |
+| [jump-straightening](optimizations/JUMP-STRAIGHTENING.markdown)                     | local | stable             |
+| [jump-threading](optimizations/JUMP-THREADING.markdown)                             | local | stable             |
+| [loop-hoisting](optimizations/LOOP-HOISTING.markdown)                               | local | stable             |
+| [loop-optimization](optimizations/LOOP-OPTIMIZATION.markdown)                       | local | stable             |
+| [loop-unrolling](optimizations/LOOP-UNROLLING.markdown)                             | local | stable             |
+| [print-merging](optimizations/PRINT-MERGING.markdown)                               | local | stable             |
+| [return-optimization](optimizations/RETURN-OPTIMIZATION.markdown)                   | local | stable             |
+| [single-step-elimination](optimizations/SINGLE-STEP-ELIMINATION.markdown)           | local | stable             |
+| [stack-optimization](optimizations/STACK-OPTIMIZATION.markdown)                     | local | stable             |
+| [temp-variables-elimination](optimizations/TEMP-VARIABLES-ELIMINATION.markdown)     | local | stable             |
+| [unreachable-code-elimination](optimizations/UNREACHABLE-CODE-ELIMINATION.markdown) | local | stable             |
 
 **Option scope: [local](#local-scope)** (for all options in this category)
 
@@ -940,4 +940,4 @@ There are additional options to control the execution of the compiled code, all 
 
 ---
 
-[« Previous: Functions](SYNTAX-4-FUNCTIONS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Code optimization »](SYNTAX-6-OPTIMIZATIONS.markdown)
+[&#xAB; Previous: Remote functions and variables](REMOTE-CALLS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Code Optimization &#xBB;](SYNTAX-6-OPTIMIZATIONS.markdown)

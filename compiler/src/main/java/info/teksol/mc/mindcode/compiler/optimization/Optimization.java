@@ -27,8 +27,8 @@ public enum Optimization {
             JumpNormalizer::new,
             "replacing always true conditional jumps with unconditional ones, removing always false jumps"),
 
-    JUMP_OPTIMIZATION("Jump Optimization",
-            JumpOptimizer::new,
+    CONDITION_OPTIMIZATION("Condition Optimization",
+            ConditionOptimizer::new,
             "merging an op instruction producing a boolean expression into the following conditional jump"),
 
     SINGLE_STEP_ELIMINATION("Single Step Elimination",
@@ -39,10 +39,10 @@ public enum Optimization {
             ExpressionOptimizer::new,
             "optimizing some common mathematical expressions"),
 
-    SELECT_OPTIMIZATION("Select Optimization",
+    BOOLEAN_OPTIMIZATION("Boolean Optimization",
             context -> context.getInstructionProcessor().isSupported(Opcode.SELECT),
-            SelectOptimizer::new,
-            "expressing conditional expressions using the 'select' instruction"),
+            BooleanOptimizer::new,
+            "simplifying boolean expressions and/or implementing them using the 'select' instruction"),
 
     IF_EXPRESSION_OPTIMIZATION("If Expression Optimization",
             IfExpressionOptimizer::new,
@@ -50,7 +50,7 @@ public enum Optimization {
 
     DATA_FLOW_OPTIMIZATION("Data Flow Optimization",
             DataFlowOptimizer::new,
-            "improving variable assignments and and expressions"),
+            "improving variable assignments and expressions, analyzing data flow for other optimizations"),
 
     LOOP_HOISTING("Loop Hoisting",
             LoopHoisting::new,
@@ -58,23 +58,23 @@ public enum Optimization {
 
     LOOP_OPTIMIZATION("Loop Optimization",
             LoopOptimizer::new,
-            "improving loops"),
+            "improving loop conditions"),
 
     LOOP_UNROLLING("Loop Unrolling",
             LoopUnroller::new,
-            "unrolling loops with constant number of iterations (optimization for speed)"),
+            "unrolling loops with a fixed number of iterations"),
 
     FUNCTION_INLINING("Function Inlining",
             FunctionInliner::new,
-            "inlining stackless function calls (optimization for speed)"),
+            "inlining stackless function calls"),
 
     ARRAY_OPTIMIZATION("Array Optimization",
             ArrayOptimizer::new,
-            "improving internal array random access mechanism (optimization for speed)"),
+            "finding optimal array-access implementation for internal arrays"),
 
     CASE_SWITCHING("Case Switching",
             CaseSwitcher::new,
-            "modifying suitable case expressions to use jump tables"),
+            "modifying suitable case expressions to use jump tables or value translations"),
 
     RETURN_OPTIMIZATION("Return Optimization",
             ReturnOptimizer::new,
@@ -94,11 +94,11 @@ public enum Optimization {
 
     STACK_OPTIMIZATION("Stack Optimization",
             StackOptimizer::new,
-            "optimizing variable storage on stack"),
+            "optimizing variable storage on the stack"),
 
     PRINT_MERGING("Print Merging",
             PrintMerger::new,
-            "merging consecutive print statements outputting text literals"),
+            "merging consecutive print statements outputting constant values"),
     ;
 
     private final String name;

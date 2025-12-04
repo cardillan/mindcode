@@ -1,4 +1,4 @@
-# Using unreleased versions of Mindustry
+# Mindustry 8
 
 [Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases) is now available. The new functionality of Mindustry Logic is already supported by Mindcode when setting the language target to `8` either by command-line argument, or by the `#set target = 8;` directive.
 
@@ -7,7 +7,7 @@ The Mindustry Logic v8 instruction set and corresponding Mindcode functions are 
 To run the code produced by Mindcode Logic 8, you need to use one of the pre-release versions, or one of the development versions of Mindustry (a "bleeding-edge" version).
 
 > [!CAUTION]
-> If you save a game or a campaign in a pre-release or development version of Mindustry, you will no longer be able to open this game/campaign in older versions of the game. Additionally, there exists a possibility that a future version of Mindustry, including an official Mindustry release, won't be compatible with a particular development version you're using. There thus might be no official release that would be able to read your game state.
+> If you save a game or a campaign in a pre-release or development version of Mindustry, you will no longer be able to open this game/campaign in older versions of the game. Additionally, there exists a possibility that a future version of Mindustry, including an official Mindustry release, won't be compatible with a particular version you're using (especially when using development versions). There thus might be no official release that would be able to read your game state.
 >
 > It is strongly recommended to back up the state of your current game (Settings/Game Data/Export data) before running any pre-release or development version of Mindustry.
 
@@ -121,7 +121,7 @@ Note: `formatNumber` and `printNumber` functions, identical to those above, are 
 
 #### Print merging optimization
 
-The [Print Merging optimization](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging) was enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language targets earlier than `8` compiles into
+The [Print Merging optimization](optimizations/PRINT-MERGING.markdown) was enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language targets earlier than `8` compiles into
 
 ```
 print `Minimum: `
@@ -216,7 +216,7 @@ Since the **v8 Build 150 Beta** pre-release, Mindustry supports the `select` ins
 > [!NOTE]
 > The Mindcode target which supports the `select` instruction is `8.1`.
 
-Mindcode doesn't provide direct access to the select instruction, but optimizes conditional expressions [to use the `select` instruction](SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) when possible. Using the ternary operator with simple values (`variable = condition ? trueValue : falseValue`) in Mindcode typically results in the `select` instruction being used.
+Mindcode doesn't provide direct access to the select instruction, but optimizes conditional expressions [to use the `select` instruction](optimizations/BOOLEAN-OPTIMIZATION.markdown) when possible. Using the ternary operator with simple values (`variable = condition ? trueValue : falseValue`) in Mindcode typically results in the `select` instruction being used.
 
 ### Implementing strict nonequality using `select`
 
@@ -285,7 +285,7 @@ printflush(message2);
 
 #### Data storage using strings 
 
-The ability to access individual characters of string values is a convenient way to store data. Mindcode provides the [`encode()` function](SYNTAX-4-FUNCTIONS.markdown#the-encode-function) to easily encode data into strings, and also uses the functionality internally to implement [very space-efficient jump tables](SYNTAX-6-OPTIMIZATIONS.markdown#text-based-jump-tables).
+The ability to access individual characters of string values is a convenient way to store data. Mindcode provides the [`encode()` function](SYNTAX-4-FUNCTIONS.markdown#the-encode-function) to easily encode data into strings, and also uses the functionality internally to implement [very space-efficient jump tables](SYNTAX-5-OTHER.markdown#option-use-text-jump-tables).
 
 ### Reading and writing canvas pixels
 
@@ -472,4 +472,4 @@ Adds a map locale property value to the text buffer.
 
 ---
 
-[« Previous: System Library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Remote functions and variables »](REMOTE-CALLS.markdown)
+[&#xAB; Previous: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Remote functions and variables &#xBB;](REMOTE-CALLS.markdown)

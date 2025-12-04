@@ -383,7 +383,6 @@ public class Processor extends AbstractMessageEmitter {
             MindustryVariable a = getExistingVariable(ix.getX());
             MindustryVariable b = getExistingVariable(ix.getY());
             LogicCondition logicCondition = ConditionEvaluator.getCondition(ix.getCondition());
-            //noinspection ConstantValue
             if (logicCondition == null) {
                 throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition '%s'.", ix.getCondition());
             }
@@ -502,7 +501,6 @@ public class Processor extends AbstractMessageEmitter {
             MindustryVariable a = getExistingVariable(ix.getX());
             MindustryVariable b = getExistingVariable(ix.getY());
             LogicCondition logicCondition = ConditionEvaluator.getCondition(ix.getCondition());
-            //noinspection ConstantValue
             if (logicCondition == null) {
                 throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition '%s'.", ix.getCondition());
             }

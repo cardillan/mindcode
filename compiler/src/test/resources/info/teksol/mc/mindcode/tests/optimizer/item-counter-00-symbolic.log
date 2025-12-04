@@ -2,7 +2,7 @@
     25 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
     14 instructions eliminated by Dead Code Elimination (7 iterations).
-    10 instructions eliminated by Jump Optimization (4 iterations).
+    10 instructions eliminated by Condition Optimization (4 iterations).
      7 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
@@ -314,7 +314,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-3 ins
     27 set .FIRST_BLOCK :n
     28 jump *label6 always
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-10 instructions):
  
      5 set .FIRST_BLOCK @links
      6 set :n @links

@@ -1,7 +1,7 @@
     87 instructions before optimizations.
      1 instructions eliminated by Case Expression Optimization.
     13 instructions eliminated by Dead Code Elimination (5 iterations).
-     1 instructions eliminated by Jump Optimization (4 iterations).
+     1 instructions eliminated by Condition Optimization (4 iterations).
      2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
@@ -265,7 +265,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-10 in
     68 op add .S9 .S9 1
     69 jump *label8 always
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
     13 # "Function: def processNumber(in n)"
     14 set :processNumber:n :i

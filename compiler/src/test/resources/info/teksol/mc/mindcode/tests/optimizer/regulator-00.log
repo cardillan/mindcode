@@ -3,10 +3,10 @@
      1 instructions eliminated by Case Expression Optimization.
     27 instructions eliminated by Dead Code Elimination (7 iterations).
      1 instructions eliminated by Jump Normalization (5 iterations).
-    12 instructions eliminated by Jump Optimization (5 iterations).
+    12 instructions eliminated by Condition Optimization (3 passes, 5 iterations).
      8 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      2 instructions modified by Expression Optimization (3 iterations).
-     9 instructions eliminated by Select Optimization (4 iterations).
+     9 instructions eliminated by Boolean Optimization (4 iterations).
      7 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -529,7 +529,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-8 ins
    144 set :item .SENSOR
    145 print "Measuring [gold]total[] in "
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-12 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-12 instructions):
  
     15 print "\n"
     16 set :n @links
@@ -882,7 +882,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    222 print "[]"
    223 print "\n"
 
-Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-9 instructions):
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-9 instructions):
  
    107 set .STATE true
    108 op add .CYCLES 0 1
@@ -1066,6 +1066,17 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
    101 set .STATE true
    102 op add .CYCLES 0 1
    103 op xor .ON .INVERTED true
+
+Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
+ 
+   162 print :pct
+   163 print "%"
+   164 print "[]"
+-    * jump *label49 equal .INVERTED false
++  165 jump *label49 strictNotEqual *tmp14 @inverted-sorter
+   166 print "\n"
+   167 print "Activate above [green]"
+   168 print PCT_HIGH
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  
@@ -1280,6 +1291,17 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    180 jump *label56 equal *tmp23 0
    181 label *label30
 
+Modifications by Jumps phase, Condition Optimization, pass 4, iteration 1:
+ 
+   120 set .STATE false
+   121 op add .CYCLES .CYCLES 1
+   122 set .ON .INVERTED
+-    * select .ACTIVE_TEXT notEqual .INVERTED false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
++  123 select .ACTIVE_TEXT strictEqual *tmp14 @inverted-sorter "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
+   124 label *label45
+   125 label *label42
+   126 label *label36
+
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
      1 set PCT_LOW 60
@@ -1400,7 +1422,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 -    * print "[]"
 +  115 print "\nLevel: [gold]{0}%[]"
 +  116 format :pct
-   117 jump *label49 equal .INVERTED false
+   117 jump *label49 strictNotEqual *tmp14 @inverted-sorter
 -    * print "\n"
 -    * print "Activate above [green]"
 -    * print PCT_HIGH
@@ -1567,13 +1589,13 @@ jump *label45 equal .STATE false
 set .STATE false
 op add .CYCLES .CYCLES 1
 set .ON .INVERTED
-select .ACTIVE_TEXT notEqual .INVERTED false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
+select .ACTIVE_TEXT strictEqual *tmp14 @inverted-sorter "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
 label *label45
 label *label42
 label *label36
 print "\nLevel: [gold]{0}%[]"
 format :pct
-jump *label49 equal .INVERTED false
+jump *label49 strictNotEqual *tmp14 @inverted-sorter
 print "\nActivate above [green]{0}%[]\nDeactivate below [salmon]{0}%[]"
 format PCT_HIGH
 format PCT_LOW

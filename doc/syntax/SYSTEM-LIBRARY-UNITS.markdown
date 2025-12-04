@@ -113,4 +113,4 @@ The function doesn't use units that are controlled by a player or a different pr
 
 ---
 
-[« Previous: Printing](SYSTEM-LIBRARY-PRINTING.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown)
+[&#xAB; Previous: Printing](SYSTEM-LIBRARY-PRINTING.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown)

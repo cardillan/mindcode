@@ -3,10 +3,10 @@
      2 instructions eliminated by Case Expression Optimization.
    124 instructions eliminated by Dead Code Elimination (6 iterations).
      3 instructions eliminated by Jump Normalization (5 iterations).
-    77 instructions eliminated by Jump Optimization (5 iterations).
+    77 instructions eliminated by Condition Optimization (2 passes, 5 iterations).
     52 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      2 instructions eliminated by Expression Optimization (3 iterations).
-    32 instructions eliminated by Select Optimization (4 iterations).
+    32 instructions eliminated by Boolean Optimization (4 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
     25 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
      1 loops improved by Loop Hoisting.
@@ -1695,7 +1695,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-21 in
   1120 label *label237
   1121 sensor *tmp361 switch1 @enabled
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-77 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-77 instructions):
  
     29 set .DEC_MAX -1
     30 ubind UNIT
@@ -3303,7 +3303,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-3 inst
    431 set .LAST_ITEM .ITEM
    432 jump *label102 notEqual .ITEM @blast-compound
 
-Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-32 instructions):
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-32 instructions):
  
     43 sensor *tmp12 @unit @controller
     44 jump *label6 notEqual *tmp12 @this
@@ -3678,6 +3678,17 @@ Modifications by Fast-dispatch case at line 712:5 (-13 instructions):
    474 label *label101
    475 label *label100
    476 set .ITEM_ICON *tmp163
+
+Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
+ 
+   522 op idiv :corr_per_min :corr_per_ms 0.000016666666666666667
+   523 select .CORR_SIGN greaterThanEq :corr_per_min 0 "[]([green]+" "[]([green]"
+   524 set .SPEED_UNIT_TXT "[])/min"
+-    * jump *label142 equal :alive false
++  525 jump *label142 strictNotEqual *tmp150 0
+   526 select *tmp366 lessThan :min_level .LOW_LEVEL_TRIGGER true false
+   527 label *label253
+   528 select *tmp208 greaterThan :max_level .HIGH_LEVEL_TRIGGER true *tmp366
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  
@@ -4054,7 +4065,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    413 op div *tmp176 :wait_time 100
  
    443 set .SPEED_UNIT_TXT "[])/min"
-   444 jump *label142 equal :alive false
+   444 jump *label142 strictNotEqual *tmp150 0
    445 select *tmp366 lessThan :min_level .LOW_LEVEL_TRIGGER true false
 -    * label *label253
    446 select *tmp208 greaterThan :max_level .HIGH_LEVEL_TRIGGER true *tmp366
@@ -4320,7 +4331,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-4 instru
    610 label *label91
    611 jump *label180 lessThanEq .CHANGE 0
 
-Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
+Modifications by Jumps phase, Condition Optimization, pass 4, iteration 1:
  
    597 print "Unit status:"
    598 sensor *tmp253 .SRC @dead
@@ -5175,7 +5186,7 @@ op add :total_flow_per_ms :items_per_ms :corr_per_ms
 op idiv :corr_per_min :corr_per_ms 0.000016666666666666667
 select .CORR_SIGN greaterThanEq :corr_per_min 0 "[]([green]+" "[]([green]"
 set .SPEED_UNIT_TXT "[])/min"
-jump *label142 equal :alive false
+jump *label142 strictNotEqual *tmp150 0
 select *tmp366 lessThan :min_level .LOW_LEVEL_TRIGGER true false
 select *tmp208 greaterThan :max_level .HIGH_LEVEL_TRIGGER true *tmp366
 jump *label150 equal :wait_time 0

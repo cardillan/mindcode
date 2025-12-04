@@ -45,6 +45,13 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
         }
     }
 
+    @Override
+    public JumpInstruction withOperands(Condition condition, LogicValue x, LogicValue y) {
+        assert getArgumentTypes() != null;
+        ensureConditional();
+        return new JumpInstruction(getAstContext(),List.of(getTarget(), condition, x, y), getArgumentTypes()).copyInfo(this);
+    }
+
     public JumpInstruction withTarget(LogicLabel target) {
         assert getArgumentTypes() != null;
         return isUnconditional()

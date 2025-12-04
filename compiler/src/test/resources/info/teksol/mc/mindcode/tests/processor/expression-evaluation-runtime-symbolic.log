@@ -1,12 +1,13 @@
    437 instructions before optimizations.
     74 instructions eliminated by Temp Variables Elimination (6 iterations).
+     1 instructions eliminated by Condition Optimization (5 iterations).
      1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
-     3 instructions eliminated by Select Optimization (4 iterations).
-   202 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
+     3 instructions eliminated by Boolean Optimization (4 iterations).
+   206 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
     11 instructions added by Function Inlining (4 iterations).
      6 function calls inlined by Function Inlining.
-   168 instructions after optimizations.
+   163 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 799):
   * Inline function 'assertEqualsRound' defined at line 3:1      size   +19, benefit       27.0, efficiency      1.421 (-31 instructions)
@@ -2127,7 +2128,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1
    297 # "Function: inline def d(in n)"
    298 label *label68
 
-Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-3 instructions):
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-3 instructions):
  
    327 assertequals %ff0000ff %ff0000 "short color literals"
    328 assertequals %ffffffff %[white] "named color literals"
@@ -2445,84 +2446,228 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
    273 label *label99
    274 # "Function: inline def d(in n)"
 
+Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-1 instructions):
+ 
+    42 assertequals 16 *tmp26 "pow"
+    43 # "Function: inline def d(in n)"
+    44 label *label13
+-    * op equal *tmp29 5 *tmp2
++   45 op equal *tmp29 zero 0
+    46 assertequals true *tmp29 "equal 1"
+    47 # "Function: inline def d(in n)"
+    48 label *label14
+-    * op equal *tmp32 5 *tmp3
++   49 op equal *tmp32 zero -1
+    50 assertequals false *tmp32 "equal 2"
+    51 # "Function: inline def d(in n)"
+-    * op add *tmp33 zero null
+    52 label *label15
+-    * op equal *tmp35 0 *tmp33
++   53 op equal *tmp35 zero 0
+    54 assertequals true *tmp35 "equal null"
+    55 # "Function: inline def d(in n)"
+    56 label *label16
+-    * op notEqual *tmp38 5 *tmp2
++   57 op notEqual *tmp38 zero 0
+    58 assertequals false *tmp38 "notEqual 1"
+    59 # "Function: inline def d(in n)"
+    60 label *label17
+-    * op notEqual *tmp41 5 *tmp3
++   61 op notEqual *tmp41 zero -1
+    62 assertequals true *tmp41 "notEqual 2"
+    63 # "Function: inline def d(in n)"
+    64 label *label18
+-    * op notEqual *tmp44 0 *tmp33
++   65 op notEqual *tmp44 zero 0
+    66 assertequals false *tmp44 "notEqual null"
+    67 # "Function: inline def d(in n)"
+    68 op add *tmp45 zero 0
+ 
+    76 # "Function: inline def d(in n)"
+    77 op add *tmp51 zero 1
+    78 label *label21
+-    * op lessThan *tmp53 0 *tmp51
++   79 op greaterThan *tmp53 zero -1
+    80 assertequals true *tmp53 "lessThan 1"
+    81 # "Function: inline def d(in n)"
+    82 label *label22
+-    * op lessThan *tmp56 1 *tmp45
++   83 op greaterThan *tmp56 zero 1
+    84 assertequals false *tmp56 "lessThan 2"
+    85 # "Function: inline def d(in n)"
+    86 label *label23
+-    * op lessThanEq *tmp59 1 *tmp51
++   87 op greaterThanEq *tmp59 zero 0
+    88 assertequals true *tmp59 "lessThanEq 1"
+    89 # "Function: inline def d(in n)"
+    90 label *label24
+-    * op lessThanEq *tmp62 1 *tmp45
++   91 op greaterThanEq *tmp62 zero 1
+    92 assertequals false *tmp62 "lessThanEq 2"
+    93 # "Function: inline def d(in n)"
+    94 label *label25
+-    * op greaterThan *tmp65 2 *tmp51
++   95 op lessThan *tmp65 zero 1
+    96 assertequals true *tmp65 "greaterThan 1"
+    97 # "Function: inline def d(in n)"
+    98 label *label26
+-    * op greaterThan *tmp68 1 *tmp6
++   99 op lessThan *tmp68 zero -1
+   100 assertequals false *tmp68 "greaterThan 2"
+   101 # "Function: inline def d(in n)"
+   102 label *label27
+-    * op greaterThanEq *tmp71 1 *tmp51
++  103 op lessThanEq *tmp71 zero 0
+   104 assertequals true *tmp71 "greaterThanEq 1"
+   105 # "Function: inline def d(in n)"
+   106 label *label28
+-    * op greaterThanEq *tmp74 1 *tmp6
++  107 op lessThanEq *tmp74 zero -1
+   108 assertequals false *tmp74 "greaterThanEq 2"
+   109 op strictEqual *tmp75 0 NULL
+   110 assertequals false *tmp75 "strictEqual 1"
+ 
+   165 # "Function: inline def d(in n)"
+   166 label *label41
+   167 # "Function: inline def sign(in x)"
+-    * op greaterThan *tmp118 *tmp112 0
+-    * op lessThan *tmp119 *tmp112 0
++  168 op greaterThan *tmp118 zero 2
++  169 op lessThan *tmp119 zero 2
+   170 op sub *tmp117 *tmp118 *tmp119
+   171 label *label42
+   172 assertequals -1 *tmp117 "sign(-2)"
+   173 # "Function: inline def d(in n)"
+   174 label *label43
+   175 # "Function: inline def sign(in x)"
+-    * op greaterThan *tmp124 *tmp6 0
+-    * op lessThan *tmp125 *tmp6 0
++  176 op greaterThan *tmp124 zero -2
++  177 op lessThan *tmp125 zero -2
+   178 op sub *tmp123 *tmp124 *tmp125
+   179 label *label44
+   180 assertequals 1 *tmp123 "sign(2)"
+   181 # "Function: inline def d(in n)"
+   182 label *label45
+   183 # "Function: inline def sign(in x)"
+-    * op greaterThan *tmp130 *tmp45 0
+-    * op lessThan *tmp131 *tmp45 0
++  184 op greaterThan *tmp130 zero 0
++  185 op lessThan *tmp131 zero 0
+   186 op sub *tmp129 *tmp130 *tmp131
+   187 label *label46
+   188 assertequals 0 *tmp129 "sign(0)"
+ 
+   276 assertequals -8 *tmp167 "unary minus"
+   277 # "Function: inline def d(in n)"
+   278 label *label59
+-    * op equal *tmp170 *tmp45 false
++  279 op equal *tmp170 zero 0
+   280 assertequals 1 *tmp170 "boolean negation 1"
+   281 # "Function: inline def d(in n)"
+   282 label *label60
+-    * op equal *tmp173 *tmp51 false
++  283 op equal *tmp173 zero -1
+   284 assertequals 0 *tmp173 "boolean negation 2"
+   285 # "Function: inline def d(in n)"
+   286 label *label61
+-    * op equal *tmp176 *tmp6 false
++  287 op equal *tmp176 zero -2
+   288 assertequals 0 *tmp176 "boolean negation 3"
+   289 # "Function: inline def d(in n)"
+   290 label *label62
+
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
-    66 op notEqual *tmp44 0 *tmp33
-    67 assertequals false *tmp44 "notEqual null"
-    68 # "Function: inline def d(in n)"
+    65 op notEqual *tmp44 zero 0
+    66 assertequals false *tmp44 "notEqual null"
+    67 # "Function: inline def d(in n)"
 -    * op add *tmp45 zero 0
-+   69 set *tmp45 zero
-    70 label *label19
-    71 op land *tmp47 1 *tmp45
-    72 assertequals false *tmp47 "land 1"
++   68 set *tmp45 zero
+    69 label *label19
+    70 op land *tmp47 1 *tmp45
+    71 assertequals false *tmp47 "land 1"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
-    68 # "Function: inline def d(in n)"
-    69 set *tmp45 zero
-    70 label *label19
--    * op land *tmp47 1 *tmp45
-+   71 op land *tmp47 1 zero
-    72 assertequals false *tmp47 "land 1"
-    73 # "Function: inline def d(in n)"
-    74 label *label20
+    51 # "Function: inline def d(in n)"
+    52 label *label15
+    53 op equal *tmp35 zero 0
+-    * assertequals true *tmp35 "equal null"
++   54 assertequals true *tmp29 "equal null"
+    55 # "Function: inline def d(in n)"
+    56 label *label16
+    57 op notEqual *tmp38 zero 0
  
-    81 assertequals true *tmp53 "lessThan 1"
-    82 # "Function: inline def d(in n)"
-    83 label *label22
--    * op lessThan *tmp56 1 *tmp45
-+   84 op lessThan *tmp56 1 zero
-    85 assertequals false *tmp56 "lessThan 2"
-    86 # "Function: inline def d(in n)"
-    87 label *label23
- 
-    89 assertequals true *tmp59 "lessThanEq 1"
-    90 # "Function: inline def d(in n)"
-    91 label *label24
--    * op lessThanEq *tmp62 1 *tmp45
-+   92 op lessThanEq *tmp62 1 zero
-    93 assertequals false *tmp62 "lessThanEq 2"
-    94 # "Function: inline def d(in n)"
-    95 label *label25
- 
-   138 assertequals 1 *tmp94 "xor"
-   139 # "Function: inline def d(in n)"
-   140 label *label35
--    * op not *tmp97 *tmp45
-+  141 op not *tmp97 zero
-   142 assertequals -1 *tmp97 "not 1"
-   143 # "Function: inline def d(in n)"
-   144 op add *tmp98 zero 65535
- 
-   182 # "Function: inline def d(in n)"
-   183 label *label45
-   184 # "Function: inline def sign(in x)"
--    * op greaterThan *tmp130 *tmp45 0
--    * op lessThan *tmp131 *tmp45 0
-+  185 op greaterThan *tmp130 zero 0
-+  186 op lessThan *tmp131 zero 0
-   187 op sub *tmp129 *tmp130 *tmp131
-   188 label *label46
-   189 assertequals 0 *tmp129 "sign(0)"
- 
-   277 assertequals -8 *tmp167 "unary minus"
-   278 # "Function: inline def d(in n)"
-   279 label *label59
--    * op equal *tmp170 *tmp45 false
-+  280 op equal *tmp170 zero false
-   281 assertequals 1 *tmp170 "boolean negation 1"
-   282 # "Function: inline def d(in n)"
-   283 label *label60
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
- 
-    66 op notEqual *tmp44 0 *tmp33
-    67 assertequals false *tmp44 "notEqual null"
-    68 # "Function: inline def d(in n)"
--    * set *tmp45 zero
+    63 # "Function: inline def d(in n)"
+    64 label *label18
+    65 op notEqual *tmp44 zero 0
+-    * assertequals false *tmp44 "notEqual null"
++   66 assertequals false *tmp38 "notEqual null"
+    67 # "Function: inline def d(in n)"
+    68 set *tmp45 zero
     69 label *label19
-    70 op land *tmp47 1 zero
+-    * op land *tmp47 1 *tmp45
++   70 op land *tmp47 1 zero
     71 assertequals false *tmp47 "land 1"
+    72 # "Function: inline def d(in n)"
+    73 label *label20
+ 
+   137 assertequals 1 *tmp94 "xor"
+   138 # "Function: inline def d(in n)"
+   139 label *label35
+-    * op not *tmp97 *tmp45
++  140 op not *tmp97 zero
+   141 assertequals -1 *tmp97 "not 1"
+   142 # "Function: inline def d(in n)"
+   143 op add *tmp98 zero 65535
+ 
+   277 # "Function: inline def d(in n)"
+   278 label *label59
+   279 op equal *tmp170 zero 0
+-    * assertequals 1 *tmp170 "boolean negation 1"
++  280 assertequals 1 *tmp29 "boolean negation 1"
+   281 # "Function: inline def d(in n)"
+   282 label *label60
+   283 op equal *tmp173 zero -1
+-    * assertequals 0 *tmp173 "boolean negation 2"
++  284 assertequals 0 *tmp32 "boolean negation 2"
+   285 # "Function: inline def d(in n)"
+   286 label *label61
+   287 op equal *tmp176 zero -2
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-5 instructions):
+ 
+    50 assertequals false *tmp32 "equal 2"
+    51 # "Function: inline def d(in n)"
+    52 label *label15
+-    * op equal *tmp35 zero 0
+    53 assertequals true *tmp29 "equal null"
+    54 # "Function: inline def d(in n)"
+    55 label *label16
+ 
+    61 assertequals true *tmp41 "notEqual 2"
+    62 # "Function: inline def d(in n)"
+    63 label *label18
+-    * op notEqual *tmp44 zero 0
+    64 assertequals false *tmp38 "notEqual null"
+    65 # "Function: inline def d(in n)"
+-    * set *tmp45 zero
+    66 label *label19
+    67 op land *tmp47 1 zero
+    68 assertequals false *tmp47 "land 1"
+ 
+   273 assertequals -8 *tmp167 "unary minus"
+   274 # "Function: inline def d(in n)"
+   275 label *label59
+-    * op equal *tmp170 zero 0
+   276 assertequals 1 *tmp29 "boolean negation 1"
+   277 # "Function: inline def d(in n)"
+   278 label *label60
+-    * op equal *tmp173 zero -1
+   279 assertequals 0 *tmp32 "boolean negation 2"
+   280 # "Function: inline def d(in n)"
+   281 label *label61
 
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
      0 set NULL null
@@ -2570,313 +2715,308 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     33 assertequals 16 *tmp26 "pow"
     34 # "Function: inline def d(in n)"
 -    * label *label13
-    35 op equal *tmp29 5 *tmp2
+    35 op equal *tmp29 zero 0
     36 assertequals true *tmp29 "equal 1"
     37 # "Function: inline def d(in n)"
 -    * label *label14
-    38 op equal *tmp32 5 *tmp3
+    38 op equal *tmp32 zero -1
     39 assertequals false *tmp32 "equal 2"
     40 # "Function: inline def d(in n)"
-    41 op add *tmp33 zero null
 -    * label *label15
-    42 op equal *tmp35 0 *tmp33
-    43 assertequals true *tmp35 "equal null"
-    44 # "Function: inline def d(in n)"
+    41 assertequals true *tmp29 "equal null"
+    42 # "Function: inline def d(in n)"
 -    * label *label16
-    45 op notEqual *tmp38 5 *tmp2
-    46 assertequals false *tmp38 "notEqual 1"
-    47 # "Function: inline def d(in n)"
+    43 op notEqual *tmp38 zero 0
+    44 assertequals false *tmp38 "notEqual 1"
+    45 # "Function: inline def d(in n)"
 -    * label *label17
-    48 op notEqual *tmp41 5 *tmp3
-    49 assertequals true *tmp41 "notEqual 2"
-    50 # "Function: inline def d(in n)"
+    46 op notEqual *tmp41 zero -1
+    47 assertequals true *tmp41 "notEqual 2"
+    48 # "Function: inline def d(in n)"
 -    * label *label18
-    51 op notEqual *tmp44 0 *tmp33
-    52 assertequals false *tmp44 "notEqual null"
-    53 # "Function: inline def d(in n)"
+    49 assertequals false *tmp38 "notEqual null"
+    50 # "Function: inline def d(in n)"
 -    * label *label19
-    54 op land *tmp47 1 zero
-    55 assertequals false *tmp47 "land 1"
-    56 # "Function: inline def d(in n)"
+    51 op land *tmp47 1 zero
+    52 assertequals false *tmp47 "land 1"
+    53 # "Function: inline def d(in n)"
 -    * label *label20
-    57 op land *tmp50 1 *tmp6
-    58 assertequals true *tmp50 "land 2"
-    59 # "Function: inline def d(in n)"
-    60 op add *tmp51 zero 1
+    54 op land *tmp50 1 *tmp6
+    55 assertequals true *tmp50 "land 2"
+    56 # "Function: inline def d(in n)"
+    57 op add *tmp51 zero 1
 -    * label *label21
-    61 op lessThan *tmp53 0 *tmp51
-    62 assertequals true *tmp53 "lessThan 1"
-    63 # "Function: inline def d(in n)"
+    58 op greaterThan *tmp53 zero -1
+    59 assertequals true *tmp53 "lessThan 1"
+    60 # "Function: inline def d(in n)"
 -    * label *label22
-    64 op lessThan *tmp56 1 zero
-    65 assertequals false *tmp56 "lessThan 2"
-    66 # "Function: inline def d(in n)"
+    61 op greaterThan *tmp56 zero 1
+    62 assertequals false *tmp56 "lessThan 2"
+    63 # "Function: inline def d(in n)"
 -    * label *label23
-    67 op lessThanEq *tmp59 1 *tmp51
-    68 assertequals true *tmp59 "lessThanEq 1"
-    69 # "Function: inline def d(in n)"
+    64 op greaterThanEq *tmp59 zero 0
+    65 assertequals true *tmp59 "lessThanEq 1"
+    66 # "Function: inline def d(in n)"
 -    * label *label24
-    70 op lessThanEq *tmp62 1 zero
-    71 assertequals false *tmp62 "lessThanEq 2"
-    72 # "Function: inline def d(in n)"
+    67 op greaterThanEq *tmp62 zero 1
+    68 assertequals false *tmp62 "lessThanEq 2"
+    69 # "Function: inline def d(in n)"
 -    * label *label25
-    73 op greaterThan *tmp65 2 *tmp51
-    74 assertequals true *tmp65 "greaterThan 1"
-    75 # "Function: inline def d(in n)"
+    70 op lessThan *tmp65 zero 1
+    71 assertequals true *tmp65 "greaterThan 1"
+    72 # "Function: inline def d(in n)"
 -    * label *label26
-    76 op greaterThan *tmp68 1 *tmp6
-    77 assertequals false *tmp68 "greaterThan 2"
-    78 # "Function: inline def d(in n)"
+    73 op lessThan *tmp68 zero -1
+    74 assertequals false *tmp68 "greaterThan 2"
+    75 # "Function: inline def d(in n)"
 -    * label *label27
-    79 op greaterThanEq *tmp71 1 *tmp51
-    80 assertequals true *tmp71 "greaterThanEq 1"
-    81 # "Function: inline def d(in n)"
+    76 op lessThanEq *tmp71 zero 0
+    77 assertequals true *tmp71 "greaterThanEq 1"
+    78 # "Function: inline def d(in n)"
 -    * label *label28
-    82 op greaterThanEq *tmp74 1 *tmp6
-    83 assertequals false *tmp74 "greaterThanEq 2"
-    84 op strictEqual *tmp75 0 NULL
+    79 op lessThanEq *tmp74 zero -1
+    80 assertequals false *tmp74 "greaterThanEq 2"
+    81 op strictEqual *tmp75 0 NULL
  
-    86 op strictEqual *tmp76 null NULL
-    87 assertequals true *tmp76 "strictEqual 2"
-    88 # "Function: inline def d(in n)"
+    83 op strictEqual *tmp76 null NULL
+    84 assertequals true *tmp76 "strictEqual 2"
+    85 # "Function: inline def d(in n)"
 -    * label *label29
-    89 op shl *tmp79 1 *tmp6
-    90 assertequals 4 *tmp79 "shl"
-    91 # "Function: inline def d(in n)"
+    86 op shl *tmp79 1 *tmp6
+    87 assertequals 4 *tmp79 "shl"
+    88 # "Function: inline def d(in n)"
 -    * label *label30
-    92 op shr *tmp82 9 *tmp6
-    93 assertequals 2 *tmp82 "shr"
-    94 # "Function: inline def d(in n)"
-    95 op add *tmp83 zero 61
+    89 op shr *tmp82 9 *tmp6
+    90 assertequals 2 *tmp82 "shr"
+    91 # "Function: inline def d(in n)"
+    92 op add *tmp83 zero 61
 -    * label *label31
-    96 op ushr *tmp85 -1 *tmp83
-    97 assertequals 7 *tmp85 "ushr"
-    98 # "Function: inline def d(in n)"
+    93 op ushr *tmp85 -1 *tmp83
+    94 assertequals 7 *tmp85 "ushr"
+    95 # "Function: inline def d(in n)"
 -    * label *label32
-    99 op or *tmp88 1 *tmp6
-   100 assertequals 3 *tmp88 "or"
-   101 # "Function: inline def d(in n)"
+    96 op or *tmp88 1 *tmp6
+    97 assertequals 3 *tmp88 "or"
+    98 # "Function: inline def d(in n)"
 -    * label *label33
-   102 op and *tmp91 3 *tmp6
-   103 assertequals 2 *tmp91 "and"
-   104 # "Function: inline def d(in n)"
+    99 op and *tmp91 3 *tmp6
+   100 assertequals 2 *tmp91 "and"
+   101 # "Function: inline def d(in n)"
 -    * label *label34
-   105 op xor *tmp94 3 *tmp6
-   106 assertequals 1 *tmp94 "xor"
-   107 # "Function: inline def d(in n)"
+   102 op xor *tmp94 3 *tmp6
+   103 assertequals 1 *tmp94 "xor"
+   104 # "Function: inline def d(in n)"
 -    * label *label35
-   108 op not *tmp97 zero
-   109 assertequals -1 *tmp97 "not 1"
-   110 # "Function: inline def d(in n)"
-   111 op add *tmp98 zero 65535
+   105 op not *tmp97 zero
+   106 assertequals -1 *tmp97 "not 1"
+   107 # "Function: inline def d(in n)"
+   108 op add *tmp98 zero 65535
 -    * label *label36
-   112 op not *tmp100 *tmp98
-   113 assertequals -65536 *tmp100 "not 2"
-   114 # "Function: inline def d(in n)"
-   115 op add *tmp103 zero 0xabcdefabcdef
+   109 op not *tmp100 *tmp98
+   110 assertequals -65536 *tmp100 "not 2"
+   111 # "Function: inline def d(in n)"
+   112 op add *tmp103 zero 0xabcdefabcdef
 -    * label *label37
-   116 op not *tmp105 *tmp103
-   117 assertequals -188900977659376 *tmp105 "not 3"
-   118 # "Function: inline def d(in n)"
+   113 op not *tmp105 *tmp103
+   114 assertequals -188900977659376 *tmp105 "not 3"
+   115 # "Function: inline def d(in n)"
 -    * label *label38
-   119 op max *tmp108 2 *tmp9
-   120 assertequals 4 *tmp108 "max"
-   121 # "Function: inline def d(in n)"
+   116 op max *tmp108 2 *tmp9
+   117 assertequals 4 *tmp108 "max"
+   118 # "Function: inline def d(in n)"
 -    * label *label39
-   122 op min *tmp111 2 *tmp9
-   123 assertequals 2 *tmp111 "min"
-   124 # "Function: inline def d(in n)"
-   125 op add *tmp112 zero -2
+   119 op min *tmp111 2 *tmp9
+   120 assertequals 2 *tmp111 "min"
+   121 # "Function: inline def d(in n)"
+   122 op add *tmp112 zero -2
 -    * label *label40
-   126 op abs *tmp114 *tmp112
-   127 assertequals 2 *tmp114 "abs"
-   128 # "Function: inline def d(in n)"
+   123 op abs *tmp114 *tmp112
+   124 assertequals 2 *tmp114 "abs"
+   125 # "Function: inline def d(in n)"
 -    * label *label41
-   129 # "Function: inline def sign(in x)"
-   130 op greaterThan *tmp118 *tmp112 0
-   131 op lessThan *tmp119 *tmp112 0
-   132 op sub *tmp117 *tmp118 *tmp119
+   126 # "Function: inline def sign(in x)"
+   127 op greaterThan *tmp118 zero 2
+   128 op lessThan *tmp119 zero 2
+   129 op sub *tmp117 *tmp118 *tmp119
 -    * label *label42
-   133 assertequals -1 *tmp117 "sign(-2)"
-   134 # "Function: inline def d(in n)"
+   130 assertequals -1 *tmp117 "sign(-2)"
+   131 # "Function: inline def d(in n)"
 -    * label *label43
-   135 # "Function: inline def sign(in x)"
-   136 op greaterThan *tmp124 *tmp6 0
-   137 op lessThan *tmp125 *tmp6 0
-   138 op sub *tmp123 *tmp124 *tmp125
+   132 # "Function: inline def sign(in x)"
+   133 op greaterThan *tmp124 zero -2
+   134 op lessThan *tmp125 zero -2
+   135 op sub *tmp123 *tmp124 *tmp125
 -    * label *label44
-   139 assertequals 1 *tmp123 "sign(2)"
-   140 # "Function: inline def d(in n)"
+   136 assertequals 1 *tmp123 "sign(2)"
+   137 # "Function: inline def d(in n)"
 -    * label *label45
-   141 # "Function: inline def sign(in x)"
-   142 op greaterThan *tmp130 zero 0
-   143 op lessThan *tmp131 zero 0
-   144 op sub *tmp129 *tmp130 *tmp131
+   138 # "Function: inline def sign(in x)"
+   139 op greaterThan *tmp130 zero 0
+   140 op lessThan *tmp131 zero 0
+   141 op sub *tmp129 *tmp130 *tmp131
 -    * label *label46
-   145 assertequals 0 *tmp129 "sign(0)"
-   146 # "Function: inline def d(in n)"
-   147 op add *tmp133 zero 2.718281828459045
+   142 assertequals 0 *tmp129 "sign(0)"
+   143 # "Function: inline def d(in n)"
+   144 op add *tmp133 zero 2.718281828459045
 -    * label *label47
-   148 op log *tmp135 *tmp133
-   149 assertequals 1 *tmp135 "log"
-   150 # "Function: inline def d(in n)"
-   151 op add *tmp136 zero 10
+   145 op log *tmp135 *tmp133
+   146 assertequals 1 *tmp135 "log"
+   147 # "Function: inline def d(in n)"
+   148 op add *tmp136 zero 10
 -    * label *label48
-   152 op log10 *tmp138 *tmp136
-   153 assertequals 1 *tmp138 "log10"
-   154 # "Function: inline def d(in n)"
+   149 op log10 *tmp138 *tmp136
+   150 assertequals 1 *tmp138 "log10"
+   151 # "Function: inline def d(in n)"
 -    * label *label49
-   155 # "Function: inline def logn(in number, in base)"
-   156 op log *tmp143 *tmp6
-   157 op div *tmp141 2.772588722239781 *tmp143
+   152 # "Function: inline def logn(in number, in base)"
+   153 op log *tmp143 *tmp6
+   154 op div *tmp141 2.772588722239781 *tmp143
 -    * label *label50
-   158 assertequals 4 *tmp141 "logn"
-   159 # "Function: inline def d(in n)"
-   160 op add *tmp145 zero 2.5
+   155 assertequals 4 *tmp141 "logn"
+   156 # "Function: inline def d(in n)"
+   157 op add *tmp145 zero 2.5
 -    * label *label51
-   161 op floor *tmp147 *tmp145
-   162 assertequals 2 *tmp147 "floor"
-   163 # "Function: inline def d(in n)"
+   158 op floor *tmp147 *tmp145
+   159 assertequals 2 *tmp147 "floor"
+   160 # "Function: inline def d(in n)"
 -    * label *label52
-   164 op ceil *tmp150 *tmp145
-   165 assertequals 3 *tmp150 "ceil"
-   166 # "Function: inline def d(in n)"
+   161 op ceil *tmp150 *tmp145
+   162 assertequals 3 *tmp150 "ceil"
+   163 # "Function: inline def d(in n)"
 -    * label *label53
-   167 # "Function: inline def round(in x)"
-   168 op add *tmp154 zero 3
-   169 op floor *tmp153 *tmp154
+   164 # "Function: inline def round(in x)"
+   165 op add *tmp154 zero 3
+   166 op floor *tmp153 *tmp154
 -    * label *label54
-   170 assertequals 3 *tmp153 "round"
-   171 # "Function: inline def d(in n)"
-   172 op add *tmp156 zero 16
+   167 assertequals 3 *tmp153 "round"
+   168 # "Function: inline def d(in n)"
+   169 op add *tmp156 zero 16
 -    * label *label55
-   173 op sqrt *tmp158 *tmp156
-   174 assertequals 4 *tmp158 "sqrt"
-   175 # "Function: inline def d(in n)"
+   170 op sqrt *tmp158 *tmp156
+   171 assertequals 4 *tmp158 "sqrt"
+   172 # "Function: inline def d(in n)"
 -    * label *label56
-   176 op angle *tmp161 1 *tmp51
-   177 assertequals 45 *tmp161 "angle"
-   178 # "Function: inline def d(in n)"
-   179 op add *tmp162 zero 135
+   173 op angle *tmp161 1 *tmp51
+   174 assertequals 45 *tmp161 "angle"
+   175 # "Function: inline def d(in n)"
+   176 op add *tmp162 zero 135
 -    * label *label57
-   180 op angleDiff *tmp164 45 *tmp162
-   181 assertequals 90 *tmp164 "angleDiff"
-   182 assertequals 5 5 "len"
+   177 op angleDiff *tmp164 45 *tmp162
+   178 assertequals 90 *tmp164 "angleDiff"
+   179 assertequals 5 5 "len"
 -    * label *label82
-   183 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-   184 # "Function: inline def round(in x)"
+   180 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+   181 # "Function: inline def round(in x)"
 -    * label *label83
-   185 assertequals 1 1 "sin"
+   182 assertequals 1 1 "sin"
 -    * label *label84
 -    * label *label85
-   186 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-   187 # "Function: inline def round(in x)"
+   183 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+   184 # "Function: inline def round(in x)"
 -    * label *label86
-   188 assertequals -1 -1 "cos"
+   185 assertequals -1 -1 "cos"
 -    * label *label87
 -    * label *label88
-   189 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-   190 # "Function: inline def round(in x)"
+   186 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+   187 # "Function: inline def round(in x)"
 -    * label *label89
-   191 assertequals 1 1 "tan"
+   188 assertequals 1 1 "tan"
 -    * label *label90
 -    * label *label91
-   192 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-   193 # "Function: inline def round(in x)"
+   189 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+   190 # "Function: inline def round(in x)"
 -    * label *label92
-   194 assertequals 90 90 "asin"
+   191 assertequals 90 90 "asin"
 -    * label *label93
 -    * label *label94
-   195 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-   196 # "Function: inline def round(in x)"
+   192 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+   193 # "Function: inline def round(in x)"
 -    * label *label95
-   197 assertequals 0 0 "acos"
+   194 assertequals 0 0 "acos"
 -    * label *label96
 -    * label *label97
-   198 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-   199 # "Function: inline def round(in x)"
+   195 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+   196 # "Function: inline def round(in x)"
 -    * label *label98
-   200 assertequals 45 45 "atan"
+   197 assertequals 45 45 "atan"
 -    * label *label99
-   201 # "Function: inline def d(in n)"
+   198 # "Function: inline def d(in n)"
 -    * label *label58
-   202 op sub *tmp167 -8 zero
-   203 assertequals -8 *tmp167 "unary minus"
-   204 # "Function: inline def d(in n)"
+   199 op sub *tmp167 -8 zero
+   200 assertequals -8 *tmp167 "unary minus"
+   201 # "Function: inline def d(in n)"
 -    * label *label59
-   205 op equal *tmp170 zero false
-   206 assertequals 1 *tmp170 "boolean negation 1"
-   207 # "Function: inline def d(in n)"
+   202 assertequals 1 *tmp29 "boolean negation 1"
+   203 # "Function: inline def d(in n)"
 -    * label *label60
-   208 op equal *tmp173 *tmp51 false
-   209 assertequals 0 *tmp173 "boolean negation 2"
-   210 # "Function: inline def d(in n)"
+   204 assertequals 0 *tmp32 "boolean negation 2"
+   205 # "Function: inline def d(in n)"
 -    * label *label61
-   211 op equal *tmp176 *tmp6 false
-   212 assertequals 0 *tmp176 "boolean negation 3"
-   213 # "Function: inline def d(in n)"
+   206 op equal *tmp176 zero -2
+   207 assertequals 0 *tmp176 "boolean negation 3"
+   208 # "Function: inline def d(in n)"
 -    * label *label62
-   214 assertequals 16 *tmp26 "**="
-   215 # "Function: inline def d(in n)"
+   209 assertequals 16 *tmp26 "**="
+   210 # "Function: inline def d(in n)"
 -    * label *label63
-   216 op mul :a 2 *tmp9
-   217 assertequals 8 :a "*="
-   218 # "Function: inline def d(in n)"
+   211 op mul :a 2 *tmp9
+   212 assertequals 8 :a "*="
+   213 # "Function: inline def d(in n)"
 -    * label *label64
-   219 assertequals 1.5 *tmp11 "/="
-   220 # "Function: inline def d(in n)"
+   214 assertequals 1.5 *tmp11 "/="
+   215 # "Function: inline def d(in n)"
 -    * label *label65
-   221 assertequals 1 *tmp17 "\="
-   222 # "Function: inline def d(in n)"
+   216 assertequals 1 *tmp17 "\="
+   217 # "Function: inline def d(in n)"
 -    * label *label66
-   223 assertequals 2 *tmp20 "%="
-   224 # "Function: inline def d(in n)"
+   218 assertequals 2 *tmp20 "%="
+   219 # "Function: inline def d(in n)"
 -    * label *label67
-   225 assertequals 6 *tmp3 "+="
-   226 # "Function: inline def d(in n)"
+   220 assertequals 6 *tmp3 "+="
+   221 # "Function: inline def d(in n)"
 -    * label *label68
-   227 op sub :a 2 zero
-   228 assertequals 2 :a "-="
-   229 # "Function: inline def d(in n)"
+   222 op sub :a 2 zero
+   223 assertequals 2 :a "-="
+   224 # "Function: inline def d(in n)"
 -    * label *label69
-   230 assertequals 4 *tmp79 "<<="
-   231 # "Function: inline def d(in n)"
+   225 assertequals 4 *tmp79 "<<="
+   226 # "Function: inline def d(in n)"
 -    * label *label70
-   232 assertequals 2 *tmp82 ">>="
-   233 # "Function: inline def d(in n)"
+   227 assertequals 2 *tmp82 ">>="
+   228 # "Function: inline def d(in n)"
 -    * label *label71
-   234 assertequals 3 *tmp88 "|="
-   235 # "Function: inline def d(in n)"
+   229 assertequals 3 *tmp88 "|="
+   230 # "Function: inline def d(in n)"
 -    * label *label72
-   236 assertequals 2 *tmp91 "&="
-   237 # "Function: inline def d(in n)"
+   231 assertequals 2 *tmp91 "&="
+   232 # "Function: inline def d(in n)"
 -    * label *label73
-   238 assertequals 1 *tmp94 "^="
-   239 # "Function: inline def d(in n)"
+   233 assertequals 1 *tmp94 "^="
+   234 # "Function: inline def d(in n)"
 -    * label *label74
-   240 assertequals false *tmp47 "&&="
-   241 # "Function: inline def d(in n)"
+   235 assertequals false *tmp47 "&&="
+   236 # "Function: inline def d(in n)"
 -    * label *label75
-   242 assertequals true *tmp50 "&&="
-   243 # "Function: inline def d(in n)"
+   237 assertequals true *tmp50 "&&="
+   238 # "Function: inline def d(in n)"
 -    * label *label76
-   244 op or *tmp207 0 *tmp6
-   245 op notEqual :a *tmp207 false
-   246 assertequals true :a "||="
+   239 op or *tmp207 0 *tmp6
+   240 op notEqual :a *tmp207 false
+   241 assertequals true :a "||="
  
-   248 assertequals %ffffffff %[white] "named color literals"
-   249 # "Function: inline def o(in n)"
-   250 select *tmp209 notEqual zero false null @copper-wall
+   243 assertequals %ffffffff %[white] "named color literals"
+   244 # "Function: inline def o(in n)"
+   245 select *tmp209 notEqual zero false null @copper-wall
 -    * label *label77
-   251 sensor *tmp210 *tmp209 @id
-   252 assertequals 17 *tmp210 "Logic ID"
-   253 stop
+   246 sensor *tmp210 *tmp209 @id
+   247 assertequals 17 *tmp210 "Logic ID"
+   248 stop
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   251 sensor *tmp210 *tmp209 @id
-   252 assertequals 17 *tmp210 "Logic ID"
-   253 stop
+   246 sensor *tmp210 *tmp209 @id
+   247 assertequals 17 *tmp210 "Logic ID"
+   248 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -2916,24 +3056,21 @@ assertequals 5 *tmp23 "emod"
 op pow *tmp26 2 *tmp9
 assertequals 16 *tmp26 "pow"
 # "Function: inline def d(in n)"
-op equal *tmp29 5 *tmp2
+op equal *tmp29 zero 0
 assertequals true *tmp29 "equal 1"
 # "Function: inline def d(in n)"
-op equal *tmp32 5 *tmp3
+op equal *tmp32 zero -1
 assertequals false *tmp32 "equal 2"
 # "Function: inline def d(in n)"
-op add *tmp33 zero null
-op equal *tmp35 0 *tmp33
-assertequals true *tmp35 "equal null"
+assertequals true *tmp29 "equal null"
 # "Function: inline def d(in n)"
-op notEqual *tmp38 5 *tmp2
+op notEqual *tmp38 zero 0
 assertequals false *tmp38 "notEqual 1"
 # "Function: inline def d(in n)"
-op notEqual *tmp41 5 *tmp3
+op notEqual *tmp41 zero -1
 assertequals true *tmp41 "notEqual 2"
 # "Function: inline def d(in n)"
-op notEqual *tmp44 0 *tmp33
-assertequals false *tmp44 "notEqual null"
+assertequals false *tmp38 "notEqual null"
 # "Function: inline def d(in n)"
 op land *tmp47 1 zero
 assertequals false *tmp47 "land 1"
@@ -2942,28 +3079,28 @@ op land *tmp50 1 *tmp6
 assertequals true *tmp50 "land 2"
 # "Function: inline def d(in n)"
 op add *tmp51 zero 1
-op lessThan *tmp53 0 *tmp51
+op greaterThan *tmp53 zero -1
 assertequals true *tmp53 "lessThan 1"
 # "Function: inline def d(in n)"
-op lessThan *tmp56 1 zero
+op greaterThan *tmp56 zero 1
 assertequals false *tmp56 "lessThan 2"
 # "Function: inline def d(in n)"
-op lessThanEq *tmp59 1 *tmp51
+op greaterThanEq *tmp59 zero 0
 assertequals true *tmp59 "lessThanEq 1"
 # "Function: inline def d(in n)"
-op lessThanEq *tmp62 1 zero
+op greaterThanEq *tmp62 zero 1
 assertequals false *tmp62 "lessThanEq 2"
 # "Function: inline def d(in n)"
-op greaterThan *tmp65 2 *tmp51
+op lessThan *tmp65 zero 1
 assertequals true *tmp65 "greaterThan 1"
 # "Function: inline def d(in n)"
-op greaterThan *tmp68 1 *tmp6
+op lessThan *tmp68 zero -1
 assertequals false *tmp68 "greaterThan 2"
 # "Function: inline def d(in n)"
-op greaterThanEq *tmp71 1 *tmp51
+op lessThanEq *tmp71 zero 0
 assertequals true *tmp71 "greaterThanEq 1"
 # "Function: inline def d(in n)"
-op greaterThanEq *tmp74 1 *tmp6
+op lessThanEq *tmp74 zero -1
 assertequals false *tmp74 "greaterThanEq 2"
 op strictEqual *tmp75 0 NULL
 assertequals false *tmp75 "strictEqual 1"
@@ -3011,14 +3148,14 @@ op abs *tmp114 *tmp112
 assertequals 2 *tmp114 "abs"
 # "Function: inline def d(in n)"
 # "Function: inline def sign(in x)"
-op greaterThan *tmp118 *tmp112 0
-op lessThan *tmp119 *tmp112 0
+op greaterThan *tmp118 zero 2
+op lessThan *tmp119 zero 2
 op sub *tmp117 *tmp118 *tmp119
 assertequals -1 *tmp117 "sign(-2)"
 # "Function: inline def d(in n)"
 # "Function: inline def sign(in x)"
-op greaterThan *tmp124 *tmp6 0
-op lessThan *tmp125 *tmp6 0
+op greaterThan *tmp124 zero -2
+op lessThan *tmp125 zero -2
 op sub *tmp123 *tmp124 *tmp125
 assertequals 1 *tmp123 "sign(2)"
 # "Function: inline def d(in n)"
@@ -3086,13 +3223,11 @@ assertequals 45 45 "atan"
 op sub *tmp167 -8 zero
 assertequals -8 *tmp167 "unary minus"
 # "Function: inline def d(in n)"
-op equal *tmp170 zero false
-assertequals 1 *tmp170 "boolean negation 1"
+assertequals 1 *tmp29 "boolean negation 1"
 # "Function: inline def d(in n)"
-op equal *tmp173 *tmp51 false
-assertequals 0 *tmp173 "boolean negation 2"
+assertequals 0 *tmp32 "boolean negation 2"
 # "Function: inline def d(in n)"
-op equal *tmp176 *tmp6 false
+op equal *tmp176 zero -2
 assertequals 0 *tmp176 "boolean negation 3"
 # "Function: inline def d(in n)"
 assertequals 16 *tmp26 "**="

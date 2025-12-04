@@ -8,7 +8,7 @@ Active optimizations:
     function-inlining = advanced,
     if-expression-optimization = advanced,
     jump-normalization = advanced,
-    jump-optimization = advanced,
+    condition-optimization = advanced,
     jump-straightening = advanced,
     jump-threading = advanced,
     loop-hoisting = advanced,
@@ -26,7 +26,7 @@ Active optimizations:
      5 instructions eliminated by Dead Code Elimination (4 iterations).
        List of unused variables: SYS_MESSAGE.
      3 instructions eliminated by Jump Normalization (4 iterations).
-     3 instructions eliminated by Jump Optimization (4 iterations).
+     3 instructions eliminated by Condition Optimization (4 iterations).
      4 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
     49 instructions eliminated by Data Flow Optimization (2 passes, 11 iterations).
      4 instructions eliminated by Function Inlining (4 iterations).

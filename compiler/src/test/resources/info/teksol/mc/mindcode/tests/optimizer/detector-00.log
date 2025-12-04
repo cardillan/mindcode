@@ -3,7 +3,7 @@
      1 instructions eliminated by Case Expression Optimization.
     13 instructions eliminated by Dead Code Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
-     1 instructions eliminated by Jump Optimization (4 iterations).
+     1 instructions eliminated by Condition Optimization (4 iterations).
      2 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions modified by Data Flow Optimization (4 iterations).
      5 instructions eliminated by Case Switching (3 iterations).
@@ -270,7 +270,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-7 ins
    207 print "other:"
    208 print "\n"
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
     16 print "\"
     17 print "n"

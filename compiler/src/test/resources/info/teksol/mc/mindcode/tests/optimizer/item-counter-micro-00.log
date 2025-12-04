@@ -3,7 +3,7 @@
      1 instructions eliminated by Case Expression Optimization.
     34 instructions eliminated by Dead Code Elimination (6 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
-    17 instructions eliminated by Jump Optimization (4 iterations).
+    17 instructions eliminated by Condition Optimization (4 iterations).
     14 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      2 instructions eliminated by Expression Optimization (2 iterations).
      7 instructions eliminated by Data Flow Optimization (7 iterations).
@@ -494,7 +494,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-3 ins
     30 set .CONV4 .CONV3
     31 set .CONV3 .CONV2
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-17 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-17 instructions):
  
     36 label *label11
     37 label *label6

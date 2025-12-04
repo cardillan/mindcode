@@ -38,8 +38,8 @@ class CaseExpressionOptimizer extends BaseOptimizer {
             while (it.hasNext()) {
                 if (it.next() instanceof SetInstruction ix && ix.getResult().getType() == ArgumentType.AST_VARIABLE) {
                     LogicVariable result = ix.getResult();
-                    List<LogicInstruction> list = optimizationContext.getVariableReferences(result)
-                                    .stream().filter(in -> !(in instanceof PushOrPopInstruction)).toList();
+                    List<LogicInstruction> list = getVariableReferences(result)
+                            .stream().filter(in -> !(in instanceof PushOrPopInstruction)).toList();
 
                     // The set instruction is not the first one
                     if (list.getFirst() != ix) continue;

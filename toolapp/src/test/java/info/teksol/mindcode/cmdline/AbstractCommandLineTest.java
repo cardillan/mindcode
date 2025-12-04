@@ -467,25 +467,25 @@ public abstract class AbstractCommandLineTest {
             @Test
             public void shortArgumentNone() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("-O0");
-                assertEquals(OptimizationLevel.NONE, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
+                assertEquals(OptimizationLevel.NONE, profile.getOptimizationLevel(Optimization.CONDITION_OPTIMIZATION));
             }
 
             @Test
             public void shortArgumentBasic() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("-O1");
-                assertEquals(OptimizationLevel.BASIC, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
+                assertEquals(OptimizationLevel.BASIC, profile.getOptimizationLevel(Optimization.CONDITION_OPTIMIZATION));
             }
 
             @Test
             public void shortArgumentAdvanced() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("-O2");
-                assertEquals(OptimizationLevel.ADVANCED, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
+                assertEquals(OptimizationLevel.ADVANCED, profile.getOptimizationLevel(Optimization.CONDITION_OPTIMIZATION));
             }
 
             @Test
             public void shortArgumentExperimental() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("-03");
-                assertEquals(OptimizationLevel.EXPERIMENTAL, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
+                assertEquals(OptimizationLevel.EXPERIMENTAL, profile.getOptimizationLevel(Optimization.CONDITION_OPTIMIZATION));
             }
 
             @Test

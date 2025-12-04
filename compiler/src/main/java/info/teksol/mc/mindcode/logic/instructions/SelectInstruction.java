@@ -32,15 +32,25 @@ public class SelectInstruction extends BaseResultInstruction implements Conditio
         return new SelectInstruction(astContext, List.of(result, getCondition(), getX(), getY(), getTrueValue(), getFalseValue()), getArgumentTypes()).copyInfo(this);
     }
 
+    @Override
+    public SelectInstruction withOperands(Condition condition, LogicValue x, LogicValue y) {
+        assert getArgumentTypes() != null;
+        ensureConditional();
+        return new SelectInstruction(astContext, List.of(getResultArgument(), condition, x, y, getTrueValue(), getFalseValue()), getArgumentTypes()).copyInfo(this);
+    }
+
+    @Override
     public final Condition getCondition() {
         return (Condition) getArg(1);
     }
 
+    @Override
     public final LogicValue getX() {
         ensureConditional();
         return (LogicValue) getArg(2);
     }
 
+    @Override
     public final LogicValue getY() {
         ensureConditional();
         return (LogicValue) getArg(3);

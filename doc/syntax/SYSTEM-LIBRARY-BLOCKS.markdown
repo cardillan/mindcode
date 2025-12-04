@@ -57,4 +57,4 @@ otherwise they're `null`.
 
 ---
 
-[« Previous: Arrays](SYSTEM-LIBRARY-ARRAYS.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Compatibility »](SYSTEM-LIBRARY-COMPATIBILITY.markdown)
+[&#xAB; Previous: Arrays](SYSTEM-LIBRARY-ARRAYS.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Compatibility &#xBB;](SYSTEM-LIBRARY-COMPATIBILITY.markdown)

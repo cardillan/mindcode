@@ -313,10 +313,10 @@ Block comments (`/* A comment */`) are not supported in an mlog block.
 
 The code in an mlog block is generally not optimized. Optimizations such as unreachable code elimination, print merging, and others are not applied to an mlog block. Only the following processing is applied to mlog blocks:
 
-* A completely unreachable mlog block is removed by [Unreachable Code elimination](SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination). However, Mindcode can't detect when an mlog block itself makes the code following it unreachable (e.g., by using an infinite loop or the `end` instruction), and doesn't ever remove the code following an mlog block.
+* A completely unreachable mlog block is removed by [Unreachable Code elimination](optimizations/UNREACHABLE-CODE-ELIMINATION.markdown). However, Mindcode can't detect when an mlog block itself makes the code following it unreachable (e.g., by using an infinite loop or the `end` instruction), and doesn't ever remove the code following an mlog block.
 * If the mlog block contains an `end` instruction, Mindcode assumes the instruction may or may not be executed and updates the surrounding code accordingly.
 * The mlog block is always treated as if it manipulates the text buffer: no print merging across the block will occur. 
-* A limited [Data Flow optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) is applied to mlog blocks. Currently, the optimization is only able to propagate constant values to the mlog block. Correctly declaring output variables is vital for this optimization to produce valid code. This optimization can be turned off by setting `mlog-block-optimization` to `false`.
+* A limited [Data Flow optimization](optimizations/DATA-FLOW-OPTIMIZATION.markdown) is applied to mlog blocks. Currently, the optimization is only able to propagate constant values to the mlog block. Correctly declaring output variables is vital for this optimization to produce valid code. This optimization can be turned off by setting `mlog-block-optimization` to `false`.
 
 ### Example
 
@@ -404,4 +404,4 @@ By accessing the `@counter`, a loop was created in a way which Mindcode doesn't 
 
 ---
 
-[« Previous: Code optimization](SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for Mindustry Logic 6 »](FUNCTIONS-60.markdown)
+[&#xAB; Previous: Code Optimization](SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Schemacode &#xBB;](SCHEMACODE.markdown)

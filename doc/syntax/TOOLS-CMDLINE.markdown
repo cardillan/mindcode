@@ -104,8 +104,8 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}]
                 [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
                 [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
-                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--select-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--condition-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--boolean-optimization LEVEL]
                 [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
                 [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
                 [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
@@ -246,7 +246,7 @@ Optimization options:
 
 Optimization levels:
   Options specifying the global and individual  optimization  levels.  Individual  optimizers  use global level when not
-  explicitly set. Available optimization levels are {none,basic,advanced, experimental}.
+  explicitly set. Available optimization levels are {none, basic, advanced, experimental}.
 
   -O {0..4}              sets global optimization level for all optimizers
   --temp-variables-elimination LEVEL
@@ -261,33 +261,33 @@ Optimization levels:
   --jump-normalization LEVEL
                          sets the optimization level  of  replacing  always  true  conditional  jumps with unconditional
                          ones, removing always false jumps
-  --jump-optimization LEVEL
+  --condition-optimization LEVEL
                          sets the optimization level of merging  an  op  instruction producing a boolean expression into
                          the following conditional jump
   --single-step-elimination LEVEL
                          sets the optimization level of eliminating jumps to the next instruction
   --expression-optimization LEVEL
                          sets the optimization level of optimizing some common mathematical expressions
-  --select-optimization LEVEL
-                         sets  the  optimization  level  of  expressing   conditional  expressions  using  the  'select'
-                         instruction
+  --boolean-optimization LEVEL
+                         sets the optimization level of simplifying  boolean  expressions and/or implementing them using
+                         the 'select' instruction
   --if-expression-optimization LEVEL
                          sets the optimization level of improving ternary/if expressions
   --data-flow-optimization LEVEL
-                         sets the optimization level of improving variable assignments and and expressions
+                         sets the optimization level of improving  variable  assignments and expressions, analyzing data
+                         flow for other optimizations
   --loop-hoisting LEVEL  sets the optimization level of moving invariant code out of loops
   --loop-optimization LEVEL
-                         sets the optimization level of improving loops
+                         sets the optimization level of improving loop conditions
   --loop-unrolling LEVEL
-                         sets  the  optimization  level  of   unrolling   loops   with  constant  number  of  iterations
-                         (optimization for speed)
+                         sets the optimization level of unrolling loops with a fixed number of iterations
   --function-inlining LEVEL
-                         sets the optimization level of inlining stackless function calls (optimization for speed)
+                         sets the optimization level of inlining stackless function calls
   --array-optimization LEVEL
-                         sets the optimization level of improving  internal  array random access mechanism (optimization
-                         for speed)
+                         sets the optimization level of finding optimal array-access implementation for internal arrays
   --case-switching LEVEL
-                         sets the optimization level of modifying suitable case expressions to use jump tables
+                         sets the optimization level of modifying suitable case  expressions to use jump tables or value
+                         translations
   --return-optimization LEVEL
                          sets the optimization  level  of  speeding  up  return  statements  in  recursive and stackless
                          functions
@@ -299,8 +299,8 @@ Optimization levels:
                          sets the optimization level of  eliminating  instructions  made unreachable by optimizations or
                          false conditions
   --stack-optimization LEVEL
-                         sets the optimization level of optimizing variable storage on stack
-  --print-merging LEVEL  sets the optimization level of merging consecutive print statements outputting text literals
+                         sets the optimization level of optimizing variable storage on the stack
+  --print-merging LEVEL  sets the optimization level of merging consecutive print statements outputting constant values
 
 Debugging options:
   Options to activate debugging features or additional output from the compiler.
@@ -414,8 +414,8 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}]
                 [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
                 [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
-                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--select-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--condition-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--boolean-optimization LEVEL]
                 [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
                 [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
                 [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
@@ -545,7 +545,7 @@ Optimization options:
 
 Optimization levels:
   Options specifying the global and individual  optimization  levels.  Individual  optimizers  use global level when not
-  explicitly set. Available optimization levels are {none,basic,advanced, experimental}.
+  explicitly set. Available optimization levels are {none, basic, advanced, experimental}.
 
   -O {0..4}              sets global optimization level for all optimizers
   --temp-variables-elimination LEVEL
@@ -560,33 +560,33 @@ Optimization levels:
   --jump-normalization LEVEL
                          sets the optimization level  of  replacing  always  true  conditional  jumps with unconditional
                          ones, removing always false jumps
-  --jump-optimization LEVEL
+  --condition-optimization LEVEL
                          sets the optimization level of merging  an  op  instruction producing a boolean expression into
                          the following conditional jump
   --single-step-elimination LEVEL
                          sets the optimization level of eliminating jumps to the next instruction
   --expression-optimization LEVEL
                          sets the optimization level of optimizing some common mathematical expressions
-  --select-optimization LEVEL
-                         sets  the  optimization  level  of  expressing   conditional  expressions  using  the  'select'
-                         instruction
+  --boolean-optimization LEVEL
+                         sets the optimization level of simplifying  boolean  expressions and/or implementing them using
+                         the 'select' instruction
   --if-expression-optimization LEVEL
                          sets the optimization level of improving ternary/if expressions
   --data-flow-optimization LEVEL
-                         sets the optimization level of improving variable assignments and and expressions
+                         sets the optimization level of improving  variable  assignments and expressions, analyzing data
+                         flow for other optimizations
   --loop-hoisting LEVEL  sets the optimization level of moving invariant code out of loops
   --loop-optimization LEVEL
-                         sets the optimization level of improving loops
+                         sets the optimization level of improving loop conditions
   --loop-unrolling LEVEL
-                         sets  the  optimization  level  of   unrolling   loops   with  constant  number  of  iterations
-                         (optimization for speed)
+                         sets the optimization level of unrolling loops with a fixed number of iterations
   --function-inlining LEVEL
-                         sets the optimization level of inlining stackless function calls (optimization for speed)
+                         sets the optimization level of inlining stackless function calls
   --array-optimization LEVEL
-                         sets the optimization level of improving  internal  array random access mechanism (optimization
-                         for speed)
+                         sets the optimization level of finding optimal array-access implementation for internal arrays
   --case-switching LEVEL
-                         sets the optimization level of modifying suitable case expressions to use jump tables
+                         sets the optimization level of modifying suitable case  expressions to use jump tables or value
+                         translations
   --return-optimization LEVEL
                          sets the optimization  level  of  speeding  up  return  statements  in  recursive and stackless
                          functions
@@ -598,8 +598,8 @@ Optimization levels:
                          sets the optimization level of  eliminating  instructions  made unreachable by optimizations or
                          false conditions
   --stack-optimization LEVEL
-                         sets the optimization level of optimizing variable storage on stack
-  --print-merging LEVEL  sets the optimization level of merging consecutive print statements outputting text literals
+                         sets the optimization level of optimizing variable storage on the stack
+  --print-merging LEVEL  sets the optimization level of merging consecutive print statements outputting constant values
 
 Debugging options:
   Options to activate debugging features or additional output from the compiler.
@@ -714,4 +714,4 @@ named arguments:
 
 ---
 
-[« Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Processor emulator »](TOOLS-PROCESSOR-EMULATOR.markdown)
+[&#xAB; Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Processor emulator &#xBB;](TOOLS-PROCESSOR-EMULATOR.markdown)

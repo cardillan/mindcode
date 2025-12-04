@@ -2,9 +2,9 @@
     14 instructions eliminated by Temp Variables Elimination (6 iterations).
     13 instructions eliminated by Dead Code Elimination (5 iterations).
      1 instructions eliminated by Jump Normalization (5 iterations).
-     6 instructions eliminated by Jump Optimization (5 iterations).
+     6 instructions eliminated by Condition Optimization (2 passes, 5 iterations).
     17 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
-   573 instructions eliminated by Data Flow Optimization (10 passes, 31 iterations).
+   581 instructions eliminated by Data Flow Optimization (10 passes, 31 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
    938 instructions added by Loop Unrolling (12 iterations).
@@ -13,7 +13,7 @@
      5 function calls inlined by Function Inlining.
      8 instructions updated by Jump Threading.
      4 instructions eliminated by Unreachable Code Elimination (2 iterations).
-   434 instructions after optimizations.
+   426 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 937):
     Unroll loop at line 29:5                                     size   +33, benefit      300.0, efficiency      9.091
@@ -252,7 +252,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 ins
     97 op shl *tmp37 1 *tmp36
     98 read *tmp35 BITMAP *tmp34
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-6 instructions):
  
      4 op sqrt *tmp1 :sumPrimesUpTo:maximum
      5 op ceil :sumPrimesUpTo:sqrtMax *tmp1
@@ -6591,47 +6591,245 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
    907 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
    908 label *label35
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-14 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
  
+     7 op and :getBit*retval *tmp21 4
+     8 label *label67
+     9 op equal :testAndSetMultiples:result :getBit*retval false
+-    * jump *label73 equal :testAndSetMultiples:result false
++   10 jump *label73 notEqual :getBit*retval false
+    11 label *label406
+    12 label *label407
+    13 read *tmp35 BITMAP 0
+ 
+   301 label *label73
+   302 label *label74
+   303 label *label75
+-    * jump *label76 equal :testAndSetMultiples:result false
++  304 jump *label76 notEqual :getBit*retval false
+   305 op add :sumPrimesUpTo:sum 5 5
+   306 label *label76
+   307 label *label77
+ 
+   311 op and :getBit*retval *tmp21 8
+   312 label *label80
+   313 op equal :testAndSetMultiples:result :getBit*retval false
+-    * jump *label86 equal :testAndSetMultiples:result false
++  314 jump *label86 notEqual :getBit*retval false
+   315 label *label306
+   316 label *label307
+   317 read *tmp35 BITMAP 0
+ 
+   515 label *label86
+   516 label *label87
+   517 label *label88
+-    * jump *label89 equal :testAndSetMultiples:result false
++  518 jump *label89 notEqual :getBit*retval false
+   519 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 7
+   520 label *label89
+   521 label *label90
+ 
+   527 op and :getBit*retval *tmp21 32
+   528 label *label95
+   529 op equal :testAndSetMultiples:result :getBit*retval false
+-    * jump *label101 equal :testAndSetMultiples:result false
++  530 jump *label101 notEqual :getBit*retval false
+   531 label *label251
+   532 label *label252
+   533 read *tmp35 BITMAP 1
+ 
+   641 label *label101
+   642 label *label102
+   643 label *label103
+-    * jump *label104 equal :testAndSetMultiples:result false
++  644 jump *label104 notEqual :getBit*retval false
+   645 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 11
+   646 label *label104
+   647 label *label105
+ 
+   651 op and :getBit*retval *tmp21 64
+   652 label *label108
+   653 op equal :testAndSetMultiples:result :getBit*retval false
+-    * jump *label114 equal :testAndSetMultiples:result false
++  654 jump *label114 notEqual :getBit*retval false
+   655 label *label211
+   656 label *label212
+   657 read *tmp35 BITMAP 1
+ 
+   735 label *label114
+   736 label *label115
+   737 label *label116
+-    * jump *label117 equal :testAndSetMultiples:result false
++  738 jump *label117 notEqual :getBit*retval false
+   739 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 13
+   740 label *label117
+   741 label *label118
+ 
+   747 op and :getBit*retval *tmp21 256
+   748 label *label123
+   749 op equal :testAndSetMultiples:result :getBit*retval false
+-    * jump *label129 equal :testAndSetMultiples:result false
++  750 jump *label129 notEqual :getBit*retval false
+   751 label *label189
+   752 label *label190
+   753 read *tmp35 BITMAP 3
+ 
+   795 label *label129
+   796 label *label130
+   797 label *label131
+-    * jump *label132 equal :testAndSetMultiples:result false
++  798 jump *label132 notEqual :getBit*retval false
+   799 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 17
+   800 label *label132
+   801 label *label133
+ 
+   805 op and :getBit*retval *tmp21 512
+   806 label *label136
+   807 op equal :testAndSetMultiples:result :getBit*retval false
+-    * jump *label142 equal :testAndSetMultiples:result false
++  808 jump *label142 notEqual :getBit*retval false
+   809 label *label176
+   810 label *label177
+   811 read *tmp35 BITMAP 3
+ 
+   835 label *label142
+   836 label *label143
+   837 label *label144
+-    * jump *label145 equal :testAndSetMultiples:result false
++  838 jump *label145 notEqual :getBit*retval false
+   839 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 19
+   840 label *label145
+   841 label *label146
+ 
+   847 op and :getBit*retval *tmp21 2048
    848 label *label151
    849 op equal :testAndSetMultiples:result :getBit*retval false
-   850 jump *label157 equal :testAndSetMultiples:result false
--    * op idiv :testAndSetMultiples:i 529 2
-   851 label *label152
-   852 jump *label156 always
-   853 label *label153
--    * op idiv *tmp34 :testAndSetMultiples:i 48
--    * op mod *tmp36 :testAndSetMultiples:i 48
--    * op shl *tmp37 1 *tmp36
--    * read *tmp35 BITMAP *tmp34
--    * op or *tmp38 *tmp35 *tmp37
-   854 write *tmp38 BITMAP *tmp34
-   855 label *label154
-   856 label *label155
--    * op add :testAndSetMultiples:i :testAndSetMultiples:i 23
-   857 jump *label153 lessThanEq :testAndSetMultiples:i 250
-   858 label *label156
-   859 label *label157
+-    * jump *label157 equal :testAndSetMultiples:result false
++  850 jump *label157 notEqual :getBit*retval false
+   851 op idiv :testAndSetMultiples:i 529 2
+   852 label *label152
+   853 jump *label156 always
  
-   870 label *label164
-   871 op equal :testAndSetMultiples:result :getBit*retval false
-   872 jump *label170 equal :testAndSetMultiples:result false
--    * op idiv :testAndSetMultiples:i 625 2
-   873 label *label165
-   874 jump *label169 always
-   875 label *label166
+   866 label *label157
+   867 label *label158
+   868 label *label159
+-    * jump *label160 equal :testAndSetMultiples:result false
++  869 jump *label160 notEqual :getBit*retval false
+   870 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
+   871 label *label160
+   872 label *label161
+ 
+   876 op and :getBit*retval *tmp21 4096
+   877 label *label164
+   878 op equal :testAndSetMultiples:result :getBit*retval false
+-    * jump *label170 equal :testAndSetMultiples:result false
++  879 jump *label170 notEqual :getBit*retval false
+   880 op idiv :testAndSetMultiples:i 625 2
+   881 label *label165
+   882 jump *label169 always
+ 
+   895 label *label170
+   896 label *label171
+   897 label *label172
+-    * jump *label173 equal :testAndSetMultiples:result false
++  898 jump *label173 notEqual :getBit*retval false
+   899 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
+   900 label *label173
+   901 label *label174
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-22 instructions):
+ 
+     6 read *tmp21 BITMAP 0
+     7 op and :getBit*retval *tmp21 4
+     8 label *label67
+-    * op equal :testAndSetMultiples:result :getBit*retval false
+     9 jump *label73 notEqual :getBit*retval false
+    10 label *label406
+    11 label *label407
+ 
+   309 read *tmp21 BITMAP 0
+   310 op and :getBit*retval *tmp21 8
+   311 label *label80
+-    * op equal :testAndSetMultiples:result :getBit*retval false
+   312 jump *label86 notEqual :getBit*retval false
+   313 label *label306
+   314 label *label307
+ 
+   524 read *tmp21 BITMAP 0
+   525 op and :getBit*retval *tmp21 32
+   526 label *label95
+-    * op equal :testAndSetMultiples:result :getBit*retval false
+   527 jump *label101 notEqual :getBit*retval false
+   528 label *label251
+   529 label *label252
+ 
+   647 read *tmp21 BITMAP 0
+   648 op and :getBit*retval *tmp21 64
+   649 label *label108
+-    * op equal :testAndSetMultiples:result :getBit*retval false
+   650 jump *label114 notEqual :getBit*retval false
+   651 label *label211
+   652 label *label212
+ 
+   742 read *tmp21 BITMAP 0
+   743 op and :getBit*retval *tmp21 256
+   744 label *label123
+-    * op equal :testAndSetMultiples:result :getBit*retval false
+   745 jump *label129 notEqual :getBit*retval false
+   746 label *label189
+   747 label *label190
+ 
+   799 read *tmp21 BITMAP 0
+   800 op and :getBit*retval *tmp21 512
+   801 label *label136
+-    * op equal :testAndSetMultiples:result :getBit*retval false
+   802 jump *label142 notEqual :getBit*retval false
+   803 label *label176
+   804 label *label177
+ 
+   840 read *tmp21 BITMAP 0
+   841 op and :getBit*retval *tmp21 2048
+   842 label *label151
+-    * op equal :testAndSetMultiples:result :getBit*retval false
+   843 jump *label157 notEqual :getBit*retval false
+-    * op idiv :testAndSetMultiples:i 529 2
+   844 label *label152
+   845 jump *label156 always
+   846 label *label153
 -    * op idiv *tmp34 :testAndSetMultiples:i 48
 -    * op mod *tmp36 :testAndSetMultiples:i 48
 -    * op shl *tmp37 1 *tmp36
 -    * read *tmp35 BITMAP *tmp34
 -    * op or *tmp38 *tmp35 *tmp37
-   876 write *tmp38 BITMAP *tmp34
-   877 label *label167
-   878 label *label168
+   847 write *tmp38 BITMAP *tmp34
+   848 label *label154
+   849 label *label155
+-    * op add :testAndSetMultiples:i :testAndSetMultiples:i 23
+   850 jump *label153 lessThanEq :testAndSetMultiples:i 250
+   851 label *label156
+   852 label *label157
+ 
+   861 read *tmp21 BITMAP 0
+   862 op and :getBit*retval *tmp21 4096
+   863 label *label164
+-    * op equal :testAndSetMultiples:result :getBit*retval false
+   864 jump *label170 notEqual :getBit*retval false
+-    * op idiv :testAndSetMultiples:i 625 2
+   865 label *label165
+   866 jump *label169 always
+   867 label *label166
+-    * op idiv *tmp34 :testAndSetMultiples:i 48
+-    * op mod *tmp36 :testAndSetMultiples:i 48
+-    * op shl *tmp37 1 *tmp36
+-    * read *tmp35 BITMAP *tmp34
+-    * op or *tmp38 *tmp35 *tmp37
+   868 write *tmp38 BITMAP *tmp34
+   869 label *label167
+   870 label *label168
 -    * op add :testAndSetMultiples:i :testAndSetMultiples:i 25
-   879 jump *label166 lessThanEq :testAndSetMultiples:i 250
-   880 label *label169
-   881 label *label170
+   871 jump *label166 lessThanEq :testAndSetMultiples:i 250
+   872 label *label169
+   873 label *label170
 
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
      0 set BITMAP bank1
@@ -6643,1179 +6841,1168 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
      2 read *tmp21 BITMAP 0
      3 op and :getBit*retval *tmp21 4
 -    * label *label67
-     4 op equal :testAndSetMultiples:result :getBit*retval false
-     5 jump *label73 equal :testAndSetMultiples:result false
+     4 jump *label73 notEqual :getBit*retval false
 -    * label *label406
 -    * label *label407
-     6 read *tmp35 BITMAP 0
-     7 op or *tmp38 *tmp35 4096
-     8 write *tmp38 BITMAP 0
+     5 read *tmp35 BITMAP 0
+     6 op or *tmp38 *tmp35 4096
+     7 write *tmp38 BITMAP 0
 -    * label *label408
 -    * label *label409
 -    * label *label410
-     9 read *tmp35 BITMAP 0
-    10 op or *tmp38 *tmp35 131072
-    11 write *tmp38 BITMAP 0
+     8 read *tmp35 BITMAP 0
+     9 op or *tmp38 *tmp35 131072
+    10 write *tmp38 BITMAP 0
 -    * label *label411
 -    * label *label412
 -    * label *label413
-    12 read *tmp35 BITMAP 0
-    13 op or *tmp38 *tmp35 4194304
-    14 write *tmp38 BITMAP 0
+    11 read *tmp35 BITMAP 0
+    12 op or *tmp38 *tmp35 4194304
+    13 write *tmp38 BITMAP 0
 -    * label *label414
 -    * label *label415
 -    * label *label416
-    15 read *tmp35 BITMAP 0
-    16 op or *tmp38 *tmp35 134217728
-    17 write *tmp38 BITMAP 0
+    14 read *tmp35 BITMAP 0
+    15 op or *tmp38 *tmp35 134217728
+    16 write *tmp38 BITMAP 0
 -    * label *label417
 -    * label *label418
 -    * label *label419
-    18 read *tmp35 BITMAP 0
-    19 op or *tmp38 *tmp35 4294967296
-    20 write *tmp38 BITMAP 0
+    17 read *tmp35 BITMAP 0
+    18 op or *tmp38 *tmp35 4294967296
+    19 write *tmp38 BITMAP 0
 -    * label *label420
 -    * label *label421
 -    * label *label422
-    21 read *tmp35 BITMAP 0
-    22 op or *tmp38 *tmp35 137438953472
-    23 write *tmp38 BITMAP 0
+    20 read *tmp35 BITMAP 0
+    21 op or *tmp38 *tmp35 137438953472
+    22 write *tmp38 BITMAP 0
 -    * label *label423
 -    * label *label424
 -    * label *label425
-    24 read *tmp35 BITMAP 0
-    25 op or *tmp38 *tmp35 4398046511104
-    26 write *tmp38 BITMAP 0
+    23 read *tmp35 BITMAP 0
+    24 op or *tmp38 *tmp35 4398046511104
+    25 write *tmp38 BITMAP 0
 -    * label *label426
 -    * label *label427
 -    * label *label428
-    27 read *tmp35 BITMAP 0
-    28 op or *tmp38 *tmp35 140737488355328
-    29 write *tmp38 BITMAP 0
+    26 read *tmp35 BITMAP 0
+    27 op or *tmp38 *tmp35 140737488355328
+    28 write *tmp38 BITMAP 0
 -    * label *label429
 -    * label *label430
 -    * label *label431
-    30 read *tmp35 BITMAP 1
-    31 op or *tmp38 *tmp35 16
-    32 write *tmp38 BITMAP 1
+    29 read *tmp35 BITMAP 1
+    30 op or *tmp38 *tmp35 16
+    31 write *tmp38 BITMAP 1
 -    * label *label432
 -    * label *label433
 -    * label *label434
-    33 read *tmp35 BITMAP 1
-    34 op or *tmp38 *tmp35 512
-    35 write *tmp38 BITMAP 1
+    32 read *tmp35 BITMAP 1
+    33 op or *tmp38 *tmp35 512
+    34 write *tmp38 BITMAP 1
 -    * label *label435
 -    * label *label436
 -    * label *label437
-    36 read *tmp35 BITMAP 1
-    37 op or *tmp38 *tmp35 16384
-    38 write *tmp38 BITMAP 1
+    35 read *tmp35 BITMAP 1
+    36 op or *tmp38 *tmp35 16384
+    37 write *tmp38 BITMAP 1
 -    * label *label438
 -    * label *label439
 -    * label *label440
-    39 read *tmp35 BITMAP 1
-    40 op or *tmp38 *tmp35 524288
-    41 write *tmp38 BITMAP 1
+    38 read *tmp35 BITMAP 1
+    39 op or *tmp38 *tmp35 524288
+    40 write *tmp38 BITMAP 1
 -    * label *label441
 -    * label *label442
 -    * label *label443
-    42 read *tmp35 BITMAP 1
-    43 op or *tmp38 *tmp35 16777216
-    44 write *tmp38 BITMAP 1
+    41 read *tmp35 BITMAP 1
+    42 op or *tmp38 *tmp35 16777216
+    43 write *tmp38 BITMAP 1
 -    * label *label444
 -    * label *label445
 -    * label *label446
-    45 read *tmp35 BITMAP 1
-    46 op or *tmp38 *tmp35 536870912
-    47 write *tmp38 BITMAP 1
+    44 read *tmp35 BITMAP 1
+    45 op or *tmp38 *tmp35 536870912
+    46 write *tmp38 BITMAP 1
 -    * label *label447
 -    * label *label448
 -    * label *label449
-    48 read *tmp35 BITMAP 1
-    49 op or *tmp38 *tmp35 17179869184
-    50 write *tmp38 BITMAP 1
+    47 read *tmp35 BITMAP 1
+    48 op or *tmp38 *tmp35 17179869184
+    49 write *tmp38 BITMAP 1
 -    * label *label450
 -    * label *label451
 -    * label *label452
-    51 read *tmp35 BITMAP 1
-    52 op or *tmp38 *tmp35 549755813888
-    53 write *tmp38 BITMAP 1
+    50 read *tmp35 BITMAP 1
+    51 op or *tmp38 *tmp35 549755813888
+    52 write *tmp38 BITMAP 1
 -    * label *label453
 -    * label *label454
 -    * label *label455
-    54 read *tmp35 BITMAP 1
-    55 op or *tmp38 *tmp35 17592186044416
-    56 write *tmp38 BITMAP 1
+    53 read *tmp35 BITMAP 1
+    54 op or *tmp38 *tmp35 17592186044416
+    55 write *tmp38 BITMAP 1
 -    * label *label456
 -    * label *label457
 -    * label *label458
-    57 read *tmp35 BITMAP 2
-    58 op or *tmp38 *tmp35 2
-    59 write *tmp38 BITMAP 2
+    56 read *tmp35 BITMAP 2
+    57 op or *tmp38 *tmp35 2
+    58 write *tmp38 BITMAP 2
 -    * label *label459
 -    * label *label460
 -    * label *label461
-    60 read *tmp35 BITMAP 2
-    61 op or *tmp38 *tmp35 64
-    62 write *tmp38 BITMAP 2
+    59 read *tmp35 BITMAP 2
+    60 op or *tmp38 *tmp35 64
+    61 write *tmp38 BITMAP 2
 -    * label *label462
 -    * label *label463
 -    * label *label464
-    63 read *tmp35 BITMAP 2
-    64 op or *tmp38 *tmp35 2048
-    65 write *tmp38 BITMAP 2
+    62 read *tmp35 BITMAP 2
+    63 op or *tmp38 *tmp35 2048
+    64 write *tmp38 BITMAP 2
 -    * label *label465
 -    * label *label466
 -    * label *label467
-    66 read *tmp35 BITMAP 2
-    67 op or *tmp38 *tmp35 65536
-    68 write *tmp38 BITMAP 2
+    65 read *tmp35 BITMAP 2
+    66 op or *tmp38 *tmp35 65536
+    67 write *tmp38 BITMAP 2
 -    * label *label468
 -    * label *label469
 -    * label *label470
-    69 read *tmp35 BITMAP 2
-    70 op or *tmp38 *tmp35 2097152
-    71 write *tmp38 BITMAP 2
+    68 read *tmp35 BITMAP 2
+    69 op or *tmp38 *tmp35 2097152
+    70 write *tmp38 BITMAP 2
 -    * label *label471
 -    * label *label472
 -    * label *label473
-    72 read *tmp35 BITMAP 2
-    73 op or *tmp38 *tmp35 67108864
-    74 write *tmp38 BITMAP 2
+    71 read *tmp35 BITMAP 2
+    72 op or *tmp38 *tmp35 67108864
+    73 write *tmp38 BITMAP 2
 -    * label *label474
 -    * label *label475
 -    * label *label476
-    75 read *tmp35 BITMAP 2
-    76 op or *tmp38 *tmp35 2147483648
-    77 write *tmp38 BITMAP 2
+    74 read *tmp35 BITMAP 2
+    75 op or *tmp38 *tmp35 2147483648
+    76 write *tmp38 BITMAP 2
 -    * label *label477
 -    * label *label478
 -    * label *label479
-    78 read *tmp35 BITMAP 2
-    79 op or *tmp38 *tmp35 68719476736
-    80 write *tmp38 BITMAP 2
+    77 read *tmp35 BITMAP 2
+    78 op or *tmp38 *tmp35 68719476736
+    79 write *tmp38 BITMAP 2
 -    * label *label480
 -    * label *label481
 -    * label *label482
-    81 read *tmp35 BITMAP 2
-    82 op or *tmp38 *tmp35 2199023255552
-    83 write *tmp38 BITMAP 2
+    80 read *tmp35 BITMAP 2
+    81 op or *tmp38 *tmp35 2199023255552
+    82 write *tmp38 BITMAP 2
 -    * label *label483
 -    * label *label484
 -    * label *label485
-    84 read *tmp35 BITMAP 2
-    85 op or *tmp38 *tmp35 70368744177664
-    86 write *tmp38 BITMAP 2
+    83 read *tmp35 BITMAP 2
+    84 op or *tmp38 *tmp35 70368744177664
+    85 write *tmp38 BITMAP 2
 -    * label *label486
 -    * label *label487
 -    * label *label488
-    87 read *tmp35 BITMAP 3
-    88 op or *tmp38 *tmp35 8
-    89 write *tmp38 BITMAP 3
+    86 read *tmp35 BITMAP 3
+    87 op or *tmp38 *tmp35 8
+    88 write *tmp38 BITMAP 3
 -    * label *label489
 -    * label *label490
 -    * label *label491
-    90 read *tmp35 BITMAP 3
-    91 op or *tmp38 *tmp35 256
-    92 write *tmp38 BITMAP 3
+    89 read *tmp35 BITMAP 3
+    90 op or *tmp38 *tmp35 256
+    91 write *tmp38 BITMAP 3
 -    * label *label492
 -    * label *label493
 -    * label *label494
-    93 read *tmp35 BITMAP 3
-    94 op or *tmp38 *tmp35 8192
-    95 write *tmp38 BITMAP 3
+    92 read *tmp35 BITMAP 3
+    93 op or *tmp38 *tmp35 8192
+    94 write *tmp38 BITMAP 3
 -    * label *label495
 -    * label *label496
 -    * label *label497
-    96 read *tmp35 BITMAP 3
-    97 op or *tmp38 *tmp35 262144
-    98 write *tmp38 BITMAP 3
+    95 read *tmp35 BITMAP 3
+    96 op or *tmp38 *tmp35 262144
+    97 write *tmp38 BITMAP 3
 -    * label *label498
 -    * label *label499
 -    * label *label500
-    99 read *tmp35 BITMAP 3
-   100 op or *tmp38 *tmp35 8388608
-   101 write *tmp38 BITMAP 3
+    98 read *tmp35 BITMAP 3
+    99 op or *tmp38 *tmp35 8388608
+   100 write *tmp38 BITMAP 3
 -    * label *label501
 -    * label *label502
 -    * label *label503
-   102 read *tmp35 BITMAP 3
-   103 op or *tmp38 *tmp35 268435456
-   104 write *tmp38 BITMAP 3
+   101 read *tmp35 BITMAP 3
+   102 op or *tmp38 *tmp35 268435456
+   103 write *tmp38 BITMAP 3
 -    * label *label504
 -    * label *label505
 -    * label *label506
-   105 read *tmp35 BITMAP 3
-   106 op or *tmp38 *tmp35 8589934592
-   107 write *tmp38 BITMAP 3
+   104 read *tmp35 BITMAP 3
+   105 op or *tmp38 *tmp35 8589934592
+   106 write *tmp38 BITMAP 3
 -    * label *label507
 -    * label *label508
 -    * label *label509
-   108 read *tmp35 BITMAP 3
-   109 op or *tmp38 *tmp35 274877906944
-   110 write *tmp38 BITMAP 3
+   107 read *tmp35 BITMAP 3
+   108 op or *tmp38 *tmp35 274877906944
+   109 write *tmp38 BITMAP 3
 -    * label *label510
 -    * label *label511
 -    * label *label512
-   111 read *tmp35 BITMAP 3
-   112 op or *tmp38 *tmp35 8796093022208
-   113 write *tmp38 BITMAP 3
+   110 read *tmp35 BITMAP 3
+   111 op or *tmp38 *tmp35 8796093022208
+   112 write *tmp38 BITMAP 3
 -    * label *label513
 -    * label *label514
 -    * label *label515
-   114 read *tmp35 BITMAP 4
-   115 op or *tmp38 *tmp35 1
-   116 write *tmp38 BITMAP 4
+   113 read *tmp35 BITMAP 4
+   114 op or *tmp38 *tmp35 1
+   115 write *tmp38 BITMAP 4
 -    * label *label516
 -    * label *label517
 -    * label *label518
-   117 read *tmp35 BITMAP 4
-   118 op or *tmp38 *tmp35 32
-   119 write *tmp38 BITMAP 4
+   116 read *tmp35 BITMAP 4
+   117 op or *tmp38 *tmp35 32
+   118 write *tmp38 BITMAP 4
 -    * label *label519
 -    * label *label520
 -    * label *label521
-   120 read *tmp35 BITMAP 4
-   121 op or *tmp38 *tmp35 1024
-   122 write *tmp38 BITMAP 4
+   119 read *tmp35 BITMAP 4
+   120 op or *tmp38 *tmp35 1024
+   121 write *tmp38 BITMAP 4
 -    * label *label522
 -    * label *label523
 -    * label *label524
-   123 read *tmp35 BITMAP 4
-   124 op or *tmp38 *tmp35 32768
-   125 write *tmp38 BITMAP 4
+   122 read *tmp35 BITMAP 4
+   123 op or *tmp38 *tmp35 32768
+   124 write *tmp38 BITMAP 4
 -    * label *label525
 -    * label *label526
 -    * label *label527
-   126 read *tmp35 BITMAP 4
-   127 op or *tmp38 *tmp35 1048576
-   128 write *tmp38 BITMAP 4
+   125 read *tmp35 BITMAP 4
+   126 op or *tmp38 *tmp35 1048576
+   127 write *tmp38 BITMAP 4
 -    * label *label528
 -    * label *label529
 -    * label *label530
-   129 read *tmp35 BITMAP 4
-   130 op or *tmp38 *tmp35 33554432
-   131 write *tmp38 BITMAP 4
+   128 read *tmp35 BITMAP 4
+   129 op or *tmp38 *tmp35 33554432
+   130 write *tmp38 BITMAP 4
 -    * label *label531
 -    * label *label532
 -    * label *label533
-   132 read *tmp35 BITMAP 4
-   133 op or *tmp38 *tmp35 1073741824
-   134 write *tmp38 BITMAP 4
+   131 read *tmp35 BITMAP 4
+   132 op or *tmp38 *tmp35 1073741824
+   133 write *tmp38 BITMAP 4
 -    * label *label534
 -    * label *label535
 -    * label *label536
-   135 read *tmp35 BITMAP 4
-   136 op or *tmp38 *tmp35 34359738368
-   137 write *tmp38 BITMAP 4
+   134 read *tmp35 BITMAP 4
+   135 op or *tmp38 *tmp35 34359738368
+   136 write *tmp38 BITMAP 4
 -    * label *label537
 -    * label *label538
 -    * label *label539
-   138 read *tmp35 BITMAP 4
-   139 op or *tmp38 *tmp35 1099511627776
-   140 write *tmp38 BITMAP 4
+   137 read *tmp35 BITMAP 4
+   138 op or *tmp38 *tmp35 1099511627776
+   139 write *tmp38 BITMAP 4
 -    * label *label540
 -    * label *label541
 -    * label *label542
-   141 read *tmp35 BITMAP 4
-   142 op or *tmp38 *tmp35 35184372088832
-   143 write *tmp38 BITMAP 4
+   140 read *tmp35 BITMAP 4
+   141 op or *tmp38 *tmp35 35184372088832
+   142 write *tmp38 BITMAP 4
 -    * label *label543
 -    * label *label544
 -    * label *label545
-   144 read *tmp35 BITMAP 5
-   145 op or *tmp38 *tmp35 4
-   146 write *tmp38 BITMAP 5
+   143 read *tmp35 BITMAP 5
+   144 op or *tmp38 *tmp35 4
+   145 write *tmp38 BITMAP 5
 -    * label *label546
 -    * label *label547
 -    * label *label548
-   147 read *tmp35 BITMAP 5
-   148 op or *tmp38 *tmp35 128
-   149 write *tmp38 BITMAP 5
+   146 read *tmp35 BITMAP 5
+   147 op or *tmp38 *tmp35 128
+   148 write *tmp38 BITMAP 5
 -    * label *label549
 -    * label *label550
 -    * label *label72
-   150 label *label73
+   149 label *label73
 -    * label *label74
 -    * label *label75
-   151 jump *label76 equal :testAndSetMultiples:result false
-   152 op add :sumPrimesUpTo:sum 5 5
-   153 label *label76
+   150 jump *label76 notEqual :getBit*retval false
+   151 op add :sumPrimesUpTo:sum 5 5
+   152 label *label76
 -    * label *label77
 -    * label *label78
 -    * label *label79
-   154 read *tmp21 BITMAP 0
-   155 op and :getBit*retval *tmp21 8
+   153 read *tmp21 BITMAP 0
+   154 op and :getBit*retval *tmp21 8
 -    * label *label80
-   156 op equal :testAndSetMultiples:result :getBit*retval false
-   157 jump *label86 equal :testAndSetMultiples:result false
+   155 jump *label86 notEqual :getBit*retval false
 -    * label *label306
 -    * label *label307
-   158 read *tmp35 BITMAP 0
-   159 op or *tmp38 *tmp35 16777216
-   160 write *tmp38 BITMAP 0
+   156 read *tmp35 BITMAP 0
+   157 op or *tmp38 *tmp35 16777216
+   158 write *tmp38 BITMAP 0
 -    * label *label308
 -    * label *label309
 -    * label *label310
-   161 read *tmp35 BITMAP 0
-   162 op or *tmp38 *tmp35 2147483648
-   163 write *tmp38 BITMAP 0
+   159 read *tmp35 BITMAP 0
+   160 op or *tmp38 *tmp35 2147483648
+   161 write *tmp38 BITMAP 0
 -    * label *label311
 -    * label *label312
 -    * label *label313
-   164 read *tmp35 BITMAP 0
-   165 op or *tmp38 *tmp35 274877906944
-   166 write *tmp38 BITMAP 0
+   162 read *tmp35 BITMAP 0
+   163 op or *tmp38 *tmp35 274877906944
+   164 write *tmp38 BITMAP 0
 -    * label *label314
 -    * label *label315
 -    * label *label316
-   167 read *tmp35 BITMAP 0
-   168 op or *tmp38 *tmp35 35184372088832
-   169 write *tmp38 BITMAP 0
+   165 read *tmp35 BITMAP 0
+   166 op or *tmp38 *tmp35 35184372088832
+   167 write *tmp38 BITMAP 0
 -    * label *label317
 -    * label *label318
 -    * label *label319
-   170 read *tmp35 BITMAP 1
-   171 op or *tmp38 *tmp35 16
-   172 write *tmp38 BITMAP 1
+   168 read *tmp35 BITMAP 1
+   169 op or *tmp38 *tmp35 16
+   170 write *tmp38 BITMAP 1
 -    * label *label320
 -    * label *label321
 -    * label *label322
-   173 read *tmp35 BITMAP 1
-   174 op or *tmp38 *tmp35 2048
-   175 write *tmp38 BITMAP 1
+   171 read *tmp35 BITMAP 1
+   172 op or *tmp38 *tmp35 2048
+   173 write *tmp38 BITMAP 1
 -    * label *label323
 -    * label *label324
 -    * label *label325
-   176 read *tmp35 BITMAP 1
-   177 op or *tmp38 *tmp35 262144
-   178 write *tmp38 BITMAP 1
+   174 read *tmp35 BITMAP 1
+   175 op or *tmp38 *tmp35 262144
+   176 write *tmp38 BITMAP 1
 -    * label *label326
 -    * label *label327
 -    * label *label328
-   179 read *tmp35 BITMAP 1
-   180 op or *tmp38 *tmp35 33554432
-   181 write *tmp38 BITMAP 1
+   177 read *tmp35 BITMAP 1
+   178 op or *tmp38 *tmp35 33554432
+   179 write *tmp38 BITMAP 1
 -    * label *label329
 -    * label *label330
 -    * label *label331
-   182 read *tmp35 BITMAP 1
-   183 op or *tmp38 *tmp35 4294967296
-   184 write *tmp38 BITMAP 1
+   180 read *tmp35 BITMAP 1
+   181 op or *tmp38 *tmp35 4294967296
+   182 write *tmp38 BITMAP 1
 -    * label *label332
 -    * label *label333
 -    * label *label334
-   185 read *tmp35 BITMAP 1
-   186 op or *tmp38 *tmp35 549755813888
-   187 write *tmp38 BITMAP 1
+   183 read *tmp35 BITMAP 1
+   184 op or *tmp38 *tmp35 549755813888
+   185 write *tmp38 BITMAP 1
 -    * label *label335
 -    * label *label336
 -    * label *label337
-   188 read *tmp35 BITMAP 1
-   189 op or *tmp38 *tmp35 70368744177664
-   190 write *tmp38 BITMAP 1
+   186 read *tmp35 BITMAP 1
+   187 op or *tmp38 *tmp35 70368744177664
+   188 write *tmp38 BITMAP 1
 -    * label *label338
 -    * label *label339
 -    * label *label340
-   191 read *tmp35 BITMAP 2
-   192 op or *tmp38 *tmp35 32
-   193 write *tmp38 BITMAP 2
+   189 read *tmp35 BITMAP 2
+   190 op or *tmp38 *tmp35 32
+   191 write *tmp38 BITMAP 2
 -    * label *label341
 -    * label *label342
 -    * label *label343
-   194 read *tmp35 BITMAP 2
-   195 op or *tmp38 *tmp35 4096
-   196 write *tmp38 BITMAP 2
+   192 read *tmp35 BITMAP 2
+   193 op or *tmp38 *tmp35 4096
+   194 write *tmp38 BITMAP 2
 -    * label *label344
 -    * label *label345
 -    * label *label346
-   197 read *tmp35 BITMAP 2
-   198 op or *tmp38 *tmp35 524288
-   199 write *tmp38 BITMAP 2
+   195 read *tmp35 BITMAP 2
+   196 op or *tmp38 *tmp35 524288
+   197 write *tmp38 BITMAP 2
 -    * label *label347
 -    * label *label348
 -    * label *label349
-   200 read *tmp35 BITMAP 2
-   201 op or *tmp38 *tmp35 67108864
-   202 write *tmp38 BITMAP 2
+   198 read *tmp35 BITMAP 2
+   199 op or *tmp38 *tmp35 67108864
+   200 write *tmp38 BITMAP 2
 -    * label *label350
 -    * label *label351
 -    * label *label352
-   203 read *tmp35 BITMAP 2
-   204 op or *tmp38 *tmp35 8589934592
-   205 write *tmp38 BITMAP 2
+   201 read *tmp35 BITMAP 2
+   202 op or *tmp38 *tmp35 8589934592
+   203 write *tmp38 BITMAP 2
 -    * label *label353
 -    * label *label354
 -    * label *label355
-   206 read *tmp35 BITMAP 2
-   207 op or *tmp38 *tmp35 1099511627776
-   208 write *tmp38 BITMAP 2
+   204 read *tmp35 BITMAP 2
+   205 op or *tmp38 *tmp35 1099511627776
+   206 write *tmp38 BITMAP 2
 -    * label *label356
 -    * label *label357
 -    * label *label358
-   209 read *tmp35 BITMAP 2
-   210 op or *tmp38 *tmp35 140737488355328
-   211 write *tmp38 BITMAP 2
+   207 read *tmp35 BITMAP 2
+   208 op or *tmp38 *tmp35 140737488355328
+   209 write *tmp38 BITMAP 2
 -    * label *label359
 -    * label *label360
 -    * label *label361
-   212 read *tmp35 BITMAP 3
-   213 op or *tmp38 *tmp35 64
-   214 write *tmp38 BITMAP 3
+   210 read *tmp35 BITMAP 3
+   211 op or *tmp38 *tmp35 64
+   212 write *tmp38 BITMAP 3
 -    * label *label362
 -    * label *label363
 -    * label *label364
-   215 read *tmp35 BITMAP 3
-   216 op or *tmp38 *tmp35 8192
-   217 write *tmp38 BITMAP 3
+   213 read *tmp35 BITMAP 3
+   214 op or *tmp38 *tmp35 8192
+   215 write *tmp38 BITMAP 3
 -    * label *label365
 -    * label *label366
 -    * label *label367
-   218 read *tmp35 BITMAP 3
-   219 op or *tmp38 *tmp35 1048576
-   220 write *tmp38 BITMAP 3
+   216 read *tmp35 BITMAP 3
+   217 op or *tmp38 *tmp35 1048576
+   218 write *tmp38 BITMAP 3
 -    * label *label368
 -    * label *label369
 -    * label *label370
-   221 read *tmp35 BITMAP 3
-   222 op or *tmp38 *tmp35 134217728
-   223 write *tmp38 BITMAP 3
+   219 read *tmp35 BITMAP 3
+   220 op or *tmp38 *tmp35 134217728
+   221 write *tmp38 BITMAP 3
 -    * label *label371
 -    * label *label372
 -    * label *label373
-   224 read *tmp35 BITMAP 3
-   225 op or *tmp38 *tmp35 17179869184
-   226 write *tmp38 BITMAP 3
+   222 read *tmp35 BITMAP 3
+   223 op or *tmp38 *tmp35 17179869184
+   224 write *tmp38 BITMAP 3
 -    * label *label374
 -    * label *label375
 -    * label *label376
-   227 read *tmp35 BITMAP 3
-   228 op or *tmp38 *tmp35 2199023255552
-   229 write *tmp38 BITMAP 3
+   225 read *tmp35 BITMAP 3
+   226 op or *tmp38 *tmp35 2199023255552
+   227 write *tmp38 BITMAP 3
 -    * label *label377
 -    * label *label378
 -    * label *label379
-   230 read *tmp35 BITMAP 4
-   231 op or *tmp38 *tmp35 1
-   232 write *tmp38 BITMAP 4
+   228 read *tmp35 BITMAP 4
+   229 op or *tmp38 *tmp35 1
+   230 write *tmp38 BITMAP 4
 -    * label *label380
 -    * label *label381
 -    * label *label382
-   233 read *tmp35 BITMAP 4
-   234 op or *tmp38 *tmp35 128
-   235 write *tmp38 BITMAP 4
+   231 read *tmp35 BITMAP 4
+   232 op or *tmp38 *tmp35 128
+   233 write *tmp38 BITMAP 4
 -    * label *label383
 -    * label *label384
 -    * label *label385
-   236 read *tmp35 BITMAP 4
-   237 op or *tmp38 *tmp35 16384
-   238 write *tmp38 BITMAP 4
+   234 read *tmp35 BITMAP 4
+   235 op or *tmp38 *tmp35 16384
+   236 write *tmp38 BITMAP 4
 -    * label *label386
 -    * label *label387
 -    * label *label388
-   239 read *tmp35 BITMAP 4
-   240 op or *tmp38 *tmp35 2097152
-   241 write *tmp38 BITMAP 4
+   237 read *tmp35 BITMAP 4
+   238 op or *tmp38 *tmp35 2097152
+   239 write *tmp38 BITMAP 4
 -    * label *label389
 -    * label *label390
 -    * label *label391
-   242 read *tmp35 BITMAP 4
-   243 op or *tmp38 *tmp35 268435456
-   244 write *tmp38 BITMAP 4
+   240 read *tmp35 BITMAP 4
+   241 op or *tmp38 *tmp35 268435456
+   242 write *tmp38 BITMAP 4
 -    * label *label392
 -    * label *label393
 -    * label *label394
-   245 read *tmp35 BITMAP 4
-   246 op or *tmp38 *tmp35 34359738368
-   247 write *tmp38 BITMAP 4
+   243 read *tmp35 BITMAP 4
+   244 op or *tmp38 *tmp35 34359738368
+   245 write *tmp38 BITMAP 4
 -    * label *label395
 -    * label *label396
 -    * label *label397
-   248 read *tmp35 BITMAP 4
-   249 op or *tmp38 *tmp35 4398046511104
-   250 write *tmp38 BITMAP 4
+   246 read *tmp35 BITMAP 4
+   247 op or *tmp38 *tmp35 4398046511104
+   248 write *tmp38 BITMAP 4
 -    * label *label398
 -    * label *label399
 -    * label *label400
-   251 read *tmp35 BITMAP 5
-   252 op or *tmp38 *tmp35 2
-   253 write *tmp38 BITMAP 5
+   249 read *tmp35 BITMAP 5
+   250 op or *tmp38 *tmp35 2
+   251 write *tmp38 BITMAP 5
 -    * label *label401
 -    * label *label402
 -    * label *label403
-   254 read *tmp35 BITMAP 5
-   255 op or *tmp38 *tmp35 256
-   256 write *tmp38 BITMAP 5
+   252 read *tmp35 BITMAP 5
+   253 op or *tmp38 *tmp35 256
+   254 write *tmp38 BITMAP 5
 -    * label *label404
 -    * label *label405
 -    * label *label85
-   257 label *label86
+   255 label *label86
 -    * label *label87
 -    * label *label88
-   258 jump *label89 equal :testAndSetMultiples:result false
-   259 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 7
-   260 label *label89
+   256 jump *label89 notEqual :getBit*retval false
+   257 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 7
+   258 label *label89
 -    * label *label90
 -    * label *label91
 -    * label *label92
 -    * label *label93
 -    * label *label94
-   261 read *tmp21 BITMAP 0
-   262 op and :getBit*retval *tmp21 32
+   259 read *tmp21 BITMAP 0
+   260 op and :getBit*retval *tmp21 32
 -    * label *label95
-   263 op equal :testAndSetMultiples:result :getBit*retval false
-   264 jump *label101 equal :testAndSetMultiples:result false
+   261 jump *label101 notEqual :getBit*retval false
 -    * label *label251
 -    * label *label252
-   265 read *tmp35 BITMAP 1
-   266 op or *tmp38 *tmp35 4096
-   267 write *tmp38 BITMAP 1
+   262 read *tmp35 BITMAP 1
+   263 op or *tmp38 *tmp35 4096
+   264 write *tmp38 BITMAP 1
 -    * label *label253
 -    * label *label254
 -    * label *label255
-   268 read *tmp35 BITMAP 1
-   269 op or *tmp38 *tmp35 8388608
-   270 write *tmp38 BITMAP 1
+   265 read *tmp35 BITMAP 1
+   266 op or *tmp38 *tmp35 8388608
+   267 write *tmp38 BITMAP 1
 -    * label *label256
 -    * label *label257
 -    * label *label258
-   271 read *tmp35 BITMAP 1
-   272 op or *tmp38 *tmp35 17179869184
-   273 write *tmp38 BITMAP 1
+   268 read *tmp35 BITMAP 1
+   269 op or *tmp38 *tmp35 17179869184
+   270 write *tmp38 BITMAP 1
 -    * label *label259
 -    * label *label260
 -    * label *label261
-   274 read *tmp35 BITMAP 1
-   275 op or *tmp38 *tmp35 35184372088832
-   276 write *tmp38 BITMAP 1
+   271 read *tmp35 BITMAP 1
+   272 op or *tmp38 *tmp35 35184372088832
+   273 write *tmp38 BITMAP 1
 -    * label *label262
 -    * label *label263
 -    * label *label264
-   277 read *tmp35 BITMAP 2
-   278 op or *tmp38 *tmp35 256
-   279 write *tmp38 BITMAP 2
+   274 read *tmp35 BITMAP 2
+   275 op or *tmp38 *tmp35 256
+   276 write *tmp38 BITMAP 2
 -    * label *label265
 -    * label *label266
 -    * label *label267
-   280 read *tmp35 BITMAP 2
-   281 op or *tmp38 *tmp35 524288
-   282 write *tmp38 BITMAP 2
+   277 read *tmp35 BITMAP 2
+   278 op or *tmp38 *tmp35 524288
+   279 write *tmp38 BITMAP 2
 -    * label *label268
 -    * label *label269
 -    * label *label270
-   283 read *tmp35 BITMAP 2
-   284 op or *tmp38 *tmp35 1073741824
-   285 write *tmp38 BITMAP 2
+   280 read *tmp35 BITMAP 2
+   281 op or *tmp38 *tmp35 1073741824
+   282 write *tmp38 BITMAP 2
 -    * label *label271
 -    * label *label272
 -    * label *label273
-   286 read *tmp35 BITMAP 2
-   287 op or *tmp38 *tmp35 2199023255552
-   288 write *tmp38 BITMAP 2
+   283 read *tmp35 BITMAP 2
+   284 op or *tmp38 *tmp35 2199023255552
+   285 write *tmp38 BITMAP 2
 -    * label *label274
 -    * label *label275
 -    * label *label276
-   289 read *tmp35 BITMAP 3
-   290 op or *tmp38 *tmp35 16
-   291 write *tmp38 BITMAP 3
+   286 read *tmp35 BITMAP 3
+   287 op or *tmp38 *tmp35 16
+   288 write *tmp38 BITMAP 3
 -    * label *label277
 -    * label *label278
 -    * label *label279
-   292 read *tmp35 BITMAP 3
-   293 op or *tmp38 *tmp35 32768
-   294 write *tmp38 BITMAP 3
+   289 read *tmp35 BITMAP 3
+   290 op or *tmp38 *tmp35 32768
+   291 write *tmp38 BITMAP 3
 -    * label *label280
 -    * label *label281
 -    * label *label282
-   295 read *tmp35 BITMAP 3
-   296 op or *tmp38 *tmp35 67108864
-   297 write *tmp38 BITMAP 3
+   292 read *tmp35 BITMAP 3
+   293 op or *tmp38 *tmp35 67108864
+   294 write *tmp38 BITMAP 3
 -    * label *label283
 -    * label *label284
 -    * label *label285
-   298 read *tmp35 BITMAP 3
-   299 op or *tmp38 *tmp35 137438953472
-   300 write *tmp38 BITMAP 3
+   295 read *tmp35 BITMAP 3
+   296 op or *tmp38 *tmp35 137438953472
+   297 write *tmp38 BITMAP 3
 -    * label *label286
 -    * label *label287
 -    * label *label288
-   301 read *tmp35 BITMAP 4
-   302 op or *tmp38 *tmp35 1
-   303 write *tmp38 BITMAP 4
+   298 read *tmp35 BITMAP 4
+   299 op or *tmp38 *tmp35 1
+   300 write *tmp38 BITMAP 4
 -    * label *label289
 -    * label *label290
 -    * label *label291
-   304 read *tmp35 BITMAP 4
-   305 op or *tmp38 *tmp35 2048
-   306 write *tmp38 BITMAP 4
+   301 read *tmp35 BITMAP 4
+   302 op or *tmp38 *tmp35 2048
+   303 write *tmp38 BITMAP 4
 -    * label *label292
 -    * label *label293
 -    * label *label294
-   307 read *tmp35 BITMAP 4
-   308 op or *tmp38 *tmp35 4194304
-   309 write *tmp38 BITMAP 4
+   304 read *tmp35 BITMAP 4
+   305 op or *tmp38 *tmp35 4194304
+   306 write *tmp38 BITMAP 4
 -    * label *label295
 -    * label *label296
 -    * label *label297
-   310 read *tmp35 BITMAP 4
-   311 op or *tmp38 *tmp35 8589934592
-   312 write *tmp38 BITMAP 4
+   307 read *tmp35 BITMAP 4
+   308 op or *tmp38 *tmp35 8589934592
+   309 write *tmp38 BITMAP 4
 -    * label *label298
 -    * label *label299
 -    * label *label300
-   313 read *tmp35 BITMAP 4
-   314 op or *tmp38 *tmp35 17592186044416
-   315 write *tmp38 BITMAP 4
+   310 read *tmp35 BITMAP 4
+   311 op or *tmp38 *tmp35 17592186044416
+   312 write *tmp38 BITMAP 4
 -    * label *label301
 -    * label *label302
 -    * label *label303
-   316 read *tmp35 BITMAP 5
-   317 op or *tmp38 *tmp35 128
-   318 write *tmp38 BITMAP 5
+   313 read *tmp35 BITMAP 5
+   314 op or *tmp38 *tmp35 128
+   315 write *tmp38 BITMAP 5
 -    * label *label304
 -    * label *label305
 -    * label *label100
-   319 label *label101
+   316 label *label101
 -    * label *label102
 -    * label *label103
-   320 jump *label104 equal :testAndSetMultiples:result false
-   321 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 11
-   322 label *label104
+   317 jump *label104 notEqual :getBit*retval false
+   318 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 11
+   319 label *label104
 -    * label *label105
 -    * label *label106
 -    * label *label107
-   323 read *tmp21 BITMAP 0
-   324 op and :getBit*retval *tmp21 64
+   320 read *tmp21 BITMAP 0
+   321 op and :getBit*retval *tmp21 64
 -    * label *label108
-   325 op equal :testAndSetMultiples:result :getBit*retval false
-   326 jump *label114 equal :testAndSetMultiples:result false
+   322 jump *label114 notEqual :getBit*retval false
 -    * label *label211
 -    * label *label212
-   327 read *tmp35 BITMAP 1
-   328 op or *tmp38 *tmp35 68719476736
-   329 write *tmp38 BITMAP 1
+   323 read *tmp35 BITMAP 1
+   324 op or *tmp38 *tmp35 68719476736
+   325 write *tmp38 BITMAP 1
 -    * label *label213
 -    * label *label214
 -    * label *label215
-   330 read *tmp35 BITMAP 2
-   331 op or *tmp38 *tmp35 2
-   332 write *tmp38 BITMAP 2
+   326 read *tmp35 BITMAP 2
+   327 op or *tmp38 *tmp35 2
+   328 write *tmp38 BITMAP 2
 -    * label *label216
 -    * label *label217
 -    * label *label218
-   333 read *tmp35 BITMAP 2
-   334 op or *tmp38 *tmp35 16384
-   335 write *tmp38 BITMAP 2
+   329 read *tmp35 BITMAP 2
+   330 op or *tmp38 *tmp35 16384
+   331 write *tmp38 BITMAP 2
 -    * label *label219
 -    * label *label220
 -    * label *label221
-   336 read *tmp35 BITMAP 2
-   337 op or *tmp38 *tmp35 134217728
-   338 write *tmp38 BITMAP 2
+   332 read *tmp35 BITMAP 2
+   333 op or *tmp38 *tmp35 134217728
+   334 write *tmp38 BITMAP 2
 -    * label *label222
 -    * label *label223
 -    * label *label224
-   339 read *tmp35 BITMAP 2
-   340 op or *tmp38 *tmp35 1099511627776
-   341 write *tmp38 BITMAP 2
+   335 read *tmp35 BITMAP 2
+   336 op or *tmp38 *tmp35 1099511627776
+   337 write *tmp38 BITMAP 2
 -    * label *label225
 -    * label *label226
 -    * label *label227
-   342 read *tmp35 BITMAP 3
-   343 op or *tmp38 *tmp35 32
-   344 write *tmp38 BITMAP 3
+   338 read *tmp35 BITMAP 3
+   339 op or *tmp38 *tmp35 32
+   340 write *tmp38 BITMAP 3
 -    * label *label228
 -    * label *label229
 -    * label *label230
-   345 read *tmp35 BITMAP 3
-   346 op or *tmp38 *tmp35 262144
-   347 write *tmp38 BITMAP 3
+   341 read *tmp35 BITMAP 3
+   342 op or *tmp38 *tmp35 262144
+   343 write *tmp38 BITMAP 3
 -    * label *label231
 -    * label *label232
 -    * label *label233
-   348 read *tmp35 BITMAP 3
-   349 op or *tmp38 *tmp35 2147483648
-   350 write *tmp38 BITMAP 3
+   344 read *tmp35 BITMAP 3
+   345 op or *tmp38 *tmp35 2147483648
+   346 write *tmp38 BITMAP 3
 -    * label *label234
 -    * label *label235
 -    * label *label236
-   351 read *tmp35 BITMAP 3
-   352 op or *tmp38 *tmp35 17592186044416
-   353 write *tmp38 BITMAP 3
+   347 read *tmp35 BITMAP 3
+   348 op or *tmp38 *tmp35 17592186044416
+   349 write *tmp38 BITMAP 3
 -    * label *label237
 -    * label *label238
 -    * label *label239
-   354 read *tmp35 BITMAP 4
-   355 op or *tmp38 *tmp35 512
-   356 write *tmp38 BITMAP 4
+   350 read *tmp35 BITMAP 4
+   351 op or *tmp38 *tmp35 512
+   352 write *tmp38 BITMAP 4
 -    * label *label240
 -    * label *label241
 -    * label *label242
-   357 read *tmp35 BITMAP 4
-   358 op or *tmp38 *tmp35 4194304
-   359 write *tmp38 BITMAP 4
+   353 read *tmp35 BITMAP 4
+   354 op or *tmp38 *tmp35 4194304
+   355 write *tmp38 BITMAP 4
 -    * label *label243
 -    * label *label244
 -    * label *label245
-   360 read *tmp35 BITMAP 4
-   361 op or *tmp38 *tmp35 34359738368
-   362 write *tmp38 BITMAP 4
+   356 read *tmp35 BITMAP 4
+   357 op or *tmp38 *tmp35 34359738368
+   358 write *tmp38 BITMAP 4
 -    * label *label246
 -    * label *label247
 -    * label *label248
-   363 read *tmp35 BITMAP 5
-   364 op or *tmp38 *tmp35 1
-   365 write *tmp38 BITMAP 5
+   359 read *tmp35 BITMAP 5
+   360 op or *tmp38 *tmp35 1
+   361 write *tmp38 BITMAP 5
 -    * label *label249
 -    * label *label250
 -    * label *label113
-   366 label *label114
+   362 label *label114
 -    * label *label115
 -    * label *label116
-   367 jump *label117 equal :testAndSetMultiples:result false
-   368 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 13
-   369 label *label117
+   363 jump *label117 notEqual :getBit*retval false
+   364 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 13
+   365 label *label117
 -    * label *label118
 -    * label *label119
 -    * label *label120
 -    * label *label121
 -    * label *label122
-   370 read *tmp21 BITMAP 0
-   371 op and :getBit*retval *tmp21 256
+   366 read *tmp21 BITMAP 0
+   367 op and :getBit*retval *tmp21 256
 -    * label *label123
-   372 op equal :testAndSetMultiples:result :getBit*retval false
-   373 jump *label129 equal :testAndSetMultiples:result false
+   368 jump *label129 notEqual :getBit*retval false
 -    * label *label189
 -    * label *label190
-   374 read *tmp35 BITMAP 3
-   375 op or *tmp38 *tmp35 1
-   376 write *tmp38 BITMAP 3
+   369 read *tmp35 BITMAP 3
+   370 op or *tmp38 *tmp35 1
+   371 write *tmp38 BITMAP 3
 -    * label *label191
 -    * label *label192
 -    * label *label193
-   377 read *tmp35 BITMAP 3
-   378 op or *tmp38 *tmp35 131072
-   379 write *tmp38 BITMAP 3
+   372 read *tmp35 BITMAP 3
+   373 op or *tmp38 *tmp35 131072
+   374 write *tmp38 BITMAP 3
 -    * label *label194
 -    * label *label195
 -    * label *label196
-   380 read *tmp35 BITMAP 3
-   381 op or *tmp38 *tmp35 17179869184
-   382 write *tmp38 BITMAP 3
+   375 read *tmp35 BITMAP 3
+   376 op or *tmp38 *tmp35 17179869184
+   377 write *tmp38 BITMAP 3
 -    * label *label197
 -    * label *label198
 -    * label *label199
-   383 read *tmp35 BITMAP 4
-   384 op or *tmp38 *tmp35 8
-   385 write *tmp38 BITMAP 4
+   378 read *tmp35 BITMAP 4
+   379 op or *tmp38 *tmp35 8
+   380 write *tmp38 BITMAP 4
 -    * label *label200
 -    * label *label201
 -    * label *label202
-   386 read *tmp35 BITMAP 4
-   387 op or *tmp38 *tmp35 1048576
-   388 write *tmp38 BITMAP 4
+   381 read *tmp35 BITMAP 4
+   382 op or *tmp38 *tmp35 1048576
+   383 write *tmp38 BITMAP 4
 -    * label *label203
 -    * label *label204
 -    * label *label205
-   389 read *tmp35 BITMAP 4
-   390 op or *tmp38 *tmp35 137438953472
-   391 write *tmp38 BITMAP 4
+   384 read *tmp35 BITMAP 4
+   385 op or *tmp38 *tmp35 137438953472
+   386 write *tmp38 BITMAP 4
 -    * label *label206
 -    * label *label207
 -    * label *label208
-   392 read *tmp35 BITMAP 5
-   393 op or *tmp38 *tmp35 64
-   394 write *tmp38 BITMAP 5
+   387 read *tmp35 BITMAP 5
+   388 op or *tmp38 *tmp35 64
+   389 write *tmp38 BITMAP 5
 -    * label *label209
 -    * label *label210
 -    * label *label128
-   395 label *label129
+   390 label *label129
 -    * label *label130
 -    * label *label131
-   396 jump *label132 equal :testAndSetMultiples:result false
-   397 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 17
-   398 label *label132
+   391 jump *label132 notEqual :getBit*retval false
+   392 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 17
+   393 label *label132
 -    * label *label133
 -    * label *label134
 -    * label *label135
-   399 read *tmp21 BITMAP 0
-   400 op and :getBit*retval *tmp21 512
+   394 read *tmp21 BITMAP 0
+   395 op and :getBit*retval *tmp21 512
 -    * label *label136
-   401 op equal :testAndSetMultiples:result :getBit*retval false
-   402 jump *label142 equal :testAndSetMultiples:result false
+   396 jump *label142 notEqual :getBit*retval false
 -    * label *label176
 -    * label *label177
-   403 read *tmp35 BITMAP 3
-   404 op or *tmp38 *tmp35 68719476736
-   405 write *tmp38 BITMAP 3
+   397 read *tmp35 BITMAP 3
+   398 op or *tmp38 *tmp35 68719476736
+   399 write *tmp38 BITMAP 3
 -    * label *label178
 -    * label *label179
 -    * label *label180
-   406 read *tmp35 BITMAP 4
-   407 op or *tmp38 *tmp35 128
-   408 write *tmp38 BITMAP 4
+   400 read *tmp35 BITMAP 4
+   401 op or *tmp38 *tmp35 128
+   402 write *tmp38 BITMAP 4
 -    * label *label181
 -    * label *label182
 -    * label *label183
-   409 read *tmp35 BITMAP 4
-   410 op or *tmp38 *tmp35 67108864
-   411 write *tmp38 BITMAP 4
+   403 read *tmp35 BITMAP 4
+   404 op or *tmp38 *tmp35 67108864
+   405 write *tmp38 BITMAP 4
 -    * label *label184
 -    * label *label185
 -    * label *label186
-   412 read *tmp35 BITMAP 4
-   413 op or *tmp38 *tmp35 35184372088832
-   414 write *tmp38 BITMAP 4
+   406 read *tmp35 BITMAP 4
+   407 op or *tmp38 *tmp35 35184372088832
+   408 write *tmp38 BITMAP 4
 -    * label *label187
 -    * label *label188
 -    * label *label141
-   415 label *label142
+   409 label *label142
 -    * label *label143
 -    * label *label144
-   416 jump *label145 equal :testAndSetMultiples:result false
-   417 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 19
-   418 label *label145
+   410 jump *label145 notEqual :getBit*retval false
+   411 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 19
+   412 label *label145
 -    * label *label146
 -    * label *label147
 -    * label *label148
 -    * label *label149
 -    * label *label150
-   419 read *tmp21 BITMAP 0
-   420 op and :getBit*retval *tmp21 2048
+   413 read *tmp21 BITMAP 0
+   414 op and :getBit*retval *tmp21 2048
 -    * label *label151
-   421 op equal :testAndSetMultiples:result :getBit*retval false
-   422 jump *label157 equal :testAndSetMultiples:result false
+   415 jump *label157 notEqual :getBit*retval false
 -    * label *label152
-   423 jump *label156 always
-   424 label *label153
-   425 write *tmp38 BITMAP *tmp34
+   416 jump *label156 always
+   417 label *label153
+   418 write *tmp38 BITMAP *tmp34
 -    * label *label154
 -    * label *label155
-   426 jump *label153 lessThanEq :testAndSetMultiples:i 250
-   427 label *label156
-   428 label *label157
+   419 jump *label153 lessThanEq :testAndSetMultiples:i 250
+   420 label *label156
+   421 label *label157
 -    * label *label158
 -    * label *label159
-   429 jump *label160 equal :testAndSetMultiples:result false
-   430 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
-   431 label *label160
+   422 jump *label160 notEqual :getBit*retval false
+   423 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
+   424 label *label160
 -    * label *label161
 -    * label *label162
 -    * label *label163
-   432 read *tmp21 BITMAP 0
-   433 op and :getBit*retval *tmp21 4096
+   425 read *tmp21 BITMAP 0
+   426 op and :getBit*retval *tmp21 4096
 -    * label *label164
-   434 op equal :testAndSetMultiples:result :getBit*retval false
-   435 jump *label170 equal :testAndSetMultiples:result false
+   427 jump *label170 notEqual :getBit*retval false
 -    * label *label165
-   436 jump *label169 always
-   437 label *label166
-   438 write *tmp38 BITMAP *tmp34
+   428 jump *label169 always
+   429 label *label166
+   430 write *tmp38 BITMAP *tmp34
 -    * label *label167
 -    * label *label168
-   439 jump *label166 lessThanEq :testAndSetMultiples:i 250
-   440 label *label169
-   441 label *label170
+   431 jump *label166 lessThanEq :testAndSetMultiples:i 250
+   432 label *label169
+   433 label *label170
 -    * label *label171
 -    * label *label172
-   442 jump *label173 equal :testAndSetMultiples:result false
-   443 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
-   444 label *label173
+   434 jump *label173 notEqual :getBit*retval false
+   435 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
+   436 label *label173
 -    * label *label174
-   445 op add :sumPrimesUpTo:i 25 4
+   437 op add :sumPrimesUpTo:i 25 4
 -    * label *label175
 -    * label *label5
 -    * label *label12
-   446 label *label33
-   447 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
+   438 label *label33
+   439 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
 -    * label *label35
-   448 op idiv *tmp20 :getBit:bitIndex 48
-   449 op mod *tmp22 :getBit:bitIndex 48
-   450 op shl *tmp23 1 *tmp22
-   451 read *tmp21 BITMAP *tmp20
-   452 op and :getBit*retval *tmp21 *tmp23
+   440 op idiv *tmp20 :getBit:bitIndex 48
+   441 op mod *tmp22 :getBit:bitIndex 48
+   442 op shl *tmp23 1 *tmp22
+   443 read *tmp21 BITMAP *tmp20
+   444 op and :getBit*retval *tmp21 *tmp23
 -    * label *label36
-   453 jump *label15 notEqual :getBit*retval false
-   454 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-   455 label *label15
+   445 jump *label15 notEqual :getBit*retval false
+   446 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
+   447 label *label15
 -    * label *label16
-   456 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
-   457 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
+   448 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
+   449 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
 -    * label *label37
-   458 op idiv *tmp20 :getBit:bitIndex 48
-   459 op mod *tmp22 :getBit:bitIndex 48
-   460 op shl *tmp23 1 *tmp22
-   461 read *tmp21 BITMAP *tmp20
-   462 op and :getBit*retval *tmp21 *tmp23
+   450 op idiv *tmp20 :getBit:bitIndex 48
+   451 op mod *tmp22 :getBit:bitIndex 48
+   452 op shl *tmp23 1 *tmp22
+   453 read *tmp21 BITMAP *tmp20
+   454 op and :getBit*retval *tmp21 *tmp23
 -    * label *label38
-   463 jump *label18 notEqual :getBit*retval false
-   464 jump *label21 greaterThan :sumPrimesUpTo:i 500
-   465 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
-   466 label *label21
+   455 jump *label18 notEqual :getBit*retval false
+   456 jump *label21 greaterThan :sumPrimesUpTo:i 500
+   457 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
+   458 label *label21
 -    * label *label22
-   467 label *label18
+   459 label *label18
 -    * label *label19
-   468 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 4
+   460 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 4
 -    * label *label13
-   469 jump *label33 lessThanEq :sumPrimesUpTo:i 500
+   461 jump *label33 lessThanEq :sumPrimesUpTo:i 500
 -    * label *label14
 -    * label *label2
-   470 assertequals 21536 :sumPrimesUpTo:sum "sumPrimesUpTo(500)"
-   471 stop
-   472 end
+   462 assertequals 21536 :sumPrimesUpTo:sum "sumPrimesUpTo(500)"
+   463 stop
+   464 end
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  
+     1 set :sumPrimesUpTo:sum 5
      2 read *tmp21 BITMAP 0
      3 op and :getBit*retval *tmp21 4
-     4 op equal :testAndSetMultiples:result :getBit*retval false
--    * jump *label73 equal :testAndSetMultiples:result false
-+    5 jump *label76 equal :testAndSetMultiples:result false
-     6 read *tmp35 BITMAP 0
-     7 op or *tmp38 *tmp35 4096
-     8 write *tmp38 BITMAP 0
+-    * jump *label73 notEqual :getBit*retval false
++    4 jump *label76 notEqual :getBit*retval false
+     5 read *tmp35 BITMAP 0
+     6 op or *tmp38 *tmp35 4096
+     7 write *tmp38 BITMAP 0
  
-   154 read *tmp21 BITMAP 0
-   155 op and :getBit*retval *tmp21 8
-   156 op equal :testAndSetMultiples:result :getBit*retval false
--    * jump *label86 equal :testAndSetMultiples:result false
-+  157 jump *label89 equal :testAndSetMultiples:result false
-   158 read *tmp35 BITMAP 0
-   159 op or *tmp38 *tmp35 16777216
-   160 write *tmp38 BITMAP 0
+   152 label *label76
+   153 read *tmp21 BITMAP 0
+   154 op and :getBit*retval *tmp21 8
+-    * jump *label86 notEqual :getBit*retval false
++  155 jump *label89 notEqual :getBit*retval false
+   156 read *tmp35 BITMAP 0
+   157 op or *tmp38 *tmp35 16777216
+   158 write *tmp38 BITMAP 0
  
-   261 read *tmp21 BITMAP 0
-   262 op and :getBit*retval *tmp21 32
-   263 op equal :testAndSetMultiples:result :getBit*retval false
--    * jump *label101 equal :testAndSetMultiples:result false
-+  264 jump *label104 equal :testAndSetMultiples:result false
-   265 read *tmp35 BITMAP 1
-   266 op or *tmp38 *tmp35 4096
-   267 write *tmp38 BITMAP 1
+   258 label *label89
+   259 read *tmp21 BITMAP 0
+   260 op and :getBit*retval *tmp21 32
+-    * jump *label101 notEqual :getBit*retval false
++  261 jump *label104 notEqual :getBit*retval false
+   262 read *tmp35 BITMAP 1
+   263 op or *tmp38 *tmp35 4096
+   264 write *tmp38 BITMAP 1
  
-   323 read *tmp21 BITMAP 0
-   324 op and :getBit*retval *tmp21 64
-   325 op equal :testAndSetMultiples:result :getBit*retval false
--    * jump *label114 equal :testAndSetMultiples:result false
-+  326 jump *label117 equal :testAndSetMultiples:result false
-   327 read *tmp35 BITMAP 1
-   328 op or *tmp38 *tmp35 68719476736
-   329 write *tmp38 BITMAP 1
+   319 label *label104
+   320 read *tmp21 BITMAP 0
+   321 op and :getBit*retval *tmp21 64
+-    * jump *label114 notEqual :getBit*retval false
++  322 jump *label117 notEqual :getBit*retval false
+   323 read *tmp35 BITMAP 1
+   324 op or *tmp38 *tmp35 68719476736
+   325 write *tmp38 BITMAP 1
  
-   370 read *tmp21 BITMAP 0
-   371 op and :getBit*retval *tmp21 256
-   372 op equal :testAndSetMultiples:result :getBit*retval false
--    * jump *label129 equal :testAndSetMultiples:result false
-+  373 jump *label132 equal :testAndSetMultiples:result false
-   374 read *tmp35 BITMAP 3
-   375 op or *tmp38 *tmp35 1
-   376 write *tmp38 BITMAP 3
+   365 label *label117
+   366 read *tmp21 BITMAP 0
+   367 op and :getBit*retval *tmp21 256
+-    * jump *label129 notEqual :getBit*retval false
++  368 jump *label132 notEqual :getBit*retval false
+   369 read *tmp35 BITMAP 3
+   370 op or *tmp38 *tmp35 1
+   371 write *tmp38 BITMAP 3
  
-   399 read *tmp21 BITMAP 0
-   400 op and :getBit*retval *tmp21 512
-   401 op equal :testAndSetMultiples:result :getBit*retval false
--    * jump *label142 equal :testAndSetMultiples:result false
-+  402 jump *label145 equal :testAndSetMultiples:result false
-   403 read *tmp35 BITMAP 3
-   404 op or *tmp38 *tmp35 68719476736
-   405 write *tmp38 BITMAP 3
+   393 label *label132
+   394 read *tmp21 BITMAP 0
+   395 op and :getBit*retval *tmp21 512
+-    * jump *label142 notEqual :getBit*retval false
++  396 jump *label145 notEqual :getBit*retval false
+   397 read *tmp35 BITMAP 3
+   398 op or *tmp38 *tmp35 68719476736
+   399 write *tmp38 BITMAP 3
  
-   419 read *tmp21 BITMAP 0
-   420 op and :getBit*retval *tmp21 2048
-   421 op equal :testAndSetMultiples:result :getBit*retval false
--    * jump *label157 equal :testAndSetMultiples:result false
-+  422 jump *label160 equal :testAndSetMultiples:result false
-   423 jump *label156 always
-   424 label *label153
-   425 write *tmp38 BITMAP *tmp34
+   412 label *label145
+   413 read *tmp21 BITMAP 0
+   414 op and :getBit*retval *tmp21 2048
+-    * jump *label157 notEqual :getBit*retval false
++  415 jump *label160 notEqual :getBit*retval false
+   416 jump *label156 always
+   417 label *label153
+   418 write *tmp38 BITMAP *tmp34
  
-   432 read *tmp21 BITMAP 0
-   433 op and :getBit*retval *tmp21 4096
-   434 op equal :testAndSetMultiples:result :getBit*retval false
--    * jump *label170 equal :testAndSetMultiples:result false
-+  435 jump *label173 equal :testAndSetMultiples:result false
-   436 jump *label169 always
-   437 label *label166
-   438 write *tmp38 BITMAP *tmp34
+   424 label *label160
+   425 read *tmp21 BITMAP 0
+   426 op and :getBit*retval *tmp21 4096
+-    * jump *label170 notEqual :getBit*retval false
++  427 jump *label173 notEqual :getBit*retval false
+   428 jump *label169 always
+   429 label *label166
+   430 write *tmp38 BITMAP *tmp34
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-4 instructions):
  
-   147 read *tmp35 BITMAP 5
-   148 op or *tmp38 *tmp35 128
-   149 write *tmp38 BITMAP 5
+   146 read *tmp35 BITMAP 5
+   147 op or *tmp38 *tmp35 128
+   148 write *tmp38 BITMAP 5
 -    * label *label73
-   150 jump *label76 equal :testAndSetMultiples:result false
-   151 op add :sumPrimesUpTo:sum 5 5
-   152 label *label76
+   149 jump *label76 notEqual :getBit*retval false
+   150 op add :sumPrimesUpTo:sum 5 5
+   151 label *label76
  
-   253 read *tmp35 BITMAP 5
-   254 op or *tmp38 *tmp35 256
-   255 write *tmp38 BITMAP 5
+   251 read *tmp35 BITMAP 5
+   252 op or *tmp38 *tmp35 256
+   253 write *tmp38 BITMAP 5
 -    * label *label86
-   256 jump *label89 equal :testAndSetMultiples:result false
-   257 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 7
-   258 label *label89
+   254 jump *label89 notEqual :getBit*retval false
+   255 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 7
+   256 label *label89
  
-   314 read *tmp35 BITMAP 5
-   315 op or *tmp38 *tmp35 128
-   316 write *tmp38 BITMAP 5
+   311 read *tmp35 BITMAP 5
+   312 op or *tmp38 *tmp35 128
+   313 write *tmp38 BITMAP 5
 -    * label *label101
-   317 jump *label104 equal :testAndSetMultiples:result false
-   318 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 11
-   319 label *label104
+   314 jump *label104 notEqual :getBit*retval false
+   315 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 11
+   316 label *label104
  
-   360 read *tmp35 BITMAP 5
-   361 op or *tmp38 *tmp35 1
-   362 write *tmp38 BITMAP 5
+   356 read *tmp35 BITMAP 5
+   357 op or *tmp38 *tmp35 1
+   358 write *tmp38 BITMAP 5
 -    * label *label114
-   363 jump *label117 equal :testAndSetMultiples:result false
-   364 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 13
-   365 label *label117
+   359 jump *label117 notEqual :getBit*retval false
+   360 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 13
+   361 label *label117
  
-   388 read *tmp35 BITMAP 5
-   389 op or *tmp38 *tmp35 64
-   390 write *tmp38 BITMAP 5
+   383 read *tmp35 BITMAP 5
+   384 op or *tmp38 *tmp35 64
+   385 write *tmp38 BITMAP 5
 -    * label *label129
-   391 jump *label132 equal :testAndSetMultiples:result false
-   392 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 17
-   393 label *label132
+   386 jump *label132 notEqual :getBit*retval false
+   387 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 17
+   388 label *label132
  
-   407 read *tmp35 BITMAP 4
-   408 op or *tmp38 *tmp35 35184372088832
-   409 write *tmp38 BITMAP 4
+   401 read *tmp35 BITMAP 4
+   402 op or *tmp38 *tmp35 35184372088832
+   403 write *tmp38 BITMAP 4
 -    * label *label142
-   410 jump *label145 equal :testAndSetMultiples:result false
-   411 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 19
-   412 label *label145
+   404 jump *label145 notEqual :getBit*retval false
+   405 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 19
+   406 label *label145
  
-   415 op equal :testAndSetMultiples:result :getBit*retval false
-   416 jump *label160 equal :testAndSetMultiples:result false
-   417 jump *label156 always
+   408 op and :getBit*retval *tmp21 2048
+   409 jump *label160 notEqual :getBit*retval false
+   410 jump *label156 always
 -    * label *label153
 -    * write *tmp38 BITMAP *tmp34
 -    * jump *label153 lessThanEq :testAndSetMultiples:i 250
-   418 label *label156
+   411 label *label156
 -    * label *label157
-   419 jump *label160 equal :testAndSetMultiples:result false
-   420 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
-   421 label *label160
+   412 jump *label160 notEqual :getBit*retval false
+   413 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
+   414 label *label160
  
-   424 op equal :testAndSetMultiples:result :getBit*retval false
-   425 jump *label173 equal :testAndSetMultiples:result false
-   426 jump *label169 always
+   416 op and :getBit*retval *tmp21 4096
+   417 jump *label173 notEqual :getBit*retval false
+   418 jump *label169 always
 -    * label *label166
 -    * write *tmp38 BITMAP *tmp34
 -    * jump *label166 lessThanEq :testAndSetMultiples:i 250
-   427 label *label169
+   419 label *label169
 -    * label *label170
-   428 jump *label173 equal :testAndSetMultiples:result false
-   429 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
-   430 label *label173
+   420 jump *label173 notEqual :getBit*retval false
+   421 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
+   422 label *label173
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-9 instructions):
  
-   147 read *tmp35 BITMAP 5
-   148 op or *tmp38 *tmp35 128
-   149 write *tmp38 BITMAP 5
--    * jump *label76 equal :testAndSetMultiples:result false
-   150 op add :sumPrimesUpTo:sum 5 5
-   151 label *label76
-   152 read *tmp21 BITMAP 0
+   146 read *tmp35 BITMAP 5
+   147 op or *tmp38 *tmp35 128
+   148 write *tmp38 BITMAP 5
+-    * jump *label76 notEqual :getBit*retval false
+   149 op add :sumPrimesUpTo:sum 5 5
+   150 label *label76
+   151 read *tmp21 BITMAP 0
  
-   252 read *tmp35 BITMAP 5
-   253 op or *tmp38 *tmp35 256
-   254 write *tmp38 BITMAP 5
--    * jump *label89 equal :testAndSetMultiples:result false
-   255 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 7
-   256 label *label89
-   257 read *tmp21 BITMAP 0
+   250 read *tmp35 BITMAP 5
+   251 op or *tmp38 *tmp35 256
+   252 write *tmp38 BITMAP 5
+-    * jump *label89 notEqual :getBit*retval false
+   253 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 7
+   254 label *label89
+   255 read *tmp21 BITMAP 0
  
-   312 read *tmp35 BITMAP 5
-   313 op or *tmp38 *tmp35 128
-   314 write *tmp38 BITMAP 5
--    * jump *label104 equal :testAndSetMultiples:result false
-   315 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 11
-   316 label *label104
-   317 read *tmp21 BITMAP 0
+   309 read *tmp35 BITMAP 5
+   310 op or *tmp38 *tmp35 128
+   311 write *tmp38 BITMAP 5
+-    * jump *label104 notEqual :getBit*retval false
+   312 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 11
+   313 label *label104
+   314 read *tmp21 BITMAP 0
  
-   357 read *tmp35 BITMAP 5
-   358 op or *tmp38 *tmp35 1
-   359 write *tmp38 BITMAP 5
--    * jump *label117 equal :testAndSetMultiples:result false
-   360 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 13
-   361 label *label117
-   362 read *tmp21 BITMAP 0
+   353 read *tmp35 BITMAP 5
+   354 op or *tmp38 *tmp35 1
+   355 write *tmp38 BITMAP 5
+-    * jump *label117 notEqual :getBit*retval false
+   356 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 13
+   357 label *label117
+   358 read *tmp21 BITMAP 0
  
-   384 read *tmp35 BITMAP 5
-   385 op or *tmp38 *tmp35 64
-   386 write *tmp38 BITMAP 5
--    * jump *label132 equal :testAndSetMultiples:result false
-   387 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 17
-   388 label *label132
-   389 read *tmp21 BITMAP 0
+   379 read *tmp35 BITMAP 5
+   380 op or *tmp38 *tmp35 64
+   381 write *tmp38 BITMAP 5
+-    * jump *label132 notEqual :getBit*retval false
+   382 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 17
+   383 label *label132
+   384 read *tmp21 BITMAP 0
  
-   402 read *tmp35 BITMAP 4
-   403 op or *tmp38 *tmp35 35184372088832
-   404 write *tmp38 BITMAP 4
--    * jump *label145 equal :testAndSetMultiples:result false
-   405 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 19
-   406 label *label145
-   407 read *tmp21 BITMAP 0
-   408 op and :getBit*retval *tmp21 2048
-   409 op equal :testAndSetMultiples:result :getBit*retval false
-   410 jump *label160 equal :testAndSetMultiples:result false
+   396 read *tmp35 BITMAP 4
+   397 op or *tmp38 *tmp35 35184372088832
+   398 write *tmp38 BITMAP 4
+-    * jump *label145 notEqual :getBit*retval false
+   399 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 19
+   400 label *label145
+   401 read *tmp21 BITMAP 0
+   402 op and :getBit*retval *tmp21 2048
+   403 jump *label160 notEqual :getBit*retval false
 -    * jump *label156 always
-   411 label *label156
-   412 jump *label160 equal :testAndSetMultiples:result false
-   413 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
+   404 label *label156
+   405 jump *label160 notEqual :getBit*retval false
+   406 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
  
-   416 op and :getBit*retval *tmp21 4096
-   417 op equal :testAndSetMultiples:result :getBit*retval false
-   418 jump *label173 equal :testAndSetMultiples:result false
+   408 read *tmp21 BITMAP 0
+   409 op and :getBit*retval *tmp21 4096
+   410 jump *label173 notEqual :getBit*retval false
 -    * jump *label169 always
-   419 label *label169
-   420 jump *label173 equal :testAndSetMultiples:result false
-   421 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
+   411 label *label169
+   412 jump *label173 notEqual :getBit*retval false
+   413 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
  
-   447 jump *label33 lessThanEq :sumPrimesUpTo:i 500
-   448 assertequals 21536 :sumPrimesUpTo:sum "sumPrimesUpTo(500)"
-   449 stop
+   439 jump *label33 lessThanEq :sumPrimesUpTo:i 500
+   440 assertequals 21536 :sumPrimesUpTo:sum "sumPrimesUpTo(500)"
+   441 stop
 -    * end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 2 (-2 instructions):
  
+   400 label *label145
+   401 read *tmp21 BITMAP 0
+   402 op and :getBit*retval *tmp21 2048
+-    * jump *label160 notEqual :getBit*retval false
+   403 label *label156
+   404 jump *label160 notEqual :getBit*retval false
+   405 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
+   406 label *label160
    407 read *tmp21 BITMAP 0
-   408 op and :getBit*retval *tmp21 2048
-   409 op equal :testAndSetMultiples:result :getBit*retval false
--    * jump *label160 equal :testAndSetMultiples:result false
-   410 label *label156
-   411 jump *label160 equal :testAndSetMultiples:result false
-   412 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
- 
-   414 read *tmp21 BITMAP 0
-   415 op and :getBit*retval *tmp21 4096
-   416 op equal :testAndSetMultiples:result :getBit*retval false
--    * jump *label173 equal :testAndSetMultiples:result false
-   417 label *label169
-   418 jump *label173 equal :testAndSetMultiples:result false
-   419 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
+   408 op and :getBit*retval *tmp21 4096
+-    * jump *label173 notEqual :getBit*retval false
+   409 label *label169
+   410 jump *label173 notEqual :getBit*retval false
+   411 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
 
 Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
  
-   407 read *tmp21 BITMAP 0
-   408 op and :getBit*retval *tmp21 2048
-   409 op equal :testAndSetMultiples:result :getBit*retval false
+   400 label *label145
+   401 read *tmp21 BITMAP 0
+   402 op and :getBit*retval *tmp21 2048
 -    * label *label156
-   410 jump *label160 equal :testAndSetMultiples:result false
-   411 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
-   412 label *label160
-   413 read *tmp21 BITMAP 0
-   414 op and :getBit*retval *tmp21 4096
-   415 op equal :testAndSetMultiples:result :getBit*retval false
+   403 jump *label160 notEqual :getBit*retval false
+   404 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
+   405 label *label160
+   406 read *tmp21 BITMAP 0
+   407 op and :getBit*retval *tmp21 4096
 -    * label *label169
-   416 jump *label173 equal :testAndSetMultiples:result false
-   417 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
-   418 label *label173
+   408 jump *label173 notEqual :getBit*retval false
+   409 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
+   410 label *label173
 
 Final code before resolving virtual instructions:
 
@@ -7823,8 +8010,7 @@ set BITMAP bank1
 set :sumPrimesUpTo:sum 5
 read *tmp21 BITMAP 0
 op and :getBit*retval *tmp21 4
-op equal :testAndSetMultiples:result :getBit*retval false
-jump *label76 equal :testAndSetMultiples:result false
+jump *label76 notEqual :getBit*retval false
 read *tmp35 BITMAP 0
 op or *tmp38 *tmp35 4096
 write *tmp38 BITMAP 0
@@ -7973,8 +8159,7 @@ op add :sumPrimesUpTo:sum 5 5
 label *label76
 read *tmp21 BITMAP 0
 op and :getBit*retval *tmp21 8
-op equal :testAndSetMultiples:result :getBit*retval false
-jump *label89 equal :testAndSetMultiples:result false
+jump *label89 notEqual :getBit*retval false
 read *tmp35 BITMAP 0
 op or *tmp38 *tmp35 16777216
 write *tmp38 BITMAP 0
@@ -8078,8 +8263,7 @@ op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 7
 label *label89
 read *tmp21 BITMAP 0
 op and :getBit*retval *tmp21 32
-op equal :testAndSetMultiples:result :getBit*retval false
-jump *label104 equal :testAndSetMultiples:result false
+jump *label104 notEqual :getBit*retval false
 read *tmp35 BITMAP 1
 op or *tmp38 *tmp35 4096
 write *tmp38 BITMAP 1
@@ -8138,8 +8322,7 @@ op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 11
 label *label104
 read *tmp21 BITMAP 0
 op and :getBit*retval *tmp21 64
-op equal :testAndSetMultiples:result :getBit*retval false
-jump *label117 equal :testAndSetMultiples:result false
+jump *label117 notEqual :getBit*retval false
 read *tmp35 BITMAP 1
 op or *tmp38 *tmp35 68719476736
 write *tmp38 BITMAP 1
@@ -8183,8 +8366,7 @@ op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 13
 label *label117
 read *tmp21 BITMAP 0
 op and :getBit*retval *tmp21 256
-op equal :testAndSetMultiples:result :getBit*retval false
-jump *label132 equal :testAndSetMultiples:result false
+jump *label132 notEqual :getBit*retval false
 read *tmp35 BITMAP 3
 op or *tmp38 *tmp35 1
 write *tmp38 BITMAP 3
@@ -8210,8 +8392,7 @@ op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 17
 label *label132
 read *tmp21 BITMAP 0
 op and :getBit*retval *tmp21 512
-op equal :testAndSetMultiples:result :getBit*retval false
-jump *label145 equal :testAndSetMultiples:result false
+jump *label145 notEqual :getBit*retval false
 read *tmp35 BITMAP 3
 op or *tmp38 *tmp35 68719476736
 write *tmp38 BITMAP 3
@@ -8228,14 +8409,12 @@ op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 19
 label *label145
 read *tmp21 BITMAP 0
 op and :getBit*retval *tmp21 2048
-op equal :testAndSetMultiples:result :getBit*retval false
-jump *label160 equal :testAndSetMultiples:result false
+jump *label160 notEqual :getBit*retval false
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
 label *label160
 read *tmp21 BITMAP 0
 op and :getBit*retval *tmp21 4096
-op equal :testAndSetMultiples:result :getBit*retval false
-jump *label173 equal :testAndSetMultiples:result false
+jump *label173 notEqual :getBit*retval false
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
 label *label173
 op add :sumPrimesUpTo:i 25 4

@@ -1,6 +1,6 @@
     45 instructions before optimizations.
      6 instructions eliminated by Temp Variables Elimination (6 iterations).
-     2 instructions eliminated by Jump Optimization (5 iterations).
+     2 instructions eliminated by Condition Optimization (5 iterations).
      2 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions eliminated by Expression Optimization (3 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
@@ -34,7 +34,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 inst
     23 jump *label8 always
     24 label *label7
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-2 instructions):
  
     15 set :testAndSwap:sorted :sorted
     16 read :testAndSwap:a ARRAY :testAndSwap:i

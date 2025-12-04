@@ -279,14 +279,20 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                         ix.getX(), ix.getY(), LogicBuiltIn.COUNTER, ix.getTarget())
                         : ix);
             }
-            case MultiLabelInstruction ix -> { }
-            case LabelInstruction ix -> { }
             case OpInstruction ix -> {
                 consumer.accept(ix.getOperation() == STRICT_NOT_EQUAL
                         ? createSelect(astContext, ix.getResult(), Condition.STRICT_EQUAL,
-                            ix.getX(), ix.getY(), LogicBoolean.FALSE, LogicBoolean.TRUE)
+                        ix.getX(), ix.getY(), LogicBoolean.FALSE, LogicBoolean.TRUE)
                         : ix);
             }
+            case SelectInstruction ix -> {
+                consumer.accept(ix.getCondition() == Condition.STRICT_NOT_EQUAL
+                        ? createSelect(astContext, ix.getResult(), Condition.STRICT_EQUAL,
+                        ix.getX(), ix.getY(), ix.getFalseValue(), ix.getTrueValue())
+                        : ix);
+            }
+            case MultiLabelInstruction ix -> { }
+            case LabelInstruction ix -> { }
             case PushInstruction ix -> {
                 consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
                 consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
@@ -324,8 +330,9 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case ReturnInstruction ix -> {
                 consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
             }
+
+            // Note: MULTIJUMP / MULTICALL Instructions are handled by LabelResolver, as the actual label value needs to be known
             default -> {
-                // Note: MULTIJUMP / MULTICALL Instructions are handled by LabelResolver, as the actual label value needs to be known
                 consumer.accept(instruction);
             }
         }

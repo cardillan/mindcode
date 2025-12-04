@@ -98,7 +98,7 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
                 Optimization.STACK_OPTIMIZATION,
                 Optimization.EXPRESSION_OPTIMIZATION,
                 Optimization.JUMP_NORMALIZATION,
-                Optimization.JUMP_OPTIMIZATION,
+                Optimization.CONDITION_OPTIMIZATION,
                 Optimization.JUMP_STRAIGHTENING,
                 Optimization.CASE_EXPRESSION_OPTIMIZATION,
                 Optimization.IF_EXPRESSION_OPTIMIZATION,

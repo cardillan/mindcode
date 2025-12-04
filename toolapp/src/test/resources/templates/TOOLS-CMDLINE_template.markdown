@@ -93,4 +93,4 @@ It is possible to display the command line help by using a `-h` or `--help` argu
 
 ---
 
-[« Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Processor emulator »](TOOLS-PROCESSOR-EMULATOR.markdown)
+[&#xAB; Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Processor emulator &#xBB;](TOOLS-PROCESSOR-EMULATOR.markdown)

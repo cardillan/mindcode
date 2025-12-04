@@ -145,6 +145,7 @@ public class MindustryOpcodeVariants {
         add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("lessThanEq"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
         add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("greaterThan"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
         add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("strictEqual"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+    virtual(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("strictNotEqual"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
         add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("always"), in("valueIfTrue"), in("ValueIfFalse"));
 
         add(list, V7,  MAX, S, FUNC, Opcode.LOOKUP,     lookup("type"), res("result"), in("index"));

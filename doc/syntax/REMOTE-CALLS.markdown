@@ -177,7 +177,7 @@ await(processor2.foo);
 await(processor3.foo);
 ```
 
-When a remote module is instantiated multiple times, [multiplexed arrays](SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization) are used by default. This increases both the size and cost of array access by one instruction needed to set up the remote processor. When the array access is inlined or otherwise optimized, this additional cost may disappear.
+When a remote module is instantiated multiple times, [multiplexed arrays](optimizations/ARRAY-OPTIMIZATION.markdown) are used by default. This increases both the size and cost of array access by one instruction needed to set up the remote processor. When the array access is inlined or otherwise optimized, this additional cost may disappear.
 
 ### Synchronous remote calls
 
@@ -466,4 +466,4 @@ RemoteTest2 = """
 
 ---
 
-[« Previous: Mindustry Logic 8](MINDUSTRY-8.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Schemacode »](SCHEMACODE.markdown)
+[&#xAB; Previous: Mindustry 8](MINDUSTRY-8.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Compiler Options &#xBB;](SYNTAX-5-OTHER.markdown)

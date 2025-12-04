@@ -79,7 +79,7 @@ defaults:
   function-inlining: [ none, basic, advanced ]
   if-expression-optimization: [ none, basic, experimental ]
   jump-normalization: [ none, basic ]
-  jump-optimization: [ none, basic ]
+  condition-optimization: [ none, basic ]
   jump-straightening: [ none, basic ]
   jump-threading: [ none, basic, advanced ]
   loop-hoisting: [ none, basic, advanced ]
@@ -180,4 +180,4 @@ To create a basic unit test, a separate source file containing just the assertio
 
 ---
 
-[« Previous: Mlog Decompiler](TOOLS-MLOG-DECOMPILER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Troubleshooting Mindcode »](TROUBLESHOOTING.markdown)
+[&#xAB; Previous: Mlog Decompiler](TOOLS-MLOG-DECOMPILER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Troubleshooting Mindcode &#xBB;](TROUBLESHOOTING.markdown)

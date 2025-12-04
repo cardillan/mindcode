@@ -3,7 +3,7 @@
      1 instructions eliminated by Case Expression Optimization.
     33 instructions eliminated by Dead Code Elimination (7 iterations).
      3 instructions eliminated by Jump Normalization (5 iterations).
-     5 instructions eliminated by Jump Optimization (5 iterations).
+     5 instructions eliminated by Condition Optimization (5 iterations).
     24 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
    310 instructions eliminated by Data Flow Optimization (6 passes, 29 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
@@ -585,7 +585,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-10 in
    377 op add *tmp101 :drawDigit:x 7
    378 draw line :drawDigit:x :drawDigit:y *tmp101 :drawDigit:y
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-5 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-5 instructions):
  
     81 draw image *tmp3 *tmp6 :item 16 0
     82 op add :index :index 1
@@ -8638,7 +8638,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-8 instru
    786 jump *label527 notEqual :displayItem:amount 1
    787 op add *tmp122 :y 12
 
-Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
+Modifications by Jumps phase, Condition Optimization, pass 4, iteration 1:
  
    225 label *label332
    226 op idiv :displayItem:amount :displayItem:amount 10

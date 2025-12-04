@@ -10,4 +10,4 @@ See [Mindustry Modding Guide](https://simonwoodburyforget.github.io/mindustry-mo
 
 ---
 
-[« Previous: Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mlog Decompiler »](TOOLS-MLOG-DECOMPILER.markdown)
+[&#xAB; Previous: Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mlog Decompiler &#xBB;](TOOLS-MLOG-DECOMPILER.markdown)

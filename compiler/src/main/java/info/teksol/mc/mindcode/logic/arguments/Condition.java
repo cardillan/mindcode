@@ -6,25 +6,27 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public enum Condition implements LogicArgument {
-    EQUAL           ( "equal",         "==",     true),
-    NOT_EQUAL       ( "notEqual",      "not",    true),
-    LESS_THAN       ( "lessThan",      "<",      false),
-    LESS_THAN_EQ    ( "lessThanEq",    "<=",     false),
-    GREATER_THAN    ( "greaterThan",   ">",      false),
-    GREATER_THAN_EQ ( "greaterThanEq", ">=",     false),
-    STRICT_EQUAL    ( "strictEqual",   "===",    true),
-    STRICT_NOT_EQUAL( "strictNotEqual","!==",    true),
-    ALWAYS          ( "always",        "always", false);
+    EQUAL           ( "equal",         "==",     true,  true),
+    NOT_EQUAL       ( "notEqual",      "not",    true,  false),
+    LESS_THAN       ( "lessThan",      "<",      false, false),
+    LESS_THAN_EQ    ( "lessThanEq",    "<=",     false, true),
+    GREATER_THAN    ( "greaterThan",   ">",      false, false),
+    GREATER_THAN_EQ ( "greaterThanEq", ">=",     false, true),
+    STRICT_EQUAL    ( "strictEqual",   "===",    true,  true),
+    STRICT_NOT_EQUAL( "strictNotEqual","!==",    true,  false),
+    ALWAYS          ( "always",        "always", false, true);
 
 
     private final String mlog;
     private final String mindcode;
     private final boolean equality;
+    private final boolean reflexive;
 
-    Condition(String mlog, String mindcode, boolean equality) {
+    Condition(String mlog, String mindcode, boolean equality, boolean reflexive) {
         this.mindcode = mindcode;
         this.mlog = mlog;
         this.equality = equality;
+        this.reflexive = reflexive;
     }
 
     @Override
@@ -46,15 +48,40 @@ public enum Condition implements LogicArgument {
         return mindcode;
     }
 
-    public boolean hasInverse(GlobalCompilerProfile profile) {
-        return ordinal() < (profile.useEmulatedStrictNotEqual() ? ALWAYS.ordinal() : STRICT_EQUAL.ordinal());
-    }
-
     public boolean isEquality() {
         return equality;
     }
 
-    public Condition inverse(GlobalCompilerProfile profile) {
+    public boolean isCommutative() {
+        return isEquality();
+    }
+
+    public boolean isReflexive() {
+        return reflexive;
+    }
+
+    public boolean hasInverse(GlobalCompilerProfile profile) {
+        return ordinal() < (profile.useEmulatedStrictNotEqual() ? ALWAYS.ordinal() : STRICT_EQUAL.ordinal());
+    }
+
+    public boolean isStrict() {
+        return switch (this) {
+            case STRICT_EQUAL, STRICT_NOT_EQUAL -> true;
+            default -> false;
+        };
+    }
+
+    public Condition opposite() {
+        return switch (this) {
+            case LESS_THAN -> GREATER_THAN;
+            case GREATER_THAN_EQ -> LESS_THAN_EQ;
+            case LESS_THAN_EQ -> GREATER_THAN_EQ;
+            case GREATER_THAN -> LESS_THAN;
+            default -> this;
+        };
+    }
+
+    public Condition inverse(boolean allowStrictEqual) {
         return switch (this) {
             case EQUAL -> NOT_EQUAL;
             case NOT_EQUAL -> EQUAL;
@@ -62,15 +89,17 @@ public enum Condition implements LogicArgument {
             case GREATER_THAN_EQ -> LESS_THAN;
             case LESS_THAN_EQ -> GREATER_THAN;
             case GREATER_THAN -> LESS_THAN_EQ;
-            case STRICT_EQUAL -> requireSelect(profile, STRICT_NOT_EQUAL);
+            case STRICT_EQUAL -> {
+                if (!allowStrictEqual) throw new MindcodeInternalError(this + " has no inverse.");
+                yield STRICT_NOT_EQUAL;
+            }
             case STRICT_NOT_EQUAL -> STRICT_EQUAL;
             default -> throw new MindcodeInternalError(this + " has no inverse.");
         };
     }
 
-    private Condition requireSelect(GlobalCompilerProfile profile, Condition condition) {
-        if (profile.useEmulatedStrictNotEqual()) return condition;
-        throw new MindcodeInternalError(this + " has no inverse.");
+    public Condition inverse(GlobalCompilerProfile profile) {
+        return inverse(profile.useEmulatedStrictNotEqual());
     }
 
     public Operation toOperation() {

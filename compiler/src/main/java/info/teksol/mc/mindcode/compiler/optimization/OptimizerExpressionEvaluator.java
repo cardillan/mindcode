@@ -184,6 +184,8 @@ public class OptimizerExpressionEvaluator {
         } else if (instruction.getX().isConstant() && instruction.getY().isConstant()) {
             LogicLiteral literal = evaluate(instruction.sourcePosition(), instruction.getCondition().toOperation(), instruction.getX(), instruction.getY());
             return literal instanceof LogicBoolean b ? b : null;
+        } else if (instruction.getX().equals(instruction.getY())) {
+            return instruction.getCondition().isReflexive() ? LogicBoolean.TRUE : LogicBoolean.FALSE;
         }
         return null;
     }

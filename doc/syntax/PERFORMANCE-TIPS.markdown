@@ -375,7 +375,7 @@ One of Mindcode's strongest optimization tools is loop unrolling. When a loop is
 * Only one loop control variable is used.
 * Only simple updates of the loop control variable are used.
 
-Furthermore, Mindcode is able to unroll more complex loops on [advanced optimization level](SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling-preconditions).
+Furthermore, Mindcode is able to unroll more complex loops on [advanced optimization level](optimizations/LOOP-UNROLLING.markdown#loop-unrolling-preconditions).
 
 ## Determining the number of iterations
 
@@ -795,4 +795,4 @@ label_34:
 
 ---
 
-[« Previous: Troubleshooting Mindcode](TROUBLESHOOTING.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mindustry Tips and Tricks »](MINDUSTRY-TIPS-N-TRICKS.markdown)
+[&#xAB; Previous: Troubleshooting Mindcode](TROUBLESHOOTING.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mindustry Tips and Tricks &#xBB;](MINDUSTRY-TIPS-N-TRICKS.markdown)

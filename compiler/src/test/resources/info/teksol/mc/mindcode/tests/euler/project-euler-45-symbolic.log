@@ -2,7 +2,7 @@
      4 instructions eliminated by Temp Variables Elimination (5 iterations).
      4 instructions eliminated by Dead Code Elimination (5 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
-     2 instructions eliminated by Jump Optimization (4 iterations).
+     2 instructions eliminated by Condition Optimization (4 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
     10 instructions eliminated by Data Flow Optimization (4 iterations).
      3 instructions updated by Jump Threading.
@@ -76,7 +76,7 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 ins
     16 jump *label3 equal *tmp11 false
     17 op add :pn :pn :p
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-2 instructions):
  
     12 op mul *tmp9 4 :h
     13 op add :h *tmp9 1

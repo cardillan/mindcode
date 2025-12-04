@@ -1,10 +1,10 @@
     45 instructions before optimizations.
-     8 instructions eliminated by Temp Variables Elimination (6 iterations).
+     8 instructions eliminated by Temp Variables Elimination (7 iterations).
      2 instructions eliminated by Dead Code Elimination (4 iterations).
-     1 instructions eliminated by Jump Optimization (5 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     3 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-     3 instructions modified by Loop Optimization (3 iterations).
+     1 instructions eliminated by Condition Optimization (2 passes, 6 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
+     3 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+     3 instructions modified by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
     29 instructions after optimizations.
 
@@ -63,7 +63,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-8 inst
     29 op add :i :i 1
     30 jump *label0 always
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
     10 label *label3
     11 jump *label5 greaterThanEq :j SIZE
@@ -191,13 +191,24 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     35 read *tmp16 FINAL :i
     36 read *tmp18 ARRAY :i
 
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+Modifications by Iterated phase, Condition Optimization, pass 3, iteration 1:
+ 
+     3 op sub *tmp1 SIZE 1
+     4 set :i 0
+     5 label *label0
+-    * jump *label2 greaterThanEq 0 *tmp1
++    6 jump *label2 lessThanEq SIZE 1
+     7 label *label11
+     8 read :min ARRAY :i
+     9 set :min_index :i
+
+Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
  
      2 set FINAL bank3
      3 op sub *tmp1 SIZE 1
      4 set :i 0
 -    * label *label0
-     5 jump *label2 greaterThanEq 0 *tmp1
+     5 jump *label2 lessThanEq SIZE 1
      6 label *label11
      7 read :min ARRAY :i
      8 set :min_index :i
@@ -234,7 +245,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     33 jump *label13 lessThan :i SIZE
     34 label *label10
 
-Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
     33 jump *label13 lessThan :i SIZE
     34 label *label10
@@ -248,7 +259,7 @@ set ARRAY bank2
 set FINAL bank3
 op sub *tmp1 SIZE 1
 set :i 0
-jump *label2 greaterThanEq 0 *tmp1
+jump *label2 lessThanEq SIZE 1
 label *label11
 read :min ARRAY :i
 set :min_index :i

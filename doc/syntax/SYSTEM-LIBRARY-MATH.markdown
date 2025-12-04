@@ -298,7 +298,7 @@ Returns the median of five values.
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Ten arguments in total                   |                 673 |                 87 |
+| Ten arguments in total                   |                 623 |                 87 |
 | Fifteen arguments in total               |                 141 |                117 |
 | Twenty arguments in total                |                 181 |                147 |
 
@@ -308,4 +308,4 @@ and is fairly slow as it doesn't modify the input array.
 
 ---
 
-[« Previous: Graphics](SYSTEM-LIBRARY-GRAPHICS.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Printing »](SYSTEM-LIBRARY-PRINTING.markdown)
+[&#xAB; Previous: Graphics](SYSTEM-LIBRARY-GRAPHICS.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Printing &#xBB;](SYSTEM-LIBRARY-PRINTING.markdown)

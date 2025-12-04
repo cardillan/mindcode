@@ -12,11 +12,9 @@ import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.Vari
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
-import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
+import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -145,6 +143,19 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         }
     }
 
+    /**
+     * Returns the operands in a tuple. If one of the operands is a numeric literal, it will be returned
+     * in e1 (the operands may get swapped).
+
+     * @param ix instruction to inspect
+     * @return a tuple containing a constant operand and the other operand.
+     */
+    protected Tuple2<LogicValue, LogicValue> extractConstantOperand(BinaryInstruction ix) {
+        return ix.getX().isNumericLiteral()
+                ? Tuple2.ofSame(ix.getX(), ix.getY())
+                : Tuple2.ofSame(ix.getY(), ix.getX());
+    }
+
     protected boolean hasDependencyCycle(Map<LogicVariable, Set<LogicVariable>> dependencies) {
         propagateAllDependencies(dependencies);
         return dependencies.entrySet().stream().anyMatch(e -> e.getValue().contains(e.getKey()));
@@ -217,6 +228,14 @@ abstract class BaseOptimizer extends AbstractOptimizer {
 
     public void clearVariableStates() {
         optimizationContext.clearVariableStates();
+    }
+
+    public List<LogicInstruction> getVariableReferences(LogicVariable variable) {
+        return optimizationContext.getVariableReferences(variable);
+    }
+
+    public boolean isUsedOutsideOf(LogicVariable variable, AstContext context) {
+        return optimizationContext.isUsedOutsideOf(variable, context);
     }
     //</editor-fold>
 

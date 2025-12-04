@@ -300,7 +300,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         @Test
         void handlesReturnStatementsFromIf() {
             assertCompiles("""
-                    #set jump-optimization = none;
+                    #set condition-optimization = none;
                     #set unreachable-code-elimination = none;
                     param A = 10;
                     print(foo());
@@ -1173,7 +1173,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             """,
                     createInstruction(OP, "rand", tmp(0), "10"),
                     createInstruction(OP, "equal", ":result", tmp(0), "false"),
-                    createInstruction(JUMP, label(0), "equal", ":result", "false"),
+                    createInstruction(JUMP, label(0), "notEqual", tmp(0), "false"),
                     createInstruction(PRINT, q("A")),
                     createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, ":result")
@@ -1625,7 +1625,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             """,
                     createInstruction(OP, "sub", tmp(1), ".SIZE", "1"),
                     createInstruction(SET, ":i", "0"),
-                    createInstruction(JUMP, label(2), "greaterThanEq", "0", tmp(1)),
+                    createInstruction(JUMP, label(2), "lessThanEq", ".SIZE", "1"),
                     createInstruction(LABEL, label(3)),
                     createInstruction(READ, ":min", "cell1", ":i"),
                     createInstruction(OP, "add", ":i", ":i", "1"),

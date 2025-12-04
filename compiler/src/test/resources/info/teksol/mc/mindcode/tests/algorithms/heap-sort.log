@@ -1,7 +1,7 @@
     99 instructions before optimizations.
     21 instructions eliminated by Temp Variables Elimination (6 iterations).
     10 instructions eliminated by Dead Code Elimination (5 iterations).
-     7 instructions eliminated by Jump Optimization (5 iterations).
+     7 instructions eliminated by Condition Optimization (2 passes, 5 iterations).
      5 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      2 instructions modified by Expression Optimization (3 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
@@ -170,7 +170,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-21 ins
     68 jump *label21 always
     69 label *label20
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-7 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-7 instructions):
  
      5 jump *label2 greaterThanEq :i SIZE
      6 set :up:index :i
@@ -422,6 +422,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     79 read *tmp46 FINAL :i
     80 read *tmp48 ARRAY :i
 
+Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
+ 
+    30 label *label2
+    31 op sub :index SIZE 1
+    32 label *label9
+-    * jump *label11 lessThanEq :index 0
++   33 jump *label11 lessThanEq SIZE 1
+    34 label *label31
+    35 read :x ARRAY 0
+    36 read *tmp19 ARRAY :index
+
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
     39 op sub :index :index 1
@@ -462,7 +473,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     25 label *label2
     26 op sub :index SIZE 1
 -    * label *label9
-    27 jump *label11 lessThanEq :index 0
+    27 jump *label11 lessThanEq SIZE 1
     28 label *label31
     29 read :x ARRAY 0
  
@@ -614,7 +625,7 @@ op add :i :i 1
 jump *label29 lessThan :i SIZE
 label *label2
 op sub :index SIZE 1
-jump *label11 lessThanEq :index 0
+jump *label11 lessThanEq SIZE 1
 label *label31
 read :x ARRAY 0
 read *tmp19 ARRAY :index

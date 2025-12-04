@@ -75,4 +75,4 @@ Sorts elements of two arrays in parallel. The `sortBy` array contains the sort k
 
 ---
 
-[Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Blocks »](SYSTEM-LIBRARY-BLOCKS.markdown)
+[Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Blocks &#xBB;](SYSTEM-LIBRARY-BLOCKS.markdown)

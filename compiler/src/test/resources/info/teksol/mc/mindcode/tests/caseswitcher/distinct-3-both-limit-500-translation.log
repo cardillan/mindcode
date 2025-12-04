@@ -2,7 +2,7 @@
      2 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Jump Optimization (3 iterations).
+     1 instructions eliminated by Condition Optimization (3 iterations).
      2 instructions eliminated by Data Flow Optimization (5 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
@@ -238,7 +238,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
    170 op greaterThan *tmp6 *tmp5 1
    171 jump *label57 equal *tmp6 false
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
    167 label *label3
    168 op shl :bit 1 *tmp1

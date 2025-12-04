@@ -3,7 +3,7 @@
      1 instructions eliminated by Case Expression Optimization.
     33 instructions eliminated by Dead Code Elimination (7 iterations).
      3 instructions eliminated by Jump Normalization (5 iterations).
-     5 instructions eliminated by Jump Optimization (5 iterations).
+     5 instructions eliminated by Condition Optimization (5 iterations).
     24 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
    310 instructions eliminated by Data Flow Optimization (6 passes, 29 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
@@ -581,7 +581,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-10 in
    369 op add *tmp101 :drawDigit:x 7
    370 draw line :drawDigit:x :drawDigit:y *tmp101 :drawDigit:y
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-5 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-5 instructions):
  
     77 draw image *tmp3 *tmp6 :item 16 0
     78 op add :index :index 1
@@ -8599,7 +8599,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-8 instru
    944 # "Function: def drawDigit12(in x, in y, in digit)"
    945 jump *label521 notEqual :displayItem:amount 1
 
-Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
+Modifications by Jumps phase, Condition Optimization, pass 4, iteration 1:
  
    248 label *label326
    249 op idiv :displayItem:amount :displayItem:amount 10

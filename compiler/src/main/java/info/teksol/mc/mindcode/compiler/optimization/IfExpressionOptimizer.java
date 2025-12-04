@@ -103,7 +103,7 @@ class IfExpressionOptimizer extends AbstractConditionalOptimizer {
                 && isContained(trueBranch.toList()) && isContained(falseBranch.toList())) {
 
             LogicVariable resVar = resTrue.getResult();
-            List<LogicInstruction> references = optimizationContext.getVariableReferences(resVar);
+            List<LogicInstruction> references = getVariableReferences(resVar);
             LogicInstruction instructionAfter = requireNonNull(instructionAfter(ifExpression));
             boolean canMoveForward = resVar.isTemporaryVariable()
                     ? references.stream().filter(LogicResultInstruction.class::isInstance)

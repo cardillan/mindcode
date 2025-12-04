@@ -2,10 +2,10 @@
     19 instructions eliminated by Temp Variables Elimination (5 iterations).
      2 instructions eliminated by Case Expression Optimization.
     20 instructions eliminated by Dead Code Elimination (5 iterations).
-    12 instructions eliminated by Jump Optimization (4 iterations).
+    12 instructions eliminated by Condition Optimization (4 iterations).
      8 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
-     1 instructions eliminated by Select Optimization (3 iterations).
+     1 instructions eliminated by Boolean Optimization (3 iterations).
      1 instructions eliminated by If Expression Optimization (2 iterations).
      3 instructions modified by Data Flow Optimization (5 iterations).
      4 instructions modified by Loop Optimization (2 iterations).
@@ -359,7 +359,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-5 ins
     72 set *tmp12 512
     73 jump *label17 always
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-12 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-12 instructions):
  
      3 set .SWITCH null
      4 set .MESSAGE .SWITCH
@@ -605,7 +605,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    112 op sub :amount :curr :prev
    113 op sub :time :currTick :prevTick
 
-Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 instructions):
  
     50 label *label1
     51 jump *label40 equal .SOURCE_MEMORY null

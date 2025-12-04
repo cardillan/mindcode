@@ -1,10 +1,10 @@
    296 instructions before optimizations.
     40 instructions eliminated by Temp Variables Elimination (2 passes, 7 iterations).
     32 instructions eliminated by Dead Code Elimination (5 iterations).
-    15 instructions eliminated by Jump Optimization (5 iterations).
+    15 instructions eliminated by Condition Optimization (5 iterations).
     11 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      2 instructions eliminated by Expression Optimization (3 iterations).
-    12 instructions eliminated by Select Optimization (4 iterations).
+    12 instructions eliminated by Boolean Optimization (4 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
@@ -428,7 +428,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-38 ins
    254 label *label13
    255 drawflush display1
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-15 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-15 instructions):
  
      3 op div .EXPECTED_FLOW *tmp0 75
      4 op mul *tmp2 .EXPECTED_FLOW 3600
@@ -723,7 +723,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    228 drawflush display1
    229 op sub *tmp103 @time :start
 
-Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-12 instructions):
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-12 instructions):
  
      1 set EXPECTED_BOOST 1.5
      2 op div .EXPECTED_FLOW EXPECTED_BOOST 4.6875

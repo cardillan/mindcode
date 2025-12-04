@@ -2,9 +2,9 @@
      8 instructions eliminated by Temp Variables Elimination (5 iterations).
      5 instructions eliminated by Case Expression Optimization.
     15 instructions eliminated by Dead Code Elimination (4 iterations).
-     2 instructions eliminated by Jump Optimization (4 iterations).
+     2 instructions eliminated by Condition Optimization (4 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
-     6 instructions eliminated by Select Optimization (4 iterations).
+     6 instructions eliminated by Boolean Optimization (4 iterations).
     32 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
      2 instructions eliminated by Function Inlining (3 iterations).
      2 function calls inlined by Function Inlining.

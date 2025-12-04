@@ -1,4 +1,4 @@
-# Control flow statements
+# Control Flow Statements
 
 Control flow statements are statements that alter the flow of code. They either branch, i.e., execute one of several possible alternatives, or they loop, i.e., repeat part of the code one or more times.
 
@@ -519,7 +519,7 @@ end;
 
 If the `when null` clause is not used, or the `when` clause contains an expression that evaluates to `null` or zero (as opposed to a `null` or zero literal), `null` and zero are not distinguished by the case statement.
 
-While the [Case Switching optimization](SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) can alter case expressions heavily, the original behavior described here is preserved. 
+While the [Case Switching optimization](optimizations/CASE-SWITCHING.markdown) can alter case expressions heavily, the original behavior described here is preserved. 
 
 ### Additional considerations
 
@@ -538,4 +538,4 @@ The `end()` function maps to the `end` instruction, and as such has a special me
 
 ---
 
-[« Previous: Expressions](SYNTAX-2-EXPRESSIONS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Functions »](SYNTAX-4-FUNCTIONS.markdown)
+[&#xAB; Previous: Expressions](SYNTAX-2-EXPRESSIONS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Functions &#xBB;](SYNTAX-4-FUNCTIONS.markdown)

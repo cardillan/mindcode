@@ -7,7 +7,7 @@ column.
 
 In some cases, a single instruction can be generated in more than one way (e.g., the `radar` instruction,
 which can be written as a `turret.radar` function, or as a `radar` function which takes `turret` as a parameter).
-Both ways are identical. Additionally, some functions have output parameters, which are marked by the 'out' modifier.
+Both ways are identical. Additionally, some functions have output parameters, which are marked by the `out` modifier.
 Output parameters are optional, and you may omit them if you don't need the value they return. Mindcode allows
 you to omit all optional arguments, but in this case the entire instruction will be considered useless
 and may be removed by the optimizer.
@@ -679,4 +679,4 @@ Add map locale property value to the text buffer. To set map locale bundles in m
 
 ---
 
-[« Previous: Function reference for target 7.1](FUNCTIONS-71.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Function reference for target 8.1 »](FUNCTIONS-81.markdown)
+[&#xAB; Previous: Function reference for target 7.1](FUNCTIONS-71.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; [Next: Function reference for target 8.1 &#xBB;](FUNCTIONS-81.markdown)

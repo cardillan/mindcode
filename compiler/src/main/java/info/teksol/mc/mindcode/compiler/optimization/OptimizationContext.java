@@ -462,6 +462,21 @@ public class OptimizationContext {
         return value;
     }
 
+    public @Nullable LogicInstruction findDefiningInstruction(LogicInstruction instruction, LogicVariable variable) {
+        if (!staleVariables.contains(variable)) {
+            VariableStates variableStates = getVariableStates(instruction);
+            if (variableStates != null) {
+                DataFlowVariableStates.VariableValue variableValue = variableStates.findVariableValue(variable);
+                return variableValue != null ? variableValue.getInstruction() : null;
+            }
+        }
+        return null;
+    }
+
+    public boolean isStale(LogicVariable variable) {
+        return staleVariables.contains(variable);
+    }
+
     public void clearVariableStates() {
         variableStates.clear();
         loopVariables.clear();
@@ -1090,6 +1105,10 @@ public class OptimizationContext {
     //</editor-fold>
 
     //<editor-fold desc="Program modification">
+    private void addStaleVariable(LogicVariable variable) {
+        staleVariables.add(variable);
+    }
+
     private void instructionAdded(LogicInstruction instruction) {
         if (instruction instanceof LabelInstruction label) {
             addLabelInstruction(label);
@@ -1099,7 +1118,7 @@ public class OptimizationContext {
         instruction.outputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
-                .forEachOrdered(staleVariables::add);
+                .forEachOrdered(this::addStaleVariable);
     }
 
     private void instructionRemoved(LogicInstruction instruction) {
@@ -1112,7 +1131,7 @@ public class OptimizationContext {
         instruction.outputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
-                .forEachOrdered(staleVariables::add);
+                .forEachOrdered(this::addStaleVariable);
     }
 
     /// Inserts a new instruction at the given index. The instruction must be assigned an AST context suitable for its
@@ -1201,6 +1220,10 @@ public class OptimizationContext {
         instructionRemoved(instruction);
         updated = true;
         deletions += instruction.getRealSize(null);
+    }
+
+    public void forceUpdate() {
+        this.updated = true;
     }
 
     /// Inserts a new instruction before given, existing instruction. The new instruction must be assigned

@@ -8,20 +8,20 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static info.teksol.mc.mindcode.compiler.optimization.Optimization.JUMP_OPTIMIZATION;
+import static info.teksol.mc.mindcode.compiler.optimization.Optimization.CONDITION_OPTIMIZATION;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
-class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
+class ConditionOptimizerTest extends AbstractOptimizerTest<ConditionOptimizer> {
 
     @Override
-    protected Class<JumpOptimizer> getTestedClass() {
-        return JumpOptimizer.class;
+    protected Class<ConditionOptimizer> getTestedClass() {
+        return ConditionOptimizer.class;
     }
 
     @Override
     protected List<Optimization> getAllOptimizations() {
-        return List.of(JUMP_OPTIMIZATION);
+        return List.of(CONDITION_OPTIMIZATION);
     }
 
     @Test
@@ -73,18 +73,18 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
     }
 
     @Test
-    void preservesUserVariables() {
+    void processesUserVariables() {
         assertCompilesTo("""
-                        #set dead-code-elimination = advanced;
-                        #set temp-variables-elimination = advanced;
-                        alive = @unit.@dead === 0;
+                        #set data-flow-optimization = experimental;
+                        #set dead-code-elimination = experimental;
+                        #set temp-variables-elimination = experimental;
+                        alive = @unit.@dead == 0;
                         if alive then
                             print("alive");
                         end;
                         """,
                 createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
-                createInstruction(OP, "strictEqual", ":alive", tmp(0), "0"),
-                createInstruction(JUMP, label(0), "equal", ":alive", "false"),
+                createInstruction(JUMP, label(0), "notEqual", tmp(0), "0"),
                 createInstruction(PRINT, q("alive")),
                 createInstruction(JUMP, label(1), "always"),
                 createInstruction(LABEL, label(0)),
@@ -149,16 +149,6 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
     }
 
     @Test
-    void ignoresUserVariables() {
-        assertDoesNotOptimize(
-                createInstruction(OP, Operation.STRICT_EQUAL, c, a, b),
-                createInstruction(JUMP, label0, Condition.NOT_EQUAL, c, LogicBoolean.FALSE),
-                createInstruction(PRINT, message),
-                createInstruction(LABEL, label0)
-        );
-    }
-
-    @Test
     void ignoresDifferentVariables() {
         assertDoesNotOptimize(
                 createInstruction(OP, Operation.STRICT_EQUAL, tmp0, a, b),
@@ -182,8 +172,8 @@ class JumpOptimizerTest extends AbstractOptimizerTest<JumpOptimizer> {
     @Test
     void ignoresWrongOrder() {
         assertDoesNotOptimize(
-                createInstruction(JUMP, label0, Condition.NOT_EQUAL, tmp0, LogicBoolean.FALSE),
-                createInstruction(OP, Operation.STRICT_EQUAL, tmp0, a, b),
+                createInstruction(JUMP, label0, Condition.NOT_EQUAL, c, LogicBoolean.FALSE),
+                createInstruction(OP, Operation.STRICT_EQUAL, c, a, b),
                 createInstruction(PRINT, message),
                 createInstruction(LABEL, label0)
         );

@@ -2,10 +2,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.arguments.Operation;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -14,7 +11,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 @NullMarked
-public class OpInstruction extends BaseResultInstruction {
+public class OpInstruction extends BaseResultInstruction implements ConditionalInstruction {
 
     OpInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.OP, args, params);
@@ -27,6 +24,13 @@ public class OpInstruction extends BaseResultInstruction {
     @Override
     public OpInstruction withContext(AstContext astContext) {
         return this.astContext == astContext ? this : new OpInstruction(this, astContext);
+    }
+
+    @Override
+    public OpInstruction withOperands(Condition condition, LogicValue x, LogicValue y) {
+        assert getArgumentTypes() != null;
+        ensureConditional();
+        return new OpInstruction(astContext,List.of(condition.toOperation(), getResultArgument(), x, y), getArgumentTypes()).copyInfo(this);
     }
 
     @Override
@@ -61,6 +65,20 @@ public class OpInstruction extends BaseResultInstruction {
         }
     }
 
+    public final Condition getCondition() {
+        return switch (getOperation()) {
+            case EQUAL -> Condition.EQUAL;
+            case NOT_EQUAL -> Condition.NOT_EQUAL;
+            case LESS_THAN -> Condition.LESS_THAN;
+            case LESS_THAN_EQ -> Condition.LESS_THAN_EQ;
+            case GREATER_THAN -> Condition.GREATER_THAN;
+            case GREATER_THAN_EQ -> Condition.GREATER_THAN_EQ;
+            case STRICT_EQUAL -> Condition.STRICT_EQUAL;
+            default -> Condition.ALWAYS;
+        };
+    }
+
+
     public final LogicValue getX() {
         return (LogicValue) getArg(2);
     }
@@ -71,5 +89,11 @@ public class OpInstruction extends BaseResultInstruction {
 
     public boolean isDeterministic() {
         return getOperation().isDeterministic();
+    }
+
+    private void ensureConditional() {
+        if (isUnconditional()) {
+            throw new IllegalArgumentException("Conditional op required, got " + this);
+        }
     }
 }

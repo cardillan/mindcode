@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Some `select` optimizations were not applied when optimizing for size. As a result, code optimized for size might end up larger than code optimized for speed.
 * Some `select` optimizations may have been incorrect. Due to the previous bug, the probability of them being applied was low ([#290](https://github.com/cardillan/mindcode/issues/290)).
-* Fixed the wrong optimization of volatile variables in [If Expression Optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) ([#291](https://github.com/cardillan/mindcode/issues/291)).
+* Fixed the wrong optimization of volatile variables in [If Expression Optimization](doc/syntax/optimizations/IF-EXPRESSION-OPTIMIZATION.markdown) ([#291](https://github.com/cardillan/mindcode/issues/291)).
 
 ### Added
 
@@ -20,8 +20,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * **Breaking:** The [`and` and `or` operators](/doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#boolean-and-logical-and-or-operators) now perform [short-circuit evaluation](https://en.wikipedia.org/wiki/Short-circuit_evaluation).
+* The _Jump optimization_ has been renamed to [Condition Optimization](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown), and has been significantly extended:
+  * Conditional expressions are handled in `select` and `or` instructions as well as in `jump`.
+  * The optimization is applied to all variables, not just temporary ones. The results of the DFO analysis are used to track user-defined variables.
+  * On `advanced` level, constant folding of conditional expressions is now also performed.
+* The [Boolean Optimization](doc/syntax/optimizations/BOOLEAN-OPTIMIZATION.markdown), previously included in the If Expression Optimization as a _Select Optimization_, has been extracted into a separate optimization type.
 * The [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY-COMPATIBILITY.markdown) now also performs a test to find out whether assigning `null` to `@counter` is ignored by the processor.
-* The [Select Optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) has been extracted from the If Expression Optimization and is now a separate optimization type.  
+* The documentation has been restructured. Individual optimizers are described in separate files, and the description of Logic functions with links to the Function reference was also moved to a separate file.
 
 ## 3.10.0 - 2025-11-17
 
@@ -31,14 +36,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* A new [fast dispatch optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#fast-dispatch) is available for case expressions. Fast dispatch uses just a single instruction to transfer the control to the desired branch of a case expression, including the `else` branch.
-* A new [value translation optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#value-translation), which reads values encoded into a text string using the `read` instruction, may be applied on case expressions ([#289](https://github.com/cardillan/mindcode/issues/289)).
+* A new [fast dispatch optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown#fast-dispatch) is available for case expressions. Fast dispatch uses just a single instruction to transfer the control to the desired branch of a case expression, including the `else` branch.
+* A new [value translation optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown#value-translation), which reads values encoded into a text string using the `read` instruction, may be applied on case expressions ([#289](https://github.com/cardillan/mindcode/issues/289)).
 * Added the [`use-text-translations` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-text-translations) to allow/disallow using encoding values into a text string for the above optimization.
 
 ### Changed
 
 * **Breaking**: the `text-tables` compiler option has been renamed (yet again - sorry) to [`use-text-jump-tables`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-text-jump-tables).
-* The [Case Switcher optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#null-values) was updated to fully support `null` values in `when` branches (even in integer expressions).
+* The [Case Switcher optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown#null-values) was updated to fully support `null` values in `when` branches (even in integer expressions).
 * The Extended testing tool now accepts values for any compiler directive in the settings file.
 
 ## 3.9.0 - 2025-10-27
@@ -57,10 +62,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for implementing the `!==` operator using a [`select stricEqual` instruction](/doc/syntax/MINDUSTRY-8.markdown#implementing-strict-nonequality-using-select) in target `8`.
 * Added the [`emulate-strict-not-equal` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulate-strict-not-equal) to allow/disallow using `select` instead of `jump strictNotEqual`.
 * Added new internal array implementations using new Mindustry 8 logic capabilities:
-  * [compact `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#compact-tables),
-  * [folded `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#folded-tables),
-  * [lookup arrays](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays).
-* Added support for using [text-based table dispatch](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#text-based-table-dispatch) in array implementations.
+  * [compact `@counter` tables](doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown#compact-tables),
+  * [folded `@counter` tables](doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown#folded-tables),
+  * [lookup arrays](doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown#lookup-arrays).
+* Added support for using [text-based table dispatch](doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown#text-based-table-dispatch) in array implementations.
 * Added the [`use-lookup-arrays`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-lookup-arrays) and [`use-short-arrays`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-short-arrays) options.
 * Added warnings when a name specified by the `mlog` modifier collides with another user-defined variable or array element in the current processor.
 * Added the ability to output the final code size broken down by function and an accompanying [`print-code-size`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-print-code-size) options.
@@ -134,7 +139,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 * Added support for calling remote functions locally.
 * Added support for evaluating the `@name` property of all objects (not just objects with a logic ID) at compile time. The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option.
-* Added support for evaluating the `@name` property to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option.
+* Added support for evaluating the `@name` property to the [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown). The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option.
 * Added new [`filename` attribute](doc/syntax/SCHEMACODE.markdown#attribute-definition) to schematic definition, allowing to specify the name of the output file to use for the generated schematic.
 * **Breaking** added new [`target` attribute](doc/syntax/SCHEMACODE.markdown#attribute-definition) to schematic definition, allowing to specify the target version for the schematic. This might break existing schematics, as previously schematics were compiled using the latest metadata version only.
 * Added support for a content map in schematics, both when reading and when writing them. The content map is included in all schematic files, regardless of target (older Mindustry versions which do not support a content map will ignore them when reading schematics).
@@ -184,8 +189,8 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Changed
 
-* Changed the [Jump Threading optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading) to redirect jumps to a function call directly to the function. The optimization may currently only take place when `symbolic-labels` is set to `false`.
-* Improved the `select` optimization in the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) to handle more cases as well as nested or chained conditional expressions.
+* Changed the [Jump Threading optimization](doc/syntax/optimizations/JUMP-THREADING.markdown) to redirect jumps to a function call directly to the function. The optimization may currently only take place when `symbolic-labels` is set to `false`.
+* Improved the `select` optimization in the [If Expression Optimization](doc/syntax/optimizations/BOOLEAN-OPTIMIZATION.markdown) to handle more cases as well as nested or chained conditional expressions.
 
 ## 3.8.0-beta.2 - 2025-07-21
 
@@ -206,15 +211,14 @@ The newly added features are fully functional. There's an unfinished support for
 * Added a [`null-counter-is-noop` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-null-counter-is-noop). When active, Mindcode assumes assigning a `null` to `@counter` is ignored by the processor and may produce code depending on this behavior.
 * Added support for new instruction opcodes (`setmarker textAlign` and `setmarker lineAlign`).
 * Added specific support for the new `select` instruction. The instruction is not accessible to the user directly but is used by optimizers to encode conditional expressions.
-* Added support for generating [text-based jump tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#text-based-jump-tables).
+* Added support for generating [text-based jump tables](doc/syntax/optimizations/CASE-SWITCHING.markdown#text-based-jump-tables).
 
 ### Changed
 
 * The code generation of list iteration loops with symbolic labels has been updated to avoid issues with assigning `null` to `@counter`.
-* Changed the [Array Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#using-a-select-instruction) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
-* Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
-* Changed the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
-* Changed the [Jump Threading optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading) to replace the return address of a call with the target of the following unconditional jump on the `experimental` level.
+* Changed the [Array Optimization](doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown#using-a-select-instruction) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
+* Changed the [If Expression Optimization](doc/syntax/optimizations/BOOLEAN-OPTIMIZATION.markdown) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
+* Changed the [Jump Threading optimization](doc/syntax/optimizations/JUMP-THREADING.markdown) to replace the return address of a call with the target of the following unconditional jump on the `experimental` level.
 * The compatibility testing (both in the `compatible` system library, and in code generated via the [`target-guard` compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard)) were updated to distinguish targets `8.0` and `8.1`.
 
 ### Miscellaneous
@@ -273,9 +277,9 @@ The newly added features are fully functional. There's an unfinished support for
 ### Changed
 
 * **Breaking:** the `target-optimization` compiler option has been replaced with the [`builtin-evaluation` option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-builtin-evaluation). Instead of `#set target-optimization = specific;` use `#set builtin-evaluation = full;`.
-* Improvements to the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching):
+* Improvements to the [Case Switching optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown):
   * The optimization now processes integer case expression with ranges too if ranges do not overlap other ranges or standalone values.
-  * The optimization now uses bisection search to locate the proper segment when performing [Jump Table Compression](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression).
+  * The optimization now uses bisection search to locate the proper segment when performing [Jump Table Compression](doc/syntax/optimizations/CASE-SWITCHING.markdown#jump-table-compression).
   * The jump table can be padded not just towards zero, but also towards the maximum value, to remove the need for the range check. Requires `builtin-evaluation` to be set to `full`.
   * The `case-optimization-strength` option now has a range from `0` to `6`. Each additional value significantly increases the number of segment arrangements considered, as well as optimization time. The value of `0` doesn't consider any other configuration except a full jump table, effectively turning Jump Table compression off.
   * When `case-optimization-strength` is greater than zero, the optimizer also generates segment configuration for a full bisection search. This may improve case expressions which are too small for a full jump table optimization.
@@ -339,7 +343,7 @@ The newly added features are fully functional. There's an unfinished support for
 * Updated the `log2()` function to use `op logn` when possible.
 * Updated all conditional operators to support string arguments (e.g., `name == "Phillip"` is now a valid expression).
 * The `noinit` keyword has no longer any effect in `linked` variable declarations. Guard code is not generated unless the `guarded` modifier is used to explicitly request it.
-* Changed the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) to generate many different ways to compress a jump table, selecting the most efficient one for the given optimization goal and instruction-space constraints.
+* Changed the [Case Switching optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown) to generate many different ways to compress a jump table, selecting the most efficient one for the given optimization goal and instruction-space constraints.
 * Removed the optimization goal `auto` and added `neutral`. Implemented new optimization selection according to the [optimization goal](/doc/syntax/SYNTAX-5-OTHER.markdown#option-goal). The Case Switching optimization is capable of generation optimizations for the `size` and `neutral` goals.
 
 ### Miscellaneous
@@ -407,10 +411,10 @@ The newly added features are fully functional. There's an unfinished support for
 * Added new functions to the [`graphics` library](doc/syntax/SYSTEM-LIBRARY-GRAPHICS.markdown):
   * Added `setAlpha()` function which takes a packed color as an argument (including e.g., named color literals) and returns a packed color with an updated alpha channel.
   * Added `packHsv()` function which creates a packed color value out of `hue`, `saturation`, `value` and `alpha` components.
-* Expanded the [Case Switching optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching):
-  * Range checking of the input values may be suppressed using [`unsafe-case-optimization`](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#range-check-elimination) compiler directive.
-  * Case expressions based on Mindustry content (e.g., items, block types, and so on) [can be optimized](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#mindustry-content-conversion) by converting the values to logic IDs and building jump tables using these numerical values.
-  * Large jump tables containing a lot of unused values may be [compressed](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression) to save space.
+* Expanded the [Case Switching optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown):
+  * Range checking of the input values may be suppressed using [`unsafe-case-optimization`](doc/syntax/optimizations/CASE-SWITCHING.markdown#range-check-elimination) compiler directive.
+  * Case expressions based on Mindustry content (e.g., items, block types, and so on) [can be optimized](doc/syntax/optimizations/CASE-SWITCHING.markdown#mindustry-content-conversion) by converting the values to logic IDs and building jump tables using these numerical values.
+  * Large jump tables containing a lot of unused values may be [compressed](doc/syntax/optimizations/CASE-SWITCHING.markdown#jump-table-compression) to save space.
 
 #### Experimental features
 
@@ -483,7 +487,7 @@ The newly added features are fully functional. There's an unfinished support for
 * Fixed some command-line options not having an effect in the command-line tool ([#231](https://github.com/cardillan/mindcode/issues/231)).
 * Fixed wrong handling or hoisted set instruction setting up the return address in later loop unrolling ([#234](https://github.com/cardillan/mindcode/issues/234)).
 * Fixed optimizations removing the `spawn` instruction when the output value was not used ([#236](https://github.com/cardillan/mindcode/issues/236)).
-* Fixed Jump Optimization not performing the optimization in unrolled loops.
+* Fixed Condition Optimization not performing the optimization in unrolled loops.
 * Fixed an error in compile-time evaluation of an expression involving a character literal ([#240](https://github.com/cardillan/mindcode/issues/240)).
 * Fixed incorrect compile-time evaluation of some logic IDs ([#242](https://github.com/cardillan/mindcode/issues/242)).
 * Fixed possible incorrect handling of arguments passed to the `print()` and other output functions ([#243](https://github.com/cardillan/mindcode/issues/243)).
@@ -511,7 +515,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 * Added support for passing arguments to inline functions [by reference](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters). It is possible to pass variables and arrays this way.
 * Added new `target-optimization` compiler directive/command line option. The `specific` option generates code for the specific compilation target only, the `compatible` option generates code intended for the compilation target and future versions of Mindustry Logic.
-* Added [array-specific optimizations for speed](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization) (available on `experimental` level).
+* Added [array-specific optimizations for speed](doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) (available on `experimental` level).
 * Added new [`arrays` system library](/doc/syntax/SYSTEM-LIBRARY-ARRAYS.markdown) with some basic array functions. The size calculations for the library functions are possibly incorrect, as new means for determining code size of functions taking an array as a ref argument needs to be developed.
 * Added support for generating symbolic labels instead of instruction addresses in jump instructions, through the [`symbolic-labels` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
 * Added support for applying indenting to the generated mlog code based through the [`mlog-indent` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-mlog-indent).
@@ -695,7 +699,7 @@ The newly added features are fully functional. There's an unfinished support for
 * When enhanced comments are used on a line which contains a beginning of a new statement or expression, the output generated by the enhanced comment precedes the first such statement/expression ([#185](https://github.com/cardillan/mindcode/issues/185)).
 * Better reporting of errors and warnings produced during compilation.
 * Changed the mechanism of mlog variable names generation.
-* Optimization of bitwise and boolean expressions which are incorrect for non-integers are only [performed on `advanced` level](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
+* Optimization of bitwise and boolean expressions which are incorrect for non-integers are only [performed on `advanced` level](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown).
 * Any compile-time constant expression can be used as a value for a [program parameter](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters).
 
 ## 2.7.4 - 2025-01-04
@@ -796,9 +800,9 @@ The newly added features are fully functional. There's an unfinished support for
 * **Breaking:** changed the [system library](doc/syntax/SYSTEM-LIBRARY.markdown) to several separate files that can be included in the compiled code using the `require` keyword. The system libraries are no longer automatically loaded when compiling for `ML8A` target, and most of them can be used with earlier targets as well.
 * Changed rules for function overloading: a vararg function doesn't conflict with a non-vararg function. When a function call matches both a vararg function and a non-vararg function, the non-vararg function will be called.
 * Changed all variables within system libraries to use the `_` prefix, to avoid possible clashes with constants and program parameters declared in the main file.
-* Changed existing examples to utilize functions from the system library where one is available.
+* Changed existing examples to use functions from the system library where one is available.
 * Changed processor emulator to [output all existing variables and their values](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#inspecting-program-state) when encountering the `stop` instruction.
-* Changed the Jump Optimization to handle cases where the jump instruction contains a value produced by a function.
+* Changed the Condition Optimization to handle cases where the jump instruction contains a value produced by a function.
 
 ## 2.5.0 - 2024-11-03
 
@@ -818,7 +822,7 @@ The newly added features are fully functional. There's an unfinished support for
 * Added a new `void` keyword for declaring functions not returning any value.
 * Added a new `begin` and `var` keywords reserved for future use.
 * Added support for omitting optional arguments in the argument list.
-* Added support for the special `@wait` argument of the [`message()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-message-function).
+* Added support for the special `@wait` argument of the [`message()` function](doc/syntax/FUNCTIONS.markdown#the-message-function).
 
 #### Experimental features
 
@@ -830,8 +834,8 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Changed
 
-* Changed the [Loop Unrolling optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling) to replace output iterator variables with the variable assigned to them.
-* Changed the [Single Step Eliminator](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) to remove a jump is if there is an identical jump preceding it and there are no other jumps or labels between them. Active on `experimental`.
+* Changed the [Loop Unrolling optimization](doc/syntax/optimizations/LOOP-UNROLLING.markdown) to replace output iterator variables with the variable assigned to them.
+* Changed the [Single Step Eliminator](doc/syntax/optimizations/SINGLE-STEP-ELIMINATION.markdown) to remove a jump is if there is an identical jump preceding it and there are no other jumps or labels between them. Active on `experimental`.
 * Changed the expression evaluator to evaluate operations over known built-in values. The change enhances the Data Flow and Jump Normalization optimizations.
 * Changed the Schemacode compiler to correctly output positions of error messages generated by both the Schemacode and Mindcode compilers, taking into account both the source file and/or position of the Mindcode program or program snippet within the source file.
 
@@ -873,7 +877,7 @@ The newly added features are fully functional. There's an unfinished support for
 * Added variable name validation: when inserting mlog into Mindustry processor, variables named `configure` are silently renamed to `config`. For this reason, using `configure` as a name for any variable in Mindcode causes an error.
 * Added navigable compiler error messages to the web app. Clicking on a message with a known position in the source code selects the corresponding position in the editor.
 * Added support for outputting the error messages by the command line tool in a format which allows IDEs to parse the position and navigate to the error location in the source code.
-* Added a variety of new optimizations to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
+* Added a variety of new optimizations to the [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown).
   * `op` instruction: many new optimizations when one of the two operands is known.
   * `lookup` instruction: when possible, the instruction is replaced by a `set` instruction setting the item, liquid, building, or unit directly to the target variable, allowing further optimizations to take place. Effective on `aggresive` optimization level.
 * Added warning messages when deprecated features are detected in the source code.
@@ -888,18 +892,18 @@ The newly added features are fully functional. There's an unfinished support for
 
 * Added support for Mindustry Logic from upcoming version 8. The features supported correspond to the current implementation in Mindustry and might therefore still change. All new features are described in [separate documentation](doc/syntax/MINDUSTRY-8.markdown).
 * Added a [system library](doc/syntax/SYSTEM-LIBRARY.markdown), automatically included when the language target is `8A` or later.
-* Added support to the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#instruction-propagation) to propagate values in `if` expressions not just into the `set` instruction, but into any instruction taking an input parameter. Available on  the `experimental` optimization level.
+* Added support to the [If Expression Optimization](doc/syntax/optimizations/IF-EXPRESSION-OPTIMIZATION.markdown#instruction-propagation) to propagate values in `if` expressions not just into the `set` instruction, but into any instruction taking an input parameter. Available on  the `experimental` optimization level.
 
 ### Changed
 
 * **Breaking:** Changed the implementation of the `printf()` function under language target `ML8A`. Instead of compile-time formatting of passed parameters, the function uses `print` and `format` instructions for [run-time formatting](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#run-time-formatting).
 * Changed the definition of the `&&` and `||` operators: they are guaranteed to [always evaluate to either `0` or `1`](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#operators).
 * Changed the `min()` and `max()` functions to accept more than just two arguments.
-* Changed the [Temporary Variables Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#temp-variables-elimination) to replace unused output variables in instructions with `0`, to ensure no unnecessary variable will be created by the instruction, reducing clutter. Closes [#154](https://github.com/cardillan/mindcode/issues/154).
-* Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to support value propagation for all instructions having one output parameter (based on instruction metadata), instead of just a subset of specifically handled instructions.
-* Changed—yet again—the way the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) removes the last instruction, which is a jump to the beginning of the program, so that it doesn't leave behind any jump that might have targeted the removed instruction. Such a jump was harmless, but unnecessary and looked strange in the mlog.
+* Changed the [Temporary Variables Elimination optimization](doc/syntax/optimizations/TEMP-VARIABLES-ELIMINATION.markdown) to replace unused output variables in instructions with `0`, to ensure no unnecessary variable will be created by the instruction, reducing clutter. Closes [#154](https://github.com/cardillan/mindcode/issues/154).
+* Changed the [If Expression Optimization](doc/syntax/optimizations/IF-EXPRESSION-OPTIMIZATION.markdown) to support value propagation for all instructions having one output parameter (based on instruction metadata), instead of just a subset of specifically handled instructions.
+* Changed—yet again—the way the [Single Step Elimination optimization](doc/syntax/optimizations/SINGLE-STEP-ELIMINATION.markdown) removes the last instruction, which is a jump to the beginning of the program, so that it doesn't leave behind any jump that might have targeted the removed instruction. Such a jump was harmless, but unnecessary and looked strange in the mlog.
 * Changed the text buffer handling in the processor emulator to recognize identical outputs produced by consecutive `printflush` operations and avoid creating duplicate outputs.
-* When a compiler-generated variable is evaluated as uninitialized (this situation indicates a bug in some of the optimizers), an internal error is thrown.
+* When a compiler-generated variable is evaluated as uninitialized (this situation generally indicates an optimization bug), an internal error is thrown.
 
 ### Deprecated
 
@@ -924,7 +928,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Changed
 
-* Changed the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) to remove the last instruction if it jumps to the start of the program (not just `end`, but also unconditional jump) on `advanced` optimization level.
+* Changed the [Single Step Elimination optimization](doc/syntax/optimizations/SINGLE-STEP-ELIMINATION.markdown) to remove the last instruction if it jumps to the start of the program (not just `end`, but also unconditional jump) on `advanced` optimization level.
 
 ## 2.2.0 - 2024-09-29
 
@@ -935,14 +939,14 @@ The newly added features are fully functional. There's an unfinished support for
 * Fixed wrong size computation of code generated by the `remark()` function if the [`remarks` option](doc/syntax/SYNTAX-5-OTHER.markdown#option-remarks) was set to `none` or `active`.
 * Fixed Data Flow optimization incorrectly handling equality and inequality comparisons ([#146](https://github.com/cardillan/mindcode/issues/146)).
 * Fixed Data Flow optimization incorrectly processing execution paths through a case expression ([#147](https://github.com/cardillan/mindcode/issues/147)).
-* Fixed [Function Inlining optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) missing some opportunities to inline a function.
+* Fixed [Function Inlining optimization](doc/syntax/optimizations/FUNCTION-INLINING.markdown) missing some opportunities to inline a function.
 * Fixed the `webapp.bat` file not working on Windows due to classpath being too long.
 
 ### Added
 
 * Added a secondary set of icons representing constants with dashes in identifiers replaced by underscores (e.g., `ITEM_COAL` instead of `ITEM-COAL`). Kebab-case identifiers (with dashes) are deprecated in Mindcode and will be desupported in a future release. (In Schemacode, there are currently no plans to remove support for kebab-case identifiers.)
 * Added support for declaring [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) using a new `param` keyword. Using global variables for program parametrization is deprecated, program parameters should be used instead. Support for program parametrization through global variables will be removed in a future release.
-* Added a new `noinline` keyword, which will prevent a function from being inlined even when called just once, and by the [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) optimization. The keyword can only be used when declaring a function.
+* Added a new `noinline` keyword, which will prevent a function from being inlined even when called just once, and by the [Function Inlining](doc/syntax/optimizations/FUNCTION-INLINING.markdown) optimization. The keyword can only be used when declaring a function.
 * Added support for block comments, delimited by `/*` and `*/`. These comments can span multiple lines.
 * Added a new schematic sample with quite a sophisticated code [on the Schematics page](http://mindcode.herokuapp.com/?s=overdrive-dome-supply). It consists of an overdrive dome supplied by units controlled by a microprocessor. The microprocessor searches for available units among a list of supported types, switches to the preferred unit type when it becomes available, and rebinds units (possibly switching the type again) if units in use are destroyed or taken over by the player or a rogue processor.
 
@@ -955,7 +959,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 * Added a new GUI option to choose an optimization level in the web app when compiling Mindcode or building Schemacode.
 * Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](doc/syntax/TOOLS-CMDLINE.markdown#running-the-compiled-code). The output is shown in a separate control in the web app or written to the log when using the command line tool.
 * Added a capability to the command line tool to compile several source files at once using the [`--append` command line argument](doc/syntax/TOOLS-CMDLINE.markdown#additional-input-files).
-* Added new optimization level, `experimental`. On this setting, the [Data Flow optimizer](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) doesn't assume the assignments to global variables might be changed by editing the compiled code, allowing performing more optimizations on them. Program parameters must be used instead of global variables for program parametrization if this optimization level is used.
+* Added new optimization level, `experimental`. When using this setting, the [Data Flow optimizer](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown) doesn't assume the assignments to global variables might be changed by editing the compiled code, allowing performing more optimizations on them. Program parameters must be used instead of global variables for program parametrization if this optimization level is used.
 * Added [formattable string literals](doc/syntax/SYNTAX.markdown#formattable-string-literals), which allow formatting outputs of the `print` and `println` functions the same way as `printf` does.
 * Added [enhanced comments](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#enhanced-comments), an alternative way to enter remarks.
 * Added new [`sort-variables` compiler directive](doc/syntax/SYNTAX-5-OTHER.markdown#option-sort-variables) which ensures that user variables will be accessed in a well-defined order, to make inspecting the variables in the Mindustry processors **Vars** screen easier.
@@ -964,12 +968,12 @@ Experimental features may contain bugs, break existing code or produce suboptima
 ### Changed
 
 * Changed the names of [optimization levels](doc/syntax/SYNTAX-5-OTHER.markdown#option-optimization) from `off` and `aggressive` to `none` and `advanced`. The former names are still supported in the `#set` compiler directive, but not in the command-line options.
-* Changed the [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization to analyze functions modifying variables inside loop instead of a blanket assumption that all global variables may be changed by a function.
+* Changed the [Loop Hoisting](doc/syntax/optimizations/LOOP-HOISTING.markdown) optimization to analyze functions modifying variables inside loop instead of a blanket assumption that all global variables may be changed by a function.
 * Changes to the web app
     * A button was added to the web app to copy the output code to the clipboard with a single click.
     * It is now possible to select the optimization level directly in the web app user interface. The default optimization level is now `basic` for Mindcode compiler and `advanced` for Schemacode builder.
 * Changed the syntax to allow an optional `do` keyword in all `for` and `while` loops, and optional `then` keyword in `if` and `elsif` statements.
-* Changed the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) to remove the `end` instruction at the very end of the program on `advanced` optimization level.
+* Changed the [Single Step Elimination optimization](doc/syntax/optimizations/SINGLE-STEP-ELIMINATION.markdown) to remove the `end` instruction at the very end of the program on `advanced` optimization level.
 * Changed the command line tool to output final instruction numbers when printing out the unresolved code, for easier localization of errors reported when running the compiled code on an emulated processor.
 
 ### Miscellaneous
@@ -982,7 +986,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Fixed
 
-* Fixed a slightly wrong (too low) cost estimation in the [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) optimization.
+* Fixed a slightly wrong (too low) cost estimation in the [Case Switching](doc/syntax/optimizations/CASE-SWITCHING.markdown) optimization.
 
 ### Added
 
@@ -990,7 +994,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Changed
 
-* Slightly improved the [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) optimization -
+* Slightly improved the [Case Switching](doc/syntax/optimizations/CASE-SWITCHING.markdown) optimization -
   instead of expanding the jump table range by one on each side and limiting the input value using the `op min` and
   `op max` instructions, the jump table covers only the existing `when` branches and values outside the supported
   range are handled using conditional jumps. This change saves two instructions and potentially speeds up the
@@ -1047,7 +1051,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
   and [unit command](doc/syntax/SCHEMACODE.markdown#unit-command-configuration) configurations to Schemacode compiler
   and decompiler. This definitely resolves [issue #122](https://github.com/cardillan/mindcode/issues/122).
 * Added support for handling list iteration loops and loop invariant `if` expressions to the
-  [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization.
+  [Loop Hoisting](doc/syntax/optimizations/LOOP-HOISTING.markdown) optimization.
 
 ### Fixed
 
@@ -1059,7 +1063,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 * Schemacode compiler and decompiler now use [mimex](https://github.com/cardillan/mimex)-generated metadata for
   lists of items, liquids, and unit commands. All Mindcode object definitions are now loaded from extracted metadata
   and not from separate definitions, in Mindcode as well as in Schemacode.
-* The documentation of [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization now uses
+* The documentation of [Loop Hoisting](doc/syntax/optimizations/LOOP-HOISTING.markdown) optimization now uses
   diff-style mlog code listings to demonstrate the effects of optimizations on emitted code. The goal is to
   gradually replace all suitable optimization examples to this format.
 
@@ -1067,7 +1071,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Added
 
-* Added [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization. This optimization
+* Added [Loop Hoisting](doc/syntax/optimizations/LOOP-HOISTING.markdown) optimization. This optimization
   moves invariant code out of loops.
 * Added new reserved keywords `elseif` and `elif`. Using these keywords will result in a compilation error (see
   [#121](https://github.com/cardillan/mindcode/issues/121)).
@@ -1096,11 +1100,11 @@ Experimental features may contain bugs, break existing code or produce suboptima
 ### Added
 
 * Added limited support for the new `sync` instruction through the `sync()` function. The function requires a global
-  variable as a parameter (see [the `sync()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-sync-function) for
+  variable as a parameter (see [the `sync()` function](doc/syntax/FUNCTIONS.markdown#the-sync-function) for
   the description of the function and the limitations imposed on it).
 * Added support for the [`effect` instruction](doc/syntax/FUNCTIONS-71.markdown#instruction-effect).
 * Added more capabilities to the
-  [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization):
+  [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown):
   * Replacing `@this.x` and `@this.y` expressions by the `@thisx`/`@thisy` built-in constants.
   * Replacing `@constant.id` expressions by an integer value of the ID assigned to the `@constant`, assuming it is
     a known item, liquid, block type, or unit type. This optimization is only active on `aggresive` optimization level.
@@ -1168,7 +1172,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 ### Fixed
 
 * Fixed a bug in the code duplication routine that sometimes prevented [Unreachable Code
-  Elimination](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination) from removing unreachable portions
+  Elimination](doc/syntax/optimizations/UNREACHABLE-CODE-ELIMINATION.markdown) from removing unreachable portions
   of optimized case statements and inlined functions. The bug sometimes caused runtime exceptions when optimizing
   for speed, usually under tight instruction space restrictions only.
 * Fixed [#108 Compilation errors are not properly reported](https://github.com/cardillan/mindcode/issues/108).
@@ -1182,27 +1186,27 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Added
 
-* Added [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) optimization. This optimization converts
+* Added [Case Switching](doc/syntax/optimizations/CASE-SWITCHING.markdown) optimization. This optimization converts
   suitable case expressions to use jump tables.
-* Added [Return Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#return-optimization) improving some very specific
+* Added [Return Optimization](doc/syntax/optimizations/RETURN-OPTIMIZATION.markdown) improving some very specific
   cases sometimes arising in recursive functions.
 * Added [compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-instruction-limit) to alter the instruction limit
   for speed optimizations.
 
 ### Fixed
 
-* Fixed a wrong cost estimation in [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling). The cost
+* Fixed a wrong cost estimation in [Loop Unrolling](doc/syntax/optimizations/LOOP-UNROLLING.markdown). The cost
   estimates were too high, potentially preventing some eligible loops from being unrolled.
 * Fixed the compiler not recognizing integer values in compiler option directives (`#set`).
 
 ### Changed
 
-* Changed [Jump Threading](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading) to also replace jumps leading to `goto`
+* Changed [Jump Threading](doc/syntax/optimizations/JUMP-THREADING.markdown) to also replace jumps leading to `goto`
   instructions with the `goto` instruction itself on `aggressive` level. There's a possible speedup in some stackless
   function calls and list iteration loops.
-* Changed [Single Step Elimination](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) to also remove two
+* Changed [Single Step Elimination](doc/syntax/optimizations/SINGLE-STEP-ELIMINATION.markdown) to also remove two
   consecutive jumps that are identical. Such sequences were sometimes produced as a result of other optimizations.
-* Changed [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) to use a single
+* Changed [Data Flow Optimization](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown) to use a single
   instruction iterator instance instead of making an instruction list from each AstContext being processed.
   Significantly speeds up processing.
 * Additional optimizers converted to adding no-op instruction instead of removing them; updated other optimizers
@@ -1212,9 +1216,9 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Fixed
 
-* Fixed a bug in [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) that caused runtime
+* Fixed a bug in [Function Inlining](doc/syntax/optimizations/FUNCTION-INLINING.markdown) that caused runtime
   exception in some circumstances.
-* Fixed a bug in [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) that may have
+* Fixed a bug in [Data Flow Optimization](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown) that may have
   removed instructions that were actually used by the program.
 
 ### Changed
@@ -1229,9 +1233,9 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Added
 
-* Added list iteration loop unrolling to [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling)
+* Added list iteration loop unrolling to [Loop Unrolling](doc/syntax/optimizations/LOOP-UNROLLING.markdown)
   optimization.
-* Added [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining). Stackless functions and even
+* Added [Function Inlining](doc/syntax/optimizations/FUNCTION-INLINING.markdown). Stackless functions and even
   individual function calls may be selected for inlining based on expected benefit and available instruction space.
 
 ### Fixed
@@ -1244,8 +1248,8 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Changed
 
-* Changed option name `conditional-jump-optimization` to `jump-optimization` to conform with
-  [documentation](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-optimization).
+* Changed option name `conditional-condition-optimization` to `condition-optimization` to conform with
+  [documentation](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown).
 
 ### Miscellaneous
 
@@ -1262,13 +1266,13 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Changed
 
-* Changed [Unreachable Code Elimination](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination) to perform
+* Changed [Unreachable Code Elimination](doc/syntax/optimizations/UNREACHABLE-CODE-ELIMINATION.markdown) to perform
   actual control flow analysis and remove all unreachable regions of code, instead of relying on active labels to
-  detect reachable instructions. This change eliminates some unreachable code that was not recognized before, such
+  detect reachable instructions. This change eliminates some unreachable code not recognized before, such
   as loops inside unreachable regions of code.
 * Changed Data Flow Optimization to protect assignment to uninitialized variables made before calling an out-of-line
   or recursive function that might call the
-  [`end()` function](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#handling-of-uninitialized-variables). Hopefully all
+  [`end()` function](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown#handling-of-uninitialized-variables). Hopefully all
   possible means of calling the `end()` function are finally covered.
 * Changed the printout of the unresolved instruction (activated by the `-u` command line option) to omit
   inactive labels.
@@ -1281,7 +1285,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
   Various opportunities for optimizations that improve execution speed at the price of code size increase are
   identified and realized in the order of decreasing efficiency until the opportunities or the available instruction
   space are exhausted.
-* Added [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling) optimization.
+* Added [Loop Unrolling](doc/syntax/optimizations/LOOP-UNROLLING.markdown) optimization.
 * Added [compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-passes) to limit the number of performed
   optimization passes.
 
@@ -1293,7 +1297,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Changed
 
-* Changed [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) to optimize [main
+* Changed [Data Flow Optimization](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown) to optimize [main
   variables](doc/syntax/SYNTAX-1-VARIABLES.markdown#variable-scope) even on `basic` level. Only final assignments to
   main variables are preserved on `basic` level, other assignments can be optimized away. This change allows the Loop
   Unrolling optimization to be functional even on `basic` optimization level.
@@ -1325,14 +1329,14 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Changed
 
-* The [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) now properly handles
+* The [Data Flow Optimization](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown) now properly handles
   assignments to uninitialized variables made before calling the
-  [`end()` function](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#handling-of-uninitialized-variables).
+  [`end()` function](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown#handling-of-uninitialized-variables).
 
 ### Removed
 
 * Removed _Return value optimization_ and _Temporary inputs elimination_. These optimizations were completely
-  superseded by the [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization).
+  superseded by the [Data Flow Optimization](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown).
 * Removed the old command-line compiler and the `mindcode` / `mindcode.bat` files in the `bin` directory.
 
 ## 2023-06-19
@@ -1362,12 +1366,12 @@ Experimental features may contain bugs, break existing code or produce suboptima
 ### Added
 
 * Added elimination of useless `set` instructions (such as `set x x`) to
-  [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). Optimizes recursive
-  function calls passing unchanged value of function argument to the next function call.
+  [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown). Optimizes recursive
+  function calls passing unchanged value of a function argument to the next function call.
 * Added elimination of variables never modified by a function from stack in
-  [Stack Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization).
+  [Stack Optimization](doc/syntax/optimizations/STACK-OPTIMIZATION.markdown).
 * Added specific optimization for recursive function calls to the
-  [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization):
+  [Data Flow Optimization](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown):
   * The optimizer is aware when a variable value is preserved on the stack and can reuse the variable state when
     optimizing code following a recursive function call.
   * Streamlining expressions when passing value derived from the current value of the function argument to the
@@ -1396,22 +1400,22 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Added
 
-* Added [Constant folding](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#constant-folding) to Data Flow Optimization.
-* Added [Common subexpression optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#common-subexpressions-optimization)
+* Added [Constant folding](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown#constant-folding) to Data Flow Optimization.
+* Added [Common subexpression optimization](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown#common-subexpressions-optimization)
   to Data Flow Optimization.
 
 ### Removed
 
 * Removed _Function call optimization_. This optimization was completely superseded by the
-  [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization), which handles all
-  cases previously optimized by Function call optimization, and is able to identify more opportunities for
+  [Data Flow Optimization](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown), which handles all
+  cases previously optimized by Function call optimization and is able to identify more opportunities for
   optimization. The old optimization was removed because it became incompatible (i.e., produced wrong results)
   with the code produced by Data Flow Optimization.
 
 ### Deprecated
 
 * Deprecated _Return value optimization_. This optimization was completely superseded by the
-  [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization), which handles more cases
+  [Data Flow Optimization](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown), which handles more cases
   than the old optimization. The Return value optimization will be removed when it becomes incompatible with
   further changes to code generation/optimization.
 * Deprecated _Temporary inputs elimination_, for the same reasons as above.
@@ -1420,8 +1424,8 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Added
 
-* Added [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization). This optimization could
-  remove user defined variables from compiled code—see the documentation for details.
+* Added [Data Flow Optimization](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown). This optimization could
+  remove user-defined variables from compiled code—see the documentation for details.
 
 ### Fixed
 
@@ -1450,18 +1454,18 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Added
 
-* Added [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization). Sometimes
-  it only decreases the number of instructions by rearranging them, in other cases it can decrease number of executed
-  instructions. Only ternary expressions and if statements containing both true and false branch are affected.
+* Added [If Expression Optimization](doc/syntax/optimizations/IF-EXPRESSION-OPTIMIZATION.markdown). Sometimes
+  it only decreases the number of instructions by rearranging them, in other cases it can decrease the number of executed
+  instructions. Only ternary expressions and if statements containing both true and false branches are affected.
 
 ### Fixed
 
 * Fixed the [range iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) not having the upper
   boundary fixed under some conditions. The feature announced in release [2023-05-03](#2023-05-03) wasn't fully
   implemented until now.
-* Fixed bugs in the [stack optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization). In some cases,
+* Fixed bugs in the [stack optimization](doc/syntax/optimizations/STACK-OPTIMIZATION.markdown). In some cases,
   `push`/`pop` instructions were mistakenly removed, in other cases unnecessary `push`/`pop` instructions were left
-  in the code. Current implementation uses AST structure metadata to identify and protect variables used in
+  in the code. The current implementation uses AST structure metadata to identify and protect variables used in
   loops.
 
 ### Miscellaneous
@@ -1486,7 +1490,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 * Added option for [code generation goal](doc/syntax/SYNTAX-5-OTHER.markdown#option-goal). Allows specifying whether
   to aim for a smaller code or a faster code.
-* Added basic [loop optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-optimization).
+* Added basic [loop optimization](doc/syntax/optimizations/LOOP-OPTIMIZATION.markdown).
 
 ## 2023-05-21
 
@@ -1573,8 +1577,8 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 ### Changed
 
 * **Breaking:** changed [range iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) to
-  evaluate the upper boundary only once, before entering the loop for the first time. Previous version evaluated
-  the upper bound at each iteration, and reflected possible changes in the upper bound. The documentation was
+  evaluate the upper boundary only once, before entering the loop for the first time. The previous version evaluated
+  the upper bound at each iteration and reflected possible changes in the upper bound. The documentation was
   expanded to specify the evaluation of the upper bound. Use a while loop or a C-style loop if you want to fully
   evaluate the loop condition at each iteration.
 * Changed handling of non-constant string expressions: when detected, a compilation error occurs (see also
@@ -1590,7 +1594,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Changed
 
-* Enhanced [print merging optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#print-merging) to merge non-string
+* Enhanced [print merging optimization](doc/syntax/optimizations/PRINT-MERGING.markdown) to merge non-string
   literals (e.g., numeric constants) on aggressive optimization level.
 * Changed handling of hexadecimal and boolean literals to include range checks and refuse literals outside the valid
   range (signed 64-bit integer; note that [Mindustry Logic variables](doc/syntax/SYNTAX-1-VARIABLES.markdown) cannot
@@ -1620,7 +1624,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 * Fixed constant expression evaluation crashing on binary numeric literals.
 * Fixed constant expression evaluation producing values not representable in mlog source code.
-* Fixed function call optimization not processing numeric literal arguments in some cases.
+* Fixed the function call optimization not processing numeric literal arguments in some cases.
 
 ## 2023-04-14
 
@@ -1632,7 +1636,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
   [scientific notation in numeric literals](doc/syntax/SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic)
   in a Mindcode source code. Literals compatible with mlog are kept unchanged, literals unrecognized by mlog (e.g., `1.5e-5`)
   are converted to mlog-compatible representation (in this case, `15e-6`).
-* Added [simple expression optimizer](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
+* Added [simple expression optimizer](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown).
   Current implementation replaces `mul` by a constant or an `idiv`/`div` followed by a `floor`
   with a single `idiv` instruction.
 

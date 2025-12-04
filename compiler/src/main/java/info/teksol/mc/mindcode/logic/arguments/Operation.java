@@ -160,18 +160,6 @@ public enum Operation implements LogicArgument {
         };
     }
 
-    @Override
-    public String toMlog() {
-        if (mlog == null) {
-            throw new MindcodeInternalError("No mlog representation for operation " + this);
-        }
-        return mlog;
-    }
-
-    public String getMindcode() {
-        return mindcode;
-    }
-
     public boolean isFunction() {
         return function;
     }
@@ -180,8 +168,11 @@ public enum Operation implements LogicArgument {
         return ordinal() <= STRICT_NOT_EQUAL.ordinal();
     }
 
-    public boolean isCondition(GlobalCompilerProfile profile) {
-        return ordinal() <= STRICT_EQUAL.ordinal() || this == STRICT_NOT_EQUAL && profile.useEmulatedStrictNotEqual();
+    public boolean isStrict() {
+        return switch (this) {
+            case STRICT_EQUAL, STRICT_NOT_EQUAL -> true;
+            default -> false;
+        };
     }
 
     public boolean isDeterministic() {
@@ -203,7 +194,27 @@ public enum Operation implements LogicArgument {
         };
     }
 
-    public @Nullable Condition toCondition(GlobalCompilerProfile profile) {
+    public boolean isCondition(GlobalCompilerProfile profile) {
+        return isCondition(profile.useEmulatedStrictNotEqual());
+    }
+
+    public boolean isCondition(boolean allowStrictNotEqual) {
+        return ordinal() <= STRICT_EQUAL.ordinal() || allowStrictNotEqual && this == STRICT_NOT_EQUAL;
+    }
+
+    @Override
+    public String toMlog() {
+        if (mlog == null) {
+            throw new MindcodeInternalError("No mlog representation for operation " + this);
+        }
+        return mlog;
+    }
+
+    public String getMindcode() {
+        return mindcode;
+    }
+
+    public @Nullable Condition toCondition(boolean allowStrictNotEqual) {
         return switch (this) {
             case EQUAL -> Condition.EQUAL;
             case NOT_EQUAL -> Condition.NOT_EQUAL;
@@ -212,39 +223,22 @@ public enum Operation implements LogicArgument {
             case GREATER_THAN -> Condition.GREATER_THAN;
             case GREATER_THAN_EQ -> Condition.GREATER_THAN_EQ;
             case STRICT_EQUAL -> Condition.STRICT_EQUAL;
-            case STRICT_NOT_EQUAL -> profile.useEmulatedStrictNotEqual() ? Condition.STRICT_NOT_EQUAL : null;
+            case STRICT_NOT_EQUAL -> allowStrictNotEqual ? Condition.STRICT_NOT_EQUAL : null;
             default -> null;
         };
     }
 
     public Condition toExistingCondition(GlobalCompilerProfile profile) {
-        return Objects.requireNonNull(toCondition(profile), "Operation " + this + " is not a condition");
+        return Objects.requireNonNull(toCondition(profile.useEmulatedStrictNotEqual()),
+                "Operation " + this + " is not a condition");
     }
 
-    public boolean hasInverse(GlobalCompilerProfile profile) {
-        return ordinal() < STRICT_EQUAL.ordinal() || (ordinal() <= STRICT_NOT_EQUAL.ordinal() && profile.useEmulatedStrictNotEqual());
+    public Condition toExistingCondition(boolean allowStrictNotEqual) {
+        return Objects.requireNonNull(toCondition(allowStrictNotEqual),
+                "Operation " + this + " is not a condition");
     }
 
-    public Operation inverse(GlobalCompilerProfile profile) {
-        return switch (this) {
-            case EQUAL -> NOT_EQUAL;
-            case NOT_EQUAL -> EQUAL;
-            case LESS_THAN -> GREATER_THAN_EQ;
-            case GREATER_THAN_EQ -> LESS_THAN;
-            case LESS_THAN_EQ -> GREATER_THAN;
-            case GREATER_THAN -> LESS_THAN_EQ;
-            case STRICT_EQUAL -> requireSelect(profile, STRICT_NOT_EQUAL);
-            case STRICT_NOT_EQUAL -> STRICT_EQUAL;
-            default -> throw new MindcodeInternalError(this + " has no inverse.");
-        };
-    }
-
-    private Operation requireSelect(GlobalCompilerProfile profile, Operation operation) {
-        if (profile.getProcessorVersion().atLeast(ProcessorVersion.V8B)) return operation;
-        throw new MindcodeInternalError(this + " has no inverse.");
-    }
-
-    public @Nullable Operation swapped() {
+    public @Nullable Operation opposite() {
         return switch(this) {
             case LESS_THAN -> GREATER_THAN;
             case LESS_THAN_EQ -> GREATER_THAN_EQ;

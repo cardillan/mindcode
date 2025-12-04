@@ -3,9 +3,9 @@
      1 instructions eliminated by Case Expression Optimization.
     17 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
-     8 instructions eliminated by Jump Optimization (4 iterations).
+     8 instructions eliminated by Condition Optimization (4 iterations).
      6 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions eliminated by Select Optimization (3 iterations).
+     1 instructions eliminated by Boolean Optimization (3 iterations).
     20 instructions modified by Data Flow Optimization (7 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
@@ -409,7 +409,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-9 ins
    130 print "\nNo memory or container."
    131 printflush .MESSAGE
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-8 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-8 instructions):
  
     19 set .MEMORY null
     20 set :n @links
@@ -614,7 +614,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    172 sensor :amount .CONTAINER .SENSOR
    173 sensor :max .CONTAINER .MAXIMUM
 
-Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 instructions):
  
    175 op div *tmp39 *tmp38 :max
    176 op add :scaled 10 *tmp39

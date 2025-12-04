@@ -2,10 +2,10 @@
     63 instructions eliminated by Temp Variables Elimination (6 iterations).
     60 instructions eliminated by Dead Code Elimination (11 iterations).
      3 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
-    36 instructions eliminated by Jump Optimization (5 iterations).
+    37 instructions eliminated by Condition Optimization (2 passes, 5 iterations).
     37 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      3 instructions eliminated by Expression Optimization (3 iterations).
-    14 instructions eliminated by Select Optimization (4 iterations).
+    14 instructions eliminated by Boolean Optimization (4 iterations).
      2 instructions eliminated by If Expression Optimization (3 iterations).
     83 instructions eliminated by Data Flow Optimization (9 passes, 29 iterations).
    499 instructions added by Function Inlining (10 iterations).
@@ -14,7 +14,7 @@
     34 instructions updated by Jump Threading.
     11 instructions eliminated by Unreachable Code Elimination (2 iterations).
    131 instructions eliminated by Print Merging.
-   735 instructions after optimizations.
+   734 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 544):
   * Inline function 'kilo' defined at line 117:1                 size    +3, benefit      218.8, efficiency     72.917 (-4 instructions)
@@ -119,12 +119,12 @@ Pass 1: speed optimization selection (cost limit 99):
   ! Inline function call at line 91:14                           size  +147, benefit      137.5, efficiency      0.935
   ! Inline function call at line 93:14                           size  +147, benefit      137.5, efficiency      0.935
 
-Pass 2: speed optimization selection (cost limit 123):
+Pass 2: speed optimization selection (cost limit 124):
   ! Inline function 'start_reactor' defined at line 140:1        size  +143, benefit      275.0, efficiency      1.923
   ! Inline function call at line 91:14                           size  +144, benefit      137.5, efficiency      0.955
   ! Inline function call at line 93:14                           size  +144, benefit      137.5, efficiency      0.955
 
-Pass 3: speed optimization selection (cost limit 123):
+Pass 3: speed optimization selection (cost limit 124):
   ! Inline function 'start_reactor' defined at line 140:1        size  +143, benefit      275.0, efficiency      1.923
   ! Inline function call at line 91:14                           size  +144, benefit      137.5, efficiency      0.955
   ! Inline function call at line 93:14                           size  +144, benefit      137.5, efficiency      0.955
@@ -1102,7 +1102,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-5 ins
    425 set :calc_charge_req*retval 0
    426 jump *label81 always
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-36 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-36 instructions):
  
     26 sensor *tmp1 node1 @powerNetOut
     27 op sub *tmp2 *tmp0 *tmp1
@@ -2052,7 +2052,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
     31 set :t_startup2 *tmp5
     32 set :t_startup3 *tmp5
 
-Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-14 instructions):
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-14 instructions):
  
     21 sensor *tmp1 node1 @powerNetOut
     22 op sub *tmp2 *tmp0 *tmp1
@@ -4334,6 +4334,20 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-2 ins
    636 op mul *tmp128 15 3
    637 jump *label290 greaterThanEq :start_reactor:fuel_stored 45
 
+Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-1 instructions):
+ 
+   888 print "n"
+   889 label *label49
+   890 label *label42
+-    * op lessThan *tmp29 :throttle_blast:fuel_stored :throttle_blast:limit
+   891 jump *label40 always
+   892 label *label40
+-    * select *tmp46 notEqual *tmp29 false @pyratite @scrap
++  893 select *tmp46 lessThan :throttle_blast:fuel_stored :throttle_blast:limit @pyratite @scrap
+   894 control config unloader7 *tmp46
+   895 sensor *tmp48 node1 @powerNetStored
+   896 sensor *tmp49 node1 @powerNetCapacity
+
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-20 instructions):
  
     55 control enabled projector1 false
@@ -4448,126 +4462,126 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    778 set :fuel_3 :start_reactor:supply_fuel
    779 set :t_startup3 .RET_T_STARTUP
  
+   874 print "n"
    875 label *label49
    876 label *label42
-   877 op lessThan *tmp29 :throttle_blast:fuel_stored :throttle_blast:limit
 -    * jump *label40 always
-   878 label *label40
-   879 select *tmp46 notEqual *tmp29 false @pyratite @scrap
-   880 control config unloader7 *tmp46
+   877 label *label40
+   878 select *tmp46 lessThan :throttle_blast:fuel_stored :throttle_blast:limit @pyratite @scrap
+   879 control config unloader7 *tmp46
  
-   898 label *label137
-   899 op idiv *tmp85 .AVG_SURPLUS 100
-   900 op div :kilo*retval *tmp85 10
+   897 label *label137
+   898 op idiv *tmp85 .AVG_SURPLUS 100
+   899 op div :kilo*retval *tmp85 10
 -    * jump *label138 always
-   901 label *label138
-   902 set :surplus :kilo*retval
-   903 sensor :kilo:val node1 @powerNetStored
-   904 label *label139
-   905 op idiv *tmp85 :kilo:val 100
-   906 op div :kilo*retval *tmp85 10
--    * jump *label140 always
-   907 label *label140
-   908 set :charge :kilo*retval
-   909 jump *label59 lessThanEq .START_POWER_REQ 0
-   910 label *label141
-   911 op idiv *tmp85 .START_POWER_REQ 100
-   912 op div :kilo*retval *tmp85 10
--    * jump *label142 always
-   913 label *label142
-   914 print "Req "
-   915 print :kilo*retval
- 
-  1040 op mul *tmp101 :calc_charge_req:time_left :calc_charge_req:time_left
-  1041 op idiv :calc_charge_req:charge_req *tmp101 0.04
-  1042 set :calc_charge_req*retval :calc_charge_req:charge_req
--    * jump *label184 always
-  1043 label *label184
-  1044 op sub *tmp143 :start_reactor:charge :calc_charge_req*retval
-  1045 jump *label104 greaterThanEq *tmp143 .PWR_ABORT
- 
-  1157 sensor *tmp188 :start_reactor:reactor @enabled
-  1158 select .RET_T_STARTUP notEqual :start_reactor:enabled *tmp188 @tick :start_reactor:t_startup
-  1159 set :start_reactor*retval :start_reactor:supply_fuel
--    * jump *label86 always
-  1160 label *label86
-  1161 return :start_reactor*retaddr
-  1162 end
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2 instructions):
- 
-   897 label *label52
-   898 label *label137
-   899 op idiv *tmp85 .AVG_SURPLUS 100
--    * op div :kilo*retval *tmp85 10
-+  900 op div :surplus *tmp85 10
-   901 label *label138
--    * set :surplus :kilo*retval
+   900 label *label138
+   901 set :surplus :kilo*retval
    902 sensor :kilo:val node1 @powerNetStored
    903 label *label139
    904 op idiv *tmp85 :kilo:val 100
+   905 op div :kilo*retval *tmp85 10
+-    * jump *label140 always
+   906 label *label140
+   907 set :charge :kilo*retval
+   908 jump *label59 lessThanEq .START_POWER_REQ 0
+   909 label *label141
+   910 op idiv *tmp85 .START_POWER_REQ 100
+   911 op div :kilo*retval *tmp85 10
+-    * jump *label142 always
+   912 label *label142
+   913 print "Req "
+   914 print :kilo*retval
  
-   969 op sub *tmp104 @tick :start_reactor:t_startup
-   970 op idiv :start_reactor:secs *tmp104 60
-   971 sensor :start_reactor:fuel :start_reactor:reactor @blast-compound
--    * set :start_reactor:supply_fuel true
-+  972 set :start_reactor*retval true
-   973 sensor :start_reactor:fuel_stored .CONTAINER @blast-compound
-   974 sensor :start_reactor:cryo :start_reactor:reactor @cryofluid
-   975 sensor *tmp109 .NODE @powerNetStored
+  1039 op mul *tmp101 :calc_charge_req:time_left :calc_charge_req:time_left
+  1040 op idiv :calc_charge_req:charge_req *tmp101 0.04
+  1041 set :calc_charge_req*retval :calc_charge_req:charge_req
+-    * jump *label184 always
+  1042 label *label184
+  1043 op sub *tmp143 :start_reactor:charge :calc_charge_req*retval
+  1044 jump *label104 greaterThanEq *tmp143 .PWR_ABORT
  
-   990 control enabled :start_reactor:reactor false
-   991 print "emergency mode"
-   992 print "\n"
--    * set :start_reactor:supply_fuel false
-+  993 set :start_reactor*retval false
-   994 jump *label88 always
-   995 label *label87
-   996 jump *label89 equal :start_reactor:enabled false
- 
-  1048 control enabled :start_reactor:reactor false
-  1049 print "START FAIL battery"
-  1050 print "\n"
--    * set :start_reactor:supply_fuel false
-+ 1051 set :start_reactor*retval false
-  1052 jump *label105 always
-  1053 label *label104
-  1054 op sub :start_reactor:time_left 30 :start_reactor:secs
- 
-  1069 control enabled :start_reactor:reactor false
-  1070 print "ABANDON - battery crit"
-  1071 print "\n"
--    * set :start_reactor:supply_fuel false
-+ 1072 set :start_reactor*retval false
-  1073 jump *label109 always
-  1074 label *label108
-  1075 op idiv :start_reactor:mins :start_reactor:secs 6
- 
-  1098 jump *label112 greaterThanEq .REACTORS_DESIRED :start_reactor:reactor_num
-  1099 print "IDLE"
-  1100 print "\n"
--    * set :start_reactor:supply_fuel false
-+ 1101 set :start_reactor*retval false
-  1102 jump *label113 always
-  1103 label *label112
-  1104 op add *tmp167 :start_reactor:flow_units :start_reactor:charge_units
- 
-  1113 print :start_reactor:flow
-  1114 print "W)"
-  1115 print "\n"
--    * set :start_reactor:supply_fuel false
-+ 1116 set :start_reactor*retval false
-  1117 jump *label115 always
-  1118 label *label114
-  1119 jump *label116 equal :start_reactor:fuel_on false
- 
-  1155 label *label88
   1156 sensor *tmp188 :start_reactor:reactor @enabled
   1157 select .RET_T_STARTUP notEqual :start_reactor:enabled *tmp188 @tick :start_reactor:t_startup
+  1158 set :start_reactor*retval :start_reactor:supply_fuel
+-    * jump *label86 always
+  1159 label *label86
+  1160 return :start_reactor*retaddr
+  1161 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2 instructions):
+ 
+   896 label *label52
+   897 label *label137
+   898 op idiv *tmp85 .AVG_SURPLUS 100
+-    * op div :kilo*retval *tmp85 10
++  899 op div :surplus *tmp85 10
+   900 label *label138
+-    * set :surplus :kilo*retval
+   901 sensor :kilo:val node1 @powerNetStored
+   902 label *label139
+   903 op idiv *tmp85 :kilo:val 100
+ 
+   968 op sub *tmp104 @tick :start_reactor:t_startup
+   969 op idiv :start_reactor:secs *tmp104 60
+   970 sensor :start_reactor:fuel :start_reactor:reactor @blast-compound
+-    * set :start_reactor:supply_fuel true
++  971 set :start_reactor*retval true
+   972 sensor :start_reactor:fuel_stored .CONTAINER @blast-compound
+   973 sensor :start_reactor:cryo :start_reactor:reactor @cryofluid
+   974 sensor *tmp109 .NODE @powerNetStored
+ 
+   989 control enabled :start_reactor:reactor false
+   990 print "emergency mode"
+   991 print "\n"
+-    * set :start_reactor:supply_fuel false
++  992 set :start_reactor*retval false
+   993 jump *label88 always
+   994 label *label87
+   995 jump *label89 equal :start_reactor:enabled false
+ 
+  1047 control enabled :start_reactor:reactor false
+  1048 print "START FAIL battery"
+  1049 print "\n"
+-    * set :start_reactor:supply_fuel false
++ 1050 set :start_reactor*retval false
+  1051 jump *label105 always
+  1052 label *label104
+  1053 op sub :start_reactor:time_left 30 :start_reactor:secs
+ 
+  1068 control enabled :start_reactor:reactor false
+  1069 print "ABANDON - battery crit"
+  1070 print "\n"
+-    * set :start_reactor:supply_fuel false
++ 1071 set :start_reactor*retval false
+  1072 jump *label109 always
+  1073 label *label108
+  1074 op idiv :start_reactor:mins :start_reactor:secs 6
+ 
+  1097 jump *label112 greaterThanEq .REACTORS_DESIRED :start_reactor:reactor_num
+  1098 print "IDLE"
+  1099 print "\n"
+-    * set :start_reactor:supply_fuel false
++ 1100 set :start_reactor*retval false
+  1101 jump *label113 always
+  1102 label *label112
+  1103 op add *tmp167 :start_reactor:flow_units :start_reactor:charge_units
+ 
+  1112 print :start_reactor:flow
+  1113 print "W)"
+  1114 print "\n"
+-    * set :start_reactor:supply_fuel false
++ 1115 set :start_reactor*retval false
+  1116 jump *label115 always
+  1117 label *label114
+  1118 jump *label116 equal :start_reactor:fuel_on false
+ 
+  1154 label *label88
+  1155 sensor *tmp188 :start_reactor:reactor @enabled
+  1156 select .RET_T_STARTUP notEqual :start_reactor:enabled *tmp188 @tick :start_reactor:t_startup
 -    * set :start_reactor*retval :start_reactor:supply_fuel
-  1158 label *label86
-  1159 return :start_reactor*retaddr
-  1160 end
+  1157 label *label86
+  1158 return :start_reactor*retaddr
+  1159 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
  
@@ -4966,153 +4980,153 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    760 label *label44
    761 jump *label41 equal :emerg_shutdown false
  
+   800 print "n"
    801 label *label49
    802 label *label42
-   803 op lessThan *tmp29 :throttle_blast:fuel_stored :throttle_blast:limit
 -    * label *label40
-   804 select *tmp46 notEqual *tmp29 false @pyratite @scrap
-   805 control config unloader7 *tmp46
-   806 sensor *tmp48 node1 @powerNetStored
-   807 sensor *tmp49 node1 @powerNetCapacity
-   808 op div :diff_generators:stored_pc *tmp48 *tmp49
-   809 jump *label53 lessThanEq :diff_generators:stored_pc 0.9
+   803 select *tmp46 lessThan :throttle_blast:fuel_stored :throttle_blast:limit @pyratite @scrap
+   804 control config unloader7 *tmp46
+   805 sensor *tmp48 node1 @powerNetStored
+   806 sensor *tmp49 node1 @powerNetCapacity
+   807 op div :diff_generators:stored_pc *tmp48 *tmp49
+   808 jump *label53 lessThanEq :diff_generators:stored_pc 0.9
 -    * label *label56
-   810 jump *label53 greaterThanEq .START_POWER_REQ 10
+   809 jump *label53 greaterThanEq .START_POWER_REQ 10
 -    * label *label55
-   811 print "Differential now idle."
-   812 print "\n"
-   813 control enabled generator1 false
+   810 print "Differential now idle."
+   811 print "\n"
+   812 control enabled generator1 false
  
-   817 control enabled generator1 true
-   818 control enabled generator2 true
-   819 label *label54
+   816 control enabled generator1 true
+   817 control enabled generator2 true
+   818 label *label54
 -    * label *label52
 -    * label *label137
-   820 op idiv *tmp85 .AVG_SURPLUS 100
-   821 op div :surplus *tmp85 10
+   819 op idiv *tmp85 .AVG_SURPLUS 100
+   820 op div :surplus *tmp85 10
 -    * label *label138
-   822 sensor :kilo:val node1 @powerNetStored
+   821 sensor :kilo:val node1 @powerNetStored
 -    * label *label139
-   823 op idiv *tmp85 :kilo:val 100
-   824 op div :kilo*retval *tmp85 10
+   822 op idiv *tmp85 :kilo:val 100
+   823 op div :kilo*retval *tmp85 10
 -    * label *label140
-   825 set :charge :kilo*retval
-   826 jump *label59 lessThanEq .START_POWER_REQ 0
+   824 set :charge :kilo*retval
+   825 jump *label59 lessThanEq .START_POWER_REQ 0
 -    * label *label141
-   827 op idiv *tmp85 .START_POWER_REQ 100
-   828 op div :kilo*retval *tmp85 10
+   826 op idiv *tmp85 .START_POWER_REQ 100
+   827 op div :kilo*retval *tmp85 10
 -    * label *label142
-   829 print "Req "
-   830 print :kilo*retval
-   831 print "kJ / "
+   828 print "Req "
+   829 print :kilo*retval
+   830 print "kJ / "
  
-   846 sensor *tmp66 node1 @powerNetCapacity
-   847 op div :update_reactors_desired:stored *tmp65 *tmp66
-   848 jump *label63 lessThanEq :update_reactors_desired:stored 0.98
+   845 sensor *tmp66 node1 @powerNetCapacity
+   846 op div :update_reactors_desired:stored *tmp65 *tmp66
+   847 jump *label63 lessThanEq :update_reactors_desired:stored 0.98
 -    * label *label66
-   849 jump *label63 lessThanEq .AVG_SURPLUS 16500
+   848 jump *label63 lessThanEq .AVG_SURPLUS 16500
 -    * label *label65
-   850 jump *label67 lessThanEq .REACTORS_DESIRED 2
-   851 op sub .REACTORS_DESIRED .REACTORS_DESIRED 1
-   852 op sub .AVG_SURPLUS .AVG_SURPLUS 6500
-   853 label *label67
+   849 jump *label67 lessThanEq .REACTORS_DESIRED 2
+   850 op sub .REACTORS_DESIRED .REACTORS_DESIRED 1
+   851 op sub .AVG_SURPLUS .AVG_SURPLUS 6500
+   852 label *label67
 -    * label *label68
-   854 label *label63
+   853 label *label63
 -    * label *label64
-   855 jump *label69 greaterThanEq :update_reactors_desired:stored 0.8
+   854 jump *label69 greaterThanEq :update_reactors_desired:stored 0.8
 -    * label *label72
-   856 jump *label69 greaterThanEq .AVG_SURPLUS 8000
+   855 jump *label69 greaterThanEq .AVG_SURPLUS 8000
 -    * label *label71
-   857 op sub *tmp78 .AVG_SURPLUS 10000
-   858 op idiv *tmp79 *tmp78 6500
-   859 op max :update_reactors_desired:needed 1 *tmp79
-   860 op add *tmp81 :update_reactors_desired:needed .REACTORS_DESIRED
-   861 op min .REACTORS_DESIRED 5 *tmp81
-   862 label *label69
+   856 op sub *tmp78 .AVG_SURPLUS 10000
+   857 op idiv *tmp79 *tmp78 6500
+   858 op max :update_reactors_desired:needed 1 *tmp79
+   859 op add *tmp81 :update_reactors_desired:needed .REACTORS_DESIRED
+   860 op min .REACTORS_DESIRED 5 *tmp81
+   861 label *label69
 -    * label *label70
 -    * label *label62
-   863 label *label60
-   864 jump *label73 equal .REACTORS_DESIRED 5
-   865 print "Require only "
+   862 label *label60
+   863 jump *label73 equal .REACTORS_DESIRED 5
+   864 print "Require only "
  
-   867 print "/5 reactors."
-   868 print "\n"
-   869 label *label73
+   866 print "/5 reactors."
+   867 print "\n"
+   868 label *label73
 -    * label *label74
-   870 printflush message1
+   869 printflush message1
 -    * label *label8
-   871 jump *label7 always
+   870 jump *label7 always
 -    * label *label9
-   872 end
-   873 label *label3
-   874 op sub *tmp104 @tick :start_reactor:t_startup
+   871 end
+   872 label *label3
+   873 op sub *tmp104 @tick :start_reactor:t_startup
  
-   906 jump *label92 always
-   907 label *label91
-   908 jump *label93 lessThanEq :start_reactor:reactor_num 1
+   905 jump *label92 always
+   906 label *label91
+   907 jump *label93 lessThanEq :start_reactor:reactor_num 1
 -    * label *label96
-   909 op mul *tmp128 .FUEL_TOT_ABORT :start_reactor:reactor_num
-   910 jump *label93 greaterThanEq :start_reactor:fuel_stored *tmp128
+   908 op mul *tmp128 .FUEL_TOT_ABORT :start_reactor:reactor_num
+   909 jump *label93 greaterThanEq :start_reactor:fuel_stored *tmp128
 -    * label *label95
-   911 control enabled :start_reactor:reactor false
-   912 print "STOP system fuel low"
-   913 print "\n"
+   910 control enabled :start_reactor:reactor false
+   911 print "STOP system fuel low"
+   912 print "\n"
  
-   926 jump *label100 always
-   927 label *label99
-   928 jump *label101 greaterThanEq :start_reactor:secs 30
+   925 jump *label100 always
+   926 label *label99
+   927 jump *label101 greaterThanEq :start_reactor:secs 30
 -    * label *label179
-   929 op sub *tmp94 @tick :start_reactor:t_startup
-   930 op idiv :calc_charge_req:secs *tmp94 60
-   931 jump *label181 greaterThan :calc_charge_req:secs 30
+   928 op sub *tmp94 @tick :start_reactor:t_startup
+   929 op idiv :calc_charge_req:secs *tmp94 60
+   930 jump *label181 greaterThan :calc_charge_req:secs 30
 -    * label *label180
-   932 sensor *tmp97 :start_reactor:reactor @enabled
-   933 jump *label182 notEqual *tmp97 false
-   934 label *label181
-   935 set :calc_charge_req*retval 0
-   936 jump *label184 always
-   937 label *label182
+   931 sensor *tmp97 :start_reactor:reactor @enabled
+   932 jump *label182 notEqual *tmp97 false
+   933 label *label181
+   934 set :calc_charge_req*retval 0
+   935 jump *label184 always
+   936 label *label182
 -    * label *label183
-   938 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
-   939 op mul *tmp101 :calc_charge_req:time_left :calc_charge_req:time_left
-   940 op idiv :calc_charge_req:charge_req *tmp101 0.04
+   937 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
+   938 op mul *tmp101 :calc_charge_req:time_left :calc_charge_req:time_left
+   939 op idiv :calc_charge_req:charge_req *tmp101 0.04
  
-   942 label *label184
-   943 op sub *tmp143 :start_reactor:charge :calc_charge_req*retval
-   944 jump *label104 greaterThanEq *tmp143 .PWR_ABORT
+   941 label *label184
+   942 op sub *tmp143 :start_reactor:charge :calc_charge_req*retval
+   943 jump *label104 greaterThanEq *tmp143 .PWR_ABORT
 -    * label *label107
-   945 jump *label104 greaterThanEq :start_reactor:surplus .FLOW_ABORT
+   944 jump *label104 greaterThanEq :start_reactor:surplus .FLOW_ABORT
 -    * label *label106
-   946 control enabled :start_reactor:reactor false
-   947 print "START FAIL battery"
-   948 print "\n"
+   945 control enabled :start_reactor:reactor false
+   946 print "START FAIL battery"
+   947 print "\n"
  
-   961 jump *label102 always
-   962 label *label101
-   963 jump *label108 greaterThanEq :start_reactor:charge .PWR_ABANDON
+   960 jump *label102 always
+   961 label *label101
+   962 jump *label108 greaterThanEq :start_reactor:charge .PWR_ABANDON
 -    * label *label111
-   964 jump *label108 greaterThanEq :start_reactor:surplus .FLOW_ABORT
+   963 jump *label108 greaterThanEq :start_reactor:surplus .FLOW_ABORT
 -    * label *label110
-   965 control enabled :start_reactor:reactor false
-   966 print "ABANDON - battery crit"
-   967 print "\n"
+   964 control enabled :start_reactor:reactor false
+   965 print "ABANDON - battery crit"
+   966 print "\n"
  
-  1013 jump *label115 always
-  1014 label *label114
-  1015 jump *label116 equal :start_reactor:fuel_on false
+  1012 jump *label115 always
+  1013 label *label114
+  1014 jump *label116 equal :start_reactor:fuel_on false
 -    * label *label119
-  1016 jump *label116 greaterThanEq :start_reactor:fuel .FUEL_REQ
+  1015 jump *label116 greaterThanEq :start_reactor:fuel .FUEL_REQ
 -    * label *label118
-  1017 op add *tmp178 :start_reactor:fuel :start_reactor:fuel_stored
-  1018 jump *label120 lessThanEq *tmp178 .FUEL_REQ
-  1019 print "WAIT fuel"
+  1016 op add *tmp178 :start_reactor:fuel :start_reactor:fuel_stored
+  1017 jump *label120 lessThanEq *tmp178 .FUEL_REQ
+  1018 print "WAIT fuel"
  
-  1049 label *label88
-  1050 sensor *tmp188 :start_reactor:reactor @enabled
-  1051 select .RET_T_STARTUP notEqual :start_reactor:enabled *tmp188 @tick :start_reactor:t_startup
+  1048 label *label88
+  1049 sensor *tmp188 :start_reactor:reactor @enabled
+  1050 select .RET_T_STARTUP notEqual :start_reactor:enabled *tmp188 @tick :start_reactor:t_startup
 -    * label *label86
-  1052 return :start_reactor*retaddr
-  1053 end
+  1051 return :start_reactor*retaddr
+  1052 end
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  
@@ -5332,73 +5346,73 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
    776 print " Critical power."
    777 print "\n"
  
-   903 control enabled :start_reactor:reactor false
-   904 print "STOP unwanted"
-   905 print "\n"
+   902 control enabled :start_reactor:reactor false
+   903 print "STOP unwanted"
+   904 print "\n"
 -    * jump *label92 always
-+  906 jump *label90 always
-   907 label *label91
-   908 jump *label93 lessThanEq :start_reactor:reactor_num 1
-   909 op mul *tmp128 .FUEL_TOT_ABORT :start_reactor:reactor_num
++  905 jump *label90 always
+   906 label *label91
+   907 jump *label93 lessThanEq :start_reactor:reactor_num 1
+   908 op mul *tmp128 .FUEL_TOT_ABORT :start_reactor:reactor_num
  
-   911 control enabled :start_reactor:reactor false
-   912 print "STOP system fuel low"
-   913 print "\n"
+   910 control enabled :start_reactor:reactor false
+   911 print "STOP system fuel low"
+   912 print "\n"
 -    * jump *label94 always
-+  914 jump *label90 always
-   915 label *label93
-   916 jump *label97 greaterThan :start_reactor:fuel 1
-   917 control enabled :start_reactor:reactor false
-   918 print "STOP fuel low"
-   919 print "\n"
++  913 jump *label90 always
+   914 label *label93
+   915 jump *label97 greaterThan :start_reactor:fuel 1
+   916 control enabled :start_reactor:reactor false
+   917 print "STOP fuel low"
+   918 print "\n"
 -    * jump *label98 always
-+  920 jump *label90 always
-   921 label *label97
-   922 jump *label99 greaterThan :start_reactor:cryo .CRYO_ABORT
-   923 control enabled :start_reactor:reactor false
-   924 print "STOP out of cryo"
-   925 print "\n"
++  919 jump *label90 always
+   920 label *label97
+   921 jump *label99 greaterThan :start_reactor:cryo .CRYO_ABORT
+   922 control enabled :start_reactor:reactor false
+   923 print "STOP out of cryo"
+   924 print "\n"
 -    * jump *label100 always
-+  926 jump *label90 always
-   927 label *label99
-   928 jump *label101 greaterThanEq :start_reactor:secs 30
-   929 op sub *tmp94 @tick :start_reactor:t_startup
++  925 jump *label90 always
+   926 label *label99
+   927 jump *label101 greaterThanEq :start_reactor:secs 30
+   928 op sub *tmp94 @tick :start_reactor:t_startup
  
-   947 print "START FAIL battery"
-   948 print "\n"
-   949 set :start_reactor*retval false
+   946 print "START FAIL battery"
+   947 print "\n"
+   948 set :start_reactor*retval false
 -    * jump *label105 always
-+  950 jump *label90 always
-   951 label *label104
-   952 op sub :start_reactor:time_left 30 :start_reactor:secs
-   953 print "Starting "
++  949 jump *label90 always
+   950 label *label104
+   951 op sub :start_reactor:time_left 30 :start_reactor:secs
+   952 print "Starting "
  
-   958 print "J"
-   959 print "\n"
-   960 label *label105
+   957 print "J"
+   958 print "\n"
+   959 label *label105
 -    * jump *label102 always
-+  961 jump *label90 always
-   962 label *label101
-   963 jump *label108 greaterThanEq :start_reactor:charge .PWR_ABANDON
-   964 jump *label108 greaterThanEq :start_reactor:surplus .FLOW_ABORT
++  960 jump *label90 always
+   961 label *label101
+   962 jump *label108 greaterThanEq :start_reactor:charge .PWR_ABANDON
+   963 jump *label108 greaterThanEq :start_reactor:surplus .FLOW_ABORT
  
-   966 print "ABANDON - battery crit"
-   967 print "\n"
-   968 set :start_reactor*retval false
+   965 print "ABANDON - battery crit"
+   966 print "\n"
+   967 set :start_reactor*retval false
 -    * jump *label109 always
-+  969 jump *label90 always
-   970 label *label108
-   971 op idiv :start_reactor:mins :start_reactor:secs 6
-   972 op div :start_reactor:mins :start_reactor:mins 10
++  968 jump *label90 always
+   969 label *label108
+   970 op idiv :start_reactor:mins :start_reactor:secs 6
+   971 op div :start_reactor:mins :start_reactor:mins 10
  
-  1018 jump *label120 lessThanEq *tmp178 .FUEL_REQ
-  1019 print "WAIT fuel"
-  1020 print "\n"
+  1017 jump *label120 lessThanEq *tmp178 .FUEL_REQ
+  1018 print "WAIT fuel"
+  1019 print "\n"
 -    * jump *label121 always
-+ 1021 jump *label117 always
-  1022 label *label120
-  1023 print "WAIT system fuel"
-  1024 print "\n"
++ 1020 jump *label117 always
+  1021 label *label120
+  1022 print "WAIT system fuel"
+  1023 print "\n"
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-11 instructions):
  
@@ -5528,46 +5542,46 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    745 label *label41
    746 jump *label48 notEqual *tmp28 false
  
-   834 label *label73
-   835 printflush message1
-   836 jump *label7 always
+   833 label *label73
+   834 printflush message1
+   835 jump *label7 always
 -    * end
-   837 label *label3
-   838 op sub *tmp104 @tick :start_reactor:t_startup
-   839 op idiv :start_reactor:secs *tmp104 60
+   836 label *label3
+   837 op sub *tmp104 @tick :start_reactor:t_startup
+   838 op idiv :start_reactor:secs *tmp104 60
  
-   921 print :calc_charge_req*retval
-   922 print "J"
-   923 print "\n"
+   920 print :calc_charge_req*retval
+   921 print "J"
+   922 print "\n"
 -    * label *label105
-   924 jump *label90 always
-   925 label *label101
-   926 jump *label108 greaterThanEq :start_reactor:charge .PWR_ABANDON
+   923 jump *label90 always
+   924 label *label101
+   925 jump *label108 greaterThanEq :start_reactor:charge .PWR_ABANDON
  
-   938 print " "
-   939 print "mins"
-   940 print "\n"
+   937 print " "
+   938 print "mins"
+   939 print "\n"
 -    * label *label109
 -    * label *label102
 -    * label *label100
 -    * label *label98
 -    * label *label94
 -    * label *label92
-   941 jump *label90 always
-   942 label *label89
-   943 op sub *tmp157 :start_reactor:charge .START_POWER_REQ
+   940 jump *label90 always
+   941 label *label89
+   942 op sub *tmp157 :start_reactor:charge .START_POWER_REQ
  
-   979 label *label120
-   980 print "WAIT system fuel"
-   981 print "\n"
+   978 label *label120
+   979 print "WAIT system fuel"
+   980 print "\n"
 -    * label *label121
-   982 jump *label117 always
-   983 label *label116
-   984 op mul *tmp181 .FUEL_TOT_REQ :start_reactor:reactor_num
+   981 jump *label117 always
+   982 label *label116
+   983 op mul *tmp181 .FUEL_TOT_REQ :start_reactor:reactor_num
  
-  1006 sensor *tmp188 :start_reactor:reactor @enabled
-  1007 select .RET_T_STARTUP notEqual :start_reactor:enabled *tmp188 @tick :start_reactor:t_startup
-  1008 return :start_reactor*retaddr
+  1005 sensor *tmp188 :start_reactor:reactor @enabled
+  1006 select .RET_T_STARTUP notEqual :start_reactor:enabled *tmp188 @tick :start_reactor:t_startup
+  1007 return :start_reactor*retaddr
 -    * end
 
 Modifications by Jumps phase, Dead Code Elimination, pass 4, iteration 1:
@@ -6094,21 +6108,21 @@ Modifications by Final phase, Print Merging, iteration 1 (-131 instructions):
 +  667 format :throttle_blast:fuel_stored
    668 label *label49
    669 label *label42
-   670 op lessThan *tmp29 :throttle_blast:fuel_stored :throttle_blast:limit
+   670 select *tmp46 lessThan :throttle_blast:fuel_stored :throttle_blast:limit @pyratite @scrap
  
-   675 op div :diff_generators:stored_pc *tmp48 *tmp49
-   676 jump *label53 lessThanEq :diff_generators:stored_pc 0.9
-   677 jump *label53 greaterThanEq .START_POWER_REQ 10
+   674 op div :diff_generators:stored_pc *tmp48 *tmp49
+   675 jump *label53 lessThanEq :diff_generators:stored_pc 0.9
+   676 jump *label53 greaterThanEq .START_POWER_REQ 10
 -    * print "Differential now idle."
 -    * print "\n"
-+  678 print "Differential now idle.\n"
-   679 control enabled generator1 false
-   680 control enabled generator2 false
-   681 jump *label54 always
++  677 print "Differential now idle.\n"
+   678 control enabled generator1 false
+   679 control enabled generator2 false
+   680 jump *label54 always
  
-   692 jump *label59 lessThanEq .START_POWER_REQ 0
-   693 op idiv *tmp85 .START_POWER_REQ 100
-   694 op div :kilo*retval *tmp85 10
+   691 jump *label59 lessThanEq .START_POWER_REQ 0
+   692 op idiv *tmp85 .START_POWER_REQ 100
+   693 op div :kilo*retval *tmp85 10
 -    * print "Req "
 -    * print :kilo*retval
 -    * print "kJ / "
@@ -6117,98 +6131,98 @@ Modifications by Final phase, Print Merging, iteration 1 (-131 instructions):
 -    * print :surplus
 -    * print "kW flow."
 -    * print "\n"
-+  695 print "Req {0}kJ / {0}kJ. {0}kW flow.\n"
-+  696 format :kilo*retval
-+  697 format :charge
-+  698 format :surplus
-   699 jump *label60 always
-   700 label *label59
++  694 print "Req {0}kJ / {0}kJ. {0}kW flow.\n"
++  695 format :kilo*retval
++  696 format :charge
++  697 format :surplus
+   698 jump *label60 always
+   699 label *label59
 -    * print "Power "
 -    * print :surplus
 -    * print "kW, "
 -    * print :kilo*retval
 -    * print "kJ"
 -    * print "\n"
-+  701 print "Power {0}kW, {0}kJ\n"
-+  702 format :surplus
-+  703 format :kilo*retval
-   704 sensor *tmp65 node1 @powerNetStored
-   705 sensor *tmp66 node1 @powerNetCapacity
-   706 op div :update_reactors_desired:stored *tmp65 *tmp66
++  700 print "Power {0}kW, {0}kJ\n"
++  701 format :surplus
++  702 format :kilo*retval
+   703 sensor *tmp65 node1 @powerNetStored
+   704 sensor *tmp66 node1 @powerNetCapacity
+   705 op div :update_reactors_desired:stored *tmp65 *tmp66
  
-   721 label *label69
-   722 label *label60
-   723 jump *label73 equal .REACTORS_DESIRED 5
+   720 label *label69
+   721 label *label60
+   722 jump *label73 equal .REACTORS_DESIRED 5
 -    * print "Require only "
 -    * print .REACTORS_DESIRED
 -    * print "/5 reactors."
 -    * print "\n"
-+  724 print "Require only {0}/5 reactors.\n"
-+  725 format .REACTORS_DESIRED
-   726 label *label73
-   727 printflush message1
-   728 jump *label7 always
++  723 print "Require only {0}/5 reactors.\n"
++  724 format .REACTORS_DESIRED
+   725 label *label73
+   726 printflush message1
+   727 jump *label7 always
  
-   743 op mul *tmp116 :start_reactor:surplus 0.2
-   744 op add .AVG_SURPLUS *tmp115 *tmp116
-   745 sensor :start_reactor:enabled :start_reactor:reactor @enabled
+   742 op mul *tmp116 :start_reactor:surplus 0.2
+   743 op add .AVG_SURPLUS *tmp115 *tmp116
+   744 sensor :start_reactor:enabled :start_reactor:reactor @enabled
 -    * print "#"
 -    * print :start_reactor:reactor_num
 -    * print " "
 -    * print "- "
-+  746 print "#{0} - "
-+  747 format :start_reactor:reactor_num
-   748 jump *label87 equal :start_reactor:emerg_shutdown false
-   749 control enabled :start_reactor:reactor false
++  745 print "#{0} - "
++  746 format :start_reactor:reactor_num
+   747 jump *label87 equal :start_reactor:emerg_shutdown false
+   748 control enabled :start_reactor:reactor false
 -    * print "emergency mode"
 -    * print "\n"
-+  750 print "emergency mode\n"
-   751 set :start_reactor*retval false
-   752 jump *label88 always
-   753 label *label87
-   754 jump *label89 equal :start_reactor:enabled false
-   755 jump *label91 greaterThanEq .REACTORS_DESIRED :start_reactor:reactor_num
-   756 control enabled :start_reactor:reactor false
++  749 print "emergency mode\n"
+   750 set :start_reactor*retval false
+   751 jump *label88 always
+   752 label *label87
+   753 jump *label89 equal :start_reactor:enabled false
+   754 jump *label91 greaterThanEq .REACTORS_DESIRED :start_reactor:reactor_num
+   755 control enabled :start_reactor:reactor false
 -    * print "STOP unwanted"
 -    * print "\n"
-+  757 print "STOP unwanted\n"
-   758 jump *label90 always
-   759 label *label91
-   760 jump *label93 lessThanEq :start_reactor:reactor_num 1
-   761 op mul *tmp128 .FUEL_TOT_ABORT :start_reactor:reactor_num
-   762 jump *label93 greaterThanEq :start_reactor:fuel_stored *tmp128
-   763 control enabled :start_reactor:reactor false
++  756 print "STOP unwanted\n"
+   757 jump *label90 always
+   758 label *label91
+   759 jump *label93 lessThanEq :start_reactor:reactor_num 1
+   760 op mul *tmp128 .FUEL_TOT_ABORT :start_reactor:reactor_num
+   761 jump *label93 greaterThanEq :start_reactor:fuel_stored *tmp128
+   762 control enabled :start_reactor:reactor false
 -    * print "STOP system fuel low"
 -    * print "\n"
-+  764 print "STOP system fuel low\n"
-   765 jump *label90 always
-   766 label *label93
-   767 jump *label97 greaterThan :start_reactor:fuel 1
-   768 control enabled :start_reactor:reactor false
++  763 print "STOP system fuel low\n"
+   764 jump *label90 always
+   765 label *label93
+   766 jump *label97 greaterThan :start_reactor:fuel 1
+   767 control enabled :start_reactor:reactor false
 -    * print "STOP fuel low"
 -    * print "\n"
-+  769 print "STOP fuel low\n"
-   770 jump *label90 always
-   771 label *label97
-   772 jump *label99 greaterThan :start_reactor:cryo .CRYO_ABORT
-   773 control enabled :start_reactor:reactor false
++  768 print "STOP fuel low\n"
+   769 jump *label90 always
+   770 label *label97
+   771 jump *label99 greaterThan :start_reactor:cryo .CRYO_ABORT
+   772 control enabled :start_reactor:reactor false
 -    * print "STOP out of cryo"
 -    * print "\n"
-+  774 print "STOP out of cryo\n"
-   775 jump *label90 always
-   776 label *label99
-   777 jump *label101 greaterThanEq :start_reactor:secs 30
++  773 print "STOP out of cryo\n"
+   774 jump *label90 always
+   775 label *label99
+   776 jump *label101 greaterThanEq :start_reactor:secs 30
  
-   793 jump *label104 greaterThanEq *tmp143 .PWR_ABORT
-   794 jump *label104 greaterThanEq :start_reactor:surplus .FLOW_ABORT
-   795 control enabled :start_reactor:reactor false
+   792 jump *label104 greaterThanEq *tmp143 .PWR_ABORT
+   793 jump *label104 greaterThanEq :start_reactor:surplus .FLOW_ABORT
+   794 control enabled :start_reactor:reactor false
 -    * print "START FAIL battery"
 -    * print "\n"
-+  796 print "START FAIL battery\n"
-   797 set :start_reactor*retval false
-   798 jump *label90 always
-   799 label *label104
-   800 op sub :start_reactor:time_left 30 :start_reactor:secs
++  795 print "START FAIL battery\n"
+   796 set :start_reactor*retval false
+   797 jump *label90 always
+   798 label *label104
+   799 op sub :start_reactor:time_left 30 :start_reactor:secs
 -    * print "Starting "
 -    * print :start_reactor:time_left
 -    * print " "
@@ -6216,91 +6230,91 @@ Modifications by Final phase, Print Merging, iteration 1 (-131 instructions):
 -    * print :calc_charge_req*retval
 -    * print "J"
 -    * print "\n"
-+  801 print "Starting {0} secs, req {0}J\n"
-+  802 format :start_reactor:time_left
-+  803 format :calc_charge_req*retval
-   804 jump *label90 always
-   805 label *label101
-   806 jump *label108 greaterThanEq :start_reactor:charge .PWR_ABANDON
-   807 jump *label108 greaterThanEq :start_reactor:surplus .FLOW_ABORT
-   808 control enabled :start_reactor:reactor false
++  800 print "Starting {0} secs, req {0}J\n"
++  801 format :start_reactor:time_left
++  802 format :calc_charge_req*retval
+   803 jump *label90 always
+   804 label *label101
+   805 jump *label108 greaterThanEq :start_reactor:charge .PWR_ABANDON
+   806 jump *label108 greaterThanEq :start_reactor:surplus .FLOW_ABORT
+   807 control enabled :start_reactor:reactor false
 -    * print "ABANDON - battery crit"
 -    * print "\n"
-+  809 print "ABANDON - battery crit\n"
-   810 set :start_reactor*retval false
-   811 jump *label90 always
-   812 label *label108
-   813 op idiv :start_reactor:mins :start_reactor:secs 6
-   814 op div :start_reactor:mins :start_reactor:mins 10
++  808 print "ABANDON - battery crit\n"
+   809 set :start_reactor*retval false
+   810 jump *label90 always
+   811 label *label108
+   812 op idiv :start_reactor:mins :start_reactor:secs 6
+   813 op div :start_reactor:mins :start_reactor:mins 10
 -    * print "RUN "
 -    * print :start_reactor:mins
 -    * print " "
 -    * print "mins"
 -    * print "\n"
-+  815 print "RUN {0} mins\n"
-+  816 format :start_reactor:mins
-   817 jump *label90 always
-   818 label *label89
-   819 op sub *tmp157 :start_reactor:charge .START_POWER_REQ
++  814 print "RUN {0} mins\n"
++  815 format :start_reactor:mins
+   816 jump *label90 always
+   817 label *label89
+   818 op sub *tmp157 :start_reactor:charge .START_POWER_REQ
  
-   825 op mul *tmp163 .CRYO_REQ_EA :start_reactor:reactor_num
-   826 op add :start_reactor:cryo_req .CRYO_REQ *tmp163
-   827 jump *label112 greaterThanEq .REACTORS_DESIRED :start_reactor:reactor_num
+   824 op mul *tmp163 .CRYO_REQ_EA :start_reactor:reactor_num
+   825 op add :start_reactor:cryo_req .CRYO_REQ *tmp163
+   826 jump *label112 greaterThanEq .REACTORS_DESIRED :start_reactor:reactor_num
 -    * print "IDLE"
 -    * print "\n"
-+  828 print "IDLE\n"
-   829 set :start_reactor*retval false
-   830 jump *label113 always
-   831 label *label112
++  827 print "IDLE\n"
+   828 set :start_reactor*retval false
+   829 jump *label113 always
+   830 label *label112
  
-   835 op div :start_reactor:flow *tmp171 10
-   836 op idiv *tmp174 :start_reactor:charge_units 0.001
-   837 op div :start_reactor:charge *tmp174 10
+   834 op div :start_reactor:flow *tmp171 10
+   835 op idiv *tmp174 :start_reactor:charge_units 0.001
+   836 op div :start_reactor:charge *tmp174 10
 -    * print "WAIT power. (%"
 -    * print :start_reactor:charge
 -    * print "J + %"
 -    * print :start_reactor:flow
 -    * print "W)"
 -    * print "\n"
-+  838 print "WAIT power. (%{0}J + %{0}W)\n"
-+  839 format :start_reactor:charge
-+  840 format :start_reactor:flow
-   841 set :start_reactor*retval false
-   842 jump *label115 always
-   843 label *label114
++  837 print "WAIT power. (%{0}J + %{0}W)\n"
++  838 format :start_reactor:charge
++  839 format :start_reactor:flow
+   840 set :start_reactor*retval false
+   841 jump *label115 always
+   842 label *label114
  
-   845 jump *label116 greaterThanEq :start_reactor:fuel .FUEL_REQ
-   846 op add *tmp178 :start_reactor:fuel :start_reactor:fuel_stored
-   847 jump *label120 lessThanEq *tmp178 .FUEL_REQ
+   844 jump *label116 greaterThanEq :start_reactor:fuel .FUEL_REQ
+   845 op add *tmp178 :start_reactor:fuel :start_reactor:fuel_stored
+   846 jump *label120 lessThanEq *tmp178 .FUEL_REQ
 -    * print "WAIT fuel"
 -    * print "\n"
-+  848 print "WAIT fuel\n"
-   849 jump *label117 always
-   850 label *label120
++  847 print "WAIT fuel\n"
+   848 jump *label117 always
+   849 label *label120
 -    * print "WAIT system fuel"
 -    * print "\n"
-+  851 print "WAIT system fuel\n"
-   852 jump *label117 always
-   853 label *label116
-   854 op mul *tmp181 .FUEL_TOT_REQ :start_reactor:reactor_num
-   855 jump *label122 greaterThanEq :start_reactor:fuel_stored *tmp181
++  850 print "WAIT system fuel\n"
+   851 jump *label117 always
+   852 label *label116
+   853 op mul *tmp181 .FUEL_TOT_REQ :start_reactor:reactor_num
+   854 jump *label122 greaterThanEq :start_reactor:fuel_stored *tmp181
 -    * print "WAIT buffer fuel"
 -    * print "\n"
-+  856 print "WAIT buffer fuel\n"
-   857 jump *label123 always
-   858 label *label122
-   859 jump *label124 greaterThanEq :start_reactor:cryo :start_reactor:cryo_req
++  855 print "WAIT buffer fuel\n"
+   856 jump *label123 always
+   857 label *label122
+   858 jump *label124 greaterThanEq :start_reactor:cryo :start_reactor:cryo_req
 -    * print "WAIT cryo"
 -    * print "\n"
-+  860 print "WAIT cryo\n"
-   861 jump *label125 always
-   862 label *label124
++  859 print "WAIT cryo\n"
+   860 jump *label125 always
+   861 label *label124
 -    * print "STARTUP"
 -    * print "\n"
-+  863 print "STARTUP\n"
-   864 op add .START_POWER_REQ .START_POWER_REQ .PWR_REQ
-   865 control enabled :start_reactor:reactor true
-   866 label *label125
++  862 print "STARTUP\n"
+   863 op add .START_POWER_REQ .START_POWER_REQ .PWR_REQ
+   864 control enabled :start_reactor:reactor true
+   865 label *label125
 
 Final code before resolving virtual instructions:
 
@@ -6974,8 +6988,7 @@ print "Fuel {0} / 800\n"
 format :throttle_blast:fuel_stored
 label *label49
 label *label42
-op lessThan *tmp29 :throttle_blast:fuel_stored :throttle_blast:limit
-select *tmp46 notEqual *tmp29 false @pyratite @scrap
+select *tmp46 lessThan :throttle_blast:fuel_stored :throttle_blast:limit @pyratite @scrap
 control config unloader7 *tmp46
 sensor *tmp48 node1 @powerNetStored
 sensor *tmp49 node1 @powerNetCapacity

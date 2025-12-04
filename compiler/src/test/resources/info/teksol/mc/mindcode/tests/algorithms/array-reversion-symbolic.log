@@ -2,7 +2,7 @@
      2 instructions eliminated by Temp Variables Elimination (7 iterations).
      2 instructions eliminated by Dead Code Elimination (4 iterations).
      5 instructions eliminated by Jump Normalization (6 iterations).
-     1 instructions eliminated by Jump Optimization (6 iterations).
+     1 instructions eliminated by Condition Optimization (6 iterations).
     17 instructions eliminated by Single Step Elimination (4 passes, 19 iterations).
     20 instructions eliminated by Expression Optimization (4 iterations).
     75 instructions eliminated by Data Flow Optimization (4 passes, 33 iterations).
@@ -53,7 +53,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
     11 set :reverse:j .array*9
     12 op add *tmp3 @counter 1
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
     75 set *tmp3 null
     76 label *label4

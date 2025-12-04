@@ -1,7 +1,7 @@
     54 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination (5 iterations).
      6 instructions eliminated by Dead Code Elimination (4 iterations).
-     5 instructions eliminated by Jump Optimization (4 iterations).
+     5 instructions eliminated by Condition Optimization (4 iterations).
      4 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
    105 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
      4 instructions modified by Loop Optimization (2 iterations).
@@ -69,7 +69,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
     37 jump *label15 equal *tmp9 false
     38 set *tmp0 :getRepeatLength:i
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-5 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-5 instructions):
  
      6 set :getRepeatLength:n :getRepeatLength:d
      7 label *label4

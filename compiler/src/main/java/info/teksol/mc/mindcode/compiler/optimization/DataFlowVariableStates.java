@@ -64,7 +64,7 @@ class DataFlowVariableStates {
         /// Maps variables to their last encountered read instruction position.
         private final Map<LogicVariable, Integer> reads;
 
-        /// Identifies instructions that do not have to be kept, because they set value the variable already had.
+        /// Identifies instructions that do not have to be kept, because they set the value the variable already had.
         /// Organized by variable for easier housekeeping.
         private final Map<LogicVariable, LogicInstruction> useless;
 
@@ -74,9 +74,9 @@ class DataFlowVariableStates {
         /// Set of initialized variables.
         private final Set<LogicVariable> initialized;
 
-        /// Set of variables stored on stack. Storing a variable on stack preserves its value during subsequent
-        /// modification (i.e. when setting parameter value for the recursive call) - the exact same value will be
-        /// restored from stack later on.
+        /// Set of variables stored on the stack. Storing a variable on stack preserves its value during subsequent
+        /// modification (i.e., when setting parameter value for the recursive call) - the exact same value will be
+        /// restored from the stack later on.
         private final Set<LogicVariable> stored;
 
         /// Indicates the program flow of this instance is terminated: an unconditional jump outside local context
@@ -834,7 +834,7 @@ class DataFlowVariableStates {
             // For commutative operations, swapped arguments are equal
             // For inequality operators, swapped operation and arguments are also equal
             if (first.getOperation() == second.getOperation() && first.getOperation().isCommutative()
-                    || first.getOperation().swapped() == second.getOperation()) {
+                    || first.getOperation().opposite() == second.getOperation()) {
                 return Objects.equals(x1, y2) && Objects.equals(y1, x2);
             }
 

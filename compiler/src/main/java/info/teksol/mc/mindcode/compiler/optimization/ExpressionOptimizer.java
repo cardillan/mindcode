@@ -5,6 +5,7 @@ import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -35,16 +36,16 @@ class ExpressionOptimizer extends BaseOptimizer {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
                 switch (it.next()) {
-                    case LookupInstruction ix     -> processLookupInstruction(it, ix);
-                    case OpInstruction ix         -> processOpInstruction(it, ix);
-                    case PackColorInstruction ix  -> processPackColorInstruction(it, ix);
-                    case SelectInstruction ix     -> processSelectInstruction(it, ix);
-                    case SensorInstruction ix     -> processSensorInstruction(it, ix);
-                    case SetInstruction ix        -> processSetInstruction(it, ix);
-                    case ReadInstruction ix       -> processReadInstruction(it, ix);
-                    case WriteInstruction ix      -> processWriteInstruction(it, ix);
-                    case ReadArrInstruction ix    -> processReadArrInstruction(it, ix);
-                    case WriteArrInstruction ix   -> processWriteArrInstruction(it, ix);
+                    case LookupInstruction ix       -> processLookupInstruction(it, ix);
+                    case OpInstruction ix           -> processOpInstruction(it, ix);
+                    case PackColorInstruction ix    -> processPackColorInstruction(it, ix);
+                    case SelectInstruction ix       -> processSelectInstruction(it, ix);
+                    case SensorInstruction ix       -> processSensorInstruction(it, ix);
+                    case SetInstruction ix          -> processSetInstruction(it, ix);
+                    case ReadInstruction ix         -> processReadInstruction(it, ix);
+                    case WriteInstruction ix        -> processWriteInstruction(it, ix);
+                    case ReadArrInstruction ix      -> processReadArrInstruction(it, ix);
+                    case WriteArrInstruction ix     -> processWriteArrInstruction(it, ix);
                     default -> {}
                 }
             }
@@ -145,11 +146,12 @@ class ExpressionOptimizer extends BaseOptimizer {
                             return;
                         } else if (advanced(ix) && ix.getOperation() == Operation.LOGICAL_AND) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
+                            return;
                         }
                     }
                 }
             } else {
-                DataFlowVariableStates.VariableStates variableStates = optimizationContext.getVariableStates(ix);
+                VariableStates variableStates = optimizationContext.getVariableStates(ix);
                 LogicValue x = optimizationContext.resolveValue(variableStates, ix.getX());
                 LogicValue y = optimizationContext.resolveValue(variableStates, ix.getY());
                 if (x.equals(y)) {
@@ -179,7 +181,9 @@ class ExpressionOptimizer extends BaseOptimizer {
         final Tuple2<LogicValue, LogicValue> ops = extractIdivOperands(ix);
         if (ops != null) {
             LogicVariable result = ix.getResult();
-            List<LogicInstruction> list = instructions(in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
+            List<LogicInstruction> list = getVariableReferences(result).stream()
+                    .filter(in -> in.getArgs().contains(result))
+                    .filter(in -> !(in instanceof PushOrPopInstruction)).toList();
 
             // Preconditions:
             // - exactly two instructions
@@ -195,19 +199,6 @@ class ExpressionOptimizer extends BaseOptimizer {
                 logicIterator.next();
             }
         }
-    }
-
-    /**
-     * Returns the operands in a tuple. If one of the operands is a numeric literal, it will be returned
-     * in e1 (the operands may get swapped).
-
-     * @param ix instruction to inspect
-     * @return a tuple containing a constant operand and the other operand.
-     */
-    private Tuple2<LogicValue, LogicValue> extractConstantOperand(OpInstruction ix) {
-        return ix.getX().isNumericLiteral()
-                ? Tuple2.ofSame(ix.getX(), ix.getY())
-                : Tuple2.ofSame(ix.getY(), ix.getX());
     }
 
     private @Nullable Tuple2<LogicValue, LogicValue> extractIdivOperands(OpInstruction ix) {
@@ -251,9 +242,16 @@ class ExpressionOptimizer extends BaseOptimizer {
     private void processSelectInstruction(LogicIterator logicIterator, SelectInstruction ix) {
         LogicBoolean condition = expressionEvaluator.evaluateConditionalInstruction(ix);
         switch(condition) {
-            case null -> {}
             case TRUE -> logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), ix.getTrueValue()));
             case FALSE -> logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), ix.getFalseValue()));
+            case null -> {
+                VariableStates variableStates = optimizationContext.getVariableStates(ix);
+                LogicValue t = optimizationContext.resolveValue(variableStates, ix.getTrueValue());
+                LogicValue f = optimizationContext.resolveValue(variableStates, ix.getFalseValue());
+                if (t.equals(f)) {
+                    logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), ix.getTrueValue()));
+                }
+            }
         }
     }
 

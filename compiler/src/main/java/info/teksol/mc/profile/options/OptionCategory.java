@@ -30,7 +30,7 @@ public enum OptionCategory {
 
     OPTIMIZATION_LEVELS("Optimization levels", """
             Options specifying the global and individual optimization levels. Individual optimizers use global level
-            when not explicitly set. Available optimization levels are {none,basic,advanced, experimental}.
+            when not explicitly set. Available optimization levels are {none, basic, advanced, experimental}.
             """),
 
     DEBUGGING("Debugging options", """

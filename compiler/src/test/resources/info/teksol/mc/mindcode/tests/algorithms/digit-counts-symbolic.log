@@ -1,7 +1,7 @@
     90 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination (7 iterations).
      1 instructions eliminated by Dead Code Elimination (4 iterations).
-     1 instructions eliminated by Jump Optimization (6 iterations).
+     1 instructions eliminated by Condition Optimization (6 iterations).
      1 instructions eliminated by Single Step Elimination (7 iterations).
     18 instructions eliminated by Expression Optimization (4 iterations).
     31 instructions eliminated by Data Flow Optimization (4 passes, 13 iterations).
@@ -42,7 +42,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
     63 op add *tmp3 *tmp3 1
     64 writearr<internal:folded:compact:dst> *tmp3 .array[] *tmp2
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
     64 writearr<internal:folded:compact:dst> *tmp3 .array[] *tmp2
     65 op idiv :countDigits:number :countDigits:number 10

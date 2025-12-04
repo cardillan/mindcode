@@ -1,10 +1,10 @@
    477 instructions before optimizations.
     52 instructions eliminated by Temp Variables Elimination (2 passes, 7 iterations).
     48 instructions eliminated by Dead Code Elimination (5 iterations).
-    26 instructions eliminated by Jump Optimization (5 iterations).
+    26 instructions eliminated by Condition Optimization (5 iterations).
     18 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      2 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
-    22 instructions eliminated by Select Optimization (4 iterations).
+    22 instructions eliminated by Boolean Optimization (4 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
     35 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
      1 instructions added by Loop Optimization (3 iterations).
@@ -607,7 +607,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-48 ins
    427 label *label69
    428 label *label70
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-26 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-26 instructions):
  
      1 set TO_INDEX 8
      2 set EXPECTED_BOOST 1.5
@@ -1286,7 +1286,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    331 jump *label65 equal bank1 null
    332 jump *label67 notEqual FROM_INDEX 0
 
-Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-22 instructions):
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-22 instructions):
  
      1 set TO_INDEX 8
      2 set EXPECTED_BOOST 1.5

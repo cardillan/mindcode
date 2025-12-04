@@ -3,7 +3,7 @@
      3 instructions eliminated by Case Expression Optimization.
     62 instructions eliminated by Dead Code Elimination (6 iterations).
      3 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
-    14 instructions eliminated by Jump Optimization (5 iterations).
+    14 instructions eliminated by Condition Optimization (5 iterations).
     35 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
    278 instructions eliminated by Data Flow Optimization (4 passes, 26 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
@@ -1109,7 +1109,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-25 in
    618 op add *tmp212 :drawDigit:x 7
    619 draw line :drawDigit:x :drawDigit:y *tmp212 :drawDigit:y
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-14 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-14 instructions):
  
      7 set .LINKS @links
      8 set :n .LINKS
@@ -7305,7 +7305,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-4 instru
    969 jump *label367 always
    970 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 
-Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
+Modifications by Jumps phase, Condition Optimization, pass 4, iteration 1:
  
    428 op sub :displayItem:x :x 11
    429 op idiv :displayItem:amount :displayItem:amount 10

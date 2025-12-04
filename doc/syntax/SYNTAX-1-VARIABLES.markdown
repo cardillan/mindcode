@@ -329,7 +329,7 @@ Mindustry Logic doesn't provide a specialized mechanism for creating arrays out 
 
 Accessing individual elements of internal arrays is slower than accessing elements of external arrays and consumes additional instruction space for `@counter` tables. However, when Mindcode is able to resolve the index during compilation to a numeric value, the variable corresponding to the element is accessed directly, providing performance which can be even better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g., when unrolling all loops in the program), the `@counter` tables might be eliminated entirely, keeping only the individual element variables in the resulting code.
 
-Several different implementations of internal arrays are available in target 8 or higher, some of them may perform better than normal `@counter` tables available in Mindustry 7. The [Array Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization) chooses the most efficient implementation for each array or individual array access. 
+Several different implementations of internal arrays are available in target 8 or higher, some of them may perform better than normal `@counter` tables available in Mindustry 7. The [Array Optimization](optimizations/ARRAY-OPTIMIZATION.markdown) chooses the most efficient implementation for each array or individual array access. 
 
 ## Remote arrays
 
@@ -470,7 +470,7 @@ mlog(@coal.@name) var coal;
 * When declaring a variable, a single constant string expression must be specified.
 * When declaring an array, there are two possibilities:
   * A name as a constant string expression is specified for each array element. The number of names must be equal to the array size.
-  * A single lookup type is specified, creating a [lookup array](SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays). Lookup arrays require target 8 or higher. The following lookup types are available:  `:block`, `:unit`, `:item`, `:liquid` or `:team`.
+  * A single lookup type is specified, creating a [lookup array](optimizations/ARRAY-OPTIMIZATION.markdown#lookup-arrays). Lookup arrays require target 8 or higher. The following lookup types are available:  `:block`, `:unit`, `:item`, `:liquid` or `:team`.
 * Names specified by mlog must not correspond to linked block names.
 * When a name specified by the `mlog` modifier collides with another user-defined variable or array element in the current processor, a warning is produced. 
 
@@ -1646,4 +1646,4 @@ end
 
 ---
 
-[« Previous: Mindcode basics](SYNTAX.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Expressions »](SYNTAX-2-EXPRESSIONS.markdown)
+[Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Expressions &#xBB;](SYNTAX-2-EXPRESSIONS.markdown)

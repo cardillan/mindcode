@@ -468,4 +468,4 @@ end;
 
 ---
 
-[« Previous: Mindcode Performance Tips](PERFORMANCE-TIPS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown)
+[&#xAB; Previous: Performance tips](PERFORMANCE-TIPS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown)

@@ -1,6 +1,6 @@
     31 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination (6 iterations).
-     1 instructions eliminated by Jump Optimization (5 iterations).
+     1 instructions eliminated by Condition Optimization (5 iterations).
      1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions eliminated by Expression Optimization (3 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
@@ -31,7 +31,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
     19 label *label3
     20 set *tmp2 10
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
      6 end
      7 label *label0

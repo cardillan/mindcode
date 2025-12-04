@@ -498,7 +498,7 @@ public class CaseExpression {
                                 if (jump.getCondition() == Condition.EQUAL || jump.getCondition() == Condition.STRICT_EQUAL) {
                                     target = jump.getTarget();
                                 } else {
-                                    // NOT_EQUAL might have been created by the jump over jump optimization
+                                    // NOT_EQUAL might have been created by the jump over condition optimization
                                     target = findNextLabel(context, iterator, jump);
                                     if (target == null) return null;
                                 }
@@ -523,7 +523,7 @@ public class CaseExpression {
                                         target = jump.getTarget();
                                         rangeHighValue = value.getIntValue() + (jump.getCondition() == Condition.LESS_THAN_EQ ? 1 : 0);
                                     } else {
-                                        // The original jump modified by the jump over jump optimization
+                                        // The original jump modified by the jump over condition optimization
                                         target = findNextLabel(context, iterator, jump);
                                         if (target == null) return null;
                                         // When the condition is met, the value doesn't belong to the range

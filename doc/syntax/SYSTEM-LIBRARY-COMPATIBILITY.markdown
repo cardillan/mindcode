@@ -40,4 +40,4 @@ Note: The Mindcode processor emulator currently isn't able to run this function.
 
 ---
 
-[« Previous: Blocks](SYSTEM-LIBRARY-BLOCKS.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Graphics »](SYSTEM-LIBRARY-GRAPHICS.markdown)
+[&#xAB; Previous: Blocks](SYSTEM-LIBRARY-BLOCKS.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Graphics &#xBB;](SYSTEM-LIBRARY-GRAPHICS.markdown)

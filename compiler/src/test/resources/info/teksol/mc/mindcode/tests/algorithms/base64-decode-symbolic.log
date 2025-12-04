@@ -2,7 +2,7 @@
      7 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instructions eliminated by Case Expression Optimization.
      3 instructions eliminated by Dead Code Elimination (4 iterations).
-     1 instructions eliminated by Jump Optimization (5 iterations).
+     1 instructions eliminated by Condition Optimization (5 iterations).
      1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
     14 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
@@ -185,7 +185,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-2 ins
     66 set *tmp7 63
     67 jump *label10 always
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
     28 set :printbyte:byte :decode64:bytes
     29 call *label1 :printbyte*retaddr :printbyte*retval

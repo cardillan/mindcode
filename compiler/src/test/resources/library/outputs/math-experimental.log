@@ -2,10 +2,10 @@
     71 instructions eliminated by Temp Variables Elimination (8 iterations).
    124 instructions eliminated by Dead Code Elimination (5 iterations).
     28 instructions modified by Jump Normalization (7 iterations).
-    66 instructions eliminated by Jump Optimization (7 iterations).
+    66 instructions eliminated by Condition Optimization (7 iterations).
     81 instructions eliminated by Single Step Elimination (3 passes, 12 iterations).
      8 instructions modified by Expression Optimization (5 iterations).
-    24 instructions eliminated by Select Optimization (2 passes, 7 iterations).
+    24 instructions eliminated by Boolean Optimization (2 passes, 7 iterations).
      5 instructions eliminated by If Expression Optimization (5 iterations).
    256 instructions eliminated by Data Flow Optimization (9 passes, 32 iterations).
     79 instructions added by Loop Unrolling (13 iterations).

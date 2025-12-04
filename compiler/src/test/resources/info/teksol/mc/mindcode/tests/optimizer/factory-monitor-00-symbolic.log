@@ -2,10 +2,10 @@
     58 instructions eliminated by Temp Variables Elimination (2 passes, 7 iterations).
      1 instructions eliminated by Case Expression Optimization.
     43 instructions eliminated by Dead Code Elimination (6 iterations).
-    26 instructions eliminated by Jump Optimization (5 iterations).
+    26 instructions eliminated by Condition Optimization (5 iterations).
     15 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
-     8 instructions eliminated by Select Optimization (4 iterations).
+     8 instructions eliminated by Boolean Optimization (4 iterations).
      3 instructions eliminated by If Expression Optimization (3 iterations).
     20 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
      1 instructions added by Loop Optimization (3 iterations).
@@ -934,7 +934,7 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-12 in
    180 print "No block to monitor or display."
    181 jump *label30 always
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-26 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-26 instructions):
  
     14 set .MUL1 .MUL2
     15 set :icon null
@@ -1700,7 +1700,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    455 drawflush .DISPLAY
    456 op sub *tmp173 @time :start
 
-Modifications by Iterated phase, Select Optimization, pass 1, iteration 1 (-8 instructions):
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-8 instructions):
  
    337 op sub *tmp114 100 :output
    338 op lessThan *tmp115 *tmp114 :minimum
@@ -2536,7 +2536,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-1 instru
    557 getlink :factory :n
    558 sensor *tmp93 :factory @type
 
-Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
+Modifications by Jumps phase, Condition Optimization, pass 4, iteration 1:
  
    553 jump *label58 greaterThanEq 0 @links
    554 label *label90

@@ -28,7 +28,7 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
                         #set emulate-strict-not-equal = false;
                         #set dead-code-elimination = advanced;
                         #set single-step-elimination = advanced;
-                        #set jump-optimization = advanced;
+                        #set condition-optimization = advanced;
                         #set jump-straightening = advanced;
                         while true do
                             print("In loop");
@@ -54,7 +54,7 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
         assertCompilesTo("""
                         #set dead-code-elimination = advanced;
                         #set single-step-elimination = advanced;
-                        #set jump-optimization = advanced;
+                        #set condition-optimization = advanced;
                         #set jump-straightening = advanced;
                         while true do
                             print("In loop");

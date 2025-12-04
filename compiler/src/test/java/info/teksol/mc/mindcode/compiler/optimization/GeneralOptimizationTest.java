@@ -135,8 +135,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(OP, "lessThan", tmp(4), ":silicon", ":capacity"),
                 createInstruction(OP, "lessThan", tmp(5), ":graphite", ":capacity"),
                 createInstruction(OP, "or", tmp(7), tmp(4), tmp(5)),
-                createInstruction(OP, "notEqual", tmp(6), tmp(7), "false"),
-                createInstruction(OP, "equal", tmp(8), tmp(6), "false"),
+                createInstruction(OP, "equal", tmp(8), tmp(7), "false"),
                 createInstruction(CONTROL, "enabled", "conveyor1", tmp(8))
         );
     }

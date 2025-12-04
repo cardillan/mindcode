@@ -404,7 +404,7 @@ Logical operators may return any numeric value or `null`. `null` and zero repres
 * when evaluating `and`: the value of the first operand is false.
 
 > [!NOTE]
-> The [Select Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) may turn a short-circuit operation into a full evaluation, if it doesn't change the semantics of the operation and the result is compatible with the optimization goal. 
+> The [Select Optimization](optimizations/BOOLEAN-OPTIMIZATION.markdown) may turn a short-circuit operation into a full evaluation, if it doesn't change the semantics of the operation and the result is compatible with the optimization goal. 
 
 Boolean operators are guaranteed to always return `0` or `1`. They're always evaluated fully. Boolean operators may be a little bit less effective, as additional operations might need to be performed to ensure the resulting value is always `0` or `1`.
 
@@ -480,7 +480,7 @@ Expressions or parts of expressions that are constant are evaluated at compile t
 
 Constant expressions can be used in [constant](SYNTAX-1-VARIABLES.markdown#constants) and [program parameter](SYNTAX-1-VARIABLES.markdown#program-parameters) declarations.
 
-Furthermore, expressions that contain some constant subexpressions (e.g., `ticks * 60 / 1000` contains a constant subexpression `60 / 1000`) may be partially evaluated by the [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#constant-folding).
+Furthermore, expressions that contain some constant subexpressions (e.g., `ticks * 60 / 1000` contains a constant subexpression `60 / 1000`) may be partially evaluated by the [Data Flow Optimization](optimizations/DATA-FLOW-OPTIMIZATION.markdown#constant-folding).
 
 > [!TIP]
 > Compile-time expression evaluation produces results identical to computations performed on an actual Mindustry Logic processor, emulating the behavior corresponding to the selected language/processor target.
@@ -558,4 +558,4 @@ Not strictly equal to zero
 
 ---
 
-[« Previous: Variables and constants](SYNTAX-1-VARIABLES.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Control flow statements »](SYNTAX-3-STATEMENTS.markdown)
+[&#xAB; Previous: Variables](SYNTAX-1-VARIABLES.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Control Flow Statements &#xBB;](SYNTAX-3-STATEMENTS.markdown)

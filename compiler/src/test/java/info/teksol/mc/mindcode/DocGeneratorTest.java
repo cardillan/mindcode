@@ -125,11 +125,11 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
                 writer.println("---");
                 writer.println();
                 if (i > 0) {
-                    writer.printf("[« Previous: %s](%s) &nbsp; | &nbsp; ", libraryName(files.get(i - 1)), libraryReference(files.get(i - 1)));
+                    writer.printf("[&#xAB; Previous: %s](%s) &nbsp; | &nbsp; ", libraryName(files.get(i - 1)), libraryReference(files.get(i - 1)));
                 }
                 writer.printf("[Up: System library](%s)", TARGET_FILE);
                 if (i < files.size() - 1) {
-                    writer.printf(" &nbsp; | &nbsp; [Next: %s »](%s)", libraryName(files.get(i + 1)), libraryReference(files.get(i + 1)));
+                    writer.printf(" &nbsp; | &nbsp; [Next: %s &#xBB;](%s)", libraryName(files.get(i + 1)), libraryReference(files.get(i + 1)));
                 }
                 writer.println();
             }

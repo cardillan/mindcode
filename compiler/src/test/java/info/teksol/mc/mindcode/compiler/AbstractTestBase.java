@@ -120,6 +120,7 @@ public abstract class AbstractTestBase extends AbstractMessageEmitter implements
         }
         setDebugPrinterProvider(compiler);
 
+        System.out.println(compiler.compilerProfile().encode());
         compiler.compile();
         expectedMessages.validate();
         expectedMessages.setAccumulateErrors(false);

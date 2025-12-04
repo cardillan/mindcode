@@ -1,7 +1,7 @@
     40 instructions before optimizations.
      1 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Normalization (5 iterations).
-     1 instructions eliminated by Jump Optimization (5 iterations).
+     1 instructions eliminated by Condition Optimization (5 iterations).
      4 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions modified by If Expression Optimization (3 iterations).
     39 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
@@ -29,7 +29,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructi
     47 assertprints "6|28|Less|0" "loops in conditions"
     48 stop
 
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
     32 jump *label7 always
     33 set *tmp3 null
