@@ -5,8 +5,11 @@
      3 instructions eliminated by Jump Normalization (5 iterations).
     76 instructions eliminated by Condition Optimization (2 passes, 5 iterations).
     52 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
-     2 instructions eliminated by Expression Optimization (3 iterations).
+     2 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
     32 instructions eliminated by Boolean Optimization (4 iterations).
+       2 short-circuited conditions turned to a sequence of selects.
+       1 final jumps of short-circuited conditions turned to an operation or select.
+       8 fully-evaluated conditions turned to a sequence of selects.
      1 instructions eliminated by If Expression Optimization (3 iterations).
     24 instructions eliminated by Data Flow Optimization (3 passes, 12 iterations).
      1 loops improved by Loop Hoisting.
@@ -3322,7 +3325,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-32 
 +   56 label *label251
 +   57 sensor *tmp20 :first_unit @dead
 +   58 op strictEqual *tmp21 *tmp20 0
-+   59 select *tmp22 equal *tmp21 false false true
++   59 op notEqual *tmp22 *tmp21 false
     60 jump *label13 always
     61 label *label12
     62 set *tmp22 false
@@ -3459,8 +3462,8 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     56 label *label251
     57 sensor *tmp20 :first_unit @dead
     58 op strictEqual *tmp21 *tmp20 0
--    * select *tmp22 equal *tmp21 false false true
-+   59 select :repeat equal *tmp21 false false true
+-    * op notEqual *tmp22 *tmp21 false
++   59 op notEqual :repeat *tmp21 false
     60 jump *label13 always
     61 label *label12
 -    * set *tmp22 false
@@ -3650,8 +3653,8 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-1
     55 label *label251
     56 sensor *tmp20 :first_unit @dead
 -    * op strictEqual *tmp21 *tmp20 0
--    * select :repeat equal *tmp21 false false true
-+   57 select :repeat strictNotEqual *tmp20 0 false true
+-    * op notEqual :repeat *tmp21 false
++   57 op strictEqual :repeat *tmp20 0
     58 jump *label13 always
     59 label *label12
     60 set :repeat false
@@ -3665,6 +3668,26 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    594 label *label154
    595 label *label155
    596 label *label134
+
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
+ 
+    42 sensor *tmp12 @unit @controller
+    43 jump *label6 notEqual *tmp12 @this
+    44 sensor :state @unit @flag
+-    * select *tmp365 greaterThanEq :state 1 true false
++   45 op greaterThanEq *tmp365 :state 1
+    46 label *label249
+    47 select *tmp18 lessThan :state 6 *tmp365 false
+    48 label *label250
+ 
+   540 select .CORR_SIGN greaterThanEq :corr_per_min 0 "[]([green]+" "[]([green]"
+   541 set .SPEED_UNIT_TXT "[])/min"
+   542 jump *label142 equal :alive false
+-    * select *tmp366 lessThan :min_level .LOW_LEVEL_TRIGGER true false
++  543 op lessThan *tmp366 :min_level .LOW_LEVEL_TRIGGER
+   544 label *label253
+   545 select *tmp208 greaterThan :max_level .HIGH_LEVEL_TRIGGER true *tmp366
+   546 label *label254
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
@@ -3734,7 +3757,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     39 sensor *tmp12 @unit @controller
     40 jump *label6 notEqual *tmp12 @this
     41 sensor :state @unit @flag
-    42 select *tmp365 greaterThanEq :state 1 true false
+    42 op greaterThanEq *tmp365 :state 1
 -    * label *label249
     43 select *tmp18 lessThan :state 6 *tmp365 false
 -    * label *label250
@@ -3746,7 +3769,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label14
 -    * label *label251
     48 sensor *tmp20 :first_unit @dead
-    49 select :repeat strictNotEqual *tmp20 0 false true
+    49 op strictEqual :repeat *tmp20 0
     50 jump *label13 always
     51 label *label12
     52 set :repeat false
@@ -4021,7 +4044,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
    474 set .SPEED_UNIT_TXT "[])/min"
    475 jump *label142 equal :alive false
-   476 select *tmp366 lessThan :min_level .LOW_LEVEL_TRIGGER true false
+   476 op lessThan *tmp366 :min_level .LOW_LEVEL_TRIGGER
 -    * label *label253
    477 select *tmp208 greaterThan :max_level .HIGH_LEVEL_TRIGGER true *tmp366
 -    * label *label254
@@ -4750,14 +4773,14 @@ label *label243
 sensor *tmp12 @unit @controller
 jump *label6 notEqual *tmp12 @this
 sensor :state @unit @flag
-select *tmp365 greaterThanEq :state 1 true false
+op greaterThanEq *tmp365 :state 1
 select *tmp18 lessThan :state 6 *tmp365 false
 op add .TARGET .TARGET *tmp18
 label *label6
 ubind UNIT
 jump *label12 equal @unit :first_unit
 sensor *tmp20 :first_unit @dead
-select :repeat strictNotEqual *tmp20 0 false true
+op strictEqual :repeat *tmp20 0
 jump *label13 always
 label *label12
 set :repeat false
@@ -5171,7 +5194,7 @@ op idiv :corr_per_min :corr_per_ms 0.000016666666666666667
 select .CORR_SIGN greaterThanEq :corr_per_min 0 "[]([green]+" "[]([green]"
 set .SPEED_UNIT_TXT "[])/min"
 jump *label142 equal :alive false
-select *tmp366 lessThan :min_level .LOW_LEVEL_TRIGGER true false
+op lessThan *tmp366 :min_level .LOW_LEVEL_TRIGGER
 select *tmp208 greaterThan :max_level .HIGH_LEVEL_TRIGGER true *tmp366
 jump *label150 equal :wait_time 0
 jump *label148 lessThanEq *tmp208 :remote_wait_time

@@ -328,7 +328,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(PRINT, q("\n")),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
-                    createInstruction(SELECT, ":fib*retval", "lessThan", ":fib:n", "0", "0", "1"),
+                    createInstruction(OP, "greaterThanEq", ":fib*retval", ":fib:n", "0"),
                     createInstruction(RETURN, ":fib*retaddr")
             );
         }
@@ -1134,7 +1134,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                                 print(getBit(i) ? 1 : 0);
                             end;
                             """,
-                    createInstruction(PRINT, "1")
+                    createInstruction(PRINT, "true")
             );
         }
 

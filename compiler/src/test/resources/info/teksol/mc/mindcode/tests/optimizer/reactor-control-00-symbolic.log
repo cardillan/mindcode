@@ -7,6 +7,8 @@
     42 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions eliminated by Expression Optimization (3 iterations).
     16 instructions eliminated by Boolean Optimization (5 iterations).
+       4 final jumps of short-circuited conditions turned to an operation or select.
+       5 fully-evaluated conditions turned to a sequence of selects.
      2 instructions eliminated by If Expression Optimization (3 iterations).
      8 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
@@ -2036,7 +2038,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-13 
     92 label *label24
 -    * set *tmp53 true
 +   93 label *label160
-+   94 select *tmp53 notEqual :production 0 false true
++   94 op equal *tmp53 :production 0
     95 jump *label23 always
     96 label *label22
     97 set *tmp53 false
@@ -2071,7 +2073,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-13 
    271 label *label69
 -    * set *tmp103 true
 +  272 label *label163
-+  273 select *tmp103 lessThan :total_battery 25000 false true
++  273 op greaterThanEq *tmp103 :total_battery 25000
    274 jump *label68 always
    275 label *label67
    276 set *tmp103 false
@@ -2106,7 +2108,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-13 
 -    * set *tmp135 false
 +  347 label *label165
 +  348 sensor *tmp133 tank1 @totalLiquids
-+  349 select *tmp135 lessThanEq *tmp133 1000 false true
++  349 op greaterThan *tmp135 *tmp133 1000
    350 label *label100
    351 set .COOLANT_FLAG *tmp135
 -    * jump *label105 notEqual .FUEL_FLAG false
@@ -2121,7 +2123,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-13 
 -    * set *tmp138 false
 +  357 label *label167
 +  358 sensor *tmp136 vault1 @blast-compound
-+  359 select *tmp138 lessThanEq *tmp136 800 false true
++  359 op greaterThan *tmp138 *tmp136 800
    360 label *label104
    361 set .FUEL_FLAG *tmp138
    362 jump *label107 equal :enough_battery false
@@ -2157,7 +2159,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 +   92 jump *label23 lessThanEq :consumption 0
     93 label *label24
     94 label *label160
-    95 select *tmp53 notEqual :production 0 false true
+    95 op equal *tmp53 :production 0
     96 jump *label23 always
 -    * label *label22
 -    * set *tmp53 false
@@ -2176,7 +2178,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 +  265 jump *label68 lessThanEq :net_power 1000
    266 label *label69
    267 label *label163
-   268 select *tmp103 lessThan :total_battery 25000 false true
+   268 op greaterThanEq *tmp103 :total_battery 25000
    269 jump *label68 always
 -    * label *label67
 -    * set *tmp103 false
@@ -2193,8 +2195,8 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    339 label *label99
    340 label *label165
    341 sensor *tmp133 tank1 @totalLiquids
--    * select *tmp135 lessThanEq *tmp133 1000 false true
-+  342 select .COOLANT_FLAG lessThanEq *tmp133 1000 false true
+-    * op greaterThan *tmp135 *tmp133 1000
++  342 op greaterThan .COOLANT_FLAG *tmp133 1000
    343 label *label100
 -    * set .COOLANT_FLAG *tmp135
    344 jump *label103 equal .FUEL_FLAG false
@@ -2205,8 +2207,8 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    348 label *label103
    349 label *label167
    350 sensor *tmp136 vault1 @blast-compound
--    * select *tmp138 lessThanEq *tmp136 800 false true
-+  351 select .FUEL_FLAG lessThanEq *tmp136 800 false true
+-    * op greaterThan *tmp138 *tmp136 800
++  351 op greaterThan .FUEL_FLAG *tmp136 800
    352 label *label104
 -    * set .FUEL_FLAG *tmp138
    353 jump *label107 equal :enough_battery false
@@ -2467,7 +2469,7 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-1
    171 print "Link [gold]"
  
    348 sensor *tmp136 vault1 @blast-compound
-   349 select .FUEL_FLAG lessThanEq *tmp136 800 false true
+   349 op greaterThan .FUEL_FLAG *tmp136 800
    350 label *label104
 -    * jump *label107 equal :enough_battery false
 +  351 jump *label107 lessThan :total_capacity :required_capacity
@@ -2488,7 +2490,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
  
     91 label *label24
     92 label *label160
-    93 select *tmp53 notEqual :production 0 false true
+    93 op equal *tmp53 :production 0
 -    * jump *label23 always
     94 label *label23
     95 jump *label29 lessThan :consumption :min_consumption
@@ -2496,7 +2498,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
  
    263 label *label69
    264 label *label163
-   265 select *tmp103 lessThan :total_battery 25000 false true
+   265 op greaterThanEq *tmp103 :total_battery 25000
 -    * jump *label68 always
    266 label *label68
    267 jump *label72 lessThan :net_power :neededPower
@@ -2551,7 +2553,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     82 jump *label23 lessThanEq :consumption 0
 -    * label *label24
 -    * label *label160
-    83 select *tmp53 notEqual :production 0 false true
+    83 op equal *tmp53 :production 0
     84 label *label23
     85 jump *label29 lessThan :consumption :min_consumption
 -    * label *label30
@@ -2644,7 +2646,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    237 jump *label68 lessThanEq :net_power 1000
 -    * label *label69
 -    * label *label163
-   238 select *tmp103 lessThan :total_battery 25000 false true
+   238 op greaterThanEq *tmp103 :total_battery 25000
    239 label *label68
    240 jump *label72 lessThan :net_power :neededPower
  
@@ -2717,7 +2719,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    290 label *label99
 -    * label *label165
    291 sensor *tmp133 tank1 @totalLiquids
-   292 select .COOLANT_FLAG lessThanEq *tmp133 1000 false true
+   292 op greaterThan .COOLANT_FLAG *tmp133 1000
    293 label *label100
    294 jump *label103 equal .FUEL_FLAG false
 -    * label *label105
@@ -2726,7 +2728,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    297 label *label103
 -    * label *label167
    298 sensor *tmp136 vault1 @blast-compound
-   299 select .FUEL_FLAG lessThanEq *tmp136 800 false true
+   299 op greaterThan .FUEL_FLAG *tmp136 800
    300 label *label104
    301 jump *label107 lessThan :total_capacity :required_capacity
 -    * label *label110
@@ -3239,7 +3241,7 @@ op mul :min_consumption .REACTORS_ON 1200
 set *tmp53 false
 jump *label23 notEqual :battery_level 0
 jump *label23 lessThanEq :consumption 0
-select *tmp53 notEqual :production 0 false true
+op equal *tmp53 :production 0
 label *label23
 jump *label29 lessThan :consumption :min_consumption
 jump *label27 equal *tmp53 false
@@ -3355,7 +3357,7 @@ select .OVERDRIVE greaterThan :net_power 100 true .OVERDRIVE
 set *tmp103 false
 jump *label68 greaterThanEq .REACTORS_ON :reactors
 jump *label68 lessThanEq :net_power 1000
-select *tmp103 lessThan :total_battery 25000 false true
+op greaterThanEq *tmp103 :total_battery 25000
 label *label68
 jump *label72 lessThan :net_power :neededPower
 set .OUTPUT_3 .OUTPUT_2
@@ -3407,14 +3409,14 @@ set .COOLANT_FLAG true
 jump *label100 always
 label *label99
 sensor *tmp133 tank1 @totalLiquids
-select .COOLANT_FLAG lessThanEq *tmp133 1000 false true
+op greaterThan .COOLANT_FLAG *tmp133 1000
 label *label100
 jump *label103 equal .FUEL_FLAG false
 set .FUEL_FLAG true
 jump *label104 always
 label *label103
 sensor *tmp136 vault1 @blast-compound
-select .FUEL_FLAG lessThanEq *tmp136 800 false true
+op greaterThan .FUEL_FLAG *tmp136 800
 label *label104
 jump *label107 lessThan :total_capacity :required_capacity
 sensor *tmp139 switch2 @enabled

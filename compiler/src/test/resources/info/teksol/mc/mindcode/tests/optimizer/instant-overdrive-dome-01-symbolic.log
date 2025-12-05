@@ -5,6 +5,8 @@
    125 instructions eliminated by Condition Optimization (2 passes, 6 iterations).
    101 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
     11 instructions eliminated by Boolean Optimization (4 iterations).
+       2 final jumps of short-circuited conditions turned to an operation or select.
+       3 fully-evaluated conditions turned to a sequence of selects.
      4 instructions eliminated by If Expression Optimization (3 iterations).
     88 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
      2 instructions added by Loop Optimization (3 iterations).
@@ -5004,7 +5006,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-11 
 +  505 label *label383
 +  506 sensor *tmp182 .UNIT_S1 @totalItems
 +  507 sensor *tmp183 .UNIT_S2 @totalItems
-+  508 select *tmp185 greaterThanEq *tmp182 *tmp183 false true
++  508 op lessThan *tmp185 *tmp182 *tmp183
    509 label *label165
    510 set .SUPPLY_S_FIRST *tmp185
 -    * jump *label170 equal *tmp126 false
@@ -5021,7 +5023,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-11 
 +  516 label *label385
 +  517 sensor *tmp187 .UNIT_P1 @totalItems
 +  518 sensor *tmp188 .UNIT_P2 @totalItems
-+  519 select *tmp190 greaterThanEq *tmp187 *tmp188 false true
++  519 op lessThan *tmp190 *tmp187 *tmp188
    520 label *label169
    521 set .SUPPLY_P_FIRST *tmp190
    522 op add :unitCheck @time 5000
@@ -5066,8 +5068,8 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    505 label *label383
    506 sensor *tmp182 .UNIT_S1 @totalItems
    507 sensor *tmp183 .UNIT_S2 @totalItems
--    * select *tmp185 greaterThanEq *tmp182 *tmp183 false true
-+  508 select .SUPPLY_S_FIRST greaterThanEq *tmp182 *tmp183 false true
+-    * op lessThan *tmp185 *tmp182 *tmp183
++  508 op lessThan .SUPPLY_S_FIRST *tmp182 *tmp183
    509 label *label165
 -    * set .SUPPLY_S_FIRST *tmp185
    510 jump *label168 notEqual *tmp126 false
@@ -5079,8 +5081,8 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    515 label *label385
    516 sensor *tmp187 .UNIT_P1 @totalItems
    517 sensor *tmp188 .UNIT_P2 @totalItems
--    * select *tmp190 greaterThanEq *tmp187 *tmp188 false true
-+  518 select .SUPPLY_P_FIRST greaterThanEq *tmp187 *tmp188 false true
+-    * op lessThan *tmp190 *tmp187 *tmp188
++  518 op lessThan .SUPPLY_P_FIRST *tmp187 *tmp188
    519 label *label169
 -    * set .SUPPLY_P_FIRST *tmp190
    520 op add :unitCheck @time 5000
@@ -6854,7 +6856,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label383
    571 sensor *tmp182 .UNIT_S1 @totalItems
    572 sensor *tmp183 .UNIT_S2 @totalItems
-   573 select .SUPPLY_S_FIRST greaterThanEq *tmp182 *tmp183 false true
+   573 op lessThan .SUPPLY_S_FIRST *tmp182 *tmp183
    574 label *label165
    575 jump *label168 notEqual *tmp126 false
 -    * label *label170
@@ -6864,7 +6866,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label385
    579 sensor *tmp187 .UNIT_P1 @totalItems
    580 sensor *tmp188 .UNIT_P2 @totalItems
-   581 select .SUPPLY_P_FIRST greaterThanEq *tmp187 *tmp188 false true
+   581 op lessThan .SUPPLY_P_FIRST *tmp187 *tmp188
    582 label *label169
    583 op add :unitCheck @time 5000
 -    * label *label172
@@ -8989,7 +8991,7 @@ jump *label165 always
 label *label164
 sensor *tmp182 .UNIT_S1 @totalItems
 sensor *tmp183 .UNIT_S2 @totalItems
-select .SUPPLY_S_FIRST greaterThanEq *tmp182 *tmp183 false true
+op lessThan .SUPPLY_S_FIRST *tmp182 *tmp183
 label *label165
 jump *label168 notEqual *tmp126 false
 set .SUPPLY_P_FIRST true
@@ -8997,7 +8999,7 @@ jump *label169 always
 label *label168
 sensor *tmp187 .UNIT_P1 @totalItems
 sensor *tmp188 .UNIT_P2 @totalItems
-select .SUPPLY_P_FIRST greaterThanEq *tmp187 *tmp188 false true
+op lessThan .SUPPLY_P_FIRST *tmp187 *tmp188
 label *label169
 op add :unitCheck @time 5000
 sensor *tmp192 switch1 @enabled

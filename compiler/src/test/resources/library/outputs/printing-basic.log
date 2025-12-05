@@ -6,6 +6,7 @@
     22 instructions eliminated by Condition Optimization (6 iterations).
     44 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
      6 instructions eliminated by Boolean Optimization (6 iterations).
+       2 fully-evaluated conditions turned to a sequence of selects.
    310 instructions eliminated by Data Flow Optimization (18 passes, 61 iterations).
      4 instructions eliminated by Loop Optimization (4 iterations).
      7 loops improved by Loop Optimization.

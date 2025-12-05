@@ -7,6 +7,7 @@
     13 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      2 instructions modified by Expression Optimization (2 iterations).
      1 instructions eliminated by Boolean Optimization (3 iterations).
+       1 fully-evaluated conditions turned to a sequence of selects.
      2 instructions eliminated by Data Flow Optimization (6 iterations).
      3 instructions eliminated by Case Switching (4 iterations).
      2 case expressions converted to fast dispatch by Case Switching.

@@ -6,6 +6,8 @@
     37 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      3 instructions eliminated by Expression Optimization (3 iterations).
     14 instructions eliminated by Boolean Optimization (4 iterations).
+       2 final jumps of short-circuited conditions turned to an operation or select.
+       5 fully-evaluated conditions turned to a sequence of selects.
      2 instructions eliminated by If Expression Optimization (3 iterations).
     83 instructions eliminated by Data Flow Optimization (9 passes, 29 iterations).
    499 instructions added by Function Inlining (10 iterations).
@@ -2062,7 +2064,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-14 
    139 label *label15
 -    * set *tmp26 false
 +  140 label *label113
-+  141 select *tmp26 equal :start_reactor*retval false false true
++  141 op notEqual *tmp26 :start_reactor*retval false
    142 label *label16
    143 set :update_fuel:fuel *tmp26
    144 set :update_fuel:uld_in unloader5
@@ -2080,7 +2082,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-14 
    153 label *label20
 -    * set *tmp28 false
 +  154 label *label116
-+  155 select *tmp28 equal *tmp26 false false true
++  155 op notEqual *tmp28 *tmp26 false
    156 label *label21
    157 # "Function: def throttle_blast(in reactors_fueled, in emerg_shutdown)"
    158 sensor *tmp30 node1 @powerNetStored
@@ -2151,7 +2153,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 -    * jump *label16 always
    138 label *label15
    139 label *label113
-   140 select *tmp26 equal :start_reactor*retval false false true
+   140 op notEqual *tmp26 :start_reactor*retval false
  
    143 set :update_fuel:uld_in unloader5
    144 set :update_fuel:uld_out unloader6
@@ -2167,7 +2169,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 -    * jump *label21 always
    151 label *label20
    152 label *label116
-   153 select *tmp28 equal *tmp26 false false true
+   153 op notEqual *tmp28 *tmp26 false
 
 Modifications by Inline function 'kilo' defined at line 117:1 (-2 instructions):
  
@@ -2390,7 +2392,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
    107 select *tmp89 notEqual :start_reactor*retval false @blast-compound @scrap
  
    145 label *label113
-   146 select *tmp26 equal :start_reactor*retval false false true
+   146 op notEqual *tmp26 :start_reactor*retval false
    147 label *label16
 -    * set :update_fuel:fuel *tmp26
 -    * set :update_fuel:uld_in unloader5
@@ -4940,7 +4942,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label17
 -    * label *label15
 -    * label *label113
-   752 select *tmp26 equal :start_reactor*retval false false true
+   752 op notEqual *tmp26 :start_reactor*retval false
    753 label *label16
 -    * label *label128
    754 # "Function: def update_fuel(in fuel, in uld_in, in uld_out)"
@@ -4956,7 +4958,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label22
 -    * label *label20
 -    * label *label116
-   762 select *tmp28 equal *tmp26 false false true
+   762 op notEqual *tmp28 *tmp26 false
    763 label *label21
    764 # "Function: def throttle_blast(in reactors_fueled, in emerg_shutdown)"
  
@@ -6949,7 +6951,7 @@ set :t_startup5 .RET_T_STARTUP
 set *tmp26 true
 jump *label16 notEqual :start_reactor:supply_fuel false
 jump *label16 notEqual :fuel_4 false
-select *tmp26 equal :start_reactor*retval false false true
+op notEqual *tmp26 :start_reactor*retval false
 label *label16
 # "Function: def update_fuel(in fuel, in uld_in, in uld_out)"
 select *tmp89 notEqual *tmp26 false @blast-compound @scrap
@@ -6959,7 +6961,7 @@ control config unloader6 *tmp93
 set *tmp28 true
 jump *label21 notEqual :fuel_1 false
 jump *label21 notEqual :fuel_2 false
-select *tmp28 equal *tmp26 false false true
+op notEqual *tmp28 *tmp26 false
 label *label21
 # "Function: def throttle_blast(in reactors_fueled, in emerg_shutdown)"
 sensor *tmp30 node1 @powerNetStored

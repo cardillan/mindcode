@@ -6,6 +6,8 @@
     37 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      3 instructions eliminated by Expression Optimization (3 iterations).
     14 instructions eliminated by Boolean Optimization (4 iterations).
+       2 final jumps of short-circuited conditions turned to an operation or select.
+       5 fully-evaluated conditions turned to a sequence of selects.
      2 instructions eliminated by If Expression Optimization (3 iterations).
     83 instructions eliminated by Data Flow Optimization (9 passes, 29 iterations).
    499 instructions added by Function Inlining (10 iterations).
@@ -2082,7 +2084,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-14 
    166 label *label29
 -    * set *tmp26 false
 +  167 label *label132
-+  168 select *tmp26 equal :start_reactor*retval false false true
++  168 op notEqual *tmp26 :start_reactor*retval false
    169 label *label30
    170 set :update_fuel:fuel *tmp26
    171 set :update_fuel:uld_in unloader5
@@ -2100,7 +2102,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-14 
    182 label *label35
 -    * set *tmp28 false
 +  183 label *label135
-+  184 select *tmp28 equal *tmp26 false false true
++  184 op notEqual *tmp28 *tmp26 false
    185 label *label36
    186 sensor *tmp30 node1 @powerNetStored
    187 op floor :throttle_blast:charge *tmp30
@@ -2171,7 +2173,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 -    * jump *label30 always
    165 label *label29
    166 label *label132
-   167 select *tmp26 equal :start_reactor*retval false false true
+   167 op notEqual *tmp26 :start_reactor*retval false
  
    172 setaddr :update_fuel*retaddr *label34 (h:*label34)
    173 call *label1 *invalid :update_fuel*retval (m:*label34) (h:*label34)
@@ -2187,7 +2189,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 -    * jump *label36 always
    180 label *label35
    181 label *label135
-   182 select *tmp28 equal *tmp26 false false true
+   182 op notEqual *tmp28 *tmp26 false
 
 Modifications by Inline function 'kilo' defined at line 117:1 (-2 instructions):
  
@@ -2414,7 +2416,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
    121 control config unloader3 *tmp89
  
    166 label *label132
-   167 select *tmp26 equal :start_reactor*retval false false true
+   167 op notEqual *tmp26 :start_reactor*retval false
    168 label *label30
 -    * set :update_fuel:fuel *tmp26
 -    * set :update_fuel:uld_in unloader5
@@ -4953,7 +4955,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label31
 -    * label *label29
 -    * label *label132
-   740 select *tmp26 equal :start_reactor*retval false false true
+   740 op notEqual *tmp26 :start_reactor*retval false
    741 label *label30
 -    * label *label147
    742 select *tmp89 notEqual *tmp26 false @blast-compound @scrap
@@ -4968,7 +4970,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label37
 -    * label *label35
 -    * label *label135
-   749 select *tmp28 equal *tmp26 false false true
+   749 op notEqual *tmp28 *tmp26 false
    750 label *label36
    751 sensor *tmp30 node1 @powerNetStored
  
@@ -6944,7 +6946,7 @@ set :t_startup5 .RET_T_STARTUP
 set *tmp26 true
 jump *label30 notEqual :start_reactor:supply_fuel false
 jump *label30 notEqual :fuel_4 false
-select *tmp26 equal :start_reactor*retval false false true
+op notEqual *tmp26 :start_reactor*retval false
 label *label30
 select *tmp89 notEqual *tmp26 false @blast-compound @scrap
 control config unloader5 *tmp89
@@ -6953,7 +6955,7 @@ control config unloader6 *tmp93
 set *tmp28 true
 jump *label36 notEqual :fuel_1 false
 jump *label36 notEqual :fuel_2 false
-select *tmp28 equal *tmp26 false false true
+op notEqual *tmp28 *tmp26 false
 label *label36
 sensor *tmp30 node1 @powerNetStored
 op floor :throttle_blast:charge *tmp30

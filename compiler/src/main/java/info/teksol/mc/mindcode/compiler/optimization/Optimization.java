@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -40,7 +39,6 @@ public enum Optimization {
             "optimizing some common mathematical expressions"),
 
     BOOLEAN_OPTIMIZATION("Boolean Optimization",
-            context -> context.getInstructionProcessor().isSupported(Opcode.SELECT),
             BooleanOptimizer::new,
             "simplifying boolean expressions and/or implementing them using the 'select' instruction"),
 

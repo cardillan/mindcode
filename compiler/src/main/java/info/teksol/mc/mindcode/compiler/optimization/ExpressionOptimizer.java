@@ -240,8 +240,8 @@ class ExpressionOptimizer extends BaseOptimizer {
     }
 
     private void processSelectInstruction(LogicIterator logicIterator, SelectInstruction ix) {
-        LogicBoolean condition = expressionEvaluator.evaluateConditionalInstruction(ix);
-        switch(condition) {
+        LogicBoolean conditionValue = expressionEvaluator.evaluateConditionalInstruction(ix);
+        switch(conditionValue) {
             case TRUE -> logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), ix.getTrueValue()));
             case FALSE -> logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), ix.getFalseValue()));
             case null -> {
@@ -250,6 +250,10 @@ class ExpressionOptimizer extends BaseOptimizer {
                 LogicValue f = optimizationContext.resolveValue(variableStates, ix.getFalseValue());
                 if (t.equals(f)) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), ix.getTrueValue()));
+                } else if (t.isOne() && f.isZero() || t.isZero() && f.isOne() && ix.getCondition().hasInverse(false)) {
+                    Condition condition = ix.getCondition();
+                    Condition adjusted = t.isZero() ? condition.inverse(false) : condition;
+                    logicIterator.set(createOp(ix.getAstContext(), adjusted.toOperation(), ix.getResult(), ix.getX(), ix.getY()));
                 }
             }
         }

@@ -1,13 +1,17 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mc.util.CollectionUtils;
+import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collector;
@@ -20,13 +24,34 @@ import static java.util.Objects.requireNonNullElse;
 
 @NullMarked
 class BooleanOptimizer extends AbstractConditionalOptimizer {
+    private final boolean hasSelect;
+
     public BooleanOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.BOOLEAN_OPTIMIZATION, optimizationContext);
+        hasSelect = getProcessor().isSupported(Opcode.SELECT);
     }
+
+    private int fullEvaluations = 0;
+    private int shortSelectSequence = 0;
+    private int lastJumps = 0;
+    private int fullSelectSequence = 0;
+
+    @Override
+    public void generateFinalMessages() {
+        super.generateFinalMessages();
+        outputActions("       %d short-circuited conditions turned to full evaluations.", fullEvaluations);
+        outputActions("       %d short-circuited conditions turned to a sequence of selects.", shortSelectSequence);
+        outputActions("       %d final jumps of short-circuited conditions turned to an operation or select.", lastJumps);
+        outputActions("       %d fully-evaluated conditions turned to a sequence of selects.", fullSelectSequence);
+    }
+
+    private void outputActions(@PrintFormat String format, int count) {
+        if (count > 0) emitMessage(MessageLevel.INFO, format, count);
+    }
+
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        // Note: the optimizer is not created when SELECT is not available
         List<AstContext> contexts = contexts(ctx -> ctx.matches(IF, BASIC));
         List<Boolean> result = contexts.stream().map(this::applySelectOptimization).toList();
         return result.stream().anyMatch(Boolean::booleanValue);
@@ -92,14 +117,20 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         // The total jump steps executing both alternatives
         boolean optimizeForSize = ifExpression.getLocalProfile().getGoal() == GenerationGoal.SIZE;
 
+        // The entire if expression is a simple ternary operation
+        boolean ternaryOp = results.size() == 1 && trueContent.hasSingleAssignment() && falseContent.hasSingleAssignment();
+
+        // The expression produces a boolean value
+        boolean booleanOp = ternaryOp && mapsToBoolean(trueContent, falseContent);
+
         ConditionJumpHandling jumpHandling = analyzeJump(analysis.lastJump(), trueContent, falseContent);
+
+        // Without select we can only encode expressions producing booleans
+        if (!hasSelect && !booleanOp) return false;
 
         if (analysis.shortCircuit() && analysis.jumpCount() > 1) {
             // Optimize only linear conditions with more than one jump
             if (analysis.operation() != null) {
-                // The entire if expression is a simple ternary operation
-                boolean ternaryOp = results.size() == 1 && trueContent.hasSingleAssignment() && falseContent.hasSingleAssignment();
-
                 if (!analysis.sideEffects() && (optimizeForSize || (analysis.jumpCount() == 2 && analysis.shortedOpCount() == 0))) {
                     // Full evaluation is possible and compatible with the goal
                     // Since full evaluation stores the condition value in a variable anyway, no need for jump handling
@@ -108,10 +139,12 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
                         // We convert to full evaluation assuming the select conversion will happen later.
                         // We're being conservative and require the select overhead to be 0.
                         convertToFullEvaluation(conditionContext, condition, analysis);
+                        fullEvaluations++;
                         return true;
-                    } else if (ternaryOp && jumpHandling == ConditionJumpHandling.NONE) {
+                    } else if (hasSelect && ternaryOp && jumpHandling == ConditionJumpHandling.NONE) {
                         // Only one variable to be set: a select sequence is always shorter and faster
                         convertToSelectSequence(ifExpression, condition, analysis, trueContent, falseContent, results.getFirst());
+                        shortSelectSequence++;
                         return true;
                     }
                 }
@@ -119,8 +152,11 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
                 // Here we try to replace the very last jump in a condition with a 'select'
                 // Always shorter and faster.
                 // Since it is just one select, no need for jump handling
-                if (ternaryOp) {
-                    return convertLastJump(analysis, condition, trueBranch, falseBranch, trueContent, falseContent, results.getFirst());
+                if (ternaryOp && hasSelect || booleanOp) {
+                    if (convertLastJump(analysis, condition, trueBranch, falseBranch, trueContent, falseContent, results.getFirst())) {
+                        lastJumps++;
+                        return true;
+                    }
                 }
             }
 
@@ -135,12 +171,21 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
                     + (!trueContent.isEmpty() && !falseContent.isEmpty() ? 0.5 : 0);
 
             if (optimizeForSize ? numOperations <= 5 : selectSteps < originalSteps) {
-                optimizeFullEvaluation(ifExpression, condition, trueContent, falseContent, results, analysis.lastJump(), jumpHandling);
-                return true;
+                if (optimizeFullEvaluation(ifExpression, condition, trueContent, falseContent, results, analysis.lastJump(), jumpHandling)) {
+                    fullSelectSequence++;
+                    return true;
+                }
             }
         }
 
         return false;
+    }
+
+    private boolean mapsToBoolean(BranchContent trueContent, BranchContent falseContent) {
+        LogicBoolean trueValue = trueContent.getAsBoolean();
+        LogicBoolean falseValue = falseContent.getAsBoolean();
+        return trueValue == LogicBoolean.TRUE && falseValue == LogicBoolean.FALSE
+                || trueValue == LogicBoolean.FALSE && falseValue == LogicBoolean.TRUE;
     }
 
     private void convertToSelectSequence(AstContext ifExpression, LogicList condition, ShortCircuitAnalysis analysis,
@@ -233,7 +278,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
 
         final LogicList targetBranch = analysis.operation() == Operation.LOGICAL_AND ? trueBranch : falseBranch;
         AstContext targetContext = targetBranch.getExistingAstContext();
-        LogicList newInstructions = createLogicList(targetContext);
+        LogicList instructions = createLogicList(targetContext);
 
         int index = findJumpFromEnd(condition, 2);
 
@@ -250,18 +295,23 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
             size++;
             LogicInstruction ix = transformed.getExisting(i);
             if (ix instanceof JumpInstruction jumpIx) {
-                if (jumpIx.getCondition() != Condition.STRICT_NOT_EQUAL) {
-                    // The last jump always leads to the false branch: when the condition is true, the false value is selected
-                    newInstructions.createSelect(result, jumpIx.getCondition(), jumpIx.getX(), jumpIx.getY(),
-                            falseContent.assignments.get(result), trueContent.assignments.get(result));
+                boolean swapValues = jumpIx.getCondition() != Condition.STRICT_NOT_EQUAL;
+                Condition newCondition = swapValues ? jumpIx.getCondition() : Condition.STRICT_EQUAL;
+                LogicValue trueValue = trueContent.assignments.getOrDefault(result, result);
+                LogicValue falseValue = falseContent.assignments.getOrDefault(result, result);
+                LogicValue t = swapValues ? falseValue : trueValue;
+                LogicValue f = swapValues ? trueValue : falseValue;
+                if (t.isOne() && f.isZero() || t.isZero() && f.isOne() && newCondition.hasInverse(false)) {
+                    Condition adjusted = t.isZero() ? newCondition.inverse(false) : newCondition;
+                    instructions.createOp(adjusted.toOperation(), result, jumpIx.getX(), jumpIx.getY());
+                } else if (hasSelect) {
+                    instructions.createSelect(result, newCondition, jumpIx.getX(), jumpIx.getY(), t, f);
                 } else {
-                    // We're inverting the condition here
-                    newInstructions.createSelect(result, Condition.STRICT_EQUAL, jumpIx.getX(), jumpIx.getY(),
-                            trueContent.assignments.get(result), falseContent.assignments.get(result));
+                    return false;
                 }
                 break;
             }
-            newInstructions.addToContext(ix);
+            instructions.addToContext(ix);
         }
 
         // Remove the unused part of the condition
@@ -272,7 +322,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         int branchIndex = instructionIndex(targetBranch.getExisting(0));
         for (int i = 0; i < targetBranch.size(); i++) removeInstruction(branchIndex);
 
-        insertInstructions(branchIndex, newInstructions);
+        insertInstructions(branchIndex, instructions);
         return true;
     }
 
@@ -286,7 +336,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         throw new MindcodeInternalError("Expected two jumps or more");
     }
 
-    private void optimizeFullEvaluation(AstContext ifExpression, LogicList condition, BranchContent trueContent,
+    private boolean optimizeFullEvaluation(AstContext ifExpression, LogicList condition, BranchContent trueContent,
             BranchContent falseContent, SequencedSet<LogicVariable> results, JumpInstruction jump, ConditionJumpHandling jumpHandling) {
         AstContext targetContext = requireNonNull(ifExpression.parent()).createChild(ifExpression.existingNode(), OPERATOR);
         int index = findJumpFromEnd(condition, 1);
@@ -298,7 +348,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         JumpInstruction invertedJump = negateCompoundCondition(condition);
         if (invertedJump != null && analyzeJump(invertedJump, trueContent, falseContent) == ConditionJumpHandling.NONE) {
             instructions.removeLast();  // This is the op instruction
-            replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
+            return replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
                     invertedJump.getCondition(), invertedJump.getX(), invertedJump.getY(),
                     false);
         } else {
@@ -311,20 +361,20 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
             if (jump.getCondition().hasInverse(getGlobalProfile())) {
                 // The compiler inverts the if condition because the jump leads to the false branch
                 // Here we invert it back so that true and false values remain the same
-                replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
+                return replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
                         jump.getCondition().inverse(getGlobalProfile()), jump.getX(), jump.getY(),
                         false);
             } else {
                 // The compiler inverts the if condition because the jump leads to the false branch
                 // Here we cannot invert it back, so the true and false values are swapped
-                replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
+                return replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
                         jump.getCondition(), jump.getX(), jump.getY(),
                         true);
             }
         }
     }
 
-    private void replaceIfStatement(AstContext ifExpression, LogicList instructions, BranchContent trueContent, BranchContent falseContent,
+    private boolean replaceIfStatement(AstContext ifExpression, LogicList instructions, BranchContent trueContent, BranchContent falseContent,
             Set<LogicVariable> results, Condition condition, LogicValue x, LogicValue y, boolean swapValues) {
         int falseIndex = 0;
         Set<LogicVariable> resolved = new HashSet<>();
@@ -358,9 +408,14 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
             addInstruction(instructions, instruction, results, resolved, trueContent, falseContent, condition, x, y, swapValues);
         }
 
-        int insertionIndex = firstInstructionIndex(ifExpression);
-        removeMatchingInstructions(ix -> ix.belongsTo(ifExpression));
-        insertInstructions(insertionIndex, instructions);
+        if (hasSelect || instructions.stream().noneMatch(ix -> ix.getOpcode() == Opcode.SELECT)) {
+            int insertionIndex = firstInstructionIndex(ifExpression);
+            removeMatchingInstructions(ix -> ix.belongsTo(ifExpression));
+            insertInstructions(insertionIndex, instructions);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void encapsulateResult(LogicList instructions, LogicResultInstruction instruction, Set<LogicVariable> results,
@@ -382,9 +437,15 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         if (results.contains(result)) {
             LogicValue trueValue = trueContent.assignments.getOrDefault(result, result);
             LogicValue falseValue = falseContent.assignments.getOrDefault(result, result);
-            instructions.createSelect(result, condition, x, y,
-                    swapValues ? falseValue : trueValue,
-                    swapValues ? trueValue : falseValue);
+            LogicValue t = swapValues ? falseValue : trueValue;
+            LogicValue f = swapValues ? trueValue : falseValue;
+
+            if (t.isOne() && f.isZero() || t.isZero() && f.isOne() && condition.hasInverse(false)) {
+                Condition adjusted = t.isZero() ? condition.inverse(false) : condition;
+                instructions.createOp(adjusted.toOperation(), result, x, y);
+            } else {
+                instructions.createSelect(result, condition, x, y, t, f);
+            }
             resolved.add(result);
         } else {
             instructions.addToContext(instruction);
@@ -453,9 +514,10 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
     }
 
     private enum ConditionJumpHandling {
-        /// No handling needed
+        /// No handling needed.
         NONE,
-        /// The condition value needs to be stored separately
+        /// The condition value needs to be stored separately, as the statement body/bodies modify variables
+        /// used by the condition.
         FULL,
     }
 
@@ -494,6 +556,17 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
 
         boolean hasSingleAssignment() {
             return assignments.size() == 1 && instructions.size() == 1;
+        }
+
+        @Nullable LogicBoolean getAsBoolean() {
+            if (assignments.size() == 1) {
+                LogicValue value = assignments.values().iterator().next();
+                if (value instanceof LogicBoolean booleanValue) return booleanValue;
+                if (value.isNumericConstant() && (value.getIntValue() == 0 || value.getIntValue() == 1)) {
+                    return LogicBoolean.get(value.getIntValue() == 1);
+                }
+            }
+            return null;
         }
 
         boolean hasDependents(LogicVariable variable) {

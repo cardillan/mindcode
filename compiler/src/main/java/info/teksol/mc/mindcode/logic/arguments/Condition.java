@@ -60,8 +60,12 @@ public enum Condition implements LogicArgument {
         return reflexive;
     }
 
+    public boolean hasInverse(boolean allowStrictNotEqual) {
+        return this != ALWAYS && (allowStrictNotEqual || this != STRICT_EQUAL);
+    }
+
     public boolean hasInverse(GlobalCompilerProfile profile) {
-        return ordinal() < (profile.useEmulatedStrictNotEqual() ? ALWAYS.ordinal() : STRICT_EQUAL.ordinal());
+        return hasInverse(profile.useEmulatedStrictNotEqual());
     }
 
     public boolean isStrict() {

@@ -17,6 +17,14 @@ public interface LogicReadable {
         return isConstant() && !isObject();
     }
 
+    default boolean isZero() {
+        return isNumericConstant() && getDoubleValue() == 0d;
+    }
+
+    default boolean isOne() {
+        return isNumericConstant() && getDoubleValue() == 1d;
+    }
+
     /// Provides the value of this argument as a double. Throws error when isConstant() is false.
     ///
     /// @return numeric value of this argument as a double

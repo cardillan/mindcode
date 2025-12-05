@@ -232,7 +232,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                 createInstruction(SET, ":i", "0"),
                 createInstruction(LABEL, label(6)),
                 createInstruction(OP, "mod", tmp(0), ":i", "2"),
-                createInstruction(SELECT, tmp(2), "notEqual", tmp(0), "false", "1", "0"),
+                createInstruction(OP, "notEqual", tmp(2), tmp(0), "false"),
                 createInstruction(PRINT, tmp(2)),
                 createInstruction(OP, "add", ":i", ":i", "1"),
                 createInstruction(JUMP, label(6), "lessThan", ":i", "1000")
