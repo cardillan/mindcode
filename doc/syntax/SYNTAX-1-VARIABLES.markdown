@@ -206,7 +206,7 @@ print(a);
 printflush(message1);
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 print 10
@@ -437,7 +437,7 @@ printflush(output);
 stopProcessor();
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 # A guard code: loops until message1 is not null

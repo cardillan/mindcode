@@ -136,7 +136,7 @@ Does not display anything until Print Flush is used.
 
 ## Instruction `Format`
 
-Replace next placeholder in text buffer with a value. Does not do anything if placeholder pattern is invalid. Placeholder pattern: "{number 0-9}" Example: print "test {0}"; format "example"
+Replace next placeholder in text buffer with a value. Does not do anything if placeholder pattern is invalid. Placeholder pattern: `"{number 0-9}"` Example: `print "test {0}"; format "example"`
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
 

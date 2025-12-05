@@ -202,6 +202,10 @@ public enum Operation implements LogicArgument {
         return ordinal() <= STRICT_EQUAL.ordinal() || allowStrictNotEqual && this == STRICT_NOT_EQUAL;
     }
 
+    public boolean hasBooleanValue() {
+        return ordinal() <= STRICT_NOT_EQUAL.ordinal() || this == BOOLEAN_AND || this == LOGICAL_AND;
+    }
+
     @Override
     public String toMlog() {
         if (mlog == null) {
@@ -246,6 +250,24 @@ public enum Operation implements LogicArgument {
             case GREATER_THAN_EQ -> LESS_THAN_EQ;
             default -> null;
         };
+    }
+
+    public @Nullable Operation inverseCondition(boolean allowStrictNotEqual) {
+        return switch (this) {
+            case EQUAL -> NOT_EQUAL;
+            case NOT_EQUAL -> EQUAL;
+            case LESS_THAN -> GREATER_THAN_EQ;
+            case GREATER_THAN_EQ -> LESS_THAN;
+            case LESS_THAN_EQ -> GREATER_THAN;
+            case GREATER_THAN -> LESS_THAN_EQ;
+            case STRICT_EQUAL -> allowStrictNotEqual ? STRICT_NOT_EQUAL : null;
+            case STRICT_NOT_EQUAL -> STRICT_EQUAL;
+            default -> null;
+        };
+    }
+
+    public @Nullable Operation inverseCondition(GlobalCompilerProfile profile) {
+        return inverseCondition(profile.useEmulatedStrictNotEqual());
     }
 
     private static final Map<String, Operation> MINDCODE_MAP = Stream.of(values())

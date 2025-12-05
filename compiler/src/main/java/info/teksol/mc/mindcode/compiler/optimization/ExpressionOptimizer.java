@@ -39,13 +39,13 @@ class ExpressionOptimizer extends BaseOptimizer {
                     case LookupInstruction ix       -> processLookupInstruction(it, ix);
                     case OpInstruction ix           -> processOpInstruction(it, ix);
                     case PackColorInstruction ix    -> processPackColorInstruction(it, ix);
+                    case ReadArrInstruction ix      -> processReadArrInstruction(it, ix);
+                    case ReadInstruction ix         -> processReadInstruction(it, ix);
                     case SelectInstruction ix       -> processSelectInstruction(it, ix);
                     case SensorInstruction ix       -> processSensorInstruction(it, ix);
                     case SetInstruction ix          -> processSetInstruction(it, ix);
-                    case ReadInstruction ix         -> processReadInstruction(it, ix);
-                    case WriteInstruction ix        -> processWriteInstruction(it, ix);
-                    case ReadArrInstruction ix      -> processReadArrInstruction(it, ix);
                     case WriteArrInstruction ix     -> processWriteArrInstruction(it, ix);
+                    case WriteInstruction ix        -> processWriteInstruction(it, ix);
                     default -> {}
                 }
             }
@@ -179,7 +179,7 @@ class ExpressionOptimizer extends BaseOptimizer {
         }
 
         final Tuple2<LogicValue, LogicValue> ops = extractIdivOperands(ix);
-        if (ops != null) {
+        if (ops != null && !optimizationContext.isStale(ix.getResult())) {
             LogicVariable result = ix.getResult();
             List<LogicInstruction> list = getVariableReferences(result).stream()
                     .filter(in -> in.getArgs().contains(result))
@@ -190,32 +190,30 @@ class ExpressionOptimizer extends BaseOptimizer {
             // - div/idiv/mul comes first
             // - the second is the floor operation
             // - the second operates on the result of the first
-            if (list.size() == 2 && list.get(0) == ix && list.get(1) instanceof OpInstruction ox
+            if (list.size() == 2 && list.getFirst() == ix && list.getLast() instanceof OpInstruction ox
                     && ox.getOperation() == Operation.FLOOR && ox.getX().equals(ix.getResult())) {
 
                 replaceInstruction(ox, createOp(ox.getAstContext(),
                         Operation.IDIV, ox.getResult(), ops.e1(), ops.e2()));
-                logicIterator.set(createEmpty(ix.getAstContext()));
+                if (ix.getResult().isTemporaryVariable()) {
+                    logicIterator.set(createEmpty(ix.getAstContext()));
+                }
                 logicIterator.next();
             }
         }
     }
 
     private @Nullable Tuple2<LogicValue, LogicValue> extractIdivOperands(OpInstruction ix) {
-        if (!ix.getResult().isTemporaryVariable()) {
-            return null;
-        } else {
-            return switch (ix.getOperation()) {
-                case DIV, IDIV -> Tuple2.ofSame(ix.getX(), ix.getY());
+        return switch (ix.getOperation()) {
+            case DIV, IDIV -> Tuple2.ofSame(ix.getX(), ix.getY());
 
-                case MUL ->
-                        ix.getX().isNumericLiteral() ? invertMultiplicand(ix.getY(), ix.getX()) :
-                        ix.getY().isNumericLiteral() ? invertMultiplicand(ix.getX(), ix.getY()) :
-                        null;
+            case MUL ->
+                    ix.getX().isNumericLiteral() ? invertMultiplicand(ix.getY(), ix.getX()) :
+                    ix.getY().isNumericLiteral() ? invertMultiplicand(ix.getX(), ix.getY()) :
+                    null;
 
-                default -> null;
-            };
-        }
+            default -> null;
+        };
     }
 
     private @Nullable Tuple2<LogicValue, LogicValue> invertMultiplicand(LogicValue variable, LogicValue literal) {
@@ -236,6 +234,36 @@ class ExpressionOptimizer extends BaseOptimizer {
                     Color.toDoubleBitsClamped(r, g, b, a),
                     Color.toColorLiteralClamped(r, g, b, a));
             logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), color));
+        }
+    }
+
+    private void processReadArrInstruction(LogicIterator logicIterator, ReadArrInstruction ix) {
+        ArrayStore arrayStore = ix.getArray().getArrayStore();
+        if (ix.getIndex().isNumericConstant() && arrayStore.optimizeElementAccess()) {
+            List<ValueStore> elements = arrayStore.getElements();
+            if (!ix.getIndex().isLong()) {
+                error(ix.getIndex().sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
+            } else if (ix.getIndex().getIntValue() < 0 || ix.getIndex().getIntValue() >= elements.size()) {
+                error(ix.getIndex().sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
+            } else {
+                LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(instructionProcessor,
+                        ix.getAstContext(), logicIterator::add);
+                logicIterator.remove();
+                elements.get(ix.getIndex().getIntValue()).readValue(creator, ix.getResult());
+            }
+        }
+    }
+
+    private void processReadInstruction(LogicIterator logicIterator, ReadInstruction ix) {
+        if (ix.getMemory() instanceof LogicString logicString && ix.getIndex().isNumericConstant()) {
+            String string = logicString.getValue();
+            long index = ix.getIndex().getLongValue();
+            LogicValue value = index >= 0 && index < string.length()
+                    ? LogicNumber.create((long) string.charAt((int) index))
+                    : LogicNull.NULL;
+            logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), value));
+        } else if (advanced(ix) && ix.getMemory().equals(LogicBuiltIn.THIS) && ix.getIndex() instanceof LogicString mlogName) {
+            logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicVariable.mlogVariable(mlogName.getValue())));
         }
     }
 
@@ -286,32 +314,9 @@ class ExpressionOptimizer extends BaseOptimizer {
         }
     }
 
-    private void processReadInstruction(LogicIterator logicIterator, ReadInstruction ix) {
-        if (ix.getMemory().equals(LogicBuiltIn.THIS) && ix.getIndex() instanceof LogicString mlogName) {
-            logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicVariable.mlogVariable(mlogName.getValue())));
-        }
-    }
-
     private void processWriteInstruction(LogicIterator logicIterator, WriteInstruction ix) {
         if (ix.getMemory().equals(LogicBuiltIn.THIS) && ix.getIndex() instanceof LogicString mlogName) {
             logicIterator.set(createSet(ix.getAstContext(),LogicVariable.mlogVariable(mlogName.getValue()), ix.getValue()));
-        }
-    }
-
-    private void processReadArrInstruction(LogicIterator logicIterator, ReadArrInstruction ix) {
-        ArrayStore arrayStore = ix.getArray().getArrayStore();
-        if (ix.getIndex().isNumericConstant() && arrayStore.optimizeElementAccess()) {
-            List<ValueStore> elements = arrayStore.getElements();
-            if (!ix.getIndex().isLong()) {
-                error(ix.getIndex().sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
-            } else if (ix.getIndex().getIntValue() < 0 || ix.getIndex().getIntValue() >= elements.size()) {
-                error(ix.getIndex().sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
-            } else {
-                LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(instructionProcessor,
-                        ix.getAstContext(), logicIterator::add);
-                logicIterator.remove();
-                elements.get(ix.getIndex().getIntValue()).readValue(creator, ix.getResult());
-            }
         }
     }
 

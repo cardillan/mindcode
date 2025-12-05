@@ -1,13 +1,31 @@
 # Boolean Optimization
 
-This optimization replaces conditional expressions, which assign a value to variables depending on a condition, by the `select` instruction, if the target is `8.1` or higher. Example:
+This optimization is aimed at fully evaluated and short-circuited boolean expressions, both standalone and in conditional expressions. The basis of the optimization lies in replacing the conditional expression with a sequence of `op` or `select` (in target `8.1` or higher) instructions. In the following text only the `select` instructions are mentioned. However, wherever possible, the `op` instructions are used instead.
+
+> [!TIP]
+> Since the `op` instruction can only generate boolean values, the optimization possibilities are very limited for targets where `select` is not available.
+
+Available optimizations depend on the expression evaluation (full or short-circuited).
+
+## Fully evaluated expressions
+
+In fully evaluated expressions, the value of the condition is fully computed before the conditional statement is executed. Such expressions can be optimized by replacing the true and false branches with a sequence of `select` instructions based on the final value of the condition; one `select` instruction is needed for each output variable of the conditional expressions. When additional computations are needed to produce a final value of any output variable in either branch, these computations are kept in the optimized code and are executed regardless of the actual value of the condition.    
+
+When this optimization is applied, it always decreases the code size, as it avoids any jumps, and it replaces two separate assignments to the same variable in each branch with a single `select` instruction.  
+
+Whether the optimization is applied depends on the optimization goal:
+
+* `speed` or `neutral`: the optimization is applied if the average execution time is improved by the optimization. When computing the average execution time, it is assumed both branches get selected with the same probability.
+* `size`: the optimization is applied if the number of instructions required needed for the additional computations (see above) is at most five.
+
+Example:
 
 ```Mindcode
 set target = 8.1;
 print(rand(10) < 5 ? "low" : "high");
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 op rand *tmp0 10 0
@@ -15,7 +33,7 @@ select *tmp2 lessThan *tmp0 5 "low" "high"
 print *tmp2
 ```
 
-The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch. It is applied if the average execution time is improved by the optimization, unless the optimization goal is set to `size`, in which case the optimization is always applied. (The code size is always reduced thanks to avoiding any jumps.)
+The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch.
 
 ```Mindcode
 set target = 8;
@@ -49,7 +67,7 @@ print :b
 print :c
 ```
 
-Even when the assignments modify both variables used in the branch condition, or a simple single expression is used in one of the branches, the `select` optimization can compensate for that:
+Even when the assignments modify one or both variables used in the branch condition, or a simple single expression is used in one of the branches, the `select` optimization can compensate for that:
 
 ```Mindcode
 set target = 8;
@@ -73,6 +91,152 @@ select .b equal *tmp5 false 20 10
 packcolor *tmp6 0 .b .b 1
 select *tmp3 greaterThan .a 0 *tmp6 %[red]
 draw col *tmp3 0 0 0 0 0
+```
+
+## Short-circuit expressions
+
+Three different optimizations are available for short-circuited expressions. Unless specified otherwise, all of these optimizations are only supported when the condition can be expressed as a sequence of `and` or `or` operators (not both). 
+
+### Conversion to full evaluation
+
+This optimization only happens when the short-circuit condition can be converted to full evaluation without any side effects, and the result is compatible with the optimization goal:
+
+* `speed` or `neutral`: the condition consists of a single `and` or `or` operator only, there are no additional computations neither in the true or false branch, nor in the short-circuited portion of the condition and both branches write to the same set of variables.
+* `size`: the number of instructions required needed for the additional computations is at most five.
+
+This optimization allows the condition to be processed as a [Fully evaluated expression](#fully-evaluated-expressions) described above, which provides the actual benefit.
+
+Due to the preconditions listed above, the optimization only happens when the second term in the condition is a simple variable when the optimization goal is `speed` or `neutral`. The combined effects of both optimizations taking place can be seen here:
+
+```Mindcode
+#set target = 8;
+if switch1.enabled and a then
+    x = 10; y = 20;
+else
+    x = 5; y = 7;
+end;
+print(x, y);
+```
+
+compiles to:
+
+```mlog
+sensor *tmp0 switch1 @enabled
+op land *tmp2 *tmp0 :a
+select :x notEqual *tmp2 false 10 5
+select :y notEqual *tmp2 false 20 7
+print :x
+print :y
+```
+
+Just switching the terms in the condition precludes the optimization:
+
+```Mindcode
+#set target = 8;
+if a and switch1.enabled then
+    x = 10; y = 20;
+else
+    x = 5; y = 7;
+end;
+print(x, y);
+```
+
+compiles to:
+
+```mlog
+jump 6 equal :a false
+sensor *tmp0 switch1 @enabled
+jump 6 equal *tmp0 false
+set :x 10
+set :y 20
+jump 8 always 0 0
+set :x 5
+set :y 7
+print :x
+print :y
+```
+
+### Single variable assignment
+
+If both the true and the false branches write to just one variable without any additional computations, it is again possible to replace the expression with a sequence of `select` instructions (the `op` instructions can't be used in this case, as they do not allow handling intermediate results). Unlike the case of the fully evaluated condition, each `select` instruction evaluates a piece of the original condition:
+
+```Mindcode
+#set target = 8;
+volatile x = a > 0 or b > 10 or c < 20 ? 10 : 20;
+```
+
+compiles to:
+
+```mlog
+select *tmp4 greaterThan :a 0 10 20
+select *tmp5 greaterThan :b 10 10 *tmp4
+select .x lessThan :c 20 10 *tmp5
+```
+
+This optimization only happens when the short-circuit condition can be converted to full evaluation without any side effects, and the result is compatible with the optimization goal:
+
+* `speed` or `neutral`: the condition has at most two terms, and there are no additional computations in the condition.
+* `size`: the condition has at most five terms, and it uses at most five additional instructions for evaluation of the condition 
+
+An example of the optimization applied under the `size` optimization goal:
+
+```Mindcode
+#set target = 8;
+#set goal = size;
+volatile x = (switch1.enabled and sorter1.config == @coal);
+```
+
+compiles to:
+
+```mlog
+sensor *tmp0 switch1 @enabled
+op notEqual *tmp4 *tmp0 false
+sensor *tmp1 sorter1 @config
+select .x equal *tmp1 @coal *tmp4 false
+```
+
+### Last jump conversion
+
+When none of the above optimizations can be made, the optimizer tries to replace the last jump in the sequence of jumps with a `select` instruction. This is only possible when the conditional expression produces just one variable identical in both branches, and the condition is a simple variable. This optimization also doesn't depend on the optimization goal.
+
+Example:
+
+```Mindcode
+#set target = 8;
+volatile x = switch1.enabled and !@unit.@dead and amount > 0 ? "yes" : "no";
+```
+
+compiles to:
+
+```mlog
+sensor *tmp0 switch1 @enabled
+jump 6 equal *tmp0 false
+sensor *tmp1 @unit @dead
+jump 6 notEqual *tmp1 false
+select .x lessThanEq :amount 0 "no" "yes"
+jump 0 always 0 0
+set .x "no"
+```
+
+For comparison, the unoptimized code would look like this:
+
+```Mindcode
+#set target = 8;
+#set boolean-optimization = none;
+volatile x = switch1.enabled and !@unit.@dead and amount > 0 ? "yes" : "no";
+```
+
+compiles to:
+
+```mlog
+sensor *tmp0 switch1 @enabled
+jump 7 equal *tmp0 false
+sensor *tmp1 @unit @dead
+jump 7 notEqual *tmp1 false
+jump 7 lessThanEq :amount 0
+set .x "yes"
+jump 0 always 0 0
+set .x "no"
 ```
 
 ---

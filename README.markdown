@@ -49,11 +49,12 @@ The most important recent changes to Mindcode include:
 * Mindustry Logic 8
   * Complete support for [the latest Mindustry 8 pre-release](/doc/syntax/MINDUSTRY-8.markdown).
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
-  * [Array implementations](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization) using the Mindustry 8 Logic capabilities. 
+  * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities. 
   * New string/character-based instructions and character literals.
   * Support for named color literals: `%[red]`.
 * Language features
-  * Local compiler options
+  * Short-circuit evaluation of boolean expressions.
+  * Local compiler options.
   * Support for `null` values in the `case` expression.
   * Significantly improved optimization of `case` expressions, including `case` expression over block types, unit types, items or liquids.
   * Passing arguments (including arrays) to inline functions by reference.

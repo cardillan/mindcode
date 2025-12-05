@@ -203,7 +203,7 @@ print(building, type, floor);
 printflush(message1);
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 op rand *tmp0 100 0
@@ -387,7 +387,7 @@ print("Final value: ", i);
 printflush(message1);
 ```
 
-which compiles to
+which compiles to:
 
 ```mlog
 set address @counter

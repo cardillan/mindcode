@@ -43,7 +43,7 @@ x = y - 1 != 2;
 x = 1 - y != 2;
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 op greaterThanEq .x .y 1
@@ -70,7 +70,7 @@ x = y - 1 >= 2;
 x = 1 - y >= 2;
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 op add *tmp0 .y 1
@@ -81,7 +81,7 @@ op sub *tmp4 1 .y
 op greaterThanEq .x *tmp4 2
 ```
 
-The following example demonstrates constant folding applied to multiplication and division, plus a precision loss which typically occurs when handing decimal numbers:
+The following example demonstrates constant folding applied to multiplication and division, as well as the detection of a precision loss (which typically occurs when handing decimal numbers):
 
 ```Mindcode
 #set remarks = comments;
@@ -94,7 +94,7 @@ x = 2 / y >= 4;
 x = y - 0.1 >= 0.2;
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 # Multiplication and division
@@ -110,7 +110,7 @@ op greaterThanEq .x *tmp6 0.2
 
 Condition streamlining is performed when the condition compares a variable to `false` using an `equal`/`notEqual` comparison (this effectively determines whether the value stored in the variable represents `true` or `false`), and the `op` instruction has a relational operator. In these cases, which may be produced directly by the compiler, or are a result of boolean operators in expressions, the condition can be evaluated directly by the conditional instruction.
 
-The optimization doesn't happen when the resulting condition requires strict inequality, and emulating the strict inequality with a `select` is not possible.
+The optimization doesn't happen when the resulting condition requires strict inequality and emulating the strict inequality with a `select` is not possible.
 
 A typical example of a streamlined condition is:
 
@@ -121,7 +121,7 @@ while !(n < 0) do
 end;
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 jump 0 lessThan :n 0
@@ -138,7 +138,7 @@ while !(n < 0) do
 end;
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 op lessThan *tmp0 :n 0

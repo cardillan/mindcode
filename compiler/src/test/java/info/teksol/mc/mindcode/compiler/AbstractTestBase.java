@@ -311,7 +311,7 @@ public abstract class AbstractTestBase extends AbstractMessageEmitter implements
             enabled     = LogicBuiltIn.createForUnitTests("@enabled",   false),
             time        = LogicBuiltIn.createForUnitTests("@time",      false),
             unit        = LogicBuiltIn.createForUnitTests("@unit",      false),
-            This        = LogicBuiltIn.createForUnitTests("@this",      false),
+            thiz        = LogicBuiltIn.createForUnitTests("@this",      false),
             x           = LogicBuiltIn.createForUnitTests("@x",         false),
             y           = LogicBuiltIn.createForUnitTests("@y",         false),
             thisx       = LogicBuiltIn.createForUnitTests("@thisx",     false),

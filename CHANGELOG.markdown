@@ -21,12 +21,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * **Breaking:** The [`and` and `or` operators](/doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#boolean-and-logical-and-or-operators) now perform [short-circuit evaluation](https://en.wikipedia.org/wiki/Short-circuit_evaluation).
 * The _Jump optimization_ has been renamed to [Condition Optimization](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown), and has been significantly extended:
-  * Conditional expressions are handled in `select` and `or` instructions as well as in `jump`.
+  * [Condition streamlining](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown#condition-streamlining) is now applied to the `select` and `or` instructions as well as to `jump`.
   * The optimization is applied to all variables, not just temporary ones. The results of the DFO analysis are used to track user-defined variables.
-  * On `advanced` level, constant folding of conditional expressions is now also performed.
-* The [Boolean Optimization](doc/syntax/optimizations/BOOLEAN-OPTIMIZATION.markdown), previously included in the If Expression Optimization as a _Select Optimization_, has been extracted into a separate optimization type.
+  * On `advanced` level, [constant folding of conditional expressions](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown#constant-folding) is now also performed.
+* **Breaking:** The `jump-optimization` command-line option and compiler directive has been renamed to `condition-optimization`.
+* The [Boolean Optimization](doc/syntax/optimizations/BOOLEAN-OPTIMIZATION.markdown), previously included in the If Expression Optimization as a _Select Optimization_, has been extracted into a separate optimization type and extended:
+  * Several optimizations aimed at short-circuited conditional expressions were added.
+  * Where possible, an `op` instruction is used instead of `select`. This allows applying some optimizations even when the compilation target doesn't support `select`.  
+* The [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) has been updated:
+  * More cases where a [`select` instruction](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#the-select-instruction) can be replaced with a `set` instruction are now supported.
+  * When the resulting values of `select` are `0` and `1` and the condition allows it, the instruction is replaced with an `op` instruction.
+  * Added an optimization turning a [`read` instruction](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#the-readwrite-instructions) with a constant string and a constant index into a `set` instruction setting the character value directly.
+* When evaluating `jump` and `select` conditions during optimizations, cases where the operands of the condition are identical (the same variable) are handled.   
 * The [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY-COMPATIBILITY.markdown) now also performs a test to find out whether assigning `null` to `@counter` is ignored by the processor.
-* The documentation has been restructured. Individual optimizers are described in separate files, and the description of Logic functions with links to the Function reference was also moved to a separate file.
+* The documentation has been restructured. Individual optimizers are described in [separate files](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#individual-mindcode-optimizations), and the description of Logic functions with links to the Function reference was also moved to a [separate file](doc/syntax/FUNCTIONS.markdown).
 
 ## 3.10.0 - 2025-11-17
 
@@ -393,7 +401,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Miscellaneous
 
-* Mindustry Logic functions take precedence over functions defined in the system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in the current target.
+* Logic functions take precedence over functions defined in the system library. This allows system libraries to contain functions that can be used when a corresponding Logic function doesn't exist in the current target.
 * A list of supported keywords and built-in variables for instruction parameters are now provided by mimex-generated metadata.
 * Added a list of accepted built-in variables to the description of functions in the function reference.
 * The docker definition was updated to avoid unnecessary recompilations (courtesy of 3bd).
@@ -558,7 +566,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Added
 
-* Added [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords) as a preferred way to specify mlog keywords to Mindustry Logic functions ([#215](https://github.com/cardillan/mindcode/issues/215)).
+* Added [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords) as a preferred way to specify mlog keywords to Logic functions ([#215](https://github.com/cardillan/mindcode/issues/215)).
 * Added support for passing mlog keywords and formattable string literals as arguments to inline functions.
 * Added support for creating constants out of mlog keywords.
 * Added known mlog keywords to the file type definitions of the [provided IntelliJ IDEA IDE settings](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea).
@@ -581,7 +589,7 @@ The newly added features are fully functional. There's an unfinished support for
 ### Deprecated
 
 * Deprecated the `loop` keyword in `do while` loop.
-* Deprecated specifying mlog keywords without the `:` prefix in Mindustry Logic function calls.
+* Deprecated specifying mlog keywords without the `:` prefix in Logic function calls.
 
 ## 3.1.1 - 2025-03-15
 

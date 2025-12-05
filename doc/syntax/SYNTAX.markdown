@@ -10,13 +10,11 @@ This documentation covers the basics of Mindcode syntax:
 * [Control Flow Statements](SYNTAX-3-STATEMENTS.markdown)
 * [Functions](SYNTAX-4-FUNCTIONS.markdown)
 
-Mindcode provides access to most mlog instructions via [Logic functions](FUNCTIONS.markdown):
+Mindcode provides access to most mlog instructions via Logic functions:
 
-* [Function reference for target 6.0](FUNCTIONS-60.markdown)
-* [Function reference for target 7.0](FUNCTIONS-70.markdown)
-* [Function reference for target 7.1](FUNCTIONS-71.markdown)
-* [Function reference for target 8.0](FUNCTIONS-80.markdown)
-* [Function reference for target 8.1](FUNCTIONS-81.markdown)
+* [Function reference for target 7.1](FUNCTIONS-71.markdown) (for the latest stable Mindustry version)
+* [Function reference for target 8.1](FUNCTIONS-81.markdown) (for the latest Mindustry beta release)
+* See [Logic functions](FUNCTIONS.markdown) for all supported versions.
 
 A [System Library](SYSTEM-LIBRARY.markdown), consisting of several separate modules, is available:
 
@@ -108,7 +106,7 @@ In the web application, the `require` statement can only be used to import syste
 In the command-line tool, using the `require` statement with external files is analogous to the [`--append` command-line argument](TOOLS-CMDLINE.markdown#additional-input-files).
 
 > [!IMPORTANT]
-> At this moment, all included files share the same variable namespace. Functions, variables, constants, and program parameters defined in one source file may conflict with identically named function, variable, constant, or program parameter in another included file. 
+> At this moment, all included files share the same variable namespace. Functions, variables, constants, and program parameters defined in one source file may conflict with an identically named function, variable, constant, or program parameter in another included file. 
 
 ## Compilation and optimization
 
@@ -140,7 +138,7 @@ Code adhering to the strict syntax produces the same output regardless of the sy
 ### Relaxed syntax
 
 * **Code in global scope.** It is permissible to place executable code outside a code block (e.g., `print("Hello!"); printflush(message1);` is a valid source code).
-* **Optional variable declarations.** While variables can be explicitly declared, these declarations are optional. When variables aren't declared, they can be used freely in the source code and their scope is determined by naming convention.
+* **Optional variable declarations.** While variables can be explicitly declared, these declarations are optional. When variables aren't declared, they can be used freely in the source code, and their scope is determined by naming convention.
 
 > [!TIP]
 > Using the naming convention to determine variable scopes leads to some constraints on allowed variable names: names of linked blocks generally cannot be used to name any other variable, and upper-case variable names (which are global by convention) cannot be used as function parameters. 
@@ -154,7 +152,7 @@ Code adhering to the strict syntax produces the same output regardless of the sy
 * **Explicit variable declarations.** All variables must be declared before being used, even variables representing linked blocks. The variables are valid in the code block in which they were declared.
 
 > [!TIP]
-> At this moment, several code blocks can exist in the global scope. They are compiled in the order in which they're encountered in the program.
+> At this moment, several code blocks can exist in the global scope. They are compiled in the order in which they're encountered in the program. In future versions of Mindcode, however, multiple top-level code blocks might be disallowed.
 
 The requirement to declare variables explicitly helps to identify misspelled variable names, as unknown variable names cause compilation errors, and cases when a single variable is used for multiple different purposes, as repeated variable declarations also cause compilation errors.
 
@@ -276,7 +274,7 @@ Mindustry Logic provides variables and constants that start with `@`. They can b
 Built-in variables and constants can be used as-is in Mindcode, e.g., `@time` or `@titanium-conveyor`. The leading `@` is always present.
 
 > [!TIP]
-> Mindcode has a list of built-in variables and handles some of them specifically, but any unknown built-in values in the source code are compiled in as-is. When Mindustry Logic introduces a new built-in variable, it can be used right away without waiting for a new version of Mindcode to be released, unless the new built-in variable needs some special handling by the compiler.
+> Mindcode has a list of built-in variables and handles some of them specifically. When an unknown built-in variable is encountered, a warning is generated, but the built-in variable is used as specified in the source code (the warning can be suppressed by the [`#declare` directive](SYNTAX-EXTENSIONS.markdown#declaring-new-built-in-variables)). Therefore, when Mindustry Logic introduces a new built-in variable, or such a variable is provided by a mod, it can be used right away without waiting for a new version of Mindcode to be released.
 
 Some built-in variables represent a constant numerical value, such as `@pi` or `@blockCount`. The actual numerical value is either _stable_, meaning it is the same in all released versions of Mindustry since the first one in which it appeared (e.g., `@pi`), or _unstable_, meaning the value depends on the actual version of Mindustry used (e.g., `@blockCount`).
 
@@ -291,7 +289,7 @@ println(@pi);           // Conversion to string
 printflush(message3);
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 print @pi
@@ -302,9 +300,7 @@ print "3.1415927410125732\n"
 printflush message3
 ```
 
-The unstable built-in variables are compile-time evaluated when the `builtin-evaluation` option is set to `full`. This setting is useful when the program is meant to be only run in the version of Mindustry selected by the `target` option, and not on later versions.
-
-All other built-in constants and variables (that is, those that aren't numerical constants) are compiled into mlog code as is, although Mindcode emits a warning when an unknown built-in variable is encountered as protection against mistyped identifiers. Valid built-in variables unknown to Mindcode (provided by a mod, for example) can be declared using the [`#declare` directive](SYNTAX-EXTENSIONS.markdown#declaring-new-built-in-variables) to eliminate the warning.
+The unstable built-in variables are compile-time evaluated when the `builtin-evaluation` option is set to `full`. This setting is useful when the program is meant to be only run in the version of Mindustry selected by the `target` option, and not in any later versions.
 
 > [!NOTE]
 > Assignments to built-in variables aren't supported.
@@ -335,26 +331,26 @@ Some mlog instructions expect one of a predefined set of keywords at certain pos
 Examples of mlog keywords are `add` in `op add result a 10`, or the first occurrence of `building` and `core` in `ulocate building core enemy @copper outx outy found building`. Note that Mindustry Logic doesn't distinguish between an mlog keyword and a variable identifier: the first occurrence of `building` in the example instruction is an mlog keyword, while the second occurrence is a variable.
 
 > [!TIP]
-> Like built-in variables, mlog keywords may consist of multiple words. Most of the time the multi-word keywords are specified in camelCase convention (`:bottomLeft`), but at least one of currently existing keywords follows a kebab-case convention (`:spore-slowed`).
+> Like built-in variables, mlog keywords may consist of multiple words. Most of the time the multi-word keywords are specified in camelCase convention (`:unitCount`), but at least one of currently existing keywords follows a kebab-case convention (`:spore-slowed`).
 
-Some of these keywords do not occur in Mindcode, for example, all mlog keywords that can appear in an `op` instruction are mapped to Mindcode functions and operators. In other cases, mlog keywords must be specified as arguments to the Logic functions. To make a distinction between an mlog keyword and an identifier in Mindcode, the keywords are prefixed with a colon, e.g., `:building`. The function call corresponding to the `ulocate` instruction above is:
+Some of these keywords never appear in Mindcode; for example, all mlog keywords that can appear in an `op` instruction are mapped to Mindcode functions and operators. In other cases, mlog keywords must be specified as arguments to Logic functions. To make a distinction between an mlog keyword and an identifier in Mindcode, the keywords are prefixed with a colon, e.g., `:building`. The function call corresponding to the `ulocate` instruction above is:
 
 ```Mindcode
 building = ulocate(:building, :core, enemy, out outx, out outy, out found);
 ```
 
 > [!NOTE]
-> While mlog keywords are prefixed with a colon in Mindcode, they appear without the prefix in mlog. On the other hand, names of local variables in Mindcode have no prefix, but are prefixed with a colon in mlog. This might make it confusing at first when comparing emitted mlog code to the Mindcode source. Using an mlog syntax highlighter, such as [mlogls](https://github.com/JeanJPNM/mlogls), might help.  
+> While mlog keywords are prefixed with a colon in Mindcode, they appear without the prefix in mlog. On the other hand, names of local variables in Mindcode have no prefix but are prefixed with a colon in mlog. This might make it confusing at first when comparing emitted mlog code to the Mindcode source. Using an mlog syntax highlighter, such as [mlogls](https://github.com/JeanJPNM/mlogls), might help.  
 
 Mlog keywords can appear in these contexts in Mindcode:
 
-1. As an argument to Mindustry Logic function calls, at positions where a keyword is expected.
-2. As an argument to inline functions. Keywords passed in to an inline function may only be used as arguments to another inline or Mindustry Logic function.
-3. As a value of a constant definition. Such constants can, again, be only used as arguments to an inline or Mindustry Logic function.
+1. As an argument to Logic function calls, at positions where a keyword is expected.
+2. As an argument to inline functions. Keywords passed in to an inline function may only be used as arguments to another inline or Logic function.
+3. As a value of a constant definition. Such constants can, again, be only used as arguments to an inline or Logic function.
 
 As has already been mentioned, it's not possible to store an mlog keyword in a variable.
 
-Mlog keywords were introduced in Mindcode 3.2.0. For backwards compatibility, it is possible to use a keyword without the `:` prefix in Mindustry Logic function calls. This way of specifying mlog keywords is deprecated, however, and generates a warning message.
+Mlog keywords were introduced in Mindcode 3.2.0. For backwards compatibility, it is possible to use a keyword without the `:` prefix in Logic function calls. This way of specifying mlog keywords is deprecated, however, and generates a warning message.
 
 ## Literals
 
@@ -469,20 +465,17 @@ When Mindustry processes the mlog code in Mindustry Logic, it handles numeric li
 To find a way around these constraints, Mindcode always reads the value of the numeric literal and then converts it to Mindustry Logic compatible literal using these rules (the first applicable rule is used):
 
 1. Floating point literals (i.e., decimal literals containing either decimal point or exponent):
-   1. If the value is negative, the absolute value is converted according to these rules, and a minus sign is prepended to the result.
-   2. If the value is equal to `-2147483648`, it can't be represented as an mlog literal in any way and a compilation error is produced.  
-   3. If the value is zero, it is encoded as `0`.
+   1. If the value is zero, it is encoded as `0`.
+   2. If the value is negative, the absolute value is converted according to the following rules, and a minus sign is prepended to the result.
+   3. **Mindustry Logic version 7 and earlier**: If the value is equal to `-2147483648`, it can't be represented as an mlog literal in any way. When used in an expression, the value is created by subtracting `2147483648` from zero. When this is not possible (e.g., when declaring a constant), a compilation error is produced. 
    4. If the value is between 10<sup>-20</sup> and 2<sup>63</sup>-1, the number is converted to decimal notation using 20 digits precision and a decimal separator when needed.
-   5. **Mindustry Logic version 7 and earlier**: If the value is between 10<sup>-38</sup> and 10<sup>38</sup>, the number is converted to exponential notation
-      without using a decimal separator, using `float` precision (which will be used by Mindustry processor when
-      reading the literal as well). If the conversion to float causes loss of precision, a warning is produced.
-   6. **Mindustry Logic version 8 and later**: If the value is roughly between 10<sup>-308</sup> and 10<sup>308</sup>, the number is converted to exponential notation
-      without using a decimal separator. Loss of precision doesn't happen.
+   5. **Mindustry Logic version 7 and earlier**: If the value is between 10<sup>-38</sup> and 10<sup>38</sup>, the number is converted to exponential notation without using a decimal separator, using `float` precision (which will be used by Mindustry processor when reading the literal as well). If the conversion to float causes a loss of precision, a warning is produced.
+   6. **Mindustry Logic version 8 and later**: If the value is roughly between 10<sup>-308</sup> and 10<sup>308</sup>, the number is converted to exponential notation without using a decimal separator. Loss of precision doesn't happen.
    7. If none of the above rules is applicable, the conversion isn't possible and a compilation error is produced.
 2. Binary, decimal or hexadecimal integer literals:
    1. If the literal is a positive binary, hexadecimal, or decimal integer lower than 2<sup>63</sup>, the literal is used exactly as specified in the source code.
-   2. If the literal can't be represented in binary or hexadecimal in the target Mindustry version, it is converted to decimal representation.
-   3. If the value is equal to `-2147483648`, it can't be represented as an mlog literal in any way and a compilation error is produced.
+   2. If the literal can't be represented in binary or hexadecimal in the target Mindustry version, or its value is negative, it is converted to decimal representation.
+   3. **Mindustry Logic version 7 and earlier**: If the value is equal to `-2147483648`, it can't be represented as an mlog literal in any way. When used in an expression, the value is created by subtracting `2147483648` from zero. When this is not possible (e.g., when declaring a constant), a compilation error is produced.
    4. If the value of the literal exceeds the maximum supported value, a compilation error is produced.
    5. If the value of the literal is larger than 2<sup>52</sup>, Mindcode emits a 'Literal exceeds safe range for integer operations' warning (the warning threshold is set to 2<sup>52</sup> and not 2<sup>53</sup>, because values above 2<sup>52</sup> are potentially unsafe for binary complement operations).
 
@@ -495,8 +488,8 @@ Examples of Mindcode literals and their conversion into mlog:
 | `1`                  | `1`                    | `1`                    |
 | `-008`               | `-008`                 | `-008`                 |
 | `0b10101`            | `0b10101`              | `0b10101`              |
-| `0xFFFFFFFFFFFFFFFF` | `-1`                   | `0xFFFFFFFFFFFFFFFF`   |
-| `-0xFF`              | `-255`                 | `-0xff`                |
+| `0xFFFFFFFFFFFFFFFF` | `-1`                   | `-1`                   |
+| `-0xFF`              | `-255`                 | `-255`                 |
 | `3.0`                | `3`                    | `3`                    |
 | `1e10`               | `10000000000`          | `10000000000`          |
 | `-1e-10`             | `-0.0000000001`        | `-0.0000000001`        |

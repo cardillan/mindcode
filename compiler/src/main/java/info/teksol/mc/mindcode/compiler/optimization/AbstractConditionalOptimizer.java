@@ -43,6 +43,7 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
 
         JumpInstruction lastJump = null;
         LogicLabel trueLabel =  conditionInstructions.getLast() instanceof LabelInstruction lastLabel ? lastLabel.getLabel() : null;
+        boolean plainOperands = true;
         boolean mixed = false;
         int jumpCount = 0;
         int opCount = 0;
@@ -58,6 +59,9 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
                     targets.add(jump.getTarget());
                     jumpCount++;
                     conditions.add(jump.getCondition());
+                    if (!jump.isPlainComparison()) {
+                        plainOperands = false;
+                    }
                 }
             } else if (ix.affectsControlFlow() && !(ix instanceof LabelInstruction)) {
                 mixed = true;
@@ -97,7 +101,8 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
                 !ix.belongsTo(conditionInstructions.getAstContext()) &&
                         (ix.getAllReads().anyMatch(arguments::contains) || ix.getSideEffects().hasWrites()));
 
-        return new ShortCircuitAnalysis(shortCircuit, condition, lastJump, sideEffects, operation, onlyEquals, jumpCount, opCount);
+        return new ShortCircuitAnalysis(shortCircuit, condition, lastJump, sideEffects, operation,
+                onlyEquals, plainOperands, jumpCount, opCount);
     }
 
     protected double executionSteps(AstContext astContext) {
@@ -137,6 +142,7 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
             boolean sideEffects,                // Short-circuited code has side effects
             Operation operation,                // Expression type of the condition
             boolean onlyEquals,                 // All conditional relations are equal or notEqual
+            boolean plainOperands,              // All operands are plain variables or constants
             int jumpCount,                      // Number of jumps in total
             int shortedOpCount) {               // Number of short-circuited operations
 

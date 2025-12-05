@@ -85,7 +85,7 @@ public enum Condition implements LogicArgument {
         };
     }
 
-    public Condition inverse(boolean allowStrictEqual) {
+    public Condition inverse(boolean allowStrictNotEqual) {
         return switch (this) {
             case EQUAL -> NOT_EQUAL;
             case NOT_EQUAL -> EQUAL;
@@ -94,7 +94,7 @@ public enum Condition implements LogicArgument {
             case LESS_THAN_EQ -> GREATER_THAN;
             case GREATER_THAN -> LESS_THAN_EQ;
             case STRICT_EQUAL -> {
-                if (!allowStrictEqual) throw new MindcodeInternalError(this + " has no inverse.");
+                if (!allowStrictNotEqual) throw new MindcodeInternalError(this + " has no inverse.");
                 yield STRICT_NOT_EQUAL;
             }
             case STRICT_NOT_EQUAL -> STRICT_EQUAL;

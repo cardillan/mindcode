@@ -106,14 +106,14 @@ end;
 printflush(message1);
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 print "fissile-matter\ndormant-cyst\ntungsten\ncarbide\noxide\n"
 printflush message1
 ```
 
-When `target` is set to `8`, the code instead compiles to
+When `target` is set to `8`, the code instead compiles to:
 
 ```
 print "tungsten\noxide\ncarbide\n"
@@ -343,7 +343,7 @@ begin
 end;
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 # Mlog code compiled with support for symbolic labels
@@ -448,7 +448,7 @@ end;
 foo();
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 set :foo*retaddr 2
@@ -504,7 +504,7 @@ end;
 print("Found!");
 ```
 
-compiles to
+compiles to:
 
 ```
 sensor *tmp0 @unit @dead

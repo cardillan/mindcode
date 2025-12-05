@@ -28,7 +28,7 @@ length = len(x, y);
 print(length);
 ```
 
-which compiles to
+which compiles to:
 
 ```mlog
 op len :length :x :y
@@ -98,7 +98,7 @@ param variable = "foo";
 print(@this.read("foo"));       // Mindcode resolves this to variable 'foo' 
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 set foo 10
@@ -128,7 +128,7 @@ var floorOre = @this.read(ore.@name);
 print(floorOre);
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 # Initialization:

@@ -19,7 +19,7 @@ public enum Opcode {
     PRINT           ("print",           "Print", "Add text to the print buffer. Does not display anything until printflush is used."),
     PRINTCHAR       ("printchar",       "PrintChar", "Add a UTF-16 character or content icon to the print buffer.\nDoes not display anything until Print Flush is used."),
     FORMAT          ("format",          "Format", "Replace next placeholder in text buffer with a value. Does not do anything if placeholder pattern is invalid."
-            + " Placeholder pattern: \"{number 0-9}\" Example: print \"test {0}\"; format \"example\""),
+            + " Placeholder pattern: `\"{number 0-9}\"` Example: `print \"test {0}\"; format \"example\"`"),
 
     // BLOCK CONTROL
     DRAWFLUSH       ("drawflush",       "DrawFlush", "Flush queued Draw operations to a display."),

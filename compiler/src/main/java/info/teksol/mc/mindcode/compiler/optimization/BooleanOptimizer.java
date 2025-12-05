@@ -131,21 +131,28 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         if (analysis.shortCircuit() && analysis.jumpCount() > 1) {
             // Optimize only linear conditions with more than one jump
             if (analysis.operation() != null) {
-                if (!analysis.sideEffects() && (optimizeForSize || (analysis.jumpCount() == 2 && analysis.shortedOpCount() == 0))) {
+                if (!analysis.sideEffects()) {
                     // Full evaluation is possible and compatible with the goal
                     // Since full evaluation stores the condition value in a variable anyway, no need for jump handling
 
-                    if (analysis.onlyEquals() && (optimizeForSize ? numOperations <= 5 : diff1 + diff2 + numOperations == 0)) {
+                    int maxSpeedJumpCount = booleanOp && analysis.shortedOpCount() == 0 && analysis.plainOperands() ? 3 : 2;
+                    boolean isGoalCompatible = optimizeForSize ? numOperations <= 5
+                            : analysis.jumpCount() <= maxSpeedJumpCount && diff1 + diff2 + numOperations == 0;
+                    if (analysis.onlyEquals() && analysis.shortedOpCount() == 0 && isGoalCompatible) {
                         // We convert to full evaluation assuming the select conversion will happen later.
                         // We're being conservative and require the select overhead to be 0.
                         convertToFullEvaluation(conditionContext, condition, analysis);
                         fullEvaluations++;
                         return true;
-                    } else if (hasSelect && ternaryOp && jumpHandling == ConditionJumpHandling.NONE) {
-                        // Only one variable to be set: a select sequence is always shorter and faster
-                        convertToSelectSequence(ifExpression, condition, analysis, trueContent, falseContent, results.getFirst());
-                        shortSelectSequence++;
-                        return true;
+                    } else if (hasSelect && ternaryOp) {
+                        int maxShortedOpCount = optimizeForSize ? 5 : 0;
+                        int maxJumpCount = optimizeForSize ? 5 : maxSpeedJumpCount;
+                        if (analysis.shortedOpCount() <= maxShortedOpCount && analysis.jumpCount() <= maxJumpCount) {
+                            // Only one variable to be set: a select sequence is always shorter and faster
+                            convertToSelectSequence(ifExpression, condition, analysis, trueContent, falseContent, results.getFirst());
+                            shortSelectSequence++;
+                            return true;
+                        }
                     }
                 }
 

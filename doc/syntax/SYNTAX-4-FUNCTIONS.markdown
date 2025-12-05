@@ -21,7 +21,7 @@ There are several kinds of parameters a function can have:
 2. _Output parameter_: serve to return an output value from the function to the caller, in addition to a value possibly returned by the function itself. Arguments corresponding to output parameters are optional when calling a function. When output arguments are specified, they need to correspond to a global, main, or local variable, and need to be marked with an `out` modifier to express the intention to receive the output value from the function. Variables passed as arguments to output parameters need not be initialized, as they're initialized by the function call.  
 3. _Input/output parameter_: serve both to pass a value into the function and to retrieve the value back. Input/output parameters aren't optional. It is possible to use an `in` modifier when passing an argument to input/output parameter, meaning the caller isn't interested in the output value of the argument, or an `out` modifier to also receive the output value from the function. When using the `in` modifier, any expression may be provided, but for the `out` modifier, a global, main, or local variable needs to be used. Variables passed as arguments to input/output parameters should be initialized. Using `in out` modifiers is identical to using just the `out` modifier, as it is not possible to opt out from passing the input value to the function.
 4. _Reference parameter_: instead of an argument value, a reference to the argument is passed into the function. Reference parameters are declared using the `ref` modifier, and must not use either `in` or `out` modifier at the same time. Arguments passed to the reference parameters also need to be marked with the `ref` keyword. Only functions declared inline may have reference parameters, and only a variable may be passed. It is possible to pass an array (internal, external, or remote) of any length as a reference and access its elements by index from within the function.     
-5. _Keyword parameter_: these parameters can be passed to Logic functions and inline functions. They require one of the predefined mlog keywords as an argument. For example, the `uradar` functions requires one of the following keywords for each of its first three arguments: `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`. The colon is stripped from keywords when converting them to mlog. It is not possible to store one of these values in a variable and pass the variable instead; an inline function can only use the keyword as an argument to another inline function or Mindustry Logic function. Passing a value different to one of the supported values for a given function argument causes an error.
+5. _Keyword parameter_: these parameters can be passed to Logic functions and inline functions. They require one of the predefined mlog keywords as an argument. For example, the `uradar` functions requires one of the following keywords for each of its first three arguments: `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`. The colon is stripped from keywords when converting them to mlog. It is not possible to store one of these values in a variable and pass the variable instead; an inline function can only use the keyword as an argument to another inline function or Logic function. Passing a value different to one of the supported values for a given function argument causes an error.
 6. _Formattable string literal_: specific built-in functions and inline functions may also accept a [formattable string literal](SYNTAX.markdown#formattable-string-literals) as an argument. An inline function can only use the formattable string literal as an argument to another inline function or a text output built-in function.
 
 Examples of function definitions and function calls:
@@ -389,7 +389,7 @@ begin
 end;
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 set data "Dbftbs!djqifs"
@@ -416,7 +416,7 @@ println(strlen(data));
 printflush(message1);
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 set data "Dbftbs!djqifs"
@@ -788,7 +788,7 @@ A vararg function doesn't conflict with a non-vararg function. When a function c
 
 Mindcode will report all conflicts of function declarations as errors, even if there aren't any ambiguous function calls.
 
-A user-defined function may have the same name as a Mindustry Logic function. User-defined functions override Logic functions of the same name. When a function call matches the user-defined function, the user-defined function will be called instead of Mindustry Logic function:
+A user-defined function may have the same name as a Logic function. User-defined functions override Logic functions of the same name. When a function call matches the user-defined function, the user-defined function will be called instead of Logic function:
 
 ```Mindcode
 inline def ulocate(ore, oreType)
@@ -796,7 +796,7 @@ inline def ulocate(ore, oreType)
 end;
 
 found = ulocate(:ore, @copper);                   // Calls the user-defined function
-found = ulocate(:ore, @copper, out x, out y);    // Calls the Mindustry Logic function
+found = ulocate(:ore, @copper, out x, out y);     // Calls the Logic function
 ```
 
 If, however, the user-defined ulocate function was defined with output variables as well, both calls would call the user-defined function:
@@ -811,7 +811,7 @@ found = ulocate(:ore, @copper);                  // Calls the user-defined funct
 found = ulocate(:ore, @copper, out x, out y);    // Also calls the user-defined function
 ```
 
-It is not possible to call a Mindustry Logic function if a matching user-defined function exists.
+It is not possible to call a Logic function if a matching user-defined function exists.
 
 ## Debugging functions
 

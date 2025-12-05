@@ -15,7 +15,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-import static info.teksol.mc.mindcode.logic.arguments.LogicBoolean.FALSE;
 import static java.lang.Math.abs;
 
 @NullMarked
@@ -46,6 +45,8 @@ class ConditionOptimizer extends BaseOptimizer {
                             if (getVariableReferences(variable).size() == 1) {
                                 removeInstruction(oper);
                             }
+                        } else if (cond instanceof OpInstruction next){
+                            tryMergeOperations(logicIterator, oper, next);
                         }
                     }
                 }
@@ -63,9 +64,23 @@ class ConditionOptimizer extends BaseOptimizer {
                 cond.getCondition() == Condition.EQUAL ? operation == Operation.STRICT_EQUAL : operation == Operation.STRICT_NOT_EQUAL;
         if (requireStrictNotEqual && !canUseSelect) return false;
 
-        return cond.getCondition().isEquality()
-                && (cond.getX() == FALSE || cond.getY() == FALSE)
-                && operation.isCondition(true);
+        return cond.isPlainComparison() && operation.isCondition(true);
+    }
+
+    private void tryMergeOperations(LogicIterator logicIterator, OpInstruction prev, OpInstruction next) {
+        if (next.isPlainComparison()) {
+            Operation nextOp = next.getOperation();
+            Operation prevOp = prev.getOperation();
+            Operation prevOpInverse = prevOp.inverseCondition(false);
+            if (prevOp.hasBooleanValue() && (nextOp == Operation.NOT_EQUAL || prevOpInverse != null)) {
+                Operation newOperation = nextOp != Operation.NOT_EQUAL ? prevOpInverse : prevOp;
+                logicIterator.set(next.withOperands(newOperation, prev.getX(), prev.getY()));
+
+                if (getVariableReferences(prev.getResult()).size() == 1) {
+                    removeInstruction(prev);
+                }
+            }
+        }
     }
 
     private @Nullable LogicInstruction findDefiningInstruction(LogicIterator logicIterator, LogicInstruction cond,

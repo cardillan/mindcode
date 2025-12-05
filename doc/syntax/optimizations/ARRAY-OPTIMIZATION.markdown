@@ -191,7 +191,7 @@ void countDigits(number)
 end;
 ```
 
-compiles to
+compiles to:
 
 ```mlog
 set LIMIT 100

@@ -212,7 +212,7 @@ b = i;
 print(a, b);
 ```
 
-which compiles to
+which compiles to:
 
 ```mlog
 op rand :a 10 0
