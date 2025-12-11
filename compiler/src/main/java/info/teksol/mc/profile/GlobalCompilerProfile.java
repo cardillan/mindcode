@@ -69,11 +69,11 @@ public interface GlobalCompilerProfile {
     }
 
     default boolean isSignature() {
-        return getBooleanValue(CompilerOptions.SIGNATURE);
+        return getBooleanValue(MlogFormatOptions.SIGNATURE);
     }
 
     default List<String> getAuthors() {
-        return this.<String>getOption(CompilerOptions.AUTHOR).getValues();
+        return this.<String>getOption(MlogFormatOptions.AUTHOR).getValues();
     }
 
     default boolean isShortFunctionPrefix() {

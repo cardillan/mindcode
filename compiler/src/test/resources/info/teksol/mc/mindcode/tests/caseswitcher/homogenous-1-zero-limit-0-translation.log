@@ -207,33 +207,6 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     51 print :hash
     52 assertequals 1061505871 :hash "Test selected blocks"
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
-     0 set :hash 0
-     1 set :i -1
--    * label *label0
-     2 label *label9
-     3 lookup block :block :i
-     4 # "Function: def isWall(in block)"
- 
-    34 label *label7
-    35 set *tmp2 false
-    36 label *label6
--    * label *label5
-    37 jump *label3 equal *tmp2 false
-    38 op mul *tmp5 :hash 31
-    39 op add *tmp6 *tmp5 :i
- 
-    42 jump *label4 always
-    43 label *label3
-    44 label *label4
--    * label *label1
-    45 op add :i :i 1
-    46 jump *label9 lessThan :i @blockCount
--    * label *label2
-    47 print :hash
-    48 assertequals 1061505871 :hash "Test selected blocks"
-    49 end
-
 Final code before resolving virtual instructions:
 
 set :hash 0

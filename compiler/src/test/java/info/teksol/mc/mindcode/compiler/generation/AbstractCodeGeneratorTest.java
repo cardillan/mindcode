@@ -199,7 +199,7 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
             final String b = actualArg.toMlog();
 
             if (evaluateDirectly(a) || evaluateDirectly(b)) {
-                return a.equals(b);
+                if (a.equals(b)) continue;
             } else if (expectedToActual.containsKey(a)) {
                 // we mapped this hole to a value before -- check that we reference the same value again
                 if (expectedToActual.get(a).equals(b)) {

@@ -260,7 +260,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     class ShortCircuit {
 
         @Test
-        void aaa() {
+        void swapsBranches() {
             assertCompilesTo("""
                             #set target = 8.0;
                             

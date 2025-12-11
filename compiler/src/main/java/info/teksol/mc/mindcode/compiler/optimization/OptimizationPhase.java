@@ -47,7 +47,8 @@ public enum OptimizationPhase {
             JUMP_THREADING,
             UNREACHABLE_CODE_ELIMINATION,
             DEAD_CODE_ELIMINATION,
-            SINGLE_STEP_ELIMINATION
+            SINGLE_STEP_ELIMINATION,
+            BOOLEAN_OPTIMIZATION
     ),
 
     /// Optimizers run in a single pass at the end of the optimization. No context structure dependency.

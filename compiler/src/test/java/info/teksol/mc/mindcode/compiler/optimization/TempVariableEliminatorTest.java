@@ -189,7 +189,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertCompilesTo("""
                         r = rand(100);
                         """,
-                createInstruction(OP, "rand", "r", "100")
+                createInstruction(OP, "rand", ":r", "100")
         );
     }
 
@@ -198,8 +198,8 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertCompilesTo("""
                         state = min(max(state, MIN), MAX);
                         """,
-                createInstruction(OP, "max", tmp(0), "state", "MIN"),
-                createInstruction(OP, "min", "state", tmp(0), "MAX")
+                createInstruction(OP, "max", tmp(0), ":state", ".MIN"),
+                createInstruction(OP, "min", ":state", tmp(0), ".MAX")
         );
     }
 
@@ -208,7 +208,7 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
         assertCompilesTo("""
                         remaining = capacity - current;
                         """,
-                createInstruction(OP, "sub", "remaining", "capacity", "current")
+                createInstruction(OP, "sub", ":remaining", ":capacity", ":current")
         );
     }
 

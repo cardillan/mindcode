@@ -8,7 +8,7 @@
      2 loops improved by Loop Optimization.
      2 instructions added by Case Switching (3 iterations).
      1 case expressions converted to switched jumps by Case Switching.
-    10 instructions eliminated by Jump Straightening (4 iterations).
+    10 instructions eliminated by Jump Straightening (5 iterations).
     60 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 941):
@@ -562,89 +562,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     17 label *label30
     18 op mod *tmp2 :processNumber:n 10
     19 # "Function: def processDigit(in n)"
-
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-     8 set .S1 0
-     9 set .S0 0
-    10 set :i 1
--    * label *label0
-    11 label *label29
-    12 # "Function: def processNumber(in n)"
-    13 set :processNumber:n :i
--    * label *label4
-    14 jump *label6 lessThanEq :i 0
-    15 label *label30
-    16 op mod *tmp2 :processNumber:n 10
- 
-    19 jump *label33 greaterThanEq *tmp2 2
-    20 jump *label31 lessThan *tmp2 0
-    21 jump *label12 greaterThanEq *tmp2 1
--    * label *label10
-    22 op add .S0 .S0 1
-    23 jump *label8 always
-    24 label *label33
-    25 jump *label14 lessThan *tmp2 3
-    26 jump *label18 greaterThanEq *tmp2 4
--    * label *label16
-    27 op add .S3 .S3 1
-    28 jump *label8 always
-    29 label *label32
-    30 jump *label34 greaterThanEq *tmp2 8
-    31 jump *label20 lessThan *tmp2 6
-    32 jump *label24 greaterThanEq *tmp2 7
--    * label *label22
-    33 op add .S6 .S6 1
-    34 jump *label8 always
-    35 label *label34
-    36 jump *label26 lessThan *tmp2 9
-    37 jump *label28 lessThan *tmp2 10
-    38 jump *label31 always
--    * label *label9
-    39 label *label12
-    40 op add .S1 .S1 1
-    41 jump *label8 always
--    * label *label11
-    42 label *label14
-    43 op add .S2 .S2 1
-    44 jump *label8 always
--    * label *label13
--    * label *label15
-    45 label *label18
-    46 op add .S4 .S4 1
-    47 jump *label8 always
--    * label *label17
-    48 label *label20
-    49 op add .S5 .S5 1
-    50 jump *label8 always
--    * label *label19
--    * label *label21
-    51 label *label24
-    52 op add .S7 .S7 1
-    53 jump *label8 always
--    * label *label23
-    54 label *label26
-    55 op add .S8 .S8 1
-    56 jump *label8 always
--    * label *label25
-    57 label *label28
-    58 op add .S9 .S9 1
--    * label *label27
-    59 label *label31
-    60 label *label8
--    * label *label7
-    61 op idiv :processNumber:n :processNumber:n 10
--    * label *label5
-    62 jump *label30 greaterThan :processNumber:n 0
-    63 label *label6
--    * label *label3
--    * label *label1
-    64 op add :i :i 1
-    65 jump *label29 lessThanEq :i 100
--    * label *label2
-    66 assertequals 11 .S0 "Unexpected value of S0"
-    67 assertequals 21 .S1 "Unexpected value of S1"
-    68 assertequals 20 .S2 "Unexpected value of S2"
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  

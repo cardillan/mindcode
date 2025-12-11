@@ -6,7 +6,7 @@
      2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      3 instructions modified by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
-     1 instructions eliminated by Jump Straightening (6 iterations).
+     1 instructions eliminated by Jump Straightening (7 iterations).
     26 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
@@ -186,48 +186,6 @@ Modifications by Iterated phase, Condition Optimization, pass 3, iteration 1:
     12 read :a ARRAY :j
     13 jump *label6 greaterThan :a :item
 
-Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
- 
-     1 set ARRAY bank2
-     2 set FINAL bank3
-     3 set :i 1
--    * label *label0
-     4 jump *label2 greaterThanEq 1 SIZE
-     5 label *label11
-     6 read :item ARRAY :i
-     7 op sub :j :i 1
--    * label *label3
-     8 jump *label5 lessThan :i 1
-     9 label *label12
-    10 read :a ARRAY :j
-    11 jump *label6 greaterThan :a :item
-    12 jump *label5 always
-    13 label *label6
--    * label *label7
-    14 op add *tmp8 :j 1
-    15 write :a ARRAY *tmp8
-    16 op sub :j :j 1
--    * label *label4
-    17 jump *label12 greaterThanEq :j 0
-    18 label *label5
-    19 op add *tmp12 :j 1
-    20 write :item ARRAY *tmp12
--    * label *label1
-    21 op add :i :i 1
-    22 jump *label11 lessThan :i SIZE
-    23 label *label2
-    24 set :i 0
--    * label *label8
-    25 jump *label10 greaterThanEq 0 SIZE
-    26 label *label13
-    27 read *tmp15 FINAL :i
-    28 read *tmp17 ARRAY :i
-    29 assertequals *tmp15 *tmp17 "unexpected value"
--    * label *label9
-    30 op add :i :i 1
-    31 jump *label13 lessThan :i SIZE
-    32 label *label10
-
 Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-1 instructions):
  
      8 jump *label5 lessThan :i 1
@@ -239,16 +197,6 @@ Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-1 instru
     12 label *label6
     13 op add *tmp8 :j 1
     14 write :a ARRAY *tmp8
-
-Modifications by Jumps phase, Condition Optimization, pass 5, iteration 1:
- 
-     9 label *label12
-    10 read :a ARRAY :j
-    11 jump *label5 lessThanEq :a :item
--    * label *label6
-    12 op add *tmp8 :j 1
-    13 write :a ARRAY *tmp8
-    14 op sub :j :j 1
 
 Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  

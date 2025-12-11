@@ -3,6 +3,8 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.*;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
+import static info.teksol.mc.mindcode.compiler.optimization.AbstractConditionalOptimizer.JumpTarget.*;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
 
@@ -31,7 +34,8 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         hasSelect = getProcessor().isSupported(Opcode.SELECT);
     }
 
-    private int fullEvaluations = 0;
+    private int fullConditions = 0;
+    private int fullExpressions = 0;
     private int shortSelectSequence = 0;
     private int lastJumps = 0;
     private int fullSelectSequence = 0;
@@ -39,10 +43,11 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
     @Override
     public void generateFinalMessages() {
         super.generateFinalMessages();
-        outputActions("       %d short-circuited conditions turned to full evaluations.", fullEvaluations);
-        outputActions("       %d short-circuited conditions turned to a sequence of selects.", shortSelectSequence);
-        outputActions("       %d final jumps of short-circuited conditions turned to an operation or select.", lastJumps);
-        outputActions("       %d fully-evaluated conditions turned to a sequence of selects.", fullSelectSequence);
+        outputActions("       %d short-circuited expressions turned to full evaluations.", fullExpressions);
+        outputActions("       %d short-circuited conditions turned to full evaluations.", fullConditions);
+        outputActions("       %d short-circuited expressions optimized using selects.", shortSelectSequence);
+        outputActions("       %d final jumps of a short-circuited expression optimized.", lastJumps);
+        outputActions("       %d fully-evaluated expressions optimized using selects.", fullSelectSequence);
     }
 
     private void outputActions(@PrintFormat String format, int count) {
@@ -68,13 +73,57 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         return result;
     }
 
+    private boolean removeUnreachableCode(AstContext condition) {
+        Set<LogicLabel> activeLabels = new HashSet<>();
+        boolean reachable = true;
+        boolean modified = false;
+
+        try (LogicIterator it = createIteratorForContext(condition)) {
+            while (it.hasNext()) {
+                LogicInstruction ix = it.next();
+                if (ix.getAstContext() == condition) {
+                    if (reachable) {
+                        if (ix instanceof JumpInstruction j) {
+                            activeLabels.add(j.getTarget());
+                            // Unconditional jump makes code unreachable
+                            reachable = j.isConditional();
+                        } else if (ix instanceof LabelInstruction l && !activeLabels.contains(l.getLabel())) {
+                            it.remove();
+                            modified = true;
+                        } else if (ix.getOpcode() == Opcode.EMPTY) {
+                            it.remove();
+                        }
+                    } else if (ix instanceof LabelInstruction l && activeLabels.contains(l.getLabel())) {
+                        // An active label makes code reachable
+                        reachable = true;
+                    } else {
+                        // Removing all unreachable instructions
+                        it.remove();
+                        modified = true;
+                    }
+                }
+            }
+        }
+
+        return modified;
+    }
+
+
     // Note: this optimization doesn't resolve negated strictEqual operation. There will be a separate optimization for that.
     private boolean applySelectOptimization(AstContext ifExpression) {
-        if (!hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY, FLOW_CONTROL)) return false;
+        if (!hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY, FLOW_CONTROL)
+                && !hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY)) return false;
 
         AstContext conditionContext = ifExpression.child(0);
+        boolean shortCircuit = conditionContext.children().size() == 1 && conditionContext.children().getFirst()
+                .matches(AstContextType.SCBE_COND, AstContextType.SCBE_OPER);
+        if (shortCircuit) {
+            // Help the optimizer a bit by removing the unreachable code within the short-circuited context
+            while (removeUnreachableCode(conditionContext.children().getFirst()));
+        }
+
         LogicList condition = contextInstructions(conditionContext);
-        ShortCircuitAnalysis analysis = analyzeShortCircuit(condition);
+        ShortCircuitAnalysis analysis = analyzeShortCircuit(condition, true);
         if (analysis == null) {
             return false;
         }
@@ -128,28 +177,38 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         // Without select we can only encode expressions producing booleans
         if (!hasSelect && !booleanOp) return false;
 
-        if (analysis.shortCircuit() && analysis.jumpCount() > 1) {
+        if (analysis.shortCircuit()) {
+            LogicVariable result = results.getFirst();
+
+            // We'll try to switch to full evaluation here
+            if (analysis.jumps().size() == 3 && booleanOp && analysis.shortedOpCount() == 0 && analysis.plainOperands()) {
+                if (evaluateFully(ifExpression, analysis, condition, result)) {
+                    fullExpressions++;
+                    return true;
+                }
+            }
+
             // Optimize only linear conditions with more than one jump
             if (analysis.operation() != null) {
                 if (!analysis.sideEffects()) {
                     // Full evaluation is possible and compatible with the goal
                     // Since full evaluation stores the condition value in a variable anyway, no need for jump handling
 
+                    int maxShortedOpCount = optimizeForSize ? results.size() - diff1 - diff2 : 0;
                     int maxSpeedJumpCount = booleanOp && analysis.shortedOpCount() == 0 && analysis.plainOperands() ? 3 : 2;
                     boolean isGoalCompatible = optimizeForSize ? numOperations <= 5
                             : analysis.jumpCount() <= maxSpeedJumpCount && diff1 + diff2 + numOperations == 0;
-                    if (analysis.onlyEquals() && analysis.shortedOpCount() == 0 && isGoalCompatible) {
+                    if (analysis.onlyEquals() && analysis.shortedOpCount() <= maxShortedOpCount && isGoalCompatible) {
                         // We convert to full evaluation assuming the select conversion will happen later.
                         // We're being conservative and require the select overhead to be 0.
                         convertToFullEvaluation(conditionContext, condition, analysis);
-                        fullEvaluations++;
+                        fullConditions++;
                         return true;
                     } else if (hasSelect && ternaryOp) {
-                        int maxShortedOpCount = optimizeForSize ? 5 : 0;
                         int maxJumpCount = optimizeForSize ? 5 : maxSpeedJumpCount;
                         if (analysis.shortedOpCount() <= maxShortedOpCount && analysis.jumpCount() <= maxJumpCount) {
                             // Only one variable to be set: a select sequence is always shorter and faster
-                            convertToSelectSequence(ifExpression, condition, analysis, trueContent, falseContent, results.getFirst());
+                            convertToSelectSequence(ifExpression, condition, analysis, trueContent, falseContent, result);
                             shortSelectSequence++;
                             return true;
                         }
@@ -160,7 +219,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
                 // Always shorter and faster.
                 // Since it is just one select, no need for jump handling
                 if (ternaryOp && hasSelect || booleanOp) {
-                    if (convertLastJump(analysis, condition, trueBranch, falseBranch, trueContent, falseContent, results.getFirst())) {
+                    if (convertLastJump(analysis, condition, trueBranch, falseBranch, trueContent, falseContent, result)) {
                         lastJumps++;
                         return true;
                     }
@@ -169,7 +228,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
 
             // Couldn't do anything
             return false;
-        } else {
+        } else if (analysis.normal()) {
             // Here the entire condition has only one jump
             // Subtracting one from the select steps: we're replacing the condition jump with a select sequence
             int jumpHandlingCost = jumpHandling == ConditionJumpHandling.NONE ? 0 : 1;
@@ -185,6 +244,146 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
             }
         }
 
+        return false;
+    }
+
+    private interface FullBooleanOptimizer {
+        boolean optimize(AstContext ifExpression, LogicList condition, ShortCircuitAnalysis analysis, LogicVariable result);
+    }
+
+    private boolean evaluateFully(AstContext ifExpression, ShortCircuitAnalysis analysis, LogicList condition, LogicVariable result) {
+        if (tryEvaluate(ifExpression, analysis, condition, result, FALSE, FALSE, this::evaluateAndAnd)) return true;
+        if (tryEvaluate(ifExpression, analysis, condition, result, FALSE, TRUE, this::evaluateAndOrFlipped)) return true;
+        if (tryEvaluate(ifExpression, analysis, condition, result, TRUE, FALSE, this::evaluateOrAndFlipped)) return true;
+        if (tryEvaluate(ifExpression, analysis, condition, result, TRUE, TRUE, this::evaluateOrOr)) return true;
+        if (tryEvaluate(ifExpression, analysis, condition, result, NEXT, FALSE, this::evaluateOrAnd)) return true;
+        if (tryEvaluate(ifExpression, analysis, condition, result, NEXT, TRUE, this::evaluateAndOr)) return true;
+        return false;
+    }
+
+    private boolean tryEvaluate(AstContext ifExpression, ShortCircuitAnalysis analysis, LogicList condition,
+            LogicVariable result, JumpTarget t0, JumpTarget t1, FullBooleanOptimizer optimizer) {
+        List<Jump> jumps = analysis.jumps();
+        return jumps.size() == 3
+                && jumps.get(0).target() == t0
+                && jumps.get(1).target() == t1
+                && jumps.get(2).target() == FALSE
+                && optimizer.optimize(ifExpression, condition, analysis, result);
+    }
+
+    private void replaceExpression(AstContext ifExpression, LogicList condition, OpInstruction op1, OpInstruction op2) {
+        AstContext targetContext = requireNonNull(ifExpression.parent()).createChild(ifExpression.existingNode(), OPERATOR);
+        LogicList instructions = createLogicList(targetContext);
+        LogicList duplicated = condition.duplicateToContext(targetContext, false);
+
+        for (LogicInstruction ix : duplicated) {
+            if (ix instanceof JumpInstruction) {
+                break;
+            } else {
+                instructions.addKeepingContext(ix);
+            }
+        }
+
+        instructions.addToContext(op1);
+        instructions.addToContext(op2);
+
+        insertInstructions(firstInstructionIndex(ifExpression), instructions);
+        removeMatchingInstructions(ix -> ix.belongsTo(ifExpression));
+    }
+
+    private boolean evaluateAndAnd(AstContext astContext, LogicList condition, ShortCircuitAnalysis analysis, LogicVariable result) {
+        Jump a = analysis.jumps().getFirst();
+        Jump b = analysis.jumps().get(1);
+        Jump c = analysis.jumps().get(2);
+
+        if (a.comparesToFalse() && b.comparesToFalse() && c.comparesToFalse()) {
+            LogicVariable tmp = instructionProcessor.nextTemp();
+            replaceExpression(astContext, condition,
+                    createOp(astContext, Operation.LOGICAL_AND, tmp, a.variable(), b.variable()),
+                    createOp(astContext, Operation.LOGICAL_AND, result, tmp, c.variable())
+            );
+            return true;
+        }
+        return false;
+    }
+
+    private boolean evaluateAndOrFlipped(AstContext astContext, LogicList condition, ShortCircuitAnalysis analysis, LogicVariable result) {
+        Jump a = analysis.jumps().getFirst();
+        Jump b = analysis.jumps().get(1);
+        Jump c = analysis.jumps().get(2);
+
+        if (a.comparesToFalse() && b.comparesToTrue() && c.comparesToFalse()) {
+            LogicVariable tmp = instructionProcessor.nextTemp();
+            replaceExpression(astContext, condition,
+                    createOp(astContext, Operation.LOGICAL_OR, tmp, b.variable(), c.variable()),
+                    createOp(astContext, Operation.LOGICAL_AND, result, tmp, a.variable())
+            );
+            return true;
+        }
+        return false;
+    }
+
+    private boolean evaluateOrAndFlipped(AstContext astContext, LogicList condition, ShortCircuitAnalysis analysis, LogicVariable result) {
+        Jump a = analysis.jumps().getFirst();
+        Jump b = analysis.jumps().get(1);
+        Jump c = analysis.jumps().get(2);
+
+        if (a.comparesToTrue() && b.comparesToFalse() && c.comparesToFalse()) {
+            LogicVariable tmp = instructionProcessor.nextTemp();
+            replaceExpression(astContext, condition,
+                    createOp(astContext, Operation.LOGICAL_AND, tmp, b.variable(), c.variable()),
+                    createOp(astContext, Operation.LOGICAL_OR, result, tmp, a.variable())
+            );
+            return true;
+        }
+        return false;
+    }
+
+    private boolean evaluateOrOr(AstContext astContext, LogicList condition, ShortCircuitAnalysis analysis, LogicVariable result) {
+        Jump a = analysis.jumps().getFirst();
+        Jump b = analysis.jumps().get(1);
+        Jump c = analysis.jumps().get(2);
+
+        if (a.comparesToTrue() && b.comparesToTrue() && c.comparesToFalse()) {
+            LogicVariable tmp = instructionProcessor.nextTemp();
+            replaceExpression(astContext, condition,
+                    createOp(astContext, Operation.LOGICAL_OR, tmp, a.variable(), b.variable()),
+                    createOp(astContext, Operation.LOGICAL_OR, result, tmp, c.variable())
+            );
+            return true;
+        }
+        return false;
+    }
+
+    private boolean evaluateOrAnd(AstContext astContext, LogicList condition, ShortCircuitAnalysis analysis, LogicVariable result) {
+        Jump a = analysis.jumps().getFirst();
+        Jump b = analysis.jumps().get(1);
+        Jump c = analysis.jumps().get(2);
+
+        if (a.comparesToTrue() && b.comparesToFalse() && c.comparesToFalse()) {
+            LogicVariable tmp = instructionProcessor.nextTemp();
+            replaceExpression(astContext, condition,
+                    createOp(astContext, Operation.LOGICAL_OR, tmp, a.variable(), b.variable()),
+                    createOp(astContext, Operation.LOGICAL_AND, result, tmp, c.variable())
+            );
+            return true;
+        }
+        return false;
+    }
+
+    private boolean evaluateAndOr(AstContext astContext, LogicList condition, ShortCircuitAnalysis analysis, LogicVariable result) {
+        Jump a = analysis.jumps().getFirst();
+        Jump b = analysis.jumps().get(1);
+        Jump c = analysis.jumps().get(2);
+
+        if (a.comparesToFalse() && b.comparesToTrue() && c.comparesToFalse()) {
+            LogicVariable tmp = instructionProcessor.nextTemp();
+            replaceExpression(astContext, condition,
+                    createOp(astContext, Operation.LOGICAL_AND, tmp, a.variable(), b.variable()),
+                    createOp(astContext, Operation.LOGICAL_OR, result, tmp, c.variable())
+            );
+            return true;
+        }
         return false;
     }
 
@@ -250,7 +449,10 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         LogicLabel falseLabel = null;
         for (LogicInstruction ix : duplicated) {
             if (ix instanceof JumpInstruction jump) {
-                values.add(jump.getX().equals(LogicBoolean.FALSE) ? jump.getY() : jump.getX());
+                // We know we can ignore unconditional jumps
+                if (jump.isConditional()) {
+                    values.add(jump.getX().equals(LogicBoolean.FALSE) ? jump.getY() : jump.getX());
+                }
 
                 // The last jump necessarily targets the false branch
                 falseLabel = jump.getTarget();
@@ -604,9 +806,9 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
                             %s
                     """.formatted(
                             assignments.entrySet().stream().map(e -> e.getKey().toMlog() + " = " + e.getValue().toMlog()).collect(newLines),
-                            dependencies.entrySet().stream().map(e -> e.getKey().toMlog() + ": [" + e.getValue().stream().map(LogicVariable::toMlog)
+                            dependencies.entrySet().stream().map(e -> e.getKey().toMlog() + ": [" + e.getValue().stream().map(info.teksol.mc.mindcode.logic.arguments.LogicVariable::toMlog)
                                     .collect(commas) + "]").collect(newLines),
-                            results.stream().map(LogicVariable::toMlog).collect(commas),
+                            results.stream().map(info.teksol.mc.mindcode.logic.arguments.LogicVariable::toMlog).collect(commas),
                             instructions.stream().map(Object::toString).collect(newLines));
         }
     }

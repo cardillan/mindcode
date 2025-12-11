@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
@@ -80,13 +80,13 @@ public class LogicKeyword extends AbstractArgument implements ValueStore {
 
     @Override
     public LogicValue getValue(ContextfulInstructionCreator creator) {
-        MindcodeCompiler.getContext().error(sourcePosition, ERR.INVALID_KEYWORD_USE);
+        ContextFactory.getMessageContext().error(sourcePosition, ERR.INVALID_KEYWORD_USE);
         return LogicNull.NULL;
     }
 
     @Override
     public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
-        MindcodeCompiler.getContext().error(sourcePosition, ERR.INVALID_KEYWORD_USE);
+        ContextFactory.getMessageContext().error(sourcePosition, ERR.INVALID_KEYWORD_USE);
     }
 
     @Override

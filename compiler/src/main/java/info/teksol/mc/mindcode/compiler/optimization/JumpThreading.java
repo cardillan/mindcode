@@ -93,7 +93,7 @@ class JumpThreading extends BaseOptimizer {
 
     private void createStartLabel() {
         if (!hasStartLabel) {
-            insertInstruction(0, createLabel(instructionAt(0).getAstContext(), FIRST_LABEL));
+            insertInstruction(0, createLabel(optimizationContext.getRootContext(), FIRST_LABEL));
             hasStartLabel = true;
         }
     }
@@ -117,6 +117,10 @@ class JumpThreading extends BaseOptimizer {
             JumpRedirection redirected = evaluateJumpRedirection(firstJump, target.target);
             if (redirected == null || !labels.add(redirected.target)) {
                 return target;
+            }
+            // Do not redirect jumps to the start label further
+            if (redirected.target == FIRST_LABEL) {
+                return redirected;
             }
             target = redirected;
         }
@@ -143,7 +147,7 @@ class JumpThreading extends BaseOptimizer {
             return new JumpRedirection(call.getCallAddr(), call.getMarker());
         }
 
-        // Handle end instruction only in advanced mode
+        // Handle end instruction
         if (next == null || (next instanceof EndInstruction)) {
             createStartLabel();
             return new JumpRedirection(FIRST_LABEL, null);

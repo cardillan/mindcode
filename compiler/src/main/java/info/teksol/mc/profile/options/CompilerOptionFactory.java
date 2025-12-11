@@ -133,6 +133,18 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 "short", "long", false));
+
+        list.add(new StringCompilerOptionValue(MlogFormatOptions.AUTHOR, "",
+                "adds an author to the list of authors which is then output similarly to the compiler's signature",
+                "author",
+                OptionMultiplicity.ONCE_OR_MORE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category, List.of()).setAdditive());
+
+        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.SIGNATURE, "no-signature", "",
+                "prevents appending a signature '" + CompilerProfile.SIGNATURE + "' at the end of the final code",
+                OptionMultiplicity.ZERO, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.COMMAND_LINE, category,
+                true).setConstValue(false));
     }
 
     private static void addCompilerOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
@@ -191,18 +203,6 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 true));
-
-        list.add(new StringCompilerOptionValue(CompilerOptions.AUTHOR, "",
-                "adds an author to the list of authors which is then output similarly to the compiler's signature",
-                "author",
-                OptionMultiplicity.ONCE_OR_MORE, SemanticStability.STABLE, OptionScope.GLOBAL,
-                OptionAvailability.UNIVERSAL, category, List.of()).setAdditive());
-
-        list.add(new BooleanCompilerOptionValue(CompilerOptions.SIGNATURE, "no-signature", "",
-                "prevents appending a signature '" + CompilerProfile.SIGNATURE + "' at the end of the final code",
-                OptionMultiplicity.ZERO, SemanticStability.STABLE, OptionScope.GLOBAL,
-                OptionAvailability.COMMAND_LINE, category,
-                true).setConstValue(false));
     }
 
     private static void addOptimizationsOptions(List<CompilerOptionValue<?>> list, boolean webApp) {

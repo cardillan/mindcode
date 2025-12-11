@@ -14,7 +14,7 @@
      3 function calls inlined by Function Inlining.
      1 instructions added by Case Switching (6 iterations).
      1 case expressions converted to switched jumps by Case Switching.
-     2 instructions eliminated by Jump Straightening (5 iterations).
+     2 instructions eliminated by Jump Straightening (6 iterations).
      4 instructions updated by Jump Threading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     12 instructions modified by Print Merging.
@@ -673,108 +673,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-1
     13 op add :decode64:index :decode64:index 1
     14 label *label27
     15 label *label28
-
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
- 
-     2 # "Function: void decode64()"
-     3 set :decode64:index 0
-     4 label *label3
--    * label *label25
--    * label *label26
-     5 remark "Reading character number "
-     6 remark 0
-     7 remark " "
- 
-     9 read :charToInt:ch data :decode64:index
-    10 call *label0 :charToInt*retaddr :charToInt*retval
-    11 op add :decode64:index :decode64:index 1
--    * label *label27
--    * label *label28
-    12 remark "Reading character number "
-    13 remark 1
-    14 remark " "
- 
-    18 call *label0 :charToInt*retaddr :charToInt*retval
-    19 op or :decode64:bytes *tmp1 :charToInt*retval
-    20 op add :decode64:index :decode64:index 1
--    * label *label29
--    * label *label30
-    21 remark "Reading character number "
-    22 remark 2
-    23 remark " "
- 
-    27 call *label0 :charToInt*retaddr :charToInt*retval
-    28 op or :decode64:bytes *tmp1 :charToInt*retval
-    29 op add :decode64:index :decode64:index 1
--    * label *label31
--    * label *label32
-    30 remark "Reading character number "
-    31 remark 3
-    32 remark " "
- 
-    37 call *label0 :charToInt*retaddr :charToInt*retval
-    38 op or :decode64:bytes *tmp1 :charToInt*retval
-    39 op add :decode64:index :decode64:index 1
--    * label *label33
--    * label *label8
-    40 remark "Printing text"
-    41 op shr :printbyte:byte :decode64:bytes 16
--    * label *label34
-    42 # "Function: void printbyte(in byte)"
-    43 op and :printbyte:ch :printbyte:byte 0xFF
-    44 jump *label35 equal :printbyte:ch false
-    45 printchar :printbyte:ch
-    46 label *label35
--    * label *label36
--    * label *label37
-    47 op shr :printbyte:byte :decode64:bytes 8
--    * label *label38
-    48 # "Function: void printbyte(in byte)"
-    49 op and :printbyte:ch :printbyte:byte 0xFF
-    50 jump *label39 equal :printbyte:ch false
-    51 printchar :printbyte:ch
-    52 label *label39
--    * label *label40
--    * label *label41
--    * label *label42
-    53 # "Function: void printbyte(in byte)"
-    54 op and :printbyte:ch :decode64:bytes 0xFF
-    55 jump *label43 equal :printbyte:ch false
-    56 printchar :printbyte:ch
-    57 label *label43
--    * label *label44
--    * label *label45
--    * label *label4
-    58 jump *label3 notEqual :decode64:src null
--    * label *label5
-    59 printflush message1
--    * label *label2
-    60 assertprints "All Hail the King!" "Decoded value"
-    61 end
-    62 label *label0
- 
-    78 jump *label46 always
-    79 label *label49
-    80 jump *label46 greaterThanEq :charToInt:ch 123
--    * label *label15
-    81 op sub :charToInt*retval :charToInt:ch 71
-    82 jump *label10 always
-    83 label *label12
-    84 op sub :charToInt*retval :charToInt:ch 65
-    85 jump *label10 always
--    * label *label11
--    * label *label14
--    * label *label17
-    86 label *label20
-    87 set :charToInt*retval 63
-    88 jump *label10 always
--    * label *label19
-    89 label *label46
-    90 set :charToInt*retval null
-    91 label *label10
--    * label *label9
-    92 return :charToInt*retaddr
-    93 end
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  

@@ -613,33 +613,6 @@ Modifications by Translate case at line 11:5 (-93 instructions):
     12 op shl :bit 1 *tmp2
     13 op and *tmp5 :total :bit
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
-     0 assertequals 260 @blockCount "Verify block count"
-     1 set :total 0
-     2 set :i -1
--    * label *label0
-     3 label *label55
-     4 lookup block :block :i
-     5 # "Function: def identifyBlock(in block)"
- 
-     7 read *tmp9 "000000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J0000000000000000000000000" *tmp8
-     8 op sub *tmp10 *tmp9 48
-     9 select *tmp2 strictEqual *tmp9 null 0 *tmp10
--    * label *label3
-    10 op shl :bit 1 *tmp2
-    11 op and *tmp5 :total :bit
-    12 jump *label53 lessThanEq *tmp5 1
- 
-    15 label *label53
-    16 op or :total :total :bit
-    17 label *label54
--    * label *label1
-    18 op add :i :i 1
-    19 jump *label55 lessThan :i @blockCount
--    * label *label2
-    20 assertequals 0x07FFFFF9 :total "Test selected blocks"
-    21 end
-
 Final code before resolving virtual instructions:
 
 assertequals 260 @blockCount "Verify block count"

@@ -4,6 +4,7 @@ import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.EmptyInstruction;
+import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
@@ -105,7 +106,7 @@ public class DiffDebugPrinter implements DebugPrinter {
         List<LogicInstruction> after  =  after0.stream().filter(ix -> !(ix instanceof EmptyInstruction)).toList();
 
         // Do not print steps that didn't change anything
-        if (!printAll() && identityEquals(before, after)) {
+        if (!printAll() && noSignificantChanges(before, after)) {
             return;
         }
 
@@ -173,12 +174,26 @@ public class DiffDebugPrinter implements DebugPrinter {
         }
     }
 
-    private boolean identityEquals(List<LogicInstruction> list1, List<LogicInstruction> list2) {
-        if (list1.size() != list2.size()) return false;
-        for (int i = 0; i < list1.size(); i++) {
-            if (list1.get(i) != list2.get(i)) return false;
+    private boolean noSignificantChanges(List<LogicInstruction> before, List<LogicInstruction> after) {
+        int index = 0;
+        for (LogicInstruction ix : after) {
+            if (index >= before.size()) return false;
+            while (before.get(index) != ix) {
+                if (!ignoreInstruction(before.get(index))) return false;
+                if (++index >= before.size()) return false;
+            }
+            if (++index > before.size()) return false;
         }
-        return true;
+
+        while (index < before.size() && ignoreInstruction(before.get(index))) {
+            index++;
+        }
+
+        return index == before.size();
+    }
+
+    private boolean ignoreInstruction(LogicInstruction instruction) {
+        return instruction instanceof LabelInstruction || instruction instanceof EmptyInstruction;
     }
 
     protected int findInstructionIndex(List<LogicInstruction> program, int index, LogicInstruction instruction) {

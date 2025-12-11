@@ -216,34 +216,6 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     53 print :hash
     54 assertequals 2727247113 :hash "Test selected blocks"
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
-     0 assertequals 260 @blockCount "Verify block count"
-     1 set :hash 0
-     2 set :i -1
--    * label *label0
-     3 label *label9
-     4 lookup block :block :i
-     5 jump *label8 strictEqual :block null
- 
-    36 label *label7
-    37 set *tmp2 false
-    38 label *label6
--    * label *label5
-    39 jump *label3 equal *tmp2 false
-    40 op mul *tmp5 :hash 31
-    41 op add *tmp6 *tmp5 :i
- 
-    44 jump *label4 always
-    45 label *label3
-    46 label *label4
--    * label *label1
-    47 op add :i :i 1
-    48 jump *label9 lessThan :i @blockCount
--    * label *label2
-    49 print :hash
-    50 assertequals 2727247113 :hash "Test selected blocks"
-    51 end
-
 Final code before resolving virtual instructions:
 
 assertequals 260 @blockCount "Verify block count"

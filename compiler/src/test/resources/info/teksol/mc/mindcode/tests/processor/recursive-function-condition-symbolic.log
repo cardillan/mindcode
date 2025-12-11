@@ -108,15 +108,6 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-
     17 label *label2
     18 returnrec bank1
 
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
- 
-    14 label *label5
-    15 pop bank1 :foo:n
-    16 label *label4
--    * label *label2
-    17 returnrec bank1
-    18 end
-
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
  
     15 pop bank1 :foo:n

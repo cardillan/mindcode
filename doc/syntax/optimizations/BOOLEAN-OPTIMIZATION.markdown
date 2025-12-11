@@ -1,6 +1,6 @@
 # Boolean Optimization
 
-This optimization is aimed at fully evaluated and short-circuited boolean expressions, both standalone and in conditional expressions. The basis of the optimization lies in replacing the conditional expression with a sequence of `op` or `select` (in target `8.1` or higher) instructions. In the following text only the `select` instructions are mentioned. However, wherever possible, the `op` instructions are used instead.
+This optimization handles boolean expressions in conditional expressions or standalone, both fully evaluated and short-circuited. The basis of the optimization lies in replacing the conditional expression with a sequence of `op` or `select` (in target `8.1` or higher) instructions. In the following text only the `select` instructions are mentioned. However, wherever possible, the `op` instructions are used instead.
 
 > [!TIP]
 > Since the `op` instruction can only generate boolean values, the optimization possibilities are very limited for targets where `select` is not available.
@@ -21,7 +21,7 @@ Whether the optimization is applied depends on the optimization goal:
 Example:
 
 ```Mindcode
-set target = 8.1;
+#set target = 8.1;
 print(rand(10) < 5 ? "low" : "high");
 ```
 
@@ -36,7 +36,7 @@ print *tmp2
 The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch.
 
 ```Mindcode
-set target = 8;
+#set target = 8;
 
 if switch1.enabled then
     a = "on";
@@ -70,7 +70,7 @@ print :c
 Even when the assignments modify one or both variables used in the branch condition, or a simple single expression is used in one of the branches, the `select` optimization can compensate for that:
 
 ```Mindcode
-set target = 8;
+#set target = 8;
 
 noinit var a, b;
 
@@ -96,6 +96,47 @@ draw col *tmp3 0 0 0 0 0
 ## Short-circuit expressions
 
 Three different optimizations are available for short-circuited expressions. Unless specified otherwise, all of these optimizations are only supported when the condition can be expressed as a sequence of `and` or `or` operators (not both). 
+
+### Pure boolean expressions
+
+Pure boolean expressions are expressions over variables using only the `and` and `or` operators. When such an expression has at most three terms (variables), it can be fully evaluated using just two `op` instructions. As this solution is always smaller and faster than the fully evaluated solution, the optimization is always applied for these cases. All six possible forms of a three-variable pure boolean expression, and the resulting optimizations, are demonstrated here:
+
+```Mindcode
+volatile a, b, c;
+print(a and b and c);
+print(a and (b or c));
+print(a or (b and c));
+print(a or b or c);
+print((a or b) and c);
+print((a and b) or c);
+```
+
+compiles to:
+
+```mlog
+op land *tmp6 .a .b
+op land *tmp0 *tmp6 .c
+print *tmp0
+op or *tmp7 .b .c
+op land *tmp1 *tmp7 .a
+print *tmp1
+op land *tmp8 .b .c
+op or *tmp2 *tmp8 .a
+print *tmp2
+op or *tmp9 .a .b
+op or *tmp3 *tmp9 .c
+print *tmp3
+op or *tmp10 .a .b
+op land *tmp4 *tmp10 .c
+print *tmp4
+op land *tmp11 .a .b
+op or *tmp5 *tmp11 .c
+print *tmp5
+```
+
+Notes: 
+* Pure boolean expression optimization doesn't depend on the optimization goal or the selected target.
+* When a pure boolean expression is used as a condition in a conditional statement, this optimization is not applied.
 
 ### Conversion to full evaluation
 
@@ -162,21 +203,21 @@ If both the true and the false branches write to just one variable without any a
 
 ```Mindcode
 #set target = 8;
-volatile x = a > 0 or b > 10 or c < 20 ? 10 : 20;
+print(a > 0 or b > 0 ? 10 : 20);
 ```
 
 compiles to:
 
 ```mlog
-select *tmp4 greaterThan :a 0 10 20
-select *tmp5 greaterThan :b 10 10 *tmp4
-select .x lessThan :c 20 10 *tmp5
+select *tmp3 greaterThan :a 0 10 20
+select *tmp2 greaterThan :b 0 10 *tmp3
+print *tmp2
 ```
 
 This optimization only happens when the short-circuit condition can be converted to full evaluation without any side effects, and the result is compatible with the optimization goal:
 
-* `speed` or `neutral`: the condition has at most two terms, and there are no additional computations in the condition.
-* `size`: the condition has at most five terms, and it uses at most five additional instructions for evaluation of the condition 
+* `speed` or `neutral`: the condition has at most three terms, and there are no additional computations in the condition.
+* `size`: the condition has at most five terms, and it uses at most five additional instructions for evaluation of the condition.
 
 An example of the optimization applied under the `size` optimization goal:
 

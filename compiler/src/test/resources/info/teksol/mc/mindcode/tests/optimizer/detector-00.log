@@ -8,7 +8,7 @@
      1 instructions modified by Data Flow Optimization (4 iterations).
      5 instructions eliminated by Case Switching (3 iterations).
      1 case expressions converted to fast dispatch by Case Switching.
-     7 instructions eliminated by Jump Straightening (4 iterations).
+     7 instructions eliminated by Jump Straightening (5 iterations).
      7 instructions updated by Jump Threading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     94 instructions eliminated by Print Merging.
@@ -388,95 +388,6 @@ Modifications by Fast-dispatch case at line 17:9 (-5 instructions):
    236 label *label7
    237 jump *label6 always
    238 label *label5
-
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-     7 op add :page *tmp4 1
-     8 control enabled switch1 false
-     9 label *label3
--    * label *label4
-    10 print "Property detector - page "
-    11 print :page
-    12 print "/"
- 
-    21 multijump :page 0 0 (m:*label23)
-    22 multilabel *label32 (m:*label23)
-    23 multilabel *label24 (m:*label23)
--    * label *label22
-    24 jump *label7 always
-    25 multilabel *label25 (m:*label23)
--    * label *label9
-    26 print "contents:"
-    27 print "\n"
-    28 sensor *tmp13 .BLOCK @totalItems
- 
-    47 print *tmp18
-    48 print "\n"
-    49 jump *label7 always
--    * label *label8
-    50 multilabel *label26 (m:*label23)
--    * label *label11
-    51 print "power:"
-    52 print "\n"
-    53 sensor *tmp19 .BLOCK @totalPower
- 
-    79 print *tmp28
-    80 print "\n"
-    81 jump *label7 always
--    * label *label10
-    82 multilabel *label27 (m:*label23)
--    * label *label13
-    83 print "combat:"
-    84 print "\n"
-    85 sensor *tmp29 .BLOCK @ammo
- 
-    99 print *tmp32
-   100 print "\n"
-   101 jump *label7 always
--    * label *label12
-   102 multilabel *label28 (m:*label23)
--    * label *label15
-   103 print "status:"
-   104 print "\n"
-   105 sensor *tmp33 .BLOCK @heat
- 
-   123 print *tmp37
-   124 print "\n"
-   125 jump *label7 always
--    * label *label14
-   126 multilabel *label29 (m:*label23)
--    * label *label17
-   127 print "position:"
-   128 print "\n"
-   129 sensor *tmp38 .BLOCK @rotation
- 
-   143 print *tmp41
-   144 print "\n"
-   145 jump *label7 always
--    * label *label16
-   146 multilabel *label30 (m:*label23)
--    * label *label19
-   147 print "unit:"
-   148 print "\n"
-   149 sensor *tmp42 .BLOCK @shootX
- 
-   191 print *tmp52
-   192 print "\n"
-   193 jump *label7 always
--    * label *label18
-   194 multilabel *label31 (m:*label23)
--    * label *label21
-   195 print "other:"
-   196 print "\n"
-   197 sensor *tmp53 .BLOCK @team
- 
-   225 print "\n"
-   226 label *label6
-   227 printflush message1
--    * label *label1
-   228 jump *label0 always
--    * label *label2
-   229 end
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  

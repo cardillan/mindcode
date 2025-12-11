@@ -773,37 +773,6 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (+237 inst
    534 label *label6
    535 label *label5
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
-     0 set :hash 0
-     1 set :i -1
--    * label *label0
-     2 label *label9
-     3 lookup block :block :i
-     4 # "Function: def isWall(in block)"
- 
-   527 label *label8
-   528 set *tmp2 true
-   529 jump *label6 always
--    * label *label7
-   530 label *label10
-   531 set *tmp2 false
-   532 label *label6
--    * label *label5
-   533 jump *label3 equal *tmp2 false
-   534 op mul *tmp5 :hash 31
-   535 op add *tmp6 *tmp5 :i
- 
-   538 jump *label4 always
-   539 label *label3
-   540 label *label4
--    * label *label1
-   541 op add :i :i 1
-   542 jump *label9 lessThan :i @blockCount
--    * label *label2
-   543 print :hash
-   544 assertequals 2750008148 :hash "Test selected blocks"
-   545 end
-
 Final code before resolving virtual instructions:
 
 set :hash 0

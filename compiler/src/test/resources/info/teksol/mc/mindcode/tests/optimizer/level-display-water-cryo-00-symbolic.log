@@ -7,7 +7,7 @@
      5 instructions eliminated by Data Flow Optimization (5 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
-     5 instructions eliminated by Jump Straightening (4 iterations).
+     5 instructions eliminated by Jump Straightening (5 iterations).
      1 instructions updated by Jump Threading.
      6 instructions eliminated by Print Merging.
     81 instructions after optimizations.
@@ -401,77 +401,6 @@ Modifications by Replicate loop condition at line 43:1 (+1 instructions):
    113 label *label24
    114 end
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-     4 set .DISPLAY null
-     5 label *label0
-     6 jump *label3 equal .TANK_CRYO null
--    * label *label5
-     7 jump *label3 equal .TANK_WATER null
--    * label *label4
-     8 jump *label2 notEqual .DISPLAY null
-     9 label *label3
-    10 print "Water and Cryofluid Level Meter"
-    11 set :n @links
--    * label *label6
-    12 jump *label8 lessThanEq :n 0
-    13 label *label25
-    14 op sub :n :n 1
- 
-    17 print :block
-    18 sensor *tmp8 :block @type
-    19 jump *label10 notEqual *tmp8 @message
--    * label *label11
-    20 set .MESSAGE :block
-    21 jump *label9 always
-    22 label *label10
-    23 jump *label12 notEqual *tmp8 @switch
--    * label *label13
-    24 set .SWITCH :block
-    25 jump *label9 always
-    26 label *label12
-    27 jump *label14 notEqual *tmp8 @liquid-tank
--    * label *label15
-    28 set .TANK_CRYO .TANK_WATER
-    29 set .TANK_WATER :block
-    30 jump *label9 always
-    31 label *label14
-    32 jump *label16 notEqual *tmp8 @logic-display
--    * label *label17
-    33 set .DISPLAY :block
-    34 label *label16
-    35 label *label9
--    * label *label7
-    36 jump *label25 greaterThan :n 0
-    37 label *label8
-    38 print "\nMessage: "
- 
-    46 jump *label18 notEqual .TANK_CRYO null
-    47 print "\nNo cryofluid or water tank."
-    48 label *label18
--    * label *label19
-    49 jump *label20 notEqual .DISPLAY null
-    50 print "\nNo display."
-    51 label *label20
--    * label *label21
-    52 printflush .MESSAGE
--    * label *label1
-    53 jump *label0 always
-    54 label *label2
-    55 control enabled .SWITCH 0
--    * label *label22
-    56 sensor *tmp16 .SWITCH @enabled
-    57 jump *label24 notEqual *tmp16 0
-    58 label *label26
- 
-    95 print "\nElapsed: "
-    96 print *tmp37
-    97 printflush .MESSAGE
--    * label *label23
-    98 sensor *tmp16 .SWITCH @enabled
-    99 jump *label26 equal *tmp16 0
-   100 label *label24
-
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
      1 set .TANK_WATER null
@@ -486,14 +415,6 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
     59 label *label26
     60 set :start_time @time
     61 draw clear 0 0 0
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1:
- 
-    98 printflush .MESSAGE
-    99 sensor *tmp16 .SWITCH @enabled
-   100 jump *label26 equal *tmp16 0
--    * label *label24
-   101 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  

@@ -32,18 +32,22 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
         }
     }
 
-    protected @Nullable ShortCircuitAnalysis analyzeShortCircuit(LogicList conditionInstructions) {
+    protected @Nullable ShortCircuitAnalysis analyzeShortCircuit(LogicList conditionInstructions, boolean analyzeJumps) {
         AstContext context = conditionInstructions.getExistingAstContext();
-        boolean shortCircuit = context.children().size() == 1 && context.children().getFirst().matches(
-                AstContextType.SCBE_COND, AstContextType.SCBE_OPER);
+        boolean shortCircuit = context.children().size() == 1 && context.children().getFirst()
+                .matches(AstContextType.SCBE_COND, AstContextType.SCBE_OPER);
         boolean condition = context.children().size() == 1 && context.children().getFirst().matches(AstContextType.SCBE_COND);
         List<LogicLabel> targets = new ArrayList<>();
         List<Condition> conditions = new ArrayList<>();
         Set<LogicArgument> arguments = new HashSet<>();
+        List<LogicInstruction> controls = new ArrayList<>();
+        List<Jump> jumps = List.of();
 
+        LogicLabel lastFullLabel = null;
         JumpInstruction lastJump = null;
         LogicLabel trueLabel =  conditionInstructions.getLast() instanceof LabelInstruction lastLabel ? lastLabel.getLabel() : null;
         boolean plainOperands = true;
+        boolean normal = true;
         boolean mixed = false;
         int jumpCount = 0;
         int opCount = 0;
@@ -51,28 +55,42 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
         Operation operation;
 
         for (LogicInstruction ix : conditionInstructions) {
-            if (ix instanceof JumpInstruction jump) {
-                lastJump = jump;
-                if (jump.isUnconditional()) {
-                    mixed = true;
-                } else {
-                    targets.add(jump.getTarget());
-                    jumpCount++;
-                    conditions.add(jump.getCondition());
-                    if (!jump.isPlainComparison()) {
-                        plainOperands = false;
-                    }
+            if (ix instanceof LabelInstruction labelIx) {
+                if (labelIx.getLabel().equals(lastFullLabel)) {
+                    lastFullLabel = null;
                 }
-            } else if (ix.affectsControlFlow() && !(ix instanceof LabelInstruction)) {
-                mixed = true;
-            } else if (ix.isReal() && jumpCount > 0) {
-                opCount++;
-                ix.processAllModifications(arguments::add);
+                if (targets.contains(labelIx.getLabel())) {
+                    controls.add(labelIx);
+                    // The last full jump jumps over some active code, bail out
+                    if (lastFullLabel != null) mixed = true;
+                }
+            } else if (lastFullLabel == null) {
+                if (ix instanceof JumpInstruction jump) {
+                    if (jump.isUnconditional()) {
+                        normal = false;
+                        mixed = true;
+                        lastFullLabel = jump.getTarget();
+                    } else {
+                        lastJump = jump;
+                        controls.add(jump);
+                        targets.add(jump.getTarget());
+                        jumpCount++;
+                        conditions.add(jump.getCondition());
+                        if (!jump.isPlainComparison()) {
+                            plainOperands = false;
+                        }
+                    }
+                } else if (ix.affectsControlFlow()) {
+                    mixed = true;
+                } else if (ix.isReal() && jumpCount > 0) {
+                    opCount++;
+                    ix.processAllModifications(arguments::add);
+                }
             }
         }
 
         // Non-standard condition
-        if (lastJump == null || lastJump.isUnconditional() || !shortCircuit && conditionInstructions.getLast() != lastJump) {
+        if (lastFullLabel != null || lastJump == null || lastJump.isUnconditional()) {
             return null;
         }
 
@@ -83,9 +101,9 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
         } else {
             // All other jump targets must be the same
             // If they lead to the true label, it is OR, otherwise it is AND
-            targets.removeLast();
+            LogicLabel falseLabel = targets.removeLast();
             SequencedSet<LogicLabel> targetSet = new LinkedHashSet<>(targets);
-            operation = targetSet.size() != 1 || getLabelInstruction(targetSet.getFirst()).getAstContext() == conditionInstructions.getAstContext()
+            operation = !normal || targetSet.size() != 1 || getLabelInstruction(targetSet.getFirst()).getAstContext() == conditionInstructions.getAstContext()
                     ? null : targetSet.getFirst().equals(trueLabel) ? Operation.LOGICAL_OR : Operation.LOGICAL_AND;
 
             Condition lastCondition = conditions.removeLast();
@@ -95,14 +113,49 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
             } else {
                 onlyEquals = conditionSet.getFirst().equals(operation == Operation.LOGICAL_AND ? Condition.EQUAL : Condition.NOT_EQUAL);
             }
+
+            jumps = analyzeJumps ? analyzeJumps(controls, trueLabel, falseLabel) : List.of();
         }
 
         boolean sideEffects = optimizationContext.getProgram().stream().anyMatch(ix ->
                 !ix.belongsTo(conditionInstructions.getAstContext()) &&
                         (ix.getAllReads().anyMatch(arguments::contains) || ix.getSideEffects().hasWrites()));
 
-        return new ShortCircuitAnalysis(shortCircuit, condition, lastJump, sideEffects, operation,
-                onlyEquals, plainOperands, jumpCount, opCount);
+        return new ShortCircuitAnalysis(shortCircuit, normal, condition, lastJump, sideEffects, operation,
+                onlyEquals, plainOperands, jumpCount, opCount, List.copyOf(jumps));
+    }
+
+    private List<Jump> analyzeJumps(List<LogicInstruction> controls, LogicLabel trueLabel, LogicLabel falseLabel) {
+        // Normalize
+        if (controls.getLast() instanceof LabelInstruction ix && ix.getLabel().equals(trueLabel)) {
+            controls.removeLast();
+        }
+
+        LogicLabel nextLabel;
+        if (controls.size() == 4 && controls.get(2) instanceof LabelInstruction ix) {
+            nextLabel = ix.getLabel();
+            controls.remove(2);
+        } else {
+            nextLabel = LogicLabel.INVALID;
+        }
+
+        // We're okay here
+        if (controls.size() != 3 || !controls.stream().allMatch(ix -> ix instanceof JumpInstruction j && j.isPlainComparison())) {
+            return List.of();
+        }
+
+        // So, we have three jumps and their targets
+        return controls.stream()
+                .map(JumpInstruction.class::cast)
+                .map(jump -> new Jump(jump, findJumpTarget(jump.getTarget(), trueLabel, falseLabel, nextLabel)))
+                .toList();
+    }
+
+    private JumpTarget findJumpTarget(LogicLabel target, LogicLabel trueLabel, LogicLabel falseLabel, LogicLabel nextLabel) {
+        if (target.equals(trueLabel)) return JumpTarget.TRUE;
+        if (target.equals(falseLabel)) return JumpTarget.FALSE;
+        if (target.equals(nextLabel)) return JumpTarget.NEXT;
+        return JumpTarget.INVALID;
     }
 
     protected double executionSteps(AstContext astContext) {
@@ -137,6 +190,7 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
 
     protected record ShortCircuitAnalysis(
             boolean shortCircuit,               // This is a short-circuit condition
+            boolean normal,                     // This is a normalized condition
             boolean condition,                  // This is a short-circuited condition (not an operation)
             JumpInstruction lastJump,           // Last jump in the condition
             boolean sideEffects,                // Short-circuited code has side effects
@@ -144,7 +198,8 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
             boolean onlyEquals,                 // All conditional relations are equal or notEqual
             boolean plainOperands,              // All operands are plain variables or constants
             int jumpCount,                      // Number of jumps in total
-            int shortedOpCount) {               // Number of short-circuited operations
+            int shortedOpCount,                 // Number of short-circuited operations
+            List<Jump> jumps) {                 // Analyzed jumps
 
         public boolean canPrecomputeTrueBranch() {
             return !shortCircuit || operation == Operation.LOGICAL_OR;
@@ -152,6 +207,38 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
 
         public boolean canPrecomputeFalseBranch() {
             return !shortCircuit || operation == Operation.LOGICAL_AND;
+        }
+    }
+
+    protected enum JumpTarget {
+        TRUE, FALSE, NEXT, INVALID
+    }
+
+    protected record Jump(
+            Condition condition,
+            LogicValue x,
+            LogicValue y,
+            JumpTarget target) {
+
+        private Jump(JumpInstruction jump, JumpTarget target) {
+            this(jump.getCondition(), jump.getX(), jump.getY(), target);
+            if (!jump.isPlainComparison()) {
+                throw new IllegalArgumentException("Jump condition is not a plain comparison");
+            }
+        }
+
+        public LogicValue variable() {
+            return x == LogicBoolean.FALSE ? y : x;
+        }
+
+        public boolean comparesToTrue() {
+            // We already know it's a plain comparison jump
+            return condition == Condition.NOT_EQUAL;
+        }
+
+        public boolean comparesToFalse() {
+            // We already know it's a plain comparison jump
+            return condition == Condition.EQUAL;
         }
     }
 }

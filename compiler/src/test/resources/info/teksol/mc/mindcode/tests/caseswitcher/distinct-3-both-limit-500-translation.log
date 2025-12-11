@@ -655,33 +655,6 @@ Modifications by Translate case at line 11:5 (-100 instructions):
     13 op shl :bit 1 *tmp2
     14 op and *tmp5 :total :bit
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
-     0 assertequals 260 @blockCount "Verify block count"
-     1 set :total 0
-     2 set :i -1
--    * label *label0
-     3 label *label59
-     4 lookup block :block :i
-     5 # "Function: def identifyBlock(in block)"
- 
-     8 op sub *tmp10 *tmp9 48
-     9 select *tmp11 strictEqual *tmp8 null 1 *tmp10
-    10 select *tmp2 strictEqual *tmp9 null 0 *tmp11
--    * label *label3
-    11 op shl :bit 1 *tmp2
-    12 op and *tmp5 :total :bit
-    13 jump *label57 lessThanEq *tmp5 1
- 
-    16 label *label57
-    17 op or :total :total :bit
-    18 label *label58
--    * label *label1
-    19 op add :i :i 1
-    20 jump *label59 lessThan :i @blockCount
--    * label *label2
-    21 assertequals 0x07FFFFFF :total "Test selected blocks"
-    22 end
-
 Final code before resolving virtual instructions:
 
 assertequals 260 @blockCount "Verify block count"

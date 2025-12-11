@@ -1,8 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -35,9 +33,5 @@ class UnreachableCodeEliminator extends BaseOptimizer {
         }
 
         return false;
-    }
-
-    int findLabelIndex(LogicLabel label) {
-        return firstInstructionIndex(ix -> ix instanceof LabelInstruction l && l.getLabel().equals(label));
     }
 }

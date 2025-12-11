@@ -324,43 +324,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     85 op sub :baz:n :baz:n 1
     86 set :baz:a :baz:b
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-    40 pop bank1 :foo:a
-    41 pop bank1 :foo:n
-    42 label *label7
--    * label *label8
-    43 op add :foo:b :foo:b 1
-    44 print :foo:a
-    45 print :foo:b
--    * label *label6
-    46 returnrec bank1
-    47 end
-    48 label *label1
- 
-    63 set :bar:a *tmp18
-    64 pop bank1 :bar:n
-    65 label *label11
--    * label *label12
-    66 op add :bar:b :bar:b 1
-    67 print :bar:a
-    68 print :bar:b
--    * label *label10
-    69 returnrec bank1
-    70 end
-    71 label *label2
- 
-    87 pop bank1 :baz:b
-    88 pop bank1 :baz:n
-    89 label *label15
--    * label *label16
-    90 op add :baz:b :baz:b 1
-    91 print :baz:a
-    92 print :baz:b
--    * label *label14
-    93 returnrec bank1
-    94 end
-
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-3 instructions):
  
     44 print :foo:a

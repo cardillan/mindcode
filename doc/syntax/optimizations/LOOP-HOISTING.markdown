@@ -44,7 +44,7 @@ set :j 0
 op add *tmp0 MAX 10
 jump 0 greaterThanEq 0 MAX
 set :i 0
-jump 9 greaterThanEq 0 *tmp0
+jump 9 lessThanEq MAX -10
 op add :i :i 1
 print :i
 jump 6 lessThan :i *tmp0
@@ -82,8 +82,8 @@ Hoisting the instructions setting up return addresses is not possible when [`sym
 When the `select` optimization is available, Loop Hoisting is capable of handling some conditional expressions as well:
 
 ```Mindcode
-set target = 8;
-set symbolic-labels = true;
+#set target = 8;
+#set symbolic-labels = true;
 param MAX = 10;
 for i in 1 ... MAX do
     print(i, (MAX % 2 == 0) ? "Even" : "Odd");
@@ -94,9 +94,9 @@ print("end");
 produces
 
 ```mlog
- Mlog code compiled with support for symbolic labels
- You can safely add/remove instructions, in most parts of the program
- Pay closer attention to sections of the program manipulating @counter
+# Mlog code compiled with support for symbolic labels
+# You can safely add/remove instructions, in most parts of the program
+# Pay closer attention to sections of the program manipulating @counter
     set MAX 10
     set :i 1
     op mod *tmp0 MAX 2

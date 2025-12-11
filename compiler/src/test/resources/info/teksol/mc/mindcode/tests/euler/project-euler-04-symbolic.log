@@ -3,8 +3,8 @@
      4 instructions eliminated by Dead Code Elimination (5 iterations).
      3 instructions eliminated by Condition Optimization (5 iterations).
      3 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     1 instructions eliminated by Boolean Optimization (4 iterations).
-       1 fully-evaluated conditions turned to a sequence of selects.
+     1 instructions eliminated by Boolean Optimization (6 iterations).
+       1 fully-evaluated expressions optimized using selects.
      1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -234,46 +234,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     15 label *label18
     16 op mul *tmp5 10 :revert:res
     17 op mod *tmp6 :revert:num 10
-
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
-     0 set :max 0
-     1 set :i 10
--    * label *label0
-     2 label *label14
-     3 set :j :i
--    * label *label3
-     4 jump *label5 greaterThanEq :i 100
-     5 label *label15
-     6 op mul :num :i :j
- 
-     8 # "Function: def revert(in num)"
-     9 set :revert:num :num
-    10 set :revert:res 0
--    * label *label17
-    11 jump *label20 lessThanEq :num 0
-    12 label *label18
-    13 op mul *tmp5 10 :revert:res
-    14 op mod *tmp6 :revert:num 10
-    15 op add :revert:res *tmp5 *tmp6
-    16 op idiv :revert:num :revert:num 10
--    * label *label19
-    17 jump *label18 greaterThan :revert:num 0
-    18 label *label20
--    * label *label21
-    19 select :max equal :num :revert:res :num :max
-    20 label *label6
--    * label *label7
--    * label *label4
-    21 op add :j :j 1
-    22 jump *label15 lessThan :j 100
-    23 label *label5
--    * label *label1
-    24 op add :i :i 1
-    25 jump *label14 lessThan :i 100
--    * label *label2
-    26 assertequals 9009 :max "Project Euler 4"
-    27 stop
-    28 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  

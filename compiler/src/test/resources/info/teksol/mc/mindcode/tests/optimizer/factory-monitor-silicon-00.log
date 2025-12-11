@@ -4,8 +4,8 @@
     26 instructions eliminated by Condition Optimization (5 iterations).
     18 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      2 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
-    22 instructions eliminated by Boolean Optimization (4 iterations).
-       9 fully-evaluated conditions turned to a sequence of selects.
+    22 instructions eliminated by Boolean Optimization (6 iterations).
+       9 fully-evaluated expressions optimized using selects.
      1 instructions eliminated by If Expression Optimization (3 iterations).
     35 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
      1 instructions added by Loop Optimization (3 iterations).
@@ -1710,134 +1710,6 @@ Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1
    251 label *label58
    252 jump *label63 lessThanEq :boost EXPECTED_BOOST
 
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
- 
-     6 select *tmp3 notEqual bank1 null 156 176
-     7 set *tmp5 0
-     8 jump *label5 equal FROM_INDEX 0
--    * label *label4
-     9 op mul *tmp6 FROM_INDEX 22
-    10 op add *tmp5 4 *tmp6
-    11 label *label5
- 
-    21 set :expected_flow_str null
-    22 set :icon null
-    23 control enabled switch1 0
--    * label *label8
-    24 sensor *tmp14 switch1 @enabled
-    25 jump *label10 notEqual *tmp14 0
-    26 label *label73
- 
-    32 draw stroke 2
-    33 set :index FROM_INDEX
-    34 set :n 0
--    * label *label11
-    35 jump *label13 greaterThanEq 0 @links
-    36 label *label71
-    37 getlink :smelter :n
- 
-    50 set :minimum :s
-    51 set :icon @sand
-    52 label *label16
--    * label *label17
-    53 jump *label18 greaterThanEq :c :minimum
-    54 set :minimum :c
-    55 set :icon @coal
-    56 label *label18
--    * label *label19
-    57 jump *label20 greaterThanEq :p :minimum
-    58 set :minimum :p
-    59 set :icon @pyratite
-    60 label *label20
--    * label *label21
-    61 op greaterThan *tmp36 :a 10
-    62 op sub *tmp37 31 :a
-    63 op lessThan *tmp38 *tmp37 :minimum
- 
-   132 op max :blue 192 :blue
-   133 set :boost EXPECTED_BOOST
-   134 label *label38
--    * label *label39
-   135 op mul *tmp91 .BAR_LENGTH :boost
-   136 op idiv :length *tmp91 EXPECTED_BOOST
-   137 draw color :red :green :blue 128
- 
-   143 op add :index :index 1
-   144 op add :factories :factories 1
-   145 label *label14
--    * label *label15
--    * label *label12
-   146 op add :n :n 1
-   147 jump *label71 lessThan :n @links
-   148 label *label13
-   149 set :index FROM_INDEX
-   150 set :n 0
--    * label *label40
-   151 jump *label42 greaterThanEq 0 @links
-   152 label *label72
-   153 getlink :smelter :n
- 
-   165 set :minimum :s
-   166 set :icon @sand
-   167 label *label45
--    * label *label46
-   168 jump *label47 greaterThanEq :c :minimum
-   169 set :minimum :c
-   170 set :icon @coal
-   171 label *label47
--    * label *label48
-   172 jump *label49 greaterThanEq :l :minimum
-   173 set :minimum :l
-   174 set :icon @lead
-   175 label *label49
--    * label *label50
-   176 op add :x 5 .BAR_SPACE
-   177 op mul *tmp118 :index 22
-   178 op add :y 4 *tmp118
- 
-   242 op max :blue 192 0
-   243 set :boost EXPECTED_BOOST
-   244 label *label63
--    * label *label64
-   245 op mul *tmp165 .BAR_LENGTH :boost
-   246 op idiv :length *tmp165 EXPECTED_BOOST
-   247 draw color :red :green :blue 128
- 
-   252 draw lineRect :x :y :length 14
-   253 op add :index :index 1
-   254 label *label43
--    * label *label44
--    * label *label41
-   255 op add :n :n 1
-   256 jump *label72 lessThan :n @links
-   257 label *label42
- 
-   288 draw triangle 156 :pos1 164 :pos 156 :pos2
-   289 op idiv :flow_str :rate 0.0002777777777777778
-   290 label *label69
--    * label *label70
-   291 label *label67
--    * label *label68
-   292 print "\nNominal production: "
-   293 print :expected_flow_str
-   294 print "/min"
- 
-   296 print :flow_str
-   297 print "/min"
-   298 label *label65
--    * label *label66
-   299 drawflush display1
-   300 op sub *tmp192 @time :start
-   301 op floor *tmp193 *tmp192
- 
-   303 print *tmp193
-   304 print " ms"
-   305 printflush message1
--    * label *label9
-   306 sensor *tmp14 switch1 @enabled
-   307 jump *label73 equal *tmp14 0
-   308 label *label10
-
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
      1 set FROM_INDEX 0
@@ -1870,30 +1742,6 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
    195 label *label55
    196 draw color 255 80 80 255
    197 op add *tmp131 :y 3
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1:
- 
-    92 draw color 255 80 80 255
-    93 op add *tmp64 :y 6
-    94 draw rect 9 *tmp64 2 2
--    * label *label29
-    95 jump *label27 always
-    96 label *label26
-    97 draw color 255 80 80 255
- 
-   207 op add *tmp138 :x 4
-   208 op add *tmp139 :y 6
-   209 draw rect *tmp138 *tmp139 2 2
--    * label *label56
-   210 jump *label54 always
-   211 label *label53
-   212 draw color 255 80 80 255
- 
-   304 printflush message1
-   305 sensor *tmp14 switch1 @enabled
-   306 jump *label73 equal *tmp14 0
--    * label *label10
-   307 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  

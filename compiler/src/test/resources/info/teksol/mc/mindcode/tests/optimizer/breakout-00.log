@@ -9,7 +9,7 @@
      3 loops improved by Loop Optimization.
    126 instructions added by Loop Unrolling (6 iterations).
      3 loops unrolled by Loop Unrolling.
-     3 instructions eliminated by Jump Straightening (2 passes, 6 iterations).
+     3 instructions eliminated by Jump Straightening (2 passes, 8 iterations).
      3 instructions updated by Jump Threading.
      2 instructions eliminated by Unreachable Code Elimination (3 iterations).
    179 instructions after optimizations.
@@ -460,9 +460,9 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-3 inst
 
 Modifications by Unroll loop at line 83:13 (+51 instructions):
  
-    75 set :y 126
-    76 label *label23
-    77 label *label40
+    74 set :y 126
+    75 label *label23
+    76 label *label40
 -    * set :x 1
 -    * label *label26
 -    * label *label41
@@ -501,308 +501,308 @@ Modifications by Unroll loop at line 83:13 (+51 instructions):
 -    * op add :x :x 58.666666666666664
 -    * jump *label41 lessThan :x 176
 -    * label *label28
-+   78 set :x 1
-+   79 label *label42
-+   80 label *label43
-+   81 read *tmp39 BRICKS :brickPtr
-+   82 jump *label48 equal *tmp39 false
-+   83 draw rect :x :y 57.666666666666664 9
-+   84 op greaterThan *tmp41 :ballXEnd :x
-+   85 op add *tmp42 :x 58.666666666666664
-+   86 op lessThan *tmp43 :ballX *tmp42
-+   87 op land *tmp44 *tmp41 *tmp43
-+   88 op greaterThan *tmp45 :ballYEnd :y
-+   89 op land *tmp46 *tmp44 *tmp45
-+   90 op add *tmp47 :y 10
-+   91 op lessThan *tmp48 :ballY *tmp47
-+   92 op land *tmp49 *tmp46 *tmp48
-+   93 jump *label46 equal *tmp49 false
-+   94 write 0 BRICKS :brickPtr
-+   95 op sub :brickCount :brickCount 1
-+   96 op sub *tmp53 :x 4
-+   97 op greaterThan *tmp54 :ballX *tmp53
-+   98 op add *tmp55 :x 62.666666666666664
-+   99 op lessThan *tmp56 :ballX *tmp55
-+  100 op land *tmp57 *tmp54 *tmp56
-+  101 jump *label44 equal *tmp57 false
-+  102 op mul :ballVY :ballVY -1
-+  103 jump *label45 always
-+  104 label *label44
-+  105 op mul :ballVX :ballVX -1
-+  106 label *label45
-+  107 label *label46
-+  108 label *label47
-+  109 label *label48
-+  110 label *label49
-+  111 op add :brickPtr :brickPtr 1
-+  112 label *label50
-+  113 op add :x :x 58.666666666666664
-+  114 label *label51
-+  115 read *tmp39 BRICKS :brickPtr
-+  116 jump *label56 equal *tmp39 false
-+  117 draw rect :x :y 57.666666666666664 9
-+  118 op greaterThan *tmp41 :ballXEnd :x
-+  119 op add *tmp42 :x 58.666666666666664
-+  120 op lessThan *tmp43 :ballX *tmp42
-+  121 op land *tmp44 *tmp41 *tmp43
-+  122 op greaterThan *tmp45 :ballYEnd :y
-+  123 op land *tmp46 *tmp44 *tmp45
-+  124 op add *tmp47 :y 10
-+  125 op lessThan *tmp48 :ballY *tmp47
-+  126 op land *tmp49 *tmp46 *tmp48
-+  127 jump *label54 equal *tmp49 false
-+  128 write 0 BRICKS :brickPtr
-+  129 op sub :brickCount :brickCount 1
-+  130 op sub *tmp53 :x 4
-+  131 op greaterThan *tmp54 :ballX *tmp53
-+  132 op add *tmp55 :x 62.666666666666664
-+  133 op lessThan *tmp56 :ballX *tmp55
-+  134 op land *tmp57 *tmp54 *tmp56
-+  135 jump *label52 equal *tmp57 false
-+  136 op mul :ballVY :ballVY -1
-+  137 jump *label53 always
-+  138 label *label52
-+  139 op mul :ballVX :ballVX -1
-+  140 label *label53
-+  141 label *label54
-+  142 label *label55
-+  143 label *label56
-+  144 label *label57
-+  145 op add :brickPtr :brickPtr 1
-+  146 label *label58
-+  147 op add :x :x 58.666666666666664
-+  148 label *label59
-+  149 read *tmp39 BRICKS :brickPtr
-+  150 jump *label64 equal *tmp39 false
-+  151 draw rect :x :y 57.666666666666664 9
-+  152 op greaterThan *tmp41 :ballXEnd :x
-+  153 op add *tmp42 :x 58.666666666666664
-+  154 op lessThan *tmp43 :ballX *tmp42
-+  155 op land *tmp44 *tmp41 *tmp43
-+  156 op greaterThan *tmp45 :ballYEnd :y
-+  157 op land *tmp46 *tmp44 *tmp45
-+  158 op add *tmp47 :y 10
-+  159 op lessThan *tmp48 :ballY *tmp47
-+  160 op land *tmp49 *tmp46 *tmp48
-+  161 jump *label62 equal *tmp49 false
-+  162 write 0 BRICKS :brickPtr
-+  163 op sub :brickCount :brickCount 1
-+  164 op sub *tmp53 :x 4
-+  165 op greaterThan *tmp54 :ballX *tmp53
-+  166 op add *tmp55 :x 62.666666666666664
-+  167 op lessThan *tmp56 :ballX *tmp55
-+  168 op land *tmp57 *tmp54 *tmp56
-+  169 jump *label60 equal *tmp57 false
-+  170 op mul :ballVY :ballVY -1
-+  171 jump *label61 always
-+  172 label *label60
-+  173 op mul :ballVX :ballVX -1
-+  174 label *label61
-+  175 label *label62
-+  176 label *label63
-+  177 label *label64
-+  178 label *label65
-+  179 op add :brickPtr :brickPtr 1
-+  180 label *label66
-+  181 op add :x :x 58.666666666666664
-+  182 label *label28
-   183 label *label24
-   184 op sub :y :y 10
-   185 jump *label40 greaterThan :y 106
++   77 set :x 1
++   78 label *label42
++   79 label *label43
++   80 read *tmp39 BRICKS :brickPtr
++   81 jump *label48 equal *tmp39 false
++   82 draw rect :x :y 57.666666666666664 9
++   83 op greaterThan *tmp41 :ballXEnd :x
++   84 op add *tmp42 :x 58.666666666666664
++   85 op lessThan *tmp43 :ballX *tmp42
++   86 op land *tmp44 *tmp41 *tmp43
++   87 op greaterThan *tmp45 :ballYEnd :y
++   88 op land *tmp46 *tmp44 *tmp45
++   89 op add *tmp47 :y 10
++   90 op lessThan *tmp48 :ballY *tmp47
++   91 op land *tmp49 *tmp46 *tmp48
++   92 jump *label46 equal *tmp49 false
++   93 write 0 BRICKS :brickPtr
++   94 op sub :brickCount :brickCount 1
++   95 op sub *tmp53 :x 4
++   96 op greaterThan *tmp54 :ballX *tmp53
++   97 op add *tmp55 :x 62.666666666666664
++   98 op lessThan *tmp56 :ballX *tmp55
++   99 op land *tmp57 *tmp54 *tmp56
++  100 jump *label44 equal *tmp57 false
++  101 op mul :ballVY :ballVY -1
++  102 jump *label45 always
++  103 label *label44
++  104 op mul :ballVX :ballVX -1
++  105 label *label45
++  106 label *label46
++  107 label *label47
++  108 label *label48
++  109 label *label49
++  110 op add :brickPtr :brickPtr 1
++  111 label *label50
++  112 op add :x :x 58.666666666666664
++  113 label *label51
++  114 read *tmp39 BRICKS :brickPtr
++  115 jump *label56 equal *tmp39 false
++  116 draw rect :x :y 57.666666666666664 9
++  117 op greaterThan *tmp41 :ballXEnd :x
++  118 op add *tmp42 :x 58.666666666666664
++  119 op lessThan *tmp43 :ballX *tmp42
++  120 op land *tmp44 *tmp41 *tmp43
++  121 op greaterThan *tmp45 :ballYEnd :y
++  122 op land *tmp46 *tmp44 *tmp45
++  123 op add *tmp47 :y 10
++  124 op lessThan *tmp48 :ballY *tmp47
++  125 op land *tmp49 *tmp46 *tmp48
++  126 jump *label54 equal *tmp49 false
++  127 write 0 BRICKS :brickPtr
++  128 op sub :brickCount :brickCount 1
++  129 op sub *tmp53 :x 4
++  130 op greaterThan *tmp54 :ballX *tmp53
++  131 op add *tmp55 :x 62.666666666666664
++  132 op lessThan *tmp56 :ballX *tmp55
++  133 op land *tmp57 *tmp54 *tmp56
++  134 jump *label52 equal *tmp57 false
++  135 op mul :ballVY :ballVY -1
++  136 jump *label53 always
++  137 label *label52
++  138 op mul :ballVX :ballVX -1
++  139 label *label53
++  140 label *label54
++  141 label *label55
++  142 label *label56
++  143 label *label57
++  144 op add :brickPtr :brickPtr 1
++  145 label *label58
++  146 op add :x :x 58.666666666666664
++  147 label *label59
++  148 read *tmp39 BRICKS :brickPtr
++  149 jump *label64 equal *tmp39 false
++  150 draw rect :x :y 57.666666666666664 9
++  151 op greaterThan *tmp41 :ballXEnd :x
++  152 op add *tmp42 :x 58.666666666666664
++  153 op lessThan *tmp43 :ballX *tmp42
++  154 op land *tmp44 *tmp41 *tmp43
++  155 op greaterThan *tmp45 :ballYEnd :y
++  156 op land *tmp46 *tmp44 *tmp45
++  157 op add *tmp47 :y 10
++  158 op lessThan *tmp48 :ballY *tmp47
++  159 op land *tmp49 *tmp46 *tmp48
++  160 jump *label62 equal *tmp49 false
++  161 write 0 BRICKS :brickPtr
++  162 op sub :brickCount :brickCount 1
++  163 op sub *tmp53 :x 4
++  164 op greaterThan *tmp54 :ballX *tmp53
++  165 op add *tmp55 :x 62.666666666666664
++  166 op lessThan *tmp56 :ballX *tmp55
++  167 op land *tmp57 *tmp54 *tmp56
++  168 jump *label60 equal *tmp57 false
++  169 op mul :ballVY :ballVY -1
++  170 jump *label61 always
++  171 label *label60
++  172 op mul :ballVX :ballVX -1
++  173 label *label61
++  174 label *label62
++  175 label *label63
++  176 label *label64
++  177 label *label65
++  178 op add :brickPtr :brickPtr 1
++  179 label *label66
++  180 op add :x :x 58.666666666666664
++  181 label *label28
+   182 label *label24
+   183 op sub :y :y 10
+   184 jump *label40 greaterThan :y 106
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    80 label *label43
-    81 read *tmp39 BRICKS :brickPtr
-    82 jump *label48 equal *tmp39 false
--    * draw rect :x :y 57.666666666666664 9
--    * op greaterThan *tmp41 :ballXEnd :x
--    * op add *tmp42 :x 58.666666666666664
--    * op lessThan *tmp43 :ballX *tmp42
-+   83 draw rect 1 :y 57.666666666666664 9
-+   84 op greaterThan *tmp41 :ballXEnd 1
-+   85 op add *tmp42 1 58.666666666666664
-+   86 op lessThan *tmp43 :ballX 59.666666666666664
-    87 op land *tmp44 *tmp41 *tmp43
-    88 op greaterThan *tmp45 :ballYEnd :y
-    89 op land *tmp46 *tmp44 *tmp45
- 
-    93 jump *label46 equal *tmp49 false
-    94 write 0 BRICKS :brickPtr
-    95 op sub :brickCount :brickCount 1
--    * op sub *tmp53 :x 4
--    * op greaterThan *tmp54 :ballX *tmp53
--    * op add *tmp55 :x 62.666666666666664
--    * op lessThan *tmp56 :ballX *tmp55
-+   96 op sub *tmp53 1 4
-+   97 op greaterThan *tmp54 :ballX -3
-+   98 op add *tmp55 1 62.666666666666664
-+   99 op lessThan *tmp56 :ballX 63.666666666666664
-   100 op land *tmp57 *tmp54 *tmp56
-   101 jump *label44 equal *tmp57 false
-   102 op mul :ballVY :ballVY -1
- 
-   110 label *label49
-   111 op add :brickPtr :brickPtr 1
-   112 label *label50
--    * op add :x :x 58.666666666666664
-+  113 op add :x 1 58.666666666666664
-   114 label *label51
-   115 read *tmp39 BRICKS :brickPtr
-   116 jump *label56 equal *tmp39 false
--    * draw rect :x :y 57.666666666666664 9
--    * op greaterThan *tmp41 :ballXEnd :x
--    * op add *tmp42 :x 58.666666666666664
--    * op lessThan *tmp43 :ballX *tmp42
-+  117 draw rect 59.666666666666664 :y 57.666666666666664 9
-+  118 op greaterThan *tmp41 :ballXEnd 59.666666666666664
-+  119 op add *tmp42 59.666666666666664 58.666666666666664
-+  120 op lessThan *tmp43 :ballX 118.33333333333333
-   121 op land *tmp44 *tmp41 *tmp43
-   122 op greaterThan *tmp45 :ballYEnd :y
-   123 op land *tmp46 *tmp44 *tmp45
- 
-   127 jump *label54 equal *tmp49 false
-   128 write 0 BRICKS :brickPtr
-   129 op sub :brickCount :brickCount 1
--    * op sub *tmp53 :x 4
--    * op greaterThan *tmp54 :ballX *tmp53
--    * op add *tmp55 :x 62.666666666666664
--    * op lessThan *tmp56 :ballX *tmp55
-+  130 op sub *tmp53 59.666666666666664 4
-+  131 op greaterThan *tmp54 :ballX 55.666666666666664
-+  132 op add *tmp55 59.666666666666664 62.666666666666664
-+  133 op lessThan *tmp56 :ballX 122.33333333333333
-   134 op land *tmp57 *tmp54 *tmp56
-   135 jump *label52 equal *tmp57 false
-   136 op mul :ballVY :ballVY -1
- 
-   144 label *label57
-   145 op add :brickPtr :brickPtr 1
-   146 label *label58
--    * op add :x :x 58.666666666666664
-+  147 op add :x 59.666666666666664 58.666666666666664
-   148 label *label59
-   149 read *tmp39 BRICKS :brickPtr
-   150 jump *label64 equal *tmp39 false
--    * draw rect :x :y 57.666666666666664 9
--    * op greaterThan *tmp41 :ballXEnd :x
--    * op add *tmp42 :x 58.666666666666664
--    * op lessThan *tmp43 :ballX *tmp42
-+  151 draw rect 118.33333333333333 :y 57.666666666666664 9
-+  152 op greaterThan *tmp41 :ballXEnd 118.33333333333333
-+  153 op add *tmp42 118.33333333333333 58.666666666666664
-+  154 op lessThan *tmp43 :ballX 177
-   155 op land *tmp44 *tmp41 *tmp43
-   156 op greaterThan *tmp45 :ballYEnd :y
-   157 op land *tmp46 *tmp44 *tmp45
- 
-   161 jump *label62 equal *tmp49 false
-   162 write 0 BRICKS :brickPtr
-   163 op sub :brickCount :brickCount 1
--    * op sub *tmp53 :x 4
--    * op greaterThan *tmp54 :ballX *tmp53
--    * op add *tmp55 :x 62.666666666666664
--    * op lessThan *tmp56 :ballX *tmp55
-+  164 op sub *tmp53 118.33333333333333 4
-+  165 op greaterThan *tmp54 :ballX 114.33333333333333
-+  166 op add *tmp55 118.33333333333333 62.666666666666664
-+  167 op lessThan *tmp56 :ballX 181
-   168 op land *tmp57 *tmp54 *tmp56
-   169 jump *label60 equal *tmp57 false
-   170 op mul :ballVY :ballVY -1
- 
-   178 label *label65
-   179 op add :brickPtr :brickPtr 1
-   180 label *label66
--    * op add :x :x 58.666666666666664
-+  181 op add :x 118.33333333333333 58.666666666666664
-   182 label *label28
-   183 label *label24
-   184 op sub :y :y 10
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-13 instructions):
- 
-    75 set :y 126
-    76 label *label23
-    77 label *label40
--    * set :x 1
-    78 label *label42
     79 label *label43
     80 read *tmp39 BRICKS :brickPtr
     81 jump *label48 equal *tmp39 false
-    82 draw rect 1 :y 57.666666666666664 9
-    83 op greaterThan *tmp41 :ballXEnd 1
+-    * draw rect :x :y 57.666666666666664 9
+-    * op greaterThan *tmp41 :ballXEnd :x
+-    * op add *tmp42 :x 58.666666666666664
+-    * op lessThan *tmp43 :ballX *tmp42
++   82 draw rect 1 :y 57.666666666666664 9
++   83 op greaterThan *tmp41 :ballXEnd 1
++   84 op add *tmp42 1 58.666666666666664
++   85 op lessThan *tmp43 :ballX 59.666666666666664
+    86 op land *tmp44 *tmp41 *tmp43
+    87 op greaterThan *tmp45 :ballYEnd :y
+    88 op land *tmp46 *tmp44 *tmp45
+ 
+    92 jump *label46 equal *tmp49 false
+    93 write 0 BRICKS :brickPtr
+    94 op sub :brickCount :brickCount 1
+-    * op sub *tmp53 :x 4
+-    * op greaterThan *tmp54 :ballX *tmp53
+-    * op add *tmp55 :x 62.666666666666664
+-    * op lessThan *tmp56 :ballX *tmp55
++   95 op sub *tmp53 1 4
++   96 op greaterThan *tmp54 :ballX -3
++   97 op add *tmp55 1 62.666666666666664
++   98 op lessThan *tmp56 :ballX 63.666666666666664
+    99 op land *tmp57 *tmp54 *tmp56
+   100 jump *label44 equal *tmp57 false
+   101 op mul :ballVY :ballVY -1
+ 
+   109 label *label49
+   110 op add :brickPtr :brickPtr 1
+   111 label *label50
+-    * op add :x :x 58.666666666666664
++  112 op add :x 1 58.666666666666664
+   113 label *label51
+   114 read *tmp39 BRICKS :brickPtr
+   115 jump *label56 equal *tmp39 false
+-    * draw rect :x :y 57.666666666666664 9
+-    * op greaterThan *tmp41 :ballXEnd :x
+-    * op add *tmp42 :x 58.666666666666664
+-    * op lessThan *tmp43 :ballX *tmp42
++  116 draw rect 59.666666666666664 :y 57.666666666666664 9
++  117 op greaterThan *tmp41 :ballXEnd 59.666666666666664
++  118 op add *tmp42 59.666666666666664 58.666666666666664
++  119 op lessThan *tmp43 :ballX 118.33333333333333
+   120 op land *tmp44 *tmp41 *tmp43
+   121 op greaterThan *tmp45 :ballYEnd :y
+   122 op land *tmp46 *tmp44 *tmp45
+ 
+   126 jump *label54 equal *tmp49 false
+   127 write 0 BRICKS :brickPtr
+   128 op sub :brickCount :brickCount 1
+-    * op sub *tmp53 :x 4
+-    * op greaterThan *tmp54 :ballX *tmp53
+-    * op add *tmp55 :x 62.666666666666664
+-    * op lessThan *tmp56 :ballX *tmp55
++  129 op sub *tmp53 59.666666666666664 4
++  130 op greaterThan *tmp54 :ballX 55.666666666666664
++  131 op add *tmp55 59.666666666666664 62.666666666666664
++  132 op lessThan *tmp56 :ballX 122.33333333333333
+   133 op land *tmp57 *tmp54 *tmp56
+   134 jump *label52 equal *tmp57 false
+   135 op mul :ballVY :ballVY -1
+ 
+   143 label *label57
+   144 op add :brickPtr :brickPtr 1
+   145 label *label58
+-    * op add :x :x 58.666666666666664
++  146 op add :x 59.666666666666664 58.666666666666664
+   147 label *label59
+   148 read *tmp39 BRICKS :brickPtr
+   149 jump *label64 equal *tmp39 false
+-    * draw rect :x :y 57.666666666666664 9
+-    * op greaterThan *tmp41 :ballXEnd :x
+-    * op add *tmp42 :x 58.666666666666664
+-    * op lessThan *tmp43 :ballX *tmp42
++  150 draw rect 118.33333333333333 :y 57.666666666666664 9
++  151 op greaterThan *tmp41 :ballXEnd 118.33333333333333
++  152 op add *tmp42 118.33333333333333 58.666666666666664
++  153 op lessThan *tmp43 :ballX 177
+   154 op land *tmp44 *tmp41 *tmp43
+   155 op greaterThan *tmp45 :ballYEnd :y
+   156 op land *tmp46 *tmp44 *tmp45
+ 
+   160 jump *label62 equal *tmp49 false
+   161 write 0 BRICKS :brickPtr
+   162 op sub :brickCount :brickCount 1
+-    * op sub *tmp53 :x 4
+-    * op greaterThan *tmp54 :ballX *tmp53
+-    * op add *tmp55 :x 62.666666666666664
+-    * op lessThan *tmp56 :ballX *tmp55
++  163 op sub *tmp53 118.33333333333333 4
++  164 op greaterThan *tmp54 :ballX 114.33333333333333
++  165 op add *tmp55 118.33333333333333 62.666666666666664
++  166 op lessThan *tmp56 :ballX 181
+   167 op land *tmp57 *tmp54 *tmp56
+   168 jump *label60 equal *tmp57 false
+   169 op mul :ballVY :ballVY -1
+ 
+   177 label *label65
+   178 op add :brickPtr :brickPtr 1
+   179 label *label66
+-    * op add :x :x 58.666666666666664
++  180 op add :x 118.33333333333333 58.666666666666664
+   181 label *label28
+   182 label *label24
+   183 op sub :y :y 10
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-13 instructions):
+ 
+    74 set :y 126
+    75 label *label23
+    76 label *label40
+-    * set :x 1
+    77 label *label42
+    78 label *label43
+    79 read *tmp39 BRICKS :brickPtr
+    80 jump *label48 equal *tmp39 false
+    81 draw rect 1 :y 57.666666666666664 9
+    82 op greaterThan *tmp41 :ballXEnd 1
 -    * op add *tmp42 1 58.666666666666664
-    84 op lessThan *tmp43 :ballX 59.666666666666664
-    85 op land *tmp44 *tmp41 *tmp43
-    86 op greaterThan *tmp45 :ballYEnd :y
+    83 op lessThan *tmp43 :ballX 59.666666666666664
+    84 op land *tmp44 *tmp41 *tmp43
+    85 op greaterThan *tmp45 :ballYEnd :y
  
-    91 jump *label46 equal *tmp49 false
-    92 write 0 BRICKS :brickPtr
-    93 op sub :brickCount :brickCount 1
+    90 jump *label46 equal *tmp49 false
+    91 write 0 BRICKS :brickPtr
+    92 op sub :brickCount :brickCount 1
 -    * op sub *tmp53 1 4
-    94 op greaterThan *tmp54 :ballX -3
+    93 op greaterThan *tmp54 :ballX -3
 -    * op add *tmp55 1 62.666666666666664
-    95 op lessThan *tmp56 :ballX 63.666666666666664
-    96 op land *tmp57 *tmp54 *tmp56
-    97 jump *label44 equal *tmp57 false
+    94 op lessThan *tmp56 :ballX 63.666666666666664
+    95 op land *tmp57 *tmp54 *tmp56
+    96 jump *label44 equal *tmp57 false
  
-   106 label *label49
-   107 op add :brickPtr :brickPtr 1
-   108 label *label50
+   105 label *label49
+   106 op add :brickPtr :brickPtr 1
+   107 label *label50
 -    * op add :x 1 58.666666666666664
-   109 label *label51
-   110 read *tmp39 BRICKS :brickPtr
-   111 jump *label56 equal *tmp39 false
-   112 draw rect 59.666666666666664 :y 57.666666666666664 9
-   113 op greaterThan *tmp41 :ballXEnd 59.666666666666664
+   108 label *label51
+   109 read *tmp39 BRICKS :brickPtr
+   110 jump *label56 equal *tmp39 false
+   111 draw rect 59.666666666666664 :y 57.666666666666664 9
+   112 op greaterThan *tmp41 :ballXEnd 59.666666666666664
 -    * op add *tmp42 59.666666666666664 58.666666666666664
-   114 op lessThan *tmp43 :ballX 118.33333333333333
-   115 op land *tmp44 *tmp41 *tmp43
-   116 op greaterThan *tmp45 :ballYEnd :y
+   113 op lessThan *tmp43 :ballX 118.33333333333333
+   114 op land *tmp44 *tmp41 *tmp43
+   115 op greaterThan *tmp45 :ballYEnd :y
  
-   121 jump *label54 equal *tmp49 false
-   122 write 0 BRICKS :brickPtr
-   123 op sub :brickCount :brickCount 1
+   120 jump *label54 equal *tmp49 false
+   121 write 0 BRICKS :brickPtr
+   122 op sub :brickCount :brickCount 1
 -    * op sub *tmp53 59.666666666666664 4
-   124 op greaterThan *tmp54 :ballX 55.666666666666664
+   123 op greaterThan *tmp54 :ballX 55.666666666666664
 -    * op add *tmp55 59.666666666666664 62.666666666666664
-   125 op lessThan *tmp56 :ballX 122.33333333333333
-   126 op land *tmp57 *tmp54 *tmp56
-   127 jump *label52 equal *tmp57 false
+   124 op lessThan *tmp56 :ballX 122.33333333333333
+   125 op land *tmp57 *tmp54 *tmp56
+   126 jump *label52 equal *tmp57 false
  
-   136 label *label57
-   137 op add :brickPtr :brickPtr 1
-   138 label *label58
+   135 label *label57
+   136 op add :brickPtr :brickPtr 1
+   137 label *label58
 -    * op add :x 59.666666666666664 58.666666666666664
-   139 label *label59
-   140 read *tmp39 BRICKS :brickPtr
-   141 jump *label64 equal *tmp39 false
-   142 draw rect 118.33333333333333 :y 57.666666666666664 9
-   143 op greaterThan *tmp41 :ballXEnd 118.33333333333333
+   138 label *label59
+   139 read *tmp39 BRICKS :brickPtr
+   140 jump *label64 equal *tmp39 false
+   141 draw rect 118.33333333333333 :y 57.666666666666664 9
+   142 op greaterThan *tmp41 :ballXEnd 118.33333333333333
 -    * op add *tmp42 118.33333333333333 58.666666666666664
-   144 op lessThan *tmp43 :ballX 177
-   145 op land *tmp44 *tmp41 *tmp43
-   146 op greaterThan *tmp45 :ballYEnd :y
+   143 op lessThan *tmp43 :ballX 177
+   144 op land *tmp44 *tmp41 *tmp43
+   145 op greaterThan *tmp45 :ballYEnd :y
  
-   151 jump *label62 equal *tmp49 false
-   152 write 0 BRICKS :brickPtr
-   153 op sub :brickCount :brickCount 1
+   150 jump *label62 equal *tmp49 false
+   151 write 0 BRICKS :brickPtr
+   152 op sub :brickCount :brickCount 1
 -    * op sub *tmp53 118.33333333333333 4
-   154 op greaterThan *tmp54 :ballX 114.33333333333333
+   153 op greaterThan *tmp54 :ballX 114.33333333333333
 -    * op add *tmp55 118.33333333333333 62.666666666666664
-   155 op lessThan *tmp56 :ballX 181
-   156 op land *tmp57 *tmp54 *tmp56
-   157 jump *label60 equal *tmp57 false
+   154 op lessThan *tmp56 :ballX 181
+   155 op land *tmp57 *tmp54 *tmp56
+   156 jump *label60 equal *tmp57 false
  
-   166 label *label65
-   167 op add :brickPtr :brickPtr 1
-   168 label *label66
+   165 label *label65
+   166 op add :brickPtr :brickPtr 1
+   167 label *label66
 -    * op add :x 118.33333333333333 58.666666666666664
-   169 label *label28
-   170 label *label24
-   171 op sub :y :y 10
+   168 label *label28
+   169 label *label24
+   170 op sub :y :y 10
 
 Modifications by Unroll loop at line 41:5 (+9 instructions):
  
@@ -929,9 +929,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
 
 Modifications by Unroll loop at line 82:9 (+66 instructions):
  
-    84 label *label21
-    85 label *label22
-    86 set :brickPtr 0
+    83 label *label21
+    84 label *label22
+    85 set :brickPtr 0
 -    * set :y 126
 -    * label *label23
 -    * label *label40
@@ -1031,515 +1031,515 @@ Modifications by Unroll loop at line 82:9 (+66 instructions):
 -    * op sub :y :y 10
 -    * jump *label40 greaterThan :y 106
 -    * label *label25
-+   87 set :y 126
-+   88 label *label80
-+   89 label *label81
-+   90 label *label82
-+   91 label *label83
-+   92 read *tmp39 BRICKS :brickPtr
-+   93 jump *label88 equal *tmp39 false
-+   94 draw rect 1 :y 57.666666666666664 9
-+   95 op greaterThan *tmp41 :ballXEnd 1
-+   96 op lessThan *tmp43 :ballX 59.666666666666664
-+   97 op land *tmp44 *tmp41 *tmp43
-+   98 op greaterThan *tmp45 :ballYEnd :y
-+   99 op land *tmp46 *tmp44 *tmp45
-+  100 op add *tmp47 :y 10
-+  101 op lessThan *tmp48 :ballY *tmp47
-+  102 op land *tmp49 *tmp46 *tmp48
-+  103 jump *label86 equal *tmp49 false
-+  104 write 0 BRICKS :brickPtr
-+  105 op sub :brickCount :brickCount 1
-+  106 op greaterThan *tmp54 :ballX -3
-+  107 op lessThan *tmp56 :ballX 63.666666666666664
-+  108 op land *tmp57 *tmp54 *tmp56
-+  109 jump *label84 equal *tmp57 false
-+  110 op mul :ballVY :ballVY -1
-+  111 jump *label85 always
-+  112 label *label84
-+  113 op mul :ballVX :ballVX -1
-+  114 label *label85
-+  115 label *label86
-+  116 label *label87
-+  117 label *label88
-+  118 label *label89
-+  119 op add :brickPtr :brickPtr 1
-+  120 label *label90
-+  121 label *label91
-+  122 read *tmp39 BRICKS :brickPtr
-+  123 jump *label96 equal *tmp39 false
-+  124 draw rect 59.666666666666664 :y 57.666666666666664 9
-+  125 op greaterThan *tmp41 :ballXEnd 59.666666666666664
-+  126 op lessThan *tmp43 :ballX 118.33333333333333
-+  127 op land *tmp44 *tmp41 *tmp43
-+  128 op greaterThan *tmp45 :ballYEnd :y
-+  129 op land *tmp46 *tmp44 *tmp45
-+  130 op add *tmp47 :y 10
-+  131 op lessThan *tmp48 :ballY *tmp47
-+  132 op land *tmp49 *tmp46 *tmp48
-+  133 jump *label94 equal *tmp49 false
-+  134 write 0 BRICKS :brickPtr
-+  135 op sub :brickCount :brickCount 1
-+  136 op greaterThan *tmp54 :ballX 55.666666666666664
-+  137 op lessThan *tmp56 :ballX 122.33333333333333
-+  138 op land *tmp57 *tmp54 *tmp56
-+  139 jump *label92 equal *tmp57 false
-+  140 op mul :ballVY :ballVY -1
-+  141 jump *label93 always
-+  142 label *label92
-+  143 op mul :ballVX :ballVX -1
-+  144 label *label93
-+  145 label *label94
-+  146 label *label95
-+  147 label *label96
-+  148 label *label97
-+  149 op add :brickPtr :brickPtr 1
-+  150 label *label98
-+  151 label *label99
-+  152 read *tmp39 BRICKS :brickPtr
-+  153 jump *label104 equal *tmp39 false
-+  154 draw rect 118.33333333333333 :y 57.666666666666664 9
-+  155 op greaterThan *tmp41 :ballXEnd 118.33333333333333
-+  156 op lessThan *tmp43 :ballX 177
-+  157 op land *tmp44 *tmp41 *tmp43
-+  158 op greaterThan *tmp45 :ballYEnd :y
-+  159 op land *tmp46 *tmp44 *tmp45
-+  160 op add *tmp47 :y 10
-+  161 op lessThan *tmp48 :ballY *tmp47
-+  162 op land *tmp49 *tmp46 *tmp48
-+  163 jump *label102 equal *tmp49 false
-+  164 write 0 BRICKS :brickPtr
-+  165 op sub :brickCount :brickCount 1
-+  166 op greaterThan *tmp54 :ballX 114.33333333333333
-+  167 op lessThan *tmp56 :ballX 181
-+  168 op land *tmp57 *tmp54 *tmp56
-+  169 jump *label100 equal *tmp57 false
-+  170 op mul :ballVY :ballVY -1
-+  171 jump *label101 always
-+  172 label *label100
-+  173 op mul :ballVX :ballVX -1
-+  174 label *label101
-+  175 label *label102
-+  176 label *label103
-+  177 label *label104
-+  178 label *label105
-+  179 op add :brickPtr :brickPtr 1
-+  180 label *label106
-+  181 label *label107
-+  182 label *label108
-+  183 op sub :y :y 10
-+  184 label *label109
-+  185 label *label110
-+  186 label *label111
-+  187 read *tmp39 BRICKS :brickPtr
-+  188 jump *label116 equal *tmp39 false
-+  189 draw rect 1 :y 57.666666666666664 9
-+  190 op greaterThan *tmp41 :ballXEnd 1
-+  191 op lessThan *tmp43 :ballX 59.666666666666664
-+  192 op land *tmp44 *tmp41 *tmp43
-+  193 op greaterThan *tmp45 :ballYEnd :y
-+  194 op land *tmp46 *tmp44 *tmp45
-+  195 op add *tmp47 :y 10
-+  196 op lessThan *tmp48 :ballY *tmp47
-+  197 op land *tmp49 *tmp46 *tmp48
-+  198 jump *label114 equal *tmp49 false
-+  199 write 0 BRICKS :brickPtr
-+  200 op sub :brickCount :brickCount 1
-+  201 op greaterThan *tmp54 :ballX -3
-+  202 op lessThan *tmp56 :ballX 63.666666666666664
-+  203 op land *tmp57 *tmp54 *tmp56
-+  204 jump *label112 equal *tmp57 false
-+  205 op mul :ballVY :ballVY -1
-+  206 jump *label113 always
-+  207 label *label112
-+  208 op mul :ballVX :ballVX -1
-+  209 label *label113
-+  210 label *label114
-+  211 label *label115
-+  212 label *label116
-+  213 label *label117
-+  214 op add :brickPtr :brickPtr 1
-+  215 label *label118
-+  216 label *label119
-+  217 read *tmp39 BRICKS :brickPtr
-+  218 jump *label124 equal *tmp39 false
-+  219 draw rect 59.666666666666664 :y 57.666666666666664 9
-+  220 op greaterThan *tmp41 :ballXEnd 59.666666666666664
-+  221 op lessThan *tmp43 :ballX 118.33333333333333
-+  222 op land *tmp44 *tmp41 *tmp43
-+  223 op greaterThan *tmp45 :ballYEnd :y
-+  224 op land *tmp46 *tmp44 *tmp45
-+  225 op add *tmp47 :y 10
-+  226 op lessThan *tmp48 :ballY *tmp47
-+  227 op land *tmp49 *tmp46 *tmp48
-+  228 jump *label122 equal *tmp49 false
-+  229 write 0 BRICKS :brickPtr
-+  230 op sub :brickCount :brickCount 1
-+  231 op greaterThan *tmp54 :ballX 55.666666666666664
-+  232 op lessThan *tmp56 :ballX 122.33333333333333
-+  233 op land *tmp57 *tmp54 *tmp56
-+  234 jump *label120 equal *tmp57 false
-+  235 op mul :ballVY :ballVY -1
-+  236 jump *label121 always
-+  237 label *label120
-+  238 op mul :ballVX :ballVX -1
-+  239 label *label121
-+  240 label *label122
-+  241 label *label123
-+  242 label *label124
-+  243 label *label125
-+  244 op add :brickPtr :brickPtr 1
-+  245 label *label126
-+  246 label *label127
-+  247 read *tmp39 BRICKS :brickPtr
-+  248 jump *label132 equal *tmp39 false
-+  249 draw rect 118.33333333333333 :y 57.666666666666664 9
-+  250 op greaterThan *tmp41 :ballXEnd 118.33333333333333
-+  251 op lessThan *tmp43 :ballX 177
-+  252 op land *tmp44 *tmp41 *tmp43
-+  253 op greaterThan *tmp45 :ballYEnd :y
-+  254 op land *tmp46 *tmp44 *tmp45
-+  255 op add *tmp47 :y 10
-+  256 op lessThan *tmp48 :ballY *tmp47
-+  257 op land *tmp49 *tmp46 *tmp48
-+  258 jump *label130 equal *tmp49 false
-+  259 write 0 BRICKS :brickPtr
-+  260 op sub :brickCount :brickCount 1
-+  261 op greaterThan *tmp54 :ballX 114.33333333333333
-+  262 op lessThan *tmp56 :ballX 181
-+  263 op land *tmp57 *tmp54 *tmp56
-+  264 jump *label128 equal *tmp57 false
-+  265 op mul :ballVY :ballVY -1
-+  266 jump *label129 always
-+  267 label *label128
-+  268 op mul :ballVX :ballVX -1
-+  269 label *label129
-+  270 label *label130
-+  271 label *label131
-+  272 label *label132
-+  273 label *label133
-+  274 op add :brickPtr :brickPtr 1
-+  275 label *label134
-+  276 label *label135
-+  277 label *label136
-+  278 op sub :y :y 10
-+  279 label *label25
-   280 jump *label37 lessThan :ballY 0
-   281 label *label38
-   282 jump *label35 notEqual :brickCount 0
++   86 set :y 126
++   87 label *label80
++   88 label *label81
++   89 label *label82
++   90 label *label83
++   91 read *tmp39 BRICKS :brickPtr
++   92 jump *label88 equal *tmp39 false
++   93 draw rect 1 :y 57.666666666666664 9
++   94 op greaterThan *tmp41 :ballXEnd 1
++   95 op lessThan *tmp43 :ballX 59.666666666666664
++   96 op land *tmp44 *tmp41 *tmp43
++   97 op greaterThan *tmp45 :ballYEnd :y
++   98 op land *tmp46 *tmp44 *tmp45
++   99 op add *tmp47 :y 10
++  100 op lessThan *tmp48 :ballY *tmp47
++  101 op land *tmp49 *tmp46 *tmp48
++  102 jump *label86 equal *tmp49 false
++  103 write 0 BRICKS :brickPtr
++  104 op sub :brickCount :brickCount 1
++  105 op greaterThan *tmp54 :ballX -3
++  106 op lessThan *tmp56 :ballX 63.666666666666664
++  107 op land *tmp57 *tmp54 *tmp56
++  108 jump *label84 equal *tmp57 false
++  109 op mul :ballVY :ballVY -1
++  110 jump *label85 always
++  111 label *label84
++  112 op mul :ballVX :ballVX -1
++  113 label *label85
++  114 label *label86
++  115 label *label87
++  116 label *label88
++  117 label *label89
++  118 op add :brickPtr :brickPtr 1
++  119 label *label90
++  120 label *label91
++  121 read *tmp39 BRICKS :brickPtr
++  122 jump *label96 equal *tmp39 false
++  123 draw rect 59.666666666666664 :y 57.666666666666664 9
++  124 op greaterThan *tmp41 :ballXEnd 59.666666666666664
++  125 op lessThan *tmp43 :ballX 118.33333333333333
++  126 op land *tmp44 *tmp41 *tmp43
++  127 op greaterThan *tmp45 :ballYEnd :y
++  128 op land *tmp46 *tmp44 *tmp45
++  129 op add *tmp47 :y 10
++  130 op lessThan *tmp48 :ballY *tmp47
++  131 op land *tmp49 *tmp46 *tmp48
++  132 jump *label94 equal *tmp49 false
++  133 write 0 BRICKS :brickPtr
++  134 op sub :brickCount :brickCount 1
++  135 op greaterThan *tmp54 :ballX 55.666666666666664
++  136 op lessThan *tmp56 :ballX 122.33333333333333
++  137 op land *tmp57 *tmp54 *tmp56
++  138 jump *label92 equal *tmp57 false
++  139 op mul :ballVY :ballVY -1
++  140 jump *label93 always
++  141 label *label92
++  142 op mul :ballVX :ballVX -1
++  143 label *label93
++  144 label *label94
++  145 label *label95
++  146 label *label96
++  147 label *label97
++  148 op add :brickPtr :brickPtr 1
++  149 label *label98
++  150 label *label99
++  151 read *tmp39 BRICKS :brickPtr
++  152 jump *label104 equal *tmp39 false
++  153 draw rect 118.33333333333333 :y 57.666666666666664 9
++  154 op greaterThan *tmp41 :ballXEnd 118.33333333333333
++  155 op lessThan *tmp43 :ballX 177
++  156 op land *tmp44 *tmp41 *tmp43
++  157 op greaterThan *tmp45 :ballYEnd :y
++  158 op land *tmp46 *tmp44 *tmp45
++  159 op add *tmp47 :y 10
++  160 op lessThan *tmp48 :ballY *tmp47
++  161 op land *tmp49 *tmp46 *tmp48
++  162 jump *label102 equal *tmp49 false
++  163 write 0 BRICKS :brickPtr
++  164 op sub :brickCount :brickCount 1
++  165 op greaterThan *tmp54 :ballX 114.33333333333333
++  166 op lessThan *tmp56 :ballX 181
++  167 op land *tmp57 *tmp54 *tmp56
++  168 jump *label100 equal *tmp57 false
++  169 op mul :ballVY :ballVY -1
++  170 jump *label101 always
++  171 label *label100
++  172 op mul :ballVX :ballVX -1
++  173 label *label101
++  174 label *label102
++  175 label *label103
++  176 label *label104
++  177 label *label105
++  178 op add :brickPtr :brickPtr 1
++  179 label *label106
++  180 label *label107
++  181 label *label108
++  182 op sub :y :y 10
++  183 label *label109
++  184 label *label110
++  185 label *label111
++  186 read *tmp39 BRICKS :brickPtr
++  187 jump *label116 equal *tmp39 false
++  188 draw rect 1 :y 57.666666666666664 9
++  189 op greaterThan *tmp41 :ballXEnd 1
++  190 op lessThan *tmp43 :ballX 59.666666666666664
++  191 op land *tmp44 *tmp41 *tmp43
++  192 op greaterThan *tmp45 :ballYEnd :y
++  193 op land *tmp46 *tmp44 *tmp45
++  194 op add *tmp47 :y 10
++  195 op lessThan *tmp48 :ballY *tmp47
++  196 op land *tmp49 *tmp46 *tmp48
++  197 jump *label114 equal *tmp49 false
++  198 write 0 BRICKS :brickPtr
++  199 op sub :brickCount :brickCount 1
++  200 op greaterThan *tmp54 :ballX -3
++  201 op lessThan *tmp56 :ballX 63.666666666666664
++  202 op land *tmp57 *tmp54 *tmp56
++  203 jump *label112 equal *tmp57 false
++  204 op mul :ballVY :ballVY -1
++  205 jump *label113 always
++  206 label *label112
++  207 op mul :ballVX :ballVX -1
++  208 label *label113
++  209 label *label114
++  210 label *label115
++  211 label *label116
++  212 label *label117
++  213 op add :brickPtr :brickPtr 1
++  214 label *label118
++  215 label *label119
++  216 read *tmp39 BRICKS :brickPtr
++  217 jump *label124 equal *tmp39 false
++  218 draw rect 59.666666666666664 :y 57.666666666666664 9
++  219 op greaterThan *tmp41 :ballXEnd 59.666666666666664
++  220 op lessThan *tmp43 :ballX 118.33333333333333
++  221 op land *tmp44 *tmp41 *tmp43
++  222 op greaterThan *tmp45 :ballYEnd :y
++  223 op land *tmp46 *tmp44 *tmp45
++  224 op add *tmp47 :y 10
++  225 op lessThan *tmp48 :ballY *tmp47
++  226 op land *tmp49 *tmp46 *tmp48
++  227 jump *label122 equal *tmp49 false
++  228 write 0 BRICKS :brickPtr
++  229 op sub :brickCount :brickCount 1
++  230 op greaterThan *tmp54 :ballX 55.666666666666664
++  231 op lessThan *tmp56 :ballX 122.33333333333333
++  232 op land *tmp57 *tmp54 *tmp56
++  233 jump *label120 equal *tmp57 false
++  234 op mul :ballVY :ballVY -1
++  235 jump *label121 always
++  236 label *label120
++  237 op mul :ballVX :ballVX -1
++  238 label *label121
++  239 label *label122
++  240 label *label123
++  241 label *label124
++  242 label *label125
++  243 op add :brickPtr :brickPtr 1
++  244 label *label126
++  245 label *label127
++  246 read *tmp39 BRICKS :brickPtr
++  247 jump *label132 equal *tmp39 false
++  248 draw rect 118.33333333333333 :y 57.666666666666664 9
++  249 op greaterThan *tmp41 :ballXEnd 118.33333333333333
++  250 op lessThan *tmp43 :ballX 177
++  251 op land *tmp44 *tmp41 *tmp43
++  252 op greaterThan *tmp45 :ballYEnd :y
++  253 op land *tmp46 *tmp44 *tmp45
++  254 op add *tmp47 :y 10
++  255 op lessThan *tmp48 :ballY *tmp47
++  256 op land *tmp49 *tmp46 *tmp48
++  257 jump *label130 equal *tmp49 false
++  258 write 0 BRICKS :brickPtr
++  259 op sub :brickCount :brickCount 1
++  260 op greaterThan *tmp54 :ballX 114.33333333333333
++  261 op lessThan *tmp56 :ballX 181
++  262 op land *tmp57 *tmp54 *tmp56
++  263 jump *label128 equal *tmp57 false
++  264 op mul :ballVY :ballVY -1
++  265 jump *label129 always
++  266 label *label128
++  267 op mul :ballVX :ballVX -1
++  268 label *label129
++  269 label *label130
++  270 label *label131
++  271 label *label132
++  272 label *label133
++  273 op add :brickPtr :brickPtr 1
++  274 label *label134
++  275 label *label135
++  276 label *label136
++  277 op sub :y :y 10
++  278 label *label25
+   279 jump *label37 lessThan :ballY 0
+   280 jump *label35 notEqual :brickCount 0
+   281 label *label37
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    89 label *label81
-    90 label *label82
-    91 label *label83
+    88 label *label81
+    89 label *label82
+    90 label *label83
 -    * read *tmp39 BRICKS :brickPtr
-+   92 read *tmp39 BRICKS 0
-    93 jump *label88 equal *tmp39 false
++   91 read *tmp39 BRICKS 0
+    92 jump *label88 equal *tmp39 false
 -    * draw rect 1 :y 57.666666666666664 9
-+   94 draw rect 1 126 57.666666666666664 9
-    95 op greaterThan *tmp41 :ballXEnd 1
-    96 op lessThan *tmp43 :ballX 59.666666666666664
-    97 op land *tmp44 *tmp41 *tmp43
++   93 draw rect 1 126 57.666666666666664 9
+    94 op greaterThan *tmp41 :ballXEnd 1
+    95 op lessThan *tmp43 :ballX 59.666666666666664
+    96 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd :y
-+   98 op greaterThan *tmp45 :ballYEnd 126
-    99 op land *tmp46 *tmp44 *tmp45
++   97 op greaterThan *tmp45 :ballYEnd 126
+    98 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 :y 10
 -    * op lessThan *tmp48 :ballY *tmp47
-+  100 op add *tmp47 126 10
-+  101 op lessThan *tmp48 :ballY 136
-   102 op land *tmp49 *tmp46 *tmp48
-   103 jump *label86 equal *tmp49 false
++   99 op add *tmp47 126 10
++  100 op lessThan *tmp48 :ballY 136
+   101 op land *tmp49 *tmp46 *tmp48
+   102 jump *label86 equal *tmp49 false
 -    * write 0 BRICKS :brickPtr
-+  104 write 0 BRICKS 0
-   105 op sub :brickCount :brickCount 1
-   106 op greaterThan *tmp54 :ballX -3
-   107 op lessThan *tmp56 :ballX 63.666666666666664
++  103 write 0 BRICKS 0
+   104 op sub :brickCount :brickCount 1
+   105 op greaterThan *tmp54 :ballX -3
+   106 op lessThan *tmp56 :ballX 63.666666666666664
  
-   116 label *label87
-   117 label *label88
-   118 label *label89
+   115 label *label87
+   116 label *label88
+   117 label *label89
 -    * op add :brickPtr :brickPtr 1
-+  119 op add :brickPtr 0 1
-   120 label *label90
-   121 label *label91
++  118 op add :brickPtr 0 1
+   119 label *label90
+   120 label *label91
 -    * read *tmp39 BRICKS :brickPtr
-+  122 read *tmp39 BRICKS 1
-   123 jump *label96 equal *tmp39 false
++  121 read *tmp39 BRICKS 1
+   122 jump *label96 equal *tmp39 false
 -    * draw rect 59.666666666666664 :y 57.666666666666664 9
-+  124 draw rect 59.666666666666664 126 57.666666666666664 9
-   125 op greaterThan *tmp41 :ballXEnd 59.666666666666664
-   126 op lessThan *tmp43 :ballX 118.33333333333333
-   127 op land *tmp44 *tmp41 *tmp43
++  123 draw rect 59.666666666666664 126 57.666666666666664 9
+   124 op greaterThan *tmp41 :ballXEnd 59.666666666666664
+   125 op lessThan *tmp43 :ballX 118.33333333333333
+   126 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd :y
-+  128 op greaterThan *tmp45 :ballYEnd 126
-   129 op land *tmp46 *tmp44 *tmp45
++  127 op greaterThan *tmp45 :ballYEnd 126
+   128 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 :y 10
 -    * op lessThan *tmp48 :ballY *tmp47
-+  130 op add *tmp47 126 10
-+  131 op lessThan *tmp48 :ballY 136
-   132 op land *tmp49 *tmp46 *tmp48
-   133 jump *label94 equal *tmp49 false
++  129 op add *tmp47 126 10
++  130 op lessThan *tmp48 :ballY 136
+   131 op land *tmp49 *tmp46 *tmp48
+   132 jump *label94 equal *tmp49 false
 -    * write 0 BRICKS :brickPtr
-+  134 write 0 BRICKS 1
-   135 op sub :brickCount :brickCount 1
-   136 op greaterThan *tmp54 :ballX 55.666666666666664
-   137 op lessThan *tmp56 :ballX 122.33333333333333
++  133 write 0 BRICKS 1
+   134 op sub :brickCount :brickCount 1
+   135 op greaterThan *tmp54 :ballX 55.666666666666664
+   136 op lessThan *tmp56 :ballX 122.33333333333333
  
-   146 label *label95
-   147 label *label96
-   148 label *label97
+   145 label *label95
+   146 label *label96
+   147 label *label97
 -    * op add :brickPtr :brickPtr 1
-+  149 op add :brickPtr 1 1
-   150 label *label98
-   151 label *label99
++  148 op add :brickPtr 1 1
+   149 label *label98
+   150 label *label99
 -    * read *tmp39 BRICKS :brickPtr
-+  152 read *tmp39 BRICKS 2
-   153 jump *label104 equal *tmp39 false
++  151 read *tmp39 BRICKS 2
+   152 jump *label104 equal *tmp39 false
 -    * draw rect 118.33333333333333 :y 57.666666666666664 9
-+  154 draw rect 118.33333333333333 126 57.666666666666664 9
-   155 op greaterThan *tmp41 :ballXEnd 118.33333333333333
-   156 op lessThan *tmp43 :ballX 177
-   157 op land *tmp44 *tmp41 *tmp43
++  153 draw rect 118.33333333333333 126 57.666666666666664 9
+   154 op greaterThan *tmp41 :ballXEnd 118.33333333333333
+   155 op lessThan *tmp43 :ballX 177
+   156 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd :y
-+  158 op greaterThan *tmp45 :ballYEnd 126
-   159 op land *tmp46 *tmp44 *tmp45
++  157 op greaterThan *tmp45 :ballYEnd 126
+   158 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 :y 10
 -    * op lessThan *tmp48 :ballY *tmp47
-+  160 op add *tmp47 126 10
-+  161 op lessThan *tmp48 :ballY 136
-   162 op land *tmp49 *tmp46 *tmp48
-   163 jump *label102 equal *tmp49 false
++  159 op add *tmp47 126 10
++  160 op lessThan *tmp48 :ballY 136
+   161 op land *tmp49 *tmp46 *tmp48
+   162 jump *label102 equal *tmp49 false
 -    * write 0 BRICKS :brickPtr
-+  164 write 0 BRICKS 2
-   165 op sub :brickCount :brickCount 1
-   166 op greaterThan *tmp54 :ballX 114.33333333333333
-   167 op lessThan *tmp56 :ballX 181
++  163 write 0 BRICKS 2
+   164 op sub :brickCount :brickCount 1
+   165 op greaterThan *tmp54 :ballX 114.33333333333333
+   166 op lessThan *tmp56 :ballX 181
  
-   176 label *label103
-   177 label *label104
-   178 label *label105
+   175 label *label103
+   176 label *label104
+   177 label *label105
 -    * op add :brickPtr :brickPtr 1
-+  179 op add :brickPtr 2 1
-   180 label *label106
-   181 label *label107
-   182 label *label108
++  178 op add :brickPtr 2 1
+   179 label *label106
+   180 label *label107
+   181 label *label108
 -    * op sub :y :y 10
-+  183 op sub :y 126 10
-   184 label *label109
-   185 label *label110
-   186 label *label111
++  182 op sub :y 126 10
+   183 label *label109
+   184 label *label110
+   185 label *label111
 -    * read *tmp39 BRICKS :brickPtr
-+  187 read *tmp39 BRICKS 3
-   188 jump *label116 equal *tmp39 false
++  186 read *tmp39 BRICKS 3
+   187 jump *label116 equal *tmp39 false
 -    * draw rect 1 :y 57.666666666666664 9
-+  189 draw rect 1 116 57.666666666666664 9
-   190 op greaterThan *tmp41 :ballXEnd 1
-   191 op lessThan *tmp43 :ballX 59.666666666666664
-   192 op land *tmp44 *tmp41 *tmp43
++  188 draw rect 1 116 57.666666666666664 9
+   189 op greaterThan *tmp41 :ballXEnd 1
+   190 op lessThan *tmp43 :ballX 59.666666666666664
+   191 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd :y
-+  193 op greaterThan *tmp45 :ballYEnd 116
-   194 op land *tmp46 *tmp44 *tmp45
++  192 op greaterThan *tmp45 :ballYEnd 116
+   193 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 :y 10
 -    * op lessThan *tmp48 :ballY *tmp47
-+  195 op add *tmp47 116 10
-+  196 op lessThan *tmp48 :ballY 126
-   197 op land *tmp49 *tmp46 *tmp48
-   198 jump *label114 equal *tmp49 false
++  194 op add *tmp47 116 10
++  195 op lessThan *tmp48 :ballY 126
+   196 op land *tmp49 *tmp46 *tmp48
+   197 jump *label114 equal *tmp49 false
 -    * write 0 BRICKS :brickPtr
-+  199 write 0 BRICKS 3
-   200 op sub :brickCount :brickCount 1
-   201 op greaterThan *tmp54 :ballX -3
-   202 op lessThan *tmp56 :ballX 63.666666666666664
++  198 write 0 BRICKS 3
+   199 op sub :brickCount :brickCount 1
+   200 op greaterThan *tmp54 :ballX -3
+   201 op lessThan *tmp56 :ballX 63.666666666666664
  
-   211 label *label115
-   212 label *label116
-   213 label *label117
+   210 label *label115
+   211 label *label116
+   212 label *label117
 -    * op add :brickPtr :brickPtr 1
-+  214 op add :brickPtr 3 1
-   215 label *label118
-   216 label *label119
++  213 op add :brickPtr 3 1
+   214 label *label118
+   215 label *label119
 -    * read *tmp39 BRICKS :brickPtr
-+  217 read *tmp39 BRICKS 4
-   218 jump *label124 equal *tmp39 false
++  216 read *tmp39 BRICKS 4
+   217 jump *label124 equal *tmp39 false
 -    * draw rect 59.666666666666664 :y 57.666666666666664 9
-+  219 draw rect 59.666666666666664 116 57.666666666666664 9
-   220 op greaterThan *tmp41 :ballXEnd 59.666666666666664
-   221 op lessThan *tmp43 :ballX 118.33333333333333
-   222 op land *tmp44 *tmp41 *tmp43
++  218 draw rect 59.666666666666664 116 57.666666666666664 9
+   219 op greaterThan *tmp41 :ballXEnd 59.666666666666664
+   220 op lessThan *tmp43 :ballX 118.33333333333333
+   221 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd :y
-+  223 op greaterThan *tmp45 :ballYEnd 116
-   224 op land *tmp46 *tmp44 *tmp45
++  222 op greaterThan *tmp45 :ballYEnd 116
+   223 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 :y 10
 -    * op lessThan *tmp48 :ballY *tmp47
-+  225 op add *tmp47 116 10
-+  226 op lessThan *tmp48 :ballY 126
-   227 op land *tmp49 *tmp46 *tmp48
-   228 jump *label122 equal *tmp49 false
++  224 op add *tmp47 116 10
++  225 op lessThan *tmp48 :ballY 126
+   226 op land *tmp49 *tmp46 *tmp48
+   227 jump *label122 equal *tmp49 false
 -    * write 0 BRICKS :brickPtr
-+  229 write 0 BRICKS 4
-   230 op sub :brickCount :brickCount 1
-   231 op greaterThan *tmp54 :ballX 55.666666666666664
-   232 op lessThan *tmp56 :ballX 122.33333333333333
++  228 write 0 BRICKS 4
+   229 op sub :brickCount :brickCount 1
+   230 op greaterThan *tmp54 :ballX 55.666666666666664
+   231 op lessThan *tmp56 :ballX 122.33333333333333
  
-   241 label *label123
-   242 label *label124
-   243 label *label125
+   240 label *label123
+   241 label *label124
+   242 label *label125
 -    * op add :brickPtr :brickPtr 1
-+  244 op add :brickPtr 4 1
-   245 label *label126
-   246 label *label127
++  243 op add :brickPtr 4 1
+   244 label *label126
+   245 label *label127
 -    * read *tmp39 BRICKS :brickPtr
-+  247 read *tmp39 BRICKS 5
-   248 jump *label132 equal *tmp39 false
++  246 read *tmp39 BRICKS 5
+   247 jump *label132 equal *tmp39 false
 -    * draw rect 118.33333333333333 :y 57.666666666666664 9
-+  249 draw rect 118.33333333333333 116 57.666666666666664 9
-   250 op greaterThan *tmp41 :ballXEnd 118.33333333333333
-   251 op lessThan *tmp43 :ballX 177
-   252 op land *tmp44 *tmp41 *tmp43
++  248 draw rect 118.33333333333333 116 57.666666666666664 9
+   249 op greaterThan *tmp41 :ballXEnd 118.33333333333333
+   250 op lessThan *tmp43 :ballX 177
+   251 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd :y
-+  253 op greaterThan *tmp45 :ballYEnd 116
-   254 op land *tmp46 *tmp44 *tmp45
++  252 op greaterThan *tmp45 :ballYEnd 116
+   253 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 :y 10
 -    * op lessThan *tmp48 :ballY *tmp47
-+  255 op add *tmp47 116 10
-+  256 op lessThan *tmp48 :ballY 126
-   257 op land *tmp49 *tmp46 *tmp48
-   258 jump *label130 equal *tmp49 false
++  254 op add *tmp47 116 10
++  255 op lessThan *tmp48 :ballY 126
+   256 op land *tmp49 *tmp46 *tmp48
+   257 jump *label130 equal *tmp49 false
 -    * write 0 BRICKS :brickPtr
-+  259 write 0 BRICKS 5
-   260 op sub :brickCount :brickCount 1
-   261 op greaterThan *tmp54 :ballX 114.33333333333333
-   262 op lessThan *tmp56 :ballX 181
++  258 write 0 BRICKS 5
+   259 op sub :brickCount :brickCount 1
+   260 op greaterThan *tmp54 :ballX 114.33333333333333
+   261 op lessThan *tmp56 :ballX 181
  
-   271 label *label131
-   272 label *label132
-   273 label *label133
+   270 label *label131
+   271 label *label132
+   272 label *label133
 -    * op add :brickPtr :brickPtr 1
-+  274 op add :brickPtr 5 1
-   275 label *label134
-   276 label *label135
-   277 label *label136
++  273 op add :brickPtr 5 1
+   274 label *label134
+   275 label *label135
+   276 label *label136
 -    * op sub :y :y 10
-+  278 op sub :y 116 10
-   279 label *label25
-   280 jump *label37 lessThan :ballY 0
-   281 label *label38
++  277 op sub :y 116 10
+   278 label *label25
+   279 jump *label37 lessThan :ballY 0
+   280 jump *label35 notEqual :brickCount 0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-16 instructions):
  
-    83 op sub :paddleWidth :paddleWidth 1
-    84 label *label21
-    85 label *label22
+    82 op sub :paddleWidth :paddleWidth 1
+    83 label *label21
+    84 label *label22
 -    * set :brickPtr 0
 -    * set :y 126
-    86 label *label80
-    87 label *label81
-    88 label *label82
+    85 label *label80
+    86 label *label81
+    87 label *label82
  
-    95 op land *tmp44 *tmp41 *tmp43
-    96 op greaterThan *tmp45 :ballYEnd 126
-    97 op land *tmp46 *tmp44 *tmp45
+    94 op land *tmp44 *tmp41 *tmp43
+    95 op greaterThan *tmp45 :ballYEnd 126
+    96 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 126 10
-    98 op lessThan *tmp48 :ballY 136
-    99 op land *tmp49 *tmp46 *tmp48
-   100 jump *label86 equal *tmp49 false
+    97 op lessThan *tmp48 :ballY 136
+    98 op land *tmp49 *tmp46 *tmp48
+    99 jump *label86 equal *tmp49 false
  
-   113 label *label87
-   114 label *label88
-   115 label *label89
+   112 label *label87
+   113 label *label88
+   114 label *label89
 -    * op add :brickPtr 0 1
-   116 label *label90
-   117 label *label91
-   118 read *tmp39 BRICKS 1
+   115 label *label90
+   116 label *label91
+   117 read *tmp39 BRICKS 1
  
-   123 op land *tmp44 *tmp41 *tmp43
-   124 op greaterThan *tmp45 :ballYEnd 126
-   125 op land *tmp46 *tmp44 *tmp45
+   122 op land *tmp44 *tmp41 *tmp43
+   123 op greaterThan *tmp45 :ballYEnd 126
+   124 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 126 10
-   126 op lessThan *tmp48 :ballY 136
-   127 op land *tmp49 *tmp46 *tmp48
-   128 jump *label94 equal *tmp49 false
+   125 op lessThan *tmp48 :ballY 136
+   126 op land *tmp49 *tmp46 *tmp48
+   127 jump *label94 equal *tmp49 false
  
-   141 label *label95
-   142 label *label96
-   143 label *label97
+   140 label *label95
+   141 label *label96
+   142 label *label97
 -    * op add :brickPtr 1 1
-   144 label *label98
-   145 label *label99
-   146 read *tmp39 BRICKS 2
+   143 label *label98
+   144 label *label99
+   145 read *tmp39 BRICKS 2
  
-   151 op land *tmp44 *tmp41 *tmp43
-   152 op greaterThan *tmp45 :ballYEnd 126
-   153 op land *tmp46 *tmp44 *tmp45
+   150 op land *tmp44 *tmp41 *tmp43
+   151 op greaterThan *tmp45 :ballYEnd 126
+   152 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 126 10
-   154 op lessThan *tmp48 :ballY 136
-   155 op land *tmp49 *tmp46 *tmp48
-   156 jump *label102 equal *tmp49 false
+   153 op lessThan *tmp48 :ballY 136
+   154 op land *tmp49 *tmp46 *tmp48
+   155 jump *label102 equal *tmp49 false
  
-   169 label *label103
-   170 label *label104
-   171 label *label105
+   168 label *label103
+   169 label *label104
+   170 label *label105
 -    * op add :brickPtr 2 1
-   172 label *label106
-   173 label *label107
-   174 label *label108
+   171 label *label106
+   172 label *label107
+   173 label *label108
 -    * op sub :y 126 10
-   175 label *label109
-   176 label *label110
-   177 label *label111
+   174 label *label109
+   175 label *label110
+   176 label *label111
  
-   183 op land *tmp44 *tmp41 *tmp43
-   184 op greaterThan *tmp45 :ballYEnd 116
-   185 op land *tmp46 *tmp44 *tmp45
+   182 op land *tmp44 *tmp41 *tmp43
+   183 op greaterThan *tmp45 :ballYEnd 116
+   184 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 116 10
-   186 op lessThan *tmp48 :ballY 126
-   187 op land *tmp49 *tmp46 *tmp48
-   188 jump *label114 equal *tmp49 false
+   185 op lessThan *tmp48 :ballY 126
+   186 op land *tmp49 *tmp46 *tmp48
+   187 jump *label114 equal *tmp49 false
  
-   201 label *label115
-   202 label *label116
-   203 label *label117
+   200 label *label115
+   201 label *label116
+   202 label *label117
 -    * op add :brickPtr 3 1
-   204 label *label118
-   205 label *label119
-   206 read *tmp39 BRICKS 4
+   203 label *label118
+   204 label *label119
+   205 read *tmp39 BRICKS 4
  
-   211 op land *tmp44 *tmp41 *tmp43
-   212 op greaterThan *tmp45 :ballYEnd 116
-   213 op land *tmp46 *tmp44 *tmp45
+   210 op land *tmp44 *tmp41 *tmp43
+   211 op greaterThan *tmp45 :ballYEnd 116
+   212 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 116 10
-   214 op lessThan *tmp48 :ballY 126
-   215 op land *tmp49 *tmp46 *tmp48
-   216 jump *label122 equal *tmp49 false
+   213 op lessThan *tmp48 :ballY 126
+   214 op land *tmp49 *tmp46 *tmp48
+   215 jump *label122 equal *tmp49 false
  
-   229 label *label123
-   230 label *label124
-   231 label *label125
+   228 label *label123
+   229 label *label124
+   230 label *label125
 -    * op add :brickPtr 4 1
-   232 label *label126
-   233 label *label127
-   234 read *tmp39 BRICKS 5
+   231 label *label126
+   232 label *label127
+   233 read *tmp39 BRICKS 5
  
-   239 op land *tmp44 *tmp41 *tmp43
-   240 op greaterThan *tmp45 :ballYEnd 116
-   241 op land *tmp46 *tmp44 *tmp45
+   238 op land *tmp44 *tmp41 *tmp43
+   239 op greaterThan *tmp45 :ballYEnd 116
+   240 op land *tmp46 *tmp44 *tmp45
 -    * op add *tmp47 116 10
-   242 op lessThan *tmp48 :ballY 126
-   243 op land *tmp49 *tmp46 *tmp48
-   244 jump *label130 equal *tmp49 false
+   241 op lessThan *tmp48 :ballY 126
+   242 op land *tmp49 *tmp46 *tmp48
+   243 jump *label130 equal *tmp49 false
  
-   257 label *label131
-   258 label *label132
-   259 label *label133
+   256 label *label131
+   257 label *label132
+   258 label *label133
 -    * op add :brickPtr 5 1
-   260 label *label134
-   261 label *label135
-   262 label *label136
+   259 label *label134
+   260 label *label135
+   261 label *label136
 -    * op sub :y 116 10
-   263 label *label25
-   264 jump *label37 lessThan :ballY 0
-   265 label *label38
+   262 label *label25
+   263 jump *label37 lessThan :ballY 0
+   264 jump *label35 notEqual :brickCount 0
 
 Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-1 instructions):
  
@@ -1548,265 +1548,104 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-1
     54 op add :ballXEnd :ballX 5
 -    * op add :ballYEnd :ballY 5
     55 jump *label17 lessThan :ballX 0
-    56 label *label18
 -    * jump *label15 lessThanEq :ballXEnd 176
-+   57 jump *label15 lessThanEq :ballX 171
-    58 label *label17
-    59 op mul :ballVX :ballVX -1
-    60 label *label15
-    61 label *label16
++   56 jump *label15 lessThanEq :ballX 171
+    57 label *label17
+    58 op mul :ballVX :ballVX -1
+    59 label *label15
+    60 label *label16
 -    * jump *label19 lessThanEq :ballYEnd 176
-+   62 jump *label19 lessThanEq :ballY 171
-    63 op mul :ballVY :ballVY -1
-    64 label *label19
-    65 label *label20
++   61 jump *label19 lessThanEq :ballY 171
+    62 op mul :ballVY :ballVY -1
+    63 label *label19
+    64 label *label20
  
-    67 op add *tmp23 :paddleX :paddleWidth
-    68 op lessThan *tmp24 :ballX *tmp23
-    69 op land *tmp25 *tmp22 *tmp24
+    66 op add *tmp23 :paddleX :paddleWidth
+    67 op lessThan *tmp24 :ballX *tmp23
+    68 op land *tmp25 *tmp22 *tmp24
 -    * op greaterThan *tmp26 :ballYEnd 10
-+   70 op greaterThan *tmp26 :ballY 5
-    71 op land *tmp27 *tmp25 *tmp26
-    72 op lessThan *tmp28 :ballY 15
-    73 op land *tmp29 *tmp27 *tmp28
++   69 op greaterThan *tmp26 :ballY 5
+    70 op land *tmp27 *tmp25 *tmp26
+    71 op lessThan *tmp28 :ballY 15
+    72 op land *tmp29 *tmp27 *tmp28
  
-    89 read *tmp39 BRICKS 0
-    90 jump *label88 equal *tmp39 false
-    91 draw rect 1 126 57.666666666666664 9
+    88 read *tmp39 BRICKS 0
+    89 jump *label88 equal *tmp39 false
+    90 draw rect 1 126 57.666666666666664 9
 -    * op greaterThan *tmp41 :ballXEnd 1
-+   92 op greaterThan *tmp41 :ballX -4
-    93 op lessThan *tmp43 :ballX 59.666666666666664
-    94 op land *tmp44 *tmp41 *tmp43
++   91 op greaterThan *tmp41 :ballX -4
+    92 op lessThan *tmp43 :ballX 59.666666666666664
+    93 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd 126
-+   95 op greaterThan *tmp45 :ballY 121
-    96 op land *tmp46 *tmp44 *tmp45
-    97 op lessThan *tmp48 :ballY 136
-    98 op land *tmp49 *tmp46 *tmp48
++   94 op greaterThan *tmp45 :ballY 121
+    95 op land *tmp46 *tmp44 *tmp45
+    96 op lessThan *tmp48 :ballY 136
+    97 op land *tmp49 *tmp46 *tmp48
  
-   117 read *tmp39 BRICKS 1
-   118 jump *label96 equal *tmp39 false
-   119 draw rect 59.666666666666664 126 57.666666666666664 9
+   116 read *tmp39 BRICKS 1
+   117 jump *label96 equal *tmp39 false
+   118 draw rect 59.666666666666664 126 57.666666666666664 9
 -    * op greaterThan *tmp41 :ballXEnd 59.666666666666664
-+  120 op greaterThan *tmp41 :ballX 54.666666666666664
-   121 op lessThan *tmp43 :ballX 118.33333333333333
-   122 op land *tmp44 *tmp41 *tmp43
++  119 op greaterThan *tmp41 :ballX 54.666666666666664
+   120 op lessThan *tmp43 :ballX 118.33333333333333
+   121 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd 126
-+  123 op greaterThan *tmp45 :ballY 121
-   124 op land *tmp46 *tmp44 *tmp45
-   125 op lessThan *tmp48 :ballY 136
-   126 op land *tmp49 *tmp46 *tmp48
++  122 op greaterThan *tmp45 :ballY 121
+   123 op land *tmp46 *tmp44 *tmp45
+   124 op lessThan *tmp48 :ballY 136
+   125 op land *tmp49 *tmp46 *tmp48
  
-   145 read *tmp39 BRICKS 2
-   146 jump *label104 equal *tmp39 false
-   147 draw rect 118.33333333333333 126 57.666666666666664 9
+   144 read *tmp39 BRICKS 2
+   145 jump *label104 equal *tmp39 false
+   146 draw rect 118.33333333333333 126 57.666666666666664 9
 -    * op greaterThan *tmp41 :ballXEnd 118.33333333333333
-+  148 op greaterThan *tmp41 :ballX 113.33333333333333
-   149 op lessThan *tmp43 :ballX 177
-   150 op land *tmp44 *tmp41 *tmp43
++  147 op greaterThan *tmp41 :ballX 113.33333333333333
+   148 op lessThan *tmp43 :ballX 177
+   149 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd 126
-+  151 op greaterThan *tmp45 :ballY 121
-   152 op land *tmp46 *tmp44 *tmp45
-   153 op lessThan *tmp48 :ballY 136
-   154 op land *tmp49 *tmp46 *tmp48
++  150 op greaterThan *tmp45 :ballY 121
+   151 op land *tmp46 *tmp44 *tmp45
+   152 op lessThan *tmp48 :ballY 136
+   153 op land *tmp49 *tmp46 *tmp48
  
-   177 read *tmp39 BRICKS 3
-   178 jump *label116 equal *tmp39 false
-   179 draw rect 1 116 57.666666666666664 9
+   176 read *tmp39 BRICKS 3
+   177 jump *label116 equal *tmp39 false
+   178 draw rect 1 116 57.666666666666664 9
 -    * op greaterThan *tmp41 :ballXEnd 1
-+  180 op greaterThan *tmp41 :ballX -4
-   181 op lessThan *tmp43 :ballX 59.666666666666664
-   182 op land *tmp44 *tmp41 *tmp43
++  179 op greaterThan *tmp41 :ballX -4
+   180 op lessThan *tmp43 :ballX 59.666666666666664
+   181 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd 116
-+  183 op greaterThan *tmp45 :ballY 111
-   184 op land *tmp46 *tmp44 *tmp45
-   185 op lessThan *tmp48 :ballY 126
-   186 op land *tmp49 *tmp46 *tmp48
++  182 op greaterThan *tmp45 :ballY 111
+   183 op land *tmp46 *tmp44 *tmp45
+   184 op lessThan *tmp48 :ballY 126
+   185 op land *tmp49 *tmp46 *tmp48
  
-   205 read *tmp39 BRICKS 4
-   206 jump *label124 equal *tmp39 false
-   207 draw rect 59.666666666666664 116 57.666666666666664 9
+   204 read *tmp39 BRICKS 4
+   205 jump *label124 equal *tmp39 false
+   206 draw rect 59.666666666666664 116 57.666666666666664 9
 -    * op greaterThan *tmp41 :ballXEnd 59.666666666666664
-+  208 op greaterThan *tmp41 :ballX 54.666666666666664
-   209 op lessThan *tmp43 :ballX 118.33333333333333
-   210 op land *tmp44 *tmp41 *tmp43
++  207 op greaterThan *tmp41 :ballX 54.666666666666664
+   208 op lessThan *tmp43 :ballX 118.33333333333333
+   209 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd 116
-+  211 op greaterThan *tmp45 :ballY 111
-   212 op land *tmp46 *tmp44 *tmp45
-   213 op lessThan *tmp48 :ballY 126
-   214 op land *tmp49 *tmp46 *tmp48
++  210 op greaterThan *tmp45 :ballY 111
+   211 op land *tmp46 *tmp44 *tmp45
+   212 op lessThan *tmp48 :ballY 126
+   213 op land *tmp49 *tmp46 *tmp48
  
-   233 read *tmp39 BRICKS 5
-   234 jump *label132 equal *tmp39 false
-   235 draw rect 118.33333333333333 116 57.666666666666664 9
+   232 read *tmp39 BRICKS 5
+   233 jump *label132 equal *tmp39 false
+   234 draw rect 118.33333333333333 116 57.666666666666664 9
 -    * op greaterThan *tmp41 :ballXEnd 118.33333333333333
-+  236 op greaterThan *tmp41 :ballX 113.33333333333333
-   237 op lessThan *tmp43 :ballX 177
-   238 op land *tmp44 *tmp41 *tmp43
++  235 op greaterThan *tmp41 :ballX 113.33333333333333
+   236 op lessThan *tmp43 :ballX 177
+   237 op land *tmp44 *tmp41 *tmp43
 -    * op greaterThan *tmp45 :ballYEnd 116
-+  239 op greaterThan *tmp45 :ballY 111
-   240 op land *tmp46 *tmp44 *tmp45
-   241 op lessThan *tmp48 :ballY 126
-   242 op land *tmp49 *tmp46 *tmp48
-
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
- 
-    11 op rand *tmp4 10
-    12 op sub :ballVY *tmp4 5
-    13 set :brickCount 6
--    * label *label67
--    * label *label68
-    14 write 1 BRICKS 0
--    * label *label69
--    * label *label70
-    15 write 1 BRICKS 1
--    * label *label71
--    * label *label72
-    16 write 1 BRICKS 2
--    * label *label73
--    * label *label74
-    17 write 1 BRICKS 3
--    * label *label75
--    * label *label76
-    18 write 1 BRICKS 4
--    * label *label77
--    * label *label78
-    19 write 1 BRICKS 5
--    * label *label79
--    * label *label5
-    20 label *label6
-    21 draw clear 0 0 0
-    22 draw rect :paddleX 10 :paddleWidth 5
- 
-    27 jump *label11 greaterThanEq :paddleX *tmp10
-    28 op add :paddleX :paddleX 3
-    29 label *label11
--    * label *label12
-    30 jump *label10 always
-    31 label *label9
-    32 jump *label13 lessThanEq :paddleX 0
-    33 op sub :paddleX :paddleX 3
-    34 label *label13
--    * label *label14
-    35 label *label10
-    36 op add :ballX :ballX :ballVX
-    37 op add :ballY :ballY :ballVY
-    38 op add :ballXEnd :ballX 5
-    39 jump *label17 lessThan :ballX 0
--    * label *label18
-    40 jump *label15 lessThanEq :ballX 171
-    41 label *label17
-    42 op mul :ballVX :ballVX -1
-    43 label *label15
--    * label *label16
-    44 jump *label19 lessThanEq :ballY 171
-    45 op mul :ballVY :ballVY -1
-    46 label *label19
--    * label *label20
-    47 op greaterThan *tmp22 :ballXEnd :paddleX
-    48 op add *tmp23 :paddleX :paddleWidth
-    49 op lessThan *tmp24 :ballX *tmp23
- 
-    62 op add :ballVX :ballVX *tmp35
-    63 op sub :paddleWidth :paddleWidth 1
-    64 label *label21
--    * label *label22
--    * label *label80
--    * label *label81
--    * label *label82
--    * label *label83
-    65 read *tmp39 BRICKS 0
-    66 jump *label88 equal *tmp39 false
-    67 draw rect 1 126 57.666666666666664 9
- 
-    85 op mul :ballVX :ballVX -1
-    86 label *label85
-    87 label *label86
--    * label *label87
-    88 label *label88
--    * label *label89
--    * label *label90
--    * label *label91
-    89 read *tmp39 BRICKS 1
-    90 jump *label96 equal *tmp39 false
-    91 draw rect 59.666666666666664 126 57.666666666666664 9
- 
-   109 op mul :ballVX :ballVX -1
-   110 label *label93
-   111 label *label94
--    * label *label95
-   112 label *label96
--    * label *label97
--    * label *label98
--    * label *label99
-   113 read *tmp39 BRICKS 2
-   114 jump *label104 equal *tmp39 false
-   115 draw rect 118.33333333333333 126 57.666666666666664 9
- 
-   133 op mul :ballVX :ballVX -1
-   134 label *label101
-   135 label *label102
--    * label *label103
-   136 label *label104
--    * label *label105
--    * label *label106
--    * label *label107
--    * label *label108
--    * label *label109
--    * label *label110
--    * label *label111
-   137 read *tmp39 BRICKS 3
-   138 jump *label116 equal *tmp39 false
-   139 draw rect 1 116 57.666666666666664 9
- 
-   157 op mul :ballVX :ballVX -1
-   158 label *label113
-   159 label *label114
--    * label *label115
-   160 label *label116
--    * label *label117
--    * label *label118
--    * label *label119
-   161 read *tmp39 BRICKS 4
-   162 jump *label124 equal *tmp39 false
-   163 draw rect 59.666666666666664 116 57.666666666666664 9
- 
-   181 op mul :ballVX :ballVX -1
-   182 label *label121
-   183 label *label122
--    * label *label123
-   184 label *label124
--    * label *label125
--    * label *label126
--    * label *label127
-   185 read *tmp39 BRICKS 5
-   186 jump *label132 equal *tmp39 false
-   187 draw rect 118.33333333333333 116 57.666666666666664 9
- 
-   205 op mul :ballVX :ballVX -1
-   206 label *label129
-   207 label *label130
--    * label *label131
-   208 label *label132
--    * label *label133
--    * label *label134
--    * label *label135
--    * label *label136
--    * label *label25
-   209 jump *label37 lessThan :ballY 0
--    * label *label38
-   210 jump *label35 notEqual :brickCount 0
-   211 label *label37
-   212 jump *label8 always
-   213 label *label35
--    * label *label36
-   214 drawflush DISPLAY
--    * label *label7
-   215 jump *label6 always
-   216 label *label8
--    * label *label1
-   217 jump *label0 always
--    * label *label2
-   218 end
++  238 op greaterThan *tmp45 :ballY 111
+   239 op land *tmp46 *tmp44 *tmp45
+   240 op lessThan *tmp48 :ballY 126
+   241 op land *tmp49 *tmp46 *tmp48
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  
@@ -1865,15 +1704,6 @@ Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-1 instru
    210 label *label35
    211 drawflush DISPLAY
    212 jump *label6 always
-
-Modifications by Jumps phase, Condition Optimization, pass 5, iteration 1:
- 
-   207 label *label132
-   208 jump *label0 lessThan :ballY 0
-   209 jump *label0 equal :brickCount 0
--    * label *label35
-   210 drawflush DISPLAY
-   211 jump *label6 always
 
 Final code before resolving virtual instructions:
 

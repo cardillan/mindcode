@@ -6,7 +6,6 @@ import info.teksol.mc.messages.ListMessageLogger;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
-import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.FileReferences;
@@ -110,13 +109,17 @@ public class DocValidatorTest {
     @TestFactory
     @Execution(ExecutionMode.CONCURRENT)
     public DynamicNode validateDocumentation() {
-        final File[] files = new File(SYNTAX_REL_PATH).listFiles((_, name) -> name.endsWith(".markdown"));
-        assertNotNull(files);
-        assertTrue(files.length > 0, "Expected to find at least one markdown file in " + SYNTAX_REL_PATH + "; found none");
+        final File[] files1 = new File(SYNTAX_REL_PATH).listFiles((_, name) -> name.endsWith(".markdown"));
+        assertNotNull(files1);
+        assertTrue(files1.length > 0, "Expected to find at least one markdown file in " + SYNTAX_REL_PATH + "; found none");
+
+        final File[] files2 = new File(OPTIMIZATIONS_PATH).listFiles((_, name) -> name.endsWith(".markdown"));
+        assertNotNull(files2);
+        assertTrue(files2.length > 0, "Expected to find at least one markdown file in " + OPTIMIZATIONS_PATH + "; found none");
 
         return DynamicContainer.dynamicContainer(
                 "Documentation validation",
-                Stream.of(files)
+                Stream.concat(Arrays.stream(files1), Arrays.stream(files2))
                         .map(file -> DynamicTest.dynamicTest("Validating " + file.getName(),
                                 null, () -> validateFile(file))
                         )
@@ -161,7 +164,7 @@ public class DocValidatorTest {
         MindcodeCompiler compiler = new MindcodeCompiler(messageConsumer, profile, inputFiles);
         try {
             compiler.compile();
-        } catch (MindcodeInternalError error) {
+        } catch (Exception error) {
             messageConsumer.addMessage(ToolMessage.error("Error compiling source code: " + error.getMessage()));
         }
 

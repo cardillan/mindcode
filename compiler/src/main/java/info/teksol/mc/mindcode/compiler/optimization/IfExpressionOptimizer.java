@@ -79,8 +79,8 @@ class IfExpressionOptimizer extends AbstractConditionalOptimizer {
         }
 
         LogicList condition = contextInstructions(ifExpression.child(0));
-        ShortCircuitAnalysis analysis = analyzeShortCircuit(condition);
-        if (analysis == null) {
+        ShortCircuitAnalysis analysis = analyzeShortCircuit(condition, false);
+        if (analysis == null || !analysis.normal()) {
             return;
         }
 
@@ -293,21 +293,33 @@ class IfExpressionOptimizer extends AbstractConditionalOptimizer {
             insertInstructions(instructionIndex(requireNonNull(falseAnchor)), trueBranch);
 
             // Negate compound condition
+            LogicInstruction last = requireNonNull(condition.getLast());
+
             if (analysis.shortCircuit()) {
                 JumpInstruction originalJump = (JumpInstruction) requireNonNull(condition.getRealFromEnd(0));
-                LabelInstruction trueLabel = (LabelInstruction) requireNonNull(condition.getLast());
-                LabelInstruction falseLabel = getLabelInstruction(originalJump.getTarget());
 
                 // Swap labels
-                int trueLabelIndex = instructionIndex(trueLabel);
+                int trueLabelIndex;
+                LabelInstruction trueLabel;
+                if (condition.getLast() instanceof LabelInstruction lbl) {
+                    trueLabel = lbl;
+                    trueLabelIndex = instructionIndex(trueLabel);
+                    invalidateInstruction(trueLabelIndex);
+                } else {
+                    trueLabel = createLabel(last.getAstContext(), instructionProcessor.nextLabel());
+                    trueLabelIndex = instructionIndex(last) + 1;
+                    insertInstruction(trueLabelIndex, trueLabel);
+                }
+
+                LabelInstruction falseLabel = getLabelInstruction(originalJump.getTarget());
                 int falseLabelIndex = instructionIndex(falseLabel);
-                invalidateInstruction(trueLabelIndex);
                 invalidateInstruction(falseLabelIndex);
+
                 replaceInstruction(trueLabelIndex, trueLabel.withLabel(falseLabel.getLabel()));
                 replaceInstruction(falseLabelIndex, falseLabel.withLabel(trueLabel.getLabel()));
                 replaceInstruction(originalJump, invertedJump.withTarget(trueLabel.getLabel()));
             } else {
-                int conditionIndex = instructionIndex(requireNonNull(condition.getLast()));
+                int conditionIndex = instructionIndex(last);
                 replaceInstruction(conditionIndex, invertedJump);
                 removeInstruction(conditionIndex - 1);
             }

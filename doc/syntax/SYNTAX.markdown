@@ -1,6 +1,8 @@
 # Mindcode
 
-Mindcode is a high-level language for [Mindustry](https://github.com/anuke/mindustry). The language design was inspired mostly by Ruby, but there are quite a few differences. Mindcode aims to provide programmatic access to full Mindustry Logic functionality. The mlog instructions interacting with the Mindustry World are available as [Logic functions](FUNCTIONS.markdown). Other instructions are used by expressions, control structures, and other statements in Mindcode.
+Mindcode is a high-level procedural programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, arrays, conditional statements and loops, functions, modules, remote variables and function calls (synchronous and asynchronous), system library, user libraries, debugging support, and others. Mindcode generates fairly well-optimized mlog code, using available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler) and provides means for integration both with various IDEs and Mindustry itself.
+
+Mindcode provides programmatic access to full Mindustry Logic functionality—all mlog instructions are supported, and the language can be easily extended to support new instructions provided by mods or different clients.
 
 This documentation covers the basics of Mindcode syntax:
 

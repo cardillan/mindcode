@@ -10,7 +10,7 @@
      1 instructions eliminated by Case Switching (5 iterations).
      1 case expressions converted to switched jumps by Case Switching.
      1 case expressions converted to fast dispatch by Case Switching.
-     8 instructions eliminated by Jump Straightening (4 iterations).
+     8 instructions eliminated by Jump Straightening (5 iterations).
      6 instructions updated by Jump Threading.
     26 instructions eliminated by Print Merging.
     88 instructions after optimizations.
@@ -610,102 +610,6 @@ Modifications by Fast-dispatch case at line 23:17:
     62 jump *label6 always
     63 label *label11
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-    10 print "Configuring..."
-    11 print "\n"
-    12 set :n @links
--    * label *label3
-    13 jump *label5 lessThanEq :n 0
-    14 label *label30
-    15 op sub :n :n 1
- 
-    19 jump *label32 greaterThanEq *tmp36 145
-    20 multijump *tmp36 0 0 (m:*label33)
-    21 multilabel *label36 (m:*label33)
--    * label *label8
-    22 set .MESSAGE :block
-    23 jump *label6 always
--    * label *label7
-    24 multilabel *label37 (m:*label33)
--    * label *label10
-    25 set .SWITCH :block
-    26 jump *label6 always
--    * label *label9
-    27 multilabel *label35 (m:*label33)
--    * label *label12
-    28 sensor *tmp8 :block @firstItem
-    29 sensor *tmp37 *tmp8 @id
-    30 multijump *tmp37 0 0 (m:*label41)
- 
-    33 label *label39
-    34 jump *label13 always
-    35 multilabel *label45 (m:*label41)
--    * label *label15
-    36 set .TITANIUM :block
-    37 jump *label13 always
--    * label *label14
-    38 multilabel *label46 (m:*label41)
--    * label *label17
-    39 set .SILICON :block
-    40 jump *label13 always
--    * label *label16
-    41 multilabel *label42 (m:*label41)
--    * label *label40
-    42 jump *label39 strictEqual *tmp37 null
--    * label *label19
-    43 set .COPPER :block
-    44 jump *label13 always
--    * label *label18
-    45 multilabel *label43 (m:*label41)
--    * label *label21
-    46 set .LEAD :block
-    47 label *label13
-    48 jump *label6 always
--    * label *label11
-    49 multilabel *label38 (m:*label33)
--    * label *label23
-    50 set .DISPLAY :block
-    51 jump *label6 always
--    * label *label22
-    52 multilabel *label34 (m:*label33)
-    53 label *label32
-    54 print "\n"
- 
-    65 print null
-    66 print "/"
-    67 print "min"
--    * label *label4
-    68 jump *label30 greaterThan :n 0
-    69 label *label5
-    70 print "Message: "
- 
-    89 print .LEAD
-    90 print "\n"
-    91 printflush .MESSAGE
--    * label *label1
-    92 jump *label0 equal .TITANIUM null
--    * label *label26
-    93 jump *label0 equal .SILICON null
--    * label *label25
-    94 jump *label0 equal .COPPER null
--    * label *label24
-    95 jump *label0 equal .LEAD null
--    * label *label2
-    96 control enabled .SWITCH 0
--    * label *label27
-    97 sensor *tmp23 .SWITCH @enabled
-    98 jump *label29 notEqual *tmp23 0
-    99 label *label31
- 
-   128 op floor *tmp35 *tmp34
-   129 print *tmp35
-   130 printflush .MESSAGE
--    * label *label28
-   131 sensor *tmp23 .SWITCH @enabled
-   132 jump *label31 equal *tmp23 0
-   133 label *label29
-
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
      1 set .SWITCH null
@@ -743,30 +647,6 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
    100 label *label31
    101 set :start @time
    102 draw clear 0 0 80
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1:
- 
-    31 multijump *tmp37 0 0 (m:*label41)
-    32 multilabel *label47 (m:*label41)
-    33 multilabel *label44 (m:*label41)
--    * label *label39
-    34 jump *label6 always
-    35 multilabel *label45 (m:*label41)
-    36 set .TITANIUM :block
- 
-    44 jump *label6 always
-    45 multilabel *label43 (m:*label41)
-    46 set .LEAD :block
--    * label *label13
-    47 jump *label6 always
-    48 multilabel *label38 (m:*label33)
-    49 set .DISPLAY :block
- 
-   129 printflush .MESSAGE
-   130 sensor *tmp23 .SWITCH @enabled
-   131 jump *label31 equal *tmp23 0
--    * label *label29
-   132 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  

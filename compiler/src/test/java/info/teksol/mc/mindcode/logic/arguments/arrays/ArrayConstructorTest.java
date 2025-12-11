@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
+import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
@@ -97,13 +98,13 @@ class ArrayConstructorTest extends AbstractCodeGeneratorTest {
     }
 
     protected void testConstructors(Consumer<ArrayAccessInstruction> decorator) {
-        ArrayConstructorFactory.setContext(this);
+        ContextFactory.setArrayConstructorContext(this);
         for (LogicArray array : arrays) {
             ArrayAccessInstruction ix = ip.createReadArr(mockAstContext, tmp0, array, tmp1);
             decorator.accept(ix);
             testInstruction(ix);
         }
-        ArrayConstructorFactory.setContext(null);
+        ContextFactory.clearArrayConstructorContext();
     }
     
     private Consumer<ArrayAccessInstruction> decorator(ArrayOrganization organization, ArrayConstruction construction, boolean folded) {

@@ -351,88 +351,6 @@ Modifications by Replicate loop condition at line 58:1 (+1 instructions):
    104 label *label17
    105 end
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-     7 op div *tmp7 *tmp6 100
-     8 op sub :distance *tmp7 2
-     9 ubind UNIT
--    * label *label0
-    10 jump *label2 notEqual @unit null
-    11 label *label18
-    12 print UNIT
-    13 print ": no active unit found."
-    14 printflush message1
-    15 ubind UNIT
--    * label *label1
-    16 jump *label18 equal @unit null
-    17 label *label2
--    * label *label3
-    18 sensor *tmp10 switch1 @enabled
-    19 jump *label5 notEqual *tmp10 false
-    20 label *label19
- 
-    22 print UNIT
-    23 print " speed."
-    24 printflush message1
--    * label *label4
-    25 sensor *tmp10 switch1 @enabled
-    26 jump *label19 equal *tmp10 false
-    27 label *label5
-    28 control enabled switch1 false
--    * label *label6
-    29 sensor *tmp13 @unit @controlled
-    30 jump *label8 equal *tmp13 0
-    31 label *label20
- 
-    33 print UNIT
-    34 printflush message1
-    35 ubind UNIT
--    * label *label7
-    36 sensor *tmp13 @unit @controlled
-    37 jump *label20 notEqual *tmp13 0
-    38 label *label8
-    39 ucontrol flag 1
--    * label *label9
-    40 ucontrol within 10 10 1 *tmp15
-    41 jump *label11 notEqual *tmp15 false
-    42 label *label21
-    43 print "Moving to start"
-    44 printflush message1
-    45 ucontrol move 10 10
--    * label *label10
-    46 ucontrol within 10 10 1 *tmp15
-    47 jump *label21 equal *tmp15 false
-    48 label *label11
- 
-    50 printflush message1
-    51 set :start @time
-    52 ucontrol move 10 .DY
--    * label *label12
-    53 ucontrol within 10 .DY 1 *tmp18
-    54 jump *label14 notEqual *tmp18 false
-    55 label *label22
-    56 ucontrol move 10 .DY
--    * label *label13
-    57 ucontrol within 10 .DY 1 *tmp18
-    58 jump *label22 equal *tmp18 false
-    59 label *label14
- 
-    67 op div *tmp28 :distance :elapsed
-    68 op idiv *tmp30 *tmp28 0.00001
-    69 op div :speed *tmp30 100
--    * label *label15
-    70 sensor *tmp32 switch1 @enabled
-    71 jump *label17 notEqual *tmp32 false
-    72 label *label23
- 
-    87 print "tiles/s"
-    88 print "\nPress button to repeat"
-    89 printflush message1
--    * label *label16
-    90 sensor *tmp32 switch1 @enabled
-    91 jump *label23 equal *tmp32 false
-    92 label *label17
-
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
      1 set UNIT @flare
@@ -447,14 +365,6 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
     73 label *label23
     74 print "Measurement results ("
     75 print UNIT
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1:
- 
-    90 printflush message1
-    91 sensor *tmp32 switch1 @enabled
-    92 jump *label23 equal *tmp32 false
--    * label *label17
-    93 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  

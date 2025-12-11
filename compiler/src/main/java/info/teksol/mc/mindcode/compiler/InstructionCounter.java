@@ -23,7 +23,7 @@ public class InstructionCounter {
         int size = program.stream().mapToInt(ix -> ix.getRealSize(sharedStructures)).sum();
 
         final int variableCreationSize;
-        Set<LogicVariable> forcedVariables = new HashSet<>(MindcodeCompiler.getContext().getForcedVariables());
+        Set<LogicVariable> forcedVariables = new HashSet<>(ContextFactory.getForcedVariableContext().getForcedVariables());
         program.forEach(ix -> forcedVariables.addAll(ix.getIndirectVariables()));
         if (!forcedVariables.isEmpty()) {
             program.forEach(ix -> ix.getTypedArguments().forEach(a -> {

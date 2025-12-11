@@ -243,30 +243,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-2
     10 label *label17
     11 label *label20
 
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
-     0 set p 1
-     1 assertflush
--    * label *label8
-     2 op mul :test:b p 2
--    * label *label9
--    * label *label12
-     3 op mul :test:i p 4
--    * label *label13
--    * label *label16
-     4 op mul :test:step p 8
--    * label *label17
--    * label *label20
--    * label *label21
--    * label *label3
-     5 print p
-     6 print :test:b
-     7 print :test:i
-     8 print :test:step
--    * label *label0
-     9 assertprints "1248" "sort variables"
-    10 stop
-    11 end
-
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
      8 print :test:step

@@ -7,7 +7,7 @@ Loop unrolling is a [dynamic optimization](../SYNTAX-6-OPTIMIZATIONS.markdown#st
 The Loop Unrolling optimization works by replacing loops whose number of iterations can be determined by the compiler with a linear sequence of instructions. This results in a significant speedup of program execution: the jump instruction representing an exit condition, and oftentimes also the instruction(s) updating the loop control variable, can be removed from the unrolled loop, so that only instructions actually performing the intended work of the loop remain. The optimization is most efficient on loops that are very "tight"—contain very few instructions apart from the loop itself. The most dramatic practical example is probably something like this (let's see it first without the loop unrolling):
 
 ```Mindcode
-set loop-unrolling = none;
+#set loop-unrolling = none;
 for i in 0 ... 10 do
     cell1[i] = 0;
 end;
@@ -227,7 +227,7 @@ Both loops are eligible for unrolling at the beginning, and the inner one is cho
 Sometimes unrolling an outer loop can make the inner loop eligible for unrolling too. In this case, the inner loop cannot be unrolled first, as it is not constant:
 
 ```Mindcode
-set optimization = advanced;
+#set optimization = advanced;
 first = true;
 for i in 1 .. 5 do
     for j in i .. 5 do

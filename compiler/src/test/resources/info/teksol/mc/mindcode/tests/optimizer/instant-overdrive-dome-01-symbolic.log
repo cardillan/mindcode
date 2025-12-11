@@ -4,38 +4,38 @@
      7 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
    125 instructions eliminated by Condition Optimization (2 passes, 6 iterations).
    101 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
-    11 instructions eliminated by Boolean Optimization (4 iterations).
-       2 final jumps of short-circuited conditions turned to an operation or select.
-       3 fully-evaluated conditions turned to a sequence of selects.
+    20 instructions eliminated by Boolean Optimization (2 passes, 8 iterations).
+       2 final jumps of a short-circuited expression optimized.
+       6 fully-evaluated expressions optimized using selects.
      4 instructions eliminated by If Expression Optimization (3 iterations).
     88 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
      2 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
-   149 instructions added by Loop Unrolling (7 iterations).
+   158 instructions added by Loop Unrolling (7 iterations).
      2 loops unrolled by Loop Unrolling.
-    46 instructions eliminated by Jump Straightening (3 passes, 6 iterations).
+    46 instructions eliminated by Jump Straightening (3 passes, 9 iterations).
     33 instructions updated by Jump Threading.
     19 instructions eliminated by Unreachable Code Elimination (3 iterations).
     75 instructions eliminated by Print Merging.
    855 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 238):
+Pass 1: speed optimization selection (cost limit 229):
     Replicate loop condition at line 54:5                        size    +1, benefit       25.0, efficiency     25.000
     Replicate loop condition at line 119:5                       size    +1, benefit       25.0, efficiency     25.000
   * Unroll iteration loop at line 169:9                          size    +5, benefit      375.0, efficiency     75.000 (+3 instructions)
-    Unroll iteration loop at line 201:9                          size  +185, benefit      375.0, efficiency      2.027
+    Unroll iteration loop at line 201:9                          size  +197, benefit      375.0, efficiency      1.904
 
-Pass 1: speed optimization selection (cost limit 235):
+Pass 1: speed optimization selection (cost limit 226):
   * Replicate loop condition at line 54:5                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
     Replicate loop condition at line 119:5                       size    +1, benefit       25.0, efficiency     25.000
-    Unroll iteration loop at line 201:9                          size  +185, benefit      375.0, efficiency      2.027
+    Unroll iteration loop at line 201:9                          size  +197, benefit      375.0, efficiency      1.904
 
-Pass 1: speed optimization selection (cost limit 234):
+Pass 1: speed optimization selection (cost limit 225):
   * Replicate loop condition at line 119:5                       size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Unroll iteration loop at line 201:9                          size  +185, benefit      375.0, efficiency      2.027
+    Unroll iteration loop at line 201:9                          size  +197, benefit      375.0, efficiency      1.904
 
-Pass 1: speed optimization selection (cost limit 233):
-  * Unroll iteration loop at line 201:9                          size  +185, benefit      375.0, efficiency      2.027 (+138 instructions)
+Pass 1: speed optimization selection (cost limit 224):
+  * Unroll iteration loop at line 201:9                          size  +197, benefit      375.0, efficiency      1.904 (+147 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-173 instructions):
  
@@ -4915,170 +4915,166 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     15 print "[gold]Locating core..."
     16 printflush message1
 
-Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-11 instructions):
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-2 instructions):
  
-    70 ubind UNIT_TYPE
-    71 set :areUnitsAvailable:firstUnit @unit
-    72 jump *label27 equal :areUnitsAvailable:firstUnit null
--    * # "Function: inline def needsFourUnits(in unit)"
--    * set :needsFourUnits:unit @unit
--    * op sub *tmp14 .DOME_X .CORE_X
--    * op sub *tmp15 .DOME_Y .CORE_Y
--    * op len *tmp16 *tmp14 *tmp15
--    * op mul *tmp17 2 *tmp16
--    * sensor *tmp18 :needsFourUnits:unit @speed
--    * op div :needsFourUnits:travel_time *tmp17 *tmp18
--    * op greaterThanEq *tmp13 :needsFourUnits:travel_time 47
--    * jump *label31 always
--    * label *label31
--    * jump *label29 equal *tmp13 false
--    * set *tmp21 4
--    * jump *label30 always
--    * label *label29
--    * set *tmp21 2
--    * label *label30
-+   73 # "Function: inline def needsFourUnits(in unit)"
-+   74 set :needsFourUnits:unit @unit
-+   75 op sub *tmp14 .DOME_X .CORE_X
-+   76 op sub *tmp15 .DOME_Y .CORE_Y
-+   77 op len *tmp16 *tmp14 *tmp15
-+   78 op mul *tmp17 2 *tmp16
-+   79 sensor *tmp18 :needsFourUnits:unit @speed
-+   80 op div :needsFourUnits:travel_time *tmp17 *tmp18
-+   81 op greaterThanEq *tmp13 :needsFourUnits:travel_time 47
-+   82 jump *label381 always
-+   83 label *label381
-+   84 select *tmp21 notEqual *tmp13 false 4 2
-    85 set :areUnitsAvailable:needed *tmp21
-    86 label *label32
-    87 sensor *tmp22 @unit @controlled
+    91 label *label32
+    92 sensor *tmp22 @unit @controlled
+    93 jump *label37 equal *tmp22 0
+-    * label *label38
+    94 sensor *tmp24 @unit @controller
+    95 jump *label35 notEqual *tmp24 @this
+    96 label *label37
  
-   156 ubind :chooseUnitType:type
-   157 set :areUnitsAvailable.1:firstUnit @unit
-   158 jump *label58 equal :areUnitsAvailable.1:firstUnit null
--    * # "Function: inline def needsFourUnits(in unit)"
--    * set :needsFourUnits.1:unit @unit
--    * op sub *tmp44 .DOME_X .CORE_X
--    * op sub *tmp45 .DOME_Y .CORE_Y
--    * op len *tmp46 *tmp44 *tmp45
--    * op mul *tmp47 2 *tmp46
--    * sensor *tmp48 :needsFourUnits.1:unit @speed
--    * op div :needsFourUnits.1:travel_time *tmp47 *tmp48
--    * op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
--    * jump *label62 always
--    * label *label62
--    * jump *label60 equal *tmp43 false
--    * set *tmp51 4
--    * jump *label61 always
--    * label *label60
--    * set *tmp51 2
--    * label *label61
-+  159 # "Function: inline def needsFourUnits(in unit)"
-+  160 set :needsFourUnits.1:unit @unit
-+  161 op sub *tmp44 .DOME_X .CORE_X
-+  162 op sub *tmp45 .DOME_Y .CORE_Y
-+  163 op len *tmp46 *tmp44 *tmp45
-+  164 op mul *tmp47 2 *tmp46
-+  165 sensor *tmp48 :needsFourUnits.1:unit @speed
-+  166 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
-+  167 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-+  168 jump *label382 always
-+  169 label *label382
-+  170 select *tmp51 notEqual *tmp43 false 4 2
-   171 set :areUnitsAvailable.1:needed *tmp51
-   172 label *label63
-   173 sensor *tmp52 @unit @controlled
+   181 label *label63
+   182 sensor *tmp52 @unit @controlled
+   183 jump *label68 equal *tmp52 0
+-    * label *label69
+   184 sensor *tmp54 @unit @controller
+   185 jump *label66 notEqual *tmp54 @this
+   186 label *label68
  
-   497 set .UNIT_P2 null
-   498 set .GROUP1 "unit"
-   499 label *label125
+   359 set .UNIT_P1 *tmp98
+   360 sensor *tmp116 *tmp80 @firstItem
+   361 jump *label118 equal *tmp116 @phase-fabric
+-    * label *label119
+   362 sensor *tmp118 *tmp98 @firstItem
+   363 jump *label116 notEqual *tmp118 @silicon
+   364 label *label118
+ 
+   469 set .UNIT_P2 *tmp153
+   470 sensor *tmp171 .UNIT_S1 @firstItem
+   471 jump *label154 notEqual *tmp171 @phase-fabric
+-    * label *label157
+   472 sensor *tmp173 *tmp153 @firstItem
+   473 jump *label154 equal *tmp173 @phase-fabric
+-    * label *label156
+   474 # "Function: inline void swap(in out a, in out b)"
+   475 set :swap.1:t .UNIT_S1
+   476 label *label158
+ 
+   480 label *label155
+   481 sensor *tmp176 *tmp135 @firstItem
+   482 jump *label161 equal *tmp176 @phase-fabric
+-    * label *label162
+   483 sensor *tmp178 .UNIT_P2 @firstItem
+   484 jump *label159 notEqual *tmp178 @silicon
+   485 label *label161
+ 
+   501 set .UNIT_P2 null
+   502 set .GROUP1 "unit"
+   503 label *label125
 -    * jump *label166 equal *tmp126 false
 -    * label *label167
 -    * sensor *tmp182 .UNIT_S1 @totalItems
 -    * sensor *tmp183 .UNIT_S2 @totalItems
 -    * jump *label164 greaterThanEq *tmp182 *tmp183
-+  500 jump *label164 notEqual *tmp126 false
-   501 label *label166
-   502 set *tmp185 true
-   503 jump *label165 always
-   504 label *label164
++  504 jump *label164 notEqual *tmp126 false
+   505 label *label166
+   506 set *tmp185 true
+   507 jump *label165 always
+   508 label *label164
 -    * set *tmp185 false
-+  505 label *label383
-+  506 sensor *tmp182 .UNIT_S1 @totalItems
-+  507 sensor *tmp183 .UNIT_S2 @totalItems
-+  508 op lessThan *tmp185 *tmp182 *tmp183
-   509 label *label165
-   510 set .SUPPLY_S_FIRST *tmp185
++  509 sensor *tmp182 .UNIT_S1 @totalItems
++  510 sensor *tmp183 .UNIT_S2 @totalItems
++  511 op lessThan *tmp185 *tmp182 *tmp183
+   512 label *label165
+   513 set .SUPPLY_S_FIRST *tmp185
 -    * jump *label170 equal *tmp126 false
 -    * label *label171
 -    * sensor *tmp187 .UNIT_P1 @totalItems
 -    * sensor *tmp188 .UNIT_P2 @totalItems
 -    * jump *label168 greaterThanEq *tmp187 *tmp188
-+  511 jump *label168 notEqual *tmp126 false
-   512 label *label170
-   513 set *tmp190 true
-   514 jump *label169 always
-   515 label *label168
++  514 jump *label168 notEqual *tmp126 false
+   515 label *label170
+   516 set *tmp190 true
+   517 jump *label169 always
+   518 label *label168
 -    * set *tmp190 false
-+  516 label *label385
-+  517 sensor *tmp187 .UNIT_P1 @totalItems
-+  518 sensor *tmp188 .UNIT_P2 @totalItems
-+  519 op lessThan *tmp190 *tmp187 *tmp188
-   520 label *label169
-   521 set .SUPPLY_P_FIRST *tmp190
-   522 op add :unitCheck @time 5000
++  519 sensor *tmp187 .UNIT_P1 @totalItems
++  520 sensor *tmp188 .UNIT_P2 @totalItems
++  521 op lessThan *tmp190 *tmp187 *tmp188
+   522 label *label169
+   523 set .SUPPLY_P_FIRST *tmp190
+   524 op add :unitCheck @time 5000
  
-  1185 ubind UNIT_TYPE
-  1186 set :areUnitsAvailable.2:firstUnit @unit
-  1187 jump *label356 equal :areUnitsAvailable.2:firstUnit null
--    * # "Function: inline def needsFourUnits(in unit)"
--    * set :needsFourUnits.3:unit @unit
--    * sensor *tmp474 :needsFourUnits.3:unit @speed
--    * op div :needsFourUnits.3:travel_time *tmp130 *tmp474
--    * op greaterThanEq *tmp469 :needsFourUnits.3:travel_time 47
--    * jump *label360 always
--    * label *label360
--    * jump *label358 equal *tmp469 false
--    * set *tmp477 4
--    * jump *label359 always
--    * label *label358
--    * set *tmp477 2
--    * label *label359
-+ 1188 # "Function: inline def needsFourUnits(in unit)"
-+ 1189 set :needsFourUnits.3:unit @unit
-+ 1190 sensor *tmp474 :needsFourUnits.3:unit @speed
-+ 1191 op div :needsFourUnits.3:travel_time *tmp130 *tmp474
-+ 1192 op greaterThanEq *tmp469 :needsFourUnits.3:travel_time 47
-+ 1193 jump *label387 always
-+ 1194 label *label387
-+ 1195 select *tmp477 notEqual *tmp469 false 4 2
-  1196 set :areUnitsAvailable.2:needed *tmp477
-  1197 label *label361
-  1198 sensor *tmp478 @unit @controlled
+   590 sensor :processUnit:state @unit @flag
+   591 set :processUnit:distance -1
+   592 jump *label194 lessThan :processUnit:state 2
+-    * label *label195
+   593 jump *label192 lessThanEq :processUnit:state 3
+   594 label *label194
+   595 sensor *tmp217 @unit @firstItem
+ 
+   734 sensor :processUnit.1:state @unit @flag
+   735 set :processUnit.1:distance -1
+   736 jump *label236 lessThan :processUnit.1:state 2
+-    * label *label237
+   737 jump *label234 lessThanEq :processUnit.1:state 3
+   738 label *label236
+   739 sensor *tmp281 @unit @firstItem
+ 
+   905 sensor :processUnit.2:state @unit @flag
+   906 set :processUnit.2:distance -1
+   907 jump *label281 lessThan :processUnit.2:state 2
+-    * label *label282
+   908 jump *label279 lessThanEq :processUnit.2:state 3
+   909 label *label281
+   910 sensor *tmp351 @unit @firstItem
+ 
+  1049 sensor :processUnit.3:state @unit @flag
+  1050 set :processUnit.3:distance -1
+  1051 jump *label323 lessThan :processUnit.3:state 2
+-    * label *label324
+  1052 jump *label321 lessThanEq :processUnit.3:state 3
+  1053 label *label323
+  1054 sensor *tmp415 @unit @firstItem
+ 
+  1173 print "ms"
+  1174 printflush message1
+  1175 jump *label349 equal *tmp9 UNIT_TYPE
+-    * label *label352
+  1176 jump *label349 lessThanEq :unitCheck @time
+-    * label *label351
+  1177 # "Function: inline def areUnitsAvailable(in type, in output)"
+  1178 set :areUnitsAvailable.2:free 0
+  1179 set :areUnitsAvailable.2:occupied 0
+ 
+  1198 label *label361
+  1199 sensor *tmp478 @unit @controlled
+  1200 jump *label366 equal *tmp478 0
+-    * label *label367
+  1201 sensor *tmp480 @unit @controller
+  1202 jump *label364 notEqual *tmp480 @this
+  1203 label *label366
+ 
+  1255 ubind :locateCore:type
+  1256 sensor *tmp494 @unit @controlled
+  1257 jump *label378 equal *tmp494 0
+-    * label *label379
+  1258 sensor *tmp496 @unit @controller
+  1259 jump *label376 notEqual *tmp496 @this
+  1260 label *label378
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-4 instructions):
  
-   499 label *label125
-   500 jump *label164 notEqual *tmp126 false
-   501 label *label166
+   502 set .GROUP1 "unit"
+   503 label *label125
+   504 jump *label164 notEqual *tmp126 false
 -    * set *tmp185 true
-+  502 set .SUPPLY_S_FIRST true
-   503 jump *label165 always
-   504 label *label164
-   505 label *label383
-   506 sensor *tmp182 .UNIT_S1 @totalItems
-   507 sensor *tmp183 .UNIT_S2 @totalItems
++  505 set .SUPPLY_S_FIRST true
+   506 jump *label165 always
+   507 label *label164
+   508 sensor *tmp182 .UNIT_S1 @totalItems
+   509 sensor *tmp183 .UNIT_S2 @totalItems
 -    * op lessThan *tmp185 *tmp182 *tmp183
-+  508 op lessThan .SUPPLY_S_FIRST *tmp182 *tmp183
-   509 label *label165
++  510 op lessThan .SUPPLY_S_FIRST *tmp182 *tmp183
+   511 label *label165
 -    * set .SUPPLY_S_FIRST *tmp185
-   510 jump *label168 notEqual *tmp126 false
-   511 label *label170
+   512 jump *label168 notEqual *tmp126 false
 -    * set *tmp190 true
-+  512 set .SUPPLY_P_FIRST true
-   513 jump *label169 always
-   514 label *label168
-   515 label *label385
++  513 set .SUPPLY_P_FIRST true
+   514 jump *label169 always
+   515 label *label168
    516 sensor *tmp187 .UNIT_P1 @totalItems
    517 sensor *tmp188 .UNIT_P2 @totalItems
 -    * op lessThan *tmp190 *tmp187 *tmp188
@@ -5089,37 +5085,37 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    521 label *label172
    522 sensor *tmp192 switch1 @enabled
  
-   838 set .UNIT_S2 :processUnit.1:unit
-   839 jump *label260 equal .SUPPLY_S_FIRST false
-   840 sensor *tmp323 :processUnit:unit @totalItems
+   836 set .UNIT_S2 :processUnit.1:unit
+   837 jump *label260 equal .SUPPLY_S_FIRST false
+   838 sensor *tmp323 :processUnit:unit @totalItems
 -    * op greaterThan *tmp322 *tmp323 0
-+  841 op greaterThan .SUPPLY_S_FIRST *tmp323 0
-   842 jump *label261 always
-   843 label *label260
-   844 sensor *tmp325 :processUnit.1:unit @totalItems
++  839 op greaterThan .SUPPLY_S_FIRST *tmp323 0
+   840 jump *label261 always
+   841 label *label260
+   842 sensor *tmp325 :processUnit.1:unit @totalItems
 -    * op equal *tmp322 *tmp325 0
-+  845 op equal .SUPPLY_S_FIRST *tmp325 0
-   846 label *label261
++  843 op equal .SUPPLY_S_FIRST *tmp325 0
+   844 label *label261
 -    * set .SUPPLY_S_FIRST *tmp322
-   847 label *label218
-   848 label *label219
-   849 # "Function: inline void printDomeStatus(in item, in text)"
+   845 label *label218
+   846 label *label219
+   847 # "Function: inline void printDomeStatus(in item, in text)"
  
-  1154 set .UNIT_P2 :processUnit.3:unit
-  1155 jump *label347 equal .SUPPLY_P_FIRST false
-  1156 sensor *tmp457 :processUnit.2:unit @totalItems
+  1150 set .UNIT_P2 :processUnit.3:unit
+  1151 jump *label347 equal .SUPPLY_P_FIRST false
+  1152 sensor *tmp457 :processUnit.2:unit @totalItems
 -    * op greaterThan *tmp456 *tmp457 0
-+ 1157 op greaterThan .SUPPLY_P_FIRST *tmp457 0
-  1158 jump *label348 always
-  1159 label *label347
-  1160 sensor *tmp459 :processUnit.3:unit @totalItems
++ 1153 op greaterThan .SUPPLY_P_FIRST *tmp457 0
+  1154 jump *label348 always
+  1155 label *label347
+  1156 sensor *tmp459 :processUnit.3:unit @totalItems
 -    * op equal *tmp456 *tmp459 0
-+ 1161 op equal .SUPPLY_P_FIRST *tmp459 0
-  1162 label *label348
++ 1157 op equal .SUPPLY_P_FIRST *tmp459 0
+  1158 label *label348
 -    * set .SUPPLY_P_FIRST *tmp456
-  1163 label *label305
-  1164 label *label306
-  1165 op sub *tmp461 @time :start
+  1159 label *label305
+  1160 label *label306
+  1161 op sub *tmp461 @time :start
 
 Modifications by Unroll iteration loop at line 169:9 (+7 instructions):
  
@@ -5152,41 +5148,41 @@ Modifications by Unroll iteration loop at line 169:9 (+7 instructions):
 -    * multilabel *label14 (m:marker0)
 -    * label *label10
 +   19 set :locateDomeAndCore:type @flare
-+   20 label *label388
++   20 label *label383
 +   21 set :locateCore:type :locateDomeAndCore:type
 +   22 call *label0 :locateCore*retaddr :locateCore*retval
-+   23 jump *label389 equal :locateCore*retval false
++   23 jump *label384 equal :locateCore*retval false
 +   24 jump *label1 always
-+   25 label *label389
-+   26 label *label390
-+   27 label *label391
++   25 label *label384
++   26 label *label385
++   27 label *label386
 +   28 set :locateDomeAndCore:type @poly
-+   29 label *label394
++   29 label *label389
 +   30 set :locateCore:type :locateDomeAndCore:type
 +   31 call *label0 :locateCore*retaddr :locateCore*retval
-+   32 jump *label395 equal :locateCore*retval false
++   32 jump *label390 equal :locateCore*retval false
 +   33 jump *label1 always
-+   34 label *label395
-+   35 label *label396
-+   36 label *label397
++   34 label *label390
++   35 label *label391
++   36 label *label392
 +   37 set :locateDomeAndCore:type @mega
-+   38 label *label400
++   38 label *label395
 +   39 set :locateCore:type :locateDomeAndCore:type
 +   40 call *label0 :locateCore*retaddr :locateCore*retval
-+   41 jump *label401 equal :locateCore*retval false
++   41 jump *label396 equal :locateCore*retval false
 +   42 jump *label1 always
-+   43 label *label401
-+   44 label *label402
-+   45 label *label403
++   43 label *label396
++   44 label *label397
++   45 label *label398
 +   46 set :locateDomeAndCore:type @mono
-+   47 label *label406
++   47 label *label401
 +   48 set :locateCore:type :locateDomeAndCore:type
 +   49 call *label0 :locateCore*retaddr :locateCore*retval
-+   50 jump *label407 equal :locateCore*retval false
++   50 jump *label402 equal :locateCore*retval false
 +   51 jump *label1 always
-+   52 label *label407
-+   53 label *label408
-+   54 label *label409
++   52 label *label402
++   53 label *label403
++   54 label *label404
 +   55 label *label10
     56 label *label6
     57 jump *label5 always
@@ -5212,38 +5208,38 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     18 label *label5
     19 set :locateDomeAndCore:type @flare
-    20 label *label388
+    20 label *label383
 -    * set :locateCore:type :locateDomeAndCore:type
 +   21 set :locateCore:type @flare
     22 call *label0 :locateCore*retaddr :locateCore*retval
-    23 jump *label389 equal :locateCore*retval false
+    23 jump *label384 equal :locateCore*retval false
     24 jump *label1 always
  
-    27 label *label391
+    27 label *label386
     28 set :locateDomeAndCore:type @poly
-    29 label *label394
+    29 label *label389
 -    * set :locateCore:type :locateDomeAndCore:type
 +   30 set :locateCore:type @poly
     31 call *label0 :locateCore*retaddr :locateCore*retval
-    32 jump *label395 equal :locateCore*retval false
+    32 jump *label390 equal :locateCore*retval false
     33 jump *label1 always
  
-    36 label *label397
+    36 label *label392
     37 set :locateDomeAndCore:type @mega
-    38 label *label400
+    38 label *label395
 -    * set :locateCore:type :locateDomeAndCore:type
 +   39 set :locateCore:type @mega
     40 call *label0 :locateCore*retaddr :locateCore*retval
-    41 jump *label401 equal :locateCore*retval false
+    41 jump *label396 equal :locateCore*retval false
     42 jump *label1 always
  
-    45 label *label403
+    45 label *label398
     46 set :locateDomeAndCore:type @mono
-    47 label *label406
+    47 label *label401
 -    * set :locateCore:type :locateDomeAndCore:type
 +   48 set :locateCore:type @mono
     49 call *label0 :locateCore*retaddr :locateCore*retval
-    50 jump *label407 equal :locateCore*retval false
+    50 jump *label402 equal :locateCore*retval false
     51 jump *label1 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
@@ -5252,31 +5248,31 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     17 set .CORE null
     18 label *label5
 -    * set :locateDomeAndCore:type @flare
-    19 label *label388
+    19 label *label383
     20 set :locateCore:type @flare
     21 call *label0 :locateCore*retaddr :locateCore*retval
  
-    24 label *label389
-    25 label *label390
-    26 label *label391
+    24 label *label384
+    25 label *label385
+    26 label *label386
 -    * set :locateDomeAndCore:type @poly
-    27 label *label394
+    27 label *label389
     28 set :locateCore:type @poly
     29 call *label0 :locateCore*retaddr :locateCore*retval
  
-    32 label *label395
-    33 label *label396
-    34 label *label397
+    32 label *label390
+    33 label *label391
+    34 label *label392
 -    * set :locateDomeAndCore:type @mega
-    35 label *label400
+    35 label *label395
     36 set :locateCore:type @mega
     37 call *label0 :locateCore*retaddr :locateCore*retval
  
-    40 label *label401
-    41 label *label402
-    42 label *label403
+    40 label *label396
+    41 label *label397
+    42 label *label398
 -    * set :locateDomeAndCore:type @mono
-    43 label *label406
+    43 label *label401
     44 set :locateCore:type @mono
     45 call *label0 :locateCore*retaddr :locateCore*retval
 
@@ -5285,14 +5281,14 @@ Modifications by Replicate loop condition at line 54:5 (+1 instructions):
     60 label *label17
     61 sensor *tmp7 switch1 @enabled
     62 jump *label19 notEqual *tmp7 false
-+   63 label *label413
++   63 label *label408
     64 print "[coral]Activate switch to begin supplying overdrive dome..."
     65 print "\n"
     66 printflush message1
     67 label *label18
 -    * jump *label17 always
 +   68 sensor *tmp7 switch1 @enabled
-+   69 jump *label413 equal *tmp7 false
++   69 jump *label408 equal *tmp7 false
     70 label *label19
     71 # "Function: inline def chooseUnitType()"
     72 label *label21
@@ -5302,26 +5298,26 @@ Modifications by Replicate loop condition at line 119:5 (+1 instructions):
    531 label *label172
    532 sensor *tmp192 switch1 @enabled
    533 jump *label174 equal *tmp192 false
-+  534 label *label414
++  534 label *label409
    535 set :start @time
    536 print " === [gold]Supplying Overdrive Dome[] === "
    537 print "\n"
  
-  1254 label *label349
-  1255 label *label350
-  1256 label *label173
+  1252 label *label349
+  1253 label *label350
+  1254 label *label173
 -    * jump *label172 always
-+ 1257 sensor *tmp192 switch1 @enabled
-+ 1258 jump *label414 notEqual *tmp192 false
-  1259 label *label174
-  1260 end
-  1261 label *label0
++ 1255 sensor *tmp192 switch1 @enabled
++ 1256 jump *label409 notEqual *tmp192 false
+  1257 label *label174
+  1258 end
+  1259 label *label0
 
-Modifications by Unroll iteration loop at line 201:9 (+142 instructions):
+Modifications by Unroll iteration loop at line 201:9 (+151 instructions):
  
-   143 jump *label20 always
-   144 label *label24
-   145 label *label25
+   147 jump *label20 always
+   148 label *label24
+   149 label *label25
 -    * set :chooseUnitType:type @flare
 -    * op add *tmp37 @counter 1
 -    * jump *label46 always
@@ -5354,14 +5350,18 @@ Modifications by Unroll iteration loop at line 201:9 (+142 instructions):
 -    * sensor *tmp48 :needsFourUnits.1:unit @speed
 -    * op div :needsFourUnits.1:travel_time *tmp47 *tmp48
 -    * op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
--    * jump *label382 always
--    * label *label382
--    * select *tmp51 notEqual *tmp43 false 4 2
+-    * jump *label62 always
+-    * label *label62
+-    * jump *label60 equal *tmp43 false
+-    * set *tmp51 4
+-    * jump *label61 always
+-    * label *label60
+-    * set *tmp51 2
+-    * label *label61
 -    * set :areUnitsAvailable.1:needed *tmp51
 -    * label *label63
 -    * sensor *tmp52 @unit @controlled
 -    * jump *label68 equal *tmp52 0
--    * label *label69
 -    * sensor *tmp54 @unit @controller
 -    * jump *label66 notEqual *tmp54 @this
 -    * label *label68
@@ -5415,573 +5415,589 @@ Modifications by Unroll iteration loop at line 201:9 (+142 instructions):
 -    * multijump *tmp37 0 0 (m:marker1)
 -    * multilabel *label52 (m:marker1)
 -    * label *label48
-+  146 set :chooseUnitType:type @flare
-+  147 label *label415
-+  148 jump *label436 equal :chooseUnitType:type UNIT_TYPE
-+  149 # "Function: inline def areUnitsAvailable(in type, in output)"
-+  150 set :areUnitsAvailable.1:free 0
-+  151 set :areUnitsAvailable.1:occupied 0
-+  152 set :areUnitsAvailable.1:needed 0
-+  153 ubind :chooseUnitType:type
-+  154 set :areUnitsAvailable.1:firstUnit @unit
-+  155 jump *label427 equal :areUnitsAvailable.1:firstUnit null
-+  156 # "Function: inline def needsFourUnits(in unit)"
-+  157 set :needsFourUnits.1:unit @unit
-+  158 op sub *tmp44 .DOME_X .CORE_X
-+  159 op sub *tmp45 .DOME_Y .CORE_Y
-+  160 op len *tmp46 *tmp44 *tmp45
-+  161 op mul *tmp47 2 *tmp46
-+  162 sensor *tmp48 :needsFourUnits.1:unit @speed
-+  163 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
-+  164 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-+  165 jump *label416 always
-+  166 label *label416
-+  167 select *tmp51 notEqual *tmp43 false 4 2
-+  168 set :areUnitsAvailable.1:needed *tmp51
-+  169 label *label417
-+  170 sensor *tmp52 @unit @controlled
-+  171 jump *label419 equal *tmp52 0
-+  172 label *label418
-+  173 sensor *tmp54 @unit @controller
-+  174 jump *label422 notEqual *tmp54 @this
-+  175 label *label419
-+  176 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
-+  177 jump *label420 lessThan :areUnitsAvailable.1:free *tmp51
-+  178 set *tmp40 true
-+  179 jump *label433 always
-+  180 label *label420
-+  181 label *label421
-+  182 jump *label423 always
-+  183 label *label422
-+  184 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-+  185 label *label423
-+  186 ubind :chooseUnitType:type
-+  187 label *label424
-+  188 jump *label426 equal @unit :areUnitsAvailable.1:firstUnit
-+  189 label *label425
-+  190 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
-+  191 jump *label417 equal *tmp61 0
-+  192 label *label426
-+  193 label *label427
-+  194 label *label428
-+  195 jump *label431 equal true false
-+  196 print :chooseUnitType:type
-+  197 print ":"
-+  198 print " occupied: "
-+  199 print :areUnitsAvailable.1:occupied
-+  200 print ","
-+  201 print " free: "
-+  202 print :areUnitsAvailable.1:free
-+  203 jump *label429 lessThanEq :areUnitsAvailable.1:needed 0
-+  204 print ", needed: "
-+  205 print :areUnitsAvailable.1:needed
-+  206 label *label429
-+  207 label *label430
-+  208 print "\n"
-+  209 label *label431
-+  210 label *label432
-+  211 set *tmp40 false
-+  212 jump *label433 always
-+  213 label *label433
-+  214 jump *label434 equal *tmp40 false
-+  215 printflush null
-+  216 set *tmp9 :chooseUnitType:type
-+  217 jump *label20 always
-+  218 label *label434
-+  219 label *label435
-+  220 label *label436
-+  221 label *label437
-+  222 label *label438
-+  223 set :chooseUnitType:type @poly
-+  224 label *label441
-+  225 jump *label462 equal :chooseUnitType:type UNIT_TYPE
-+  226 # "Function: inline def areUnitsAvailable(in type, in output)"
-+  227 set :areUnitsAvailable.1:free 0
-+  228 set :areUnitsAvailable.1:occupied 0
-+  229 set :areUnitsAvailable.1:needed 0
-+  230 ubind :chooseUnitType:type
-+  231 set :areUnitsAvailable.1:firstUnit @unit
-+  232 jump *label453 equal :areUnitsAvailable.1:firstUnit null
-+  233 # "Function: inline def needsFourUnits(in unit)"
-+  234 set :needsFourUnits.1:unit @unit
-+  235 op sub *tmp44 .DOME_X .CORE_X
-+  236 op sub *tmp45 .DOME_Y .CORE_Y
-+  237 op len *tmp46 *tmp44 *tmp45
-+  238 op mul *tmp47 2 *tmp46
-+  239 sensor *tmp48 :needsFourUnits.1:unit @speed
-+  240 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
-+  241 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-+  242 jump *label442 always
-+  243 label *label442
-+  244 select *tmp51 notEqual *tmp43 false 4 2
-+  245 set :areUnitsAvailable.1:needed *tmp51
-+  246 label *label443
-+  247 sensor *tmp52 @unit @controlled
-+  248 jump *label445 equal *tmp52 0
-+  249 label *label444
-+  250 sensor *tmp54 @unit @controller
-+  251 jump *label448 notEqual *tmp54 @this
-+  252 label *label445
-+  253 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
-+  254 jump *label446 lessThan :areUnitsAvailable.1:free *tmp51
-+  255 set *tmp40 true
-+  256 jump *label459 always
-+  257 label *label446
-+  258 label *label447
-+  259 jump *label449 always
-+  260 label *label448
-+  261 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-+  262 label *label449
-+  263 ubind :chooseUnitType:type
-+  264 label *label450
-+  265 jump *label452 equal @unit :areUnitsAvailable.1:firstUnit
-+  266 label *label451
-+  267 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
-+  268 jump *label443 equal *tmp61 0
-+  269 label *label452
-+  270 label *label453
-+  271 label *label454
-+  272 jump *label457 equal true false
-+  273 print :chooseUnitType:type
-+  274 print ":"
-+  275 print " occupied: "
-+  276 print :areUnitsAvailable.1:occupied
-+  277 print ","
-+  278 print " free: "
-+  279 print :areUnitsAvailable.1:free
-+  280 jump *label455 lessThanEq :areUnitsAvailable.1:needed 0
-+  281 print ", needed: "
-+  282 print :areUnitsAvailable.1:needed
-+  283 label *label455
-+  284 label *label456
-+  285 print "\n"
-+  286 label *label457
-+  287 label *label458
-+  288 set *tmp40 false
-+  289 jump *label459 always
-+  290 label *label459
-+  291 jump *label460 equal *tmp40 false
-+  292 printflush null
-+  293 set *tmp9 :chooseUnitType:type
-+  294 jump *label20 always
-+  295 label *label460
-+  296 label *label461
-+  297 label *label462
-+  298 label *label463
-+  299 label *label464
-+  300 set :chooseUnitType:type @mega
-+  301 label *label467
-+  302 jump *label488 equal :chooseUnitType:type UNIT_TYPE
-+  303 # "Function: inline def areUnitsAvailable(in type, in output)"
-+  304 set :areUnitsAvailable.1:free 0
-+  305 set :areUnitsAvailable.1:occupied 0
-+  306 set :areUnitsAvailable.1:needed 0
-+  307 ubind :chooseUnitType:type
-+  308 set :areUnitsAvailable.1:firstUnit @unit
-+  309 jump *label479 equal :areUnitsAvailable.1:firstUnit null
-+  310 # "Function: inline def needsFourUnits(in unit)"
-+  311 set :needsFourUnits.1:unit @unit
-+  312 op sub *tmp44 .DOME_X .CORE_X
-+  313 op sub *tmp45 .DOME_Y .CORE_Y
-+  314 op len *tmp46 *tmp44 *tmp45
-+  315 op mul *tmp47 2 *tmp46
-+  316 sensor *tmp48 :needsFourUnits.1:unit @speed
-+  317 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
-+  318 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-+  319 jump *label468 always
-+  320 label *label468
-+  321 select *tmp51 notEqual *tmp43 false 4 2
-+  322 set :areUnitsAvailable.1:needed *tmp51
-+  323 label *label469
-+  324 sensor *tmp52 @unit @controlled
-+  325 jump *label471 equal *tmp52 0
-+  326 label *label470
-+  327 sensor *tmp54 @unit @controller
-+  328 jump *label474 notEqual *tmp54 @this
-+  329 label *label471
-+  330 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
-+  331 jump *label472 lessThan :areUnitsAvailable.1:free *tmp51
-+  332 set *tmp40 true
-+  333 jump *label485 always
-+  334 label *label472
-+  335 label *label473
-+  336 jump *label475 always
-+  337 label *label474
-+  338 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-+  339 label *label475
-+  340 ubind :chooseUnitType:type
-+  341 label *label476
-+  342 jump *label478 equal @unit :areUnitsAvailable.1:firstUnit
-+  343 label *label477
-+  344 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
-+  345 jump *label469 equal *tmp61 0
-+  346 label *label478
-+  347 label *label479
-+  348 label *label480
-+  349 jump *label483 equal true false
-+  350 print :chooseUnitType:type
-+  351 print ":"
-+  352 print " occupied: "
-+  353 print :areUnitsAvailable.1:occupied
-+  354 print ","
-+  355 print " free: "
-+  356 print :areUnitsAvailable.1:free
-+  357 jump *label481 lessThanEq :areUnitsAvailable.1:needed 0
-+  358 print ", needed: "
-+  359 print :areUnitsAvailable.1:needed
-+  360 label *label481
-+  361 label *label482
-+  362 print "\n"
-+  363 label *label483
-+  364 label *label484
-+  365 set *tmp40 false
-+  366 jump *label485 always
-+  367 label *label485
-+  368 jump *label486 equal *tmp40 false
-+  369 printflush null
-+  370 set *tmp9 :chooseUnitType:type
-+  371 jump *label20 always
-+  372 label *label486
-+  373 label *label487
-+  374 label *label488
-+  375 label *label489
-+  376 label *label490
-+  377 set :chooseUnitType:type @mono
-+  378 label *label493
-+  379 jump *label514 equal :chooseUnitType:type UNIT_TYPE
-+  380 # "Function: inline def areUnitsAvailable(in type, in output)"
-+  381 set :areUnitsAvailable.1:free 0
-+  382 set :areUnitsAvailable.1:occupied 0
-+  383 set :areUnitsAvailable.1:needed 0
-+  384 ubind :chooseUnitType:type
-+  385 set :areUnitsAvailable.1:firstUnit @unit
-+  386 jump *label505 equal :areUnitsAvailable.1:firstUnit null
-+  387 # "Function: inline def needsFourUnits(in unit)"
-+  388 set :needsFourUnits.1:unit @unit
-+  389 op sub *tmp44 .DOME_X .CORE_X
-+  390 op sub *tmp45 .DOME_Y .CORE_Y
-+  391 op len *tmp46 *tmp44 *tmp45
-+  392 op mul *tmp47 2 *tmp46
-+  393 sensor *tmp48 :needsFourUnits.1:unit @speed
-+  394 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
-+  395 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-+  396 jump *label494 always
-+  397 label *label494
-+  398 select *tmp51 notEqual *tmp43 false 4 2
-+  399 set :areUnitsAvailable.1:needed *tmp51
-+  400 label *label495
-+  401 sensor *tmp52 @unit @controlled
-+  402 jump *label497 equal *tmp52 0
-+  403 label *label496
-+  404 sensor *tmp54 @unit @controller
-+  405 jump *label500 notEqual *tmp54 @this
-+  406 label *label497
-+  407 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
-+  408 jump *label498 lessThan :areUnitsAvailable.1:free *tmp51
-+  409 set *tmp40 true
-+  410 jump *label511 always
-+  411 label *label498
-+  412 label *label499
-+  413 jump *label501 always
-+  414 label *label500
-+  415 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-+  416 label *label501
-+  417 ubind :chooseUnitType:type
-+  418 label *label502
-+  419 jump *label504 equal @unit :areUnitsAvailable.1:firstUnit
-+  420 label *label503
-+  421 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
-+  422 jump *label495 equal *tmp61 0
-+  423 label *label504
-+  424 label *label505
-+  425 label *label506
-+  426 jump *label509 equal true false
-+  427 print :chooseUnitType:type
-+  428 print ":"
-+  429 print " occupied: "
-+  430 print :areUnitsAvailable.1:occupied
-+  431 print ","
-+  432 print " free: "
-+  433 print :areUnitsAvailable.1:free
-+  434 jump *label507 lessThanEq :areUnitsAvailable.1:needed 0
-+  435 print ", needed: "
-+  436 print :areUnitsAvailable.1:needed
-+  437 label *label507
-+  438 label *label508
-+  439 print "\n"
-+  440 label *label509
-+  441 label *label510
-+  442 set *tmp40 false
-+  443 jump *label511 always
-+  444 label *label511
-+  445 jump *label512 equal *tmp40 false
-+  446 printflush null
-+  447 set *tmp9 :chooseUnitType:type
-+  448 jump *label20 always
-+  449 label *label512
-+  450 label *label513
-+  451 label *label514
-+  452 label *label515
-+  453 label *label516
-+  454 label *label48
-   455 printflush message1
-   456 label *label22
-   457 jump *label21 always
++  150 set :chooseUnitType:type @flare
++  151 label *label410
++  152 jump *label432 equal :chooseUnitType:type UNIT_TYPE
++  153 # "Function: inline def areUnitsAvailable(in type, in output)"
++  154 set :areUnitsAvailable.1:free 0
++  155 set :areUnitsAvailable.1:occupied 0
++  156 set :areUnitsAvailable.1:needed 0
++  157 ubind :chooseUnitType:type
++  158 set :areUnitsAvailable.1:firstUnit @unit
++  159 jump *label423 equal :areUnitsAvailable.1:firstUnit null
++  160 # "Function: inline def needsFourUnits(in unit)"
++  161 set :needsFourUnits.1:unit @unit
++  162 op sub *tmp44 .DOME_X .CORE_X
++  163 op sub *tmp45 .DOME_Y .CORE_Y
++  164 op len *tmp46 *tmp44 *tmp45
++  165 op mul *tmp47 2 *tmp46
++  166 sensor *tmp48 :needsFourUnits.1:unit @speed
++  167 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
++  168 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
++  169 jump *label411 always
++  170 label *label411
++  171 jump *label412 equal *tmp43 false
++  172 set *tmp51 4
++  173 jump *label413 always
++  174 label *label412
++  175 set *tmp51 2
++  176 label *label413
++  177 set :areUnitsAvailable.1:needed *tmp51
++  178 label *label414
++  179 sensor *tmp52 @unit @controlled
++  180 jump *label415 equal *tmp52 0
++  181 sensor *tmp54 @unit @controller
++  182 jump *label418 notEqual *tmp54 @this
++  183 label *label415
++  184 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
++  185 jump *label416 lessThan :areUnitsAvailable.1:free *tmp51
++  186 set *tmp40 true
++  187 jump *label429 always
++  188 label *label416
++  189 label *label417
++  190 jump *label419 always
++  191 label *label418
++  192 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
++  193 label *label419
++  194 ubind :chooseUnitType:type
++  195 label *label420
++  196 jump *label422 equal @unit :areUnitsAvailable.1:firstUnit
++  197 label *label421
++  198 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
++  199 jump *label414 equal *tmp61 0
++  200 label *label422
++  201 label *label423
++  202 label *label424
++  203 jump *label427 equal true false
++  204 print :chooseUnitType:type
++  205 print ":"
++  206 print " occupied: "
++  207 print :areUnitsAvailable.1:occupied
++  208 print ","
++  209 print " free: "
++  210 print :areUnitsAvailable.1:free
++  211 jump *label425 lessThanEq :areUnitsAvailable.1:needed 0
++  212 print ", needed: "
++  213 print :areUnitsAvailable.1:needed
++  214 label *label425
++  215 label *label426
++  216 print "\n"
++  217 label *label427
++  218 label *label428
++  219 set *tmp40 false
++  220 jump *label429 always
++  221 label *label429
++  222 jump *label430 equal *tmp40 false
++  223 printflush null
++  224 set *tmp9 :chooseUnitType:type
++  225 jump *label20 always
++  226 label *label430
++  227 label *label431
++  228 label *label432
++  229 label *label433
++  230 label *label434
++  231 set :chooseUnitType:type @poly
++  232 label *label437
++  233 jump *label459 equal :chooseUnitType:type UNIT_TYPE
++  234 # "Function: inline def areUnitsAvailable(in type, in output)"
++  235 set :areUnitsAvailable.1:free 0
++  236 set :areUnitsAvailable.1:occupied 0
++  237 set :areUnitsAvailable.1:needed 0
++  238 ubind :chooseUnitType:type
++  239 set :areUnitsAvailable.1:firstUnit @unit
++  240 jump *label450 equal :areUnitsAvailable.1:firstUnit null
++  241 # "Function: inline def needsFourUnits(in unit)"
++  242 set :needsFourUnits.1:unit @unit
++  243 op sub *tmp44 .DOME_X .CORE_X
++  244 op sub *tmp45 .DOME_Y .CORE_Y
++  245 op len *tmp46 *tmp44 *tmp45
++  246 op mul *tmp47 2 *tmp46
++  247 sensor *tmp48 :needsFourUnits.1:unit @speed
++  248 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
++  249 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
++  250 jump *label438 always
++  251 label *label438
++  252 jump *label439 equal *tmp43 false
++  253 set *tmp51 4
++  254 jump *label440 always
++  255 label *label439
++  256 set *tmp51 2
++  257 label *label440
++  258 set :areUnitsAvailable.1:needed *tmp51
++  259 label *label441
++  260 sensor *tmp52 @unit @controlled
++  261 jump *label442 equal *tmp52 0
++  262 sensor *tmp54 @unit @controller
++  263 jump *label445 notEqual *tmp54 @this
++  264 label *label442
++  265 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
++  266 jump *label443 lessThan :areUnitsAvailable.1:free *tmp51
++  267 set *tmp40 true
++  268 jump *label456 always
++  269 label *label443
++  270 label *label444
++  271 jump *label446 always
++  272 label *label445
++  273 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
++  274 label *label446
++  275 ubind :chooseUnitType:type
++  276 label *label447
++  277 jump *label449 equal @unit :areUnitsAvailable.1:firstUnit
++  278 label *label448
++  279 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
++  280 jump *label441 equal *tmp61 0
++  281 label *label449
++  282 label *label450
++  283 label *label451
++  284 jump *label454 equal true false
++  285 print :chooseUnitType:type
++  286 print ":"
++  287 print " occupied: "
++  288 print :areUnitsAvailable.1:occupied
++  289 print ","
++  290 print " free: "
++  291 print :areUnitsAvailable.1:free
++  292 jump *label452 lessThanEq :areUnitsAvailable.1:needed 0
++  293 print ", needed: "
++  294 print :areUnitsAvailable.1:needed
++  295 label *label452
++  296 label *label453
++  297 print "\n"
++  298 label *label454
++  299 label *label455
++  300 set *tmp40 false
++  301 jump *label456 always
++  302 label *label456
++  303 jump *label457 equal *tmp40 false
++  304 printflush null
++  305 set *tmp9 :chooseUnitType:type
++  306 jump *label20 always
++  307 label *label457
++  308 label *label458
++  309 label *label459
++  310 label *label460
++  311 label *label461
++  312 set :chooseUnitType:type @mega
++  313 label *label464
++  314 jump *label486 equal :chooseUnitType:type UNIT_TYPE
++  315 # "Function: inline def areUnitsAvailable(in type, in output)"
++  316 set :areUnitsAvailable.1:free 0
++  317 set :areUnitsAvailable.1:occupied 0
++  318 set :areUnitsAvailable.1:needed 0
++  319 ubind :chooseUnitType:type
++  320 set :areUnitsAvailable.1:firstUnit @unit
++  321 jump *label477 equal :areUnitsAvailable.1:firstUnit null
++  322 # "Function: inline def needsFourUnits(in unit)"
++  323 set :needsFourUnits.1:unit @unit
++  324 op sub *tmp44 .DOME_X .CORE_X
++  325 op sub *tmp45 .DOME_Y .CORE_Y
++  326 op len *tmp46 *tmp44 *tmp45
++  327 op mul *tmp47 2 *tmp46
++  328 sensor *tmp48 :needsFourUnits.1:unit @speed
++  329 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
++  330 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
++  331 jump *label465 always
++  332 label *label465
++  333 jump *label466 equal *tmp43 false
++  334 set *tmp51 4
++  335 jump *label467 always
++  336 label *label466
++  337 set *tmp51 2
++  338 label *label467
++  339 set :areUnitsAvailable.1:needed *tmp51
++  340 label *label468
++  341 sensor *tmp52 @unit @controlled
++  342 jump *label469 equal *tmp52 0
++  343 sensor *tmp54 @unit @controller
++  344 jump *label472 notEqual *tmp54 @this
++  345 label *label469
++  346 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
++  347 jump *label470 lessThan :areUnitsAvailable.1:free *tmp51
++  348 set *tmp40 true
++  349 jump *label483 always
++  350 label *label470
++  351 label *label471
++  352 jump *label473 always
++  353 label *label472
++  354 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
++  355 label *label473
++  356 ubind :chooseUnitType:type
++  357 label *label474
++  358 jump *label476 equal @unit :areUnitsAvailable.1:firstUnit
++  359 label *label475
++  360 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
++  361 jump *label468 equal *tmp61 0
++  362 label *label476
++  363 label *label477
++  364 label *label478
++  365 jump *label481 equal true false
++  366 print :chooseUnitType:type
++  367 print ":"
++  368 print " occupied: "
++  369 print :areUnitsAvailable.1:occupied
++  370 print ","
++  371 print " free: "
++  372 print :areUnitsAvailable.1:free
++  373 jump *label479 lessThanEq :areUnitsAvailable.1:needed 0
++  374 print ", needed: "
++  375 print :areUnitsAvailable.1:needed
++  376 label *label479
++  377 label *label480
++  378 print "\n"
++  379 label *label481
++  380 label *label482
++  381 set *tmp40 false
++  382 jump *label483 always
++  383 label *label483
++  384 jump *label484 equal *tmp40 false
++  385 printflush null
++  386 set *tmp9 :chooseUnitType:type
++  387 jump *label20 always
++  388 label *label484
++  389 label *label485
++  390 label *label486
++  391 label *label487
++  392 label *label488
++  393 set :chooseUnitType:type @mono
++  394 label *label491
++  395 jump *label513 equal :chooseUnitType:type UNIT_TYPE
++  396 # "Function: inline def areUnitsAvailable(in type, in output)"
++  397 set :areUnitsAvailable.1:free 0
++  398 set :areUnitsAvailable.1:occupied 0
++  399 set :areUnitsAvailable.1:needed 0
++  400 ubind :chooseUnitType:type
++  401 set :areUnitsAvailable.1:firstUnit @unit
++  402 jump *label504 equal :areUnitsAvailable.1:firstUnit null
++  403 # "Function: inline def needsFourUnits(in unit)"
++  404 set :needsFourUnits.1:unit @unit
++  405 op sub *tmp44 .DOME_X .CORE_X
++  406 op sub *tmp45 .DOME_Y .CORE_Y
++  407 op len *tmp46 *tmp44 *tmp45
++  408 op mul *tmp47 2 *tmp46
++  409 sensor *tmp48 :needsFourUnits.1:unit @speed
++  410 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
++  411 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
++  412 jump *label492 always
++  413 label *label492
++  414 jump *label493 equal *tmp43 false
++  415 set *tmp51 4
++  416 jump *label494 always
++  417 label *label493
++  418 set *tmp51 2
++  419 label *label494
++  420 set :areUnitsAvailable.1:needed *tmp51
++  421 label *label495
++  422 sensor *tmp52 @unit @controlled
++  423 jump *label496 equal *tmp52 0
++  424 sensor *tmp54 @unit @controller
++  425 jump *label499 notEqual *tmp54 @this
++  426 label *label496
++  427 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
++  428 jump *label497 lessThan :areUnitsAvailable.1:free *tmp51
++  429 set *tmp40 true
++  430 jump *label510 always
++  431 label *label497
++  432 label *label498
++  433 jump *label500 always
++  434 label *label499
++  435 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
++  436 label *label500
++  437 ubind :chooseUnitType:type
++  438 label *label501
++  439 jump *label503 equal @unit :areUnitsAvailable.1:firstUnit
++  440 label *label502
++  441 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
++  442 jump *label495 equal *tmp61 0
++  443 label *label503
++  444 label *label504
++  445 label *label505
++  446 jump *label508 equal true false
++  447 print :chooseUnitType:type
++  448 print ":"
++  449 print " occupied: "
++  450 print :areUnitsAvailable.1:occupied
++  451 print ","
++  452 print " free: "
++  453 print :areUnitsAvailable.1:free
++  454 jump *label506 lessThanEq :areUnitsAvailable.1:needed 0
++  455 print ", needed: "
++  456 print :areUnitsAvailable.1:needed
++  457 label *label506
++  458 label *label507
++  459 print "\n"
++  460 label *label508
++  461 label *label509
++  462 set *tmp40 false
++  463 jump *label510 always
++  464 label *label510
++  465 jump *label511 equal *tmp40 false
++  466 printflush null
++  467 set *tmp9 :chooseUnitType:type
++  468 jump *label20 always
++  469 label *label511
++  470 label *label512
++  471 label *label513
++  472 label *label514
++  473 label *label515
++  474 label *label48
+   475 printflush message1
+   476 label *label22
+   477 jump *label21 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   145 label *label25
-   146 set :chooseUnitType:type @flare
-   147 label *label415
--    * jump *label436 equal :chooseUnitType:type UNIT_TYPE
-+  148 jump *label436 equal @flare UNIT_TYPE
-   149 # "Function: inline def areUnitsAvailable(in type, in output)"
-   150 set :areUnitsAvailable.1:free 0
-   151 set :areUnitsAvailable.1:occupied 0
-   152 set :areUnitsAvailable.1:needed 0
+   149 label *label25
+   150 set :chooseUnitType:type @flare
+   151 label *label410
+-    * jump *label432 equal :chooseUnitType:type UNIT_TYPE
++  152 jump *label432 equal @flare UNIT_TYPE
+   153 # "Function: inline def areUnitsAvailable(in type, in output)"
+   154 set :areUnitsAvailable.1:free 0
+   155 set :areUnitsAvailable.1:occupied 0
+   156 set :areUnitsAvailable.1:needed 0
 -    * ubind :chooseUnitType:type
-+  153 ubind @flare
-   154 set :areUnitsAvailable.1:firstUnit @unit
-   155 jump *label427 equal :areUnitsAvailable.1:firstUnit null
-   156 # "Function: inline def needsFourUnits(in unit)"
++  157 ubind @flare
+   158 set :areUnitsAvailable.1:firstUnit @unit
+   159 jump *label423 equal :areUnitsAvailable.1:firstUnit null
+   160 # "Function: inline def needsFourUnits(in unit)"
  
-   183 label *label422
-   184 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   185 label *label423
+   191 label *label418
+   192 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
+   193 label *label419
 -    * ubind :chooseUnitType:type
-+  186 ubind @flare
-   187 label *label424
-   188 jump *label426 equal @unit :areUnitsAvailable.1:firstUnit
-   189 label *label425
++  194 ubind @flare
+   195 label *label420
+   196 jump *label422 equal @unit :areUnitsAvailable.1:firstUnit
+   197 label *label421
  
-   193 label *label427
-   194 label *label428
-   195 jump *label431 equal true false
+   201 label *label423
+   202 label *label424
+   203 jump *label427 equal true false
 -    * print :chooseUnitType:type
-+  196 print @flare
-   197 print ":"
-   198 print " occupied: "
-   199 print :areUnitsAvailable.1:occupied
++  204 print @flare
+   205 print ":"
+   206 print " occupied: "
+   207 print :areUnitsAvailable.1:occupied
  
-   213 label *label433
-   214 jump *label434 equal *tmp40 false
-   215 printflush null
+   221 label *label429
+   222 jump *label430 equal *tmp40 false
+   223 printflush null
 -    * set *tmp9 :chooseUnitType:type
-+  216 set *tmp9 @flare
-   217 jump *label20 always
-   218 label *label434
-   219 label *label435
++  224 set *tmp9 @flare
+   225 jump *label20 always
+   226 label *label430
+   227 label *label431
  
-   222 label *label438
-   223 set :chooseUnitType:type @poly
-   224 label *label441
--    * jump *label462 equal :chooseUnitType:type UNIT_TYPE
-+  225 jump *label462 equal @poly UNIT_TYPE
-   226 # "Function: inline def areUnitsAvailable(in type, in output)"
-   227 set :areUnitsAvailable.1:free 0
-   228 set :areUnitsAvailable.1:occupied 0
-   229 set :areUnitsAvailable.1:needed 0
+   230 label *label434
+   231 set :chooseUnitType:type @poly
+   232 label *label437
+-    * jump *label459 equal :chooseUnitType:type UNIT_TYPE
++  233 jump *label459 equal @poly UNIT_TYPE
+   234 # "Function: inline def areUnitsAvailable(in type, in output)"
+   235 set :areUnitsAvailable.1:free 0
+   236 set :areUnitsAvailable.1:occupied 0
+   237 set :areUnitsAvailable.1:needed 0
 -    * ubind :chooseUnitType:type
-+  230 ubind @poly
-   231 set :areUnitsAvailable.1:firstUnit @unit
-   232 jump *label453 equal :areUnitsAvailable.1:firstUnit null
-   233 # "Function: inline def needsFourUnits(in unit)"
++  238 ubind @poly
+   239 set :areUnitsAvailable.1:firstUnit @unit
+   240 jump *label450 equal :areUnitsAvailable.1:firstUnit null
+   241 # "Function: inline def needsFourUnits(in unit)"
  
-   260 label *label448
-   261 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   262 label *label449
+   272 label *label445
+   273 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
+   274 label *label446
 -    * ubind :chooseUnitType:type
-+  263 ubind @poly
-   264 label *label450
-   265 jump *label452 equal @unit :areUnitsAvailable.1:firstUnit
-   266 label *label451
++  275 ubind @poly
+   276 label *label447
+   277 jump *label449 equal @unit :areUnitsAvailable.1:firstUnit
+   278 label *label448
  
-   270 label *label453
-   271 label *label454
-   272 jump *label457 equal true false
+   282 label *label450
+   283 label *label451
+   284 jump *label454 equal true false
 -    * print :chooseUnitType:type
-+  273 print @poly
-   274 print ":"
-   275 print " occupied: "
-   276 print :areUnitsAvailable.1:occupied
++  285 print @poly
+   286 print ":"
+   287 print " occupied: "
+   288 print :areUnitsAvailable.1:occupied
  
-   290 label *label459
-   291 jump *label460 equal *tmp40 false
-   292 printflush null
+   302 label *label456
+   303 jump *label457 equal *tmp40 false
+   304 printflush null
 -    * set *tmp9 :chooseUnitType:type
-+  293 set *tmp9 @poly
-   294 jump *label20 always
-   295 label *label460
-   296 label *label461
++  305 set *tmp9 @poly
+   306 jump *label20 always
+   307 label *label457
+   308 label *label458
  
-   299 label *label464
-   300 set :chooseUnitType:type @mega
-   301 label *label467
--    * jump *label488 equal :chooseUnitType:type UNIT_TYPE
-+  302 jump *label488 equal @mega UNIT_TYPE
-   303 # "Function: inline def areUnitsAvailable(in type, in output)"
-   304 set :areUnitsAvailable.1:free 0
-   305 set :areUnitsAvailable.1:occupied 0
-   306 set :areUnitsAvailable.1:needed 0
+   311 label *label461
+   312 set :chooseUnitType:type @mega
+   313 label *label464
+-    * jump *label486 equal :chooseUnitType:type UNIT_TYPE
++  314 jump *label486 equal @mega UNIT_TYPE
+   315 # "Function: inline def areUnitsAvailable(in type, in output)"
+   316 set :areUnitsAvailable.1:free 0
+   317 set :areUnitsAvailable.1:occupied 0
+   318 set :areUnitsAvailable.1:needed 0
 -    * ubind :chooseUnitType:type
-+  307 ubind @mega
-   308 set :areUnitsAvailable.1:firstUnit @unit
-   309 jump *label479 equal :areUnitsAvailable.1:firstUnit null
-   310 # "Function: inline def needsFourUnits(in unit)"
++  319 ubind @mega
+   320 set :areUnitsAvailable.1:firstUnit @unit
+   321 jump *label477 equal :areUnitsAvailable.1:firstUnit null
+   322 # "Function: inline def needsFourUnits(in unit)"
  
-   337 label *label474
-   338 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   339 label *label475
+   353 label *label472
+   354 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
+   355 label *label473
 -    * ubind :chooseUnitType:type
-+  340 ubind @mega
-   341 label *label476
-   342 jump *label478 equal @unit :areUnitsAvailable.1:firstUnit
-   343 label *label477
++  356 ubind @mega
+   357 label *label474
+   358 jump *label476 equal @unit :areUnitsAvailable.1:firstUnit
+   359 label *label475
  
-   347 label *label479
-   348 label *label480
-   349 jump *label483 equal true false
+   363 label *label477
+   364 label *label478
+   365 jump *label481 equal true false
 -    * print :chooseUnitType:type
-+  350 print @mega
-   351 print ":"
-   352 print " occupied: "
-   353 print :areUnitsAvailable.1:occupied
++  366 print @mega
+   367 print ":"
+   368 print " occupied: "
+   369 print :areUnitsAvailable.1:occupied
  
-   367 label *label485
-   368 jump *label486 equal *tmp40 false
-   369 printflush null
+   383 label *label483
+   384 jump *label484 equal *tmp40 false
+   385 printflush null
 -    * set *tmp9 :chooseUnitType:type
-+  370 set *tmp9 @mega
-   371 jump *label20 always
-   372 label *label486
-   373 label *label487
++  386 set *tmp9 @mega
+   387 jump *label20 always
+   388 label *label484
+   389 label *label485
  
-   376 label *label490
-   377 set :chooseUnitType:type @mono
-   378 label *label493
--    * jump *label514 equal :chooseUnitType:type UNIT_TYPE
-+  379 jump *label514 equal @mono UNIT_TYPE
-   380 # "Function: inline def areUnitsAvailable(in type, in output)"
-   381 set :areUnitsAvailable.1:free 0
-   382 set :areUnitsAvailable.1:occupied 0
-   383 set :areUnitsAvailable.1:needed 0
+   392 label *label488
+   393 set :chooseUnitType:type @mono
+   394 label *label491
+-    * jump *label513 equal :chooseUnitType:type UNIT_TYPE
++  395 jump *label513 equal @mono UNIT_TYPE
+   396 # "Function: inline def areUnitsAvailable(in type, in output)"
+   397 set :areUnitsAvailable.1:free 0
+   398 set :areUnitsAvailable.1:occupied 0
+   399 set :areUnitsAvailable.1:needed 0
 -    * ubind :chooseUnitType:type
-+  384 ubind @mono
-   385 set :areUnitsAvailable.1:firstUnit @unit
-   386 jump *label505 equal :areUnitsAvailable.1:firstUnit null
-   387 # "Function: inline def needsFourUnits(in unit)"
++  400 ubind @mono
+   401 set :areUnitsAvailable.1:firstUnit @unit
+   402 jump *label504 equal :areUnitsAvailable.1:firstUnit null
+   403 # "Function: inline def needsFourUnits(in unit)"
  
-   414 label *label500
-   415 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   416 label *label501
+   434 label *label499
+   435 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
+   436 label *label500
 -    * ubind :chooseUnitType:type
-+  417 ubind @mono
-   418 label *label502
-   419 jump *label504 equal @unit :areUnitsAvailable.1:firstUnit
-   420 label *label503
++  437 ubind @mono
+   438 label *label501
+   439 jump *label503 equal @unit :areUnitsAvailable.1:firstUnit
+   440 label *label502
  
-   424 label *label505
-   425 label *label506
-   426 jump *label509 equal true false
+   444 label *label504
+   445 label *label505
+   446 jump *label508 equal true false
 -    * print :chooseUnitType:type
-+  427 print @mono
-   428 print ":"
-   429 print " occupied: "
-   430 print :areUnitsAvailable.1:occupied
++  447 print @mono
+   448 print ":"
+   449 print " occupied: "
+   450 print :areUnitsAvailable.1:occupied
  
-   444 label *label511
-   445 jump *label512 equal *tmp40 false
-   446 printflush null
+   464 label *label510
+   465 jump *label511 equal *tmp40 false
+   466 printflush null
 -    * set *tmp9 :chooseUnitType:type
-+  447 set *tmp9 @mono
-   448 jump *label20 always
-   449 label *label512
-   450 label *label513
++  467 set *tmp9 @mono
+   468 jump *label20 always
+   469 label *label511
+   470 label *label512
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
  
-   143 jump *label20 always
-   144 label *label24
-   145 label *label25
+   147 jump *label20 always
+   148 label *label24
+   149 label *label25
 -    * set :chooseUnitType:type @flare
-   146 label *label415
-   147 jump *label436 equal @flare UNIT_TYPE
-   148 # "Function: inline def areUnitsAvailable(in type, in output)"
+   150 label *label410
+   151 jump *label432 equal @flare UNIT_TYPE
+   152 # "Function: inline def areUnitsAvailable(in type, in output)"
  
-   219 label *label436
-   220 label *label437
-   221 label *label438
+   227 label *label432
+   228 label *label433
+   229 label *label434
 -    * set :chooseUnitType:type @poly
-   222 label *label441
-   223 jump *label462 equal @poly UNIT_TYPE
-   224 # "Function: inline def areUnitsAvailable(in type, in output)"
+   230 label *label437
+   231 jump *label459 equal @poly UNIT_TYPE
+   232 # "Function: inline def areUnitsAvailable(in type, in output)"
  
-   295 label *label462
-   296 label *label463
-   297 label *label464
+   307 label *label459
+   308 label *label460
+   309 label *label461
 -    * set :chooseUnitType:type @mega
-   298 label *label467
-   299 jump *label488 equal @mega UNIT_TYPE
-   300 # "Function: inline def areUnitsAvailable(in type, in output)"
+   310 label *label464
+   311 jump *label486 equal @mega UNIT_TYPE
+   312 # "Function: inline def areUnitsAvailable(in type, in output)"
  
-   371 label *label488
-   372 label *label489
-   373 label *label490
+   387 label *label486
+   388 label *label487
+   389 label *label488
 -    * set :chooseUnitType:type @mono
-   374 label *label493
-   375 jump *label514 equal @mono UNIT_TYPE
-   376 # "Function: inline def areUnitsAvailable(in type, in output)"
+   390 label *label491
+   391 jump *label513 equal @mono UNIT_TYPE
+   392 # "Function: inline def areUnitsAvailable(in type, in output)"
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-5 instructions):
  
-   119 label *label34
-   120 label *label27
-   121 label *label28
+   123 label *label34
+   124 label *label27
+   125 label *label28
 -    * jump *label42 equal true false
-   122 print UNIT_TYPE
-   123 print ":"
-   124 print " occupied: "
+   126 print UNIT_TYPE
+   127 print ":"
+   128 print " occupied: "
  
-   190 label *label426
-   191 label *label427
-   192 label *label428
--    * jump *label431 equal true false
-   193 print @flare
-   194 print ":"
-   195 print " occupied: "
+   198 label *label422
+   199 label *label423
+   200 label *label424
+-    * jump *label427 equal true false
+   201 print @flare
+   202 print ":"
+   203 print " occupied: "
  
-   265 label *label452
-   266 label *label453
-   267 label *label454
--    * jump *label457 equal true false
-   268 print @poly
-   269 print ":"
-   270 print " occupied: "
+   277 label *label449
+   278 label *label450
+   279 label *label451
+-    * jump *label454 equal true false
+   280 print @poly
+   281 print ":"
+   282 print " occupied: "
  
-   340 label *label478
-   341 label *label479
-   342 label *label480
--    * jump *label483 equal true false
-   343 print @mega
-   344 print ":"
-   345 print " occupied: "
+   356 label *label476
+   357 label *label477
+   358 label *label478
+-    * jump *label481 equal true false
+   359 print @mega
+   360 print ":"
+   361 print " occupied: "
  
-   415 label *label504
-   416 label *label505
-   417 label *label506
--    * jump *label509 equal true false
-   418 print @mono
-   419 print ":"
-   420 print " occupied: "
+   435 label *label503
+   436 label *label504
+   437 label *label505
+-    * jump *label508 equal true false
+   438 print @mono
+   439 print ":"
+   440 print " occupied: "
  
-  1434 label *label363
-  1435 label *label356
-  1436 label *label357
+  1444 label *label363
+  1445 label *label356
+  1446 label *label357
 -    * jump *label371 equal false false
-+ 1437 jump *label371 always
-  1438 print UNIT_TYPE
-  1439 print ":"
-  1440 print " occupied: "
++ 1447 jump *label371 always
+  1448 print UNIT_TYPE
+  1449 print ":"
+  1450 print " occupied: "
 
 Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-4 instructions):
  
@@ -5989,1338 +6005,506 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-4
     89 sensor *tmp18 :needsFourUnits:unit @speed
     90 op div :needsFourUnits:travel_time *tmp17 *tmp18
 -    * op greaterThanEq *tmp13 :needsFourUnits:travel_time 47
-    91 jump *label381 always
-    92 label *label381
--    * select *tmp21 notEqual *tmp13 false 4 2
-+   93 select *tmp21 greaterThanEq :needsFourUnits:travel_time 47 4 2
-    94 set :areUnitsAvailable:needed *tmp21
-    95 label *label32
-    96 sensor *tmp22 @unit @controlled
+    91 jump *label31 always
+    92 label *label31
+-    * jump *label29 equal *tmp13 false
++   93 jump *label29 lessThan :needsFourUnits:travel_time 47
+    94 set *tmp21 4
+    95 jump *label30 always
+    96 label *label29
  
-   161 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-   162 jump *label416 always
-   163 label *label416
--    * select *tmp51 notEqual *tmp43 false 4 2
-+  164 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   165 set :areUnitsAvailable.1:needed *tmp51
-   166 label *label417
-   167 sensor *tmp52 @unit @controlled
+   165 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
+   166 jump *label411 always
+   167 label *label411
+-    * jump *label412 equal *tmp43 false
++  168 jump *label412 lessThan :needsFourUnits.1:travel_time 47
+   169 set *tmp51 4
+   170 jump *label413 always
+   171 label *label412
  
-   236 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-   237 jump *label442 always
-   238 label *label442
--    * select *tmp51 notEqual *tmp43 false 4 2
-+  239 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   240 set :areUnitsAvailable.1:needed *tmp51
-   241 label *label443
-   242 sensor *tmp52 @unit @controlled
+   244 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
+   245 jump *label438 always
+   246 label *label438
+-    * jump *label439 equal *tmp43 false
++  247 jump *label439 lessThan :needsFourUnits.1:travel_time 47
+   248 set *tmp51 4
+   249 jump *label440 always
+   250 label *label439
  
-   311 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-   312 jump *label468 always
-   313 label *label468
--    * select *tmp51 notEqual *tmp43 false 4 2
-+  314 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   315 set :areUnitsAvailable.1:needed *tmp51
-   316 label *label469
-   317 sensor *tmp52 @unit @controlled
+   323 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
+   324 jump *label465 always
+   325 label *label465
+-    * jump *label466 equal *tmp43 false
++  326 jump *label466 lessThan :needsFourUnits.1:travel_time 47
+   327 set *tmp51 4
+   328 jump *label467 always
+   329 label *label466
  
-   386 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-   387 jump *label494 always
-   388 label *label494
--    * select *tmp51 notEqual *tmp43 false 4 2
-+  389 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   390 set :areUnitsAvailable.1:needed *tmp51
-   391 label *label495
-   392 sensor *tmp52 @unit @controlled
+   402 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
+   403 jump *label492 always
+   404 label *label492
+-    * jump *label493 equal *tmp43 false
++  405 jump *label493 lessThan :needsFourUnits.1:travel_time 47
+   406 set *tmp51 4
+   407 jump *label494 always
+   408 label *label493
  
-   595 op greaterThanEq *tmp126 :needsFourUnits.2:travel_time 47
-   596 jump *label123 always
-   597 label *label123
+   614 op greaterThanEq *tmp126 :needsFourUnits.2:travel_time 47
+   615 jump *label123 always
+   616 label *label123
 -    * jump *label124 equal *tmp126 false
-+  598 jump *label124 lessThan :needsFourUnits.2:travel_time 47
-   599 # "Function: inline def acquireUnit(in currentUnit)"
-   600 # "Function: inline def rebindUnit(in currentUnit)"
-   601 jump *label128 equal .UNIT_S2 null
++  617 jump *label124 lessThan :needsFourUnits.2:travel_time 47
+   618 # "Function: inline def acquireUnit(in currentUnit)"
+   619 # "Function: inline def rebindUnit(in currentUnit)"
+   620 jump *label128 equal .UNIT_S2 null
  
-   909 label *label178
-   910 set .UNIT_S1 :processUnit:unit
-   911 jump *label218 equal *tmp126 false
+   920 label *label178
+   921 set .UNIT_S1 :processUnit:unit
+   922 jump *label218 equal *tmp126 false
 -    * op equal *tmp259 .SUPPLY_S_FIRST false
-   912 # "Function: inline void processUnit(in out unit, in item, in group, in supply)"
-   913 # "Function: inline def rebindUnit(in currentUnit)"
-   914 jump *label222 equal .UNIT_S2 null
+   923 # "Function: inline void processUnit(in out unit, in item, in group, in supply)"
+   924 # "Function: inline def rebindUnit(in currentUnit)"
+   925 jump *label222 equal .UNIT_S2 null
  
-  1000 jump *label250 notEqual :processUnit.1:state 3
-  1001 ucontrol within .DOME_X .DOME_Y 8 *tmp305
-  1002 jump *label252 equal *tmp305 false
+  1010 jump *label250 notEqual :processUnit.1:state 3
+  1011 ucontrol within .DOME_X .DOME_Y 8 *tmp305
+  1012 jump *label252 equal *tmp305 false
 -    * jump *label254 equal *tmp259 false
-+ 1003 jump *label254 notEqual .SUPPLY_S_FIRST false
-  1004 ucontrol itemDrop .DOME .UNIT_CAPACITY
-  1005 set .MSG ", supplying\n"
-  1006 jump *label255 always
++ 1013 jump *label254 notEqual .SUPPLY_S_FIRST false
+  1014 ucontrol itemDrop .DOME .UNIT_CAPACITY
+  1015 set .MSG ", supplying\n"
+  1016 jump *label255 always
  
-  1224 label *label265
-  1225 set .UNIT_P1 :processUnit.2:unit
-  1226 jump *label305 equal *tmp126 false
+  1233 label *label265
+  1234 set .UNIT_P1 :processUnit.2:unit
+  1235 jump *label305 equal *tmp126 false
 -    * op equal *tmp393 .SUPPLY_P_FIRST false
-  1227 # "Function: inline void processUnit(in out unit, in item, in group, in supply)"
-  1228 # "Function: inline def rebindUnit(in currentUnit)"
-  1229 jump *label309 equal .UNIT_P2 null
+  1236 # "Function: inline void processUnit(in out unit, in item, in group, in supply)"
+  1237 # "Function: inline def rebindUnit(in currentUnit)"
+  1238 jump *label309 equal .UNIT_P2 null
  
-  1315 jump *label337 notEqual :processUnit.3:state 3
-  1316 ucontrol within .DOME_X .DOME_Y 8 *tmp439
-  1317 jump *label339 equal *tmp439 false
+  1323 jump *label337 notEqual :processUnit.3:state 3
+  1324 ucontrol within .DOME_X .DOME_Y 8 *tmp439
+  1325 jump *label339 equal *tmp439 false
 -    * jump *label341 equal *tmp393 false
-+ 1318 jump *label341 notEqual .SUPPLY_P_FIRST false
-  1319 ucontrol itemDrop .DOME .UNIT_CAPACITY
-  1320 set .MSG ", supplying\n"
-  1321 jump *label342 always
++ 1326 jump *label341 notEqual .SUPPLY_P_FIRST false
+  1327 ucontrol itemDrop .DOME .UNIT_CAPACITY
+  1328 set .MSG ", supplying\n"
+  1329 jump *label342 always
  
-  1400 set :needsFourUnits.3:unit @unit
-  1401 sensor *tmp474 :needsFourUnits.3:unit @speed
-  1402 op div :needsFourUnits.3:travel_time *tmp130 *tmp474
+  1406 set :needsFourUnits.3:unit @unit
+  1407 sensor *tmp474 :needsFourUnits.3:unit @speed
+  1408 op div :needsFourUnits.3:travel_time *tmp130 *tmp474
 -    * op greaterThanEq *tmp469 :needsFourUnits.3:travel_time 47
-  1403 jump *label387 always
-  1404 label *label387
--    * select *tmp477 notEqual *tmp469 false 4 2
-+ 1405 select *tmp477 greaterThanEq :needsFourUnits.3:travel_time 47 4 2
-  1406 set :areUnitsAvailable.2:needed *tmp477
-  1407 label *label361
-  1408 sensor *tmp478 @unit @controlled
+  1409 jump *label360 always
+  1410 label *label360
+-    * jump *label358 equal *tmp469 false
++ 1411 jump *label358 lessThan :needsFourUnits.3:travel_time 47
+  1412 set *tmp477 4
+  1413 jump *label359 always
+  1414 label *label358
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-17 instructions):
  
     88 op mul *tmp17 2 *tmp16
     89 sensor *tmp18 :needsFourUnits:unit @speed
     90 op div :needsFourUnits:travel_time *tmp17 *tmp18
--    * jump *label381 always
-    91 label *label381
-    92 select *tmp21 greaterThanEq :needsFourUnits:travel_time 47 4 2
-    93 set :areUnitsAvailable:needed *tmp21
+-    * jump *label31 always
+    91 label *label31
+    92 jump *label29 lessThan :needsFourUnits:travel_time 47
+    93 set *tmp21 4
  
-   133 label *label42
-   134 label *label43
-   135 set *tmp10 false
+   137 label *label42
+   138 label *label43
+   139 set *tmp10 false
 -    * jump *label26 always
-   136 label *label26
-   137 jump *label24 equal *tmp10 false
-   138 set *tmp9 UNIT_TYPE
+   140 label *label26
+   141 jump *label24 equal *tmp10 false
+   142 set *tmp9 UNIT_TYPE
  
-   157 sensor *tmp48 :needsFourUnits.1:unit @speed
-   158 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
-   159 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
--    * jump *label416 always
-   160 label *label416
-   161 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   162 set :areUnitsAvailable.1:needed *tmp51
+   161 sensor *tmp48 :needsFourUnits.1:unit @speed
+   162 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+   163 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
+-    * jump *label411 always
+   164 label *label411
+   165 jump *label412 lessThan :needsFourUnits.1:travel_time 47
+   166 set *tmp51 4
  
-   202 label *label431
-   203 label *label432
-   204 set *tmp40 false
--    * jump *label433 always
-   205 label *label433
-   206 jump *label434 equal *tmp40 false
-   207 printflush null
+   210 label *label427
+   211 label *label428
+   212 set *tmp40 false
+-    * jump *label429 always
+   213 label *label429
+   214 jump *label430 equal *tmp40 false
+   215 printflush null
  
-   230 sensor *tmp48 :needsFourUnits.1:unit @speed
-   231 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
-   232 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
--    * jump *label442 always
-   233 label *label442
-   234 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   235 set :areUnitsAvailable.1:needed *tmp51
+   238 sensor *tmp48 :needsFourUnits.1:unit @speed
+   239 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+   240 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
+-    * jump *label438 always
+   241 label *label438
+   242 jump *label439 lessThan :needsFourUnits.1:travel_time 47
+   243 set *tmp51 4
  
-   275 label *label457
-   276 label *label458
-   277 set *tmp40 false
--    * jump *label459 always
-   278 label *label459
-   279 jump *label460 equal *tmp40 false
-   280 printflush null
+   287 label *label454
+   288 label *label455
+   289 set *tmp40 false
+-    * jump *label456 always
+   290 label *label456
+   291 jump *label457 equal *tmp40 false
+   292 printflush null
  
-   303 sensor *tmp48 :needsFourUnits.1:unit @speed
-   304 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
-   305 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
--    * jump *label468 always
-   306 label *label468
-   307 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   308 set :areUnitsAvailable.1:needed *tmp51
+   315 sensor *tmp48 :needsFourUnits.1:unit @speed
+   316 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+   317 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
+-    * jump *label465 always
+   318 label *label465
+   319 jump *label466 lessThan :needsFourUnits.1:travel_time 47
+   320 set *tmp51 4
  
-   348 label *label483
-   349 label *label484
-   350 set *tmp40 false
--    * jump *label485 always
-   351 label *label485
-   352 jump *label486 equal *tmp40 false
-   353 printflush null
+   364 label *label481
+   365 label *label482
+   366 set *tmp40 false
+-    * jump *label483 always
+   367 label *label483
+   368 jump *label484 equal *tmp40 false
+   369 printflush null
  
-   376 sensor *tmp48 :needsFourUnits.1:unit @speed
-   377 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
-   378 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
--    * jump *label494 always
-   379 label *label494
-   380 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   381 set :areUnitsAvailable.1:needed *tmp51
+   392 sensor *tmp48 :needsFourUnits.1:unit @speed
+   393 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+   394 op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
+-    * jump *label492 always
+   395 label *label492
+   396 jump *label493 lessThan :needsFourUnits.1:travel_time 47
+   397 set *tmp51 4
  
-   421 label *label509
-   422 label *label510
-   423 set *tmp40 false
--    * jump *label511 always
-   424 label *label511
-   425 jump *label512 equal *tmp40 false
-   426 printflush null
+   441 label *label508
+   442 label *label509
+   443 set *tmp40 false
+-    * jump *label510 always
+   444 label *label510
+   445 jump *label511 equal *tmp40 false
+   446 printflush null
  
-   512 label *label89
-   513 ucontrol flag 1
-   514 set *tmp80 @unit
+   532 label *label89
+   533 ucontrol flag 1
+   534 set *tmp80 @unit
 -    * jump *label88 always
-   515 label *label88
-   516 set .UNIT_S1 *tmp80
-   517 # "Function: inline def acquireUnit(in currentUnit)"
+   535 label *label88
+   536 set .UNIT_S1 *tmp80
+   537 # "Function: inline def acquireUnit(in currentUnit)"
  
-   551 label *label103
-   552 ucontrol flag 1
-   553 set *tmp98 @unit
+   571 label *label103
+   572 ucontrol flag 1
+   573 set *tmp98 @unit
 -    * jump *label102 always
-   554 label *label102
-   555 set .UNIT_P1 *tmp98
-   556 sensor *tmp116 *tmp80 @firstItem
+   574 label *label102
+   575 set .UNIT_P1 *tmp98
+   576 sensor *tmp116 *tmp80 @firstItem
  
-   581 sensor *tmp131 .UNIT_S1 @speed
-   582 op div :needsFourUnits.2:travel_time *tmp130 .SPEED
-   583 op greaterThanEq *tmp126 :needsFourUnits.2:travel_time 47
+   600 sensor *tmp131 .UNIT_S1 @speed
+   601 op div :needsFourUnits.2:travel_time *tmp130 .SPEED
+   602 op greaterThanEq *tmp126 :needsFourUnits.2:travel_time 47
 -    * jump *label123 always
-   584 label *label123
-   585 jump *label124 lessThan :needsFourUnits.2:travel_time 47
-   586 # "Function: inline def acquireUnit(in currentUnit)"
+   603 label *label123
+   604 jump *label124 lessThan :needsFourUnits.2:travel_time 47
+   605 # "Function: inline def acquireUnit(in currentUnit)"
  
-   620 label *label127
-   621 ucontrol flag 1
-   622 set *tmp135 @unit
+   639 label *label127
+   640 ucontrol flag 1
+   641 set *tmp135 @unit
 -    * jump *label126 always
-   623 label *label126
-   624 set .UNIT_S2 *tmp135
-   625 # "Function: inline def acquireUnit(in currentUnit)"
+   642 label *label126
+   643 set .UNIT_S2 *tmp135
+   644 # "Function: inline def acquireUnit(in currentUnit)"
  
-   659 label *label141
-   660 ucontrol flag 1
-   661 set *tmp153 @unit
+   678 label *label141
+   679 ucontrol flag 1
+   680 set *tmp153 @unit
 -    * jump *label140 always
-   662 label *label140
-   663 set .UNIT_P2 *tmp153
-   664 sensor *tmp171 .UNIT_S1 @firstItem
+   681 label *label140
+   682 set .UNIT_P2 *tmp153
+   683 sensor *tmp171 .UNIT_S1 @firstItem
  
-  1385 set :needsFourUnits.3:unit @unit
-  1386 sensor *tmp474 :needsFourUnits.3:unit @speed
-  1387 op div :needsFourUnits.3:travel_time *tmp130 *tmp474
--    * jump *label387 always
-  1388 label *label387
-  1389 select *tmp477 greaterThanEq :needsFourUnits.3:travel_time 47 4 2
-  1390 set :areUnitsAvailable.2:needed *tmp477
+  1391 set :needsFourUnits.3:unit @unit
+  1392 sensor *tmp474 :needsFourUnits.3:unit @speed
+  1393 op div :needsFourUnits.3:travel_time *tmp130 *tmp474
+-    * jump *label360 always
+  1394 label *label360
+  1395 jump *label358 lessThan :needsFourUnits.3:travel_time 47
+  1396 set *tmp477 4
  
-  1431 label *label371
-  1432 label *label372
-  1433 set *tmp466 false
+  1441 label *label371
+  1442 label *label372
+  1443 set *tmp466 false
 -    * jump *label355 always
-  1434 label *label355
-  1435 jump *label353 equal *tmp466 false
-  1436 end
+  1444 label *label355
+  1445 jump *label353 equal *tmp466 false
+  1446 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-6 instructions):
  
-   156 op mul *tmp47 2 *tmp46
-   157 sensor *tmp48 :needsFourUnits.1:unit @speed
-   158 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+   160 op mul *tmp47 2 *tmp46
+   161 sensor *tmp48 :needsFourUnits.1:unit @speed
+   162 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
 -    * op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-   159 label *label416
-   160 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   161 set :areUnitsAvailable.1:needed *tmp51
+   163 label *label411
+   164 jump *label412 lessThan :needsFourUnits.1:travel_time 47
+   165 set *tmp51 4
  
-   228 op mul *tmp47 2 *tmp46
-   229 sensor *tmp48 :needsFourUnits.1:unit @speed
-   230 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+   236 op mul *tmp47 2 *tmp46
+   237 sensor *tmp48 :needsFourUnits.1:unit @speed
+   238 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
 -    * op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-   231 label *label442
-   232 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   233 set :areUnitsAvailable.1:needed *tmp51
+   239 label *label438
+   240 jump *label439 lessThan :needsFourUnits.1:travel_time 47
+   241 set *tmp51 4
  
-   300 op mul *tmp47 2 *tmp46
-   301 sensor *tmp48 :needsFourUnits.1:unit @speed
-   302 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+   312 op mul *tmp47 2 *tmp46
+   313 sensor *tmp48 :needsFourUnits.1:unit @speed
+   314 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
 -    * op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-   303 label *label468
-   304 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   305 set :areUnitsAvailable.1:needed *tmp51
+   315 label *label465
+   316 jump *label466 lessThan :needsFourUnits.1:travel_time 47
+   317 set *tmp51 4
  
-   372 op mul *tmp47 2 *tmp46
-   373 sensor *tmp48 :needsFourUnits.1:unit @speed
-   374 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+   388 op mul *tmp47 2 *tmp46
+   389 sensor *tmp48 :needsFourUnits.1:unit @speed
+   390 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
 -    * op greaterThanEq *tmp43 :needsFourUnits.1:travel_time 47
-   375 label *label494
-   376 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   377 set :areUnitsAvailable.1:needed *tmp51
+   391 label *label492
+   392 jump *label493 lessThan :needsFourUnits.1:travel_time 47
+   393 set *tmp51 4
  
-  1373 # "Function: inline def areUnitsAvailable(in type, in output)"
-  1374 set :areUnitsAvailable.2:free 0
-  1375 set :areUnitsAvailable.2:occupied 0
+  1379 # "Function: inline def areUnitsAvailable(in type, in output)"
+  1380 set :areUnitsAvailable.2:free 0
+  1381 set :areUnitsAvailable.2:occupied 0
 -    * set :areUnitsAvailable.2:needed 0
-  1376 ubind UNIT_TYPE
-  1377 set :areUnitsAvailable.2:firstUnit @unit
-  1378 jump *label356 equal :areUnitsAvailable.2:firstUnit null
+  1382 ubind UNIT_TYPE
+  1383 set :areUnitsAvailable.2:firstUnit @unit
+  1384 jump *label356 equal :areUnitsAvailable.2:firstUnit null
  
-  1382 op div :needsFourUnits.3:travel_time *tmp130 *tmp474
-  1383 label *label387
-  1384 select *tmp477 greaterThanEq :needsFourUnits.3:travel_time 47 4 2
+  1393 label *label358
+  1394 set *tmp477 2
+  1395 label *label359
 -    * set :areUnitsAvailable.2:needed *tmp477
-  1385 label *label361
-  1386 sensor *tmp478 @unit @controlled
-  1387 jump *label366 equal *tmp478 0
+  1396 label *label361
+  1397 sensor *tmp478 @unit @controlled
+  1398 jump *label366 equal *tmp478 0
 
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+Modifications by Iterated phase, Boolean Optimization, pass 2, iteration 1 (-18 instructions):
  
-     3 remark "Do not modify anything below this line."
-     4 # "Function: inline void locateDomeAndCore()"
-     5 set .DOME dome1
--    * label *label2
-     6 jump *label4 notEqual dome1 null
-     7 label *label380
-     8 print "[gold]Waiting for an overdrive dome to be connected..."
-     9 printflush message1
-    10 set .DOME dome1
--    * label *label3
-    11 jump *label380 equal dome1 null
-    12 label *label4
-    13 print "[gold]Locating core..."
-    14 printflush message1
-    15 set .CORE null
-    16 label *label5
--    * label *label388
-    17 set :locateCore:type @flare
-    18 call *label0 :locateCore*retaddr :locateCore*retval
-    19 jump *label389 equal :locateCore*retval false
-    20 jump *label1 always
-    21 label *label389
--    * label *label390
--    * label *label391
--    * label *label394
-    22 set :locateCore:type @poly
-    23 call *label0 :locateCore*retaddr :locateCore*retval
-    24 jump *label395 equal :locateCore*retval false
-    25 jump *label1 always
-    26 label *label395
--    * label *label396
--    * label *label397
--    * label *label400
-    27 set :locateCore:type @mega
-    28 call *label0 :locateCore*retaddr :locateCore*retval
-    29 jump *label401 equal :locateCore*retval false
-    30 jump *label1 always
-    31 label *label401
--    * label *label402
--    * label *label403
--    * label *label406
-    32 set :locateCore:type @mono
-    33 call *label0 :locateCore*retaddr :locateCore*retval
-    34 jump *label407 equal :locateCore*retval false
-    35 jump *label1 always
-    36 label *label407
--    * label *label408
--    * label *label409
--    * label *label10
--    * label *label6
-    37 jump *label5 always
--    * label *label7
-    38 label *label1
-    39 sensor .CORE_X .CORE @x
-    40 sensor .CORE_Y .CORE @y
-    41 sensor .DOME_X .DOME @x
-    42 sensor .DOME_Y .DOME @y
--    * label *label17
-    43 sensor *tmp7 switch1 @enabled
-    44 jump *label19 notEqual *tmp7 false
-    45 label *label413
-    46 print "[coral]Activate switch to begin supplying overdrive dome..."
-    47 print "\n"
-    48 printflush message1
--    * label *label18
-    49 sensor *tmp7 switch1 @enabled
-    50 jump *label413 equal *tmp7 false
-    51 label *label19
+    80 ubind UNIT_TYPE
+    81 set :areUnitsAvailable:firstUnit @unit
+    82 jump *label27 equal :areUnitsAvailable:firstUnit null
+-    * # "Function: inline def needsFourUnits(in unit)"
+-    * set :needsFourUnits:unit @unit
+-    * op sub *tmp14 .DOME_X .CORE_X
+-    * op sub *tmp15 .DOME_Y .CORE_Y
+-    * op len *tmp16 *tmp14 *tmp15
+-    * op mul *tmp17 2 *tmp16
+-    * sensor *tmp18 :needsFourUnits:unit @speed
+-    * op div :needsFourUnits:travel_time *tmp17 *tmp18
+-    * label *label31
+-    * jump *label29 lessThan :needsFourUnits:travel_time 47
+-    * set *tmp21 4
+-    * jump *label30 always
+-    * label *label29
+-    * set *tmp21 2
+-    * label *label30
++   83 # "Function: inline def needsFourUnits(in unit)"
++   84 set :needsFourUnits:unit @unit
++   85 op sub *tmp14 .DOME_X .CORE_X
++   86 op sub *tmp15 .DOME_Y .CORE_Y
++   87 op len *tmp16 *tmp14 *tmp15
++   88 op mul *tmp17 2 *tmp16
++   89 sensor *tmp18 :needsFourUnits:unit @speed
++   90 op div :needsFourUnits:travel_time *tmp17 *tmp18
++   91 label *label519
++   92 select *tmp21 greaterThanEq :needsFourUnits:travel_time 47 4 2
+    93 set :areUnitsAvailable:needed *tmp21
+    94 label *label32
+    95 sensor *tmp22 @unit @controlled
  
-    69 op mul *tmp17 2 *tmp16
-    70 sensor *tmp18 :needsFourUnits:unit @speed
-    71 op div :needsFourUnits:travel_time *tmp17 *tmp18
--    * label *label381
-    72 select *tmp21 greaterThanEq :needsFourUnits:travel_time 47 4 2
-    73 set :areUnitsAvailable:needed *tmp21
-    74 label *label32
-    75 sensor *tmp22 @unit @controlled
-    76 jump *label37 equal *tmp22 0
--    * label *label38
-    77 sensor *tmp24 @unit @controller
-    78 jump *label35 notEqual *tmp24 @this
-    79 label *label37
+   147 ubind @flare
+   148 set :areUnitsAvailable.1:firstUnit @unit
+   149 jump *label423 equal :areUnitsAvailable.1:firstUnit null
+-    * # "Function: inline def needsFourUnits(in unit)"
+-    * set :needsFourUnits.1:unit @unit
+-    * op sub *tmp44 .DOME_X .CORE_X
+-    * op sub *tmp45 .DOME_Y .CORE_Y
+-    * op len *tmp46 *tmp44 *tmp45
+-    * op mul *tmp47 2 *tmp46
+-    * sensor *tmp48 :needsFourUnits.1:unit @speed
+-    * op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+-    * label *label411
+-    * jump *label412 lessThan :needsFourUnits.1:travel_time 47
+-    * set *tmp51 4
+-    * jump *label413 always
+-    * label *label412
+-    * set *tmp51 2
+-    * label *label413
++  150 # "Function: inline def needsFourUnits(in unit)"
++  151 set :needsFourUnits.1:unit @unit
++  152 op sub *tmp44 .DOME_X .CORE_X
++  153 op sub *tmp45 .DOME_Y .CORE_Y
++  154 op len *tmp46 *tmp44 *tmp45
++  155 op mul *tmp47 2 *tmp46
++  156 sensor *tmp48 :needsFourUnits.1:unit @speed
++  157 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
++  158 label *label520
++  159 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
+   160 set :areUnitsAvailable.1:needed *tmp51
+   161 label *label414
+   162 sensor *tmp52 @unit @controlled
  
-    82 set *tmp10 true
-    83 jump *label26 always
-    84 label *label39
--    * label *label40
-    85 jump *label36 always
-    86 label *label35
-    87 op add :areUnitsAvailable:occupied :areUnitsAvailable:occupied 1
-    88 label *label36
-    89 ubind UNIT_TYPE
--    * label *label33
-    90 jump *label34 equal @unit :areUnitsAvailable:firstUnit
--    * label *label41
-    91 sensor *tmp31 :areUnitsAvailable:firstUnit @dead
-    92 jump *label32 equal *tmp31 0
-    93 label *label34
-    94 label *label27
--    * label *label28
-    95 print UNIT_TYPE
-    96 print ":"
-    97 print " occupied: "
- 
-   103 print ", needed: "
-   104 print :areUnitsAvailable:needed
-   105 label *label44
--    * label *label45
-   106 print "\n"
--    * label *label42
--    * label *label43
-   107 set *tmp10 false
-   108 label *label26
-   109 jump *label24 equal *tmp10 false
-   110 set *tmp9 UNIT_TYPE
-   111 jump *label20 always
-   112 label *label24
--    * label *label25
--    * label *label415
-   113 jump *label436 equal @flare UNIT_TYPE
-   114 # "Function: inline def areUnitsAvailable(in type, in output)"
-   115 set :areUnitsAvailable.1:free 0
- 
-   126 op mul *tmp47 2 *tmp46
-   127 sensor *tmp48 :needsFourUnits.1:unit @speed
-   128 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
--    * label *label416
-   129 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   130 set :areUnitsAvailable.1:needed *tmp51
-   131 label *label417
-   132 sensor *tmp52 @unit @controlled
-   133 jump *label419 equal *tmp52 0
--    * label *label418
-   134 sensor *tmp54 @unit @controller
-   135 jump *label422 notEqual *tmp54 @this
-   136 label *label419
- 
-   139 set *tmp40 true
-   140 jump *label433 always
-   141 label *label420
--    * label *label421
-   142 jump *label423 always
-   143 label *label422
-   144 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   145 label *label423
-   146 ubind @flare
--    * label *label424
-   147 jump *label426 equal @unit :areUnitsAvailable.1:firstUnit
--    * label *label425
-   148 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
-   149 jump *label417 equal *tmp61 0
-   150 label *label426
-   151 label *label427
--    * label *label428
-   152 print @flare
-   153 print ":"
-   154 print " occupied: "
- 
-   160 print ", needed: "
-   161 print :areUnitsAvailable.1:needed
-   162 label *label429
--    * label *label430
-   163 print "\n"
--    * label *label431
--    * label *label432
-   164 set *tmp40 false
-   165 label *label433
-   166 jump *label434 equal *tmp40 false
- 
-   168 set *tmp9 @flare
-   169 jump *label20 always
-   170 label *label434
--    * label *label435
-   171 label *label436
--    * label *label437
+   218 ubind @poly
+   219 set :areUnitsAvailable.1:firstUnit @unit
+   220 jump *label450 equal :areUnitsAvailable.1:firstUnit null
+-    * # "Function: inline def needsFourUnits(in unit)"
+-    * set :needsFourUnits.1:unit @unit
+-    * op sub *tmp44 .DOME_X .CORE_X
+-    * op sub *tmp45 .DOME_Y .CORE_Y
+-    * op len *tmp46 *tmp44 *tmp45
+-    * op mul *tmp47 2 *tmp46
+-    * sensor *tmp48 :needsFourUnits.1:unit @speed
+-    * op div :needsFourUnits.1:travel_time *tmp47 *tmp48
 -    * label *label438
--    * label *label441
-   172 jump *label462 equal @poly UNIT_TYPE
-   173 # "Function: inline def areUnitsAvailable(in type, in output)"
-   174 set :areUnitsAvailable.1:free 0
+-    * jump *label439 lessThan :needsFourUnits.1:travel_time 47
+-    * set *tmp51 4
+-    * jump *label440 always
+-    * label *label439
+-    * set *tmp51 2
+-    * label *label440
++  221 # "Function: inline def needsFourUnits(in unit)"
++  222 set :needsFourUnits.1:unit @unit
++  223 op sub *tmp44 .DOME_X .CORE_X
++  224 op sub *tmp45 .DOME_Y .CORE_Y
++  225 op len *tmp46 *tmp44 *tmp45
++  226 op mul *tmp47 2 *tmp46
++  227 sensor *tmp48 :needsFourUnits.1:unit @speed
++  228 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
++  229 label *label521
++  230 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
+   231 set :areUnitsAvailable.1:needed *tmp51
+   232 label *label441
+   233 sensor *tmp52 @unit @controlled
  
-   185 op mul *tmp47 2 *tmp46
-   186 sensor *tmp48 :needsFourUnits.1:unit @speed
-   187 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
--    * label *label442
-   188 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   189 set :areUnitsAvailable.1:needed *tmp51
-   190 label *label443
-   191 sensor *tmp52 @unit @controlled
-   192 jump *label445 equal *tmp52 0
--    * label *label444
-   193 sensor *tmp54 @unit @controller
-   194 jump *label448 notEqual *tmp54 @this
-   195 label *label445
- 
-   198 set *tmp40 true
-   199 jump *label459 always
-   200 label *label446
--    * label *label447
-   201 jump *label449 always
-   202 label *label448
-   203 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   204 label *label449
-   205 ubind @poly
--    * label *label450
-   206 jump *label452 equal @unit :areUnitsAvailable.1:firstUnit
--    * label *label451
-   207 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
-   208 jump *label443 equal *tmp61 0
-   209 label *label452
-   210 label *label453
--    * label *label454
-   211 print @poly
-   212 print ":"
-   213 print " occupied: "
- 
-   219 print ", needed: "
-   220 print :areUnitsAvailable.1:needed
-   221 label *label455
--    * label *label456
-   222 print "\n"
--    * label *label457
--    * label *label458
-   223 set *tmp40 false
-   224 label *label459
-   225 jump *label460 equal *tmp40 false
- 
-   227 set *tmp9 @poly
-   228 jump *label20 always
-   229 label *label460
--    * label *label461
-   230 label *label462
--    * label *label463
--    * label *label464
+   289 ubind @mega
+   290 set :areUnitsAvailable.1:firstUnit @unit
+   291 jump *label477 equal :areUnitsAvailable.1:firstUnit null
+-    * # "Function: inline def needsFourUnits(in unit)"
+-    * set :needsFourUnits.1:unit @unit
+-    * op sub *tmp44 .DOME_X .CORE_X
+-    * op sub *tmp45 .DOME_Y .CORE_Y
+-    * op len *tmp46 *tmp44 *tmp45
+-    * op mul *tmp47 2 *tmp46
+-    * sensor *tmp48 :needsFourUnits.1:unit @speed
+-    * op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+-    * label *label465
+-    * jump *label466 lessThan :needsFourUnits.1:travel_time 47
+-    * set *tmp51 4
+-    * jump *label467 always
+-    * label *label466
+-    * set *tmp51 2
 -    * label *label467
-   231 jump *label488 equal @mega UNIT_TYPE
-   232 # "Function: inline def areUnitsAvailable(in type, in output)"
-   233 set :areUnitsAvailable.1:free 0
++  292 # "Function: inline def needsFourUnits(in unit)"
++  293 set :needsFourUnits.1:unit @unit
++  294 op sub *tmp44 .DOME_X .CORE_X
++  295 op sub *tmp45 .DOME_Y .CORE_Y
++  296 op len *tmp46 *tmp44 *tmp45
++  297 op mul *tmp47 2 *tmp46
++  298 sensor *tmp48 :needsFourUnits.1:unit @speed
++  299 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
++  300 label *label522
++  301 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
+   302 set :areUnitsAvailable.1:needed *tmp51
+   303 label *label468
+   304 sensor *tmp52 @unit @controlled
  
-   244 op mul *tmp47 2 *tmp46
-   245 sensor *tmp48 :needsFourUnits.1:unit @speed
-   246 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
--    * label *label468
-   247 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   248 set :areUnitsAvailable.1:needed *tmp51
-   249 label *label469
-   250 sensor *tmp52 @unit @controlled
-   251 jump *label471 equal *tmp52 0
--    * label *label470
-   252 sensor *tmp54 @unit @controller
-   253 jump *label474 notEqual *tmp54 @this
-   254 label *label471
- 
-   257 set *tmp40 true
-   258 jump *label485 always
-   259 label *label472
--    * label *label473
-   260 jump *label475 always
-   261 label *label474
-   262 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   263 label *label475
-   264 ubind @mega
--    * label *label476
-   265 jump *label478 equal @unit :areUnitsAvailable.1:firstUnit
--    * label *label477
-   266 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
-   267 jump *label469 equal *tmp61 0
-   268 label *label478
-   269 label *label479
--    * label *label480
-   270 print @mega
-   271 print ":"
-   272 print " occupied: "
- 
-   278 print ", needed: "
-   279 print :areUnitsAvailable.1:needed
-   280 label *label481
--    * label *label482
-   281 print "\n"
--    * label *label483
--    * label *label484
-   282 set *tmp40 false
-   283 label *label485
-   284 jump *label486 equal *tmp40 false
- 
-   286 set *tmp9 @mega
-   287 jump *label20 always
-   288 label *label486
--    * label *label487
-   289 label *label488
--    * label *label489
--    * label *label490
+   360 ubind @mono
+   361 set :areUnitsAvailable.1:firstUnit @unit
+   362 jump *label504 equal :areUnitsAvailable.1:firstUnit null
+-    * # "Function: inline def needsFourUnits(in unit)"
+-    * set :needsFourUnits.1:unit @unit
+-    * op sub *tmp44 .DOME_X .CORE_X
+-    * op sub *tmp45 .DOME_Y .CORE_Y
+-    * op len *tmp46 *tmp44 *tmp45
+-    * op mul *tmp47 2 *tmp46
+-    * sensor *tmp48 :needsFourUnits.1:unit @speed
+-    * op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+-    * label *label492
+-    * jump *label493 lessThan :needsFourUnits.1:travel_time 47
+-    * set *tmp51 4
+-    * jump *label494 always
 -    * label *label493
-   290 jump *label514 equal @mono UNIT_TYPE
-   291 # "Function: inline def areUnitsAvailable(in type, in output)"
-   292 set :areUnitsAvailable.1:free 0
- 
-   303 op mul *tmp47 2 *tmp46
-   304 sensor *tmp48 :needsFourUnits.1:unit @speed
-   305 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
+-    * set *tmp51 2
 -    * label *label494
-   306 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
-   307 set :areUnitsAvailable.1:needed *tmp51
-   308 label *label495
-   309 sensor *tmp52 @unit @controlled
-   310 jump *label497 equal *tmp52 0
--    * label *label496
-   311 sensor *tmp54 @unit @controller
-   312 jump *label500 notEqual *tmp54 @this
-   313 label *label497
++  363 # "Function: inline def needsFourUnits(in unit)"
++  364 set :needsFourUnits.1:unit @unit
++  365 op sub *tmp44 .DOME_X .CORE_X
++  366 op sub *tmp45 .DOME_Y .CORE_Y
++  367 op len *tmp46 *tmp44 *tmp45
++  368 op mul *tmp47 2 *tmp46
++  369 sensor *tmp48 :needsFourUnits.1:unit @speed
++  370 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
++  371 label *label523
++  372 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
+   373 set :areUnitsAvailable.1:needed *tmp51
+   374 label *label495
+   375 sensor *tmp52 @unit @controlled
  
-   316 set *tmp40 true
-   317 jump *label511 always
-   318 label *label498
--    * label *label499
-   319 jump *label501 always
-   320 label *label500
-   321 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   322 label *label501
-   323 ubind @mono
--    * label *label502
-   324 jump *label504 equal @unit :areUnitsAvailable.1:firstUnit
--    * label *label503
-   325 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
-   326 jump *label495 equal *tmp61 0
-   327 label *label504
-   328 label *label505
--    * label *label506
-   329 print @mono
-   330 print ":"
-   331 print " occupied: "
- 
-   337 print ", needed: "
-   338 print :areUnitsAvailable.1:needed
-   339 label *label507
--    * label *label508
-   340 print "\n"
--    * label *label509
--    * label *label510
-   341 set *tmp40 false
-   342 label *label511
-   343 jump *label512 equal *tmp40 false
- 
-   345 set *tmp9 @mono
-   346 jump *label20 always
-   347 label *label512
--    * label *label513
-   348 label *label514
--    * label *label515
--    * label *label516
--    * label *label48
-   349 printflush message1
--    * label *label22
-   350 jump *label21 always
--    * label *label23
-   351 set *tmp9 null
-   352 label *label20
-   353 print "[gold]Binding units..."
- 
-   363 jump *label78 notEqual :rebindUnits:firstUnit null
-   364 end
-   365 label *label78
--    * label *label79
-   366 label *label80
-   367 sensor *tmp70 @unit @controller
-   368 jump *label83 notEqual *tmp70 @this
- 
-   375 jump *label85 equal .UNIT_S2 null
-   376 jump *label82 always
-   377 label *label85
--    * label *label86
-   378 label *label83
--    * label *label84
-   379 ubind *tmp9
--    * label *label81
-   380 jump *label82 equal @unit :rebindUnits:firstUnit
--    * label *label87
-   381 sensor *tmp78 :rebindUnits:firstUnit @dead
-   382 jump *label80 equal *tmp78 0
-   383 label *label82
--    * label *label77
-   384 # "Function: inline def acquireUnit(in currentUnit)"
-   385 # "Function: inline def rebindUnit(in currentUnit)"
-   386 jump *label90 equal .UNIT_S1 null
- 
-   393 jump *label92 equal *tmp88 false
-   394 jump *label89 always
-   395 label *label92
--    * label *label93
-   396 label *label90
--    * label *label91
-   397 ubind *tmp9
-   398 set :rebindUnit:firstUnit @unit
-   399 jump *label94 equal :rebindUnit:firstUnit null
- 
-   402 jump *label99 notEqual *tmp92 0
-   403 jump *label89 always
-   404 label *label99
--    * label *label100
-   405 ubind *tmp9
--    * label *label97
-   406 jump *label98 equal @unit :rebindUnit:firstUnit
--    * label *label101
-   407 sensor *tmp96 :rebindUnit:firstUnit @dead
-   408 jump *label96 equal *tmp96 0
-   409 label *label98
-   410 label *label94
--    * label *label95
-   411 end
-   412 label *label89
-   413 ucontrol flag 1
-   414 set *tmp80 @unit
--    * label *label88
-   415 set .UNIT_S1 *tmp80
-   416 # "Function: inline def acquireUnit(in currentUnit)"
-   417 # "Function: inline def rebindUnit(in currentUnit)"
- 
-   425 jump *label106 equal *tmp106 false
-   426 jump *label103 always
-   427 label *label106
--    * label *label107
-   428 label *label104
--    * label *label105
-   429 ubind *tmp9
-   430 set :rebindUnit.1:firstUnit @unit
-   431 jump *label108 equal :rebindUnit.1:firstUnit null
- 
-   434 jump *label113 notEqual *tmp110 0
-   435 jump *label103 always
-   436 label *label113
--    * label *label114
-   437 ubind *tmp9
--    * label *label111
-   438 jump *label112 equal @unit :rebindUnit.1:firstUnit
--    * label *label115
-   439 sensor *tmp114 :rebindUnit.1:firstUnit @dead
-   440 jump *label110 equal *tmp114 0
-   441 label *label112
-   442 label *label108
--    * label *label109
-   443 end
-   444 label *label103
-   445 ucontrol flag 1
-   446 set *tmp98 @unit
--    * label *label102
-   447 set .UNIT_P1 *tmp98
-   448 sensor *tmp116 *tmp80 @firstItem
-   449 jump *label118 equal *tmp116 @phase-fabric
--    * label *label119
-   450 sensor *tmp118 *tmp98 @firstItem
-   451 jump *label116 notEqual *tmp118 @silicon
-   452 label *label118
-   453 # "Function: inline void swap(in out a, in out b)"
--    * label *label120
-   454 set .UNIT_S1 *tmp98
-   455 set .UNIT_P1 *tmp80
-   456 label *label116
--    * label *label117
-   457 sensor .UNIT_CAPACITY .UNIT_S1 @itemCapacity
-   458 sensor .SPEED .UNIT_S1 @speed
-   459 op div .SPEED_TENTHS .SPEED 10
- 
-   461 jump *label121 equal *tmp124 false
-   462 stop
-   463 label *label121
--    * label *label122
-   464 # "Function: inline def needsFourUnits(in unit)"
-   465 op sub *tmp127 .DOME_X .CORE_X
-   466 op sub *tmp128 .DOME_Y .CORE_Y
- 
-   469 sensor *tmp131 .UNIT_S1 @speed
-   470 op div :needsFourUnits.2:travel_time *tmp130 .SPEED
-   471 op greaterThanEq *tmp126 :needsFourUnits.2:travel_time 47
--    * label *label123
-   472 jump *label124 lessThan :needsFourUnits.2:travel_time 47
-   473 # "Function: inline def acquireUnit(in currentUnit)"
-   474 # "Function: inline def rebindUnit(in currentUnit)"
- 
-   482 jump *label130 equal *tmp143 false
-   483 jump *label127 always
-   484 label *label130
--    * label *label131
-   485 label *label128
--    * label *label129
-   486 ubind *tmp9
-   487 set :rebindUnit.2:firstUnit @unit
-   488 jump *label132 equal :rebindUnit.2:firstUnit null
- 
-   491 jump *label137 notEqual *tmp147 0
-   492 jump *label127 always
-   493 label *label137
--    * label *label138
-   494 ubind *tmp9
--    * label *label135
-   495 jump *label136 equal @unit :rebindUnit.2:firstUnit
--    * label *label139
-   496 sensor *tmp151 :rebindUnit.2:firstUnit @dead
-   497 jump *label134 equal *tmp151 0
-   498 label *label136
-   499 label *label132
--    * label *label133
-   500 end
-   501 label *label127
-   502 ucontrol flag 1
-   503 set *tmp135 @unit
--    * label *label126
-   504 set .UNIT_S2 *tmp135
-   505 # "Function: inline def acquireUnit(in currentUnit)"
-   506 # "Function: inline def rebindUnit(in currentUnit)"
- 
-   514 jump *label144 equal *tmp161 false
-   515 jump *label141 always
-   516 label *label144
--    * label *label145
-   517 label *label142
--    * label *label143
-   518 ubind *tmp9
-   519 set :rebindUnit.3:firstUnit @unit
-   520 jump *label146 equal :rebindUnit.3:firstUnit null
- 
-   523 jump *label151 notEqual *tmp165 0
-   524 jump *label141 always
-   525 label *label151
--    * label *label152
-   526 ubind *tmp9
--    * label *label149
-   527 jump *label150 equal @unit :rebindUnit.3:firstUnit
--    * label *label153
-   528 sensor *tmp169 :rebindUnit.3:firstUnit @dead
-   529 jump *label148 equal *tmp169 0
-   530 label *label150
-   531 label *label146
--    * label *label147
-   532 end
-   533 label *label141
-   534 ucontrol flag 1
-   535 set *tmp153 @unit
--    * label *label140
-   536 set .UNIT_P2 *tmp153
-   537 sensor *tmp171 .UNIT_S1 @firstItem
-   538 jump *label154 notEqual *tmp171 @phase-fabric
--    * label *label157
-   539 sensor *tmp173 *tmp153 @firstItem
-   540 jump *label154 equal *tmp173 @phase-fabric
--    * label *label156
-   541 # "Function: inline void swap(in out a, in out b)"
-   542 set :swap.1:t .UNIT_S1
--    * label *label158
-   543 set .UNIT_S1 *tmp153
-   544 set .UNIT_P2 :swap.1:t
-   545 label *label154
--    * label *label155
-   546 sensor *tmp176 *tmp135 @firstItem
-   547 jump *label161 equal *tmp176 @phase-fabric
--    * label *label162
-   548 sensor *tmp178 .UNIT_P2 @firstItem
-   549 jump *label159 notEqual *tmp178 @silicon
-   550 label *label161
-   551 # "Function: inline void swap(in out a, in out b)"
--    * label *label163
-   552 set .UNIT_S2 .UNIT_P2
-   553 set .UNIT_P2 *tmp135
-   554 label *label159
--    * label *label160
-   555 set .GROUP1 "unit  1"
-   556 set .GROUP2 "unit 2"
-   557 jump *label125 always
- 
-   565 set .GROUP1 "unit"
-   566 label *label125
-   567 jump *label164 notEqual *tmp126 false
--    * label *label166
-   568 set .SUPPLY_S_FIRST true
-   569 jump *label165 always
-   570 label *label164
--    * label *label383
-   571 sensor *tmp182 .UNIT_S1 @totalItems
-   572 sensor *tmp183 .UNIT_S2 @totalItems
-   573 op lessThan .SUPPLY_S_FIRST *tmp182 *tmp183
-   574 label *label165
-   575 jump *label168 notEqual *tmp126 false
--    * label *label170
-   576 set .SUPPLY_P_FIRST true
-   577 jump *label169 always
-   578 label *label168
--    * label *label385
-   579 sensor *tmp187 .UNIT_P1 @totalItems
-   580 sensor *tmp188 .UNIT_P2 @totalItems
-   581 op lessThan .SUPPLY_P_FIRST *tmp187 *tmp188
-   582 label *label169
-   583 op add :unitCheck @time 5000
--    * label *label172
-   584 sensor *tmp192 switch1 @enabled
-   585 jump *label174 equal *tmp192 false
-   586 label *label414
- 
-   610 print "]"
-   611 print "\n"
-   612 label *label177
--    * label *label175
-   613 # "Function: inline void processUnit(in out unit, in item, in group, in supply)"
-   614 # "Function: inline def rebindUnit(in currentUnit)"
-   615 jump *label180 equal .UNIT_S1 null
- 
-   622 jump *label182 equal *tmp203 false
-   623 jump *label179 always
-   624 label *label182
--    * label *label183
-   625 label *label180
--    * label *label181
-   626 ubind *tmp9
-   627 set :rebindUnit.4:firstUnit @unit
-   628 jump *label184 equal :rebindUnit.4:firstUnit null
- 
-   631 jump *label189 notEqual *tmp207 0
-   632 jump *label179 always
-   633 label *label189
--    * label *label190
-   634 ubind *tmp9
--    * label *label187
-   635 jump *label188 equal @unit :rebindUnit.4:firstUnit
--    * label *label191
-   636 sensor *tmp211 :rebindUnit.4:firstUnit @dead
-   637 jump *label186 equal *tmp211 0
-   638 label *label188
-   639 label *label184
--    * label *label185
-   640 end
-   641 label *label179
-   642 sensor :processUnit:state @unit @flag
-   643 set :processUnit:distance -1
-   644 jump *label194 lessThan :processUnit:state 2
--    * label *label195
-   645 jump *label192 lessThanEq :processUnit:state 3
-   646 label *label194
-   647 sensor *tmp217 @unit @firstItem
- 
-   660 jump *label200 equal *tmp223 false
-   661 ucontrol itemDrop .CORE .UNIT_CAPACITY
-   662 label *label200
--    * label *label201
-   663 label *label199
-   664 label *label197
-   665 label *label192
--    * label *label193
-   666 jump *label202 notEqual :processUnit:state 2
-   667 ucontrol within .CORE_X .CORE_Y 8 *tmp227
-   668 jump *label204 equal *tmp227 false
- 
-   688 op div :processUnit:distance *tmp237 10
-   689 label *label205
-   690 label *label202
--    * label *label203
-   691 jump *label208 notEqual :processUnit:state 3
-   692 ucontrol within .DOME_X .DOME_Y 8 *tmp241
-   693 jump *label210 equal *tmp241 false
- 
-   704 ucontrol approach .CORE_X .CORE_Y 6
-   705 set :processUnit:state 2
-   706 label *label214
--    * label *label215
-   707 jump *label211 always
-   708 label *label210
-   709 ucontrol approach .DOME_X .DOME_Y 6
- 
-   717 op div :processUnit:distance *tmp252 10
-   718 label *label211
-   719 label *label208
--    * label *label209
-   720 ucontrol flag :processUnit:state
-   721 sensor *tmp254 @unit @totalItems
-   722 print "  "
- 
-   739 print .MSG
-   740 label *label217
-   741 set :processUnit:unit @unit
--    * label *label178
-   742 set .UNIT_S1 :processUnit:unit
-   743 jump *label218 equal *tmp126 false
-   744 # "Function: inline void processUnit(in out unit, in item, in group, in supply)"
- 
-   753 jump *label224 equal *tmp267 false
-   754 jump *label221 always
-   755 label *label224
--    * label *label225
-   756 label *label222
--    * label *label223
-   757 ubind *tmp9
-   758 set :rebindUnit.5:firstUnit @unit
-   759 jump *label226 equal :rebindUnit.5:firstUnit null
- 
-   762 jump *label231 notEqual *tmp271 0
-   763 jump *label221 always
-   764 label *label231
--    * label *label232
-   765 ubind *tmp9
--    * label *label229
-   766 jump *label230 equal @unit :rebindUnit.5:firstUnit
--    * label *label233
-   767 sensor *tmp275 :rebindUnit.5:firstUnit @dead
-   768 jump *label228 equal *tmp275 0
-   769 label *label230
-   770 label *label226
--    * label *label227
-   771 end
-   772 label *label221
-   773 sensor :processUnit.1:state @unit @flag
-   774 set :processUnit.1:distance -1
-   775 jump *label236 lessThan :processUnit.1:state 2
--    * label *label237
-   776 jump *label234 lessThanEq :processUnit.1:state 3
-   777 label *label236
-   778 sensor *tmp281 @unit @firstItem
- 
-   791 jump *label242 equal *tmp287 false
-   792 ucontrol itemDrop .CORE .UNIT_CAPACITY
-   793 label *label242
--    * label *label243
-   794 label *label241
-   795 label *label239
-   796 label *label234
--    * label *label235
-   797 jump *label244 notEqual :processUnit.1:state 2
-   798 ucontrol within .CORE_X .CORE_Y 8 *tmp291
-   799 jump *label246 equal *tmp291 false
- 
-   819 op div :processUnit.1:distance *tmp301 10
-   820 label *label247
-   821 label *label244
--    * label *label245
-   822 jump *label250 notEqual :processUnit.1:state 3
-   823 ucontrol within .DOME_X .DOME_Y 8 *tmp305
-   824 jump *label252 equal *tmp305 false
- 
-   835 ucontrol approach .CORE_X .CORE_Y 6
-   836 set :processUnit.1:state 2
-   837 label *label256
--    * label *label257
-   838 jump *label253 always
-   839 label *label252
-   840 ucontrol approach .DOME_X .DOME_Y 6
- 
-   848 op div :processUnit.1:distance *tmp316 10
-   849 label *label253
-   850 label *label250
--    * label *label251
-   851 ucontrol flag :processUnit.1:state
-   852 sensor *tmp318 @unit @totalItems
-   853 print "  "
- 
-   870 print .MSG
-   871 label *label259
-   872 set :processUnit.1:unit @unit
--    * label *label220
-   873 set .UNIT_S2 :processUnit.1:unit
-   874 jump *label260 equal .SUPPLY_S_FIRST false
-   875 sensor *tmp323 :processUnit:unit @totalItems
- 
-   880 op equal .SUPPLY_S_FIRST *tmp325 0
-   881 label *label261
-   882 label *label218
--    * label *label219
-   883 # "Function: inline void printDomeStatus(in item, in text)"
-   884 print "\n[green]Phase fabric[] status:\n"
-   885 sensor :printDomeStatus.1:level .DOME @phase-fabric
- 
-   897 print "]"
-   898 print "\n"
-   899 label *label264
--    * label *label262
-   900 # "Function: inline void processUnit(in out unit, in item, in group, in supply)"
-   901 # "Function: inline def rebindUnit(in currentUnit)"
-   902 jump *label267 equal .UNIT_P1 null
- 
-   909 jump *label269 equal *tmp337 false
-   910 jump *label266 always
-   911 label *label269
--    * label *label270
-   912 label *label267
--    * label *label268
-   913 ubind *tmp9
-   914 set :rebindUnit.6:firstUnit @unit
-   915 jump *label271 equal :rebindUnit.6:firstUnit null
- 
-   918 jump *label276 notEqual *tmp341 0
-   919 jump *label266 always
-   920 label *label276
--    * label *label277
-   921 ubind *tmp9
--    * label *label274
-   922 jump *label275 equal @unit :rebindUnit.6:firstUnit
--    * label *label278
-   923 sensor *tmp345 :rebindUnit.6:firstUnit @dead
-   924 jump *label273 equal *tmp345 0
-   925 label *label275
-   926 label *label271
--    * label *label272
-   927 end
-   928 label *label266
-   929 sensor :processUnit.2:state @unit @flag
-   930 set :processUnit.2:distance -1
-   931 jump *label281 lessThan :processUnit.2:state 2
--    * label *label282
-   932 jump *label279 lessThanEq :processUnit.2:state 3
-   933 label *label281
-   934 sensor *tmp351 @unit @firstItem
- 
-   947 jump *label287 equal *tmp357 false
-   948 ucontrol itemDrop .CORE .UNIT_CAPACITY
-   949 label *label287
--    * label *label288
-   950 label *label286
-   951 label *label284
-   952 label *label279
--    * label *label280
-   953 jump *label289 notEqual :processUnit.2:state 2
-   954 ucontrol within .CORE_X .CORE_Y 8 *tmp361
-   955 jump *label291 equal *tmp361 false
- 
-   975 op div :processUnit.2:distance *tmp371 10
-   976 label *label292
-   977 label *label289
--    * label *label290
-   978 jump *label295 notEqual :processUnit.2:state 3
-   979 ucontrol within .DOME_X .DOME_Y 8 *tmp375
-   980 jump *label297 equal *tmp375 false
- 
-   991 ucontrol approach .CORE_X .CORE_Y 6
-   992 set :processUnit.2:state 2
-   993 label *label301
--    * label *label302
-   994 jump *label298 always
-   995 label *label297
-   996 ucontrol approach .DOME_X .DOME_Y 6
- 
-  1004 op div :processUnit.2:distance *tmp386 10
-  1005 label *label298
-  1006 label *label295
--    * label *label296
-  1007 ucontrol flag :processUnit.2:state
-  1008 sensor *tmp388 @unit @totalItems
-  1009 print "  "
- 
-  1026 print .MSG
-  1027 label *label304
-  1028 set :processUnit.2:unit @unit
--    * label *label265
-  1029 set .UNIT_P1 :processUnit.2:unit
-  1030 jump *label305 equal *tmp126 false
-  1031 # "Function: inline void processUnit(in out unit, in item, in group, in supply)"
- 
-  1040 jump *label311 equal *tmp401 false
-  1041 jump *label308 always
-  1042 label *label311
--    * label *label312
-  1043 label *label309
--    * label *label310
-  1044 ubind *tmp9
-  1045 set :rebindUnit.7:firstUnit @unit
-  1046 jump *label313 equal :rebindUnit.7:firstUnit null
- 
-  1049 jump *label318 notEqual *tmp405 0
-  1050 jump *label308 always
-  1051 label *label318
--    * label *label319
-  1052 ubind *tmp9
--    * label *label316
-  1053 jump *label317 equal @unit :rebindUnit.7:firstUnit
--    * label *label320
-  1054 sensor *tmp409 :rebindUnit.7:firstUnit @dead
-  1055 jump *label315 equal *tmp409 0
-  1056 label *label317
-  1057 label *label313
--    * label *label314
-  1058 end
-  1059 label *label308
-  1060 sensor :processUnit.3:state @unit @flag
-  1061 set :processUnit.3:distance -1
-  1062 jump *label323 lessThan :processUnit.3:state 2
--    * label *label324
-  1063 jump *label321 lessThanEq :processUnit.3:state 3
-  1064 label *label323
-  1065 sensor *tmp415 @unit @firstItem
- 
-  1078 jump *label329 equal *tmp421 false
-  1079 ucontrol itemDrop .CORE .UNIT_CAPACITY
-  1080 label *label329
--    * label *label330
-  1081 label *label328
-  1082 label *label326
-  1083 label *label321
--    * label *label322
-  1084 jump *label331 notEqual :processUnit.3:state 2
-  1085 ucontrol within .CORE_X .CORE_Y 8 *tmp425
-  1086 jump *label333 equal *tmp425 false
- 
-  1106 op div :processUnit.3:distance *tmp435 10
-  1107 label *label334
-  1108 label *label331
--    * label *label332
-  1109 jump *label337 notEqual :processUnit.3:state 3
-  1110 ucontrol within .DOME_X .DOME_Y 8 *tmp439
-  1111 jump *label339 equal *tmp439 false
- 
-  1122 ucontrol approach .CORE_X .CORE_Y 6
-  1123 set :processUnit.3:state 2
-  1124 label *label343
--    * label *label344
-  1125 jump *label340 always
-  1126 label *label339
-  1127 ucontrol approach .DOME_X .DOME_Y 6
- 
-  1135 op div :processUnit.3:distance *tmp450 10
-  1136 label *label340
-  1137 label *label337
--    * label *label338
-  1138 ucontrol flag :processUnit.3:state
-  1139 sensor *tmp452 @unit @totalItems
-  1140 print "  "
- 
-  1157 print .MSG
-  1158 label *label346
-  1159 set :processUnit.3:unit @unit
--    * label *label307
-  1160 set .UNIT_P2 :processUnit.3:unit
-  1161 jump *label347 equal .SUPPLY_P_FIRST false
-  1162 sensor *tmp457 :processUnit.2:unit @totalItems
- 
-  1167 op equal .SUPPLY_P_FIRST *tmp459 0
-  1168 label *label348
-  1169 label *label305
--    * label *label306
-  1170 op sub *tmp461 @time :start
-  1171 op floor *tmp462 *tmp461
-  1172 print "\n"
- 
-  1176 print "ms"
-  1177 printflush message1
-  1178 jump *label349 equal *tmp9 UNIT_TYPE
--    * label *label352
-  1179 jump *label349 lessThanEq :unitCheck @time
--    * label *label351
-  1180 # "Function: inline def areUnitsAvailable(in type, in output)"
-  1181 set :areUnitsAvailable.2:free 0
-  1182 set :areUnitsAvailable.2:occupied 0
- 
-  1187 set :needsFourUnits.3:unit @unit
-  1188 sensor *tmp474 :needsFourUnits.3:unit @speed
-  1189 op div :needsFourUnits.3:travel_time *tmp130 *tmp474
--    * label *label387
-  1190 select *tmp477 greaterThanEq :needsFourUnits.3:travel_time 47 4 2
-  1191 label *label361
-  1192 sensor *tmp478 @unit @controlled
-  1193 jump *label366 equal *tmp478 0
--    * label *label367
-  1194 sensor *tmp480 @unit @controller
-  1195 jump *label364 notEqual *tmp480 @this
-  1196 label *label366
- 
-  1199 set *tmp466 true
-  1200 jump *label355 always
-  1201 label *label368
--    * label *label369
-  1202 jump *label365 always
-  1203 label *label364
-  1204 op add :areUnitsAvailable.2:occupied :areUnitsAvailable.2:occupied 1
-  1205 label *label365
-  1206 ubind UNIT_TYPE
--    * label *label362
-  1207 jump *label363 equal @unit :areUnitsAvailable.2:firstUnit
--    * label *label370
-  1208 sensor *tmp487 :areUnitsAvailable.2:firstUnit @dead
-  1209 jump *label361 equal *tmp487 0
-  1210 label *label363
-  1211 label *label356
--    * label *label357
-  1212 jump *label371 always
-  1213 print UNIT_TYPE
-  1214 print ":"
- 
-  1221 print ", needed: "
-  1222 print :areUnitsAvailable.2:needed
-  1223 label *label373
--    * label *label374
-  1224 print "\n"
-  1225 label *label371
--    * label *label372
-  1226 set *tmp466 false
-  1227 label *label355
-  1228 jump *label353 equal *tmp466 false
-  1229 end
-  1230 label *label353
--    * label *label354
-  1231 op add :unitCheck @time 5000
-  1232 label *label349
--    * label *label350
--    * label *label173
-  1233 sensor *tmp192 switch1 @enabled
-  1234 jump *label414 notEqual *tmp192 false
-  1235 label *label174
- 
-  1239 ubind :locateCore:type
-  1240 sensor *tmp494 @unit @controlled
-  1241 jump *label378 equal *tmp494 0
--    * label *label379
-  1242 sensor *tmp496 @unit @controller
-  1243 jump *label376 notEqual *tmp496 @this
-  1244 label *label378
-  1245 ulocate building core false @copper *tmp500 *tmp501 *tmp502 .CORE
-  1246 label *label376
--    * label *label377
-  1247 set :locateCore*retval .CORE
--    * label *label375
-  1248 return :locateCore*retaddr
-  1249 end
+  1357 ubind UNIT_TYPE
+  1358 set :areUnitsAvailable.2:firstUnit @unit
+  1359 jump *label356 equal :areUnitsAvailable.2:firstUnit null
+-    * # "Function: inline def needsFourUnits(in unit)"
+-    * set :needsFourUnits.3:unit @unit
+-    * sensor *tmp474 :needsFourUnits.3:unit @speed
+-    * op div :needsFourUnits.3:travel_time *tmp130 *tmp474
+-    * label *label360
+-    * jump *label358 lessThan :needsFourUnits.3:travel_time 47
+-    * set *tmp477 4
+-    * jump *label359 always
+-    * label *label358
+-    * set *tmp477 2
+-    * label *label359
++ 1360 # "Function: inline def needsFourUnits(in unit)"
++ 1361 set :needsFourUnits.3:unit @unit
++ 1362 sensor *tmp474 :needsFourUnits.3:unit @speed
++ 1363 op div :needsFourUnits.3:travel_time *tmp130 *tmp474
++ 1364 label *label524
++ 1365 select *tmp477 greaterThanEq :needsFourUnits.3:travel_time 47 4 2
+  1366 label *label361
+  1367 sensor *tmp478 @unit @controlled
+  1368 jump *label366 equal *tmp478 0
 
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-21 instructions):
  
     16 label *label5
     17 set :locateCore:type @flare
     18 call *label0 :locateCore*retaddr :locateCore*retval
--    * jump *label389 equal :locateCore*retval false
+-    * jump *label384 equal :locateCore*retval false
 -    * jump *label1 always
 +   19 jump *label1 notEqual :locateCore*retval false
-    20 label *label389
+    20 label *label384
     21 set :locateCore:type @poly
     22 call *label0 :locateCore*retaddr :locateCore*retval
--    * jump *label395 equal :locateCore*retval false
+-    * jump *label390 equal :locateCore*retval false
 -    * jump *label1 always
 +   23 jump *label1 notEqual :locateCore*retval false
-    24 label *label395
+    24 label *label390
     25 set :locateCore:type @mega
     26 call *label0 :locateCore*retaddr :locateCore*retval
--    * jump *label401 equal :locateCore*retval false
+-    * jump *label396 equal :locateCore*retval false
 -    * jump *label1 always
 +   27 jump *label1 notEqual :locateCore*retval false
-    28 label *label401
+    28 label *label396
     29 set :locateCore:type @mono
     30 call *label0 :locateCore*retaddr :locateCore*retval
--    * jump *label407 equal :locateCore*retval false
+-    * jump *label402 equal :locateCore*retval false
 -    * jump *label1 always
 +   31 jump *label1 notEqual :locateCore*retval false
-    32 label *label407
+    32 label *label402
     33 jump *label5 always
     34 label *label1
  
@@ -7494,164 +6678,6 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-21 instr
   1031 ubind *tmp9
   1032 jump *label317 equal @unit :rebindUnit.7:firstUnit
 
-Modifications by Jumps phase, Condition Optimization, pass 4, iteration 1:
- 
-    17 set :locateCore:type @flare
-    18 call *label0 :locateCore*retaddr :locateCore*retval
-    19 jump *label1 notEqual :locateCore*retval false
--    * label *label389
-    20 set :locateCore:type @poly
-    21 call *label0 :locateCore*retaddr :locateCore*retval
-    22 jump *label1 notEqual :locateCore*retval false
--    * label *label395
-    23 set :locateCore:type @mega
-    24 call *label0 :locateCore*retaddr :locateCore*retval
-    25 jump *label1 notEqual :locateCore*retval false
--    * label *label401
-    26 set :locateCore:type @mono
-    27 call *label0 :locateCore*retaddr :locateCore*retval
-    28 jump *label1 notEqual :locateCore*retval false
--    * label *label407
-    29 jump *label5 always
-    30 label *label1
-    31 sensor .CORE_X .CORE @x
- 
-   365 set .UNIT_S1 .UNIT_P1
-   366 set .UNIT_P1 @unit
-   367 jump *label82 notEqual .UNIT_S2 null
--    * label *label85
-   368 label *label83
-   369 ubind *tmp9
-   370 jump *label82 equal @unit :rebindUnits:firstUnit
- 
-   381 op equal *tmp87 *tmp86 @this
-   382 op land *tmp88 *tmp85 *tmp87
-   383 jump *label89 notEqual *tmp88 false
--    * label *label92
-   384 label *label90
-   385 ubind *tmp9
-   386 set :rebindUnit:firstUnit @unit
- 
-   388 label *label96
-   389 sensor *tmp92 @unit @controlled
-   390 jump *label89 equal *tmp92 0
--    * label *label99
-   391 ubind *tmp9
-   392 jump *label98 equal @unit :rebindUnit:firstUnit
-   393 sensor *tmp96 :rebindUnit:firstUnit @dead
- 
-   409 op equal *tmp105 *tmp104 @this
-   410 op land *tmp106 *tmp103 *tmp105
-   411 jump *label103 notEqual *tmp106 false
--    * label *label106
-   412 label *label104
-   413 ubind *tmp9
-   414 set :rebindUnit.1:firstUnit @unit
- 
-   416 label *label110
-   417 sensor *tmp110 @unit @controlled
-   418 jump *label103 equal *tmp110 0
--    * label *label113
-   419 ubind *tmp9
-   420 jump *label112 equal @unit :rebindUnit.1:firstUnit
-   421 sensor *tmp114 :rebindUnit.1:firstUnit @dead
- 
-   462 op equal *tmp142 *tmp141 @this
-   463 op land *tmp143 *tmp140 *tmp142
-   464 jump *label127 notEqual *tmp143 false
--    * label *label130
-   465 label *label128
-   466 ubind *tmp9
-   467 set :rebindUnit.2:firstUnit @unit
- 
-   469 label *label134
-   470 sensor *tmp147 @unit @controlled
-   471 jump *label127 equal *tmp147 0
--    * label *label137
-   472 ubind *tmp9
-   473 jump *label136 equal @unit :rebindUnit.2:firstUnit
-   474 sensor *tmp151 :rebindUnit.2:firstUnit @dead
- 
-   490 op equal *tmp160 *tmp159 @this
-   491 op land *tmp161 *tmp158 *tmp160
-   492 jump *label141 notEqual *tmp161 false
--    * label *label144
-   493 label *label142
-   494 ubind *tmp9
-   495 set :rebindUnit.3:firstUnit @unit
- 
-   497 label *label148
-   498 sensor *tmp165 @unit @controlled
-   499 jump *label141 equal *tmp165 0
--    * label *label151
-   500 ubind *tmp9
-   501 jump *label150 equal @unit :rebindUnit.3:firstUnit
-   502 sensor *tmp169 :rebindUnit.3:firstUnit @dead
- 
-   594 op equal *tmp202 *tmp201 @this
-   595 op land *tmp203 *tmp200 *tmp202
-   596 jump *label179 notEqual *tmp203 false
--    * label *label182
-   597 label *label180
-   598 ubind *tmp9
-   599 set :rebindUnit.4:firstUnit @unit
- 
-   601 label *label186
-   602 sensor *tmp207 @unit @controlled
-   603 jump *label179 equal *tmp207 0
--    * label *label189
-   604 ubind *tmp9
-   605 jump *label188 equal @unit :rebindUnit.4:firstUnit
-   606 sensor *tmp211 :rebindUnit.4:firstUnit @dead
- 
-   721 op equal *tmp266 *tmp265 @this
-   722 op land *tmp267 *tmp264 *tmp266
-   723 jump *label221 notEqual *tmp267 false
--    * label *label224
-   724 label *label222
-   725 ubind *tmp9
-   726 set :rebindUnit.5:firstUnit @unit
- 
-   728 label *label228
-   729 sensor *tmp271 @unit @controlled
-   730 jump *label221 equal *tmp271 0
--    * label *label231
-   731 ubind *tmp9
-   732 jump *label230 equal @unit :rebindUnit.5:firstUnit
-   733 sensor *tmp275 :rebindUnit.5:firstUnit @dead
- 
-   873 op equal *tmp336 *tmp335 @this
-   874 op land *tmp337 *tmp334 *tmp336
-   875 jump *label266 notEqual *tmp337 false
--    * label *label269
-   876 label *label267
-   877 ubind *tmp9
-   878 set :rebindUnit.6:firstUnit @unit
- 
-   880 label *label273
-   881 sensor *tmp341 @unit @controlled
-   882 jump *label266 equal *tmp341 0
--    * label *label276
-   883 ubind *tmp9
-   884 jump *label275 equal @unit :rebindUnit.6:firstUnit
-   885 sensor *tmp345 :rebindUnit.6:firstUnit @dead
- 
-  1000 op equal *tmp400 *tmp399 @this
-  1001 op land *tmp401 *tmp398 *tmp400
-  1002 jump *label308 notEqual *tmp401 false
--    * label *label311
-  1003 label *label309
-  1004 ubind *tmp9
-  1005 set :rebindUnit.7:firstUnit @unit
- 
-  1007 label *label315
-  1008 sensor *tmp405 @unit @controlled
-  1009 jump *label308 equal *tmp405 0
--    * label *label318
-  1010 ubind *tmp9
-  1011 jump *label317 equal @unit :rebindUnit.7:firstUnit
-  1012 sensor *tmp409 :rebindUnit.7:firstUnit @dead
-
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
      1 remark "This is the preferred unit type to use for bringing in supplies."
@@ -7667,41 +6693,41 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
     76 jump *label26 always
     77 label *label39
  
-   128 jump *label422 notEqual *tmp54 @this
-   129 label *label419
+   128 jump *label418 notEqual *tmp54 @this
+   129 label *label415
    130 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
--    * jump *label420 lessThan :areUnitsAvailable.1:free *tmp51
-+  131 jump *label423 lessThan :areUnitsAvailable.1:free *tmp51
+-    * jump *label416 lessThan :areUnitsAvailable.1:free *tmp51
++  131 jump *label419 lessThan :areUnitsAvailable.1:free *tmp51
    132 set *tmp40 true
-   133 jump *label433 always
-   134 label *label420
+   133 jump *label429 always
+   134 label *label416
  
-   187 jump *label448 notEqual *tmp54 @this
-   188 label *label445
+   187 jump *label445 notEqual *tmp54 @this
+   188 label *label442
    189 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
--    * jump *label446 lessThan :areUnitsAvailable.1:free *tmp51
-+  190 jump *label449 lessThan :areUnitsAvailable.1:free *tmp51
+-    * jump *label443 lessThan :areUnitsAvailable.1:free *tmp51
++  190 jump *label446 lessThan :areUnitsAvailable.1:free *tmp51
    191 set *tmp40 true
-   192 jump *label459 always
-   193 label *label446
+   192 jump *label456 always
+   193 label *label443
  
-   246 jump *label474 notEqual *tmp54 @this
-   247 label *label471
+   246 jump *label472 notEqual *tmp54 @this
+   247 label *label469
    248 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
--    * jump *label472 lessThan :areUnitsAvailable.1:free *tmp51
-+  249 jump *label475 lessThan :areUnitsAvailable.1:free *tmp51
+-    * jump *label470 lessThan :areUnitsAvailable.1:free *tmp51
++  249 jump *label473 lessThan :areUnitsAvailable.1:free *tmp51
    250 set *tmp40 true
-   251 jump *label485 always
-   252 label *label472
+   251 jump *label483 always
+   252 label *label470
  
-   305 jump *label500 notEqual *tmp54 @this
-   306 label *label497
+   305 jump *label499 notEqual *tmp54 @this
+   306 label *label496
    307 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
--    * jump *label498 lessThan :areUnitsAvailable.1:free *tmp51
-+  308 jump *label501 lessThan :areUnitsAvailable.1:free *tmp51
+-    * jump *label497 lessThan :areUnitsAvailable.1:free *tmp51
++  308 jump *label500 lessThan :areUnitsAvailable.1:free *tmp51
    309 set *tmp40 true
-   310 jump *label511 always
-   311 label *label498
+   310 jump *label510 always
+   311 label *label497
  
    385 label *label90
    386 ubind *tmp9
@@ -7768,7 +6794,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
    559 sensor *tmp192 switch1 @enabled
 -    * jump *label174 equal *tmp192 false
 +  560 jump __start__ equal *tmp192 false
-   561 label *label414
+   561 label *label409
    562 set :start @time
    563 print " === [gold]Supplying Overdrive Dome[] === "
  
@@ -7942,43 +6968,43 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
     78 op add :areUnitsAvailable:occupied :areUnitsAvailable:occupied 1
     79 label *label36
  
-   129 jump *label423 lessThan :areUnitsAvailable.1:free *tmp51
+   129 jump *label419 lessThan :areUnitsAvailable.1:free *tmp51
    130 set *tmp40 true
-   131 jump *label433 always
--    * label *label420
--    * jump *label423 always
-   132 label *label422
+   131 jump *label429 always
+-    * label *label416
+-    * jump *label419 always
+   132 label *label418
    133 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   134 label *label423
+   134 label *label419
  
-   186 jump *label449 lessThan :areUnitsAvailable.1:free *tmp51
+   186 jump *label446 lessThan :areUnitsAvailable.1:free *tmp51
    187 set *tmp40 true
-   188 jump *label459 always
--    * label *label446
--    * jump *label449 always
-   189 label *label448
+   188 jump *label456 always
+-    * label *label443
+-    * jump *label446 always
+   189 label *label445
    190 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   191 label *label449
+   191 label *label446
  
-   243 jump *label475 lessThan :areUnitsAvailable.1:free *tmp51
+   243 jump *label473 lessThan :areUnitsAvailable.1:free *tmp51
    244 set *tmp40 true
-   245 jump *label485 always
--    * label *label472
--    * jump *label475 always
-   246 label *label474
+   245 jump *label483 always
+-    * label *label470
+-    * jump *label473 always
+   246 label *label472
    247 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   248 label *label475
+   248 label *label473
  
-   300 jump *label501 lessThan :areUnitsAvailable.1:free *tmp51
+   300 jump *label500 lessThan :areUnitsAvailable.1:free *tmp51
    301 set *tmp40 true
-   302 jump *label511 always
--    * label *label498
--    * jump *label501 always
-   303 label *label500
+   302 jump *label510 always
+-    * label *label497
+-    * jump *label500 always
+   303 label *label499
    304 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-   305 label *label501
+   305 label *label500
  
-   331 label *label514
+   331 label *label513
    332 printflush message1
    333 jump *label21 always
 -    * set *tmp9 null
@@ -8155,7 +7181,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
  
   1140 label *label349
   1141 sensor *tmp192 switch1 @enabled
-  1142 jump *label414 notEqual *tmp192 false
+  1142 jump *label409 notEqual *tmp192 false
 -    * label *label174
   1143 end
   1144 label *label0
@@ -8213,13 +7239,13 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
  
     35 sensor *tmp7 switch1 @enabled
     36 jump *label19 notEqual *tmp7 false
-    37 label *label413
+    37 label *label408
 -    * print "[coral]Activate switch to begin supplying overdrive dome..."
 -    * print "\n"
 +   38 print "[coral]Activate switch to begin supplying overdrive dome...\n"
     39 printflush message1
     40 sensor *tmp7 switch1 @enabled
-    41 jump *label413 equal *tmp7 false
+    41 jump *label408 equal *tmp7 false
  
     43 # "Function: inline def chooseUnitType()"
     44 label *label21
@@ -8245,9 +7271,9 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
     87 jump *label44 lessThanEq :areUnitsAvailable:needed 0
     88 print ", needed: "
  
-   132 jump *label417 equal *tmp61 0
-   133 label *label426
-   134 label *label427
+   132 jump *label414 equal *tmp61 0
+   133 label *label422
+   134 label *label423
 -    * print @flare
 -    * print ":"
 -    * print " occupied: "
@@ -8257,12 +7283,12 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 +  135 print "flare: occupied: {0}, free: "
 +  136 format :areUnitsAvailable.1:occupied
    137 print :areUnitsAvailable.1:free
-   138 jump *label429 lessThanEq :areUnitsAvailable.1:needed 0
+   138 jump *label425 lessThanEq :areUnitsAvailable.1:needed 0
    139 print ", needed: "
  
-   185 jump *label443 equal *tmp61 0
-   186 label *label452
-   187 label *label453
+   185 jump *label441 equal *tmp61 0
+   186 label *label449
+   187 label *label450
 -    * print @poly
 -    * print ":"
 -    * print " occupied: "
@@ -8272,12 +7298,12 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 +  188 print "poly: occupied: {0}, free: "
 +  189 format :areUnitsAvailable.1:occupied
    190 print :areUnitsAvailable.1:free
-   191 jump *label455 lessThanEq :areUnitsAvailable.1:needed 0
+   191 jump *label452 lessThanEq :areUnitsAvailable.1:needed 0
    192 print ", needed: "
  
-   238 jump *label469 equal *tmp61 0
-   239 label *label478
-   240 label *label479
+   238 jump *label468 equal *tmp61 0
+   239 label *label476
+   240 label *label477
 -    * print @mega
 -    * print ":"
 -    * print " occupied: "
@@ -8287,12 +7313,12 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 +  241 print "mega: occupied: {0}, free: "
 +  242 format :areUnitsAvailable.1:occupied
    243 print :areUnitsAvailable.1:free
-   244 jump *label481 lessThanEq :areUnitsAvailable.1:needed 0
+   244 jump *label479 lessThanEq :areUnitsAvailable.1:needed 0
    245 print ", needed: "
  
    291 jump *label495 equal *tmp61 0
-   292 label *label504
-   293 label *label505
+   292 label *label503
+   293 label *label504
 -    * print @mono
 -    * print ":"
 -    * print " occupied: "
@@ -8302,11 +7328,11 @@ Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
 +  294 print "mono: occupied: {0}, free: "
 +  295 format :areUnitsAvailable.1:occupied
    296 print :areUnitsAvailable.1:free
-   297 jump *label507 lessThanEq :areUnitsAvailable.1:needed 0
+   297 jump *label506 lessThanEq :areUnitsAvailable.1:needed 0
    298 print ", needed: "
  
    518 jump __start__ equal *tmp192 false
-   519 label *label414
+   519 label *label409
    520 set :start @time
 -    * print " === [gold]Supplying Overdrive Dome[] === "
 -    * print "\n"
@@ -8522,11 +7548,11 @@ sensor .DOME_X .DOME @x
 sensor .DOME_Y .DOME @y
 sensor *tmp7 switch1 @enabled
 jump *label19 notEqual *tmp7 false
-label *label413
+label *label408
 print "[coral]Activate switch to begin supplying overdrive dome...\n"
 printflush message1
 sensor *tmp7 switch1 @enabled
-jump *label413 equal *tmp7 false
+jump *label408 equal *tmp7 false
 label *label19
 # "Function: inline def chooseUnitType()"
 label *label21
@@ -8583,14 +7609,14 @@ jump *label24 equal *tmp10 false
 set *tmp9 UNIT_TYPE
 jump *label20 always
 label *label24
-jump *label436 equal @flare UNIT_TYPE
+jump *label432 equal @flare UNIT_TYPE
 # "Function: inline def areUnitsAvailable(in type, in output)"
 set :areUnitsAvailable.1:free 0
 set :areUnitsAvailable.1:occupied 0
 set :areUnitsAvailable.1:needed 0
 ubind @flare
 set :areUnitsAvailable.1:firstUnit @unit
-jump *label427 equal :areUnitsAvailable.1:firstUnit null
+jump *label423 equal :areUnitsAvailable.1:firstUnit null
 # "Function: inline def needsFourUnits(in unit)"
 set :needsFourUnits.1:unit @unit
 op sub *tmp44 .DOME_X .CORE_X
@@ -8601,49 +7627,49 @@ sensor *tmp48 :needsFourUnits.1:unit @speed
 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
 set :areUnitsAvailable.1:needed *tmp51
-label *label417
+label *label414
 sensor *tmp52 @unit @controlled
-jump *label419 equal *tmp52 0
+jump *label415 equal *tmp52 0
 sensor *tmp54 @unit @controller
-jump *label422 notEqual *tmp54 @this
-label *label419
+jump *label418 notEqual *tmp54 @this
+label *label415
 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
-jump *label423 lessThan :areUnitsAvailable.1:free *tmp51
+jump *label419 lessThan :areUnitsAvailable.1:free *tmp51
 set *tmp40 true
-jump *label433 always
-label *label422
+jump *label429 always
+label *label418
 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-label *label423
+label *label419
 ubind @flare
-jump *label426 equal @unit :areUnitsAvailable.1:firstUnit
+jump *label422 equal @unit :areUnitsAvailable.1:firstUnit
 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
-jump *label417 equal *tmp61 0
-label *label426
-label *label427
+jump *label414 equal *tmp61 0
+label *label422
+label *label423
 print "flare: occupied: {0}, free: "
 format :areUnitsAvailable.1:occupied
 print :areUnitsAvailable.1:free
-jump *label429 lessThanEq :areUnitsAvailable.1:needed 0
+jump *label425 lessThanEq :areUnitsAvailable.1:needed 0
 print ", needed: "
 print :areUnitsAvailable.1:needed
-label *label429
+label *label425
 print "\n"
 set *tmp40 false
-label *label433
-jump *label434 equal *tmp40 false
+label *label429
+jump *label430 equal *tmp40 false
 printflush null
 set *tmp9 @flare
 jump *label20 always
-label *label434
-label *label436
-jump *label462 equal @poly UNIT_TYPE
+label *label430
+label *label432
+jump *label459 equal @poly UNIT_TYPE
 # "Function: inline def areUnitsAvailable(in type, in output)"
 set :areUnitsAvailable.1:free 0
 set :areUnitsAvailable.1:occupied 0
 set :areUnitsAvailable.1:needed 0
 ubind @poly
 set :areUnitsAvailable.1:firstUnit @unit
-jump *label453 equal :areUnitsAvailable.1:firstUnit null
+jump *label450 equal :areUnitsAvailable.1:firstUnit null
 # "Function: inline def needsFourUnits(in unit)"
 set :needsFourUnits.1:unit @unit
 op sub *tmp44 .DOME_X .CORE_X
@@ -8654,49 +7680,49 @@ sensor *tmp48 :needsFourUnits.1:unit @speed
 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
 set :areUnitsAvailable.1:needed *tmp51
-label *label443
+label *label441
 sensor *tmp52 @unit @controlled
-jump *label445 equal *tmp52 0
+jump *label442 equal *tmp52 0
 sensor *tmp54 @unit @controller
-jump *label448 notEqual *tmp54 @this
-label *label445
+jump *label445 notEqual *tmp54 @this
+label *label442
 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
-jump *label449 lessThan :areUnitsAvailable.1:free *tmp51
+jump *label446 lessThan :areUnitsAvailable.1:free *tmp51
 set *tmp40 true
-jump *label459 always
-label *label448
+jump *label456 always
+label *label445
 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-label *label449
+label *label446
 ubind @poly
-jump *label452 equal @unit :areUnitsAvailable.1:firstUnit
+jump *label449 equal @unit :areUnitsAvailable.1:firstUnit
 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
-jump *label443 equal *tmp61 0
-label *label452
-label *label453
+jump *label441 equal *tmp61 0
+label *label449
+label *label450
 print "poly: occupied: {0}, free: "
 format :areUnitsAvailable.1:occupied
 print :areUnitsAvailable.1:free
-jump *label455 lessThanEq :areUnitsAvailable.1:needed 0
+jump *label452 lessThanEq :areUnitsAvailable.1:needed 0
 print ", needed: "
 print :areUnitsAvailable.1:needed
-label *label455
+label *label452
 print "\n"
 set *tmp40 false
-label *label459
-jump *label460 equal *tmp40 false
+label *label456
+jump *label457 equal *tmp40 false
 printflush null
 set *tmp9 @poly
 jump *label20 always
-label *label460
-label *label462
-jump *label488 equal @mega UNIT_TYPE
+label *label457
+label *label459
+jump *label486 equal @mega UNIT_TYPE
 # "Function: inline def areUnitsAvailable(in type, in output)"
 set :areUnitsAvailable.1:free 0
 set :areUnitsAvailable.1:occupied 0
 set :areUnitsAvailable.1:needed 0
 ubind @mega
 set :areUnitsAvailable.1:firstUnit @unit
-jump *label479 equal :areUnitsAvailable.1:firstUnit null
+jump *label477 equal :areUnitsAvailable.1:firstUnit null
 # "Function: inline def needsFourUnits(in unit)"
 set :needsFourUnits.1:unit @unit
 op sub *tmp44 .DOME_X .CORE_X
@@ -8707,49 +7733,49 @@ sensor *tmp48 :needsFourUnits.1:unit @speed
 op div :needsFourUnits.1:travel_time *tmp47 *tmp48
 select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
 set :areUnitsAvailable.1:needed *tmp51
-label *label469
+label *label468
 sensor *tmp52 @unit @controlled
-jump *label471 equal *tmp52 0
+jump *label469 equal *tmp52 0
 sensor *tmp54 @unit @controller
-jump *label474 notEqual *tmp54 @this
-label *label471
+jump *label472 notEqual *tmp54 @this
+label *label469
 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
-jump *label475 lessThan :areUnitsAvailable.1:free *tmp51
+jump *label473 lessThan :areUnitsAvailable.1:free *tmp51
 set *tmp40 true
-jump *label485 always
-label *label474
+jump *label483 always
+label *label472
 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-label *label475
+label *label473
 ubind @mega
-jump *label478 equal @unit :areUnitsAvailable.1:firstUnit
+jump *label476 equal @unit :areUnitsAvailable.1:firstUnit
 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
-jump *label469 equal *tmp61 0
-label *label478
-label *label479
+jump *label468 equal *tmp61 0
+label *label476
+label *label477
 print "mega: occupied: {0}, free: "
 format :areUnitsAvailable.1:occupied
 print :areUnitsAvailable.1:free
-jump *label481 lessThanEq :areUnitsAvailable.1:needed 0
+jump *label479 lessThanEq :areUnitsAvailable.1:needed 0
 print ", needed: "
 print :areUnitsAvailable.1:needed
-label *label481
+label *label479
 print "\n"
 set *tmp40 false
-label *label485
-jump *label486 equal *tmp40 false
+label *label483
+jump *label484 equal *tmp40 false
 printflush null
 set *tmp9 @mega
 jump *label20 always
+label *label484
 label *label486
-label *label488
-jump *label514 equal @mono UNIT_TYPE
+jump *label513 equal @mono UNIT_TYPE
 # "Function: inline def areUnitsAvailable(in type, in output)"
 set :areUnitsAvailable.1:free 0
 set :areUnitsAvailable.1:occupied 0
 set :areUnitsAvailable.1:needed 0
 ubind @mono
 set :areUnitsAvailable.1:firstUnit @unit
-jump *label505 equal :areUnitsAvailable.1:firstUnit null
+jump *label504 equal :areUnitsAvailable.1:firstUnit null
 # "Function: inline def needsFourUnits(in unit)"
 set :needsFourUnits.1:unit @unit
 op sub *tmp44 .DOME_X .CORE_X
@@ -8762,39 +7788,39 @@ select *tmp51 greaterThanEq :needsFourUnits.1:travel_time 47 4 2
 set :areUnitsAvailable.1:needed *tmp51
 label *label495
 sensor *tmp52 @unit @controlled
-jump *label497 equal *tmp52 0
+jump *label496 equal *tmp52 0
 sensor *tmp54 @unit @controller
-jump *label500 notEqual *tmp54 @this
-label *label497
+jump *label499 notEqual *tmp54 @this
+label *label496
 op add :areUnitsAvailable.1:free :areUnitsAvailable.1:free 1
-jump *label501 lessThan :areUnitsAvailable.1:free *tmp51
+jump *label500 lessThan :areUnitsAvailable.1:free *tmp51
 set *tmp40 true
-jump *label511 always
-label *label500
+jump *label510 always
+label *label499
 op add :areUnitsAvailable.1:occupied :areUnitsAvailable.1:occupied 1
-label *label501
+label *label500
 ubind @mono
-jump *label504 equal @unit :areUnitsAvailable.1:firstUnit
+jump *label503 equal @unit :areUnitsAvailable.1:firstUnit
 sensor *tmp61 :areUnitsAvailable.1:firstUnit @dead
 jump *label495 equal *tmp61 0
+label *label503
 label *label504
-label *label505
 print "mono: occupied: {0}, free: "
 format :areUnitsAvailable.1:occupied
 print :areUnitsAvailable.1:free
-jump *label507 lessThanEq :areUnitsAvailable.1:needed 0
+jump *label506 lessThanEq :areUnitsAvailable.1:needed 0
 print ", needed: "
 print :areUnitsAvailable.1:needed
-label *label507
+label *label506
 print "\n"
 set *tmp40 false
-label *label511
-jump *label512 equal *tmp40 false
+label *label510
+jump *label511 equal *tmp40 false
 printflush null
 set *tmp9 @mono
 jump *label20 always
-label *label512
-label *label514
+label *label511
+label *label513
 printflush message1
 jump *label21 always
 label *label20
@@ -9004,7 +8030,7 @@ label *label169
 op add :unitCheck @time 5000
 sensor *tmp192 switch1 @enabled
 jump __start__ equal *tmp192 false
-label *label414
+label *label409
 set :start @time
 print " === [gold]Supplying Overdrive Dome[] === \n\nUnit type: [green]{0}[]\n\n[green]Silicon[] status:\n"
 format *tmp9
@@ -9549,7 +8575,7 @@ label *label353
 op add :unitCheck @time 5000
 label *label349
 sensor *tmp192 switch1 @enabled
-jump *label414 notEqual *tmp192 false
+jump *label409 notEqual *tmp192 false
 end
 label *label0
 # "Function: noinline def locateCore(in type)"

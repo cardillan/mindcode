@@ -666,6 +666,14 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     protected LogicIterator createIteratorAtContext(AstContext context) {
         return optimizationContext.createIteratorAtContext(context);
     }
+
+    /// Creates a new LogicIterator representing instructions within a given context.
+    ///
+    /// @param context target context
+    /// @return LogicIterator positioned at the beginning of the given context
+    public LogicIterator createIteratorForContext(AstContext context) {
+        return optimizationContext.createIteratorForContext(context);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Finding contexts">

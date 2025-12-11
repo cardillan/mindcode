@@ -1463,7 +1463,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(SET, ":row", "1498"),
                     createInstruction(LABEL, label(6)),
                     createInstruction(OP, "add", ":col", ":row", "1"),
-                    createInstruction(JUMP, label(5), "lessThan", ":col", "0"),
+                    createInstruction(JUMP, label(5), "lessThan", ":row", "-1"),
                     createInstruction(LABEL, label(7)),
                     createInstruction(PRINT, ":col"),
                     createInstruction(OP, "sub", ":col", ":col", "1"),

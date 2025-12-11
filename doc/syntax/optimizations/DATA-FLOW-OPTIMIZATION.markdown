@@ -52,7 +52,7 @@ Notice the `initialized = 1` statement is preserved, while `foo = 1` is not.
 This protection is also applied to assignment to uninitialized variables made before calling a user function which, directly or indirectly, calls or may call the `end()` function:
 
 ```Mindcode
-set unreachable-code-elimination = none;
+#set unreachable-code-elimination = none;
 print(foo);
 foo = 5;
 bar();
@@ -204,7 +204,7 @@ Backpropagation is a separate optimization that allows modifying instructions pr
 This example demonstrates the effects of the backpropagation optimization:
 
 ```Mindcode
-set optimization = experimental;
+#set optimization = experimental;
 i = rand(10);
 a = i;
 i = rand(20);

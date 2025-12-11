@@ -732,23 +732,21 @@ public class OptimizationContext {
             }
 
             LogicBoolean result = switch (activeTargets.size()) {
-                case 0 -> LogicBoolean.TRUE;  // If there's no active target, the condition flows into the true branch naturally
-                case 1 -> activeTargets.stream().findFirst()
+                // If there's no active target, the condition flows into the true branch naturally
+                case 0 -> LogicBoolean.TRUE;
+
+                // If there's only one active target, and the condition exit point isn't active, the active target decides the fate
+                // (should be always false, btw)
+                case 1 -> active ? null : activeTargets.stream().findFirst()
                         .map(l -> LogicBoolean.get(getLabelInstruction(l).getAstContext() == shortCircuitContext)).get();
+
+                // Multiple active targets: undecidable
                 default -> null;
             };
 
             println("RESULT: " + result + "\n\n");
             return result;
         } else {
-//            int jumps = (int) instructions.stream().filter(JumpInstruction.class::isInstance).count();
-//            return switch (jumps) {
-//                case 0 -> LogicBoolean.TRUE;
-//                case 1 -> instructions.getLast() instanceof JumpInstruction jump && jump.getAstContext() == conditionContext
-//                        ? negate(evaluateJumpInstruction(jump))     // Evaluate the jump
-//                        : null;                                     // We don't know
-//                default -> null;
-//            };
             long jumps = instructions.stream().filter(JumpInstruction.class::isInstance).count();
             LogicBoolean jumpResult = jumps == 0 ? LogicBoolean.FALSE :
                     jumps == 1 && (instructions.getFromEnd(0) instanceof JumpInstruction jump)
@@ -1340,7 +1338,7 @@ public class OptimizationContext {
     ///
     /// @return a new LogicIterator instance
     public LogicIterator createIterator() {
-        return createIteratorAtIndex(0);
+        return createIteratorAtIndex(0, _ -> true);
     }
 
     /// Creates a new LogicIterator positioned at the given index.
@@ -1348,7 +1346,17 @@ public class OptimizationContext {
     /// @param index initial position of the iterator
     /// @return a new LogicIterator instance
     public LogicIterator createIteratorAtIndex(int index) {
-        LogicIterator iterator = new LogicIterator(index);
+        LogicIterator iterator = new LogicIterator(index, _ -> true);
+        iterators.add(iterator);
+        return iterator;
+    }
+
+    /// Creates a new LogicIterator positioned at the given index.
+    ///
+    /// @param index initial position of the iterator
+    /// @return a new LogicIterator instance
+    public LogicIterator createIteratorAtIndex(int index, Predicate<LogicInstruction> matcher) {
+        LogicIterator iterator = new LogicIterator(index, matcher);
         iterators.add(iterator);
         return iterator;
     }
@@ -1358,7 +1366,7 @@ public class OptimizationContext {
     /// @param instruction target instruction
     /// @return LogicIterator positioned at the given instruction
     public LogicIterator createIteratorAtInstruction(LogicInstruction instruction) {
-        return createIteratorAtIndex(existingInstructionIndex(instruction));
+        return createIteratorAtIndex(existingInstructionIndex(instruction), _ -> true);
     }
 
     /// Creates a new LogicIterator positioned at the beginning of the given context.
@@ -1366,7 +1374,16 @@ public class OptimizationContext {
     /// @param context target context
     /// @return LogicIterator positioned at the beginning of the given context
     public LogicIterator createIteratorAtContext(AstContext context) {
-        return createIteratorAtIndex(firstInstructionIndex(context));
+        return createIteratorAtIndex(firstInstructionIndex(context), _ -> true);
+    }
+
+    /// Creates a new LogicIterator representing instructions within a given context.
+    ///
+    /// @param context target context
+    /// @return LogicIterator positioned at the beginning of the given context
+    public LogicIterator createIteratorForContext(AstContext context) {
+        int index = firstInstructionIndex(context);
+        return index < 0 ? new LogicIterator() : createIteratorAtIndex(index, ix -> ix.belongsTo(context));
     }
 
     /// This class is modeled after ListIterator. Provides read-only functions at the moment.
@@ -1376,15 +1393,35 @@ public class OptimizationContext {
     /// This is true regardless of how the modification was done (e.g., even by modifications made though
     /// different LogicIterator instance, or by calling methods).
     public class LogicIterator implements ListIterator<LogicInstruction>, AutoCloseable {
+        private final Predicate<LogicInstruction> matcher;
+        private final boolean valid;
         private int cursor;
         private boolean closed = false;
         private int lastRet = -1;
 
-        private LogicIterator(int cursor) {
+        private LogicIterator() {
+            this.cursor = 0;
+            this.matcher = _ -> false;
+            this.valid = false;
+        }
+        private LogicIterator(int cursor, Predicate<LogicInstruction> matcher) {
             this.cursor = cursor;
-            if (cursor < 0 || cursor > program.size()) {
+            this.matcher = matcher;
+            this.valid = true;
+            if (cursor < 0 || cursor > program.size() || failIndex(cursor)) {
                 throw new NoSuchElementException();
             }
+        }
+
+        private boolean failIndex(int index) {
+            return index >= 0 && index < program.size() && !matcher.test(program.get(index));
+        }
+
+        private LogicInstruction test(LogicInstruction instruction) {
+            if (!matcher.test(instruction)) {
+                throw new NoSuchElementException();
+            }
+            return instruction;
         }
 
         @Override
@@ -1395,7 +1432,7 @@ public class OptimizationContext {
 
         public void setNextIndex(int index) {
             checkClosed();
-            if (cursor < 0 || cursor >= program.size()) {
+            if (cursor < 0 || cursor >= program.size() || failIndex(cursor)) {
                 throw new NoSuchElementException();
             }
             cursor = index;
@@ -1416,13 +1453,25 @@ public class OptimizationContext {
         /// @return instruction at given offset relative to current position, or null
         public LogicInstruction peek(int offset) {
             checkClosed();
-            return instructionAt(cursor + offset);
+            return test(instructionAt(cursor + offset));
+        }
+
+        /// Returns the next non-empty instruction without advancing the cursor.
+        /// @return the next non-empty instruction
+        public @Nullable LogicInstruction peekValid() {
+            checkClosed();
+            for (int i = cursor; i < program.size(); i++) {
+                LogicInstruction instruction = program.get(i);
+                if (!matcher.test(instruction)) break;
+                if (instruction.getOpcode() != Opcode.EMPTY) return instruction;
+            }
+            return null;
         }
 
         /// @return true if there's a next instruction.
         public boolean hasNext() {
             checkClosed();
-            return cursor < program.size();
+            return cursor < program.size() && !failIndex(cursor);
         }
 
         /// @return the next instruction
@@ -1430,7 +1479,24 @@ public class OptimizationContext {
         public LogicInstruction next() {
             checkClosed();
             int i = cursor;
-            if (i >= program.size()) {
+            if (i >= program.size() || failIndex(i)) {
+                throw new NoSuchElementException();
+            }
+            cursor = i + 1;
+            return program.get(lastRet = i);
+        }
+
+        /// Returns the next instructions, skipping all empty instructions in the process
+        /// @return the next non-empty instruction
+        /// @throws NoSuchElementException when at the end of the program
+        public LogicInstruction nextValid() {
+            checkClosed();
+            int i = cursor;
+
+            while (i < program.size() && program.get(i).getOpcode() == Opcode.EMPTY) {
+                i++;
+            }
+            if (i >= program.size() || failIndex(i)) {
                 throw new NoSuchElementException();
             }
             cursor = i + 1;
@@ -1452,7 +1518,7 @@ public class OptimizationContext {
         @Override
         public boolean hasPrevious() {
             checkClosed();
-            return cursor != 0;
+            return cursor > 0 && !failIndex(cursor - 1);
         }
 
         /// @return the previous instruction
@@ -1460,7 +1526,7 @@ public class OptimizationContext {
         public LogicInstruction previous() {
             checkClosed();
             int i = cursor - 1;
-            if (i < 0) {
+            if (i < 0 || failIndex(i)) {
                 throw new NoSuchElementException();
             }
             cursor = i;
@@ -1498,6 +1564,16 @@ public class OptimizationContext {
             replaceInstruction(lastRet, replacement);
         }
 
+        /// Sets the last returned instruction to empty. If no instruction was returned, or it was already removed,
+        /// an exception is thrown.
+        public void setEmpty() {
+            checkClosed();
+            if (lastRet < 0) {
+                throw new IllegalStateException();
+            }
+            replaceInstruction(lastRet, instructionProcessor.createEmpty(program.get(lastRet).getAstContext()));
+        }
+
         /// Inserts the specified instruction into the list.
         /// The instruction is inserted immediately before the element that
         /// would be returned by [#next], if any, and after the element
@@ -1510,6 +1586,10 @@ public class OptimizationContext {
         @Override
         public void add(LogicInstruction instruction) {
             checkClosed();
+            if (!valid) {
+                throw new IllegalStateException();
+            }
+
             int index = cursor;
             insertInstruction(index, instruction);
             // Cursor will be updated in instructionAdded
@@ -1561,7 +1641,7 @@ public class OptimizationContext {
     }
 
     private void closeIterator(LogicIterator iterator) {
-        if (!iterators.remove(iterator)) {
+        if (iterator.valid && !iterators.remove(iterator)) {
             throw new IllegalStateException("Trying to close unknown iterator.");
         }
     }

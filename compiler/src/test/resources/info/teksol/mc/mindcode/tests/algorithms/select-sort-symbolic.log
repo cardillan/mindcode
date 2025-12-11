@@ -202,49 +202,6 @@ Modifications by Iterated phase, Condition Optimization, pass 3, iteration 1:
      8 read :min ARRAY :i
      9 set :min_index :i
 
-Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
- 
-     2 set FINAL bank3
-     3 op sub *tmp1 SIZE 1
-     4 set :i 0
--    * label *label0
-     5 jump *label2 lessThanEq SIZE 1
-     6 label *label11
-     7 read :min ARRAY :i
-     8 set :min_index :i
-     9 op add :j :i 1
--    * label *label3
-    10 jump *label5 greaterThanEq :j SIZE
-    11 label *label12
-    12 read :curr ARRAY :j
- 
-    14 set :min :curr
-    15 set :min_index :j
-    16 label *label6
--    * label *label7
--    * label *label4
-    17 op add :j :j 1
-    18 jump *label12 lessThan :j SIZE
-    19 label *label5
-    20 read *tmp12 ARRAY :i
-    21 write *tmp12 ARRAY :min_index
-    22 write :min ARRAY :i
--    * label *label1
-    23 op add :i :i 1
-    24 jump *label11 lessThan :i *tmp1
-    25 label *label2
-    26 set :i 0
--    * label *label8
-    27 jump *label10 greaterThanEq 0 SIZE
-    28 label *label13
-    29 read *tmp16 FINAL :i
-    30 read *tmp18 ARRAY :i
-    31 assertequals *tmp16 *tmp18 "unexpected value"
--    * label *label9
-    32 op add :i :i 1
-    33 jump *label13 lessThan :i SIZE
-    34 label *label10
-
 Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
     33 jump *label13 lessThan :i SIZE

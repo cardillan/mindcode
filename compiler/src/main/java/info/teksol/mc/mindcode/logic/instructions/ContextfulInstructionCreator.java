@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
@@ -52,10 +51,6 @@ public interface ContextfulInstructionCreator {
 
     default void setInternalError() {
         throw new MindcodeInternalError("Internal error occurred.");
-    }
-
-    default void addForcedVariable(LogicVariable variable) {
-        MindcodeCompiler.getContext().addForcedVariable(variable);
     }
 
     LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments);

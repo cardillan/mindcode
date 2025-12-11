@@ -71,7 +71,7 @@ The format instruction is used in optimization when these conditions are met:
 If the `{0}` placeholder is avoided, the formatting mechanism can be used freely in the code without any limitations and the print merging optimization with the format instruction can still happen. To avoid the `{0}` placeholder, use placeholders starting at `{1}`:
 
 ```Mindcode
-set target = 8;
+#set target = 8;
 param a = 10;               // prevent a from being propagated as a constant
 println("{2} {1}");         // if you use "{0} {1}" instead - different optimization will happen 
 format("Before");

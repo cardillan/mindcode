@@ -82,9 +82,9 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
                         print("Done");
                         """,
                 createInstruction(LABEL, label(0)),
-                createInstruction(JUMP, label(2), "greaterThanEq", "@time", "wait"),
+                createInstruction(JUMP, label(2), "greaterThanEq", "@time", ":wait"),
                 createInstruction(OP, "add", ":n", ":n", "1"),
-                createInstruction(JUMP, label(0), "greaterThanEq", "@time", "wait"),
+                createInstruction(JUMP, label(0), "greaterThanEq", "@time", ":wait"),
                 createInstruction(PRINT, q("Waiting")),
                 createInstruction(JUMP, label(0), "always"),
                 createInstruction(JUMP, label(0), "always"),

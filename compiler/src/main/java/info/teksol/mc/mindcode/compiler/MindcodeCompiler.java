@@ -63,12 +63,9 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 @NullMarked
 public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuilderContext, PreprocessorContext,
         ArrayConstructorContext, CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext,
-        VariablesContext, OptimizerContext {
+        VariablesContext, ForcedVariableContext, OptimizerContext {
 
     public static final String REMOTE_PROTOCOL_VERSION = "v1";
-
-    // MindcodeCompiler serves as a compiler context too
-    private static final ThreadLocal<@Nullable MindcodeCompiler> context = new ThreadLocal<>();
 
     // Inputs, configurations, and tools
     private final CompilationPhase targetPhase;
@@ -136,7 +133,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         returnStack = new ReturnStack();
         stackTracker = new StackTracker(messageLogger);
 
-        context.set(this);
+        ContextFactory.setCompilerContext(this);
     }
 
     public void setEmulatorInitializer(Consumer<Processor> emulatorInitializer) {
@@ -437,20 +434,6 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
     public boolean hasErrors() {
         return messageLogger.hasErrors();
-    }
-
-    public static boolean initialized() {
-        return context.get() != null;
-    }
-
-    // Root method for getting compiler contexts
-    // Allows finding all out-of-line usages of compiler context through call hierarchy.
-    public static MindcodeCompiler getContext() {
-        return Objects.requireNonNull(context.get());
-    }
-
-    public static CompileTimeEvaluatorContext getCompileTimeEvaluatorContext() {
-        return getContext();
     }
 
     // Compiler outputs

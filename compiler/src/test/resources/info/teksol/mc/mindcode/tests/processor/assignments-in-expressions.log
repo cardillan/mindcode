@@ -108,18 +108,6 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
     10 label *label1
     11 label *label2
 
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
- 
-     8 jump *label1 greaterThanEq a b
-     9 print "yes"
-    10 label *label1
--    * label *label2
-    11 print :test:res
--    * label *label0
-    12 assertprints "yes1" "assignments in conditions"
-    13 stop
-    14 end
-
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
     11 print :test:res

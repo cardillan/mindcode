@@ -1,29 +1,18 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.ArrayConstruction;
 import info.teksol.mc.mindcode.logic.instructions.ReadArrInstruction;
 import info.teksol.mc.mindcode.logic.instructions.WriteArrInstruction;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public class ArrayConstructorFactory {
-    private static final ThreadLocal<@Nullable ArrayConstructorContext> context = new ThreadLocal<>();
-
-    private static ArrayConstructorContext context() {
-        ArrayConstructorContext context1 = context.get();
-        return context1 == null ? MindcodeCompiler.getContext() : context1;
-    }
-
-    public static void setContext(@Nullable ArrayConstructorContext context) {
-        ArrayConstructorFactory.context.set(context);
-    }
 
     public static ArrayConstructor create(ArrayAccessInstruction instruction) {
-        ArrayConstructorContext context = context();
+        ArrayConstructorContext context = ContextFactory.getArrayConstructorContext();
         boolean compact = instruction.getArrayConstruction() == ArrayConstruction.COMPACT;
         return switch (instruction.getArrayOrganization()) {
             case INTERNAL -> compact ? new CompactSharedArrayConstructor(context, instruction)

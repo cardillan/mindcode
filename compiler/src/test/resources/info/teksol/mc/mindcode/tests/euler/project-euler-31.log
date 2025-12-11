@@ -381,61 +381,6 @@ Modifications by Optimize return at line 14:9 (+2 instructions):
     38 label *label15
     39 set :ways:result 0
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
-     0 set *sp 16
--    * label *label23
-     1 write 200 bank1 0
--    * label *label24
--    * label *label27
-     2 write 100 bank1 1
--    * label *label28
--    * label *label31
-     3 write 50 bank1 2
--    * label *label32
--    * label *label35
-     4 write 20 bank1 3
--    * label *label36
--    * label *label39
-     5 write 10 bank1 4
--    * label *label40
--    * label *label43
-     6 write 5 bank1 5
--    * label *label44
--    * label *label47
-     7 write 2 bank1 6
--    * label *label48
--    * label *label51
-     8 write 1 bank1 7
--    * label *label52
--    * label *label3
-     9 set :ways:amount 20
-    10 set :ways:index 1
-    11 callrec bank1 *label0 *label12 :ways*retval
- 
-    18 set :ways*retval 1
-    19 returnrec bank1
-    20 label *label14
--    * label *label15
-    21 set :ways:result 0
-    22 set :ways:i :ways:index
--    * label *label16
-    23 jump *label18 greaterThanEq :ways:index 8
-    24 label *label22
-    25 read :ways:p bank1 :ways:i
- 
-    42 pop bank1 :ways:amount
-    43 op add :ways:result :ways:result :ways*retval
-    44 label *label19
--    * label *label20
--    * label *label17
-    45 op add :ways:i :ways:i 1
-    46 jump *label22 lessThan :ways:i 8
-    47 label *label18
-    48 set :ways*retval :ways:result
--    * label *label13
-    49 returnrec bank1
-    50 end
-
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
     47 label *label18

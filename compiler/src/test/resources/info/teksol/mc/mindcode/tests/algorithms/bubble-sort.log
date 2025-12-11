@@ -233,39 +233,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     31 read *tmp15 FINAL :i
     32 read *tmp17 ARRAY :i
 
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
- 
-     5 op sub :n :n 1
-     6 set :sorted true
-     7 set :i 0
--    * label *label3
-     8 jump *label5 greaterThanEq 0 :n
-     9 label *label12
-    10 op add *tmp1 :i 1
- 
-    15 write :testAndSwap:a ARRAY *tmp1
-    16 set :sorted false
-    17 label *label8
--    * label *label6
--    * label *label4
-    18 op add :i :i 1
-    19 jump *label12 lessThan :i :n
-    20 label *label5
--    * label *label1
-    21 jump *label0 equal :sorted false
--    * label *label2
-    22 set :i 0
--    * label *label9
-    23 jump *label11 greaterThanEq 0 SIZE
-    24 label *label13
-    25 read *tmp15 FINAL :i
-    26 read *tmp17 ARRAY :i
-    27 assertequals *tmp15 *tmp17 "unexpected value"
--    * label *label10
-    28 op add :i :i 1
-    29 jump *label13 lessThan :i SIZE
-    30 label *label11
-
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
     29 jump *label13 lessThan :i SIZE

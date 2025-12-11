@@ -67,27 +67,6 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     17 assertequals 669171001 :sum "Project Euler 28"
     18 stop
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-     1 set :current 3
-     2 set :step 2
-     3 set :count 1
--    * label *label0
-     4 label *label5
-     5 op add :sum :sum :current
-     6 op add :current :current :step
- 
-     9 op add :step :step 2
-    10 set :count 0
-    11 label *label3
--    * label *label4
--    * label *label1
-    12 jump *label5 lessThanEq :current 1002001
--    * label *label2
-    13 assertequals 669171001 :sum "Project Euler 28"
-    14 stop
-    15 end
-
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
     12 jump *label5 lessThanEq :current 1002001

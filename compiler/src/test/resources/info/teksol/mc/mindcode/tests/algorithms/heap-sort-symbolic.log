@@ -449,80 +449,6 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
     47 label *label33
     48 read :down:cv ARRAY :down:child
 
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
- 
-     1 set ARRAY bank2
-     2 set FINAL bank3
-     3 set :i 1
--    * label *label0
-     4 jump *label2 greaterThanEq 1 SIZE
-     5 label *label29
-     6 # "Function: def up(in index)"
-     7 set :up:index :i
--    * label *label4
-     8 jump *label6 lessThanEq :i 0
-     9 label *label30
-    10 op sub *tmp2 :up:index 1
- 
-    19 label *label7
-    20 jump *label6 always
-    21 label *label8
--    * label *label5
-    22 jump *label30 greaterThan :up:parent 0
-    23 label *label6
--    * label *label3
--    * label *label1
-    24 op add :i :i 1
-    25 jump *label29 lessThan :i SIZE
-    26 label *label2
-    27 op sub :index SIZE 1
--    * label *label9
-    28 jump *label11 lessThanEq SIZE 1
-    29 label *label31
-    30 read :x ARRAY 0
- 
-    34 op sub :index :index 1
-    35 # "Function: def down(in index)"
-    36 set :down:parent 0
--    * label *label13
-    37 set *tmp23 0
-    38 set :down:child 1
-    39 jump *label15 greaterThan 1 :index
- 
-    46 op add :down:child *tmp23 2
-    47 read :down:cv ARRAY :down:child
-    48 label *label18
--    * label *label19
-    49 label *label16
--    * label *label17
-    50 read :down:pv ARRAY :down:parent
-    51 jump *label20 greaterThanEq :down:pv :down:cv
-    52 write :down:cv ARRAY :down:parent
- 
-    56 label *label20
-    57 jump *label15 always
-    58 label *label21
--    * label *label14
-    59 op mul *tmp23 :down:child 2
-    60 op add :down:child *tmp23 1
-    61 jump *label33 lessThanEq :down:child :index
-    62 label *label15
--    * label *label12
--    * label *label10
-    63 jump *label31 greaterThan :index 0
-    64 label *label11
-    65 set :i 0
--    * label *label22
-    66 jump *label24 greaterThanEq 0 SIZE
-    67 label *label32
-    68 read *tmp46 FINAL :i
-    69 read *tmp48 ARRAY :i
-    70 assertequals *tmp46 *tmp48 "unexpected value"
--    * label *label23
-    71 op add :i :i 1
-    72 jump *label32 lessThan :i SIZE
-    73 label *label24
-
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  
     11 op idiv :up:parent *tmp2 2
@@ -585,24 +511,6 @@ Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-3 i
     67 label *label24
     68 stop
 -    * end
-
-Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
- 
-    15 write :up:pv ARRAY :up:index
-    16 write :up:iv ARRAY :up:parent
-    17 set :up:index :up:parent
--    * label *label8
-    18 jump *label30 greaterThan :up:parent 0
-    19 label *label6
-    20 op add :i :i 1
- 
-    48 write :down:cv ARRAY :down:parent
-    49 write :down:pv ARRAY :down:child
-    50 set :down:parent :down:child
--    * label *label21
-    51 op mul *tmp23 :down:child 2
-    52 op add :down:child *tmp23 1
-    53 jump *label33 lessThanEq :down:child :index
 
 Final code before resolving virtual instructions:
 

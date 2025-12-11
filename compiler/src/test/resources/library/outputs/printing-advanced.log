@@ -6,8 +6,8 @@
     22 instructions eliminated by Condition Optimization (5 iterations).
     36 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
     31 instructions modified by Expression Optimization (3 iterations).
-     6 instructions eliminated by Boolean Optimization (5 iterations).
-       2 fully-evaluated conditions turned to a sequence of selects.
+     6 instructions eliminated by Boolean Optimization (7 iterations).
+       2 fully-evaluated expressions optimized using selects.
    344 instructions eliminated by Data Flow Optimization (25 passes, 81 iterations).
      4 instructions eliminated by Loop Optimization (3 iterations).
      7 loops improved by Loop Optimization.
@@ -17,7 +17,7 @@
     15 function calls inlined by Function Inlining.
     12 instructions eliminated by Case Switching (28 iterations).
      2 case expressions converted to fast dispatch by Case Switching.
-     6 instructions eliminated by Jump Straightening (5 iterations).
+     6 instructions eliminated by Jump Straightening (6 iterations).
    140 instructions updated by Jump Threading.
    288 instructions eliminated by Unreachable Code Elimination (2 iterations).
     20 instructions eliminated by Print Merging.

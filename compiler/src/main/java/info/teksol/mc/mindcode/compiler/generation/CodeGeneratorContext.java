@@ -1,5 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
+import info.teksol.mc.mindcode.compiler.ForcedVariableContext;
+import info.teksol.mc.mindcode.compiler.MessageContext;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstAllocation;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstRequire;
@@ -19,10 +21,12 @@ import java.util.Set;
 
 @NullMarked
 public interface CodeGeneratorContext extends
+        MessageContext,
         PreprocessorContext,
         CodeAssemblerContext,
         CompileTimeEvaluatorContext,
-        FunctionMapperContext {
+        FunctionMapperContext,
+        ForcedVariableContext {
     boolean hasErrors();
     CompileTimeEvaluator compileTimeEvaluator();
     ReturnStack returnStack();

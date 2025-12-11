@@ -5,15 +5,15 @@
     12 instructions eliminated by Condition Optimization (4 iterations).
      8 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
-     1 instructions eliminated by Boolean Optimization (3 iterations).
-       1 fully-evaluated conditions turned to a sequence of selects.
+     1 instructions eliminated by Boolean Optimization (5 iterations).
+       1 fully-evaluated expressions optimized using selects.
      1 instructions eliminated by If Expression Optimization (2 iterations).
      3 instructions modified by Data Flow Optimization (5 iterations).
      4 instructions modified by Loop Optimization (2 iterations).
      4 loops improved by Loop Optimization.
      1 instructions eliminated by Case Switching (4 iterations).
      1 case expressions converted to fast dispatch by Case Switching.
-     5 instructions eliminated by Jump Straightening (4 iterations).
+     5 instructions eliminated by Jump Straightening (5 iterations).
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     23 instructions eliminated by Print Merging.
     94 instructions after optimizations.
@@ -687,125 +687,6 @@ Modifications by Fast-dispatch case at line 13:9 (-1 instructions):
     38 label *label4
     39 jump *label41 greaterThan :n 0
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-     2 set .TARGET_MEMORY null
-     3 set .SWITCH null
-     4 set .MESSAGE null
--    * label *label0
-     5 label *label40
-     6 print "Item Rate Meter"
-     7 set :n @links
--    * label *label3
-     8 jump *label5 lessThanEq :n 0
-     9 label *label41
-    10 op sub :n :n 1
- 
-    16 multijump *tmp55 0 0 (m:*label45)
-    17 multilabel *label50 (m:*label45)
-    18 multilabel *label46 (m:*label45)
--    * label *label44
-    19 jump *label6 always
-    20 multilabel *label47 (m:*label45)
--    * label *label8
-    21 set .MESSAGE :block
-    22 jump *label6 always
--    * label *label7
-    23 multilabel *label48 (m:*label45)
--    * label *label10
-    24 set .SWITCH :block
-    25 jump *label6 always
--    * label *label9
-    26 multilabel *label49 (m:*label45)
--    * label *label12
-    27 set .TARGET_MEMORY .SOURCE_MEMORY
-    28 set .SOURCE_MEMORY :block
-    29 label *label6
--    * label *label4
-    30 jump *label41 greaterThan :n 0
-    31 label *label5
-    32 print "\nMessage: "
- 
-    40 jump *label13 notEqual .SOURCE_MEMORY null
-    41 print "\nNo memory."
-    42 label *label13
--    * label *label14
-    43 printflush .MESSAGE
--    * label *label1
-    44 jump *label40 equal .SOURCE_MEMORY null
--    * label *label2
-    45 select .TARGET_MEMORY equal .TARGET_MEMORY null .SOURCE_MEMORY .TARGET_MEMORY
-    46 set :startIndex 0
-    47 sensor *tmp13 .TARGET_MEMORY @type
-    48 jump *label18 notEqual *tmp13 @memory-cell
--    * label *label19
-    49 set *tmp12 64
-    50 jump *label17 always
-    51 label *label18
-    52 jump *label20 notEqual *tmp13 @memory-bank
--    * label *label21
-    53 set *tmp12 512
-    54 jump *label17 always
-    55 label *label20
- 
-    60 op idiv :startIndex *tmp12 2
-    61 op sub :memSize *tmp12 1
-    62 label *label22
--    * label *label23
-    63 set :prevTick @tick
-    64 read :prev .SOURCE_MEMORY 0
-    65 set :currTick :prevTick
- 
-    67 read *tmp21 .TARGET_MEMORY :startIndex
-    68 op max :index :startIndex *tmp21
-    69 set :nextTick :prevTick
--    * label *label24
-    70 sensor *tmp23 switch1 @enabled
-    71 jump *label26 notEqual *tmp23 0
-    72 label *label43
- 
-    77 op add :nextTick :prevTick TICKS
-    78 set :currTick :prevTick
-    79 label *label27
--    * label *label28
--    * label *label29
-    80 jump *label31 greaterThanEq @tick :nextTick
-    81 label *label42
-    82 jump *label32 greaterThanEq @tick :prevTick
- 
-    88 set :currTick @tick
-    89 set :curr :value
-    90 label *label34
--    * label *label35
-    91 label *label33
--    * label *label30
-    92 jump *label42 lessThan @tick :nextTick
-    93 label *label31
-    94 op sub :amount :curr :prev
-    95 op sub :time :currTick :prevTick
-    96 set :rate 0
-    97 jump *label37 equal :amount 0
--    * label *label36
-    98 op div *tmp42 :amount :time
-    99 op max :rate *tmp42 0
-   100 label *label37
- 
-   102 jump *label38 lessThan :index :memSize
-   103 op add :index :startIndex 1
-   104 label *label38
--    * label *label39
-   105 write :index .TARGET_MEMORY :startIndex
-   106 write :rate .TARGET_MEMORY :index
-   107 print "Item Rate Meter"
- 
-   135 printflush message1
-   136 set :prevTick :currTick
-   137 set :prev :curr
--    * label *label25
-   138 sensor *tmp23 switch1 @enabled
-   139 jump *label43 equal *tmp23 0
-   140 label *label26
-
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
     81 label *label42
@@ -815,16 +696,6 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
     84 label *label32
     85 read :value .SOURCE_MEMORY 0
     86 jump *label34 equal :value :curr
-
-Modifications by Jumps phase, Dead Code Elimination, pass 3, iteration 1:
- 
-    87 set :currTick @tick
-    88 set :curr :value
-    89 label *label34
--    * label *label33
-    90 jump *label42 lessThan @tick :nextTick
-    91 label *label31
-    92 op sub :amount :curr :prev
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  

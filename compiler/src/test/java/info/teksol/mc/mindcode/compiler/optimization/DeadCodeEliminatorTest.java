@@ -29,7 +29,7 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                             end();
                         end;
                         """,
-                createInstruction(OP, "equal", tmp(0), "x", "3"),
+                createInstruction(OP, "equal", tmp(0), ":x", "3"),
                 createInstruction(JUMP, label(0), "equal", tmp(0), "false"),
                 createInstruction(JUMP, label(1), "always"),
                 createInstruction(LABEL, label(0)),
@@ -115,14 +115,14 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         outbuilding = ulocate(:damaged, out x, out y, out found);
                         approach(x, y, 4);
                         """,
-                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "x", "y", tmp(0), tmp(1)),
-                createInstruction(UCONTROL, "approach", "x", "y", "4"),
-                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "x", "y", "found", tmp(2)),
-                createInstruction(UCONTROL, "approach", "x", "y", "4"),
-                createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "x", "y", "found", tmp(3)),
-                createInstruction(UCONTROL, "approach", "x", "y", "4"),
-                createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "x", "y", "found", tmp(4)),
-                createInstruction(UCONTROL, "approach", "x", "y", "4")
+                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", ":x", ":y", tmp(0), tmp(1)),
+                createInstruction(UCONTROL, "approach", ":x", ":y", "4"),
+                createInstruction(ULOCATE, "building", "core", ".ENEMY", "@copper", ":x", ":y", ":found", tmp(2)),
+                createInstruction(UCONTROL, "approach", ":x", ":y", "4"),
+                createInstruction(ULOCATE, "spawn", "core", "true", "@copper", ":x", ":y", ":found", tmp(3)),
+                createInstruction(UCONTROL, "approach", ":x", ":y", "4"),
+                createInstruction(ULOCATE, "damaged", "core", "true", "@copper", ":x", ":y", ":found", tmp(4)),
+                createInstruction(UCONTROL, "approach", ":x", ":y", "4")
         );
     }
 
@@ -149,8 +149,8 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         ulocate(:ore, @surge-alloy, out a, out b);
                         approach(x, y, 4);
                         """,
-                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "x", "y", tmp(0), tmp(1)),
-                createInstruction(UCONTROL, "approach", "x", "y", "4")
+                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", ":x", ":y", tmp(0), tmp(1)),
+                createInstruction(UCONTROL, "approach", ":x", ":y", "4")
         );
     }
 

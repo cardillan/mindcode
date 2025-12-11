@@ -251,39 +251,6 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (-23 instr
     15 label *label6
     16 label *label5
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
-     0 set :hash 0
-     1 set :i -1
--    * label *label0
-     2 label *label9
-     3 lookup block :block :i
-     4 sensor *tmp9 :block @id
-     5 multijump *tmp9 0 0 (m:*label11)
-     6 multilabel *label13 (m:*label11)
--    * label *label8
-     7 set *tmp2 true
-     8 jump *label6 always
--    * label *label7
-     9 multilabel *label12 (m:*label11)
--    * label *label10
-    10 set *tmp2 false
-    11 label *label6
--    * label *label5
-    12 jump *label3 equal *tmp2 false
-    13 op mul *tmp5 :hash 31
-    14 op add *tmp6 *tmp5 :i
- 
-    17 jump *label4 always
-    18 label *label3
-    19 label *label4
--    * label *label1
-    20 op add :i :i 1
-    21 jump *label9 lessThan :i @blockCount
--    * label *label2
-    22 print :hash
-    23 assertequals 2750008148 :hash "Test selected blocks"
-    24 end
-
 Final code before resolving virtual instructions:
 
 set :hash 0

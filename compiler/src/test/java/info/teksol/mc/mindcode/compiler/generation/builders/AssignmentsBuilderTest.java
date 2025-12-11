@@ -144,11 +144,11 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             g %= h;
                             i %%= j;
                             """,
-                    createInstruction(OP, "mul", "a", "a", "b"),
-                    createInstruction(OP, "div", "c", "c", "d"),
-                    createInstruction(OP, "idiv", "e", "e", "f"),
-                    createInstruction(OP, "mod", "g", "g", "h"),
-                    createInstruction(OP, "emod", "i", "i", "j")
+                    createInstruction(OP, "mul", ":a", ":a", ":b"),
+                    createInstruction(OP, "div", ":c", ":c", ":d"),
+                    createInstruction(OP, "idiv", ":e", ":e", ":f"),
+                    createInstruction(OP, "mod", ":g", ":g", ":h"),
+                    createInstruction(OP, "emod", ":i", ":i", ":j")
             );
         }
 
@@ -158,8 +158,8 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             a += b;
                             c -= d;
                             """,
-                    createInstruction(OP, "add", "a", "a", "b"),
-                    createInstruction(OP, "sub", "c", "c", "d")
+                    createInstruction(OP, "add", ":a", ":a", ":b"),
+                    createInstruction(OP, "sub", ":c", ":c", ":d")
             );
         }
 
@@ -182,8 +182,8 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             a &= b;
                             c &&= d;
                             """,
-                    createInstruction(OP, "and", "a", "a", "b"),
-                    createInstruction(OP, "land", "c", "c", "d")
+                    createInstruction(OP, "and", ":a", ":a", ":b"),
+                    createInstruction(OP, "land", ":c", ":c", ":d")
             );
         }
 
@@ -194,10 +194,10 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             c ||= d;
                             g ^= h;
                             """,
-                    createInstruction(OP, "or", "a", "a", "b"),
-                    createInstruction(OP, "or", tmp(1), "c", "d"),
-                    createInstruction(OP, "notEqual", "c", tmp(1), "false"),
-                    createInstruction(OP, "xor", "g", "g", "h")
+                    createInstruction(OP, "or", ":a", ":a", ":b"),
+                    createInstruction(OP, "or", tmp(0), ":c", ":d"),
+                    createInstruction(OP, "notEqual", ":c", tmp(0), "false"),
+                    createInstruction(OP, "xor", ":g", ":g", ":h")
             );
         }
 

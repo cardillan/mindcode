@@ -72,19 +72,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
      6 op sub :b :b 1
      7 label *label1
 
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
-     0 set a 10
-     1 set :b 20
-     2 set :i a
--    * label *label0
-     3 jump *label2 greaterThanEq a 20
-     4 label *label3
-     5 op sub :b :b 1
--    * label *label1
-     6 op add :i :i 1
-     7 jump *label3 lessThan :i 20
-     8 label *label2
-
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
      8 label *label2

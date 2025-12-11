@@ -161,8 +161,8 @@ When choosing which arrays to implement using lookup, Mindcode chooses the large
 Example of a lookup array:
 
 ```Mindcode
-set target = 8;
-set syntax = strict;
+#set target = 8;
+#set syntax = strict;
 
 const SIZE = 10;
 param LIMIT = 100;

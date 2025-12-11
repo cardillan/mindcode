@@ -3,10 +3,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.instructions.ConditionalInstruction;
-import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
+import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NullMarked;
@@ -36,7 +33,7 @@ class ConditionOptimizer extends BaseOptimizer {
                         Operation operation = oper.getOperation();
                         if (advanced(cond) && canFoldConstants(operation)) {
                             foldConstants(logicIterator, cond, oper, condArgs);
-                        } else if (canInjectCondition(cond, operation)) {
+                        } else if (operation.isCondition(false) && canInjectCondition(cond, oper)) {
                             // We've already verified we can support strictNotEqual here
                             Condition opCondition = operation.toExistingCondition(true);
                             Condition newCondition = cond.getCondition() == Condition.EQUAL ? opCondition.inverse(true) : opCondition;
@@ -56,13 +53,17 @@ class ConditionOptimizer extends BaseOptimizer {
         return false;
     }
 
-    private boolean canInjectCondition(ConditionalInstruction cond, Operation operation) {
+    private boolean canInjectCondition(ConditionalInstruction cond, OpInstruction oper) {
+        Operation operation = oper.getOperation();
+
         boolean canUseSelect = cond instanceof JumpInstruction ? getGlobalProfile().useEmulatedStrictNotEqual()
                 : instructionProcessor.isSupported(Opcode.SELECT);
 
         boolean requireStrictNotEqual = operation.isStrict() &&
                 cond.getCondition() == Condition.EQUAL ? operation == Operation.STRICT_EQUAL : operation == Operation.STRICT_NOT_EQUAL;
         if (requireStrictNotEqual && !canUseSelect) return false;
+
+        if (cond instanceof SelectInstruction sx && (sx.getResult().equals(oper.getX()) || sx.getResult().equals(oper.getY()))) return false;
 
         return cond.isPlainComparison() && operation.isCondition(true);
     }

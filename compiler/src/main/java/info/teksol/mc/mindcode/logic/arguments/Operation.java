@@ -203,7 +203,7 @@ public enum Operation implements LogicArgument {
     }
 
     public boolean hasBooleanValue() {
-        return ordinal() <= STRICT_NOT_EQUAL.ordinal() || this == BOOLEAN_AND || this == LOGICAL_AND;
+        return ordinal() <= STRICT_NOT_EQUAL.ordinal() || this == BOOLEAN_AND || this == LOGICAL_AND || this == LOGICAL_OR;
     }
 
     @Override

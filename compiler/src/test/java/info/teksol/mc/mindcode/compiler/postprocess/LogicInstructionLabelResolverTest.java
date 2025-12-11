@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.postprocess;
 
 
+import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.LogicParameter;
@@ -10,6 +11,7 @@ import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SortCategory;
 import org.jspecify.annotations.NullMarked;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -23,6 +25,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @NullMarked
 class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
+
+    @BeforeEach
+    void setupContext() {
+        ContextFactory.setArrayConstructorContext(this);
+    }
 
     @Test
     void initializesRemoteVariables() {

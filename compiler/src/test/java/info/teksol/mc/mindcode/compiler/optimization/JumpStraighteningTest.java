@@ -111,6 +111,25 @@ class JumpStraighteningTest extends AbstractOptimizerTest<JumpStraightening> {
     }
 
     @Test
+    void optimizesDoublyInvertedSequence() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(LABEL, label0),
+                        createInstruction(JUMP, label1, Condition.EQUAL, a, b),
+                        createInstruction(JUMP, label0, Condition.ALWAYS),
+                        createInstruction(JUMP, label1, Condition.ALWAYS),
+                        createInstruction(LABEL, label1)
+                ),
+                List.of(
+                        createInstruction(LABEL, label0),
+                        createInstruction(JUMP, label0, Condition.NOT_EQUAL, a, b),
+                        createInstruction(JUMP, label1, Condition.ALWAYS),
+                        createInstruction(LABEL, label1)
+                )
+        );
+    }
+
+    @Test
     void ignoresStrictEqual() {
         profile.setEmulateStrictNotEqual(false);
         assertDoesNotOptimize(

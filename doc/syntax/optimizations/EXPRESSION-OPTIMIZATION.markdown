@@ -123,8 +123,8 @@ When the [`builtin-evaluation` option](../SYNTAX-5-OTHER.markdown#option-builtin
 Some Mindustry content objects may have different logic IDs in different Mindustry versions (these objects are called _unstable_). For these objects, the above optimizations only happen when the `builtin-evaluation` option is set to `full`:
 
 ```Mindcode
-set target = 7;
-set builtin-evaluation = full;
+#set target = 7;
+#set builtin-evaluation = full;
 println(lookup(:item, 18));
 println(@tungsten.@id);
 printflush(message1);

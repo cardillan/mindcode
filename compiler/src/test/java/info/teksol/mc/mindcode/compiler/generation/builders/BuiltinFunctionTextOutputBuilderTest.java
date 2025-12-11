@@ -50,7 +50,7 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(READ, tmp(0), q("AA"), "0"),
                     createInstruction(SET, ":a", tmp(0)),
-                    createInstruction(READ, tmp(1), q("BB"), "0"),
+                    createInstruction(READ, tmp(1), q("BB"), "1"),
                     createInstruction(SET, ":b", tmp(1))
             );
         }
@@ -218,7 +218,7 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             remark($"Value: $.", a * b);
                             """,
-                    createInstruction(OP, "mul", tmp(0), "a", "b"),
+                    createInstruction(OP, "mul", tmp(0), ":a", ":b"),
                     createInstruction(REMARK, q("Value: ")),
                     createInstruction(REMARK, tmp(0)),
                     createInstruction(REMARK, q("."))

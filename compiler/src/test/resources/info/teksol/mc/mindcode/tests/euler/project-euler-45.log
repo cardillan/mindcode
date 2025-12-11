@@ -144,16 +144,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
      4 label *label0
      5 jump *label3 greaterThanEq :pn :hn
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-    15 jump *label2 always
-    16 label *label6
-    17 label *label4
--    * label *label1
-    18 jump *label0 always
-    19 label *label2
-    20 assertequals 1533776805 :hn "Project Euler 45"
-
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  
      5 jump *label3 greaterThanEq :pn :hn

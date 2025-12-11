@@ -2,14 +2,20 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.AbstractTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
+import info.teksol.mc.mindcode.compiler.ContextFactory;
+import info.teksol.mc.mindcode.compiler.ForcedVariableContext;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import org.jspecify.annotations.NullMarked;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,6 +65,26 @@ class DiffDebugPrinterTest extends AbstractTestBase {
         }
     };
 
+    private final ForcedVariableContext forcedVariableContext = new ForcedVariableContext() {
+        @Override
+        public void addForcedVariable(LogicVariable variable) { }
+
+        @Override
+        public Set<LogicVariable> getForcedVariables() {
+            return Set.of();
+        }
+    };
+
+    @BeforeEach
+    void setup() {
+        ContextFactory.setForcedVariableContext(forcedVariableContext);
+    }
+
+    @AfterEach
+    void tearDown() {
+        ContextFactory.clearForcedVariableContext();
+    }
+
     @Test
     void skipsEmptyIterations() {
         List<LogicInstruction> program = new ArrayList<>();
@@ -69,6 +95,25 @@ class DiffDebugPrinterTest extends AbstractTestBase {
         program.add(createInstruction(END));
 
         printer.registerIteration(optimizer, "Iteration 1", program);
+        printer.registerIteration(optimizer, "Iteration 2", program);
+        printer.print(messages::add);
+
+        Assertions.assertTrue(messages.isEmpty());
+    }
+
+    @Test
+    void ignoresEliminatedLabels() {
+        List<LogicInstruction> program = new ArrayList<>();
+        program.add(createInstruction(LABEL, q("label0")));
+        program.add(createInstruction(SET, "a", "1"));
+        program.add(createInstruction(SET, "b", "2"));
+        program.add(createInstruction(LABEL, q("label1")));
+        program.add(createInstruction(OP, "add", "c", "a", "b"));
+        program.add(createInstruction(PRINT, "c"));
+        program.add(createInstruction(LABEL, q("label2")));
+
+        printer.registerIteration(optimizer, "Iteration 1", program);
+        program.removeIf(i -> i.getOpcode() == LABEL);
         printer.registerIteration(optimizer, "Iteration 2", program);
         printer.print(messages::add);
 
@@ -97,6 +142,28 @@ class DiffDebugPrinterTest extends AbstractTestBase {
                              2 op add c a b
                         -    * print c
                              3 end""",
+                String.join("\n", messages));
+    }
+
+
+    @Test
+    void identifiesRemovedEnd() {
+        List<LogicInstruction> program = new ArrayList<>();
+        program.add(createInstruction(OP, "add", "c", "a", "b"));
+        program.add(createInstruction(PRINT, "c"));
+        program.add(createInstruction(END));
+
+        printer.registerIteration(optimizer, "Iteration 1", program);
+        program.removeLast();
+        printer.registerIteration(optimizer, "Iteration 2", program);
+        printer.print(messages::add);
+
+        assertEquals("""
+
+                        Modifications by all optimizers (-1 instructions):
+                             0 op add c a b
+                             1 print c
+                        -    * end""",
                 String.join("\n", messages));
     }
 

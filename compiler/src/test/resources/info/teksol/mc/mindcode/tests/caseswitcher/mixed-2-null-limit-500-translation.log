@@ -707,31 +707,6 @@ Modifications by Translate case at line 11:5 (-114 instructions):
     11 jump *label58 equal *tmp2 48
     12 printchar *tmp2
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
-     0 assertflush
-     1 # "Function: void printAll()"
-     2 set :printAll:i -1
--    * label *label1
-     3 label *label60
-     4 lookup block *tmp0 :printAll:i
-     5 # "Function: def identifyBlock(in block)"
-     6 sensor *tmp6 *tmp0 @id
-     7 read *tmp7 "0000BCDEFGHIJK000000000000000LLMMMM000000NNNN000000000000000OOOOPP00000000000000000000000000000000000000000000000000000000000000000000000000000000P000000000000000000000000000000000000000000000000000000000000000000000Q0000000000000RST00UVWX00YZ00000000000000000" *tmp6
-     8 select *tmp2 strictEqual *tmp6 null 65 *tmp7
--    * label *label4
-     9 jump *label58 equal *tmp2 48
-    10 printchar *tmp2
-    11 jump *label59 always
-    12 label *label58
-    13 label *label59
--    * label *label2
-    14 op add :printAll:i :printAll:i 1
-    15 jump *label60 lessThan :printAll:i @blockCount
--    * label *label3
--    * label *label0
-    16 assertprints "ABCDEFGHIJKLLMMMMNNNNOOOOPPPQRSTUVWXYZ" "Verifying output"
-    17 end
-
 Final code before resolving virtual instructions:
 
 assertflush

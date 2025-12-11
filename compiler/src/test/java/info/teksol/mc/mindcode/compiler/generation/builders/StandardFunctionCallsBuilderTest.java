@@ -1462,7 +1462,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         void compilesEndFunctionCall() {
             assertCompilesTo(
                     "if some_cond == false then end(); end;",
-                    createInstruction(OP, "equal", tmp(0), "some_cond", "false"),
+                    createInstruction(OP, "equal", tmp(0), ":some_cond", "false"),
                     createInstruction(JUMP, label(0), "equal", tmp(0), "false"),
                     createInstruction(END),
                     createInstruction(SET, tmp(1), "null"),
@@ -1581,15 +1581,15 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             drawflush(display1);
                             """,
                     createInstruction(DRAW, "clear", ":r", ":g", ":b"),
-                    createInstruction(DRAW, "color", ":r", ":g", ":b", "alpha"),
-                    createInstruction(DRAW, "stroke", "width"),
-                    createInstruction(DRAW, "line", "x1", "y1", "x2", "y2"),
+                    createInstruction(DRAW, "color", ":r", ":g", ":b", ":alpha"),
+                    createInstruction(DRAW, "stroke", ":width"),
+                    createInstruction(DRAW, "line", ":x1", ":y1", ":x2", ":y2"),
                     createInstruction(DRAW, "rect", ":x", ":y", ":w", ":h"),
                     createInstruction(DRAW, "lineRect", ":x", ":y", ":w", ":h"),
-                    createInstruction(DRAW, "poly", ":x", ":y", "sides", "radius", "rotation"),
-                    createInstruction(DRAW, "linePoly", ":x", ":y", "sides", "radius", "rotation"),
-                    createInstruction(DRAW, "triangle", "x1", "y1", "x2", "y2", "x3", "y3"),
-                    createInstruction(DRAW, "image", ":x", ":y", "@copper", "size", "rotation"),
+                    createInstruction(DRAW, "poly", ":x", ":y", ":sides", ":radius", ":rotation"),
+                    createInstruction(DRAW, "linePoly", ":x", ":y", ":sides", ":radius", ":rotation"),
+                    createInstruction(DRAW, "triangle", ":x1", ":y1", ":x2", ":y2", ":x3", ":y3"),
+                    createInstruction(DRAW, "image", ":x", ":y", "@copper", ":size", ":rotation"),
                     createInstruction(DRAWFLUSH, "display1")
             );
         }
@@ -1856,7 +1856,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             makemarker(:shapeText, id, x, y, replace);
                             """,
-                    createInstruction(MAKEMARKER, "shapeText", "id", ":x", ":y", "replace")
+                    createInstruction(MAKEMARKER, "shapeText", ":id", ":x", ":y", ":replace")
             );
         }
 
@@ -1918,9 +1918,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             setblock(:ore, to, x, y);
                             setblock(:block, to, x, y, team, rotation);
                             """,
-                    createInstruction(SETBLOCK, "floor", "to", ":x", ":y"),
-                    createInstruction(SETBLOCK, "ore", "to", ":x", ":y"),
-                    createInstruction(SETBLOCK, "block", "to", ":x", ":y", "team", "rotation")
+                    createInstruction(SETBLOCK, "floor", ":to", ":x", ":y"),
+                    createInstruction(SETBLOCK, "ore", ":to", ":x", ":y"),
+                    createInstruction(SETBLOCK, "block", ":to", ":x", ":y", ":team", ":rotation")
             );
         }
 
@@ -1940,8 +1940,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             applyStatus(:burning, unit, duration);
                             clearStatus(:freezing, unit);
                             """,
-                    createInstruction(STATUS, "false", "burning", "unit", "duration"),
-                    createInstruction(STATUS, "true", "freezing", "unit")
+                    createInstruction(STATUS, "false", "burning", ":unit", ":duration"),
+                    createInstruction(STATUS, "true", "freezing", ":unit")
             );
         }
 
@@ -1980,28 +1980,28 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             setrule(:rtsMinWeight, value, team);
                             setrule(:rtsMinSquad, value, team);
                             """,
-                    createInstruction(SETRULE, "currentWaveTime", "value"),
-                    createInstruction(SETRULE, "waveTimer", "value"),
-                    createInstruction(SETRULE, "waves", "value"),
-                    createInstruction(SETRULE, "wave", "value"),
-                    createInstruction(SETRULE, "waveSpacing", "value"),
-                    createInstruction(SETRULE, "waveSending", "value"),
-                    createInstruction(SETRULE, "attackMode", "value"),
-                    createInstruction(SETRULE, "enemyCoreBuildRadius", "value"),
-                    createInstruction(SETRULE, "dropZoneRadius", "value"),
-                    createInstruction(SETRULE, "unitCap", "value"),
-                    createInstruction(SETRULE, "mapArea", "0", ":x", ":y", "width", "height"),
-                    createInstruction(SETRULE, "lighting", "value"),
-                    createInstruction(SETRULE, "ambientLight", "value"),
-                    createInstruction(SETRULE, "solarMultiplier", "value"),
-                    createInstruction(SETRULE, "buildSpeed", "value", "team"),
-                    createInstruction(SETRULE, "unitBuildSpeed", "value", "team"),
-                    createInstruction(SETRULE, "unitCost", "value", "team"),
-                    createInstruction(SETRULE, "unitDamage", "value", "team"),
-                    createInstruction(SETRULE, "blockHealth", "value", "team"),
-                    createInstruction(SETRULE, "blockDamage", "value", "team"),
-                    createInstruction(SETRULE, "rtsMinWeight", "value", "team"),
-                    createInstruction(SETRULE, "rtsMinSquad", "value", "team")
+                    createInstruction(SETRULE, "currentWaveTime", ":value"),
+                    createInstruction(SETRULE, "waveTimer", ":value"),
+                    createInstruction(SETRULE, "waves", ":value"),
+                    createInstruction(SETRULE, "wave", ":value"),
+                    createInstruction(SETRULE, "waveSpacing", ":value"),
+                    createInstruction(SETRULE, "waveSending", ":value"),
+                    createInstruction(SETRULE, "attackMode", ":value"),
+                    createInstruction(SETRULE, "enemyCoreBuildRadius", ":value"),
+                    createInstruction(SETRULE, "dropZoneRadius", ":value"),
+                    createInstruction(SETRULE, "unitCap", ":value"),
+                    createInstruction(SETRULE, "mapArea", "0", ":x", ":y", ":width", ":height"),
+                    createInstruction(SETRULE, "lighting", ":value"),
+                    createInstruction(SETRULE, "ambientLight", ":value"),
+                    createInstruction(SETRULE, "solarMultiplier", ":value"),
+                    createInstruction(SETRULE, "buildSpeed", ":value", ":team"),
+                    createInstruction(SETRULE, "unitBuildSpeed", ":value", ":team"),
+                    createInstruction(SETRULE, "unitCost", ":value", ":team"),
+                    createInstruction(SETRULE, "unitDamage", ":value", ":team"),
+                    createInstruction(SETRULE, "blockHealth", ":value", ":team"),
+                    createInstruction(SETRULE, "blockDamage", ":value", ":team"),
+                    createInstruction(SETRULE, "rtsMinWeight", ":value", ":team"),
+                    createInstruction(SETRULE, "rtsMinSquad", ":value", ":team")
             );
         }
 
@@ -2015,8 +2015,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(MESSAGE, "notify", "0", "@wait"),
                     createInstruction(MESSAGE, "mission", "0", "@wait"),
-                    createInstruction(MESSAGE, "announce", "duration", ":result"),
-                    createInstruction(MESSAGE, "toast", "duration", ":result")
+                    createInstruction(MESSAGE, "announce", ":duration", ":result"),
+                    createInstruction(MESSAGE, "toast", ":duration", ":result")
             );
         }
 
@@ -2027,8 +2027,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             cutscene(:zoom, level);
                             cutscene(:stop);
                             """,
-                    createInstruction(CUTSCENE, "pan", ":x", ":y", "speed"),
-                    createInstruction(CUTSCENE, "zoom", "level"),
+                    createInstruction(CUTSCENE, "pan", ":x", ":y", ":speed"),
+                    createInstruction(CUTSCENE, "zoom", ":level"),
                     createInstruction(CUTSCENE, "stop")
             );
         }
@@ -2176,35 +2176,35 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(EFFECT, "warn", ":x", ":y"),
                     createInstruction(EFFECT, "cross", ":x", ":y"),
                     createInstruction(EFFECT, "blockFall", ":x", ":y", "0", "0", "@vault"),
-                    createInstruction(EFFECT, "placeBlock", ":x", ":y", "size"),
-                    createInstruction(EFFECT, "placeBlockSpark", ":x", ":y", "size"),
-                    createInstruction(EFFECT, "breakBlock", ":x", ":y", "size"),
+                    createInstruction(EFFECT, "placeBlock", ":x", ":y", ":size"),
+                    createInstruction(EFFECT, "placeBlockSpark", ":x", ":y", ":size"),
+                    createInstruction(EFFECT, "breakBlock", ":x", ":y", ":size"),
                     createInstruction(EFFECT, "spawn", ":x", ":y"),
-                    createInstruction(EFFECT, "trail", ":x", ":y", "size", "color"),
-                    createInstruction(EFFECT, "breakProp", ":x", ":y", "size", "color"),
-                    createInstruction(EFFECT, "smokeCloud", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "vapor", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "hit", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "hitSquare", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "shootSmall", ":x", ":y", "rotation", "color"),
-                    createInstruction(EFFECT, "shootBig", ":x", ":y", "rotation", "color"),
-                    createInstruction(EFFECT, "smokeSmall", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "smokeBig", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "smokeColor", ":x", ":y", "rotation", "color"),
-                    createInstruction(EFFECT, "smokeSquare", ":x", ":y", "rotation", "color"),
-                    createInstruction(EFFECT, "smokeSquareBig", ":x", ":y", "rotation", "color"),
-                    createInstruction(EFFECT, "spark", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "sparkBig", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "sparkShoot", ":x", ":y", "rotation", "color"),
-                    createInstruction(EFFECT, "sparkShootBig", ":x", ":y", "rotation", "color"),
-                    createInstruction(EFFECT, "drill", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "drillBig", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "lightBlock", ":x", ":y", "size", "color"),
-                    createInstruction(EFFECT, "explosion", ":x", ":y", "size"),
-                    createInstruction(EFFECT, "smokePuff", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "sparkExplosion", ":x", ":y", "0", "color"),
-                    createInstruction(EFFECT, "crossExplosion", ":x", ":y", "size", "color"),
-                    createInstruction(EFFECT, "wave", ":x", ":y", "size", "color"),
+                    createInstruction(EFFECT, "trail", ":x", ":y", ":size", ":color"),
+                    createInstruction(EFFECT, "breakProp", ":x", ":y", ":size", ":color"),
+                    createInstruction(EFFECT, "smokeCloud", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "vapor", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "hit", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "hitSquare", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "shootSmall", ":x", ":y", ":rotation", ":color"),
+                    createInstruction(EFFECT, "shootBig", ":x", ":y", ":rotation", ":color"),
+                    createInstruction(EFFECT, "smokeSmall", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "smokeBig", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "smokeColor", ":x", ":y", ":rotation", ":color"),
+                    createInstruction(EFFECT, "smokeSquare", ":x", ":y", ":rotation", ":color"),
+                    createInstruction(EFFECT, "smokeSquareBig", ":x", ":y", ":rotation", ":color"),
+                    createInstruction(EFFECT, "spark", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "sparkBig", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "sparkShoot", ":x", ":y", ":rotation", ":color"),
+                    createInstruction(EFFECT, "sparkShootBig", ":x", ":y", ":rotation", ":color"),
+                    createInstruction(EFFECT, "drill", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "drillBig", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "lightBlock", ":x", ":y", ":size", ":color"),
+                    createInstruction(EFFECT, "explosion", ":x", ":y", ":size"),
+                    createInstruction(EFFECT, "smokePuff", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "sparkExplosion", ":x", ":y", "0", ":color"),
+                    createInstruction(EFFECT, "crossExplosion", ":x", ":y", ":size", ":color"),
+                    createInstruction(EFFECT, "wave", ":x", ":y", ":size", ":color"),
                     createInstruction(EFFECT, "bubble", ":x", ":y")
             );
         }

@@ -207,33 +207,6 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     50 print :hash
     51 assertequals 1061505871 :hash "Test selected blocks"
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
-     0 set :hash 0
-     1 set :i -1
--    * label *label0
-     2 label *label9
-     3 lookup block :block :i
-     4 jump *label8 equal :block @graphite-press
- 
-    33 label *label7
-    34 set *tmp2 false
-    35 label *label6
--    * label *label5
-    36 jump *label3 equal *tmp2 false
-    37 op mul *tmp5 :hash 31
-    38 op add *tmp6 *tmp5 :i
- 
-    41 jump *label4 always
-    42 label *label3
-    43 label *label4
--    * label *label1
-    44 op add :i :i 1
-    45 jump *label9 lessThan :i @blockCount
--    * label *label2
-    46 print :hash
-    47 assertequals 1061505871 :hash "Test selected blocks"
-    48 end
-
 Final code before resolving virtual instructions:
 
 set :hash 0

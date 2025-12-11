@@ -21,21 +21,21 @@ class BreakContinueStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 ++after;
                             end;
                             """,
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(JUMP, label(3), "equal", "true", "false"),
-                    createInstruction(OP, "add", "before", "before", "1"),
-                    createInstruction(OP, "greaterThan", tmp(0), "b", "10"),
-                    createInstruction(JUMP, label(4), "equal", tmp(0), "false"),
-                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "equal", "true", "false"),
+                    createInstruction(OP, "add", ":before", ":before", "1"),
+                    createInstruction(OP, "greaterThan", tmp(0), ":b", "10"),
+                    createInstruction(JUMP, label(3), "equal", tmp(0), "false"),
+                    createInstruction(JUMP, label(2), "always"),
                     createInstruction(SET, tmp(1), "null"),
-                    createInstruction(JUMP, label(5), "always"),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, tmp(1), "null"),
                     createInstruction(LABEL, label(4)),
-                    createInstruction(SET, tmp(1), "null"),
-                    createInstruction(LABEL, label(5)),
-                    createInstruction(OP, "add", "after", "after", "1"),
-                    createInstruction(LABEL, label(2)),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(OP, "add", ":after", ":after", "1"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
             );
         }
 
@@ -48,20 +48,20 @@ class BreakContinueStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 ++after;
                             while true;
                             """,
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(OP, "add", "before", "before", "1"),
-                    createInstruction(OP, "greaterThan", tmp(0), "b", "10"),
-                    createInstruction(JUMP, label(4), "equal", tmp(0), "false"),
-                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", ":before", ":before", "1"),
+                    createInstruction(OP, "greaterThan", tmp(0), ":b", "10"),
+                    createInstruction(JUMP, label(3), "equal", tmp(0), "false"),
+                    createInstruction(JUMP, label(2), "always"),
                     createInstruction(SET, tmp(1), "null"),
-                    createInstruction(JUMP, label(5), "always"),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, tmp(1), "null"),
                     createInstruction(LABEL, label(4)),
-                    createInstruction(SET, tmp(1), "null"),
-                    createInstruction(LABEL, label(5)),
-                    createInstruction(OP, "add", "after", "after", "1"),
-                    createInstruction(LABEL, label(2)),
-                    createInstruction(JUMP, label(1), "notEqual", "true", "false"),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(OP, "add", ":after", ":after", "1"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(0), "notEqual", "true", "false"),
+                    createInstruction(LABEL, label(2))
             );
         }
 
@@ -195,24 +195,24 @@ class BreakContinueStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 ++outer;
                             while true;
                             """,
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(LABEL, label(4)),
-                    createInstruction(OP, "add", "inner", "inner", "1"),
-                    createInstruction(OP, "greaterThan", tmp(0), "b", "10"),
-                    createInstruction(JUMP, label(7), "equal", tmp(0), "false"),
-                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(OP, "add", ":inner", ":inner", "1"),
+                    createInstruction(OP, "greaterThan", tmp(0), ":b", "10"),
+                    createInstruction(JUMP, label(6), "equal", tmp(0), "false"),
+                    createInstruction(JUMP, label(2), "always"),
                     createInstruction(SET, tmp(1), "null"),
-                    createInstruction(JUMP, label(8), "always"),
-                    createInstruction(LABEL, label(7)),
-                    createInstruction(SET, tmp(1), "null"),
-                    createInstruction(LABEL, label(8)),
-                    createInstruction(LABEL, label(5)),
-                    createInstruction(JUMP, label(4), "notEqual", "true", "false"),
+                    createInstruction(JUMP, label(7), "always"),
                     createInstruction(LABEL, label(6)),
-                    createInstruction(OP, "add", "outer", "outer", "1"),
-                    createInstruction(LABEL, label(2)),
-                    createInstruction(JUMP, label(1), "notEqual", "true", "false"),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(SET, tmp(1), "null"),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(JUMP, label(3), "notEqual", "true", "false"),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(OP, "add", ":outer", ":outer", "1"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(0), "notEqual", "true", "false"),
+                    createInstruction(LABEL, label(2))
             );
         }
 
@@ -227,24 +227,24 @@ class BreakContinueStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 ++outer;
                             while true;
                             """,
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(LABEL, label(4)),
-                    createInstruction(OP, "add", "inner", "inner", "1"),
-                    createInstruction(OP, "greaterThan", tmp(0), "b", "10"),
-                    createInstruction(JUMP, label(7), "equal", tmp(0), "false"),
-                    createInstruction(JUMP, label(6), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(OP, "add", ":inner", ":inner", "1"),
+                    createInstruction(OP, "greaterThan", tmp(0), ":b", "10"),
+                    createInstruction(JUMP, label(6), "equal", tmp(0), "false"),
+                    createInstruction(JUMP, label(5), "always"),
                     createInstruction(SET, tmp(1), "null"),
-                    createInstruction(JUMP, label(8), "always"),
-                    createInstruction(LABEL, label(7)),
-                    createInstruction(SET, tmp(1), "null"),
-                    createInstruction(LABEL, label(8)),
-                    createInstruction(LABEL, label(5)),
-                    createInstruction(JUMP, label(4), "notEqual", "true", "false"),
+                    createInstruction(JUMP, label(7), "always"),
                     createInstruction(LABEL, label(6)),
-                    createInstruction(OP, "add", "outer", "outer", "1"),
-                    createInstruction(LABEL, label(2)),
-                    createInstruction(JUMP, label(1), "notEqual", "true", "false"),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(SET, tmp(1), "null"),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(JUMP, label(3), "notEqual", "true", "false"),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(OP, "add", ":outer", ":outer", "1"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(0), "notEqual", "true", "false"),
+                    createInstruction(LABEL, label(2))
             );
         }
     }
@@ -260,21 +260,21 @@ class BreakContinueStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 ++after;
                             end;
                             """,
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(JUMP, label(3), "equal", "true", "false"),
-                    createInstruction(OP, "add", "before", "before", "1"),
-                    createInstruction(OP, "greaterThan", tmp(0), "b", "10"),
-                    createInstruction(JUMP, label(4), "equal", tmp(0), "false"),
-                    createInstruction(JUMP, label(2), "always"),
-                    createInstruction(SET, tmp(1), "null"),
-                    createInstruction(JUMP, label(5), "always"),
-                    createInstruction(LABEL, label(4)),
-                    createInstruction(SET, tmp(1), "null"),
-                    createInstruction(LABEL, label(5)),
-                    createInstruction(OP, "add", "after", "after", "1"),
-                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "equal", "true", "false"),
+                    createInstruction(OP, "add", ":before", ":before", "1"),
+                    createInstruction(OP, "greaterThan", tmp(0), ":b", "10"),
+                    createInstruction(JUMP, label(3), "equal", tmp(0), "false"),
                     createInstruction(JUMP, label(1), "always"),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(SET, tmp(1), "null"),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, tmp(1), "null"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(OP, "add", ":after", ":after", "1"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
             );
         }
 
@@ -287,20 +287,20 @@ class BreakContinueStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 ++after;
                             while true;
                             """,
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(OP, "add", "before", "before", "1"),
-                    createInstruction(OP, "greaterThan", tmp(0), "b", "10"),
-                    createInstruction(JUMP, label(4), "equal", tmp(0), "false"),
-                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", ":before", ":before", "1"),
+                    createInstruction(OP, "greaterThan", tmp(0), ":b", "10"),
+                    createInstruction(JUMP, label(3), "equal", tmp(0), "false"),
+                    createInstruction(JUMP, label(1), "always"),
                     createInstruction(SET, tmp(1), "null"),
-                    createInstruction(JUMP, label(5), "always"),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, tmp(1), "null"),
                     createInstruction(LABEL, label(4)),
-                    createInstruction(SET, tmp(1), "null"),
-                    createInstruction(LABEL, label(5)),
-                    createInstruction(OP, "add", "after", "after", "1"),
-                    createInstruction(LABEL, label(2)),
-                    createInstruction(JUMP, label(1), "notEqual", "true", "false"),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(OP, "add", ":after", ":after", "1"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(0), "notEqual", "true", "false"),
+                    createInstruction(LABEL, label(2))
 
             );
         }
@@ -408,24 +408,24 @@ class BreakContinueStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 ++outer;
                             while true;
                             """,
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(LABEL, label(4)),
-                    createInstruction(OP, "add", "inner", "inner", "1"),
-                    createInstruction(OP, "greaterThan", tmp(0), "b", "10"),
-                    createInstruction(JUMP, label(7), "equal", tmp(0), "false"),
-                    createInstruction(JUMP, label(5), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(OP, "add", ":inner", ":inner", "1"),
+                    createInstruction(OP, "greaterThan", tmp(0), ":b", "10"),
+                    createInstruction(JUMP, label(6), "equal", tmp(0), "false"),
+                    createInstruction(JUMP, label(4), "always"),
                     createInstruction(SET, tmp(1), "null"),
-                    createInstruction(JUMP, label(8), "always"),
-                    createInstruction(LABEL, label(7)),
-                    createInstruction(SET, tmp(1), "null"),
-                    createInstruction(LABEL, label(8)),
-                    createInstruction(LABEL, label(5)),
-                    createInstruction(JUMP, label(4), "notEqual", "true", "false"),
+                    createInstruction(JUMP, label(7), "always"),
                     createInstruction(LABEL, label(6)),
-                    createInstruction(OP, "add", "outer", "outer", "1"),
-                    createInstruction(LABEL, label(2)),
-                    createInstruction(JUMP, label(1), "notEqual", "true", "false"),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(SET, tmp(1), "null"),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(JUMP, label(3), "notEqual", "true", "false"),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(OP, "add", ":outer", ":outer", "1"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(0), "notEqual", "true", "false"),
+                    createInstruction(LABEL, label(2))
             );
         }
     }

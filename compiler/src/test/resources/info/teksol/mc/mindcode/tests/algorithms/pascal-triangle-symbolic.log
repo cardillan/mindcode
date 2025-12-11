@@ -267,49 +267,6 @@ Modifications by Virtual Instruction Expansion:
     46 op add :c :c 1
     47 jump *label11 lessThan :c :lineLength
 
-Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
- 
-     3 set copper 1
-     4 set lead 1
-     5 set :i 3
--    * label *label0
-     6 jump *label2 greaterThan 3 TRIANGLE_SIZE
-     7 label *label9
-     8 set water 1
-     9 set :j 1
--    * label *label3
-    10 jump *label5 greaterThan 1 :lineLength
-    11 label *label10
-    12 op sub *tmp4 :j 1
- 
-    20 lookup liquid *tmp21 :j
-    21 sensor .currentLine*elem *tmp21 @name
-    22 write *tmp8 @this .currentLine*elem
--    * label *label4
-    23 op add :j :j 1
-    24 jump *label10 lessThanEq :j :lineLength
-    25 label *label5
- 
-    28 write 1 @this .currentLine*elem
-    29 op add :lineLength :lineLength 1
-    30 set :c 0
--    * label *label6
-    31 jump *label8 greaterThanEq 0 :lineLength
-    32 label *label11
-    33 lookup liquid *tmp23 :c
- 
-    38 lookup item *tmp25 :c
-    39 sensor .previousLine*elem *tmp25 @name
-    40 write *tmp18 @this .previousLine*elem
--    * label *label7
-    41 op add :c :c 1
-    42 jump *label11 lessThan :c :lineLength
-    43 label *label8
--    * label *label1
-    44 op add :i :i 1
-    45 jump *label9 lessThanEq :i TRIANGLE_SIZE
-    46 label *label2
-
 Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
     46 label *label2

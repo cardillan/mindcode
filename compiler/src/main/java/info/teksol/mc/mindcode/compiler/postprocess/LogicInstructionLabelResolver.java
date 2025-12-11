@@ -1,8 +1,8 @@
 package info.teksol.mc.mindcode.compiler.postprocess;
 
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -71,7 +71,7 @@ public class LogicInstructionLabelResolver {
 
         List<LogicVariable> order = orderVariables(allVariables, categories);
 
-        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
+        AstContext astContext = ContextFactory.getMasterContext().getRootAstContext()
                 .createSubcontext(AstContextType.CREATE_VARS, AstSubcontextType.BASIC, 1.0);
         List<LogicInstruction> variables = createVariables(astContext, order);
 
@@ -146,7 +146,7 @@ public class LogicInstructionLabelResolver {
     }
 
     public List<LogicInstruction> resolveLabels(List<LogicInstruction> program, Set<LogicVariable> forcedVariables) {
-        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
+        AstContext astContext = ContextFactory.getArrayConstructorContext().getRootAstContext()
                 .createSubcontext(AstContextType.CREATE_VARS, AstSubcontextType.BASIC, 1.0);
 
         if (program.isEmpty()) {

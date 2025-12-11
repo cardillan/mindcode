@@ -476,33 +476,6 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    177 assertequals 0x07FFFFFF :total "Test selected blocks"
    178 end
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
-     0 assertequals 260 @blockCount "Verify block count"
-     1 set :total 0
-     2 set :i -1
--    * label *label0
-     3 label *label59
-     4 lookup block :block :i
-     5 jump *label6 strictEqual :block null
- 
-   160 label *label55
-   161 set *tmp2 0
-   162 label *label4
--    * label *label3
-   163 op shl :bit 1 *tmp2
-   164 op and *tmp5 :total :bit
-   165 jump *label57 lessThanEq *tmp5 1
- 
-   168 label *label57
-   169 op or :total :total :bit
-   170 label *label58
--    * label *label1
-   171 op add :i :i 1
-   172 jump *label59 lessThan :i @blockCount
--    * label *label2
-   173 assertequals 0x07FFFFFF :total "Test selected blocks"
-   174 end
-
 Final code before resolving virtual instructions:
 
 assertequals 260 @blockCount "Verify block count"

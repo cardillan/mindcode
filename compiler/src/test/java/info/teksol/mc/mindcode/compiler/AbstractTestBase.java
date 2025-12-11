@@ -31,6 +31,7 @@ import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.intellij.lang.annotations.Language;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import org.junit.jupiter.api.AfterEach;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -48,6 +49,11 @@ public abstract class AbstractTestBase extends AbstractMessageEmitter implements
 
     public AbstractTestBase() {
         super(ExpectedMessages.throwOnMessage());
+    }
+
+    @AfterEach
+    void clearContext() {
+        ContextFactory.clearContexts();
     }
 
     public static final String SCRIPTS_BASE_DIRECTORY = "src/test/resources/info/teksol/mc/mindcode/tests";

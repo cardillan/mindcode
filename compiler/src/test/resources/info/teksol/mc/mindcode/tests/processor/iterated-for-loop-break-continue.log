@@ -6,7 +6,7 @@
      2 instructions modified by Data Flow Optimization (4 iterations).
      7 instructions added by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
-     2 instructions eliminated by Jump Straightening (4 iterations).
+     2 instructions eliminated by Jump Straightening (5 iterations).
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
      1 instructions eliminated by Print Merging.
     37 instructions after optimizations.
@@ -167,44 +167,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     11 call *label0 *invalid :d*retval (m:*label6) (h:*label6)
     12 label *label6
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
-     0 assertflush
-     1 set :test:i 0
-     2 set :test:j 10
--    * label *label2
-     3 set :d:n 0
-     4 setaddr :d*retaddr *label5 (h:*label5)
-     5 call *label0 *invalid :d*retval (m:*label5) (h:*label5)
- 
-    18 jump *label7 notEqual :d*retval 4
-    19 jump *label3 always
-    20 label *label7
--    * label *label8
-    21 print :test:i
-    22 print "|"
-    23 print :test:j
- 
-    29 jump *label10 notEqual :d*retval 10
-    30 jump *label4 always
-    31 label *label10
--    * label *label11
-    32 label *label3
-    33 op add :test:i :test:i 2
-    34 op add :test:j :test:j 1
- 
-    43 label *label16
-    44 jump *label14 lessThanEq *tmp1 :d*retval
-    45 label *label4
--    * label *label1
-    46 assertprints "0|10|2|11|6|13|8|14|10|15|" "iterated-for-loop-break-continue"
-    47 stop
-    48 end
-    49 label *label0
-    50 set :d*retval :d:n
--    * label *label13
-    51 return :d*retaddr
-    52 end
-
 Modifications by Jumps phase, Jump Straightening, pass 3, iteration 1 (-2 instructions):
  
     15 setaddr :d*retaddr *label9 (h:*label9)
@@ -226,24 +188,6 @@ Modifications by Jumps phase, Jump Straightening, pass 3, iteration 1 (-2 instru
     29 label *label10
     30 label *label3
     31 op add :test:i :test:i 2
-
-Modifications by Jumps phase, Condition Optimization, pass 3, iteration 1:
- 
-    16 call *label0 *invalid :d*retval (m:*label9) (h:*label9)
-    17 label *label9
-    18 jump *label3 equal :d*retval 4
--    * label *label7
-    19 print :test:i
-    20 print "|"
-    21 print :test:j
- 
-    25 call *label0 *invalid :d*retval (m:*label12) (h:*label12)
-    26 label *label12
-    27 jump *label4 equal :d*retval 10
--    * label *label10
-    28 label *label3
-    29 op add :test:i :test:i 2
-    30 op add :test:j :test:j 1
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  

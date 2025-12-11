@@ -240,13 +240,13 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(SET, "count", "10"),
                 createInstruction(SET, ":i", "1"),
                 createInstruction(JUMP, "__start__", "greaterThan", "1", "count"),
-                createInstruction(LABEL, label(5)),
-                createInstruction(OP, "rand", "__fn0_x", "10"),
-                createInstruction(OP, "rand", "__fn0_y", "10"),
-                createInstruction(OP, "add", tmp(4), "__fn0_x", "__fn0_y"),
-                createInstruction(PRINT, tmp(4)),
+                createInstruction(LABEL, label(4)),
+                createInstruction(OP, "rand", ":foo:x", "10"),
+                createInstruction(OP, "rand", ":foo:y", "10"),
+                createInstruction(OP, "add", tmp(3), ":foo:x", ":foo:y"),
+                createInstruction(PRINT, tmp(3)),
                 createInstruction(OP, "add", ":i", ":i", "1"),
-                createInstruction(JUMP, label(5), "lessThanEq", ":i", "count")
+                createInstruction(JUMP, label(4), "lessThanEq", ":i", "count")
         );
     }
 

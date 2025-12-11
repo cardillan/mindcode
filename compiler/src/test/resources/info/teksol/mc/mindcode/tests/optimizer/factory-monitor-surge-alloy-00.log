@@ -4,8 +4,8 @@
     15 instructions eliminated by Condition Optimization (5 iterations).
     11 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      2 instructions eliminated by Expression Optimization (3 iterations).
-    12 instructions eliminated by Boolean Optimization (4 iterations).
-       5 fully-evaluated conditions turned to a sequence of selects.
+    12 instructions eliminated by Boolean Optimization (6 iterations).
+       5 fully-evaluated expressions optimized using selects.
      1 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
@@ -846,85 +846,6 @@ Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1
    181 label *label35
    182 label *label33
 
-Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
- 
-     7 set :icon null
-     8 set :flow_str null
-     9 control enabled switch1 0
--    * label *label2
-    10 sensor *tmp7 switch1 @enabled
-    11 jump *label4 notEqual *tmp7 0
-    12 label *label43
- 
-    47 draw rect 0 0 156 176
-    48 label *label10
-    49 label *label7
--    * label *label8
-    50 print "\n"
-    51 print "Nominal production: "
-    52 print .EXPECTED_FLOW_STR
- 
-    58 print "/"
-    59 print "min"
-    60 label *label5
--    * label *label6
-    61 set :start @time
-    62 draw stroke 2
-    63 set :index FROM_INDEX
-    64 set :n 0
--    * label *label11
-    65 jump *label13 greaterThanEq 0 @links
-    66 label *label42
-    67 getlink :smelter :n
- 
-    80 set :minimum :l
-    81 set :icon @lead
-    82 label *label16
--    * label *label17
-    83 jump *label18 greaterThanEq :s :minimum
-    84 set :minimum :s
-    85 set :icon @silicon
-    86 label *label18
--    * label *label19
-    87 jump *label20 greaterThanEq :c :minimum
-    88 set :minimum :c
-    89 set :icon @copper
-    90 label *label20
--    * label *label21
-    91 jump *label22 greaterThanEq :t :minimum
-    92 set :minimum :t
-    93 set :icon @titanium
-    94 label *label22
--    * label *label23
-    95 op greaterThan *tmp48 :a 5
-    96 op sub *tmp49 21 :a
-    97 op lessThan *tmp50 *tmp49 :minimum
- 
-   178 op max :blue 192 :blue
-   179 set :boost EXPECTED_BOOST
-   180 label *label40
--    * label *label41
-   181 op mul *tmp97 .BAR_LENGTH :boost
-   182 op idiv :length *tmp97 EXPECTED_BOOST
-   183 draw color :red :green :blue 128
- 
-   188 draw lineRect :x :y :length 14
-   189 op add :index :index 1
-   190 label *label14
--    * label *label15
--    * label *label12
-   191 op add :n :n 1
-   192 jump *label42 lessThan :n @links
-   193 label *label13
- 
-   200 print " "
-   201 print "ms"
-   202 printflush message1
--    * label *label3
-   203 sensor *tmp7 switch1 @enabled
-   204 jump *label43 equal *tmp7 0
-   205 label *label4
-
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
      1 set FROM_INDEX 0
@@ -948,22 +869,6 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
    122 label *label30
    123 op add :x12 :x 12
    124 op add :y3 :y 3
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1:
- 
-   135 op add *tmp75 :x 4
-   136 op add *tmp76 :y 6
-   137 draw rect *tmp75 *tmp76 2 2
--    * label *label31
-   138 jump *label29 always
-   139 label *label28
-   140 op add :x2 :x 2
- 
-   202 printflush message1
-   203 sensor *tmp7 switch1 @enabled
-   204 jump *label43 equal *tmp7 0
--    * label *label4
-   205 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
