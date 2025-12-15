@@ -102,7 +102,7 @@ produces
     op mod *tmp0 MAX 2
     select *tmp2 equal *tmp0 0 "Even" "Odd"
     jump label_9 greaterThanEq 1 MAX
-    label_5:
+label_5:
         print :i
         print *tmp2
     op add :i :i 1

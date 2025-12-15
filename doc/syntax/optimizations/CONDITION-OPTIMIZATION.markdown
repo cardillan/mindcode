@@ -145,7 +145,8 @@ op equal *tmp1 *tmp0 false
 jump 0 equal *tmp1 false
 op add :n :n 1
 op lessThan *tmp0 :n 0
-jump 3 equal *tmp0 false
+op equal *tmp1 *tmp0 false
+jump 3 notEqual *tmp1 false
 ```
 
 ---

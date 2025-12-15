@@ -503,7 +503,7 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     void unrollsUpdatesInConditions() {
         assertCompilesTo("""
                         i = 0;
-                        while (i += 1) < 10 do
+                        while ++i < 10 do
                             print(i);
                         end;
                         """,

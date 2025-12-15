@@ -1,7 +1,7 @@
     99 instructions before optimizations.
     21 instructions eliminated by Temp Variables Elimination (6 iterations).
     10 instructions eliminated by Dead Code Elimination (5 iterations).
-     7 instructions eliminated by Condition Optimization (2 passes, 5 iterations).
+     7 instructions eliminated by Condition Optimization (2 passes, 7 iterations).
      5 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      2 instructions modified by Expression Optimization (3 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
@@ -12,7 +12,7 @@
     53 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 944):
-  * Replicate loop condition at line 31:5                        size    +2, benefit      625.0, efficiency    312.500 (+2 instructions)
+  * Partial loop rotation at line 31:5                           size    +2, benefit      625.0, efficiency    312.500 (+2 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructions):
  
@@ -345,7 +345,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     83 stop
     84 end
 
-Modifications by Replicate loop condition at line 31:5 (+2 instructions):
+Modifications by Partial loop rotation at line 31:5 (+2 instructions):
  
     42 op mul *tmp23 :down:parent 2
     43 op add :down:child *tmp23 1

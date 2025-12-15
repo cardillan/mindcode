@@ -3,7 +3,7 @@
      1 instructions eliminated by Case Expression Optimization.
     27 instructions eliminated by Dead Code Elimination (7 iterations).
      1 instructions eliminated by Jump Normalization (5 iterations).
-    12 instructions eliminated by Condition Optimization (2 passes, 5 iterations).
+    12 instructions eliminated by Condition Optimization (2 passes, 7 iterations).
      7 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      2 instructions modified by Expression Optimization (3 iterations).
      9 instructions eliminated by Boolean Optimization (6 iterations).
@@ -19,7 +19,7 @@
    265 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 827):
-  * Replicate loop condition at line 72:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  * Partial loop rotation at line 72:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
   o Convert case at line 26:9 (segments: 15)                     size    +0, benefit     2013.9, efficiency   Infinity
   o Convert case at line 26:9 (segments: 6)                      size    +1, benefit     2118.1, efficiency   2118.056
   o Convert case at line 26:9 (segments: 4, padded low)          size   +67, benefit     2395.8, efficiency     35.759
@@ -953,7 +953,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-9 i
    161 label *label45
    162 label *label46
 
-Modifications by Replicate loop condition at line 72:1 (+1 instructions):
+Modifications by Partial loop rotation at line 72:1 (+1 instructions):
  
    117 label *label28
    118 sensor *tmp23 .SWITCH @enabled

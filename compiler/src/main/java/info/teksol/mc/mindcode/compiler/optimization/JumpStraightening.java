@@ -40,6 +40,12 @@ class JumpStraightening extends BaseOptimizer {
         super(Optimization.JUMP_STRAIGHTENING, optimizationContext);
     }
 
+    private boolean effectivelyUnconditional(JumpInstruction jump, JumpInstruction next) {
+        return next.isUnconditional()
+                || jump.getCondition().inverse(getGlobalProfile()) == next.getCondition()
+                && jump.getX().equals(next.getX()) && jump.getY().equals(next.getY());
+    }
+
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
         try (LogicIterator iterator = createIterator()) {
@@ -47,7 +53,7 @@ class JumpStraightening extends BaseOptimizer {
                 if (iterator.next() instanceof JumpInstruction jump
                         && jump.getCondition().hasInverse(getGlobalProfile())
                         && iterator.hasNext() && iterator.peekValid() instanceof JumpInstruction next
-                        && next.isUnconditional()) {
+                        && effectivelyUnconditional(jump, next)) {
 
                     if (next.getAstContext() == jump.getAstContext() || phase.breaksContextStructure()) {
                         try (LogicIterator inner = iterator.copy()) {

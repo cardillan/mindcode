@@ -2,8 +2,8 @@
      2 instructions eliminated by Temp Variables Elimination (7 iterations).
      2 instructions eliminated by Dead Code Elimination (4 iterations).
      5 instructions eliminated by Jump Normalization (6 iterations).
-     1 instructions eliminated by Condition Optimization (6 iterations).
-    17 instructions eliminated by Single Step Elimination (4 passes, 19 iterations).
+     1 instructions eliminated by Condition Optimization (7 iterations).
+    17 instructions eliminated by Single Step Elimination (4 passes, 14 iterations).
     20 instructions eliminated by Expression Optimization (4 iterations).
     75 instructions eliminated by Data Flow Optimization (4 passes, 33 iterations).
      1 instructions eliminated by Loop Optimization (4 iterations).
@@ -869,46 +869,37 @@ Modifications by Unroll loop at line 6:5 (+35 instructions):
 +    3 writearr<lookup:liquid> :i .array[] :i
 +    4 label *label83
 +    5 op add :i :i 1
-+    6 label *label84
-+    7 writearr<lookup:liquid> :i .array[] :i
-+    8 label *label85
-+    9 op add :i :i 1
-+   10 label *label86
-+   11 writearr<lookup:liquid> :i .array[] :i
-+   12 label *label87
-+   13 op add :i :i 1
-+   14 label *label88
++    6 writearr<lookup:liquid> :i .array[] :i
++    7 label *label84
++    8 op add :i :i 1
++    9 writearr<lookup:liquid> :i .array[] :i
++   10 label *label85
++   11 op add :i :i 1
++   12 writearr<lookup:liquid> :i .array[] :i
++   13 label *label86
++   14 op add :i :i 1
 +   15 writearr<lookup:liquid> :i .array[] :i
-+   16 label *label89
++   16 label *label87
 +   17 op add :i :i 1
-+   18 label *label90
-+   19 writearr<lookup:liquid> :i .array[] :i
-+   20 label *label91
-+   21 op add :i :i 1
-+   22 label *label92
-+   23 writearr<lookup:liquid> :i .array[] :i
-+   24 label *label93
-+   25 op add :i :i 1
-+   26 label *label94
++   18 writearr<lookup:liquid> :i .array[] :i
++   19 label *label88
++   20 op add :i :i 1
++   21 writearr<lookup:liquid> :i .array[] :i
++   22 label *label89
++   23 op add :i :i 1
++   24 writearr<lookup:liquid> :i .array[] :i
++   25 label *label90
++   26 op add :i :i 1
 +   27 writearr<lookup:liquid> :i .array[] :i
-+   28 label *label95
++   28 label *label91
 +   29 op add :i :i 1
-+   30 label *label96
-+   31 writearr<lookup:liquid> :i .array[] :i
-+   32 label *label97
-+   33 op add :i :i 1
-+   34 label *label98
-+   35 writearr<lookup:liquid> :i .array[] :i
-+   36 label *label99
-+   37 op add :i :i 1
-+   38 label *label100
-+   39 writearr<lookup:liquid> :i .array[] :i
-+   40 label *label101
-+   41 op add :i :i 1
-+   42 label *label2
-    43 set :reverse:i .array*0
-    44 label *label20
-    45 jump *label21 greaterThanEq 4 0
++   30 writearr<lookup:liquid> :i .array[] :i
++   31 label *label92
++   32 op add :i :i 1
++   33 label *label2
+    34 set :reverse:i .array*0
+    35 label *label20
+    36 jump *label21 greaterThanEq 4 0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set :i 0
@@ -918,64 +909,55 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +    3 writearr<lookup:liquid> 0 .array[] 0
      4 label *label83
 -    * op add :i :i 1
+-    * writearr<lookup:liquid> :i .array[] :i
 +    5 op add :i 0 1
-     6 label *label84
--    * writearr<lookup:liquid> :i .array[] :i
-+    7 writearr<lookup:liquid> 1 .array[] 1
-     8 label *label85
++    6 writearr<lookup:liquid> 1 .array[] 1
+     7 label *label84
 -    * op add :i :i 1
-+    9 op add :i 1 1
-    10 label *label86
 -    * writearr<lookup:liquid> :i .array[] :i
-+   11 writearr<lookup:liquid> 2 .array[] 2
-    12 label *label87
++    8 op add :i 1 1
++    9 writearr<lookup:liquid> 2 .array[] 2
+    10 label *label85
 -    * op add :i :i 1
-+   13 op add :i 2 1
-    14 label *label88
 -    * writearr<lookup:liquid> :i .array[] :i
-+   15 writearr<lookup:liquid> 3 .array[] 3
-    16 label *label89
++   11 op add :i 2 1
++   12 writearr<lookup:liquid> 3 .array[] 3
+    13 label *label86
 -    * op add :i :i 1
-+   17 op add :i 3 1
-    18 label *label90
 -    * writearr<lookup:liquid> :i .array[] :i
-+   19 writearr<lookup:liquid> 4 .array[] 4
-    20 label *label91
++   14 op add :i 3 1
++   15 writearr<lookup:liquid> 4 .array[] 4
+    16 label *label87
 -    * op add :i :i 1
-+   21 op add :i 4 1
-    22 label *label92
 -    * writearr<lookup:liquid> :i .array[] :i
-+   23 writearr<lookup:liquid> 5 .array[] 5
-    24 label *label93
++   17 op add :i 4 1
++   18 writearr<lookup:liquid> 5 .array[] 5
+    19 label *label88
 -    * op add :i :i 1
-+   25 op add :i 5 1
-    26 label *label94
 -    * writearr<lookup:liquid> :i .array[] :i
-+   27 writearr<lookup:liquid> 6 .array[] 6
-    28 label *label95
++   20 op add :i 5 1
++   21 writearr<lookup:liquid> 6 .array[] 6
+    22 label *label89
 -    * op add :i :i 1
-+   29 op add :i 6 1
-    30 label *label96
 -    * writearr<lookup:liquid> :i .array[] :i
-+   31 writearr<lookup:liquid> 7 .array[] 7
-    32 label *label97
++   23 op add :i 6 1
++   24 writearr<lookup:liquid> 7 .array[] 7
+    25 label *label90
 -    * op add :i :i 1
-+   33 op add :i 7 1
-    34 label *label98
 -    * writearr<lookup:liquid> :i .array[] :i
-+   35 writearr<lookup:liquid> 8 .array[] 8
-    36 label *label99
++   26 op add :i 7 1
++   27 writearr<lookup:liquid> 8 .array[] 8
+    28 label *label91
 -    * op add :i :i 1
-+   37 op add :i 8 1
-    38 label *label100
 -    * writearr<lookup:liquid> :i .array[] :i
-+   39 writearr<lookup:liquid> 9 .array[] 9
-    40 label *label101
++   29 op add :i 8 1
++   30 writearr<lookup:liquid> 9 .array[] 9
+    31 label *label92
 -    * op add :i :i 1
-+   41 op add :i 9 1
-    42 label *label2
-    43 set :reverse:i .array*0
-    44 label *label20
++   32 op add :i 9 1
+    33 label *label2
+    34 set :reverse:i .array*0
+    35 label *label20
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-11 instructions):
 -    * set :i 0
@@ -984,154 +966,145 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
      2 writearr<lookup:liquid> 0 .array[] 0
      3 label *label83
 -    * op add :i 0 1
-     4 label *label84
-     5 writearr<lookup:liquid> 1 .array[] 1
-     6 label *label85
+     4 writearr<lookup:liquid> 1 .array[] 1
+     5 label *label84
 -    * op add :i 1 1
-     7 label *label86
-     8 writearr<lookup:liquid> 2 .array[] 2
-     9 label *label87
+     6 writearr<lookup:liquid> 2 .array[] 2
+     7 label *label85
 -    * op add :i 2 1
-    10 label *label88
-    11 writearr<lookup:liquid> 3 .array[] 3
-    12 label *label89
+     8 writearr<lookup:liquid> 3 .array[] 3
+     9 label *label86
 -    * op add :i 3 1
-    13 label *label90
-    14 writearr<lookup:liquid> 4 .array[] 4
-    15 label *label91
+    10 writearr<lookup:liquid> 4 .array[] 4
+    11 label *label87
 -    * op add :i 4 1
-    16 label *label92
-    17 writearr<lookup:liquid> 5 .array[] 5
-    18 label *label93
+    12 writearr<lookup:liquid> 5 .array[] 5
+    13 label *label88
 -    * op add :i 5 1
-    19 label *label94
-    20 writearr<lookup:liquid> 6 .array[] 6
-    21 label *label95
+    14 writearr<lookup:liquid> 6 .array[] 6
+    15 label *label89
 -    * op add :i 6 1
-    22 label *label96
-    23 writearr<lookup:liquid> 7 .array[] 7
-    24 label *label97
+    16 writearr<lookup:liquid> 7 .array[] 7
+    17 label *label90
 -    * op add :i 7 1
-    25 label *label98
-    26 writearr<lookup:liquid> 8 .array[] 8
-    27 label *label99
+    18 writearr<lookup:liquid> 8 .array[] 8
+    19 label *label91
 -    * op add :i 8 1
-    28 label *label100
-    29 writearr<lookup:liquid> 9 .array[] 9
-    30 label *label101
+    20 writearr<lookup:liquid> 9 .array[] 9
+    21 label *label92
 -    * op add :i 9 1
-    31 label *label2
-    32 set :reverse:i .array*0
-    33 label *label20
+    22 label *label2
+    23 set :reverse:i .array*0
+    24 label *label20
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-5 instructions):
  
-    31 label *label2
-    32 set :reverse:i .array*0
-    33 label *label20
+    22 label *label2
+    23 set :reverse:i .array*0
+    24 label *label20
 -    * jump *label21 greaterThanEq 4 0
-+   34 jump *label21 always
-    35 jump *label6 always
-    36 label *label21
-    37 label *label22
++   25 jump *label21 always
+    26 jump *label6 always
+    27 label *label21
+    28 label *label22
  
-    40 set .array*9 :reverse:i
-    41 set :reverse:i .array*1
-    42 label *label26
+    31 set .array*9 :reverse:i
+    32 set :reverse:i .array*1
+    33 label *label26
 -    * jump *label27 greaterThanEq 3 0
-+   43 jump *label27 always
-    44 jump *label6 always
-    45 label *label27
-    46 label *label28
++   34 jump *label27 always
+    35 jump *label6 always
+    36 label *label27
+    37 label *label28
  
-    49 set .array*8 :reverse:i
-    50 set :reverse:i .array*2
-    51 label *label32
+    40 set .array*8 :reverse:i
+    41 set :reverse:i .array*2
+    42 label *label32
 -    * jump *label33 greaterThanEq 2 0
-+   52 jump *label33 always
-    53 jump *label6 always
-    54 label *label33
-    55 label *label34
++   43 jump *label33 always
+    44 jump *label6 always
+    45 label *label33
+    46 label *label34
  
-    58 set .array*7 :reverse:i
-    59 set :reverse:i .array*3
-    60 label *label38
+    49 set .array*7 :reverse:i
+    50 set :reverse:i .array*3
+    51 label *label38
 -    * jump *label39 greaterThanEq 1 0
-+   61 jump *label39 always
-    62 jump *label6 always
-    63 label *label39
-    64 label *label40
++   52 jump *label39 always
+    53 jump *label6 always
+    54 label *label39
+    55 label *label40
  
-    67 set .array*6 :reverse:i
-    68 set :reverse:i .array*4
-    69 label *label44
+    58 set .array*6 :reverse:i
+    59 set :reverse:i .array*4
+    60 label *label44
 -    * jump *label45 greaterThanEq 0 0
-+   70 jump *label45 always
-    71 jump *label6 always
-    72 label *label45
-    73 label *label46
++   61 jump *label45 always
+    62 jump *label6 always
+    63 label *label45
+    64 label *label46
  
-    75 set .array*4 .array*5
-    76 set .array*5 :reverse:i
-    77 label *label50
+    66 set .array*4 .array*5
+    67 set .array*5 :reverse:i
+    68 label *label50
 -    * jump *label51 greaterThanEq -1 0
-    78 jump *label6 always
-    79 label *label51
-    80 label *label52
-    81 label *label53
-    82 label *label56
+    69 jump *label6 always
+    70 label *label51
+    71 label *label52
+    72 label *label53
+    73 label *label56
 -    * jump *label57 greaterThanEq -2 0
-    83 jump *label6 always
-    84 label *label57
-    85 label *label58
-    86 label *label59
-    87 label *label62
+    74 jump *label6 always
+    75 label *label57
+    76 label *label58
+    77 label *label59
+    78 label *label62
 -    * jump *label63 greaterThanEq -3 0
-    88 jump *label6 always
-    89 label *label63
-    90 label *label64
-    91 label *label65
-    92 label *label68
+    79 jump *label6 always
+    80 label *label63
+    81 label *label64
+    82 label *label65
+    83 label *label68
 -    * jump *label69 greaterThanEq -4 0
-    93 jump *label6 always
-    94 label *label69
-    95 label *label70
-    96 label *label71
-    97 label *label74
+    84 jump *label6 always
+    85 label *label69
+    86 label *label70
+    87 label *label71
+    88 label *label74
 -    * jump *label75 greaterThanEq -5 0
-    98 jump *label6 always
-    99 label *label75
-   100 label *label76
+    89 jump *label6 always
+    90 label *label75
+    91 label *label76
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-5 instructions):
  
-    75 set .array*4 .array*5
-    76 set .array*5 :reverse:i
-    77 label *label50
+    66 set .array*4 .array*5
+    67 set .array*5 :reverse:i
+    68 label *label50
 -    * jump *label6 always
-    78 label *label51
-    79 label *label52
-    80 label *label53
-    81 label *label56
+    69 label *label51
+    70 label *label52
+    71 label *label53
+    72 label *label56
 -    * jump *label6 always
-    82 label *label57
-    83 label *label58
-    84 label *label59
-    85 label *label62
+    73 label *label57
+    74 label *label58
+    75 label *label59
+    76 label *label62
 -    * jump *label6 always
-    86 label *label63
-    87 label *label64
-    88 label *label65
-    89 label *label68
+    77 label *label63
+    78 label *label64
+    79 label *label65
+    80 label *label68
 -    * jump *label6 always
-    90 label *label69
-    91 label *label70
-    92 label *label71
-    93 label *label74
+    81 label *label69
+    82 label *label70
+    83 label *label71
+    84 label *label74
 -    * jump *label6 always
-    94 label *label75
-    95 label *label76
-    96 label *label77
+    85 label *label75
+    86 label *label76
+    87 label *label77
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-21 instructions):
      0 label *label81
@@ -1139,44 +1112,35 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-
 -    * writearr<lookup:liquid> 0 .array[] 0
 +    2 set .array*0 0
      3 label *label83
-     4 label *label84
 -    * writearr<lookup:liquid> 1 .array[] 1
-+    5 set .array*1 1
-     6 label *label85
-     7 label *label86
++    4 set .array*1 1
+     5 label *label84
 -    * writearr<lookup:liquid> 2 .array[] 2
-+    8 set .array*2 2
-     9 label *label87
-    10 label *label88
++    6 set .array*2 2
+     7 label *label85
 -    * writearr<lookup:liquid> 3 .array[] 3
-+   11 set .array*3 3
-    12 label *label89
-    13 label *label90
++    8 set .array*3 3
+     9 label *label86
 -    * writearr<lookup:liquid> 4 .array[] 4
-+   14 set .array*4 4
-    15 label *label91
-    16 label *label92
++   10 set .array*4 4
+    11 label *label87
 -    * writearr<lookup:liquid> 5 .array[] 5
-+   17 set .array*5 5
-    18 label *label93
-    19 label *label94
++   12 set .array*5 5
+    13 label *label88
 -    * writearr<lookup:liquid> 6 .array[] 6
-+   20 set .array*6 6
-    21 label *label95
-    22 label *label96
++   14 set .array*6 6
+    15 label *label89
 -    * writearr<lookup:liquid> 7 .array[] 7
-+   23 set .array*7 7
-    24 label *label97
-    25 label *label98
++   16 set .array*7 7
+    17 label *label90
 -    * writearr<lookup:liquid> 8 .array[] 8
-+   26 set .array*8 8
-    27 label *label99
-    28 label *label100
++   18 set .array*8 8
+    19 label *label91
 -    * writearr<lookup:liquid> 9 .array[] 9
-+   29 set .array*9 9
-    30 label *label101
-    31 label *label2
-    32 set :reverse:i .array*0
++   20 set .array*9 9
+    21 label *label92
+    22 label *label2
+    23 set :reverse:i .array*0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
      0 label *label81
@@ -1184,35 +1148,35 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
 -    * set .array*0 0
 +    2 set :reverse:i 0
      3 label *label83
-     4 label *label84
-     5 set .array*1 1
+     4 set .array*1 1
+     5 label *label84
  
-    29 set .array*9 9
-    30 label *label101
-    31 label *label2
+    20 set .array*9 9
+    21 label *label92
+    22 label *label2
 -    * set :reverse:i .array*0
-    32 label *label20
-    33 jump *label21 always
-    34 jump *label6 always
+    23 label *label20
+    24 jump *label21 always
+    25 jump *label6 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
  
-    26 set .array*8 8
-    27 label *label99
-    28 label *label100
+    17 label *label90
+    18 set .array*8 8
+    19 label *label91
 -    * set .array*9 9
-+   29 set .array*0 9
-    30 label *label101
-    31 label *label2
-    32 label *label20
++   20 set .array*0 9
+    21 label *label92
+    22 label *label2
+    23 label *label20
  
-    35 label *label21
-    36 label *label22
-    37 label *label23
+    26 label *label21
+    27 label *label22
+    28 label *label23
 -    * set .array*0 .array*9
-    38 set .array*9 :reverse:i
-    39 set :reverse:i .array*1
-    40 label *label26
+    29 set .array*9 :reverse:i
+    30 set :reverse:i .array*1
+    31 label *label26
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-1 instructions):
      0 label *label81
@@ -1220,240 +1184,240 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-1
 -    * set :reverse:i 0
 +    2 set .array*9 0
      3 label *label83
-     4 label *label84
-     5 set .array*1 1
+     4 set .array*1 1
+     5 label *label84
  
-    35 label *label21
-    36 label *label22
-    37 label *label23
+    26 label *label21
+    27 label *label22
+    28 label *label23
 -    * set .array*9 :reverse:i
-    38 set :reverse:i .array*1
-    39 label *label26
-    40 jump *label27 always
+    29 set :reverse:i .array*1
+    30 label *label26
+    31 jump *label27 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 4 (-1 instructions):
  
+     1 label *label82
      2 set .array*9 0
      3 label *label83
-     4 label *label84
 -    * set .array*1 1
-+    5 set :reverse:i 1
-     6 label *label85
-     7 label *label86
-     8 set .array*2 2
++    4 set :reverse:i 1
+     5 label *label84
+     6 set .array*2 2
+     7 label *label85
  
-    35 label *label21
-    36 label *label22
-    37 label *label23
+    26 label *label21
+    27 label *label22
+    28 label *label23
 -    * set :reverse:i .array*1
-    38 label *label26
-    39 jump *label27 always
-    40 jump *label6 always
+    29 label *label26
+    30 jump *label27 always
+    31 jump *label6 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 5 (-1 instructions):
  
-    23 set .array*7 7
-    24 label *label97
-    25 label *label98
+    15 label *label89
+    16 set .array*7 7
+    17 label *label90
 -    * set .array*8 8
-+   26 set .array*1 8
-    27 label *label99
-    28 label *label100
-    29 set .array*0 9
++   18 set .array*1 8
+    19 label *label91
+    20 set .array*0 9
+    21 label *label92
  
-    41 label *label27
-    42 label *label28
-    43 label *label29
+    32 label *label27
+    33 label *label28
+    34 label *label29
 -    * set .array*1 .array*8
-    44 set .array*8 :reverse:i
-    45 set :reverse:i .array*2
-    46 label *label32
+    35 set .array*8 :reverse:i
+    36 set :reverse:i .array*2
+    37 label *label32
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 6 (-1 instructions):
  
+     1 label *label82
      2 set .array*9 0
      3 label *label83
-     4 label *label84
 -    * set :reverse:i 1
-+    5 set .array*8 1
-     6 label *label85
-     7 label *label86
-     8 set .array*2 2
++    4 set .array*8 1
+     5 label *label84
+     6 set .array*2 2
+     7 label *label85
  
-    41 label *label27
-    42 label *label28
-    43 label *label29
+    32 label *label27
+    33 label *label28
+    34 label *label29
 -    * set .array*8 :reverse:i
-    44 set :reverse:i .array*2
-    45 label *label32
-    46 jump *label33 always
+    35 set :reverse:i .array*2
+    36 label *label32
+    37 jump *label33 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 7 (-1 instructions):
  
-     5 set .array*8 1
-     6 label *label85
-     7 label *label86
+     3 label *label83
+     4 set .array*8 1
+     5 label *label84
 -    * set .array*2 2
-+    8 set :reverse:i 2
-     9 label *label87
-    10 label *label88
-    11 set .array*3 3
++    6 set :reverse:i 2
+     7 label *label85
+     8 set .array*3 3
+     9 label *label86
  
-    41 label *label27
-    42 label *label28
-    43 label *label29
+    32 label *label27
+    33 label *label28
+    34 label *label29
 -    * set :reverse:i .array*2
-    44 label *label32
-    45 jump *label33 always
-    46 jump *label6 always
+    35 label *label32
+    36 jump *label33 always
+    37 jump *label6 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 8 (-1 instructions):
  
-    20 set .array*6 6
-    21 label *label95
-    22 label *label96
+    13 label *label88
+    14 set .array*6 6
+    15 label *label89
 -    * set .array*7 7
-+   23 set .array*2 7
-    24 label *label97
-    25 label *label98
-    26 set .array*1 8
++   16 set .array*2 7
+    17 label *label90
+    18 set .array*1 8
+    19 label *label91
  
-    47 label *label33
-    48 label *label34
-    49 label *label35
+    38 label *label33
+    39 label *label34
+    40 label *label35
 -    * set .array*2 .array*7
-    50 set .array*7 :reverse:i
-    51 set :reverse:i .array*3
-    52 label *label38
+    41 set .array*7 :reverse:i
+    42 set :reverse:i .array*3
+    43 label *label38
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 9 (-1 instructions):
  
-     5 set .array*8 1
-     6 label *label85
-     7 label *label86
+     3 label *label83
+     4 set .array*8 1
+     5 label *label84
 -    * set :reverse:i 2
-+    8 set .array*7 2
-     9 label *label87
-    10 label *label88
-    11 set .array*3 3
++    6 set .array*7 2
+     7 label *label85
+     8 set .array*3 3
+     9 label *label86
  
-    47 label *label33
-    48 label *label34
-    49 label *label35
+    38 label *label33
+    39 label *label34
+    40 label *label35
 -    * set .array*7 :reverse:i
-    50 set :reverse:i .array*3
-    51 label *label38
-    52 jump *label39 always
+    41 set :reverse:i .array*3
+    42 label *label38
+    43 jump *label39 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 10 (-1 instructions):
  
-     8 set .array*7 2
-     9 label *label87
-    10 label *label88
+     5 label *label84
+     6 set .array*7 2
+     7 label *label85
 -    * set .array*3 3
-+   11 set :reverse:i 3
-    12 label *label89
-    13 label *label90
-    14 set .array*4 4
++    8 set :reverse:i 3
+     9 label *label86
+    10 set .array*4 4
+    11 label *label87
  
-    47 label *label33
-    48 label *label34
-    49 label *label35
+    38 label *label33
+    39 label *label34
+    40 label *label35
 -    * set :reverse:i .array*3
-    50 label *label38
-    51 jump *label39 always
-    52 jump *label6 always
+    41 label *label38
+    42 jump *label39 always
+    43 jump *label6 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 11 (-1 instructions):
  
-    17 set .array*5 5
-    18 label *label93
-    19 label *label94
+    11 label *label87
+    12 set .array*5 5
+    13 label *label88
 -    * set .array*6 6
-+   20 set .array*3 6
-    21 label *label95
-    22 label *label96
-    23 set .array*2 7
++   14 set .array*3 6
+    15 label *label89
+    16 set .array*2 7
+    17 label *label90
  
-    53 label *label39
-    54 label *label40
-    55 label *label41
+    44 label *label39
+    45 label *label40
+    46 label *label41
 -    * set .array*3 .array*6
-    56 set .array*6 :reverse:i
-    57 set :reverse:i .array*4
-    58 label *label44
+    47 set .array*6 :reverse:i
+    48 set :reverse:i .array*4
+    49 label *label44
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 12 (-1 instructions):
  
-     8 set .array*7 2
-     9 label *label87
-    10 label *label88
+     5 label *label84
+     6 set .array*7 2
+     7 label *label85
 -    * set :reverse:i 3
-+   11 set .array*6 3
-    12 label *label89
-    13 label *label90
-    14 set .array*4 4
++    8 set .array*6 3
+     9 label *label86
+    10 set .array*4 4
+    11 label *label87
  
-    53 label *label39
-    54 label *label40
-    55 label *label41
+    44 label *label39
+    45 label *label40
+    46 label *label41
 -    * set .array*6 :reverse:i
-    56 set :reverse:i .array*4
-    57 label *label44
-    58 jump *label45 always
+    47 set :reverse:i .array*4
+    48 label *label44
+    49 jump *label45 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 13 (-1 instructions):
  
-    11 set .array*6 3
-    12 label *label89
-    13 label *label90
+     7 label *label85
+     8 set .array*6 3
+     9 label *label86
 -    * set .array*4 4
-+   14 set :reverse:i 4
-    15 label *label91
-    16 label *label92
-    17 set .array*5 5
++   10 set :reverse:i 4
+    11 label *label87
+    12 set .array*5 5
+    13 label *label88
  
-    53 label *label39
-    54 label *label40
-    55 label *label41
+    44 label *label39
+    45 label *label40
+    46 label *label41
 -    * set :reverse:i .array*4
-    56 label *label44
-    57 jump *label45 always
-    58 jump *label6 always
+    47 label *label44
+    48 jump *label45 always
+    49 jump *label6 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 14 (-1 instructions):
  
-    14 set :reverse:i 4
-    15 label *label91
-    16 label *label92
+     9 label *label86
+    10 set :reverse:i 4
+    11 label *label87
 -    * set .array*5 5
-+   17 set .array*4 5
-    18 label *label93
-    19 label *label94
-    20 set .array*3 6
++   12 set .array*4 5
+    13 label *label88
+    14 set .array*3 6
+    15 label *label89
  
-    59 label *label45
-    60 label *label46
-    61 label *label47
+    50 label *label45
+    51 label *label46
+    52 label *label47
 -    * set .array*4 .array*5
-    62 set .array*5 :reverse:i
-    63 label *label50
-    64 label *label51
+    53 set .array*5 :reverse:i
+    54 label *label50
+    55 label *label51
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 15:
  
-    59 label *label45
-    60 label *label46
-    61 label *label47
+    50 label *label45
+    51 label *label46
+    52 label *label47
 -    * set .array*5 :reverse:i
-+   62 set .array*5 4
-    63 label *label50
-    64 label *label51
-    65 label *label52
++   53 set .array*5 4
+    54 label *label50
+    55 label *label51
+    56 label *label52
  
-    83 label *label6
-    84 label *label3
-    85 assertflush
+    74 label *label6
+    75 label *label3
+    76 assertflush
 -    * print .array*0
 -    * print .array*1
 -    * print .array*2
@@ -1464,161 +1428,123 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 15:
 -    * print .array*7
 -    * print .array*8
 -    * print .array*9
-+   86 print 9
-+   87 print 8
-+   88 print 7
-+   89 print 6
-+   90 print 5
-+   91 print 4
-+   92 print 3
-+   93 print 2
-+   94 print 1
-+   95 print 0
-    96 assertprints "9876543210" "reverse array"
-    97 end
++   77 print 9
++   78 print 8
++   79 print 7
++   80 print 6
++   81 print 5
++   82 print 4
++   83 print 3
++   84 print 2
++   85 print 1
++   86 print 0
+    87 assertprints "9876543210" "reverse array"
+    88 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 16 (-11 instructions):
      0 label *label81
      1 label *label82
 -    * set .array*9 0
      2 label *label83
-     3 label *label84
 -    * set .array*8 1
-     4 label *label85
-     5 label *label86
+     3 label *label84
 -    * set .array*7 2
-     6 label *label87
-     7 label *label88
+     4 label *label85
 -    * set .array*6 3
-     8 label *label89
-     9 label *label90
+     5 label *label86
 -    * set :reverse:i 4
-    10 label *label91
-    11 label *label92
+     6 label *label87
 -    * set .array*4 5
-    12 label *label93
-    13 label *label94
+     7 label *label88
 -    * set .array*3 6
-    14 label *label95
-    15 label *label96
+     8 label *label89
 -    * set .array*2 7
-    16 label *label97
-    17 label *label98
+     9 label *label90
 -    * set .array*1 8
-    18 label *label99
-    19 label *label100
+    10 label *label91
 -    * set .array*0 9
-    20 label *label101
-    21 label *label2
-    22 label *label20
+    11 label *label92
+    12 label *label2
+    13 label *label20
  
-    49 label *label45
-    50 label *label46
-    51 label *label47
+    40 label *label45
+    41 label *label46
+    42 label *label47
 -    * set .array*5 4
-    52 label *label50
-    53 label *label51
-    54 label *label52
+    43 label *label50
+    44 label *label51
+    45 label *label52
 
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-3 instructions):
  
-    45 label *label41
-    46 label *label44
-    47 jump *label45 always
+    30 label *label35
+    31 label *label38
+    32 jump *label39 always
 -    * jump *label6 always
-    48 label *label45
-    49 label *label46
-    50 label *label47
-
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 2 (-1 instructions):
- 
-    44 label *label40
-    45 label *label41
-    46 label *label44
+    33 label *label39
+    34 label *label40
+    35 label *label41
+    36 label *label44
 -    * jump *label45 always
-    47 label *label45
-    48 label *label46
-    49 label *label47
-
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 3 (-1 instructions):
- 
-    39 label *label35
-    40 label *label38
-    41 jump *label39 always
 -    * jump *label6 always
-    42 label *label39
-    43 label *label40
-    44 label *label41
+    37 label *label45
+    38 label *label46
+    39 label *label47
 
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 4 (-1 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 2 (-2 instructions):
  
-    38 label *label34
-    39 label *label35
-    40 label *label38
+    24 label *label29
+    25 label *label32
+    26 jump *label33 always
+-    * jump *label6 always
+    27 label *label33
+    28 label *label34
+    29 label *label35
+    30 label *label38
 -    * jump *label39 always
-    41 label *label39
-    42 label *label40
-    43 label *label41
+    31 label *label39
+    32 label *label40
+    33 label *label41
+
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 3 (-2 instructions):
+ 
+    18 label *label23
+    19 label *label26
+    20 jump *label27 always
+-    * jump *label6 always
+    21 label *label27
+    22 label *label28
+    23 label *label29
+    24 label *label32
+-    * jump *label33 always
+    25 label *label33
+    26 label *label34
+    27 label *label35
+
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 4 (-2 instructions):
+ 
+    12 label *label2
+    13 label *label20
+    14 jump *label21 always
+-    * jump *label6 always
+    15 label *label21
+    16 label *label22
+    17 label *label23
+    18 label *label26
+-    * jump *label27 always
+    19 label *label27
+    20 label *label28
+    21 label *label29
 
 Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 5 (-1 instructions):
  
-    33 label *label29
-    34 label *label32
-    35 jump *label33 always
--    * jump *label6 always
-    36 label *label33
-    37 label *label34
-    38 label *label35
-
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 6 (-1 instructions):
- 
-    32 label *label28
-    33 label *label29
-    34 label *label32
--    * jump *label33 always
-    35 label *label33
-    36 label *label34
-    37 label *label35
-
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 7 (-1 instructions):
- 
-    27 label *label23
-    28 label *label26
-    29 jump *label27 always
--    * jump *label6 always
-    30 label *label27
-    31 label *label28
-    32 label *label29
-
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 8 (-1 instructions):
- 
-    26 label *label22
-    27 label *label23
-    28 label *label26
--    * jump *label27 always
-    29 label *label27
-    30 label *label28
-    31 label *label29
-
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 9 (-1 instructions):
- 
-    21 label *label2
-    22 label *label20
-    23 jump *label21 always
--    * jump *label6 always
-    24 label *label21
-    25 label *label22
-    26 label *label23
-
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 10 (-1 instructions):
- 
-    20 label *label101
-    21 label *label2
-    22 label *label20
+    11 label *label92
+    12 label *label2
+    13 label *label20
 -    * jump *label21 always
-    23 label *label21
-    24 label *label22
-    25 label *label23
+    14 label *label21
+    15 label *label22
+    16 label *label23
 
 Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  

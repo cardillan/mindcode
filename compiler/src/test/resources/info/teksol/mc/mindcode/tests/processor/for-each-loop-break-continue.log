@@ -1,8 +1,8 @@
     63 instructions before optimizations.
      5 instructions eliminated by Temp Variables Elimination (6 iterations).
      5 instructions eliminated by Dead Code Elimination (4 iterations).
-     2 instructions eliminated by Condition Optimization (5 iterations).
-     4 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
+     2 instructions eliminated by Condition Optimization (6 iterations).
+     4 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      4 instructions eliminated by Data Flow Optimization (6 iterations).
     58 instructions added by Loop Unrolling (4 iterations).
      1 loops unrolled by Loop Unrolling.
@@ -506,22 +506,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
    137 set :d:n 15
    138 setaddr :d*retaddr *label86 (h:*label86)
 
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
- 
-   149 call *label0 *invalid :d*retval (m:*label89) (h:*label89)
-   150 label *label89
-   151 jump *label90 notEqual :d*retval 12
--    * jump *label4 always
-   152 label *label90
-   153 label *label91
-   154 label *label92
-
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 2 (-1 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
  
    148 setaddr :d*retaddr *label89 (h:*label89)
    149 call *label0 *invalid :d*retval (m:*label89) (h:*label89)
    150 label *label89
 -    * jump *label90 notEqual :d*retval 12
+-    * jump *label4 always
    151 label *label90
    152 label *label91
    153 label *label92

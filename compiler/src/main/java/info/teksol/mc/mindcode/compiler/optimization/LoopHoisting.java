@@ -207,7 +207,7 @@ class LoopHoisting extends BaseOptimizer {
     }
 
     private boolean isMovable(LogicInstruction instruction) {
-        return  instructionProcessor.isDeterministic(instruction) && instruction.isSafe();
+        return instructionProcessor.isDeterministic(instruction) && instruction.isSafe();
     }
 
     private boolean safeToMove(AstContext loop, LogicInstruction instruction) {

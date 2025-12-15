@@ -1,6 +1,6 @@
     20 instructions before optimizations.
      2 instructions eliminated by Dead Code Elimination (4 iterations).
-     2 instructions eliminated by Condition Optimization (4 iterations).
+     2 instructions eliminated by Condition Optimization (5 iterations).
      2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.

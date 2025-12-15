@@ -44,11 +44,12 @@ which produces:
 
 ```mlog
 sensor *tmp0 switch1 @enabled
-jump 6 equal *tmp0 false
+jump 7 equal *tmp0 false
 sensor *tmp1 switch2 @enabled
-jump 6 equal *tmp1 false
+jump 7 equal *tmp1 false
 print "Doing something."
-jump 0 always 0 0
+sensor *tmp0 switch1 @enabled
+jump 2 notEqual *tmp0 false
 print "A switch has been reset."
 ```
 

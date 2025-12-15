@@ -66,6 +66,11 @@ public interface LogicInstruction extends MlogInstruction {
         return reads.isEmpty() ? inputOnlyArgumentsStream() : Stream.concat(inputArgumentsStream(), reads.stream());
     }
 
+    default Stream<LogicArgument> getAllWrites() {
+        return Stream.of(outputArgumentsStream(), getSideEffects().writes().stream(), getSideEffects().resets().stream())
+                .mapMulti(Stream::forEach);
+    }
+
     default Stream<LogicArgument> getAllArguments() {
         List<LogicVariable> all = getSideEffects().all();
         return all.isEmpty() ? inputOutputArgumentsStream() : Stream.concat(inputArgumentsStream(), all.stream());

@@ -1,8 +1,8 @@
    588 instructions before optimizations.
     15 instructions eliminated by Dead Code Elimination (4 iterations).
     24 instructions eliminated by Jump Normalization (6 iterations).
-     9 instructions eliminated by Condition Optimization (6 iterations).
-    73 instructions eliminated by Single Step Elimination (2 passes, 9 iterations).
+     9 instructions eliminated by Condition Optimization (7 iterations).
+    73 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
      5 instructions modified by Expression Optimization (2 passes, 4 iterations).
     36 instructions eliminated by Boolean Optimization (7 iterations).
        12 fully-evaluated expressions optimized using selects.
@@ -3280,7 +3280,7 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-9
    264 op strictNotEqual *tmp127 A 1
    265 # "Function: inline def eval(in b)"
 
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-48 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-72 instructions):
  
      1 # "Function: inline def compare(in title, in a, in b, in expected)"
      2 assertflush
@@ -3290,471 +3290,294 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
      5 label *label3
      6 label *label1
      7 # "Function: inline def eval(in b)"
-     8 jump *label5 always
--    * jump *label6 always
-     9 label *label5
-    10 label *label6
-    11 label *label4
-    12 # "Function: inline def eval(in b)"
-    13 jump *label8 always
--    * jump *label9 always
-    14 label *label8
-    15 label *label9
-    16 label *label7
-    17 # "Function: inline def eval(in b)"
--    * jump *label12 always
-    18 label *label11
-    19 label *label12
-    20 label *label10
- 
-    28 assertflush
-    29 # "Function: inline def eval(in b)"
-    30 jump *label15 always
--    * jump *label16 always
-    31 label *label15
-    32 label *label16
-    33 label *label14
-    34 # "Function: inline def eval(in b)"
--    * jump *label19 always
-    35 label *label18
-    36 label *label19
-    37 label *label17
-    38 # "Function: inline def eval(in b)"
-    39 jump *label21 always
--    * jump *label22 always
-    40 label *label21
-    41 label *label22
-    42 label *label20
-    43 # "Function: inline def eval(in b)"
--    * jump *label25 always
-    44 label *label24
-    45 label *label25
-    46 label *label23
- 
-    54 assertflush
-    55 # "Function: inline def eval(in b)"
-    56 jump *label28 always
--    * jump *label29 always
-    57 label *label28
-    58 label *label29
-    59 label *label27
-    60 # "Function: inline def eval(in b)"
--    * jump *label32 always
-    61 label *label31
-    62 label *label32
-    63 label *label30
-    64 # "Function: inline def eval(in b)"
-    65 jump *label34 always
--    * jump *label35 always
-    66 label *label34
-    67 label *label35
-    68 label *label33
-    69 # "Function: inline def eval(in b)"
--    * jump *label38 always
-    70 label *label37
-    71 label *label38
-    72 label *label36
- 
-    80 assertflush
-    81 # "Function: inline def eval(in b)"
-    82 jump *label41 always
--    * jump *label42 always
-    83 label *label41
-    84 label *label42
-    85 label *label40
-    86 # "Function: inline def eval(in b)"
--    * jump *label45 always
-    87 label *label44
-    88 label *label45
-    89 label *label43
-    90 # "Function: inline def eval(in b)"
-    91 jump *label47 always
--    * jump *label48 always
-    92 label *label47
-    93 label *label48
-    94 label *label46
-    95 # "Function: inline def eval(in b)"
--    * jump *label51 always
-    96 label *label50
-    97 label *label51
-    98 label *label49
- 
-   105 # "Function: inline def compare(in title, in a, in b, in expected)"
-   106 assertflush
-   107 # "Function: inline def eval(in b)"
--    * jump *label55 always
-   108 label *label54
-   109 label *label55
-   110 label *label53
-   111 # "Function: inline def eval(in b)"
-   112 jump *label57 always
--    * jump *label58 always
-   113 label *label57
-   114 label *label58
-   115 label *label56
-   116 # "Function: inline def eval(in b)"
-   117 jump *label60 always
--    * jump *label61 always
-   118 label *label60
-   119 label *label61
-   120 label *label59
-   121 # "Function: inline def eval(in b)"
--    * jump *label64 always
-   122 label *label63
-   123 label *label64
-   124 label *label62
- 
-   132 assertflush
-   133 # "Function: inline def eval(in b)"
-   134 jump *label67 always
--    * jump *label68 always
-   135 label *label67
-   136 label *label68
-   137 label *label66
-   138 # "Function: inline def eval(in b)"
--    * jump *label71 always
-   139 label *label70
-   140 label *label71
-   141 label *label69
-   142 # "Function: inline def eval(in b)"
-   143 jump *label73 always
--    * jump *label74 always
-   144 label *label73
-   145 label *label74
-   146 label *label72
-   147 # "Function: inline def eval(in b)"
--    * jump *label77 always
-   148 label *label76
-   149 label *label77
-   150 label *label75
- 
-   158 assertflush
-   159 # "Function: inline def eval(in b)"
-   160 jump *label80 always
--    * jump *label81 always
-   161 label *label80
-   162 label *label81
-   163 label *label79
-   164 # "Function: inline def eval(in b)"
--    * jump *label84 always
-   165 label *label83
-   166 label *label84
-   167 label *label82
-   168 # "Function: inline def eval(in b)"
-   169 jump *label86 always
--    * jump *label87 always
-   170 label *label86
-   171 label *label87
-   172 label *label85
-   173 # "Function: inline def eval(in b)"
--    * jump *label90 always
-   174 label *label89
-   175 label *label90
-   176 label *label88
- 
-   247 assertflush
-   248 # "Function: inline def eval(in b)"
-   249 jump *label132 always
--    * jump *label133 always
-   250 label *label132
-   251 label *label133
-   252 label *label131
-   253 # "Function: inline def eval(in b)"
--    * jump *label136 always
-   254 label *label135
-   255 label *label136
-   256 label *label134
-   257 # "Function: inline def eval(in b)"
-   258 jump *label138 always
--    * jump *label139 always
-   259 label *label138
-   260 label *label139
-   261 label *label137
-   262 # "Function: inline def eval(in b)"
--    * jump *label142 always
-   263 label *label141
-   264 label *label142
-   265 label *label140
- 
-   272 # "Function: inline def compare(in title, in a, in b, in expected)"
-   273 assertflush
-   274 # "Function: inline def eval(in b)"
--    * jump *label146 always
-   275 label *label145
-   276 label *label146
-   277 label *label144
-   278 # "Function: inline def eval(in b)"
-   279 jump *label148 always
--    * jump *label149 always
-   280 label *label148
-   281 label *label149
-   282 label *label147
-   283 # "Function: inline def eval(in b)"
-   284 jump *label151 always
--    * jump *label152 always
-   285 label *label151
-   286 label *label152
-   287 label *label150
-   288 # "Function: inline def eval(in b)"
--    * jump *label155 always
-   289 label *label154
-   290 label *label155
-   291 label *label153
- 
-   299 assertflush
-   300 # "Function: inline def eval(in b)"
-   301 jump *label158 always
--    * jump *label159 always
-   302 label *label158
-   303 label *label159
-   304 label *label157
-   305 # "Function: inline def eval(in b)"
--    * jump *label162 always
-   306 label *label161
-   307 label *label162
-   308 label *label160
-   309 # "Function: inline def eval(in b)"
-   310 jump *label164 always
--    * jump *label165 always
-   311 label *label164
-   312 label *label165
-   313 label *label163
-   314 # "Function: inline def eval(in b)"
--    * jump *label168 always
-   315 label *label167
-   316 label *label168
-   317 label *label166
- 
-   325 assertflush
-   326 # "Function: inline def eval(in b)"
-   327 jump *label171 always
--    * jump *label172 always
-   328 label *label171
-   329 label *label172
-   330 label *label170
-   331 # "Function: inline def eval(in b)"
--    * jump *label175 always
-   332 label *label174
-   333 label *label175
-   334 label *label173
-   335 # "Function: inline def eval(in b)"
-   336 jump *label177 always
--    * jump *label178 always
-   337 label *label177
-   338 label *label178
-   339 label *label176
-   340 # "Function: inline def eval(in b)"
--    * jump *label181 always
-   341 label *label180
-   342 label *label181
-   343 label *label179
- 
-   350 # "Function: inline def compare(in title, in a, in b, in expected)"
-   351 assertflush
-   352 # "Function: inline def eval(in b)"
--    * jump *label185 always
-   353 label *label184
-   354 label *label185
-   355 label *label183
-   356 # "Function: inline def eval(in b)"
-   357 jump *label187 always
--    * jump *label188 always
-   358 label *label187
-   359 label *label188
-   360 label *label186
-   361 # "Function: inline def eval(in b)"
--    * jump *label191 always
-   362 label *label190
-   363 label *label191
-   364 label *label189
-   365 # "Function: inline def eval(in b)"
-   366 jump *label193 always
--    * jump *label194 always
-   367 label *label193
-   368 label *label194
-   369 label *label192
-
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 2 (-24 instructions):
- 
-     5 label *label3
-     6 label *label1
-     7 # "Function: inline def eval(in b)"
 -    * jump *label5 always
+-    * jump *label6 always
      8 label *label5
      9 label *label6
     10 label *label4
     11 # "Function: inline def eval(in b)"
 -    * jump *label8 always
+-    * jump *label9 always
     12 label *label8
     13 label *label9
     14 label *label7
+    15 # "Function: inline def eval(in b)"
+-    * jump *label12 always
+    16 label *label11
+    17 label *label12
+    18 label *label10
  
     25 # "Function: inline def compare(in title, in a, in b, in expected)"
     26 assertflush
     27 # "Function: inline def eval(in b)"
 -    * jump *label15 always
+-    * jump *label16 always
     28 label *label15
     29 label *label16
     30 label *label14
- 
+    31 # "Function: inline def eval(in b)"
+-    * jump *label19 always
+    32 label *label18
     33 label *label19
     34 label *label17
     35 # "Function: inline def eval(in b)"
 -    * jump *label21 always
+-    * jump *label22 always
     36 label *label21
     37 label *label22
     38 label *label20
+    39 # "Function: inline def eval(in b)"
+-    * jump *label25 always
+    40 label *label24
+    41 label *label25
+    42 label *label23
  
     49 # "Function: inline def compare(in title, in a, in b, in expected)"
     50 assertflush
     51 # "Function: inline def eval(in b)"
 -    * jump *label28 always
+-    * jump *label29 always
     52 label *label28
     53 label *label29
     54 label *label27
- 
+    55 # "Function: inline def eval(in b)"
+-    * jump *label32 always
+    56 label *label31
     57 label *label32
     58 label *label30
     59 # "Function: inline def eval(in b)"
 -    * jump *label34 always
+-    * jump *label35 always
     60 label *label34
     61 label *label35
     62 label *label33
+    63 # "Function: inline def eval(in b)"
+-    * jump *label38 always
+    64 label *label37
+    65 label *label38
+    66 label *label36
  
     73 # "Function: inline def compare(in title, in a, in b, in expected)"
     74 assertflush
     75 # "Function: inline def eval(in b)"
 -    * jump *label41 always
+-    * jump *label42 always
     76 label *label41
     77 label *label42
     78 label *label40
- 
+    79 # "Function: inline def eval(in b)"
+-    * jump *label45 always
+    80 label *label44
     81 label *label45
     82 label *label43
     83 # "Function: inline def eval(in b)"
 -    * jump *label47 always
+-    * jump *label48 always
     84 label *label47
     85 label *label48
     86 label *label46
+    87 # "Function: inline def eval(in b)"
+-    * jump *label51 always
+    88 label *label50
+    89 label *label51
+    90 label *label49
  
+    97 # "Function: inline def compare(in title, in a, in b, in expected)"
+    98 assertflush
+    99 # "Function: inline def eval(in b)"
+-    * jump *label55 always
+   100 label *label54
    101 label *label55
    102 label *label53
    103 # "Function: inline def eval(in b)"
 -    * jump *label57 always
+-    * jump *label58 always
    104 label *label57
    105 label *label58
    106 label *label56
    107 # "Function: inline def eval(in b)"
 -    * jump *label60 always
+-    * jump *label61 always
    108 label *label60
    109 label *label61
    110 label *label59
+   111 # "Function: inline def eval(in b)"
+-    * jump *label64 always
+   112 label *label63
+   113 label *label64
+   114 label *label62
  
    121 # "Function: inline def compare(in title, in a, in b, in expected)"
    122 assertflush
    123 # "Function: inline def eval(in b)"
 -    * jump *label67 always
+-    * jump *label68 always
    124 label *label67
    125 label *label68
    126 label *label66
- 
+   127 # "Function: inline def eval(in b)"
+-    * jump *label71 always
+   128 label *label70
    129 label *label71
    130 label *label69
    131 # "Function: inline def eval(in b)"
 -    * jump *label73 always
+-    * jump *label74 always
    132 label *label73
    133 label *label74
    134 label *label72
+   135 # "Function: inline def eval(in b)"
+-    * jump *label77 always
+   136 label *label76
+   137 label *label77
+   138 label *label75
  
    145 # "Function: inline def compare(in title, in a, in b, in expected)"
    146 assertflush
    147 # "Function: inline def eval(in b)"
 -    * jump *label80 always
+-    * jump *label81 always
    148 label *label80
    149 label *label81
    150 label *label79
- 
+   151 # "Function: inline def eval(in b)"
+-    * jump *label84 always
+   152 label *label83
    153 label *label84
    154 label *label82
    155 # "Function: inline def eval(in b)"
 -    * jump *label86 always
+-    * jump *label87 always
    156 label *label86
    157 label *label87
    158 label *label85
+   159 # "Function: inline def eval(in b)"
+-    * jump *label90 always
+   160 label *label89
+   161 label *label90
+   162 label *label88
  
    232 # "Function: inline def compare(in title, in a, in b, in expected)"
    233 assertflush
    234 # "Function: inline def eval(in b)"
 -    * jump *label132 always
+-    * jump *label133 always
    235 label *label132
    236 label *label133
    237 label *label131
- 
+   238 # "Function: inline def eval(in b)"
+-    * jump *label136 always
+   239 label *label135
    240 label *label136
    241 label *label134
    242 # "Function: inline def eval(in b)"
 -    * jump *label138 always
+-    * jump *label139 always
    243 label *label138
    244 label *label139
    245 label *label137
+   246 # "Function: inline def eval(in b)"
+-    * jump *label142 always
+   247 label *label141
+   248 label *label142
+   249 label *label140
  
+   256 # "Function: inline def compare(in title, in a, in b, in expected)"
+   257 assertflush
+   258 # "Function: inline def eval(in b)"
+-    * jump *label146 always
+   259 label *label145
    260 label *label146
    261 label *label144
    262 # "Function: inline def eval(in b)"
 -    * jump *label148 always
+-    * jump *label149 always
    263 label *label148
    264 label *label149
    265 label *label147
    266 # "Function: inline def eval(in b)"
 -    * jump *label151 always
+-    * jump *label152 always
    267 label *label151
    268 label *label152
    269 label *label150
+   270 # "Function: inline def eval(in b)"
+-    * jump *label155 always
+   271 label *label154
+   272 label *label155
+   273 label *label153
  
    280 # "Function: inline def compare(in title, in a, in b, in expected)"
    281 assertflush
    282 # "Function: inline def eval(in b)"
 -    * jump *label158 always
+-    * jump *label159 always
    283 label *label158
    284 label *label159
    285 label *label157
- 
+   286 # "Function: inline def eval(in b)"
+-    * jump *label162 always
+   287 label *label161
    288 label *label162
    289 label *label160
    290 # "Function: inline def eval(in b)"
 -    * jump *label164 always
+-    * jump *label165 always
    291 label *label164
    292 label *label165
    293 label *label163
+   294 # "Function: inline def eval(in b)"
+-    * jump *label168 always
+   295 label *label167
+   296 label *label168
+   297 label *label166
  
    304 # "Function: inline def compare(in title, in a, in b, in expected)"
    305 assertflush
    306 # "Function: inline def eval(in b)"
 -    * jump *label171 always
+-    * jump *label172 always
    307 label *label171
    308 label *label172
    309 label *label170
- 
+   310 # "Function: inline def eval(in b)"
+-    * jump *label175 always
+   311 label *label174
    312 label *label175
    313 label *label173
    314 # "Function: inline def eval(in b)"
 -    * jump *label177 always
+-    * jump *label178 always
    315 label *label177
    316 label *label178
    317 label *label176
+   318 # "Function: inline def eval(in b)"
+-    * jump *label181 always
+   319 label *label180
+   320 label *label181
+   321 label *label179
  
+   328 # "Function: inline def compare(in title, in a, in b, in expected)"
+   329 assertflush
+   330 # "Function: inline def eval(in b)"
+-    * jump *label185 always
+   331 label *label184
    332 label *label185
    333 label *label183
    334 # "Function: inline def eval(in b)"
 -    * jump *label187 always
+-    * jump *label188 always
    335 label *label187
    336 label *label188
    337 label *label186
- 
+   338 # "Function: inline def eval(in b)"
+-    * jump *label191 always
+   339 label *label190
    340 label *label191
    341 label *label189
    342 # "Function: inline def eval(in b)"
 -    * jump *label193 always
+-    * jump *label194 always
    343 label *label193
    344 label *label194
    345 label *label192

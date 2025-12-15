@@ -63,10 +63,13 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
         if (!isInvertible(profile)) {
             throw new MindcodeInternalError("Jump is not invertible. " + this);
         }
+        return forceInvert();
+    }
 
+    public JumpInstruction forceInvert() {
         assert getArgumentTypes() != null;
         return new JumpInstruction(getAstContext(),
-                List.of(getTarget(), getCondition().inverse(profile), getX(), getY()), getArgumentTypes()).copyInfo(this);
+                List.of(getTarget(), getCondition().inverse(true), getX(), getY()), getArgumentTypes()).copyInfo(this);
     }
 
     @Override

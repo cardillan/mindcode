@@ -1,21 +1,21 @@
    477 instructions before optimizations.
     52 instructions eliminated by Temp Variables Elimination (2 passes, 7 iterations).
     48 instructions eliminated by Dead Code Elimination (5 iterations).
-    26 instructions eliminated by Condition Optimization (5 iterations).
+    26 instructions eliminated by Condition Optimization (6 iterations).
     18 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      2 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
     22 instructions eliminated by Boolean Optimization (6 iterations).
        9 fully-evaluated expressions optimized using selects.
      1 instructions eliminated by If Expression Optimization (3 iterations).
-    35 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
+    36 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
      3 instructions updated by Jump Threading.
      4 instructions eliminated by Print Merging.
-   270 instructions after optimizations.
+   269 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 710):
-  * Replicate loop condition at line 33:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+Pass 1: speed optimization selection (cost limit 711):
+  * Partial loop rotation at line 33:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-40 instructions):
  
@@ -977,7 +977,7 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    386 label *label70
    387 label *label67
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
     32 label *label6
     33 set *tmp9 176
@@ -1058,75 +1058,79 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    155 jump *label30 notEqual *tmp76 0
    156 set :red 255
  
-   223 sensor :e :smelter @enabled
-   224 sensor :power :smelter @totalPower
-   225 sensor :boost :smelter @timescale
+   219 sensor :s :smelter @sand
+   220 sensor :c :smelter @coal
+   221 sensor :l :smelter @lead
+-    * sensor :a :smelter @pyratite
+   222 sensor :e :smelter @enabled
+   223 sensor :power :smelter @totalPower
+   224 sensor :boost :smelter @timescale
 -    * jump *label45 greaterThanEq :s :minimum
-+  226 jump *label45 greaterThanEq :s 11
-   227 set :minimum :s
-   228 set :icon @sand
-   229 label *label45
++  225 jump *label45 greaterThanEq :s 11
+   226 set :minimum :s
+   227 set :icon @sand
+   228 label *label45
  
-   240 label *label50
-   241 set :column 1
-   242 set :row :index
+   239 label *label50
+   240 set :column 1
+   241 set :row :index
 -    * op mul *tmp116 :column .BAR_SPACE
-+  243 op mul *tmp116 1 .BAR_SPACE
-   244 op add :x 5 *tmp116
++  242 op mul *tmp116 1 .BAR_SPACE
+   243 op add :x 5 *tmp116
 -    * op mul *tmp118 :row 22
-+  245 op mul *tmp118 :index 22
-   246 op add :y 4 *tmp118
-   247 draw color 0 0 80 255
-   248 op sub *tmp120 :x 1
++  244 op mul *tmp118 :index 22
+   245 op add :y 4 *tmp118
+   246 draw color 0 0 80 255
+   247 op sub *tmp120 :x 1
  
-   272 draw rect *tmp132 *tmp133 8 4
-   273 op add *tmp134 :x 12
-   274 op add *tmp135 :y 3
+   271 draw rect *tmp132 *tmp133 8 4
+   272 op add *tmp134 :x 12
+   273 op add *tmp135 :y 3
 -    * draw rect *tmp134 *tmp135 2 2
-+  275 draw rect *tmp134 *tmp131 2 2
-   276 op add *tmp136 :x 12
-   277 op add *tmp137 :y 9
++  274 draw rect *tmp134 *tmp131 2 2
+   275 op add *tmp136 :x 12
+   276 op add *tmp137 :y 9
 -    * draw rect *tmp136 *tmp137 2 2
-+  278 draw rect *tmp134 *tmp137 2 2
-   279 draw color 255 80 80 255
-   280 op add *tmp138 :x 4
-   281 op add *tmp139 :y 6
++  277 draw rect *tmp134 *tmp137 2 2
+   278 draw color 255 80 80 255
+   279 op add *tmp138 :x 4
+   280 op add *tmp139 :y 6
  
-   294 op add *tmp145 :y 2
-   295 op add *tmp146 :x 12
-   296 op add *tmp147 :y 12
+   293 op add *tmp145 :y 2
+   294 op add *tmp146 :x 12
+   295 op add *tmp147 :y 12
 -    * draw line *tmp144 *tmp145 *tmp146 *tmp147
-+  297 draw line *tmp140 *tmp143 *tmp142 *tmp141
-   298 draw color 0 0 0 255
-   299 op sub *tmp148 :x 1
-   300 op sub *tmp149 :y 1
++  296 draw line *tmp140 *tmp143 *tmp142 *tmp141
+   297 draw color 0 0 0 255
+   298 op sub *tmp148 :x 1
+   299 op sub *tmp149 :y 1
 -    * draw lineRect *tmp148 *tmp149 16 16
-+  301 draw lineRect *tmp120 *tmp121 16 16
-   302 draw stroke 2
-   303 label *label54
++  300 draw lineRect *tmp120 *tmp121 16 16
+   301 draw stroke 2
+   302 label *label54
 -    * op add :x :x 16
-+  304 op add :x *tmp116 21
-   305 op mul *tmp151 :power :e
-   306 jump *label57 notEqual *tmp151 0
-   307 set :red 255
++  303 op add :x *tmp116 21
+   304 op mul *tmp151 :power :e
+   305 jump *label57 notEqual *tmp151 0
+   306 set :red 255
  
-   311 label *label57
-   312 op greaterThan *tmp154 :minimum 6
-   313 op greaterThanEq *tmp155 :boost EXPECTED_BOOST
+   310 label *label57
+   311 op greaterThan *tmp154 :minimum 6
+   312 op greaterThanEq *tmp155 :boost EXPECTED_BOOST
 -    * op land *tmp156 *tmp154 *tmp155
-+  314 op land *tmp156 *tmp122 *tmp155
-   315 jump *label59 equal *tmp156 false
-   316 set *tmp157 0
-   317 jump *label60 always
++  313 op land *tmp156 *tmp122 *tmp155
+   314 jump *label59 equal *tmp156 false
+   315 set *tmp157 0
+   316 jump *label60 always
  
-   331 jump *label63 lessThanEq :boost EXPECTED_BOOST
-   332 op max :red 192 :red
-   333 op max :green 192 :green
+   330 jump *label63 lessThanEq :boost EXPECTED_BOOST
+   331 op max :red 192 :red
+   332 op max :green 192 :green
 -    * op max :blue 192 :blue
-+  334 op max :blue 192 0
-   335 set :boost EXPECTED_BOOST
-   336 label *label63
-   337 label *label64
++  333 op max :blue 192 0
+   334 set :boost EXPECTED_BOOST
+   335 label *label63
+   336 label *label64
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-24 instructions):
  
@@ -1200,47 +1204,47 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    138 draw stroke 2
    139 label *label27
  
-   225 set :icon @lead
-   226 label *label49
-   227 label *label50
+   224 set :icon @lead
+   225 label *label49
+   226 label *label50
 -    * set :column 1
 -    * set :row :index
-   228 op mul *tmp116 1 .BAR_SPACE
-   229 op add :x 5 *tmp116
-   230 op mul *tmp118 :index 22
+   227 op mul *tmp116 1 .BAR_SPACE
+   228 op add :x 5 *tmp116
+   229 op mul *tmp118 :index 22
  
-   256 op add *tmp133 :y 5
-   257 draw rect *tmp132 *tmp133 8 4
-   258 op add *tmp134 :x 12
+   255 op add *tmp133 :y 5
+   256 draw rect *tmp132 *tmp133 8 4
+   257 op add *tmp134 :x 12
 -    * op add *tmp135 :y 3
-   259 draw rect *tmp134 *tmp131 2 2
+   258 draw rect *tmp134 *tmp131 2 2
 -    * op add *tmp136 :x 12
-   260 op add *tmp137 :y 9
-   261 draw rect *tmp134 *tmp137 2 2
-   262 draw color 255 80 80 255
+   259 op add *tmp137 :y 9
+   260 draw rect *tmp134 *tmp137 2 2
+   261 draw color 255 80 80 255
  
-   273 op add *tmp142 :x 12
-   274 op add *tmp143 :y 2
-   275 draw line *tmp140 *tmp141 *tmp142 *tmp143
+   272 op add *tmp142 :x 12
+   273 op add *tmp143 :y 2
+   274 draw line *tmp140 *tmp141 *tmp142 *tmp143
 -    * op add *tmp144 :x 2
 -    * op add *tmp145 :y 2
 -    * op add *tmp146 :x 12
 -    * op add *tmp147 :y 12
-   276 draw line *tmp140 *tmp143 *tmp142 *tmp141
-   277 draw color 0 0 0 255
+   275 draw line *tmp140 *tmp143 *tmp142 *tmp141
+   276 draw color 0 0 0 255
 -    * op sub *tmp148 :x 1
 -    * op sub *tmp149 :y 1
-   278 draw lineRect *tmp120 *tmp121 16 16
-   279 draw stroke 2
-   280 label *label54
+   277 draw lineRect *tmp120 *tmp121 16 16
+   278 draw stroke 2
+   279 label *label54
  
-   286 set :blue 0
-   287 jump *label58 always
-   288 label *label57
+   285 set :blue 0
+   286 jump *label58 always
+   287 label *label57
 -    * op greaterThan *tmp154 :minimum 6
-   289 op greaterThanEq *tmp155 :boost EXPECTED_BOOST
-   290 op land *tmp156 *tmp122 *tmp155
-   291 jump *label59 equal *tmp156 false
+   288 op greaterThanEq *tmp155 :boost EXPECTED_BOOST
+   289 op land *tmp156 *tmp122 *tmp155
+   290 jump *label59 equal *tmp156 false
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
  
@@ -1278,14 +1282,14 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    205 sensor *tmp100 :smelter @type
    206 jump *label43 notEqual *tmp100 @pyratite-mixer
  
-   326 label *label44
-   327 label *label41
-   328 op add :n :n 1
+   325 label *label44
+   326 label *label41
+   327 op add :n :n 1
 -    * jump *label40 always
-+  329 jump *label72 lessThan :n @links
-   330 label *label42
-   331 jump *label65 equal bank1 null
-   332 jump *label67 notEqual FROM_INDEX 0
++  328 jump *label72 lessThan :n @links
+   329 label *label42
+   330 jump *label65 equal bank1 null
+   331 jump *label67 notEqual FROM_INDEX 0
 
 Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-22 instructions):
  
@@ -1371,9 +1375,9 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-22 
    146 set :blue 0
    147 label *label33
  
-   208 op sub *tmp120 :x 1
-   209 op sub *tmp121 :y 1
-   210 draw rect *tmp120 *tmp121 .BAR_SPACE 16
+   207 op sub *tmp120 :x 1
+   208 op sub *tmp121 :y 1
+   209 draw rect *tmp120 *tmp121 .BAR_SPACE 16
 -    * op greaterThan *tmp122 :minimum 6
 -    * op equal *tmp123 :showa 0
 -    * op land *tmp124 *tmp122 *tmp123
@@ -1381,17 +1385,17 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-22 
 -    * set :icon @pyratite-mixer
 -    * label *label51
 -    * label *label52
-+  211 op greaterThan *tmp122 :minimum 6
-+  212 op equal *tmp123 :showa 0
-+  213 op land *tmp124 *tmp122 *tmp123
-+  214 select :icon notEqual *tmp124 false @pyratite-mixer :icon
-   215 draw color 255 255 255 255
-   216 jump *label53 equal :e false
-   217 jump *label55 lessThanEq :power 0
++  210 op greaterThan *tmp122 :minimum 6
++  211 op equal *tmp123 :showa 0
++  212 op land *tmp124 *tmp122 *tmp123
++  213 select :icon notEqual *tmp124 false @pyratite-mixer :icon
+   214 draw color 255 255 255 255
+   215 jump *label53 equal :e false
+   216 jump *label55 lessThanEq :power 0
  
-   258 set :blue 0
-   259 jump *label58 always
-   260 label *label57
+   257 set :blue 0
+   258 jump *label58 always
+   259 label *label57
 -    * op greaterThanEq *tmp155 :boost EXPECTED_BOOST
 -    * op land *tmp156 *tmp122 *tmp155
 -    * jump *label59 equal *tmp156 false
@@ -1400,20 +1404,20 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-22 
 -    * label *label59
 -    * set *tmp157 255
 -    * label *label60
-+  261 op greaterThanEq *tmp155 :boost EXPECTED_BOOST
-+  262 op land *tmp156 *tmp122 *tmp155
-+  263 select *tmp157 notEqual *tmp156 false 0 255
-   264 set :red *tmp157
++  260 op greaterThanEq *tmp155 :boost EXPECTED_BOOST
++  261 op land *tmp156 *tmp122 *tmp155
++  262 select *tmp157 notEqual *tmp156 false 0 255
+   263 set :red *tmp157
 -    * jump *label61 lessThanEq :minimum 3
 -    * set *tmp159 255
 -    * jump *label62 always
 -    * label *label61
 -    * set *tmp159 0
 -    * label *label62
-+  265 select *tmp159 greaterThan :minimum 3 255 0
-   266 set :green *tmp159
-   267 set :blue 0
-   268 label *label58
++  264 select *tmp159 greaterThan :minimum 3 255 0
+   265 set :green *tmp159
+   266 set :blue 0
+   267 label *label58
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -1440,7 +1444,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     19 op sub :clh *tmp9 *tmp5
     20 set :showa null
 
-Modifications by Replicate loop condition at line 33:1 (+1 instructions):
+Modifications by Partial loop rotation at line 33:1 (+1 instructions):
  
     26 label *label8
     27 sensor *tmp14 switch1 @enabled
@@ -1450,14 +1454,14 @@ Modifications by Replicate loop condition at line 33:1 (+1 instructions):
     31 print "Silicon Factory Monitor"
     32 set :factories 0
  
-   339 print " ms"
-   340 printflush message1
-   341 label *label9
+   338 print " ms"
+   339 printflush message1
+   340 label *label9
 -    * jump *label8 always
-+  342 sensor *tmp14 switch1 @enabled
-+  343 jump *label73 equal *tmp14 0
-   344 label *label10
-   345 end
++  341 sensor *tmp14 switch1 @enabled
++  342 jump *label73 equal *tmp14 0
+   343 label *label10
+   344 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -1500,14 +1504,14 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
     74 op mul *tmp43 :index 22
     75 op add :y 4 *tmp43
  
-   198 set :icon @lead
-   199 label *label49
-   200 label *label50
+   197 set :icon @lead
+   198 label *label49
+   199 label *label50
 -    * op mul *tmp116 1 .BAR_SPACE
-+  201 set *tmp116 .BAR_SPACE
-   202 op add :x 5 *tmp116
-   203 op mul *tmp118 :index 22
-   204 op add :y 4 *tmp118
++  200 set *tmp116 .BAR_SPACE
+   201 op add :x 5 *tmp116
+   202 op mul *tmp118 :index 22
+   203 op add :y 4 *tmp118
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
@@ -1599,23 +1603,23 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
    163 op add :factories :factories 1
    164 label *label14
  
-   199 label *label49
-   200 label *label50
-   201 set *tmp116 .BAR_SPACE
+   198 label *label49
+   199 label *label50
+   200 set *tmp116 .BAR_SPACE
 -    * op add :x 5 *tmp116
-+  202 op add :x 5 .BAR_SPACE
-   203 op mul *tmp118 :index 22
-   204 op add :y 4 *tmp118
-   205 draw color 0 0 80 255
++  201 op add :x 5 .BAR_SPACE
+   202 op mul *tmp118 :index 22
+   203 op add :y 4 *tmp118
+   204 draw color 0 0 80 255
  
-   248 draw lineRect *tmp120 *tmp121 16 16
-   249 draw stroke 2
-   250 label *label54
+   247 draw lineRect *tmp120 *tmp121 16 16
+   248 draw stroke 2
+   249 label *label54
 -    * op add :x *tmp116 21
-+  251 op add :x .BAR_SPACE 21
-   252 op mul *tmp151 :power :e
-   253 jump *label57 notEqual *tmp151 0
-   254 set :red 255
++  250 op add :x .BAR_SPACE 21
+   251 op mul *tmp151 :power :e
+   252 jump *label57 notEqual *tmp151 0
+   253 set :red 255
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-11 instructions):
  
@@ -1674,13 +1678,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
    114 jump *label30 notEqual *tmp76 0
    115 set :red 255
  
-   188 set :icon @lead
-   189 label *label49
-   190 label *label50
+   187 set :icon @lead
+   188 label *label49
+   189 label *label50
 -    * set *tmp116 .BAR_SPACE
-   191 op add :x 5 .BAR_SPACE
-   192 op mul *tmp118 :index 22
-   193 op add :y 4 *tmp118
+   190 op add :x 5 .BAR_SPACE
+   191 op mul *tmp118 :index 22
+   192 op add :y 4 *tmp118
 
 Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1 (-4 instructions):
  
@@ -1697,18 +1701,18 @@ Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1
    133 label *label33
    134 label *label31
  
-   245 label *label57
-   246 op greaterThanEq *tmp155 :boost EXPECTED_BOOST
-   247 op land *tmp156 *tmp122 *tmp155
+   244 label *label57
+   245 op greaterThanEq *tmp155 :boost EXPECTED_BOOST
+   246 op land *tmp156 *tmp122 *tmp155
 -    * select *tmp157 notEqual *tmp156 false 0 255
 -    * set :red *tmp157
 -    * select *tmp159 greaterThan :minimum 3 255 0
 -    * set :green *tmp159
-+  248 select :red notEqual *tmp156 false 0 255
-+  249 select :green greaterThan :minimum 3 255 0
-   250 set :blue 0
-   251 label *label58
-   252 jump *label63 lessThanEq :boost EXPECTED_BOOST
++  247 select :red notEqual *tmp156 false 0 255
++  248 select :green greaterThan :minimum 3 255 0
+   249 set :blue 0
+   250 label *label58
+   251 jump *label63 lessThanEq :boost EXPECTED_BOOST
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -1734,48 +1738,48 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
     83 draw color 255 80 80 255
     84 op add *tmp56 :y 3
  
-   191 op add *tmp129 :x 7
-   192 op add *tmp130 :y 7
-   193 draw image *tmp129 *tmp130 :icon 16 0
+   190 op add *tmp129 :x 7
+   191 op add *tmp130 :y 7
+   192 draw image *tmp129 *tmp130 :icon 16 0
 -    * jump *label56 always
-+  194 jump *label54 always
-   195 label *label55
-   196 draw color 255 80 80 255
-   197 op add *tmp131 :y 3
++  193 jump *label54 always
+   194 label *label55
+   195 draw color 255 80 80 255
+   196 op add *tmp131 :y 3
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   304 printflush message1
-   305 sensor *tmp14 switch1 @enabled
-   306 jump *label73 equal *tmp14 0
+   303 printflush message1
+   304 sensor *tmp14 switch1 @enabled
+   305 jump *label73 equal *tmp14 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  
-   288 op idiv :flow_str :rate 0.0002777777777777778
-   289 label *label69
-   290 label *label67
+   287 op idiv :flow_str :rate 0.0002777777777777778
+   288 label *label69
+   289 label *label67
 -    * print "\nNominal production: "
 -    * print :expected_flow_str
 -    * print "/min"
 -    * print "\nActual production: "
 -    * print :flow_str
 -    * print "/min"
-+  291 print "\nNominal production: {0}/min\nActual production: {0}/min"
-+  292 format :expected_flow_str
-+  293 format :flow_str
-   294 label *label65
-   295 drawflush display1
-   296 op sub *tmp192 @time :start
-   297 op floor *tmp193 *tmp192
++  290 print "\nNominal production: {0}/min\nActual production: {0}/min"
++  291 format :expected_flow_str
++  292 format :flow_str
+   293 label *label65
+   294 drawflush display1
+   295 op sub *tmp192 @time :start
+   296 op floor *tmp193 *tmp192
 -    * print "\nUpdate time: "
 -    * print *tmp193
 -    * print " ms"
-+  298 print "\nUpdate time: {0} ms"
-+  299 format *tmp193
-   300 printflush message1
-   301 sensor *tmp14 switch1 @enabled
-   302 jump *label73 equal *tmp14 0
++  297 print "\nUpdate time: {0} ms"
++  298 format *tmp193
+   299 printflush message1
+   300 sensor *tmp14 switch1 @enabled
+   301 jump *label73 equal *tmp14 0
 
 Final code before resolving virtual instructions:
 
@@ -1939,7 +1943,6 @@ set :minimum 11
 sensor :s :smelter @sand
 sensor :c :smelter @coal
 sensor :l :smelter @lead
-sensor :a :smelter @pyratite
 sensor :e :smelter @enabled
 sensor :power :smelter @totalPower
 sensor :boost :smelter @timescale

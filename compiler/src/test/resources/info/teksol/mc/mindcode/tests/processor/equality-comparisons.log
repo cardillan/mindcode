@@ -2,8 +2,8 @@
     60 instructions eliminated by Temp Variables Elimination (7 iterations).
     15 instructions eliminated by Dead Code Elimination (4 iterations).
     24 instructions eliminated by Jump Normalization (6 iterations).
-    45 instructions eliminated by Condition Optimization (6 iterations).
-    73 instructions eliminated by Single Step Elimination (2 passes, 9 iterations).
+    45 instructions eliminated by Condition Optimization (7 iterations).
+    73 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
      5 instructions modified by Expression Optimization (2 passes, 4 iterations).
     36 instructions eliminated by Boolean Optimization (7 iterations).
        12 fully-evaluated expressions optimized using selects.
@@ -3464,431 +3464,266 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
    340 label *label193
    341 label *label194
 
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-48 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-72 instructions):
      0 set A 0
      1 assertflush
 -    * jump *label3 always
      2 label *label2
      3 label *label3
      4 label *label1
-     5 jump *label5 always
--    * jump *label6 always
-     6 label *label5
-     7 label *label6
-     8 label *label4
-     9 jump *label8 always
--    * jump *label9 always
-    10 label *label8
-    11 label *label9
-    12 label *label7
--    * jump *label12 always
-    13 label *label11
-    14 label *label12
-    15 label *label10
- 
-    21 label *label0
-    22 assertflush
-    23 jump *label15 always
--    * jump *label16 always
-    24 label *label15
-    25 label *label16
-    26 label *label14
--    * jump *label19 always
-    27 label *label18
-    28 label *label19
-    29 label *label17
-    30 jump *label21 always
--    * jump *label22 always
-    31 label *label21
-    32 label *label22
-    33 label *label20
--    * jump *label25 always
-    34 label *label24
-    35 label *label25
-    36 label *label23
- 
-    42 label *label13
-    43 assertflush
-    44 jump *label28 always
--    * jump *label29 always
-    45 label *label28
-    46 label *label29
-    47 label *label27
--    * jump *label32 always
-    48 label *label31
-    49 label *label32
-    50 label *label30
-    51 jump *label34 always
--    * jump *label35 always
-    52 label *label34
-    53 label *label35
-    54 label *label33
--    * jump *label38 always
-    55 label *label37
-    56 label *label38
-    57 label *label36
- 
-    63 label *label26
-    64 assertflush
-    65 jump *label41 always
--    * jump *label42 always
-    66 label *label41
-    67 label *label42
-    68 label *label40
--    * jump *label45 always
-    69 label *label44
-    70 label *label45
-    71 label *label43
-    72 jump *label47 always
--    * jump *label48 always
-    73 label *label47
-    74 label *label48
-    75 label *label46
--    * jump *label51 always
-    76 label *label50
-    77 label *label51
-    78 label *label49
- 
-    83 assertprints "FTFT" "comparison 4"
-    84 label *label39
-    85 assertflush
--    * jump *label55 always
-    86 label *label54
-    87 label *label55
-    88 label *label53
-    89 jump *label57 always
--    * jump *label58 always
-    90 label *label57
-    91 label *label58
-    92 label *label56
-    93 jump *label60 always
--    * jump *label61 always
-    94 label *label60
-    95 label *label61
-    96 label *label59
--    * jump *label64 always
-    97 label *label63
-    98 label *label64
-    99 label *label62
- 
-   105 label *label52
-   106 assertflush
-   107 jump *label67 always
--    * jump *label68 always
-   108 label *label67
-   109 label *label68
-   110 label *label66
--    * jump *label71 always
-   111 label *label70
-   112 label *label71
-   113 label *label69
-   114 jump *label73 always
--    * jump *label74 always
-   115 label *label73
-   116 label *label74
-   117 label *label72
--    * jump *label77 always
-   118 label *label76
-   119 label *label77
-   120 label *label75
- 
-   126 label *label65
-   127 assertflush
-   128 jump *label80 always
--    * jump *label81 always
-   129 label *label80
-   130 label *label81
-   131 label *label79
--    * jump *label84 always
-   132 label *label83
-   133 label *label84
-   134 label *label82
-   135 jump *label86 always
--    * jump *label87 always
-   136 label *label86
-   137 label *label87
-   138 label *label85
--    * jump *label90 always
-   139 label *label89
-   140 label *label90
-   141 label *label88
- 
-   195 label *label117
-   196 assertflush
-   197 jump *label132 always
--    * jump *label133 always
-   198 label *label132
-   199 label *label133
-   200 label *label131
--    * jump *label136 always
-   201 label *label135
-   202 label *label136
-   203 label *label134
-   204 jump *label138 always
--    * jump *label139 always
-   205 label *label138
-   206 label *label139
-   207 label *label137
--    * jump *label142 always
-   208 label *label141
-   209 label *label142
-   210 label *label140
- 
-   215 assertprints "FTFT" "comparison 11"
-   216 label *label130
-   217 assertflush
--    * jump *label146 always
-   218 label *label145
-   219 label *label146
-   220 label *label144
-   221 jump *label148 always
--    * jump *label149 always
-   222 label *label148
-   223 label *label149
-   224 label *label147
-   225 jump *label151 always
--    * jump *label152 always
-   226 label *label151
-   227 label *label152
-   228 label *label150
--    * jump *label155 always
-   229 label *label154
-   230 label *label155
-   231 label *label153
- 
-   237 label *label143
-   238 assertflush
-   239 jump *label158 always
--    * jump *label159 always
-   240 label *label158
-   241 label *label159
-   242 label *label157
--    * jump *label162 always
-   243 label *label161
-   244 label *label162
-   245 label *label160
-   246 jump *label164 always
--    * jump *label165 always
-   247 label *label164
-   248 label *label165
-   249 label *label163
--    * jump *label168 always
-   250 label *label167
-   251 label *label168
-   252 label *label166
- 
-   258 label *label156
-   259 assertflush
-   260 jump *label171 always
--    * jump *label172 always
-   261 label *label171
-   262 label *label172
-   263 label *label170
--    * jump *label175 always
-   264 label *label174
-   265 label *label175
-   266 label *label173
-   267 jump *label177 always
--    * jump *label178 always
-   268 label *label177
-   269 label *label178
-   270 label *label176
--    * jump *label181 always
-   271 label *label180
-   272 label *label181
-   273 label *label179
- 
-   278 assertprints "FTFT" "comparison 14"
-   279 label *label169
-   280 assertflush
--    * jump *label185 always
-   281 label *label184
-   282 label *label185
-   283 label *label183
-   284 jump *label187 always
--    * jump *label188 always
-   285 label *label187
-   286 label *label188
-   287 label *label186
--    * jump *label191 always
-   288 label *label190
-   289 label *label191
-   290 label *label189
-   291 jump *label193 always
--    * jump *label194 always
-   292 label *label193
-   293 label *label194
-   294 label *label192
-
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 2 (-24 instructions):
- 
-     2 label *label2
-     3 label *label3
-     4 label *label1
 -    * jump *label5 always
+-    * jump *label6 always
      5 label *label5
      6 label *label6
      7 label *label4
 -    * jump *label8 always
+-    * jump *label9 always
      8 label *label8
      9 label *label9
     10 label *label7
+-    * jump *label12 always
+    11 label *label11
+    12 label *label12
+    13 label *label10
  
     18 assertprints "TFFT" "comparison 1"
     19 label *label0
     20 assertflush
 -    * jump *label15 always
+-    * jump *label16 always
     21 label *label15
     22 label *label16
     23 label *label14
+-    * jump *label19 always
     24 label *label18
     25 label *label19
     26 label *label17
 -    * jump *label21 always
+-    * jump *label22 always
     27 label *label21
     28 label *label22
     29 label *label20
+-    * jump *label25 always
+    30 label *label24
+    31 label *label25
+    32 label *label23
  
     37 assertprints "FTFT" "comparison 2"
     38 label *label13
     39 assertflush
 -    * jump *label28 always
+-    * jump *label29 always
     40 label *label28
     41 label *label29
     42 label *label27
+-    * jump *label32 always
     43 label *label31
     44 label *label32
     45 label *label30
 -    * jump *label34 always
+-    * jump *label35 always
     46 label *label34
     47 label *label35
     48 label *label33
+-    * jump *label38 always
+    49 label *label37
+    50 label *label38
+    51 label *label36
  
     56 assertprints "FTFT" "comparison 3"
     57 label *label26
     58 assertflush
 -    * jump *label41 always
+-    * jump *label42 always
     59 label *label41
     60 label *label42
     61 label *label40
+-    * jump *label45 always
     62 label *label44
     63 label *label45
     64 label *label43
 -    * jump *label47 always
+-    * jump *label48 always
     65 label *label47
     66 label *label48
     67 label *label46
+-    * jump *label51 always
+    68 label *label50
+    69 label *label51
+    70 label *label49
  
+    75 assertprints "FTFT" "comparison 4"
+    76 label *label39
+    77 assertflush
+-    * jump *label55 always
     78 label *label54
     79 label *label55
     80 label *label53
 -    * jump *label57 always
+-    * jump *label58 always
     81 label *label57
     82 label *label58
     83 label *label56
 -    * jump *label60 always
+-    * jump *label61 always
     84 label *label60
     85 label *label61
     86 label *label59
+-    * jump *label64 always
+    87 label *label63
+    88 label *label64
+    89 label *label62
  
     94 assertprints "TFFT" "comparison 5"
     95 label *label52
     96 assertflush
 -    * jump *label67 always
+-    * jump *label68 always
     97 label *label67
     98 label *label68
     99 label *label66
+-    * jump *label71 always
    100 label *label70
    101 label *label71
    102 label *label69
 -    * jump *label73 always
+-    * jump *label74 always
    103 label *label73
    104 label *label74
    105 label *label72
+-    * jump *label77 always
+   106 label *label76
+   107 label *label77
+   108 label *label75
  
    113 assertprints "FTFT" "comparison 6"
    114 label *label65
    115 assertflush
 -    * jump *label80 always
+-    * jump *label81 always
    116 label *label80
    117 label *label81
    118 label *label79
+-    * jump *label84 always
    119 label *label83
    120 label *label84
    121 label *label82
 -    * jump *label86 always
+-    * jump *label87 always
    122 label *label86
    123 label *label87
    124 label *label85
+-    * jump *label90 always
+   125 label *label89
+   126 label *label90
+   127 label *label88
  
    180 assertprints "FTFT" "comparison 10"
    181 label *label117
    182 assertflush
 -    * jump *label132 always
+-    * jump *label133 always
    183 label *label132
    184 label *label133
    185 label *label131
+-    * jump *label136 always
    186 label *label135
    187 label *label136
    188 label *label134
 -    * jump *label138 always
+-    * jump *label139 always
    189 label *label138
    190 label *label139
    191 label *label137
+-    * jump *label142 always
+   192 label *label141
+   193 label *label142
+   194 label *label140
  
+   199 assertprints "FTFT" "comparison 11"
+   200 label *label130
+   201 assertflush
+-    * jump *label146 always
    202 label *label145
    203 label *label146
    204 label *label144
 -    * jump *label148 always
+-    * jump *label149 always
    205 label *label148
    206 label *label149
    207 label *label147
 -    * jump *label151 always
+-    * jump *label152 always
    208 label *label151
    209 label *label152
    210 label *label150
+-    * jump *label155 always
+   211 label *label154
+   212 label *label155
+   213 label *label153
  
    218 assertprints "TFFT" "comparison 12"
    219 label *label143
    220 assertflush
 -    * jump *label158 always
+-    * jump *label159 always
    221 label *label158
    222 label *label159
    223 label *label157
+-    * jump *label162 always
    224 label *label161
    225 label *label162
    226 label *label160
 -    * jump *label164 always
+-    * jump *label165 always
    227 label *label164
    228 label *label165
    229 label *label163
+-    * jump *label168 always
+   230 label *label167
+   231 label *label168
+   232 label *label166
  
    237 assertprints "FTFT" "comparison 13"
    238 label *label156
    239 assertflush
 -    * jump *label171 always
+-    * jump *label172 always
    240 label *label171
    241 label *label172
    242 label *label170
+-    * jump *label175 always
    243 label *label174
    244 label *label175
    245 label *label173
 -    * jump *label177 always
+-    * jump *label178 always
    246 label *label177
    247 label *label178
    248 label *label176
+-    * jump *label181 always
+   249 label *label180
+   250 label *label181
+   251 label *label179
  
+   256 assertprints "FTFT" "comparison 14"
+   257 label *label169
+   258 assertflush
+-    * jump *label185 always
    259 label *label184
    260 label *label185
    261 label *label183
 -    * jump *label187 always
+-    * jump *label188 always
    262 label *label187
    263 label *label188
    264 label *label186
+-    * jump *label191 always
    265 label *label190
    266 label *label191
    267 label *label189
 -    * jump *label193 always
+-    * jump *label194 always
    268 label *label193
    269 label *label194
    270 label *label192

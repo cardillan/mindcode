@@ -50,7 +50,7 @@ class ConditionOptimizer extends BaseOptimizer {
             }
         }
 
-        return false;
+        return wasUpdated();
     }
 
     private boolean canInjectCondition(ConditionalInstruction cond, OpInstruction oper) {

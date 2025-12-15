@@ -2,12 +2,11 @@
     39 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instructions eliminated by Case Expression Optimization.
     25 instructions eliminated by Dead Code Elimination (6 iterations).
-    22 instructions eliminated by Condition Optimization (5 iterations).
+    22 instructions eliminated by Condition Optimization (6 iterations).
     12 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
      3 instructions eliminated by If Expression Optimization (3 iterations).
     14 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
-     5 instructions modified by Loop Optimization (3 iterations).
      5 loops improved by Loop Optimization.
      4 instructions eliminated by Jump Straightening (6 iterations).
      1 instructions updated by Jump Threading.
@@ -15,7 +14,7 @@
    184 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 798):
-  * Replicate loop condition at line 91:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  * Partial loop rotation at line 91:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -1224,7 +1223,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    155 op sub :crh *tmp62 0
    156 label *label33
 
-Modifications by Replicate loop condition at line 91:1 (+1 instructions):
+Modifications by Partial loop rotation at line 91:1 (+1 instructions):
  
    175 label *label42
    176 sensor *tmp76 .SWITCH @enabled

@@ -97,6 +97,7 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
             final LogicInstruction actualIx = actual.get(index);
             if (expectedIx.getMlogOpcode().equals(actualIx.getMlogOpcode())) {
                 if (!matchArgs(expectedIx, actualIx)) {
+                    matchArgs(expectedIx, actualIx);
                     assertFailed(makeVarsIn(expected), actual, createUnmatchedArgumentsMessage(actual, messages, index, expectedIx, actualIx));
                     return;
                 }

@@ -3,7 +3,6 @@
      1 instructions eliminated by Case Expression Optimization.
      1 instructions eliminated by Dead Code Elimination (5 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-     1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
      7 instructions eliminated by Jump Straightening (2 passes, 8 iterations).
      1 instructions updated by Jump Threading.

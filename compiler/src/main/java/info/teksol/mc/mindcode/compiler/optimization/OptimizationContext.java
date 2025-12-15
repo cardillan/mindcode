@@ -54,6 +54,9 @@ public class OptimizationContext {
     private final Map<LogicInstruction, VariableStates> variableStates = new IdentityHashMap<>();
 
     /// Holds evaluation of first loop condition variables for loop optimizer.
+    private final Map<LogicInstruction, VariableStates> firstPassStates = new HashMap<>();
+
+    /// Holds evaluation of first loop condition variables for loop optimizer.
     private final Map<AstContext, VariableStates> loopVariables = new HashMap<>();
 
     /// Variables affected by added, removed or changed instructions are added to the stale list
@@ -80,7 +83,7 @@ public class OptimizationContext {
     private int deletions = 0;
     private boolean updated;
 
-    private boolean traceActive = OptimizationCoordinator.TRACE_ALL;
+    private boolean traceActive = true;
 
     OptimizationContext(TraceFile traceFile, MessageConsumer messageConsumer, CompilerProfile globalProfile,
             InstructionProcessor instructionProcessor, OptimizerContext optimizerContext, List<LogicInstruction> program,
@@ -440,16 +443,24 @@ public class OptimizationContext {
         this.variableStates.put(instruction, variableStates);
     }
 
-    public void storeLoopVariables(AstContext conditionContext, VariableStates variableStates) {
-        loopVariables.put(conditionContext, variableStates);
-    }
-
     public @Nullable VariableStates getVariableStates(LogicInstruction instruction) {
         return variableStates.get(instruction);
     }
 
-    public @Nullable VariableStates getLoopVariables(AstContext conditionContext) {
-        return loopVariables.get(conditionContext);
+    public void storeFirstPassStates(LogicInstruction instruction, VariableStates variableStates) {
+        firstPassStates.put(instruction, variableStates);
+    }
+
+    public @Nullable VariableStates getFirstPassStates(LogicInstruction instruction) {
+        return firstPassStates.get(instruction);
+    }
+
+    public void storeLoopVariables(AstContext loopContext, VariableStates variableStates) {
+        loopVariables.put(loopContext, variableStates);
+    }
+
+    public @Nullable VariableStates getLoopVariables(AstContext loopContext) {
+        return loopVariables.get(loopContext);
     }
 
     public LogicValue resolveValue(@Nullable VariableStates variableStates, LogicValue value) {
@@ -479,7 +490,7 @@ public class OptimizationContext {
 
     public void clearVariableStates() {
         variableStates.clear();
-        loopVariables.clear();
+        firstPassStates.clear();
         staleVariables.clear();
     }
 
@@ -646,41 +657,48 @@ public class OptimizationContext {
         return expressionEvaluator.evaluate(sourcePosition, operation, a, b);
     }
 
-    public @Nullable LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
-        return evaluateConditionalInstruction(jump, variableStates.get(jump));
+    /// Evaluates the given condition. Supports both short-circuited and fully evaluated ones. Returns values:
+    /// - `TRUE` if the condition's value is true (true branch is entered)
+    /// - `FALSE` if the condition's value is false (false branch is entered)
+    /// - `null` id the condition's value cannot be determined
+    ///
+    /// @param conditionContext context of the condition to evaluate
+    /// @return the condition's value, or null if it cannot be determined'
+    public @Nullable LogicBoolean evaluateJumpCondition(AstContext conditionContext) {
+        return evaluateCondition(conditionContext, variableStates);
     }
 
-    public @Nullable LogicBoolean evaluateLoopConditionJump(JumpInstruction jump, AstContext loopContext) {
-        return evaluateConditionalInstruction(jump, loopVariables.get(loopContext));
+    /// Evaluates the given condition. Supports both short-circuited and fully evaluated ones. Returns values:
+    /// - `TRUE` if the condition's value is true (loop is entered)
+    /// - `FALSE` if the condition's value is false (loop is skipped)
+    /// - `null` id the condition's value cannot be determined
+    ///
+    /// @param conditionContext context of the condition to evaluate
+    /// @return the condition's value, or null if it cannot be determined'
+    public @Nullable LogicBoolean evaluateLoopCondition(AstContext conditionContext) {
+        return evaluateCondition(conditionContext, firstPassStates);
     }
 
-    private @Nullable LogicBoolean evaluateConditionalInstruction(ConditionalInstruction jump, VariableStates vs) {
-        if (jump.isUnconditional()) {
-            return LogicBoolean.TRUE;
-        }
-
-        // Avoid creating new instruction just for the evaluation
-        LogicValue x = resolveValue(vs, jump.getX());
-        LogicValue y = resolveValue(vs, jump.getY());
-
-        if (x.isConstant() && y.isConstant()) {
-            LogicLiteral result = expressionEvaluator.evaluate(jump.sourcePosition(), jump.getCondition().toOperation(), x, y);
-            if (result instanceof LogicBoolean b) {
-                return b;
-            }
-        }
-
-        return null;
+    public boolean isShortCircuitCondition(AstContext conditionContext) {
+        return conditionContext.children().size() == 1 && conditionContext.children().getFirst()
+                .matches(AstContextType.SCBE_COND, AstContextType.SCBE_OPER);
     }
 
-    public @Nullable LogicBoolean evaluateConditionJump(AstContext conditionContext) {
+    /// Evaluates the given condition. Supports both short-circuited and fully evaluated ones. Returns values:
+    /// - `TRUE` if the condition's value is true (true branch or loop is entered)
+    /// - `FALSE` if the condition's value is false (false branch is entered or loop is skipped)
+    /// - `null` id the condition's value cannot be determined
+    ///
+    /// @param conditionContext context of the condition to evaluate
+    /// @param variableStates variable states to use for evaluation (first-pass or full)
+    /// @return the condition's value, or null if it cannot be determined'
+    private @Nullable LogicBoolean evaluateCondition(AstContext conditionContext, Map<LogicInstruction, VariableStates> variableStates) {
         if (!conditionContext.matches(AstSubcontextType.CONDITION)) {
             throw new IllegalArgumentException("Expected condition context, got " + conditionContext);
         }
 
         LogicList instructions = contextInstructions(conditionContext);
-        if (conditionContext.children().size() == 1 && conditionContext.children().getFirst().matches(
-                AstContextType.SCBE_COND, AstContextType.SCBE_OPER)) {
+        if (isShortCircuitCondition(conditionContext)) {
             AstContext shortCircuitContext = conditionContext.children().getFirst();
 
             // Simple control-flow analysis
@@ -696,7 +714,7 @@ public class OptimizationContext {
                     case JumpInstruction jump -> {
                         // When waiting for a specific target, skip jump
                         if (active) {
-                            LogicBoolean jumpResult = evaluateJumpInstruction(jump);
+                            LogicBoolean jumpResult = evaluateConditionalInstruction(jump, variableStates);
                             if (jumpResult == LogicBoolean.TRUE) {
                                 activeTargets.add(jump.getTarget());
                                 active = false;
@@ -750,11 +768,15 @@ public class OptimizationContext {
             long jumps = instructions.stream().filter(JumpInstruction.class::isInstance).count();
             LogicBoolean jumpResult = jumps == 0 ? LogicBoolean.FALSE :
                     jumps == 1 && (instructions.getFromEnd(0) instanceof JumpInstruction jump)
-                            ? evaluateJumpInstruction(jump)     // Evaluate the jump
-                            : null;                             // We don't know
+                            ? evaluateConditionalInstruction(jump, variableStates)  // Evaluate the jump
+                            : null;                                                       // We don't know
 
             return negate(jumpResult);
         }
+    }
+
+    private @Nullable LogicBoolean negate(@Nullable LogicBoolean value) {
+        return value == null ? null : value.not();
     }
 
     private void println(String message) {
@@ -766,8 +788,36 @@ public class OptimizationContext {
                 .collect(Collectors.joining(", ", "    Active targets: [", "]")));
     }
 
-    private @Nullable LogicBoolean negate(@Nullable LogicBoolean value) {
-        return value == null ? null : value.not();
+
+    private @Nullable LogicBoolean evaluateConditionalInstruction(ConditionalInstruction cond,
+            Map<LogicInstruction, VariableStates> variableStates) {
+        return cond.isUnconditional()
+                ? LogicBoolean.TRUE
+                : evaluatePlainCondition(cond, cond.getX(), cond.getY(), variableStates);
+    }
+
+    public @Nullable LogicBoolean evaluatePlainCondition(ConditionalInstruction cond, LogicValue valueX, LogicValue valueY) {
+        return evaluatePlainCondition(cond, valueX, valueY, variableStates);
+    }
+
+    private @Nullable LogicBoolean evaluatePlainCondition(ConditionalInstruction cond, LogicValue valueX, LogicValue valueY,
+            Map<LogicInstruction, VariableStates> variableStates) {
+        if (cond.isUnconditional()) return LogicBoolean.TRUE;
+
+        VariableStates instructionVariableStates = variableStates.get(cond);
+
+        // Avoid creating new instruction just for the evaluation
+        LogicValue x = resolveValue(instructionVariableStates, valueX);
+        LogicValue y = resolveValue(instructionVariableStates, valueY);
+
+        if (x.isConstant() && y.isConstant()) {
+            LogicLiteral result = expressionEvaluator.evaluate(cond.sourcePosition(), cond.getCondition().toOperation(), x, y);
+            if (result instanceof LogicBoolean b) {
+                return b;
+            }
+        }
+
+        return null;
     }
     //</editor-fold>
 
@@ -1733,7 +1783,9 @@ public class OptimizationContext {
     //<editor-fold desc="Finding instructions by context">
     public LogicList contextInstructions(@Nullable AstContext astContext) {
         return astContext == null ? EMPTY :
-                new LogicList(astContext, List.copyOf(instructionStream().filter(ix -> ix.belongsTo(astContext)).toList()));
+                new LogicList(astContext,
+                        List.copyOf(instructionStream().filter(ix -> ix.belongsTo(astContext)).toList()),
+                        Map.of());
     }
 
     public Stream<LogicInstruction> contextStream(@Nullable AstContext astContext) {
@@ -1773,30 +1825,37 @@ public class OptimizationContext {
 
     //<editor-fold desc="Logic list">
     public LogicList buildLogicList(AstContext context, List<LogicInstruction> instructions) {
-        return new LogicList(context, instructions);
+        return new LogicList(context, instructions, Map.of());
     }
 
     public LogicList createLogicList(AstContext context) {
-        return new LogicList(context, List.of());
+        return new LogicList(context, List.of(), Map.of());
     }
 
-    private final LogicList EMPTY = new LogicList(null, java.util.List.of());
+    private final LogicList EMPTY = new LogicList(null, java.util.List.of(), Map.of());
 
     /// Class for accessing context instructions in an organized manner.
     /// Is always created from a specific AST context.
     public class LogicList implements Iterable<LogicInstruction>, ContextfulInstructionCreator, ContextlessInstructionCreator {
         private final @Nullable AstContext astContext;
         private final ArrayList<LogicInstruction> instructions;
+        private final Map<LogicLabel, LogicLabel> labelMap;
 
-        private LogicList(@Nullable AstContext astContext, List<LogicInstruction> instructions) {
+        private LogicList(@Nullable AstContext astContext, List<LogicInstruction> instructions,
+                Map<LogicLabel, LogicLabel> labelMap) {
             this.astContext = astContext;
             this.instructions = new ArrayList<>(instructions);
+            this.labelMap = labelMap;
         }
 
         @Override
         public LogicList withSideEffects(SideEffects sideEffects) {
             instructionProcessor.withSideEffects(sideEffects);
             return this;
+        }
+
+        public Map<LogicLabel, LogicLabel> getLabelMap() {
+            return labelMap;
         }
 
         @Override
@@ -1829,8 +1888,24 @@ public class OptimizationContext {
             instructions.add(instruction);
         }
 
+        public void addKeepingContext(int index, LogicInstruction instruction) {
+            instructions.add(index, instruction);
+        }
+
+        public void replaceInContext(int index, LogicInstruction instruction) {
+            instructions.set(index, instruction.withContext(instructions.get(index).getAstContext()));
+        }
+
+        public void replaceKeepingContext(int index, LogicInstruction instruction) {
+            instructions.set(index, instruction);
+        }
+
         public LogicInstruction remove(int index) {
             return instructions.remove(index);
+        }
+
+        public boolean removeIf(Predicate<LogicInstruction> filter) {
+            return instructions.removeIf(filter);
         }
 
         public LogicInstruction removeFirst() {
@@ -1934,6 +2009,18 @@ public class OptimizationContext {
             return -1;
         }
 
+        public @Nullable LogicInstruction last(Predicate<LogicInstruction> matcher) {
+            for (int i = size() - 1; i >= 0; i--) {
+                LogicInstruction ix = get(i);
+                assert ix != null;
+                if (matcher.test(ix)) {
+                    return ix;
+                }
+            }
+
+            return null;
+        }
+
         public int lastIndexOf(Predicate<LogicInstruction> matcher) {
             for (int i = size() - 1; i >= 0; i--) {
                 LogicInstruction ix = get(i);
@@ -1946,16 +2033,12 @@ public class OptimizationContext {
             return -1;
         }
 
-        public int lastIndexOf(LogicInstruction o) {
-            return instructions.lastIndexOf(o);
-        }
-
         public ListIterator<LogicInstruction> listIterator() {
             return instructions.listIterator();
         }
 
         public LogicList subList(int fromIndex, int toIndex) {
-            return new LogicList(astContext, instructions.subList(fromIndex, toIndex));
+            return new LogicList(astContext, instructions.subList(fromIndex, toIndex), labelMap);
         }
 
         public List<LogicInstruction> toList() {
@@ -1987,7 +2070,7 @@ public class OptimizationContext {
             Map<AstContext, AstContext> contextMap = astContext.createDeepCopy();
             return new LogicList(contextMap.get(astContext), stream()
                     .map(ix -> remapContextAndLabels(labelMap, contextMap, ix))
-                    .toList());
+                    .toList(), labelMap);
         }
 
         public LogicList duplicateToContext(AstContext newContext, boolean functionInlining) {
@@ -2022,7 +2105,7 @@ public class OptimizationContext {
                     .map(transformer)
                     .filter(Objects::nonNull)
                     .map(ix -> remapContextAndLabels(labelMap, contextMap, ix))
-                    .toList());
+                    .toList(), labelMap);
         }
 
         private Map<LogicLabel, LogicLabel> duplicateLabels() {
@@ -2043,7 +2126,6 @@ public class OptimizationContext {
         private LogicInstruction remapContextAndLabels(Map<LogicLabel, LogicLabel> labelMap, Map<AstContext, AstContext> contextMap, LogicInstruction ix) {
             return instructionProcessor.replaceLabels(ix.withContext(contextMap.get(ix.getAstContext())), labelMap);
         }
-
     }
     //</editor-fold>
 

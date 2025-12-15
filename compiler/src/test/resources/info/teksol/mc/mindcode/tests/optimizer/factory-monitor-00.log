@@ -2,28 +2,27 @@
     58 instructions eliminated by Temp Variables Elimination (2 passes, 7 iterations).
      1 instructions eliminated by Case Expression Optimization.
     43 instructions eliminated by Dead Code Elimination (6 iterations).
-    26 instructions eliminated by Condition Optimization (5 iterations).
+    26 instructions eliminated by Condition Optimization (6 iterations).
     15 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
      8 instructions eliminated by Boolean Optimization (6 iterations).
        4 fully-evaluated expressions optimized using selects.
      3 instructions eliminated by If Expression Optimization (3 iterations).
     20 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
-     1 instructions added by Loop Optimization (3 iterations).
-     3 loops improved by Loop Optimization.
+     4 loops improved by Loop Optimization.
      8 instructions eliminated by Case Switching (5 iterations).
      1 case expressions converted to switched jumps by Case Switching.
     13 instructions eliminated by Jump Straightening (2 passes, 7 iterations).
      2 instructions updated by Jump Threading.
     22 instructions eliminated by Print Merging.
-   327 instructions after optimizations.
+   326 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 636):
-  * Replicate loop condition at line 160:1                       size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+Pass 1: speed optimization selection (cost limit 637):
+  * Partial loop rotation at line 160:1                          size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
   o Fast-dispatch case at line 20:9                              size    -9, benefit     4899.0, efficiency   Infinity
   o Convert case at line 20:9 (segments: 1, padded low)          size    -8, benefit     5141.8, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 635):
+Pass 1: speed optimization selection (cost limit 636):
   o Fast-dispatch case at line 20:9                              size    -9, benefit     4899.0, efficiency   Infinity
   * Convert case at line 20:9 (segments: 1, padded low)          size    -8, benefit     5141.8, efficiency   Infinity (-8 instructions)
 
@@ -1663,29 +1662,50 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
     16 label *label0
     17 jump *label3 equal .DISPLAY null
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
  
-    23 set :n @links
-    24 label *label5
-    25 jump *label7 lessThanEq :n 0
-+   26 label *label89
-    27 op sub :n :n 1
-    28 getlink :block :n
-    29 sensor *tmp7 :block @type
+    14 set .MUL1 null
+    15 set :icon null
+    16 label *label0
+-    * jump *label3 equal .DISPLAY null
+-    * label *label4
+-    * jump *label2 notEqual .TYPE null
++   17 label *label90
+    18 label *label3
+    19 print "Universal Factory Monitor"
+    20 print "\n"
+    21 set :n @links
+    22 label *label5
+    23 jump *label7 lessThanEq :n 0
++   24 label *label91
+    25 op sub :n :n 1
+    26 getlink :block :n
+    27 sensor *tmp7 :block @type
  
-   140 print " not supported"
-   141 label *label8
-   142 label *label6
+   138 print " not supported"
+   139 label *label8
+   140 label *label6
 -    * jump *label5 always
-+  143 jump *label89 greaterThan :n 0
-   144 label *label7
-   145 print "Message: "
-   146 print .MESSAGE
++  141 jump *label91 greaterThan :n 0
+   142 label *label7
+   143 print "Message: "
+   144 print .MESSAGE
+ 
+   176 label *label30
+   177 printflush .MESSAGE
+   178 label *label1
+-    * jump *label0 always
++  179 jump *label3 equal .DISPLAY null
++  180 jump *label90 equal .TYPE null
++  181 label *label89
+   182 label *label2
+   183 sensor *tmp28 .DISPLAY @type
+   184 jump *label33 notEqual *tmp28 @logic-display
  
    298 set :n 0
    299 label *label56
    300 jump *label58 greaterThanEq :n @links
-+  301 label *label90
++  301 label *label92
    302 jump *label59 lessThan :index TO_INDEX
    303 jump *label58 always
    304 label *label59
@@ -1694,20 +1714,20 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    451 label *label57
    452 op add :n :n 1
 -    * jump *label56 always
-+  453 jump *label90 lessThan :n @links
++  453 jump *label92 lessThan :n @links
    454 label *label58
    455 drawflush .DISPLAY
    456 op sub *tmp173 @time :start
 
 Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-8 instructions):
  
-   170 print .OUTPUT
-   171 print "\n"
-   172 jump *label31 equal .DISPLAY null
+   168 print .OUTPUT
+   169 print "\n"
+   170 jump *label31 equal .DISPLAY null
 -    * label *label32
-   173 jump *label29 notEqual .TYPE null
-   174 label *label31
-   175 print "No block to monitor or display."
+   171 jump *label29 notEqual .TYPE null
+   172 label *label31
+   173 print "No block to monitor or display."
  
    336 op sub *tmp114 100 :output
    337 op lessThan *tmp115 *tmp114 :minimum
@@ -1867,12 +1887,12 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    266 op sub :crh *tmp80 0
    267 jump *label50 always
 
-Modifications by Replicate loop condition at line 160:1 (+1 instructions):
+Modifications by Partial loop rotation at line 160:1 (+1 instructions):
  
    277 label *label53
    278 sensor *tmp87 .SWITCH @enabled
    279 jump *label55 notEqual *tmp87 0
-+  280 label *label91
++  280 label *label93
    281 set :start @time
    282 print "Universal Factory Monitor"
    283 print "\n"
@@ -1882,7 +1902,7 @@ Modifications by Replicate loop condition at line 160:1 (+1 instructions):
    437 label *label54
 -    * jump *label53 always
 +  438 sensor *tmp87 .SWITCH @enabled
-+  439 jump *label91 equal *tmp87 0
++  439 jump *label93 equal *tmp87 0
    440 label *label55
    441 end
 
@@ -1893,105 +1913,105 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    292 label *label56
 -    * jump *label58 greaterThanEq :n @links
 +  293 jump *label58 greaterThanEq 0 @links
-   294 label *label90
+   294 label *label92
    295 jump *label59 lessThan :index TO_INDEX
    296 jump *label58 always
 
 Modifications by Convert case at line 20:9 (segments: 1, padded low) (-8 instructions):
  
-    27 op sub :n :n 1
-    28 getlink :block :n
-    29 sensor *tmp7 :block @type
+    25 op sub :n :n 1
+    26 getlink :block :n
+    27 sensor *tmp7 :block @type
 -    * jump *label9 notEqual *tmp7 @message
-+   30 sensor *tmp175 *tmp7 @id
-+   31 jump *label92 greaterThanEq *tmp175 146
-+   32 multijump *tmp175 0 0 (m:*label93)
-+   33 multilabel *label102 (m:*label93)
-    34 label *label10
-    35 set .MESSAGE :block
-    36 jump *label8 always
-    37 label *label9
++   28 sensor *tmp175 *tmp7 @id
++   29 jump *label94 greaterThanEq *tmp175 146
++   30 multijump *tmp175 0 0 (m:*label95)
++   31 multilabel *label104 (m:*label95)
+    32 label *label10
+    33 set .MESSAGE :block
+    34 jump *label8 always
+    35 label *label9
 -    * jump *label11 notEqual *tmp7 @switch
-+   38 multilabel *label103 (m:*label93)
-    39 label *label12
-    40 set .SWITCH :block
-    41 jump *label8 always
-    42 label *label11
++   36 multilabel *label105 (m:*label95)
+    37 label *label12
+    38 set .SWITCH :block
+    39 jump *label8 always
+    40 label *label11
 -    * jump *label14 equal *tmp7 @logic-display
 -    * jump *label13 notEqual *tmp7 @large-logic-display
-+   43 multilabel *label104 (m:*label93)
-    44 label *label14
-    45 set .DISPLAY :block
-    46 jump *label8 always
-    47 label *label13
++   41 multilabel *label106 (m:*label95)
+    42 label *label14
+    43 set .DISPLAY :block
+    44 jump *label8 always
+    45 label *label13
 -    * jump *label15 notEqual *tmp7 @silicon-smelter
-+   48 multilabel *label95 (m:*label93)
-    49 label *label16
-    50 set .TYPE @silicon-smelter
-    51 sensor .CAPACITY :block @itemCapacity
++   46 multilabel *label97 (m:*label95)
+    47 label *label16
+    48 set .TYPE @silicon-smelter
+    49 sensor .CAPACITY :block @itemCapacity
  
-    58 set .OUTPUT @silicon
-    59 jump *label8 always
-    60 label *label15
+    56 set .OUTPUT @silicon
+    57 jump *label8 always
+    58 label *label15
 -    * jump *label17 notEqual *tmp7 @silicon-crucible
-+   61 multilabel *label96 (m:*label93)
-    62 label *label18
-    63 set .TYPE @silicon-crucible
-    64 sensor .CAPACITY :block @itemCapacity
++   59 multilabel *label98 (m:*label95)
+    60 label *label18
+    61 set .TYPE @silicon-crucible
+    62 sensor .CAPACITY :block @itemCapacity
  
-    71 set .OUTPUT @silicon
-    72 jump *label8 always
-    73 label *label17
+    69 set .OUTPUT @silicon
+    70 jump *label8 always
+    71 label *label17
 -    * jump *label19 notEqual *tmp7 @kiln
-+   74 multilabel *label97 (m:*label93)
-    75 label *label20
-    76 set .TYPE @kiln
-    77 sensor .CAPACITY :block @itemCapacity
++   72 multilabel *label99 (m:*label95)
+    73 label *label20
+    74 set .TYPE @kiln
+    75 sensor .CAPACITY :block @itemCapacity
  
-    84 set .OUTPUT @metaglass
-    85 jump *label8 always
-    86 label *label19
+    82 set .OUTPUT @metaglass
+    83 jump *label8 always
+    84 label *label19
 -    * jump *label21 notEqual *tmp7 @phase-weaver
-+   87 multilabel *label99 (m:*label93)
-    88 label *label22
-    89 set .TYPE @phase-weaver
-    90 sensor .CAPACITY :block @itemCapacity
++   85 multilabel *label101 (m:*label95)
+    86 label *label22
+    87 set .TYPE @phase-weaver
+    88 sensor .CAPACITY :block @itemCapacity
  
-    97 set .OUTPUT @phase-fabric
-    98 jump *label8 always
-    99 label *label21
+    95 set .OUTPUT @phase-fabric
+    96 jump *label8 always
+    97 label *label21
 -    * jump *label23 notEqual *tmp7 @pyratite-mixer
-+  100 multilabel *label100 (m:*label93)
-   101 label *label24
-   102 set .TYPE @pyratite-mixer
-   103 sensor .CAPACITY :block @itemCapacity
++   98 multilabel *label102 (m:*label95)
+    99 label *label24
+   100 set .TYPE @pyratite-mixer
+   101 sensor .CAPACITY :block @itemCapacity
  
-   110 set .OUTPUT @pyratite
-   111 jump *label8 always
-   112 label *label23
+   108 set .OUTPUT @pyratite
+   109 jump *label8 always
+   110 label *label23
 -    * jump *label25 notEqual *tmp7 @blast-mixer
-+  113 multilabel *label101 (m:*label93)
-   114 label *label26
-   115 set .TYPE @blast-mixer
-   116 sensor .CAPACITY :block @itemCapacity
++  111 multilabel *label103 (m:*label95)
+   112 label *label26
+   113 set .TYPE @blast-mixer
+   114 sensor .CAPACITY :block @itemCapacity
  
-   123 set .OUTPUT @blast-compound
-   124 jump *label8 always
-   125 label *label25
+   121 set .OUTPUT @blast-compound
+   122 jump *label8 always
+   123 label *label25
 -    * jump *label27 notEqual *tmp7 @plastanium-compressor
-+  126 multilabel *label98 (m:*label93)
-   127 label *label28
-   128 set .TYPE @plastanium-compressor
-   129 sensor .CAPACITY :block @itemCapacity
++  124 multilabel *label100 (m:*label95)
+   125 label *label28
+   126 set .TYPE @plastanium-compressor
+   127 sensor .CAPACITY :block @itemCapacity
  
-   137 set .OUTPUT @plastanium
-   138 jump *label8 always
-   139 label *label27
-+  140 multilabel *label94 (m:*label93)
-+  141 label *label92
-   142 print "\n  "
-   143 print :block
-   144 print " not supported"
+   135 set .OUTPUT @plastanium
+   136 jump *label8 always
+   137 label *label27
++  138 multilabel *label96 (m:*label95)
++  139 label *label94
+   140 print "\n  "
+   141 print :block
+   142 print " not supported"
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-4 instructions):
  
@@ -2055,15 +2075,15 @@ Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1
 
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-1 instructions):
  
-   262 set :n 0
-   263 jump *label58 greaterThanEq 0 @links
-   264 label *label90
+   260 set :n 0
+   261 jump *label58 greaterThanEq 0 @links
+   262 label *label92
 -    * jump *label59 lessThan :index TO_INDEX
 -    * jump *label58 always
-+  265 jump *label58 greaterThanEq :index TO_INDEX
-   266 label *label59
-   267 getlink :factory :n
-   268 sensor *tmp93 :factory @type
++  263 jump *label58 greaterThanEq :index TO_INDEX
+   264 label *label59
+   265 getlink :factory :n
+   266 sensor *tmp93 :factory @type
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -2071,54 +2091,54 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
      2 set TO_INDEX 16
      3 set EXPECTED_BOOST 1.5
  
-   248 label *label34
-   249 control enabled .SWITCH 0
-   250 sensor *tmp87 .SWITCH @enabled
+   246 label *label34
+   247 control enabled .SWITCH 0
+   248 sensor *tmp87 .SWITCH @enabled
 -    * jump *label55 notEqual *tmp87 0
-+  251 jump __start__ notEqual *tmp87 0
-   252 label *label91
-   253 set :start @time
-   254 print "Universal Factory Monitor"
++  249 jump __start__ notEqual *tmp87 0
+   250 label *label93
+   251 set :start @time
+   252 print "Universal Factory Monitor"
  
-   312 op add *tmp131 :x 7
-   313 op add *tmp132 :y 7
-   314 draw image *tmp131 *tmp132 :icon 16 0
+   310 op add *tmp131 :x 7
+   311 op add *tmp132 :y 7
+   312 draw image *tmp131 *tmp132 :icon 16 0
 -    * jump *label76 always
-+  315 jump *label74 always
-   316 label *label75
-   317 draw color 255 80 80 255
-   318 op add *tmp133 :y 3
++  313 jump *label74 always
+   314 label *label75
+   315 draw color 255 80 80 255
+   316 op add *tmp133 :y 3
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   395 printflush .MESSAGE
-   396 sensor *tmp87 .SWITCH @enabled
-   397 jump *label91 equal *tmp87 0
+   393 printflush .MESSAGE
+   394 sensor *tmp87 .SWITCH @enabled
+   395 jump *label93 equal *tmp87 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
  
-    18 jump *label3 equal .DISPLAY null
-    19 jump *label2 notEqual .TYPE null
-    20 label *label3
+    16 set :icon null
+    17 label *label90
+    18 label *label3
 -    * print "Universal Factory Monitor"
 -    * print "\n"
-+   21 print "Universal Factory Monitor\n"
-    22 set :n @links
-    23 jump *label7 lessThanEq :n 0
-    24 label *label89
++   19 print "Universal Factory Monitor\n"
+    20 set :n @links
+    21 jump *label7 lessThanEq :n 0
+    22 label *label91
  
-   117 jump *label8 always
-   118 multilabel *label94 (m:*label93)
-   119 label *label92
+   115 jump *label8 always
+   116 multilabel *label96 (m:*label95)
+   117 label *label94
 -    * print "\n  "
 -    * print :block
 -    * print " not supported"
-+  120 print "\n  {0} not supported"
-+  121 format :block
-   122 label *label8
-   123 jump *label89 greaterThan :n 0
-   124 label *label7
++  118 print "\n  {0} not supported"
++  119 format :block
+   120 label *label8
+   121 jump *label91 greaterThan :n 0
+   122 label *label7
 -    * print "Message: "
 -    * print .MESSAGE
 -    * print "\n"
@@ -2146,42 +2166,42 @@ Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
 -    * print "Output: "
 -    * print .OUTPUT
 -    * print "\n"
-+  125 print "Message: {0}\nSwitch: {0}\nDisplay: {0}\nMonitoring: {0}\nCapacity: {0}\nResource 1: {0}\nResource 2: {0}\nResource 3: {0}\nOutput: {0}\n"
-+  126 format .MESSAGE
-+  127 format .SWITCH
-+  128 format .DISPLAY
-+  129 format .TYPE
-+  130 format .CAPACITY
-+  131 format .RES1
-+  132 format .RES2
-+  133 format .RES3
-+  134 format .OUTPUT
-   135 jump *label31 equal .DISPLAY null
-   136 jump *label29 notEqual .TYPE null
-   137 label *label31
++  123 print "Message: {0}\nSwitch: {0}\nDisplay: {0}\nMonitoring: {0}\nCapacity: {0}\nResource 1: {0}\nResource 2: {0}\nResource 3: {0}\nOutput: {0}\n"
++  124 format .MESSAGE
++  125 format .SWITCH
++  126 format .DISPLAY
++  127 format .TYPE
++  128 format .CAPACITY
++  129 format .RES1
++  130 format .RES2
++  131 format .RES3
++  132 format .OUTPUT
+   133 jump *label31 equal .DISPLAY null
+   134 jump *label29 notEqual .TYPE null
+   135 label *label31
  
-   232 jump __start__ notEqual *tmp87 0
-   233 label *label91
-   234 set :start @time
+   230 jump __start__ notEqual *tmp87 0
+   231 label *label93
+   232 set :start @time
 -    * print "Universal Factory Monitor"
 -    * print "\n"
 -    * print "Monitoring: "
-+  235 print "Universal Factory Monitor\nMonitoring: "
-   236 print .TYPE
-   237 draw color 0 0 80 255
-   238 draw rect :clx :cly :clw :clh
++  233 print "Universal Factory Monitor\nMonitoring: "
+   234 print .TYPE
+   235 draw color 0 0 80 255
+   236 draw rect :clx :cly :clw :clh
  
-   368 drawflush .DISPLAY
-   369 op sub *tmp173 @time :start
-   370 op floor *tmp174 *tmp173
+   366 drawflush .DISPLAY
+   367 op sub *tmp173 @time :start
+   368 op floor *tmp174 *tmp173
 -    * print "\nDraw time: "
 -    * print *tmp174
 -    * print " ms"
-+  371 print "\nDraw time: {0} ms"
-+  372 format *tmp174
-   373 printflush .MESSAGE
-   374 sensor *tmp87 .SWITCH @enabled
-   375 jump *label91 equal *tmp87 0
++  369 print "\nDraw time: {0} ms"
++  370 format *tmp174
+   371 printflush .MESSAGE
+   372 sensor *tmp87 .SWITCH @enabled
+   373 jump *label93 equal *tmp87 0
 
 Final code before resolving virtual instructions:
 
@@ -2202,31 +2222,29 @@ set .MUL3 null
 set .MUL2 null
 set .MUL1 null
 set :icon null
-label *label0
-jump *label3 equal .DISPLAY null
-jump *label2 notEqual .TYPE null
+label *label90
 label *label3
 print "Universal Factory Monitor\n"
 set :n @links
 jump *label7 lessThanEq :n 0
-label *label89
+label *label91
 op sub :n :n 1
 getlink :block :n
 sensor *tmp7 :block @type
 sensor *tmp175 *tmp7 @id
-jump *label92 greaterThanEq *tmp175 146
+jump *label94 greaterThanEq *tmp175 146
 multijump *tmp175 0 0
-multilabel *label102
-set .MESSAGE :block                     # Origin: 26, keys: 137
-jump *label8 always
-multilabel *label103
-set .SWITCH :block                      # Origin: 26, keys: 138
-jump *label8 always
 multilabel *label104
-set .DISPLAY :block                     # Origin: 26, keys: 144, 145
+set .MESSAGE :block                     # Origin: 24, keys: 137
 jump *label8 always
-multilabel *label95
-set .TYPE @silicon-smelter              # Origin: 26, keys: 2
+multilabel *label105
+set .SWITCH :block                      # Origin: 24, keys: 138
+jump *label8 always
+multilabel *label106
+set .DISPLAY :block                     # Origin: 24, keys: 144, 145
+jump *label8 always
+multilabel *label97
+set .TYPE @silicon-smelter              # Origin: 24, keys: 2
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @sand
 set .RES2 @coal
@@ -2236,8 +2254,8 @@ set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @silicon
 jump *label8 always
-multilabel *label96
-set .TYPE @silicon-crucible             # Origin: 26, keys: 3
+multilabel *label98
+set .TYPE @silicon-crucible             # Origin: 24, keys: 3
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @sand
 set .RES2 @coal
@@ -2247,8 +2265,8 @@ set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @silicon
 jump *label8 always
-multilabel *label97
-set .TYPE @kiln                         # Origin: 26, keys: 4
+multilabel *label99
+set .TYPE @kiln                         # Origin: 24, keys: 4
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @sand
 set .RES2 @lead
@@ -2258,8 +2276,8 @@ set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @metaglass
 jump *label8 always
-multilabel *label99
-set .TYPE @phase-weaver                 # Origin: 26, keys: 6
+multilabel *label101
+set .TYPE @phase-weaver                 # Origin: 24, keys: 6
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @sand
 set .RES2 @thorium
@@ -2269,8 +2287,8 @@ set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @phase-fabric
 jump *label8 always
-multilabel *label100
-set .TYPE @pyratite-mixer               # Origin: 26, keys: 8
+multilabel *label102
+set .TYPE @pyratite-mixer               # Origin: 24, keys: 8
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @sand
 set .RES2 @coal
@@ -2280,8 +2298,8 @@ set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @pyratite
 jump *label8 always
-multilabel *label101
-set .TYPE @blast-mixer                  # Origin: 26, keys: 9
+multilabel *label103
+set .TYPE @blast-mixer                  # Origin: 24, keys: 9
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @pyratite
 set .RES2 @spore-pod
@@ -2291,8 +2309,8 @@ set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @blast-compound
 jump *label8 always
-multilabel *label98
-set .TYPE @plastanium-compressor        # Origin: 26, keys: 5
+multilabel *label100
+set .TYPE @plastanium-compressor        # Origin: 24, keys: 5
 sensor .CAPACITY :block @itemCapacity
 set .RES1 @titanium
 set .RES2 @oil
@@ -2303,12 +2321,12 @@ sensor *tmp23 :block @liquidCapacity
 op div .MUL2 250 *tmp23
 set .OUTPUT @plastanium
 jump *label8 always
-multilabel *label94
-label *label92
-print "\n  {0} not supported"           # Origin: 26, keys: 0, 1, 7, 10 .. 136, 139 .. 143
+multilabel *label96
+label *label94
+print "\n  {0} not supported"           # Origin: 24, keys: 0, 1, 7, 10 .. 136, 139 .. 143
 format :block
 label *label8
-jump *label89 greaterThan :n 0
+jump *label91 greaterThan :n 0
 label *label7
 print "Message: {0}\nSwitch: {0}\nDisplay: {0}\nMonitoring: {0}\nCapacity: {0}\nResource 1: {0}\nResource 2: {0}\nResource 3: {0}\nOutput: {0}\n"
 format .MESSAGE
@@ -2326,8 +2344,8 @@ label *label31
 print "No block to monitor or display."
 label *label29
 printflush .MESSAGE
-jump *label0 always
-label *label2
+jump *label3 equal .DISPLAY null
+jump *label90 equal .TYPE null
 sensor *tmp28 .DISPLAY @type
 jump *label33 notEqual *tmp28 @logic-display
 set .OFFSET_X 2
@@ -2418,7 +2436,7 @@ label *label34
 control enabled .SWITCH 0
 sensor *tmp87 .SWITCH @enabled
 jump __start__ notEqual *tmp87 0
-label *label91
+label *label93
 set :start @time
 print "Universal Factory Monitor\nMonitoring: "
 print .TYPE
@@ -2429,7 +2447,7 @@ draw stroke 2
 set :index FROM_INDEX
 set :n 0
 jump *label58 greaterThanEq 0 @links
-label *label90
+label *label92
 jump *label58 greaterThanEq :index TO_INDEX
 getlink :factory :n
 sensor *tmp93 :factory @type
@@ -2551,7 +2569,7 @@ draw lineRect :x :y :length 14
 op add :index :index 1
 label *label61
 op add :n :n 1
-jump *label90 lessThan :n @links
+jump *label92 lessThan :n @links
 label *label58
 drawflush .DISPLAY
 op sub *tmp173 @time :start
@@ -2560,4 +2578,4 @@ print "\nDraw time: {0} ms"
 format *tmp174
 printflush .MESSAGE
 sensor *tmp87 .SWITCH @enabled
-jump *label91 equal *tmp87 0
+jump *label93 equal *tmp87 0

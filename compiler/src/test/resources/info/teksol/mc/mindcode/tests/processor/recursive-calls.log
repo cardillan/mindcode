@@ -1,7 +1,7 @@
    146 instructions before optimizations.
      6 instructions eliminated by Temp Variables Elimination (5 iterations).
     15 instructions eliminated by Dead Code Elimination (6 iterations).
-     3 instructions eliminated by Condition Optimization (4 iterations).
+     3 instructions eliminated by Condition Optimization (5 iterations).
      3 instructions eliminated by Single Step Elimination (5 iterations).
      7 instructions eliminated by Data Flow Optimization (4 iterations).
      3 instructions eliminated by Unreachable Code Elimination (2 iterations).

@@ -2,7 +2,7 @@
      1 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Condition Optimization (3 iterations).
+     1 instructions eliminated by Condition Optimization (4 iterations).
      2 instructions eliminated by Data Flow Optimization (5 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.

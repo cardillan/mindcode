@@ -1,5 +1,8 @@
 package info.teksol.mc.util;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public class MutableDouble extends Number implements Comparable<MutableDouble> {
     private double value;
 

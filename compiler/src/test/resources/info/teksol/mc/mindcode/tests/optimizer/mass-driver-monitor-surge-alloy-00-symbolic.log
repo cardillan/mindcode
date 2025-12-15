@@ -2,7 +2,7 @@
     12 instructions eliminated by Temp Variables Elimination (5 iterations).
      2 instructions eliminated by Case Expression Optimization.
     10 instructions eliminated by Dead Code Elimination (5 iterations).
-     6 instructions eliminated by Condition Optimization (4 iterations).
+     6 instructions eliminated by Condition Optimization (5 iterations).
      5 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
     17 instructions eliminated by Data Flow Optimization (6 iterations).
      1 instructions added by Loop Optimization (2 iterations).
@@ -15,7 +15,7 @@
    232 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 885):
-  * Replicate loop condition at line 68:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  * Partial loop rotation at line 68:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
   o Convert case at line 17:9 (segments: 6)                      size    +4, benefit      439.9, efficiency    109.976
     Convert case at line 17:9 (segments: 1, padded low)          size  +143, benefit      540.9, efficiency      3.782
 
@@ -503,25 +503,37 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     75 label *label5
     76 print "Message: "
     77 print .MESSAGE
+ 
+    97 printflush .MESSAGE
+    98 label *label1
+    99 jump *label0 equal .TITANIUM null
+-    * label *label26
+   100 jump *label0 equal .SILICON null
+-    * label *label25
+   101 jump *label0 equal .COPPER null
+-    * label *label24
+   102 jump *label0 equal .LEAD null
+   103 label *label2
+   104 control enabled .SWITCH 0
 
-Modifications by Replicate loop condition at line 68:1 (+1 instructions):
+Modifications by Partial loop rotation at line 68:1 (+1 instructions):
  
-   108 label *label27
-   109 sensor *tmp23 .SWITCH @enabled
-   110 jump *label29 notEqual *tmp23 0
-+  111 label *label31
-   112 set :start @time
-   113 draw clear 0 0 80
-   114 draw color 255 255 255 255
+   105 label *label27
+   106 sensor *tmp23 .SWITCH @enabled
+   107 jump *label29 notEqual *tmp23 0
++  108 label *label31
+   109 set :start @time
+   110 draw clear 0 0 80
+   111 draw color 255 255 255 255
  
-   141 print *tmp35
-   142 printflush .MESSAGE
-   143 label *label28
+   138 print *tmp35
+   139 printflush .MESSAGE
+   140 label *label28
 -    * jump *label27 always
-+  144 sensor *tmp23 .SWITCH @enabled
-+  145 jump *label31 equal *tmp23 0
-   146 label *label29
-   147 end
++  141 sensor *tmp23 .SWITCH @enabled
++  142 jump *label31 equal *tmp23 0
+   143 label *label29
+   144 end
 
 Modifications by Convert case at line 17:9 (segments: 1, padded low) (+143 instructions):
  

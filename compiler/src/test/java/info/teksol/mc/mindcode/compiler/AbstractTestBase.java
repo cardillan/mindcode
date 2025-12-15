@@ -211,7 +211,7 @@ public abstract class AbstractTestBase extends AbstractMessageEmitter implements
     }
 
     protected static String q(String str) {
-        return '"' + str + '"';
+        return '"' + str.replace("\n", "\\n") + '"';
     }
 
     protected static class TestOptimizerContext extends AbstractMessageEmitter implements OptimizerContext {

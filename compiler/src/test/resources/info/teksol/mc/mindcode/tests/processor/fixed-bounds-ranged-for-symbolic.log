@@ -2,7 +2,6 @@
      1 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
-     1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
      9 instructions after optimizations.
 

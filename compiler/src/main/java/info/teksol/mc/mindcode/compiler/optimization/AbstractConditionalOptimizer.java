@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.util.MutableDouble;
 import org.jspecify.annotations.Nullable;
 
@@ -16,6 +17,41 @@ import java.util.*;
 public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
     public AbstractConditionalOptimizer(Optimization optimization, OptimizationContext optimizationContext) {
         super(optimization, optimizationContext);
+    }
+
+    protected boolean removeUnreachableCode(AstContext condition) {
+        Set<LogicLabel> activeLabels = new HashSet<>();
+        boolean reachable = true;
+        boolean modified = false;
+
+        try (OptimizationContext.LogicIterator it = createIteratorForContext(condition)) {
+            while (it.hasNext()) {
+                LogicInstruction ix = it.next();
+                if (ix.getAstContext() == condition) {
+                    if (reachable) {
+                        if (ix instanceof JumpInstruction j) {
+                            activeLabels.add(j.getTarget());
+                            // Unconditional jump makes code unreachable
+                            reachable = j.isConditional();
+                        } else if (ix instanceof LabelInstruction l && !activeLabels.contains(l.getLabel())) {
+                            it.remove();
+                            modified = true;
+                        } else if (ix.getOpcode() == Opcode.EMPTY) {
+                            it.remove();
+                        }
+                    } else if (ix instanceof LabelInstruction l && activeLabels.contains(l.getLabel())) {
+                        // An active label makes code reachable
+                        reachable = true;
+                    } else {
+                        // Removing all unreachable instructions
+                        it.remove();
+                        modified = true;
+                    }
+                }
+            }
+        }
+
+        return modified;
     }
 
     protected @Nullable JumpInstruction negateCompoundCondition(LogicList condition) {
@@ -34,12 +70,11 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
 
     protected @Nullable ShortCircuitAnalysis analyzeShortCircuit(LogicList conditionInstructions, boolean analyzeJumps) {
         AstContext context = conditionInstructions.getExistingAstContext();
-        boolean shortCircuit = context.children().size() == 1 && context.children().getFirst()
-                .matches(AstContextType.SCBE_COND, AstContextType.SCBE_OPER);
+        boolean shortCircuit = optimizationContext.isShortCircuitCondition(context);
         boolean condition = context.children().size() == 1 && context.children().getFirst().matches(AstContextType.SCBE_COND);
         List<LogicLabel> targets = new ArrayList<>();
         List<Condition> conditions = new ArrayList<>();
-        Set<LogicArgument> arguments = new HashSet<>();
+        List<LogicInstruction> uncertain = new ArrayList<>();
         List<LogicInstruction> controls = new ArrayList<>();
         List<Jump> jumps = List.of();
 
@@ -84,7 +119,7 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
                     mixed = true;
                 } else if (ix.isReal() && jumpCount > 0) {
                     opCount++;
-                    ix.processAllModifications(arguments::add);
+                    uncertain.add(ix);
                 }
             }
         }
@@ -117,12 +152,26 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
             jumps = analyzeJumps ? analyzeJumps(controls, trueLabel, falseLabel) : List.of();
         }
 
-        boolean sideEffects = optimizationContext.getProgram().stream().anyMatch(ix ->
-                !ix.belongsTo(conditionInstructions.getAstContext()) &&
-                        (ix.getAllReads().anyMatch(arguments::contains) || ix.getSideEffects().hasWrites()));
+        List<LogicInstruction> sideEffects = uncertain.stream()
+                .filter(ix -> !ix.isSafe() || ix.getAllWrites().anyMatch(arg -> outsideUse(context, arg)))
+                .toList();
 
-        return new ShortCircuitAnalysis(shortCircuit, normal, condition, lastJump, sideEffects, operation,
+        if (false) {
+            sideEffects.forEach(ix -> {
+                System.out.println(ix + ":");
+                System.out.println("    safe: " + ix.isSafe());
+                System.out.println("    hasWrites: " + ix.getSideEffects().hasWrites());
+                System.out.println("    outsideUse: " + ix.getAllWrites().anyMatch(arg -> outsideUse(context, arg)));
+                System.out.println();
+            });
+        }
+        return new ShortCircuitAnalysis(shortCircuit, normal, condition, lastJump, !sideEffects.isEmpty(), operation,
                 onlyEquals, plainOperands, jumpCount, opCount, List.copyOf(jumps));
+    }
+
+    private boolean outsideUse(AstContext localContext, LogicArgument argument) {
+        return argument instanceof LogicVariable variable &&
+                optimizationContext.getVariableReferences(variable).stream().anyMatch(ix -> !ix.belongsTo(localContext));
     }
 
     private List<Jump> analyzeJumps(List<LogicInstruction> controls, LogicLabel trueLabel, LogicLabel falseLabel) {

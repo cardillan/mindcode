@@ -1,7 +1,7 @@
    135 instructions before optimizations.
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Condition Optimization (3 iterations).
+     1 instructions eliminated by Condition Optimization (4 iterations).
      3 instructions eliminated by Data Flow Optimization (6 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.

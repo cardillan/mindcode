@@ -2,7 +2,7 @@
      8 instructions eliminated by Temp Variables Elimination (5 iterations).
      5 instructions eliminated by Case Expression Optimization.
     15 instructions eliminated by Dead Code Elimination (4 iterations).
-     2 instructions eliminated by Condition Optimization (4 iterations).
+     2 instructions eliminated by Condition Optimization (5 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
      6 instructions eliminated by Boolean Optimization (6 iterations).
        2 fully-evaluated expressions optimized using selects.

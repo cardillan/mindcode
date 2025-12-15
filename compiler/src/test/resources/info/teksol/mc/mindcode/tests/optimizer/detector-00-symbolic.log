@@ -1,10 +1,10 @@
    248 instructions before optimizations.
      3 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
-    13 instructions eliminated by Dead Code Elimination (2 passes, 6 iterations).
+    12 instructions eliminated by Dead Code Elimination (5 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
      2 instructions eliminated by Single Step Elimination (5 iterations).
-     1 instructions modified by Data Flow Optimization (4 iterations).
+     1 instructions eliminated by Data Flow Optimization (5 iterations).
      2 instructions added by Case Switching (3 iterations).
      1 case expressions converted to switched jumps by Case Switching.
      7 instructions eliminated by Jump Straightening (5 iterations).
@@ -13,7 +13,7 @@
     94 instructions eliminated by Print Merging.
    128 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 778):
+Pass 1: speed optimization selection (cost limit 779):
   o Convert case at line 17:9 (segments: 4)                      size    +1, benefit        3.6, efficiency      3.571
   * Convert case at line 17:9 (segments: 7)                      size    +2, benefit       10.7, efficiency      5.357 (+2 instructions)
 
@@ -299,6 +299,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    216 sensor *tmp55 .BLOCK @flag
    217 print "flag: "
 
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+   209 print "team: "
+   210 print *tmp53
+   211 print "\n"
+-    * sensor *tmp54 .BLOCK @type
+   212 print "type: "
+   213 print *tmp10
+   214 print "\n"
+
 Modifications by Convert case at line 17:9 (segments: 7) (+2 instructions):
  
     20 sensor *tmp10 .BLOCK @type
@@ -512,13 +522,13 @@ Modifications by Convert case at line 17:9 (segments: 7) (+2 instructions):
    211 print "other:"
    212 print "\n"
  
-   235 print *tmp58
-   236 print "\n"
-   237 label *label20
-+  238 label *label22
-   239 label *label7
-   240 jump *label6 always
-   241 label *label5
+   234 print *tmp58
+   235 print "\n"
+   236 label *label20
++  237 label *label22
+   238 label *label7
+   239 jump *label6 always
+   240 label *label5
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  
@@ -592,29 +602,19 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
-   224 print "enabled: "
-   225 print *tmp58
-   226 print "\n"
+   223 print "enabled: "
+   224 print *tmp58
+   225 print "\n"
 -    * label *label22
 -    * label *label7
-   227 jump *label6 always
-   228 label *label5
-   229 print "No linked block found."
+   226 jump *label6 always
+   227 label *label5
+   228 print "No linked block found."
  
-   231 label *label6
-   232 printflush message1
-   233 jump *label0 always
+   230 label *label6
+   231 printflush message1
+   232 jump *label0 always
 -    * end
-
-Modifications by Jumps phase, Dead Code Elimination, pass 3, iteration 1 (-1 instructions):
- 
-   204 print "team: "
-   205 print *tmp53
-   206 print "\n"
--    * sensor *tmp54 .BLOCK @type
-   207 print "type: "
-   208 print *tmp10
-   209 print "\n"
 
 Modifications by Final phase, Print Merging, iteration 1 (-94 instructions):
  

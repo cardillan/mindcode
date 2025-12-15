@@ -70,4 +70,22 @@ public interface OptimizationAction {
     default double neutralEfficiency() {
         return -cost() * benefit();
     }
+
+    /// Returns `true` if the action is better in at least one metric, and not worse in the other.
+    /// Such optimization should always be applied.
+    default boolean totalImprovement() {
+        return cost() <= 0 && benefit() >= 0.0 && improvement();
+    }
+
+    /// Returns `true` if the action improves at least one metric.
+    /// Such optimization can be applied.
+    default boolean improvement() {
+        return cost() < 0 || benefit() > 0.0;
+    }
+
+    default boolean isStrictlyBetterThan(OptimizationAction otherAction) {
+        return cost() <= otherAction.cost() && benefit() > otherAction.benefit() ||
+                cost() < otherAction.cost() && benefit() >= otherAction.benefit();
+
+    }
 }

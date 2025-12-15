@@ -30,10 +30,10 @@ import static info.teksol.mc.mindcode.compiler.optimization.OptimizationPhase.*;
 public class OptimizationCoordinator {
     public static final boolean TRACE = false;
     public static final boolean DEBUG_PRINT = TRACE;
-    public static final boolean TRACE_ALL = true;
     public static final boolean SYSTEM_OUT = false;
 
-    public static final boolean IGNORE_UNINITIALIZED = false;
+    public static final int TRACING_RUN = -1;
+    public static final boolean IGNORE_UNINITIALIZED = TRACE;
     public static final boolean IGNORE_UNKNOWN_LABELS = false;
 
     private final List<LogicInstruction> program = new ArrayList<>();

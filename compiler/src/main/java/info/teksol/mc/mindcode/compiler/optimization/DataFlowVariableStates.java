@@ -77,7 +77,7 @@ class DataFlowVariableStates {
         /// Set of variables stored on the stack. Storing a variable on stack preserves its value during subsequent
         /// modification (i.e., when setting parameter value for the recursive call) - the exact same value will be
         /// restored from the stack later on.
-        private final Set<LogicVariable> stored;
+        private final Set<LogicVariable> onStack;
 
         /// Indicates the program flow of this instance is terminated: an unconditional jump outside local context
         /// was encountered. A new copy was created to be merged at the jump target was created, and this copy must
@@ -109,7 +109,7 @@ class DataFlowVariableStates {
             reads = new HashMap<>();
             useless = new HashMap<>();
             initialized = new HashSet<>();
-            stored = new HashSet<>();
+            onStack = new HashSet<>();
             reachable = true;
         }
 
@@ -122,7 +122,7 @@ class DataFlowVariableStates {
             reads = new HashMap<>(other.reads);
             useless = new HashMap<>(other.useless);
             initialized = new HashSet<>(other.initialized);
-            stored = new HashSet<>(other.stored);
+            onStack = new HashSet<>(other.onStack);
             dead = other.dead;
             this.reachable = reachable;
         }
@@ -160,6 +160,8 @@ class DataFlowVariableStates {
         ///
         /// @return an isolated copy of this instance
         public VariableStates isolatedCopy() {
+            int id = counter.incrementAndGet();
+            trace(() -> "*** Creating isolated copy of " + getId() + ": vs#" + id);
             return new VariableStates(this, id, true);
         }
 
@@ -234,7 +236,7 @@ class DataFlowVariableStates {
         public VariableStates pushVariable(LogicVariable variable) {
             modifications++;
             trace(() -> "Pushing variable " + variable.toMlog());
-            if (!stored.add(variable)) {
+            if (!onStack.add(variable)) {
                 throw new MindcodeInternalError("Push called twice on " + variable.toMlog());
             }
             return this;
@@ -247,7 +249,7 @@ class DataFlowVariableStates {
         public VariableStates popVariable(LogicVariable variable) {
             modifications++;
             trace(() -> "Popping variable " + variable.toMlog());
-            if (!stored.remove(variable)) {
+            if (!onStack.remove(variable)) {
                 throw new MindcodeInternalError("Pop without push on " + variable.toMlog());
             }
             return this;
@@ -263,7 +265,7 @@ class DataFlowVariableStates {
         ///                    (values inferred on the first pass through a loop must not be reused)
         public void valueSet(LogicVariable variable, LogicInstruction instruction, @Nullable LogicValue value, boolean reuseValue) {
             modifications++;
-            if (stored.contains(variable)) {
+            if (onStack.contains(variable)) {
                 invalidateVariable(variable);
                 trace(() -> "Not setting value of variable " + variable.toMlog() + ", because it is stored on stack.");
                 return;
@@ -389,7 +391,7 @@ class DataFlowVariableStates {
         /// @param variable variable to reset
         public void valueReset(LogicVariable variable, boolean markInitialized) {
             modifications++;
-            if (stored.contains(variable)) {
+            if (onStack.contains(variable)) {
                 trace(() -> "Variable " + variable.toMlog() + " not reset after function call, because it is stored on stack.");
             } else {
                 trace(() -> "Value reset: " + variable.toMlog());
@@ -419,7 +421,7 @@ class DataFlowVariableStates {
         /// @param variable variable to test (null is acceptable)
         /// @return known value of the variable
         public @Nullable VariableValue findVariableValue(@Nullable LogicValue variable) {
-            return variable instanceof LogicVariable v && !stored.contains(v) ? values.get(v) : null;
+            return variable instanceof LogicVariable v && !onStack.contains(v) ? values.get(v) : null;
         }
 
         /// Marks the variable as read, to protect instructions assigning a value to the variable. This is a generic
@@ -524,7 +526,7 @@ class DataFlowVariableStates {
             }
 
             VariableValue variableValue = values.get(variable);
-            return variableValue == null || stored.contains(variable) ? null : variableValue.constantValue;
+            return variableValue == null || onStack.contains(variable) ? null : variableValue.constantValue;
         }
 
         public void protectVariable(LogicVariable variable) {
@@ -543,7 +545,7 @@ class DataFlowVariableStates {
         /// @param variable variable to inspect
         /// @return a prior variable known to contain the same value
         public @Nullable LogicVariable findEquivalent(LogicVariable variable) {
-            return stored.contains(variable) ? null : equivalences.get(variable);
+            return onStack.contains(variable) ? null : equivalences.get(variable);
         }
 
         /// Merges two variable states. Each state was produced by a code path, and it isn't known which one was
@@ -562,7 +564,7 @@ class DataFlowVariableStates {
             print("This");
             other.print("Other");
 
-            if (!stored.isEmpty() || !other.stored.isEmpty()) {
+            if (!onStack.isEmpty() || !other.onStack.isEmpty()) {
                 throw new MindcodeInternalError("Trying to merge variable states having variables on stack.");
             }
 

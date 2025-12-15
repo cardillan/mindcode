@@ -3,8 +3,6 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
-import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -19,7 +17,8 @@ import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.*;
+import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.IF;
+import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.OPERATOR;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 import static info.teksol.mc.mindcode.compiler.optimization.AbstractConditionalOptimizer.JumpTarget.*;
 import static java.util.Objects.requireNonNull;
@@ -73,51 +72,13 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         return result;
     }
 
-    private boolean removeUnreachableCode(AstContext condition) {
-        Set<LogicLabel> activeLabels = new HashSet<>();
-        boolean reachable = true;
-        boolean modified = false;
-
-        try (LogicIterator it = createIteratorForContext(condition)) {
-            while (it.hasNext()) {
-                LogicInstruction ix = it.next();
-                if (ix.getAstContext() == condition) {
-                    if (reachable) {
-                        if (ix instanceof JumpInstruction j) {
-                            activeLabels.add(j.getTarget());
-                            // Unconditional jump makes code unreachable
-                            reachable = j.isConditional();
-                        } else if (ix instanceof LabelInstruction l && !activeLabels.contains(l.getLabel())) {
-                            it.remove();
-                            modified = true;
-                        } else if (ix.getOpcode() == Opcode.EMPTY) {
-                            it.remove();
-                        }
-                    } else if (ix instanceof LabelInstruction l && activeLabels.contains(l.getLabel())) {
-                        // An active label makes code reachable
-                        reachable = true;
-                    } else {
-                        // Removing all unreachable instructions
-                        it.remove();
-                        modified = true;
-                    }
-                }
-            }
-        }
-
-        return modified;
-    }
-
-
     // Note: this optimization doesn't resolve negated strictEqual operation. There will be a separate optimization for that.
     private boolean applySelectOptimization(AstContext ifExpression) {
         if (!hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY, FLOW_CONTROL)
                 && !hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY)) return false;
 
         AstContext conditionContext = ifExpression.child(0);
-        boolean shortCircuit = conditionContext.children().size() == 1 && conditionContext.children().getFirst()
-                .matches(AstContextType.SCBE_COND, AstContextType.SCBE_OPER);
-        if (shortCircuit) {
+        if (optimizationContext.isShortCircuitCondition(conditionContext)) {
             // Help the optimizer a bit by removing the unreachable code within the short-circuited context
             while (removeUnreachableCode(conditionContext.children().getFirst()));
         }
@@ -252,13 +213,12 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
     }
 
     private boolean evaluateFully(AstContext ifExpression, ShortCircuitAnalysis analysis, LogicList condition, LogicVariable result) {
-        if (tryEvaluate(ifExpression, analysis, condition, result, FALSE, FALSE, this::evaluateAndAnd)) return true;
-        if (tryEvaluate(ifExpression, analysis, condition, result, FALSE, TRUE, this::evaluateAndOrFlipped)) return true;
-        if (tryEvaluate(ifExpression, analysis, condition, result, TRUE, FALSE, this::evaluateOrAndFlipped)) return true;
-        if (tryEvaluate(ifExpression, analysis, condition, result, TRUE, TRUE, this::evaluateOrOr)) return true;
-        if (tryEvaluate(ifExpression, analysis, condition, result, NEXT, FALSE, this::evaluateOrAnd)) return true;
-        if (tryEvaluate(ifExpression, analysis, condition, result, NEXT, TRUE, this::evaluateAndOr)) return true;
-        return false;
+        return tryEvaluate(ifExpression, analysis, condition, result, FALSE, FALSE, this::evaluateAndAnd) ||
+                tryEvaluate(ifExpression, analysis, condition, result, FALSE, TRUE, this::evaluateAndOrFlipped) ||
+                tryEvaluate(ifExpression, analysis, condition, result, TRUE, FALSE, this::evaluateOrAndFlipped) ||
+                tryEvaluate(ifExpression, analysis, condition, result, TRUE, TRUE, this::evaluateOrOr) ||
+                tryEvaluate(ifExpression, analysis, condition, result, NEXT, FALSE, this::evaluateOrAnd) ||
+                tryEvaluate(ifExpression, analysis, condition, result, NEXT, TRUE, this::evaluateAndOr);
     }
 
     private boolean tryEvaluate(AstContext ifExpression, ShortCircuitAnalysis analysis, LogicList condition,
@@ -481,8 +441,8 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
             BranchContent trueContent, BranchContent falseContent, LogicVariable result) {
 
         AstContext conditionContext = condition.getExistingAstContext();
-        if (conditionContext.children().size() != 1 || !conditionContext.child(0).matches(SCBE_COND, SCBE_OPER)) {
-            throw new MindcodeInternalError("Expected one short circuit child context");
+        if (!optimizationContext.isShortCircuitCondition(conditionContext)) {
+            throw new MindcodeInternalError("Expected short circuit condition");
         }
 
         final LogicList targetBranch = analysis.operation() == Operation.LOGICAL_AND ? trueBranch : falseBranch;

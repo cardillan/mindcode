@@ -6,6 +6,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @NullMarked
 public class CollectionUtils {
@@ -86,6 +87,10 @@ public class CollectionUtils {
     @SafeVarargs
     public static <T extends @Nullable Object> Predicate<T> notIn(T... values) {
         return in(values).negate();
+    }
+
+    public static <K, V> Map<V, K> invert(Map<K, V> map) {
+        return map.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
     }
 
     public static <E extends @Nullable Object> int indexOf(List<? extends E> list, int startIndex, Predicate<E> matcher) {

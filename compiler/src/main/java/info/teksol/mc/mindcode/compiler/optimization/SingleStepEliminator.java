@@ -74,7 +74,7 @@ class SingleStepEliminator extends BaseOptimizer {
                                 // This becomes the last jump, other properties remain unchanged
                                 lastJump = jump;
                                 continue;
-                            } else if (sequential && jump.equals(lastJump)) {
+                            } else if (sequential && equal(lastJump, jump)) {
                                 // Removing jump identical to the previous one with effective instructions between them,
                                 // but these instructions are safe.
                                 // Keeping lastJump intact
@@ -137,7 +137,21 @@ class SingleStepEliminator extends BaseOptimizer {
         return instruction instanceof EndInstruction;
     }
 
+    private boolean equal(JumpInstruction jump1, JumpInstruction jump2) {
+        return equalConditions(jump1, jump2) && equalTargets(jump1, jump2);
+    }
+
+    private boolean equalConditions(JumpInstruction jump1, JumpInstruction jump2) {
+        return jump1.getCondition() == jump2.getCondition() &&
+                (jump1.isUnconditional() || jump1.getX().equals(jump2.getX()) && jump1.getY().equals(jump2.getY()));
+    }
+
+    private boolean equalTargets(JumpInstruction jump1, JumpInstruction jump2) {
+        return jump1.getTarget().equals(jump2.getTarget())
+                || labeledInstructionIndex(jump1.getTarget()) == labeledInstructionIndex(jump2.getTarget());
+    }
+
     private boolean supersedes(JumpInstruction lastJump, JumpInstruction jump) {
-        return lastJump.equals(jump) || lastJump.getTarget().equals(jump.getTarget()) && jump.isUnconditional();
+        return equalTargets(lastJump, jump) && (jump.isUnconditional() || equalConditions(lastJump, jump));
     }
 }

@@ -568,7 +568,7 @@ produces
     set .y 0
     # Index-based access (7 instructions per iteration)
     set :i 0
-    label_16:
+label_16:
         op mul *tmp3 :i 2
         op add @counter @counter *tmp3
         set *tmp2 .array*0
@@ -639,7 +639,7 @@ produces
     set .a*3 :x
     # Index-based access (15 instructions per iteration)
     set :i 0
-    label_22:
+label_22:
         op mul *tmp9 :i 2
         op add @counter @counter *tmp9
         set *tmp5 .b*0

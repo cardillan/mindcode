@@ -12,7 +12,10 @@ import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.Vari
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.instructions.BinaryInstruction;
+import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
+import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NullMarked;
@@ -50,7 +53,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     }
 
     protected boolean isTraceActive() {
-        return OptimizationCoordinator.TRACE_ALL;
+        return OptimizationCoordinator.TRACING_RUN == -1 || OptimizationCoordinator.TRACING_RUN == currentRun;
     }
 
     // Optimization logic
@@ -222,10 +225,6 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.getVariableStates(instruction);
     }
 
-    public @Nullable VariableStates getLoopVariables(AstContext conditionContext) {
-        return optimizationContext.getLoopVariables(conditionContext);
-    }
-
     public void clearVariableStates() {
         optimizationContext.clearVariableStates();
     }
@@ -262,14 +261,6 @@ abstract class BaseOptimizer extends AbstractOptimizer {
 
     public @Nullable LogicLiteral evaluate(SourcePosition sourcePosition, Operation operation, LogicReadable a, LogicReadable b) {
         return optimizationContext.evaluate(sourcePosition, operation, a, b);
-    }
-
-    public @Nullable LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
-        return optimizationContext.evaluateJumpInstruction(jump);
-    }
-
-    public @Nullable LogicBoolean evaluateLoopConditionJump(JumpInstruction jump, AstContext loopContext) {
-        return optimizationContext.evaluateLoopConditionJump(jump, loopContext);
     }
     //</editor-fold>
 

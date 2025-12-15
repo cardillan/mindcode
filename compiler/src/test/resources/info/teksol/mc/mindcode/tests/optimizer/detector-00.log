@@ -1,11 +1,11 @@
    248 instructions before optimizations.
      3 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
-    13 instructions eliminated by Dead Code Elimination (2 passes, 6 iterations).
+    12 instructions eliminated by Dead Code Elimination (5 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
-     1 instructions eliminated by Condition Optimization (4 iterations).
+     1 instructions eliminated by Condition Optimization (5 iterations).
      2 instructions eliminated by Single Step Elimination (5 iterations).
-     1 instructions modified by Data Flow Optimization (4 iterations).
+     1 instructions eliminated by Data Flow Optimization (5 iterations).
      5 instructions eliminated by Case Switching (3 iterations).
      1 case expressions converted to fast dispatch by Case Switching.
      7 instructions eliminated by Jump Straightening (5 iterations).
@@ -14,7 +14,7 @@
     94 instructions eliminated by Print Merging.
    120 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 779):
+Pass 1: speed optimization selection (cost limit 780):
   * Fast-dispatch case at line 17:9                              size    -6, benefit       37.5, efficiency   Infinity (-5 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -311,6 +311,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    215 sensor *tmp55 .BLOCK @flag
    216 print "flag: "
 
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+   208 print "team: "
+   209 print *tmp53
+   210 print "\n"
+-    * sensor *tmp54 .BLOCK @type
+   211 print "type: "
+   212 print *tmp10
+   213 print "\n"
+
 Modifications by Fast-dispatch case at line 17:9 (-5 instructions):
  
     19 sensor *tmp10 .BLOCK @type
@@ -381,13 +391,13 @@ Modifications by Fast-dispatch case at line 17:9 (-5 instructions):
    210 print "other:"
    211 print "\n"
  
-   233 print "enabled: "
-   234 print *tmp58
-   235 print "\n"
+   232 print "enabled: "
+   233 print *tmp58
+   234 print "\n"
 -    * label *label20
-   236 label *label7
-   237 jump *label6 always
-   238 label *label5
+   235 label *label7
+   236 jump *label6 always
+   237 label *label5
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  
@@ -456,28 +466,18 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
-   218 print "enabled: "
-   219 print *tmp58
-   220 print "\n"
+   217 print "enabled: "
+   218 print *tmp58
+   219 print "\n"
 -    * label *label7
-   221 jump *label6 always
-   222 label *label5
-   223 print "No linked block found."
+   220 jump *label6 always
+   221 label *label5
+   222 print "No linked block found."
  
-   225 label *label6
-   226 printflush message1
-   227 jump *label0 always
+   224 label *label6
+   225 printflush message1
+   226 jump *label0 always
 -    * end
-
-Modifications by Jumps phase, Dead Code Elimination, pass 3, iteration 1 (-1 instructions):
- 
-   198 print "team: "
-   199 print *tmp53
-   200 print "\n"
--    * sensor *tmp54 .BLOCK @type
-   201 print "type: "
-   202 print *tmp10
-   203 print "\n"
 
 Modifications by Final phase, Print Merging, iteration 1 (-94 instructions):
  

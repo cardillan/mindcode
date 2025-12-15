@@ -152,22 +152,39 @@ class LoopUnroller extends BaseOptimizer {
             return null;
         }
 
-        boolean entryCondition = hasEntryCondition(loop);
-        if (entryCondition) {
-            LogicList condition = contextInstructions(loop.findSubcontext(CONDITION));
-            if (condition.getLast() instanceof JumpInstruction jump && evaluateLoopConditionJump(jump, loop) != LogicBoolean.FALSE) {
+        List<AstContext> conditions = loop.findSubcontexts(CONDITION);
+        if (hasEntryCondition(loop)) {
+            AstContext firstConditionContext = conditions.getFirst();
+            LogicBoolean result = optimizationContext.evaluateLoopCondition(firstConditionContext);
+            if (result != LogicBoolean.TRUE) {
                 // The loop is not known to execute at least once
                 return null;
+            }
+
+            // If there are two condition contexts, the first one needs to be jump-free
+            if (conditions.size() > 1) {
+                if (conditions.size() != 2) {
+                    throw new MindcodeInternalError("Invalid loop structure.");
+                }
+
+                AstContext conditionJumpContext = optimizationContext.isShortCircuitCondition(firstConditionContext)
+                        ? firstConditionContext.child(0) : firstConditionContext;
+
+                if (optimizationContext.instructionStream().anyMatch(ix -> ix instanceof JumpInstruction jump
+                        && jump.getAstContext() == conditionJumpContext)) {
+                    return null;
+                }
             }
         }
 
         AstContext init = loop.findSubcontext(INIT);
+        AstContext firstCondition = conditions.size() > 1 ? conditions.getFirst() : null;
         List<LogicList> iterationContexts = iterationInstructionContexts(loop);
-        LogicList condition = contextInstructions(loop.findLastSubcontext(CONDITION));
+        LogicList condition = contextInstructions(conditions.getLast());
 
         // The last jump in condition should contain a loop control variable
         if (condition.getLast() instanceof JumpInstruction jump) {
-            LogicVariable controlVariable = findLoopControl(loop, init, jump);
+            LogicVariable controlVariable = findLoopControl(loop, init, firstCondition, jump);
             var variables = optimizationContext.getLoopVariables(loop);
             var initialValue = variables == null ? null : variables.findVariableValue(controlVariable);
             if (initialValue != null && initialValue.getConstantValue() instanceof LogicLiteral initLiteral && initLiteral.isNumericLiteral()) {
@@ -305,9 +322,11 @@ class LoopUnroller extends BaseOptimizer {
 
             requireNonNull(result);
 
-            // TODO Awfully ineffective. Evaluate condition without duplicating and evaluating jump
-            JumpInstruction test = replaceAllArgs(jump, loopControl, result);
-            if (evaluateJumpInstruction(test) == terminatingValue) {
+            LogicBoolean evaluation = optimizationContext.evaluatePlainCondition(jump,
+                    loopControl.equals(jump.getX()) ? result : jump.getX(),
+                    loopControl.equals(jump.getY()) ? result : jump.getY());
+
+            if (evaluation == terminatingValue) {
                 return loops;
             }
         }
@@ -316,7 +335,8 @@ class LoopUnroller extends BaseOptimizer {
     }
 
     // Finds the control variable of this loop
-    private @Nullable LogicVariable findLoopControl(AstContext loop, @Nullable AstContext init, JumpInstruction jump) {
+    private @Nullable LogicVariable findLoopControl(AstContext loop, @Nullable AstContext init,
+            @Nullable AstContext firstCondition, JumpInstruction jump) {
         if (jump.isUnconditional()) {
             return null;    // There isn't any loop control variable
         }
@@ -325,7 +345,7 @@ class LoopUnroller extends BaseOptimizer {
         for (LogicValue operand : jump.getOperands()) {
             if (operand instanceof LogicVariable variable && !variable.isGlobalVariable()) {
                 // All modifications of this operand outside the init context
-                List<LogicInstruction> controlIxs = getControlVariableUpdates(loop, init, variable);
+                List<LogicInstruction> controlIxs = getControlVariableUpdates(loop, init, firstCondition, variable);
                 if (!controlIxs.isEmpty()) {
                     if (controlIxs.stream().allMatch(ix -> ix instanceof OpInstruction op
                             && loop.executesOnce(op)
@@ -348,9 +368,10 @@ class LoopUnroller extends BaseOptimizer {
         return result;
     }
 
-    private ArrayList<LogicInstruction> getControlVariableUpdates(AstContext loop, @Nullable AstContext init, LogicVariable variable) {
+    private ArrayList<LogicInstruction> getControlVariableUpdates(AstContext loop, @Nullable AstContext init,
+            @Nullable AstContext firstCondition, LogicVariable variable) {
         return contextStream(loop)
-                .filter(ix -> !ix.getAstContext().belongsTo(init))
+                .filter(ix -> !ix.getAstContext().belongsTo(init) && !ix.getAstContext().belongsTo(firstCondition))
                 .filter(ix -> ix.usesAsOutput(variable))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
