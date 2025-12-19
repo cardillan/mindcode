@@ -5,8 +5,8 @@
      5 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
     11 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
-     4 instructions added by Loop Optimization (3 iterations).
-     3 loops improved by Loop Optimization.
+     4 instructions added by Loop Rotation (3 iterations).
+       3 loop conditions were partially rotated.
      1 instructions eliminated by Jump Straightening (6 iterations).
      3 instructions updated by Jump Threading.
     11 instructions eliminated by Print Merging.
@@ -376,7 +376,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
     26 label *label6
     27 sensor *tmp11 .SORTER @dead
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      3 set .BANK bank1
      4 label *label0

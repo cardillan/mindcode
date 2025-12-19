@@ -4,8 +4,8 @@
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      1 instructions eliminated by Condition Optimization (4 iterations).
      2 instructions eliminated by Data Flow Optimization (6 iterations).
-     1 instructions eliminated by Loop Optimization (2 iterations).
-     1 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (2 iterations).
+       1 loop conditions were fully rotated.
     61 instructions eliminated by Case Switching (3 iterations).
      1 case expressions converted to switched jumps by Case Switching.
     66 instructions after optimizations.
@@ -300,7 +300,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    176 jump *label58 equal *tmp2 48
    177 printchar *tmp2
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
      0 assertflush
      1 set :printAll:i -1
      2 label *label1

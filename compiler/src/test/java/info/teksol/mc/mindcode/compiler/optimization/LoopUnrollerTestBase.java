@@ -130,7 +130,7 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void processesEntryCondition() {
         assertCompilesTo("""
-                        #set loop-optimization = none;
+                        #set loop-rotation = none;
                         for i in 1 .. 3 do
                             print(i);
                         end;
@@ -142,7 +142,7 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void processesExitCondition() {
         assertCompilesTo("""
-                        #set loop-optimization = none;
+                        #set loop-rotation = none;
                         i = 1;
                         do
                             print(i);

@@ -3,7 +3,7 @@
      8 instructions eliminated by Jump Normalization (5 iterations).
      1 instructions eliminated by Single Step Elimination (6 iterations).
    215 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
-     1 loops improved by Loop Optimization.
+       1 loop conditions were partially rotated.
    645 instructions added by Loop Unrolling (6 iterations).
      3 loops unrolled by Loop Unrolling.
    460 instructions after optimizations.
@@ -82,7 +82,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     36 read *tmp6 bank2 *tmp5
     37 read *tmp3 bank2 :j
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
     32 set :j :i
     33 label *label11

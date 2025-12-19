@@ -4,8 +4,8 @@
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      1 instructions eliminated by Condition Optimization (4 iterations).
      2 instructions eliminated by Data Flow Optimization (4 iterations).
-     1 instructions eliminated by Loop Optimization (2 iterations).
-     1 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (2 iterations).
+       1 loop conditions were fully rotated.
    123 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -470,7 +470,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    171 op shl :bit 1 *tmp2
    172 op and *tmp5 :total :bit
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
      1 set :total 0
      2 set :i -1

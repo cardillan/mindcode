@@ -5,8 +5,8 @@
     10 instructions eliminated by Condition Optimization (2 passes, 8 iterations).
      8 instructions eliminated by Single Step Elimination (7 iterations).
     38 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
-     3 instructions eliminated by Loop Optimization (3 iterations).
-     3 loops improved by Loop Optimization.
+     3 instructions eliminated by Loop Rotation (3 iterations).
+       3 loop conditions were fully rotated.
    126 instructions added by Loop Unrolling (6 iterations).
      3 loops unrolled by Loop Unrolling.
      3 instructions eliminated by Jump Straightening (2 passes, 8 iterations).
@@ -415,7 +415,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     97 op greaterThan *tmp54 :ballX *tmp53
     98 op add *tmp55 :x 62.666666666666664
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-3 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-3 instructions):
  
     13 set :brickCount 6
     14 set :i 0

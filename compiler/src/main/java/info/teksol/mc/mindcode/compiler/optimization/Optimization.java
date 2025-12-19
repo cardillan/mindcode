@@ -54,9 +54,9 @@ public enum Optimization {
             LoopHoisting::new,
             "moving invariant code out of loops"),
 
-    LOOP_OPTIMIZATION("Loop Optimization",
-            LoopOptimizer::new,
-            "improving loop conditions"),
+    LOOP_ROTATION("Loop Rotation",
+            LoopRotator::new,
+            "rotating a front loop condition to the bottom of the loop"),
 
     LOOP_UNROLLING("Loop Unrolling",
             LoopUnroller::new,

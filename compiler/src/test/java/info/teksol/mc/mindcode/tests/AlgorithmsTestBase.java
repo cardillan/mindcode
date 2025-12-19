@@ -106,7 +106,7 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
                 Optimization.TEMP_VARIABLES_ELIMINATION,
                 Optimization.DEAD_CODE_ELIMINATION,
                 Optimization.SINGLE_STEP_ELIMINATION,
-                Optimization.LOOP_OPTIMIZATION,
+                Optimization.LOOP_ROTATION,
                 Optimization.LOOP_HOISTING,
                 Optimization.DATA_FLOW_OPTIMIZATION,
                 Optimization.FUNCTION_INLINING,

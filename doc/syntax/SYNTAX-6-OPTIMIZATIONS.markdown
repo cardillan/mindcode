@@ -75,7 +75,7 @@ Individual optimizations are described in separate documents:
 * [Jump Straightening](optimizations/JUMP-STRAIGHTENING.markdown): simplifying sequences of intertwined jumps.
 * [Jump Threading](optimizations/JUMP-THREADING.markdown): eliminating chained jumps.
 * [Loop Hoisting](optimizations/LOOP-HOISTING.markdown): moving invariant code out of loops.
-* [Loop Optimization](optimizations/LOOP-OPTIMIZATION.markdown): improving loop conditions.
+* [Loop Rotation](optimizations/LOOP-ROTATION.markdown): rotating a front loop condition to the bottom of the loop.
 * [Loop Unrolling](optimizations/LOOP-UNROLLING.markdown): unrolling loops with a fixed number of iterations.
 * [Print Merging](optimizations/PRINT-MERGING.markdown): merging consecutive print statements outputting constant values.
 * [Return Optimization](optimizations/RETURN-OPTIMIZATION.markdown): speeding up return statements in recursive and stackless functions.

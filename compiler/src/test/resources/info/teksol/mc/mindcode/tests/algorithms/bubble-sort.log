@@ -5,7 +5,7 @@
      1 instructions eliminated by Expression Optimization (3 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
      7 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-     2 loops improved by Loop Optimization.
+       2 loop conditions were partially rotated.
     26 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 instructions):
@@ -134,7 +134,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     34 read *tmp17 ARRAY :i
     35 assertequals *tmp15 *tmp17 "unexpected value"
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      7 set :i 0
      8 label *label3

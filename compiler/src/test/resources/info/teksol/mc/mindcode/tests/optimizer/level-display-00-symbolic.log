@@ -5,8 +5,9 @@
      8 instructions eliminated by Condition Optimization (5 iterations).
      3 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      2 instructions modified by Data Flow Optimization (2 passes, 5 iterations).
-     1 instructions eliminated by Loop Optimization (2 iterations).
-     5 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (2 iterations).
+       2 loop conditions were fully rotated.
+       3 loop conditions were partially rotated.
      7 instructions eliminated by Jump Straightening (5 iterations).
      5 instructions eliminated by Print Merging.
     86 instructions after optimizations.
@@ -359,7 +360,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      6 jump *label3 equal .MEMORY null
      7 label *label4
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-2 instructions):
  
      3 set .SWITCH null
      4 set .MESSAGE null

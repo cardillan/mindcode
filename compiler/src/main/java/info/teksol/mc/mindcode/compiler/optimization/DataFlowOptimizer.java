@@ -423,7 +423,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
 
         // Acquiring variable states before entering the loop. Note we don't advance currentContext here
         if (children.get(currentContext).matches(CONDITION)) {
-            // Evaluate the initial condition context fully for LoopOptimizer in isolation
+            // Evaluate the initial condition context fully for LoopRotator in isolation
             VariableStates copy = processDefaultContext(localContext, children.get(currentContext),
                     variableStates.isolatedCopy(), false,
                     (lc, c, vs, ix) -> {

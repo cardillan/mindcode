@@ -9,8 +9,9 @@
      6 instructions eliminated by Boolean Optimization (8 iterations).
        2 fully-evaluated expressions optimized using selects.
    344 instructions eliminated by Data Flow Optimization (26 passes, 85 iterations).
-     4 instructions eliminated by Loop Optimization (4 iterations).
-     7 loops improved by Loop Optimization.
+     4 instructions eliminated by Loop Rotation (4 iterations).
+       4 loop conditions were fully rotated.
+       3 loop conditions were partially rotated.
    709 instructions added by Loop Unrolling (29 iterations).
     19 loops unrolled by Loop Unrolling.
    274 instructions added by Function Inlining (29 iterations).

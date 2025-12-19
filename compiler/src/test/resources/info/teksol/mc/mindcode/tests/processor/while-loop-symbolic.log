@@ -3,7 +3,7 @@
      1 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Condition Optimization (6 iterations).
      2 instructions modified by Data Flow Optimization (2 passes, 5 iterations).
-     1 loops improved by Loop Optimization.
+       1 loop conditions were partially rotated.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     20 instructions after optimizations.
 
@@ -57,7 +57,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      7 set :test:i :d*retval
      8 label *label2
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      7 set :test:i :d*retval
      8 label *label2

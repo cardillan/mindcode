@@ -118,4 +118,4 @@ At this moment, the following limitations apply:
 
 ---
 
-[&#xAB; Previous: Jump Threading](JUMP-THREADING.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Loop Optimization &#xBB;](LOOP-OPTIMIZATION.markdown)
+[&#xAB; Previous: Jump Threading](JUMP-THREADING.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Loop Rotation &#xBB;](LOOP-ROTATION.markdown)

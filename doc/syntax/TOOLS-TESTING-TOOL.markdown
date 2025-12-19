@@ -83,7 +83,7 @@ defaults:
   jump-straightening: [ none, basic ]
   jump-threading: [ none, basic, advanced ]
   loop-hoisting: [ none, basic, advanced ]
-  loop-optimization: [ none, basic ]
+  loop-rotation: [ none, basic ]
   loop-unrolling: [ none, basic, advanced ]
   print-merging: [ none ]
   return-optimization: [ none, basic ]

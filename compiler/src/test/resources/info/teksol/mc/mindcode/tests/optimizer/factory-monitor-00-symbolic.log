@@ -9,7 +9,8 @@
        4 fully-evaluated expressions optimized using selects.
      3 instructions eliminated by If Expression Optimization (3 iterations).
     20 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
-     4 loops improved by Loop Optimization.
+       1 loop conditions were fully rotated.
+       3 loop conditions were partially rotated.
    137 instructions added by Case Switching (5 iterations).
      1 case expressions converted to switched jumps by Case Switching.
     13 instructions eliminated by Jump Straightening (2 passes, 7 iterations).
@@ -1664,7 +1665,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
     16 label *label0
     17 jump *label3 equal .DISPLAY null
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
     14 set .MUL1 null
     15 set :icon null

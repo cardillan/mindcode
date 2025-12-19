@@ -6,7 +6,8 @@
     15 instructions eliminated by Condition Optimization (6 iterations).
     37 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
    278 instructions eliminated by Data Flow Optimization (4 passes, 28 iterations).
-     3 loops improved by Loop Optimization.
+       1 loop conditions were fully rotated.
+       2 loop conditions were partially rotated.
    630 instructions added by Loop Unrolling (17 iterations).
      2 loops unrolled by Loop Unrolling.
     85 instructions eliminated by Case Switching (17 iterations).
@@ -2720,7 +2721,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1
    351 draw line :displayItem:x :y *tmp128 *tmp125
    352 label *label110
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
      8 set :n .LINKS
      9 label *label3

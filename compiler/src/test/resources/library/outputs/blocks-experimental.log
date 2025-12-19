@@ -8,7 +8,7 @@
      5 instructions eliminated by Boolean Optimization (2 passes, 9 iterations).
        5 fully-evaluated expressions optimized using selects.
     68 instructions eliminated by Data Flow Optimization (5 passes, 18 iterations).
-     1 loops improved by Loop Optimization.
+       1 loop conditions were partially rotated.
     10 instructions added by Loop Unrolling (8 iterations).
      3 loops unrolled by Loop Unrolling.
     19 instructions eliminated by Print Merging.

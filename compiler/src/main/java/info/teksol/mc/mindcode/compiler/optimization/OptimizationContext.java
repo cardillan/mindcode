@@ -53,10 +53,10 @@ public class OptimizationContext {
     /// Maps instructions to input variable states (i.e., states before the instruction is executed)
     private final Map<LogicInstruction, VariableStates> variableStates = new IdentityHashMap<>();
 
-    /// Holds evaluation of first loop condition variables for loop optimizer.
+    /// Holds evaluation of first loop condition variables for loop rotator/unroller.
     private final Map<LogicInstruction, VariableStates> firstPassStates = new HashMap<>();
 
-    /// Holds evaluation of first loop condition variables for loop optimizer.
+    /// Holds evaluation of first loop condition variables for loop rotator/unroller.
     private final Map<AstContext, VariableStates> loopVariables = new HashMap<>();
 
     /// Variables affected by added, removed or changed instructions are added to the stale list

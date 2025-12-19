@@ -255,4 +255,4 @@ For [list iteration loops with modifications](../SYNTAX-3-STATEMENTS.markdown#mo
 
 ---
 
-[&#xAB; Previous: Loop Optimization](LOOP-OPTIMIZATION.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Print Merging &#xBB;](PRINT-MERGING.markdown)
+[&#xAB; Previous: Loop Rotation](LOOP-ROTATION.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Print Merging &#xBB;](PRINT-MERGING.markdown)

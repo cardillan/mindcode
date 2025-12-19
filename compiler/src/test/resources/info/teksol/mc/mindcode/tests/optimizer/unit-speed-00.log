@@ -4,8 +4,8 @@
      1 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
      7 instructions eliminated by Data Flow Optimization (9 iterations).
-     5 instructions added by Loop Optimization (2 iterations).
-     6 loops improved by Loop Optimization.
+     5 instructions added by Loop Rotation (2 iterations).
+       6 loop conditions were partially rotated.
      1 instructions updated by Jump Threading.
     10 instructions eliminated by Print Merging.
     71 instructions after optimizations.
@@ -247,7 +247,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     63 op abs *tmp25 *tmp24
     64 op div *tmp26 *tmp25 2
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      9 ubind UNIT
     10 label *label0

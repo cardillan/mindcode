@@ -5,8 +5,8 @@
     18 instructions eliminated by Condition Optimization (6 iterations).
     40 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
    253 instructions eliminated by Data Flow Optimization (11 passes, 36 iterations).
-     9 instructions eliminated by Loop Optimization (3 iterations).
-     9 loops improved by Loop Optimization.
+     9 instructions eliminated by Loop Rotation (3 iterations).
+       9 loop conditions were fully rotated.
    965 instructions added by Loop Unrolling (13 iterations).
      9 loops unrolled by Loop Unrolling.
      8 instructions added by Function Inlining (13 iterations).
@@ -1497,7 +1497,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-8
    213 jump *label76 equal *tmp90 false
    214 set :shrinkWall.3:i 0
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-9 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-9 instructions):
  
     25 jump *label12 equal *tmp12 false
     26 set :shrinkWall:i 0

@@ -4,7 +4,7 @@
      1 instructions eliminated by Condition Optimization (2 passes, 8 iterations).
      2 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
-     3 loops improved by Loop Optimization.
+       3 loop conditions were partially rotated.
     29 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
@@ -125,7 +125,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
     33 read *tmp18 ARRAY :i
     34 assertequals *tmp16 *tmp18 "unexpected value"
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      4 set :i 0
      5 label *label0

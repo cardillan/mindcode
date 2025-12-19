@@ -4,7 +4,7 @@
      2 instructions eliminated by Condition Optimization (6 iterations).
      2 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions modified by Data Flow Optimization (4 iterations).
-     1 loops improved by Loop Optimization.
+       1 loop conditions were partially rotated.
      2 instructions eliminated by Jump Straightening (6 iterations).
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     25 instructions after optimizations.
@@ -101,7 +101,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     22 label *label8
     23 label *label3
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      8 set :test:i *tmp1
      9 label *label2

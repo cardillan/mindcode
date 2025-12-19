@@ -743,7 +743,7 @@ when not explicitly set. Available optimization levels are {none, basic, advance
 | [jump-straightening](optimizations/JUMP-STRAIGHTENING.markdown)                     | local | stable             |
 | [jump-threading](optimizations/JUMP-THREADING.markdown)                             | local | stable             |
 | [loop-hoisting](optimizations/LOOP-HOISTING.markdown)                               | local | stable             |
-| [loop-optimization](optimizations/LOOP-OPTIMIZATION.markdown)                       | local | stable             |
+| [loop-rotation](optimizations/LOOP-ROTATION.markdown)                               | local | stable             |
 | [loop-unrolling](optimizations/LOOP-UNROLLING.markdown)                             | local | stable             |
 | [print-merging](optimizations/PRINT-MERGING.markdown)                               | local | stable             |
 | [return-optimization](optimizations/RETURN-OPTIMIZATION.markdown)                   | local | stable             |

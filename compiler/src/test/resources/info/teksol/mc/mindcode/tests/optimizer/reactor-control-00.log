@@ -11,8 +11,9 @@
        5 fully-evaluated expressions optimized using selects.
      2 instructions eliminated by If Expression Optimization (3 iterations).
      8 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
-     1 instructions eliminated by Loop Optimization (3 iterations).
-     3 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (3 iterations).
+       1 loop conditions were fully rotated.
+       2 loop conditions were partially rotated.
     10 instructions eliminated by Case Switching (6 iterations).
      3 case expressions converted to fast dispatch by Case Switching.
     16 instructions eliminated by Jump Straightening (6 iterations).
@@ -1969,7 +1970,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
    396 op mul *tmp147 :p 0.00472972972972973
    397 op add *tmp148 -5 *tmp147
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
      4 set .COOLANT_FLAG 0
      5 set :reactors 0

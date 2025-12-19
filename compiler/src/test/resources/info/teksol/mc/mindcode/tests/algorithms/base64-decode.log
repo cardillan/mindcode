@@ -7,8 +7,8 @@
      1 instructions modified by Expression Optimization (3 iterations).
     14 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
      2 loops improved by Loop Hoisting.
-     1 instructions eliminated by Loop Optimization (3 iterations).
-     1 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (3 iterations).
+       1 loop conditions were fully rotated.
     23 instructions added by Loop Unrolling (6 iterations).
      1 loops unrolled by Loop Unrolling.
      2 instructions eliminated by Function Inlining (6 iterations).
@@ -264,7 +264,7 @@ Modifications by Iterated phase, Loop Hoisting, pass 1, iteration 2:
      8 jump *label8 greaterThanEq :decode64:i 4
      9 remark "Reading character number "
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
      5 set :decode64:bytes 0
      6 set :decode64:i 0

@@ -8,8 +8,8 @@
        9 fully-evaluated expressions optimized using selects.
      1 instructions eliminated by If Expression Optimization (3 iterations).
     36 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
-     1 instructions added by Loop Optimization (3 iterations).
-     3 loops improved by Loop Optimization.
+     1 instructions added by Loop Rotation (3 iterations).
+       3 loop conditions were partially rotated.
      3 instructions updated by Jump Threading.
      4 instructions eliminated by Print Merging.
    269 instructions after optimizations.
@@ -1257,7 +1257,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
     39 label *label8
     40 sensor *tmp14 switch1 @enabled
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
     49 set :n 0
     50 label *label11

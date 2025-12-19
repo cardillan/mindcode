@@ -3,7 +3,7 @@
      1 instructions eliminated by Case Expression Optimization.
      1 instructions eliminated by Dead Code Elimination (5 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-     1 loops improved by Loop Optimization.
+       1 loop conditions were partially rotated.
      7 instructions eliminated by Jump Straightening (2 passes, 8 iterations).
      1 instructions updated by Jump Threading.
      3 instructions eliminated by Unreachable Code Elimination (3 iterations).
@@ -215,7 +215,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     67 label *label5
     68 op add :test:i :test:i 1
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
     11 set :test:i *tmp1
     12 label *label4

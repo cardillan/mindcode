@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
@@ -9,7 +8,6 @@ import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mc.util.CollectionUtils;
-import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -42,17 +40,12 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
     @Override
     public void generateFinalMessages() {
         super.generateFinalMessages();
-        outputActions("       %d short-circuited expressions turned to full evaluations.", fullExpressions);
-        outputActions("       %d short-circuited conditions turned to full evaluations.", fullConditions);
-        outputActions("       %d short-circuited expressions optimized using selects.", shortSelectSequence);
-        outputActions("       %d final jumps of a short-circuited expression optimized.", lastJumps);
-        outputActions("       %d fully-evaluated expressions optimized using selects.", fullSelectSequence);
+        outputActions("%d short-circuited expressions turned to full evaluations.", fullExpressions);
+        outputActions("%d short-circuited conditions turned to full evaluations.", fullConditions);
+        outputActions("%d short-circuited expressions optimized using selects.", shortSelectSequence);
+        outputActions("%d final jumps of a short-circuited expression optimized.", lastJumps);
+        outputActions("%d fully-evaluated expressions optimized using selects.", fullSelectSequence);
     }
-
-    private void outputActions(@PrintFormat String format, int count) {
-        if (count > 0) emitMessage(MessageLevel.INFO, format, count);
-    }
-
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {

@@ -7,7 +7,8 @@
      1 instructions modified by Expression Optimization (3 iterations).
      3 instructions eliminated by If Expression Optimization (3 iterations).
     14 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
-     5 loops improved by Loop Optimization.
+       1 loop conditions were fully rotated.
+       4 loop conditions were partially rotated.
      3 instructions eliminated by Case Switching (5 iterations).
      1 case expressions converted to fast dispatch by Case Switching.
      4 instructions eliminated by Jump Straightening (6 iterations).
@@ -1068,7 +1069,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    167 op div .MUL 60 CAPACITY
    168 jump *label37 equal .MEMORY null
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
      5 set .SWITCH null
      6 set .MESSAGE null

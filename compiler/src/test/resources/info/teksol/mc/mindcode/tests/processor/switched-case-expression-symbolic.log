@@ -4,8 +4,9 @@
      1 instructions eliminated by Condition Optimization (5 iterations).
      2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
-     1 instructions eliminated by Loop Optimization (2 iterations).
-     2 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (2 iterations).
+       1 loop conditions were fully rotated.
+       1 loop conditions were partially rotated.
      2 instructions added by Case Switching (3 iterations).
      1 case expressions converted to switched jumps by Case Switching.
     10 instructions eliminated by Jump Straightening (5 iterations).
@@ -439,7 +440,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4:
     11 label *label0
     12 jump *label2 greaterThan :i 100
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
      9 set .S0 0
     10 set :i 1

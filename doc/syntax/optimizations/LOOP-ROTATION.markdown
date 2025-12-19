@@ -1,6 +1,6 @@
-# Loop Optimization
+# Loop Rotation
 
-The loop optimization improves loops with the condition at the beginning by performing these modifications:
+The loop rotation improves loops with the condition at the beginning by performing these modifications:
 
 * If the loop jump condition is invertible, the unconditional jump at the end of the loop to the loop condition is replaced by a conditional jump with an inverted loop condition targeting the first instruction of the loop body. This doesn't affect the number of instructions but executes one less instruction per loop.
     * If the loop condition isn't invertible (that is, the jump condition is `===`), the optimization isn't done, since the saved jump would be spent on inverting the condition, and the code size would increase for no benefit at all.

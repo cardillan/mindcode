@@ -5,8 +5,8 @@
     16 instructions modified by Expression Optimization (3 iterations).
     88 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
      1 loops improved by Loop Hoisting.
-     1 instructions eliminated by Loop Optimization (3 iterations).
-     1 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (3 iterations).
+       1 loop conditions were fully rotated.
     97 instructions added by Loop Unrolling (6 iterations).
      1 loops unrolled by Loop Unrolling.
    862 instructions added by Function Inlining (6 iterations).
@@ -197,7 +197,7 @@ Modifications by Iterated phase, Loop Hoisting, pass 1, iteration 1:
     49 label *label14
     50 op add :foo:i :foo:i 1
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
     44 set :foo:i 0
     45 op add *tmp14 :foo:n :foo:r

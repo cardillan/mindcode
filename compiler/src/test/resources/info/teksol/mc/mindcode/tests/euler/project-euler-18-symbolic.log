@@ -7,8 +7,9 @@
      2 instructions modified by Expression Optimization (3 iterations).
   1177 instructions eliminated by Data Flow Optimization (17 passes, 54 iterations).
      1 loops improved by Loop Hoisting.
-     1 instructions eliminated by Loop Optimization (3 iterations).
-     2 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (3 iterations).
+       1 loop conditions were fully rotated.
+       1 loop conditions were partially rotated.
   1268 instructions added by Loop Unrolling (18 iterations).
     15 loops unrolled by Loop Unrolling.
    837 instructions after optimizations.
@@ -4831,7 +4832,7 @@ Modifications by Iterated phase, Loop Hoisting, pass 1, iteration 1:
    376 op mul *tmp612 16 *tmp610
    377 op add *tmp614 *tmp612 :run:col
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
    362 # "Function: def run()"
    363 set :run:row 13

@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
@@ -22,7 +21,7 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.EACH;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.LOOP;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
-/// The loop optimizer improves loops with the condition at the beginning by performing these modifications:
+/// The loop rotator improves loops with the condition at the beginning by performing these modifications:
 /// - Replacing the closing unconditional jump to the loop condition with a jump based on the inverse of the loop
 ///   condition leading to the loop body. This avoids the execution of the unconditional jump. If the loop condition
 ///   evaluates through additional instructions apart from the jump, these will be copied to the end of the loop too
@@ -34,19 +33,19 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 /// If the opening jump has a form of op followed by negation jump, the condition is still replicated at the end
 /// of the body as a jump having the op condition. In this case, execution of two instructions per loop is avoided.
 @NullMarked
-class LoopOptimizer extends AbstractConditionalOptimizer {
-    public LoopOptimizer(OptimizationContext optimizationContext) {
-        super(Optimization.LOOP_OPTIMIZATION, optimizationContext);
+class LoopRotator extends AbstractConditionalOptimizer {
+    public LoopRotator(OptimizationContext optimizationContext) {
+        super(Optimization.LOOP_ROTATION, optimizationContext);
     }
 
-    private int count = 0;
+    private int fullRotations = 0;
+    private int partialRotations = 0;
 
     @Override
     public void generateFinalMessages() {
         super.generateFinalMessages();
-        if (count > 0) {
-            emitMessage(MessageLevel.INFO, "%6d loops improved by %s.", count, getName());
-        }
+        outputActions("%d loop conditions were fully rotated.", fullRotations);
+        outputActions("%d loop conditions were partially rotated.", partialRotations);
     }
 
     @Override
@@ -227,9 +226,11 @@ class LoopOptimizer extends AbstractConditionalOptimizer {
         if (fullRotation) {
             optimizationContext.removeMatchingInstructions(ix -> ix instanceof JumpInstruction
                     && ix.getAstContext() == lastJump.getAstContext());
+            fullRotations++;
+        } else {
+            partialRotations++;
         }
 
-        count++;
         return OptimizationResult.REALIZED;
     }
 

@@ -9,8 +9,8 @@
        6 fully-evaluated expressions optimized using selects.
      4 instructions eliminated by If Expression Optimization (3 iterations).
     89 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
-     2 instructions added by Loop Optimization (3 iterations).
-     3 loops improved by Loop Optimization.
+     2 instructions added by Loop Rotation (3 iterations).
+       3 loop conditions were partially rotated.
    158 instructions added by Loop Unrolling (7 iterations).
      2 loops unrolled by Loop Unrolling.
     46 instructions eliminated by Jump Straightening (3 passes, 9 iterations).
@@ -4887,7 +4887,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-4
    474 set .UNIT_S2 .UNIT_P2
    475 set .UNIT_P2 *tmp135
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      4 set .DOME dome1
      5 label *label2

@@ -7,8 +7,8 @@
     12 instructions eliminated by Boolean Optimization (6 iterations).
        5 fully-evaluated expressions optimized using selects.
      2 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
-     7 instructions added by Loop Optimization (3 iterations).
-     9 loops improved by Loop Optimization.
+     7 instructions added by Loop Rotation (3 iterations).
+       9 loop conditions were partially rotated.
      7 instructions eliminated by Jump Straightening (2 passes, 7 iterations).
      7 instructions updated by Jump Threading.
      3 instructions eliminated by Unreachable Code Elimination (2 iterations).
@@ -1632,7 +1632,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    258 sensor .SRC_Y .SRC @y
    259 sensor .DST_X .DST @x
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
     46 printflush message1
     47 label *label13

@@ -5,8 +5,9 @@
      6 instructions eliminated by Condition Optimization (2 passes, 8 iterations).
     17 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
    581 instructions eliminated by Data Flow Optimization (10 passes, 32 iterations).
-     1 instructions eliminated by Loop Optimization (4 iterations).
-     3 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (4 iterations).
+       1 loop conditions were fully rotated.
+       2 loop conditions were partially rotated.
    944 instructions added by Loop Unrolling (13 iterations).
      7 loops unrolled by Loop Unrolling.
     17 instructions added by Function Inlining (13 iterations).
@@ -443,7 +444,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
     80 op mod *tmp36 :testAndSetMultiples:i 48
     81 op shl *tmp37 1 *tmp36
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
      1 set :sumPrimesUpTo:sum 5
      2 set :sumPrimesUpTo:i 5

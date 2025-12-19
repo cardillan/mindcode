@@ -21,11 +21,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * **Breaking:** The [`and` and `or` operators](/doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#boolean-and-logical-and-or-operators) now perform [short-circuit evaluation](https://en.wikipedia.org/wiki/Short-circuit_evaluation).
-* The _Jump optimization_ has been renamed to [Condition Optimization](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown), and has been significantly extended:
+* The _Jump Optimization_ has been renamed to [Condition Optimization](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown), and has been significantly extended:
   * [Condition streamlining](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown#condition-streamlining) is now applied to the `select` and `or` instructions as well as to `jump`.
   * The optimization is applied to all variables, not just temporary ones. The results of the DFO analysis are used to track user-defined variables.
   * On `advanced` level, [constant folding of conditional expressions](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown#constant-folding) is now also performed.
 * **Breaking:** The `jump-optimization` command-line option and compiler directive has been renamed to `condition-optimization`.
+* The _Loop Optimization_ has been renamed to [Loop Rotation](doc/syntax/optimizations/LOOP-ROTATION.markdown), and has been extended to support short-circuit conditions. Full and partial loop rotations are now supported.
+* **Breaking:** The `loop-optimization` command-line option and compiler directive has been renamed to `loop-rotation`.
 * The [Boolean Optimization](doc/syntax/optimizations/BOOLEAN-OPTIMIZATION.markdown), previously included in the If Expression Optimization as a _Select Optimization_, has been extracted into a separate optimization class and enhanced:
   * Several optimizations aimed at short-circuited conditional expressions were added.
   * Where possible, an `op` instruction is used instead of `select`. This allows applying some optimizations even when the compilation target doesn't support `select`.  
@@ -1500,7 +1502,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 * Added option for [code generation goal](doc/syntax/SYNTAX-5-OTHER.markdown#option-goal). Allows specifying whether
   to aim for a smaller code or a faster code.
-* Added basic [loop optimization](doc/syntax/optimizations/LOOP-OPTIMIZATION.markdown).
+* Added basic [loop optimization](doc/syntax/optimizations/LOOP-ROTATION.markdown).
 
 ## 2023-05-21
 

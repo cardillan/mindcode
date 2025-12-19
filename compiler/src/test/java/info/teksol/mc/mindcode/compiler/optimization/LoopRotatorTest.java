@@ -10,11 +10,11 @@ import java.util.List;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
-class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
+class LoopRotatorTest extends AbstractOptimizerTest<LoopRotator> {
 
     @Override
-    protected Class<LoopOptimizer> getTestedClass() {
-        return LoopOptimizer.class;
+    protected Class<LoopRotator> getTestedClass() {
+        return LoopRotator.class;
     }
 
     @Override

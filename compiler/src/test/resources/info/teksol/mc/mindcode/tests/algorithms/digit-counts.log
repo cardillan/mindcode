@@ -5,8 +5,9 @@
      1 instructions eliminated by Single Step Elimination (7 iterations).
     18 instructions eliminated by Expression Optimization (4 iterations).
     31 instructions eliminated by Data Flow Optimization (4 passes, 13 iterations).
-     1 instructions eliminated by Loop Optimization (4 iterations).
-     2 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (4 iterations).
+       1 loop conditions were fully rotated.
+       1 loop conditions were partially rotated.
     27 instructions added by Loop Unrolling (6 iterations).
      2 loops unrolled by Loop Unrolling.
      2 instructions eliminated by Array Optimization (6 iterations).
@@ -173,7 +174,7 @@ Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-12 in
     70 label *label22
     71 op add :printArray:i :printArray:i 1
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
     44 set :i 0
     45 label *label13

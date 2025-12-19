@@ -8,8 +8,8 @@
      1 instructions eliminated by Boolean Optimization (5 iterations).
        1 fully-evaluated expressions optimized using selects.
     20 instructions modified by Data Flow Optimization (7 iterations).
-     1 instructions added by Loop Optimization (2 iterations).
-     3 loops improved by Loop Optimization.
+     1 instructions added by Loop Rotation (2 iterations).
+       3 loop conditions were partially rotated.
    136 instructions added by Case Switching (4 iterations).
      1 case expressions converted to switched jumps by Case Switching.
      9 instructions eliminated by Jump Straightening (5 iterations).
@@ -589,7 +589,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
     17 print "Item/Liquid/Energy Level Meter"
     18 set .CONTAINER null
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
     20 set :n @links
     21 label *label3

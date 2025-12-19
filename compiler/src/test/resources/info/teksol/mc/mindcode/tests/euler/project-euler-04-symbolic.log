@@ -6,8 +6,9 @@
      1 instructions eliminated by Boolean Optimization (6 iterations).
        1 fully-evaluated expressions optimized using selects.
      1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-     1 instructions eliminated by Loop Optimization (3 iterations).
-     3 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (3 iterations).
+       1 loop conditions were fully rotated.
+       2 loop conditions were partially rotated.
     21 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 978):
@@ -130,7 +131,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     22 jump *label8 notEqual :num :revert:res
     23 set :max :num
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
      0 set :max 0
      1 set :i 10
      2 label *label0

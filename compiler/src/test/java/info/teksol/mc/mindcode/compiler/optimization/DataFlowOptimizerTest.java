@@ -1653,7 +1653,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         }
 
         @Test
-        void optimizesDataFlowAfterLoopOptimization() {
+        void optimizesDataFlowAfterLoopRotation() {
             assertCompilesTo("""
                             index = rand(10);
                             parent = 0;

@@ -9,8 +9,8 @@
      9 instructions eliminated by Boolean Optimization (6 iterations).
        3 fully-evaluated expressions optimized using selects.
      7 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
-     1 instructions added by Loop Optimization (3 iterations).
-     3 loops improved by Loop Optimization.
+     1 instructions added by Loop Rotation (3 iterations).
+       3 loop conditions were partially rotated.
    131 instructions added by Case Switching (5 iterations).
      1 case expressions converted to switched jumps by Case Switching.
      8 instructions eliminated by Jump Straightening (6 iterations).
@@ -866,7 +866,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-3
     10 print "Configuring regulator..."
     11 print "\n"
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
     12 set :n @links
     13 label *label3

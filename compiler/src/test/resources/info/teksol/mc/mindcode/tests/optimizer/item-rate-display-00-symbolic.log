@@ -4,8 +4,9 @@
     12 instructions eliminated by Condition Optimization (6 iterations).
     11 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
    128 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
-     1 instructions eliminated by Loop Optimization (3 iterations).
-     6 loops improved by Loop Optimization.
+     1 instructions eliminated by Loop Rotation (3 iterations).
+       2 loop conditions were fully rotated.
+       4 loop conditions were partially rotated.
    670 instructions added by Loop Unrolling (6 iterations).
      2 loops unrolled by Loop Unrolling.
     16 instructions eliminated by Print Merging.
@@ -580,7 +581,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     14 read *tmp4 MEMORY 256
     15 op sub :ptr *tmp4 .SHIFT
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-2 instructions):
  
     20 read :maximum MEMORY :ptr
     21 set :n 0

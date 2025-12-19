@@ -5,7 +5,7 @@
      6 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      2 instructions eliminated by Expression Optimization (3 iterations).
     12 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
-     2 loops improved by Loop Optimization.
+       2 loop conditions were partially rotated.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     24 instructions eliminated by Stack Optimization.
     68 instructions after optimizations.
@@ -384,7 +384,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
     61 label *label8
     62 set :quicksort:new_pivot_index :partition:index
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      9 set :i 0
     10 label *label2

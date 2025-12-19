@@ -18,6 +18,7 @@ import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.util.Tuple2;
+import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -144,6 +145,10 @@ abstract class BaseOptimizer extends AbstractOptimizer {
             emitMessage(MessageLevel.INFO, "%6d instructions %s by %s%s.",
                     count, verb, getName(), visits);
         }
+    }
+
+    protected void outputActions(@PrintFormat String format, int count) {
+        if (count > 0) emitMessage(MessageLevel.INFO, "       " + format, count);
     }
 
     /**

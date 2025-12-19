@@ -4,7 +4,8 @@
      5 instructions eliminated by Condition Optimization (5 iterations).
      4 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
    105 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
-     4 loops improved by Loop Optimization.
+       2 loop conditions were fully rotated.
+       2 loop conditions were partially rotated.
    587 instructions added by Loop Unrolling (5 iterations).
      1 loops unrolled by Loop Unrolling.
    520 instructions after optimizations.
@@ -185,7 +186,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     45 set :maxlen *tmp0
     46 set :maxnum :d
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-2 instructions):
  
      1 set :maxnum 0
      2 set :d 2

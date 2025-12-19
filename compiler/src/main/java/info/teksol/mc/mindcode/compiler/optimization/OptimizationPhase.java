@@ -28,7 +28,7 @@ public enum OptimizationPhase {
             ARRAY_OPTIMIZATION,
             TEMP_VARIABLES_ELIMINATION,
             LOOP_HOISTING,
-            LOOP_OPTIMIZATION,
+            LOOP_ROTATION,
             LOOP_UNROLLING,
             FUNCTION_INLINING,
             BOOLEAN_OPTIMIZATION,
