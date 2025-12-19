@@ -33,7 +33,7 @@ class ConditionOptimizer extends BaseOptimizer {
                         Operation operation = oper.getOperation();
                         if (advanced(cond) && canFoldConstants(operation)) {
                             foldConstants(logicIterator, cond, oper, condArgs);
-                        } else if (operation.isCondition(false) && canInjectCondition(cond, oper)) {
+                        } else if (operation.isCondition(true) && canInjectCondition(cond, oper)) {
                             // We've already verified we can support strictNotEqual here
                             Condition opCondition = operation.toExistingCondition(true);
                             Condition newCondition = cond.getCondition() == Condition.EQUAL ? opCondition.inverse(true) : opCondition;
@@ -42,6 +42,10 @@ class ConditionOptimizer extends BaseOptimizer {
                             if (getVariableReferences(variable).size() == 1) {
                                 removeInstruction(oper);
                             }
+                        } else if (operation == Operation.STRICT_NOT_EQUAL && cond.isPlainComparison()) {
+                            // Invert both operation and condition
+                            replaceInstruction(oper, oper.withOperands(Operation.STRICT_EQUAL, oper.getX(), oper.getY()));
+                            logicIterator.set(cond.forceInvert());
                         } else if (cond instanceof OpInstruction next){
                             tryMergeOperations(logicIterator, oper, next);
                         }
@@ -56,7 +60,8 @@ class ConditionOptimizer extends BaseOptimizer {
     private boolean canInjectCondition(ConditionalInstruction cond, OpInstruction oper) {
         Operation operation = oper.getOperation();
 
-        boolean canUseSelect = cond instanceof JumpInstruction ? getGlobalProfile().useEmulatedStrictNotEqual()
+        boolean canUseSelect = cond instanceof JumpInstruction
+                ? getGlobalProfile().useEmulatedStrictNotEqual()
                 : instructionProcessor.isSupported(Opcode.SELECT);
 
         boolean requireStrictNotEqual = operation.isStrict() &&

@@ -80,6 +80,7 @@ public class OpInstruction extends BaseResultInstruction implements ConditionalI
             case GREATER_THAN -> Condition.GREATER_THAN;
             case GREATER_THAN_EQ -> Condition.GREATER_THAN_EQ;
             case STRICT_EQUAL -> Condition.STRICT_EQUAL;
+            case STRICT_NOT_EQUAL -> Condition.STRICT_NOT_EQUAL;
             default -> Condition.ALWAYS;
         };
     }

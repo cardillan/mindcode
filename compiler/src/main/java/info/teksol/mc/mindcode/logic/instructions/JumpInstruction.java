@@ -60,25 +60,16 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
     }
 
     public JumpInstruction invert(GlobalCompilerProfile profile) {
-        if (!isInvertible(profile)) {
-            throw new MindcodeInternalError("Jump is not invertible. " + this);
-        }
-        return forceInvert();
+        return (JumpInstruction) ConditionalInstruction.super.invert(profile);
     }
 
     public JumpInstruction forceInvert() {
-        assert getArgumentTypes() != null;
-        return new JumpInstruction(getAstContext(),
-                List.of(getTarget(), getCondition().inverse(true), getX(), getY()), getArgumentTypes()).copyInfo(this);
+        return (JumpInstruction) ConditionalInstruction.super.forceInvert();
     }
 
     @Override
     public boolean endsCodePath() {
         return isUnconditional();
-    }
-
-    public boolean isInvertible(GlobalCompilerProfile profile) {
-        return getCondition().hasInverse(profile);
     }
 
     public final LogicLabel getTarget() {
