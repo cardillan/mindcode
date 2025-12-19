@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added the [`no-argument-padding` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-no-argument-padding). When activated, instructions are not padded to the maximum number of arguments.
 * Added the [`author` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-author). The option adds an entry to the list of authors, which is then displayed alongside the usual compiler signature.
+* Added support for new instruction opcode (`ucontrol deconstruct`).
 
 ### Changed
 
@@ -25,7 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * The optimization is applied to all variables, not just temporary ones. The results of the DFO analysis are used to track user-defined variables.
   * On `advanced` level, [constant folding of conditional expressions](doc/syntax/optimizations/CONDITION-OPTIMIZATION.markdown#constant-folding) is now also performed.
 * **Breaking:** The `jump-optimization` command-line option and compiler directive has been renamed to `condition-optimization`.
-* The [Boolean Optimization](doc/syntax/optimizations/BOOLEAN-OPTIMIZATION.markdown), previously included in the If Expression Optimization as a _Select Optimization_, has been extracted into a separate optimization type and extended:
+* The [Boolean Optimization](doc/syntax/optimizations/BOOLEAN-OPTIMIZATION.markdown), previously included in the If Expression Optimization as a _Select Optimization_, has been extracted into a separate optimization class and enhanced:
   * Several optimizations aimed at short-circuited conditional expressions were added.
   * Where possible, an `op` instruction is used instead of `select`. This allows applying some optimizations even when the compilation target doesn't support `select`.  
 * The [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) has been updated:
@@ -34,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * Added an optimization turning a [`read` instruction](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#the-readwrite-instructions) with a constant string and a constant index into a `set` instruction setting the character value directly.
 * When evaluating `jump` and `select` conditions during optimizations, cases where the operands of the condition are identical (the same variable) are handled.   
 * The [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY-COMPATIBILITY.markdown) now also performs a test to find out whether assigning `null` to `@counter` is ignored by the processor.
+* The mimex metadata have been updated to match the current BE version. The most significant change is a new set of sound constants. 
 * The documentation has been restructured. Individual optimizers are described in [separate files](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#individual-mindcode-optimizations), and the description of Logic functions with links to the Function reference was also moved to a [separate file](doc/syntax/FUNCTIONS.markdown).
 
 ## 3.10.0 - 2025-11-17

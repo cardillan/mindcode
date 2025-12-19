@@ -1792,11 +1792,11 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesPlaysound() {
             assertCompilesTo("""
-                            playsound(true, @sfx-railgun, 1, 1, 100, 10, true);
-                            playsound(false, @sfx-laser, 1, 1, 0.5, false);
+                            playsound(true, @sfx-door, 1, 1, 100, 10, true);
+                            playsound(false, @sfx-click, 1, 1, 0.5, false);
                             """,
-                    createInstruction(PLAYSOUND, "true", "@sfx-railgun", "1", "1", "0", "100", "10", "true"),
-                    createInstruction(PLAYSOUND, "false", "@sfx-laser", "1", "1", "0.5", "0", "0", "false")
+                    createInstruction(PLAYSOUND, "true", "@sfx-door", "1", "1", "0", "100", "10", "true"),
+                    createInstruction(PLAYSOUND, "false", "@sfx-click", "1", "1", "0.5", "0", "0", "false")
             );
         }
 

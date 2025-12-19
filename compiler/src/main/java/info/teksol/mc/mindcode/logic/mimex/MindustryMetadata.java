@@ -34,6 +34,10 @@ public class MindustryMetadata {
         return cache.computeIfAbsent(processorVersion.mimexVersion, _ -> new MindustryMetadata(processorVersion));
     }
 
+    public ProcessorVersion getProcessorVersion() {
+        return processorVersion;
+    }
+
     private final AtomicReference<@Nullable Set<String>> stableBuiltins = new AtomicReference<>();
     private final AtomicReference<@Nullable Icons> icons = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, NamedColor>> colors = new AtomicReference<>();

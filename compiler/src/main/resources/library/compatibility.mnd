@@ -7,9 +7,8 @@ module compatibility;
 
 linked message1;
 
-noinit var __init;
-volatile noinit var __a;
-volatile var __counterNull;
+noinit var init;
+volatile var counterNull;
 
 /**
  * This function runs the compatibility test on a Mindustry Logic processor. The compatibility test verifies that the
@@ -39,15 +38,12 @@ volatile var __counterNull;
  * Note: The Mindcode processor emulator currently isn't able to run this function.
  */
 inline void runCompatibilityTest()
-    __counterNull = "[salmon]set @counter null IS NOT a noop[]\n" +
+    counterNull = "[salmon]set @counter null IS NOT a noop[]\n" +
             "Use [gold]#set null-counter-is-noop = false;[] in your programs.\n\n";
-    if not __init then
-        __init = true;
-        __a = null;
-        mlog (in __a) {
-            set @counter __a;
-        }
-        __counterNull = "[green]set @counter null IS a noop[]\n\n";
+    if not init then
+        init = true;
+        mlog("set", "@counter", "null");
+        counterNull = "[green]set @counter null IS a noop[]\n\n";
     end;
 
     if __MINDUSTRY_VERSION__ == "v126.2" then
@@ -77,7 +73,7 @@ inline void _compatibilityTest6()
     mlog {
         print "Testing..."
         printflush message1
-        print $__counterNull;
+        print $counterNull;
 
         jump general notEqual @ctrlProcessor 1
         jump general notEqual @ctrlPlayer 2
@@ -101,7 +97,7 @@ inline void _compatibilityTest7()
     mlog {
         print "Testing..."
         printflush message1
-        print $__counterNull;
+        print $counterNull;
 
         op strictEqual result @pi 3.1415927410125732
         jump general equal result false
@@ -905,7 +901,7 @@ inline void _compatibilityTest80()
     mlog {
         print "Testing..."
         printflush message1
-        print $__counterNull;
+        print $counterNull;
 
         jump general notEqual @blockCount 260
         op strictEqual result @colorAccent %ffd37fff
@@ -1016,18 +1012,13 @@ inline void _compatibilityTest80()
         jump general notEqual @sfx-buttonClick 11
         jump general notEqual @sfx-cannon 12
         jump general notEqual @sfx-chatMessage 13
-        jump general notEqual @sfx-click 14
         jump general notEqual @sfx-combustion 15
         jump general notEqual @sfx-conveyor 16
         jump general notEqual @sfx-corexplode 17
         jump general notEqual @sfx-cutter 18
-        jump general notEqual @sfx-door 19
         jump general notEqual @sfx-drill 20
-        jump general notEqual @sfx-drillCharge 21
-        jump general notEqual @sfx-drillImpact 22
         jump general notEqual @sfx-dullExplosion 23
         jump general notEqual @sfx-electricHum 24
-        jump general notEqual @sfx-explosion 25
         jump general notEqual @sfx-explosionbig 26
         jump general notEqual @sfx-extractLoop 27
         jump general notEqual @sfx-fire 28
@@ -1061,26 +1052,21 @@ inline void _compatibilityTest80()
         jump general notEqual @sfx-noammo 56
         jump general notEqual @sfx-pew 57
         jump general notEqual @sfx-place 58
-        jump general notEqual @sfx-plantBreak 59
         jump general notEqual @sfx-plasmaboom 60
         jump general notEqual @sfx-plasmadrop 61
         jump general notEqual @sfx-press 62
         jump general notEqual @sfx-pulse 63
         jump general notEqual @sfx-pulseBlast 64
         jump general notEqual @sfx-railgun 65
-        jump general notEqual @sfx-rain 66
         jump general notEqual @sfx-release 67
         jump general notEqual @sfx-respawn 68
         jump general notEqual @sfx-respawning 69
-        jump general notEqual @sfx-rockBreak 70
         jump general notEqual @sfx-sap 71
         jump general notEqual @sfx-shield 72
         jump general notEqual @sfx-shockBlast 73
-        jump general notEqual @sfx-shoot 74
         jump general notEqual @sfx-shootAlt 75
         jump general notEqual @sfx-shootAltLong 76
         jump general notEqual @sfx-shootBig 77
-        jump general notEqual @sfx-shootSmite 78
         jump general notEqual @sfx-shootSnap 79
         jump general notEqual @sfx-shotgun 80
         jump general notEqual @sfx-smelter 81
@@ -1096,9 +1082,6 @@ inline void _compatibilityTest80()
         jump general notEqual @sfx-tractorbeam 92
         jump general notEqual @sfx-unlock 93
         jump general notEqual @sfx-wave 94
-        jump general notEqual @sfx-wind 95
-        jump general notEqual @sfx-wind2 96
-        jump general notEqual @sfx-wind3 97
         jump general notEqual @sfx-windhowl 98
         sensor id @graphite-press @id
         jump general notEqual id 0
@@ -1795,6 +1778,19 @@ inline void _compatibilityTest80()
 
         jump specific notEqual @itemCount 20
         jump specific notEqual @liquidCount 11
+        jump specific notEqual @sfx-click 14
+        jump specific notEqual @sfx-door 19
+        jump specific notEqual @sfx-drillCharge 21
+        jump specific notEqual @sfx-drillImpact 22
+        jump specific notEqual @sfx-explosion 25
+        jump specific notEqual @sfx-plantBreak 59
+        jump specific notEqual @sfx-rain 66
+        jump specific notEqual @sfx-rockBreak 70
+        jump specific notEqual @sfx-shoot 74
+        jump specific notEqual @sfx-shootSmite 78
+        jump specific notEqual @sfx-wind 95
+        jump specific notEqual @sfx-wind2 96
+        jump specific notEqual @sfx-wind3 97
         jump specific notEqual @unitCount 56
 
         print $_MESSAGE_OK
@@ -1814,915 +1810,972 @@ inline void _compatibilityTest81()
     mlog {
         print "Testing..."
         printflush message1
-        print $__counterNull;
+        print $counterNull;
 
-        jump general notEqual @blockCount 260
-        jump general notEqual @bottom 4
-        jump general notEqual @bottomLeft 12
-        jump general notEqual @bottomRight 20
-        jump general notEqual @center 1
-        op strictEqual result @colorAccent %ffd37fff
-        jump general equal result false
-        op strictEqual result @colorAcid %7fff00ff
-        jump general equal result false
-        op strictEqual result @colorBlack %000000ff
-        jump general equal result false
-        op strictEqual result @colorBlue %4169e1ff
-        jump general equal result false
-        op strictEqual result @colorBrick %b22222ff
-        jump general equal result false
-        op strictEqual result @colorBrown %8b4513ff
-        jump general equal result false
-        op strictEqual result @colorCoral %ff7f50ff
-        jump general equal result false
-        op strictEqual result @colorCrimson %dc143cff
-        jump general equal result false
-        op strictEqual result @colorCyan %00ffffff
-        jump general equal result false
-        op strictEqual result @colorDarkgray %3f3f3fff
-        jump general equal result false
-        op strictEqual result @colorDarkgrey %3f3f3fff
-        jump general equal result false
-        op strictEqual result @colorForest %228b22ff
-        jump general equal result false
-        op strictEqual result @colorGold %ffd700ff
-        jump general equal result false
-        op strictEqual result @colorGoldenrod %daa520ff
-        jump general equal result false
-        op strictEqual result @colorGray %7f7f7fff
-        jump general equal result false
-        op strictEqual result @colorGreen %38d667ff
-        jump general equal result false
-        op strictEqual result @colorGrey %7f7f7fff
-        jump general equal result false
-        op strictEqual result @colorHighlight %ffe0a5ff
-        jump general equal result false
-        op strictEqual result @colorLightgray %bfbfbfff
-        jump general equal result false
-        op strictEqual result @colorLightgrey %bfbfbfff
-        jump general equal result false
-        op strictEqual result @colorLime %32cd32ff
-        jump general equal result false
-        op strictEqual result @colorMagenta %ff00ffff
-        jump general equal result false
-        op strictEqual result @colorMaroon %b03060ff
-        jump general equal result false
-        op strictEqual result @colorNavy %00007fff
-        jump general equal result false
-        op strictEqual result @colorNegstat %e55454ff
-        jump general equal result false
-        op strictEqual result @colorOlive %6b8e23ff
-        jump general equal result false
-        op strictEqual result @colorOrange %ffa500ff
-        jump general equal result false
-        op strictEqual result @colorPink %ff69b4ff
-        jump general equal result false
-        op strictEqual result @colorPurple %a020f0ff
-        jump general equal result false
-        op strictEqual result @colorRed %e55454ff
-        jump general equal result false
-        op strictEqual result @colorRoyal %4169e1ff
-        jump general equal result false
-        op strictEqual result @colorSalmon %fa8072ff
-        jump general equal result false
-        op strictEqual result @colorScarlet %ff341cff
-        jump general equal result false
-        op strictEqual result @colorSky %87ceebff
-        jump general equal result false
-        op strictEqual result @colorSlate %708090ff
-        jump general equal result false
-        op strictEqual result @colorStat %ffd37fff
-        jump general equal result false
-        op strictEqual result @colorTan %d2b48cff
-        jump general equal result false
-        op strictEqual result @colorTeal %007f7fff
-        jump general equal result false
-        op strictEqual result @colorUnlaunched %8982edff
-        jump general equal result false
-        op strictEqual result @colorViolet %ee82eeff
-        jump general equal result false
-        op strictEqual result @colorWhite %ffffffff
-        jump general equal result false
-        op strictEqual result @colorYellow %ffff00ff
-        jump general equal result false
-        jump general notEqual @ctrlCommand 3
-        jump general notEqual @ctrlPlayer 2
-        jump general notEqual @ctrlProcessor 1
-        op strictEqual result @degToRad 0.01745329238474369
-        jump general equal result false
-        op strictEqual result @e 2.7182817459106445
-        jump general equal result false
-        jump general notEqual @left 8
-        op strictEqual result @pi 3.1415927410125732
-        jump general equal result false
-        op strictEqual result @radToDeg 57.2957763671875
-        jump general equal result false
-        jump general notEqual @right 16
-        jump general notEqual @sfx-back 1
-        jump general notEqual @sfx-bang 2
-        jump general notEqual @sfx-beam 3
-        jump general notEqual @sfx-bigshot 4
-        jump general notEqual @sfx-bioLoop 5
-        jump general notEqual @sfx-blaster 6
-        jump general notEqual @sfx-bolt 7
-        jump general notEqual @sfx-boom 8
-        jump general notEqual @sfx-break 9
-        jump general notEqual @sfx-build 10
-        jump general notEqual @sfx-buttonClick 11
-        jump general notEqual @sfx-cannon 12
-        jump general notEqual @sfx-chatMessage 13
-        jump general notEqual @sfx-click 14
-        jump general notEqual @sfx-combustion 15
-        jump general notEqual @sfx-conveyor 16
-        jump general notEqual @sfx-corexplode 17
-        jump general notEqual @sfx-cutter 18
-        jump general notEqual @sfx-door 19
-        jump general notEqual @sfx-drill 20
-        jump general notEqual @sfx-drillCharge 21
-        jump general notEqual @sfx-drillImpact 22
-        jump general notEqual @sfx-dullExplosion 23
-        jump general notEqual @sfx-electricHum 24
-        jump general notEqual @sfx-explosion 25
-        jump general notEqual @sfx-explosionbig 26
-        jump general notEqual @sfx-extractLoop 27
-        jump general notEqual @sfx-fire 28
-        jump general notEqual @sfx-flame 29
-        jump general notEqual @sfx-flame2 30
-        jump general notEqual @sfx-flux 31
-        jump general notEqual @sfx-glow 32
-        jump general notEqual @sfx-grinding 33
-        jump general notEqual @sfx-hum 34
-        jump general notEqual @sfx-largeCannon 35
-        jump general notEqual @sfx-largeExplosion 36
-        jump general notEqual @sfx-laser 37
-        jump general notEqual @sfx-laserbeam 38
-        jump general notEqual @sfx-laserbig 39
-        jump general notEqual @sfx-laserblast 40
-        jump general notEqual @sfx-lasercharge 41
-        jump general notEqual @sfx-lasercharge2 42
-        jump general notEqual @sfx-lasershoot 43
-        jump general notEqual @sfx-machine 44
-        jump general notEqual @sfx-malignShoot 45
-        jump general notEqual @sfx-mediumCannon 46
-        jump general notEqual @sfx-message 47
-        jump general notEqual @sfx-mineDeploy 48
-        jump general notEqual @sfx-minebeam 49
-        jump general notEqual @sfx-missile 50
-        jump general notEqual @sfx-missileLarge 51
-        jump general notEqual @sfx-missileLaunch 52
-        jump general notEqual @sfx-missileSmall 53
-        jump general notEqual @sfx-missileTrail 54
-        jump general notEqual @sfx-mud 55
-        jump general notEqual @sfx-noammo 56
-        jump general notEqual @sfx-pew 57
-        jump general notEqual @sfx-place 58
-        jump general notEqual @sfx-plantBreak 59
-        jump general notEqual @sfx-plasmaboom 60
-        jump general notEqual @sfx-plasmadrop 61
-        jump general notEqual @sfx-press 62
-        jump general notEqual @sfx-pulse 63
-        jump general notEqual @sfx-pulseBlast 64
-        jump general notEqual @sfx-railgun 65
-        jump general notEqual @sfx-rain 66
-        jump general notEqual @sfx-release 67
-        jump general notEqual @sfx-respawn 68
-        jump general notEqual @sfx-respawning 69
-        jump general notEqual @sfx-rockBreak 70
-        jump general notEqual @sfx-sap 71
-        jump general notEqual @sfx-shield 72
-        jump general notEqual @sfx-shockBlast 73
-        jump general notEqual @sfx-shoot 74
-        jump general notEqual @sfx-shootAlt 75
-        jump general notEqual @sfx-shootAltLong 76
-        jump general notEqual @sfx-shootBig 77
-        jump general notEqual @sfx-shootSmite 78
-        jump general notEqual @sfx-shootSnap 79
-        jump general notEqual @sfx-shotgun 80
-        jump general notEqual @sfx-smelter 81
-        jump general notEqual @sfx-spark 82
-        jump general notEqual @sfx-spellLoop 83
-        jump general notEqual @sfx-splash 84
-        jump general notEqual @sfx-spray 85
-        jump general notEqual @sfx-steam 86
-        jump general notEqual @sfx-techloop 88
-        jump general notEqual @sfx-thruster 89
-        jump general notEqual @sfx-titanExplosion 90
-        jump general notEqual @sfx-torch 91
-        jump general notEqual @sfx-tractorbeam 92
-        jump general notEqual @sfx-unlock 93
-        jump general notEqual @sfx-wave 94
-        jump general notEqual @sfx-wind 95
-        jump general notEqual @sfx-wind2 96
-        jump general notEqual @sfx-wind3 97
-        jump general notEqual @sfx-windhowl 98
-        jump general notEqual @top 2
-        jump general notEqual @topLeft 10
-        jump general notEqual @topRight 18
+        set e1 ""
+        set e2 ""
+
+        select e1 strictEqual @blockCount 260 e1 "\n@blockCount"
+        select e1 strictEqual @bottom 4 e1 "\n@bottom"
+        select e1 strictEqual @bottomLeft 12 e1 "\n@bottomLeft"
+        select e1 strictEqual @bottomRight 20 e1 "\n@bottomRight"
+        select e1 strictEqual @center 1 e1 "\n@center"
+        select e1 strictEqual @colorAccent %ffd37fff e1 "\n@colorAccent"
+        select e1 strictEqual @colorAcid %7fff00ff e1 "\n@colorAcid"
+        select e1 strictEqual @colorBlack %000000ff e1 "\n@colorBlack"
+        select e1 strictEqual @colorBlue %4169e1ff e1 "\n@colorBlue"
+        select e1 strictEqual @colorBrick %b22222ff e1 "\n@colorBrick"
+        select e1 strictEqual @colorBrown %8b4513ff e1 "\n@colorBrown"
+        select e1 strictEqual @colorCoral %ff7f50ff e1 "\n@colorCoral"
+        select e1 strictEqual @colorCrimson %dc143cff e1 "\n@colorCrimson"
+        select e1 strictEqual @colorCyan %00ffffff e1 "\n@colorCyan"
+        select e1 strictEqual @colorDarkgray %3f3f3fff e1 "\n@colorDarkgray"
+        select e1 strictEqual @colorDarkgrey %3f3f3fff e1 "\n@colorDarkgrey"
+        select e1 strictEqual @colorForest %228b22ff e1 "\n@colorForest"
+        select e1 strictEqual @colorGold %ffd700ff e1 "\n@colorGold"
+        select e1 strictEqual @colorGoldenrod %daa520ff e1 "\n@colorGoldenrod"
+        select e1 strictEqual @colorGray %7f7f7fff e1 "\n@colorGray"
+        select e1 strictEqual @colorGreen %38d667ff e1 "\n@colorGreen"
+        select e1 strictEqual @colorGrey %7f7f7fff e1 "\n@colorGrey"
+        select e1 strictEqual @colorHighlight %ffe0a5ff e1 "\n@colorHighlight"
+        select e1 strictEqual @colorLightgray %bfbfbfff e1 "\n@colorLightgray"
+        select e1 strictEqual @colorLightgrey %bfbfbfff e1 "\n@colorLightgrey"
+        select e1 strictEqual @colorLime %32cd32ff e1 "\n@colorLime"
+        select e1 strictEqual @colorMagenta %ff00ffff e1 "\n@colorMagenta"
+        select e1 strictEqual @colorMaroon %b03060ff e1 "\n@colorMaroon"
+        select e1 strictEqual @colorNavy %00007fff e1 "\n@colorNavy"
+        select e1 strictEqual @colorNegstat %e55454ff e1 "\n@colorNegstat"
+        select e1 strictEqual @colorOlive %6b8e23ff e1 "\n@colorOlive"
+        select e1 strictEqual @colorOrange %ffa500ff e1 "\n@colorOrange"
+        select e1 strictEqual @colorPink %ff69b4ff e1 "\n@colorPink"
+        select e1 strictEqual @colorPurple %a020f0ff e1 "\n@colorPurple"
+        select e1 strictEqual @colorRed %e55454ff e1 "\n@colorRed"
+        select e1 strictEqual @colorRoyal %4169e1ff e1 "\n@colorRoyal"
+        select e1 strictEqual @colorSalmon %fa8072ff e1 "\n@colorSalmon"
+        select e1 strictEqual @colorScarlet %ff341cff e1 "\n@colorScarlet"
+        select e1 strictEqual @colorSky %87ceebff e1 "\n@colorSky"
+        select e1 strictEqual @colorSlate %708090ff e1 "\n@colorSlate"
+        select e1 strictEqual @colorStat %ffd37fff e1 "\n@colorStat"
+        select e1 strictEqual @colorTan %d2b48cff e1 "\n@colorTan"
+        select e1 strictEqual @colorTeal %007f7fff e1 "\n@colorTeal"
+        select e1 strictEqual @colorUnlaunched %8982edff e1 "\n@colorUnlaunched"
+        select e1 strictEqual @colorViolet %ee82eeff e1 "\n@colorViolet"
+        select e1 strictEqual @colorWhite %ffffffff e1 "\n@colorWhite"
+        select e1 strictEqual @colorYellow %ffff00ff e1 "\n@colorYellow"
+        select e1 strictEqual @ctrlCommand 3 e1 "\n@ctrlCommand"
+        select e1 strictEqual @ctrlPlayer 2 e1 "\n@ctrlPlayer"
+        select e1 strictEqual @ctrlProcessor 1 e1 "\n@ctrlProcessor"
+        select e1 strictEqual @degToRad 0.01745329238474369 e1 "\n@degToRad"
+        select e1 strictEqual @e 2.7182817459106445 e1 "\n@e"
+        select e1 strictEqual @left 8 e1 "\n@left"
+        select e1 strictEqual @pi 3.1415927410125732 e1 "\n@pi"
+        select e1 strictEqual @radToDeg 57.2957763671875 e1 "\n@radToDeg"
+        select e1 strictEqual @right 16 e1 "\n@right"
+        select e1 strictEqual @sfx-acceleratorConstruct 1 e1 "\n@sfx-acceleratorConstruct"
+        select e1 strictEqual @sfx-acceleratorLaunch 2 e1 "\n@sfx-acceleratorLaunch"
+        select e1 strictEqual @sfx-acceleratorLightning1 3 e1 "\n@sfx-acceleratorLightning1"
+        select e1 strictEqual @sfx-acceleratorLightning2 4 e1 "\n@sfx-acceleratorLightning2"
+        select e1 strictEqual @sfx-beamHeal 5 e1 "\n@sfx-beamHeal"
+        select e1 strictEqual @sfx-beamLustre 6 e1 "\n@sfx-beamLustre"
+        select e1 strictEqual @sfx-beamMeltdown 7 e1 "\n@sfx-beamMeltdown"
+        select e1 strictEqual @sfx-beamParallax 8 e1 "\n@sfx-beamParallax"
+        select e1 strictEqual @sfx-beamPlasma 9 e1 "\n@sfx-beamPlasma"
+        select e1 strictEqual @sfx-beamPlasmaSmall 10 e1 "\n@sfx-beamPlasmaSmall"
+        select e1 strictEqual @sfx-blockBreak1 11 e1 "\n@sfx-blockBreak1"
+        select e1 strictEqual @sfx-blockBreak2 12 e1 "\n@sfx-blockBreak2"
+        select e1 strictEqual @sfx-blockBreak3 13 e1 "\n@sfx-blockBreak3"
+        select e1 strictEqual @sfx-blockExplode1 14 e1 "\n@sfx-blockExplode1"
+        select e1 strictEqual @sfx-blockExplode1Alt 15 e1 "\n@sfx-blockExplode1Alt"
+        select e1 strictEqual @sfx-blockExplode2 16 e1 "\n@sfx-blockExplode2"
+        select e1 strictEqual @sfx-blockExplode2Alt 17 e1 "\n@sfx-blockExplode2Alt"
+        select e1 strictEqual @sfx-blockExplode3 18 e1 "\n@sfx-blockExplode3"
+        select e1 strictEqual @sfx-blockExplodeElectric 19 e1 "\n@sfx-blockExplodeElectric"
+        select e1 strictEqual @sfx-blockExplodeElectricBig 20 e1 "\n@sfx-blockExplodeElectricBig"
+        select e1 strictEqual @sfx-blockExplodeExplosive 21 e1 "\n@sfx-blockExplodeExplosive"
+        select e1 strictEqual @sfx-blockExplodeExplosiveAlt 22 e1 "\n@sfx-blockExplodeExplosiveAlt"
+        select e1 strictEqual @sfx-blockExplodeFlammable 23 e1 "\n@sfx-blockExplodeFlammable"
+        select e1 strictEqual @sfx-blockExplodeWall 24 e1 "\n@sfx-blockExplodeWall"
+        select e1 strictEqual @sfx-blockHeal 25 e1 "\n@sfx-blockHeal"
+        select e1 strictEqual @sfx-blockPlace1 26 e1 "\n@sfx-blockPlace1"
+        select e1 strictEqual @sfx-blockPlace2 27 e1 "\n@sfx-blockPlace2"
+        select e1 strictEqual @sfx-blockPlace3 28 e1 "\n@sfx-blockPlace3"
+        select e1 strictEqual @sfx-blockRepair 29 e1 "\n@sfx-blockRepair"
+        select e1 strictEqual @sfx-blockRotate 30 e1 "\n@sfx-blockRotate"
+        select e1 strictEqual @sfx-chargeCorvus 31 e1 "\n@sfx-chargeCorvus"
+        select e1 strictEqual @sfx-chargeLancer 32 e1 "\n@sfx-chargeLancer"
+        select e1 strictEqual @sfx-chargeVela 33 e1 "\n@sfx-chargeVela"
+        select e1 strictEqual @sfx-coreLand 35 e1 "\n@sfx-coreLand"
+        select e1 strictEqual @sfx-coreLaunch 36 e1 "\n@sfx-coreLaunch"
+        select e1 strictEqual @sfx-explosionAfflict 41 e1 "\n@sfx-explosionAfflict"
+        select e1 strictEqual @sfx-explosionArtillery 42 e1 "\n@sfx-explosionArtillery"
+        select e1 strictEqual @sfx-explosionArtilleryShock 43 e1 "\n@sfx-explosionArtilleryShock"
+        select e1 strictEqual @sfx-explosionArtilleryShockBig 44 e1 "\n@sfx-explosionArtilleryShockBig"
+        select e1 strictEqual @sfx-explosionCleroi 45 e1 "\n@sfx-explosionCleroi"
+        select e1 strictEqual @sfx-explosionCore 46 e1 "\n@sfx-explosionCore"
+        select e1 strictEqual @sfx-explosionCrawler 47 e1 "\n@sfx-explosionCrawler"
+        select e1 strictEqual @sfx-explosionDull 48 e1 "\n@sfx-explosionDull"
+        select e1 strictEqual @sfx-explosionMissile 49 e1 "\n@sfx-explosionMissile"
+        select e1 strictEqual @sfx-explosionNavanax 50 e1 "\n@sfx-explosionNavanax"
+        select e1 strictEqual @sfx-explosionObviate 51 e1 "\n@sfx-explosionObviate"
+        select e1 strictEqual @sfx-explosionPlasmaSmall 52 e1 "\n@sfx-explosionPlasmaSmall"
+        select e1 strictEqual @sfx-explosionQuad 53 e1 "\n@sfx-explosionQuad"
+        select e1 strictEqual @sfx-explosionReactor 54 e1 "\n@sfx-explosionReactor"
+        select e1 strictEqual @sfx-explosionReactor2 55 e1 "\n@sfx-explosionReactor2"
+        select e1 strictEqual @sfx-explosionReactorNeoplasm 56 e1 "\n@sfx-explosionReactorNeoplasm"
+        select e1 strictEqual @sfx-explosionTitan 57 e1 "\n@sfx-explosionTitan"
+        select e1 strictEqual @sfx-healWave 58 e1 "\n@sfx-healWave"
+        select e1 strictEqual @sfx-loopBio 59 e1 "\n@sfx-loopBio"
+        select e1 strictEqual @sfx-loopBuild 60 e1 "\n@sfx-loopBuild"
+        select e1 strictEqual @sfx-loopCircuit 61 e1 "\n@sfx-loopCircuit"
+        select e1 strictEqual @sfx-loopCombustion 62 e1 "\n@sfx-loopCombustion"
+        select e1 strictEqual @sfx-loopConveyor 63 e1 "\n@sfx-loopConveyor"
+        select e1 strictEqual @sfx-loopCultivator 64 e1 "\n@sfx-loopCultivator"
+        select e1 strictEqual @sfx-loopCutter 65 e1 "\n@sfx-loopCutter"
+        select e1 strictEqual @sfx-loopDifferential 66 e1 "\n@sfx-loopDifferential"
+        select e1 strictEqual @sfx-loopDrill 67 e1 "\n@sfx-loopDrill"
+        select e1 strictEqual @sfx-loopElectricHum 68 e1 "\n@sfx-loopElectricHum"
+        select e1 strictEqual @sfx-loopExtract 69 e1 "\n@sfx-loopExtract"
+        select e1 strictEqual @sfx-loopFire 70 e1 "\n@sfx-loopFire"
+        select e1 strictEqual @sfx-loopFlux 71 e1 "\n@sfx-loopFlux"
+        select e1 strictEqual @sfx-loopGlow 72 e1 "\n@sfx-loopGlow"
+        select e1 strictEqual @sfx-loopGrind 73 e1 "\n@sfx-loopGrind"
+        select e1 strictEqual @sfx-loopHover 74 e1 "\n@sfx-loopHover"
+        select e1 strictEqual @sfx-loopHover2 75 e1 "\n@sfx-loopHover2"
+        select e1 strictEqual @sfx-loopHum 76 e1 "\n@sfx-loopHum"
+        select e1 strictEqual @sfx-loopMachine 77 e1 "\n@sfx-loopMachine"
+        select e1 strictEqual @sfx-loopMachine2 78 e1 "\n@sfx-loopMachine2"
+        select e1 strictEqual @sfx-loopMachineSpin 79 e1 "\n@sfx-loopMachineSpin"
+        select e1 strictEqual @sfx-loopMalign 80 e1 "\n@sfx-loopMalign"
+        select e1 strictEqual @sfx-loopMineBeam 81 e1 "\n@sfx-loopMineBeam"
+        select e1 strictEqual @sfx-loopMissileTrail 82 e1 "\n@sfx-loopMissileTrail"
+        select e1 strictEqual @sfx-loopPulse 83 e1 "\n@sfx-loopPulse"
+        select e1 strictEqual @sfx-loopRegen 84 e1 "\n@sfx-loopRegen"
+        select e1 strictEqual @sfx-loopShield 85 e1 "\n@sfx-loopShield"
+        select e1 strictEqual @sfx-loopSmelter 86 e1 "\n@sfx-loopSmelter"
+        select e1 strictEqual @sfx-loopSpray 87 e1 "\n@sfx-loopSpray"
+        select e1 strictEqual @sfx-loopSteam 88 e1 "\n@sfx-loopSteam"
+        select e1 strictEqual @sfx-loopTech 89 e1 "\n@sfx-loopTech"
+        select e1 strictEqual @sfx-loopThoriumReactor 90 e1 "\n@sfx-loopThoriumReactor"
+        select e1 strictEqual @sfx-loopThruster 91 e1 "\n@sfx-loopThruster"
+        select e1 strictEqual @sfx-loopUnitBuilding 92 e1 "\n@sfx-loopUnitBuilding"
+        select e1 strictEqual @sfx-massdriver 93 e1 "\n@sfx-massdriver"
+        select e1 strictEqual @sfx-massdriverReceive 94 e1 "\n@sfx-massdriverReceive"
+        select e1 strictEqual @sfx-mechStep 95 e1 "\n@sfx-mechStep"
+        select e1 strictEqual @sfx-mechStepHeavy 96 e1 "\n@sfx-mechStepHeavy"
+        select e1 strictEqual @sfx-mechStepSmall 97 e1 "\n@sfx-mechStepSmall"
+        select e1 strictEqual @sfx-padLand 98 e1 "\n@sfx-padLand"
+        select e1 strictEqual @sfx-padLaunch 99 e1 "\n@sfx-padLaunch"
+        select e1 strictEqual @sfx-shieldBreak 103 e1 "\n@sfx-shieldBreak"
+        select e1 strictEqual @sfx-shieldBreakSmall 104 e1 "\n@sfx-shieldBreakSmall"
+        select e1 strictEqual @sfx-shieldHit 105 e1 "\n@sfx-shieldHit"
+        select e1 strictEqual @sfx-shieldWave 106 e1 "\n@sfx-shieldWave"
+        select e1 strictEqual @sfx-shipMove 107 e1 "\n@sfx-shipMove"
+        select e1 strictEqual @sfx-shipMoveBig 108 e1 "\n@sfx-shipMoveBig"
+        select e1 strictEqual @sfx-shockBullet 109 e1 "\n@sfx-shockBullet"
+        select e1 strictEqual @sfx-shockwaveTower 110 e1 "\n@sfx-shockwaveTower"
+        select e1 strictEqual @sfx-shootAfflict 112 e1 "\n@sfx-shootAfflict"
+        select e1 strictEqual @sfx-shootAlpha 113 e1 "\n@sfx-shootAlpha"
+        select e1 strictEqual @sfx-shootArc 114 e1 "\n@sfx-shootArc"
+        select e1 strictEqual @sfx-shootArtillery 115 e1 "\n@sfx-shootArtillery"
+        select e1 strictEqual @sfx-shootArtillerySap 116 e1 "\n@sfx-shootArtillerySap"
+        select e1 strictEqual @sfx-shootArtillerySapBig 117 e1 "\n@sfx-shootArtillerySapBig"
+        select e1 strictEqual @sfx-shootArtillerySmall 118 e1 "\n@sfx-shootArtillerySmall"
+        select e1 strictEqual @sfx-shootAtrax 119 e1 "\n@sfx-shootAtrax"
+        select e1 strictEqual @sfx-shootAvert 120 e1 "\n@sfx-shootAvert"
+        select e1 strictEqual @sfx-shootBeamPlasma 121 e1 "\n@sfx-shootBeamPlasma"
+        select e1 strictEqual @sfx-shootBeamPlasmaSmall 122 e1 "\n@sfx-shootBeamPlasmaSmall"
+        select e1 strictEqual @sfx-shootBreach 123 e1 "\n@sfx-shootBreach"
+        select e1 strictEqual @sfx-shootBreachCarbide 124 e1 "\n@sfx-shootBreachCarbide"
+        select e1 strictEqual @sfx-shootCleroi 125 e1 "\n@sfx-shootCleroi"
+        select e1 strictEqual @sfx-shootCollaris 126 e1 "\n@sfx-shootCollaris"
+        select e1 strictEqual @sfx-shootConquer 127 e1 "\n@sfx-shootConquer"
+        select e1 strictEqual @sfx-shootCorvus 128 e1 "\n@sfx-shootCorvus"
+        select e1 strictEqual @sfx-shootCyclone 129 e1 "\n@sfx-shootCyclone"
+        select e1 strictEqual @sfx-shootDiffuse 130 e1 "\n@sfx-shootDiffuse"
+        select e1 strictEqual @sfx-shootDisperse 131 e1 "\n@sfx-shootDisperse"
+        select e1 strictEqual @sfx-shootDuo 132 e1 "\n@sfx-shootDuo"
+        select e1 strictEqual @sfx-shootEclipse 133 e1 "\n@sfx-shootEclipse"
+        select e1 strictEqual @sfx-shootElude 134 e1 "\n@sfx-shootElude"
+        select e1 strictEqual @sfx-shootEnergyField 135 e1 "\n@sfx-shootEnergyField"
+        select e1 strictEqual @sfx-shootFlame 136 e1 "\n@sfx-shootFlame"
+        select e1 strictEqual @sfx-shootFlamePlasma 137 e1 "\n@sfx-shootFlamePlasma"
+        select e1 strictEqual @sfx-shootForeshadow 138 e1 "\n@sfx-shootForeshadow"
+        select e1 strictEqual @sfx-shootFuse 139 e1 "\n@sfx-shootFuse"
+        select e1 strictEqual @sfx-shootHorizon 140 e1 "\n@sfx-shootHorizon"
+        select e1 strictEqual @sfx-shootLancer 141 e1 "\n@sfx-shootLancer"
+        select e1 strictEqual @sfx-shootLaser 142 e1 "\n@sfx-shootLaser"
+        select e1 strictEqual @sfx-shootLocus 143 e1 "\n@sfx-shootLocus"
+        select e1 strictEqual @sfx-shootMalign 144 e1 "\n@sfx-shootMalign"
+        select e1 strictEqual @sfx-shootMeltdown 145 e1 "\n@sfx-shootMeltdown"
+        select e1 strictEqual @sfx-shootMerui 146 e1 "\n@sfx-shootMerui"
+        select e1 strictEqual @sfx-shootMissile 147 e1 "\n@sfx-shootMissile"
+        select e1 strictEqual @sfx-shootMissileLarge 148 e1 "\n@sfx-shootMissileLarge"
+        select e1 strictEqual @sfx-shootMissileLong 149 e1 "\n@sfx-shootMissileLong"
+        select e1 strictEqual @sfx-shootMissilePlasma 150 e1 "\n@sfx-shootMissilePlasma"
+        select e1 strictEqual @sfx-shootMissilePlasmaShort 151 e1 "\n@sfx-shootMissilePlasmaShort"
+        select e1 strictEqual @sfx-shootMissileShort 152 e1 "\n@sfx-shootMissileShort"
+        select e1 strictEqual @sfx-shootMissileSmall 153 e1 "\n@sfx-shootMissileSmall"
+        select e1 strictEqual @sfx-shootNavanax 154 e1 "\n@sfx-shootNavanax"
+        select e1 strictEqual @sfx-shootOmura 155 e1 "\n@sfx-shootOmura"
+        select e1 strictEqual @sfx-shootPayload 156 e1 "\n@sfx-shootPayload"
+        select e1 strictEqual @sfx-shootPulsar 157 e1 "\n@sfx-shootPulsar"
+        select e1 strictEqual @sfx-shootQuad 158 e1 "\n@sfx-shootQuad"
+        select e1 strictEqual @sfx-shootReign 159 e1 "\n@sfx-shootReign"
+        select e1 strictEqual @sfx-shootRetusa 160 e1 "\n@sfx-shootRetusa"
+        select e1 strictEqual @sfx-shootRipple 161 e1 "\n@sfx-shootRipple"
+        select e1 strictEqual @sfx-shootSalvo 162 e1 "\n@sfx-shootSalvo"
+        select e1 strictEqual @sfx-shootSap 163 e1 "\n@sfx-shootSap"
+        select e1 strictEqual @sfx-shootScathe 164 e1 "\n@sfx-shootScathe"
+        select e1 strictEqual @sfx-shootScatter 165 e1 "\n@sfx-shootScatter"
+        select e1 strictEqual @sfx-shootScepter 166 e1 "\n@sfx-shootScepter"
+        select e1 strictEqual @sfx-shootScepterSecondary 167 e1 "\n@sfx-shootScepterSecondary"
+        select e1 strictEqual @sfx-shootSegment 168 e1 "\n@sfx-shootSegment"
+        select e1 strictEqual @sfx-shootSpectre 170 e1 "\n@sfx-shootSpectre"
+        select e1 strictEqual @sfx-shootStell 171 e1 "\n@sfx-shootStell"
+        select e1 strictEqual @sfx-shootSublimate 172 e1 "\n@sfx-shootSublimate"
+        select e1 strictEqual @sfx-shootTank 173 e1 "\n@sfx-shootTank"
+        select e1 strictEqual @sfx-shootToxopidShotgun 174 e1 "\n@sfx-shootToxopidShotgun"
+        select e1 strictEqual @sfx-stepMud 175 e1 "\n@sfx-stepMud"
+        select e1 strictEqual @sfx-stepWater 176 e1 "\n@sfx-stepWater"
+        select e1 strictEqual @sfx-tankMove 177 e1 "\n@sfx-tankMove"
+        select e1 strictEqual @sfx-tankMoveHeavy 178 e1 "\n@sfx-tankMoveHeavy"
+        select e1 strictEqual @sfx-tankMoveSmall 179 e1 "\n@sfx-tankMoveSmall"
+        select e1 strictEqual @sfx-uiBack 180 e1 "\n@sfx-uiBack"
+        select e1 strictEqual @sfx-uiButton 181 e1 "\n@sfx-uiButton"
+        select e1 strictEqual @sfx-uiChat 182 e1 "\n@sfx-uiChat"
+        select e1 strictEqual @sfx-uiNotify 183 e1 "\n@sfx-uiNotify"
+        select e1 strictEqual @sfx-uiUnlock 184 e1 "\n@sfx-uiUnlock"
+        select e1 strictEqual @sfx-unitCreate 185 e1 "\n@sfx-unitCreate"
+        select e1 strictEqual @sfx-unitCreateBig 186 e1 "\n@sfx-unitCreateBig"
+        select e1 strictEqual @sfx-unitExplode1 187 e1 "\n@sfx-unitExplode1"
+        select e1 strictEqual @sfx-unitExplode2 188 e1 "\n@sfx-unitExplode2"
+        select e1 strictEqual @sfx-unitExplode3 189 e1 "\n@sfx-unitExplode3"
+        select e1 strictEqual @sfx-walkerStep 190 e1 "\n@sfx-walkerStep"
+        select e1 strictEqual @sfx-walkerStepSmall 191 e1 "\n@sfx-walkerStepSmall"
+        select e1 strictEqual @sfx-walkerStepTiny 192 e1 "\n@sfx-walkerStepTiny"
+        select e1 strictEqual @sfx-waveSpawn 193 e1 "\n@sfx-waveSpawn"
+        select e1 strictEqual @sfx-windHowl 197 e1 "\n@sfx-windHowl"
+        select e1 strictEqual @sfx-wreckFall 198 e1 "\n@sfx-wreckFall"
+        select e1 strictEqual @sfx-wreckFallBig 199 e1 "\n@sfx-wreckFallBig"
+        select e1 strictEqual @top 2 e1 "\n@top"
+        select e1 strictEqual @topLeft 10 e1 "\n@topLeft"
+        select e1 strictEqual @topRight 18 e1 "\n@topRight"
         sensor id @graphite-press @id
-        jump general notEqual id 0
+        select e1 equal id 0 e1 "\n@graphite-press"
         sensor id @multi-press @id
-        jump general notEqual id 1
+        select e1 equal id 1 e1 "\n@multi-press"
         sensor id @silicon-smelter @id
-        jump general notEqual id 2
+        select e1 equal id 2 e1 "\n@silicon-smelter"
         sensor id @silicon-crucible @id
-        jump general notEqual id 3
+        select e1 equal id 3 e1 "\n@silicon-crucible"
         sensor id @kiln @id
-        jump general notEqual id 4
+        select e1 equal id 4 e1 "\n@kiln"
         sensor id @plastanium-compressor @id
-        jump general notEqual id 5
+        select e1 equal id 5 e1 "\n@plastanium-compressor"
         sensor id @phase-weaver @id
-        jump general notEqual id 6
+        select e1 equal id 6 e1 "\n@phase-weaver"
         sensor id @cryofluid-mixer @id
-        jump general notEqual id 7
+        select e1 equal id 7 e1 "\n@cryofluid-mixer"
         sensor id @pyratite-mixer @id
-        jump general notEqual id 8
+        select e1 equal id 8 e1 "\n@pyratite-mixer"
         sensor id @blast-mixer @id
-        jump general notEqual id 9
+        select e1 equal id 9 e1 "\n@blast-mixer"
         sensor id @melter @id
-        jump general notEqual id 10
+        select e1 equal id 10 e1 "\n@melter"
         sensor id @separator @id
-        jump general notEqual id 11
+        select e1 equal id 11 e1 "\n@separator"
         sensor id @disassembler @id
-        jump general notEqual id 12
+        select e1 equal id 12 e1 "\n@disassembler"
         sensor id @spore-press @id
-        jump general notEqual id 13
+        select e1 equal id 13 e1 "\n@spore-press"
         sensor id @pulverizer @id
-        jump general notEqual id 14
+        select e1 equal id 14 e1 "\n@pulverizer"
         sensor id @coal-centrifuge @id
-        jump general notEqual id 15
+        select e1 equal id 15 e1 "\n@coal-centrifuge"
         sensor id @incinerator @id
-        jump general notEqual id 16
+        select e1 equal id 16 e1 "\n@incinerator"
         sensor id @copper-wall @id
-        jump general notEqual id 17
+        select e1 equal id 17 e1 "\n@copper-wall"
         sensor id @copper-wall-large @id
-        jump general notEqual id 18
+        select e1 equal id 18 e1 "\n@copper-wall-large"
         sensor id @titanium-wall @id
-        jump general notEqual id 19
+        select e1 equal id 19 e1 "\n@titanium-wall"
         sensor id @titanium-wall-large @id
-        jump general notEqual id 20
+        select e1 equal id 20 e1 "\n@titanium-wall-large"
         sensor id @plastanium-wall @id
-        jump general notEqual id 21
+        select e1 equal id 21 e1 "\n@plastanium-wall"
         sensor id @plastanium-wall-large @id
-        jump general notEqual id 22
+        select e1 equal id 22 e1 "\n@plastanium-wall-large"
         sensor id @thorium-wall @id
-        jump general notEqual id 23
+        select e1 equal id 23 e1 "\n@thorium-wall"
         sensor id @thorium-wall-large @id
-        jump general notEqual id 24
+        select e1 equal id 24 e1 "\n@thorium-wall-large"
         sensor id @phase-wall @id
-        jump general notEqual id 25
+        select e1 equal id 25 e1 "\n@phase-wall"
         sensor id @phase-wall-large @id
-        jump general notEqual id 26
+        select e1 equal id 26 e1 "\n@phase-wall-large"
         sensor id @surge-wall @id
-        jump general notEqual id 27
+        select e1 equal id 27 e1 "\n@surge-wall"
         sensor id @surge-wall-large @id
-        jump general notEqual id 28
+        select e1 equal id 28 e1 "\n@surge-wall-large"
         sensor id @door @id
-        jump general notEqual id 29
+        select e1 equal id 29 e1 "\n@door"
         sensor id @door-large @id
-        jump general notEqual id 30
+        select e1 equal id 30 e1 "\n@door-large"
         sensor id @scrap-wall @id
-        jump general notEqual id 31
+        select e1 equal id 31 e1 "\n@scrap-wall"
         sensor id @scrap-wall-large @id
-        jump general notEqual id 32
+        select e1 equal id 32 e1 "\n@scrap-wall-large"
         sensor id @scrap-wall-huge @id
-        jump general notEqual id 33
+        select e1 equal id 33 e1 "\n@scrap-wall-huge"
         sensor id @scrap-wall-gigantic @id
-        jump general notEqual id 34
+        select e1 equal id 34 e1 "\n@scrap-wall-gigantic"
         sensor id @mender @id
-        jump general notEqual id 35
+        select e1 equal id 35 e1 "\n@mender"
         sensor id @mend-projector @id
-        jump general notEqual id 36
+        select e1 equal id 36 e1 "\n@mend-projector"
         sensor id @overdrive-projector @id
-        jump general notEqual id 37
+        select e1 equal id 37 e1 "\n@overdrive-projector"
         sensor id @overdrive-dome @id
-        jump general notEqual id 38
+        select e1 equal id 38 e1 "\n@overdrive-dome"
         sensor id @force-projector @id
-        jump general notEqual id 39
+        select e1 equal id 39 e1 "\n@force-projector"
         sensor id @shock-mine @id
-        jump general notEqual id 40
+        select e1 equal id 40 e1 "\n@shock-mine"
         sensor id @conveyor @id
-        jump general notEqual id 41
+        select e1 equal id 41 e1 "\n@conveyor"
         sensor id @titanium-conveyor @id
-        jump general notEqual id 42
+        select e1 equal id 42 e1 "\n@titanium-conveyor"
         sensor id @plastanium-conveyor @id
-        jump general notEqual id 43
+        select e1 equal id 43 e1 "\n@plastanium-conveyor"
         sensor id @armored-conveyor @id
-        jump general notEqual id 44
+        select e1 equal id 44 e1 "\n@armored-conveyor"
         sensor id @junction @id
-        jump general notEqual id 45
+        select e1 equal id 45 e1 "\n@junction"
         sensor id @bridge-conveyor @id
-        jump general notEqual id 46
+        select e1 equal id 46 e1 "\n@bridge-conveyor"
         sensor id @phase-conveyor @id
-        jump general notEqual id 47
+        select e1 equal id 47 e1 "\n@phase-conveyor"
         sensor id @sorter @id
-        jump general notEqual id 48
+        select e1 equal id 48 e1 "\n@sorter"
         sensor id @inverted-sorter @id
-        jump general notEqual id 49
+        select e1 equal id 49 e1 "\n@inverted-sorter"
         sensor id @router @id
-        jump general notEqual id 50
+        select e1 equal id 50 e1 "\n@router"
         sensor id @distributor @id
-        jump general notEqual id 51
+        select e1 equal id 51 e1 "\n@distributor"
         sensor id @overflow-gate @id
-        jump general notEqual id 52
+        select e1 equal id 52 e1 "\n@overflow-gate"
         sensor id @underflow-gate @id
-        jump general notEqual id 53
+        select e1 equal id 53 e1 "\n@underflow-gate"
         sensor id @mass-driver @id
-        jump general notEqual id 54
+        select e1 equal id 54 e1 "\n@mass-driver"
         sensor id @duct @id
-        jump general notEqual id 55
+        select e1 equal id 55 e1 "\n@duct"
         sensor id @duct-router @id
-        jump general notEqual id 56
+        select e1 equal id 56 e1 "\n@duct-router"
         sensor id @duct-bridge @id
-        jump general notEqual id 57
+        select e1 equal id 57 e1 "\n@duct-bridge"
         sensor id @mechanical-pump @id
-        jump general notEqual id 58
+        select e1 equal id 58 e1 "\n@mechanical-pump"
         sensor id @rotary-pump @id
-        jump general notEqual id 59
+        select e1 equal id 59 e1 "\n@rotary-pump"
         sensor id @conduit @id
-        jump general notEqual id 60
+        select e1 equal id 60 e1 "\n@conduit"
         sensor id @pulse-conduit @id
-        jump general notEqual id 61
+        select e1 equal id 61 e1 "\n@pulse-conduit"
         sensor id @plated-conduit @id
-        jump general notEqual id 62
+        select e1 equal id 62 e1 "\n@plated-conduit"
         sensor id @liquid-router @id
-        jump general notEqual id 63
+        select e1 equal id 63 e1 "\n@liquid-router"
         sensor id @liquid-tank @id
-        jump general notEqual id 64
+        select e1 equal id 64 e1 "\n@liquid-tank"
         sensor id @liquid-junction @id
-        jump general notEqual id 65
+        select e1 equal id 65 e1 "\n@liquid-junction"
         sensor id @bridge-conduit @id
-        jump general notEqual id 66
+        select e1 equal id 66 e1 "\n@bridge-conduit"
         sensor id @phase-conduit @id
-        jump general notEqual id 67
+        select e1 equal id 67 e1 "\n@phase-conduit"
         sensor id @power-node @id
-        jump general notEqual id 68
+        select e1 equal id 68 e1 "\n@power-node"
         sensor id @power-node-large @id
-        jump general notEqual id 69
+        select e1 equal id 69 e1 "\n@power-node-large"
         sensor id @surge-tower @id
-        jump general notEqual id 70
+        select e1 equal id 70 e1 "\n@surge-tower"
         sensor id @diode @id
-        jump general notEqual id 71
+        select e1 equal id 71 e1 "\n@diode"
         sensor id @battery @id
-        jump general notEqual id 72
+        select e1 equal id 72 e1 "\n@battery"
         sensor id @battery-large @id
-        jump general notEqual id 73
+        select e1 equal id 73 e1 "\n@battery-large"
         sensor id @combustion-generator @id
-        jump general notEqual id 74
+        select e1 equal id 74 e1 "\n@combustion-generator"
         sensor id @thermal-generator @id
-        jump general notEqual id 75
+        select e1 equal id 75 e1 "\n@thermal-generator"
         sensor id @steam-generator @id
-        jump general notEqual id 76
+        select e1 equal id 76 e1 "\n@steam-generator"
         sensor id @differential-generator @id
-        jump general notEqual id 77
+        select e1 equal id 77 e1 "\n@differential-generator"
         sensor id @rtg-generator @id
-        jump general notEqual id 78
+        select e1 equal id 78 e1 "\n@rtg-generator"
         sensor id @solar-panel @id
-        jump general notEqual id 79
+        select e1 equal id 79 e1 "\n@solar-panel"
         sensor id @solar-panel-large @id
-        jump general notEqual id 80
+        select e1 equal id 80 e1 "\n@solar-panel-large"
         sensor id @thorium-reactor @id
-        jump general notEqual id 81
+        select e1 equal id 81 e1 "\n@thorium-reactor"
         sensor id @impact-reactor @id
-        jump general notEqual id 82
+        select e1 equal id 82 e1 "\n@impact-reactor"
         sensor id @mechanical-drill @id
-        jump general notEqual id 83
+        select e1 equal id 83 e1 "\n@mechanical-drill"
         sensor id @pneumatic-drill @id
-        jump general notEqual id 84
+        select e1 equal id 84 e1 "\n@pneumatic-drill"
         sensor id @laser-drill @id
-        jump general notEqual id 85
+        select e1 equal id 85 e1 "\n@laser-drill"
         sensor id @blast-drill @id
-        jump general notEqual id 86
+        select e1 equal id 86 e1 "\n@blast-drill"
         sensor id @water-extractor @id
-        jump general notEqual id 87
+        select e1 equal id 87 e1 "\n@water-extractor"
         sensor id @cultivator @id
-        jump general notEqual id 88
+        select e1 equal id 88 e1 "\n@cultivator"
         sensor id @oil-extractor @id
-        jump general notEqual id 89
+        select e1 equal id 89 e1 "\n@oil-extractor"
         sensor id @core-shard @id
-        jump general notEqual id 90
+        select e1 equal id 90 e1 "\n@core-shard"
         sensor id @core-foundation @id
-        jump general notEqual id 91
+        select e1 equal id 91 e1 "\n@core-foundation"
         sensor id @core-nucleus @id
-        jump general notEqual id 92
+        select e1 equal id 92 e1 "\n@core-nucleus"
         sensor id @vault @id
-        jump general notEqual id 93
+        select e1 equal id 93 e1 "\n@vault"
         sensor id @container @id
-        jump general notEqual id 94
+        select e1 equal id 94 e1 "\n@container"
         sensor id @unloader @id
-        jump general notEqual id 95
+        select e1 equal id 95 e1 "\n@unloader"
         sensor id @duo @id
-        jump general notEqual id 96
+        select e1 equal id 96 e1 "\n@duo"
         sensor id @scatter @id
-        jump general notEqual id 97
+        select e1 equal id 97 e1 "\n@scatter"
         sensor id @scorch @id
-        jump general notEqual id 98
+        select e1 equal id 98 e1 "\n@scorch"
         sensor id @hail @id
-        jump general notEqual id 99
+        select e1 equal id 99 e1 "\n@hail"
         sensor id @wave @id
-        jump general notEqual id 100
+        select e1 equal id 100 e1 "\n@wave"
         sensor id @lancer @id
-        jump general notEqual id 101
+        select e1 equal id 101 e1 "\n@lancer"
         sensor id @arc @id
-        jump general notEqual id 102
+        select e1 equal id 102 e1 "\n@arc"
         sensor id @parallax @id
-        jump general notEqual id 103
+        select e1 equal id 103 e1 "\n@parallax"
         sensor id @swarmer @id
-        jump general notEqual id 104
+        select e1 equal id 104 e1 "\n@swarmer"
         sensor id @salvo @id
-        jump general notEqual id 105
+        select e1 equal id 105 e1 "\n@salvo"
         sensor id @segment @id
-        jump general notEqual id 106
+        select e1 equal id 106 e1 "\n@segment"
         sensor id @tsunami @id
-        jump general notEqual id 107
+        select e1 equal id 107 e1 "\n@tsunami"
         sensor id @fuse @id
-        jump general notEqual id 108
+        select e1 equal id 108 e1 "\n@fuse"
         sensor id @ripple @id
-        jump general notEqual id 109
+        select e1 equal id 109 e1 "\n@ripple"
         sensor id @cyclone @id
-        jump general notEqual id 110
+        select e1 equal id 110 e1 "\n@cyclone"
         sensor id @foreshadow @id
-        jump general notEqual id 111
+        select e1 equal id 111 e1 "\n@foreshadow"
         sensor id @spectre @id
-        jump general notEqual id 112
+        select e1 equal id 112 e1 "\n@spectre"
         sensor id @meltdown @id
-        jump general notEqual id 113
+        select e1 equal id 113 e1 "\n@meltdown"
         sensor id @ground-factory @id
-        jump general notEqual id 115
+        select e1 equal id 115 e1 "\n@ground-factory"
         sensor id @air-factory @id
-        jump general notEqual id 116
+        select e1 equal id 116 e1 "\n@air-factory"
         sensor id @naval-factory @id
-        jump general notEqual id 117
+        select e1 equal id 117 e1 "\n@naval-factory"
         sensor id @additive-reconstructor @id
-        jump general notEqual id 118
+        select e1 equal id 118 e1 "\n@additive-reconstructor"
         sensor id @multiplicative-reconstructor @id
-        jump general notEqual id 119
+        select e1 equal id 119 e1 "\n@multiplicative-reconstructor"
         sensor id @exponential-reconstructor @id
-        jump general notEqual id 120
+        select e1 equal id 120 e1 "\n@exponential-reconstructor"
         sensor id @tetrative-reconstructor @id
-        jump general notEqual id 121
+        select e1 equal id 121 e1 "\n@tetrative-reconstructor"
         sensor id @repair-point @id
-        jump general notEqual id 122
+        select e1 equal id 122 e1 "\n@repair-point"
         sensor id @repair-turret @id
-        jump general notEqual id 123
+        select e1 equal id 123 e1 "\n@repair-turret"
         sensor id @payload-conveyor @id
-        jump general notEqual id 124
+        select e1 equal id 124 e1 "\n@payload-conveyor"
         sensor id @payload-router @id
-        jump general notEqual id 125
+        select e1 equal id 125 e1 "\n@payload-router"
         sensor id @power-source @id
-        jump general notEqual id 126
+        select e1 equal id 126 e1 "\n@power-source"
         sensor id @power-void @id
-        jump general notEqual id 127
+        select e1 equal id 127 e1 "\n@power-void"
         sensor id @item-source @id
-        jump general notEqual id 128
+        select e1 equal id 128 e1 "\n@item-source"
         sensor id @item-void @id
-        jump general notEqual id 129
+        select e1 equal id 129 e1 "\n@item-void"
         sensor id @liquid-source @id
-        jump general notEqual id 130
+        select e1 equal id 130 e1 "\n@liquid-source"
         sensor id @liquid-void @id
-        jump general notEqual id 131
+        select e1 equal id 131 e1 "\n@liquid-void"
         sensor id @payload-void @id
-        jump general notEqual id 132
+        select e1 equal id 132 e1 "\n@payload-void"
         sensor id @payload-source @id
-        jump general notEqual id 133
+        select e1 equal id 133 e1 "\n@payload-source"
         sensor id @illuminator @id
-        jump general notEqual id 134
+        select e1 equal id 134 e1 "\n@illuminator"
         sensor id @launch-pad @id
-        jump general notEqual id 135
+        select e1 equal id 135 e1 "\n@launch-pad"
         sensor id @interplanetary-accelerator @id
-        jump general notEqual id 136
+        select e1 equal id 136 e1 "\n@interplanetary-accelerator"
         sensor id @message @id
-        jump general notEqual id 137
+        select e1 equal id 137 e1 "\n@message"
         sensor id @switch @id
-        jump general notEqual id 138
+        select e1 equal id 138 e1 "\n@switch"
         sensor id @micro-processor @id
-        jump general notEqual id 139
+        select e1 equal id 139 e1 "\n@micro-processor"
         sensor id @logic-processor @id
-        jump general notEqual id 140
+        select e1 equal id 140 e1 "\n@logic-processor"
         sensor id @hyper-processor @id
-        jump general notEqual id 141
+        select e1 equal id 141 e1 "\n@hyper-processor"
         sensor id @memory-cell @id
-        jump general notEqual id 142
+        select e1 equal id 142 e1 "\n@memory-cell"
         sensor id @memory-bank @id
-        jump general notEqual id 143
+        select e1 equal id 143 e1 "\n@memory-bank"
         sensor id @logic-display @id
-        jump general notEqual id 144
+        select e1 equal id 144 e1 "\n@logic-display"
         sensor id @large-logic-display @id
-        jump general notEqual id 145
+        select e1 equal id 145 e1 "\n@large-logic-display"
         sensor id @liquid-container @id
-        jump general notEqual id 146
+        select e1 equal id 146 e1 "\n@liquid-container"
         sensor id @deconstructor @id
-        jump general notEqual id 147
+        select e1 equal id 147 e1 "\n@deconstructor"
         sensor id @constructor @id
-        jump general notEqual id 148
+        select e1 equal id 148 e1 "\n@constructor"
         sensor id @thruster @id
-        jump general notEqual id 149
+        select e1 equal id 149 e1 "\n@thruster"
         sensor id @large-constructor @id
-        jump general notEqual id 150
+        select e1 equal id 150 e1 "\n@large-constructor"
         sensor id @payload-loader @id
-        jump general notEqual id 151
+        select e1 equal id 151 e1 "\n@payload-loader"
         sensor id @payload-unloader @id
-        jump general notEqual id 152
+        select e1 equal id 152 e1 "\n@payload-unloader"
         sensor id @silicon-arc-furnace @id
-        jump general notEqual id 153
+        select e1 equal id 153 e1 "\n@silicon-arc-furnace"
         sensor id @cliff-crusher @id
-        jump general notEqual id 154
+        select e1 equal id 154 e1 "\n@cliff-crusher"
         sensor id @plasma-bore @id
-        jump general notEqual id 155
+        select e1 equal id 155 e1 "\n@plasma-bore"
         sensor id @reinforced-liquid-junction @id
-        jump general notEqual id 156
+        select e1 equal id 156 e1 "\n@reinforced-liquid-junction"
         sensor id @breach @id
-        jump general notEqual id 157
+        select e1 equal id 157 e1 "\n@breach"
         sensor id @core-bastion @id
-        jump general notEqual id 158
+        select e1 equal id 158 e1 "\n@core-bastion"
         sensor id @turbine-condenser @id
-        jump general notEqual id 159
+        select e1 equal id 159 e1 "\n@turbine-condenser"
         sensor id @beam-node @id
-        jump general notEqual id 160
+        select e1 equal id 160 e1 "\n@beam-node"
         sensor id @beam-tower @id
-        jump general notEqual id 161
+        select e1 equal id 161 e1 "\n@beam-tower"
         sensor id @build-tower @id
-        jump general notEqual id 162
+        select e1 equal id 162 e1 "\n@build-tower"
         sensor id @impact-drill @id
-        jump general notEqual id 163
+        select e1 equal id 163 e1 "\n@impact-drill"
         sensor id @carbide-crucible @id
-        jump general notEqual id 164
+        select e1 equal id 164 e1 "\n@carbide-crucible"
         sensor id @surge-conveyor @id
-        jump general notEqual id 165
+        select e1 equal id 165 e1 "\n@surge-conveyor"
         sensor id @duct-unloader @id
-        jump general notEqual id 166
+        select e1 equal id 166 e1 "\n@duct-unloader"
         sensor id @surge-router @id
-        jump general notEqual id 167
+        select e1 equal id 167 e1 "\n@surge-router"
         sensor id @reinforced-conduit @id
-        jump general notEqual id 168
+        select e1 equal id 168 e1 "\n@reinforced-conduit"
         sensor id @reinforced-liquid-router @id
-        jump general notEqual id 169
+        select e1 equal id 169 e1 "\n@reinforced-liquid-router"
         sensor id @reinforced-liquid-container @id
-        jump general notEqual id 170
+        select e1 equal id 170 e1 "\n@reinforced-liquid-container"
         sensor id @reinforced-liquid-tank @id
-        jump general notEqual id 171
+        select e1 equal id 171 e1 "\n@reinforced-liquid-tank"
         sensor id @reinforced-bridge-conduit @id
-        jump general notEqual id 172
+        select e1 equal id 172 e1 "\n@reinforced-bridge-conduit"
         sensor id @core-citadel @id
-        jump general notEqual id 173
+        select e1 equal id 173 e1 "\n@core-citadel"
         sensor id @core-acropolis @id
-        jump general notEqual id 174
+        select e1 equal id 174 e1 "\n@core-acropolis"
         sensor id @heat-reactor @id
-        jump general notEqual id 175
+        select e1 equal id 175 e1 "\n@heat-reactor"
         sensor id @impulse-pump @id
-        jump general notEqual id 176
+        select e1 equal id 176 e1 "\n@impulse-pump"
         sensor id @reinforced-pump @id
-        jump general notEqual id 177
+        select e1 equal id 177 e1 "\n@reinforced-pump"
         sensor id @electrolyzer @id
-        jump general notEqual id 178
+        select e1 equal id 178 e1 "\n@electrolyzer"
         sensor id @oxidation-chamber @id
-        jump general notEqual id 179
+        select e1 equal id 179 e1 "\n@oxidation-chamber"
         sensor id @surge-smelter @id
-        jump general notEqual id 180
+        select e1 equal id 180 e1 "\n@surge-smelter"
         sensor id @surge-crucible @id
-        jump general notEqual id 181
+        select e1 equal id 181 e1 "\n@surge-crucible"
         sensor id @overflow-duct @id
-        jump general notEqual id 182
+        select e1 equal id 182 e1 "\n@overflow-duct"
         sensor id @large-plasma-bore @id
-        jump general notEqual id 183
+        select e1 equal id 183 e1 "\n@large-plasma-bore"
         sensor id @cyanogen-synthesizer @id
-        jump general notEqual id 184
+        select e1 equal id 184 e1 "\n@cyanogen-synthesizer"
         sensor id @slag-centrifuge @id
-        jump general notEqual id 185
+        select e1 equal id 185 e1 "\n@slag-centrifuge"
         sensor id @electric-heater @id
-        jump general notEqual id 186
+        select e1 equal id 186 e1 "\n@electric-heater"
         sensor id @slag-incinerator @id
-        jump general notEqual id 187
+        select e1 equal id 187 e1 "\n@slag-incinerator"
         sensor id @phase-synthesizer @id
-        jump general notEqual id 188
+        select e1 equal id 188 e1 "\n@phase-synthesizer"
         sensor id @sublimate @id
-        jump general notEqual id 189
+        select e1 equal id 189 e1 "\n@sublimate"
         sensor id @reinforced-container @id
-        jump general notEqual id 190
+        select e1 equal id 190 e1 "\n@reinforced-container"
         sensor id @reinforced-vault @id
-        jump general notEqual id 191
+        select e1 equal id 191 e1 "\n@reinforced-vault"
         sensor id @atmospheric-concentrator @id
-        jump general notEqual id 192
+        select e1 equal id 192 e1 "\n@atmospheric-concentrator"
         sensor id @unit-cargo-loader @id
-        jump general notEqual id 193
+        select e1 equal id 193 e1 "\n@unit-cargo-loader"
         sensor id @unit-cargo-unload-point @id
-        jump general notEqual id 194
+        select e1 equal id 194 e1 "\n@unit-cargo-unload-point"
         sensor id @chemical-combustion-chamber @id
-        jump general notEqual id 195
+        select e1 equal id 195 e1 "\n@chemical-combustion-chamber"
         sensor id @pyrolysis-generator @id
-        jump general notEqual id 196
+        select e1 equal id 196 e1 "\n@pyrolysis-generator"
         sensor id @regen-projector @id
-        jump general notEqual id 197
+        select e1 equal id 197 e1 "\n@regen-projector"
         sensor id @titan @id
-        jump general notEqual id 198
+        select e1 equal id 198 e1 "\n@titan"
         sensor id @small-deconstructor @id
-        jump general notEqual id 199
+        select e1 equal id 199 e1 "\n@small-deconstructor"
         sensor id @vent-condenser @id
-        jump general notEqual id 200
+        select e1 equal id 200 e1 "\n@vent-condenser"
         sensor id @phase-heater @id
-        jump general notEqual id 201
+        select e1 equal id 201 e1 "\n@phase-heater"
         sensor id @heat-redirector @id
-        jump general notEqual id 202
+        select e1 equal id 202 e1 "\n@heat-redirector"
         sensor id @tungsten-wall @id
-        jump general notEqual id 203
+        select e1 equal id 203 e1 "\n@tungsten-wall"
         sensor id @tungsten-wall-large @id
-        jump general notEqual id 204
+        select e1 equal id 204 e1 "\n@tungsten-wall-large"
         sensor id @tank-assembler @id
-        jump general notEqual id 205
+        select e1 equal id 205 e1 "\n@tank-assembler"
         sensor id @beryllium-wall @id
-        jump general notEqual id 206
+        select e1 equal id 206 e1 "\n@beryllium-wall"
         sensor id @beryllium-wall-large @id
-        jump general notEqual id 207
+        select e1 equal id 207 e1 "\n@beryllium-wall-large"
         sensor id @eruption-drill @id
-        jump general notEqual id 208
+        select e1 equal id 208 e1 "\n@eruption-drill"
         sensor id @ship-assembler @id
-        jump general notEqual id 209
+        select e1 equal id 209 e1 "\n@ship-assembler"
         sensor id @mech-assembler @id
-        jump general notEqual id 210
+        select e1 equal id 210 e1 "\n@mech-assembler"
         sensor id @shield-projector @id
-        jump general notEqual id 211
+        select e1 equal id 211 e1 "\n@shield-projector"
         sensor id @beam-link @id
-        jump general notEqual id 212
+        select e1 equal id 212 e1 "\n@beam-link"
         sensor id @world-processor @id
-        jump general notEqual id 213
+        select e1 equal id 213 e1 "\n@world-processor"
         sensor id @reinforced-payload-conveyor @id
-        jump general notEqual id 214
+        select e1 equal id 214 e1 "\n@reinforced-payload-conveyor"
         sensor id @reinforced-payload-router @id
-        jump general notEqual id 215
+        select e1 equal id 215 e1 "\n@reinforced-payload-router"
         sensor id @disperse @id
-        jump general notEqual id 216
+        select e1 equal id 216 e1 "\n@disperse"
         sensor id @large-shield-projector @id
-        jump general notEqual id 217
+        select e1 equal id 217 e1 "\n@large-shield-projector"
         sensor id @payload-mass-driver @id
-        jump general notEqual id 218
+        select e1 equal id 218 e1 "\n@payload-mass-driver"
         sensor id @world-cell @id
-        jump general notEqual id 219
+        select e1 equal id 219 e1 "\n@world-cell"
         sensor id @carbide-wall @id
-        jump general notEqual id 220
+        select e1 equal id 220 e1 "\n@carbide-wall"
         sensor id @carbide-wall-large @id
-        jump general notEqual id 221
+        select e1 equal id 221 e1 "\n@carbide-wall-large"
         sensor id @tank-fabricator @id
-        jump general notEqual id 222
+        select e1 equal id 222 e1 "\n@tank-fabricator"
         sensor id @mech-fabricator @id
-        jump general notEqual id 223
+        select e1 equal id 223 e1 "\n@mech-fabricator"
         sensor id @ship-fabricator @id
-        jump general notEqual id 224
+        select e1 equal id 224 e1 "\n@ship-fabricator"
         sensor id @reinforced-surge-wall @id
-        jump general notEqual id 225
+        select e1 equal id 225 e1 "\n@reinforced-surge-wall"
         sensor id @radar @id
-        jump general notEqual id 226
+        select e1 equal id 226 e1 "\n@radar"
         sensor id @blast-door @id
-        jump general notEqual id 227
+        select e1 equal id 227 e1 "\n@blast-door"
         sensor id @canvas @id
-        jump general notEqual id 228
+        select e1 equal id 228 e1 "\n@canvas"
         sensor id @armored-duct @id
-        jump general notEqual id 229
+        select e1 equal id 229 e1 "\n@armored-duct"
         sensor id @unit-repair-tower @id
-        jump general notEqual id 230
+        select e1 equal id 230 e1 "\n@unit-repair-tower"
         sensor id @diffuse @id
-        jump general notEqual id 231
+        select e1 equal id 231 e1 "\n@diffuse"
         sensor id @prime-refabricator @id
-        jump general notEqual id 232
+        select e1 equal id 232 e1 "\n@prime-refabricator"
         sensor id @basic-assembler-module @id
-        jump general notEqual id 233
+        select e1 equal id 233 e1 "\n@basic-assembler-module"
         sensor id @reinforced-surge-wall-large @id
-        jump general notEqual id 234
+        select e1 equal id 234 e1 "\n@reinforced-surge-wall-large"
         sensor id @tank-refabricator @id
-        jump general notEqual id 235
+        select e1 equal id 235 e1 "\n@tank-refabricator"
         sensor id @mech-refabricator @id
-        jump general notEqual id 236
+        select e1 equal id 236 e1 "\n@mech-refabricator"
         sensor id @ship-refabricator @id
-        jump general notEqual id 237
+        select e1 equal id 237 e1 "\n@ship-refabricator"
         sensor id @slag-heater @id
-        jump general notEqual id 238
+        select e1 equal id 238 e1 "\n@slag-heater"
         sensor id @afflict @id
-        jump general notEqual id 239
+        select e1 equal id 239 e1 "\n@afflict"
         sensor id @shielded-wall @id
-        jump general notEqual id 240
+        select e1 equal id 240 e1 "\n@shielded-wall"
         sensor id @lustre @id
-        jump general notEqual id 241
+        select e1 equal id 241 e1 "\n@lustre"
         sensor id @scathe @id
-        jump general notEqual id 242
+        select e1 equal id 242 e1 "\n@scathe"
         sensor id @smite @id
-        jump general notEqual id 243
+        select e1 equal id 243 e1 "\n@smite"
         sensor id @underflow-duct @id
-        jump general notEqual id 244
+        select e1 equal id 244 e1 "\n@underflow-duct"
         sensor id @malign @id
-        jump general notEqual id 245
+        select e1 equal id 245 e1 "\n@malign"
         sensor id @shockwave-tower @id
-        jump general notEqual id 246
+        select e1 equal id 246 e1 "\n@shockwave-tower"
         sensor id @heat-source @id
-        jump general notEqual id 247
+        select e1 equal id 247 e1 "\n@heat-source"
         sensor id @flux-reactor @id
-        jump general notEqual id 248
+        select e1 equal id 248 e1 "\n@flux-reactor"
         sensor id @neoplasia-reactor @id
-        jump general notEqual id 249
+        select e1 equal id 249 e1 "\n@neoplasia-reactor"
         sensor id @heat-router @id
-        jump general notEqual id 250
+        select e1 equal id 250 e1 "\n@heat-router"
         sensor id @large-payload-mass-driver @id
-        jump general notEqual id 251
+        select e1 equal id 251 e1 "\n@large-payload-mass-driver"
         sensor id @reinforced-message @id
-        jump general notEqual id 252
+        select e1 equal id 252 e1 "\n@reinforced-message"
         sensor id @world-message @id
-        jump general notEqual id 253
+        select e1 equal id 253 e1 "\n@world-message"
         sensor id @world-switch @id
-        jump general notEqual id 254
+        select e1 equal id 254 e1 "\n@world-switch"
         sensor id @small-heat-redirector @id
-        jump general notEqual id 255
+        select e1 equal id 255 e1 "\n@small-heat-redirector"
         sensor id @large-cliff-crusher @id
-        jump general notEqual id 256
+        select e1 equal id 256 e1 "\n@large-cliff-crusher"
         sensor id @advanced-launch-pad @id
-        jump general notEqual id 257
+        select e1 equal id 257 e1 "\n@advanced-launch-pad"
         sensor id @landing-pad @id
-        jump general notEqual id 258
+        select e1 equal id 258 e1 "\n@landing-pad"
         sensor id @tile-logic-display @id
-        jump general notEqual id 259
+        select e1 equal id 259 e1 "\n@tile-logic-display"
         sensor id @dagger @id
-        jump general notEqual id 0
+        select e1 equal id 0 e1 "\n@dagger"
         sensor id @mace @id
-        jump general notEqual id 1
+        select e1 equal id 1 e1 "\n@mace"
         sensor id @fortress @id
-        jump general notEqual id 2
+        select e1 equal id 2 e1 "\n@fortress"
         sensor id @scepter @id
-        jump general notEqual id 3
+        select e1 equal id 3 e1 "\n@scepter"
         sensor id @reign @id
-        jump general notEqual id 4
+        select e1 equal id 4 e1 "\n@reign"
         sensor id @nova @id
-        jump general notEqual id 5
+        select e1 equal id 5 e1 "\n@nova"
         sensor id @pulsar @id
-        jump general notEqual id 6
+        select e1 equal id 6 e1 "\n@pulsar"
         sensor id @quasar @id
-        jump general notEqual id 7
+        select e1 equal id 7 e1 "\n@quasar"
         sensor id @vela @id
-        jump general notEqual id 8
+        select e1 equal id 8 e1 "\n@vela"
         sensor id @corvus @id
-        jump general notEqual id 9
+        select e1 equal id 9 e1 "\n@corvus"
         sensor id @crawler @id
-        jump general notEqual id 10
+        select e1 equal id 10 e1 "\n@crawler"
         sensor id @atrax @id
-        jump general notEqual id 11
+        select e1 equal id 11 e1 "\n@atrax"
         sensor id @spiroct @id
-        jump general notEqual id 12
+        select e1 equal id 12 e1 "\n@spiroct"
         sensor id @arkyid @id
-        jump general notEqual id 13
+        select e1 equal id 13 e1 "\n@arkyid"
         sensor id @toxopid @id
-        jump general notEqual id 14
+        select e1 equal id 14 e1 "\n@toxopid"
         sensor id @flare @id
-        jump general notEqual id 15
+        select e1 equal id 15 e1 "\n@flare"
         sensor id @horizon @id
-        jump general notEqual id 16
+        select e1 equal id 16 e1 "\n@horizon"
         sensor id @zenith @id
-        jump general notEqual id 17
+        select e1 equal id 17 e1 "\n@zenith"
         sensor id @antumbra @id
-        jump general notEqual id 18
+        select e1 equal id 18 e1 "\n@antumbra"
         sensor id @eclipse @id
-        jump general notEqual id 19
+        select e1 equal id 19 e1 "\n@eclipse"
         sensor id @mono @id
-        jump general notEqual id 20
+        select e1 equal id 20 e1 "\n@mono"
         sensor id @poly @id
-        jump general notEqual id 21
+        select e1 equal id 21 e1 "\n@poly"
         sensor id @mega @id
-        jump general notEqual id 22
+        select e1 equal id 22 e1 "\n@mega"
         sensor id @quad @id
-        jump general notEqual id 23
+        select e1 equal id 23 e1 "\n@quad"
         sensor id @oct @id
-        jump general notEqual id 24
+        select e1 equal id 24 e1 "\n@oct"
         sensor id @risso @id
-        jump general notEqual id 25
+        select e1 equal id 25 e1 "\n@risso"
         sensor id @minke @id
-        jump general notEqual id 26
+        select e1 equal id 26 e1 "\n@minke"
         sensor id @bryde @id
-        jump general notEqual id 27
+        select e1 equal id 27 e1 "\n@bryde"
         sensor id @sei @id
-        jump general notEqual id 28
+        select e1 equal id 28 e1 "\n@sei"
         sensor id @omura @id
-        jump general notEqual id 29
+        select e1 equal id 29 e1 "\n@omura"
         sensor id @retusa @id
-        jump general notEqual id 30
+        select e1 equal id 30 e1 "\n@retusa"
         sensor id @oxynoe @id
-        jump general notEqual id 31
+        select e1 equal id 31 e1 "\n@oxynoe"
         sensor id @cyerce @id
-        jump general notEqual id 32
+        select e1 equal id 32 e1 "\n@cyerce"
         sensor id @aegires @id
-        jump general notEqual id 33
+        select e1 equal id 33 e1 "\n@aegires"
         sensor id @navanax @id
-        jump general notEqual id 34
+        select e1 equal id 34 e1 "\n@navanax"
         sensor id @alpha @id
-        jump general notEqual id 35
+        select e1 equal id 35 e1 "\n@alpha"
         sensor id @beta @id
-        jump general notEqual id 36
+        select e1 equal id 36 e1 "\n@beta"
         sensor id @gamma @id
-        jump general notEqual id 37
+        select e1 equal id 37 e1 "\n@gamma"
         sensor id @stell @id
-        jump general notEqual id 38
+        select e1 equal id 38 e1 "\n@stell"
         sensor id @locus @id
-        jump general notEqual id 39
+        select e1 equal id 39 e1 "\n@locus"
         sensor id @precept @id
-        jump general notEqual id 40
+        select e1 equal id 40 e1 "\n@precept"
         sensor id @vanquish @id
-        jump general notEqual id 41
+        select e1 equal id 41 e1 "\n@vanquish"
         sensor id @conquer @id
-        jump general notEqual id 42
+        select e1 equal id 42 e1 "\n@conquer"
         sensor id @merui @id
-        jump general notEqual id 43
+        select e1 equal id 43 e1 "\n@merui"
         sensor id @cleroi @id
-        jump general notEqual id 44
+        select e1 equal id 44 e1 "\n@cleroi"
         sensor id @anthicus @id
-        jump general notEqual id 45
+        select e1 equal id 45 e1 "\n@anthicus"
         sensor id @tecta @id
-        jump general notEqual id 46
+        select e1 equal id 46 e1 "\n@tecta"
         sensor id @collaris @id
-        jump general notEqual id 47
+        select e1 equal id 47 e1 "\n@collaris"
         sensor id @elude @id
-        jump general notEqual id 48
+        select e1 equal id 48 e1 "\n@elude"
         sensor id @avert @id
-        jump general notEqual id 49
+        select e1 equal id 49 e1 "\n@avert"
         sensor id @obviate @id
-        jump general notEqual id 50
+        select e1 equal id 50 e1 "\n@obviate"
         sensor id @quell @id
-        jump general notEqual id 51
+        select e1 equal id 51 e1 "\n@quell"
         sensor id @disrupt @id
-        jump general notEqual id 52
+        select e1 equal id 52 e1 "\n@disrupt"
         sensor id @evoke @id
-        jump general notEqual id 53
+        select e1 equal id 53 e1 "\n@evoke"
         sensor id @incite @id
-        jump general notEqual id 54
+        select e1 equal id 54 e1 "\n@incite"
         sensor id @emanate @id
-        jump general notEqual id 55
+        select e1 equal id 55 e1 "\n@emanate"
         sensor id @copper @id
-        jump general notEqual id 0
+        select e1 equal id 0 e1 "\n@copper"
         sensor id @lead @id
-        jump general notEqual id 1
+        select e1 equal id 1 e1 "\n@lead"
         sensor id @metaglass @id
-        jump general notEqual id 2
+        select e1 equal id 2 e1 "\n@metaglass"
         sensor id @graphite @id
-        jump general notEqual id 3
+        select e1 equal id 3 e1 "\n@graphite"
         sensor id @sand @id
-        jump general notEqual id 4
+        select e1 equal id 4 e1 "\n@sand"
         sensor id @coal @id
-        jump general notEqual id 5
+        select e1 equal id 5 e1 "\n@coal"
         sensor id @titanium @id
-        jump general notEqual id 6
+        select e1 equal id 6 e1 "\n@titanium"
         sensor id @thorium @id
-        jump general notEqual id 7
+        select e1 equal id 7 e1 "\n@thorium"
         sensor id @scrap @id
-        jump general notEqual id 8
+        select e1 equal id 8 e1 "\n@scrap"
         sensor id @silicon @id
-        jump general notEqual id 9
+        select e1 equal id 9 e1 "\n@silicon"
         sensor id @plastanium @id
-        jump general notEqual id 10
+        select e1 equal id 10 e1 "\n@plastanium"
         sensor id @phase-fabric @id
-        jump general notEqual id 11
+        select e1 equal id 11 e1 "\n@phase-fabric"
         sensor id @surge-alloy @id
-        jump general notEqual id 12
+        select e1 equal id 12 e1 "\n@surge-alloy"
         sensor id @spore-pod @id
-        jump general notEqual id 13
+        select e1 equal id 13 e1 "\n@spore-pod"
         sensor id @blast-compound @id
-        jump general notEqual id 14
+        select e1 equal id 14 e1 "\n@blast-compound"
         sensor id @pyratite @id
-        jump general notEqual id 15
+        select e1 equal id 15 e1 "\n@pyratite"
         sensor id @beryllium @id
-        jump general notEqual id 16
+        select e1 equal id 16 e1 "\n@beryllium"
         sensor id @tungsten @id
-        jump general notEqual id 17
+        select e1 equal id 17 e1 "\n@tungsten"
         sensor id @oxide @id
-        jump general notEqual id 18
+        select e1 equal id 18 e1 "\n@oxide"
         sensor id @carbide @id
-        jump general notEqual id 19
+        select e1 equal id 19 e1 "\n@carbide"
         sensor id @water @id
-        jump general notEqual id 0
+        select e1 equal id 0 e1 "\n@water"
         sensor id @slag @id
-        jump general notEqual id 1
+        select e1 equal id 1 e1 "\n@slag"
         sensor id @oil @id
-        jump general notEqual id 2
+        select e1 equal id 2 e1 "\n@oil"
         sensor id @cryofluid @id
-        jump general notEqual id 3
+        select e1 equal id 3 e1 "\n@cryofluid"
         sensor id @neoplasm @id
-        jump general notEqual id 4
+        select e1 equal id 4 e1 "\n@neoplasm"
         sensor id @hydrogen @id
-        jump general notEqual id 5
+        select e1 equal id 5 e1 "\n@hydrogen"
         sensor id @ozone @id
-        jump general notEqual id 6
+        select e1 equal id 6 e1 "\n@ozone"
         sensor id @cyanogen @id
-        jump general notEqual id 7
+        select e1 equal id 7 e1 "\n@cyanogen"
         sensor id @gallium @id
-        jump general notEqual id 8
+        select e1 equal id 8 e1 "\n@gallium"
         sensor id @nitrogen @id
-        jump general notEqual id 9
+        select e1 equal id 9 e1 "\n@nitrogen"
         sensor id @arkycite @id
-        jump general notEqual id 10
+        select e1 equal id 10 e1 "\n@arkycite"
 
-        jump specific notEqual @itemCount 20
-        jump specific notEqual @liquidCount 11
-        jump specific notEqual @unitCount 56
+        select e2 strictEqual @itemCount 20 e2 "\n@itemCount"
+        select e2 strictEqual @liquidCount 11 e2 "\n@liquidCount"
+        select e2 strictEqual @sfx-click 34 e2 "\n@sfx-click"
+        select e2 strictEqual @sfx-door 37 e2 "\n@sfx-door"
+        select e2 strictEqual @sfx-drillCharge 38 e2 "\n@sfx-drillCharge"
+        select e2 strictEqual @sfx-drillImpact 39 e2 "\n@sfx-drillImpact"
+        select e2 strictEqual @sfx-explosion 40 e2 "\n@sfx-explosion"
+        select e2 strictEqual @sfx-plantBreak 100 e2 "\n@sfx-plantBreak"
+        select e2 strictEqual @sfx-rain 101 e2 "\n@sfx-rain"
+        select e2 strictEqual @sfx-rockBreak 102 e2 "\n@sfx-rockBreak"
+        select e2 strictEqual @sfx-shoot 111 e2 "\n@sfx-shoot"
+        select e2 strictEqual @sfx-shootSmite 169 e2 "\n@sfx-shootSmite"
+        select e2 strictEqual @sfx-wind 194 e2 "\n@sfx-wind"
+        select e2 strictEqual @sfx-wind2 195 e2 "\n@sfx-wind2"
+        select e2 strictEqual @sfx-wind3 196 e2 "\n@sfx-wind3"
+        select e2 strictEqual @unitCount 56 e2 "\n@unitCount"
 
-        print $_MESSAGE_OK
-        jump finish always 0 0
-    general:
-        print $_MESSAGE_GENERAL
-        jump finish always 0 0
-    specific:
-        print $_MESSAGE_SPECIFIC
-    finish:
+        select msg equal e2 "" $_MESSAGE_OK $_MESSAGE_SPECIFIC
+        select msg equal e1 "" msg $_MESSAGE_GENERAL
+        print msg
+        print "\n[grey]"
+        print e1
+        print e2
         printflush message1;
     }
     do while true;

@@ -10,7 +10,7 @@ A special-purpose library for testing Mindcode's compatibility with a specific M
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                 916 |                916 |
+| Inlined function                         |                 971 |                971 |
 
 This function runs the compatibility test on a Mindustry Logic processor. The compatibility test verifies that the
 compiler's metadata corresponding to the current target are identical to the actual data in the Mindustry processor.

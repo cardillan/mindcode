@@ -342,6 +342,7 @@ Control the currently bound unit.
 |`mine(x, y)`|`ucontrol mine x y 0 0 0`|
 |`flag(value)`|`ucontrol flag value 0 0 0 0`|
 |`build(x, y, block, rotation, config)`|`ucontrol build x y block rotation config`|
+|`deconstruct(x, y)`|`ucontrol deconstruct x y 0 0 0`|
 |`building = getBlock(x, y, out type, out floor)`|`ucontrol getBlock x y type building floor`|
 |`result = within(x, y, radius)`|`ucontrol within x y radius result 0`|
 |`unbind()`|`ucontrol unbind 0 0 0 0 0`|

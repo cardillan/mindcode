@@ -29,10 +29,9 @@ public class CompatibilityLibraryGeneratorTest {
             module compatibility;
             
             linked message1;
-
-            noinit var __init;
-            volatile noinit var __a;
-            volatile var __counterNull;
+            
+            noinit var init;
+            volatile var counterNull;
             
             /**
              * This function runs the compatibility test on a Mindustry Logic processor. The compatibility test verifies that the
@@ -62,17 +61,14 @@ public class CompatibilityLibraryGeneratorTest {
              * Note: The Mindcode processor emulator currently isn't able to run this function.
              */
             inline void runCompatibilityTest()
-                __counterNull = "[salmon]set @counter null IS NOT a noop[]\\n" +
+                counterNull = "[salmon]set @counter null IS NOT a noop[]\\n" +
                         "Use [gold]#set null-counter-is-noop = false;[] in your programs.\\n\\n";
-                if not __init then
-                    __init = true;
-                    __a = null;
-                    mlog (in __a) {
-                        set @counter __a;
-                    }
-                    __counterNull = "[green]set @counter null IS a noop[]\\n\\n";
+                if not init then
+                    init = true;
+                    mlog("set", "@counter", "null");
+                    counterNull = "[green]set @counter null IS a noop[]\\n\\n";
                 end;
-
+            
                 if __MINDUSTRY_VERSION__ == "v126.2" then
                     _compatibilityTest6();
                 elsif __MINDUSTRY_VERSION__ == "v146" then
@@ -113,8 +109,8 @@ public class CompatibilityLibraryGeneratorTest {
                 mlog {
                     print "Testing..."
                     printflush message1
-                    print $__counterNull;
-
+                    print $counterNull;
+            
             %s
             %s
                     print $_MESSAGE_OK
@@ -125,6 +121,28 @@ public class CompatibilityLibraryGeneratorTest {
                 specific:
                     print $_MESSAGE_SPECIFIC
                 finish:
+                    printflush message1;
+                }
+                do while true;
+            """;
+
+    public static final String CODE_SELECT = """
+                mlog {
+                    print "Testing..."
+                    printflush message1
+                    print $counterNull;
+            
+                    set e1 ""
+                    set e2 ""
+
+            %s
+            %s
+                    select msg equal e2 "" $_MESSAGE_OK $_MESSAGE_SPECIFIC
+                    select msg equal e1 "" msg $_MESSAGE_GENERAL
+                    print msg
+                    print "\\n[grey]"
+                    print e1
+                    print e2
                     printflush message1;
                 }
                 do while true;
@@ -143,7 +161,8 @@ public class CompatibilityLibraryGeneratorTest {
     }
 
     private String formatMethod(MindustryMetadata metadata) {
-        return String.format(CODE, generateStableBuiltinTest(metadata), generateUnstableBuiltinTest(metadata));
+        String template = metadata.getProcessorVersion().atLeast(ProcessorVersion.V8B) ? CODE_SELECT : CODE;
+        return String.format(template, generateStableBuiltinTest(metadata), generateUnstableBuiltinTest(metadata));
     }
 
     private boolean isStableBuiltin(MindustryMetadata metadata, LVar var) {
@@ -172,6 +191,14 @@ public class CompatibilityLibraryGeneratorTest {
                     jump specific equal result false
             """;
 
+    private static final String BUILTIN_TEST_GENERAL_STRICT_SELECT = """
+                    select e1 strictEqual %s %s e1 "\\n%s"
+            """;
+
+    private static final String BUILTIN_TEST_SPECIFIC_STRICT_SELECT = """
+                    select e2 strictEqual %s %s e2 "\\n%s"
+            """;
+
     private final double MAX_COLOR = Color.parseColor("%FFFFFFFF");
 
     private boolean isIntegerValue(double value) {
@@ -184,15 +211,18 @@ public class CompatibilityLibraryGeneratorTest {
 
     private String formatValue(double value) {
         return isColorValue(value) ? Color.unpack(value) :
-                value == (long)value ? Long.toString((long)value) : Double.toString(value);
+                value == (long) value ? Long.toString((long) value) : Double.toString(value);
     }
 
     private String generateStableBuiltinTest(MindustryMetadata metadata) {
+        boolean select = metadata.getProcessorVersion().atLeast(ProcessorVersion.V8B);
         StringBuilder sb = new StringBuilder();
 
         metadata.getAllLVars().stream().filter(var -> isStableBuiltin(metadata, var))
-                .map(var -> String.format(isIntegerValue(var.numericValue()) ? BUILTIN_TEST_GENERAL : BUILTIN_TEST_GENERAL_STRICT,
-                        var.name(), formatValue(var.numericValue())))
+                .map(var -> String.format(select
+                                ? BUILTIN_TEST_GENERAL_STRICT_SELECT
+                                : isIntegerValue(var.numericValue()) ? BUILTIN_TEST_GENERAL : BUILTIN_TEST_GENERAL_STRICT,
+                        var.name(), formatValue(var.numericValue()), var.name()))
                 .forEach(sb::append);
 
         appendMindustryContent(sb, metadata, metadata.getAllBlocks(), true);
@@ -203,11 +233,14 @@ public class CompatibilityLibraryGeneratorTest {
     }
 
     private String generateUnstableBuiltinTest(MindustryMetadata metadata) {
+        boolean select = metadata.getProcessorVersion().atLeast(ProcessorVersion.V8B);
         StringBuilder sb = new StringBuilder();
 
-        metadata.getAllLVars().stream().filter(var -> isUnStableBuiltin(metadata, var) )
-                .map(var -> String.format(isIntegerValue(var.numericValue()) ? BUILTIN_TEST_SPECIFIC : BUILTIN_TEST_SPECIFIC_STRICT,
-                        var.name(), formatValue(var.numericValue())))
+        metadata.getAllLVars().stream().filter(var -> isUnStableBuiltin(metadata, var))
+                .map(var -> String.format(select
+                                ? BUILTIN_TEST_SPECIFIC_STRICT_SELECT
+                                : isIntegerValue(var.numericValue()) ? BUILTIN_TEST_SPECIFIC : BUILTIN_TEST_SPECIFIC_STRICT,
+                        var.name(), formatValue(var.numericValue()), var.name()))
                 .forEach(sb::append);
 
         appendMindustryContent(sb, metadata, metadata.getAllBlocks(), false);
@@ -222,11 +255,24 @@ public class CompatibilityLibraryGeneratorTest {
                     jump %s notEqual id %d
             """;
 
+    private static final String CONTENT_TEST_SELECT = """
+                    sensor id %s @id
+                    select %s equal id %d %s "\\n%s"
+            """;
+
     private void appendMindustryContent(StringBuilder sb, MindustryMetadata metadata, Collection<? extends MindustryContent> content, boolean stable) {
-        String label = stable ? "general" : "specific";
-        content.stream().filter(o -> o.logicId() >= 0 && !o.legacy() && metadata.isStableBuiltin(o.name()) == stable)
-                .sorted(Comparator.comparingInt(MindustryContent::logicId))
-                .map(o -> String.format(CONTENT_TEST, o.name(), label, o.logicId()))
-                .forEach(sb::append);
+        if (metadata.getProcessorVersion().atLeast(ProcessorVersion.V8B)) {
+            String var = stable ? "e1" : "e2";
+            content.stream().filter(o -> o.logicId() >= 0 && !o.legacy() && metadata.isStableBuiltin(o.name()) == stable)
+                    .sorted(Comparator.comparingInt(MindustryContent::logicId))
+                    .map(o -> String.format(CONTENT_TEST_SELECT, o.name(), var, o.logicId(), var, o.name()))
+                    .forEach(sb::append);
+        } else {
+            String label = stable ? "general" : "specific";
+            content.stream().filter(o -> o.logicId() >= 0 && !o.legacy() && metadata.isStableBuiltin(o.name()) == stable)
+                    .sorted(Comparator.comparingInt(MindustryContent::logicId))
+                    .map(o -> String.format(CONTENT_TEST, o.name(), label, o.logicId()))
+                    .forEach(sb::append);
+        }
     }
 }

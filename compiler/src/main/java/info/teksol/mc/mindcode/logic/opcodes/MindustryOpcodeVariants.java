@@ -188,6 +188,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, FUNC, Opcode.UCONTROL,   uctrl("mine"),      in("x"), in("y"));
         add(list, V6,  MAX, S, FUNC, Opcode.UCONTROL,   uctrl("flag"),      in("value"));
         add(list, V6,  MAX, S, FUNC, Opcode.UCONTROL,   uctrl("build"),     in("x"), in("y"), in("block"), in("rotation"), in("config"));
+        add(list, V8B, MAX, S, FUNC, Opcode.UCONTROL,   uctrl("deconstruct"),in("x"), in("y"));
         add(list, V6,  V6,  S, FUNC, Opcode.UCONTROL,   uctrl("getBlock"),  in("x"), in("y"), out("type"), out("building"));
         add(list, V7,  V7,  S, FUNC, Opcode.UCONTROL,   uctrl("getBlock"),  in("x"), in("y"), out("type"), out("building"), out("floor"));
         add(list, V7A, MAX, S, FUNC, Opcode.UCONTROL,   uctrl("getBlock"),  in("x"), in("y"), out("type"), res("building"), out("floor"));
