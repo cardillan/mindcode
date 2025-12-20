@@ -472,7 +472,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
 
             // If we don't know for sure the loop body will be executed, propagate uninitialized values from
             // before the loop to after the loop.
-            LogicBoolean result = optimizationContext.evaluateLoopCondition(conditionContext);
+            LogicBoolean result = optimizationContext.evaluateLoopEntryCondition(conditionContext);
             if (result != LogicBoolean.TRUE) propagateUninitialized = true;
         }
 

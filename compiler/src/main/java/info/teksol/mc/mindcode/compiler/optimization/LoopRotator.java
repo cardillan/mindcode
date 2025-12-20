@@ -3,8 +3,10 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
+import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -106,7 +108,7 @@ class LoopRotator extends AbstractConditionalOptimizer {
 
             // Try full rotation only when the front condition can be removed
             DuplicateConditionAction full = !analysis.sideEffects()
-                    && optimizationContext.evaluateLoopCondition(conditionContext) == LogicBoolean.TRUE
+                    && optimizationContext.evaluateLoopEntryCondition(conditionContext) == LogicBoolean.TRUE
                     ? createOptimizationAction(loop, condition, lastJump, backJump, exitLabel, costLimit, true)
                     : null;
 
@@ -145,7 +147,10 @@ class LoopRotator extends AbstractConditionalOptimizer {
             if (ix.getAstContext() == lastJumpContext && ix instanceof JumpInstruction jump) {
                 boolean hasInverse = jump.getCondition().hasInverse(getGlobalProfile());
                 if (jump.getTarget().equals(exitLabel)) {
-                    if (!hasInverse) additionalSteps += 1.0 / (double)(1 << jumps);
+                    if (!hasInverse) {
+                        size++;
+                        additionalSteps += 1.0 / (double)(1 << jumps);
+                    }
 
                     // When not performing a full rotation, stop at the first exit jump
                     if (!fullRotation) {
@@ -160,12 +165,12 @@ class LoopRotator extends AbstractConditionalOptimizer {
         }
 
         // Inverting the condition wouldn't save execution time
-        if (!finalConversion && jumps == 0) return null;
+        if (!fullRotation && !finalConversion && jumps == 0) return null;
 
         // Keeps condition instructions without the label
         final LogicList conditionEvaluation = condition.subList(1, condition.size());
         int cost = size - (fullRotation ? jumps : 0) - 1;
-        double benefit = (1 - additionalSteps) * backJump.getAstContext().totalWeight();
+        double benefit = (fullRotation ? loop.totalWeight() : 0.0) + (1 - additionalSteps) * backJump.getAstContext().totalWeight();
 
         return cost <= costLimit && benefit >= 0.0
                 ? new DuplicateConditionAction(loop, conditionEvaluation, lastJump, backJump, fullRotation, cost, benefit)
@@ -193,9 +198,15 @@ class LoopRotator extends AbstractConditionalOptimizer {
             if (ix.getAstContext() == conditionContext && ix instanceof JumpInstruction j) {
                 if (j.getTarget().equals(exitLabel)) {
                     LogicLabel label = instructionProcessor.nextLabel();
-                    if (j.getCondition().hasInverse(getGlobalProfile()) || fullRotation) {
+                    if (j.getCondition().hasInverse(getGlobalProfile())) {
                         frontIndex++;
                         copy.replaceKeepingContext(index, j.forceInvert().withTarget(label));
+                    } else if (fullRotation || j == lastJumpCopy) {
+                        LogicVariable tmp = instructionProcessor.nextTemp();
+                        copy.addKeepingContext(index++, createOp(j.getAstContext(), j.getCondition().toOperation(),
+                                tmp, j.getX(), j.getY()));
+                        copy.replaceKeepingContext(index, createJump(j.getAstContext(), label,
+                                Condition.EQUAL, tmp, LogicBoolean.FALSE));
                     } else {
                         copy.replaceKeepingContext(index, createJumpUnconditional(j.getAstContext(), label));
                     }

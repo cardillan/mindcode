@@ -675,7 +675,7 @@ public class OptimizationContext {
     ///
     /// @param conditionContext context of the condition to evaluate
     /// @return the condition's value, or null if it cannot be determined'
-    public @Nullable LogicBoolean evaluateLoopCondition(AstContext conditionContext) {
+    public @Nullable LogicBoolean evaluateLoopEntryCondition(AstContext conditionContext) {
         return evaluateCondition(conditionContext, firstPassStates);
     }
 

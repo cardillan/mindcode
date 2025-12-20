@@ -98,17 +98,13 @@ class ConditionOptimizer extends BaseOptimizer {
             if (definingInstruction != null) return definingInstruction;
         }
 
+        // TODO Fix DFO and remove this
         // An alternative way of finding the definition.
         // Not entirely sure why needed. Will be fixed with DFO rewrite.
         List<LogicInstruction> references = getVariableReferences(variable);
         if (references.size() == 2) {
-            if (stale) {
-                LogicInstruction other = references.getLast() == cond ? references.getFirst() : references.getLast();
-                return instructionIndex(other) < logicIterator.currentIndex() ? other : null;
-            } else {
-                // The instruction order is intact
-                return references.getLast() == cond ? references.getFirst() : null;
-            }
+            LogicInstruction other = references.getLast() == cond ? references.getFirst() : references.getLast();
+            return instructionIndex(other) < logicIterator.currentIndex() ? other : null;
         }
         return null;
     }

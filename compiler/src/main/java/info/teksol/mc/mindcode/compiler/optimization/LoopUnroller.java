@@ -155,7 +155,7 @@ class LoopUnroller extends BaseOptimizer {
         List<AstContext> conditions = loop.findSubcontexts(CONDITION);
         if (hasEntryCondition(loop)) {
             AstContext firstConditionContext = conditions.getFirst();
-            LogicBoolean result = optimizationContext.evaluateLoopCondition(firstConditionContext);
+            LogicBoolean result = optimizationContext.evaluateLoopEntryCondition(firstConditionContext);
             if (result != LogicBoolean.TRUE) {
                 // The loop is not known to execute at least once
                 return null;
