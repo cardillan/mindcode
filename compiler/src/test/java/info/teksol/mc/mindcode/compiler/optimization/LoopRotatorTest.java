@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
 import org.jspecify.annotations.NullMarked;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -27,231 +28,426 @@ class LoopRotatorTest extends AbstractOptimizerTest<LoopRotator> {
         return super.createCompilerProfile().setGoal(GenerationGoal.SPEED);
     }
 
-    @Test
-    void optimizesRangedForLoops() {
-        assertCompilesTo("""
-                        for i in 0 ... 1000 do
-                            cell1[i] = 1;
-                        end;
-                        print("Done.");
-                        """,
-                createInstruction(SET, ":i", "0"),
-                createInstruction(LABEL, label(3)),
-                createInstruction(WRITE, "1", "cell1", ":i"),
-                createInstruction(OP, "add", ":i", ":i", "1"),
-                createInstruction(JUMP, label(3), "lessThan", ":i", "1000"),
-                createInstruction(PRINT, q("Done."))
-        );
-    }
+    @Nested
+    class FullBooleanEvaluations {
 
-    @Test
-    void optimizesWhileLoop() {
-        assertCompilesTo("""
-                        i = 1000;
-                        while i > 0 do
-                            print(i);
-                            i -= 1;
-                        end;
-                        """,
-                createInstruction(SET, ":i", "1000"),
-                createInstruction(LABEL, label(3)),
-                createInstruction(PRINT, ":i"),
-                createInstruction(OP, "sub", ":i", ":i", "1"),
-                createInstruction(JUMP, label(3), "greaterThan", ":i", "0")
-        );
-    }
-
-    @Test
-    void optimizesWhileLoopComparingToNull() {
-        assertCompilesTo("""
-                        block = null;
-                        while block == null do
-                            block = getlink(1);
-                        end;
-                        print(block);
-                        """,
-                createInstruction(SET, ":block", "null"),
-                createInstruction(LABEL, label(3)),
-                createInstruction(GETLINK, ":block", "1"),
-                createInstruction(JUMP, label(3), "equal", ":block", "null"),
-                createInstruction(PRINT, ":block")
-        );
-    }
-
-    @Test
-    void optimizesWhileLoopStrictEqual() {
-        assertCompilesTo(
-                expectedMessages()
-                        .add("Variable 'state' is not initialized.")
-                        .add("Variable 'i' is not initialized."),
-                """
-                        #set emulate-strict-not-equal = false;
-                        while state === 0 do
-                            print(i);
-                            state = @unit.@dead;
-                        end;
-                        """,
-                createInstruction(LABEL, "__start__"),
-                createInstruction(OP, "strictEqual", tmp(0), ":state", "0"),
-                createInstruction(JUMP, "__start__", "equal", tmp(0), "false"),
-                createInstruction(LABEL, label(3)),
-                createInstruction(PRINT, ":i"),
-                createInstruction(SENSOR, ":state", "@unit", "@dead"),
-                createInstruction(JUMP, label(3), "strictEqual", ":state", "0")
-        );
-    }
-
-
-    @Test
-    void optimizesWhileLoopStrictEqualTarget8() {
-        assertCompilesTo("""
-                        noinit volatile state, i;
-                        while state === 0 do
-                            print(i);
-                            state = @unit.@dead;
-                        end;
-                        """,
-                createInstruction(LABEL, "__start__"),
-                createInstruction(JUMP, "__start__", "strictNotEqual", ".state", "0"),
-                createInstruction(LABEL, label(3)),
-                createInstruction(PRINT, ".i"),
-                createInstruction(SENSOR, ".state", "@unit", "@dead"),
-                createInstruction(JUMP, label(3), "strictEqual", ".state", "0")
-        );
-    }
-
-    @Test
-    void optimizesWhileLoopWithInitialization() {
-        assertCompilesTo("""
-                        count = 0;
-                        while switch1.@enabled do
-                            print(count += 1);
-                        end;
-                        """,
-                createInstruction(LABEL, "__start__"),
-                createInstruction(SET, ":count", "0"),
-                createInstruction(SENSOR, tmp(0), "switch1", "@enabled"),
-                createInstruction(JUMP, "__start__", "equal", tmp(0), "false"),
-                createInstruction(LABEL, label(3)),
-                createInstruction(OP, "add", ":count", ":count", "1"),
-                createInstruction(PRINT, ":count"),
-                createInstruction(SENSOR, tmp(0), "switch1", "@enabled"),
-                createInstruction(JUMP, label(3), "notEqual", tmp(0), "false")
-        );
-    }
-
-    @Test
-    void optimizesWhileLoopWithInitializationAndStrictEqual() {
-        assertCompilesTo("""
-                        #set emulate-strict-not-equal = false;
-                        while @unit.@dead === 0 do
-                            print("Got unit!");
-                        end;
-                        """,
-                createInstruction(LABEL, "__start__"),
-                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
-                createInstruction(OP, "strictEqual", tmp(1), tmp(0), "0"),
-                createInstruction(JUMP, "__start__", "equal", tmp(1), "false"),
-                createInstruction(LABEL, label(3)),
-                createInstruction(PRINT, q("Got unit!")),
-                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
-                createInstruction(JUMP, label(3), "strictEqual", tmp(0), "0")
-        );
-    }
-
-    @Test
-    void optimizesWhileLoopWithInitializationAndStrictEqualTarget8() {
-        assertCompilesTo("""
-                        while @unit.@dead === 0 do
-                            print("Got unit!");
-                        end;
-                        """,
-                createInstruction(LABEL, "__start__"),
-                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
-                createInstruction(JUMP, "__start__", "strictNotEqual", tmp(0), "0"),
-                createInstruction(LABEL, label(3)),
-                createInstruction(PRINT, q("Got unit!")),
-                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
-                createInstruction(JUMP, label(3), "strictEqual", tmp(0), "0")
-        );
-    }
-
-    @Test
-    void optimizesRangedForLoopsWithBreak() {
-        assertCompilesTo("""
-                        for i in 1 .. 1000 do
-                            print(i);
-                            if i > 5 then
-                                break;
+        @Test
+        void optimizesRangedForLoops() {
+            assertCompilesTo("""
+                            for i in 0 ... 1000 do
+                                cell1[i] = 1;
                             end;
-                        end;
-                        """,
-                createInstruction(LABEL, "__start__"),
-                createInstruction(SET, ":i", "1"),
-                createInstruction(LABEL, label(5)),
-                createInstruction(PRINT, ":i"),
-                createInstruction(JUMP, "__start__", "greaterThan", ":i", "5"),
-                createInstruction(OP, "add", ":i", ":i", "1"),
-                createInstruction(JUMP, label(5), "lessThanEq", ":i", "1000")
-        );
-    }
+                            print("Done.");
+                            """,
+                    createInstruction(SET, ":i", "0"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(WRITE, "1", "cell1", ":i"),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(3), "lessThan", ":i", "1000"),
+                    createInstruction(PRINT, q("Done."))
+            );
+        }
 
-    @Test
-    void optimizesWhileLoopWithContinue() {
-        assertCompilesTo("""
-                        i = 1000;
-                        while i > 0 do
-                            i -= 1;
-                            if i == 4 then
-                                continue;
+        @Test
+        void optimizesWhileLoop() {
+            assertCompilesTo("""
+                            i = 1000;
+                            while i > 0 do
+                                print(i);
+                                i -= 1;
                             end;
-                            print(i);
-                        end;
-                        """,
-                createInstruction(SET, ":i", "1000"),
-                createInstruction(LABEL, label(5)),
-                createInstruction(OP, "sub", ":i", ":i", "1"),
-                createInstruction(JUMP, label(1), "equal", ":i", "4"),
-                createInstruction(PRINT, ":i"),
-                createInstruction(LABEL, label(1)),
-                createInstruction(JUMP, label(5), "greaterThan", ":i", "0")
-        );
+                            """,
+                    createInstruction(SET, ":i", "1000"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, ":i"),
+                    createInstruction(OP, "sub", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(3), "greaterThan", ":i", "0")
+            );
+        }
+
+        @Test
+        void optimizesWhileLoopComparingToNull() {
+            assertCompilesTo("""
+                            block = null;
+                            while block == null do
+                                block = getlink(1);
+                            end;
+                            print(block);
+                            """,
+                    createInstruction(SET, ":block", "null"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(GETLINK, ":block", "1"),
+                    createInstruction(JUMP, label(3), "equal", ":block", "null"),
+                    createInstruction(PRINT, ":block")
+            );
+        }
+
+        @Test
+        void optimizesWhileLoopStrictEqual() {
+            assertCompilesTo(
+                    expectedMessages()
+                            .add("Variable 'state' is not initialized.")
+                            .add("Variable 'i' is not initialized."),
+                    """
+                            #set emulate-strict-not-equal = false;
+                            while state === 0 do
+                                print(i);
+                                state = @unit.@dead;
+                            end;
+                            """,
+                    createInstruction(LABEL, "__start__"),
+                    createInstruction(OP, "strictEqual", tmp(0), ":state", "0"),
+                    createInstruction(JUMP, "__start__", "equal", tmp(0), "false"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, ":i"),
+                    createInstruction(SENSOR, ":state", "@unit", "@dead"),
+                    createInstruction(JUMP, label(3), "strictEqual", ":state", "0")
+            );
+        }
+
+
+        @Test
+        void optimizesWhileLoopStrictEqualTarget8() {
+            assertCompilesTo("""
+                            noinit volatile state, i;
+                            while state === 0 do
+                                print(i);
+                                state = @unit.@dead;
+                            end;
+                            """,
+                    createInstruction(LABEL, "__start__"),
+                    createInstruction(JUMP, "__start__", "strictNotEqual", ".state", "0"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, ".i"),
+                    createInstruction(SENSOR, ".state", "@unit", "@dead"),
+                    createInstruction(JUMP, label(3), "strictEqual", ".state", "0")
+            );
+        }
+
+        @Test
+        void optimizesWhileLoopWithInitialization() {
+            assertCompilesTo("""
+                            count = 0;
+                            while switch1.@enabled do
+                                print(count += 1);
+                            end;
+                            """,
+                    createInstruction(LABEL, "__start__"),
+                    createInstruction(SET, ":count", "0"),
+                    createInstruction(SENSOR, tmp(0), "switch1", "@enabled"),
+                    createInstruction(JUMP, "__start__", "equal", tmp(0), "false"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(OP, "add", ":count", ":count", "1"),
+                    createInstruction(PRINT, ":count"),
+                    createInstruction(SENSOR, tmp(0), "switch1", "@enabled"),
+                    createInstruction(JUMP, label(3), "notEqual", tmp(0), "false")
+            );
+        }
+
+        @Test
+        void optimizesWhileLoopWithInitializationAndStrictEqual() {
+            assertCompilesTo("""
+                            #set emulate-strict-not-equal = false;
+                            while @unit.@dead === 0 do
+                                print("Got unit!");
+                            end;
+                            """,
+                    createInstruction(LABEL, "__start__"),
+                    createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                    createInstruction(OP, "strictEqual", tmp(1), tmp(0), "0"),
+                    createInstruction(JUMP, "__start__", "equal", tmp(1), "false"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, q("Got unit!")),
+                    createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                    createInstruction(JUMP, label(3), "strictEqual", tmp(0), "0")
+            );
+        }
+
+        @Test
+        void optimizesWhileLoopWithInitializationAndStrictEqualTarget8() {
+            assertCompilesTo("""
+                            while @unit.@dead === 0 do
+                                print("Got unit!");
+                            end;
+                            """,
+                    createInstruction(LABEL, "__start__"),
+                    createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                    createInstruction(JUMP, "__start__", "strictNotEqual", tmp(0), "0"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, q("Got unit!")),
+                    createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                    createInstruction(JUMP, label(3), "strictEqual", tmp(0), "0")
+            );
+        }
+
+        @Test
+        void optimizesRangedForLoopsWithBreak() {
+            assertCompilesTo("""
+                            for i in 1 .. 1000 do
+                                print(i);
+                                if i > 5 then
+                                    break;
+                                end;
+                            end;
+                            """,
+                    createInstruction(LABEL, "__start__"),
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(PRINT, ":i"),
+                    createInstruction(JUMP, "__start__", "greaterThan", ":i", "5"),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(5), "lessThanEq", ":i", "1000")
+            );
+        }
+
+        @Test
+        void optimizesWhileLoopWithContinue() {
+            assertCompilesTo("""
+                            i = 1000;
+                            while i > 0 do
+                                i -= 1;
+                                if i == 4 then
+                                    continue;
+                                end;
+                                print(i);
+                            end;
+                            """,
+                    createInstruction(SET, ":i", "1000"),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(OP, "sub", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(1), "equal", ":i", "4"),
+                    createInstruction(PRINT, ":i"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(5), "greaterThan", ":i", "0")
+            );
+        }
+
+        @Test
+        void optimizesBitReadTest() {
+            assertCompilesTo("""
+                            def getBit(bitIndex)
+                              bitIndex % 2;
+                            end;
+                            
+                            for i in 0 ... 1000 do
+                                print(getBit(i) ? 1 : 0);
+                            end;
+                            """,
+                    createInstruction(SET, ":i", "0"),
+                    createInstruction(LABEL, label(6)),
+                    createInstruction(OP, "mod", tmp(0), ":i", "2"),
+                    createInstruction(OP, "notEqual", tmp(2), tmp(0), "false"),
+                    createInstruction(PRINT, tmp(2)),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(6), "lessThan", ":i", "1000")
+            );
+        }
+
+        @Test
+        void optimizesUpdatesInConditions() {
+            assertCompilesTo("""
+                            i = 0;
+                            while (i += 1) <= 2000 do
+                                print(i);
+                            end;
+                            """,
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, ":i"),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(3), "lessThanEq", ":i", "2000")
+            );
+        }
     }
 
-    @Test
-    void optimizesBitReadTest() {
-        assertCompilesTo("""
-                        def getBit(bitIndex)
-                          bitIndex % 2;
-                        end;
+    @Nested
+    class ShortCircuitBooleanEvaluations {
 
-                        for i in 0 ... 1000 do
-                            print(getBit(i) ? 1 : 0);
-                        end;
-                        """,
-                createInstruction(SET, ":i", "0"),
-                createInstruction(LABEL, label(6)),
-                createInstruction(OP, "mod", tmp(0), ":i", "2"),
-                createInstruction(OP, "notEqual", tmp(2), tmp(0), "false"),
-                createInstruction(PRINT, tmp(2)),
-                createInstruction(OP, "add", ":i", ":i", "1"),
-                createInstruction(JUMP, label(6), "lessThan", ":i", "1000")
-        );
-    }
+        @Test
+        void reusesFrontCondition() {
+            assertCompilesTo("""
+                            noinit volatile a, b, c, d;
+                            print("Before loop.");
+                            while a and b or c and d do
+                                print("In loop.");
+                            end;
+                            print("Out of loop.");
+                            """,
+                    createInstruction(PRINT, q("Before loop.")),
+                    createInstruction(JUMP, label(4), "equal", ".a", "false"),
+                    createInstruction(JUMP, label(3), "notEqual", ".b", "false"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(JUMP, label(2), "equal", ".c", "false"),
+                    createInstruction(LABEL, label(9)),
+                    createInstruction(JUMP, label(2), "equal", ".d", "false"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, q("In loop.")),
+                    createInstruction(JUMP, label(4), "equal", ".a", "false"),
+                    createInstruction(JUMP, label(3), "notEqual", ".b", "false"),
+                    createInstruction(JUMP, label(9), "notEqual", ".c", "false"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(PRINT, q("Out of loop."))
+            );
+        }
 
-    @Test
-    void optimizesUpdatesInConditions() {
-        assertCompilesTo("""
-                        i = 0;
-                        while (i += 1) <= 2000 do
-                            print(i);
-                        end;
-                        """,
-                createInstruction(SET, ":i", "1"),
-                createInstruction(LABEL, label(3)),
-                createInstruction(PRINT, ":i"),
-                createInstruction(OP, "add", ":i", ":i", "1"),
-                createInstruction(JUMP, label(3), "lessThanEq", ":i", "2000")
-        );
+        @Test
+        void reusesStrictEqualCondition() {
+            assertCompilesTo("""
+                            #set emulate-strict-not-equal = false;
+                            noinit volatile a, b, c, d;
+                            print("Before loop.");
+                            while a !== 0 and b !== 0 or c !== 0 and d !== 0 do
+                                print("In loop.");
+                            end;
+                            print("Out of loop.");
+                            """,
+                    createInstruction(PRINT, q("Before loop.")),
+                    createInstruction(JUMP, label(4), "strictEqual", ".a", "0"),
+                    createInstruction(OP, "strictEqual", tmp(1), ".b", "0"),
+                    createInstruction(JUMP, label(3), "equal", tmp(1), "false"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(LABEL, label(9)),
+                    createInstruction(JUMP, label(2), "strictEqual", ".c", "0"),
+                    createInstruction(JUMP, label(2), "strictEqual", ".d", "0"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, q("In loop.")),
+                    createInstruction(JUMP, label(4), "strictEqual", ".a", "0"),
+                    createInstruction(OP, "strictEqual", tmp(1), ".b", "0"),
+                    createInstruction(JUMP, label(3), "equal", tmp(1), "false"),
+                    createInstruction(JUMP, label(9), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(PRINT, q("Out of loop."))
+            );
+        }
+
+        @Test
+        void invertsStrictNotEqualCondition() {
+            assertCompilesTo("""
+                            #set emulate-strict-not-equal = false;
+                            noinit volatile a, b, c, d;
+                            print("Before loop.");
+                            while a === 0 and b === 0 or c === 0 and d === 0 do
+                                print("In loop.");
+                            end;
+                            print("Out of loop.");
+                            """,
+                    createInstruction(PRINT, q("Before loop.")),
+                    createInstruction(OP, "strictEqual", tmp(0), ".a", "0"),
+                    createInstruction(JUMP, label(4), "equal", tmp(0), "false"),
+                    createInstruction(JUMP, label(3), "strictEqual", ".b", "0"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(OP, "strictEqual", tmp(2), ".c", "0"),
+                    createInstruction(JUMP, label(2), "equal", tmp(2), "false"),
+                    createInstruction(LABEL, label(9)),
+                    createInstruction(OP, "strictEqual", tmp(3), ".d", "0"),
+                    createInstruction(JUMP, label(2), "equal", tmp(3), "false"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, q("In loop.")),
+                    createInstruction(OP, "strictEqual", tmp(0), ".a", "0"),
+                    createInstruction(JUMP, label(4), "equal", tmp(0), "false"),
+                    createInstruction(JUMP, label(3), "strictEqual", ".b", "0"),
+                    createInstruction(JUMP, label(9), "strictEqual", ".c", "0"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(PRINT, q("Out of loop."))
+            );
+        }
+
+        @Test
+        void supportsDataFlowOptimization() {
+            assertCompilesTo("""
+                            param x = 1;
+                            param y = 0;
+                            
+                            a = b = c = x;
+                            d = y;
+                            
+                            print("Before loop.");
+                            while a or b or c or d do
+                                print("In loop.");
+                                a = b;
+                                b = c;
+                                c = d;
+                            end;
+                            print("Out of loop.");
+                            """,
+                    createInstruction(SET, "x", "1"),
+                    createInstruction(SET, "y", "0"),
+                    createInstruction(SET, ":c", "x"),
+                    createInstruction(SET, ":b", "x"),
+                    createInstruction(PRINT, q("Before loop.")),
+                    createInstruction(JUMP, label(3), "notEqual", "x", "false"),
+                    createInstruction(JUMP, label(2), "equal", "y", "false"),
+                    createInstruction(LABEL, label(8)),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, q("In loop.")),
+                    createInstruction(SET, ":a", ":b"),
+                    createInstruction(SET, ":b", ":c"),
+                    createInstruction(SET, ":c", "y"),
+                    createInstruction(JUMP, label(3), "notEqual", ":a", "false"),
+                    createInstruction(JUMP, label(3), "notEqual", ":b", "false"),
+                    createInstruction(JUMP, label(3), "notEqual", ":c", "false"),
+                    createInstruction(JUMP, label(8), "notEqual", "y", "false"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(PRINT, q("Out of loop."))
+            );
+        }
+
+        @Test
+        void handlesSideEffects() {
+            assertCompilesTo("""
+                            def foo(x)
+                                print("foo");
+                                x;
+                            end;
+                            
+                            a = b = true;
+                            
+                            print("Before loop:");
+                            while foo(a) or foo(b) do
+                                print("In loop:");
+                                a = !a;
+                                b = !b;
+                            end;
+                            print("After loop");
+                            """,
+                    createInstruction(SET, ":b", "true"),
+                    createInstruction(SET, ":a", "true"),
+                    createInstruction(PRINT, q("Before loop:foo")),
+                    createInstruction(LABEL, label(18)),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(PRINT, q("In loop:foo")),
+                    createInstruction(OP, "equal", ":a", ":a", "false"),
+                    createInstruction(OP, "equal", ":b", ":b", "false"),
+                    createInstruction(JUMP, label(4), "notEqual", ":a", "false"),
+                    createInstruction(PRINT, q("foo")),
+                    createInstruction(JUMP, label(18), "notEqual", ":b", "false"),
+                    createInstruction(PRINT, q("After loop"))
+            );
+        }
+
+        @Test
+        void eliminatesUnnecessaryJumps() {
+            assertCompilesTo("""
+                            c = true;
+                            
+                            print("Before loop");
+                            while c or switch1.enabled or switch2.enabled do
+                                print("In loop");
+                                c = false;
+                            end;
+                            print("After loop");
+                            """,
+                    createInstruction(PRINT, q("Before loop")),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, q("In loop")),
+                    createInstruction(SENSOR, tmp(0), "switch1", "@enabled"),
+                    createInstruction(JUMP, label(3), "notEqual", tmp(0), "false"),
+                    createInstruction(SENSOR, tmp(1), "switch2", "@enabled"),
+                    createInstruction(JUMP, label(7), "notEqual", tmp(1), "false"),
+                    createInstruction(PRINT, q("After loop"))
+            );
+        }
+
     }
 }

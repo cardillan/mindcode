@@ -2,13 +2,13 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -19,7 +19,7 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.EACH;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.LOOP;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
-/// This optimizer moves loop invariant code in front of given loop.
+/// This optimizer moves loop invariant code in front of a given loop.
 @NullMarked
 class LoopHoisting extends BaseOptimizer {
     public LoopHoisting(OptimizationContext optimizationContext) {
@@ -113,10 +113,11 @@ class LoopHoisting extends BaseOptimizer {
 
     private Set<LogicArgument> findLoopVariables(AstContext loop, List<AstContext> parts, @Nullable AstContext inspectedContext) {
         Map<LogicVariable, Set<LogicVariable>> dependencies = new HashMap<>();
+        Map<LogicVariable, Set<LogicVariable>> dependants = new HashMap<>();
         parts.stream()
                 .map(this::contextInstructions)
                 .flatMap(LogicList::stream)
-                .forEachOrdered(ix -> addDependencies(loop, inspectedContext, dependencies, ix));
+                .forEachOrdered(ix -> addDependencies(loop, inspectedContext, dependencies, dependants, ix));
 
         propagateAllDependencies(dependencies);
 
@@ -168,12 +169,19 @@ class LoopHoisting extends BaseOptimizer {
                 .collect(Collectors.toSet());
     }
 
+    private boolean isSafe(LogicInstruction instruction) {
+        return instruction.isSafe() && instruction.getOpcode() != Opcode.JUMP && instruction.outputArgumentsStream().findAny().isPresent();
+    }
+
     private void addDependencies(AstContext loop, @Nullable AstContext inspectedContext,
-            Map<LogicVariable, Set<LogicVariable>> dependencies, LogicInstruction instruction) {
-        if (instruction.isSafe() && instructionProcessor.isDeterministic(instruction)
+            Map<LogicVariable, Set<LogicVariable>> dependencies, Map<LogicVariable, Set<LogicVariable>> dependants,
+            LogicInstruction instruction) {
+
+        // When dependencies.get(x).contain(y) is true, it means that x depends on y.
+        // When dependants.get(x).contains(y) is true, it means that y depends on x.
+
+        if (isSafe(instruction) && instructionProcessor.isDeterministic(instruction)
                 && (loop.executesOnce(instruction) || inspectedContext != null && inspectedContext.executesOnce(instruction))) {
-            String prefix = instruction.getAstContext().function() == null
-                    ? null : instruction.getAstContext().function().getPrefix();
 
             List<LogicVariable> inputs = instruction.inputArgumentsStream()
                     .filter(LogicVariable.class::isInstance)
@@ -183,13 +191,20 @@ class LoopHoisting extends BaseOptimizer {
             instruction.outputArgumentsStream()
                     .filter(LogicVariable.class::isInstance)
                     .map(LogicVariable.class::cast)
-                    .forEach(arg -> {
-                        // This is a bit risky. We assume temporary variables are used just once
-                        if (!arg.isTemporaryVariable() && dependencies.containsKey(arg)) {
-                            dependencies.get(arg).add(arg);
+                    .forEach(output -> {
+                        if (dependencies.containsKey(output) && (!output.isTemporaryVariable()
+                                || optimizationContext.getVariableReferences(output).size() > 1)) {
+                            dependencies.get(output).add(output);
                         } else {
-                            dependencies.computeIfAbsent(arg, a -> new HashSet<>()).addAll(inputs);
+                            dependencies.computeIfAbsent(output, a -> new HashSet<>()).addAll(inputs);
                         }
+
+                        dependants.getOrDefault(output, Set.of())
+                                .stream()
+                                .filter(dependencies::containsKey)
+                                .forEach(arg -> dependencies.computeIfAbsent(arg, a -> new HashSet<>()).add(arg));
+
+                        inputs.forEach(input -> dependants.computeIfAbsent(input, _ -> new HashSet<>()).add(output));
                     });
         } else {
             // This instruction isn't loop-independent: it's unsafe, nondeterministic or nonlinear.
@@ -207,40 +222,10 @@ class LoopHoisting extends BaseOptimizer {
     }
 
     private boolean isMovable(LogicInstruction instruction) {
-        return instructionProcessor.isDeterministic(instruction) && instruction.isSafe();
+        return instructionProcessor.isDeterministic(instruction) && isSafe(instruction);
     }
 
     private boolean safeToMove(AstContext loop, LogicInstruction instruction) {
         return isMovable(instruction) && loop.executesOnce(instruction);
-    }
-
-    private boolean safeIfContext(AstContext loop, List<AstContext> parts, AstContext context) {
-        if (context.matches(AstContextType.IF)) {
-            Set<LogicArgument> loopVariables = findLoopVariables(loop, parts, context);
-            return contextStream(context)
-                    .allMatch(ix -> context.executesOnce(ix)
-                            && (ix instanceof JumpInstruction || ix instanceof LabelInstruction || isMovable(ix))
-                            && ix.inputOutputArgumentsStream().noneMatch(loopVariables::contains));
-        }
-
-        AstContext c = context;
-        while (!c.contextType().flowControl && c.children().size() == 1) {
-            c = c.child(0);
-        }
-
-        final AstContext ifContext = c;
-        boolean canMove = contextStream(context).allMatch(ix -> ix.belongsTo(ifContext) || isMovable(ix));
-
-        return ifContext.matches(AstContextType.IF)
-                && canMove
-                && safeIfContext(loop, parts, c);
-    }
-
-    private boolean onlyLocalJumps(AstContext context) {
-        return contextStream(context).noneMatch(ix -> nonlocalJump(context, ix));
-    }
-
-    private boolean nonlocalJump(AstContext context, LogicInstruction ix) {
-        return ix instanceof JumpInstruction jump && !getLabelInstruction(jump.getTarget()).belongsTo(context);
     }
 }
