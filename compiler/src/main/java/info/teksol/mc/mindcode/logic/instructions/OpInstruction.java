@@ -35,7 +35,6 @@ public class OpInstruction extends BaseResultInstruction implements ConditionalI
 
     public OpInstruction withOperands(Operation operation, LogicValue x, LogicValue y) {
         assert getArgumentTypes() != null;
-        ensureConditional();
         return new OpInstruction(astContext,List.of(operation, getResultArgument(), x, y), getArgumentTypes()).copyInfo(this);
     }
 

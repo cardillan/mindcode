@@ -230,7 +230,7 @@ public class CaseSwitcher extends BaseOptimizer {
         CaseSwitchingOptimizationAction action = new CaseSwitchingOptimizationAction(++actionCounter, optimizationContext,
                 this::applySwitchedOptimization, this::isDebugOutput, param, segments, padding, false);
         actions.add(action);
-        if (experimental(param.context())) {
+        if (advanced(param.context())) {
             boolean canMoveMoreBodies = action.segments.stream().anyMatch(s -> s.moveable() && !s.embedded());
             if (canMoveMoreBodies) {
                 actions.add(new CaseSwitchingOptimizationAction(++actionCounter, optimizationContext,

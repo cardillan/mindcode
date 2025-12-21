@@ -91,7 +91,7 @@ class AstContextTest {
         AstContext child = context.createSubcontext(AstSubcontextType.INIT, 2.0);
 
         assertEquals(context.function(), child.function());
-        assertEquals(context.level(), child.level());
+        assertEquals(context.level() + 1, child.level());
         assertEquals(context.node(), child.node());
         assertEquals(context.contextType(), child.contextType());
         assertEquals(AstSubcontextType.INIT, child.subcontextType());
@@ -103,7 +103,7 @@ class AstContextTest {
         AstContext child = context.createSubcontext(function2, AstSubcontextType.INIT, 2.0);
 
         assertEquals(function2, child.function());
-        assertEquals(context.level(), child.level());
+        assertEquals(context.level() + 1, child.level());
         assertEquals(context.node(), child.node());
         assertEquals(context.contextType(), child.contextType());
         assertEquals(AstSubcontextType.INIT, child.subcontextType());

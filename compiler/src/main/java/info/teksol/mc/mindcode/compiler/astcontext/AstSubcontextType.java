@@ -11,7 +11,7 @@ public enum AstSubcontextType {
     MOCK            ("    "),
 
     /// System-generated END instruction
-    END             ("END "),
+    END             ("END ", false),
 
     /// Sequence of statements, with a single entry point and (mostly) single exit point.
     /// Break, continue and return might jump out of the block, use `BaseOptimizer.isContained`
@@ -22,22 +22,22 @@ public enum AstSubcontextType {
     ELSE            ("ELSE"),
 
     /// The condition in if, loop, when or similar structures. Contains code for the entire expression.
-    CONDITION       ("COND"),
+    CONDITION       ("COND", false),
 
     /// Jumps between blocks, or labels for such jumps.
-    FLOW_CONTROL    ("FLOW"),
+    FLOW_CONTROL    ("FLOW", false),
 
     /// Initialization code for a control structure (only loops at this moment).
     INIT            ("INIT"),
 
-    /// Update code (setting up next iteration) in a loop.
-    UPDATE          ("UPDT"),
+    /// Update code (setting up the next iteration) in a loop.
+    UPDATE          ("UPDT", false),
 
     /// Part of list iterator loop executed before each iteration
-    ITR_LEADING     ("ITRL"),
+    ITR_LEADING     ("ITRL", false),
 
     /// Part of list iterator loop executed after each iteration
-    ITR_TRAILING    ("ITRT"),
+    ITR_TRAILING    ("ITRT", false),
 
     /// Code setting up arguments before a function call.
     ARGUMENTS       ("ARGS"),
@@ -46,41 +46,44 @@ public enum AstSubcontextType {
     PARAMETERS      ("PRMS"),
 
     /// Code copying return value(s) of a function call to temporary variables.
-    RETURN_VALUE    ("RETV"),
+    RETURN_VALUE    ("RETV", false),
 
-    /// Call to a system function (mapped to an instruction) or a built-in function.
+    /// A call to a system function (mapped to an instruction) or a built-in function.
     /// Technically not a call, as it includes the entire function body.
     SYSTEM_CALL     ("SCAL"),
 
     INLINE_CALL     ("ICAL"),
 
-    ///  Call to an out-of-line (but stackless) function.
-    OUT_OF_LINE_CALL("OCAL"),
+    ///  A call to an out-of-line (but stackless) function.
+    OUT_OF_LINE_CALL("OCAL", false),
 
     /// A recursive function call, includes stack operations.
-    RECURSIVE_CALL  ("RCAL"),
+    RECURSIVE_CALL  ("RCAL", false),
 
     /// A remote function call.
-    REMOTE_CALL     ("RMCL"),
+    REMOTE_CALL     ("RMCL", false),
 
     /// Initialization of a remote module.
-    REMOTE_INIT     ("RMIN"),
+    REMOTE_INIT     ("RMIN", false),
 
     /// Array access
     ARRAY           ("ARRA"),
 
+    /// Relocation context
+    RELOCATION      ("RELO"),
+
     ;
 
     public final String text;
-    final double multiplier;
+    public final boolean safe;
 
     AstSubcontextType(String text) {
         this.text = text;
-        this.multiplier = 1.0;
+        this.safe = true;
     }
 
-    AstSubcontextType(String text, double multiplier) {
+    AstSubcontextType(String text, boolean safe) {
         this.text = text;
-        this.multiplier = multiplier;
+        this.safe = safe;
     }
 }

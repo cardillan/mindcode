@@ -64,7 +64,7 @@ class JumpThreading extends BaseOptimizer {
                             count++;
                         }
                     }
-                } else if (experimental(instruction) && !getGlobalProfile().isSymbolicLabels()
+                } else if (advanced(instruction) && !getGlobalProfile().isSymbolicLabels()
                            && instruction.getCallReturn() == LogicLabel.EMPTY
                            && (instruction instanceof CallInstruction || instruction instanceof MultiCallInstruction)) {
                     setAddress = (SetAddressInstruction) optimizationContext.firstInstruction(
@@ -143,7 +143,7 @@ class JumpThreading extends BaseOptimizer {
         }
 
         // Jump to call can get redirected
-        if (experimental(firstJump) && !getGlobalProfile().isSymbolicLabels() && next instanceof CallInstruction call) {
+        if (advanced(firstJump) && !getGlobalProfile().isSymbolicLabels() && next instanceof CallInstruction call) {
             return new JumpRedirection(call.getCallAddr(), call.getMarker());
         }
 

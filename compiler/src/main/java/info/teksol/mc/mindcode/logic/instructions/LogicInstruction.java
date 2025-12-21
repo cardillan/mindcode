@@ -25,7 +25,7 @@ public interface LogicInstruction extends MlogInstruction {
         return getAstContext().sourcePosition();
     }
 
-    LogicInstruction withContext(AstContext astContext);
+    LogicInstruction withContext(AstContext context);
 
     Object getInfo(InstructionInfo instructionInfo);
 
@@ -39,7 +39,7 @@ public interface LogicInstruction extends MlogInstruction {
 
     <T extends LogicInstruction> T copyInfo(T other);
 
-    boolean belongsTo(@Nullable AstContext astContext);
+    boolean belongsTo(@Nullable AstContext context);
 
     @Nullable AstContext findContextOfType(AstContextType contextType);
 
@@ -67,8 +67,9 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default Stream<LogicArgument> getAllWrites() {
-        return Stream.of(outputArgumentsStream(), getSideEffects().writes().stream(), getSideEffects().resets().stream())
-                .mapMulti(Stream::forEach);
+        SideEffects s = getSideEffects();
+        return s.writes().isEmpty() && s.resets().isEmpty() ? outputArgumentsStream()
+                : Stream.of(outputArgumentsStream(), s.writes().stream(), s.resets().stream()).mapMulti(Stream::forEach);
     }
 
     default Stream<LogicArgument> getAllArguments() {

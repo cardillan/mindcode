@@ -8,10 +8,10 @@ public enum AstContextType {
     ROOT            ("ROOT"),
     INIT            ("INIT"),
     CODE            ("CODE"),
-    MLOG            ("MLOG"),
+    MLOG            ("MLOG", true),
     FUNCTION_DEF    ("FNDF"),
     FUNCTION_BODY   ("FUNC"),
-    CALL            ("CALL", true),
+    CALL            ("CALL", true, true),
     RETURN          ("RETN", true),
 
     IF              ("IF  ", true),
@@ -32,7 +32,7 @@ public enum AstContextType {
 
     // A jump table. Not to be optimized.
     // The jump table effects are expressed as side effects of the first instruction.
-    JUMPS           ("JUMP"),
+    JUMPS           ("JUMP", true),
 
     // Variable creation context - added in label resolving phase, never optimized
     CREATE_VARS     ("CVAR"),
@@ -40,14 +40,23 @@ public enum AstContextType {
 
     public final String text;
     public final boolean flowControl;
+    public final boolean safe;
 
     AstContextType(String text) {
         this.text = text;
-        flowControl = false;
+        this.flowControl = false;
+        this.safe = true;
     }
 
     AstContextType(String text, boolean flowControl) {
         this.text = text;
         this.flowControl = flowControl;
+        this.safe = false;
+    }
+
+    AstContextType(String text, boolean flowControl, boolean safe) {
+        this.text = text;
+        this.flowControl = flowControl;
+        this.safe = safe;
     }
 }

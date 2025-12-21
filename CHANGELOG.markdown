@@ -41,6 +41,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * The mimex metadata have been updated to match the current BE version. The most significant change is a new set of sound constants. 
 * The documentation has been restructured. Individual optimizers are described in [separate files](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#individual-mindcode-optimizations), and the description of Logic functions with links to the Function reference was also moved to a [separate file](doc/syntax/FUNCTIONS.markdown).
 
+### Miscellaneous
+
+* A new optimization, Instruction Reordering, is being developed. The corresponding compiler directive is already present, but the optimization, even when explicitly enabled, is not yet functional.
+* All experimental features are now considered standard. The default optimization level is now advanced. Going forward, only features controllable via compiler options will be marked experimental, and the default optimization level will be `advanced`. Note that Mindcode is a live system and features may be modified to support new functionalities. A reasonable effort will be spent to ensure smooth conversion or backwards compatibility, but all features, both well-established and relatively recent, can be changed or removed in a release. 
+
 ## 3.10.0 - 2025-11-17
 
 ### Fixed

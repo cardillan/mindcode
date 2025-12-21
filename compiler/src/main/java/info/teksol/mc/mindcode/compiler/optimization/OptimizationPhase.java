@@ -8,8 +8,8 @@ import static info.teksol.mc.mindcode.compiler.optimization.Optimization.*;
 
 @NullMarked
 public enum OptimizationPhase {
-    /// Optimizers in this phase are run only once in the initial pass. Here should be optimizers completely independent
-    /// of other optimizers (i.e. they won't benefit from multiple passes).
+    /// Optimizers in this phase are run only once in the initial pass. There should be optimizers completely independent
+    /// of other optimizers (i.e., they won't benefit from multiple passes).
     INITIAL("Initial",
             CASE_EXPRESSION_OPTIMIZATION,
             DEAD_CODE_ELIMINATION,
@@ -27,6 +27,7 @@ public enum OptimizationPhase {
             DATA_FLOW_OPTIMIZATION,
             ARRAY_OPTIMIZATION,
             TEMP_VARIABLES_ELIMINATION,
+            //INSTRUCTION_REORDERING,
             LOOP_HOISTING,
             LOOP_ROTATION,
             LOOP_UNROLLING,

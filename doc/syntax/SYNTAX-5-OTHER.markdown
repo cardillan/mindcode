@@ -739,6 +739,7 @@ when not explicitly set. Available optimization levels are {none, basic, advance
 | [expression-optimization](optimizations/EXPRESSION-OPTIMIZATION.markdown)           | local | stable             |
 | [function-inlining](optimizations/FUNCTION-INLINING.markdown)                       | local | stable             |
 | [if-expression-optimization](optimizations/IF-EXPRESSION-OPTIMIZATION.markdown)     | local | stable             |
+| [instruction-reordering](optimizations/INSTRUCTION-REORDERING.markdown)             | local | stable             |
 | [jump-normalization](optimizations/JUMP-NORMALIZATION.markdown)                     | local | stable             |
 | [jump-straightening](optimizations/JUMP-STRAIGHTENING.markdown)                     | local | stable             |
 | [jump-threading](optimizations/JUMP-THREADING.markdown)                             | local | stable             |

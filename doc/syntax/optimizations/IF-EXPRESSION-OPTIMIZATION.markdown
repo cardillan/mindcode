@@ -205,4 +205,4 @@ print *tmp1
 
 ---
 
-[&#xAB; Previous: Function Inlining](FUNCTION-INLINING.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Jump Normalization &#xBB;](JUMP-NORMALIZATION.markdown)
+[&#xAB; Previous: Function Inlining](FUNCTION-INLINING.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Instruction Reordering &#xBB;](INSTRUCTION-REORDERING.markdown)

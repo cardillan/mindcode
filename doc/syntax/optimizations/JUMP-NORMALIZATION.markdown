@@ -11,4 +11,4 @@ The first case reduces the code size and speeds up execution. The second one in 
 
 ---
 
-[&#xAB; Previous: If Expression Optimization](IF-EXPRESSION-OPTIMIZATION.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Jump Straightening &#xBB;](JUMP-STRAIGHTENING.markdown)
+[&#xAB; Previous: Instruction Reordering](INSTRUCTION-REORDERING.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Jump Straightening &#xBB;](JUMP-STRAIGHTENING.markdown)

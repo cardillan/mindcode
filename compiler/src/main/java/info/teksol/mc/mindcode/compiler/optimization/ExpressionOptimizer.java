@@ -23,6 +23,7 @@ import static info.teksol.mc.evaluator.ExpressionEvaluator.clamp01;
 
 @NullMarked
 class ExpressionOptimizer extends BaseOptimizer {
+    private static final boolean POSTFIX_SWITCHING = false;
 
     private final OptimizerExpressionEvaluator expressionEvaluator;
 
@@ -311,8 +312,33 @@ class ExpressionOptimizer extends BaseOptimizer {
     private void processSetInstruction(LogicIterator logicIterator, SetInstruction ix) {
         if (ix.getResult().equals(ix.getValue())) {
             logicIterator.set(createEmpty(ix.getAstContext()));
+        } else if (POSTFIX_SWITCHING && experimental(ix) && ix.getResult().isTemporaryVariable()) {
+            Operation reverse;
+            if (logicIterator.hasNext()
+                    && logicIterator.peek(0) instanceof OpInstruction op
+                    && (reverse = reverse(op.getOperation())) != null
+                    && op.getResult().equals(ix.getValue())
+                    && op.getX().equals(ix.getValue())
+            ) {
+                logicIterator.next();
+                logicIterator.set(op.withResult(ix.getResult()).withOperands(reverse, op.getX(), op.getY()));
+                logicIterator.previous();
+                logicIterator.previous();
+                logicIterator.set(op);
+                logicIterator.next();
+            }
         }
     }
+
+    private @Nullable Operation reverse(Operation operation) {
+        return switch (operation) {
+            case ADD -> Operation.SUB;
+            case SUB -> Operation.ADD;
+            case BITWISE_XOR -> Operation.BITWISE_XOR;
+            default -> null;
+        };
+    }
+
 
     private void processWriteInstruction(LogicIterator logicIterator, WriteInstruction ix) {
         if (ix.getMemory().equals(LogicBuiltIn.THIS) && ix.getIndex() instanceof LogicString mlogName) {

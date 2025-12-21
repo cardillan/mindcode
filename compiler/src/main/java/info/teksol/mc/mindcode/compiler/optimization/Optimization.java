@@ -50,6 +50,10 @@ public enum Optimization {
             DataFlowOptimizer::new,
             "improving variable assignments and expressions, analyzing data flow for other optimizations"),
 
+    INSTRUCTION_REORDERING("Instruction Reordering",
+            InstructionReordering::new,
+            "reordering instructions to allow additional optimizations being made (not available yet)"),
+
     LOOP_HOISTING("Loop Hoisting",
             LoopHoisting::new,
             "moving invariant code out of loops"),

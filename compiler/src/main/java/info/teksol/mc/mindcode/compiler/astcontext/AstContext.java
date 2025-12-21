@@ -32,6 +32,7 @@ public final class AstContext {
     private final AstContextType contextType;
     private final AstSubcontextType subcontextType;
     private final @Nullable AstContext parent;
+    private final @Nullable AstContext safeContext;
     private double weight;
     private final List<AstContext> children;
 
@@ -39,31 +40,32 @@ public final class AstContext {
     private final @Nullable MindcodeFunction functionBody;
     private final int functionCopyNumber;
 
-    private AstContext(CompilerProfile profile, @Nullable MindcodeFunction function, int level, @Nullable AstMindcodeNode node,
+    private AstContext(CompilerProfile profile, @Nullable MindcodeFunction function, @Nullable AstMindcodeNode node,
             AstContextType contextType, AstSubcontextType subcontextType, @Nullable AstContext parent, double weight,
             @Nullable MindcodeFunction functionBody, int functionCopyNumber, List<AstContext> children) {
         this.id = counter.getAndIncrement();
         this.profile = profile;
         this.function = function;
-        this.level = level;
+        this.level = parent == null ? 0 : parent.level + 1;
         this.node = node;
         this.contextType = contextType;
         this.subcontextType = subcontextType;
         this.parent = parent;
+        this.safeContext = parent != null && isSafe(contextType, subcontextType) ? parent.safeContext : this;
         this.weight = weight;
         this.functionBody = functionBody;
         this.functionCopyNumber = functionCopyNumber;
         this.children = children;
     }
 
-    private AstContext(CompilerProfile profile, @Nullable MindcodeFunction function, int level, @Nullable AstMindcodeNode node,
+    private AstContext(CompilerProfile profile, @Nullable MindcodeFunction function, @Nullable AstMindcodeNode node,
             AstContextType contextType, AstSubcontextType subcontextType, @Nullable AstContext parent, double weight,
             @Nullable MindcodeFunction functionBody, int functionCopyNumber) {
-        this(profile, function, level, node, contextType, subcontextType, parent, weight, functionBody, functionCopyNumber, new ArrayList<>());
+        this(profile, function, node, contextType, subcontextType, parent, weight, functionBody, functionCopyNumber, new ArrayList<>());
     }
 
     public static AstContext createRootNode(CompilerProfile profile) {
-        return new AstContext(profile, null, 0, null, AstContextType.ROOT,
+        return new AstContext(profile, null, null, AstContextType.ROOT,
                 AstSubcontextType.BASIC, null, 1.0, null, 0);
     }
 
@@ -72,7 +74,7 @@ public final class AstContext {
     }
 
     public AstContext createChild(AstMindcodeNode node, AstContextType contextType) {
-        AstContext child = new AstContext(node.getProfile(), function, level + 1, node, contextType, node.getSubcontextType(),
+        AstContext child = new AstContext(node.getProfile(), function, node, contextType, node.getSubcontextType(),
                 this, node.getProfile().getCodeWeight(), functionBody, functionCopyNumber);
         children.add(child);
 
@@ -80,7 +82,7 @@ public final class AstContext {
     }
 
     public AstContext createChild(AstMindcodeNode node, AstContextType contextType, AstSubcontextType subcontextType) {
-        AstContext child = new AstContext(node.getProfile(), function, level + 1, node, contextType, subcontextType,
+        AstContext child = new AstContext(node.getProfile(), function, node, contextType, subcontextType,
                 this, node.getProfile().getCodeWeight(), functionBody, functionCopyNumber);
         children.add(child);
 
@@ -89,14 +91,14 @@ public final class AstContext {
 
     public AstContext createFunctionDeclaration(MindcodeFunction function, AstMindcodeNode node,
             AstContextType contextType, double weight) {
-        AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),
+        AstContext child = new AstContext(profile, function, node, contextType, node.getSubcontextType(),
                 this, weight, function, function.nextCopyNumber());
         children.add(child);
         return child;
     }
 
     public AstContext createFunctionBody(MindcodeFunction functionBody, AstMindcodeNode node, AstContextType contextType) {
-        AstContext child = new AstContext(node.getProfile(), function, level + 1, node, contextType, node.getSubcontextType(),
+        AstContext child = new AstContext(node.getProfile(), function, node, contextType, node.getSubcontextType(),
                 this, node.getProfile().getCodeWeight(), functionBody, functionBody.nextCopyNumber());
         children.add(child);
 
@@ -105,7 +107,7 @@ public final class AstContext {
 
     public AstContext createSubcontext(AstSubcontextType subcontextType, double weight) {
         // Subcontext always inherits compiler profile from parent context
-        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType,
+        AstContext child = new AstContext(profile, function, node, contextType, subcontextType,
                 this, weight, functionBody, functionCopyNumber);
         children.add(child);
         return child;
@@ -113,7 +115,7 @@ public final class AstContext {
 
     public AstContext createSubcontext(MindcodeFunction function, AstSubcontextType subcontextType, double weight) {
         // Subcontext always inherits compiler profile from parent context
-        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType,
+        AstContext child = new AstContext(profile, function, node, contextType, subcontextType,
                 this, weight, functionBody, functionCopyNumber);
         children.add(child);
         return child;
@@ -121,11 +123,19 @@ public final class AstContext {
 
     public AstContext createSubcontext(AstContextType contextType, AstSubcontextType subcontextType, double weight) {
         // Subcontext always inherits compiler profile from parent context
-        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType,
+        AstContext child = new AstContext(profile, function, node, contextType, subcontextType,
                 this, weight, functionBody, functionCopyNumber);
         children.add(child);
         return child;
     }
+
+    public AstContext createRelocationContext(AstContext original) {
+        AstContext child = new AstContext(original.profile, original.function, original.node, contextType, AstSubcontextType.RELOCATION,
+                this, original.totalWeight() / weight, original.functionBody, original.functionCopyNumber);
+        children.add(child);
+        return child;
+    }
+
 
     public Map<AstContext, AstContext> createDeepCopy() {
         Map<AstContext, AstContext> map = new IdentityHashMap<>(16);
@@ -138,7 +148,7 @@ public final class AstContext {
             @Nullable AstContext parent, @Nullable MindcodeFunction originalFunction) {
         int newFunctionCopyNumber = functionBody == null || functionBody == originalFunction ? 0
                 : functionCopyMap.computeIfAbsent(functionBody, _ -> new HashMap<>()).computeIfAbsent(functionCopyNumber, _ -> functionBody.nextCopyNumber());
-        AstContext copy = new AstContext(profile, function, level, node, contextType, subcontextType, parent, weight, functionBody, newFunctionCopyNumber);
+        AstContext copy = new AstContext(profile, function, node, contextType, subcontextType, parent, weight, functionBody, newFunctionCopyNumber);
         children.stream()
                 .map(c -> c.createDeepCopy(map, functionCopyMap, copy, originalFunction))
                 .forEachOrdered(copy.children::add);
@@ -168,6 +178,22 @@ public final class AstContext {
         return profile;
     }
 
+    private static boolean isSafe(AstContextType contextType, AstSubcontextType subcontextType) {
+        return contextType.safe && subcontextType.safe;
+    }
+
+    public boolean isSafe() {
+        return isSafe(contextType, subcontextType);
+    }
+
+    public boolean isTopSafeContext() {
+        return this == safeContext && isSafe(contextType, subcontextType);
+    }
+
+    public @Nullable AstContext getSafeContext() {
+        return safeContext;
+    }
+
     /**
      * This context belongs to another context when they're the same instance, or when this context is
      * a descendant (direct or indirect child) of the other context.
@@ -176,7 +202,11 @@ public final class AstContext {
      * @return true if this context belongs to the other context
      */
     public boolean belongsTo(@Nullable AstContext other) {
-        return this == other || (other != null && parent != null && parent.belongsTo(other));
+        return other != null && belongsToExisting(other);
+    }
+
+    private boolean belongsToExisting(AstContext other) {
+        return this == other || level >= other.level && parent != null && parent.belongsToExisting(other);
     }
 
     public boolean matches(AstContextType contextType) {

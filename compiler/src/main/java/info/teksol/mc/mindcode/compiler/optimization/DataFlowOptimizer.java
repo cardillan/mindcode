@@ -112,7 +112,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
 
         getRootContext().children().forEach(this::processTopContext);
 
-        if (experimentalGlobal() && currentPass > 1) {
+        if (advancedGlobal() && currentPass > 1) {
             boolean updated = false;
             for (Definition definition : definitions) {
                 LogicVariable variable = definition.variable;

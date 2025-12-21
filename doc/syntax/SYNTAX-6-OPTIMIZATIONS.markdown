@@ -71,6 +71,7 @@ Individual optimizations are described in separate documents:
 * [Expression Optimization](optimizations/EXPRESSION-OPTIMIZATION.markdown): optimizing some common mathematical expressions.
 * [Function Inlining](optimizations/FUNCTION-INLINING.markdown): inlining stackless function calls.
 * [If Expression Optimization](optimizations/IF-EXPRESSION-OPTIMIZATION.markdown): improving ternary/if expressions.
+* [Instruction Reordering](optimizations/INSTRUCTION-REORDERING.markdown): reordering instructions to allow additional optimizations being made (not available yet).
 * [Jump Normalization](optimizations/JUMP-NORMALIZATION.markdown): replacing always true conditional jumps with unconditional ones, removing always false jumps.
 * [Jump Straightening](optimizations/JUMP-STRAIGHTENING.markdown): simplifying sequences of intertwined jumps.
 * [Jump Threading](optimizations/JUMP-THREADING.markdown): eliminating chained jumps.

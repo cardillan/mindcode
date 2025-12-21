@@ -107,10 +107,11 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--condition-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
                 [--boolean-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
-                [--loop-hoisting LEVEL] [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
-                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
-                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
-                [--stack-optimization LEVEL] [--print-merging LEVEL]
+                [--instruction-reordering LEVEL] [--loop-hoisting LEVEL] [--loop-rotation LEVEL]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
+                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
+                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]] [--run-steps {0..1000000000}]
@@ -276,6 +277,9 @@ Optimization levels:
   --data-flow-optimization LEVEL
                          sets the optimization level of improving  variable  assignments and expressions, analyzing data
                          flow for other optimizations
+  --instruction-reordering LEVEL
+                         sets the optimization level of reordering  instructions to allow additional optimizations being
+                         made (not available yet)
   --loop-hoisting LEVEL  sets the optimization level of moving invariant code out of loops
   --loop-rotation LEVEL  sets the optimization level of rotating a front loop condition to the bottom of the loop
   --loop-unrolling LEVEL
@@ -416,10 +420,11 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--condition-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
                 [--boolean-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
-                [--loop-hoisting LEVEL] [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
-                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
-                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
-                [--stack-optimization LEVEL] [--print-merging LEVEL]
+                [--instruction-reordering LEVEL] [--loop-hoisting LEVEL] [--loop-rotation LEVEL]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
+                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
+                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]] [--run-steps {0..1000000000}]
@@ -574,6 +579,9 @@ Optimization levels:
   --data-flow-optimization LEVEL
                          sets the optimization level of improving  variable  assignments and expressions, analyzing data
                          flow for other optimizations
+  --instruction-reordering LEVEL
+                         sets the optimization level of reordering  instructions to allow additional optimizations being
+                         made (not available yet)
   --loop-hoisting LEVEL  sets the optimization level of moving invariant code out of loops
   --loop-rotation LEVEL  sets the optimization level of rotating a front loop condition to the bottom of the loop
   --loop-unrolling LEVEL
