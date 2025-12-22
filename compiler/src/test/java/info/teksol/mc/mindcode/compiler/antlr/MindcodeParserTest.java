@@ -544,6 +544,15 @@ class MindcodeParserTest extends AbstractParserTest {
         }
 
         @Test
+        void parsesRangedIn() {
+            assertParses("""
+                    a in 1 .. 10;
+                    b not in 2 ... 20;
+                    c !in 3 ... 30;
+                    """);
+        }
+
+        @Test
         void refusesWrongOperators() {
             assertGeneratesMessages(
                     expectedMessages()
@@ -762,7 +771,8 @@ class MindcodeParserTest extends AbstractParserTest {
         void refusesWrongFunctionArguments() {
             assertGeneratesMessages(
                     expectedMessages()
-                            .addRegex(1, 10, "Parse error: .*"),
+                            .addRegex(1, 10, "Parse error: .*").repeat(2)
+                            .addRegex(1, 11, "Parse error: .*"),
                     "foo(in a b);");
         }
 
@@ -1353,9 +1363,9 @@ class MindcodeParserTest extends AbstractParserTest {
         void refusesMultipleControlVariables() {
             assertGeneratesMessages(
                     expectedMessages()
-                            .addRegex(1, 15, "Parse error: .*")
-                            .addRegex(1, 25, "Parse error: .*"),
-                    "for i, j in 0 ... 10 a; end;");
+                            .addRegex(1, 22, "Parse error: .*")
+                            .addRegex(1, 28, "Parse error: .*"),
+                    "for i, j in 0 ... 10 do a; end;");
         }
     }
 

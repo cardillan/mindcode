@@ -1,10 +1,12 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.generated.ast.visitors.AstOperatorBinaryVisitor;
+import info.teksol.mc.generated.ast.visitors.AstOperatorInRangeVisitor;
 import info.teksol.mc.generated.ast.visitors.AstOperatorShortCircuitingVisitor;
 import info.teksol.mc.generated.ast.visitors.AstOperatorUnaryVisitor;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorBinary;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorInRange;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorShortCircuiting;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorUnary;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -20,6 +22,7 @@ import static info.teksol.mc.mindcode.logic.arguments.Operation.*;
 
 @NullMarked
 public class OperatorsBuilder extends AbstractCodeBuilder implements AstOperatorBinaryVisitor<ValueStore>,
+        AstOperatorInRangeVisitor<ValueStore>,
         AstOperatorShortCircuitingVisitor<ValueStore>,
         AstOperatorUnaryVisitor<ValueStore> {
 
@@ -33,6 +36,11 @@ public class OperatorsBuilder extends AbstractCodeBuilder implements AstOperator
         final ValueStore right = evaluate(node.getRight());
         final LogicVariable tmp = assembler.nextNodeResultTemp();
         return createOperation(node, node.getOperation(), tmp, left.getValue(assembler), right.getValue(assembler));
+    }
+
+    @Override
+    public ValueStore visitOperatorInRange(AstOperatorInRange node) {
+        return evaluateOperatorShortCircuiting(transformInRange(node), false);
     }
 
     @Override

@@ -230,6 +230,10 @@ expression
         op = (SHIFT_LEFT | SHIFT_RIGHT | USHIFT_RIGHT) right = expression               # astOperatorBinaryShift
     | left = expression op = BITWISE_AND right=expression                               # astOperatorBinaryBitwiseAnd
     | left = expression op = (BITWISE_OR | BITWISE_XOR) right = expression              # astOperatorBinaryBitwiseOr
+    | value = expression negation = (BOOLEAN_NOT | LOGICAL_NOT)? op = IN
+        firstValue = expression operator = (DOT2 | DOT3) lastValue = expression         # astOperatorBinaryInRange
+    | value = expression negation = (BOOLEAN_NOT | LOGICAL_NOT)?
+        op = IN set = valueList                                                         # astOperatorBinaryInSet
     | left = expression
         op = (LESS_THAN | LESS_THAN_EQUAL | GREATER_THAN_EQUAL | GREATER_THAN)
         right = expression                                                              # astOperatorBinaryInequality
@@ -238,8 +242,6 @@ expression
         right = expression                                                              # astOperatorBinaryEquality
     | left = expression op = (BOOLEAN_AND | LOGICAL_AND) right = expression             # astOperatorBinaryAnd
     | left = expression op = (BOOLEAN_OR | LOGICAL_OR) right = expression               # astOperatorBinaryOr
-//    | left = expression op = IN firstValue = expression
-//        operator = (DOT2 | DOT3) lastValue = expression                                 # astOperatorBinaryInRange
     | <assoc = right> condition = expression
          QUESTION trueBranch = expression
          COLON falseBranch = expression                                                 # astOperatorTernary

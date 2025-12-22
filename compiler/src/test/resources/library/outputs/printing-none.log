@@ -506,146 +506,143 @@ Final code before resolving virtual instructions:
   387:  op abs *tmp57 *tmp56 0
   388:  set :printExactFast:cmp *tmp57
   389:  op lessThanEq *tmp58 :printExactFast:cmp 0
-  390:  jump *label121 equal *tmp58 false
-  391:  print :printExactFast:base
-  392:  set *tmp59 :printExactFast:base
-  393:  jump *label122 always 0 0
-        label *label121
-  394:  op greaterThan *tmp60 :printExactFast:cmp 0.00001
-  395:  jump *label123 equal *tmp60 false
-  396:  print :printExactFast:base
-  397:  set *tmp61 :printExactFast:base
-  398:  jump *label124 always 0 0
-        label *label123
-  399:  op floor *tmp62 :printExactFast:base 0
-  400:  print *tmp62
-  401:  print "."
-  402:  set :printExactFast:digit 1
-        label *label125
-  403:  jump *label127 greaterThan :printExactFast:digit 3
-  404:  set :frac:x :printExactFast:base
-  405:  op mod *tmp64 :frac:x 1
-  406:  set *tmp63 *tmp64
-        label *label128
-  407:  op mul *tmp65 *tmp63 100000
-  408:  set :printExactFast:base *tmp65
-  409:  op floor *tmp66 :printExactFast:base 0
-  410:  set :printExactFast:t *tmp66
-  411:  op lessThan *tmp67 :printExactFast:t 100
-  412:  jump *label129 equal *tmp67 false
-  413:  op lessThan *tmp69 :printExactFast:t 10
-  414:  jump *label131 equal *tmp69 false
-  415:  print "0000"
-  416:  set *tmp70 "0000"
-  417:  jump *label132 always 0 0
-        label *label131
-  418:  print "000"
-  419:  set *tmp70 "000"
-        label *label132
-  420:  set *tmp68 *tmp70
-  421:  jump *label130 always 0 0
-        label *label129
-  422:  op lessThan *tmp71 :printExactFast:t 1000
-  423:  jump *label133 equal *tmp71 false
-  424:  print "00"
-  425:  set *tmp72 "00"
-  426:  jump *label134 always 0 0
-        label *label133
-  427:  op lessThan *tmp73 :printExactFast:t 10000
-  428:  jump *label135 equal *tmp73 false
-  429:  print "0"
-  430:  set *tmp74 "0"
-  431:  jump *label136 always 0 0
-        label *label135
-  432:  set *tmp74 null
-        label *label136
-  433:  set *tmp72 *tmp74
-        label *label134
-  434:  set *tmp68 *tmp72
-        label *label130
-  435:  print :printExactFast:t
-        label *label126
-  436:  op add :printExactFast:digit :printExactFast:digit 1
-  437:  jump *label125 always 0 0
-        label *label127
-  438:  set *tmp61 null
+  390:  jump *label123 notEqual *tmp58 false
         label *label124
-  439:  set *tmp59 *tmp61
+  391:  op greaterThan *tmp59 :printExactFast:cmp 0.00001
+  392:  jump *label123 notEqual *tmp59 false
+  393:  jump *label121 always 0 0
+        label *label123
+  394:  print :printExactFast:base
+  395:  set *tmp60 :printExactFast:base
+  396:  jump *label122 always 0 0
+        label *label121
+  397:  op floor *tmp61 :printExactFast:base 0
+  398:  print *tmp61
+  399:  print "."
+  400:  set :printExactFast:digit 1
+        label *label125
+  401:  jump *label127 greaterThan :printExactFast:digit 3
+  402:  set :frac:x :printExactFast:base
+  403:  op mod *tmp63 :frac:x 1
+  404:  set *tmp62 *tmp63
+        label *label128
+  405:  op mul *tmp64 *tmp62 100000
+  406:  set :printExactFast:base *tmp64
+  407:  op floor *tmp65 :printExactFast:base 0
+  408:  set :printExactFast:t *tmp65
+  409:  op lessThan *tmp66 :printExactFast:t 100
+  410:  jump *label129 equal *tmp66 false
+  411:  op lessThan *tmp68 :printExactFast:t 10
+  412:  jump *label131 equal *tmp68 false
+  413:  print "0000"
+  414:  set *tmp69 "0000"
+  415:  jump *label132 always 0 0
+        label *label131
+  416:  print "000"
+  417:  set *tmp69 "000"
+        label *label132
+  418:  set *tmp67 *tmp69
+  419:  jump *label130 always 0 0
+        label *label129
+  420:  op lessThan *tmp70 :printExactFast:t 1000
+  421:  jump *label133 equal *tmp70 false
+  422:  print "00"
+  423:  set *tmp71 "00"
+  424:  jump *label134 always 0 0
+        label *label133
+  425:  op lessThan *tmp72 :printExactFast:t 10000
+  426:  jump *label135 equal *tmp72 false
+  427:  print "0"
+  428:  set *tmp73 "0"
+  429:  jump *label136 always 0 0
+        label *label135
+  430:  set *tmp73 null
+        label *label136
+  431:  set *tmp71 *tmp73
+        label *label134
+  432:  set *tmp67 *tmp71
+        label *label130
+  433:  print :printExactFast:t
+        label *label126
+  434:  op add :printExactFast:digit :printExactFast:digit 1
+  435:  jump *label125 always 0 0
+        label *label127
+  436:  set *tmp60 null
         label *label122
-  440:  op notEqual *tmp75 :printExactFast:exp 0
-  441:  jump *label137 equal *tmp75 false
-  442:  print "E"
-  443:  print :printExactFast:exp
-  444:  set *tmp76 :printExactFast:exp
-  445:  jump *label138 always 0 0
+  437:  op notEqual *tmp74 :printExactFast:exp 0
+  438:  jump *label137 equal *tmp74 false
+  439:  print "E"
+  440:  print :printExactFast:exp
+  441:  set *tmp75 :printExactFast:exp
+  442:  jump *label138 always 0 0
         label *label137
-  446:  set *tmp76 null
+  443:  set *tmp75 null
         label *label138
-  447:  set *tmp44 *tmp76
+  444:  set *tmp44 *tmp75
         label *label116
         label *label114
-  448:  return :printExactFast*retaddr
-  449:  end
+  445:  return :printExactFast*retaddr
+  446:  end
         label *label7
-  450:  set :isZero.1:x :printExactSlow:n
-  451:  op abs *tmp78 :isZero.1:x 0
-  452:  op lessThanEq *tmp79 *tmp78 0
-  453:  set *tmp77 *tmp79
+  447:  set :isZero.1:x :printExactSlow:n
+  448:  op abs *tmp77 :isZero.1:x 0
+  449:  op lessThanEq *tmp78 *tmp77 0
+  450:  set *tmp76 *tmp78
         label *label142
-  454:  jump *label140 equal *tmp77 false
-  455:  print :printExactSlow:n
-  456:  set *tmp80 :printExactSlow:n
-  457:  jump *label141 always 0 0
+  451:  jump *label140 equal *tmp76 false
+  452:  print :printExactSlow:n
+  453:  set *tmp79 :printExactSlow:n
+  454:  jump *label141 always 0 0
         label *label140
-  458:  op lessThan *tmp81 :printExactSlow:n 0
-  459:  jump *label143 equal *tmp81 false
-  460:  print "-"
-  461:  op abs *tmp83 :printExactSlow:n 0
-  462:  set :printExactSlow:n *tmp83
-  463:  set *tmp82 :printExactSlow:n
-  464:  jump *label144 always 0 0
+  455:  op lessThan *tmp80 :printExactSlow:n 0
+  456:  jump *label143 equal *tmp80 false
+  457:  print "-"
+  458:  op abs *tmp82 :printExactSlow:n 0
+  459:  set :printExactSlow:n *tmp82
+  460:  set *tmp81 :printExactSlow:n
+  461:  jump *label144 always 0 0
         label *label143
-  465:  set *tmp82 null
+  462:  set *tmp81 null
         label *label144
-  466:  op log10 *tmp84 :printExactSlow:n 0
-  467:  op floor *tmp85 *tmp84 0
-  468:  set :printExactSlow:exp *tmp85
-  469:  op sub *tmp86 0 :printExactSlow:exp
-  470:  op pow *tmp87 10 *tmp86
-  471:  op mul *tmp88 :printExactSlow:n *tmp87
-  472:  set :printExactSlow:base *tmp88
-  473:  op floor *tmp89 :printExactSlow:base 0
-  474:  print *tmp89
-  475:  print "."
-  476:  set :printExactSlow:digit 1
+  463:  op log10 *tmp83 :printExactSlow:n 0
+  464:  op floor *tmp84 *tmp83 0
+  465:  set :printExactSlow:exp *tmp84
+  466:  op sub *tmp85 0 :printExactSlow:exp
+  467:  op pow *tmp86 10 *tmp85
+  468:  op mul *tmp87 :printExactSlow:n *tmp86
+  469:  set :printExactSlow:base *tmp87
+  470:  op floor *tmp88 :printExactSlow:base 0
+  471:  print *tmp88
+  472:  print "."
+  473:  set :printExactSlow:digit 1
         label *label145
-  477:  jump *label147 greaterThan :printExactSlow:digit 15
-  478:  set :frac.1:x :printExactSlow:base
-  479:  op mod *tmp91 :frac.1:x 1
-  480:  set *tmp90 *tmp91
+  474:  jump *label147 greaterThan :printExactSlow:digit 15
+  475:  set :frac.1:x :printExactSlow:base
+  476:  op mod *tmp90 :frac.1:x 1
+  477:  set *tmp89 *tmp90
         label *label148
-  481:  op mul *tmp92 *tmp90 10
-  482:  set :printExactSlow:base *tmp92
-  483:  op floor *tmp93 :printExactSlow:base 0
-  484:  print *tmp93
+  478:  op mul *tmp91 *tmp89 10
+  479:  set :printExactSlow:base *tmp91
+  480:  op floor *tmp92 :printExactSlow:base 0
+  481:  print *tmp92
         label *label146
-  485:  op add :printExactSlow:digit :printExactSlow:digit 1
-  486:  jump *label145 always 0 0
+  482:  op add :printExactSlow:digit :printExactSlow:digit 1
+  483:  jump *label145 always 0 0
         label *label147
-  487:  op notEqual *tmp94 :printExactSlow:exp 0
-  488:  jump *label149 equal *tmp94 false
-  489:  print "E"
-  490:  print :printExactSlow:exp
-  491:  set *tmp95 :printExactSlow:exp
-  492:  jump *label150 always 0 0
+  484:  op notEqual *tmp93 :printExactSlow:exp 0
+  485:  jump *label149 equal *tmp93 false
+  486:  print "E"
+  487:  print :printExactSlow:exp
+  488:  set *tmp94 :printExactSlow:exp
+  489:  jump *label150 always 0 0
         label *label149
-  493:  set *tmp95 null
+  490:  set *tmp94 null
         label *label150
-  494:  set *tmp80 *tmp95
+  491:  set *tmp79 *tmp94
         label *label141
         label *label139
-  495:  return :printExactSlow*retaddr
-  496:  end
+  492:  return :printExactSlow*retaddr
+  493:  end
 
 
 stop instruction encountered, dumping variable values:
@@ -704,47 +701,46 @@ stop instruction encountered, dumping variable values:
 *tmp56: 0.23450000000000015
 *tmp57: 0.23450000000000015
 *tmp58: 0.0
-*tmp59: 1.2345000000000002
+*tmp59: 1.0
 *tmp6: 228.0
-*tmp60: 1.0
-*tmp61: 1.2345000000000002
-*tmp62: 1.0
+*tmp60: 1.2345000000000002
+*tmp61: 1.0
+*tmp62: 0.9999983634211276
 *tmp63: 0.9999983634211276
-*tmp64: 0.9999983634211276
-*tmp65: 99999.83634211276
-*tmp66: 99999.0
-*tmp67: 0.0
-*tmp68: null
-*tmp69: 1.0
+*tmp64: 99999.83634211276
+*tmp65: 99999.0
+*tmp66: 0.0
+*tmp67: null
+*tmp68: 1.0
+*tmp69: 0000
 *tmp7: -241.0
-*tmp70: 0000
-*tmp71: 0.0
-*tmp72: null
-*tmp73: 0.0
-*tmp74: null
-*tmp75: 1.0
-*tmp76: -50.0
-*tmp77: 0.0
-*tmp78: 1.2345E-50
-*tmp79: 0.0
+*tmp70: 0.0
+*tmp71: null
+*tmp72: 0.0
+*tmp73: null
+*tmp74: 1.0
+*tmp75: -50.0
+*tmp76: 0.0
+*tmp77: 1.2345E-50
+*tmp78: 0.0
+*tmp79: -50.0
 *tmp8: 0.0
-*tmp80: -50.0
-*tmp81: 1.0
+*tmp80: 1.0
+*tmp81: 1.2345E-50
 *tmp82: 1.2345E-50
-*tmp83: 1.2345E-50
-*tmp84: -49.90850890573205
-*tmp85: -50.0
-*tmp86: 50.0
-*tmp87: 1.0E50
-*tmp88: 1.2345000000000002
-*tmp89: 1.0
+*tmp83: -49.90850890573205
+*tmp84: -50.0
+*tmp85: 50.0
+*tmp86: 1.0E50
+*tmp87: 1.2345000000000002
+*tmp88: 1.0
+*tmp89: 0.015276668818842154
 *tmp9: 0.0
 *tmp90: 0.015276668818842154
-*tmp91: 0.015276668818842154
-*tmp92: 0.15276668818842154
-*tmp93: 0.0
-*tmp94: 1.0
-*tmp95: -50.0
+*tmp91: 0.15276668818842154
+*tmp92: 0.0
+*tmp93: 1.0
+*tmp94: -50.0
 :formatBinaryNumber:digits: 0.0
 :formatBinaryNumber:n: 0.0
 :formatBinaryNumber:number: 10.0

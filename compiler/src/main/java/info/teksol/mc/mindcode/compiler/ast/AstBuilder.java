@@ -895,6 +895,17 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return processBooleanOperator(ctx.op, ctx.left, ctx.right);
     }
 
+    @Override
+    public AstMindcodeNode visitAstOperatorBinaryInRange(AstOperatorBinaryInRangeContext ctx) {
+        return new AstOperatorInRange(pos(ctx.value.start, ctx.lastValue.stop, ctx.op),
+                ctx.negation != null,
+                visitAstExpression(ctx.value),
+                new AstRange(pos(ctx.firstValue.start, ctx.lastValue.stop, ctx.firstValue.start),
+                        visitAstExpression(ctx.firstValue),
+                        visitAstExpression(ctx.lastValue),
+                        ctx.operator.getType() == MindcodeLexer.DOT3));
+    }
+
     private AstExpression processBooleanOperator(Token op, ExpressionContext left, ExpressionContext right) {
         SourcePosition position = pos(left.start, right.stop, op);
         Operation operation = operation(op);

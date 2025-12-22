@@ -773,6 +773,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAstOperatorBinaryInRange(MindcodeParser.AstOperatorBinaryInRangeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstOperatorBinaryInRange(MindcodeParser.AstOperatorBinaryInRangeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAstMethodCall(MindcodeParser.AstMethodCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1140,6 +1152,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAstOperatorIncDecPrefix(MindcodeParser.AstOperatorIncDecPrefixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAstOperatorBinaryInSet(MindcodeParser.AstOperatorBinaryInSetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstOperatorBinaryInSet(MindcodeParser.AstOperatorBinaryInSetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

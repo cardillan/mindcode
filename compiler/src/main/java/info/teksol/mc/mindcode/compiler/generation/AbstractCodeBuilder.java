@@ -265,12 +265,12 @@ public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
         }
     }
 
-    protected Condition insideRangeCondition(AstRange range) {
+    public static Condition insideRangeCondition(AstRange range) {
         return range.isExclusive() ? Condition.LESS_THAN : Condition.LESS_THAN_EQ;
     }
 
-    protected Condition outsideRangeCondition(AstRange range) {
-        return insideRangeCondition(range).inverse(globalProfile);
+    public static Condition outsideRangeCondition(AstRange range) {
+        return insideRangeCondition(range).inverse(false);
     }
 
     protected LogicVariable createOperation(AstMindcodeNode node, Operation operation, LogicVariable tmp, LogicValue left, LogicValue right) {
@@ -365,29 +365,58 @@ public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
         }
     }
 
+    AstExpression transform(AstExpression node) {
+        return switch(node) {
+            case AstParentheses p -> transform(p.getExpression());
+            case AstOperatorInRange r -> transformInRange(r);
+            default -> node;
+        };
+    }
+
+    protected AstOperatorShortCircuiting transformInRange(AstOperatorInRange node) {
+        AstOperatorShortCircuiting result;
+        AstCachedNode cached = new AstCachedNode(node.getValue());
+
+        if (node.isNegation()) {
+            result = new AstOperatorShortCircuiting(node.sourcePosition(),
+                    Operation.LOGICAL_OR,
+                    new AstOperatorBinary(node.getRange().sourcePosition(),
+                            Operation.LESS_THAN, cached, node.getRange().getFirstValue()),
+                    new AstOperatorBinary(node.getRange().sourcePosition(),
+                            outsideRangeCondition(node.getRange()).toOperation(),
+                            cached, node.getRange().getLastValue()));
+        } else {
+            result = new AstOperatorShortCircuiting(node.sourcePosition(),
+                    Operation.LOGICAL_AND,
+                    new AstOperatorBinary(node.getRange().sourcePosition(),
+                            Operation.GREATER_THAN_EQ, cached, node.getRange().getFirstValue()),
+                    new AstOperatorBinary(node.getRange().sourcePosition(),
+                            insideRangeCondition(node.getRange()).toOperation(),
+                            cached, node.getRange().getLastValue()));
+        }
+
+        result.setProfile(node.getProfile());
+        result.getLeft().setProfile(node.getProfile());
+        result.getRight().setProfile(node.getProfile());
+        return result;
+    }
+
     protected record UnwrappedNode(AstExpression expression, boolean negated) { }
 
     protected UnwrappedNode unwrapNegation(AstExpression original) {
         boolean negated = false;
         AstExpression node = original;
         while (true) {
-            node = unwrapParentheses(node);
+            node = transform(node);
             if (node instanceof AstOperatorShortCircuiting) {
                 return new UnwrappedNode(node, negated);
             } else if (node instanceof AstOperatorUnary unary && unary.getOperation().isBooleanNegation()) {
                 negated = !negated;
-                node = unwrapParentheses(unary.getOperand());
+                node = transform(unary.getOperand());
             } else {
                 return new UnwrappedNode(original, false);
             }
         }
-    }
-
-    protected AstExpression unwrapParentheses(AstExpression node) {
-        while (node instanceof AstParentheses parentheses) {
-            node = parentheses.getExpression();
-        }
-        return node;
     }
 
     private void emulateStrictNotEqual(AstMindcodeNode node, LogicVariable tmp, LogicValue left, LogicValue right) {

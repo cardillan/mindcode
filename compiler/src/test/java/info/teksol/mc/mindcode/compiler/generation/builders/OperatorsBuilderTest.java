@@ -103,6 +103,46 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void compilesInRange() {
+            assertCompilesTo("""
+                            a in b .. c;
+                            """,
+                    createInstruction(OP, "greaterThanEq", tmp(0), ":a", ":b"),
+                    createInstruction(JUMP, label(0), "equal", tmp(0), "false"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(OP, "lessThanEq", tmp(1), ":a", ":c"),
+                    createInstruction(JUMP, label(0), "equal", tmp(1), "false"),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(2), "true"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(2), "false"),
+                    createInstruction(LABEL, label(1))
+            );
+        }
+
+        @Test
+        void compilesNotInRange() {
+            assertCompilesTo("""
+                            a not in b .. c;
+                            """,
+                    createInstruction(OP, "lessThan", tmp(0), ":a", ":b"),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(0), "false"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(OP, "greaterThan", tmp(1), ":a", ":c"),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(1), "false"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(2), "true"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(2), "false"),
+                    createInstruction(LABEL, label(1))
+            );
+        }
+
+        @Test
         void compilesEqualitiesInTarget7() {
             assertCompilesTo("""
                             #set target = 7;

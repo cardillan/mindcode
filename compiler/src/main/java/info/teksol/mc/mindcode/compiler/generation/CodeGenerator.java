@@ -97,6 +97,9 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nodeVisitor.registerVisitor(new StatementListsBuilder(this, context));
         nodeVisitor.registerVisitor(new WhileLoopStatementsBuilder(this, context));
 
+        // Specialized handler for cached nodes
+        nodeVisitor.registerVisitor(new CachedNodeBuilder(this, context));
+
         functionCompiler = new FunctionDeclarationsBuilder(this, context);
     }
 

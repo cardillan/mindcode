@@ -191,6 +191,18 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
                                 """, baseType).build())
                 .build();
         classBuilder.addMethod(visitTreeMethod);
+//
+//        MethodSpec transformMethod = MethodSpec.methodBuilder("transform")
+//                .addModifiers(Modifier.DEFAULT, Modifier.PUBLIC)
+//                .addParameter(baseType, "astNode")
+//                .returns(baseType)
+//                .addCode(CodeBlock.builder()
+//                        .add("""
+//                                return astNode;
+//                                """, baseType).build())
+//                .build();
+//        classBuilder.addMethod(transformMethod);
+
         createClass(GENERATED_PACKAGE_NAME, classBuilder);
     }
 

@@ -532,6 +532,20 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     )
             );
         }
+
+
+        @Test
+        void buildsRangedInOperator() {
+            assertBuildsTo("""
+                            a in b ... c;
+                            a !in b .. c;
+                            """,
+                    List.of(
+                            new AstOperatorInRange(EMPTY, false, a, new AstRange(EMPTY, b, c, true)),
+                            new AstOperatorInRange(EMPTY, true, a, new AstRange(EMPTY, b, c, false))
+                    )
+            );
+        }
     }
 
     @Nested

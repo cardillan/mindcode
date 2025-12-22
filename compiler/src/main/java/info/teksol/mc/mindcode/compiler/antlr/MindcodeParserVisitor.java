@@ -436,6 +436,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstOperatorBinaryAdd(MindcodeParser.AstOperatorBinaryAddContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astOperatorBinaryInRange}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstOperatorBinaryInRange(MindcodeParser.AstOperatorBinaryInRangeContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astMethodCall}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -652,6 +659,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAstOperatorIncDecPrefix(MindcodeParser.AstOperatorIncDecPrefixContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astOperatorBinaryInSet}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstOperatorBinaryInSet(MindcodeParser.AstOperatorBinaryInSetContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code astAssignment}
 	 * labeled alternative in {@link MindcodeParser#expression}.
