@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * The [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) has been updated:
   * More cases where a [`select` instruction](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#the-select-instruction) can be replaced with a `set` instruction are now supported.
   * When the resulting values of `select` are `0` and `1` and the condition allows it, the instruction is replaced with an `op` instruction.
+  * The instruction normalizing the result of an `||` operator to `0` or `1` is removed when not needed. 
   * Added an optimization turning a [`read` instruction](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#the-readwrite-instructions) with a constant string and a constant index into a `set` instruction setting the character value directly.
 * When evaluating `jump` and `select` conditions during optimizations, cases where the operands of the condition are identical (the same variable) are handled.   
 * The [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY-COMPATIBILITY.markdown) now also performs a test to find out whether assigning `null` to `@counter` is ignored by the processor.

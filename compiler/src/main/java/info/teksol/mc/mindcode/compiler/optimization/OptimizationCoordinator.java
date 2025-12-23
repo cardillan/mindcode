@@ -10,10 +10,12 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
-import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionArrayExpander;
+import info.teksol.mc.mindcode.compiler.postprocess.VirtualInstructionResolver;
+import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
@@ -40,20 +42,20 @@ public class OptimizationCoordinator {
     private final InstructionProcessor instructionProcessor;
     private final MessageConsumer messageConsumer;
     private final OptimizerContext optimizerContext;
-    private final LogicInstructionArrayExpander arrayExpander;
+    private final VirtualInstructionResolver virtualInstructionResolver;
     private final boolean remoteLibrary;
     private final CompilerProfile globalProfile;
     private DebugPrinter debugPrinter = new NullDebugPrinter();
     private @Nullable OptimizationContext optimizationContext;
 
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile globalProfile,
-            MessageConsumer messageConsumer, OptimizerContext optimizerContext, LogicInstructionArrayExpander arrayExpander,
-            boolean remoteLibrary) {
+            MessageConsumer messageConsumer, OptimizerContext optimizerContext,
+            VirtualInstructionResolver virtualInstructionResolver, boolean remoteLibrary) {
         this.instructionProcessor = instructionProcessor;
         this.messageConsumer = messageConsumer;
         this.optimizerContext = optimizerContext;
         this.globalProfile = globalProfile;
-        this.arrayExpander = arrayExpander;
+        this.virtualInstructionResolver = virtualInstructionResolver;
         this.remoteLibrary = remoteLibrary;
     }
 
@@ -102,6 +104,10 @@ public class OptimizationCoordinator {
             optimizePhase(INITIAL, optimizers, 0);
 
             int pass = 1;
+
+            // Always two passes
+            optimizePhase(ITERATED, optimizers, pass++);
+
             boolean modified = true;
 
             // We reserve one pass for the phase after the expansion
@@ -109,11 +115,19 @@ public class OptimizationCoordinator {
                 modified = optimizePhase(ITERATED, optimizers, pass++);
             }
 
-            if (arrayExpander.analyze(program)) {
+            if (virtualInstructionResolver.analyze(program)) {
                 for (int index = 0; index < program.size(); index++) {
-                    if (program.get(index) instanceof ArrayAccessInstruction ix) {
+                    LogicInstruction programIx = program.get(index);
+                    if (programIx instanceof ArrayAccessInstruction ix) {
                         optimizationContext.removeInstruction(index);
-                        List<LogicInstruction> expanded = arrayExpander.expand(ix);
+                        List<LogicInstruction> expanded = virtualInstructionResolver.expand(ix);
+                        for (LogicInstruction instruction : expanded) {
+                            optimizationContext.insertInstructionUnchecked(index++, instruction);
+                        }
+                        index--;
+                    } else if (programIx instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {
+                        optimizationContext.removeInstruction(index);
+                        List<LogicInstruction> expanded = virtualInstructionResolver.expand(op);
                         for (LogicInstruction instruction : expanded) {
                             optimizationContext.insertInstructionUnchecked(index++, instruction);
                         }
@@ -122,7 +136,7 @@ public class OptimizationCoordinator {
                 }
 
                 boolean generateEndSeparator = program.getLast().getOpcode() == Opcode.END;
-                for (LogicInstruction instruction : arrayExpander.getJumpTables(generateEndSeparator)) {
+                for (LogicInstruction instruction : virtualInstructionResolver.getJumpTables(generateEndSeparator)) {
                     optimizationContext.insertInstructionUnchecked(program.size(), instruction);
                 }
                 modified = true;

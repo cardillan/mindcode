@@ -40,7 +40,7 @@ public enum Operation implements LogicArgument {
     BITWISE_NOT     (1, true, "not",  MindcodeLexer.BITWISE_NOT),
     // Boolean: guaranteed to produce 0/1.
     BOOLEAN_AND     (2, true, "land", MindcodeLexer.BOOLEAN_AND),
-    BOOLEAN_OR      (2, true, "or",   MindcodeLexer.BOOLEAN_OR, null),
+    BOOLEAN_OR      (2, true, "lor",  MindcodeLexer.BOOLEAN_OR),
     BOOLEAN_NOT     (1, true, null,   MindcodeLexer.BOOLEAN_NOT),
     // Logical: produce null/zero or nonzero, can be short-circuited.
     LOGICAL_AND     (2, true, "land", MindcodeLexer.LOGICAL_AND),
@@ -149,6 +149,21 @@ public enum Operation implements LogicArgument {
     public boolean isShortCircuiting() {
         return switch(this) {
             case LOGICAL_AND, LOGICAL_OR -> true;
+            default -> false;
+        };
+    }
+
+    public boolean acceptsAnyBoolean() {
+        return switch(this) {
+            case BOOLEAN_AND, BOOLEAN_OR, BOOLEAN_NOT, LOGICAL_AND, LOGICAL_OR, LOGICAL_NOT -> true;
+            default -> false;
+        };
+    }
+
+    public boolean producesBoolean() {
+        return switch(this) {
+            case EQUAL, NOT_EQUAL, LESS_THAN, LESS_THAN_EQ, GREATER_THAN, GREATER_THAN_EQ, STRICT_EQUAL, STRICT_NOT_EQUAL,
+                 BOOLEAN_AND, BOOLEAN_NOT, LOGICAL_AND, LOGICAL_NOT -> true;
             default -> false;
         };
     }

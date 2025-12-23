@@ -488,6 +488,12 @@ public class OptimizationContext {
         return staleVariables.contains(variable);
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
+    public boolean isStale(LogicArgument argument) {
+        // When the argument is not a variable, it can't be included in the stale set
+        return staleVariables.contains(argument);
+    }
+
     public void clearVariableStates() {
         variableStates.clear();
         firstPassStates.clear();

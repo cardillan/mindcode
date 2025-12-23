@@ -32,9 +32,9 @@ import info.teksol.mc.mindcode.compiler.optimization.DebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.DiffDebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
-import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionArrayExpander;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionLabelResolver;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
+import info.teksol.mc.mindcode.compiler.postprocess.VirtualInstructionResolver;
 import info.teksol.mc.mindcode.compiler.preprocess.DirectivePreprocessor;
 import info.teksol.mc.mindcode.compiler.preprocess.PreprocessorContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
@@ -282,7 +282,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.COMPILER) <= 0) return;
 
-        LogicInstructionArrayExpander arrayExpander = new LogicInstructionArrayExpander();
+        VirtualInstructionResolver virtualInstructionResolver = new VirtualInstructionResolver(instructionProcessor);
 
         // OPTIMIZE
         long optimizeStart = System.nanoTime();
@@ -290,7 +290,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
             final DebugPrinter debugPrinter = globalProfile.getDebugMessages() > 0 && globalProfile.optimizationsActive()
                     ? debugPrinterProvider.apply(globalProfile.getDebugMessages()) : new NullDebugPrinter();
             OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, globalProfile, messageConsumer,
-                    this, arrayExpander, !astProgram.isMainProgram());
+                    this, virtualInstructionResolver, !astProgram.isMainProgram());
             optimizer.setDebugPrinter(debugPrinter);
             instructions = optimizer.optimize(callGraph, instructions, rootAstContext);
             debugPrinter.print(this::debug);
@@ -301,7 +301,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.OPTIMIZER) <= 0) return;
 
         // Run the program through the array expander again, as optimizations might have been inactive.
-        instructions = arrayExpander.expandArrayInstructions(instructions);
+        instructions = virtualInstructionResolver.resolveVirtualInstructions(instructions);
 
         // Check there are no direct access instructions
         if (globalProfile.isSymbolicLabels()) {

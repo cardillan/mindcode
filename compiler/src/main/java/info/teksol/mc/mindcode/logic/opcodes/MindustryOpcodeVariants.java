@@ -102,6 +102,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("equal"),        res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("notEqual"),     res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("land"),         res("result"),  in("a"), in("b"));
+    virtual(list, V6,  MAX, S, NONE, Opcode.OP,         op("lor"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("lessThan"),     res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("lessThanEq"),   res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("greaterThan"),  res("result"),  in("a"), in("b"));

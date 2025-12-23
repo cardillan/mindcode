@@ -1,8 +1,8 @@
      5 instructions before optimizations.
-     1 instructions eliminated by Single Step Elimination (4 iterations).
+     1 instructions eliminated by Single Step Elimination (5 iterations).
      4 instructions after optimizations.
 
-Modifications by Jumps phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
      1 read *tmp0 bank1 0
      2 assertequals 10 *tmp0 "value from memory"

@@ -14,7 +14,7 @@ Whether the optimization will be applied or not depends on the value of the [`bu
 
 ## The `op` instruction
 
-The result of some operations may be determined by inspecting the operation's operands, even when one or both of them are not known at compile time.
+Several optimizations are available for the `op` instruction.
 
 ### Known value of an operand 
 
@@ -52,6 +52,58 @@ When both operands of the `op` instruction are known to have the same value, som
 * `sub`, `xor`: sets the result to `0`
 * `or`, `land`: sets the result directly to the first operand, if the instruction doesn't represent the boolean version of the operation (`||` or `&&`),
 * `and`, `min` and `max`: sets the result directly to the first operand.
+
+### Boolean OR simplification
+
+The boolean OR operator (`||`) guarantees to always produce a boolean value - `0` or `1`. As mlog itself doesn't guarantee that, an additional instruction must be used to ensure the result is a boolean value:
+
+```Mindcode
+volatile x = a || b;
+```
+
+compiles to:
+
+```mlog
+op or *tmp1 :a :b
+op notEqual .x *tmp1 false
+```
+
+This additional instruction can be removed in either of the following cases: 
+
+* the output of `||` is used in a context where any nonzero value can be used to represent `true` (i.e., any other boolean/logical operator, or a condition comparing the result to `0` or `false`),
+* both inputs of `||` are guaranteed to be 0 or 1.
+
+Examples:
+
+```Mindcode
+#set target = 8;
+#set remarks = comments;
+
+/// a || b is computed first, and as it is used in another `op or` instruction, the additional instruction is removed
+volatile x = a || (b || c);
+
+/// The && and ! operators (op land/op equal) are guaranteed to produce 0 or 1
+volatile y = a && b || !c;
+
+/// When used in an if, the value need not to be normalized
+volatile z = a || b ? "yes" : "no";
+```
+
+compiles to:
+
+```mlog
+# a || b is computed first, and as it is used in another `op or` instruction, the additional instruction is removed
+op or *tmp0 :b :c
+op or *tmp7 :a *tmp0
+op notEqual .x *tmp7 false
+# The && and ! operators (op land/op equal) are guaranteed to produce 0 or 1
+op land *tmp2 :a :b
+op equal *tmp3 :c false
+op or .y *tmp2 *tmp3
+# When used in an if, the value need not to be normalized
+op or *tmp5 :a :b
+select .z notEqual *tmp5 false "yes" "no"
+```
 
 ### Simplifying complex expressions
 

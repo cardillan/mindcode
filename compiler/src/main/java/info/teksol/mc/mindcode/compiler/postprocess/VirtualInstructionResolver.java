@@ -1,7 +1,12 @@
 package info.teksol.mc.mindcode.compiler.postprocess;
 
+import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
+import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
@@ -9,13 +14,21 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static info.teksol.mc.mindcode.logic.arguments.Operation.NOT_EQUAL;
+
 /// Expands virtual instructions (READARR, WRITEARR) into real code.
 @NullMarked
-public class LogicInstructionArrayExpander {
+public class VirtualInstructionResolver {
+    private final InstructionProcessor processor;
+
     private boolean expanded = false;
     private final Map<String, JumpTable> jumpTables = new TreeMap<>();
 
-    public List<LogicInstruction> expandArrayInstructions(List<LogicInstruction> program) {
+    public VirtualInstructionResolver(InstructionProcessor processor) {
+        this.processor = processor;
+    }
+
+    public List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {
         // Already expanded, do not repeat
         if (expanded) return program;
 
@@ -49,6 +62,8 @@ public class LogicInstructionArrayExpander {
             if (instruction instanceof ArrayAccessInstruction ix) {
                 ix.getArrayConstructor().generateJumpTable(jumpTables);
                 found = true;
+            } else if (instruction instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {
+                found = true;
             }
         }
 
@@ -69,9 +84,21 @@ public class LogicInstructionArrayExpander {
         return result;
     }
 
+    public List<LogicInstruction> expand(OpInstruction op) {
+        List<LogicInstruction> result = new ArrayList<>();
+        LogicVariable tmp = processor.nextTemp();
+        result.add(op.withOperationAndResult(Operation.BITWISE_OR, tmp));
+        result.add(op.withOperands(NOT_EQUAL, tmp, LogicBoolean.FALSE));
+        return result;
+    }
+
     private void expandInstruction(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
         if (instruction instanceof ArrayAccessInstruction ix) {
             ix.getArrayConstructor().expandInstruction(consumer, jumpTables);
+        } else if (instruction instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {
+            LogicVariable tmp = processor.nextTemp();
+            consumer.accept(op.withOperationAndResult(Operation.BITWISE_OR, tmp));
+            consumer.accept(op.withOperands(NOT_EQUAL, tmp, LogicBoolean.FALSE));
         } else {
             consumer.accept(instruction);
         }

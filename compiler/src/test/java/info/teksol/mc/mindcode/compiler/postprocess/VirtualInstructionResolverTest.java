@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
-class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
+class VirtualInstructionResolverTest extends AbstractCodeGeneratorTest {
 
     @Override
     protected CompilationPhase getTargetPhase() {

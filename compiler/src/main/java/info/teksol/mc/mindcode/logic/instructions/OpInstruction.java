@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 @NullMarked
 public class OpInstruction extends BaseResultInstruction implements ConditionalInstruction {
@@ -44,6 +45,13 @@ public class OpInstruction extends BaseResultInstruction implements ConditionalI
         return hasSecondOperand()
                 ? new OpInstruction(astContext, List.of(getArg(0), result, getArg(2), getArg(3)), getArgumentTypes()).copyInfo(this)
                 : new OpInstruction(astContext, List.of(getArg(0), result, getArg(2)), getArgumentTypes()).copyInfo(this);
+    }
+
+    public OpInstruction withOperationAndResult(Operation operation, LogicVariable result) {
+        assert getArgumentTypes() != null;
+        return hasSecondOperand()
+                ? new OpInstruction(astContext, List.of(operation, result, getArg(2), getArg(3)), getArgumentTypes()).copyInfo(this)
+                : new OpInstruction(astContext, List.of(operation, result, getArg(2)), getArgumentTypes()).copyInfo(this);
     }
 
     public OpInstruction withX(LogicValue x) {
@@ -93,13 +101,14 @@ public class OpInstruction extends BaseResultInstruction implements ConditionalI
         return (LogicValue) getArg(3);
     }
 
-    public boolean isDeterministic() {
-        return getOperation().isDeterministic();
-    }
-
     private void ensureConditional() {
         if (isUnconditional()) {
             throw new IllegalArgumentException("Conditional op required, got " + this);
         }
+    }
+
+    @Override
+    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
+        return getArg(0) == Operation.BOOLEAN_OR ? 2 : 1;
     }
 }

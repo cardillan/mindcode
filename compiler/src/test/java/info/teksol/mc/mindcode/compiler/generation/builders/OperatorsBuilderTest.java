@@ -81,9 +81,8 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                             e ^ f;
                             """,
                     createInstruction(OP, "or", tmp(0), ":a", ":b"),
-                    createInstruction(OP, "or", tmp(2), ":c", ":d"),
-                    createInstruction(OP, "notEqual", tmp(1), tmp(2), "false"),
-                    createInstruction(OP, "xor", tmp(3), ":e", ":f")
+                    createInstruction(OP, "lor", tmp(1), ":c", ":d"),
+                    createInstruction(OP, "xor", tmp(2), ":e", ":f")
             );
         }
 

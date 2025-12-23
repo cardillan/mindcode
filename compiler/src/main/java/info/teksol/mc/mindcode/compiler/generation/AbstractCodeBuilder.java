@@ -283,7 +283,6 @@ public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
         }
 
         switch (operation) {
-            case BOOLEAN_OR         -> emulateBooleanOr(node, tmp, left, right);
             case STRICT_NOT_EQUAL   -> emulateStrictNotEqual(node, tmp, left, right);
             case EMOD               -> emulateEmod(node, tmp, left, right);
             case USHR               -> emulateUshr(node, tmp, left, right);
@@ -363,13 +362,6 @@ public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
         final LogicVariable tmp2 = assembler.unprotectedTemp();
         assembler.createOp(STRICT_EQUAL, tmp2, left, right);
         assembler.createOp(EQUAL, tmp, tmp2, LogicBoolean.FALSE);
-    }
-
-    private void emulateBooleanOr(AstMindcodeNode node, LogicVariable tmp, LogicValue left, LogicValue right) {
-        final LogicVariable tmp2 = assembler.unprotectedTemp();
-        assembler.createOp(BOOLEAN_OR, tmp2, left, right);
-        // Ensure the result is 0 or 1
-        assembler.createOp(NOT_EQUAL, tmp, tmp2, LogicBoolean.FALSE);
     }
 
     private void emulateEmod(AstMindcodeNode node, LogicVariable tmp, LogicValue left, LogicValue right) {

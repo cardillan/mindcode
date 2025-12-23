@@ -172,6 +172,68 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
     }
 
     @Nested
+    class OpBooleanOrSimplification {
+
+        @Test
+        void simplifiesChainedOr() {
+            assertCompilesTo("""
+                        noinit var a, b, c;
+                        print(a || b || c);
+                        """,
+                    createInstruction(OP, "or", tmp(0), ".a", ".b"),
+                    createInstruction(OP, "or", tmp(2), tmp(0), ".c"),
+                    createInstruction(OP, "notEqual", tmp(1), tmp(2), "false"),
+                    createInstruction(PRINT, tmp(1))
+            );
+        }
+
+        @Test
+        void normalizesVolatileVariables() {
+            assertCompilesTo("""
+                        noinit var a, b;
+                        volatile x = a || b;
+                        """,
+                    createInstruction(OP, "or", tmp(1), ".a", ".b"),
+                    createInstruction(OP, "notEqual", tmp(0), tmp(1), "false"),
+                    createInstruction(SET, ".x", tmp(0))
+            );
+        }
+
+        @Test
+        void simplifiesBooleanOperands() {
+            assertCompilesTo("""
+                        #set optimization = experimental;
+                        noinit var a, b, c;
+                        print(a && b || !c);
+                        """,
+                    createInstruction(OP, "land", tmp(0), ".a", ".b"),
+                    createInstruction(OP, "equal", tmp(1), ".c", "false"),
+                    createInstruction(OP, "or", tmp(2), tmp(0), tmp(1)),
+                    createInstruction(PRINT, tmp(2))
+            );
+        }
+
+        @Test
+        void simplifiesConditions() {
+            assertCompilesTo("""
+                        noinit var a, b, c;
+                        if a || b then
+                            print("Yes");
+                        end;
+                        """,
+                    createInstruction(OP, "or", tmp(0), ".a", ".b"),
+                    createInstruction(JUMP, label(0), "equal", tmp(0), "false"),
+                    createInstruction(PRINT, q("Yes")),
+                    createInstruction(SET, tmp(1), q("Yes")),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(1), "null"),
+                    createInstruction(LABEL, label(1))
+            );
+        }
+    }
+
+    @Nested
     class OpExpressionSimplifications {
         @Test
         void optimizesMulThenFloor1() {

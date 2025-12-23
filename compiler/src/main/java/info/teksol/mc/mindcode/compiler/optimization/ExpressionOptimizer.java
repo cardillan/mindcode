@@ -6,6 +6,7 @@ import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
+import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -69,6 +70,8 @@ class ExpressionOptimizer extends BaseOptimizer {
     }
 
     private void processOpInstruction(LogicIterator logicIterator, OpInstruction ix) {
+        VariableStates variableStates = optimizationContext.getVariableStates(ix);
+
         if (ix.hasSecondOperand()) {
             final Tuple2<LogicValue, LogicValue> opers = extractConstantOperand(ix);
             if (opers.e1().isNumericConstant() && opers.e1().isLong()) {
@@ -152,7 +155,6 @@ class ExpressionOptimizer extends BaseOptimizer {
                     }
                 }
             } else {
-                VariableStates variableStates = optimizationContext.getVariableStates(ix);
                 LogicValue x = optimizationContext.resolveValue(variableStates, ix.getX());
                 LogicValue y = optimizationContext.resolveValue(variableStates, ix.getY());
                 if (x.equals(y)) {
@@ -175,6 +177,22 @@ class ExpressionOptimizer extends BaseOptimizer {
                             return;
                         }
                     }
+                }
+            }
+        }
+
+        if (ix.getOperation() == Operation.BOOLEAN_OR) {
+            List<LogicInstruction> references = optimizationContext.getVariableReferences(ix.getResult());
+            if (!ix.getResult().isVolatile() && optimizationContext.getVariableReferences(ix.getResult())
+                    .stream().allMatch(this::acceptsBoolean)) {
+                logicIterator.set(ix.withOperands(Operation.BITWISE_OR, ix.getX(), ix.getY()));
+                return;
+            } else if (variableStates != null && !optimizationContext.isStale(ix.getX()) && !optimizationContext.isStale(ix.getY())) {
+                VariableValue valueX = variableStates.findVariableValue(ix.getX());
+                VariableValue valueY = variableStates.findVariableValue(ix.getY());
+                if (producesBoolean(valueX) && producesBoolean(valueY)) {
+                    logicIterator.set(ix.withOperands(Operation.BITWISE_OR, ix.getX(), ix.getY()));
+                    return;
                 }
             }
         }
@@ -202,6 +220,29 @@ class ExpressionOptimizer extends BaseOptimizer {
                 logicIterator.next();
             }
         }
+    }
+
+    private boolean acceptsBoolean(LogicInstruction instruction) {
+        if (instruction instanceof OpInstruction op) {
+            return op.getOperation().acceptsAnyBoolean() || op.isPlainComparison();
+        } else if (instruction instanceof ConditionalInstruction cond) {
+            return cond.isPlainComparison();
+        } else {
+            return false;
+        }
+    }
+
+    private boolean producesBoolean(@Nullable VariableValue value) {
+        if (value == null) {
+            return false;
+        } else if (value.getConstantValue() instanceof LogicLiteral lit) {
+            int litValue = lit.getIntValue();
+            return litValue == 0 || litValue == 1;
+        } else if (value.getInstruction() instanceof OpInstruction op) {
+            return op.getOperation().producesBoolean();
+        }
+
+        return false;
     }
 
     private @Nullable Tuple2<LogicValue, LogicValue> extractIdivOperands(OpInstruction ix) {

@@ -195,8 +195,7 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             g ^= h;
                             """,
                     createInstruction(OP, "or", ":a", ":a", ":b"),
-                    createInstruction(OP, "or", tmp(0), ":c", ":d"),
-                    createInstruction(OP, "notEqual", ":c", tmp(0), "false"),
+                    createInstruction(OP, "lor", ":c", ":c", ":d"),
                     createInstruction(OP, "xor", ":g", ":g", ":h")
             );
         }
