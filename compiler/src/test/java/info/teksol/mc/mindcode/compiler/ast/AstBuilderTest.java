@@ -533,9 +533,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
             );
         }
 
-
         @Test
-        void buildsRangedInOperator() {
+        void buildsInRangeOperator() {
             assertBuildsTo("""
                             a in b ... c;
                             a !in b .. c;
@@ -543,6 +542,25 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     List.of(
                             new AstOperatorInRange(EMPTY, false, a, new AstRange(EMPTY, b, c, true)),
                             new AstOperatorInRange(EMPTY, true, a, new AstRange(EMPTY, b, c, false))
+                    )
+            );
+        }
+
+        @Test
+        void buildsInListOperator() {
+            assertBuildsTo("""
+                            a in (1, 2, 3);
+                            a !in (1 .. 3, 5 ... 9);
+                            """,
+                    List.of(
+                            new AstOperatorInList(EMPTY, false, a,
+                                    List.of(number(1), number(2), number(3))),
+                            new AstOperatorInList(EMPTY, true, a,
+                                            List.of(
+                                                    new AstRange(EMPTY, number(1), number(3), false),
+                                                    new AstRange(EMPTY, number(5), number(9), true)
+                                            )
+                            )
                     )
             );
         }

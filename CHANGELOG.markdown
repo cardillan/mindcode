@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added the [`no-argument-padding` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-no-argument-padding). When activated, instructions are not padded to the maximum number of arguments.
 * Added the [`author` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-author). The option adds an entry to the list of authors, which is then displayed alongside the usual compiler signature.
 * Added support for new instruction opcode (`ucontrol deconstruct`).
+* Added a binary [`in` operator](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#rangelist-membership-operator) for testing whether a value is contained in a given range or a list of values. 
 
 ### Changed
 

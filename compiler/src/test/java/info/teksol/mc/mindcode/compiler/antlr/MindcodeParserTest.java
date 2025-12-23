@@ -544,11 +544,20 @@ class MindcodeParserTest extends AbstractParserTest {
         }
 
         @Test
-        void parsesRangedIn() {
+        void parsesInRange() {
             assertParses("""
                     a in 1 .. 10;
                     b not in 2 ... 20;
                     c !in 3 ... 30;
+                    """);
+        }
+
+        @Test
+        void parsesInList() {
+            assertParses("""
+                    a in (1, 2, 3);
+                    b not in (4, 5 .. 12, 16, 20);
+                    c !in (7, 8 .. 11);
                     """);
         }
 

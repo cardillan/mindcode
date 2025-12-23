@@ -1068,6 +1068,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAstFunctionCall(MindcodeParser.AstFunctionCallContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code astOperatorBinaryInList}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstOperatorBinaryInList(MindcodeParser.AstOperatorBinaryInListContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astOperatorBinaryInList}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstOperatorBinaryInList(MindcodeParser.AstOperatorBinaryInListContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astMemberAccess}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -1115,18 +1127,6 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAstOperatorIncDecPrefix(MindcodeParser.AstOperatorIncDecPrefixContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code astOperatorBinaryInSet}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterAstOperatorBinaryInSet(MindcodeParser.AstOperatorBinaryInSetContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code astOperatorBinaryInSet}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitAstOperatorBinaryInSet(MindcodeParser.AstOperatorBinaryInSetContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code astAssignment}
 	 * labeled alternative in {@link MindcodeParser#expression}.

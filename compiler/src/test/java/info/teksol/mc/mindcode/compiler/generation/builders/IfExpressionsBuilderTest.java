@@ -68,6 +68,102 @@ class IfExpressionsBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Nested
+    class InListCondition {
+
+        @Test
+        void compilesInListCondition() {
+            assertCompilesTo("""
+                            if a in (1, 2, 3) then
+                                print("yes");
+                            end;
+                            """,
+                    createInstruction(SET, tmp(1), ":a"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "1"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "2"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "3"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(PRINT, q("yes")),
+                    createInstruction(SET, tmp(0), q("yes")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, tmp(0), "null"),
+                    createInstruction(LABEL, label(0))
+            );
+        }
+
+        @Test
+        void compilesNotInListCondition() {
+            assertCompilesTo("""
+                            if a not in (1, 2, 3) then
+                                print("yes");
+                            end;
+                            """,
+                    createInstruction(SET, tmp(1), ":a"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "1"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "2"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "3"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(0), "null"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(PRINT, q("yes")),
+                    createInstruction(SET, tmp(0), q("yes")),
+                    createInstruction(LABEL, label(0))
+            );
+        }
+
+        @Test
+        void compilesNotInListCondition2() {
+            assertCompilesTo("""
+                            if not (a in (1, 2, 3)) then
+                                print("yes");
+                            end;
+                            """,
+                    createInstruction(SET, tmp(1), ":a"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "1"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "2"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "3"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(0), "null"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(PRINT, q("yes")),
+                    createInstruction(SET, tmp(0), q("yes")),
+                    createInstruction(LABEL, label(0))
+            );
+        }
+
+        @Test
+        void compilesInListConditionWithElse() {
+            assertCompilesTo("""
+                            if a in (1, 2, 3) then
+                                print("yes");
+                            else
+                                print("no");
+                            end;
+                            """,
+                    createInstruction(SET, tmp(1), ":a"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "1"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "2"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "3"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(PRINT, q("yes")),
+                    createInstruction(SET, tmp(0), q("yes")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(PRINT, q("no")),
+                    createInstruction(SET, tmp(0), q("no")),
+                    createInstruction(LABEL, label(0))
+
+            );
+        }
+    }
+
+    @Nested
     class IfExpressions {
         @Test
         void compilesSimpleIfElseStatement() {

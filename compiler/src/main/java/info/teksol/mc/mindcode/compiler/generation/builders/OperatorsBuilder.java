@@ -1,12 +1,10 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.generated.ast.visitors.AstOperatorBinaryVisitor;
-import info.teksol.mc.generated.ast.visitors.AstOperatorInRangeVisitor;
 import info.teksol.mc.generated.ast.visitors.AstOperatorShortCircuitingVisitor;
 import info.teksol.mc.generated.ast.visitors.AstOperatorUnaryVisitor;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorBinary;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorInRange;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorShortCircuiting;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorUnary;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -22,7 +20,6 @@ import static info.teksol.mc.mindcode.logic.arguments.Operation.*;
 
 @NullMarked
 public class OperatorsBuilder extends AbstractCodeBuilder implements AstOperatorBinaryVisitor<ValueStore>,
-        AstOperatorInRangeVisitor<ValueStore>,
         AstOperatorShortCircuitingVisitor<ValueStore>,
         AstOperatorUnaryVisitor<ValueStore> {
 
@@ -39,11 +36,6 @@ public class OperatorsBuilder extends AbstractCodeBuilder implements AstOperator
     }
 
     @Override
-    public ValueStore visitOperatorInRange(AstOperatorInRange node) {
-        return evaluateOperatorShortCircuiting(transformInRange(node), false);
-    }
-
-    @Override
     public ValueStore visitOperatorShortCircuiting(AstOperatorShortCircuiting node) {
         return evaluateOperatorShortCircuiting(node, false);
     }
@@ -51,16 +43,6 @@ public class OperatorsBuilder extends AbstractCodeBuilder implements AstOperator
     @Override
     public ValueStore visitOperatorUnary(AstOperatorUnary node) {
         Operation operation = node.getOperation();
-
-        if (operation.isBooleanNegation()) {
-            UnwrappedNode unwrapped = unwrapNegation(node);
-            if (unwrapped.expression() instanceof AstOperatorShortCircuiting condition) {
-                ValueStore result = evaluateOperatorShortCircuiting(condition, unwrapped.negated());
-                assembler.exitAstNode(condition);
-                return result;
-            }
-        }
-
         final ValueStore operand = evaluate(node.getOperand());
 
         if (operation == ADD) {

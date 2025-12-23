@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.BASIC;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.CONDITION;
+import static info.teksol.mc.mindcode.compiler.generation.NodeTransformation.transform;
 import static info.teksol.mc.mindcode.logic.arguments.LogicBoolean.FALSE;
 import static info.teksol.mc.mindcode.logic.arguments.Operation.*;
 
@@ -243,7 +244,7 @@ public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
         } else {
             // We're trying to report the error as precisely as possible
             if (targetNode instanceof AstIdentifier identifier) {
-                // We got a read-only identifier. It can be either a constant, or a parameter
+                // We got a read-only identifier. It can be either a constant or a parameter
                 error(targetNode, ERR.LVALUE_ASSIGNMENT_TO_CONST_NOT_ALLOWED, identifier.getName());
             } else {
                 switch (target) {
@@ -296,38 +297,34 @@ public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
         return tmp;
     }
 
-    protected void evaluateCondition(AstExpression condition, LogicLabel falseLabel, AstContextType contextType) {
-        UnwrappedNode unwrapped = unwrapNegation(condition);
-
-        if (unwrapped.expression instanceof AstOperatorShortCircuiting shortCircuitingNode) {
+    protected void evaluateCondition(AstExpression expression, LogicLabel falseLabel, AstContextType contextType) {
+        AstExpression node = transform(expression);
+        if (node instanceof AstOperatorShortCircuiting shortCircuitingNode) {
             assembler.enterAstNode(shortCircuitingNode, contextType);
             LogicLabel trueLabel = assembler.nextLabel();
-            evaluateShortCircuitingOperator(shortCircuitingNode, trueLabel, falseLabel, unwrapped.negated);
+            evaluateShortCircuitingOperator(shortCircuitingNode, trueLabel, falseLabel);
             assembler.createLabel(trueLabel);
             assembler.exitAstNode(shortCircuitingNode, contextType);
         } else {
-            final LogicValue value = variables.excludeVariablesFromTracking(() -> evaluate(condition).getValue(assembler));
+            final LogicValue value = variables.excludeVariablesFromTracking(() -> evaluate(node).getValue(assembler));
             assembler.createJump(falseLabel, Condition.EQUAL, value, FALSE);
         }
     }
 
-    protected void evaluateInvertedCondition(AstExpression condition, LogicLabel trueLabel, LogicLabel falseLabel) {
-        AstContextType contextType = AstContextType.SCBE_COND;
-        UnwrappedNode unwrapped = unwrapNegation(condition);
-
-        if (unwrapped.expression instanceof AstOperatorShortCircuiting shortCircuitingNode) {
+    protected void evaluateInvertedCondition(AstExpression node, LogicLabel trueLabel, LogicLabel falseLabel) {
+        final AstContextType contextType = AstContextType.SCBE_COND;
+        if (node instanceof AstOperatorShortCircuiting shortCircuitingNode) {
             assembler.enterAstNode(shortCircuitingNode, contextType);
-            evaluateShortCircuitingOperator(shortCircuitingNode, trueLabel, falseLabel, unwrapped.negated);
+            evaluateShortCircuitingOperator(shortCircuitingNode, trueLabel, falseLabel);
             assembler.exitAstNode(shortCircuitingNode, contextType);
         } else {
-            final LogicValue value = evaluate(condition).getValue(assembler);
+            final LogicValue value = evaluate(node).getValue(assembler);
             assembler.createJump(trueLabel, Condition.NOT_EQUAL, value, FALSE);
         }
     }
 
-    private void evaluateShortCircuitingOperator(AstOperatorShortCircuiting node, LogicLabel trueLabel, LogicLabel falseLabel,
-            boolean negated) {
-        if (node.getOperation() == LOGICAL_OR ^ negated) {
+    private void evaluateShortCircuitingOperator(AstOperatorShortCircuiting node, LogicLabel trueLabel, LogicLabel falseLabel) {
+        if (node.getOperation() == LOGICAL_OR ^ node.isNegated()) {
             evaluateShortCircuit(node, trueLabel, falseLabel);
         } else {
             evaluateShortCircuit(node, falseLabel, trueLabel);
@@ -336,20 +333,17 @@ public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
 
     private void evaluateShortCircuit(AstOperatorShortCircuiting node, LogicLabel shortCircuitLabel, LogicLabel fullEvaluationLabel) {
         LogicLabel intraNodeNextLabel = assembler.nextLabel();
-        evaluateShortCircuitNode(node, node.getLeft(), shortCircuitLabel, intraNodeNextLabel);
+        evaluateShortCircuitNode(node, transform(node.getLeft()), shortCircuitLabel, intraNodeNextLabel);
         assembler.createLabel(intraNodeNextLabel);
 
-        evaluateShortCircuitNode(node, node.getRight(), shortCircuitLabel, fullEvaluationLabel);
+        evaluateShortCircuitNode(node, transform(node.getRight()), shortCircuitLabel, fullEvaluationLabel);
         assembler.createJumpUnconditional(fullEvaluationLabel);
     }
 
-    private void evaluateShortCircuitNode(AstOperatorShortCircuiting parentNode, AstExpression child, LogicLabel shortCircuitLabel,
+    private void evaluateShortCircuitNode(AstOperatorShortCircuiting node, AstExpression child, LogicLabel shortCircuitLabel,
             LogicLabel fullEvaluationLabel) {
-        UnwrappedNode unwrapped = unwrapNegation(child);
-        AstExpression node = unwrapped.expression;
-
-        if (node instanceof AstOperatorShortCircuiting subnode) {
-            if (subnode.getOperation() == parentNode.getOperation() ^ unwrapped.negated) {
+        if (child instanceof AstOperatorShortCircuiting subnode) {
+            if (subnode.getOperation() == node.getOperation() ^ subnode.isNegated()) {
                 // Chaining identical operations
                 evaluateShortCircuit(subnode, shortCircuitLabel, fullEvaluationLabel);
             } else {
@@ -358,64 +352,10 @@ public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
                 evaluateShortCircuit(subnode, fullEvaluationLabel, shortCircuitLabel);
             }
         } else {
-            final ValueStore value = evaluate(node);
+            final ValueStore value = evaluate(child);
             // Short-circuiting jump
-            final Condition condition = (parentNode.getOperation() == LOGICAL_AND) ? Condition.EQUAL : Condition.NOT_EQUAL;
+            final Condition condition = (node.getOperation() == LOGICAL_AND) ? Condition.EQUAL : Condition.NOT_EQUAL;
             assembler.createJump(shortCircuitLabel, condition, value.getValue(assembler), LogicBoolean.FALSE);
-        }
-    }
-
-    AstExpression transform(AstExpression node) {
-        return switch(node) {
-            case AstParentheses p -> transform(p.getExpression());
-            case AstOperatorInRange r -> transformInRange(r);
-            default -> node;
-        };
-    }
-
-    protected AstOperatorShortCircuiting transformInRange(AstOperatorInRange node) {
-        AstOperatorShortCircuiting result;
-        AstCachedNode cached = new AstCachedNode(node.getValue());
-
-        if (node.isNegation()) {
-            result = new AstOperatorShortCircuiting(node.sourcePosition(),
-                    Operation.LOGICAL_OR,
-                    new AstOperatorBinary(node.getRange().sourcePosition(),
-                            Operation.LESS_THAN, cached, node.getRange().getFirstValue()),
-                    new AstOperatorBinary(node.getRange().sourcePosition(),
-                            outsideRangeCondition(node.getRange()).toOperation(),
-                            cached, node.getRange().getLastValue()));
-        } else {
-            result = new AstOperatorShortCircuiting(node.sourcePosition(),
-                    Operation.LOGICAL_AND,
-                    new AstOperatorBinary(node.getRange().sourcePosition(),
-                            Operation.GREATER_THAN_EQ, cached, node.getRange().getFirstValue()),
-                    new AstOperatorBinary(node.getRange().sourcePosition(),
-                            insideRangeCondition(node.getRange()).toOperation(),
-                            cached, node.getRange().getLastValue()));
-        }
-
-        result.setProfile(node.getProfile());
-        result.getLeft().setProfile(node.getProfile());
-        result.getRight().setProfile(node.getProfile());
-        return result;
-    }
-
-    protected record UnwrappedNode(AstExpression expression, boolean negated) { }
-
-    protected UnwrappedNode unwrapNegation(AstExpression original) {
-        boolean negated = false;
-        AstExpression node = original;
-        while (true) {
-            node = transform(node);
-            if (node instanceof AstOperatorShortCircuiting) {
-                return new UnwrappedNode(node, negated);
-            } else if (node instanceof AstOperatorUnary unary && unary.getOperation().isBooleanNegation()) {
-                negated = !negated;
-                node = transform(unary.getOperand());
-            } else {
-                return new UnwrappedNode(original, false);
-            }
         }
     }
 

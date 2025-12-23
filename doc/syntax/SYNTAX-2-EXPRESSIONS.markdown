@@ -164,23 +164,24 @@ Non-alphanumeric operators don't require spaces around them: `a+b` is a valid ex
 
 The full list of Mindcode operators in the order of precedence is as follows:
 
-| Category            | Operators                                                                                         |
-|---------------------|---------------------------------------------------------------------------------------------------|
-| postfix             | `var++` `var--`                                                                                   |
-| prefix              | `++var` `--var`                                                                                   |
-| unary               | `+` `-` `~` `!` `not`                                                                             |
-| exponentiation      | `**`                                                                                              |
-| multiplicative      | `*` `/` `\` `%` `%%`                                                                              |
-| additive            | `+` `-`                                                                                           |
-| shift               | `<<` `>>` `>>>`                                                                                   |
-| bitwise AND         | `&`                                                                                               |
-| bitwise XOR/OR      | `^` `\|`                                                                                          |
-| relational          | `<` `<=` `>` `>=`                                                                                 |
-| equality            | `==` `!=` `===` `!==`                                                                             |
-| boolean/logical AND | `&&` `and`                                                                                        |
-| boolean/logical OR  | `\|\|` `or`                                                                                       |
-| ternary             | `? :`                                                                                             |
-| assignment          | `=` `**=` `*=` `/=` `\=` `%=` `%%=` `+=` `-=`<br>`<<=` `>>=` `>>>=` `&=` `^=` `\|=` `&&=` `\|\|=` |
+| Category              | Operators                                                                                         |
+|-----------------------|---------------------------------------------------------------------------------------------------|
+| postfix               | `var++` `var--`                                                                                   |
+| prefix                | `++var` `--var`                                                                                   |
+| unary                 | `+` `-` `~` `!` `not`                                                                             |
+| exponentiation        | `**`                                                                                              |
+| multiplicative        | `*` `/` `\` `%` `%%`                                                                              |
+| additive              | `+` `-`                                                                                           |
+| shift                 | `<<` `>>` `>>>`                                                                                   |
+| bitwise AND           | `&`                                                                                               |
+| bitwise XOR/OR        | `^` `\|`                                                                                          |
+| range/list membership | `in` `not in`                                                                                     |
+| relational            | `<` `<=` `>` `>=`                                                                                 |
+| equality              | `==` `!=` `===` `!==`                                                                             |
+| boolean/logical AND   | `&&` `and`                                                                                        |
+| boolean/logical OR    | `\|\|` `or`                                                                                       |
+| ternary               | `? :`                                                                                             |
+| assignment            | `=` `**=` `*=` `/=` `\=` `%=` `%%=` `+=` `-=`<br>`<<=` `>>=` `>>>=` `&=` `^=` `\|=` `&&=` `\|\|=` |
 
 ## Postfix and prefix operators
 
@@ -319,6 +320,38 @@ Bitwise operations manipulate individual bits of their arguments' integer repres
 * `&` performs bitwise AND operation,
 * `^` performs bitwise exclusive OR operation,
 * `|` performs bitwise inclusive OR operation.
+
+## Range/list membership operator
+
+The `in` operator can be used to test whether a value is present in a range or a list of values.
+
+* `<value> in <range>` tests whether a value lies within a given inclusive or exclusive range, e.g., `a in (0 ... 10)`,
+* `<value> in <list>` tests whether a value is present in a given list of values, e.g., `a in (1, 2, 3)`.
+
+The `in` operator can be negated by prefixing it with a boolean negation operator (`not in` or `! in`, `!in` is also allowed), for example:
+
+* `a not in (0 ... 10)`
+* `a !in (1, 2, 3)`
+
+### Range membership operator
+
+When used with a range specification, the `in` operator produces two comparisons of the value to the range boundaries: `a in (min ... max)` is compiled as `(a >= min and a < max)` and `a not in (min ... max)` as `(a < min or a >= max)`. Note that the operator is short-circuiting and mends well with other short-circuiting operators. Proper comparison is used for the inclusive (`..`) and exclusive (`...`) ranges.
+
+### List membership operator
+
+The list membership operator is compiled as a [case expression](SYNTAX-3-STATEMENTS.markdown#case-expressions), and its implementation depends on the context:
+
+* `a in (1, 2, 3)` is compiled as `case a when 1, 2, 3 then true; else false; end`.
+* `if a in (1, 2, 3) then true_branch(); else false_branch(); end;` is compiled as `case a when 1, 2, 3 then true_branch(); else false_branch(); end`.
+
+This has the following consequences:
+
+* The list membership operator benefits from the same optimizations as case expressions (especially [case switching](optimizations/CASE-SWITCHING.markdown)).
+* When all values in the list are integers, Mindcode assumes the input value is integer as well.  
+* It is possible to use ranges in the list of values as well, for example `a in (1 .. 3, 7 .. 9)`.
+
+> [!NOTE]
+> The difference between `a in 1 ... 10` and `a in (1 ... 10)` is that the former is a range membership operator, while the latter is a list membership operator, resulting in different behavior when the input value is not an integer.
 
 ## Relational operators
 

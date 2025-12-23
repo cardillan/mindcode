@@ -233,7 +233,7 @@ expression
     | value = expression negation = (BOOLEAN_NOT | LOGICAL_NOT)? op = IN
         firstValue = expression operator = (DOT2 | DOT3) lastValue = expression         # astOperatorBinaryInRange
     | value = expression negation = (BOOLEAN_NOT | LOGICAL_NOT)?
-        op = IN set = valueList                                                         # astOperatorBinaryInSet
+        op = IN LPAREN values = whenValueList RPAREN                                    # astOperatorBinaryInList
     | left = expression
         op = (LESS_THAN | LESS_THAN_EQUAL | GREATER_THAN_EQUAL | GREATER_THAN)
         right = expression                                                              # astOperatorBinaryInequality

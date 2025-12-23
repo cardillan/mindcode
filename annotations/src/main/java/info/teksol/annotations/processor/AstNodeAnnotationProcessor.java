@@ -141,7 +141,7 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
         ClassName baseType = ClassName.get(nodePackageName, NODE_BASE_CLASS);
         int maxLen = astNodeTypes.stream().mapToInt(e -> e.getSimpleName().toString().length()).max().orElse(0);
         CodeBlock.Builder codeBlockBuilder = CodeBlock.builder()
-                .beginControlFlow("return switch (astNode)");
+                .beginControlFlow("return switch (transform(astNode))");
 
         ClassName visitorInterfaceName = ClassName.get(GENERATED_PACKAGE_NAME, VISITOR_INTERFACE_NAME);
         TypeSpec.Builder classBuilder = TypeSpec.interfaceBuilder(visitorInterfaceName)
@@ -191,17 +191,17 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
                                 """, baseType).build())
                 .build();
         classBuilder.addMethod(visitTreeMethod);
-//
-//        MethodSpec transformMethod = MethodSpec.methodBuilder("transform")
-//                .addModifiers(Modifier.DEFAULT, Modifier.PUBLIC)
-//                .addParameter(baseType, "astNode")
-//                .returns(baseType)
-//                .addCode(CodeBlock.builder()
-//                        .add("""
-//                                return astNode;
-//                                """, baseType).build())
-//                .build();
-//        classBuilder.addMethod(transformMethod);
+
+        MethodSpec transformMethod = MethodSpec.methodBuilder("transform")
+                .addModifiers(Modifier.DEFAULT, Modifier.PUBLIC)
+                .addParameter(baseType, "astNode")
+                .returns(baseType)
+                .addCode(CodeBlock.builder()
+                        .add("""
+                                return astNode;
+                                """, baseType).build())
+                .build();
+        classBuilder.addMethod(transformMethod);
 
         createClass(GENERATED_PACKAGE_NAME, classBuilder);
     }

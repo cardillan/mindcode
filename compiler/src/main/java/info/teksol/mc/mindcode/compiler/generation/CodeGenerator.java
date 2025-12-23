@@ -323,7 +323,9 @@ public class CodeGenerator extends AbstractMessageEmitter {
     private boolean allowUndeclaredLinks = false;
     private boolean requireMlogConstant = false;
 
-    public ValueStore visit(AstMindcodeNode node, boolean evaluate) {
+    public ValueStore visit(AstMindcodeNode astNode, boolean evaluate) {
+        AstMindcodeNode node = NodeTransformation.transform(astNode);
+
         if (node.getScopeRestriction().disallowed(isLocalContext() ? AstNodeScope.LOCAL : AstNodeScope.GLOBAL)) {
             emitWrongScopeMessage(node);
         }
@@ -342,9 +344,12 @@ public class CodeGenerator extends AbstractMessageEmitter {
         if (node.getScope() == AstNodeScope.LOCAL) nested++;
         if (node instanceof AstAllocations || node instanceof AstParameter || node instanceof AstRequire) allowUndeclaredLinks = true;
         if (node instanceof AstParameter || node instanceof AstVariablesDeclaration var && var.isConstantDeclaration()) requireMlogConstant = true;
-        assembler.enterAstNode(node);
+
+        AstMindcodeNode evaluated = NodeTransformation.transform(evaluator.evaluate(node, isLocalContext(), requireMlogConstant));
+
+        assembler.enterAstNode(evaluated);
         variables.enterAstNode();
-        ValueStore result = nodeVisitor.visit(evaluator.evaluate(node, isLocalContext(), requireMlogConstant));
+        ValueStore result = nodeVisitor.visit(evaluated);
 
         if (node == program.getMainModule()) {
             mainBodyContext = assembler.getAstContext();
@@ -355,7 +360,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
         }
 
         variables.exitAstNode();
-        assembler.exitAstNode(node);
+        assembler.exitAstNode(evaluated);
+
         if (node instanceof AstParameter || node instanceof AstVariablesDeclaration var && var.isConstantDeclaration()) requireMlogConstant = false;
         if (node instanceof AstAllocations || node instanceof AstParameter || node instanceof AstRequire) allowUndeclaredLinks = false;
         if (node.getScope() == AstNodeScope.LOCAL) nested--;

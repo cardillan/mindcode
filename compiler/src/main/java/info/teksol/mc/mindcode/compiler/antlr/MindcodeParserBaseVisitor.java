@@ -655,6 +655,13 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitAstOperatorBinaryInList(MindcodeParser.AstOperatorBinaryInListContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitAstMemberAccess(MindcodeParser.AstMemberAccessContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -677,13 +684,6 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitAstOperatorIncDecPrefix(MindcodeParser.AstOperatorIncDecPrefixContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitAstOperatorBinaryInSet(MindcodeParser.AstOperatorBinaryInSetContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

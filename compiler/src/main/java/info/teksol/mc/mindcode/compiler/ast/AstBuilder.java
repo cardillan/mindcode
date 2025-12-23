@@ -906,6 +906,14 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                         ctx.operator.getType() == MindcodeLexer.DOT3));
     }
 
+    @Override
+    public AstMindcodeNode visitAstOperatorBinaryInList(AstOperatorBinaryInListContext ctx) {
+        return new AstOperatorInList(pos(ctx.value.start, ctx.whenValueList().stop, ctx.op),
+                ctx.negation != null,
+                visitAstExpression(ctx.value),
+                ctx.values.whenValue().stream().map(this::visitAstExpression).toList());
+    }
+
     private AstExpression processBooleanOperator(Token op, ExpressionContext left, ExpressionContext right) {
         SourcePosition position = pos(left.start, right.stop, op);
         Operation operation = operation(op);

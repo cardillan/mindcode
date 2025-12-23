@@ -6,25 +6,26 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
 
 @NullMarked
 @AstNode
-public class AstOperatorInRange extends AstExpression implements AstNegatable<AstOperatorInRange> {
+public class AstOperatorInList extends AstExpression implements AstNegatable<AstOperatorInList> {
     private final boolean negated;
     private final AstExpression value;
-    private final AstRange range;
+    private final List<AstExpression> values;
 
-    public AstOperatorInRange(SourcePosition sourcePosition, boolean negated,
-            AstExpression value, AstRange range) {
-        super(sourcePosition, children(value, range));
-        this.negated = negated;
+    public AstOperatorInList(SourcePosition sourcePosition, boolean negated,
+            AstExpression value, List<AstExpression> values) {
+        super(sourcePosition, children(List.of(value), values));
         this.value = Objects.requireNonNull(value);
-        this.range = Objects.requireNonNull(range);
+        this.values = Objects.requireNonNull(values);
+        this.negated = negated;
     }
 
-    private AstOperatorInRange(AstOperatorInRange other, boolean negated) {
-        this(other.sourcePosition(), negated, other.value, other.range);
+    public AstOperatorInList(AstOperatorInList other, boolean negated) {
+        this(other.sourcePosition(), negated, other.value, other.values);
         setProfile(other.getProfile());
     }
 
@@ -32,8 +33,8 @@ public class AstOperatorInRange extends AstExpression implements AstNegatable<As
         return value;
     }
 
-    public AstRange getRange() {
-        return range;
+    public List<AstExpression> getValues() {
+        return values;
     }
 
     @Override
@@ -42,8 +43,8 @@ public class AstOperatorInRange extends AstExpression implements AstNegatable<As
     }
 
     @Override
-    public AstOperatorInRange negate() {
-        return new AstOperatorInRange(this, !negated);
+    public AstOperatorInList negate() {
+        return new AstOperatorInList(this, !negated);
     }
 
     @Override
@@ -51,15 +52,15 @@ public class AstOperatorInRange extends AstExpression implements AstNegatable<As
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AstOperatorInRange that = (AstOperatorInRange) o;
-        return negated == that.negated && value.equals(that.value) && range.equals(that.range);
+        AstOperatorInList that = (AstOperatorInList) o;
+        return negated == that.negated && value.equals(that.value) && values.equals(that.values);
     }
 
     @Override
     public int hashCode() {
         int result = Boolean.hashCode(negated);
         result = 31 * result + value.hashCode();
-        result = 31 * result + range.hashCode();
+        result = 31 * result + values.hashCode();
         return result;
     }
 

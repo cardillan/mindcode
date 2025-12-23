@@ -1,10 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
-import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.generated.ast.visitors.AstIfExpressionVisitor;
 import info.teksol.mc.generated.ast.visitors.AstOperatorTernaryVisitor;
-import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorTernary;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
@@ -14,23 +11,12 @@ import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.List;
-
 @NullMarked
 public class IfExpressionsBuilder extends AbstractCodeBuilder implements
-        AstIfExpressionVisitor<ValueStore>,
         AstOperatorTernaryVisitor<ValueStore>
 {
     public IfExpressionsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
-    }
-
-    @Override
-    public ValueStore visitIfExpression(AstIfExpression node) {
-        // TODO In the past, elsif branches were emulated as nested else if expressions.
-        //      Code optimizers might therefore have problems if we encoded elsif branches more effectively.
-        //      Change the implementation to a more efficient one and update the optimizers.
-        return visitOperatorTernary(repackageIfExpression(node));
     }
 
     @Override
@@ -58,37 +44,6 @@ public class IfExpressionsBuilder extends AbstractCodeBuilder implements
 
         assembler.clearSubcontextType();
         return tmp;
-    }
-
-    private AstOperatorTernary repackageIfExpression(AstIfExpression node) {
-        if (node.getIfBranches().isEmpty()) {
-            throw new MindcodeInternalError("Invalid If expression structure (missing if branch).");
-        }
-
-        AstIfBranch last = node.getIfBranches().getLast();
-        AstOperatorTernary result = new AstOperatorTernary(last.sourcePosition(), last.getCondition(),
-                repackageBody(last, last.getBody()),
-                repackageBody(last, node.getElseBranch()));
-        result.setProfile(node.getProfile());
-
-        for (int i = node.getIfBranches().size() - 2; i >= 0; i--) {
-            final AstIfBranch branch = node.getIfBranches().get(i);
-            result = new AstOperatorTernary(branch.sourcePosition(), branch.getCondition(),
-                    repackageBody(branch, branch.getBody()),
-                    result);
-            result.setProfile(branch.getProfile());
-        }
-
-        return result;
-    }
-
-    private AstMindcodeNode repackageBody(AstIfBranch branch, List<AstMindcodeNode> expressions) {
-        SourcePosition position = branch.getCondition().sourcePosition();
-        if (expressions.size() == 1 && expressions.getFirst() instanceof AstExpression exp) return exp;
-
-        AstStatementList result = new AstStatementList(expressions.isEmpty() ? position : expressions.getFirst().sourcePosition(), expressions);
-        result.setProfile(branch.getProfile());
-        return result;
     }
 
     // Some constructs may produce VOID, but we want if statement branches to default to null,
