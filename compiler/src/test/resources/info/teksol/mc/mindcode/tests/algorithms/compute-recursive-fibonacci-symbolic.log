@@ -106,8 +106,18 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
+     8 # "Function: def fib(in n)"
+     9 set :fib*retval :fib:n
+    10 jump *label4 lessThan :fib:n 2
+-    * label *label3
+    11 push bank1 :fib:n
+    12 op sub :fib:n :fib:n 1
+    13 callrec bank1 *label0 *label5 :fib*retval
+ 
+    23 pop bank1 :fib:n
     24 op add :fib*retval *tmp4 :fib*retval
     25 label *label4
+-    * label *label2
     26 returnrec bank1
 -    * end
 

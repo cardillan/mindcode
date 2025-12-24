@@ -468,6 +468,140 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    119 label *label69
    120 label *label70
 
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
+     0 assertflush
+     1 # "Function: def test()"
+-    * label *label17
+     2 set :d:n 1
+     3 call *label0 :d*retaddr :d*retval
+     4 jump *label18 notEqual :d*retval 3
+     5 jump *label22 always
+     6 label *label18
+-    * label *label19
+     7 print 1
+     8 print "|"
+     9 set :d:n 1
+ 
+    11 jump *label20 notEqual :d*retval 12
+    12 jump *label4 always
+    13 label *label20
+-    * label *label21
+    14 label *label22
+    15 set :d:n 2
+    16 call *label0 :d*retaddr :d*retval
+    17 set :test:i :d*retval
+-    * label *label25
+    18 set :d:n :d*retval
+    19 call *label0 :d*retaddr :d*retval
+    20 jump *label26 notEqual :d*retval 3
+    21 jump *label30 always
+    22 label *label26
+-    * label *label27
+    23 print :test:i
+    24 print "|"
+    25 set :d:n :test:i
+ 
+    27 jump *label28 notEqual :d*retval 12
+    28 jump *label4 always
+    29 label *label28
+-    * label *label29
+    30 label *label30
+-    * label *label33
+    31 set :d:n 3
+    32 call *label0 :d*retaddr :d*retval
+    33 jump *label34 notEqual :d*retval 3
+    34 jump *label38 always
+    35 label *label34
+-    * label *label35
+    36 print 3
+    37 print "|"
+    38 set :d:n 3
+ 
+    40 jump *label36 notEqual :d*retval 12
+    41 jump *label4 always
+    42 label *label36
+-    * label *label37
+    43 label *label38
+    44 set :d:n 5
+    45 call *label0 :d*retaddr :d*retval
+    46 set :test:i :d*retval
+-    * label *label41
+    47 set :d:n :d*retval
+    48 call *label0 :d*retaddr :d*retval
+    49 jump *label42 notEqual :d*retval 3
+    50 jump *label46 always
+    51 label *label42
+-    * label *label43
+    52 print :test:i
+    53 print "|"
+    54 set :d:n :test:i
+ 
+    56 jump *label44 notEqual :d*retval 12
+    57 jump *label4 always
+    58 label *label44
+-    * label *label45
+    59 label *label46
+-    * label *label49
+    60 set :d:n 8
+    61 call *label0 :d*retaddr :d*retval
+    62 jump *label50 notEqual :d*retval 3
+    63 jump *label54 always
+    64 label *label50
+-    * label *label51
+    65 print 8
+    66 print "|"
+    67 set :d:n 8
+ 
+    69 jump *label52 notEqual :d*retval 12
+    70 jump *label4 always
+    71 label *label52
+-    * label *label53
+    72 label *label54
+    73 set :d:n 12
+    74 call *label0 :d*retaddr :d*retval
+    75 set :test:i :d*retval
+-    * label *label57
+    76 set :d:n :d*retval
+    77 call *label0 :d*retaddr :d*retval
+    78 jump *label58 notEqual :d*retval 3
+    79 jump *label62 always
+    80 label *label58
+-    * label *label59
+    81 print :test:i
+    82 print "|"
+    83 set :d:n :test:i
+ 
+    85 jump *label60 notEqual :d*retval 12
+    86 jump *label4 always
+    87 label *label60
+-    * label *label61
+    88 label *label62
+-    * label *label65
+    89 set :d:n 15
+    90 call *label0 :d*retaddr :d*retval
+    91 jump *label66 notEqual :d*retval 3
+    92 jump *label70 always
+    93 label *label66
+-    * label *label67
+    94 print 15
+    95 print "|"
+    96 set :d:n 15
+    97 call *label0 :d*retaddr :d*retval
+-    * label *label68
+-    * label *label69
+    98 label *label70
+    99 label *label4
+-    * label *label1
+   100 assertprints "1|2|5|8|12|" "iterated-for-loop-break-continue"
+   101 stop
+   102 end
+   103 label *label0
+   104 # "Function: noinline def d(in n)"
+   105 set :d*retval :d:n
+-    * label *label16
+   106 return :d*retaddr
+-    * end
+
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-13 instructions):
  
      1 # "Function: def test()"
@@ -578,13 +712,6 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-13 instr
     80 label *label66
     81 print 15
     82 print "|"
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
- 
-    78 # "Function: noinline def d(in n)"
-    79 set :d*retval :d:n
-    80 return :d*retaddr
--    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  

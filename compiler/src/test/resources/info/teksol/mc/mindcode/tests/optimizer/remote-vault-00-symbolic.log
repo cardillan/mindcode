@@ -598,9 +598,102 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
+    15 ucontrol flag .ANSWER_FLAG
+    16 op add .SERVICED .SERVICED 1
+    17 label *label4
+-    * label *label5
+-    * label *label3
+    18 # "Function: inline def procesUnit(in unit)"
+    19 ubind @poly
+    20 sensor *tmp13 @unit @flag
+ 
+    22 ucontrol flag .ANSWER_FLAG
+    23 op add .SERVICED .SERVICED 1
+    24 label *label7
+-    * label *label8
+-    * label *label6
+    25 # "Function: inline def procesUnit(in unit)"
+    26 ubind @mega
+    27 sensor *tmp17 @unit @flag
+ 
+    29 ucontrol flag .ANSWER_FLAG
+    30 op add .SERVICED .SERVICED 1
+    31 label *label10
+-    * label *label11
+-    * label *label9
+    32 # "Function: inline def procesUnit(in unit)"
+    33 ubind @quad
+    34 sensor *tmp21 @unit @flag
+ 
+    36 ucontrol flag .ANSWER_FLAG
+    37 op add .SERVICED .SERVICED 1
+    38 label *label13
+-    * label *label14
+-    * label *label12
+    39 # "Function: inline def procesUnit(in unit)"
+    40 ubind @oct
+    41 sensor *tmp25 @unit @flag
+ 
+    43 ucontrol flag .ANSWER_FLAG
+    44 op add .SERVICED .SERVICED 1
+    45 label *label16
+-    * label *label17
+-    * label *label15
+    46 # "Function: inline def procesUnit(in unit)"
+    47 ubind @flare
+    48 sensor *tmp29 @unit @flag
+ 
+    50 ucontrol flag .ANSWER_FLAG
+    51 op add .SERVICED .SERVICED 1
+    52 label *label19
+-    * label *label20
+-    * label *label18
+    53 # "Function: inline def procesUnit(in unit)"
+    54 ubind @horizon
+    55 sensor *tmp33 @unit @flag
+ 
+    57 ucontrol flag .ANSWER_FLAG
+    58 op add .SERVICED .SERVICED 1
+    59 label *label22
+-    * label *label23
+-    * label *label21
+    60 # "Function: inline def procesUnit(in unit)"
+    61 ubind @zenith
+    62 sensor *tmp37 @unit @flag
+ 
+    64 ucontrol flag .ANSWER_FLAG
+    65 op add .SERVICED .SERVICED 1
+    66 label *label25
+-    * label *label26
+-    * label *label24
+    67 # "Function: inline def procesUnit(in unit)"
+    68 ubind @antumbra
+    69 sensor *tmp41 @unit @flag
+ 
+    71 ucontrol flag .ANSWER_FLAG
+    72 op add .SERVICED .SERVICED 1
+    73 label *label28
+-    * label *label29
+-    * label *label27
+    74 # "Function: inline def procesUnit(in unit)"
+    75 ubind @eclipse
+    76 sensor *tmp45 @unit @flag
+ 
+    78 ucontrol flag .ANSWER_FLAG
+    79 op add .SERVICED .SERVICED 1
+    80 label *label31
+-    * label *label32
+-    * label *label30
+    81 print "Remote vault [gold]#"
+    82 print LINK_ID
+    83 print "["
+ 
+    96 print "ms"
     97 print "\n"
     98 printflush message1
+-    * label *label1
     99 jump *label0 always
+-    * label *label2
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):

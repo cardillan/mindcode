@@ -1,12 +1,12 @@
     38 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination (5 iterations).
-     4 instructions eliminated by Dead Code Elimination (5 iterations).
-     1 instructions eliminated by Jump Normalization (4 iterations).
-     2 instructions eliminated by Condition Optimization (5 iterations).
-     1 instructions eliminated by Single Step Elimination (5 iterations).
+     4 instructions eliminated by Dead Code Elimination (6 iterations).
+     1 instructions eliminated by Jump Normalization (5 iterations).
+     2 instructions eliminated by Condition Optimization (6 iterations).
+     1 instructions eliminated by Single Step Elimination (6 iterations).
     10 instructions eliminated by Data Flow Optimization (4 iterations).
      3 instructions updated by Jump Threading.
-     2 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     2 instructions eliminated by Unreachable Code Elimination (3 iterations).
     14 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
@@ -162,26 +162,23 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
     15 jump *label2 always
     16 label *label6
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-2 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+    16 label *label2
+    17 assertequals 1533776805 :hn "Project Euler 45"
+    18 stop
+-    * end
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-2 instructions):
  
     11 op add :hn :hn :h
     12 op add :h :h 4
     13 jump *label0 always
--    * label *label5
 -    * jump *label2 always
--    * label *label6
--    * label *label4
 -    * jump *label0 always
     14 label *label2
     15 assertequals 1533776805 :hn "Project Euler 45"
     16 stop
-
-Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
- 
-    14 label *label2
-    15 assertequals 1533776805 :hn "Project Euler 45"
-    16 stop
--    * end
 
 Final code before resolving virtual instructions:
 

@@ -89,8 +89,26 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
  
+     8 call *label0 *invalid :d*retval (m:*label3) (h:*label3)
+     9 label *label3
+    10 set :test:i :d*retval
+-    * label *label4
+    11 jump *label6 greaterThanEq :d*retval 10
+    12 label *label8
+    13 op add :test:j :test:j :test:i
+    14 print :test:j
+    15 print "|"
+    16 op add :test:i :test:i 1
+-    * label *label5
+    17 jump *label8 lessThan :test:i 10
+    18 label *label6
+-    * label *label1
+    19 assertprints "0|1|3|6|10|15|21|28|36|45|" "while-loop"
+    20 stop
+    21 end
     22 label *label0
     23 set :d*retval :d:n
+-    * label *label7
     24 return :d*retaddr
 -    * end
 

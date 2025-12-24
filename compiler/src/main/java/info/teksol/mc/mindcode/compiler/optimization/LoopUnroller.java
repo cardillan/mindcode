@@ -79,12 +79,6 @@ class LoopUnroller extends BaseOptimizer {
         return structure.matches("l(tl)*bft");
     }
 
-    private boolean hasEntryCondition(AstContext loop) {
-        List<AstContext> children = loop.children();
-        return (children.size() >= 2) && (children.get(0).subcontextType() == CONDITION
-                || children.get(0).subcontextType() == INIT && children.get(1).subcontextType() == CONDITION);
-    }
-
     private boolean hasExitCondition(AstContext loop) {
         for (int i = loop.children().size() - 1; i >= 0; i--) {
             switch (loop.child(i).subcontextType()) {

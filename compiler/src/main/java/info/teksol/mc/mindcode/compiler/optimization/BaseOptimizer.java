@@ -31,6 +31,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.CONDITION;
+import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.INIT;
+
 /// Base class for optimizers. Contains methods to access and modify instructions of the program being processed
 /// by the optimizer.
 ///
@@ -244,6 +247,12 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     //</editor-fold>
 
     //<editor-fold desc="Expression evaluation">
+    protected boolean hasEntryCondition(AstContext loop) {
+        List<AstContext> children = loop.children();
+        return (children.size() >= 2) && (children.get(0).subcontextType() == CONDITION
+                || children.get(0).subcontextType() == INIT && children.get(1).subcontextType() == CONDITION);
+    }
+
     public OptimizerExpressionEvaluator getExpressionEvaluator() {
         return optimizationContext.getExpressionEvaluator();
     }

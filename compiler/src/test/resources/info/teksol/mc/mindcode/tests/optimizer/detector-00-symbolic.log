@@ -530,6 +530,90 @@ Modifications by Convert case at line 17:9 (segments: 7) (+2 instructions):
    239 jump *label6 always
    240 label *label5
 
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+     7 op add :page *tmp4 1
+     8 control enabled switch1 false
+     9 label *label3
+-    * label *label4
+    10 print "Property detector - page "
+    11 print :page
+    12 print "/"
+ 
+    22 jump *label23 greaterThanEq :page 4
+    23 jump *label24 greaterThanEq :page 2
+    24 jump *label22 lessThan :page 1
+-    * label *label9
+    25 print "contents:"
+    26 print "\n"
+    27 sensor *tmp13 .BLOCK @totalItems
+ 
+    48 jump *label7 always
+    49 label *label24
+    50 jump *label13 greaterThanEq :page 3
+-    * label *label11
+    51 print "power:"
+    52 print "\n"
+    53 sensor *tmp19 .BLOCK @totalPower
+ 
+    82 label *label23
+    83 jump *label25 greaterThanEq :page 6
+    84 jump *label17 greaterThanEq :page 5
+-    * label *label15
+    85 print "status:"
+    86 print "\n"
+    87 sensor *tmp33 .BLOCK @heat
+ 
+   109 jump *label19 lessThan :page 7
+   110 jump *label21 lessThan :page 8
+   111 jump *label22 always
+-    * label *label8
+-    * label *label10
+   112 label *label13
+   113 print "combat:"
+   114 print "\n"
+ 
+   129 print *tmp32
+   130 print "\n"
+   131 jump *label7 always
+-    * label *label12
+-    * label *label14
+   132 label *label17
+   133 print "position:"
+   134 print "\n"
+ 
+   149 print *tmp41
+   150 print "\n"
+   151 jump *label7 always
+-    * label *label16
+   152 label *label19
+   153 print "unit:"
+   154 print "\n"
+ 
+   197 print *tmp52
+   198 print "\n"
+   199 jump *label7 always
+-    * label *label18
+   200 label *label21
+   201 print "other:"
+   202 print "\n"
+ 
+   223 print "enabled: "
+   224 print *tmp58
+   225 print "\n"
+-    * label *label20
+   226 label *label22
+   227 label *label7
+   228 jump *label6 always
+ 
+   231 print "\n"
+   232 label *label6
+   233 printflush message1
+-    * label *label1
+   234 jump *label0 always
+-    * label *label2
+-    * end
+
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  
     21 print " - "
@@ -599,22 +683,6 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
    200 label *label21
    201 print "other:"
    202 print "\n"
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
- 
-   223 print "enabled: "
-   224 print *tmp58
-   225 print "\n"
--    * label *label22
--    * label *label7
-   226 jump *label6 always
-   227 label *label5
-   228 print "No linked block found."
- 
-   230 label *label6
-   231 printflush message1
-   232 jump *label0 always
--    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-94 instructions):
  

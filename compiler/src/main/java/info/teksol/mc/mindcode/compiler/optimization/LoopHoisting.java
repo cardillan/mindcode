@@ -5,14 +5,15 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.EACH;
@@ -68,7 +69,10 @@ class LoopHoisting extends BaseOptimizer {
             return;
         }
 
-        Set<LogicArgument> loopVariables = findLoopVariables(loop, parts, null);
+        boolean guaranteedToRun = !hasEntryCondition(loop)
+                || optimizationContext.evaluateLoopEntryCondition(parts.getFirst()) == LogicBoolean.TRUE;
+
+        Set<LogicArgument> loopVariables = findLoopVariables(loop, parts, guaranteedToRun);
 
         // Only move instructions from the direct children
         Set<LogicArgument> readVariables = new HashSet<>();
@@ -111,13 +115,13 @@ class LoopHoisting extends BaseOptimizer {
         }
     }
 
-    private Set<LogicArgument> findLoopVariables(AstContext loop, List<AstContext> parts, @Nullable AstContext inspectedContext) {
+    private Set<LogicArgument> findLoopVariables(AstContext loop, List<AstContext> parts, boolean guaranteedToRun) {
         Map<LogicVariable, Set<LogicVariable>> dependencies = new HashMap<>();
         Map<LogicVariable, Set<LogicVariable>> dependants = new HashMap<>();
         parts.stream()
                 .map(this::contextInstructions)
                 .flatMap(LogicList::stream)
-                .forEachOrdered(ix -> addDependencies(loop, inspectedContext, dependencies, dependants, ix));
+                .forEachOrdered(ix -> addDependencies(loop, dependencies, dependants, guaranteedToRun, ix));
 
         propagateAllDependencies(dependencies);
 
@@ -154,7 +158,7 @@ class LoopHoisting extends BaseOptimizer {
 
         iteratorVariables.forEach(v -> dependencies.computeIfAbsent(v, w -> new HashSet<>()).add(v));
 
-        // Dependencies now maps a variable to a full set of variables it depends on, directly or indirectly
+        // The 'dependencies' map now maps a variable to a full set of variables it depends on, directly or indirectly
 
         // Primary loop variables: depend on themselves
         Set<LogicVariable> primary = dependencies.entrySet().stream()
@@ -173,16 +177,16 @@ class LoopHoisting extends BaseOptimizer {
         return instruction.isSafe() && instruction.getOpcode() != Opcode.JUMP && instruction.outputArgumentsStream().findAny().isPresent();
     }
 
-    private void addDependencies(AstContext loop, @Nullable AstContext inspectedContext,
+    private static final Function<LogicVariable, Set<LogicVariable>> createHashSet = _ -> new HashSet<>();
+
+    private void addDependencies(AstContext loop,
             Map<LogicVariable, Set<LogicVariable>> dependencies, Map<LogicVariable, Set<LogicVariable>> dependants,
-            LogicInstruction instruction) {
+            boolean guaranteedToRun, LogicInstruction instruction) {
 
         // When dependencies.get(x).contain(y) is true, it means that x depends on y.
         // When dependants.get(x).contains(y) is true, it means that y depends on x.
 
-        if (isSafe(instruction) && instructionProcessor.isDeterministic(instruction)
-                && (loop.executesOnce(instruction) || inspectedContext != null && inspectedContext.executesOnce(instruction))) {
-
+        if (isSafe(instruction) && instructionProcessor.isDeterministic(instruction) && (loop.executesOnce(instruction))) {
             List<LogicVariable> inputs = instruction.inputArgumentsStream()
                     .filter(LogicVariable.class::isInstance)
                     .map(LogicVariable.class::cast)
@@ -196,15 +200,24 @@ class LoopHoisting extends BaseOptimizer {
                                 || optimizationContext.getVariableReferences(output).size() > 1)) {
                             dependencies.get(output).add(output);
                         } else {
-                            dependencies.computeIfAbsent(output, a -> new HashSet<>()).addAll(inputs);
+                            dependencies.computeIfAbsent(output, createHashSet).addAll(inputs);
                         }
 
                         dependants.getOrDefault(output, Set.of())
                                 .stream()
                                 .filter(dependencies::containsKey)
-                                .forEach(arg -> dependencies.computeIfAbsent(arg, a -> new HashSet<>()).add(arg));
+                                .forEach(arg -> dependencies.computeIfAbsent(arg, createHashSet).add(arg));
 
-                        inputs.forEach(input -> dependants.computeIfAbsent(input, _ -> new HashSet<>()).add(output));
+                        boolean loopDependent = output.isVolatile() ||
+                                !guaranteedToRun && optimizationContext.getVariableReferences(output).stream()
+                                        .anyMatch(ix -> !ix.belongsTo(loop));
+
+                        if (loopDependent) {
+                            dependencies.computeIfAbsent(output, createHashSet).add(output);
+                            dependants.computeIfAbsent(output, createHashSet).add(output);
+                        }
+
+                        inputs.forEach(input -> dependants.computeIfAbsent(input, createHashSet).add(output));
                     });
         } else {
             // This instruction isn't loop-independent: it's unsafe, nondeterministic or nonlinear.
@@ -212,7 +225,7 @@ class LoopHoisting extends BaseOptimizer {
             instruction.outputArgumentsStream()
                     .filter(LogicVariable.class::isInstance)
                     .map(LogicVariable.class::cast)
-                    .forEach(arg -> dependencies.computeIfAbsent(arg, a -> new HashSet<>()).add(arg));
+                    .forEach(arg -> dependencies.computeIfAbsent(arg, createHashSet).add(arg));
         }
     }
 

@@ -266,6 +266,11 @@ public class OptimizationContext {
             while (unreachableInstructions.get(index)) {
                 unreachableInstructions.clear(index);
                 LogicInstruction ix = program.get(index);
+
+                if (ix.getCallReturn() != LogicLabel.EMPTY) {
+                    heads.offer(findLabelIndex(ix.getCallReturn()));
+                }
+
                 switch (ix.getOpcode()) {
                     case END -> {
                         // `end` inside an mlog block is ignored - we don't see into the data flow there
@@ -276,12 +281,16 @@ public class OptimizationContext {
                     }
                     case JUMP -> {
                         JumpInstruction jump = (JumpInstruction) ix;
-                        int labelIndex = findLabelIndex(jump.getTarget());
-                        if (labelIndex >= 0) {
-                            heads.offer(labelIndex);
-                        }
+                        heads.offer(findLabelIndex(jump.getTarget()));
                         if (jump.isUnconditional()) {
                             continue MainLoop;
+                        }
+                    }
+                    case SETADDR -> {
+                        if (ix.getCallReturn() != LogicLabel.EMPTY) {
+                            SetAddressInstruction setAddr = (SetAddressInstruction) ix;
+                            heads.offer(findLabelIndex(setAddr.getLabel()));
+                            //continue MainLoop;
                         }
                     }
                     case CALL -> {
@@ -305,11 +314,6 @@ public class OptimizationContext {
                     }
                 }
 
-                if (ix.getCallReturn() != LogicLabel.EMPTY) {
-                    heads.offer(findLabelIndex(ix.getCallReturn()));
-                    continue MainLoop;
-                }
-
                 index++;
             }
         }
@@ -320,7 +324,7 @@ public class OptimizationContext {
     private int findLabelIndex(LogicLabel label) {
         int index = firstInstructionIndex(ix -> ix instanceof LabelInstruction l && l.getLabel().equals(label));
         if (index < 0) {
-            //throw new IllegalArgumentException("Illegal label: " + label);
+            throw new IllegalArgumentException("Illegal label: " + label);
         }
         return index;
     }

@@ -517,6 +517,160 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    152 label *label91
    153 label *label92
 
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
+     0 assertflush
+-    * label *label22
+     1 set :d:n 1
+     2 setaddr :d*retaddr *label23 (h:*label23)
+     3 call *label0 *invalid :d*retval (m:*label23) (h:*label23)
+ 
+     5 jump *label24 notEqual :d*retval 3
+     6 jump *label29 always
+     7 label *label24
+-    * label *label25
+     8 print 1
+     9 print "|"
+    10 set :d:n 1
+ 
+    14 jump *label27 notEqual :d*retval 12
+    15 jump *label4 always
+    16 label *label27
+-    * label *label28
+    17 label *label29
+    18 set :d:n 2
+    19 setaddr :d*retaddr *label32 (h:*label32)
+    20 call *label0 *invalid :d*retval (m:*label32) (h:*label32)
+    21 label *label32
+    22 set :test:i :d*retval
+-    * label *label33
+    23 set :d:n :d*retval
+    24 setaddr :d*retaddr *label34 (h:*label34)
+    25 call *label0 *invalid :d*retval (m:*label34) (h:*label34)
+ 
+    27 jump *label35 notEqual :d*retval 3
+    28 jump *label40 always
+    29 label *label35
+-    * label *label36
+    30 print :test:i
+    31 print "|"
+    32 set :d:n :test:i
+ 
+    36 jump *label38 notEqual :d*retval 12
+    37 jump *label4 always
+    38 label *label38
+-    * label *label39
+    39 label *label40
+-    * label *label43
+    40 set :d:n 3
+    41 setaddr :d*retaddr *label44 (h:*label44)
+    42 call *label0 *invalid :d*retval (m:*label44) (h:*label44)
+ 
+    44 jump *label45 notEqual :d*retval 3
+    45 jump *label50 always
+    46 label *label45
+-    * label *label46
+    47 print 3
+    48 print "|"
+    49 set :d:n 3
+ 
+    53 jump *label48 notEqual :d*retval 12
+    54 jump *label4 always
+    55 label *label48
+-    * label *label49
+    56 label *label50
+    57 set :d:n 5
+    58 setaddr :d*retaddr *label53 (h:*label53)
+    59 call *label0 *invalid :d*retval (m:*label53) (h:*label53)
+    60 label *label53
+    61 set :test:i :d*retval
+-    * label *label54
+    62 set :d:n :d*retval
+    63 setaddr :d*retaddr *label55 (h:*label55)
+    64 call *label0 *invalid :d*retval (m:*label55) (h:*label55)
+ 
+    66 jump *label56 notEqual :d*retval 3
+    67 jump *label61 always
+    68 label *label56
+-    * label *label57
+    69 print :test:i
+    70 print "|"
+    71 set :d:n :test:i
+ 
+    75 jump *label59 notEqual :d*retval 12
+    76 jump *label4 always
+    77 label *label59
+-    * label *label60
+    78 label *label61
+-    * label *label64
+    79 set :d:n 8
+    80 setaddr :d*retaddr *label65 (h:*label65)
+    81 call *label0 *invalid :d*retval (m:*label65) (h:*label65)
+ 
+    83 jump *label66 notEqual :d*retval 3
+    84 jump *label71 always
+    85 label *label66
+-    * label *label67
+    86 print 8
+    87 print "|"
+    88 set :d:n 8
+ 
+    92 jump *label69 notEqual :d*retval 12
+    93 jump *label4 always
+    94 label *label69
+-    * label *label70
+    95 label *label71
+    96 set :d:n 12
+    97 setaddr :d*retaddr *label74 (h:*label74)
+    98 call *label0 *invalid :d*retval (m:*label74) (h:*label74)
+    99 label *label74
+   100 set :test:i :d*retval
+-    * label *label75
+   101 set :d:n :d*retval
+   102 setaddr :d*retaddr *label76 (h:*label76)
+   103 call *label0 *invalid :d*retval (m:*label76) (h:*label76)
+ 
+   105 jump *label77 notEqual :d*retval 3
+   106 jump *label82 always
+   107 label *label77
+-    * label *label78
+   108 print :test:i
+   109 print "|"
+   110 set :d:n :test:i
+ 
+   114 jump *label80 notEqual :d*retval 12
+   115 jump *label4 always
+   116 label *label80
+-    * label *label81
+   117 label *label82
+-    * label *label85
+   118 set :d:n 15
+   119 setaddr :d*retaddr *label86 (h:*label86)
+   120 call *label0 *invalid :d*retval (m:*label86) (h:*label86)
+ 
+   122 jump *label87 notEqual :d*retval 3
+   123 jump *label92 always
+   124 label *label87
+-    * label *label88
+   125 print 15
+   126 print "|"
+   127 set :d:n 15
+   128 setaddr :d*retaddr *label89 (h:*label89)
+   129 call *label0 *invalid :d*retval (m:*label89) (h:*label89)
+   130 label *label89
+-    * label *label90
+-    * label *label91
+   131 label *label92
+   132 label *label4
+-    * label *label1
+   133 assertprints "1|2|5|8|12|" "iterated-for-loop-break-continue"
+   134 stop
+   135 end
+   136 label *label0
+   137 set :d*retval :d:n
+-    * label *label21
+   138 return :d*retaddr
+-    * end
+
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-13 instructions):
  
      2 setaddr :d*retaddr *label23 (h:*label23)
@@ -645,13 +799,6 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-13 instr
    111 label *label87
    112 print 15
    113 print "|"
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
- 
-   110 label *label0
-   111 set :d*retval :d:n
-   112 return :d*retaddr
--    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  

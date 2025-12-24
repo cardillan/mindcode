@@ -131,12 +131,13 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
         assertCompilesTo("""
                         A = rand(10);
                         B = rand(20);
-                        for i = 0; i < A; i += 1 do
+                        i = 0;
+                        do
                             x = 2 * A;
                             y = 2 * B;
                             foo(10);
                             print(x, y);
-                        end;
+                        while ++i < A;
 
                         noinline def bar(x)
                             A = x - B;
@@ -147,22 +148,20 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                             bar(n);
                         end;
                         """,
-                createInstruction(LABEL, "__start__"),
                 createInstruction(OP, "rand", ".A", "10"),
                 createInstruction(OP, "rand", ".B", "20"),
                 createInstruction(SET, ":i", "0"),
                 createInstruction(OP, "mul", ":y", "2", ".B"),
                 createInstruction(SET, ":foo:n", "10"),
                 createInstruction(SETADDR, ":foo*retaddr", label(5)),
-                createInstruction(JUMP, "__start__", "greaterThanEq", "0", ".A"),
-                createInstruction(LABEL, label(9)),
+                createInstruction(LABEL, label(2)),
                 createInstruction(OP, "mul", ":x", "2", ".A"),
                 createInstruction(CALL, label(1), "*invalid", ":foo*retval"),
                 createInstruction(LABEL, label(5)),
                 createInstruction(PRINT, ":x"),
                 createInstruction(PRINT, ":y"),
                 createInstruction(OP, "add", ":i", ":i", "1"),
-                createInstruction(JUMP, label(9), "lessThan", ":i", ".A"),
+                createInstruction(JUMP, label(2), "lessThan", ":i", ".A"),
                 createInstruction(END),
                 createInstruction(LABEL, label(1)),
                 createInstruction(PRINT, ":foo:n"),
@@ -253,7 +252,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void recognizesFunctionOutputParameters() {
         assertCompilesTo("""
-                        param count = 10;
+                        const count = 10;
 
                         foo(out a, out b);
                         print(a + b);
@@ -268,8 +267,6 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                             y = rand(10);
                         end;
                         """,
-                createInstruction(LABEL, "__start__"),
-                createInstruction(SET, "count", "10"),
                 createInstruction(SETADDR, ":foo*retaddr", label(1)),
                 createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
                 createInstruction(LABEL, label(1)),
@@ -277,17 +274,17 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(PRINT, tmp(1)),
                 createInstruction(SET, ":i", "1"),
                 createInstruction(SETADDR, ":foo*retaddr", label(5)),
-                createInstruction(JUMP, "__start__", "greaterThan", "1", "count"),
                 createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
                 createInstruction(LABEL, label(5)),
                 createInstruction(OP, "add", tmp(3), ":foo:x", ":foo:y"),
                 createInstruction(PRINT, tmp(3)),
                 createInstruction(OP, "add", ":i", ":i", "1"),
+                createInstruction(JUMP, label(0), "lessThanEq", ":i", "10"),
+                createInstruction(END),
                 createInstruction(LABEL, label(0)),
                 createInstruction(OP, "rand", ":foo:x", "10"),
                 createInstruction(OP, "rand", ":foo:y", "10"),
                 createInstruction(RETURN, ":foo*retaddr")
-
         );
     }
 

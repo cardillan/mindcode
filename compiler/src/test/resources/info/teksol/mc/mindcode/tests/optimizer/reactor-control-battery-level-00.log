@@ -6061,10 +6061,1058 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
   1031 set .ACCU_PROD 0
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+     0 printflush message1
+     1 print "Initializing..."
+     2 printflush message1
+-    * label *label15
+-    * label *label16
+     3 write 0 bank1 0
+-    * label *label17
+     4 write 0 bank1 1
+-    * label *label18
+     5 write 0 bank1 2
+-    * label *label19
+     6 write 0 bank1 3
+-    * label *label20
+     7 write 0 bank1 4
+-    * label *label21
+     8 write 0 bank1 5
+-    * label *label22
+     9 write 0 bank1 6
+-    * label *label23
+    10 write 0 bank1 7
+-    * label *label24
+    11 write 0 bank1 8
+-    * label *label25
+    12 write 0 bank1 9
+-    * label *label26
+    13 write 0 bank1 10
+-    * label *label27
+    14 write 0 bank1 11
+-    * label *label28
+    15 write 0 bank1 12
+-    * label *label29
+    16 write 0 bank1 13
+-    * label *label30
+    17 write 0 bank1 14
+-    * label *label31
+    18 write 0 bank1 15
+-    * label *label32
+    19 write 0 bank1 16
+-    * label *label33
+    20 write 0 bank1 17
+-    * label *label34
+    21 write 0 bank1 18
+-    * label *label35
+    22 write 0 bank1 19
+-    * label *label36
+    23 write 0 bank1 20
+-    * label *label37
+    24 write 0 bank1 21
+-    * label *label38
+    25 write 0 bank1 22
+-    * label *label39
+    26 write 0 bank1 23
+-    * label *label40
+    27 write 0 bank1 24
+-    * label *label41
+    28 write 0 bank1 25
+-    * label *label42
+    29 write 0 bank1 26
+-    * label *label43
+    30 write 0 bank1 27
+-    * label *label44
+    31 write 0 bank1 28
+-    * label *label45
+    32 write 0 bank1 29
+-    * label *label46
+    33 write 0 bank1 30
+-    * label *label47
+    34 write 0 bank1 31
+-    * label *label48
+    35 write 0 bank1 32
+-    * label *label49
+    36 write 0 bank1 33
+-    * label *label50
+    37 write 0 bank1 34
+-    * label *label51
+    38 write 0 bank1 35
+-    * label *label52
+    39 write 0 bank1 36
+-    * label *label53
+    40 write 0 bank1 37
+-    * label *label54
+    41 write 0 bank1 38
+-    * label *label55
+    42 write 0 bank1 39
+-    * label *label56
+    43 write 0 bank1 40
+-    * label *label57
+    44 write 0 bank1 41
+-    * label *label58
+    45 write 0 bank1 42
+-    * label *label59
+    46 write 0 bank1 43
+-    * label *label60
+    47 write 0 bank1 44
+-    * label *label61
+    48 write 0 bank1 45
+-    * label *label62
+    49 write 0 bank1 46
+-    * label *label63
+    50 write 0 bank1 47
+-    * label *label64
+    51 write 0 bank1 48
+-    * label *label65
+    52 write 0 bank1 49
+-    * label *label66
+    53 write 0 bank1 50
+-    * label *label67
+    54 write 0 bank1 51
+-    * label *label68
+    55 write 0 bank1 52
+-    * label *label69
+    56 write 0 bank1 53
+-    * label *label70
+    57 write 0 bank1 54
+-    * label *label71
+    58 write 0 bank1 55
+-    * label *label72
+    59 write 0 bank1 56
+-    * label *label73
+    60 write 0 bank1 57
+-    * label *label74
+    61 write 0 bank1 58
+-    * label *label75
+    62 write 0 bank1 59
+-    * label *label76
+    63 write 0 bank1 60
+-    * label *label77
+    64 write 0 bank1 61
+-    * label *label78
+    65 write 0 bank1 62
+-    * label *label79
+    66 write 0 bank1 63
+-    * label *label80
+    67 write 0 bank1 64
+-    * label *label81
+    68 write 0 bank1 65
+-    * label *label82
+    69 write 0 bank1 66
+-    * label *label83
+    70 write 0 bank1 67
+-    * label *label84
+    71 write 0 bank1 68
+-    * label *label85
+    72 write 0 bank1 69
+-    * label *label86
+    73 write 0 bank1 70
+-    * label *label87
+    74 write 0 bank1 71
+-    * label *label88
+    75 write 0 bank1 72
+-    * label *label89
+    76 write 0 bank1 73
+-    * label *label90
+    77 write 0 bank1 74
+-    * label *label91
+    78 write 0 bank1 75
+-    * label *label92
+    79 write 0 bank1 76
+-    * label *label93
+    80 write 0 bank1 77
+-    * label *label94
+    81 write 0 bank1 78
+-    * label *label95
+    82 write 0 bank1 79
+-    * label *label96
+    83 write 0 bank1 80
+-    * label *label97
+    84 write 0 bank1 81
+-    * label *label98
+    85 write 0 bank1 82
+-    * label *label99
+    86 write 0 bank1 83
+-    * label *label100
+    87 write 0 bank1 84
+-    * label *label101
+    88 write 0 bank1 85
+-    * label *label102
+    89 write 0 bank1 86
+-    * label *label103
+    90 write 0 bank1 87
+-    * label *label104
+    91 write 0 bank1 88
+-    * label *label105
+    92 write 0 bank1 89
+-    * label *label106
+    93 write 0 bank1 90
+-    * label *label107
+    94 write 0 bank1 91
+-    * label *label108
+    95 write 0 bank1 92
+-    * label *label109
+    96 write 0 bank1 93
+-    * label *label110
+    97 write 0 bank1 94
+-    * label *label111
+    98 write 0 bank1 95
+-    * label *label112
+    99 write 0 bank1 96
+-    * label *label113
+   100 write 0 bank1 97
+-    * label *label114
+   101 write 0 bank1 98
+-    * label *label115
+   102 write 0 bank1 99
+-    * label *label116
+   103 write 0 bank1 100
+-    * label *label117
+   104 write 0 bank1 101
+-    * label *label118
+   105 write 0 bank1 102
+-    * label *label119
+   106 write 0 bank1 103
+-    * label *label120
+   107 write 0 bank1 104
+-    * label *label121
+   108 write 0 bank1 105
+-    * label *label122
+   109 write 0 bank1 106
+-    * label *label123
+   110 write 0 bank1 107
+-    * label *label124
+   111 write 0 bank1 108
+-    * label *label125
+   112 write 0 bank1 109
+-    * label *label126
+   113 write 0 bank1 110
+-    * label *label127
+   114 write 0 bank1 111
+-    * label *label128
+   115 write 0 bank1 112
+-    * label *label129
+   116 write 0 bank1 113
+-    * label *label130
+   117 write 0 bank1 114
+-    * label *label131
+   118 write 0 bank1 115
+-    * label *label132
+   119 write 0 bank1 116
+-    * label *label133
+   120 write 0 bank1 117
+-    * label *label134
+   121 write 0 bank1 118
+-    * label *label135
+   122 write 0 bank1 119
+-    * label *label136
+   123 write 0 bank1 120
+-    * label *label137
+   124 write 0 bank1 121
+-    * label *label138
+   125 write 0 bank1 122
+-    * label *label139
+   126 write 0 bank1 123
+-    * label *label140
+   127 write 0 bank1 124
+-    * label *label141
+   128 write 0 bank1 125
+-    * label *label142
+   129 write 0 bank1 126
+-    * label *label143
+   130 write 0 bank1 127
+-    * label *label144
+   131 write 0 bank1 128
+-    * label *label145
+   132 write 0 bank1 129
+-    * label *label146
+   133 write 0 bank1 130
+-    * label *label147
+   134 write 0 bank1 131
+-    * label *label148
+   135 write 0 bank1 132
+-    * label *label149
+   136 write 0 bank1 133
+-    * label *label150
+   137 write 0 bank1 134
+-    * label *label151
+   138 write 0 bank1 135
+-    * label *label152
+   139 write 0 bank1 136
+-    * label *label153
+   140 write 0 bank1 137
+-    * label *label154
+   141 write 0 bank1 138
+-    * label *label155
+   142 write 0 bank1 139
+-    * label *label156
+   143 write 0 bank1 140
+-    * label *label157
+   144 write 0 bank1 141
+-    * label *label158
+   145 write 0 bank1 142
+-    * label *label159
+   146 write 0 bank1 143
+-    * label *label160
+   147 write 0 bank1 144
+-    * label *label161
+   148 write 0 bank1 145
+-    * label *label162
+   149 write 0 bank1 146
+-    * label *label163
+   150 write 0 bank1 147
+-    * label *label164
+   151 write 0 bank1 148
+-    * label *label165
+   152 write 0 bank1 149
+-    * label *label166
+   153 write 0 bank1 150
+-    * label *label167
+   154 write 0 bank1 151
+-    * label *label168
+   155 write 0 bank1 152
+-    * label *label169
+   156 write 0 bank1 153
+-    * label *label170
+   157 write 0 bank1 154
+-    * label *label171
+   158 write 0 bank1 155
+-    * label *label172
+   159 write 0 bank1 156
+-    * label *label173
+   160 write 0 bank1 157
+-    * label *label174
+   161 write 0 bank1 158
+-    * label *label175
+   162 write 0 bank1 159
+-    * label *label176
+   163 write 0 bank1 160
+-    * label *label177
+   164 write 0 bank1 161
+-    * label *label178
+   165 write 0 bank1 162
+-    * label *label179
+   166 write 0 bank1 163
+-    * label *label180
+   167 write 0 bank1 164
+-    * label *label181
+   168 write 0 bank1 165
+-    * label *label182
+   169 write 0 bank1 166
+-    * label *label183
+   170 write 0 bank1 167
+-    * label *label184
+   171 write 0 bank1 168
+-    * label *label185
+   172 write 0 bank1 169
+-    * label *label186
+   173 write 0 bank1 170
+-    * label *label187
+   174 write 0 bank1 171
+-    * label *label188
+   175 write 0 bank1 172
+-    * label *label189
+   176 write 0 bank1 173
+-    * label *label190
+   177 write 0 bank1 174
+-    * label *label191
+   178 write 0 bank1 175
+-    * label *label192
+   179 write 0 bank1 176
+-    * label *label193
+   180 write 0 bank1 177
+-    * label *label194
+   181 write 0 bank1 178
+-    * label *label195
+   182 write 0 bank1 179
+-    * label *label196
+   183 write 0 bank1 180
+-    * label *label197
+   184 write 0 bank1 181
+-    * label *label198
+   185 write 0 bank1 182
+-    * label *label199
+   186 write 0 bank1 183
+-    * label *label200
+   187 write 0 bank1 184
+-    * label *label201
+   188 write 0 bank1 185
+-    * label *label202
+   189 write 0 bank1 186
+-    * label *label203
+   190 write 0 bank1 187
+-    * label *label204
+   191 write 0 bank1 188
+-    * label *label205
+   192 write 0 bank1 189
+-    * label *label206
+   193 write 0 bank1 190
+-    * label *label207
+   194 write 0 bank1 191
+-    * label *label208
+   195 write 0 bank1 192
+-    * label *label209
+   196 write 0 bank1 193
+-    * label *label210
+   197 write 0 bank1 194
+-    * label *label211
+   198 write 0 bank1 195
+-    * label *label212
+   199 write 0 bank1 196
+-    * label *label213
+   200 write 0 bank1 197
+-    * label *label214
+   201 write 0 bank1 198
+-    * label *label215
+   202 write 0 bank1 199
+-    * label *label216
+   203 write 0 bank1 200
+-    * label *label217
+   204 write 0 bank1 201
+-    * label *label218
+   205 write 0 bank1 202
+-    * label *label219
+   206 write 0 bank1 203
+-    * label *label220
+   207 write 0 bank1 204
+-    * label *label221
+   208 write 0 bank1 205
+-    * label *label222
+   209 write 0 bank1 206
+-    * label *label223
+   210 write 0 bank1 207
+-    * label *label224
+   211 write 0 bank1 208
+-    * label *label225
+   212 write 0 bank1 209
+-    * label *label226
+   213 write 0 bank1 210
+-    * label *label227
+   214 write 0 bank1 211
+-    * label *label228
+   215 write 0 bank1 212
+-    * label *label229
+   216 write 0 bank1 213
+-    * label *label230
+   217 write 0 bank1 214
+-    * label *label231
+   218 write 0 bank1 215
+-    * label *label232
+   219 write 0 bank1 216
+-    * label *label233
+   220 write 0 bank1 217
+-    * label *label234
+   221 write 0 bank1 218
+-    * label *label235
+   222 write 0 bank1 219
+-    * label *label236
+   223 write 0 bank1 220
+-    * label *label237
+   224 write 0 bank1 221
+-    * label *label238
+   225 write 0 bank1 222
+-    * label *label239
+   226 write 0 bank1 223
+-    * label *label240
+   227 write 0 bank1 224
+-    * label *label241
+   228 write 0 bank1 225
+-    * label *label242
+   229 write 0 bank1 226
+-    * label *label243
+   230 write 0 bank1 227
+-    * label *label244
+   231 write 0 bank1 228
+-    * label *label245
+   232 write 0 bank1 229
+-    * label *label246
+   233 write 0 bank1 230
+-    * label *label247
+   234 write 0 bank1 231
+-    * label *label248
+   235 write 0 bank1 232
+-    * label *label249
+   236 write 0 bank1 233
+-    * label *label250
+   237 write 0 bank1 234
+-    * label *label251
+   238 write 0 bank1 235
+-    * label *label252
+   239 write 0 bank1 236
+-    * label *label253
+   240 write 0 bank1 237
+-    * label *label254
+   241 write 0 bank1 238
+-    * label *label255
+   242 write 0 bank1 239
+-    * label *label256
+   243 write 0 bank1 240
+-    * label *label257
+   244 write 0 bank1 241
+-    * label *label258
+   245 write 0 bank1 242
+-    * label *label259
+   246 write 0 bank1 243
+-    * label *label260
+   247 write 0 bank1 244
+-    * label *label261
+   248 write 0 bank1 245
+-    * label *label262
+   249 write 0 bank1 246
+-    * label *label263
+   250 write 0 bank1 247
+-    * label *label264
+   251 write 0 bank1 248
+-    * label *label265
+   252 write 0 bank1 249
+-    * label *label266
+   253 write 0 bank1 250
+-    * label *label267
+   254 write 0 bank1 251
+-    * label *label268
+   255 write 0 bank1 252
+-    * label *label269
+   256 write 0 bank1 253
+-    * label *label270
+   257 write 0 bank1 254
+-    * label *label271
+   258 write 0 bank1 255
+-    * label *label272
+   259 write 0 bank1 256
+-    * label *label273
+   260 write 0 bank1 257
+-    * label *label274
+   261 write 0 bank1 258
+-    * label *label275
+   262 write 0 bank1 259
+-    * label *label276
+   263 write 0 bank1 260
+-    * label *label277
+   264 write 0 bank1 261
+-    * label *label278
+   265 write 0 bank1 262
+-    * label *label279
+   266 write 0 bank1 263
+-    * label *label280
+   267 write 0 bank1 264
+-    * label *label281
+   268 write 0 bank1 265
+-    * label *label282
+   269 write 0 bank1 266
+-    * label *label283
+   270 write 0 bank1 267
+-    * label *label284
+   271 write 0 bank1 268
+-    * label *label285
+   272 write 0 bank1 269
+-    * label *label286
+   273 write 0 bank1 270
+-    * label *label287
+   274 write 0 bank1 271
+-    * label *label288
+   275 write 0 bank1 272
+-    * label *label289
+   276 write 0 bank1 273
+-    * label *label290
+   277 write 0 bank1 274
+-    * label *label291
+   278 write 0 bank1 275
+-    * label *label292
+   279 write 0 bank1 276
+-    * label *label293
+   280 write 0 bank1 277
+-    * label *label294
+   281 write 0 bank1 278
+-    * label *label295
+   282 write 0 bank1 279
+-    * label *label296
+   283 write 0 bank1 280
+-    * label *label297
+   284 write 0 bank1 281
+-    * label *label298
+   285 write 0 bank1 282
+-    * label *label299
+   286 write 0 bank1 283
+-    * label *label300
+   287 write 0 bank1 284
+-    * label *label301
+   288 write 0 bank1 285
+-    * label *label302
+   289 write 0 bank1 286
+-    * label *label303
+   290 write 0 bank1 287
+-    * label *label304
+   291 write 0 bank1 288
+-    * label *label305
+   292 write 0 bank1 289
+-    * label *label306
+   293 write 0 bank1 290
+-    * label *label307
+   294 write 0 bank1 291
+-    * label *label308
+   295 write 0 bank1 292
+-    * label *label309
+   296 write 0 bank1 293
+-    * label *label310
+   297 write 0 bank1 294
+-    * label *label311
+   298 write 0 bank1 295
+-    * label *label312
+   299 write 0 bank1 296
+-    * label *label313
+   300 write 0 bank1 297
+-    * label *label314
+   301 write 0 bank1 298
+-    * label *label315
+   302 write 0 bank1 299
+-    * label *label316
+   303 write 0 bank1 300
+-    * label *label317
+   304 write 0 bank1 301
+-    * label *label318
+   305 write 0 bank1 302
+-    * label *label319
+   306 write 0 bank1 303
+-    * label *label320
+   307 write 0 bank1 304
+-    * label *label321
+   308 write 0 bank1 305
+-    * label *label322
+   309 write 0 bank1 306
+-    * label *label323
+   310 write 0 bank1 307
+-    * label *label324
+   311 write 0 bank1 308
+-    * label *label325
+   312 write 0 bank1 309
+-    * label *label326
+   313 write 0 bank1 310
+-    * label *label327
+   314 write 0 bank1 311
+-    * label *label328
+   315 write 0 bank1 312
+-    * label *label329
+   316 write 0 bank1 313
+-    * label *label330
+   317 write 0 bank1 314
+-    * label *label331
+   318 write 0 bank1 315
+-    * label *label332
+   319 write 0 bank1 316
+-    * label *label333
+   320 write 0 bank1 317
+-    * label *label334
+   321 write 0 bank1 318
+-    * label *label335
+   322 write 0 bank1 319
+-    * label *label336
+   323 write 0 bank1 320
+-    * label *label337
+   324 write 0 bank1 321
+-    * label *label338
+   325 write 0 bank1 322
+-    * label *label339
+   326 write 0 bank1 323
+-    * label *label340
+   327 write 0 bank1 324
+-    * label *label341
+   328 write 0 bank1 325
+-    * label *label342
+   329 write 0 bank1 326
+-    * label *label343
+   330 write 0 bank1 327
+-    * label *label344
+   331 write 0 bank1 328
+-    * label *label345
+   332 write 0 bank1 329
+-    * label *label346
+   333 write 0 bank1 330
+-    * label *label347
+   334 write 0 bank1 331
+-    * label *label348
+   335 write 0 bank1 332
+-    * label *label349
+   336 write 0 bank1 333
+-    * label *label350
+   337 write 0 bank1 334
+-    * label *label351
+   338 write 0 bank1 335
+-    * label *label352
+   339 write 0 bank1 336
+-    * label *label353
+   340 write 0 bank1 337
+-    * label *label354
+   341 write 0 bank1 338
+-    * label *label355
+   342 write 0 bank1 339
+-    * label *label356
+   343 write 0 bank1 340
+-    * label *label357
+   344 write 0 bank1 341
+-    * label *label358
+   345 write 0 bank1 342
+-    * label *label359
+   346 write 0 bank1 343
+-    * label *label360
+   347 write 0 bank1 344
+-    * label *label361
+   348 write 0 bank1 345
+-    * label *label362
+   349 write 0 bank1 346
+-    * label *label363
+   350 write 0 bank1 347
+-    * label *label364
+   351 write 0 bank1 348
+-    * label *label365
+   352 write 0 bank1 349
+-    * label *label366
+   353 write 0 bank1 350
+-    * label *label367
+   354 write 0 bank1 351
+-    * label *label368
+   355 write 0 bank1 352
+-    * label *label369
+   356 write 0 bank1 353
+-    * label *label370
+   357 write 0 bank1 354
+-    * label *label371
+   358 write 0 bank1 355
+-    * label *label372
+   359 write 0 bank1 356
+-    * label *label373
+   360 write 0 bank1 357
+-    * label *label374
+   361 write 0 bank1 358
+-    * label *label375
+   362 write 0 bank1 359
+-    * label *label376
+   363 write 0 bank1 360
+-    * label *label377
+   364 write 0 bank1 361
+-    * label *label378
+   365 write 0 bank1 362
+-    * label *label379
+   366 write 0 bank1 363
+-    * label *label380
+   367 write 0 bank1 364
+-    * label *label381
+   368 write 0 bank1 365
+-    * label *label382
+   369 write 0 bank1 366
+-    * label *label383
+   370 write 0 bank1 367
+-    * label *label384
+   371 write 0 bank1 368
+-    * label *label385
+   372 write 0 bank1 369
+-    * label *label386
+   373 write 0 bank1 370
+-    * label *label387
+   374 write 0 bank1 371
+-    * label *label388
+   375 write 0 bank1 372
+-    * label *label389
+   376 write 0 bank1 373
+-    * label *label390
+   377 write 0 bank1 374
+-    * label *label391
+   378 write 0 bank1 375
+-    * label *label392
+   379 write 0 bank1 376
+-    * label *label393
+   380 write 0 bank1 377
+-    * label *label394
+   381 write 0 bank1 378
+-    * label *label395
+   382 write 0 bank1 379
+-    * label *label396
+   383 write 0 bank1 380
+-    * label *label397
+   384 write 0 bank1 381
+-    * label *label398
+   385 write 0 bank1 382
+-    * label *label399
+   386 write 0 bank1 383
+-    * label *label400
+   387 write 0 bank1 384
+-    * label *label401
+   388 write 0 bank1 385
+-    * label *label402
+   389 write 0 bank1 386
+-    * label *label403
+   390 write 0 bank1 387
+-    * label *label404
+   391 write 0 bank1 388
+-    * label *label405
+   392 write 0 bank1 389
+-    * label *label406
+   393 write 0 bank1 390
+-    * label *label407
+   394 write 0 bank1 391
+-    * label *label408
+   395 write 0 bank1 392
+-    * label *label409
+   396 write 0 bank1 393
+-    * label *label410
+   397 write 0 bank1 394
+-    * label *label411
+   398 write 0 bank1 395
+-    * label *label412
+   399 write 0 bank1 396
+-    * label *label413
+   400 write 0 bank1 397
+-    * label *label414
+   401 write 0 bank1 398
+-    * label *label415
+   402 write 0 bank1 399
+-    * label *label416
+   403 write 0 bank1 400
+-    * label *label417
+   404 write 0 bank1 401
+-    * label *label418
+   405 write 0 bank1 402
+-    * label *label419
+   406 write 0 bank1 403
+-    * label *label420
+   407 write 0 bank1 404
+-    * label *label421
+   408 write 0 bank1 405
+-    * label *label422
+   409 write 0 bank1 406
+-    * label *label423
+   410 write 0 bank1 407
+-    * label *label424
+   411 write 0 bank1 408
+-    * label *label425
+   412 write 0 bank1 409
+-    * label *label426
+   413 write 0 bank1 410
+-    * label *label427
+   414 write 0 bank1 411
+-    * label *label428
+   415 write 0 bank1 412
+-    * label *label429
+   416 write 0 bank1 413
+-    * label *label430
+   417 write 0 bank1 414
+-    * label *label431
+   418 write 0 bank1 415
+-    * label *label432
+   419 write 0 bank1 416
+-    * label *label433
+   420 write 0 bank1 417
+-    * label *label434
+   421 write 0 bank1 418
+-    * label *label435
+   422 write 0 bank1 419
+-    * label *label436
+   423 write 0 bank1 420
+-    * label *label437
+   424 write 0 bank1 421
+-    * label *label438
+   425 write 0 bank1 422
+-    * label *label439
+   426 write 0 bank1 423
+-    * label *label440
+   427 write 0 bank1 424
+-    * label *label441
+   428 write 0 bank1 425
+-    * label *label442
+   429 write 0 bank1 426
+-    * label *label443
+   430 write 0 bank1 427
+-    * label *label444
+   431 write 0 bank1 428
+-    * label *label445
+   432 write 0 bank1 429
+-    * label *label446
+   433 write 0 bank1 430
+-    * label *label447
+   434 write 0 bank1 431
+-    * label *label448
+   435 write 0 bank1 432
+-    * label *label449
+   436 write 0 bank1 433
+-    * label *label450
+   437 write 0 bank1 434
+-    * label *label451
+   438 write 0 bank1 435
+-    * label *label452
+   439 write 0 bank1 436
+-    * label *label453
+   440 write 0 bank1 437
+-    * label *label454
+   441 write 0 bank1 438
+-    * label *label455
+   442 write 0 bank1 439
+-    * label *label456
+   443 write 0 bank1 440
+-    * label *label457
+   444 write 0 bank1 441
+-    * label *label458
+   445 write 0 bank1 442
+-    * label *label459
+   446 write 0 bank1 443
+-    * label *label460
+   447 write 0 bank1 444
+-    * label *label461
+   448 write 0 bank1 445
+-    * label *label462
+   449 write 0 bank1 446
+-    * label *label463
+   450 write 0 bank1 447
+-    * label *label464
+   451 write 0 bank1 448
+-    * label *label465
+   452 write 0 bank1 449
+-    * label *label466
+   453 write 0 bank1 450
+-    * label *label467
+   454 write 0 bank1 451
+-    * label *label468
+   455 write 0 bank1 452
+-    * label *label469
+   456 write 0 bank1 453
+-    * label *label470
+   457 write 0 bank1 454
+-    * label *label471
+   458 write 0 bank1 455
+-    * label *label472
+   459 write 0 bank1 456
+-    * label *label473
+   460 write 0 bank1 457
+-    * label *label474
+   461 write 0 bank1 458
+-    * label *label475
+   462 write 0 bank1 459
+-    * label *label476
+   463 write 0 bank1 460
+-    * label *label477
+   464 write 0 bank1 461
+-    * label *label478
+   465 write 0 bank1 462
+-    * label *label479
+   466 write 0 bank1 463
+-    * label *label480
+   467 write 0 bank1 464
+-    * label *label481
+   468 write 0 bank1 465
+-    * label *label482
+   469 write 0 bank1 466
+-    * label *label483
+   470 write 0 bank1 467
+-    * label *label484
+   471 write 0 bank1 468
+-    * label *label485
+   472 write 0 bank1 469
+-    * label *label486
+   473 write 0 bank1 470
+-    * label *label487
+   474 write 0 bank1 471
+-    * label *label488
+   475 write 0 bank1 472
+-    * label *label489
+   476 write 0 bank1 473
+-    * label *label490
+   477 write 0 bank1 474
+-    * label *label491
+   478 write 0 bank1 475
+-    * label *label492
+   479 write 0 bank1 476
+-    * label *label493
+   480 write 0 bank1 477
+-    * label *label494
+   481 write 0 bank1 478
+-    * label *label495
+   482 write 0 bank1 479
+-    * label *label496
+   483 write 0 bank1 480
+-    * label *label497
+   484 write 0 bank1 481
+-    * label *label498
+   485 write 0 bank1 482
+-    * label *label499
+   486 write 0 bank1 483
+-    * label *label500
+   487 write 0 bank1 484
+-    * label *label501
+   488 write 0 bank1 485
+-    * label *label502
+   489 write 0 bank1 486
+-    * label *label503
+   490 write 0 bank1 487
+-    * label *label504
+   491 write 0 bank1 488
+-    * label *label505
+   492 write 0 bank1 489
+-    * label *label506
+   493 write 0 bank1 490
+-    * label *label507
+   494 write 0 bank1 491
+-    * label *label508
+   495 write 0 bank1 492
+-    * label *label509
+   496 write 0 bank1 493
+-    * label *label510
+   497 write 0 bank1 494
+-    * label *label511
+   498 write 0 bank1 495
+-    * label *label512
+   499 write 0 bank1 496
+-    * label *label513
+   500 write 0 bank1 497
+-    * label *label514
+   501 write 0 bank1 498
+-    * label *label515
+   502 write 0 bank1 499
+-    * label *label516
+   503 write 0 bank1 500
+-    * label *label517
+   504 write 0 bank1 501
+-    * label *label518
+   505 write 0 bank1 502
+-    * label *label519
+   506 write 0 bank1 503
+-    * label *label520
+   507 write 0 bank1 504
+-    * label *label521
+   508 write 0 bank1 505
+-    * label *label522
+   509 write 0 bank1 506
+-    * label *label523
+   510 write 0 bank1 507
+-    * label *label524
+   511 write 0 bank1 508
+-    * label *label525
+   512 write 0 bank1 509
+-    * label *label526
+   513 write 0 bank1 510
+-    * label *label527
+   514 write 0 bank1 511
+-    * label *label528
+-    * label *label2
+   515 set .ACCU_CONS 0
+   516 set .ACCU_PROD 0
+   517 set :index 0
  
+   581 print "]"
+   582 set :loops 0
+   583 set :start @time
+-    * label *label8
+   584 jump *label10 lessThan @time :start
+   585 label *label14
+   586 jump *label10 greaterThanEq @time :wait
+   587 op add :loops :loops 1
+-    * label *label9
+   588 jump *label14 greaterThanEq @time :start
+   589 label *label10
+   590 print "\n"
+   591 print "[lightgray]Loops: "
    592 print :loops
    593 printflush message1
+-    * label *label4
    594 jump *label3 always
+-    * label *label5
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):

@@ -1,12 +1,12 @@
   1138 instructions before optimizations.
    100 instructions eliminated by Temp Variables Elimination (3 passes, 7 iterations).
      2 instructions eliminated by Case Expression Optimization.
-   122 instructions eliminated by Dead Code Elimination (6 iterations).
-     3 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
-    76 instructions eliminated by Condition Optimization (2 passes, 7 iterations).
-    52 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+   122 instructions eliminated by Dead Code Elimination (7 iterations).
+     3 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
+    76 instructions eliminated by Condition Optimization (2 passes, 8 iterations).
+    52 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
      2 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
-    32 instructions eliminated by Boolean Optimization (6 iterations).
+    32 instructions eliminated by Boolean Optimization (7 iterations).
        2 short-circuited expressions optimized using selects.
        1 final jumps of a short-circuited expression optimized.
        8 fully-evaluated expressions optimized using selects.
@@ -17,9 +17,9 @@
        9 loop conditions were partially rotated.
      3 instructions added by Case Switching (7 iterations).
      1 case expressions converted to switched jumps by Case Switching.
-    25 instructions eliminated by Jump Straightening (2 passes, 7 iterations).
+    25 instructions eliminated by Jump Straightening (2 passes, 8 iterations).
      6 instructions updated by Jump Threading.
-     2 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     2 instructions eliminated by Unreachable Code Elimination (3 iterations).
     71 instructions eliminated by Print Merging.
    629 instructions after optimizations.
 
@@ -3923,43 +3923,23 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
    796 set :state .S_UNUSED
    797 label *label226
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-2 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+   830 label *label231
+   831 control enabled switch1 false
+   832 control enabled switch2 false
+-    * end
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 (-2 instructions):
  
     80 print "[salmon]No vault or container."
     81 printflush message1
     82 jump *label16 always
--    * label *label25
 -    * jump *label18 always
--    * label *label26
 -    * jump *label16 always
     83 label *label18
     84 set .CORE null
     85 jump *label27 notEqual LINK_ID 0
- 
-   790 jump *label223 greaterThan :items .PARK_ITEM_LIMIT
-   791 ucontrol move .PARK_X .PARK_Y
-   792 set :state .S_UNUSED
--    * label *label226
--    * label *label224
-   793 jump *label223 always
-   794 label *label222
-   795 op add :active :active 1
- 
-   797 print :items
-   798 print .ITEM_ICON
-   799 ucontrol flag :state
--    * label *label186
--    * label *label184
-   800 jump *label77 always
-   801 label *label79
-   802 label *label228
-
-Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
- 
-   828 label *label231
-   829 control enabled switch1 false
-   830 control enabled switch2 false
--    * end
 
 Modifications by Final phase, Temp Variables Elimination, iteration 1:
  

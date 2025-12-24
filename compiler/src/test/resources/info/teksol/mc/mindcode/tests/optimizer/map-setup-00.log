@@ -7534,220 +7534,1608 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    351 label *label694
    352 jump *label695 lessThanEq *tmp70 0
 
-Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
- 
-   269 label *label700
-   270 op sub *tmp82 :shrinkWall.1:x .center
-   271 label *label701
--    * jump *label702 lessThanEq *tmp82 0
-+  272 jump *label705 lessThanEq *tmp82 0
-   273 set :replaceBlock:x :shrinkWall.1:x
-   274 set :replaceBlock:from @air
-   275 set :replaceBlock:to @shrubs
- 
-   281 label *label705
-   282 op sub *tmp82 :expandWall.3:x .center
-   283 label *label706
--    * jump *label707 lessThanEq *tmp82 0
-+  284 jump *label710 lessThanEq *tmp82 0
-   285 set :replaceBlock:x :expandWall.3:x
-   286 set :replaceBlock:from @air
-   287 set :replaceBlock:to @shrubs
- 
-   293 label *label710
-   294 op sub *tmp82 :expandWall.3:x .center
-   295 label *label711
--    * jump *label712 lessThanEq *tmp82 0
-+  296 jump *label715 lessThanEq *tmp82 0
-   297 set :replaceBlock:x :expandWall.3:x
-   298 set :replaceBlock:from @air
-   299 set :replaceBlock:to @shrubs
- 
-   305 label *label715
-   306 op sub *tmp82 :expandWall.3:x .center
-   307 label *label716
--    * jump *label717 lessThanEq *tmp82 0
-+  308 jump *label720 lessThanEq *tmp82 0
-   309 set :replaceBlock:x :expandWall.3:x
-   310 set :replaceBlock:from @air
-   311 set :replaceBlock:to @shrubs
- 
-   317 label *label720
-   318 op sub *tmp82 :expandWall.3:x .center
-   319 label *label721
--    * jump *label722 lessThanEq *tmp82 0
-+  320 jump *label725 lessThanEq *tmp82 0
-   321 set :replaceBlock:x :expandWall.3:x
-   322 set :replaceBlock:from @air
-   323 set :replaceBlock:to @shrubs
- 
-   329 label *label725
-   330 op sub *tmp82 :expandWall.3:x .center
-   331 label *label726
--    * jump *label727 lessThanEq *tmp82 0
-+  332 jump *label730 lessThanEq *tmp82 0
-   333 set :replaceBlock:x :expandWall.3:x
-   334 set :replaceBlock:from @air
-   335 set :replaceBlock:to @shrubs
- 
-   341 label *label730
-   342 op sub *tmp82 :expandWall.3:x .center
-   343 label *label731
--    * jump *label732 lessThanEq *tmp82 0
-+  344 jump *label735 lessThanEq *tmp82 0
-   345 set :replaceBlock:x :expandWall.3:x
-   346 set :replaceBlock:from @air
-   347 set :replaceBlock:to @shrubs
- 
-   353 label *label735
-   354 op sub *tmp82 :expandWall.3:x .center
-   355 label *label736
--    * jump *label737 lessThanEq *tmp82 0
-+  356 jump *label740 lessThanEq *tmp82 0
-   357 set :replaceBlock:x :expandWall.3:x
-   358 set :replaceBlock:from @air
-   359 set :replaceBlock:to @shrubs
- 
-   365 label *label740
-   366 op sub *tmp82 :expandWall.3:x .center
-   367 label *label741
--    * jump *label742 lessThanEq *tmp82 0
-+  368 jump *label745 lessThanEq *tmp82 0
-   369 set :replaceBlock:x :expandWall.3:x
-   370 set :replaceBlock:from @air
-   371 set :replaceBlock:to @shrubs
- 
-   518 draw print 0.25 2 @center
-   519 drawflush display2
-   520 radar enemy any any distance @this 0 *tmp103
--    * jump *label83 equal *tmp103 null
-+  521 jump *label8 equal *tmp103 null
-   522 set :i 0
-   523 label *label85
-   524 getlink :block :i
-
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-13 instructions):
  
+     2 setrate 1000
+     3 op floor :leftX .center
+     4 label *label2
+-    * label *label3
+     5 op sub :leftX :leftX 1
+     6 getblock block *tmp3 :leftX 224.5
+     7 jump *label2 equal *tmp3 @air
+-    * label *label4
+     8 op add :leftX :leftX 1
+     9 op floor *tmp6 .center
+    10 op add :rightX *tmp6 1
+    11 label *label5
+-    * label *label6
+    12 op add :rightX :rightX 1
+    13 getblock block *tmp8 :rightX 224.5
+    14 jump *label5 equal *tmp8 @air
+-    * label *label7
+    15 op sub :rightX :rightX 1
+    16 label *label8
+    17 wait 0.000000000000001
+ 
+    19 set :shrinkWall:x :leftX
+    20 sensor *tmp12 switch1 @enabled
+    21 jump *label12 equal *tmp12 false
+-    * label *label106
+-    * label *label107
+    22 op sub *tmp15 .center :leftX
+    23 op abs *tmp16 *tmp15
+    24 jump *label108 greaterThan *tmp16 149
+ 
+    28 set :replaceBlock:to @air
+    29 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+    30 label *label108
+-    * label *label109
+-    * label *label110
+-    * label *label16
+    31 control enabled switch1 false
+    32 label *label12
+-    * label *label13
+-    * label *label11
+    33 # "Function: inline void expandWall(in switch, in out x, in direction, in steps)"
+    34 set :expandWall:x :shrinkWall:x
+    35 sensor *tmp22 switch2 @enabled
+    36 jump *label20 equal *tmp22 false
+-    * label *label111
+-    * label *label112
+    37 op sub *tmp26 .center :shrinkWall:x
+-    * label *label113
+-    * label *label114
+    38 jump *label115 lessThanEq *tmp26 0
+    39 set :replaceBlock:x :shrinkWall:x
+    40 set :replaceBlock:from @air
+ 
+    42 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+    43 op add :expandWall:x :shrinkWall:x 1
+    44 label *label115
+-    * label *label116
+-    * label *label117
+-    * label *label24
+    45 control enabled switch2 false
+    46 label *label20
+-    * label *label21
+-    * label *label19
+    47 # "Function: inline void expandWall(in switch, in out x, in direction, in steps)"
+    48 set :expandWall.1:x :rightX
     49 sensor *tmp34 switch3 @enabled
     50 jump *label30 equal *tmp34 false
+-    * label *label118
+-    * label *label119
     51 jump *label120 always
 -    * jump *label121 always
     52 label *label120
     53 op sub *tmp38 :rightX .center
     54 label *label121
  
+    59 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+    60 op add :expandWall.1:x :rightX -1
+    61 label *label122
+-    * label *label123
+-    * label *label124
+-    * label *label34
+    62 control enabled switch3 false
+    63 label *label30
+-    * label *label31
+-    * label *label29
+    64 # "Function: inline void shrinkWall(in switch, in out x, in direction, in steps)"
+    65 set :shrinkWall.1:x :expandWall.1:x
+    66 sensor *tmp46 switch4 @enabled
+    67 jump *label40 equal *tmp46 false
+-    * label *label125
+-    * label *label126
+    68 op sub *tmp49 .center :expandWall.1:x
+    69 op abs *tmp50 *tmp49
+    70 jump *label127 greaterThan *tmp50 149
+ 
+    74 set :replaceBlock:to @air
+    75 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+    76 label *label127
+-    * label *label128
+-    * label *label129
+-    * label *label44
+    77 control enabled switch4 false
+    78 label *label40
+-    * label *label41
+-    * label *label39
+    79 # "Function: inline void shrinkWall(in switch, in out x, in direction, in steps)"
+    80 set :shrinkWall.2:x :expandWall:x
+    81 sensor *tmp56 switch5 @enabled
+    82 jump *label48 equal *tmp56 false
+-    * label *label582
+-    * label *label583
+    83 op sub *tmp59 .center :expandWall:x
+    84 op abs *tmp60 *tmp59
+    85 jump *label584 greaterThan *tmp60 149
+ 
+    89 set :replaceBlock:to @air
+    90 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+    91 label *label584
+-    * label *label585
+-    * label *label586
+    92 op sub *tmp59 .center :shrinkWall.2:x
+    93 op abs *tmp60 *tmp59
+    94 jump *label587 greaterThan *tmp60 149
+ 
+    98 set :replaceBlock:to @air
+    99 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   100 label *label587
+-    * label *label588
+-    * label *label589
+   101 op sub *tmp59 .center :shrinkWall.2:x
+   102 op abs *tmp60 *tmp59
+   103 jump *label590 greaterThan *tmp60 149
+ 
+   107 set :replaceBlock:to @air
+   108 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   109 label *label590
+-    * label *label591
+-    * label *label592
+   110 op sub *tmp59 .center :shrinkWall.2:x
+   111 op abs *tmp60 *tmp59
+   112 jump *label593 greaterThan *tmp60 149
+ 
+   116 set :replaceBlock:to @air
+   117 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   118 label *label593
+-    * label *label594
+-    * label *label595
+   119 op sub *tmp59 .center :shrinkWall.2:x
+   120 op abs *tmp60 *tmp59
+   121 jump *label596 greaterThan *tmp60 149
+ 
+   125 set :replaceBlock:to @air
+   126 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   127 label *label596
+-    * label *label597
+-    * label *label598
+   128 op sub *tmp59 .center :shrinkWall.2:x
+   129 op abs *tmp60 *tmp59
+   130 jump *label599 greaterThan *tmp60 149
+ 
+   134 set :replaceBlock:to @air
+   135 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   136 label *label599
+-    * label *label600
+-    * label *label601
+   137 op sub *tmp59 .center :shrinkWall.2:x
+   138 op abs *tmp60 *tmp59
+   139 jump *label602 greaterThan *tmp60 149
+ 
+   143 set :replaceBlock:to @air
+   144 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   145 label *label602
+-    * label *label603
+-    * label *label604
+   146 op sub *tmp59 .center :shrinkWall.2:x
+   147 op abs *tmp60 *tmp59
+   148 jump *label605 greaterThan *tmp60 149
+ 
+   152 set :replaceBlock:to @air
+   153 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   154 label *label605
+-    * label *label606
+-    * label *label607
+   155 op sub *tmp59 .center :shrinkWall.2:x
+   156 op abs *tmp60 *tmp59
+   157 jump *label608 greaterThan *tmp60 149
+ 
+   161 set :replaceBlock:to @air
+   162 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   163 label *label608
+-    * label *label609
+-    * label *label610
+   164 op sub *tmp59 .center :shrinkWall.2:x
+   165 op abs *tmp60 *tmp59
+   166 jump *label611 greaterThan *tmp60 149
+ 
+   170 set :replaceBlock:to @air
+   171 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   172 label *label611
+-    * label *label612
+-    * label *label613
+-    * label *label52
+   173 control enabled switch5 false
+   174 label *label48
+-    * label *label49
+-    * label *label47
+   175 # "Function: inline void expandWall(in switch, in out x, in direction, in steps)"
+   176 set :expandWall.2:x :shrinkWall.2:x
+   177 sensor *tmp66 switch6 @enabled
+   178 jump *label56 equal *tmp66 false
+-    * label *label646
+-    * label *label647
+   179 op sub *tmp70 .center :shrinkWall.2:x
+-    * label *label648
+-    * label *label649
+   180 jump *label650 lessThanEq *tmp70 0
+   181 set :replaceBlock:x :shrinkWall.2:x
+   182 set :replaceBlock:from @air
+ 
+   184 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   185 op add :expandWall.2:x :shrinkWall.2:x 1
+   186 label *label650
+-    * label *label651
+-    * label *label652
+   187 op sub *tmp70 .center :expandWall.2:x
+-    * label *label653
+-    * label *label654
+   188 jump *label655 lessThanEq *tmp70 0
+   189 set :replaceBlock:x :expandWall.2:x
+   190 set :replaceBlock:from @air
+ 
+   192 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   193 op add :expandWall.2:x :expandWall.2:x 1
+   194 label *label655
+-    * label *label656
+-    * label *label657
+   195 op sub *tmp70 .center :expandWall.2:x
+-    * label *label658
+-    * label *label659
+   196 jump *label660 lessThanEq *tmp70 0
+   197 set :replaceBlock:x :expandWall.2:x
+   198 set :replaceBlock:from @air
+ 
+   200 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   201 op add :expandWall.2:x :expandWall.2:x 1
+   202 label *label660
+-    * label *label661
+-    * label *label662
+   203 op sub *tmp70 .center :expandWall.2:x
+-    * label *label663
+-    * label *label664
+   204 jump *label665 lessThanEq *tmp70 0
+   205 set :replaceBlock:x :expandWall.2:x
+   206 set :replaceBlock:from @air
+ 
+   208 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   209 op add :expandWall.2:x :expandWall.2:x 1
+   210 label *label665
+-    * label *label666
+-    * label *label667
+   211 op sub *tmp70 .center :expandWall.2:x
+-    * label *label668
+-    * label *label669
+   212 jump *label670 lessThanEq *tmp70 0
+   213 set :replaceBlock:x :expandWall.2:x
+   214 set :replaceBlock:from @air
+ 
+   216 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   217 op add :expandWall.2:x :expandWall.2:x 1
+   218 label *label670
+-    * label *label671
+-    * label *label672
+   219 op sub *tmp70 .center :expandWall.2:x
+-    * label *label673
+-    * label *label674
+   220 jump *label675 lessThanEq *tmp70 0
+   221 set :replaceBlock:x :expandWall.2:x
+   222 set :replaceBlock:from @air
+ 
+   224 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   225 op add :expandWall.2:x :expandWall.2:x 1
+   226 label *label675
+-    * label *label676
+-    * label *label677
+   227 op sub *tmp70 .center :expandWall.2:x
+-    * label *label678
+-    * label *label679
+   228 jump *label680 lessThanEq *tmp70 0
+   229 set :replaceBlock:x :expandWall.2:x
+   230 set :replaceBlock:from @air
+ 
+   232 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   233 op add :expandWall.2:x :expandWall.2:x 1
+   234 label *label680
+-    * label *label681
+-    * label *label682
+   235 op sub *tmp70 .center :expandWall.2:x
+-    * label *label683
+-    * label *label684
+   236 jump *label685 lessThanEq *tmp70 0
+   237 set :replaceBlock:x :expandWall.2:x
+   238 set :replaceBlock:from @air
+ 
+   240 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   241 op add :expandWall.2:x :expandWall.2:x 1
+   242 label *label685
+-    * label *label686
+-    * label *label687
+   243 op sub *tmp70 .center :expandWall.2:x
+-    * label *label688
+-    * label *label689
+   244 jump *label690 lessThanEq *tmp70 0
+   245 set :replaceBlock:x :expandWall.2:x
+   246 set :replaceBlock:from @air
+ 
+   248 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   249 op add :expandWall.2:x :expandWall.2:x 1
+   250 label *label690
+-    * label *label691
+-    * label *label692
+   251 op sub *tmp70 .center :expandWall.2:x
+-    * label *label693
+-    * label *label694
+   252 jump *label695 lessThanEq *tmp70 0
+   253 set :replaceBlock:x :expandWall.2:x
+   254 set :replaceBlock:from @air
+ 
+   256 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   257 op add :expandWall.2:x :expandWall.2:x 1
+   258 label *label695
+-    * label *label696
+-    * label *label697
+-    * label *label60
+   259 control enabled switch6 false
+   260 label *label56
+-    * label *label57
+-    * label *label55
+   261 set :leftX :expandWall.2:x
+   262 # "Function: inline void expandWall(in switch, in out x, in direction, in steps)"
+   263 set :expandWall.3:x :shrinkWall.1:x
    264 sensor *tmp78 switch7 @enabled
    265 jump *label66 equal *tmp78 false
+-    * label *label698
+-    * label *label699
    266 jump *label700 always
 -    * jump *label701 always
    267 label *label700
    268 op sub *tmp82 :shrinkWall.1:x .center
    269 label *label701
  
-   273 set :replaceBlock:to @shrubs
    274 call *label1 :replaceBlock*retaddr :replaceBlock*retval
    275 op add :expandWall.3:x :shrinkWall.1:x -1
--    * label *label702
-   276 jump *label705 always
+   276 label *label702
+-    * label *label703
+-    * label *label704
+   277 jump *label705 always
 -    * jump *label706 always
-   277 label *label705
-   278 op sub *tmp82 :expandWall.3:x .center
-   279 label *label706
+   278 label *label705
+   279 op sub *tmp82 :expandWall.3:x .center
+   280 label *label706
  
-   283 set :replaceBlock:to @shrubs
-   284 call *label1 :replaceBlock*retaddr :replaceBlock*retval
-   285 op add :expandWall.3:x :expandWall.3:x -1
--    * label *label707
-   286 jump *label710 always
+   285 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   286 op add :expandWall.3:x :expandWall.3:x -1
+   287 label *label707
+-    * label *label708
+-    * label *label709
+   288 jump *label710 always
 -    * jump *label711 always
-   287 label *label710
-   288 op sub *tmp82 :expandWall.3:x .center
-   289 label *label711
+   289 label *label710
+   290 op sub *tmp82 :expandWall.3:x .center
+   291 label *label711
  
-   293 set :replaceBlock:to @shrubs
-   294 call *label1 :replaceBlock*retaddr :replaceBlock*retval
-   295 op add :expandWall.3:x :expandWall.3:x -1
--    * label *label712
-   296 jump *label715 always
+   296 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   297 op add :expandWall.3:x :expandWall.3:x -1
+   298 label *label712
+-    * label *label713
+-    * label *label714
+   299 jump *label715 always
 -    * jump *label716 always
-   297 label *label715
-   298 op sub *tmp82 :expandWall.3:x .center
-   299 label *label716
+   300 label *label715
+   301 op sub *tmp82 :expandWall.3:x .center
+   302 label *label716
  
-   303 set :replaceBlock:to @shrubs
-   304 call *label1 :replaceBlock*retaddr :replaceBlock*retval
-   305 op add :expandWall.3:x :expandWall.3:x -1
--    * label *label717
-   306 jump *label720 always
+   307 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   308 op add :expandWall.3:x :expandWall.3:x -1
+   309 label *label717
+-    * label *label718
+-    * label *label719
+   310 jump *label720 always
 -    * jump *label721 always
-   307 label *label720
-   308 op sub *tmp82 :expandWall.3:x .center
-   309 label *label721
+   311 label *label720
+   312 op sub *tmp82 :expandWall.3:x .center
+   313 label *label721
  
-   313 set :replaceBlock:to @shrubs
-   314 call *label1 :replaceBlock*retaddr :replaceBlock*retval
-   315 op add :expandWall.3:x :expandWall.3:x -1
--    * label *label722
-   316 jump *label725 always
+   318 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   319 op add :expandWall.3:x :expandWall.3:x -1
+   320 label *label722
+-    * label *label723
+-    * label *label724
+   321 jump *label725 always
 -    * jump *label726 always
-   317 label *label725
-   318 op sub *tmp82 :expandWall.3:x .center
-   319 label *label726
+   322 label *label725
+   323 op sub *tmp82 :expandWall.3:x .center
+   324 label *label726
  
-   323 set :replaceBlock:to @shrubs
-   324 call *label1 :replaceBlock*retaddr :replaceBlock*retval
-   325 op add :expandWall.3:x :expandWall.3:x -1
--    * label *label727
-   326 jump *label730 always
+   329 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   330 op add :expandWall.3:x :expandWall.3:x -1
+   331 label *label727
+-    * label *label728
+-    * label *label729
+   332 jump *label730 always
 -    * jump *label731 always
-   327 label *label730
-   328 op sub *tmp82 :expandWall.3:x .center
-   329 label *label731
+   333 label *label730
+   334 op sub *tmp82 :expandWall.3:x .center
+   335 label *label731
  
-   333 set :replaceBlock:to @shrubs
-   334 call *label1 :replaceBlock*retaddr :replaceBlock*retval
-   335 op add :expandWall.3:x :expandWall.3:x -1
--    * label *label732
-   336 jump *label735 always
+   340 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   341 op add :expandWall.3:x :expandWall.3:x -1
+   342 label *label732
+-    * label *label733
+-    * label *label734
+   343 jump *label735 always
 -    * jump *label736 always
-   337 label *label735
-   338 op sub *tmp82 :expandWall.3:x .center
-   339 label *label736
+   344 label *label735
+   345 op sub *tmp82 :expandWall.3:x .center
+   346 label *label736
  
-   343 set :replaceBlock:to @shrubs
-   344 call *label1 :replaceBlock*retaddr :replaceBlock*retval
-   345 op add :expandWall.3:x :expandWall.3:x -1
--    * label *label737
-   346 jump *label740 always
+   351 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   352 op add :expandWall.3:x :expandWall.3:x -1
+   353 label *label737
+-    * label *label738
+-    * label *label739
+   354 jump *label740 always
 -    * jump *label741 always
-   347 label *label740
-   348 op sub *tmp82 :expandWall.3:x .center
-   349 label *label741
+   355 label *label740
+   356 op sub *tmp82 :expandWall.3:x .center
+   357 label *label741
  
-   353 set :replaceBlock:to @shrubs
-   354 call *label1 :replaceBlock*retaddr :replaceBlock*retval
-   355 op add :expandWall.3:x :expandWall.3:x -1
--    * label *label742
-   356 jump *label745 always
+   362 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   363 op add :expandWall.3:x :expandWall.3:x -1
+   364 label *label742
+-    * label *label743
+-    * label *label744
+   365 jump *label745 always
 -    * jump *label746 always
-   357 label *label745
-   358 op sub *tmp82 :expandWall.3:x .center
-   359 label *label746
+   366 label *label745
+   367 op sub *tmp82 :expandWall.3:x .center
+   368 label *label746
  
-   513 label *label89
-   514 jump *label85 lessThan :i @links
-   515 stop
--    * label *label83
-   516 jump *label8 always
--    * end
-   517 label *label1
-   518 # "Function: noinline void replaceBlock(in x, in from, in to)"
-   519 getblock block *tmp118 :replaceBlock:x 150
+   373 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   374 op add :expandWall.3:x :expandWall.3:x -1
+   375 label *label747
+-    * label *label748
+-    * label *label749
+-    * label *label70
+   376 control enabled switch7 false
+   377 label *label66
+-    * label *label67
+-    * label *label65
+   378 # "Function: inline void shrinkWall(in switch, in out x, in direction, in steps)"
+   379 set :shrinkWall.3:x :expandWall.3:x
+   380 sensor *tmp90 switch8 @enabled
+   381 jump *label76 equal *tmp90 false
+-    * label *label614
+-    * label *label615
+   382 op sub *tmp93 .center :expandWall.3:x
+   383 op abs *tmp94 *tmp93
+   384 jump *label616 greaterThan *tmp94 149
  
-  1117 setblock block :replaceBlock:to :replaceBlock:x 299 0 0
-  1118 label *label579
-  1119 return :replaceBlock*retaddr
+   388 set :replaceBlock:to @air
+   389 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   390 label *label616
+-    * label *label617
+-    * label *label618
+   391 op sub *tmp93 .center :shrinkWall.3:x
+   392 op abs *tmp94 *tmp93
+   393 jump *label619 greaterThan *tmp94 149
+ 
+   397 set :replaceBlock:to @air
+   398 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   399 label *label619
+-    * label *label620
+-    * label *label621
+   400 op sub *tmp93 .center :shrinkWall.3:x
+   401 op abs *tmp94 *tmp93
+   402 jump *label622 greaterThan *tmp94 149
+ 
+   406 set :replaceBlock:to @air
+   407 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   408 label *label622
+-    * label *label623
+-    * label *label624
+   409 op sub *tmp93 .center :shrinkWall.3:x
+   410 op abs *tmp94 *tmp93
+   411 jump *label625 greaterThan *tmp94 149
+ 
+   415 set :replaceBlock:to @air
+   416 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   417 label *label625
+-    * label *label626
+-    * label *label627
+   418 op sub *tmp93 .center :shrinkWall.3:x
+   419 op abs *tmp94 *tmp93
+   420 jump *label628 greaterThan *tmp94 149
+ 
+   424 set :replaceBlock:to @air
+   425 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   426 label *label628
+-    * label *label629
+-    * label *label630
+   427 op sub *tmp93 .center :shrinkWall.3:x
+   428 op abs *tmp94 *tmp93
+   429 jump *label631 greaterThan *tmp94 149
+ 
+   433 set :replaceBlock:to @air
+   434 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   435 label *label631
+-    * label *label632
+-    * label *label633
+   436 op sub *tmp93 .center :shrinkWall.3:x
+   437 op abs *tmp94 *tmp93
+   438 jump *label634 greaterThan *tmp94 149
+ 
+   442 set :replaceBlock:to @air
+   443 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   444 label *label634
+-    * label *label635
+-    * label *label636
+   445 op sub *tmp93 .center :shrinkWall.3:x
+   446 op abs *tmp94 *tmp93
+   447 jump *label637 greaterThan *tmp94 149
+ 
+   451 set :replaceBlock:to @air
+   452 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   453 label *label637
+-    * label *label638
+-    * label *label639
+   454 op sub *tmp93 .center :shrinkWall.3:x
+   455 op abs *tmp94 *tmp93
+   456 jump *label640 greaterThan *tmp94 149
+ 
+   460 set :replaceBlock:to @air
+   461 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   462 label *label640
+-    * label *label641
+-    * label *label642
+   463 op sub *tmp93 .center :shrinkWall.3:x
+   464 op abs *tmp94 *tmp93
+   465 jump *label643 greaterThan *tmp94 149
+ 
+   469 set :replaceBlock:to @air
+   470 call *label1 :replaceBlock*retaddr :replaceBlock*retval
+   471 label *label643
+-    * label *label644
+-    * label *label645
+-    * label *label80
+   472 control enabled switch8 false
+   473 label *label76
+-    * label *label77
+-    * label *label75
+   474 set :rightX :shrinkWall.3:x
+   475 op sub *tmp99 .center :expandWall.2:x
+   476 op add *tmp100 *tmp99 0.5
+-    * label *label750
+   477 # "Function: void displayNumber(in display, in number)"
+   478 draw reset
+   479 sensor *tmp114 display1 @displayWidth
+ 
+   489 print *tmp100
+   490 draw print 0.25 2 @center
+   491 drawflush display1
+-    * label *label751
+   492 op sub *tmp101 :shrinkWall.3:x .center
+   493 op add *tmp102 *tmp101 0.5
+-    * label *label752
+   494 # "Function: void displayNumber(in display, in number)"
+   495 draw reset
+   496 sensor *tmp114 display2 @displayWidth
+ 
+   506 print *tmp102
+   507 draw print 0.25 2 @center
+   508 drawflush display2
+-    * label *label753
+   509 radar enemy any any distance @this 0 *tmp103
+   510 jump *label83 equal *tmp103 null
+   511 set :i 0
+ 
+   520 sensor *tmp112 :block @y
+   521 setblock block @air *tmp111 *tmp112 0 0
+   522 label *label89
+-    * label *label86
+   523 jump *label85 lessThan :i @links
+-    * label *label87
+   524 stop
+   525 label *label83
+-    * label *label84
+-    * label *label9
+   526 jump *label8 always
+-    * label *label10
 -    * end
+   527 label *label1
+   528 # "Function: noinline void replaceBlock(in x, in from, in to)"
+-    * label *label130
+-    * label *label131
+   529 getblock block *tmp118 :replaceBlock:x 150
+   530 jump *label132 notEqual *tmp118 :replaceBlock:from
+   531 setblock block :replaceBlock:to :replaceBlock:x 150 0 0
+   532 label *label132
+-    * label *label133
+-    * label *label134
+   533 getblock block *tmp118 :replaceBlock:x 151
+   534 jump *label135 notEqual *tmp118 :replaceBlock:from
+   535 setblock block :replaceBlock:to :replaceBlock:x 151 0 0
+   536 label *label135
+-    * label *label136
+-    * label *label137
+   537 getblock block *tmp118 :replaceBlock:x 152
+   538 jump *label138 notEqual *tmp118 :replaceBlock:from
+   539 setblock block :replaceBlock:to :replaceBlock:x 152 0 0
+   540 label *label138
+-    * label *label139
+-    * label *label140
+   541 getblock block *tmp118 :replaceBlock:x 153
+   542 jump *label141 notEqual *tmp118 :replaceBlock:from
+   543 setblock block :replaceBlock:to :replaceBlock:x 153 0 0
+   544 label *label141
+-    * label *label142
+-    * label *label143
+   545 getblock block *tmp118 :replaceBlock:x 154
+   546 jump *label144 notEqual *tmp118 :replaceBlock:from
+   547 setblock block :replaceBlock:to :replaceBlock:x 154 0 0
+   548 label *label144
+-    * label *label145
+-    * label *label146
+   549 getblock block *tmp118 :replaceBlock:x 155
+   550 jump *label147 notEqual *tmp118 :replaceBlock:from
+   551 setblock block :replaceBlock:to :replaceBlock:x 155 0 0
+   552 label *label147
+-    * label *label148
+-    * label *label149
+   553 getblock block *tmp118 :replaceBlock:x 156
+   554 jump *label150 notEqual *tmp118 :replaceBlock:from
+   555 setblock block :replaceBlock:to :replaceBlock:x 156 0 0
+   556 label *label150
+-    * label *label151
+-    * label *label152
+   557 getblock block *tmp118 :replaceBlock:x 157
+   558 jump *label153 notEqual *tmp118 :replaceBlock:from
+   559 setblock block :replaceBlock:to :replaceBlock:x 157 0 0
+   560 label *label153
+-    * label *label154
+-    * label *label155
+   561 getblock block *tmp118 :replaceBlock:x 158
+   562 jump *label156 notEqual *tmp118 :replaceBlock:from
+   563 setblock block :replaceBlock:to :replaceBlock:x 158 0 0
+   564 label *label156
+-    * label *label157
+-    * label *label158
+   565 getblock block *tmp118 :replaceBlock:x 159
+   566 jump *label159 notEqual *tmp118 :replaceBlock:from
+   567 setblock block :replaceBlock:to :replaceBlock:x 159 0 0
+   568 label *label159
+-    * label *label160
+-    * label *label161
+   569 getblock block *tmp118 :replaceBlock:x 160
+   570 jump *label162 notEqual *tmp118 :replaceBlock:from
+   571 setblock block :replaceBlock:to :replaceBlock:x 160 0 0
+   572 label *label162
+-    * label *label163
+-    * label *label164
+   573 getblock block *tmp118 :replaceBlock:x 161
+   574 jump *label165 notEqual *tmp118 :replaceBlock:from
+   575 setblock block :replaceBlock:to :replaceBlock:x 161 0 0
+   576 label *label165
+-    * label *label166
+-    * label *label167
+   577 getblock block *tmp118 :replaceBlock:x 162
+   578 jump *label168 notEqual *tmp118 :replaceBlock:from
+   579 setblock block :replaceBlock:to :replaceBlock:x 162 0 0
+   580 label *label168
+-    * label *label169
+-    * label *label170
+   581 getblock block *tmp118 :replaceBlock:x 163
+   582 jump *label171 notEqual *tmp118 :replaceBlock:from
+   583 setblock block :replaceBlock:to :replaceBlock:x 163 0 0
+   584 label *label171
+-    * label *label172
+-    * label *label173
+   585 getblock block *tmp118 :replaceBlock:x 164
+   586 jump *label174 notEqual *tmp118 :replaceBlock:from
+   587 setblock block :replaceBlock:to :replaceBlock:x 164 0 0
+   588 label *label174
+-    * label *label175
+-    * label *label176
+   589 getblock block *tmp118 :replaceBlock:x 165
+   590 jump *label177 notEqual *tmp118 :replaceBlock:from
+   591 setblock block :replaceBlock:to :replaceBlock:x 165 0 0
+   592 label *label177
+-    * label *label178
+-    * label *label179
+   593 getblock block *tmp118 :replaceBlock:x 166
+   594 jump *label180 notEqual *tmp118 :replaceBlock:from
+   595 setblock block :replaceBlock:to :replaceBlock:x 166 0 0
+   596 label *label180
+-    * label *label181
+-    * label *label182
+   597 getblock block *tmp118 :replaceBlock:x 167
+   598 jump *label183 notEqual *tmp118 :replaceBlock:from
+   599 setblock block :replaceBlock:to :replaceBlock:x 167 0 0
+   600 label *label183
+-    * label *label184
+-    * label *label185
+   601 getblock block *tmp118 :replaceBlock:x 168
+   602 jump *label186 notEqual *tmp118 :replaceBlock:from
+   603 setblock block :replaceBlock:to :replaceBlock:x 168 0 0
+   604 label *label186
+-    * label *label187
+-    * label *label188
+   605 getblock block *tmp118 :replaceBlock:x 169
+   606 jump *label189 notEqual *tmp118 :replaceBlock:from
+   607 setblock block :replaceBlock:to :replaceBlock:x 169 0 0
+   608 label *label189
+-    * label *label190
+-    * label *label191
+   609 getblock block *tmp118 :replaceBlock:x 170
+   610 jump *label192 notEqual *tmp118 :replaceBlock:from
+   611 setblock block :replaceBlock:to :replaceBlock:x 170 0 0
+   612 label *label192
+-    * label *label193
+-    * label *label194
+   613 getblock block *tmp118 :replaceBlock:x 171
+   614 jump *label195 notEqual *tmp118 :replaceBlock:from
+   615 setblock block :replaceBlock:to :replaceBlock:x 171 0 0
+   616 label *label195
+-    * label *label196
+-    * label *label197
+   617 getblock block *tmp118 :replaceBlock:x 172
+   618 jump *label198 notEqual *tmp118 :replaceBlock:from
+   619 setblock block :replaceBlock:to :replaceBlock:x 172 0 0
+   620 label *label198
+-    * label *label199
+-    * label *label200
+   621 getblock block *tmp118 :replaceBlock:x 173
+   622 jump *label201 notEqual *tmp118 :replaceBlock:from
+   623 setblock block :replaceBlock:to :replaceBlock:x 173 0 0
+   624 label *label201
+-    * label *label202
+-    * label *label203
+   625 getblock block *tmp118 :replaceBlock:x 174
+   626 jump *label204 notEqual *tmp118 :replaceBlock:from
+   627 setblock block :replaceBlock:to :replaceBlock:x 174 0 0
+   628 label *label204
+-    * label *label205
+-    * label *label206
+   629 getblock block *tmp118 :replaceBlock:x 175
+   630 jump *label207 notEqual *tmp118 :replaceBlock:from
+   631 setblock block :replaceBlock:to :replaceBlock:x 175 0 0
+   632 label *label207
+-    * label *label208
+-    * label *label209
+   633 getblock block *tmp118 :replaceBlock:x 176
+   634 jump *label210 notEqual *tmp118 :replaceBlock:from
+   635 setblock block :replaceBlock:to :replaceBlock:x 176 0 0
+   636 label *label210
+-    * label *label211
+-    * label *label212
+   637 getblock block *tmp118 :replaceBlock:x 177
+   638 jump *label213 notEqual *tmp118 :replaceBlock:from
+   639 setblock block :replaceBlock:to :replaceBlock:x 177 0 0
+   640 label *label213
+-    * label *label214
+-    * label *label215
+   641 getblock block *tmp118 :replaceBlock:x 178
+   642 jump *label216 notEqual *tmp118 :replaceBlock:from
+   643 setblock block :replaceBlock:to :replaceBlock:x 178 0 0
+   644 label *label216
+-    * label *label217
+-    * label *label218
+   645 getblock block *tmp118 :replaceBlock:x 179
+   646 jump *label219 notEqual *tmp118 :replaceBlock:from
+   647 setblock block :replaceBlock:to :replaceBlock:x 179 0 0
+   648 label *label219
+-    * label *label220
+-    * label *label221
+   649 getblock block *tmp118 :replaceBlock:x 180
+   650 jump *label222 notEqual *tmp118 :replaceBlock:from
+   651 setblock block :replaceBlock:to :replaceBlock:x 180 0 0
+   652 label *label222
+-    * label *label223
+-    * label *label224
+   653 getblock block *tmp118 :replaceBlock:x 181
+   654 jump *label225 notEqual *tmp118 :replaceBlock:from
+   655 setblock block :replaceBlock:to :replaceBlock:x 181 0 0
+   656 label *label225
+-    * label *label226
+-    * label *label227
+   657 getblock block *tmp118 :replaceBlock:x 182
+   658 jump *label228 notEqual *tmp118 :replaceBlock:from
+   659 setblock block :replaceBlock:to :replaceBlock:x 182 0 0
+   660 label *label228
+-    * label *label229
+-    * label *label230
+   661 getblock block *tmp118 :replaceBlock:x 183
+   662 jump *label231 notEqual *tmp118 :replaceBlock:from
+   663 setblock block :replaceBlock:to :replaceBlock:x 183 0 0
+   664 label *label231
+-    * label *label232
+-    * label *label233
+   665 getblock block *tmp118 :replaceBlock:x 184
+   666 jump *label234 notEqual *tmp118 :replaceBlock:from
+   667 setblock block :replaceBlock:to :replaceBlock:x 184 0 0
+   668 label *label234
+-    * label *label235
+-    * label *label236
+   669 getblock block *tmp118 :replaceBlock:x 185
+   670 jump *label237 notEqual *tmp118 :replaceBlock:from
+   671 setblock block :replaceBlock:to :replaceBlock:x 185 0 0
+   672 label *label237
+-    * label *label238
+-    * label *label239
+   673 getblock block *tmp118 :replaceBlock:x 186
+   674 jump *label240 notEqual *tmp118 :replaceBlock:from
+   675 setblock block :replaceBlock:to :replaceBlock:x 186 0 0
+   676 label *label240
+-    * label *label241
+-    * label *label242
+   677 getblock block *tmp118 :replaceBlock:x 187
+   678 jump *label243 notEqual *tmp118 :replaceBlock:from
+   679 setblock block :replaceBlock:to :replaceBlock:x 187 0 0
+   680 label *label243
+-    * label *label244
+-    * label *label245
+   681 getblock block *tmp118 :replaceBlock:x 188
+   682 jump *label246 notEqual *tmp118 :replaceBlock:from
+   683 setblock block :replaceBlock:to :replaceBlock:x 188 0 0
+   684 label *label246
+-    * label *label247
+-    * label *label248
+   685 getblock block *tmp118 :replaceBlock:x 189
+   686 jump *label249 notEqual *tmp118 :replaceBlock:from
+   687 setblock block :replaceBlock:to :replaceBlock:x 189 0 0
+   688 label *label249
+-    * label *label250
+-    * label *label251
+   689 getblock block *tmp118 :replaceBlock:x 190
+   690 jump *label252 notEqual *tmp118 :replaceBlock:from
+   691 setblock block :replaceBlock:to :replaceBlock:x 190 0 0
+   692 label *label252
+-    * label *label253
+-    * label *label254
+   693 getblock block *tmp118 :replaceBlock:x 191
+   694 jump *label255 notEqual *tmp118 :replaceBlock:from
+   695 setblock block :replaceBlock:to :replaceBlock:x 191 0 0
+   696 label *label255
+-    * label *label256
+-    * label *label257
+   697 getblock block *tmp118 :replaceBlock:x 192
+   698 jump *label258 notEqual *tmp118 :replaceBlock:from
+   699 setblock block :replaceBlock:to :replaceBlock:x 192 0 0
+   700 label *label258
+-    * label *label259
+-    * label *label260
+   701 getblock block *tmp118 :replaceBlock:x 193
+   702 jump *label261 notEqual *tmp118 :replaceBlock:from
+   703 setblock block :replaceBlock:to :replaceBlock:x 193 0 0
+   704 label *label261
+-    * label *label262
+-    * label *label263
+   705 getblock block *tmp118 :replaceBlock:x 194
+   706 jump *label264 notEqual *tmp118 :replaceBlock:from
+   707 setblock block :replaceBlock:to :replaceBlock:x 194 0 0
+   708 label *label264
+-    * label *label265
+-    * label *label266
+   709 getblock block *tmp118 :replaceBlock:x 195
+   710 jump *label267 notEqual *tmp118 :replaceBlock:from
+   711 setblock block :replaceBlock:to :replaceBlock:x 195 0 0
+   712 label *label267
+-    * label *label268
+-    * label *label269
+   713 getblock block *tmp118 :replaceBlock:x 196
+   714 jump *label270 notEqual *tmp118 :replaceBlock:from
+   715 setblock block :replaceBlock:to :replaceBlock:x 196 0 0
+   716 label *label270
+-    * label *label271
+-    * label *label272
+   717 getblock block *tmp118 :replaceBlock:x 197
+   718 jump *label273 notEqual *tmp118 :replaceBlock:from
+   719 setblock block :replaceBlock:to :replaceBlock:x 197 0 0
+   720 label *label273
+-    * label *label274
+-    * label *label275
+   721 getblock block *tmp118 :replaceBlock:x 198
+   722 jump *label276 notEqual *tmp118 :replaceBlock:from
+   723 setblock block :replaceBlock:to :replaceBlock:x 198 0 0
+   724 label *label276
+-    * label *label277
+-    * label *label278
+   725 getblock block *tmp118 :replaceBlock:x 199
+   726 jump *label279 notEqual *tmp118 :replaceBlock:from
+   727 setblock block :replaceBlock:to :replaceBlock:x 199 0 0
+   728 label *label279
+-    * label *label280
+-    * label *label281
+   729 getblock block *tmp118 :replaceBlock:x 200
+   730 jump *label282 notEqual *tmp118 :replaceBlock:from
+   731 setblock block :replaceBlock:to :replaceBlock:x 200 0 0
+   732 label *label282
+-    * label *label283
+-    * label *label284
+   733 getblock block *tmp118 :replaceBlock:x 201
+   734 jump *label285 notEqual *tmp118 :replaceBlock:from
+   735 setblock block :replaceBlock:to :replaceBlock:x 201 0 0
+   736 label *label285
+-    * label *label286
+-    * label *label287
+   737 getblock block *tmp118 :replaceBlock:x 202
+   738 jump *label288 notEqual *tmp118 :replaceBlock:from
+   739 setblock block :replaceBlock:to :replaceBlock:x 202 0 0
+   740 label *label288
+-    * label *label289
+-    * label *label290
+   741 getblock block *tmp118 :replaceBlock:x 203
+   742 jump *label291 notEqual *tmp118 :replaceBlock:from
+   743 setblock block :replaceBlock:to :replaceBlock:x 203 0 0
+   744 label *label291
+-    * label *label292
+-    * label *label293
+   745 getblock block *tmp118 :replaceBlock:x 204
+   746 jump *label294 notEqual *tmp118 :replaceBlock:from
+   747 setblock block :replaceBlock:to :replaceBlock:x 204 0 0
+   748 label *label294
+-    * label *label295
+-    * label *label296
+   749 getblock block *tmp118 :replaceBlock:x 205
+   750 jump *label297 notEqual *tmp118 :replaceBlock:from
+   751 setblock block :replaceBlock:to :replaceBlock:x 205 0 0
+   752 label *label297
+-    * label *label298
+-    * label *label299
+   753 getblock block *tmp118 :replaceBlock:x 206
+   754 jump *label300 notEqual *tmp118 :replaceBlock:from
+   755 setblock block :replaceBlock:to :replaceBlock:x 206 0 0
+   756 label *label300
+-    * label *label301
+-    * label *label302
+   757 getblock block *tmp118 :replaceBlock:x 207
+   758 jump *label303 notEqual *tmp118 :replaceBlock:from
+   759 setblock block :replaceBlock:to :replaceBlock:x 207 0 0
+   760 label *label303
+-    * label *label304
+-    * label *label305
+   761 getblock block *tmp118 :replaceBlock:x 208
+   762 jump *label306 notEqual *tmp118 :replaceBlock:from
+   763 setblock block :replaceBlock:to :replaceBlock:x 208 0 0
+   764 label *label306
+-    * label *label307
+-    * label *label308
+   765 getblock block *tmp118 :replaceBlock:x 209
+   766 jump *label309 notEqual *tmp118 :replaceBlock:from
+   767 setblock block :replaceBlock:to :replaceBlock:x 209 0 0
+   768 label *label309
+-    * label *label310
+-    * label *label311
+   769 getblock block *tmp118 :replaceBlock:x 210
+   770 jump *label312 notEqual *tmp118 :replaceBlock:from
+   771 setblock block :replaceBlock:to :replaceBlock:x 210 0 0
+   772 label *label312
+-    * label *label313
+-    * label *label314
+   773 getblock block *tmp118 :replaceBlock:x 211
+   774 jump *label315 notEqual *tmp118 :replaceBlock:from
+   775 setblock block :replaceBlock:to :replaceBlock:x 211 0 0
+   776 label *label315
+-    * label *label316
+-    * label *label317
+   777 getblock block *tmp118 :replaceBlock:x 212
+   778 jump *label318 notEqual *tmp118 :replaceBlock:from
+   779 setblock block :replaceBlock:to :replaceBlock:x 212 0 0
+   780 label *label318
+-    * label *label319
+-    * label *label320
+   781 getblock block *tmp118 :replaceBlock:x 213
+   782 jump *label321 notEqual *tmp118 :replaceBlock:from
+   783 setblock block :replaceBlock:to :replaceBlock:x 213 0 0
+   784 label *label321
+-    * label *label322
+-    * label *label323
+   785 getblock block *tmp118 :replaceBlock:x 214
+   786 jump *label324 notEqual *tmp118 :replaceBlock:from
+   787 setblock block :replaceBlock:to :replaceBlock:x 214 0 0
+   788 label *label324
+-    * label *label325
+-    * label *label326
+   789 getblock block *tmp118 :replaceBlock:x 215
+   790 jump *label327 notEqual *tmp118 :replaceBlock:from
+   791 setblock block :replaceBlock:to :replaceBlock:x 215 0 0
+   792 label *label327
+-    * label *label328
+-    * label *label329
+   793 getblock block *tmp118 :replaceBlock:x 216
+   794 jump *label330 notEqual *tmp118 :replaceBlock:from
+   795 setblock block :replaceBlock:to :replaceBlock:x 216 0 0
+   796 label *label330
+-    * label *label331
+-    * label *label332
+   797 getblock block *tmp118 :replaceBlock:x 217
+   798 jump *label333 notEqual *tmp118 :replaceBlock:from
+   799 setblock block :replaceBlock:to :replaceBlock:x 217 0 0
+   800 label *label333
+-    * label *label334
+-    * label *label335
+   801 getblock block *tmp118 :replaceBlock:x 218
+   802 jump *label336 notEqual *tmp118 :replaceBlock:from
+   803 setblock block :replaceBlock:to :replaceBlock:x 218 0 0
+   804 label *label336
+-    * label *label337
+-    * label *label338
+   805 getblock block *tmp118 :replaceBlock:x 219
+   806 jump *label339 notEqual *tmp118 :replaceBlock:from
+   807 setblock block :replaceBlock:to :replaceBlock:x 219 0 0
+   808 label *label339
+-    * label *label340
+-    * label *label341
+   809 getblock block *tmp118 :replaceBlock:x 220
+   810 jump *label342 notEqual *tmp118 :replaceBlock:from
+   811 setblock block :replaceBlock:to :replaceBlock:x 220 0 0
+   812 label *label342
+-    * label *label343
+-    * label *label344
+   813 getblock block *tmp118 :replaceBlock:x 221
+   814 jump *label345 notEqual *tmp118 :replaceBlock:from
+   815 setblock block :replaceBlock:to :replaceBlock:x 221 0 0
+   816 label *label345
+-    * label *label346
+-    * label *label347
+   817 getblock block *tmp118 :replaceBlock:x 222
+   818 jump *label348 notEqual *tmp118 :replaceBlock:from
+   819 setblock block :replaceBlock:to :replaceBlock:x 222 0 0
+   820 label *label348
+-    * label *label349
+-    * label *label350
+   821 getblock block *tmp118 :replaceBlock:x 223
+   822 jump *label351 notEqual *tmp118 :replaceBlock:from
+   823 setblock block :replaceBlock:to :replaceBlock:x 223 0 0
+   824 label *label351
+-    * label *label352
+-    * label *label353
+   825 getblock block *tmp118 :replaceBlock:x 224
+   826 jump *label354 notEqual *tmp118 :replaceBlock:from
+   827 setblock block :replaceBlock:to :replaceBlock:x 224 0 0
+   828 label *label354
+-    * label *label355
+-    * label *label356
+   829 getblock block *tmp118 :replaceBlock:x 225
+   830 jump *label357 notEqual *tmp118 :replaceBlock:from
+   831 setblock block :replaceBlock:to :replaceBlock:x 225 0 0
+   832 label *label357
+-    * label *label358
+-    * label *label359
+   833 getblock block *tmp118 :replaceBlock:x 226
+   834 jump *label360 notEqual *tmp118 :replaceBlock:from
+   835 setblock block :replaceBlock:to :replaceBlock:x 226 0 0
+   836 label *label360
+-    * label *label361
+-    * label *label362
+   837 getblock block *tmp118 :replaceBlock:x 227
+   838 jump *label363 notEqual *tmp118 :replaceBlock:from
+   839 setblock block :replaceBlock:to :replaceBlock:x 227 0 0
+   840 label *label363
+-    * label *label364
+-    * label *label365
+   841 getblock block *tmp118 :replaceBlock:x 228
+   842 jump *label366 notEqual *tmp118 :replaceBlock:from
+   843 setblock block :replaceBlock:to :replaceBlock:x 228 0 0
+   844 label *label366
+-    * label *label367
+-    * label *label368
+   845 getblock block *tmp118 :replaceBlock:x 229
+   846 jump *label369 notEqual *tmp118 :replaceBlock:from
+   847 setblock block :replaceBlock:to :replaceBlock:x 229 0 0
+   848 label *label369
+-    * label *label370
+-    * label *label371
+   849 getblock block *tmp118 :replaceBlock:x 230
+   850 jump *label372 notEqual *tmp118 :replaceBlock:from
+   851 setblock block :replaceBlock:to :replaceBlock:x 230 0 0
+   852 label *label372
+-    * label *label373
+-    * label *label374
+   853 getblock block *tmp118 :replaceBlock:x 231
+   854 jump *label375 notEqual *tmp118 :replaceBlock:from
+   855 setblock block :replaceBlock:to :replaceBlock:x 231 0 0
+   856 label *label375
+-    * label *label376
+-    * label *label377
+   857 getblock block *tmp118 :replaceBlock:x 232
+   858 jump *label378 notEqual *tmp118 :replaceBlock:from
+   859 setblock block :replaceBlock:to :replaceBlock:x 232 0 0
+   860 label *label378
+-    * label *label379
+-    * label *label380
+   861 getblock block *tmp118 :replaceBlock:x 233
+   862 jump *label381 notEqual *tmp118 :replaceBlock:from
+   863 setblock block :replaceBlock:to :replaceBlock:x 233 0 0
+   864 label *label381
+-    * label *label382
+-    * label *label383
+   865 getblock block *tmp118 :replaceBlock:x 234
+   866 jump *label384 notEqual *tmp118 :replaceBlock:from
+   867 setblock block :replaceBlock:to :replaceBlock:x 234 0 0
+   868 label *label384
+-    * label *label385
+-    * label *label386
+   869 getblock block *tmp118 :replaceBlock:x 235
+   870 jump *label387 notEqual *tmp118 :replaceBlock:from
+   871 setblock block :replaceBlock:to :replaceBlock:x 235 0 0
+   872 label *label387
+-    * label *label388
+-    * label *label389
+   873 getblock block *tmp118 :replaceBlock:x 236
+   874 jump *label390 notEqual *tmp118 :replaceBlock:from
+   875 setblock block :replaceBlock:to :replaceBlock:x 236 0 0
+   876 label *label390
+-    * label *label391
+-    * label *label392
+   877 getblock block *tmp118 :replaceBlock:x 237
+   878 jump *label393 notEqual *tmp118 :replaceBlock:from
+   879 setblock block :replaceBlock:to :replaceBlock:x 237 0 0
+   880 label *label393
+-    * label *label394
+-    * label *label395
+   881 getblock block *tmp118 :replaceBlock:x 238
+   882 jump *label396 notEqual *tmp118 :replaceBlock:from
+   883 setblock block :replaceBlock:to :replaceBlock:x 238 0 0
+   884 label *label396
+-    * label *label397
+-    * label *label398
+   885 getblock block *tmp118 :replaceBlock:x 239
+   886 jump *label399 notEqual *tmp118 :replaceBlock:from
+   887 setblock block :replaceBlock:to :replaceBlock:x 239 0 0
+   888 label *label399
+-    * label *label400
+-    * label *label401
+   889 getblock block *tmp118 :replaceBlock:x 240
+   890 jump *label402 notEqual *tmp118 :replaceBlock:from
+   891 setblock block :replaceBlock:to :replaceBlock:x 240 0 0
+   892 label *label402
+-    * label *label403
+-    * label *label404
+   893 getblock block *tmp118 :replaceBlock:x 241
+   894 jump *label405 notEqual *tmp118 :replaceBlock:from
+   895 setblock block :replaceBlock:to :replaceBlock:x 241 0 0
+   896 label *label405
+-    * label *label406
+-    * label *label407
+   897 getblock block *tmp118 :replaceBlock:x 242
+   898 jump *label408 notEqual *tmp118 :replaceBlock:from
+   899 setblock block :replaceBlock:to :replaceBlock:x 242 0 0
+   900 label *label408
+-    * label *label409
+-    * label *label410
+   901 getblock block *tmp118 :replaceBlock:x 243
+   902 jump *label411 notEqual *tmp118 :replaceBlock:from
+   903 setblock block :replaceBlock:to :replaceBlock:x 243 0 0
+   904 label *label411
+-    * label *label412
+-    * label *label413
+   905 getblock block *tmp118 :replaceBlock:x 244
+   906 jump *label414 notEqual *tmp118 :replaceBlock:from
+   907 setblock block :replaceBlock:to :replaceBlock:x 244 0 0
+   908 label *label414
+-    * label *label415
+-    * label *label416
+   909 getblock block *tmp118 :replaceBlock:x 245
+   910 jump *label417 notEqual *tmp118 :replaceBlock:from
+   911 setblock block :replaceBlock:to :replaceBlock:x 245 0 0
+   912 label *label417
+-    * label *label418
+-    * label *label419
+   913 getblock block *tmp118 :replaceBlock:x 246
+   914 jump *label420 notEqual *tmp118 :replaceBlock:from
+   915 setblock block :replaceBlock:to :replaceBlock:x 246 0 0
+   916 label *label420
+-    * label *label421
+-    * label *label422
+   917 getblock block *tmp118 :replaceBlock:x 247
+   918 jump *label423 notEqual *tmp118 :replaceBlock:from
+   919 setblock block :replaceBlock:to :replaceBlock:x 247 0 0
+   920 label *label423
+-    * label *label424
+-    * label *label425
+   921 getblock block *tmp118 :replaceBlock:x 248
+   922 jump *label426 notEqual *tmp118 :replaceBlock:from
+   923 setblock block :replaceBlock:to :replaceBlock:x 248 0 0
+   924 label *label426
+-    * label *label427
+-    * label *label428
+   925 getblock block *tmp118 :replaceBlock:x 249
+   926 jump *label429 notEqual *tmp118 :replaceBlock:from
+   927 setblock block :replaceBlock:to :replaceBlock:x 249 0 0
+   928 label *label429
+-    * label *label430
+-    * label *label431
+   929 getblock block *tmp118 :replaceBlock:x 250
+   930 jump *label432 notEqual *tmp118 :replaceBlock:from
+   931 setblock block :replaceBlock:to :replaceBlock:x 250 0 0
+   932 label *label432
+-    * label *label433
+-    * label *label434
+   933 getblock block *tmp118 :replaceBlock:x 251
+   934 jump *label435 notEqual *tmp118 :replaceBlock:from
+   935 setblock block :replaceBlock:to :replaceBlock:x 251 0 0
+   936 label *label435
+-    * label *label436
+-    * label *label437
+   937 getblock block *tmp118 :replaceBlock:x 252
+   938 jump *label438 notEqual *tmp118 :replaceBlock:from
+   939 setblock block :replaceBlock:to :replaceBlock:x 252 0 0
+   940 label *label438
+-    * label *label439
+-    * label *label440
+   941 getblock block *tmp118 :replaceBlock:x 253
+   942 jump *label441 notEqual *tmp118 :replaceBlock:from
+   943 setblock block :replaceBlock:to :replaceBlock:x 253 0 0
+   944 label *label441
+-    * label *label442
+-    * label *label443
+   945 getblock block *tmp118 :replaceBlock:x 254
+   946 jump *label444 notEqual *tmp118 :replaceBlock:from
+   947 setblock block :replaceBlock:to :replaceBlock:x 254 0 0
+   948 label *label444
+-    * label *label445
+-    * label *label446
+   949 getblock block *tmp118 :replaceBlock:x 255
+   950 jump *label447 notEqual *tmp118 :replaceBlock:from
+   951 setblock block :replaceBlock:to :replaceBlock:x 255 0 0
+   952 label *label447
+-    * label *label448
+-    * label *label449
+   953 getblock block *tmp118 :replaceBlock:x 256
+   954 jump *label450 notEqual *tmp118 :replaceBlock:from
+   955 setblock block :replaceBlock:to :replaceBlock:x 256 0 0
+   956 label *label450
+-    * label *label451
+-    * label *label452
+   957 getblock block *tmp118 :replaceBlock:x 257
+   958 jump *label453 notEqual *tmp118 :replaceBlock:from
+   959 setblock block :replaceBlock:to :replaceBlock:x 257 0 0
+   960 label *label453
+-    * label *label454
+-    * label *label455
+   961 getblock block *tmp118 :replaceBlock:x 258
+   962 jump *label456 notEqual *tmp118 :replaceBlock:from
+   963 setblock block :replaceBlock:to :replaceBlock:x 258 0 0
+   964 label *label456
+-    * label *label457
+-    * label *label458
+   965 getblock block *tmp118 :replaceBlock:x 259
+   966 jump *label459 notEqual *tmp118 :replaceBlock:from
+   967 setblock block :replaceBlock:to :replaceBlock:x 259 0 0
+   968 label *label459
+-    * label *label460
+-    * label *label461
+   969 getblock block *tmp118 :replaceBlock:x 260
+   970 jump *label462 notEqual *tmp118 :replaceBlock:from
+   971 setblock block :replaceBlock:to :replaceBlock:x 260 0 0
+   972 label *label462
+-    * label *label463
+-    * label *label464
+   973 getblock block *tmp118 :replaceBlock:x 261
+   974 jump *label465 notEqual *tmp118 :replaceBlock:from
+   975 setblock block :replaceBlock:to :replaceBlock:x 261 0 0
+   976 label *label465
+-    * label *label466
+-    * label *label467
+   977 getblock block *tmp118 :replaceBlock:x 262
+   978 jump *label468 notEqual *tmp118 :replaceBlock:from
+   979 setblock block :replaceBlock:to :replaceBlock:x 262 0 0
+   980 label *label468
+-    * label *label469
+-    * label *label470
+   981 getblock block *tmp118 :replaceBlock:x 263
+   982 jump *label471 notEqual *tmp118 :replaceBlock:from
+   983 setblock block :replaceBlock:to :replaceBlock:x 263 0 0
+   984 label *label471
+-    * label *label472
+-    * label *label473
+   985 getblock block *tmp118 :replaceBlock:x 264
+   986 jump *label474 notEqual *tmp118 :replaceBlock:from
+   987 setblock block :replaceBlock:to :replaceBlock:x 264 0 0
+   988 label *label474
+-    * label *label475
+-    * label *label476
+   989 getblock block *tmp118 :replaceBlock:x 265
+   990 jump *label477 notEqual *tmp118 :replaceBlock:from
+   991 setblock block :replaceBlock:to :replaceBlock:x 265 0 0
+   992 label *label477
+-    * label *label478
+-    * label *label479
+   993 getblock block *tmp118 :replaceBlock:x 266
+   994 jump *label480 notEqual *tmp118 :replaceBlock:from
+   995 setblock block :replaceBlock:to :replaceBlock:x 266 0 0
+   996 label *label480
+-    * label *label481
+-    * label *label482
+   997 getblock block *tmp118 :replaceBlock:x 267
+   998 jump *label483 notEqual *tmp118 :replaceBlock:from
+   999 setblock block :replaceBlock:to :replaceBlock:x 267 0 0
+  1000 label *label483
+-    * label *label484
+-    * label *label485
+  1001 getblock block *tmp118 :replaceBlock:x 268
+  1002 jump *label486 notEqual *tmp118 :replaceBlock:from
+  1003 setblock block :replaceBlock:to :replaceBlock:x 268 0 0
+  1004 label *label486
+-    * label *label487
+-    * label *label488
+  1005 getblock block *tmp118 :replaceBlock:x 269
+  1006 jump *label489 notEqual *tmp118 :replaceBlock:from
+  1007 setblock block :replaceBlock:to :replaceBlock:x 269 0 0
+  1008 label *label489
+-    * label *label490
+-    * label *label491
+  1009 getblock block *tmp118 :replaceBlock:x 270
+  1010 jump *label492 notEqual *tmp118 :replaceBlock:from
+  1011 setblock block :replaceBlock:to :replaceBlock:x 270 0 0
+  1012 label *label492
+-    * label *label493
+-    * label *label494
+  1013 getblock block *tmp118 :replaceBlock:x 271
+  1014 jump *label495 notEqual *tmp118 :replaceBlock:from
+  1015 setblock block :replaceBlock:to :replaceBlock:x 271 0 0
+  1016 label *label495
+-    * label *label496
+-    * label *label497
+  1017 getblock block *tmp118 :replaceBlock:x 272
+  1018 jump *label498 notEqual *tmp118 :replaceBlock:from
+  1019 setblock block :replaceBlock:to :replaceBlock:x 272 0 0
+  1020 label *label498
+-    * label *label499
+-    * label *label500
+  1021 getblock block *tmp118 :replaceBlock:x 273
+  1022 jump *label501 notEqual *tmp118 :replaceBlock:from
+  1023 setblock block :replaceBlock:to :replaceBlock:x 273 0 0
+  1024 label *label501
+-    * label *label502
+-    * label *label503
+  1025 getblock block *tmp118 :replaceBlock:x 274
+  1026 jump *label504 notEqual *tmp118 :replaceBlock:from
+  1027 setblock block :replaceBlock:to :replaceBlock:x 274 0 0
+  1028 label *label504
+-    * label *label505
+-    * label *label506
+  1029 getblock block *tmp118 :replaceBlock:x 275
+  1030 jump *label507 notEqual *tmp118 :replaceBlock:from
+  1031 setblock block :replaceBlock:to :replaceBlock:x 275 0 0
+  1032 label *label507
+-    * label *label508
+-    * label *label509
+  1033 getblock block *tmp118 :replaceBlock:x 276
+  1034 jump *label510 notEqual *tmp118 :replaceBlock:from
+  1035 setblock block :replaceBlock:to :replaceBlock:x 276 0 0
+  1036 label *label510
+-    * label *label511
+-    * label *label512
+  1037 getblock block *tmp118 :replaceBlock:x 277
+  1038 jump *label513 notEqual *tmp118 :replaceBlock:from
+  1039 setblock block :replaceBlock:to :replaceBlock:x 277 0 0
+  1040 label *label513
+-    * label *label514
+-    * label *label515
+  1041 getblock block *tmp118 :replaceBlock:x 278
+  1042 jump *label516 notEqual *tmp118 :replaceBlock:from
+  1043 setblock block :replaceBlock:to :replaceBlock:x 278 0 0
+  1044 label *label516
+-    * label *label517
+-    * label *label518
+  1045 getblock block *tmp118 :replaceBlock:x 279
+  1046 jump *label519 notEqual *tmp118 :replaceBlock:from
+  1047 setblock block :replaceBlock:to :replaceBlock:x 279 0 0
+  1048 label *label519
+-    * label *label520
+-    * label *label521
+  1049 getblock block *tmp118 :replaceBlock:x 280
+  1050 jump *label522 notEqual *tmp118 :replaceBlock:from
+  1051 setblock block :replaceBlock:to :replaceBlock:x 280 0 0
+  1052 label *label522
+-    * label *label523
+-    * label *label524
+  1053 getblock block *tmp118 :replaceBlock:x 281
+  1054 jump *label525 notEqual *tmp118 :replaceBlock:from
+  1055 setblock block :replaceBlock:to :replaceBlock:x 281 0 0
+  1056 label *label525
+-    * label *label526
+-    * label *label527
+  1057 getblock block *tmp118 :replaceBlock:x 282
+  1058 jump *label528 notEqual *tmp118 :replaceBlock:from
+  1059 setblock block :replaceBlock:to :replaceBlock:x 282 0 0
+  1060 label *label528
+-    * label *label529
+-    * label *label530
+  1061 getblock block *tmp118 :replaceBlock:x 283
+  1062 jump *label531 notEqual *tmp118 :replaceBlock:from
+  1063 setblock block :replaceBlock:to :replaceBlock:x 283 0 0
+  1064 label *label531
+-    * label *label532
+-    * label *label533
+  1065 getblock block *tmp118 :replaceBlock:x 284
+  1066 jump *label534 notEqual *tmp118 :replaceBlock:from
+  1067 setblock block :replaceBlock:to :replaceBlock:x 284 0 0
+  1068 label *label534
+-    * label *label535
+-    * label *label536
+  1069 getblock block *tmp118 :replaceBlock:x 285
+  1070 jump *label537 notEqual *tmp118 :replaceBlock:from
+  1071 setblock block :replaceBlock:to :replaceBlock:x 285 0 0
+  1072 label *label537
+-    * label *label538
+-    * label *label539
+  1073 getblock block *tmp118 :replaceBlock:x 286
+  1074 jump *label540 notEqual *tmp118 :replaceBlock:from
+  1075 setblock block :replaceBlock:to :replaceBlock:x 286 0 0
+  1076 label *label540
+-    * label *label541
+-    * label *label542
+  1077 getblock block *tmp118 :replaceBlock:x 287
+  1078 jump *label543 notEqual *tmp118 :replaceBlock:from
+  1079 setblock block :replaceBlock:to :replaceBlock:x 287 0 0
+  1080 label *label543
+-    * label *label544
+-    * label *label545
+  1081 getblock block *tmp118 :replaceBlock:x 288
+  1082 jump *label546 notEqual *tmp118 :replaceBlock:from
+  1083 setblock block :replaceBlock:to :replaceBlock:x 288 0 0
+  1084 label *label546
+-    * label *label547
+-    * label *label548
+  1085 getblock block *tmp118 :replaceBlock:x 289
+  1086 jump *label549 notEqual *tmp118 :replaceBlock:from
+  1087 setblock block :replaceBlock:to :replaceBlock:x 289 0 0
+  1088 label *label549
+-    * label *label550
+-    * label *label551
+  1089 getblock block *tmp118 :replaceBlock:x 290
+  1090 jump *label552 notEqual *tmp118 :replaceBlock:from
+  1091 setblock block :replaceBlock:to :replaceBlock:x 290 0 0
+  1092 label *label552
+-    * label *label553
+-    * label *label554
+  1093 getblock block *tmp118 :replaceBlock:x 291
+  1094 jump *label555 notEqual *tmp118 :replaceBlock:from
+  1095 setblock block :replaceBlock:to :replaceBlock:x 291 0 0
+  1096 label *label555
+-    * label *label556
+-    * label *label557
+  1097 getblock block *tmp118 :replaceBlock:x 292
+  1098 jump *label558 notEqual *tmp118 :replaceBlock:from
+  1099 setblock block :replaceBlock:to :replaceBlock:x 292 0 0
+  1100 label *label558
+-    * label *label559
+-    * label *label560
+  1101 getblock block *tmp118 :replaceBlock:x 293
+  1102 jump *label561 notEqual *tmp118 :replaceBlock:from
+  1103 setblock block :replaceBlock:to :replaceBlock:x 293 0 0
+  1104 label *label561
+-    * label *label562
+-    * label *label563
+  1105 getblock block *tmp118 :replaceBlock:x 294
+  1106 jump *label564 notEqual *tmp118 :replaceBlock:from
+  1107 setblock block :replaceBlock:to :replaceBlock:x 294 0 0
+  1108 label *label564
+-    * label *label565
+-    * label *label566
+  1109 getblock block *tmp118 :replaceBlock:x 295
+  1110 jump *label567 notEqual *tmp118 :replaceBlock:from
+  1111 setblock block :replaceBlock:to :replaceBlock:x 295 0 0
+  1112 label *label567
+-    * label *label568
+-    * label *label569
+  1113 getblock block *tmp118 :replaceBlock:x 296
+  1114 jump *label570 notEqual *tmp118 :replaceBlock:from
+  1115 setblock block :replaceBlock:to :replaceBlock:x 296 0 0
+  1116 label *label570
+-    * label *label571
+-    * label *label572
+  1117 getblock block *tmp118 :replaceBlock:x 297
+  1118 jump *label573 notEqual *tmp118 :replaceBlock:from
+  1119 setblock block :replaceBlock:to :replaceBlock:x 297 0 0
+  1120 label *label573
+-    * label *label574
+-    * label *label575
+  1121 getblock block *tmp118 :replaceBlock:x 298
+  1122 jump *label576 notEqual *tmp118 :replaceBlock:from
+  1123 setblock block :replaceBlock:to :replaceBlock:x 298 0 0
+  1124 label *label576
+-    * label *label577
+-    * label *label578
+  1125 getblock block *tmp118 :replaceBlock:x 299
+  1126 jump *label579 notEqual *tmp118 :replaceBlock:from
+  1127 setblock block :replaceBlock:to :replaceBlock:x 299 0 0
+  1128 label *label579
+-    * label *label580
+-    * label *label581
+-    * label *label94
+-    * label *label91
+  1129 return :replaceBlock*retaddr
+-    * end
+
+Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
+ 
+   265 jump *label700 always
+   266 label *label700
+   267 op sub *tmp82 :shrinkWall.1:x .center
+-    * jump *label702 lessThanEq *tmp82 0
++  268 jump *label705 lessThanEq *tmp82 0
+   269 set :replaceBlock:x :shrinkWall.1:x
+   270 set :replaceBlock:from @air
+   271 set :replaceBlock:to @shrubs
+ 
+   275 jump *label705 always
+   276 label *label705
+   277 op sub *tmp82 :expandWall.3:x .center
+-    * jump *label707 lessThanEq *tmp82 0
++  278 jump *label710 lessThanEq *tmp82 0
+   279 set :replaceBlock:x :expandWall.3:x
+   280 set :replaceBlock:from @air
+   281 set :replaceBlock:to @shrubs
+ 
+   285 jump *label710 always
+   286 label *label710
+   287 op sub *tmp82 :expandWall.3:x .center
+-    * jump *label712 lessThanEq *tmp82 0
++  288 jump *label715 lessThanEq *tmp82 0
+   289 set :replaceBlock:x :expandWall.3:x
+   290 set :replaceBlock:from @air
+   291 set :replaceBlock:to @shrubs
+ 
+   295 jump *label715 always
+   296 label *label715
+   297 op sub *tmp82 :expandWall.3:x .center
+-    * jump *label717 lessThanEq *tmp82 0
++  298 jump *label720 lessThanEq *tmp82 0
+   299 set :replaceBlock:x :expandWall.3:x
+   300 set :replaceBlock:from @air
+   301 set :replaceBlock:to @shrubs
+ 
+   305 jump *label720 always
+   306 label *label720
+   307 op sub *tmp82 :expandWall.3:x .center
+-    * jump *label722 lessThanEq *tmp82 0
++  308 jump *label725 lessThanEq *tmp82 0
+   309 set :replaceBlock:x :expandWall.3:x
+   310 set :replaceBlock:from @air
+   311 set :replaceBlock:to @shrubs
+ 
+   315 jump *label725 always
+   316 label *label725
+   317 op sub *tmp82 :expandWall.3:x .center
+-    * jump *label727 lessThanEq *tmp82 0
++  318 jump *label730 lessThanEq *tmp82 0
+   319 set :replaceBlock:x :expandWall.3:x
+   320 set :replaceBlock:from @air
+   321 set :replaceBlock:to @shrubs
+ 
+   325 jump *label730 always
+   326 label *label730
+   327 op sub *tmp82 :expandWall.3:x .center
+-    * jump *label732 lessThanEq *tmp82 0
++  328 jump *label735 lessThanEq *tmp82 0
+   329 set :replaceBlock:x :expandWall.3:x
+   330 set :replaceBlock:from @air
+   331 set :replaceBlock:to @shrubs
+ 
+   335 jump *label735 always
+   336 label *label735
+   337 op sub *tmp82 :expandWall.3:x .center
+-    * jump *label737 lessThanEq *tmp82 0
++  338 jump *label740 lessThanEq *tmp82 0
+   339 set :replaceBlock:x :expandWall.3:x
+   340 set :replaceBlock:from @air
+   341 set :replaceBlock:to @shrubs
+ 
+   345 jump *label740 always
+   346 label *label740
+   347 op sub *tmp82 :expandWall.3:x .center
+-    * jump *label742 lessThanEq *tmp82 0
++  348 jump *label745 lessThanEq *tmp82 0
+   349 set :replaceBlock:x :expandWall.3:x
+   350 set :replaceBlock:from @air
+   351 set :replaceBlock:to @shrubs
+ 
+   496 draw print 0.25 2 @center
+   497 drawflush display2
+   498 radar enemy any any distance @this 0 *tmp103
+-    * jump *label83 equal *tmp103 null
++  499 jump *label8 equal *tmp103 null
+   500 set :i 0
+   501 label *label85
+   502 getlink :block :i
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-11 instructions):
  

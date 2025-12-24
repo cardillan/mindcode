@@ -773,6 +773,109 @@ Modifications by Fast-dispatch case at line 60:13 (-1 instructions):
    101 jump *label37 equal :flag 0
    102 print ", F"
 
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+     7 multijump *tmp52 0 0 (m:*label54)
+     8 multilabel *label60 (m:*label54)
+     9 multilabel *label55 (m:*label54)
+-    * label *label53
+    10 set *tmp4 null
+    11 jump *label5 always
+    12 multilabel *label56 (m:*label54)
+-    * label *label7
+    13 set *tmp4 @mono
+    14 jump *label5 always
+-    * label *label6
+    15 multilabel *label57 (m:*label54)
+-    * label *label9
+    16 set *tmp4 @poly
+    17 jump *label5 always
+-    * label *label8
+    18 multilabel *label58 (m:*label54)
+-    * label *label11
+    19 set *tmp4 @mega
+    20 jump *label5 always
+-    * label *label10
+    21 multilabel *label59 (m:*label54)
+-    * label *label13
+    22 set *tmp4 @flare
+    23 label *label5
+    24 set .UNIT *tmp4
+ 
+    27 print *tmp4
+    28 print ": gathering information..."
+    29 label *label3
+-    * label *label4
+    30 ubind .UNIT
+    31 jump *label14 notEqual @unit null
+    32 print .UNIT
+ 
+    45 jump *label20 equal *tmp13 false
+    46 print " (cleanup active)"
+    47 label *label20
+-    * label *label21
+    48 label *label16
+-    * label *label17
+    49 sensor :controlled @unit @controlled
+    50 sensor :flag @unit @flag
+    51 sensor :items @unit @totalItems
+ 
+    63 multijump :controlled 0 0 (m:*label62)
+    64 multilabel *label67 (m:*label62)
+    65 multilabel *label63 (m:*label62)
+-    * label *label61
+    66 jump *label30 always
+    67 multilabel *label64 (m:*label62)
+-    * label *label32
+    68 sensor :controller @unit @controller
+    69 sensor *tmp31 :controller @x
+    70 op floor :x *tmp31
+ 
+    75 print ";"
+    76 print :y
+    77 jump *label30 always
+-    * label *label31
+    78 multilabel *label65 (m:*label62)
+-    * label *label34
+    79 print ", player"
+    80 jump *label30 always
+-    * label *label33
+    81 multilabel *label66 (m:*label62)
+-    * label *label36
+    82 print ", command"
+    83 label *label30
+    84 jump *label37 equal :flag 0
+    85 print ", F"
+    86 print :flag
+    87 label *label37
+-    * label *label38
+    88 jump *label39 lessThanEq :items 0
+    89 print ", "
+    90 print :items
+    91 print " "
+    92 print :item
+    93 label *label39
+-    * label *label40
+    94 label *label24
+-    * label *label25
+    95 jump *label41 notEqual :controlled 0
+    96 sensor *tmp40 switch1 @enabled
+    97 jump *label41 equal *tmp40 false
+ 
+   116 ucontrol approach @thisx @thisy 4
+   117 label *label52
+   118 label *label49
+-    * label *label50
+   119 label *label46
+   120 label *label41
+-    * label *label42
+   121 op add :index :index 1
+   122 label *label15
+-    * label *label1
+   123 jump *label0 always
+-    * label *label2
+-    * end
+
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  
     32 print .UNIT
@@ -792,23 +895,6 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
    105 label *label47
    106 ucontrol approach .CORE_X .CORE_Y 4
    107 label *label48
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
- 
-   104 jump *label46 always
-   105 label *label47
-   106 ucontrol approach .CORE_X .CORE_Y 4
--    * label *label48
-   107 jump *label46 always
-   108 label *label45
-   109 jump *label49 equal :flag 0
- 
-   118 label *label46
-   119 label *label41
-   120 op add :index :index 1
--    * label *label15
-   121 jump *label0 always
--    * end
 
 Modifications by Final phase, Temp Variables Elimination, iteration 1:
  

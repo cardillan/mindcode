@@ -326,24 +326,42 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-3 instructions):
  
+    39 pop bank1 :foo:a
+    40 pop bank1 :foo:n
+    41 label *label7
+-    * label *label8
+    42 op add :foo:b :foo:b 1
     43 print :foo:a
     44 print :foo:b
+-    * label *label6
     45 returnrec bank1
 -    * end
     46 label *label1
     47 print :bar:a
     48 print :bar:b
  
+    60 set :bar:a *tmp18
+    61 pop bank1 :bar:n
+    62 label *label11
+-    * label *label12
+    63 op add :bar:b :bar:b 1
     64 print :bar:a
     65 print :bar:b
+-    * label *label10
     66 returnrec bank1
 -    * end
     67 label *label2
     68 print :baz:a
     69 print :baz:b
  
+    82 pop bank1 :baz:b
+    83 pop bank1 :baz:n
+    84 label *label15
+-    * label *label16
+    85 op add :baz:b :baz:b 1
     86 print :baz:a
     87 print :baz:b
+-    * label *label14
     88 returnrec bank1
 -    * end
 

@@ -106,8 +106,18 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
+     7 label *label0
+     8 set :fib*retval :fib:n
+     9 jump *label4 lessThan :fib:n 2
+-    * label *label3
+    10 push bank1 :fib:n
+    11 op sub :fib:n :fib:n 1
+    12 callrec bank1 *label0 *label5 :fib*retval
+ 
+    22 pop bank1 :fib:n
     23 op add :fib*retval *tmp4 :fib*retval
     24 label *label4
+-    * label *label2
     25 returnrec bank1
 -    * end
 

@@ -27,7 +27,7 @@ Mindcode can generate code for several Mindustry versions. The target can be sel
 * **v8 Build 149 Beta**: use `#set target = 8.0;` to select it.
 * **v8 Build 150 Beta** or later: use `#set target = 8;` (or `8.1`) to select it.
 
-At this moment, target `8` is also fully compatible with the latest Mindustry BE version (build 26149).
+At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry versions (154.3 Beta or BE build 26530).
 
 [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality in Mindustry 8.
 
@@ -54,11 +54,9 @@ The most important recent changes to Mindcode include:
   * Support for named color literals: `%[red]`.
 * Language features
   * Short-circuit evaluation of boolean expressions.
+  * The `in` operator for testing range_list membership.
   * Local compiler options.
-  * Support for `null` values in the `case` expression.
-  * Significantly improved optimization of `case` expressions, including `case` expression over block types, unit types, items or liquids.
-  * Passing arguments (including arrays) to inline functions by reference.
-  * Support for passing mlog keywords as arguments to inline functions.
+  * Significantly improved optimization of `case` expressions.
 * Other functionality
   * Reporting compiled code size broken down by function.  
   * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).

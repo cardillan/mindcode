@@ -1,20 +1,20 @@
    223 instructions before optimizations.
     16 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
-    17 instructions eliminated by Dead Code Elimination (4 iterations).
-     1 instructions eliminated by Jump Normalization (4 iterations).
-     8 instructions eliminated by Condition Optimization (5 iterations).
-     6 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions eliminated by Boolean Optimization (5 iterations).
+    17 instructions eliminated by Dead Code Elimination (5 iterations).
+     1 instructions eliminated by Jump Normalization (5 iterations).
+     8 instructions eliminated by Condition Optimization (6 iterations).
+     6 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+     1 instructions eliminated by Boolean Optimization (6 iterations).
        1 fully-evaluated expressions optimized using selects.
     20 instructions modified by Data Flow Optimization (7 iterations).
      1 instructions added by Loop Rotation (2 iterations).
        3 loop conditions were partially rotated.
     10 instructions eliminated by Case Switching (4 iterations).
      1 case expressions converted to fast dispatch by Case Switching.
-     9 instructions eliminated by Jump Straightening (5 iterations).
+     9 instructions eliminated by Jump Straightening (6 iterations).
      2 instructions updated by Jump Threading.
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instructions eliminated by Unreachable Code Elimination (3 iterations).
     13 instructions eliminated by Print Merging.
    141 instructions after optimizations.
 
@@ -767,24 +767,24 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
    134 set :startTime @time
    135 set :prevTick :nextTick
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+   176 printflush .MESSAGE
+   177 sensor *tmp24 .SWITCH @enabled
+   178 jump *label41 equal *tmp24 0
+-    * end
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
  
    112 label *label23
    113 printflush .MESSAGE
    114 jump *label2 always
--    * label *label24
 -    * jump *label0 always
    115 label *label2
    116 write .START_INDEX .MEMORY 0
    117 write .END_INDEX .MEMORY 2
- 
-   175 printflush .MESSAGE
-   176 sensor *tmp24 .SWITCH @enabled
-   177 jump *label41 equal *tmp24 0
--    * label *label29
-   178 end
 
-Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-2 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
    111 jump *label0 always
    112 label *label23
@@ -793,11 +793,6 @@ Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-2 i
    114 label *label2
    115 write .START_INDEX .MEMORY 0
    116 write .END_INDEX .MEMORY 2
- 
-   174 printflush .MESSAGE
-   175 sensor *tmp24 .SWITCH @enabled
-   176 jump *label41 equal *tmp24 0
--    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
  

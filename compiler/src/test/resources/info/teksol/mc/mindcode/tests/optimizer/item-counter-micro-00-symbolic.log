@@ -1,17 +1,17 @@
    275 instructions before optimizations.
     32 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
-    34 instructions eliminated by Dead Code Elimination (6 iterations).
-     1 instructions eliminated by Jump Normalization (4 iterations).
-    17 instructions eliminated by Condition Optimization (5 iterations).
-    14 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+    34 instructions eliminated by Dead Code Elimination (7 iterations).
+     1 instructions eliminated by Jump Normalization (5 iterations).
+    17 instructions eliminated by Condition Optimization (6 iterations).
+    14 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      2 instructions eliminated by Expression Optimization (2 iterations).
      7 instructions eliminated by Data Flow Optimization (7 iterations).
      1 instructions added by Loop Rotation (2 iterations).
        1 loop conditions were partially rotated.
-     3 instructions eliminated by Jump Straightening (5 iterations).
+     3 instructions eliminated by Jump Straightening (6 iterations).
      4 instructions updated by Jump Threading.
-     2 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     2 instructions eliminated by Unreachable Code Elimination (3 iterations).
     35 instructions eliminated by Print Merging.
    128 instructions after optimizations.
 
@@ -952,27 +952,23 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
     64 jump *label2 always
     65 label *label18
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-2 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+   185 control enabled switch1 0
+   186 write 0 .MEMORY :lastCell
+   187 write 0 .MEMORY 0
+-    * end
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-2 instructions):
  
     60 print "Item Counter\n[salmon]No memory attached."
     61 printflush message1
     62 jump *label0 always
--    * label *label17
 -    * jump *label2 always
--    * label *label18
--    * label *label16
--    * label *label14
 -    * jump *label0 always
     63 label *label2
     64 op idiv *tmp12 MIN_BATCH 10
     65 op max .EFF_MIN_BATCH *tmp12 1
-
-Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
- 
-   183 control enabled switch1 0
-   184 write 0 .MEMORY :lastCell
-   185 write 0 .MEMORY 0
--    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
  

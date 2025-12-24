@@ -1,14 +1,14 @@
     99 instructions before optimizations.
     21 instructions eliminated by Temp Variables Elimination (6 iterations).
-    10 instructions eliminated by Dead Code Elimination (5 iterations).
-     7 instructions eliminated by Condition Optimization (2 passes, 7 iterations).
-     5 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+    10 instructions eliminated by Dead Code Elimination (6 iterations).
+     7 instructions eliminated by Condition Optimization (2 passes, 8 iterations).
+     5 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
      2 instructions modified by Expression Optimization (3 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      2 instructions added by Loop Rotation (3 iterations).
        5 loop conditions were partially rotated.
      2 instructions updated by Jump Threading.
-     2 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     2 instructions eliminated by Unreachable Code Elimination (3 iterations).
     53 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 944):
@@ -469,12 +469,18 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
     53 write :down:pv ARRAY :down:child
     54 set :down:parent :down:child
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-2 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+    70 jump *label32 lessThan :i SIZE
+    71 label *label24
+    72 stop
+-    * end
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 (-2 instructions):
  
     16 write :up:iv ARRAY :up:parent
     17 set :up:index :up:parent
     18 jump *label8 always
--    * label *label7
 -    * jump *label6 always
     19 label *label8
     20 jump *label30 greaterThan :up:parent 0
@@ -483,13 +489,12 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
     51 write :down:pv ARRAY :down:child
     52 set :down:parent :down:child
     53 jump *label21 always
--    * label *label20
 -    * jump *label15 always
     54 label *label21
     55 op mul *tmp23 :down:child 2
     56 op add :down:child *tmp23 1
 
-Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-3 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-2 instructions):
  
     15 write :up:pv ARRAY :up:index
     16 write :up:iv ARRAY :up:parent
@@ -506,11 +511,6 @@ Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-3 i
     52 label *label21
     53 op mul *tmp23 :down:child 2
     54 op add :down:child *tmp23 1
- 
-    66 jump *label32 lessThan :i SIZE
-    67 label *label24
-    68 stop
--    * end
 
 Final code before resolving virtual instructions:
 

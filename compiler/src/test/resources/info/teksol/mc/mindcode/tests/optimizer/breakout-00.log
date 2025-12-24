@@ -11,7 +11,7 @@
      3 loops unrolled by Loop Unrolling.
      3 instructions eliminated by Jump Straightening (2 passes, 8 iterations).
      3 instructions updated by Jump Threading.
-     2 instructions eliminated by Unreachable Code Elimination (3 iterations).
+     2 instructions eliminated by Unreachable Code Elimination (2 passes, 3 iterations).
    179 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 907):
@@ -1614,6 +1614,152 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-1
    230 op lessThan *tmp48 :ballY 126
    231 op land *tmp49 *tmp46 *tmp48
 
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+    11 op rand *tmp4 10
+    12 op sub :ballVY *tmp4 5
+    13 set :brickCount 6
+-    * label *label65
+-    * label *label66
+    14 write 1 BRICKS 0
+-    * label *label67
+    15 write 1 BRICKS 1
+-    * label *label68
+    16 write 1 BRICKS 2
+-    * label *label69
+    17 write 1 BRICKS 3
+-    * label *label70
+    18 write 1 BRICKS 4
+-    * label *label71
+    19 write 1 BRICKS 5
+-    * label *label72
+-    * label *label5
+    20 label *label6
+    21 draw clear 0 0 0
+    22 draw rect :paddleX 10 :paddleWidth 5
+ 
+    27 jump *label11 greaterThanEq :paddleX *tmp10
+    28 op add :paddleX :paddleX 3
+    29 label *label11
+-    * label *label12
+    30 jump *label10 always
+    31 label *label9
+    32 jump *label13 lessThanEq :paddleX 0
+    33 op sub :paddleX :paddleX 3
+    34 label *label13
+-    * label *label14
+    35 label *label10
+    36 op add :ballX :ballX :ballVX
+    37 op add :ballY :ballY :ballVY
+ 
+    41 label *label17
+    42 op mul :ballVX :ballVX -1
+    43 label *label15
+-    * label *label16
+    44 jump *label19 lessThanEq :ballY 171
+    45 op mul :ballVY :ballVY -1
+    46 label *label19
+-    * label *label20
+    47 op greaterThan *tmp22 :ballXEnd :paddleX
+    48 op add *tmp23 :paddleX :paddleWidth
+    49 op lessThan *tmp24 :ballX *tmp23
+ 
+    62 op add :ballVX :ballVX *tmp35
+    63 op sub :paddleWidth :paddleWidth 1
+    64 label *label21
+-    * label *label22
+-    * label *label73
+-    * label *label74
+-    * label *label75
+-    * label *label76
+    65 read *tmp39 BRICKS 0
+    66 jump *label81 equal *tmp39 false
+    67 draw rect 1 126 57.666666666666664 9
+ 
+    85 op mul :ballVX :ballVX -1
+    86 label *label78
+    87 label *label79
+-    * label *label80
+    88 label *label81
+-    * label *label82
+-    * label *label83
+    89 read *tmp39 BRICKS 1
+    90 jump *label88 equal *tmp39 false
+    91 draw rect 59.666666666666664 126 57.666666666666664 9
+ 
+   109 op mul :ballVX :ballVX -1
+   110 label *label85
+   111 label *label86
+-    * label *label87
+   112 label *label88
+-    * label *label89
+-    * label *label90
+   113 read *tmp39 BRICKS 2
+   114 jump *label95 equal *tmp39 false
+   115 draw rect 118.33333333333333 126 57.666666666666664 9
+ 
+   133 op mul :ballVX :ballVX -1
+   134 label *label92
+   135 label *label93
+-    * label *label94
+   136 label *label95
+-    * label *label96
+-    * label *label97
+-    * label *label98
+-    * label *label99
+-    * label *label100
+-    * label *label101
+   137 read *tmp39 BRICKS 3
+   138 jump *label106 equal *tmp39 false
+   139 draw rect 1 116 57.666666666666664 9
+ 
+   157 op mul :ballVX :ballVX -1
+   158 label *label103
+   159 label *label104
+-    * label *label105
+   160 label *label106
+-    * label *label107
+-    * label *label108
+   161 read *tmp39 BRICKS 4
+   162 jump *label113 equal *tmp39 false
+   163 draw rect 59.666666666666664 116 57.666666666666664 9
+ 
+   181 op mul :ballVX :ballVX -1
+   182 label *label110
+   183 label *label111
+-    * label *label112
+   184 label *label113
+-    * label *label114
+-    * label *label115
+   185 read *tmp39 BRICKS 5
+   186 jump *label120 equal *tmp39 false
+   187 draw rect 118.33333333333333 116 57.666666666666664 9
+ 
+   205 op mul :ballVX :ballVX -1
+   206 label *label117
+   207 label *label118
+-    * label *label119
+   208 label *label120
+-    * label *label121
+-    * label *label122
+-    * label *label123
+-    * label *label124
+-    * label *label25
+   209 jump *label37 lessThan :ballY 0
+   210 jump *label35 notEqual :brickCount 0
+   211 label *label37
+   212 jump *label8 always
+   213 label *label35
+-    * label *label36
+   214 drawflush DISPLAY
+-    * label *label7
+   215 jump *label6 always
+   216 label *label8
+-    * label *label1
+   217 jump *label0 always
+-    * label *label2
+-    * end
+
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  
     24 sensor *tmp8 PADDLECONTROLLER @enabled
@@ -1638,27 +1784,12 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
    214 drawflush DISPLAY
    215 jump *label6 always
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-2 instructions):
+Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 (-1 instructions):
  
-    26 op sub *tmp10 176 :paddleWidth
-    27 jump *label10 greaterThanEq :paddleX *tmp10
-    28 op add :paddleX :paddleX 3
--    * label *label11
-    29 jump *label10 always
-    30 label *label9
-    31 jump *label13 lessThanEq :paddleX 0
- 
-   207 label *label120
-   208 jump *label0 lessThan :ballY 0
-   209 jump *label35 notEqual :brickCount 0
--    * label *label37
-   210 jump *label0 always
    211 label *label35
    212 drawflush DISPLAY
    213 jump *label6 always
--    * label *label8
 -    * jump *label0 always
--    * end
 
 Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-1 instructions):
  

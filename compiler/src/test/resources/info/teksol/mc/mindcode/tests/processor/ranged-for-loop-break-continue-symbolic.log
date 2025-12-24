@@ -131,6 +131,41 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     12 jump *label5 notEqual :test:i 3
     13 jump *label3 always
 
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+     6 call *label0 :d*retaddr :d*retval
+     7 set *tmp3 :d*retval
+     8 set :test:i *tmp1
+-    * label *label2
+     9 jump *label4 greaterThanEq *tmp1 :d*retval
+    10 label *label10
+    11 jump *label5 notEqual :test:i 3
+    12 jump *label3 always
+    13 label *label5
+-    * label *label6
+    14 print :test:i
+    15 print "|"
+    16 set :d:n 5
+ 
+    18 jump *label7 notEqual :test:i :d*retval
+    19 jump *label4 always
+    20 label *label7
+-    * label *label8
+    21 label *label3
+    22 op add :test:i :test:i 1
+    23 jump *label10 lessThan :test:i *tmp3
+    24 label *label4
+-    * label *label1
+    25 assertprints "1|2|4|5|" "iterated-for-loop-break-continue"
+    26 stop
+    27 end
+    28 label *label0
+    29 # "Function: noinline def d(in n)"
+    30 set :d*retval :d:n
+-    * label *label9
+    31 return :d*retaddr
+-    * end
+
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-2 instructions):
  
      8 set :test:i *tmp1
@@ -150,13 +185,6 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-2 instru
     18 label *label7
     19 label *label3
     20 op add :test:i :test:i 1
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
- 
-    25 # "Function: noinline def d(in n)"
-    26 set :d*retval :d:n
-    27 return :d*retaddr
--    * end
 
 Final code before resolving virtual instructions:
 

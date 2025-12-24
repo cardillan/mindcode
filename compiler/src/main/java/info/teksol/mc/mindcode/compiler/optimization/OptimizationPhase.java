@@ -42,11 +42,11 @@ public enum OptimizationPhase {
     /// These optimizers can make changes incompatible with the AST context structure in this phase,
     /// therefore, are separated from the previous phase.
     JUMPS("Jumps",
+            UNREACHABLE_CODE_ELIMINATION,
             JUMP_NORMALIZATION,
             JUMP_STRAIGHTENING,
             CONDITION_OPTIMIZATION,
             JUMP_THREADING,
-            UNREACHABLE_CODE_ELIMINATION,
             DEAD_CODE_ELIMINATION,
             SINGLE_STEP_ELIMINATION,
             BOOLEAN_OPTIMIZATION

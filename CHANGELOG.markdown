@@ -8,10 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Loop hoisting might incorrectly hoist some loop-dependent instructions ([#294](https://github.com/cardillan/mindcode/issues/294)).
 * Some `select` optimizations were not applied when optimizing for size. As a result, code optimized for size might end up larger than code optimized for speed.
 * Some `select` optimizations may have been incorrect. Due to the previous bug, the probability of them being applied was low ([#290](https://github.com/cardillan/mindcode/issues/290)).
 * Fixed the wrong optimization of volatile variables in [If Expression Optimization](doc/syntax/optimizations/IF-EXPRESSION-OPTIMIZATION.markdown) ([#291](https://github.com/cardillan/mindcode/issues/291)).
+* Fixed instructions being hoisted in front of the loop even when the loop is not guaranteed to run ([#293](https://github.com/cardillan/mindcode/issues/293)).
+* Fixed loop-dependent instructions being possibly hoisted in front of the loop ([#294](https://github.com/cardillan/mindcode/issues/294)).
 
 ### Added
 

@@ -1,17 +1,17 @@
    601 instructions before optimizations.
     40 instructions eliminated by Temp Variables Elimination (3 passes, 7 iterations).
-    84 instructions eliminated by Dead Code Elimination (7 iterations).
-     6 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
-    55 instructions eliminated by Condition Optimization (6 iterations).
-    30 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-    12 instructions eliminated by Boolean Optimization (6 iterations).
+    84 instructions eliminated by Dead Code Elimination (8 iterations).
+     6 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
+    55 instructions eliminated by Condition Optimization (7 iterations).
+    30 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
+    12 instructions eliminated by Boolean Optimization (7 iterations).
        5 fully-evaluated expressions optimized using selects.
      2 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
      5 instructions added by Loop Rotation (3 iterations).
        9 loop conditions were partially rotated.
-     7 instructions eliminated by Jump Straightening (2 passes, 7 iterations).
+     7 instructions eliminated by Jump Straightening (2 passes, 8 iterations).
      7 instructions updated by Jump Threading.
-     3 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     3 instructions eliminated by Unreachable Code Elimination (3 iterations).
     50 instructions eliminated by Print Merging.
    317 instructions after optimizations.
 
@@ -2060,12 +2060,18 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
    444 print "[salmon]Local or remote container became invalid."
    445 print "\n"
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-3 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+   445 printflush message2
+   446 sensor *tmp201 switch1 @enabled
+   447 jump *label150 equal *tmp201 false
+-    * end
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 (-3 instructions):
  
     59 print "."
     60 print ".."
     61 jump *label25 always
--    * label *label24
 -    * jump *label18 always
     62 label *label25
     63 label *label23
@@ -2074,7 +2080,6 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    105 print "n"
    106 print "[salmon]Item dump must be a container or a vault!"
    107 jump *label37 always
--    * label *label36
 -    * jump *label28 always
    108 label *label37
    109 label *label35
@@ -2083,28 +2088,12 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    245 print "."
    246 print ".."
    247 jump *label87 always
--    * label *label86
 -    * jump *label80 always
    248 label *label87
    249 label *label85
    250 printflush message1
- 
-   317 jump *label110 always
-   318 label *label111
-   319 set .MSG "\nDropping items: [green]"
--    * label *label112
-   320 jump *label110 always
-   321 label *label109
-   322 ucontrol approach .DST_X .DST_Y 6
- 
-   442 printflush message2
-   443 sensor *tmp201 switch1 @enabled
-   444 jump *label150 equal *tmp201 false
--    * label *label142
--    * label *label136
-   445 end
 
-Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-4 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-3 instructions):
  
     58 print UNIT
     59 print "."
@@ -2129,11 +2118,6 @@ Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-4 i
    245 label *label87
    246 label *label85
    247 printflush message1
- 
-   439 printflush message2
-   440 sensor *tmp201 switch1 @enabled
-   441 jump *label150 equal *tmp201 false
--    * end
 
 Modifications by Final phase, Temp Variables Elimination, iteration 1:
  

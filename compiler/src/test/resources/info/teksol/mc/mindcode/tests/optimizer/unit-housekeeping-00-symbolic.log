@@ -685,6 +685,101 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 i
    112 ucontrol flag 1
    113 ulocate building core false @copper .CORE_X .CORE_Y *tmp45 .CORE
 
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+     4 sensor *tmp2 switch2 @enabled
+     5 jump *label3 equal *tmp2 false
+     6 jump *label6 notEqual .UNIT @flare
+-    * label *label7
+     7 set *tmp4 @mono
+     8 jump *label5 always
+     9 label *label6
+    10 jump *label8 notEqual .UNIT @mono
+-    * label *label9
+    11 set *tmp4 @poly
+    12 jump *label5 always
+    13 label *label8
+    14 jump *label10 notEqual .UNIT @poly
+-    * label *label11
+    15 set *tmp4 @mega
+    16 jump *label5 always
+    17 label *label10
+    18 jump *label12 notEqual .UNIT @mega
+-    * label *label13
+    19 set *tmp4 @flare
+    20 jump *label5 always
+    21 label *label12
+ 
+    27 print *tmp4
+    28 print ": gathering information..."
+    29 label *label3
+-    * label *label4
+    30 ubind .UNIT
+    31 jump *label14 notEqual @unit null
+    32 print .UNIT
+ 
+    46 jump *label20 equal *tmp13 false
+    47 print " (cleanup active)"
+    48 label *label20
+-    * label *label21
+    49 label *label16
+-    * label *label17
+    50 sensor :controlled @unit @controlled
+    51 sensor :flag @unit @flag
+    52 sensor :items @unit @totalItems
+ 
+    62 print "\n"
+    63 print :index
+    64 jump *label31 notEqual :controlled @ctrlProcessor
+-    * label *label32
+    65 sensor :controller @unit @controller
+    66 sensor *tmp31 :controller @x
+    67 op floor :x *tmp31
+ 
+    74 jump *label30 always
+    75 label *label31
+    76 jump *label33 notEqual :controlled @ctrlPlayer
+-    * label *label34
+    77 print ", player"
+    78 jump *label30 always
+    79 label *label33
+    80 jump *label35 notEqual :controlled @ctrlCommand
+-    * label *label36
+    81 print ", command"
+    82 label *label35
+    83 label *label30
+ 
+    85 print ", F"
+    86 print :flag
+    87 label *label37
+-    * label *label38
+    88 jump *label39 lessThanEq :items 0
+    89 print ", "
+    90 print :items
+    91 print " "
+    92 print :item
+    93 label *label39
+-    * label *label40
+    94 label *label24
+-    * label *label25
+    95 jump *label41 notEqual :controlled 0
+    96 sensor *tmp40 switch1 @enabled
+    97 jump *label41 equal *tmp40 false
+ 
+   116 ucontrol approach @thisx @thisy 4
+   117 label *label52
+   118 label *label49
+-    * label *label50
+   119 label *label46
+   120 label *label41
+-    * label *label42
+   121 op add :index :index 1
+   122 label *label15
+-    * label *label1
+   123 jump *label0 always
+-    * label *label2
+-    * end
+
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  
     32 print .UNIT
@@ -704,23 +799,6 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
    105 label *label47
    106 ucontrol approach .CORE_X .CORE_Y 4
    107 label *label48
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
- 
-   104 jump *label46 always
-   105 label *label47
-   106 ucontrol approach .CORE_X .CORE_Y 4
--    * label *label48
-   107 jump *label46 always
-   108 label *label45
-   109 jump *label49 equal :flag 0
- 
-   118 label *label46
-   119 label *label41
-   120 op add :index :index 1
--    * label *label15
-   121 jump *label0 always
--    * end
 
 Modifications by Final phase, Temp Variables Elimination, iteration 1:
  

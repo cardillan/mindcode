@@ -55,25 +55,33 @@ jump 4 lessThan :j MAX
 The optimization affects even instructions setting up parameters or return addresses for stackless function calls and array access:
 
 ```Mindcode
+param cnt = 5;
+
 noinline def foo(x)
-    print(x);
+    println(x);
 end;
 
-for i in 0 ... @links do
+var i = cnt;
+do
     foo("Huzzah!");
-end;
+while --i > 0;
+printflush(message1);
 ```
 
 compiles into
 
 ```mlog
-set :i 0
+set cnt 5
+set .i cnt
 set :foo:x "Huzzah!"
 set :foo*retaddr 5
-jump 0 greaterThanEq 0 @links
-jump 6 always 0 0
-op add :i :i 1
+jump 9 always 0 0
+op sub .i .i 1
+jump 9 greaterThan .i 0
+printflush message1
+end
 print :foo:x
+print "\n"
 set @counter :foo*retaddr
 ```
 
@@ -113,8 +121,9 @@ label_5:
 
 At this moment, the following limitations apply:
 
+* Assignments to volatile variables are never hoisted out of the loop.
 * If the loop contains a stackless or recursive function call, global variables that might be modified by that function call are marked as loop dependent and expressions based on them aren't hoisted. The compiler must assume the value of the global variable may change inside these functions.
-* `if` expressions are hoisted only when part of simple expressions. Specifically, when the `if` expression is nested in a function call (such as `print(x < 0 ? "positive" : "negative");`), it won't be optimized.
+* When the loop body isn't guaranteed to run at least once, only instructions setting up variables not used outside the loop are hoisted. This is possibly ineffective because the hoisted instructions might be executed even though the loop itself isn't, but the program semantic is not affected.
 
 ---
 

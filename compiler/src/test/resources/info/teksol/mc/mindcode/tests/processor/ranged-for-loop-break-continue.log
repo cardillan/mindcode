@@ -131,6 +131,40 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     15 jump *label7 notEqual :test:i 3
     16 jump *label5 always
 
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+     9 label *label3
+    10 set *tmp3 :d*retval
+    11 set :test:i *tmp1
+-    * label *label4
+    12 jump *label6 greaterThanEq *tmp1 :d*retval
+    13 label *label13
+    14 jump *label7 notEqual :test:i 3
+    15 jump *label5 always
+    16 label *label7
+-    * label *label8
+    17 print :test:i
+    18 print "|"
+    19 set :d:n 5
+ 
+    23 jump *label9 notEqual :test:i :d*retval
+    24 jump *label6 always
+    25 label *label9
+-    * label *label10
+    26 label *label5
+    27 op add :test:i :test:i 1
+    28 jump *label13 lessThan :test:i *tmp3
+    29 label *label6
+-    * label *label1
+    30 assertprints "1|2|4|5|" "iterated-for-loop-break-continue"
+    31 stop
+    32 end
+    33 label *label0
+    34 set :d*retval :d:n
+-    * label *label12
+    35 return :d*retaddr
+-    * end
+
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-2 instructions):
  
     11 set :test:i *tmp1
@@ -152,13 +186,6 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-2 instru
     23 label *label9
     24 label *label5
     25 op add :test:i :test:i 1
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
- 
-    29 label *label0
-    30 set :d*retval :d:n
-    31 return :d*retaddr
--    * end
 
 Final code before resolving virtual instructions:
 
