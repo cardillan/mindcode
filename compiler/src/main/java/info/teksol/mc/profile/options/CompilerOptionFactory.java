@@ -284,7 +284,7 @@ public class CompilerOptionFactory {
                     OptimizationLevel.class,
                     OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                     OptionAvailability.UNIVERSAL, category,
-                    OptimizationLevel.EXPERIMENTAL));
+                    OptimizationLevel.ADVANCED));
         }
 
         list.add(new OptimizationLevelCompilerValue(OptimizationOptions.OPTIMIZATION, "",

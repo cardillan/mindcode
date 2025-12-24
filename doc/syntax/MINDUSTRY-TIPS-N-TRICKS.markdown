@@ -69,46 +69,51 @@ to print colored texts in the colors indicated in the example.
 
 <details><summary>Show a full list of predefined color names.</summary>
 
-```
-clear
-black
-white
-light_gray
-gray
-dark_gray
-light_grey
-grey
-dark_grey
-blue
-navy
-royal
-slate
-sky
-cyan
-teal
-green
-acid
-lime
-forest
-olive
-yellow
-gold
-goldenrod
-orange
-brown
-tan
-brick
-red
-scarlet
-crimson
-coral
-salmon
-pink
-magenta
-purple
-violet
-maroon
-```
+<!--- list:namedColors --->
+
+* `accent`
+* `acid`
+* `black`
+* `blue`
+* `brick`
+* `brown`
+* `clear`
+* `coral`
+* `crimson`
+* `cyan`
+* `darkgray`
+* `darkgrey`
+* `forest`
+* `gold`
+* `goldenrod`
+* `gray`
+* `green`
+* `grey`
+* `highlight`
+* `lightgray`
+* `lightgrey`
+* `lime`
+* `magenta`
+* `maroon`
+* `navy`
+* `negstat`
+* `olive`
+* `orange`
+* `pink`
+* `purple`
+* `red`
+* `royal`
+* `salmon`
+* `scarlet`
+* `sky`
+* `slate`
+* `stat`
+* `tan`
+* `teal`
+* `unlaunched`
+* `violet`
+* `white`
+* `yellow`
 
 </details>
 

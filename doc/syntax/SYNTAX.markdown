@@ -212,6 +212,8 @@ end;
 
 This is a list of Mindcode keywords:
 
+<!--- list:keywords --->
+
 * `allocate`
 * `and`
 * `begin`
@@ -220,21 +222,24 @@ This is a list of Mindcode keywords:
 * `case`
 * `const`
 * `continue`
+* `debug`
 * `def`
 * `descending`
 * `do`
 * `else`
 * `elsif`
 * `end`
+* `export`
 * `external`
 * `false`
 * `for`
+* `guarded`
 * `heap`
 * `if`
 * `in`
 * `inline`
 * `linked`
-* `loop`
+* `mlog`
 * `module`
 * `noinit`
 * `noinline`
@@ -243,6 +248,8 @@ This is a list of Mindcode keywords:
 * `or`
 * `out`
 * `param`
+* `private`
+* `public`
 * `ref`
 * `remote`
 * `require`

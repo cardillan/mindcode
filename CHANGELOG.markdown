@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+* **Breaking**: new keywords have been added to the language: `public` and `private` and are reserved for future use. Code that uses any of these keywords as a function or variable name will not compile, and the variable or function will have to be renamed.
 * Added the [`no-argument-padding` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-no-argument-padding). When activated, instructions are not padded to the maximum number of arguments.
 * Added the [`author` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-author). The option adds an entry to the list of authors, which is then displayed alongside the usual compiler signature.
 * Added support for new instruction opcode (`ucontrol deconstruct`).
@@ -46,7 +47,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Miscellaneous
 
 * A new optimization, Instruction Reordering, is being developed. The corresponding compiler directive is already present, but the optimization, even when explicitly enabled, is not yet functional.
-* All experimental features are now considered standard. The default optimization level is now advanced. Going forward, only features controllable via compiler options will be marked experimental, and the default optimization level will be `advanced`. Note that Mindcode is a live system and features may be modified to support new functionalities. A reasonable effort will be spent to ensure smooth conversion or backwards compatibility, but all features, both well-established and relatively recent, can be changed or removed in a release. 
+* All experimental features are now considered standard. The default optimization level is now advanced. Going forward, only features controllable via compiler options will be marked experimental, and the default optimization level will be `advanced`. Note that Mindcode is a live system and features may be modified to support new functionalities. A reasonable effort will be spent to ensure smooth conversion or backwards compatibility, but all features, both well-established and relatively recent, can be changed or removed in a new release. 
 
 ## 3.10.0 - 2025-11-17
 

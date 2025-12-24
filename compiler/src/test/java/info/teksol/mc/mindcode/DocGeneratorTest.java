@@ -422,7 +422,7 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
 
         CompilerProfile profile = createCompilerProfile()
                 .setTarget(ProcessorVersion.MAX, ProcessorEdition.W)
-                .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL)
+                .setAllOptimizationLevels(OptimizationLevel.ADVANCED)
                 .setGoal(goal)
                 .setSignature(false)
                 .setLibraryPrecedence(true);

@@ -132,6 +132,9 @@ public class MindustryMetadata {
         return cacheInstance(colors, () -> new NamedColorReader("mimex-colors.txt").createFromResource());
     }
 
+    public Set<String> getColorNames() {
+        return getNamedColors().keySet();
+    }
     // Name to instance maps
 
     Map<String, BlockType> getBlockMap() {

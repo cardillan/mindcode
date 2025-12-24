@@ -458,7 +458,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     ///                       it applies optimizations for general-purpose environments.
     /// @return a [CompilerProfile] instance configured with the advanced optimization level.
     public static CompilerProfile fullOptimizations(boolean webApplication) {
-        return new CompilerProfile(webApplication, OptimizationLevel.EXPERIMENTAL);
+        return new CompilerProfile(webApplication, OptimizationLevel.ADVANCED);
     }
 
     /// Creates a [CompilerProfile] instance with no optimizations applied.

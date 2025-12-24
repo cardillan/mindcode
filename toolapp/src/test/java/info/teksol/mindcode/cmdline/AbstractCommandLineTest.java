@@ -484,7 +484,7 @@ public abstract class AbstractCommandLineTest {
 
             @Test
             public void shortArgumentExperimental() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("-03");
+                CompilerProfile profile = parseToProfile("-O3");
                 assertEquals(OptimizationLevel.EXPERIMENTAL, profile.getOptimizationLevel(Optimization.CONDITION_OPTIMIZATION));
             }
 

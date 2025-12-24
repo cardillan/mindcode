@@ -6,13 +6,18 @@ import info.teksol.mc.messages.ListMessageLogger;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.mc.mindcode.logic.mimex.ContentType;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.FileReferences;
 import info.teksol.mc.profile.Remarks;
 import info.teksol.mc.profile.options.*;
 import info.teksol.mc.util.CollectionUtils;
 import info.teksol.mc.util.Markdown;
+import org.antlr.v4.runtime.Vocabulary;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.*;
@@ -25,6 +30,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -129,6 +136,98 @@ public class DocValidatorTest {
     private void validateFile(File file) throws IOException {
         List<Executable> assertions = new ArrayList<>();
         List<String> lines = Files.readAllLines(file.toPath());
+
+        validateFileCode(file, lines, assertions);
+        validateFileLists(file, lines, assertions);
+
+        assertAll(assertions);
+    }
+
+    private void validateFileLists(File file, List<String> lines, List<Executable> assertions) {
+        int start = 0;
+
+        while (true) {
+            int index = CollectionUtils.indexOf(lines, start, line -> line.trim().startsWith("<!--- list:"));
+            if (index < 0) break;
+
+            if (!lines.get(index + 1).isEmpty()) {
+                assertions.add(() -> fail("Missing a blank line at " + uriString(file, index + 2)));
+            }
+
+            int closingIndex = CollectionUtils.indexOf(lines, index + 2, line -> !line.trim().startsWith("* "));
+            if (closingIndex < 0) {
+                assertions.add(() -> fail("Cannot determine the end of a list at " + uriString(file, index + 3)));
+            }
+
+            Collection<String> values = generateList(lines.get(index));
+            if (values.isEmpty()) {
+                assertions.add(() -> fail("Cannot determine the list type at " + uriString(file, index + 1)));
+            } else {
+                String expected = values.stream().sorted().map(v -> "* `" + v + "`").collect(Collectors.joining("\n"));
+                String actual = String.join("\n", lines.subList(index + 2, closingIndex));
+                assertions.add(() -> doesEqual(expected, actual, "Incorrect list at " + uriString(file, index + 3)));
+            }
+
+            start = closingIndex + 1;
+        }
+    }
+
+    private Collection<String> generateList(String definition) {
+        Pattern pattern = Pattern.compile("<!---\\s*list:([^\\s]+)");
+        Matcher matcher = pattern.matcher(definition);
+
+        if (!matcher.find()) return List.of();
+
+        String[] split = matcher.group(1).split(":");
+
+        return switch (split[0]) {
+            case "blockNames" -> getBlockNames();
+            case "blocks" -> getBlocks(split[1]);
+            case "icons" -> getIcons(split[1]);
+            case "keywords" -> getKeywords(MindcodeLexer.VOCABULARY);
+            case "namedColors" -> getNamedColors();
+            case "sounds" -> getSounds();
+            default -> List.of();
+        };
+    }
+
+    private Collection<String> getBlockNames() {
+        return BlockType.getBaseLinkNames(MindustryMetadata.getLatest());
+    }
+
+    private Collection<String> getBlocks(String category) {
+        return MindustryMetadata.getLatest().getAllBlocks().stream()
+                .filter(b -> b.category().equals(category))
+                .filter(b -> !b.visibility().equals("hidden"))
+                .map(BlockType::name)
+                .toList();
+    }
+
+    private Collection<String> getIcons(String category) {
+        ContentType contentType = ContentType.valueOf(category.toUpperCase());
+        String prefix = contentType == ContentType.UNKNOWN ? "" : contentType.name().toUpperCase() + "_";
+        return MindustryMetadata.getLatest().getIcons().getContentIconsNames(contentType)
+                .stream().map(n -> prefix + n.replace('-', '_').toUpperCase()).toList();
+    }
+
+    private Collection<String> getKeywords(Vocabulary vocabulary) {
+        return IntStream.range(0, vocabulary.getMaxTokenType())
+                .mapToObj(vocabulary::getLiteralName)
+                .filter(l -> l != null && l.matches("'#?\\w+'"))
+                .map(l -> l.substring(1, l.length() - 1))
+                .filter(k -> !k.equals("elif") && !k.equals("elseif") && !k.startsWith("#"))
+                .toList();
+    }
+
+    private Collection<String> getNamedColors() {
+        return MindustryMetadata.getLatest().getColorNames();
+    }
+
+    private Collection<String> getSounds() {
+        return MindustryMetadata.getLatest().getSoundNames();
+    }
+
+    private void validateFileCode(File file, List<String> lines, List<Executable> assertions) {
         int start = 0;
 
         while (true) {
@@ -152,8 +251,6 @@ public class DocValidatorTest {
 
             start = closingIndex + 1;
         }
-
-        assertAll(assertions);
     }
 
     private void validateCode(List<Executable> assertions, File file, int line, String source, @Nullable String mlog) {

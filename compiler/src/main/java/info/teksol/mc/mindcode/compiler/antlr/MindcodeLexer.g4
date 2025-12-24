@@ -64,6 +64,8 @@ NOINLINE                : 'noinline' ;
 NULL                    : 'null' ;
 OUT                     : 'out' ;
 PARAM                   : 'param' ;
+PRIVATE                 : 'private' ;
+PUBLIC                  : 'public' ;
 REF                     : 'ref' ;
 REMOTE                  : 'remote' ;
 REQUIRE                 : 'require' ;

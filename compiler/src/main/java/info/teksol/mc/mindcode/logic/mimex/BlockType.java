@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.logic.mimex;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @NullMarked
@@ -43,10 +44,10 @@ public record BlockType(
         return name;
     }
 
-    public static List<String> getBaseLinkNames(MindustryMetadata metadata) {
+    public static Set<String> getBaseLinkNames(MindustryMetadata metadata) {
         return metadata.getBlockMap().values().stream()
                 .filter(b -> !b.visibility.equals("hidden"))
                 .map(BlockType::getBaseLinkName)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 }

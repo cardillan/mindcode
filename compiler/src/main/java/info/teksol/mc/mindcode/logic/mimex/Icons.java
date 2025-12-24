@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,10 @@ public class Icons {
 
     public @Nullable String getContentIcon(ContentType type, String contentName) {
         return contentMap.getOrDefault(type, Map.of()).get(contentName);
+    }
+
+    public Set<String> getContentIconsNames(ContentType type) {
+        return contentMap.getOrDefault(type, Map.of()).keySet();
     }
 
     // Schematics
@@ -110,9 +115,8 @@ public class Icons {
                     .filter(split -> split.length == 3)
                     .forEach(split -> {
                         ContentType type = ContentType.byName(split[0].split("-")[0]);
-                        if (type != null) {
-                            result.computeIfAbsent(type, t -> new HashMap<>()).put(split[1], String.valueOf((char) Integer.parseInt(split[2])));
-                        }
+                        if (type == null) type = ContentType.UNKNOWN;
+                        result.computeIfAbsent(type, t -> new HashMap<>()).put(split[1], String.valueOf((char) Integer.parseInt(split[2])));
                     });
             return result;
         } catch (IOException e) {

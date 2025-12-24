@@ -27,7 +27,7 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     protected final InstructionProcessor instructionProcessor;
     protected final MindustryMetadata metadata;
     protected final boolean debugOutput;
-    protected OptimizationLevel level = OptimizationLevel.EXPERIMENTAL;
+    protected OptimizationLevel level = OptimizationLevel.ADVANCED;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
 
     public AbstractOptimizer(Optimization optimization, OptimizationContext optimizationContext) {

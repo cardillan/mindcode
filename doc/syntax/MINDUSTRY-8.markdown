@@ -365,100 +365,208 @@ Plays a sound, either in a specific position on the world map or with a global v
 
 <details><summary>Show the full list of available sounds.</summary>
 
-`@sfx-artillery`
-`@sfx-bang`
-`@sfx-beam`
-`@sfx-bigshot`
-`@sfx-bioLoop`
-`@sfx-blaster`
-`@sfx-bolt`
-`@sfx-boom`
-`@sfx-break`
-`@sfx-build`
-`@sfx-buttonClick`
-`@sfx-cannon`
-`@sfx-click`
-`@sfx-combustion`
-`@sfx-conveyor`
-`@sfx-corexplode`
-`@sfx-cutter`
-`@sfx-door`
-`@sfx-drill`
-`@sfx-drillCharge`
-`@sfx-drillImpact`
-`@sfx-dullExplosion`
-`@sfx-electricHum`
-`@sfx-explosion`
-`@sfx-explosionbig`
-`@sfx-extractLoop`
-`@sfx-fire`
-`@sfx-flame`
-`@sfx-flame2`
-`@sfx-flux`
-`@sfx-glow`
-`@sfx-grinding`
-`@sfx-hum`
-`@sfx-largeCannon`
-`@sfx-largeExplosion`
-`@sfx-laser`
-`@sfx-laserbeam`
-`@sfx-laserbig`
-`@sfx-laserblast`
-`@sfx-lasercharge`
-`@sfx-lasercharge2`
-`@sfx-lasershoot`
-`@sfx-machine`
-`@sfx-malignShoot`
-`@sfx-mediumCannon`
-`@sfx-minebeam`
-`@sfx-mineDeploy`
-`@sfx-missile`
-`@sfx-missileLarge`
-`@sfx-missileLaunch`
-`@sfx-missileSmall`
-`@sfx-missileTrail`
-`@sfx-mud`
-`@sfx-noammo`
-`@sfx-pew`
-`@sfx-place`
-`@sfx-plantBreak`
-`@sfx-plasmaboom`
-`@sfx-plasmadrop`
-`@sfx-pulse`
-`@sfx-pulseBlast`
-`@sfx-railgun`
-`@sfx-rain`
-`@sfx-release`
-`@sfx-respawn`
-`@sfx-respawning`
-`@sfx-rockBreak`
-`@sfx-sap`
-`@sfx-shield`
-`@sfx-shockBlast`
-`@sfx-shoot`
-`@sfx-shootAlt`
-`@sfx-shootAltLong`
-`@sfx-shootBig`
-`@sfx-shootSmite`
-`@sfx-shootSnap`
-`@sfx-shotgun`
-`@sfx-smelter`
-`@sfx-spark`
-`@sfx-spellLoop`
-`@sfx-splash`
-`@sfx-spray`
-`@sfx-steam`
-`@sfx-swish`
-`@sfx-techloop`
-`@sfx-thruster`
-`@sfx-titanExplosion`
-`@sfx-torch`
-`@sfx-tractorbeam`
-`@sfx-wave`
-`@sfx-wind`
-`@sfx-wind2`
-`@sfx-wind3`
-`@sfx-windhowl`
+<!--- list:sounds --->
+
+* `@sfx-acceleratorCharge`
+* `@sfx-acceleratorConstruct`
+* `@sfx-acceleratorLaunch`
+* `@sfx-acceleratorLightning1`
+* `@sfx-acceleratorLightning2`
+* `@sfx-beamHeal`
+* `@sfx-beamLustre`
+* `@sfx-beamMeltdown`
+* `@sfx-beamParallax`
+* `@sfx-beamPlasma`
+* `@sfx-beamPlasmaSmall`
+* `@sfx-blockBreak1`
+* `@sfx-blockBreak2`
+* `@sfx-blockBreak3`
+* `@sfx-blockExplode1`
+* `@sfx-blockExplode1Alt`
+* `@sfx-blockExplode2`
+* `@sfx-blockExplode2Alt`
+* `@sfx-blockExplode3`
+* `@sfx-blockExplodeElectric`
+* `@sfx-blockExplodeElectricBig`
+* `@sfx-blockExplodeExplosive`
+* `@sfx-blockExplodeExplosiveAlt`
+* `@sfx-blockExplodeFlammable`
+* `@sfx-blockExplodeWall`
+* `@sfx-blockHeal`
+* `@sfx-blockPlace1`
+* `@sfx-blockPlace2`
+* `@sfx-blockPlace3`
+* `@sfx-blockRepair`
+* `@sfx-blockRotate`
+* `@sfx-chargeCorvus`
+* `@sfx-chargeLancer`
+* `@sfx-chargeVela`
+* `@sfx-click`
+* `@sfx-coreLand`
+* `@sfx-coreLaunch`
+* `@sfx-door`
+* `@sfx-drillCharge`
+* `@sfx-drillImpact`
+* `@sfx-explosion`
+* `@sfx-explosionAfflict`
+* `@sfx-explosionArtillery`
+* `@sfx-explosionArtilleryShock`
+* `@sfx-explosionArtilleryShockBig`
+* `@sfx-explosionCleroi`
+* `@sfx-explosionCore`
+* `@sfx-explosionCrawler`
+* `@sfx-explosionDull`
+* `@sfx-explosionMissile`
+* `@sfx-explosionNavanax`
+* `@sfx-explosionObviate`
+* `@sfx-explosionPlasmaSmall`
+* `@sfx-explosionQuad`
+* `@sfx-explosionReactor`
+* `@sfx-explosionReactor2`
+* `@sfx-explosionReactorNeoplasm`
+* `@sfx-explosionTitan`
+* `@sfx-healWave`
+* `@sfx-loopBio`
+* `@sfx-loopBuild`
+* `@sfx-loopCircuit`
+* `@sfx-loopCombustion`
+* `@sfx-loopConveyor`
+* `@sfx-loopCultivator`
+* `@sfx-loopCutter`
+* `@sfx-loopDifferential`
+* `@sfx-loopDrill`
+* `@sfx-loopElectricHum`
+* `@sfx-loopExtract`
+* `@sfx-loopFire`
+* `@sfx-loopFlux`
+* `@sfx-loopGlow`
+* `@sfx-loopGrind`
+* `@sfx-loopHover`
+* `@sfx-loopHover2`
+* `@sfx-loopHum`
+* `@sfx-loopMachine`
+* `@sfx-loopMachine2`
+* `@sfx-loopMachineSpin`
+* `@sfx-loopMalign`
+* `@sfx-loopMineBeam`
+* `@sfx-loopMissileTrail`
+* `@sfx-loopPulse`
+* `@sfx-loopRegen`
+* `@sfx-loopShield`
+* `@sfx-loopSmelter`
+* `@sfx-loopSpray`
+* `@sfx-loopSteam`
+* `@sfx-loopTech`
+* `@sfx-loopThoriumReactor`
+* `@sfx-loopThruster`
+* `@sfx-loopUnitBuilding`
+* `@sfx-massdriver`
+* `@sfx-massdriverReceive`
+* `@sfx-mechStep`
+* `@sfx-mechStepHeavy`
+* `@sfx-mechStepSmall`
+* `@sfx-padLand`
+* `@sfx-padLaunch`
+* `@sfx-plantBreak`
+* `@sfx-rain`
+* `@sfx-rockBreak`
+* `@sfx-shieldBreak`
+* `@sfx-shieldBreakSmall`
+* `@sfx-shieldHit`
+* `@sfx-shieldWave`
+* `@sfx-shipMove`
+* `@sfx-shipMoveBig`
+* `@sfx-shockBullet`
+* `@sfx-shockwaveTower`
+* `@sfx-shoot`
+* `@sfx-shootAfflict`
+* `@sfx-shootAlpha`
+* `@sfx-shootArc`
+* `@sfx-shootArtillery`
+* `@sfx-shootArtillerySap`
+* `@sfx-shootArtillerySapBig`
+* `@sfx-shootArtillerySmall`
+* `@sfx-shootAtrax`
+* `@sfx-shootAvert`
+* `@sfx-shootBeamPlasma`
+* `@sfx-shootBeamPlasmaSmall`
+* `@sfx-shootBreach`
+* `@sfx-shootBreachCarbide`
+* `@sfx-shootCleroi`
+* `@sfx-shootCollaris`
+* `@sfx-shootConquer`
+* `@sfx-shootCorvus`
+* `@sfx-shootCyclone`
+* `@sfx-shootDiffuse`
+* `@sfx-shootDisperse`
+* `@sfx-shootDuo`
+* `@sfx-shootEclipse`
+* `@sfx-shootElude`
+* `@sfx-shootEnergyField`
+* `@sfx-shootFlame`
+* `@sfx-shootFlamePlasma`
+* `@sfx-shootForeshadow`
+* `@sfx-shootFuse`
+* `@sfx-shootHorizon`
+* `@sfx-shootLancer`
+* `@sfx-shootLaser`
+* `@sfx-shootLocus`
+* `@sfx-shootMalign`
+* `@sfx-shootMeltdown`
+* `@sfx-shootMerui`
+* `@sfx-shootMissile`
+* `@sfx-shootMissileLarge`
+* `@sfx-shootMissileLong`
+* `@sfx-shootMissilePlasma`
+* `@sfx-shootMissilePlasmaShort`
+* `@sfx-shootMissileShort`
+* `@sfx-shootMissileSmall`
+* `@sfx-shootNavanax`
+* `@sfx-shootOmura`
+* `@sfx-shootPayload`
+* `@sfx-shootPulsar`
+* `@sfx-shootQuad`
+* `@sfx-shootReign`
+* `@sfx-shootRetusa`
+* `@sfx-shootRipple`
+* `@sfx-shootSalvo`
+* `@sfx-shootSap`
+* `@sfx-shootScathe`
+* `@sfx-shootScatter`
+* `@sfx-shootScepter`
+* `@sfx-shootScepterSecondary`
+* `@sfx-shootSegment`
+* `@sfx-shootSmite`
+* `@sfx-shootSpectre`
+* `@sfx-shootStell`
+* `@sfx-shootSublimate`
+* `@sfx-shootTank`
+* `@sfx-shootToxopidShotgun`
+* `@sfx-stepMud`
+* `@sfx-stepWater`
+* `@sfx-tankMove`
+* `@sfx-tankMoveHeavy`
+* `@sfx-tankMoveSmall`
+* `@sfx-uiBack`
+* `@sfx-uiButton`
+* `@sfx-uiChat`
+* `@sfx-uiNotify`
+* `@sfx-uiUnlock`
+* `@sfx-unitCreate`
+* `@sfx-unitCreateBig`
+* `@sfx-unitExplode1`
+* `@sfx-unitExplode2`
+* `@sfx-unitExplode3`
+* `@sfx-walkerStep`
+* `@sfx-walkerStepSmall`
+* `@sfx-walkerStepTiny`
+* `@sfx-waveSpawn`
+* `@sfx-wind`
+* `@sfx-wind2`
+* `@sfx-wind3`
+* `@sfx-windHowl`
+* `@sfx-wreckFall`
+* `@sfx-wreckFallBig`
 
 </details>
 

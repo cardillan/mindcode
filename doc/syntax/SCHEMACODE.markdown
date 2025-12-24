@@ -139,301 +139,330 @@ All supported block types are listed below.
 
 <details><summary>Show a full list of block in the Turret category.</summary>
 
+<!--- list:blocks:turret --->
+
+* `@afflict`
+* `@arc`
+* `@breach`
+* `@cyclone`
+* `@diffuse`
+* `@disperse`
 * `@duo`
+* `@foreshadow`
+* `@fuse`
+* `@hail`
+* `@lancer`
+* `@lustre`
+* `@malign`
+* `@meltdown`
+* `@parallax`
+* `@ripple`
+* `@salvo`
+* `@scathe`
 * `@scatter`
 * `@scorch`
-* `@hail`
-* `@wave`
-* `@lancer`
-* `@arc`
-* `@parallax`
-* `@swarmer`
-* `@salvo`
 * `@segment`
-* `@tsunami`
-* `@fuse`
-* `@ripple`
-* `@cyclone`
-* `@foreshadow`
-* `@spectre`
-* `@meltdown`
-* `@breach`
-* `@diffuse`
-* `@sublimate`
-* `@titan`
-* `@disperse`
-* `@afflict`
-* `@lustre`
-* `@scathe`
 * `@smite`
-* `@malign`
+* `@spectre`
+* `@sublimate`
+* `@swarmer`
+* `@titan`
+* `@tsunami`
+* `@wave`
 
 </details>
 
 <details><summary>Show a full list of block in the Production category.</summary>
 
-* `@mechanical-drill`
-* `@pneumatic-drill`
-* `@laser-drill`
+<!--- list:blocks:production --->
+
 * `@blast-drill`
-* `@water-extractor`
-* `@cultivator`
-* `@oil-extractor`
-* `@vent-condenser`
 * `@cliff-crusher`
-* `@plasma-bore`
-* `@large-plasma-bore`
-* `@impact-drill`
+* `@cultivator`
 * `@eruption-drill`
+* `@impact-drill`
+* `@large-cliff-crusher`
+* `@large-plasma-bore`
+* `@laser-drill`
+* `@mechanical-drill`
+* `@oil-extractor`
+* `@plasma-bore`
+* `@pneumatic-drill`
+* `@vent-condenser`
+* `@water-extractor`
 
 </details>
 
 <details><summary>Show a full list of block in the Distribution category.</summary>
 
-* `@conveyor`
-* `@titanium-conveyor`
-* `@plastanium-conveyor`
+<!--- list:blocks:distribution --->
+
 * `@armored-conveyor`
-* `@junction`
-* `@bridge-conveyor`
-* `@phase-conveyor`
-* `@sorter`
-* `@inverted-sorter`
-* `@router`
-* `@distributor`
-* `@overflow-gate`
-* `@underflow-gate`
-* `@mass-driver`
-* `@duct`
 * `@armored-duct`
-* `@duct-router`
-* `@overflow-duct`
-* `@underflow-duct`
+* `@bridge-conveyor`
+* `@conveyor`
+* `@distributor`
+* `@duct`
 * `@duct-bridge`
+* `@duct-router`
 * `@duct-unloader`
-* `@surge-conveyor`
-* `@surge-router`
-* `@unit-cargo-loader`
-* `@unit-cargo-unload-point`
+* `@inverted-sorter`
 * `@item-source`
 * `@item-void`
+* `@junction`
+* `@mass-driver`
+* `@overflow-duct`
+* `@overflow-gate`
+* `@phase-conveyor`
+* `@plastanium-conveyor`
+* `@router`
+* `@sorter`
+* `@surge-conveyor`
+* `@surge-router`
+* `@titanium-conveyor`
+* `@underflow-duct`
+* `@underflow-gate`
+* `@unit-cargo-loader`
+* `@unit-cargo-unload-point`
+* `@unloader`
 
 </details>
 
-<details><summary>Show a full list of block in the Liquids category.</summary>
+<details><summary>Show a full list of block in the Liquid category.</summary>
 
-* `@mechanical-pump`
-* `@rotary-pump`
-* `@impulse-pump`
-* `@conduit`
-* `@pulse-conduit`
-* `@plated-conduit`
-* `@liquid-router`
-* `@liquid-container`
-* `@liquid-tank`
-* `@liquid-junction`
+<!--- list:blocks:liquid --->
+
 * `@bridge-conduit`
-* `@phase-conduit`
-* `@reinforced-pump`
-* `@reinforced-conduit`
-* `@reinforced-liquid-junction`
-* `@reinforced-bridge-conduit`
-* `@reinforced-liquid-router`
-* `@reinforced-liquid-container`
-* `@reinforced-liquid-tank`
+* `@conduit`
+* `@impulse-pump`
+* `@liquid-container`
+* `@liquid-junction`
+* `@liquid-router`
 * `@liquid-source`
+* `@liquid-tank`
 * `@liquid-void`
+* `@mechanical-pump`
+* `@phase-conduit`
+* `@plated-conduit`
+* `@pulse-conduit`
+* `@reinforced-bridge-conduit`
+* `@reinforced-conduit`
+* `@reinforced-liquid-container`
+* `@reinforced-liquid-junction`
+* `@reinforced-liquid-router`
+* `@reinforced-liquid-tank`
+* `@reinforced-pump`
+* `@rotary-pump`
 
 </details>
 
 <details><summary>Show a full list of block in the Power category.</summary>
 
-* `@power-node`
-* `@power-node-large`
-* `@surge-tower`
-* `@diode`
+<!--- list:blocks:power --->
+
 * `@battery`
 * `@battery-large`
+* `@beam-link`
+* `@beam-node`
+* `@beam-tower`
+* `@chemical-combustion-chamber`
 * `@combustion-generator`
-* `@thermal-generator`
-* `@steam-generator`
 * `@differential-generator`
+* `@diode`
+* `@flux-reactor`
+* `@impact-reactor`
+* `@neoplasia-reactor`
+* `@power-node`
+* `@power-node-large`
+* `@power-source`
+* `@power-void`
+* `@pyrolysis-generator`
 * `@rtg-generator`
 * `@solar-panel`
 * `@solar-panel-large`
+* `@steam-generator`
+* `@surge-tower`
+* `@thermal-generator`
 * `@thorium-reactor`
-* `@impact-reactor`
-* `@beam-node`
-* `@beam-tower`
-* `@beam-link`
 * `@turbine-condenser`
-* `@chemical-combustion-chamber`
-* `@pyrolysis-generator`
-* `@flux-reactor`
-* `@neoplasia-reactor`
-* `@power-source`
-* `@power-void`
 
 </details>
 
 <details><summary>Show a full list of block in the Defense category.</summary>
 
-* `@copper-wall`
-* `@copper-wall-large`
-* `@titanium-wall`
-* `@titanium-wall-large`
-* `@plastanium-wall`
-* `@plastanium-wall-large`
-* `@thorium-wall`
-* `@thorium-wall-large`
-* `@phase-wall`
-* `@phase-wall-large`
-* `@surge-wall`
-* `@surge-wall-large`
-* `@door`
-* `@door-large`
-* `@scrap-wall`
-* `@scrap-wall-large`
-* `@scrap-wall-huge`
-* `@scrap-wall-gigantic`
-* `@thruster`
+<!--- list:blocks:defense --->
+
 * `@beryllium-wall`
 * `@beryllium-wall-large`
-* `@tungsten-wall`
-* `@tungsten-wall-large`
 * `@blast-door`
-* `@reinforced-surge-wall`
-* `@reinforced-surge-wall-large`
 * `@carbide-wall`
 * `@carbide-wall-large`
+* `@copper-wall`
+* `@copper-wall-large`
+* `@door`
+* `@door-large`
+* `@phase-wall`
+* `@phase-wall-large`
+* `@plastanium-wall`
+* `@plastanium-wall-large`
+* `@reinforced-surge-wall`
+* `@reinforced-surge-wall-large`
+* `@scrap-wall`
+* `@scrap-wall-gigantic`
+* `@scrap-wall-huge`
+* `@scrap-wall-large`
 * `@shielded-wall`
+* `@surge-wall`
+* `@surge-wall-large`
+* `@thorium-wall`
+* `@thorium-wall-large`
+* `@thruster`
+* `@titanium-wall`
+* `@titanium-wall-large`
+* `@tungsten-wall`
+* `@tungsten-wall-large`
 
 </details>
 
 <details><summary>Show a full list of block in the Crafting category.</summary>
 
-* `@graphite-press`
-* `@multi-press`
-* `@silicon-smelter`
-* `@silicon-crucible`
-* `@kiln`
-* `@plastanium-compressor`
-* `@phase-weaver`
-* `@surge-smelter`
-* `@cryofluid-mixer`
-* `@pyratite-mixer`
-* `@blast-mixer`
-* `@melter`
-* `@separator`
-* `@disassembler`
-* `@spore-press`
-* `@pulverizer`
-* `@coal-centrifuge`
-* `@incinerator`
-* `@silicon-arc-furnace`
-* `@electrolyzer`
+<!--- list:blocks:crafting --->
+
 * `@atmospheric-concentrator`
-* `@oxidation-chamber`
+* `@blast-mixer`
+* `@carbide-crucible`
+* `@coal-centrifuge`
+* `@cryofluid-mixer`
+* `@cyanogen-synthesizer`
+* `@disassembler`
 * `@electric-heater`
-* `@slag-heater`
-* `@phase-heater`
+* `@electrolyzer`
+* `@graphite-press`
+* `@heat-reactor`
 * `@heat-redirector`
 * `@heat-router`
-* `@slag-incinerator`
-* `@carbide-crucible`
-* `@surge-crucible`
-* `@cyanogen-synthesizer`
-* `@phase-synthesizer`
 * `@heat-source`
+* `@incinerator`
+* `@kiln`
+* `@melter`
+* `@multi-press`
+* `@oxidation-chamber`
+* `@phase-heater`
+* `@phase-synthesizer`
+* `@phase-weaver`
+* `@plastanium-compressor`
+* `@pulverizer`
+* `@pyratite-mixer`
+* `@separator`
+* `@silicon-arc-furnace`
+* `@silicon-crucible`
+* `@silicon-smelter`
+* `@slag-centrifuge`
+* `@slag-heater`
+* `@slag-incinerator`
+* `@small-heat-redirector`
+* `@spore-press`
+* `@surge-crucible`
+* `@surge-smelter`
 
 </details>
 
 <details><summary>Show a full list of block in the Units category.</summary>
 
-* `@ground-factory`
-* `@air-factory`
-* `@naval-factory`
+<!--- list:blocks:units --->
+
 * `@additive-reconstructor`
-* `@multiplicative-reconstructor`
-* `@exponential-reconstructor`
-* `@tetrative-reconstructor`
-* `@repair-point`
-* `@repair-turret`
-* `@tank-fabricator`
-* `@ship-fabricator`
-* `@mech-fabricator`
-* `@tank-refabricator`
-* `@mech-refabricator`
-* `@ship-refabricator`
-* `@prime-refabricator`
-* `@tank-assembler`
-* `@ship-assembler`
-* `@mech-assembler`
+* `@air-factory`
 * `@basic-assembler-module`
-* `@unit-repair-tower`
+* `@constructor`
+* `@deconstructor`
+* `@exponential-reconstructor`
+* `@ground-factory`
+* `@large-constructor`
+* `@large-payload-mass-driver`
+* `@mech-assembler`
+* `@mech-fabricator`
+* `@mech-refabricator`
+* `@multiplicative-reconstructor`
+* `@naval-factory`
 * `@payload-conveyor`
+* `@payload-loader`
+* `@payload-mass-driver`
 * `@payload-router`
+* `@payload-source`
+* `@payload-unloader`
+* `@payload-void`
+* `@prime-refabricator`
 * `@reinforced-payload-conveyor`
 * `@reinforced-payload-router`
-* `@payload-mass-driver`
-* `@large-payload-mass-driver`
+* `@repair-point`
+* `@repair-turret`
+* `@ship-assembler`
+* `@ship-fabricator`
+* `@ship-refabricator`
 * `@small-deconstructor`
-* `@deconstructor`
-* `@constructor`
-* `@large-constructor`
-* `@payload-loader`
-* `@payload-unloader`
-* `@payload-source`
-* `@payload-void`
+* `@tank-assembler`
+* `@tank-fabricator`
+* `@tank-refabricator`
+* `@tetrative-reconstructor`
+* `@unit-repair-tower`
 
 </details>
 
 <details><summary>Show a full list of block in the Effect category.</summary>
 
-* `@mender`
-* `@mend-projector`
-* `@overdrive-projector`
-* `@overdrive-dome`
-* `@force-projector`
-* `@shock-mine`
+<!--- list:blocks:effect --->
+
+* `@advanced-launch-pad`
 * `@build-tower`
-* `@regen-projector`
-* `@shockwave-tower`
-* `@shield-projector`
-* `@large-shield-projector`
-* `@core-shard`
-* `@core-foundation`
-* `@core-nucleus`
+* `@container`
+* `@core-acropolis`
 * `@core-bastion`
 * `@core-citadel`
-* `@core-acropolis`
-* `@container`
-* `@vault`
-* `@unloader`
+* `@core-foundation`
+* `@core-nucleus`
+* `@core-shard`
+* `@force-projector`
+* `@illuminator`
+* `@interplanetary-accelerator`
+* `@landing-pad`
+* `@large-shield-projector`
+* `@launch-pad`
+* `@mend-projector`
+* `@mender`
+* `@overdrive-dome`
+* `@overdrive-projector`
+* `@radar`
+* `@regen-projector`
 * `@reinforced-container`
 * `@reinforced-vault`
-* `@illuminator`
-* `@launch-pad`
-* `@interplanetary-accelerator`
+* `@shield-projector`
+* `@shock-mine`
+* `@shockwave-tower`
+* `@vault`
 
 </details>
 
 <details><summary>Show a full list of block in the Logic category.</summary>
 
-* `@message`
-* `@switch`
-* `@micro-processor`
-* `@logic-processor`
-* `@hyper-processor`
-* `@memory-cell`
-* `@memory-bank`
-* `@logic-display`
-* `@large-logic-display`
+<!--- list:blocks:logic --->
+
 * `@canvas`
+* `@hyper-processor`
+* `@large-logic-display`
+* `@logic-display`
+* `@logic-processor`
+* `@memory-bank`
+* `@memory-cell`
+* `@message`
+* `@micro-processor`
 * `@reinforced-message`
-* `@world-processor`
+* `@switch`
+* `@tile-logic-display`
 * `@world-cell`
 * `@world-message`
+* `@world-processor`
+* `@world-switch`
 
 </details>
 
