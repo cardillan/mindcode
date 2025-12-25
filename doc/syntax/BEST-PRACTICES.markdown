@@ -21,7 +21,7 @@ The most important change in the 3.11 release comes with the ability to short-ci
 > y = a > 0 or b > 0 ? 1: -1;
 > ```
 >
-> would evaluate the condition `a > 0 or b > 0` only once, reusing it in the second statement. This is no longer the case with short-circuited conditions; for cases like this, replace the condition with a single `if` statement:
+> would evaluate the condition `a > 0 or b > 0` only once, reusing it in the second statement. This is no longer the case with short-circuited conditions; in similar situations, use a single `if` statement instead:
 >
 > ```Mindcode
 > if a > 0 or b > 0 then
@@ -74,7 +74,7 @@ Mindcode provides an [option](SYNTAX-5-OTHER.markdown#option-symbolic-labels) fo
 
 # The `case` expressions
 
-Mindcode provides a very powerful optimization for `case` expressions, in case where all the `when` values are either integer constants, or constant Mindustry objects of the same type (blocks, items, etc.)
+Mindcode provides a very powerful optimization for `case` expressions, in case where all the `when` values are either integer constants, or constant Mindustry objects of the same type (blocks, items, etc.).
 
 As an extreme example, in target `8.0` or higher Mindcode may be capable of converting the entire case expression into a single instruction:
 
@@ -95,7 +95,7 @@ read .output "ABC" :input
 
 The following measures may help produce the most efficient code:
 
-* When using Mindustry objects as `when` values, set the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) to `full`. This means the compiler only considers the Mindustry objects which exist in the given target and doesn't need to produce code for handling unknown objects.
+* When using Mindustry objects as `when` values, set the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) to `full`. This means the compiler only considers the Mindustry objects which exist in the given target and doesn't need to produce code for handling unknown objects. On the other hand, the compiled code is only guaranteed to run correctly on Mindustry versions compatible with the chosen target. Consider using the [`target-guard` option](SYNTAX-5-OTHER.markdown#option-target-guard) to ensure the program won't run on incompatible Mindustry versions.
 * If possible, use printable characters as `when` values. For example, if your case expression produces a few categories, consider assigning each category a value using character literals (e.g. `'A'`, `'B'` or `'0'`, `'1'` and so on). If you need to perform additional computations on the resulting values, though, use the natural values in the `when` clause and let Mindcode perform the necessary conversions.  
 
 An `in` operator applied to a list of values uses `case`expression internally, so it benefits from the same optimizations.
