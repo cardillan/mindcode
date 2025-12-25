@@ -144,7 +144,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Reorganized the [Compiler options documentation](doc/syntax/SYNTAX-5-OTHER.markdown).
 * Split the [System library documentation](doc/syntax/SYSTEM-LIBRARY.markdown) into separate files.
 * Updated the code size calculations for the System library documentation. The array jump tables are no longer included in the calculations.
-* Added a section on [Variable-based lookups](/doc/syntax/PERFORMANCE-TIPS.markdown#variable-based-lookups) and the [`encode()` function](/doc/syntax/PERFORMANCE-TIPS.markdown#efficient-static-data-representation) to the Performance tips documentation.
+* Added a section on [Variable-based lookups](/doc/syntax/BEST-PRACTICES.markdown#variable-based-lookups) and the [`encode()` function](/doc/syntax/BEST-PRACTICES.markdown#efficient-static-data-representation) to the Performance tips documentation.
 
 ## 3.8.0-beta.5 - 2025-09-07
 
@@ -491,7 +491,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Added
 
-* A document offering some [tips on writing a better performing Mindcode](/doc/syntax/PERFORMANCE-TIPS.markdown).
+* A document offering some [tips on writing a better performing Mindcode](/doc/syntax/BEST-PRACTICES.markdown).
 
 ### Changed
 

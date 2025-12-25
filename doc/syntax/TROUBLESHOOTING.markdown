@@ -223,4 +223,4 @@ The number of variables being sorted is limited by the [instruction limit](SYNTA
 
 ---
 
-[&#xAB; Previous: Testing tool](TOOLS-TESTING-TOOL.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Performance tips &#xBB;](PERFORMANCE-TIPS.markdown)
+[&#xAB; Previous: Testing tool](TOOLS-TESTING-TOOL.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mindustry Tips and Tricks &#xBB;](MINDUSTRY-TIPS-N-TRICKS.markdown)

@@ -404,4 +404,4 @@ By accessing the `@counter`, a loop was created in a way which Mindcode doesn't 
 
 ---
 
-[&#xAB; Previous: Code Optimization](SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Schemacode &#xBB;](SCHEMACODE.markdown)
+[&#xAB; Previous: Code Optimization](SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Best Practices &#xBB;](BEST-PRACTICES.markdown)

@@ -1,6 +1,37 @@
-# Performance tips
+# Best Practices
 
-This document contains some tips for writing better-performing code in Mindcode.
+This document contains some tips on writing a better-performing code in Mindcode.
+
+As Mindcode undergoes development, the beast practices may change as new versions are released. Significant changes to the best practices are therefore described here.
+
+## Mindcode 3.11
+
+The most important change in the 3.11 release comes with the ability to short-circuit boolean expressions and some other related changes to the handling of boolean expressions.
+
+* It is no longer necessary or advisable to avoid boolean operators in conditions. When using the `and` and `or` operators, which are short-circuiting, the conditions are often compiled using fewer instructions than a fully evaluated condition right off the bat. Furthermore, the evaluation of the condition is terminated as soon as the value of the condition is known. This may result in significant performance improvements.
+* The `&&` and `||` operators are analogous to the `and` and `or` operators, except they still perform full evaluations. In cases where full evaluation of an expression is for some reason preferred, these operators may be used. The `||` operator also ensures the resulting value is always normalized (either `1` or `0`), which requires an additional instruction to perform the normalization. However, a new optimization removes these additional instructions where possible. Furthermore, it is possible to use the `|` operator instead of the `||` one, as it also performs full evaluation, but doesn't normalize the result.
+* The `in range` operator is also short-circuited (the lower bound is always tested first) and can be efficiently used in boolean expressions involving `and` or `or` operators. The value is guaranteed to be evaluated only once. When testing the upper bound first is more desirable for some reason, it is necessary to express the condition as two separate tests, putting the upper bound first.   
+* The `in (list)` operator is implemented as a `case` expression and benefits from the same optimizations. Its most effective when used as a sole condition in an `if` expression.
+
+> [!NOTE] 
+> Short-circuited boolean expressions cannot be reused. In previous versions, the following code
+>
+> ```Mindcode
+> x = a > 0 or b > 0 ? "positive": "negative";
+> y = a > 0 or b > 0 ? 1: -1;
+> ```
+>
+> would evaluate the condition `a > 0 or b > 0` only once, reusing it in the second statement. This is no longer the case with short-circuited conditions; for cases like this, replace the condition with a single `if` statement:
+>
+> ```Mindcode
+> if a > 0 or b > 0 then
+>     x = "positive";
+>     y = 1;
+> else
+>     x = "negative";
+>     y = -1;
+> end;
+> ```
 
 # Vector length calculation
 
@@ -37,52 +68,78 @@ print :length
 
 Note: an optimization which would replace the sequence of the four instructions with `op len` is planned, but hasn't been implemented yet.
 
-# `case` expressions
+# Absolute addressing
 
-Case expressions evaluate conditions differently and may produce better code, if it is possible to express the condition as a `when` expression:
+Mindcode provides an [option](SYNTAX-5-OTHER.markdown#option-symbolic-labels) for generating the mlog code with symbolic labels. Even though this option ensures the resulting code is more readable and can also be modified manually, it also precludes the compiler from using absolute addressing in the code and (in taget `8.0` or higher) text-encoded jump tables. This causes the compiler to generate a slower code, a larger code or both. Especially case expressions can be seriously affected, and to a lesser extent internal arrays.        
+
+# The `case` expressions
+
+Mindcode provides a very powerful optimization for `case` expressions, in case where all the `when` values are either integer constants, or constant Mindustry objects of the same type (blocks, items, etc.)
+
+As an extreme example, in target `8.0` or higher Mindcode may be capable of converting the entire case expression into a single instruction:
 
 ```Mindcode
-case x
-    when 1 ... 10 then print("yes");
+#set target = 8;
+volatile output = case input
+    when 0 then 'A';
+    when 1 then 'B';
+    when 2 then 'C';
 end;
+```
+
+compiles to:
+
+```mlog
+read .output "ABC" :input
+```
+
+The following measures may help produce the most efficient code:
+
+* When using Mindustry objects as `when` values, set the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) to `full`. This means the compiler only considers the Mindustry objects which exist in the given target and doesn't need to produce code for handling unknown objects.
+* If possible, use printable characters as `when` values. For example, if your case expression produces a few categories, consider assigning each category a value using character literals (e.g. `'A'`, `'B'` or `'0'`, `'1'` and so on). If you need to perform additional computations on the resulting values, though, use the natural values in the `when` clause and let Mindcode perform the necessary conversions.  
+
+An `in` operator applied to a list of values uses `case`expression internally, so it benefits from the same optimizations.
+
+# Conditional expressions
+
+The `and` and `or` operators in Mindcode provide short-circuited evaluation. This provides two benefits:
+
+* The evaluation of a condition ends up as soon as its final value is known, avoiding the need to evaluate the remaining condition terms.
+* Relational operators can be evaluated using just one instruction (`jump` or `select`). Compare short-circuited and full evaluation of the same condition: 
+
+```Mindcode
+#set remarks = comments;
+
+/// Full evaluation 
+if a > 0 || b > 0 then
+    print("Positive");
+end;
+
+/// Short-circuit evaluation 
+if a > 0 or b > 0 then
+    print("Positive");
+end;
+
 printflush(message1);
 ```
 
-compiles into:
+compiles to:
 
 ```mlog
-jump 3 lessThan :x 1
-jump 3 greaterThanEq :x 10
-print "yes"
+# Full evaluation 
+op greaterThan *tmp0 :a 0
+op greaterThan *tmp1 :b 0
+op or *tmp2 *tmp0 *tmp1
+jump 5 equal *tmp2 false
+print "Positive"
+# Short-circuit evaluation 
+jump 7 greaterThan :a 0
+jump 8 lessThanEq :b 0
+print "Positive"
 printflush message1
 ```
 
-Mindcode applies a very powerful optimization to case expressions, especially to larger case expressions. A case expression typically produces much faster code than a series of `if` statements. 
-
-# Avoiding boolean operators in loop conditions
-
-If the condition is part of a loop, it might be possible to avoid the boolean expression in it:
-
-```Mindcode
-// while x > 0 and x < 10 do
-while x > 0 do
-    if x >= 10 then break; end;
-    print("in loop");
-    x = vault1.@coal;  // Just changing the value of x in some way       
-end;
-printflush(message1);
-```
-
-which compiles into practically optimal code:
-
-```mlog
-jump 5 lessThanEq :x 0
-jump 5 greaterThanEq :x 10
-print "in loop"
-sensor :x vault1 @coal
-jump 1 greaterThan :x 0
-printflush message1
-```
+Mindcode performs extensive optimization of conditional expressions and may even turn a short-circuited expression into a fully evaluated one when it is beneficial.
 
 # Variable-based lookups
 
@@ -265,7 +322,7 @@ To illustrate this technique, consider this excerpt from the [Base Builder proje
 const Common_offset = 74;
 
 def packCfg(type, x, y, rotation, ind)
-    // The `A` - Common_offset ensures the resulting string start with "A".
+    // The `A` - Common_offset ensures the resulting string starts with an "A".
     encode(Common_offset, 'A' - Common_offset, type.@id, round(2 * x), round(2 * y), rotation, ind) + "-" + type.@name + "-" + ind;
 end;
 
@@ -469,7 +526,7 @@ for var out a in array do
     a++;
 end;
 
-println(array);
+print(array);
 ```
 
 produces
@@ -484,20 +541,18 @@ set .array*2 :a
 print .array*0
 print .array*1
 print :a
-print "\n"
 ```
 
 Index-based approach, on the other hand:
 
 ```Mindcode
-param p = 0;
 var array[3];
 
 for i in 0 ... length(array) do
     array[i]++;
 end;
 
-println(array);
+print(array);
 ```
 
 produces
@@ -510,7 +565,6 @@ op add .array*2 .array*2 1
 print .array*0
 print .array*1
 print *tmp1
-print "\n"
 ```
 
 The long-term goal is to produce identical, optimal code in both of these cases. At this moment, there's room for improvement in both approaches, but index-based loops may produce better code in some circumstances.
@@ -795,4 +849,4 @@ label_34:
 
 ---
 
-[&#xAB; Previous: Troubleshooting Mindcode](TROUBLESHOOTING.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mindustry Tips and Tricks &#xBB;](MINDUSTRY-TIPS-N-TRICKS.markdown)
+[&#xAB; Previous: Extending Mindcode](SYNTAX-EXTENSIONS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Schemacode &#xBB;](SCHEMACODE.markdown)

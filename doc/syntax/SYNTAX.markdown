@@ -33,11 +33,12 @@ For Mindustry Logic 8 and later, new mlog instructions are supported:
 * [Mindustry Logic 8](MINDUSTRY-8.markdown)
 * [Remote functions and variables](REMOTE-CALLS.markdown)
 
-The more advanced Mindcode features are described here:
+The more advanced Mindcode features and topics are discussed here:
 
 * [Compiler Options](SYNTAX-5-OTHER.markdown)
 * [Code Optimization](SYNTAX-6-OPTIMIZATIONS.markdown)
 * [Extending Mindcode](SYNTAX-EXTENSIONS.markdown)
+* [Best Practices](BEST-PRACTICES.markdown)
 
 Schemacode, a schematic definition language, is covered here:
 
@@ -56,7 +57,6 @@ Supporting tools:
 Additional information on Mindcode and Mindustry Logic:
 
 * [Troubleshooting Mindcode](TROUBLESHOOTING.markdown)
-* [Mindcode Performance Tips](PERFORMANCE-TIPS.markdown)
 * [Mindustry Tips and Tricks](MINDUSTRY-TIPS-N-TRICKS.markdown)
 
 ---

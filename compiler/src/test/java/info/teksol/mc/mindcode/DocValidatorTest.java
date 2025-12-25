@@ -58,6 +58,7 @@ public class DocValidatorTest {
             "SYNTAX-5-OTHER.markdown",
             "SYNTAX-6-OPTIMIZATIONS.markdown",
             "SYNTAX-EXTENSIONS.markdown",
+            "BEST-PRACTICES.markdown",
             "SCHEMACODE.markdown",
             "TOOLS-IDE-INTEGRATION.markdown",
             "TOOLS-CMDLINE.markdown",
@@ -67,7 +68,6 @@ public class DocValidatorTest {
             "TOOLS-MLOG-DECOMPILER.markdown",
             "TOOLS-TESTING-TOOL.markdown",
             "TROUBLESHOOTING.markdown",
-            "PERFORMANCE-TIPS.markdown",
             "MINDUSTRY-TIPS-N-TRICKS.markdown",
     };
 

@@ -473,4 +473,4 @@ end;
 
 ---
 
-[&#xAB; Previous: Performance tips](PERFORMANCE-TIPS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown)
+[&#xAB; Previous: Troubleshooting Mindcode](TROUBLESHOOTING.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown)
