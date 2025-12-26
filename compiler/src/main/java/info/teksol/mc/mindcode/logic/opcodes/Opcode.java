@@ -73,7 +73,7 @@ public enum Opcode {
     MAKEMARKER      (false, "makemarker",      "MakeMarker", "Create a new logic marker in the world. An ID to identify this marker must be provided. Markers currently limited to 20,000 per world."),
     LOCALEPRINT     (false, "localeprint",     "LocalePrint", "Add map locale property value to the text buffer. To set map locale bundles in map editor, check Map Info > Locale Bundles. If client is a mobile device, tries to print a property ending in \".mobile\" first."),
 
-    // Unit testing support. These instructions are left in final code for execution by the processor emulator.
+    // Unit testing support. These instructions are left in the final code for execution by the processor emulator.
 
     ASSERT_EQUALS   ("assertequals",    1),
     ASSERT_PRINTS   ("assertprints",    1),
@@ -101,7 +101,7 @@ public enum Opcode {
     /// Stores a variable on stack. Used by recursive functions
     PUSH            ("push",            2),
 
-    /// Restores a variable from stack. Used by recursive functions
+    /// Restores a variable from the stack. Used by recursive functions
     POP             ("pop",             2),
 
     /// Recursive call. Replaced by instructions that store the return address on the stack and then jump to the target
@@ -121,13 +121,13 @@ public enum Opcode {
     MULTIJUMP       ("multijump",       1),
 
     /// Calls a dynamic target (mechanism for internal arrays), potentially using computed offset.
-    /// Replaced by a `op add @counter ...` operation.
+    /// Replaced by an ` op add @counter ...` operation.
     MULTICALL       ("multicall",       1),
 
-    /// Assigns program address represented by a label to a variable. Replaced by a `set` instruction.
+    /// Assigns a program address represented by a label to a variable. Replaced by a `set` instruction.
     SETADDR         ("setaddr",         1),
 
-    /// Represents compiled remark. Replaced by `print`, `jump` + `print` or altogether removed from final code
+    /// Represents compiled remark. Replaced by `print`, `jump` + `print` or altogether removed from the final code
     /// depending on compiler options.
     REMARK          (false, "remark",          2),
 
@@ -218,6 +218,20 @@ public enum Opcode {
 
     public boolean isSafe() {
         return safe;
+    }
+
+    /// Indicates whether the instruction interacts with the world (either by querying it or by modifying it)
+    public boolean worldAccess() {
+        return switch (this) {
+            case NOOP,
+                 // GETLINK does read the world, but no other logic can modify what it reads, so it is
+                 // indifferent to world access.
+                 GETLINK,
+                 SET, OP, SELECT, LOOKUP, PACKCOLOR, UNPACKCOLOR,
+                 ASSERT_PRINTS, ASSERT_FLUSH -> false;
+            case CUSTOM -> true;
+            default -> !virtual;
+        };
     }
 
     public boolean isVirtual() {

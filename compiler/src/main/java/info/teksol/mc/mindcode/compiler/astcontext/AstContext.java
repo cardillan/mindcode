@@ -500,7 +500,7 @@ public final class AstContext {
 
     @Override
     public int hashCode() {
-        return Objects.hash(level, node, contextType, subcontextType, weight);
+        return Objects.hash(id, level, node, contextType, subcontextType, weight);
     }
 
 }

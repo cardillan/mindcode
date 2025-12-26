@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
@@ -20,7 +19,7 @@ class InstructionReordering extends AbstractConditionalOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        optimizationContext.forEachContext(_ -> true, this::optimizeContext);
+        optimizationContext.forEachContext(AstContext::isTopSafeContext, this::optimizeContext);
         return false;
     }
 
@@ -29,12 +28,6 @@ class InstructionReordering extends AbstractConditionalOptimizer {
 
         LogicList body = optimizationContext.contextInstructions(context);
         if (body.size() < 2) return false;
-
-        System.out.println("\n\n\n");
-        System.out.println("Optimizing context " + context.hierarchy());
-        int start = instructionIndex(Objects.requireNonNull(body.getFirst()));
-        int end = instructionIndex(Objects.requireNonNull(body.getLast()));
-        output(context, start, end, "Before:");
 
         // Create dependency map
         Map<LogicArgument, Integer> defines = new HashMap<>();
@@ -78,50 +71,47 @@ class InstructionReordering extends AbstractConditionalOptimizer {
                 .collect(Collectors.groupingBy(ix -> dependants.getOrDefault(ix, Integer.MAX_VALUE),
                 TreeMap::new, Collectors.toList()));
 
+        System.out.println("\n\n\n");
+        System.out.println("Optimizing context " + context.hierarchy());
+        int start = instructionIndex(Objects.requireNonNull(body.getFirst()));
+        int end = instructionIndex(Objects.requireNonNull(body.getLast()));
+        output(context, start, end, "Before:");
+
         int lastMovableIndex = lastLocalIndex;
         Map<LogicInstruction, LogicInstruction> replacements = new IdentityHashMap<>();
 
         // Now process groups in descending order
         groups.reversed().forEach((anchor, list) -> {
-            int preAnchorIndex = anchor == Integer.MAX_VALUE ? lastMovableIndex : anchor - 1;
-            LogicInstruction preAnchorOriginal = body.getExisting(preAnchorIndex);
-            int preTargetIndex = instructionIndex(replacements.getOrDefault(preAnchorOriginal, preAnchorOriginal));
+            LogicInstruction anchorOriginal = anchor == Integer.MAX_VALUE
+                    ? body.getExisting(lastMovableIndex) : body.getExisting(anchor);
 
-            LogicInstruction anchorOriginal = preTargetIndex < optimizationContext.getProgram().size() ? instructionAt(preTargetIndex) : null;
-            LogicInstruction anchorInstruction;
-            if (anchorOriginal != null) {
-                anchorInstruction = instructionAt(preTargetIndex + 1);
-                System.out.println("Processing anchor " + anchorInstruction + " (" + preTargetIndex + 1 + ")");
-            } else {
-                System.out.println("Processing anchor <EOF> (" + preTargetIndex + 1 + ")");
-            }
+            LogicInstruction anchorInstruction = replacements.getOrDefault(anchorOriginal, anchorOriginal);
+
+            System.out.println("Processing anchor " + anchorInstruction + " (" + anchor + ")");
+
+            // We're going to move the instructions right here
+            int targetIndex = instructionIndex(anchorInstruction);
 
             for (int i = list.size() - 1; i >= 0; i--) {
                 LogicInstruction ix = list.get(i);
-                if (ix == anchorOriginal) continue;     // TODO: HOW???
-
                 if (ix.getAstContext().getSafeContext() != context || ix instanceof EmptyInstruction) continue;
 
                 int sourceIndex = instructionIndex(ix);
-                if (sourceIndex > preTargetIndex) {
-                    throw new MindcodeInternalError("Trying to move an instruction backwards");
-                } else if (sourceIndex != preTargetIndex) {
-                    AstContext targetContext = preTargetIndex + 1 < optimizationContext.getProgram().size()
-                            ? instructionAt(preTargetIndex + 1).getAstContext()
-                            : context;
+                if (sourceIndex != targetIndex - 1) {
+                    LogicInstruction target = instructionAt(targetIndex);
 
-                    System.out.println("  Moving " + ix + " from " + sourceIndex + " to " + preTargetIndex);
+                    //targetIndex;
+                    System.out.println("  Moving " + ix + " from " + sourceIndex + " to " + targetIndex);
                     removeInstruction(sourceIndex);
-                    LogicInstruction newIx = ix.withContext(targetContext);
-                    insertInstruction(preTargetIndex, newIx);
+                    LogicInstruction newIx = ix.withContext(target.getAstContext());
+                    insertInstruction(targetIndex, newIx);
                     replacements.put(ix, newIx);
-                    preTargetIndex--;
 
                     output(context, start, end, "Moved:");
                 } else {
-                    preTargetIndex = sourceIndex - 1;
+                    targetIndex = sourceIndex;
                 }
-            };
+            }
         });
 
         output(context, start, end, "After:");
