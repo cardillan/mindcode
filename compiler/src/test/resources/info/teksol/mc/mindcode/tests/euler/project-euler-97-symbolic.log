@@ -1,9 +1,10 @@
     16 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (5 iterations).
-     1 instructions eliminated by Condition Optimization (5 iterations).
-     1 instructions eliminated by Single Step Elimination (5 iterations).
-     1 instructions eliminated by Loop Rotation (2 iterations).
-       1 loop conditions were fully rotated.
+     2 instructions eliminated by Temp Variables Elimination (7 iterations).
+     1 instructions eliminated by Jump Normalization (6 iterations).
+     1 instructions eliminated by Condition Optimization (7 iterations).
+     1 instructions eliminated by Single Step Elimination (7 iterations).
+     1 instructions modified by Data Flow Optimization (5 iterations).
+       1 loop conditions were partially rotated.
     11 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
@@ -38,23 +39,42 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1
      5 op mod :result *tmp1 10000000000
      6 op sub :count :count 20
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
+     1 set :count 57862
+     2 label *label0
+     3 jump *label2 lessThanEq :count 20
++    4 label *label3
+     5 op shl *tmp1 :result 20
+     6 op mod :result *tmp1 10000000000
+     7 op sub :count :count 20
+     8 label *label1
+-    * jump *label0 always
++    9 jump *label3 greaterThan :count 20
+    10 label *label2
+    11 op shl *tmp3 :result :count
+    12 op add *tmp4 *tmp3 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
      0 set :result 28433
      1 set :count 57862
      2 label *label0
 -    * jump *label2 lessThanEq :count 20
-+    3 label *label3
++    3 jump *label2 lessThanEq 57862 20
+     4 label *label3
+     5 op shl *tmp1 :result 20
+     6 op mod :result *tmp1 10000000000
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
+     0 set :result 28433
+     1 set :count 57862
+     2 label *label0
+-    * jump *label2 lessThanEq 57862 20
+     3 label *label3
      4 op shl *tmp1 :result 20
      5 op mod :result *tmp1 10000000000
-     6 op sub :count :count 20
-     7 label *label1
--    * jump *label0 always
-+    8 jump *label3 greaterThan :count 20
-     9 label *label2
-    10 op shl *tmp3 :result :count
-    11 op add *tmp4 *tmp3 1
 
-Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
      9 op mod :result *tmp4 10000000000
     10 assertequals 7075090433 :result "Project Euler 97"

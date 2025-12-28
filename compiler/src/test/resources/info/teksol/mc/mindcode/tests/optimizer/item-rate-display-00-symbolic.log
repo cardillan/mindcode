@@ -1,27 +1,25 @@
    205 instructions before optimizations.
-    34 instructions eliminated by Temp Variables Elimination (6 iterations).
+    34 instructions eliminated by Temp Variables Elimination (7 iterations).
     16 instructions eliminated by Dead Code Elimination (4 iterations).
-    12 instructions eliminated by Condition Optimization (6 iterations).
-    11 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
-   128 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
-     1 instructions eliminated by Loop Rotation (3 iterations).
-       2 loop conditions were fully rotated.
-       4 loop conditions were partially rotated.
-   670 instructions added by Loop Unrolling (6 iterations).
+     2 instructions eliminated by Jump Normalization (6 iterations).
+    12 instructions eliminated by Condition Optimization (7 iterations).
+    11 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
+   128 instructions eliminated by Data Flow Optimization (5 passes, 17 iterations).
+     1 instructions added by Loop Rotation (4 iterations).
+       6 loop conditions were partially rotated.
+   670 instructions added by Loop Unrolling (7 iterations).
      2 loops unrolled by Loop Unrolling.
     16 instructions eliminated by Print Merging.
    657 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 871):
-    Partial loop rotation at line 32:1                           size    +1, benefit       25.0, efficiency     25.000
+Pass 1: speed optimization selection (cost limit 869):
+  * Full loop rotation at line 32:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
+
+Pass 2: speed optimization selection (cost limit 870):
     Unroll loop at line 24:1                                     size  +137, benefit     1450.0, efficiency     10.584
   * Unroll loop at line 65:5                                     size  +473, benefit    36250.0, efficiency     76.638 (+411 instructions)
 
-Pass 1: speed optimization selection (cost limit 460):
-  * Partial loop rotation at line 32:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Unroll loop at line 24:1                                     size  +137, benefit     1450.0, efficiency     10.584
-
-Pass 1: speed optimization selection (cost limit 459):
+Pass 2: speed optimization selection (cost limit 459):
   * Unroll loop at line 24:1                                     size  +137, benefit     1450.0, efficiency     10.584 (+137 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-16 instructions):
@@ -581,95 +579,169 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     14 read *tmp4 MEMORY 256
     15 op sub :ptr *tmp4 .SHIFT
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
+    21 set :n 0
+    22 label *label2
+    23 jump *label4 greaterThanEq :n 29
++   24 label *label34
+    25 op sub :ptr :ptr 1
+    26 jump *label5 greaterThan :ptr 256
+    27 op sub :ptr 511 1
+ 
+    31 op max :maximum :maximum *tmp15
+    32 label *label3
+    33 op add :n :n 1
+-    * jump *label2 always
++   34 jump *label34 lessThan :n 29
+    35 label *label4
+    36 op mul :maximum :maximum SMOOTH
+    37 label *label7
+ 
+    44 set :n 0
+    45 label *label12
+    46 jump *label14 greaterThanEq :n TOTAL
++   47 label *label35
+    48 read :m COORD :n
+    49 print "\n"
+    50 print "Coord: [gold]"
+ 
+    54 op max :maximum :maximum :m
+    55 label *label13
+    56 op add :n :n 1
+-    * jump *label12 always
++   57 jump *label35 lessThan :n TOTAL
+    58 label *label14
+    59 label *label10
+    60 label *label11
+ 
+    85 set :i 0
+    86 label *label17
+    87 jump *label19 greaterThanEq :i SMOOTH
++   88 label *label36
+    89 read *tmp38 MEMORY :head
+    90 op add :value :value *tmp38
+    91 op sub :head :head 1
+ 
+    95 label *label21
+    96 label *label18
+    97 op add :i :i 1
+-    * jump *label17 always
++   98 jump *label36 lessThan :i SMOOTH
+    99 label *label19
+   100 op mul *tmp42 :value :scale
+   101 op add :last 10 *tmp42
+ 
+   105 set :n 0
+   106 label *label22
+   107 jump *label24 greaterThanEq :n 29
++  108 label *label37
+   109 read :t MEMORY :tail
+   110 read :h MEMORY :head
+   111 op sub *tmp48 :value :t
+ 
+   129 op max :newMax :newMax :value
+   130 label *label23
+   131 op add :n :n 1
+-    * jump *label22 always
++  132 jump *label37 lessThan :n 29
+   133 label *label24
+   134 draw color 255 255 255 255
+   135 draw lineRect 10 10 156 156
+ 
+   153 set :loops 0
+   154 label *label31
+   155 jump *label33 greaterThanEq @time :wait
++  156 label *label38
+   157 op add :loops :loops 1
+   158 label *label32
+-    * jump *label31 always
++  159 jump *label38 lessThan @time :wait
+   160 label *label33
+   161 drawflush display1
+   162 print "\nLoops: "
+
+Modifications by Full loop rotation at line 32:1 (+1 instructions):
+ 
+    37 label *label7
+    38 sensor *tmp18 switch1 @enabled
+    39 jump *label9 notEqual *tmp18 0
++   40 label *label39
+    41 print "Item Rate Display"
+    42 set :start @time
+    43 sensor *tmp21 COORD @dead
+ 
+   164 print :loops
+   165 printflush message1
+   166 label *label8
+-    * jump *label7 always
++  167 sensor *tmp18 switch1 @enabled
++  168 jump *label39 equal *tmp18 0
+   169 label *label9
+   170 control enabled switch1 0
+   171 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     20 read :maximum MEMORY :ptr
     21 set :n 0
     22 label *label2
 -    * jump *label4 greaterThanEq :n 29
-+   23 label *label34
++   23 jump *label4 greaterThanEq 0 29
+    24 label *label34
+    25 op sub :ptr :ptr 1
+    26 jump *label5 greaterThan :ptr 256
+ 
+    44 jump *label10 notEqual *tmp21 0
+    45 set :n 0
+    46 label *label12
+-    * jump *label14 greaterThanEq :n TOTAL
++   47 jump *label14 greaterThanEq 0 TOTAL
+    48 label *label35
+    49 read :m COORD :n
+    50 print "\n"
+ 
+    85 set :value 0
+    86 set :i 0
+    87 label *label17
+-    * jump *label19 greaterThanEq :i SMOOTH
++   88 jump *label19 greaterThanEq 0 SMOOTH
+    89 label *label36
+    90 read *tmp38 MEMORY :head
+    91 op add :value :value *tmp38
+ 
+   105 set :x 159
+   106 set :n 0
+   107 label *label22
+-    * jump *label24 greaterThanEq :n 29
++  108 jump *label24 greaterThanEq 0 29
+   109 label *label37
+   110 read :t MEMORY :tail
+   111 read :h MEMORY :head
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-2 instructions):
+ 
+    20 read :maximum MEMORY :ptr
+    21 set :n 0
+    22 label *label2
+-    * jump *label4 greaterThanEq 0 29
+    23 label *label34
     24 op sub :ptr :ptr 1
     25 jump *label5 greaterThan :ptr 256
-    26 op sub :ptr 511 1
  
-    30 op max :maximum :maximum *tmp15
-    31 label *label3
-    32 op add :n :n 1
--    * jump *label2 always
-+   33 jump *label34 lessThan :n 29
-    34 label *label4
-    35 op mul :maximum :maximum SMOOTH
-    36 label *label7
- 
-    43 set :n 0
-    44 label *label12
-    45 jump *label14 greaterThanEq :n TOTAL
-+   46 label *label35
-    47 read :m COORD :n
-    48 print "\n"
-    49 print "Coord: [gold]"
- 
-    53 op max :maximum :maximum :m
-    54 label *label13
-    55 op add :n :n 1
--    * jump *label12 always
-+   56 jump *label35 lessThan :n TOTAL
-    57 label *label14
-    58 label *label10
-    59 label *label11
- 
-    84 set :i 0
-    85 label *label17
-    86 jump *label19 greaterThanEq :i SMOOTH
-+   87 label *label36
-    88 read *tmp38 MEMORY :head
-    89 op add :value :value *tmp38
-    90 op sub :head :head 1
- 
-    94 label *label21
-    95 label *label18
-    96 op add :i :i 1
--    * jump *label17 always
-+   97 jump *label36 lessThan :i SMOOTH
-    98 label *label19
-    99 op mul *tmp42 :value :scale
-   100 op add :last 10 *tmp42
- 
-   103 set :x 159
-   104 set :n 0
-   105 label *label22
--    * jump *label24 greaterThanEq :n 29
-+  106 label *label37
-   107 read :t MEMORY :tail
-   108 read :h MEMORY :head
-   109 op sub *tmp48 :value :t
- 
-   127 op max :newMax :newMax :value
-   128 label *label23
-   129 op add :n :n 1
--    * jump *label22 always
-+  130 jump *label37 lessThan :n 29
-   131 label *label24
-   132 draw color 255 255 255 255
-   133 draw lineRect 10 10 156 156
- 
-   151 set :loops 0
-   152 label *label31
-   153 jump *label33 greaterThanEq @time :wait
-+  154 label *label38
-   155 op add :loops :loops 1
-   156 label *label32
--    * jump *label31 always
-+  157 jump *label38 lessThan @time :wait
-   158 label *label33
-   159 drawflush display1
-   160 print "\nLoops: "
+   104 set :x 159
+   105 set :n 0
+   106 label *label22
+-    * jump *label24 greaterThanEq 0 29
+   107 label *label37
+   108 read :t MEMORY :tail
+   109 read :h MEMORY :head
 
 Modifications by Unroll loop at line 65:5 (+503 instructions):
  
-   101 set :newMax :value
-   102 draw color 80 255 80 255
-   103 set :x 159
+   102 set :newMax :value
+   103 draw color 80 255 80 255
+   104 set :x 159
 -    * set :n 0
 -    * label *label22
 -    * label *label37
@@ -698,8 +770,7 @@ Modifications by Unroll loop at line 65:5 (+503 instructions):
 -    * op add :n :n 1
 -    * jump *label37 lessThan :n 29
 -    * label *label24
-+  104 set :n 0
-+  105 label *label39
++  105 set :n 0
 +  106 label *label40
 +  107 read :t MEMORY :tail
 +  108 read :h MEMORY :head
@@ -1373,25 +1444,7 @@ Modifications by Unroll loop at line 65:5 (+503 instructions):
    776 draw lineRect 10 10 156 156
    777 op max :maximum :newMax :maximum
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4 instructions):
- 
-    42 jump *label10 notEqual *tmp21 0
-    43 set :n 0
-    44 label *label12
--    * jump *label14 greaterThanEq :n TOTAL
-+   45 jump *label14 greaterThanEq 0 TOTAL
-    46 label *label35
-    47 read :m COORD :n
-    48 print "\n"
- 
-    83 set :value 0
-    84 set :i 0
-    85 label *label17
--    * jump *label19 greaterThanEq :i SMOOTH
-+   86 jump *label19 greaterThanEq 0 SMOOTH
-    87 label *label36
-    88 read *tmp38 MEMORY :head
-    89 op add :value :value *tmp38
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-4 instructions):
  
    120 label *label44
    121 op mul *tmp56 :value :scale
@@ -1868,16 +1921,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4
    771 draw color 255 255 255 255
    772 draw lineRect 10 10 156 156
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-31 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-31 instructions):
  
-   100 op add :last 10 *tmp42
-   101 set :newMax :value
-   102 draw color 80 255 80 255
+   101 op add :last 10 *tmp42
+   102 set :newMax :value
+   103 draw color 80 255 80 255
 -    * set :x 159
 -    * set :n 0
-   103 label *label39
    104 label *label40
    105 read :t MEMORY :tail
+   106 read :h MEMORY :head
  
    124 set :last :y
    125 op max :newMax :newMax :value
@@ -2360,7 +2413,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
    740 draw color 255 255 255 255
    741 draw lineRect 10 10 156 156
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-30 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-30 instructions):
  
    118 label *label44
    119 op mul *tmp56 :value :scale
@@ -2650,7 +2703,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
    708 label *label185
    709 label *label24
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-27 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 4 (-27 instructions):
  
    139 op mul *tmp56 :value :scale
    140 op add :y 10 *tmp56
@@ -2868,26 +2921,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-2
    663 op max :newMax :newMax :value
    664 label *label180
 
-Modifications by Partial loop rotation at line 32:1 (+1 instructions):
- 
-    36 label *label7
-    37 sensor *tmp18 switch1 @enabled
-    38 jump *label9 notEqual *tmp18 0
-+   39 label *label186
-    40 print "Item Rate Display"
-    41 set :start @time
-    42 sensor *tmp21 COORD @dead
- 
-   713 print :loops
-   714 printflush message1
-   715 label *label8
--    * jump *label7 always
-+  716 sensor *tmp18 switch1 @enabled
-+  717 jump *label186 equal *tmp18 0
-   718 label *label9
-   719 control enabled switch1 0
-   720 end
-
 Modifications by Unroll loop at line 24:1 (+167 instructions):
  
     18 label *label0
@@ -2908,809 +2941,808 @@ Modifications by Unroll loop at line 24:1 (+167 instructions):
 -    * jump *label34 lessThan :n 29
 -    * label *label4
 +   21 set :n 0
-+   22 label *label187
-+   23 label *label188
-+   24 op sub :ptr :ptr 1
-+   25 jump *label189 greaterThan :ptr 256
-+   26 op sub :ptr 511 1
-+   27 label *label189
-+   28 label *label190
-+   29 read *tmp15 MEMORY :ptr
-+   30 op max :maximum :maximum *tmp15
-+   31 label *label191
-+   32 op add :n :n 1
-+   33 op sub :ptr :ptr 1
-+   34 jump *label192 greaterThan :ptr 256
-+   35 op sub :ptr 511 1
-+   36 label *label192
-+   37 label *label193
-+   38 read *tmp15 MEMORY :ptr
-+   39 op max :maximum :maximum *tmp15
-+   40 label *label194
-+   41 op add :n :n 1
-+   42 op sub :ptr :ptr 1
-+   43 jump *label195 greaterThan :ptr 256
-+   44 op sub :ptr 511 1
-+   45 label *label195
-+   46 label *label196
-+   47 read *tmp15 MEMORY :ptr
-+   48 op max :maximum :maximum *tmp15
-+   49 label *label197
-+   50 op add :n :n 1
-+   51 op sub :ptr :ptr 1
-+   52 jump *label198 greaterThan :ptr 256
-+   53 op sub :ptr 511 1
-+   54 label *label198
-+   55 label *label199
-+   56 read *tmp15 MEMORY :ptr
-+   57 op max :maximum :maximum *tmp15
-+   58 label *label200
-+   59 op add :n :n 1
-+   60 op sub :ptr :ptr 1
-+   61 jump *label201 greaterThan :ptr 256
-+   62 op sub :ptr 511 1
-+   63 label *label201
-+   64 label *label202
-+   65 read *tmp15 MEMORY :ptr
-+   66 op max :maximum :maximum *tmp15
-+   67 label *label203
-+   68 op add :n :n 1
-+   69 op sub :ptr :ptr 1
-+   70 jump *label204 greaterThan :ptr 256
-+   71 op sub :ptr 511 1
-+   72 label *label204
-+   73 label *label205
-+   74 read *tmp15 MEMORY :ptr
-+   75 op max :maximum :maximum *tmp15
-+   76 label *label206
-+   77 op add :n :n 1
-+   78 op sub :ptr :ptr 1
-+   79 jump *label207 greaterThan :ptr 256
-+   80 op sub :ptr 511 1
-+   81 label *label207
-+   82 label *label208
-+   83 read *tmp15 MEMORY :ptr
-+   84 op max :maximum :maximum *tmp15
-+   85 label *label209
-+   86 op add :n :n 1
-+   87 op sub :ptr :ptr 1
-+   88 jump *label210 greaterThan :ptr 256
-+   89 op sub :ptr 511 1
-+   90 label *label210
-+   91 label *label211
-+   92 read *tmp15 MEMORY :ptr
-+   93 op max :maximum :maximum *tmp15
-+   94 label *label212
-+   95 op add :n :n 1
-+   96 op sub :ptr :ptr 1
-+   97 jump *label213 greaterThan :ptr 256
-+   98 op sub :ptr 511 1
-+   99 label *label213
-+  100 label *label214
-+  101 read *tmp15 MEMORY :ptr
-+  102 op max :maximum :maximum *tmp15
-+  103 label *label215
-+  104 op add :n :n 1
-+  105 op sub :ptr :ptr 1
-+  106 jump *label216 greaterThan :ptr 256
-+  107 op sub :ptr 511 1
-+  108 label *label216
-+  109 label *label217
-+  110 read *tmp15 MEMORY :ptr
-+  111 op max :maximum :maximum *tmp15
-+  112 label *label218
-+  113 op add :n :n 1
-+  114 op sub :ptr :ptr 1
-+  115 jump *label219 greaterThan :ptr 256
-+  116 op sub :ptr 511 1
-+  117 label *label219
-+  118 label *label220
-+  119 read *tmp15 MEMORY :ptr
-+  120 op max :maximum :maximum *tmp15
-+  121 label *label221
-+  122 op add :n :n 1
-+  123 op sub :ptr :ptr 1
-+  124 jump *label222 greaterThan :ptr 256
-+  125 op sub :ptr 511 1
-+  126 label *label222
-+  127 label *label223
-+  128 read *tmp15 MEMORY :ptr
-+  129 op max :maximum :maximum *tmp15
-+  130 label *label224
-+  131 op add :n :n 1
-+  132 op sub :ptr :ptr 1
-+  133 jump *label225 greaterThan :ptr 256
-+  134 op sub :ptr 511 1
-+  135 label *label225
-+  136 label *label226
-+  137 read *tmp15 MEMORY :ptr
-+  138 op max :maximum :maximum *tmp15
-+  139 label *label227
-+  140 op add :n :n 1
-+  141 op sub :ptr :ptr 1
-+  142 jump *label228 greaterThan :ptr 256
-+  143 op sub :ptr 511 1
-+  144 label *label228
-+  145 label *label229
-+  146 read *tmp15 MEMORY :ptr
-+  147 op max :maximum :maximum *tmp15
-+  148 label *label230
-+  149 op add :n :n 1
-+  150 op sub :ptr :ptr 1
-+  151 jump *label231 greaterThan :ptr 256
-+  152 op sub :ptr 511 1
-+  153 label *label231
-+  154 label *label232
-+  155 read *tmp15 MEMORY :ptr
-+  156 op max :maximum :maximum *tmp15
-+  157 label *label233
-+  158 op add :n :n 1
-+  159 op sub :ptr :ptr 1
-+  160 jump *label234 greaterThan :ptr 256
-+  161 op sub :ptr 511 1
-+  162 label *label234
-+  163 label *label235
-+  164 read *tmp15 MEMORY :ptr
-+  165 op max :maximum :maximum *tmp15
-+  166 label *label236
-+  167 op add :n :n 1
-+  168 op sub :ptr :ptr 1
-+  169 jump *label237 greaterThan :ptr 256
-+  170 op sub :ptr 511 1
-+  171 label *label237
-+  172 label *label238
-+  173 read *tmp15 MEMORY :ptr
-+  174 op max :maximum :maximum *tmp15
-+  175 label *label239
-+  176 op add :n :n 1
-+  177 op sub :ptr :ptr 1
-+  178 jump *label240 greaterThan :ptr 256
-+  179 op sub :ptr 511 1
-+  180 label *label240
-+  181 label *label241
-+  182 read *tmp15 MEMORY :ptr
-+  183 op max :maximum :maximum *tmp15
-+  184 label *label242
-+  185 op add :n :n 1
-+  186 op sub :ptr :ptr 1
-+  187 jump *label243 greaterThan :ptr 256
-+  188 op sub :ptr 511 1
-+  189 label *label243
-+  190 label *label244
-+  191 read *tmp15 MEMORY :ptr
-+  192 op max :maximum :maximum *tmp15
-+  193 label *label245
-+  194 op add :n :n 1
-+  195 op sub :ptr :ptr 1
-+  196 jump *label246 greaterThan :ptr 256
-+  197 op sub :ptr 511 1
-+  198 label *label246
-+  199 label *label247
-+  200 read *tmp15 MEMORY :ptr
-+  201 op max :maximum :maximum *tmp15
-+  202 label *label248
-+  203 op add :n :n 1
-+  204 op sub :ptr :ptr 1
-+  205 jump *label249 greaterThan :ptr 256
-+  206 op sub :ptr 511 1
-+  207 label *label249
-+  208 label *label250
-+  209 read *tmp15 MEMORY :ptr
-+  210 op max :maximum :maximum *tmp15
-+  211 label *label251
-+  212 op add :n :n 1
-+  213 op sub :ptr :ptr 1
-+  214 jump *label252 greaterThan :ptr 256
-+  215 op sub :ptr 511 1
-+  216 label *label252
-+  217 label *label253
-+  218 read *tmp15 MEMORY :ptr
-+  219 op max :maximum :maximum *tmp15
-+  220 label *label254
-+  221 op add :n :n 1
-+  222 op sub :ptr :ptr 1
-+  223 jump *label255 greaterThan :ptr 256
-+  224 op sub :ptr 511 1
-+  225 label *label255
-+  226 label *label256
-+  227 read *tmp15 MEMORY :ptr
-+  228 op max :maximum :maximum *tmp15
-+  229 label *label257
-+  230 op add :n :n 1
-+  231 op sub :ptr :ptr 1
-+  232 jump *label258 greaterThan :ptr 256
-+  233 op sub :ptr 511 1
-+  234 label *label258
-+  235 label *label259
-+  236 read *tmp15 MEMORY :ptr
-+  237 op max :maximum :maximum *tmp15
-+  238 label *label260
-+  239 op add :n :n 1
-+  240 op sub :ptr :ptr 1
-+  241 jump *label261 greaterThan :ptr 256
-+  242 op sub :ptr 511 1
-+  243 label *label261
-+  244 label *label262
-+  245 read *tmp15 MEMORY :ptr
-+  246 op max :maximum :maximum *tmp15
-+  247 label *label263
-+  248 op add :n :n 1
-+  249 op sub :ptr :ptr 1
-+  250 jump *label264 greaterThan :ptr 256
-+  251 op sub :ptr 511 1
-+  252 label *label264
-+  253 label *label265
-+  254 read *tmp15 MEMORY :ptr
-+  255 op max :maximum :maximum *tmp15
-+  256 label *label266
-+  257 op add :n :n 1
-+  258 op sub :ptr :ptr 1
-+  259 jump *label267 greaterThan :ptr 256
-+  260 op sub :ptr 511 1
-+  261 label *label267
-+  262 label *label268
-+  263 read *tmp15 MEMORY :ptr
-+  264 op max :maximum :maximum *tmp15
-+  265 label *label269
-+  266 op add :n :n 1
-+  267 op sub :ptr :ptr 1
-+  268 jump *label270 greaterThan :ptr 256
-+  269 op sub :ptr 511 1
-+  270 label *label270
-+  271 label *label271
-+  272 read *tmp15 MEMORY :ptr
-+  273 op max :maximum :maximum *tmp15
-+  274 label *label272
-+  275 op add :n :n 1
-+  276 op sub :ptr :ptr 1
-+  277 jump *label273 greaterThan :ptr 256
-+  278 op sub :ptr 511 1
-+  279 label *label273
-+  280 label *label274
-+  281 read *tmp15 MEMORY :ptr
-+  282 op max :maximum :maximum *tmp15
-+  283 label *label275
-+  284 op add :n :n 1
-+  285 label *label4
-   286 op mul :maximum :maximum SMOOTH
-   287 label *label7
-   288 sensor *tmp18 switch1 @enabled
++   22 label *label186
++   23 op sub :ptr :ptr 1
++   24 jump *label187 greaterThan :ptr 256
++   25 op sub :ptr 511 1
++   26 label *label187
++   27 label *label188
++   28 read *tmp15 MEMORY :ptr
++   29 op max :maximum :maximum *tmp15
++   30 label *label189
++   31 op add :n :n 1
++   32 op sub :ptr :ptr 1
++   33 jump *label190 greaterThan :ptr 256
++   34 op sub :ptr 511 1
++   35 label *label190
++   36 label *label191
++   37 read *tmp15 MEMORY :ptr
++   38 op max :maximum :maximum *tmp15
++   39 label *label192
++   40 op add :n :n 1
++   41 op sub :ptr :ptr 1
++   42 jump *label193 greaterThan :ptr 256
++   43 op sub :ptr 511 1
++   44 label *label193
++   45 label *label194
++   46 read *tmp15 MEMORY :ptr
++   47 op max :maximum :maximum *tmp15
++   48 label *label195
++   49 op add :n :n 1
++   50 op sub :ptr :ptr 1
++   51 jump *label196 greaterThan :ptr 256
++   52 op sub :ptr 511 1
++   53 label *label196
++   54 label *label197
++   55 read *tmp15 MEMORY :ptr
++   56 op max :maximum :maximum *tmp15
++   57 label *label198
++   58 op add :n :n 1
++   59 op sub :ptr :ptr 1
++   60 jump *label199 greaterThan :ptr 256
++   61 op sub :ptr 511 1
++   62 label *label199
++   63 label *label200
++   64 read *tmp15 MEMORY :ptr
++   65 op max :maximum :maximum *tmp15
++   66 label *label201
++   67 op add :n :n 1
++   68 op sub :ptr :ptr 1
++   69 jump *label202 greaterThan :ptr 256
++   70 op sub :ptr 511 1
++   71 label *label202
++   72 label *label203
++   73 read *tmp15 MEMORY :ptr
++   74 op max :maximum :maximum *tmp15
++   75 label *label204
++   76 op add :n :n 1
++   77 op sub :ptr :ptr 1
++   78 jump *label205 greaterThan :ptr 256
++   79 op sub :ptr 511 1
++   80 label *label205
++   81 label *label206
++   82 read *tmp15 MEMORY :ptr
++   83 op max :maximum :maximum *tmp15
++   84 label *label207
++   85 op add :n :n 1
++   86 op sub :ptr :ptr 1
++   87 jump *label208 greaterThan :ptr 256
++   88 op sub :ptr 511 1
++   89 label *label208
++   90 label *label209
++   91 read *tmp15 MEMORY :ptr
++   92 op max :maximum :maximum *tmp15
++   93 label *label210
++   94 op add :n :n 1
++   95 op sub :ptr :ptr 1
++   96 jump *label211 greaterThan :ptr 256
++   97 op sub :ptr 511 1
++   98 label *label211
++   99 label *label212
++  100 read *tmp15 MEMORY :ptr
++  101 op max :maximum :maximum *tmp15
++  102 label *label213
++  103 op add :n :n 1
++  104 op sub :ptr :ptr 1
++  105 jump *label214 greaterThan :ptr 256
++  106 op sub :ptr 511 1
++  107 label *label214
++  108 label *label215
++  109 read *tmp15 MEMORY :ptr
++  110 op max :maximum :maximum *tmp15
++  111 label *label216
++  112 op add :n :n 1
++  113 op sub :ptr :ptr 1
++  114 jump *label217 greaterThan :ptr 256
++  115 op sub :ptr 511 1
++  116 label *label217
++  117 label *label218
++  118 read *tmp15 MEMORY :ptr
++  119 op max :maximum :maximum *tmp15
++  120 label *label219
++  121 op add :n :n 1
++  122 op sub :ptr :ptr 1
++  123 jump *label220 greaterThan :ptr 256
++  124 op sub :ptr 511 1
++  125 label *label220
++  126 label *label221
++  127 read *tmp15 MEMORY :ptr
++  128 op max :maximum :maximum *tmp15
++  129 label *label222
++  130 op add :n :n 1
++  131 op sub :ptr :ptr 1
++  132 jump *label223 greaterThan :ptr 256
++  133 op sub :ptr 511 1
++  134 label *label223
++  135 label *label224
++  136 read *tmp15 MEMORY :ptr
++  137 op max :maximum :maximum *tmp15
++  138 label *label225
++  139 op add :n :n 1
++  140 op sub :ptr :ptr 1
++  141 jump *label226 greaterThan :ptr 256
++  142 op sub :ptr 511 1
++  143 label *label226
++  144 label *label227
++  145 read *tmp15 MEMORY :ptr
++  146 op max :maximum :maximum *tmp15
++  147 label *label228
++  148 op add :n :n 1
++  149 op sub :ptr :ptr 1
++  150 jump *label229 greaterThan :ptr 256
++  151 op sub :ptr 511 1
++  152 label *label229
++  153 label *label230
++  154 read *tmp15 MEMORY :ptr
++  155 op max :maximum :maximum *tmp15
++  156 label *label231
++  157 op add :n :n 1
++  158 op sub :ptr :ptr 1
++  159 jump *label232 greaterThan :ptr 256
++  160 op sub :ptr 511 1
++  161 label *label232
++  162 label *label233
++  163 read *tmp15 MEMORY :ptr
++  164 op max :maximum :maximum *tmp15
++  165 label *label234
++  166 op add :n :n 1
++  167 op sub :ptr :ptr 1
++  168 jump *label235 greaterThan :ptr 256
++  169 op sub :ptr 511 1
++  170 label *label235
++  171 label *label236
++  172 read *tmp15 MEMORY :ptr
++  173 op max :maximum :maximum *tmp15
++  174 label *label237
++  175 op add :n :n 1
++  176 op sub :ptr :ptr 1
++  177 jump *label238 greaterThan :ptr 256
++  178 op sub :ptr 511 1
++  179 label *label238
++  180 label *label239
++  181 read *tmp15 MEMORY :ptr
++  182 op max :maximum :maximum *tmp15
++  183 label *label240
++  184 op add :n :n 1
++  185 op sub :ptr :ptr 1
++  186 jump *label241 greaterThan :ptr 256
++  187 op sub :ptr 511 1
++  188 label *label241
++  189 label *label242
++  190 read *tmp15 MEMORY :ptr
++  191 op max :maximum :maximum *tmp15
++  192 label *label243
++  193 op add :n :n 1
++  194 op sub :ptr :ptr 1
++  195 jump *label244 greaterThan :ptr 256
++  196 op sub :ptr 511 1
++  197 label *label244
++  198 label *label245
++  199 read *tmp15 MEMORY :ptr
++  200 op max :maximum :maximum *tmp15
++  201 label *label246
++  202 op add :n :n 1
++  203 op sub :ptr :ptr 1
++  204 jump *label247 greaterThan :ptr 256
++  205 op sub :ptr 511 1
++  206 label *label247
++  207 label *label248
++  208 read *tmp15 MEMORY :ptr
++  209 op max :maximum :maximum *tmp15
++  210 label *label249
++  211 op add :n :n 1
++  212 op sub :ptr :ptr 1
++  213 jump *label250 greaterThan :ptr 256
++  214 op sub :ptr 511 1
++  215 label *label250
++  216 label *label251
++  217 read *tmp15 MEMORY :ptr
++  218 op max :maximum :maximum *tmp15
++  219 label *label252
++  220 op add :n :n 1
++  221 op sub :ptr :ptr 1
++  222 jump *label253 greaterThan :ptr 256
++  223 op sub :ptr 511 1
++  224 label *label253
++  225 label *label254
++  226 read *tmp15 MEMORY :ptr
++  227 op max :maximum :maximum *tmp15
++  228 label *label255
++  229 op add :n :n 1
++  230 op sub :ptr :ptr 1
++  231 jump *label256 greaterThan :ptr 256
++  232 op sub :ptr 511 1
++  233 label *label256
++  234 label *label257
++  235 read *tmp15 MEMORY :ptr
++  236 op max :maximum :maximum *tmp15
++  237 label *label258
++  238 op add :n :n 1
++  239 op sub :ptr :ptr 1
++  240 jump *label259 greaterThan :ptr 256
++  241 op sub :ptr 511 1
++  242 label *label259
++  243 label *label260
++  244 read *tmp15 MEMORY :ptr
++  245 op max :maximum :maximum *tmp15
++  246 label *label261
++  247 op add :n :n 1
++  248 op sub :ptr :ptr 1
++  249 jump *label262 greaterThan :ptr 256
++  250 op sub :ptr 511 1
++  251 label *label262
++  252 label *label263
++  253 read *tmp15 MEMORY :ptr
++  254 op max :maximum :maximum *tmp15
++  255 label *label264
++  256 op add :n :n 1
++  257 op sub :ptr :ptr 1
++  258 jump *label265 greaterThan :ptr 256
++  259 op sub :ptr 511 1
++  260 label *label265
++  261 label *label266
++  262 read *tmp15 MEMORY :ptr
++  263 op max :maximum :maximum *tmp15
++  264 label *label267
++  265 op add :n :n 1
++  266 op sub :ptr :ptr 1
++  267 jump *label268 greaterThan :ptr 256
++  268 op sub :ptr 511 1
++  269 label *label268
++  270 label *label269
++  271 read *tmp15 MEMORY :ptr
++  272 op max :maximum :maximum *tmp15
++  273 label *label270
++  274 op add :n :n 1
++  275 op sub :ptr :ptr 1
++  276 jump *label271 greaterThan :ptr 256
++  277 op sub :ptr 511 1
++  278 label *label271
++  279 label *label272
++  280 read *tmp15 MEMORY :ptr
++  281 op max :maximum :maximum *tmp15
++  282 label *label273
++  283 op add :n :n 1
++  284 label *label4
+   285 op mul :maximum :maximum SMOOTH
+   286 label *label7
+   287 sensor *tmp18 switch1 @enabled
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
-    29 read *tmp15 MEMORY :ptr
-    30 op max :maximum :maximum *tmp15
-    31 label *label191
+    28 read *tmp15 MEMORY :ptr
+    29 op max :maximum :maximum *tmp15
+    30 label *label189
 -    * op add :n :n 1
-+   32 op add :n 0 1
-    33 op sub :ptr :ptr 1
-    34 jump *label192 greaterThan :ptr 256
-    35 op sub :ptr 511 1
++   31 op add :n 0 1
+    32 op sub :ptr :ptr 1
+    33 jump *label190 greaterThan :ptr 256
+    34 op sub :ptr 511 1
  
-    38 read *tmp15 MEMORY :ptr
-    39 op max :maximum :maximum *tmp15
-    40 label *label194
+    37 read *tmp15 MEMORY :ptr
+    38 op max :maximum :maximum *tmp15
+    39 label *label192
 -    * op add :n :n 1
-+   41 op add :n 1 1
-    42 op sub :ptr :ptr 1
-    43 jump *label195 greaterThan :ptr 256
-    44 op sub :ptr 511 1
++   40 op add :n 1 1
+    41 op sub :ptr :ptr 1
+    42 jump *label193 greaterThan :ptr 256
+    43 op sub :ptr 511 1
  
-    47 read *tmp15 MEMORY :ptr
-    48 op max :maximum :maximum *tmp15
-    49 label *label197
+    46 read *tmp15 MEMORY :ptr
+    47 op max :maximum :maximum *tmp15
+    48 label *label195
 -    * op add :n :n 1
-+   50 op add :n 2 1
-    51 op sub :ptr :ptr 1
-    52 jump *label198 greaterThan :ptr 256
-    53 op sub :ptr 511 1
++   49 op add :n 2 1
+    50 op sub :ptr :ptr 1
+    51 jump *label196 greaterThan :ptr 256
+    52 op sub :ptr 511 1
  
-    56 read *tmp15 MEMORY :ptr
-    57 op max :maximum :maximum *tmp15
-    58 label *label200
+    55 read *tmp15 MEMORY :ptr
+    56 op max :maximum :maximum *tmp15
+    57 label *label198
 -    * op add :n :n 1
-+   59 op add :n 3 1
-    60 op sub :ptr :ptr 1
-    61 jump *label201 greaterThan :ptr 256
-    62 op sub :ptr 511 1
++   58 op add :n 3 1
+    59 op sub :ptr :ptr 1
+    60 jump *label199 greaterThan :ptr 256
+    61 op sub :ptr 511 1
  
-    65 read *tmp15 MEMORY :ptr
-    66 op max :maximum :maximum *tmp15
-    67 label *label203
+    64 read *tmp15 MEMORY :ptr
+    65 op max :maximum :maximum *tmp15
+    66 label *label201
 -    * op add :n :n 1
-+   68 op add :n 4 1
-    69 op sub :ptr :ptr 1
-    70 jump *label204 greaterThan :ptr 256
-    71 op sub :ptr 511 1
++   67 op add :n 4 1
+    68 op sub :ptr :ptr 1
+    69 jump *label202 greaterThan :ptr 256
+    70 op sub :ptr 511 1
  
-    74 read *tmp15 MEMORY :ptr
-    75 op max :maximum :maximum *tmp15
-    76 label *label206
+    73 read *tmp15 MEMORY :ptr
+    74 op max :maximum :maximum *tmp15
+    75 label *label204
 -    * op add :n :n 1
-+   77 op add :n 5 1
-    78 op sub :ptr :ptr 1
-    79 jump *label207 greaterThan :ptr 256
-    80 op sub :ptr 511 1
++   76 op add :n 5 1
+    77 op sub :ptr :ptr 1
+    78 jump *label205 greaterThan :ptr 256
+    79 op sub :ptr 511 1
  
-    83 read *tmp15 MEMORY :ptr
-    84 op max :maximum :maximum *tmp15
-    85 label *label209
+    82 read *tmp15 MEMORY :ptr
+    83 op max :maximum :maximum *tmp15
+    84 label *label207
 -    * op add :n :n 1
-+   86 op add :n 6 1
-    87 op sub :ptr :ptr 1
-    88 jump *label210 greaterThan :ptr 256
-    89 op sub :ptr 511 1
++   85 op add :n 6 1
+    86 op sub :ptr :ptr 1
+    87 jump *label208 greaterThan :ptr 256
+    88 op sub :ptr 511 1
  
-    92 read *tmp15 MEMORY :ptr
-    93 op max :maximum :maximum *tmp15
-    94 label *label212
+    91 read *tmp15 MEMORY :ptr
+    92 op max :maximum :maximum *tmp15
+    93 label *label210
 -    * op add :n :n 1
-+   95 op add :n 7 1
-    96 op sub :ptr :ptr 1
-    97 jump *label213 greaterThan :ptr 256
-    98 op sub :ptr 511 1
++   94 op add :n 7 1
+    95 op sub :ptr :ptr 1
+    96 jump *label211 greaterThan :ptr 256
+    97 op sub :ptr 511 1
  
-   101 read *tmp15 MEMORY :ptr
-   102 op max :maximum :maximum *tmp15
-   103 label *label215
+   100 read *tmp15 MEMORY :ptr
+   101 op max :maximum :maximum *tmp15
+   102 label *label213
 -    * op add :n :n 1
-+  104 op add :n 8 1
-   105 op sub :ptr :ptr 1
-   106 jump *label216 greaterThan :ptr 256
-   107 op sub :ptr 511 1
++  103 op add :n 8 1
+   104 op sub :ptr :ptr 1
+   105 jump *label214 greaterThan :ptr 256
+   106 op sub :ptr 511 1
  
-   110 read *tmp15 MEMORY :ptr
-   111 op max :maximum :maximum *tmp15
-   112 label *label218
+   109 read *tmp15 MEMORY :ptr
+   110 op max :maximum :maximum *tmp15
+   111 label *label216
 -    * op add :n :n 1
-+  113 op add :n 9 1
-   114 op sub :ptr :ptr 1
-   115 jump *label219 greaterThan :ptr 256
-   116 op sub :ptr 511 1
++  112 op add :n 9 1
+   113 op sub :ptr :ptr 1
+   114 jump *label217 greaterThan :ptr 256
+   115 op sub :ptr 511 1
  
-   119 read *tmp15 MEMORY :ptr
-   120 op max :maximum :maximum *tmp15
-   121 label *label221
+   118 read *tmp15 MEMORY :ptr
+   119 op max :maximum :maximum *tmp15
+   120 label *label219
 -    * op add :n :n 1
-+  122 op add :n 10 1
-   123 op sub :ptr :ptr 1
-   124 jump *label222 greaterThan :ptr 256
-   125 op sub :ptr 511 1
++  121 op add :n 10 1
+   122 op sub :ptr :ptr 1
+   123 jump *label220 greaterThan :ptr 256
+   124 op sub :ptr 511 1
  
-   128 read *tmp15 MEMORY :ptr
-   129 op max :maximum :maximum *tmp15
-   130 label *label224
+   127 read *tmp15 MEMORY :ptr
+   128 op max :maximum :maximum *tmp15
+   129 label *label222
 -    * op add :n :n 1
-+  131 op add :n 11 1
-   132 op sub :ptr :ptr 1
-   133 jump *label225 greaterThan :ptr 256
-   134 op sub :ptr 511 1
++  130 op add :n 11 1
+   131 op sub :ptr :ptr 1
+   132 jump *label223 greaterThan :ptr 256
+   133 op sub :ptr 511 1
  
-   137 read *tmp15 MEMORY :ptr
-   138 op max :maximum :maximum *tmp15
-   139 label *label227
+   136 read *tmp15 MEMORY :ptr
+   137 op max :maximum :maximum *tmp15
+   138 label *label225
 -    * op add :n :n 1
-+  140 op add :n 12 1
-   141 op sub :ptr :ptr 1
-   142 jump *label228 greaterThan :ptr 256
-   143 op sub :ptr 511 1
++  139 op add :n 12 1
+   140 op sub :ptr :ptr 1
+   141 jump *label226 greaterThan :ptr 256
+   142 op sub :ptr 511 1
  
-   146 read *tmp15 MEMORY :ptr
-   147 op max :maximum :maximum *tmp15
-   148 label *label230
+   145 read *tmp15 MEMORY :ptr
+   146 op max :maximum :maximum *tmp15
+   147 label *label228
 -    * op add :n :n 1
-+  149 op add :n 13 1
-   150 op sub :ptr :ptr 1
-   151 jump *label231 greaterThan :ptr 256
-   152 op sub :ptr 511 1
++  148 op add :n 13 1
+   149 op sub :ptr :ptr 1
+   150 jump *label229 greaterThan :ptr 256
+   151 op sub :ptr 511 1
  
-   155 read *tmp15 MEMORY :ptr
-   156 op max :maximum :maximum *tmp15
-   157 label *label233
+   154 read *tmp15 MEMORY :ptr
+   155 op max :maximum :maximum *tmp15
+   156 label *label231
 -    * op add :n :n 1
-+  158 op add :n 14 1
-   159 op sub :ptr :ptr 1
-   160 jump *label234 greaterThan :ptr 256
-   161 op sub :ptr 511 1
++  157 op add :n 14 1
+   158 op sub :ptr :ptr 1
+   159 jump *label232 greaterThan :ptr 256
+   160 op sub :ptr 511 1
  
-   164 read *tmp15 MEMORY :ptr
-   165 op max :maximum :maximum *tmp15
-   166 label *label236
+   163 read *tmp15 MEMORY :ptr
+   164 op max :maximum :maximum *tmp15
+   165 label *label234
 -    * op add :n :n 1
-+  167 op add :n 15 1
-   168 op sub :ptr :ptr 1
-   169 jump *label237 greaterThan :ptr 256
-   170 op sub :ptr 511 1
++  166 op add :n 15 1
+   167 op sub :ptr :ptr 1
+   168 jump *label235 greaterThan :ptr 256
+   169 op sub :ptr 511 1
  
-   173 read *tmp15 MEMORY :ptr
-   174 op max :maximum :maximum *tmp15
-   175 label *label239
+   172 read *tmp15 MEMORY :ptr
+   173 op max :maximum :maximum *tmp15
+   174 label *label237
 -    * op add :n :n 1
-+  176 op add :n 16 1
-   177 op sub :ptr :ptr 1
-   178 jump *label240 greaterThan :ptr 256
-   179 op sub :ptr 511 1
++  175 op add :n 16 1
+   176 op sub :ptr :ptr 1
+   177 jump *label238 greaterThan :ptr 256
+   178 op sub :ptr 511 1
  
-   182 read *tmp15 MEMORY :ptr
-   183 op max :maximum :maximum *tmp15
-   184 label *label242
+   181 read *tmp15 MEMORY :ptr
+   182 op max :maximum :maximum *tmp15
+   183 label *label240
 -    * op add :n :n 1
-+  185 op add :n 17 1
-   186 op sub :ptr :ptr 1
-   187 jump *label243 greaterThan :ptr 256
-   188 op sub :ptr 511 1
++  184 op add :n 17 1
+   185 op sub :ptr :ptr 1
+   186 jump *label241 greaterThan :ptr 256
+   187 op sub :ptr 511 1
  
-   191 read *tmp15 MEMORY :ptr
-   192 op max :maximum :maximum *tmp15
-   193 label *label245
+   190 read *tmp15 MEMORY :ptr
+   191 op max :maximum :maximum *tmp15
+   192 label *label243
 -    * op add :n :n 1
-+  194 op add :n 18 1
-   195 op sub :ptr :ptr 1
-   196 jump *label246 greaterThan :ptr 256
-   197 op sub :ptr 511 1
++  193 op add :n 18 1
+   194 op sub :ptr :ptr 1
+   195 jump *label244 greaterThan :ptr 256
+   196 op sub :ptr 511 1
  
-   200 read *tmp15 MEMORY :ptr
-   201 op max :maximum :maximum *tmp15
-   202 label *label248
+   199 read *tmp15 MEMORY :ptr
+   200 op max :maximum :maximum *tmp15
+   201 label *label246
 -    * op add :n :n 1
-+  203 op add :n 19 1
-   204 op sub :ptr :ptr 1
-   205 jump *label249 greaterThan :ptr 256
-   206 op sub :ptr 511 1
++  202 op add :n 19 1
+   203 op sub :ptr :ptr 1
+   204 jump *label247 greaterThan :ptr 256
+   205 op sub :ptr 511 1
  
-   209 read *tmp15 MEMORY :ptr
-   210 op max :maximum :maximum *tmp15
-   211 label *label251
+   208 read *tmp15 MEMORY :ptr
+   209 op max :maximum :maximum *tmp15
+   210 label *label249
 -    * op add :n :n 1
-+  212 op add :n 20 1
-   213 op sub :ptr :ptr 1
-   214 jump *label252 greaterThan :ptr 256
-   215 op sub :ptr 511 1
++  211 op add :n 20 1
+   212 op sub :ptr :ptr 1
+   213 jump *label250 greaterThan :ptr 256
+   214 op sub :ptr 511 1
  
-   218 read *tmp15 MEMORY :ptr
-   219 op max :maximum :maximum *tmp15
-   220 label *label254
+   217 read *tmp15 MEMORY :ptr
+   218 op max :maximum :maximum *tmp15
+   219 label *label252
 -    * op add :n :n 1
-+  221 op add :n 21 1
-   222 op sub :ptr :ptr 1
-   223 jump *label255 greaterThan :ptr 256
-   224 op sub :ptr 511 1
++  220 op add :n 21 1
+   221 op sub :ptr :ptr 1
+   222 jump *label253 greaterThan :ptr 256
+   223 op sub :ptr 511 1
  
-   227 read *tmp15 MEMORY :ptr
-   228 op max :maximum :maximum *tmp15
-   229 label *label257
+   226 read *tmp15 MEMORY :ptr
+   227 op max :maximum :maximum *tmp15
+   228 label *label255
 -    * op add :n :n 1
-+  230 op add :n 22 1
-   231 op sub :ptr :ptr 1
-   232 jump *label258 greaterThan :ptr 256
-   233 op sub :ptr 511 1
++  229 op add :n 22 1
+   230 op sub :ptr :ptr 1
+   231 jump *label256 greaterThan :ptr 256
+   232 op sub :ptr 511 1
  
-   236 read *tmp15 MEMORY :ptr
-   237 op max :maximum :maximum *tmp15
-   238 label *label260
+   235 read *tmp15 MEMORY :ptr
+   236 op max :maximum :maximum *tmp15
+   237 label *label258
 -    * op add :n :n 1
-+  239 op add :n 23 1
-   240 op sub :ptr :ptr 1
-   241 jump *label261 greaterThan :ptr 256
-   242 op sub :ptr 511 1
++  238 op add :n 23 1
+   239 op sub :ptr :ptr 1
+   240 jump *label259 greaterThan :ptr 256
+   241 op sub :ptr 511 1
  
-   245 read *tmp15 MEMORY :ptr
-   246 op max :maximum :maximum *tmp15
-   247 label *label263
+   244 read *tmp15 MEMORY :ptr
+   245 op max :maximum :maximum *tmp15
+   246 label *label261
 -    * op add :n :n 1
-+  248 op add :n 24 1
-   249 op sub :ptr :ptr 1
-   250 jump *label264 greaterThan :ptr 256
-   251 op sub :ptr 511 1
++  247 op add :n 24 1
+   248 op sub :ptr :ptr 1
+   249 jump *label262 greaterThan :ptr 256
+   250 op sub :ptr 511 1
  
-   254 read *tmp15 MEMORY :ptr
-   255 op max :maximum :maximum *tmp15
-   256 label *label266
+   253 read *tmp15 MEMORY :ptr
+   254 op max :maximum :maximum *tmp15
+   255 label *label264
 -    * op add :n :n 1
-+  257 op add :n 25 1
-   258 op sub :ptr :ptr 1
-   259 jump *label267 greaterThan :ptr 256
-   260 op sub :ptr 511 1
++  256 op add :n 25 1
+   257 op sub :ptr :ptr 1
+   258 jump *label265 greaterThan :ptr 256
+   259 op sub :ptr 511 1
  
-   263 read *tmp15 MEMORY :ptr
-   264 op max :maximum :maximum *tmp15
-   265 label *label269
+   262 read *tmp15 MEMORY :ptr
+   263 op max :maximum :maximum *tmp15
+   264 label *label267
 -    * op add :n :n 1
-+  266 op add :n 26 1
-   267 op sub :ptr :ptr 1
-   268 jump *label270 greaterThan :ptr 256
-   269 op sub :ptr 511 1
++  265 op add :n 26 1
+   266 op sub :ptr :ptr 1
+   267 jump *label268 greaterThan :ptr 256
+   268 op sub :ptr 511 1
  
-   272 read *tmp15 MEMORY :ptr
-   273 op max :maximum :maximum *tmp15
-   274 label *label272
+   271 read *tmp15 MEMORY :ptr
+   272 op max :maximum :maximum *tmp15
+   273 label *label270
 -    * op add :n :n 1
-+  275 op add :n 27 1
-   276 op sub :ptr :ptr 1
-   277 jump *label273 greaterThan :ptr 256
-   278 op sub :ptr 511 1
++  274 op add :n 27 1
+   275 op sub :ptr :ptr 1
+   276 jump *label271 greaterThan :ptr 256
+   277 op sub :ptr 511 1
  
-   281 read *tmp15 MEMORY :ptr
-   282 op max :maximum :maximum *tmp15
-   283 label *label275
+   280 read *tmp15 MEMORY :ptr
+   281 op max :maximum :maximum *tmp15
+   282 label *label273
 -    * op add :n :n 1
-+  284 op add :n 28 1
-   285 label *label4
-   286 op mul :maximum :maximum SMOOTH
-   287 label *label7
++  283 op add :n 28 1
+   284 label *label4
+   285 op mul :maximum :maximum SMOOTH
+   286 label *label7
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-30 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-30 instructions):
  
     18 label *label0
     19 label *label1
     20 read :maximum MEMORY :ptr
 -    * set :n 0
-    21 label *label187
-    22 label *label188
-    23 op sub :ptr :ptr 1
+    21 label *label186
+    22 op sub :ptr :ptr 1
+    23 jump *label187 greaterThan :ptr 256
  
-    28 read *tmp15 MEMORY :ptr
-    29 op max :maximum :maximum *tmp15
-    30 label *label191
+    27 read *tmp15 MEMORY :ptr
+    28 op max :maximum :maximum *tmp15
+    29 label *label189
 -    * op add :n 0 1
-    31 op sub :ptr :ptr 1
-    32 jump *label192 greaterThan :ptr 256
-    33 op sub :ptr 511 1
+    30 op sub :ptr :ptr 1
+    31 jump *label190 greaterThan :ptr 256
+    32 op sub :ptr 511 1
  
-    36 read *tmp15 MEMORY :ptr
-    37 op max :maximum :maximum *tmp15
-    38 label *label194
+    35 read *tmp15 MEMORY :ptr
+    36 op max :maximum :maximum *tmp15
+    37 label *label192
 -    * op add :n 1 1
-    39 op sub :ptr :ptr 1
-    40 jump *label195 greaterThan :ptr 256
-    41 op sub :ptr 511 1
+    38 op sub :ptr :ptr 1
+    39 jump *label193 greaterThan :ptr 256
+    40 op sub :ptr 511 1
  
-    44 read *tmp15 MEMORY :ptr
-    45 op max :maximum :maximum *tmp15
-    46 label *label197
+    43 read *tmp15 MEMORY :ptr
+    44 op max :maximum :maximum *tmp15
+    45 label *label195
 -    * op add :n 2 1
-    47 op sub :ptr :ptr 1
-    48 jump *label198 greaterThan :ptr 256
-    49 op sub :ptr 511 1
+    46 op sub :ptr :ptr 1
+    47 jump *label196 greaterThan :ptr 256
+    48 op sub :ptr 511 1
  
-    52 read *tmp15 MEMORY :ptr
-    53 op max :maximum :maximum *tmp15
-    54 label *label200
+    51 read *tmp15 MEMORY :ptr
+    52 op max :maximum :maximum *tmp15
+    53 label *label198
 -    * op add :n 3 1
-    55 op sub :ptr :ptr 1
-    56 jump *label201 greaterThan :ptr 256
-    57 op sub :ptr 511 1
+    54 op sub :ptr :ptr 1
+    55 jump *label199 greaterThan :ptr 256
+    56 op sub :ptr 511 1
  
-    60 read *tmp15 MEMORY :ptr
-    61 op max :maximum :maximum *tmp15
-    62 label *label203
+    59 read *tmp15 MEMORY :ptr
+    60 op max :maximum :maximum *tmp15
+    61 label *label201
 -    * op add :n 4 1
-    63 op sub :ptr :ptr 1
-    64 jump *label204 greaterThan :ptr 256
-    65 op sub :ptr 511 1
+    62 op sub :ptr :ptr 1
+    63 jump *label202 greaterThan :ptr 256
+    64 op sub :ptr 511 1
  
-    68 read *tmp15 MEMORY :ptr
-    69 op max :maximum :maximum *tmp15
-    70 label *label206
+    67 read *tmp15 MEMORY :ptr
+    68 op max :maximum :maximum *tmp15
+    69 label *label204
 -    * op add :n 5 1
-    71 op sub :ptr :ptr 1
-    72 jump *label207 greaterThan :ptr 256
-    73 op sub :ptr 511 1
+    70 op sub :ptr :ptr 1
+    71 jump *label205 greaterThan :ptr 256
+    72 op sub :ptr 511 1
  
-    76 read *tmp15 MEMORY :ptr
-    77 op max :maximum :maximum *tmp15
-    78 label *label209
+    75 read *tmp15 MEMORY :ptr
+    76 op max :maximum :maximum *tmp15
+    77 label *label207
 -    * op add :n 6 1
-    79 op sub :ptr :ptr 1
-    80 jump *label210 greaterThan :ptr 256
-    81 op sub :ptr 511 1
+    78 op sub :ptr :ptr 1
+    79 jump *label208 greaterThan :ptr 256
+    80 op sub :ptr 511 1
  
-    84 read *tmp15 MEMORY :ptr
-    85 op max :maximum :maximum *tmp15
-    86 label *label212
+    83 read *tmp15 MEMORY :ptr
+    84 op max :maximum :maximum *tmp15
+    85 label *label210
 -    * op add :n 7 1
-    87 op sub :ptr :ptr 1
-    88 jump *label213 greaterThan :ptr 256
-    89 op sub :ptr 511 1
+    86 op sub :ptr :ptr 1
+    87 jump *label211 greaterThan :ptr 256
+    88 op sub :ptr 511 1
  
-    92 read *tmp15 MEMORY :ptr
-    93 op max :maximum :maximum *tmp15
-    94 label *label215
+    91 read *tmp15 MEMORY :ptr
+    92 op max :maximum :maximum *tmp15
+    93 label *label213
 -    * op add :n 8 1
-    95 op sub :ptr :ptr 1
-    96 jump *label216 greaterThan :ptr 256
-    97 op sub :ptr 511 1
+    94 op sub :ptr :ptr 1
+    95 jump *label214 greaterThan :ptr 256
+    96 op sub :ptr 511 1
  
-   100 read *tmp15 MEMORY :ptr
-   101 op max :maximum :maximum *tmp15
-   102 label *label218
+    99 read *tmp15 MEMORY :ptr
+   100 op max :maximum :maximum *tmp15
+   101 label *label216
 -    * op add :n 9 1
-   103 op sub :ptr :ptr 1
-   104 jump *label219 greaterThan :ptr 256
-   105 op sub :ptr 511 1
+   102 op sub :ptr :ptr 1
+   103 jump *label217 greaterThan :ptr 256
+   104 op sub :ptr 511 1
  
-   108 read *tmp15 MEMORY :ptr
-   109 op max :maximum :maximum *tmp15
-   110 label *label221
+   107 read *tmp15 MEMORY :ptr
+   108 op max :maximum :maximum *tmp15
+   109 label *label219
 -    * op add :n 10 1
-   111 op sub :ptr :ptr 1
-   112 jump *label222 greaterThan :ptr 256
-   113 op sub :ptr 511 1
+   110 op sub :ptr :ptr 1
+   111 jump *label220 greaterThan :ptr 256
+   112 op sub :ptr 511 1
  
-   116 read *tmp15 MEMORY :ptr
-   117 op max :maximum :maximum *tmp15
-   118 label *label224
+   115 read *tmp15 MEMORY :ptr
+   116 op max :maximum :maximum *tmp15
+   117 label *label222
 -    * op add :n 11 1
-   119 op sub :ptr :ptr 1
-   120 jump *label225 greaterThan :ptr 256
-   121 op sub :ptr 511 1
+   118 op sub :ptr :ptr 1
+   119 jump *label223 greaterThan :ptr 256
+   120 op sub :ptr 511 1
  
-   124 read *tmp15 MEMORY :ptr
-   125 op max :maximum :maximum *tmp15
-   126 label *label227
+   123 read *tmp15 MEMORY :ptr
+   124 op max :maximum :maximum *tmp15
+   125 label *label225
 -    * op add :n 12 1
-   127 op sub :ptr :ptr 1
-   128 jump *label228 greaterThan :ptr 256
-   129 op sub :ptr 511 1
+   126 op sub :ptr :ptr 1
+   127 jump *label226 greaterThan :ptr 256
+   128 op sub :ptr 511 1
  
-   132 read *tmp15 MEMORY :ptr
-   133 op max :maximum :maximum *tmp15
-   134 label *label230
+   131 read *tmp15 MEMORY :ptr
+   132 op max :maximum :maximum *tmp15
+   133 label *label228
 -    * op add :n 13 1
-   135 op sub :ptr :ptr 1
-   136 jump *label231 greaterThan :ptr 256
-   137 op sub :ptr 511 1
+   134 op sub :ptr :ptr 1
+   135 jump *label229 greaterThan :ptr 256
+   136 op sub :ptr 511 1
  
-   140 read *tmp15 MEMORY :ptr
-   141 op max :maximum :maximum *tmp15
-   142 label *label233
+   139 read *tmp15 MEMORY :ptr
+   140 op max :maximum :maximum *tmp15
+   141 label *label231
 -    * op add :n 14 1
-   143 op sub :ptr :ptr 1
-   144 jump *label234 greaterThan :ptr 256
-   145 op sub :ptr 511 1
+   142 op sub :ptr :ptr 1
+   143 jump *label232 greaterThan :ptr 256
+   144 op sub :ptr 511 1
  
-   148 read *tmp15 MEMORY :ptr
-   149 op max :maximum :maximum *tmp15
-   150 label *label236
+   147 read *tmp15 MEMORY :ptr
+   148 op max :maximum :maximum *tmp15
+   149 label *label234
 -    * op add :n 15 1
-   151 op sub :ptr :ptr 1
-   152 jump *label237 greaterThan :ptr 256
-   153 op sub :ptr 511 1
+   150 op sub :ptr :ptr 1
+   151 jump *label235 greaterThan :ptr 256
+   152 op sub :ptr 511 1
  
-   156 read *tmp15 MEMORY :ptr
-   157 op max :maximum :maximum *tmp15
-   158 label *label239
+   155 read *tmp15 MEMORY :ptr
+   156 op max :maximum :maximum *tmp15
+   157 label *label237
 -    * op add :n 16 1
-   159 op sub :ptr :ptr 1
-   160 jump *label240 greaterThan :ptr 256
-   161 op sub :ptr 511 1
+   158 op sub :ptr :ptr 1
+   159 jump *label238 greaterThan :ptr 256
+   160 op sub :ptr 511 1
  
-   164 read *tmp15 MEMORY :ptr
-   165 op max :maximum :maximum *tmp15
-   166 label *label242
+   163 read *tmp15 MEMORY :ptr
+   164 op max :maximum :maximum *tmp15
+   165 label *label240
 -    * op add :n 17 1
-   167 op sub :ptr :ptr 1
-   168 jump *label243 greaterThan :ptr 256
-   169 op sub :ptr 511 1
+   166 op sub :ptr :ptr 1
+   167 jump *label241 greaterThan :ptr 256
+   168 op sub :ptr 511 1
  
-   172 read *tmp15 MEMORY :ptr
-   173 op max :maximum :maximum *tmp15
-   174 label *label245
+   171 read *tmp15 MEMORY :ptr
+   172 op max :maximum :maximum *tmp15
+   173 label *label243
 -    * op add :n 18 1
-   175 op sub :ptr :ptr 1
-   176 jump *label246 greaterThan :ptr 256
-   177 op sub :ptr 511 1
+   174 op sub :ptr :ptr 1
+   175 jump *label244 greaterThan :ptr 256
+   176 op sub :ptr 511 1
  
-   180 read *tmp15 MEMORY :ptr
-   181 op max :maximum :maximum *tmp15
-   182 label *label248
+   179 read *tmp15 MEMORY :ptr
+   180 op max :maximum :maximum *tmp15
+   181 label *label246
 -    * op add :n 19 1
-   183 op sub :ptr :ptr 1
-   184 jump *label249 greaterThan :ptr 256
-   185 op sub :ptr 511 1
+   182 op sub :ptr :ptr 1
+   183 jump *label247 greaterThan :ptr 256
+   184 op sub :ptr 511 1
  
-   188 read *tmp15 MEMORY :ptr
-   189 op max :maximum :maximum *tmp15
-   190 label *label251
+   187 read *tmp15 MEMORY :ptr
+   188 op max :maximum :maximum *tmp15
+   189 label *label249
 -    * op add :n 20 1
-   191 op sub :ptr :ptr 1
-   192 jump *label252 greaterThan :ptr 256
-   193 op sub :ptr 511 1
+   190 op sub :ptr :ptr 1
+   191 jump *label250 greaterThan :ptr 256
+   192 op sub :ptr 511 1
  
-   196 read *tmp15 MEMORY :ptr
-   197 op max :maximum :maximum *tmp15
-   198 label *label254
+   195 read *tmp15 MEMORY :ptr
+   196 op max :maximum :maximum *tmp15
+   197 label *label252
 -    * op add :n 21 1
-   199 op sub :ptr :ptr 1
-   200 jump *label255 greaterThan :ptr 256
-   201 op sub :ptr 511 1
+   198 op sub :ptr :ptr 1
+   199 jump *label253 greaterThan :ptr 256
+   200 op sub :ptr 511 1
  
-   204 read *tmp15 MEMORY :ptr
-   205 op max :maximum :maximum *tmp15
-   206 label *label257
+   203 read *tmp15 MEMORY :ptr
+   204 op max :maximum :maximum *tmp15
+   205 label *label255
 -    * op add :n 22 1
-   207 op sub :ptr :ptr 1
-   208 jump *label258 greaterThan :ptr 256
-   209 op sub :ptr 511 1
+   206 op sub :ptr :ptr 1
+   207 jump *label256 greaterThan :ptr 256
+   208 op sub :ptr 511 1
  
-   212 read *tmp15 MEMORY :ptr
-   213 op max :maximum :maximum *tmp15
-   214 label *label260
+   211 read *tmp15 MEMORY :ptr
+   212 op max :maximum :maximum *tmp15
+   213 label *label258
 -    * op add :n 23 1
-   215 op sub :ptr :ptr 1
-   216 jump *label261 greaterThan :ptr 256
-   217 op sub :ptr 511 1
+   214 op sub :ptr :ptr 1
+   215 jump *label259 greaterThan :ptr 256
+   216 op sub :ptr 511 1
  
-   220 read *tmp15 MEMORY :ptr
-   221 op max :maximum :maximum *tmp15
-   222 label *label263
+   219 read *tmp15 MEMORY :ptr
+   220 op max :maximum :maximum *tmp15
+   221 label *label261
 -    * op add :n 24 1
-   223 op sub :ptr :ptr 1
-   224 jump *label264 greaterThan :ptr 256
-   225 op sub :ptr 511 1
+   222 op sub :ptr :ptr 1
+   223 jump *label262 greaterThan :ptr 256
+   224 op sub :ptr 511 1
  
-   228 read *tmp15 MEMORY :ptr
-   229 op max :maximum :maximum *tmp15
-   230 label *label266
+   227 read *tmp15 MEMORY :ptr
+   228 op max :maximum :maximum *tmp15
+   229 label *label264
 -    * op add :n 25 1
-   231 op sub :ptr :ptr 1
-   232 jump *label267 greaterThan :ptr 256
-   233 op sub :ptr 511 1
+   230 op sub :ptr :ptr 1
+   231 jump *label265 greaterThan :ptr 256
+   232 op sub :ptr 511 1
  
-   236 read *tmp15 MEMORY :ptr
-   237 op max :maximum :maximum *tmp15
-   238 label *label269
+   235 read *tmp15 MEMORY :ptr
+   236 op max :maximum :maximum *tmp15
+   237 label *label267
 -    * op add :n 26 1
-   239 op sub :ptr :ptr 1
-   240 jump *label270 greaterThan :ptr 256
-   241 op sub :ptr 511 1
+   238 op sub :ptr :ptr 1
+   239 jump *label268 greaterThan :ptr 256
+   240 op sub :ptr 511 1
  
-   244 read *tmp15 MEMORY :ptr
-   245 op max :maximum :maximum *tmp15
-   246 label *label272
+   243 read *tmp15 MEMORY :ptr
+   244 op max :maximum :maximum *tmp15
+   245 label *label270
 -    * op add :n 27 1
-   247 op sub :ptr :ptr 1
-   248 jump *label273 greaterThan :ptr 256
-   249 op sub :ptr 511 1
+   246 op sub :ptr :ptr 1
+   247 jump *label271 greaterThan :ptr 256
+   248 op sub :ptr 511 1
  
-   252 read *tmp15 MEMORY :ptr
-   253 op max :maximum :maximum *tmp15
-   254 label *label275
+   251 read *tmp15 MEMORY :ptr
+   252 op max :maximum :maximum *tmp15
+   253 label *label273
 -    * op add :n 28 1
-   255 label *label4
-   256 op mul :maximum :maximum SMOOTH
-   257 label *label7
+   254 label *label4
+   255 op mul :maximum :maximum SMOOTH
+   256 label *label7
 
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-2 instructions):
  
-   889 op sub *tmp48 :value :t
-   890 op add :value *tmp48 :h
-   891 op sub :head :head 1
+   887 op sub *tmp48 :value :t
+   888 op add :value *tmp48 :h
+   889 op sub :head :head 1
 -    * jump *label181 greaterThan :head 256
-   892 label *label181
-   893 label *label182
-   894 op sub :tail :tail 1
+   890 label *label181
+   891 label *label182
+   892 op sub :tail :tail 1
 -    * jump *label183 greaterThan :tail 256
-   895 label *label183
-   896 label *label184
-   897 op mul *tmp56 :value :scale
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2 instructions):
- 
-   888 read :h MEMORY :head
-   889 op sub *tmp48 :value :t
-   890 op add :value *tmp48 :h
--    * op sub :head :head 1
-   891 label *label181
-   892 label *label182
--    * op sub :tail :tail 1
    893 label *label183
    894 label *label184
    895 op mul *tmp56 :value :scale
 
-Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1 (-2 instructions):
  
-   768 jump *label186 equal *tmp18 0
+   886 read :h MEMORY :head
+   887 op sub *tmp48 :value :t
+   888 op add :value *tmp48 :h
+-    * op sub :head :head 1
+   889 label *label181
+   890 label *label182
+-    * op sub :tail :tail 1
+   891 label *label183
+   892 label *label184
+   893 op mul *tmp56 :value :scale
+
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
+ 
+   768 jump *label39 equal *tmp18 0
    769 label *label9
    770 control enabled switch1 0
 -    * end
@@ -3798,183 +3830,183 @@ op add :ptr :ptr 254
 label *label0
 read :maximum MEMORY :ptr
 op sub :ptr :ptr 1
-jump *label189 greaterThan :ptr 256
+jump *label187 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label189
+label *label187
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label192 greaterThan :ptr 256
+jump *label190 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label192
+label *label190
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label195 greaterThan :ptr 256
+jump *label193 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label195
+label *label193
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label198 greaterThan :ptr 256
+jump *label196 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label198
+label *label196
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label201 greaterThan :ptr 256
+jump *label199 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label201
+label *label199
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label204 greaterThan :ptr 256
+jump *label202 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label204
+label *label202
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label207 greaterThan :ptr 256
+jump *label205 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label207
+label *label205
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label210 greaterThan :ptr 256
+jump *label208 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label210
+label *label208
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label213 greaterThan :ptr 256
+jump *label211 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label213
+label *label211
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label216 greaterThan :ptr 256
+jump *label214 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label216
+label *label214
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label219 greaterThan :ptr 256
+jump *label217 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label219
+label *label217
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label222 greaterThan :ptr 256
+jump *label220 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label222
+label *label220
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label225 greaterThan :ptr 256
+jump *label223 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label225
+label *label223
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label228 greaterThan :ptr 256
+jump *label226 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label228
+label *label226
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label231 greaterThan :ptr 256
+jump *label229 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label231
+label *label229
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label234 greaterThan :ptr 256
+jump *label232 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label234
+label *label232
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label237 greaterThan :ptr 256
+jump *label235 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label237
+label *label235
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label240 greaterThan :ptr 256
+jump *label238 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label240
+label *label238
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label243 greaterThan :ptr 256
+jump *label241 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label243
+label *label241
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label246 greaterThan :ptr 256
+jump *label244 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label246
+label *label244
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label249 greaterThan :ptr 256
+jump *label247 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label249
+label *label247
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label252 greaterThan :ptr 256
+jump *label250 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label252
+label *label250
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label255 greaterThan :ptr 256
+jump *label253 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label255
+label *label253
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label258 greaterThan :ptr 256
+jump *label256 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label258
+label *label256
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label261 greaterThan :ptr 256
+jump *label259 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label261
+label *label259
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label264 greaterThan :ptr 256
+jump *label262 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label264
+label *label262
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label267 greaterThan :ptr 256
+jump *label265 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label267
+label *label265
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label270 greaterThan :ptr 256
+jump *label268 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label270
+label *label268
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op sub :ptr :ptr 1
-jump *label273 greaterThan :ptr 256
+jump *label271 greaterThan :ptr 256
 op sub :ptr 511 1
-label *label273
+label *label271
 read *tmp15 MEMORY :ptr
 op max :maximum :maximum *tmp15
 op mul :maximum :maximum SMOOTH
 sensor *tmp18 switch1 @enabled
 jump *label9 notEqual *tmp18 0
-label *label186
+label *label39
 print "Item Rate Display"
 set :start @time
 sensor *tmp21 COORD @dead
@@ -4532,6 +4564,6 @@ print "\nLoops: "
 print :loops
 printflush message1
 sensor *tmp18 switch1 @enabled
-jump *label186 equal *tmp18 0
+jump *label39 equal *tmp18 0
 label *label9
 control enabled switch1 0

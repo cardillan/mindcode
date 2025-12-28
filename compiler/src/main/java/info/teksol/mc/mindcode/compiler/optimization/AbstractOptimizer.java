@@ -238,10 +238,10 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
 
         public static OptimizationEffect fromComparison(ArrayAccessInstruction original, ArrayAccessInstruction optimized,
                 @Nullable Map<String, Integer> originalStructures, @Nullable Map<String, Integer> optimizedStructures) {
-            int originalSize = original.getRealSize(originalStructures);
+            int originalSize = original.getSharedSize(originalStructures);
             double originalSteps = original.getExecutionSteps();
 
-            int optimizedSize = optimized.getRealSize(optimizedStructures);
+            int optimizedSize = optimized.getSharedSize(optimizedStructures);
             double optimizedSteps = optimized.getExecutionSteps();
 
             double weight = original.getAstContext().totalWeight();

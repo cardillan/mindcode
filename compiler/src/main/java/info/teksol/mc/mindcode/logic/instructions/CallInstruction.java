@@ -40,7 +40,7 @@ public class CallInstruction extends BaseInstruction implements CallingInstructi
         return (LogicVariable) getArg(2);
     }
 
-    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
-        return super.getRealSize(sharedStructures) + (astContext.getGlobalProfile().isSymbolicLabels() ? 1 : 0);
+    public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
+        return super.getSharedSize(sharedStructures) + (astContext.getGlobalProfile().isSymbolicLabels() ? 1 : 0);
     }
 }

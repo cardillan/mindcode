@@ -1,10 +1,10 @@
     50 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (5 iterations).
+     2 instructions eliminated by Temp Variables Elimination (7 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     2 instructions eliminated by Data Flow Optimization (4 iterations).
-     1 instructions eliminated by Loop Rotation (2 iterations).
-       1 loop conditions were fully rotated.
+     1 instructions eliminated by Jump Normalization (5 iterations).
+     2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+       1 loop conditions were partially rotated.
     42 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -184,24 +184,43 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     37 jump *label3 equal *tmp2 false
     38 op mul *tmp5 :hash 31
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
+     1 set :i -1
+     2 label *label0
+     3 jump *label2 greaterThanEq :i @blockCount
++    4 label *label9
+     5 lookup block :block :i
+     6 jump *label8 equal :block @copper-wall
+     7 jump *label8 equal :block @copper-wall-large
+ 
+    45 label *label4
+    46 label *label1
+    47 op add :i :i 1
+-    * jump *label0 always
++   48 jump *label9 lessThan :i @blockCount
+    49 label *label2
+    50 print :hash
+    51 assertequals 2750008148 :hash "Test selected blocks"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
      0 set :hash 0
      1 set :i -1
      2 label *label0
 -    * jump *label2 greaterThanEq :i @blockCount
-+    3 label *label9
++    3 jump *label2 greaterThanEq -1 @blockCount
+     4 label *label9
+     5 lookup block :block :i
+     6 jump *label8 equal :block @copper-wall
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
+     0 set :hash 0
+     1 set :i -1
+     2 label *label0
+-    * jump *label2 greaterThanEq -1 @blockCount
+     3 label *label9
      4 lookup block :block :i
      5 jump *label8 equal :block @copper-wall
-     6 jump *label8 equal :block @copper-wall-large
- 
-    44 label *label4
-    45 label *label1
-    46 op add :i :i 1
--    * jump *label0 always
-+   47 jump *label9 lessThan :i @blockCount
-    48 label *label2
-    49 print :hash
-    50 assertequals 2750008148 :hash "Test selected blocks"
 
 Final code before resolving virtual instructions:
 

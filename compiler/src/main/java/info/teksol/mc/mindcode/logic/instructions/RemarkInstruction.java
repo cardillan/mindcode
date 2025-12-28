@@ -32,7 +32,7 @@ public class RemarkInstruction extends BaseInstruction {
     }
 
     @Override
-    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
+    public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
         return switch (astContext.getLocalProfile().getRemarks()) {
             case NONE, COMMENTS -> 0;
             case ACTIVE -> 1;

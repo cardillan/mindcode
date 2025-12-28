@@ -30,6 +30,9 @@ public enum AstSubcontextType {
     /// Initialization code for a control structure (only loops at this moment).
     INIT            ("INIT"),
 
+    /// Hoisting context withing a fully rotated loop (placed between the initial condition and the loop body)
+    HOIST           ("HOIS"),
+
     /// Update code (setting up the next iteration) in a loop.
     UPDATE          ("UPDT", false),
 

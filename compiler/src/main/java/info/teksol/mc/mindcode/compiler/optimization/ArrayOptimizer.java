@@ -333,8 +333,8 @@ class ArrayOptimizer extends BaseOptimizer {
                 affectedInstructions.add(original);
             } else {
                 // No change in effect
-                original.getRealSize(originalStructures);
-                original.getRealSize(optimizedStructures);
+                original.getSharedSize(originalStructures);
+                original.getSharedSize(optimizedStructures);
             }
         }
 

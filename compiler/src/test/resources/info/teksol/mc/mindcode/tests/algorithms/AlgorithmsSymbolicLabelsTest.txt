@@ -9,6 +9,6 @@ pascal-triangle.mnd:                               46     1189      93.4%   954D
 sorting with bubble-sort.mnd:                      26    15476     100.0%   09F1B1A6B8B97AF2   70D146070D037071
 sorting with heap-sort.mnd:                        53    64558     100.0%   0CEFC91051987EFB   E7D4D623EEFFC502
 sorting with insert-sort.mnd:                      26    26063     100.0%   0AF6F57A5EBA45E2   30BCE5A20E6E7676
-sorting with quick-sort.mnd:                       68    49132      98.5%   24EED06D28A2DCC0   C1F05290B168EB62
+sorting with quick-sort.mnd:                       69    49133      98.5%   24EED06D28A2DCC0   2B4DC40EDF517307
 sorting with select-sort.mnd:                      29    35152     100.0%   3F4EE1C8DB9B8B18   8B5E67E0BB18EE84
 storage-display.mnd:                              698     1057      28.2%   FD4E7E3F60CEF5E4   9FAAFC10FE1C9800

@@ -255,16 +255,20 @@ public final class AstContext {
         return parent != null && parent.matchesRecursively(contextTypes);
     }
 
-    public @Nullable AstContext findContextOfType(AstContextType contextType) {
+    public Optional<AstContext> findSuperContextOfType(Predicate<AstContext> matcher) {
         AstContext current = this;
         while (current != null) {
-            if (current.contextType == contextType) {
-                return current;
+            if (matcher.test(current)) {
+                return Optional.of(current);
             }
             current = current.parent;
         }
 
-        return null;
+        return Optional.empty();
+    }
+
+    public @Nullable AstContext findSuperContextOfType(AstContextType contextType) {
+        return findSuperContextOfType(ctx -> ctx.matches(contextType)).orElse(null);
     }
 
     public @Nullable AstContext findTopContextOfType(AstContextType contextType) {

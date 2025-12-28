@@ -69,7 +69,7 @@ public class CustomInstruction extends AbstractInstruction {
     }
 
     @Override
-    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
+    public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
         return label ? 0 : 1;
     }
 

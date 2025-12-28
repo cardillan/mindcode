@@ -11,29 +11,29 @@
     71 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 923):
-  * Partial loop rotation at line 17:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Partial loop rotation at line 24:1                           size    +1, benefit       25.0, efficiency     25.000
-    Partial loop rotation at line 32:1                           size    +1, benefit       25.0, efficiency     25.000
-    Partial loop rotation at line 45:1                           size    +1, benefit       25.0, efficiency     25.000
-    Partial loop rotation at line 58:1                           size    +1, benefit       25.0, efficiency     25.000
+  * Full loop rotation at line 17:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
+    Full loop rotation at line 24:1                              size    +1, benefit       26.0, efficiency     26.000
+    Full loop rotation at line 32:1                              size    +1, benefit       26.0, efficiency     26.000
+    Full loop rotation at line 45:1                              size    +1, benefit       26.0, efficiency     26.000
+    Full loop rotation at line 58:1                              size    +1, benefit       26.0, efficiency     26.000
 
 Pass 1: speed optimization selection (cost limit 922):
-  * Partial loop rotation at line 24:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Partial loop rotation at line 32:1                           size    +1, benefit       25.0, efficiency     25.000
-    Partial loop rotation at line 45:1                           size    +1, benefit       25.0, efficiency     25.000
-    Partial loop rotation at line 58:1                           size    +1, benefit       25.0, efficiency     25.000
+  * Full loop rotation at line 24:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
+    Full loop rotation at line 32:1                              size    +1, benefit       26.0, efficiency     26.000
+    Full loop rotation at line 45:1                              size    +1, benefit       26.0, efficiency     26.000
+    Full loop rotation at line 58:1                              size    +1, benefit       26.0, efficiency     26.000
 
 Pass 1: speed optimization selection (cost limit 921):
-  * Partial loop rotation at line 32:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Partial loop rotation at line 45:1                           size    +1, benefit       25.0, efficiency     25.000
-    Partial loop rotation at line 58:1                           size    +1, benefit       25.0, efficiency     25.000
+  * Full loop rotation at line 32:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
+    Full loop rotation at line 45:1                              size    +1, benefit       26.0, efficiency     26.000
+    Full loop rotation at line 58:1                              size    +1, benefit       26.0, efficiency     26.000
 
 Pass 1: speed optimization selection (cost limit 920):
-  * Partial loop rotation at line 45:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Partial loop rotation at line 58:1                           size    +1, benefit       25.0, efficiency     25.000
+  * Full loop rotation at line 45:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
+    Full loop rotation at line 58:1                              size    +1, benefit       26.0, efficiency     26.000
 
 Pass 1: speed optimization selection (cost limit 919):
-  * Partial loop rotation at line 58:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  * Full loop rotation at line 58:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 instructions):
  
@@ -264,7 +264,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     20 label *label3
     21 sensor *tmp10 switch1 @enabled
 
-Modifications by Partial loop rotation at line 17:1 (+1 instructions):
+Modifications by Full loop rotation at line 17:1 (+1 instructions):
  
     20 label *label3
     21 sensor *tmp10 switch1 @enabled
@@ -282,7 +282,7 @@ Modifications by Partial loop rotation at line 17:1 (+1 instructions):
     32 control enabled switch1 false
     33 label *label6
 
-Modifications by Partial loop rotation at line 24:1 (+1 instructions):
+Modifications by Full loop rotation at line 24:1 (+1 instructions):
  
     33 label *label6
     34 sensor *tmp13 @unit @controlled
@@ -300,7 +300,7 @@ Modifications by Partial loop rotation at line 24:1 (+1 instructions):
     45 ucontrol flag 1
     46 label *label9
 
-Modifications by Partial loop rotation at line 32:1 (+1 instructions):
+Modifications by Full loop rotation at line 32:1 (+1 instructions):
  
     46 label *label9
     47 ucontrol within 10 10 1 *tmp15
@@ -317,7 +317,7 @@ Modifications by Partial loop rotation at line 32:1 (+1 instructions):
     57 print "Moving to destination"
     58 printflush message1
 
-Modifications by Partial loop rotation at line 45:1 (+1 instructions):
+Modifications by Full loop rotation at line 45:1 (+1 instructions):
  
     61 label *label12
     62 ucontrol within 10 .DY 1 *tmp18
@@ -332,7 +332,7 @@ Modifications by Partial loop rotation at line 45:1 (+1 instructions):
     70 set :finish @time
     71 op sub *tmp24 10 .DY
 
-Modifications by Partial loop rotation at line 58:1 (+1 instructions):
+Modifications by Full loop rotation at line 58:1 (+1 instructions):
  
     80 label *label15
     81 sensor *tmp32 switch1 @enabled

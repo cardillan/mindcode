@@ -1,24 +1,24 @@
    138 instructions before optimizations.
-    19 instructions eliminated by Temp Variables Elimination (5 iterations).
+    19 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instructions eliminated by Case Expression Optimization.
      8 instructions eliminated by Dead Code Elimination (4 iterations).
-     8 instructions eliminated by Condition Optimization (5 iterations).
-     3 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     2 instructions modified by Data Flow Optimization (2 passes, 6 iterations).
-     1 instructions eliminated by Loop Rotation (2 iterations).
-       2 loop conditions were fully rotated.
-       3 loop conditions were partially rotated.
-     2 instructions eliminated by Case Switching (4 iterations).
+     1 instructions eliminated by Jump Normalization (5 iterations).
+     8 instructions eliminated by Condition Optimization (6 iterations).
+     3 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+     3 instructions modified by Data Flow Optimization (2 passes, 7 iterations).
+       1 loop conditions were fully rotated.
+       4 loop conditions were partially rotated.
+     2 instructions eliminated by Case Switching (5 iterations).
      1 case expressions converted to fast dispatch by Case Switching.
-     7 instructions eliminated by Jump Straightening (5 iterations).
+     7 instructions eliminated by Jump Straightening (6 iterations).
      5 instructions eliminated by Print Merging.
     84 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 909):
-  * Partial loop rotation at line 56:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+Pass 1: speed optimization selection (cost limit 908):
+  * Full loop rotation at line 56:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
   o Fast-dispatch case at line 22:9                              size    -3, benefit      625.0, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 908):
+Pass 1: speed optimization selection (cost limit 907):
   * Fast-dispatch case at line 22:9                              size    -3, benefit      625.0, efficiency   Infinity (-2 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -366,7 +366,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      6 jump *label3 equal .MEMORY null
      7 label *label4
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
      3 set .SWITCH null
      4 set .MESSAGE null
@@ -405,37 +405,36 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-2 instruct
     67 read .CURRENT_INDEX .MEMORY 1
     68 read .R0 .MEMORY 3
  
-    89 draw color .R1 .G1 .B1 255
     90 set :x 159
     91 label *label26
--    * jump *label28 lessThanEq :x 10
-+   92 label *label35
-    93 op sub :head :head 1
-    94 read :value .MEMORY :head
-    95 op sub :x1 :x 5
+    92 jump *label28 lessThanEq :x 10
++   93 label *label35
+    94 op sub :head :head 1
+    95 read :value .MEMORY :head
+    96 op sub :x1 :x 5
  
-    97 set :x :x1
-    98 set :last :value
-    99 label *label27
+    98 set :x :x1
+    99 set :last :value
+   100 label *label27
 -    * jump *label26 always
-+  100 jump *label35 greaterThan :x 10
-   101 label *label28
-   102 draw color 255 255 255 255
-   103 draw lineRect 10 10 156 156
++  101 jump *label35 greaterThan :x 10
+   102 label *label28
+   103 draw color 255 255 255 255
+   104 draw lineRect 10 10 156 156
  
-   110 set :loops 0
-   111 label *label29
-   112 jump *label31 greaterThanEq @time :wait
-+  113 label *label36
-   114 op add :loops :loops 1
-   115 label *label30
+   111 set :loops 0
+   112 label *label29
+   113 jump *label31 greaterThanEq @time :wait
++  114 label *label36
+   115 op add :loops :loops 1
+   116 label *label30
 -    * jump *label29 always
-+  116 jump *label36 lessThan @time :wait
-   117 label *label31
-   118 drawflush .DISPLAY
-   119 print "\nWait loops: "
++  117 jump *label36 lessThan @time :wait
+   118 label *label31
+   119 drawflush .DISPLAY
+   120 print "\nWait loops: "
 
-Modifications by Partial loop rotation at line 56:1 (+1 instructions):
+Modifications by Full loop rotation at line 56:1 (+1 instructions):
  
     74 label *label23
     75 sensor *tmp19 .SWITCH @enabled
@@ -445,26 +444,35 @@ Modifications by Partial loop rotation at line 56:1 (+1 instructions):
     79 print "Item/Liquid/Energy Level Display"
     80 draw clear 0 0 80
  
-   120 print :loops
-   121 printflush .MESSAGE
-   122 label *label24
+   121 print :loops
+   122 printflush .MESSAGE
+   123 label *label24
 -    * jump *label23 always
-+  123 sensor *tmp19 .SWITCH @enabled
-+  124 jump *label37 equal *tmp19 0
-   125 label *label25
-   126 control enabled switch1 0
-   127 end
++  124 sensor *tmp19 .SWITCH @enabled
++  125 jump *label37 equal *tmp19 0
+   126 label *label25
+   127 control enabled switch1 0
+   128 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    97 set :x :x1
-    98 set :last :value
-    99 label *label27
+    89 draw color .R1 .G1 .B1 255
+    90 set :x 159
+    91 label *label26
+-    * jump *label28 lessThanEq :x 10
++   92 jump *label28 lessThanEq 159 10
+    93 label *label35
+    94 op sub :head :head 1
+    95 read :value .MEMORY :head
+ 
+    98 set :x :x1
+    99 set :last :value
+   100 label *label27
 -    * jump *label35 greaterThan :x 10
-+  100 jump *label35 greaterThan :x1 10
-   101 label *label28
-   102 draw color 255 255 255 255
-   103 draw lineRect 10 10 156 156
++  101 jump *label35 greaterThan :x1 10
+   102 label *label28
+   103 draw color 255 255 255 255
+   104 draw lineRect 10 10 156 156
 
 Modifications by Fast-dispatch case at line 22:9 (-2 instructions):
  
@@ -510,7 +518,17 @@ Modifications by Fast-dispatch case at line 22:9 (-2 instructions):
     48 label *label6
     49 jump *label34 greaterThan :n 0
 
-Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
+ 
+    94 draw color .R1 .G1 .B1 255
+    95 set :x 159
+    96 label *label26
+-    * jump *label28 lessThanEq 159 10
+    97 label *label35
+    98 op sub :head :head 1
+    99 read :value .MEMORY :head
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
    105 jump *label37 equal *tmp19 0
    106 label *label25

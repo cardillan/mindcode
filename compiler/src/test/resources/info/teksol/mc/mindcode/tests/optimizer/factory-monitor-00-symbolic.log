@@ -19,7 +19,7 @@
    471 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 637):
-  * Partial loop rotation at line 160:1                          size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  * Full loop rotation at line 160:1                             size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
   o Convert case at line 20:9 (segments: 13)                     size    +4, benefit     4747.6, efficiency   1186.899
   o Convert case at line 20:9 (segments: 5, padded low)          size    +8, benefit     4752.4, efficiency    594.050
   o Convert case at line 20:9 (segments: 1, padded low)          size  +137, benefit     4793.3, efficiency     34.987
@@ -1890,7 +1890,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    266 op sub :crh *tmp80 0
    267 jump *label50 always
 
-Modifications by Partial loop rotation at line 160:1 (+1 instructions):
+Modifications by Full loop rotation at line 160:1 (+1 instructions):
  
    277 label *label53
    278 sensor *tmp87 .SWITCH @enabled

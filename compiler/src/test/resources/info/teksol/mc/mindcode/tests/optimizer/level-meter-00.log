@@ -19,7 +19,7 @@
    141 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 834):
-  * Partial loop rotation at line 122:1                          size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  * Full loop rotation at line 122:1                             size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
   o Fast-dispatch case at line 34:9                              size   -11, benefit     3125.0, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 833):
@@ -637,7 +637,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 i
    179 write :scaled .MEMORY :index
    180 op sub *tmp47 :index .SIZE
 
-Modifications by Partial loop rotation at line 122:1 (+1 instructions):
+Modifications by Full loop rotation at line 122:1 (+1 instructions):
  
    149 label *label27
    150 sensor *tmp24 .SWITCH @enabled

@@ -157,10 +157,10 @@ class AstContextTest {
     }
 
     @Test
-    void findContextOfType() {
-        assertEquals(root, context.findContextOfType(root.contextType()));
-        assertEquals(context, context.findContextOfType(context.contextType()));
-        assertNull(context.findContextOfType(AstContextType.ALLOCATION));
+    void findSuperContextOfType() {
+        assertEquals(root, context.findSuperContextOfType(root.contextType()));
+        assertEquals(context, context.findSuperContextOfType(context.contextType()));
+        assertNull(context.findSuperContextOfType(AstContextType.ALLOCATION));
     }
 
     @Test

@@ -6,10 +6,11 @@ Loop rotation supports both fully evaluated and short-circuited conditions.
 
 ## Full loop rotation
 
-Full loop rotation is performed when the compiler is able to determine the loop will necessarily be executed at least once. In this case, the loop condition is moved to the end of the loop body. This provides two benefits:
+Full loop rotation copies the loop condition to the end of the loop. The front condition is executed just once to determine whether the loop should be executed at all. Then the loop body gets executed, followed by the end condition, which jumps back to the beginning of the loop body when it evaluates as true. Furthermore, if the front condition can be shown to be always true, it gets eliminated. This provides several possible benefits:
 
-* the condition is not evaluated at the beginning of the loop,
-* the jump jumping back to the beginning of the loop is eliminated.
+* the condition is only evaluated at the beginning of the loop when necessary,
+* parts of the front condition can be eliminated when they aren't needed to determine whether the loop should be executed,
+* the unconditional jump jumping back to the beginning of the loop is replaced by the actual condition, saving one execution step.
 
 Example:
 
@@ -40,40 +41,7 @@ print .b
 print "."
 ```
 
-When the condition contains additional operations (side effects), the full loop rotation sometimes cannot be performed, as moving the condition to the end of the loop body would change the program semantics:
-
-```Mindcode
-var a = 1;
-var b = 0;
-
-inline def sideEffect(x)
-    print("Side effect!");
-    return x;
-end;
-
-while a or sideEffect(b) do
-   a--;
-   b++;
-end;
-
-print("Done!");
-```
-
-compiles to:
-
-```mlog
-set .a 1
-set .b 0
-jump 5 notEqual .a false
-print "Side effect!"
-jump 8 equal .b false
-op sub .a .a 1
-op add .b .b 1
-jump 2 always 0 0
-print "Done!"
-```
-
-In simple cases, the full loop rotation decreases the code size (by replacing the final jump with the condition) and decreases execution time (by avoiding the condition on the first entry and by eliminating the jump). In more complex cases, the code size may actually increase (when the condition performs additional computation with effects outside the condition), which makes it a [dynamic optimization](../SYNTAX-6-OPTIMIZATIONS.markdown#static-and-dynamic-optimizations) for details on performing these optimizations.
+If the front condition can be eliminated, the full loop rotation typically decreases the code size and decreases execution time in simple cases. In more complex cases, the code size may actually increase (when the condition performs additional computation with effects outside the condition), which makes it a [dynamic optimization](../SYNTAX-6-OPTIMIZATIONS.markdown#static-and-dynamic-optimizations).
 
 Note: performing the loop rotation often requires inverting the condition of some conditional jumps in the duplicated condition. When the condition includes a strict equal comparison (`===` or `!==`), such operations may increase the execution time of the rotated condition. This might decrease or outright remove the optimization benefit from loop executions but still saves executing the condition on the first entry to the loop:
 
@@ -104,7 +72,7 @@ print "Done!"
 
 ## Partial loop rotation
 
-When the loop condition involves short-circuit operations, or the loop cannot be shown to execute at least once, the loop rotation can be performed partially. In this case, the condition in front of the loop is duplicated to the end of the loop body. If the condition structure allows it, only part of it will be duplicated, and the non-duplicated remaining parts of the original condition will be reused (by rerouting some jumps from the duplicated condition to the original condition).
+When the loop condition involves short-circuit operations, the loop rotation can be performed partially. In this case, parts of the condition in front of the loop are duplicated to the end of the loop body. The non-duplicated remaining parts of the original condition are reused (by rerouting some jumps from the duplicated condition to the original condition).
 
 In a typical case, a partially rotated loop completely avoids the jump returning to the beginning of the loop condition. If a strict-equal comparison (`===` or `!==`) is involved, the additional jump might not be avoided entirely, but the average execution time of the loop should still be reduced.
 

@@ -4,11 +4,11 @@
      5 instructions eliminated by Condition Optimization (6 iterations).
      6 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      2 instructions eliminated by Expression Optimization (3 iterations).
-    12 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+    11 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
        2 loop conditions were partially rotated.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     24 instructions eliminated by Stack Optimization.
-    65 instructions after optimizations.
+    66 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instructions):
  
@@ -427,125 +427,112 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
     61 set :quicksort:new_pivot_index :partition:index
     62 op sub *tmp42 :partition:index 1
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
-     1 set *sp 0
-     2 set ARRAY bank2
-     3 set FINAL bank3
--    * op sub *tmp0 SIZE 1
-+    4 op sub :quicksort:right SIZE 1
-     5 set :quicksort:left 0
--    * set :quicksort:right *tmp0
-     6 callrec bank1 *label0 *label1 :quicksort*retval
-     7 label *label1
-     8 set :i 0
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
- 
-     7 label *label1
-     8 set :i 0
-     9 label *label2
+     8 label *label1
+     9 set :i 0
+    10 label *label2
 -    * jump *label4 greaterThanEq :i SIZE
-+   10 jump *label4 greaterThanEq 0 SIZE
-    11 label *label22
-    12 read *tmp2 FINAL :i
-    13 read *tmp4 ARRAY :i
++   11 jump *label4 greaterThanEq 0 SIZE
+    12 label *label22
+    13 read *tmp2 FINAL :i
+    14 read *tmp4 ARRAY :i
  
-    33 set :partition:index :quicksort:left
-    34 set :partition:i :quicksort:left
-    35 label *label11
+    34 set :partition:index :quicksort:left
+    35 set :partition:i :quicksort:left
+    36 label *label11
 -    * jump *label13 greaterThanEq :partition:i :quicksort:right
-+   36 jump *label13 greaterThanEq :quicksort:left :quicksort:right
-    37 label *label23
-    38 read :partition:curr ARRAY :partition:i
-    39 jump *label14 greaterThanEq :partition:curr :partition:pivot
++   37 jump *label13 greaterThanEq :quicksort:left :quicksort:right
+    38 label *label23
+    39 read :partition:curr ARRAY :partition:i
+    40 jump *label14 greaterThanEq :partition:curr :partition:pivot
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
  
-     6 callrec bank1 *label0 *label1 :quicksort*retval
-     7 label *label1
-     8 set :i 0
+     7 callrec bank1 *label0 *label1 :quicksort*retval
+     8 label *label1
+     9 set :i 0
 -    * label *label2
-     9 jump *label4 greaterThanEq 0 SIZE
-    10 label *label22
-    11 read *tmp2 FINAL :i
-    12 read *tmp4 ARRAY :i
-    13 assertequals *tmp2 *tmp4 "unexpected value"
+    10 jump *label4 greaterThanEq 0 SIZE
+    11 label *label22
+    12 read *tmp2 FINAL :i
+    13 read *tmp4 ARRAY :i
+    14 assertequals *tmp2 *tmp4 "unexpected value"
 -    * label *label3
-    14 op add :i :i 1
-    15 jump *label22 lessThan :i SIZE
-    16 label *label4
+    15 op add :i :i 1
+    16 jump *label22 lessThan :i SIZE
+    17 label *label4
  
-    27 write *tmp18 ARRAY :quicksort:pivot_index
-    28 write :partition:pivot ARRAY :quicksort:right
-    29 label *label9
+    28 write *tmp18 ARRAY :quicksort:pivot_index
+    29 write :partition:pivot ARRAY :quicksort:right
+    30 label *label9
 -    * label *label10
-    30 set :partition:index :quicksort:left
-    31 set :partition:i :quicksort:left
+    31 set :partition:index :quicksort:left
+    32 set :partition:i :quicksort:left
 -    * label *label11
-    32 jump *label13 greaterThanEq :quicksort:left :quicksort:right
-    33 label *label23
-    34 read :partition:curr ARRAY :partition:i
+    33 jump *label13 greaterThanEq :quicksort:left :quicksort:right
+    34 label *label23
+    35 read :partition:curr ARRAY :partition:i
  
-    38 write *tmp31 ARRAY :partition:i
-    39 write :partition:curr ARRAY :partition:index
-    40 label *label16
+    39 write *tmp31 ARRAY :partition:i
+    40 write :partition:curr ARRAY :partition:index
+    41 label *label16
 -    * label *label17
-    41 op add :partition:index :partition:index 1
-    42 label *label14
+    42 op add :partition:index :partition:index 1
+    43 label *label14
 -    * label *label15
 -    * label *label12
-    43 op add :partition:i :partition:i 1
-    44 jump *label23 lessThan :partition:i :quicksort:right
-    45 label *label13
+    44 op add :partition:i :partition:i 1
+    45 jump *label23 lessThan :partition:i :quicksort:right
+    46 label *label13
  
-    48 write *tmp39 ARRAY :quicksort:right
-    49 write :partition:pivot ARRAY :partition:index
-    50 label *label18
+    49 write *tmp39 ARRAY :quicksort:right
+    50 write :partition:pivot ARRAY :partition:index
+    51 label *label18
 -    * label *label19
 -    * label *label8
-    51 set :quicksort:new_pivot_index :partition:index
-    52 op sub *tmp42 :partition:index 1
-    53 push bank1 :quicksort:left
+    52 set :quicksort:new_pivot_index :partition:index
+    53 op sub *tmp42 :partition:index 1
+    54 push bank1 :quicksort:left
  
-    74 pop bank1 :quicksort:right
-    75 pop bank1 :quicksort:left
-    76 label *label6
+    75 pop bank1 :quicksort:right
+    76 pop bank1 :quicksort:left
+    77 label *label6
 -    * label *label7
 -    * label *label5
-    77 returnrec bank1
+    78 returnrec bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-24 instructions):
  
-    50 label *label18
-    51 set :quicksort:new_pivot_index :partition:index
-    52 op sub *tmp42 :partition:index 1
+    51 label *label18
+    52 set :quicksort:new_pivot_index :partition:index
+    53 op sub *tmp42 :partition:index 1
 -    * push bank1 :quicksort:left
-    53 push bank1 :quicksort:right
+    54 push bank1 :quicksort:right
 -    * push bank1 :quicksort:pivot_index
-    54 push bank1 :quicksort:new_pivot_index
-    55 set :quicksort:right *tmp42
-    56 callrec bank1 *label0 *label20 :quicksort*retval
-    57 label *label20
-    58 pop bank1 :quicksort:new_pivot_index
+    55 push bank1 :quicksort:new_pivot_index
+    56 set :quicksort:right *tmp42
+    57 callrec bank1 *label0 *label20 :quicksort*retval
+    58 label *label20
+    59 pop bank1 :quicksort:new_pivot_index
 -    * pop bank1 :quicksort:pivot_index
-    59 pop bank1 :quicksort:right
+    60 pop bank1 :quicksort:right
 -    * pop bank1 :quicksort:left
-    60 op add *tmp43 :quicksort:new_pivot_index 1
+    61 op add *tmp43 :quicksort:new_pivot_index 1
 -    * push bank1 :quicksort:left
 -    * push bank1 :quicksort:right
 -    * push bank1 :quicksort:pivot_index
 -    * push bank1 :quicksort:new_pivot_index
-    61 set :quicksort:left *tmp43
-    62 callrec bank1 *label0 *label21 :quicksort*retval
-    63 label *label21
+    62 set :quicksort:left *tmp43
+    63 callrec bank1 *label0 *label21 :quicksort*retval
+    64 label *label21
 -    * pop bank1 :quicksort:new_pivot_index
 -    * pop bank1 :quicksort:pivot_index
 -    * pop bank1 :quicksort:right
 -    * pop bank1 :quicksort:left
-    64 label *label6
-    65 returnrec bank1
+    65 label *label6
+    66 returnrec bank1
 
 Final code before resolving virtual instructions:
 
@@ -553,8 +540,9 @@ set SIZE 512
 set *sp 0
 set ARRAY bank2
 set FINAL bank3
-op sub :quicksort:right SIZE 1
+op sub *tmp0 SIZE 1
 set :quicksort:left 0
+set :quicksort:right *tmp0
 callrec bank1 *label0 *label1 :quicksort*retval
 label *label1
 set :i 0

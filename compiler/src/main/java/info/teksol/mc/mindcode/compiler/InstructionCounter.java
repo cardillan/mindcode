@@ -20,7 +20,7 @@ public class InstructionCounter {
     /// @return total number of mlog instructions represented by this program
     public static int globalSize(List<LogicInstruction> program) {
         Map<String, Integer> sharedStructures = new HashMap<>();
-        int size = program.stream().mapToInt(ix -> ix.getRealSize(sharedStructures)).sum();
+        int size = program.stream().mapToInt(ix -> ix.getSharedSize(sharedStructures)).sum();
 
         final int variableCreationSize;
         Set<LogicVariable> forcedVariables = new HashSet<>(ContextFactory.getForcedVariableContext().getForcedVariables());
@@ -60,7 +60,7 @@ public class InstructionCounter {
     /// @param instructions stream of instructions to compute the size of
     /// @return total number of mlog instructions represented by this program
     public static int localSize(Stream<LogicInstruction> instructions) {
-        return localSize(instructions, ix -> ix.getRealSize(null));
+        return localSize(instructions, LogicInstruction::getRealSize);
     }
 
     /// Computes the local size of the instructions in the given list. See [#localSize(Stream, ToIntFunction<LogicInstruction>)].

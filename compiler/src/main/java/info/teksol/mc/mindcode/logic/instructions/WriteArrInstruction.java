@@ -66,7 +66,7 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
     }
 
     @Override
-    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
+    public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
         assert arrayConstructor != null;
         return arrayConstructor.getInstructionSize(sharedStructures);
     }

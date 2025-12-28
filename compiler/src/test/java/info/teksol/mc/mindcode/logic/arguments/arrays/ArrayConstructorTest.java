@@ -63,7 +63,7 @@ class ArrayConstructorTest extends AbstractCodeGeneratorTest {
 
     private void testInstruction(ArrayAccessInstruction ix) {
         Map<String, Integer> sharedStructures = new HashMap<>();
-        int computedSize = ix.getRealSize(sharedStructures);
+        int computedSize = ix.getSharedSize(sharedStructures);
         int computedSharedSize = sharedStructures.getOrDefault(ix.getJumpTableId(), 0);
         double computedSteps = ix.getExecutionSteps();
 
@@ -74,10 +74,10 @@ class ArrayConstructorTest extends AbstractCodeGeneratorTest {
 
         JumpTable jumpTable = jumpTables.get(ix.getJumpTableId());
         List<LogicInstruction> jumpTableInstructions = jumpTable == null ? List.of() : jumpTable.instructions();
-        int generatedSize = instructions.stream().mapToInt(i -> i.getRealSize(null)).sum();
+        int generatedSize = instructions.stream().mapToInt(LogicInstruction::getRealSize).sum();
         int generatedSharedSize = jumpTableInstructions.stream()
                 .filter(i -> i.getOpcode() != Opcode.END)
-                .mapToInt(i -> i.getRealSize(null)).sum();
+                .mapToInt(LogicInstruction::getRealSize).sum();
 
         assertEquals(generatedSize, computedSize,
                 () -> describeInstruction(ix, "incorrect instruction size"));

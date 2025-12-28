@@ -407,14 +407,19 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
         // Note: this method processes contexts in unnatural order and uses iterator.setNextIndex to keep
         // the iterator position synchronized with what is expected.
         List<AstContext> children = new ArrayList<>(localContext.children());
+        if (children.isEmpty() || children.stream().noneMatch(c -> c.matches(CONDITION, BODY)))
+            return variableStates;
+
         int currentContext = 0;
         boolean propagateUninitialized = false;
 
-        if (children.stream().anyMatch(c -> c.matches(ITR_LEADING,ITR_TRAILING))) {
+        if (children.stream().anyMatch(c -> c.matches(ITR_LEADING, ITR_TRAILING))) {
             throw new MindcodeInternalError("Unexpected structure of non-list iteration loop");
         }
 
-        if (!children.isEmpty() && children.getFirst().matches(INIT)) {
+        // If the HOIST context is found here, it means the front condition has been eliminated
+        // and the HOIST context gets executed always.
+        while (children.get(currentContext).matches(INIT, HOIST)) {
             variableStates = processContext(localContext, children.getFirst(), variableStates, modifyInstructions, dfProcessor);
             currentContext++;
         }
@@ -476,6 +481,13 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
             if (result != LogicBoolean.TRUE) propagateUninitialized = true;
         }
 
+        VariableStates preHoistStates = null;
+        if (children.get(currentContext).matches(HOIST)) {
+            preHoistStates = variableStates.copy("loop pre-hoist state");
+            variableStates = processContext(localContext, children.get(currentContext), variableStates, modifyInstructions, dfProcessor);
+            currentContext++;
+        }
+
         int loopStart = currentContext;
         int startIndex = firstInstructionIndex(children.get(loopStart));
 
@@ -514,6 +526,10 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
             propagateUninitialized = true;
         }
 
+        if (preHoistStates != null) {
+            variableStates = variableStates.merge(preHoistStates, true, "loop pre-hoist state");
+        }
+
         return variableStates;
     }
 
@@ -535,7 +551,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
         List<AstContext> trailingContexts = localContext.findSubcontexts(ITR_TRAILING);
         List<AstContext> bodyContexts = localContext.children().stream().filter(c -> c.matches(BODY, FLOW_CONTROL)).toList();
 
-        if (children.get(currentContext).matches(INIT)) {
+        while (currentContext < children.size() && children.get(currentContext).matches(INIT, HOIST)) {
             variableStates = processContext(localContext, children.getFirst(), variableStates, modifyInstructions, dfProcessor);
             currentContext++;
         }

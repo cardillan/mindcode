@@ -1,16 +1,16 @@
    132 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (5 iterations).
+     2 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Condition Optimization (4 iterations).
-     2 instructions eliminated by Data Flow Optimization (5 iterations).
-     1 instructions eliminated by Loop Rotation (2 iterations).
-       1 loop conditions were fully rotated.
-   104 instructions eliminated by Case Switching (3 iterations).
+     1 instructions eliminated by Jump Normalization (4 iterations).
+     1 instructions eliminated by Condition Optimization (5 iterations).
+     2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+       1 loop conditions were partially rotated.
+   104 instructions eliminated by Case Switching (4 iterations).
      1 case expressions converted to value translations by Case Switching.
     19 instructions after optimizations.
 
-Pass 1: size optimization selection (cost limit 377):
+Pass 1: size optimization selection (cost limit 376):
   * Translate case at line 11:5                                  size  -104, benefit     1187.5, efficiency    104.000 (-104 instructions)
     Convert case at line 11:5 (segments: 34)                     size   -19, benefit     1184.5, efficiency     19.000
 
@@ -476,31 +476,30 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    172 op shl :bit 1 *tmp2
    173 op and *tmp5 :total :bit
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
-     1 set :total 0
      2 set :i -1
      3 label *label0
--    * jump *label2 greaterThanEq :i @blockCount
-+    4 label *label61
-     5 lookup block :block :i
-     6 # "Function: def identifyBlock(in block)"
-     7 jump *label6 strictEqual :block null
+     4 jump *label2 greaterThanEq :i @blockCount
++    5 label *label61
+     6 lookup block :block :i
+     7 # "Function: def identifyBlock(in block)"
+     8 jump *label6 strictEqual :block null
  
-   179 label *label60
-   180 label *label1
-   181 op add :i :i 1
+   180 label *label60
+   181 label *label1
+   182 op add :i :i 1
 -    * jump *label0 always
-+  182 jump *label61 lessThan :i @blockCount
-   183 label *label2
-   184 assertequals 0x0FFFFFFF :total "Test selected blocks"
-   185 end
++  183 jump *label61 lessThan :i @blockCount
+   184 label *label2
+   185 assertequals 0x0FFFFFFF :total "Test selected blocks"
+   186 end
 
 Modifications by Translate case at line 11:5 (-104 instructions):
  
-     4 label *label61
-     5 lookup block :block :i
-     6 # "Function: def identifyBlock(in block)"
+     5 label *label61
+     6 lookup block :block :i
+     7 # "Function: def identifyBlock(in block)"
 -    * jump *label6 strictEqual :block null
 -    * jump *label5 always
 -    * label *label6
@@ -665,14 +664,35 @@ Modifications by Translate case at line 11:5 (-104 instructions):
 -    * label *label57
 -    * set *tmp2 0
 -    * label *label4
-+    7 sensor *tmp8 :block @id
-+    8 read *tmp9 "200000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J000000000000000000000000K" *tmp8
-+    9 op sub *tmp10 *tmp9 48
-+   10 select *tmp11 strictEqual *tmp8 null 1 *tmp10
-+   11 select *tmp2 strictEqual *tmp9 null 0 *tmp11
-    12 label *label3
-    13 op shl :bit 1 *tmp2
-    14 op and *tmp5 :total :bit
++    8 sensor *tmp8 :block @id
++    9 read *tmp9 "200000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J000000000000000000000000K" *tmp8
++   10 op sub *tmp10 *tmp9 48
++   11 select *tmp11 strictEqual *tmp8 null 1 *tmp10
++   12 select *tmp2 strictEqual *tmp9 null 0 *tmp11
+    13 label *label3
+    14 op shl :bit 1 *tmp2
+    15 op and *tmp5 :total :bit
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     1 set :total 0
+     2 set :i -1
+     3 label *label0
+-    * jump *label2 greaterThanEq :i @blockCount
++    4 jump *label2 greaterThanEq -1 @blockCount
+     5 label *label61
+     6 lookup block :block :i
+     7 # "Function: def identifyBlock(in block)"
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
+ 
+     1 set :total 0
+     2 set :i -1
+     3 label *label0
+-    * jump *label2 greaterThanEq -1 @blockCount
+     4 label *label61
+     5 lookup block :block :i
+     6 # "Function: def identifyBlock(in block)"
 
 Final code before resolving virtual instructions:
 

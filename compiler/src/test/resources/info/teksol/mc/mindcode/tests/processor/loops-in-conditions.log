@@ -1,22 +1,22 @@
     40 instructions before optimizations.
      1 instructions eliminated by Dead Code Elimination (4 iterations).
-     1 instructions eliminated by Jump Normalization (6 iterations).
-     1 instructions eliminated by Condition Optimization (7 iterations).
-     4 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
+     3 instructions eliminated by Jump Normalization (2 passes, 7 iterations).
+     1 instructions eliminated by Condition Optimization (8 iterations).
+     4 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
+     1 instructions modified by If Expression Optimization (5 iterations).
     39 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
-     2 instructions eliminated by Loop Rotation (4 iterations).
-       2 loop conditions were fully rotated.
-    18 instructions added by Loop Unrolling (6 iterations).
+       2 loop conditions were partially rotated.
+    18 instructions added by Loop Unrolling (7 iterations).
      2 loops unrolled by Loop Unrolling.
      6 instructions eliminated by Print Merging.
      4 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 973):
+Pass 3: speed optimization selection (cost limit 976):
   * Unroll loop at line 3:5                                      size    +0, benefit      200.0, efficiency   Infinity (-5 instructions)
     Unroll loop at line 3:5                                      size    +4, benefit      400.0, efficiency    100.000
 
-Pass 1: speed optimization selection (cost limit 978):
-  * Unroll loop at line 3:5                                      size    +4, benefit      400.0, efficiency    100.000 (-5 instructions)
+Pass 3: speed optimization selection (cost limit 981):
+  * Unroll loop at line 3:5                                      size    +4, benefit      400.0, efficiency    100.000 (-7 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
@@ -152,39 +152,125 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2
     15 set :sum.1:i 0
     16 label *label8
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
+     2 set :sum:i 0
+     3 label *label4
+     4 jump *label6 greaterThanEq :sum:i 4
++    5 label *label11
+     6 op add :sum:c :sum:c :sum:i
+     7 label *label5
+     8 op add :sum:i :sum:i 1
+-    * jump *label4 always
++    9 jump *label11 lessThan :sum:i 4
+    10 label *label6
+    11 print :sum:c
+    12 print "|"
+ 
+    16 set :sum.1:i 0
+    17 label *label8
+    18 jump *label10 greaterThanEq :sum.1:i 8
++   19 label *label12
+    20 op add :sum.1:c :sum.1:c :sum.1:i
+    21 label *label9
+    22 op add :sum.1:i :sum.1:i 1
+-    * jump *label8 always
++   23 jump *label12 lessThan :sum.1:i 8
+    24 label *label10
+    25 print :sum.1:c
+    26 print "|"
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
+ 
+    10 label *label6
+    11 print :sum:c
+    12 print "|"
+-    * jump *label3 always
+    13 label *label3
+    14 set :sum.1:c 0
+    15 set :sum.1:i 0
+ 
+    23 label *label10
+    24 print :sum.1:c
+    25 print "|"
+-    * jump *label7 always
+    26 label *label7
+    27 jump *label1 greaterThanEq :sum:c :sum.1:c
+    28 print "Less"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      1 set :sum:c 0
      2 set :sum:i 0
      3 label *label4
 -    * jump *label6 greaterThanEq :sum:i 4
-+    4 label *label11
-     5 op add :sum:c :sum:c :sum:i
-     6 label *label5
-     7 op add :sum:i :sum:i 1
--    * jump *label4 always
-+    8 jump *label11 lessThan :sum:i 4
-     9 label *label6
-    10 print :sum:c
-    11 print "|"
++    4 jump *label6 greaterThanEq 0 4
+     5 label *label11
+     6 op add :sum:c :sum:c :sum:i
+     7 label *label5
  
     14 set :sum.1:c 0
     15 set :sum.1:i 0
     16 label *label8
 -    * jump *label10 greaterThanEq :sum.1:i 8
-+   17 label *label12
++   17 jump *label10 greaterThanEq 0 8
+    18 label *label12
+    19 op add :sum.1:c :sum.1:c :sum.1:i
+    20 label *label9
+
+Modifications by Iterated phase, If Expression Optimization, pass 2, iteration 1:
+     0 assertflush
++    1 set *tmp6 1
+     2 set :sum:c 0
+     3 set :sum:i 0
+     4 label *label4
+ 
+    25 print :sum.1:c
+    26 print "|"
+    27 label *label7
+-    * jump *label1 greaterThanEq :sum:c :sum.1:c
++   28 jump *label2 greaterThanEq :sum:c :sum.1:c
+    29 print "Less"
+    30 set *tmp6 0
+    31 jump *label2 always
+-    * label *label1
+-    * set *tmp6 1
+    32 label *label2
+    33 print "|"
+    34 print *tmp6
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-2 instructions):
+ 
+     2 set :sum:c 0
+     3 set :sum:i 0
+     4 label *label4
+-    * jump *label6 greaterThanEq 0 4
+     5 label *label11
+     6 op add :sum:c :sum:c :sum:i
+     7 label *label5
+ 
+    14 set :sum.1:c 0
+    15 set :sum.1:i 0
+    16 label *label8
+-    * jump *label10 greaterThanEq 0 8
+    17 label *label12
     18 op add :sum.1:c :sum.1:c :sum.1:i
     19 label *label9
-    20 op add :sum.1:i :sum.1:i 1
--    * jump *label8 always
-+   21 jump *label12 lessThan :sum.1:i 8
-    22 label *label10
-    23 print :sum.1:c
-    24 print "|"
+
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+    26 jump *label2 greaterThanEq :sum:c :sum.1:c
+    27 print "Less"
+    28 set *tmp6 0
+-    * jump *label2 always
+    29 label *label2
+    30 print "|"
+    31 print *tmp6
 
 Modifications by Unroll loop at line 3:5 (+5 instructions):
      0 assertflush
-     1 set :sum:c 0
+     1 set *tmp6 1
+     2 set :sum:c 0
 -    * set :sum:i 0
 -    * label *label4
 -    * label *label11
@@ -193,84 +279,83 @@ Modifications by Unroll loop at line 3:5 (+5 instructions):
 -    * op add :sum:i :sum:i 1
 -    * jump *label11 lessThan :sum:i 4
 -    * label *label6
-+    2 set :sum:i 0
-+    3 label *label13
-+    4 label *label14
++    3 set :sum:i 0
++    4 label *label13
 +    5 op add :sum:c :sum:c :sum:i
-+    6 label *label15
++    6 label *label14
 +    7 op add :sum:i :sum:i 1
 +    8 op add :sum:c :sum:c :sum:i
-+    9 label *label16
++    9 label *label15
 +   10 op add :sum:i :sum:i 1
 +   11 op add :sum:c :sum:c :sum:i
-+   12 label *label17
++   12 label *label16
 +   13 op add :sum:i :sum:i 1
 +   14 op add :sum:c :sum:c :sum:i
-+   15 label *label18
++   15 label *label17
 +   16 op add :sum:i :sum:i 1
 +   17 label *label6
     18 print :sum:c
     19 print "|"
-    20 jump *label3 always
+    20 label *label3
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
  
-     2 set :sum:i 0
-     3 label *label13
-     4 label *label14
+     2 set :sum:c 0
+     3 set :sum:i 0
+     4 label *label13
 -    * op add :sum:c :sum:c :sum:i
 +    5 op add :sum:c 0 0
-     6 label *label15
+     6 label *label14
 -    * op add :sum:i :sum:i 1
 -    * op add :sum:c :sum:c :sum:i
 +    7 op add :sum:i 0 1
 +    8 op add :sum:c 0 1
-     9 label *label16
+     9 label *label15
 -    * op add :sum:i :sum:i 1
 -    * op add :sum:c :sum:c :sum:i
 +   10 op add :sum:i 1 1
 +   11 op add :sum:c 1 2
-    12 label *label17
+    12 label *label16
 -    * op add :sum:i :sum:i 1
 -    * op add :sum:c :sum:c :sum:i
 +   13 op add :sum:i 2 1
 +   14 op add :sum:c 3 3
-    15 label *label18
+    15 label *label17
 -    * op add :sum:i :sum:i 1
 +   16 op add :sum:i 3 1
     17 label *label6
 -    * print :sum:c
 +   18 print 6
     19 print "|"
-    20 jump *label3 always
-    21 label *label3
+    20 label *label3
+    21 set :sum.1:c 0
  
-    32 print "|"
-    33 jump *label7 always
-    34 label *label7
--    * jump *label1 greaterThanEq :sum:c :sum.1:c
-+   35 jump *label1 greaterThanEq 6 :sum.1:c
-    36 print "Less"
-    37 set *tmp6 0
-    38 jump *label2 always
+    30 print :sum.1:c
+    31 print "|"
+    32 label *label7
+-    * jump *label2 greaterThanEq :sum:c :sum.1:c
++   33 jump *label2 greaterThanEq 6 :sum.1:c
+    34 print "Less"
+    35 set *tmp6 0
+    36 label *label2
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-10 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-10 instructions):
      0 assertflush
+     1 set *tmp6 1
 -    * set :sum:c 0
 -    * set :sum:i 0
-     1 label *label13
-     2 label *label14
+     2 label *label13
 -    * op add :sum:c 0 0
-     3 label *label15
+     3 label *label14
 -    * op add :sum:i 0 1
 -    * op add :sum:c 0 1
-     4 label *label16
+     4 label *label15
 -    * op add :sum:i 1 1
 -    * op add :sum:c 1 2
-     5 label *label17
+     5 label *label16
 -    * op add :sum:i 2 1
 -    * op add :sum:c 3 3
-     6 label *label18
+     6 label *label17
 -    * op add :sum:i 3 1
      7 label *label6
      8 print 6
@@ -278,9 +363,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 
 Modifications by Unroll loop at line 3:5 (+13 instructions):
  
-    10 jump *label3 always
-    11 label *label3
-    12 set :sum.1:c 0
+     9 print "|"
+    10 label *label3
+    11 set :sum.1:c 0
 -    * set :sum.1:i 0
 -    * label *label8
 -    * label *label12
@@ -289,195 +374,158 @@ Modifications by Unroll loop at line 3:5 (+13 instructions):
 -    * op add :sum.1:i :sum.1:i 1
 -    * jump *label12 lessThan :sum.1:i 8
 -    * label *label10
-+   13 set :sum.1:i 0
-+   14 label *label19
-+   15 label *label20
-+   16 op add :sum.1:c :sum.1:c :sum.1:i
-+   17 label *label21
-+   18 op add :sum.1:i :sum.1:i 1
-+   19 op add :sum.1:c :sum.1:c :sum.1:i
-+   20 label *label22
-+   21 op add :sum.1:i :sum.1:i 1
-+   22 op add :sum.1:c :sum.1:c :sum.1:i
-+   23 label *label23
-+   24 op add :sum.1:i :sum.1:i 1
-+   25 op add :sum.1:c :sum.1:c :sum.1:i
-+   26 label *label24
-+   27 op add :sum.1:i :sum.1:i 1
-+   28 op add :sum.1:c :sum.1:c :sum.1:i
-+   29 label *label25
-+   30 op add :sum.1:i :sum.1:i 1
-+   31 op add :sum.1:c :sum.1:c :sum.1:i
-+   32 label *label26
-+   33 op add :sum.1:i :sum.1:i 1
-+   34 op add :sum.1:c :sum.1:c :sum.1:i
-+   35 label *label27
-+   36 op add :sum.1:i :sum.1:i 1
-+   37 op add :sum.1:c :sum.1:c :sum.1:i
-+   38 label *label28
-+   39 op add :sum.1:i :sum.1:i 1
-+   40 label *label10
-    41 print :sum.1:c
-    42 print "|"
-    43 jump *label7 always
++   12 set :sum.1:i 0
++   13 label *label18
++   14 op add :sum.1:c :sum.1:c :sum.1:i
++   15 label *label19
++   16 op add :sum.1:i :sum.1:i 1
++   17 op add :sum.1:c :sum.1:c :sum.1:i
++   18 label *label20
++   19 op add :sum.1:i :sum.1:i 1
++   20 op add :sum.1:c :sum.1:c :sum.1:i
++   21 label *label21
++   22 op add :sum.1:i :sum.1:i 1
++   23 op add :sum.1:c :sum.1:c :sum.1:i
++   24 label *label22
++   25 op add :sum.1:i :sum.1:i 1
++   26 op add :sum.1:c :sum.1:c :sum.1:i
++   27 label *label23
++   28 op add :sum.1:i :sum.1:i 1
++   29 op add :sum.1:c :sum.1:c :sum.1:i
++   30 label *label24
++   31 op add :sum.1:i :sum.1:i 1
++   32 op add :sum.1:c :sum.1:c :sum.1:i
++   33 label *label25
++   34 op add :sum.1:i :sum.1:i 1
++   35 op add :sum.1:c :sum.1:c :sum.1:i
++   36 label *label26
++   37 op add :sum.1:i :sum.1:i 1
++   38 label *label10
+    39 print :sum.1:c
+    40 print "|"
+    41 label *label7
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1 (-1 instructions):
+     0 assertflush
+-    * set *tmp6 1
+     1 label *label13
+     2 label *label14
+     3 label *label15
  
-    13 set :sum.1:i 0
+    10 set :sum.1:c 0
+    11 set :sum.1:i 0
+    12 label *label18
+-    * op add :sum.1:c :sum.1:c :sum.1:i
++   13 op add :sum.1:c 0 0
     14 label *label19
-    15 label *label20
--    * op add :sum.1:c :sum.1:c :sum.1:i
-+   16 op add :sum.1:c 0 0
-    17 label *label21
 -    * op add :sum.1:i :sum.1:i 1
 -    * op add :sum.1:c :sum.1:c :sum.1:i
-+   18 op add :sum.1:i 0 1
-+   19 op add :sum.1:c 0 1
-    20 label *label22
++   15 op add :sum.1:i 0 1
++   16 op add :sum.1:c 0 1
+    17 label *label20
 -    * op add :sum.1:i :sum.1:i 1
 -    * op add :sum.1:c :sum.1:c :sum.1:i
-+   21 op add :sum.1:i 1 1
-+   22 op add :sum.1:c 1 2
-    23 label *label23
++   18 op add :sum.1:i 1 1
++   19 op add :sum.1:c 1 2
+    20 label *label21
 -    * op add :sum.1:i :sum.1:i 1
 -    * op add :sum.1:c :sum.1:c :sum.1:i
-+   24 op add :sum.1:i 2 1
-+   25 op add :sum.1:c 3 3
-    26 label *label24
++   21 op add :sum.1:i 2 1
++   22 op add :sum.1:c 3 3
+    23 label *label22
 -    * op add :sum.1:i :sum.1:i 1
 -    * op add :sum.1:c :sum.1:c :sum.1:i
-+   27 op add :sum.1:i 3 1
-+   28 op add :sum.1:c 6 4
-    29 label *label25
++   24 op add :sum.1:i 3 1
++   25 op add :sum.1:c 6 4
+    26 label *label23
 -    * op add :sum.1:i :sum.1:i 1
 -    * op add :sum.1:c :sum.1:c :sum.1:i
-+   30 op add :sum.1:i 4 1
-+   31 op add :sum.1:c 10 5
-    32 label *label26
++   27 op add :sum.1:i 4 1
++   28 op add :sum.1:c 10 5
+    29 label *label24
 -    * op add :sum.1:i :sum.1:i 1
 -    * op add :sum.1:c :sum.1:c :sum.1:i
-+   33 op add :sum.1:i 5 1
-+   34 op add :sum.1:c 15 6
-    35 label *label27
++   30 op add :sum.1:i 5 1
++   31 op add :sum.1:c 15 6
+    32 label *label25
 -    * op add :sum.1:i :sum.1:i 1
 -    * op add :sum.1:c :sum.1:c :sum.1:i
-+   36 op add :sum.1:i 6 1
-+   37 op add :sum.1:c 21 7
-    38 label *label28
++   33 op add :sum.1:i 6 1
++   34 op add :sum.1:c 21 7
+    35 label *label26
 -    * op add :sum.1:i :sum.1:i 1
-+   39 op add :sum.1:i 7 1
-    40 label *label10
++   36 op add :sum.1:i 7 1
+    37 label *label10
 -    * print :sum.1:c
-+   41 print 28
-    42 print "|"
-    43 jump *label7 always
-    44 label *label7
--    * jump *label1 greaterThanEq 6 :sum.1:c
-+   45 jump *label1 greaterThanEq 6 28
-    46 print "Less"
-    47 set *tmp6 0
-    48 jump *label2 always
++   38 print 28
+    39 print "|"
+    40 label *label7
+-    * jump *label2 greaterThanEq 6 :sum.1:c
++   41 jump *label2 greaterThanEq 6 28
+    42 print "Less"
+    43 set *tmp6 0
+    44 label *label2
+    45 print "|"
+-    * print *tmp6
++   46 print 0
+    47 label *label0
+    48 assertprints "6|28|Less|0" "loops in conditions"
+    49 stop
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-18 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-19 instructions):
  
-     9 print "|"
-    10 jump *label3 always
-    11 label *label3
+     7 print 6
+     8 print "|"
+     9 label *label3
 -    * set :sum.1:c 0
 -    * set :sum.1:i 0
-    12 label *label19
-    13 label *label20
+    10 label *label18
 -    * op add :sum.1:c 0 0
-    14 label *label21
+    11 label *label19
 -    * op add :sum.1:i 0 1
 -    * op add :sum.1:c 0 1
-    15 label *label22
+    12 label *label20
 -    * op add :sum.1:i 1 1
 -    * op add :sum.1:c 1 2
-    16 label *label23
+    13 label *label21
 -    * op add :sum.1:i 2 1
 -    * op add :sum.1:c 3 3
-    17 label *label24
+    14 label *label22
 -    * op add :sum.1:i 3 1
 -    * op add :sum.1:c 6 4
-    18 label *label25
+    15 label *label23
 -    * op add :sum.1:i 4 1
 -    * op add :sum.1:c 10 5
-    19 label *label26
+    16 label *label24
 -    * op add :sum.1:i 5 1
 -    * op add :sum.1:c 15 6
-    20 label *label27
+    17 label *label25
 -    * op add :sum.1:i 6 1
 -    * op add :sum.1:c 21 7
-    21 label *label28
+    18 label *label26
 -    * op add :sum.1:i 7 1
-    22 label *label10
-    23 print 28
-    24 print "|"
-
-Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
- 
-    24 print "|"
-    25 jump *label7 always
-    26 label *label7
--    * jump *label1 greaterThanEq 6 28
-    27 print "Less"
-    28 set *tmp6 0
-    29 jump *label2 always
-
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
- 
-     7 label *label6
-     8 print 6
-     9 print "|"
--    * jump *label3 always
-    10 label *label3
-    11 label *label19
-    12 label *label20
- 
-    21 label *label10
-    22 print 28
-    23 print "|"
--    * jump *label7 always
-    24 label *label7
-    25 print "Less"
-    26 set *tmp6 0
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
- 
-    26 set *tmp6 0
-    27 jump *label2 always
-    28 label *label1
--    * set *tmp6 1
-    29 label *label2
-    30 print "|"
--    * print *tmp6
-+   31 print 0
-    32 label *label0
-    33 assertprints "6|28|Less|0" "loops in conditions"
-    34 stop
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
- 
-    23 print "|"
-    24 label *label7
-    25 print "Less"
+    19 label *label10
+    20 print 28
+    21 print "|"
+    22 label *label7
+    23 jump *label2 greaterThanEq 6 28
+    24 print "Less"
 -    * set *tmp6 0
-    26 jump *label2 always
-    27 label *label1
-    28 label *label2
+    25 label *label2
+    26 print "|"
+    27 print 0
 
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Jump Normalization, pass 4, iteration 1 (-1 instructions):
  
-    23 print "|"
-    24 label *label7
-    25 print "Less"
--    * jump *label2 always
-    26 label *label1
-    27 label *label2
-    28 print "|"
+    20 print 28
+    21 print "|"
+    22 label *label7
+-    * jump *label2 greaterThanEq 6 28
+    23 print "Less"
+    24 label *label2
+    25 print "|"
 
-Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 6, iteration 1 (-1 instructions):
  
      7 print 0
      8 assertprints "6|28|Less|0" "loops in conditions"

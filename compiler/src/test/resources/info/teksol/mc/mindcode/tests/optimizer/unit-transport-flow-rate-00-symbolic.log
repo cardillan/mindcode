@@ -13,7 +13,7 @@
     70 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 921):
-  * Partial loop rotation at line 17:1                           size    +2, benefit       25.0, efficiency     12.500 (+2 instructions)
+  * Full loop rotation at line 17:1                              size    +2, benefit       26.0, efficiency     13.000 (+2 instructions)
     Partial loop rotation at line 38:1                           size    +2, benefit       25.0, efficiency     12.500
 
 Pass 1: speed optimization selection (cost limit 919):
@@ -416,26 +416,26 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     90 label *label7
     91 jump *label6 always
 
-Modifications by Partial loop rotation at line 17:1 (+2 instructions):
+Modifications by Full loop rotation at line 17:1 (+2 instructions):
  
-     5 jump *label3 equal .SORTER null
      6 jump *label3 equal .VAULT null
      7 jump *label2 notEqual .BANK null
-+    8 label *label21
-     9 label *label3
+     8 label *label3
++    9 label *label21
     10 print "Missing sorter, vault or memory bank."
     11 printflush message1
- 
+    12 set .SORTER sorter1
     13 set .VAULT vault1
     14 set .BANK bank1
     15 label *label1
 -    * jump *label0 always
-+   16 jump *label3 equal .SORTER null
-+   17 jump *label3 equal .VAULT null
++   16 jump *label21 equal .SORTER null
++   17 jump *label21 equal .VAULT null
 +   18 jump *label21 equal .BANK null
-    19 label *label2
-    20 read :shipped .BANK 511
-    21 read .MULTIPLIER .BANK 510
++   19 label *label20
+    20 label *label2
+    21 read :shipped .BANK 511
+    22 read .MULTIPLIER .BANK 510
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -448,72 +448,72 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +    5 jump *label3 equal sorter1 null
 +    6 jump *label3 equal vault1 null
 +    7 jump *label2 notEqual bank1 null
-     8 label *label21
-     9 label *label3
+     8 label *label3
+     9 label *label21
     10 print "Missing sorter, vault or memory bank."
 
 Modifications by Partial loop rotation at line 38:1 (+2 instructions):
  
-    28 sensor *tmp11 .SORTER @dead
-    29 op strictEqual *tmp12 *tmp11 0
-    30 jump *label8 equal *tmp12 false
-+   31 label *label22
-    32 sensor *tmp13 .VAULT @dead
-    33 op strictEqual *tmp14 *tmp13 0
-    34 jump *label8 equal *tmp14 false
+    29 sensor *tmp11 .SORTER @dead
+    30 op strictEqual *tmp12 *tmp11 0
+    31 jump *label8 equal *tmp12 false
++   32 label *label22
+    33 sensor *tmp13 .VAULT @dead
+    34 op strictEqual *tmp14 *tmp13 0
+    35 jump *label8 equal *tmp14 false
  
-    92 jump *label19 lessThan @time :wait
-    93 label *label18
-    94 label *label7
+    93 jump *label19 lessThan @time :wait
+    94 label *label18
+    95 label *label7
 -    * jump *label6 always
-+   95 sensor *tmp11 .SORTER @dead
-+   96 op strictEqual *tmp12 *tmp11 0
-+   97 jump *label22 notEqual *tmp12 false
-    98 label *label8
-    99 end
++   96 sensor *tmp11 .SORTER @dead
++   97 op strictEqual *tmp12 *tmp11 0
++   98 jump *label22 notEqual *tmp12 false
+    99 label *label8
+   100 end
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
-    44 label *label13
-    45 read :shipped .BANK 511
-    46 sensor :item .SORTER @config
+    45 label *label13
+    46 read :shipped .BANK 511
+    47 sensor :item .SORTER @config
 -    * op add :total 0 :shipped
-+   47 set :total :shipped
-    48 jump *label14 greaterThanEq .MILLIS 10000
-    49 op add .MILLIS .MILLIS 1000
-    50 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
++   48 set :total :shipped
+    49 jump *label14 greaterThanEq .MILLIS 10000
+    50 op add .MILLIS .MILLIS 1000
+    51 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
-    52 label *label14
-    53 read :last_total .BANK :index
-    54 label *label15
+    53 label *label14
+    54 read :last_total .BANK :index
+    55 label *label15
 -    * write :total .BANK :index
 -    * op sub *tmp34 :total :last_total
-+   55 write :shipped .BANK :index
-+   56 op sub *tmp34 :shipped :last_total
-    57 op div :flow_rate *tmp34 .SIGN_MILLIS
-    58 write :flow_rate .BANK 507
-    59 write @time .BANK 508
++   56 write :shipped .BANK :index
++   57 op sub *tmp34 :shipped :last_total
+    58 op div :flow_rate *tmp34 .SIGN_MILLIS
+    59 write :flow_rate .BANK 507
+    60 write @time .BANK 508
  
-    74 print "\nFlow rate: "
-    75 print :flow_rate_str
-    76 print "\nTotal: "
+    75 print "\nFlow rate: "
+    76 print :flow_rate_str
+    77 print "\nTotal: "
 -    * print :total
-+   77 print :shipped
-    78 print "\nLast total: "
-    79 print :last_total
-    80 print "\nIndex: "
++   78 print :shipped
+    79 print "\nLast total: "
+    80 print :last_total
+    81 print "\nIndex: "
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
  
-    44 label *label13
-    45 read :shipped .BANK 511
-    46 sensor :item .SORTER @config
+    45 label *label13
+    46 read :shipped .BANK 511
+    47 sensor :item .SORTER @config
 -    * set :total :shipped
-    47 jump *label14 greaterThanEq .MILLIS 10000
-    48 op add .MILLIS .MILLIS 1000
-    49 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
+    48 jump *label14 greaterThanEq .MILLIS 10000
+    49 op add .MILLIS .MILLIS 1000
+    50 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -594,15 +594,15 @@ set .BANK bank1
 jump *label3 equal sorter1 null
 jump *label3 equal vault1 null
 jump *label2 notEqual bank1 null
-label *label21
 label *label3
+label *label21
 print "Missing sorter, vault or memory bank."
 printflush message1
 set .SORTER sorter1
 set .VAULT vault1
 set .BANK bank1
-jump *label3 equal .SORTER null
-jump *label3 equal .VAULT null
+jump *label21 equal .SORTER null
+jump *label21 equal .VAULT null
 jump *label21 equal .BANK null
 label *label2
 read :shipped .BANK 511

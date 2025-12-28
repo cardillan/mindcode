@@ -1,11 +1,11 @@
    135 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination (5 iterations).
+     1 instructions eliminated by Temp Variables Elimination (7 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Condition Optimization (4 iterations).
-     2 instructions eliminated by Data Flow Optimization (5 iterations).
-     1 instructions eliminated by Loop Rotation (2 iterations).
-       1 loop conditions were fully rotated.
+     1 instructions eliminated by Jump Normalization (5 iterations).
+     1 instructions eliminated by Condition Optimization (6 iterations).
+     2 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+       1 loop conditions were partially rotated.
    127 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -295,24 +295,43 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    176 jump *label58 equal *tmp2 48
    177 printchar *tmp2
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
+     1 set :printAll:i -1
+     2 label *label1
+     3 jump *label3 greaterThanEq :printAll:i @blockCount
++    4 label *label60
+     5 lookup block :identifyBlock:block :printAll:i
+     6 jump *label7 strictEqual :identifyBlock:block null
+     7 jump *label6 always
+ 
+   181 label *label59
+   182 label *label2
+   183 op add :printAll:i :printAll:i 1
+-    * jump *label1 always
++  184 jump *label60 lessThan :printAll:i @blockCount
+   185 label *label3
+   186 label *label0
+   187 assertprints "ABCDEFGHIJKLLMMMMNNNNOOOOPPPQRSTUVWXYZ" "Verifying output"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
      0 assertflush
      1 set :printAll:i -1
      2 label *label1
 -    * jump *label3 greaterThanEq :printAll:i @blockCount
-+    3 label *label60
++    3 jump *label3 greaterThanEq -1 @blockCount
+     4 label *label60
+     5 lookup block :identifyBlock:block :printAll:i
+     6 jump *label7 strictEqual :identifyBlock:block null
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
+     0 assertflush
+     1 set :printAll:i -1
+     2 label *label1
+-    * jump *label3 greaterThanEq -1 @blockCount
+     3 label *label60
      4 lookup block :identifyBlock:block :printAll:i
      5 jump *label7 strictEqual :identifyBlock:block null
-     6 jump *label6 always
- 
-   180 label *label59
-   181 label *label2
-   182 op add :printAll:i :printAll:i 1
--    * jump *label1 always
-+  183 jump *label60 lessThan :printAll:i @blockCount
-   184 label *label3
-   185 label *label0
-   186 assertprints "ABCDEFGHIJKLLMMMMNNNNOOOOPPPQRSTUVWXYZ" "Verifying output"
 
 Final code before resolving virtual instructions:
 

@@ -61,6 +61,6 @@ public class AstVariablesDeclaration extends AstExpression {
 
     @Override
     public AstContextType getContextType() {
-        return AstContextType.INIT;
+        return AstContextType.DECLARATION;
     }
 }

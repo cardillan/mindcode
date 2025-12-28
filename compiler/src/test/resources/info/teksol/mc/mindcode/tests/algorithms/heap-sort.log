@@ -12,7 +12,7 @@
     53 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 944):
-  * Partial loop rotation at line 31:5                           size    +2, benefit      625.0, efficiency    312.500 (+2 instructions)
+  * Full loop rotation at line 31:5                              size    +2, benefit      650.0, efficiency    325.000 (+2 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructions):
  
@@ -345,7 +345,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     83 stop
     84 end
 
-Modifications by Partial loop rotation at line 31:5 (+2 instructions):
+Modifications by Full loop rotation at line 31:5 (+2 instructions):
  
     42 op mul *tmp23 :down:parent 2
     43 op add :down:child *tmp23 1

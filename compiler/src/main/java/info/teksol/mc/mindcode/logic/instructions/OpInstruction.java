@@ -108,7 +108,7 @@ public class OpInstruction extends BaseResultInstruction implements ConditionalI
     }
 
     @Override
-    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
+    public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
         return getArg(0) == Operation.BOOLEAN_OR ? 2 : 1;
     }
 }

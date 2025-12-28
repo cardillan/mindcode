@@ -17,6 +17,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.EACH;
@@ -91,7 +92,7 @@ class LoopRotator extends AbstractConditionalOptimizer {
         }
 
         ShortCircuitAnalysis analysis = analyzeShortCircuit(condition, false);
-        if (analysis == null || !analysis.normal()) return;
+        if (analysis == null) return;
 
         JumpInstruction lastJump = analysis.lastJump();
 
@@ -103,23 +104,26 @@ class LoopRotator extends AbstractConditionalOptimizer {
 
             LogicLabel exitLabel = exitLabelIx.getLabel();
 
-            DuplicateConditionAction partial =
-                    createOptimizationAction(loop, condition, lastJump, backJump, exitLabel, costLimit, false);
-
-            // Try full rotation only when the front condition can be removed
-            DuplicateConditionAction full = !analysis.sideEffects()
-                    && optimizationContext.evaluateLoopEntryCondition(conditionContext) == LogicBoolean.TRUE
-                    ? createOptimizationAction(loop, condition, lastJump, backJump, exitLabel, costLimit, true)
+            LoopRotationAction partial = analysis.normal()
+                    ? createOptimizationAction(loop, condition, lastJump, backJump, exitLabel, costLimit, false, false)
                     : null;
 
-            DuplicateConditionAction optimal = partial == null ? full
+            boolean hoisting = !optimizationContext.getLoopInvariants(loop).isEmpty();
+            boolean canRemoveFront = analysis.normal() && !analysis.sideEffects() &&
+                    optimizationContext.evaluateLoopEntryCondition(conditionContext) == LogicBoolean.TRUE;
+
+            LoopRotationAction full = partial == null || !partial.fullRotation && hoisting
+                    ? createOptimizationAction(loop, condition, lastJump, backJump, exitLabel, costLimit, true, canRemoveFront)
+                    : null;
+
+            LoopRotationAction optimal = partial == null ? full
                     : full == null ? partial
                     : partial.isStrictlyBetterThan(full) ? partial
                     : full.isStrictlyBetterThan(partial) ? full
                     : null;
 
             if (optimize && optimal != null && optimal.totalImprovement()) {
-                duplicateCondition(optimal.conditionEvaluation, optimal.lastJump, optimal.backJump, optimal.fullRotation);
+                optimal.rotateCondition();
                 return;
             }
 
@@ -129,15 +133,19 @@ class LoopRotator extends AbstractConditionalOptimizer {
     }
 
     private boolean hasConditionAtFront(AstContext loop) {
-        List<AstContext> children = loop.children();
-        return (children.size() >= 2) && (children.getFirst().subcontextType() == CONDITION
-                || children.getFirst().subcontextType() == INIT && children.get(1).subcontextType() == CONDITION);
+        return loop.children().stream()
+                .filter(c -> c.matches(CONDITION, BODY))
+                .findFirst()
+                .filter(c -> c.matches(CONDITION))
+                .isPresent();
     }
 
-    private @Nullable DuplicateConditionAction createOptimizationAction(AstContext loop, LogicList condition,
+    private @Nullable LoopRotationAction createOptimizationAction(AstContext loop, LogicList condition,
             JumpInstruction lastJump, JumpInstruction backJump, LogicLabel exitLabel, int costLimit,
-            boolean fullRotation) {
+            boolean fullRotation, boolean canRemoveFront) {
         AstContext lastJumpContext = lastJump.getAstContext();
+        LogicLabel enterLabel = condition.getLast() instanceof LabelInstruction l ? l.getLabel() : null;
+        boolean effectivelyFull = true;
 
         int size = 0;
         int jumps = 0;
@@ -146,6 +154,9 @@ class LoopRotator extends AbstractConditionalOptimizer {
         for (LogicInstruction ix : condition) {
             if (ix.getAstContext() == lastJumpContext && ix instanceof JumpInstruction jump) {
                 boolean hasInverse = jump.getCondition().hasInverse(getGlobalProfile());
+                if (!jump.getTarget().equals(enterLabel) && jump != lastJump) {
+                    effectivelyFull = false;
+                }
                 if (jump.getTarget().equals(exitLabel)) {
                     if (!hasInverse) {
                         size++;
@@ -161,109 +172,163 @@ class LoopRotator extends AbstractConditionalOptimizer {
                 }
                 jumps++;
             }
-            size += ix.getRealSize(null);
+            size += ix.getRealSize();
         }
 
         // Inverting the condition wouldn't save execution time
         if (!fullRotation && !finalConversion && jumps == 0) return null;
 
-        // Keeps condition instructions without the label
-        final LogicList conditionEvaluation = condition.subList(1, condition.size());
-        int cost = size - (fullRotation ? jumps : 0) - 1;
-        double benefit = (fullRotation ? loop.totalWeight() : 0.0) + (1 - additionalSteps) * backJump.getAstContext().totalWeight();
+        // If effectivelyFull is true, each jump leads to the beginning of the loop
+        if (effectivelyFull && !fullRotation) {
+            jumps++;
+            fullRotation = true;
+        }
 
+        int cost;
+        double benefit;
+        if (fullRotation && !canRemoveFront) {
+            cost = size - 1;
+            double originalWeight = optimizationContext.getLoopInvariants(loop).stream()
+                    .mapToDouble(ix -> ix.getRealSize() * ix.getAstContext().totalWeight()).sum();
+            double hoistedWeight = loop.totalWeight() * optimizationContext.getLoopInvariants(loop).stream()
+                    .mapToInt(LogicInstruction::getRealSize).sum();
+            benefit = loop.totalWeight() + (1 - additionalSteps) * backJump.getAstContext().totalWeight()
+                    + originalWeight - hoistedWeight;
+        } else {
+            cost = size - (fullRotation ? jumps : 0) - 1;
+            benefit = (fullRotation ? loop.totalWeight() : 0.0) + (1 - additionalSteps) * backJump.getAstContext().totalWeight();
+        }
+
+        // Keeps condition instructions without the label
+
+        final LogicList conditionEvaluation = condition.subList(1, condition.size());
         return cost <= costLimit && benefit >= 0.0
-                ? new DuplicateConditionAction(loop, conditionEvaluation, lastJump, backJump, fullRotation, cost, benefit)
+                ? new LoopRotationAction(loop, conditionEvaluation, lastJump, backJump, fullRotation, canRemoveFront, cost, benefit)
                 : null;
     }
 
-    private OptimizationResult duplicateCondition(LogicList condition, JumpInstruction lastJump, JumpInstruction backJump,
-            boolean fullRotation) {
-        LogicLabel exitLabel = lastJump.getTarget();
-
-        LogicList copy = condition.duplicate(true);
-        // Invert the label map (new -> old)
-        Map<LogicLabel, LogicLabel> labelMap = CollectionUtils.invert(copy.getLabelMap());
-
-        LogicInstruction last = copy.last(ix -> ix instanceof JumpInstruction j && j.isConditional());
-        if (!(last instanceof JumpInstruction lastJumpCopy) || !lastJumpCopy.getTarget().equals(exitLabel)) {
-            throw new MindcodeInternalError("Unexpected condition structure");
-        }
-        AstContext conditionContext = lastJumpCopy.getAstContext();
-
-        int index = 0;
-        int frontIndex = instructionIndex(condition.getExisting(0));
-        while (index < copy.size()) {
-            LogicInstruction ix = copy.getExisting(index);
-            if (ix.getAstContext() == conditionContext && ix instanceof JumpInstruction j) {
-                if (j.getTarget().equals(exitLabel)) {
-                    LogicLabel label = instructionProcessor.nextLabel();
-                    if (j.getCondition().hasInverse(getGlobalProfile())) {
-                        frontIndex++;
-                        copy.replaceKeepingContext(index, j.forceInvert().withTarget(label));
-                    } else if (fullRotation || j == lastJumpCopy) {
-                        LogicVariable tmp = instructionProcessor.nextTemp();
-                        copy.addKeepingContext(index++, createOp(j.getAstContext(), j.getCondition().toOperation(),
-                                tmp, j.getX(), j.getY()));
-                        copy.replaceKeepingContext(index, createJump(j.getAstContext(), label,
-                                Condition.EQUAL, tmp, LogicBoolean.FALSE));
-                    } else {
-                        copy.replaceKeepingContext(index, createJumpUnconditional(j.getAstContext(), label));
-                    }
-                    insertInstruction(frontIndex, createLabel(lastJump.getAstContext(), label));
-                    index++;
-                    if (!fullRotation) break;
-                } else {
-                    // Restore the original label
-                    LogicLabel target = labelMap.getOrDefault(j.getTarget(), j.getTarget());
-                    copy.replaceKeepingContext(index, j.withTarget(target));
-                }
-            }
-
-            index++;
-            frontIndex++;
-        }
-
-        // Remove all after the index
-        while (copy.size() > index) {
-            copy.remove(index);
-        }
-
-        // Replace the last jump first, then insert the rest of the code *before* it
-        int targetIndex = instructionIndex(backJump);
-        removeInstruction(targetIndex);
-        insertInstructions(targetIndex, copy);
-
-        if (fullRotation) {
-            optimizationContext.removeMatchingInstructions(ix -> ix instanceof JumpInstruction
-                    && ix.getAstContext() == lastJump.getAstContext());
-            fullRotations++;
-        } else {
-            partialRotations++;
-        }
-
-        return OptimizationResult.REALIZED;
-    }
-
-    private class DuplicateConditionAction extends AbstractOptimizationAction {
+    private class LoopRotationAction extends AbstractOptimizationAction {
         private final JumpInstruction lastJump;
         private final JumpInstruction backJump;
         private final LogicList conditionEvaluation;
         private final boolean fullRotation;
+        private final boolean canRemoveFront;
 
-        public DuplicateConditionAction(AstContext astContext, LogicList conditionEvaluation, JumpInstruction lastJump,
-                JumpInstruction backJump, boolean fullRotation, int cost, double benefit) {
-            super(astContext, cost, benefit);
+        public LoopRotationAction(AstContext loop, LogicList conditionEvaluation, JumpInstruction lastJump,
+                JumpInstruction backJump, boolean fullRotation, boolean canRemoveFront, int cost, double benefit) {
+            super(loop, cost, benefit);
             this.conditionEvaluation = conditionEvaluation;
             this.lastJump = lastJump;
             this.backJump = backJump;
             this.fullRotation = fullRotation;
+            this.canRemoveFront = canRemoveFront;
         }
 
         @Override
         public OptimizationResult apply(int costLimit) {
-            return applyOptimization(() -> duplicateCondition(conditionEvaluation, lastJump, backJump,
-                    fullRotation), toString());
+            return applyOptimization(this::rotateCondition, toString());
+        }
+
+        private OptimizationResult rotateCondition() {
+            boolean hoistingRotation = fullRotation && !canRemoveFront;
+            LogicLabel exitLabel = lastJump.getTarget();
+            LogicLabel repeatLabel = null;
+            LogicLabel enterLabel = null;
+
+            LogicList copy = conditionEvaluation.duplicate(true);
+            // Invert the label map (new -> old)
+            Map<LogicLabel, LogicLabel> labelMap = CollectionUtils.invert(copy.getLabelMap());
+
+            if (hoistingRotation) {
+                // The front condition is evaluated just once
+                conditionEvaluation.getExistingAstContext().updateWeight(1.0);
+
+                // We need to create a new label at the start of the body
+                // to separate the body from a loop hoisting context
+                repeatLabel = instructionProcessor.nextLabel();
+                AstContext body = Objects.requireNonNull(astContext.findSubcontext(BODY));
+                int index = optimizationContext.firstInstructionIndex(body);
+                optimizationContext.insertInstruction(index,
+                        createLabel(astContext.createSubcontext(HOIST, 1.0), repeatLabel));
+                labelMap.put(backJump.getTarget(), repeatLabel);
+
+                enterLabel = copy.getLast() instanceof LabelInstruction l ? l.getLabel() : null;
+            }
+
+            LogicInstruction last = copy.last(ix -> ix instanceof JumpInstruction j && j.isConditional());
+            if (!(last instanceof JumpInstruction lastJumpCopy) || !lastJumpCopy.getTarget().equals(exitLabel)) {
+                throw new MindcodeInternalError("Unexpected condition structure");
+            }
+            AstContext conditionContext = lastJumpCopy.getAstContext();
+
+            int index = 0;
+            int frontIndex = instructionIndex(conditionEvaluation.getExisting(0));
+            while (index < copy.size()) {
+                LogicInstruction ix = copy.getExisting(index);
+                if (ix.getAstContext() == conditionContext && ix instanceof JumpInstruction j) {
+                    if (j.getTarget().equals(exitLabel)) {
+                        if (hoistingRotation) {
+                            if (j.getCondition().hasInverse(getGlobalProfile())) {
+                                copy.replaceKeepingContext(index, j.forceInvert().withTarget(repeatLabel));
+                            } else {
+                                LogicVariable tmp = instructionProcessor.nextTemp();
+                                copy.addKeepingContext(index++, createOp(j.getAstContext(), j.getCondition().toOperation(),
+                                        tmp, j.getX(), j.getY()));
+                                copy.replaceKeepingContext(index, createJump(j.getAstContext(), repeatLabel,
+                                        Condition.EQUAL, tmp, LogicBoolean.FALSE));
+                            }
+                        } else {
+                            LogicLabel label = instructionProcessor.nextLabel();
+                            if (j.getCondition().hasInverse(getGlobalProfile())) {
+                                frontIndex++;
+                                copy.replaceKeepingContext(index, j.forceInvert().withTarget(label));
+                            } else if (fullRotation || j == lastJumpCopy) {
+                                LogicVariable tmp = instructionProcessor.nextTemp();
+                                copy.addKeepingContext(index++, createOp(j.getAstContext(), j.getCondition().toOperation(),
+                                        tmp, j.getX(), j.getY()));
+                                copy.replaceKeepingContext(index, createJump(j.getAstContext(), label,
+                                        Condition.EQUAL, tmp, LogicBoolean.FALSE));
+                            } else {
+                                copy.replaceKeepingContext(index, createJumpUnconditional(j.getAstContext(), label));
+                            }
+                            insertInstruction(frontIndex, createLabel(lastJump.getAstContext(), label));
+                            if (!fullRotation) {
+                                index++;
+                                break;
+                            }
+                        }
+                    } else if (hoistingRotation && j.getTarget().equals(enterLabel)) {
+                        copy.replaceKeepingContext(index, j.withTarget(repeatLabel));
+                    } else if (!hoistingRotation) {
+                        // Restore the original label
+                        LogicLabel target = labelMap.getOrDefault(j.getTarget(), j.getTarget());
+                        copy.replaceKeepingContext(index, j.withTarget(target));
+                    }
+                }
+
+                index++;
+                frontIndex++;
+            }
+
+            // Remove all after the index
+            while (copy.size() > index) {
+                copy.remove(index);
+            }
+
+            // Replace the last jump first, then insert the rest of the code *before* it
+            int targetIndex = instructionIndex(backJump);
+            removeInstruction(targetIndex);
+            insertInstructions(targetIndex, copy);
+
+            if (fullRotation && canRemoveFront) {
+                optimizationContext.removeMatchingInstructions(ix -> ix instanceof JumpInstruction
+                        && ix.getAstContext() == lastJump.getAstContext());
+                fullRotations++;
+            } else {
+                partialRotations++;
+            }
+
+            return OptimizationResult.REALIZED;
         }
 
         @Override

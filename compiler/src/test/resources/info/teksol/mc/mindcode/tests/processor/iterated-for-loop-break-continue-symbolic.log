@@ -12,7 +12,7 @@
     37 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 966):
-  * Partial loop rotation at line 4:5                            size    +7, benefit       25.0, efficiency      3.571 (+7 instructions)
+  * Full loop rotation at line 4:5                               size    +7, benefit       26.0, efficiency      3.714 (+7 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructions):
  
@@ -118,7 +118,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     26 label *label8
     27 label *label3
 
-Modifications by Partial loop rotation at line 4:5 (+7 instructions):
+Modifications by Full loop rotation at line 4:5 (+7 instructions):
  
      8 set :d:n :test:j
      9 call *label0 :d*retaddr :d*retval

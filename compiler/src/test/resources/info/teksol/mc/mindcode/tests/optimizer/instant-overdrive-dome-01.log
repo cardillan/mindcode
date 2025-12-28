@@ -20,18 +20,18 @@
    854 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 231):
-    Partial loop rotation at line 54:5                           size    +1, benefit       25.0, efficiency     25.000
-    Partial loop rotation at line 119:5                          size    +1, benefit       25.0, efficiency     25.000
+    Full loop rotation at line 54:5                              size    +1, benefit       26.0, efficiency     26.000
+    Full loop rotation at line 119:5                             size    +1, benefit       26.0, efficiency     26.000
   * Unroll iteration loop at line 169:9                          size    +5, benefit      375.0, efficiency     75.000 (+3 instructions)
     Unroll iteration loop at line 201:9                          size  +197, benefit      375.0, efficiency      1.904
 
 Pass 1: speed optimization selection (cost limit 228):
-  * Partial loop rotation at line 54:5                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Partial loop rotation at line 119:5                          size    +1, benefit       25.0, efficiency     25.000
+  * Full loop rotation at line 54:5                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
+    Full loop rotation at line 119:5                             size    +1, benefit       26.0, efficiency     26.000
     Unroll iteration loop at line 201:9                          size  +197, benefit      375.0, efficiency      1.904
 
 Pass 1: speed optimization selection (cost limit 227):
-  * Partial loop rotation at line 119:5                          size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  * Full loop rotation at line 119:5                             size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
     Unroll iteration loop at line 201:9                          size  +197, benefit      375.0, efficiency      1.904
 
 Pass 1: speed optimization selection (cost limit 226):
@@ -5370,7 +5370,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     49 set :locateCore:type @mono
     50 setaddr :locateCore*retaddr *label406 (h:*label406)
 
-Modifications by Partial loop rotation at line 54:5 (+1 instructions):
+Modifications by Full loop rotation at line 54:5 (+1 instructions):
  
     67 label *label18
     68 sensor *tmp7 switch1 @enabled
@@ -5387,7 +5387,7 @@ Modifications by Partial loop rotation at line 54:5 (+1 instructions):
     78 label *label22
     79 printflush null
 
-Modifications by Partial loop rotation at line 119:5 (+1 instructions):
+Modifications by Full loop rotation at line 119:5 (+1 instructions):
  
    511 label *label173
    512 sensor *tmp192 switch1 @enabled

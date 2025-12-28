@@ -246,11 +246,11 @@ public class LogicInstructionPrinter {
                 lastRemark = false;
             } else {
                 result = "%5d%s:  ".formatted(lineNumber, decoration);
-                if (instruction instanceof RemarkInstruction && instruction.getRealSize(null) == 2) {
+                if (instruction instanceof RemarkInstruction && instruction.getRealSize() == 2) {
                     lineNumber += lastRemark ? 1 : 2;
                     lastRemark = true;
                 } else {
-                    lineNumber += instruction.getRealSize(null);
+                    lineNumber += instruction.getRealSize();
                     lastRemark = false;
                 }
             }

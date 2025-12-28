@@ -1,23 +1,24 @@
    188 instructions before optimizations.
-    19 instructions eliminated by Temp Variables Elimination (5 iterations).
+    19 instructions eliminated by Temp Variables Elimination (6 iterations).
      2 instructions eliminated by Case Expression Optimization.
     20 instructions eliminated by Dead Code Elimination (5 iterations).
-    12 instructions eliminated by Condition Optimization (5 iterations).
-     8 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions eliminated by Expression Optimization (2 iterations).
-     1 instructions eliminated by Boolean Optimization (5 iterations).
+     1 instructions eliminated by Jump Normalization (5 iterations).
+    12 instructions eliminated by Condition Optimization (6 iterations).
+     8 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+     1 instructions eliminated by Expression Optimization (3 iterations).
+     1 instructions eliminated by Boolean Optimization (6 iterations).
        1 fully-evaluated expressions optimized using selects.
-     1 instructions eliminated by If Expression Optimization (2 iterations).
-     3 instructions modified by Data Flow Optimization (4 iterations).
-       1 loop conditions were fully rotated.
-       3 loop conditions were partially rotated.
-     5 instructions eliminated by Jump Straightening (5 iterations).
+     1 instructions eliminated by If Expression Optimization (3 iterations).
+     4 instructions modified by Data Flow Optimization (2 passes, 6 iterations).
+     1 instructions added by Loop Rotation (3 iterations).
+       4 loop conditions were partially rotated.
+     5 instructions eliminated by Jump Straightening (6 iterations).
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     23 instructions eliminated by Print Merging.
     95 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 881):
-  * Partial loop rotation at line 57:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+Pass 1: speed optimization selection (cost limit 880):
+  * Full loop rotation at line 57:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
  
@@ -549,105 +550,125 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     75 label *label23
     76 set :prevTick @tick
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
+     4 set .MESSAGE null
+     5 label *label0
+     6 jump *label2 notEqual .SOURCE_MEMORY null
++    7 label *label40
+     8 print "Item Rate Meter"
+     9 set :n @links
+    10 label *label3
+    11 jump *label5 lessThanEq :n 0
++   12 label *label41
+    13 op sub :n :n 1
+    14 getlink :block :n
+    15 print "\nFound: "
+ 
+    33 label *label11
+    34 label *label6
+    35 label *label4
+-    * jump *label3 always
++   36 jump *label41 greaterThan :n 0
+    37 label *label5
+    38 print "\nMessage: "
+    39 print .MESSAGE
+ 
+    49 label *label14
+    50 printflush .MESSAGE
+    51 label *label1
+-    * jump *label0 always
++   52 jump *label40 equal .SOURCE_MEMORY null
+    53 label *label2
+    54 jump *label15 notEqual .TARGET_MEMORY null
+    55 set .TARGET_MEMORY .SOURCE_MEMORY
+ 
+    95 label *label28
+    96 label *label29
+    97 jump *label31 greaterThanEq @tick :nextTick
++   98 label *label42
+    99 jump *label32 greaterThanEq @tick :prevTick
+   100 end
+   101 jump *label33 always
+ 
+   108 label *label35
+   109 label *label33
+   110 label *label30
+-    * jump *label29 always
++  111 jump *label42 lessThan @tick :nextTick
+   112 label *label31
+   113 op sub :amount :curr :prev
+   114 op sub :time :currTick :prevTick
+
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    51 label *label1
+    52 jump *label40 equal .SOURCE_MEMORY null
+    53 label *label2
+-    * jump *label15 notEqual .TARGET_MEMORY null
+-    * set .TARGET_MEMORY .SOURCE_MEMORY
+-    * label *label15
+-    * label *label16
++   54 select .TARGET_MEMORY equal .TARGET_MEMORY null .SOURCE_MEMORY .TARGET_MEMORY
+    55 set :startIndex 0
+    56 sensor *tmp13 .TARGET_MEMORY @type
+    57 jump *label18 notEqual *tmp13 @memory-cell
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+   109 label *label31
+   110 op sub :amount :curr :prev
+   111 op sub :time :currTick :prevTick
+-    * jump *label36 notEqual :amount 0
+   112 set :rate 0
+-    * jump *label37 always
++  113 jump *label37 equal :amount 0
+   114 label *label36
+   115 op div *tmp42 :amount :time
+   116 op max :rate *tmp42 0
+
+Modifications by Full loop rotation at line 57:1 (+1 instructions):
+ 
+    82 label *label24
+    83 sensor *tmp23 switch1 @enabled
+    84 jump *label26 notEqual *tmp23 0
++   85 label *label43
+    86 op add :nextTick :nextTick TICKS
+    87 op add *tmp26 :nextTick TICKS
+    88 jump *label27 lessThanEq @tick *tmp26
+ 
+   155 set :prevTick :currTick
+   156 set :prev :curr
+   157 label *label25
+-    * jump *label24 always
++  158 sensor *tmp23 switch1 @enabled
++  159 jump *label43 equal *tmp23 0
+   160 label *label26
+   161 control enabled switch1 0
+   162 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      3 set .SWITCH null
      4 set .MESSAGE null
      5 label *label0
 -    * jump *label2 notEqual .SOURCE_MEMORY null
-+    6 label *label40
++    6 jump *label2 notEqual null null
+     7 label *label40
+     8 print "Item Rate Meter"
+     9 set :n @links
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
+ 
+     3 set .SWITCH null
+     4 set .MESSAGE null
+     5 label *label0
+-    * jump *label2 notEqual null null
+     6 label *label40
      7 print "Item Rate Meter"
      8 set :n @links
-     9 label *label3
-    10 jump *label5 lessThanEq :n 0
-+   11 label *label41
-    12 op sub :n :n 1
-    13 getlink :block :n
-    14 print "\nFound: "
- 
-    32 label *label11
-    33 label *label6
-    34 label *label4
--    * jump *label3 always
-+   35 jump *label41 greaterThan :n 0
-    36 label *label5
-    37 print "\nMessage: "
-    38 print .MESSAGE
- 
-    48 label *label14
-    49 printflush .MESSAGE
-    50 label *label1
--    * jump *label0 always
-+   51 jump *label40 equal .SOURCE_MEMORY null
-    52 label *label2
-    53 jump *label15 notEqual .TARGET_MEMORY null
-    54 set .TARGET_MEMORY .SOURCE_MEMORY
- 
-    94 label *label28
-    95 label *label29
-    96 jump *label31 greaterThanEq @tick :nextTick
-+   97 label *label42
-    98 jump *label32 greaterThanEq @tick :prevTick
-    99 end
-   100 jump *label33 always
- 
-   107 label *label35
-   108 label *label33
-   109 label *label30
--    * jump *label29 always
-+  110 jump *label42 lessThan @tick :nextTick
-   111 label *label31
-   112 op sub :amount :curr :prev
-   113 op sub :time :currTick :prevTick
 
-Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 instructions):
- 
-    50 label *label1
-    51 jump *label40 equal .SOURCE_MEMORY null
-    52 label *label2
--    * jump *label15 notEqual .TARGET_MEMORY null
--    * set .TARGET_MEMORY .SOURCE_MEMORY
--    * label *label15
--    * label *label16
-+   53 select .TARGET_MEMORY equal .TARGET_MEMORY null .SOURCE_MEMORY .TARGET_MEMORY
-    54 set :startIndex 0
-    55 sensor *tmp13 .TARGET_MEMORY @type
-    56 jump *label18 notEqual *tmp13 @memory-cell
-
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-   108 label *label31
-   109 op sub :amount :curr :prev
-   110 op sub :time :currTick :prevTick
--    * jump *label36 notEqual :amount 0
-   111 set :rate 0
--    * jump *label37 always
-+  112 jump *label37 equal :amount 0
-   113 label *label36
-   114 op div *tmp42 :amount :time
-   115 op max :rate *tmp42 0
-
-Modifications by Partial loop rotation at line 57:1 (+1 instructions):
- 
-    81 label *label24
-    82 sensor *tmp23 switch1 @enabled
-    83 jump *label26 notEqual *tmp23 0
-+   84 label *label43
-    85 op add :nextTick :nextTick TICKS
-    86 op add *tmp26 :nextTick TICKS
-    87 jump *label27 lessThanEq @tick *tmp26
- 
-   154 set :prevTick :currTick
-   155 set :prev :curr
-   156 label *label25
--    * jump *label24 always
-+  157 sensor *tmp23 switch1 @enabled
-+  158 jump *label43 equal *tmp23 0
-   159 label *label26
-   160 control enabled switch1 0
-   161 end
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
  
      2 set .TARGET_MEMORY null
      3 set .SWITCH null
@@ -766,7 +787,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
    138 jump *label43 equal *tmp23 0
    139 label *label26
 
-Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
    137 jump *label43 equal *tmp23 0
    138 label *label26

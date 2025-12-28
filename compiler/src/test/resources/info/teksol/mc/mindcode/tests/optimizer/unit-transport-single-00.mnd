@@ -301,7 +301,7 @@ while true do
     loop_time = @time - start;
 end;
 
-while (SORTER.@dead === 0) == false do
+while SORTER.@dead do
     println("[salmon]sorter1 is missing!");
     println("[gold]Please place and link sorter or inverted sorter to the processor.");
     printflush(message1);
@@ -309,7 +309,7 @@ while (SORTER.@dead === 0) == false do
     SORTER = sorter1;
 end;
 
-if SRC.@dead !== 0 or DST.@dead !== 0 then
+if SRC.@dead or DST.@dead then
     switch1.enabled = false;
     while switch1.@enabled == false do
         println("[salmon]Local or remote container became invalid.");

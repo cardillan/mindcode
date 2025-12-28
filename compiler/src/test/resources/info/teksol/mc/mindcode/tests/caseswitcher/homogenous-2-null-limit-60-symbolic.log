@@ -1,15 +1,15 @@
     51 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (5 iterations).
+     2 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     2 instructions eliminated by Data Flow Optimization (5 iterations).
-     1 instructions eliminated by Loop Rotation (2 iterations).
-       1 loop conditions were fully rotated.
-     4 instructions eliminated by Case Switching (3 iterations).
+     1 instructions eliminated by Jump Normalization (4 iterations).
+     2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+       1 loop conditions were partially rotated.
+     4 instructions eliminated by Case Switching (4 iterations).
      1 case expressions converted to switched jumps by Case Switching.
     39 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 17):
+Pass 1: speed optimization selection (cost limit 16):
   o Convert case at line 11:5 (segments: 5)                      size    -8, benefit      474.0, efficiency   Infinity
   o Convert case at line 11:5 (segments: 5)                      size    -7, benefit      474.1, efficiency   Infinity
   o Convert case at line 11:5 (segments: 13)                     size    -6, benefit      528.2, efficiency   Infinity
@@ -197,30 +197,30 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     39 jump *label3 equal *tmp2 false
     40 op mul *tmp5 :hash 31
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
-     0 set :hash 0
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
      1 set :i -1
      2 label *label0
--    * jump *label2 greaterThanEq :i @blockCount
-+    3 label *label9
-     4 lookup block :block :i
-     5 # "Function: def isWall(in block)"
-     6 jump *label8 strictEqual :block null
+     3 jump *label2 greaterThanEq :i @blockCount
++    4 label *label9
+     5 lookup block :block :i
+     6 # "Function: def isWall(in block)"
+     7 jump *label8 strictEqual :block null
  
-    46 label *label4
-    47 label *label1
-    48 op add :i :i 1
+    47 label *label4
+    48 label *label1
+    49 op add :i :i 1
 -    * jump *label0 always
-+   49 jump *label9 lessThan :i @blockCount
-    50 label *label2
-    51 print :hash
-    52 assertequals 3138715214 :hash "Test selected blocks"
++   50 jump *label9 lessThan :i @blockCount
+    51 label *label2
+    52 print :hash
+    53 assertequals 3138715214 :hash "Test selected blocks"
 
 Modifications by Convert case at line 11:5 (segments: 13) (-4 instructions):
  
-     3 label *label9
-     4 lookup block :block :i
-     5 # "Function: def isWall(in block)"
+     4 label *label9
+     5 lookup block :block :i
+     6 # "Function: def isWall(in block)"
 -    * jump *label8 strictEqual :block null
 -    * jump *label8 equal :block @copper-wall
 -    * jump *label8 equal :block @copper-wall-large
@@ -247,42 +247,61 @@ Modifications by Convert case at line 11:5 (segments: 13) (-4 instructions):
 -    * jump *label8 equal :block @carbide-wall
 -    * jump *label8 equal :block @carbide-wall-large
 -    * jump *label7 always
-+    6 sensor *tmp9 :block @id
-+    7 jump *label12 greaterThanEq *tmp9 203
-+    8 jump *label10 greaterThanEq *tmp9 35
-+    9 jump *label11 lessThan *tmp9 17
-+   10 jump *label8 lessThan *tmp9 29
-+   11 jump *label10 lessThan *tmp9 31
-    12 label *label8
++    7 sensor *tmp9 :block @id
++    8 jump *label12 greaterThanEq *tmp9 203
++    9 jump *label10 greaterThanEq *tmp9 35
++   10 jump *label11 lessThan *tmp9 17
++   11 jump *label8 lessThan *tmp9 29
++   12 jump *label10 lessThan *tmp9 31
+    13 label *label8
 -    * set *tmp2 true
 -    * jump *label6 always
-+   13 set *tmp2 true
-+   14 jump *label6 always
-+   15 label *label12
-+   16 jump *label13 greaterThanEq *tmp9 234
-+   17 jump *label14 greaterThanEq *tmp9 220
-+   18 jump *label10 greaterThanEq *tmp9 208
-+   19 jump *label8 lessThan *tmp9 205
-+   20 jump *label10 lessThan *tmp9 206
-+   21 set *tmp2 true
-+   22 jump *label6 always
-+   23 label *label14
-+   24 jump *label10 greaterThanEq *tmp9 226
-+   25 jump *label8 lessThan *tmp9 222
-+   26 jump *label10 lessThan *tmp9 225
-+   27 set *tmp2 true
-+   28 jump *label6 always
-+   29 label *label13
-+   30 jump *label10 greaterThanEq *tmp9 235
-+   31 set *tmp2 true
-+   32 jump *label6 always
-    33 label *label7
-+   34 label *label11
-+   35 jump *label8 strictEqual *tmp9 null
-+   36 label *label10
-    37 set *tmp2 false
-    38 label *label6
-    39 label *label5
++   14 set *tmp2 true
++   15 jump *label6 always
++   16 label *label12
++   17 jump *label13 greaterThanEq *tmp9 234
++   18 jump *label14 greaterThanEq *tmp9 220
++   19 jump *label10 greaterThanEq *tmp9 208
++   20 jump *label8 lessThan *tmp9 205
++   21 jump *label10 lessThan *tmp9 206
++   22 set *tmp2 true
++   23 jump *label6 always
++   24 label *label14
++   25 jump *label10 greaterThanEq *tmp9 226
++   26 jump *label8 lessThan *tmp9 222
++   27 jump *label10 lessThan *tmp9 225
++   28 set *tmp2 true
++   29 jump *label6 always
++   30 label *label13
++   31 jump *label10 greaterThanEq *tmp9 235
++   32 set *tmp2 true
++   33 jump *label6 always
+    34 label *label7
++   35 label *label11
++   36 jump *label8 strictEqual *tmp9 null
++   37 label *label10
+    38 set *tmp2 false
+    39 label *label6
+    40 label *label5
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+     0 set :hash 0
+     1 set :i -1
+     2 label *label0
+-    * jump *label2 greaterThanEq :i @blockCount
++    3 jump *label2 greaterThanEq -1 @blockCount
+     4 label *label9
+     5 lookup block :block :i
+     6 # "Function: def isWall(in block)"
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
+     0 set :hash 0
+     1 set :i -1
+     2 label *label0
+-    * jump *label2 greaterThanEq -1 @blockCount
+     3 label *label9
+     4 lookup block :block :i
+     5 # "Function: def isWall(in block)"
 
 Final code before resolving virtual instructions:
 

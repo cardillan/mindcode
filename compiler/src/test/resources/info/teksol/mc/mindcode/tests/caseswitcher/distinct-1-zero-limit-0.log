@@ -1,11 +1,11 @@
    124 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (5 iterations).
+     2 instructions eliminated by Temp Variables Elimination (7 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Condition Optimization (4 iterations).
-     2 instructions eliminated by Data Flow Optimization (4 iterations).
-     1 instructions eliminated by Loop Rotation (2 iterations).
-       1 loop conditions were fully rotated.
+     1 instructions eliminated by Jump Normalization (5 iterations).
+     1 instructions eliminated by Condition Optimization (6 iterations).
+     2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+       1 loop conditions were partially rotated.
    115 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -442,25 +442,45 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    159 op shl :bit 1 *tmp2
    160 op and *tmp5 :total :bit
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
+     2 set :i -1
+     3 label *label0
+     4 jump *label2 greaterThanEq :i @blockCount
++    5 label *label57
+     6 lookup block :block :i
+     7 jump *label6 equal :block @graphite-press
+     8 jump *label5 always
+ 
+   167 label *label56
+   168 label *label1
+   169 op add :i :i 1
+-    * jump *label0 always
++  170 jump *label57 lessThan :i @blockCount
+   171 label *label2
+   172 assertequals 0x07FFFFFD :total "Test selected blocks"
+   173 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      1 set :total 0
      2 set :i -1
      3 label *label0
 -    * jump *label2 greaterThanEq :i @blockCount
-+    4 label *label57
++    4 jump *label2 greaterThanEq -1 @blockCount
+     5 label *label57
+     6 lookup block :block :i
+     7 jump *label6 equal :block @graphite-press
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
+ 
+     1 set :total 0
+     2 set :i -1
+     3 label *label0
+-    * jump *label2 greaterThanEq -1 @blockCount
+     4 label *label57
      5 lookup block :block :i
      6 jump *label6 equal :block @graphite-press
-     7 jump *label5 always
- 
-   166 label *label56
-   167 label *label1
-   168 op add :i :i 1
--    * jump *label0 always
-+  169 jump *label57 lessThan :i @blockCount
-   170 label *label2
-   171 assertequals 0x07FFFFFD :total "Test selected blocks"
-   172 end
 
 Final code before resolving virtual instructions:
 

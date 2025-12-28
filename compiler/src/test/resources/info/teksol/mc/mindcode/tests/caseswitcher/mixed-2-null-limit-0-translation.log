@@ -1,10 +1,10 @@
    135 instructions before optimizations.
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Condition Optimization (4 iterations).
-     3 instructions eliminated by Data Flow Optimization (5 iterations).
-     1 instructions eliminated by Loop Rotation (2 iterations).
-       1 loop conditions were fully rotated.
+     1 instructions eliminated by Jump Normalization (5 iterations).
+     1 instructions eliminated by Condition Optimization (6 iterations).
+     3 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+       1 loop conditions were partially rotated.
    127 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -498,25 +498,45 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    178 jump *label58 equal *tmp2 48
    179 printchar *tmp2
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
+     2 set :printAll:i -1
+     3 label *label1
+     4 jump *label3 greaterThanEq :printAll:i @blockCount
++    5 label *label60
+     6 lookup block *tmp0 :printAll:i
+     7 # "Function: def identifyBlock(in block)"
+     8 jump *label7 strictEqual *tmp0 null
+ 
+   183 label *label59
+   184 label *label2
+   185 op add :printAll:i :printAll:i 1
+-    * jump *label1 always
++  186 jump *label60 lessThan :printAll:i @blockCount
+   187 label *label3
+   188 label *label0
+   189 assertprints "ABCDEFGHIJKLLMMMMNNNNOOOOPPPQRSTUVWXYZ" "Verifying output"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      1 # "Function: void printAll()"
      2 set :printAll:i -1
      3 label *label1
 -    * jump *label3 greaterThanEq :printAll:i @blockCount
-+    4 label *label60
++    4 jump *label3 greaterThanEq -1 @blockCount
+     5 label *label60
+     6 lookup block *tmp0 :printAll:i
+     7 # "Function: def identifyBlock(in block)"
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
+ 
+     1 # "Function: void printAll()"
+     2 set :printAll:i -1
+     3 label *label1
+-    * jump *label3 greaterThanEq -1 @blockCount
+     4 label *label60
      5 lookup block *tmp0 :printAll:i
      6 # "Function: def identifyBlock(in block)"
-     7 jump *label7 strictEqual *tmp0 null
- 
-   182 label *label59
-   183 label *label2
-   184 op add :printAll:i :printAll:i 1
--    * jump *label1 always
-+  185 jump *label60 lessThan :printAll:i @blockCount
-   186 label *label3
-   187 label *label0
-   188 assertprints "ABCDEFGHIJKLLMMMMNNNNOOOOPPPQRSTUVWXYZ" "Verifying output"
 
 Final code before resolving virtual instructions:
 

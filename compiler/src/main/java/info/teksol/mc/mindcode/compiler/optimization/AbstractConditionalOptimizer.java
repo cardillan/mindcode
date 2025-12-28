@@ -217,7 +217,7 @@ public abstract class AbstractConditionalOptimizer extends BaseOptimizer {
         double total = 0;
 
         for (LogicInstruction instruction : instructions) {
-            total += instruction.getRealSize(null) * weight;
+            total += instruction.getRealSize() * weight;
             switch (instruction) {
                 case JumpInstruction jump -> {
                     targetWeights.computeIfAbsent(jump.getTarget(), _ -> MutableDouble.zero())

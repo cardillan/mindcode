@@ -16,7 +16,7 @@
    128 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 835):
-  * Partial loop rotation at line 69:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  * Full loop rotation at line 69:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -905,7 +905,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-4
     91 set :startTime @time
     92 label *label19
 
-Modifications by Partial loop rotation at line 69:1 (+1 instructions):
+Modifications by Full loop rotation at line 69:1 (+1 instructions):
  
     92 label *label19
     93 sensor *tmp22 switch1 @enabled

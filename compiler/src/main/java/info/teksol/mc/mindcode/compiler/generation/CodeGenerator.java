@@ -208,7 +208,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
     }
 
     private void generateTargetGuard() {
-        assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.INIT);
+        assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.INIT);
         LogicLabel guardLabel = assembler.nextLabel().withoutStateTransfer();
         assembler.createLabel(guardLabel);
         switch (globalProfile.getProcessorVersion()) {
@@ -250,7 +250,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
     private void setupRemoteSignature() {
         List<MindcodeFunction> remoteFunctions = callGraph.getFunctions().stream().filter(f -> f.isRemote() && f.isEntryPoint()).toList();
-        assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.REMOTE_INIT);
+        assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.REMOTE_INIT);
         String remoteSignature = createRemoteSignature(remoteFunctions.stream().map(MindcodeFunction::getDeclaration));
         assembler.createSet(LogicVariable.preserved(nameCreator().remoteSignature()), LogicString.create(remoteSignature));
         assembler.clearContextType(program);

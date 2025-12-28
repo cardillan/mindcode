@@ -115,8 +115,8 @@ public abstract class AbstractInstruction implements LogicInstruction {
         return this.astContext.belongsTo(astContext);
     }
 
-    public @Nullable AstContext findContextOfType(AstContextType contextType) {
-        return astContext.findContextOfType(contextType);
+    public @Nullable AstContext findSuperContextOfType(AstContextType contextType) {
+        return astContext.findSuperContextOfType(contextType);
     }
 
     public @Nullable AstContext findTopContextOfTypes(AstContextType... contextTypes) {
@@ -162,14 +162,14 @@ public abstract class AbstractInstruction implements LogicInstruction {
     @Override
     public LogicInstruction remapInfoValues(Map<? extends LogicValue, LogicValue> valueMap) {
         for (Map.Entry<InstructionInfo, Object> entry : info.entrySet()) {
-            if (entry.getValue() instanceof LogicValue value && valueMap.containsKey(value)) {
-                entry.setValue(valueMap.get(value));
-            } else if (entry.getValue() instanceof List<?> list) {
-                entry.setValue(list.stream()
+            switch (entry.getValue()) {
+                case LogicValue value when valueMap.containsKey(value) -> entry.setValue(valueMap.get(value));
+                case List<?> list -> entry.setValue(list.stream()
                         .map(e -> e instanceof LogicValue value ? valueMap.getOrDefault(value, value) : e)
                         .toList());
-            } else if (entry.getValue() instanceof SideEffects sideEffects) {
-                entry.setValue(sideEffects.replaceVariables(valueMap));
+                case SideEffects sideEffects -> entry.setValue(sideEffects.replaceVariables(valueMap));
+                default -> {
+                }
             }
         }
         return this;

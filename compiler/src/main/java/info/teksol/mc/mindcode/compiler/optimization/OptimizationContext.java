@@ -59,6 +59,9 @@ public class OptimizationContext {
     /// Holds evaluation of first loop condition variables for loop rotator/unroller.
     private final Map<AstContext, VariableStates> loopVariables = new HashMap<>();
 
+    /// Holds list of invariant instruction which could be hoisted if the loop gets fully rotated
+    private final Map<AstContext, List<LogicInstruction>> loopInvariants = new HashMap<>();
+
     /// Variables affected by added, removed or changed instructions are added to the stale list
     /// The information collected by DFO about these variables is unusable.
     private final Set<LogicVariable> staleVariables = new HashSet<>();
@@ -467,6 +470,18 @@ public class OptimizationContext {
         return loopVariables.get(loopContext);
     }
 
+    public void storeLoopInvariants(AstContext loopContext, List<LogicInstruction> loopInvariants) {
+        this.loopInvariants.put(loopContext, loopInvariants);
+    }
+
+    public List<LogicInstruction> getLoopInvariants(AstContext loopContext) {
+        return loopInvariants.getOrDefault(loopContext, List.of());
+    }
+
+    public void clearLoopInvariants() {
+        loopInvariants.clear();
+    }
+
     public LogicValue resolveValue(@Nullable VariableStates variableStates, LogicValue value) {
         if (variableStates != null && value instanceof LogicVariable v && !staleVariables.contains(v)) {
             var newValue = variableStates.findVariableValue(v);
@@ -502,6 +517,7 @@ public class OptimizationContext {
         variableStates.clear();
         firstPassStates.clear();
         staleVariables.clear();
+        loopVariables.clear();
     }
 
     public LabelInstruction getLabelInstruction(LogicLabel label) {
@@ -1221,10 +1237,10 @@ public class OptimizationContext {
         program.add(index, instruction);
         instructionAdded(instruction);
         updated = true;
-        insertions += instruction.getRealSize(null);
+        insertions += instruction.getRealSize();
     }
 
-    /// Inserts all instructions in the list to the program, starting at given index.
+    /// Inserts all instructions in the list to the program, starting at a given index.
     /// See [#insertInstruction(int,LogicInstruction)].
     ///
     /// @param index where to place the instructions
@@ -1257,7 +1273,7 @@ public class OptimizationContext {
         instructionRemoved(original);
         instructionAdded(replacement);
         updated = true;
-        int difference = original.getRealSize(null) - replacement.getRealSize(null);
+        int difference = original.getRealSize() - replacement.getRealSize();
         if (difference == 0) {
             modifications++;
         } else if (difference > 0) {
@@ -1277,7 +1293,7 @@ public class OptimizationContext {
         LogicInstruction instruction = program.remove(index);
         instructionRemoved(instruction);
         updated = true;
-        deletions += instruction.getRealSize(null);
+        deletions += instruction.getRealSize();
     }
 
     public void forceUpdate() {

@@ -13,11 +13,11 @@
     66 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 924):
-    Partial loop rotation at line 17:1                           size    +2, benefit       25.0, efficiency     12.500
+    Full loop rotation at line 17:1                              size    +2, benefit       26.0, efficiency     13.000
   * Partial loop rotation at line 38:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
 
 Pass 1: speed optimization selection (cost limit 923):
-  * Partial loop rotation at line 17:1                           size    +2, benefit       25.0, efficiency     12.500 (+2 instructions)
+  * Full loop rotation at line 17:1                              size    +2, benefit       26.0, efficiency     13.000 (+2 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
@@ -449,26 +449,26 @@ Modifications by Partial loop rotation at line 38:1 (+1 instructions):
     91 label *label8
     92 end
 
-Modifications by Partial loop rotation at line 17:1 (+2 instructions):
+Modifications by Full loop rotation at line 17:1 (+2 instructions):
  
-     5 jump *label3 equal .SORTER null
      6 jump *label3 equal .VAULT null
      7 jump *label2 notEqual .BANK null
-+    8 label *label22
-     9 label *label3
+     8 label *label3
++    9 label *label22
     10 print "Missing sorter, vault or memory bank."
     11 printflush message1
- 
+    12 set .SORTER sorter1
     13 set .VAULT vault1
     14 set .BANK bank1
     15 label *label1
 -    * jump *label0 always
-+   16 jump *label3 equal .SORTER null
-+   17 jump *label3 equal .VAULT null
++   16 jump *label22 equal .SORTER null
++   17 jump *label22 equal .VAULT null
 +   18 jump *label22 equal .BANK null
-    19 label *label2
-    20 read :shipped .BANK 511
-    21 read .MULTIPLIER .BANK 510
++   19 label *label21
+    20 label *label2
+    21 read :shipped .BANK 511
+    22 read .MULTIPLIER .BANK 510
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -481,52 +481,52 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +    5 jump *label3 equal sorter1 null
 +    6 jump *label3 equal vault1 null
 +    7 jump *label2 notEqual bank1 null
-     8 label *label22
-     9 label *label3
+     8 label *label3
+     9 label *label22
     10 print "Missing sorter, vault or memory bank."
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
-    41 label *label13
-    42 read :shipped .BANK 511
-    43 sensor :item .SORTER @config
+    42 label *label13
+    43 read :shipped .BANK 511
+    44 sensor :item .SORTER @config
 -    * op add :total 0 :shipped
-+   44 set :total :shipped
-    45 jump *label14 greaterThanEq .MILLIS 10000
-    46 op add .MILLIS .MILLIS 1000
-    47 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
++   45 set :total :shipped
+    46 jump *label14 greaterThanEq .MILLIS 10000
+    47 op add .MILLIS .MILLIS 1000
+    48 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
-    49 label *label14
-    50 read :last_total .BANK :index
-    51 label *label15
+    50 label *label14
+    51 read :last_total .BANK :index
+    52 label *label15
 -    * write :total .BANK :index
 -    * op sub *tmp34 :total :last_total
-+   52 write :shipped .BANK :index
-+   53 op sub *tmp34 :shipped :last_total
-    54 op div :flow_rate *tmp34 .SIGN_MILLIS
-    55 write :flow_rate .BANK 507
-    56 write @time .BANK 508
++   53 write :shipped .BANK :index
++   54 op sub *tmp34 :shipped :last_total
+    55 op div :flow_rate *tmp34 .SIGN_MILLIS
+    56 write :flow_rate .BANK 507
+    57 write @time .BANK 508
  
-    71 print "\nFlow rate: "
-    72 print :flow_rate_str
-    73 print "\nTotal: "
+    72 print "\nFlow rate: "
+    73 print :flow_rate_str
+    74 print "\nTotal: "
 -    * print :total
-+   74 print :shipped
-    75 print "\nLast total: "
-    76 print :last_total
-    77 print "\nIndex: "
++   75 print :shipped
+    76 print "\nLast total: "
+    77 print :last_total
+    78 print "\nIndex: "
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
  
-    41 label *label13
-    42 read :shipped .BANK 511
-    43 sensor :item .SORTER @config
+    42 label *label13
+    43 read :shipped .BANK 511
+    44 sensor :item .SORTER @config
 -    * set :total :shipped
-    44 jump *label14 greaterThanEq .MILLIS 10000
-    45 op add .MILLIS .MILLIS 1000
-    46 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
+    45 jump *label14 greaterThanEq .MILLIS 10000
+    46 op add .MILLIS .MILLIS 1000
+    47 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -605,15 +605,15 @@ set .BANK bank1
 jump *label3 equal sorter1 null
 jump *label3 equal vault1 null
 jump *label2 notEqual bank1 null
-label *label22
 label *label3
+label *label22
 print "Missing sorter, vault or memory bank."
 printflush message1
 set .SORTER sorter1
 set .VAULT vault1
 set .BANK bank1
-jump *label3 equal .SORTER null
-jump *label3 equal .VAULT null
+jump *label22 equal .SORTER null
+jump *label22 equal .VAULT null
 jump *label22 equal .BANK null
 label *label2
 read :shipped .BANK 511

@@ -32,6 +32,6 @@ public abstract class AstRequire extends AstDeclaration {
 
     @Override
     public AstContextType getContextType() {
-        return AstContextType.INIT;
+        return AstContextType.DECLARATION;
     }
 }

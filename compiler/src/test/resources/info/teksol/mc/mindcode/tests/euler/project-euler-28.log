@@ -1,9 +1,10 @@
     20 instructions before optimizations.
      2 instructions eliminated by Dead Code Elimination (4 iterations).
-     2 instructions eliminated by Condition Optimization (5 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions eliminated by Loop Rotation (2 iterations).
-       1 loop conditions were fully rotated.
+     1 instructions eliminated by Jump Normalization (6 iterations).
+     2 instructions eliminated by Condition Optimization (7 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
+     1 instructions modified by Data Flow Optimization (5 iterations).
+       1 loop conditions were partially rotated.
     13 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
@@ -47,27 +48,47 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     13 label *label4
     14 label *label1
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
+     3 set :count 1
+     4 label *label0
+     5 jump *label2 greaterThan :current 1002001
++    6 label *label5
+     7 op add :sum :sum :current
+     8 op add :current :current :step
+     9 op add :count :count 1
+ 
+    13 label *label3
+    14 label *label4
+    15 label *label1
+-    * jump *label0 always
++   16 jump *label5 lessThanEq :current 1002001
+    17 label *label2
+    18 assertequals 669171001 :sum "Project Euler 28"
+    19 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      2 set :step 2
      3 set :count 1
      4 label *label0
 -    * jump *label2 greaterThan :current 1002001
-+    5 label *label5
++    5 jump *label2 greaterThan 3 1002001
+     6 label *label5
+     7 op add :sum :sum :current
+     8 op add :current :current :step
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
+ 
+     2 set :step 2
+     3 set :count 1
+     4 label *label0
+-    * jump *label2 greaterThan 3 1002001
+     5 label *label5
      6 op add :sum :sum :current
      7 op add :current :current :step
-     8 op add :count :count 1
- 
-    12 label *label3
-    13 label *label4
-    14 label *label1
--    * jump *label0 always
-+   15 jump *label5 lessThanEq :current 1002001
-    16 label *label2
-    17 assertequals 669171001 :sum "Project Euler 28"
-    18 stop
 
-Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
     12 jump *label5 lessThanEq :current 1002001
     13 assertequals 669171001 :sum "Project Euler 28"

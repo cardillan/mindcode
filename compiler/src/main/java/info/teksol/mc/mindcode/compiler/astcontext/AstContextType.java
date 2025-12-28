@@ -6,7 +6,7 @@ import org.jspecify.annotations.NullMarked;
 public enum AstContextType {
     NONE            ("NONE"),
     ROOT            ("ROOT"),
-    INIT            ("INIT"),
+    DECLARATION     ("DECL"),
     CODE            ("CODE"),
     MLOG            ("MLOG", true),
     FUNCTION_DEF    ("FNDF"),

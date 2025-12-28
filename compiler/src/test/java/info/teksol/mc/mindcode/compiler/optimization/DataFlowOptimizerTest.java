@@ -55,10 +55,10 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(SET, "LIMIT", "2"),
                     createInstruction(SET, ":i", "0"),
                     createInstruction(JUMP, label(2), "greaterThanEq", "0", "LIMIT"),
+                    createInstruction(SETADDR, ".a*ret", label(10)),
                     createInstruction(LABEL, label(6)),
                     createInstruction(OP, "add", tmp(2), ":i", "1"),
                     createInstruction(OP, "mul", tmp(3), "2", tmp(2)),
-                    createInstruction(SETADDR, ".a*ret", label(10)),
                     createInstruction(OP, "mul", tmp(7), ":i", "2"),
                     createInstruction(MULTICALL, label(8), tmp(7)),
                     createInstruction(LABEL, label(10)),
@@ -68,8 +68,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(LABEL, label(2)),
                     createInstruction(SET, ":i", "0"),
                     createInstruction(JUMP, "__start__", "greaterThanEq", "0", "LIMIT"),
-                    createInstruction(LABEL, label(7)),
                     createInstruction(SETADDR, ".a*ret", label(11)),
+                    createInstruction(LABEL, label(7)),
                     createInstruction(OP, "mul", tmp(8), ":i", "2"),
                     createInstruction(MULTICALL, label(8), tmp(8)),
                     createInstruction(LABEL, label(11)),
@@ -1632,6 +1632,33 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(JUMP, label(3), "lessThan", ":i", tmp(1)),
                     createInstruction(LABEL, label(2)),
                     createInstruction(PRINT, ":min")
+            );
+        }
+
+        @Test
+        void handlesLoopRotationAndHoisting() {
+            // min is uninitialized because we do not know the loop body will execute
+            assertCompilesTo("""
+                            param A = 2;
+                            x = A;
+                            for i in 0 ... A do
+                                x = 2 * A;
+                                print(i);
+                            end;
+                            print(x);
+                            """,
+                    createInstruction(SET, "A", "2"),
+                    createInstruction(SET, ":x", "A"),
+                    createInstruction(SET, ":i", "0"),
+                    createInstruction(JUMP, label(2), "greaterThanEq", "0", "A"),
+                    createInstruction(OP, "mul", ":x", "2", "A"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, ":i"),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(3), "lessThan", ":i", "A"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(PRINT, ":x")
+
             );
         }
 

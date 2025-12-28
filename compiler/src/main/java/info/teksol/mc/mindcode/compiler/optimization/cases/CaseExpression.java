@@ -305,7 +305,7 @@ public class CaseExpression {
     private boolean addBranchInstruction(LogicInstruction ix) {
         if (branch == null) return false;
 
-        int size = ix.getRealSize(null);
+        int size = ix.getRealSize();
         branch.addSize(size);
 
         if (ix instanceof SetInstruction set) {

@@ -207,7 +207,7 @@ public class LogicInstructionLabelResolver {
                 instructionPointer++;
             }
 
-            instructionPointer += instruction.getRealSize(null);
+            instructionPointer += instruction.getRealSize();
             if (instruction instanceof LabeledInstruction ix) {
                 if (addresses.containsKey(ix.getLabel())) {
                     throw new MindcodeInternalError("Duplicate label detected: '%s' reused at least twice in %s", ix.getLabel(), program);

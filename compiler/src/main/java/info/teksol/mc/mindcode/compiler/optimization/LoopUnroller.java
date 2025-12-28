@@ -58,6 +58,7 @@ class LoopUnroller extends BaseOptimizer {
 
     private static final Map<AstSubcontextType, String> SYMBOL_MAP = Map.of(
             INIT, "i",
+            HOIST, "h",
             CONDITION, "c",
             BODY, "b",
             UPDATE, "u",
@@ -68,7 +69,7 @@ class LoopUnroller extends BaseOptimizer {
 
     private boolean hasSupportedStructure(AstContext loop) {
         String structure = loop.children().stream().map(c -> SYMBOL_MAP.get(c.subcontextType())).collect(Collectors.joining());
-        return structure.contains("b") && structure.matches("i?c?b?u?c?f");
+        return structure.contains("b") && structure.matches("i?h?c?h?b?u?c?f");
     }
 
     private boolean hasSupportedIterationStructure(AstContext loop) {
@@ -76,7 +77,7 @@ class LoopUnroller extends BaseOptimizer {
         if (optimizationContext.getUnreachableInstructions().get(firstInstructionIndex(loop))) return false;
 
         String structure = loop.children().stream().map(c -> SYMBOL_MAP.get(c.subcontextType())).collect(Collectors.joining());
-        return structure.matches("l(tl)*bft");
+        return structure.matches("h?l(tl)*bft");
     }
 
     private boolean hasExitCondition(AstContext loop) {
@@ -225,8 +226,7 @@ class LoopUnroller extends BaseOptimizer {
 
     private int getReplacementSize(LogicInstruction instruction, LogicVariable controlVariable) {
         return instruction instanceof ArrayAccessInstruction ix && ix.getIndex().equals(controlVariable)
-                ? 1
-                : instruction.getRealSize(null);
+                ? 1 : instruction.getRealSize();
     }
 
     private int findLoopCount(AstContext loop, JumpInstruction jump, LogicVariable loopControl,

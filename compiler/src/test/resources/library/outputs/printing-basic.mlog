@@ -260,240 +260,40 @@ assertflush
 print "-1.2345000000000002E-50"
 assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
 assertflush
-op abs *tmp77 null 0
 print null
 assertprints "null" "printExactSlow(null)"
 assertflush
-set :printExactSlow:n 0
-set :printExactSlow*retaddr 269
-jump 419 always 0 0
+print 0
 assertprints "0" "printExactSlow(0)"
 assertflush
-set :printExactSlow:n 1
-set :printExactSlow*retaddr 274
-jump 419 always 0 0
+print "1.000000000000000"
 assertprints "1.000000000000000" "printExactSlow(1)"
 assertflush
-set :printExactSlow:n 1.0000001
-set :printExactSlow*retaddr 279
-jump 419 always 0 0
+print "1.000000100000000"
 assertprints "1.000000100000000" "printExactSlow(1.0000001)"
 assertflush
-set :printExactSlow:n 3.00000007
-set :printExactSlow*retaddr 284
-jump 419 always 0 0
+print "3.000000070000000"
 assertprints "3.000000070000000" "printExactSlow(3.00000007)"
 assertflush
-set :printExactSlow:n 3E50
-set :printExactSlow*retaddr 289
-jump 419 always 0 0
+print "3.000000000000000E50"
 assertprints "3.000000000000000E50" "printExactSlow(3e50)"
 assertflush
-set :printExactSlow:n 1.0123456789
-set :printExactSlow*retaddr 294
-jump 419 always 0 0
+print "1.012345678900000"
 assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush
-set :printExactSlow:n 10000001E13
-set :printExactSlow*retaddr 299
-jump 419 always 0 0
+print "1.000000099999999E20"
 assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
 assertflush
-set :printExactSlow:n 12345E-54
-set :printExactSlow*retaddr 304
-jump 419 always 0 0
+print "1.234500000000000E-50"
 assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush
-set :printExactSlow:n -12345E-54
-set :printExactSlow*retaddr 309
-jump 419 always 0 0
+print "-1.234500000000000E-50"
 assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
 assertflush
-op shr :printExactBinary:t -1035087118336 32
-set *tmp1 314
-jump 316 always 0 0
-op and :printExactBinary:t -1035087118336 0xFFFFFFFF
-set *tmp1 413
-op shr *tmp4 :printExactBinary:t 31
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 30
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 29
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 28
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 27
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 26
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 25
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 24
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 23
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 22
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 21
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 20
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 19
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 18
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 17
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 16
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 15
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 14
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 13
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 12
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 11
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 10
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 9
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 8
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 7
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 6
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 5
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 4
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 3
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 2
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 1
-op and *tmp5 *tmp4 1
-print *tmp5
-op shr *tmp4 :printExactBinary:t 0
-op and *tmp5 *tmp4 1
-print *tmp5
-set @counter *tmp1
+print "1111111111111111111111110000111100000000000000000000000000000000"
 assertprints "1111111111111111111111110000111100000000000000000000000000000000" "printExactBinary(0xFFFFFF0F << 32)"
 assertflush
 print "FFFFFF0F00000000"
 assertprints "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
 stop
-end
-op abs *tmp77 :printExactSlow:n 0
-jump 423 greaterThan *tmp77 0
-print :printExactSlow:n
-set @counter :printExactSlow*retaddr
-jump 426 greaterThanEq :printExactSlow:n 0
-print "-"
-op abs :printExactSlow:n :printExactSlow:n 0
-op log10 *tmp83 :printExactSlow:n 0
-op floor :printExactSlow:exp *tmp83 0
-op sub *tmp85 0 :printExactSlow:exp
-op pow *tmp86 10 *tmp85
-op mul :printExactSlow:base :printExactSlow:n *tmp86
-op floor *tmp88 :printExactSlow:base 0
-print *tmp88
-print "."
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-op mod *tmp89 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp89 10
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
-jump 497 equal :printExactSlow:exp 0
-print "E"
-print :printExactSlow:exp
-set @counter :printExactSlow*retaddr
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

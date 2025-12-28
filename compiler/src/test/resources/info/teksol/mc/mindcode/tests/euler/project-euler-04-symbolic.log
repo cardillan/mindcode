@@ -1,23 +1,19 @@
     36 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (6 iterations).
+     2 instructions eliminated by Temp Variables Elimination (7 iterations).
      4 instructions eliminated by Dead Code Elimination (5 iterations).
-     3 instructions eliminated by Condition Optimization (6 iterations).
-     3 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     1 instructions eliminated by Boolean Optimization (6 iterations).
+     1 instructions eliminated by Jump Normalization (6 iterations).
+     3 instructions eliminated by Condition Optimization (7 iterations).
+     3 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
+     1 instructions eliminated by Boolean Optimization (7 iterations).
        1 fully-evaluated expressions optimized using selects.
-     1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-     1 instructions eliminated by Loop Rotation (3 iterations).
-       1 loop conditions were fully rotated.
-       2 loop conditions were partially rotated.
+     1 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+       3 loop conditions were partially rotated.
     21 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 978):
-  ! Unroll loop at line 4:1                                      size +1332, benefit     4500.0, efficiency      3.378
-
-Pass 2: speed optimization selection (cost limit 978):
-  ! Unroll loop at line 4:1                                      size +1332, benefit     4500.0, efficiency      3.378
-
 Pass 3: speed optimization selection (cost limit 978):
+  ! Unroll loop at line 4:1                                      size +1332, benefit     4500.0, efficiency      3.378
+
+Pass 4: speed optimization selection (cost limit 978):
   ! Unroll loop at line 4:1                                      size +1332, benefit     4500.0, efficiency      3.378
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
@@ -131,54 +127,54 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     22 jump *label8 notEqual :num :revert:res
     23 set :max :num
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
-     0 set :max 0
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
      1 set :i 10
      2 label *label0
--    * jump *label2 greaterThanEq :i 100
-+    3 label *label14
-     4 set :j :i
-     5 label *label3
-     6 jump *label5 greaterThanEq :j 100
-+    7 label *label15
-     8 op mul :num :i :j
-     9 jump *label6 lessThanEq :num :max
-    10 # "Function: def revert(in num)"
+     3 jump *label2 greaterThanEq :i 100
++    4 label *label14
+     5 set :j :i
+     6 label *label3
+     7 jump *label5 greaterThanEq :j 100
++    8 label *label15
+     9 op mul :num :i :j
+    10 jump *label6 lessThanEq :num :max
+    11 # "Function: def revert(in num)"
  
-    12 set :revert:res 0
-    13 label *label11
-    14 jump *label13 lessThanEq :revert:num 0
-+   15 label *label16
-    16 op mul *tmp5 10 :revert:res
-    17 op mod *tmp6 :revert:num 10
-    18 op add :revert:res *tmp5 *tmp6
-    19 op idiv :revert:num :revert:num 10
-    20 label *label12
+    13 set :revert:res 0
+    14 label *label11
+    15 jump *label13 lessThanEq :revert:num 0
++   16 label *label16
+    17 op mul *tmp5 10 :revert:res
+    18 op mod *tmp6 :revert:num 10
+    19 op add :revert:res *tmp5 *tmp6
+    20 op idiv :revert:num :revert:num 10
+    21 label *label12
 -    * jump *label11 always
-+   21 jump *label16 greaterThan :revert:num 0
-    22 label *label13
-    23 label *label10
-    24 jump *label8 notEqual :num :revert:res
++   22 jump *label16 greaterThan :revert:num 0
+    23 label *label13
+    24 label *label10
+    25 jump *label8 notEqual :num :revert:res
  
-    29 label *label7
-    30 label *label4
-    31 op add :j :j 1
+    30 label *label7
+    31 label *label4
+    32 op add :j :j 1
 -    * jump *label3 always
-+   32 jump *label15 lessThan :j 100
-    33 label *label5
-    34 label *label1
-    35 op add :i :i 1
++   33 jump *label15 lessThan :j 100
+    34 label *label5
+    35 label *label1
+    36 op add :i :i 1
 -    * jump *label0 always
-+   36 jump *label14 lessThan :i 100
-    37 label *label2
-    38 assertequals 9009 :max "Project Euler 4"
-    39 stop
++   37 jump *label14 lessThan :i 100
+    38 label *label2
+    39 assertequals 9009 :max "Project Euler 4"
+    40 stop
 
 Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 instructions):
  
-     7 label *label15
-     8 op mul :num :i :j
-     9 jump *label6 lessThanEq :num :max
+     8 label *label15
+     9 op mul :num :i :j
+    10 jump *label6 lessThanEq :num :max
 -    * # "Function: def revert(in num)"
 -    * set :revert:num :num
 -    * set :revert:res 0
@@ -197,46 +193,59 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 i
 -    * set :max :num
 -    * label *label8
 -    * label *label9
-+   10 # "Function: def revert(in num)"
-+   11 set :revert:num :num
-+   12 set :revert:res 0
-+   13 label *label17
-+   14 jump *label20 lessThanEq :revert:num 0
-+   15 label *label18
-+   16 op mul *tmp5 10 :revert:res
-+   17 op mod *tmp6 :revert:num 10
-+   18 op add :revert:res *tmp5 *tmp6
-+   19 op idiv :revert:num :revert:num 10
-+   20 label *label19
-+   21 jump *label18 greaterThan :revert:num 0
-+   22 label *label20
-+   23 label *label21
-+   24 select :max equal :num :revert:res :num :max
-    25 label *label6
-    26 label *label7
-    27 label *label4
++   11 # "Function: def revert(in num)"
++   12 set :revert:num :num
++   13 set :revert:res 0
++   14 label *label17
++   15 jump *label20 lessThanEq :revert:num 0
++   16 label *label18
++   17 op mul *tmp5 10 :revert:res
++   18 op mod *tmp6 :revert:num 10
++   19 op add :revert:res *tmp5 *tmp6
++   20 op idiv :revert:num :revert:num 10
++   21 label *label19
++   22 jump *label18 greaterThan :revert:num 0
++   23 label *label20
++   24 label *label21
++   25 select :max equal :num :revert:res :num :max
+    26 label *label6
+    27 label *label7
+    28 label *label4
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+     0 set :max 0
+     1 set :i 10
+     2 label *label0
+-    * jump *label2 greaterThanEq :i 100
++    3 jump *label2 greaterThanEq 10 100
+     4 label *label14
+     5 set :j :i
+     6 label *label3
+-    * jump *label5 greaterThanEq :j 100
++    7 jump *label5 greaterThanEq :i 100
+     8 label *label15
+     9 op mul :num :i :j
+    10 jump *label6 lessThanEq :num :max
  
+    12 set :revert:num :num
+    13 set :revert:res 0
+    14 label *label17
+-    * jump *label20 lessThanEq :revert:num 0
++   15 jump *label20 lessThanEq :num 0
+    16 label *label18
+    17 op mul *tmp5 10 :revert:res
+    18 op mod *tmp6 :revert:num 10
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
+     0 set :max 0
+     1 set :i 10
+     2 label *label0
+-    * jump *label2 greaterThanEq 10 100
      3 label *label14
      4 set :j :i
      5 label *label3
--    * jump *label5 greaterThanEq :j 100
-+    6 jump *label5 greaterThanEq :i 100
-     7 label *label15
-     8 op mul :num :i :j
-     9 jump *label6 lessThanEq :num :max
- 
-    11 set :revert:num :num
-    12 set :revert:res 0
-    13 label *label17
--    * jump *label20 lessThanEq :revert:num 0
-+   14 jump *label20 lessThanEq :num 0
-    15 label *label18
-    16 op mul *tmp5 10 :revert:res
-    17 op mod *tmp6 :revert:num 10
 
-Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
     25 jump *label14 lessThan :i 100
     26 assertequals 9009 :max "Project Euler 4"

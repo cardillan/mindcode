@@ -41,7 +41,7 @@ public interface LogicInstruction extends MlogInstruction {
 
     boolean belongsTo(@Nullable AstContext context);
 
-    @Nullable AstContext findContextOfType(AstContextType contextType);
+    @Nullable AstContext findSuperContextOfType(AstContextType contextType);
 
     default boolean affectsControlFlow() {
         return false;
@@ -94,8 +94,16 @@ public interface LogicInstruction extends MlogInstruction {
     ///                         shared structure but not decrease it. When null, the caller isn't interested
     ///                         in shared structure calculation.
     /// @return real size of the instruction
-    default int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
+    default int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
         return getOpcode().getSize();
+    }
+
+    /// Returns the true size of the instruction without calculating the size of shared structures.
+    /// Real instructions have a size of 1, virtual instruction may get resolved to more (or less) real instructions.
+    ///
+    /// @return real size of the instruction
+    default int getRealSize() {
+        return getSharedSize(null);
     }
 
     default LogicLabel getMarker() {

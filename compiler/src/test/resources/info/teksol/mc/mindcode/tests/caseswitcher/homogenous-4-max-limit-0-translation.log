@@ -1,10 +1,10 @@
     54 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (5 iterations).
+     2 instructions eliminated by Temp Variables Elimination (7 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     2 instructions eliminated by Data Flow Optimization (4 iterations).
-     1 instructions eliminated by Loop Rotation (2 iterations).
-       1 loop conditions were fully rotated.
+     1 instructions eliminated by Jump Normalization (5 iterations).
+     2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+       1 loop conditions were partially rotated.
     46 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -196,25 +196,45 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     42 jump *label3 equal *tmp2 false
     43 op mul *tmp5 :hash 31
 
-Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
+ 
+     2 set :i -1
+     3 label *label0
+     4 jump *label2 greaterThanEq :i @blockCount
++    5 label *label9
+     6 lookup block :block :i
+     7 # "Function: def isWall(in block)"
+     8 jump *label8 strictEqual :block null
+ 
+    50 label *label4
+    51 label *label1
+    52 op add :i :i 1
+-    * jump *label0 always
++   53 jump *label9 lessThan :i @blockCount
+    54 label *label2
+    55 print :hash
+    56 assertequals 2727247113 :hash "Test selected blocks"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      1 set :hash 0
      2 set :i -1
      3 label *label0
 -    * jump *label2 greaterThanEq :i @blockCount
-+    4 label *label9
++    4 jump *label2 greaterThanEq -1 @blockCount
+     5 label *label9
+     6 lookup block :block :i
+     7 # "Function: def isWall(in block)"
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
+ 
+     1 set :hash 0
+     2 set :i -1
+     3 label *label0
+-    * jump *label2 greaterThanEq -1 @blockCount
+     4 label *label9
      5 lookup block :block :i
      6 # "Function: def isWall(in block)"
-     7 jump *label8 strictEqual :block null
- 
-    49 label *label4
-    50 label *label1
-    51 op add :i :i 1
--    * jump *label0 always
-+   52 jump *label9 lessThan :i @blockCount
-    53 label *label2
-    54 print :hash
-    55 assertequals 2727247113 :hash "Test selected blocks"
 
 Final code before resolving virtual instructions:
 

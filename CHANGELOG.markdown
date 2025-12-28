@@ -6,7 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.12.0 - Unreleased
 
+### Changed
 
+* The [Loop Rotation optimization](/doc/syntax/optimizations/LOOP-ROTATION.markdown) has been updated:
+  * Full loop rotation is performed even for conditions which contain complex code (such as nested loops or function calls).
+  * A full loop rotation is also considered alongside a partial rotation if it could be beneficial to Loop Hoisting.   
+* The [Loop Hoisting optimization](/doc/syntax/optimizations/LOOP-HOISTING.markdown) has been extended:
+  * The optimizer gathers information to support the Loop Rotation optimization.
+  * When a loop is fully rotated, an instruction can be hoisted in such a way that it's executed at most once, but only if the loop actually runs.  
+  * When a loop is not known to execute at least once, an instruction affecting just the loop can still get hoisted entirely out of the loop if the loop is nested.
 
 ## 3.11.0 - 2025-12-25
 
