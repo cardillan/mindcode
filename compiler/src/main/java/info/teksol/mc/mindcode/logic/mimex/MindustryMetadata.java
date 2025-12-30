@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -50,6 +52,7 @@ public class MindustryMetadata {
     private final AtomicReference<@Nullable Map<String, UnitCommand>> unitCommandMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, LAccess>> lAccessMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, LVar>> lVarMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, LogicStatement>> logicStatementMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, Weather>> weatherMap = new AtomicReference<>();
 
     private final AtomicReference<@Nullable Map<Integer, BlockType>> blockIdMap = new AtomicReference<>();
@@ -170,6 +173,10 @@ public class MindustryMetadata {
 
     Map<String, LVar> getLVarMap() {
         return cacheInstance(lVarMap, () -> new LVarReader("mimex-vars.txt").createFromResource());
+    }
+
+    Map<String, LogicStatement> getLogicStatementMap() {
+        return cacheInstance(logicStatementMap, () -> new LogicStatementReader("mimex-logic-statements.txt").createFromResource());
     }
 
     Map<String, Weather> getWeatherMap() {
@@ -478,6 +485,20 @@ public class MindustryMetadata {
     }
     //</editor-fold>
 
+    //<editor-fold desc="Logic statements">
+    public int getLogicStatementCount() {
+        return getLogicStatementMap().size();
+    }
+
+    public @Nullable LogicStatement getLogicStatementByOpcode(String opcode) {
+        return getLogicStatementMap().get(opcode);
+    }
+
+    public Collection<LogicStatement> getAllLogicStatements() {
+        return getLogicStatementMap().values();
+    }
+    //</editor-fold>
+
     //<editor-fold desc="Teams">
     public int getTeamCount() {
         return getTeamLogicIdMap().size();
@@ -577,18 +598,20 @@ public class MindustryMetadata {
         }
     }
 
-    private abstract class AbstractContentReader<T extends NamedContent> extends  AbstractReader {
+    private abstract class AbstractContentReader<T> extends  AbstractReader {
         protected final int logicIdIndex;
+
+        protected AbstractContentReader(String resource) {
+            super(resource);
+            logicIdIndex = header.indexOf("logicId");
+        }
 
         protected abstract @Nullable T create(String[] columns);
 
+        protected abstract String mappingName(T object);
+
         protected List<T> createUnregistered() {
             return List.of();
-        }
-
-        public AbstractContentReader(String resource) {
-            super(resource);
-            logicIdIndex = header.indexOf("logicId");
         }
 
         protected int parseLogicId(String[] columns) {
@@ -603,9 +626,9 @@ public class MindustryMetadata {
                     String[] columns = lines.get(i).split(";", -1);
                     list.add(create(columns));
                 }
-                Map<String, T> result = list.stream().filter(Objects::nonNull).collect(Collectors.toMap(T::name,
+                Map<String, T> result = list.stream().filter(Objects::nonNull).collect(Collectors.toMap(this::mappingName,
                         t -> t, (a, _) -> a, LinkedHashMap::new));
-                createUnregistered().forEach(t -> result.putIfAbsent(t.name(), t));
+                createUnregistered().forEach(t -> result.putIfAbsent(mappingName(t), t));
 
                 return Collections.unmodifiableMap(result);
             } catch (Exception e) {
@@ -614,7 +637,18 @@ public class MindustryMetadata {
         }
     }
 
-    private class SimpleReader<T extends MindustryContent> extends AbstractContentReader<T> {
+    private abstract class AbstractNamedContentReader<T extends NamedContent> extends  AbstractContentReader<T> {
+        protected AbstractNamedContentReader(String resource) {
+            super(resource);
+        }
+
+        @Override
+        protected String mappingName(T object) {
+            return object.name();
+        }
+    }
+
+    private class SimpleReader<T extends MindustryContent> extends AbstractNamedContentReader<T> {
         private interface ItemConstructor<T extends MindustryContent> {
             T construct(String contentName, String name, int id, int logicId);
         }
@@ -643,7 +677,7 @@ public class MindustryMetadata {
         }
     }
 
-    private class BlockTypeReader extends AbstractContentReader<BlockType> {
+    private class BlockTypeReader extends AbstractNamedContentReader<BlockType> {
         private int name, id, visibility, implementation, legacy, size, hasPower, configurable, category, range, maxNodes, rotate, unitPlans;
 
         public BlockTypeReader(String resource) {
@@ -692,7 +726,7 @@ public class MindustryMetadata {
         }
     }
 
-    private class NamedColorReader extends AbstractContentReader<NamedColor> {
+    private class NamedColorReader extends AbstractNamedContentReader<NamedColor> {
         private int name, rgba;
 
         public NamedColorReader(String resource) {
@@ -713,7 +747,7 @@ public class MindustryMetadata {
         }
     }
 
-    private class LAccessReader extends AbstractContentReader<LAccess> {
+    private class LAccessReader extends AbstractNamedContentReader<LAccess> {
         private int name, senseable, controls, settable, parameters;
 
         public LAccessReader(String resource) {
@@ -741,7 +775,7 @@ public class MindustryMetadata {
         }
     }
 
-    private class LVarReader extends AbstractContentReader<LVar> {
+    private class LVarReader extends AbstractNamedContentReader<LVar> {
         private int name, global, isobj, constant, numval;
 
         public LVarReader(String resource) {
@@ -779,6 +813,54 @@ public class MindustryMetadata {
                     Boolean.parseBoolean(columns[constant]),
                     Double.parseDouble(columns[numval]))
                     : null;
+        }
+    }
+
+    private class LogicStatementReader extends AbstractContentReader<LogicStatement> {
+        private int opcode, arguments, name, typeName, hidden, privileged, nonPrivileged, hint, categoryName, categoryColor, categoryDescription;
+
+        public LogicStatementReader(String resource) {
+            super(resource);
+        }
+
+        @Override
+        protected void parseHeader() {
+            opcode = findColumn("opcode");
+            arguments = findColumn("arguments");
+            name = findColumn("name");
+            typeName = findColumn("typeName");
+            hidden = findColumn("hidden");
+            privileged = findColumn("privileged");
+            nonPrivileged = findColumn("nonPrivileged");
+            hint = findColumn("hint");
+            categoryName = findColumn("categoryName");
+            categoryColor = findColumn("categoryColor");
+            categoryDescription = findColumn("categoryDescription");
+        }
+
+        @Override
+        protected LogicStatement create(String[] columns) {
+            return new LogicStatement(
+                    columns[opcode],
+                    columns[arguments],
+                    columns[name],
+                    columns[typeName],
+                    Boolean.parseBoolean(columns[hidden]),
+                    Boolean.parseBoolean(columns[privileged]),
+                    Boolean.parseBoolean(columns[nonPrivileged]),
+                    decode(columns[hint]),
+                    columns[categoryName],
+                    Color.parseColor(columns[categoryColor]),
+                    decode(columns[categoryDescription]));
+        }
+
+        @Override
+        protected String mappingName(LogicStatement object) {
+            return object.opcode();
+        }
+
+        private String decode(String encoded) {
+            return URLDecoder.decode(encoded, StandardCharsets.UTF_8);
         }
     }
 

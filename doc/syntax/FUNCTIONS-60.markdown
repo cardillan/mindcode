@@ -39,7 +39,8 @@ generated code use mlog opcodes.
 
 ## Instruction `Draw`
 
-Add an operation to the drawing buffer. Does not display anything until `drawflush` is used.
+Add an operation to the drawing buffer.
+Does not display anything until Draw Flush is used.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#draw)
 
@@ -58,7 +59,8 @@ Add an operation to the drawing buffer. Does not display anything until `drawflu
 
 ## Instruction `Print`
 
-Add text to the print buffer. Does not display anything until printflush is used.
+Add text to the print buffer.
+Does not display anything until Print Flush is used.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#print)
 
@@ -137,7 +139,7 @@ Get data from a building or unit.
 
 ## Instruction `Operation`
 
-Perform an operation on one or two variables.
+Perform an operation on 1-2 variables.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#operation)
 
@@ -171,7 +173,7 @@ Jump to the top of the instruction stack.
 
 ## Instruction `Unit Bind`
 
-Bind to the next unit of a type and store it in @unit.
+Bind to the next unit of a type, and store it in `@unit`.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#unit-bind)
 
@@ -217,7 +219,8 @@ Locate units around the currently bound unit.
 
 ## Instruction `Unit Locate`
 
-Locate a specific type of position/building anywhere on the map. Requires a bound unit.
+Locate a specific type of position/building anywhere on the map.
+Requires a bound unit.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#unit-locate)
 

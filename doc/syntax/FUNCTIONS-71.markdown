@@ -59,7 +59,8 @@ generated code use mlog opcodes.
 
 ## Instruction `Draw`
 
-Add an operation to the drawing buffer. Does not display anything until `drawflush` is used.
+Add an operation to the drawing buffer.
+Does not display anything until Draw Flush is used.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#draw)
 
@@ -79,7 +80,8 @@ Add an operation to the drawing buffer. Does not display anything until `drawflu
 
 ## Instruction `Print`
 
-Add text to the print buffer. Does not display anything until printflush is used.
+Add text to the print buffer.
+Does not display anything until Print Flush is used.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#print)
 
@@ -161,7 +163,7 @@ Get data from a building or unit.
 
 ## Instruction `Operation`
 
-Perform an operation on one or two variables.
+Perform an operation on 1-2 variables.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#operation)
 
@@ -189,7 +191,10 @@ Perform an operation on one or two variables.
 
 ## Instruction `Lookup`
 
-Look up an item/liquid/unit/block type by ID. Total counts of each type can be accessed with @unitCount, @itemCount, @liquidCount, @blockCount.
+Look up an item/liquid/unit/block type by ID.
+Total counts of each type can be accessed with:
+`@unitCount` / `@itemCount` / `@liquidCount` / `@blockCount`
+For the inverse operation, sense `@id` of the object.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#lookup)
 
@@ -239,7 +244,7 @@ Jump to the top of the instruction stack.
 
 ## Instruction `Unit Bind`
 
-Bind to the next unit of a type and store it in @unit.
+Bind to the next unit of a type, and store it in `@unit`.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#unit-bind)
 
@@ -288,7 +293,8 @@ Locate units around the currently bound unit.
 
 ## Instruction `Unit Locate`
 
-Locate a specific type of position/building anywhere on the map. Requires a bound unit.
+Locate a specific type of position/building anywhere on the map.
+Requires a bound unit.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#unit-locate)
 
@@ -392,7 +398,8 @@ Set a game rule.
 
 ## Instruction `Flush Message`
 
-Display a message on the screen from the text buffer. If the success result variable is @wait, will wait until the previous message finishes. Otherwise, outputs whether displaying the message succeeded.
+Display a message on the screen from the text buffer.
+Will wait until the previous message finishes.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#flush-message)
 
@@ -479,7 +486,8 @@ Set processor execution speed in instructions/tick.
 
 ## Instruction `Fetch`
 
-Lookup units, cores, players or buildings by index. Indices start at 0 and end at their returned count.
+Lookup units, cores, players or buildings by index.
+Indices start at 0 and end at their returned count.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#fetch)
 
@@ -496,7 +504,8 @@ Lookup units, cores, players or buildings by index. Indices start at 0 and end a
 
 ## Instruction `Sync`
 
-Sync a variable across the network. Limited to 20 times a second per variable.
+Sync a variable across the network.
+Limited to 20 times a second per variable.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#sync)
 

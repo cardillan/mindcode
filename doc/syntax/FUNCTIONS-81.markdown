@@ -70,7 +70,8 @@ generated code use mlog opcodes.
 
 ## Instruction `Read`
 
-Read a variable identified by a name from a linked processor.
+Read a number from a linked memory cell.
+Can also read from variables in other processors.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#read)
 
@@ -80,7 +81,8 @@ Read a variable identified by a name from a linked processor.
 
 ## Instruction `Write`
 
-Write a number to a variable identified by a name in a linked processor.
+Write a number to a linked memory cell.
+Can also write to variables in other processors.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#write)
 
@@ -90,7 +92,8 @@ Write a number to a variable identified by a name in a linked processor.
 
 ## Instruction `Draw`
 
-Add an operation to the drawing buffer. Does not display anything until `drawflush` is used.
+Add an operation to the drawing buffer.
+Does not display anything until Draw Flush is used.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#draw)
 
@@ -115,7 +118,8 @@ Add an operation to the drawing buffer. Does not display anything until `drawflu
 
 ## Instruction `Print`
 
-Add text to the print buffer. Does not display anything until printflush is used.
+Add text to the print buffer.
+Does not display anything until Print Flush is used.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#print)
 
@@ -136,7 +140,14 @@ Does not display anything until Print Flush is used.
 
 ## Instruction `Format`
 
-Replace next placeholder in text buffer with a value. Does not do anything if placeholder pattern is invalid. Placeholder pattern: `"{number 0-9}"` Example: `print "test {0}"; format "example"`
+Replace next placeholder in text buffer with a value.
+Does not do anything if placeholder pattern is invalid.
+Placeholder pattern: "{number 0-9}"
+Example:
+```
+print "test {0}"
+format "example"
+```
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
 
@@ -218,7 +229,7 @@ Get data from a building or unit.
 
 ## Instruction `Operation`
 
-Perform an operation on one or two variables.
+Perform an operation on 1-2 variables.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#operation)
 
@@ -249,7 +260,10 @@ Perform an operation on one or two variables.
 
 ## Instruction `Lookup`
 
-Look up an item/liquid/unit/block type by ID. Total counts of each type can be accessed with @unitCount, @itemCount, @liquidCount, @blockCount.
+Look up an item/liquid/unit/block type by ID.
+Total counts of each type can be accessed with:
+`@unitCount` / `@itemCount` / `@liquidCount` / `@blockCount`
+For the inverse operation, sense `@id` of the object.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#lookup)
 
@@ -309,7 +323,7 @@ Jump to the top of the instruction stack.
 
 ## Instruction `Unit Bind`
 
-Bind to the next unit of a type and store it in @unit.
+Bind to the next unit of a type, and store it in `@unit`.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#unit-bind)
 
@@ -359,7 +373,8 @@ Locate units around the currently bound unit.
 
 ## Instruction `Unit Locate`
 
-Locate a specific type of position/building anywhere on the map. Requires a bound unit.
+Locate a specific type of position/building anywhere on the map.
+Requires a bound unit.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#unit-locate)
 
@@ -488,7 +503,10 @@ Set a game rule.
 
 ## Instruction `Flush Message`
 
-Display a message on the screen from the text buffer. If the success result variable is @wait, will wait until the previous message finishes. Otherwise, outputs whether displaying the message succeeded.
+Display a message on the screen from the text buffer.
+If the success result variable is `@wait`,
+will wait until the previous message finishes.
+Otherwise, outputs whether displaying the message succeeded.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#flush-message)
 
@@ -575,7 +593,8 @@ Set processor execution speed in instructions/tick.
 
 ## Instruction `Fetch`
 
-Lookup units, cores, players or buildings by index. Indices start at 0 and end at their returned count.
+Lookup units, cores, players or buildings by index.
+Indices start at 0 and end at their returned count.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#fetch)
 
@@ -592,7 +611,8 @@ Lookup units, cores, players or buildings by index. Indices start at 0 and end a
 
 ## Instruction `Sync`
 
-Sync a variable across the network. Limited to 20 times a second per variable.
+Sync a variable across the network.
+Limited to 20 times a second per variable.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#sync)
 
@@ -632,7 +652,8 @@ Sets a property of a unit or building.
 
 ## Instruction `Play Sound`
 
-Plays a sound. Volume and pan can be a global value, or calculated based on position.
+Plays a sound.
+Volume and pan can be a global value, or calculated based on position.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
 
@@ -643,7 +664,9 @@ Plays a sound. Volume and pan can be a global value, or calculated based on posi
 
 ## Instruction `Set Marker`
 
-Set a property for a marker. The ID used must be the same as in the Make Marker instruction. null values are ignored.
+Set a property for a marker.
+The ID used must be the same as in the Make Marker instruction.
+`null` values are ignored.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
 
@@ -677,7 +700,9 @@ Set a property for a marker. The ID used must be the same as in the Make Marker 
 
 ## Instruction `Make Marker`
 
-Create a new logic marker in the world. An ID to identify this marker must be provided. Markers currently limited to 20,000 per world.
+Create a new logic marker in the world.
+An ID to identify this marker must be provided.
+Markers currently limited to 20,000 per world.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
 
@@ -687,7 +712,9 @@ Create a new logic marker in the world. An ID to identify this marker must be pr
 
 ## Instruction `Locale Print`
 
-Add map locale property value to the text buffer. To set map locale bundles in map editor, check Map Info > Locale Bundles. If client is a mobile device, tries to print a property ending in ".mobile" first.
+Add map locale property value to the text buffer.
+To set map locale bundles in map editor, check Map Info > Locale Bundles.
+If client is a mobile device, tries to print a property ending in ".mobile" first.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
 
