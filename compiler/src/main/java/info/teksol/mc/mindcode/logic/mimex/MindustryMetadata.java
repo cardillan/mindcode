@@ -259,7 +259,7 @@ public class MindustryMetadata {
 
     public Set<String> getBlockFlags() {
         return cacheInstance(blockFlags, () -> new NamedReader("mimex-block-flags.txt",
-                "logic", "true"::equalsIgnoreCase).createFromResource());
+                "ulocate", "true"::equalsIgnoreCase).createFromResource());
     }
 
     public Set<String> getConditions() {
@@ -284,21 +284,21 @@ public class MindustryMetadata {
 
     public Set<String> getLAccessNames() {
         return cacheInstance(lAccessNames, () -> getLAccessMap().values().stream()
-                .filter(LAccess::senseable)
+                .filter(LAccess::sensor)
                 .map(LAccess::name)
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
     public Set<String> getLAccessControllableNames() {
         return cacheInstance(lAccessControllable, () -> getLAccessMap().values().stream()
-                .filter(LAccess::controllable)
+                .filter(LAccess::control)
                 .map(LAccess::name)
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
     public Set<String> getLAccessSettableNames() {
         return cacheInstance(lAccessSettable, () -> getLAccessMap().values().stream()
-                .filter(LAccess::settable)
+                .filter(LAccess::setprop)
                 .map(LAccess::name)
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
@@ -313,7 +313,7 @@ public class MindustryMetadata {
 
     public Set<String> getLookableContents() {
         return cacheInstance(lookableContents, () -> new NamedReader("mimex-contents.txt",
-                "lookable", "true"::equalsIgnoreCase).createFromResource());
+                "lookup", "true"::equalsIgnoreCase).createFromResource());
     }
 
     public Set<String> getMarkerControls() {
@@ -355,7 +355,7 @@ public class MindustryMetadata {
 
     public Set<String> getTileLayersSettable() {
         return cacheInstance(tileLayersSettable, () -> new NamedReader("mimex-layers.txt",
-                "settable", "true"::equalsIgnoreCase).createFromResource());
+                "setblock", "true"::equalsIgnoreCase).createFromResource());
     }
 
     public Set<String> getUnitControls() {
@@ -748,7 +748,7 @@ public class MindustryMetadata {
     }
 
     private class LAccessReader extends AbstractNamedContentReader<LAccess> {
-        private int name, senseable, controls, settable, parameters;
+        private int name, sensor, control, setprop, parameters;
 
         public LAccessReader(String resource) {
             super(resource);
@@ -757,9 +757,9 @@ public class MindustryMetadata {
         @Override
         protected void parseHeader() {
             name = findColumn("name");
-            senseable = findColumn("senseable");
-            controls = findColumn("controls");
-            settable = findColumn("settable");
+            sensor = findColumn("sensor");
+            control = findColumn("control");
+            setprop = findColumn("setprop");
             parameters = findColumn("parameters");
         }
 
@@ -768,9 +768,9 @@ public class MindustryMetadata {
             return new LAccess(
                     columns[name],
                     "@" + columns[name],
-                    Boolean.parseBoolean(columns[senseable]),
-                    Boolean.parseBoolean(columns[controls]),
-                    Boolean.parseBoolean(columns[settable]),
+                    Boolean.parseBoolean(columns[sensor]),
+                    Boolean.parseBoolean(columns[control]),
+                    Boolean.parseBoolean(columns[setprop]),
                     columns[parameters]);
         }
     }
@@ -817,7 +817,8 @@ public class MindustryMetadata {
     }
 
     private class LogicStatementReader extends AbstractContentReader<LogicStatement> {
-        private int opcode, arguments, name, typeName, hidden, privileged, nonPrivileged, hint, categoryName, categoryColor, categoryDescription;
+        private int opcode, arguments, argumentTypes, argumentNames, name, typeName, hidden, privileged, nonPrivileged,
+                hint, categoryName, categoryColor, categoryDescription;
 
         public LogicStatementReader(String resource) {
             super(resource);
@@ -827,6 +828,8 @@ public class MindustryMetadata {
         protected void parseHeader() {
             opcode = findColumn("opcode");
             arguments = findColumn("arguments");
+            argumentTypes = findColumn("argumentTypes");
+            argumentNames = findColumn("argumentNames");
             name = findColumn("name");
             typeName = findColumn("typeName");
             hidden = findColumn("hidden");
@@ -843,6 +846,8 @@ public class MindustryMetadata {
             return new LogicStatement(
                     columns[opcode],
                     columns[arguments],
+                    columns[argumentTypes],
+                    columns[argumentNames],
                     columns[name],
                     columns[typeName],
                     Boolean.parseBoolean(columns[hidden]),

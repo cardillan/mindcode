@@ -6,6 +6,8 @@ import org.jspecify.annotations.NullMarked;
 public record LogicStatement(
         String opcode,
         String arguments,
+        String argumentTypes,
+        String argumentNames,
         String name,
         String typeName,
         boolean hidden,

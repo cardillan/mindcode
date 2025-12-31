@@ -6,9 +6,9 @@ import org.jspecify.annotations.NullMarked;
 public record LAccess(
         String contentName,
         String name,
-        boolean senseable,
-        boolean controllable,
-        boolean settable,
+        boolean sensor,
+        boolean control,
+        boolean setprop,
         String parameters
 ) implements MindustryContent {
 
