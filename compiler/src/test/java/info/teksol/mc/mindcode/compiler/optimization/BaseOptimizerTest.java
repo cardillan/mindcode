@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.mindcode.compiler.AbstractTestBase;
+import info.teksol.mc.mindcode.compiler.AbstractCompilerTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstStatementList;
@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 @NullMarked
-class BaseOptimizerTest extends AbstractTestBase {
+class BaseOptimizerTest extends AbstractCompilerTestBase {
 
     @Override
     protected CompilationPhase getTargetPhase() {

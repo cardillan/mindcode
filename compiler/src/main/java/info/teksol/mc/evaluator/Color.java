@@ -19,6 +19,10 @@ public record Color(float r, float g, float b, float a) {
         return toDoubleBitsClamped(r / 255f, g / 255f, b / 255f, a / 255f);
     }
 
+    public static double toDoubleBitsClamped(int r, int g, int b, int a) {
+        return toDoubleBitsClamped(r / 255f, g / 255f, b / 255f, a / 255f);
+    }
+
     public static double toDoubleBitsClamped(float r, float g, float b, float a) {
         return Double.longBitsToDouble(rgba8888(r, g, b, a) & 0xffffffffL);
     }
@@ -48,19 +52,19 @@ public record Color(float r, float g, float b, float a) {
     }
 
     public static Color fromDouble(double value) {
-        return rgba8888((int)Double.doubleToRawLongBits(value));
+        return rgba8888((int) Double.doubleToRawLongBits(value));
     }
 
     private static Color rgba8888(int value) {
-        float r = (float)((value & -16777216) >>> 24) / 255.0F;
-        float g = (float)((value & 16711680) >>> 16) / 255.0F;
-        float b = (float)((value & '\uff00') >>> 8) / 255.0F;
-        float a = (float)(value & 255) / 255.0F;
+        float r = (float) ((value & -16777216) >>> 24) / 255.0F;
+        float g = (float) ((value & 16711680) >>> 16) / 255.0F;
+        float b = (float) ((value & '\uff00') >>> 8) / 255.0F;
+        float a = (float) (value & 255) / 255.0F;
         return new Color(r, g, b, a);
     }
 
     public static String unpack(double packed) {
-        int value = (int)(Double.doubleToRawLongBits(packed)),
+        int value = (int) (Double.doubleToRawLongBits(packed)),
                 intR = ((value & 0xff000000) >>> 24),
                 intG = ((value & 0x00ff0000) >>> 16),
                 intB = ((value & 0x0000ff00) >>> 8),
@@ -69,4 +73,3 @@ public record Color(float r, float g, float b, float a) {
         return String.format("%%%02x%02x%02x%02x", intR, intG, intB, intA);
     }
 }
-

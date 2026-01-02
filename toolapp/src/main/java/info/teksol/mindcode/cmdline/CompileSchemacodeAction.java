@@ -75,7 +75,7 @@ public class CompileSchemacodeAction extends ActionHandler {
                 OptionCategory.OPTIMIZATIONS,
                 OptionCategory.OPTIMIZATION_LEVELS,
                 OptionCategory.DEBUGGING,
-                OptionCategory.RUN);
+                OptionCategory.EMULATOR);
 
         return subparser;
     }
@@ -123,4 +123,3 @@ public class CompileSchemacodeAction extends ActionHandler {
         }
     }
 }
-

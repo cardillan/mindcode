@@ -4,7 +4,7 @@ import com.amihaiemil.eoyaml.*;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.profile.options.CompilerOptionFactory;
 import info.teksol.mc.profile.options.CompilerOptionValue;
-import info.teksol.mc.profile.options.RunOptions;
+import info.teksol.mc.profile.options.EmulatorOptions;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -88,7 +88,7 @@ public class ConfigurationReader {
                 run);
     }
 
-    private static final Set<Enum<?>> ignoredOptions = Set.of(RunOptions.RUN);
+    private static final Set<Enum<?>> ignoredOptions = Set.of(EmulatorOptions.RUN);
 
     private static SequencedMap<Enum<?>, List<Object>> getSettings(YamlMapping mapping, YamlMapping defaults) {
         SequencedMap<Enum<?>, List<Object>> result = new LinkedHashMap<>();

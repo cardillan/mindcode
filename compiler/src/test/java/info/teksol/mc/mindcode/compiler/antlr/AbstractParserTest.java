@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode.compiler.antlr;
 
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.messages.ExpectedMessages;
-import info.teksol.mc.mindcode.compiler.AbstractTestBase;
+import info.teksol.mc.mindcode.compiler.AbstractCompilerTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeParser.AstModuleContext;
 import org.jspecify.annotations.NullMarked;
@@ -10,7 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.Objects;
 
 @NullMarked
-public abstract class AbstractParserTest extends AbstractTestBase {
+public abstract class AbstractParserTest extends AbstractCompilerTestBase {
 
     protected CompilationPhase getTargetPhase() {
         return CompilationPhase.PARSER;

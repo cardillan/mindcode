@@ -1,6 +1,6 @@
 package info.teksol.mc.profile;
 
-import info.teksol.mc.emulator.processor.ExecutionFlag;
+import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
@@ -415,7 +415,19 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     }
     //</editor-fold>
 
-    //<editor-fold desc="Run Options">
+    //<editor-fold desc="Emulator Options">
+    public Target getEmulatorTarget() {
+        Target emulatorTarget = this.<Target>getOption(EmulatorOptions.EMULATOR_TARGET).getValue();
+        Target runTarget = getTarget();
+        return emulatorTarget.version() == ProcessorVersion.V6 && emulatorTarget.edition() == ProcessorEdition.W
+                ? runTarget : emulatorTarget;
+    }
+
+    public CompilerProfile setEmulatorTarget(ProcessorVersion version, ProcessorEdition edition) {
+        getOption(EmulatorOptions.EMULATOR_TARGET).setValue(new Target(version, edition));
+        return this;
+    }
+
     public CompilerProfile setExecutionFlag(ExecutionFlag flag, boolean value) {
         if (!flag.isSettable()) {
             throw new MindcodeInternalError("Trying to update unmodifiable flag %s", flag);
@@ -425,17 +437,17 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     }
 
     public CompilerProfile setOutputProfiling(boolean outputProfiling) {
-        getOption(RunOptions.OUTPUT_PROFILING).setValue(outputProfiling);
+        getOption(EmulatorOptions.OUTPUT_PROFILING).setValue(outputProfiling);
         return this;
     }
 
     public CompilerProfile setRun(boolean run) {
-        getOption(RunOptions.RUN).setValue(run);
+        getOption(EmulatorOptions.RUN).setValue(run);
         return this;
     }
 
     private CompilerProfile setStepLimit(int stepLimit) {
-        getOption(RunOptions.RUN_STEPS).setValue(stepLimit);
+        getOption(EmulatorOptions.RUN_STEPS).setValue(stepLimit);
         return this;
     }
     //</editor-fold>

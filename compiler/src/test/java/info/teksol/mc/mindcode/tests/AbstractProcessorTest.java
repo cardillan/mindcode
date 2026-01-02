@@ -1,15 +1,15 @@
 package info.teksol.mc.mindcode.tests;
 
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.emulator.blocks.Memory;
-import info.teksol.mc.emulator.blocks.MindustryBlock;
-import info.teksol.mc.emulator.processor.Assertion;
-import info.teksol.mc.emulator.processor.ExecutionFlag;
-import info.teksol.mc.emulator.processor.Processor;
+import info.teksol.mc.emulator.Assertion;
+import info.teksol.mc.emulator.Emulator;
+import info.teksol.mc.emulator.ExecutionFlag;
+import info.teksol.mc.emulator.blocks.MemoryBlock;
+import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.messages.TimingMessage;
-import info.teksol.mc.mindcode.compiler.AbstractTestBase;
+import info.teksol.mc.mindcode.compiler.AbstractCompilerTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 // Processor for execution is equipped with bank1 memory bank.
 // Additional blocks can be added
 @NullMarked
-public abstract class AbstractProcessorTest extends AbstractTestBase {
+public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
 
     protected final String logSuffix;
     protected final boolean symbolicLabels;
@@ -68,14 +68,11 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
                 // Do not merge constants in print statements
                 .setOptimizationLevel(Optimization.PRINT_MERGING, OptimizationLevel.BASIC)
                 .setExecutionFlag(ExecutionFlag.DUMP_VARIABLES_ON_STOP, false)
-                .setSymbolicLabels(symbolicLabels);
+                .setSymbolicLabels(symbolicLabels)
+                .setRun(true);
     }
 
     protected abstract String getScriptsDirectory();
-
-    protected String getLogDirectory() {
-        return getScriptsDirectory();
-    }
 
     private static final Map<String, String> headers = new ConcurrentHashMap<>();
     private static final Map<String, Queue<String>> results = new ConcurrentHashMap<>();
@@ -87,9 +84,9 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         ///
         /// @param useAsserts if true, the evaluator should explicitly assert the equality, otherwise it just reports
         ///                                     the result. Each evaluator will be called at least once with useAsserts set to true.
-        /// @param processor   processor emulator used to run the code
+        /// @param emulator   processor emulator used to run the code
         /// @return true if the actual results output matches the expected one
-        boolean asExpected(boolean useAsserts, Processor processor);
+        boolean asExpected(boolean useAsserts, Emulator emulator);
     }
 
     static void done(String scriptsDirectory, String className) throws IOException {
@@ -113,14 +110,14 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         results.computeIfAbsent(getClass().getSimpleName(), k -> new ConcurrentLinkedDeque<>()).add(info);
     }
 
-    private void logPerformance(@Nullable String title, String code, String compiled, Processor processor) {
-        int coverage = 1000 * processor.getCoverage().cardinality() / processor.getInstructions();
+    private void logPerformance(@Nullable String title, String code, String compiled, Emulator emulator) {
+        int coverage = 1000 * emulator.coveredCount() / emulator.instructionCount();
         String name = title != null ? title : testInfo().getDisplayName().replaceAll("\\(\\)", "");
         headers.computeIfAbsent(getClass().getSimpleName(), k ->
                 String.format("%-40s %12s   %6s   %8s   %-16s   %-16s", "Name", "Instructions", "Steps", "Coverage", "Source CRC", "Compiled CRC"));
         String info = String.format(Locale.US,
                 "%-40s %12d   %6d   %5d.%01d%%   %016X   %016X",
-                name + ":", processor.getInstructions(), processor.getSteps(), coverage / 10, coverage % 10,
+                name + ":", emulator.instructionCount(), emulator.executionSteps(), coverage / 10, coverage % 10,
                 CRC64.hash1(code.getBytes(StandardCharsets.UTF_8)),
                 CRC64.hash1(compiled.getBytes(StandardCharsets.UTF_8)));
         System.out.println(info);
@@ -166,7 +163,8 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
 
     protected void compileAndOutputCode(String title, String code, Path logFile) {
         InputFiles inputFiles = createInputFiles(code);
-        MindcodeCompiler compiler = new MindcodeCompiler(expectedMessages(), createCompilerProfile(), inputFiles);
+        MindcodeCompiler compiler = new MindcodeCompiler(expectedMessages(),
+                createCompilerProfile().setRun(false), inputFiles);
         compiler.compile();
         if (compiler.getUnresolved().isEmpty()) {
             throw new MindcodeInternalError("No code generated.");
@@ -181,14 +179,14 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
     }
 
 
-    protected void setupEmulator(Processor emulator, Map<String, MindustryBlock> blocks) {
-        emulator.addBlock("bank1", Memory.createMemoryBank(ip.getMetadata()));
-        emulator.addBlock("bank2", Memory.createMemoryBank(ip.getMetadata()));
+    protected void setupEmulator(Emulator emulator, Map<String, MindustryBuilding> blocks) {
+        emulator.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata()));
+        emulator.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata()));
         blocks.forEach(emulator::addBlock);
     }
 
     protected void testAndEvaluateCode(@Nullable String title, ExpectedMessages expectedMessages, String code,
-            Map<String, MindustryBlock> blocks, RunEvaluator evaluator, @Nullable Path logFile) {
+            Map<String, MindustryBuilding> blocks, RunEvaluator evaluator, @Nullable Path logFile) {
         process(expectedMessages,
                 createInputFiles(code),
                 emulator -> setupEmulator(emulator, blocks),
@@ -200,24 +198,11 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
                     List<Executable> executables = new ArrayList<>();
                     executables.add(() -> evaluator.asExpected(true, compiler.getEmulator()));
                     compiler.getAssertions().forEach(a -> executables.add(() -> assertTrue(a.success(), a.generateErrorMessage())));
-                    executables.add(() -> assertNull(compiler.getExecutionException()));
+                    executables.add(() -> assertFalse(compiler.isRuntimeError()));
                     assertAll(executables);
 
                     return null;
                 });
-    }
-
-    protected RunEvaluator createOutputEvaluator(MindcodeCompiler compiler, String expectedOutput) {
-        return (useAsserts, processor) -> {
-            String actualOutput = processor.getTextBuffer().getFormattedOutput();
-            boolean matches = Objects.equals(expectedOutput, actualOutput);
-            if (useAsserts) {
-                assertEquals(expectedOutput, actualOutput,
-                        () -> compiler.getMessages().stream().map(MindcodeMessage::message)
-                                .collect(Collectors.joining("\n", "\n", "\n")));
-            }
-            return matches;
-        };
     }
 
     protected RunEvaluator outputEvaluator(List<String> expectedOutput) {
@@ -226,6 +211,38 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
             boolean outputMatches = Objects.equals(expectedOutput, actualOutput);
             if (useAsserts) {
                 assertEquals(expectedOutput, actualOutput);
+            }
+
+            boolean assertionsMatch = compiler.getAssertions().stream().allMatch(Assertion::success);
+            if (useAsserts && !assertionsMatch) {
+                compiler.getAssertions().stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
+            }
+            return outputMatches && assertionsMatch;
+        };
+    }
+
+    protected RunEvaluator containsOutputEvaluator(String expectedOutput) {
+        return (useAsserts, compiler) -> {
+            String actualOutput = compiler.getTextBuffer().getFormattedOutput();
+            boolean outputMatches = actualOutput.contains(expectedOutput);
+            if (useAsserts) {
+                assertTrue(outputMatches, "Output does not contain expected text.\nExpected:" + expectedOutput + "\nOutput: " + actualOutput);
+            }
+
+            boolean assertionsMatch = compiler.getAssertions().stream().allMatch(Assertion::success);
+            if (useAsserts && !assertionsMatch) {
+                compiler.getAssertions().stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
+            }
+            return outputMatches && assertionsMatch;
+        };
+    }
+
+    protected RunEvaluator lastOutputEvaluator(String expectedLastOutput) {
+        return (useAsserts, compiler) -> {
+            String actualLastOutput = compiler.getTextBuffer().getPrintOutput().getLast();
+            boolean outputMatches = Objects.equals(expectedLastOutput, actualLastOutput);
+            if (useAsserts) {
+                assertEquals(expectedLastOutput, actualLastOutput);
             }
 
             boolean assertionsMatch = compiler.getAssertions().stream().allMatch(Assertion::success);
@@ -247,20 +264,20 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         };
     }
 
-    protected void testAndEvaluateFile(String fileName, Map<String, MindustryBlock> blocks,
+    protected void testAndEvaluateFile(String fileName, Map<String, MindustryBuilding> blocks,
             ExpectedMessages expectedMessages, RunEvaluator evaluator) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         testAndEvaluateCode(fileName, expectedMessages, readFile(fileName), blocks, evaluator, logFile);
     }
 
     protected void testAndEvaluateFile(String fileName, Function<String, String> codeDecorator,
-            Map<String, MindustryBlock> blocks, RunEvaluator evaluator) throws IOException {
+            Map<String, MindustryBuilding> blocks, RunEvaluator evaluator) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         testAndEvaluateCode(fileName, expectedMessages(), codeDecorator.apply(readFile(fileName)), blocks, evaluator, logFile);
     }
 
     protected void testAndEvaluateFile(String fileName, Function<String, String> codeDecorator,
-            Map<String, MindustryBlock> blocks, List<String> expectedOutputs) throws IOException {
+            Map<String, MindustryBuilding> blocks, List<String> expectedOutputs) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         testAndEvaluateCode(fileName, expectedMessages(), codeDecorator.apply(readFile(fileName)), blocks,
                 outputEvaluator(expectedOutputs), logFile);
@@ -277,7 +294,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         testAndEvaluateCode(fileName, expectedMessages(), readFile(fileName), Map.of(), assertEvaluator(), logFile);
     }
 
-    protected void testCode(ExpectedMessages expectedMessages, String code, Map<String, MindustryBlock> blocks, String... expectedOutputs) {
+    protected void testCode(ExpectedMessages expectedMessages, String code, Map<String, MindustryBuilding> blocks, String... expectedOutputs) {
         testAndEvaluateCode(null, expectedMessages, code, blocks, outputEvaluator(List.of(expectedOutputs)), null);
     }
 
@@ -285,7 +302,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         testAndEvaluateCode(null, expectedMessages, code, Map.of(), outputEvaluator(List.of(expectedOutputs)), null);
     }
 
-    protected void testCode(String code, Map<String, MindustryBlock> blocks, String... expectedOutputs) {
+    protected void testCode(String code, Map<String, MindustryBuilding> blocks, String... expectedOutputs) {
         testAndEvaluateCode(null, expectedMessages(), code, blocks, outputEvaluator(List.of(expectedOutputs)), null);
     }
 

@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.postprocess;
 
 import info.teksol.mc.messages.ExpectedMessages;
-import info.teksol.mc.mindcode.compiler.AbstractTestBase;
+import info.teksol.mc.mindcode.compiler.AbstractCompilerTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
@@ -10,7 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Assertions;
 
 @NullMarked
-public abstract class AbstractCodeOutputTest extends AbstractTestBase {
+public abstract class AbstractCodeOutputTest extends AbstractCompilerTestBase {
 
     @Override
     protected CompilationPhase getTargetPhase() {

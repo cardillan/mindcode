@@ -10,68 +10,67 @@ import java.util.stream.Stream;
 @NullMarked
 public enum Opcode {
     // NOOP
-    NOOP            (true,  "noop",            "Invalid", "No operation or invalid statement."),
+    NOOP            (true,  "noop",             "Invalid"),
 
     // INPUT & OUTPUT
-    READ            (true,  "read",            "Read", "Read a variable identified by a name from a linked processor."),
-    WRITE           (false, "write",           "Write", "Write a number to a variable identified by a name in a linked processor."),
-    DRAW            (false, "draw",            "Draw", "Add an operation to the drawing buffer. Does not display anything until `drawflush` is used."),
-    PRINT           (false, "print",           "Print", "Add text to the print buffer. Does not display anything until printflush is used."),
-    PRINTCHAR       (false, "printchar",       "PrintChar", "Add a UTF-16 character or content icon to the print buffer.\nDoes not display anything until Print Flush is used."),
-    FORMAT          (false, "format",          "Format", "Replace next placeholder in text buffer with a value. Does not do anything if placeholder pattern is invalid."
-            + " Placeholder pattern: `\"{number 0-9}\"` Example: `print \"test {0}\"; format \"example\"`"),
+    READ            (true,  "read",             "Read"),
+    WRITE           (false, "write",            "Write"),
+    DRAW            (false, "draw",             "Draw"),
+    PRINT           (false, "print",            "Print"),
+    PRINTCHAR       (false, "printchar",        "PrintChar"),
+    FORMAT          (false, "format",           "Format"),
 
     // BLOCK CONTROL
-    DRAWFLUSH       (false, "drawflush",       "DrawFlush", "Flush queued Draw operations to a display."),
-    PRINTFLUSH      (false, "printflush",      "PrintFlush", "Flush queued Print operations to a message block."),
-    GETLINK         (true,  "getlink",         "GetLink", "Get a processor link by index. Starts at 0."),
-    CONTROL         (false, "control",         "Control", "Control a building.", 1),
-    RADAR           (true,  "radar",           "Radar", "Locate units around a building with range."),
-    SENSOR          (true,  "sensor",          "Sensor", "Get data from a building or unit."),
+    DRAWFLUSH       (false, "drawflush",        "DrawFlush"),
+    PRINTFLUSH      (false, "printflush",       "PrintFlush"),
+    GETLINK         (true,  "getlink",          "GetLink"),
+    CONTROL         (false, "control",          "Control", 1),
+    RADAR           (true,  "radar",            "Radar"),
+    SENSOR          (true,  "sensor",           "Sensor"),
 
     // OPERATIONS
-    SET             (true,  "set",             "Set", "Set a variable."),
-    OP              (true,  "op",              "Operation", "Perform an operation on one or two variables."),
-    SELECT          (true,  "select",          "Select", "Select one of two values based on a condition"),
-    LOOKUP          (true,  "lookup",          "Lookup", "Look up an item/liquid/unit/block type by ID. Total counts of each type can be accessed with @unitCount, @itemCount, @liquidCount, @blockCount."),
-    PACKCOLOR       (true,  "packcolor",       "PackColor", "Pack [0, 1] RGBA components into a single number for drawing or rule-setting."),
-    UNPACKCOLOR     (true,  "unpackcolor",     "UnpackColor", "Unpack RGBA components from a color that was packed using Pack Color."),
+    SET             (true,  "set",              "Set"),
+    OP              (true,  "op",               "Operation"),
+    SELECT          (true,  "select",           "Select"),
+    LOOKUP          (true,  "lookup",           "Lookup"),
+    PACKCOLOR       (true,  "packcolor",        "PackColor"),
+    UNPACKCOLOR     (true,  "unpackcolor",      "UnpackColor"),
 
     // FLOW CONTROL
-    WAIT            (false, "wait",            "Wait", "Wait a certain number of seconds."),
-    STOP            (true,  "stop",            "Stop", "Halt execution of this processor."),
-    END             (true,  "end",             "End", "Jump to the top of the instruction stack."),
-    JUMP            (true,  "jump",            "Jump", "Conditionally jump to another statement."),
+    WAIT            (false, "wait",             "Wait"),
+    STOP            (false, "stop",             "Stop"),
+    END             (true,  "end",              "End"),
+    JUMP            (true,  "jump",             "Jump"),
 
     // UNIT CONTROL
-    UBIND           (false, "ubind",           "UnitBind", "Bind to the next unit of a type and store it in @unit."),
-    UCONTROL        (false, "ucontrol",        "UnitControl", "Control the currently bound unit."),
-    URADAR          (true,  "uradar",          "UnitRadar", "Locate units around the currently bound unit."),
-    ULOCATE         (true,  "ulocate",         "UnitLocate", "Locate a specific type of position/building anywhere on the map. Requires a bound unit."),
+    UBIND           (false, "ubind",            "UnitBind"),
+    UCONTROL        (false, "ucontrol",         "UnitControl"),
+    URADAR          (true,  "uradar",           "UnitRadar"),
+    ULOCATE         (true,  "ulocate",          "UnitLocate"),
 
     // WORLD
-    GETBLOCK        (true,  "getblock",        "GetBlock", "Get tile data at any location."),
-    SETBLOCK        (false, "setblock",        "SetBlock", "Set tile data at any location."),
-    SPAWN           (false, "spawn", "SpawnUnit",  "Spawn unit at a location."),
-    STATUS          (false, "status",          "ApplyStatus", "Apply or clear a status effect from a unit."),
-    WEATHERSENSE    (true,  "weathersense",    "WeatherSense", "Check if a type of weather is active."),
-    WEATHERSET      (false, "weatherset",      "WeatherSet", "Set the current state of a type of weather."),
-    SPAWNWAVE       (false, "spawnwave",       "SpawnWave", "Spawn a wave."),
-    SETRULE         (false, "setrule",         "SetRule", "Set a game rule."),
-    MESSAGE         (false, "message", "FlushMessage",  "Display a message on the screen from the text buffer. If the success result variable is @wait, will wait until the previous message finishes. Otherwise, outputs whether displaying the message succeeded."),
-    CUTSCENE        (false, "cutscene",        "Cutscene", "Manipulate the player camera.", 1),
-    EFFECT          (false, "effect",          "Effect", "Create a particle effect."),
-    EXPLOSION       (false, "explosion",       "Explosion", "Create an explosion at a location."),
-    SETRATE         (false, "setrate",         "SetRate", "Set processor execution speed in instructions/tick."),
-    FETCH           (true,  "fetch",           "Fetch", "Lookup units, cores, players or buildings by index. Indices start at 0 and end at their returned count."),
-    SYNC            (false, "sync",            "Sync", "Sync a variable across the network. Limited to 20 times a second per variable."),
-    GETFLAG         (true,  "getflag",         "GetFlag", "Check if a global flag is set."),
-    SETFLAG         (false, "setflag",         "SetFlag", "Set a global flag that can be read by all processors."),
-    SETPROP         (false, "setprop",         "SetProp", "Sets a property of a unit or building."),
-    PLAYSOUND       (false, "playsound",       "PlaySound", "Plays a sound. Volume and pan can be a global value, or calculated based on position."),
-    SETMARKER       (false, "setmarker",       "SetMarker", "Set a property for a marker. The ID used must be the same as in the Make Marker instruction. null values are ignored."),
-    MAKEMARKER      (false, "makemarker",      "MakeMarker", "Create a new logic marker in the world. An ID to identify this marker must be provided. Markers currently limited to 20,000 per world."),
-    LOCALEPRINT     (false, "localeprint",     "LocalePrint", "Add map locale property value to the text buffer. To set map locale bundles in map editor, check Map Info > Locale Bundles. If client is a mobile device, tries to print a property ending in \".mobile\" first."),
+    GETBLOCK        (true,  "getblock",         "GetBlock"),
+    SETBLOCK        (false, "setblock",         "SetBlock"),
+    SPAWN           (false, "spawn",            "SpawnUnit"),
+    STATUS          (false, "status",           "ApplyStatus"),
+    WEATHERSENSE    (true,  "weathersense",     "WeatherSense"),
+    WEATHERSET      (false, "weatherset",       "WeatherSet"),
+    SPAWNWAVE       (false, "spawnwave",        "SpawnWave"),
+    SETRULE         (false, "setrule",          "SetRule"),
+    MESSAGE         (false, "message",          "FlushMessage"),
+    CUTSCENE        (false, "cutscene",         "Cutscene", 1),
+    EFFECT          (false, "effect",           "Effect"),
+    EXPLOSION       (false, "explosion",        "Explosion"),
+    SETRATE         (false, "setrate",          "SetRate"),
+    FETCH           (true,  "fetch",            "Fetch"),
+    SYNC            (false, "sync",             "Sync"),
+    GETFLAG         (true,  "getflag",          "GetFlag"),
+    SETFLAG         (false, "setflag",          "SetFlag"),
+    SETPROP         (false, "setprop",          "SetProp"),
+    PLAYSOUND       (false, "playsound",        "PlaySound"),
+    SETMARKER       (false, "setmarker",        "SetMarker"),
+    MAKEMARKER      (false, "makemarker",       "MakeMarker"),
+    LOCALEPRINT     (false, "localeprint",      "LocalePrint"),
 
     // Unit testing support. These instructions are left in the final code for execution by the processor emulator.
 
@@ -151,26 +150,23 @@ public enum Opcode {
     private final boolean safe;
     private final String opcode;
     private final String name;
-    private final String description;
     private final int additionalPrintArguments;
     private final boolean virtual;
     private final int size;
 
-    Opcode(boolean safe, String opcode, String name, String description) {
+    Opcode(boolean safe, String opcode, String name) {
         this.safe = safe;
         this.opcode = opcode;
         this.name = name;
-        this.description = description;
         this.additionalPrintArguments = 0;
         this.virtual = false;
         this.size = 1;
     }
 
-    Opcode(boolean safe, String opcode, String name, String description, int additionalPrintArguments) {
+    Opcode(boolean safe, String opcode, String name, int additionalPrintArguments) {
         this.safe = safe;
         this.opcode = opcode;
         this.name = name;
-        this.description = description;
         this.additionalPrintArguments = additionalPrintArguments;
         this.virtual = false;
         this.size = 1;
@@ -180,7 +176,6 @@ public enum Opcode {
         this.safe = true;
         this.opcode = opcode;
         this.name = opcode;
-        this.description = "Virtual instruction.";
         this.additionalPrintArguments = 0;
         this.virtual = true;
         this.size = size;
@@ -190,7 +185,6 @@ public enum Opcode {
         this.safe = safe;
         this.opcode = opcode;
         this.name = opcode;
-        this.description = "Virtual instruction.";
         this.additionalPrintArguments = 0;
         this.virtual = true;
         this.size = size;
@@ -202,10 +196,6 @@ public enum Opcode {
 
     public String getOpcode() {
         return opcode;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public String getName() {

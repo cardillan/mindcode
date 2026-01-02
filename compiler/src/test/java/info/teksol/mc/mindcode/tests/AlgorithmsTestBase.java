@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.tests;
 
-import info.teksol.mc.emulator.blocks.Memory;
+import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
@@ -42,8 +42,8 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
                 expectedMessages(),
                 "param SIZE = " + arrayLength + ";\n" + readFile(fileName),
                 Map.of(
-                        "bank2", Memory.createMemoryBank(ip.getMetadata(), array),
-                        "bank3", Memory.createMemoryBank(ip.getMetadata(), sorted)
+                        "bank2", MemoryBlock.createMemoryBank(ip.getMetadata(), array),
+                        "bank3", MemoryBlock.createMemoryBank(ip.getMetadata(), sorted)
                 ),
                 assertEvaluator(),
                 Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix)
@@ -62,7 +62,8 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
         );
 
         return DynamicContainer.dynamicContainer("Array sorting tests",
-                definitions.keySet().stream().map(name -> DynamicTest.dynamicTest(name, null,
+                definitions.keySet().stream().map(name -> DynamicTest.dynamicTest(name,
+                        Path.of(getScriptsDirectory(), name).toUri(),
                         () -> executeSortingAlgorithmTest(name, definitions.get(name))))
         );
     }
@@ -83,7 +84,8 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
         );
 
         return DynamicContainer.dynamicContainer("Script tests",
-                fileNames.stream().map(name -> DynamicTest.dynamicTest(name, null,
+                fileNames.stream().map(name -> DynamicTest.dynamicTest(name,
+                        Path.of(getScriptsDirectory(), name).toUri(),
                         () -> testAndEvaluateFile(name))
                 )
         );
@@ -115,7 +117,7 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
         );
 
         final List<DynamicTest> result = new ArrayList<>();
-        int[] numbers = { 21600, 12345, 13579 };
+        int[] numbers = {21600, 12345, 13579};
         String code = readFile("storage-display.mnd");
 
         for (int number : numbers) {
@@ -126,21 +128,22 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
                 for (int i = 0; i < index; i++) {
                     compilerProfile.setOptimizationLevel(optimizations.get(i), OptimizationLevel.EXPERIMENTAL);
                 }
-                processDrawingCode(result, index == 0 ? "None" : "+ " + optimizations.get(index - 1).getName(),
-                        compilerProfile, code, number);
+                processDrawingCode(result, index == 0 ? "None" : "+ " + optimizations.get(index - 1).getName(), code, number);
             }
         }
         return result;
     }
 
-    private void processDrawingCode(List<DynamicTest> result, String name, CompilerProfile profile, String code, int number) {
-        result.add(DynamicTest.dynamicTest(name, null, () -> testAndEvaluateCode(
-                number + ", " + name,
-                expectedMessages(),
-                "AMOUNT = " + number + "\n" + code,
-                Map.of(),
-                (useAsserts, expectedOutput) -> true,
-                Path.of(getScriptsDirectory(), "storage-display.log")
-        )));
+    private void processDrawingCode(List<DynamicTest> result, String name, String code, int number) {
+        result.add(DynamicTest.dynamicTest(name,
+                Path.of(getScriptsDirectory(), "storage-display.mnd").toUri(),
+                () -> testAndEvaluateCode(
+                        number + ", " + name,
+                        expectedMessages(),
+                        "AMOUNT = " + number + "\n" + code,
+                        Map.of(),
+                        (useAsserts, expectedOutput) -> true,
+                        Path.of(getScriptsDirectory(), "storage-display.log")
+                )));
     }
 }

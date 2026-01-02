@@ -360,7 +360,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.ASSERT_BOUNDS,
                 type("type"), in("multiple"), in("min"), cond("minOp"), in("value"), cond("maxOp"), in("max"), in("message"));
         add(list, V6, MAX,  S, NONE, Opcode.ERROR,
-                in("e0)"), in("e1)"), in("e2)"), in("e3)"), in("e4)"), in("e5)"), in("e6)"), in("e7)"), in("e8)"), in("e9)"));
+                in("e0"), in("e1"), in("e2"), in("e3"), in("e4"), in("e5"), in("e6"), in("e7"), in("e8"), in("e9"));
 
         // Virtual instructions
         add(list, V6,  MAX, S, NONE, Opcode.EMPTY);

@@ -1,5 +1,6 @@
-package info.teksol.mc.emulator.processor;
+package info.teksol.mc.emulator;
 
+import info.teksol.mc.emulator.mimex.EmulatorErrorHandler;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -11,9 +12,9 @@ import java.util.Map;
 
 @NullMarked
 public class TextBuffer {
+    private final EmulatorErrorHandler errorHandler;
     private final int outputLimit;
     private final int bufferLimit;
-    private final boolean overflowError;
     private final List<String> output = new ArrayList<>();
     private final Map<String, String> cache = new HashMap<>();
 
@@ -22,14 +23,10 @@ public class TextBuffer {
     private int assertBufferStart = -1;
     private int assertListStart = -1;
 
-    TextBuffer() {
-        this(0, 0, true);
-    }
-
-    public TextBuffer(int outputLimit, int bufferLimit, boolean overflowError) {
+    public TextBuffer(EmulatorErrorHandler errorHandler, int outputLimit, int bufferLimit) {
+        this.errorHandler = errorHandler;
         this.outputLimit = outputLimit;
         this.bufferLimit = bufferLimit;
-        this.overflowError = overflowError;
     }
 
     public boolean isEmpty() {
@@ -43,8 +40,8 @@ public class TextBuffer {
     }
 
     private void checkBuffer() {
-        if (overflowError && buffer.length() - flushIndex >= bufferLimit) {
-            throw new ExecutionException(ExecutionFlag.ERR_TEXT_BUFFER_OVERFLOW,
+        if (errorHandler.getFlag(ExecutionFlag.ERR_TEXT_BUFFER_OVERFLOW) && buffer.length() - flushIndex >= bufferLimit) {
+            errorHandler.error(ExecutionFlag.ERR_TEXT_BUFFER_OVERFLOW,
                     "The capacity of the text buffer (%d) exceeded.", bufferLimit);
         }
     }
@@ -146,7 +143,7 @@ public class TextBuffer {
 
     public void prepareAssert() {
         if (assertBufferStart != -1) {
-            throw new ExecutionException(ExecutionFlag.ERR_INVALID_ASSERT_PRINTS,
+            errorHandler.error(ExecutionFlag.ERR_INVALID_ASSERT_PRINTS,
                     "Multiple or nested '%s' instruction calls.", Opcode.ASSERT_FLUSH);
         }
         assertBufferStart = buffer.length();
@@ -155,7 +152,7 @@ public class TextBuffer {
 
     public String getAssertedOutput() {
         if (assertBufferStart == -1) {
-            throw new ExecutionException(ExecutionFlag.ERR_INVALID_ASSERT_PRINTS,
+            errorHandler.error(ExecutionFlag.ERR_INVALID_ASSERT_PRINTS,
                     "'%s' without '%s'.", Opcode.ASSERT_PRINTS, Opcode.ASSERT_FLUSH);
         }
         String text = buffer.substring(assertBufferStart);
@@ -174,7 +171,7 @@ public class TextBuffer {
         return output;
     }
 
-    /// @return the joined and possible formatted output of print and format instructions.
+    /// @return the joined and possibly formatted output of print and format instructions.
     public String getFormattedOutput() {
         if (repetitions > 0) {
             assert last != null;
@@ -191,6 +188,4 @@ public class TextBuffer {
         last = null;
         return buffer.toString();
     }
-
-    static final TextBuffer EMPTY = new TextBuffer(0, 0, false);
 }

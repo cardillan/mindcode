@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.emulator.MindustryVariable;
+import info.teksol.mc.emulator.LVar;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -298,7 +298,7 @@ class LoopUnroller extends BaseOptimizer {
 
     private int findLoopCountAdvanced(AstContext loop, JumpInstruction jump, LogicVariable loopControl,
             LogicLiteral initLiteral, List<LogicInstruction> controlIxs, int loopLimit) {
-        MindustryVariable controlVariable = MindustryVariable.createVar(loopControl.toMlog());
+        LVar controlVariable = LVar.create(loopControl.toMlog());
         controlVariable.setDoubleValue(initLiteral.getDoubleValue());
         LogicBoolean terminatingValue = LogicBoolean.get(!hasExitCondition(loop));
 

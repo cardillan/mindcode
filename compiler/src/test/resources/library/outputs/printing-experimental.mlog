@@ -294,7 +294,7 @@ op add *tmp54 :printExactFast:base 0.5
 op floor *tmp53 *tmp54 0
 op sub *tmp56 :printExactFast:base *tmp53
 op abs :printExactFast:cmp *tmp56 0
-jump 298 lessThanEq :printExactFast:cmp 0
+jump 298 lessThan :printExactFast:cmp 0.000000000000001
 jump 300 lessThanEq :printExactFast:cmp 0.00001
 print :printExactFast:base
 jump 348 always 0 0

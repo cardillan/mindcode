@@ -12,6 +12,10 @@ public record IntRange(int min, int max) implements Comparable<IntRange> {
         }
     }
 
+    public static IntRange of(int start, int stop) {
+        return new IntRange(start, stop);
+    }
+
     public boolean overlaps(IntRange other) {
         return other.min <= max && other.max >= min;
     }

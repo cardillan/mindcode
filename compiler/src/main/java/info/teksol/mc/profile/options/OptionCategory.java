@@ -2,6 +2,9 @@ package info.teksol.mc.profile.options;
 
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 @NullMarked
 public enum OptionCategory {
     INPUT_OUTPUT("Input/output options", """
@@ -37,7 +40,7 @@ public enum OptionCategory {
             Options to activate debugging features or additional output from the compiler.
             """),
 
-    RUN("Run options", """
+    EMULATOR("Emulator options", """
             Options to specify whether and how to run the compiled code on an emulated processor. The emulated
             processor is much faster than Mindustry processors, but can't run instructions which obtain information
             from the Mindustry World. Sole exceptions are memory cells ('cell1' to 'cell9') and memory banks
@@ -52,5 +55,9 @@ public enum OptionCategory {
     OptionCategory(String title, String description) {
         this.title = title;
         this.description = description;
+    }
+
+    public static Optional<OptionCategory> fromTitle(String title) {
+        return Stream.of(values()).filter(c -> c.title.equals(title)).findFirst();
     }
 }

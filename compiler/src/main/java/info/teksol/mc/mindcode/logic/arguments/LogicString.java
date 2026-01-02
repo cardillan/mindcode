@@ -1,7 +1,6 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.emulator.MindustryString;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstLiteralString;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -79,7 +78,7 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
 
     @Override
     public Object getObject() {
-        return new MindustryString(value);
+        return value;
     }
 
     @Override
@@ -92,4 +91,3 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
         return new AstLiteralString(position, value);
     }
 }
-

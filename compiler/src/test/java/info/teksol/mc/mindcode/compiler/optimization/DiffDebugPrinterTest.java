@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.mindcode.compiler.AbstractTestBase;
+import info.teksol.mc.mindcode.compiler.AbstractCompilerTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.ForcedVariableContext;
@@ -21,7 +21,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @NullMarked
-class DiffDebugPrinterTest extends AbstractTestBase {
+class DiffDebugPrinterTest extends AbstractCompilerTestBase {
 
     @Override
     protected CompilationPhase getTargetPhase() {

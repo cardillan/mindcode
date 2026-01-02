@@ -387,7 +387,7 @@ set *tmp53 *tmp55
 op sub *tmp56 :printExactFast:base *tmp53
 op abs *tmp57 *tmp56 0
 set :printExactFast:cmp *tmp57
-op lessThanEq *tmp58 :printExactFast:cmp 0
+op lessThan *tmp58 :printExactFast:cmp 0.000000000000001
 jump 394 notEqual *tmp58 false
 op greaterThan *tmp59 :printExactFast:cmp 0.00001
 jump 394 notEqual *tmp59 false

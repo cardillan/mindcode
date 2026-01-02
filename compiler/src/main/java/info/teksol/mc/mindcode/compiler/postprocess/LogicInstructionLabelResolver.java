@@ -48,7 +48,7 @@ public class LogicInstructionLabelResolver {
         return new LogicInstructionLabelResolver(profile, processor, rootAstContext).resolve(program);
     }
 
-    private List<LogicInstruction> resolve(List<LogicInstruction> program) {
+    public List<LogicInstruction> resolve(List<LogicInstruction> program) {
         return sortVariables(resolveLabels(program, Set.of()));
     }
 

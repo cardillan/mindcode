@@ -7,6 +7,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -37,7 +38,9 @@ public class OptimizerSymbolicLabelsTest extends AbstractProcessorTest {
         return DynamicContainer.dynamicContainer("Optimization tests",
                 Stream.of(files)
                 .map(File::getName)
-                .map(f -> DynamicTest.dynamicTest(f, null, () -> compileAndOutputFile(f)))
+                .map(name -> DynamicTest.dynamicTest(name,
+                        Path.of(getScriptsDirectory(), name).toUri(),
+                        () -> compileAndOutputFile(name)))
         );
     }
 }

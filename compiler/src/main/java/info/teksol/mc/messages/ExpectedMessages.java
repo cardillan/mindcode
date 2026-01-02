@@ -23,6 +23,7 @@ public class ExpectedMessages implements MessageConsumer {
     private final List<MatchCounter> matchers;
     private final List<String> messages = new ArrayList<>();
     private boolean accumulateErrors = false;
+    private boolean stdout = false;
 
     /// Additional message consumer
     private MessageConsumer logger = m -> {};
@@ -56,6 +57,11 @@ public class ExpectedMessages implements MessageConsumer {
     /// @return an instance which fails on unexpected or missing messages
     public static ExpectedMessages create() {
         return new ExpectedMessages();
+    }
+
+    public ExpectedMessages stdout() {
+        stdout = true;
+        return this;
     }
 
     /// Adds a matcher for messages at the given level or weaker.
@@ -189,6 +195,9 @@ public class ExpectedMessages implements MessageConsumer {
 
     @Override
     public void addMessage(MindcodeMessage mindcodeMessage) {
+        if (stdout) {
+            System.out.println(mindcodeMessage.formatMessage(ExpectedMessages::formatPosition));
+        }
         logger.addMessage(mindcodeMessage);
         for (MessageMatcher matcher : matchers) {
             if (matcher.matches(mindcodeMessage)) {

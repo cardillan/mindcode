@@ -1,7 +1,9 @@
 package info.teksol.mindcode.webapp;
 
 import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.emulator.EmulatorMessage;
 import info.teksol.mc.messages.ListMessageLogger;
+import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -233,7 +235,7 @@ public class HomeController {
     }
 
     public List<WebappMessage> formatMessages(MindcodeCompiler compiler, Predicate<MindcodeMessage> filter) {
-        return compiler.getMessages().stream().filter(filter)
+        return compiler.getMessages().stream().filter(filter.and(m -> !(m instanceof EmulatorMessage)))
                 .map(WebappMessage::transform)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -242,11 +244,16 @@ public class HomeController {
         if (compiler.hasErrors()) {
             return null;
         } else {
-            String output = compiler.getTextBuffer().getFormattedOutput();
+            String output = compiler.getTextBufferOutput();
             String text = output.isEmpty() ? "The program produced no output." : output;
 
-            if (compiler.getExecutionException() != null) {
-                text = text + "\n" + compiler.getExecutionException().getWebAppMessage();
+            Optional<EmulatorMessage> emulatorError = compiler.getMessages().stream()
+                    .filter(m -> m.level() == MessageLevel.ERROR && m instanceof EmulatorMessage)
+                    .map(EmulatorMessage.class::cast)
+                    .findFirst();
+
+            if (emulatorError.isPresent()) {
+                text = text + "\n" + emulatorError.get().message();
             }
 
             return text;

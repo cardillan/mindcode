@@ -251,7 +251,7 @@ void printExactFast(n)
         var exp = floor(log10(n));
         var base = n * 10 ** -exp;
         var cmp = abs(base - round(base));
-        if cmp <= 0 or cmp > 1e-5 then
+        if cmp < 1e-15 or cmp > 1e-5 then
             // An exact integer, or a number that won't be rounded, use native function
             print(base);
         else

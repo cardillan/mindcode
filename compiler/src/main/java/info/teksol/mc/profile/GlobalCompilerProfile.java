@@ -1,6 +1,6 @@
 package info.teksol.mc.profile;
 
-import info.teksol.mc.emulator.processor.ExecutionFlag;
+import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
@@ -43,7 +43,7 @@ public interface GlobalCompilerProfile {
     }
 
     default boolean isNullCounterIsNoop() {
-        return getBooleanValue(EnvironmentOptions.NULL_COUNTER_IS_NOOP);
+        return getBooleanValue(EnvironmentOptions.NULL_COUNTER_IS_NOOP) && getTarget().version() != ProcessorVersion.V8A;
     }
 
     default int getInstructionLimit() {
@@ -157,7 +157,9 @@ public interface GlobalCompilerProfile {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Run Options">
+    //<editor-fold desc="Emulator Options">
+    Target getEmulatorTarget();
+
     default Set<ExecutionFlag> getExecutionFlags() {
         EnumSet<ExecutionFlag> executionFlags = EnumSet.noneOf(ExecutionFlag.class);
         for (ExecutionFlag flag : ExecutionFlag.LIST) {
@@ -167,16 +169,15 @@ public interface GlobalCompilerProfile {
     }
 
     default boolean isOutputProfiling() {
-        return getBooleanValue(RunOptions.OUTPUT_PROFILING);
+        return getBooleanValue(EmulatorOptions.OUTPUT_PROFILING);
     }
 
     default boolean isRun() {
-        return getBooleanValue(RunOptions.RUN);
+        return getBooleanValue(EmulatorOptions.RUN);
     }
 
     default int getStepLimit() {
-        return getIntValue(RunOptions.RUN_STEPS);
+        return getIntValue(EmulatorOptions.RUN_STEPS);
     }
-
     //</editor-fold>
 }

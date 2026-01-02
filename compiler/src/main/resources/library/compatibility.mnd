@@ -34,15 +34,16 @@ volatile var counterNull;
  *
  * runCompatibilityTest();
  * ```
- *
- * Note: The Mindcode processor emulator currently isn't able to run this function.
  */
 inline void runCompatibilityTest()
-    counterNull = "[salmon]set @counter null IS NOT a noop[]\n" +
-            "Use [gold]#set null-counter-is-noop = false;[] in your programs.\n\n";
+    counterNull = __MINDUSTRY_VERSION__ == "v149"
+        ? "[salmon]set @counter null IS NOT a noop[]\nYour selected compilation target already handles this.\n\n"
+        : "[salmon]set @counter null IS NOT a noop[]\nUse [gold]#set null-counter-is-noop = false;[] in your programs.\n\n";
+
     if not init then
         init = true;
         mlog("set", "@counter", "null");
+        mlog("read", "@counter", "@this", in ".counterNull");
         counterNull = "[green]set @counter null IS a noop[]\n\n";
     end;
 
@@ -69,6 +70,10 @@ const _MESSAGE_SPECIFIC =
     "Please report the problem, and use [gold]#set builtin-evaluation = compatible;[]\n" +
     "to avoid incompatibility issues.";
 
+const _MESSAGE_NO_SELECT =
+    "[salmon]Cannot evaluate processor compatibility - the [gold]select[] instruction is missing.[]\n" +
+    "Use the correct target for this Mindustry version when compiling your code.";
+
 inline void _compatibilityTest6()
     mlog {
         print "Testing..."
@@ -77,8 +82,9 @@ inline void _compatibilityTest6()
 
         jump general notEqual @ctrlProcessor 1
         jump general notEqual @ctrlPlayer 2
-        jump general notEqual @ctrlFormation 3
 
+        jump specific notEqual true 1
+        jump specific notEqual @ctrlFormation 3
 
         print $_MESSAGE_OK
         jump finish always 0 0
@@ -194,7 +200,6 @@ inline void _compatibilityTest7()
         jump general equal result false
         op strictEqual result @colorNegstat %e55454ff
         jump general equal result false
-        jump general notEqual @blockCount 254
         sensor id @graphite-press @id
         jump general notEqual id 0
         sensor id @multi-press @id
@@ -847,12 +852,6 @@ inline void _compatibilityTest7()
         jump general notEqual id 15
         sensor id @beryllium @id
         jump general notEqual id 16
-        sensor id @tungsten @id
-        jump general notEqual id 19
-        sensor id @carbide @id
-        jump general notEqual id 20
-        sensor id @oxide @id
-        jump general notEqual id 21
         sensor id @water @id
         jump general notEqual id 0
         sensor id @slag @id
@@ -876,6 +875,10 @@ inline void _compatibilityTest7()
         sensor id @arkycite @id
         jump general notEqual id 10
 
+        jump specific notEqual true 1
+        op strictEqual result π 3.1415927410125732
+        jump specific equal result false
+        jump specific notEqual @blockCount 254
         jump specific notEqual @unitCount 56
         jump specific notEqual @itemCount 22
         jump specific notEqual @liquidCount 11
@@ -883,6 +886,12 @@ inline void _compatibilityTest7()
         jump specific notEqual id 17
         sensor id @dormant-cyst @id
         jump specific notEqual id 18
+        sensor id @tungsten @id
+        jump specific notEqual id 19
+        sensor id @carbide @id
+        jump specific notEqual id 20
+        sensor id @oxide @id
+        jump specific notEqual id 21
 
         print $_MESSAGE_OK
         jump finish always 0 0
@@ -903,7 +912,6 @@ inline void _compatibilityTest80()
         printflush message1
         print $counterNull;
 
-        jump general notEqual @blockCount 260
         op strictEqual result @colorAccent %ffd37fff
         jump general equal result false
         op strictEqual result @colorAcid %7fff00ff
@@ -999,90 +1007,6 @@ inline void _compatibilityTest80()
         jump general equal result false
         op strictEqual result @radToDeg 57.2957763671875
         jump general equal result false
-        jump general notEqual @sfx-back 1
-        jump general notEqual @sfx-bang 2
-        jump general notEqual @sfx-beam 3
-        jump general notEqual @sfx-bigshot 4
-        jump general notEqual @sfx-bioLoop 5
-        jump general notEqual @sfx-blaster 6
-        jump general notEqual @sfx-bolt 7
-        jump general notEqual @sfx-boom 8
-        jump general notEqual @sfx-break 9
-        jump general notEqual @sfx-build 10
-        jump general notEqual @sfx-buttonClick 11
-        jump general notEqual @sfx-cannon 12
-        jump general notEqual @sfx-chatMessage 13
-        jump general notEqual @sfx-combustion 15
-        jump general notEqual @sfx-conveyor 16
-        jump general notEqual @sfx-corexplode 17
-        jump general notEqual @sfx-cutter 18
-        jump general notEqual @sfx-drill 20
-        jump general notEqual @sfx-dullExplosion 23
-        jump general notEqual @sfx-electricHum 24
-        jump general notEqual @sfx-explosionbig 26
-        jump general notEqual @sfx-extractLoop 27
-        jump general notEqual @sfx-fire 28
-        jump general notEqual @sfx-flame 29
-        jump general notEqual @sfx-flame2 30
-        jump general notEqual @sfx-flux 31
-        jump general notEqual @sfx-glow 32
-        jump general notEqual @sfx-grinding 33
-        jump general notEqual @sfx-hum 34
-        jump general notEqual @sfx-largeCannon 35
-        jump general notEqual @sfx-largeExplosion 36
-        jump general notEqual @sfx-laser 37
-        jump general notEqual @sfx-laserbeam 38
-        jump general notEqual @sfx-laserbig 39
-        jump general notEqual @sfx-laserblast 40
-        jump general notEqual @sfx-lasercharge 41
-        jump general notEqual @sfx-lasercharge2 42
-        jump general notEqual @sfx-lasershoot 43
-        jump general notEqual @sfx-machine 44
-        jump general notEqual @sfx-malignShoot 45
-        jump general notEqual @sfx-mediumCannon 46
-        jump general notEqual @sfx-message 47
-        jump general notEqual @sfx-mineDeploy 48
-        jump general notEqual @sfx-minebeam 49
-        jump general notEqual @sfx-missile 50
-        jump general notEqual @sfx-missileLarge 51
-        jump general notEqual @sfx-missileLaunch 52
-        jump general notEqual @sfx-missileSmall 53
-        jump general notEqual @sfx-missileTrail 54
-        jump general notEqual @sfx-mud 55
-        jump general notEqual @sfx-noammo 56
-        jump general notEqual @sfx-pew 57
-        jump general notEqual @sfx-place 58
-        jump general notEqual @sfx-plasmaboom 60
-        jump general notEqual @sfx-plasmadrop 61
-        jump general notEqual @sfx-press 62
-        jump general notEqual @sfx-pulse 63
-        jump general notEqual @sfx-pulseBlast 64
-        jump general notEqual @sfx-railgun 65
-        jump general notEqual @sfx-release 67
-        jump general notEqual @sfx-respawn 68
-        jump general notEqual @sfx-respawning 69
-        jump general notEqual @sfx-sap 71
-        jump general notEqual @sfx-shield 72
-        jump general notEqual @sfx-shockBlast 73
-        jump general notEqual @sfx-shootAlt 75
-        jump general notEqual @sfx-shootAltLong 76
-        jump general notEqual @sfx-shootBig 77
-        jump general notEqual @sfx-shootSnap 79
-        jump general notEqual @sfx-shotgun 80
-        jump general notEqual @sfx-smelter 81
-        jump general notEqual @sfx-spark 82
-        jump general notEqual @sfx-spellLoop 83
-        jump general notEqual @sfx-splash 84
-        jump general notEqual @sfx-spray 85
-        jump general notEqual @sfx-steam 86
-        jump general notEqual @sfx-techloop 88
-        jump general notEqual @sfx-thruster 89
-        jump general notEqual @sfx-titanExplosion 90
-        jump general notEqual @sfx-torch 91
-        jump general notEqual @sfx-tractorbeam 92
-        jump general notEqual @sfx-unlock 93
-        jump general notEqual @sfx-wave 94
-        jump general notEqual @sfx-windhowl 98
         sensor id @graphite-press @id
         jump general notEqual id 0
         sensor id @multi-press @id
@@ -1747,12 +1671,6 @@ inline void _compatibilityTest80()
         jump general notEqual id 15
         sensor id @beryllium @id
         jump general notEqual id 16
-        sensor id @tungsten @id
-        jump general notEqual id 17
-        sensor id @oxide @id
-        jump general notEqual id 18
-        sensor id @carbide @id
-        jump general notEqual id 19
         sensor id @water @id
         jump general notEqual id 0
         sensor id @slag @id
@@ -1776,22 +1694,116 @@ inline void _compatibilityTest80()
         sensor id @arkycite @id
         jump general notEqual id 10
 
+        jump specific notEqual @blockCount 260
         jump specific notEqual @itemCount 20
         jump specific notEqual @liquidCount 11
+        jump specific notEqual @sfx-back 1
+        jump specific notEqual @sfx-bang 2
+        jump specific notEqual @sfx-beam 3
+        jump specific notEqual @sfx-bigshot 4
+        jump specific notEqual @sfx-bioLoop 5
+        jump specific notEqual @sfx-blaster 6
+        jump specific notEqual @sfx-bolt 7
+        jump specific notEqual @sfx-boom 8
+        jump specific notEqual @sfx-break 9
+        jump specific notEqual @sfx-build 10
+        jump specific notEqual @sfx-buttonClick 11
+        jump specific notEqual @sfx-cannon 12
+        jump specific notEqual @sfx-chatMessage 13
         jump specific notEqual @sfx-click 14
+        jump specific notEqual @sfx-combustion 15
+        jump specific notEqual @sfx-conveyor 16
+        jump specific notEqual @sfx-corexplode 17
+        jump specific notEqual @sfx-cutter 18
         jump specific notEqual @sfx-door 19
+        jump specific notEqual @sfx-drill 20
         jump specific notEqual @sfx-drillCharge 21
         jump specific notEqual @sfx-drillImpact 22
+        jump specific notEqual @sfx-dullExplosion 23
+        jump specific notEqual @sfx-electricHum 24
         jump specific notEqual @sfx-explosion 25
+        jump specific notEqual @sfx-explosionbig 26
+        jump specific notEqual @sfx-extractLoop 27
+        jump specific notEqual @sfx-fire 28
+        jump specific notEqual @sfx-flame 29
+        jump specific notEqual @sfx-flame2 30
+        jump specific notEqual @sfx-flux 31
+        jump specific notEqual @sfx-glow 32
+        jump specific notEqual @sfx-grinding 33
+        jump specific notEqual @sfx-hum 34
+        jump specific notEqual @sfx-largeCannon 35
+        jump specific notEqual @sfx-largeExplosion 36
+        jump specific notEqual @sfx-laser 37
+        jump specific notEqual @sfx-laserbeam 38
+        jump specific notEqual @sfx-laserbig 39
+        jump specific notEqual @sfx-laserblast 40
+        jump specific notEqual @sfx-lasercharge 41
+        jump specific notEqual @sfx-lasercharge2 42
+        jump specific notEqual @sfx-lasershoot 43
+        jump specific notEqual @sfx-machine 44
+        jump specific notEqual @sfx-malignShoot 45
+        jump specific notEqual @sfx-mediumCannon 46
+        jump specific notEqual @sfx-message 47
+        jump specific notEqual @sfx-mineDeploy 48
+        jump specific notEqual @sfx-minebeam 49
+        jump specific notEqual @sfx-missile 50
+        jump specific notEqual @sfx-missileLarge 51
+        jump specific notEqual @sfx-missileLaunch 52
+        jump specific notEqual @sfx-missileSmall 53
+        jump specific notEqual @sfx-missileTrail 54
+        jump specific notEqual @sfx-mud 55
+        jump specific notEqual @sfx-noammo 56
+        jump specific notEqual @sfx-pew 57
+        jump specific notEqual @sfx-place 58
         jump specific notEqual @sfx-plantBreak 59
+        jump specific notEqual @sfx-plasmaboom 60
+        jump specific notEqual @sfx-plasmadrop 61
+        jump specific notEqual @sfx-press 62
+        jump specific notEqual @sfx-pulse 63
+        jump specific notEqual @sfx-pulseBlast 64
+        jump specific notEqual @sfx-railgun 65
         jump specific notEqual @sfx-rain 66
+        jump specific notEqual @sfx-release 67
+        jump specific notEqual @sfx-respawn 68
+        jump specific notEqual @sfx-respawning 69
         jump specific notEqual @sfx-rockBreak 70
+        jump specific notEqual @sfx-sap 71
+        jump specific notEqual @sfx-shield 72
+        jump specific notEqual @sfx-shockBlast 73
         jump specific notEqual @sfx-shoot 74
+        jump specific notEqual @sfx-shootAlt 75
+        jump specific notEqual @sfx-shootAltLong 76
+        jump specific notEqual @sfx-shootBig 77
         jump specific notEqual @sfx-shootSmite 78
+        jump specific notEqual @sfx-shootSnap 79
+        jump specific notEqual @sfx-shotgun 80
+        jump specific notEqual @sfx-smelter 81
+        jump specific notEqual @sfx-spark 82
+        jump specific notEqual @sfx-spellLoop 83
+        jump specific notEqual @sfx-splash 84
+        jump specific notEqual @sfx-spray 85
+        jump specific notEqual @sfx-steam 86
+        jump specific notEqual @sfx-techloop 88
+        jump specific notEqual @sfx-thruster 89
+        jump specific notEqual @sfx-titanExplosion 90
+        jump specific notEqual @sfx-torch 91
+        jump specific notEqual @sfx-tractorbeam 92
+        jump specific notEqual @sfx-unlock 93
+        jump specific notEqual @sfx-wave 94
         jump specific notEqual @sfx-wind 95
         jump specific notEqual @sfx-wind2 96
         jump specific notEqual @sfx-wind3 97
+        jump specific notEqual @sfx-windhowl 98
         jump specific notEqual @unitCount 56
+        jump specific notEqual true 1
+        op strictEqual result π 3.1415927410125732
+        jump specific equal result false
+        sensor id @tungsten @id
+        jump specific notEqual id 17
+        sensor id @oxide @id
+        jump specific notEqual id 18
+        sensor id @carbide @id
+        jump specific notEqual id 19
 
         print $_MESSAGE_OK
         jump finish always 0 0
@@ -1814,8 +1826,8 @@ inline void _compatibilityTest81()
 
         set e1 ""
         set e2 ""
+        set msg $_MESSAGE_NO_SELECT
 
-        select e1 strictEqual @blockCount 260 e1 "\n@blockCount"
         select e1 strictEqual @bottom 4 e1 "\n@bottom"
         select e1 strictEqual @bottomLeft 12 e1 "\n@bottomLeft"
         select e1 strictEqual @bottomRight 20 e1 "\n@bottomRight"
@@ -2724,12 +2736,6 @@ inline void _compatibilityTest81()
         select e1 equal id 15 e1 "\n@pyratite"
         sensor id @beryllium @id
         select e1 equal id 16 e1 "\n@beryllium"
-        sensor id @tungsten @id
-        select e1 equal id 17 e1 "\n@tungsten"
-        sensor id @oxide @id
-        select e1 equal id 18 e1 "\n@oxide"
-        sensor id @carbide @id
-        select e1 equal id 19 e1 "\n@carbide"
         sensor id @water @id
         select e1 equal id 0 e1 "\n@water"
         sensor id @slag @id
@@ -2753,6 +2759,7 @@ inline void _compatibilityTest81()
         sensor id @arkycite @id
         select e1 equal id 10 e1 "\n@arkycite"
 
+        select e2 strictEqual @blockCount 260 e2 "\n@blockCount"
         select e2 strictEqual @itemCount 20 e2 "\n@itemCount"
         select e2 strictEqual @liquidCount 11 e2 "\n@liquidCount"
         select e2 strictEqual @sfx-click 34 e2 "\n@sfx-click"
@@ -2769,6 +2776,14 @@ inline void _compatibilityTest81()
         select e2 strictEqual @sfx-wind2 195 e2 "\n@sfx-wind2"
         select e2 strictEqual @sfx-wind3 196 e2 "\n@sfx-wind3"
         select e2 strictEqual @unitCount 56 e2 "\n@unitCount"
+        select e2 strictEqual true 1 e2 "\ntrue"
+        select e2 strictEqual π 3.1415927410125732 e2 "\nπ"
+        sensor id @tungsten @id
+        select e2 equal id 17 e2 "\n@tungsten"
+        sensor id @oxide @id
+        select e2 equal id 18 e2 "\n@oxide"
+        sensor id @carbide @id
+        select e2 equal id 19 e2 "\n@carbide"
 
         select msg equal e2 "" $_MESSAGE_OK $_MESSAGE_SPECIFIC
         select msg equal e1 "" msg $_MESSAGE_GENERAL

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Order(1)
 class SamplesTest {
+    private static final String MINDCODE_DIRECTORY = "src/main/resources/samples/mindcode";
+    private static final String SCHEMATICS_DIRECTORY = "src/main/resources/samples/schematics";
 
     @TestFactory
     @Execution(ExecutionMode.CONCURRENT)
@@ -28,7 +31,8 @@ class SamplesTest {
 
         return DynamicContainer.dynamicContainer("Mindcode Samples",
                 samples.values().stream()
-                        .map(sample -> DynamicTest.dynamicTest(sample.name(), null,
+                        .map(sample -> DynamicTest.dynamicTest(sample.name(),
+                                Path.of(MINDCODE_DIRECTORY, sample.name() + ".sdf").toUri(),
                                 () -> compileMindcode(sample)))
         );
     }
@@ -41,7 +45,8 @@ class SamplesTest {
 
         return DynamicContainer.dynamicContainer("Schemacode Samples",
                 samples.values().stream()
-                        .map(sample -> DynamicTest.dynamicTest(sample.name(), null,
+                        .map(sample -> DynamicTest.dynamicTest(sample.name(),
+                                Path.of(SCHEMATICS_DIRECTORY, sample.name() + ".sdf").toUri(),
                                 () -> buildSchematic(sample)))
         );
     }

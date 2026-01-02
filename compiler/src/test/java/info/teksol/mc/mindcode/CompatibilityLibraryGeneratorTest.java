@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode;
 
 import info.teksol.mc.evaluator.Color;
-import info.teksol.mc.mindcode.logic.mimex.LVar;
+import info.teksol.mc.mindcode.logic.mimex.LVariable;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
@@ -57,15 +57,16 @@ public class CompatibilityLibraryGeneratorTest {
              *
              * runCompatibilityTest();
              * ```
-             *
-             * Note: The Mindcode processor emulator currently isn't able to run this function.
              */
             inline void runCompatibilityTest()
-                counterNull = "[salmon]set @counter null IS NOT a noop[]\\n" +
-                        "Use [gold]#set null-counter-is-noop = false;[] in your programs.\\n\\n";
+                counterNull = __MINDUSTRY_VERSION__ == "v149"
+                    ? "[salmon]set @counter null IS NOT a noop[]\\nYour selected compilation target already handles this.\\n\\n"
+                    : "[salmon]set @counter null IS NOT a noop[]\\nUse [gold]#set null-counter-is-noop = false;[] in your programs.\\n\\n";
+
                 if not init then
                     init = true;
                     mlog("set", "@counter", "null");
+                    mlog("read", "@counter", "@this", in ".counterNull");
                     counterNull = "[green]set @counter null IS a noop[]\\n\\n";
                 end;
             
@@ -92,6 +93,10 @@ public class CompatibilityLibraryGeneratorTest {
                 "Please report the problem, and use [gold]#set builtin-evaluation = compatible;[]\\n" +
                 "to avoid incompatibility issues.";
             
+            const _MESSAGE_NO_SELECT =
+                "[salmon]Cannot evaluate processor compatibility - the [gold]select[] instruction is missing.[]\\n" +
+                "Use the correct target for this Mindustry version when compiling your code.";
+
             inline void _compatibilityTest6()
             %send;
             
@@ -134,6 +139,7 @@ public class CompatibilityLibraryGeneratorTest {
             
                     set e1 ""
                     set e2 ""
+                    set msg $_MESSAGE_NO_SELECT
 
             %s
             %s
@@ -165,11 +171,11 @@ public class CompatibilityLibraryGeneratorTest {
         return String.format(template, generateStableBuiltinTest(metadata), generateUnstableBuiltinTest(metadata));
     }
 
-    private boolean isStableBuiltin(MindustryMetadata metadata, LVar var) {
+    private boolean isStableBuiltin(MindustryMetadata metadata, LVariable var) {
         return var.isNumericConstant() && metadata.isStableBuiltin(var.name());
     }
 
-    private boolean isUnStableBuiltin(MindustryMetadata metadata, LVar var) {
+    private boolean isUnStableBuiltin(MindustryMetadata metadata, LVariable var) {
         return var.isNumericConstant() && !metadata.isStableBuiltin(var.name());
     }
 

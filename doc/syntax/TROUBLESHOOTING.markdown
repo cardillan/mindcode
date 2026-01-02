@@ -106,7 +106,7 @@ end;
 The built-in `error()` function serves for logging diagnostic information when an unexpected situation is encountered by the program. The infromation is stored in special variables or displayed in-game, and the processor is stopped.
 
 > [!NOTE]
-> When the `error-function` option is set to `false`, or the `error-reporting` option is set to `none`, calls to the `error()` function are ignored and not compiled into the source code.
+> When the `error-function` option is set to `false`, or the `error-reporting` option is set to `none`, calls to the `error()` function are ignored and not compiled into the final code.
 
 When the first parameter to the error function is a formattable string literal, the string and other function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `[1]`, `[2]`, and so on.
 

@@ -1,9 +1,9 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.emulator.MlogReadable;
 import info.teksol.mc.evaluator.ExpressionEvaluator;
 import info.teksol.mc.evaluator.ExpressionValue;
-import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
 import info.teksol.mc.mindcode.logic.arguments.*;
@@ -173,7 +173,7 @@ public class OptimizerExpressionEvaluator {
         return op;
     }
 
-    public @Nullable LogicLiteral evaluate(SourcePosition sourcePosition, Operation operation, LogicReadable a, LogicReadable b) {
+    public @Nullable LogicLiteral evaluate(SourcePosition sourcePosition, Operation operation, MlogReadable a, MlogReadable b) {
         ExpressionEvaluator.existingOperation(operation).execute(expressionValue, a, b);
         return expressionValue.getLiteral(sourcePosition);
     }

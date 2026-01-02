@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.evaluator.LogicReadable;
+import info.teksol.mc.emulator.MlogReadable;
 import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.WARN;
@@ -679,7 +679,7 @@ public class OptimizationContext {
         return expressionEvaluator.normalizeMul(op, variable, number);
     }
 
-    public @Nullable LogicLiteral evaluate(SourcePosition sourcePosition, Operation operation, LogicReadable a, LogicReadable b) {
+    public @Nullable LogicLiteral evaluate(SourcePosition sourcePosition, Operation operation, MlogReadable a, MlogReadable b) {
         return expressionEvaluator.evaluate(sourcePosition, operation, a, b);
     }
 

@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode;
 
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.emulator.processor.Assertion;
+import info.teksol.mc.emulator.Assertion;
 import info.teksol.mc.messages.ListMessageLogger;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
@@ -51,7 +51,7 @@ public class SystemLibraryTest {
 
     @Test
     void testOneLibrary() throws IOException {
-        testLibrary("printing", OptimizationLevel.ADVANCED);
+        testLibrary("arrays", OptimizationLevel.NONE);
     }
 
     @TestFactory
@@ -69,7 +69,8 @@ public class SystemLibraryTest {
                         .filter(s -> !"compatibility".equals(s))
                         .flatMap(name -> levels.stream().map(
                                 level -> DynamicTest.dynamicTest(name + ":" + level,
-                                        null, () -> testLibrary(name, level))
+                                        Path.of(LIBRARY_DIRECTORY, name + ".mnd").toUri(),
+                                        () -> testLibrary(name, level))
                         ))
         );
     }
@@ -123,12 +124,12 @@ public class SystemLibraryTest {
         Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, libraryName + "-" + level.name().toLowerCase() + ".mlog"),
                 StringUtils.normalizeLineEndings(compiler.getOutput()), StandardCharsets.UTF_8);
 
-        System.out.println(compiler.getTextBuffer().getFormattedOutput());
+        System.out.println(compiler.getTextBufferOutput());
 
         if (executableTest) {
             assertFalse(compiler.getAssertions().isEmpty(), "No assertions were executed by the unit test.");
-            if (compiler.getExecutionException() != null) {
-                fail(compiler.getExecutionException().getMessage());
+            if (compiler.isRuntimeError()) {
+                fail("Runtime error occurred while executing compiled code.");
             }
         }
 

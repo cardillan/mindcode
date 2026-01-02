@@ -8,6 +8,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -43,7 +44,9 @@ public class EulerSymbolicLabelsTest extends AbstractProcessorTest {
         return DynamicContainer.dynamicContainer("Project Euler tests",
                 Stream.of(files)
                         .map(File::getName)
-                        .map(name -> DynamicTest.dynamicTest(name, null, () -> testAndEvaluateFile(name)))
+                        .map(name -> DynamicTest.dynamicTest(name,
+                                Path.of(getScriptsDirectory(), name).toUri(),
+                                () -> testAndEvaluateFile(name)))
         );
     }
 }

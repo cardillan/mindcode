@@ -1,7 +1,7 @@
 package info.teksol.mindcode.exttest.cases;
 
 import info.teksol.mc.common.InputFile;
-import info.teksol.mc.emulator.processor.Assertion;
+import info.teksol.mc.emulator.Assertion;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mindcode.exttest.ErrorResult;
@@ -40,22 +40,22 @@ public class BasicTestCaseExecutor implements TestCaseExecutor {
                     .map(Assertion::generateErrorMessage)
                     .collect(Collectors.joining("\n"));
 
-            boolean success = unexpectedMessages.isEmpty() && failedTests.isEmpty() && compiler.getExecutionException() == null;
+            boolean success = unexpectedMessages.isEmpty() && failedTests.isEmpty() && !compiler.isRuntimeError();
 
             if (success) {
                 if (compiler.globalCompilerProfile().isRun() && compiler.getAssertions().isEmpty()) {
                     progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(), -1,
-                            "", null, "No assertions found."));
+                            "", "No assertions found."));
                 } else {
                     progress.reportSuccess();
                 }
             } else {
                 progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(), -1,
-                        unexpectedMessages, compiler.getExecutionException(), failedTests));
+                        unexpectedMessages, failedTests));
             }
         } catch (Exception e) {
             progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(), -1,
-                    "", null, "Exception: " + e));
+                    "", "Exception: " + e));
         }
     }
 }

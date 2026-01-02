@@ -1,7 +1,7 @@
 package info.teksol.mindcode.exttest.cases;
 
 import info.teksol.mc.common.InputFile;
-import info.teksol.mc.emulator.processor.Assertion;
+import info.teksol.mc.emulator.Assertion;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
@@ -45,7 +45,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                     .setOptimizationLevel(Optimization.CASE_SWITCHING, OptimizationLevel.NONE)
                     .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
-            int originalSteps = compiler.getEmulator().getSteps() - compiler.getEmulator().getNoopSteps();
+            int originalSteps = compiler.getEmulator().executionSteps() - compiler.getEmulator().noopSteps();
             int originalSize = compiler.getInstructions().size();
             String originalOutput = compiler.getEmulator().getTextBuffer().getFormattedOutput();
 
@@ -55,7 +55,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                     .setGoal(GenerationGoal.SPEED)
                     .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
-            int newSteps = compiler.getEmulator().getSteps() - compiler.getEmulator().getNoopSteps();
+            int newSteps = compiler.getEmulator().executionSteps() - compiler.getEmulator().noopSteps();
             int newSize = (int) compiler.getInstructions().stream().filter(ix -> ix.getOpcode() != Opcode.NOOP).count();
             String newOutput = compiler.getEmulator().getTextBuffer().getFormattedOutput();
 
@@ -66,7 +66,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
 
             if (!Objects.equals(originalOutput, newOutput)) {
                 progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
-                        compiler.compilerProfile().getCaseConfiguration(), "", compiler.getExecutionException(),
+                        compiler.compilerProfile().getCaseConfiguration(), "",
                         "The original and optimized outputs differ:\n" + originalOutput + "\n" + newOutput));
             }
 
@@ -74,7 +74,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                     .stream().filter(ConvertCaseOptimizationAction::applied).toList();
             if (diagnosticData.size() != 1) {
                 progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
-                        compiler.compilerProfile().getCaseConfiguration(),"", compiler.getExecutionException(),
+                        compiler.compilerProfile().getCaseConfiguration(),"",
                         "No Case-Switching diagnostic information found."));
             } else {
                 ConvertCaseOptimizationAction action = diagnosticData.getFirst();
@@ -86,7 +86,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 if (stepDifference != expectedStepDifference) {
                     success = false;
                     progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
-                            compiler.compilerProfile().getCaseConfiguration(), "", compiler.getExecutionException(),
+                            compiler.compilerProfile().getCaseConfiguration(), "",
                             String.format("Original steps: %d, new steps: %d, difference: %d (expected %d).",
                                     originalSteps, newSteps, stepDifference, expectedStepDifference)));
                 }
@@ -96,16 +96,17 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 if (sizeDifference != expectedSizeDifference) {
                     success = false;
                     progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
-                            compiler.compilerProfile().getCaseConfiguration(), "", compiler.getExecutionException(),
+                            compiler.compilerProfile().getCaseConfiguration(), "",
                             String.format("Original size: %d, new size: %d, difference: %d (expected %d)",
                                     originalSize, newSize, sizeDifference, expectedSizeDifference)));
                 }
 
-                if (compiler.getEmulator().getNoopSteps() > 1) {
+                if (compiler.getEmulator().noopSteps() > 1) {
                     success = false;
                     progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
-                            compiler.compilerProfile().getCaseConfiguration(), "", compiler.getExecutionException(),
-                            String.format("Unexpected noop executions: %d (expected at most 1).", compiler.getEmulator().getNoopSteps())));
+                            compiler.compilerProfile().getCaseConfiguration(), "",
+                            String.format("Unexpected noop executions: %d (expected at most 1).",
+                                    compiler.getEmulator().noopSteps())));
                 }
 
                 if (success) {
@@ -114,7 +115,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
             }
         } catch (Exception e) {
             progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
-                    compiler.compilerProfile().getCaseConfiguration(), "", null, "Exception: " + e));
+                    compiler.compilerProfile().getCaseConfiguration(), "", "Exception: " + e));
         }
     }
 
@@ -131,11 +132,11 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 .map(Assertion::generateErrorMessage)
                 .collect(Collectors.joining("\n"));
 
-        boolean success = unexpectedMessages.isEmpty() && failedTests.isEmpty() && compiler.getExecutionException() == null;
+        boolean success = unexpectedMessages.isEmpty() && failedTests.isEmpty() && !compiler.isRuntimeError();
 
         if (!success) {
             progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
-                    compiler.compilerProfile().getCaseConfiguration(), unexpectedMessages, compiler.getExecutionException(), failedTests));
+                    compiler.compilerProfile().getCaseConfiguration(), unexpectedMessages, failedTests));
         }
 
         return success;

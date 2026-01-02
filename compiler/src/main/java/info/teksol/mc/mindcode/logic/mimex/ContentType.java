@@ -63,7 +63,7 @@ public enum ContentType {
     }
 
     public static @Nullable ContentType byName(String contentType) {
-        return VALUE_MAP.get(contentType);
+        return VALUE_MAP.get(contentType.toUpperCase());
     }
 
     public static @Nullable ContentType byId(int id) {
@@ -71,7 +71,7 @@ public enum ContentType {
     }
 
     public static ContentType byName(String contentType, ContentType defaultValue) {
-        return VALUE_MAP.getOrDefault(contentType, defaultValue);
+        return VALUE_MAP.getOrDefault(contentType.toUpperCase(), defaultValue);
     }
 
 }

@@ -20,17 +20,18 @@ All operations that do not interact with the Mindustry World are supported. Oper
 * Printing to the text buffer is fully supported, and the text produced by the program is displayed when the execution ends.
   * The size of the text buffer is limited to 10,000 characters.
   * The `format` instruction is fully supported. Only text produced since the last `printflush` instructions is available for formatting.  
-  * When the contents of the text buffer encountered at the `printflush` instruction is the same as the content encountered at the previous `printflush` instruction, the text isn't written to the text buffer again, just the number of the text block repetitions is printed. 
+  * When the contents of the text buffer encountered at the `printflush` instruction is the same as the content encountered at the previous `printflush` instruction, the text isn't written to the text buffer again, just the number of the text block repetitions is outputted. 
   * `draw print` instruction is handled like the `printflush` instructions: the text consumed by the `draw print` instruction isn't removed from the text buffer and is included in the program output.
 * The `getlink` instruction can be used to access linked blocks specified above. The `@links` variable is set to the total number of linked blocks.
-* The `read` and `write` instructions can be used with the linked memory cells and memory blocks obtained either through the linked variable (e.g., `cell1`), or through the `getlink` instruction.  
+* The `read` and `write` instructions can be used with the linked memory cells and memory blocks obtained either through the linked variable (e.g., `cell1`), or through the `getlink` instruction. When the emulation target is 8.0 or higher, the other usages of `read` and `write` are also supported (i.e., reading/writing an existing variable from a processor, accessing characters in a string or a message box, etc.).  
 * The `sensor` instruction is supported for a very limited number of properties:
   * `type`: returns the type of the object (e.g., `@memory-cell`)
+  * `name`: returns the name of the object if it exists (e.g., `lead` for `@lead`)
   * `id`: returns the ID of the object if it exists (e.g., `1` for `@lead`)
   * Accessing other properties isn't supported. 
-* The `wait` instruction isn't supported; specifically, it doesn't pause the execution of the program. 
-* All other instructions that do not set an output variable are silently ignored. For example, the `ucontrol move` instruction executes, but does nothing (there's no unit to send the command to in the emulated world).
-* Instructions which do set an output variable, such as `ulocate`, are not supported and, unless specifically configured, stop the execution of the program. Since the Mindustry World isn't simulated, it is not possible to set the values of output variables to some sensible value. 
+* The `wait` instruction's effect on processor scheduling is emulated, but the instruction doesn't pause the program execution.
+* The `noop` instruction is supported.
+* No other instructions are supported and, unless specifically configured, they stop the execution of the program. Since the Mindustry World isn't simulated, it is not possible to meaningfully emulate these instructions. 
 
 ## Irregular situation handling
 
@@ -44,29 +45,34 @@ Execution flags can be set through compiler directives or command-line options. 
 
 All flags are described in the following table:
 
-| Flag                            | Default | Meaning                                                                    |
-|---------------------------------|:-------:|----------------------------------------------------------------------------|
-| trace-execution                 |  false  | output instruction and variable states at each execution step              |
-| dump-variables-on-stop          |  false  | output variable values when the `stop` instruction is encountered          |
-| stop-on-stop-instruction        |  true   | stop when the `stop` instruction is encountered                            |
-| stop-on-end-instruction         |  true   | stop when the `end` instruction is encountered                             |
-| stop-on-program-end             |  true   | stop when the end of instruction list is reached                           |
-| err-invalid-counter             |  true   | stop when an invalid value is written to `@counter`                        |
-| err-invalid-identifier          |  true   | stop when a malformed identifier or value is encountered                   |
-| err-unsupported-opcode          |  true   | stop when unsupported instruction is encountered                           |
-| err-uninitialized-var           |  false  | stop when an uninitialized variable is read                                |
-| err-assignment-to-fixed-var     |  true   | stop on attempts to write a value to an unmodifiable built-in variable     |
-| err-not-an-object               |  true   | stop when a numerical value is used instead of an object                   |
-| err-not-a-number                |  true   | stop when an object is used instead of a numeric value                     |
-| err-invalid-content             |  true   | stop when an invalid index is used in the `lookup` instruction             |
-| err-invalid-link                |  true   | stop when an invalid index is used in the `getlink` instruction            |
-| err-memory-access               |  true   | stop when accessing invalid memory-cell or memory-bank index               |
-| err-unsupported-block-operation |  true   | stop when attempting to perform an unsupported operation on a block        |
-| err-text-buffer-overflow        |  false  | stop when the text buffer size (400 characters) is exceeded                |
-| err-graphics-buffer-overflow    |  true   | stop when the graphics buffer size (256 operations) is exceeded            |
-| err-invalid-format              |  true   | stop when no placeholder for the `format` instruction exists in the buffer |
+| Flag                            | Default | Meaning                                                                                       |
+|---------------------------------|---------|-----------------------------------------------------------------------------------------------|
+| enforce-instruction-limit       | false   | only parse the first 1000 instructions of the code to be executed                             |
+| trace-execution                 | false   | output instruction and variable states at each execution step                                 |
+| dump-variables-on-stop          | true    | output variable values when the 'stop' instruction is encountered                             |
+| stop-on-stop-instruction        | true    | stop execution when the 'stop' instruction is encountered                                     |
+| stop-on-end-instruction         | true    | stop execution when the 'end' instruction is encountered                                      |
+| stop-on-long-wait               | true    | stop execution when the 'wait' instruction longer than an hour encountered                    |
+| stop-on-program-end             | true    | stop execution when the end of instruction list is reached                                    |
+| err-parse-error                 | true    | stop execution when an error or invalid instruction is encountered during parsing             |
+| err-invalid-counter             | true    | stop execution when an invalid value is written to '@counter'                                 |
+| err-unsupported-opcode          | true    | stop execution when an instruction unsupported by the emulator is encountered                 |
+| err-nonexistent-var             | false   | stop execution when a nonexistent variable is being indirectly accessed                       |
+| err-assignment-to-fixed-var     | true    | stop execution on attempts to write a value to an unmodifiable built-in variable              |
+| err-not-an-object               | true    | stop execution when a numeric value is used instead of an object                              |
+| err-not-a-number                | true    | stop execution when an object is used instead of a numeric value (nulls are always permitted) |
+| err-unknown-color               | true    | stop execution when an unknown color is used in a named color literal                         |
+| err-invalid-lookup              | true    | stop execution when an invalid index is used in the 'lookup' instruction                      |
+| err-invalid-link                | false   | stop execution when an invalid index is used in the 'getlink' instruction                     |
+| err-memory-access               | false   | stop execution when accessing invalid memory-cell or memory-bank index                        |
+| err-memory-object               | true    | stop execution when attempting to store an object in external memory                          |
+| err-unsupported-block-operation | true    | stop execution when performing an unsupported operation on a block                            |
+| err-text-buffer-overflow        | false   | stop execution when the text buffer size (400 characters) is exceeded                         |
+| err-invalid-format              | true    | stop execution when no placeholder for the 'format' instruction exists in the buffer          |
+| err-graphics-buffer-overflow    | true    | stop execution when the graphics buffer size (256 operations) is exceeded                     |
+| err-runtime-check-failed        | true    | stop execution when a compiler-generated runtime check fails.                                 |
 
-The `err-uninitialized-var` and `err-text-buffer-overflow` flags are `false` by default. It is expected that these events can happen even in an otherwise sound program. Setting them to `true` enforces even stricter standards in your programs.   
+Some flags are `false` by default. It is expected that these events can happen even in an otherwise sound program. Setting them to `true` enforces even stricter standards in your programs.   
 
 ## Inspecting program state
 
@@ -76,60 +82,89 @@ Firstly, the content of all variables is written to the message log when the `st
 
 Example of the variable dump:
 
-```
-stop instruction encountered, dumping variable values:
-@counter: 76.0
-:fn13:base: 60000.09930373835
-:fn13:cmp: 8.976000009930374E-8
-:fn13:exp: 0.0
-:fn13:n: 1.00000008976
-:fn13:t: 60000.0
-*tmp1: 1.00000008976
-*tmp10: 1.0
-*tmp12: 1.0
-*tmp13: 1.50000008976
-*tmp15: 8.976000009930374E-8
-*tmp21: 1.0
-*tmp22: 0.6000009930373835
-*tmp7: 3.898227098923865E-8
-*tmp9: -0.0
-:number: 1.00000008976
+```Mindcode
+#set sort-variables;
+#set target = 8;
+#set trace-execution = true;
+
+require printing;
+
+param number = 1.00000008976;
+printExactFast(number);
+printflush(message1);
+stopProcessor();
 ```
 
-Secondly, when the `trace-execution` flag is set, the instruction to be executed, followed by the values of all input variables, is printed to the message log at each step. The value of output variables is also printed after the instruction is executed. The size of the output produced by this mechanism can be quite sizable, but it can be used to inspect the program flow in detail.
+Output:
+
+```
+stop instruction encountered, dumping variable values:
+@counter: 74.0
+number: 1.00000008976
+:printExactFast:n: 1.00000008976
+*tmp1: 1.00000008976
+*tmp7: 3.898227098923865E-8
+:printExactFast:exp: 0.0
+*tmp9: 0.0
+*tmp10: 1.0
+:printExactFast:base: 60000.09930373835
+*tmp13: 1.50000008976
+*tmp12: 1.0
+*tmp15: 8.976000009930374E-8
+:printExactFast:cmp: 8.976000009930374E-8
+*tmp20: 1.0
+*tmp21: 0.6000009930373835
+:printExactFast:t: 60000.0
+```
+
+Note that the `sort-variables` directive ensures the variables are sorted meaningfully. Without this directive, the variables are printed in the encountered order, which is identical to the order on the **Vars** screen in the game.  
+
+Secondly, when the `trace-execution` flag is set, each instruction and the prior values of its arguments are printed to the message log at each step. The values of arguments changed by the instruction are also printed after the instruction is executed. The size of the output produced by this mechanism can be quite sizable, but it can be used to inspect the program flow in detail.
 
 Example of the execution trace:
 
 ```
 Program execution trace:
-Step 1, instruction #0: set :number 1.00000008976
-   out :number: 1.00000008976
-Step 2, instruction #1: set :fn13:n :number
-   in  :number: 1.00000008976
-   out :fn13:n: 1.00000008976
-Step 3, instruction #2: op abs *tmp1 :number
-   in  :number: 1.00000008976
-   out *tmp1: 1.00000008976
-Step 4, instruction #3: jump 6 greaterThan *tmp1 0
-   in  *tmp1: 1.00000008976
-Step 5, instruction #6: jump 9 greaterThanEq :number 0
-   in  :number: 1.00000008976
-Step 6, instruction #9: op log10 *tmp7 :fn13:n
-   in  :fn13:n: 1.00000008976
-   out *tmp7: 3.898227098923865E-8
-Step 7, instruction #10: op floor :fn13:exp *tmp7
-   in  *tmp7: 3.898227098923865E-8
-   out :fn13:exp: 0.0
-Step 8, instruction #11: op mul *tmp9 -1 :fn13:exp
-   in  :fn13:exp: 0.0
-   out *tmp9: -0.0
-Step 9, instruction #12: op pow *tmp10 10 *tmp9
-   in  *tmp9: -0.0
-   out *tmp10: 1.0
-Step 10, instruction #13: op mul :fn13:base :fn13:n *tmp10
-   in  :fn13:n: 1.00000008976
-   in  *tmp10: 1.0
-   out :fn13:base: 1.00000008976
+Step 1, instruction #0: jump 3 always 0 0
+    Jumped to #3 (avoided 'draw triangle message1 number :printExactFast:base :printExactFast:cmp :printExactFast:exp :printExactFast:n')
+Step 2, instruction #3: set number 1.00000008976
+    number --> null
+    number <-- 1.00000008976
+Step 3, instruction #4: set :printExactFast:n number
+    :printExactFast:n --> null
+    number --> 1.00000008976
+    :printExactFast:n <-- 1.00000008976
+Step 4, instruction #5: op abs *tmp1 number 0
+    *tmp1 --> null
+    number --> 1.00000008976
+    *tmp1 <-- 1.00000008976
+Step 5, instruction #6: jump 9 greaterThan *tmp1 0
+    *tmp1 --> 1.00000008976
+    Jumped to #9 (avoided 'print number')
+Step 6, instruction #9: jump 12 greaterThanEq number 0
+    number --> 1.00000008976
+    Jumped to #12 (avoided 'print "-"')
+Step 7, instruction #12: op log10 *tmp7 :printExactFast:n 0
+    *tmp7 --> null
+    :printExactFast:n --> 1.00000008976
+    *tmp7 <-- 3.898227098923865E-8
+Step 8, instruction #13: op floor :printExactFast:exp *tmp7 0
+    :printExactFast:exp --> null
+    *tmp7 --> 3.898227098923865E-8
+    :printExactFast:exp <-- 0.0
+Step 9, instruction #14: op sub *tmp9 0 :printExactFast:exp
+    *tmp9 --> null
+    :printExactFast:exp --> 0.0
+    *tmp9 <-- 0.0
+Step 10, instruction #15: op pow *tmp10 10 *tmp9
+    *tmp10 --> null
+    *tmp9 --> 0.0
+    *tmp10 <-- 1.0
+Step 11, instruction #16: op mul :printExactFast:base :printExactFast:n *tmp10
+    :printExactFast:base --> null
+    :printExactFast:n --> 1.00000008976
+    *tmp10 --> 1.0
+    :printExactFast:base <-- 1.00000008976
 ```
 
 In the web app, the number of messages output by either of these two mechanisms is limited to 1000; in the command-line application, the limit is 10,000. 

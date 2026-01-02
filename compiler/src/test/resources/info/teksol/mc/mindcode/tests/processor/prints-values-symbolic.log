@@ -59,11 +59,11 @@ print 5.5
 assertprints "5.5" "prints 5.5"
 assertflush
 print bank1
-assertprints "bank" "prints bank"
+assertprints "memory-bank" "prints link name"
 assertflush
 sensor *tmp0 bank1 @type
 print *tmp0
-assertprints "memory-bank" "prints memory-bank"
+assertprints "memory-bank" "prints type name"
 assertflush
 print null
 assertprints "null" "prints null"

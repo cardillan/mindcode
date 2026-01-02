@@ -2,11 +2,12 @@ package info.teksol.mc.mindcode.compiler;
 
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.emulator.processor.Processor;
+import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MessageLevel;
+import info.teksol.mc.mindcode.AbstractTestBase;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
@@ -45,11 +46,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @NullMarked
-public abstract class AbstractTestBase extends AbstractMessageEmitter implements ArrayConstructorContext {
-
-    public AbstractTestBase() {
-        super(ExpectedMessages.throwOnMessage());
-    }
+public abstract class AbstractCompilerTestBase extends AbstractTestBase implements ArrayConstructorContext {
 
     @AfterEach
     void clearContext() {
@@ -97,8 +94,7 @@ public abstract class AbstractTestBase extends AbstractMessageEmitter implements
                 .setDebugMessages(3)
                 .setPrintStackTrace(true)
                 .setPrintCodeSize(false)
-                .setRun(true);
-
+                .setRun(false);
     }
 
     protected ExpectedMessages expectedMessages() {
@@ -112,12 +108,8 @@ public abstract class AbstractTestBase extends AbstractMessageEmitter implements
                 .addLevelsUpTo(MessageLevel.INFO).ignored();
     }
 
-    protected Processor createEmulator(MindcodeCompiler compiler) {
-        return new Processor(compiler.instructionProcessor(), compiler.messageConsumer(), 1000);
-    }
-
     protected <T extends @Nullable Object> T process(ExpectedMessages expectedMessages, InputFiles inputFiles,
-            @Nullable Consumer<Processor> emulatorInitializer, Function<MindcodeCompiler, @Nullable T> resultExtractor) {
+            @Nullable Consumer<Emulator> emulatorInitializer, Function<MindcodeCompiler, @Nullable T> resultExtractor) {
         expectedMessages.setAccumulateErrors(true);
         MindcodeCompiler compiler = new MindcodeCompiler(getTargetPhase(), expectedMessages,
                 createCompilerProfile(), inputFiles);

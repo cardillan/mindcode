@@ -54,7 +54,8 @@ class SchematicsIOTest {
         Arrays.sort(files);
 
         for (final File file : files) {
-            result.add(DynamicTest.dynamicTest(file.getName(), null, () -> readSchema(file)));
+            result.add(DynamicTest.dynamicTest(file.getName(),
+                    file.toURI(), () -> readSchema(file)));
         }
 
         return result;
@@ -74,7 +75,7 @@ class SchematicsIOTest {
         Arrays.sort(files);
 
         for (final File file : files) {
-            result.add(DynamicTest.dynamicTest(file.getName(), null, () -> rewriteSchema(file)));
+            result.add(DynamicTest.dynamicTest(file.getName(), file.toURI(), () -> rewriteSchema(file)));
         }
 
         return result;

@@ -3,7 +3,7 @@ package info.teksol.mc.mindcode.compiler.generation;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.messages.MindcodeMessage;
-import info.teksol.mc.mindcode.compiler.AbstractTestBase;
+import info.teksol.mc.mindcode.compiler.AbstractCompilerTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @NullMarked
-public class AbstractCodeGeneratorTest extends AbstractTestBase {
+public class AbstractCodeGeneratorTest extends AbstractCompilerTestBase {
     private static final boolean FORCE_EXACT_MATCH = false;
     private static final Pattern variablePattern = Pattern.compile("^[.:*][a-zA-Z_][^*]*");
 

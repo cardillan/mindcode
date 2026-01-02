@@ -40,6 +40,10 @@ public class MindustryMetadata {
         return processorVersion;
     }
 
+    // Raw metadata
+    private final Map<String, MimexFile> mimexFiles = new ConcurrentHashMap<>();
+    private final Map<String, MimexFile> mimexClassFiles = new ConcurrentHashMap<>();
+
     private final AtomicReference<@Nullable Set<String>> stableBuiltins = new AtomicReference<>();
     private final AtomicReference<@Nullable Icons> icons = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, NamedColor>> colors = new AtomicReference<>();
@@ -51,7 +55,7 @@ public class MindustryMetadata {
     private final AtomicReference<@Nullable Map<String, Unit>> unitMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, UnitCommand>> unitCommandMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, LAccess>> lAccessMap = new AtomicReference<>();
-    private final AtomicReference<@Nullable Map<String, LVar>> lVarMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, LVariable>> lVarMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, LogicStatement>> logicStatementMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, Weather>> weatherMap = new AtomicReference<>();
 
@@ -99,10 +103,30 @@ public class MindustryMetadata {
         return forVersion(ProcessorVersion.MAX);
     }
 
+    //<editor-fold desc="Raw metadata">
+    private MimexFile getMimexFile(String fileName) {
+        return mimexFiles.computeIfAbsent(fileName, _ -> MimexFile.load(MIMEX_DATA + processorVersion.mimexVersion, fileName));
+    }
+
+    private MimexFile getClassMap() {
+        return getMimexFile("mimex-class-map.txt");
+    }
+
+    private MimexFile loadFileForClass(String className) {
+        return getClassMap().findAttribute("class", className, "file")
+                .map(this::getMimexFile).orElseThrow();
+
+    }
+
+    public MimexFile getFileForClass(String className) {
+        return mimexClassFiles.computeIfAbsent(className, _ -> loadFileForClass(className));
+    }
+    //</editor-fold>
+
     //<editor-fold desc="Lazy initialization">
 
     // Lazy initialization via AtomicReference
-    private static <T> T cacheInstance(AtomicReference<@Nullable T> reference, Supplier<T> supplier) {
+    private <T> T cacheInstance(AtomicReference<@Nullable T> reference, Supplier<T> supplier) {
         T value = reference.get();
         if (value == null) {
             value = supplier.get();
@@ -167,11 +191,15 @@ public class MindustryMetadata {
         return cacheInstance(unitCommandMap, () -> new SimpleReader<>("mimex-commands.txt", UnitCommand::create).createFromResource());
     }
 
+    public Collection<LAccess> getAllLAccesses() {
+        return getLAccessMap().values();
+    }
+
     private Map<String, LAccess> getLAccessMap() {
         return cacheInstance(lAccessMap, () -> new LAccessReader("mimex-laccess.txt").createFromResource());
     }
 
-    Map<String, LVar> getLVarMap() {
+    Map<String, LVariable> getLVarMap() {
         return cacheInstance(lVarMap, () -> new LVarReader("mimex-vars.txt").createFromResource());
     }
 
@@ -403,6 +431,7 @@ public class MindustryMetadata {
             case BLOCK -> getBlockById(id);
             case ITEM -> getItemById(id);
             case LIQUID -> getLiquidById(id);
+            case TEAM -> getTeamById(id);
             case UNIT -> getUnitById(id);
             case null, default -> null;
         };
@@ -490,8 +519,8 @@ public class MindustryMetadata {
         return getLogicStatementMap().size();
     }
 
-    public @Nullable LogicStatement getLogicStatementByOpcode(String opcode) {
-        return getLogicStatementMap().get(opcode);
+    public Optional<LogicStatement> getLogicStatementByOpcode(String opcode) {
+        return Optional.ofNullable(getLogicStatementMap().get(opcode));
     }
 
     public Collection<LogicStatement> getAllLogicStatements() {
@@ -550,12 +579,18 @@ public class MindustryMetadata {
         return getLVarMap().containsKey(name);
     }
 
-    public Collection<LVar> getAllLVars() {
+    public Collection<LVariable> getAllLVars() {
         return getLVarMap().values();
     }
 
-    public @Nullable LVar getLVar(String name) {
+    public @Nullable LVariable getLVar(String name) {
         return getLVarMap().get(name);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Weathers">
+    public Collection<Weather> getAllWeathers() {
+        return getWeatherMap().values();
     }
     //</editor-fold>
 
@@ -775,22 +810,22 @@ public class MindustryMetadata {
         }
     }
 
-    private class LVarReader extends AbstractNamedContentReader<LVar> {
-        private int name, global, isobj, constant, numval;
+    private class LVarReader extends AbstractNamedContentReader<LVariable> {
+        private int name, global, isobj, constant, numval, isNull, privileged;
 
         public LVarReader(String resource) {
             super(resource);
         }
 
         @Override
-        protected List<LVar> createUnregistered() {
+        protected List<LVariable> createUnregistered() {
             return List.of(
-                    new LVar("links", "@links", false, false, false, 0.0),
-                    new LVar("mapw", "@mapw", false, false, false, 0.0),
-                    new LVar("maph", "@maph", false, false, false, 0.0),
-                    new LVar("wait", "@wait", false, false, false, 0.0),
-                    new LVar("thisx", "@thisx", false, false, false, 0.0),
-                    new LVar("thisy", "@thisy", false, false, false, 0.0)
+                    new LVariable("links", "@links", false, false, false, 0.0, true, false, true),
+                    new LVariable("mapw", "@mapw", false, false, false, 0.0, true, false, true),
+                    new LVariable("maph", "@maph", false, false, false, 0.0, true, false, true),
+                    new LVariable("wait", "@wait", false, false, false, 0.0, true, true, true),
+                    new LVariable("thisx", "@thisx", false, false, false, 0.0, true, false, true),
+                    new LVariable("thisy", "@thisy", false, false, false, 0.0, true, false, true)
             );
         }
 
@@ -801,18 +836,23 @@ public class MindustryMetadata {
             isobj = findColumn("isobj");
             constant = findColumn("constant");
             numval = findColumn("numval");
+            isNull = findColumn("isnull");
+            privileged = findColumn("privileged");
         }
 
         @Override
-        protected @Nullable LVar create(String[] columns) {
-            return columns[name].charAt(0) == '@' ? new LVar(
-                    columns[name].substring(1),
-                    columns[name],
+        protected @Nullable LVariable create(String[] columns) {
+            String name = columns[this.name];
+            return new LVariable(
+                    name.startsWith("@") ? name.substring(1) : "",
+                    name,
                     "global".equals(columns[global]),
                     Boolean.parseBoolean(columns[isobj]),
                     Boolean.parseBoolean(columns[constant]),
-                    Double.parseDouble(columns[numval]))
-                    : null;
+                    Double.parseDouble(columns[numval]),
+                    Boolean.parseBoolean(columns[isNull]),
+                    Boolean.parseBoolean(columns[privileged]),
+                    false);
         }
     }
 
@@ -845,9 +885,9 @@ public class MindustryMetadata {
         protected LogicStatement create(String[] columns) {
             return new LogicStatement(
                     columns[opcode],
-                    columns[arguments],
-                    columns[argumentTypes],
-                    columns[argumentNames],
+                    splitSpaces(columns[arguments]),
+                    splitSpaces(columns[argumentTypes]),
+                    splitSpaces(columns[argumentNames]),
                     columns[name],
                     columns[typeName],
                     Boolean.parseBoolean(columns[hidden]),
@@ -867,6 +907,10 @@ public class MindustryMetadata {
         private String decode(String encoded) {
             return URLDecoder.decode(encoded, StandardCharsets.UTF_8);
         }
+    }
+
+    private List<String> splitSpaces(String values) {
+        return values.isBlank() ? List.of() : List.of(values.split(" +"));
     }
 
     private class NamedReader extends AbstractReader {

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -130,7 +131,8 @@ public abstract class ProcessorTestBase extends AbstractProcessorTest {
         return DynamicContainer.dynamicContainer("Processor tests",
                 Stream.of(files)
                         .map(File::getName)
-                        .map(name -> DynamicTest.dynamicTest(name, null,
+                        .map(name -> DynamicTest.dynamicTest(name,
+                                Path.of(getScriptsDirectory(), name).toUri(),
                                 () -> testAndEvaluateFile(name))
                         ));
     }

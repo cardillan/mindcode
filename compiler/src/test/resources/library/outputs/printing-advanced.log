@@ -1290,7 +1290,7 @@ Final code before resolving virtual instructions:
   293:  op floor *tmp53 *tmp54 0
   294:  op sub *tmp56 :printExactFast:base *tmp53
   295:  op abs :printExactFast:cmp *tmp56 0
-  296:  jump *label123 lessThanEq :printExactFast:cmp 0
+  296:  jump *label123 lessThan :printExactFast:cmp 0.000000000000001
   297:  jump *label121 lessThanEq :printExactFast:cmp 0.00001
         label *label123
   298:  print :printExactFast:base
@@ -1371,27 +1371,27 @@ Final code before resolving virtual instructions:
 
 
 stop instruction encountered, dumping variable values:
-*tmp42: 1.2345E-50
-*tmp48: -49.90850890573205
-*tmp50: 50.0
-*tmp51: 1.0E50
-*tmp53: 1.0
-*tmp54: 1.7345000000000002
-*tmp56: 0.23450000000000015
-*tmp61: 1.0
-*tmp62: 0.9999983634211276
-*tmp89: 0.015276668818842154
-*tmp92: 0.0
-:formatHexNumber:digit: 1.0
+@counter: 278.0
+:formatNumber:n: 1.0
 :formatHexNumber:digits: -10.0
 :formatHexNumber:n: 0.0
-:formatNumber:n: 1.0
-:printExactFast*retaddr: 206.0
-:printExactFast:base: 1.2345000000000002
-:printExactFast:cmp: 0.23450000000000015
-:printExactFast:exp: -50.0
+:formatHexNumber:digit: 1.0
 :printExactFast:n: 1.2345E-50
-:printExactFast:t: 99999.0
+:printExactFast*retaddr: 206.0
 :printExactSlow:base: 0.15276668818842154
 :printExactSlow:digit: 16.0
-@counter: 279.0
+*tmp89: 0.015276668818842154
+*tmp92: 0.0
+*tmp42: 1.2345E-50
+*tmp48: -49.90850890573205
+:printExactFast:exp: -50.0
+*tmp50: 50.0
+*tmp51: 1.0E50
+:printExactFast:base: 1.2345000000000002
+*tmp54: 1.7345000000000002
+*tmp53: 1.0
+*tmp56: 0.23450000000000015
+:printExactFast:cmp: 0.23450000000000015
+*tmp61: 1.0
+*tmp62: 0.9999983634211276
+:printExactFast:t: 99999.0

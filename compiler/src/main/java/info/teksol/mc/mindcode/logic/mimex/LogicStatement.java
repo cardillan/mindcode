@@ -2,12 +2,14 @@ package info.teksol.mc.mindcode.logic.mimex;
 
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
+
 @NullMarked
 public record LogicStatement(
         String opcode,
-        String arguments,
-        String argumentTypes,
-        String argumentNames,
+        List<String> arguments,
+        List<String> argumentTypes,
+        List<String> argumentNames,
         String name,
         String typeName,
         boolean hidden,

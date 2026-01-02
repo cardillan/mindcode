@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode.compiler.ast;
 
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.messages.ExpectedMessages;
-import info.teksol.mc.mindcode.compiler.AbstractTestBase;
+import info.teksol.mc.mindcode.compiler.AbstractCompilerTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import org.jspecify.annotations.NullMarked;
@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 @NullMarked
-public class AbstractAstBuilderTest extends AbstractTestBase {
+public class AbstractAstBuilderTest extends AbstractCompilerTestBase {
 
     @Override
     protected CompilationPhase getTargetPhase() {

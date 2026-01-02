@@ -1,6 +1,6 @@
 #set target = 8;
 #set builtin-evaluation = full;
-#set err-invalid-content = false;
+#set err-invalid-lookup = false;
 #set loop-unrolling = none;
 #set use-text-translations = false;
 //#set single-step-elimination = none;

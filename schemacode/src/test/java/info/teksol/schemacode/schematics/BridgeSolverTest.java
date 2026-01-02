@@ -27,7 +27,7 @@ class BridgeSolverTest extends AbstractSchematicsTest {
                 "phase-conveyor");
 
         for (final String blockType : blockTypes) {
-            result.add(DynamicTest.dynamicTest(blockType, null, () -> refusesConnectionToSelf(blockType)));
+            result.add(DynamicTest.dynamicTest(blockType, () -> refusesConnectionToSelf(blockType)));
         }
 
         return result;
@@ -55,7 +55,7 @@ class BridgeSolverTest extends AbstractSchematicsTest {
                 "phase-conveyor");
 
         for (final String blockType : blockTypes) {
-            result.add(DynamicTest.dynamicTest(blockType, null, () -> refusesNonOrthogonalConnection(blockType)));
+            result.add(DynamicTest.dynamicTest(blockType, () -> refusesNonOrthogonalConnection(blockType)));
         }
 
         return result;
@@ -84,7 +84,7 @@ class BridgeSolverTest extends AbstractSchematicsTest {
                 SchematicsMetadata.getMetadata().getExistingBlock("@phase-conveyor"));
 
         for (final BlockType blockType : blockTypes) {
-            result.add(DynamicTest.dynamicTest(blockType.name(), null, () -> refusesOutOfRangeConnection(blockType)));
+            result.add(DynamicTest.dynamicTest(blockType.name(), () -> refusesOutOfRangeConnection(blockType)));
         }
 
         return result;

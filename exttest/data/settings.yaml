@@ -37,6 +37,10 @@ defaults:
   # 'true' to compile, optimize and run the code, 'false' to just compile and optimize.
   run: false
 
+  # Some combinations of optimizations may result in a code in which the temporary variables in unused
+  # `set` instructions are replaced with `0`. This makes the emulator accept such instructions.
+  err-assignment-to-fixed-var: [ false ]
+
   # List of goal settings to use
   goal: [ speed, neutral, size ]
 
@@ -89,6 +93,10 @@ run-test:
   # List of symbolic labels settings to use
   symbolic-labels: [ false, true ]
 
+  # Some combinations of optimizations may result in a code in which the temporary variables in unused
+  # `set` instructions are replaced with `0`. This makes the emulator accept such instructions.
+  err-assignment-to-fixed-var: [ false ]
+
   # Activated case-switching specific tests
   case-switching-test: false
 
@@ -129,6 +137,10 @@ case-switching-defaults:
 
   # 'true' to compile, optimize and run the code, 'false' to just compile and optimize.
   run: true
+
+  # Some combinations of optimizations may result in a code in which the temporary variables in unused
+  # `set` instructions are replaced with `0`. This makes the emulator accept such instructions.
+  err-assignment-to-fixed-var: [ false ]
 
   # This setting disables fast dispatch optimization, which would otherwise always take precedence over case-switching
   null-counter-is-noop: [ false ]

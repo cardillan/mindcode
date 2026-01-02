@@ -1,5 +1,5 @@
 #set builtin-evaluation = full;
-#set err-invalid-content = false;
+#set err-invalid-lookup = false;
 #set use-text-translations = false;
 //#set single-step-elimination = none;
 //#set jump-straightening = none;

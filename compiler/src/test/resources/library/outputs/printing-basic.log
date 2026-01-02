@@ -889,14 +889,14 @@ Final code before resolving virtual instructions:
 
 
 stop instruction encountered, dumping variable values:
-*tmp20: {2},00{1}
+@counter: 297.0
+:formatNumber:n: 9.0
+:formatNumber:mod: 9.0
 *tmp22: {2},00{1}
-*tmp27: 1.0
+*tmp20: {2},00{1}
 :formatBinaryNumber:digits: 0.0
 :formatBinaryNumber:n: 0.0
-:formatHexNumber:digit: 10.0
+*tmp27: 1.0
 :formatHexNumber:digits: 0.0
 :formatHexNumber:n: 0.0
-:formatNumber:mod: 9.0
-:formatNumber:n: 9.0
-@counter: 298.0
+:formatHexNumber:digit: 10.0

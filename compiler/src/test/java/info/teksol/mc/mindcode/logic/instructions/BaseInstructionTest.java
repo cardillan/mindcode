@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
-import info.teksol.mc.mindcode.compiler.AbstractTestBase;
+import info.teksol.mc.mindcode.compiler.AbstractCompilerTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +11,7 @@ import java.util.List;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.ULOCATE;
 
 @NullMarked
-class BaseInstructionTest extends AbstractTestBase {
+class BaseInstructionTest extends AbstractCompilerTestBase {
 
     @Override
     protected CompilationPhase getTargetPhase() {

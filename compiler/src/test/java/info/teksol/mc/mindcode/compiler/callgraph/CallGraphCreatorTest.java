@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.messages.ExpectedMessages;
-import info.teksol.mc.mindcode.compiler.AbstractTestBase;
+import info.teksol.mc.mindcode.compiler.AbstractCompilerTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import org.jspecify.annotations.NullMarked;
@@ -13,7 +13,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 @NullMarked
-class CallGraphCreatorTest extends AbstractTestBase {
+class CallGraphCreatorTest extends AbstractCompilerTestBase {
 
     @Override
     protected CompilationPhase getTargetPhase() {

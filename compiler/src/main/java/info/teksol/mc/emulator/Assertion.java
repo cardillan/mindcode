@@ -1,4 +1,4 @@
-package info.teksol.mc.emulator.processor;
+package info.teksol.mc.emulator;
 
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.messages.ToolMessage;

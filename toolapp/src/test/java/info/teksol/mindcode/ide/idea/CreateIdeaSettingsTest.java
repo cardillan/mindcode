@@ -1,7 +1,7 @@
 package info.teksol.mindcode.ide.idea;
 
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
-import info.teksol.mc.mindcode.logic.mimex.LVar;
+import info.teksol.mc.mindcode.logic.mimex.LVariable;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.FunctionMapping;
 import info.teksol.mc.mindcode.logic.opcodes.MindustryOpcodeVariants;
@@ -37,7 +37,8 @@ public class CreateIdeaSettingsTest {
     private final List<String> schemacode = getKeywords(SchemacodeLexer.VOCABULARY);
     private final List<String> combined = Stream.concat(mindcode.stream(), schemacode.stream())
             .distinct().sorted().toList();
-    private final List<String> builtins = MindustryMetadata.getLatest().getAllLVars().stream().map(LVar::name).distinct().sorted().toList();
+    private final List<String> builtins = MindustryMetadata.getLatest().getAllLVars().stream()
+            .map(LVariable::name).filter(name -> name.startsWith("@")).distinct().sorted().toList();
 
     private final String mlogOpcodes = String.join(";", opcodes);
     private final String pureMlogKeywords = String.join(";", mlog);

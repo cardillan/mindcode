@@ -104,7 +104,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 OptionCategory.OPTIMIZATIONS,
                 OptionCategory.OPTIMIZATION_LEVELS,
                 OptionCategory.DEBUGGING,
-                OptionCategory.RUN);
+                OptionCategory.EMULATOR);
 
         return subparser;
     }
@@ -156,17 +156,15 @@ public class CompileMindcodeAction extends ActionHandler {
             if (globalProfile.isRun()) {
                 messageLogger.info("");
                 messageLogger.info("Program output (%,d steps):", compiler.getSteps());
-                if (!compiler.getTextBuffer().isEmpty()) {
-                    messageLogger.info(compiler.getTextBuffer().getFormattedOutput());
+                String textBufferOutput = compiler.getTextBufferOutput();
+                if (!textBufferOutput.isEmpty()) {
+                    messageLogger.info(textBufferOutput);
                 } else {
                     messageLogger.info("The program didn't generate any output.");
                 }
                 if (!compiler.getAssertions().isEmpty()) {
                     messageLogger.info("The program generated the following assertions:");
                     compiler.getAssertions().forEach(a -> messageLogger.addMessage(a.createMessage()));
-                }
-                if (compiler.getExecutionException() != null) {
-                    messageLogger.error(compiler.getExecutionException().getMessage());
                 }
 
                 if (globalProfile.isOutputProfiling()) {

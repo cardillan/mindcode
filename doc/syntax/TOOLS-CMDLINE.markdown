@@ -114,16 +114,18 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
-                [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]] [--run-steps {0..1000000000}]
-                [--output-profiling [{true,false}]] [--trace-execution {true,false}]
+                [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
+                [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]] [--run [{true,false}]]
+                [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
+                [--enforce-instruction-limit {true,false}] [--trace-execution {true,false}]
                 [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
-                [--err-invalid-counter {true,false}] [--err-invalid-identifier {true,false}]
-                [--err-unsupported-opcode {true,false}] [--err-uninitialized-var {true,false}]
-                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
-                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
-                [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
-                [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
+                [--stop-on-end-instruction {true,false}] [--stop-on-long-wait {true,false}]
+                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
+                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
+                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
+                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--err-invalid-lookup {true,false}] [--err-invalid-link {true,false}] [--err-memory-access {true,false}]
+                [--err-memory-object {true,false}] [--err-unsupported-block-operation {true,false}]
                 [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
                 [--err-graphics-buffer-overflow {true,false}] [--err-runtime-check-failed {true,false}] [input]
 
@@ -327,17 +329,21 @@ Debugging options:
                          (instruction numbers are included in the output)
   -s, --stacktrace       outputs a stack trace onto stderr when an unhandled exception occurs
 
-Run options:
+Emulator options:
   Options to specify whether and how to run the compiled  code  on an emulated processor. The emulated processor is much
   faster than Mindustry processors, but can't run instructions  which  obtain information from the Mindustry World. Sole
   exceptions are memory cells ('cell1' to 'cell9') and memory banks ('bank1' to 'bank9'), which can be read and written.
 
+  --emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
+                         selects target processor version and edition (a 'w' suffix specifies the world processor)
   --run [{true,false}]   run the compiled code on an emulated processor
   --run-steps {0..1000000000}
                          the maximum number of instruction executions  to  emulate,  the execution stops when this limit
                          is reached
   --output-profiling [{true,false}]
                          output the profiling data into the log file
+  --enforce-instruction-limit {true,false}
+                         only parse the first 1000 instructions of the code to be executed
   --trace-execution {true,false}
                          output instruction and variable states at each execution step
   --dump-variables-on-stop {true,false}
@@ -346,32 +352,36 @@ Run options:
                          stop execution when the 'stop' instruction is encountered
   --stop-on-end-instruction {true,false}
                          stop execution when the 'end' instruction is encountered
+  --stop-on-long-wait {true,false}
+                         stop execution when the 'wait' instruction longer than an hour encountered
   --stop-on-program-end {true,false}
                          stop execution when the end of instruction list is reached
+  --err-parse-error {true,false}
+                         stop execution when an error or invalid instruction is encountered during parsing
   --err-invalid-counter {true,false}
                          stop execution when an invalid value is written to '@counter'
-  --err-invalid-identifier {true,false}
-                         stop execution when a malformed identifier or value is encountered
   --err-unsupported-opcode {true,false}
-                         stop execution when unsupported instruction is encountered
-  --err-uninitialized-var {true,false}
-                         stop execution when an uninitialized variable is used in internal processing
+                         stop execution when an instruction unsupported by the emulator is encountered
+  --err-nonexistent-var {true,false}
+                         stop execution when a nonexistent variable is being indirectly accessed
   --err-assignment-to-fixed-var {true,false}
                          stop execution on attempts to write a value to an unmodifiable built-in variable
   --err-not-an-object {true,false}
                          stop execution when a numeric value is used instead of an object
   --err-not-a-number {true,false}
-                         stop execution when an object is used instead of a numeric value
+                         stop execution when an object is used instead of a numeric value (nulls are always permitted)
   --err-unknown-color {true,false}
                          stop execution when an unknown color is used in a named color literal
-  --err-invalid-content {true,false}
+  --err-invalid-lookup {true,false}
                          stop execution when an invalid index is used in the 'lookup' instruction
   --err-invalid-link {true,false}
                          stop execution when an invalid index is used in the 'getlink' instruction
   --err-memory-access {true,false}
-                         stop execution when accessing invalid memory-cell or memory-bank index 
+                         stop execution when accessing invalid memory-cell or memory-bank index
+  --err-memory-object {true,false}
+                         stop execution when attempting to store an object in external memory
   --err-unsupported-block-operation {true,false}
-                         stop execution when attempting to perform an unsupported operation on a block
+                         stop execution when performing an unsupported operation on a block
   --err-text-buffer-overflow {true,false}
                          stop execution when the text buffer size (400 characters) is exceeded
   --err-invalid-format {true,false}
@@ -379,7 +389,7 @@ Run options:
   --err-graphics-buffer-overflow {true,false}
                          stop execution when the graphics buffer size (256 operations) is exceeded
   --err-runtime-check-failed {true,false}
-                         stop execution when a runtime check fails.
+                         stop execution when a compiler-generated runtime check fails.
 ```
 
 ## Decompile Mlog action help
@@ -427,16 +437,18 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
-                [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]] [--run-steps {0..1000000000}]
-                [--output-profiling [{true,false}]] [--trace-execution {true,false}]
+                [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
+                [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]] [--run [{true,false}]]
+                [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
+                [--enforce-instruction-limit {true,false}] [--trace-execution {true,false}]
                 [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
-                [--err-invalid-counter {true,false}] [--err-invalid-identifier {true,false}]
-                [--err-unsupported-opcode {true,false}] [--err-uninitialized-var {true,false}]
-                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
-                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
-                [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
-                [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
+                [--stop-on-end-instruction {true,false}] [--stop-on-long-wait {true,false}]
+                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
+                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
+                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
+                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--err-invalid-lookup {true,false}] [--err-invalid-link {true,false}] [--err-memory-access {true,false}]
+                [--err-memory-object {true,false}] [--err-unsupported-block-operation {true,false}]
                 [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
                 [--err-graphics-buffer-overflow {true,false}] [--err-runtime-check-failed {true,false}] [input]
 
@@ -629,17 +641,21 @@ Debugging options:
                          (instruction numbers are included in the output)
   -s, --stacktrace       outputs a stack trace onto stderr when an unhandled exception occurs
 
-Run options:
+Emulator options:
   Options to specify whether and how to run the compiled  code  on an emulated processor. The emulated processor is much
   faster than Mindustry processors, but can't run instructions  which  obtain information from the Mindustry World. Sole
   exceptions are memory cells ('cell1' to 'cell9') and memory banks ('bank1' to 'bank9'), which can be read and written.
 
+  --emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
+                         selects target processor version and edition (a 'w' suffix specifies the world processor)
   --run [{true,false}]   run the compiled code on an emulated processor
   --run-steps {0..1000000000}
                          the maximum number of instruction executions  to  emulate,  the execution stops when this limit
                          is reached
   --output-profiling [{true,false}]
                          output the profiling data into the log file
+  --enforce-instruction-limit {true,false}
+                         only parse the first 1000 instructions of the code to be executed
   --trace-execution {true,false}
                          output instruction and variable states at each execution step
   --dump-variables-on-stop {true,false}
@@ -648,32 +664,36 @@ Run options:
                          stop execution when the 'stop' instruction is encountered
   --stop-on-end-instruction {true,false}
                          stop execution when the 'end' instruction is encountered
+  --stop-on-long-wait {true,false}
+                         stop execution when the 'wait' instruction longer than an hour encountered
   --stop-on-program-end {true,false}
                          stop execution when the end of instruction list is reached
+  --err-parse-error {true,false}
+                         stop execution when an error or invalid instruction is encountered during parsing
   --err-invalid-counter {true,false}
                          stop execution when an invalid value is written to '@counter'
-  --err-invalid-identifier {true,false}
-                         stop execution when a malformed identifier or value is encountered
   --err-unsupported-opcode {true,false}
-                         stop execution when unsupported instruction is encountered
-  --err-uninitialized-var {true,false}
-                         stop execution when an uninitialized variable is used in internal processing
+                         stop execution when an instruction unsupported by the emulator is encountered
+  --err-nonexistent-var {true,false}
+                         stop execution when a nonexistent variable is being indirectly accessed
   --err-assignment-to-fixed-var {true,false}
                          stop execution on attempts to write a value to an unmodifiable built-in variable
   --err-not-an-object {true,false}
                          stop execution when a numeric value is used instead of an object
   --err-not-a-number {true,false}
-                         stop execution when an object is used instead of a numeric value
+                         stop execution when an object is used instead of a numeric value (nulls are always permitted)
   --err-unknown-color {true,false}
                          stop execution when an unknown color is used in a named color literal
-  --err-invalid-content {true,false}
+  --err-invalid-lookup {true,false}
                          stop execution when an invalid index is used in the 'lookup' instruction
   --err-invalid-link {true,false}
                          stop execution when an invalid index is used in the 'getlink' instruction
   --err-memory-access {true,false}
-                         stop execution when accessing invalid memory-cell or memory-bank index 
+                         stop execution when accessing invalid memory-cell or memory-bank index
+  --err-memory-object {true,false}
+                         stop execution when attempting to store an object in external memory
   --err-unsupported-block-operation {true,false}
-                         stop execution when attempting to perform an unsupported operation on a block
+                         stop execution when performing an unsupported operation on a block
   --err-text-buffer-overflow {true,false}
                          stop execution when the text buffer size (400 characters) is exceeded
   --err-invalid-format {true,false}
@@ -681,7 +701,7 @@ Run options:
   --err-graphics-buffer-overflow {true,false}
                          stop execution when the graphics buffer size (256 operations) is exceeded
   --err-runtime-check-failed {true,false}
-                         stop execution when a runtime check fails.
+                         stop execution when a compiler-generated runtime check fails.
 ```
 
 ## Decompile Schematic action help

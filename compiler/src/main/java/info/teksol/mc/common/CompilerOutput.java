@@ -1,8 +1,7 @@
 package info.teksol.mc.common;
 
-import info.teksol.mc.emulator.processor.Assertion;
-import info.teksol.mc.emulator.processor.ExecutionException;
-import info.teksol.mc.emulator.processor.TextBuffer;
+import info.teksol.mc.emulator.Assertion;
+import info.teksol.mc.emulator.TextBuffer;
 import info.teksol.mc.messages.MindcodeMessage;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -14,20 +13,20 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @NullMarked
-public record CompilerOutput<T extends @Nullable Object>(T output, String fileName, List<MindcodeMessage> messages,
-                                @Nullable ExecutionException executionException, List<Assertion> assertions,
-                                @Nullable TextBuffer textBuffer, int steps) {
+public record CompilerOutput<T extends @Nullable Object>(
+        T output, String fileName, List<MindcodeMessage> messages, List<Assertion> assertions,
+        @Nullable TextBuffer textBuffer, int steps) {
 
     public <R> CompilerOutput<R> withOutput(R output) {
-        return new CompilerOutput<>(output, fileName, messages, executionException, assertions, textBuffer, steps);
+        return new CompilerOutput<>(output, fileName, messages, assertions, textBuffer, steps);
     }
 
     public CompilerOutput(T output, String fileName, List<MindcodeMessage> messages) {
-        this(output, fileName, messages, null, List.of(), null, 0);
+        this(output, fileName, messages, List.of(), null, 0);
     }
 
     public CompilerOutput(List<MindcodeMessage> messages) {
-        this(null, "", messages, null, List.of(), null, 0);
+        this(null, "", messages, List.of(), null, 0);
     }
 
     public void addMessage(MindcodeMessage message) {

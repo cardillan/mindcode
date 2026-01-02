@@ -1,5 +1,7 @@
 package info.teksol.mc.evaluator;
 
+import info.teksol.mc.emulator.MlogReadable;
+import info.teksol.mc.emulator.MlogWritable;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -14,8 +16,8 @@ public class ExpressionEvaluator {
     public static final double doubleDegRad = 0.017453292519943295;
     public static final double doubleRadDeg = 57.29577951308232;
 
-    public static @Nullable LogicOperation getOperation(Operation operation) {
-        return OPERATIONS.get(operation);
+    public static @Nullable LogicOperation getOperation(@Nullable Operation operation) {
+        return operation == null ? null : OPERATIONS.get(operation);
     }
 
     public static LogicOperation existingOperation(Operation operation) {
@@ -26,7 +28,7 @@ public class ExpressionEvaluator {
         return ARGUMENTS.getOrDefault(operation, -1);
     }
 
-    public static void evaluatePackColor(LogicWritable target, LogicReadable r, LogicReadable g, LogicReadable b, LogicReadable a) {
+    public static void evaluatePackColor(MlogWritable target, MlogReadable r, MlogReadable g, MlogReadable b, MlogReadable a) {
         target.setDoubleValue(Color.toDoubleBitsClamped(
                 clamp01(r.getDoubleValue()),
                 clamp01(g.getDoubleValue()),
@@ -35,7 +37,7 @@ public class ExpressionEvaluator {
         );
     }
 
-    public static void evaluateUnpackColor(LogicReadable color, LogicWritable r, LogicWritable g, LogicWritable b, LogicWritable a) {
+    public static void evaluateUnpackColor(MlogReadable color, MlogWritable r, MlogWritable g, MlogWritable b, MlogWritable a) {
         Color unpacked = Color.fromDouble(color.getDoubleValue());
         r.setDoubleValue(unpacked.r());
         g.setDoubleValue(unpacked.g());
@@ -51,7 +53,7 @@ public class ExpressionEvaluator {
         return Math.max(Math.min((float)value, 1f), 0f);
     }
 
-    public static boolean equals(LogicReadable a, LogicReadable b) {
+    public static boolean equals(MlogReadable a, MlogReadable b) {
         if (a.isObject() && b.isObject()) {
             return Objects.equals(a.getObject(), b.getObject());
         } else {
@@ -59,7 +61,7 @@ public class ExpressionEvaluator {
         }
     }
 
-    public static boolean strictlyEquals(LogicReadable a, LogicReadable b) {
+    public static boolean strictlyEquals(MlogReadable a, MlogReadable b) {
         return (a.isObject() == b.isObject()) && (a.isObject()
                 ? Objects.equals(a.getObject(), b.getObject())
                 : a.getDoubleValue() == b.getDoubleValue()

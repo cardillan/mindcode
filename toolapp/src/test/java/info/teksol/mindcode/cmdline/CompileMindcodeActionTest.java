@@ -1,6 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mc.emulator.processor.ExecutionFlag;
+import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.cmdline.Main.Action;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;

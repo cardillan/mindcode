@@ -64,7 +64,8 @@ public abstract class CaseSwitcherProcessorTestBase extends AbstractProcessorTes
                 Stream.of(files)
                         .map(File::getName)
                         .flatMap(name -> codeSizes(name).mapToObj(codeSize -> DynamicTest.dynamicTest(
-                                getTestName(name, codeSize), null,
+                                getTestName(name, codeSize),
+                                Path.of(getScriptsDirectory(), name).toUri(),
                                 () -> executeCaseSwitchingTest(name, codeSize))
                         )));
     }

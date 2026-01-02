@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.mimex.LVar;
+import info.teksol.mc.mindcode.logic.mimex.LVariable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -46,7 +46,7 @@ public class LogicBuiltinConst extends LogicBuiltIn {
     }
 
     public static LogicBuiltIn create(InstructionProcessor processor, SourcePosition sourcePosition, String name) {
-        LVar var = processor.getMetadata().getLVar(name);
+        LVariable var = processor.getMetadata().getLVar(name);
         return var != null && var.isNumericConstant()
                 ? new LogicBuiltinConst(sourcePosition, name, var.numericValue())
                 : LogicBuiltIn.create(processor, sourcePosition, name);

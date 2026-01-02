@@ -215,8 +215,8 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
         return DynamicContainer.dynamicContainer("Case Switcher Configuration generator tests",
                 Stream.of(files)
                         .map(File::getName)
-                        .map(name -> DynamicTest.dynamicTest(
-                                getTestName(name), null,
+                        .map(name -> DynamicTest.dynamicTest(getTestName(name),
+                                Path.of(getScriptsDirectory(), name).toUri(),
                                 () -> executeCaseSwitchingTest(name))
                         ));
     }

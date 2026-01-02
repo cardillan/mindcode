@@ -8,10 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -59,38 +56,44 @@ class MindustryMetadataTest {
             Function<MindustryMetadata, Map<String, T>> contentExtractor) {
 
         Map<String, T> stableList = createList(contentExtractor.apply(metadata.getFirst()));
+        Set<String> unstableList = new HashSet<>();
 
         for (int i = 1; i < metadata.size(); i++) {
             Map<String, T> currentList = createList(contentExtractor.apply(metadata.get(i)));
+            stableList.keySet().stream().filter(k -> !currentList.containsKey(k)).forEach(unstableList::add);
             stableList.keySet().retainAll(currentList.keySet());
             for (T c : currentList.values()) {
                 T d = stableList.get(c.name());
                 if (d == null) {
                     stableList.put(c.name(), c);
                 } else if (d.logicId() != c.logicId()) {
-                    stableList.remove(c.name());
+                    unstableList.add(c.name());
                 }
             }
         }
 
+        stableList.keySet().removeAll(unstableList);
         stableList.values().stream().sorted().map(MindustryContent::name).forEach(stableIds::add);
     }
 
     private void findStableValues(List<String> stableIds, List<MindustryMetadata> metadata) {
-        Map<String, LVar> stableList = createLVarList(metadata.getFirst().getLVarMap());
+        Map<String, LVariable> stableList = createLVarList(metadata.getFirst().getLVarMap());
+        Set<String> unstableList = new HashSet<>();
 
         for (int i = 1; i < metadata.size(); i++) {
-            Map<String, LVar> currentList = createLVarList(metadata.get(i).getLVarMap());
-            for (LVar c : currentList.values()) {
-                LVar d = stableList.get(c.name());
+            Map<String, LVariable> currentList = createLVarList(metadata.get(i).getLVarMap());
+            stableList.keySet().stream().filter(k -> !currentList.containsKey(k)).forEach(unstableList::add);
+            for (LVariable c : currentList.values()) {
+                LVariable d = stableList.get(c.name());
                 if (d == null) {
                     stableList.put(c.name(), c);
                 } else if (d.numericValue() != c.numericValue()) {
-                    stableList.remove(c.name());
+                    unstableList.add(c.name());
                 }
             }
         }
 
+        stableList.keySet().removeAll(unstableList);
         stableList.values().stream().sorted().map(MindustryContent::name).forEach(stableIds::add);
     }
 
@@ -100,11 +103,12 @@ class MindustryMetadataTest {
                 .collect(Collectors.toMap(MindustryContent::name, Function.identity()));
     }
 
-    private static final Set<String> UNSTABLE_COUNTS = Set.of("@itemCount", "@liquidCount", "@unitCount", "@buildCount");
+    private static final Set<String> UNSTABLE_COUNTS = Set.of("@itemCount", "@liquidCount", "@unitCount", "@blockCount");
 
-    private Map<String, LVar> createLVarList(Map<String, LVar> content) {
+    private Map<String, LVariable> createLVarList(Map<String, LVariable> content) {
         return content.values().stream()
-                .filter(LVar::isNumericConstant)
+                .filter(LVariable::isNumericConstant)
+                .filter(c -> c.name().startsWith("@"))
                 .filter(c -> !UNSTABLE_COUNTS.contains(c.name()))
                 .collect(Collectors.toMap(MindustryContent::name, Function.identity()));
     }

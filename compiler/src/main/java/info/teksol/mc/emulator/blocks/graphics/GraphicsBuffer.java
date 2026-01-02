@@ -1,8 +1,5 @@
 package info.teksol.mc.emulator.blocks.graphics;
 
-import info.teksol.mc.emulator.processor.ExecutionException;
-import info.teksol.mc.emulator.processor.ExecutionFlag;
-import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -11,38 +8,26 @@ import java.util.List;
 @NullMarked
 public class GraphicsBuffer {
     private final int sizeLimit;
-    private final List<DrawInstruction> drawInstructions = new ArrayList<>();
-
-    // In Mindustry Logic, the transformation matrix is owned by the processor and is not reset when the
-    // processor's code is recompiled.
-    // Here we want to reset the matrix for each independent run
-    private final TransformationMatrix transformationMatrix = new TransformationMatrix();
+    private final List<GraphicsCommand> commands = new ArrayList<>();
 
     public GraphicsBuffer(int sizeLimit) {
         this.sizeLimit = sizeLimit;
     }
 
-    public boolean draw(DrawInstruction instruction) {
-        drawInstructions.add(instruction);
-
-        // Only report the error once
-        if (drawInstructions.size() == sizeLimit + 1) {
-            throw new ExecutionException(ExecutionFlag.ERR_GRAPHICS_BUFFER_OVERFLOW, "Capacity of the graphics buffer (%d) exceeded.", sizeLimit);
+    public boolean draw(GraphicsCommand command) {
+        if (commands.size() < sizeLimit) {
+            commands.add(command);
+            return true;
         }
-
-        return true;
+        return false;
     }
 
-    public List<DrawInstruction> getDrawInstructions() {
-        return drawInstructions;
-    }
-
-    public TransformationMatrix getTransformationMatrix() {
-        return transformationMatrix;
+    public List<GraphicsCommand> getCommands() {
+        return commands;
     }
 
     public void clear() {
-        drawInstructions.clear();
+        commands.clear();
     }
 
     public static final GraphicsBuffer EMPTY = new GraphicsBuffer(0);

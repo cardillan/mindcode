@@ -185,7 +185,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                 p(5, 5), p(6, 3), p(7, 0), p(7, 1), p(7, 2), p(7, 3));
 
         for (final Position position : positions) {
-            result.add(DynamicTest.dynamicTest(position.toString(), null, () -> refusesOutOfRangeLink(position)));
+            result.add(DynamicTest.dynamicTest(position.toString(), () -> refusesOutOfRangeLink(position)));
         }
 
         return result;
@@ -206,14 +206,14 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
     @TestFactory
     List<DynamicTest> refusesOutOfRangeLinksLarge() {
-        // Tests *some* of closest out-of-range links
+        // Tests *some* of the closest out-of-range links
         final List<DynamicTest> result = new ArrayList<>();
         List<Position> positions = List.of(
                 p(1, 16), p(7, 15), p(9, 14), p(10, 13), p(12, 12), p(13, 11),
                 p(13, 10), p(14, 9), p(15, 8), p(16, 7), p(16, 6), p(16, 1));
 
         for (final Position position : positions) {
-            result.add(DynamicTest.dynamicTest(position.toString(), null, () -> refusesOutOfRangeLinkLarge(position)));
+            result.add(DynamicTest.dynamicTest(position.toString(), () -> refusesOutOfRangeLinkLarge(position)));
         }
 
         return result;

@@ -1,11 +1,12 @@
 package info.teksol.mc.evaluator;
 
+import info.teksol.mc.emulator.MlogReadable;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public interface LogicReadable {
+public interface LogicReadable extends MlogReadable {
     /// Indicates that an expressions using the value can be evaluated at compile time.
     /// All literals can be evaluated. Built-in constants can only be evaluated if they aren't a variable
     /// (e.g. @coal can be evaluated, but @thisx cannot).

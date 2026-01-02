@@ -155,7 +155,7 @@ In the past, Mindustry processor behavior has been inconsistent when assigning `
 
 **Option scope: [module](#module-scope)**
 
-Use the `target` option to specify the Mindcode/Mindustry Logic version to be used by the compiler and processor emulator. Compiler will generate code compatible with the selected processor version and edition, and both compiler and processor emulator recognize Mindustry objects, built-in variables and other elements available in a given Mindustry Logic version.
+Use the `target` option to specify the Mindcode/Mindustry Logic version to be used by the compiler and processor emulator. Compiler will generate code compatible with the selected processor version and edition, and both the compiler and processor emulator recognize Mindustry objects, built-in variables and other elements available in a given Mindustry Logic version.
 
 The target versions consist of a major and minor version number. As of now, these versions exist:
 
@@ -887,7 +887,7 @@ Note on the `linked` category: when a block is linked into the processor, a vari
 
 The number of variables being sorted is limited by the [instruction limit](#option-instruction-limit). Should the resulting program size exceed the instruction limit, some or all variables will remain unordered.
 
-## Run options
+## Emulator options
 
 Options to specify whether and how to run the compiled code on an emulated processor. The emulated
 processor is much faster than Mindustry processors, but can't run instructions which obtain information
@@ -896,8 +896,18 @@ from the Mindustry World. Sole exceptions are memory cells ('cell1' to 'cell9') 
 
 | Option                                       | Scope  | Semantic stability |
 |----------------------------------------------|--------|--------------------|
+| [emulator-target](#option-emulator-target)   | module | stable             |
 | [output-profiling](#option-output-profiling) | global | stable             |
 | [run](#option-run)                           | global | stable             |
+| [run-steps](#option-run-steps)               | global | stable             |
+
+### Option `emulator-target`
+
+**Option scope: [global](#global-scope)**
+
+Use the `emulator-target` option to specify the Mindustry Logic version to be used by the processor emulator. When the option is not specified, the target specifie by the `target` option is used for the emulator. This option is therefore only useful to emulate executing the coompiled code on a Mindustry processor different from the one used by the compiler.
+
+For possible values of this option, please see [Option `target`](#option-target).
 
 ### Option `output-profiling`
 
@@ -934,6 +944,14 @@ Activates running the compiled code on an emulated processor. Possible values ar
 * `true` (or omitted): the code is run.
 
 For more information on running the compiled Mindcode, see [Processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown).
+
+### Option `run-steps`
+
+**Option scope: [global](#global-scope)**
+
+Sets the maximum number of steps (individual instructions) to be executed by the processor emulator. If the program doesn't stop by itself (e.g., by running to its natural end, or by using the stop instruction), the emulator will stop the execution when the specified number of steps is reached.
+
+When multiple processors get emulated, the step limit is applied to the aggregate of the instructions executed by all processors. 
 
 ### Execution flags
 

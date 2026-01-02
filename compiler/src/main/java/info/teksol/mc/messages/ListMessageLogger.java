@@ -1,5 +1,6 @@
 package info.teksol.mc.messages;
 
+import info.teksol.mc.emulator.EmulatorMessage;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -22,9 +23,11 @@ public class ListMessageLogger extends AbstractMessageLogger {
 
     @Override
     public void addMessage(MindcodeMessage message) {
-        switch (message.level()) {
-            case ERROR -> hasErrors = true;
-            case WARNING -> hasWarnings = true;
+        if (!(message instanceof EmulatorMessage)) {
+            switch (message.level()) {
+                case ERROR -> hasErrors = true;
+                case WARNING -> hasWarnings = true;
+            }
         }
         messages.add(message);
         messageConsumer.accept(message);

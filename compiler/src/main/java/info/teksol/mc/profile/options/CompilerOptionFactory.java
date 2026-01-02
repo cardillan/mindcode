@@ -1,6 +1,6 @@
 package info.teksol.mc.profile.options;
 
-import info.teksol.mc.emulator.processor.ExecutionFlag;
+import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
@@ -48,7 +48,7 @@ public class CompilerOptionFactory {
         addOptimizationsOptions(list, webApp);
         addOptimizationLevels(list, webApp);
         addDebuggingOptions(list, webApp);
-        addRunOptions(list, webApp);
+        addEmulatorOptions(list, webApp);
 
         return list.stream().collect(Collectors.toMap(CompilerOptionValue::getOption, e -> e,
                 (v1, v2) -> {throw new IllegalStateException("YOUR MESSAGE HERE");}, LinkedHashMap::new));
@@ -366,23 +366,29 @@ public class CompilerOptionFactory {
                 0, Integer.MAX_VALUE, 0));
     }
 
-    private static void addRunOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
-        final OptionCategory category = OptionCategory.RUN;
+    private static void addEmulatorOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.EMULATOR;
 
-        list.add(new BooleanCompilerOptionValue(RunOptions.RUN, "",
+        list.add(new TargetCompilerOptionValue(EmulatorOptions.EMULATOR_TARGET, "",
+                "selects target processor version and edition (a 'w' suffix specifies the world processor)",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.MODULE,
+                OptionAvailability.UNIVERSAL, category,
+                new Target(ProcessorVersion.V6, ProcessorEdition.W)));
+
+        list.add(new BooleanCompilerOptionValue(EmulatorOptions.RUN, "",
                 "run the compiled code on an emulated processor",
                 OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 false).setConstValue(true));
 
-        list.add(new IntegerCompilerOptionValue(RunOptions.RUN_STEPS, "",
+        list.add(new IntegerCompilerOptionValue(EmulatorOptions.RUN_STEPS, "",
                 "the maximum number of instruction executions to emulate, the execution stops when this limit is reached",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
-                OptionAvailability.COMMAND_LINE, category,
+                OptionAvailability.UNIVERSAL, category,
                 0, webApp ? MAX_STEP_LIMIT_WEBAPP : MAX_STEP_LIMIT_CMDLINE,
                 webApp ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE));
 
-        list.add(new BooleanCompilerOptionValue(RunOptions.OUTPUT_PROFILING, "",
+        list.add(new BooleanCompilerOptionValue(EmulatorOptions.OUTPUT_PROFILING, "",
                 "output the profiling data into the log file",
                 OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,

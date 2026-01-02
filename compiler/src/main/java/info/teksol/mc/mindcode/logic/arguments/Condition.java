@@ -3,6 +3,11 @@ package info.teksol.mc.mindcode.logic.arguments;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @NullMarked
 public enum Condition implements LogicArgument {
@@ -118,5 +123,12 @@ public enum Condition implements LogicArgument {
             case STRICT_NOT_EQUAL -> Operation.STRICT_NOT_EQUAL;
             case ALWAYS -> throw new MindcodeInternalError("No operation for 'always'");
         };
+    }
+
+    private static final Map<String, Condition> MLOG_MAP = Stream.of(values())
+            .collect(Collectors.toMap(Condition::toMlog, o -> o, (o1, o2) -> o1));
+
+    public static @Nullable Condition fromMlog(String name) {
+        return MLOG_MAP.get(name);
     }
 }

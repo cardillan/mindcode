@@ -2,8 +2,12 @@ package info.teksol.mc.messages;
 
 import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.emulator.EmulatorMessage;
+import info.teksol.mc.emulator.ExecutionFlag;
+import info.teksol.mc.emulator.LInstruction;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public abstract class AbstractMessageEmitter implements MessageEmitter {
@@ -33,6 +37,11 @@ public abstract class AbstractMessageEmitter implements MessageEmitter {
     }
 
     @Override
+    public void error(ExecutionFlag flag, int index, @Nullable LInstruction instruction, @PrintFormat String format, Object... args) {
+        addMessage(EmulatorMessage.error(flag, index, instruction, format, args));
+    }
+
+    @Override
     public void error(@PrintFormat String format, Object... args) {
         addMessage(ToolMessage.error(format, args));
     }
@@ -45,6 +54,11 @@ public abstract class AbstractMessageEmitter implements MessageEmitter {
     @Override
     public void warn(SourcePosition position, @PrintFormat String format, Object... args) {
         addMessage(CompilerMessage.warn(position, format, args));
+    }
+
+    @Override
+    public void warn(ExecutionFlag flag, int index, @Nullable LInstruction instruction, @PrintFormat String format, Object... args) {
+        addMessage(EmulatorMessage.warn(flag, index, instruction, format, args));
     }
 
     @Override
