@@ -53,6 +53,11 @@ public class InstructionSamplesTest {
         createInstructionSamples(ProcessorVersion.V8A);
     }
 
+    @Test
+    void createInstructionSamplesForV8B() throws IOException {
+        createInstructionSamples(ProcessorVersion.V8B);
+    }
+
     private void createInstructionSamples(ProcessorVersion version) throws IOException {
         assertTrue(new File(".." + File.separatorChar + "README.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W, new StandardNameCreator(false));

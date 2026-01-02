@@ -3,9 +3,9 @@ package info.teksol.mc.mindcode.compiler;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.emulator.blocks.Memory;
+import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.MessageBlock;
-import info.teksol.mc.emulator.blocks.MindustryBlock;
+import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
 import info.teksol.mc.emulator.processor.Assertion;
 import info.teksol.mc.emulator.processor.ExecutionException;
@@ -401,14 +401,14 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         // All flags are already set as we want them to be
         Processor processor = new Processor(instructionProcessor, messageConsumer, globalProfile.getExecutionFlags(), globalProfile.getTraceLimit());
-        addBlocks(processor, "cell", _ -> Memory.createMemoryCell(metadata));
-        addBlocks(processor, "bank", _ -> Memory.createMemoryBank(metadata));
+        addBlocks(processor, "cell", _ -> MemoryBlock.createMemoryCell(metadata));
+        addBlocks(processor, "bank", _ -> MemoryBlock.createMemoryBank(metadata));
         addBlocks(processor, "display", i -> LogicDisplay.createLogicDisplay(metadata, i < 5));
         addBlocks(processor, "message", _ -> MessageBlock.createMessage(metadata));
         return processor;
     }
 
-    private void addBlocks(Processor processor, String name, Function<Integer, MindustryBlock> creator) {
+    private void addBlocks(Processor processor, String name, Function<Integer, MindustryBuilding> creator) {
         for (int i = 1; i < 10; i++) {
             processor.addBlock(name + i, creator.apply(i));
         }

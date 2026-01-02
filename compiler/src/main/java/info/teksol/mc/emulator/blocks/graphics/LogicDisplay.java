@@ -1,6 +1,6 @@
 package info.teksol.mc.emulator.blocks.graphics;
 
-import info.teksol.mc.emulator.blocks.MindustryBlock;
+import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NullMarked
-public class LogicDisplay extends MindustryBlock {
+public class LogicDisplay extends MindustryBuilding {
     private final int sizeX;
     private final int sizeY;
 

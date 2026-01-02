@@ -1,8 +1,8 @@
 package info.teksol.mc.mindcode.tests;
 
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.emulator.blocks.Memory;
-import info.teksol.mc.emulator.blocks.MindustryBlock;
+import info.teksol.mc.emulator.blocks.MemoryBlock;
+import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.emulator.processor.Assertion;
 import info.teksol.mc.emulator.processor.ExecutionFlag;
 import info.teksol.mc.emulator.processor.Processor;
@@ -181,14 +181,14 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
     }
 
 
-    protected void setupEmulator(Processor emulator, Map<String, MindustryBlock> blocks) {
-        emulator.addBlock("bank1", Memory.createMemoryBank(ip.getMetadata()));
-        emulator.addBlock("bank2", Memory.createMemoryBank(ip.getMetadata()));
+    protected void setupEmulator(Processor emulator, Map<String, MindustryBuilding> blocks) {
+        emulator.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata()));
+        emulator.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata()));
         blocks.forEach(emulator::addBlock);
     }
 
     protected void testAndEvaluateCode(@Nullable String title, ExpectedMessages expectedMessages, String code,
-            Map<String, MindustryBlock> blocks, RunEvaluator evaluator, @Nullable Path logFile) {
+            Map<String, MindustryBuilding> blocks, RunEvaluator evaluator, @Nullable Path logFile) {
         process(expectedMessages,
                 createInputFiles(code),
                 emulator -> setupEmulator(emulator, blocks),
@@ -247,20 +247,20 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         };
     }
 
-    protected void testAndEvaluateFile(String fileName, Map<String, MindustryBlock> blocks,
+    protected void testAndEvaluateFile(String fileName, Map<String, MindustryBuilding> blocks,
             ExpectedMessages expectedMessages, RunEvaluator evaluator) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         testAndEvaluateCode(fileName, expectedMessages, readFile(fileName), blocks, evaluator, logFile);
     }
 
     protected void testAndEvaluateFile(String fileName, Function<String, String> codeDecorator,
-            Map<String, MindustryBlock> blocks, RunEvaluator evaluator) throws IOException {
+            Map<String, MindustryBuilding> blocks, RunEvaluator evaluator) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         testAndEvaluateCode(fileName, expectedMessages(), codeDecorator.apply(readFile(fileName)), blocks, evaluator, logFile);
     }
 
     protected void testAndEvaluateFile(String fileName, Function<String, String> codeDecorator,
-            Map<String, MindustryBlock> blocks, List<String> expectedOutputs) throws IOException {
+            Map<String, MindustryBuilding> blocks, List<String> expectedOutputs) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         testAndEvaluateCode(fileName, expectedMessages(), codeDecorator.apply(readFile(fileName)), blocks,
                 outputEvaluator(expectedOutputs), logFile);
@@ -277,7 +277,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         testAndEvaluateCode(fileName, expectedMessages(), readFile(fileName), Map.of(), assertEvaluator(), logFile);
     }
 
-    protected void testCode(ExpectedMessages expectedMessages, String code, Map<String, MindustryBlock> blocks, String... expectedOutputs) {
+    protected void testCode(ExpectedMessages expectedMessages, String code, Map<String, MindustryBuilding> blocks, String... expectedOutputs) {
         testAndEvaluateCode(null, expectedMessages, code, blocks, outputEvaluator(List.of(expectedOutputs)), null);
     }
 
@@ -285,7 +285,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         testAndEvaluateCode(null, expectedMessages, code, Map.of(), outputEvaluator(List.of(expectedOutputs)), null);
     }
 
-    protected void testCode(String code, Map<String, MindustryBlock> blocks, String... expectedOutputs) {
+    protected void testCode(String code, Map<String, MindustryBuilding> blocks, String... expectedOutputs) {
         testAndEvaluateCode(null, expectedMessages(), code, blocks, outputEvaluator(List.of(expectedOutputs)), null);
     }
 

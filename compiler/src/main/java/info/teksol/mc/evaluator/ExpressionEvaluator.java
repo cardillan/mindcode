@@ -1,5 +1,6 @@
 package info.teksol.mc.evaluator;
 
+import info.teksol.mc.emulator.v2.MlogReadable;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -51,7 +52,7 @@ public class ExpressionEvaluator {
         return Math.max(Math.min((float)value, 1f), 0f);
     }
 
-    public static boolean equals(LogicReadable a, LogicReadable b) {
+    public static boolean equals(MlogReadable a, MlogReadable b) {
         if (a.isObject() && b.isObject()) {
             return Objects.equals(a.getObject(), b.getObject());
         } else {
@@ -59,7 +60,7 @@ public class ExpressionEvaluator {
         }
     }
 
-    public static boolean strictlyEquals(LogicReadable a, LogicReadable b) {
+    public static boolean strictlyEquals(MlogReadable a, MlogReadable b) {
         return (a.isObject() == b.isObject()) && (a.isObject()
                 ? Objects.equals(a.getObject(), b.getObject())
                 : a.getDoubleValue() == b.getDoubleValue()

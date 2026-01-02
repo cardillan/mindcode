@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode;
 
 import info.teksol.mc.evaluator.Color;
-import info.teksol.mc.mindcode.logic.mimex.LVar;
+import info.teksol.mc.mindcode.logic.mimex.LVariable;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
@@ -165,11 +165,11 @@ public class CompatibilityLibraryGeneratorTest {
         return String.format(template, generateStableBuiltinTest(metadata), generateUnstableBuiltinTest(metadata));
     }
 
-    private boolean isStableBuiltin(MindustryMetadata metadata, LVar var) {
+    private boolean isStableBuiltin(MindustryMetadata metadata, LVariable var) {
         return var.isNumericConstant() && metadata.isStableBuiltin(var.name());
     }
 
-    private boolean isUnStableBuiltin(MindustryMetadata metadata, LVar var) {
+    private boolean isUnStableBuiltin(MindustryMetadata metadata, LVariable var) {
         return var.isNumericConstant() && !metadata.isStableBuiltin(var.name());
     }
 

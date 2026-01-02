@@ -12,6 +12,6 @@ public record Team(
 
     @Override
     public ContentType contentType() {
-        return ContentType.LIQUID;
+        return ContentType.TEAM;
     }
 }

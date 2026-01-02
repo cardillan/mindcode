@@ -3,9 +3,9 @@ package info.teksol.mc.emulator.processor;
 import info.teksol.mc.emulator.MindustryObject;
 import info.teksol.mc.emulator.MindustryString;
 import info.teksol.mc.emulator.MindustryVariable;
-import info.teksol.mc.emulator.blocks.Memory;
+import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.MessageBlock;
-import info.teksol.mc.emulator.blocks.MindustryBlock;
+import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.emulator.blocks.graphics.GraphicsBuffer;
 import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
 import info.teksol.mc.evaluator.ConditionEvaluator;
@@ -34,8 +34,8 @@ public class Processor extends AbstractMessageEmitter {
     private final MindustryMetadata metadata;
     private final Set<ExecutionFlag> flags;
     private final MindustryVariables variables;
-    private final Map<String, MindustryBlock> blockMap = new LinkedHashMap<>();
-    private List<MindustryBlock> blocks = List.of();
+    private final Map<String, MindustryBuilding> blockMap = new LinkedHashMap<>();
+    private List<MindustryBuilding> blocks = List.of();
     private final MindustryVariable counter;
     private final int traceLimit;
     private int traceCount = 0;
@@ -67,7 +67,7 @@ public class Processor extends AbstractMessageEmitter {
         this(instructionProcessor, messageConsumer, ExecutionFlag.getDefaultFlags(), traceLimit);
     }
 
-    public void addBlock(String name, MindustryBlock block) {
+    public void addBlock(String name, MindustryBuilding block) {
         blockMap.put(name, block);
         variables.addLinkedBlock(name, block);
         blocks= List.copyOf(blockMap.values());
@@ -466,7 +466,7 @@ public class Processor extends AbstractMessageEmitter {
         if (ix.getBlock() == LogicNull.NULL) {
             textBuffer.printflush(null);
         } else {
-            blockOperation("drawflush", ix.getBlock(), MessageBlock.class,
+            blockOperation("printflush", ix.getBlock(), MessageBlock.class,
                     message -> message.printflush(textBuffer), () -> textBuffer.printflush(null));
         }
         return true;
@@ -482,7 +482,7 @@ public class Processor extends AbstractMessageEmitter {
             MindustryVariable variable = getVariableByName(index.getStringValue());
             target.assign(variable);
         } else {
-            blockOperation("read", ix.getMemory(), Memory.class,
+            blockOperation("read", ix.getMemory(), MemoryBlock.class,
                     memory -> target.setDoubleValue(memory.read(index.getIntValue())));
         }
         return true;
@@ -577,7 +577,7 @@ public class Processor extends AbstractMessageEmitter {
             MindustryVariable variable = getVariableByName(index.getStringValue());
             variable.assign(source);
         } else {
-            blockOperation("write", ix.getMemory(), Memory.class,
+            blockOperation("write", ix.getMemory(), MemoryBlock.class,
                     memory -> memory.write(index.getIntValue(), source.getDoubleValue()));
         }
         return true;

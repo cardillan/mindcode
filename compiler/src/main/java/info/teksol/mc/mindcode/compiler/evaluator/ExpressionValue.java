@@ -4,7 +4,7 @@ import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.mimex.LVar;
+import info.teksol.mc.mindcode.logic.mimex.LVariable;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -56,7 +56,7 @@ class ExpressionValue implements LogicReadable {
     private static ExpressionValue evaluateBuiltin(BuiltinEvaluation builtinEvaluation, InstructionProcessor processor,
             AstBuiltInIdentifier b) {
         if (builtinEvaluation != BuiltinEvaluation.NONE) {
-            LVar var = processor.getMetadata().getLVar(b.getName());
+            LVariable var = processor.getMetadata().getLVar(b.getName());
             return var != null && var.isNumericConstant()
                    && (builtinEvaluation == BuiltinEvaluation.FULL || processor.getMetadata().isStableBuiltin(var.name()))
                     ? new ExpressionValue(processor, null, var.numericValue()) : new InvalidValue(processor);

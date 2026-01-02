@@ -3,7 +3,7 @@ package info.teksol.mc.mindcode.logic.mimex;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public record LVar(
+public record LVariable(
         String contentName,
         String name,
         boolean global,

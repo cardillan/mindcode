@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.tests.interceptor;
 
-import info.teksol.mc.emulator.blocks.Memory;
-import info.teksol.mc.emulator.blocks.MindustryBlock;
+import info.teksol.mc.emulator.blocks.MemoryBlock;
+import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.emulator.processor.ExecutionException;
 import info.teksol.mc.emulator.processor.Processor;
 import info.teksol.mc.messages.ExpectedMessages;
@@ -38,7 +38,7 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
 
     @Override
     protected void testAndEvaluateCode(@Nullable String title, ExpectedMessages expectedMessages, String code,
-            Map<String, MindustryBlock> blocks, RunEvaluator evaluator, @Nullable Path logFile) {
+            Map<String, MindustryBuilding> blocks, RunEvaluator evaluator, @Nullable Path logFile) {
         this.evaluator = evaluator;
         super.testAndEvaluateCode(title, expectedMessages, code, blocks, evaluator, logFile);
     }
@@ -60,8 +60,8 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
             List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.globalCompilerProfile(),
                     compiler.instructionProcessor(), mockAstRootContext, program);
             Processor processor = new Processor(compiler.instructionProcessor(), expectedMessages(), 1000);
-            processor.addBlock("bank1", Memory.createMemoryBank(ip.getMetadata()));
-            processor.addBlock("bank2", Memory.createMemoryBank(ip.getMetadata()));
+            processor.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata()));
+            processor.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata()));
             try {
                 processor.run(instructions, MAX_STEPS);
             } catch (ExecutionException e) {

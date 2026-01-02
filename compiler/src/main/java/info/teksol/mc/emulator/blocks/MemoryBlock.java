@@ -10,15 +10,15 @@ import java.util.Arrays;
 import static info.teksol.mc.emulator.processor.ExecutionFlag.ERR_MEMORY_ACCESS;
 
 @NullMarked
-public class Memory extends MindustryBlock {
+public class MemoryBlock extends MindustryBuilding {
     private final double[] memory;
 
-    private Memory(String name, BlockType type, double[] array) {
+    private MemoryBlock(String name, BlockType type, double[] array) {
         super(name, type);
         memory = array;
     }
 
-    public Memory(String name, BlockType type, int size) {
+    public MemoryBlock(String name, BlockType type, int size) {
         super(name, type);
         memory = new double[size];
     }
@@ -38,19 +38,19 @@ public class Memory extends MindustryBlock {
         return index;
     }
 
-    public static Memory createMemoryCell(MindustryMetadata metadata) {
-        return new Memory("cell", metadata.getExistingBlock("@memory-cell"), 64);
+    public static MemoryBlock createMemoryCell(MindustryMetadata metadata) {
+        return new MemoryBlock("cell", metadata.getExistingBlock("@memory-cell"), 64);
     }
 
-    public static Memory createMemoryCell(MindustryMetadata metadata, double[] array) {
-        return new Memory("cell", metadata.getExistingBlock("@memory-cell"), Arrays.copyOf(array, 64));
+    public static MemoryBlock createMemoryCell(MindustryMetadata metadata, double[] array) {
+        return new MemoryBlock("cell", metadata.getExistingBlock("@memory-cell"), Arrays.copyOf(array, 64));
     }
 
-    public static Memory createMemoryBank(MindustryMetadata metadata) {
-        return new Memory("bank", metadata.getExistingBlock("@memory-bank"), 512);
+    public static MemoryBlock createMemoryBank(MindustryMetadata metadata) {
+        return new MemoryBlock("bank", metadata.getExistingBlock("@memory-bank"), 512);
     }
 
-    public static Memory createMemoryBank(MindustryMetadata metadata, double[] array) {
-        return new Memory("bank", metadata.getExistingBlock("@memory-bank"), Arrays.copyOf(array, 512));
+    public static MemoryBlock createMemoryBank(MindustryMetadata metadata, double[] array) {
+        return new MemoryBlock("bank", metadata.getExistingBlock("@memory-bank"), Arrays.copyOf(array, 512));
     }
 }

@@ -4,8 +4,8 @@ import info.teksol.mc.emulator.MindustryObject;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/// Represents a Mindustry content. There are various kind of contents - building types, unit types,
-/// items, liquids.
+/// Represents a Mindustry content. There are various kinds of content - building types, unit types,
+/// items, liquids, etc.
 @NullMarked
 public interface MindustryContent extends NamedContent, MindustryObject, Comparable<MindustryContent> {
 

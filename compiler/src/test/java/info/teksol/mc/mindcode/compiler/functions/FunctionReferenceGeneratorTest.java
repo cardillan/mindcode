@@ -5,7 +5,6 @@ import info.teksol.mc.mindcode.compiler.generation.variables.StandardNameCreator
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
-import info.teksol.mc.mindcode.logic.mimex.LogicStatement;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
@@ -148,14 +147,12 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
     }
 
     private String opcodeHint(InstructionProcessor processor, Opcode opcode) {
-        LogicStatement statement = processor.getMetadata().getLogicStatementByOpcode(opcode.getOpcode());
-        if (statement == null) {
-            return "";
-        }
-        return statement.hint().replaceAll("\\[\\w*]", "")
-                .replaceAll("(@\\w+|true|false|null)", "`$1`")
-                .replaceAll("(?s)Example:\n(.*)", "Example:\n```\n$1\n```")
-                ;
+        return processor.getMetadata().getLogicStatementByOpcode(opcode.getOpcode())
+                .map(statement -> statement.hint()
+                        .replaceAll("\\[\\w*]", "")
+                        .replaceAll("(@\\w+|true|false|null)", "`$1`")
+                        .replaceAll("(?s)Example:\n(.*)", "Example:\n```\n$1\n```")
+                ).orElse("");
     }
 
     private void printOpcode(InstructionProcessor processor, PrintWriter w, Opcode opcode, List<FunctionSample> samples) {

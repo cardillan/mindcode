@@ -6,7 +6,7 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public class MessageBlock extends MindustryBlock {
+public class MessageBlock extends MindustryBuilding {
     private final StringBuilder contents = new StringBuilder();
 
     public MessageBlock(String name, MindustryContent type) {

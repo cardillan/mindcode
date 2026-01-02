@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.tests;
 
-import info.teksol.mc.emulator.blocks.Memory;
+import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
@@ -42,8 +42,8 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
                 expectedMessages(),
                 "param SIZE = " + arrayLength + ";\n" + readFile(fileName),
                 Map.of(
-                        "bank2", Memory.createMemoryBank(ip.getMetadata(), array),
-                        "bank3", Memory.createMemoryBank(ip.getMetadata(), sorted)
+                        "bank2", MemoryBlock.createMemoryBank(ip.getMetadata(), array),
+                        "bank3", MemoryBlock.createMemoryBank(ip.getMetadata(), sorted)
                 ),
                 assertEvaluator(),
                 Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix)

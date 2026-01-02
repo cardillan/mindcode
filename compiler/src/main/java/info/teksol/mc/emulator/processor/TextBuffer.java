@@ -18,6 +18,7 @@ public class TextBuffer {
     private final Map<String, String> cache = new HashMap<>();
 
     private final StringBuilder buffer = new StringBuilder();
+    private final StringBuilder formatter = new StringBuilder();
     private int flushIndex = 0;
     private int assertBufferStart = -1;
     private int assertListStart = -1;

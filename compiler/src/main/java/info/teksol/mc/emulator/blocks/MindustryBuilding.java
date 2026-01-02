@@ -7,9 +7,14 @@ import org.jspecify.annotations.NullMarked;
 import java.util.Objects;
 
 @NullMarked
-public class MindustryBlock extends AbstractMindustryObject {
+public class MindustryBuilding extends AbstractMindustryObject {
 
-    public MindustryBlock(String name, MindustryContent type) {
+    public MindustryBuilding(String name, MindustryContent type) {
         super(name, -1, Objects.requireNonNull(type));
+    }
+
+    @Override
+    public MindustryContent type() {
+        return super.type();
     }
 }

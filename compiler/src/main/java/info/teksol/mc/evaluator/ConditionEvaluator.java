@@ -2,6 +2,7 @@ package info.teksol.mc.evaluator;
 
 import info.teksol.mc.mindcode.logic.arguments.Condition;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.Map;
 @NullMarked
 public class ConditionEvaluator {
 
-    public static LogicCondition getCondition(Condition condition) {
+    public static @Nullable LogicCondition getCondition(Condition condition) {
         return CONDITIONS.get(condition);
     }
 

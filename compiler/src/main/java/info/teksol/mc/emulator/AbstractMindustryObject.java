@@ -10,7 +10,7 @@ import java.util.Objects;
 public class AbstractMindustryObject implements MindustryObject {
     private final String name;
     private final int id;
-    private @Nullable final MindustryContent type;
+    private @Nullable final MindustryContent type;      // §§§ remove nullable
 
     public AbstractMindustryObject(String name, int id, @Nullable MindustryContent type) {
         this.name = Objects.requireNonNull(name);

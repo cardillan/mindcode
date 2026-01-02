@@ -1,12 +1,12 @@
 package info.teksol.mc.emulator.processor;
 
 import info.teksol.mc.emulator.MindustryVariable;
-import info.teksol.mc.emulator.blocks.MindustryBlock;
+import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.mimex.LVar;
+import info.teksol.mc.mindcode.logic.mimex.LVariable;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.mimex.NamedColor;
@@ -48,7 +48,7 @@ public class MindustryVariables {
         variables.put("1", MindustryVariable.createConst("1", 1));
 
         metadata.getAllLVars().stream()
-                .filter(LVar::isNumericConstant)
+                .filter(LVariable::isNumericConstant)
                 .forEach(v -> variables.put(v.name(), MindustryVariable.createConst(v.name(), v.numericValue())));
     }
 
@@ -56,7 +56,7 @@ public class MindustryVariables {
         variables.put(name, MindustryVariable.createConst(name, value));
     }
 
-    public void addLinkedBlock(String name, MindustryBlock block) {
+    public void addLinkedBlock(String name, MindustryBuilding block) {
         variables.put(name, MindustryVariable.createConstObject(block));
     }
 
