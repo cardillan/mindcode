@@ -130,17 +130,17 @@ end
 control = """
     #set instruction-limit = 1500;
 
-    linked message1, message2, message3, display1;
-    linked memory      = bank1;
-    linked buttonUp    = switch1;
-    linked buttonLeft  = switch2;
-    linked buttonRight = switch3;
-    linked buttonDown  = switch4;
-    linked buttonPlus  = switch5;
-    linked buttonMinus = switch6;
-    linked buttonJulia = switch7;
-    linked buttonLoad  = switch8;
-    linked buttonSave  = switch9;
+    guarded linked message1, message2, message3, display1,
+        memory      = bank1,
+        buttonUp    = switch1,
+        buttonLeft  = switch2,
+        buttonRight = switch3,
+        buttonDown  = switch4,
+        buttonPlus  = switch5,
+        buttonMinus = switch6,
+        buttonJulia = switch7,
+        buttonLoad  = switch8,
+        buttonSave  = switch9;
 
     const DISPLAY_SIZE_LARGE = 176;
     const HALF_SIZE = DISPLAY_SIZE_LARGE / 2;
