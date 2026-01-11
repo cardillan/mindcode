@@ -41,9 +41,4 @@ public class MindustryInstructionProcessor8 extends BaseInstructionProcessor {
         // Code taken from Mindustry to achieve an exact match
         return Math.abs(value - Math.round(value)) < 0.00001 ? String.valueOf(Math.round(value)) : String.valueOf(value);
     }
-
-    @Override
-    public double parseNumber(String literal) {
-        return Double.parseDouble(literal);
-    }
 }

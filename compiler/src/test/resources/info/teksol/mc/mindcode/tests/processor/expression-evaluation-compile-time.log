@@ -391,8 +391,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op add *tmp9 :round:x 0.5
 -    * op floor *tmp8 *tmp9
 +   79 op mul :round:x 0.9999999999999999 100000000
-+   80 op add *tmp9 99999999.99999999 0.5
-+   81 op floor *tmp8 100000000.49999999
++   80 op add *tmp9 100000000 0.5
++   81 op floor *tmp8 100000000.5
     82 label *label20
 -    * op div *tmp11 *tmp8 100000000
 -    * assertequals :assertEqualsRound:expected *tmp11 :assertEqualsRound:title
@@ -482,8 +482,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :assertEqualsRound:title "tan"
     61 label *label19
 -    * op mul :round:x 0.9999999999999999 100000000
--    * op add *tmp9 99999999.99999999 0.5
--    * op floor *tmp8 100000000.49999999
+-    * op add *tmp9 100000000 0.5
+-    * op floor *tmp8 100000000.5
     62 label *label20
 -    * op div *tmp11 100000000 100000000
     63 assertequals 1 1 "tan"

@@ -411,8 +411,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     86 # "Function: inline def round(in x)"
 -    * op add *tmp9 *tmp7 0.5
 -    * op floor *tmp8 *tmp9
-+   87 op add *tmp9 99999999.99999999 0.5
-+   88 op floor *tmp8 100000000.49999999
++   87 op add *tmp9 100000000 0.5
++   88 op floor *tmp8 100000000.5
     89 label *label14
 -    * op div *tmp11 *tmp8 100000000
 -    * assertequals :assertEqualsRound:expected *tmp11 :assertEqualsRound:title
@@ -514,8 +514,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     67 # "Function: void assertEqualsRound(in expected, in actual, in title)"
 -    * op mul *tmp7 0.9999999999999999 100000000
     68 # "Function: inline def round(in x)"
--    * op add *tmp9 99999999.99999999 0.5
--    * op floor *tmp8 100000000.49999999
+-    * op add *tmp9 100000000 0.5
+-    * op floor *tmp8 100000000.5
     69 label *label14
 -    * op div *tmp11 100000000 100000000
     70 assertequals 1 1 "tan"

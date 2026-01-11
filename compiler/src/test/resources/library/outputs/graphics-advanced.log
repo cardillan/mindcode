@@ -117,4 +117,4 @@ Final code before resolving virtual instructions:
    81:  stop
         label *label49
    82:  draw scale 2.225 2.225 0 0 0 0
-   83:  draw scale 0.47954545454545455 0.47954545454545455 0 0 0 0
+   83:  draw scale 0.4795454545454546 0.4795454545454546 0 0 0 0

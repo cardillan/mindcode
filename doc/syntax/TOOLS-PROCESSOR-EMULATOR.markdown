@@ -99,22 +99,22 @@ Output:
 
 ```
 stop instruction encountered, dumping variable values:
-@counter: 74.0
+@counter: 77.0
 number: 1.00000008976
+:printExactFast:base: 60000.09930373835
+:printExactFast:cmp: 8.976000009930374E-8
+:printExactFast:exp: 0.0
 :printExactFast:n: 1.00000008976
+:printExactFast:t: 60000.0
 *tmp1: 1.00000008976
 *tmp7: 3.898227098923865E-8
-:printExactFast:exp: 0.0
 *tmp9: 0.0
 *tmp10: 1.0
-:printExactFast:base: 60000.09930373835
 *tmp13: 1.50000008976
 *tmp12: 1.0
 *tmp15: 8.976000009930374E-8
-:printExactFast:cmp: 8.976000009930374E-8
 *tmp20: 1.0
 *tmp21: 0.6000009930373835
-:printExactFast:t: 60000.0
 ```
 
 Note that the `sort-variables` directive ensures the variables are sorted meaningfully. Without this directive, the variables are printed in the encountered order, which is identical to the order on the **Vars** screen in the game.  

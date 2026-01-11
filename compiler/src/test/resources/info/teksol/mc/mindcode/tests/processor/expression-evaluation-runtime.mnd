@@ -82,15 +82,15 @@ assertEquals(4,             sqrt(d(16)),                "sqrt");
 assertEquals(45,            angle(1, d(1)),             "angle");
 assertEquals(90,            angleDiff(45, d(135)),      "angleDiff");
 
-assertEquals(5,             len(3, 4),                  "len");
+assertEquals(5,             len(3, d(4)),               "len");
 
-assertEqualsRound(1,        sin(90),                    "sin");
-assertEqualsRound(-1,       cos(180),                   "cos");
-assertEqualsRound(1,        tan(45),                    "tan");
+assertEqualsRound(1,        sin(d(90)),                 "sin");
+assertEqualsRound(-1,       cos(d(180)),                "cos");
+assertEqualsRound(1,        tan(d(45)),                 "tan");
 
-assertEqualsRound(90,       asin(1),                    "asin");
-assertEqualsRound(0,        acos(1),                    "acos");
-assertEqualsRound(45,       atan(1),                    "atan");
+assertEqualsRound(90,       asin(d(1)),                 "asin");
+assertEqualsRound(0,        acos(d(1)),                 "acos");
+assertEqualsRound(45,       atan(d(1)),                 "atan");
 
 // Mindcode extensions
 assertEquals(-8,            -d(8),                      "unary minus");

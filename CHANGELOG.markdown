@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.12.0 - Unreleased
 
+### Fixed
+
+* Fixed incorrect evaluation of some numeric mlog constants ([#295](https://github.com/cardillan/mindcode/issues/295)).
+* Fixed the Mandelbrot schematic sample not rendering after build.
+
 ### Changed
 
 * The [Loop Rotation optimization](/doc/syntax/optimizations/LOOP-ROTATION.markdown) has been updated:
@@ -15,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * The optimizer gathers information to support the Loop Rotation optimization.
   * When a loop is fully rotated, an instruction can be hoisted in such a way that it's executed at most once, but only if the loop actually runs.  
   * When a loop is not known to execute at least once, an instruction affecting just the loop can still get hoisted entirely out of the loop if the loop is nested.
+* The [mlog processor emulator](/doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown) has been completely rewritten. The emulator now matches the behavior if a Mindustry processor of the version identified by the [`target`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target) (or [`emulator-target`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-target) compiler options.
+* The [execution flags](/doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) have been updated to match the new processor emulator. Some flags have been removed, some have been added, and some have been renamed. 
 
 ## 3.11.0 - 2025-12-25
 
@@ -1154,7 +1161,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 > [!NOTE]
 > Mindustry 7.0 build 146 added—among other improvements - the `id` property that provides an id of given
-> block, unit, item or liquid (basically the inverse of the `lookup` operation). Since Mindcode has a generic support
+> block, unit, item, or liquid (basically the inverse of the `lookup` operation). Since Mindcode has a generic support
 > for properties and built-in constants, this property can be used right away; no explicit support from Mindcode is
 > needed. For example:
 >

@@ -69,10 +69,6 @@ class ExpressionValue implements LogicReadable {
         return new ExpressionValue(processor, null, 0);
     }
 
-    public static ExpressionValue fromLiteral(InstructionProcessor processor, String literal) {
-        return new ExpressionValue(processor, null, processor.parseNumber(literal));
-    }
-
     private ExpressionValue(InstructionProcessor processor, @Nullable Object object, @Nullable Number value) {
         this.processor = processor;
         this.object = object;

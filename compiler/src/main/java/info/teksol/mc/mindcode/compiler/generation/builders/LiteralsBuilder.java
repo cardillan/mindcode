@@ -33,7 +33,7 @@ public class LiteralsBuilder extends AbstractCodeBuilder implements
         AstLiteralNullVisitor<ValueStore>,
         AstLiteralStringVisitor<ValueStore>
 {
-    private static final String MAX_LONG_VALUE = "9223372036854775808";
+    private static final String INVALID_LONG_VALUE = "9223372036854775807";
 
     public LiteralsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
@@ -141,7 +141,7 @@ public class LiteralsBuilder extends AbstractCodeBuilder implements
                     : LogicNumber.create(node.sourcePosition(), value);
         } catch (NumberFormatException e) {
             error(node, ERR.LITERAL_INTEGER_TOO_LARGE, literal, getMaxLiteralValue(radix));
-            return LogicNumber.create(node.sourcePosition(), MAX_LONG_VALUE, Long.MAX_VALUE);
+            return LogicNumber.create(node.sourcePosition(), INVALID_LONG_VALUE, Long.MAX_VALUE);
         }
     }
 
@@ -160,7 +160,7 @@ public class LiteralsBuilder extends AbstractCodeBuilder implements
             return LogicNumber.create(processor, node.sourcePosition(), literal.get());
         } else {
             error(node, ERR.LITERAL_NO_VALID_REPRESENTATION, node.getLiteral());
-            return LogicNumber.create(processor, node.sourcePosition(), MAX_LONG_VALUE);
+            return LogicNumber.create(processor, node.sourcePosition(), INVALID_LONG_VALUE);
         }
     }
 

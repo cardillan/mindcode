@@ -34,8 +34,8 @@ public class MindustryInstructionProcessor7 extends BaseInstructionProcessor {
         }
 
         // Can it be represented as a float at all?
-        double abs = Math.abs(value);
-        if ((float) abs == 0f || !Float.isFinite((float) abs)) {
+        float f = (float) value;
+        if (f == 0f || !Float.isFinite(f)) {
             return Optional.empty();
         }
 
@@ -47,12 +47,5 @@ public class MindustryInstructionProcessor7 extends BaseInstructionProcessor {
     public String formatNumber(double value) {
         // Code taken from Mindustry to achieve an exact match
         return Math.abs(value - (long) value) < 0.00001 ? String.valueOf((long) value) : String.valueOf(value);
-    }
-
-    @Override
-    public double parseNumber(String literal) {
-        return literal.indexOf('e') >= 0 || literal.indexOf('E') >= 0
-                ? Float.parseFloat(literal)
-                : Double.parseDouble(literal);
     }
 }

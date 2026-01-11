@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.emulator.mimex.LStrings;
 import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.CompilerMessage;
@@ -40,6 +41,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
     private final NameCreator nameCreator;
+    private final LStrings strings;
     private @Nullable MindustryMetadata metadata;
     private final boolean instructionValidation;
     private final boolean noArgumentPadding;
@@ -75,6 +77,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         super(parameters.messageConsumer);
         this.processorVersion = parameters.version;
         this.processorEdition = parameters.edition;
+        this.strings = LStrings.create(processorVersion);
         this.nameCreator = parameters.nameCreator;
         this.instructionValidation = parameters.instructionValidation;
         this.noArgumentPadding = parameters.noArgumentPadding;
@@ -712,10 +715,11 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 ? mantissa.substring(0, lastValidDigit + 1)
                 : mantissa.substring(0, lastValidDigit + 1) + literal.charAt(exp) + exponent;
 
+        double rewritten = parseNumber(mlog);
+        double absDiff = Math.abs(rewritten - value);
+        double relDiff = Math.abs(absDiff / value);
+
         if (floatPrecision) {
-            double rewritten = Float.parseFloat(literal);
-            double absDiff = Math.abs(rewritten - value);
-            double relDiff = Math.abs(absDiff / value);
             if (relDiff > 1e-9) {
                 if (!allowPrecisionLoss) {
                     return Optional.empty();
@@ -724,8 +728,22 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 messageConsumer.accept(CompilerMessage.warn(sourcePosition, WARN.LITERAL_LOSS_OF_PRECISION,
                         originalLiteral, rewritten));
             }
+        } else if (relDiff > 1e-15 && Math.abs(value) >= Double.MIN_NORMAL) {
+            // We don't care about precision loss of subnormal numbers.
+            // Note that packed colors are subnormal, but these should be rewritten as color literals.
+            throw new MindcodeInternalError("Unexpected precision loss formatting literal: " + literal);
         }
 
         return Optional.of(mlog);
+    }
+
+
+    @Override
+    public double parseNumber(String literal) {
+        double value = strings.parseDouble(literal, Double.NaN);
+        if (Double.isNaN(value)) {
+            throw new MindcodeInternalError("Cannot parse numeric literal: " + literal);
+        }
+        return value;
     }
 }
