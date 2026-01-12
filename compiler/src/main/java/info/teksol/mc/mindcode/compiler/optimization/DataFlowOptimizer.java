@@ -1284,7 +1284,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
         private VariableStates processContext(AstContext context, VariableStates variableStates, boolean modifyInstructions,
                 DataFlowInstructionProcessor dfProcessor) {
             variableStates = DataFlowOptimizer.this.processDefaultContext(context, context, variableStates, modifyInstructions,
-                    (lc, c, vs, mod) -> processInstruction(lc, c, vs,mod,dfProcessor));
+                    (lc, c, vs, mod) -> processInstruction(lc, context, vs,mod,dfProcessor));
             return getFinalStates(variableStates);
         }
 
@@ -1299,7 +1299,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
             seek(leadingPart);
             variableStates = DataFlowOptimizer.this.processDefaultContext(leadingPart, leadingPart,
                     variableStates, modifyInstructions,
-                    (lc, c, vs, mod) -> processInstruction(lc, c, vs,mod,dfProcessor));
+                    (lc, c, vs, mod) -> processInstruction(lc, leadingPart, vs,mod,dfProcessor));
 
             trace(() -> "=== Processing trailing part of short-circuiting context; cx#" + trailingPart.id);
             seek(trailingPart);
@@ -1319,7 +1319,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
 
             variableStates = DataFlowOptimizer.this.processDefaultContext(trailingPart, trailingPart,
                     variableStates, modifyInstructions,
-                    (lc, c, vs, mod) -> processInstruction(lc, c, vs,mod, dfProcessor));
+                    (lc, c, vs, mod) -> processInstruction(lc, trailingPart, vs,mod, dfProcessor));
 
             trace("=== End of combined short-circuiting context processing");
             return getFinalStates(variableStates);

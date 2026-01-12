@@ -1784,6 +1784,33 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     }
 
     @Nested
+    class ShortCircuiting {
+        @Test
+        void allowsCaseStatementInShortCircuiting() {
+            // Maeke sure there isn't an error - see #296
+            assertCompilesTo("""
+                            if @links < 1000 and @unit in (@flare, @poly, @mega) then
+                                print("Yes");
+                            end;
+                            """,
+                    createInstruction(LABEL, "__start__"),
+                    createInstruction(JUMP, "__start__", "greaterThanEq", "@links", "1000"),
+                    createInstruction(JUMP, label(6), "equal", "@unit", "@flare"),
+                    createInstruction(JUMP, label(6), "equal", "@unit", "@poly"),
+                    createInstruction(JUMP, label(5), "notEqual", "@unit", "@mega"),
+                    createInstruction(LABEL, label(6)),
+                    createInstruction(SET, tmp(1), "true"),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(SET, tmp(1), "false"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(JUMP, "__start__", "equal", tmp(1), "false"),
+                    createInstruction(PRINT, q("Yes"))
+            );
+        }
+    }
+
+    @Nested
     class Volatile {
 
         @Test

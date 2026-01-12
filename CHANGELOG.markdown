@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.12.1 - 2026-01-12
+
+### Fixed
+
+* Fixed the Data Flow optimization incorrectly marking a variable as uninitialized ([#296](https://github.com/cardillan/mindcode/issues/296)).
+
 ## 3.12.0 - 2026-01-11
 
 ### Fixed
