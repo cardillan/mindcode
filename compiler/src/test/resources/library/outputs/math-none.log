@@ -2027,7 +2027,7 @@ Final code before resolving virtual instructions:
  1539:  end
 
 
-stop instruction encountered, dumping variable values:
+'stop' instruction encountered, dumping variable values:
 @counter: 1458.0
 :nullToZero:x: null
 :nullToZero:result: 0.0

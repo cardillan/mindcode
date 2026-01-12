@@ -22,11 +22,12 @@ public interface Emulator {
     int executionSteps();
     int noopSteps();
 
-    int instructionCount();
-    int coveredCount();
-    int[] getProfile();
+    int getExecutorCount();
+    int instructionCount(int executor);
+    int coveredCount(int executor);
+    int[] getProfile(int executor);
 
-    List<Assertion> getAssertions();
+    List<Assertion> getAssertions(int executor);
 
-    TextBuffer getTextBuffer();
+    TextBuffer getTextBuffer(int executor);
 }

@@ -1,9 +1,9 @@
 package info.teksol.mc.emulator.mimex.target70;
 
 import info.teksol.mc.emulator.LVar;
+import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.emulator.mimex.LAssembler;
 import info.teksol.mc.emulator.mimex.LStatement;
-import info.teksol.mc.emulator.mimex.MimexEmulator;
 import info.teksol.mc.emulator.mimex.target60.LExecutor60;
 import info.teksol.mc.evaluator.ExpressionEvaluator;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
@@ -18,7 +18,7 @@ import static info.teksol.mc.emulator.ExecutionFlag.*;
 @NullMarked
 public class LExecutor70 extends LExecutor60 {
 
-    public LExecutor70(MindustryMetadata metadata, LAssembler assembler, MimexEmulator emulator) {
+    public LExecutor70(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator) {
         super(metadata, assembler, emulator);
 
         builders.put("lookup", LookupI::new);
@@ -90,7 +90,7 @@ public class LExecutor70 extends LExecutor60 {
         public void run() {
             counter.numval--;
             if (errorHandler.trace(DUMP_VARIABLES_ON_STOP)) {
-                errorHandler.info("\nstop instruction encountered, dumping variable values:");
+                errorHandler.info("\n'stop' instruction encountered, dumping variable values:");
                 vars.values().stream()
                         .filter(v -> !v.constant)
                         .map(v -> v.name + ": " + v.printExact())
@@ -112,12 +112,19 @@ public class LExecutor70 extends LExecutor60 {
         @Override
         public void run() {
             if (curTime >= value.num()) {
+                if (errorHandler.getFlag(TRACE_EXECUTION)) {
+                    errorHandler.info("    Wait finished (requested time %g, actual time %g)", value.num(), curTime);
+                }
                 curTime = 0f;
             } else {
+                if (errorHandler.getFlag(TRACE_EXECUTION)) {
+                    errorHandler.info("    Waiting (requested time %g, actual time %g)", value.num(), curTime);
+                }
+
                 //skip back to self.
                 counter.numval--;
                 yield = true;
-                curTime += emulator.tickDelta() / 60f;
+                curTime += delta / 60f;
             }
 
             if (value.num() > 3600) {

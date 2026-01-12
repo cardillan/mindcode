@@ -896,10 +896,17 @@ from the Mindustry World. Sole exceptions are memory cells ('cell1' to 'cell9') 
 
 | Option                                       | Scope  | Semantic stability |
 |----------------------------------------------|--------|--------------------|
+| [emulator-fps](#option-emulator-fps)         | global | stable             |
 | [emulator-target](#option-emulator-target)   | module | stable             |
 | [output-profiling](#option-output-profiling) | global | stable             |
 | [run](#option-run)                           | global | stable             |
 | [run-steps](#option-run-steps)               | global | stable             |
+
+### Option `emulator-fps`
+
+**Option scope: [global](#global-scope)**
+
+Sets the FPS rate the emulator will use to schedule instructions. The standard FPS rate is 60 (the default value). Higher or lower FPS rates affect the number of instructions executed per tick.
 
 ### Option `emulator-target`
 

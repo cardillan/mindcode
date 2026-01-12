@@ -7,6 +7,7 @@ import info.teksol.mc.emulator.blocks.graphics.GraphicsBuffer;
 import info.teksol.mc.mindcode.logic.arguments.AssertOp;
 import info.teksol.mc.mindcode.logic.arguments.AssertionType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -18,16 +19,14 @@ import static info.teksol.mc.emulator.ExecutionFlag.*;
 
 @NullMarked
 public abstract class LExecutorBase implements LExecutor {
+    private static final int maxInstructionScale = 5;
+    private static final int maxGraphicsBuffer = 256;
+    private static final int maxDisplayBuffer = 1024;
+
     protected final MindustryMetadata metadata;
     protected final LAssembler assembler;
-    protected final MimexEmulator emulator;
+    protected final BasicEmulator emulator;
     protected final EmulatorErrorHandler errorHandler;
-
-    public static final int
-            maxGraphicsBuffer = 256,
-            maxDisplayBuffer = 1024,
-            maxTextBuffer = 256;    //§§§
-
 
     protected final List<LInstruction> instructions = new ArrayList<>();
     protected final Map<String, LVar> vars = new LinkedHashMap<>();
@@ -47,17 +46,23 @@ public abstract class LExecutorBase implements LExecutor {
     protected final LVar links;
     protected final LVar ipt;
 
-    protected boolean yield = false;
     protected int[] profile = new int[0];
-    protected int step;
-    protected int noopSteps;
+    protected double accumulator = 0;
+    protected boolean yield = false;
 
-    public LExecutorBase(MindustryMetadata metadata, LAssembler assembler, MimexEmulator emulator) {
+    // Current tick's delta (in ticks)
+    protected double delta;
+
+    /// Index of the instruction being executed. All errors are reported against this instruction.
+    protected int index;
+
+    public LExecutorBase(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator) {
         this.metadata = metadata;
         this.assembler = assembler;
         this.emulator = emulator;
         this.errorHandler = emulator.getErrorHandler();
 
+        int maxTextBuffer = metadata.getProcessorVersion() == ProcessorVersion.V6 ? 256 : 400;
         textBuffer = new TextBuffer(errorHandler, 1000, maxTextBuffer);
         graphicsBuffer = new GraphicsBuffer(maxGraphicsBuffer);
 
@@ -67,6 +72,7 @@ public abstract class LExecutorBase implements LExecutor {
         thisv = assembler.var("@this");
         links = assembler.var("@links");
         ipt = assembler.var("@ipt");
+        ipt.numval = 8;
 
         // Set up 'this' processor
         thisv.objval = new LogicBlock("@this", metadata.getExistingBlock("@micro-processor"), this);
@@ -87,17 +93,37 @@ public abstract class LExecutorBase implements LExecutor {
         links.numval = linkedBlocks.size();
     }
 
-    /// Index of the instruction being executed. All errors are reported against this instruction.
-    int index;
-
     @Override
-    public void runOnce(int stepLimit) {
-        if (step >= stepLimit) {
-            finished = true;
-            error(ERR_EXECUTION_LIMIT_EXCEEDED, "Execution step limit of %,d exceeded.", stepLimit);
-            return;
-        }
+    public void runTick(int executorIndex, double delta) {
+        this.delta = delta;
 
+        int ipt = this.ipt.numi();
+        accumulator += delta * ipt;
+
+        if (accumulator > maxInstructionScale * ipt) accumulator = maxInstructionScale * ipt;
+
+        while (accumulator >= 1f) {
+            if (errorHandler.getFlag(TRACE_EXECUTION)) {
+                errorHandler.info("    Accumulator: %g", accumulator);
+            }
+            if (emulator.allFinished(executorIndex, finished)) {
+                finished = true;
+                return;
+            }
+
+            runOnce();
+            accumulator--;
+            if (yield) {
+                if (errorHandler.getFlag(TRACE_EXECUTION)) {
+                    errorHandler.info("    Yielding execution");
+                }
+                yield = false;
+                break;
+            }
+        }
+    }
+
+    public void runOnce() {
         if (counter.numval >= instructions.size() || counter.numval < 0) {
             counter.numval = 0;
         }
@@ -123,7 +149,7 @@ public abstract class LExecutorBase implements LExecutor {
             }
 
             profile[index]++;
-            step++;
+            emulator.step++;
         }
 
         if (counter.numval >= instructions.size()) {
@@ -136,9 +162,9 @@ public abstract class LExecutorBase implements LExecutor {
     private void traceInputs() {
         if (errorHandler.trace(TRACE_EXECUTION)) {
             LInstruction instruction = instructions.get(index);
-            errorHandler.info("Step %d, instruction #%d: %s", step + 1, index, instruction);
+            errorHandler.info("    Step %d, instruction #%d: %s", emulator.step + 1, index, instruction);
             traceVars.clear();
-            instruction.vars().forEach(v -> traceVars.add(String.format("    %s --> %s", v.name, v.trace())));
+            instruction.vars().forEach(v -> traceVars.add(String.format("        %s --> %s", v.name, v.trace())));
         }
     }
 
@@ -147,15 +173,15 @@ public abstract class LExecutorBase implements LExecutor {
             LInstruction instruction = instructions.get(index);
             traceVars.forEach(errorHandler::info);
             instruction.vars().stream()
-                    .filter(v -> v.updateStep == step)
-                    .forEach(v -> errorHandler.info("    %s <-- %s", v.name, v.trace()));
+                    .filter(v -> v.updateStep == emulator.step)
+                    .forEach(v -> errorHandler.info("        %s <-- %s", v.name, v.trace()));
 
             int nextIndex = (int) counter.numval;
-            if (nextIndex != index + 1 && !"stop".equals(instruction.opcode())) {
+            if (nextIndex != index + 1 && !"stop".equals(instruction.opcode()) && !"wait".equals(instruction.opcode())) {
                 String nextInstr = index + 1 < instructions.size()
                         ? " (avoided '" + instructions.get(index + 1) + "')"
                         : "";
-                errorHandler.info("    Jumped to #%d%s", nextIndex, nextInstr);
+                errorHandler.info("        Jumped to #%d%s", nextIndex, nextInstr);
             }
         }
     }
@@ -209,16 +235,6 @@ public abstract class LExecutorBase implements LExecutor {
     }
 
     @Override
-    public int steps() {
-        return step;
-    }
-
-    @Override
-    public int noopSteps() {
-        return noopSteps;
-    }
-
-    @Override
     public List<Assertion> getAssertions() {
         return assertions;
     }
@@ -260,7 +276,7 @@ public abstract class LExecutorBase implements LExecutor {
             error(ERR_ASSIGNMENT_TO_FIXED_VAR, "Cannot assign to fixed variable '%s'.", var.name);
             return false;
         } else {
-            var.updateStep = step;
+            var.updateStep = emulator.step;
             return true;
         }
     }
@@ -338,7 +354,7 @@ public abstract class LExecutorBase implements LExecutor {
             return text;
         }
     }
-    
+
 
     protected class NoopI extends AbstractInstruction {
         public NoopI(LStatement statement) {
@@ -347,7 +363,7 @@ public abstract class LExecutorBase implements LExecutor {
 
         @Override
         public void run() {
-            noopSteps++;
+            emulator.noopSteps++;
         }
     }
 

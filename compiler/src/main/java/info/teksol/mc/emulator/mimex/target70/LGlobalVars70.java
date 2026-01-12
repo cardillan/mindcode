@@ -68,9 +68,9 @@ public class LGlobalVars70 extends LGlobalVarsBase {
 
     @Override
     public void update(double tick) {
-        varTick.setnum(tick);
-        varTime.setnum(tick / 60.0 * 1000.0);
-        varSecond.setnum(tick / 60f);
-        varMinute.setnum(tick / 60f / 60f);
+        varTick.numval = tick;
+        varTime.numval = tick / 60.0 * 1000.0;
+        varSecond.numval = tick / 60f;
+        varMinute.numval = tick / 60f / 60f;
     }
 }

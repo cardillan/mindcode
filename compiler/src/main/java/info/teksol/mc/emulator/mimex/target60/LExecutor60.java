@@ -32,7 +32,7 @@ public class LExecutor60 extends LExecutorBase {
         boolean handle(LVar variable, Object object, LVar address);
     }
 
-    public LExecutor60(MindustryMetadata metadata, LAssembler assembler, MimexEmulator emulator) {
+    public LExecutor60(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator) {
         super(metadata, assembler, emulator);
 
         builders.put("draw", DrawI::new);

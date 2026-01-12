@@ -375,6 +375,12 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 new Target(ProcessorVersion.V6, ProcessorEdition.W)));
 
+        list.add(new DoubleCompilerOptionValue(EmulatorOptions.EMULATOR_FPS, "",
+                "the fps used by the emulator",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, 240, 60));
+
         list.add(new BooleanCompilerOptionValue(EmulatorOptions.RUN, "",
                 "run the compiled code on an emulated processor",
                 OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,

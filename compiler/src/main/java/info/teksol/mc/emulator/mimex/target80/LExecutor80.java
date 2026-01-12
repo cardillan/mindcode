@@ -3,9 +3,9 @@ package info.teksol.mc.emulator.mimex.target80;
 import info.teksol.mc.emulator.LVar;
 import info.teksol.mc.emulator.MindustryObject;
 import info.teksol.mc.emulator.blocks.LogicBlock;
+import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.emulator.mimex.LAssembler;
 import info.teksol.mc.emulator.mimex.LStatement;
-import info.teksol.mc.emulator.mimex.MimexEmulator;
 import info.teksol.mc.emulator.mimex.target60.LExecutor60;
 import info.teksol.mc.emulator.mimex.target70.LExecutor70;
 import info.teksol.mc.mindcode.logic.mimex.LAccess;
@@ -20,7 +20,7 @@ import static info.teksol.mc.emulator.ExecutionFlag.*;
 @NullMarked
 public class LExecutor80 extends LExecutor70 {
 
-    public LExecutor80(MindustryMetadata metadata, LAssembler assembler, MimexEmulator emulator) {
+    public LExecutor80(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator) {
         super(metadata, assembler, emulator);
 
         builders.put("format", FormatI::new);
@@ -33,7 +33,7 @@ public class LExecutor80 extends LExecutor70 {
     }
 
     protected void copyRemoteVar(@Nullable LVar from, LVar to) {
-        to.updateStep = step;
+        to.updateStep = emulator.step;
         if (from != null && !to.constant) {
             to.objval = from.objval;
             to.numval = from.numval;

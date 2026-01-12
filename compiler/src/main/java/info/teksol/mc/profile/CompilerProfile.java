@@ -416,15 +416,13 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     //</editor-fold>
 
     //<editor-fold desc="Emulator Options">
-    public Target getEmulatorTarget() {
-        Target emulatorTarget = this.<Target>getOption(EmulatorOptions.EMULATOR_TARGET).getValue();
-        Target runTarget = getTarget();
-        return emulatorTarget.version() == ProcessorVersion.V6 && emulatorTarget.edition() == ProcessorEdition.W
-                ? runTarget : emulatorTarget;
-    }
-
     public CompilerProfile setEmulatorTarget(ProcessorVersion version, ProcessorEdition edition) {
         getOption(EmulatorOptions.EMULATOR_TARGET).setValue(new Target(version, edition));
+        return this;
+    }
+
+    private CompilerProfile setEmulatorFps(double emulatorFps) {
+        getOption(EmulatorOptions.EMULATOR_FPS).setValue(emulatorFps);
         return this;
     }
 

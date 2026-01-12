@@ -115,12 +115,12 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
-                [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]] [--run [{true,false}]]
-                [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
-                [--enforce-instruction-limit {true,false}] [--trace-execution {true,false}]
-                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-long-wait {true,false}]
-                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
+                [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
+                [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
+                [--output-profiling [{true,false}]] [--enforce-instruction-limit {true,false}]
+                [--trace-execution {true,false}] [--dump-variables-on-stop {true,false}]
+                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
+                [--stop-on-long-wait {true,false}] [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
                 [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
                 [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
                 [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
@@ -336,6 +336,8 @@ Emulator options:
 
   --emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
                          selects target processor version and edition (a 'w' suffix specifies the world processor)
+  --emulator-fps {1.0..240.0}
+                         the fps used by the emulator
   --run [{true,false}]   run the compiled code on an emulated processor
   --run-steps {0..1000000000}
                          the maximum number of instruction executions  to  emulate,  the execution stops when this limit
@@ -438,12 +440,12 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
-                [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]] [--run [{true,false}]]
-                [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
-                [--enforce-instruction-limit {true,false}] [--trace-execution {true,false}]
-                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-long-wait {true,false}]
-                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
+                [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
+                [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
+                [--output-profiling [{true,false}]] [--enforce-instruction-limit {true,false}]
+                [--trace-execution {true,false}] [--dump-variables-on-stop {true,false}]
+                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
+                [--stop-on-long-wait {true,false}] [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
                 [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
                 [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
                 [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
@@ -648,6 +650,8 @@ Emulator options:
 
   --emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
                          selects target processor version and edition (a 'w' suffix specifies the world processor)
+  --emulator-fps {1.0..240.0}
+                         the fps used by the emulator
   --run [{true,false}]   run the compiled code on an emulated processor
   --run-steps {0..1000000000}
                          the maximum number of instruction executions  to  emulate,  the execution stops when this limit

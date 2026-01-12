@@ -3,7 +3,7 @@ package info.teksol.mc.mindcode.tests.interceptor;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.MindustryBuilding;
-import info.teksol.mc.emulator.mimex.MimexEmulator;
+import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -62,8 +62,7 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
             String code = LogicInstructionPrinter.toString(ip, instructions,
                     compiler.globalCompilerProfile().isSymbolicLabels(), compiler.globalCompilerProfile().getMlogIndent());
 
-            Emulator emulator = new MimexEmulator(expectedMessages(), compiler.globalCompilerProfile().getTarget(),
-                    compiler.compilerProfile().getExecutionFlags(), code, 1000);
+            Emulator emulator = new BasicEmulator(expectedMessages(), compiler.globalCompilerProfile(), code, 1000);
             emulator.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata()));
             emulator.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata()));
             emulator.run(instructions, MAX_STEPS);

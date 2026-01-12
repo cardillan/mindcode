@@ -2,9 +2,9 @@ package info.teksol.mc.emulator.mimex.target81;
 
 import info.teksol.mc.emulator.LVar;
 import info.teksol.mc.emulator.blocks.MessageBlock;
+import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.emulator.mimex.LAssembler;
 import info.teksol.mc.emulator.mimex.LStatement;
-import info.teksol.mc.emulator.mimex.MimexEmulator;
 import info.teksol.mc.emulator.mimex.target80.LExecutor80;
 import info.teksol.mc.evaluator.ConditionEvaluator;
 import info.teksol.mc.evaluator.ExpressionEvaluator;
@@ -20,7 +20,7 @@ import static info.teksol.mc.emulator.ExecutionFlag.ERR_UNSUPPORTED_OPCODE;
 @NullMarked
 public class LExecutor81 extends LExecutor80 {
 
-    public LExecutor81(MindustryMetadata metadata, LAssembler assembler, MimexEmulator emulator) {
+    public LExecutor81(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator) {
         super(metadata, assembler, emulator);
 
         builders.put("select", SelectI::new);

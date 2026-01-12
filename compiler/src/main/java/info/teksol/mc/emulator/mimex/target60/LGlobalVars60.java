@@ -16,9 +16,8 @@ public class LGlobalVars60 extends LGlobalVarsBase {
     public LGlobalVars60(MindustryMetadata metadata, boolean privileged) {
         super(metadata, privileged);
 
-        varTime = put("@time", null);
-        varTick = put("@tick", null);
-        varTime.setnum(startTime);
+        varTime = put("@time", startTime);
+        varTick = put("@tick", 0);
     }
 
     protected void createContentVariables(MindustryMetadata metadata) {
@@ -54,7 +53,7 @@ public class LGlobalVars60 extends LGlobalVarsBase {
 
     @Override
     public void update(double tick) {
-        varTick.setnum(tick);
-        varTime.setnum(startTime + tick / 60 * 1000);
+        varTick.numval = tick;
+        varTime.numval = startTime + tick / 60 * 1000;
     }
 }

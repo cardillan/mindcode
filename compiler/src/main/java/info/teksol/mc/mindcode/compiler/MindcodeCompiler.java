@@ -10,7 +10,7 @@ import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.MessageBlock;
 import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
-import info.teksol.mc.emulator.mimex.MimexEmulator;
+import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.generated.ast.AstIndentedPrinter;
 import info.teksol.mc.messages.*;
 import info.teksol.mc.mindcode.compiler.antlr.LexerParser;
@@ -415,16 +415,15 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     private void run() {
-        emulator = new MimexEmulator(messageConsumer, globalProfile.getEmulatorTarget(), globalProfile.getExecutionFlags(),
-                output, globalProfile.getTraceLimit());
+        emulator = new BasicEmulator(messageConsumer, globalProfile, output, globalProfile.getTraceLimit());
         initializeEmulator();
 
         emulator.run(List.of(), globalProfile.getStepLimit());
         runtimeError = emulator.isError();
-        assertions = emulator.getAssertions();
-        textBuffer = emulator.getTextBuffer();
+        assertions = emulator.getAssertions(0);
+        textBuffer = emulator.getTextBuffer(0);
         steps = emulator.executionSteps();
-        executionProfile = emulator.getProfile();
+        executionProfile = emulator.getProfile(0);
     }
 
     public boolean hasErrors() {

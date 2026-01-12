@@ -111,13 +111,13 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
     }
 
     private void logPerformance(@Nullable String title, String code, String compiled, Emulator emulator) {
-        int coverage = 1000 * emulator.coveredCount() / emulator.instructionCount();
+        int coverage = 1000 * emulator.coveredCount(0) / emulator.instructionCount(0);
         String name = title != null ? title : testInfo().getDisplayName().replaceAll("\\(\\)", "");
         headers.computeIfAbsent(getClass().getSimpleName(), k ->
                 String.format("%-40s %12s   %6s   %8s   %-16s   %-16s", "Name", "Instructions", "Steps", "Coverage", "Source CRC", "Compiled CRC"));
         String info = String.format(Locale.US,
                 "%-40s %12d   %6d   %5d.%01d%%   %016X   %016X",
-                name + ":", emulator.instructionCount(), emulator.executionSteps(), coverage / 10, coverage % 10,
+                name + ":", emulator.instructionCount(0), emulator.executionSteps(), coverage / 10, coverage % 10,
                 CRC64.hash1(code.getBytes(StandardCharsets.UTF_8)),
                 CRC64.hash1(compiled.getBytes(StandardCharsets.UTF_8)));
         System.out.println(info);
@@ -207,15 +207,15 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
 
     protected RunEvaluator outputEvaluator(List<String> expectedOutput) {
         return (useAsserts, compiler) -> {
-            List<String> actualOutput = compiler.getTextBuffer().getPrintOutput();
+            List<String> actualOutput = compiler.getTextBuffer(0).getPrintOutput();
             boolean outputMatches = Objects.equals(expectedOutput, actualOutput);
             if (useAsserts) {
                 assertEquals(expectedOutput, actualOutput);
             }
 
-            boolean assertionsMatch = compiler.getAssertions().stream().allMatch(Assertion::success);
+            boolean assertionsMatch = compiler.getAssertions(0).stream().allMatch(Assertion::success);
             if (useAsserts && !assertionsMatch) {
-                compiler.getAssertions().stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
+                compiler.getAssertions(0).stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
             }
             return outputMatches && assertionsMatch;
         };
@@ -223,15 +223,15 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
 
     protected RunEvaluator containsOutputEvaluator(String expectedOutput) {
         return (useAsserts, compiler) -> {
-            String actualOutput = compiler.getTextBuffer().getFormattedOutput();
+            String actualOutput = compiler.getTextBuffer(0).getFormattedOutput();
             boolean outputMatches = actualOutput.contains(expectedOutput);
             if (useAsserts) {
                 assertTrue(outputMatches, "Output does not contain expected text.\nExpected:" + expectedOutput + "\nOutput: " + actualOutput);
             }
 
-            boolean assertionsMatch = compiler.getAssertions().stream().allMatch(Assertion::success);
+            boolean assertionsMatch = compiler.getAssertions(0).stream().allMatch(Assertion::success);
             if (useAsserts && !assertionsMatch) {
-                compiler.getAssertions().stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
+                compiler.getAssertions(0).stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
             }
             return outputMatches && assertionsMatch;
         };
@@ -239,15 +239,15 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
 
     protected RunEvaluator lastOutputEvaluator(String expectedLastOutput) {
         return (useAsserts, compiler) -> {
-            String actualLastOutput = compiler.getTextBuffer().getPrintOutput().getLast();
+            String actualLastOutput = compiler.getTextBuffer(0).getPrintOutput().getLast();
             boolean outputMatches = Objects.equals(expectedLastOutput, actualLastOutput);
             if (useAsserts) {
                 assertEquals(expectedLastOutput, actualLastOutput);
             }
 
-            boolean assertionsMatch = compiler.getAssertions().stream().allMatch(Assertion::success);
+            boolean assertionsMatch = compiler.getAssertions(0).stream().allMatch(Assertion::success);
             if (useAsserts && !assertionsMatch) {
-                compiler.getAssertions().stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
+                compiler.getAssertions(0).stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
             }
             return outputMatches && assertionsMatch;
         };
@@ -256,11 +256,11 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
     protected RunEvaluator assertEvaluator() {
         return (useAsserts, processor) -> {
             if (useAsserts) {
-                if (processor.getAssertions().isEmpty()) {
+                if (processor.getAssertions(0).isEmpty()) {
                     fail("Expected assertions not present");
                 }
             }
-            return !processor.getAssertions().isEmpty();
+            return !processor.getAssertions(0).isEmpty();
         };
     }
 

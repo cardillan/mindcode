@@ -12,8 +12,7 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public interface LGlobalVars {
 
-    @Nullable
-    LVar get(String symbol);
+    @Nullable LVar get(String symbol);
 
     void update(double tick);
 

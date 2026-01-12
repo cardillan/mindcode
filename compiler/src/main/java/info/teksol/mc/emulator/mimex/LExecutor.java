@@ -20,7 +20,7 @@ import java.util.Map;
 public interface LExecutor {
     void addBlock(String name, MindustryBuilding block);
 
-    void runOnce(int stepLimit);
+    void runTick(int executorIndex, double delta);
 
     List<LInstruction> instructions();
 
@@ -35,10 +35,6 @@ public interface LExecutor {
 
     boolean yield();
 
-    int steps();
-
-    int noopSteps();
-
     List<Assertion> getAssertions();
 
     int[] getProfile();
@@ -47,7 +43,7 @@ public interface LExecutor {
 
     @Nullable MindustryBuilding getLink(int index);
 
-    static LExecutor create(MindustryMetadata metadata, LAssembler assembler, MimexEmulator emulator) {
+    static LExecutor create(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator) {
         return switch (metadata.getProcessorVersion()) {
             case V6         -> new LExecutor60(metadata, assembler, emulator);
             case V7, V7A    -> new LExecutor70(metadata, assembler, emulator);

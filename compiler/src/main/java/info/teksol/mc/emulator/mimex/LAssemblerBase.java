@@ -45,7 +45,7 @@ public abstract class LAssemblerBase implements LAssembler {
         thisx = putConst("@thisx", 0.0);
         thisy = putConst("@thisy", 0.0);
         links = putConst("@links", 0.0);
-        ipt = putConst("@ipt", 0.0);
+        ipt = putConst("@ipt", 2.0);
     }
 
     /// Attempts to parse the symbol as a double value, in the same way as the target Mindustry version

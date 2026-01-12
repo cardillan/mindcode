@@ -19,6 +19,8 @@ public interface GlobalCompilerProfile {
 
     int getIntValue(Enum<?> option);
 
+    double getDoubleValue(Enum<?> option);
+
     boolean getBooleanValue(Enum<?> option);
 
     String getStringValue(Enum<?> option);
@@ -158,7 +160,16 @@ public interface GlobalCompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Emulator Options">
-    Target getEmulatorTarget();
+    default Target getEmulatorTarget() {
+        Target emulatorTarget = this.<Target>getOption(EmulatorOptions.EMULATOR_TARGET).getValue();
+        Target runTarget = getTarget();
+        return emulatorTarget.version() == ProcessorVersion.V6 && emulatorTarget.edition() == ProcessorEdition.W
+                ? runTarget : emulatorTarget;
+    }
+
+    default double getEmulatorFps() {
+        return getDoubleValue(EmulatorOptions.EMULATOR_FPS);
+    }
 
     default Set<ExecutionFlag> getExecutionFlags() {
         EnumSet<ExecutionFlag> executionFlags = EnumSet.noneOf(ExecutionFlag.class);

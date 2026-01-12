@@ -70,4 +70,19 @@ public abstract class LGlobalVarsBase implements LGlobalVars {
 
         return var;
     }
+
+    protected LVar put(String name, double value) {
+        LVar existingVar = vars.get(name);
+        if (existingVar != null) { //don't overwrite existing vars (see #6910)
+            throw new IllegalArgumentException("Failed to add global logic variable '" + name + "', as it already exists.");
+        }
+
+        LVar var = new LVar(name);
+        var.constant = true;
+        var.isobj = false;
+        var.numval = value;
+        vars.put(name, var);
+
+        return var;
+    }
 }

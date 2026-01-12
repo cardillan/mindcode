@@ -47,7 +47,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
             if (!compile(compiler, progress)) return;
             int originalSteps = compiler.getEmulator().executionSteps() - compiler.getEmulator().noopSteps();
             int originalSize = compiler.getInstructions().size();
-            String originalOutput = compiler.getEmulator().getTextBuffer().getFormattedOutput();
+            String originalOutput = compiler.getEmulator().getTextBuffer(0).getFormattedOutput();
 
             // Second round
             compiler = compilerSupplier.get();
@@ -57,7 +57,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
             if (!compile(compiler, progress)) return;
             int newSteps = compiler.getEmulator().executionSteps() - compiler.getEmulator().noopSteps();
             int newSize = (int) compiler.getInstructions().stream().filter(ix -> ix.getOpcode() != Opcode.NOOP).count();
-            String newOutput = compiler.getEmulator().getTextBuffer().getFormattedOutput();
+            String newOutput = compiler.getEmulator().getTextBuffer(0).getFormattedOutput();
 
             List<CaseSwitcherConfigurations> configurationData = compiler.getDiagnosticData(CaseSwitcherConfigurations.class);
             if (configurationData.size() == 1) {
