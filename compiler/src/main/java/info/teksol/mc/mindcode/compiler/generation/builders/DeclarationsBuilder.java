@@ -235,7 +235,10 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         }
 
         for (AstVariableSpecification specification : node.getVariables()) {
-            if (specification.isArray()) {
+            if (specification.getIdentifier().isIntrinsic()) {
+                // Report error and do nothing
+                error(specification.getIdentifier(), ERR.VARIABLE_INTRINSIC_IDENTIFIER, specification.getName());
+            } else if (specification.isArray()) {
                 node.getModifiers().forEach(this::validateArrayModifiers);
                 if (isLocalContext()) {
                     error(specification, ERR.ARRAY_LOCAL);

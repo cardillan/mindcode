@@ -36,7 +36,7 @@ volatile var counterNull;
  * ```
  */
 inline void runCompatibilityTest()
-    counterNull = __MINDUSTRY_VERSION__ == "v149"
+    counterNull = @@MINDUSTRY_VERSION == "v149"
         ? "[salmon]set @counter null IS NOT a noop[]\nYour selected compilation target already handles this.\n\n"
         : "[salmon]set @counter null IS NOT a noop[]\nUse [gold]#set null-counter-is-noop = false;[] in your programs.\n\n";
 
@@ -47,11 +47,11 @@ inline void runCompatibilityTest()
         counterNull = "[green]set @counter null IS a noop[]\n\n";
     end;
 
-    if __MINDUSTRY_VERSION__ == "v126.2" then
+    if @@MINDUSTRY_VERSION == "v126.2" then
         _compatibilityTest6();
-    elsif __MINDUSTRY_VERSION__ == "v146" then
+    elsif @@MINDUSTRY_VERSION == "v146" then
         _compatibilityTest7();
-    elsif __MINDUSTRY_VERSION__ == "v149" then
+    elsif @@MINDUSTRY_VERSION == "v149" then
         _compatibilityTest80();
     else
         _compatibilityTest81();

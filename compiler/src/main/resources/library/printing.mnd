@@ -366,7 +366,7 @@ void printExactHex(n)
     for var t in n >> 32, n & 0xFFFFFFFF do
         for var i in 0 ... 8 descending do
             var digit = (t >> (4 * i)) & 0xF;
-            if __TARGET_MAJOR__ < 8 then
+            if @@TARGET_MAJOR < 8 then
                 case digit
                     when 0 .. 9 then print(digit);
                     when 10 then print("A");

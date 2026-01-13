@@ -25,6 +25,10 @@ public class AstIdentifier extends AstExpression implements Comparable<AstIdenti
         this.external = external;
     }
 
+    public boolean isIntrinsic() {
+        return name.startsWith("@@");
+    }
+
     public boolean isExternal() {
         return external;
     }

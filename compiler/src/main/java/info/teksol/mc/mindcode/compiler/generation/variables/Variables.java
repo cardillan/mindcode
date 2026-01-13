@@ -59,10 +59,10 @@ public class Variables extends AbstractMessageEmitter {
         nameCreator = context.nameCreator();
         heapTracker = HeapTracker.createDefaultTracker(context);
         globalVariables = context.metadata().getIcons().createIconMapAsValueStore();
-        putVariable("__MINDUSTRY_VERSION__", LogicString.create(globalProfile.getProcessorVersion().mimexVersion));
-        putVariable("__TARGET_MAJOR__", LogicNumber.create(globalProfile.getProcessorVersion().major));
-        putVariable("__TARGET_MINOR__", LogicNumber.create(globalProfile.getProcessorVersion().minor));
-        putVariable("__PROCESSOR_EDITION__", LogicString.create(globalProfile.getProcessorEdition().editionName()));
+        putVariable("@@MINDUSTRY_VERSION", LogicString.create(globalProfile.getProcessorVersion().mimexVersion));
+        putVariable("@@TARGET_MAJOR", LogicNumber.create(globalProfile.getProcessorVersion().major));
+        putVariable("@@TARGET_MINOR", LogicNumber.create(globalProfile.getProcessorVersion().minor));
+        putVariable("@@PROCESSOR_EDITION", LogicString.create(globalProfile.getProcessorEdition().editionName()));
     }
 
     public NameCreator nameCreator() {
@@ -322,6 +322,12 @@ public class Variables extends AbstractMessageEmitter {
             return Objects.requireNonNull(globalVariables.get(identifier.getName()));
         }
 
+        if (identifier.isIntrinsic()) {
+            error(identifier, ERR.VARIABLE_INTRINSIC_IDENTIFIER, identifier.getName());
+            putVariableIfAbsent(identifier.getName(), LogicNull.NULL);
+            return LogicNull.NULL;
+        }
+
         if (allowUndeclaredLinks && isLinkedVariable(identifier)) {
             return registerGlobalVariable(identifier, LogicVariable.block(identifier));
         }
@@ -425,20 +431,20 @@ public class Variables extends AbstractMessageEmitter {
     }
 
     private @Nullable String processVariableMlogModifier(Modifiers modifiers) {
-        if (modifiers.getParameters(MLOG) instanceof MlogSpecification(List<LogicArgument> mlogNames)) {
-            if (mlogNames.isEmpty()) {
+        if (modifiers.getParameters(MLOG) instanceof MlogSpecification(List<LogicArgument> mlogNameList)) {
+            if (mlogNameList.isEmpty()) {
                 throw new MindcodeInternalError("Mising name in mlog specification.");
             }
 
-            if (mlogNames.size() > 1) {
-                if (mlogNames.get(1) instanceof SourceElement element && !element.sourcePosition().isEmpty()) {
+            if (mlogNameList.size() > 1) {
+                if (mlogNameList.get(1) instanceof SourceElement element && !element.sourcePosition().isEmpty()) {
                     error(element, ERR.MODIFIER_MLOG_TOO_MAY_VALUES);
                 } else {
                     error(modifiers.getNode(MLOG), ERR.MODIFIER_MLOG_TOO_MAY_VALUES);
                 }
             }
 
-            switch (mlogNames.getFirst()) {
+            switch (mlogNameList.getFirst()) {
                 case LogicString mlogName -> {
                     verifyMlogName(mlogName);
                     return mlogName.getValue();
@@ -448,7 +454,7 @@ public class Variables extends AbstractMessageEmitter {
                     return null;
                 }
                 case LogicVariable l -> { return null; }
-                default -> throw new MindcodeInternalError("Unexpected mlog name " + mlogNames.getFirst());
+                default -> throw new MindcodeInternalError("Unexpected mlog name " + mlogNameList.getFirst());
             }
         } else if (modifiers.contains(MLOG)) {
             throw new MindcodeInternalError("Unexpected modifier parametrization: " + modifiers.getParameters(MLOG));
@@ -460,14 +466,14 @@ public class Variables extends AbstractMessageEmitter {
     public ArrayNameCreator processArrayMlogModifier(Modifiers modifiers, int arraySize, NameCreator standardNameCreator) {
         if (!modifiers.contains(MLOG)) return standardNameCreator;
 
-        if (modifiers.getParameters(MLOG) instanceof MlogSpecification(List<LogicArgument> mlogNames)) {
-            if (mlogNames.isEmpty()) {
+        if (modifiers.getParameters(MLOG) instanceof MlogSpecification(List<LogicArgument> mlogNameList)) {
+            if (mlogNameList.isEmpty()) {
                 throw new MindcodeInternalError("Mising name in mlog specification.");
             }
             SourceElement sourceElement = modifiers.getNode(MLOG);
 
-            if (mlogNames.getFirst() instanceof LogicKeyword keyword) {
-                if (mlogNames.size() > 1) {
+            if (mlogNameList.getFirst() instanceof LogicKeyword keyword) {
+                if (mlogNameList.size() > 1) {
                     error(sourceElement, ERR.MODIFIER_MLOG_TOO_MAY_VALUES);
                 }
 
@@ -514,14 +520,14 @@ public class Variables extends AbstractMessageEmitter {
                     }
                 };
             } else {
-                if (mlogNames.size() != arraySize) {
-                    error(sourceElement, ERR.MODIFIER_MLOG_SIZE_MISMATCH, mlogNames.size(), arraySize);
+                if (mlogNameList.size() != arraySize) {
+                    error(sourceElement, ERR.MODIFIER_MLOG_SIZE_MISMATCH, mlogNameList.size(), arraySize);
                 }
 
-                mlogNames.stream().filter(LogicKeyword.class::isInstance)
+                mlogNameList.stream().filter(LogicKeyword.class::isInstance)
                         .forEach(_ -> error(sourceElement, ERR.INVALID_MLOG_KEYWORD));
 
-                mlogNames.stream().filter(e -> e instanceof LogicString str).map(LogicString.class::cast).forEach(this::verifyMlogName);
+                mlogNameList.stream().filter(e -> e instanceof LogicString str).map(LogicString.class::cast).forEach(this::verifyMlogName);
 
                 return new ArrayNameCreator() {
                     @Override
@@ -531,8 +537,8 @@ public class Variables extends AbstractMessageEmitter {
 
                     @Override
                     public String arrayElement(String arrayName, int index) {
-                        return index >= mlogNames.size() ? "invalid"
-                                : mlogNames.get(index) instanceof LogicString str ? str.getValue()
+                        return index >= mlogNameList.size() ? "invalid"
+                                : mlogNameList.get(index) instanceof LogicString str ? str.getValue()
                                 : standardNameCreator.arrayElement(arrayName, index);
                     }
 

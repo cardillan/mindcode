@@ -188,6 +188,7 @@ public class ERR {
     public static final String UNSUPPORTED_STRING_EXPRESSION = "Unsupported string expression.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIER = "Modifier '%s' cannot be used with '%s'.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIERS = "Modifiers %s are mutually exclusive.";
+    public static final String VARIABLE_INTRINSIC_IDENTIFIER = "Identifier '%s' is reserved for compiler-defined variables.";
     public static final String VARIABLE_MISSING_MODIFIER = "Modifier '%s' requires the %s modifier.";
     public static final String VARIABLE_MULTIPLE_DECLARATIONS = "Multiple declarations of '%s'.";
     public static final String VARIABLE_MULTIPLE_SPECIFICATIONS_MLOG = "Only one variable may be specified within an `mlog` declaration.";

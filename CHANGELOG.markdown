@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.13.0 - Unreleased
+
+### Changed
+
+* [Compiler-defined constants](/doc/syntax/SYNTAX-1-VARIABLES.markdown#compiler-defined-constants) now follow the `@@VARIABLE` pattern, instead of earlier `__VARIABLE__` (for example, `@@MINDUSTRY_VERSION`). 
+
 ## 3.12.1 - 2026-01-12
 
 ### Fixed

@@ -15,9 +15,30 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesKnownBuiltIns() {
             assertCompiles("""
-                            print(@coal);
-                            print(@crux);
-                            print(@time);
+                    print(@coal);
+                    print(@crux);
+                    print(@time);
+                    """
+            );
+        }
+
+        @Test
+        void compilesCompilerVariables() {
+            assertCompiles("""
+                    print(@@MINDUSTRY_VERSION);
+                    print(@@TARGET_MAJOR);
+                    print(@@TARGET_MINOR);
+                    """
+            );
+        }
+
+
+        @Test
+        void refusesUnknownCompilerVariables() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Identifier '@@FOO' is reserved for compiler-defined variables."),
+                    """
+                            print(@@FOO);
                             """
             );
         }
@@ -30,7 +51,6 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             print(@fluffy-bunny);
                             """);
         }
-
     }
 
     @Nested

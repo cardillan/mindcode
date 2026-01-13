@@ -1052,6 +1052,13 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void refusesCompilerVariables() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Identifier '@@foo' is reserved for compiler-defined variables."),
+                    "var @@foo = 10;");
+        }
+
+        @Test
         void refusesMultipleMlogVariableSpecifications() {
             assertGeneratesMessages(expectedMessages()
                             .add("Only one variable may be specified within an `mlog` declaration.")

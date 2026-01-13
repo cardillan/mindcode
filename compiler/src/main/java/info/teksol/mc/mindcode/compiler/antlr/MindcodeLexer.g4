@@ -167,7 +167,7 @@ fragment LetterDigitDash: [-a-zA-Z0-9_] ;
 
 // Identifiers
 
-IDENTIFIER              : Letter LetterOrDigit* ;
+IDENTIFIER              : (AT AT)? Letter LetterOrDigit* ;
 EXTIDENTIFIER           : DOLLAR Letter LetterOrDigit* ;
 BUILTINIDENTIFIER       : AT Letter
                         | AT Letter LetterDigitDash* LetterOrDigit ;
