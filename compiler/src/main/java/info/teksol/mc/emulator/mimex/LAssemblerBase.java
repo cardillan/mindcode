@@ -17,6 +17,7 @@ public abstract class LAssemblerBase implements LAssembler {
     protected final MindustryMetadata metadata;
     protected final LStrings strings;
     protected final LGlobalVars globalVars;
+    protected final boolean privileged;
 
     protected boolean error;
     private final List<LInstruction> instructions = new ArrayList<>();
@@ -30,12 +31,13 @@ public abstract class LAssemblerBase implements LAssembler {
     protected final LVar links;
     protected final LVar ipt;
 
-    public LAssemblerBase(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings,
-            LGlobalVars globalVars) {
+    protected LAssemblerBase(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings,
+            LGlobalVars globalVars, boolean privileged) {
         this.errorHandler = errorHandler;
         this.metadata = metadata;
         this.strings = strings;
         this.globalVars = globalVars;
+        this.privileged = privileged;
 
         // Create default variables
         counter = putVar("@counter");
@@ -56,7 +58,7 @@ public abstract class LAssemblerBase implements LAssembler {
     /// @return a variable ID by name. This may be a constant variable referring to a number or object.
     @Override
     public LVar var(String symbol) {
-        LVar global = globalVars.get(symbol);
+        LVar global = globalVars.get(symbol, privileged);
         if (global != null) {
             return global;
         }
@@ -106,7 +108,7 @@ public abstract class LAssemblerBase implements LAssembler {
             return vars.get(name);
         } else {
             //variables are null objects by default
-            LVar var = new LVar(name);
+            LVar var = LVar.create(name);
             var.isobj = true;
             vars.put(name, var);
             return var;

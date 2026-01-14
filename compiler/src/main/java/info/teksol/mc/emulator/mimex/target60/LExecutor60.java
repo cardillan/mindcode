@@ -3,6 +3,7 @@ package info.teksol.mc.emulator.mimex.target60;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.emulator.LVar;
 import info.teksol.mc.emulator.MindustryObject;
+import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.MessageBlock;
 import info.teksol.mc.emulator.mimex.*;
@@ -32,8 +33,8 @@ public class LExecutor60 extends LExecutorBase {
         boolean handle(LVar variable, Object object, LVar address);
     }
 
-    public LExecutor60(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator) {
-        super(metadata, assembler, emulator);
+    public LExecutor60(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator, LogicBlock logicBlock) {
+        super(metadata, assembler, emulator, logicBlock);
 
         builders.put("draw", DrawI::new);
         builders.put("drawflush", DrawFlushI::new);

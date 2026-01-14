@@ -23,12 +23,13 @@ public interface LAssembler {
 
     LVar var(String symbol);
 
-    static LAssembler create(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars) {
+    static LAssembler create(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars,
+            boolean privileged) {
         return switch (metadata.getProcessorVersion()) {
-            case V6         -> new LAssembler60(errorHandler, metadata, strings, globalVars);
-            case V7, V7A    -> new LAssembler70(errorHandler, metadata, strings, globalVars);
-            case V8A        -> new LAssembler80(errorHandler, metadata, strings, globalVars);
-            case V8B, MAX   -> new LAssembler81(errorHandler, metadata, strings, globalVars);
+            case V6         -> new LAssembler60(errorHandler, metadata, strings, globalVars, privileged);
+            case V7, V7A    -> new LAssembler70(errorHandler, metadata, strings, globalVars, privileged);
+            case V8A        -> new LAssembler80(errorHandler, metadata, strings, globalVars, privileged);
+            case V8B, MAX   -> new LAssembler81(errorHandler, metadata, strings, globalVars, privileged);
         };
     }
 }

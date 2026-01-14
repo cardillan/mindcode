@@ -1,6 +1,7 @@
 package info.teksol.mc.emulator.mimex.target70;
 
 import info.teksol.mc.emulator.LVar;
+import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.emulator.mimex.LAssembler;
 import info.teksol.mc.emulator.mimex.LStatement;
@@ -18,8 +19,8 @@ import static info.teksol.mc.emulator.ExecutionFlag.*;
 @NullMarked
 public class LExecutor70 extends LExecutor60 {
 
-    public LExecutor70(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator) {
-        super(metadata, assembler, emulator);
+    public LExecutor70(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator, LogicBlock logicBlock) {
+        super(metadata, assembler, emulator, logicBlock);
 
         builders.put("lookup", LookupI::new);
         builders.put("packcolor", PackColorI::new);
@@ -111,11 +112,15 @@ public class LExecutor70 extends LExecutor60 {
 
         @Override
         public void run() {
-            if (curTime >= value.num()) {
+            if (value.num() <= 0) {
+                yield = true;
+                curTime = 0;
+            } else if (curTime >= value.num()) {
                 if (errorHandler.getFlag(TRACE_EXECUTION)) {
                     errorHandler.info("    Wait finished (requested time %g, actual time %g)", value.num(), curTime);
                 }
-                curTime = 0f;
+                waitTime += curTime;
+                curTime = 0;
             } else {
                 if (errorHandler.getFlag(TRACE_EXECUTION)) {
                     errorHandler.info("    Waiting (requested time %g, actual time %g)", value.num(), curTime);

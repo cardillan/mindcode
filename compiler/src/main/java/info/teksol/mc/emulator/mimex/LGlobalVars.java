@@ -12,16 +12,16 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public interface LGlobalVars {
 
-    @Nullable LVar get(String symbol);
+    @Nullable LVar get(String symbol, boolean privileged);
 
     void update(double tick);
 
-    static LGlobalVars create(MindustryMetadata metadata, boolean privileged) {
+    static LGlobalVars create(MindustryMetadata metadata) {
         return switch (metadata.getProcessorVersion()) {
-            case V6         -> new LGlobalVars60(metadata, privileged);
-            case V7, V7A    -> new LGlobalVars70(metadata, privileged);
-            case V8A        -> new LGlobalVars80(metadata, privileged);
-            case V8B, MAX   -> new LGlobalVars81(metadata, privileged);
+            case V6         -> new LGlobalVars60(metadata);
+            case V7, V7A    -> new LGlobalVars70(metadata);
+            case V8A        -> new LGlobalVars80(metadata);
+            case V8B, MAX   -> new LGlobalVars81(metadata);
         };
     }
 }

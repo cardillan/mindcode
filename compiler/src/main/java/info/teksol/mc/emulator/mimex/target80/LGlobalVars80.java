@@ -16,8 +16,8 @@ public class LGlobalVars80 extends LGlobalVarsBase {
     protected final LVar varMapW;
     protected final LVar varMapH;
 
-    public LGlobalVars80(MindustryMetadata metadata, boolean privileged) {
-        super(metadata, privileged);
+    public LGlobalVars80(MindustryMetadata metadata) {
+        super(metadata);
 
         varTime = getExisting("@time");
         varTick = getExisting("@tick");

@@ -26,6 +26,7 @@ public abstract class LExecutorBase implements LExecutor {
     protected final MindustryMetadata metadata;
     protected final LAssembler assembler;
     protected final BasicEmulator emulator;
+    protected final LogicBlock logicBlock;
     protected final EmulatorErrorHandler errorHandler;
 
     protected final List<LInstruction> instructions = new ArrayList<>();
@@ -36,30 +37,42 @@ public abstract class LExecutorBase implements LExecutor {
     protected final TextBuffer textBuffer;
     protected final GraphicsBuffer graphicsBuffer;
 
-    /// When set to true, this executor has finished running the code. The execution will actually stop when all
-    /// executors within the emulator (i.e., all processors) have finished.
-    protected boolean finished = false;
-
     protected final LVar counter;
     protected final LVar unit;
     protected final LVar thisv;
     protected final LVar links;
     protected final LVar ipt;
 
+    // Performance statistics
+    protected int steps;
+    protected int noopSteps;
     protected int[] profile = new int[0];
+    protected double waitTime;
+    protected double accumulatorLoss;
+
+    // Run parameters
+
+    /// Instruction accumulator
     protected double accumulator = 0;
+
+    /// When set to true, this executor has finished running the code. The execution will actually stop when all
+    /// executors within the emulator (i.e., all processors) have finished.
+    protected boolean finished = false;
+
+    /// Yield the execution for the rest of the tick
     protected boolean yield = false;
 
-    // Current tick's delta (in ticks)
+    /// Current tick's delta (in ticks)
     protected double delta;
 
     /// Index of the instruction being executed. All errors are reported against this instruction.
     protected int index;
 
-    public LExecutorBase(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator) {
+    public LExecutorBase(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator, LogicBlock logicBlock) {
         this.metadata = metadata;
         this.assembler = assembler;
         this.emulator = emulator;
+        this.logicBlock = logicBlock;
         this.errorHandler = emulator.getErrorHandler();
 
         int maxTextBuffer = metadata.getProcessorVersion() == ProcessorVersion.V6 ? 256 : 400;
@@ -72,10 +85,11 @@ public abstract class LExecutorBase implements LExecutor {
         thisv = assembler.var("@this");
         links = assembler.var("@links");
         ipt = assembler.var("@ipt");
-        ipt.numval = 8;
+        ipt.numval = logicBlock.getIpt();
 
         // Set up 'this' processor
-        thisv.objval = new LogicBlock("@this", metadata.getExistingBlock("@micro-processor"), this);
+        logicBlock.setExecutor(this);
+        thisv.objval = logicBlock;
 
         builders.put("noop", NoopI::new);
 
@@ -86,11 +100,43 @@ public abstract class LExecutorBase implements LExecutor {
         builders.put("error", ErrorI::new);
     }
 
+    //<editor-fold desc="Initialization">
     @Override
-    public void addBlock(String name, MindustryBuilding block) {
+    public void load(LParser parser) {
+        parser.parse(getFlag(ENFORCE_INSTRUCTION_LIMIT))
+                .stream().map(this::build).forEach(instructions::add);
+        profile = new int[instructions.size()];
+        vars.putAll(assembler.getVars());
+        logicBlock.getLinks().forEach(this::addBlock);
+        instructions.addAll(assembler.getInstructions());
+        finished = parser.isError() || assembler.isError();
+    }
+
+    protected boolean getFlag(ExecutionFlag flag) {
+        return errorHandler.getFlag(flag);
+    }
+
+    private void addBlock(String name, MindustryBuilding block) {
         vars.computeIfPresent(name, (_, v) -> v.link(block));
         linkedBlocks.add(block);
         links.numval = linkedBlocks.size();
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Execution">
+    @Override
+    public boolean isEmpty() {
+        return instructions.isEmpty();
+    }
+
+    @Override
+    public boolean finished() {
+        return finished;
+    }
+
+    @Override
+    public boolean yield() {
+        return yield;
     }
 
     @Override
@@ -100,7 +146,11 @@ public abstract class LExecutorBase implements LExecutor {
         int ipt = this.ipt.numi();
         accumulator += delta * ipt;
 
-        if (accumulator > maxInstructionScale * ipt) accumulator = maxInstructionScale * ipt;
+        int maxAccumulator = maxInstructionScale * ipt;
+        if (accumulator > maxAccumulator) {
+            accumulatorLoss += accumulator - maxAccumulator;
+            accumulator = maxAccumulator;
+        }
 
         while (accumulator >= 1f) {
             if (errorHandler.getFlag(TRACE_EXECUTION)) {
@@ -148,6 +198,7 @@ public abstract class LExecutorBase implements LExecutor {
                 error(ERR_INVALID_COUNTER, "Value of '@counter' (%d) outside valid range (0 to %d).", newIndex, instructions.size());
             }
 
+            steps++;
             profile[index]++;
             emulator.step++;
         }
@@ -185,10 +236,67 @@ public abstract class LExecutorBase implements LExecutor {
             }
         }
     }
+    //</editor-fold>
+
+    //<editor-fold desc="Results">
+    @Override
+    public String getProcessorId() {
+        //§§§
+        return logicBlock.name();
+    }
 
     @Override
-    public List<LInstruction> instructions() {
-        return instructions;
+    public List<Assertion> getAssertions() {
+        return assertions;
+    }
+
+    @Override
+    public String getFormattedOutput() {
+        return textBuffer.getFormattedOutput();
+    }
+
+    @Override
+    public List<String> getPrintOutput() {
+        return textBuffer.getPrintOutput();
+    }
+
+    @Override
+    public double getAccumulatorLoss() {
+        return accumulatorLoss;
+    }
+
+    @Override
+    public int[] getProfile() {
+        return profile;
+    }
+
+    @Override
+    public int getSteps() {
+        return steps;
+    }
+
+    @Override
+    public double getWaitTime() {
+        return waitTime;
+    }
+
+    @Override
+    public TextBuffer textBuffer() {
+        return textBuffer;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Instruction support">
+
+    // Note: statement building is performed by the LStatement/LStatements classes in Mindustry. As the emulator
+    // doesn't implement this layer, the instruction building is contained here. Also, unlike Mindustry, the
+    // instruction classes are not static and have implicit access to the executor instance.
+
+    // Child classes populate instruction builders in constructor.
+    protected Map<String, Function<LStatement, LInstruction>> builders = new HashMap<>();
+
+    private LInstruction build(LStatement statement) {
+        return builders.getOrDefault(statement.opcode(), UnknownI::new).apply(statement);
     }
 
     protected boolean error(ExecutionFlag flag, @PrintFormat String message, Object... args) {
@@ -205,63 +313,7 @@ public abstract class LExecutorBase implements LExecutor {
         }
     }
 
-    @Override
-    public void load(LParser parser) {
-        parser.parse(getFlag(ENFORCE_INSTRUCTION_LIMIT))
-                .stream().map(this::build).forEach(instructions::add);
-        profile = new int[instructions.size()];
-        vars.putAll(assembler.getVars());
-        instructions.addAll(assembler.getInstructions());
-        finished = parser.isError() || assembler.isError();
-    }
-
-    @Override
-    public Map<String, LVar> getVars() {
-        return vars;
-    }
-
-    public boolean getFlag(ExecutionFlag flag) {
-        return errorHandler.getFlag(flag);
-    }
-
-    @Override
-    public boolean finished() {
-        return finished;
-    }
-
-    @Override
-    public boolean yield() {
-        return yield;
-    }
-
-    @Override
-    public List<Assertion> getAssertions() {
-        return assertions;
-    }
-
-    @Override
-    public int[] getProfile() {
-        return profile;
-    }
-
-    // Note: statement building is performed by the LStatement/LStatements classes in Mindustry. As the emulator
-    // doesn't implement this layer, the instruction building is contained here. Also, unlike Mindustry, the
-    // instruction classes are not static and have implicit access to the executor instance.
-
-    // Child classes populate instruction builders in constructor.
-    protected Map<String, Function<LStatement, LInstruction>> builders = new HashMap<>();
-
-    private LInstruction build(LStatement statement) {
-        return builders.getOrDefault(statement.opcode(), UnknownI::new).apply(statement);
-    }
-
-    @Override
-    public TextBuffer textBuffer() {
-        return textBuffer;
-    }
-
-    @Override
-    public @Nullable MindustryBuilding getLink(int index) {
+    protected @Nullable MindustryBuilding getLink(int index) {
         return index >= 0 && index < linkedBlocks.size() ? linkedBlocks.get(index) : null;
     }
 
@@ -304,6 +356,7 @@ public abstract class LExecutorBase implements LExecutor {
             var.setobj(null);
         }
     }
+    //</editor-fold>
 
     //<editor-fold desc="Instructions">
     protected class UnknownI extends AbstractInstruction {
@@ -363,6 +416,7 @@ public abstract class LExecutorBase implements LExecutor {
 
         @Override
         public void run() {
+            noopSteps++;
             emulator.noopSteps++;
         }
     }

@@ -15,13 +15,13 @@ public interface LParser {
 
     boolean isError();
 
-    static LParser create(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, String text,
+    static LParser create(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
             boolean privileged) {
         return switch (metadata.getProcessorVersion()) {
-            case V6         -> new LParser60(errorHandler, metadata, strings, text, privileged);
-            case V7, V7A    -> new LParser70(errorHandler, metadata, strings, text, privileged);
-            case V8A        -> new LParser80(errorHandler, metadata, strings, text, privileged);
-            case V8B, MAX   -> new LParser81(errorHandler, metadata, strings, text, privileged);
+            case V6         -> new LParser60(errorHandler, metadata, strings, code, privileged);
+            case V7, V7A    -> new LParser70(errorHandler, metadata, strings, code, privileged);
+            case V8A        -> new LParser80(errorHandler, metadata, strings, code, privileged);
+            case V8B, MAX   -> new LParser81(errorHandler, metadata, strings, code, privileged);
         };
     }
 }

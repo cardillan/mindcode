@@ -12,8 +12,9 @@ import org.jspecify.annotations.NullMarked;
 public class LAssembler70 extends LAssemblerBase {
     private static final int invalidNum = Integer.MIN_VALUE;
 
-    public LAssembler70(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars) {
-        super(errorHandler, metadata, strings, globalVars);
+    public LAssembler70(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars,
+            boolean privileged) {
+        super(errorHandler, metadata, strings, globalVars, privileged);
     }
 
     @Override

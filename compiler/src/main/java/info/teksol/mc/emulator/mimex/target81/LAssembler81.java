@@ -12,7 +12,8 @@ public class LAssembler81 extends LAssembler80 {
     private static final long invalidNumNegative = Long.MIN_VALUE;
     private static final long invalidNumPositive = Long.MAX_VALUE;
 
-    public LAssembler81(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars) {
-        super(errorHandler, metadata, strings, globalVars);
+    public LAssembler81(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars,
+            boolean privileged) {
+        super(errorHandler, metadata, strings, globalVars, privileged);
     }
 }

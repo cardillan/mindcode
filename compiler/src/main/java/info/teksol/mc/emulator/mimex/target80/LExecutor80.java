@@ -20,8 +20,8 @@ import static info.teksol.mc.emulator.ExecutionFlag.*;
 @NullMarked
 public class LExecutor80 extends LExecutor70 {
 
-    public LExecutor80(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator) {
-        super(metadata, assembler, emulator);
+    public LExecutor80(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator, LogicBlock logicBlock) {
+        super(metadata, assembler, emulator, logicBlock);
 
         builders.put("format", FormatI::new);
         builders.put("printchar", PrintCharI::new);

@@ -1,14 +1,9 @@
 package info.teksol.mc.emulator.mimex;
 
-import info.teksol.mc.emulator.Assertion;
-import info.teksol.mc.emulator.Emulator;
-import info.teksol.mc.emulator.ExecutionFlag;
-import info.teksol.mc.emulator.TextBuffer;
-import info.teksol.mc.emulator.blocks.MindustryBuilding;
+import info.teksol.mc.emulator.*;
+import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.messages.MessageConsumer;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.options.Target;
 import org.jspecify.annotations.NullMarked;
@@ -16,7 +11,6 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static info.teksol.mc.emulator.ExecutionFlag.TRACE_EXECUTION;
 
@@ -33,40 +27,37 @@ public class BasicEmulator implements Emulator {
     public int step;
     public int noopSteps;
 
-    public BasicEmulator(MessageConsumer messageConsumer, GlobalCompilerProfile profile, String code, int traceLimit) {
+    public BasicEmulator(MessageConsumer messageConsumer, GlobalCompilerProfile profile, EmulatorSchematic schematic, int traceLimit) {
         errorHandler = new EmulatorErrorHandler(messageConsumer, profile.getExecutionFlags(), traceLimit);
         stepLimit = profile.getStepLimit();
         fps = profile.getEmulatorFps();
 
-        // Create components
+        // Create shared components
         Target target = profile.getEmulatorTarget();
-        boolean privileged = target.edition() == ProcessorEdition.WORLD_PROCESSOR;
-        MindustryMetadata metadata = MindustryMetadata.forVersion(target.version());
         LStrings strings = LStrings.create(target.version());
-        globalVars = LGlobalVars.create(metadata, privileged);
-        LParser parser = LParser.create(errorHandler, metadata, strings, code, privileged);
-        LAssembler assembler = LAssembler.create(errorHandler, metadata, strings, globalVars);
+        MindustryMetadata metadata = MindustryMetadata.forVersion(target.version());
+        globalVars = LGlobalVars.create(metadata);
 
-        LExecutor executor = LExecutor.create(metadata, assembler, this);
-        executor.load(parser);
-        executors.add(executor);
+        schematic.getBlocks().stream()
+                .filter(LogicBlock.class::isInstance)
+                .map(LogicBlock.class::cast)
+                .forEach(logicBlock -> {
+                    LParser parser = LParser.create(errorHandler, metadata, strings, logicBlock.getCode(), logicBlock.isPrivileged());
+                    LAssembler assembler = LAssembler.create(errorHandler, metadata, strings, globalVars, logicBlock.isPrivileged());
+                    LExecutor executor = LExecutor.create(metadata, assembler, this, logicBlock);
+                    executor.load(parser);
+                    executors.add(executor);
+                });
 
         running = new BitSet(executors.size());
     }
 
-    //<editor-fold desc="Setting up">
-    @Override
-    public void addBlock(String name, MindustryBuilding block) {
-        executors.getFirst().addBlock(name, block);
-    }
-    //</editor-fold>
-
     //<editor-fold desc="Running">
     @Override
-    public void run(List<LogicInstruction> program, int stepLimit) {
+    public void run(int stepLimit) {
         for (int index = 0; index < executors.size(); index++) {
             LExecutor executor = executors.get(index);
-            if (executor.instructions().isEmpty()) {
+            if (executor.isEmpty()) {
                 executor.textBuffer().append("No program to run.");
             } else {
                 running.set(index);
@@ -135,29 +126,13 @@ public class BasicEmulator implements Emulator {
         return executors.size();
     }
 
-    @Override
-    public int instructionCount(int executor) {
-        return executors.get(executor).instructions().size();
+    public ExecutorResults getExecutorResults(int executor) {
+        return executors.get(executor);
     }
 
     @Override
-    public int coveredCount(int executor) {
-        return IntStream.of(executors.get(executor).getProfile()).map(i -> i > 0 ? 1 : 0).sum();
-    }
-
-    @Override
-    public int[] getProfile(int executor) {
-        return executors.get(executor).getProfile();
-    }
-
-    @Override
-    public List<Assertion> getAssertions(int executor) {
-        return executors.get(executor).getAssertions();
-    }
-
-    @Override
-    public TextBuffer getTextBuffer(int executor) {
-        return executors.get(executor).textBuffer();
+    public List<Assertion> getAllAssertions() {
+        return executors.stream().flatMap(e -> e.getAssertions().stream()).toList();
     }
 
     //</editor-fold>

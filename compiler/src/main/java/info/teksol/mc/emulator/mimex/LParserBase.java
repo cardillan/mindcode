@@ -33,12 +33,12 @@ public abstract class LParserBase implements LParser {
     private int pos;
     private int line;
 
-    public LParserBase(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, String text, boolean privileged) {
+    public LParserBase(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code, boolean privileged) {
         this.errorHandler = errorHandler;
         this.strings = strings;
         this.metadata = metadata;
         this.privileged = privileged;
-        this.chars = text.toCharArray();
+        this.chars = code.toCharArray();
     }
 
     protected Map<String, String> opNameChanges() {

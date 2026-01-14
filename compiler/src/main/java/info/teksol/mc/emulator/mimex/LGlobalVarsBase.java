@@ -12,25 +12,22 @@ import java.util.Objects;
 
 @NullMarked
 public abstract class LGlobalVarsBase implements LGlobalVars {
-    protected final boolean privileged;
     protected final Map<String, LVar> vars = new HashMap<>();
 
-    public LGlobalVarsBase(MindustryMetadata metadata, boolean privileged) {
-        this.privileged = privileged;
-
+    public LGlobalVarsBase(MindustryMetadata metadata) {
         createContentVariables(metadata);
 
         metadata.getAllLVars().stream()
                 .filter(LVariable::isEmulatedVariable)
-                .filter(v -> privileged || !v.privileged())
                 .forEach(this::put);
     }
 
     protected abstract void createContentVariables(MindustryMetadata metadata);
 
     @Override
-    public @Nullable LVar get(String symbol) {
-        return vars.get(symbol);
+    public @Nullable LVar get(String symbol, boolean privileged) {
+        LVar var = vars.get(symbol);
+        return var != null && var.privileged && !privileged ? vars.get("null") : var;
     }
 
     protected LVar getExisting(String symbol) {
@@ -43,7 +40,7 @@ public abstract class LGlobalVarsBase implements LGlobalVars {
             throw new IllegalArgumentException("Failed to add global logic variable '" + variable.name() + "', as it already exists.");
         }
 
-        LVar var = new LVar(variable.name());
+        LVar var = LVar.createGlobal(variable.name(), variable.privileged());
         var.constant = true;
         if (!variable.object()) {
             var.isobj = false;
@@ -62,8 +59,7 @@ public abstract class LGlobalVarsBase implements LGlobalVars {
             throw new IllegalArgumentException("Failed to add global logic variable '" + name + "', as it already exists.");
         }
 
-        LVar var = new LVar(name);
-        var.constant = true;
+        LVar var = LVar.createConst(name);
         var.isobj = true;
         var.objval = value;
         vars.put(name, var);
@@ -77,8 +73,7 @@ public abstract class LGlobalVarsBase implements LGlobalVars {
             throw new IllegalArgumentException("Failed to add global logic variable '" + name + "', as it already exists.");
         }
 
-        LVar var = new LVar(name);
-        var.constant = true;
+        LVar var = LVar.createConst(name);
         var.isobj = false;
         var.numval = value;
         vars.put(name, var);

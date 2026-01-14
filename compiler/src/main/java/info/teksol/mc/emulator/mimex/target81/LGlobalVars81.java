@@ -7,7 +7,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class LGlobalVars81 extends LGlobalVars80 {
 
-    public LGlobalVars81(MindustryMetadata metadata, boolean privileged) {
-        super(metadata, privileged);
+    public LGlobalVars81(MindustryMetadata metadata) {
+        super(metadata);
     }
 }

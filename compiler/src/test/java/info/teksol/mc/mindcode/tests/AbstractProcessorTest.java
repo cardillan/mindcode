@@ -4,6 +4,8 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.emulator.Assertion;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.ExecutionFlag;
+import info.teksol.mc.emulator.ExecutorResults;
+import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.messages.ExpectedMessages;
@@ -111,13 +113,14 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
     }
 
     private void logPerformance(@Nullable String title, String code, String compiled, Emulator emulator) {
-        int coverage = 1000 * emulator.coveredCount(0) / emulator.instructionCount(0);
+        ExecutorResults result = emulator.getExecutorResults(0);
+        long coverage = Math.round(1000 * result.getCoverage());
         String name = title != null ? title : testInfo().getDisplayName().replaceAll("\\(\\)", "");
         headers.computeIfAbsent(getClass().getSimpleName(), k ->
                 String.format("%-40s %12s   %6s   %8s   %-16s   %-16s", "Name", "Instructions", "Steps", "Coverage", "Source CRC", "Compiled CRC"));
         String info = String.format(Locale.US,
                 "%-40s %12d   %6d   %5d.%01d%%   %016X   %016X",
-                name + ":", emulator.instructionCount(0), emulator.executionSteps(), coverage / 10, coverage % 10,
+                name + ":", result.getProfile().length, result.getSteps(), coverage / 10, coverage % 10,
                 CRC64.hash1(code.getBytes(StandardCharsets.UTF_8)),
                 CRC64.hash1(compiled.getBytes(StandardCharsets.UTF_8)));
         System.out.println(info);
@@ -125,7 +128,7 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
     }
 
     // Prevent unit tests hanging due to possible endless loops in generated code
-    protected final int MAX_STEPS = 1_000_000;
+    protected final int STEP_LIMIT = 1_000_000;
 
     private @Nullable TestInfo testInfo;
 
@@ -179,17 +182,17 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
     }
 
 
-    protected void setupEmulator(Emulator emulator, Map<String, MindustryBuilding> blocks) {
-        emulator.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata()));
-        emulator.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata()));
-        blocks.forEach(emulator::addBlock);
+    protected void setupLogicBlock(LogicBlock logicBlock, Map<String, MindustryBuilding> blocks) {
+        logicBlock.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata()));
+        logicBlock.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata()));
+        blocks.forEach(logicBlock::addBlock);
     }
 
     protected void testAndEvaluateCode(@Nullable String title, ExpectedMessages expectedMessages, String code,
             Map<String, MindustryBuilding> blocks, RunEvaluator evaluator, @Nullable Path logFile) {
         process(expectedMessages,
                 createInputFiles(code),
-                emulator -> setupEmulator(emulator, blocks),
+                emulator -> setupLogicBlock(emulator, blocks),
                 compiler -> {
                     assertFalse(compiler.hasErrors(), "Errors while compiling program.");
                     writeLogFile(logFile, compiler, compiler.getUnresolved());
@@ -206,48 +209,48 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
     }
 
     protected RunEvaluator outputEvaluator(List<String> expectedOutput) {
-        return (useAsserts, compiler) -> {
-            List<String> actualOutput = compiler.getTextBuffer(0).getPrintOutput();
+        return (useAsserts, emulator) -> {
+            List<String> actualOutput = emulator.getExecutorResults(0).getPrintOutput();
             boolean outputMatches = Objects.equals(expectedOutput, actualOutput);
             if (useAsserts) {
                 assertEquals(expectedOutput, actualOutput);
             }
 
-            boolean assertionsMatch = compiler.getAssertions(0).stream().allMatch(Assertion::success);
+            boolean assertionsMatch = emulator.getAllAssertions().stream().allMatch(Assertion::success);
             if (useAsserts && !assertionsMatch) {
-                compiler.getAssertions(0).stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
+                emulator.getAllAssertions().stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
             }
             return outputMatches && assertionsMatch;
         };
     }
 
     protected RunEvaluator containsOutputEvaluator(String expectedOutput) {
-        return (useAsserts, compiler) -> {
-            String actualOutput = compiler.getTextBuffer(0).getFormattedOutput();
+        return (useAsserts, emulator) -> {
+            String actualOutput = emulator.getExecutorResults(0).getFormattedOutput();
             boolean outputMatches = actualOutput.contains(expectedOutput);
             if (useAsserts) {
                 assertTrue(outputMatches, "Output does not contain expected text.\nExpected:" + expectedOutput + "\nOutput: " + actualOutput);
             }
 
-            boolean assertionsMatch = compiler.getAssertions(0).stream().allMatch(Assertion::success);
+            boolean assertionsMatch = emulator.getAllAssertions().stream().allMatch(Assertion::success);
             if (useAsserts && !assertionsMatch) {
-                compiler.getAssertions(0).stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
+                emulator.getAllAssertions().stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
             }
             return outputMatches && assertionsMatch;
         };
     }
 
     protected RunEvaluator lastOutputEvaluator(String expectedLastOutput) {
-        return (useAsserts, compiler) -> {
-            String actualLastOutput = compiler.getTextBuffer(0).getPrintOutput().getLast();
+        return (useAsserts, emulator) -> {
+            String actualLastOutput = emulator.getExecutorResults(0).getPrintOutput().getLast();
             boolean outputMatches = Objects.equals(expectedLastOutput, actualLastOutput);
             if (useAsserts) {
                 assertEquals(expectedLastOutput, actualLastOutput);
             }
 
-            boolean assertionsMatch = compiler.getAssertions(0).stream().allMatch(Assertion::success);
+            boolean assertionsMatch = emulator.getAllAssertions().stream().allMatch(Assertion::success);
             if (useAsserts && !assertionsMatch) {
-                compiler.getAssertions(0).stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
+                emulator.getAllAssertions().stream().filter(Assertion::failure).forEach(a -> fail(a.generateErrorMessage()));
             }
             return outputMatches && assertionsMatch;
         };
@@ -256,11 +259,11 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
     protected RunEvaluator assertEvaluator() {
         return (useAsserts, processor) -> {
             if (useAsserts) {
-                if (processor.getAssertions(0).isEmpty()) {
+                if (processor.getAllAssertions().isEmpty()) {
                     fail("Expected assertions not present");
                 }
             }
-            return !processor.getAssertions(0).isEmpty();
+            return !processor.getAllAssertions().isEmpty();
         };
     }
 

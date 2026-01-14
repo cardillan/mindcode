@@ -13,8 +13,8 @@ public class LGlobalVars60 extends LGlobalVarsBase {
     protected final LVar varTime;
     protected final LVar varTick;
 
-    public LGlobalVars60(MindustryMetadata metadata, boolean privileged) {
-        super(metadata, privileged);
+    public LGlobalVars60(MindustryMetadata metadata) {
+        super(metadata);
 
         varTime = put("@time", startTime);
         varTick = put("@tick", 0);

@@ -2,7 +2,7 @@ package info.teksol.mc.mindcode.compiler;
 
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.emulator.Emulator;
+import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.messages.MessageConsumer;
@@ -109,12 +109,12 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
     }
 
     protected <T extends @Nullable Object> T process(ExpectedMessages expectedMessages, InputFiles inputFiles,
-            @Nullable Consumer<Emulator> emulatorInitializer, Function<MindcodeCompiler, @Nullable T> resultExtractor) {
+            @Nullable Consumer<LogicBlock> logicBlockInitializer, Function<MindcodeCompiler, @Nullable T> resultExtractor) {
         expectedMessages.setAccumulateErrors(true);
         MindcodeCompiler compiler = new MindcodeCompiler(getTargetPhase(), expectedMessages,
                 createCompilerProfile(), inputFiles);
-        if (emulatorInitializer != null) {
-            compiler.setEmulatorInitializer(emulatorInitializer);
+        if (logicBlockInitializer != null) {
+            compiler.setLogicBlockInitializer(logicBlockInitializer);
         }
         setDebugPrinterProvider(compiler);
 

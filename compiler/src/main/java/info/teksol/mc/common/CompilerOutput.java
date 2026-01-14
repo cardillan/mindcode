@@ -1,6 +1,7 @@
 package info.teksol.mc.common;
 
 import info.teksol.mc.emulator.Assertion;
+import info.teksol.mc.emulator.EmulatorSchematic;
 import info.teksol.mc.emulator.TextBuffer;
 import info.teksol.mc.messages.MindcodeMessage;
 import org.jspecify.annotations.NullMarked;
@@ -15,18 +16,18 @@ import java.util.stream.Collectors;
 @NullMarked
 public record CompilerOutput<T extends @Nullable Object>(
         T output, String fileName, List<MindcodeMessage> messages, List<Assertion> assertions,
-        @Nullable TextBuffer textBuffer, int steps) {
+        @Nullable EmulatorSchematic schematic, @Nullable TextBuffer textBuffer, int steps) {
 
     public <R> CompilerOutput<R> withOutput(R output) {
-        return new CompilerOutput<>(output, fileName, messages, assertions, textBuffer, steps);
+        return new CompilerOutput<>(output, fileName, messages, assertions, schematic, textBuffer, steps);
     }
 
-    public CompilerOutput(T output, String fileName, List<MindcodeMessage> messages) {
-        this(output, fileName, messages, List.of(), null, 0);
+    public CompilerOutput(T output, String fileName, List<MindcodeMessage> messages, EmulatorSchematic schematic) {
+        this(output, fileName, messages, List.of(), schematic, null, 0);
     }
 
     public CompilerOutput(List<MindcodeMessage> messages) {
-        this(null, "", messages, List.of(), null, 0);
+        this(null, "", messages, List.of(), null, null, 0);
     }
 
     public void addMessage(MindcodeMessage message) {
@@ -35,18 +36,6 @@ public record CompilerOutput<T extends @Nullable Object>(
 
     public String getStringOutput() {
         return output == null ? "" : output.toString();
-    }
-
-    public List<String> getPrintOutput() {
-        return textBuffer != null ? textBuffer.getPrintOutput() : List.of();
-    }
-
-    public String getProgramOutput() {
-        return textBuffer != null ? textBuffer.getFormattedOutput() : "";
-    }
-
-    public boolean hasProgramOutput() {
-        return textBuffer != null && !textBuffer.isEmpty();
     }
 
     public <M> List<M> texts(Function<MindcodeMessage, M> messageTransformer) {

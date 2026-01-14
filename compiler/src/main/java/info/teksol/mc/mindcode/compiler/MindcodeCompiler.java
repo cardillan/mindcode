@@ -5,7 +5,8 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.emulator.Assertion;
 import info.teksol.mc.emulator.Emulator;
-import info.teksol.mc.emulator.TextBuffer;
+import info.teksol.mc.emulator.EmulatorSchematic;
+import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.MessageBlock;
 import info.teksol.mc.emulator.blocks.MindustryBuilding;
@@ -43,6 +44,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructorContext;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.DirectiveProcessor;
 import info.teksol.mc.profile.FinalCodeOutput;
@@ -102,11 +104,10 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private Function<Integer, DebugPrinter> debugPrinterProvider = DiffDebugPrinter::new;
 
     // Run output
-    private Consumer<Emulator> emulatorInitializer = _ -> {};
+    private Consumer<LogicBlock> logicBlockInitializer = _ -> {};
     private @Nullable Emulator emulator;
     private boolean runtimeError = false;
     private List<Assertion> assertions = List.of();
-    private @Nullable TextBuffer textBuffer;
     private int steps;
     private int[] executionProfile = new int[0];
 
@@ -136,8 +137,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         ContextFactory.setCompilerContext(this);
     }
 
-    public void setEmulatorInitializer(Consumer<Emulator> emulatorInitializer) {
-        this.emulatorInitializer = emulatorInitializer;
+    public void setLogicBlockInitializer(Consumer<LogicBlock> logicBlockInitializer) {
+        this.logicBlockInitializer = logicBlockInitializer;
     }
 
     public void setDebugPrinterProvider(Function<Integer, DebugPrinter> debugPrinterProvider) {
@@ -395,35 +396,38 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         info("%s", sbr);
     }
 
-    private void addBlocks(Emulator emulator, String name, Function<Integer, MindustryBuilding> creator) {
+    private void addBlocks(LogicBlock logicBlock, String name, Function<Integer, MindustryBuilding> creator) {
         for (int i = 1; i < 10; i++) {
-            emulator.addBlock(name + i, creator.apply(i));
+            logicBlock.addBlock(name + i, creator.apply(i));
         }
     }
 
-    private void initializeEmulator() {
+    private void initializeLogicBlock(LogicBlock logicBlock) {
         assert metadata != null;
-        assert emulator != null;
 
         // All flags are already set as we want them to be
-        addBlocks(emulator, "cell", _ -> MemoryBlock.createMemoryCell(metadata));
-        addBlocks(emulator, "bank", _ -> MemoryBlock.createMemoryBank(metadata));
-        addBlocks(emulator, "display", i -> LogicDisplay.createLogicDisplay(metadata, i < 5));
-        addBlocks(emulator, "message", _ -> MessageBlock.createMessage(metadata));
+        addBlocks(logicBlock, "cell", _ -> MemoryBlock.createMemoryCell(metadata));
+        addBlocks(logicBlock, "bank", _ -> MemoryBlock.createMemoryBank(metadata));
+        addBlocks(logicBlock, "display", i -> LogicDisplay.createLogicDisplay(metadata, i < 5));
+        addBlocks(logicBlock, "message", _ -> MessageBlock.createMessage(metadata));
 
-        emulatorInitializer.accept(emulator);
+        logicBlockInitializer.accept(logicBlock);
     }
 
     private void run() {
-        emulator = new BasicEmulator(messageConsumer, globalProfile, output, globalProfile.getTraceLimit());
-        initializeEmulator();
+        assert metadata != null;
+        LogicBlock logicBlock = compilerProfile().getProcessorEdition() == ProcessorEdition.WORLD_PROCESSOR
+        ? LogicBlock.createWorldProcessor(metadata, output)
+        : LogicBlock.createMicroProcessor(metadata, output);
+        initializeLogicBlock(logicBlock);
+        EmulatorSchematic schematic = new EmulatorSchematic(List.of(logicBlock));
+        emulator = new BasicEmulator(messageConsumer, globalProfile, schematic, globalProfile.getTraceLimit());
 
-        emulator.run(List.of(), globalProfile.getStepLimit());
+        emulator.run(globalProfile.getStepLimit());
         runtimeError = emulator.isError();
-        assertions = emulator.getAssertions(0);
-        textBuffer = emulator.getTextBuffer(0);
+        assertions = emulator.getAllAssertions();
         steps = emulator.executionSteps();
-        executionProfile = emulator.getProfile(0);
+        executionProfile = emulator.getExecutorResults(0).getProfile();
     }
 
     public boolean hasErrors() {
@@ -484,7 +488,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     public String getTextBufferOutput() {
-        return textBuffer == null ? "" : textBuffer.getFormattedOutput();
+        return emulator == null ? "" : emulator.getExecutorResults(0).getFormattedOutput();
     }
 
     public int getSteps() {

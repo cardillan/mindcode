@@ -2,6 +2,7 @@ package info.teksol.mindcode.exttest.cases;
 
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.emulator.Assertion;
+import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
@@ -45,9 +46,10 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                     .setOptimizationLevel(Optimization.CASE_SWITCHING, OptimizationLevel.NONE)
                     .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
-            int originalSteps = compiler.getEmulator().executionSteps() - compiler.getEmulator().noopSteps();
+            Emulator emulator = compiler.getEmulator();
+            int originalSteps = emulator.executionSteps() - emulator.noopSteps();
             int originalSize = compiler.getInstructions().size();
-            String originalOutput = compiler.getEmulator().getTextBuffer(0).getFormattedOutput();
+            String originalOutput = emulator.getExecutorResults(0).getFormattedOutput();
 
             // Second round
             compiler = compilerSupplier.get();
@@ -55,9 +57,10 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                     .setGoal(GenerationGoal.SPEED)
                     .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
-            int newSteps = compiler.getEmulator().executionSteps() - compiler.getEmulator().noopSteps();
+            emulator = compiler.getEmulator();
+            int newSteps = emulator.executionSteps() - emulator.noopSteps();
             int newSize = (int) compiler.getInstructions().stream().filter(ix -> ix.getOpcode() != Opcode.NOOP).count();
-            String newOutput = compiler.getEmulator().getTextBuffer(0).getFormattedOutput();
+            String newOutput = emulator.getExecutorResults(0).getFormattedOutput();
 
             List<CaseSwitcherConfigurations> configurationData = compiler.getDiagnosticData(CaseSwitcherConfigurations.class);
             if (configurationData.size() == 1) {
@@ -101,12 +104,12 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                                     originalSize, newSize, sizeDifference, expectedSizeDifference)));
                 }
 
-                if (compiler.getEmulator().noopSteps() > 1) {
+                if (emulator.noopSteps() > 1) {
                     success = false;
                     progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
                             compiler.compilerProfile().getCaseConfiguration(), "",
                             String.format("Unexpected noop executions: %d (expected at most 1).",
-                                    compiler.getEmulator().noopSteps())));
+                                    emulator.noopSteps())));
                 }
 
                 if (success) {

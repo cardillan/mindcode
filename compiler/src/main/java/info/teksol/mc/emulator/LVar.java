@@ -7,6 +7,7 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class LVar implements MlogReadable, MlogWritable {
     public final String name;
+    public final boolean privileged;
     public boolean constant;
     public boolean isobj;
     public @Nullable Object objval;
@@ -19,13 +20,22 @@ public class LVar implements MlogReadable, MlogWritable {
     // and the previous values of these fields
     public int updateStep;
 
-    public LVar(String name) {
-        this(name, false);
-    }
-
-    public LVar(String name, boolean constant) {
+    private LVar(String name, boolean constant, boolean privileged) {
         this.name = name;
         this.constant = constant;
+        this.privileged = privileged;
+    }
+
+    public static LVar create(String name) {
+        return new LVar(name, false, false);
+    }
+
+    public static LVar createConst(String name) {
+        return new LVar(name, true, false);
+    }
+
+    public static LVar createGlobal(String name, boolean privileged) {
+        return new LVar(name, true, privileged);
     }
 
     public LVar link(MindustryBuilding block) {
@@ -155,9 +165,5 @@ public class LVar implements MlogReadable, MlogWritable {
     @Override
     public String toString() {
         return name + " = " + printExact() + (constant ? " [const]" : "");
-    }
-
-    public static LVar create(String name) {
-        return new LVar(name);
     }
 }

@@ -1,19 +1,12 @@
 package info.teksol.mc.emulator;
 
-import info.teksol.mc.emulator.blocks.MindustryBuilding;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-
 import java.util.List;
 
 public interface Emulator {
 
-    // Setting up
-
-    void addBlock(String name, MindustryBuilding block);
-
     // Running
 
-    void run(List<LogicInstruction> program, int stepLimit);
+    void run(int stepLimit);
 
     // Providing outputs
 
@@ -22,12 +15,8 @@ public interface Emulator {
     int executionSteps();
     int noopSteps();
 
+    List<Assertion> getAllAssertions();
+
     int getExecutorCount();
-    int instructionCount(int executor);
-    int coveredCount(int executor);
-    int[] getProfile(int executor);
-
-    List<Assertion> getAssertions(int executor);
-
-    TextBuffer getTextBuffer(int executor);
+    ExecutorResults getExecutorResults(int executor);
 }

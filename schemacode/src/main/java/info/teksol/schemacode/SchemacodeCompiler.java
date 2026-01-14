@@ -3,6 +3,7 @@ package info.teksol.schemacode;
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.emulator.EmulatorSchematic;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
@@ -36,7 +37,6 @@ public class SchemacodeCompiler {
     /**
      * Parses schemacode source into AST tree.
      *
-     * @param definition source code
      * @param messageConsumer message consumer
      * @return Top node of parsed AST tree
      */
@@ -70,7 +70,7 @@ public class SchemacodeCompiler {
 
         InputFile inputFile = inputFiles.getMainInputFile();
         if (inputFile.getCode().isBlank()) {
-            return new CompilerOutput<>(new byte[0], "", List.of());
+            return new CompilerOutput<>(new byte[0], "", List.of(), new EmulatorSchematic());
         }
 
         List<MindcodeMessage> messages = new ArrayList<>();
@@ -86,7 +86,8 @@ public class SchemacodeCompiler {
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             SchematicsIO.write(schematic, output);
-            return new CompilerOutput<>(output.toByteArray(), schematic.filename(), messages);
+            return new CompilerOutput<>(output.toByteArray(), schematic.filename(), messages,
+                    schematic.toEmulatorSchematic(SchematicsMetadata.getMetadata()));
         } catch (IOException e) {
             throw new SchematicsInternalError(e, "Error converting schematics to binary representation.");
         }

@@ -1,6 +1,7 @@
 package info.teksol.mc.emulator.mimex.target81;
 
 import info.teksol.mc.emulator.LVar;
+import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.blocks.MessageBlock;
 import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.emulator.mimex.LAssembler;
@@ -20,8 +21,8 @@ import static info.teksol.mc.emulator.ExecutionFlag.ERR_UNSUPPORTED_OPCODE;
 @NullMarked
 public class LExecutor81 extends LExecutor80 {
 
-    public LExecutor81(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator) {
-        super(metadata, assembler, emulator);
+    public LExecutor81(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator, LogicBlock logicBlock) {
+        super(metadata, assembler, emulator, logicBlock);
 
         builders.put("select", SelectI::new);
         builders.put("unpackcolor", UnpackColorI::new);

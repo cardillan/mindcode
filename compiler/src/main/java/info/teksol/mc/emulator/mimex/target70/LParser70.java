@@ -11,9 +11,9 @@ import java.util.Map;
 @NullMarked
 public class LParser70 extends LParser60 {
 
-    public LParser70(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, String text,
+    public LParser70(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
             boolean privileged) {
-        super(errorHandler, metadata, strings, text, privileged);
+        super(errorHandler, metadata, strings, code, privileged);
     }
 
     @Override
