@@ -22,6 +22,7 @@ public class LExecutor80 extends LExecutor70 {
 
     public LExecutor80(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator, LogicBlock logicBlock) {
         super(metadata, assembler, emulator, logicBlock);
+        accumulatorHalving = false;
 
         builders.put("format", FormatI::new);
         builders.put("printchar", PrintCharI::new);
@@ -125,12 +126,15 @@ public class LExecutor80 extends LExecutor70 {
 
         @Override
         public void run() {
-            /// §§§ error reporting
             if (value.isobj) {
                 if (value.objval instanceof MindustryObject object) {
                     textBuffer.print(Objects.requireNonNullElse(object.iconString(metadata), ""));
                 }
             } else {
+                char ch = (char) Math.floor(value.numval);
+                if (ch != Math.floor(value.numval)) {
+                    error(ERR_INVALID_CHARACTER, "Invalid character value used in printchar instruction: %g", value.numval);
+                }
                 textBuffer.print(String.valueOf((char) Math.floor(value.numval)));
             }
         }

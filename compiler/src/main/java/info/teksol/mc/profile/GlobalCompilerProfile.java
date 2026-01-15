@@ -1,5 +1,6 @@
 package info.teksol.mc.profile;
 
+import info.teksol.mc.emulator.EmulatedProcessor;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
@@ -169,6 +170,12 @@ public interface GlobalCompilerProfile {
 
     default double getEmulatorFps() {
         return getDoubleValue(EmulatorOptions.EMULATOR_FPS);
+    }
+
+    default EmulatedProcessor getEmulatorProcessor() {
+        EmulatedProcessor processor = getEnumValue(EmulatorOptions.EMULATOR_PROCESSOR);
+        return processor != EmulatedProcessor.DEFAULT ? processor :
+                getProcessorEdition() == ProcessorEdition.W ? EmulatedProcessor.WORLD_PROCESSOR : EmulatedProcessor.LOGIC_PROCESSOR;
     }
 
     default Set<ExecutionFlag> getExecutionFlags() {

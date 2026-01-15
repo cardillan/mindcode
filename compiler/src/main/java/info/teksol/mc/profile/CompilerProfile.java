@@ -1,5 +1,6 @@
 package info.teksol.mc.profile;
 
+import info.teksol.mc.emulator.EmulatedProcessor;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -423,6 +424,11 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
 
     private CompilerProfile setEmulatorFps(double emulatorFps) {
         getOption(EmulatorOptions.EMULATOR_FPS).setValue(emulatorFps);
+        return this;
+    }
+
+    private CompilerProfile setEmulatorProcessor(EmulatedProcessor emulatorProcessor) {
+        getOption(EmulatorOptions.EMULATOR_PROCESSOR).setValue(emulatorProcessor);
         return this;
     }
 

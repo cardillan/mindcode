@@ -1,5 +1,6 @@
 package info.teksol.mc.profile.options;
 
+import info.teksol.mc.emulator.EmulatedProcessor;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
@@ -371,7 +372,7 @@ public class CompilerOptionFactory {
 
         list.add(new TargetCompilerOptionValue(EmulatorOptions.EMULATOR_TARGET, "",
                 "selects target processor version and edition (a 'w' suffix specifies the world processor)",
-                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.MODULE,
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 new Target(ProcessorVersion.V6, ProcessorEdition.W)));
 
@@ -380,6 +381,14 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 1, 240, 60));
+
+        list.add(new EnumCompilerOptionValue<>(EmulatorOptions.EMULATOR_PROCESSOR, "",
+                "specifies which Mindustry logic processor to use for the emulator (when the type " +
+                        "of the processor is specified in the schematics, this vale is ignored)",
+                EmulatedProcessor.class,
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                EmulatedProcessor.DEFAULT));
 
         list.add(new BooleanCompilerOptionValue(EmulatorOptions.RUN, "",
                 "run the compiled code on an emulated processor",

@@ -6,9 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.13.0 - Unreleased
 
+### Fixed
+
+* Fixed incorrect emulation of the instruction accumulator for targets 6 and 7 affecting instruction scheduling.  
+
+### Added
+
+* Added the [`emulator-processor` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-processor), allowing to specify the processor used by the emulator when the proper type cannot be determined from schematics. 
+
 ### Changed
 
-* [Compiler-defined constants](/doc/syntax/SYNTAX-1-VARIABLES.markdown#compiler-defined-constants) now follow the `@@VARIABLE` pattern, instead of earlier `__VARIABLE__` (for example, `@@MINDUSTRY_VERSION`). 
+* [Compiler-defined constants](/doc/syntax/SYNTAX-1-VARIABLES.markdown#compiler-defined-constants) now follow the `@@VARIABLE` pattern, instead of earlier `__VARIABLE__` (for example, `@@MINDUSTRY_VERSION`).
+* Changed the emulator handling of the `wait` instruction eith zero argument to match the ltest Mindustry BE behavior.
 
 ## 3.12.1 - 2026-01-12
 

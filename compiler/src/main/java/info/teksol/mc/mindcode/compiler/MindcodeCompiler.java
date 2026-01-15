@@ -44,7 +44,6 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructorContext;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.DirectiveProcessor;
 import info.teksol.mc.profile.FinalCodeOutput;
@@ -416,9 +415,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
     private void run() {
         assert metadata != null;
-        LogicBlock logicBlock = compilerProfile().getProcessorEdition() == ProcessorEdition.WORLD_PROCESSOR
-        ? LogicBlock.createWorldProcessor(metadata, output)
-        : LogicBlock.createMicroProcessor(metadata, output);
+        LogicBlock logicBlock = LogicBlock.createProcessor(metadata, compilerProfile().getEmulatorProcessor(), output);
         initializeLogicBlock(logicBlock);
         EmulatorSchematic schematic = new EmulatorSchematic(List.of(logicBlock));
         emulator = new BasicEmulator(messageConsumer, globalProfile, schematic, globalProfile.getTraceLimit());

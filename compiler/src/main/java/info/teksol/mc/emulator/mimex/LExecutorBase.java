@@ -52,6 +52,8 @@ public abstract class LExecutorBase implements LExecutor {
 
     // Run parameters
 
+    protected boolean accumulatorHalving = true;
+
     /// Instruction accumulator
     protected double accumulator = 0;
 
@@ -152,7 +154,9 @@ public abstract class LExecutorBase implements LExecutor {
             accumulator = maxAccumulator;
         }
 
-        while (accumulator >= 1f) {
+        int limit = accumulatorHalving ? 0 : 1;
+
+        while (accumulator >= limit) {
             if (errorHandler.getFlag(TRACE_EXECUTION)) {
                 errorHandler.info("    Accumulator: %g", accumulator);
             }
@@ -163,6 +167,7 @@ public abstract class LExecutorBase implements LExecutor {
 
             runOnce();
             accumulator--;
+            if (accumulatorHalving) limit++;
             if (yield) {
                 if (errorHandler.getFlag(TRACE_EXECUTION)) {
                     errorHandler.info("    Yielding execution");

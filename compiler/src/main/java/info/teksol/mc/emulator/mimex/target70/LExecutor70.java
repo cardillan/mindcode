@@ -18,6 +18,7 @@ import static info.teksol.mc.emulator.ExecutionFlag.*;
 
 @NullMarked
 public class LExecutor70 extends LExecutor60 {
+    protected boolean zeroWaitYields = false;
 
     public LExecutor70(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator, LogicBlock logicBlock) {
         super(metadata, assembler, emulator, logicBlock);
@@ -112,7 +113,7 @@ public class LExecutor70 extends LExecutor60 {
 
         @Override
         public void run() {
-            if (value.num() <= 0) {
+            if (zeroWaitYields && value.num() <= 0) {
                 yield = true;
                 curTime = 0;
             } else if (curTime >= value.num()) {

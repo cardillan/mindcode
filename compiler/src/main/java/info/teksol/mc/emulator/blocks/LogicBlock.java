@@ -1,9 +1,11 @@
 package info.teksol.mc.emulator.blocks;
 
+import info.teksol.mc.emulator.EmulatedProcessor;
 import info.teksol.mc.emulator.LVar;
 import info.teksol.mc.emulator.mimex.LExecutor;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
+import info.teksol.mc.util.EnumUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -44,6 +46,10 @@ public class LogicBlock extends MindustryBuilding {
 
     public static LogicBlock createWorldProcessor(MindustryMetadata metadata, String code) {
         return new LogicBlock("processor", metadata.getExistingBlock("@world-processor"), code);
+    }
+
+    public static LogicBlock createProcessor(MindustryMetadata metadata, EmulatedProcessor processor, String code) {
+        return new LogicBlock("processor", metadata.getExistingBlock("@" + EnumUtils.toKebabCase(processor)), code);
     }
 
     public void addBlock(String name, MindustryBuilding block) {

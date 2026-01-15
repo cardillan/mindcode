@@ -894,19 +894,34 @@ processor is much faster than Mindustry processors, but can't run instructions w
 from the Mindustry World. Sole exceptions are memory cells ('cell1' to 'cell9') and memory banks
 ('bank1' to 'bank9'), which can be read and written.
 
-| Option                                       | Scope  | Semantic stability |
-|----------------------------------------------|--------|--------------------|
-| [emulator-fps](#option-emulator-fps)         | global | stable             |
-| [emulator-target](#option-emulator-target)   | module | stable             |
-| [output-profiling](#option-output-profiling) | global | stable             |
-| [run](#option-run)                           | global | stable             |
-| [run-steps](#option-run-steps)               | global | stable             |
+| Option                                           | Scope  | Semantic stability |
+|--------------------------------------------------|--------|--------------------|
+| [emulator-fps](#option-emulator-fps)             | global | stable             |
+| [emulator-processor](#option-emulator-processor) | global | stable             |
+| [emulator-target](#option-emulator-target)       | global | stable             |
+| [output-profiling](#option-output-profiling)     | global | stable             |
+| [run](#option-run)                               | global | stable             |
+| [run-steps](#option-run-steps)                   | global | stable             |
 
 ### Option `emulator-fps`
 
 **Option scope: [global](#global-scope)**
 
 Sets the FPS rate the emulator will use to schedule instructions. The standard FPS rate is 60 (the default value). Higher or lower FPS rates affect the number of instructions executed per tick.
+
+### Option `emulator-processor`
+
+**Option scope: [global](#global-scope)**
+
+Use the `emulator-processor` option to specify the Mindustry Logic processor to be used by the processor emulator. Possible values are:
+
+* `default` (the default value): use logic processor when compiling code for the standard edition, and world processor when compiling code for the world edition.
+* `micro-processor`: use the `@micro-processor` processor.
+* `logic-processor`: use the `@logic-processor` processor.
+* `hyper-processor`: use the `@hyper-processor` processor.
+* `world-processor`: use the `@world-processor` processor.
+
+When the type of the processor is specified by a schematic, this option is ignored.
 
 ### Option `emulator-target`
 

@@ -23,6 +23,7 @@ public class LExecutor81 extends LExecutor80 {
 
     public LExecutor81(MindustryMetadata metadata, LAssembler assembler, BasicEmulator emulator, LogicBlock logicBlock) {
         super(metadata, assembler, emulator, logicBlock);
+        zeroWaitYields = true;
 
         builders.put("select", SelectI::new);
         builders.put("unpackcolor", UnpackColorI::new);
