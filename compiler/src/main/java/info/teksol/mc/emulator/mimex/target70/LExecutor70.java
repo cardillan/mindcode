@@ -33,7 +33,7 @@ public class LExecutor70 extends LExecutor60 {
 
     protected class LookupI extends AbstractInstruction {
         protected final String type;
-        @Nullable Map<Integer, ? extends MindustryContent> lookupMap;
+        protected final @Nullable Map<Integer, ? extends MindustryContent> lookupMap;
         protected final LVar result, id;
 
         public LookupI(LStatement statement) {
@@ -91,13 +91,14 @@ public class LExecutor70 extends LExecutor60 {
         @Override
         public void run() {
             counter.numval--;
-            if (errorHandler.trace(DUMP_VARIABLES_ON_STOP)) {
-                errorHandler.info("\n'stop' instruction encountered, dumping variable values:");
+            if (messageHandler.getFlag(DUMP_VARIABLES_ON_STOP)) {
+                messageHandler.dump("%n        'stop' instruction encountered, dumping variable values:");
                 vars.values().stream()
                         .filter(v -> !v.constant)
                         .map(v -> v.name + ": " + v.printExact())
-                        .forEach(errorHandler::info);
+                        .forEach(messageHandler::dump);
             }
+            active = false;
             finish(STOP_ON_STOP_INSTRUCTION);
         }
     }
@@ -117,15 +118,11 @@ public class LExecutor70 extends LExecutor60 {
                 yield = true;
                 curTime = 0;
             } else if (curTime >= value.num()) {
-                if (errorHandler.getFlag(TRACE_EXECUTION)) {
-                    errorHandler.info("    Wait finished (requested time %g, actual time %g)", value.num(), curTime);
-                }
+                messageHandler.trace("            Wait finished (requested time %g, actual time %g)", value.num(), curTime);
                 waitTime += curTime;
                 curTime = 0;
             } else {
-                if (errorHandler.getFlag(TRACE_EXECUTION)) {
-                    errorHandler.info("    Waiting (requested time %g, actual time %g)", value.num(), curTime);
-                }
+                messageHandler.trace("            Waiting (requested time %g, actual time %g)", value.num(), curTime);
 
                 //skip back to self.
                 counter.numval--;
@@ -134,7 +131,7 @@ public class LExecutor70 extends LExecutor60 {
             }
 
             if (value.num() > 3600) {
-                finish(STOP_ON_LONG_WAIT);
+                active = false;
             }
         }
     }

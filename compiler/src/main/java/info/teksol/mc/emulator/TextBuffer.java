@@ -1,6 +1,6 @@
 package info.teksol.mc.emulator;
 
-import info.teksol.mc.emulator.mimex.EmulatorErrorHandler;
+import info.teksol.mc.emulator.mimex.EmulatorMessageHandler;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 @NullMarked
 public class TextBuffer {
-    private final EmulatorErrorHandler errorHandler;
+    private final EmulatorMessageHandler errorHandler;
     private final int outputLimit;
     private final int bufferLimit;
     private final List<String> output = new ArrayList<>();
@@ -23,7 +23,7 @@ public class TextBuffer {
     private int assertBufferStart = -1;
     private int assertListStart = -1;
 
-    public TextBuffer(EmulatorErrorHandler errorHandler, int outputLimit, int bufferLimit) {
+    public TextBuffer(EmulatorMessageHandler errorHandler, int outputLimit, int bufferLimit) {
         this.errorHandler = errorHandler;
         this.outputLimit = outputLimit;
         this.bufferLimit = bufferLimit;

@@ -5,6 +5,7 @@ import info.teksol.mc.emulator.Assertion;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.emulator.ExecutorResults;
+import info.teksol.mc.emulator.blocks.BlockPosition;
 import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.MindustryBuilding;
@@ -181,10 +182,9 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
         compileAndOutputCode(fileName, readFile(fileName), logFile);
     }
 
-
     protected void setupLogicBlock(LogicBlock logicBlock, Map<String, MindustryBuilding> blocks) {
-        logicBlock.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata()));
-        logicBlock.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata()));
+        logicBlock.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata(), BlockPosition.ZERO_POSITION));
+        logicBlock.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata(), BlockPosition.ZERO_POSITION));
         blocks.forEach(logicBlock::addBlock);
     }
 

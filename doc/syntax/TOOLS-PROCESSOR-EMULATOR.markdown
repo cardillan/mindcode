@@ -52,7 +52,6 @@ All flags are described in the following table:
 | dump-variables-on-stop          | true    | output variable values when the 'stop' instruction is encountered                             |
 | stop-on-stop-instruction        | true    | stop execution when the 'stop' instruction is encountered                                     |
 | stop-on-end-instruction         | true    | stop execution when the 'end' instruction is encountered                                      |
-| stop-on-long-wait               | true    | stop execution when the 'wait' instruction longer than an hour encountered                    |
 | stop-on-program-end             | true    | stop execution when the end of instruction list is reached                                    |
 | err-parse-error                 | true    | stop execution when an error or invalid instruction is encountered during parsing             |
 | err-invalid-counter             | true    | stop execution when an invalid value is written to '@counter'                                 |
@@ -62,6 +61,7 @@ All flags are described in the following table:
 | err-not-an-object               | true    | stop execution when a numeric value is used instead of an object                              |
 | err-not-a-number                | true    | stop execution when an object is used instead of a numeric value (nulls are always permitted) |
 | err-unknown-color               | true    | stop execution when an unknown color is used in a named color literal                         |
+| err-invalid-character           | true    | stop execution when an invalid numeric value is used in the 'printchar' instruction           |
 | err-invalid-lookup              | true    | stop execution when an invalid index is used in the 'lookup' instruction                      |
 | err-invalid-link                | false   | stop execution when an invalid index is used in the 'getlink' instruction                     |
 | err-memory-access               | false   | stop execution when accessing invalid memory-cell or memory-bank index                        |

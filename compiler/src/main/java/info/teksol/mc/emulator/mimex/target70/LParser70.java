@@ -1,6 +1,6 @@
 package info.teksol.mc.emulator.mimex.target70;
 
-import info.teksol.mc.emulator.mimex.EmulatorErrorHandler;
+import info.teksol.mc.emulator.mimex.EmulatorMessageHandler;
 import info.teksol.mc.emulator.mimex.LStrings;
 import info.teksol.mc.emulator.mimex.target60.LParser60;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
@@ -11,7 +11,7 @@ import java.util.Map;
 @NullMarked
 public class LParser70 extends LParser60 {
 
-    public LParser70(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
+    public LParser70(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
             boolean privileged) {
         super(errorHandler, metadata, strings, code, privileged);
     }

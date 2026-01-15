@@ -1,5 +1,6 @@
 package info.teksol.mc.emulator.blocks.graphics;
 
+import info.teksol.mc.emulator.blocks.BlockPosition;
 import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
@@ -17,14 +18,14 @@ public class LogicDisplay extends MindustryBuilding {
 
     private final List<byte[]> snapshots = new ArrayList<>();
 
-    public LogicDisplay(String name, BlockType type, int sizeX, int sizeY) {
-        super(name, type);
+    public LogicDisplay(String name, BlockType type, BlockPosition position, int sizeX, int sizeY) {
+        super(name, type, position);
         this.sizeX = sizeX;
         this.sizeY = sizeY;
     }
 
-    public LogicDisplay(String name, BlockType type, int size) {
-        this(name, type, size, size);
+    public LogicDisplay(String name, BlockType type, BlockPosition position, int size) {
+        this(name, type, position, size, size);
     }
 
     public void drawflush(GraphicsBuffer graphicsBuffer) {
@@ -43,15 +44,15 @@ public class LogicDisplay extends MindustryBuilding {
         return snapshots;
     }
 
-    public static LogicDisplay createLogicDisplay(MindustryMetadata metadata) {
-        return new LogicDisplay("display", metadata.getExistingBlock("@logic-display"), 80);
+    public static LogicDisplay createLogicDisplay(MindustryMetadata metadata, BlockPosition position) {
+        return new LogicDisplay("display", metadata.getExistingBlock("@logic-display"), position, 80);
     }
 
-    public static LogicDisplay createLargeLogicDisplay(MindustryMetadata metadata) {
-        return new LogicDisplay("display", metadata.getExistingBlock("@large-logic-display"), 176);
+    public static LogicDisplay createLargeLogicDisplay(MindustryMetadata metadata, BlockPosition position) {
+        return new LogicDisplay("display", metadata.getExistingBlock("@large-logic-display"), position, 176);
     }
 
-    public static LogicDisplay createLogicDisplay(MindustryMetadata metadata, boolean large) {
-        return large ? createLargeLogicDisplay(metadata) : createLogicDisplay(metadata);
+    public static LogicDisplay createLogicDisplay(MindustryMetadata metadata, boolean large, BlockPosition position) {
+        return large ? createLargeLogicDisplay(metadata, position) : createLogicDisplay(metadata, position);
     }
 }

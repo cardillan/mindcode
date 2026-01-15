@@ -56,4 +56,9 @@ public class LGlobalVars60 extends LGlobalVarsBase {
         varTick.numval = tick;
         varTime.numval = startTime + tick / 60 * 1000;
     }
+
+    @Override
+    public double getTime() {
+        return varTime.numval;
+    }
 }

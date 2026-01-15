@@ -234,7 +234,7 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
             return cost < 0 || benefit > 0.0;
         }
 
-        public static OptimizationEffect NONE = new OptimizationEffect();
+        public static final OptimizationEffect NONE = new OptimizationEffect();
 
         public static OptimizationEffect fromComparison(ArrayAccessInstruction original, ArrayAccessInstruction optimized,
                 @Nullable Map<String, Integer> originalStructures, @Nullable Map<String, Integer> optimizedStructures) {

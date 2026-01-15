@@ -2,7 +2,10 @@ package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.arguments.Condition;
+import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -61,13 +64,8 @@ public class SelectInstruction extends BaseResultInstruction implements Conditio
     }
 
     public final LogicValue getFalseValue() {
-        return switch (getArg(5)) {
-            case LogicValue value -> value;
-            // §§§ Emulator workaround
-            case LogicLabel label -> LogicNumber.create(Integer.parseInt(label.toMlog()));
-
-            default -> throw new MindcodeInternalError("Unexpected argument type " + getArg(5));
-        };
+        if (getArg(5) instanceof LogicValue value) return value;
+        throw new MindcodeInternalError("Unexpected argument type " + getArg(5));
     }
 
     private void ensureConditional() {

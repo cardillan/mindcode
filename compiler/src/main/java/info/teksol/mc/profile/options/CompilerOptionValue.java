@@ -26,6 +26,7 @@ public abstract class CompilerOptionValue<T> implements CompilerOption {
     private final List<T> values = new ArrayList<>();
     private final List<T> constValues = new ArrayList<>();
 
+    private boolean isDefault = true;
     private boolean additive = false;
     private Function<@Nullable List<T>, List<T>> valueProcessor = list -> list == null ? List.of() : list;
 
@@ -163,6 +164,7 @@ public abstract class CompilerOptionValue<T> implements CompilerOption {
         }));
         if (!additive) this.values.clear();
         this.values.addAll(processed);
+        this.isDefault = false;
     }
 
     public boolean setValues(List<T> values, OptionScope scope) {
@@ -175,7 +177,7 @@ public abstract class CompilerOptionValue<T> implements CompilerOption {
     }
 
     public boolean isDefault() {
-        return values.equals(defaultValues);
+        return isDefault;
     }
 
     @Override

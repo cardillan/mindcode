@@ -28,6 +28,8 @@ public interface GlobalCompilerProfile {
 
     <T extends Enum<T>> T getEnumValue(Enum<?> option);
 
+    boolean isDefault(Enum<?> option);
+
     //<editor-fold desc="Input/output options">
     default FileReferences getFileReferences() {
         return getEnumValue(InputOutputOptions.FILE_REFERENCES);
@@ -46,7 +48,8 @@ public interface GlobalCompilerProfile {
     }
 
     default boolean isNullCounterIsNoop() {
-        return getBooleanValue(EnvironmentOptions.NULL_COUNTER_IS_NOOP) && getTarget().version() != ProcessorVersion.V8A;
+        return isDefault(EnvironmentOptions.NULL_COUNTER_IS_NOOP)
+                ? getTarget().version() != ProcessorVersion.V8A : getBooleanValue(EnvironmentOptions.NULL_COUNTER_IS_NOOP);
     }
 
     default int getInstructionLimit() {
@@ -162,10 +165,9 @@ public interface GlobalCompilerProfile {
 
     //<editor-fold desc="Emulator Options">
     default Target getEmulatorTarget() {
-        Target emulatorTarget = this.<Target>getOption(EmulatorOptions.EMULATOR_TARGET).getValue();
-        Target runTarget = getTarget();
-        return emulatorTarget.version() == ProcessorVersion.V6 && emulatorTarget.edition() == ProcessorEdition.W
-                ? runTarget : emulatorTarget;
+        return isDefault(EmulatorOptions.EMULATOR_TARGET)
+                ? getTarget()
+                : this.<Target>getOption(EmulatorOptions.EMULATOR_TARGET).getValue();
     }
 
     default double getEmulatorFps() {
@@ -173,9 +175,9 @@ public interface GlobalCompilerProfile {
     }
 
     default EmulatedProcessor getEmulatorProcessor() {
-        EmulatedProcessor processor = getEnumValue(EmulatorOptions.EMULATOR_PROCESSOR);
-        return processor != EmulatedProcessor.DEFAULT ? processor :
-                getProcessorEdition() == ProcessorEdition.W ? EmulatedProcessor.WORLD_PROCESSOR : EmulatedProcessor.LOGIC_PROCESSOR;
+        return isDefault(EmulatorOptions.EMULATOR_PROCESSOR)
+                ? getProcessorEdition() == ProcessorEdition.W ? EmulatedProcessor.WORLD_PROCESSOR : EmulatedProcessor.LOGIC_PROCESSOR
+                : getEnumValue(EmulatorOptions.EMULATOR_PROCESSOR);
     }
 
     default Set<ExecutionFlag> getExecutionFlags() {

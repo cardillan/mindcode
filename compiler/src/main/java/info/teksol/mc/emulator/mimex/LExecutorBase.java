@@ -27,7 +27,7 @@ public abstract class LExecutorBase implements LExecutor {
     protected final LAssembler assembler;
     protected final BasicEmulator emulator;
     protected final LogicBlock logicBlock;
-    protected final EmulatorErrorHandler errorHandler;
+    protected final EmulatorMessageHandler messageHandler;
 
     protected final List<LInstruction> instructions = new ArrayList<>();
     protected final Map<String, LVar> vars = new LinkedHashMap<>();
@@ -57,6 +57,10 @@ public abstract class LExecutorBase implements LExecutor {
     /// Instruction accumulator
     protected double accumulator = 0;
 
+    /// When set to true, this executor is active. The yielding instructions (`stop` and `wait`) make an executor
+    /// inactive.
+    protected boolean active = true;
+
     /// When set to true, this executor has finished running the code. The execution will actually stop when all
     /// executors within the emulator (i.e., all processors) have finished.
     protected boolean finished = false;
@@ -75,10 +79,10 @@ public abstract class LExecutorBase implements LExecutor {
         this.assembler = assembler;
         this.emulator = emulator;
         this.logicBlock = logicBlock;
-        this.errorHandler = emulator.getErrorHandler();
+        this.messageHandler = emulator.getMessageHandler();
 
         int maxTextBuffer = metadata.getProcessorVersion() == ProcessorVersion.V6 ? 256 : 400;
-        textBuffer = new TextBuffer(errorHandler, 1000, maxTextBuffer);
+        textBuffer = new TextBuffer(messageHandler, 1000, maxTextBuffer);
         graphicsBuffer = new GraphicsBuffer(maxGraphicsBuffer);
 
         // Create default variables
@@ -115,7 +119,7 @@ public abstract class LExecutorBase implements LExecutor {
     }
 
     protected boolean getFlag(ExecutionFlag flag) {
-        return errorHandler.getFlag(flag);
+        return messageHandler.getFlag(flag);
     }
 
     private void addBlock(String name, MindustryBuilding block) {
@@ -129,6 +133,11 @@ public abstract class LExecutorBase implements LExecutor {
     @Override
     public boolean isEmpty() {
         return instructions.isEmpty();
+    }
+
+    @Override
+    public boolean active() {
+        return active && !finished;
     }
 
     @Override
@@ -157,9 +166,6 @@ public abstract class LExecutorBase implements LExecutor {
         int limit = accumulatorHalving ? 0 : 1;
 
         while (accumulator >= limit) {
-            if (errorHandler.getFlag(TRACE_EXECUTION)) {
-                errorHandler.info("    Accumulator: %g", accumulator);
-            }
             if (emulator.allFinished(executorIndex, finished)) {
                 finished = true;
                 return;
@@ -169,9 +175,7 @@ public abstract class LExecutorBase implements LExecutor {
             accumulator--;
             if (accumulatorHalving) limit++;
             if (yield) {
-                if (errorHandler.getFlag(TRACE_EXECUTION)) {
-                    errorHandler.info("    Yielding execution");
-                }
+                messageHandler.trace("            Yielding execution");
                 yield = false;
                 break;
             }
@@ -188,9 +192,10 @@ public abstract class LExecutorBase implements LExecutor {
             index = (int) counter.numval++;
 
             LInstruction instruction = instructions.get(index);
-            errorHandler.beginExecution(index, instruction);
+            messageHandler.beginExecution(index, instruction);
 
             traceInputs();
+            active = true;
             instruction.run();
             traceOutputs();
 
@@ -216,28 +221,28 @@ public abstract class LExecutorBase implements LExecutor {
     private final List<String> traceVars = new ArrayList<>();
 
     private void traceInputs() {
-        if (errorHandler.trace(TRACE_EXECUTION)) {
+        if (messageHandler.getFlag(TRACE_EXECUTION)) {
             LInstruction instruction = instructions.get(index);
-            errorHandler.info("    Step %d, instruction #%d: %s", emulator.step + 1, index, instruction);
+            messageHandler.trace("        Step %d, acc. %.2f, instruction #%d: %s", emulator.step, accumulator, index, instruction);
             traceVars.clear();
-            instruction.vars().forEach(v -> traceVars.add(String.format("        %s --> %s", v.name, v.trace())));
+            instruction.vars().forEach(v -> traceVars.add(String.format("            %s --> %s", v.name, v.trace())));
         }
     }
 
     private void traceOutputs() {
-        if (errorHandler.getFlag(TRACE_EXECUTION)) {
+        if (messageHandler.getFlag(TRACE_EXECUTION)) {
             LInstruction instruction = instructions.get(index);
-            traceVars.forEach(errorHandler::info);
+            traceVars.forEach(messageHandler::trace);
             instruction.vars().stream()
                     .filter(v -> v.updateStep == emulator.step)
-                    .forEach(v -> errorHandler.info("        %s <-- %s", v.name, v.trace()));
+                    .forEach(v -> messageHandler.trace("            %s <-- %s", v.name, v.trace()));
 
             int nextIndex = (int) counter.numval;
             if (nextIndex != index + 1 && !"stop".equals(instruction.opcode()) && !"wait".equals(instruction.opcode())) {
                 String nextInstr = index + 1 < instructions.size()
                         ? " (avoided '" + instructions.get(index + 1) + "')"
                         : "";
-                errorHandler.info("        Jumped to #%d%s", nextIndex, nextInstr);
+                messageHandler.trace("            Jumped to #%d%s", nextIndex, nextInstr);
             }
         }
     }
@@ -246,8 +251,7 @@ public abstract class LExecutorBase implements LExecutor {
     //<editor-fold desc="Results">
     @Override
     public String getProcessorId() {
-        //§§§
-        return logicBlock.name();
+        return logicBlock.processorId();
     }
 
     @Override
@@ -298,23 +302,32 @@ public abstract class LExecutorBase implements LExecutor {
     // instruction classes are not static and have implicit access to the executor instance.
 
     // Child classes populate instruction builders in constructor.
-    protected Map<String, Function<LStatement, LInstruction>> builders = new HashMap<>();
+    protected final Map<String, Function<LStatement, LInstruction>> builders = new HashMap<>();
 
     private LInstruction build(LStatement statement) {
         return builders.getOrDefault(statement.opcode(), UnknownI::new).apply(statement);
     }
 
     protected boolean error(ExecutionFlag flag, @PrintFormat String message, Object... args) {
-        if (errorHandler.error(flag, message, args)) {
-            finished = true;
+        if (messageHandler.error(flag, message, args)) {
+            if (!finished) {
+                messageHandler.trace("            Execution finished.");
+                finished = true;
+            }
             return true;
         }
         return false;
     }
 
     protected void finish(ExecutionFlag flag) {
-        if (errorHandler.getFlag(flag)) {
-            finished = true;
+        if (messageHandler.getFlag(flag)) {
+            if (!finished) {
+                // Less indent: finish not triggered by a specific instruction
+                messageHandler.trace(flag == STOP_ON_PROGRAM_END
+                        ? "%n        Execution finished."
+                        : "            Execution finished.");
+                finished = true;
+            }
         }
     }
 
@@ -462,7 +475,7 @@ public abstract class LExecutorBase implements LExecutor {
                 // We're okay
             } else {
                 if (!error(ERR_RUNTIME_CHECK_FAILED, "Failed runtime check: '%s'.", message.printExact())) {
-                    errorHandler.warn("Failed runtime check: '%s'.", message.printExact());
+                    messageHandler.warn("Failed runtime check: '%s'.", message.printExact());
                 }
             }
         }
@@ -515,7 +528,7 @@ public abstract class LExecutorBase implements LExecutor {
     }
 
     protected class ErrorI extends AbstractInstruction {
-        protected List<LVar> args;
+        protected final List<LVar> args;
 
         public ErrorI(LStatement statement) {
             super(statement);

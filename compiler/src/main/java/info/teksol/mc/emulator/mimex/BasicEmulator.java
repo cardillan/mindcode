@@ -12,11 +12,9 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-import static info.teksol.mc.emulator.ExecutionFlag.TRACE_EXECUTION;
-
 @NullMarked
 public class BasicEmulator implements Emulator {
-    private final EmulatorErrorHandler errorHandler;
+    private final EmulatorMessageHandler messageHandler;
     private final LGlobalVars globalVars;
     private final List<LExecutor> executors = new ArrayList<>();
     private final BitSet running;
@@ -24,11 +22,11 @@ public class BasicEmulator implements Emulator {
     public final int stepLimit;
     public final double fps;
 
-    public int step;
+    public int step = 1;
     public int noopSteps;
 
     public BasicEmulator(MessageConsumer messageConsumer, GlobalCompilerProfile profile, EmulatorSchematic schematic, int traceLimit) {
-        errorHandler = new EmulatorErrorHandler(messageConsumer, profile.getExecutionFlags(), traceLimit);
+        messageHandler = new EmulatorMessageHandler(messageConsumer, profile.getExecutionFlags(), traceLimit);
         stepLimit = profile.getStepLimit();
         fps = profile.getEmulatorFps();
 
@@ -42,8 +40,8 @@ public class BasicEmulator implements Emulator {
                 .filter(LogicBlock.class::isInstance)
                 .map(LogicBlock.class::cast)
                 .forEach(logicBlock -> {
-                    LParser parser = LParser.create(errorHandler, metadata, strings, logicBlock.getCode(), logicBlock.isPrivileged());
-                    LAssembler assembler = LAssembler.create(errorHandler, metadata, strings, globalVars, logicBlock.isPrivileged());
+                    LParser parser = LParser.create(messageHandler, metadata, strings, logicBlock.getCode(), logicBlock.isPrivileged());
+                    LAssembler assembler = LAssembler.create(messageHandler, metadata, strings, globalVars, logicBlock.isPrivileged());
                     LExecutor executor = LExecutor.create(metadata, assembler, this, logicBlock);
                     executor.load(parser);
                     executors.add(executor);
@@ -64,31 +62,27 @@ public class BasicEmulator implements Emulator {
             }
         }
 
-        if (errorHandler.getFlag(TRACE_EXECUTION)) {
-            errorHandler.info("%nProgram execution trace:");
-        }
+        messageHandler.trace("%nProgram execution trace:");
 
-        int tickCount = 0;
+        int frame = 1;
         double tickValue = 0f;
         double delta = 60f / fps;
 
         while (!running.isEmpty()) {
             globalVars.update(tickValue);
 
-            if (errorHandler.getFlag(TRACE_EXECUTION)) {
-                errorHandler.info("New tick started (order %d, value %g)", tickCount, tickValue);
-            }
+            messageHandler.trace("%nFrame %d: @tick %.2f,  @time %.2f, delta %.4f", frame, tickValue, globalVars.getTime(), delta);
 
             for (int index = 0; index < executors.size(); index++) {
                 LExecutor executor = executors.get(index);
+                messageHandler.trace("%n    Processor %s (%s):", executor.getProcessorId(),
+                        executor.finished() ? "finished" : executor.active() ? "running" : "waiting");
                 executor.runTick(index, delta);
 
-                if (executor.finished()) {
-                    running.clear(index);
-                }
+                running.set(index, executor.active());
             }
 
-            tickCount++;
+            frame++;
             tickValue += delta;
         }
     }
@@ -97,7 +91,7 @@ public class BasicEmulator implements Emulator {
         if (finished) running.clear(executor);
 
         if (step >= stepLimit) {
-            errorHandler.error(ExecutionFlag.ERR_EXECUTION_LIMIT_EXCEEDED, "Execution step limit of %,d exceeded.", stepLimit);
+            messageHandler.error(ExecutionFlag.ERR_EXECUTION_LIMIT_EXCEEDED, "Execution step limit of %,d exceeded.", stepLimit);
             return true;
         } else {
             return running.isEmpty();
@@ -108,7 +102,7 @@ public class BasicEmulator implements Emulator {
     //<editor-fold desc="Providing outputs">
     @Override
     public boolean isError() {
-        return errorHandler.isError();
+        return messageHandler.isError();
     }
 
     @Override
@@ -138,8 +132,8 @@ public class BasicEmulator implements Emulator {
     //</editor-fold>
 
     //<editor-fold desc="Executor support">
-    public EmulatorErrorHandler getErrorHandler() {
-        return errorHandler;
+    public EmulatorMessageHandler getMessageHandler() {
+        return messageHandler;
     }
 
     public double tickDelta() {

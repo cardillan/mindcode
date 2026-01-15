@@ -38,7 +38,7 @@ Trying to set a non-local compiler option using the `#setlocal` directive causes
 
 When a function being called is declared `inline`, options set at the module level are replaced with options effective at the call site. Options set locally for the function declaration (by a `#setlocal` directive preceding the function declaration) are preserved.
 
-Functions not explicitly declared `inline` are always compiled using the options effective in the module containing the function declaration, or by the `#setlocal` directive preceding the function declaration. This is the case even when the function gets inlined later on either because it is called just once, or by the Function Inlining optimization.
+Functions not explicitly declared `inline` are always compiled using the options effective in the module containing the function declaration, or by the `#setlocal` directive preceding the function declaration. This is the case even when the function gets inlined later on either because it is called just once or by the Function Inlining optimization.
 
 ## Semantic stability
 
@@ -129,7 +129,7 @@ printflush message1
 
 **Option scope: [global](#global-scope)**
 
-Sets the instruction limit: the maximum number of instructions that can be placed into a Mindustry processor. The standard value is 1000, however some mods allow to change this value within the game.
+Sets the instruction limit: the maximum number of instructions that can be placed into a Mindustry processor. The standard value is 1000, although some mods allow changing this value within the game.
 
 Mindcode uses the instruction limit with the [`speed` optimization goal](#option-goal): optimizations for speed must not exceed the instruction limit. In some cases, the optimization cost estimates are too conservative—some optimizations applied together may lead to code reductions that are not known to individual optimizers considering each optimization in isolation. In these cases, increasing the instruction limit might allow more optimizations to be performed. When the resulting code exceeds 1000 instructions, it is not usable in regular Mindustry processors, and the option should be decreased or set back to 1000. (A new feature, which would perform this trial-and-error optimization automatically, is planned.)
 
@@ -146,10 +146,10 @@ It is also possible to decrease the instruction limit if you wish so. The valid 
 
 Informs Mindcode how operations assigning `null` to `@counter` are handled by the processor. Possible values are:
 
-* `false`: assigning `null` to `@counter` is interpreted by the processor (possibly by jumping to address #0).
-* `true` (the default value): assigning `null` to `@counter` is ignored by the processor. Mindcode may generate code depending on this behavior.
+* `false` (the default value for target 8.0): assigning `null` to `@counter` is interpreted by the processor (possibly by jumping to address #0).
+* `true` (the default value for all other targets): assigning `null` to `@counter` is ignored by the processor. Mindcode may generate code depending on this behavior.
 
-In the past, Mindustry processor behavior has been inconsistent when assigning `null` to `@counter`. To allow Mindcode to produce correct code in case it gets changed again, this option has been added.
+In the past, Mindustry processor behavior has been inconsistent when assigning `null` to `@counter`. To allow Mindcode to produce the correct code in case it gets changed again, this option has been added.
 
 ### Option `target`
 
@@ -475,7 +475,7 @@ This feature is meant for small, test scripts, where a call to `printflush()` is
 
 **Option scope: [local](#local-scope)**
 
-his option activates/deactivates runtime checks when accessing internal or external array by index.
+his option activates/deactivates runtime checks when accessing an internal or external array by index.
 
 * `false`: no boundary checks are performed.
 * `true` (the default value): boundary checks are performed according to the error-reporting mechanism, unless `error-reporting` is set to `none`, in which case no runtime checks are performed.
@@ -540,7 +540,7 @@ The following compiler options govern which runtime checks are performed:
 Possible values for the `error-reporting` option are:
 
 * `none` (the default value): no runtime checks are generated.
-* `assert`: runtime checks are generated using instructions provided by the [MlogAssertions mod](https://github.com/cardillan/MlogAssertions). The mod is available for Mindustry 7 and latest Mindustry 8 Beta. If the mod is not installed, no runtime checks are performed, but otherwise the code runs as expected. Each runtime check takes one instruction. When the runtime check fails, the mod displays an error message over the processor for easier detection.
+* `assert`: runtime checks are generated using instructions provided by the [MlogAssertions mod](https://github.com/cardillan/MlogAssertions). The mod is available for Mindustry 7 and the latest Mindustry 8 Beta. If the mod is not installed, no runtime checks are performed, but otherwise the code runs as expected. Each runtime check takes one instruction. When the runtime check fails, the mod displays an error message over the processor for easier detection.
 * `minimal`: when the runtime check fails, the program execution stops on a `jump` instruction (this instruction permanently jumps to itself, which can be determined by inspecting the `@counter` variable in the **Vars** screen). Each runtime check takes two instructions.
 * `simple`: when the runtime check fails, the program execution stops on a `stop` instruction (again, this can be determined by inspecting the `@counter` variable). Each runtime check takes three instructions.
 * `described`: when the runtime check fails, the program execution stops on a `stop` instruction. However, a `print` instruction containing an error message is generated just before the `stop` instruction; after locating the faulting `stop` instruction, the error message can be read. Each runtime check takes four instructions.
@@ -915,11 +915,10 @@ Sets the FPS rate the emulator will use to schedule instructions. The standard F
 
 Use the `emulator-processor` option to specify the Mindustry Logic processor to be used by the processor emulator. Possible values are:
 
-* `default` (the default value): use logic processor when compiling code for the standard edition, and world processor when compiling code for the world edition.
-* `micro-processor`: use the `@micro-processor` processor.
-* `logic-processor`: use the `@logic-processor` processor.
-* `hyper-processor`: use the `@hyper-processor` processor.
-* `world-processor`: use the `@world-processor` processor.
+* `micro-processor`: uses the `@micro-processor` processor.
+* `logic-processor` (the default value when compiling for the standard edition): uses the `@logic-processor` processor.
+* `hyper-processor`: uses the `@hyper-processor` processor.
+* `world-processor` (the default value when compiling for the world edition): uses the `@world-processor` processor.
 
 When the type of the processor is specified by a schematic, this option is ignored.
 
@@ -927,7 +926,7 @@ When the type of the processor is specified by a schematic, this option is ignor
 
 **Option scope: [global](#global-scope)**
 
-Use the `emulator-target` option to specify the Mindustry Logic version to be used by the processor emulator. When the option is not specified, the target specifie by the `target` option is used for the emulator. This option is therefore only useful to emulate executing the coompiled code on a Mindustry processor different from the one used by the compiler.
+Use the `emulator-target` option to specify the Mindustry Logic version to be used by the processor emulator. When the option is not specified, the target specifie by the `target` option is used for the emulator. This option is therefore only useful to emulate executing the compiled code on a Mindustry processor different from the one used by the compiler.
 
 For possible values of this option, please see [Option `target`](#option-target).
 

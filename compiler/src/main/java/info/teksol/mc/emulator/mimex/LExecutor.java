@@ -22,6 +22,8 @@ public interface LExecutor extends ExecutorResults {
 
     @Nullable LVar getOptionalVar(String name);
 
+    boolean active();
+
     boolean finished();
 
     boolean yield();

@@ -73,4 +73,9 @@ public class LGlobalVars70 extends LGlobalVarsBase {
         varSecond.numval = tick / 60f;
         varMinute.numval = tick / 60f / 60f;
     }
+
+    @Override
+    public double getTime() {
+        return varTime.numval;
+    }
 }

@@ -10,13 +10,13 @@ import java.util.Arrays;
 public class MemoryBlock extends MindustryBuilding {
     private final double[] memory;
 
-    private MemoryBlock(String name, BlockType type, double[] array) {
-        super(name, type);
+    private MemoryBlock(String name, BlockType type, BlockPosition position, double[] array) {
+        super(name, type, position);
         memory = array;
     }
 
-    public MemoryBlock(String name, BlockType type, int size) {
-        super(name, type);
+    public MemoryBlock(String name, BlockType type, BlockPosition position, int size) {
+        super(name, type, position);
         memory = new double[size];
     }
 
@@ -39,19 +39,19 @@ public class MemoryBlock extends MindustryBuilding {
         return index;
     }
 
-    public static MemoryBlock createMemoryCell(MindustryMetadata metadata) {
-        return new MemoryBlock("cell", metadata.getExistingBlock("@memory-cell"), 64);
+    public static MemoryBlock createMemoryCell(MindustryMetadata metadata, BlockPosition position) {
+        return new MemoryBlock("cell", metadata.getExistingBlock("@memory-cell"), position, 64);
     }
 
-    public static MemoryBlock createMemoryCell(MindustryMetadata metadata, double[] array) {
-        return new MemoryBlock("cell", metadata.getExistingBlock("@memory-cell"), Arrays.copyOf(array, 64));
+    public static MemoryBlock createMemoryCell(MindustryMetadata metadata, BlockPosition position, double[] array) {
+        return new MemoryBlock("cell", metadata.getExistingBlock("@memory-cell"), position, Arrays.copyOf(array, 64));
     }
 
-    public static MemoryBlock createMemoryBank(MindustryMetadata metadata) {
-        return new MemoryBlock("bank", metadata.getExistingBlock("@memory-bank"), 512);
+    public static MemoryBlock createMemoryBank(MindustryMetadata metadata, BlockPosition position) {
+        return new MemoryBlock("bank", metadata.getExistingBlock("@memory-bank"), position, 512);
     }
 
-    public static MemoryBlock createMemoryBank(MindustryMetadata metadata, double[] array) {
-        return new MemoryBlock("bank", metadata.getExistingBlock("@memory-bank"), Arrays.copyOf(array, 512));
+    public static MemoryBlock createMemoryBank(MindustryMetadata metadata, BlockPosition position, double[] array) {
+        return new MemoryBlock("bank", metadata.getExistingBlock("@memory-bank"), position, Arrays.copyOf(array, 512));
     }
 }

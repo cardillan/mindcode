@@ -14,7 +14,6 @@ public enum ExecutionFlag {
 
     STOP_ON_STOP_INSTRUCTION        ("stop execution when the 'stop' instruction is encountered"),
     STOP_ON_END_INSTRUCTION         ("stop execution when the 'end' instruction is encountered"),
-    STOP_ON_LONG_WAIT               ("stop execution when the 'wait' instruction longer than an hour encountered"),
     STOP_ON_PROGRAM_END             ("stop execution when the end of instruction list is reached"),
     ERR_PARSE_ERROR                 ("stop execution when an error or invalid instruction is encountered during parsing"),
     ERR_EXECUTION_LIMIT_EXCEEDED    ("stop execution when number of steps exceeds the execution limit",false, true),
@@ -26,7 +25,7 @@ public enum ExecutionFlag {
     ERR_NOT_AN_OBJECT               ("stop execution when a numeric value is used instead of an object"),
     ERR_NOT_A_NUMBER                ("stop execution when an object is used instead of a numeric value (nulls are always permitted)"),
     ERR_UNKNOWN_COLOR               ("stop execution when an unknown color is used in a named color literal"),
-    ERR_INVALID_CHARACTER           ("stop execution when an invalid value is used in the 'printchar' instruction"),
+    ERR_INVALID_CHARACTER           ("stop execution when an invalid numeric value is used in the 'printchar' instruction"),
     ERR_INVALID_LOOKUP              ("stop execution when an invalid index is used in the 'lookup' instruction"),
     ERR_INVALID_LINK                ("stop execution when an invalid index is used in the 'getlink' instruction", true, false),
     ERR_MEMORY_ACCESS               ("stop execution when accessing invalid memory-cell or memory-bank index", true, false),

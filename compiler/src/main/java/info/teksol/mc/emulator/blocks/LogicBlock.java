@@ -3,7 +3,7 @@ package info.teksol.mc.emulator.blocks;
 import info.teksol.mc.emulator.EmulatedProcessor;
 import info.teksol.mc.emulator.LVar;
 import info.teksol.mc.emulator.mimex.LExecutor;
-import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.util.EnumUtils;
 import org.jspecify.annotations.NullMarked;
@@ -20,8 +20,8 @@ public class LogicBlock extends MindustryBuilding {
     private final String code;
     private @Nullable LExecutor executor;
 
-    public LogicBlock(String name, MindustryContent type, String code) {
-        super(name, type);
+    public LogicBlock(String name, BlockType type, BlockPosition position, String code) {
+        super(name, type, position);
         this.code = code;
         switch (type.name()) {
             case "@micro-processor" -> { ipt = 2; privileged = false; }
@@ -32,24 +32,24 @@ public class LogicBlock extends MindustryBuilding {
         }
     }
 
-    public static LogicBlock createMicroProcessor(MindustryMetadata metadata, String code) {
-        return new LogicBlock("processor", metadata.getExistingBlock("@micro-processor"), code);
+    public static LogicBlock createProcessor(MindustryMetadata metadata, EmulatedProcessor processor, BlockPosition position, String code) {
+        return new LogicBlock("processor", metadata.getExistingBlock("@" + EnumUtils.toKebabCase(processor)), position, code);
     }
 
-    public static LogicBlock createLogicProcessor(MindustryMetadata metadata, String code) {
-        return new LogicBlock("processor", metadata.getExistingBlock("@logic-processor"), code);
+    public static LogicBlock createMicroProcessor(MindustryMetadata metadata, BlockPosition position, String code) {
+        return createProcessor(metadata, EmulatedProcessor.MICRO_PROCESSOR, position, code);
     }
 
-    public static LogicBlock createHyperProcessor(MindustryMetadata metadata, String code) {
-        return new LogicBlock("processor", metadata.getExistingBlock("@hyper-processor"), code);
+    public static LogicBlock createLogicProcessor(MindustryMetadata metadata, BlockPosition position, String code) {
+        return createProcessor(metadata, EmulatedProcessor.LOGIC_PROCESSOR, position, code);
     }
 
-    public static LogicBlock createWorldProcessor(MindustryMetadata metadata, String code) {
-        return new LogicBlock("processor", metadata.getExistingBlock("@world-processor"), code);
+    public static LogicBlock createHyperProcessor(MindustryMetadata metadata, BlockPosition position, String code) {
+        return createProcessor(metadata, EmulatedProcessor.HYPER_PROCESSOR, position, code);
     }
 
-    public static LogicBlock createProcessor(MindustryMetadata metadata, EmulatedProcessor processor, String code) {
-        return new LogicBlock("processor", metadata.getExistingBlock("@" + EnumUtils.toKebabCase(processor)), code);
+    public static LogicBlock createWorldProcessor(MindustryMetadata metadata, BlockPosition position, String code) {
+        return createProcessor(metadata, EmulatedProcessor.WORLD_PROCESSOR, position, code);
     }
 
     public void addBlock(String name, MindustryBuilding block) {
@@ -74,6 +74,10 @@ public class LogicBlock extends MindustryBuilding {
 
     public void setExecutor(LExecutor executor) {
         this.executor = executor;
+    }
+
+    public String processorId() {
+        return type.format() + " at (" + x() + ", " + y() + ")";
     }
 
     public @Nullable LVar getOptionalVar(String name) {

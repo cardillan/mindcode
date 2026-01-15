@@ -435,7 +435,7 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
     }
 
     private static final class Translation {
-        LogicVariable outputVariable;
+        final LogicVariable outputVariable;
         private final ValueAnalyzer analyzer;
         boolean nullKey;                        // Explicitly map input null to an output value
         boolean nullKeyVoid;                    // Explicitly map input null to the original value

@@ -15,7 +15,7 @@ public abstract class LParserBase implements LParser {
     private static final int maxInstructions = 1000;
     private static final int maxJumps = 500;
 
-    private final EmulatorErrorHandler errorHandler;
+    private final EmulatorMessageHandler errorHandler;
     private final MindustryMetadata metadata;
     private final LStrings strings;
     private final Map<String, String> opNameChanges = opNameChanges();
@@ -33,7 +33,7 @@ public abstract class LParserBase implements LParser {
     private int pos;
     private int line;
 
-    public LParserBase(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code, boolean privileged) {
+    public LParserBase(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code, boolean privileged) {
         this.errorHandler = errorHandler;
         this.strings = strings;
         this.metadata = metadata;
@@ -215,13 +215,6 @@ public abstract class LParserBase implements LParser {
         return error;
     }
 
-    static class JumpIndex {
-        JumpStatement jump;
-        String location;
-
-        public JumpIndex(JumpStatement jump, String location) {
-            this.jump = jump;
-            this.location = location;
-        }
+    record JumpIndex(JumpStatement jump, String location) {
     }
 }

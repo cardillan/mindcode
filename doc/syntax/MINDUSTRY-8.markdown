@@ -550,6 +550,7 @@ Plays a sound, either in a specific position on the world map or with a global v
 * `@sfx-uiBack`
 * `@sfx-uiButton`
 * `@sfx-uiChat`
+* `@sfx-uiFavorite`
 * `@sfx-uiNotify`
 * `@sfx-uiUnlock`
 * `@sfx-unitCreate`

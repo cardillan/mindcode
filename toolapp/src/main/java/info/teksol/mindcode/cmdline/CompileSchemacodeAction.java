@@ -112,16 +112,16 @@ public class CompileSchemacodeAction extends ActionHandler {
                 result.addMessage(ToolMessage.info("\nCreated schematic was copied to the clipboard."));
             }
 
-            outputMessages(result, output, logFile, positionFormatter);
-
             Emulator emulator = new BasicEmulator(result.messages()::add, compilerProfile, result.schematic(), 10000);
             emulator.run(compilerProfile.getStepLimit());
 
             for (int i = 0; i < emulator.getExecutorCount(); i++) {
                 System.out.println();
-                System.out.println("Processor " + i + ":");
+                System.out.println("Processor " + emulator.getExecutorResults(i).getProcessorId());
                 System.out.println(emulator.getExecutorResults(i).getFormattedOutput());
             }
+
+            outputMessages(result, output, logFile, positionFormatter);
         } else {
             // Errors: print just them into stderr
             List<String> errors = result.errors(m -> m.formatMessage(positionFormatter));

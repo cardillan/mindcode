@@ -1,10 +1,9 @@
 package info.teksol.schemacode.schematics;
 
+import info.teksol.mc.emulator.EmulatedProcessor;
 import info.teksol.mc.emulator.EmulatorSchematic;
-import info.teksol.mc.emulator.blocks.LogicBlock;
-import info.teksol.mc.emulator.blocks.MemoryBlock;
-import info.teksol.mc.emulator.blocks.MessageBlock;
-import info.teksol.mc.emulator.blocks.MindustryBuilding;
+import info.teksol.mc.emulator.blocks.*;
+import info.teksol.mc.emulator.blocks.BlockPosition;
 import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.schemacode.mindustry.Position;
@@ -36,18 +35,24 @@ public record Schematic(String name, String filename, String description, List<S
     }
 
     private MindustryBuilding convertBlock(MindustryMetadata metadata, Block block) {
+        BlockPosition position = block.position().toBlockPosition();
         return switch (block.blockType().name()) {
-            case "@micro-processor" -> LogicBlock.createMicroProcessor(metadata, block.configuration().as(ProcessorConfiguration.class).code());
-            case "@logic-processor" -> LogicBlock.createLogicProcessor(metadata, block.configuration().as(ProcessorConfiguration.class).code());
-            case "@hyper-processor" -> LogicBlock.createHyperProcessor(metadata, block.configuration().as(ProcessorConfiguration.class).code());
-            case "@world-processor" -> LogicBlock.createWorldProcessor(metadata, block.configuration().as(ProcessorConfiguration.class).code());
-            case "@memory-cell" -> MemoryBlock.createMemoryCell(metadata);
-            case "@memory-bank" -> MemoryBlock.createMemoryBank(metadata);
-            case "@message" -> MessageBlock.createMessage(metadata);
-            case "@logic-display" -> LogicDisplay.createLogicDisplay(metadata);
-            case "@large-logic-display" -> LogicDisplay.createLargeLogicDisplay(metadata);
-            default -> new MindustryBuilding(block.blockType().getBaseLinkName(), metadata.getExistingBlock(block.name()));
+            case "@micro-processor" -> createLogicBlock(metadata, block, EmulatedProcessor.MICRO_PROCESSOR);
+            case "@logic-processor" -> createLogicBlock(metadata, block, EmulatedProcessor.LOGIC_PROCESSOR);
+            case "@hyper-processor" -> createLogicBlock(metadata, block, EmulatedProcessor.HYPER_PROCESSOR);
+            case "@world-processor" -> createLogicBlock(metadata, block, EmulatedProcessor.WORLD_PROCESSOR);
+            case "@memory-cell" -> MemoryBlock.createMemoryCell(metadata, position);
+            case "@memory-bank" -> MemoryBlock.createMemoryBank(metadata, position);
+            case "@message" -> MessageBlock.createMessage(metadata, position);
+            case "@logic-display" -> LogicDisplay.createLogicDisplay(metadata, position);
+            case "@large-logic-display" -> LogicDisplay.createLargeLogicDisplay(metadata, position);
+            default -> new MindustryBuilding(block.blockType().getBaseLinkName(), metadata.getExistingBlock(block.name()), position);
         };
+    }
+
+    private LogicBlock createLogicBlock(MindustryMetadata metadata, Block block, EmulatedProcessor processor) {
+        return LogicBlock.createProcessor(metadata, processor, block.position().toBlockPosition(),
+                block.configuration().as(ProcessorConfiguration.class).code());
     }
 
     private void setupLinks(LogicBlock logicBlock, ProcessorConfiguration configuration, Map<Position, MindustryBuilding> blockMap) {

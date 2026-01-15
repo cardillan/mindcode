@@ -1,7 +1,7 @@
 package info.teksol.mc.emulator.mimex.target80;
 
 import info.teksol.mc.emulator.ExecutionFlag;
-import info.teksol.mc.emulator.mimex.EmulatorErrorHandler;
+import info.teksol.mc.emulator.mimex.EmulatorMessageHandler;
 import info.teksol.mc.emulator.mimex.LAssemblerBase;
 import info.teksol.mc.emulator.mimex.LGlobalVars;
 import info.teksol.mc.emulator.mimex.LStrings;
@@ -15,7 +15,7 @@ public class LAssembler80 extends LAssemblerBase {
     private static final long invalidNumNegative = Long.MIN_VALUE;
     private static final long invalidNumPositive = Long.MAX_VALUE;
 
-    public LAssembler80(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars,
+    public LAssembler80(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars,
             boolean privileged) {
         super(errorHandler, metadata, strings, globalVars, privileged);
     }

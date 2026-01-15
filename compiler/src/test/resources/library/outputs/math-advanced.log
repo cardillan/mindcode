@@ -1836,7 +1836,7 @@ Final code before resolving virtual instructions:
   987:  return :median.1*retaddr
 
 
-'stop' instruction encountered, dumping variable values:
+        'stop' instruction encountered, dumping variable values:
 @counter: 951.0
 :nullToZero:result: 0.0
 :nullToZero.1:result: 1.0

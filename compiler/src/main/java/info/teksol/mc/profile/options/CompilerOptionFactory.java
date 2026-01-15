@@ -388,7 +388,7 @@ public class CompilerOptionFactory {
                 EmulatedProcessor.class,
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
-                EmulatedProcessor.DEFAULT));
+                EmulatedProcessor.LOGIC_PROCESSOR));
 
         list.add(new BooleanCompilerOptionValue(EmulatorOptions.RUN, "",
                 "run the compiled code on an emulated processor",

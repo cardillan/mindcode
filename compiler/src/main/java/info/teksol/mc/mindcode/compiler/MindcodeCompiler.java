@@ -6,10 +6,7 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.emulator.Assertion;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.EmulatorSchematic;
-import info.teksol.mc.emulator.blocks.LogicBlock;
-import info.teksol.mc.emulator.blocks.MemoryBlock;
-import info.teksol.mc.emulator.blocks.MessageBlock;
-import info.teksol.mc.emulator.blocks.MindustryBuilding;
+import info.teksol.mc.emulator.blocks.*;
 import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
 import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.generated.ast.AstIndentedPrinter;
@@ -405,17 +402,18 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         assert metadata != null;
 
         // All flags are already set as we want them to be
-        addBlocks(logicBlock, "cell", _ -> MemoryBlock.createMemoryCell(metadata));
-        addBlocks(logicBlock, "bank", _ -> MemoryBlock.createMemoryBank(metadata));
-        addBlocks(logicBlock, "display", i -> LogicDisplay.createLogicDisplay(metadata, i < 5));
-        addBlocks(logicBlock, "message", _ -> MessageBlock.createMessage(metadata));
+        addBlocks(logicBlock, "cell", _ -> MemoryBlock.createMemoryCell(metadata, BlockPosition.ZERO_POSITION));
+        addBlocks(logicBlock, "bank", _ -> MemoryBlock.createMemoryBank(metadata, BlockPosition.ZERO_POSITION));
+        addBlocks(logicBlock, "display", i -> LogicDisplay.createLogicDisplay(metadata, i < 5, BlockPosition.ZERO_POSITION));
+        addBlocks(logicBlock, "message", _ -> MessageBlock.createMessage(metadata, BlockPosition.ZERO_POSITION));
 
         logicBlockInitializer.accept(logicBlock);
     }
 
     private void run() {
         assert metadata != null;
-        LogicBlock logicBlock = LogicBlock.createProcessor(metadata, compilerProfile().getEmulatorProcessor(), output);
+        LogicBlock logicBlock = LogicBlock.createProcessor(metadata, compilerProfile().getEmulatorProcessor(),
+                BlockPosition.ZERO_POSITION, output);
         initializeLogicBlock(logicBlock);
         EmulatorSchematic schematic = new EmulatorSchematic(List.of(logicBlock));
         emulator = new BasicEmulator(messageConsumer, globalProfile, schematic, globalProfile.getTraceLimit());

@@ -13,7 +13,7 @@ import java.util.Map;
 
 @NullMarked
 public abstract class LAssemblerBase implements LAssembler {
-    protected final EmulatorErrorHandler errorHandler;
+    protected final EmulatorMessageHandler errorHandler;
     protected final MindustryMetadata metadata;
     protected final LStrings strings;
     protected final LGlobalVars globalVars;
@@ -31,7 +31,7 @@ public abstract class LAssemblerBase implements LAssembler {
     protected final LVar links;
     protected final LVar ipt;
 
-    protected LAssemblerBase(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings,
+    protected LAssemblerBase(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings,
             LGlobalVars globalVars, boolean privileged) {
         this.errorHandler = errorHandler;
         this.metadata = metadata;

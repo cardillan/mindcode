@@ -85,28 +85,39 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public <T> CompilerOptionValue<T> getOption(Enum<?> option) {
         return (CompilerOptionValue<T>) options.get(option);
     }
 
+    @Override
     public int getIntValue(Enum<?> option) {
         return this.<Integer>getOption(option).getValue();
     }
 
+    @Override
     public double getDoubleValue(Enum<?> option) {
         return this.<Double>getOption(option).getValue();
     }
 
+    @Override
     public boolean getBooleanValue(Enum<?> option) {
         return this.<Boolean>getOption(option).getValue();
     }
 
+    @Override
     public String getStringValue(Enum<?> option) {
         return this.<String>getOption(option).getValue();
     }
 
+    @Override
     public <T extends Enum<T>> T getEnumValue(Enum<?> option) {
         return this.<T>getOption(option).getValue();
+    }
+
+    @Override
+    public boolean isDefault(Enum<?> option) {
+        return getOption(option).isDefault();
     }
 
     public boolean isWebApplication() {

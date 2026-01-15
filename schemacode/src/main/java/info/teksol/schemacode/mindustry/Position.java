@@ -1,11 +1,15 @@
 package info.teksol.schemacode.mindustry;
 
+import info.teksol.mc.emulator.blocks.BlockPosition;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.schematics.Block;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.UnaryOperator;
 
+@NullMarked
 public record Position(int x, int y) implements Comparable<Position>, Configuration {
 
     private static final int INVALID_COORDINATE = -255;
@@ -111,7 +115,7 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
      * @param refPos reference position, use null if absolute coordinates are desired
      * @return Schemacode representation
      */
-    public String toString(Position refPos) {
+    public String toString(@Nullable Position refPos) {
         return refPos == null ? toStringAbsolute() : sub(refPos).toRelativePositionString();
     }
 
@@ -122,7 +126,7 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
      * @param refPos reference position, use null if absolute coordinates are desired
      * @return Schemacode representation
      */
-    public String toStringNear(Position refPos) {
+    public String toStringNear(@Nullable Position refPos) {
         Position relative = refPos == null ? null : sub(refPos);
         return relative == null || !relative.isNear() ? toStringAbsolute() : relative.toRelativePositionString();
     }
@@ -139,5 +143,9 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
         return nonPositive()
                 ? "-(" + (-x) + ", " + (-y) + ")"
                 : "+(" + x + ", " + y + ")";
+    }
+
+    public BlockPosition toBlockPosition() {
+        return new BlockPosition(x, y);
     }
 }

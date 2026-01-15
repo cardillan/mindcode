@@ -645,7 +645,7 @@ Final code before resolving virtual instructions:
   493:  end
 
 
-'stop' instruction encountered, dumping variable values:
+        'stop' instruction encountered, dumping variable values:
 @counter: 229.0
 :printLines:line: 3.0
 *tmp0: 12.0

@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.tests;
 
+import info.teksol.mc.emulator.blocks.BlockPosition;
 import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
@@ -26,7 +27,7 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
     void storageDisplayTest() throws IOException {
         testAndEvaluateFile("storage-display.mnd",
                 s -> "param AMOUNT = 12345;\n" + s,
-                Map.of("display1", LogicDisplay.createLargeLogicDisplay(ip.getMetadata())),
+                Map.of("display1", LogicDisplay.createLargeLogicDisplay(ip.getMetadata(), BlockPosition.ZERO_POSITION)),
                 List.of()
         );
     }
@@ -42,8 +43,8 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
                 expectedMessages(),
                 "param SIZE = " + arrayLength + ";\n" + readFile(fileName),
                 Map.of(
-                        "bank2", MemoryBlock.createMemoryBank(ip.getMetadata(), array),
-                        "bank3", MemoryBlock.createMemoryBank(ip.getMetadata(), sorted)
+                        "bank2", MemoryBlock.createMemoryBank(ip.getMetadata(), BlockPosition.ZERO_POSITION, array),
+                        "bank3", MemoryBlock.createMemoryBank(ip.getMetadata(), BlockPosition.ZERO_POSITION, sorted)
                 ),
                 assertEvaluator(),
                 Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix)

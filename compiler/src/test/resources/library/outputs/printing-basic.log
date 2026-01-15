@@ -888,7 +888,7 @@ Final code before resolving virtual instructions:
   297:  stop
 
 
-'stop' instruction encountered, dumping variable values:
+        'stop' instruction encountered, dumping variable values:
 @counter: 297.0
 :formatNumber:n: 9.0
 :formatNumber:mod: 9.0

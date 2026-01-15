@@ -1,6 +1,6 @@
 package info.teksol.mc.emulator.mimex.target70;
 
-import info.teksol.mc.emulator.mimex.EmulatorErrorHandler;
+import info.teksol.mc.emulator.mimex.EmulatorMessageHandler;
 import info.teksol.mc.emulator.mimex.LAssemblerBase;
 import info.teksol.mc.emulator.mimex.LGlobalVars;
 import info.teksol.mc.emulator.mimex.LStrings;
@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 public class LAssembler70 extends LAssemblerBase {
     private static final int invalidNum = Integer.MIN_VALUE;
 
-    public LAssembler70(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars,
+    public LAssembler70(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars,
             boolean privileged) {
         super(errorHandler, metadata, strings, globalVars, privileged);
     }

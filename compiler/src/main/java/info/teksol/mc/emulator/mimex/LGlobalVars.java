@@ -16,6 +16,8 @@ public interface LGlobalVars {
 
     void update(double tick);
 
+    double getTime();
+
     static LGlobalVars create(MindustryMetadata metadata) {
         return switch (metadata.getProcessorVersion()) {
             case V6         -> new LGlobalVars60(metadata);

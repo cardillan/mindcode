@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.tests.interceptor;
 
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.EmulatorSchematic;
+import info.teksol.mc.emulator.blocks.BlockPosition;
 import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.MindustryBuilding;
@@ -64,9 +65,9 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
             String code = LogicInstructionPrinter.toString(ip, instructions,
                     compiler.globalCompilerProfile().isSymbolicLabels(), compiler.globalCompilerProfile().getMlogIndent());
 
-            LogicBlock logicBlock = LogicBlock.createLogicProcessor(ip.getMetadata(), code);
-            logicBlock.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata()));
-            logicBlock.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata()));
+            LogicBlock logicBlock = LogicBlock.createLogicProcessor(ip.getMetadata(), BlockPosition.ZERO_POSITION, code);
+            logicBlock.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata(), BlockPosition.ZERO_POSITION));
+            logicBlock.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata(), BlockPosition.ZERO_POSITION));
             EmulatorSchematic emulatorSchematic = new EmulatorSchematic(List.of(logicBlock));
             Emulator emulator = new BasicEmulator(expectedMessages(), compiler.globalCompilerProfile(), emulatorSchematic, 1000);
             emulator.run(STEP_LIMIT);

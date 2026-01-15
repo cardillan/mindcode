@@ -117,15 +117,15 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
                 [--emulator-fps {1.0..240.0}]
-                [--emulator-processor {default,micro-processor,logic-processor,hyper-processor,world-processor}]
+                [--emulator-processor {micro-processor,logic-processor,hyper-processor,world-processor}]
                 [--run [{true,false}]] [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
                 [--enforce-instruction-limit {true,false}] [--trace-execution {true,false}]
                 [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-long-wait {true,false}]
-                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
-                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
-                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
-                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
+                [--err-parse-error {true,false}] [--err-invalid-counter {true,false}]
+                [--err-unsupported-opcode {true,false}] [--err-nonexistent-var {true,false}]
+                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
+                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-character {true,false}] [--err-invalid-lookup {true,false}]
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
@@ -341,7 +341,7 @@ Emulator options:
                          selects target processor version and edition (a 'w' suffix specifies the world processor)
   --emulator-fps {1.0..240.0}
                          the fps used by the emulator
-  --emulator-processor {default,micro-processor,logic-processor,hyper-processor,world-processor}
+  --emulator-processor {micro-processor,logic-processor,hyper-processor,world-processor}
                          specifies which Mindustry logic  processor  to  use  for  the  emulator  (when  the type of the
                          processor is specified in the schematics, this vale is ignored)
   --run [{true,false}]   run the compiled code on an emulated processor
@@ -360,8 +360,6 @@ Emulator options:
                          stop execution when the 'stop' instruction is encountered
   --stop-on-end-instruction {true,false}
                          stop execution when the 'end' instruction is encountered
-  --stop-on-long-wait {true,false}
-                         stop execution when the 'wait' instruction longer than an hour encountered
   --stop-on-program-end {true,false}
                          stop execution when the end of instruction list is reached
   --err-parse-error {true,false}
@@ -381,7 +379,7 @@ Emulator options:
   --err-unknown-color {true,false}
                          stop execution when an unknown color is used in a named color literal
   --err-invalid-character {true,false}
-                         stop execution when an invalid value is used in the 'printchar' instruction
+                         stop execution when an invalid numeric value is used in the 'printchar' instruction
   --err-invalid-lookup {true,false}
                          stop execution when an invalid index is used in the 'lookup' instruction
   --err-invalid-link {true,false}
@@ -450,15 +448,15 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
                 [--emulator-fps {1.0..240.0}]
-                [--emulator-processor {default,micro-processor,logic-processor,hyper-processor,world-processor}]
+                [--emulator-processor {micro-processor,logic-processor,hyper-processor,world-processor}]
                 [--run [{true,false}]] [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
                 [--enforce-instruction-limit {true,false}] [--trace-execution {true,false}]
                 [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-long-wait {true,false}]
-                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
-                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
-                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
-                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
+                [--err-parse-error {true,false}] [--err-invalid-counter {true,false}]
+                [--err-unsupported-opcode {true,false}] [--err-nonexistent-var {true,false}]
+                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
+                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-character {true,false}] [--err-invalid-lookup {true,false}]
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
@@ -663,7 +661,7 @@ Emulator options:
                          selects target processor version and edition (a 'w' suffix specifies the world processor)
   --emulator-fps {1.0..240.0}
                          the fps used by the emulator
-  --emulator-processor {default,micro-processor,logic-processor,hyper-processor,world-processor}
+  --emulator-processor {micro-processor,logic-processor,hyper-processor,world-processor}
                          specifies which Mindustry logic  processor  to  use  for  the  emulator  (when  the type of the
                          processor is specified in the schematics, this vale is ignored)
   --run [{true,false}]   run the compiled code on an emulated processor
@@ -682,8 +680,6 @@ Emulator options:
                          stop execution when the 'stop' instruction is encountered
   --stop-on-end-instruction {true,false}
                          stop execution when the 'end' instruction is encountered
-  --stop-on-long-wait {true,false}
-                         stop execution when the 'wait' instruction longer than an hour encountered
   --stop-on-program-end {true,false}
                          stop execution when the end of instruction list is reached
   --err-parse-error {true,false}
@@ -703,7 +699,7 @@ Emulator options:
   --err-unknown-color {true,false}
                          stop execution when an unknown color is used in a named color literal
   --err-invalid-character {true,false}
-                         stop execution when an invalid value is used in the 'printchar' instruction
+                         stop execution when an invalid numeric value is used in the 'printchar' instruction
   --err-invalid-lookup {true,false}
                          stop execution when an invalid index is used in the 'lookup' instruction
   --err-invalid-link {true,false}

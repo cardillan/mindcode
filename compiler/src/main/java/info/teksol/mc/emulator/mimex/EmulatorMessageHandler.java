@@ -1,5 +1,6 @@
 package info.teksol.mc.emulator.mimex;
 
+import info.teksol.mc.emulator.EmulatorMessage;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.emulator.LInstruction;
 import info.teksol.mc.messages.AbstractMessageEmitter;
@@ -10,8 +11,11 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
+import static info.teksol.mc.emulator.ExecutionFlag.DUMP_VARIABLES_ON_STOP;
+import static info.teksol.mc.emulator.ExecutionFlag.TRACE_EXECUTION;
+
 @NullMarked
-public class EmulatorErrorHandler extends AbstractMessageEmitter {
+public class EmulatorMessageHandler extends AbstractMessageEmitter {
     private final Set<ExecutionFlag> flags;
 
     /// A runtime error was encountered
@@ -23,7 +27,7 @@ public class EmulatorErrorHandler extends AbstractMessageEmitter {
     private int index;
     private @Nullable LInstruction instruction;
 
-    public EmulatorErrorHandler(MessageConsumer messageConsumer, Set<ExecutionFlag> flags, int traceLimit) {
+    public EmulatorMessageHandler(MessageConsumer messageConsumer, Set<ExecutionFlag> flags, int traceLimit) {
         super(messageConsumer);
         this.flags = flags;
         this.traceLimit = traceLimit;
@@ -33,8 +37,20 @@ public class EmulatorErrorHandler extends AbstractMessageEmitter {
         return flags.contains(flag);
     }
 
-    public boolean trace(ExecutionFlag flag) {
-        return getFlag(flag) && traceCount++ < traceLimit;
+    public void trace(ExecutionFlag flag, @PrintFormat String format, Object... args) {
+        if (getFlag(flag) && traceCount++ < traceLimit) {
+            addMessage(EmulatorMessage.info(-1, null, format, args));
+        }
+    }
+
+    public void trace(@PrintFormat String format, Object... args) {
+        trace(TRACE_EXECUTION, format, args);
+    }
+
+    public void dump(@PrintFormat String format, Object... args) {
+        if (getFlag(DUMP_VARIABLES_ON_STOP)) {
+            addMessage(EmulatorMessage.info(-1, null, format, args));
+        }
     }
 
     public void beginExecution(int index, LInstruction instruction) {

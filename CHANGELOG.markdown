@@ -19,6 +19,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * [Compiler-defined constants](/doc/syntax/SYNTAX-1-VARIABLES.markdown#compiler-defined-constants) now follow the `@@VARIABLE` pattern, instead of earlier `__VARIABLE__` (for example, `@@MINDUSTRY_VERSION`).
 * Changed the emulator handling of the `wait` instruction eith zero argument to match the ltest Mindustry BE behavior.
 
+### Miscellaneous
+
+* The system of compiler options has been updated to allow determining whether a given option has been set. This allows the default values of unset options to be derived from the values of other options.   
+
 ## 3.12.1 - 2026-01-12
 
 ### Fixed

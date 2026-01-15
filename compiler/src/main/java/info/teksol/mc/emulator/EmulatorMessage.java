@@ -19,15 +19,18 @@ public record EmulatorMessage(
 
     public EmulatorMessage {
         Objects.requireNonNull(level);
-        Objects.requireNonNull(flag);
         Objects.requireNonNull(text);
     }
 
     @Override
     public String message() {
-        String prefix = instruction == null ? "Runtime error occurred:\n" : String.format("Runtime error at instruction #%d: '%s':\n", index, instruction);
-        String suffix = flag == null ? "" : String.format("\nUse the '#set %s = false;' directive to ignore this error.", flag.getOptionName());
-        return prefix + text + suffix;
+        if (level.weakerOrEqual(MessageLevel.INFO)) {
+            return text;
+        } else {
+            String prefix = instruction == null ? "Runtime error occurred:\n" : String.format("Runtime error at instruction #%d: '%s':\n", index, instruction);
+            String suffix = flag == null ? "" : String.format("\nUse the '#set %s = false;' directive to ignore this error.", flag.getOptionName());
+            return prefix + text + suffix;
+        }
     }
 
     public static EmulatorMessage error(ExecutionFlag flag, int index, @Nullable LInstruction instruction, @PrintFormat String format, Object... args) {

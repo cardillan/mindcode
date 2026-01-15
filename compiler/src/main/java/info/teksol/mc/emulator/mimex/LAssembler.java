@@ -23,7 +23,7 @@ public interface LAssembler {
 
     LVar var(String symbol);
 
-    static LAssembler create(EmulatorErrorHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars,
+    static LAssembler create(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, LGlobalVars globalVars,
             boolean privileged) {
         return switch (metadata.getProcessorVersion()) {
             case V6         -> new LAssembler60(errorHandler, metadata, strings, globalVars, privileged);

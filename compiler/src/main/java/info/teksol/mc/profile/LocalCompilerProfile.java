@@ -22,6 +22,8 @@ public interface LocalCompilerProfile {
 
     <T extends Enum<T>> T getEnumValue(Enum<?> option);
 
+    boolean isDefault(Enum<?> option);
+
     //<editor-fold desc="Environment Options">
     ProcessorVersion getProcessorVersion();
 

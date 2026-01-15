@@ -26,8 +26,8 @@ import static info.teksol.mc.emulator.ExecutionFlag.*;
 
 @NullMarked
 public class LExecutor60 extends LExecutorBase {
-    protected List<ReadWriteHandler> readHandlers = new ArrayList<>();
-    protected List<ReadWriteHandler> writeHandlers = new ArrayList<>();
+    protected final List<ReadWriteHandler> readHandlers = new ArrayList<>();
+    protected final List<ReadWriteHandler> writeHandlers = new ArrayList<>();
 
     protected interface ReadWriteHandler {
         boolean handle(LVar variable, Object object, LVar address);
@@ -108,7 +108,7 @@ public class LExecutor60 extends LExecutorBase {
     }
 
     protected class DrawI extends AbstractInstruction {
-        protected String command;
+        protected final String command;
 
         public DrawI(LStatement statement) {
             super(statement);
