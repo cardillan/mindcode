@@ -4,6 +4,7 @@ import info.teksol.mc.emulator.*;
 import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.emulator.blocks.graphics.GraphicsBuffer;
+import info.teksol.mc.emulator.mimex.target60.LExecutor60;
 import info.teksol.mc.mindcode.logic.arguments.AssertOp;
 import info.teksol.mc.mindcode.logic.arguments.AssertionType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
@@ -52,7 +53,9 @@ public abstract class LExecutorBase implements LExecutor {
 
     // Run parameters
 
+    // Behavioral flags
     protected boolean accumulatorHalving = true;
+    protected boolean yieldPreservesAccumulator = false;
 
     /// Instruction accumulator
     protected double accumulator = 0;
@@ -172,9 +175,10 @@ public abstract class LExecutorBase implements LExecutor {
             }
 
             runOnce();
-            accumulator--;
+            var saved = accumulator--;
             if (accumulatorHalving) limit++;
             if (yield) {
+                if (yieldPreservesAccumulator) accumulator = saved;
                 messageHandler.trace("            Yielding execution");
                 yield = false;
                 break;
@@ -249,9 +253,29 @@ public abstract class LExecutorBase implements LExecutor {
     //</editor-fold>
 
     //<editor-fold desc="Results">
+    private @Nullable String id;
+
     @Override
     public String getProcessorId() {
-        return logicBlock.processorId();
+        if (id == null) {
+            id = instructions.stream()
+                    .filter(LExecutor60.SetI.class::isInstance)
+                    .map(LExecutor60.SetI.class::cast)
+                    .filter(ix -> ix.result.name.equals("*id"))
+                    .map(ix -> extractId(ix.source.printExact()))
+                    .filter(s -> !s.isEmpty())
+                    .findFirst()
+                    .orElseGet(logicBlock::processorId);
+        }
+        return id;
+    }
+    
+    private String extractId(String text) {
+        return Arrays.stream(text.split("\\n"))
+                .filter(s -> s.startsWith("id: ") || s.startsWith("name: "))
+                .reduce((a, b) -> a.startsWith("id: ") ? a : b)
+                .map(s -> s.substring(s.indexOf(" ") + 1))
+                .orElse("");
     }
 
     @Override

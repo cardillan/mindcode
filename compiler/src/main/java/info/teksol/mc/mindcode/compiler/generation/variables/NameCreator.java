@@ -26,6 +26,7 @@ public interface NameCreator extends ArrayNameCreator {
     String temp(int index);
     String stackPointer();
     String remoteSignature();
+    String programId();
 
     default LogicString global(AstIdentifier identifier) {
         return LogicString.create(identifier.sourcePosition(), global(identifier.getName()));

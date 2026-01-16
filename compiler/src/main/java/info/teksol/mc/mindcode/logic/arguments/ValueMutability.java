@@ -32,7 +32,7 @@ public enum ValueMutability {
     /// results of `sensor` invocations on linked blocks aren't reused even for deterministic properties.
     IMMUTABLE,
 
-    /// Represents a value which is not run-time constant, but only changes through an explicit action of the program.
+    /// Represents a value which is not run-time constant but only changes through an explicit action of the program.
     /// These are regular variables. In essence, everything that doesn't fall into any of the other categories ends
     /// up here.
     MUTABLE,

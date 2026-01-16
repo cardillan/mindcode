@@ -96,6 +96,7 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
+                [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
                 [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]] [--boundary-checks {true,false}]
                 [--emulate-strict-not-equal {true,false}] [--error-function {true,false}]
                 [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
@@ -179,7 +180,8 @@ Environment options:
                          may produce code depending on this behavior
 
 Mlog formatting options:
-  Options determining how the mlog code is generated and formatted.
+  Options determining how the mlog code  is  generated  and  formatted,  including  instructions generated to carry over
+  specific information into the compiled program (such as signature or processor ID).
 
   --symbolic-labels [{true,false}]
                          generate symbolic labels for jump instructions where possible
@@ -195,6 +197,12 @@ Mlog formatting options:
                          signature
   --no-signature         prevents appending a signature 'Compiled  by  Mindcode  - github.com/cardillan/mindcode' at the
                          end of the final code
+  --processor-id processor_ID
+                         sets the processor ID to be stored in the compiled code
+  --program-name program_name
+                         sets the program name to be stored in the compiled code
+  --program-version program_version
+                         sets the program version to be stored in the compiled code
 
 Compiler options:
   Options which affect the way the source code is compiled.
@@ -427,6 +435,7 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
+                [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
                 [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]] [--boundary-checks {true,false}]
                 [--emulate-strict-not-equal {true,false}] [--error-function {true,false}]
                 [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
@@ -499,7 +508,8 @@ Environment options:
                          may produce code depending on this behavior
 
 Mlog formatting options:
-  Options determining how the mlog code is generated and formatted.
+  Options determining how the mlog code  is  generated  and  formatted,  including  instructions generated to carry over
+  specific information into the compiled program (such as signature or processor ID).
 
   --symbolic-labels [{true,false}]
                          generate symbolic labels for jump instructions where possible
@@ -515,6 +525,12 @@ Mlog formatting options:
                          signature
   --no-signature         prevents appending a signature 'Compiled  by  Mindcode  - github.com/cardillan/mindcode' at the
                          end of the final code
+  --processor-id processor_ID
+                         sets the processor ID to be stored in the compiled code
+  --program-name program_name
+                         sets the program name to be stored in the compiled code
+  --program-version program_version
+                         sets the program version to be stored in the compiled code
 
 Compiler options:
   Options which affect the way the source code is compiled.

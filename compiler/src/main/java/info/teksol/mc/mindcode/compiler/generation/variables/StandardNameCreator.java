@@ -185,6 +185,11 @@ public class StandardNameCreator implements NameCreator {
         return COMPILER_PREFIX + "signature";
     }
 
+    @Override
+    public String programId() {
+        return COMPILER_PREFIX + "id";
+    }
+
     private String withPrefix(String prefix, String name, int index) {
         return index == 0 ? prefix + name : prefix + name + distinctPrefix + index;
     }

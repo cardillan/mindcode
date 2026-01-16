@@ -382,9 +382,9 @@ public class LExecutor60 extends LExecutorBase {
         }
     }
 
-    protected class SetI extends AbstractInstruction {
-        protected final LVar result;
-        protected final LVar source;
+    public class SetI extends AbstractInstruction {
+        public final LVar result;
+        public final LVar source;
 
         public SetI(LStatement statement) {
             super(statement);

@@ -31,10 +31,7 @@ import info.teksol.mc.util.CRC64;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -153,8 +150,9 @@ public class CodeGenerator extends AbstractMessageEmitter {
     }
 
     private void generateCode() {
-        if (!program.isMainProgram()) generateRemoteJumpTable();
-        if (globalProfile.isTargetGuard()) generateTargetGuard();
+        generateRemoteJumpTable();
+        generateProcessorId();
+        generateTargetGuard();
 
         callGraph.getMain().setGenerated();
         variables.enterFunction(callGraph.getMain(), List.of());
@@ -196,6 +194,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
     }
 
     private void generateRemoteJumpTable() {
+        if (program.isMainProgram()) return;
+
         List<MindcodeFunction> remoteFunctions = callGraph.assignRemoteFunctionIndexes(f -> f.isRemote() && f.isEntryPoint());
         if (remoteFunctions.isEmpty()) return;
 
@@ -207,7 +207,23 @@ public class CodeGenerator extends AbstractMessageEmitter {
         assembler.clearContextType(program);
     }
 
+    private void generateProcessorId() {
+        List<String> lines = new ArrayList<>();
+        if (!globalProfile.getProcessorId().isBlank()) lines.add("id: " + globalProfile.getProcessorId());
+        if (!globalProfile.getProgramName().isBlank()) lines.add("name: " + globalProfile.getProgramName());
+        if (!globalProfile.getProgramVersion().isBlank()) lines.add("version: " + globalProfile.getProgramVersion());
+        LogicString id = LogicString.create(String.join("\\n", lines));
+        variables.putVariable("@@ID", id);
+
+        if (!lines.isEmpty()) {
+            assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.INIT);
+            assembler.createSet(LogicVariable.preserved(nameCreator().programId()), id);
+        }
+    }
+
     private void generateTargetGuard() {
+        if (!globalProfile.isTargetGuard()) return;
+
         assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.INIT);
         LogicLabel guardLabel = assembler.nextLabel().withoutStateTransfer();
         assembler.createLabel(guardLabel);

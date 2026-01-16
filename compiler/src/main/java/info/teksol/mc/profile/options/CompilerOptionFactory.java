@@ -52,7 +52,7 @@ public class CompilerOptionFactory {
         addEmulatorOptions(list, webApp);
 
         return list.stream().collect(Collectors.toMap(CompilerOptionValue::getOption, e -> e,
-                (v1, v2) -> {throw new IllegalStateException("YOUR MESSAGE HERE");}, LinkedHashMap::new));
+                (v1, v2) -> {throw new IllegalStateException("Conflicting compiler option " + v1.option);}, LinkedHashMap::new));
     }
 
     private static void addInputOutputOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
@@ -146,6 +146,24 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ZERO, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.COMMAND_LINE, category,
                 true).setConstValue(false));
+
+        list.add(new StringCompilerOptionValue(MlogFormatOptions.PROCESSOR_ID, "",
+                "sets the processor ID to be stored in the compiled code",
+                "processor_ID",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category, List.of("")));
+
+        list.add(new StringCompilerOptionValue(MlogFormatOptions.PROGRAM_NAME, "",
+                "sets the program name to be stored in the compiled code",
+                "program_name",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category, List.of("")));
+
+        list.add(new StringCompilerOptionValue(MlogFormatOptions.PROGRAM_VERSION, "",
+                "sets the program version to be stored in the compiled code",
+                "program_version",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category, List.of("")));
     }
 
     private static void addCompilerOptions(List<CompilerOptionValue<?>> list, boolean webApp) {

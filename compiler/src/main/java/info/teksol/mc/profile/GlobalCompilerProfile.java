@@ -89,6 +89,18 @@ public interface GlobalCompilerProfile {
     default boolean isSymbolicLabels() {
         return getBooleanValue(MlogFormatOptions.SYMBOLIC_LABELS);
     }
+
+    default String getProcessorId() {
+        return getStringValue(MlogFormatOptions.PROCESSOR_ID);
+    }
+
+    default String getProgramVersion() {
+        return getStringValue(MlogFormatOptions.PROGRAM_VERSION);
+    }
+
+    default String getProgramName() {
+        return getStringValue(MlogFormatOptions.PROGRAM_NAME);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Compiler Options">

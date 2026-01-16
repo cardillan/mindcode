@@ -10,4 +10,7 @@ public enum MlogFormatOptions {
     NO_ARGUMENT_PADDING,
     SIGNATURE,
     SYMBOLIC_LABELS,
+    PROCESSOR_ID,
+    PROGRAM_NAME,
+    PROGRAM_VERSION,
 }

@@ -385,7 +385,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         return node;
     }
 
-    private static final Set<Integer> invalidCharacters = Set.of(0, (int) '\r',  (int) '"');
+    private static final Set<Integer> invalidCharacters = Set.of((int) '\r',  (int) '"');
 
     private AstMindcodeNode evaluateEncode(AstFunctionCall node, boolean local) {
         if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {

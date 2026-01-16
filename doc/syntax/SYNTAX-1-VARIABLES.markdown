@@ -20,7 +20,7 @@ When a variable is used in a numeric operation, it is converted to a number depe
 
 ### Integer/double conversion
 
-All numeric values, both integer and floating-point, are stored as `double`, a 64-bit floating point value. Some Mindustry Logic operations operate on integer values. To perform these operations, the numeric value is converted from the floating point representation (`double`) to a 64-bit integer (a Java `long`), then the operation is performed and the result is converted to a `double` again. 
+All numeric values, both integer and floating-point, are stored as `double`, a 64-bit floating point value. Some Mindustry Logic operations operate on integer values. To perform these operations, the numeric value is converted from the floating point representation (`double`) to a 64-bit integer (a Java `long`), then the operation is performed, and the result is converted to a `double` again. 
 
 > [!IMPORTANT]
 > Conversion from `double` to `long` (an _integer conversion_) leads to loss of fractional part of the floating-point value. Values are always truncated towards zero, e.g., 0.9999 gets converted to 0, and -7.8 gets converted to -7.
@@ -328,7 +328,7 @@ As external arrays are stored in memory blocks, they can only hold numeric value
 
 ## Internal arrays
 
-Mindustry Logic doesn't provide a specialized mechanism for creating arrays out of internal variables. However, it is possible to create a reasonably efficient implementation of random access arrays using _`@counter` arrays_, named as such since accessing an element of such arrays involves manipulating the `@counter` variable. Individual elements of such arrays are stored in processor variables (one variable per array element), and therefore can hold non-numerical values as well, such as unit or block references, items, liquids, strings and so on.
+Mindustry Logic doesn't provide a specialized mechanism for creating arrays out of internal variables. However, it is possible to create a reasonably efficient implementation of random access arrays using _`@counter` arrays_, named as such since accessing an element of such arrays involves manipulating the `@counter` variable. Individual elements of such arrays are stored in processor variables (one variable per array element), and therefore can hold non-numerical values as well, such as unit or block references, items, liquids, strings, and so on.
 
 Accessing individual elements of internal arrays is slower than accessing elements of external arrays and consumes additional instruction space for `@counter` tables. However, when Mindcode is able to resolve the index during compilation to a numeric value, the variable corresponding to the element is accessed directly, providing performance which can be even better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g., when unrolling all loops in the program), the `@counter` tables might be eliminated entirely, keeping only the individual element variables in the resulting code.
 
@@ -1367,6 +1367,7 @@ The list of all existing icons is quite huge:
 
 Mindcode provides the following built-in constants which reflect the compiler options used for the compilation: 
 
+* `@@ID`: String. Contains the processor ID, program name, and program version as set by the corresponding [compiler options](SYNTAX-5-OTHER.markdown#option-processor-id). 
 * `@@MINDUSTRY_VERSION`: String. The Mindustry version specified by the `target` option (e.g. `v146`).
 * `@@TARGET_MAJOR`: Integer. Major target version number (i.e., `6`, `7` or `8`).
 * `@@TARGET_MINOR`: Integer. Minor target version number (e.g., `0` or `1`).
@@ -1531,7 +1532,7 @@ export mlog(:liquid) array1[10];
 
 Target 8 or higher is required to use remote variables.
 
-External variables and arrays are stored in another processor. They are declared using the [`remote` storage modifier](#storage-modifiers). The `remote` modifier specifies the processor the variable is stored in, and it may be specified as a linked variable, linked block or a regular variable:
+External variables and arrays are stored in another processor. They are declared using the [`remote` storage modifier](#storage-modifiers). The `remote` modifier specifies the processor the variable is stored in, and it may be specified as a linked variable, linked block, or a regular variable:
 
 ```Mindcode
 #set target = 8;

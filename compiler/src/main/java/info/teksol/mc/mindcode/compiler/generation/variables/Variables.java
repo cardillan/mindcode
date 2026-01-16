@@ -101,7 +101,7 @@ public class Variables extends AbstractMessageEmitter {
         return processor.isBlockName(identifier.getName());
     }
 
-    private @Nullable ValueStore putVariable(String name, ValueStore variable) {
+    public @Nullable ValueStore putVariable(String name, ValueStore variable) {
         return globalVariables.put(name, verifyMlogConflicts(variable));
     }
 

@@ -19,7 +19,8 @@ public enum OptionCategory {
             """),
 
     MLOG_FORMAT("Mlog formatting options", """
-            Options determining how the mlog code is generated and formatted.
+            Options determining how the mlog code is generated and formatted, including instructions generated to
+            carry over specific information into the compiled program (such as signature or processor ID).
             """),
 
     COMPILER("Compiler options", """

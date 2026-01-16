@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added the [`emulator-processor` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-processor), allowing to specify the processor used by the emulator when the proper type cannot be determined from schematics. 
+* Added the [`processor-id`, `program-name` and `program-version` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-processor-id). These options take string values, which are then encoded into a `*id` variable and can be used to identify the processor in the schematics.
 
 ### Changed
 

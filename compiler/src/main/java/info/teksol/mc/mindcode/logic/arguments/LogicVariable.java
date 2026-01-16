@@ -304,7 +304,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable preserved(String name) {
-        return new LogicVariable(EMPTY, PRESERVED, ValueMutability.MUTABLE, name, name);
+        return new LogicVariable(EMPTY, PRESERVED, ValueMutability.IMMUTABLE, name, name);
     }
 
     public static LogicVariable mlogVariable(String name) {

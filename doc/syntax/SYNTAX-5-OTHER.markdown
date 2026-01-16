@@ -203,7 +203,8 @@ Generally, a module target is compatible with the same or higher global target, 
 
 ## Mlog formatting options
 
-Options determining how the mlog code is generated and formatted.
+Options determining how the mlog code is generated and formatted, including instructions generated to
+carry over specific information into the compiled program (such as signature or processor ID).
 
 | Option                                             | Scope  | Semantic stability |
 |----------------------------------------------------|--------|--------------------|
@@ -211,9 +212,14 @@ Options determining how the mlog code is generated and formatted.
 | [function-prefix](#option-function-prefix)         | global | stable             |
 | [mlog-indent](#option-mlog-indent)                 | global | stable             |
 | [no-argument-padding](#option-no-argument-padding) | global | stable             |
+| [processor-id](#option-processor-id)               | global | stable             |
+| [program-name](#option-program-name)               | global | stable             |
+| [program-version](#option-program-version)         | global | stable             |
 | [symbolic-labels](#option-symbolic-labels)         | global | stable             |
 
 ### Option `author`
+
+**Option scope: [global](#global-scope)**
 
 Adds an author to the list of the program's authors. The author list is added to the end of the program alongside the signature if there's enough instruction space and the program doesn't loop naturally. Multiple authors can be listed in a single directive. The author's name is normally enclosed in double quotes. Double quotes are optional if the name consists only of alphanumerical characters and underscores (no spaces).
 
@@ -273,6 +279,75 @@ Disables padding unused arguments in generated instructions with zero values. Po
 
 * `false` (the default value): instructions in the compiled code are padded with zero values in unused arguments. The format of the instructions generated this way matches the format produced by Mindustry when copying code from a processor to the clipboard.
 * `true`: instructions in the compiled code won't contain unused arguments. Generally, this makes the code more readable.
+
+### Option `processor-id`
+
+**Option scope: [global](#global-scope)**
+
+Specifies the processor ID, which is an arbitrary string value. Processor ID is encoded, together with the program name and program version, into the `*id` variable, and the encoded value is also available as `@@ID` within Mindcode.
+
+```Mindcode
+#set processor-id = Main;
+#set program-name = "A sample program";
+#set program-version = "v0.1.0";
+
+println(@@ID);
+```
+
+compiles to:
+
+```mlog
+set *id "id: Main\nname: A sample program\nversion: v0.1.0"
+print "id: Main\nname: A sample program\nversion: v0.1.0\n"
+```
+
+The processor ID is used by the [processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown) to identify the processor used to run the compiled program. Since the `set *id ...` instruction is always the first (or almost first) instruction in the compiled program, it can also be easily inspected in the game just by looking at the code. Hopefully, mods will also be developed which will display processor ID in a more convenient way.  
+
+### Option `program-name`
+
+**Option scope: [global](#global-scope)**
+
+Specifies the name of the compiled program, which is an arbitrary string value. The program name is encoded, together with the processor ID and program version, into the `*id` variable, and the encoded value is also available as `@@ID` within Mindcode.
+
+```Mindcode
+#set processor-id = Main;
+#set program-name = "A sample program";
+#set program-version = "v0.1.0";
+
+println(@@ID);
+```
+
+compiles to:
+
+```mlog
+set *id "id: Main\nname: A sample program\nversion: v0.1.0"
+print "id: Main\nname: A sample program\nversion: v0.1.0\n"
+```
+
+Since the `set *id ...` instruction is always the first (or almost first) instruction in the compiled program, it can also be easily inspected in the game just by looking at the code.
+
+### Option `program-version`
+
+**Option scope: [global](#global-scope)**
+
+Specifies the version of the compiled program, which is an arbitrary string value. The program version is encoded, together with the processor ID and program name, into the `*id` variable, and the encoded value is also available as `@@ID` within Mindcode.
+
+```Mindcode
+#set processor-id = Main;
+#set program-name = "A sample program";
+#set program-version = "v0.1.0";
+
+println(@@ID);
+```
+
+compiles to:
+
+```mlog
+set *id "id: Main\nname: A sample program\nversion: v0.1.0"
+print "id: Main\nname: A sample program\nversion: v0.1.0\n"
+```
+
+Since the `set *id ...` instruction is always the first (or almost first) instruction in the compiled program, it can also be easily inspected in the game just by looking at the code.
 
 ### Option `symbolic-labels`
 
