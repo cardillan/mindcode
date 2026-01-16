@@ -28,7 +28,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     final InstructionProcessor processor;
     final @Nullable CodeAssembler assembler;
     final ProcessorVersion processorVersion;
-    final ProcessorEdition processorEdition;
+    final ProcessorType processorType;
     private final Map<String, PropertyHandler> propertyMap;
     private final Map<String, FunctionHandler> functionMap;
     private final List<SampleGenerator> sampleGenerators;
@@ -40,7 +40,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
         this.processor = processor;
         this.assembler = assembler;
         processorVersion = processor.getProcessorVersion();
-        processorEdition = processor.getProcessorEdition();
+        processorType = processor.getProcessorType();
         propertyMap = createPropertyMap();
         functionMap = createFunctionMap();
 
@@ -96,7 +96,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
                                 s.getName(),
                                 s.generateSampleCall(),
                                 s.generateSampleInstruction(),
-                                s.getOpcodeVariant().edition(),
+                                s.getOpcodeVariant().type(),
                                 s.getNote()
                         )
                 ),
@@ -108,7 +108,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
                                         t.e1().getName(),
                                         t.e2(),
                                         t.e1().generateSampleInstruction(),
-                                        t.e1().getOpcodeVariant().edition(),
+                                        t.e1().getOpcodeVariant().type(),
                                         t.e1().getNote()
                                 )
                         )
@@ -131,7 +131,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     private Map<String, PropertyHandler> createPropertyMap() {
         Map<String, PropertyHandler> map = processor.getOpcodeVariants().stream()
                 .filter(v -> v.functionMapping() == FunctionMapping.PROP || v.functionMapping() == FunctionMapping.BOTH)
-                .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
+                .filter(v -> v.isAvailableIn(processorVersion, processorType))
                 .map(this::createPropertyHandler)
                 .collect(Collectors.toMap(PropertyHandler::getName, f -> f));
 
@@ -171,7 +171,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     private Map<String, FunctionHandler> createFunctionMap() {
         Map<String, List<FunctionHandler>> functionGroups = processor.getOpcodeVariants().stream()
                 .filter(v -> v.functionMapping() == FunctionMapping.FUNC || v.functionMapping() == FunctionMapping.BOTH)
-                .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
+                .filter(v -> v.isAvailableIn(processorVersion, processorType))
                 .map(this::createFunctionHandler)
                 .collect(Collectors.groupingBy(FunctionHandler::getName));
 

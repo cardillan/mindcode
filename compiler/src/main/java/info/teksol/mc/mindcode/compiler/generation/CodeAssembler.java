@@ -260,7 +260,7 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     /// The current implementation uses a very long wait (over 30,000 years)
     public void suspendExecution() {
         if (processor.isSupported(WAIT)) {
-            createInstruction(WAIT, LogicNumber.create(processor, "1e12"));
+            createWait(LogicNumber.create(processor, "1e12"));
         }
     }
 
@@ -268,7 +268,7 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     /// or provide results.
     public void createYieldExecution() {
         if (processor.isSupported(WAIT)) {
-            createInstruction(WAIT, LogicNumber.create(processor, "1e-15"));
+            createWait( LogicNumber.create(processor, "1e-15"));
         }
     }
 

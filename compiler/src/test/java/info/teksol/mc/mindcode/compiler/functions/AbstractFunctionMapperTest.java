@@ -13,7 +13,7 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
@@ -25,7 +25,7 @@ public class AbstractFunctionMapperTest {
 
     protected static void createFunctionMapper(List<OpcodeVariant> opcodeVariants) {
         InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V6,
-                ProcessorEdition.STANDARD_PROCESSOR, new StandardNameCreator((false)), opcodeVariants);
+                ProcessorType.MICRO_PROCESSOR, new StandardNameCreator((false)), opcodeVariants);
 
         createFunctionMapper(instructionProcessor);
     }

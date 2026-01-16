@@ -39,7 +39,7 @@ import static info.teksol.mc.util.CollectionUtils.indexOf;
 @NullMarked
 public abstract class BaseInstructionProcessor extends AbstractMessageEmitter implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
-    private final ProcessorEdition processorEdition;
+    private final ProcessorType processorType;
     private final NameCreator nameCreator;
     private final LStrings strings;
     private @Nullable MindustryMetadata metadata;
@@ -60,23 +60,23 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     record InstructionProcessorParameters(
             MessageConsumer messageConsumer,
             ProcessorVersion version,
-            ProcessorEdition edition,
+            ProcessorType type,
             NameCreator nameCreator,
             boolean instructionValidation,
             boolean noArgumentPadding,
             List<OpcodeVariant> opcodeVariants) {
 
-        public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version, ProcessorEdition edition,
+        public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version, ProcessorType type,
                 NameCreator nameCreator, boolean instructionValidation, boolean noArgumentPadding) {
-            this(messageConsumer, version, edition, nameCreator, instructionValidation, noArgumentPadding,
-                    MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
+            this(messageConsumer, version, type, nameCreator, instructionValidation, noArgumentPadding,
+                    MindustryOpcodeVariants.getSpecificOpcodeVariants(version, type));
         }
     }
 
     BaseInstructionProcessor(InstructionProcessorParameters parameters) {
         super(parameters.messageConsumer);
         this.processorVersion = parameters.version;
-        this.processorEdition = parameters.edition;
+        this.processorType = parameters.type;
         this.strings = LStrings.create(processorVersion);
         this.nameCreator = parameters.nameCreator;
         this.instructionValidation = parameters.instructionValidation;
@@ -126,8 +126,8 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
-    public ProcessorEdition getProcessorEdition() {
-        return processorEdition;
+    public ProcessorType getProcessorType() {
+        return processorType;
     }
 
     @Override
@@ -198,6 +198,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case SETADDR     -> new SetAddressInstruction(astContext, args, params);
             case STOP        -> new StopInstruction(astContext);
             case UNPACKCOLOR -> new UnpackColorInstruction(astContext, args, params);
+            case WAIT        -> new WaitInstruction(astContext, args, params);
             case WRITE       -> new WriteInstruction(astContext, args, params);
             case WRITEARR    -> new WriteArrInstruction(astContext, args, params);
             default          ->  createGenericInstruction(astContext, opcode, args, params);
@@ -279,30 +280,30 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case JumpInstruction ix -> {
                 consumer.accept(ix.getCondition() == Condition.STRICT_NOT_EQUAL
                         ? createSelect(astContext, LogicBuiltIn.COUNTER, Condition.STRICT_EQUAL,
-                        ix.getX(), ix.getY(), LogicBuiltIn.COUNTER, ix.getTarget())
+                        ix.getX(), ix.getY(), LogicBuiltIn.COUNTER, ix.getTarget()).copyComment(ix)
                         : ix);
             }
             case OpInstruction ix -> {
                 consumer.accept(ix.getOperation() == STRICT_NOT_EQUAL
                         ? createSelect(astContext, ix.getResult(), Condition.STRICT_EQUAL,
-                        ix.getX(), ix.getY(), LogicBoolean.FALSE, LogicBoolean.TRUE)
+                        ix.getX(), ix.getY(), LogicBoolean.FALSE, LogicBoolean.TRUE).copyComment(ix)
                         : ix);
             }
             case SelectInstruction ix -> {
                 consumer.accept(ix.getCondition() == Condition.STRICT_NOT_EQUAL
                         ? createSelect(astContext, ix.getResult(), Condition.STRICT_EQUAL,
-                        ix.getX(), ix.getY(), ix.getFalseValue(), ix.getTrueValue())
+                        ix.getX(), ix.getY(), ix.getFalseValue(), ix.getTrueValue()).copyComment(ix)
                         : ix);
             }
             case MultiLabelInstruction ix -> { }
             case LabelInstruction ix -> { }
             case PushInstruction ix -> {
                 consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
-                consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
+                consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE).copyComment(ix));
             }
             case PopInstruction ix -> {
                 consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createRead(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
+                consumer.accept(createRead(astContext, ix.getVariable(), ix.getMemory(), stackPointer()).copyComment(ix));
             }
             case CallRecInstruction ix -> {
                 if (profile.isSymbolicLabels()) {
@@ -313,25 +314,25 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                     consumer.accept(createInstruction(astContext, WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
                 }
                 consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
+                consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()).copyComment(ix));
             }
             case ReturnRecInstruction ix -> {
                 LogicVariable retAddr = nextTemp();
                 consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
                 consumer.accept(createRead(astContext, retAddr, ix.getStack(), stackPointer()));
-                consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, retAddr));
+                consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, retAddr).copyComment(ix));
             }
             case CallInstruction ix -> {
                 if (profile.isSymbolicLabels()) {
                     consumer.accept(createOp(astContext, ADD, ix.getReturnAddr(), LogicBuiltIn.COUNTER, LogicNumber.ONE));
                 }
-                consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
+                consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()).copyComment(ix));
             }
             case SetAddressInstruction ix -> {
-                consumer.accept(createInstruction(astContext, SET, ix.getResult(), ix.getLabel()));
+                consumer.accept(createInstruction(astContext, SET, ix.getResult(), ix.getLabel()).copyComment(ix));
             }
             case ReturnInstruction ix -> {
-                consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
+                consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()).copyComment(ix));
             }
 
             // Note: MULTIJUMP / MULTICALL Instructions are handled by LabelResolver, as the actual label value needs to be known

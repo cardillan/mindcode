@@ -5,7 +5,7 @@ factory-monitor-00.mnd:                           471   863D948F911F2E7A   40A3C
 factory-monitor-silicon-00.mnd:                   269   92331871E01FEB02   DF4C30F5D0BC3D82
 factory-monitor-surge-alloy-00.mnd:               174   B570A56D64509A07   04252CB0BEEE5CF7
 impact-reactor-logic-00.mnd:                      730   3E95B78DA13C7171   E9FE074A556D4E6C
-instant-overdrive-dome-01.mnd:                    854   FC2767B9BB219136   B7185248D2E566BE
+instant-overdrive-dome-01.mnd:                    854   FC2767B9BB219136   9A88B22ACD76D772
 item-counter-00.mnd:                               90   DBF0CE14BD53EC86   11F4E9070B6B4C9C
 item-counter-micro-00.mnd:                        128   AB81229C62913E11   62E457BFD55B9A55
 item-rate-display-00.mnd:                         657   B3F3156754BCE6C9   E6710AC228903F5B
@@ -13,7 +13,7 @@ item-rate-meter-00.mnd:                            95   199812ADE3D3F8C3   69B64
 level-display-00.mnd:                              86   B0F2701257FEF4C3   492E69C46B55D697
 level-display-water-cryo-00.mnd:                   80   3B59D99D61A51686   F6ECDFBC5D07883D
 level-meter-00.mnd:                               287   C7BCD2A84C470E15   BF7472BFDECDB263
-map-setup-00.mnd:                                 920   95F602FA758275E6   02A33DCAD3C36C78
+map-setup-00.mnd:                                 920   95F602FA758275E6   E5341A4BBBBE9A94
 mass-driver-monitor-00.mnd:                       184   6E6F762403154535   84E815959D323BC5
 mass-driver-monitor-surge-alloy-00.mnd:           232   84BE8CA14CE3386F   EFCD8824E55C9726
 reactor-control-00.mnd:                           424   0B5F71D4A736D2F1   8CA87E73FC5D2A0C

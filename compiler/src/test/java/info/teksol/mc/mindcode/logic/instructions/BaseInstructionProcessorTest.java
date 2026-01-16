@@ -7,7 +7,7 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import info.teksol.mc.mindcode.logic.arguments.GenericArgument;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
 import org.jspecify.annotations.NullMarked;
@@ -100,7 +100,7 @@ public class BaseInstructionProcessorTest extends AbstractCodeGeneratorTest {
         List.of("0", "1", "123456.789", "1e10", "1e25", "123456E25", "3333333e-40", "33333333333e-20").forEach(number -> {
             List<MindcodeMessage> messages = new ArrayList<>();
             InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(messages::add,
-                    ProcessorVersion.V8A, ProcessorEdition.W, nameCreator);
+                    ProcessorVersion.V8A, ProcessorType.W, nameCreator);
             processor.mlogRewrite(SourcePosition.EMPTY, number, true);
             Assertions.assertEquals(List.of(), messages);
         });
@@ -111,7 +111,7 @@ public class BaseInstructionProcessorTest extends AbstractCodeGeneratorTest {
         List.of("33333333e-40", "99999999e-40", "3333333333e-40", "7777777777e10").forEach(number -> {
             List<MindcodeMessage> messages = new ArrayList<>();
             InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(messages::add,
-                    ProcessorVersion.V7A, ProcessorEdition.W, nameCreator);
+                    ProcessorVersion.V7A, ProcessorType.W, nameCreator);
             processor.mlogRewrite(SourcePosition.EMPTY, number, true);
             if (messages.isEmpty()) {
                 Assertions.fail("No precision loss for number " + number);

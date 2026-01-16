@@ -8,6 +8,7 @@ public enum AstContextType {
     ROOT            ("ROOT"),
     DECLARATION     ("DECL"),
     CODE            ("CODE"),
+    ATOMIC          ("ATOM"),
     MLOG            ("MLOG", true),
     FUNCTION_DEF    ("FNDF"),
     FUNCTION_BODY   ("FUNC"),

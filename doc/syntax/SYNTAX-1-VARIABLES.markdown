@@ -1371,7 +1371,7 @@ Mindcode provides the following built-in constants which reflect the compiler op
 * `@@MINDUSTRY_VERSION`: String. The Mindustry version specified by the `target` option (e.g. `v146`).
 * `@@TARGET_MAJOR`: Integer. Major target version number (i.e., `6`, `7` or `8`).
 * `@@TARGET_MINOR`: Integer. Minor target version number (e.g., `0` or `1`).
-* `@@PROCESSOR_EDITION`: String. `S` for standard and `W` for world edition.
+* `@@PROCESSOR_TYPE`: String. `m` for micro-, `l` for logic-, `h` for hyper-, and `w` for world-processor.
 
 Through these constants, it is possible to support several different targets in the same code, for example:
 

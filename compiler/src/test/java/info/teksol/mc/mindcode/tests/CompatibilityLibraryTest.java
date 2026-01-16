@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.tests;
 
 import info.teksol.mc.emulator.ExecutionFlag;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.Target;
@@ -58,8 +58,8 @@ public class CompatibilityLibraryTest extends AbstractProcessorTest {
     }
 
     void executeCompatibilityTest(ProcessorVersion compiler, ProcessorVersion emulator) {
-        Target compilerTarget = new Target(compiler, ProcessorEdition.STANDARD_PROCESSOR);
-        Target emulatorTarget = new Target(emulator, ProcessorEdition.STANDARD_PROCESSOR);
+        Target compilerTarget = new Target(compiler, ProcessorType.MICRO_PROCESSOR);
+        Target emulatorTarget = new Target(emulator, ProcessorType.MICRO_PROCESSOR);
         String code = """
                 #set target = %s;
                 #set emulator-target = %s;
@@ -102,8 +102,8 @@ public class CompatibilityLibraryTest extends AbstractProcessorTest {
     }
 
     private String testName(ProcessorVersion compiler, ProcessorVersion emulator) {
-        Target compilerTarget = new Target(compiler, ProcessorEdition.STANDARD_PROCESSOR);
-        Target emulatorTarget = new Target(emulator, ProcessorEdition.STANDARD_PROCESSOR);
+        Target compilerTarget = new Target(compiler, ProcessorType.MICRO_PROCESSOR);
+        Target emulatorTarget = new Target(emulator, ProcessorType.MICRO_PROCESSOR);
         return "compiler target: " + compilerTarget.targetName() + ", emulator target: " + emulatorTarget.targetName();
     }
 }

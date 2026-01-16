@@ -5,7 +5,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.MlogInstruction;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -23,6 +23,6 @@ public interface FunctionMapper {
     List<FunctionSample> generateSamples();
 
     record FunctionSample(int order, String name, String functionCall, LogicInstruction instruction,
-                          ProcessorEdition edition, String note) {
+                          ProcessorType type, String note) {
     }
 }

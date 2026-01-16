@@ -521,6 +521,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAstAtomicBlock(MindcodeParser.AstAtomicBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstAtomicBlock(MindcodeParser.AstAtomicBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}

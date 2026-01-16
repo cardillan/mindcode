@@ -118,6 +118,7 @@ statement
     | BREAK label = IDENTIFIER?                                                         # astBreakStatement
     | CONTINUE label = IDENTIFIER?                                                      # astContinueStatement
     | RETURN value = expression?                                                        # astReturnStatement
+    | ATOMIC exp = astStatementList? END                                                # astAtomicBlock
     | BEGIN exp = astStatementList? END                                                 # astCodeBlock
     | DEBUG exp = astStatementList? END                                                 # astDebugBlock
     | MLOG variables = mlogVariableList? LBRACE block = mlogBlock                       # astMlogBlock

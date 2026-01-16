@@ -178,6 +178,10 @@ public interface ContextlessInstructionCreator {
         return (StopInstruction) createInstruction(astContext, STOP);
     }
 
+    default WaitInstruction createWait(AstContext astContext, LogicValue value) {
+        return (WaitInstruction) createInstruction(astContext, WAIT, value);
+    }
+
     default WriteInstruction createWrite(AstContext astContext, LogicValue value, LogicVariable memory, LogicValue index) {
         return (WriteInstruction) createInstruction(astContext, WRITE, value, memory, index);
     }

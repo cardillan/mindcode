@@ -32,7 +32,6 @@ generated code use mlog opcodes.
   * [Instruction `Unit Control`](#instruction-unit-control)
   * [Instruction `Unit Radar`](#instruction-unit-radar)
   * [Instruction `Unit Locate`](#instruction-unit-locate)
-* World processor
 
 # Micro Processor, Logic Processor and Hyper Processor
 

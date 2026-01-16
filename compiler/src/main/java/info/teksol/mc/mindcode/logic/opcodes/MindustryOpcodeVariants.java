@@ -7,17 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static info.teksol.mc.mindcode.logic.opcodes.FunctionMapping.*;
-import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.S;
-import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.W;
+import static info.teksol.mc.mindcode.logic.opcodes.ProcessorType.S;
+import static info.teksol.mc.mindcode.logic.opcodes.ProcessorType.W;
 import static info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion.*;
 
 @NullMarked
 public class MindustryOpcodeVariants {
     private static final MindustryOpcodeVariants data = new MindustryOpcodeVariants();
 
-    public static List<OpcodeVariant> getSpecificOpcodeVariants(ProcessorVersion processorVersion, ProcessorEdition processorEdition) {
+    public static List<OpcodeVariant> getSpecificOpcodeVariants(ProcessorVersion processorVersion, ProcessorType processorType) {
         return data.variants.stream()
-                .filter(o -> o.isAvailableIn(processorVersion, processorEdition))
+                .filter(o -> o.isAvailableIn(processorVersion, processorType))
                 .toList();
     }
 
@@ -33,13 +33,13 @@ public class MindustryOpcodeVariants {
     }
 
     private void add(List<OpcodeVariant> variants, ProcessorVersion versionFrom, ProcessorVersion versionTo,
-            ProcessorEdition edition, FunctionMapping functionMapping, Opcode opcode, NamedParameter... arguments) {
-        variants.add(new OpcodeVariant(versionFrom, versionTo, edition, functionMapping, opcode, arguments));
+            ProcessorType type, FunctionMapping functionMapping, Opcode opcode, NamedParameter... arguments) {
+        variants.add(new OpcodeVariant(versionFrom, versionTo, type, functionMapping, opcode, arguments));
     }
 
     private void virtual(List<OpcodeVariant> variants, ProcessorVersion versionFrom, ProcessorVersion versionTo,
-            ProcessorEdition edition, FunctionMapping functionMapping, Opcode opcode, NamedParameter... arguments) {
-        variants.add(OpcodeVariant.virtual(versionFrom, versionTo, edition, functionMapping, opcode, arguments));
+            ProcessorType type, FunctionMapping functionMapping, Opcode opcode, NamedParameter... arguments) {
+        variants.add(OpcodeVariant.virtual(versionFrom, versionTo, type, functionMapping, opcode, arguments));
     }
 
     private List<OpcodeVariant> initialize() {

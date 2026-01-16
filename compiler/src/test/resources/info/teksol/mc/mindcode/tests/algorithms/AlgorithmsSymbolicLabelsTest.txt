@@ -1,11 +1,11 @@
 Name                                     Instructions    Steps   Coverage   Source CRC         Compiled CRC    
-array-reversion.mnd:                                3        3     100.0%   38B9E303CEA00378   734AF6B0E8E9D264
-base64-decode.mnd:                                 62      384      85.5%   BDD246AE230D839E   0729F355D6293B2B
+array-reversion.mnd:                                3        3     100.0%   38B9E303CEA00378   AF75ADA6E8F5946D
+base64-decode.mnd:                                 62      384      85.5%   BDD246AE230D839E   3F68B9AE50674CDF
 compute-recursive-fibonacci.mnd:                   34     2653      97.1%   BDE1C81A7769E0CB   CE59781BBA2CFA1B
 compute-sum-of-primes.mnd:                        426     1876      99.8%   B6615E97E02F94A9   AA8E7DBA6968A1F5
-digit-counts.mnd:                                  37     1846     100.0%   4395C6D90051BC6D   EE30DB9963083411
+digit-counts.mnd:                                  37     1846     100.0%   4395C6D90051BC6D   4373D4EACB57CE24
 memory-read-write.mnd:                              4        4     100.0%   D9539CC21D8111B7   30633B28AE9D9EDA
-pascal-triangle.mnd:                               46     1189      93.5%   954D9E65ED4E6EF0   9D3E0B808821DB88
+pascal-triangle.mnd:                               46     1189      93.5%   954D9E65ED4E6EF0   4A1DE22870C1AED7
 sorting with bubble-sort.mnd:                      26    15476     100.0%   09F1B1A6B8B97AF2   70D146070D037071
 sorting with heap-sort.mnd:                        53    64558     100.0%   0CEFC91051987EFB   E7D4D623EEFFC502
 sorting with insert-sort.mnd:                      26    26063     100.0%   0AF6F57A5EBA45E2   30BCE5A20E6E7676

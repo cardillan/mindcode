@@ -23,10 +23,12 @@ import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PrintingInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
+import info.teksol.mc.profile.options.CompilerOptions;
 import info.teksol.mc.util.CRC64;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -153,6 +155,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         generateRemoteJumpTable();
         generateProcessorId();
         generateTargetGuard();
+        generateSetrate();
 
         callGraph.getMain().setGenerated();
         variables.enterFunction(callGraph.getMain(), List.of());
@@ -218,6 +221,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         if (!lines.isEmpty()) {
             assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.INIT);
             assembler.createSet(LogicVariable.preserved(nameCreator().programId()), id);
+            assembler.clearContextType(program);
         }
     }
 
@@ -262,6 +266,14 @@ public class CodeGenerator extends AbstractMessageEmitter {
             default -> throw new MindcodeInternalError("Unhandled processor version " + globalProfile.getProcessorVersion());
         }
         assembler.clearContextType(program);
+    }
+
+    private void generateSetrate() {
+        if (globalProfile.getProcessorType() == ProcessorType.WORLD_PROCESSOR && !globalProfile.isDefault(CompilerOptions.SETRATE)) {
+            assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.INIT);
+            assembler.createInstruction(Opcode.SETRATE, LogicNumber.create(globalProfile.getSetrate()));
+            assembler.clearContextType(program);
+        }
     }
 
     private void setupRemoteSignature() {

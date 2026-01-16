@@ -66,7 +66,7 @@ printflush message1
 
 will output `Test: BA` to message1.
 
-The `printf` function is designed to use this mechanism: `printf(fmt, a, b, c)` gets translated to
+The [`printf` function](SYNTAX-4-FUNCTIONS.markdown#run-time-formatting) is designed to use this mechanism: `printf(fmt, a, b, c)` gets translated to
 
 ```
 print fmt
@@ -220,7 +220,7 @@ Mindcode doesn't provide direct access to the select instruction, but optimizes 
 
 ### Implementing strict nonequality using `select`
 
-The `strictNotEqual` condition is supported neither in the `op`, nor in the `jump` instructions, and prior to the `select` instruction, this condition needs to be evaluated in two instructions. The `select` instruction allows to simplify it:
+The `strictNotEqual` condition is supported neither in the `op`, nor in the `jump` instructions, and prior to the `select` instruction, this condition needs to be evaluated in two instructions. The `select` instruction allows simplifying it:
 
 * `op strictNotEqual resul a b` can be expressed as `select result strictEqual a b false true`.
 * `jump target strictNotEqual resul a b` can be expressed as `select @counter strictEqual a b @counter target`.
@@ -290,6 +290,17 @@ The ability to access individual characters of string values is a convenient way
 ### Reading and writing canvas pixels
 
 Mindustry 8 allows reading and writing individual canvas pixels using `read` and `write`. Canvas is an Erekir-specific block, so this is only relevant when working with mixed tech or when creating world processors for Erekir maps. The indexes need to be in the `0 ... 64` range, and individual pixel values are in the `0 ... 8` range (there are only eight different colors supported by canvases).
+
+## `wait` instruction
+
+In the latest BE, a small but important change was made to the `wait` instruction:
+
+* When the instruction has a zero argument, it still skips the rest of the current frame but isn't executed again on the next frame.
+* When the instruction skips the rest of the frame (i.e., the instruction _yields_ the execution), the accumulator isn't decreased.
+
+The important change is the second one: when an instruction waits for a specified amount of time, it is guaranteed that the accumulator will have enough capacity to execute at least the number of instructions corresponding to the wait time (and the processor's current instructions-per-tick value) uninterrupted during the next update.
+
+This can be used to ensure that a section of code will be executed atomically (without interruption). Mindcode provides [atomic code blocks](REMOTE-CALLS.markdown#atomic-code-blocks) for this purpose. 
 
 ## Graphic output
 
@@ -581,4 +592,4 @@ Adds a map locale property value to the text buffer.
 
 ---
 
-[&#xAB; Previous: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Remote functions and variables &#xBB;](REMOTE-CALLS.markdown)
+[&#xAB; Previous: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Parallel processing &#xBB;](REMOTE-CALLS.markdown)

@@ -235,6 +235,11 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
+    public AstAtomicBlock visitAstAtomicBlock(MindcodeParser.AstAtomicBlockContext ctx) {
+        return new AstAtomicBlock(pos(ctx), processBody(ctx.exp));
+    }
+
+    @Override
     public AstCodeBlock visitAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx) {
         return new AstCodeBlock(pos(ctx), processBody(ctx.exp), false);
     }

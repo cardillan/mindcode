@@ -6,6 +6,7 @@ import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
 import info.teksol.mc.mindcode.logic.opcodes.*;
+import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
@@ -16,13 +17,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.W;
-import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.WORLD_PROCESSOR;
+import static info.teksol.mc.mindcode.logic.opcodes.ProcessorType.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NullMarked
 public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
+
+    private static final List<Tuple2<String, ProcessorType>> processorTypes = List.of(
+            Tuple2.of("Micro Processor, Logic Processor and Hyper Processor", MICRO_PROCESSOR),
+            Tuple2.of("World Processor", WORLD_PROCESSOR)
+    );
 
     private static final String SYNTAX_REL_PATH = ".." + File.separatorChar + "doc" + File.separatorChar + "syntax" + File.separatorChar;
 
@@ -96,32 +101,36 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
             w.println("# Index");
             w.println();
 
-            for (ProcessorEdition edition : ProcessorEdition.values()) {
-                w.println("* " + edition.getTitle());
+            for (Tuple2<String, ProcessorType> entry : processorTypes) {
+                ProcessorType type = entry.e2();
+                if (version == ProcessorVersion.V6 && type == WORLD_PROCESSOR) break;
+
+                w.println("* " + entry.e1());
 
                 for (Opcode opcode : Opcode.values()) {
-                    // Does this opcode exist in edition?
-                    if (samples.stream().noneMatch(v -> v.edition() == edition && v.instruction().getOpcode() == opcode)) {
+                    // Does this opcode exist in type?
+                    if (samples.stream().noneMatch(v -> v.type() == type && v.instruction().getOpcode() == opcode)) {
                         continue;
                     }
                     w.println("  * [Instruction `" + instructionName(opcode) + "`](#instruction-" + linkify(opcode) + ")");
                 }
             }
 
-            for (ProcessorEdition edition : ProcessorEdition.values()) {
+            for (Tuple2<String, ProcessorType> entry : processorTypes) {
+                ProcessorType type = entry.e2();
                 boolean first = true;
 
                 for (Opcode opcode : Opcode.values()) {
-                    // Does this opcode exist in edition?
-                    if (samples.stream().noneMatch(v -> v.edition() == edition && v.instruction().getOpcode() == opcode)) {
+                    // Does this opcode exist in type?
+                    if (samples.stream().noneMatch(v -> v.type() == type && v.instruction().getOpcode() == opcode)) {
                         continue;
                     }
 
                     if (first) {
                         w.println();
-                        w.println("# " + edition.getTitle());
+                        w.println("# " + entry.e1());
                         w.println();
-                        if (edition == WORLD_PROCESSOR) {
+                        if (type == WORLD_PROCESSOR) {
                             w.println("These instructions are only available to the World Processor,");
                             w.println("which can be placed in custom-created levels in Mindustry 7 or higher.");
                             w.println();

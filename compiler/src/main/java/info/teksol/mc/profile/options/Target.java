@@ -1,6 +1,6 @@
 package info.teksol.mc.profile.options;
 
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 
@@ -9,33 +9,33 @@ import java.util.Objects;
 @NullMarked
 public final class Target {
     private final ProcessorVersion version;
-    private final ProcessorEdition edition;
+    private final ProcessorType type;
 
-    public Target(ProcessorVersion version, ProcessorEdition edition) {
+    public Target(ProcessorVersion version, ProcessorType type) {
         this.version = version;
-        this.edition = edition;
+        this.type = type;
     }
 
     public Target(String value) {
-        ProcessorEdition edition = ProcessorEdition.byCode(value.charAt(value.length() - 1));
+        ProcessorType type = ProcessorType.byCode(value.charAt(value.length() - 1));
         ProcessorVersion version = ProcessorVersion.byCode(value.substring(
                 value.startsWith("ML") ? 2 : 0,
-                value.length() - (edition == null ? 0 : 1)));
+                value.length() - (type == null ? 0 : 1)));
 
         if (version == null) {
             throw new IllegalArgumentException("Invalid target: " + value);
         }
 
         this.version = version;
-        this.edition = edition != null ? edition : ProcessorEdition.S;
+        this.type = type != null ? type : ProcessorType.S;
     }
 
     public ProcessorVersion version() {
         return version;
     }
 
-    public ProcessorEdition edition() {
-        return edition;
+    public ProcessorType type() {
+        return type;
     }
 
     public boolean atLeast(ProcessorVersion min) {
@@ -50,16 +50,17 @@ public final class Target {
         return version.matches(min, max);
     }
 
-    /**
-     * A target is compatible with another target if code compiled under the target works the same when compiled
-     * under the other target. The relation is not reflexive: 7.1 is compatible with 8.0, but 8.0 is not compatible
-     * with 7.1. Also, 7 is compatible with 7w, but 7w is not compatible with 7.
-     *
-     * @return true if this target is compatible with the given target
-     */
+    /// A target is compatible with another target if code compiled under the target works the same when compiled
+    /// under the other target. The relation is not reflexive: 7.1 is compatible with 8.0, but 8.0 is not compatible
+    /// with 7.1. Also, 7 is compatible with 7w, but 7w is not compatible with 7.
+    ///
+    /// @return true if this target is compatible with the given target
     public boolean isCompatibleWith(Target other) {
-        return version.isCompatibleWith(other.version) &&
-               edition.isCompatibleWith(other.edition);
+        return version.isCompatibleWith(other.version) && type.isCompatibleWith(other.type);
+    }
+
+    public Target withType(ProcessorType type) {
+        return new Target(version, type);
     }
 
     @Override
@@ -68,26 +69,26 @@ public final class Target {
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (Target) obj;
         return Objects.equals(this.version, that.version) &&
-               Objects.equals(this.edition, that.edition);
+               Objects.equals(this.type, that.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(version, edition);
+        return Objects.hash(version, type);
     }
 
     public String targetName() {
-        return version.versionName() + edition.editionName();
+        return version.versionName() + type.code();
     }
 
     public String webpageTargetName() {
-        return version.major + (edition == ProcessorEdition.S ? "" : edition.editionName());
+        return version.major + (type == ProcessorType.S ? "" : type.code());
     }
 
     @Override
     public String toString() {
         return "Target[" +
                "version=" + version + ", " +
-               "edition=" + edition + ']';
+               "type=" + type + ']';
     }
 }

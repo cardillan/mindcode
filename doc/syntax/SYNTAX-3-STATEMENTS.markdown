@@ -526,13 +526,27 @@ While the [Case Switching optimization](optimizations/CASE-SWITCHING.markdown) c
 * Some expressions after the `when` keyword might or might not get evaluated, depending on the value of the case expression. Do not use expressions with side effects (such as a function call that would modify some global variable). 
 * Avoid having several `when` branches matching the same value -- currently the first matching branch gets executed, but the behavior might change in the future.
 
+# Code blocks
+
+Code blocks are used to group a set of statements together:
+
+```
+begin
+    var enabled = floor(rand(2));
+    print("Current value is ", enabled);
+    switch1.enabled = enabled;
+end;
+```
+
+Variables declared in a code block are local to the code block.
+
 # The `end()` function
 
-The `end()` function maps to the `end` instruction, and as such has a special meaning - it resets the execution of the program and starts it from the beginning again. In this sense, the `end()` function is one of control flow statements. The function may be called from anywhere, even from a recursive function. The following rules apply when the function is invoked: 
+The `end()` function maps to the `end` instruction, and as such has a special meaning – it resets the execution of the program and starts it from the beginning again. In this sense, the `end()` function is one of control flow statements. The function may be called from anywhere, even from a recursive function. The following rules apply when the function is invoked: 
 
 * the processor starts executing the program from the beginning,
 * values of existing variables are preserved (the last value written to any uninitialized[^1] global or main variable before `end()` is called is preserved),
-* the call stack is reset - calling recursive functions starts from the topmost level again.
+* the call stack is reset – calling recursive functions starts from the topmost level again.
 
 [^1]: Only uninitialized variables are handled this way. Any value assigned to an initialized variable before calling `end()` would get overwritten with whatever value the variable is initialized to when the program execution is restarted.  
 

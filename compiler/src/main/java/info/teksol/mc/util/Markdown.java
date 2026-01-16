@@ -48,16 +48,4 @@ public class Markdown {
             }
         }
     }
-
-    // Example usage
-    public static void main(String[] args) {
-        List<List<String>> table = List.of(
-                List.of("Name", "Age", "Occupation"),
-                List.of("Alice", "30", "Software Engineer"),
-                List.of("Bob", "25", "Data Analyst"),
-                List.of("Charlie", "40", "Manager")
-        );
-
-        System.out.println(toMarkdownTable(table));
-    }
 }

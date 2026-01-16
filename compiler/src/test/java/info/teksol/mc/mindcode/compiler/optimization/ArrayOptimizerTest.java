@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
@@ -33,7 +33,7 @@ class ArrayOptimizerTest {
         protected CompilerProfile createCompilerProfile() {
             return super.createCompilerProfile()
                     .setGoal(GenerationGoal.SPEED)
-                    .setTarget(ProcessorVersion.V7A, ProcessorEdition.S);
+                    .setTarget(ProcessorVersion.V7A, ProcessorType.S);
         }
 
         @Test
@@ -240,7 +240,7 @@ class ArrayOptimizerTest {
         protected CompilerProfile createCompilerProfile() {
             return super.createCompilerProfile()
                     .setGoal(GenerationGoal.SPEED)
-                    .setTarget(ProcessorVersion.V8A, ProcessorEdition.S);
+                    .setTarget(ProcessorVersion.V8A, ProcessorType.S);
         }
 
         @Test

@@ -6,6 +6,13 @@ import org.jspecify.annotations.NullMarked;
 public class ERR {
     public static final String ALLOCATION_MULTIPLE_HEAP = "Multiple heap allocation declarations.";
     public static final String ALLOCATION_MULTIPLE_STACK = "Multiple stack allocation declarations.";
+    public static final String ATOMIC_REQUIRES_TARGET_81 = "'atomic' requires target 8.1 or higher.";
+    public static final String ATOMIC_BLOCK_LOOPS = "The atomic block executes a loop.";
+    public static final String ATOMIC_BLOCK_NESTED = "Nested invocation of atomic blocks.";
+    public static final String ATOMIC_BLOCK_RECURSIVE = "The atomic block executes a recursive function call.";
+    public static final String ATOMIC_BLOCK_WAIT = "The atomic block executes a 'wait' instruction.";
+    public static final String ATOMIC_BLOCK_TOO_LONG = "The atomic block requires %d steps or more, exceeding the maximum allowed number of %d steps.";
+    public static final String ATOMIC_BLOCK_NO_IPT_SET = "Atomic blocks require processor IPT to be set on a world processor. Use the 'setrate' or 'ipt' compiler options.";
     public static final String ARGUMENT_IN_MODIFIER_NOT_ALLOWED = "Parameter '%s' isn't input, 'in' modifier not allowed.";
     public static final String ARGUMENT_IN_OUT_MODIFIER_REQUESTED = "Parameter '%s' is declared 'in out' and no 'in' or 'out' argument modifier was used.";
     public static final String ARGUMENT_KEYWORD_INVALID_VALUE = "Invalid value '%s' for keyword parameter: allowed values are '%s'.";
@@ -45,6 +52,7 @@ public class ERR {
     public static final String ASYNC_WRONG_ARGUMENT = "The '%s' function requires a call of a remote function as an argument.";
     public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";
+    public static final String COMPILER_TYPE_INCOMPATIBLE = "This processor type is incompatible with the actual processor type in the schematics (%s) which contains this code.";
     public static final String CONSTANT_STRING_OR_KEYWORD_REQUIRED = "Constant string expression or keyword required.";
     public static final String CONTINUE_NOT_ALLOWED = "The 'continue' statement not allowed in this context.";
     public static final String DECLARE_BLOCK_NAME_EXPECTED = "A custom block name is expected.";
@@ -93,7 +101,7 @@ public class ERR {
     public static final String FUNCTION_CONFLICT = "Function '%s' conflicts with function '%s'%s.";
     public static final String FUNCTION_CONFLICT_REMOTE = "Remote function '%s' conflicts with remote function '%s': names of remote functions must be unique.";
     public static final String FUNCTION_DEBUG_MUST_BE_VOID = "Debug function must be declared 'void'.";
-    public static final String FUNCTION_DEBUG_NO_OUTPUTS = "Debug function must not have any `out` parameters.";
+    public static final String FUNCTION_DEBUG_NO_OUTPUTS = "Debug function must not have any 'out' parameters.";
     public static final String FUNCTION_RECURSIVE_INLINE = "Recursive function '%s' declared 'inline'.";
     public static final String FUNCTION_RECURSIVE_NO_STACK = "Function '%s' is recursive and no stack was allocated.";
     public static final String FUNCTION_RECURSIVE_REMOTE = "Recursive function '%s' declared 'remote'.";
@@ -179,7 +187,7 @@ public class ERR {
     public static final String RETURN_VALUE_IN_VOID_FUNCTION = "Cannot return a value from a 'void' function.";
     public static final String SCOPE_CODE_OUTSIDE_CODE_BLOCK = "Code outside a main code block or function.";
     public static final String SCOPE_DECLARATION_WITHIN_CODE_BLOCK = "Statement or declaration not allowed within a main code block or function.";
-    public static final String SETLOCAL_NOT_USED = "The `#setlocal` directive must precede a statement or an expression.";
+    public static final String SETLOCAL_NOT_USED = "The '#setlocal' directive must precede a statement or an expression.";
     public static final String SUBARRAY_INDEX_OUT_OF_BOUNDS = "Subarray index %d out of range %d .. %d.";
     public static final String SUBARRAY_INVALID_RANGE = "Empty or invalid subarray range.";
     public static final String SUBARRAY_MUTABLE_RANGE = "Subarray specification must use constant range.";
@@ -191,7 +199,7 @@ public class ERR {
     public static final String VARIABLE_INTRINSIC_IDENTIFIER = "Identifier '%s' is reserved for compiler-defined variables.";
     public static final String VARIABLE_MISSING_MODIFIER = "Modifier '%s' requires the %s modifier.";
     public static final String VARIABLE_MULTIPLE_DECLARATIONS = "Multiple declarations of '%s'.";
-    public static final String VARIABLE_MULTIPLE_SPECIFICATIONS_MLOG = "Only one variable may be specified within an `mlog` declaration.";
+    public static final String VARIABLE_MULTIPLE_SPECIFICATIONS_MLOG = "Only one variable may be specified within an 'mlog' declaration.";
     public static final String VARIABLE_NAME_RESERVED_FOR_LINKS = "Name '%s' is reserved for linked blocks.";
     public static final String VARIABLE_NOINIT_CANNOT_BE_INITIALIZED = "Variable declared as 'noinit' cannot be initialized.";
     public static final String VARIABLE_NOT_DEFINED = "Variable '%s' is not defined.";

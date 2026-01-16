@@ -296,6 +296,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstReturnStatement(MindcodeParser.AstReturnStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astAtomicBlock}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstAtomicBlock(MindcodeParser.AstAtomicBlockContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astCodeBlock}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree

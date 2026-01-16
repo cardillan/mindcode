@@ -3,7 +3,9 @@ package info.teksol.schemacode.mindustry;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.options.Target;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstLink;
 import info.teksol.schemacode.ast.AstProcessor;
@@ -107,9 +109,9 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
         return new ProcessorConfiguration(links, code);
     }
 
-    public static ProcessorConfiguration fromAstConfiguration(SchematicsBuilder builder, AstProcessor processor, Position position) {
+    public static ProcessorConfiguration fromAstConfiguration(SchematicsBuilder builder, AstProcessor processor, BlockPosition blockPos) {
         List<Link> links = processor.links().stream()
-                .mapMulti((AstLink l, Consumer<Link> c) -> l.getProcessorLinks(c, builder, position))
+                .mapMulti((AstLink l, Consumer<Link> c) -> l.getProcessorLinks(c, builder, blockPos.position()))
                 .distinct()
                 .toList();
 
@@ -133,7 +135,7 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                 .forEachOrdered(l -> builder.error(processor, "Incompatible link name '%s' for block type '%s'.", l.name,
                         builder.getBlockPosition(l.position).blockType().name()));
 
-        String mlog = convertToMlog(builder, processor);
+        String mlog = convertToMlog(builder, processor, ProcessorType.fromBlockType(blockPos.blockType()));
         return new ProcessorConfiguration(links, mlog);
     }
 
@@ -144,7 +146,7 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
         return link.name().startsWith(baseName) && link.name.substring(baseName.length()).matches("[1-9]\\d*");
     }
 
-    private static String convertToMlog(SchematicsBuilder builder, AstProcessor processor) {
+    private static String convertToMlog(SchematicsBuilder builder, AstProcessor processor, ProcessorType type) {
         return switch (processor.language()) {
             case NONE -> "";
             case MLOG -> processor.program().getProgramText(builder);
@@ -160,8 +162,10 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                 CompilerProfile compilerProfile = builder.getCompilerProfile();
                 compilerProfile.setPositionTranslator(processor.program().createPositionTranslator(builder));
                 List<MindcodeMessage> messages = new ArrayList<>();
+                Target schematicTarget = compilerProfile.getCompilerTarget().withType(type);
                 MindcodeCompiler compiler = new MindcodeCompiler(messages::add,
-                        compilerProfile.duplicate(true), builder.getInputFiles());
+                        compilerProfile.duplicate(true).setSchematicTarget(schematicTarget),
+                        builder.getInputFiles());
                 compiler.compile(fileToCompile);
 
                 messages.forEach(builder::addMessage);

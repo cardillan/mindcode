@@ -172,6 +172,10 @@ public interface LogicInstruction extends MlogInstruction {
         return setInfo(InstructionInfo.COMMENT, comment);
     }
 
+    default LogicInstruction copyComment(LogicInstruction ix) {
+        return setInfo(InstructionInfo.COMMENT, ix.getComment());
+    }
+
     @SuppressWarnings("unchecked")
     default List<LogicLabel> getJumpTable() {
         return (List<LogicLabel>) getInfo(InstructionInfo.JUMP_TABLE);

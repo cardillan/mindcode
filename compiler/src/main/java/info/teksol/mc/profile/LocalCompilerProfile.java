@@ -2,7 +2,7 @@ package info.teksol.mc.profile;
 
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.options.*;
 import org.jspecify.annotations.NullMarked;
@@ -24,10 +24,12 @@ public interface LocalCompilerProfile {
 
     boolean isDefault(Enum<?> option);
 
+    boolean isSpecified(Enum<?> option);
+
     //<editor-fold desc="Environment Options">
     ProcessorVersion getProcessorVersion();
 
-    ProcessorEdition getProcessorEdition();
+    ProcessorType getProcessorType();
 
     Target getTarget();
 
@@ -51,6 +53,14 @@ public interface LocalCompilerProfile {
 
     default RuntimeErrorReporting getErrorReporting() {
         return getEnumValue(CompilerOptions.ERROR_REPORTING);
+    }
+
+    default int getIpt() {
+        return isDefault(CompilerOptions.IPT) ? getIntValue(CompilerOptions.SETRATE) : getIntValue(CompilerOptions.IPT);
+    }
+
+    default boolean isVolatileAtomic() {
+        return getBooleanValue(CompilerOptions.VOLATILE_ATOMIC);
     }
 
     default Remarks getRemarks() {

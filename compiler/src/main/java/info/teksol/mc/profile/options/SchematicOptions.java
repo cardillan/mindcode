@@ -5,4 +5,5 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public enum SchematicOptions {
     ADD_TAG,
+    SCHEMATIC_TARGET,
 }

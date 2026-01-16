@@ -167,6 +167,11 @@ public abstract class CompilerOptionValue<T> implements CompilerOption {
         this.isDefault = false;
     }
 
+    public void copyValues(List<T> values) {
+        this.values.clear();
+        this.values.addAll(values);
+    }
+
     public boolean setValues(List<T> values, OptionScope scope) {
         setValues(values);
         return true;

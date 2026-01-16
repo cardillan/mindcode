@@ -1,10 +1,9 @@
 package info.teksol.mc.profile.options;
 
-import info.teksol.mc.emulator.EmulatedProcessor;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.*;
 import org.jspecify.annotations.NullMarked;
@@ -21,10 +20,10 @@ public class CompilerOptionFactory {
     public static final int MAX_INSTRUCTIONS_CMDLINE = 100_000;
     public static final int MAX_INSTRUCTIONS_WEBAPP = 1500;
 
-    public static final int DEFAULT_PASSES_CMDLINE = 25;
-    public static final int DEFAULT_PASSES_WEBAPP = 5;
+    public static final int DEFAULT_PASSES_CMDLINE = 50;
+    public static final int DEFAULT_PASSES_WEBAPP = 15;
     public static final int MAX_PASSES_CMDLINE = 1000;
-    public static final int MAX_PASSES_WEBAPP = 25;
+    public static final int MAX_PASSES_WEBAPP = 50;
 
     public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 3;
     public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 2;
@@ -75,16 +74,23 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ZERO_OR_MORE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.COMMAND_LINE, category,
                 List.of()));
+
+        list.add(new TargetCompilerOptionValue(SchematicOptions.SCHEMATIC_TARGET, "",
+                "target processor version and type as specified in schematics definition",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.NONE, category,
+                new Target(ProcessorVersion.V7A, ProcessorType.MICRO_PROCESSOR)));
+
     }
 
     private static void addEnvironmentOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
         final OptionCategory category = OptionCategory.ENVIRONMENT;
 
         list.add(new TargetCompilerOptionValue(EnvironmentOptions.TARGET, "t",
-                "selects target processor version and edition (a 'w' suffix specifies the world processor)",
+                "selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.MODULE,
                 OptionAvailability.UNIVERSAL, category,
-                new Target(ProcessorVersion.V7A, ProcessorEdition.S)));
+                new Target(ProcessorVersion.V7A, ProcessorType.S)));
 
         list.add(new IntegerCompilerOptionValue(EnvironmentOptions.INSTRUCTION_LIMIT, "i",
                 "sets the maximal number of instructions for the speed optimizations",
@@ -182,6 +188,25 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 false).setConstValue(true));
+
+        list.add(new IntegerCompilerOptionValue(CompilerOptions.SETRATE, "",
+                "generates a 'setrate' instruction with the specified value in the initialization code," +
+                        " and sets the IPT value for the compiler to use",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, 1000, 8));
+
+        list.add(new IntegerCompilerOptionValue(CompilerOptions.IPT, "",
+                "sets the IPT value for the compiler to use without generating the 'setrate' instruction",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, 1000, 8));
+
+        list.add(new BooleanCompilerOptionValue(CompilerOptions.VOLATILE_ATOMIC, "",
+                "when active, nonvolatile variables are not protected by atomic blocks",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
 
         list.add(new BooleanCompilerOptionValue(CompilerOptions.BOUNDARY_CHECKS, "",
                 "activates or deactivates runtime checks to catch indexes being out of range when accessing arrays",
@@ -389,24 +414,16 @@ public class CompilerOptionFactory {
         final OptionCategory category = OptionCategory.EMULATOR;
 
         list.add(new TargetCompilerOptionValue(EmulatorOptions.EMULATOR_TARGET, "",
-                "selects target processor version and edition (a 'w' suffix specifies the world processor)",
+                "selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)",
                 OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
-                new Target(ProcessorVersion.V6, ProcessorEdition.W)));
+                new Target(ProcessorVersion.V7A, ProcessorType.S)));
 
         list.add(new DoubleCompilerOptionValue(EmulatorOptions.EMULATOR_FPS, "",
                 "the fps used by the emulator",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 1, 240, 60));
-
-        list.add(new EnumCompilerOptionValue<>(EmulatorOptions.EMULATOR_PROCESSOR, "",
-                "specifies which Mindustry logic processor to use for the emulator (when the type " +
-                        "of the processor is specified in the schematics, this vale is ignored)",
-                EmulatedProcessor.class,
-                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
-                OptionAvailability.UNIVERSAL, category,
-                EmulatedProcessor.LOGIC_PROCESSOR));
 
         list.add(new BooleanCompilerOptionValue(EmulatorOptions.RUN, "",
                 "run the compiled code on an emulated processor",

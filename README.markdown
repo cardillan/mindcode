@@ -14,7 +14,7 @@
 </div>
 <br>
 
-**Mindcode** is a high-level procedural programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, arrays (including `@counter` arrays), conditional statements and loops, functions, modules, remote variables and function calls (synchronous and asynchronous), system library, user libraries, debugging support, and others. Mindcode generates fairly well-optimized mlog code, using available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler) and provides means for integration both with various IDEs and Mindustry itself.
+**Mindcode** is a high-level procedural programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, arrays (including `@counter` arrays), conditional statements and loops, functions, modules, remote variables and function calls (synchronous and asynchronous), atomic code execution, system library, user libraries, debugging support, and others. Mindcode generates fairly well-optimized mlog code, using available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler) and provides means for integration both with various IDEs and Mindustry itself.
 
 **Schemacode**, an extension built over Mindcode, is a specialized definition language designed for creating a complete Mindustry schematic from a text file. [Schematics Builder](doc/syntax/SCHEMACODE.markdown) compiles these definition files directly into Mindustry schematics, either into binary `.msch` file, or into the text representation. Processors can be included in these schematics, complete with the code (specified either in Mindcode or mlog) and linked blocks.
 
@@ -27,7 +27,10 @@ Mindcode can generate code for several Mindustry versions. The target can be sel
 * **v8 Build 149 Beta**: use `#set target = 8.0;` to select it.
 * **v8 Build 150 Beta** or later: use `#set target = 8;` (or `8.1`) to select it.
 
-At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry versions (154.3 Beta or BE build 26530).
+At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry versions (154.3 Beta or BE build 26613).
+
+> [!NOTE]
+> An [atomic code block](doc/syntax/REMOTE-CALLS.markdown#atomic-code-blocks) is only guaranteed to execute correctly in the latest BE version (build 26609 or higher). 
 
 [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality in Mindustry 8.
 
@@ -37,8 +40,11 @@ Please refer to the [documentation](doc/syntax/SYNTAX.markdown) for a complete d
 
 Additionally, the following repositories contain Mindcode projects, which may also serve as an example of how to use Mindcode: 
 
-* [golem](https://github.com/cardillan/golem), a collection of more complex Mindcode and Schemacode scripts, maintained by the author.
-* [mindustry-mindcode-projects](https://github.com/50275/mindustry-mindcode-projects), an independent collection of Mindcode programs.
+* Maintained by the author
+  * [golem](https://github.com/cardillan/golem), a collection of more complex Mindcode and Schemacode scripts.
+* Maintained by other users
+  * [Mindustry Mindcode Projects](https://github.com/50275/mindustry-mindcode-projects)
+  * [Mindustry logic scripts](https://github.com/dadymax/mindustrylogicscripts)
 
 ## Latest development
 
@@ -47,6 +53,7 @@ See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3
 The most important recent changes to Mindcode include:
 
 * Mindustry Logic 8
+  * [Atomic code blocks](doc/syntax/REMOTE-CALLS.markdown#atomic-code-blocks) guaranteed to be executed atomically, without interruption.
   * Complete support for [the latest Mindustry 8 pre-release](/doc/syntax/MINDUSTRY-8.markdown).
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
   * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities. 

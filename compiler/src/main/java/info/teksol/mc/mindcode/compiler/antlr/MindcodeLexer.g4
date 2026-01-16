@@ -32,6 +32,7 @@ lexer grammar MindcodeLexer;
 
 // Keywords
 ALLOCATE                : 'allocate' ;
+ATOMIC                  : 'atomic' ;
 BEGIN                   : 'begin' ;
 BREAK                   : 'break' ;
 CACHED                  : 'cached' ;

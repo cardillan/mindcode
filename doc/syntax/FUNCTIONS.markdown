@@ -1,6 +1,6 @@
 # Logic functions
 
-Mindcode allows calling/executing most Mindustry Logic instructions via functions. The available instruction set depends on the Mindustry version and processor type (edition). It is possible to choose the target Mindustry version using the [`#set target` directive](SYNTAX-5-OTHER.markdown#option-target), or a [command-line argument](TOOLS-CMDLINE.markdown).
+Mindcode allows calling/executing most Mindustry Logic instructions via functions. The available instruction set depends on the Mindustry version and processor type. It is possible to choose the target Mindustry version/processor type using the [`#set target` directive](SYNTAX-5-OTHER.markdown#option-target), or a [command-line argument](TOOLS-CMDLINE.markdown).
 
 A specific `7.1` target was added to Mindcode, where the `getBlock` and `ulocate` functions return the building that was found at given coordinates or located using the criteria. This update makes the most occurring use case, where the located building is the only used output of the function, a natural way to use the function.
 

@@ -78,7 +78,7 @@ The change to the `global1` variable only happens when the function call is fini
 
 # Logic functions
 
-[Logic functions](FUNCTIONS.markdown) are the primary mechanism of executing specific mlog instruction. The available instruction set depends on the Mindustry version and processor type (edition). It is possible to choose the target Mindustry version using the [`#set target` directive](SYNTAX-5-OTHER.markdown#option-target), or a [command-line argument](TOOLS-CMDLINE.markdown).
+[Logic functions](FUNCTIONS.markdown) are the primary mechanism of executing specific mlog instruction. The available instruction set depends on the Mindustry version and processor type. It is possible to choose the target Mindustry version/processor type using the [`#set target` directive](SYNTAX-5-OTHER.markdown#option-target), or a [command-line argument](TOOLS-CMDLINE.markdown).
 
 # Built-in functions
 

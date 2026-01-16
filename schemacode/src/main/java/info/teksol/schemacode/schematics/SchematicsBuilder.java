@@ -254,7 +254,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
             error(astConfiguration, "Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
                     blockPos.blockType().name(), blockPos.position().toStringAbsolute(),
                     blockPos.configurationType(), ConfigurationType.fromInstance(configuration));
-            return EmptyConfiguration.EMPTY; // Ignore wrong configuration but keep processing the block
+            return EmptyConfiguration.EMPTY; // Ignore the wrong configuration but keep processing the block
         } else {
             return configuration;
         }
@@ -269,7 +269,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
                     new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
             case AstItemReference r -> verifyConfiguration(r, blockPos, "item");
             case AstLiquidReference r -> verifyConfiguration(r, blockPos, "liquid");
-            case AstProcessor p -> ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
+            case AstProcessor p -> ProcessorConfiguration.fromAstConfiguration(this, p, blockPos);
             case AstRgbaValue rgb -> convertToRgbValue(blockPos, rgb);
             case AstText t -> new TextConfiguration(t.getText(this));
             case AstUnitCommandReference r -> verifyConfiguration(r, blockPos, "command");

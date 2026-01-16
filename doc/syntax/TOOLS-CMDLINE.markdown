@@ -97,7 +97,8 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
-                [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]] [--boundary-checks {true,false}]
+                [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]] [--setrate {1..1000}] [--ipt {1..1000}]
+                [--volatile-atomic {true,false}] [--boundary-checks {true,false}]
                 [--emulate-strict-not-equal {true,false}] [--error-function {true,false}]
                 [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
                 [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
@@ -117,16 +118,14 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
-                [--emulator-fps {1.0..240.0}]
-                [--emulator-processor {micro-processor,logic-processor,hyper-processor,world-processor}]
-                [--run [{true,false}]] [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
-                [--enforce-instruction-limit {true,false}] [--trace-execution {true,false}]
-                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
-                [--err-parse-error {true,false}] [--err-invalid-counter {true,false}]
-                [--err-unsupported-opcode {true,false}] [--err-nonexistent-var {true,false}]
-                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
-                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
+                [--output-profiling [{true,false}]] [--enforce-instruction-limit {true,false}]
+                [--trace-execution {true,false}] [--dump-variables-on-stop {true,false}]
+                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
+                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
+                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
+                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
+                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-character {true,false}] [--err-invalid-lookup {true,false}]
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
@@ -170,7 +169,7 @@ Environment options:
   as prescribing which specific processor features may or may not be used.
 
   -t, --target {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}
-                         selects target processor version and edition (a 'w' suffix specifies the world processor)
+                         selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
   --builtin-evaluation {none,compatible,full}
@@ -212,6 +211,11 @@ Compiler options:
   --target-guard [{true,false}]
                          generates guard code at  the  beginning  of  the  program  ensuring  the  processor runs in the
                          Mindustry version compatible with the 'target' and 'builtin-evaluation' options
+  --setrate {1..1000}    generates a 'setrate' instruction with  the  specified  value  in  the initialization code, and
+                         sets the IPT value for the compiler to use
+  --ipt {1..1000}        sets the IPT value for the compiler to use without generating the 'setrate' instruction
+  --volatile-atomic {true,false}
+                         when active, nonvolatile variables are not protected by atomic blocks
   --boundary-checks {true,false}
                          activates or deactivates runtime checks  to  catch  indexes  being  out of range when accessing
                          arrays
@@ -346,12 +350,9 @@ Emulator options:
   exceptions are memory cells ('cell1' to 'cell9') and memory banks ('bank1' to 'bank9'), which can be read and written.
 
   --emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
-                         selects target processor version and edition (a 'w' suffix specifies the world processor)
+                         selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
   --emulator-fps {1.0..240.0}
                          the fps used by the emulator
-  --emulator-processor {micro-processor,logic-processor,hyper-processor,world-processor}
-                         specifies which Mindustry logic  processor  to  use  for  the  emulator  (when  the type of the
-                         processor is specified in the schematics, this vale is ignored)
   --run [{true,false}]   run the compiled code on an emulated processor
   --run-steps {0..1000000000}
                          the maximum number of instruction executions  to  emulate,  the execution stops when this limit
@@ -436,7 +437,8 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
-                [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]] [--boundary-checks {true,false}]
+                [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]] [--setrate {1..1000}] [--ipt {1..1000}]
+                [--volatile-atomic {true,false}] [--boundary-checks {true,false}]
                 [--emulate-strict-not-equal {true,false}] [--error-function {true,false}]
                 [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
                 [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
@@ -456,16 +458,14 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
-                [--emulator-fps {1.0..240.0}]
-                [--emulator-processor {micro-processor,logic-processor,hyper-processor,world-processor}]
-                [--run [{true,false}]] [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
-                [--enforce-instruction-limit {true,false}] [--trace-execution {true,false}]
-                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
-                [--err-parse-error {true,false}] [--err-invalid-counter {true,false}]
-                [--err-unsupported-opcode {true,false}] [--err-nonexistent-var {true,false}]
-                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
-                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
+                [--output-profiling [{true,false}]] [--enforce-instruction-limit {true,false}]
+                [--trace-execution {true,false}] [--dump-variables-on-stop {true,false}]
+                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
+                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
+                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
+                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
+                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-character {true,false}] [--err-invalid-lookup {true,false}]
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
@@ -498,7 +498,7 @@ Environment options:
   as prescribing which specific processor features may or may not be used.
 
   -t, --target {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}
-                         selects target processor version and edition (a 'w' suffix specifies the world processor)
+                         selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
   --builtin-evaluation {none,compatible,full}
@@ -540,6 +540,11 @@ Compiler options:
   --target-guard [{true,false}]
                          generates guard code at  the  beginning  of  the  program  ensuring  the  processor runs in the
                          Mindustry version compatible with the 'target' and 'builtin-evaluation' options
+  --setrate {1..1000}    generates a 'setrate' instruction with  the  specified  value  in  the initialization code, and
+                         sets the IPT value for the compiler to use
+  --ipt {1..1000}        sets the IPT value for the compiler to use without generating the 'setrate' instruction
+  --volatile-atomic {true,false}
+                         when active, nonvolatile variables are not protected by atomic blocks
   --boundary-checks {true,false}
                          activates or deactivates runtime checks  to  catch  indexes  being  out of range when accessing
                          arrays
@@ -674,12 +679,9 @@ Emulator options:
   exceptions are memory cells ('cell1' to 'cell9') and memory banks ('bank1' to 'bank9'), which can be read and written.
 
   --emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
-                         selects target processor version and edition (a 'w' suffix specifies the world processor)
+                         selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
   --emulator-fps {1.0..240.0}
                          the fps used by the emulator
-  --emulator-processor {micro-processor,logic-processor,hyper-processor,world-processor}
-                         specifies which Mindustry logic  processor  to  use  for  the  emulator  (when  the type of the
-                         processor is specified in the schematics, this vale is ignored)
   --run [{true,false}]   run the compiled code on an emulated processor
   --run-steps {0..1000000000}
                          the maximum number of instruction executions  to  emulate,  the execution stops when this limit

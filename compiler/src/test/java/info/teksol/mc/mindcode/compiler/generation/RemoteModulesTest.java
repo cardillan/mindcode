@@ -699,9 +699,9 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void reportsIncompatibleEdition() {
+        void reportsIncompatibleTarget() {
             assertGeneratesMessage(
-                    "Module target '8.0w' is incompatible with global target '8.1s'.",
+                    "Module target '8.0w' is incompatible with global target '8.1m'.",
                     """
                             #set target = 8.1s;
                             require "target.mnd";

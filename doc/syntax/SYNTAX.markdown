@@ -28,10 +28,10 @@ A [System Library](SYSTEM-LIBRARY.markdown), consisting of several separate modu
 * [Printing](SYSTEM-LIBRARY-PRINTING.markdown)
 * [Units](SYSTEM-LIBRARY-UNITS.markdown)
 
-For Mindustry Logic 8 and later, new mlog instructions are supported:
+For Mindustry Logic 8 and later, many new functionalities are supported:
 
 * [Mindustry Logic 8](MINDUSTRY-8.markdown)
-* [Remote functions and variables](REMOTE-CALLS.markdown)
+* [Parallel processing](REMOTE-CALLS.markdown)
 
 The more advanced Mindcode features and topics are discussed here:
 
@@ -216,6 +216,7 @@ This is a list of Mindcode keywords:
 
 * `allocate`
 * `and`
+* `atomic`
 * `begin`
 * `break`
 * `cached`

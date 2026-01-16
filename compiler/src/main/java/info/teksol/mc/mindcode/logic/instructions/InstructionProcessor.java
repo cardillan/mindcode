@@ -33,7 +33,7 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
 
     ProcessorVersion getProcessorVersion();
 
-    ProcessorEdition getProcessorEdition();
+    ProcessorType getProcessorType();
 
     /// @return list of all opcode variants available to this instruction processor
     List<OpcodeVariant> getOpcodeVariants();
@@ -130,14 +130,14 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @return true if the instruction is effectively deterministic
     boolean isDeterministic(LogicInstruction instruction);
 
-    /// Returns true if an instruction with given opcode is supported by current processor settings (version, edition).
+    /// Returns true if an instruction with given opcode is supported by current processor settings (version, type).
     ///
     /// @param opcode instruction opcode
     /// @return true if the instruction is supported
     boolean isSupported(Opcode opcode);
 
     /// Returns true if an instruction with given opcode and arguments is supported by current processor
-    /// settings (version, edition).
+    /// settings (version, type).
     ///
     /// @param opcode    instruction opcode
     /// @param arguments instruction arguments

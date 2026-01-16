@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.W;
+import static info.teksol.mc.mindcode.logic.opcodes.ProcessorType.W;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /// This test produces files containing permutations of instructions and their arguments allowed by metadata.

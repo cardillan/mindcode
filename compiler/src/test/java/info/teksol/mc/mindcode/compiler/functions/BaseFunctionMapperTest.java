@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import static info.teksol.mc.mindcode.logic.opcodes.FunctionMapping.FUNC;
 import static info.teksol.mc.mindcode.logic.opcodes.MindustryOpcodeVariants.*;
-import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.S;
+import static info.teksol.mc.mindcode.logic.opcodes.ProcessorType.S;
 import static info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion.V6;
 import static info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion.V7;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -21,7 +21,7 @@ class BaseFunctionMapperTest extends AbstractFunctionMapperTest {
     @Test
     void createsAllInstances() {
         assertAll(Stream.of(ProcessorVersion.values()).map(version ->
-                () -> createFunctionMapper(MindustryOpcodeVariants.getSpecificOpcodeVariants(version, ProcessorEdition.W))));
+                () -> createFunctionMapper(MindustryOpcodeVariants.getSpecificOpcodeVariants(version, ProcessorType.W))));
     }
 
     @Test

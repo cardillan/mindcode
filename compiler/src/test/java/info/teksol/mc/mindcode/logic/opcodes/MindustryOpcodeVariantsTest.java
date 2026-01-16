@@ -22,7 +22,7 @@ class MindustryOpcodeVariantsTest {
     }
 
     void verifyAllOpcodesArePresent(List<String> errors, ProcessorVersion processorVersion) {
-        Map<Opcode, List<OpcodeVariant>> opcodes = MindustryOpcodeVariants.getSpecificOpcodeVariants(processorVersion, ProcessorEdition.W)
+        Map<Opcode, List<OpcodeVariant>> opcodes = MindustryOpcodeVariants.getSpecificOpcodeVariants(processorVersion, ProcessorType.W)
                 .stream()
                 .collect(Collectors.groupingBy(OpcodeVariant::opcode, Collectors.toList()));
 

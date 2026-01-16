@@ -1,12 +1,11 @@
 package info.teksol.mc.profile;
 
-import info.teksol.mc.emulator.EmulatedProcessor;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.options.*;
 import org.jspecify.annotations.NullMarked;
@@ -62,7 +61,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
         for (CompilerOptionValue<?> option : other.options.values()) {
             if (option.option != OptimizationOptions.OPTIMIZATION && (includeUnstable || option.stability == SemanticStability.STABLE)) {
-                getOption(option.option).setValues((List<Object>) option.getValues());
+                getOption(option.option).copyValues((List<Object>) option.getValues());
             }
         }
     }
@@ -118,6 +117,10 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     @Override
     public boolean isDefault(Enum<?> option) {
         return getOption(option).isDefault();
+    }
+
+    public boolean isSpecified(Enum<?> option) {
+        return !getOption(option).isDefault();
     }
 
     public boolean isWebApplication() {
@@ -200,6 +203,12 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         this.<String>getOption(SchematicOptions.ADD_TAG).setValues(additionalTags);
         return this;
     }
+
+    public CompilerProfile setSchematicTarget(Target target) {
+        getOption(SchematicOptions.SCHEMATIC_TARGET).setValue(target);
+        return this;
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="Environment Options">
@@ -217,16 +226,22 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return this.<Target>getOption(EnvironmentOptions.TARGET).getValue().version();
     }
 
-    public ProcessorEdition getProcessorEdition() {
-        return this.<Target>getOption(EnvironmentOptions.TARGET).getValue().edition();
+    public ProcessorType getProcessorType() {
+        return this.<Target>getOption(EnvironmentOptions.TARGET).getValue().type();
     }
 
-    public Target getTarget() {
+    public Target getCompilerTarget() {
         return this.<Target>getOption(EnvironmentOptions.TARGET).getValue();
     }
 
-    public CompilerProfile setTarget(ProcessorVersion version, ProcessorEdition edition) {
-        getOption(EnvironmentOptions.TARGET).setValue(new Target(version, edition));
+    public Target getTarget() {
+        return isDefault(SchematicOptions.SCHEMATIC_TARGET)
+                ? getCompilerTarget()
+                : getCompilerTarget().withType(getSchematicTarget().type());
+    }
+
+    public CompilerProfile setTarget(ProcessorVersion version, ProcessorType type) {
+        getOption(EnvironmentOptions.TARGET).setValue(new Target(version, type));
         return this;
     }
 
@@ -319,6 +334,11 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
 
     public CompilerProfile setTargetGuard(boolean targetGuard) {
         getOption(CompilerOptions.TARGET_GUARD).setValue(targetGuard);
+        return this;
+    }
+
+    public CompilerProfile setVolatileAtomic(boolean volatileAtomic) {
+        getOption(CompilerOptions.VOLATILE_ATOMIC).setValue(volatileAtomic);
         return this;
     }
     //</editor-fold>
@@ -428,18 +448,13 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     //</editor-fold>
 
     //<editor-fold desc="Emulator Options">
-    public CompilerProfile setEmulatorTarget(ProcessorVersion version, ProcessorEdition edition) {
-        getOption(EmulatorOptions.EMULATOR_TARGET).setValue(new Target(version, edition));
+    public CompilerProfile setEmulatorTarget(ProcessorVersion version, ProcessorType type) {
+        getOption(EmulatorOptions.EMULATOR_TARGET).setValue(new Target(version, type));
         return this;
     }
 
     private CompilerProfile setEmulatorFps(double emulatorFps) {
         getOption(EmulatorOptions.EMULATOR_FPS).setValue(emulatorFps);
-        return this;
-    }
-
-    private CompilerProfile setEmulatorProcessor(EmulatedProcessor emulatorProcessor) {
-        getOption(EmulatorOptions.EMULATOR_PROCESSOR).setValue(emulatorProcessor);
         return this;
     }
 

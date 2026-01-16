@@ -30,6 +30,7 @@ import info.teksol.mc.mindcode.compiler.optimization.DebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.DiffDebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
+import info.teksol.mc.mindcode.compiler.postprocess.AtomicBlockResolver;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionLabelResolver;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.compiler.postprocess.VirtualInstructionResolver;
@@ -300,6 +301,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         // Run the program through the array expander again, as optimizations might have been inactive.
         instructions = virtualInstructionResolver.resolveVirtualInstructions(instructions);
 
+        instructions = AtomicBlockResolver.resolve(instructionProcessor, instructions);
+
         // Check there are no direct access instructions
         if (globalProfile.isSymbolicLabels()) {
             boolean hasLabels = instructions.stream()
@@ -412,7 +415,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
     private void run() {
         assert metadata != null;
-        LogicBlock logicBlock = LogicBlock.createProcessor(metadata, compilerProfile().getEmulatorProcessor(),
+        LogicBlock logicBlock = LogicBlock.createProcessor(metadata, compilerProfile().getEmulatorTarget().type(),
                 BlockPosition.ZERO_POSITION, output);
         initializeLogicBlock(logicBlock);
         EmulatorSchematic schematic = new EmulatorSchematic(List.of(logicBlock));

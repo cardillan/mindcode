@@ -205,6 +205,10 @@ public interface ContextfulInstructionCreator {
         return (StopInstruction) createInstruction(STOP);
     }
 
+    default WaitInstruction createWait(LogicValue value) {
+        return (WaitInstruction) createInstruction(WAIT, value);
+    }
+
     default WriteInstruction createWrite(LogicValue value, LogicValue memory, LogicValue index) {
         return (WriteInstruction) createInstruction(WRITE, value, memory, index);
     }

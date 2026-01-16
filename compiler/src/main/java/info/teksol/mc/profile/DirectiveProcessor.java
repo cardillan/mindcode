@@ -5,10 +5,8 @@ import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveValue;
-import info.teksol.mc.profile.options.CompilerOptionFactory;
-import info.teksol.mc.profile.options.CompilerOptionValue;
-import info.teksol.mc.profile.options.OptionMultiplicity;
-import info.teksol.mc.profile.options.OptionScope;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
+import info.teksol.mc.profile.options.*;
 import info.teksol.mc.util.StringSimilarity;
 import org.jspecify.annotations.NullMarked;
 
@@ -93,6 +91,13 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
             }
         } else {
             setOptionValue(profile.getOption(optionEnum), directive);
+            if (optionEnum == EnvironmentOptions.TARGET && profile.isSpecified(SchematicOptions.SCHEMATIC_TARGET)) {
+                ProcessorType compilerProcessor = profile.getCompilerTarget().type();
+                ProcessorType schematicProcessor = profile.getSchematicTarget().type();
+                if (!compilerProcessor.isCompatibleWith(schematicProcessor)) {
+                    error(directive, ERR.COMPILER_TYPE_INCOMPATIBLE, schematicProcessor.code());
+                }
+            }
         }
     }
         

@@ -36,7 +36,7 @@ generated code use mlog opcodes.
   * [Instruction `Unit Control`](#instruction-unit-control)
   * [Instruction `Unit Radar`](#instruction-unit-radar)
   * [Instruction `Unit Locate`](#instruction-unit-locate)
-* World processor
+* World Processor
   * [Instruction `Get Block`](#instruction-get-block)
   * [Instruction `Set Block`](#instruction-set-block)
   * [Instruction `Spawn Unit`](#instruction-spawn-unit)
@@ -305,7 +305,7 @@ Requires a bound unit.
 |`found = ulocate(:spawn, out outx, out outy, out building)`|`ulocate spawn core true @copper outx outy found building`|
 |`found = ulocate(:damaged, out outx, out outy, out building)`|`ulocate damaged core true @copper outx outy found building`|
 
-# World processor
+# World Processor
 
 These instructions are only available to the World Processor,
 which can be placed in custom-created levels in Mindustry 7 or higher.

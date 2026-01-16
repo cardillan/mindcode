@@ -25,7 +25,7 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GlobalCompilerProfile;
@@ -66,8 +66,8 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
         return ProcessorVersion.MAX;
     }
 
-    protected ProcessorEdition getProcessorEdition() {
-        return ProcessorEdition.WORLD_PROCESSOR;
+    protected ProcessorType getProcessorType() {
+        return ProcessorType.WORLD_PROCESSOR;
     }
 
     protected void setDebugPrinterProvider(MindcodeCompiler compiler) {
@@ -89,7 +89,7 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
 
     protected CompilerProfile createCompilerProfile() {
         return CompilerProfile.fullOptimizations(false)
-                .setTarget(getProcessorVersion(), getProcessorEdition())
+                .setTarget(getProcessorVersion(), getProcessorType())
                 .setAutoPrintflush(false)
                 .setDebugMessages(3)
                 .setPrintStackTrace(true)
@@ -118,7 +118,7 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
         }
         setDebugPrinterProvider(compiler);
 
-        System.out.println(compiler.compilerProfile().encode());
+        //System.out.println(compiler.compilerProfile().encode());
         compiler.compile();
         expectedMessages.validate();
         expectedMessages.setAccumulateErrors(false);

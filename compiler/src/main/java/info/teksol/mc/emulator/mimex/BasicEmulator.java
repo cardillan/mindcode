@@ -76,7 +76,7 @@ public class BasicEmulator implements Emulator {
             for (int index = 0; index < executors.size(); index++) {
                 LExecutor executor = executors.get(index);
                 messageHandler.trace("%n    Processor %s (%s):", executor.getProcessorId(),
-                        executor.finished() ? "finished" : executor.active() ? "running" : "waiting");
+                        executor.finished() ? "inactive" : executor.active() ? "active" : "waiting");
                 executor.runTick(index, delta);
 
                 running.set(index, executor.active());

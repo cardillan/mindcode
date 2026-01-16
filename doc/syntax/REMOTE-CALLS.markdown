@@ -1,3 +1,11 @@
+# Parallel processing
+
+In Mindustry 8, the logic system has been significantly extended, allowing close cooperation between multiple processors. Mindcode provides access to these new functionalities in the following ways:
+
+* [Remote functions and variables](#remote-functions-and-variables): a function or a variable declared in a remote module can be accessed from a different processor which uses the remote module. Remote functions and variables are fully supported by the Mindcode's syntax; calling a remote function, or accessing a remote variable, is possible using the usual syntax for method calls and variables.  
+* [Arbitrary access to remote variables](#arbitrary-access-to-remote-variables): Mindcode provides a way to access arbitrary variables in remote processors, possibly interfacing with code that wasn't created by Mindcode. 
+* [Atomic code blocks](#atomic-code-blocks): an atomic code block guarantees that the contained code will be fully processed during a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including other processor variables, contents of memory banks or cells, or unit and block states.
+
 # Remote functions and variables
 
 Mindcode supports accessing variables (including arrays) in linked processors and calling Mindcode functions in them. This functionality uses the Mindustry Logic 8 ability to read and write variables to/from other processors, including `@counter`, by name.
@@ -382,7 +390,7 @@ To specify where the remote variable is located and even what name it uses, use 
 remote <processor> [var] <variable1>;
 ```
 
-The _storage specification_ is included after the `remote` keyword. The storage clause consist of the name of the remote processor block (e.g., `processor1`, or a variable), and optionally an mlog name as a constant string expression, enclosed in parentheses. When the mlog name is not specified, it is derived from the name of the variable being declared this way using Mindcode's convention. All variables created this way are stored in the given remote processor.
+The _storage specification_ is included after the `remote` keyword. The storage clause consists of the name of the remote processor block (e.g., `processor1`, or a variable), and optionally an mlog name as a constant string expression, enclosed in parentheses. When the mlog name is not specified, it is derived from the name of the variable being declared this way using Mindcode's convention. All variables created this way are stored in the given remote processor.
 
 Note: the storage specification is very similar to the [storage specification of external variables](SYNTAX-1-VARIABLES.markdown#external-variables).
 
@@ -419,7 +427,128 @@ read *tmp4 processor1 "foo"
 print *tmp4
 ```
 
-# Schemacode support for modules
+# Atomic code blocks
+
+An atomic code block ensures that the code enclosed in it will execute in a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including current or other processor's variables, contents of memory banks or cells, or unit and block states. This is true even at high frame rates (generally, frame rate may affect instruction scheduling, making any guarantees about atomicity of code executed outside atomic blocks impossible).
+
+> [!NOTE]
+> Atomic code blocks are only supported for targets 8.1 or higher. They also rely on a very recent change to Mindustry, and therefore only work on Mindustry BE build 26609 or higher. Specifically, the latest Beta release (v8 Build 154.3 - Beta) doesn't contain the required functionality.    
+
+The atomic block has the following syntax:
+
+```
+atomic
+    // Atomic block code
+end;
+```
+
+The following constructs must not be contained (directly or indirectly) in an atomic block: 
+
+* another (nested) atomic block,
+* a `wait` instruction (this also precludes synchronous remote function calls and waiting for the result of an asynchronous remote call),
+* a recursive function call,
+* a loop.
+ 
+Mindcode recognizes most kinds of loops including loops in mlog blocks, but it won't recognize jumps or loops resulting from `@counter` manipuation. Such jumps and loops may cause malfunction of atomic blocks.  
+
+> [!IMPORTANT]
+> The [Loop unrolling optimization](optimizations/LOOP-UNROLLING.markdown) may unroll a loop inside an atomic block. Unrolled loops are allowed inside atomic blocks. However, when the optimization doesn't take place, either because of space constraints or because the optimization is disabled, the atomic block will no longer compile. Use loops within atomic blocks with caution. 
+
+Mindcode uses the following mechanism to make sure the code enclosed in a code block will be executed atomically: the maximum possible number of steps required to execute the atomic block is calculated, and a `wait` instruction is inserted at the beginning of the atomic block with a duration which guarantees that enough instruction quota will accumulate during the wait. This ensures that the longest code path gets executed in a single frame on the next update.
+
+## Processor speed
+
+To be able to compute the correct wait time, the compiler needs to know the speed of the target processor (i.e., its execution rate expressed as instructions per tick). This depends on the type of the processor:
+
+| Processor type  | IPT |
+|-----------------|----:|
+| Micro-processor |   2 |
+| Logic-processor |   8 |
+| Hyper-processor |  25 |
+| World-processor |   8 |
+
+Notes:
+
+* In the case of non-privileged processors (micro-, logic-, or hyper-processor), the instruction rate can be increased using an overdrive projector or overdrive dome. Mindcode always assumes the basic processor speed, because the overdrive projector or dome may fail during gameplay, which would prevent the atomic code block from executing atomically.
+* The world processor's speed can be changed using the `setrate` instruction, up to 1000 instructions per tick. The program must use the [`setrate`](SYNTAX-5-OTHER.markdown#option-setrate) or [`ipt` compiler option](SYNTAX-5-OTHER.markdown#option-ipt) to specify the actual instruction rate that will be in effect during execution.
+
+Use the [`target` compiler option](SYNTAX-5-OTHER.markdown#option-target) to inform the compiler about the type of the processor that will be used. When the source code is being compiled as part of building a schematic, the actual type of the processor is determined by the schematic definition.
+
+> [!WARNING]
+> Running the compiled code on a processor slower than the compilation target or the declared IPT rate will cause the atomic blocks not to be executed atomically. This is true even when the code block is short, because at frame rates higher than 60 FPS instructions are executed in bursts shorter than the processor's IPT. Mindcode computes the wait duration to exactly cover the execution time of the code block, which means there isn't any margin to accommodate slower processor speeds.
+> 
+> Running the code on a faster or overdriven processor preserves the atomicity of atomic code blocks, but may result in degraded performance.
+
+If you really don't know what kind of processor your code will be running on, using the micro-processor as a target (which is also the default) is the safest option.
+
+## Atomic block size and performance
+
+Processor speed determines the maximum capacity of an atomic code block. It's not possible to execute more than five ticks worth of instructions in a single frame update. This limits the maximum number of steps performed by an atomic block to 10, 40, and 125 for a micro-, logic-, and hyper-processor respectively (one of these steps is always reserved for the `wait` instruction used by the atomic block). When the longest code path exceeds the maximum possible number of steps for an atomic block, a compilation error occurs.
+
+An atomic block should always be as short as possible. Do not perform calculations or operations which do not need to be part of the atomic block. Calling non-inlined functions from an atomic block is possible but may be too costly for the atomic block on slower processors. 
+
+Executing several atomic blocks in quick succession or in a loop may result in a significant performance penalty. Each atomic block involves a yield, and if the instruction quota accumulated during the yield isn't used up between consecutive atomic block executions, it may eventually be lost, decreasing the overall performance. When at least one tick worth of instructions is executed between the atomic blocks, there's generally no performance penalty.
+
+## Unprotected instructions
+
+By default, the atomic block may not protect instructions which cannot be affected by outside processors or changes in the Mindustry world. An instruction is unprotected when all the following conditions are met:
+
+* The instruction doesn't interact with the world at all (interactions with the current processor, such as `print` instruction, are allowed).
+* The instruction doesn't have a volatile avariable as an operand (`@counter` is allowed).
+* The instruction is not a custom instruction (created in an mlog block on using one of `mlog()`, `mlogSafe()` or `mlogText()` functions).
+
+When computing the wait duration, the compiler doesn't consider unprotected instructions at the end of the execution path. Only the steps leading up to and including the last protected instruction are counted. The goal is not to protect instructions such as unconditional jumps or instructions performing returns from functions. Not protecting these instructions may allow for longer atomic blocks than would be otherwise possible, especially on microprocessors. 
+
+It is possible to activate protection for all variables by setting the [`volatile-atomic`](SYNTAX-5-OTHER.markdown#option-volatile-atomic) compiler option to `false`.
+
+## Example
+
+The following code assigns each processor a different value, using a memory cell to store the counter. Multiple processors linked to this memory cell will all end up with a different value.
+
+```Mindcode
+// Using a microprocessor
+#set target = 8m;      
+#set symbolic-labels = true;    
+
+// Make sure the cell is linked up before proceeding
+guarded linked cell1;
+linked message1;
+
+// The counter, stored in a memory cell
+external(cell1[0]) counter;
+
+var value;
+atomic
+    value = ++counter;  
+end;
+
+while true do
+    print(value);
+    printflush(message1);
+end;
+```
+
+compiles to:
+
+```mlog
+# Mlog code compiled with support for symbolic labels
+# You can safely add/remove instructions, in most parts of the program
+# Pay closer attention to sections of the program manipulating @counter
+label_0:
+    jump label_0 equal cell1 null
+        wait 0.033334                           # 2.000 ticks for atomic execution of 4 steps at 2 ipt
+        read *tmp0 cell1 0
+        op add *tmp1 *tmp0 1
+        write *tmp1 cell1 0                     # The last atomic block instruction
+label_5:
+        print *tmp1
+        printflush message1
+        jump label_5 always 0 0
+```
+
+# Appendix
+
+## Schemacode support for modules
 
 All [string values](SCHEMACODE.markdown#string-value-definition) defined in a Schemacode source file are accessible through the `require` keyword as files. The name of the file must be the same as the identifier used to declare the string value, without any path or extension. This makes it possible to `require` source code stored in a string value as a remote module:
 

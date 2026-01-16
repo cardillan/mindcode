@@ -494,6 +494,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAstReturnStatement(MindcodeParser.AstReturnStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code astAtomicBlock}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstAtomicBlock(MindcodeParser.AstAtomicBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astAtomicBlock}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstAtomicBlock(MindcodeParser.AstAtomicBlockContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astCodeBlock}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree

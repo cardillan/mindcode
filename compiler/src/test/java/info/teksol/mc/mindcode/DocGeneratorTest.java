@@ -8,7 +8,7 @@ import info.teksol.mc.mindcode.compiler.ast.AbstractAstBuilderTest;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
@@ -421,7 +421,7 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
 //        }
 
         CompilerProfile profile = createCompilerProfile()
-                .setTarget(ProcessorVersion.MAX, ProcessorEdition.W)
+                .setTarget(ProcessorVersion.MAX, ProcessorType.W)
                 .setAllOptimizationLevels(OptimizationLevel.ADVANCED)
                 .setGoal(goal)
                 .setSignature(false)

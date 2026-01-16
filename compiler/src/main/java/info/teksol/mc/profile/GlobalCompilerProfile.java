@@ -1,10 +1,9 @@
 package info.teksol.mc.profile;
 
-import info.teksol.mc.emulator.EmulatedProcessor;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.options.*;
 import org.jspecify.annotations.NullMarked;
@@ -30,6 +29,8 @@ public interface GlobalCompilerProfile {
 
     boolean isDefault(Enum<?> option);
 
+    boolean isSpecified(Enum<?> option);
+
     //<editor-fold desc="Input/output options">
     default FileReferences getFileReferences() {
         return getEnumValue(InputOutputOptions.FILE_REFERENCES);
@@ -39,6 +40,10 @@ public interface GlobalCompilerProfile {
     //<editor-fold desc="Schematics options">
     default List<String> getAdditionalTags() {
         return this.<String>getOption(SchematicOptions.ADD_TAG).getValues();
+    }
+
+    default Target getSchematicTarget() {
+        return this.<Target>getOption(SchematicOptions.SCHEMATIC_TARGET).getValue();
     }
     //</editor-fold>
 
@@ -58,7 +63,7 @@ public interface GlobalCompilerProfile {
 
     ProcessorVersion getProcessorVersion();
 
-    ProcessorEdition getProcessorEdition();
+    ProcessorType getProcessorType();
 
     Target getTarget();
     //</editor-fold>
@@ -115,6 +120,10 @@ public interface GlobalCompilerProfile {
     boolean useEmulatedStrictNotEqual();
 
     SyntacticMode getSyntacticMode();
+
+    default int getSetrate() {
+        return getIntValue(CompilerOptions.SETRATE);
+    }
 
     default boolean isTargetGuard() {
         return getBooleanValue(CompilerOptions.TARGET_GUARD);
@@ -184,12 +193,6 @@ public interface GlobalCompilerProfile {
 
     default double getEmulatorFps() {
         return getDoubleValue(EmulatorOptions.EMULATOR_FPS);
-    }
-
-    default EmulatedProcessor getEmulatorProcessor() {
-        return isDefault(EmulatorOptions.EMULATOR_PROCESSOR)
-                ? getProcessorEdition() == ProcessorEdition.W ? EmulatedProcessor.WORLD_PROCESSOR : EmulatedProcessor.LOGIC_PROCESSOR
-                : getEnumValue(EmulatorOptions.EMULATOR_PROCESSOR);
     }
 
     default Set<ExecutionFlag> getExecutionFlags() {

@@ -13,7 +13,7 @@ item-rate-meter-00.mnd:                            94   199812ADE3D3F8C3   0C15C
 level-display-00.mnd:                              84   B0F2701257FEF4C3   E807DFFCB36A5177
 level-display-water-cryo-00.mnd:                   79   3B59D99D61A51686   9BBC72B3DD90CCF1
 level-meter-00.mnd:                               141   C7BCD2A84C470E15   52A5311D27327B37
-map-setup-00.mnd:                                 920   95F602FA758275E6   02A33DCAD3C36C78
+map-setup-00.mnd:                                 920   95F602FA758275E6   E5341A4BBBBE9A94
 mass-driver-monitor-00.mnd:                       181   6E6F762403154535   4AE281D6AC63453B
 mass-driver-monitor-surge-alloy-00.mnd:            88   84BE8CA14CE3386F   258551AC9AB9410E
 reactor-control-00.mnd:                           339   0B5F71D4A736D2F1   151C4D253F48230A

@@ -7,7 +7,7 @@ import info.teksol.mc.messages.ListMessageLogger;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.*;
 import info.teksol.mc.profile.options.Target;
@@ -39,7 +39,7 @@ public class SystemLibraryTest {
 
     private CompilerProfile createCompilerProfile() {
         return CompilerProfile.fullOptimizations(false)
-                .setTarget(new Target(ProcessorVersion.MAX, ProcessorEdition.W))
+                .setTarget(new Target(ProcessorVersion.MAX, ProcessorType.W))
                 .setFinalCodeOutput(FinalCodeOutput.PLAIN)
                 .setAutoPrintflush(false)
                 .setSyntacticMode(SyntacticMode.STRICT)

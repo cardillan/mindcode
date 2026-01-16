@@ -10,7 +10,7 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
 import info.teksol.mc.mindcode.logic.instructions.MlogInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 
@@ -36,7 +36,7 @@ public class MlogDecompiler {
 
     public static String decompile(String mlog, boolean preamble) {
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(
-                ProcessorVersion.MAX, ProcessorEdition.W, new StandardNameCreator());
+                ProcessorVersion.MAX, ProcessorType.W, new StandardNameCreator());
         MlogParser mlogParser = new MlogParser(processor, mlog);
         ParsedMlog parsedMlog = mlogParser.parse();
         return new MlogDecompiler(processor, parsedMlog, preamble).decompile();
@@ -290,4 +290,3 @@ public class MlogDecompiler {
         }
     }
 }
-

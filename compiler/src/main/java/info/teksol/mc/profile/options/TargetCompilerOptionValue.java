@@ -1,6 +1,6 @@
 package info.teksol.mc.profile.options;
 
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -18,12 +18,12 @@ public class TargetCompilerOptionValue extends CompilerOptionValue<Target> {
 
     @Override
     public @Nullable Target convert(String value) {
-        ProcessorEdition edition = ProcessorEdition.byCode(value.charAt(value.length() - 1));
+        ProcessorType type = ProcessorType.byCode(value.charAt(value.length() - 1));
         ProcessorVersion version = ProcessorVersion.byCode(value.substring(
                 value.startsWith("ML") ? 2 : 0,
-                value.length() - (edition == null ? 0 : 1)));
+                value.length() - (type == null ? 0 : 1)));
 
-        return version == null ? null : new Target(version, edition != null ? edition : ProcessorEdition.S);
+        return version == null ? null : new Target(version, type != null ? type : ProcessorType.S);
     }
 
     @Override

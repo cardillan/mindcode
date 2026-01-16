@@ -1,11 +1,11 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mc.emulator.EmulatedProcessor;
 import info.teksol.mc.emulator.EmulatorSchematic;
 import info.teksol.mc.emulator.blocks.*;
 import info.teksol.mc.emulator.blocks.BlockPosition;
 import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration;
 import org.jspecify.annotations.NullMarked;
@@ -37,10 +37,10 @@ public record Schematic(String name, String filename, String description, List<S
     private MindustryBuilding convertBlock(MindustryMetadata metadata, Block block) {
         BlockPosition position = block.position().toBlockPosition();
         return switch (block.blockType().name()) {
-            case "@micro-processor" -> createLogicBlock(metadata, block, EmulatedProcessor.MICRO_PROCESSOR);
-            case "@logic-processor" -> createLogicBlock(metadata, block, EmulatedProcessor.LOGIC_PROCESSOR);
-            case "@hyper-processor" -> createLogicBlock(metadata, block, EmulatedProcessor.HYPER_PROCESSOR);
-            case "@world-processor" -> createLogicBlock(metadata, block, EmulatedProcessor.WORLD_PROCESSOR);
+            case "@micro-processor" -> createLogicBlock(metadata, block, ProcessorType.MICRO_PROCESSOR);
+            case "@logic-processor" -> createLogicBlock(metadata, block, ProcessorType.LOGIC_PROCESSOR);
+            case "@hyper-processor" -> createLogicBlock(metadata, block, ProcessorType.HYPER_PROCESSOR);
+            case "@world-processor" -> createLogicBlock(metadata, block, ProcessorType.WORLD_PROCESSOR);
             case "@memory-cell" -> MemoryBlock.createMemoryCell(metadata, position);
             case "@memory-bank" -> MemoryBlock.createMemoryBank(metadata, position);
             case "@message" -> MessageBlock.createMessage(metadata, position);
@@ -50,7 +50,7 @@ public record Schematic(String name, String filename, String description, List<S
         };
     }
 
-    private LogicBlock createLogicBlock(MindustryMetadata metadata, Block block, EmulatedProcessor processor) {
+    private LogicBlock createLogicBlock(MindustryMetadata metadata, Block block, ProcessorType processor) {
         return LogicBlock.createProcessor(metadata, processor, block.position().toBlockPosition(),
                 block.configuration().as(ProcessorConfiguration.class).code());
     }

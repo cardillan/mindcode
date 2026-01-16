@@ -155,7 +155,7 @@ In the past, Mindustry processor behavior has been inconsistent when assigning `
 
 **Option scope: [module](#module-scope)**
 
-Use the `target` option to specify the Mindcode/Mindustry Logic version to be used by the compiler and processor emulator. Compiler will generate code compatible with the selected processor version and edition, and both the compiler and processor emulator recognize Mindustry objects, built-in variables and other elements available in a given Mindustry Logic version.
+Use the `target` option to specify the Mindcode/Mindustry Logic version and the processor type to be used by the compiler and processor emulator. Compiler will generate code compatible with the selected processor version and type, and both the compiler and processor emulator recognize Mindustry objects, built-in variables and other elements available in a given Mindustry Logic version.
 
 The target versions consist of a major and minor version number. As of now, these versions exist:
 
@@ -174,14 +174,19 @@ The target can be set using either just a major or both major and minor version 
 #set target = 7.0;      // Sets version 7.0
 ```
 
-To use a world-processor variant of Mindcode language, it is necessary to add `W` as a suffix to the version number:
+The processor type is specified by appending a one-letter suffix to the version number:
+
+* `m` or `M` for micro-processor (the default when not specified),
+* `l` or `L` for logic-processor,
+* `h` or `H` for hyper-processor,
+* `w` or `W` for world-processor.
 
 ```
-#set target = 8W;     // World-processor logic version 8
-#set target = 7.0W    // World-processor logic version 7.0
+#set target = 7.0w    // World-processor, version 7.0
+#set target = 8L;     // Logic-processor, version 8
 ```
 
-The same names of version targets are used with the `-t` / `--target` command-line option.
+Note that when the Mindcode is compiled to configure a schematic-defined processor when building a schematic, the processor type is taken from the schematic definition and the target version is ignored. A warning is emitted   
 
 #### Module targets
 
@@ -462,62 +467,62 @@ compiles to:
     set type @mono
     # Flag to mark our units
     op rand .myFlag 10000000000 0
-label_3:
-        ubind type
-        # Remember first unit we found to be aware we're looping again
-        sensor *tmp1 :firstUnit @dead
-        jump label_10 equal *tmp1 false
-            set :firstUnit @unit
-            set :active 0
-            set :change 0
-            jump label_13 always 0 0
-        label_10:
-            jump label_13 notEqual @unit :firstUnit
-                # We've completed a loop: visited all existing units once
-                # Compute how many units we want to acquire/release to meet the target
-                # When change is negative, we need to drop units
-                op sub :change target :active
-                # Counts active units. Contains valid value when completing the loop.
+    label_3:
+            ubind type
+            # Remember first unit we found to be aware we're looping again
+            sensor *tmp1 :firstUnit @dead
+            jump label_10 equal *tmp1 false
+                set :firstUnit @unit
                 set :active 0
-        label_13:
-        sensor :unitFlag @unit @flag
-        jump label_20 notEqual :unitFlag 0
-            # This is a free unit
-            jump label_19 lessThanEq :change 0
-                # We're acquiring a new unit
-                op sub :change :change 1
-                ucontrol flag .myFlag 0 0 0 0
-                jump label_21 always 0 0
-                # We don't need a new unit, skip it
-            label_19:
+                set :change 0
+                jump label_13 always 0 0
+            label_10:
+                jump label_13 notEqual @unit :firstUnit
+                    # We've completed a loop: visited all existing units once
+                    # Compute how many units we want to acquire/release to meet the target
+                    # When change is negative, we need to drop units
+                    op sub :change target :active
+                    # Counts active units. Contains valid value when completing the loop.
+                    set :active 0
+            label_13:
+            sensor :unitFlag @unit @flag
+            jump label_20 notEqual :unitFlag 0
+                # This is a free unit
+                jump label_19 lessThanEq :change 0
+                    # We're acquiring a new unit
+                    op sub :change :change 1
+                    ucontrol flag .myFlag 0 0 0 0
+                    jump label_21 always 0 0
+                    # We don't need a new unit, skip it
+                label_19:
+                    jump label_3 always 0 0
+                # If not our unit, skip it
+            label_20:
+                jump label_3 notEqual :unitFlag .myFlag
+            # This is our unit.
+            label_21:
+            jump label_26 greaterThanEq :change 0
+                # The unit is superfluous: free it
+                ucontrol flag 0 0 0 0 0
+                ucontrol unbind 0 0 0 0 0
+                op add :change :change 1
+                # Skip processing for this unit
                 jump label_3 always 0 0
-            # If not our unit, skip it
-        label_20:
-            jump label_3 notEqual :unitFlag .myFlag
-        # This is our unit.
-        label_21:
-        jump label_26 greaterThanEq :change 0
-            # The unit is superfluous: free it
-            ucontrol flag 0 0 0 0 0
-            ucontrol unbind 0 0 0 0 0
-            op add :change :change 1
-            # Skip processing for this unit
+            # We found an active unit, count it
+            label_26:
+            op add :active :active 1
+            # Handle your unit here
+            op mul *tmp19 30 :active
+            op add :angle *tmp19 @tick
+            op sin *tmp21 :angle 0
+            op mul *tmp22 15 *tmp21
+            op add *tmp23 @thisx *tmp22
+            op cos *tmp24 :angle 0
+            op mul *tmp25 15 *tmp24
+            op add *tmp26 @thisy *tmp25
+            ucontrol move *tmp23 *tmp26 0 0 0
+            # End of unit handling
             jump label_3 always 0 0
-        # We found an active unit, count it
-        label_26:
-        op add :active :active 1
-        # Handle your unit here
-        op mul *tmp19 30 :active
-        op add :angle *tmp19 @tick
-        op sin *tmp21 :angle 0
-        op mul *tmp22 15 *tmp21
-        op add *tmp23 @thisx *tmp22
-        op cos *tmp24 :angle 0
-        op mul *tmp25 15 *tmp24
-        op add *tmp26 @thisy *tmp25
-        ucontrol move *tmp23 *tmp26 0 0 0
-        # End of unit handling
-        jump label_3 always 0 0
 ```
 
 ## Compiler options
@@ -531,9 +536,12 @@ Options which affect the way the source code is compiled.
 | [emulate-strict-not-equal](#option-emulate-strict-not-equal) | global | stable             |
 | [error-function](#option-error-function)                     | local  | stable             |
 | [error-reporting](#option-error-reporting)                   | local  | stable             |
+| [ipt](#option-ipt)                                           | local  | stable             |
 | [remarks](#option-remarks)                                   | local  | stable             |
+| [setrate](#option-setrate)                                   | global | stable             |
 | [syntax](#option-syntax)                                     | module | stable             |
 | [target-guard](#option-target-guard)                         | global | stable             |
+| [volatile-atomic](#option-volatile-atomic)                   | local  | stable             |
 
 ### Option `auto-printflush`
 
@@ -550,7 +558,7 @@ This feature is meant for small, test scripts, where a call to `printflush()` is
 
 **Option scope: [local](#local-scope)**
 
-his option activates/deactivates runtime checks when accessing an internal or external array by index.
+This option activates/deactivates runtime checks when accessing an internal or external array by index.
 
 * `false`: no boundary checks are performed.
 * `true` (the default value): boundary checks are performed according to the error-reporting mechanism, unless `error-reporting` is set to `none`, in which case no runtime checks are performed.
@@ -620,6 +628,47 @@ Possible values for the `error-reporting` option are:
 * `simple`: when the runtime check fails, the program execution stops on a `stop` instruction (again, this can be determined by inspecting the `@counter` variable). Each runtime check takes three instructions.
 * `described`: when the runtime check fails, the program execution stops on a `stop` instruction. However, a `print` instruction containing an error message is generated just before the `stop` instruction; after locating the faulting `stop` instruction, the error message can be read. Each runtime check takes four instructions.
 
+### Option `ipt`
+
+**Option scope: [local](#local-scope)**
+
+This option specifies world processor's speed in instructions per tick. This value is used by the compiler building [atomic code blocks](REMOTE-CALLS.markdown#atomic-code-blocks). Allowed values are in the range of `1` to `1000`.
+
+The option has a local scope and can be applied to atomic code blocks to specify the current processor speed for the block:
+
+```Mindcode
+#set target = 8w;
+
+setrate(500);
+#setlocal ipt = 500;
+atomic
+    cell1[0]++;
+end;
+
+setrate(1000);
+#setlocal ipt = 1000;
+atomic
+    cell1[1]++;
+end;
+```
+
+compiles to:
+
+```mlog
+setrate 500
+wait 0.000134                           # 0.008 ticks for atomic execution of 4 steps at 500 ipt
+read *tmp0 cell1 0
+op add *tmp0 *tmp0 1
+write *tmp0 cell1 0                     # The last atomic block instruction
+setrate 1000
+wait 0.000067                           # 0.004 ticks for atomic execution of 4 steps at 1000 ipt
+read *tmp2 cell1 1
+op add *tmp2 *tmp2 1
+write *tmp2 cell1 1                     # The last atomic block instruction
+```
+
+An alternative way to specify the processor speed is the [`setrate` compiler option](#option-setrate), however, this option also generates a `setrate` instruction to apply the specified speed to the processor. 
+
 ### Option `remarks`
 
 **Option scope: [local](#local-scope)**
@@ -636,6 +685,35 @@ Converting remarks to comments may improve code readability. Remarks in a loop m
 Passive remarks can be used for putting instructions or comments in the compiled code in a way which is still visible in the game UI.
 
 Active remarks can be used to easily add debugging output to a program that can be deactivated using a compiler option (potentially through a command line switch without modifying the source code).
+
+### Option `setrate`
+
+**Option scope: [global](#global-scope)**
+
+This option specifies world processor's speed in instructions per tick, and generates the `setrate` instruction in the initialization code to apply the specified speed. The specified value is also used by the compiler building [atomic code blocks](REMOTE-CALLS.markdown#atomic-code-blocks). Allowed values are in the range of `1` to `1000`.
+
+Example:
+
+```Mindcode
+#set target = 8w;
+#set setrate = 750;
+
+atomic
+    cell1[0]++;
+end;
+```
+
+compiles to:
+
+```mlog
+setrate 750
+wait 0.000089                           # 0.005 ticks for atomic execution of 4 steps at 750 ipt
+read *tmp0 cell1 0
+op add *tmp0 *tmp0 1
+write *tmp0 cell1 0                     # The last atomic block instruction
+```
+
+An alternative way to specify the processor speed is the [`ipt` compiler option](#option-ipt), however, this option does not generate a `setrate` instruction to apply the specified speed to the processor.
 
 ### Option `syntax`
 
@@ -672,6 +750,17 @@ The guard code is always a single `jump` instruction which jumps back to itself 
 | 8.1    | full                | `jump 0 strictEqual @bufferSize null`  |
 
 The jump target (`0`) is replaced with proper instruction address when it's not the first in the compiled code.
+
+### Option `volatile-atomic`
+
+**Option scope: [local](#local-scope)**
+
+This option governs the behavior of the [`atomic` code blocks](REMOTE-CALLS.markdown#atomic-code-blocks). Possible values are:
+
+* `false`: all instructions in an atomic block are protected and guaranteed to be executed atomically.
+* `true` (the default value): only instructions interacting with the world, and instructions accessing volatile variables, are protected and guaranteed to be executed atomically.
+
+Mindcode's contract regarding variables is that only volatile variables may be accessed by other processors, and therefore non-volatile variables, including compiler-generated variables, do not need to be protected. Such variables can't be influenced from the outside and therefore don't need to be protected.
 
 ## Optimization options
 
@@ -969,14 +1058,13 @@ processor is much faster than Mindustry processors, but can't run instructions w
 from the Mindustry World. Sole exceptions are memory cells ('cell1' to 'cell9') and memory banks
 ('bank1' to 'bank9'), which can be read and written.
 
-| Option                                           | Scope  | Semantic stability |
-|--------------------------------------------------|--------|--------------------|
-| [emulator-fps](#option-emulator-fps)             | global | stable             |
-| [emulator-processor](#option-emulator-processor) | global | stable             |
-| [emulator-target](#option-emulator-target)       | global | stable             |
-| [output-profiling](#option-output-profiling)     | global | stable             |
-| [run](#option-run)                               | global | stable             |
-| [run-steps](#option-run-steps)                   | global | stable             |
+| Option                                       | Scope  | Semantic stability |
+|----------------------------------------------|--------|--------------------|
+| [emulator-fps](#option-emulator-fps)         | global | stable             |
+| [emulator-target](#option-emulator-target)   | global | stable             |
+| [output-profiling](#option-output-profiling) | global | stable             |
+| [run](#option-run)                           | global | stable             |
+| [run-steps](#option-run-steps)               | global | stable             |
 
 ### Option `emulator-fps`
 
@@ -984,24 +1072,11 @@ from the Mindustry World. Sole exceptions are memory cells ('cell1' to 'cell9') 
 
 Sets the FPS rate the emulator will use to schedule instructions. The standard FPS rate is 60 (the default value). Higher or lower FPS rates affect the number of instructions executed per tick.
 
-### Option `emulator-processor`
-
-**Option scope: [global](#global-scope)**
-
-Use the `emulator-processor` option to specify the Mindustry Logic processor to be used by the processor emulator. Possible values are:
-
-* `micro-processor`: uses the `@micro-processor` processor.
-* `logic-processor` (the default value when compiling for the standard edition): uses the `@logic-processor` processor.
-* `hyper-processor`: uses the `@hyper-processor` processor.
-* `world-processor` (the default value when compiling for the world edition): uses the `@world-processor` processor.
-
-When the type of the processor is specified by a schematic, this option is ignored.
-
 ### Option `emulator-target`
 
 **Option scope: [global](#global-scope)**
 
-Use the `emulator-target` option to specify the Mindustry Logic version to be used by the processor emulator. When the option is not specified, the target specifie by the `target` option is used for the emulator. This option is therefore only useful to emulate executing the compiled code on a Mindustry processor different from the one used by the compiler.
+Use the `emulator-target` option to specify the Mindustry Logic version and processor type to be used by the processor emulator. When the option is not specified, the target specified by the [`target` option](#option-target) is used for the emulator. This option is therefore only useful to emulate executing the compiled code on a Mindustry processor different from the one used by the compiler.
 
 For possible values of this option, please see [Option `target`](#option-target).
 
@@ -1055,4 +1130,4 @@ There are additional options to control the execution of the compiled code, all 
 
 ---
 
-[&#xAB; Previous: Remote functions and variables](REMOTE-CALLS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Code Optimization &#xBB;](SYNTAX-6-OPTIMIZATIONS.markdown)
+[&#xAB; Previous: Parallel processing](REMOTE-CALLS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Code Optimization &#xBB;](SYNTAX-6-OPTIMIZATIONS.markdown)

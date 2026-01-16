@@ -2,7 +2,7 @@ Name                                     Instructions    Steps   Coverage   Sour
 assignments-in-expressions.mnd:                    13       13     100.0%   3E55A40DD17DEC43   12225E91F5F5C27F
 complex-case-expression.mnd:                       49      295      98.0%   E6AA465B5328A02F   B3F1ADD95704F852
 equality-comparisons.mnd:                          61       61     100.0%   16DB5681427420C5   121DCBB54EB6CAAD
-executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   8D3C8B1C15C11253
+executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   3749FDAEE5AD8730
 expression-evaluation-compile-time.mnd:            79       79     100.0%   1CFFE222D3784C4B   C021187B6C2F80C9
 expression-evaluation-runtime.mnd:                196      196     100.0%   556E593ABBF7BE04   6EE8DB58734A3D04
 fixed-bounds-ranged-for.mnd:                        9       36     100.0%   6CB678A2E1E09678   70911AEC39BECA9E
@@ -15,7 +15,7 @@ processesAssertBounds:                              5        5     100.0%   9537
 processesBasicCode2:                                3        3     100.0%   B406896E6E3CDCB7   295C15253DC5C1B9
 processesBasicCode:                                 4        4     100.0%   A4E4C088A4510A90   30633B28AE9D9EDA
 processesCaseExpressions:                           6        4      66.7%   0A6F2A75C193B958   381E5D60588F2DF8
-processesGlobalVariableDataFlow:                   24       24     100.0%   A117AFBA99D093C8   81CD64197EE83BEA
+processesGlobalVariableDataFlow:                   24       24     100.0%   A117AFBA99D093C8   334362DDF2E81FD1
 processesTranslatedCaseExpressions:                 6        4      66.7%   5324DB4ECE283002   381E5D60588F2DF8
 ranged-for-loop-break-continue.mnd:                25       62      96.0%   0E564BDD58072C70   02F0F875D06A42F0
 recursive-calls.mnd:                              103      278      99.0%   9CB0965E0E62F089   321F7E80EC75F16B
