@@ -139,7 +139,7 @@ public class CompileMindcodeAction extends ActionHandler {
         MindcodeCompiler compiler = new MindcodeCompiler(messageLogger, globalProfile, inputFiles);
         compiler.compile();
 
-        if (!messageLogger.hasErrors()) {
+        if (!compiler.hasCompilerErrors()) {
             writeOutput(output, compiler.getOutput());
 
             if (arguments.getBoolean("clipboard")) {
@@ -183,7 +183,7 @@ public class CompileMindcodeAction extends ActionHandler {
             writeOutputToFile(logFile, errors);
         }
 
-        if (messageLogger.hasErrors()) {
+        if (compiler.hasCompilerErrors()) {
             System.exit(1);
         }
     }

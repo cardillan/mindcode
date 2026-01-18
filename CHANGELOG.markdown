@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
+* Runtime errors generated when running the code in the processor emulator no longer prevent outputting the compiled code in the tool app.
 * Changed the format of the [`target` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target). Instead of a processor edition (standard or world), a particular processor type is now specified, using the first letter of the type name (i.e., `m` for micro-, `l` for logic-, `h` for hyper-, and `w` for world-processor, case-insensitive), for example, `#set target = 8L;`.
 * When compiling Mindcode for a processor in a schematic, the target type of the processor is determined by the block type in the schematic.  
 * [Compiler-defined constants](/doc/syntax/SYNTAX-1-VARIABLES.markdown#compiler-defined-constants) now follow the `@@VARIABLE` pattern, instead of earlier `__VARIABLE__` (for example, `@@MINDUSTRY_VERSION`).

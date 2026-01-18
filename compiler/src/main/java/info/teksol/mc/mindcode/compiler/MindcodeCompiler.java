@@ -5,6 +5,7 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.emulator.Assertion;
 import info.teksol.mc.emulator.Emulator;
+import info.teksol.mc.emulator.EmulatorMessage;
 import info.teksol.mc.emulator.EmulatorSchematic;
 import info.teksol.mc.emulator.blocks.*;
 import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
@@ -235,7 +236,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         if (!modules.isEmpty()) {
             astProgram = new AstProgram(globalProfile, new SourcePosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
         }
-        if (hasErrors() || targetPhase.compareTo(CompilationPhase.AST_BUILDER) <= 0) return;
+        if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.AST_BUILDER) <= 0) return;
 
         if (astProgram == null) {
             throw new MindcodeInternalError("Program is empty.");
@@ -263,7 +264,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         callGraph = CallGraphCreator.createCallGraph(this, astProgram);
 
-        if (hasErrors() || targetPhase.compareTo(CompilationPhase.CALL_GRAPH) <= 0) return;
+        if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.CALL_GRAPH) <= 0) return;
 
         rootAstContext = AstContext.createRootNode(globalProfile);
         variables = new Variables(this);
@@ -272,13 +273,13 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         CodeGenerator.generateCode(this, astProgram);
 
-        if (assembler.isInternalError() && !hasErrors()) {
+        if (assembler.isInternalError() && !hasCompilerErrors()) {
             throw new MindcodeInternalError("Internal error encountered.");
         }
         unoptimized = assembler.getInstructions();
         instructions = unoptimized;
         long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
-        if (hasErrors() || targetPhase.compareTo(CompilationPhase.COMPILER) <= 0) return;
+        if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.COMPILER) <= 0) return;
 
         VirtualInstructionResolver virtualInstructionResolver = new VirtualInstructionResolver(instructionProcessor);
 
@@ -296,7 +297,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         unresolved = instructions;
         long optimizeTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
 
-        if (hasErrors() || targetPhase.compareTo(CompilationPhase.OPTIMIZER) <= 0) return;
+        if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.OPTIMIZER) <= 0) return;
 
         // Run the program through the array expander again, as optimizations might have been inactive.
         instructions = virtualInstructionResolver.resolveVirtualInstructions(instructions);
@@ -342,7 +343,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         output = LogicInstructionPrinter.toString(instructionProcessor, resolver.generateSymbolicLabels(instructions),
                 globalProfile.isSymbolicLabels(), globalProfile.getMlogIndent());
 
-        if (hasErrors() || targetPhase.compareTo(CompilationPhase.PRINTER) <= 0) return;
+        if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.PRINTER) <= 0) return;
 
         // RUN if requested
         // Timing output
@@ -428,10 +429,6 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         executionProfile = emulator.getExecutorResults(0).getProfile();
     }
 
-    public boolean hasErrors() {
-        return messageLogger.hasErrors();
-    }
-
     // Compiler outputs
     public CommonTokenStream getTokenStream(InputFile inputFile) {
         return tokenStreams.get(inputFile);
@@ -501,11 +498,16 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         return Objects.requireNonNull(emulator);
     }
 
-    public boolean isInternalError() {
+    public boolean hasInternalError() {
         return internalError;
     }
 
-    public boolean isRuntimeError() {
+    public boolean hasCompilerErrors() {
+        return messageLogger.getMessages().stream()
+                .anyMatch(m -> m.level() == MessageLevel.ERROR && !(m instanceof EmulatorMessage));
+    }
+
+    public boolean hasRuntimeError() {
         return runtimeError;
     }
 

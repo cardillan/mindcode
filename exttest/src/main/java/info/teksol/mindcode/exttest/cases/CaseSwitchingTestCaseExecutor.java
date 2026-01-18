@@ -135,7 +135,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 .map(Assertion::generateErrorMessage)
                 .collect(Collectors.joining("\n"));
 
-        boolean success = unexpectedMessages.isEmpty() && failedTests.isEmpty() && !compiler.isRuntimeError();
+        boolean success = unexpectedMessages.isEmpty() && failedTests.isEmpty() && !compiler.hasRuntimeError();
 
         if (!success) {
             progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),

@@ -162,7 +162,7 @@ public class HomeController {
     }
 
     private String getCompilerCode(String sourceCode, MindcodeCompiler compiler) {
-        if (compiler.isInternalError()) {
+        if (compiler.hasInternalError()) {
             return """
                     Oh no! Mindcode crashed.
                     
@@ -174,7 +174,7 @@ public class HomeController {
                     in which case you'll be able to continue developing your program
                     even before a fix is available.
                     """;
-        } else if (sourceCode.isBlank() || compiler.hasErrors()) {
+        } else if (sourceCode.isBlank() || compiler.hasCompilerErrors()) {
             return "";
         } else if (isEmpty(compiler.getUnoptimized())) {
             if (compiler.getCallGraph().getFunctions().stream().filter(f -> !f.getDeclaration().sourcePosition().isLibrary()).count() > 1) {
@@ -241,7 +241,7 @@ public class HomeController {
     }
 
     private String processRunOutput(MindcodeCompiler compiler) {
-        if (compiler.hasErrors()) {
+        if (compiler.hasCompilerErrors()) {
             return null;
         } else {
             String output = compiler.getTextBufferOutput();

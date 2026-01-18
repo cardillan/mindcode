@@ -194,14 +194,14 @@ public abstract class AbstractProcessorTest extends AbstractCompilerTestBase {
                 createInputFiles(code),
                 emulator -> setupLogicBlock(emulator, blocks),
                 compiler -> {
-                    assertFalse(compiler.hasErrors(), "Errors while compiling program.");
+                    assertFalse(compiler.hasCompilerErrors(), "Errors while compiling program.");
                     writeLogFile(logFile, compiler, compiler.getUnresolved());
                     logPerformance(title, code, compiler.getOutput(), compiler.getEmulator());
 
                     List<Executable> executables = new ArrayList<>();
                     executables.add(() -> evaluator.asExpected(true, compiler.getEmulator()));
                     compiler.getAssertions().forEach(a -> executables.add(() -> assertTrue(a.success(), a.generateErrorMessage())));
-                    executables.add(() -> assertFalse(compiler.isRuntimeError()));
+                    executables.add(() -> assertFalse(compiler.hasRuntimeError()));
                     assertAll(executables);
 
                     return null;

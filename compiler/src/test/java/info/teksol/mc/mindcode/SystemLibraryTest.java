@@ -128,7 +128,7 @@ public class SystemLibraryTest {
 
         if (executableTest) {
             assertFalse(compiler.getAssertions().isEmpty(), "No assertions were executed by the unit test.");
-            if (compiler.isRuntimeError()) {
+            if (compiler.hasRuntimeError()) {
                 fail("Runtime error occurred while executing compiled code.");
             }
         }
