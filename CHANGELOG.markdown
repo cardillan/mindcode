@@ -16,7 +16,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added the [`setrate`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-setrate) and [`ipt` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-ipt). These options specify the rate at which a world processor executes instructions (used by the compiler when building atomic blocks).
 * Added the [`volatile-atomic` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-volatile-atomic) governing the way atomic blocks are created.
 * Added the [`processor-id`, `program-name` and `program-version` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-processor-id). These options take string values, which are then encoded into a `*id` variable and can be used to identify the processor in the schematics.
-* Added the [`emulator-fps` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-fps) to specify the frame rate to be emulated by the processor emulator. While frames are always emulated fully by Mindcode emulator, the change in instruction scheduling caused by different frame rate only affects situations where an interaction between two or more processors is being emulated.  
+* Added the [`emulator-fps` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-fps) to specify the frame rate to be emulated by the processor emulator. While frames are always emulated fully by Mindcode emulator, the change in instruction scheduling caused by different frame rate only affects situations where an interaction between two or more processors is being emulated.
+* Added the ability to run the compiled schematics on the schematics emulator to the tool app.
+* Added support for sensing `@x` and `@y` in blocks when emulating schematics.
 
 ### Changed
 

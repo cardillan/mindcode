@@ -20,6 +20,9 @@ public abstract class LGlobalVarsBase implements LGlobalVars {
         metadata.getAllLVars().stream()
                 .filter(LVariable::isEmulatedVariable)
                 .forEach(this::put);
+
+        update("@mapw", 200);
+        update("@maph", 300);
     }
 
     protected abstract void createContentVariables(MindustryMetadata metadata);
@@ -65,6 +68,15 @@ public abstract class LGlobalVarsBase implements LGlobalVars {
         vars.put(name, var);
 
         return var;
+    }
+
+    protected void update(String name, double value) {
+        LVar existingVar = vars.get(name);
+        if (existingVar == null) {
+            put(name, value);
+        } else {
+            existingVar.numval = value;
+        }
     }
 
     protected LVar put(String name, double value) {

@@ -6,6 +6,7 @@ import info.teksol.mc.emulator.MindustryObject;
 import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.blocks.MemoryBlock;
 import info.teksol.mc.emulator.blocks.MessageBlock;
+import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.emulator.mimex.*;
 import info.teksol.mc.evaluator.ConditionEvaluator;
 import info.teksol.mc.evaluator.ExpressionEvaluator;
@@ -375,6 +376,16 @@ public class LExecutor60 extends LExecutorBase {
                 case "@name" -> {
                     // §§§ Report error?
                     setVar(to, object instanceof MindustryContent content ? content.contentName() : null);
+                    return true;
+                }
+                case "@x" -> {
+                    // §§§ Report error?
+                    setVar(to, object instanceof MindustryBuilding building ? building.x() : null);
+                    return true;
+                }
+                case "@y" -> {
+                    // §§§ Report error?
+                    setVar(to, object instanceof MindustryBuilding building ? building.y() : null);
                     return true;
                 }
             }

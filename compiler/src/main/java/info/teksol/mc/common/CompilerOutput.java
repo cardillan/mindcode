@@ -1,33 +1,36 @@
 package info.teksol.mc.common;
 
 import info.teksol.mc.emulator.Assertion;
-import info.teksol.mc.emulator.EmulatorSchematic;
-import info.teksol.mc.emulator.TextBuffer;
+import info.teksol.mc.emulator.EmulatorMessage;
 import info.teksol.mc.messages.MindcodeMessage;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @NullMarked
-public record CompilerOutput<T extends @Nullable Object>(
-        T output, String fileName, List<MindcodeMessage> messages, List<Assertion> assertions,
-        @Nullable EmulatorSchematic schematic, @Nullable TextBuffer textBuffer, int steps) {
+public record CompilerOutput<T>(
+        @Nullable T output,
+        String fileName,
+        List<MindcodeMessage> messages,
+        List<Assertion> assertions
+) {
 
     public <R> CompilerOutput<R> withOutput(R output) {
-        return new CompilerOutput<>(output, fileName, messages, assertions, schematic, textBuffer, steps);
+        return new CompilerOutput<>(output, fileName, messages, assertions);
     }
 
-    public CompilerOutput(T output, String fileName, List<MindcodeMessage> messages, EmulatorSchematic schematic) {
-        this(output, fileName, messages, List.of(), schematic, null, 0);
+    public CompilerOutput(T output, String fileName, List<MindcodeMessage> messages) {
+        this(output, fileName, messages, List.of());
     }
 
     public CompilerOutput(List<MindcodeMessage> messages) {
-        this(null, "", messages, List.of(), null, null, 0);
+        this(null, "", messages, List.of());
     }
 
     public void addMessage(MindcodeMessage message) {
@@ -36,6 +39,10 @@ public record CompilerOutput<T extends @Nullable Object>(
 
     public String getStringOutput() {
         return output == null ? "" : output.toString();
+    }
+
+    public T existingOutput() {
+        return Objects.requireNonNull(output);
     }
 
     public <M> List<M> texts(Function<MindcodeMessage, M> messageTransformer) {
@@ -60,19 +67,7 @@ public record CompilerOutput<T extends @Nullable Object>(
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public boolean hasErrors() {
-        return messages.stream().anyMatch(MindcodeMessage::isError);
-    }
-
-    public boolean hasWarnings() {
-        return messages.stream().anyMatch(MindcodeMessage::isWarning);
-    }
-
-    public boolean hasInfos() {
-        return messages.stream().anyMatch(MindcodeMessage::isInfo);
-    }
-
-    public boolean hasDebug() {
-        return messages.stream().anyMatch(MindcodeMessage::isDebug);
+    public boolean hasCompilerErrors() {
+        return messages.stream().anyMatch(m -> m.isError() &&!(m instanceof EmulatorMessage));
     }
 }

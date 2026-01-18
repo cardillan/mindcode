@@ -3,8 +3,6 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.PositionFormatter;
-import info.teksol.mc.emulator.Emulator;
-import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.CompilerOptionValue;
@@ -104,24 +102,15 @@ public class CompileSchemacodeAction extends ActionHandler {
         final File logFile = resolveOutputFile(inputFile, outputDirectory, outputFileLog, ".log");
         final PositionFormatter positionFormatter = sp -> sp.formatForIde(compilerProfile.getFileReferences());
 
-        if (!result.hasErrors()) {
-            writeOutput(output, result.output());
+        if (!result.hasCompilerErrors()) {
+            outputMessages(result, output, logFile, positionFormatter);
+
+            writeOutput(output, result.existingOutput());
 
             if (arguments.getBoolean("clipboard")) {
                 writeToClipboard(Base64.getEncoder().encodeToString(result.output()));
                 result.addMessage(ToolMessage.info("\nCreated schematic was copied to the clipboard."));
             }
-
-            Emulator emulator = new BasicEmulator(result.messages()::add, compilerProfile, result.schematic(), 10000);
-            emulator.run(compilerProfile.getStepLimit());
-
-            for (int i = 0; i < emulator.getExecutorCount(); i++) {
-                System.out.println();
-                System.out.println("Processor " + emulator.getExecutorResults(i).getProcessorId());
-                System.out.println(emulator.getExecutorResults(i).getFormattedOutput());
-            }
-
-            outputMessages(result, output, logFile, positionFormatter);
         } else {
             // Errors: print just them into stderr
             List<String> errors = result.errors(m -> m.formatMessage(positionFormatter));

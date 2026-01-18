@@ -69,7 +69,7 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
             logicBlock.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata(), BlockPosition.ZERO_POSITION));
             logicBlock.addBlock("bank2", MemoryBlock.createMemoryBank(ip.getMetadata(), BlockPosition.ZERO_POSITION));
             EmulatorSchematic emulatorSchematic = new EmulatorSchematic(List.of(logicBlock));
-            Emulator emulator = new BasicEmulator(expectedMessages(), compiler.globalCompilerProfile(), emulatorSchematic, 1000);
+            Emulator emulator = new BasicEmulator(expectedMessages(), compiler.globalCompilerProfile(), emulatorSchematic);
             emulator.run(STEP_LIMIT);
             return emulator;
         }

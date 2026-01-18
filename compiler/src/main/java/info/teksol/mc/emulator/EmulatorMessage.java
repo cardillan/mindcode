@@ -28,7 +28,7 @@ public record EmulatorMessage(
             return text;
         } else {
             String prefix = instruction == null ? "Runtime error occurred:\n" : String.format("Runtime error at instruction #%d: '%s':\n", index, instruction);
-            String suffix = flag == null ? "" : String.format("\nUse the '#set %s = false;' directive to ignore this error.", flag.getOptionName());
+            String suffix = flag == null || !flag.isSettable() ? "" : String.format("\nUse the '#set %s = false;' directive to ignore this error.", flag.getOptionName());
             return prefix + text + suffix;
         }
     }
@@ -43,6 +43,10 @@ public record EmulatorMessage(
 
     public static EmulatorMessage info(int index, @Nullable LInstruction instruction, @PrintFormat String format, Object... args) {
         return new EmulatorMessage(MessageLevel.INFO, null, index, instruction, String.format(Locale.US, format, args));
+    }
+
+    public static EmulatorMessage info(@PrintFormat String format, Object... args) {
+        return new EmulatorMessage(MessageLevel.INFO, null, -1, null, String.format(Locale.US, format, args));
     }
 
     public static EmulatorMessage debug(int index, @Nullable LInstruction instruction, @PrintFormat String format, Object... args) {

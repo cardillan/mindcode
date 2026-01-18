@@ -3,7 +3,10 @@ package info.teksol.schemacode;
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.emulator.Emulator;
+import info.teksol.mc.emulator.EmulatorMessage;
 import info.teksol.mc.emulator.EmulatorSchematic;
+import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
@@ -70,7 +73,7 @@ public class SchemacodeCompiler {
 
         InputFile inputFile = inputFiles.getMainInputFile();
         if (inputFile.getCode().isBlank()) {
-            return new CompilerOutput<>(new byte[0], "", List.of(), new EmulatorSchematic());
+            return new CompilerOutput<>(new byte[0], "", List.of());
         }
 
         List<MindcodeMessage> messages = new ArrayList<>();
@@ -86,8 +89,20 @@ public class SchemacodeCompiler {
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             SchematicsIO.write(schematic, output);
-            return new CompilerOutput<>(output.toByteArray(), schematic.filename(), messages,
-                    schematic.toEmulatorSchematic(SchematicsMetadata.getMetadata()));
+
+            if (compilerProfile.isRun()) {
+                EmulatorSchematic emulatorSchematic = schematic.toEmulatorSchematic(SchematicsMetadata.getMetadata());
+
+                Emulator emulator = new BasicEmulator(messages::add, compilerProfile, emulatorSchematic);
+                emulator.run(compilerProfile.getStepLimit());
+
+                for (int i = 0; i < emulator.getExecutorCount(); i++) {
+                    messages.add(EmulatorMessage.info("%n*** Output of processor %s:%n", emulator.getExecutorResults(i).getProcessorId()));
+                    messages.add(EmulatorMessage.info("%s", emulator.getExecutorResults(i).getFormattedOutput()));
+                }
+            }
+
+            return new CompilerOutput<>(output.toByteArray(), schematic.filename(), messages);
         } catch (IOException e) {
             throw new SchematicsInternalError(e, "Error converting schematics to binary representation.");
         }

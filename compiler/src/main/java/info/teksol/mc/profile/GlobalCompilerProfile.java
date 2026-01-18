@@ -31,6 +31,8 @@ public interface GlobalCompilerProfile {
 
     boolean isSpecified(Enum<?> option);
 
+    boolean isWebApplication();
+
     //<editor-fold desc="Input/output options">
     default FileReferences getFileReferences() {
         return getEnumValue(InputOutputOptions.FILE_REFERENCES);
@@ -213,6 +215,10 @@ public interface GlobalCompilerProfile {
 
     default int getStepLimit() {
         return getIntValue(EmulatorOptions.RUN_STEPS);
+    }
+
+    default int getTraceLimit() {
+        return isWebApplication() ? 1000 : 10_000;
     }
     //</editor-fold>
 }

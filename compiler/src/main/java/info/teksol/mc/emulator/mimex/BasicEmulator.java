@@ -25,8 +25,8 @@ public class BasicEmulator implements Emulator {
     public int step = 1;
     public int noopSteps;
 
-    public BasicEmulator(MessageConsumer messageConsumer, GlobalCompilerProfile profile, EmulatorSchematic schematic, int traceLimit) {
-        messageHandler = new EmulatorMessageHandler(messageConsumer, profile.getExecutionFlags(), traceLimit);
+    public BasicEmulator(MessageConsumer messageConsumer, GlobalCompilerProfile profile, EmulatorSchematic schematic) {
+        messageHandler = new EmulatorMessageHandler(messageConsumer, profile.getExecutionFlags(), profile.getTraceLimit());
         stepLimit = profile.getStepLimit();
         fps = profile.getEmulatorFps();
 

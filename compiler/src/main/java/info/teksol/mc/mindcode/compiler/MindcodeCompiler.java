@@ -420,7 +420,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                 BlockPosition.ZERO_POSITION, output);
         initializeLogicBlock(logicBlock);
         EmulatorSchematic schematic = new EmulatorSchematic(List.of(logicBlock));
-        emulator = new BasicEmulator(messageConsumer, globalProfile, schematic, globalProfile.getTraceLimit());
+        emulator = new BasicEmulator(messageConsumer, globalProfile, schematic);
 
         emulator.run(globalProfile.getStepLimit());
         runtimeError = emulator.isError();

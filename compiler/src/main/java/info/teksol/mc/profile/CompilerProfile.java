@@ -144,10 +144,6 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         this.positionTranslator = positionTranslator;
     }
 
-    public int getTraceLimit() {
-        return webApplication ? 1000 : 10_000;
-    }
-
     @Override
     public boolean useTextJumpTables() {
         return isUseTextJumpTables() && !isSymbolicLabels() && getProcessorVersion().atLeast(ProcessorVersion.V8A);

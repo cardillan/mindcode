@@ -32,8 +32,7 @@ public class SchematicsDecompiler {
             decompiler.setRelativeConnections(true);
             decompiler.setRelativeLinks(true);
             String schemaDefinition = decompiler.buildCode();
-            return new CompilerOutput<>(schemaDefinition, "", List.of(),
-                    schematic.toEmulatorSchematic(SchematicsMetadata.getMetadata()));
+            return new CompilerOutput<>(schemaDefinition, "", List.of());
         } catch (Exception e) {
             return new CompilerOutput<>(List.of(ToolMessage.error(e.toString())));
         }

@@ -164,7 +164,7 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                 List<MindcodeMessage> messages = new ArrayList<>();
                 Target schematicTarget = compilerProfile.getCompilerTarget().withType(type);
                 MindcodeCompiler compiler = new MindcodeCompiler(messages::add,
-                        compilerProfile.duplicate(true).setSchematicTarget(schematicTarget),
+                        compilerProfile.duplicate(true).setRun(false).setSchematicTarget(schematicTarget),
                         builder.getInputFiles());
                 compiler.compile(fileToCompile);
 

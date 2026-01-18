@@ -41,6 +41,8 @@ public abstract class LExecutorBase implements LExecutor {
     protected final LVar counter;
     protected final LVar unit;
     protected final LVar thisv;
+    protected final LVar thisx;
+    protected final LVar thisy;
     protected final LVar links;
     protected final LVar ipt;
 
@@ -92,6 +94,8 @@ public abstract class LExecutorBase implements LExecutor {
         counter = assembler.var("@counter");
         unit = assembler.var("@unit");
         thisv = assembler.var("@this");
+        thisx = assembler.var("@thisx");
+        thisy = assembler.var("@thisy");
         links = assembler.var("@links");
         ipt = assembler.var("@ipt");
         ipt.numval = logicBlock.getIpt();
@@ -99,6 +103,8 @@ public abstract class LExecutorBase implements LExecutor {
         // Set up 'this' processor
         logicBlock.setExecutor(this);
         thisv.objval = logicBlock;
+        thisx.numval = logicBlock.x();
+        thisy.numval = logicBlock.y();
 
         builders.put("noop", NoopI::new);
 
