@@ -71,6 +71,10 @@ public interface GlobalCompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Mlog FormatOptions">
+    default boolean isEncodeZeroCharacters() {
+        return !isWebApplication() && getBooleanValue(MlogFormatOptions.ENCODE_ZERO_CHARACTERS);
+    }
+
     default boolean isNoArgumentPadding() {
         return getBooleanValue(MlogFormatOptions.NO_ARGUMENT_PADDING);
     }

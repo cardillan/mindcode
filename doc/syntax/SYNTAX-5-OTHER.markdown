@@ -211,16 +211,17 @@ Generally, a module target is compatible with the same or higher global target, 
 Options determining how the mlog code is generated and formatted, including instructions generated to
 carry over specific information into the compiled program (such as signature or processor ID).
 
-| Option                                             | Scope  | Semantic stability |
-|----------------------------------------------------|--------|--------------------|
-| [author](#option-author)                           | global | stable             |
-| [function-prefix](#option-function-prefix)         | global | stable             |
-| [mlog-indent](#option-mlog-indent)                 | global | stable             |
-| [no-argument-padding](#option-no-argument-padding) | global | stable             |
-| [processor-id](#option-processor-id)               | global | stable             |
-| [program-name](#option-program-name)               | global | stable             |
-| [program-version](#option-program-version)         | global | stable             |
-| [symbolic-labels](#option-symbolic-labels)         | global | stable             |
+| Option                                                   | Scope  | Semantic stability |
+|----------------------------------------------------------|--------|--------------------|
+| [author](#option-author)                                 | global | stable             |
+| [encode-zero-characters](#option-encode-zero-characters) | global | stable             |
+| [function-prefix](#option-function-prefix)               | global | stable             |
+| [mlog-indent](#option-mlog-indent)                       | global | stable             |
+| [no-argument-padding](#option-no-argument-padding)       | global | stable             |
+| [processor-id](#option-processor-id)                     | global | stable             |
+| [program-name](#option-program-name)                     | global | stable             |
+| [program-version](#option-program-version)               | global | stable             |
+| [symbolic-labels](#option-symbolic-labels)               | global | stable             |
 
 ### Option `author`
 
@@ -254,6 +255,28 @@ set @counter :foo*retaddr
 print "Created by cardillan, Mickey Mouse and Rameses Niblick the Third"
 print "Compiled by Mindcode - github.com/cardillan/mindcode"
 ```
+
+### Option `encode-zero-characters`
+
+**Option scope: [global](#global-scope)**
+
+Allows encoding zero characters into mlog string literals. Possible values are:
+
+* `false` (the default value): mlog string literals containing zero characters are never created.
+* `true`: when needed, mlog string literals containing zero characters can be created.
+
+Zero characters represent zero and `false` values in string literals and may allow more efficient encoding of some expressions. 
+
+> [!WARNING]
+> Texts containing zero characters cannot be transferred via clipboard at all and oftentimes pose a challenge to text editors.
+> 
+> The only way to insert code containing zero characters into Mindustry processors is via the MlogWatcher mod, or by generating and importing a schematic (a schematic can be imported via clipboard, even when the encoded code contains zero characters).
+> 
+> The only way to copy the original mlog code from a processor in this situation is by creating and exporting a schematic containing the processor and extracting the mlog code from the schematic.
+> 
+> Use this option with caution. We only recommend using it when creating a schematic that won't be subsequently edited.
+
+In the web app, setting this option to `true` has no effect. When an mlog code containing zero characters is created in the command-line tool, and copying the resulting mlog code into a clipboard is requested, the code won't be copied to clipboard and an error message will be displayed instead. 
 
 ### Option `function-prefix`
 

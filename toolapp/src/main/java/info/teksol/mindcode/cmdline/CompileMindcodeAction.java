@@ -143,8 +143,12 @@ public class CompileMindcodeAction extends ActionHandler {
             writeOutput(output, compiler.getOutput());
 
             if (arguments.getBoolean("clipboard")) {
-                writeToClipboard(compiler.getOutput());
-                messageLogger.info("\nCompiled mlog code was copied to the clipboard.");
+                if (compiler.getOutput().indexOf(0) >= 0) {
+                    messageLogger.error("\nCompiled mlog code contains zero characters, can't copy to clipboard.");
+                } else {
+                    writeToClipboard(compiler.getOutput());
+                    messageLogger.info("\nCompiled mlog code was copied to the clipboard.");
+                }
             }
 
             if (arguments.getBoolean("watcher")) {

@@ -18,6 +18,7 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GlobalCompilerProfile;
+import info.teksol.mc.util.Utf8Utils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -45,6 +46,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     private @Nullable MindustryMetadata metadata;
     private final boolean instructionValidation;
     private final boolean noArgumentPadding;
+    private final boolean encodeZeroCharacters;
     private final List<OpcodeVariant> opcodeVariants;
     private final Map<Opcode, List<OpcodeVariant>> variantsByOpcode;
     private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
@@ -64,12 +66,13 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             NameCreator nameCreator,
             boolean instructionValidation,
             boolean noArgumentPadding,
+            boolean encodeZeroCharacters,
             List<OpcodeVariant> opcodeVariants) {
 
         public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version, ProcessorType type,
-                NameCreator nameCreator, boolean instructionValidation, boolean noArgumentPadding) {
+                NameCreator nameCreator, boolean instructionValidation, boolean noArgumentPadding, boolean encodeZeroCharacters) {
             this(messageConsumer, version, type, nameCreator, instructionValidation, noArgumentPadding,
-                    MindustryOpcodeVariants.getSpecificOpcodeVariants(version, type));
+                    encodeZeroCharacters, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, type));
         }
     }
 
@@ -81,6 +84,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         this.nameCreator = parameters.nameCreator;
         this.instructionValidation = parameters.instructionValidation;
         this.noArgumentPadding = parameters.noArgumentPadding;
+        this.encodeZeroCharacters = parameters.encodeZeroCharacters;
         this.opcodeVariants = parameters.opcodeVariants;
         variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode));
         opcodeKeywordPosition = variantsByOpcode.keySet().stream().collect(Collectors.toMap(k -> k,
@@ -137,16 +141,6 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
 
     private static final AstContext sampleContext = AstContext.createRootNode(
             CompilerProfile.fullOptimizations(false));
-
-    @Override
-    public LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant) {
-        return createInstruction(sampleContext, opcodeVariant.opcode(),
-                opcodeVariant.namedParameters().stream()
-                        .map(NamedParameter::name)
-                        .map(GenericArgument::new)
-                        .collect(Collectors.toList())
-        );
-    }
 
     @Override
     public BaseInstructionProcessor withSideEffects(SideEffects sideEffects) {
@@ -231,23 +225,6 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 }
             }
         }
-    }
-
-    @Override
-    public LogicInstruction convertCustomInstruction(LogicInstruction instruction) {
-        Opcode opcode;
-        if (instruction instanceof CustomInstruction ix && (opcode = Opcode.fromOpcode(ix.getMlogOpcode())) != null) {
-            Operation operation;
-            if (opcode == OP && (operation = Operation.fromMlog(ix.getArg(0).toMlog())) != null) {
-                List<LogicArgument> args = new ArrayList<>(ix.getArgs());
-                args.set(0, operation);
-                List<InstructionParameterType> params = getParameters(opcode, args);
-                assert params != null;
-                return new OpInstruction(ix.astContext, args, params);
-            }
-            return createInstructionUnchecked(instruction.getAstContext(), opcode, instruction.getArgs());
-        }
-        return instruction;
     }
 
     private LogicInstruction createGenericInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments,
@@ -367,26 +344,11 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
-    public <T extends LogicInstruction> T replaceAllArgs(T instruction, Map<LogicArgument, LogicArgument> argumentMap) {
-        Function<LogicArgument, LogicArgument> mapper = arg -> argumentMap.getOrDefault(arg, arg);
-        return replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
-    }
-
-    @Override
     public <T extends LogicInstruction> T replaceLabels(T instruction, Map<LogicLabel, LogicLabel> labelMap) {
         Function<LogicArgument, LogicArgument> mapper =
                 arg -> arg instanceof LogicLabel label ? labelMap.getOrDefault(label, label) : arg;
         T ix = replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
         ix.remapInfoLabels(labelMap);
-        return ix;
-    }
-
-    @Override
-    public <T extends LogicInstruction> T replaceArguments(T instruction, Map<? extends LogicValue, LogicValue> valueMap) {
-        Function<LogicArgument, LogicArgument> mapper =
-                arg -> arg instanceof LogicValue value ? valueMap.getOrDefault(value, value) : arg;
-        T ix = replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
-        ix.remapInfoValues(valueMap);
         return ix;
     }
 
@@ -746,5 +708,10 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             throw new MindcodeInternalError("Cannot parse numeric literal: " + literal);
         }
         return value;
+    }
+
+    @Override
+    public boolean canEncode(int character) {
+        return character == 0 ? encodeZeroCharacters : Utf8Utils.canEncode(character);
     }
 }

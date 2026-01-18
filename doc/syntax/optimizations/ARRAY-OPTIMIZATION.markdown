@@ -1,6 +1,6 @@
 # Array Optimization
 
-The array optimization improves the performance of array operations in several ways. Some array optimizations are [dynamic optimizations](../SYNTAX-6-OPTIMIZATIONS.markdown#static-and-dynamic-optimizations) and are only applied when compatible with the optimization goal.
+The array optimization improves the performance of array operations in several ways. Some array optimizations are [dynamic optimizations](../SYNTAX-6-OPTIMIZATIONS.markdown#static-and-dynamic-optimizations) and are only applied when compatible with the optimization goal. Many of these array optimizations require target 8.0 or 8.1, as noted in the corresponding sections.
 
 **Types of arrays**
 

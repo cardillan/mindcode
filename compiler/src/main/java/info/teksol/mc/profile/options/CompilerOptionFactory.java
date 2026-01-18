@@ -170,6 +170,13 @@ public class CompilerOptionFactory {
                 "program_version",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category, List.of("")));
+
+        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.ENCODE_ZERO_CHARACTERS, "",
+                "allow encoding zero characters into mlog string literals (WARNING: the resulting code " +
+                        "can't be edited as a teext or copied/pasted to/from the clipboard!)",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
     }
 
     private static void addCompilerOptions(List<CompilerOptionValue<?>> list, boolean webApp) {

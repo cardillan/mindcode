@@ -97,12 +97,12 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
-                [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]] [--setrate {1..1000}] [--ipt {1..1000}]
-                [--volatile-atomic {true,false}] [--boundary-checks {true,false}]
-                [--emulate-strict-not-equal {true,false}] [--error-function {true,false}]
-                [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
-                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--encode-zero-characters [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
+                [--setrate {1..1000}] [--ipt {1..1000}] [--volatile-atomic {true,false}]
+                [--boundary-checks {true,false}] [--emulate-strict-not-equal {true,false}]
+                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
+                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
+                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
                 [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
                 [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
@@ -202,6 +202,9 @@ Mlog formatting options:
                          sets the program name to be stored in the compiled code
   --program-version program_version
                          sets the program version to be stored in the compiled code
+  --encode-zero-characters [{true,false}]
+                         allow encoding zero characters into mlog string  literals (WARNING: the resulting code can't be
+                         edited as a teext or copied/pasted to/from the clipboard!)
 
 Compiler options:
   Options which affect the way the source code is compiled.
@@ -437,12 +440,12 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
-                [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]] [--setrate {1..1000}] [--ipt {1..1000}]
-                [--volatile-atomic {true,false}] [--boundary-checks {true,false}]
-                [--emulate-strict-not-equal {true,false}] [--error-function {true,false}]
-                [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
-                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--encode-zero-characters [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
+                [--setrate {1..1000}] [--ipt {1..1000}] [--volatile-atomic {true,false}]
+                [--boundary-checks {true,false}] [--emulate-strict-not-equal {true,false}]
+                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
+                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
+                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
                 [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
                 [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
@@ -531,6 +534,9 @@ Mlog formatting options:
                          sets the program name to be stored in the compiled code
   --program-version program_version
                          sets the program version to be stored in the compiled code
+  --encode-zero-characters [{true,false}]
+                         allow encoding zero characters into mlog string  literals (WARNING: the resulting code can't be
+                         edited as a teext or copied/pasted to/from the clipboard!)
 
 Compiler options:
   Options which affect the way the source code is compiled.

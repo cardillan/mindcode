@@ -12,8 +12,8 @@ public class Utf8Utils {
 
     public static final Set<Integer> INVALID_CHARS = Set.of(0, (int) '\r', (int) '"', (int) '\\');
 
-    public static boolean canEncode(int value) {
-        return value >= 0 && value < UTF16_END && (value < SURROGATE_START || value >= SURROGATE_END) && !INVALID_CHARS.contains(value);
+    public static boolean canEncode(int character) {
+        return character >= 0 && character < UTF16_END && (character < SURROGATE_START || character >= SURROGATE_END) && !INVALID_CHARS.contains(character);
     }
 
     public static String encode(IntStream values) {

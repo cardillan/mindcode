@@ -202,7 +202,7 @@ public class LogicInstructionLabelResolver {
         int instructionPointer = 0;
         for (int i = 0; i < program.size(); i++) {
             final LogicInstruction instruction = program.get(i);
-            if (instruction.isJumpTarget() && Utf8Utils.INVALID_CHARS.contains(instructionPointer)) {
+            if (instruction.isJumpTarget() && !processor.canEncode(instructionPointer)) {
                 program.add(i++, processor.createInstruction(instruction.getAstContext(), Opcode.NOOP));
                 instructionPointer++;
             }

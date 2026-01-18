@@ -30,7 +30,7 @@ Mindcode can generate code for several Mindustry versions. The target can be sel
 At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry versions (154.3 Beta or BE build 26613).
 
 > [!NOTE]
-> An [atomic code block](doc/syntax/REMOTE-CALLS.markdown#atomic-code-blocks) is only guaranteed to execute correctly in the latest BE version (build 26609 or higher). 
+> The [atomic code blocks](doc/syntax/REMOTE-CALLS.markdown#atomic-code-blocks) are only guaranteed to execute correctly in the latest BE version (build 26609 or higher). The latest beta release (v154.3) doesn't provide necessary support for atomic code blocks. 
 
 [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality in Mindustry 8.
 
@@ -53,18 +53,19 @@ See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3
 The most important recent changes to Mindcode include:
 
 * Mindustry Logic 8
-  * [Atomic code blocks](doc/syntax/REMOTE-CALLS.markdown#atomic-code-blocks) guaranteed to be executed atomically, without interruption.
   * Complete support for [the latest Mindustry 8 pre-release](/doc/syntax/MINDUSTRY-8.markdown).
+  * [Atomic code blocks](doc/syntax/REMOTE-CALLS.markdown#atomic-code-blocks) guaranteed to be executed atomically – without interruption.
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
   * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities. 
   * New string/character-based instructions and character literals.
-  * Support for named color literals: `%[red]`.
 * Language features
   * Short-circuit evaluation of boolean expressions.
-  * The `in` operator for testing range_list membership.
+  * Improved [Loop Rotation](doc/syntax/optimizations/LOOP-ROTATION.markdown) and [Loop Hoisting](doc/syntax/optimizations/LOOP-HOISTING.markdown) optimizations.
+  * The [`in` operator](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#rangelist-membership-operator) for testing range or list membership.
   * Local compiler options.
   * Significantly improved optimization of `case` expressions.
 * Other functionality
+  * [Processor emulator](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown) for all supported Mindcode targets, including schematic emulation.
   * Reporting compiled code size broken down by function.  
   * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
   * Using Mindustry Logic metadata corresponding to the target selected for compilation.
@@ -97,7 +98,7 @@ The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), availabl
 
 To learn more about Mindustry Logic, you can find more information about it here:
 
-* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated September 2025)
+* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated December 2025)
 
 You can also get help on these Discord servers:
 

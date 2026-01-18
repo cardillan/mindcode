@@ -363,7 +363,7 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
                 t.nullKeyVoid = true;
             }
 
-            t.outputOffset = analyzer.getValues().stream().allMatch(Utf8Utils::canEncode) ? 0
+            t.outputOffset = analyzer.getValues().stream().allMatch(optimizationContext.getInstructionProcessor()::canEncode) ? 0
                     : analyzer.getMin() >= 0 && analyzer.getMax() < 60 ? '0'
                     : Utf8Utils.SAFE_START - analyzer.getMin();
         }

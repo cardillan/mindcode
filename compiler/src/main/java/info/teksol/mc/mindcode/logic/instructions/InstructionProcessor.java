@@ -3,7 +3,10 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.MessageEmitter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import org.jspecify.annotations.NullMarked;
@@ -54,7 +57,7 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// Adds a custom-defined builtin value.
     void addBuiltin(String name);
 
-    /// Adds a custom keyword. Returns true if the category is valid for current target.
+    /// Adds a custom keyword. Returns true if the category is valid for the current target.
     boolean addKeyword(KeywordCategory keywordCategory, String keyword);
 
     @Nullable
@@ -65,15 +68,7 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// Determines a proper initial array organization for a given array
     void setupArrayAccessInstruction(ArrayAccessInstruction instruction);
 
-    /// Creates a sample logic instruction from a given opcode variant.
-    ///
-    /// @param opcodeVariant opcode variant to use
-    /// @return instruction having all arguments set to opcode variant defaults
-    LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant);
-
     LogicInstruction createInstructionUnchecked(AstContext context, Opcode opcode, List<LogicArgument> arguments);
-
-    LogicInstruction convertCustomInstruction(LogicInstruction instruction);
 
     /// Provides real Mindustry Logic instructions as a replacement for given virtual instruction.
     /// Non-virtual instructions are passed as-is.
@@ -95,8 +90,6 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @return a modified instruction
     <T extends LogicInstruction> T replaceAllArgs(T instruction, LogicArgument oldArg, LogicArgument newArg);
 
-    <T extends LogicInstruction> T replaceAllArgs(T instruction, Map<LogicArgument, LogicArgument> argumentMap);
-
     <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs);
 
     /// Replaces all label arguments of the instruction contained in the label map with the label the original
@@ -108,12 +101,10 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @return a modified instruction (original one if modification wasn't necessary)
     <T extends LogicInstruction> T replaceLabels(T instruction, Map<LogicLabel, LogicLabel> labelMap);
 
-    <T extends LogicInstruction> T replaceArguments(T instruction, Map<? extends LogicValue, LogicValue> valueMap);
-
     /// Determines the number of arguments needed to print the instruction
     ///
     /// @param instruction instruction to process
-    /// @return number total printable arguments
+    /// @return number of total printable arguments
     int getPrintArgumentCount(LogicInstruction instruction);
 
     /// Determines whether the given instruction is effectively deterministic. The instruction is effectively
@@ -144,7 +135,7 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @return true if the instruction is supported
     boolean isSupported(Opcode opcode, List<LogicArgument> arguments);
 
-    /// Determines whether the identifier could be a block name (such as switch1, cell2, projector3 etc.).
+    /// Determines whether the identifier could be a block name (such as switch1, cell2, projector3, etc.).
     ///
     /// @param identifier identifier to check
     /// @return true if it conforms to Mindustry Logic block name
@@ -168,7 +159,7 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @return true if the built-in variable is volatile.
     boolean isVolatileBuiltIn(String builtin);
 
-    /// Mindustry is not capable of parsing some literals in non-decimal bases. This method identifies such numbers,
+    /// Mindustry is not capable of parsing some literals in non-decimal bases. This method identifies such numbers
     /// so that they can be encoded into mlog as decimals.
     boolean isValidHexLiteral(long value);
 
@@ -183,7 +174,7 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @param literal            the literal to process
     /// @param allowPrecisionLoss `true` to format literals leading to precision loss (emits a warning),
     ///                           `false` to refuse formating such literals
-    /// @return Optional containing mlog compatible literal, or nothing if mlog compatible equivalent doesn't exist
+    /// @return Optional containing mlog compatible literal, or nothing if an mlog compatible equivalent doesn't exist
     Optional<String> mlogRewrite(SourcePosition sourcePosition, String literal, boolean allowPrecisionLoss);
 
     Optional<LogicLiteral> createLiteral(SourcePosition sourcePosition, double value, boolean allowPrecisionLoss);
@@ -198,4 +189,7 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     default String getLabelPrefix() {
         return "*label";
     }
+
+    /// Indicates whether a character can be encoded into mlog
+    boolean canEncode(int character);
 }
