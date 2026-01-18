@@ -32,9 +32,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-26 instruct
     18 set :icon :lastRate
  
     70 draw rect 0 0 156 176
-    71 set *tmp15 null
+    71 set *tmp16 null
     72 label *label10
--    * set *tmp12 *tmp15
+-    * set *tmp12 *tmp16
     73 jump *label8 always
     74 label *label7
 -    * set *tmp12 null
@@ -50,150 +50,150 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-26 instruct
     87 label *label5
 -    * set *tmp10 null
     88 label *label6
-    89 set *tmp26 @time
-    90 set :start *tmp26
+    89 set *tmp27 @time
+    90 set :start *tmp27
  
-   120 jump *label16 equal *tmp40 false
+   120 jump *label16 equal *tmp41 false
    121 set :minimum :l
    122 set :icon @lead
--    * set *tmp41 :icon
+-    * set *tmp42 :icon
    123 jump *label17 always
    124 label *label16
--    * set *tmp41 null
+-    * set *tmp42 null
    125 label *label17
-   126 op lessThan *tmp42 :s :minimum
-   127 jump *label18 equal *tmp42 false
+   126 op lessThan *tmp43 :s :minimum
+   127 jump *label18 equal *tmp43 false
    128 set :minimum :s
    129 set :icon @silicon
--    * set *tmp43 :icon
+-    * set *tmp44 :icon
    130 jump *label19 always
    131 label *label18
--    * set *tmp43 null
+-    * set *tmp44 null
    132 label *label19
-   133 op lessThan *tmp44 :c :minimum
-   134 jump *label20 equal *tmp44 false
+   133 op lessThan *tmp45 :c :minimum
+   134 jump *label20 equal *tmp45 false
    135 set :minimum :c
    136 set :icon @copper
--    * set *tmp45 :icon
+-    * set *tmp46 :icon
    137 jump *label21 always
    138 label *label20
--    * set *tmp45 null
+-    * set *tmp46 null
    139 label *label21
-   140 op lessThan *tmp46 :t :minimum
-   141 jump *label22 equal *tmp46 false
+   140 op lessThan *tmp47 :t :minimum
+   141 jump *label22 equal *tmp47 false
    142 set :minimum :t
    143 set :icon @titanium
--    * set *tmp47 :icon
+-    * set *tmp48 :icon
    144 jump *label23 always
    145 label *label22
--    * set *tmp47 null
+-    * set *tmp48 null
    146 label *label23
-   147 op greaterThan *tmp48 :a 5
-   148 op sub *tmp49 21 :a
+   147 op greaterThan *tmp49 :a 5
+   148 op sub *tmp50 21 :a
  
-   151 set :showa *tmp51
+   151 set :showa *tmp52
    152 jump *label24 equal :showa false
    153 set :icon @surge-alloy
--    * set *tmp52 :icon
+-    * set *tmp53 :icon
    154 jump *label25 always
    155 label *label24
--    * set *tmp52 null
+-    * set *tmp53 null
    156 label *label25
-   157 op mod *tmp53 :index 2
-   158 set :column *tmp53
+   157 op mod *tmp54 :index 2
+   158 set :column *tmp54
  
-   175 op land *tmp63 *tmp61 *tmp62
-   176 jump *label26 equal *tmp63 false
+   175 op land *tmp64 *tmp62 *tmp63
+   176 jump *label26 equal *tmp64 false
    177 set :icon @surge-smelter
--    * set *tmp64 :icon
+-    * set *tmp65 :icon
    178 jump *label27 always
    179 label *label26
--    * set *tmp64 null
+-    * set *tmp65 null
    180 label *label27
    181 draw color 255 255 255 255
    182 jump *label28 equal :e false
  
-   207 draw rect *tmp75 *tmp76 2 2
-   208 set *tmp67 null
+   207 draw rect *tmp76 *tmp77 2 2
+   208 set *tmp68 null
    209 label *label31
--    * set *tmp65 *tmp67
+-    * set *tmp66 *tmp68
    210 jump *label29 always
    211 label *label28
-   212 op add *tmp77 :x 2
+   212 op add *tmp78 :x 2
  
    224 draw color 0 0 0 255
    225 draw lineRect :xm1 :ym1 16 16
    226 draw stroke 2
--    * set *tmp65 null
+-    * set *tmp66 null
    227 label *label29
-   228 op add *tmp81 :x 16
-   229 set :x *tmp81
+   228 op add *tmp82 :x 16
+   229 set :x *tmp82
  
    233 set :red 255
    234 set :green 0
    235 set :blue 0
--    * set *tmp84 :blue
+-    * set *tmp85 :blue
    236 jump *label33 always
    237 label *label32
    238 jump *label34 equal :showa false
  
    264 set :blue 0
-   265 set *tmp85 :blue
+   265 set *tmp86 :blue
    266 label *label35
--    * set *tmp84 *tmp85
+-    * set *tmp85 *tmp86
    267 label *label33
-   268 op greaterThan *tmp92 :boost EXPECTED_BOOST
-   269 jump *label40 equal *tmp92 false
+   268 op greaterThan *tmp93 :boost EXPECTED_BOOST
+   269 jump *label40 equal *tmp93 false
  
-   274 op max *tmp96 192 :blue
-   275 set :blue *tmp96
+   274 op max *tmp97 192 :blue
+   275 set :blue *tmp97
    276 set :boost EXPECTED_BOOST
--    * set *tmp93 :boost
+-    * set *tmp94 :boost
    277 jump *label41 always
    278 label *label40
--    * set *tmp93 null
+-    * set *tmp94 null
    279 label *label41
-   280 op mul *tmp97 .BAR_LENGTH :boost
-   281 op idiv *tmp98 *tmp97 EXPECTED_BOOST
+   280 op mul *tmp98 .BAR_LENGTH :boost
+   281 op idiv *tmp99 *tmp98 EXPECTED_BOOST
  
    288 draw lineRect :x :y :length 14
-   289 op add *tmp101 :index 1
-   290 set :index *tmp101
--    * set *tmp31 :index
+   289 op add *tmp102 :index 1
+   290 set :index *tmp102
+-    * set *tmp32 :index
    291 jump *label15 always
    292 label *label14
--    * set *tmp31 null
+-    * set *tmp32 null
    293 label *label15
    294 label *label12
-   295 op add *tmp102 :n 1
+   295 op add *tmp103 :n 1
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-6 instructions):
  
-    63 op mul *tmp24 3600 :rate
-    64 op floor *tmp25 *tmp24
-    65 set :flow_str *tmp25
--    * set *tmp15 :flow_str
+    63 op mul *tmp25 3600 :rate
+    64 op floor *tmp26 *tmp25
+    65 set :flow_str *tmp26
+-    * set *tmp16 :flow_str
     66 jump *label10 always
     67 label *label9
     68 draw color 0 0 80 255
     69 draw rect 0 0 156 176
--    * set *tmp15 null
+-    * set *tmp16 null
     70 label *label10
     71 jump *label8 always
     72 label *label7
  
-   183 op add *tmp68 :x 7
-   184 op add *tmp69 :y 7
-   185 draw image *tmp68 *tmp69 :icon 16 0
--    * set *tmp67 null
+   183 op add *tmp69 :x 7
+   184 op add *tmp70 :y 7
+   185 draw image *tmp69 *tmp70 :icon 16 0
+-    * set *tmp68 null
    186 jump *label31 always
    187 label *label30
-   188 op add *tmp70 :x 12
+   188 op add *tmp71 :x 12
  
-   202 op add *tmp75 :x 4
-   203 op add *tmp76 :y 6
-   204 draw rect *tmp75 *tmp76 2 2
--    * set *tmp67 null
+   202 op add *tmp76 :x 4
+   203 op add *tmp77 :y 6
+   204 draw rect *tmp76 *tmp77 2 2
+-    * set *tmp68 null
    205 label *label31
    206 jump *label29 always
    207 label *label28
@@ -201,18 +201,18 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-6 instructi
    236 set :green 0
    237 set :blue 255
    238 set :minimum :a
--    * set *tmp85 :minimum
+-    * set *tmp86 :minimum
    239 jump *label35 always
    240 label *label34
-   241 op greaterThan *tmp86 :minimum 14
+   241 op greaterThan *tmp87 :minimum 14
  
    257 label *label39
-   258 set :green *tmp91
+   258 set :green *tmp92
    259 set :blue 0
--    * set *tmp85 :blue
+-    * set *tmp86 :blue
    260 label *label35
    261 label *label33
-   262 op greaterThan *tmp92 :boost EXPECTED_BOOST
+   262 op greaterThan *tmp93 :boost EXPECTED_BOOST
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-38 instructions):
      0 set FROM_INDEX 0
@@ -232,35 +232,35 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-38 ins
     25 jump *label5 equal *tmp9 false
     26 op equal *tmp11 FROM_INDEX 0
     27 jump *label7 equal *tmp11 false
--    * read *tmp13 bank1 511
--    * set :rate *tmp13
+-    * read *tmp14 bank1 511
+-    * set :rate *tmp14
 +   28 read :rate bank1 511
-    29 op notEqual *tmp14 :lastRate :rate
-    30 jump *label9 equal *tmp14 false
+    29 op notEqual *tmp15 :lastRate :rate
+    30 jump *label9 equal *tmp15 false
     31 draw clear 0 0 80
  
-    46 op sub *tmp16 :rate .EXPECTED_FLOW
-    47 op mul *tmp17 84 *tmp16
-    48 op div *tmp18 *tmp17 .EXPECTED_FLOW
--    * op add *tmp19 88 *tmp18
--    * set :pos *tmp19
-+   49 op add :pos 88 *tmp18
-    50 op max *tmp20 :pos 4
--    * op min *tmp21 *tmp20 170
--    * set :pos *tmp21
--    * op add *tmp22 :pos 7
--    * set :pos1 *tmp22
--    * op sub *tmp23 :pos 7
--    * set :pos2 *tmp23
-+   51 op min :pos *tmp20 170
+    46 op sub *tmp17 :rate .EXPECTED_FLOW
+    47 op mul *tmp18 84 *tmp17
+    48 op div *tmp19 *tmp18 .EXPECTED_FLOW
+-    * op add *tmp20 88 *tmp19
+-    * set :pos *tmp20
++   49 op add :pos 88 *tmp19
+    50 op max *tmp21 :pos 4
+-    * op min *tmp22 *tmp21 170
+-    * set :pos *tmp22
+-    * op add *tmp23 :pos 7
+-    * set :pos1 *tmp23
+-    * op sub *tmp24 :pos 7
+-    * set :pos2 *tmp24
++   51 op min :pos *tmp21 170
 +   52 op add :pos1 :pos 7
 +   53 op sub :pos2 :pos 7
     54 draw color 255 255 16 255
     55 draw triangle 156 :pos1 164 :pos 156 :pos2
-    56 op mul *tmp24 3600 :rate
--    * op floor *tmp25 *tmp24
--    * set :flow_str *tmp25
-+   57 op floor :flow_str *tmp24
+    56 op mul *tmp25 3600 :rate
+-    * op floor *tmp26 *tmp25
+-    * set :flow_str *tmp26
++   57 op floor :flow_str *tmp25
     58 jump *label10 always
     59 label *label9
     60 draw color 0 0 80 255
@@ -268,38 +268,38 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-38 ins
     76 jump *label6 always
     77 label *label5
     78 label *label6
--    * set *tmp26 @time
--    * set :start *tmp26
+-    * set *tmp27 @time
+-    * set :start *tmp27
 +   79 set :start @time
     80 draw stroke 2
     81 set :index FROM_INDEX
     82 set :n 0
     83 label *label11
-    84 op lessThan *tmp27 :n @links
-    85 jump *label13 equal *tmp27 false
--    * getlink *tmp28 :n
--    * set :smelter *tmp28
+    84 op lessThan *tmp28 :n @links
+    85 jump *label13 equal *tmp28 false
+-    * getlink *tmp29 :n
+-    * set :smelter *tmp29
 +   86 getlink :smelter :n
-    87 sensor *tmp29 :smelter @type
-    88 op equal *tmp30 *tmp29 @surge-smelter
-    89 jump *label14 equal *tmp30 false
+    87 sensor *tmp30 :smelter @type
+    88 op equal *tmp31 *tmp30 @surge-smelter
+    89 jump *label14 equal *tmp31 false
     90 set :minimum 21
--    * sensor *tmp32 :smelter @titanium
--    * set :t *tmp32
--    * sensor *tmp33 :smelter @copper
--    * set :c *tmp33
--    * sensor *tmp34 :smelter @lead
--    * set :l *tmp34
--    * sensor *tmp35 :smelter @silicon
--    * set :s *tmp35
--    * sensor *tmp36 :smelter @surge-alloy
--    * set :a *tmp36
--    * sensor *tmp37 :smelter @enabled
--    * set :e *tmp37
--    * sensor *tmp38 :smelter @totalPower
--    * set :power *tmp38
--    * sensor *tmp39 :smelter @timescale
--    * set :boost *tmp39
+-    * sensor *tmp33 :smelter @titanium
+-    * set :t *tmp33
+-    * sensor *tmp34 :smelter @copper
+-    * set :c *tmp34
+-    * sensor *tmp35 :smelter @lead
+-    * set :l *tmp35
+-    * sensor *tmp36 :smelter @silicon
+-    * set :s *tmp36
+-    * sensor *tmp37 :smelter @surge-alloy
+-    * set :a *tmp37
+-    * sensor *tmp38 :smelter @enabled
+-    * set :e *tmp38
+-    * sensor *tmp39 :smelter @totalPower
+-    * set :power *tmp39
+-    * sensor *tmp40 :smelter @timescale
+-    * set :boost *tmp40
 +   91 sensor :t :smelter @titanium
 +   92 sensor :c :smelter @copper
 +   93 sensor :l :smelter @lead
@@ -308,52 +308,52 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-38 ins
 +   96 sensor :e :smelter @enabled
 +   97 sensor :power :smelter @totalPower
 +   98 sensor :boost :smelter @timescale
-    99 op lessThan *tmp40 :l :minimum
-   100 jump *label16 equal *tmp40 false
+    99 op lessThan *tmp41 :l :minimum
+   100 jump *label16 equal *tmp41 false
    101 set :minimum :l
  
-   127 op greaterThan *tmp48 :a 5
-   128 op sub *tmp49 21 :a
-   129 op lessThan *tmp50 *tmp49 :minimum
--    * op land *tmp51 *tmp48 *tmp50
--    * set :showa *tmp51
-+  130 op land :showa *tmp48 *tmp50
+   127 op greaterThan *tmp49 :a 5
+   128 op sub *tmp50 21 :a
+   129 op lessThan *tmp51 *tmp50 :minimum
+-    * op land *tmp52 *tmp49 *tmp51
+-    * set :showa *tmp52
++  130 op land :showa *tmp49 *tmp51
    131 jump *label24 equal :showa false
    132 set :icon @surge-alloy
    133 jump *label25 always
    134 label *label24
    135 label *label25
--    * op mod *tmp53 :index 2
--    * set :column *tmp53
--    * op idiv *tmp54 :index 2
--    * set :row *tmp54
+-    * op mod *tmp54 :index 2
+-    * set :column *tmp54
+-    * op idiv *tmp55 :index 2
+-    * set :row *tmp55
 +  136 op mod :column :index 2
 +  137 op idiv :row :index 2
-   138 op mul *tmp55 :column .BAR_SPACE
--    * op add *tmp56 5 *tmp55
--    * set :x *tmp56
-+  139 op add :x 5 *tmp55
-   140 op mul *tmp57 :row 22
--    * op add *tmp58 4 *tmp57
--    * set :y *tmp58
--    * op sub *tmp59 :x 1
--    * set :xm1 *tmp59
--    * op sub *tmp60 :y 1
--    * set :ym1 *tmp60
-+  141 op add :y 4 *tmp57
+   138 op mul *tmp56 :column .BAR_SPACE
+-    * op add *tmp57 5 *tmp56
+-    * set :x *tmp57
++  139 op add :x 5 *tmp56
+   140 op mul *tmp58 :row 22
+-    * op add *tmp59 4 *tmp58
+-    * set :y *tmp59
+-    * op sub *tmp60 :x 1
+-    * set :xm1 *tmp60
+-    * op sub *tmp61 :y 1
+-    * set :ym1 *tmp61
++  141 op add :y 4 *tmp58
 +  142 op sub :xm1 :x 1
 +  143 op sub :ym1 :y 1
    144 draw color 0 0 80 255
    145 draw rect :xm1 :ym1 .BAR_SPACE 16
-   146 op greaterThan *tmp61 :minimum 16
+   146 op greaterThan *tmp62 :minimum 16
  
-   160 draw image *tmp68 *tmp69 :icon 16 0
+   160 draw image *tmp69 *tmp70 :icon 16 0
    161 jump *label31 always
    162 label *label30
--    * op add *tmp70 :x 12
--    * set :x12 *tmp70
--    * op add *tmp71 :y 3
--    * set :y3 *tmp71
+-    * op add *tmp71 :x 12
+-    * set :x12 *tmp71
+-    * op add *tmp72 :y 3
+-    * set :y3 *tmp72
 +  163 op add :x12 :x 12
 +  164 op add :y3 :y 3
    165 draw color 255 80 80 255
@@ -363,14 +363,14 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-38 ins
    178 label *label31
    179 jump *label29 always
    180 label *label28
--    * op add *tmp77 :x 2
--    * set :x2 *tmp77
--    * op add *tmp78 :y 2
--    * set :y2 *tmp78
--    * op add *tmp79 :x 12
--    * set :x12 *tmp79
--    * op add *tmp80 :y 12
--    * set :y12 *tmp80
+-    * op add *tmp78 :x 2
+-    * set :x2 *tmp78
+-    * op add *tmp79 :y 2
+-    * set :y2 *tmp79
+-    * op add *tmp80 :x 12
+-    * set :x12 *tmp80
+-    * op add *tmp81 :y 12
+-    * set :y12 *tmp81
 +  181 op add :x2 :x 2
 +  182 op add :y2 :y 2
 +  183 op add :x12 :x 12
@@ -382,22 +382,22 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-38 ins
    190 draw lineRect :xm1 :ym1 16 16
    191 draw stroke 2
    192 label *label29
--    * op add *tmp81 :x 16
--    * set :x *tmp81
+-    * op add *tmp82 :x 16
+-    * set :x *tmp82
 +  193 op add :x :x 16
-   194 op mul *tmp82 :power :e
-   195 op equal *tmp83 *tmp82 0
-   196 jump *label32 equal *tmp83 false
+   194 op mul *tmp83 :power :e
+   195 op equal *tmp84 *tmp83 0
+   196 jump *label32 equal *tmp84 false
  
    229 label *label33
-   230 op greaterThan *tmp92 :boost EXPECTED_BOOST
-   231 jump *label40 equal *tmp92 false
--    * op max *tmp94 192 :red
--    * set :red *tmp94
--    * op max *tmp95 192 :green
--    * set :green *tmp95
--    * op max *tmp96 192 :blue
--    * set :blue *tmp96
+   230 op greaterThan *tmp93 :boost EXPECTED_BOOST
+   231 jump *label40 equal *tmp93 false
+-    * op max *tmp95 192 :red
+-    * set :red *tmp95
+-    * op max *tmp96 192 :green
+-    * set :green *tmp96
+-    * op max *tmp97 192 :blue
+-    * set :blue *tmp97
 +  232 op max :red 192 :red
 +  233 op max :green 192 :green
 +  234 op max :blue 192 :blue
@@ -405,25 +405,25 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-38 ins
    236 jump *label41 always
    237 label *label40
    238 label *label41
-   239 op mul *tmp97 .BAR_LENGTH :boost
--    * op idiv *tmp98 *tmp97 EXPECTED_BOOST
--    * set :length *tmp98
-+  240 op idiv :length *tmp97 EXPECTED_BOOST
+   239 op mul *tmp98 .BAR_LENGTH :boost
+-    * op idiv *tmp99 *tmp98 EXPECTED_BOOST
+-    * set :length *tmp99
++  240 op idiv :length *tmp98 EXPECTED_BOOST
    241 draw color :red :green :blue 128
-   242 op mul *tmp99 :minimum :length
-   243 op idiv *tmp100 *tmp99 20
-   244 draw rect :x :y *tmp100 14
+   242 op mul *tmp100 :minimum :length
+   243 op idiv *tmp101 *tmp100 20
+   244 draw rect :x :y *tmp101 14
    245 draw color :red :green :blue 255
    246 draw lineRect :x :y :length 14
--    * op add *tmp101 :index 1
--    * set :index *tmp101
+-    * op add *tmp102 :index 1
+-    * set :index *tmp102
 +  247 op add :index :index 1
    248 jump *label15 always
    249 label *label14
    250 label *label15
    251 label *label12
--    * op add *tmp102 :n 1
--    * set :n *tmp102
+-    * op add *tmp103 :n 1
+-    * set :n *tmp103
 +  252 op add :n :n 1
    253 jump *label11 always
    254 label *label13
@@ -455,8 +455,8 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1
 +   22 jump *label5 equal bank1 null
 +   23 jump *label7 notEqual FROM_INDEX 0
     24 read :rate bank1 511
--    * op notEqual *tmp14 :lastRate :rate
--    * jump *label9 equal *tmp14 false
+-    * op notEqual *tmp15 :lastRate :rate
+-    * jump *label9 equal *tmp15 false
 +   25 jump *label9 equal :lastRate :rate
     26 draw clear 0 0 80
     27 set :lastRate :rate
@@ -465,14 +465,14 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1
     76 set :index FROM_INDEX
     77 set :n 0
     78 label *label11
--    * op lessThan *tmp27 :n @links
--    * jump *label13 equal *tmp27 false
+-    * op lessThan *tmp28 :n @links
+-    * jump *label13 equal *tmp28 false
 +   79 jump *label13 greaterThanEq :n @links
     80 getlink :smelter :n
-    81 sensor *tmp29 :smelter @type
--    * op equal *tmp30 *tmp29 @surge-smelter
--    * jump *label14 equal *tmp30 false
-+   82 jump *label14 notEqual *tmp29 @surge-smelter
+    81 sensor *tmp30 :smelter @type
+-    * op equal *tmp31 *tmp30 @surge-smelter
+-    * jump *label14 equal *tmp31 false
++   82 jump *label14 notEqual *tmp30 @surge-smelter
     83 set :minimum 21
     84 sensor :t :smelter @titanium
     85 sensor :c :smelter @copper
@@ -480,32 +480,32 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1
     89 sensor :e :smelter @enabled
     90 sensor :power :smelter @totalPower
     91 sensor :boost :smelter @timescale
--    * op lessThan *tmp40 :l :minimum
--    * jump *label16 equal *tmp40 false
+-    * op lessThan *tmp41 :l :minimum
+-    * jump *label16 equal *tmp41 false
 +   92 jump *label16 greaterThanEq :l :minimum
     93 set :minimum :l
     94 set :icon @lead
     95 jump *label17 always
     96 label *label16
     97 label *label17
--    * op lessThan *tmp42 :s :minimum
--    * jump *label18 equal *tmp42 false
+-    * op lessThan *tmp43 :s :minimum
+-    * jump *label18 equal *tmp43 false
 +   98 jump *label18 greaterThanEq :s :minimum
     99 set :minimum :s
    100 set :icon @silicon
    101 jump *label19 always
    102 label *label18
    103 label *label19
--    * op lessThan *tmp44 :c :minimum
--    * jump *label20 equal *tmp44 false
+-    * op lessThan *tmp45 :c :minimum
+-    * jump *label20 equal *tmp45 false
 +  104 jump *label20 greaterThanEq :c :minimum
    105 set :minimum :c
    106 set :icon @copper
    107 jump *label21 always
    108 label *label20
    109 label *label21
--    * op lessThan *tmp46 :t :minimum
--    * jump *label22 equal *tmp46 false
+-    * op lessThan *tmp47 :t :minimum
+-    * jump *label22 equal *tmp47 false
 +  110 jump *label22 greaterThanEq :t :minimum
    111 set :minimum :t
    112 set :icon @titanium
@@ -514,38 +514,38 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1
    142 label *label27
    143 draw color 255 255 255 255
    144 jump *label28 equal :e false
--    * op greaterThan *tmp66 :power 0
--    * jump *label30 equal *tmp66 false
+-    * op greaterThan *tmp67 :power 0
+-    * jump *label30 equal *tmp67 false
 +  145 jump *label30 lessThanEq :power 0
-   146 op add *tmp68 :x 7
-   147 op add *tmp69 :y 7
-   148 draw image *tmp68 *tmp69 :icon 16 0
+   146 op add *tmp69 :x 7
+   147 op add *tmp70 :y 7
+   148 draw image *tmp69 *tmp70 :icon 16 0
  
    180 label *label29
    181 op add :x :x 16
-   182 op mul *tmp82 :power :e
--    * op equal *tmp83 *tmp82 0
--    * jump *label32 equal *tmp83 false
-+  183 jump *label32 notEqual *tmp82 0
+   182 op mul *tmp83 :power :e
+-    * op equal *tmp84 *tmp83 0
+-    * jump *label32 equal *tmp84 false
++  183 jump *label32 notEqual *tmp83 0
    184 set :red 255
    185 set :green 0
    186 set :blue 0
  
-   203 set *tmp89 255
+   203 set *tmp90 255
    204 label *label37
-   205 set :red *tmp89
--    * op greaterThan *tmp90 :minimum 7
--    * jump *label38 equal *tmp90 false
+   205 set :red *tmp90
+-    * op greaterThan *tmp91 :minimum 7
+-    * jump *label38 equal *tmp91 false
 +  206 jump *label38 lessThanEq :minimum 7
-   207 set *tmp91 255
+   207 set *tmp92 255
    208 jump *label39 always
    209 label *label38
  
    213 set :blue 0
    214 label *label35
    215 label *label33
--    * op greaterThan *tmp92 :boost EXPECTED_BOOST
--    * jump *label40 equal *tmp92 false
+-    * op greaterThan *tmp93 :boost EXPECTED_BOOST
+-    * jump *label40 equal *tmp93 false
 +  216 jump *label40 lessThanEq :boost EXPECTED_BOOST
    217 op max :red 192 :red
    218 op max :green 192 :green
@@ -593,9 +593,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 -    * jump *label23 always
    108 label *label22
    109 label *label23
-   110 op greaterThan *tmp48 :a 5
+   110 op greaterThan *tmp49 :a 5
  
-   113 op land :showa *tmp48 *tmp50
+   113 op land :showa *tmp49 *tmp51
    114 jump *label24 equal :showa false
    115 set :icon @surge-alloy
 -    * jump *label25 always
@@ -603,8 +603,8 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    117 label *label25
    118 op mod :column :index 2
  
-   130 op land *tmp63 *tmp61 *tmp62
-   131 jump *label26 equal *tmp63 false
+   130 op land *tmp64 *tmp62 *tmp63
+   131 jump *label26 equal *tmp64 false
    132 set :icon @surge-smelter
 -    * jump *label27 always
    133 label *label26
@@ -617,7 +617,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 -    * jump *label41 always
    213 label *label40
    214 label *label41
-   215 op mul *tmp97 .BAR_LENGTH :boost
+   215 op mul *tmp98 .BAR_LENGTH :boost
  
    221 draw color :red :green :blue 255
    222 draw lineRect :x :y :length 14
@@ -642,8 +642,8 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
     47 op sub :pos2 :pos 7
     48 draw color 255 255 16 255
     49 draw triangle 156 :pos1 164 :pos 156 :pos2
--    * op mul *tmp24 3600 :rate
--    * op floor :flow_str *tmp24
+-    * op mul *tmp25 3600 :rate
+-    * op floor :flow_str *tmp25
 +   50 op idiv :flow_str :rate 0.0002777777777777778
     51 jump *label10 always
     52 label *label9
@@ -683,9 +683,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    169 draw stroke 2
    170 label *label29
 -    * op add :x :x 16
-+  171 op add :x *tmp55 21
-   172 op mul *tmp82 :power :e
-   173 jump *label32 notEqual *tmp82 0
++  171 op add :x *tmp56 21
+   172 op mul *tmp83 :power :e
+   173 jump *label32 notEqual *tmp83 0
    174 set :red 255
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
@@ -712,8 +712,8 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     74 jump *label13 greaterThanEq :n @links
 +   75 label *label42
     76 getlink :smelter :n
-    77 sensor *tmp29 :smelter @type
-    78 jump *label14 notEqual *tmp29 @surge-smelter
+    77 sensor *tmp30 :smelter @type
+    78 jump *label14 notEqual *tmp30 @surge-smelter
  
    223 label *label15
    224 label *label12
@@ -722,7 +722,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
 +  226 jump *label42 lessThan :n @links
    227 label *label13
    228 drawflush display1
-   229 op sub *tmp103 @time :start
+   229 op sub *tmp104 @time :start
 
 Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-12 instructions):
  
@@ -743,9 +743,9 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-12 
      7 set :icon null
      8 set :flow_str null
  
-   103 op sub *tmp49 21 :a
-   104 op lessThan *tmp50 *tmp49 :minimum
-   105 op land :showa *tmp48 *tmp50
+   103 op sub *tmp50 21 :a
+   104 op lessThan *tmp51 *tmp50 :minimum
+   105 op land :showa *tmp49 *tmp51
 -    * jump *label24 equal :showa false
 -    * set :icon @surge-alloy
 -    * label *label24
@@ -753,22 +753,22 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-12 
 +  106 select :icon notEqual :showa false @surge-alloy :icon
    107 op mod :column :index 2
    108 op idiv :row :index 2
-   109 op mul *tmp55 :column .BAR_SPACE
+   109 op mul *tmp56 :column .BAR_SPACE
  
    114 op sub :ym1 :y 1
    115 draw color 0 0 80 255
    116 draw rect :xm1 :ym1 .BAR_SPACE 16
--    * op greaterThan *tmp61 :minimum 16
--    * op equal *tmp62 :showa 0
--    * op land *tmp63 *tmp61 *tmp62
--    * jump *label26 equal *tmp63 false
+-    * op greaterThan *tmp62 :minimum 16
+-    * op equal *tmp63 :showa 0
+-    * op land *tmp64 *tmp62 *tmp63
+-    * jump *label26 equal *tmp64 false
 -    * set :icon @surge-smelter
 -    * label *label26
 -    * label *label27
-+  117 op greaterThan *tmp61 :minimum 16
-+  118 op equal *tmp62 :showa 0
-+  119 op land *tmp63 *tmp61 *tmp62
-+  120 select :icon notEqual *tmp63 false @surge-smelter :icon
++  117 op greaterThan *tmp62 :minimum 16
++  118 op equal *tmp63 :showa 0
++  119 op land *tmp64 *tmp62 *tmp63
++  120 select :icon notEqual *tmp64 false @surge-smelter :icon
    121 draw color 255 255 255 255
    122 jump *label28 equal :e false
    123 jump *label30 lessThanEq :power 0
@@ -776,28 +776,28 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-12 
    171 set :minimum :a
    172 jump *label35 always
    173 label *label34
--    * op greaterThan *tmp86 :minimum 14
--    * op greaterThanEq *tmp87 :boost EXPECTED_BOOST
--    * op land *tmp88 *tmp86 *tmp87
--    * jump *label36 equal *tmp88 false
--    * set *tmp89 0
+-    * op greaterThan *tmp87 :minimum 14
+-    * op greaterThanEq *tmp88 :boost EXPECTED_BOOST
+-    * op land *tmp89 *tmp87 *tmp88
+-    * jump *label36 equal *tmp89 false
+-    * set *tmp90 0
 -    * jump *label37 always
 -    * label *label36
--    * set *tmp89 255
+-    * set *tmp90 255
 -    * label *label37
-+  174 op greaterThan *tmp86 :minimum 14
-+  175 op greaterThanEq *tmp87 :boost EXPECTED_BOOST
-+  176 op land *tmp88 *tmp86 *tmp87
-+  177 select *tmp89 notEqual *tmp88 false 0 255
-   178 set :red *tmp89
++  174 op greaterThan *tmp87 :minimum 14
++  175 op greaterThanEq *tmp88 :boost EXPECTED_BOOST
++  176 op land *tmp89 *tmp87 *tmp88
++  177 select *tmp90 notEqual *tmp89 false 0 255
+   178 set :red *tmp90
 -    * jump *label38 lessThanEq :minimum 7
--    * set *tmp91 255
+-    * set *tmp92 255
 -    * jump *label39 always
 -    * label *label38
--    * set *tmp91 0
+-    * set *tmp92 0
 -    * label *label39
-+  179 select *tmp91 greaterThan :minimum 7 255 0
-   180 set :green *tmp91
++  179 select *tmp92 greaterThan :minimum 7 255 0
+   180 set :green *tmp92
    181 set :blue 0
    182 label *label35
 
@@ -829,18 +829,18 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   69 jump *label13 greaterThanEq 0 @links
     70 label *label42
     71 getlink :smelter :n
-    72 sensor *tmp29 :smelter @type
+    72 sensor *tmp30 :smelter @type
 
 Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1 (-2 instructions):
  
-   175 op greaterThan *tmp86 :minimum 14
-   176 op greaterThanEq *tmp87 :boost EXPECTED_BOOST
-   177 op land *tmp88 *tmp86 *tmp87
--    * select *tmp89 notEqual *tmp88 false 0 255
--    * set :red *tmp89
--    * select *tmp91 greaterThan :minimum 7 255 0
--    * set :green *tmp91
-+  178 select :red notEqual *tmp88 false 0 255
+   175 op greaterThan *tmp87 :minimum 14
+   176 op greaterThanEq *tmp88 :boost EXPECTED_BOOST
+   177 op land *tmp89 *tmp87 *tmp88
+-    * select *tmp90 notEqual *tmp89 false 0 255
+-    * set :red *tmp90
+-    * select *tmp92 greaterThan :minimum 7 255 0
+-    * set :green *tmp92
++  178 select :red notEqual *tmp89 false 0 255
 +  179 select :green greaterThan :minimum 7 255 0
    180 set :blue 0
    181 label *label35
@@ -861,9 +861,9 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
     14 print "Surge Alloy Factory Monitor"
     15 jump *label5 equal bank1 null
  
-   118 op add *tmp68 :x 7
-   119 op add *tmp69 :y 7
-   120 draw image *tmp68 *tmp69 :icon 16 0
+   118 op add *tmp69 :x 7
+   119 op add *tmp70 :y 7
+   120 draw image *tmp69 *tmp70 :icon 16 0
 -    * jump *label31 always
 +  121 jump *label29 always
    122 label *label30
@@ -900,15 +900,15 @@ Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
     56 draw stroke 2
  
    187 drawflush display1
-   188 op sub *tmp103 @time :start
-   189 op floor *tmp104 *tmp103
+   188 op sub *tmp104 @time :start
+   189 op floor *tmp105 *tmp104
 -    * print "\n"
 -    * print "Update time: "
--    * print *tmp104
+-    * print *tmp105
 -    * print " "
 -    * print "ms"
 +  190 print "\nUpdate time: {0} ms"
-+  191 format *tmp104
++  191 format *tmp105
    192 printflush message1
    193 sensor *tmp7 switch1 @enabled
    194 jump *label43 equal *tmp7 0
@@ -949,12 +949,12 @@ draw color 0 255 0 255
 draw lineRect 164 89 8 84
 draw color 0 0 80 255
 draw rect 164 4 2 170
-op sub *tmp16 :rate .EXPECTED_FLOW
-op mul *tmp17 84 *tmp16
-op div *tmp18 *tmp17 .EXPECTED_FLOW
-op add :pos 88 *tmp18
-op max *tmp20 :pos 4
-op min :pos *tmp20 170
+op sub *tmp17 :rate .EXPECTED_FLOW
+op mul *tmp18 84 *tmp17
+op div *tmp19 *tmp18 .EXPECTED_FLOW
+op add :pos 88 *tmp19
+op max *tmp21 :pos 4
+op min :pos *tmp21 170
 op add :pos1 :pos 7
 op sub :pos2 :pos 7
 draw color 255 255 16 255
@@ -977,8 +977,8 @@ set :n 0
 jump *label13 greaterThanEq 0 @links
 label *label42
 getlink :smelter :n
-sensor *tmp29 :smelter @type
-jump *label14 notEqual *tmp29 @surge-smelter
+sensor *tmp30 :smelter @type
+jump *label14 notEqual *tmp30 @surge-smelter
 set :minimum 21
 sensor :t :smelter @titanium
 sensor :c :smelter @copper
@@ -1004,31 +1004,31 @@ jump *label22 greaterThanEq :t :minimum
 set :minimum :t
 set :icon @titanium
 label *label22
-op greaterThan *tmp48 :a 5
-op sub *tmp49 21 :a
-op lessThan *tmp50 *tmp49 :minimum
-op land :showa *tmp48 *tmp50
+op greaterThan *tmp49 :a 5
+op sub *tmp50 21 :a
+op lessThan *tmp51 *tmp50 :minimum
+op land :showa *tmp49 *tmp51
 select :icon notEqual :showa false @surge-alloy :icon
 op mod :column :index 2
 op idiv :row :index 2
-op mul *tmp55 :column .BAR_SPACE
-op add :x 5 *tmp55
-op mul *tmp57 :row 22
-op add :y 4 *tmp57
+op mul *tmp56 :column .BAR_SPACE
+op add :x 5 *tmp56
+op mul *tmp58 :row 22
+op add :y 4 *tmp58
 op sub :xm1 :x 1
 op sub :ym1 :y 1
 draw color 0 0 80 255
 draw rect :xm1 :ym1 .BAR_SPACE 16
-op greaterThan *tmp61 :minimum 16
-op equal *tmp62 :showa 0
-op land *tmp63 *tmp61 *tmp62
-select :icon notEqual *tmp63 false @surge-smelter :icon
+op greaterThan *tmp62 :minimum 16
+op equal *tmp63 :showa 0
+op land *tmp64 *tmp62 *tmp63
+select :icon notEqual *tmp64 false @surge-smelter :icon
 draw color 255 255 255 255
 jump *label28 equal :e false
 jump *label30 lessThanEq :power 0
-op add *tmp68 :x 7
-op add *tmp69 :y 7
-draw image *tmp68 *tmp69 :icon 16 0
+op add *tmp69 :x 7
+op add *tmp70 :y 7
+draw image *tmp69 *tmp70 :icon 16 0
 jump *label29 always
 label *label30
 op add :x12 :x 12
@@ -1036,16 +1036,16 @@ op add :y3 :y 3
 draw color 255 80 80 255
 draw rect :x :y3 14 8
 draw color 0 0 0 255
-op add *tmp72 :x 2
-op add *tmp73 :y 5
-draw rect *tmp72 *tmp73 8 4
+op add *tmp73 :x 2
+op add *tmp74 :y 5
+draw rect *tmp73 *tmp74 8 4
 draw rect :x12 :y3 2 2
-op add *tmp74 :y 9
-draw rect :x12 *tmp74 2 2
+op add *tmp75 :y 9
+draw rect :x12 *tmp75 2 2
 draw color 255 80 80 255
-op add *tmp75 :x 4
-op add *tmp76 :y 6
-draw rect *tmp75 *tmp76 2 2
+op add *tmp76 :x 4
+op add *tmp77 :y 6
+draw rect *tmp76 *tmp77 2 2
 jump *label29 always
 label *label28
 op add :x2 :x 2
@@ -1060,9 +1060,9 @@ draw color 0 0 0 255
 draw lineRect :xm1 :ym1 16 16
 draw stroke 2
 label *label29
-op add :x *tmp55 21
-op mul *tmp82 :power :e
-jump *label32 notEqual *tmp82 0
+op add :x *tmp56 21
+op mul *tmp83 :power :e
+jump *label32 notEqual *tmp83 0
 set :red 255
 set :green 0
 set :blue 0
@@ -1075,10 +1075,10 @@ set :blue 255
 set :minimum :a
 jump *label35 always
 label *label34
-op greaterThan *tmp86 :minimum 14
-op greaterThanEq *tmp87 :boost EXPECTED_BOOST
-op land *tmp88 *tmp86 *tmp87
-select :red notEqual *tmp88 false 0 255
+op greaterThan *tmp87 :minimum 14
+op greaterThanEq *tmp88 :boost EXPECTED_BOOST
+op land *tmp89 *tmp87 *tmp88
+select :red notEqual *tmp89 false 0 255
 select :green greaterThan :minimum 7 255 0
 set :blue 0
 label *label35
@@ -1089,12 +1089,12 @@ op max :green 192 :green
 op max :blue 192 :blue
 set :boost EXPECTED_BOOST
 label *label40
-op mul *tmp97 .BAR_LENGTH :boost
-op idiv :length *tmp97 EXPECTED_BOOST
+op mul *tmp98 .BAR_LENGTH :boost
+op idiv :length *tmp98 EXPECTED_BOOST
 draw color :red :green :blue 128
-op mul *tmp99 :minimum :length
-op idiv *tmp100 *tmp99 20
-draw rect :x :y *tmp100 14
+op mul *tmp100 :minimum :length
+op idiv *tmp101 *tmp100 20
+draw rect :x :y *tmp101 14
 draw color :red :green :blue 255
 draw lineRect :x :y :length 14
 op add :index :index 1
@@ -1103,10 +1103,10 @@ op add :n :n 1
 jump *label42 lessThan :n @links
 label *label13
 drawflush display1
-op sub *tmp103 @time :start
-op floor *tmp104 *tmp103
+op sub *tmp104 @time :start
+op floor *tmp105 *tmp104
 print "\nUpdate time: {0} ms"
-format *tmp104
+format *tmp105
 printflush message1
 sensor *tmp7 switch1 @enabled
 jump *label43 equal *tmp7 0

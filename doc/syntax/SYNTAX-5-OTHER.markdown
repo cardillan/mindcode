@@ -657,14 +657,14 @@ compiles to:
 ```mlog
 setrate 500
 wait 0.000134                           # 0.008 ticks for atomic execution of 4 steps at 500 ipt
-read *tmp0 cell1 0
-op add *tmp0 *tmp0 1
+read *tmp1 cell1 0
+op add *tmp0 *tmp1 1
 write *tmp0 cell1 0                     # The last atomic block instruction
 setrate 1000
 wait 0.000067                           # 0.004 ticks for atomic execution of 4 steps at 1000 ipt
-read *tmp2 cell1 1
-op add *tmp2 *tmp2 1
-write *tmp2 cell1 1                     # The last atomic block instruction
+read *tmp4 cell1 1
+op add *tmp3 *tmp4 1
+write *tmp3 cell1 1                     # The last atomic block instruction
 ```
 
 An alternative way to specify the processor speed is the [`setrate` compiler option](#option-setrate), however, this option also generates a `setrate` instruction to apply the specified speed to the processor. 
@@ -708,8 +708,8 @@ compiles to:
 ```mlog
 setrate 750
 wait 0.000089                           # 0.005 ticks for atomic execution of 4 steps at 750 ipt
-read *tmp0 cell1 0
-op add *tmp0 *tmp0 1
+read *tmp1 cell1 0
+op add *tmp0 *tmp1 1
 write *tmp0 cell1 0                     # The last atomic block instruction
 ```
 

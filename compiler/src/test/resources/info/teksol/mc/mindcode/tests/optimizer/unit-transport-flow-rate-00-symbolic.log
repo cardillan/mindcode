@@ -22,29 +22,29 @@ Pass 1: speed optimization selection (cost limit 919):
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
     71 print "Wait reset\n"
-    72 op add *tmp22 :start .DELAY
-    73 set :wait *tmp22
--    * set *tmp21 :wait
+    72 op add *tmp26 :start .DELAY
+    73 set :wait *tmp26
+-    * set *tmp25 :wait
     74 jump *label13 always
     75 label *label12
--    * set *tmp21 null
+-    * set *tmp25 null
     76 label *label13
-    77 set *tmp23 .IND_SHIPPED
-    78 read *tmp24 .BANK *tmp23
+    77 set *tmp27 .IND_SHIPPED
+    78 read *tmp29 .BANK *tmp27
  
     86 op add .MILLIS .MILLIS .DELAY
-    87 op mul *tmp29 .MULTIPLIER .MILLIS
-    88 set .SIGN_MILLIS *tmp29
--    * set *tmp28 .SIGN_MILLIS
+    87 op mul *tmp34 .MULTIPLIER .MILLIS
+    88 set .SIGN_MILLIS *tmp34
+-    * set *tmp33 .SIGN_MILLIS
     89 jump *label15 always
     90 label *label14
-    91 set *tmp30 :index
-    92 read *tmp31 .BANK *tmp30
-    93 set :last_total *tmp31
--    * set *tmp28 :last_total
+    91 set *tmp35 :index
+    92 read *tmp37 .BANK *tmp35
+    93 set :last_total *tmp37
+-    * set *tmp33 :last_total
     94 label *label15
-    95 set *tmp32 :index
-    96 write :total .BANK *tmp32
+    95 set *tmp38 :index
+    96 write :total .BANK *tmp38
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-27 instructions):
  
@@ -62,16 +62,16 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-27 ins
     30 jump *label0 always
     31 label *label2
 -    * set *tmp4 .IND_SHIPPED
--    * read *tmp5 .BANK *tmp4
--    * set :shipped *tmp5
--    * set *tmp6 .IND_MULTIPLIER
--    * read *tmp7 .BANK *tmp6
--    * set .MULTIPLIER *tmp7
--    * set *tmp8 .IND_SESSION_KEY
--    * read *tmp9 .BANK *tmp8
--    * set .SESSION_KEY *tmp9
--    * sensor *tmp10 .SORTER @config
--    * set :item *tmp10
+-    * read *tmp6 .BANK *tmp4
+-    * set :shipped *tmp6
+-    * set *tmp7 .IND_MULTIPLIER
+-    * read *tmp9 .BANK *tmp7
+-    * set .MULTIPLIER *tmp9
+-    * set *tmp10 .IND_SESSION_KEY
+-    * read *tmp12 .BANK *tmp10
+-    * set .SESSION_KEY *tmp12
+-    * sensor *tmp13 .SORTER @config
+-    * set :item *tmp13
 +   32 read :shipped .BANK .IND_SHIPPED
 +   33 read .MULTIPLIER .BANK .IND_MULTIPLIER
 +   34 read .SESSION_KEY .BANK .IND_SESSION_KEY
@@ -80,80 +80,80 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-27 ins
     37 set :index 0
     38 set .MILLIS 0
  
-    48 jump *label8 equal *tmp14 false
+    48 jump *label8 equal *tmp17 false
     49 jump *label10 always
     50 label *label10
--    * set *tmp15 .IND_SESSION_KEY
--    * read *tmp16 .BANK *tmp15
-+   51 read *tmp16 .BANK .IND_SESSION_KEY
-    52 op strictEqual *tmp17 .SESSION_KEY *tmp16
-    53 jump *label8 equal *tmp17 false
+-    * set *tmp18 .IND_SESSION_KEY
+-    * read *tmp21 .BANK *tmp18
++   51 read *tmp21 .BANK .IND_SESSION_KEY
+    52 op strictEqual *tmp20 .SESSION_KEY *tmp21
+    53 jump *label8 equal *tmp20 false
     54 jump *label9 always
     55 label *label9
--    * set *tmp18 @time
--    * set :start *tmp18
--    * op add *tmp19 :wait .DELAY
--    * set :wait *tmp19
+-    * set *tmp22 @time
+-    * set :start *tmp22
+-    * op add *tmp23 :wait .DELAY
+-    * set :wait *tmp23
 +   56 set :start @time
 +   57 op add :wait :wait .DELAY
-    58 op greaterThan *tmp20 :start :wait
-    59 jump *label12 equal *tmp20 false
+    58 op greaterThan *tmp24 :start :wait
+    59 jump *label12 equal *tmp24 false
     60 print "Wait reset\n"
--    * op add *tmp22 :start .DELAY
--    * set :wait *tmp22
+-    * op add *tmp26 :start .DELAY
+-    * set :wait *tmp26
 +   61 op add :wait :start .DELAY
     62 jump *label13 always
     63 label *label12
     64 label *label13
--    * set *tmp23 .IND_SHIPPED
--    * read *tmp24 .BANK *tmp23
--    * set :shipped *tmp24
--    * sensor *tmp25 .SORTER @config
--    * set :item *tmp25
--    * op add *tmp26 :level :shipped
--    * set :total *tmp26
+-    * set *tmp27 .IND_SHIPPED
+-    * read *tmp29 .BANK *tmp27
+-    * set :shipped *tmp29
+-    * sensor *tmp30 .SORTER @config
+-    * set :item *tmp30
+-    * op add *tmp31 :level :shipped
+-    * set :total *tmp31
 +   65 read :shipped .BANK .IND_SHIPPED
 +   66 sensor :item .SORTER @config
 +   67 op add :total :level :shipped
-    68 op lessThan *tmp27 .MILLIS .TOTAL_MILLIS
-    69 jump *label14 equal *tmp27 false
+    68 op lessThan *tmp32 .MILLIS .TOTAL_MILLIS
+    69 jump *label14 equal *tmp32 false
     70 op add .MILLIS .MILLIS .DELAY
--    * op mul *tmp29 .MULTIPLIER .MILLIS
--    * set .SIGN_MILLIS *tmp29
+-    * op mul *tmp34 .MULTIPLIER .MILLIS
+-    * set .SIGN_MILLIS *tmp34
 +   71 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
     72 jump *label15 always
     73 label *label14
--    * set *tmp30 :index
--    * read *tmp31 .BANK *tmp30
--    * set :last_total *tmp31
+-    * set *tmp35 :index
+-    * read *tmp37 .BANK *tmp35
+-    * set :last_total *tmp37
 +   74 read :last_total .BANK :index
     75 label *label15
--    * set *tmp32 :index
--    * write :total .BANK *tmp32
+-    * set *tmp38 :index
+-    * write :total .BANK *tmp38
 +   76 write :total .BANK :index
-    77 op sub *tmp34 :total :last_total
--    * op div *tmp35 *tmp34 .SIGN_MILLIS
--    * set :flow_rate *tmp35
--    * set *tmp36 .IND_FLOW_RATE
--    * write :flow_rate .BANK *tmp36
-+   78 op div :flow_rate *tmp34 .SIGN_MILLIS
+    77 op sub *tmp40 :total :last_total
+-    * op div *tmp41 *tmp40 .SIGN_MILLIS
+-    * set :flow_rate *tmp41
+-    * set *tmp42 .IND_FLOW_RATE
+-    * write :flow_rate .BANK *tmp42
++   78 op div :flow_rate *tmp40 .SIGN_MILLIS
 +   79 write :flow_rate .BANK .IND_FLOW_RATE
-    80 set *tmp38 .IND_TIME
--    * set *tmp40 @time
--    * write *tmp40 .BANK *tmp38
-+   81 write @time .BANK *tmp38
-    82 op add *tmp41 :index 1
--    * op mod *tmp42 *tmp41 .SAMPLES
--    * set :index *tmp42
-+   83 op mod :index *tmp41 .SAMPLES
-    84 op mul *tmp43 60000 :flow_rate
--    * op floor *tmp44 *tmp43
--    * set :flow_rate_str *tmp44
--    * op div *tmp45 .MILLIS 1000
--    * set :seconds *tmp45
--    * op sub *tmp46 @time :start
--    * set :elapsed *tmp46
-+   85 op floor :flow_rate_str *tmp43
+    80 set *tmp44 .IND_TIME
+-    * set *tmp46 @time
+-    * write *tmp46 .BANK *tmp44
++   81 write @time .BANK *tmp44
+    82 op add *tmp47 :index 1
+-    * op mod *tmp48 *tmp47 .SAMPLES
+-    * set :index *tmp48
++   83 op mod :index *tmp47 .SAMPLES
+    84 op mul *tmp49 60000 :flow_rate
+-    * op floor *tmp50 *tmp49
+-    * set :flow_rate_str *tmp50
+-    * op div *tmp51 .MILLIS 1000
+-    * set :seconds *tmp51
+-    * op sub *tmp52 @time :start
+-    * set :elapsed *tmp52
++   85 op floor :flow_rate_str *tmp49
 +   86 op div :seconds .MILLIS 1000
 +   87 op sub :elapsed @time :start
     88 print "Measured interval: "
@@ -162,15 +162,15 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-27 ins
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 2 (-1 instructions):
  
-    77 op sub *tmp34 :total :last_total
-    78 op div :flow_rate *tmp34 .SIGN_MILLIS
+    77 op sub *tmp40 :total :last_total
+    78 op div :flow_rate *tmp40 .SIGN_MILLIS
     79 write :flow_rate .BANK .IND_FLOW_RATE
--    * set *tmp38 .IND_TIME
--    * write @time .BANK *tmp38
+-    * set *tmp44 .IND_TIME
+-    * write @time .BANK *tmp44
 +   80 write @time .BANK .IND_TIME
-    81 op add *tmp41 :index 1
-    82 op mod :index *tmp41 .SAMPLES
-    83 op mul *tmp43 60000 :flow_rate
+    81 op add *tmp47 :index 1
+    82 op mod :index *tmp47 .SAMPLES
+    83 op mul *tmp49 60000 :flow_rate
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-1 instructions):
  
@@ -208,8 +208,8 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-6
     51 label *label9
     52 set :start @time
     53 op add :wait :wait .DELAY
--    * op greaterThan *tmp20 :start :wait
--    * jump *label12 equal *tmp20 false
+-    * op greaterThan *tmp24 :start :wait
+-    * jump *label12 equal *tmp24 false
 +   54 jump *label12 lessThanEq :start :wait
     55 print "Wait reset\n"
     56 op add :wait :start .DELAY
@@ -218,8 +218,8 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-6
     60 read :shipped .BANK .IND_SHIPPED
     61 sensor :item .SORTER @config
     62 op add :total :level :shipped
--    * op lessThan *tmp27 .MILLIS .TOTAL_MILLIS
--    * jump *label14 equal *tmp27 false
+-    * op lessThan *tmp32 .MILLIS .TOTAL_MILLIS
+-    * jump *label14 equal *tmp32 false
 +   63 jump *label14 greaterThanEq .MILLIS .TOTAL_MILLIS
     64 op add .MILLIS .MILLIS .DELAY
     65 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
@@ -228,8 +228,8 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-6
    101 printflush message1
    102 set :loops 0
    103 label *label16
--    * op lessThan *tmp47 @time :wait
--    * jump *label18 equal *tmp47 false
+-    * op lessThan *tmp53 @time :wait
+-    * jump *label18 equal *tmp53 false
 +  104 jump *label18 greaterThanEq @time :wait
    105 op add :loops :loops 1
    106 label *label17
@@ -245,14 +245,14 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     17 jump *label2 notEqual .BANK null
     18 label *label3
  
-    41 sensor *tmp13 .VAULT @dead
-    42 op strictEqual *tmp14 *tmp13 0
-    43 jump *label8 equal *tmp14 false
+    41 sensor *tmp16 .VAULT @dead
+    42 op strictEqual *tmp17 *tmp16 0
+    43 jump *label8 equal *tmp17 false
 -    * jump *label10 always
     44 label *label10
-    45 read *tmp16 .BANK .IND_SESSION_KEY
-    46 op strictEqual *tmp17 .SESSION_KEY *tmp16
-    47 jump *label8 equal *tmp17 false
+    45 read *tmp21 .BANK .IND_SESSION_KEY
+    46 op strictEqual *tmp20 .SESSION_KEY *tmp21
+    47 jump *label8 equal *tmp20 false
 -    * jump *label9 always
     48 label *label9
     49 set :start @time
@@ -268,10 +268,10 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
     70 write @time .BANK .IND_TIME
-    71 op add *tmp41 :index 1
-    72 op mod :index *tmp41 .SAMPLES
--    * op mul *tmp43 60000 :flow_rate
--    * op floor :flow_rate_str *tmp43
+    71 op add *tmp47 :index 1
+    72 op mod :index *tmp47 .SAMPLES
+-    * op mul *tmp49 60000 :flow_rate
+-    * op floor :flow_rate_str *tmp49
 +   73 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
     74 op div :seconds .MILLIS 1000
     75 op sub :elapsed @time :start
@@ -302,13 +302,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     31 set :index 0
     32 set .MILLIS 0
  
-    41 op strictEqual *tmp14 *tmp13 0
-    42 jump *label8 equal *tmp14 false
+    41 op strictEqual *tmp17 *tmp16 0
+    42 jump *label8 equal *tmp17 false
     43 label *label10
--    * read *tmp16 .BANK .IND_SESSION_KEY
-+   44 read *tmp16 .BANK 509
-    45 op strictEqual *tmp17 .SESSION_KEY *tmp16
-    46 jump *label8 equal *tmp17 false
+-    * read *tmp21 .BANK .IND_SESSION_KEY
++   44 read *tmp21 .BANK 509
+    45 op strictEqual *tmp20 .SESSION_KEY *tmp21
+    46 jump *label8 equal *tmp20 false
     47 label *label9
     48 set :start @time
 -    * op add :wait :wait .DELAY
@@ -333,15 +333,15 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     62 label *label14
  
     65 write :total .BANK :index
-    66 op sub *tmp34 :total :last_total
-    67 op div :flow_rate *tmp34 .SIGN_MILLIS
+    66 op sub *tmp40 :total :last_total
+    67 op div :flow_rate *tmp40 .SIGN_MILLIS
 -    * write :flow_rate .BANK .IND_FLOW_RATE
 -    * write @time .BANK .IND_TIME
 +   68 write :flow_rate .BANK 507
 +   69 write @time .BANK 508
-    70 op add *tmp41 :index 1
--    * op mod :index *tmp41 .SAMPLES
-+   71 op mod :index *tmp41 10
+    70 op add *tmp47 :index 1
+-    * op mod :index *tmp47 .SAMPLES
++   71 op mod :index *tmp47 10
     72 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
     73 op div :seconds .MILLIS 1000
     74 op sub :elapsed @time :start
@@ -374,7 +374,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
 -    * set :level 0
     25 set :wait 0
     26 label *label6
-    27 sensor *tmp11 .SORTER @dead
+    27 sensor *tmp14 .SORTER @dead
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
@@ -388,17 +388,17 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
      8 label *label3
      9 print "Missing sorter, vault or memory bank."
  
-    25 sensor *tmp11 .SORTER @dead
-    26 op strictEqual *tmp12 *tmp11 0
-    27 jump *label8 equal *tmp12 false
+    25 sensor *tmp14 .SORTER @dead
+    26 op strictEqual *tmp15 *tmp14 0
+    27 jump *label8 equal *tmp15 false
 -    * label *label11
-    28 sensor *tmp13 .VAULT @dead
-    29 op strictEqual *tmp14 *tmp13 0
-    30 jump *label8 equal *tmp14 false
+    28 sensor *tmp16 .VAULT @dead
+    29 op strictEqual *tmp17 *tmp16 0
+    30 jump *label8 equal *tmp17 false
 -    * label *label10
-    31 read *tmp16 .BANK 509
-    32 op strictEqual *tmp17 .SESSION_KEY *tmp16
-    33 jump *label8 equal *tmp17 false
+    31 read *tmp21 .BANK 509
+    32 op strictEqual *tmp20 .SESSION_KEY *tmp21
+    33 jump *label8 equal *tmp20 false
 -    * label *label9
     34 set :start @time
     35 op add :wait :wait 1000
@@ -454,21 +454,21 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 
 Modifications by Partial loop rotation at line 38:1 (+2 instructions):
  
-    29 sensor *tmp11 .SORTER @dead
-    30 op strictEqual *tmp12 *tmp11 0
-    31 jump *label8 equal *tmp12 false
+    29 sensor *tmp14 .SORTER @dead
+    30 op strictEqual *tmp15 *tmp14 0
+    31 jump *label8 equal *tmp15 false
 +   32 label *label22
-    33 sensor *tmp13 .VAULT @dead
-    34 op strictEqual *tmp14 *tmp13 0
-    35 jump *label8 equal *tmp14 false
+    33 sensor *tmp16 .VAULT @dead
+    34 op strictEqual *tmp17 *tmp16 0
+    35 jump *label8 equal *tmp17 false
  
     93 jump *label19 lessThan @time :wait
     94 label *label18
     95 label *label7
 -    * jump *label6 always
-+   96 sensor *tmp11 .SORTER @dead
-+   97 op strictEqual *tmp12 *tmp11 0
-+   98 jump *label22 notEqual *tmp12 false
++   96 sensor *tmp14 .SORTER @dead
++   97 op strictEqual *tmp15 *tmp14 0
++   98 jump *label22 notEqual *tmp15 false
     99 label *label8
    100 end
 
@@ -489,10 +489,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     54 read :last_total .BANK :index
     55 label *label15
 -    * write :total .BANK :index
--    * op sub *tmp34 :total :last_total
+-    * op sub *tmp40 :total :last_total
 +   56 write :shipped .BANK :index
-+   57 op sub *tmp34 :shipped :last_total
-    58 op div :flow_rate *tmp34 .SIGN_MILLIS
++   57 op sub *tmp40 :shipped :last_total
+    58 op div :flow_rate *tmp40 .SIGN_MILLIS
     59 write :flow_rate .BANK 507
     60 write @time .BANK 508
  
@@ -522,28 +522,28 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
      3 set .VAULT vault1
  
     25 set :wait 0
-    26 sensor *tmp11 .SORTER @dead
-    27 op strictEqual *tmp12 *tmp11 0
--    * jump *label8 equal *tmp12 false
-+   28 jump __start__ equal *tmp12 false
+    26 sensor *tmp14 .SORTER @dead
+    27 op strictEqual *tmp15 *tmp14 0
+-    * jump *label8 equal *tmp15 false
++   28 jump __start__ equal *tmp15 false
     29 label *label22
-    30 sensor *tmp13 .VAULT @dead
-    31 op strictEqual *tmp14 *tmp13 0
--    * jump *label8 equal *tmp14 false
-+   32 jump __start__ equal *tmp14 false
-    33 read *tmp16 .BANK 509
-    34 op strictEqual *tmp17 .SESSION_KEY *tmp16
+    30 sensor *tmp16 .VAULT @dead
+    31 op strictEqual *tmp17 *tmp16 0
 -    * jump *label8 equal *tmp17 false
-+   35 jump __start__ equal *tmp17 false
++   32 jump __start__ equal *tmp17 false
+    33 read *tmp21 .BANK 509
+    34 op strictEqual *tmp20 .SESSION_KEY *tmp21
+-    * jump *label8 equal *tmp20 false
++   35 jump __start__ equal *tmp20 false
     36 set :start @time
     37 op add :wait :wait 1000
     38 jump *label12 lessThanEq :start :wait
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-    88 sensor *tmp11 .SORTER @dead
-    89 op strictEqual *tmp12 *tmp11 0
-    90 jump *label22 notEqual *tmp12 false
+    88 sensor *tmp14 .SORTER @dead
+    89 op strictEqual *tmp15 *tmp14 0
+    90 jump *label22 notEqual *tmp15 false
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
@@ -612,16 +612,16 @@ set :last_total :shipped
 set :index 0
 set .MILLIS 0
 set :wait 0
-sensor *tmp11 .SORTER @dead
-op strictEqual *tmp12 *tmp11 0
-jump __start__ equal *tmp12 false
+sensor *tmp14 .SORTER @dead
+op strictEqual *tmp15 *tmp14 0
+jump __start__ equal *tmp15 false
 label *label22
-sensor *tmp13 .VAULT @dead
-op strictEqual *tmp14 *tmp13 0
-jump __start__ equal *tmp14 false
-read *tmp16 .BANK 509
-op strictEqual *tmp17 .SESSION_KEY *tmp16
+sensor *tmp16 .VAULT @dead
+op strictEqual *tmp17 *tmp16 0
 jump __start__ equal *tmp17 false
+read *tmp21 .BANK 509
+op strictEqual *tmp20 .SESSION_KEY *tmp21
+jump __start__ equal *tmp20 false
 set :start @time
 op add :wait :wait 1000
 jump *label12 lessThanEq :start :wait
@@ -638,12 +638,12 @@ label *label14
 read :last_total .BANK :index
 label *label15
 write :shipped .BANK :index
-op sub *tmp34 :shipped :last_total
-op div :flow_rate *tmp34 .SIGN_MILLIS
+op sub *tmp40 :shipped :last_total
+op div :flow_rate *tmp40 .SIGN_MILLIS
 write :flow_rate .BANK 507
 write @time .BANK 508
-op add *tmp41 :index 1
-op mod :index *tmp41 10
+op add *tmp47 :index 1
+op mod :index *tmp47 10
 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
 op div :seconds .MILLIS 1000
 op sub :elapsed @time :start
@@ -663,6 +663,6 @@ label *label19
 op add :loops :loops 1
 jump *label19 lessThan @time :wait
 label *label18
-sensor *tmp11 .SORTER @dead
-op strictEqual *tmp12 *tmp11 0
-jump *label22 notEqual *tmp12 false
+sensor *tmp14 .SORTER @dead
+op strictEqual *tmp15 *tmp14 0
+jump *label22 notEqual *tmp15 false

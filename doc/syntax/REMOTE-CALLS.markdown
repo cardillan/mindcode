@@ -418,13 +418,13 @@ compiles to:
 
 ```mlog
 # Remote variables named using Mindcode's naming convention
-read *tmp0 processor1 ".x"
-print *tmp0
-read *tmp2 processor1 ".y"
+read *tmp2 processor1 ".x"
 print *tmp2
+read *tmp3 processor1 ".y"
+print *tmp3
 # Remote variable named using the specified name
-read *tmp4 processor1 "foo"
-print *tmp4
+read *tmp5 processor1 "foo"
+print *tmp5
 ```
 
 # Atomic code blocks
@@ -537,11 +537,11 @@ compiles to:
 label_0:
     jump label_0 equal cell1 null
         wait 0.033334                           # 2.000 ticks for atomic execution of 4 steps at 2 ipt
-        read *tmp0 cell1 0
-        op add *tmp1 *tmp0 1
-        write *tmp1 cell1 0                     # The last atomic block instruction
+        read *tmp1 cell1 0
+        op add *tmp2 *tmp1 1
+        write *tmp2 cell1 0                     # The last atomic block instruction
 label_5:
-        print *tmp1
+        print *tmp2
         printflush message1
         jump label_5 always 0 0
 ```

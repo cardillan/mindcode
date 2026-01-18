@@ -27,7 +27,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Miscellaneous
 
-* The system of compiler options has been updated to allow determining whether a given option has been set. This allows the default values of unset options to be derived from the values of other options.   
+* The system of compiler options has been updated to allow determining whether a given option has been set. This allows the default values of unset options to be derived from the values of other options.
+* The transfer variable, defined for uncached external and remote variables, is no longer used for reads. Instead, a fresh new temporary variable is used each time. This may increase the number of temporary variables generated but avoids unnecessary instructions when using postfix operators on these variables. This became quite important with atomic blocks.  
 
 ## 3.12.1 - 2026-01-12
 

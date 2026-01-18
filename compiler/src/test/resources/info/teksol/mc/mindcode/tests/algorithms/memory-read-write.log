@@ -4,14 +4,14 @@
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
-     1 read *tmp0 bank1 0
-     2 assertequals 10 *tmp0 "value from memory"
+     1 read *tmp1 bank1 0
+     2 assertequals 10 *tmp1 "value from memory"
      3 stop
 -    * end
 
 Final code before resolving virtual instructions:
 
 write 10 bank1 0
-read *tmp0 bank1 0
-assertequals 10 *tmp0 "value from memory"
+read *tmp1 bank1 0
+assertequals 10 *tmp1 "value from memory"
 stop

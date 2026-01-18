@@ -54,20 +54,20 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
 -    * op sub *tmp4 :j :i
 -    * set *tmp5 *tmp4
 +   36 op sub *tmp5 :j :i
-    37 read *tmp6 bank2 *tmp5
-    38 read *tmp3 bank2 *tmp2
-    39 op add *tmp7 *tmp3 *tmp6
+    37 read *tmp7 bank2 *tmp5
+    38 read *tmp8 bank2 *tmp2
+    39 op add *tmp9 *tmp8 *tmp7
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     35 set *tmp2 :j
     36 op sub *tmp5 :j :i
-    37 read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 *tmp2
-+   38 read *tmp3 bank2 :j
-    39 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 *tmp2
-+   40 write *tmp7 bank2 :j
+    37 read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 *tmp2
++   38 read *tmp8 bank2 :j
+    39 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 *tmp2
++   40 write *tmp9 bank2 :j
     41 label *label12
     42 op add :j :j 1
     43 jump *label11 always
@@ -79,8 +79,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     34 jump *label13 greaterThan :j 200
 -    * set *tmp2 :j
     35 op sub *tmp5 :j :i
-    36 read *tmp6 bank2 *tmp5
-    37 read *tmp3 bank2 :j
+    36 read *tmp7 bank2 *tmp5
+    37 read *tmp8 bank2 :j
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
@@ -89,10 +89,10 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     34 jump *label13 greaterThan :j 200
 +   35 label *label14
     36 op sub *tmp5 :j :i
-    37 read *tmp6 bank2 *tmp5
-    38 read *tmp3 bank2 :j
+    37 read *tmp7 bank2 *tmp5
+    38 read *tmp8 bank2 :j
  
-    40 write *tmp7 bank2 :j
+    40 write *tmp9 bank2 :j
     41 label *label12
     42 op add :j :j 1
 -    * jump *label11 always
@@ -139,10 +139,10 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
 -    * jump *label13 greaterThan :j 200
 -    * label *label14
 -    * op sub *tmp5 :j :i
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
--    * op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
+-    * op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
 -    * label *label12
 -    * op add :j :j 1
 -    * jump *label14 lessThanEq :j 200
@@ -158,10 +158,10 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
 +    5 jump *label19 greaterThan :j 200
 +    6 label *label17
 +    7 op sub *tmp5 :j :i
-+    8 read *tmp6 bank2 *tmp5
-+    9 read *tmp3 bank2 :j
-+   10 op add *tmp7 *tmp3 *tmp6
-+   11 write *tmp7 bank2 :j
++    8 read *tmp7 bank2 *tmp5
++    9 read *tmp8 bank2 :j
++   10 op add *tmp9 *tmp8 *tmp7
++   11 write *tmp9 bank2 :j
 +   12 label *label18
 +   13 op add :j :j 1
 +   14 jump *label17 lessThanEq :j 200
@@ -174,10 +174,10 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
 +   21 jump *label27 greaterThan :j 200
 +   22 label *label25
 +   23 op sub *tmp5 :j :i
-+   24 read *tmp6 bank2 *tmp5
-+   25 read *tmp3 bank2 :j
-+   26 op add *tmp7 *tmp3 *tmp6
-+   27 write *tmp7 bank2 :j
++   24 read *tmp7 bank2 *tmp5
++   25 read *tmp8 bank2 :j
++   26 op add *tmp9 *tmp8 *tmp7
++   27 write *tmp9 bank2 :j
 +   28 label *label26
 +   29 op add :j :j 1
 +   30 jump *label25 lessThanEq :j 200
@@ -190,10 +190,10 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
 +   37 jump *label35 greaterThan :j 200
 +   38 label *label33
 +   39 op sub *tmp5 :j :i
-+   40 read *tmp6 bank2 *tmp5
-+   41 read *tmp3 bank2 :j
-+   42 op add *tmp7 *tmp3 *tmp6
-+   43 write *tmp7 bank2 :j
++   40 read *tmp7 bank2 *tmp5
++   41 read *tmp8 bank2 :j
++   42 op add *tmp9 *tmp8 *tmp7
++   43 write *tmp9 bank2 :j
 +   44 label *label34
 +   45 op add :j :j 1
 +   46 jump *label33 lessThanEq :j 200
@@ -206,10 +206,10 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
 +   53 jump *label43 greaterThan :j 200
 +   54 label *label41
 +   55 op sub *tmp5 :j :i
-+   56 read *tmp6 bank2 *tmp5
-+   57 read *tmp3 bank2 :j
-+   58 op add *tmp7 *tmp3 *tmp6
-+   59 write *tmp7 bank2 :j
++   56 read *tmp7 bank2 *tmp5
++   57 read *tmp8 bank2 :j
++   58 op add *tmp9 *tmp8 *tmp7
++   59 write *tmp9 bank2 :j
 +   60 label *label42
 +   61 op add :j :j 1
 +   62 jump *label41 lessThanEq :j 200
@@ -222,10 +222,10 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
 +   69 jump *label51 greaterThan :j 200
 +   70 label *label49
 +   71 op sub *tmp5 :j :i
-+   72 read *tmp6 bank2 *tmp5
-+   73 read *tmp3 bank2 :j
-+   74 op add *tmp7 *tmp3 *tmp6
-+   75 write *tmp7 bank2 :j
++   72 read *tmp7 bank2 *tmp5
++   73 read *tmp8 bank2 :j
++   74 op add *tmp9 *tmp8 *tmp7
++   75 write *tmp9 bank2 :j
 +   76 label *label50
 +   77 op add :j :j 1
 +   78 jump *label49 lessThanEq :j 200
@@ -238,10 +238,10 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
 +   85 jump *label59 greaterThan :j 200
 +   86 label *label57
 +   87 op sub *tmp5 :j :i
-+   88 read *tmp6 bank2 *tmp5
-+   89 read *tmp3 bank2 :j
-+   90 op add *tmp7 *tmp3 *tmp6
-+   91 write *tmp7 bank2 :j
++   88 read *tmp7 bank2 *tmp5
++   89 read *tmp8 bank2 :j
++   90 op add *tmp9 *tmp8 *tmp7
++   91 write *tmp9 bank2 :j
 +   92 label *label58
 +   93 op add :j :j 1
 +   94 jump *label57 lessThanEq :j 200
@@ -254,10 +254,10 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
 +  101 jump *label67 greaterThan :j 200
 +  102 label *label65
 +  103 op sub *tmp5 :j :i
-+  104 read *tmp6 bank2 *tmp5
-+  105 read *tmp3 bank2 :j
-+  106 op add *tmp7 *tmp3 *tmp6
-+  107 write *tmp7 bank2 :j
++  104 read *tmp7 bank2 *tmp5
++  105 read *tmp8 bank2 :j
++  106 op add *tmp9 *tmp8 *tmp7
++  107 write *tmp9 bank2 :j
 +  108 label *label66
 +  109 op add :j :j 1
 +  110 jump *label65 lessThanEq :j 200
@@ -270,18 +270,18 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
 +  117 jump *label75 greaterThan :j 200
 +  118 label *label73
 +  119 op sub *tmp5 :j :i
-+  120 read *tmp6 bank2 *tmp5
-+  121 read *tmp3 bank2 :j
-+  122 op add *tmp7 *tmp3 *tmp6
-+  123 write *tmp7 bank2 :j
++  120 read *tmp7 bank2 *tmp5
++  121 read *tmp8 bank2 :j
++  122 op add *tmp9 *tmp8 *tmp7
++  123 write *tmp9 bank2 :j
 +  124 label *label74
 +  125 op add :j :j 1
 +  126 jump *label73 lessThanEq :j 200
 +  127 label *label75
 +  128 label *label76
 +  129 label *label2
-   130 read *tmp8 bank2 200
-   131 assertequals 73682 *tmp8 "Project Euler 31b"
+   130 read *tmp11 bank2 200
+   131 assertequals 73682 *tmp11 "Project Euler 31b"
    132 stop
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
@@ -296,9 +296,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      6 label *label17
 -    * op sub *tmp5 :j :i
 +    7 op sub *tmp5 :j 1
-     8 read *tmp6 bank2 *tmp5
-     9 read *tmp3 bank2 :j
-    10 op add *tmp7 *tmp3 *tmp6
+     8 read *tmp7 bank2 *tmp5
+     9 read *tmp8 bank2 :j
+    10 op add *tmp9 *tmp8 *tmp7
  
     16 label *label20
     17 set :i 2
@@ -311,9 +311,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     22 label *label25
 -    * op sub *tmp5 :j :i
 +   23 op sub *tmp5 :j 2
-    24 read *tmp6 bank2 *tmp5
-    25 read *tmp3 bank2 :j
-    26 op add *tmp7 *tmp3 *tmp6
+    24 read *tmp7 bank2 *tmp5
+    25 read *tmp8 bank2 :j
+    26 op add *tmp9 *tmp8 *tmp7
  
     32 label *label28
     33 set :i 5
@@ -326,9 +326,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     38 label *label33
 -    * op sub *tmp5 :j :i
 +   39 op sub *tmp5 :j 5
-    40 read *tmp6 bank2 *tmp5
-    41 read *tmp3 bank2 :j
-    42 op add *tmp7 *tmp3 *tmp6
+    40 read *tmp7 bank2 *tmp5
+    41 read *tmp8 bank2 :j
+    42 op add *tmp9 *tmp8 *tmp7
  
     48 label *label36
     49 set :i 10
@@ -341,9 +341,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     54 label *label41
 -    * op sub *tmp5 :j :i
 +   55 op sub *tmp5 :j 10
-    56 read *tmp6 bank2 *tmp5
-    57 read *tmp3 bank2 :j
-    58 op add *tmp7 *tmp3 *tmp6
+    56 read *tmp7 bank2 *tmp5
+    57 read *tmp8 bank2 :j
+    58 op add *tmp9 *tmp8 *tmp7
  
     64 label *label44
     65 set :i 20
@@ -356,9 +356,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     70 label *label49
 -    * op sub *tmp5 :j :i
 +   71 op sub *tmp5 :j 20
-    72 read *tmp6 bank2 *tmp5
-    73 read *tmp3 bank2 :j
-    74 op add *tmp7 *tmp3 *tmp6
+    72 read *tmp7 bank2 *tmp5
+    73 read *tmp8 bank2 :j
+    74 op add *tmp9 *tmp8 *tmp7
  
     80 label *label52
     81 set :i 50
@@ -371,9 +371,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     86 label *label57
 -    * op sub *tmp5 :j :i
 +   87 op sub *tmp5 :j 50
-    88 read *tmp6 bank2 *tmp5
-    89 read *tmp3 bank2 :j
-    90 op add *tmp7 *tmp3 *tmp6
+    88 read *tmp7 bank2 *tmp5
+    89 read *tmp8 bank2 :j
+    90 op add *tmp9 *tmp8 *tmp7
  
     96 label *label60
     97 set :i 100
@@ -386,9 +386,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    102 label *label65
 -    * op sub *tmp5 :j :i
 +  103 op sub *tmp5 :j 100
-   104 read *tmp6 bank2 *tmp5
-   105 read *tmp3 bank2 :j
-   106 op add *tmp7 *tmp3 *tmp6
+   104 read *tmp7 bank2 *tmp5
+   105 read *tmp8 bank2 :j
+   106 op add *tmp9 *tmp8 *tmp7
  
    112 label *label68
    113 set :i 200
@@ -401,9 +401,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    118 label *label73
 -    * op sub *tmp5 :j :i
 +  119 op sub *tmp5 :j 200
-   120 read *tmp6 bank2 *tmp5
-   121 read *tmp3 bank2 :j
-   122 op add *tmp7 *tmp3 *tmp6
+   120 read *tmp7 bank2 *tmp5
+   121 read *tmp8 bank2 :j
+   122 op add *tmp9 *tmp8 *tmp7
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
  
@@ -414,7 +414,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
 +    5 jump *label19 greaterThan 1 200
      6 label *label17
      7 op sub *tmp5 :j 1
-     8 read *tmp6 bank2 *tmp5
+     8 read *tmp7 bank2 *tmp5
  
     18 label *label23
     19 set :j 2
@@ -423,7 +423,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
 +   21 jump *label27 greaterThan 2 200
     22 label *label25
     23 op sub *tmp5 :j 2
-    24 read *tmp6 bank2 *tmp5
+    24 read *tmp7 bank2 *tmp5
  
     34 label *label31
     35 set :j 5
@@ -432,7 +432,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
 +   37 jump *label35 greaterThan 5 200
     38 label *label33
     39 op sub *tmp5 :j 5
-    40 read *tmp6 bank2 *tmp5
+    40 read *tmp7 bank2 *tmp5
  
     50 label *label39
     51 set :j 10
@@ -441,7 +441,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
 +   53 jump *label43 greaterThan 10 200
     54 label *label41
     55 op sub *tmp5 :j 10
-    56 read *tmp6 bank2 *tmp5
+    56 read *tmp7 bank2 *tmp5
  
     66 label *label47
     67 set :j 20
@@ -450,7 +450,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
 +   69 jump *label51 greaterThan 20 200
     70 label *label49
     71 op sub *tmp5 :j 20
-    72 read *tmp6 bank2 *tmp5
+    72 read *tmp7 bank2 *tmp5
  
     82 label *label55
     83 set :j 50
@@ -459,7 +459,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
 +   85 jump *label59 greaterThan 50 200
     86 label *label57
     87 op sub *tmp5 :j 50
-    88 read *tmp6 bank2 *tmp5
+    88 read *tmp7 bank2 *tmp5
  
     98 label *label63
     99 set :j 100
@@ -468,7 +468,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
 +  101 jump *label67 greaterThan 100 200
    102 label *label65
    103 op sub *tmp5 :j 100
-   104 read *tmp6 bank2 *tmp5
+   104 read *tmp7 bank2 *tmp5
  
    114 label *label71
    115 set :j 200
@@ -477,7 +477,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
 +  117 jump *label75 greaterThan 200 200
    118 label *label73
    119 op sub *tmp5 :j 200
-   120 read *tmp6 bank2 *tmp5
+   120 read *tmp7 bank2 *tmp5
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-8 instructions):
      0 write 1 bank2 0
@@ -550,7 +550,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-8 ins
 -    * jump *label19 greaterThan 1 200
      4 label *label17
      5 op sub *tmp5 :j 1
-     6 read *tmp6 bank2 *tmp5
+     6 read *tmp7 bank2 *tmp5
  
     15 label *label23
     16 set :j 2
@@ -558,7 +558,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-8 ins
 -    * jump *label27 greaterThan 2 200
     18 label *label25
     19 op sub *tmp5 :j 2
-    20 read *tmp6 bank2 *tmp5
+    20 read *tmp7 bank2 *tmp5
  
     29 label *label31
     30 set :j 5
@@ -566,7 +566,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-8 ins
 -    * jump *label35 greaterThan 5 200
     32 label *label33
     33 op sub *tmp5 :j 5
-    34 read *tmp6 bank2 *tmp5
+    34 read *tmp7 bank2 *tmp5
  
     43 label *label39
     44 set :j 10
@@ -574,7 +574,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-8 ins
 -    * jump *label43 greaterThan 10 200
     46 label *label41
     47 op sub *tmp5 :j 10
-    48 read *tmp6 bank2 *tmp5
+    48 read *tmp7 bank2 *tmp5
  
     57 label *label47
     58 set :j 20
@@ -582,7 +582,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-8 ins
 -    * jump *label51 greaterThan 20 200
     60 label *label49
     61 op sub *tmp5 :j 20
-    62 read *tmp6 bank2 *tmp5
+    62 read *tmp7 bank2 *tmp5
  
     71 label *label55
     72 set :j 50
@@ -590,7 +590,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-8 ins
 -    * jump *label59 greaterThan 50 200
     74 label *label57
     75 op sub *tmp5 :j 50
-    76 read *tmp6 bank2 *tmp5
+    76 read *tmp7 bank2 *tmp5
  
     85 label *label63
     86 set :j 100
@@ -598,7 +598,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-8 ins
 -    * jump *label67 greaterThan 100 200
     88 label *label65
     89 op sub *tmp5 :j 100
-    90 read *tmp6 bank2 *tmp5
+    90 read *tmp7 bank2 *tmp5
  
     99 label *label71
    100 set :j 200
@@ -606,7 +606,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-8 ins
 -    * jump *label75 greaterThan 200 200
    102 label *label73
    103 op sub *tmp5 :j 200
-   104 read *tmp6 bank2 *tmp5
+   104 read *tmp7 bank2 *tmp5
 
 Modifications by Unroll loop at line 5:5 (-1 instructions):
  
@@ -617,10 +617,10 @@ Modifications by Unroll loop at line 5:5 (-1 instructions):
 -    * label *label72
 -    * label *label73
 -    * op sub *tmp5 :j 200
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
--    * op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
+-    * op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
 -    * label *label74
 -    * op add :j :j 1
 -    * jump *label73 lessThanEq :j 200
@@ -628,16 +628,16 @@ Modifications by Unroll loop at line 5:5 (-1 instructions):
 +  100 set :j 200
 +  101 label *label80
 +  102 op sub *tmp5 :j 200
-+  103 read *tmp6 bank2 *tmp5
-+  104 read *tmp3 bank2 :j
-+  105 op add *tmp7 *tmp3 *tmp6
-+  106 write *tmp7 bank2 :j
++  103 read *tmp7 bank2 *tmp5
++  104 read *tmp8 bank2 :j
++  105 op add *tmp9 *tmp8 *tmp7
++  106 write *tmp9 bank2 :j
 +  107 label *label81
 +  108 op add :j :j 1
 +  109 label *label75
    110 label *label76
    111 label *label2
-   112 read *tmp8 bank2 200
+   112 read *tmp11 bank2 200
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
@@ -645,14 +645,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
    100 set :j 200
    101 label *label80
 -    * op sub *tmp5 :j 200
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  102 op sub *tmp5 200 200
-+  103 read *tmp6 bank2 0
-+  104 read *tmp3 bank2 200
-   105 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  106 write *tmp7 bank2 200
++  103 read *tmp7 bank2 0
++  104 read *tmp8 bank2 200
+   105 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  106 write *tmp9 bank2 200
    107 label *label81
 -    * op add :j :j 1
 +  108 op add :j 200 1
@@ -668,10 +668,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-3
 -    * set :j 200
    100 label *label80
 -    * op sub *tmp5 200 200
-   101 read *tmp6 bank2 0
-   102 read *tmp3 bank2 200
-   103 op add *tmp7 *tmp3 *tmp6
-   104 write *tmp7 bank2 200
+   101 read *tmp7 bank2 0
+   102 read *tmp8 bank2 200
+   103 op add *tmp9 *tmp8 *tmp7
+   104 write *tmp9 bank2 200
    105 label *label81
 -    * op add :j 200 1
    106 label *label75
@@ -687,10 +687,10 @@ Modifications by Unroll loop at line 5:5 (+599 instructions):
 -    * label *label64
 -    * label *label65
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
--    * op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
+-    * op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
 -    * label *label66
 -    * op add :j :j 1
 -    * jump *label65 lessThanEq :j 200
@@ -698,710 +698,710 @@ Modifications by Unroll loop at line 5:5 (+599 instructions):
 +   86 set :j 100
 +   87 label *label82
 +   88 op sub *tmp5 :j 100
-+   89 read *tmp6 bank2 *tmp5
-+   90 read *tmp3 bank2 :j
-+   91 op add *tmp7 *tmp3 *tmp6
-+   92 write *tmp7 bank2 :j
++   89 read *tmp7 bank2 *tmp5
++   90 read *tmp8 bank2 :j
++   91 op add *tmp9 *tmp8 *tmp7
++   92 write *tmp9 bank2 :j
 +   93 label *label83
 +   94 op add :j :j 1
 +   95 op sub *tmp5 :j 100
-+   96 read *tmp6 bank2 *tmp5
-+   97 read *tmp3 bank2 :j
-+   98 op add *tmp7 *tmp3 *tmp6
-+   99 write *tmp7 bank2 :j
++   96 read *tmp7 bank2 *tmp5
++   97 read *tmp8 bank2 :j
++   98 op add *tmp9 *tmp8 *tmp7
++   99 write *tmp9 bank2 :j
 +  100 label *label84
 +  101 op add :j :j 1
 +  102 op sub *tmp5 :j 100
-+  103 read *tmp6 bank2 *tmp5
-+  104 read *tmp3 bank2 :j
-+  105 op add *tmp7 *tmp3 *tmp6
-+  106 write *tmp7 bank2 :j
++  103 read *tmp7 bank2 *tmp5
++  104 read *tmp8 bank2 :j
++  105 op add *tmp9 *tmp8 *tmp7
++  106 write *tmp9 bank2 :j
 +  107 label *label85
 +  108 op add :j :j 1
 +  109 op sub *tmp5 :j 100
-+  110 read *tmp6 bank2 *tmp5
-+  111 read *tmp3 bank2 :j
-+  112 op add *tmp7 *tmp3 *tmp6
-+  113 write *tmp7 bank2 :j
++  110 read *tmp7 bank2 *tmp5
++  111 read *tmp8 bank2 :j
++  112 op add *tmp9 *tmp8 *tmp7
++  113 write *tmp9 bank2 :j
 +  114 label *label86
 +  115 op add :j :j 1
 +  116 op sub *tmp5 :j 100
-+  117 read *tmp6 bank2 *tmp5
-+  118 read *tmp3 bank2 :j
-+  119 op add *tmp7 *tmp3 *tmp6
-+  120 write *tmp7 bank2 :j
++  117 read *tmp7 bank2 *tmp5
++  118 read *tmp8 bank2 :j
++  119 op add *tmp9 *tmp8 *tmp7
++  120 write *tmp9 bank2 :j
 +  121 label *label87
 +  122 op add :j :j 1
 +  123 op sub *tmp5 :j 100
-+  124 read *tmp6 bank2 *tmp5
-+  125 read *tmp3 bank2 :j
-+  126 op add *tmp7 *tmp3 *tmp6
-+  127 write *tmp7 bank2 :j
++  124 read *tmp7 bank2 *tmp5
++  125 read *tmp8 bank2 :j
++  126 op add *tmp9 *tmp8 *tmp7
++  127 write *tmp9 bank2 :j
 +  128 label *label88
 +  129 op add :j :j 1
 +  130 op sub *tmp5 :j 100
-+  131 read *tmp6 bank2 *tmp5
-+  132 read *tmp3 bank2 :j
-+  133 op add *tmp7 *tmp3 *tmp6
-+  134 write *tmp7 bank2 :j
++  131 read *tmp7 bank2 *tmp5
++  132 read *tmp8 bank2 :j
++  133 op add *tmp9 *tmp8 *tmp7
++  134 write *tmp9 bank2 :j
 +  135 label *label89
 +  136 op add :j :j 1
 +  137 op sub *tmp5 :j 100
-+  138 read *tmp6 bank2 *tmp5
-+  139 read *tmp3 bank2 :j
-+  140 op add *tmp7 *tmp3 *tmp6
-+  141 write *tmp7 bank2 :j
++  138 read *tmp7 bank2 *tmp5
++  139 read *tmp8 bank2 :j
++  140 op add *tmp9 *tmp8 *tmp7
++  141 write *tmp9 bank2 :j
 +  142 label *label90
 +  143 op add :j :j 1
 +  144 op sub *tmp5 :j 100
-+  145 read *tmp6 bank2 *tmp5
-+  146 read *tmp3 bank2 :j
-+  147 op add *tmp7 *tmp3 *tmp6
-+  148 write *tmp7 bank2 :j
++  145 read *tmp7 bank2 *tmp5
++  146 read *tmp8 bank2 :j
++  147 op add *tmp9 *tmp8 *tmp7
++  148 write *tmp9 bank2 :j
 +  149 label *label91
 +  150 op add :j :j 1
 +  151 op sub *tmp5 :j 100
-+  152 read *tmp6 bank2 *tmp5
-+  153 read *tmp3 bank2 :j
-+  154 op add *tmp7 *tmp3 *tmp6
-+  155 write *tmp7 bank2 :j
++  152 read *tmp7 bank2 *tmp5
++  153 read *tmp8 bank2 :j
++  154 op add *tmp9 *tmp8 *tmp7
++  155 write *tmp9 bank2 :j
 +  156 label *label92
 +  157 op add :j :j 1
 +  158 op sub *tmp5 :j 100
-+  159 read *tmp6 bank2 *tmp5
-+  160 read *tmp3 bank2 :j
-+  161 op add *tmp7 *tmp3 *tmp6
-+  162 write *tmp7 bank2 :j
++  159 read *tmp7 bank2 *tmp5
++  160 read *tmp8 bank2 :j
++  161 op add *tmp9 *tmp8 *tmp7
++  162 write *tmp9 bank2 :j
 +  163 label *label93
 +  164 op add :j :j 1
 +  165 op sub *tmp5 :j 100
-+  166 read *tmp6 bank2 *tmp5
-+  167 read *tmp3 bank2 :j
-+  168 op add *tmp7 *tmp3 *tmp6
-+  169 write *tmp7 bank2 :j
++  166 read *tmp7 bank2 *tmp5
++  167 read *tmp8 bank2 :j
++  168 op add *tmp9 *tmp8 *tmp7
++  169 write *tmp9 bank2 :j
 +  170 label *label94
 +  171 op add :j :j 1
 +  172 op sub *tmp5 :j 100
-+  173 read *tmp6 bank2 *tmp5
-+  174 read *tmp3 bank2 :j
-+  175 op add *tmp7 *tmp3 *tmp6
-+  176 write *tmp7 bank2 :j
++  173 read *tmp7 bank2 *tmp5
++  174 read *tmp8 bank2 :j
++  175 op add *tmp9 *tmp8 *tmp7
++  176 write *tmp9 bank2 :j
 +  177 label *label95
 +  178 op add :j :j 1
 +  179 op sub *tmp5 :j 100
-+  180 read *tmp6 bank2 *tmp5
-+  181 read *tmp3 bank2 :j
-+  182 op add *tmp7 *tmp3 *tmp6
-+  183 write *tmp7 bank2 :j
++  180 read *tmp7 bank2 *tmp5
++  181 read *tmp8 bank2 :j
++  182 op add *tmp9 *tmp8 *tmp7
++  183 write *tmp9 bank2 :j
 +  184 label *label96
 +  185 op add :j :j 1
 +  186 op sub *tmp5 :j 100
-+  187 read *tmp6 bank2 *tmp5
-+  188 read *tmp3 bank2 :j
-+  189 op add *tmp7 *tmp3 *tmp6
-+  190 write *tmp7 bank2 :j
++  187 read *tmp7 bank2 *tmp5
++  188 read *tmp8 bank2 :j
++  189 op add *tmp9 *tmp8 *tmp7
++  190 write *tmp9 bank2 :j
 +  191 label *label97
 +  192 op add :j :j 1
 +  193 op sub *tmp5 :j 100
-+  194 read *tmp6 bank2 *tmp5
-+  195 read *tmp3 bank2 :j
-+  196 op add *tmp7 *tmp3 *tmp6
-+  197 write *tmp7 bank2 :j
++  194 read *tmp7 bank2 *tmp5
++  195 read *tmp8 bank2 :j
++  196 op add *tmp9 *tmp8 *tmp7
++  197 write *tmp9 bank2 :j
 +  198 label *label98
 +  199 op add :j :j 1
 +  200 op sub *tmp5 :j 100
-+  201 read *tmp6 bank2 *tmp5
-+  202 read *tmp3 bank2 :j
-+  203 op add *tmp7 *tmp3 *tmp6
-+  204 write *tmp7 bank2 :j
++  201 read *tmp7 bank2 *tmp5
++  202 read *tmp8 bank2 :j
++  203 op add *tmp9 *tmp8 *tmp7
++  204 write *tmp9 bank2 :j
 +  205 label *label99
 +  206 op add :j :j 1
 +  207 op sub *tmp5 :j 100
-+  208 read *tmp6 bank2 *tmp5
-+  209 read *tmp3 bank2 :j
-+  210 op add *tmp7 *tmp3 *tmp6
-+  211 write *tmp7 bank2 :j
++  208 read *tmp7 bank2 *tmp5
++  209 read *tmp8 bank2 :j
++  210 op add *tmp9 *tmp8 *tmp7
++  211 write *tmp9 bank2 :j
 +  212 label *label100
 +  213 op add :j :j 1
 +  214 op sub *tmp5 :j 100
-+  215 read *tmp6 bank2 *tmp5
-+  216 read *tmp3 bank2 :j
-+  217 op add *tmp7 *tmp3 *tmp6
-+  218 write *tmp7 bank2 :j
++  215 read *tmp7 bank2 *tmp5
++  216 read *tmp8 bank2 :j
++  217 op add *tmp9 *tmp8 *tmp7
++  218 write *tmp9 bank2 :j
 +  219 label *label101
 +  220 op add :j :j 1
 +  221 op sub *tmp5 :j 100
-+  222 read *tmp6 bank2 *tmp5
-+  223 read *tmp3 bank2 :j
-+  224 op add *tmp7 *tmp3 *tmp6
-+  225 write *tmp7 bank2 :j
++  222 read *tmp7 bank2 *tmp5
++  223 read *tmp8 bank2 :j
++  224 op add *tmp9 *tmp8 *tmp7
++  225 write *tmp9 bank2 :j
 +  226 label *label102
 +  227 op add :j :j 1
 +  228 op sub *tmp5 :j 100
-+  229 read *tmp6 bank2 *tmp5
-+  230 read *tmp3 bank2 :j
-+  231 op add *tmp7 *tmp3 *tmp6
-+  232 write *tmp7 bank2 :j
++  229 read *tmp7 bank2 *tmp5
++  230 read *tmp8 bank2 :j
++  231 op add *tmp9 *tmp8 *tmp7
++  232 write *tmp9 bank2 :j
 +  233 label *label103
 +  234 op add :j :j 1
 +  235 op sub *tmp5 :j 100
-+  236 read *tmp6 bank2 *tmp5
-+  237 read *tmp3 bank2 :j
-+  238 op add *tmp7 *tmp3 *tmp6
-+  239 write *tmp7 bank2 :j
++  236 read *tmp7 bank2 *tmp5
++  237 read *tmp8 bank2 :j
++  238 op add *tmp9 *tmp8 *tmp7
++  239 write *tmp9 bank2 :j
 +  240 label *label104
 +  241 op add :j :j 1
 +  242 op sub *tmp5 :j 100
-+  243 read *tmp6 bank2 *tmp5
-+  244 read *tmp3 bank2 :j
-+  245 op add *tmp7 *tmp3 *tmp6
-+  246 write *tmp7 bank2 :j
++  243 read *tmp7 bank2 *tmp5
++  244 read *tmp8 bank2 :j
++  245 op add *tmp9 *tmp8 *tmp7
++  246 write *tmp9 bank2 :j
 +  247 label *label105
 +  248 op add :j :j 1
 +  249 op sub *tmp5 :j 100
-+  250 read *tmp6 bank2 *tmp5
-+  251 read *tmp3 bank2 :j
-+  252 op add *tmp7 *tmp3 *tmp6
-+  253 write *tmp7 bank2 :j
++  250 read *tmp7 bank2 *tmp5
++  251 read *tmp8 bank2 :j
++  252 op add *tmp9 *tmp8 *tmp7
++  253 write *tmp9 bank2 :j
 +  254 label *label106
 +  255 op add :j :j 1
 +  256 op sub *tmp5 :j 100
-+  257 read *tmp6 bank2 *tmp5
-+  258 read *tmp3 bank2 :j
-+  259 op add *tmp7 *tmp3 *tmp6
-+  260 write *tmp7 bank2 :j
++  257 read *tmp7 bank2 *tmp5
++  258 read *tmp8 bank2 :j
++  259 op add *tmp9 *tmp8 *tmp7
++  260 write *tmp9 bank2 :j
 +  261 label *label107
 +  262 op add :j :j 1
 +  263 op sub *tmp5 :j 100
-+  264 read *tmp6 bank2 *tmp5
-+  265 read *tmp3 bank2 :j
-+  266 op add *tmp7 *tmp3 *tmp6
-+  267 write *tmp7 bank2 :j
++  264 read *tmp7 bank2 *tmp5
++  265 read *tmp8 bank2 :j
++  266 op add *tmp9 *tmp8 *tmp7
++  267 write *tmp9 bank2 :j
 +  268 label *label108
 +  269 op add :j :j 1
 +  270 op sub *tmp5 :j 100
-+  271 read *tmp6 bank2 *tmp5
-+  272 read *tmp3 bank2 :j
-+  273 op add *tmp7 *tmp3 *tmp6
-+  274 write *tmp7 bank2 :j
++  271 read *tmp7 bank2 *tmp5
++  272 read *tmp8 bank2 :j
++  273 op add *tmp9 *tmp8 *tmp7
++  274 write *tmp9 bank2 :j
 +  275 label *label109
 +  276 op add :j :j 1
 +  277 op sub *tmp5 :j 100
-+  278 read *tmp6 bank2 *tmp5
-+  279 read *tmp3 bank2 :j
-+  280 op add *tmp7 *tmp3 *tmp6
-+  281 write *tmp7 bank2 :j
++  278 read *tmp7 bank2 *tmp5
++  279 read *tmp8 bank2 :j
++  280 op add *tmp9 *tmp8 *tmp7
++  281 write *tmp9 bank2 :j
 +  282 label *label110
 +  283 op add :j :j 1
 +  284 op sub *tmp5 :j 100
-+  285 read *tmp6 bank2 *tmp5
-+  286 read *tmp3 bank2 :j
-+  287 op add *tmp7 *tmp3 *tmp6
-+  288 write *tmp7 bank2 :j
++  285 read *tmp7 bank2 *tmp5
++  286 read *tmp8 bank2 :j
++  287 op add *tmp9 *tmp8 *tmp7
++  288 write *tmp9 bank2 :j
 +  289 label *label111
 +  290 op add :j :j 1
 +  291 op sub *tmp5 :j 100
-+  292 read *tmp6 bank2 *tmp5
-+  293 read *tmp3 bank2 :j
-+  294 op add *tmp7 *tmp3 *tmp6
-+  295 write *tmp7 bank2 :j
++  292 read *tmp7 bank2 *tmp5
++  293 read *tmp8 bank2 :j
++  294 op add *tmp9 *tmp8 *tmp7
++  295 write *tmp9 bank2 :j
 +  296 label *label112
 +  297 op add :j :j 1
 +  298 op sub *tmp5 :j 100
-+  299 read *tmp6 bank2 *tmp5
-+  300 read *tmp3 bank2 :j
-+  301 op add *tmp7 *tmp3 *tmp6
-+  302 write *tmp7 bank2 :j
++  299 read *tmp7 bank2 *tmp5
++  300 read *tmp8 bank2 :j
++  301 op add *tmp9 *tmp8 *tmp7
++  302 write *tmp9 bank2 :j
 +  303 label *label113
 +  304 op add :j :j 1
 +  305 op sub *tmp5 :j 100
-+  306 read *tmp6 bank2 *tmp5
-+  307 read *tmp3 bank2 :j
-+  308 op add *tmp7 *tmp3 *tmp6
-+  309 write *tmp7 bank2 :j
++  306 read *tmp7 bank2 *tmp5
++  307 read *tmp8 bank2 :j
++  308 op add *tmp9 *tmp8 *tmp7
++  309 write *tmp9 bank2 :j
 +  310 label *label114
 +  311 op add :j :j 1
 +  312 op sub *tmp5 :j 100
-+  313 read *tmp6 bank2 *tmp5
-+  314 read *tmp3 bank2 :j
-+  315 op add *tmp7 *tmp3 *tmp6
-+  316 write *tmp7 bank2 :j
++  313 read *tmp7 bank2 *tmp5
++  314 read *tmp8 bank2 :j
++  315 op add *tmp9 *tmp8 *tmp7
++  316 write *tmp9 bank2 :j
 +  317 label *label115
 +  318 op add :j :j 1
 +  319 op sub *tmp5 :j 100
-+  320 read *tmp6 bank2 *tmp5
-+  321 read *tmp3 bank2 :j
-+  322 op add *tmp7 *tmp3 *tmp6
-+  323 write *tmp7 bank2 :j
++  320 read *tmp7 bank2 *tmp5
++  321 read *tmp8 bank2 :j
++  322 op add *tmp9 *tmp8 *tmp7
++  323 write *tmp9 bank2 :j
 +  324 label *label116
 +  325 op add :j :j 1
 +  326 op sub *tmp5 :j 100
-+  327 read *tmp6 bank2 *tmp5
-+  328 read *tmp3 bank2 :j
-+  329 op add *tmp7 *tmp3 *tmp6
-+  330 write *tmp7 bank2 :j
++  327 read *tmp7 bank2 *tmp5
++  328 read *tmp8 bank2 :j
++  329 op add *tmp9 *tmp8 *tmp7
++  330 write *tmp9 bank2 :j
 +  331 label *label117
 +  332 op add :j :j 1
 +  333 op sub *tmp5 :j 100
-+  334 read *tmp6 bank2 *tmp5
-+  335 read *tmp3 bank2 :j
-+  336 op add *tmp7 *tmp3 *tmp6
-+  337 write *tmp7 bank2 :j
++  334 read *tmp7 bank2 *tmp5
++  335 read *tmp8 bank2 :j
++  336 op add *tmp9 *tmp8 *tmp7
++  337 write *tmp9 bank2 :j
 +  338 label *label118
 +  339 op add :j :j 1
 +  340 op sub *tmp5 :j 100
-+  341 read *tmp6 bank2 *tmp5
-+  342 read *tmp3 bank2 :j
-+  343 op add *tmp7 *tmp3 *tmp6
-+  344 write *tmp7 bank2 :j
++  341 read *tmp7 bank2 *tmp5
++  342 read *tmp8 bank2 :j
++  343 op add *tmp9 *tmp8 *tmp7
++  344 write *tmp9 bank2 :j
 +  345 label *label119
 +  346 op add :j :j 1
 +  347 op sub *tmp5 :j 100
-+  348 read *tmp6 bank2 *tmp5
-+  349 read *tmp3 bank2 :j
-+  350 op add *tmp7 *tmp3 *tmp6
-+  351 write *tmp7 bank2 :j
++  348 read *tmp7 bank2 *tmp5
++  349 read *tmp8 bank2 :j
++  350 op add *tmp9 *tmp8 *tmp7
++  351 write *tmp9 bank2 :j
 +  352 label *label120
 +  353 op add :j :j 1
 +  354 op sub *tmp5 :j 100
-+  355 read *tmp6 bank2 *tmp5
-+  356 read *tmp3 bank2 :j
-+  357 op add *tmp7 *tmp3 *tmp6
-+  358 write *tmp7 bank2 :j
++  355 read *tmp7 bank2 *tmp5
++  356 read *tmp8 bank2 :j
++  357 op add *tmp9 *tmp8 *tmp7
++  358 write *tmp9 bank2 :j
 +  359 label *label121
 +  360 op add :j :j 1
 +  361 op sub *tmp5 :j 100
-+  362 read *tmp6 bank2 *tmp5
-+  363 read *tmp3 bank2 :j
-+  364 op add *tmp7 *tmp3 *tmp6
-+  365 write *tmp7 bank2 :j
++  362 read *tmp7 bank2 *tmp5
++  363 read *tmp8 bank2 :j
++  364 op add *tmp9 *tmp8 *tmp7
++  365 write *tmp9 bank2 :j
 +  366 label *label122
 +  367 op add :j :j 1
 +  368 op sub *tmp5 :j 100
-+  369 read *tmp6 bank2 *tmp5
-+  370 read *tmp3 bank2 :j
-+  371 op add *tmp7 *tmp3 *tmp6
-+  372 write *tmp7 bank2 :j
++  369 read *tmp7 bank2 *tmp5
++  370 read *tmp8 bank2 :j
++  371 op add *tmp9 *tmp8 *tmp7
++  372 write *tmp9 bank2 :j
 +  373 label *label123
 +  374 op add :j :j 1
 +  375 op sub *tmp5 :j 100
-+  376 read *tmp6 bank2 *tmp5
-+  377 read *tmp3 bank2 :j
-+  378 op add *tmp7 *tmp3 *tmp6
-+  379 write *tmp7 bank2 :j
++  376 read *tmp7 bank2 *tmp5
++  377 read *tmp8 bank2 :j
++  378 op add *tmp9 *tmp8 *tmp7
++  379 write *tmp9 bank2 :j
 +  380 label *label124
 +  381 op add :j :j 1
 +  382 op sub *tmp5 :j 100
-+  383 read *tmp6 bank2 *tmp5
-+  384 read *tmp3 bank2 :j
-+  385 op add *tmp7 *tmp3 *tmp6
-+  386 write *tmp7 bank2 :j
++  383 read *tmp7 bank2 *tmp5
++  384 read *tmp8 bank2 :j
++  385 op add *tmp9 *tmp8 *tmp7
++  386 write *tmp9 bank2 :j
 +  387 label *label125
 +  388 op add :j :j 1
 +  389 op sub *tmp5 :j 100
-+  390 read *tmp6 bank2 *tmp5
-+  391 read *tmp3 bank2 :j
-+  392 op add *tmp7 *tmp3 *tmp6
-+  393 write *tmp7 bank2 :j
++  390 read *tmp7 bank2 *tmp5
++  391 read *tmp8 bank2 :j
++  392 op add *tmp9 *tmp8 *tmp7
++  393 write *tmp9 bank2 :j
 +  394 label *label126
 +  395 op add :j :j 1
 +  396 op sub *tmp5 :j 100
-+  397 read *tmp6 bank2 *tmp5
-+  398 read *tmp3 bank2 :j
-+  399 op add *tmp7 *tmp3 *tmp6
-+  400 write *tmp7 bank2 :j
++  397 read *tmp7 bank2 *tmp5
++  398 read *tmp8 bank2 :j
++  399 op add *tmp9 *tmp8 *tmp7
++  400 write *tmp9 bank2 :j
 +  401 label *label127
 +  402 op add :j :j 1
 +  403 op sub *tmp5 :j 100
-+  404 read *tmp6 bank2 *tmp5
-+  405 read *tmp3 bank2 :j
-+  406 op add *tmp7 *tmp3 *tmp6
-+  407 write *tmp7 bank2 :j
++  404 read *tmp7 bank2 *tmp5
++  405 read *tmp8 bank2 :j
++  406 op add *tmp9 *tmp8 *tmp7
++  407 write *tmp9 bank2 :j
 +  408 label *label128
 +  409 op add :j :j 1
 +  410 op sub *tmp5 :j 100
-+  411 read *tmp6 bank2 *tmp5
-+  412 read *tmp3 bank2 :j
-+  413 op add *tmp7 *tmp3 *tmp6
-+  414 write *tmp7 bank2 :j
++  411 read *tmp7 bank2 *tmp5
++  412 read *tmp8 bank2 :j
++  413 op add *tmp9 *tmp8 *tmp7
++  414 write *tmp9 bank2 :j
 +  415 label *label129
 +  416 op add :j :j 1
 +  417 op sub *tmp5 :j 100
-+  418 read *tmp6 bank2 *tmp5
-+  419 read *tmp3 bank2 :j
-+  420 op add *tmp7 *tmp3 *tmp6
-+  421 write *tmp7 bank2 :j
++  418 read *tmp7 bank2 *tmp5
++  419 read *tmp8 bank2 :j
++  420 op add *tmp9 *tmp8 *tmp7
++  421 write *tmp9 bank2 :j
 +  422 label *label130
 +  423 op add :j :j 1
 +  424 op sub *tmp5 :j 100
-+  425 read *tmp6 bank2 *tmp5
-+  426 read *tmp3 bank2 :j
-+  427 op add *tmp7 *tmp3 *tmp6
-+  428 write *tmp7 bank2 :j
++  425 read *tmp7 bank2 *tmp5
++  426 read *tmp8 bank2 :j
++  427 op add *tmp9 *tmp8 *tmp7
++  428 write *tmp9 bank2 :j
 +  429 label *label131
 +  430 op add :j :j 1
 +  431 op sub *tmp5 :j 100
-+  432 read *tmp6 bank2 *tmp5
-+  433 read *tmp3 bank2 :j
-+  434 op add *tmp7 *tmp3 *tmp6
-+  435 write *tmp7 bank2 :j
++  432 read *tmp7 bank2 *tmp5
++  433 read *tmp8 bank2 :j
++  434 op add *tmp9 *tmp8 *tmp7
++  435 write *tmp9 bank2 :j
 +  436 label *label132
 +  437 op add :j :j 1
 +  438 op sub *tmp5 :j 100
-+  439 read *tmp6 bank2 *tmp5
-+  440 read *tmp3 bank2 :j
-+  441 op add *tmp7 *tmp3 *tmp6
-+  442 write *tmp7 bank2 :j
++  439 read *tmp7 bank2 *tmp5
++  440 read *tmp8 bank2 :j
++  441 op add *tmp9 *tmp8 *tmp7
++  442 write *tmp9 bank2 :j
 +  443 label *label133
 +  444 op add :j :j 1
 +  445 op sub *tmp5 :j 100
-+  446 read *tmp6 bank2 *tmp5
-+  447 read *tmp3 bank2 :j
-+  448 op add *tmp7 *tmp3 *tmp6
-+  449 write *tmp7 bank2 :j
++  446 read *tmp7 bank2 *tmp5
++  447 read *tmp8 bank2 :j
++  448 op add *tmp9 *tmp8 *tmp7
++  449 write *tmp9 bank2 :j
 +  450 label *label134
 +  451 op add :j :j 1
 +  452 op sub *tmp5 :j 100
-+  453 read *tmp6 bank2 *tmp5
-+  454 read *tmp3 bank2 :j
-+  455 op add *tmp7 *tmp3 *tmp6
-+  456 write *tmp7 bank2 :j
++  453 read *tmp7 bank2 *tmp5
++  454 read *tmp8 bank2 :j
++  455 op add *tmp9 *tmp8 *tmp7
++  456 write *tmp9 bank2 :j
 +  457 label *label135
 +  458 op add :j :j 1
 +  459 op sub *tmp5 :j 100
-+  460 read *tmp6 bank2 *tmp5
-+  461 read *tmp3 bank2 :j
-+  462 op add *tmp7 *tmp3 *tmp6
-+  463 write *tmp7 bank2 :j
++  460 read *tmp7 bank2 *tmp5
++  461 read *tmp8 bank2 :j
++  462 op add *tmp9 *tmp8 *tmp7
++  463 write *tmp9 bank2 :j
 +  464 label *label136
 +  465 op add :j :j 1
 +  466 op sub *tmp5 :j 100
-+  467 read *tmp6 bank2 *tmp5
-+  468 read *tmp3 bank2 :j
-+  469 op add *tmp7 *tmp3 *tmp6
-+  470 write *tmp7 bank2 :j
++  467 read *tmp7 bank2 *tmp5
++  468 read *tmp8 bank2 :j
++  469 op add *tmp9 *tmp8 *tmp7
++  470 write *tmp9 bank2 :j
 +  471 label *label137
 +  472 op add :j :j 1
 +  473 op sub *tmp5 :j 100
-+  474 read *tmp6 bank2 *tmp5
-+  475 read *tmp3 bank2 :j
-+  476 op add *tmp7 *tmp3 *tmp6
-+  477 write *tmp7 bank2 :j
++  474 read *tmp7 bank2 *tmp5
++  475 read *tmp8 bank2 :j
++  476 op add *tmp9 *tmp8 *tmp7
++  477 write *tmp9 bank2 :j
 +  478 label *label138
 +  479 op add :j :j 1
 +  480 op sub *tmp5 :j 100
-+  481 read *tmp6 bank2 *tmp5
-+  482 read *tmp3 bank2 :j
-+  483 op add *tmp7 *tmp3 *tmp6
-+  484 write *tmp7 bank2 :j
++  481 read *tmp7 bank2 *tmp5
++  482 read *tmp8 bank2 :j
++  483 op add *tmp9 *tmp8 *tmp7
++  484 write *tmp9 bank2 :j
 +  485 label *label139
 +  486 op add :j :j 1
 +  487 op sub *tmp5 :j 100
-+  488 read *tmp6 bank2 *tmp5
-+  489 read *tmp3 bank2 :j
-+  490 op add *tmp7 *tmp3 *tmp6
-+  491 write *tmp7 bank2 :j
++  488 read *tmp7 bank2 *tmp5
++  489 read *tmp8 bank2 :j
++  490 op add *tmp9 *tmp8 *tmp7
++  491 write *tmp9 bank2 :j
 +  492 label *label140
 +  493 op add :j :j 1
 +  494 op sub *tmp5 :j 100
-+  495 read *tmp6 bank2 *tmp5
-+  496 read *tmp3 bank2 :j
-+  497 op add *tmp7 *tmp3 *tmp6
-+  498 write *tmp7 bank2 :j
++  495 read *tmp7 bank2 *tmp5
++  496 read *tmp8 bank2 :j
++  497 op add *tmp9 *tmp8 *tmp7
++  498 write *tmp9 bank2 :j
 +  499 label *label141
 +  500 op add :j :j 1
 +  501 op sub *tmp5 :j 100
-+  502 read *tmp6 bank2 *tmp5
-+  503 read *tmp3 bank2 :j
-+  504 op add *tmp7 *tmp3 *tmp6
-+  505 write *tmp7 bank2 :j
++  502 read *tmp7 bank2 *tmp5
++  503 read *tmp8 bank2 :j
++  504 op add *tmp9 *tmp8 *tmp7
++  505 write *tmp9 bank2 :j
 +  506 label *label142
 +  507 op add :j :j 1
 +  508 op sub *tmp5 :j 100
-+  509 read *tmp6 bank2 *tmp5
-+  510 read *tmp3 bank2 :j
-+  511 op add *tmp7 *tmp3 *tmp6
-+  512 write *tmp7 bank2 :j
++  509 read *tmp7 bank2 *tmp5
++  510 read *tmp8 bank2 :j
++  511 op add *tmp9 *tmp8 *tmp7
++  512 write *tmp9 bank2 :j
 +  513 label *label143
 +  514 op add :j :j 1
 +  515 op sub *tmp5 :j 100
-+  516 read *tmp6 bank2 *tmp5
-+  517 read *tmp3 bank2 :j
-+  518 op add *tmp7 *tmp3 *tmp6
-+  519 write *tmp7 bank2 :j
++  516 read *tmp7 bank2 *tmp5
++  517 read *tmp8 bank2 :j
++  518 op add *tmp9 *tmp8 *tmp7
++  519 write *tmp9 bank2 :j
 +  520 label *label144
 +  521 op add :j :j 1
 +  522 op sub *tmp5 :j 100
-+  523 read *tmp6 bank2 *tmp5
-+  524 read *tmp3 bank2 :j
-+  525 op add *tmp7 *tmp3 *tmp6
-+  526 write *tmp7 bank2 :j
++  523 read *tmp7 bank2 *tmp5
++  524 read *tmp8 bank2 :j
++  525 op add *tmp9 *tmp8 *tmp7
++  526 write *tmp9 bank2 :j
 +  527 label *label145
 +  528 op add :j :j 1
 +  529 op sub *tmp5 :j 100
-+  530 read *tmp6 bank2 *tmp5
-+  531 read *tmp3 bank2 :j
-+  532 op add *tmp7 *tmp3 *tmp6
-+  533 write *tmp7 bank2 :j
++  530 read *tmp7 bank2 *tmp5
++  531 read *tmp8 bank2 :j
++  532 op add *tmp9 *tmp8 *tmp7
++  533 write *tmp9 bank2 :j
 +  534 label *label146
 +  535 op add :j :j 1
 +  536 op sub *tmp5 :j 100
-+  537 read *tmp6 bank2 *tmp5
-+  538 read *tmp3 bank2 :j
-+  539 op add *tmp7 *tmp3 *tmp6
-+  540 write *tmp7 bank2 :j
++  537 read *tmp7 bank2 *tmp5
++  538 read *tmp8 bank2 :j
++  539 op add *tmp9 *tmp8 *tmp7
++  540 write *tmp9 bank2 :j
 +  541 label *label147
 +  542 op add :j :j 1
 +  543 op sub *tmp5 :j 100
-+  544 read *tmp6 bank2 *tmp5
-+  545 read *tmp3 bank2 :j
-+  546 op add *tmp7 *tmp3 *tmp6
-+  547 write *tmp7 bank2 :j
++  544 read *tmp7 bank2 *tmp5
++  545 read *tmp8 bank2 :j
++  546 op add *tmp9 *tmp8 *tmp7
++  547 write *tmp9 bank2 :j
 +  548 label *label148
 +  549 op add :j :j 1
 +  550 op sub *tmp5 :j 100
-+  551 read *tmp6 bank2 *tmp5
-+  552 read *tmp3 bank2 :j
-+  553 op add *tmp7 *tmp3 *tmp6
-+  554 write *tmp7 bank2 :j
++  551 read *tmp7 bank2 *tmp5
++  552 read *tmp8 bank2 :j
++  553 op add *tmp9 *tmp8 *tmp7
++  554 write *tmp9 bank2 :j
 +  555 label *label149
 +  556 op add :j :j 1
 +  557 op sub *tmp5 :j 100
-+  558 read *tmp6 bank2 *tmp5
-+  559 read *tmp3 bank2 :j
-+  560 op add *tmp7 *tmp3 *tmp6
-+  561 write *tmp7 bank2 :j
++  558 read *tmp7 bank2 *tmp5
++  559 read *tmp8 bank2 :j
++  560 op add *tmp9 *tmp8 *tmp7
++  561 write *tmp9 bank2 :j
 +  562 label *label150
 +  563 op add :j :j 1
 +  564 op sub *tmp5 :j 100
-+  565 read *tmp6 bank2 *tmp5
-+  566 read *tmp3 bank2 :j
-+  567 op add *tmp7 *tmp3 *tmp6
-+  568 write *tmp7 bank2 :j
++  565 read *tmp7 bank2 *tmp5
++  566 read *tmp8 bank2 :j
++  567 op add *tmp9 *tmp8 *tmp7
++  568 write *tmp9 bank2 :j
 +  569 label *label151
 +  570 op add :j :j 1
 +  571 op sub *tmp5 :j 100
-+  572 read *tmp6 bank2 *tmp5
-+  573 read *tmp3 bank2 :j
-+  574 op add *tmp7 *tmp3 *tmp6
-+  575 write *tmp7 bank2 :j
++  572 read *tmp7 bank2 *tmp5
++  573 read *tmp8 bank2 :j
++  574 op add *tmp9 *tmp8 *tmp7
++  575 write *tmp9 bank2 :j
 +  576 label *label152
 +  577 op add :j :j 1
 +  578 op sub *tmp5 :j 100
-+  579 read *tmp6 bank2 *tmp5
-+  580 read *tmp3 bank2 :j
-+  581 op add *tmp7 *tmp3 *tmp6
-+  582 write *tmp7 bank2 :j
++  579 read *tmp7 bank2 *tmp5
++  580 read *tmp8 bank2 :j
++  581 op add *tmp9 *tmp8 *tmp7
++  582 write *tmp9 bank2 :j
 +  583 label *label153
 +  584 op add :j :j 1
 +  585 op sub *tmp5 :j 100
-+  586 read *tmp6 bank2 *tmp5
-+  587 read *tmp3 bank2 :j
-+  588 op add *tmp7 *tmp3 *tmp6
-+  589 write *tmp7 bank2 :j
++  586 read *tmp7 bank2 *tmp5
++  587 read *tmp8 bank2 :j
++  588 op add *tmp9 *tmp8 *tmp7
++  589 write *tmp9 bank2 :j
 +  590 label *label154
 +  591 op add :j :j 1
 +  592 op sub *tmp5 :j 100
-+  593 read *tmp6 bank2 *tmp5
-+  594 read *tmp3 bank2 :j
-+  595 op add *tmp7 *tmp3 *tmp6
-+  596 write *tmp7 bank2 :j
++  593 read *tmp7 bank2 *tmp5
++  594 read *tmp8 bank2 :j
++  595 op add *tmp9 *tmp8 *tmp7
++  596 write *tmp9 bank2 :j
 +  597 label *label155
 +  598 op add :j :j 1
 +  599 op sub *tmp5 :j 100
-+  600 read *tmp6 bank2 *tmp5
-+  601 read *tmp3 bank2 :j
-+  602 op add *tmp7 *tmp3 *tmp6
-+  603 write *tmp7 bank2 :j
++  600 read *tmp7 bank2 *tmp5
++  601 read *tmp8 bank2 :j
++  602 op add *tmp9 *tmp8 *tmp7
++  603 write *tmp9 bank2 :j
 +  604 label *label156
 +  605 op add :j :j 1
 +  606 op sub *tmp5 :j 100
-+  607 read *tmp6 bank2 *tmp5
-+  608 read *tmp3 bank2 :j
-+  609 op add *tmp7 *tmp3 *tmp6
-+  610 write *tmp7 bank2 :j
++  607 read *tmp7 bank2 *tmp5
++  608 read *tmp8 bank2 :j
++  609 op add *tmp9 *tmp8 *tmp7
++  610 write *tmp9 bank2 :j
 +  611 label *label157
 +  612 op add :j :j 1
 +  613 op sub *tmp5 :j 100
-+  614 read *tmp6 bank2 *tmp5
-+  615 read *tmp3 bank2 :j
-+  616 op add *tmp7 *tmp3 *tmp6
-+  617 write *tmp7 bank2 :j
++  614 read *tmp7 bank2 *tmp5
++  615 read *tmp8 bank2 :j
++  616 op add *tmp9 *tmp8 *tmp7
++  617 write *tmp9 bank2 :j
 +  618 label *label158
 +  619 op add :j :j 1
 +  620 op sub *tmp5 :j 100
-+  621 read *tmp6 bank2 *tmp5
-+  622 read *tmp3 bank2 :j
-+  623 op add *tmp7 *tmp3 *tmp6
-+  624 write *tmp7 bank2 :j
++  621 read *tmp7 bank2 *tmp5
++  622 read *tmp8 bank2 :j
++  623 op add *tmp9 *tmp8 *tmp7
++  624 write *tmp9 bank2 :j
 +  625 label *label159
 +  626 op add :j :j 1
 +  627 op sub *tmp5 :j 100
-+  628 read *tmp6 bank2 *tmp5
-+  629 read *tmp3 bank2 :j
-+  630 op add *tmp7 *tmp3 *tmp6
-+  631 write *tmp7 bank2 :j
++  628 read *tmp7 bank2 *tmp5
++  629 read *tmp8 bank2 :j
++  630 op add *tmp9 *tmp8 *tmp7
++  631 write *tmp9 bank2 :j
 +  632 label *label160
 +  633 op add :j :j 1
 +  634 op sub *tmp5 :j 100
-+  635 read *tmp6 bank2 *tmp5
-+  636 read *tmp3 bank2 :j
-+  637 op add *tmp7 *tmp3 *tmp6
-+  638 write *tmp7 bank2 :j
++  635 read *tmp7 bank2 *tmp5
++  636 read *tmp8 bank2 :j
++  637 op add *tmp9 *tmp8 *tmp7
++  638 write *tmp9 bank2 :j
 +  639 label *label161
 +  640 op add :j :j 1
 +  641 op sub *tmp5 :j 100
-+  642 read *tmp6 bank2 *tmp5
-+  643 read *tmp3 bank2 :j
-+  644 op add *tmp7 *tmp3 *tmp6
-+  645 write *tmp7 bank2 :j
++  642 read *tmp7 bank2 *tmp5
++  643 read *tmp8 bank2 :j
++  644 op add *tmp9 *tmp8 *tmp7
++  645 write *tmp9 bank2 :j
 +  646 label *label162
 +  647 op add :j :j 1
 +  648 op sub *tmp5 :j 100
-+  649 read *tmp6 bank2 *tmp5
-+  650 read *tmp3 bank2 :j
-+  651 op add *tmp7 *tmp3 *tmp6
-+  652 write *tmp7 bank2 :j
++  649 read *tmp7 bank2 *tmp5
++  650 read *tmp8 bank2 :j
++  651 op add *tmp9 *tmp8 *tmp7
++  652 write *tmp9 bank2 :j
 +  653 label *label163
 +  654 op add :j :j 1
 +  655 op sub *tmp5 :j 100
-+  656 read *tmp6 bank2 *tmp5
-+  657 read *tmp3 bank2 :j
-+  658 op add *tmp7 *tmp3 *tmp6
-+  659 write *tmp7 bank2 :j
++  656 read *tmp7 bank2 *tmp5
++  657 read *tmp8 bank2 :j
++  658 op add *tmp9 *tmp8 *tmp7
++  659 write *tmp9 bank2 :j
 +  660 label *label164
 +  661 op add :j :j 1
 +  662 op sub *tmp5 :j 100
-+  663 read *tmp6 bank2 *tmp5
-+  664 read *tmp3 bank2 :j
-+  665 op add *tmp7 *tmp3 *tmp6
-+  666 write *tmp7 bank2 :j
++  663 read *tmp7 bank2 *tmp5
++  664 read *tmp8 bank2 :j
++  665 op add *tmp9 *tmp8 *tmp7
++  666 write *tmp9 bank2 :j
 +  667 label *label165
 +  668 op add :j :j 1
 +  669 op sub *tmp5 :j 100
-+  670 read *tmp6 bank2 *tmp5
-+  671 read *tmp3 bank2 :j
-+  672 op add *tmp7 *tmp3 *tmp6
-+  673 write *tmp7 bank2 :j
++  670 read *tmp7 bank2 *tmp5
++  671 read *tmp8 bank2 :j
++  672 op add *tmp9 *tmp8 *tmp7
++  673 write *tmp9 bank2 :j
 +  674 label *label166
 +  675 op add :j :j 1
 +  676 op sub *tmp5 :j 100
-+  677 read *tmp6 bank2 *tmp5
-+  678 read *tmp3 bank2 :j
-+  679 op add *tmp7 *tmp3 *tmp6
-+  680 write *tmp7 bank2 :j
++  677 read *tmp7 bank2 *tmp5
++  678 read *tmp8 bank2 :j
++  679 op add *tmp9 *tmp8 *tmp7
++  680 write *tmp9 bank2 :j
 +  681 label *label167
 +  682 op add :j :j 1
 +  683 op sub *tmp5 :j 100
-+  684 read *tmp6 bank2 *tmp5
-+  685 read *tmp3 bank2 :j
-+  686 op add *tmp7 *tmp3 *tmp6
-+  687 write *tmp7 bank2 :j
++  684 read *tmp7 bank2 *tmp5
++  685 read *tmp8 bank2 :j
++  686 op add *tmp9 *tmp8 *tmp7
++  687 write *tmp9 bank2 :j
 +  688 label *label168
 +  689 op add :j :j 1
 +  690 op sub *tmp5 :j 100
-+  691 read *tmp6 bank2 *tmp5
-+  692 read *tmp3 bank2 :j
-+  693 op add *tmp7 *tmp3 *tmp6
-+  694 write *tmp7 bank2 :j
++  691 read *tmp7 bank2 *tmp5
++  692 read *tmp8 bank2 :j
++  693 op add *tmp9 *tmp8 *tmp7
++  694 write *tmp9 bank2 :j
 +  695 label *label169
 +  696 op add :j :j 1
 +  697 op sub *tmp5 :j 100
-+  698 read *tmp6 bank2 *tmp5
-+  699 read *tmp3 bank2 :j
-+  700 op add *tmp7 *tmp3 *tmp6
-+  701 write *tmp7 bank2 :j
++  698 read *tmp7 bank2 *tmp5
++  699 read *tmp8 bank2 :j
++  700 op add *tmp9 *tmp8 *tmp7
++  701 write *tmp9 bank2 :j
 +  702 label *label170
 +  703 op add :j :j 1
 +  704 op sub *tmp5 :j 100
-+  705 read *tmp6 bank2 *tmp5
-+  706 read *tmp3 bank2 :j
-+  707 op add *tmp7 *tmp3 *tmp6
-+  708 write *tmp7 bank2 :j
++  705 read *tmp7 bank2 *tmp5
++  706 read *tmp8 bank2 :j
++  707 op add *tmp9 *tmp8 *tmp7
++  708 write *tmp9 bank2 :j
 +  709 label *label171
 +  710 op add :j :j 1
 +  711 op sub *tmp5 :j 100
-+  712 read *tmp6 bank2 *tmp5
-+  713 read *tmp3 bank2 :j
-+  714 op add *tmp7 *tmp3 *tmp6
-+  715 write *tmp7 bank2 :j
++  712 read *tmp7 bank2 *tmp5
++  713 read *tmp8 bank2 :j
++  714 op add *tmp9 *tmp8 *tmp7
++  715 write *tmp9 bank2 :j
 +  716 label *label172
 +  717 op add :j :j 1
 +  718 op sub *tmp5 :j 100
-+  719 read *tmp6 bank2 *tmp5
-+  720 read *tmp3 bank2 :j
-+  721 op add *tmp7 *tmp3 *tmp6
-+  722 write *tmp7 bank2 :j
++  719 read *tmp7 bank2 *tmp5
++  720 read *tmp8 bank2 :j
++  721 op add *tmp9 *tmp8 *tmp7
++  722 write *tmp9 bank2 :j
 +  723 label *label173
 +  724 op add :j :j 1
 +  725 op sub *tmp5 :j 100
-+  726 read *tmp6 bank2 *tmp5
-+  727 read *tmp3 bank2 :j
-+  728 op add *tmp7 *tmp3 *tmp6
-+  729 write *tmp7 bank2 :j
++  726 read *tmp7 bank2 *tmp5
++  727 read *tmp8 bank2 :j
++  728 op add *tmp9 *tmp8 *tmp7
++  729 write *tmp9 bank2 :j
 +  730 label *label174
 +  731 op add :j :j 1
 +  732 op sub *tmp5 :j 100
-+  733 read *tmp6 bank2 *tmp5
-+  734 read *tmp3 bank2 :j
-+  735 op add *tmp7 *tmp3 *tmp6
-+  736 write *tmp7 bank2 :j
++  733 read *tmp7 bank2 *tmp5
++  734 read *tmp8 bank2 :j
++  735 op add *tmp9 *tmp8 *tmp7
++  736 write *tmp9 bank2 :j
 +  737 label *label175
 +  738 op add :j :j 1
 +  739 op sub *tmp5 :j 100
-+  740 read *tmp6 bank2 *tmp5
-+  741 read *tmp3 bank2 :j
-+  742 op add *tmp7 *tmp3 *tmp6
-+  743 write *tmp7 bank2 :j
++  740 read *tmp7 bank2 *tmp5
++  741 read *tmp8 bank2 :j
++  742 op add *tmp9 *tmp8 *tmp7
++  743 write *tmp9 bank2 :j
 +  744 label *label176
 +  745 op add :j :j 1
 +  746 op sub *tmp5 :j 100
-+  747 read *tmp6 bank2 *tmp5
-+  748 read *tmp3 bank2 :j
-+  749 op add *tmp7 *tmp3 *tmp6
-+  750 write *tmp7 bank2 :j
++  747 read *tmp7 bank2 *tmp5
++  748 read *tmp8 bank2 :j
++  749 op add *tmp9 *tmp8 *tmp7
++  750 write *tmp9 bank2 :j
 +  751 label *label177
 +  752 op add :j :j 1
 +  753 op sub *tmp5 :j 100
-+  754 read *tmp6 bank2 *tmp5
-+  755 read *tmp3 bank2 :j
-+  756 op add *tmp7 *tmp3 *tmp6
-+  757 write *tmp7 bank2 :j
++  754 read *tmp7 bank2 *tmp5
++  755 read *tmp8 bank2 :j
++  756 op add *tmp9 *tmp8 *tmp7
++  757 write *tmp9 bank2 :j
 +  758 label *label178
 +  759 op add :j :j 1
 +  760 op sub *tmp5 :j 100
-+  761 read *tmp6 bank2 *tmp5
-+  762 read *tmp3 bank2 :j
-+  763 op add *tmp7 *tmp3 *tmp6
-+  764 write *tmp7 bank2 :j
++  761 read *tmp7 bank2 *tmp5
++  762 read *tmp8 bank2 :j
++  763 op add *tmp9 *tmp8 *tmp7
++  764 write *tmp9 bank2 :j
 +  765 label *label179
 +  766 op add :j :j 1
 +  767 op sub *tmp5 :j 100
-+  768 read *tmp6 bank2 *tmp5
-+  769 read *tmp3 bank2 :j
-+  770 op add *tmp7 *tmp3 *tmp6
-+  771 write *tmp7 bank2 :j
++  768 read *tmp7 bank2 *tmp5
++  769 read *tmp8 bank2 :j
++  770 op add *tmp9 *tmp8 *tmp7
++  771 write *tmp9 bank2 :j
 +  772 label *label180
 +  773 op add :j :j 1
 +  774 op sub *tmp5 :j 100
-+  775 read *tmp6 bank2 *tmp5
-+  776 read *tmp3 bank2 :j
-+  777 op add *tmp7 *tmp3 *tmp6
-+  778 write *tmp7 bank2 :j
++  775 read *tmp7 bank2 *tmp5
++  776 read *tmp8 bank2 :j
++  777 op add *tmp9 *tmp8 *tmp7
++  778 write *tmp9 bank2 :j
 +  779 label *label181
 +  780 op add :j :j 1
 +  781 op sub *tmp5 :j 100
-+  782 read *tmp6 bank2 *tmp5
-+  783 read *tmp3 bank2 :j
-+  784 op add *tmp7 *tmp3 *tmp6
-+  785 write *tmp7 bank2 :j
++  782 read *tmp7 bank2 *tmp5
++  783 read *tmp8 bank2 :j
++  784 op add *tmp9 *tmp8 *tmp7
++  785 write *tmp9 bank2 :j
 +  786 label *label182
 +  787 op add :j :j 1
 +  788 op sub *tmp5 :j 100
-+  789 read *tmp6 bank2 *tmp5
-+  790 read *tmp3 bank2 :j
-+  791 op add *tmp7 *tmp3 *tmp6
-+  792 write *tmp7 bank2 :j
++  789 read *tmp7 bank2 *tmp5
++  790 read *tmp8 bank2 :j
++  791 op add *tmp9 *tmp8 *tmp7
++  792 write *tmp9 bank2 :j
 +  793 label *label183
 +  794 op add :j :j 1
 +  795 label *label67
@@ -1415,1214 +1415,1214 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     86 set :j 100
     87 label *label82
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +   88 op sub *tmp5 100 100
-+   89 read *tmp6 bank2 0
-+   90 read *tmp3 bank2 100
-    91 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+   92 write *tmp7 bank2 100
++   89 read *tmp7 bank2 0
++   90 read *tmp8 bank2 100
+    91 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++   92 write *tmp9 bank2 100
     93 label *label83
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +   94 op add :j 100 1
 +   95 op sub *tmp5 101 100
-+   96 read *tmp6 bank2 1
-+   97 read *tmp3 bank2 101
-    98 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+   99 write *tmp7 bank2 101
++   96 read *tmp7 bank2 1
++   97 read *tmp8 bank2 101
+    98 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++   99 write *tmp9 bank2 101
    100 label *label84
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  101 op add :j 101 1
 +  102 op sub *tmp5 102 100
-+  103 read *tmp6 bank2 2
-+  104 read *tmp3 bank2 102
-   105 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  106 write *tmp7 bank2 102
++  103 read *tmp7 bank2 2
++  104 read *tmp8 bank2 102
+   105 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  106 write *tmp9 bank2 102
    107 label *label85
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  108 op add :j 102 1
 +  109 op sub *tmp5 103 100
-+  110 read *tmp6 bank2 3
-+  111 read *tmp3 bank2 103
-   112 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  113 write *tmp7 bank2 103
++  110 read *tmp7 bank2 3
++  111 read *tmp8 bank2 103
+   112 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  113 write *tmp9 bank2 103
    114 label *label86
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  115 op add :j 103 1
 +  116 op sub *tmp5 104 100
-+  117 read *tmp6 bank2 4
-+  118 read *tmp3 bank2 104
-   119 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  120 write *tmp7 bank2 104
++  117 read *tmp7 bank2 4
++  118 read *tmp8 bank2 104
+   119 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  120 write *tmp9 bank2 104
    121 label *label87
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  122 op add :j 104 1
 +  123 op sub *tmp5 105 100
-+  124 read *tmp6 bank2 5
-+  125 read *tmp3 bank2 105
-   126 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  127 write *tmp7 bank2 105
++  124 read *tmp7 bank2 5
++  125 read *tmp8 bank2 105
+   126 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  127 write *tmp9 bank2 105
    128 label *label88
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  129 op add :j 105 1
 +  130 op sub *tmp5 106 100
-+  131 read *tmp6 bank2 6
-+  132 read *tmp3 bank2 106
-   133 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  134 write *tmp7 bank2 106
++  131 read *tmp7 bank2 6
++  132 read *tmp8 bank2 106
+   133 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  134 write *tmp9 bank2 106
    135 label *label89
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  136 op add :j 106 1
 +  137 op sub *tmp5 107 100
-+  138 read *tmp6 bank2 7
-+  139 read *tmp3 bank2 107
-   140 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  141 write *tmp7 bank2 107
++  138 read *tmp7 bank2 7
++  139 read *tmp8 bank2 107
+   140 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  141 write *tmp9 bank2 107
    142 label *label90
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  143 op add :j 107 1
 +  144 op sub *tmp5 108 100
-+  145 read *tmp6 bank2 8
-+  146 read *tmp3 bank2 108
-   147 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  148 write *tmp7 bank2 108
++  145 read *tmp7 bank2 8
++  146 read *tmp8 bank2 108
+   147 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  148 write *tmp9 bank2 108
    149 label *label91
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  150 op add :j 108 1
 +  151 op sub *tmp5 109 100
-+  152 read *tmp6 bank2 9
-+  153 read *tmp3 bank2 109
-   154 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  155 write *tmp7 bank2 109
++  152 read *tmp7 bank2 9
++  153 read *tmp8 bank2 109
+   154 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  155 write *tmp9 bank2 109
    156 label *label92
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  157 op add :j 109 1
 +  158 op sub *tmp5 110 100
-+  159 read *tmp6 bank2 10
-+  160 read *tmp3 bank2 110
-   161 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  162 write *tmp7 bank2 110
++  159 read *tmp7 bank2 10
++  160 read *tmp8 bank2 110
+   161 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  162 write *tmp9 bank2 110
    163 label *label93
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  164 op add :j 110 1
 +  165 op sub *tmp5 111 100
-+  166 read *tmp6 bank2 11
-+  167 read *tmp3 bank2 111
-   168 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  169 write *tmp7 bank2 111
++  166 read *tmp7 bank2 11
++  167 read *tmp8 bank2 111
+   168 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  169 write *tmp9 bank2 111
    170 label *label94
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  171 op add :j 111 1
 +  172 op sub *tmp5 112 100
-+  173 read *tmp6 bank2 12
-+  174 read *tmp3 bank2 112
-   175 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  176 write *tmp7 bank2 112
++  173 read *tmp7 bank2 12
++  174 read *tmp8 bank2 112
+   175 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  176 write *tmp9 bank2 112
    177 label *label95
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  178 op add :j 112 1
 +  179 op sub *tmp5 113 100
-+  180 read *tmp6 bank2 13
-+  181 read *tmp3 bank2 113
-   182 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  183 write *tmp7 bank2 113
++  180 read *tmp7 bank2 13
++  181 read *tmp8 bank2 113
+   182 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  183 write *tmp9 bank2 113
    184 label *label96
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  185 op add :j 113 1
 +  186 op sub *tmp5 114 100
-+  187 read *tmp6 bank2 14
-+  188 read *tmp3 bank2 114
-   189 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  190 write *tmp7 bank2 114
++  187 read *tmp7 bank2 14
++  188 read *tmp8 bank2 114
+   189 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  190 write *tmp9 bank2 114
    191 label *label97
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  192 op add :j 114 1
 +  193 op sub *tmp5 115 100
-+  194 read *tmp6 bank2 15
-+  195 read *tmp3 bank2 115
-   196 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  197 write *tmp7 bank2 115
++  194 read *tmp7 bank2 15
++  195 read *tmp8 bank2 115
+   196 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  197 write *tmp9 bank2 115
    198 label *label98
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  199 op add :j 115 1
 +  200 op sub *tmp5 116 100
-+  201 read *tmp6 bank2 16
-+  202 read *tmp3 bank2 116
-   203 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  204 write *tmp7 bank2 116
++  201 read *tmp7 bank2 16
++  202 read *tmp8 bank2 116
+   203 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  204 write *tmp9 bank2 116
    205 label *label99
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  206 op add :j 116 1
 +  207 op sub *tmp5 117 100
-+  208 read *tmp6 bank2 17
-+  209 read *tmp3 bank2 117
-   210 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  211 write *tmp7 bank2 117
++  208 read *tmp7 bank2 17
++  209 read *tmp8 bank2 117
+   210 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  211 write *tmp9 bank2 117
    212 label *label100
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  213 op add :j 117 1
 +  214 op sub *tmp5 118 100
-+  215 read *tmp6 bank2 18
-+  216 read *tmp3 bank2 118
-   217 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  218 write *tmp7 bank2 118
++  215 read *tmp7 bank2 18
++  216 read *tmp8 bank2 118
+   217 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  218 write *tmp9 bank2 118
    219 label *label101
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  220 op add :j 118 1
 +  221 op sub *tmp5 119 100
-+  222 read *tmp6 bank2 19
-+  223 read *tmp3 bank2 119
-   224 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  225 write *tmp7 bank2 119
++  222 read *tmp7 bank2 19
++  223 read *tmp8 bank2 119
+   224 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  225 write *tmp9 bank2 119
    226 label *label102
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  227 op add :j 119 1
 +  228 op sub *tmp5 120 100
-+  229 read *tmp6 bank2 20
-+  230 read *tmp3 bank2 120
-   231 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  232 write *tmp7 bank2 120
++  229 read *tmp7 bank2 20
++  230 read *tmp8 bank2 120
+   231 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  232 write *tmp9 bank2 120
    233 label *label103
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  234 op add :j 120 1
 +  235 op sub *tmp5 121 100
-+  236 read *tmp6 bank2 21
-+  237 read *tmp3 bank2 121
-   238 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  239 write *tmp7 bank2 121
++  236 read *tmp7 bank2 21
++  237 read *tmp8 bank2 121
+   238 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  239 write *tmp9 bank2 121
    240 label *label104
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  241 op add :j 121 1
 +  242 op sub *tmp5 122 100
-+  243 read *tmp6 bank2 22
-+  244 read *tmp3 bank2 122
-   245 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  246 write *tmp7 bank2 122
++  243 read *tmp7 bank2 22
++  244 read *tmp8 bank2 122
+   245 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  246 write *tmp9 bank2 122
    247 label *label105
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  248 op add :j 122 1
 +  249 op sub *tmp5 123 100
-+  250 read *tmp6 bank2 23
-+  251 read *tmp3 bank2 123
-   252 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  253 write *tmp7 bank2 123
++  250 read *tmp7 bank2 23
++  251 read *tmp8 bank2 123
+   252 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  253 write *tmp9 bank2 123
    254 label *label106
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  255 op add :j 123 1
 +  256 op sub *tmp5 124 100
-+  257 read *tmp6 bank2 24
-+  258 read *tmp3 bank2 124
-   259 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  260 write *tmp7 bank2 124
++  257 read *tmp7 bank2 24
++  258 read *tmp8 bank2 124
+   259 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  260 write *tmp9 bank2 124
    261 label *label107
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  262 op add :j 124 1
 +  263 op sub *tmp5 125 100
-+  264 read *tmp6 bank2 25
-+  265 read *tmp3 bank2 125
-   266 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  267 write *tmp7 bank2 125
++  264 read *tmp7 bank2 25
++  265 read *tmp8 bank2 125
+   266 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  267 write *tmp9 bank2 125
    268 label *label108
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  269 op add :j 125 1
 +  270 op sub *tmp5 126 100
-+  271 read *tmp6 bank2 26
-+  272 read *tmp3 bank2 126
-   273 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  274 write *tmp7 bank2 126
++  271 read *tmp7 bank2 26
++  272 read *tmp8 bank2 126
+   273 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  274 write *tmp9 bank2 126
    275 label *label109
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  276 op add :j 126 1
 +  277 op sub *tmp5 127 100
-+  278 read *tmp6 bank2 27
-+  279 read *tmp3 bank2 127
-   280 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  281 write *tmp7 bank2 127
++  278 read *tmp7 bank2 27
++  279 read *tmp8 bank2 127
+   280 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  281 write *tmp9 bank2 127
    282 label *label110
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  283 op add :j 127 1
 +  284 op sub *tmp5 128 100
-+  285 read *tmp6 bank2 28
-+  286 read *tmp3 bank2 128
-   287 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  288 write *tmp7 bank2 128
++  285 read *tmp7 bank2 28
++  286 read *tmp8 bank2 128
+   287 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  288 write *tmp9 bank2 128
    289 label *label111
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  290 op add :j 128 1
 +  291 op sub *tmp5 129 100
-+  292 read *tmp6 bank2 29
-+  293 read *tmp3 bank2 129
-   294 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  295 write *tmp7 bank2 129
++  292 read *tmp7 bank2 29
++  293 read *tmp8 bank2 129
+   294 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  295 write *tmp9 bank2 129
    296 label *label112
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  297 op add :j 129 1
 +  298 op sub *tmp5 130 100
-+  299 read *tmp6 bank2 30
-+  300 read *tmp3 bank2 130
-   301 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  302 write *tmp7 bank2 130
++  299 read *tmp7 bank2 30
++  300 read *tmp8 bank2 130
+   301 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  302 write *tmp9 bank2 130
    303 label *label113
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  304 op add :j 130 1
 +  305 op sub *tmp5 131 100
-+  306 read *tmp6 bank2 31
-+  307 read *tmp3 bank2 131
-   308 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  309 write *tmp7 bank2 131
++  306 read *tmp7 bank2 31
++  307 read *tmp8 bank2 131
+   308 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  309 write *tmp9 bank2 131
    310 label *label114
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  311 op add :j 131 1
 +  312 op sub *tmp5 132 100
-+  313 read *tmp6 bank2 32
-+  314 read *tmp3 bank2 132
-   315 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  316 write *tmp7 bank2 132
++  313 read *tmp7 bank2 32
++  314 read *tmp8 bank2 132
+   315 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  316 write *tmp9 bank2 132
    317 label *label115
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  318 op add :j 132 1
 +  319 op sub *tmp5 133 100
-+  320 read *tmp6 bank2 33
-+  321 read *tmp3 bank2 133
-   322 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  323 write *tmp7 bank2 133
++  320 read *tmp7 bank2 33
++  321 read *tmp8 bank2 133
+   322 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  323 write *tmp9 bank2 133
    324 label *label116
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  325 op add :j 133 1
 +  326 op sub *tmp5 134 100
-+  327 read *tmp6 bank2 34
-+  328 read *tmp3 bank2 134
-   329 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  330 write *tmp7 bank2 134
++  327 read *tmp7 bank2 34
++  328 read *tmp8 bank2 134
+   329 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  330 write *tmp9 bank2 134
    331 label *label117
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  332 op add :j 134 1
 +  333 op sub *tmp5 135 100
-+  334 read *tmp6 bank2 35
-+  335 read *tmp3 bank2 135
-   336 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  337 write *tmp7 bank2 135
++  334 read *tmp7 bank2 35
++  335 read *tmp8 bank2 135
+   336 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  337 write *tmp9 bank2 135
    338 label *label118
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  339 op add :j 135 1
 +  340 op sub *tmp5 136 100
-+  341 read *tmp6 bank2 36
-+  342 read *tmp3 bank2 136
-   343 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  344 write *tmp7 bank2 136
++  341 read *tmp7 bank2 36
++  342 read *tmp8 bank2 136
+   343 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  344 write *tmp9 bank2 136
    345 label *label119
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  346 op add :j 136 1
 +  347 op sub *tmp5 137 100
-+  348 read *tmp6 bank2 37
-+  349 read *tmp3 bank2 137
-   350 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  351 write *tmp7 bank2 137
++  348 read *tmp7 bank2 37
++  349 read *tmp8 bank2 137
+   350 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  351 write *tmp9 bank2 137
    352 label *label120
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  353 op add :j 137 1
 +  354 op sub *tmp5 138 100
-+  355 read *tmp6 bank2 38
-+  356 read *tmp3 bank2 138
-   357 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  358 write *tmp7 bank2 138
++  355 read *tmp7 bank2 38
++  356 read *tmp8 bank2 138
+   357 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  358 write *tmp9 bank2 138
    359 label *label121
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  360 op add :j 138 1
 +  361 op sub *tmp5 139 100
-+  362 read *tmp6 bank2 39
-+  363 read *tmp3 bank2 139
-   364 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  365 write *tmp7 bank2 139
++  362 read *tmp7 bank2 39
++  363 read *tmp8 bank2 139
+   364 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  365 write *tmp9 bank2 139
    366 label *label122
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  367 op add :j 139 1
 +  368 op sub *tmp5 140 100
-+  369 read *tmp6 bank2 40
-+  370 read *tmp3 bank2 140
-   371 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  372 write *tmp7 bank2 140
++  369 read *tmp7 bank2 40
++  370 read *tmp8 bank2 140
+   371 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  372 write *tmp9 bank2 140
    373 label *label123
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  374 op add :j 140 1
 +  375 op sub *tmp5 141 100
-+  376 read *tmp6 bank2 41
-+  377 read *tmp3 bank2 141
-   378 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  379 write *tmp7 bank2 141
++  376 read *tmp7 bank2 41
++  377 read *tmp8 bank2 141
+   378 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  379 write *tmp9 bank2 141
    380 label *label124
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  381 op add :j 141 1
 +  382 op sub *tmp5 142 100
-+  383 read *tmp6 bank2 42
-+  384 read *tmp3 bank2 142
-   385 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  386 write *tmp7 bank2 142
++  383 read *tmp7 bank2 42
++  384 read *tmp8 bank2 142
+   385 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  386 write *tmp9 bank2 142
    387 label *label125
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  388 op add :j 142 1
 +  389 op sub *tmp5 143 100
-+  390 read *tmp6 bank2 43
-+  391 read *tmp3 bank2 143
-   392 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  393 write *tmp7 bank2 143
++  390 read *tmp7 bank2 43
++  391 read *tmp8 bank2 143
+   392 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  393 write *tmp9 bank2 143
    394 label *label126
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  395 op add :j 143 1
 +  396 op sub *tmp5 144 100
-+  397 read *tmp6 bank2 44
-+  398 read *tmp3 bank2 144
-   399 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  400 write *tmp7 bank2 144
++  397 read *tmp7 bank2 44
++  398 read *tmp8 bank2 144
+   399 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  400 write *tmp9 bank2 144
    401 label *label127
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  402 op add :j 144 1
 +  403 op sub *tmp5 145 100
-+  404 read *tmp6 bank2 45
-+  405 read *tmp3 bank2 145
-   406 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  407 write *tmp7 bank2 145
++  404 read *tmp7 bank2 45
++  405 read *tmp8 bank2 145
+   406 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  407 write *tmp9 bank2 145
    408 label *label128
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  409 op add :j 145 1
 +  410 op sub *tmp5 146 100
-+  411 read *tmp6 bank2 46
-+  412 read *tmp3 bank2 146
-   413 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  414 write *tmp7 bank2 146
++  411 read *tmp7 bank2 46
++  412 read *tmp8 bank2 146
+   413 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  414 write *tmp9 bank2 146
    415 label *label129
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  416 op add :j 146 1
 +  417 op sub *tmp5 147 100
-+  418 read *tmp6 bank2 47
-+  419 read *tmp3 bank2 147
-   420 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  421 write *tmp7 bank2 147
++  418 read *tmp7 bank2 47
++  419 read *tmp8 bank2 147
+   420 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  421 write *tmp9 bank2 147
    422 label *label130
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  423 op add :j 147 1
 +  424 op sub *tmp5 148 100
-+  425 read *tmp6 bank2 48
-+  426 read *tmp3 bank2 148
-   427 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  428 write *tmp7 bank2 148
++  425 read *tmp7 bank2 48
++  426 read *tmp8 bank2 148
+   427 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  428 write *tmp9 bank2 148
    429 label *label131
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  430 op add :j 148 1
 +  431 op sub *tmp5 149 100
-+  432 read *tmp6 bank2 49
-+  433 read *tmp3 bank2 149
-   434 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  435 write *tmp7 bank2 149
++  432 read *tmp7 bank2 49
++  433 read *tmp8 bank2 149
+   434 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  435 write *tmp9 bank2 149
    436 label *label132
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  437 op add :j 149 1
 +  438 op sub *tmp5 150 100
-+  439 read *tmp6 bank2 50
-+  440 read *tmp3 bank2 150
-   441 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  442 write *tmp7 bank2 150
++  439 read *tmp7 bank2 50
++  440 read *tmp8 bank2 150
+   441 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  442 write *tmp9 bank2 150
    443 label *label133
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  444 op add :j 150 1
 +  445 op sub *tmp5 151 100
-+  446 read *tmp6 bank2 51
-+  447 read *tmp3 bank2 151
-   448 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  449 write *tmp7 bank2 151
++  446 read *tmp7 bank2 51
++  447 read *tmp8 bank2 151
+   448 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  449 write *tmp9 bank2 151
    450 label *label134
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  451 op add :j 151 1
 +  452 op sub *tmp5 152 100
-+  453 read *tmp6 bank2 52
-+  454 read *tmp3 bank2 152
-   455 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  456 write *tmp7 bank2 152
++  453 read *tmp7 bank2 52
++  454 read *tmp8 bank2 152
+   455 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  456 write *tmp9 bank2 152
    457 label *label135
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  458 op add :j 152 1
 +  459 op sub *tmp5 153 100
-+  460 read *tmp6 bank2 53
-+  461 read *tmp3 bank2 153
-   462 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  463 write *tmp7 bank2 153
++  460 read *tmp7 bank2 53
++  461 read *tmp8 bank2 153
+   462 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  463 write *tmp9 bank2 153
    464 label *label136
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  465 op add :j 153 1
 +  466 op sub *tmp5 154 100
-+  467 read *tmp6 bank2 54
-+  468 read *tmp3 bank2 154
-   469 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  470 write *tmp7 bank2 154
++  467 read *tmp7 bank2 54
++  468 read *tmp8 bank2 154
+   469 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  470 write *tmp9 bank2 154
    471 label *label137
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  472 op add :j 154 1
 +  473 op sub *tmp5 155 100
-+  474 read *tmp6 bank2 55
-+  475 read *tmp3 bank2 155
-   476 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  477 write *tmp7 bank2 155
++  474 read *tmp7 bank2 55
++  475 read *tmp8 bank2 155
+   476 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  477 write *tmp9 bank2 155
    478 label *label138
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  479 op add :j 155 1
 +  480 op sub *tmp5 156 100
-+  481 read *tmp6 bank2 56
-+  482 read *tmp3 bank2 156
-   483 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  484 write *tmp7 bank2 156
++  481 read *tmp7 bank2 56
++  482 read *tmp8 bank2 156
+   483 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  484 write *tmp9 bank2 156
    485 label *label139
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  486 op add :j 156 1
 +  487 op sub *tmp5 157 100
-+  488 read *tmp6 bank2 57
-+  489 read *tmp3 bank2 157
-   490 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  491 write *tmp7 bank2 157
++  488 read *tmp7 bank2 57
++  489 read *tmp8 bank2 157
+   490 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  491 write *tmp9 bank2 157
    492 label *label140
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  493 op add :j 157 1
 +  494 op sub *tmp5 158 100
-+  495 read *tmp6 bank2 58
-+  496 read *tmp3 bank2 158
-   497 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  498 write *tmp7 bank2 158
++  495 read *tmp7 bank2 58
++  496 read *tmp8 bank2 158
+   497 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  498 write *tmp9 bank2 158
    499 label *label141
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  500 op add :j 158 1
 +  501 op sub *tmp5 159 100
-+  502 read *tmp6 bank2 59
-+  503 read *tmp3 bank2 159
-   504 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  505 write *tmp7 bank2 159
++  502 read *tmp7 bank2 59
++  503 read *tmp8 bank2 159
+   504 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  505 write *tmp9 bank2 159
    506 label *label142
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  507 op add :j 159 1
 +  508 op sub *tmp5 160 100
-+  509 read *tmp6 bank2 60
-+  510 read *tmp3 bank2 160
-   511 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  512 write *tmp7 bank2 160
++  509 read *tmp7 bank2 60
++  510 read *tmp8 bank2 160
+   511 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  512 write *tmp9 bank2 160
    513 label *label143
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  514 op add :j 160 1
 +  515 op sub *tmp5 161 100
-+  516 read *tmp6 bank2 61
-+  517 read *tmp3 bank2 161
-   518 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  519 write *tmp7 bank2 161
++  516 read *tmp7 bank2 61
++  517 read *tmp8 bank2 161
+   518 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  519 write *tmp9 bank2 161
    520 label *label144
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  521 op add :j 161 1
 +  522 op sub *tmp5 162 100
-+  523 read *tmp6 bank2 62
-+  524 read *tmp3 bank2 162
-   525 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  526 write *tmp7 bank2 162
++  523 read *tmp7 bank2 62
++  524 read *tmp8 bank2 162
+   525 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  526 write *tmp9 bank2 162
    527 label *label145
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  528 op add :j 162 1
 +  529 op sub *tmp5 163 100
-+  530 read *tmp6 bank2 63
-+  531 read *tmp3 bank2 163
-   532 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  533 write *tmp7 bank2 163
++  530 read *tmp7 bank2 63
++  531 read *tmp8 bank2 163
+   532 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  533 write *tmp9 bank2 163
    534 label *label146
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  535 op add :j 163 1
 +  536 op sub *tmp5 164 100
-+  537 read *tmp6 bank2 64
-+  538 read *tmp3 bank2 164
-   539 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  540 write *tmp7 bank2 164
++  537 read *tmp7 bank2 64
++  538 read *tmp8 bank2 164
+   539 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  540 write *tmp9 bank2 164
    541 label *label147
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  542 op add :j 164 1
 +  543 op sub *tmp5 165 100
-+  544 read *tmp6 bank2 65
-+  545 read *tmp3 bank2 165
-   546 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  547 write *tmp7 bank2 165
++  544 read *tmp7 bank2 65
++  545 read *tmp8 bank2 165
+   546 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  547 write *tmp9 bank2 165
    548 label *label148
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  549 op add :j 165 1
 +  550 op sub *tmp5 166 100
-+  551 read *tmp6 bank2 66
-+  552 read *tmp3 bank2 166
-   553 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  554 write *tmp7 bank2 166
++  551 read *tmp7 bank2 66
++  552 read *tmp8 bank2 166
+   553 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  554 write *tmp9 bank2 166
    555 label *label149
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  556 op add :j 166 1
 +  557 op sub *tmp5 167 100
-+  558 read *tmp6 bank2 67
-+  559 read *tmp3 bank2 167
-   560 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  561 write *tmp7 bank2 167
++  558 read *tmp7 bank2 67
++  559 read *tmp8 bank2 167
+   560 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  561 write *tmp9 bank2 167
    562 label *label150
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  563 op add :j 167 1
 +  564 op sub *tmp5 168 100
-+  565 read *tmp6 bank2 68
-+  566 read *tmp3 bank2 168
-   567 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  568 write *tmp7 bank2 168
++  565 read *tmp7 bank2 68
++  566 read *tmp8 bank2 168
+   567 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  568 write *tmp9 bank2 168
    569 label *label151
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  570 op add :j 168 1
 +  571 op sub *tmp5 169 100
-+  572 read *tmp6 bank2 69
-+  573 read *tmp3 bank2 169
-   574 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  575 write *tmp7 bank2 169
++  572 read *tmp7 bank2 69
++  573 read *tmp8 bank2 169
+   574 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  575 write *tmp9 bank2 169
    576 label *label152
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  577 op add :j 169 1
 +  578 op sub *tmp5 170 100
-+  579 read *tmp6 bank2 70
-+  580 read *tmp3 bank2 170
-   581 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  582 write *tmp7 bank2 170
++  579 read *tmp7 bank2 70
++  580 read *tmp8 bank2 170
+   581 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  582 write *tmp9 bank2 170
    583 label *label153
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  584 op add :j 170 1
 +  585 op sub *tmp5 171 100
-+  586 read *tmp6 bank2 71
-+  587 read *tmp3 bank2 171
-   588 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  589 write *tmp7 bank2 171
++  586 read *tmp7 bank2 71
++  587 read *tmp8 bank2 171
+   588 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  589 write *tmp9 bank2 171
    590 label *label154
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  591 op add :j 171 1
 +  592 op sub *tmp5 172 100
-+  593 read *tmp6 bank2 72
-+  594 read *tmp3 bank2 172
-   595 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  596 write *tmp7 bank2 172
++  593 read *tmp7 bank2 72
++  594 read *tmp8 bank2 172
+   595 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  596 write *tmp9 bank2 172
    597 label *label155
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  598 op add :j 172 1
 +  599 op sub *tmp5 173 100
-+  600 read *tmp6 bank2 73
-+  601 read *tmp3 bank2 173
-   602 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  603 write *tmp7 bank2 173
++  600 read *tmp7 bank2 73
++  601 read *tmp8 bank2 173
+   602 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  603 write *tmp9 bank2 173
    604 label *label156
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  605 op add :j 173 1
 +  606 op sub *tmp5 174 100
-+  607 read *tmp6 bank2 74
-+  608 read *tmp3 bank2 174
-   609 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  610 write *tmp7 bank2 174
++  607 read *tmp7 bank2 74
++  608 read *tmp8 bank2 174
+   609 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  610 write *tmp9 bank2 174
    611 label *label157
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  612 op add :j 174 1
 +  613 op sub *tmp5 175 100
-+  614 read *tmp6 bank2 75
-+  615 read *tmp3 bank2 175
-   616 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  617 write *tmp7 bank2 175
++  614 read *tmp7 bank2 75
++  615 read *tmp8 bank2 175
+   616 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  617 write *tmp9 bank2 175
    618 label *label158
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  619 op add :j 175 1
 +  620 op sub *tmp5 176 100
-+  621 read *tmp6 bank2 76
-+  622 read *tmp3 bank2 176
-   623 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  624 write *tmp7 bank2 176
++  621 read *tmp7 bank2 76
++  622 read *tmp8 bank2 176
+   623 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  624 write *tmp9 bank2 176
    625 label *label159
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  626 op add :j 176 1
 +  627 op sub *tmp5 177 100
-+  628 read *tmp6 bank2 77
-+  629 read *tmp3 bank2 177
-   630 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  631 write *tmp7 bank2 177
++  628 read *tmp7 bank2 77
++  629 read *tmp8 bank2 177
+   630 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  631 write *tmp9 bank2 177
    632 label *label160
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  633 op add :j 177 1
 +  634 op sub *tmp5 178 100
-+  635 read *tmp6 bank2 78
-+  636 read *tmp3 bank2 178
-   637 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  638 write *tmp7 bank2 178
++  635 read *tmp7 bank2 78
++  636 read *tmp8 bank2 178
+   637 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  638 write *tmp9 bank2 178
    639 label *label161
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  640 op add :j 178 1
 +  641 op sub *tmp5 179 100
-+  642 read *tmp6 bank2 79
-+  643 read *tmp3 bank2 179
-   644 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  645 write *tmp7 bank2 179
++  642 read *tmp7 bank2 79
++  643 read *tmp8 bank2 179
+   644 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  645 write *tmp9 bank2 179
    646 label *label162
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  647 op add :j 179 1
 +  648 op sub *tmp5 180 100
-+  649 read *tmp6 bank2 80
-+  650 read *tmp3 bank2 180
-   651 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  652 write *tmp7 bank2 180
++  649 read *tmp7 bank2 80
++  650 read *tmp8 bank2 180
+   651 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  652 write *tmp9 bank2 180
    653 label *label163
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  654 op add :j 180 1
 +  655 op sub *tmp5 181 100
-+  656 read *tmp6 bank2 81
-+  657 read *tmp3 bank2 181
-   658 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  659 write *tmp7 bank2 181
++  656 read *tmp7 bank2 81
++  657 read *tmp8 bank2 181
+   658 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  659 write *tmp9 bank2 181
    660 label *label164
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  661 op add :j 181 1
 +  662 op sub *tmp5 182 100
-+  663 read *tmp6 bank2 82
-+  664 read *tmp3 bank2 182
-   665 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  666 write *tmp7 bank2 182
++  663 read *tmp7 bank2 82
++  664 read *tmp8 bank2 182
+   665 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  666 write *tmp9 bank2 182
    667 label *label165
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  668 op add :j 182 1
 +  669 op sub *tmp5 183 100
-+  670 read *tmp6 bank2 83
-+  671 read *tmp3 bank2 183
-   672 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  673 write *tmp7 bank2 183
++  670 read *tmp7 bank2 83
++  671 read *tmp8 bank2 183
+   672 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  673 write *tmp9 bank2 183
    674 label *label166
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  675 op add :j 183 1
 +  676 op sub *tmp5 184 100
-+  677 read *tmp6 bank2 84
-+  678 read *tmp3 bank2 184
-   679 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  680 write *tmp7 bank2 184
++  677 read *tmp7 bank2 84
++  678 read *tmp8 bank2 184
+   679 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  680 write *tmp9 bank2 184
    681 label *label167
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  682 op add :j 184 1
 +  683 op sub *tmp5 185 100
-+  684 read *tmp6 bank2 85
-+  685 read *tmp3 bank2 185
-   686 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  687 write *tmp7 bank2 185
++  684 read *tmp7 bank2 85
++  685 read *tmp8 bank2 185
+   686 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  687 write *tmp9 bank2 185
    688 label *label168
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  689 op add :j 185 1
 +  690 op sub *tmp5 186 100
-+  691 read *tmp6 bank2 86
-+  692 read *tmp3 bank2 186
-   693 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  694 write *tmp7 bank2 186
++  691 read *tmp7 bank2 86
++  692 read *tmp8 bank2 186
+   693 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  694 write *tmp9 bank2 186
    695 label *label169
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  696 op add :j 186 1
 +  697 op sub *tmp5 187 100
-+  698 read *tmp6 bank2 87
-+  699 read *tmp3 bank2 187
-   700 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  701 write *tmp7 bank2 187
++  698 read *tmp7 bank2 87
++  699 read *tmp8 bank2 187
+   700 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  701 write *tmp9 bank2 187
    702 label *label170
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  703 op add :j 187 1
 +  704 op sub *tmp5 188 100
-+  705 read *tmp6 bank2 88
-+  706 read *tmp3 bank2 188
-   707 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  708 write *tmp7 bank2 188
++  705 read *tmp7 bank2 88
++  706 read *tmp8 bank2 188
+   707 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  708 write *tmp9 bank2 188
    709 label *label171
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  710 op add :j 188 1
 +  711 op sub *tmp5 189 100
-+  712 read *tmp6 bank2 89
-+  713 read *tmp3 bank2 189
-   714 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  715 write *tmp7 bank2 189
++  712 read *tmp7 bank2 89
++  713 read *tmp8 bank2 189
+   714 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  715 write *tmp9 bank2 189
    716 label *label172
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  717 op add :j 189 1
 +  718 op sub *tmp5 190 100
-+  719 read *tmp6 bank2 90
-+  720 read *tmp3 bank2 190
-   721 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  722 write *tmp7 bank2 190
++  719 read *tmp7 bank2 90
++  720 read *tmp8 bank2 190
+   721 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  722 write *tmp9 bank2 190
    723 label *label173
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  724 op add :j 190 1
 +  725 op sub *tmp5 191 100
-+  726 read *tmp6 bank2 91
-+  727 read *tmp3 bank2 191
-   728 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  729 write *tmp7 bank2 191
++  726 read *tmp7 bank2 91
++  727 read *tmp8 bank2 191
+   728 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  729 write *tmp9 bank2 191
    730 label *label174
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  731 op add :j 191 1
 +  732 op sub *tmp5 192 100
-+  733 read *tmp6 bank2 92
-+  734 read *tmp3 bank2 192
-   735 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  736 write *tmp7 bank2 192
++  733 read *tmp7 bank2 92
++  734 read *tmp8 bank2 192
+   735 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  736 write *tmp9 bank2 192
    737 label *label175
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  738 op add :j 192 1
 +  739 op sub *tmp5 193 100
-+  740 read *tmp6 bank2 93
-+  741 read *tmp3 bank2 193
-   742 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  743 write *tmp7 bank2 193
++  740 read *tmp7 bank2 93
++  741 read *tmp8 bank2 193
+   742 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  743 write *tmp9 bank2 193
    744 label *label176
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  745 op add :j 193 1
 +  746 op sub *tmp5 194 100
-+  747 read *tmp6 bank2 94
-+  748 read *tmp3 bank2 194
-   749 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  750 write *tmp7 bank2 194
++  747 read *tmp7 bank2 94
++  748 read *tmp8 bank2 194
+   749 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  750 write *tmp9 bank2 194
    751 label *label177
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  752 op add :j 194 1
 +  753 op sub *tmp5 195 100
-+  754 read *tmp6 bank2 95
-+  755 read *tmp3 bank2 195
-   756 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  757 write *tmp7 bank2 195
++  754 read *tmp7 bank2 95
++  755 read *tmp8 bank2 195
+   756 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  757 write *tmp9 bank2 195
    758 label *label178
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  759 op add :j 195 1
 +  760 op sub *tmp5 196 100
-+  761 read *tmp6 bank2 96
-+  762 read *tmp3 bank2 196
-   763 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  764 write *tmp7 bank2 196
++  761 read *tmp7 bank2 96
++  762 read *tmp8 bank2 196
+   763 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  764 write *tmp9 bank2 196
    765 label *label179
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  766 op add :j 196 1
 +  767 op sub *tmp5 197 100
-+  768 read *tmp6 bank2 97
-+  769 read *tmp3 bank2 197
-   770 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  771 write *tmp7 bank2 197
++  768 read *tmp7 bank2 97
++  769 read *tmp8 bank2 197
+   770 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  771 write *tmp9 bank2 197
    772 label *label180
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  773 op add :j 197 1
 +  774 op sub *tmp5 198 100
-+  775 read *tmp6 bank2 98
-+  776 read *tmp3 bank2 198
-   777 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  778 write *tmp7 bank2 198
++  775 read *tmp7 bank2 98
++  776 read *tmp8 bank2 198
+   777 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  778 write *tmp9 bank2 198
    779 label *label181
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  780 op add :j 198 1
 +  781 op sub *tmp5 199 100
-+  782 read *tmp6 bank2 99
-+  783 read *tmp3 bank2 199
-   784 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  785 write *tmp7 bank2 199
++  782 read *tmp7 bank2 99
++  783 read *tmp8 bank2 199
+   784 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  785 write *tmp9 bank2 199
    786 label *label182
 -    * op add :j :j 1
 -    * op sub *tmp5 :j 100
--    * read *tmp6 bank2 *tmp5
--    * read *tmp3 bank2 :j
+-    * read *tmp7 bank2 *tmp5
+-    * read *tmp8 bank2 :j
 +  787 op add :j 199 1
 +  788 op sub *tmp5 200 100
-+  789 read *tmp6 bank2 100
-+  790 read *tmp3 bank2 200
-   791 op add *tmp7 *tmp3 *tmp6
--    * write *tmp7 bank2 :j
-+  792 write *tmp7 bank2 200
++  789 read *tmp7 bank2 100
++  790 read *tmp8 bank2 200
+   791 op add *tmp9 *tmp8 *tmp7
+-    * write *tmp9 bank2 :j
++  792 write *tmp9 bank2 200
    793 label *label183
 -    * op add :j :j 1
 +  794 op add :j 200 1
@@ -2638,710 +2638,710 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-2
 -    * set :j 100
     86 label *label82
 -    * op sub *tmp5 100 100
-    87 read *tmp6 bank2 0
-    88 read *tmp3 bank2 100
-    89 op add *tmp7 *tmp3 *tmp6
-    90 write *tmp7 bank2 100
+    87 read *tmp7 bank2 0
+    88 read *tmp8 bank2 100
+    89 op add *tmp9 *tmp8 *tmp7
+    90 write *tmp9 bank2 100
     91 label *label83
 -    * op add :j 100 1
 -    * op sub *tmp5 101 100
-    92 read *tmp6 bank2 1
-    93 read *tmp3 bank2 101
-    94 op add *tmp7 *tmp3 *tmp6
-    95 write *tmp7 bank2 101
+    92 read *tmp7 bank2 1
+    93 read *tmp8 bank2 101
+    94 op add *tmp9 *tmp8 *tmp7
+    95 write *tmp9 bank2 101
     96 label *label84
 -    * op add :j 101 1
 -    * op sub *tmp5 102 100
-    97 read *tmp6 bank2 2
-    98 read *tmp3 bank2 102
-    99 op add *tmp7 *tmp3 *tmp6
-   100 write *tmp7 bank2 102
+    97 read *tmp7 bank2 2
+    98 read *tmp8 bank2 102
+    99 op add *tmp9 *tmp8 *tmp7
+   100 write *tmp9 bank2 102
    101 label *label85
 -    * op add :j 102 1
 -    * op sub *tmp5 103 100
-   102 read *tmp6 bank2 3
-   103 read *tmp3 bank2 103
-   104 op add *tmp7 *tmp3 *tmp6
-   105 write *tmp7 bank2 103
+   102 read *tmp7 bank2 3
+   103 read *tmp8 bank2 103
+   104 op add *tmp9 *tmp8 *tmp7
+   105 write *tmp9 bank2 103
    106 label *label86
 -    * op add :j 103 1
 -    * op sub *tmp5 104 100
-   107 read *tmp6 bank2 4
-   108 read *tmp3 bank2 104
-   109 op add *tmp7 *tmp3 *tmp6
-   110 write *tmp7 bank2 104
+   107 read *tmp7 bank2 4
+   108 read *tmp8 bank2 104
+   109 op add *tmp9 *tmp8 *tmp7
+   110 write *tmp9 bank2 104
    111 label *label87
 -    * op add :j 104 1
 -    * op sub *tmp5 105 100
-   112 read *tmp6 bank2 5
-   113 read *tmp3 bank2 105
-   114 op add *tmp7 *tmp3 *tmp6
-   115 write *tmp7 bank2 105
+   112 read *tmp7 bank2 5
+   113 read *tmp8 bank2 105
+   114 op add *tmp9 *tmp8 *tmp7
+   115 write *tmp9 bank2 105
    116 label *label88
 -    * op add :j 105 1
 -    * op sub *tmp5 106 100
-   117 read *tmp6 bank2 6
-   118 read *tmp3 bank2 106
-   119 op add *tmp7 *tmp3 *tmp6
-   120 write *tmp7 bank2 106
+   117 read *tmp7 bank2 6
+   118 read *tmp8 bank2 106
+   119 op add *tmp9 *tmp8 *tmp7
+   120 write *tmp9 bank2 106
    121 label *label89
 -    * op add :j 106 1
 -    * op sub *tmp5 107 100
-   122 read *tmp6 bank2 7
-   123 read *tmp3 bank2 107
-   124 op add *tmp7 *tmp3 *tmp6
-   125 write *tmp7 bank2 107
+   122 read *tmp7 bank2 7
+   123 read *tmp8 bank2 107
+   124 op add *tmp9 *tmp8 *tmp7
+   125 write *tmp9 bank2 107
    126 label *label90
 -    * op add :j 107 1
 -    * op sub *tmp5 108 100
-   127 read *tmp6 bank2 8
-   128 read *tmp3 bank2 108
-   129 op add *tmp7 *tmp3 *tmp6
-   130 write *tmp7 bank2 108
+   127 read *tmp7 bank2 8
+   128 read *tmp8 bank2 108
+   129 op add *tmp9 *tmp8 *tmp7
+   130 write *tmp9 bank2 108
    131 label *label91
 -    * op add :j 108 1
 -    * op sub *tmp5 109 100
-   132 read *tmp6 bank2 9
-   133 read *tmp3 bank2 109
-   134 op add *tmp7 *tmp3 *tmp6
-   135 write *tmp7 bank2 109
+   132 read *tmp7 bank2 9
+   133 read *tmp8 bank2 109
+   134 op add *tmp9 *tmp8 *tmp7
+   135 write *tmp9 bank2 109
    136 label *label92
 -    * op add :j 109 1
 -    * op sub *tmp5 110 100
-   137 read *tmp6 bank2 10
-   138 read *tmp3 bank2 110
-   139 op add *tmp7 *tmp3 *tmp6
-   140 write *tmp7 bank2 110
+   137 read *tmp7 bank2 10
+   138 read *tmp8 bank2 110
+   139 op add *tmp9 *tmp8 *tmp7
+   140 write *tmp9 bank2 110
    141 label *label93
 -    * op add :j 110 1
 -    * op sub *tmp5 111 100
-   142 read *tmp6 bank2 11
-   143 read *tmp3 bank2 111
-   144 op add *tmp7 *tmp3 *tmp6
-   145 write *tmp7 bank2 111
+   142 read *tmp7 bank2 11
+   143 read *tmp8 bank2 111
+   144 op add *tmp9 *tmp8 *tmp7
+   145 write *tmp9 bank2 111
    146 label *label94
 -    * op add :j 111 1
 -    * op sub *tmp5 112 100
-   147 read *tmp6 bank2 12
-   148 read *tmp3 bank2 112
-   149 op add *tmp7 *tmp3 *tmp6
-   150 write *tmp7 bank2 112
+   147 read *tmp7 bank2 12
+   148 read *tmp8 bank2 112
+   149 op add *tmp9 *tmp8 *tmp7
+   150 write *tmp9 bank2 112
    151 label *label95
 -    * op add :j 112 1
 -    * op sub *tmp5 113 100
-   152 read *tmp6 bank2 13
-   153 read *tmp3 bank2 113
-   154 op add *tmp7 *tmp3 *tmp6
-   155 write *tmp7 bank2 113
+   152 read *tmp7 bank2 13
+   153 read *tmp8 bank2 113
+   154 op add *tmp9 *tmp8 *tmp7
+   155 write *tmp9 bank2 113
    156 label *label96
 -    * op add :j 113 1
 -    * op sub *tmp5 114 100
-   157 read *tmp6 bank2 14
-   158 read *tmp3 bank2 114
-   159 op add *tmp7 *tmp3 *tmp6
-   160 write *tmp7 bank2 114
+   157 read *tmp7 bank2 14
+   158 read *tmp8 bank2 114
+   159 op add *tmp9 *tmp8 *tmp7
+   160 write *tmp9 bank2 114
    161 label *label97
 -    * op add :j 114 1
 -    * op sub *tmp5 115 100
-   162 read *tmp6 bank2 15
-   163 read *tmp3 bank2 115
-   164 op add *tmp7 *tmp3 *tmp6
-   165 write *tmp7 bank2 115
+   162 read *tmp7 bank2 15
+   163 read *tmp8 bank2 115
+   164 op add *tmp9 *tmp8 *tmp7
+   165 write *tmp9 bank2 115
    166 label *label98
 -    * op add :j 115 1
 -    * op sub *tmp5 116 100
-   167 read *tmp6 bank2 16
-   168 read *tmp3 bank2 116
-   169 op add *tmp7 *tmp3 *tmp6
-   170 write *tmp7 bank2 116
+   167 read *tmp7 bank2 16
+   168 read *tmp8 bank2 116
+   169 op add *tmp9 *tmp8 *tmp7
+   170 write *tmp9 bank2 116
    171 label *label99
 -    * op add :j 116 1
 -    * op sub *tmp5 117 100
-   172 read *tmp6 bank2 17
-   173 read *tmp3 bank2 117
-   174 op add *tmp7 *tmp3 *tmp6
-   175 write *tmp7 bank2 117
+   172 read *tmp7 bank2 17
+   173 read *tmp8 bank2 117
+   174 op add *tmp9 *tmp8 *tmp7
+   175 write *tmp9 bank2 117
    176 label *label100
 -    * op add :j 117 1
 -    * op sub *tmp5 118 100
-   177 read *tmp6 bank2 18
-   178 read *tmp3 bank2 118
-   179 op add *tmp7 *tmp3 *tmp6
-   180 write *tmp7 bank2 118
+   177 read *tmp7 bank2 18
+   178 read *tmp8 bank2 118
+   179 op add *tmp9 *tmp8 *tmp7
+   180 write *tmp9 bank2 118
    181 label *label101
 -    * op add :j 118 1
 -    * op sub *tmp5 119 100
-   182 read *tmp6 bank2 19
-   183 read *tmp3 bank2 119
-   184 op add *tmp7 *tmp3 *tmp6
-   185 write *tmp7 bank2 119
+   182 read *tmp7 bank2 19
+   183 read *tmp8 bank2 119
+   184 op add *tmp9 *tmp8 *tmp7
+   185 write *tmp9 bank2 119
    186 label *label102
 -    * op add :j 119 1
 -    * op sub *tmp5 120 100
-   187 read *tmp6 bank2 20
-   188 read *tmp3 bank2 120
-   189 op add *tmp7 *tmp3 *tmp6
-   190 write *tmp7 bank2 120
+   187 read *tmp7 bank2 20
+   188 read *tmp8 bank2 120
+   189 op add *tmp9 *tmp8 *tmp7
+   190 write *tmp9 bank2 120
    191 label *label103
 -    * op add :j 120 1
 -    * op sub *tmp5 121 100
-   192 read *tmp6 bank2 21
-   193 read *tmp3 bank2 121
-   194 op add *tmp7 *tmp3 *tmp6
-   195 write *tmp7 bank2 121
+   192 read *tmp7 bank2 21
+   193 read *tmp8 bank2 121
+   194 op add *tmp9 *tmp8 *tmp7
+   195 write *tmp9 bank2 121
    196 label *label104
 -    * op add :j 121 1
 -    * op sub *tmp5 122 100
-   197 read *tmp6 bank2 22
-   198 read *tmp3 bank2 122
-   199 op add *tmp7 *tmp3 *tmp6
-   200 write *tmp7 bank2 122
+   197 read *tmp7 bank2 22
+   198 read *tmp8 bank2 122
+   199 op add *tmp9 *tmp8 *tmp7
+   200 write *tmp9 bank2 122
    201 label *label105
 -    * op add :j 122 1
 -    * op sub *tmp5 123 100
-   202 read *tmp6 bank2 23
-   203 read *tmp3 bank2 123
-   204 op add *tmp7 *tmp3 *tmp6
-   205 write *tmp7 bank2 123
+   202 read *tmp7 bank2 23
+   203 read *tmp8 bank2 123
+   204 op add *tmp9 *tmp8 *tmp7
+   205 write *tmp9 bank2 123
    206 label *label106
 -    * op add :j 123 1
 -    * op sub *tmp5 124 100
-   207 read *tmp6 bank2 24
-   208 read *tmp3 bank2 124
-   209 op add *tmp7 *tmp3 *tmp6
-   210 write *tmp7 bank2 124
+   207 read *tmp7 bank2 24
+   208 read *tmp8 bank2 124
+   209 op add *tmp9 *tmp8 *tmp7
+   210 write *tmp9 bank2 124
    211 label *label107
 -    * op add :j 124 1
 -    * op sub *tmp5 125 100
-   212 read *tmp6 bank2 25
-   213 read *tmp3 bank2 125
-   214 op add *tmp7 *tmp3 *tmp6
-   215 write *tmp7 bank2 125
+   212 read *tmp7 bank2 25
+   213 read *tmp8 bank2 125
+   214 op add *tmp9 *tmp8 *tmp7
+   215 write *tmp9 bank2 125
    216 label *label108
 -    * op add :j 125 1
 -    * op sub *tmp5 126 100
-   217 read *tmp6 bank2 26
-   218 read *tmp3 bank2 126
-   219 op add *tmp7 *tmp3 *tmp6
-   220 write *tmp7 bank2 126
+   217 read *tmp7 bank2 26
+   218 read *tmp8 bank2 126
+   219 op add *tmp9 *tmp8 *tmp7
+   220 write *tmp9 bank2 126
    221 label *label109
 -    * op add :j 126 1
 -    * op sub *tmp5 127 100
-   222 read *tmp6 bank2 27
-   223 read *tmp3 bank2 127
-   224 op add *tmp7 *tmp3 *tmp6
-   225 write *tmp7 bank2 127
+   222 read *tmp7 bank2 27
+   223 read *tmp8 bank2 127
+   224 op add *tmp9 *tmp8 *tmp7
+   225 write *tmp9 bank2 127
    226 label *label110
 -    * op add :j 127 1
 -    * op sub *tmp5 128 100
-   227 read *tmp6 bank2 28
-   228 read *tmp3 bank2 128
-   229 op add *tmp7 *tmp3 *tmp6
-   230 write *tmp7 bank2 128
+   227 read *tmp7 bank2 28
+   228 read *tmp8 bank2 128
+   229 op add *tmp9 *tmp8 *tmp7
+   230 write *tmp9 bank2 128
    231 label *label111
 -    * op add :j 128 1
 -    * op sub *tmp5 129 100
-   232 read *tmp6 bank2 29
-   233 read *tmp3 bank2 129
-   234 op add *tmp7 *tmp3 *tmp6
-   235 write *tmp7 bank2 129
+   232 read *tmp7 bank2 29
+   233 read *tmp8 bank2 129
+   234 op add *tmp9 *tmp8 *tmp7
+   235 write *tmp9 bank2 129
    236 label *label112
 -    * op add :j 129 1
 -    * op sub *tmp5 130 100
-   237 read *tmp6 bank2 30
-   238 read *tmp3 bank2 130
-   239 op add *tmp7 *tmp3 *tmp6
-   240 write *tmp7 bank2 130
+   237 read *tmp7 bank2 30
+   238 read *tmp8 bank2 130
+   239 op add *tmp9 *tmp8 *tmp7
+   240 write *tmp9 bank2 130
    241 label *label113
 -    * op add :j 130 1
 -    * op sub *tmp5 131 100
-   242 read *tmp6 bank2 31
-   243 read *tmp3 bank2 131
-   244 op add *tmp7 *tmp3 *tmp6
-   245 write *tmp7 bank2 131
+   242 read *tmp7 bank2 31
+   243 read *tmp8 bank2 131
+   244 op add *tmp9 *tmp8 *tmp7
+   245 write *tmp9 bank2 131
    246 label *label114
 -    * op add :j 131 1
 -    * op sub *tmp5 132 100
-   247 read *tmp6 bank2 32
-   248 read *tmp3 bank2 132
-   249 op add *tmp7 *tmp3 *tmp6
-   250 write *tmp7 bank2 132
+   247 read *tmp7 bank2 32
+   248 read *tmp8 bank2 132
+   249 op add *tmp9 *tmp8 *tmp7
+   250 write *tmp9 bank2 132
    251 label *label115
 -    * op add :j 132 1
 -    * op sub *tmp5 133 100
-   252 read *tmp6 bank2 33
-   253 read *tmp3 bank2 133
-   254 op add *tmp7 *tmp3 *tmp6
-   255 write *tmp7 bank2 133
+   252 read *tmp7 bank2 33
+   253 read *tmp8 bank2 133
+   254 op add *tmp9 *tmp8 *tmp7
+   255 write *tmp9 bank2 133
    256 label *label116
 -    * op add :j 133 1
 -    * op sub *tmp5 134 100
-   257 read *tmp6 bank2 34
-   258 read *tmp3 bank2 134
-   259 op add *tmp7 *tmp3 *tmp6
-   260 write *tmp7 bank2 134
+   257 read *tmp7 bank2 34
+   258 read *tmp8 bank2 134
+   259 op add *tmp9 *tmp8 *tmp7
+   260 write *tmp9 bank2 134
    261 label *label117
 -    * op add :j 134 1
 -    * op sub *tmp5 135 100
-   262 read *tmp6 bank2 35
-   263 read *tmp3 bank2 135
-   264 op add *tmp7 *tmp3 *tmp6
-   265 write *tmp7 bank2 135
+   262 read *tmp7 bank2 35
+   263 read *tmp8 bank2 135
+   264 op add *tmp9 *tmp8 *tmp7
+   265 write *tmp9 bank2 135
    266 label *label118
 -    * op add :j 135 1
 -    * op sub *tmp5 136 100
-   267 read *tmp6 bank2 36
-   268 read *tmp3 bank2 136
-   269 op add *tmp7 *tmp3 *tmp6
-   270 write *tmp7 bank2 136
+   267 read *tmp7 bank2 36
+   268 read *tmp8 bank2 136
+   269 op add *tmp9 *tmp8 *tmp7
+   270 write *tmp9 bank2 136
    271 label *label119
 -    * op add :j 136 1
 -    * op sub *tmp5 137 100
-   272 read *tmp6 bank2 37
-   273 read *tmp3 bank2 137
-   274 op add *tmp7 *tmp3 *tmp6
-   275 write *tmp7 bank2 137
+   272 read *tmp7 bank2 37
+   273 read *tmp8 bank2 137
+   274 op add *tmp9 *tmp8 *tmp7
+   275 write *tmp9 bank2 137
    276 label *label120
 -    * op add :j 137 1
 -    * op sub *tmp5 138 100
-   277 read *tmp6 bank2 38
-   278 read *tmp3 bank2 138
-   279 op add *tmp7 *tmp3 *tmp6
-   280 write *tmp7 bank2 138
+   277 read *tmp7 bank2 38
+   278 read *tmp8 bank2 138
+   279 op add *tmp9 *tmp8 *tmp7
+   280 write *tmp9 bank2 138
    281 label *label121
 -    * op add :j 138 1
 -    * op sub *tmp5 139 100
-   282 read *tmp6 bank2 39
-   283 read *tmp3 bank2 139
-   284 op add *tmp7 *tmp3 *tmp6
-   285 write *tmp7 bank2 139
+   282 read *tmp7 bank2 39
+   283 read *tmp8 bank2 139
+   284 op add *tmp9 *tmp8 *tmp7
+   285 write *tmp9 bank2 139
    286 label *label122
 -    * op add :j 139 1
 -    * op sub *tmp5 140 100
-   287 read *tmp6 bank2 40
-   288 read *tmp3 bank2 140
-   289 op add *tmp7 *tmp3 *tmp6
-   290 write *tmp7 bank2 140
+   287 read *tmp7 bank2 40
+   288 read *tmp8 bank2 140
+   289 op add *tmp9 *tmp8 *tmp7
+   290 write *tmp9 bank2 140
    291 label *label123
 -    * op add :j 140 1
 -    * op sub *tmp5 141 100
-   292 read *tmp6 bank2 41
-   293 read *tmp3 bank2 141
-   294 op add *tmp7 *tmp3 *tmp6
-   295 write *tmp7 bank2 141
+   292 read *tmp7 bank2 41
+   293 read *tmp8 bank2 141
+   294 op add *tmp9 *tmp8 *tmp7
+   295 write *tmp9 bank2 141
    296 label *label124
 -    * op add :j 141 1
 -    * op sub *tmp5 142 100
-   297 read *tmp6 bank2 42
-   298 read *tmp3 bank2 142
-   299 op add *tmp7 *tmp3 *tmp6
-   300 write *tmp7 bank2 142
+   297 read *tmp7 bank2 42
+   298 read *tmp8 bank2 142
+   299 op add *tmp9 *tmp8 *tmp7
+   300 write *tmp9 bank2 142
    301 label *label125
 -    * op add :j 142 1
 -    * op sub *tmp5 143 100
-   302 read *tmp6 bank2 43
-   303 read *tmp3 bank2 143
-   304 op add *tmp7 *tmp3 *tmp6
-   305 write *tmp7 bank2 143
+   302 read *tmp7 bank2 43
+   303 read *tmp8 bank2 143
+   304 op add *tmp9 *tmp8 *tmp7
+   305 write *tmp9 bank2 143
    306 label *label126
 -    * op add :j 143 1
 -    * op sub *tmp5 144 100
-   307 read *tmp6 bank2 44
-   308 read *tmp3 bank2 144
-   309 op add *tmp7 *tmp3 *tmp6
-   310 write *tmp7 bank2 144
+   307 read *tmp7 bank2 44
+   308 read *tmp8 bank2 144
+   309 op add *tmp9 *tmp8 *tmp7
+   310 write *tmp9 bank2 144
    311 label *label127
 -    * op add :j 144 1
 -    * op sub *tmp5 145 100
-   312 read *tmp6 bank2 45
-   313 read *tmp3 bank2 145
-   314 op add *tmp7 *tmp3 *tmp6
-   315 write *tmp7 bank2 145
+   312 read *tmp7 bank2 45
+   313 read *tmp8 bank2 145
+   314 op add *tmp9 *tmp8 *tmp7
+   315 write *tmp9 bank2 145
    316 label *label128
 -    * op add :j 145 1
 -    * op sub *tmp5 146 100
-   317 read *tmp6 bank2 46
-   318 read *tmp3 bank2 146
-   319 op add *tmp7 *tmp3 *tmp6
-   320 write *tmp7 bank2 146
+   317 read *tmp7 bank2 46
+   318 read *tmp8 bank2 146
+   319 op add *tmp9 *tmp8 *tmp7
+   320 write *tmp9 bank2 146
    321 label *label129
 -    * op add :j 146 1
 -    * op sub *tmp5 147 100
-   322 read *tmp6 bank2 47
-   323 read *tmp3 bank2 147
-   324 op add *tmp7 *tmp3 *tmp6
-   325 write *tmp7 bank2 147
+   322 read *tmp7 bank2 47
+   323 read *tmp8 bank2 147
+   324 op add *tmp9 *tmp8 *tmp7
+   325 write *tmp9 bank2 147
    326 label *label130
 -    * op add :j 147 1
 -    * op sub *tmp5 148 100
-   327 read *tmp6 bank2 48
-   328 read *tmp3 bank2 148
-   329 op add *tmp7 *tmp3 *tmp6
-   330 write *tmp7 bank2 148
+   327 read *tmp7 bank2 48
+   328 read *tmp8 bank2 148
+   329 op add *tmp9 *tmp8 *tmp7
+   330 write *tmp9 bank2 148
    331 label *label131
 -    * op add :j 148 1
 -    * op sub *tmp5 149 100
-   332 read *tmp6 bank2 49
-   333 read *tmp3 bank2 149
-   334 op add *tmp7 *tmp3 *tmp6
-   335 write *tmp7 bank2 149
+   332 read *tmp7 bank2 49
+   333 read *tmp8 bank2 149
+   334 op add *tmp9 *tmp8 *tmp7
+   335 write *tmp9 bank2 149
    336 label *label132
 -    * op add :j 149 1
 -    * op sub *tmp5 150 100
-   337 read *tmp6 bank2 50
-   338 read *tmp3 bank2 150
-   339 op add *tmp7 *tmp3 *tmp6
-   340 write *tmp7 bank2 150
+   337 read *tmp7 bank2 50
+   338 read *tmp8 bank2 150
+   339 op add *tmp9 *tmp8 *tmp7
+   340 write *tmp9 bank2 150
    341 label *label133
 -    * op add :j 150 1
 -    * op sub *tmp5 151 100
-   342 read *tmp6 bank2 51
-   343 read *tmp3 bank2 151
-   344 op add *tmp7 *tmp3 *tmp6
-   345 write *tmp7 bank2 151
+   342 read *tmp7 bank2 51
+   343 read *tmp8 bank2 151
+   344 op add *tmp9 *tmp8 *tmp7
+   345 write *tmp9 bank2 151
    346 label *label134
 -    * op add :j 151 1
 -    * op sub *tmp5 152 100
-   347 read *tmp6 bank2 52
-   348 read *tmp3 bank2 152
-   349 op add *tmp7 *tmp3 *tmp6
-   350 write *tmp7 bank2 152
+   347 read *tmp7 bank2 52
+   348 read *tmp8 bank2 152
+   349 op add *tmp9 *tmp8 *tmp7
+   350 write *tmp9 bank2 152
    351 label *label135
 -    * op add :j 152 1
 -    * op sub *tmp5 153 100
-   352 read *tmp6 bank2 53
-   353 read *tmp3 bank2 153
-   354 op add *tmp7 *tmp3 *tmp6
-   355 write *tmp7 bank2 153
+   352 read *tmp7 bank2 53
+   353 read *tmp8 bank2 153
+   354 op add *tmp9 *tmp8 *tmp7
+   355 write *tmp9 bank2 153
    356 label *label136
 -    * op add :j 153 1
 -    * op sub *tmp5 154 100
-   357 read *tmp6 bank2 54
-   358 read *tmp3 bank2 154
-   359 op add *tmp7 *tmp3 *tmp6
-   360 write *tmp7 bank2 154
+   357 read *tmp7 bank2 54
+   358 read *tmp8 bank2 154
+   359 op add *tmp9 *tmp8 *tmp7
+   360 write *tmp9 bank2 154
    361 label *label137
 -    * op add :j 154 1
 -    * op sub *tmp5 155 100
-   362 read *tmp6 bank2 55
-   363 read *tmp3 bank2 155
-   364 op add *tmp7 *tmp3 *tmp6
-   365 write *tmp7 bank2 155
+   362 read *tmp7 bank2 55
+   363 read *tmp8 bank2 155
+   364 op add *tmp9 *tmp8 *tmp7
+   365 write *tmp9 bank2 155
    366 label *label138
 -    * op add :j 155 1
 -    * op sub *tmp5 156 100
-   367 read *tmp6 bank2 56
-   368 read *tmp3 bank2 156
-   369 op add *tmp7 *tmp3 *tmp6
-   370 write *tmp7 bank2 156
+   367 read *tmp7 bank2 56
+   368 read *tmp8 bank2 156
+   369 op add *tmp9 *tmp8 *tmp7
+   370 write *tmp9 bank2 156
    371 label *label139
 -    * op add :j 156 1
 -    * op sub *tmp5 157 100
-   372 read *tmp6 bank2 57
-   373 read *tmp3 bank2 157
-   374 op add *tmp7 *tmp3 *tmp6
-   375 write *tmp7 bank2 157
+   372 read *tmp7 bank2 57
+   373 read *tmp8 bank2 157
+   374 op add *tmp9 *tmp8 *tmp7
+   375 write *tmp9 bank2 157
    376 label *label140
 -    * op add :j 157 1
 -    * op sub *tmp5 158 100
-   377 read *tmp6 bank2 58
-   378 read *tmp3 bank2 158
-   379 op add *tmp7 *tmp3 *tmp6
-   380 write *tmp7 bank2 158
+   377 read *tmp7 bank2 58
+   378 read *tmp8 bank2 158
+   379 op add *tmp9 *tmp8 *tmp7
+   380 write *tmp9 bank2 158
    381 label *label141
 -    * op add :j 158 1
 -    * op sub *tmp5 159 100
-   382 read *tmp6 bank2 59
-   383 read *tmp3 bank2 159
-   384 op add *tmp7 *tmp3 *tmp6
-   385 write *tmp7 bank2 159
+   382 read *tmp7 bank2 59
+   383 read *tmp8 bank2 159
+   384 op add *tmp9 *tmp8 *tmp7
+   385 write *tmp9 bank2 159
    386 label *label142
 -    * op add :j 159 1
 -    * op sub *tmp5 160 100
-   387 read *tmp6 bank2 60
-   388 read *tmp3 bank2 160
-   389 op add *tmp7 *tmp3 *tmp6
-   390 write *tmp7 bank2 160
+   387 read *tmp7 bank2 60
+   388 read *tmp8 bank2 160
+   389 op add *tmp9 *tmp8 *tmp7
+   390 write *tmp9 bank2 160
    391 label *label143
 -    * op add :j 160 1
 -    * op sub *tmp5 161 100
-   392 read *tmp6 bank2 61
-   393 read *tmp3 bank2 161
-   394 op add *tmp7 *tmp3 *tmp6
-   395 write *tmp7 bank2 161
+   392 read *tmp7 bank2 61
+   393 read *tmp8 bank2 161
+   394 op add *tmp9 *tmp8 *tmp7
+   395 write *tmp9 bank2 161
    396 label *label144
 -    * op add :j 161 1
 -    * op sub *tmp5 162 100
-   397 read *tmp6 bank2 62
-   398 read *tmp3 bank2 162
-   399 op add *tmp7 *tmp3 *tmp6
-   400 write *tmp7 bank2 162
+   397 read *tmp7 bank2 62
+   398 read *tmp8 bank2 162
+   399 op add *tmp9 *tmp8 *tmp7
+   400 write *tmp9 bank2 162
    401 label *label145
 -    * op add :j 162 1
 -    * op sub *tmp5 163 100
-   402 read *tmp6 bank2 63
-   403 read *tmp3 bank2 163
-   404 op add *tmp7 *tmp3 *tmp6
-   405 write *tmp7 bank2 163
+   402 read *tmp7 bank2 63
+   403 read *tmp8 bank2 163
+   404 op add *tmp9 *tmp8 *tmp7
+   405 write *tmp9 bank2 163
    406 label *label146
 -    * op add :j 163 1
 -    * op sub *tmp5 164 100
-   407 read *tmp6 bank2 64
-   408 read *tmp3 bank2 164
-   409 op add *tmp7 *tmp3 *tmp6
-   410 write *tmp7 bank2 164
+   407 read *tmp7 bank2 64
+   408 read *tmp8 bank2 164
+   409 op add *tmp9 *tmp8 *tmp7
+   410 write *tmp9 bank2 164
    411 label *label147
 -    * op add :j 164 1
 -    * op sub *tmp5 165 100
-   412 read *tmp6 bank2 65
-   413 read *tmp3 bank2 165
-   414 op add *tmp7 *tmp3 *tmp6
-   415 write *tmp7 bank2 165
+   412 read *tmp7 bank2 65
+   413 read *tmp8 bank2 165
+   414 op add *tmp9 *tmp8 *tmp7
+   415 write *tmp9 bank2 165
    416 label *label148
 -    * op add :j 165 1
 -    * op sub *tmp5 166 100
-   417 read *tmp6 bank2 66
-   418 read *tmp3 bank2 166
-   419 op add *tmp7 *tmp3 *tmp6
-   420 write *tmp7 bank2 166
+   417 read *tmp7 bank2 66
+   418 read *tmp8 bank2 166
+   419 op add *tmp9 *tmp8 *tmp7
+   420 write *tmp9 bank2 166
    421 label *label149
 -    * op add :j 166 1
 -    * op sub *tmp5 167 100
-   422 read *tmp6 bank2 67
-   423 read *tmp3 bank2 167
-   424 op add *tmp7 *tmp3 *tmp6
-   425 write *tmp7 bank2 167
+   422 read *tmp7 bank2 67
+   423 read *tmp8 bank2 167
+   424 op add *tmp9 *tmp8 *tmp7
+   425 write *tmp9 bank2 167
    426 label *label150
 -    * op add :j 167 1
 -    * op sub *tmp5 168 100
-   427 read *tmp6 bank2 68
-   428 read *tmp3 bank2 168
-   429 op add *tmp7 *tmp3 *tmp6
-   430 write *tmp7 bank2 168
+   427 read *tmp7 bank2 68
+   428 read *tmp8 bank2 168
+   429 op add *tmp9 *tmp8 *tmp7
+   430 write *tmp9 bank2 168
    431 label *label151
 -    * op add :j 168 1
 -    * op sub *tmp5 169 100
-   432 read *tmp6 bank2 69
-   433 read *tmp3 bank2 169
-   434 op add *tmp7 *tmp3 *tmp6
-   435 write *tmp7 bank2 169
+   432 read *tmp7 bank2 69
+   433 read *tmp8 bank2 169
+   434 op add *tmp9 *tmp8 *tmp7
+   435 write *tmp9 bank2 169
    436 label *label152
 -    * op add :j 169 1
 -    * op sub *tmp5 170 100
-   437 read *tmp6 bank2 70
-   438 read *tmp3 bank2 170
-   439 op add *tmp7 *tmp3 *tmp6
-   440 write *tmp7 bank2 170
+   437 read *tmp7 bank2 70
+   438 read *tmp8 bank2 170
+   439 op add *tmp9 *tmp8 *tmp7
+   440 write *tmp9 bank2 170
    441 label *label153
 -    * op add :j 170 1
 -    * op sub *tmp5 171 100
-   442 read *tmp6 bank2 71
-   443 read *tmp3 bank2 171
-   444 op add *tmp7 *tmp3 *tmp6
-   445 write *tmp7 bank2 171
+   442 read *tmp7 bank2 71
+   443 read *tmp8 bank2 171
+   444 op add *tmp9 *tmp8 *tmp7
+   445 write *tmp9 bank2 171
    446 label *label154
 -    * op add :j 171 1
 -    * op sub *tmp5 172 100
-   447 read *tmp6 bank2 72
-   448 read *tmp3 bank2 172
-   449 op add *tmp7 *tmp3 *tmp6
-   450 write *tmp7 bank2 172
+   447 read *tmp7 bank2 72
+   448 read *tmp8 bank2 172
+   449 op add *tmp9 *tmp8 *tmp7
+   450 write *tmp9 bank2 172
    451 label *label155
 -    * op add :j 172 1
 -    * op sub *tmp5 173 100
-   452 read *tmp6 bank2 73
-   453 read *tmp3 bank2 173
-   454 op add *tmp7 *tmp3 *tmp6
-   455 write *tmp7 bank2 173
+   452 read *tmp7 bank2 73
+   453 read *tmp8 bank2 173
+   454 op add *tmp9 *tmp8 *tmp7
+   455 write *tmp9 bank2 173
    456 label *label156
 -    * op add :j 173 1
 -    * op sub *tmp5 174 100
-   457 read *tmp6 bank2 74
-   458 read *tmp3 bank2 174
-   459 op add *tmp7 *tmp3 *tmp6
-   460 write *tmp7 bank2 174
+   457 read *tmp7 bank2 74
+   458 read *tmp8 bank2 174
+   459 op add *tmp9 *tmp8 *tmp7
+   460 write *tmp9 bank2 174
    461 label *label157
 -    * op add :j 174 1
 -    * op sub *tmp5 175 100
-   462 read *tmp6 bank2 75
-   463 read *tmp3 bank2 175
-   464 op add *tmp7 *tmp3 *tmp6
-   465 write *tmp7 bank2 175
+   462 read *tmp7 bank2 75
+   463 read *tmp8 bank2 175
+   464 op add *tmp9 *tmp8 *tmp7
+   465 write *tmp9 bank2 175
    466 label *label158
 -    * op add :j 175 1
 -    * op sub *tmp5 176 100
-   467 read *tmp6 bank2 76
-   468 read *tmp3 bank2 176
-   469 op add *tmp7 *tmp3 *tmp6
-   470 write *tmp7 bank2 176
+   467 read *tmp7 bank2 76
+   468 read *tmp8 bank2 176
+   469 op add *tmp9 *tmp8 *tmp7
+   470 write *tmp9 bank2 176
    471 label *label159
 -    * op add :j 176 1
 -    * op sub *tmp5 177 100
-   472 read *tmp6 bank2 77
-   473 read *tmp3 bank2 177
-   474 op add *tmp7 *tmp3 *tmp6
-   475 write *tmp7 bank2 177
+   472 read *tmp7 bank2 77
+   473 read *tmp8 bank2 177
+   474 op add *tmp9 *tmp8 *tmp7
+   475 write *tmp9 bank2 177
    476 label *label160
 -    * op add :j 177 1
 -    * op sub *tmp5 178 100
-   477 read *tmp6 bank2 78
-   478 read *tmp3 bank2 178
-   479 op add *tmp7 *tmp3 *tmp6
-   480 write *tmp7 bank2 178
+   477 read *tmp7 bank2 78
+   478 read *tmp8 bank2 178
+   479 op add *tmp9 *tmp8 *tmp7
+   480 write *tmp9 bank2 178
    481 label *label161
 -    * op add :j 178 1
 -    * op sub *tmp5 179 100
-   482 read *tmp6 bank2 79
-   483 read *tmp3 bank2 179
-   484 op add *tmp7 *tmp3 *tmp6
-   485 write *tmp7 bank2 179
+   482 read *tmp7 bank2 79
+   483 read *tmp8 bank2 179
+   484 op add *tmp9 *tmp8 *tmp7
+   485 write *tmp9 bank2 179
    486 label *label162
 -    * op add :j 179 1
 -    * op sub *tmp5 180 100
-   487 read *tmp6 bank2 80
-   488 read *tmp3 bank2 180
-   489 op add *tmp7 *tmp3 *tmp6
-   490 write *tmp7 bank2 180
+   487 read *tmp7 bank2 80
+   488 read *tmp8 bank2 180
+   489 op add *tmp9 *tmp8 *tmp7
+   490 write *tmp9 bank2 180
    491 label *label163
 -    * op add :j 180 1
 -    * op sub *tmp5 181 100
-   492 read *tmp6 bank2 81
-   493 read *tmp3 bank2 181
-   494 op add *tmp7 *tmp3 *tmp6
-   495 write *tmp7 bank2 181
+   492 read *tmp7 bank2 81
+   493 read *tmp8 bank2 181
+   494 op add *tmp9 *tmp8 *tmp7
+   495 write *tmp9 bank2 181
    496 label *label164
 -    * op add :j 181 1
 -    * op sub *tmp5 182 100
-   497 read *tmp6 bank2 82
-   498 read *tmp3 bank2 182
-   499 op add *tmp7 *tmp3 *tmp6
-   500 write *tmp7 bank2 182
+   497 read *tmp7 bank2 82
+   498 read *tmp8 bank2 182
+   499 op add *tmp9 *tmp8 *tmp7
+   500 write *tmp9 bank2 182
    501 label *label165
 -    * op add :j 182 1
 -    * op sub *tmp5 183 100
-   502 read *tmp6 bank2 83
-   503 read *tmp3 bank2 183
-   504 op add *tmp7 *tmp3 *tmp6
-   505 write *tmp7 bank2 183
+   502 read *tmp7 bank2 83
+   503 read *tmp8 bank2 183
+   504 op add *tmp9 *tmp8 *tmp7
+   505 write *tmp9 bank2 183
    506 label *label166
 -    * op add :j 183 1
 -    * op sub *tmp5 184 100
-   507 read *tmp6 bank2 84
-   508 read *tmp3 bank2 184
-   509 op add *tmp7 *tmp3 *tmp6
-   510 write *tmp7 bank2 184
+   507 read *tmp7 bank2 84
+   508 read *tmp8 bank2 184
+   509 op add *tmp9 *tmp8 *tmp7
+   510 write *tmp9 bank2 184
    511 label *label167
 -    * op add :j 184 1
 -    * op sub *tmp5 185 100
-   512 read *tmp6 bank2 85
-   513 read *tmp3 bank2 185
-   514 op add *tmp7 *tmp3 *tmp6
-   515 write *tmp7 bank2 185
+   512 read *tmp7 bank2 85
+   513 read *tmp8 bank2 185
+   514 op add *tmp9 *tmp8 *tmp7
+   515 write *tmp9 bank2 185
    516 label *label168
 -    * op add :j 185 1
 -    * op sub *tmp5 186 100
-   517 read *tmp6 bank2 86
-   518 read *tmp3 bank2 186
-   519 op add *tmp7 *tmp3 *tmp6
-   520 write *tmp7 bank2 186
+   517 read *tmp7 bank2 86
+   518 read *tmp8 bank2 186
+   519 op add *tmp9 *tmp8 *tmp7
+   520 write *tmp9 bank2 186
    521 label *label169
 -    * op add :j 186 1
 -    * op sub *tmp5 187 100
-   522 read *tmp6 bank2 87
-   523 read *tmp3 bank2 187
-   524 op add *tmp7 *tmp3 *tmp6
-   525 write *tmp7 bank2 187
+   522 read *tmp7 bank2 87
+   523 read *tmp8 bank2 187
+   524 op add *tmp9 *tmp8 *tmp7
+   525 write *tmp9 bank2 187
    526 label *label170
 -    * op add :j 187 1
 -    * op sub *tmp5 188 100
-   527 read *tmp6 bank2 88
-   528 read *tmp3 bank2 188
-   529 op add *tmp7 *tmp3 *tmp6
-   530 write *tmp7 bank2 188
+   527 read *tmp7 bank2 88
+   528 read *tmp8 bank2 188
+   529 op add *tmp9 *tmp8 *tmp7
+   530 write *tmp9 bank2 188
    531 label *label171
 -    * op add :j 188 1
 -    * op sub *tmp5 189 100
-   532 read *tmp6 bank2 89
-   533 read *tmp3 bank2 189
-   534 op add *tmp7 *tmp3 *tmp6
-   535 write *tmp7 bank2 189
+   532 read *tmp7 bank2 89
+   533 read *tmp8 bank2 189
+   534 op add *tmp9 *tmp8 *tmp7
+   535 write *tmp9 bank2 189
    536 label *label172
 -    * op add :j 189 1
 -    * op sub *tmp5 190 100
-   537 read *tmp6 bank2 90
-   538 read *tmp3 bank2 190
-   539 op add *tmp7 *tmp3 *tmp6
-   540 write *tmp7 bank2 190
+   537 read *tmp7 bank2 90
+   538 read *tmp8 bank2 190
+   539 op add *tmp9 *tmp8 *tmp7
+   540 write *tmp9 bank2 190
    541 label *label173
 -    * op add :j 190 1
 -    * op sub *tmp5 191 100
-   542 read *tmp6 bank2 91
-   543 read *tmp3 bank2 191
-   544 op add *tmp7 *tmp3 *tmp6
-   545 write *tmp7 bank2 191
+   542 read *tmp7 bank2 91
+   543 read *tmp8 bank2 191
+   544 op add *tmp9 *tmp8 *tmp7
+   545 write *tmp9 bank2 191
    546 label *label174
 -    * op add :j 191 1
 -    * op sub *tmp5 192 100
-   547 read *tmp6 bank2 92
-   548 read *tmp3 bank2 192
-   549 op add *tmp7 *tmp3 *tmp6
-   550 write *tmp7 bank2 192
+   547 read *tmp7 bank2 92
+   548 read *tmp8 bank2 192
+   549 op add *tmp9 *tmp8 *tmp7
+   550 write *tmp9 bank2 192
    551 label *label175
 -    * op add :j 192 1
 -    * op sub *tmp5 193 100
-   552 read *tmp6 bank2 93
-   553 read *tmp3 bank2 193
-   554 op add *tmp7 *tmp3 *tmp6
-   555 write *tmp7 bank2 193
+   552 read *tmp7 bank2 93
+   553 read *tmp8 bank2 193
+   554 op add *tmp9 *tmp8 *tmp7
+   555 write *tmp9 bank2 193
    556 label *label176
 -    * op add :j 193 1
 -    * op sub *tmp5 194 100
-   557 read *tmp6 bank2 94
-   558 read *tmp3 bank2 194
-   559 op add *tmp7 *tmp3 *tmp6
-   560 write *tmp7 bank2 194
+   557 read *tmp7 bank2 94
+   558 read *tmp8 bank2 194
+   559 op add *tmp9 *tmp8 *tmp7
+   560 write *tmp9 bank2 194
    561 label *label177
 -    * op add :j 194 1
 -    * op sub *tmp5 195 100
-   562 read *tmp6 bank2 95
-   563 read *tmp3 bank2 195
-   564 op add *tmp7 *tmp3 *tmp6
-   565 write *tmp7 bank2 195
+   562 read *tmp7 bank2 95
+   563 read *tmp8 bank2 195
+   564 op add *tmp9 *tmp8 *tmp7
+   565 write *tmp9 bank2 195
    566 label *label178
 -    * op add :j 195 1
 -    * op sub *tmp5 196 100
-   567 read *tmp6 bank2 96
-   568 read *tmp3 bank2 196
-   569 op add *tmp7 *tmp3 *tmp6
-   570 write *tmp7 bank2 196
+   567 read *tmp7 bank2 96
+   568 read *tmp8 bank2 196
+   569 op add *tmp9 *tmp8 *tmp7
+   570 write *tmp9 bank2 196
    571 label *label179
 -    * op add :j 196 1
 -    * op sub *tmp5 197 100
-   572 read *tmp6 bank2 97
-   573 read *tmp3 bank2 197
-   574 op add *tmp7 *tmp3 *tmp6
-   575 write *tmp7 bank2 197
+   572 read *tmp7 bank2 97
+   573 read *tmp8 bank2 197
+   574 op add *tmp9 *tmp8 *tmp7
+   575 write *tmp9 bank2 197
    576 label *label180
 -    * op add :j 197 1
 -    * op sub *tmp5 198 100
-   577 read *tmp6 bank2 98
-   578 read *tmp3 bank2 198
-   579 op add *tmp7 *tmp3 *tmp6
-   580 write *tmp7 bank2 198
+   577 read *tmp7 bank2 98
+   578 read *tmp8 bank2 198
+   579 op add *tmp9 *tmp8 *tmp7
+   580 write *tmp9 bank2 198
    581 label *label181
 -    * op add :j 198 1
 -    * op sub *tmp5 199 100
-   582 read *tmp6 bank2 99
-   583 read *tmp3 bank2 199
-   584 op add *tmp7 *tmp3 *tmp6
-   585 write *tmp7 bank2 199
+   582 read *tmp7 bank2 99
+   583 read *tmp8 bank2 199
+   584 op add *tmp9 *tmp8 *tmp7
+   585 write *tmp9 bank2 199
    586 label *label182
 -    * op add :j 199 1
 -    * op sub *tmp5 200 100
-   587 read *tmp6 bank2 100
-   588 read *tmp3 bank2 200
-   589 op add *tmp7 *tmp3 *tmp6
-   590 write *tmp7 bank2 200
+   587 read *tmp7 bank2 100
+   588 read *tmp8 bank2 200
+   589 op add *tmp9 *tmp8 *tmp7
+   590 write *tmp9 bank2 200
    591 label *label183
 -    * op add :j 200 1
    592 label *label67
@@ -3350,8 +3350,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-2
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   463 read *tmp8 bank2 200
-   464 assertequals 73682 *tmp8 "Project Euler 31b"
+   463 read *tmp11 bank2 200
+   464 assertequals 73682 *tmp11 "Project Euler 31b"
    465 stop
 -    * end
 
@@ -3361,465 +3361,465 @@ write 1 bank2 0
 set :j 1
 label *label17
 op sub *tmp5 :j 1
-read *tmp6 bank2 *tmp5
-read *tmp3 bank2 :j
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 :j
+read *tmp7 bank2 *tmp5
+read *tmp8 bank2 :j
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 :j
 op add :j :j 1
 jump *label17 lessThanEq :j 200
 set :j 2
 label *label25
 op sub *tmp5 :j 2
-read *tmp6 bank2 *tmp5
-read *tmp3 bank2 :j
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 :j
+read *tmp7 bank2 *tmp5
+read *tmp8 bank2 :j
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 :j
 op add :j :j 1
 jump *label25 lessThanEq :j 200
 set :j 5
 label *label33
 op sub *tmp5 :j 5
-read *tmp6 bank2 *tmp5
-read *tmp3 bank2 :j
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 :j
+read *tmp7 bank2 *tmp5
+read *tmp8 bank2 :j
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 :j
 op add :j :j 1
 jump *label33 lessThanEq :j 200
 set :j 10
 label *label41
 op sub *tmp5 :j 10
-read *tmp6 bank2 *tmp5
-read *tmp3 bank2 :j
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 :j
+read *tmp7 bank2 *tmp5
+read *tmp8 bank2 :j
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 :j
 op add :j :j 1
 jump *label41 lessThanEq :j 200
 set :j 20
 label *label49
 op sub *tmp5 :j 20
-read *tmp6 bank2 *tmp5
-read *tmp3 bank2 :j
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 :j
+read *tmp7 bank2 *tmp5
+read *tmp8 bank2 :j
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 :j
 op add :j :j 1
 jump *label49 lessThanEq :j 200
 set :j 50
 label *label57
 op sub *tmp5 :j 50
-read *tmp6 bank2 *tmp5
-read *tmp3 bank2 :j
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 :j
+read *tmp7 bank2 *tmp5
+read *tmp8 bank2 :j
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 :j
 op add :j :j 1
 jump *label57 lessThanEq :j 200
-read *tmp6 bank2 0
-read *tmp3 bank2 100
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 100
-read *tmp6 bank2 1
-read *tmp3 bank2 101
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 101
-read *tmp6 bank2 2
-read *tmp3 bank2 102
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 102
-read *tmp6 bank2 3
-read *tmp3 bank2 103
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 103
-read *tmp6 bank2 4
-read *tmp3 bank2 104
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 104
-read *tmp6 bank2 5
-read *tmp3 bank2 105
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 105
-read *tmp6 bank2 6
-read *tmp3 bank2 106
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 106
-read *tmp6 bank2 7
-read *tmp3 bank2 107
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 107
-read *tmp6 bank2 8
-read *tmp3 bank2 108
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 108
-read *tmp6 bank2 9
-read *tmp3 bank2 109
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 109
-read *tmp6 bank2 10
-read *tmp3 bank2 110
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 110
-read *tmp6 bank2 11
-read *tmp3 bank2 111
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 111
-read *tmp6 bank2 12
-read *tmp3 bank2 112
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 112
-read *tmp6 bank2 13
-read *tmp3 bank2 113
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 113
-read *tmp6 bank2 14
-read *tmp3 bank2 114
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 114
-read *tmp6 bank2 15
-read *tmp3 bank2 115
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 115
-read *tmp6 bank2 16
-read *tmp3 bank2 116
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 116
-read *tmp6 bank2 17
-read *tmp3 bank2 117
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 117
-read *tmp6 bank2 18
-read *tmp3 bank2 118
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 118
-read *tmp6 bank2 19
-read *tmp3 bank2 119
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 119
-read *tmp6 bank2 20
-read *tmp3 bank2 120
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 120
-read *tmp6 bank2 21
-read *tmp3 bank2 121
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 121
-read *tmp6 bank2 22
-read *tmp3 bank2 122
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 122
-read *tmp6 bank2 23
-read *tmp3 bank2 123
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 123
-read *tmp6 bank2 24
-read *tmp3 bank2 124
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 124
-read *tmp6 bank2 25
-read *tmp3 bank2 125
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 125
-read *tmp6 bank2 26
-read *tmp3 bank2 126
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 126
-read *tmp6 bank2 27
-read *tmp3 bank2 127
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 127
-read *tmp6 bank2 28
-read *tmp3 bank2 128
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 128
-read *tmp6 bank2 29
-read *tmp3 bank2 129
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 129
-read *tmp6 bank2 30
-read *tmp3 bank2 130
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 130
-read *tmp6 bank2 31
-read *tmp3 bank2 131
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 131
-read *tmp6 bank2 32
-read *tmp3 bank2 132
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 132
-read *tmp6 bank2 33
-read *tmp3 bank2 133
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 133
-read *tmp6 bank2 34
-read *tmp3 bank2 134
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 134
-read *tmp6 bank2 35
-read *tmp3 bank2 135
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 135
-read *tmp6 bank2 36
-read *tmp3 bank2 136
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 136
-read *tmp6 bank2 37
-read *tmp3 bank2 137
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 137
-read *tmp6 bank2 38
-read *tmp3 bank2 138
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 138
-read *tmp6 bank2 39
-read *tmp3 bank2 139
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 139
-read *tmp6 bank2 40
-read *tmp3 bank2 140
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 140
-read *tmp6 bank2 41
-read *tmp3 bank2 141
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 141
-read *tmp6 bank2 42
-read *tmp3 bank2 142
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 142
-read *tmp6 bank2 43
-read *tmp3 bank2 143
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 143
-read *tmp6 bank2 44
-read *tmp3 bank2 144
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 144
-read *tmp6 bank2 45
-read *tmp3 bank2 145
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 145
-read *tmp6 bank2 46
-read *tmp3 bank2 146
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 146
-read *tmp6 bank2 47
-read *tmp3 bank2 147
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 147
-read *tmp6 bank2 48
-read *tmp3 bank2 148
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 148
-read *tmp6 bank2 49
-read *tmp3 bank2 149
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 149
-read *tmp6 bank2 50
-read *tmp3 bank2 150
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 150
-read *tmp6 bank2 51
-read *tmp3 bank2 151
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 151
-read *tmp6 bank2 52
-read *tmp3 bank2 152
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 152
-read *tmp6 bank2 53
-read *tmp3 bank2 153
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 153
-read *tmp6 bank2 54
-read *tmp3 bank2 154
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 154
-read *tmp6 bank2 55
-read *tmp3 bank2 155
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 155
-read *tmp6 bank2 56
-read *tmp3 bank2 156
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 156
-read *tmp6 bank2 57
-read *tmp3 bank2 157
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 157
-read *tmp6 bank2 58
-read *tmp3 bank2 158
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 158
-read *tmp6 bank2 59
-read *tmp3 bank2 159
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 159
-read *tmp6 bank2 60
-read *tmp3 bank2 160
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 160
-read *tmp6 bank2 61
-read *tmp3 bank2 161
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 161
-read *tmp6 bank2 62
-read *tmp3 bank2 162
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 162
-read *tmp6 bank2 63
-read *tmp3 bank2 163
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 163
-read *tmp6 bank2 64
-read *tmp3 bank2 164
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 164
-read *tmp6 bank2 65
-read *tmp3 bank2 165
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 165
-read *tmp6 bank2 66
-read *tmp3 bank2 166
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 166
-read *tmp6 bank2 67
-read *tmp3 bank2 167
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 167
-read *tmp6 bank2 68
-read *tmp3 bank2 168
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 168
-read *tmp6 bank2 69
-read *tmp3 bank2 169
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 169
-read *tmp6 bank2 70
-read *tmp3 bank2 170
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 170
-read *tmp6 bank2 71
-read *tmp3 bank2 171
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 171
-read *tmp6 bank2 72
-read *tmp3 bank2 172
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 172
-read *tmp6 bank2 73
-read *tmp3 bank2 173
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 173
-read *tmp6 bank2 74
-read *tmp3 bank2 174
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 174
-read *tmp6 bank2 75
-read *tmp3 bank2 175
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 175
-read *tmp6 bank2 76
-read *tmp3 bank2 176
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 176
-read *tmp6 bank2 77
-read *tmp3 bank2 177
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 177
-read *tmp6 bank2 78
-read *tmp3 bank2 178
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 178
-read *tmp6 bank2 79
-read *tmp3 bank2 179
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 179
-read *tmp6 bank2 80
-read *tmp3 bank2 180
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 180
-read *tmp6 bank2 81
-read *tmp3 bank2 181
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 181
-read *tmp6 bank2 82
-read *tmp3 bank2 182
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 182
-read *tmp6 bank2 83
-read *tmp3 bank2 183
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 183
-read *tmp6 bank2 84
-read *tmp3 bank2 184
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 184
-read *tmp6 bank2 85
-read *tmp3 bank2 185
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 185
-read *tmp6 bank2 86
-read *tmp3 bank2 186
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 186
-read *tmp6 bank2 87
-read *tmp3 bank2 187
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 187
-read *tmp6 bank2 88
-read *tmp3 bank2 188
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 188
-read *tmp6 bank2 89
-read *tmp3 bank2 189
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 189
-read *tmp6 bank2 90
-read *tmp3 bank2 190
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 190
-read *tmp6 bank2 91
-read *tmp3 bank2 191
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 191
-read *tmp6 bank2 92
-read *tmp3 bank2 192
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 192
-read *tmp6 bank2 93
-read *tmp3 bank2 193
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 193
-read *tmp6 bank2 94
-read *tmp3 bank2 194
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 194
-read *tmp6 bank2 95
-read *tmp3 bank2 195
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 195
-read *tmp6 bank2 96
-read *tmp3 bank2 196
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 196
-read *tmp6 bank2 97
-read *tmp3 bank2 197
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 197
-read *tmp6 bank2 98
-read *tmp3 bank2 198
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 198
-read *tmp6 bank2 99
-read *tmp3 bank2 199
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 199
-read *tmp6 bank2 100
-read *tmp3 bank2 200
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 200
-read *tmp6 bank2 0
-read *tmp3 bank2 200
-op add *tmp7 *tmp3 *tmp6
-write *tmp7 bank2 200
+read *tmp7 bank2 0
+read *tmp8 bank2 100
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 100
+read *tmp7 bank2 1
+read *tmp8 bank2 101
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 101
+read *tmp7 bank2 2
+read *tmp8 bank2 102
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 102
+read *tmp7 bank2 3
+read *tmp8 bank2 103
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 103
+read *tmp7 bank2 4
+read *tmp8 bank2 104
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 104
+read *tmp7 bank2 5
+read *tmp8 bank2 105
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 105
+read *tmp7 bank2 6
+read *tmp8 bank2 106
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 106
+read *tmp7 bank2 7
+read *tmp8 bank2 107
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 107
+read *tmp7 bank2 8
+read *tmp8 bank2 108
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 108
+read *tmp7 bank2 9
+read *tmp8 bank2 109
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 109
+read *tmp7 bank2 10
+read *tmp8 bank2 110
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 110
+read *tmp7 bank2 11
+read *tmp8 bank2 111
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 111
+read *tmp7 bank2 12
+read *tmp8 bank2 112
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 112
+read *tmp7 bank2 13
+read *tmp8 bank2 113
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 113
+read *tmp7 bank2 14
+read *tmp8 bank2 114
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 114
+read *tmp7 bank2 15
+read *tmp8 bank2 115
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 115
+read *tmp7 bank2 16
+read *tmp8 bank2 116
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 116
+read *tmp7 bank2 17
+read *tmp8 bank2 117
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 117
+read *tmp7 bank2 18
+read *tmp8 bank2 118
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 118
+read *tmp7 bank2 19
+read *tmp8 bank2 119
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 119
+read *tmp7 bank2 20
+read *tmp8 bank2 120
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 120
+read *tmp7 bank2 21
+read *tmp8 bank2 121
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 121
+read *tmp7 bank2 22
+read *tmp8 bank2 122
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 122
+read *tmp7 bank2 23
+read *tmp8 bank2 123
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 123
+read *tmp7 bank2 24
+read *tmp8 bank2 124
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 124
+read *tmp7 bank2 25
+read *tmp8 bank2 125
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 125
+read *tmp7 bank2 26
+read *tmp8 bank2 126
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 126
+read *tmp7 bank2 27
+read *tmp8 bank2 127
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 127
+read *tmp7 bank2 28
+read *tmp8 bank2 128
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 128
+read *tmp7 bank2 29
+read *tmp8 bank2 129
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 129
+read *tmp7 bank2 30
+read *tmp8 bank2 130
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 130
+read *tmp7 bank2 31
+read *tmp8 bank2 131
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 131
+read *tmp7 bank2 32
+read *tmp8 bank2 132
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 132
+read *tmp7 bank2 33
+read *tmp8 bank2 133
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 133
+read *tmp7 bank2 34
+read *tmp8 bank2 134
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 134
+read *tmp7 bank2 35
+read *tmp8 bank2 135
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 135
+read *tmp7 bank2 36
+read *tmp8 bank2 136
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 136
+read *tmp7 bank2 37
+read *tmp8 bank2 137
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 137
+read *tmp7 bank2 38
+read *tmp8 bank2 138
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 138
+read *tmp7 bank2 39
+read *tmp8 bank2 139
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 139
+read *tmp7 bank2 40
+read *tmp8 bank2 140
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 140
+read *tmp7 bank2 41
+read *tmp8 bank2 141
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 141
+read *tmp7 bank2 42
+read *tmp8 bank2 142
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 142
+read *tmp7 bank2 43
+read *tmp8 bank2 143
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 143
+read *tmp7 bank2 44
+read *tmp8 bank2 144
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 144
+read *tmp7 bank2 45
+read *tmp8 bank2 145
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 145
+read *tmp7 bank2 46
+read *tmp8 bank2 146
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 146
+read *tmp7 bank2 47
+read *tmp8 bank2 147
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 147
+read *tmp7 bank2 48
+read *tmp8 bank2 148
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 148
+read *tmp7 bank2 49
+read *tmp8 bank2 149
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 149
+read *tmp7 bank2 50
+read *tmp8 bank2 150
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 150
+read *tmp7 bank2 51
+read *tmp8 bank2 151
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 151
+read *tmp7 bank2 52
+read *tmp8 bank2 152
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 152
+read *tmp7 bank2 53
+read *tmp8 bank2 153
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 153
+read *tmp7 bank2 54
+read *tmp8 bank2 154
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 154
+read *tmp7 bank2 55
+read *tmp8 bank2 155
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 155
+read *tmp7 bank2 56
+read *tmp8 bank2 156
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 156
+read *tmp7 bank2 57
+read *tmp8 bank2 157
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 157
+read *tmp7 bank2 58
+read *tmp8 bank2 158
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 158
+read *tmp7 bank2 59
+read *tmp8 bank2 159
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 159
+read *tmp7 bank2 60
+read *tmp8 bank2 160
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 160
+read *tmp7 bank2 61
+read *tmp8 bank2 161
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 161
+read *tmp7 bank2 62
+read *tmp8 bank2 162
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 162
+read *tmp7 bank2 63
+read *tmp8 bank2 163
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 163
+read *tmp7 bank2 64
+read *tmp8 bank2 164
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 164
+read *tmp7 bank2 65
+read *tmp8 bank2 165
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 165
+read *tmp7 bank2 66
+read *tmp8 bank2 166
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 166
+read *tmp7 bank2 67
+read *tmp8 bank2 167
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 167
+read *tmp7 bank2 68
+read *tmp8 bank2 168
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 168
+read *tmp7 bank2 69
+read *tmp8 bank2 169
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 169
+read *tmp7 bank2 70
+read *tmp8 bank2 170
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 170
+read *tmp7 bank2 71
+read *tmp8 bank2 171
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 171
+read *tmp7 bank2 72
+read *tmp8 bank2 172
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 172
+read *tmp7 bank2 73
+read *tmp8 bank2 173
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 173
+read *tmp7 bank2 74
+read *tmp8 bank2 174
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 174
+read *tmp7 bank2 75
+read *tmp8 bank2 175
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 175
+read *tmp7 bank2 76
+read *tmp8 bank2 176
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 176
+read *tmp7 bank2 77
+read *tmp8 bank2 177
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 177
+read *tmp7 bank2 78
+read *tmp8 bank2 178
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 178
+read *tmp7 bank2 79
+read *tmp8 bank2 179
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 179
+read *tmp7 bank2 80
+read *tmp8 bank2 180
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 180
+read *tmp7 bank2 81
+read *tmp8 bank2 181
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 181
+read *tmp7 bank2 82
+read *tmp8 bank2 182
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 182
+read *tmp7 bank2 83
+read *tmp8 bank2 183
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 183
+read *tmp7 bank2 84
+read *tmp8 bank2 184
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 184
+read *tmp7 bank2 85
+read *tmp8 bank2 185
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 185
+read *tmp7 bank2 86
+read *tmp8 bank2 186
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 186
+read *tmp7 bank2 87
+read *tmp8 bank2 187
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 187
+read *tmp7 bank2 88
+read *tmp8 bank2 188
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 188
+read *tmp7 bank2 89
+read *tmp8 bank2 189
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 189
+read *tmp7 bank2 90
+read *tmp8 bank2 190
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 190
+read *tmp7 bank2 91
+read *tmp8 bank2 191
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 191
+read *tmp7 bank2 92
+read *tmp8 bank2 192
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 192
+read *tmp7 bank2 93
+read *tmp8 bank2 193
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 193
+read *tmp7 bank2 94
+read *tmp8 bank2 194
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 194
+read *tmp7 bank2 95
+read *tmp8 bank2 195
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 195
+read *tmp7 bank2 96
+read *tmp8 bank2 196
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 196
+read *tmp7 bank2 97
+read *tmp8 bank2 197
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 197
+read *tmp7 bank2 98
+read *tmp8 bank2 198
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 198
+read *tmp7 bank2 99
+read *tmp8 bank2 199
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 199
+read *tmp7 bank2 100
 read *tmp8 bank2 200
-assertequals 73682 *tmp8 "Project Euler 31b"
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 200
+read *tmp7 bank2 0
+read *tmp8 bank2 200
+op add *tmp9 *tmp8 *tmp7
+write *tmp9 bank2 200
+read *tmp11 bank2 200
+assertequals 73682 *tmp11 "Project Euler 31b"
 stop

@@ -13,7 +13,7 @@ loops-in-conditions.mnd:                            4        4     100.0%   25F7
 prints-values.mnd:                                 42       42     100.0%   810146F338C25648   618D499B26C1E42C
 processesAssertBounds:                              5        5     100.0%   95377598091542AF   56C54AE64C590C79
 processesBasicCode2:                                3        3     100.0%   B406896E6E3CDCB7   8FE79E3E7140A46C
-processesBasicCode:                                 4        4     100.0%   A4E4C088A4510A90   EB7D6403850CF0B3
+processesBasicCode:                                 4        4     100.0%   A4E4C088A4510A90   EA7C6512950CF0B3
 processesCaseExpressions:                           6        4      66.7%   0A6F2A75C193B958   167C8B62ED30D771
 processesGlobalVariableDataFlow:                   24       24     100.0%   A117AFBA99D093C8   C5551F799CC03A47
 processesTranslatedCaseExpressions:                 6        4      66.7%   5324DB4ECE283002   167C8B62ED30D771

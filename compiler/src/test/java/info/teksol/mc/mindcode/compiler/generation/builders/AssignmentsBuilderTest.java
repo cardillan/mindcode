@@ -293,15 +293,15 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             allocate heap in bank1;
                             $A = $B++ * --$C;
                             """,
-                    createInstruction(READ, tmp(1), "bank1", "1"),
-                    createInstruction(SET, tmp(2), tmp(1)),
-                    createInstruction(OP, "add", tmp(1), tmp(1), "1"),
+                    createInstruction(READ, tmp(2), "bank1", "1"),
+                    createInstruction(SET, tmp(3), tmp(2)),
+                    createInstruction(OP, "add", tmp(1), tmp(2), "1"),
                     createInstruction(WRITE, tmp(1), "bank1", "1"),
-                    createInstruction(READ, tmp(3), "bank1", "2"),
-                    createInstruction(OP, "sub", tmp(4), tmp(3), "1"),
-                    createInstruction(WRITE, tmp(4), "bank1", "2"),
-                    createInstruction(OP, "mul", tmp(5), tmp(2), tmp(4)),
-                    createInstruction(WRITE, tmp(5), "bank1", "0")
+                    createInstruction(READ, tmp(5), "bank1", "2"),
+                    createInstruction(OP, "sub", tmp(6), tmp(5), "1"),
+                    createInstruction(WRITE, tmp(6), "bank1", "2"),
+                    createInstruction(OP, "mul", tmp(7), tmp(3), tmp(6)),
+                    createInstruction(WRITE, tmp(7), "bank1", "0")
             );
         }
 
@@ -312,16 +312,16 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, tmp(0), ":a"),
                     createInstruction(SET, tmp(2), ":b"),
-                    createInstruction(READ, tmp(3), "cell2", tmp(2)),
-                    createInstruction(SET, tmp(4), tmp(3)),
-                    createInstruction(OP, "add", tmp(3), tmp(3), "1"),
+                    createInstruction(READ, tmp(4), "cell2", tmp(2)),
+                    createInstruction(SET, tmp(5), tmp(4)),
+                    createInstruction(OP, "add", tmp(3), tmp(4), "1"),
                     createInstruction(WRITE, tmp(3), "cell2", tmp(2)),
-                    createInstruction(SET, tmp(5), ":c"),
-                    createInstruction(READ, tmp(6), "cell3", tmp(5)),
-                    createInstruction(OP, "sub", tmp(7), tmp(6), "1"),
-                    createInstruction(WRITE, tmp(7), "cell3", tmp(5)),
-                    createInstruction(OP, "mul", tmp(8), tmp(4), tmp(7)),
-                    createInstruction(WRITE, tmp(8), "cell1", tmp(0))
+                    createInstruction(SET, tmp(6), ":c"),
+                    createInstruction(READ, tmp(8), "cell3", tmp(6)),
+                    createInstruction(OP, "sub", tmp(9), tmp(8), "1"),
+                    createInstruction(WRITE, tmp(9), "cell3", tmp(6)),
+                    createInstruction(OP, "mul", tmp(10), tmp(5), tmp(9)),
+                    createInstruction(WRITE, tmp(10), "cell1", tmp(0))
             );
         }
 
@@ -334,16 +334,16 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, tmp(0), ":a"),
                     createInstruction(OP, "add", ":a", ":a", "1"),
                     createInstruction(SET, tmp(1), tmp(0)),
-                    createInstruction(READ, tmp(2), "cell1", tmp(1)),
-                    createInstruction(SET, tmp(3), tmp(2)),
-                    createInstruction(OP, "add", tmp(2), tmp(2), "1"),
+                    createInstruction(READ, tmp(3), "cell1", tmp(1)),
+                    createInstruction(SET, tmp(4), tmp(3)),
+                    createInstruction(OP, "add", tmp(2), tmp(3), "1"),
                     createInstruction(WRITE, tmp(2), "cell1", tmp(1)),
                     createInstruction(OP, "sub", ":a", ":a", "1"),
-                    createInstruction(SET, tmp(4), ":a"),
-                    createInstruction(READ, tmp(5), "cell2", tmp(4)),
-                    createInstruction(SET, tmp(6), tmp(5)),
-                    createInstruction(OP, "sub", tmp(5), tmp(5), "1"),
-                    createInstruction(WRITE, tmp(5), "cell2", tmp(4))
+                    createInstruction(SET, tmp(5), ":a"),
+                    createInstruction(READ, tmp(7), "cell2", tmp(5)),
+                    createInstruction(SET, tmp(8), tmp(7)),
+                    createInstruction(OP, "sub", tmp(6), tmp(7), "1"),
+                    createInstruction(WRITE, tmp(6), "cell2", tmp(5))
             );
         }
 

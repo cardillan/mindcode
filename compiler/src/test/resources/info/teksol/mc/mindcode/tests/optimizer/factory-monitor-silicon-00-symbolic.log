@@ -232,9 +232,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-40 instruct
    431 op add *tmp170 :n 1
  
    482 label *label69
-   483 set *tmp177 null
+   483 set *tmp178 null
    484 label *label70
--    * set *tmp174 *tmp177
+-    * set *tmp174 *tmp178
    485 jump *label68 always
    486 label *label67
 -    * set *tmp174 null
@@ -251,7 +251,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-40 instruct
 -    * set *tmp172 null
    496 label *label66
    497 drawflush display1
-   498 op sub *tmp192 @time :start
+   498 op sub *tmp193 @time :start
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-8 instructions):
  
@@ -303,13 +303,13 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-8 instructi
    348 jump *label54 always
    349 label *label53
  
-   471 op mul *tmp190 3600 :rate
-   472 op floor *tmp191 *tmp190
-   473 set :flow_str *tmp191
--    * set *tmp177 :flow_str
+   471 op mul *tmp191 3600 :rate
+   472 op floor *tmp192 *tmp191
+   473 set :flow_str *tmp192
+-    * set *tmp178 :flow_str
    474 jump *label70 always
    475 label *label69
--    * set *tmp177 null
+-    * set *tmp178 null
    476 label *label70
    477 jump *label68 always
    478 label *label67
@@ -565,45 +565,45 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-48 ins
    390 jump *label65 equal *tmp171 false
    391 op equal *tmp173 FROM_INDEX 0
    392 jump *label67 equal *tmp173 false
--    * read *tmp175 bank1 511
--    * set :rate *tmp175
+-    * read *tmp176 bank1 511
+-    * set :rate *tmp176
 +  393 read :rate bank1 511
-   394 op notEqual *tmp176 :lastRate :rate
-   395 jump *label69 equal *tmp176 false
-   396 op mul *tmp178 EXPECTED_BOOST :factories
--    * op div *tmp179 *tmp178 11.25
--    * set :expected_flow *tmp179
-+  397 op div :expected_flow *tmp178 11.25
-   398 op mul *tmp180 :expected_flow 3600
--    * op floor *tmp181 *tmp180
--    * set :expected_flow_str *tmp181
-+  399 op floor :expected_flow_str *tmp180
+   394 op notEqual *tmp177 :lastRate :rate
+   395 jump *label69 equal *tmp177 false
+   396 op mul *tmp179 EXPECTED_BOOST :factories
+-    * op div *tmp180 *tmp179 11.25
+-    * set :expected_flow *tmp180
++  397 op div :expected_flow *tmp179 11.25
+   398 op mul *tmp181 :expected_flow 3600
+-    * op floor *tmp182 *tmp181
+-    * set :expected_flow_str *tmp182
++  399 op floor :expected_flow_str *tmp181
    400 set :lastRate :rate
    401 draw color 0 0 80 255
    402 draw rect 156 0 16 176
  
-   414 op sub *tmp182 :rate :expected_flow
-   415 op mul *tmp183 84 *tmp182
-   416 op div *tmp184 *tmp183 :expected_flow
--    * op add *tmp185 88 *tmp184
--    * set :pos *tmp185
-+  417 op add :pos 88 *tmp184
-   418 op max *tmp186 :pos 4
--    * op min *tmp187 *tmp186 170
--    * set :pos *tmp187
--    * op add *tmp188 :pos 7
--    * set :pos1 *tmp188
--    * op sub *tmp189 :pos 7
--    * set :pos2 *tmp189
-+  419 op min :pos *tmp186 170
+   414 op sub *tmp183 :rate :expected_flow
+   415 op mul *tmp184 84 *tmp183
+   416 op div *tmp185 *tmp184 :expected_flow
+-    * op add *tmp186 88 *tmp185
+-    * set :pos *tmp186
++  417 op add :pos 88 *tmp185
+   418 op max *tmp187 :pos 4
+-    * op min *tmp188 *tmp187 170
+-    * set :pos *tmp188
+-    * op add *tmp189 :pos 7
+-    * set :pos1 *tmp189
+-    * op sub *tmp190 :pos 7
+-    * set :pos2 *tmp190
++  419 op min :pos *tmp187 170
 +  420 op add :pos1 :pos 7
 +  421 op sub :pos2 :pos 7
    422 draw color 255 255 16 255
    423 draw triangle 156 :pos1 164 :pos 156 :pos2
-   424 op mul *tmp190 3600 :rate
--    * op floor *tmp191 *tmp190
--    * set :flow_str *tmp191
-+  425 op floor :flow_str *tmp190
+   424 op mul *tmp191 3600 :rate
+-    * op floor *tmp192 *tmp191
+-    * set :flow_str *tmp192
++  425 op floor :flow_str *tmp191
    426 jump *label70 always
    427 label *label69
    428 label *label70
@@ -831,12 +831,12 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-2
 +  366 jump *label65 equal bank1 null
 +  367 jump *label67 notEqual FROM_INDEX 0
    368 read :rate bank1 511
--    * op notEqual *tmp176 :lastRate :rate
--    * jump *label69 equal *tmp176 false
+-    * op notEqual *tmp177 :lastRate :rate
+-    * jump *label69 equal *tmp177 false
 +  369 jump *label69 equal :lastRate :rate
-   370 op mul *tmp178 EXPECTED_BOOST :factories
-   371 op div :expected_flow *tmp178 11.25
-   372 op mul *tmp180 :expected_flow 3600
+   370 op mul *tmp179 EXPECTED_BOOST :factories
+   371 op div :expected_flow *tmp179 11.25
+   372 op mul *tmp181 :expected_flow 3600
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-16 instructions):
  
@@ -937,8 +937,8 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    349 label *label41
  
    384 draw triangle 156 :pos1 164 :pos 156 :pos2
-   385 op mul *tmp190 3600 :rate
-   386 op floor :flow_str *tmp190
+   385 op mul *tmp191 3600 :rate
+   386 op floor :flow_str *tmp191
 -    * jump *label70 always
    387 label *label69
    388 label *label70
@@ -958,10 +958,10 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
    356 jump *label69 equal :lastRate :rate
-   357 op mul *tmp178 EXPECTED_BOOST :factories
-   358 op div :expected_flow *tmp178 11.25
--    * op mul *tmp180 :expected_flow 3600
--    * op floor :expected_flow_str *tmp180
+   357 op mul *tmp179 EXPECTED_BOOST :factories
+   358 op div :expected_flow *tmp179 11.25
+-    * op mul *tmp181 :expected_flow 3600
+-    * op floor :expected_flow_str *tmp181
 +  359 op idiv :expected_flow_str :expected_flow 0.0002777777777777778
    360 set :lastRate :rate
    361 draw color 0 0 80 255
@@ -970,8 +970,8 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    381 op sub :pos2 :pos 7
    382 draw color 255 255 16 255
    383 draw triangle 156 :pos1 164 :pos 156 :pos2
--    * op mul *tmp190 3600 :rate
--    * op floor :flow_str *tmp190
+-    * op mul *tmp191 3600 :rate
+-    * op floor :flow_str *tmp191
 +  384 op idiv :flow_str :rate 0.0002777777777777778
    385 label *label69
    386 label *label70
@@ -1770,13 +1770,13 @@ Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
 +  292 format :flow_str
    293 label *label65
    294 drawflush display1
-   295 op sub *tmp192 @time :start
-   296 op floor *tmp193 *tmp192
+   295 op sub *tmp193 @time :start
+   296 op floor *tmp194 *tmp193
 -    * print "\nUpdate time: "
--    * print *tmp193
+-    * print *tmp194
 -    * print " ms"
 +  297 print "\nUpdate time: {0} ms"
-+  298 format *tmp193
++  298 format *tmp194
    299 printflush message1
    300 sensor *tmp14 switch1 @enabled
    301 jump *label73 equal *tmp14 0
@@ -2043,8 +2043,8 @@ jump *label65 equal bank1 null
 jump *label67 notEqual FROM_INDEX 0
 read :rate bank1 511
 jump *label69 equal :lastRate :rate
-op mul *tmp178 EXPECTED_BOOST :factories
-op div :expected_flow *tmp178 11.25
+op mul *tmp179 EXPECTED_BOOST :factories
+op div :expected_flow *tmp179 11.25
 op idiv :expected_flow_str :expected_flow 0.0002777777777777778
 set :lastRate :rate
 draw color 0 0 80 255
@@ -2060,12 +2060,12 @@ draw color 0 255 0 255
 draw lineRect 164 89 8 84
 draw color 0 0 80 255
 draw rect 164 4 2 170
-op sub *tmp182 :rate :expected_flow
-op mul *tmp183 84 *tmp182
-op div *tmp184 *tmp183 :expected_flow
-op add :pos 88 *tmp184
-op max *tmp186 :pos 4
-op min :pos *tmp186 170
+op sub *tmp183 :rate :expected_flow
+op mul *tmp184 84 *tmp183
+op div *tmp185 *tmp184 :expected_flow
+op add :pos 88 *tmp185
+op max *tmp187 :pos 4
+op min :pos *tmp187 170
 op add :pos1 :pos 7
 op sub :pos2 :pos 7
 draw color 255 255 16 255
@@ -2078,10 +2078,10 @@ format :expected_flow_str
 format :flow_str
 label *label65
 drawflush display1
-op sub *tmp192 @time :start
-op floor *tmp193 *tmp192
+op sub *tmp193 @time :start
+op floor *tmp194 *tmp193
 print "\nUpdate time: {0} ms"
-format *tmp193
+format *tmp194
 printflush message1
 sensor *tmp14 switch1 @enabled
 jump *label73 equal *tmp14 0

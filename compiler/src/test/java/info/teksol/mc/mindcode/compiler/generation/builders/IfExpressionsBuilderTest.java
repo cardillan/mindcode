@@ -217,19 +217,19 @@ class IfExpressionsBuilderTest extends AbstractCodeGeneratorTest {
                                 $B = x;
                             end;
                             """,
-                    createInstruction(READ, tmp(0), "bank1", "0"),
-                    createInstruction(READ, tmp(1), "bank1", "1"),
-                    createInstruction(OP, "greaterThan", tmp(2), tmp(0), tmp(1)),
+                    createInstruction(READ, tmp(3), "bank1", "0"),
+                    createInstruction(READ, tmp(4), "bank1", "1"),
+                    createInstruction(OP, "greaterThan", tmp(2), tmp(3), tmp(4)),
                     createInstruction(JUMP, label(0), "equal", tmp(2), "false"),
-                    createInstruction(READ, tmp(0), "bank1", "0"),
-                    createInstruction(SET, ":x", tmp(0)),
-                    createInstruction(READ, tmp(1), "bank1", "1"),
-                    createInstruction(WRITE, tmp(1), "bank1", "0"),
+                    createInstruction(READ, tmp(6), "bank1", "0"),
+                    createInstruction(SET, ":x", tmp(6)),
+                    createInstruction(READ, tmp(7), "bank1", "1"),
+                    createInstruction(WRITE, tmp(7), "bank1", "0"),
                     createInstruction(WRITE, ":x", "bank1", "1"),
-                    createInstruction(SET, tmp(3), ":x"),
+                    createInstruction(SET, tmp(5), ":x"),
                     createInstruction(JUMP, label(1), "always"),
                     createInstruction(LABEL, label(0)),
-                    createInstruction(SET, tmp(3), "null"),
+                    createInstruction(SET, tmp(5), "null"),
                     createInstruction(LABEL, label(1))
             );
         }

@@ -10,16 +10,16 @@
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
-    17 op lessThanEq *tmp6 :a :item
-    18 jump *label6 equal *tmp6 false
+    17 op lessThanEq *tmp8 :a :item
+    18 jump *label6 equal *tmp8 false
     19 jump *label5 always
--    * set *tmp7 null
+-    * set *tmp9 null
     20 jump *label7 always
     21 label *label6
--    * set *tmp7 null
+-    * set *tmp9 null
     22 label *label7
-    23 op add *tmp8 :j 1
-    24 set *tmp9 *tmp8
+    23 op add *tmp10 :j 1
+    24 set *tmp11 *tmp10
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 instructions):
  
@@ -27,37 +27,37 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 inst
      4 label *label0
      5 jump *label2 greaterThanEq :i SIZE
 -    * set *tmp0 :i
--    * read *tmp1 ARRAY *tmp0
--    * set :item *tmp1
--    * op sub *tmp2 :i 1
--    * set :j *tmp2
+-    * read *tmp2 ARRAY *tmp0
+-    * set :item *tmp2
+-    * op sub *tmp3 :i 1
+-    * set :j *tmp3
 +    6 read :item ARRAY :i
 +    7 op sub :j :i 1
      8 label *label3
-     9 op greaterThanEq *tmp3 :j 0
-    10 jump *label5 equal *tmp3 false
--    * set *tmp4 :j
--    * read *tmp5 ARRAY *tmp4
--    * set :a *tmp5
+     9 op greaterThanEq *tmp4 :j 0
+    10 jump *label5 equal *tmp4 false
+-    * set *tmp5 :j
+-    * read *tmp7 ARRAY *tmp5
+-    * set :a *tmp7
 +   11 read :a ARRAY :j
-    12 op lessThanEq *tmp6 :a :item
-    13 jump *label6 equal *tmp6 false
+    12 op lessThanEq *tmp8 :a :item
+    13 jump *label6 equal *tmp8 false
     14 jump *label5 always
  
     16 label *label6
     17 label *label7
-    18 op add *tmp8 :j 1
--    * set *tmp9 *tmp8
--    * write :a ARRAY *tmp9
-+   19 write :a ARRAY *tmp8
+    18 op add *tmp10 :j 1
+-    * set *tmp11 *tmp10
+-    * write :a ARRAY *tmp11
++   19 write :a ARRAY *tmp10
     20 op sub :j :j 1
     21 label *label4
     22 jump *label3 always
     23 label *label5
--    * op add *tmp11 :j 1
--    * set *tmp12 *tmp11
-+   24 op add *tmp12 :j 1
-    25 write :item ARRAY *tmp12
+-    * op add *tmp13 :j 1
+-    * set *tmp14 *tmp13
++   24 op add *tmp14 :j 1
+    25 write :item ARRAY *tmp14
     26 label *label1
     27 op add :i :i 1
 
@@ -66,12 +66,12 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-2
      6 read :item ARRAY :i
      7 op sub :j :i 1
      8 label *label3
--    * op greaterThanEq *tmp3 :j 0
--    * jump *label5 equal *tmp3 false
+-    * op greaterThanEq *tmp4 :j 0
+-    * jump *label5 equal *tmp4 false
 +    9 jump *label5 lessThan :j 0
     10 read :a ARRAY :j
--    * op lessThanEq *tmp6 :a :item
--    * jump *label6 equal *tmp6 false
+-    * op lessThanEq *tmp8 :a :item
+-    * jump *label6 equal *tmp8 false
 +   11 jump *label6 greaterThan :a :item
     12 jump *label5 always
     13 jump *label7 always
@@ -85,18 +85,18 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 -    * jump *label7 always
     13 label *label6
     14 label *label7
-    15 op add *tmp8 :j 1
+    15 op add *tmp10 :j 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     29 jump *label10 greaterThanEq :i SIZE
-    30 set *tmp14 :i
-    31 set *tmp16 :i
--    * read *tmp15 FINAL *tmp14
--    * read *tmp17 ARRAY *tmp16
-+   32 read *tmp15 FINAL :i
-+   33 read *tmp17 ARRAY :i
-    34 assertequals *tmp15 *tmp17 "unexpected value"
+    30 set *tmp16 :i
+    31 set *tmp18 :i
+-    * read *tmp20 FINAL *tmp16
+-    * read *tmp21 ARRAY *tmp18
++   32 read *tmp20 FINAL :i
++   33 read *tmp21 ARRAY :i
+    34 assertequals *tmp20 *tmp21 "unexpected value"
     35 label *label9
     36 op add :i :i 1
 
@@ -105,11 +105,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     27 set :i 0
     28 label *label8
     29 jump *label10 greaterThanEq :i SIZE
--    * set *tmp14 :i
 -    * set *tmp16 :i
-    30 read *tmp15 FINAL :i
-    31 read *tmp17 ARRAY :i
-    32 assertequals *tmp15 *tmp17 "unexpected value"
+-    * set *tmp18 :i
+    30 read *tmp20 FINAL :i
+    31 read *tmp21 ARRAY :i
+    32 assertequals *tmp20 *tmp21 "unexpected value"
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
@@ -126,14 +126,14 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     13 jump *label6 greaterThan :a :item
     14 jump *label5 always
  
-    18 write :a ARRAY *tmp8
+    18 write :a ARRAY *tmp10
     19 op sub :j :j 1
     20 label *label4
 -    * jump *label3 always
 +   21 jump *label12 greaterThanEq :j 0
     22 label *label5
-    23 op add *tmp12 :j 1
-    24 write :item ARRAY *tmp12
+    23 op add *tmp14 :j 1
+    24 write :item ARRAY *tmp14
     25 label *label1
     26 op add :i :i 1
 -    * jump *label0 always
@@ -143,9 +143,9 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     30 label *label8
     31 jump *label10 greaterThanEq :i SIZE
 +   32 label *label13
-    33 read *tmp15 FINAL :i
-    34 read *tmp17 ARRAY :i
-    35 assertequals *tmp15 *tmp17 "unexpected value"
+    33 read *tmp20 FINAL :i
+    34 read *tmp21 ARRAY :i
+    35 assertequals *tmp20 *tmp21 "unexpected value"
     36 label *label9
     37 op add :i :i 1
 -    * jump *label8 always
@@ -171,8 +171,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 -    * jump *label10 greaterThanEq :i SIZE
 +   31 jump *label10 greaterThanEq 0 SIZE
     32 label *label13
-    33 read *tmp15 FINAL :i
-    34 read *tmp17 ARRAY :i
+    33 read *tmp20 FINAL :i
+    34 read *tmp21 ARRAY :i
 
 Modifications by Iterated phase, Condition Optimization, pass 3, iteration 1:
  
@@ -194,8 +194,8 @@ Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-1 instru
 -    * jump *label5 always
 +   11 jump *label5 lessThanEq :a :item
     12 label *label6
-    13 op add *tmp8 :j 1
-    14 write :a ARRAY *tmp8
+    13 op add *tmp10 :j 1
+    14 write :a ARRAY *tmp10
 
 Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
@@ -218,22 +218,22 @@ jump *label5 lessThan :i 1
 label *label12
 read :a ARRAY :j
 jump *label5 lessThanEq :a :item
-op add *tmp8 :j 1
-write :a ARRAY *tmp8
+op add *tmp10 :j 1
+write :a ARRAY *tmp10
 op sub :j :j 1
 jump *label12 greaterThanEq :j 0
 label *label5
-op add *tmp12 :j 1
-write :item ARRAY *tmp12
+op add *tmp14 :j 1
+write :item ARRAY *tmp14
 op add :i :i 1
 jump *label11 lessThan :i SIZE
 label *label2
 set :i 0
 jump *label10 greaterThanEq 0 SIZE
 label *label13
-read *tmp15 FINAL :i
-read *tmp17 ARRAY :i
-assertequals *tmp15 *tmp17 "unexpected value"
+read *tmp20 FINAL :i
+read *tmp21 ARRAY :i
+assertequals *tmp20 *tmp21 "unexpected value"
 op add :i :i 1
 jump *label13 lessThan :i SIZE
 label *label10

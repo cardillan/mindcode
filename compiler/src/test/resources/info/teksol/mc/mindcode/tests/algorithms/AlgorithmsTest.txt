@@ -2,13 +2,13 @@ Name                                     Instructions    Steps   Coverage   Sour
 array-reversion.mnd:                                3        3     100.0%   38B9E303CEA00378   AAE56F03143D7240
 base64-decode.mnd:                                 52      332      92.3%   BDD246AE230D839E   8B95BA3A4CFE7FD2
 compute-recursive-fibonacci.mnd:                   31     2476      96.8%   BDE1C81A7769E0CB   DB31C2A7CB9922C3
-compute-sum-of-primes.mnd:                        426     1876      99.8%   B6615E97E02F94A9   82A16C58F5C99A26
+compute-sum-of-primes.mnd:                        426     1876      99.8%   B6615E97E02F94A9   B44A799467A40885
 digit-counts.mnd:                                  37     1846     100.0%   4395C6D90051BC6D   6C1026B3243AEA2C
-memory-read-write.mnd:                              4        4     100.0%   D9539CC21D8111B7   EB7D6403850CF0B3
+memory-read-write.mnd:                              4        4     100.0%   D9539CC21D8111B7   EA7C6512950CF0B3
 pascal-triangle.mnd:                               46     1189      93.5%   954D9E65ED4E6EF0   374FE41A715DF5F5
-sorting with bubble-sort.mnd:                      26    15476     100.0%   09F1B1A6B8B97AF2   916F63E00760596F
-sorting with heap-sort.mnd:                        53    64558     100.0%   0CEFC91051987EFB   B997456025A5099F
-sorting with insert-sort.mnd:                      26    26063     100.0%   0AF6F57A5EBA45E2   C9D4BFD743D6F476
-sorting with quick-sort.mnd:                       66    48456      98.5%   24EED06D28A2DCC0   8CCFE72F500DB29B
-sorting with select-sort.mnd:                      29    35152     100.0%   3F4EE1C8DB9B8B18   E66B8BA399C46327
+sorting with bubble-sort.mnd:                      26    15476     100.0%   09F1B1A6B8B97AF2   A9233DF4DF6319E5
+sorting with heap-sort.mnd:                        53    64558     100.0%   0CEFC91051987EFB   2F1DB4DDEA0B1928
+sorting with insert-sort.mnd:                      26    26063     100.0%   0AF6F57A5EBA45E2   4605694E96454EAF
+sorting with quick-sort.mnd:                       66    48456      98.5%   24EED06D28A2DCC0   4D59F90AE6195487
+sorting with select-sort.mnd:                      29    35152     100.0%   3F4EE1C8DB9B8B18   41B4466497569656
 storage-display.mnd:                              626      993      30.2%   FD4E7E3F60CEF5E4   32400BCA6F0BA0AF

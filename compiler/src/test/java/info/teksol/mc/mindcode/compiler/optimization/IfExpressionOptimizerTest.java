@@ -452,10 +452,10 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                             print(value);
                             """,
                     createInstruction(READ, ":value", "cell1", "1"),
-                    createInstruction(READ, tmp(0), "cell1", "0"),
-                    createInstruction(JUMP, label(1), "equal", tmp(0), "1"),
-                    createInstruction(READ, tmp(0), "cell1", "0"),
-                    createInstruction(JUMP, label(1), "equal", tmp(0), "2"),
+                    createInstruction(READ, tmp(2), "cell1", "0"),
+                    createInstruction(JUMP, label(1), "equal", tmp(2), "1"),
+                    createInstruction(READ, tmp(4), "cell1", "0"),
+                    createInstruction(JUMP, label(1), "equal", tmp(4), "2"),
                     createInstruction(READ, ":value", "cell1", "2"),
                     createInstruction(LABEL, label(1)),
                     createInstruction(PRINT, ":value")

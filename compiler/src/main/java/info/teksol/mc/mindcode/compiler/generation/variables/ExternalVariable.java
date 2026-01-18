@@ -42,8 +42,9 @@ public class ExternalVariable implements ValueStore {
 
     @Override
     public LogicValue getValue(ContextfulInstructionCreator creator) {
-        creator.createRead(transferVariable, memory, index);
-        return transferVariable;
+        LogicVariable tmp = creator.nextTemp();
+        creator.createRead(tmp, memory, index);
+        return tmp;
     }
 
     @Override

@@ -359,8 +359,8 @@ compiles to
 
 ```mlog
 write 63539 cell1 0
-read *tmp0 cell1 0
-printchar *tmp0
+read *tmp1 cell1 0
+printchar *tmp1
 ```
 
 ## The `char()` function

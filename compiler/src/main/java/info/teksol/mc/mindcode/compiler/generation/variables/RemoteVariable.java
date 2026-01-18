@@ -79,10 +79,13 @@ public class RemoteVariable implements FunctionParameter {
 
     @Override
     public LogicValue getValue(ContextfulInstructionCreator creator) {
-        if (!cached) {
-            creator.createRead(transferVariable, processor, getMlogVariableName());
+        if (cached) {
+            return transferVariable;
         }
-        return transferVariable;
+
+        LogicVariable tmp = creator.nextTemp();
+        creator.createRead(tmp, processor, getMlogVariableName());
+        return tmp;
     }
 
     @Override

@@ -134,66 +134,66 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-18 instruct
     94 set *tmp18 @tick
     95 set :prevTick *tmp18
  
-   116 op add *tmp30 :prevTick TICKS
-   117 set :nextTick *tmp30
+   116 op add *tmp32 :prevTick TICKS
+   117 set :nextTick *tmp32
    118 set :currTick :prevTick
--    * set *tmp28 :currTick
+-    * set *tmp30 :currTick
    119 jump *label28 always
    120 label *label27
--    * set *tmp28 null
+-    * set *tmp30 null
    121 label *label28
    122 label *label29
-   123 op lessThan *tmp31 @tick :nextTick
+   123 op lessThan *tmp33 @tick :nextTick
  
-   125 op lessThan *tmp32 @tick :prevTick
-   126 jump *label32 equal *tmp32 false
+   125 op lessThan *tmp34 @tick :prevTick
+   126 jump *label32 equal *tmp34 false
    127 end
--    * set *tmp33 null
+-    * set *tmp35 null
    128 jump *label33 always
    129 label *label32
-   130 read *tmp34 .SOURCE_MEMORY 0
+   130 read *tmp37 .SOURCE_MEMORY 0
  
    139 label *label34
-   140 set *tmp36 null
+   140 set *tmp39 null
    141 label *label35
--    * set *tmp33 *tmp36
+-    * set *tmp35 *tmp39
    142 label *label33
    143 label *label30
    144 jump *label29 always
  
-   150 op equal *tmp40 :amount 0
-   151 jump *label36 equal *tmp40 false
+   150 op equal *tmp43 :amount 0
+   151 jump *label36 equal *tmp43 false
    152 set :rate 0
--    * set *tmp41 :rate
+-    * set *tmp44 :rate
    153 jump *label37 always
    154 label *label36
-   155 op div *tmp42 :amount :time
-   156 op max *tmp43 *tmp42 0
-   157 set :rate *tmp43
--    * set *tmp41 :rate
+   155 op div *tmp45 :amount :time
+   156 op max *tmp46 *tmp45 0
+   157 set :rate *tmp46
+-    * set *tmp44 :rate
    158 label *label37
    159 op add :index :index 1
-   160 op greaterThanEq *tmp44 :index :memSize
-   161 jump *label38 equal *tmp44 false
-   162 op add *tmp46 :startIndex 1
-   163 set :index *tmp46
--    * set *tmp45 :index
+   160 op greaterThanEq *tmp47 :index :memSize
+   161 jump *label38 equal *tmp47 false
+   162 op add *tmp49 :startIndex 1
+   163 set :index *tmp49
+-    * set *tmp48 :index
    164 jump *label39 always
    165 label *label38
--    * set *tmp45 null
+-    * set *tmp48 null
    166 label *label39
-   167 set *tmp47 :startIndex
-   168 write :index .TARGET_MEMORY *tmp47
+   167 set *tmp50 :startIndex
+   168 write :index .TARGET_MEMORY *tmp50
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
  
-   134 set *tmp37 @tick
-   135 set :currTick *tmp37
+   134 set *tmp40 @tick
+   135 set :currTick *tmp40
    136 set :curr :value
--    * set *tmp36 :curr
+-    * set *tmp39 :curr
    137 jump *label35 always
    138 label *label34
--    * set *tmp36 null
+-    * set *tmp39 null
    139 label *label35
    140 label *label33
    141 label *label30
@@ -231,33 +231,33 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 ins
     89 label *label23
 -    * set *tmp18 @tick
 -    * set :prevTick *tmp18
--    * read *tmp19 .SOURCE_MEMORY 0
--    * set :prev *tmp19
+-    * read *tmp20 .SOURCE_MEMORY 0
+-    * set :prev *tmp20
 +   90 set :prevTick @tick
 +   91 read :prev .SOURCE_MEMORY 0
     92 set :currTick :prevTick
     93 set :curr :prev
--    * set *tmp20 :startIndex
--    * read *tmp21 .TARGET_MEMORY *tmp20
--    * op max *tmp22 :startIndex *tmp21
--    * set :index *tmp22
-+   94 read *tmp21 .TARGET_MEMORY :startIndex
-+   95 op max :index :startIndex *tmp21
+-    * set *tmp21 :startIndex
+-    * read *tmp24 .TARGET_MEMORY *tmp21
+-    * op max *tmp23 :startIndex *tmp24
+-    * set :index *tmp23
++   94 read *tmp24 .TARGET_MEMORY :startIndex
++   95 op max :index :startIndex *tmp24
     96 set :nextTick :prevTick
     97 label *label24
-    98 sensor *tmp23 switch1 @enabled
-    99 op equal *tmp24 *tmp23 0
-   100 jump *label26 equal *tmp24 false
--    * op add *tmp25 :nextTick TICKS
--    * set :nextTick *tmp25
+    98 sensor *tmp25 switch1 @enabled
+    99 op equal *tmp26 *tmp25 0
+   100 jump *label26 equal *tmp26 false
+-    * op add *tmp27 :nextTick TICKS
+-    * set :nextTick *tmp27
 +  101 op add :nextTick :nextTick TICKS
-   102 op add *tmp26 :nextTick TICKS
-   103 op greaterThan *tmp27 @tick *tmp26
-   104 jump *label27 equal *tmp27 false
--    * set *tmp29 @tick
--    * set :prevTick *tmp29
--    * op add *tmp30 :prevTick TICKS
--    * set :nextTick *tmp30
+   102 op add *tmp28 :nextTick TICKS
+   103 op greaterThan *tmp29 @tick *tmp28
+   104 jump *label27 equal *tmp29 false
+-    * set *tmp31 @tick
+-    * set :prevTick *tmp31
+-    * op add *tmp32 :prevTick TICKS
+-    * set :nextTick *tmp32
 +  105 set :prevTick @tick
 +  106 op add :nextTick :prevTick TICKS
    107 set :currTick :prevTick
@@ -267,13 +267,13 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 ins
    116 end
    117 jump *label33 always
    118 label *label32
--    * read *tmp34 .SOURCE_MEMORY 0
--    * set :value *tmp34
+-    * read *tmp37 .SOURCE_MEMORY 0
+-    * set :value *tmp37
 +  119 read :value .SOURCE_MEMORY 0
-   120 op notEqual *tmp35 :value :curr
-   121 jump *label34 equal *tmp35 false
--    * set *tmp37 @tick
--    * set :currTick *tmp37
+   120 op notEqual *tmp38 :value :curr
+   121 jump *label34 equal *tmp38 false
+-    * set *tmp40 @tick
+-    * set :currTick *tmp40
 +  122 set :currTick @tick
    123 set :curr :value
    124 jump *label35 always
@@ -282,35 +282,35 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 ins
    128 label *label30
    129 jump *label29 always
    130 label *label31
--    * op sub *tmp38 :curr :prev
--    * set :amount *tmp38
--    * op sub *tmp39 :currTick :prevTick
--    * set :time *tmp39
+-    * op sub *tmp41 :curr :prev
+-    * set :amount *tmp41
+-    * op sub *tmp42 :currTick :prevTick
+-    * set :time *tmp42
 +  131 op sub :amount :curr :prev
 +  132 op sub :time :currTick :prevTick
-   133 op equal *tmp40 :amount 0
-   134 jump *label36 equal *tmp40 false
+   133 op equal *tmp43 :amount 0
+   134 jump *label36 equal *tmp43 false
    135 set :rate 0
    136 jump *label37 always
    137 label *label36
-   138 op div *tmp42 :amount :time
--    * op max *tmp43 *tmp42 0
--    * set :rate *tmp43
-+  139 op max :rate *tmp42 0
+   138 op div *tmp45 :amount :time
+-    * op max *tmp46 *tmp45 0
+-    * set :rate *tmp46
++  139 op max :rate *tmp45 0
    140 label *label37
    141 op add :index :index 1
-   142 op greaterThanEq *tmp44 :index :memSize
-   143 jump *label38 equal *tmp44 false
--    * op add *tmp46 :startIndex 1
--    * set :index *tmp46
+   142 op greaterThanEq *tmp47 :index :memSize
+   143 jump *label38 equal *tmp47 false
+-    * op add *tmp49 :startIndex 1
+-    * set :index *tmp49
 +  144 op add :index :startIndex 1
    145 jump *label39 always
    146 label *label38
    147 label *label39
--    * set *tmp47 :startIndex
--    * write :index .TARGET_MEMORY *tmp47
--    * set *tmp49 :index
--    * write :rate .TARGET_MEMORY *tmp49
+-    * set *tmp50 :startIndex
+-    * write :index .TARGET_MEMORY *tmp50
+-    * set *tmp52 :index
+-    * write :rate .TARGET_MEMORY *tmp52
 +  148 write :index .TARGET_MEMORY :startIndex
 +  149 write :rate .TARGET_MEMORY :index
    150 print "Item Rate Meter"
@@ -411,15 +411,15 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1
  
     86 set :nextTick :prevTick
     87 label *label24
-    88 sensor *tmp23 switch1 @enabled
--    * op equal *tmp24 *tmp23 0
--    * jump *label26 equal *tmp24 false
-+   89 jump *label26 notEqual *tmp23 0
+    88 sensor *tmp25 switch1 @enabled
+-    * op equal *tmp26 *tmp25 0
+-    * jump *label26 equal *tmp26 false
++   89 jump *label26 notEqual *tmp25 0
     90 op add :nextTick :nextTick TICKS
-    91 op add *tmp26 :nextTick TICKS
--    * op greaterThan *tmp27 @tick *tmp26
--    * jump *label27 equal *tmp27 false
-+   92 jump *label27 lessThanEq @tick *tmp26
+    91 op add *tmp28 :nextTick TICKS
+-    * op greaterThan *tmp29 @tick *tmp28
+-    * jump *label27 equal *tmp29 false
++   92 jump *label27 lessThanEq @tick *tmp28
     93 set :prevTick @tick
     94 op add :nextTick :prevTick TICKS
     95 set :currTick :prevTick
@@ -427,18 +427,18 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1
     97 label *label27
     98 label *label28
     99 label *label29
--    * op lessThan *tmp31 @tick :nextTick
--    * jump *label31 equal *tmp31 false
--    * op lessThan *tmp32 @tick :prevTick
--    * jump *label32 equal *tmp32 false
+-    * op lessThan *tmp33 @tick :nextTick
+-    * jump *label31 equal *tmp33 false
+-    * op lessThan *tmp34 @tick :prevTick
+-    * jump *label32 equal *tmp34 false
 +  100 jump *label31 greaterThanEq @tick :nextTick
 +  101 jump *label32 greaterThanEq @tick :prevTick
    102 end
    103 jump *label33 always
    104 label *label32
    105 read :value .SOURCE_MEMORY 0
--    * op notEqual *tmp35 :value :curr
--    * jump *label34 equal *tmp35 false
+-    * op notEqual *tmp38 :value :curr
+-    * jump *label34 equal *tmp38 false
 +  106 jump *label34 equal :value :curr
    107 set :currTick @tick
    108 set :curr :value
@@ -447,18 +447,18 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1
    115 label *label31
    116 op sub :amount :curr :prev
    117 op sub :time :currTick :prevTick
--    * op equal *tmp40 :amount 0
--    * jump *label36 equal *tmp40 false
+-    * op equal *tmp43 :amount 0
+-    * jump *label36 equal *tmp43 false
 +  118 jump *label36 notEqual :amount 0
    119 set :rate 0
    120 jump *label37 always
    121 label *label36
  
-   123 op max :rate *tmp42 0
+   123 op max :rate *tmp45 0
    124 label *label37
    125 op add :index :index 1
--    * op greaterThanEq *tmp44 :index :memSize
--    * jump *label38 equal *tmp44 false
+-    * op greaterThanEq *tmp47 :index :memSize
+-    * jump *label38 equal *tmp47 false
 +  126 jump *label38 lessThan :index :memSize
    127 op add :index :startIndex 1
    128 jump *label39 always
@@ -527,11 +527,11 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    130 print "["
    131 print "]"
    132 print "\n"
--    * op mul *tmp51 :rate 3600
--    * op floor *tmp52 *tmp51
-+  133 op idiv *tmp52 :rate 0.0002777777777777778
+-    * op mul *tmp54 :rate 3600
+-    * op floor *tmp55 *tmp54
++  133 op idiv *tmp55 :rate 0.0002777777777777778
    134 print "Current rate [green]"
-   135 print *tmp52
+   135 print *tmp55
    136 print "["
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
@@ -630,25 +630,25 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 -    * jump *label37 always
 +  113 jump *label37 equal :amount 0
    114 label *label36
-   115 op div *tmp42 :amount :time
-   116 op max :rate *tmp42 0
+   115 op div *tmp45 :amount :time
+   116 op max :rate *tmp45 0
 
 Modifications by Full loop rotation at line 57:1 (+1 instructions):
  
     82 label *label24
-    83 sensor *tmp23 switch1 @enabled
-    84 jump *label26 notEqual *tmp23 0
+    83 sensor *tmp25 switch1 @enabled
+    84 jump *label26 notEqual *tmp25 0
 +   85 label *label43
     86 op add :nextTick :nextTick TICKS
-    87 op add *tmp26 :nextTick TICKS
-    88 jump *label27 lessThanEq @tick *tmp26
+    87 op add *tmp28 :nextTick TICKS
+    88 jump *label27 lessThanEq @tick *tmp28
  
    155 set :prevTick :currTick
    156 set :prev :curr
    157 label *label25
 -    * jump *label24 always
-+  158 sensor *tmp23 switch1 @enabled
-+  159 jump *label43 equal *tmp23 0
++  158 sensor *tmp25 switch1 @enabled
++  159 jump *label43 equal *tmp25 0
    160 label *label26
    161 control enabled switch1 0
    162 end
@@ -670,8 +670,8 @@ Modifications by Fast-dispatch case at line 13:9 (-1 instructions):
     16 print :block
     17 sensor *tmp6 :block @type
 -    * jump *label7 notEqual *tmp6 @message
-+   18 sensor *tmp55 *tmp6 @id
-+   19 multijump *tmp55 0 0 (m:*label45)
++   18 sensor *tmp58 *tmp6 @id
++   19 multijump *tmp58 0 0 (m:*label45)
 +   20 multilabel *label50 (m:*label45)
 +   21 multilabel *label46 (m:*label45)
 +   22 label *label44
@@ -722,7 +722,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
      9 label *label41
     10 op sub :n :n 1
  
-    16 multijump *tmp55 0 0 (m:*label45)
+    16 multijump *tmp58 0 0 (m:*label45)
     17 multilabel *label50 (m:*label45)
     18 multilabel *label46 (m:*label45)
 -    * label *label44
@@ -777,12 +777,12 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
     64 read :prev .SOURCE_MEMORY 0
     65 set :currTick :prevTick
  
-    67 read *tmp21 .TARGET_MEMORY :startIndex
-    68 op max :index :startIndex *tmp21
+    67 read *tmp24 .TARGET_MEMORY :startIndex
+    68 op max :index :startIndex *tmp24
     69 set :nextTick :prevTick
 -    * label *label24
-    70 sensor *tmp23 switch1 @enabled
-    71 jump *label26 notEqual *tmp23 0
+    70 sensor *tmp25 switch1 @enabled
+    71 jump *label26 notEqual *tmp25 0
     72 label *label43
  
     77 op add :nextTick :prevTick TICKS
@@ -811,8 +811,8 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
     95 set :rate 0
     96 jump *label37 equal :amount 0
 -    * label *label36
-    97 op div *tmp42 :amount :time
-    98 op max :rate *tmp42 0
+    97 op div *tmp45 :amount :time
+    98 op max :rate *tmp45 0
     99 label *label37
  
    101 jump *label38 lessThan :index :memSize
@@ -827,13 +827,13 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    135 set :prevTick :currTick
    136 set :prev :curr
 -    * label *label25
-   137 sensor *tmp23 switch1 @enabled
-   138 jump *label43 equal *tmp23 0
+   137 sensor *tmp25 switch1 @enabled
+   138 jump *label43 equal *tmp25 0
    139 label *label26
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   137 jump *label43 equal *tmp23 0
+   137 jump *label43 equal *tmp25 0
    138 label *label26
    139 control enabled switch1 0
 -    * end
@@ -870,9 +870,9 @@ Modifications by Final phase, Print Merging, iteration 1 (-23 instructions):
 -    * print "\n"
 +  102 print "Item Rate Meter\nTotal items: [gold]{0}[]\nCurrent rate [green]{0}[]/min\n  memory start: [gold]{0}[]\n  memory index: [gold]{0}[]\n[lightgray]Loop time: {0} ms"
 +  103 format :curr
-   104 op idiv *tmp52 :rate 0.0002777777777777778
+   104 op idiv *tmp55 :rate 0.0002777777777777778
 -    * print "Current rate [green]"
--    * print *tmp52
+-    * print *tmp55
 -    * print "["
 -    * print "]/min"
 -    * print "\n"
@@ -886,15 +886,15 @@ Modifications by Final phase, Print Merging, iteration 1 (-23 instructions):
 -    * print "["
 -    * print "]"
 -    * print "\n"
-+  105 format *tmp52
++  105 format *tmp55
 +  106 format :startIndex
 +  107 format :index
-   108 op floor *tmp53 :time
+   108 op floor *tmp56 :time
 -    * print "[lightgray]Loop time: "
--    * print *tmp53
+-    * print *tmp56
 -    * print " "
 -    * print "ms"
-+  109 format *tmp53
++  109 format *tmp56
    110 printflush message1
    111 set :prevTick :currTick
    112 set :prev :curr
@@ -916,8 +916,8 @@ getlink :block :n
 print "\nFound: "
 print :block
 sensor *tmp6 :block @type
-sensor *tmp55 *tmp6 @id
-multijump *tmp55 0 0
+sensor *tmp58 *tmp6 @id
+multijump *tmp58 0 0
 multilabel *label50
 multilabel *label46
 jump *label6 always
@@ -965,15 +965,15 @@ set :prevTick @tick
 read :prev .SOURCE_MEMORY 0
 set :currTick :prevTick
 set :curr :prev
-read *tmp21 .TARGET_MEMORY :startIndex
-op max :index :startIndex *tmp21
+read *tmp24 .TARGET_MEMORY :startIndex
+op max :index :startIndex *tmp24
 set :nextTick :prevTick
-sensor *tmp23 switch1 @enabled
-jump *label26 notEqual *tmp23 0
+sensor *tmp25 switch1 @enabled
+jump *label26 notEqual *tmp25 0
 label *label43
 op add :nextTick :nextTick TICKS
-op add *tmp26 :nextTick TICKS
-jump *label27 lessThanEq @tick *tmp26
+op add *tmp28 :nextTick TICKS
+jump *label27 lessThanEq @tick *tmp28
 set :prevTick @tick
 op add :nextTick :prevTick TICKS
 set :currTick :prevTick
@@ -994,8 +994,8 @@ op sub :amount :curr :prev
 op sub :time :currTick :prevTick
 set :rate 0
 jump *label37 equal :amount 0
-op div *tmp42 :amount :time
-op max :rate *tmp42 0
+op div *tmp45 :amount :time
+op max :rate *tmp45 0
 label *label37
 op add :index :index 1
 jump *label38 lessThan :index :memSize
@@ -1005,16 +1005,16 @@ write :index .TARGET_MEMORY :startIndex
 write :rate .TARGET_MEMORY :index
 print "Item Rate Meter\nTotal items: [gold]{0}[]\nCurrent rate [green]{0}[]/min\n  memory start: [gold]{0}[]\n  memory index: [gold]{0}[]\n[lightgray]Loop time: {0} ms"
 format :curr
-op idiv *tmp52 :rate 0.0002777777777777778
-format *tmp52
+op idiv *tmp55 :rate 0.0002777777777777778
+format *tmp55
 format :startIndex
 format :index
-op floor *tmp53 :time
-format *tmp53
+op floor *tmp56 :time
+format *tmp56
 printflush message1
 set :prevTick :currTick
 set :prev :curr
-sensor *tmp23 switch1 @enabled
-jump *label43 equal *tmp23 0
+sensor *tmp25 switch1 @enabled
+jump *label43 equal *tmp25 0
 label *label26
 control enabled switch1 0
