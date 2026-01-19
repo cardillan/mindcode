@@ -35,7 +35,7 @@
             <input type="hidden" name="id" value="${model.id}">
         </#if>
         <div class="grid grid-cols-2 gap-2">
-            <@com.codeareas mlogWatcher="N" sourceTitle="Schemacode definition:" targetTitle="Encoded schematic:" sourceLines="Y" targetLines="N" />
+            <@com.codeareas mlogWatcher="Y" sourceTitle="Schemacode definition:" targetTitle="Encoded schematic:" sourceLines="Y" targetLines="N" />
             <div>
                 <div class="flex-wrap items-center space-x-2">
                     <@com.targetSettings />
@@ -48,5 +48,7 @@
         </div>
     </form>
 </div>
+
+<@com.mlogwatcher/>
 
 <@com.footer/>

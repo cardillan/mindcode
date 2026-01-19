@@ -30,7 +30,8 @@ public class MlogWatcherClient extends WebSocketClient {
     @Override
     public void onMessage(String message) {
         switch (message) {
-            case "ok" -> messageLogger.info("  Mlog Watcher: success.");
+            case "ok" -> messageLogger.info("  Mlog Watcher: mlog code injected into selected processor.");
+            case "schematic_ok" -> messageLogger.info("  Mlog Watcher: schematics added/updated.");
             case "no_processor" -> {
                 messageLogger.info("  Mlog Watcher: no processor selected.");
                 messageLogger.info("  (The target processor must be selected in Mindustry to receive the code.)");
@@ -57,13 +58,21 @@ public class MlogWatcherClient extends WebSocketClient {
         }
     }
 
+    public static void sendSchematic(int port, long timeout, MessageLogger messageLogger, String mlog) {
+        sendData(port, timeout, messageLogger, mlog, "Created schematic was sent to Mlog Watcher.");
+    }
+
     public static void sendMlog(int port, long timeout, MessageLogger messageLogger, String mlog) {
+        sendData(port, timeout, messageLogger, mlog, "Compiled mlog code was sent to Mlog Watcher.");
+    }
+
+    public static void sendData(int port, long timeout, MessageLogger messageLogger, String mlog, String message) {
         MlogWatcherClient client = null;
         try {
             client = new MlogWatcherClient(port, messageLogger);
             client.connectBlocking(timeout, TimeUnit.MILLISECONDS);
             client.send(mlog);
-            messageLogger.info("\nCompiled mlog code was sent to Mlog Watcher.");
+            messageLogger.info("%n%s", message);
             client.waitForMessage(timeout);
             client.close();
         } catch (Exception ex) {

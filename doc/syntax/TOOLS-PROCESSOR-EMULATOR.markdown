@@ -231,4 +231,4 @@ In the web app, the number of messages output by either of these two mechanisms 
 
 ---
 
-[&#xAB; Previous: Command line tool](TOOLS-CMDLINE.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mlog Watcher &#xBB;](TOOLS-MLOG-WATCHER.markdown)
+[&#xAB; Previous: Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mlog Decompiler &#xBB;](TOOLS-MLOG-DECOMPILER.markdown)

@@ -36,7 +36,7 @@ The `--append` command-line option has the same effect as the [`require` stateme
 
 The `-l` argument can be used to specify a log file, a file which receives messages generated while running the tool. When such a file isn't specified, the standard output is used (if standard output is already used for the output file, messages are written to the standard error instead).
 
-## MLog Watcher integration
+## Mlog Watcher integration
 
 The command-line tool can send the compiled code directly into a processor in a running Mindustry game through the Mlog Watcher mod. See [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) for details.
 
@@ -433,9 +433,9 @@ named arguments:
 ## Compile Schematic action help
 
 ```
-usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] [-l [LOG]]
-                [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]]
-                [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
+usage: mindcode cs [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [-o [OUTPUT]]
+                [--output-directory OUTPUT-DIRECTORY] [-l [LOG]] [--file-references {path,uri,windows-uri}]
+                [-a [TAG [TAG ...]]] [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
@@ -480,6 +480,12 @@ Compile a schematic definition file into binary msch file.
 named arguments:
   -h, --help             show this help message and exit
   -c, --clipboard        encode the created schematic into text representation and paste into clipboard
+  -w, --watcher          send created schematic to the Mlog Watcher mod in  Mindustry (the schematic will be added to or
+                         updated in the database)
+  --watcher-port {0..65535}
+                         port number for communication with Mlog Watcher
+  --watcher-timeout {0..3600000}
+                         timeout in milliseconds when trying to establish a connection to Mlog Watcher
 
 Input/output files:
   input                  Schematic definition file to be compiled into a binary msch file.
@@ -780,4 +786,4 @@ named arguments:
 
 ---
 
-[&#xAB; Previous: IDE Integration](TOOLS-IDE-INTEGRATION.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Processor emulator &#xBB;](TOOLS-PROCESSOR-EMULATOR.markdown)
+[&#xAB; Previous: Schemacode](SCHEMACODE.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: IDE Integration &#xBB;](TOOLS-IDE-INTEGRATION.markdown)

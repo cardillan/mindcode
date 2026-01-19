@@ -99,6 +99,26 @@ abstract class ActionHandler {
         return argument;
     }
 
+    void addMlogWatcherOptions(ArgumentContainer container, boolean schematics) {
+        container.addArgument("-w", "--watcher")
+                .help(schematics
+                        ? "send created schematic to the Mlog Watcher mod in Mindustry (the schematic will be added to or updated in the database)"
+                        : "send compiled mlog code to the Mlog Watcher mod in Mindustry (the code will be injected into the selected processor)")
+                .action(Arguments.storeTrue());
+
+        container.addArgument("--watcher-port")
+                .help("port number for communication with Mlog Watcher")
+                .choices(Arguments.range(0, 65535))
+                .type(Integer.class)
+                .setDefault(9992);
+
+        container.addArgument("--watcher-timeout")
+                .help("timeout in milliseconds when trying to establish a connection to Mlog Watcher")
+                .choices(Arguments.range(0, 3_600_000))
+                .type(Integer.class)
+                .setDefault(500);
+    }
+
     void addCompilerOptions(ArgumentContainer container, Map<Enum<?>, CompilerOptionValue<?>> options, OptionCategory category) {
         for (CompilerOptionValue<?> option : options.values()) {
             if (option.getAvailability().isCommandline() && option.getCategory() == category) {

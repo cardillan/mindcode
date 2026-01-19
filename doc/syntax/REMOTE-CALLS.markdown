@@ -546,6 +546,8 @@ label_5:
         jump label_5 always 0 0
 ```
 
+For a more complex example, see the [Mandelbrot Schematic](https://github.com/cardillan/golem/tree/main/mandelbrot) – especially the `mandelbrot-compute.mnd` file.
+
 # Appendix
 
 ## Schemacode support for modules

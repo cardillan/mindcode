@@ -36,7 +36,7 @@ The `--append` command-line option has the same effect as the [`require` stateme
 
 The `-l` argument can be used to specify a log file, a file which receives messages generated while running the tool. When such a file isn't specified, the standard output is used (if standard output is already used for the output file, messages are written to the standard error instead).
 
-## MLog Watcher integration
+## Mlog Watcher integration
 
 The command-line tool can send the compiled code directly into a processor in a running Mindustry game through the Mlog Watcher mod. See [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) for details.
 

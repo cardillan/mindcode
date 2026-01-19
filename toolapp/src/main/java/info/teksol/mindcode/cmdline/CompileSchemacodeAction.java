@@ -41,6 +41,8 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .help("encode the created schematic into text representation and paste into clipboard")
                 .action(Arguments.storeTrue());
 
+        addMlogWatcherOptions(subparser, true);
+
         ArgumentGroup files = subparser.addArgumentGroup("Input/output files");
 
         files.addArgument("input")
@@ -102,13 +104,23 @@ public class CompileSchemacodeAction extends ActionHandler {
         final File logFile = resolveOutputFile(inputFile, outputDirectory, outputFileLog, ".log");
         final PositionFormatter positionFormatter = sp -> sp.formatForIde(compilerProfile.getFileReferences());
 
+        ConsoleMessageLogger messageLogger = createMessageLogger(output, logFile, positionFormatter);
+
         if (!result.hasCompilerErrors()) {
             outputMessages(result, output, logFile, positionFormatter);
 
             writeOutput(output, result.existingOutput());
 
+            String encoded = Base64.getEncoder().encodeToString(result.output());
+
+            if (arguments.getBoolean("watcher")) {
+                int port = arguments.getInt("watcher_port");
+                int timeout = arguments.getInt("watcher_timeout");
+                MlogWatcherClient.sendSchematic(port, timeout, messageLogger, encoded);
+            }
+
             if (arguments.getBoolean("clipboard")) {
-                writeToClipboard(Base64.getEncoder().encodeToString(result.output()));
+                writeToClipboard(encoded);
                 result.addMessage(ToolMessage.info("\nCreated schematic was copied to the clipboard."));
             }
         } else {

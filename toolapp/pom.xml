@@ -31,7 +31,7 @@
             <version>${revision}</version>
         </dependency>
 
-        <!-- WebSocket library for connecting to MLogWatcher mod -->
+        <!-- WebSocket library for connecting to MlogWatcher mod -->
         <dependency>
             <groupId>org.java-websocket</groupId>
             <artifactId>Java-WebSocket</artifactId>

@@ -1110,4 +1110,4 @@ dimensions are specified as an attribute, a compilation error occurs.
 
 ---
 
-[&#xAB; Previous: Best Practices](BEST-PRACTICES.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: IDE Integration &#xBB;](TOOLS-IDE-INTEGRATION.markdown)
+[&#xAB; Previous: Best Practices](BEST-PRACTICES.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Command line tool &#xBB;](TOOLS-CMDLINE.markdown)

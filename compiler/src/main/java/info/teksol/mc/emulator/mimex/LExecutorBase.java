@@ -87,7 +87,7 @@ public abstract class LExecutorBase implements LExecutor {
         this.messageHandler = emulator.getMessageHandler();
 
         int maxTextBuffer = metadata.getProcessorVersion() == ProcessorVersion.V6 ? 256 : 400;
-        textBuffer = new TextBuffer(messageHandler, 1000, maxTextBuffer);
+        textBuffer = new TextBuffer(messageHandler, 10000, maxTextBuffer);
         graphicsBuffer = new GraphicsBuffer(maxGraphicsBuffer);
 
         // Create default variables

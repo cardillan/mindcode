@@ -46,13 +46,13 @@ Schemacode, a schematic definition language, is covered here:
 
 Supporting tools: 
 
-* [IDE Integration](TOOLS-IDE-INTEGRATION.markdown)
 * [Command line tool](TOOLS-CMDLINE.markdown)
-* [Processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown)
+* [IDE Integration](TOOLS-IDE-INTEGRATION.markdown)
 * [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown)
-* [Schematics Refresher](TOOLS-REFRESHER.markdown)
+* [Processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown)
 * [Mlog Decompiler](TOOLS-MLOG-DECOMPILER.markdown)
 * [Testing Framework](TOOLS-TESTING-TOOL.markdown)
+* [Schematics Refresher](TOOLS-REFRESHER.markdown)
 
 Additional information on Mindcode and Mindustry Logic:
 

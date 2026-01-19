@@ -38,21 +38,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 .help("copy compiled mlog code to clipboard")
                 .action(Arguments.storeTrue());
 
-        subparser.addArgument("-w", "--watcher")
-                .help("send compiled mlog code to the Mlog Watcher mod in Mindustry (the code will be injected into the selected processor)")
-                .action(Arguments.storeTrue());
-
-        subparser.addArgument("--watcher-port")
-                .help("port number for communication with Mlog Watcher")
-                .choices(Arguments.range(0, 65535))
-                .type(Integer.class)
-                .setDefault(9992);
-
-        subparser.addArgument("--watcher-timeout")
-                .help("timeout in milliseconds when trying to establish a connection to Mlog Watcher")
-                .choices(Arguments.range(0, 3_600_000))
-                .type(Integer.class)
-                .setDefault(500);
+        addMlogWatcherOptions(subparser, false);
 
         ArgumentGroup files = subparser.addArgumentGroup("Input/output files");
 
