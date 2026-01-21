@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.ast;
 
-import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
+import info.teksol.mc.mindcode.compiler.FunctionModifier;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstOperatorIncDec.Type;
@@ -1688,7 +1688,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             /** Comment3 */
                             inline def b(ref a, b...) b; end;
                             debug noinline void c(in a, out b, in out c, out in d) a + b; end;
-                            export def d() end;
+                            atomic export def d() end;
                             """,
                     List.of(
                             new AstFunctionDeclaration(EMPTY,
@@ -1697,8 +1697,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     DataType.VAR,
                                     List.of(),
                                     List.of(),
-                                    CallType.NONE,
-                                    false),
+                                    List.of()
+                            ),
                             new AstFunctionDeclaration(EMPTY,
                                     new AstDocComment(EMPTY, "/** Comment3 */"),
                                     b,
@@ -1708,8 +1708,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstFunctionParameter(EMPTY, b, false, false, false, true)
                                     ),
                                     List.of(b),
-                                    CallType.INLINE,
-                                    false),
+                                    List.of(new AstFunctionModifier(EMPTY, FunctionModifier.INLINE))
+                            ),
                             new AstFunctionDeclaration(EMPTY,
                                     null,
                                     c,
@@ -1721,16 +1721,22 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstFunctionParameter(EMPTY, d, true, true, false, false)
                                     ),
                                     List.of(new AstOperatorBinary(EMPTY, ADD, a, b)),
-                                    CallType.NOINLINE,
-                                    true),
+                                    List.of(
+                                            new AstFunctionModifier(EMPTY, FunctionModifier.DEBUG),
+                                            new AstFunctionModifier(EMPTY, FunctionModifier.NOINLINE)
+                                    )
+                            ),
                             new AstFunctionDeclaration(EMPTY,
                                     null,
                                     d,
                                     DataType.VAR,
                                     List.of(),
                                     List.of(),
-                                    CallType.EXPORT,
-                                    false)
+                                    List.of(
+                                            new AstFunctionModifier(EMPTY, FunctionModifier.ATOMIC),
+                                            new AstFunctionModifier(EMPTY, FunctionModifier.EXPORT)
+                                    )
+                            )
                     )
             );
         }

@@ -152,10 +152,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
     @Override
     public ValueStore visitFunctionDeclaration(AstFunctionDeclaration node) {
-        if (node.isRemote()) {
-            verifyMinimalRemoteTarget(node);
-        }
-
         // Function declarations are processed out of line
         return LogicVoid.VOID;
     }

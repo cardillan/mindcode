@@ -4,10 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.14.0 – Unreleased
+
+### Fixed
+
+* Fixed an internal error when compiling a function in the main program declared as `export`.
+* Fixed incorrect Temp variable elimination ([#298](https://github.com/cardillan/mindcode/issues/298)).
+
+### Added
+
+* Added the [`atomic()` intrinsic function](doc/syntax/REMOTE-CALLS.markdown#the-atomic-function) and [`atomic` function modifier](doc/syntax/REMOTE-CALLS.markdown#atomic-functions).
+* Added support for storing created schematics directly in the Mindustry Schematic library using the MlogWatcher mod.
+
+### Changed
+
+* Changed Mindcode syntax to allow specifying multiple [function modifiers](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-modifiers) in arbitrary order. For example, it is now possible to declare a function as `inline debug` as well as `debug inline` (which was the only allower order previously). 
+
 ## 3.13.0 – 2026-01-18
 
 > [!NOTE]
-> The [atomic code blocks](doc/syntax/REMOTE-CALLS.markdown#atomic-code-blocks) are only guaranteed to execute correctly in the latest BE version (build 26609 or higher). The latest beta release (v154.3) doesn't provide necessary support for atomic code blocks.
+> [Atomic code execution](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26609 or higher). The latest beta release (v154.3) doesn't provide necessary support for atomic code execution.
 
 ### Fixed
 
@@ -16,7 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added new `@maxUnits` sensable property.
-* Added an [atomic code block](doc/syntax/REMOTE-CALLS.markdown#atomic-code-blocks): a block of code guaranteed to be executed atomically (without interruption), meaning that other processors or game updates do not change the world state.
+* Added an [atomic code block](doc/syntax/REMOTE-CALLS.markdown#atomic-blocks): a block of code guaranteed to be executed atomically (without interruption), meaning that other processors or game updates do not change the world state.
 * Added the [`setrate`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-setrate) and [`ipt` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-ipt). These options specify the rate at which a world processor executes instructions (used by the compiler when building atomic blocks).
 * Added the [`volatile-atomic` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-volatile-atomic) governing the way atomic blocks are created.
 * Added the [`processor-id`, `program-name` and `program-version` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-processor-id). These options take string values, which are then encoded into a `*id` variable and can be used to identify the processor in the schematics.

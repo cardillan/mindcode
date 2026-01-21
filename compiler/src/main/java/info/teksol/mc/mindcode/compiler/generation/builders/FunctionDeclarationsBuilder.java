@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
+import info.teksol.mc.mindcode.compiler.FunctionModifier;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
@@ -7,10 +8,7 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -75,7 +73,7 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
         assembler.setActive(function.isUsed() || function.isEntryPoint());
         // TODO: replace getPlacementCount() with proper weight computation
         assembler.enterFunctionAstNode(function, function.getDeclaration(), function.getPlacementCount());
-        if (function.getLabel() != null && !function.isRemote()) {
+        if (function.getLabel() != null && !function.isExport()) {
             assembler.createLabel(function.getLabel());
         }
 
@@ -84,7 +82,7 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
 
         if (function.isRecursive()) {
             appendRecursiveFunctionDeclaration(function);
-        } else if (function.isRemote()) {
+        } else if (function.isExport()) {
             appendRemoteFunctionDeclaration(function);
         } else {
             appendStacklessFunctionDeclaration(function);
@@ -98,9 +96,14 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
     }
 
     private void compileFunctionBody(MindcodeFunction function) {
-        assembler.enterAstNode(function.getDeclaration(), AstContextType.FUNCTION_BODY);
+        boolean atomic = function.hasModifier(FunctionModifier.ATOMIC);
+        assembler.enterAstNode(function.getDeclaration(), atomic ? AstContextType.ATOMIC : AstContextType.FUNCTION_BODY);
         if (function.getProfile().isSymbolicLabels()) {
             assembler.createComment("Function: " + function.getDeclaration().toSourceCode());
+        }
+
+        if (atomic) {
+            assembler.createWait(LogicNumber.ZERO);
         }
         ValueStore valueStore = function.isVoid()
                 ? visitBody(function.getBody())
@@ -111,7 +114,7 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
         }
 
         assembler.createLabel(returnStack.getReturnLabel());
-        assembler.exitAstNode(function.getDeclaration(), AstContextType.FUNCTION_BODY);
+        assembler.exitAstNode(function.getDeclaration(), atomic ? AstContextType.ATOMIC : AstContextType.FUNCTION_BODY);
     }
 
     private void appendRecursiveFunctionDeclaration(MindcodeFunction function) {

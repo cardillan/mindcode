@@ -4,8 +4,8 @@ import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
-import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
+import info.teksol.mc.mindcode.compiler.FunctionModifier;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
@@ -236,7 +236,12 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstAtomicBlock visitAstAtomicBlock(MindcodeParser.AstAtomicBlockContext ctx) {
-        return new AstAtomicBlock(pos(ctx), processBody(ctx.exp));
+        return new AstAtomicBlock(pos(ctx), processBody(ctx.exp), false);
+    }
+
+    @Override
+    public AstAtomicBlock visitAstFunctionAtomic(MindcodeParser.AstFunctionAtomicContext ctx) {
+        return new AstAtomicBlock(pos(ctx), List.of(visitNonNull(ctx.exp)), true);
     }
 
     @Override
@@ -445,6 +450,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     //<editor-fold desc="Rules: function declarations">
     @Override
     public AstFunctionDeclaration visitAstFunctionDeclaration(MindcodeParser.AstFunctionDeclarationContext ctx) {
+        List<AstFunctionModifier> modifiers = ctx.functionModifier().stream().map(this::createFunctionModifier).toList();
+
         DataType dataType = switch (ctx.type.getType()) {
             case MindcodeLexer.VOID -> DataType.VOID;
             case MindcodeLexer.DEF  -> DataType.VAR;
@@ -457,10 +464,14 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 dataType,
                 processParameterList(ctx.parameterList()),
                 processBody(ctx.body),
-                ctx.callType == null ? CallType.NONE : CallType.fromToken(ctx.callType.getType()),
-                ctx.debug != null
-        );
+                modifiers);
     }
+
+    private AstFunctionModifier createFunctionModifier(FunctionModifierContext ctx) {
+        FunctionModifier modifier = FunctionModifier.fromToken(ctx.modifier.getType());
+        return new AstFunctionModifier(pos(ctx), modifier);
+    }
+
 
     private List<AstFunctionParameter> processParameterList(MindcodeParser.ParameterListContext ctx) {
         return ctx.astFunctionParameter() != null

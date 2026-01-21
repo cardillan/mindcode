@@ -2,8 +2,8 @@ package info.teksol.mc.mindcode.compiler.ast.nodes;
 
 import info.teksol.annotations.AstNode;
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
+import info.teksol.mc.mindcode.compiler.FunctionModifier;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.util.CollectionUtils;
@@ -13,6 +13,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 @AstNode
@@ -21,19 +22,17 @@ public class AstFunctionDeclaration extends AstDeclaration {
     private final DataType dataType;
     private final List<AstFunctionParameter> parameters;
     private final List<AstMindcodeNode> body;
-    private final CallType callType;
+    private final List<AstFunctionModifier> modifiers;
     private final List<AstDirectiveSet> directives = new ArrayList<>();
-    private final boolean debug;
 
     public AstFunctionDeclaration(SourcePosition sourcePosition, @Nullable AstDocComment docComment, AstIdentifier identifier,
-            DataType dataType, List<AstFunctionParameter> parameters, List<AstMindcodeNode> body, CallType callType, boolean debug) {
+            DataType dataType, List<AstFunctionParameter> parameters, List<AstMindcodeNode> body, List<AstFunctionModifier> modifiers) {
         super(sourcePosition, children(list(identifier), parameters, body), docComment);
         this.identifier = identifier;
         this.dataType = dataType;
         this.parameters = parameters;
         this.body = body;
-        this.callType = callType;
-        this.debug = debug;
+        this.modifiers = modifiers;
     }
 
     public void addDirectives(List<AstDirectiveSet> directives) {
@@ -68,28 +67,12 @@ public class AstFunctionDeclaration extends AstDeclaration {
         return body;
     }
 
-    public CallType getCallType() {
-        return callType;
+    public List<AstFunctionModifier> getModifiers() {
+        return modifiers;
     }
 
-    public boolean isDebug() {
-        return debug;
-    }
-
-    public boolean canEvaluate() {
-        return callType == CallType.NONE || callType == CallType.INLINE;
-    }
-
-    public boolean isInline() {
-        return callType == CallType.INLINE;
-    }
-
-    public boolean isNoinline() {
-        return callType == CallType.NOINLINE;
-    }
-
-    public boolean isRemote() {
-        return callType == CallType.EXPORT || callType == CallType.REMOTE;
+    public boolean hasModifier(FunctionModifier modifier) {
+        return modifiers.stream().anyMatch(m -> m.getModifier() == modifier);
     }
 
     public boolean isVarargs() {
@@ -120,7 +103,7 @@ public class AstFunctionDeclaration extends AstDeclaration {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstFunctionDeclaration that = (AstFunctionDeclaration) o;
-        return callType == that.callType && identifier.equals(that.identifier) && dataType == that.dataType
+        return Objects.equals(modifiers, that.modifiers) && identifier.equals(that.identifier) && dataType == that.dataType
                && parameters.equals(that.parameters) && body.equals(that.body);
     }
 
@@ -130,7 +113,7 @@ public class AstFunctionDeclaration extends AstDeclaration {
         result = 31 * result + dataType.hashCode();
         result = 31 * result + parameters.hashCode();
         result = 31 * result + body.hashCode();
-        result = 31 * result + callType.hashCode();
+        result = 31 * result + modifiers.hashCode();
         return result;
     }
 
@@ -146,7 +129,7 @@ public class AstFunctionDeclaration extends AstDeclaration {
 
     public String toSourceCode() {
         StringBuilder sb = new StringBuilder();
-        if (callType != CallType.NONE) sb.append(callType.token()).append(' ');
+        modifiers.forEach(modifier -> sb.append(modifier.getModifier().keyword()).append(' '));
         sb.append(dataType.keyword).append(' ');
         sb.append(identifier.getName()).append('(');
         for (int i = 0; i < parameters.size(); i++) {

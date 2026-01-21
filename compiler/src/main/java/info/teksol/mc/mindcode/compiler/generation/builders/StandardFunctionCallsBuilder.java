@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.FunctionModifier;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -104,7 +105,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // (in the case of inline functions, they could get evaluated in the context of the function)
         arguments.forEach(FunctionArgument::unwrap);
 
-        if (!function.isRemote() && target != null) {
+        if (!function.isExport() && target != null) {
             throw new MindcodeInternalError("Target must be null for non-remote function calls.");
         }
 
@@ -123,7 +124,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         }
         validateUserFunctionArguments(function, arguments.subList(0, Math.min(parameterCount, arguments.size())));
 
-        if (function.isRemote() && !function.getModule().getRemoteProcessors().isEmpty()) {
+        if (function.isExport() && !function.getModule().getRemoteProcessors().isEmpty()) {
             if (async && arguments.stream().filter(a -> !a.isInput()).anyMatch(FunctionArgument::hasValue)) {
                 error(call, ERR.ASYNC_OUTPUT_ARGUMENT, function.getName());
             }
@@ -200,7 +201,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             assembler.createComment("Function: " + inlineFunction.getDeclaration().toSourceCode());
         }
 
-        if (inlineFunction.getDeclaration().isInline()) {
+        if (inlineFunction.isDeclaredInline()) {
             CompilerProfile functionProfile = callProfile.duplicate(true);
             functionProfile.copyUnstableFrom(inlineFunction.getProfile());
             DirectivePreprocessor.processLocalDirectives(context, functionProfile, inlineFunction.getDeclaration());
@@ -221,12 +222,18 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         final LogicLabel returnLabel = assembler.nextLabel();
         returnStack.enterFunction(returnLabel, returnValue);
 
-        assembler.enterFunctionBodyAstNode(function, function.getDeclaration(), AstContextType.FUNCTION_BODY);
+        boolean atomic = function.hasModifier(FunctionModifier.ATOMIC);
+        assembler.enterFunctionBodyAstNode(function, function.getDeclaration(),
+                atomic ? AstContextType.ATOMIC : AstContextType.FUNCTION_BODY);
+        if (atomic) {
+            assembler.createWait(LogicNumber.ZERO);
+        }
+
         ValueStore result = evaluateBody(function.getBody());
         if (!function.isVoid()) {
             returnValue.setValue(assembler, result.getValue(assembler));
         }
-        assembler.exitAstNode(function.getDeclaration());
+        assembler.exitAstNode(function.getDeclaration(), atomic ? AstContextType.ATOMIC : AstContextType.FUNCTION_BODY);
 
         // Return statements write directly to returnValue. The return label is placed
         // after the code which sets the return value from the function body.
@@ -383,7 +390,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         }
 
         List<MindcodeFunction> functions = callGraph.getFunctions().stream()
-                .filter(f -> f.isRemote() && f.getName().equals(functionName.getName())).toList();
+                .filter(f -> f.isExport() && f.getName().equals(functionName.getName())).toList();
         if (functions.isEmpty()) {
             error(call, ERR.REMOTE_WRONG_ARGUMENT, call.getFunctionName());
             return null;
@@ -422,7 +429,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // Find a module using callGraph.
         // This is very convoluted, but essentially a temporary solution until types get introduced
         Optional<AstModule> module = callGraph.getFunctions().stream()
-                .filter(f -> f.isRemote() && f.getModule().matchesProcessor(remoteProcessorId.getName()))
+                .filter(f -> f.isExport() && f.getModule().matchesProcessor(remoteProcessorId.getName()))
                 .map(MindcodeFunction::getModule)
                 .findFirst();
 
@@ -533,7 +540,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
                 variables.replaceFunctionVariable(parameter.getIdentifier(), argument.unwrap());
             } else if (parameter.isInput()) {
                 ValueStore argument = argumentValues.remove();
-                if (function.getDeclaration().isInline() && !argument.unwrap().isMlogRepresentable()) {
+                if (function.isDeclaredInline() && !argument.unwrap().isMlogRepresentable()) {
                     variables.replaceFunctionVariable(parameter.getIdentifier(), argument.unwrap());
                 } else {
                     parameters.get(index).setValue(assembler, argument.getValue(assembler));

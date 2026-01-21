@@ -4,7 +4,7 @@ In Mindustry 8, the logic system has been significantly extended, allowing close
 
 * [Remote functions and variables](#remote-functions-and-variables): a function or a variable declared in a remote module can be accessed from a different processor which uses the remote module. Remote functions and variables are fully supported by the Mindcode's syntax; calling a remote function, or accessing a remote variable, is possible using the usual syntax for method calls and variables.  
 * [Arbitrary access to remote variables](#arbitrary-access-to-remote-variables): Mindcode provides a way to access arbitrary variables in remote processors, possibly interfacing with code that wasn't created by Mindcode. 
-* [Atomic code blocks](#atomic-code-blocks): an atomic code block guarantees that the contained code will be fully processed during a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including other processor variables, contents of memory banks or cells, or unit and block states.
+* [Atomic code execution](#atomic-code-execution): atomic code execution guarantees that a section of code will be fully processed during a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including other processor variables, contents of memory banks or cells, or unit and block states.
 
 # Remote functions and variables
 
@@ -67,6 +67,8 @@ Function to be called remotely must be declared using the `export` keyword:
 
 ```Mindcode
 #set target = 8;
+
+module library;
 
 export def foo(x, y, out z)
     z = x + y;
@@ -427,34 +429,121 @@ read *tmp5 processor1 "foo"
 print *tmp5
 ```
 
-# Atomic code blocks
-
-An atomic code block ensures that the code enclosed in it will execute in a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including current or other processor's variables, contents of memory banks or cells, or unit and block states. This is true even at high frame rates (generally, frame rate may affect instruction scheduling, making any guarantees about atomicity of code executed outside atomic blocks impossible).
+# Atomic code execution
 
 > [!NOTE]
-> Atomic code blocks are only supported for targets 8.1 or higher. They also rely on a very recent change to Mindustry, and therefore only work on Mindustry BE build 26609 or higher. Specifically, the latest Beta release (v8 Build 154.3 - Beta) doesn't contain the required functionality.    
+> Atomic code execution is only supported for targets 8.1 or higher. It also relies on a very recent change to Mindustry, and therefore only works on Mindustry BE build 26609 or higher. Specifically, the latest Beta release (v8 Build 154.3 - Beta) doesn't contain the required functionality.    
 
-The atomic block has the following syntax:
+An atomic code execution ensures that a section of code will execute in a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including this or other processor's variables, contents of memory banks or cells, or unit and block states. This is true even at high frame rates (generally, frame rate may affect instruction scheduling, making any guarantees about atomicity of code executed outside atomic blocks impossible).
 
-```
-atomic
-    // Atomic block code
-end;
-```
+Mindcode uses the following mechanism to make sure the code enclosed in a code block will be executed atomically: the maximum possible number of steps required to execute the atomic block is calculated, and a `wait` instruction is inserted at the beginning of the atomic block with a duration which guarantees that enough instruction quota will accumulate during the wait. This ensures that the longest code path gets executed in a single frame on the next update.
 
-The following constructs must not be contained (directly or indirectly) in an atomic block: 
+## Atomic sections
 
-* another (nested) atomic block,
+Mindcode provides the following constructs for creating atomic sections:
+
+* [atomic blocks](#atomic-blocks),
+* [the `atomic()` function](#the-atomic-function),
+* [user-defined atomic functions](#atomic-functions).
+
+The following constructs must not be contained (directly or indirectly) in an atomic section of code:
+
+* another (nested) atomic section,
 * a `wait` instruction (this also precludes synchronous remote function calls and waiting for the result of an asynchronous remote call),
 * a recursive function call,
 * a loop.
- 
-Mindcode recognizes most kinds of loops including loops in mlog blocks, but it won't recognize jumps or loops resulting from `@counter` manipuation. Such jumps and loops may cause malfunction of atomic blocks.  
+
+Mindcode recognizes most kinds of loops including loops in mlog blocks, but it won't recognize jumps or loops resulting from `@counter` manipuation. Such jumps and loops may cause malfunction of atomic blocks.
 
 > [!IMPORTANT]
-> The [Loop unrolling optimization](optimizations/LOOP-UNROLLING.markdown) may unroll a loop inside an atomic block. Unrolled loops are allowed inside atomic blocks. However, when the optimization doesn't take place, either because of space constraints or because the optimization is disabled, the atomic block will no longer compile. Use loops within atomic blocks with caution. 
+> The [Loop unrolling optimization](optimizations/LOOP-UNROLLING.markdown) may unroll a loop inside an atomic section, essentially removing the loop and making the code compatible with an atomic section. However, when the optimization doesn't take place, either because of space constraints or because the optimization is disabled, the atomic section will no longer compile. Use loops within atomic sections with caution.
 
-Mindcode uses the following mechanism to make sure the code enclosed in a code block will be executed atomically: the maximum possible number of steps required to execute the atomic block is calculated, and a `wait` instruction is inserted at the beginning of the atomic block with a duration which guarantees that enough instruction quota will accumulate during the wait. This ensures that the longest code path gets executed in a single frame on the next update.
+### Atomic blocks
+
+The atomic block has the following syntax:
+
+```Mindcode
+#set target = 8;
+
+atomic
+    // Atomic section of code
+end;
+```
+
+### The `atomic()` function
+
+The `atomic()` function is used to execute a single expression atomically, returning its value:
+
+```Mindcode
+#set target = 8;
+
+cell1[1] = atomic(cell[0]++);
+```
+
+compiles to
+
+```mlog
+wait 0.033334                           # 2.000 ticks for atomic execution of 4 steps at 2 ipt
+read *tmp2 :cell 0
+op add *tmp1 *tmp2 1
+write *tmp1 :cell 0                     # The last atomic block instruction
+write *tmp2 cell1 1
+```
+
+As seen in the above example, instructions needed to store the result aren't part of the atomic section.    
+
+### Atomic functions
+
+A function can be declared using the `atomic` keyword, in which case the function body is executed atomically:
+
+```Mindcode
+#set target = 8;
+
+atomic def increment()
+    cell1[0]++;
+end;
+
+print(increment());
+```
+
+compiles to:
+
+```mlog
+wait 0.033334                           # 2.000 ticks for atomic execution of 4 steps at 2 ipt
+read *tmp2 cell1 0
+op add *tmp1 *tmp2 1
+write *tmp1 cell1 0                     # The last atomic block instruction
+print *tmp2
+```
+
+> [!TIP]
+> Inline atomic functions guarantee that access to the arguments passed by reference is protected by the atomic section, but other arguments aren't. Example:
+ 
+```Mindcode
+#set target = 8;
+
+external(cell1[0]) x;
+external(cell1[1]) y;
+
+inline atomic void foo(ref a, in out b)
+    a++;
+    b++;
+end;
+
+foo(ref x, in out y);
+```
+
+As can be seen, access to `x` (stored in `cell1[0]`) is part of the atomic section, but access to `y` (stored in `cell1[1]`) isn't: 
+
+```mlog
+read :foo:b cell1 1
+wait 0.033334                           # 2.000 ticks for atomic execution of 4 steps at 2 ipt
+read *tmp4 cell1 0
+op add *tmp0 *tmp4 1
+write *tmp0 cell1 0
+op add :foo:b :foo:b 1                  # The last atomic block instruction
+write :foo:b cell1 1
+```
 
 ## Processor speed
 

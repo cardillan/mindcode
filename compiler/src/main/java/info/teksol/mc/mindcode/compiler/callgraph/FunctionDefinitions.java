@@ -4,8 +4,8 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
-import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
+import info.teksol.mc.mindcode.compiler.FunctionModifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -22,12 +22,13 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
 
     public FunctionDefinitions(MessageConsumer messageConsumer, AstModule mainModule) {
         super(messageConsumer);
-        main = new MindcodeFunction(createMain(), mainModule, true);
+        main = new MindcodeFunction(createMain(), Set.of(), mainModule, true);
         functionList.add(main);
     }
 
-    public MindcodeFunction addFunctionDeclaration(AstFunctionDeclaration declaration, AstModule module, boolean entryPoint) {
-        MindcodeFunction current = new MindcodeFunction(declaration, module, entryPoint);
+    public MindcodeFunction addFunctionDeclaration(AstFunctionDeclaration declaration, Set<FunctionModifier> modifiers,
+            AstModule module, boolean entryPoint) {
+        MindcodeFunction current = new MindcodeFunction(declaration, modifiers, module, entryPoint);
         functionList.add(current);
         declarationMap.put(declaration, current);
 
@@ -39,7 +40,7 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
     }
 
     private boolean conflicts(MindcodeFunction f1, MindcodeFunction f2) {
-        if (f1.isRemote() && f2.isRemote()) {
+        if (f1.isExport() && f2.isExport()) {
             return true;
         }
 
@@ -65,8 +66,8 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
     }
 
     private void reportConflict(MindcodeFunction current, MindcodeFunction previous) {
-        if (current.isRemote() && previous.isRemote()) {
-            error(current.getSourcePosition(), ERR.FUNCTION_CONFLICT_REMOTE, current.format(), previous.format());
+        if (current.isExport() && previous.isExport()) {
+            error(current.getSourcePosition(), ERR.FUNCTION_EXPORT_CONFLICT, current.format(), previous.format());
         } else {
             String defined = previous.getSourcePosition().inputFile() == current.getSourcePosition().inputFile()
                     ? "" : " defined in " + previous.getSourcePosition().inputFile().getPath();
@@ -136,8 +137,6 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
                 DataType.VOID,
                 List.of(),
                 List.of(),
-                CallType.NONE,
-                false);
+                List.of());
     }
 }
-

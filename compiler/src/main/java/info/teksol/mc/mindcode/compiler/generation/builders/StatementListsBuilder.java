@@ -46,7 +46,7 @@ public class StatementListsBuilder extends AbstractCodeBuilder implements
             atomic = false;
         }
         assembler.clearSubcontextType();
-        return result;
+        return node.isFunction() ? result : LogicVoid.VOID;
     }
 
     @Override

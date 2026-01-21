@@ -286,7 +286,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable fnRetVal(MindcodeFunction function, String mlog) {
         return new LogicVariable(function.getSourcePosition(), FUNCTION_RETVAL,
                 function.getName(), function.getPrefix(), function.getPrefix() + RETURN_VALUE,
-                mlog, false, false, true, false, function.isRemote());
+                mlog, false, false, true, false, function.isExport());
     }
 
     public static LogicVariable fnRetAddr(MindcodeFunction function, String mlog) {

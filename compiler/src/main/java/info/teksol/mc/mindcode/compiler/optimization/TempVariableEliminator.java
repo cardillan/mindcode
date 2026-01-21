@@ -57,6 +57,8 @@ class TempVariableEliminator extends BaseOptimizer {
                 LogicInstruction first = instructionAt(indices.getFirst());
                 LogicInstruction last = instructionAt(indices.getLast());
 
+                if (first instanceof EmptyInstruction || last instanceof EmptyInstruction) continue;
+
                 if (first instanceof SetInstruction set && set.getResult().equals(variable)) {
                     // Make sure all <variable> arguments of the last instruction are input
                     boolean replaceInputArg = last.typedArgumentsStream()

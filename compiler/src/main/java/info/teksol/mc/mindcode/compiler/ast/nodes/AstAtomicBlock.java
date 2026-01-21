@@ -13,10 +13,12 @@ import java.util.Objects;
 @AstNode
 public class AstAtomicBlock extends AstExpression {
     private final List<AstMindcodeNode> expressions;
+    private final boolean function;
 
-    public AstAtomicBlock(SourcePosition sourcePosition, List<AstMindcodeNode> expressions) {
+    public AstAtomicBlock(SourcePosition sourcePosition, List<AstMindcodeNode> expressions, boolean function) {
         super(sourcePosition, expressions);
         this.expressions = Objects.requireNonNull(expressions);
+        this.function = function;
     }
 
     @Override
@@ -28,13 +30,17 @@ public class AstAtomicBlock extends AstExpression {
         return expressions;
     }
 
+    public boolean isFunction() {
+        return function;
+    }
+
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         AstAtomicBlock that = (AstAtomicBlock) o;
-        return Objects.equals(expressions, that.expressions);
+        return Objects.equals(expressions, that.expressions) && function == that.function;
     }
 
     @Override

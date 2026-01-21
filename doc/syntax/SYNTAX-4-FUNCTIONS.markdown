@@ -185,7 +185,7 @@ The `format` instruction searches the text buffer, looking for a placeholder wit
 Apart from the `printf()`, Mindcode supports a new `format()` function, which just outputs the `format` instruction for each of its arguments. The `printf(fmt, value1, value2)` function call is therefore just shorthand for `print(fmt); format(value1, value2);`.
 
 > [!TIP]
-> Since the `format` instruction allows to decouple the formatting template from the values being applied to the template, Mindcode is unable to apply the print merging optimizations to the `format` instruction, even when their arguments get resolved to constant values during optimizations. Use compile-time formatting instead of run-time formatting whenever possible for more efficient code.      
+> Since the `format` instruction allows decoupling the formatting template from the values being applied to the template, Mindcode is unable to apply the print merging optimizations to the `format` instruction with constant values. Use compile-time formatting instead of run-time formatting whenever possible for more efficient code.      
 
 > [!TIP]
 > Print merging optimizations can use the `format` instruction for more effective optimizations. To make sure the optimizations do not interfere with the `format` instructions placed into the code by the user, the optimizer only uses the `{0}` placeholder for its own formatting. This leaves the remaining nine placeholders, `{1}` to `{9}`, for use in the code itself. If you do use the `{0}` placeholder in your own code, the more efficient optimization using the `format` instruction will be disabled.
@@ -472,7 +472,7 @@ printflush message1
 ```
 
 > [!NOTE]
-> Data encoded with the `encode()` function may not be easily readable in a text editor or the game interface. Some text editors may not be able to display the encoded data correctly, or may even damage the data when copying them to the clipboard. If you suspect this is happening, use the Mlog Watcher mod, or create schematics containing a processor with your code, to avoid the clipboard. 
+> Data encoded with the `encode()` function may not be easily readable in a text editor or the game interface. Some text editors may not be able to display the encoded data correctly or may even damage the data when copying them to the clipboard. If you suspect this is happening, use the Mlog Watcher mod or create schematics containing a processor with your code to avoid the clipboard. 
 
 ## The `error()` function
 
@@ -496,11 +496,11 @@ The function always takes just one argument. When the argument passed in is not 
 
 ## Remote calls
 
-The built-in functions `async()`, `finished()` and `await()` are part of the Remote Function framework and are described [here](REMOTE-CALLS.markdown#asynchronous-remote-calls).   
+The intrinsic functions `async()`, `finished()`, `await()` and `atomic()` are part of the Parallel Processing framework and are described [here](REMOTE-CALLS.markdown#asynchronous-remote-calls) and [here](REMOTE-CALLS.markdown#atomic-functions).   
 
 # System library functions
 
-The functions discussed so far are either mapped directly to Mindustry Logic, or built-in to the compiler. Additional system functions, defined in plain Mindcode, are included in the [system libraries](SYSTEM-LIBRARY.markdown).
+The functions discussed so far are either mapped directly to Mindustry Logic or built-in to the compiler. Additional system functions, defined in plain Mindcode, are included in the [system libraries](SYSTEM-LIBRARY.markdown).
 
 # User-defined functions
 
@@ -601,6 +601,16 @@ void foo(n)
     end;
 end;
 ```
+
+## Function modifiers
+
+The following function modifiers are supported:
+
+* `inline`: creates an inline function.
+* `noinline`: prevents the function from being inlined, resulting either in a stackless or recursive function.
+* `export`: creates a [function which can be called remotely](REMOTE-CALLS.markdown#exported-functions).
+* `atomic`: creates a [function whose body is executed atomically](REMOTE-CALLS.markdown#atomic-functions).
+* `debug:` creates a function that is only compiled in debug mode.
 
 ## Stackless functions
 
@@ -756,6 +766,27 @@ allocate stack in bank1[256...512];
 
 When a function is not recursive, it won't store anything on a stack, even when it is called from or it itself calls a recursive function. If your code contains a recursive function, it won't compile unless the stack is allocated. Therefore, if your code compiles without the `allocate stack` statement, you don't need to worry about your functions not supporting non-numeric variables or parameters.
 
+## Atomic functions
+
+An atomic function guarantees the function body will be executed atomically. See [Atomic functions](REMOTE-CALLS.markdown#atomic-functions) for more details. 
+
+## Debugging functions
+
+It is possible to declare a function as `debug`. In this case, calls to the function will only be compiled when the [`debug` option](SYNTAX-5-OTHER.markdown#option-debug) is set to true. Example:
+
+```Mindcode
+debug inline void pause(in switch)
+    // Pauses the execution of the program until the switch passed in is deactivated - clicked by the user
+    // Allows the user to inspect the state of the program - the variables at the place where it was called.  
+    switch.enabled = true;
+    do while not switch1.enabled;
+end;
+```
+
+A debug function must not return a value - must be declared `void` - and must not contain any parameter declared `out`. Other modifiers (`in`, `in out` and `ref`) are allowed.
+
+The `debug` keyword must precede the `inline`, `noinline`, or `export` keywords (when used) and the `void` keyword. 
+
 ## Function overloading
 
 Mindcode supports function overloading. Several functions can have the same name, provided they differ in the number of arguments they take. For example:
@@ -781,10 +812,10 @@ When two or more function declarations could be matched by the same function cal
 * `void foo(x, y, out z)`: conflict - may also take two arguments when `z` is omitted.
 
 * `void bar(x)`: `x` is an input parameter
-* `void bar(out y)`: `y` is an output parameter, therefore the function is different from `bar(x)`.
+* `void bar(out y)`: `y` is an output parameter, therefore, the function is different from `bar(x)`.
 * `void bar(in out z)`: `z` is an input/output parameter, therefore, the function clashes with both `bar(x)` and `bar(out y)`.
 
-A vararg function doesn't conflict with a non-vararg function. When a function call matches both a vararg function and a non-vararg function, the non-vararg function will be called. It is therefore possible to declare functions handling a specific number of arguments, plus a vararg function handling the generic case. The non-vararg functions handling a specific number of arguments will be used when possible.  
+A vararg function doesn't conflict with a non-vararg function. When a function call matches both a vararg function and a non-vararg function, the non-vararg function will be called. It is therefore possible to declare functions handling a specific number of arguments, plus a vararg function handling the generic case. The non-vararg functions handling a specific number of arguments will be used when possible.
 
 Mindcode will report all conflicts of function declarations as errors, even if there aren't any ambiguous function calls.
 
@@ -812,23 +843,6 @@ found = ulocate(:ore, @copper, out x, out y);    // Also calls the user-defined 
 ```
 
 It is not possible to call a Logic function if a matching user-defined function exists.
-
-## Debugging functions
-
-It is possible to declare a function as `debug`. In this case, calls to the function will only be compiled when the [`debug` option](SYNTAX-5-OTHER.markdown#option-debug) is set to true. Example:
-
-```Mindcode
-debug inline void pause(in switch)
-    // Pauses the execution of the program until the switch passed in is deactivated - clicked by the user
-    // Allows the user to inspect the state of the program - the variables at the place where it was called.  
-    switch.enabled = true;
-    do while not switch1.enabled;
-end;
-```
-
-A debug function must not return a value - must be declared `void` - and must not contain any parameter declared `out`. Other modifiers (`in`, `in out` and `ref`) are allowed.
-
-The `debug` keyword must precede the `inline`, `noinline`, or `export` keywords (when used) and the `void` keyword. 
 
 ---
 

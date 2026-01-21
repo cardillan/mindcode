@@ -1,7 +1,6 @@
 package info.teksol.mc.mindcode.compiler.astcontext;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static info.teksol.mc.common.SourcePosition.EMPTY;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,10 +31,10 @@ class AstContextTest {
     private final CallGraph callGraph = CallGraph.createEmpty(MAIN_MODULE);
     private final AstFunctionDeclaration functionDeclaration1 = new AstFunctionDeclaration( EMPTY, null,
             new AstIdentifier(EMPTY, "test1"), DataType.VAR,
-            List.of(), List.of(), CallType.NONE, false);
+            List.of(), List.of(), List.of());
     private final AstFunctionDeclaration functionDeclaration2 = new AstFunctionDeclaration( EMPTY, null,
             new AstIdentifier(EMPTY, "test2"), DataType.VAR,
-            List.of(), List.of(), CallType.NONE, false);
+            List.of(), List.of(), List.of());
     private MindcodeFunction function1;
     private MindcodeFunction function2;
     private AstContext context;
@@ -42,8 +42,8 @@ class AstContextTest {
     @BeforeEach
     void setUp() {
         FunctionDefinitions functions = new FunctionDefinitions(m -> {}, MAIN_MODULE);
-        function1 = functions.addFunctionDeclaration(functionDeclaration1, MAIN_MODULE, false);
-        function2 = functions.addFunctionDeclaration(functionDeclaration2, MAIN_MODULE, false);
+        function1 = functions.addFunctionDeclaration(functionDeclaration1, Set.of(), MAIN_MODULE, false);
+        function2 = functions.addFunctionDeclaration(functionDeclaration2, Set.of(), MAIN_MODULE, false);
 
         AstMindcodeNode node = new TestNode(profile, AstContextType.FUNCTION_DEF, AstSubcontextType.BODY);
         context = root.createFunctionDeclaration(function1, node, node.getContextType(),1.0);

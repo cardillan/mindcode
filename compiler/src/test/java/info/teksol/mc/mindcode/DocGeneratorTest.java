@@ -1,9 +1,6 @@
 package info.teksol.mc.mindcode;
 
-import info.teksol.mc.mindcode.compiler.CompilationPhase;
-import info.teksol.mc.mindcode.compiler.DataType;
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
-import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.*;
 import info.teksol.mc.mindcode.compiler.ast.AbstractAstBuilderTest;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -263,13 +260,13 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
         } else {
             int speed = measureFootprint(null, GenerationGoal.SPEED);
             int size = measureFootprint(null, GenerationGoal.SIZE);
-            if (!declaration.isNoinline()) {
+            if (!declaration.hasModifier(FunctionModifier.NOINLINE)) {
                 writer.printf("| %-40s | %19s | %18s |%n", "Inlined function", speed, size);
             } else {
                 // Implement if noinline function is ever added to the library
                 throw new UnsupportedOperationException("Size calculation for noinline functions is not supported");
             }
-            if (!declaration.isInline()) {
+            if (!declaration.hasModifier(FunctionModifier.INLINE)) {
                 int callSize = declaration.computeCallSize();
                 // +1 for the return from the function call
                 writer.printf("| %-40s | %19s | %18s |%n", "Function body", speed + 1, size + 1);
@@ -451,8 +448,7 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
     private void writeFunction(PrintWriter writer) {
         Objects.requireNonNull(declaration);
         writer.print("**Definition:** `");
-        if (declaration.isInline()) writer.print("inline ");
-        if (declaration.isNoinline()) writer.print("noinline ");
+        declaration.getModifiers().forEach(m -> writer.print(m.getModifier().keyword() + " "));
         writer.print(declaration.getDataType() == DataType.VOID ? "void " : "def ");
         writer.print(declaration.getName());
         writer.print("(");

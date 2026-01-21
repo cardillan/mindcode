@@ -3,11 +3,12 @@ package info.teksol.mc.mindcode.compiler.callgraph;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
-import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
+import info.teksol.mc.mindcode.compiler.FunctionModifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
@@ -44,7 +45,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         // Create functions from the AST tree
         visitNode(program);
 
-        // Setup individual functions
+        // Set up individual functions
         functions.addAll(functionDefinitions.getFunctions());
         functions.forEach(f -> f.initializeCalls(functionDefinitions));
 
@@ -73,8 +74,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         AstFunctionDeclaration declaration = function.getDeclaration();
         StringBuilder sbr = new StringBuilder();
         Objects.requireNonNull(declaration);
-        if (declaration.isInline()) sbr.append("inline ");
-        if (declaration.isNoinline()) sbr.append("noinline ");
+        declaration.getModifiers().forEach(m -> sbr.append(m.getModifier().keyword()).append(' '));
         sbr.append(declaration.getDataType() == DataType.VOID ? "void " : "def ");
         sbr.append(declaration.getName());
         sbr.append("(");
@@ -95,6 +95,37 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         return sbr.toString();
     }
 
+    private Set<FunctionModifier> getEffectiveModifiers(List<AstFunctionModifier> functionModifiers) {
+        EnumSet<FunctionModifier> allModifiers = EnumSet.noneOf(FunctionModifier.class);
+        EnumSet<FunctionModifier> modifiers = EnumSet.noneOf(FunctionModifier.class);
+
+        for (AstFunctionModifier astModifier : functionModifiers) {
+            FunctionModifier modifier = astModifier.getModifier();
+            boolean invalid = false;
+            for (FunctionModifier m : allModifiers) {
+                if (!m.compatible(modifier)) {
+                    error(astModifier, ERR.FUNCTION_INCOMPATIBLE_MODIFIER, modifier.keyword(), m.keyword());
+                    invalid = true;
+                }
+            }
+
+            if (modifier == FunctionModifier.REMOTE) {
+                warn(astModifier, WARN.DEPRECATED_USE_OF_REMOTE);
+            }
+
+            allModifiers.add(modifier);
+            if (!invalid) {
+                modifiers.add(modifier);
+            }
+        }
+
+        if (modifiers.remove(FunctionModifier.REMOTE)) {
+            modifiers.add(FunctionModifier.EXPORT);
+        }
+
+        return modifiers;
+    }
+
     private void visitNode(AstMindcodeNode nodeToVisit) {
         switch (nodeToVisit) {
             case AstModule m -> {
@@ -111,16 +142,19 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     private void visitFunctionDeclaration(AstFunctionDeclaration functionDeclaration) {
         Objects.requireNonNull(activeModule, "No active module");
 
+        Set<FunctionModifier> modifiers = getEffectiveModifiers(functionDeclaration.getModifiers());
+        boolean isExported = modifiers.contains(FunctionModifier.EXPORT);
+
         if (activeModule.getRemoteProcessors().isEmpty()) {
             // Only process function bodies in non-remote modules
             MindcodeFunction previousFunction = activeFunction;
-            activeFunction = functionDefinitions.addFunctionDeclaration(functionDeclaration, activeModule,
-                    !program.isMainProgram() && functionDeclaration.isRemote() && activeModule.isMain());
+            activeFunction = functionDefinitions.addFunctionDeclaration(functionDeclaration, modifiers, activeModule,
+                    !program.isMainProgram() && isExported && activeModule.isMain());
             functionDeclaration.getBody().forEach(this::visitNode);
             activeFunction = previousFunction;
-        } else if (functionDeclaration.isRemote()) {
+        } else if (isExported) {
             // Add remote functions in remote modules
-            functionDefinitions.addFunctionDeclaration(functionDeclaration, activeModule, false);
+            functionDefinitions.addFunctionDeclaration(functionDeclaration, modifiers, activeModule, false);
         }
     }
 
@@ -142,8 +176,8 @@ public class CallGraphCreator extends AbstractMessageEmitter {
             }
         }
 
-        functions.stream().filter(MindcodeFunction::isRemote).forEach(this::setupOutOfLineFunction);
-        functions.stream().filter(f -> f.isBackgroundProcess() || !f.isRemote() && !f.isMain() && !f.isInline()).forEach(this::setupOutOfLineFunction);
+        functions.stream().filter(MindcodeFunction::isExport).forEach(this::setupOutOfLineFunction);
+        functions.stream().filter(f -> f.isBackgroundProcess() || !f.isExport() && !f.isMain() && !f.isInline()).forEach(this::setupOutOfLineFunction);
     }
 
     void buildCallTreeAtRoot(List<MindcodeFunction> entryPoints, boolean trackUsages) {
@@ -164,7 +198,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     }
 
     private void setupOutOfLineFunction(MindcodeFunction function) {
-        if (function.isRemote()) {
+        if (function.isExport()) {
             function.setRemoteLabel(processor.nextLabel());
         }
         function.setLabel(processor.nextLabel());
@@ -201,27 +235,25 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         } else {
             // Visit all children
             // If a function is declared inline, its call count
-            int multiplier = function.getDeclaration().isInline() ? count : 1;
+            int multiplier = function.isDeclaredInline() ? count : 1;
             function.getCallCardinality().forEach((f, calls) -> visitFunction(f, trackUsages, multiplier * calls));
         }
         callStack.removeLast();
     }
 
     private void validateFunction(MindcodeFunction function) {
-        if (function.getDeclaration().isInline() && function.isRecursive()) {
-            error(function.getSourcePosition(), ERR.FUNCTION_RECURSIVE_INLINE, function.getName());
+        if (function.isRecursive()) {
+            if (function.isDeclaredInline()) {
+                error(function.getSourcePosition(), ERR.FUNCTION_RECURSIVE_INLINE, function.getName());
+            }
+
+            if (function.hasModifier(FunctionModifier.EXPORT)) {
+                error(function.getSourcePosition(), ERR.FUNCTION_EXPORT_RECURSIVE, function.getName());
+            }
         }
 
-        if (function.getDeclaration().isRemote() && function.isRecursive()) {
-            error(function.getSourcePosition(), ERR.FUNCTION_RECURSIVE_REMOTE, function.getName());
-        }
-
-        if (!function.getDeclaration().isInline() && function.isVarargs()) {
+        if (!function.isDeclaredInline() && function.isVarargs()) {
             error(function.getSourcePosition(), ERR.FUNCTION_VARARGS_NOT_INLINE, function.getName());
-        }
-
-        if (function.getDeclaration().getCallType() == CallType.REMOTE) {
-            warn(function.getSourcePosition(), WARN.DEPRECATED_USE_OF_REMOTE);
         }
 
         if (function.isDebug()) {
@@ -232,6 +264,20 @@ public class CallGraphCreator extends AbstractMessageEmitter {
             if (function.getDeclaredParameters().stream().anyMatch(p -> p.isOutput() && !p.isInput())) {
                 error(function.getSourcePosition(), ERR.FUNCTION_DEBUG_NO_OUTPUTS);
             }
+        }
+
+        if (function.hasModifier(FunctionModifier.EXPORT)) {
+            if (!globalProfile.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+                error(function.getSourcePosition(), ERR.REMOTE_REQUIRES_TARGET_8);
+            }
+
+            if (function.getModule().isProgram()) {
+                error(function.getSourcePosition(), ERR.FUNCTION_EXPORT_MAIN);
+            }
+        }
+
+        if (function.hasModifier(FunctionModifier.ATOMIC) && !processor.getProcessorVersion().atLeast(ProcessorVersion.V8B)) {
+            error(function.getDeclaration(), ERR.ATOMIC_REQUIRES_TARGET_81);
         }
 
         List<AstFunctionParameter> params = function.getDeclaredParameters();
@@ -255,7 +301,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
             }
 
             // Ref but not inline
-            if (!function.getDeclaration().isInline()) {
+            if (!function.isDeclaredInline()) {
                 params.stream()
                         .filter(AstFunctionParameter::isReference)
                         .forEach(p -> error(function.getSourcePosition(), ERR.PARAMETER_REF_NOT_INLINE, p.getName(),  function.getName()));
@@ -270,7 +316,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
         // When the module is not the main one, the syntax mode must be strict
         // Remote functions use strict mode per being declared in a module
-        if (globalProfile.getSyntacticMode() != SyntacticMode.STRICT && function.getModule().isMain() && !function.isRemote()) {
+        if (globalProfile.getSyntacticMode() != SyntacticMode.STRICT && function.getModule().isMain() && !function.isExport()) {
             params.stream()
                     .filter(p -> processor.isBlockName(p.getName()))
                     .forEach(p -> error(p, ERR.PARAMETER_NAME_RESERVED_LINKED, p.getName(), function.getName()));

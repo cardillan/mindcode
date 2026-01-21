@@ -30,7 +30,7 @@ Mindcode can generate code for several Mindustry versions. The target can be sel
 At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry versions (154.3 Beta or BE build 26613).
 
 > [!NOTE]
-> The [atomic code blocks](doc/syntax/REMOTE-CALLS.markdown#atomic-code-blocks) are only guaranteed to execute correctly in the latest BE version (build 26609 or higher). The latest beta release (v154.3) doesn't provide necessary support for atomic code blocks. 
+> The [atomic code blocks](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26609 or higher). The latest beta release (v154.3) doesn't provide necessary support for atomic code blocks. 
 
 [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality in Mindustry 8.
 
@@ -54,7 +54,7 @@ The most important recent changes to Mindcode include:
 
 * Mindustry Logic 8
   * Complete support for [the latest Mindustry 8 pre-release](/doc/syntax/MINDUSTRY-8.markdown).
-  * [Atomic code blocks](doc/syntax/REMOTE-CALLS.markdown#atomic-code-blocks) guaranteed to be executed atomically – without interruption.
+  * [Atomic code blocks](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) guaranteed to be executed atomically – without interruption.
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
   * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities. 
   * New string/character-based instructions and character literals.

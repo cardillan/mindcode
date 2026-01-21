@@ -572,6 +572,16 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitDeclModifier(MindcodeParser.DeclModifierContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#functionModifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionModifier(MindcodeParser.FunctionModifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#functionModifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionModifier(MindcodeParser.FunctionModifierContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#typeSpec}.
 	 * @param ctx the parse tree
 	 */
@@ -731,6 +741,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAstOperatorBinaryOr(MindcodeParser.AstOperatorBinaryOrContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astFunctionAtomic}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstFunctionAtomic(MindcodeParser.AstFunctionAtomicContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astFunctionAtomic}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstFunctionAtomic(MindcodeParser.AstFunctionAtomicContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code astOperatorBinaryAdd}
 	 * labeled alternative in {@link MindcodeParser#expression}.

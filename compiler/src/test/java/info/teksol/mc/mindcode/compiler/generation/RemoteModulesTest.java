@@ -540,8 +540,9 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesConflictingRemoteFunctions() {
             assertGeneratesMessage(
-                    "Remote function 'foo(a)' conflicts with remote function 'foo()': names of remote functions must be unique.",
+                    "Export function 'foo(a)' conflicts with export function 'foo()': names of export functions must be unique.",
                     """
+                            module library;
                             export def foo() end;
                             export def foo(a) end;
                             """
@@ -551,7 +552,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesMultipleRemoteFunctions() {
             assertGeneratesMessage(
-                    "Remote function 'foo(in a, out count)' conflicts with remote function 'foo()': names of remote functions must be unique.",
+                    "Export function 'foo(in a, out count)' conflicts with export function 'foo()': names of export functions must be unique.",
                     """
                             require "remote.mnd" remote processor1;
                             require "conflict.mnd" remote processor2;

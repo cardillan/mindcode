@@ -342,6 +342,12 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclModifier(MindcodeParser.DeclModifierContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#functionModifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionModifier(MindcodeParser.FunctionModifierContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#typeSpec}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -435,6 +441,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAstOperatorBinaryOr(MindcodeParser.AstOperatorBinaryOrContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astFunctionAtomic}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstFunctionAtomic(MindcodeParser.AstFunctionAtomicContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code astOperatorBinaryAdd}
 	 * labeled alternative in {@link MindcodeParser#expression}.

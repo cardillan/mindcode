@@ -308,7 +308,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
             if (exactMatches.size() != 1) return node;
 
             MindcodeFunction function = exactMatches.getFirst();
-            if (!function.getDeclaration().canEvaluate() || function.isVarargs() || function.isRecursive()
+            if (!function.canEvaluate() || function.isVarargs() || function.isRecursive()
                 || function.isVoid() || function.getDeclaration().getBody().size() != 1) return node;
 
             AstMindcodeNode body = function.getDeclaration().getBody().getFirst();

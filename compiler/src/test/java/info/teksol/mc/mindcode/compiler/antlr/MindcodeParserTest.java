@@ -833,12 +833,6 @@ class MindcodeParserTest extends AbstractParserTest {
         }
 
         @Test
-        void refusesBothModifiers() {
-            assertGeneratesMessageRegex(1, 8, "Parse error: .*",
-                    "inline noinline def foo() end;");
-        }
-
-        @Test
         void refusesExternalName() {
             assertGeneratesMessageRegex(1, 6, "Parse error: .*",
                     "void $foo() end;");

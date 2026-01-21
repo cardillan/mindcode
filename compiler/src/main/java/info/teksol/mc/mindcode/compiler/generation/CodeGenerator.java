@@ -199,7 +199,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
     private void generateRemoteJumpTable() {
         if (program.isMainProgram()) return;
 
-        List<MindcodeFunction> remoteFunctions = callGraph.assignRemoteFunctionIndexes(f -> f.isRemote() && f.isEntryPoint());
+        List<MindcodeFunction> remoteFunctions = callGraph.assignRemoteFunctionIndexes(f -> f.isExport() && f.isEntryPoint());
         if (remoteFunctions.isEmpty()) return;
 
         assembler.setContextType(program, AstContextType.JUMPS, AstSubcontextType.REMOTE_INIT);
@@ -277,7 +277,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
     }
 
     private void setupRemoteSignature() {
-        List<MindcodeFunction> remoteFunctions = callGraph.getFunctions().stream().filter(f -> f.isRemote() && f.isEntryPoint()).toList();
+        List<MindcodeFunction> remoteFunctions = callGraph.getFunctions().stream().filter(f -> f.isExport() && f.isEntryPoint()).toList();
         assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.REMOTE_INIT);
         String remoteSignature = createRemoteSignature(remoteFunctions.stream().map(MindcodeFunction::getDeclaration));
         assembler.createSet(LogicVariable.preserved(nameCreator().remoteSignature()), LogicString.create(remoteSignature));
@@ -360,7 +360,6 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
         // Completely skip function declarations to prevent creating AST contexts for them
         if (node instanceof AstFunctionDeclaration declaration) {
-            if (declaration.isRemote()) verifyMinimalRemoteTarget(node);
             return LogicVoid.VOID;
         }
 

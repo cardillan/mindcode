@@ -300,7 +300,7 @@ In the latest BE, a small but important change was made to the `wait` instructio
 
 The important change is the second one: when an instruction waits for a specified amount of time, it is guaranteed that the accumulator will have enough capacity to execute at least the number of instructions corresponding to the wait time (and the processor's current instructions-per-tick value) uninterrupted during the next update.
 
-This can be used to ensure that a section of code will be executed atomically (without interruption). Mindcode provides [atomic code blocks](REMOTE-CALLS.markdown#atomic-code-blocks) for this purpose. 
+This can be used to ensure that a section of code will be executed atomically (without interruption). Mindcode provides [atomic code blocks](REMOTE-CALLS.markdown#atomic-code-execution) for this purpose. 
 
 ## Graphic output
 

@@ -1,8 +1,8 @@
 package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
+import info.teksol.mc.mindcode.compiler.FunctionModifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
@@ -21,6 +21,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static info.teksol.mc.mindcode.compiler.FunctionModifier.*;
+
 // Just "Function" would be preferred, but that conflicts with java.util.function.Function
 @NullMarked
 public class MindcodeFunction {
@@ -33,6 +35,7 @@ public class MindcodeFunction {
 
     // Function properties
     private final AstFunctionDeclaration declaration;
+    private final Set<FunctionModifier> modifiers;
     private final AstModule module;
     private final boolean entryPoint;
     private final IntRange parameterCount;
@@ -85,8 +88,9 @@ public class MindcodeFunction {
     /// Keeps the number of copies of this function
     private AtomicInteger copyNumber = new AtomicInteger();
 
-    MindcodeFunction(AstFunctionDeclaration declaration, AstModule module, boolean entryPoint) {
+    MindcodeFunction(AstFunctionDeclaration declaration, Set<FunctionModifier> modifiers, AstModule module, boolean entryPoint) {
         this.declaration = Objects.requireNonNull(declaration);
+        this.modifiers = Objects.requireNonNull(modifiers);
         this.module = Objects.requireNonNull(module);
         this.entryPoint = entryPoint;
         parameterCount = declaration.getParameterCount();
@@ -94,6 +98,7 @@ public class MindcodeFunction {
 
     private MindcodeFunction(NameCreator nameCreator, MindcodeFunction other) {
         declaration = other.declaration;
+        modifiers = other.modifiers;
         module = other.module;
         entryPoint = other.entryPoint;
         parameterCount = other.parameterCount;
@@ -153,6 +158,14 @@ public class MindcodeFunction {
         return entryPoint || isBackgroundProcess();
     }
 
+    public boolean hasModifier(FunctionModifier modifier) {
+        return modifiers.contains(modifier);
+    }
+
+    public boolean hasModifier(FunctionModifier modifier1, FunctionModifier modifier2) {
+        return modifiers.contains(modifier1) || modifiers.contains(modifier2);
+    }
+
     /// @return true if this is the main function
     public boolean isMain() {
         return declaration.getName().isEmpty();
@@ -161,12 +174,12 @@ public class MindcodeFunction {
     /// @return true if this function should be inlined
     public boolean isInline() {
         // Automatically inline all non-recursive functions called just once
-        return !isRecursive() && !isRemote() && !declaration.isNoinline() && (inlined || declaration.isInline() || getPlacementCount() == 1);
+        return !isRecursive() && !isExport() && !hasModifier(NOINLINE) && (inlined || hasModifier(INLINE) || getPlacementCount() == 1);
     }
 
     /// @return true if this function is declared `remote`
-    public boolean isRemote() {
-        return declaration.isRemote();
+    public boolean isExport() {
+        return hasModifier(EXPORT);
     }
 
     public int getRemoteIndex() {
@@ -179,11 +192,15 @@ public class MindcodeFunction {
 
     /// @return true if this function cannot be inlined
     public boolean cannotInline() {
-        return declaration.isNoinline() || declaration.isRemote();
+        return hasModifier(NOINLINE, EXPORT);
+    }
+
+    public boolean isDeclaredInline() {
+        return hasModifier(INLINE);
     }
 
     public boolean isDebug() {
-        return declaration.isDebug();
+        return hasModifier(DEBUG);
     }
 
     public boolean isVarargs() {
@@ -215,9 +232,17 @@ public class MindcodeFunction {
         return declaration.getName();
     }
 
+    public boolean canEvaluate() {
+        return modifiers.stream().allMatch(INLINE::equals);
+    }
+
     public boolean isBackgroundProcess() {
-        return module.getDeclaration() != null && declaration.getCallType() == CallType.NONE
-               && !isRecursive() && isVoid() && getParameters().isEmpty() && getName().equals(BACKGROUND_PROCESS);
+        return module.getDeclaration() != null
+                && getName().equals(BACKGROUND_PROCESS)
+                && modifiers.stream().allMatch(NOINLINE::equals)
+                && !isRecursive()
+                && isVoid()
+                && getParameters().isEmpty();
     }
 
     /// @return list of the function's parameters
@@ -465,7 +490,7 @@ public class MindcodeFunction {
 
         parameters = getDeclaredParameters().stream()
                 .map(p -> (FunctionParameter) LogicVariable.parameter(p, this,
-                        nameCreator.parameter(this, p.getName()), isRemote())).toList();
+                        nameCreator.parameter(this, p.getName()), isExport())).toList();
     }
 
     public List<FunctionParameter> createRemoteParameters(CodeAssembler assembler, LogicVariable processor) {

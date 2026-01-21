@@ -54,8 +54,14 @@ public class AstModule extends AstStatement {
         return remoteProcessors.stream().anyMatch(identifier -> identifier.getName().equals(name));
     }
 
+    /// This is the main module being comnpiled
     public boolean isMain() {
         return main;
+    }
+
+    /// This is a program, not a module
+    public boolean isProgram() {
+        return declaration == null;
     }
 
     @Override

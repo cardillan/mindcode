@@ -101,8 +101,7 @@ statement
     | PARAM name = IDENTIFIER ASSIGN value = expression                                 # astParameter
     | REQUIRE file = STRING (REMOTE processors = identifierList)?                       # astRequireFile
     | REQUIRE library = IDENTIFIER (REMOTE processors = identifierList)?                # astRequireLibrary
-    | debug = DEBUG? callType = (INLINE | NOINLINE | EXPORT | REMOTE)?
-        type = (VOID | DEF) name = IDENTIFIER
+    | modifiers = functionModifier* type = (VOID | DEF) name = IDENTIFIER
         params = parameterList body = astStatementList? END                             # astFunctionDeclaration
     | (label = IDENTIFIER COLON)? FOR iterators = iteratorsValuesGroups
         DO body = astStatementList? END                                                 # astForEachLoopStatement
@@ -158,6 +157,16 @@ declModifier
     | modifier = VOLATILE
     ;
 
+// All function modifiers
+functionModifier
+    : modifier = ATOMIC
+    | modifier = DEBUG
+    | modifier = INLINE
+    | modifier = NOINLINE
+    | modifier = EXPORT
+    | modifier = REMOTE
+    ;
+
 // To be extended in the future with more types
 typeSpec
     : VAR
@@ -202,6 +211,7 @@ expression
     | KEYWORD                                                                           # astKeyword
     | END LPAREN RPAREN                                                                 # astFunctionCallEnd
     | function = (IDENTIFIER | MLOG) args = argumentList                                # astFunctionCall
+    | ATOMIC LPAREN exp = expression RPAREN                                             # astFunctionAtomic
     | object = expression DOT function = IDENTIFIER args = argumentList                 # astMethodCall
     | object = expression DOT member = IDENTIFIER                                       # astMemberAccess
     | object = expression DOT property = BUILTINIDENTIFIER                              # astPropertyAccess

@@ -1311,7 +1311,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesOverloadedRemoteFunctions() {
             assertGeneratesMessage(
-                    "Remote function 'foo()' conflicts with remote function 'foo(a)': names of remote functions must be unique.",
+                    "Export function 'foo()' conflicts with export function 'foo(a)': names of export functions must be unique.",
                     """
                             module test;
                             

@@ -605,6 +605,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFunctionModifier(MindcodeParser.FunctionModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunctionModifier(MindcodeParser.FunctionModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTypeSpec(MindcodeParser.TypeSpecContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -768,6 +780,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAstOperatorBinaryOr(MindcodeParser.AstOperatorBinaryOrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAstFunctionAtomic(MindcodeParser.AstFunctionAtomicContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstFunctionAtomic(MindcodeParser.AstFunctionAtomicContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

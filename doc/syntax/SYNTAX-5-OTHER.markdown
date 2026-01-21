@@ -655,7 +655,7 @@ Possible values for the `error-reporting` option are:
 
 **Option scope: [local](#local-scope)**
 
-This option specifies world processor's speed in instructions per tick. This value is used by the compiler building [atomic code blocks](REMOTE-CALLS.markdown#atomic-code-blocks). Allowed values are in the range of `1` to `1000`.
+This option specifies world processor's speed in instructions per tick. This value is used by the compiler building [atomic code blocks](REMOTE-CALLS.markdown#atomic-code-execution). Allowed values are in the range of `1` to `1000`.
 
 The option has a local scope and can be applied to atomic code blocks to specify the current processor speed for the block:
 
@@ -713,7 +713,7 @@ Active remarks can be used to easily add debugging output to a program that can 
 
 **Option scope: [global](#global-scope)**
 
-This option specifies world processor's speed in instructions per tick, and generates the `setrate` instruction in the initialization code to apply the specified speed. The specified value is also used by the compiler building [atomic code blocks](REMOTE-CALLS.markdown#atomic-code-blocks). Allowed values are in the range of `1` to `1000`.
+This option specifies world processor's speed in instructions per tick, and generates the `setrate` instruction in the initialization code to apply the specified speed. The specified value is also used by the compiler building [atomic code blocks](REMOTE-CALLS.markdown#atomic-code-execution). Allowed values are in the range of `1` to `1000`.
 
 Example:
 
@@ -778,7 +778,7 @@ The jump target (`0`) is replaced with proper instruction address when it's not 
 
 **Option scope: [local](#local-scope)**
 
-This option governs the behavior of the [`atomic` code blocks](REMOTE-CALLS.markdown#atomic-code-blocks). Possible values are:
+This option governs the behavior of the [`atomic` code blocks](REMOTE-CALLS.markdown#atomic-code-execution). Possible values are:
 
 * `false`: all instructions in an atomic block are protected and guaranteed to be executed atomically.
 * `true` (the default value): only instructions interacting with the world, and instructions accessing volatile variables, are protected and guaranteed to be executed atomically.

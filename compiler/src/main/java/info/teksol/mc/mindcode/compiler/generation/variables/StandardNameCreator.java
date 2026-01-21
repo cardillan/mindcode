@@ -128,14 +128,14 @@ public class StandardNameCreator implements NameCreator {
 
     @Override
     public String retval(MindcodeFunction function) {
-        return function.isRemote()
+        return function.isExport()
                 ?  withPrefix(FUNCTION_PREFIX, function.getPrefix(), function.getPrefixIndex()) + COMPILER_PREFIX + RETURN_VALUE
                 :  withPrefix(functionPrefix, function.getPrefix(), function.getPrefixIndex()) + compilerPrefix + RETURN_VALUE;
     }
 
     @Override
     public String retaddr(MindcodeFunction function) {
-        return function.isRemote()
+        return function.isExport()
                 ?  withPrefix(FUNCTION_PREFIX, function.getPrefix(), function.getPrefixIndex()) + COMPILER_PREFIX + RETURN_ADDRESS
                 :  withPrefix(functionPrefix, function.getPrefix(), function.getPrefixIndex()) + compilerPrefix + RETURN_ADDRESS;
     }
@@ -143,7 +143,7 @@ public class StandardNameCreator implements NameCreator {
     @Override
     public String finished(MindcodeFunction function) {
         // Note: always remote
-        return function.isRemote()
+        return function.isExport()
                 ?  withPrefix(FUNCTION_PREFIX, function.getPrefix(), function.getPrefixIndex()) + COMPILER_PREFIX + FUNCTION_FINISHED
                 :  withPrefix(functionPrefix, function.getPrefix(), function.getPrefixIndex()) + compilerPrefix + FUNCTION_FINISHED;
     }
