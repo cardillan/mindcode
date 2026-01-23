@@ -1,10 +1,11 @@
 package info.teksol.mc.mindcode.compiler.callgraph;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.FunctionModifier;
+import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -17,7 +18,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 @NullMarked
-public class CallGraphCreator extends AbstractMessageEmitter {
+public class CallGraphCreator extends CompilerMessageEmitter {
+    private final ToolMessageEmitter toolMessages;
     private final GlobalCompilerProfile globalProfile;
     private final InstructionProcessor processor;
     private final NameCreator nameCreator;
@@ -33,6 +35,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     private CallGraphCreator(CallGraphCreatorContext context, AstProgram program) {
         super(context.messageConsumer());
+        this.toolMessages = new ToolMessageEmitter(context.messageConsumer());
         this.globalProfile = context.globalCompilerProfile();
         this.processor = context.instructionProcessor();
         this.nameCreator = context.nameCreator();
@@ -59,14 +62,14 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     }
 
     void printCallHierarchy(MindcodeFunction function) {
-        info("\nCall hierarchy for %s", function.isMain() ? "main code block" : declarationAsString(function));
+        toolMessages.info("\nCall hierarchy for %s", function.isMain() ? "main code block" : declarationAsString(function));
         function.getDirectCalls().forEach(f -> printCallHierarchy(f, 1));
-        info("\n");
+        toolMessages.info("\n");
         System.out.println(function.getName() + " -> " + function.getDirectCalls().stream().map(MindcodeFunction::getName).toList());
     }
 
     void printCallHierarchy(MindcodeFunction function, int depth) {
-        info("%s%s", "    ".repeat(depth), declarationAsString(function));
+        toolMessages.info("%s%s", "    ".repeat(depth), declarationAsString(function));
         function.getDirectCalls().forEach(f -> printCallHierarchy(f, depth + 1));
     }
 

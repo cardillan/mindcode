@@ -14,6 +14,16 @@ public record ToolMessage(MessageLevel level, String message) implements Mindcod
         Objects.requireNonNull(message);
     }
 
+    @Override
+    public boolean console() {
+        return !isDebug();
+    }
+
+    @Override
+    public boolean logFile() {
+        return false;
+    }
+
     public static ToolMessage error(String message) {
         return new ToolMessage(MessageLevel.ERROR, message);
     }
@@ -44,13 +54,5 @@ public record ToolMessage(MessageLevel level, String message) implements Mindcod
 
     public static ToolMessage debug(@PrintFormat String format, Object... args) {
         return new ToolMessage(MessageLevel.DEBUG, String.format(Locale.US, format, args));
-    }
-
-    @Override
-    public String toString() {
-        return "ToolMessage{" +
-                "level=" + level +
-                ", message='" + message + '\'' +
-                '}';
     }
 }

@@ -4,6 +4,7 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import info.teksol.mc.mindcode.logic.arguments.LogicNull;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -49,13 +50,13 @@ public abstract class CompoundValueStore implements ValueStore {
 
     @Override
     public LogicValue getValue(ContextfulInstructionCreator creator) {
-        ContextFactory.getMessageContext().error(sourcePosition, errorMessage);
+        ContextFactory.getMessageContext().addMessage(PositionalMessage.error(sourcePosition, errorMessage));
         return LogicNull.NULL;
     }
 
     @Override
     public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
-        ContextFactory.getMessageContext().error(sourcePosition, errorMessage);
+        ContextFactory.getMessageContext().addMessage(PositionalMessage.error(sourcePosition, errorMessage));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.MessageLevel;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @NullMarked
-abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optimizer, ContextlessInstructionCreator {
+abstract class AbstractOptimizer extends CompilerMessageEmitter implements Optimizer, ContextlessInstructionCreator {
     protected final Optimization optimization;
     protected final OptimizationContext optimizationContext;
     protected final InstructionProcessor instructionProcessor;
@@ -31,7 +31,7 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
 
     public AbstractOptimizer(Optimization optimization, OptimizationContext optimizationContext) {
-        super(optimizationContext.getMessageConsumer());
+        super(optimizationContext.messageConsumer());
         this.optimization = optimization;
         this.optimizationContext = optimizationContext;
         this.instructionProcessor = optimizationContext.getInstructionProcessor();
@@ -123,7 +123,7 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     }
 
     protected void emitMessage(MessageLevel level, @PrintFormat String format, Object... args) {
-        addMessage(new OptimizerMessage(level, String.format(format, args)));
+        addMessage(new CompilerMessage(level, String.format(format, args)));
     }
 
     @Override

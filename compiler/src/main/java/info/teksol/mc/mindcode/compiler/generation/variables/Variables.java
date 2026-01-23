@@ -2,9 +2,9 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
@@ -38,7 +38,7 @@ import static info.teksol.mc.mindcode.compiler.Modifier.*;
 /// - namespaces
 /// - arrays, records and other complex types
 @NullMarked
-public class Variables extends AbstractMessageEmitter {
+public class Variables extends CompilerMessageEmitter {
     private final Set<AstMindcodeNode> reportedErrors = Collections.newSetFromMap(new IdentityHashMap<>());
 
     private final GlobalCompilerProfile globalProfile;

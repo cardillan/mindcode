@@ -25,6 +25,16 @@ public interface MindcodeMessage {
 
     String message();
 
+    /// Indicates whether the message should be displayed in the console.
+    default boolean console() {
+        return isErrorOrWarning();
+    }
+
+    /// Indicates whether the message should be displayed in the log file.
+    default boolean logFile() {
+        return true;
+    }
+
     default boolean isError() {
         return level() == MessageLevel.ERROR;
     }

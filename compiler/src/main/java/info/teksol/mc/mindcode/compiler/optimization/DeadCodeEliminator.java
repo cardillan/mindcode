@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -70,7 +70,7 @@ class DeadCodeEliminator extends BaseOptimizer {
         if (unused.stream().anyMatch(v -> !v.isOptional())) {
             unused.stream().filter(v -> !v.isOptional())
                     .sorted(Comparator.comparing(LogicVariable::sourcePosition).thenComparing(LogicVariable::getFullName))
-                    .map(v -> CompilerMessage.warn(v.sourcePosition(), WARN.VARIABLE_NOT_USED, v.getFullName()))
+                    .map(v -> PositionalMessage.warn(v.sourcePosition(), WARN.VARIABLE_NOT_USED, v.getFullName()))
                     .forEach(messageConsumer);
         }
     }

@@ -22,6 +22,10 @@ public record EmulatorMessage(
         Objects.requireNonNull(text);
     }
 
+    public EmulatorMessage(MessageLevel level, String text) {
+        this(level, null, -1, null, text);
+    }
+
     @Override
     public String message() {
         if (level.weakerOrEqual(MessageLevel.INFO)) {
@@ -41,15 +45,31 @@ public record EmulatorMessage(
         return new EmulatorMessage(MessageLevel.WARNING, flag, index, instruction, String.format(Locale.US, format, args));
     }
 
+    public static EmulatorMessage warn(@PrintFormat String format, Object... args) {
+        return new EmulatorMessage(MessageLevel.WARNING, String.format(Locale.US, format, args));
+    }
+
     public static EmulatorMessage info(int index, @Nullable LInstruction instruction, @PrintFormat String format, Object... args) {
         return new EmulatorMessage(MessageLevel.INFO, null, index, instruction, String.format(Locale.US, format, args));
     }
 
     public static EmulatorMessage info(@PrintFormat String format, Object... args) {
-        return new EmulatorMessage(MessageLevel.INFO, null, -1, null, String.format(Locale.US, format, args));
+        return new EmulatorMessage(MessageLevel.INFO, String.format(Locale.US, format, args));
+    }
+
+    public static EmulatorMessage info(String message) {
+        return new EmulatorMessage(MessageLevel.INFO, message);
     }
 
     public static EmulatorMessage debug(int index, @Nullable LInstruction instruction, @PrintFormat String format, Object... args) {
         return new EmulatorMessage(MessageLevel.DEBUG, null, index, instruction, String.format(Locale.US, format, args));
+    }
+
+    public static EmulatorMessage debug(@PrintFormat String format, Object... args) {
+        return new EmulatorMessage(MessageLevel.DEBUG, String.format(Locale.US, format, args));
+    }
+
+    public static EmulatorMessage debug(String message) {
+        return new EmulatorMessage(MessageLevel.DEBUG, message);
     }
 }

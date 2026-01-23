@@ -1,8 +1,8 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
-import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -42,10 +42,10 @@ public interface FunctionArgument extends ValueStore {
     /// Validates function arguments in calls to functions that only have input parameters
     default FunctionArgument validateAsInput(MessageConsumer messageConsumer) {
         if (!hasValue()) {
-            messageConsumer.addMessage(CompilerMessage.error(sourcePosition(), ERR.ARGUMENT_UNNAMED_NOT_OPTIONAL));
+            messageConsumer.addMessage(PositionalMessage.error(sourcePosition(), ERR.ARGUMENT_UNNAMED_NOT_OPTIONAL));
         }
         if (hasOutModifier() || hasRefModifier()) {
-            messageConsumer.addMessage(CompilerMessage.error(sourcePosition(), ERR.ARGUMENT_UNNAMED_OUT_MODIFIER_REQUESTED));
+            messageConsumer.addMessage(PositionalMessage.error(sourcePosition(), ERR.ARGUMENT_UNNAMED_OUT_MODIFIER_REQUESTED));
         }
         return this;
     }

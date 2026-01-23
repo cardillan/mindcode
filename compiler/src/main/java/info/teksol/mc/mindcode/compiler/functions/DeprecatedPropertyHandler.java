@@ -1,8 +1,8 @@
 package info.teksol.mc.mindcode.compiler.functions;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
-import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
+import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 @NullMarked
-class DeprecatedPropertyHandler extends AbstractMessageEmitter implements PropertyHandler {
+class DeprecatedPropertyHandler extends CompilerMessageEmitter implements PropertyHandler {
     private final BaseFunctionMapper functionMapper;
     private final PropertyHandler replacement;
     private final String deprecated;
@@ -84,7 +84,7 @@ class DeprecatedPropertyHandler extends AbstractMessageEmitter implements Proper
     @Override
     public LogicValue handleProperty(AstFunctionCall node, ValueStore target, List<FunctionArgument> arguments) {
         if (!warningEmitted) {
-            functionMapper.messageConsumer().accept(CompilerMessage.warn(node.sourcePosition(), WARN.FUNCTION_NO_LONGER_SUPPORTED,
+            functionMapper.messageConsumer().accept(PositionalMessage.warn(node.sourcePosition(), WARN.FUNCTION_NO_LONGER_SUPPORTED,
                     deprecated, functionMapper.processorVersion, replacement.getName()));
             warningEmitted = true;
         }

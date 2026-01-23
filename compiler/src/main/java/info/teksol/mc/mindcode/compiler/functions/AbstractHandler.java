@@ -1,9 +1,9 @@
 package info.teksol.mc.mindcode.compiler.functions;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @NullMarked
-public abstract class AbstractHandler extends AbstractMessageEmitter implements FunctionHandler, PropertyHandler, SampleGenerator {
+public abstract class AbstractHandler extends CompilerMessageEmitter implements FunctionHandler, PropertyHandler, SampleGenerator {
     protected final BaseFunctionMapper functionMapper;
     protected final OpcodeVariant opcodeVariant;
     protected final @Nullable CodeAssembler assembler;

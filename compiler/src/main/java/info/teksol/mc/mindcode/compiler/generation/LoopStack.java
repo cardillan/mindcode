@@ -1,8 +1,8 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstBreakStatement;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstContinueStatement;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
@@ -19,7 +19,7 @@ import java.util.function.Function;
 
 /// Class maintaining the stack of active loops and their break and continue labels.
 @NullMarked
-public class LoopStack extends AbstractMessageEmitter {
+public class LoopStack extends CompilerMessageEmitter {
     public record LoopLabels(String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel, boolean continueAllowed) {
     }
 

@@ -2,7 +2,6 @@ package info.teksol.mc.mindcode.compiler;
 
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstRequire;
@@ -29,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /// This class extends AbstractMessageEmitter, leveraging its messaging utilities to report
 /// warnings, errors, and other informational messages during the execution.
 @NullMarked
-public class RequirementsProcessor extends AbstractMessageEmitter {
+public class RequirementsProcessor extends CompilerMessageEmitter {
     private static final Map<String, InputFile> LIBRARY_SOURCES = new ConcurrentHashMap<>();
 
     private final CompilerProfile profile;

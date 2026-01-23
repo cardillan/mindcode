@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 
 /// Tracks the heap usage/external variables' storage. Creates heap variables and assigns indexes to them.
 @NullMarked
-public class HeapTracker extends AbstractMessageEmitter {
+public class HeapTracker extends CompilerMessageEmitter {
     private final InstructionProcessor processor;
     private final NameCreator nameCreator;
     private final LogicVariable heapMemory;

@@ -2,9 +2,9 @@ package info.teksol.schemacode.schematics;
 
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.SourceElement;
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.ToolMessage;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.Icons;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SchematicsBuilder extends AbstractMessageEmitter {
+public class SchematicsBuilder extends CompilerMessageEmitter {
     private final InputFiles inputFiles;
     private final CompilerProfile compilerProfile;
     private final AstDefinitions astDefinitions;

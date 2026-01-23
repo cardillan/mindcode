@@ -1,9 +1,9 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
 import info.teksol.mc.generated.ast.ComposedAstNodeVisitor;
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 import static info.teksol.mc.common.SourcePosition.EMPTY;
 
 @NullMarked
-public class CodeGenerator extends AbstractMessageEmitter {
+public class CodeGenerator extends CompilerMessageEmitter {
     // Stateless processing instances
     private final CodeGeneratorContext context;
     private final AstProgram program;

@@ -1,10 +1,10 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
@@ -29,7 +29,7 @@ import java.util.function.Function;
 import static info.teksol.mc.mindcode.compiler.optimization.OptimizationPhase.*;
 
 @NullMarked
-public class OptimizationCoordinator {
+public class OptimizationCoordinator extends CompilerMessageEmitter {
     public static final boolean TRACE = false;
     public static final boolean DEBUG_PRINT = TRACE;
     public static final boolean SYSTEM_OUT = false;
@@ -40,7 +40,6 @@ public class OptimizationCoordinator {
 
     private final List<LogicInstruction> program = new ArrayList<>();
     private final InstructionProcessor instructionProcessor;
-    private final MessageConsumer messageConsumer;
     private final OptimizerContext optimizerContext;
     private final VirtualInstructionResolver virtualInstructionResolver;
     private final boolean remoteLibrary;
@@ -51,8 +50,8 @@ public class OptimizationCoordinator {
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile globalProfile,
             MessageConsumer messageConsumer, OptimizerContext optimizerContext,
             VirtualInstructionResolver virtualInstructionResolver, boolean remoteLibrary) {
+        super(messageConsumer);
         this.instructionProcessor = instructionProcessor;
-        this.messageConsumer = messageConsumer;
         this.optimizerContext = optimizerContext;
         this.globalProfile = globalProfile;
         this.virtualInstructionResolver = virtualInstructionResolver;
@@ -95,7 +94,7 @@ public class OptimizationCoordinator {
                     optimizerContext, program, callGraph, rootAstContext, remoteLibrary);
 
             int count = codeSize();
-            messageConsumer.accept(OptimizerMessage.info("%6d instructions before optimizations.", count));
+            messageConsumer.accept(CompilerMessage.info("%6d instructions before optimizations.", count));
 
             debugPrinter.registerIteration(null, "", List.copyOf(program));
 
@@ -155,14 +154,14 @@ public class OptimizationCoordinator {
             } while (modified && pass <= globalProfile.getOptimizationPasses());
 
             if (passesExceeded || modified) {
-                messageConsumer.accept(OptimizerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMIT_REACHED, globalProfile.getOptimizationPasses()));
+                messageConsumer.accept(CompilerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMIT_REACHED, globalProfile.getOptimizationPasses()));
             }
 
             optimizePhase(FINAL, optimizers, 0);
 
             optimizers.values().forEach(Optimizer::generateFinalMessages);
             int newCount = codeSize();
-            messageConsumer.accept(OptimizerMessage.info("%6d instructions after optimizations.", newCount));
+            messageConsumer.accept(CompilerMessage.info("%6d instructions after optimizations.", newCount));
 
             optimizationContext.removeInactiveInstructions();
             optimizationStatistics.forEach(messageConsumer);
@@ -233,15 +232,14 @@ public class OptimizationCoordinator {
                     }
                     modified = true;
                 } else {
-                    instructionProcessor.error(SourcePosition.EMPTY, ERR.INTERNAL_ERROR_OPTIMIZER_ACTION,
-                            selectedAction.optimization().getName(), selectedAction.optimization().getOptionName());
+                    error(ERR.INTERNAL_ERROR_OPTIMIZER_ACTION, selectedAction.optimization().getName(), selectedAction.optimization().getOptionName());
                     throw new MindcodeInternalError("Error applying dynamic optimization: " + selectedAction);
                 }
             }
 
             int difference = codeSize() - initialSize;
             //int difference = firstPhaseSize - initialSize;
-            optimizationStatistics.add(OptimizerMessage.debug(
+            optimizationStatistics.add(CompilerMessage.debug(
                     "\nPass %d: %s optimization selection (cost limit %d):", pass, goal.toString().toLowerCase(), costLimit));
             possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference, considered));
 
@@ -336,11 +334,11 @@ public class OptimizationCoordinator {
 
         if (opt == selected) {
             optimizationStatistics.add(
-                    OptimizerMessage.debug("  * %-60s size %+5d, benefit %10.1f, efficiency %10.3f (%+d instructions)",
+                    CompilerMessage.debug("  * %-60s size %+5d, benefit %10.1f, efficiency %10.3f (%+d instructions)",
                             opt, opt.cost(), opt.benefit(), efficiency.apply(opt), difference));
         } else {
             optimizationStatistics.add(
-                    OptimizerMessage.debug("  %s %-60s size %+5d, benefit %10.1f, efficiency %10.3f",
+                    CompilerMessage.debug("  %s %-60s size %+5d, benefit %10.1f, efficiency %10.3f",
                             opt.cost() > costLimit ? "!" : considered.contains(opt) ? "o" : " ",
                             opt, opt.cost(), opt.benefit(), efficiency.apply(opt)));
         }

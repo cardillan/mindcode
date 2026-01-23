@@ -2,8 +2,8 @@ package info.teksol.mc.mindcode.compiler.generation;
 
 import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -44,7 +44,7 @@ import static info.teksol.mc.mindcode.logic.arguments.Operation.*;
 /// Foremost, there's a `visit(AstMindcodeNode node)` method, which is used to evaluate a child node using
 /// all registered builders (potentially including the current one).
 @NullMarked
-public abstract class AbstractCodeBuilder extends AbstractMessageEmitter {
+public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
     private final CodeGenerator codeGenerator;
 
     protected final CodeGeneratorContext context;

@@ -2,7 +2,9 @@ package info.teksol.mindcode.cmdline;
 
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.PositionFormatter;
+import info.teksol.mc.emulator.EmulatorMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.CompilerOptionValue;
@@ -122,6 +124,8 @@ public class CompileMindcodeAction extends ActionHandler {
         final PositionFormatter positionFormatter = sp -> sp.formatForIde(globalProfile.getFileReferences());
 
         ConsoleMessageLogger messageLogger = createMessageLogger(output, logFile, positionFormatter);
+        EmulatorMessageEmitter emulatorMessages = new EmulatorMessageEmitter(messageLogger);
+        ToolMessageEmitter toolMessages = new ToolMessageEmitter(messageLogger);
         MindcodeCompiler compiler = new MindcodeCompiler(messageLogger, globalProfile, inputFiles);
         compiler.compile();
 
@@ -130,10 +134,10 @@ public class CompileMindcodeAction extends ActionHandler {
 
             if (arguments.getBoolean("clipboard")) {
                 if (compiler.getOutput().indexOf(0) >= 0) {
-                    messageLogger.error("\nCompiled mlog code contains zero characters, can't copy to clipboard.");
+                    toolMessages.error("Compiled mlog code contains zero characters, can't copy to clipboard.");
                 } else {
                     writeToClipboard(compiler.getOutput());
-                    messageLogger.info("\nCompiled mlog code was copied to the clipboard.");
+                    toolMessages.info("Compiled mlog code was copied to the clipboard.");
                 }
             }
 
@@ -144,16 +148,16 @@ public class CompileMindcodeAction extends ActionHandler {
             }
 
             if (globalProfile.isRun()) {
-                messageLogger.info("");
-                messageLogger.info("Program output (%,d steps):", compiler.getSteps());
+                emulatorMessages.info("");
+                emulatorMessages.info("Program output (%,d steps):", compiler.getSteps());
                 String textBufferOutput = compiler.getTextBufferOutput();
                 if (!textBufferOutput.isEmpty()) {
-                    messageLogger.info(textBufferOutput);
+                    emulatorMessages.info(textBufferOutput);
                 } else {
-                    messageLogger.info("The program didn't generate any output.");
+                    emulatorMessages.info("The program didn't generate any output.");
                 }
                 if (!compiler.getAssertions().isEmpty()) {
-                    messageLogger.info("The program generated the following assertions:");
+                    emulatorMessages.info("The program generated the following assertions:");
                     compiler.getAssertions().forEach(a -> messageLogger.addMessage(a.createMessage()));
                 }
 
@@ -162,7 +166,7 @@ public class CompileMindcodeAction extends ActionHandler {
                     if (executionProfile.length >= compiler.getExecutableInstructions().size()) {
                         String profileResult = LogicInstructionPrinter.toStringWithProfiling(compiler.instructionProcessor(),
                                 compiler.getExecutableInstructions(), false, 0, executionProfile);
-                        messageLogger.debug("\n\nCode profiling result:\n\n" + profileResult);
+                        emulatorMessages.debug("\n\nCode profiling result:\n\n%s", profileResult);
                     }
                 }
             }

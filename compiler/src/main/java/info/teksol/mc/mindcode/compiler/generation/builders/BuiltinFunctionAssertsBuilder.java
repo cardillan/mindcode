@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
-import info.teksol.mc.messages.CompilerMessage;
+import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionArgument;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
@@ -61,11 +61,11 @@ public class BuiltinFunctionAssertsBuilder extends AbstractFunctionBuilder {
 
     private void validateAndCompile(AstFunctionArgument argument) {
         if (!argument.hasExpression()) {
-            messageConsumer.addMessage(CompilerMessage.error(argument.sourcePosition(),
+            messageConsumer.addMessage(PositionalMessage.error(argument.sourcePosition(),
                     "Parameter corresponding to this argument isn't optional, a value must be provided."));
         }
         if (argument.hasOutModifier()) {
-            messageConsumer.addMessage(CompilerMessage.error(argument.sourcePosition(),
+            messageConsumer.addMessage(PositionalMessage.error(argument.sourcePosition(),
                     "Parameter corresponding to this argument isn't output, 'out' modifier cannot be used."));
         }
         compile(Objects.requireNonNull(argument.getExpression()));

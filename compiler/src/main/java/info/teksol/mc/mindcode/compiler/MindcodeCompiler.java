@@ -61,7 +61,7 @@ import java.util.stream.Collectors;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
-public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuilderContext, PreprocessorContext,
+public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuilderContext, PreprocessorContext,
         ArrayConstructorContext, CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext,
         VariablesContext, ForcedVariableContext, OptimizerContext {
 
@@ -130,7 +130,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         this.inputFiles = inputFiles;
         this.directiveProcessor = new DirectiveProcessor(messageLogger);
         returnStack = new ReturnStack();
-        stackTracker = new StackTracker(messageLogger);
+        stackTracker = new StackTracker();
 
         ContextFactory.setCompilerContext(this);
     }
@@ -351,11 +351,11 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
             long runStart = System.nanoTime();
             run();
             long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
-            timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
-                    parseTime, compileTime, optimizeTime, runTime);
+            addMessage(TimingMessage.info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
+                    parseTime, compileTime, optimizeTime, runTime));
         } else {
-            timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
-                    parseTime, compileTime, optimizeTime);
+            addMessage(TimingMessage.info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
+                    parseTime, compileTime, optimizeTime));
         }
     }
 

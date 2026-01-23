@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.postprocess;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 @NullMarked
-public class AtomicBlockResolver extends AbstractMessageEmitter {
+public class AtomicBlockResolver extends CompilerMessageEmitter {
     private final InstructionProcessor processor;
     private final List<LogicInstruction> program;
     private int start;

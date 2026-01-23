@@ -5,8 +5,8 @@ import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.evaluator.ExpressionEvaluator;
 import info.teksol.mc.evaluator.LogicOperation;
 import info.teksol.mc.evaluator.LogicReadable;
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
@@ -38,7 +38,7 @@ import static info.teksol.mc.messages.ERR.FUNCTION_REQUIRES_TARGET_8;
 ///
 /// Non-deterministic operations or operations with side effects remain unevaluated.
 @NullMarked
-public class CompileTimeEvaluator extends AbstractMessageEmitter {
+public class CompileTimeEvaluator extends CompilerMessageEmitter {
     private final BuiltinEvaluation builtinEvaluation;
     private final InstructionProcessor processor;
     private final Map<String, AstLiteral> constants = new HashMap<>();

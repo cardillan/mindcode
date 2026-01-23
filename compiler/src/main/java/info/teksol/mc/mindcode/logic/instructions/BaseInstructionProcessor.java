@@ -3,11 +3,11 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.emulator.mimex.LStrings;
 import info.teksol.mc.evaluator.Color;
-import info.teksol.mc.messages.AbstractMessageEmitter;
-import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.InternalArray;
@@ -38,7 +38,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 import static info.teksol.mc.util.CollectionUtils.indexOf;
 
 @NullMarked
-public abstract class BaseInstructionProcessor extends AbstractMessageEmitter implements InstructionProcessor {
+public abstract class BaseInstructionProcessor extends CompilerMessageEmitter implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
     private final ProcessorType processorType;
     private final NameCreator nameCreator;
@@ -688,7 +688,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                     return Optional.empty();
                 }
 
-                messageConsumer.accept(CompilerMessage.warn(sourcePosition, WARN.LITERAL_LOSS_OF_PRECISION,
+                messageConsumer.accept(PositionalMessage.warn(sourcePosition, WARN.LITERAL_LOSS_OF_PRECISION,
                         originalLiteral, rewritten));
             }
         } else if (relDiff > 1e-15 && Math.abs(value) >= Double.MIN_NORMAL) {

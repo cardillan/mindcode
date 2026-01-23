@@ -1,19 +1,13 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
-import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
 @NullMarked
-public class StackTracker extends AbstractMessageEmitter {
+public class StackTracker {
     private LogicVariable stackMemory = LogicVariable.INVALID;
-
-    public StackTracker(MessageConsumer messageConsumer) {
-        super(messageConsumer);
-    }
 
     public boolean isValid() {
         return stackMemory != LogicVariable.INVALID;

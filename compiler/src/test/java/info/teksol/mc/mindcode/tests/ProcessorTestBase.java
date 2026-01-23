@@ -74,7 +74,7 @@ public abstract class ProcessorTestBase extends AbstractProcessorTest {
         // Array optimization will redirect all array writes to the single element
         // Therefore, the program will output 10.
         testCode(expectedMessages()
-                        .add("Failed runtime check: 'position 4:1: index out of bounds (0 to 0)'."),
+                        .add("Runtime error occurred:\nFailed runtime check: 'position 4:1: index out of bounds (0 to 0)'."),
                 """
                         #set error-reporting = assert;
                         #set err-runtime-check-failed = false;

@@ -1,8 +1,8 @@
 package info.teksol.mc.profile;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveValue;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @NullMarked
-public class DirectiveProcessor extends AbstractMessageEmitter {
+public class DirectiveProcessor extends CompilerMessageEmitter {
     private static final Map<String, Enum<?>> OPTION_MAP = createOptionMap();
 
     private OptionScope scopeLimit = OptionScope.GLOBAL;

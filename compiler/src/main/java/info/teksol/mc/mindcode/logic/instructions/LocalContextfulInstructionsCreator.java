@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
@@ -12,14 +11,13 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @NullMarked
-public class LocalContextfulInstructionsCreator extends AbstractMessageEmitter implements ContextfulInstructionCreator {
+public class LocalContextfulInstructionsCreator implements ContextfulInstructionCreator {
     private final InstructionProcessor processor;
     private final Consumer<LogicInstruction> consumer;
     private AstContext astContext;
     private boolean subcontextTypeSet = false;
 
     public LocalContextfulInstructionsCreator(InstructionProcessor processor, AstContext astContext, Consumer<LogicInstruction> consumer) {
-        super(processor.messageConsumer());
         this.processor = processor;
         this.astContext = astContext;
         this.consumer = consumer;

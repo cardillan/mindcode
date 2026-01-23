@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.preprocess;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.DirectiveProcessor;
@@ -18,7 +18,7 @@ import java.util.List;
 /// Processes compiler directives (both global/module and local) in an AST node tree, modifying the given compiler
 /// profile accordingly.
 @NullMarked
-public class DirectivePreprocessor extends AbstractMessageEmitter {
+public class DirectivePreprocessor extends CompilerMessageEmitter {
     private final DirectiveProcessor directiveProcessor;
     private CompilerProfile profile;
 

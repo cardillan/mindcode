@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
@@ -33,7 +33,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.WAIT;
 ///
 /// Labels and temporary variables may also be generated through CodeAssembler.
 @NullMarked
-public class CodeAssembler extends AbstractMessageEmitter implements ContextfulInstructionCreator, Consumer<LogicInstruction> {
+public class CodeAssembler extends CompilerMessageEmitter implements ContextfulInstructionCreator, Consumer<LogicInstruction> {
     private final InstructionProcessor processor;
     private final Variables variables;
     private final List<LogicInstruction> instructions = new ArrayList<>();

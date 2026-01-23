@@ -1,9 +1,9 @@
 package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.FunctionModifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 @NullMarked
-public class FunctionDefinitions extends AbstractMessageEmitter {
+public class FunctionDefinitions extends CompilerMessageEmitter {
     private final MindcodeFunction main;
     private final List<MindcodeFunction> functionList = new ArrayList<>();
     private final Map<String, List<MindcodeFunction>> functionMap = new HashMap<>();

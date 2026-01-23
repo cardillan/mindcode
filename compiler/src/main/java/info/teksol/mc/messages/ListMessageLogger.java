@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NullMarked
-public class ListMessageLogger extends AbstractMessageLogger {
+public class ListMessageLogger implements MessageConsumer {
     private final MessageConsumer messageConsumer;
     protected final List<MindcodeMessage> messages = new ArrayList<>();
 

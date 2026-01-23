@@ -4,10 +4,7 @@ import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
-import info.teksol.mc.mindcode.compiler.DataType;
-import info.teksol.mc.mindcode.compiler.FunctionModifier;
-import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.Modifier;
+import info.teksol.mc.mindcode.compiler.*;
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeParser;
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeParser.*;
@@ -30,6 +27,7 @@ import java.util.stream.Collectors;
 
 @NullMarked
 public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
+    private final CompilerMessageEmitter compilerMessages;
     private final AstBuilderContext context;
     private final InputFile inputFile;
     private final CommonTokenStream tokenStream;
@@ -40,6 +38,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     private AstBuilder(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream,
             SortedSet<AstIdentifier> remoteProcessors, boolean main) {
+        this.compilerMessages = new CompilerMessageEmitter(context.messageConsumer());
         this.context = context;
         this.inputFile = inputFile;
         this.tokenStream = tokenStream;
@@ -78,7 +77,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
             return expression;
         } else {
             // The syntax probably does not even permit this
-            context.error(result, ERR.EXPRESSION_REQUIRED);
+            compilerMessages.error(result.sourcePosition(), ERR.EXPRESSION_REQUIRED);
             return new AstLiteralNull(result.sourcePosition(), "null");
         }
     }
@@ -181,7 +180,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     private AstLiteralColor color(TerminalNode node) {
         String literal = node.getText();
         if (literal.length() != 7 && literal.length() != 9) {
-            context.error(pos(node), ERR.LITERAL_INVALID_COLOR_FORMAT);
+            compilerMessages.error(pos(node), ERR.LITERAL_INVALID_COLOR_FORMAT);
             if (literal.length() < 9) {
                 // pad with zeroes
                 return new AstLiteralColor(pos(node), literal + "%00000000".substring(literal.length(), 9));
@@ -200,7 +199,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
             case 3 -> new AstLiteralChar(pos(node), literal.charAt(1));
             case 4 -> new AstLiteralChar(pos(node), literal.charAt(2) == 'n' ? 10 : literal.charAt(2));
             default -> {
-                context.error(pos(node), ERR.LITERAL_INVALID_CHAR_FORMAT);
+                compilerMessages.error(pos(node), ERR.LITERAL_INVALID_CHAR_FORMAT);
                 yield new AstLiteralChar(pos(node), ' ');
             }
         };
@@ -322,6 +321,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstEnhancedComment visitAstEnhancedComment(MindcodeParser.AstEnhancedCommentContext ctx) {
         // Empty placeholders aren't supported in enhanced comment
         // The check will be done in code generator
+        @SuppressWarnings("NullableProblems")
         List<AstExpression> parts = ctx.children.stream().map(this::visitAstExpressionNullable)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -365,7 +365,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstModuleDeclaration visitAstModuleDeclaration(AstModuleDeclarationContext ctx) {
         AstModuleDeclaration declaration = new AstModuleDeclaration(pos(ctx), identifier(ctx.name));
         if (moduleDeclaration != null) {
-            context.error(declaration, ERR.MULTIPLE_MODULE_DECLARATIONS);
+            compilerMessages.error(declaration, ERR.MULTIPLE_MODULE_DECLARATIONS);
         } else {
             moduleDeclaration = declaration;
         }
@@ -397,13 +397,13 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     private @Nullable AstMindcodeNode createModifierParametrization(Modifier modifier, DeclModifierContext ctx) {
         if (modifier == Modifier.EXTERNAL && ctx.memory != null) {
             if (ctx.LPAREN() == null) {
-                context.warn(pos(ctx), WARN.MISSING_MODIFIER_PARENS, ctx.modifier.getText());
+                compilerMessages.warn(pos(ctx), WARN.MISSING_MODIFIER_PARENS, ctx.modifier.getText());
             }
             return new AstExternalParameters(pos(ctx), identifier(ctx.memory),
                     visitAstRangeIfNonNull(ctx.astRange()), visitAstExpressionIfNonNull(ctx.index));
         } else if (modifier == Modifier.REMOTE && ctx.processor != null) {
             if (ctx.LPAREN() == null) {
-                context.warn(pos(ctx), WARN.MISSING_MODIFIER_PARENS, ctx.modifier.getText());
+                compilerMessages.warn(pos(ctx), WARN.MISSING_MODIFIER_PARENS, ctx.modifier.getText());
             }
             return new AstRemoteParameters(pos(ctx), identifier(ctx.processor));
         } else if (modifier == Modifier.MLOG) {

@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.functions;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @NullMarked
-public class BaseFunctionMapper extends AbstractMessageEmitter implements FunctionMapper {
+public class BaseFunctionMapper extends CompilerMessageEmitter implements FunctionMapper {
     private final AstContext staticAstContext = AstContext.createStaticRootNode();
     final InstructionProcessor processor;
     final @Nullable CodeAssembler assembler;

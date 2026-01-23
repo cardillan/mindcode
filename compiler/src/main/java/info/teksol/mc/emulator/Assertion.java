@@ -1,7 +1,7 @@
 package info.teksol.mc.emulator;
 
 import info.teksol.mc.messages.MessageLevel;
-import info.teksol.mc.messages.ToolMessage;
+import info.teksol.mc.messages.MindcodeMessage;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
@@ -17,8 +17,9 @@ public record Assertion(String expected, String actual, String title) {
         return !Objects.equals(expected, actual);
     }
 
-    public ToolMessage createMessage() {
-        return new ToolMessage(success() ? MessageLevel.INFO : MessageLevel.ERROR,
+    public MindcodeMessage createMessage() {
+        return new EmulatorMessage(success() ? MessageLevel.INFO : MessageLevel.ERROR,
+                null, -1, null,
                 String.format("""
                                 Assertion "%s" (%s):
                                     Expected :%s

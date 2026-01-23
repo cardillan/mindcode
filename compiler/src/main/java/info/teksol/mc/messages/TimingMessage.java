@@ -19,19 +19,21 @@ public record TimingMessage(MessageLevel level, String message) implements Mindc
         return false;
     }
 
+    @Override
+    public boolean console() {
+        return true;
+    }
+
+    @Override
+    public boolean logFile() {
+        return false;
+    }
+
     public static TimingMessage info(@PrintFormat String format, Object... args) {
         return new TimingMessage(MessageLevel.INFO, String.format(Locale.US, format, args));
     }
 
     public static TimingMessage debug(String message) {
         return new TimingMessage(MessageLevel.DEBUG, message);
-    }
-
-    @Override
-    public String toString() {
-        return "TimingMessage{" +
-                "level=" + level +
-                ", message='" + message + '\'' +
-                '}';
     }
 }

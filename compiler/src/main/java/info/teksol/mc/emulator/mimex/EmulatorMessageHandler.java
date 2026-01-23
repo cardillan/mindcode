@@ -1,9 +1,8 @@
 package info.teksol.mc.emulator.mimex;
 
-import info.teksol.mc.emulator.EmulatorMessage;
+import info.teksol.mc.emulator.EmulatorMessageEmitter;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.emulator.LInstruction;
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.MessageConsumer;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
@@ -15,7 +14,7 @@ import static info.teksol.mc.emulator.ExecutionFlag.DUMP_VARIABLES_ON_STOP;
 import static info.teksol.mc.emulator.ExecutionFlag.TRACE_EXECUTION;
 
 @NullMarked
-public class EmulatorMessageHandler extends AbstractMessageEmitter {
+public class EmulatorMessageHandler extends EmulatorMessageEmitter {
     private final Set<ExecutionFlag> flags;
 
     /// A runtime error was encountered
@@ -39,7 +38,7 @@ public class EmulatorMessageHandler extends AbstractMessageEmitter {
 
     public void trace(ExecutionFlag flag, @PrintFormat String format, Object... args) {
         if (getFlag(flag) && traceCount++ < traceLimit) {
-            addMessage(EmulatorMessage.info(-1, null, format, args));
+            debug(-1, null, format, args);
         }
     }
 
@@ -49,7 +48,7 @@ public class EmulatorMessageHandler extends AbstractMessageEmitter {
 
     public void dump(@PrintFormat String format, Object... args) {
         if (getFlag(DUMP_VARIABLES_ON_STOP)) {
-            addMessage(EmulatorMessage.info(-1, null, format, args));
+            debug(format, args);
         }
     }
 

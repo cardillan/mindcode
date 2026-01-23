@@ -2,7 +2,6 @@ package info.teksol.mc.mindcode.compiler;
 
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.antlr.MissingSemicolonException;
 import org.antlr.v4.runtime.*;
@@ -31,10 +30,10 @@ public class MindcodeErrorListener extends BaseErrorListener {
         return ambiguities;
     }
 
-    private final Set<CompilerMessage> reportedMessages = new HashSet<>();
+    private final Set<PositionalMessage> reportedMessages = new HashSet<>();
 
     private void reportError(int line, int charPositionInLine, @PrintFormat String format, Object... args) {
-        CompilerMessage message = CompilerMessage.error(
+        PositionalMessage message = PositionalMessage.error(
                 new SourcePosition(inputFile, line, charPositionInLine + 1), format, args);
         if (reportedMessages.add(message)) {
             messageConsumer.accept(message);

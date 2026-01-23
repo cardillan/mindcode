@@ -2,11 +2,12 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.emulator.MlogReadable;
-import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
@@ -34,9 +35,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @NullMarked
-public class OptimizationContext {
+public class OptimizationContext extends CompilerMessageEmitter {
     private final CompilerProfile globalProfile;
-    private final MessageConsumer messageConsumer;
     private final OptimizerExpressionEvaluator expressionEvaluator;
     private final InstructionProcessor instructionProcessor;
     private final OptimizerContext optimizerContext;
@@ -91,8 +91,8 @@ public class OptimizationContext {
     OptimizationContext(TraceFile traceFile, MessageConsumer messageConsumer, CompilerProfile globalProfile,
             InstructionProcessor instructionProcessor, OptimizerContext optimizerContext, List<LogicInstruction> program,
             CallGraph callGraph, AstContext rootAstContext, boolean remoteLibrary) {
+        super(messageConsumer);
         this.traceFile = traceFile;
-        this.messageConsumer = messageConsumer;
         this.globalProfile = globalProfile;
         this.instructionProcessor = instructionProcessor;
         this.optimizerContext = optimizerContext;
@@ -119,10 +119,6 @@ public class OptimizationContext {
 
         /* Create label references */
         instructionStream().forEachOrdered(this::addReferences);
-    }
-
-    public MessageConsumer getMessageConsumer() {
-        return messageConsumer;
     }
 
     public CompilerProfile getGlobalProfile() {
@@ -217,7 +213,7 @@ public class OptimizationContext {
     public void outputUninitializedVariables(MessageConsumer messageConsumer) {
         uninitializedVariables.stream().filter(v -> !v.isNoinit())
                 .sorted(Comparator.comparing(LogicVariable::sourcePosition))
-                .map(v -> CompilerMessage.warn(v.sourcePosition(), WARN.VARIABLE_NOT_INITIALIZED, v.getFullName()))
+                .map(v -> PositionalMessage.warn(v.sourcePosition(), WARN.VARIABLE_NOT_INITIALIZED, v.getFullName()))
                 .forEach(messageConsumer);
     }
 
@@ -644,7 +640,7 @@ public class OptimizationContext {
     public void addUninitializedVariable(LogicVariable variable) {
         if (variable.getType().isCompiler()) {
              if (OptimizationCoordinator.IGNORE_UNINITIALIZED) {
-                 instructionProcessor.addMessage(OptimizerMessage.warn("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog()));
+                 warn("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
              } else {
                  throw new MindcodeInternalError("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
              }

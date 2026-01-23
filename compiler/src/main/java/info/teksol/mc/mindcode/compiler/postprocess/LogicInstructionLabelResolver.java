@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.postprocess;
 
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
-public class LogicInstructionLabelResolver {
+public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
     private final GlobalCompilerProfile profile;
     private final InstructionProcessor processor;
     private final AstContext rootAstContext;
@@ -38,6 +39,7 @@ public class LogicInstructionLabelResolver {
     private final Map<Integer, Set<Integer>> textJumpKeys = new HashMap<>();
 
     public LogicInstructionLabelResolver(GlobalCompilerProfile profile, InstructionProcessor processor, AstContext rootAstContext) {
+        super(processor.messageConsumer());
         this.processor = processor;
         this.profile = profile;
         this.rootAstContext = rootAstContext;
@@ -308,7 +310,7 @@ public class LogicInstructionLabelResolver {
         }
 
         if (profile.isSymbolicLabels() && wrongAddress) {
-            processor.error(ERR.LABEL_ADDRESS_MISMATCH);
+            error(ERR.LABEL_ADDRESS_MISMATCH);
         }
 
         return result;

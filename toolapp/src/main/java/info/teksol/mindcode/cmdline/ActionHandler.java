@@ -3,7 +3,6 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.PositionFormatter;
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.BooleanCompilerOptionValue;
@@ -259,9 +258,9 @@ abstract class ActionHandler {
     static ConsoleMessageLogger createMessageLogger(File outputFile, File logFile, PositionFormatter positionFormatter) {
         if (isStdInOut(logFile)) {
             // If mlog gets written to stdout, write log to stderr
-            return new ConsoleMessageLogger(positionFormatter, MessageLevel.DEBUG, isStdInOut(outputFile));
+            return new ConsoleMessageLogger(positionFormatter, isStdInOut(outputFile));
         } else {
-            return new ConsoleMessageLogger(positionFormatter, MessageLevel.INFO, isStdInOut(outputFile));
+            return new ConsoleMessageLogger(positionFormatter, isStdInOut(outputFile));
         }
     }
 }

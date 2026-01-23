@@ -1,8 +1,8 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
-import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 @NullMarked
-public class LocalContext extends AbstractMessageEmitter implements FunctionContext {
+public class LocalContext extends CompilerMessageEmitter implements FunctionContext {
     private final NameCreator nameCreator;
     private final MindcodeFunction function;
     private final List<FunctionArgument> varargs;

@@ -1034,7 +1034,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
     public void addUninitialized(LogicVariable variable) {
         if (variable.getType().isCompiler()) {
             if (OptimizationCoordinator.IGNORE_UNINITIALIZED) {
-                instructionProcessor.addMessage(OptimizerMessage.warn("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog()));
+                warn("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
             } else {
                 throw new MindcodeInternalError("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
             }
