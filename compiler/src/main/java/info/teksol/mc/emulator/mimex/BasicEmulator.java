@@ -107,12 +107,12 @@ public class BasicEmulator implements Emulator {
     }
 
     @Override
-    public int executionSteps() {
+    public int getExecutionSteps() {
         return step;
     }
 
     @Override
-    public int noopSteps() {
+    public int getNoopSteps() {
         return noopSteps;
     }
 
@@ -121,6 +121,12 @@ public class BasicEmulator implements Emulator {
         return executors.size();
     }
 
+    @Override
+    public List<? extends ExecutorResults> getExecutorResults() {
+        return executors;
+    }
+
+    @Override
     public ExecutorResults getExecutorResults(int executor) {
         return executors.get(executor);
     }

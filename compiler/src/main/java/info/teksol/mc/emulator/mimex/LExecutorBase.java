@@ -15,6 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import static info.teksol.mc.emulator.ExecutionFlag.*;
 
@@ -306,6 +307,15 @@ public abstract class LExecutorBase implements LExecutor {
     @Override
     public int[] getProfile() {
         return profile;
+    }
+
+    @Override
+    public List<String> getFormattedProfile() {
+        return IntStream.range(0, profile.length)
+                .mapToObj(i -> profile[i] >= 0
+                        ? String.format("%6d: %s", profile[i], instructions.get(i))
+                        : String.format("        %s", instructions.get(i)))
+                .toList();
     }
 
     @Override

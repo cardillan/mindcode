@@ -2,6 +2,7 @@ package info.teksol.schemacode.mindustry;
 
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.profile.CompilerProfile;
@@ -158,7 +159,7 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                 }
 
                 InputFile fileToCompile = builder.getInputFiles().registerSource(mindcode);
-                builder.info("Compiling %s", processor.program().getProgramId(builder));
+                builder.addMessage(ToolMessage.info("%nCompiling %s", processor.program().getProgramId(builder)));
                 CompilerProfile compilerProfile = builder.getCompilerProfile();
                 compilerProfile.setPositionTranslator(processor.program().createPositionTranslator(builder));
                 List<MindcodeMessage> messages = new ArrayList<>();

@@ -5,7 +5,6 @@ import info.teksol.mc.common.PositionFormatter;
 import info.teksol.mc.emulator.EmulatorMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
-import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionCategory;
@@ -72,8 +71,7 @@ public class CompileMindcodeAction extends ActionHandler {
         files.addArgument("-l", "--log")
                 .help("Output file to receive compiler messages; uses input file with .log extension when no file is specified.")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate())
-                .nargs("?")
-                .setDefault(new File("-"));
+                .nargs("?");
 
         addCompilerOptions(files, options, OptionCategory.INPUT_OUTPUT);
 
@@ -123,7 +121,7 @@ public class CompileMindcodeAction extends ActionHandler {
         final File logFile = resolveOutputFile(inputFile, outputDirectory, outputFileLog, ".log");
         final PositionFormatter positionFormatter = sp -> sp.formatForIde(globalProfile.getFileReferences());
 
-        ConsoleMessageLogger messageLogger = createMessageLogger(output, logFile, positionFormatter);
+        ConsoleMessageLogger messageLogger = ConsoleMessageLogger.create(positionFormatter, output, logFile);
         EmulatorMessageEmitter emulatorMessages = new EmulatorMessageEmitter(messageLogger);
         ToolMessageEmitter toolMessages = new ToolMessageEmitter(messageLogger);
         MindcodeCompiler compiler = new MindcodeCompiler(messageLogger, globalProfile, inputFiles);
@@ -148,27 +146,7 @@ public class CompileMindcodeAction extends ActionHandler {
             }
 
             if (globalProfile.isRun()) {
-                emulatorMessages.info("");
-                emulatorMessages.info("Program output (%,d steps):", compiler.getSteps());
-                String textBufferOutput = compiler.getTextBufferOutput();
-                if (!textBufferOutput.isEmpty()) {
-                    emulatorMessages.info(textBufferOutput);
-                } else {
-                    emulatorMessages.info("The program didn't generate any output.");
-                }
-                if (!compiler.getAssertions().isEmpty()) {
-                    emulatorMessages.info("The program generated the following assertions:");
-                    compiler.getAssertions().forEach(a -> messageLogger.addMessage(a.createMessage()));
-                }
-
-                if (globalProfile.isOutputProfiling()) {
-                    int[] executionProfile = compiler.getExecutionProfile();
-                    if (executionProfile.length >= compiler.getExecutableInstructions().size()) {
-                        String profileResult = LogicInstructionPrinter.toStringWithProfiling(compiler.instructionProcessor(),
-                                compiler.getExecutableInstructions(), false, 0, executionProfile);
-                        emulatorMessages.debug("\n\nCode profiling result:\n\n%s", profileResult);
-                    }
-                }
+                processEmulatorResults(emulatorMessages, compiler.getEmulator(), globalProfile.isOutputProfiling());
             }
         }
 

@@ -27,6 +27,11 @@ public record EmulatorMessage(
     }
 
     @Override
+    public boolean console() {
+        return level.strongerOrEqual(MessageLevel.INFO);
+    }
+
+    @Override
     public String message() {
         if (level.weakerOrEqual(MessageLevel.INFO)) {
             return text;

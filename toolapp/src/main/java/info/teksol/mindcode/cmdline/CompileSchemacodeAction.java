@@ -3,7 +3,8 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.PositionFormatter;
-import info.teksol.mc.messages.ToolMessage;
+import info.teksol.mc.emulator.EmulatorMessageEmitter;
+import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionCategory;
@@ -22,7 +23,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
-import java.util.List;
 import java.util.Map;
 
 @NullMarked
@@ -64,8 +64,7 @@ public class CompileSchemacodeAction extends ActionHandler {
         files.addArgument("-l", "--log")
                 .help("output file to receive compiler messages; uses stdout/stderr when not specified")
                 .nargs("?")
-                .type(Arguments.fileType().verifyCanCreate())
-                .setDefault(new File("-"));
+                .type(Arguments.fileType().verifyCanCreate());
 
         addCompilerOptions(files, options, OptionCategory.INPUT_OUTPUT);
 
@@ -94,21 +93,22 @@ public class CompileSchemacodeAction extends ActionHandler {
         final InputFiles inputFiles = InputFiles.create(basePath);
         readFile(inputFiles, inputFile);
 
-        final CompilerOutput<byte[]> result = SchemacodeCompiler.compile(inputFiles, compilerProfile);
-
         final File outputDirectory = arguments.get("output-directory");
-        final File outputFile = resolveSdfOutputFile(arguments.get("output"), result.fileName());
         final File outputFileLog = arguments.get("log");
-
-        final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".msch");
         final File logFile = resolveOutputFile(inputFile, outputDirectory, outputFileLog, ".log");
+
         final PositionFormatter positionFormatter = sp -> sp.formatForIde(compilerProfile.getFileReferences());
+        ConsoleMessageLogger messageLogger = ConsoleMessageLogger.create(positionFormatter,
+                isStdInOut(arguments.get("output")), isStdInOut(logFile));
+        EmulatorMessageEmitter emulatorMessages = new EmulatorMessageEmitter(messageLogger);
+        ToolMessageEmitter toolMessages = new ToolMessageEmitter(messageLogger);
 
-        ConsoleMessageLogger messageLogger = createMessageLogger(output, logFile, positionFormatter);
+        final CompilerOutput<byte[]> result = SchemacodeCompiler.compile(messageLogger, inputFiles, compilerProfile);
 
-        if (!result.hasCompilerErrors()) {
-            outputMessages(result, output, logFile, positionFormatter);
+        final File outputFile = resolveSdfOutputFile(arguments.get("output"), result.fileName());
+        final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".msch");
 
+        if (result.output() != null) {
             writeOutput(output, result.existingOutput());
 
             String encoded = Base64.getEncoder().encodeToString(result.output());
@@ -121,16 +121,13 @@ public class CompileSchemacodeAction extends ActionHandler {
 
             if (arguments.getBoolean("clipboard")) {
                 writeToClipboard(encoded);
-                result.addMessage(ToolMessage.info("\nCreated schematic was copied to the clipboard."));
+                toolMessages.info("\nCreated schematic was copied to the clipboard.");
+            }
+
+            if (result.emulator() != null) {
+                processEmulatorResults(emulatorMessages, result.emulator(), compilerProfile.isOutputProfiling());
             }
         } else {
-            // Errors: print just them into stderr
-            List<String> errors = result.errors(m -> m.formatMessage(positionFormatter));
-
-            errors.forEach(System.err::println);
-            if (!isStdInOut(logFile)) {
-                writeOutput(logFile, errors, true);
-            }
             System.exit(1);
         }
     }

@@ -3,6 +3,9 @@ package info.teksol.mindcode.webapp;
 import info.teksol.mc.common.TextFilePosition;
 import info.teksol.mc.messages.MindcodeMessage;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 public final class WebappMessage {
     private final String prefix;
     private final boolean position;
@@ -59,5 +62,9 @@ public final class WebappMessage {
         } else {
             return new WebappMessage(msg.level().getTitle(), true, msg.sourcePosition().start(), msg.sourcePosition().end(), msg.message());
         }
+    }
+
+    public static List<WebappMessage> transform(List<MindcodeMessage> messages, Predicate<MindcodeMessage> filter) {
+        return messages.stream().filter(filter).map(WebappMessage::transform).toList();
     }
 }

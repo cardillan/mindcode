@@ -10,6 +10,7 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +44,7 @@ public abstract class AbstractCommandLineTest {
                 arguments.get("output-directory"), arguments.get("output"), extension);
     }
 
-    protected File resolveLogFile(Namespace arguments, String extension) {
+    protected @Nullable File resolveLogFile(Namespace arguments, String extension) {
         return ActionHandler.resolveOutputFile(arguments.get("input"),
                 arguments.get("output-directory"), arguments.get("log"), extension);
     }

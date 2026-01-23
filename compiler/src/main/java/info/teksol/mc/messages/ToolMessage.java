@@ -16,7 +16,7 @@ public record ToolMessage(MessageLevel level, String message) implements Mindcod
 
     @Override
     public boolean console() {
-        return !isDebug();
+        return level.strongerOrEqual(MessageLevel.INFO);
     }
 
     @Override

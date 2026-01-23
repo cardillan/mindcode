@@ -12,6 +12,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,19 +57,22 @@ class SamplesTest {
         CompilerProfile profile = CompilerProfile.forOptimizations(false, true, OptimizationLevel.BASIC)
                 .setSyntacticMode(sample.relaxed() ? SyntacticMode.RELAXED : SyntacticMode.STRICT);
 
-        MindcodeCompiler compiler = new MindcodeCompiler(s -> {}, profile, inputFiles);
+        List<MindcodeMessage> messages = new ArrayList<>();
+        MindcodeCompiler compiler = new MindcodeCompiler(messages::add, profile, inputFiles);
         compiler.compile();
-        evaluateOutput(sample, compiler.getMessages());
+        evaluateOutput(sample, messages);
     }
 
     private void buildSchematic(Sample sample) {
-        evaluateOutput(sample, SchemacodeCompiler.compile(
+        List<MindcodeMessage> messages = new ArrayList<>();
+        SchemacodeCompiler.compile(messages::add,
                 InputFiles.fromSource(sample.source()),
-                CompilerProfile.fullOptimizations(false, true)).messages());
+                CompilerProfile.fullOptimizations(false, true));
+        evaluateOutput(sample, messages);
     }
 
-    private void evaluateOutput(Sample sample, List<MindcodeMessage> output) {
-        List<String> unexpectedMessages = output.stream().filter(MindcodeMessage::isErrorOrWarning)
+    private void evaluateOutput(Sample sample, List<MindcodeMessage> messages) {
+        List<String> unexpectedMessages = messages.stream().filter(MindcodeMessage::isErrorOrWarning)
                 .filter(message -> !message.message().matches("Optimization passes limit \\(\\d+\\) reached\\."))
                 .map(MindcodeMessage::formatMessage)
                 .toList();

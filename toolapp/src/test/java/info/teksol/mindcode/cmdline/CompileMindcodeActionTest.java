@@ -157,7 +157,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
             public void logArgumentNone() throws ArgumentParserException {
                 Namespace arguments = parseCommandLine("input.mnd -o output.mlog");
                 File output = resolveLogFile(arguments, ".log");
-                assertEquals(new File("-"), output);
+                assertEquals(new File("input.log"), output);
             }
 
             @Test

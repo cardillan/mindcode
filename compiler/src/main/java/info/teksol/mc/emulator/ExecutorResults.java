@@ -24,6 +24,8 @@ public interface ExecutorResults {
 
     int[] getProfile();
 
+    List<String> getFormattedProfile();
+
     int getSteps();
 
     double getWaitTime();

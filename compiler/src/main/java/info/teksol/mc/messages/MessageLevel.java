@@ -13,7 +13,7 @@ public enum MessageLevel {
     private final String title;
 
     public boolean strongerOrEqual(MessageLevel other) {
-        return ordinal() >= other.ordinal();
+        return ordinal() <= other.ordinal();
     }
 
     public boolean weakerOrEqual(MessageLevel other) {

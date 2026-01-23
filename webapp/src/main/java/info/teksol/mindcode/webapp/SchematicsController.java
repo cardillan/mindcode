@@ -2,6 +2,7 @@ package info.teksol.mindcode.webapp;
 
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.Target;
 import info.teksol.mindcode.samples.Sample;
@@ -86,7 +87,8 @@ public class SchematicsController {
         }
 
         final long start = System.nanoTime();
-        final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(
+        List<MindcodeMessage> messages = new ArrayList<>();
+        final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(messages::add,
                 InputFiles.fromSource(sourceCode),
                 CompilerProfile.fullOptimizations(true, true).setTarget(target));
         final long end = System.nanoTime();
@@ -103,9 +105,9 @@ public class SchematicsController {
                         (int) sourceCode.chars().filter(ch -> ch == '\n').count(),
                         compiledCode,
                         (int) compiledCode.chars().filter(ch -> ch == '\n').count(),
-                        result.errors(WebappMessage::transform),
-                        result.warnings(WebappMessage::transform),
-                        result.infos(WebappMessage::transform),
+                        WebappMessage.transform(messages, MindcodeMessage::isError),
+                        WebappMessage.transform(messages, MindcodeMessage::isWarning),
+                        WebappMessage.transform(messages, MindcodeMessage::isInfo),
                         target.webpageTargetName(),
                         null,
                         0)

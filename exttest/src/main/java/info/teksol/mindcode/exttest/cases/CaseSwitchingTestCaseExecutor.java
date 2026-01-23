@@ -47,7 +47,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                     .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
             Emulator emulator = compiler.getEmulator();
-            int originalSteps = emulator.executionSteps() - emulator.noopSteps();
+            int originalSteps = emulator.getExecutionSteps() - emulator.getNoopSteps();
             int originalSize = compiler.getInstructions().size();
             String originalOutput = emulator.getExecutorResults(0).getFormattedOutput();
 
@@ -58,7 +58,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                     .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
             emulator = compiler.getEmulator();
-            int newSteps = emulator.executionSteps() - emulator.noopSteps();
+            int newSteps = emulator.getExecutionSteps() - emulator.getNoopSteps();
             int newSize = (int) compiler.getInstructions().stream().filter(ix -> ix.getOpcode() != Opcode.NOOP).count();
             String newOutput = emulator.getExecutorResults(0).getFormattedOutput();
 
@@ -104,12 +104,12 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                                     originalSize, newSize, sizeDifference, expectedSizeDifference)));
                 }
 
-                if (emulator.noopSteps() > 1) {
+                if (emulator.getNoopSteps() > 1) {
                     success = false;
                     progress.reportError(new ErrorResult(testCaseId, compiler.compilerProfile(),
                             compiler.compilerProfile().getCaseConfiguration(), "",
                             String.format("Unexpected noop executions: %d (expected at most 1).",
-                                    emulator.noopSteps())));
+                                    emulator.getNoopSteps())));
                 }
 
                 if (success) {

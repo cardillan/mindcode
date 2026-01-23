@@ -91,7 +91,7 @@ public class LExecutor70 extends LExecutor60 {
         @Override
         public void run() {
             counter.numval--;
-            if (messageHandler.getFlag(DUMP_VARIABLES_ON_STOP)) {
+            if (active && messageHandler.getFlag(DUMP_VARIABLES_ON_STOP)) {
                 messageHandler.dump("%n        'stop' instruction encountered, dumping variable values:");
                 vars.values().stream()
                         .filter(v -> !v.constant)

@@ -360,11 +360,11 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
             long runStart = System.nanoTime();
             run();
             long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
-            addMessage(TimingMessage.info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
-                    parseTime, compileTime, optimizeTime, runTime));
+            addMessage(TimingMessage.info("Size: %d instructions, performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
+                    executableInstructions.size(), parseTime, compileTime, optimizeTime, runTime));
         } else {
-            addMessage(TimingMessage.info("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
-                    parseTime, compileTime, optimizeTime));
+            addMessage(TimingMessage.info("Size: %d instructions, Performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
+                    executableInstructions.size(), parseTime, compileTime, optimizeTime));
         }
     }
 
@@ -434,7 +434,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         emulator.run(globalProfile.getStepLimit());
         runtimeError = emulator.isError();
         assertions = emulator.getAllAssertions();
-        steps = emulator.executionSteps();
+        steps = emulator.getExecutionSteps();
         executionProfile = emulator.getExecutorResults(0).getProfile();
     }
 

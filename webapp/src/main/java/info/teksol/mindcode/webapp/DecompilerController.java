@@ -1,6 +1,7 @@
 package info.teksol.mindcode.webapp;
 
 import info.teksol.mc.common.CompilerOutput;
+import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.schemacode.SchematicsDecompiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -59,7 +62,8 @@ public class DecompilerController {
         }
 
         final long start = System.nanoTime();
-        final CompilerOutput<String> result = SchematicsDecompiler.decompile(sourceCode);
+        List<MindcodeMessage> messages = new ArrayList<>();
+        final CompilerOutput<String> result = SchematicsDecompiler.decompile(messages::add, sourceCode);
         final long end = System.nanoTime();
         logger.info("performance decompiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
@@ -74,9 +78,9 @@ public class DecompilerController {
                         (int) sourceCode.chars().filter(ch -> ch == '\n').count(),
                         compiledCode,
                         (int) compiledCode.chars().filter(ch -> ch == '\n').count(),
-                        result.errors(WebappMessage::transform),
-                        result.warnings(WebappMessage::transform),
-                        result.infos(WebappMessage::transform),
+                        WebappMessage.transform(messages, MindcodeMessage::isError),
+                        WebappMessage.transform(messages, MindcodeMessage::isWarning),
+                        WebappMessage.transform(messages, MindcodeMessage::isInfo),
                         "",
                         null,
                         0)

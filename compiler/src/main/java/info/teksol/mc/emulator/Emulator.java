@@ -12,11 +12,12 @@ public interface Emulator {
 
     boolean isError();
 
-    int executionSteps();
-    int noopSteps();
+    int getExecutionSteps();
+    int getNoopSteps();
 
     List<Assertion> getAllAssertions();
 
     int getExecutorCount();
+    List<? extends ExecutorResults> getExecutorResults();
     ExecutorResults getExecutorResults(int executor);
 }

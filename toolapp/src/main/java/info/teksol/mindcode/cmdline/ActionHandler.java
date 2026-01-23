@@ -1,8 +1,9 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.common.PositionFormatter;
+import info.teksol.mc.emulator.Emulator;
+import info.teksol.mc.emulator.EmulatorMessageEmitter;
+import info.teksol.mc.emulator.ExecutorResults;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.BooleanCompilerOptionValue;
@@ -142,6 +143,40 @@ abstract class ActionHandler {
         }
     }
 
+    protected void processEmulatorResults(EmulatorMessageEmitter emulatorMessages, Emulator emulator, boolean outputProfiling) {
+        emulatorMessages.info("");
+        emulatorMessages.info("Emulator output (%,d steps):", emulator.getExecutionSteps());
+
+        for (ExecutorResults executor : emulator.getExecutorResults()) {
+            if (emulator.getExecutorCount() > 1) {
+                emulatorMessages.info("%n*** Output of processor %s:", executor.getProcessorId());
+            }
+            String textBufferOutput = executor.getFormattedOutput();
+            if (!textBufferOutput.isEmpty()) {
+                emulatorMessages.info(textBufferOutput);
+            } else {
+                emulatorMessages.info("The program didn't generate any output.");
+            }
+        }
+
+        if (!emulator.getAllAssertions().isEmpty()) {
+            emulatorMessages.info("The program generated the following assertions:");
+            emulator.getAllAssertions().forEach(a -> emulatorMessages.addMessage(a.createMessage()));
+        }
+
+        if (outputProfiling) {
+            for (ExecutorResults executor : emulator.getExecutorResults()) {
+                if (emulator.getExecutorCount() == 1) {
+                    emulatorMessages.debug("\n*** Code profiling result:\n");
+                } else {
+                    emulatorMessages.debug("%n*** Code profiling result of processor %s:%n", executor.getProcessorId());
+                }
+
+                emulatorMessages.debug(String.join("\n", executor.getFormattedProfile()));
+            }
+        }
+    }
+
     /// Creates a compiler profile.
     ///
     /// @param schematic when true, the profile is being created for the schematic builder
@@ -155,8 +190,8 @@ abstract class ActionHandler {
         return profile;
     }
 
-    static boolean isStdInOut(File file) {
-        return file.getPath().equals("-");
+    static boolean isStdInOut(@Nullable File file) {
+        return file != null && file.getPath().equals("-");
     }
 
     static File resolveOutputFile(File inputFile, @Nullable File outputDirectory, @Nullable File outputFile, String extension) {
@@ -243,29 +278,5 @@ abstract class ActionHandler {
         Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection data = new StringSelection(string);
         c.setContents(data, data);
-    }
-
-    static void outputMessages(CompilerOutput<?> result, File outputFile, File logFile, PositionFormatter positionFormatter) {
-        // If mlog gets written to stdout, write log to stderr
-        if (isStdInOut(logFile)) {
-            boolean alwaysErr = isStdInOut(outputFile);
-            result.messages().forEach(m -> (alwaysErr || m.isErrorOrWarning() ? System.err : System.out).println(m.formatMessage(positionFormatter)));
-        } else {
-            writeOutput(logFile, result.texts(m -> m.formatMessage(positionFormatter)), isStdInOut(outputFile));
-            // Print errors and warnings to stderr anyway
-            result.messages().stream()
-                    .filter(m -> m.isErrorOrWarning() || m.isInfo())
-                    .forEach(m -> (m.isErrorOrWarning() ? System.err : System.out).println(m.formatMessage(positionFormatter)));
-        }
-
-    }
-
-    static ConsoleMessageLogger createMessageLogger(File outputFile, File logFile, PositionFormatter positionFormatter) {
-        if (isStdInOut(logFile)) {
-            // If mlog gets written to stdout, write log to stderr
-            return new ConsoleMessageLogger(positionFormatter, isStdInOut(outputFile));
-        } else {
-            return new ConsoleMessageLogger(positionFormatter, isStdInOut(outputFile));
-        }
     }
 }

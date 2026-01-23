@@ -4,13 +4,9 @@ import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.emulator.Emulator;
-import info.teksol.mc.emulator.EmulatorMessage;
 import info.teksol.mc.emulator.EmulatorSchematic;
 import info.teksol.mc.emulator.mimex.BasicEmulator;
-import info.teksol.mc.messages.ERR;
-import info.teksol.mc.messages.MessageConsumer;
-import info.teksol.mc.messages.MindcodeMessage;
-import info.teksol.mc.messages.ToolMessage;
+import info.teksol.mc.messages.*;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.ast.AstSchematicsBuilder;
@@ -25,7 +21,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -58,65 +53,63 @@ public class SchemacodeCompiler {
         return parser.definitions();
     }
 
-    static AstDefinitions createDefinitions(InputFile inputFile, DefinitionsContext parseTree, MessageConsumer messageListener) {
-        return AstSchematicsBuilder.generate(inputFile, parseTree, messageListener);
+    static AstDefinitions createDefinitions(InputFile inputFile, DefinitionsContext parseTree, MessageConsumer messageConsumer) {
+        return AstSchematicsBuilder.generate(inputFile, parseTree, messageConsumer);
     }
 
     static Schematic buildSchematic(InputFiles inputFiles, AstDefinitions astDefinitions, CompilerProfile compilerProfile,
-            MessageConsumer messageListener) {
-        SchematicsBuilder builder = SchematicsBuilder.create(inputFiles, compilerProfile, astDefinitions, messageListener);
+            MessageConsumer messageConsumer) {
+        SchematicsBuilder builder = SchematicsBuilder.create(inputFiles, compilerProfile, astDefinitions, messageConsumer);
         return builder.buildSchematics();
     }
 
-    public static CompilerOutput<byte[]> compile(InputFiles inputFiles, CompilerProfile compilerProfile) {
+    public static CompilerOutput<byte[]> compile(MessageConsumer messageConsumer, InputFiles inputFiles,
+            CompilerProfile compilerProfile) {
         SchemacodeCompiler.compilerProfile.set(compilerProfile);
+        MessageLogger messageLogger = new MessageLogger(messageConsumer);
 
         InputFile inputFile = inputFiles.getMainInputFile();
         if (inputFile.getCode().isBlank()) {
-            return new CompilerOutput<>(new byte[0], "", List.of());
+            return new CompilerOutput<>(new byte[0]);
         }
 
-        List<MindcodeMessage> messages = new ArrayList<>();
-        DefinitionsContext parseTree = parseSchematics(messages::add, inputFiles);
-        if (hasErrors(messages)) return new CompilerOutput<>(messages);
+        DefinitionsContext parseTree = parseSchematics(messageConsumer, inputFiles);
+        if (messageLogger.hasErrors()) return CompilerOutput.empty();
 
-        AstDefinitions astDefinitions = createDefinitions(inputFile, parseTree, messages::add);
-        if (hasErrors(messages)) return new CompilerOutput<>(messages);
+        AstDefinitions astDefinitions = createDefinitions(inputFile, parseTree, messageConsumer);
+        if (messageLogger.hasErrors()) return CompilerOutput.empty();
 
-        Schematic schematic = buildSchematic(inputFiles, astDefinitions, compilerProfile, messages::add);
-        if (hasErrors(messages)) return new CompilerOutput<>(messages);
+        Schematic schematic = buildSchematic(inputFiles, astDefinitions, compilerProfile, messageConsumer);
+        if (messageLogger.hasErrors()) return CompilerOutput.empty();
 
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             SchematicsIO.write(schematic, output);
 
+            Emulator emulator = null;
             if (compilerProfile.isRun()) {
                 EmulatorSchematic emulatorSchematic = schematic.toEmulatorSchematic(SchematicsMetadata.getMetadata());
-
-                Emulator emulator = new BasicEmulator(messages::add, compilerProfile, emulatorSchematic);
+                emulator = new BasicEmulator(messageConsumer, compilerProfile, emulatorSchematic);
                 emulator.run(compilerProfile.getStepLimit());
-
-                for (int i = 0; i < emulator.getExecutorCount(); i++) {
-                    messages.add(EmulatorMessage.info("%n*** Output of processor %s:%n", emulator.getExecutorResults(i).getProcessorId()));
-                    messages.add(EmulatorMessage.info("%s", emulator.getExecutorResults(i).getFormattedOutput()));
-                }
             }
 
-            return new CompilerOutput<>(output.toByteArray(), schematic.filename(), messages);
+            return new CompilerOutput<>(output.toByteArray(), schematic.filename(), emulator);
         } catch (IOException e) {
             throw new SchematicsInternalError(e, "Error converting schematics to binary representation.");
         }
     }
 
-    public static CompilerOutput<String> compileAndEncode(InputFiles inputFiles, CompilerProfile compilerProfile) {
+    public static CompilerOutput<String> compileAndEncode(MessageConsumer messageConsumer, InputFiles inputFiles,
+            CompilerProfile compilerProfile) {
         try {
-            CompilerOutput<byte[]> binaryOutput = compile(inputFiles, compilerProfile);
+            CompilerOutput<byte[]> binaryOutput = compile(messageConsumer, inputFiles, compilerProfile);
 
             String encoded = binaryOutput.output() != null
                     ? Base64.getEncoder().encodeToString(binaryOutput.output()) : "";
             return binaryOutput.withOutput(encoded);
         } catch (Exception e) {
-            return new CompilerOutput<>(List.of(ToolMessage.error(ERR.INTERNAL_ERROR)));
+            messageConsumer.addMessage(ToolMessage.error(ERR.INTERNAL_ERROR));
+            return CompilerOutput.empty();
         }
     }
 

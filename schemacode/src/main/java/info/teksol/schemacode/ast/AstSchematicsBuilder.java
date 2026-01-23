@@ -222,7 +222,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
             program = (AstProgram) visit(ctx.mlog);
             language = Language.MLOG;
         } else {
-            program = null;
+            program = AstProgram.EMPTY;
             language = Language.NONE;
         }
 

@@ -694,7 +694,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(pos(2, 25), 0, 0),
                         null,
-                        new AstProcessor(pos(2, 32), List.of(), null, Language.NONE)
+                        new AstProcessor(pos(2, 32), List.of(), AstProgram.EMPTY, Language.NONE)
                 )
         );
 
@@ -717,7 +717,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(pos(2, 25), 0, 0),
                         null,
-                        new AstProcessor(pos(2, 32), List.of(), null, Language.NONE)
+                        new AstProcessor(pos(2, 32), List.of(), AstProgram.EMPTY, Language.NONE)
                 )
         );
 
@@ -740,7 +740,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(pos(2, 25), 0, 0),
                         null,
-                        new AstProcessor(pos(2, 32), List.of(new AstLinkPattern(pos(3, 15), "*-p-*")), null, Language.NONE)
+                        new AstProcessor(pos(2, 32), List.of(new AstLinkPattern(pos(3, 15), "*-p-*")), AstProgram.EMPTY, Language.NONE)
                 )
         );
 
@@ -765,7 +765,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(pos(2, 32),
                                 List.of(new AstLinkPos(pos(3, 15), new AstConnection(pos(3, 15), "cell1"), null, false)),
-                                null,
+                                AstProgram.EMPTY,
                                 Language.NONE)
                 )
         );
@@ -806,7 +806,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(pos(2, 32),
                                 List.of(new AstLinkPos(pos(3, 15), new AstConnection(pos(3, 15), "cell1"), "cell2", false)),
-                                null,
+                                AstProgram.EMPTY,
                                 Language.NONE)
                 )
         );
@@ -832,7 +832,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(pos(2, 32),
                                 List.of(new AstLinkPos(pos(3, 15), new AstConnection(pos(3, 15), "cell1"), "cell2", true)),
-                                null,
+                                AstProgram.EMPTY,
                                 Language.NONE)
                 )
         );
@@ -858,7 +858,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(pos(2, 32),
                                 List.of(new AstLinkPos(pos(3, 15), new AstConnection(pos(3, 15), -1, -1, true), "cell1", true)),
-                                null,
+                                AstProgram.EMPTY,
                                 Language.NONE)
                 )
         );
@@ -884,7 +884,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(pos(2, 32),
                                 List.of(new AstLinkPos(pos(3, 15), new AstConnection(pos(3, 15), 1, 1), null, false)),
-                                null,
+                                AstProgram.EMPTY,
                                 Language.NONE)
                 )
         );
@@ -910,7 +910,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(pos(2, 32),
                                 List.of(new AstLinkPos(pos(3, 15), new AstConnection(pos(3, 15), 1, 1, true), null, false)),
-                                null,
+                                AstProgram.EMPTY,
                                 Language.NONE)
                 )
         );
@@ -936,7 +936,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(pos(2, 32),
                                 List.of(new AstLinkPos(pos(3, 15), new AstConnection(pos(3, 15), 1, 1), "switch1", false)),
-                                null,
+                                AstProgram.EMPTY,
                                 Language.NONE)
                 )
         );
@@ -962,7 +962,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(pos(2, 32),
                                 List.of(new AstLinkPos(pos(3, 15), new AstConnection(pos(3, 15), 1, 1, true), "switch1", false)),
-                                null,
+                                AstProgram.EMPTY,
                                 Language.NONE)
                 )
         );
@@ -988,7 +988,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(pos(2, 32),
                                 List.of(new AstLinkPos(pos(3, 15), new AstConnection(pos(3, 15), 1, 1), "switch1", true)),
-                                null,
+                                AstProgram.EMPTY,
                                 Language.NONE)
                 )
         );
@@ -1014,7 +1014,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(pos(2, 32),
                                 List.of(new AstLinkPos(pos(3, 15), new AstConnection(pos(3, 15), 1, 1, true), "switch1", true)),
-                                null,
+                                AstProgram.EMPTY,
                                 Language.NONE)
                 )
         );
@@ -1082,7 +1082,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                                 new AstLinkPos(pos(7, 13), new AstConnection(pos(7, 13), 1, 1), null, false),
                                 new AstLinkPos(pos(8, 13), new AstConnection(pos(8, 13), 2, 2, true), "message1", false),
                                 new AstLinkPos(pos(9, 13), new AstConnection(pos(9, 13), -1, -1, true), "display1", true)
-                        ), null, Language.NONE)
+                        ), AstProgram.EMPTY, Language.NONE)
                 )
         );
 

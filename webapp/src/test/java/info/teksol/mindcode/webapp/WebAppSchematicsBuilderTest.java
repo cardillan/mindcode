@@ -7,6 +7,7 @@ import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.SchemacodeCompiler;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,11 +26,11 @@ public class WebAppSchematicsBuilderTest {
                 end
                 """;
 
-        CompilerOutput<byte[]> output = SchemacodeCompiler.compile(
+        List<MindcodeMessage> messages = new ArrayList<>();
+        CompilerOutput<byte[]> output = SchemacodeCompiler.compile(messages::add,
                 InputFiles.fromSource(definition),
                 CompilerProfile.fullOptimizations(true, true));
-        assertRegex("Loading code from external file not supported in web application.",
-                output.messages());
+        assertRegex("Loading code from external file not supported in web application.", messages);
     }
 
     private void assertRegex(String expectedRegex, List<MindcodeMessage> messages) {

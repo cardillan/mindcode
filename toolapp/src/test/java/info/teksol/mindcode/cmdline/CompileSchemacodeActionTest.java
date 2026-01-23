@@ -62,7 +62,7 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
         public void logArgumentNone() throws ArgumentParserException {
             Namespace arguments = parseCommandLine("input.sdf -o output.msch");
             File output = resolveLogFile(arguments, ".log");
-            assertEquals(new File("-"), output);
+            assertEquals(new File("input.log"), output);
         }
 
         @Test

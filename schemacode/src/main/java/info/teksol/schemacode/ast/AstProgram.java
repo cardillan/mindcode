@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 @NullMarked
 public record AstProgram(SourcePosition sourcePosition, List<AstProgramSnippet> snippets) implements AstSchemaItem {
+    public static AstProgram EMPTY = new AstProgram(SourcePosition.EMPTY, List.of());
 
     public AstProgram(SourcePosition sourcePosition, AstProgramSnippet... snippets) {
         this(sourcePosition, List.of(snippets));
