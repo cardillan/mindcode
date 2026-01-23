@@ -140,7 +140,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     }
 
     private static final AstContext sampleContext = AstContext.createRootNode(
-            CompilerProfile.fullOptimizations(false));
+            CompilerProfile.fullOptimizations(false, false));
 
     @Override
     public BaseInstructionProcessor withSideEffects(SideEffects sideEffects) {

@@ -8,7 +8,6 @@ import java.util.List;
 
 @NullMarked
 public enum ExecutionFlag {
-    ENFORCE_INSTRUCTION_LIMIT       ("only parse the first 1000 instructions of the code to be executed", true, false),
     TRACE_EXECUTION                 ("output instruction and variable states at each execution step", true, false),
     DUMP_VARIABLES_ON_STOP          ("output variable values when the 'stop' instruction is encountered"),
 

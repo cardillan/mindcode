@@ -99,7 +99,7 @@ public class CompileMindcodeAction extends ActionHandler {
 
     @Override
     void handle(Namespace arguments) {
-        CompilerProfile globalProfile = createCompilerProfile(arguments);
+        CompilerProfile globalProfile = createCompilerProfile(false, arguments);
         File baseFile = arguments.get("input");
         List<File> others = arguments.get("append");
         ExcerptSpecification excerpt = arguments.get("excerpt");
@@ -173,8 +173,8 @@ public class CompileMindcodeAction extends ActionHandler {
         }
 
         if (!isStdInOut(logFile)) {
-            List<String> errors = messageLogger.getMessages().stream().map(m -> m.formatMessage(positionFormatter)).toList();
-            writeOutputToFile(logFile, errors);
+            List<String> messages = messageLogger.getMessages().stream().map(m -> m.formatMessage(positionFormatter)).toList();
+            writeOutputToFile(logFile, messages);
         }
 
         if (compiler.hasCompilerErrors()) {

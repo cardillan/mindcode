@@ -16,9 +16,10 @@ Changes intended for the next regular release.
 
 **Done**
 
+* Only output errors and warnings on the console (on stderr), everything else to the log
+
 **Doing**
 
-* Only output errors and warnings on the console (on stderr), everything else to the log
 * Detect unused variables/constants/functions from AST analysis and report them as warnings.
 
 * **Planned**
@@ -35,7 +36,6 @@ Changes intended for the next regular release.
 
 These are topics that I'm spending time thinking about. Some of these should appear in the next release after the upcoming one.
 
-* Remote parameters. Needs figuring out how to enforce restarting dependent processors when updated.
 * Partial loop unrolling optimization
 * Instruction reordering optimization
 * Rethinking of initialization code and the implicit loop. Some initialization code really shouldn't be part of the implicit loop; even the `end()` funcion should avoid them (and should, therefore, be implemented as a `jump` and not as `end`). Candidates for initialization code: 
@@ -47,6 +47,7 @@ These are topics that I'm spending time thinking about. Some of these should app
   * Code blocks in the main program??
     * For consistency with modules, we might introduce a main function after all.
   * Strict-compliant code compiled as relaxed must produce the same results as strict code. This complicates global initializations a lot.   
+* Remote parameters. Or maybe not, needs figuring out how to enforce restarting dependent processors when updated??
 * Modules/namespaces (see #149)
   * Implement public/private modifiers for variables, functions, and constants.
   * [Refactoring of Mindustry Logic functions](#refactoring-of-mindustry-logic-functions)

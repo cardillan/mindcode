@@ -70,7 +70,7 @@ public final class AstContext {
     }
 
     public static AstContext createStaticRootNode() {
-        return createRootNode(CompilerProfile.fullOptimizations(false));
+        return createRootNode(CompilerProfile.fullOptimizations(false, false));
     }
 
     public AstContext createChild(AstMindcodeNode node, AstContextType contextType) {

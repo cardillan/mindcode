@@ -1,5 +1,6 @@
 package info.teksol.mc.emulator.mimex;
 
+import info.teksol.mc.common.Globals;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.intellij.lang.annotations.PrintFormat;
@@ -12,9 +13,6 @@ import java.util.Map;
 
 @NullMarked
 public abstract class LParserBase implements LParser {
-    private static final int maxInstructions = 1000;
-    private static final int maxJumps = 500;
-
     private final EmulatorMessageHandler errorHandler;
     private final MindustryMetadata metadata;
     private final LStrings strings;
@@ -25,6 +23,7 @@ public abstract class LParserBase implements LParser {
     private final List<JumpIndex> jumps = new ArrayList<>();
     private final Map<String, Integer> jumpLocations = new HashMap<>();
     private final List<LStatement> statements = new ArrayList<>();
+    private final boolean enforceInstructionLimit;
     private final boolean privileged;
     private final char[] chars;
 
@@ -33,10 +32,12 @@ public abstract class LParserBase implements LParser {
     private int pos;
     private int line;
 
-    public LParserBase(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code, boolean privileged) {
+    public LParserBase(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
+            boolean privileged, boolean enforceInstructionLimit) {
         this.errorHandler = errorHandler;
         this.strings = strings;
         this.metadata = metadata;
+        this.enforceInstructionLimit = enforceInstructionLimit;
         this.privileged = privileged;
         this.chars = code.toCharArray();
     }
@@ -144,8 +145,8 @@ public abstract class LParserBase implements LParser {
 
             //store jump location, always ends with colon
             if (tok == 1 && tokens[0].charAt(tokens[0].length() - 1) == ':') {
-                if (jumpLocations.size() >= maxJumps) {
-                    error("Too many jump locations. Max jumps: %d", maxJumps);
+                if (jumpLocations.size() >= Globals.MAX_JUMPS) {
+                    error("Too many jump locations. Max jumps: %d", Globals.MAX_JUMPS);
                 }
                 jumpLocations.put(tokens[0].substring(0, tokens[0].length() - 1), line);
             } else {
@@ -183,13 +184,13 @@ public abstract class LParserBase implements LParser {
     }
 
     @Override
-    public List<LStatement> parse(boolean enforceInstructionLimit) {
+    public List<LStatement> parse() {
         jumps.clear();
         jumpLocations.clear();
 
         while (pos < chars.length) {
-            if (line == maxInstructions && enforceInstructionLimit) {
-                error("Too many instructions. Max instructions: %d", maxInstructions);
+            if (line == Globals.MAX_INSTRUCTIONS && enforceInstructionLimit) {
+                error("Too many instructions. Max instructions: %d", Globals.MAX_INSTRUCTIONS);
                 break;
             }
             switch (chars[pos]) {

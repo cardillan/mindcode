@@ -27,7 +27,7 @@ public class WebAppSchematicsBuilderTest {
 
         CompilerOutput<byte[]> output = SchemacodeCompiler.compile(
                 InputFiles.fromSource(definition),
-                CompilerProfile.fullOptimizations(true));
+                CompilerProfile.fullOptimizations(true, true));
         assertRegex("Loading code from external file not supported in web application.",
                 output.messages());
     }

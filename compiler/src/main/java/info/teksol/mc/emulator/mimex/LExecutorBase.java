@@ -118,8 +118,7 @@ public abstract class LExecutorBase implements LExecutor {
     //<editor-fold desc="Initialization">
     @Override
     public void load(LParser parser) {
-        parser.parse(getFlag(ENFORCE_INSTRUCTION_LIMIT))
-                .stream().map(this::build).forEach(instructions::add);
+        parser.parse().stream().map(this::build).forEach(instructions::add);
         profile = new int[instructions.size()];
         vars.putAll(assembler.getVars());
         logicBlock.getLinks().forEach(this::addBlock);

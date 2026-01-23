@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler;
 
+import info.teksol.mc.common.Globals;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.SourcePosition;
@@ -338,6 +339,14 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
         if (globalProfile.isPrintCodeSize()) {
             outputFunctionSizes();
+        }
+
+        if (executableInstructions.size() > Globals.MAX_INSTRUCTIONS) {
+            if (globalProfile.isEnforceInstructionLimit()) {
+                error(ERR.INSTRUCTION_LIMIT_EXCEEDED, globalProfile.getInstructionLimit());
+            } else {
+                warn(ERR.INSTRUCTION_LIMIT_EXCEEDED, globalProfile.getInstructionLimit());
+            }
         }
 
         output = LogicInstructionPrinter.toString(instructionProcessor, resolver.generateSymbolicLabels(instructions),

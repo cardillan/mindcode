@@ -33,7 +33,7 @@ public class AbstractFunctionMapperTest {
     protected static BaseFunctionMapper createFunctionMapper(InstructionProcessor instructionProcessor) {
         CodeAssemblerContext codeAssemblerContext = new CodeAssemblerContextImpl(
                 s -> {},
-                CompilerProfile.fullOptimizations(false),
+                CompilerProfile.fullOptimizations(false, false),
                 instructionProcessor,
                 AstContext.createStaticRootNode());
 

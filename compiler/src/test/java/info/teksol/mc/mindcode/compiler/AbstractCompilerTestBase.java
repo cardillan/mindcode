@@ -88,7 +88,7 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
     }
 
     protected CompilerProfile createCompilerProfile() {
-        return CompilerProfile.fullOptimizations(false)
+        return CompilerProfile.fullOptimizations(false, false)
                 .setTarget(getProcessorVersion(), getProcessorType())
                 .setAutoPrintflush(false)
                 .setDebugMessages(3)
@@ -98,7 +98,8 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
     }
 
     protected ExpectedMessages expectedMessages() {
-        return expectedMessages(c -> {});
+        return expectedMessages(
+                m -> m.addRegex("The limit of \\d+ executable instructions has been exceeded\\.").ignored());
     }
 
     protected ExpectedMessages expectedMessages(Consumer<ExpectedMessages> initializer) {

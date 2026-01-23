@@ -51,7 +51,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveAutoPrintflush() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setAutoPrintflush(false);
         processDirective(profile, "auto-printflush", "true");
         assertTrue(profile.isAutoPrintflush());
@@ -59,7 +59,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveErrorReporting() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setErrorReporting(RuntimeErrorReporting.NONE);
         processDirective(profile, "error-reporting", "assert");
         assertEquals(RuntimeErrorReporting.ASSERT, profile.getErrorReporting());
@@ -67,7 +67,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveBuiltinEvaluation() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setBuiltinEvaluation(BuiltinEvaluation.COMPATIBLE);
         processDirective(profile, "builtin-evaluation", "none");
         assertEquals(BuiltinEvaluation.NONE, profile.getBuiltinEvaluation());
@@ -75,7 +75,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveCaseConfiguration() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setCaseConfiguration(0);
         processDirective(profile, "case-configuration", "147");
         assertEquals(147, profile.getCaseConfiguration());
@@ -83,7 +83,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveCaseGenerationLimit() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setCaseOptimizationStrength(1);
         processDirective(profile, "case-optimization-strength", "4");
         assertEquals(4, profile.getCaseOptimizationStrength());
@@ -91,7 +91,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveDebugOutput() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setDebugOutput(false);
         processDirective(profile, "debug-output", "true");
         assertTrue(profile.isDebugOutput());
@@ -99,7 +99,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveFunctionPrefix() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setShortFunctionPrefix(true);
         processDirective(profile, "function-prefix", "long");
         assertFalse(profile.isShortFunctionPrefix());
@@ -107,7 +107,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveGoal() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setGoal(GenerationGoal.SIZE);
         processDirective(profile, "goal", "speed");
         assertEquals(GenerationGoal.SPEED, profile.getGoal());
@@ -115,7 +115,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveInstructionLimit() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setInstructionLimit(1);
         processDirective(profile, "instruction-limit", "900");
         assertEquals(900, profile.getInstructionLimit());
@@ -123,7 +123,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveMlogIndent() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setMlogIndent(0);
         processDirective(profile, "mlog-indent", "4");
         assertEquals(4, profile.getMlogIndent());
@@ -131,7 +131,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveNullCounterIsNoop() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setNullCounterIsNoop(false);
         assertFalse(profile.isNullCounterIsNoop());
         processDirective(profile, "null-counter-is-noop", "true");
@@ -140,7 +140,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveOptimization() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setAllOptimizationLevels(OptimizationLevel.NONE);
         processDirective(profile, "optimization", "basic");
         assertTrue(Optimization.LIST.stream().map(profile::getOptimizationLevel).allMatch(l -> l == OptimizationLevel.BASIC));
@@ -148,7 +148,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveOutputProfiling() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setOutputProfiling(false);
         processDirective(profile, "output-profiling", "true");
         assertTrue(profile.isOutputProfiling());
@@ -156,7 +156,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectivePasses() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setOptimizationPasses(1);
         processDirective(profile, "passes", "10");
         assertEquals(10, profile.getOptimizationPasses());
@@ -164,7 +164,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectivePrintUnresolved() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setFinalCodeOutput(FinalCodeOutput.NONE);
         processDirective(profile, "print-unresolved", "source");
         assertEquals(FinalCodeOutput.SOURCE, profile.getFinalCodeOutput());
@@ -172,7 +172,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveRemarks() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setRemarks(Remarks.NONE);
         processDirective(profile, "remarks", "active");
         assertEquals(Remarks.ACTIVE, profile.getRemarks());
@@ -180,21 +180,21 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveSortVariables() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         processDirective(profile, "sort-variables", "params", "globals");
         assertEquals(List.of(SortCategory.PARAMS, SortCategory.GLOBALS), profile.getSortVariables());
     }
 
     @Test
     void processesDirectiveSortVariablesEmpty() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         processDirective(profile, "sort-variables");
         assertEquals(SortCategory.getAllCategories(), profile.getSortVariables());
     }
 
     @Test
     void processesDirectiveSymbolicLabels() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setSymbolicLabels(false);
         processDirective(profile, "symbolic-labels", "true");
         assertTrue(profile.isSymbolicLabels());
@@ -202,7 +202,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveSyntax() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setSyntacticMode(SyntacticMode.RELAXED);
         processDirective(profile, "syntax", "strict");
         assertEquals(SyntacticMode.STRICT, profile.getSyntacticMode());
@@ -210,21 +210,21 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveTarget() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         processDirective(profile, "target", "6");
         assertEquals(ProcessorVersion.V6, profile.getProcessorVersion());
     }
 
     @Test
     void processesDirectiveTargetMinor() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         processDirective(profile, "target", "7.1");
         assertEquals(ProcessorVersion.V7A, profile.getProcessorVersion());
     }
 
     @Test
     void processesDirectiveTargetGuard() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setTargetGuard(false);
         processDirective(profile, "target-guard", "true");
         assertTrue(profile.isTargetGuard());
@@ -232,7 +232,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveUnsafeCaseOptimization() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setUnsafeCaseOptimization(false);
         processDirective(profile, "unsafe-case-optimization", "true");
         assertTrue(profile.isUnsafeCaseOptimization());
@@ -240,7 +240,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveMlogBlockOptimization() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setMlogBlockOptimization(false);
         processDirective(profile, "mlog-block-optimization", "true");
         assertTrue(profile.isMlogBlockOptimization());
@@ -248,7 +248,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void processesDirectiveTextJumpTables() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.setUseTextJumpTables(false);
         processDirective(profile, "use-text-jump-tables", "false");
         assertFalse(profile.isUseTextJumpTables());
@@ -256,7 +256,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void refusesInvalidOption() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         ExpectedMessages.create()
                 .addRegex("Unknown compiler directive 'fluffyBunny'\\..*")
                 .validate(consumer -> processDirective(consumer, profile, "fluffyBunny", "basic"));
@@ -264,7 +264,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     @Test
     void refusesInvalidValue() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         ExpectedMessages.create()
                 .addRegex("Invalid value 'fluffyBunny' of compiler directive 'target'.*")
                 .validate(consumer -> processDirective(consumer, profile, "target", "fluffyBunny"));

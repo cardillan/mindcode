@@ -17,7 +17,7 @@ public class Main {
 
     public static final Map<Action, Subparser> ACTION_PARSERS = new EnumMap<>(Action.class);
 
-    private static final CompilerProfile defaults = CompilerProfile.fullOptimizations(false);
+    private static final CompilerProfile defaults = CompilerProfile.fullOptimizations(false, false);
 
     public static void main(String[] args) {
         ArgumentParser parser = createArgumentParser(Arguments.fileType().verifyCanRead(), 79);
@@ -91,7 +91,7 @@ public class Main {
         }
 
         public CompilerProfile createCompilerProfile(Namespace arguments) {
-            return handler.createCompilerProfile(arguments);
+            return handler.createCompilerProfile(this == COMPILE_SCHEMA, arguments);
         }
 
         ActionHandler getHandler() {

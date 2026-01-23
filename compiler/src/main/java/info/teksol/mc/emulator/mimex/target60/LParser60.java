@@ -10,7 +10,7 @@ import org.jspecify.annotations.NullMarked;
 public class LParser60 extends LParserBase {
 
     public LParser60(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
-            boolean privileged) {
-        super(errorHandler, metadata, strings, code, privileged);
+            boolean privileged, boolean enforceInstructionLimit) {
+        super(errorHandler, metadata, strings, code, privileged, enforceInstructionLimit);
     }
 }

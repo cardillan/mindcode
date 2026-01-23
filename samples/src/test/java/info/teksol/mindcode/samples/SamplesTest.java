@@ -53,7 +53,7 @@ class SamplesTest {
 
     private void compileMindcode(Sample sample) {
         InputFiles inputFiles = InputFiles.fromSource(sample.source());
-        CompilerProfile profile = CompilerProfile.forOptimizations(true, OptimizationLevel.BASIC)
+        CompilerProfile profile = CompilerProfile.forOptimizations(false, true, OptimizationLevel.BASIC)
                 .setSyntacticMode(sample.relaxed() ? SyntacticMode.RELAXED : SyntacticMode.STRICT);
 
         MindcodeCompiler compiler = new MindcodeCompiler(s -> {}, profile, inputFiles);
@@ -64,7 +64,7 @@ class SamplesTest {
     private void buildSchematic(Sample sample) {
         evaluateOutput(sample, SchemacodeCompiler.compile(
                 InputFiles.fromSource(sample.source()),
-                CompilerProfile.fullOptimizations(true)).messages());
+                CompilerProfile.fullOptimizations(false, true)).messages());
     }
 
     private void evaluateOutput(Sample sample, List<MindcodeMessage> output) {

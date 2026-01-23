@@ -107,7 +107,6 @@ All flags are described in the following table:
 
 | Flag                            | Default | Meaning                                                                                       |
 |---------------------------------|---------|-----------------------------------------------------------------------------------------------|
-| enforce-instruction-limit       | false   | only parse the first 1000 instructions of the code to be executed                             |
 | trace-execution                 | false   | output instruction and variable states at each execution step                                 |
 | dump-variables-on-stop          | true    | output variable values when the 'stop' instruction is encountered                             |
 | stop-on-stop-instruction        | true    | stop execution when the 'stop' instruction is encountered                                     |

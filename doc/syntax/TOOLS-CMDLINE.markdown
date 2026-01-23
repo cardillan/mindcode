@@ -100,9 +100,10 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--encode-zero-characters [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--setrate {1..1000}] [--ipt {1..1000}] [--volatile-atomic {true,false}]
                 [--boundary-checks {true,false}] [--emulate-strict-not-equal {true,false}]
-                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
-                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
-                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--enforce-instruction-limit {true,false}] [--error-function {true,false}]
+                [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
+                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
+                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
                 [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
                 [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
@@ -119,13 +120,13 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
-                [--output-profiling [{true,false}]] [--enforce-instruction-limit {true,false}]
-                [--trace-execution {true,false}] [--dump-variables-on-stop {true,false}]
-                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
-                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
-                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
-                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
-                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--output-profiling [{true,false}]] [--trace-execution {true,false}]
+                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
+                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
+                [--err-parse-error {true,false}] [--err-invalid-counter {true,false}]
+                [--err-unsupported-opcode {true,false}] [--err-nonexistent-var {true,false}]
+                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
+                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-character {true,false}] [--err-invalid-lookup {true,false}]
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
@@ -224,6 +225,8 @@ Compiler options:
                          arrays
   --emulate-strict-not-equal {true,false}
                          use the 'select' instruction to emulate jump with the !== (strict not equal) condition
+  --enforce-instruction-limit {true,false}
+                         generate compilation error when the instruction limit is exceeded
   --error-function {true,false}
                          activates or deactivates the  error()  function  (when  set  to  'false', error() function does
                          nothing)
@@ -362,8 +365,6 @@ Emulator options:
                          is reached
   --output-profiling [{true,false}]
                          output the profiling data into the log file
-  --enforce-instruction-limit {true,false}
-                         only parse the first 1000 instructions of the code to be executed
   --trace-execution {true,false}
                          output instruction and variable states at each execution step
   --dump-variables-on-stop {true,false}
@@ -443,9 +444,10 @@ usage: mindcode cs [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--encode-zero-characters [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--setrate {1..1000}] [--ipt {1..1000}] [--volatile-atomic {true,false}]
                 [--boundary-checks {true,false}] [--emulate-strict-not-equal {true,false}]
-                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
-                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
-                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--enforce-instruction-limit {true,false}] [--error-function {true,false}]
+                [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
+                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
+                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
                 [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
                 [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
@@ -462,13 +464,13 @@ usage: mindcode cs [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
-                [--output-profiling [{true,false}]] [--enforce-instruction-limit {true,false}]
-                [--trace-execution {true,false}] [--dump-variables-on-stop {true,false}]
-                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
-                [--stop-on-program-end {true,false}] [--err-parse-error {true,false}]
-                [--err-invalid-counter {true,false}] [--err-unsupported-opcode {true,false}]
-                [--err-nonexistent-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
-                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--output-profiling [{true,false}]] [--trace-execution {true,false}]
+                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
+                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
+                [--err-parse-error {true,false}] [--err-invalid-counter {true,false}]
+                [--err-unsupported-opcode {true,false}] [--err-nonexistent-var {true,false}]
+                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
+                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-character {true,false}] [--err-invalid-lookup {true,false}]
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
@@ -562,6 +564,8 @@ Compiler options:
                          arrays
   --emulate-strict-not-equal {true,false}
                          use the 'select' instruction to emulate jump with the !== (strict not equal) condition
+  --enforce-instruction-limit {true,false}
+                         generate compilation error when the instruction limit is exceeded
   --error-function {true,false}
                          activates or deactivates the  error()  function  (when  set  to  'false', error() function does
                          nothing)
@@ -700,8 +704,6 @@ Emulator options:
                          is reached
   --output-profiling [{true,false}]
                          output the profiling data into the log file
-  --enforce-instruction-limit {true,false}
-                         only parse the first 1000 instructions of the code to be executed
   --trace-execution {true,false}
                          output instruction and variable states at each execution step
   --dump-variables-on-stop {true,false}

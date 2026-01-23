@@ -33,6 +33,8 @@ public interface GlobalCompilerProfile {
 
     boolean isWebApplication();
 
+    boolean isSchematic();
+
     //<editor-fold desc="Input/output options">
     default FileReferences getFileReferences() {
         return getEnumValue(InputOutputOptions.FILE_REFERENCES);
@@ -121,6 +123,11 @@ public interface GlobalCompilerProfile {
 
     default boolean isEmulateStrictNotEqual() {
         return getBooleanValue(CompilerOptions.EMULATE_STRICT_NOT_EQUAL);
+    }
+
+    default boolean isEnforceInstructionLimit() {
+        return isDefault(CompilerOptions.ENFORCE_INSTRUCTION_LIMIT) ? isSchematic()
+                : getBooleanValue(CompilerOptions.ENFORCE_INSTRUCTION_LIMIT);
     }
 
     boolean useEmulatedStrictNotEqual();

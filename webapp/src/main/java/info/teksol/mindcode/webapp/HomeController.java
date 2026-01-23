@@ -133,7 +133,7 @@ public class HomeController {
         ListMessageLogger messageLogger = new ListMessageLogger();
         MindcodeCompiler compiler = new MindcodeCompiler(
                 messageLogger,
-                CompilerProfile.fullOptimizations(true).setTarget(target).setRun(run),
+                CompilerProfile.fullOptimizations(false, true).setTarget(target).setRun(run),
                 InputFiles.fromSource(sourceCode));
 
         final long start = System.nanoTime();

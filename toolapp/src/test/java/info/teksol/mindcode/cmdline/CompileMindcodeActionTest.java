@@ -288,7 +288,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void createsCompilerProfileDefault() throws ArgumentParserException {
-        CompilerProfile expected = CompilerProfile.fullOptimizations(false);
+        CompilerProfile expected = CompilerProfile.fullOptimizations(false, false);
         CompilerProfile actual = parseToProfile("");
         assertEquals(expected, actual);
     }

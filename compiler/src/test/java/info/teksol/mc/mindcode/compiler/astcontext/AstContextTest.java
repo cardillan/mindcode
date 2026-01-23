@@ -26,7 +26,7 @@ class AstContextTest {
     private static final AstModule MAIN_MODULE = new AstModule(SourcePosition.EMPTY,
             null, List.of(), Collections.emptySortedSet(), true);
 
-    private final CompilerProfile profile = CompilerProfile.fullOptimizations(false);
+    private final CompilerProfile profile = CompilerProfile.fullOptimizations(false, false);
     private final AstContext root = AstContext.createRootNode(profile);
     private final CallGraph callGraph = CallGraph.createEmpty(MAIN_MODULE);
     private final AstFunctionDeclaration functionDeclaration1 = new AstFunctionDeclaration( EMPTY, null,

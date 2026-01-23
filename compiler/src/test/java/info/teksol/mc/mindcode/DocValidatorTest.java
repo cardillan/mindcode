@@ -213,7 +213,7 @@ public class DocValidatorTest extends AbstractTestBase {
     class MasterDocumentationValidation {
 
         private CompilerProfile createCompilerProfile() {
-            return CompilerProfile.fullOptimizations(false)
+            return CompilerProfile.fullOptimizations(false, false)
                     .setRemarks(Remarks.COMMENTS)
                     .setAutoPrintflush(false)
                     .setSignature(false)

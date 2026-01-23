@@ -27,7 +27,7 @@ class ExtendedTestsTest {
 
     @Test
     void printCompilerProfile() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false, false);
         profile.decode("3350291745793");
         System.out.println(Optimization.LIST.stream()
                 .sorted(Comparator.comparing(Optimization::getOptionName))

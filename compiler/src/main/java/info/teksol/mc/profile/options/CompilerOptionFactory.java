@@ -227,6 +227,12 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 true));
 
+        list.add(new BooleanCompilerOptionValue(CompilerOptions.ENFORCE_INSTRUCTION_LIMIT, "",
+                "generate compilation error when the instruction limit is exceeded",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false));
+
         list.add(new BooleanCompilerOptionValue(CompilerOptions.ERROR_FUNCTION, "",
                 "activates or deactivates the error() function (when set to 'false', error() function does nothing)",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,

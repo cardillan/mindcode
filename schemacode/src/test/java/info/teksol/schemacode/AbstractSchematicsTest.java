@@ -98,7 +98,7 @@ public abstract class AbstractSchematicsTest {
     protected Schematic buildSchematics(String source) {
         inputFiles.registerSource(source);
         AstDefinitions definitions = createDefinitions(source).withEmptyPosition();
-        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
+        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false, false);
         return SchemacodeCompiler.buildSchematic(inputFiles, definitions, compilerProfile, messageListener("buildSchematics"));
     }
 
@@ -107,7 +107,7 @@ public abstract class AbstractSchematicsTest {
         expectedMessages.addRegex("Created schematic '.*' with dimensions .*").ignored();
         List<MindcodeMessage> messages = new ArrayList<>();
         AstDefinitions definitions = createDefinitions(inputFiles);
-        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
+        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false, false);
         SchemacodeCompiler.buildSchematic(inputFiles, definitions, compilerProfile, messages::add);
         expectedMessages.validate(messages);
     }
@@ -117,7 +117,7 @@ public abstract class AbstractSchematicsTest {
         expectedMessages.addRegex("Created schematic '.*' with dimensions .*").ignored();
         List<MindcodeMessage> messages = new ArrayList<>();
         AstDefinitions definitions = createDefinitions(inputFiles);
-        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false);
+        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false, false);
         SchemacodeCompiler.buildSchematic(inputFiles, definitions, compilerProfile, messages::add);
         expectedMessages.validate(messages);
     }

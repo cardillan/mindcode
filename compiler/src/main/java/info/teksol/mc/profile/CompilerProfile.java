@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProfile {
     public static final String SIGNATURE = "Compiled by Mindcode - github.com/cardillan/mindcode";
 
+    private final boolean schematic;
     private final boolean webApplication;
     private final SequencedMap<Enum<?>, CompilerOptionValue<?>> options;
 
@@ -47,7 +48,8 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     ///                       If true, the default settings for web applications are applied; otherwise,
     ///                       default settings for the command-line tool are used.
     /// @param level          the global optimization level to be applied across all optimization types.
-    private CompilerProfile(boolean webApplication, OptimizationLevel level) {
+    private CompilerProfile(boolean schematic, boolean webApplication, OptimizationLevel level) {
+        this.schematic = schematic;
         this.webApplication = webApplication;
         this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
         setAllOptimizationLevels(level);
@@ -55,6 +57,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
 
     @SuppressWarnings("unchecked")
     private CompilerProfile(CompilerProfile other, boolean includeUnstable) {
+        this.schematic = other.schematic;
         this.webApplication = other.webApplication;
         this.libraryPrecedence = other.libraryPrecedence;
         this.positionTranslator = other.positionTranslator;
@@ -125,6 +128,10 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
 
     public boolean isWebApplication() {
         return webApplication;
+    }
+
+    public boolean isSchematic() {
+        return schematic;
     }
 
     public boolean isLibraryPrecedence() {
@@ -480,33 +487,36 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
 
     /// Creates a [CompilerProfile] instance configured for a given optimization level.
     ///
+    /// @param schematic      true if the compiler is being created for schematic builder
     /// @param webApplication a boolean indicating whether the profile is intended for a web application.
     ///                       If true, it applies optimizations specific to web applications; otherwise,
     ///                       it applies optimizations for general-purpose environments.
     /// @param level          the optimization level to be applied across all optimizations.
     /// @return a [CompilerProfile] instance configured with the advanced optimization level.
-    public static CompilerProfile forOptimizations(boolean webApplication, OptimizationLevel level) {
-        return new CompilerProfile(webApplication, level);
+    public static CompilerProfile forOptimizations(boolean schematic, boolean webApplication, OptimizationLevel level) {
+        return new CompilerProfile(schematic, webApplication, level);
     }
 
     /// Creates a [CompilerProfile] instance configured with full optimizations.
     ///
+    /// @param schematic      true if the compiler is being created for schematic builder
     /// @param webApplication a boolean indicating whether the profile is intended for a web application.
     ///                       If true, it applies optimizations specific to web applications; otherwise,
     ///                       it applies optimizations for general-purpose environments.
     /// @return a [CompilerProfile] instance configured with the advanced optimization level.
-    public static CompilerProfile fullOptimizations(boolean webApplication) {
-        return new CompilerProfile(webApplication, OptimizationLevel.ADVANCED);
+    public static CompilerProfile fullOptimizations(boolean schematic, boolean webApplication) {
+        return new CompilerProfile(schematic, webApplication, OptimizationLevel.ADVANCED);
     }
 
     /// Creates a [CompilerProfile] instance with no optimizations applied.
     ///
+    /// @param schematic      true if the compiler is being created for schematic builder
     /// @param webApplication a boolean indicating whether the compiler profile is intended for a web application.
     ///                       If true, the profile is optimized for web application settings; otherwise, it is
     ///                       configured for command-line tools.
     /// @return a [CompilerProfile] instance configured with no optimizations.
-    public static CompilerProfile noOptimizations(boolean webApplication) {
-        return new CompilerProfile(webApplication, OptimizationLevel.NONE);
+    public static CompilerProfile noOptimizations(boolean schematic, boolean webApplication) {
+        return new CompilerProfile(schematic, webApplication, OptimizationLevel.NONE);
     }
 
     @Override

@@ -40,7 +40,8 @@ public class BasicEmulator implements Emulator {
                 .filter(LogicBlock.class::isInstance)
                 .map(LogicBlock.class::cast)
                 .forEach(logicBlock -> {
-                    LParser parser = LParser.create(messageHandler, metadata, strings, logicBlock.getCode(), logicBlock.isPrivileged());
+                    LParser parser = LParser.create(messageHandler, metadata, strings, logicBlock.getCode(),
+                            logicBlock.isPrivileged(), profile.isEnforceInstructionLimit());
                     LAssembler assembler = LAssembler.create(messageHandler, metadata, strings, globalVars, logicBlock.isPrivileged());
                     LExecutor executor = LExecutor.create(metadata, assembler, this, logicBlock);
                     executor.load(parser);

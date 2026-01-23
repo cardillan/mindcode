@@ -12,8 +12,8 @@ import java.util.Map;
 public class LParser70 extends LParser60 {
 
     public LParser70(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
-            boolean privileged) {
-        super(errorHandler, metadata, strings, code, privileged);
+            boolean privileged, boolean enforceInstructionLimit) {
+        super(errorHandler, metadata, strings, code, privileged, enforceInstructionLimit);
     }
 
     @Override

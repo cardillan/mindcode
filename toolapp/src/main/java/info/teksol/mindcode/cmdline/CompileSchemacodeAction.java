@@ -88,7 +88,7 @@ public class CompileSchemacodeAction extends ActionHandler {
 
     @Override
     void handle(Namespace arguments) {
-        CompilerProfile compilerProfile = createCompilerProfile(arguments);
+        CompilerProfile compilerProfile = createCompilerProfile(true, arguments);
         final File inputFile = arguments.get("input");
         final Path basePath = isStdInOut(inputFile) ? Paths.get("") : inputFile.toPath().toAbsolutePath().normalize().getParent();
         final InputFiles inputFiles = InputFiles.create(basePath);

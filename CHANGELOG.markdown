@@ -15,11 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added the [`atomic()` intrinsic function](doc/syntax/REMOTE-CALLS.markdown#the-atomic-function) and [`atomic` function modifier](doc/syntax/REMOTE-CALLS.markdown#atomic-functions).
 * Added support for storing created schematics directly in the Mindustry Schematic library using the MlogWatcher mod.
+* Added a validation step to the compiler to verify the generated code doesn't exceed the maximum number of instructions. The [`enforce-instruction-limit` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-instruction-limit) can be used to control this behavior. 
 
 ### Changed
 
 * Changed Mindcode syntax to allow specifying multiple [function modifiers](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-modifiers) in arbitrary order. For example, it is now possible to declare a function as `inline debug` as well as `debug inline` (which was the only allower order previously).
-* Compiler and optimizer messages are no longer output on the console in the command-line application. To access these messages, a log file needs to be generated.  
+* Compiler and optimizer messages are no longer output on the console in the command-line application. To access these messages, a log file needs to be generated.
 
 ## 3.13.0 – 2026-01-18
 

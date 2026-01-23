@@ -157,7 +157,7 @@ public record Configuration(
 
         @Override
         public CompilerProfile createCompilerProfile(int testCase) {
-            CompilerProfile profile = CompilerProfile.noOptimizations(false)
+            CompilerProfile profile = CompilerProfile.noOptimizations(false, false)
                     .setOptimizationPasses(50)
                     .setAutoPrintflush(false)
                     .setRun(run);

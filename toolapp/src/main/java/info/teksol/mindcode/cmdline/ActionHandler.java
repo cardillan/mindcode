@@ -142,8 +142,13 @@ abstract class ActionHandler {
         }
     }
 
-    protected CompilerProfile createCompilerProfile(Namespace arguments) {
-        CompilerProfile profile = CompilerProfile.fullOptimizations(false);
+    /// Creates a compiler profile.
+    ///
+    /// @param schematic when true, the profile is being created for the schematic builder
+    /// @param arguments command line arguments
+    /// @return created compiler profile
+    protected CompilerProfile createCompilerProfile(boolean schematic, Namespace arguments) {
+        CompilerProfile profile = CompilerProfile.fullOptimizations(schematic, false);
         for (BiConsumer<CompilerProfile, Namespace> setter : optionSetters) {
             setter.accept(profile, arguments);
         }

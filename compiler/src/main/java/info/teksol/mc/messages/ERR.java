@@ -113,6 +113,7 @@ public class ERR {
     public static final String INTERNAL_AMBIGUOUS_CODE = "%s: ambiguous source code (%d ambiguities found).";
     public static final String INTERNAL_ERROR = "An internal error was encountered.";
     public static final String INTERNAL_ERROR_OPTIMIZER_ACTION = "Error applying dynamic optimization by %s. As a workaround, turn off the optimization by issuing '#set %s = none;'";
+    public static final String INSTRUCTION_LIMIT_EXCEEDED = "The limit of %d executable instructions has been exceeded.";
     public static final String INVALID_KEYWORD_USE = "Invalid use of mlog keyword.";
     public static final String INVALID_MLOG_KEYWORD = "Keyword only allowed as the only value of the 'mlog' modifier in array declaration.";
     public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic links. Please set 'symbolic-links' to 'false'.";

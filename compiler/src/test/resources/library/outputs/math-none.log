@@ -2026,6 +2026,7 @@ Final code before resolving virtual instructions:
  1538:  return :median.1*retaddr
  1539:  end
 
+The limit of 1000 executable instructions has been exceeded.
 
         'stop' instruction encountered, dumping variable values:
 @counter: 1458.0

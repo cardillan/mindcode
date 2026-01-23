@@ -151,8 +151,8 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
     @Test
     public void createsCompilerProfileDefault() throws ArgumentParserException {
         Namespace arguments = parseCommandLine(Action.COMPILE_SCHEMA.getShortcut());
-        CompilerProfile expected = CompilerProfile.fullOptimizations(false);
-        CompilerProfile actual = new CompileSchemacodeAction().createCompilerProfile(arguments);
+        CompilerProfile expected = CompilerProfile.fullOptimizations(true, false);
+        CompilerProfile actual = new CompileSchemacodeAction().createCompilerProfile(true, arguments);
         assertEquals(expected, actual);
     }
 }

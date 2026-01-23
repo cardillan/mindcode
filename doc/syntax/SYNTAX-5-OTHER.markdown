@@ -552,19 +552,20 @@ compiles to:
 
 Options which affect the way the source code is compiled.
 
-| Option                                                       | Scope  | Semantic stability |
-|--------------------------------------------------------------|--------|--------------------|
-| [auto-printflush](#option-auto-printflush)                   | global | stable             |
-| [boundary-checks](#option-boundary-checks)                   | local  | stable             |
-| [emulate-strict-not-equal](#option-emulate-strict-not-equal) | global | stable             |
-| [error-function](#option-error-function)                     | local  | stable             |
-| [error-reporting](#option-error-reporting)                   | local  | stable             |
-| [ipt](#option-ipt)                                           | local  | stable             |
-| [remarks](#option-remarks)                                   | local  | stable             |
-| [setrate](#option-setrate)                                   | global | stable             |
-| [syntax](#option-syntax)                                     | module | stable             |
-| [target-guard](#option-target-guard)                         | global | stable             |
-| [volatile-atomic](#option-volatile-atomic)                   | local  | stable             |
+| Option                                                         | Scope  | Semantic stability |
+|----------------------------------------------------------------|--------|--------------------|
+| [auto-printflush](#option-auto-printflush)                     | global | stable             |
+| [boundary-checks](#option-boundary-checks)                     | local  | stable             |
+| [emulate-strict-not-equal](#option-emulate-strict-not-equal)   | global | stable             |
+| [enforce-instruction-limit](#option-enforce-instruction-limit) | global | stable             |
+| [error-function](#option-error-function)                       | local  | stable             |
+| [error-reporting](#option-error-reporting)                     | local  | stable             |
+| [ipt](#option-ipt)                                             | local  | stable             |
+| [remarks](#option-remarks)                                     | local  | stable             |
+| [setrate](#option-setrate)                                     | global | stable             |
+| [syntax](#option-syntax)                                       | module | stable             |
+| [target-guard](#option-target-guard)                           | global | stable             |
+| [volatile-atomic](#option-volatile-atomic)                     | local  | stable             |
 
 ### Option `auto-printflush`
 
@@ -620,6 +621,18 @@ sensor *tmp0 @unit @dead
 jump 2 strictEqual *tmp0 1
 print "Found!"
 ```
+
+### Option `enforce-instruction-limit`
+
+**Option scope: [global](#global-scope)**
+
+Specifies how the compiler and emulator handle a situation where the instruction limit has been exceeded.
+
+* `false` (the default value when compiling Mindcode): compiler generates a warning when the instruction limit is exceeded, emulator ignores the limit and processes all instructions normally.
+* `true` (the default value when building a schematic): compiler generates an error when the instruction limit is exceeded, emulator refuses to run the code.
+
+> [!NOTE]
+> The number of instructions is checked against the Mindustry limit of 1000 instructions, disregarding the value possibly specified using the [`instruction-limit` compiler option](#option-instruction-limit). 
 
 ### Option `error-function`
 

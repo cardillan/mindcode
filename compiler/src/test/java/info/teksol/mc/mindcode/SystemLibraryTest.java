@@ -38,7 +38,7 @@ public class SystemLibraryTest {
     public static final String LIBRARY_OUTPUTS_DIRECTORY = "src/test/resources/library/outputs";
 
     private CompilerProfile createCompilerProfile() {
-        return CompilerProfile.fullOptimizations(false)
+        return CompilerProfile.fullOptimizations(false, false)
                 .setTarget(new Target(ProcessorVersion.MAX, ProcessorType.W))
                 .setFinalCodeOutput(FinalCodeOutput.PLAIN)
                 .setAutoPrintflush(false)
@@ -91,11 +91,11 @@ public class SystemLibraryTest {
             executableTest = true;
             inputFile = inputFiles.registerSource( Files.readString(testFile));
         } else if (templateFile.toFile().exists()) {
-            // Generate test code from template
+            // Generate test code from a template
             executableTest = true;
             inputFile = inputFiles.registerSource(generateCodeFromTemplate(Files.readString(templateFile)));
         } else {
-            // Generate test code from library source
+            // Generate test code from a library source
             // No reason to execute it at all, just verify it compiles
             executableTest = false;
             inputFile = inputFiles.registerSource(generateCodeFromSource(libraryName));
@@ -110,6 +110,7 @@ public class SystemLibraryTest {
         String errorsAndWarnings = messageConsumer.getMessages().stream()
                 .filter(MindcodeMessage::isErrorOrWarning)
                 .map(MindcodeMessage::message)
+                .filter(s -> !s.equals("The limit of 1000 executable instructions has been exceeded."))
                 .collect(Collectors.joining("\n"));
 
         assertTrue(errorsAndWarnings.isEmpty(), "Unexpected error or warning messages were generated:\n" + errorsAndWarnings);
