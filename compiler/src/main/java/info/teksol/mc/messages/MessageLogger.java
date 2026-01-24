@@ -1,5 +1,8 @@
 package info.teksol.mc.messages;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public class MessageLogger implements MessageConsumer {
     private final MessageConsumer delegate;
     private boolean error = false;

@@ -1,4 +1,4 @@
-package info.teksol.mindcode.cmdline;
+package info.teksol.mindcode.cmdline.mlogwatcher;
 
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
@@ -12,13 +12,13 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 @NullMarked
-public class MlogWatcherClient extends WebSocketClient {
+public class LegacyMlogWatcherClient extends WebSocketClient {
     private final ToolMessageEmitter messageEmitter;
     private final int port;
     private final Semaphore semaphore = new Semaphore(0);
     boolean errorReported;
 
-    public MlogWatcherClient(int port, ToolMessageEmitter messageEmitter) throws URISyntaxException {
+    public LegacyMlogWatcherClient(int port, ToolMessageEmitter messageEmitter) throws URISyntaxException {
         super(new URI("ws://localhost:" + port));
         this.port = port;
         this.messageEmitter = messageEmitter;
@@ -69,9 +69,9 @@ public class MlogWatcherClient extends WebSocketClient {
 
     public static void sendData(int port, long timeout, MessageConsumer messageConsumer, String mlog, String message) {
         ToolMessageEmitter messageEmitter = new ToolMessageEmitter(messageConsumer);
-        MlogWatcherClient client = null;
+        LegacyMlogWatcherClient client = null;
         try {
-            client = new MlogWatcherClient(port, messageEmitter);
+            client = new LegacyMlogWatcherClient(port, messageEmitter);
             client.connectBlocking(timeout, TimeUnit.MILLISECONDS);
             client.send(mlog);
             client.messageEmitter.info("%n%s", message);

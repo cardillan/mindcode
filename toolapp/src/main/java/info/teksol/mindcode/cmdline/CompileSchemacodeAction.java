@@ -9,6 +9,7 @@ import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionCategory;
 import info.teksol.mindcode.cmdline.Main.Action;
+import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherClient;
 import info.teksol.schemacode.SchemacodeCompiler;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
@@ -109,23 +110,23 @@ public class CompileSchemacodeAction extends ActionHandler {
         final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".msch");
 
         if (result.output() != null) {
+            if (result.emulator() != null) {
+                processEmulatorResults(emulatorMessages, result.emulator(), compilerProfile.isOutputProfiling());
+            }
+
             writeOutput(output, result.existingOutput());
 
             String encoded = Base64.getEncoder().encodeToString(result.output());
-
-            if (arguments.getBoolean("watcher")) {
-                int port = arguments.getInt("watcher_port");
-                int timeout = arguments.getInt("watcher_timeout");
-                MlogWatcherClient.sendSchematic(port, timeout, messageLogger, encoded);
-            }
 
             if (arguments.getBoolean("clipboard")) {
                 writeToClipboard(encoded);
                 toolMessages.info("\nCreated schematic was copied to the clipboard.");
             }
 
-            if (result.emulator() != null) {
-                processEmulatorResults(emulatorMessages, result.emulator(), compilerProfile.isOutputProfiling());
+            if (arguments.getBoolean("watcher")) {
+                int port = arguments.getInt("watcher_port");
+                int timeout = arguments.getInt("watcher_timeout");
+                MlogWatcherClient.sendSchematic(port, timeout, messageLogger, encoded);
             }
         } else {
             System.exit(1);

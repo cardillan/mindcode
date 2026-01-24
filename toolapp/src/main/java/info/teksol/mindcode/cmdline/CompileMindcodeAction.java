@@ -9,6 +9,7 @@ import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionCategory;
 import info.teksol.mindcode.cmdline.Main.Action;
+import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherClient;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
@@ -128,6 +129,10 @@ public class CompileMindcodeAction extends ActionHandler {
         compiler.compile();
 
         if (!compiler.hasCompilerErrors()) {
+            if (globalProfile.isRun()) {
+                processEmulatorResults(emulatorMessages, compiler.getEmulator(), globalProfile.isOutputProfiling());
+            }
+
             writeOutput(output, compiler.getOutput());
 
             if (arguments.getBoolean("clipboard")) {
@@ -143,10 +148,6 @@ public class CompileMindcodeAction extends ActionHandler {
                 int port = arguments.getInt("watcher_port");
                 int timeout = arguments.getInt("watcher_timeout");
                 MlogWatcherClient.sendMlog(port, timeout, messageLogger, compiler.getOutput());
-            }
-
-            if (globalProfile.isRun()) {
-                processEmulatorResults(emulatorMessages, compiler.getEmulator(), globalProfile.isOutputProfiling());
             }
         }
 

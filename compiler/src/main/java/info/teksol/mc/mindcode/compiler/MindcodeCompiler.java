@@ -363,7 +363,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
             addMessage(TimingMessage.info("Size: %d instructions, performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
                     executableInstructions.size(), parseTime, compileTime, optimizeTime, runTime));
         } else {
-            addMessage(TimingMessage.info("Size: %d instructions, Performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
+            addMessage(TimingMessage.info("Size: %d instructions, performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
                     executableInstructions.size(), parseTime, compileTime, optimizeTime));
         }
     }

@@ -73,13 +73,13 @@ public class SchemacodeCompiler {
             return new CompilerOutput<>(new byte[0]);
         }
 
-        DefinitionsContext parseTree = parseSchematics(messageConsumer, inputFiles);
+        DefinitionsContext parseTree = parseSchematics(messageLogger, inputFiles);
         if (messageLogger.hasErrors()) return CompilerOutput.empty();
 
-        AstDefinitions astDefinitions = createDefinitions(inputFile, parseTree, messageConsumer);
+        AstDefinitions astDefinitions = createDefinitions(inputFile, parseTree, messageLogger);
         if (messageLogger.hasErrors()) return CompilerOutput.empty();
 
-        Schematic schematic = buildSchematic(inputFiles, astDefinitions, compilerProfile, messageConsumer);
+        Schematic schematic = buildSchematic(inputFiles, astDefinitions, compilerProfile, messageLogger);
         if (messageLogger.hasErrors()) return CompilerOutput.empty();
 
         try {
@@ -89,7 +89,7 @@ public class SchemacodeCompiler {
             Emulator emulator = null;
             if (compilerProfile.isRun()) {
                 EmulatorSchematic emulatorSchematic = schematic.toEmulatorSchematic(SchematicsMetadata.getMetadata());
-                emulator = new BasicEmulator(messageConsumer, compilerProfile, emulatorSchematic);
+                emulator = new BasicEmulator(messageLogger, compilerProfile, emulatorSchematic);
                 emulator.run(compilerProfile.getStepLimit());
             }
 

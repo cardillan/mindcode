@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Changed Mindcode syntax to allow specifying multiple [function modifiers](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-modifiers) in arbitrary order. For example, it is now possible to declare a function as `inline debug` as well as `debug inline` (which was the only allower order previously).
 * Compiler and optimizer messages are no longer output on the console in the command-line application. To access these messages, a log file needs to be generated.
+* Console output is generated on the fly, instead of being cached and dumped all at once when the processing is finished. 
 
 ## 3.13.0 – 2026-01-18
 

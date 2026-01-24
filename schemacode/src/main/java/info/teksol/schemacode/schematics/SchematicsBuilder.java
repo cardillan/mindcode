@@ -43,8 +43,8 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
     }
 
     public static SchematicsBuilder create(InputFiles inputFiles, CompilerProfile compilerProfile,
-            AstDefinitions definitions, MessageConsumer messageListener) {
-        return new SchematicsBuilder(inputFiles, compilerProfile, messageListener, definitions);
+            AstDefinitions definitions, MessageConsumer messageConsumer) {
+        return new SchematicsBuilder(inputFiles, compilerProfile, messageConsumer, definitions);
     }
 
     public CompilerProfile getCompilerProfile() {
@@ -201,7 +201,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         }
 
         Schematic schematic = new Schematic(name, filename, description, labels, dim.x(), dim.y(), repositioned);
-        info("Created schematic '%s' with dimensions %s.", name, dim.toStringAbsolute());
+        addMessage(ToolMessage.info("Created schematic '%s' with dimensions %s.", name, dim.toStringAbsolute()));
         return schematic;
     }
 
