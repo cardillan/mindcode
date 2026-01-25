@@ -123,10 +123,10 @@ public class CompileSchemacodeAction extends ActionHandler {
                 toolMessages.info("\nCreated schematic was copied to the clipboard.");
             }
 
-            if (arguments.getBoolean("watcher")) {
-                int port = arguments.getInt("watcher_port");
-                int timeout = arguments.getInt("watcher_timeout");
-                MlogWatcherClient.sendSchematic(port, timeout, messageLogger, encoded);
+            MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages);
+            if (mlogWatcherClient != null) {
+                mlogWatcherClient.updateSchematic( encoded);
+                mlogWatcherClient.close();
             }
         } else {
             System.exit(1);

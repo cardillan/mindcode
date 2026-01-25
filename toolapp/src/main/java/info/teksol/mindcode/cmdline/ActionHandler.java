@@ -4,12 +4,15 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.EmulatorMessageEmitter;
 import info.teksol.mc.emulator.ExecutorResults;
+import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.BooleanCompilerOptionValue;
 import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionCategory;
 import info.teksol.mc.profile.options.OptionMultiplicity;
+import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherClient;
+import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherClientImpl;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.*;
@@ -174,6 +177,17 @@ abstract class ActionHandler {
 
                 emulatorMessages.debug(String.join("\n", executor.getFormattedProfile()));
             }
+        }
+    }
+
+    protected @Nullable MlogWatcherClient createMlogWatcherClient(Namespace arguments, ToolMessageEmitter messageEmitter) {
+        if (arguments.getBoolean("watcher")) {
+            int port = arguments.getInt("watcher_port");
+            int timeout = arguments.getInt("watcher_timeout");
+            MlogWatcherClientImpl client = new MlogWatcherClientImpl(messageEmitter, port, timeout);
+            return client.connect() ? client : null;
+        } else {
+            return null;
         }
     }
 

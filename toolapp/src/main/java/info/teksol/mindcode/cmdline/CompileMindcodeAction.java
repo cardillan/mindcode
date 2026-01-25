@@ -144,10 +144,10 @@ public class CompileMindcodeAction extends ActionHandler {
                 }
             }
 
-            if (arguments.getBoolean("watcher")) {
-                int port = arguments.getInt("watcher_port");
-                int timeout = arguments.getInt("watcher_timeout");
-                MlogWatcherClient.sendMlog(port, timeout, messageLogger, compiler.getOutput());
+            MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages);
+            if (mlogWatcherClient != null) {
+                mlogWatcherClient.updateSelectedProcessor( compiler.getOutput());
+                mlogWatcherClient.close();
             }
         }
 

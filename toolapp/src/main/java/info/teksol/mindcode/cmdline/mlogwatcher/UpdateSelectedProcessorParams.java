@@ -1,14 +1,19 @@
 package info.teksol.mindcode.cmdline.mlogwatcher;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 public class UpdateSelectedProcessorParams implements Params {
 
     private String code;
 
     public String getCode() {
-        return code;
+        byte[] bytes = Base64.getDecoder().decode(code);
+        return new String(bytes);
     }
 
     public void setCode(String code) {
-        this.code = code;
+        byte[] bytes = code.getBytes(StandardCharsets.UTF_8);
+        this.code = Base64.getEncoder().encodeToString(bytes);
     }
 }
