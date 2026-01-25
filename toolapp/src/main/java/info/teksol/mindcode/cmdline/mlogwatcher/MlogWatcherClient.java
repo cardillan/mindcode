@@ -5,5 +5,6 @@ public interface MlogWatcherClient {
     void close();
 
     void updateSelectedProcessor(String mlog);
+    void updateAllProcessorsOnMap(String mlog, String programId);
     void updateSchematic(String schematic);
 }

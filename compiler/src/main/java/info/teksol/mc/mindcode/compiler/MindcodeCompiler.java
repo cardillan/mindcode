@@ -77,6 +77,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
     private @Nullable NameCreator nameCreator;
     private @Nullable MindustryMetadata metadata;
     private @Nullable CompileTimeEvaluator compileTimeEvaluator;
+    private @Nullable CodeGenerator codeGenerator;
 
     // Intermediate and final results
     private final Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
@@ -108,7 +109,6 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
     private boolean runtimeError = false;
     private List<Assertion> assertions = List.of();
     private int steps;
-    private int[] executionProfile = new int[0];
 
     // Message logger
     private final ListMessageLogger messageLogger;
@@ -272,7 +272,8 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         assembler = new CodeAssembler(this);
         compileTimeEvaluator = new CompileTimeEvaluator(this);
 
-        CodeGenerator.generateCode(this, astProgram);
+        codeGenerator = new CodeGenerator(this, astProgram);
+        codeGenerator.generateCode();
 
         if (assembler.isInternalError() && !hasCompilerErrors()) {
             throw new MindcodeInternalError("Internal error encountered.");
@@ -435,7 +436,6 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         runtimeError = emulator.isError();
         assertions = emulator.getAllAssertions();
         steps = emulator.getExecutionSteps();
-        executionProfile = emulator.getExecutorResults(0).getProfile();
     }
 
     // Compiler outputs
@@ -487,6 +487,10 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         return output;
     }
 
+    public @Nullable String getProgramId() {
+        return codeGenerator == null ? null : codeGenerator.getProgramId();
+    }
+
     public List<Assertion> getAssertions() {
         return assertions;
     }
@@ -497,10 +501,6 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
     public int getSteps() {
         return steps;
-    }
-
-    public int[] getExecutionProfile() {
-        return executionProfile;
     }
 
     public Emulator getEmulator() {

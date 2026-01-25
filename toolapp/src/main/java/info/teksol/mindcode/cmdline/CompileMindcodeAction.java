@@ -146,7 +146,8 @@ public class CompileMindcodeAction extends ActionHandler {
 
             MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages);
             if (mlogWatcherClient != null) {
-                mlogWatcherClient.updateSelectedProcessor( compiler.getOutput());
+                //mlogWatcherClient.updateAllProcessorsOnMap(compiler.getOutput(), compiler.getProgramId());
+                mlogWatcherClient.updateSelectedProcessor(compiler.getOutput());
                 mlogWatcherClient.close();
             }
         }

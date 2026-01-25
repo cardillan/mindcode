@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 public class Request {
     public static final String UPDATE_SELECTED_PROCESSOR = "update_selected_processor";
+    public static final String UPGRADE_ALL_PROCESSORS_ON_MAP = "upgrade_all_processors_on_map";
     public static final String PUT_SCHEMATIC_IN_LIBRARY = "put_schematic_in_library";
 
     private String method;
@@ -26,6 +27,10 @@ public class Request {
             @JsonSubTypes.Type(
                     value = UpdateSelectedProcessorParams.class,
                     name = UPDATE_SELECTED_PROCESSOR
+            ),
+            @JsonSubTypes.Type(
+                    value = UpgradeAllProcessorsOnMapParams.class,
+                    name = UPGRADE_ALL_PROCESSORS_ON_MAP
             ),
             @JsonSubTypes.Type(
                     value = PutSchematicInLibraryParams.class,

@@ -59,12 +59,9 @@ public class CodeGenerator extends CompilerMessageEmitter {
     // Nesting level of code blocks
     private int nested = 0;
 
-    public static void generateCode(CodeGeneratorContext context, AstProgram program) {
-        CodeGenerator codeGenerator = new CodeGenerator(context, program);
-        codeGenerator.generateCode();
-    }
+    private @Nullable String programId = null;
 
-    private CodeGenerator(CodeGeneratorContext context, AstProgram program) {
+    public CodeGenerator(CodeGeneratorContext context, AstProgram program) {
         super(context.messageConsumer());
         this.context = context;
         this.program = program;
@@ -110,6 +107,10 @@ public class CodeGenerator extends CompilerMessageEmitter {
         return globalProfile;
     }
 
+    public @Nullable String getProgramId() {
+        return programId;
+    }
+
     public String createRemoteSignature(Stream<AstFunctionDeclaration> functions) {
         String text = functions
                 .sorted(Comparator.comparing(AstFunctionDeclaration::getName))
@@ -151,7 +152,7 @@ public class CodeGenerator extends CompilerMessageEmitter {
         return result;
     }
 
-    private void generateCode() {
+    public void generateCode() {
         generateRemoteJumpTable();
         generateProcessorId();
         generateTargetGuard();
@@ -215,7 +216,8 @@ public class CodeGenerator extends CompilerMessageEmitter {
         if (!globalProfile.getProcessorId().isBlank()) lines.add("id: " + globalProfile.getProcessorId());
         if (!globalProfile.getProgramName().isBlank()) lines.add("name: " + globalProfile.getProgramName());
         if (!globalProfile.getProgramVersion().isBlank()) lines.add("version: " + globalProfile.getProgramVersion());
-        LogicString id = LogicString.create(String.join("\\n", lines));
+        programId = String.join("\n", lines);
+        LogicString id = LogicString.create(programId.replace("\n", "\\n"));
         variables.putVariable("@@ID", id);
 
         if (!lines.isEmpty()) {

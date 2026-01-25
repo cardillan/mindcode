@@ -9,7 +9,10 @@ public class Response {
     public static final String STATUS_ERROR = "error";
 
     public static final String ERR_INVALID_ARGUMENTS = "invalid_arguments";
+    public static final String ERR_INVALID_PROGRAM_ID = "invalid_program_id";
     public static final String ERR_NO_PROCESSOR_ATTACHED = "no_processor_attached";
+    public static final String ERR_NO_ACTIVE_MAP = "no_active_map";
+    public static final String ERR_NO_PROCESSORS_FOUND = "no_processors_found";
     public static final String ERR_SCHEMATIC_IMPORT_FAILED = "schematic_import_failed";
     public static final String ERR_UNKNOWN_METHOD = "unknown_method";
 
@@ -53,6 +56,10 @@ public class Response {
 
     public static Response success() {
         return new Response(STATUS_SUCCESS, null);
+    }
+
+    public static Response success(String result) {
+        return new Response(STATUS_SUCCESS, result);
     }
 
     public static Response error(String result) {

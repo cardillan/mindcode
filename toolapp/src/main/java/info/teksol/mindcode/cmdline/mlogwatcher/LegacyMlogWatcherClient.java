@@ -11,29 +11,34 @@ public class LegacyMlogWatcherClient extends MlogWatcherClientBase implements Ml
     }
 
     protected void onTimeout() {
-        messageEmitter.info("  No response from Mlog Watcher - maybe an old version is installed?");
+        log.info("  No response from Mlog Watcher - maybe an old version is installed?");
     }
 
     @Override
     public void updateSelectedProcessor(String mlog) {
         send(mlog);
-        messageEmitter.info("%n%s", "Compiled mlog code was sent to Mlog Watcher.");
+        log.info("%n%s", "Compiled mlog code was sent to Mlog Watcher.");
 
         String response = waitForResponse();
         if (response == null) return;
 
         switch (response) {
-            case "ok" -> messageEmitter.info("  Mlog Watcher: mlog code injected into selected processor.");
+            case "ok" -> log.info("  Mlog Watcher: mlog code injected into selected processor.");
             case "no_processor" -> {
-                messageEmitter.info("  Mlog Watcher: no processor selected.");
-                messageEmitter.info("  (The target processor must be selected in Mindustry to receive the code.)");
+                log.info("  Mlog Watcher: no processor selected.");
+                log.info("  (The target processor must be selected in Mindustry to receive the code.)");
             }
-            default -> messageEmitter.info("  Mlog Watcher: unknown response '%s'.", response);
+            default -> log.info("  Mlog Watcher: unknown response '%s'.", response);
         }
     }
 
     @Override
+    public void updateAllProcessorsOnMap(String mlog, String programId) {
+        log.error("Updating all processors on the map is not supported by the legacy Mlog Watcher.");
+    }
+
+    @Override
     public void updateSchematic(String schematic) {
-        messageEmitter.error("Updating schematics is not supported by the legacy Mlog Watcher.");
+        log.error("Updating schematics is not supported by the legacy Mlog Watcher.");
     }
 }

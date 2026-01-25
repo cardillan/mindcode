@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 @NullMarked
 public abstract class MlogWatcherClientBase implements MlogWatcherClient {
-    protected final ToolMessageEmitter messageEmitter;
+    protected final ToolMessageEmitter log;
 
     private final String path;
     private final int port;
@@ -23,8 +23,8 @@ public abstract class MlogWatcherClientBase implements MlogWatcherClient {
     private final Semaphore semaphore = new Semaphore(0);
     private @Nullable String response;
 
-    public MlogWatcherClientBase(ToolMessageEmitter messageEmitter, int port, long timeout, String path) {
-        this.messageEmitter = messageEmitter;
+    public MlogWatcherClientBase(ToolMessageEmitter log, int port, long timeout, String path) {
+        this.log = log;
         this.path = path;
         this.port = port;
         this.timeout = timeout;
@@ -83,9 +83,9 @@ public abstract class MlogWatcherClientBase implements MlogWatcherClient {
 
     protected void printError(Exception ex) {
         if (!errorReported) {
-            messageEmitter.error("Error connecting to Mlog Watcher: %s", ex.getMessage());
-            messageEmitter.error("  - make sure Mindustry with active Mlog Watcher mod is running");
-            messageEmitter.error("  - verify Mlog Watcher listens on port %d", port);
+            log.error("Error connecting to Mlog Watcher: %s", ex.getMessage());
+            log.error("  - make sure Mindustry with active Mlog Watcher mod is running");
+            log.error("  - verify Mlog Watcher listens on port %d", port);
             errorReported = true;
         }
     }
