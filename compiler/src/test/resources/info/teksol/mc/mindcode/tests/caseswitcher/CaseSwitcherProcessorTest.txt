@@ -19,5 +19,5 @@ homogenous-3-both (limit    0):                    44     8162     100.0%   ACAB
 homogenous-3-both (limit  500):                    20     1990     100.0%   975D3D05F56A45FE   2503C5B21BC88234
 homogenous-4-max (limit    0):                     46     8403     100.0%   9C9CE4F72DBCAC83   4826582A7A8F6C83
 homogenous-4-max (limit  500):                     21     1997     100.0%   996F5413EFC39FA2   F18652346B65CE1A
-mixed-2-null (limit    0):                        127    16919     100.0%   47B163D7C16232BD   730CA114B0C9E01D
-mixed-2-null (limit  500):                         68     1947      97.1%   A13B814103D50539   2C918351A5E2C624
+mixed-2-null (limit    0):                        127    16919     100.0%   47B163D7C16232BD   E578E6BB36AF0DE0
+mixed-2-null (limit  500):                         68     1947      97.1%   A13B814103D50539   0AD56E3E113A5609

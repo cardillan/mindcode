@@ -13,74 +13,74 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-9 instructi
      4 set :foo:b 0
      5 callrec bank1 *label0 *label3 :foo*retval
      6 label *label3
--    * set *tmp0 :foo*retval
-     7 assertprints "0001111223221211" "foo"
-     8 assertflush
+-    * set *tmp1 :foo*retval
+     7 assertprints *tmp0 "0001111223221211" "foo"
+     8 assertflush *tmp2
      9 set :bar:n 3
  
     11 set :bar:b 0
     12 callrec bank1 *label1 *label4 :bar*retval
     13 label *label4
--    * set *tmp1 :bar*retval
-    14 assertprints "0001111223333444" "bar"
-    15 assertflush
+-    * set *tmp3 :bar*retval
+    14 assertprints *tmp2 "0001111223333444" "bar"
+    15 assertflush *tmp4
     16 set :baz:n 3
  
     18 set :baz:b 0
     19 callrec bank1 *label2 *label5 :baz*retval
     20 label *label5
--    * set *tmp2 :baz*retval
-    21 assertprints "0001111223221211" "baz"
+-    * set *tmp5 :baz*retval
+    21 assertprints *tmp4 "0001111223221211" "baz"
     22 stop
     23 end
  
     44 pop bank1 :foo:a
     45 pop bank1 :foo:n
-    46 set *tmp9 :foo*retval
--    * set *tmp5 *tmp9
+    46 set *tmp12 :foo*retval
+-    * set *tmp8 *tmp12
     47 jump *label8 always
     48 label *label7
--    * set *tmp5 null
+-    * set *tmp8 null
     49 label *label8
-    50 op add *tmp10 :foo:b 1
-    51 set :foo:b *tmp10
+    50 op add *tmp13 :foo:b 1
+    51 set :foo:b *tmp13
  
-    78 set :bar:a *tmp18
+    78 set :bar:a *tmp21
     79 pop bank1 :bar:n
-    80 set *tmp19 :bar*retval
--    * set *tmp13 *tmp19
+    80 set *tmp22 :bar*retval
+-    * set *tmp16 *tmp22
     81 jump *label12 always
     82 label *label11
--    * set *tmp13 null
+-    * set *tmp16 null
     83 label *label12
-    84 op add *tmp20 :bar:b 1
-    85 set :bar:b *tmp20
+    84 op add *tmp23 :bar:b 1
+    85 set :bar:b *tmp23
  
    112 pop bank1 :baz:b
    113 pop bank1 :baz:n
-   114 set *tmp27 :baz*retval
--    * set *tmp23 *tmp27
+   114 set *tmp30 :baz*retval
+-    * set *tmp26 *tmp30
    115 jump *label16 always
    116 label *label15
--    * set *tmp23 null
+-    * set *tmp26 null
    117 label *label16
-   118 op add *tmp28 :baz:b 1
-   119 set :baz:b *tmp28
+   118 op add *tmp31 :baz:b 1
+   119 set :baz:b *tmp31
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-3 instructions):
  
     43 pop bank1 :foo:b
     44 pop bank1 :foo:a
     45 pop bank1 :foo:n
--    * set *tmp9 :foo*retval
+-    * set *tmp12 :foo*retval
     46 jump *label8 always
     47 label *label7
     48 label *label8
  
-    76 set :bar:b *tmp17
-    77 set :bar:a *tmp18
+    76 set :bar:b *tmp20
+    77 set :bar:a *tmp21
     78 pop bank1 :bar:n
--    * set *tmp19 :bar*retval
+-    * set *tmp22 :bar*retval
     79 jump *label12 always
     80 label *label11
     81 label *label12
@@ -88,14 +88,14 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-3 instructi
    109 pop bank1 :baz:a
    110 pop bank1 :baz:b
    111 pop bank1 :baz:n
--    * set *tmp27 :baz*retval
+-    * set *tmp30 :baz*retval
    112 jump *label16 always
    113 label *label15
    114 label *label16
 
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-3 instructions):
  
-    50 set :foo:b *tmp10
+    50 set :foo:b *tmp13
     51 print :foo:a
     52 print :foo:b
 -    * set :foo*retval :foo:b
@@ -103,7 +103,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-3 instructi
     54 returnrec bank1
     55 end
  
-    82 set :bar:b *tmp20
+    82 set :bar:b *tmp23
     83 print :bar:a
     84 print :bar:b
 -    * set :bar*retval :bar:b
@@ -111,7 +111,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-3 instructi
     86 returnrec bank1
     87 end
  
-   114 set :baz:b *tmp28
+   114 set :baz:b *tmp31
    115 print :baz:a
    116 print :baz:b
 -    * set :baz*retval :baz:b
@@ -124,18 +124,18 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 inst
     25 # "Function: def foo(in n, in a, in b)"
     26 print :foo:a
     27 print :foo:b
--    * op add *tmp3 :foo:a 1
--    * set :foo:a *tmp3
+-    * op add *tmp6 :foo:a 1
+-    * set :foo:a *tmp6
 +   28 op add :foo:a :foo:a 1
-    29 op greaterThan *tmp4 :foo:n 0
-    30 jump *label7 equal *tmp4 false
-    31 op sub *tmp6 :foo:n 1
+    29 op greaterThan *tmp7 :foo:n 0
+    30 jump *label7 equal *tmp7 false
+    31 op sub *tmp9 :foo:n 1
  
     45 jump *label8 always
     46 label *label7
     47 label *label8
--    * op add *tmp10 :foo:b 1
--    * set :foo:b *tmp10
+-    * op add *tmp13 :foo:b 1
+-    * set :foo:b *tmp13
 +   48 op add :foo:b :foo:b 1
     49 print :foo:a
     50 print :foo:b
@@ -144,18 +144,18 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 inst
     55 # "Function: def bar(in n, in out a, in out b)"
     56 print :bar:a
     57 print :bar:b
--    * op add *tmp11 :bar:a 1
--    * set :bar:a *tmp11
+-    * op add *tmp14 :bar:a 1
+-    * set :bar:a *tmp14
 +   58 op add :bar:a :bar:a 1
-    59 op greaterThan *tmp12 :bar:n 0
-    60 jump *label11 equal *tmp12 false
-    61 op sub *tmp14 :bar:n 1
+    59 op greaterThan *tmp15 :bar:n 0
+    60 jump *label11 equal *tmp15 false
+    61 op sub *tmp17 :bar:n 1
  
     75 jump *label12 always
     76 label *label11
     77 label *label12
--    * op add *tmp20 :bar:b 1
--    * set :bar:b *tmp20
+-    * op add *tmp23 :bar:b 1
+-    * set :bar:b *tmp23
 +   78 op add :bar:b :bar:b 1
     79 print :bar:a
     80 print :bar:b
@@ -164,18 +164,18 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 inst
     85 # "Function: def baz(in n, in out a, in out b)"
     86 print :baz:a
     87 print :baz:b
--    * op add *tmp21 :baz:a 1
--    * set :baz:a *tmp21
+-    * op add *tmp24 :baz:a 1
+-    * set :baz:a *tmp24
 +   88 op add :baz:a :baz:a 1
-    89 op greaterThan *tmp22 :baz:n 0
-    90 jump *label15 equal *tmp22 false
-    91 op sub *tmp24 :baz:n 1
+    89 op greaterThan *tmp25 :baz:n 0
+    90 jump *label15 equal *tmp25 false
+    91 op sub *tmp27 :baz:n 1
  
    105 jump *label16 always
    106 label *label15
    107 label *label16
--    * op add *tmp28 :baz:b 1
--    * set :baz:b *tmp28
+-    * op add *tmp31 :baz:b 1
+-    * set :baz:b *tmp31
 +  108 op add :baz:b :baz:b 1
    109 print :baz:a
    110 print :baz:b
@@ -186,30 +186,30 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-3
     26 print :foo:a
     27 print :foo:b
     28 op add :foo:a :foo:a 1
--    * op greaterThan *tmp4 :foo:n 0
--    * jump *label7 equal *tmp4 false
+-    * op greaterThan *tmp7 :foo:n 0
+-    * jump *label7 equal *tmp7 false
 +   29 jump *label7 lessThanEq :foo:n 0
-    30 op sub *tmp6 :foo:n 1
+    30 op sub *tmp9 :foo:n 1
     31 push bank1 :foo:n
     32 push bank1 :foo:a
  
     55 print :bar:a
     56 print :bar:b
     57 op add :bar:a :bar:a 1
--    * op greaterThan *tmp12 :bar:n 0
--    * jump *label11 equal *tmp12 false
+-    * op greaterThan *tmp15 :bar:n 0
+-    * jump *label11 equal *tmp15 false
 +   58 jump *label11 lessThanEq :bar:n 0
-    59 op sub *tmp14 :bar:n 1
+    59 op sub *tmp17 :bar:n 1
     60 push bank1 :bar:n
-    61 set *tmp15 :bar:b
+    61 set *tmp18 :bar:b
  
     84 print :baz:a
     85 print :baz:b
     86 op add :baz:a :baz:a 1
--    * op greaterThan *tmp22 :baz:n 0
--    * jump *label15 equal *tmp22 false
+-    * op greaterThan *tmp25 :baz:n 0
+-    * jump *label15 equal *tmp25 false
 +   87 jump *label15 lessThanEq :baz:n 0
-    88 op sub *tmp24 :baz:n 1
+    88 op sub *tmp27 :baz:n 1
     89 push bank1 :baz:n
     90 push bank1 :baz:b
 
@@ -223,8 +223,8 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     45 label *label8
     46 op add :foo:b :foo:b 1
  
-    69 set :bar:b *tmp17
-    70 set :bar:a *tmp18
+    69 set :bar:b *tmp20
+    70 set :bar:a *tmp21
     71 pop bank1 :bar:n
 -    * jump *label12 always
     72 label *label11
@@ -242,42 +242,42 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     33 push bank1 :foo:b
-    34 set *tmp7 :foo:b
-    35 set *tmp8 :foo:a
--    * set :foo:n *tmp6
--    * set :foo:a *tmp7
+    34 set *tmp10 :foo:b
+    35 set *tmp11 :foo:a
+-    * set :foo:n *tmp9
+-    * set :foo:a *tmp10
 +   36 op sub :foo:n :foo:n 1
 +   37 set :foo:a :foo:b
-    38 set :foo:b *tmp8
+    38 set :foo:b *tmp11
     39 callrec bank1 *label0 *label9 :foo*retval
     40 label *label9
  
     59 push bank1 :bar:n
-    60 set *tmp15 :bar:b
-    61 set *tmp16 :bar:a
--    * set :bar:n *tmp14
--    * set :bar:a *tmp15
+    60 set *tmp18 :bar:b
+    61 set *tmp19 :bar:a
+-    * set :bar:n *tmp17
+-    * set :bar:a *tmp18
 +   62 op sub :bar:n :bar:n 1
 +   63 set :bar:a :bar:b
-    64 set :bar:b *tmp16
+    64 set :bar:b *tmp19
     65 callrec bank1 *label1 *label13 :bar*retval
     66 label *label13
-    67 set *tmp17 :bar:a
-    68 set *tmp18 :bar:b
--    * set :bar:b *tmp17
+    67 set *tmp20 :bar:a
+    68 set *tmp21 :bar:b
+-    * set :bar:b *tmp20
 +   69 set :bar:b :bar:a
-    70 set :bar:a *tmp18
+    70 set :bar:a *tmp21
     71 pop bank1 :bar:n
     72 label *label11
  
     89 push bank1 :baz:a
-    90 set *tmp25 :baz:b
-    91 set *tmp26 :baz:a
--    * set :baz:n *tmp24
--    * set :baz:a *tmp25
+    90 set *tmp28 :baz:b
+    91 set *tmp29 :baz:a
+-    * set :baz:n *tmp27
+-    * set :baz:a *tmp28
 +   92 op sub :baz:n :baz:n 1
 +   93 set :baz:a :baz:b
-    94 set :baz:b *tmp26
+    94 set :baz:b *tmp29
     95 callrec bank1 *label2 *label17 :baz*retval
     96 label *label17
 
@@ -286,41 +286,41 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     27 print :foo:b
     28 op add :foo:a :foo:a 1
     29 jump *label7 lessThanEq :foo:n 0
--    * op sub *tmp6 :foo:n 1
+-    * op sub *tmp9 :foo:n 1
     30 push bank1 :foo:n
     31 push bank1 :foo:a
     32 push bank1 :foo:b
--    * set *tmp7 :foo:b
-    33 set *tmp8 :foo:a
+-    * set *tmp10 :foo:b
+    33 set *tmp11 :foo:a
     34 op sub :foo:n :foo:n 1
     35 set :foo:a :foo:b
  
     53 print :bar:b
     54 op add :bar:a :bar:a 1
     55 jump *label11 lessThanEq :bar:n 0
--    * op sub *tmp14 :bar:n 1
+-    * op sub *tmp17 :bar:n 1
     56 push bank1 :bar:n
--    * set *tmp15 :bar:b
-    57 set *tmp16 :bar:a
+-    * set *tmp18 :bar:b
+    57 set *tmp19 :bar:a
     58 op sub :bar:n :bar:n 1
     59 set :bar:a :bar:b
-    60 set :bar:b *tmp16
+    60 set :bar:b *tmp19
     61 callrec bank1 *label1 *label13 :bar*retval
     62 label *label13
--    * set *tmp17 :bar:a
-    63 set *tmp18 :bar:b
+-    * set *tmp20 :bar:a
+    63 set *tmp21 :bar:b
     64 set :bar:b :bar:a
-    65 set :bar:a *tmp18
+    65 set :bar:a *tmp21
  
     78 print :baz:b
     79 op add :baz:a :baz:a 1
     80 jump *label15 lessThanEq :baz:n 0
--    * op sub *tmp24 :baz:n 1
+-    * op sub *tmp27 :baz:n 1
     81 push bank1 :baz:n
     82 push bank1 :baz:b
     83 push bank1 :baz:a
--    * set *tmp25 :baz:b
-    84 set *tmp26 :baz:a
+-    * set *tmp28 :baz:b
+    84 set *tmp29 :baz:a
     85 op sub :baz:n :baz:n 1
     86 set :baz:a :baz:b
 
@@ -340,7 +340,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
     48 # "Function: def bar(in n, in out a, in out b)"
     49 print :bar:a
  
-    62 set :bar:a *tmp18
+    62 set :bar:a *tmp21
     63 pop bank1 :bar:n
     64 label *label11
 -    * label *label12
@@ -373,7 +373,7 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-12 instructions)
 -    * push bank1 :foo:n
     30 push bank1 :foo:a
     31 push bank1 :foo:b
-    32 set *tmp8 :foo:a
+    32 set *tmp11 :foo:a
  
     37 label *label9
     38 pop bank1 :foo:b
@@ -387,13 +387,13 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-12 instructions)
     49 op add :bar:a :bar:a 1
     50 jump *label11 lessThanEq :bar:n 0
 -    * push bank1 :bar:n
-    51 set *tmp16 :bar:a
+    51 set *tmp19 :bar:a
     52 op sub :bar:n :bar:n 1
     53 set :bar:a :bar:b
  
-    57 set *tmp18 :bar:b
+    57 set *tmp21 :bar:b
     58 set :bar:b :bar:a
-    59 set :bar:a *tmp18
+    59 set :bar:a *tmp21
 -    * pop bank1 :bar:n
     60 label *label11
     61 op add :bar:b :bar:b 1
@@ -405,7 +405,7 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-12 instructions)
 -    * push bank1 :baz:n
     71 push bank1 :baz:b
     72 push bank1 :baz:a
-    73 set *tmp26 :baz:a
+    73 set *tmp29 :baz:a
  
     78 label *label17
     79 pop bank1 :baz:a
@@ -418,27 +418,27 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-12 instructions)
 Final code before resolving virtual instructions:
 
 set *sp 0
-assertflush
+assertflush *tmp0
 set :foo:n 3
 set :foo:a 0
 set :foo:b 0
 callrec bank1 *label0 *label3 :foo*retval
 label *label3
-assertprints "0001111223221211" "foo"
-assertflush
+assertprints *tmp0 "0001111223221211" "foo"
+assertflush *tmp2
 set :bar:n 3
 set :bar:a 0
 set :bar:b 0
 callrec bank1 *label1 *label4 :bar*retval
 label *label4
-assertprints "0001111223333444" "bar"
-assertflush
+assertprints *tmp2 "0001111223333444" "bar"
+assertflush *tmp4
 set :baz:n 3
 set :baz:a 0
 set :baz:b 0
 callrec bank1 *label2 *label5 :baz*retval
 label *label5
-assertprints "0001111223221211" "baz"
+assertprints *tmp4 "0001111223221211" "baz"
 stop
 end
 label *label0
@@ -449,10 +449,10 @@ op add :foo:a :foo:a 1
 jump *label7 lessThanEq :foo:n 0
 push bank1 :foo:a
 push bank1 :foo:b
-set *tmp8 :foo:a
+set *tmp11 :foo:a
 op sub :foo:n :foo:n 1
 set :foo:a :foo:b
-set :foo:b *tmp8
+set :foo:b *tmp11
 callrec bank1 *label0 *label9 :foo*retval
 label *label9
 pop bank1 :foo:b
@@ -468,15 +468,15 @@ print :bar:a
 print :bar:b
 op add :bar:a :bar:a 1
 jump *label11 lessThanEq :bar:n 0
-set *tmp16 :bar:a
+set *tmp19 :bar:a
 op sub :bar:n :bar:n 1
 set :bar:a :bar:b
-set :bar:b *tmp16
+set :bar:b *tmp19
 callrec bank1 *label1 *label13 :bar*retval
 label *label13
-set *tmp18 :bar:b
+set *tmp21 :bar:b
 set :bar:b :bar:a
-set :bar:a *tmp18
+set :bar:a *tmp21
 label *label11
 op add :bar:b :bar:b 1
 print :bar:a
@@ -490,10 +490,10 @@ op add :baz:a :baz:a 1
 jump *label15 lessThanEq :baz:n 0
 push bank1 :baz:b
 push bank1 :baz:a
-set *tmp26 :baz:a
+set *tmp29 :baz:a
 op sub :baz:n :baz:n 1
 set :baz:a :baz:b
-set :baz:b *tmp26
+set :baz:b *tmp29
 callrec bank1 *label2 *label17 :baz*retval
 label *label17
 pop bank1 :baz:a

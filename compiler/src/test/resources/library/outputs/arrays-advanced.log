@@ -59,52 +59,52 @@ Pass 3: speed optimization selection (cost limit 161):
 Final code before resolving virtual instructions:
 
     0:  set p 0
-    1:  assertflush
+    1:  assertflush *tmp2
     2:  print "xxxxx"
-    3:  assertprints "xxxxx" "Array fill"
+    3:  assertprints *tmp2 "xxxxx" "Array fill"
     4:  set .b*9 p
     5:  set .c*0 p
-    6:  op add *tmp4 p 1
-    7:  set .b*8 *tmp4
-    8:  set .c*1 *tmp4
-    9:  op add *tmp4 p 2
-   10:  set .b*7 *tmp4
-   11:  set .c*2 *tmp4
-   12:  op add *tmp4 p 3
-   13:  set .b*6 *tmp4
-   14:  set .c*3 *tmp4
-   15:  op add *tmp4 p 4
-   16:  set :reverse:t *tmp4
-   17:  set .c*4 *tmp4
-   18:  op add *tmp4 p 5
-   19:  set *tmp14 *tmp4
-   20:  set .c*5 *tmp4
-   21:  op add *tmp4 p 6
-   22:  set .b*3 *tmp4
-   23:  set .c*6 *tmp4
-   24:  op add *tmp4 p 7
-   25:  set .b*2 *tmp4
-   26:  set .c*7 *tmp4
-   27:  op add *tmp4 p 8
-   28:  set .b*1 *tmp4
-   29:  set .c*8 *tmp4
-   30:  op add *tmp4 p 9
-   31:  set .b*0 *tmp4
-   32:  set .c*9 *tmp4
-   33:  set .b*4 *tmp14
+    6:  op add *tmp5 p 1
+    7:  set .b*8 *tmp5
+    8:  set .c*1 *tmp5
+    9:  op add *tmp5 p 2
+   10:  set .b*7 *tmp5
+   11:  set .c*2 *tmp5
+   12:  op add *tmp5 p 3
+   13:  set .b*6 *tmp5
+   14:  set .c*3 *tmp5
+   15:  op add *tmp5 p 4
+   16:  set :reverse:t *tmp5
+   17:  set .c*4 *tmp5
+   18:  op add *tmp5 p 5
+   19:  set *tmp15 *tmp5
+   20:  set .c*5 *tmp5
+   21:  op add *tmp5 p 6
+   22:  set .b*3 *tmp5
+   23:  set .c*6 *tmp5
+   24:  op add *tmp5 p 7
+   25:  set .b*2 *tmp5
+   26:  set .c*7 *tmp5
+   27:  op add *tmp5 p 8
+   28:  set .b*1 *tmp5
+   29:  set .c*8 *tmp5
+   30:  op add *tmp5 p 9
+   31:  set .b*0 *tmp5
+   32:  set .c*9 *tmp5
+   33:  set .b*4 *tmp15
    34:  set .b*5 :reverse:t
-   35:  assertflush
-   36:  print *tmp4
+   35:  assertflush *tmp18
+   36:  print *tmp5
    37:  print .b*1
    38:  print .b*2
    39:  print .b*3
-   40:  print *tmp14
+   40:  print *tmp15
    41:  print :reverse:t
    42:  print .b*6
    43:  print .b*7
    44:  print .b*8
    45:  print p
-   46:  assertprints "9876543210" "Array reverse"
+   46:  assertprints *tmp18 "9876543210" "Array reverse"
         label *label12
    47:  set :bubblesort:flag false
    48:  set :bubblesort:a .b*0
@@ -250,7 +250,7 @@ Final code before resolving virtual instructions:
         label *label153
   155:  jump *label12 notEqual :bubblesort:flag false
         label *label11
-  156:  assertflush
+  156:  assertflush *tmp43
   157:  print .b*0
   158:  print .b*1
   159:  print .b*2
@@ -261,7 +261,7 @@ Final code before resolving virtual instructions:
   164:  print .b*7
   165:  print .b*8
   166:  print .b*9
-  167:  assertprints "0123456789" "Array sort 1"
+  167:  assertprints *tmp43 "0123456789" "Array sort 1"
         label *label32
   168:  set :bubblesort.1:flag false
   169:  set :bubblesort.1:a .b*0
@@ -461,7 +461,7 @@ Final code before resolving virtual instructions:
         label *label245
   330:  jump *label32 notEqual :bubblesort.1:flag false
         label *label31
-  331:  assertflush
+  331:  assertflush *tmp88
   332:  print .c*0
   333:  print .c*1
   334:  print .c*2
@@ -472,4 +472,4 @@ Final code before resolving virtual instructions:
   339:  print .c*7
   340:  print .c*8
   341:  print .c*9
-  342:  assertprints "9876543210" "Array sort 2"
+  342:  assertprints *tmp88 "9876543210" "Array sort 2"

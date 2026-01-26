@@ -20,7 +20,6 @@ public class TextBuffer {
 
     private final StringBuilder buffer = new StringBuilder();
     private int flushIndex = 0;
-    private int assertBufferStart = -1;
     private int assertListStart = -1;
 
     public TextBuffer(EmulatorMessageHandler errorHandler, int outputLimit, int bufferLimit) {
@@ -141,24 +140,23 @@ public class TextBuffer {
         }
     }
 
-    public void prepareAssert() {
-        if (assertBufferStart != -1) {
+    public int prepareAssert() {
+        if (assertListStart != -1) {
             errorHandler.error(ExecutionFlag.ERR_INVALID_ASSERT_PRINTS,
                     "Multiple or nested '%s' instruction calls.", Opcode.ASSERT_FLUSH);
         }
-        assertBufferStart = buffer.length();
         assertListStart = output.size();
+        return buffer.length();
     }
 
-    public String getAssertedOutput() {
-        if (assertBufferStart == -1) {
+    public String getAssertedOutput(int flushIndex) {
+        if (assertListStart == -1) {
             errorHandler.error(ExecutionFlag.ERR_INVALID_ASSERT_PRINTS,
                     "'%s' without '%s'.", Opcode.ASSERT_PRINTS, Opcode.ASSERT_FLUSH);
         }
-        String text = buffer.substring(assertBufferStart);
-        buffer.setLength(assertBufferStart);
+        String text = buffer.substring(flushIndex);
+        buffer.setLength(flushIndex);
         output.subList(assertListStart, output.size()).clear();
-        assertBufferStart = -1;
         assertListStart = -1;
         return text;
     }

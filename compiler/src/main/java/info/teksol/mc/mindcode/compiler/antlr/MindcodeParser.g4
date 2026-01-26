@@ -396,5 +396,5 @@ iteratorGroup
     ;
 
 astIterator
-    : modifier = OUT? variable = lvalue
+    : modifier = OUT? variable = (IDENTIFIER | EXTIDENTIFIER)
     ;

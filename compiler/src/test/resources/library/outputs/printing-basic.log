@@ -528,78 +528,78 @@ Pass 2: speed optimization selection (cost limit 63):
 
 Final code before resolving virtual instructions:
 
-    0:  assertflush
+    0:  assertflush *tmp0
     1:  print "1\n2\n3\n"
-    2:  assertprints "1\n2\n3\n" "printLines(1, 2, 3)"
-    3:  assertflush
+    2:  assertprints *tmp0 "1\n2\n3\n" "printLines(1, 2, 3)"
+    3:  assertflush *tmp2
     4:  print "{2}"
     5:  op floor :formatNumber:n 0 0
     6:  format :formatNumber:n
-    7:  assertprints "0" "printNumber(null)"
-    8:  assertflush
+    7:  assertprints *tmp2 "0" "printNumber(null)"
+    8:  assertflush *tmp3
     9:  print "{2}"
    10:  op floor :formatNumber:n 1 0
    11:  format :formatNumber:n
-   12:  assertprints "1" "printNumber(1)"
-   13:  assertflush
+   12:  assertprints *tmp3 "1" "printNumber(1)"
+   13:  assertflush *tmp4
    14:  print "{2}"
    15:  op floor :formatNumber:n 1.5 0
    16:  format :formatNumber:n
-   17:  assertprints "1" "printNumber(1.5)"
-   18:  assertflush
+   17:  assertprints *tmp4 "1" "printNumber(1.5)"
+   18:  assertflush *tmp5
    19:  print "{2}"
    20:  op floor :formatNumber:n 1.5 0
    21:  format "-{2}"
    22:  format :formatNumber:n
-   23:  assertprints "-1" "printNumber(-1.5)"
-   24:  assertflush
+   23:  assertprints *tmp5 "-1" "printNumber(-1.5)"
+   24:  assertflush *tmp6
    25:  print "{2}"
    26:  op floor :formatNumber:n 1234567 0
         label *label281
    27:  op mod :formatNumber:mod :formatNumber:n 1000
-   28:  select *tmp22 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
-   29:  select *tmp20 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp22
-   30:  format *tmp20
+   28:  select *tmp59 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
+   29:  select *tmp57 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp59
+   30:  format *tmp57
    31:  format :formatNumber:mod
    32:  op idiv :formatNumber:n :formatNumber:n 1000
    33:  jump *label281 greaterThan :formatNumber:n 999
    34:  format :formatNumber:n
-   35:  assertprints "1,234,567" "printNumber(1234567)"
-   36:  assertflush
+   35:  assertprints *tmp6 "1,234,567" "printNumber(1234567)"
+   36:  assertflush *tmp7
    37:  print "{2}"
    38:  op floor :formatNumber:n 1234567 0
    39:  format "-{2}"
         label *label290
    40:  op mod :formatNumber:mod :formatNumber:n 1000
-   41:  select *tmp22 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
-   42:  select *tmp20 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp22
-   43:  format *tmp20
+   41:  select *tmp59 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
+   42:  select *tmp57 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp59
+   43:  format *tmp57
    44:  format :formatNumber:mod
    45:  op idiv :formatNumber:n :formatNumber:n 1000
    46:  jump *label290 greaterThan :formatNumber:n 999
    47:  format :formatNumber:n
-   48:  assertprints "-1,234,567" "printNumber(-1234567)"
-   49:  assertflush
+   48:  assertprints *tmp7 "-1,234,567" "printNumber(-1234567)"
+   49:  assertflush *tmp8
    50:  print "{2}"
    51:  op floor :formatNumber:n 9009099999 0
         label *label299
    52:  op mod :formatNumber:mod :formatNumber:n 1000
-   53:  select *tmp22 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
-   54:  select *tmp20 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp22
-   55:  format *tmp20
+   53:  select *tmp59 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
+   54:  select *tmp57 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp59
+   55:  format *tmp57
    56:  format :formatNumber:mod
    57:  op idiv :formatNumber:n :formatNumber:n 1000
    58:  jump *label299 greaterThan :formatNumber:n 999
    59:  format :formatNumber:n
-   60:  assertprints "9,009,099,999" "printNumber(9009099999)"
-   61:  assertflush
+   60:  assertprints *tmp8 "9,009,099,999" "printNumber(9009099999)"
+   61:  assertflush *tmp9
    62:  print "{2}"
    63:  set :formatBinaryNumber:digits 0
    64:  op floor :formatBinaryNumber:n 0b1001 0
         label *label208
-   65:  op and *tmp27 :formatBinaryNumber:n 1
+   65:  op and *tmp64 :formatBinaryNumber:n 1
    66:  format "{2}{1}"
-   67:  format *tmp27
+   67:  format *tmp64
    68:  op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
    69:  op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
    70:  jump *label208 greaterThan :formatBinaryNumber:n 0
@@ -610,15 +610,15 @@ Final code before resolving virtual instructions:
    74:  jump *label212 greaterThan :formatBinaryNumber:digits 0
         label *label214
    75:  format "0b"
-   76:  assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
-   77:  assertflush
+   76:  assertprints *tmp9 "0b1001" "printBinaryNumber(0b1001, 0)"
+   77:  assertflush *tmp10
    78:  print "{2}"
    79:  set :formatBinaryNumber:digits 6
    80:  op floor :formatBinaryNumber:n 0b1010 0
         label *label220
-   81:  op and *tmp27 :formatBinaryNumber:n 1
+   81:  op and *tmp64 :formatBinaryNumber:n 1
    82:  format "{2}{1}"
-   83:  format *tmp27
+   83:  format *tmp64
    84:  op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
    85:  op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
    86:  jump *label220 greaterThan :formatBinaryNumber:n 0
@@ -629,16 +629,16 @@ Final code before resolving virtual instructions:
    90:  jump *label224 greaterThan :formatBinaryNumber:digits 0
         label *label226
    91:  format "0b"
-   92:  assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
-   93:  assertflush
+   92:  assertprints *tmp10 "0b001010" "printBinaryNumber(0b1010, 6)"
+   93:  assertflush *tmp11
    94:  print "{2}"
    95:  set :formatBinaryNumber:digits 6
    96:  format "-{2}"
    97:  op floor :formatBinaryNumber:n 10 0
         label *label232
-   98:  op and *tmp27 :formatBinaryNumber:n 1
+   98:  op and *tmp64 :formatBinaryNumber:n 1
    99:  format "{2}{1}"
-  100:  format *tmp27
+  100:  format *tmp64
   101:  op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
   102:  op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
   103:  jump *label232 greaterThan :formatBinaryNumber:n 0
@@ -649,8 +649,8 @@ Final code before resolving virtual instructions:
   107:  jump *label236 greaterThan :formatBinaryNumber:digits 0
         label *label238
   108:  format "0b"
-  109:  assertprints "-0b001010" "printBinaryNumber(-0b1010, 6)"
-  110:  assertflush
+  109:  assertprints *tmp11 "-0b001010" "printBinaryNumber(-0b1010, 6)"
+  110:  assertflush *tmp12
   111:  print "{2}"
   112:  set :formatHexNumber:digits 0
   113:  op floor :formatHexNumber:n 0xABCDEF 0
@@ -691,8 +691,8 @@ Final code before resolving virtual instructions:
   137:  jump *label467 greaterThan :formatHexNumber:digits 0
         label *label469
   138:  format "0x"
-  139:  assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
-  140:  assertflush
+  139:  assertprints *tmp12 "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
+  140:  assertflush *tmp13
   141:  print "{2}"
   142:  set :formatHexNumber:digits 0
   143:  op floor :formatHexNumber:n 0x1234567890 0
@@ -733,8 +733,8 @@ Final code before resolving virtual instructions:
   167:  jump *label495 greaterThan :formatHexNumber:digits 0
         label *label497
   168:  format "0x"
-  169:  assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
-  170:  assertflush
+  169:  assertprints *tmp13 "0x1234567890" "printHexNumber(0x1234567890, 0)"
+  170:  assertflush *tmp14
   171:  print "{2}"
   172:  set :formatHexNumber:digits 8
   173:  op floor :formatHexNumber:n 0xAABBCC 0
@@ -775,8 +775,8 @@ Final code before resolving virtual instructions:
   197:  jump *label523 greaterThan :formatHexNumber:digits 0
         label *label525
   198:  format "0x"
-  199:  assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
-  200:  assertflush
+  199:  assertprints *tmp14 "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
+  200:  assertflush *tmp15
   201:  print "{2}"
   202:  set :formatHexNumber:digits 8
   203:  format "-{2}"
@@ -818,85 +818,122 @@ Final code before resolving virtual instructions:
   228:  jump *label551 greaterThan :formatHexNumber:digits 0
         label *label553
   229:  format "0x"
-  230:  assertprints "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
-  231:  assertflush
+  230:  assertprints *tmp15 "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
+  231:  assertflush *tmp16
   232:  print null
-  233:  assertprints "null" "printExactFast(null)"
-  234:  assertflush
+  233:  assertprints *tmp16 "null" "printExactFast(null)"
+  234:  assertflush *tmp17
   235:  print 0
-  236:  assertprints "0" "printExactFast(0)"
-  237:  assertflush
+  236:  assertprints *tmp17 "0" "printExactFast(0)"
+  237:  assertflush *tmp18
   238:  print 1
-  239:  assertprints "1" "printExactFast(1)"
-  240:  assertflush
+  239:  assertprints *tmp18 "1" "printExactFast(1)"
+  240:  assertflush *tmp19
   241:  print "1.000000100000000"
-  242:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
-  243:  assertflush
+  242:  assertprints *tmp19 "1.000000100000000" "printExactFast(1.0000001)"
+  243:  assertflush *tmp20
   244:  print "3.000000070000000"
-  245:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
-  246:  assertflush
+  245:  assertprints *tmp20 "3.000000070000000" "printExactFast(3.00000007)"
+  246:  assertflush *tmp21
   247:  print "3E50"
-  248:  assertprints "3E50" "printExactFast(3e50)"
-  249:  assertflush
+  248:  assertprints *tmp21 "3E50" "printExactFast(3e50)"
+  249:  assertflush *tmp22
   250:  print 1.0123456789
-  251:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
-  252:  assertflush
+  251:  assertprints *tmp22 "1.0123456789" "printExactFast(1.0123456789)"
+  252:  assertflush *tmp23
   253:  print "1.000000099999999E20"
-  254:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
-  255:  assertflush
+  254:  assertprints *tmp23 "1.000000099999999E20" "printExactFast(1.0000001e20)"
+  255:  assertflush *tmp24
   256:  print "1.2345000000000002E-50"
-  257:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
-  258:  assertflush
+  257:  assertprints *tmp24 "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
+  258:  assertflush *tmp25
   259:  print "-1.2345000000000002E-50"
-  260:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
-  261:  assertflush
+  260:  assertprints *tmp25 "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
+  261:  assertflush *tmp26
   262:  print null
-  263:  assertprints "null" "printExactSlow(null)"
-  264:  assertflush
+  263:  assertprints *tmp26 "null" "printExactSlow(null)"
+  264:  assertflush *tmp27
   265:  print 0
-  266:  assertprints "0" "printExactSlow(0)"
-  267:  assertflush
+  266:  assertprints *tmp27 "0" "printExactSlow(0)"
+  267:  assertflush *tmp28
   268:  print "1.000000000000000"
-  269:  assertprints "1.000000000000000" "printExactSlow(1)"
-  270:  assertflush
+  269:  assertprints *tmp28 "1.000000000000000" "printExactSlow(1)"
+  270:  assertflush *tmp29
   271:  print "1.000000100000000"
-  272:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
-  273:  assertflush
+  272:  assertprints *tmp29 "1.000000100000000" "printExactSlow(1.0000001)"
+  273:  assertflush *tmp30
   274:  print "3.000000070000000"
-  275:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
-  276:  assertflush
+  275:  assertprints *tmp30 "3.000000070000000" "printExactSlow(3.00000007)"
+  276:  assertflush *tmp31
   277:  print "3.000000000000000E50"
-  278:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
-  279:  assertflush
+  278:  assertprints *tmp31 "3.000000000000000E50" "printExactSlow(3e50)"
+  279:  assertflush *tmp32
   280:  print "1.012345678900000"
-  281:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
-  282:  assertflush
+  281:  assertprints *tmp32 "1.012345678900000" "printExactSlow(1.0123456789)"
+  282:  assertflush *tmp33
   283:  print "1.000000099999999E20"
-  284:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
-  285:  assertflush
+  284:  assertprints *tmp33 "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+  285:  assertflush *tmp34
   286:  print "1.234500000000000E-50"
-  287:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
-  288:  assertflush
+  287:  assertprints *tmp34 "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
+  288:  assertflush *tmp35
   289:  print "-1.234500000000000E-50"
-  290:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
-  291:  assertflush
+  290:  assertprints *tmp35 "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
+  291:  assertflush *tmp36
   292:  print "1111111111111111111111110000111100000000000000000000000000000000"
-  293:  assertprints "1111111111111111111111110000111100000000000000000000000000000000" "printExactBinary(0xFFFFFF0F << 32)"
-  294:  assertflush
+  293:  assertprints *tmp36 "1111111111111111111111110000111100000000000000000000000000000000" "printExactBinary(0xFFFFFF0F << 32)"
+  294:  assertflush *tmp42
   295:  print "FFFFFF0F00000000"
-  296:  assertprints "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
+  296:  assertprints *tmp42 "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
   297:  stop
 
 
         'stop' instruction encountered, dumping variable values:
 @counter: 297.0
+*tmp0: 0.0
+*tmp2: 0.0
 :formatNumber:n: 9.0
+*tmp3: 0.0
+*tmp4: 0.0
+*tmp5: 0.0
+*tmp6: 0.0
 :formatNumber:mod: 9.0
-*tmp22: {2},00{1}
-*tmp20: {2},00{1}
+*tmp59: {2},00{1}
+*tmp57: {2},00{1}
+*tmp7: 0.0
+*tmp8: 0.0
+*tmp9: 0.0
 :formatBinaryNumber:digits: 0.0
 :formatBinaryNumber:n: 0.0
-*tmp27: 1.0
+*tmp64: 1.0
+*tmp10: 0.0
+*tmp11: 0.0
+*tmp12: 0.0
 :formatHexNumber:digits: 0.0
 :formatHexNumber:n: 0.0
 :formatHexNumber:digit: 10.0
+*tmp13: 0.0
+*tmp14: 0.0
+*tmp15: 0.0
+*tmp16: 0.0
+*tmp17: 0.0
+*tmp18: 0.0
+*tmp19: 0.0
+*tmp20: 0.0
+*tmp21: 0.0
+*tmp22: 0.0
+*tmp23: 0.0
+*tmp24: 0.0
+*tmp25: 0.0
+*tmp26: 0.0
+*tmp27: 0.0
+*tmp28: 0.0
+*tmp29: 0.0
+*tmp30: 0.0
+*tmp31: 0.0
+*tmp32: 0.0
+*tmp33: 0.0
+*tmp34: 0.0
+*tmp35: 0.0
+*tmp36: 0.0
+*tmp42: 0.0

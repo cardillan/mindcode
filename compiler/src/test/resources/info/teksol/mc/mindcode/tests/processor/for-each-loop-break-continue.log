@@ -16,32 +16,32 @@ Pass 1: speed optimization selection (cost limit 951):
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructions):
  
-    48 op equal *tmp6 *tmp5 3
-    49 jump *label15 equal *tmp6 false
+    48 op equal *tmp7 *tmp6 3
+    49 jump *label15 equal *tmp7 false
     50 jump *label3 always
--    * set *tmp7 null
+-    * set *tmp8 null
     51 jump *label16 always
     52 label *label15
--    * set *tmp7 null
+-    * set *tmp8 null
     53 label *label16
     54 print :test:i
     55 print "|"
  
-    61 op equal *tmp9 *tmp8 12
-    62 jump *label18 equal *tmp9 false
+    61 op equal *tmp10 *tmp9 12
+    62 jump *label18 equal *tmp10 false
     63 jump *label4 always
--    * set *tmp10 null
+-    * set *tmp11 null
     64 jump *label19 always
     65 label *label18
--    * set *tmp10 null
+-    * set *tmp11 null
     66 label *label19
     67 label *label3
-    68 multijump *tmp1 0 0 (m:marker0)
+    68 multijump *tmp2 0 0 (m:marker0)
     69 multilabel *label14 (m:marker0)
     70 label *label4
--    * set *tmp0 null
+-    * set *tmp1 null
     71 label *label1
-    72 assertprints "1|2|5|8|12|" "iterated-for-loop-break-continue"
+    72 assertprints *tmp0 "1|2|5|8|12|" "iterated-for-loop-break-continue"
     73 stop
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
@@ -49,50 +49,50 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
      6 setaddr :d*retaddr *label6 (h:*label6)
      7 call *label0 *invalid :d*retval (m:*label6) (h:*label6)
      8 label *label6
--    * set *tmp2 :d*retval
--    * set :test:i *tmp2
+-    * set *tmp3 :d*retval
+-    * set :test:i *tmp3
 +    9 set :test:i :d*retval
-    10 setaddr *tmp1 *label7
+    10 setaddr *tmp2 *label7
     11 jump *label2 always
     12 multilabel *label7 (m:marker0)
  
     18 setaddr :d*retaddr *label9 (h:*label9)
     19 call *label0 *invalid :d*retval (m:*label9) (h:*label9)
     20 label *label9
--    * set *tmp3 :d*retval
--    * set :test:i *tmp3
+-    * set *tmp4 :d*retval
+-    * set :test:i *tmp4
 +   21 set :test:i :d*retval
-    22 setaddr *tmp1 *label10
+    22 setaddr *tmp2 *label10
     23 jump *label2 always
     24 multilabel *label10 (m:marker0)
  
     30 setaddr :d*retaddr *label12 (h:*label12)
     31 call *label0 *invalid :d*retval (m:*label12) (h:*label12)
     32 label *label12
--    * set *tmp4 :d*retval
--    * set :test:i *tmp4
+-    * set *tmp5 :d*retval
+-    * set :test:i *tmp5
 +   33 set :test:i :d*retval
-    34 setaddr *tmp1 *label13
+    34 setaddr *tmp2 *label13
     35 jump *label2 always
     36 multilabel *label13 (m:marker0)
  
     41 setaddr :d*retaddr *label17 (h:*label17)
     42 call *label0 *invalid :d*retval (m:*label17) (h:*label17)
     43 label *label17
--    * set *tmp5 :d*retval
--    * op equal *tmp6 *tmp5 3
-+   44 op equal *tmp6 :d*retval 3
-    45 jump *label15 equal *tmp6 false
+-    * set *tmp6 :d*retval
+-    * op equal *tmp7 *tmp6 3
++   44 op equal *tmp7 :d*retval 3
+    45 jump *label15 equal *tmp7 false
     46 jump *label3 always
     47 jump *label16 always
  
     53 setaddr :d*retaddr *label20 (h:*label20)
     54 call *label0 *invalid :d*retval (m:*label20) (h:*label20)
     55 label *label20
--    * set *tmp8 :d*retval
--    * op equal *tmp9 *tmp8 12
-+   56 op equal *tmp9 :d*retval 12
-    57 jump *label18 equal *tmp9 false
+-    * set *tmp9 :d*retval
+-    * op equal *tmp10 *tmp9 12
++   56 op equal *tmp10 :d*retval 12
+    57 jump *label18 equal *tmp10 false
     58 jump *label4 always
     59 jump *label19 always
 
@@ -101,8 +101,8 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-2
     41 setaddr :d*retaddr *label17 (h:*label17)
     42 call *label0 *invalid :d*retval (m:*label17) (h:*label17)
     43 label *label17
--    * op equal *tmp6 :d*retval 3
--    * jump *label15 equal *tmp6 false
+-    * op equal *tmp7 :d*retval 3
+-    * jump *label15 equal *tmp7 false
 +   44 jump *label15 notEqual :d*retval 3
     45 jump *label3 always
     46 jump *label16 always
@@ -111,8 +111,8 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-2
     52 setaddr :d*retaddr *label20 (h:*label20)
     53 call *label0 *invalid :d*retval (m:*label20) (h:*label20)
     54 label *label20
--    * op equal *tmp9 :d*retval 12
--    * jump *label18 equal *tmp9 false
+-    * op equal *tmp10 :d*retval 12
+-    * jump *label18 equal *tmp10 false
 +   55 jump *label18 notEqual :d*retval 12
     56 jump *label4 always
     57 jump *label19 always
@@ -137,9 +137,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     58 label *label3
 
 Modifications by Unroll iteration loop at line 4:5 (+58 instructions):
-     0 assertflush
+     0 assertflush *tmp0
 -    * set :test:i 1
--    * setaddr *tmp1 *label5
+-    * setaddr *tmp2 *label5
 -    * jump *label2 always
 -    * multilabel *label5 (m:marker0)
 -    * set :d:n 2
@@ -147,11 +147,11 @@ Modifications by Unroll iteration loop at line 4:5 (+58 instructions):
 -    * call *label0 *invalid :d*retval (m:*label6) (h:*label6)
 -    * label *label6
 -    * set :test:i :d*retval
--    * setaddr *tmp1 *label7
+-    * setaddr *tmp2 *label7
 -    * jump *label2 always
 -    * multilabel *label7 (m:marker0)
 -    * set :test:i 3
--    * setaddr *tmp1 *label8
+-    * setaddr *tmp2 *label8
 -    * jump *label2 always
 -    * multilabel *label8 (m:marker0)
 -    * set :d:n 5
@@ -159,11 +159,11 @@ Modifications by Unroll iteration loop at line 4:5 (+58 instructions):
 -    * call *label0 *invalid :d*retval (m:*label9) (h:*label9)
 -    * label *label9
 -    * set :test:i :d*retval
--    * setaddr *tmp1 *label10
+-    * setaddr *tmp2 *label10
 -    * jump *label2 always
 -    * multilabel *label10 (m:marker0)
 -    * set :test:i 8
--    * setaddr *tmp1 *label11
+-    * setaddr *tmp2 *label11
 -    * jump *label2 always
 -    * multilabel *label11 (m:marker0)
 -    * set :d:n 12
@@ -171,11 +171,11 @@ Modifications by Unroll iteration loop at line 4:5 (+58 instructions):
 -    * call *label0 *invalid :d*retval (m:*label12) (h:*label12)
 -    * label *label12
 -    * set :test:i :d*retval
--    * setaddr *tmp1 *label13
+-    * setaddr *tmp2 *label13
 -    * jump *label2 always
 -    * multilabel *label13 (m:marker0)
 -    * set :test:i 15
--    * setaddr *tmp1 *label14
+-    * setaddr *tmp2 *label14
 -    * label *label2
 -    * set :d:n :test:i
 -    * setaddr :d*retaddr *label17 (h:*label17)
@@ -196,7 +196,7 @@ Modifications by Unroll iteration loop at line 4:5 (+58 instructions):
 -    * label *label18
 -    * label *label19
 -    * label *label3
--    * multijump *tmp1 0 0 (m:marker0)
+-    * multijump *tmp2 0 0 (m:marker0)
 -    * multilabel *label14 (m:marker0)
 -    * label *label4
 +    1 set :test:i 1
@@ -360,11 +360,11 @@ Modifications by Unroll iteration loop at line 4:5 (+58 instructions):
 +  159 label *label92
 +  160 label *label4
    161 label *label1
-   162 assertprints "1|2|5|8|12|" "iterated-for-loop-break-continue"
+   162 assertprints *tmp0 "1|2|5|8|12|" "iterated-for-loop-break-continue"
    163 stop
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
-     0 assertflush
+     0 assertflush *tmp0
      1 set :test:i 1
      2 label *label22
 -    * set :d:n :test:i
@@ -476,7 +476,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    154 label *label89
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
-     0 assertflush
+     0 assertflush *tmp0
 -    * set :test:i 1
      1 label *label22
      2 set :d:n 1
@@ -518,7 +518,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    153 label *label92
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
-     0 assertflush
+     0 assertflush *tmp0
 -    * label *label22
      1 set :d:n 1
      2 setaddr :d*retaddr *label23 (h:*label23)
@@ -662,7 +662,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    131 label *label92
    132 label *label4
 -    * label *label1
-   133 assertprints "1|2|5|8|12|" "iterated-for-loop-break-continue"
+   133 assertprints *tmp0 "1|2|5|8|12|" "iterated-for-loop-break-continue"
    134 stop
    135 end
    136 label *label0
@@ -844,7 +844,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
 
 Final code before resolving virtual instructions:
 
-assertflush
+assertflush *tmp0
 set :d:n 1
 setaddr :d*retaddr *label23
 call *label0 *invalid :d*retval
@@ -947,7 +947,7 @@ call *label0 *invalid :d*retval
 label *label89
 label *label92
 label *label4
-assertprints "1|2|5|8|12|" "iterated-for-loop-break-continue"
+assertprints *tmp0 "1|2|5|8|12|" "iterated-for-loop-break-continue"
 stop
 end
 label *label0

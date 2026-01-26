@@ -1,71 +1,71 @@
-assertflush
+assertflush *tmp0
 print "1\n2\n3\n"
-assertprints "1\n2\n3\n" "printLines(1, 2, 3)"
-assertflush
+assertprints *tmp0 "1\n2\n3\n" "printLines(1, 2, 3)"
+assertflush *tmp2
 print "{2}"
 op floor :formatNumber:n 0 0
 format :formatNumber:n
-assertprints "0" "printNumber(null)"
-assertflush
+assertprints *tmp2 "0" "printNumber(null)"
+assertflush *tmp3
 print "{2}"
 op floor :formatNumber:n 1 0
 format :formatNumber:n
-assertprints "1" "printNumber(1)"
-assertflush
+assertprints *tmp3 "1" "printNumber(1)"
+assertflush *tmp4
 print "{2}"
 op floor :formatNumber:n 1.5 0
 format :formatNumber:n
-assertprints "1" "printNumber(1.5)"
-assertflush
+assertprints *tmp4 "1" "printNumber(1.5)"
+assertflush *tmp5
 print "{2}"
 op floor :formatNumber:n 1.5 0
 format "-{2}"
 format :formatNumber:n
-assertprints "-1" "printNumber(-1.5)"
-assertflush
+assertprints *tmp5 "-1" "printNumber(-1.5)"
+assertflush *tmp6
 print "{2}"
 op floor :formatNumber:n 1234567 0
 op mod :formatNumber:mod :formatNumber:n 1000
-select *tmp22 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
-select *tmp20 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp22
-format *tmp20
+select *tmp59 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
+select *tmp57 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp59
+format *tmp57
 format :formatNumber:mod
 op idiv :formatNumber:n :formatNumber:n 1000
 jump 27 greaterThan :formatNumber:n 999
 format :formatNumber:n
-assertprints "1,234,567" "printNumber(1234567)"
-assertflush
+assertprints *tmp6 "1,234,567" "printNumber(1234567)"
+assertflush *tmp7
 print "{2}"
 op floor :formatNumber:n 1234567 0
 format "-{2}"
 op mod :formatNumber:mod :formatNumber:n 1000
-select *tmp22 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
-select *tmp20 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp22
-format *tmp20
+select *tmp59 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
+select *tmp57 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp59
+format *tmp57
 format :formatNumber:mod
 op idiv :formatNumber:n :formatNumber:n 1000
 jump 40 greaterThan :formatNumber:n 999
 format :formatNumber:n
-assertprints "-1,234,567" "printNumber(-1234567)"
-assertflush
+assertprints *tmp7 "-1,234,567" "printNumber(-1234567)"
+assertflush *tmp8
 print "{2}"
 op floor :formatNumber:n 9009099999 0
 op mod :formatNumber:mod :formatNumber:n 1000
-select *tmp22 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
-select *tmp20 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp22
-format *tmp20
+select *tmp59 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
+select *tmp57 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp59
+format *tmp57
 format :formatNumber:mod
 op idiv :formatNumber:n :formatNumber:n 1000
 jump 52 greaterThan :formatNumber:n 999
 format :formatNumber:n
-assertprints "9,009,099,999" "printNumber(9009099999)"
-assertflush
+assertprints *tmp8 "9,009,099,999" "printNumber(9009099999)"
+assertflush *tmp9
 print "{2}"
 set :formatBinaryNumber:digits 0
 op floor :formatBinaryNumber:n 0b1001 0
-op and *tmp27 :formatBinaryNumber:n 1
+op and *tmp64 :formatBinaryNumber:n 1
 format "{2}{1}"
-format *tmp27
+format *tmp64
 op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
 op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
 jump 65 greaterThan :formatBinaryNumber:n 0
@@ -74,14 +74,14 @@ format "{2}0"
 op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
 jump 72 greaterThan :formatBinaryNumber:digits 0
 format "0b"
-assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
-assertflush
+assertprints *tmp9 "0b1001" "printBinaryNumber(0b1001, 0)"
+assertflush *tmp10
 print "{2}"
 set :formatBinaryNumber:digits 6
 op floor :formatBinaryNumber:n 0b1010 0
-op and *tmp27 :formatBinaryNumber:n 1
+op and *tmp64 :formatBinaryNumber:n 1
 format "{2}{1}"
-format *tmp27
+format *tmp64
 op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
 op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
 jump 81 greaterThan :formatBinaryNumber:n 0
@@ -90,15 +90,15 @@ format "{2}0"
 op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
 jump 88 greaterThan :formatBinaryNumber:digits 0
 format "0b"
-assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
-assertflush
+assertprints *tmp10 "0b001010" "printBinaryNumber(0b1010, 6)"
+assertflush *tmp11
 print "{2}"
 set :formatBinaryNumber:digits 6
 format "-{2}"
 op floor :formatBinaryNumber:n 10 0
-op and *tmp27 :formatBinaryNumber:n 1
+op and *tmp64 :formatBinaryNumber:n 1
 format "{2}{1}"
-format *tmp27
+format *tmp64
 op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
 op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
 jump 98 greaterThan :formatBinaryNumber:n 0
@@ -107,8 +107,8 @@ format "{2}0"
 op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
 jump 105 greaterThan :formatBinaryNumber:digits 0
 format "0b"
-assertprints "-0b001010" "printBinaryNumber(-0b1010, 6)"
-assertflush
+assertprints *tmp11 "-0b001010" "printBinaryNumber(-0b1010, 6)"
+assertflush *tmp12
 print "{2}"
 set :formatHexNumber:digits 0
 op floor :formatHexNumber:n 0xABCDEF 0
@@ -137,8 +137,8 @@ format "{2}0"
 op sub :formatHexNumber:digits :formatHexNumber:digits 1
 jump 135 greaterThan :formatHexNumber:digits 0
 format "0x"
-assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
-assertflush
+assertprints *tmp12 "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
+assertflush *tmp13
 print "{2}"
 set :formatHexNumber:digits 0
 op floor :formatHexNumber:n 0x1234567890 0
@@ -167,8 +167,8 @@ format "{2}0"
 op sub :formatHexNumber:digits :formatHexNumber:digits 1
 jump 165 greaterThan :formatHexNumber:digits 0
 format "0x"
-assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
-assertflush
+assertprints *tmp13 "0x1234567890" "printHexNumber(0x1234567890, 0)"
+assertflush *tmp14
 print "{2}"
 set :formatHexNumber:digits 8
 op floor :formatHexNumber:n 0xAABBCC 0
@@ -197,8 +197,8 @@ format "{2}0"
 op sub :formatHexNumber:digits :formatHexNumber:digits 1
 jump 195 greaterThan :formatHexNumber:digits 0
 format "0x"
-assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
-assertflush
+assertprints *tmp14 "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
+assertflush *tmp15
 print "{2}"
 set :formatHexNumber:digits 8
 format "-{2}"
@@ -228,72 +228,72 @@ format "{2}0"
 op sub :formatHexNumber:digits :formatHexNumber:digits 1
 jump 226 greaterThan :formatHexNumber:digits 0
 format "0x"
-assertprints "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
-assertflush
+assertprints *tmp15 "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
+assertflush *tmp16
 print null
-assertprints "null" "printExactFast(null)"
-assertflush
+assertprints *tmp16 "null" "printExactFast(null)"
+assertflush *tmp17
 print 0
-assertprints "0" "printExactFast(0)"
-assertflush
+assertprints *tmp17 "0" "printExactFast(0)"
+assertflush *tmp18
 print 1
-assertprints "1" "printExactFast(1)"
-assertflush
+assertprints *tmp18 "1" "printExactFast(1)"
+assertflush *tmp19
 print "1.000000100000000"
-assertprints "1.000000100000000" "printExactFast(1.0000001)"
-assertflush
+assertprints *tmp19 "1.000000100000000" "printExactFast(1.0000001)"
+assertflush *tmp20
 print "3.000000070000000"
-assertprints "3.000000070000000" "printExactFast(3.00000007)"
-assertflush
+assertprints *tmp20 "3.000000070000000" "printExactFast(3.00000007)"
+assertflush *tmp21
 print "3E50"
-assertprints "3E50" "printExactFast(3e50)"
-assertflush
+assertprints *tmp21 "3E50" "printExactFast(3e50)"
+assertflush *tmp22
 print 1.0123456789
-assertprints "1.0123456789" "printExactFast(1.0123456789)"
-assertflush
+assertprints *tmp22 "1.0123456789" "printExactFast(1.0123456789)"
+assertflush *tmp23
 print "1.000000099999999E20"
-assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
-assertflush
+assertprints *tmp23 "1.000000099999999E20" "printExactFast(1.0000001e20)"
+assertflush *tmp24
 print "1.2345000000000002E-50"
-assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
-assertflush
+assertprints *tmp24 "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
+assertflush *tmp25
 print "-1.2345000000000002E-50"
-assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
-assertflush
+assertprints *tmp25 "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
+assertflush *tmp26
 print null
-assertprints "null" "printExactSlow(null)"
-assertflush
+assertprints *tmp26 "null" "printExactSlow(null)"
+assertflush *tmp27
 print 0
-assertprints "0" "printExactSlow(0)"
-assertflush
+assertprints *tmp27 "0" "printExactSlow(0)"
+assertflush *tmp28
 print "1.000000000000000"
-assertprints "1.000000000000000" "printExactSlow(1)"
-assertflush
+assertprints *tmp28 "1.000000000000000" "printExactSlow(1)"
+assertflush *tmp29
 print "1.000000100000000"
-assertprints "1.000000100000000" "printExactSlow(1.0000001)"
-assertflush
+assertprints *tmp29 "1.000000100000000" "printExactSlow(1.0000001)"
+assertflush *tmp30
 print "3.000000070000000"
-assertprints "3.000000070000000" "printExactSlow(3.00000007)"
-assertflush
+assertprints *tmp30 "3.000000070000000" "printExactSlow(3.00000007)"
+assertflush *tmp31
 print "3.000000000000000E50"
-assertprints "3.000000000000000E50" "printExactSlow(3e50)"
-assertflush
+assertprints *tmp31 "3.000000000000000E50" "printExactSlow(3e50)"
+assertflush *tmp32
 print "1.012345678900000"
-assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
-assertflush
+assertprints *tmp32 "1.012345678900000" "printExactSlow(1.0123456789)"
+assertflush *tmp33
 print "1.000000099999999E20"
-assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
-assertflush
+assertprints *tmp33 "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+assertflush *tmp34
 print "1.234500000000000E-50"
-assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
-assertflush
+assertprints *tmp34 "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
+assertflush *tmp35
 print "-1.234500000000000E-50"
-assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
-assertflush
+assertprints *tmp35 "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
+assertflush *tmp36
 print "1111111111111111111111110000111100000000000000000000000000000000"
-assertprints "1111111111111111111111110000111100000000000000000000000000000000" "printExactBinary(0xFFFFFF0F << 32)"
-assertflush
+assertprints *tmp36 "1111111111111111111111110000111100000000000000000000000000000000" "printExactBinary(0xFFFFFF0F << 32)"
+assertflush *tmp42
 print "FFFFFF0F00000000"
-assertprints "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
+assertprints *tmp42 "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
 stop
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

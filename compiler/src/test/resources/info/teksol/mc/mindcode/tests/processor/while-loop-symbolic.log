@@ -12,9 +12,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructi
     17 label *label3
     18 jump *label2 always
     19 label *label4
--    * set *tmp0 null
+-    * set *tmp1 null
     20 label *label1
-    21 assertprints "0|1|3|6|10|15|21|28|36|45|" "while-loop"
+    21 assertprints *tmp0 "0|1|3|6|10|15|21|28|36|45|" "while-loop"
     22 stop
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
@@ -22,25 +22,25 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
      1 # "Function: def test()"
      2 set :d:n 0
      3 call *label0 :d*retaddr :d*retval
--    * set *tmp1 :d*retval
--    * set :test:j *tmp1
+-    * set *tmp2 :d*retval
+-    * set :test:j *tmp2
 +    4 set :test:j :d*retval
      5 set :d:n :test:j
      6 call *label0 :d*retaddr :d*retval
--    * set *tmp2 :d*retval
--    * set :test:i *tmp2
+-    * set *tmp3 :d*retval
+-    * set :test:i *tmp3
 +    7 set :test:i :d*retval
      8 label *label2
-     9 op lessThan *tmp3 :test:i 10
-    10 jump *label4 equal *tmp3 false
+     9 op lessThan *tmp4 :test:i 10
+    10 jump *label4 equal *tmp4 false
 
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
      6 call *label0 :d*retaddr :d*retval
      7 set :test:i :d*retval
      8 label *label2
--    * op lessThan *tmp3 :test:i 10
--    * jump *label4 equal *tmp3 false
+-    * op lessThan *tmp4 :test:i 10
+-    * jump *label4 equal *tmp4 false
 +    9 jump *label4 greaterThanEq :test:i 10
     10 op add :test:j :test:j :test:i
     11 print :test:j
@@ -72,7 +72,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
 +   16 jump *label6 lessThan :test:i 10
     17 label *label4
     18 label *label1
-    19 assertprints "0|1|3|6|10|15|21|28|36|45|" "while-loop"
+    19 assertprints *tmp0 "0|1|3|6|10|15|21|28|36|45|" "while-loop"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
@@ -101,7 +101,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
     14 jump *label6 lessThan :test:i 10
     15 label *label4
 -    * label *label1
-    16 assertprints "0|1|3|6|10|15|21|28|36|45|" "while-loop"
+    16 assertprints *tmp0 "0|1|3|6|10|15|21|28|36|45|" "while-loop"
     17 stop
     18 end
     19 label *label0
@@ -113,7 +113,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 
 Final code before resolving virtual instructions:
 
-assertflush
+assertflush *tmp0
 # "Function: def test()"
 set :d:n 0
 call *label0 :d*retaddr :d*retval
@@ -129,7 +129,7 @@ print "|"
 op add :test:i :test:i 1
 jump *label6 lessThan :test:i 10
 label *label4
-assertprints "0|1|3|6|10|15|21|28|36|45|" "while-loop"
+assertprints *tmp0 "0|1|3|6|10|15|21|28|36|45|" "while-loop"
 stop
 end
 label *label0

@@ -39,7 +39,7 @@ homogenous-4-max (limit    0):                     46     8403     100.0%   9C9C
 homogenous-4-max (limit   60):                     41     2474     100.0%   B7568649521EA469   18C54043D64C175C
 homogenous-4-max (limit  100):                     41     2474     100.0%   D4D947D3AB928E93   18C54043D64C175C
 homogenous-4-max (limit  500):                    281     2258     100.0%   996F5413EFC39FA2   7EE8D18292D2DA72
-mixed-2-null (limit    0):                        127    16919     100.0%   47B163D7C16232BD   44122883F4780039
-mixed-2-null (limit  140):                        102     2667     100.0%   39246273B3B886CD   61C968C6F44CA222
-mixed-2-null (limit  230):                        166     2559     100.0%   DA4AEE9140FFCED7   5610E09160DF193D
-mixed-2-null (limit  500):                        326     2208     100.0%   A13B814103D50539   71DD7CE303A2177F
+mixed-2-null (limit    0):                        127    16919     100.0%   47B163D7C16232BD   93F60EF4728ED527
+mixed-2-null (limit  140):                        102     2667     100.0%   39246273B3B886CD   F69E9E2D5669DEE9
+mixed-2-null (limit  230):                        166     2559     100.0%   DA4AEE9140FFCED7   F4C53E1CAEE8A36D
+mixed-2-null (limit  500):                        326     2208     100.0%   A13B814103D50539   45865CB170851644

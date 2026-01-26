@@ -1,35 +1,35 @@
 set p 0
-assertflush
+assertflush *tmp2
 print "xxxxx"
-assertprints "xxxxx" "Array fill"
+assertprints *tmp2 "xxxxx" "Array fill"
 set .c*0 p
-op add *tmp4 p 1
-set .b*1 *tmp4
-set .c*1 *tmp4
-op add *tmp4 p 2
-set .b*2 *tmp4
-set .c*2 *tmp4
-op add *tmp4 p 3
-set .b*3 *tmp4
-set .c*3 *tmp4
-op add *tmp4 p 4
-set .b*4 *tmp4
-set .c*4 *tmp4
-op add *tmp4 p 5
-set .b*5 *tmp4
-set .c*5 *tmp4
-op add *tmp4 p 6
-set .b*6 *tmp4
-set .c*6 *tmp4
-op add *tmp4 p 7
-set .b*7 *tmp4
-set .c*7 *tmp4
-op add *tmp4 p 8
-set .b*8 *tmp4
-set .c*8 *tmp4
-op add *tmp4 p 9
-set .c*9 *tmp4
-set .b*0 *tmp4
+op add *tmp5 p 1
+set .b*1 *tmp5
+set .c*1 *tmp5
+op add *tmp5 p 2
+set .b*2 *tmp5
+set .c*2 *tmp5
+op add *tmp5 p 3
+set .b*3 *tmp5
+set .c*3 *tmp5
+op add *tmp5 p 4
+set .b*4 *tmp5
+set .c*4 *tmp5
+op add *tmp5 p 5
+set .b*5 *tmp5
+set .c*5 *tmp5
+op add *tmp5 p 6
+set .b*6 *tmp5
+set .c*6 *tmp5
+op add *tmp5 p 7
+set .b*7 *tmp5
+set .c*7 *tmp5
+op add *tmp5 p 8
+set .b*8 *tmp5
+set .c*8 *tmp5
+op add *tmp5 p 9
+set .c*9 *tmp5
+set .b*0 *tmp5
 set .b*9 p
 set :reverse:t .b*1
 set .b*1 .b*8
@@ -41,21 +41,21 @@ set :reverse:t .b*3
 set .b*3 .b*6
 set .b*6 :reverse:t
 set :reverse:t .b*4
-set *tmp14 .b*5
+set *tmp15 .b*5
 set .b*4 .b*5
 set .b*5 :reverse:t
-assertflush
-print *tmp4
+assertflush *tmp18
+print *tmp5
 print .b*1
 print .b*2
 print .b*3
-print *tmp14
+print *tmp15
 print :reverse:t
 print .b*6
 print .b*7
 print .b*8
 print p
-assertprints "9876543210" "Array reverse"
+assertprints *tmp18 "9876543210" "Array reverse"
 set :bubblesort:flag false
 set :bubblesort:a .b*0
 jump 65 lessThanEq .b*0 .b*1
@@ -165,7 +165,7 @@ set .b*1 .b*0
 set .b*0 :bubblesort:a
 set :bubblesort:flag true
 jump 58 notEqual :bubblesort:flag false
-assertflush
+assertflush *tmp43
 print .b*0
 print .b*1
 print .b*2
@@ -176,7 +176,7 @@ print .b*6
 print .b*7
 print .b*8
 print .b*9
-assertprints "0123456789" "Array sort 1"
+assertprints *tmp43 "0123456789" "Array sort 1"
 set :bubblesort.1:flag false
 set :bubblesort.1:a .b*0
 jump 189 greaterThanEq .b*0 .b*1
@@ -340,7 +340,7 @@ set .c*1 .c*0
 set .c*0 :bubblesort.1:v.1
 set :bubblesort.1:flag true
 jump 179 notEqual :bubblesort.1:flag false
-assertflush
+assertflush *tmp88
 print .c*0
 print .c*1
 print .c*2
@@ -351,4 +351,4 @@ print .c*6
 print .c*7
 print .c*8
 print .c*9
-assertprints "9876543210" "Array sort 2"
+assertprints *tmp88 "9876543210" "Array sort 2"

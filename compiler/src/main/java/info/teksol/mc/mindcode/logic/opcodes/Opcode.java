@@ -83,7 +83,7 @@ public enum Opcode {
     ASSERT_FLUSH    (NONE,   "assertflush",     1),
 
     /// Instruction supported by the Mlog Assertions mod.
-    ASSERT_BOUNDS   (NONE,   "assertBounds",    1),
+    ASSERT_BOUNDS   (NONE,   "assertbounds",    1),
     ERROR           (NONE,   "error",           1),
 
     // Virtual instructions - resolved when the final code is generated

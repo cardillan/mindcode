@@ -27,10 +27,10 @@ class BuiltinFunctionAssertsBuilderTest extends AbstractCodeGeneratorTest {
         assertCompilesTo("""
                         assertPrints("10", print(1, 0), "print test");
                         """,
-                createInstruction(ASSERT_FLUSH),
+                createInstruction(ASSERT_FLUSH, tmp(0)),
                 createInstruction(PRINT, "1"),
                 createInstruction(PRINT, "0"),
-                createInstruction(ASSERT_PRINTS, q("10"), q("print test"))
+                createInstruction(ASSERT_PRINTS, tmp(0), q("10"), q("print test"))
         );
     }
 }

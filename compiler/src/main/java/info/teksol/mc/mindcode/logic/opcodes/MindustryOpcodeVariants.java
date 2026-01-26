@@ -353,8 +353,8 @@ public class MindustryOpcodeVariants {
 
         // Unit testing support
         add(list, V6,  MAX, S, NONE, Opcode.ASSERT_EQUALS, in("expected"), in("actual"), in("title"));
-        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_PRINTS, in("expected"), in("title"));
-        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_FLUSH);
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_PRINTS, in("flushIndex"), in("expected"), in("title"));
+        add(list, V6,  MAX, S, NONE, Opcode.ASSERT_FLUSH, out("flushIndex"));
 
         // Assertions mod
         add(list, V6,  MAX, S, NONE, Opcode.ASSERT_BOUNDS,

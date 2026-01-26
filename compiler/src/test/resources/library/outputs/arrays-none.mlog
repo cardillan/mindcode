@@ -9,57 +9,57 @@ read @counter "ĮİĲĮİ" *tmp0
 write :fill:value @this .a*elem
 op add :fill:i :fill:i 1
 jump 3 always 0 0
-assertflush
+assertflush *tmp2
 print .a*0
 print .a*1
 print .a*2
 print .a*3
 print .a*4
-assertprints "xxxxx" "Array fill"
+assertprints *tmp2 "xxxxx" "Array fill"
 set :i 0
 jump 34 greaterThanEq :i 10
-set *tmp2 :i
-op add *tmp4 p :i
+set *tmp3 :i
+op add *tmp5 p :i
 set .b*ret 25
-set .b*ind *tmp2
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp2
-write *tmp4 @this .b*elem
-set *tmp5 :i
-op add *tmp7 p :i
+set .b*ind *tmp3
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp3
+write *tmp5 @this .b*elem
+set *tmp6 :i
+op add *tmp8 p :i
 set .c*ret 31
-set .c*ind *tmp5
-read @counter "ŀłńņňŀłńņň" *tmp5
-write *tmp7 @this .c*elem
+set .c*ind *tmp6
+read @counter "ŀłńņňŀłńņň" *tmp6
+write *tmp8 @this .c*elem
 op add :i :i 1
 jump 19 always 0 0
 set :reverse:i 0
 jump 61 greaterThanEq :reverse:i 5
-op sub *tmp8 9 :reverse:i
-set :reverse:j *tmp8
-set *tmp9 :reverse:i
+op sub *tmp9 9 :reverse:i
+set :reverse:j *tmp9
+set *tmp10 :reverse:i
 set .b*ret 42
-set .b*ind *tmp9
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp9
-read *tmp10 @this .b*elem
-set :reverse:t *tmp10
-set *tmp11 :reverse:i
-set *tmp13 :reverse:j
+set .b*ind *tmp10
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp10
+read *tmp11 @this .b*elem
+set :reverse:t *tmp11
+set *tmp12 :reverse:i
+set *tmp14 :reverse:j
 set .b*ret 49
-set .b*ind *tmp13
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp13
-read *tmp14 @this .b*elem
+set .b*ind *tmp14
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp14
+read *tmp15 @this .b*elem
 set .b*ret 53
-set .b*ind *tmp11
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp11
-write *tmp14 @this .b*elem
-set *tmp15 :reverse:j
+set .b*ind *tmp12
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp12
+write *tmp15 @this .b*elem
+set *tmp16 :reverse:j
 set .b*ret 58
-set .b*ind *tmp15
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp15
+set .b*ind *tmp16
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp16
 write :reverse:t @this .b*elem
 op add :reverse:i :reverse:i 1
 jump 35 always 0 0
-assertflush
+assertflush *tmp18
 print .b*0
 print .b*1
 print .b*2
@@ -70,87 +70,87 @@ print .b*6
 print .b*7
 print .b*8
 print .b*9
-assertprints "9876543210" "Array reverse"
+assertprints *tmp18 "9876543210" "Array reverse"
 set :bubblesort:maxToMin false
 set :bubblesort:flag false
 set :bubblesort:a .b*0
 set :bubblesort:i 1
 jump 110 greaterThanEq :bubblesort:i 10
-set *tmp17 :bubblesort:i
+set *tmp19 :bubblesort:i
 set .b*ret 82
-set .b*ind *tmp17
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp17
-read *tmp18 @this .b*elem
-set :bubblesort:b *tmp18
+set .b*ind *tmp19
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp19
+read *tmp20 @this .b*elem
+set :bubblesort:b *tmp20
 jump 88 equal :bubblesort:maxToMin false
-op lessThan *tmp20 :bubblesort:a :bubblesort:b
-set *tmp19 *tmp20
+op lessThan *tmp22 :bubblesort:a :bubblesort:b
+set *tmp21 *tmp22
 jump 90 always 0 0
-op greaterThan *tmp21 :bubblesort:a :bubblesort:b
-set *tmp19 *tmp21
-set :bubblesort:condition *tmp19
+op greaterThan *tmp23 :bubblesort:a :bubblesort:b
+set *tmp21 *tmp23
+set :bubblesort:condition *tmp21
 jump 106 equal :bubblesort:condition false
-op sub *tmp23 :bubblesort:i 1
-set *tmp24 *tmp23
+op sub *tmp25 :bubblesort:i 1
+set *tmp26 *tmp25
 set .b*ret 97
-set .b*ind *tmp24
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp24
-write :bubblesort:b @this .b*elem
-set *tmp26 :bubblesort:i
-set .b*ret 102
 set .b*ind *tmp26
 read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp26
+write :bubblesort:b @this .b*elem
+set *tmp28 :bubblesort:i
+set .b*ret 102
+set .b*ind *tmp28
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp28
 write :bubblesort:a @this .b*elem
 set :bubblesort:flag true
-set *tmp22 :bubblesort:flag
+set *tmp24 :bubblesort:flag
 jump 108 always 0 0
 set :bubblesort:a :bubblesort:b
-set *tmp22 :bubblesort:a
+set *tmp24 :bubblesort:a
 op add :bubblesort:i :bubblesort:i 1
 jump 77 always 0 0
-op equal *tmp28 :bubblesort:flag false
-jump 115 equal *tmp28 false
+op equal *tmp30 :bubblesort:flag false
+jump 115 equal *tmp30 false
 jump 152 always 0 0
-set *tmp29 null
+set *tmp31 null
 jump 116 always 0 0
-set *tmp29 null
+set *tmp31 null
 set :bubblesort:a .b*9
 op sub :bubblesort:i.1 9 1
 jump 151 lessThan :bubblesort:i.1 0
-set *tmp30 :bubblesort:i.1
+set *tmp32 :bubblesort:i.1
 set .b*ret 123
-set .b*ind *tmp30
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp30
-read *tmp31 @this .b*elem
-set :bubblesort:b.1 *tmp31
+set .b*ind *tmp32
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp32
+read *tmp33 @this .b*elem
+set :bubblesort:b.1 *tmp33
 jump 129 equal :bubblesort:maxToMin false
-op greaterThan *tmp33 :bubblesort:a :bubblesort:b.1
-set *tmp32 *tmp33
+op greaterThan *tmp35 :bubblesort:a :bubblesort:b.1
+set *tmp34 *tmp35
 jump 131 always 0 0
-op lessThan *tmp34 :bubblesort:a :bubblesort:b.1
-set *tmp32 *tmp34
-set :bubblesort:condition.1 *tmp32
+op lessThan *tmp36 :bubblesort:a :bubblesort:b.1
+set *tmp34 *tmp36
+set :bubblesort:condition.1 *tmp34
 jump 147 equal :bubblesort:condition.1 false
-op add *tmp36 :bubblesort:i.1 1
-set *tmp37 *tmp36
+op add *tmp38 :bubblesort:i.1 1
+set *tmp39 *tmp38
 set .b*ret 138
-set .b*ind *tmp37
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp37
-write :bubblesort:b.1 @this .b*elem
-set *tmp39 :bubblesort:i.1
-set .b*ret 143
 set .b*ind *tmp39
 read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp39
+write :bubblesort:b.1 @this .b*elem
+set *tmp41 :bubblesort:i.1
+set .b*ret 143
+set .b*ind *tmp41
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp41
 write :bubblesort:a @this .b*elem
 set :bubblesort:flag true
-set *tmp35 :bubblesort:flag
+set *tmp37 :bubblesort:flag
 jump 149 always 0 0
 set :bubblesort:a :bubblesort:b.1
-set *tmp35 :bubblesort:a
+set *tmp37 :bubblesort:a
 op sub :bubblesort:i.1 :bubblesort:i.1 1
 jump 118 always 0 0
 jump 74 notEqual :bubblesort:flag false
-assertflush
+assertflush *tmp43
 print .b*0
 print .b*1
 print .b*2
@@ -161,133 +161,133 @@ print .b*6
 print .b*7
 print .b*8
 print .b*9
-assertprints "0123456789" "Array sort 1"
+assertprints *tmp43 "0123456789" "Array sort 1"
 set :bubblesort.1:maxToMin true
 set :bubblesort.1:flag false
 set :bubblesort.1:a .b*0
 set :bubblesort.1:i 1
 jump 224 greaterThanEq :bubblesort.1:i 10
-set *tmp41 :bubblesort.1:i
+set *tmp44 :bubblesort.1:i
 set .b*ret 173
-set .b*ind *tmp41
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp41
-read *tmp42 @this .b*elem
-set :bubblesort.1:b *tmp42
+set .b*ind *tmp44
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp44
+read *tmp45 @this .b*elem
+set :bubblesort.1:b *tmp45
 jump 179 equal :bubblesort.1:maxToMin false
-op lessThan *tmp44 :bubblesort.1:a :bubblesort.1:b
-set *tmp43 *tmp44
+op lessThan *tmp47 :bubblesort.1:a :bubblesort.1:b
+set *tmp46 *tmp47
 jump 181 always 0 0
-op greaterThan *tmp45 :bubblesort.1:a :bubblesort.1:b
-set *tmp43 *tmp45
-set :bubblesort.1:condition *tmp43
+op greaterThan *tmp48 :bubblesort.1:a :bubblesort.1:b
+set *tmp46 *tmp48
+set :bubblesort.1:condition *tmp46
 jump 220 equal :bubblesort.1:condition false
-op sub *tmp47 :bubblesort.1:i 1
-set *tmp48 *tmp47
+op sub *tmp50 :bubblesort.1:i 1
+set *tmp51 *tmp50
 set .b*ret 188
-set .b*ind *tmp48
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp48
+set .b*ind *tmp51
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp51
 write :bubblesort.1:b @this .b*elem
-set *tmp50 :bubblesort.1:i
+set *tmp53 :bubblesort.1:i
 set .b*ret 193
-set .b*ind *tmp50
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp50
+set .b*ind *tmp53
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp53
 write :bubblesort.1:a @this .b*elem
-op sub *tmp52 :bubblesort.1:i 1
-set *tmp53 *tmp52
-set .c*ret 199
-set .c*ind *tmp53
-read @counter "ŀłńņňŀłńņň" *tmp53
-read *tmp54 @this .c*elem
-set :bubblesort.1:v *tmp54
 op sub *tmp55 :bubblesort.1:i 1
 set *tmp56 *tmp55
-set *tmp58 :bubblesort.1:i
-set .c*ret 207
-set .c*ind *tmp58
-read @counter "ŀłńņňŀłńņň" *tmp58
-read *tmp59 @this .c*elem
-set .c*ret 211
+set .c*ret 199
 set .c*ind *tmp56
 read @counter "ŀłńņňŀłńņň" *tmp56
-write *tmp59 @this .c*elem
-set *tmp60 :bubblesort.1:i
+read *tmp57 @this .c*elem
+set :bubblesort.1:v *tmp57
+op sub *tmp58 :bubblesort.1:i 1
+set *tmp59 *tmp58
+set *tmp61 :bubblesort.1:i
+set .c*ret 207
+set .c*ind *tmp61
+read @counter "ŀłńņňŀłńņň" *tmp61
+read *tmp62 @this .c*elem
+set .c*ret 211
+set .c*ind *tmp59
+read @counter "ŀłńņňŀłńņň" *tmp59
+write *tmp62 @this .c*elem
+set *tmp63 :bubblesort.1:i
 set .c*ret 216
-set .c*ind *tmp60
-read @counter "ŀłńņňŀłńņň" *tmp60
+set .c*ind *tmp63
+read @counter "ŀłńņňŀłńņň" *tmp63
 write :bubblesort.1:v @this .c*elem
 set :bubblesort.1:flag true
-set *tmp46 :bubblesort.1:flag
+set *tmp49 :bubblesort.1:flag
 jump 222 always 0 0
 set :bubblesort.1:a :bubblesort.1:b
-set *tmp46 :bubblesort.1:a
+set *tmp49 :bubblesort.1:a
 op add :bubblesort.1:i :bubblesort.1:i 1
 jump 168 always 0 0
-op equal *tmp62 :bubblesort.1:flag false
-jump 229 equal *tmp62 false
+op equal *tmp65 :bubblesort.1:flag false
+jump 229 equal *tmp65 false
 jump 289 always 0 0
-set *tmp63 null
+set *tmp66 null
 jump 230 always 0 0
-set *tmp63 null
+set *tmp66 null
 set :bubblesort.1:a .b*9
 op sub :bubblesort.1:i.1 9 1
 jump 288 lessThan :bubblesort.1:i.1 0
-set *tmp64 :bubblesort.1:i.1
+set *tmp67 :bubblesort.1:i.1
 set .b*ret 237
-set .b*ind *tmp64
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp64
-read *tmp65 @this .b*elem
-set :bubblesort.1:b.1 *tmp65
+set .b*ind *tmp67
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp67
+read *tmp68 @this .b*elem
+set :bubblesort.1:b.1 *tmp68
 jump 243 equal :bubblesort.1:maxToMin false
-op greaterThan *tmp67 :bubblesort.1:a :bubblesort.1:b.1
-set *tmp66 *tmp67
+op greaterThan *tmp70 :bubblesort.1:a :bubblesort.1:b.1
+set *tmp69 *tmp70
 jump 245 always 0 0
-op lessThan *tmp68 :bubblesort.1:a :bubblesort.1:b.1
-set *tmp66 *tmp68
-set :bubblesort.1:condition.1 *tmp66
+op lessThan *tmp71 :bubblesort.1:a :bubblesort.1:b.1
+set *tmp69 *tmp71
+set :bubblesort.1:condition.1 *tmp69
 jump 284 equal :bubblesort.1:condition.1 false
-op add *tmp70 :bubblesort.1:i.1 1
-set *tmp71 *tmp70
+op add *tmp73 :bubblesort.1:i.1 1
+set *tmp74 *tmp73
 set .b*ret 252
-set .b*ind *tmp71
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp71
+set .b*ind *tmp74
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp74
 write :bubblesort.1:b.1 @this .b*elem
-set *tmp73 :bubblesort.1:i.1
+set *tmp76 :bubblesort.1:i.1
 set .b*ret 257
-set .b*ind *tmp73
-read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp73
+set .b*ind *tmp76
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp76
 write :bubblesort.1:a @this .b*elem
-op add *tmp75 :bubblesort.1:i.1 1
-set *tmp76 *tmp75
-set .c*ret 263
-set .c*ind *tmp76
-read @counter "ŀłńņňŀłńņň" *tmp76
-read *tmp77 @this .c*elem
-set :bubblesort.1:v.1 *tmp77
 op add *tmp78 :bubblesort.1:i.1 1
 set *tmp79 *tmp78
-set *tmp81 :bubblesort.1:i.1
-set .c*ret 271
-set .c*ind *tmp81
-read @counter "ŀłńņňŀłńņň" *tmp81
-read *tmp82 @this .c*elem
-set .c*ret 275
+set .c*ret 263
 set .c*ind *tmp79
 read @counter "ŀłńņňŀłńņň" *tmp79
-write *tmp82 @this .c*elem
-set *tmp83 :bubblesort.1:i.1
+read *tmp80 @this .c*elem
+set :bubblesort.1:v.1 *tmp80
+op add *tmp81 :bubblesort.1:i.1 1
+set *tmp82 *tmp81
+set *tmp84 :bubblesort.1:i.1
+set .c*ret 271
+set .c*ind *tmp84
+read @counter "ŀłńņňŀłńņň" *tmp84
+read *tmp85 @this .c*elem
+set .c*ret 275
+set .c*ind *tmp82
+read @counter "ŀłńņňŀłńņň" *tmp82
+write *tmp85 @this .c*elem
+set *tmp86 :bubblesort.1:i.1
 set .c*ret 280
-set .c*ind *tmp83
-read @counter "ŀłńņňŀłńņň" *tmp83
+set .c*ind *tmp86
+read @counter "ŀłńņňŀłńņň" *tmp86
 write :bubblesort.1:v.1 @this .c*elem
 set :bubblesort.1:flag true
-set *tmp69 :bubblesort.1:flag
+set *tmp72 :bubblesort.1:flag
 jump 286 always 0 0
 set :bubblesort.1:a :bubblesort.1:b.1
-set *tmp69 :bubblesort.1:a
+set *tmp72 :bubblesort.1:a
 op sub :bubblesort.1:i.1 :bubblesort.1:i.1 1
 jump 232 always 0 0
 jump 165 notEqual :bubblesort.1:flag false
-assertflush
+assertflush *tmp88
 print .c*0
 print .c*1
 print .c*2
@@ -298,7 +298,7 @@ print .c*6
 print .c*7
 print .c*8
 print .c*9
-assertprints "9876543210" "Array sort 2"
+assertprints *tmp88 "9876543210" "Array sort 2"
 end
 select .a*elem lessThan .a*ind 3 ".a*0" ".a*3" # Origin: 7, keys: 0, 3
 set @counter .a*ret

@@ -6,11 +6,11 @@
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
-    36 assertflush
+    36 assertflush *tmp13
     37 print %ffffff
-    38 assertprints "0" "prints packcolor"
--    * set *tmp3 @counter
--    * set :y *tmp3
+    38 assertprints *tmp13 "0" "prints packcolor"
+-    * set *tmp14 @counter
+-    * set :y *tmp14
 +   39 set :y @counter
     40 set :x :y
     41 assertequals :x :y "chained assignments"
@@ -18,7 +18,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    38 assertprints "0" "prints packcolor"
+    38 assertprints *tmp13 "0" "prints packcolor"
     39 set :y @counter
     40 set :x :y
 -    * assertequals :x :y "chained assignments"
@@ -29,7 +29,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
     37 print %ffffff
-    38 assertprints "0" "prints packcolor"
+    38 assertprints *tmp13 "0" "prints packcolor"
     39 set :y @counter
 -    * set :x :y
     40 assertequals :y :y "chained assignments"
@@ -48,42 +48,42 @@ Final code before resolving virtual instructions:
 set a 1
 set b 0
 set p @coal
-assertflush
+assertflush *tmp0
 print "Hello"
-assertprints "Hello" "prints Hello"
-assertflush
+assertprints *tmp0 "Hello" "prints Hello"
+assertflush *tmp1
 print 10
-assertprints "10" "prints 10"
-assertflush
+assertprints *tmp1 "10" "prints 10"
+assertflush *tmp2
 print 5.5
-assertprints "5.5" "prints 5.5"
-assertflush
+assertprints *tmp2 "5.5" "prints 5.5"
+assertflush *tmp3
 print bank1
-assertprints "memory-bank" "prints link name"
-assertflush
-sensor *tmp0 bank1 @type
-print *tmp0
-assertprints "memory-bank" "prints type name"
-assertflush
+assertprints *tmp3 "memory-bank" "prints link name"
+assertflush *tmp4
+sensor *tmp5 bank1 @type
+print *tmp5
+assertprints *tmp4 "memory-bank" "prints type name"
+assertflush *tmp6
 print null
-assertprints "null" "prints null"
-assertflush
+assertprints *tmp6 "null" "prints null"
+assertflush *tmp7
 print true
-assertprints "1" "prints true"
-assertflush
+assertprints *tmp7 "1" "prints true"
+assertflush *tmp8
 print false
-assertprints "0" "prints false"
-assertflush
-op div *tmp1 a b
-print *tmp1
-assertprints "null" "prints 1 / 0"
-assertflush
-sensor *tmp2 p @id
-print *tmp2
-assertprints "5" "prints @coal.@id"
-assertflush
+assertprints *tmp8 "0" "prints false"
+assertflush *tmp9
+op div *tmp10 a b
+print *tmp10
+assertprints *tmp9 "null" "prints 1 / 0"
+assertflush *tmp11
+sensor *tmp12 p @id
+print *tmp12
+assertprints *tmp11 "5" "prints @coal.@id"
+assertflush *tmp13
 print %ffffff
-assertprints "0" "prints packcolor"
+assertprints *tmp13 "0" "prints packcolor"
 set :y @counter
 assertequals :y :y "chained assignments"
 stop

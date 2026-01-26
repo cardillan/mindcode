@@ -512,7 +512,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstIterator visitAstIterator(MindcodeParser.AstIteratorContext ctx) {
         return new AstIterator(pos(ctx),
-                visitAstExpression(ctx.variable),
+                identifier(ctx.variable),
                 ctx.modifier != null);
     }
 

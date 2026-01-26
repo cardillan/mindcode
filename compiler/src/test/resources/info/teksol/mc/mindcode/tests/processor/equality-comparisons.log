@@ -13,122 +13,122 @@
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-15 instructions):
  
-    48 print *tmp8
-    49 print *tmp11
-    50 assertprints :compare:expected :compare:title
+    48 print *tmp9
+    49 print *tmp12
+    50 assertprints *tmp1 :compare:expected :compare:title
 -    * set *tmp0 null
     51 label *label0
     52 set :compare.1:title "comparison 2"
     53 set :compare.1:a null
  
-    99 print *tmp21
-   100 print *tmp24
-   101 assertprints :compare.1:expected :compare.1:title
--    * set *tmp13 null
+    99 print *tmp23
+   100 print *tmp26
+   101 assertprints *tmp15 :compare.1:expected :compare.1:title
+-    * set *tmp14 null
    102 label *label13
    103 set :compare.2:title "comparison 3"
    104 set :compare.2:a null
  
-   150 print *tmp34
-   151 print *tmp37
-   152 assertprints :compare.2:expected :compare.2:title
--    * set *tmp26 null
+   150 print *tmp37
+   151 print *tmp40
+   152 assertprints *tmp29 :compare.2:expected :compare.2:title
+-    * set *tmp28 null
    153 label *label26
    154 set :compare.3:title "comparison 4"
    155 set :compare.3:a @coal
  
-   201 print *tmp47
-   202 print *tmp50
-   203 assertprints :compare.3:expected :compare.3:title
--    * set *tmp39 null
+   201 print *tmp51
+   202 print *tmp54
+   203 assertprints *tmp43 :compare.3:expected :compare.3:title
+-    * set *tmp42 null
    204 label *label39
    205 set :compare.4:title "comparison 5"
    206 set :compare.4:a @coal
  
-   252 print *tmp60
-   253 print *tmp63
-   254 assertprints :compare.4:expected :compare.4:title
--    * set *tmp52 null
+   252 print *tmp65
+   253 print *tmp68
+   254 assertprints *tmp57 :compare.4:expected :compare.4:title
+-    * set *tmp56 null
    255 label *label52
    256 set :compare.5:title "comparison 6"
    257 set :compare.5:a @coal
  
-   303 print *tmp73
-   304 print *tmp76
-   305 assertprints :compare.5:expected :compare.5:title
--    * set *tmp65 null
+   303 print *tmp79
+   304 print *tmp82
+   305 assertprints *tmp71 :compare.5:expected :compare.5:title
+-    * set *tmp70 null
    306 label *label65
    307 set :compare.6:title "comparison 7"
    308 set :compare.6:a @coal
  
-   354 print *tmp86
-   355 print *tmp89
-   356 assertprints :compare.6:expected :compare.6:title
--    * set *tmp78 null
+   354 print *tmp93
+   355 print *tmp96
+   356 assertprints *tmp85 :compare.6:expected :compare.6:title
+-    * set *tmp84 null
    357 label *label78
    358 set :compare.7:title "comparison 8"
    359 set :compare.7:a A
  
-   405 print *tmp99
-   406 print *tmp102
-   407 assertprints :compare.7:expected :compare.7:title
--    * set *tmp91 null
+   405 print *tmp107
+   406 print *tmp110
+   407 assertprints *tmp99 :compare.7:expected :compare.7:title
+-    * set *tmp98 null
    408 label *label91
    409 set :compare.8:title "comparison 9"
    410 set :compare.8:a A
  
-   456 print *tmp112
-   457 print *tmp115
-   458 assertprints :compare.8:expected :compare.8:title
--    * set *tmp104 null
+   456 print *tmp121
+   457 print *tmp124
+   458 assertprints *tmp113 :compare.8:expected :compare.8:title
+-    * set *tmp112 null
    459 label *label104
    460 set :compare.9:title "comparison 10"
    461 set :compare.9:a A
  
-   507 print *tmp125
-   508 print *tmp128
-   509 assertprints :compare.9:expected :compare.9:title
--    * set *tmp117 null
+   507 print *tmp135
+   508 print *tmp138
+   509 assertprints *tmp127 :compare.9:expected :compare.9:title
+-    * set *tmp126 null
    510 label *label117
    511 set :compare.10:title "comparison 11"
    512 set :compare.10:a "A"
  
-   558 print *tmp138
-   559 print *tmp141
-   560 assertprints :compare.10:expected :compare.10:title
--    * set *tmp130 null
+   558 print *tmp149
+   559 print *tmp152
+   560 assertprints *tmp141 :compare.10:expected :compare.10:title
+-    * set *tmp140 null
    561 label *label130
    562 set :compare.11:title "comparison 12"
    563 set :compare.11:a "A"
  
-   609 print *tmp151
-   610 print *tmp154
-   611 assertprints :compare.11:expected :compare.11:title
--    * set *tmp143 null
+   609 print *tmp163
+   610 print *tmp166
+   611 assertprints *tmp155 :compare.11:expected :compare.11:title
+-    * set *tmp154 null
    612 label *label143
    613 set :compare.12:title "comparison 13"
    614 set :compare.12:a "A"
  
-   660 print *tmp164
-   661 print *tmp167
-   662 assertprints :compare.12:expected :compare.12:title
--    * set *tmp156 null
+   660 print *tmp177
+   661 print *tmp180
+   662 assertprints *tmp169 :compare.12:expected :compare.12:title
+-    * set *tmp168 null
    663 label *label156
    664 set :compare.13:title "comparison 14"
    665 set :compare.13:a "A"
  
-   711 print *tmp177
-   712 print *tmp180
-   713 assertprints :compare.13:expected :compare.13:title
--    * set *tmp169 null
+   711 print *tmp191
+   712 print *tmp194
+   713 assertprints *tmp183 :compare.13:expected :compare.13:title
+-    * set *tmp182 null
    714 label *label169
    715 set :compare.14:title "comparison 15"
    716 set :compare.14:a "A"
  
-   762 print *tmp190
-   763 print *tmp193
-   764 assertprints :compare.14:expected :compare.14:title
--    * set *tmp182 null
+   762 print *tmp205
+   763 print *tmp208
+   764 assertprints *tmp197 :compare.14:expected :compare.14:title
+-    * set *tmp196 null
    765 label *label182
    766 stop
    767 end
@@ -137,1203 +137,1203 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-60 ins
  
      3 set :compare:b 0
      4 set :compare:expected "TFFT"
-     5 assertflush
--    * op equal *tmp1 :compare:a :compare:b
--    * set :eval:b *tmp1
+     5 assertflush *tmp1
+-    * op equal *tmp2 :compare:a :compare:b
+-    * set :eval:b *tmp2
 +    6 op equal :eval:b :compare:a :compare:b
      7 jump *label2 equal :eval:b false
-     8 set *tmp3 "T"
+     8 set *tmp4 "T"
      9 jump *label3 always
  
     12 label *label3
-    13 set *tmp2 *tmp3
+    13 set *tmp3 *tmp4
     14 label *label1
--    * op notEqual *tmp4 :compare:a :compare:b
--    * set :eval.1:b *tmp4
+-    * op notEqual *tmp5 :compare:a :compare:b
+-    * set :eval.1:b *tmp5
 +   15 op notEqual :eval.1:b :compare:a :compare:b
     16 jump *label5 equal :eval.1:b false
-    17 set *tmp6 "T"
+    17 set *tmp7 "T"
     18 jump *label6 always
  
     21 label *label6
-    22 set *tmp5 *tmp6
+    22 set *tmp6 *tmp7
     23 label *label4
--    * op strictEqual *tmp7 :compare:a :compare:b
--    * set :eval.2:b *tmp7
+-    * op strictEqual *tmp8 :compare:a :compare:b
+-    * set :eval.2:b *tmp8
 +   24 op strictEqual :eval.2:b :compare:a :compare:b
     25 jump *label8 equal :eval.2:b false
-    26 set *tmp9 "T"
+    26 set *tmp10 "T"
     27 jump *label9 always
  
     30 label *label9
-    31 set *tmp8 *tmp9
+    31 set *tmp9 *tmp10
     32 label *label7
--    * op strictNotEqual *tmp10 :compare:a :compare:b
--    * set :eval.3:b *tmp10
+-    * op strictNotEqual *tmp11 :compare:a :compare:b
+-    * set :eval.3:b *tmp11
 +   33 op strictNotEqual :eval.3:b :compare:a :compare:b
     34 jump *label11 equal :eval.3:b false
-    35 set *tmp12 "T"
+    35 set *tmp13 "T"
     36 jump *label12 always
  
     50 set :compare.1:b 1
     51 set :compare.1:expected "FTFT"
-    52 assertflush
--    * op equal *tmp14 :compare.1:a :compare.1:b
--    * set :eval.4:b *tmp14
+    52 assertflush *tmp15
+-    * op equal *tmp16 :compare.1:a :compare.1:b
+-    * set :eval.4:b *tmp16
 +   53 op equal :eval.4:b :compare.1:a :compare.1:b
     54 jump *label15 equal :eval.4:b false
-    55 set *tmp16 "T"
+    55 set *tmp18 "T"
     56 jump *label16 always
  
     59 label *label16
-    60 set *tmp15 *tmp16
+    60 set *tmp17 *tmp18
     61 label *label14
--    * op notEqual *tmp17 :compare.1:a :compare.1:b
--    * set :eval.5:b *tmp17
+-    * op notEqual *tmp19 :compare.1:a :compare.1:b
+-    * set :eval.5:b *tmp19
 +   62 op notEqual :eval.5:b :compare.1:a :compare.1:b
     63 jump *label18 equal :eval.5:b false
-    64 set *tmp19 "T"
+    64 set *tmp21 "T"
     65 jump *label19 always
  
     68 label *label19
-    69 set *tmp18 *tmp19
+    69 set *tmp20 *tmp21
     70 label *label17
--    * op strictEqual *tmp20 :compare.1:a :compare.1:b
--    * set :eval.6:b *tmp20
+-    * op strictEqual *tmp22 :compare.1:a :compare.1:b
+-    * set :eval.6:b *tmp22
 +   71 op strictEqual :eval.6:b :compare.1:a :compare.1:b
     72 jump *label21 equal :eval.6:b false
-    73 set *tmp22 "T"
+    73 set *tmp24 "T"
     74 jump *label22 always
  
     77 label *label22
-    78 set *tmp21 *tmp22
+    78 set *tmp23 *tmp24
     79 label *label20
--    * op strictNotEqual *tmp23 :compare.1:a :compare.1:b
--    * set :eval.7:b *tmp23
+-    * op strictNotEqual *tmp25 :compare.1:a :compare.1:b
+-    * set :eval.7:b *tmp25
 +   80 op strictNotEqual :eval.7:b :compare.1:a :compare.1:b
     81 jump *label24 equal :eval.7:b false
-    82 set *tmp25 "T"
+    82 set *tmp27 "T"
     83 jump *label25 always
  
     97 set :compare.2:b 2
     98 set :compare.2:expected "FTFT"
-    99 assertflush
--    * op equal *tmp27 :compare.2:a :compare.2:b
--    * set :eval.8:b *tmp27
+    99 assertflush *tmp29
+-    * op equal *tmp30 :compare.2:a :compare.2:b
+-    * set :eval.8:b *tmp30
 +  100 op equal :eval.8:b :compare.2:a :compare.2:b
    101 jump *label28 equal :eval.8:b false
-   102 set *tmp29 "T"
+   102 set *tmp32 "T"
    103 jump *label29 always
  
    106 label *label29
-   107 set *tmp28 *tmp29
+   107 set *tmp31 *tmp32
    108 label *label27
--    * op notEqual *tmp30 :compare.2:a :compare.2:b
--    * set :eval.9:b *tmp30
+-    * op notEqual *tmp33 :compare.2:a :compare.2:b
+-    * set :eval.9:b *tmp33
 +  109 op notEqual :eval.9:b :compare.2:a :compare.2:b
    110 jump *label31 equal :eval.9:b false
-   111 set *tmp32 "T"
+   111 set *tmp35 "T"
    112 jump *label32 always
  
    115 label *label32
-   116 set *tmp31 *tmp32
+   116 set *tmp34 *tmp35
    117 label *label30
--    * op strictEqual *tmp33 :compare.2:a :compare.2:b
--    * set :eval.10:b *tmp33
+-    * op strictEqual *tmp36 :compare.2:a :compare.2:b
+-    * set :eval.10:b *tmp36
 +  118 op strictEqual :eval.10:b :compare.2:a :compare.2:b
    119 jump *label34 equal :eval.10:b false
-   120 set *tmp35 "T"
+   120 set *tmp38 "T"
    121 jump *label35 always
  
    124 label *label35
-   125 set *tmp34 *tmp35
+   125 set *tmp37 *tmp38
    126 label *label33
--    * op strictNotEqual *tmp36 :compare.2:a :compare.2:b
--    * set :eval.11:b *tmp36
+-    * op strictNotEqual *tmp39 :compare.2:a :compare.2:b
+-    * set :eval.11:b *tmp39
 +  127 op strictNotEqual :eval.11:b :compare.2:a :compare.2:b
    128 jump *label37 equal :eval.11:b false
-   129 set *tmp38 "T"
+   129 set *tmp41 "T"
    130 jump *label38 always
  
    144 set :compare.3:b 0
    145 set :compare.3:expected "FTFT"
-   146 assertflush
--    * op equal *tmp40 :compare.3:a :compare.3:b
--    * set :eval.12:b *tmp40
+   146 assertflush *tmp43
+-    * op equal *tmp44 :compare.3:a :compare.3:b
+-    * set :eval.12:b *tmp44
 +  147 op equal :eval.12:b :compare.3:a :compare.3:b
    148 jump *label41 equal :eval.12:b false
-   149 set *tmp42 "T"
+   149 set *tmp46 "T"
    150 jump *label42 always
  
    153 label *label42
-   154 set *tmp41 *tmp42
+   154 set *tmp45 *tmp46
    155 label *label40
--    * op notEqual *tmp43 :compare.3:a :compare.3:b
--    * set :eval.13:b *tmp43
+-    * op notEqual *tmp47 :compare.3:a :compare.3:b
+-    * set :eval.13:b *tmp47
 +  156 op notEqual :eval.13:b :compare.3:a :compare.3:b
    157 jump *label44 equal :eval.13:b false
-   158 set *tmp45 "T"
+   158 set *tmp49 "T"
    159 jump *label45 always
  
    162 label *label45
-   163 set *tmp44 *tmp45
+   163 set *tmp48 *tmp49
    164 label *label43
--    * op strictEqual *tmp46 :compare.3:a :compare.3:b
--    * set :eval.14:b *tmp46
+-    * op strictEqual *tmp50 :compare.3:a :compare.3:b
+-    * set :eval.14:b *tmp50
 +  165 op strictEqual :eval.14:b :compare.3:a :compare.3:b
    166 jump *label47 equal :eval.14:b false
-   167 set *tmp48 "T"
+   167 set *tmp52 "T"
    168 jump *label48 always
  
    171 label *label48
-   172 set *tmp47 *tmp48
+   172 set *tmp51 *tmp52
    173 label *label46
--    * op strictNotEqual *tmp49 :compare.3:a :compare.3:b
--    * set :eval.15:b *tmp49
+-    * op strictNotEqual *tmp53 :compare.3:a :compare.3:b
+-    * set :eval.15:b *tmp53
 +  174 op strictNotEqual :eval.15:b :compare.3:a :compare.3:b
    175 jump *label50 equal :eval.15:b false
-   176 set *tmp51 "T"
+   176 set *tmp55 "T"
    177 jump *label51 always
  
    191 set :compare.4:b 1
    192 set :compare.4:expected "TFFT"
-   193 assertflush
--    * op equal *tmp53 :compare.4:a :compare.4:b
--    * set :eval.16:b *tmp53
+   193 assertflush *tmp57
+-    * op equal *tmp58 :compare.4:a :compare.4:b
+-    * set :eval.16:b *tmp58
 +  194 op equal :eval.16:b :compare.4:a :compare.4:b
    195 jump *label54 equal :eval.16:b false
-   196 set *tmp55 "T"
+   196 set *tmp60 "T"
    197 jump *label55 always
  
    200 label *label55
-   201 set *tmp54 *tmp55
+   201 set *tmp59 *tmp60
    202 label *label53
--    * op notEqual *tmp56 :compare.4:a :compare.4:b
--    * set :eval.17:b *tmp56
+-    * op notEqual *tmp61 :compare.4:a :compare.4:b
+-    * set :eval.17:b *tmp61
 +  203 op notEqual :eval.17:b :compare.4:a :compare.4:b
    204 jump *label57 equal :eval.17:b false
-   205 set *tmp58 "T"
+   205 set *tmp63 "T"
    206 jump *label58 always
  
    209 label *label58
-   210 set *tmp57 *tmp58
+   210 set *tmp62 *tmp63
    211 label *label56
--    * op strictEqual *tmp59 :compare.4:a :compare.4:b
--    * set :eval.18:b *tmp59
+-    * op strictEqual *tmp64 :compare.4:a :compare.4:b
+-    * set :eval.18:b *tmp64
 +  212 op strictEqual :eval.18:b :compare.4:a :compare.4:b
    213 jump *label60 equal :eval.18:b false
-   214 set *tmp61 "T"
+   214 set *tmp66 "T"
    215 jump *label61 always
  
    218 label *label61
-   219 set *tmp60 *tmp61
+   219 set *tmp65 *tmp66
    220 label *label59
--    * op strictNotEqual *tmp62 :compare.4:a :compare.4:b
--    * set :eval.19:b *tmp62
+-    * op strictNotEqual *tmp67 :compare.4:a :compare.4:b
+-    * set :eval.19:b *tmp67
 +  221 op strictNotEqual :eval.19:b :compare.4:a :compare.4:b
    222 jump *label63 equal :eval.19:b false
-   223 set *tmp64 "T"
+   223 set *tmp69 "T"
    224 jump *label64 always
  
    238 set :compare.5:b 2
    239 set :compare.5:expected "FTFT"
-   240 assertflush
--    * op equal *tmp66 :compare.5:a :compare.5:b
--    * set :eval.20:b *tmp66
+   240 assertflush *tmp71
+-    * op equal *tmp72 :compare.5:a :compare.5:b
+-    * set :eval.20:b *tmp72
 +  241 op equal :eval.20:b :compare.5:a :compare.5:b
    242 jump *label67 equal :eval.20:b false
-   243 set *tmp68 "T"
+   243 set *tmp74 "T"
    244 jump *label68 always
  
    247 label *label68
-   248 set *tmp67 *tmp68
+   248 set *tmp73 *tmp74
    249 label *label66
--    * op notEqual *tmp69 :compare.5:a :compare.5:b
--    * set :eval.21:b *tmp69
+-    * op notEqual *tmp75 :compare.5:a :compare.5:b
+-    * set :eval.21:b *tmp75
 +  250 op notEqual :eval.21:b :compare.5:a :compare.5:b
    251 jump *label70 equal :eval.21:b false
-   252 set *tmp71 "T"
+   252 set *tmp77 "T"
    253 jump *label71 always
  
    256 label *label71
-   257 set *tmp70 *tmp71
+   257 set *tmp76 *tmp77
    258 label *label69
--    * op strictEqual *tmp72 :compare.5:a :compare.5:b
--    * set :eval.22:b *tmp72
+-    * op strictEqual *tmp78 :compare.5:a :compare.5:b
+-    * set :eval.22:b *tmp78
 +  259 op strictEqual :eval.22:b :compare.5:a :compare.5:b
    260 jump *label73 equal :eval.22:b false
-   261 set *tmp74 "T"
+   261 set *tmp80 "T"
    262 jump *label74 always
  
    265 label *label74
-   266 set *tmp73 *tmp74
+   266 set *tmp79 *tmp80
    267 label *label72
--    * op strictNotEqual *tmp75 :compare.5:a :compare.5:b
--    * set :eval.23:b *tmp75
+-    * op strictNotEqual *tmp81 :compare.5:a :compare.5:b
+-    * set :eval.23:b *tmp81
 +  268 op strictNotEqual :eval.23:b :compare.5:a :compare.5:b
    269 jump *label76 equal :eval.23:b false
-   270 set *tmp77 "T"
+   270 set *tmp83 "T"
    271 jump *label77 always
  
    285 set :compare.6:b @lead
    286 set :compare.6:expected "FTFT"
-   287 assertflush
--    * op equal *tmp79 :compare.6:a :compare.6:b
--    * set :eval.24:b *tmp79
+   287 assertflush *tmp85
+-    * op equal *tmp86 :compare.6:a :compare.6:b
+-    * set :eval.24:b *tmp86
 +  288 op equal :eval.24:b :compare.6:a :compare.6:b
    289 jump *label80 equal :eval.24:b false
-   290 set *tmp81 "T"
+   290 set *tmp88 "T"
    291 jump *label81 always
  
    294 label *label81
-   295 set *tmp80 *tmp81
+   295 set *tmp87 *tmp88
    296 label *label79
--    * op notEqual *tmp82 :compare.6:a :compare.6:b
--    * set :eval.25:b *tmp82
+-    * op notEqual *tmp89 :compare.6:a :compare.6:b
+-    * set :eval.25:b *tmp89
 +  297 op notEqual :eval.25:b :compare.6:a :compare.6:b
    298 jump *label83 equal :eval.25:b false
-   299 set *tmp84 "T"
+   299 set *tmp91 "T"
    300 jump *label84 always
  
    303 label *label84
-   304 set *tmp83 *tmp84
+   304 set *tmp90 *tmp91
    305 label *label82
--    * op strictEqual *tmp85 :compare.6:a :compare.6:b
--    * set :eval.26:b *tmp85
+-    * op strictEqual *tmp92 :compare.6:a :compare.6:b
+-    * set :eval.26:b *tmp92
 +  306 op strictEqual :eval.26:b :compare.6:a :compare.6:b
    307 jump *label86 equal :eval.26:b false
-   308 set *tmp87 "T"
+   308 set *tmp94 "T"
    309 jump *label87 always
  
    312 label *label87
-   313 set *tmp86 *tmp87
+   313 set *tmp93 *tmp94
    314 label *label85
--    * op strictNotEqual *tmp88 :compare.6:a :compare.6:b
--    * set :eval.27:b *tmp88
+-    * op strictNotEqual *tmp95 :compare.6:a :compare.6:b
+-    * set :eval.27:b *tmp95
 +  315 op strictNotEqual :eval.27:b :compare.6:a :compare.6:b
    316 jump *label89 equal :eval.27:b false
-   317 set *tmp90 "T"
+   317 set *tmp97 "T"
    318 jump *label90 always
  
    332 set :compare.7:b A
    333 set :compare.7:expected "TFTF"
-   334 assertflush
--    * op equal *tmp92 :compare.7:a :compare.7:b
--    * set :eval.28:b *tmp92
+   334 assertflush *tmp99
+-    * op equal *tmp100 :compare.7:a :compare.7:b
+-    * set :eval.28:b *tmp100
 +  335 op equal :eval.28:b :compare.7:a :compare.7:b
    336 jump *label93 equal :eval.28:b false
-   337 set *tmp94 "T"
+   337 set *tmp102 "T"
    338 jump *label94 always
  
    341 label *label94
-   342 set *tmp93 *tmp94
+   342 set *tmp101 *tmp102
    343 label *label92
--    * op notEqual *tmp95 :compare.7:a :compare.7:b
--    * set :eval.29:b *tmp95
+-    * op notEqual *tmp103 :compare.7:a :compare.7:b
+-    * set :eval.29:b *tmp103
 +  344 op notEqual :eval.29:b :compare.7:a :compare.7:b
    345 jump *label96 equal :eval.29:b false
-   346 set *tmp97 "T"
+   346 set *tmp105 "T"
    347 jump *label97 always
  
    350 label *label97
-   351 set *tmp96 *tmp97
+   351 set *tmp104 *tmp105
    352 label *label95
--    * op strictEqual *tmp98 :compare.7:a :compare.7:b
--    * set :eval.30:b *tmp98
+-    * op strictEqual *tmp106 :compare.7:a :compare.7:b
+-    * set :eval.30:b *tmp106
 +  353 op strictEqual :eval.30:b :compare.7:a :compare.7:b
    354 jump *label99 equal :eval.30:b false
-   355 set *tmp100 "T"
+   355 set *tmp108 "T"
    356 jump *label100 always
  
    359 label *label100
-   360 set *tmp99 *tmp100
+   360 set *tmp107 *tmp108
    361 label *label98
--    * op strictNotEqual *tmp101 :compare.7:a :compare.7:b
--    * set :eval.31:b *tmp101
+-    * op strictNotEqual *tmp109 :compare.7:a :compare.7:b
+-    * set :eval.31:b *tmp109
 +  362 op strictNotEqual :eval.31:b :compare.7:a :compare.7:b
    363 jump *label102 equal :eval.31:b false
-   364 set *tmp103 "T"
+   364 set *tmp111 "T"
    365 jump *label103 always
  
    379 set :compare.8:b 0
    380 set :compare.8:expected "TFTF"
-   381 assertflush
--    * op equal *tmp105 :compare.8:a :compare.8:b
--    * set :eval.32:b *tmp105
+   381 assertflush *tmp113
+-    * op equal *tmp114 :compare.8:a :compare.8:b
+-    * set :eval.32:b *tmp114
 +  382 op equal :eval.32:b :compare.8:a :compare.8:b
    383 jump *label106 equal :eval.32:b false
-   384 set *tmp107 "T"
+   384 set *tmp116 "T"
    385 jump *label107 always
  
    388 label *label107
-   389 set *tmp106 *tmp107
+   389 set *tmp115 *tmp116
    390 label *label105
--    * op notEqual *tmp108 :compare.8:a :compare.8:b
--    * set :eval.33:b *tmp108
+-    * op notEqual *tmp117 :compare.8:a :compare.8:b
+-    * set :eval.33:b *tmp117
 +  391 op notEqual :eval.33:b :compare.8:a :compare.8:b
    392 jump *label109 equal :eval.33:b false
-   393 set *tmp110 "T"
+   393 set *tmp119 "T"
    394 jump *label110 always
  
    397 label *label110
-   398 set *tmp109 *tmp110
+   398 set *tmp118 *tmp119
    399 label *label108
--    * op strictEqual *tmp111 :compare.8:a :compare.8:b
--    * set :eval.34:b *tmp111
+-    * op strictEqual *tmp120 :compare.8:a :compare.8:b
+-    * set :eval.34:b *tmp120
 +  400 op strictEqual :eval.34:b :compare.8:a :compare.8:b
    401 jump *label112 equal :eval.34:b false
-   402 set *tmp113 "T"
+   402 set *tmp122 "T"
    403 jump *label113 always
  
    406 label *label113
-   407 set *tmp112 *tmp113
+   407 set *tmp121 *tmp122
    408 label *label111
--    * op strictNotEqual *tmp114 :compare.8:a :compare.8:b
--    * set :eval.35:b *tmp114
+-    * op strictNotEqual *tmp123 :compare.8:a :compare.8:b
+-    * set :eval.35:b *tmp123
 +  409 op strictNotEqual :eval.35:b :compare.8:a :compare.8:b
    410 jump *label115 equal :eval.35:b false
-   411 set *tmp116 "T"
+   411 set *tmp125 "T"
    412 jump *label116 always
  
    426 set :compare.9:b 1
    427 set :compare.9:expected "FTFT"
-   428 assertflush
--    * op equal *tmp118 :compare.9:a :compare.9:b
--    * set :eval.36:b *tmp118
+   428 assertflush *tmp127
+-    * op equal *tmp128 :compare.9:a :compare.9:b
+-    * set :eval.36:b *tmp128
 +  429 op equal :eval.36:b :compare.9:a :compare.9:b
    430 jump *label119 equal :eval.36:b false
-   431 set *tmp120 "T"
+   431 set *tmp130 "T"
    432 jump *label120 always
  
    435 label *label120
-   436 set *tmp119 *tmp120
+   436 set *tmp129 *tmp130
    437 label *label118
--    * op notEqual *tmp121 :compare.9:a :compare.9:b
--    * set :eval.37:b *tmp121
+-    * op notEqual *tmp131 :compare.9:a :compare.9:b
+-    * set :eval.37:b *tmp131
 +  438 op notEqual :eval.37:b :compare.9:a :compare.9:b
    439 jump *label122 equal :eval.37:b false
-   440 set *tmp123 "T"
+   440 set *tmp133 "T"
    441 jump *label123 always
  
    444 label *label123
-   445 set *tmp122 *tmp123
+   445 set *tmp132 *tmp133
    446 label *label121
--    * op strictEqual *tmp124 :compare.9:a :compare.9:b
--    * set :eval.38:b *tmp124
+-    * op strictEqual *tmp134 :compare.9:a :compare.9:b
+-    * set :eval.38:b *tmp134
 +  447 op strictEqual :eval.38:b :compare.9:a :compare.9:b
    448 jump *label125 equal :eval.38:b false
-   449 set *tmp126 "T"
+   449 set *tmp136 "T"
    450 jump *label126 always
  
    453 label *label126
-   454 set *tmp125 *tmp126
+   454 set *tmp135 *tmp136
    455 label *label124
--    * op strictNotEqual *tmp127 :compare.9:a :compare.9:b
--    * set :eval.39:b *tmp127
+-    * op strictNotEqual *tmp137 :compare.9:a :compare.9:b
+-    * set :eval.39:b *tmp137
 +  456 op strictNotEqual :eval.39:b :compare.9:a :compare.9:b
    457 jump *label128 equal :eval.39:b false
-   458 set *tmp129 "T"
+   458 set *tmp139 "T"
    459 jump *label129 always
  
    473 set :compare.10:b 0
    474 set :compare.10:expected "FTFT"
-   475 assertflush
--    * op equal *tmp131 :compare.10:a :compare.10:b
--    * set :eval.40:b *tmp131
+   475 assertflush *tmp141
+-    * op equal *tmp142 :compare.10:a :compare.10:b
+-    * set :eval.40:b *tmp142
 +  476 op equal :eval.40:b :compare.10:a :compare.10:b
    477 jump *label132 equal :eval.40:b false
-   478 set *tmp133 "T"
+   478 set *tmp144 "T"
    479 jump *label133 always
  
    482 label *label133
-   483 set *tmp132 *tmp133
+   483 set *tmp143 *tmp144
    484 label *label131
--    * op notEqual *tmp134 :compare.10:a :compare.10:b
--    * set :eval.41:b *tmp134
+-    * op notEqual *tmp145 :compare.10:a :compare.10:b
+-    * set :eval.41:b *tmp145
 +  485 op notEqual :eval.41:b :compare.10:a :compare.10:b
    486 jump *label135 equal :eval.41:b false
-   487 set *tmp136 "T"
+   487 set *tmp147 "T"
    488 jump *label136 always
  
    491 label *label136
-   492 set *tmp135 *tmp136
+   492 set *tmp146 *tmp147
    493 label *label134
--    * op strictEqual *tmp137 :compare.10:a :compare.10:b
--    * set :eval.42:b *tmp137
+-    * op strictEqual *tmp148 :compare.10:a :compare.10:b
+-    * set :eval.42:b *tmp148
 +  494 op strictEqual :eval.42:b :compare.10:a :compare.10:b
    495 jump *label138 equal :eval.42:b false
-   496 set *tmp139 "T"
+   496 set *tmp150 "T"
    497 jump *label139 always
  
    500 label *label139
-   501 set *tmp138 *tmp139
+   501 set *tmp149 *tmp150
    502 label *label137
--    * op strictNotEqual *tmp140 :compare.10:a :compare.10:b
--    * set :eval.43:b *tmp140
+-    * op strictNotEqual *tmp151 :compare.10:a :compare.10:b
+-    * set :eval.43:b *tmp151
 +  503 op strictNotEqual :eval.43:b :compare.10:a :compare.10:b
    504 jump *label141 equal :eval.43:b false
-   505 set *tmp142 "T"
+   505 set *tmp153 "T"
    506 jump *label142 always
  
    520 set :compare.11:b 1
    521 set :compare.11:expected "TFFT"
-   522 assertflush
--    * op equal *tmp144 :compare.11:a :compare.11:b
--    * set :eval.44:b *tmp144
+   522 assertflush *tmp155
+-    * op equal *tmp156 :compare.11:a :compare.11:b
+-    * set :eval.44:b *tmp156
 +  523 op equal :eval.44:b :compare.11:a :compare.11:b
    524 jump *label145 equal :eval.44:b false
-   525 set *tmp146 "T"
+   525 set *tmp158 "T"
    526 jump *label146 always
  
    529 label *label146
-   530 set *tmp145 *tmp146
+   530 set *tmp157 *tmp158
    531 label *label144
--    * op notEqual *tmp147 :compare.11:a :compare.11:b
--    * set :eval.45:b *tmp147
+-    * op notEqual *tmp159 :compare.11:a :compare.11:b
+-    * set :eval.45:b *tmp159
 +  532 op notEqual :eval.45:b :compare.11:a :compare.11:b
    533 jump *label148 equal :eval.45:b false
-   534 set *tmp149 "T"
+   534 set *tmp161 "T"
    535 jump *label149 always
  
    538 label *label149
-   539 set *tmp148 *tmp149
+   539 set *tmp160 *tmp161
    540 label *label147
--    * op strictEqual *tmp150 :compare.11:a :compare.11:b
--    * set :eval.46:b *tmp150
+-    * op strictEqual *tmp162 :compare.11:a :compare.11:b
+-    * set :eval.46:b *tmp162
 +  541 op strictEqual :eval.46:b :compare.11:a :compare.11:b
    542 jump *label151 equal :eval.46:b false
-   543 set *tmp152 "T"
+   543 set *tmp164 "T"
    544 jump *label152 always
  
    547 label *label152
-   548 set *tmp151 *tmp152
+   548 set *tmp163 *tmp164
    549 label *label150
--    * op strictNotEqual *tmp153 :compare.11:a :compare.11:b
--    * set :eval.47:b *tmp153
+-    * op strictNotEqual *tmp165 :compare.11:a :compare.11:b
+-    * set :eval.47:b *tmp165
 +  550 op strictNotEqual :eval.47:b :compare.11:a :compare.11:b
    551 jump *label154 equal :eval.47:b false
-   552 set *tmp155 "T"
+   552 set *tmp167 "T"
    553 jump *label155 always
  
    567 set :compare.12:b 2
    568 set :compare.12:expected "FTFT"
-   569 assertflush
--    * op equal *tmp157 :compare.12:a :compare.12:b
--    * set :eval.48:b *tmp157
+   569 assertflush *tmp169
+-    * op equal *tmp170 :compare.12:a :compare.12:b
+-    * set :eval.48:b *tmp170
 +  570 op equal :eval.48:b :compare.12:a :compare.12:b
    571 jump *label158 equal :eval.48:b false
-   572 set *tmp159 "T"
+   572 set *tmp172 "T"
    573 jump *label159 always
  
    576 label *label159
-   577 set *tmp158 *tmp159
+   577 set *tmp171 *tmp172
    578 label *label157
--    * op notEqual *tmp160 :compare.12:a :compare.12:b
--    * set :eval.49:b *tmp160
+-    * op notEqual *tmp173 :compare.12:a :compare.12:b
+-    * set :eval.49:b *tmp173
 +  579 op notEqual :eval.49:b :compare.12:a :compare.12:b
    580 jump *label161 equal :eval.49:b false
-   581 set *tmp162 "T"
+   581 set *tmp175 "T"
    582 jump *label162 always
  
    585 label *label162
-   586 set *tmp161 *tmp162
+   586 set *tmp174 *tmp175
    587 label *label160
--    * op strictEqual *tmp163 :compare.12:a :compare.12:b
--    * set :eval.50:b *tmp163
+-    * op strictEqual *tmp176 :compare.12:a :compare.12:b
+-    * set :eval.50:b *tmp176
 +  588 op strictEqual :eval.50:b :compare.12:a :compare.12:b
    589 jump *label164 equal :eval.50:b false
-   590 set *tmp165 "T"
+   590 set *tmp178 "T"
    591 jump *label165 always
  
    594 label *label165
-   595 set *tmp164 *tmp165
+   595 set *tmp177 *tmp178
    596 label *label163
--    * op strictNotEqual *tmp166 :compare.12:a :compare.12:b
--    * set :eval.51:b *tmp166
+-    * op strictNotEqual *tmp179 :compare.12:a :compare.12:b
+-    * set :eval.51:b *tmp179
 +  597 op strictNotEqual :eval.51:b :compare.12:a :compare.12:b
    598 jump *label167 equal :eval.51:b false
-   599 set *tmp168 "T"
+   599 set *tmp181 "T"
    600 jump *label168 always
  
    614 set :compare.13:b "B"
    615 set :compare.13:expected "FTFT"
-   616 assertflush
--    * op equal *tmp170 :compare.13:a :compare.13:b
--    * set :eval.52:b *tmp170
+   616 assertflush *tmp183
+-    * op equal *tmp184 :compare.13:a :compare.13:b
+-    * set :eval.52:b *tmp184
 +  617 op equal :eval.52:b :compare.13:a :compare.13:b
    618 jump *label171 equal :eval.52:b false
-   619 set *tmp172 "T"
+   619 set *tmp186 "T"
    620 jump *label172 always
  
    623 label *label172
-   624 set *tmp171 *tmp172
+   624 set *tmp185 *tmp186
    625 label *label170
--    * op notEqual *tmp173 :compare.13:a :compare.13:b
--    * set :eval.53:b *tmp173
+-    * op notEqual *tmp187 :compare.13:a :compare.13:b
+-    * set :eval.53:b *tmp187
 +  626 op notEqual :eval.53:b :compare.13:a :compare.13:b
    627 jump *label174 equal :eval.53:b false
-   628 set *tmp175 "T"
+   628 set *tmp189 "T"
    629 jump *label175 always
  
    632 label *label175
-   633 set *tmp174 *tmp175
+   633 set *tmp188 *tmp189
    634 label *label173
--    * op strictEqual *tmp176 :compare.13:a :compare.13:b
--    * set :eval.54:b *tmp176
+-    * op strictEqual *tmp190 :compare.13:a :compare.13:b
+-    * set :eval.54:b *tmp190
 +  635 op strictEqual :eval.54:b :compare.13:a :compare.13:b
    636 jump *label177 equal :eval.54:b false
-   637 set *tmp178 "T"
+   637 set *tmp192 "T"
    638 jump *label178 always
  
    641 label *label178
-   642 set *tmp177 *tmp178
+   642 set *tmp191 *tmp192
    643 label *label176
--    * op strictNotEqual *tmp179 :compare.13:a :compare.13:b
--    * set :eval.55:b *tmp179
+-    * op strictNotEqual *tmp193 :compare.13:a :compare.13:b
+-    * set :eval.55:b *tmp193
 +  644 op strictNotEqual :eval.55:b :compare.13:a :compare.13:b
    645 jump *label180 equal :eval.55:b false
-   646 set *tmp181 "T"
+   646 set *tmp195 "T"
    647 jump *label181 always
  
    661 set :compare.14:b "A"
    662 set :compare.14:expected "TFTF"
-   663 assertflush
--    * op equal *tmp183 :compare.14:a :compare.14:b
--    * set :eval.56:b *tmp183
+   663 assertflush *tmp197
+-    * op equal *tmp198 :compare.14:a :compare.14:b
+-    * set :eval.56:b *tmp198
 +  664 op equal :eval.56:b :compare.14:a :compare.14:b
    665 jump *label184 equal :eval.56:b false
-   666 set *tmp185 "T"
+   666 set *tmp200 "T"
    667 jump *label185 always
  
    670 label *label185
-   671 set *tmp184 *tmp185
+   671 set *tmp199 *tmp200
    672 label *label183
--    * op notEqual *tmp186 :compare.14:a :compare.14:b
--    * set :eval.57:b *tmp186
+-    * op notEqual *tmp201 :compare.14:a :compare.14:b
+-    * set :eval.57:b *tmp201
 +  673 op notEqual :eval.57:b :compare.14:a :compare.14:b
    674 jump *label187 equal :eval.57:b false
-   675 set *tmp188 "T"
+   675 set *tmp203 "T"
    676 jump *label188 always
  
    679 label *label188
-   680 set *tmp187 *tmp188
+   680 set *tmp202 *tmp203
    681 label *label186
--    * op strictEqual *tmp189 :compare.14:a :compare.14:b
--    * set :eval.58:b *tmp189
+-    * op strictEqual *tmp204 :compare.14:a :compare.14:b
+-    * set :eval.58:b *tmp204
 +  682 op strictEqual :eval.58:b :compare.14:a :compare.14:b
    683 jump *label190 equal :eval.58:b false
-   684 set *tmp191 "T"
+   684 set *tmp206 "T"
    685 jump *label191 always
  
    688 label *label191
-   689 set *tmp190 *tmp191
+   689 set *tmp205 *tmp206
    690 label *label189
--    * op strictNotEqual *tmp192 :compare.14:a :compare.14:b
--    * set :eval.59:b *tmp192
+-    * op strictNotEqual *tmp207 :compare.14:a :compare.14:b
+-    * set :eval.59:b *tmp207
 +  691 op strictNotEqual :eval.59:b :compare.14:a :compare.14:b
    692 jump *label193 equal :eval.59:b false
-   693 set *tmp194 "T"
+   693 set *tmp209 "T"
    694 jump *label194 always
 
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-60 instructions):
  
      3 set :compare:b 0
      4 set :compare:expected "TFFT"
-     5 assertflush
+     5 assertflush *tmp1
 -    * op equal :eval:b :compare:a :compare:b
 -    * jump *label2 equal :eval:b false
 +    6 jump *label2 notEqual :compare:a :compare:b
-     7 set *tmp3 "T"
+     7 set *tmp4 "T"
      8 jump *label3 always
      9 label *label2
  
     11 label *label3
-    12 set *tmp2 *tmp3
+    12 set *tmp3 *tmp4
     13 label *label1
 -    * op notEqual :eval.1:b :compare:a :compare:b
 -    * jump *label5 equal :eval.1:b false
 +   14 jump *label5 equal :compare:a :compare:b
-    15 set *tmp6 "T"
+    15 set *tmp7 "T"
     16 jump *label6 always
     17 label *label5
  
     19 label *label6
-    20 set *tmp5 *tmp6
+    20 set *tmp6 *tmp7
     21 label *label4
 -    * op strictEqual :eval.2:b :compare:a :compare:b
 -    * jump *label8 equal :eval.2:b false
 +   22 jump *label8 strictNotEqual :compare:a :compare:b
-    23 set *tmp9 "T"
+    23 set *tmp10 "T"
     24 jump *label9 always
     25 label *label8
  
     27 label *label9
-    28 set *tmp8 *tmp9
+    28 set *tmp9 *tmp10
     29 label *label7
 -    * op strictNotEqual :eval.3:b :compare:a :compare:b
 -    * jump *label11 equal :eval.3:b false
 +   30 jump *label11 strictEqual :compare:a :compare:b
-    31 set *tmp12 "T"
+    31 set *tmp13 "T"
     32 jump *label12 always
     33 label *label11
  
     46 set :compare.1:b 1
     47 set :compare.1:expected "FTFT"
-    48 assertflush
+    48 assertflush *tmp15
 -    * op equal :eval.4:b :compare.1:a :compare.1:b
 -    * jump *label15 equal :eval.4:b false
 +   49 jump *label15 notEqual :compare.1:a :compare.1:b
-    50 set *tmp16 "T"
+    50 set *tmp18 "T"
     51 jump *label16 always
     52 label *label15
  
     54 label *label16
-    55 set *tmp15 *tmp16
+    55 set *tmp17 *tmp18
     56 label *label14
 -    * op notEqual :eval.5:b :compare.1:a :compare.1:b
 -    * jump *label18 equal :eval.5:b false
 +   57 jump *label18 equal :compare.1:a :compare.1:b
-    58 set *tmp19 "T"
+    58 set *tmp21 "T"
     59 jump *label19 always
     60 label *label18
  
     62 label *label19
-    63 set *tmp18 *tmp19
+    63 set *tmp20 *tmp21
     64 label *label17
 -    * op strictEqual :eval.6:b :compare.1:a :compare.1:b
 -    * jump *label21 equal :eval.6:b false
 +   65 jump *label21 strictNotEqual :compare.1:a :compare.1:b
-    66 set *tmp22 "T"
+    66 set *tmp24 "T"
     67 jump *label22 always
     68 label *label21
  
     70 label *label22
-    71 set *tmp21 *tmp22
+    71 set *tmp23 *tmp24
     72 label *label20
 -    * op strictNotEqual :eval.7:b :compare.1:a :compare.1:b
 -    * jump *label24 equal :eval.7:b false
 +   73 jump *label24 strictEqual :compare.1:a :compare.1:b
-    74 set *tmp25 "T"
+    74 set *tmp27 "T"
     75 jump *label25 always
     76 label *label24
  
     89 set :compare.2:b 2
     90 set :compare.2:expected "FTFT"
-    91 assertflush
+    91 assertflush *tmp29
 -    * op equal :eval.8:b :compare.2:a :compare.2:b
 -    * jump *label28 equal :eval.8:b false
 +   92 jump *label28 notEqual :compare.2:a :compare.2:b
-    93 set *tmp29 "T"
+    93 set *tmp32 "T"
     94 jump *label29 always
     95 label *label28
  
     97 label *label29
-    98 set *tmp28 *tmp29
+    98 set *tmp31 *tmp32
     99 label *label27
 -    * op notEqual :eval.9:b :compare.2:a :compare.2:b
 -    * jump *label31 equal :eval.9:b false
 +  100 jump *label31 equal :compare.2:a :compare.2:b
-   101 set *tmp32 "T"
+   101 set *tmp35 "T"
    102 jump *label32 always
    103 label *label31
  
    105 label *label32
-   106 set *tmp31 *tmp32
+   106 set *tmp34 *tmp35
    107 label *label30
 -    * op strictEqual :eval.10:b :compare.2:a :compare.2:b
 -    * jump *label34 equal :eval.10:b false
 +  108 jump *label34 strictNotEqual :compare.2:a :compare.2:b
-   109 set *tmp35 "T"
+   109 set *tmp38 "T"
    110 jump *label35 always
    111 label *label34
  
    113 label *label35
-   114 set *tmp34 *tmp35
+   114 set *tmp37 *tmp38
    115 label *label33
 -    * op strictNotEqual :eval.11:b :compare.2:a :compare.2:b
 -    * jump *label37 equal :eval.11:b false
 +  116 jump *label37 strictEqual :compare.2:a :compare.2:b
-   117 set *tmp38 "T"
+   117 set *tmp41 "T"
    118 jump *label38 always
    119 label *label37
  
    132 set :compare.3:b 0
    133 set :compare.3:expected "FTFT"
-   134 assertflush
+   134 assertflush *tmp43
 -    * op equal :eval.12:b :compare.3:a :compare.3:b
 -    * jump *label41 equal :eval.12:b false
 +  135 jump *label41 notEqual :compare.3:a :compare.3:b
-   136 set *tmp42 "T"
+   136 set *tmp46 "T"
    137 jump *label42 always
    138 label *label41
  
    140 label *label42
-   141 set *tmp41 *tmp42
+   141 set *tmp45 *tmp46
    142 label *label40
 -    * op notEqual :eval.13:b :compare.3:a :compare.3:b
 -    * jump *label44 equal :eval.13:b false
 +  143 jump *label44 equal :compare.3:a :compare.3:b
-   144 set *tmp45 "T"
+   144 set *tmp49 "T"
    145 jump *label45 always
    146 label *label44
  
    148 label *label45
-   149 set *tmp44 *tmp45
+   149 set *tmp48 *tmp49
    150 label *label43
 -    * op strictEqual :eval.14:b :compare.3:a :compare.3:b
 -    * jump *label47 equal :eval.14:b false
 +  151 jump *label47 strictNotEqual :compare.3:a :compare.3:b
-   152 set *tmp48 "T"
+   152 set *tmp52 "T"
    153 jump *label48 always
    154 label *label47
  
    156 label *label48
-   157 set *tmp47 *tmp48
+   157 set *tmp51 *tmp52
    158 label *label46
 -    * op strictNotEqual :eval.15:b :compare.3:a :compare.3:b
 -    * jump *label50 equal :eval.15:b false
 +  159 jump *label50 strictEqual :compare.3:a :compare.3:b
-   160 set *tmp51 "T"
+   160 set *tmp55 "T"
    161 jump *label51 always
    162 label *label50
  
    175 set :compare.4:b 1
    176 set :compare.4:expected "TFFT"
-   177 assertflush
+   177 assertflush *tmp57
 -    * op equal :eval.16:b :compare.4:a :compare.4:b
 -    * jump *label54 equal :eval.16:b false
 +  178 jump *label54 notEqual :compare.4:a :compare.4:b
-   179 set *tmp55 "T"
+   179 set *tmp60 "T"
    180 jump *label55 always
    181 label *label54
  
    183 label *label55
-   184 set *tmp54 *tmp55
+   184 set *tmp59 *tmp60
    185 label *label53
 -    * op notEqual :eval.17:b :compare.4:a :compare.4:b
 -    * jump *label57 equal :eval.17:b false
 +  186 jump *label57 equal :compare.4:a :compare.4:b
-   187 set *tmp58 "T"
+   187 set *tmp63 "T"
    188 jump *label58 always
    189 label *label57
  
    191 label *label58
-   192 set *tmp57 *tmp58
+   192 set *tmp62 *tmp63
    193 label *label56
 -    * op strictEqual :eval.18:b :compare.4:a :compare.4:b
 -    * jump *label60 equal :eval.18:b false
 +  194 jump *label60 strictNotEqual :compare.4:a :compare.4:b
-   195 set *tmp61 "T"
+   195 set *tmp66 "T"
    196 jump *label61 always
    197 label *label60
  
    199 label *label61
-   200 set *tmp60 *tmp61
+   200 set *tmp65 *tmp66
    201 label *label59
 -    * op strictNotEqual :eval.19:b :compare.4:a :compare.4:b
 -    * jump *label63 equal :eval.19:b false
 +  202 jump *label63 strictEqual :compare.4:a :compare.4:b
-   203 set *tmp64 "T"
+   203 set *tmp69 "T"
    204 jump *label64 always
    205 label *label63
  
    218 set :compare.5:b 2
    219 set :compare.5:expected "FTFT"
-   220 assertflush
+   220 assertflush *tmp71
 -    * op equal :eval.20:b :compare.5:a :compare.5:b
 -    * jump *label67 equal :eval.20:b false
 +  221 jump *label67 notEqual :compare.5:a :compare.5:b
-   222 set *tmp68 "T"
+   222 set *tmp74 "T"
    223 jump *label68 always
    224 label *label67
  
    226 label *label68
-   227 set *tmp67 *tmp68
+   227 set *tmp73 *tmp74
    228 label *label66
 -    * op notEqual :eval.21:b :compare.5:a :compare.5:b
 -    * jump *label70 equal :eval.21:b false
 +  229 jump *label70 equal :compare.5:a :compare.5:b
-   230 set *tmp71 "T"
+   230 set *tmp77 "T"
    231 jump *label71 always
    232 label *label70
  
    234 label *label71
-   235 set *tmp70 *tmp71
+   235 set *tmp76 *tmp77
    236 label *label69
 -    * op strictEqual :eval.22:b :compare.5:a :compare.5:b
 -    * jump *label73 equal :eval.22:b false
 +  237 jump *label73 strictNotEqual :compare.5:a :compare.5:b
-   238 set *tmp74 "T"
+   238 set *tmp80 "T"
    239 jump *label74 always
    240 label *label73
  
    242 label *label74
-   243 set *tmp73 *tmp74
+   243 set *tmp79 *tmp80
    244 label *label72
 -    * op strictNotEqual :eval.23:b :compare.5:a :compare.5:b
 -    * jump *label76 equal :eval.23:b false
 +  245 jump *label76 strictEqual :compare.5:a :compare.5:b
-   246 set *tmp77 "T"
+   246 set *tmp83 "T"
    247 jump *label77 always
    248 label *label76
  
    261 set :compare.6:b @lead
    262 set :compare.6:expected "FTFT"
-   263 assertflush
+   263 assertflush *tmp85
 -    * op equal :eval.24:b :compare.6:a :compare.6:b
 -    * jump *label80 equal :eval.24:b false
 +  264 jump *label80 notEqual :compare.6:a :compare.6:b
-   265 set *tmp81 "T"
+   265 set *tmp88 "T"
    266 jump *label81 always
    267 label *label80
  
    269 label *label81
-   270 set *tmp80 *tmp81
+   270 set *tmp87 *tmp88
    271 label *label79
 -    * op notEqual :eval.25:b :compare.6:a :compare.6:b
 -    * jump *label83 equal :eval.25:b false
 +  272 jump *label83 equal :compare.6:a :compare.6:b
-   273 set *tmp84 "T"
+   273 set *tmp91 "T"
    274 jump *label84 always
    275 label *label83
  
    277 label *label84
-   278 set *tmp83 *tmp84
+   278 set *tmp90 *tmp91
    279 label *label82
 -    * op strictEqual :eval.26:b :compare.6:a :compare.6:b
 -    * jump *label86 equal :eval.26:b false
 +  280 jump *label86 strictNotEqual :compare.6:a :compare.6:b
-   281 set *tmp87 "T"
+   281 set *tmp94 "T"
    282 jump *label87 always
    283 label *label86
  
    285 label *label87
-   286 set *tmp86 *tmp87
+   286 set *tmp93 *tmp94
    287 label *label85
 -    * op strictNotEqual :eval.27:b :compare.6:a :compare.6:b
 -    * jump *label89 equal :eval.27:b false
 +  288 jump *label89 strictEqual :compare.6:a :compare.6:b
-   289 set *tmp90 "T"
+   289 set *tmp97 "T"
    290 jump *label90 always
    291 label *label89
  
    304 set :compare.7:b A
    305 set :compare.7:expected "TFTF"
-   306 assertflush
+   306 assertflush *tmp99
 -    * op equal :eval.28:b :compare.7:a :compare.7:b
 -    * jump *label93 equal :eval.28:b false
 +  307 jump *label93 notEqual :compare.7:a :compare.7:b
-   308 set *tmp94 "T"
+   308 set *tmp102 "T"
    309 jump *label94 always
    310 label *label93
  
    312 label *label94
-   313 set *tmp93 *tmp94
+   313 set *tmp101 *tmp102
    314 label *label92
 -    * op notEqual :eval.29:b :compare.7:a :compare.7:b
 -    * jump *label96 equal :eval.29:b false
 +  315 jump *label96 equal :compare.7:a :compare.7:b
-   316 set *tmp97 "T"
+   316 set *tmp105 "T"
    317 jump *label97 always
    318 label *label96
  
    320 label *label97
-   321 set *tmp96 *tmp97
+   321 set *tmp104 *tmp105
    322 label *label95
 -    * op strictEqual :eval.30:b :compare.7:a :compare.7:b
 -    * jump *label99 equal :eval.30:b false
 +  323 jump *label99 strictNotEqual :compare.7:a :compare.7:b
-   324 set *tmp100 "T"
+   324 set *tmp108 "T"
    325 jump *label100 always
    326 label *label99
  
    328 label *label100
-   329 set *tmp99 *tmp100
+   329 set *tmp107 *tmp108
    330 label *label98
 -    * op strictNotEqual :eval.31:b :compare.7:a :compare.7:b
 -    * jump *label102 equal :eval.31:b false
 +  331 jump *label102 strictEqual :compare.7:a :compare.7:b
-   332 set *tmp103 "T"
+   332 set *tmp111 "T"
    333 jump *label103 always
    334 label *label102
  
    347 set :compare.8:b 0
    348 set :compare.8:expected "TFTF"
-   349 assertflush
+   349 assertflush *tmp113
 -    * op equal :eval.32:b :compare.8:a :compare.8:b
 -    * jump *label106 equal :eval.32:b false
 +  350 jump *label106 notEqual :compare.8:a :compare.8:b
-   351 set *tmp107 "T"
+   351 set *tmp116 "T"
    352 jump *label107 always
    353 label *label106
  
    355 label *label107
-   356 set *tmp106 *tmp107
+   356 set *tmp115 *tmp116
    357 label *label105
 -    * op notEqual :eval.33:b :compare.8:a :compare.8:b
 -    * jump *label109 equal :eval.33:b false
 +  358 jump *label109 equal :compare.8:a :compare.8:b
-   359 set *tmp110 "T"
+   359 set *tmp119 "T"
    360 jump *label110 always
    361 label *label109
  
    363 label *label110
-   364 set *tmp109 *tmp110
+   364 set *tmp118 *tmp119
    365 label *label108
 -    * op strictEqual :eval.34:b :compare.8:a :compare.8:b
 -    * jump *label112 equal :eval.34:b false
 +  366 jump *label112 strictNotEqual :compare.8:a :compare.8:b
-   367 set *tmp113 "T"
+   367 set *tmp122 "T"
    368 jump *label113 always
    369 label *label112
  
    371 label *label113
-   372 set *tmp112 *tmp113
+   372 set *tmp121 *tmp122
    373 label *label111
 -    * op strictNotEqual :eval.35:b :compare.8:a :compare.8:b
 -    * jump *label115 equal :eval.35:b false
 +  374 jump *label115 strictEqual :compare.8:a :compare.8:b
-   375 set *tmp116 "T"
+   375 set *tmp125 "T"
    376 jump *label116 always
    377 label *label115
  
    390 set :compare.9:b 1
    391 set :compare.9:expected "FTFT"
-   392 assertflush
+   392 assertflush *tmp127
 -    * op equal :eval.36:b :compare.9:a :compare.9:b
 -    * jump *label119 equal :eval.36:b false
 +  393 jump *label119 notEqual :compare.9:a :compare.9:b
-   394 set *tmp120 "T"
+   394 set *tmp130 "T"
    395 jump *label120 always
    396 label *label119
  
    398 label *label120
-   399 set *tmp119 *tmp120
+   399 set *tmp129 *tmp130
    400 label *label118
 -    * op notEqual :eval.37:b :compare.9:a :compare.9:b
 -    * jump *label122 equal :eval.37:b false
 +  401 jump *label122 equal :compare.9:a :compare.9:b
-   402 set *tmp123 "T"
+   402 set *tmp133 "T"
    403 jump *label123 always
    404 label *label122
  
    406 label *label123
-   407 set *tmp122 *tmp123
+   407 set *tmp132 *tmp133
    408 label *label121
 -    * op strictEqual :eval.38:b :compare.9:a :compare.9:b
 -    * jump *label125 equal :eval.38:b false
 +  409 jump *label125 strictNotEqual :compare.9:a :compare.9:b
-   410 set *tmp126 "T"
+   410 set *tmp136 "T"
    411 jump *label126 always
    412 label *label125
  
    414 label *label126
-   415 set *tmp125 *tmp126
+   415 set *tmp135 *tmp136
    416 label *label124
 -    * op strictNotEqual :eval.39:b :compare.9:a :compare.9:b
 -    * jump *label128 equal :eval.39:b false
 +  417 jump *label128 strictEqual :compare.9:a :compare.9:b
-   418 set *tmp129 "T"
+   418 set *tmp139 "T"
    419 jump *label129 always
    420 label *label128
  
    433 set :compare.10:b 0
    434 set :compare.10:expected "FTFT"
-   435 assertflush
+   435 assertflush *tmp141
 -    * op equal :eval.40:b :compare.10:a :compare.10:b
 -    * jump *label132 equal :eval.40:b false
 +  436 jump *label132 notEqual :compare.10:a :compare.10:b
-   437 set *tmp133 "T"
+   437 set *tmp144 "T"
    438 jump *label133 always
    439 label *label132
  
    441 label *label133
-   442 set *tmp132 *tmp133
+   442 set *tmp143 *tmp144
    443 label *label131
 -    * op notEqual :eval.41:b :compare.10:a :compare.10:b
 -    * jump *label135 equal :eval.41:b false
 +  444 jump *label135 equal :compare.10:a :compare.10:b
-   445 set *tmp136 "T"
+   445 set *tmp147 "T"
    446 jump *label136 always
    447 label *label135
  
    449 label *label136
-   450 set *tmp135 *tmp136
+   450 set *tmp146 *tmp147
    451 label *label134
 -    * op strictEqual :eval.42:b :compare.10:a :compare.10:b
 -    * jump *label138 equal :eval.42:b false
 +  452 jump *label138 strictNotEqual :compare.10:a :compare.10:b
-   453 set *tmp139 "T"
+   453 set *tmp150 "T"
    454 jump *label139 always
    455 label *label138
  
    457 label *label139
-   458 set *tmp138 *tmp139
+   458 set *tmp149 *tmp150
    459 label *label137
 -    * op strictNotEqual :eval.43:b :compare.10:a :compare.10:b
 -    * jump *label141 equal :eval.43:b false
 +  460 jump *label141 strictEqual :compare.10:a :compare.10:b
-   461 set *tmp142 "T"
+   461 set *tmp153 "T"
    462 jump *label142 always
    463 label *label141
  
    476 set :compare.11:b 1
    477 set :compare.11:expected "TFFT"
-   478 assertflush
+   478 assertflush *tmp155
 -    * op equal :eval.44:b :compare.11:a :compare.11:b
 -    * jump *label145 equal :eval.44:b false
 +  479 jump *label145 notEqual :compare.11:a :compare.11:b
-   480 set *tmp146 "T"
+   480 set *tmp158 "T"
    481 jump *label146 always
    482 label *label145
  
    484 label *label146
-   485 set *tmp145 *tmp146
+   485 set *tmp157 *tmp158
    486 label *label144
 -    * op notEqual :eval.45:b :compare.11:a :compare.11:b
 -    * jump *label148 equal :eval.45:b false
 +  487 jump *label148 equal :compare.11:a :compare.11:b
-   488 set *tmp149 "T"
+   488 set *tmp161 "T"
    489 jump *label149 always
    490 label *label148
  
    492 label *label149
-   493 set *tmp148 *tmp149
+   493 set *tmp160 *tmp161
    494 label *label147
 -    * op strictEqual :eval.46:b :compare.11:a :compare.11:b
 -    * jump *label151 equal :eval.46:b false
 +  495 jump *label151 strictNotEqual :compare.11:a :compare.11:b
-   496 set *tmp152 "T"
+   496 set *tmp164 "T"
    497 jump *label152 always
    498 label *label151
  
    500 label *label152
-   501 set *tmp151 *tmp152
+   501 set *tmp163 *tmp164
    502 label *label150
 -    * op strictNotEqual :eval.47:b :compare.11:a :compare.11:b
 -    * jump *label154 equal :eval.47:b false
 +  503 jump *label154 strictEqual :compare.11:a :compare.11:b
-   504 set *tmp155 "T"
+   504 set *tmp167 "T"
    505 jump *label155 always
    506 label *label154
  
    519 set :compare.12:b 2
    520 set :compare.12:expected "FTFT"
-   521 assertflush
+   521 assertflush *tmp169
 -    * op equal :eval.48:b :compare.12:a :compare.12:b
 -    * jump *label158 equal :eval.48:b false
 +  522 jump *label158 notEqual :compare.12:a :compare.12:b
-   523 set *tmp159 "T"
+   523 set *tmp172 "T"
    524 jump *label159 always
    525 label *label158
  
    527 label *label159
-   528 set *tmp158 *tmp159
+   528 set *tmp171 *tmp172
    529 label *label157
 -    * op notEqual :eval.49:b :compare.12:a :compare.12:b
 -    * jump *label161 equal :eval.49:b false
 +  530 jump *label161 equal :compare.12:a :compare.12:b
-   531 set *tmp162 "T"
+   531 set *tmp175 "T"
    532 jump *label162 always
    533 label *label161
  
    535 label *label162
-   536 set *tmp161 *tmp162
+   536 set *tmp174 *tmp175
    537 label *label160
 -    * op strictEqual :eval.50:b :compare.12:a :compare.12:b
 -    * jump *label164 equal :eval.50:b false
 +  538 jump *label164 strictNotEqual :compare.12:a :compare.12:b
-   539 set *tmp165 "T"
+   539 set *tmp178 "T"
    540 jump *label165 always
    541 label *label164
  
    543 label *label165
-   544 set *tmp164 *tmp165
+   544 set *tmp177 *tmp178
    545 label *label163
 -    * op strictNotEqual :eval.51:b :compare.12:a :compare.12:b
 -    * jump *label167 equal :eval.51:b false
 +  546 jump *label167 strictEqual :compare.12:a :compare.12:b
-   547 set *tmp168 "T"
+   547 set *tmp181 "T"
    548 jump *label168 always
    549 label *label167
  
    562 set :compare.13:b "B"
    563 set :compare.13:expected "FTFT"
-   564 assertflush
+   564 assertflush *tmp183
 -    * op equal :eval.52:b :compare.13:a :compare.13:b
 -    * jump *label171 equal :eval.52:b false
 +  565 jump *label171 notEqual :compare.13:a :compare.13:b
-   566 set *tmp172 "T"
+   566 set *tmp186 "T"
    567 jump *label172 always
    568 label *label171
  
    570 label *label172
-   571 set *tmp171 *tmp172
+   571 set *tmp185 *tmp186
    572 label *label170
 -    * op notEqual :eval.53:b :compare.13:a :compare.13:b
 -    * jump *label174 equal :eval.53:b false
 +  573 jump *label174 equal :compare.13:a :compare.13:b
-   574 set *tmp175 "T"
+   574 set *tmp189 "T"
    575 jump *label175 always
    576 label *label174
  
    578 label *label175
-   579 set *tmp174 *tmp175
+   579 set *tmp188 *tmp189
    580 label *label173
 -    * op strictEqual :eval.54:b :compare.13:a :compare.13:b
 -    * jump *label177 equal :eval.54:b false
 +  581 jump *label177 strictNotEqual :compare.13:a :compare.13:b
-   582 set *tmp178 "T"
+   582 set *tmp192 "T"
    583 jump *label178 always
    584 label *label177
  
    586 label *label178
-   587 set *tmp177 *tmp178
+   587 set *tmp191 *tmp192
    588 label *label176
 -    * op strictNotEqual :eval.55:b :compare.13:a :compare.13:b
 -    * jump *label180 equal :eval.55:b false
 +  589 jump *label180 strictEqual :compare.13:a :compare.13:b
-   590 set *tmp181 "T"
+   590 set *tmp195 "T"
    591 jump *label181 always
    592 label *label180
  
    605 set :compare.14:b "A"
    606 set :compare.14:expected "TFTF"
-   607 assertflush
+   607 assertflush *tmp197
 -    * op equal :eval.56:b :compare.14:a :compare.14:b
 -    * jump *label184 equal :eval.56:b false
 +  608 jump *label184 notEqual :compare.14:a :compare.14:b
-   609 set *tmp185 "T"
+   609 set *tmp200 "T"
    610 jump *label185 always
    611 label *label184
  
    613 label *label185
-   614 set *tmp184 *tmp185
+   614 set *tmp199 *tmp200
    615 label *label183
 -    * op notEqual :eval.57:b :compare.14:a :compare.14:b
 -    * jump *label187 equal :eval.57:b false
 +  616 jump *label187 equal :compare.14:a :compare.14:b
-   617 set *tmp188 "T"
+   617 set *tmp203 "T"
    618 jump *label188 always
    619 label *label187
  
    621 label *label188
-   622 set *tmp187 *tmp188
+   622 set *tmp202 *tmp203
    623 label *label186
 -    * op strictEqual :eval.58:b :compare.14:a :compare.14:b
 -    * jump *label190 equal :eval.58:b false
 +  624 jump *label190 strictNotEqual :compare.14:a :compare.14:b
-   625 set *tmp191 "T"
+   625 set *tmp206 "T"
    626 jump *label191 always
    627 label *label190
  
    629 label *label191
-   630 set *tmp190 *tmp191
+   630 set *tmp205 *tmp206
    631 label *label189
 -    * op strictNotEqual :eval.59:b :compare.14:a :compare.14:b
 -    * jump *label193 equal :eval.59:b false
 +  632 jump *label193 strictEqual :compare.14:a :compare.14:b
-   633 set *tmp194 "T"
+   633 set *tmp209 "T"
    634 jump *label194 always
    635 label *label193
 
@@ -1341,829 +1341,829 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4
  
      3 set :compare:b 0
      4 set :compare:expected "TFFT"
-     5 assertflush
+     5 assertflush *tmp1
 -    * jump *label2 notEqual :compare:a :compare:b
 +    6 jump *label2 notEqual null 0
-     7 set *tmp3 "T"
+     7 set *tmp4 "T"
      8 jump *label3 always
      9 label *label2
--    * set *tmp3 "F"
+-    * set *tmp4 "F"
     10 label *label3
--    * set *tmp2 *tmp3
-+   11 set *tmp2 "T"
+-    * set *tmp3 *tmp4
++   11 set *tmp3 "T"
     12 label *label1
 -    * jump *label5 equal :compare:a :compare:b
--    * set *tmp6 "T"
+-    * set *tmp7 "T"
 +   13 jump *label5 equal null 0
     14 jump *label6 always
     15 label *label5
-    16 set *tmp6 "F"
+    16 set *tmp7 "F"
     17 label *label6
--    * set *tmp5 *tmp6
-+   18 set *tmp5 "F"
+-    * set *tmp6 *tmp7
++   18 set *tmp6 "F"
     19 label *label4
 -    * jump *label8 strictNotEqual :compare:a :compare:b
--    * set *tmp9 "T"
+-    * set *tmp10 "T"
 +   20 jump *label8 strictNotEqual null 0
     21 jump *label9 always
     22 label *label8
-    23 set *tmp9 "F"
+    23 set *tmp10 "F"
     24 label *label9
--    * set *tmp8 *tmp9
-+   25 set *tmp8 "F"
+-    * set *tmp9 *tmp10
++   25 set *tmp9 "F"
     26 label *label7
 -    * jump *label11 strictEqual :compare:a :compare:b
 +   27 jump *label11 strictEqual null 0
-    28 set *tmp12 "T"
+    28 set *tmp13 "T"
     29 jump *label12 always
     30 label *label11
--    * set *tmp12 "F"
+-    * set *tmp13 "F"
     31 label *label12
--    * set *tmp11 *tmp12
-+   32 set *tmp11 "T"
+-    * set *tmp12 *tmp13
++   32 set *tmp12 "T"
     33 label *label10
--    * print *tmp2
--    * print *tmp5
--    * print *tmp8
--    * print *tmp11
--    * assertprints :compare:expected :compare:title
-+   34 print *tmp3
-+   35 print *tmp6
-+   36 print *tmp9
-+   37 print *tmp12
-+   38 assertprints "TFFT" "comparison 1"
+-    * print *tmp3
+-    * print *tmp6
+-    * print *tmp9
+-    * print *tmp12
+-    * assertprints *tmp1 :compare:expected :compare:title
++   34 print *tmp4
++   35 print *tmp7
++   36 print *tmp10
++   37 print *tmp13
++   38 assertprints *tmp1 "TFFT" "comparison 1"
     39 label *label0
     40 set :compare.1:title "comparison 2"
     41 set :compare.1:a null
     42 set :compare.1:b 1
     43 set :compare.1:expected "FTFT"
-    44 assertflush
+    44 assertflush *tmp15
 -    * jump *label15 notEqual :compare.1:a :compare.1:b
--    * set *tmp16 "T"
+-    * set *tmp18 "T"
 +   45 jump *label15 notEqual null 1
     46 jump *label16 always
     47 label *label15
-    48 set *tmp16 "F"
+    48 set *tmp18 "F"
     49 label *label16
--    * set *tmp15 *tmp16
-+   50 set *tmp15 "F"
+-    * set *tmp17 *tmp18
++   50 set *tmp17 "F"
     51 label *label14
 -    * jump *label18 equal :compare.1:a :compare.1:b
 +   52 jump *label18 equal null 1
-    53 set *tmp19 "T"
+    53 set *tmp21 "T"
     54 jump *label19 always
     55 label *label18
--    * set *tmp19 "F"
+-    * set *tmp21 "F"
     56 label *label19
--    * set *tmp18 *tmp19
-+   57 set *tmp18 "T"
+-    * set *tmp20 *tmp21
++   57 set *tmp20 "T"
     58 label *label17
 -    * jump *label21 strictNotEqual :compare.1:a :compare.1:b
--    * set *tmp22 "T"
+-    * set *tmp24 "T"
 +   59 jump *label21 strictNotEqual null 1
     60 jump *label22 always
     61 label *label21
-    62 set *tmp22 "F"
+    62 set *tmp24 "F"
     63 label *label22
--    * set *tmp21 *tmp22
-+   64 set *tmp21 "F"
+-    * set *tmp23 *tmp24
++   64 set *tmp23 "F"
     65 label *label20
 -    * jump *label24 strictEqual :compare.1:a :compare.1:b
 +   66 jump *label24 strictEqual null 1
-    67 set *tmp25 "T"
+    67 set *tmp27 "T"
     68 jump *label25 always
     69 label *label24
--    * set *tmp25 "F"
+-    * set *tmp27 "F"
     70 label *label25
--    * set *tmp24 *tmp25
-+   71 set *tmp24 "T"
+-    * set *tmp26 *tmp27
++   71 set *tmp26 "T"
     72 label *label23
--    * print *tmp15
--    * print *tmp18
--    * print *tmp21
--    * print *tmp24
--    * assertprints :compare.1:expected :compare.1:title
-+   73 print *tmp16
-+   74 print *tmp19
-+   75 print *tmp22
-+   76 print *tmp25
-+   77 assertprints "FTFT" "comparison 2"
+-    * print *tmp17
+-    * print *tmp20
+-    * print *tmp23
+-    * print *tmp26
+-    * assertprints *tmp15 :compare.1:expected :compare.1:title
++   73 print *tmp18
++   74 print *tmp21
++   75 print *tmp24
++   76 print *tmp27
++   77 assertprints *tmp15 "FTFT" "comparison 2"
     78 label *label13
     79 set :compare.2:title "comparison 3"
     80 set :compare.2:a null
     81 set :compare.2:b 2
     82 set :compare.2:expected "FTFT"
-    83 assertflush
+    83 assertflush *tmp29
 -    * jump *label28 notEqual :compare.2:a :compare.2:b
--    * set *tmp29 "T"
+-    * set *tmp32 "T"
 +   84 jump *label28 notEqual null 2
     85 jump *label29 always
     86 label *label28
-    87 set *tmp29 "F"
+    87 set *tmp32 "F"
     88 label *label29
--    * set *tmp28 *tmp29
-+   89 set *tmp28 "F"
+-    * set *tmp31 *tmp32
++   89 set *tmp31 "F"
     90 label *label27
 -    * jump *label31 equal :compare.2:a :compare.2:b
 +   91 jump *label31 equal null 2
-    92 set *tmp32 "T"
+    92 set *tmp35 "T"
     93 jump *label32 always
     94 label *label31
--    * set *tmp32 "F"
+-    * set *tmp35 "F"
     95 label *label32
--    * set *tmp31 *tmp32
-+   96 set *tmp31 "T"
+-    * set *tmp34 *tmp35
++   96 set *tmp34 "T"
     97 label *label30
 -    * jump *label34 strictNotEqual :compare.2:a :compare.2:b
--    * set *tmp35 "T"
+-    * set *tmp38 "T"
 +   98 jump *label34 strictNotEqual null 2
     99 jump *label35 always
    100 label *label34
-   101 set *tmp35 "F"
+   101 set *tmp38 "F"
    102 label *label35
--    * set *tmp34 *tmp35
-+  103 set *tmp34 "F"
+-    * set *tmp37 *tmp38
++  103 set *tmp37 "F"
    104 label *label33
 -    * jump *label37 strictEqual :compare.2:a :compare.2:b
 +  105 jump *label37 strictEqual null 2
-   106 set *tmp38 "T"
+   106 set *tmp41 "T"
    107 jump *label38 always
    108 label *label37
--    * set *tmp38 "F"
+-    * set *tmp41 "F"
    109 label *label38
--    * set *tmp37 *tmp38
-+  110 set *tmp37 "T"
+-    * set *tmp40 *tmp41
++  110 set *tmp40 "T"
    111 label *label36
--    * print *tmp28
 -    * print *tmp31
 -    * print *tmp34
 -    * print *tmp37
--    * assertprints :compare.2:expected :compare.2:title
-+  112 print *tmp29
-+  113 print *tmp32
-+  114 print *tmp35
-+  115 print *tmp38
-+  116 assertprints "FTFT" "comparison 3"
+-    * print *tmp40
+-    * assertprints *tmp29 :compare.2:expected :compare.2:title
++  112 print *tmp32
++  113 print *tmp35
++  114 print *tmp38
++  115 print *tmp41
++  116 assertprints *tmp29 "FTFT" "comparison 3"
    117 label *label26
    118 set :compare.3:title "comparison 4"
    119 set :compare.3:a @coal
    120 set :compare.3:b 0
    121 set :compare.3:expected "FTFT"
-   122 assertflush
+   122 assertflush *tmp43
 -    * jump *label41 notEqual :compare.3:a :compare.3:b
--    * set *tmp42 "T"
+-    * set *tmp46 "T"
 +  123 jump *label41 notEqual @coal 0
    124 jump *label42 always
    125 label *label41
-   126 set *tmp42 "F"
+   126 set *tmp46 "F"
    127 label *label42
--    * set *tmp41 *tmp42
-+  128 set *tmp41 "F"
+-    * set *tmp45 *tmp46
++  128 set *tmp45 "F"
    129 label *label40
 -    * jump *label44 equal :compare.3:a :compare.3:b
 +  130 jump *label44 equal @coal 0
-   131 set *tmp45 "T"
+   131 set *tmp49 "T"
    132 jump *label45 always
    133 label *label44
--    * set *tmp45 "F"
+-    * set *tmp49 "F"
    134 label *label45
--    * set *tmp44 *tmp45
-+  135 set *tmp44 "T"
+-    * set *tmp48 *tmp49
++  135 set *tmp48 "T"
    136 label *label43
 -    * jump *label47 strictNotEqual :compare.3:a :compare.3:b
--    * set *tmp48 "T"
+-    * set *tmp52 "T"
 +  137 jump *label47 strictNotEqual @coal 0
    138 jump *label48 always
    139 label *label47
-   140 set *tmp48 "F"
+   140 set *tmp52 "F"
    141 label *label48
--    * set *tmp47 *tmp48
-+  142 set *tmp47 "F"
+-    * set *tmp51 *tmp52
++  142 set *tmp51 "F"
    143 label *label46
 -    * jump *label50 strictEqual :compare.3:a :compare.3:b
 +  144 jump *label50 strictEqual @coal 0
-   145 set *tmp51 "T"
+   145 set *tmp55 "T"
    146 jump *label51 always
    147 label *label50
--    * set *tmp51 "F"
+-    * set *tmp55 "F"
    148 label *label51
--    * set *tmp50 *tmp51
-+  149 set *tmp50 "T"
+-    * set *tmp54 *tmp55
++  149 set *tmp54 "T"
    150 label *label49
--    * print *tmp41
--    * print *tmp44
--    * print *tmp47
--    * print *tmp50
--    * assertprints :compare.3:expected :compare.3:title
-+  151 print *tmp42
-+  152 print *tmp45
-+  153 print *tmp48
-+  154 print *tmp51
-+  155 assertprints "FTFT" "comparison 4"
+-    * print *tmp45
+-    * print *tmp48
+-    * print *tmp51
+-    * print *tmp54
+-    * assertprints *tmp43 :compare.3:expected :compare.3:title
++  151 print *tmp46
++  152 print *tmp49
++  153 print *tmp52
++  154 print *tmp55
++  155 assertprints *tmp43 "FTFT" "comparison 4"
    156 label *label39
    157 set :compare.4:title "comparison 5"
    158 set :compare.4:a @coal
    159 set :compare.4:b 1
    160 set :compare.4:expected "TFFT"
-   161 assertflush
+   161 assertflush *tmp57
 -    * jump *label54 notEqual :compare.4:a :compare.4:b
 +  162 jump *label54 notEqual @coal 1
-   163 set *tmp55 "T"
+   163 set *tmp60 "T"
    164 jump *label55 always
    165 label *label54
--    * set *tmp55 "F"
+-    * set *tmp60 "F"
    166 label *label55
--    * set *tmp54 *tmp55
-+  167 set *tmp54 "T"
+-    * set *tmp59 *tmp60
++  167 set *tmp59 "T"
    168 label *label53
 -    * jump *label57 equal :compare.4:a :compare.4:b
--    * set *tmp58 "T"
+-    * set *tmp63 "T"
 +  169 jump *label57 equal @coal 1
    170 jump *label58 always
    171 label *label57
-   172 set *tmp58 "F"
+   172 set *tmp63 "F"
    173 label *label58
--    * set *tmp57 *tmp58
-+  174 set *tmp57 "F"
+-    * set *tmp62 *tmp63
++  174 set *tmp62 "F"
    175 label *label56
 -    * jump *label60 strictNotEqual :compare.4:a :compare.4:b
--    * set *tmp61 "T"
+-    * set *tmp66 "T"
 +  176 jump *label60 strictNotEqual @coal 1
    177 jump *label61 always
    178 label *label60
-   179 set *tmp61 "F"
+   179 set *tmp66 "F"
    180 label *label61
--    * set *tmp60 *tmp61
-+  181 set *tmp60 "F"
+-    * set *tmp65 *tmp66
++  181 set *tmp65 "F"
    182 label *label59
 -    * jump *label63 strictEqual :compare.4:a :compare.4:b
 +  183 jump *label63 strictEqual @coal 1
-   184 set *tmp64 "T"
+   184 set *tmp69 "T"
    185 jump *label64 always
    186 label *label63
--    * set *tmp64 "F"
+-    * set *tmp69 "F"
    187 label *label64
--    * set *tmp63 *tmp64
-+  188 set *tmp63 "T"
+-    * set *tmp68 *tmp69
++  188 set *tmp68 "T"
    189 label *label62
--    * print *tmp54
--    * print *tmp57
--    * print *tmp60
--    * print *tmp63
--    * assertprints :compare.4:expected :compare.4:title
-+  190 print *tmp55
-+  191 print *tmp58
-+  192 print *tmp61
-+  193 print *tmp64
-+  194 assertprints "TFFT" "comparison 5"
+-    * print *tmp59
+-    * print *tmp62
+-    * print *tmp65
+-    * print *tmp68
+-    * assertprints *tmp57 :compare.4:expected :compare.4:title
++  190 print *tmp60
++  191 print *tmp63
++  192 print *tmp66
++  193 print *tmp69
++  194 assertprints *tmp57 "TFFT" "comparison 5"
    195 label *label52
    196 set :compare.5:title "comparison 6"
    197 set :compare.5:a @coal
    198 set :compare.5:b 2
    199 set :compare.5:expected "FTFT"
-   200 assertflush
+   200 assertflush *tmp71
 -    * jump *label67 notEqual :compare.5:a :compare.5:b
--    * set *tmp68 "T"
+-    * set *tmp74 "T"
 +  201 jump *label67 notEqual @coal 2
    202 jump *label68 always
    203 label *label67
-   204 set *tmp68 "F"
+   204 set *tmp74 "F"
    205 label *label68
--    * set *tmp67 *tmp68
-+  206 set *tmp67 "F"
+-    * set *tmp73 *tmp74
++  206 set *tmp73 "F"
    207 label *label66
 -    * jump *label70 equal :compare.5:a :compare.5:b
 +  208 jump *label70 equal @coal 2
-   209 set *tmp71 "T"
+   209 set *tmp77 "T"
    210 jump *label71 always
    211 label *label70
--    * set *tmp71 "F"
+-    * set *tmp77 "F"
    212 label *label71
--    * set *tmp70 *tmp71
-+  213 set *tmp70 "T"
+-    * set *tmp76 *tmp77
++  213 set *tmp76 "T"
    214 label *label69
 -    * jump *label73 strictNotEqual :compare.5:a :compare.5:b
--    * set *tmp74 "T"
+-    * set *tmp80 "T"
 +  215 jump *label73 strictNotEqual @coal 2
    216 jump *label74 always
    217 label *label73
-   218 set *tmp74 "F"
+   218 set *tmp80 "F"
    219 label *label74
--    * set *tmp73 *tmp74
-+  220 set *tmp73 "F"
+-    * set *tmp79 *tmp80
++  220 set *tmp79 "F"
    221 label *label72
 -    * jump *label76 strictEqual :compare.5:a :compare.5:b
 +  222 jump *label76 strictEqual @coal 2
-   223 set *tmp77 "T"
+   223 set *tmp83 "T"
    224 jump *label77 always
    225 label *label76
--    * set *tmp77 "F"
+-    * set *tmp83 "F"
    226 label *label77
--    * set *tmp76 *tmp77
-+  227 set *tmp76 "T"
+-    * set *tmp82 *tmp83
++  227 set *tmp82 "T"
    228 label *label75
--    * print *tmp67
--    * print *tmp70
 -    * print *tmp73
 -    * print *tmp76
--    * assertprints :compare.5:expected :compare.5:title
-+  229 print *tmp68
-+  230 print *tmp71
-+  231 print *tmp74
-+  232 print *tmp77
-+  233 assertprints "FTFT" "comparison 6"
+-    * print *tmp79
+-    * print *tmp82
+-    * assertprints *tmp71 :compare.5:expected :compare.5:title
++  229 print *tmp74
++  230 print *tmp77
++  231 print *tmp80
++  232 print *tmp83
++  233 assertprints *tmp71 "FTFT" "comparison 6"
    234 label *label65
    235 set :compare.6:title "comparison 7"
    236 set :compare.6:a @coal
    237 set :compare.6:b @lead
    238 set :compare.6:expected "FTFT"
-   239 assertflush
+   239 assertflush *tmp85
 -    * jump *label80 notEqual :compare.6:a :compare.6:b
--    * set *tmp81 "T"
+-    * set *tmp88 "T"
 +  240 jump *label80 notEqual @coal @lead
    241 jump *label81 always
    242 label *label80
-   243 set *tmp81 "F"
+   243 set *tmp88 "F"
    244 label *label81
--    * set *tmp80 *tmp81
-+  245 set *tmp80 "F"
+-    * set *tmp87 *tmp88
++  245 set *tmp87 "F"
    246 label *label79
 -    * jump *label83 equal :compare.6:a :compare.6:b
 +  247 jump *label83 equal @coal @lead
-   248 set *tmp84 "T"
+   248 set *tmp91 "T"
    249 jump *label84 always
    250 label *label83
--    * set *tmp84 "F"
+-    * set *tmp91 "F"
    251 label *label84
--    * set *tmp83 *tmp84
-+  252 set *tmp83 "T"
+-    * set *tmp90 *tmp91
++  252 set *tmp90 "T"
    253 label *label82
 -    * jump *label86 strictNotEqual :compare.6:a :compare.6:b
--    * set *tmp87 "T"
+-    * set *tmp94 "T"
 +  254 jump *label86 strictNotEqual @coal @lead
    255 jump *label87 always
    256 label *label86
-   257 set *tmp87 "F"
+   257 set *tmp94 "F"
    258 label *label87
--    * set *tmp86 *tmp87
-+  259 set *tmp86 "F"
+-    * set *tmp93 *tmp94
++  259 set *tmp93 "F"
    260 label *label85
 -    * jump *label89 strictEqual :compare.6:a :compare.6:b
 +  261 jump *label89 strictEqual @coal @lead
-   262 set *tmp90 "T"
+   262 set *tmp97 "T"
    263 jump *label90 always
    264 label *label89
--    * set *tmp90 "F"
+-    * set *tmp97 "F"
    265 label *label90
--    * set *tmp89 *tmp90
-+  266 set *tmp89 "T"
+-    * set *tmp96 *tmp97
++  266 set *tmp96 "T"
    267 label *label88
--    * print *tmp80
--    * print *tmp83
--    * print *tmp86
--    * print *tmp89
--    * assertprints :compare.6:expected :compare.6:title
-+  268 print *tmp81
-+  269 print *tmp84
-+  270 print *tmp87
-+  271 print *tmp90
-+  272 assertprints "FTFT" "comparison 7"
+-    * print *tmp87
+-    * print *tmp90
+-    * print *tmp93
+-    * print *tmp96
+-    * assertprints *tmp85 :compare.6:expected :compare.6:title
++  268 print *tmp88
++  269 print *tmp91
++  270 print *tmp94
++  271 print *tmp97
++  272 assertprints *tmp85 "FTFT" "comparison 7"
    273 label *label78
    274 set :compare.7:title "comparison 8"
    275 set :compare.7:a A
    276 set :compare.7:b A
    277 set :compare.7:expected "TFTF"
-   278 assertflush
+   278 assertflush *tmp99
 -    * jump *label93 notEqual :compare.7:a :compare.7:b
 +  279 jump *label93 notEqual A A
-   280 set *tmp94 "T"
+   280 set *tmp102 "T"
    281 jump *label94 always
    282 label *label93
  
    284 label *label94
-   285 set *tmp93 *tmp94
+   285 set *tmp101 *tmp102
    286 label *label92
 -    * jump *label96 equal :compare.7:a :compare.7:b
 +  287 jump *label96 equal A A
-   288 set *tmp97 "T"
+   288 set *tmp105 "T"
    289 jump *label97 always
    290 label *label96
  
    292 label *label97
-   293 set *tmp96 *tmp97
+   293 set *tmp104 *tmp105
    294 label *label95
 -    * jump *label99 strictNotEqual :compare.7:a :compare.7:b
 +  295 jump *label99 strictNotEqual A A
-   296 set *tmp100 "T"
+   296 set *tmp108 "T"
    297 jump *label100 always
    298 label *label99
  
    300 label *label100
-   301 set *tmp99 *tmp100
+   301 set *tmp107 *tmp108
    302 label *label98
 -    * jump *label102 strictEqual :compare.7:a :compare.7:b
 +  303 jump *label102 strictEqual A A
-   304 set *tmp103 "T"
+   304 set *tmp111 "T"
    305 jump *label103 always
    306 label *label102
  
    308 label *label103
-   309 set *tmp102 *tmp103
+   309 set *tmp110 *tmp111
    310 label *label101
--    * print *tmp93
--    * print *tmp96
--    * print *tmp99
--    * print *tmp102
--    * assertprints :compare.7:expected :compare.7:title
-+  311 print *tmp94
-+  312 print *tmp97
-+  313 print *tmp100
-+  314 print *tmp103
-+  315 assertprints "TFTF" "comparison 8"
+-    * print *tmp101
+-    * print *tmp104
+-    * print *tmp107
+-    * print *tmp110
+-    * assertprints *tmp99 :compare.7:expected :compare.7:title
++  311 print *tmp102
++  312 print *tmp105
++  313 print *tmp108
++  314 print *tmp111
++  315 assertprints *tmp99 "TFTF" "comparison 8"
    316 label *label91
    317 set :compare.8:title "comparison 9"
    318 set :compare.8:a A
    319 set :compare.8:b 0
    320 set :compare.8:expected "TFTF"
-   321 assertflush
+   321 assertflush *tmp113
 -    * jump *label106 notEqual :compare.8:a :compare.8:b
 +  322 jump *label106 notEqual A 0
-   323 set *tmp107 "T"
+   323 set *tmp116 "T"
    324 jump *label107 always
    325 label *label106
  
    327 label *label107
-   328 set *tmp106 *tmp107
+   328 set *tmp115 *tmp116
    329 label *label105
 -    * jump *label109 equal :compare.8:a :compare.8:b
 +  330 jump *label109 equal A 0
-   331 set *tmp110 "T"
+   331 set *tmp119 "T"
    332 jump *label110 always
    333 label *label109
  
    335 label *label110
-   336 set *tmp109 *tmp110
+   336 set *tmp118 *tmp119
    337 label *label108
 -    * jump *label112 strictNotEqual :compare.8:a :compare.8:b
 +  338 jump *label112 strictNotEqual A 0
-   339 set *tmp113 "T"
+   339 set *tmp122 "T"
    340 jump *label113 always
    341 label *label112
  
    343 label *label113
-   344 set *tmp112 *tmp113
+   344 set *tmp121 *tmp122
    345 label *label111
 -    * jump *label115 strictEqual :compare.8:a :compare.8:b
 +  346 jump *label115 strictEqual A 0
-   347 set *tmp116 "T"
+   347 set *tmp125 "T"
    348 jump *label116 always
    349 label *label115
  
    351 label *label116
-   352 set *tmp115 *tmp116
+   352 set *tmp124 *tmp125
    353 label *label114
--    * print *tmp106
--    * print *tmp109
--    * print *tmp112
 -    * print *tmp115
--    * assertprints :compare.8:expected :compare.8:title
-+  354 print *tmp107
-+  355 print *tmp110
-+  356 print *tmp113
-+  357 print *tmp116
-+  358 assertprints "TFTF" "comparison 9"
+-    * print *tmp118
+-    * print *tmp121
+-    * print *tmp124
+-    * assertprints *tmp113 :compare.8:expected :compare.8:title
++  354 print *tmp116
++  355 print *tmp119
++  356 print *tmp122
++  357 print *tmp125
++  358 assertprints *tmp113 "TFTF" "comparison 9"
    359 label *label104
    360 set :compare.9:title "comparison 10"
    361 set :compare.9:a A
    362 set :compare.9:b 1
    363 set :compare.9:expected "FTFT"
-   364 assertflush
+   364 assertflush *tmp127
 -    * jump *label119 notEqual :compare.9:a :compare.9:b
 +  365 jump *label119 notEqual A 1
-   366 set *tmp120 "T"
+   366 set *tmp130 "T"
    367 jump *label120 always
    368 label *label119
  
    370 label *label120
-   371 set *tmp119 *tmp120
+   371 set *tmp129 *tmp130
    372 label *label118
 -    * jump *label122 equal :compare.9:a :compare.9:b
 +  373 jump *label122 equal A 1
-   374 set *tmp123 "T"
+   374 set *tmp133 "T"
    375 jump *label123 always
    376 label *label122
  
    378 label *label123
-   379 set *tmp122 *tmp123
+   379 set *tmp132 *tmp133
    380 label *label121
 -    * jump *label125 strictNotEqual :compare.9:a :compare.9:b
 +  381 jump *label125 strictNotEqual A 1
-   382 set *tmp126 "T"
+   382 set *tmp136 "T"
    383 jump *label126 always
    384 label *label125
  
    386 label *label126
-   387 set *tmp125 *tmp126
+   387 set *tmp135 *tmp136
    388 label *label124
 -    * jump *label128 strictEqual :compare.9:a :compare.9:b
 +  389 jump *label128 strictEqual A 1
-   390 set *tmp129 "T"
+   390 set *tmp139 "T"
    391 jump *label129 always
    392 label *label128
  
    394 label *label129
-   395 set *tmp128 *tmp129
+   395 set *tmp138 *tmp139
    396 label *label127
--    * print *tmp119
--    * print *tmp122
--    * print *tmp125
--    * print *tmp128
--    * assertprints :compare.9:expected :compare.9:title
-+  397 print *tmp120
-+  398 print *tmp123
-+  399 print *tmp126
-+  400 print *tmp129
-+  401 assertprints "FTFT" "comparison 10"
+-    * print *tmp129
+-    * print *tmp132
+-    * print *tmp135
+-    * print *tmp138
+-    * assertprints *tmp127 :compare.9:expected :compare.9:title
++  397 print *tmp130
++  398 print *tmp133
++  399 print *tmp136
++  400 print *tmp139
++  401 assertprints *tmp127 "FTFT" "comparison 10"
    402 label *label117
    403 set :compare.10:title "comparison 11"
    404 set :compare.10:a "A"
    405 set :compare.10:b 0
    406 set :compare.10:expected "FTFT"
-   407 assertflush
+   407 assertflush *tmp141
 -    * jump *label132 notEqual :compare.10:a :compare.10:b
--    * set *tmp133 "T"
+-    * set *tmp144 "T"
 +  408 jump *label132 notEqual "A" 0
    409 jump *label133 always
    410 label *label132
-   411 set *tmp133 "F"
+   411 set *tmp144 "F"
    412 label *label133
--    * set *tmp132 *tmp133
-+  413 set *tmp132 "F"
+-    * set *tmp143 *tmp144
++  413 set *tmp143 "F"
    414 label *label131
 -    * jump *label135 equal :compare.10:a :compare.10:b
 +  415 jump *label135 equal "A" 0
-   416 set *tmp136 "T"
+   416 set *tmp147 "T"
    417 jump *label136 always
    418 label *label135
--    * set *tmp136 "F"
+-    * set *tmp147 "F"
    419 label *label136
--    * set *tmp135 *tmp136
-+  420 set *tmp135 "T"
+-    * set *tmp146 *tmp147
++  420 set *tmp146 "T"
    421 label *label134
 -    * jump *label138 strictNotEqual :compare.10:a :compare.10:b
--    * set *tmp139 "T"
+-    * set *tmp150 "T"
 +  422 jump *label138 strictNotEqual "A" 0
    423 jump *label139 always
    424 label *label138
-   425 set *tmp139 "F"
+   425 set *tmp150 "F"
    426 label *label139
--    * set *tmp138 *tmp139
-+  427 set *tmp138 "F"
+-    * set *tmp149 *tmp150
++  427 set *tmp149 "F"
    428 label *label137
 -    * jump *label141 strictEqual :compare.10:a :compare.10:b
 +  429 jump *label141 strictEqual "A" 0
-   430 set *tmp142 "T"
+   430 set *tmp153 "T"
    431 jump *label142 always
    432 label *label141
--    * set *tmp142 "F"
+-    * set *tmp153 "F"
    433 label *label142
--    * set *tmp141 *tmp142
-+  434 set *tmp141 "T"
+-    * set *tmp152 *tmp153
++  434 set *tmp152 "T"
    435 label *label140
--    * print *tmp132
--    * print *tmp135
--    * print *tmp138
--    * print *tmp141
--    * assertprints :compare.10:expected :compare.10:title
-+  436 print *tmp133
-+  437 print *tmp136
-+  438 print *tmp139
-+  439 print *tmp142
-+  440 assertprints "FTFT" "comparison 11"
+-    * print *tmp143
+-    * print *tmp146
+-    * print *tmp149
+-    * print *tmp152
+-    * assertprints *tmp141 :compare.10:expected :compare.10:title
++  436 print *tmp144
++  437 print *tmp147
++  438 print *tmp150
++  439 print *tmp153
++  440 assertprints *tmp141 "FTFT" "comparison 11"
    441 label *label130
    442 set :compare.11:title "comparison 12"
    443 set :compare.11:a "A"
    444 set :compare.11:b 1
    445 set :compare.11:expected "TFFT"
-   446 assertflush
+   446 assertflush *tmp155
 -    * jump *label145 notEqual :compare.11:a :compare.11:b
 +  447 jump *label145 notEqual "A" 1
-   448 set *tmp146 "T"
+   448 set *tmp158 "T"
    449 jump *label146 always
    450 label *label145
--    * set *tmp146 "F"
+-    * set *tmp158 "F"
    451 label *label146
--    * set *tmp145 *tmp146
-+  452 set *tmp145 "T"
+-    * set *tmp157 *tmp158
++  452 set *tmp157 "T"
    453 label *label144
 -    * jump *label148 equal :compare.11:a :compare.11:b
--    * set *tmp149 "T"
+-    * set *tmp161 "T"
 +  454 jump *label148 equal "A" 1
    455 jump *label149 always
    456 label *label148
-   457 set *tmp149 "F"
+   457 set *tmp161 "F"
    458 label *label149
--    * set *tmp148 *tmp149
-+  459 set *tmp148 "F"
+-    * set *tmp160 *tmp161
++  459 set *tmp160 "F"
    460 label *label147
 -    * jump *label151 strictNotEqual :compare.11:a :compare.11:b
--    * set *tmp152 "T"
+-    * set *tmp164 "T"
 +  461 jump *label151 strictNotEqual "A" 1
    462 jump *label152 always
    463 label *label151
-   464 set *tmp152 "F"
+   464 set *tmp164 "F"
    465 label *label152
--    * set *tmp151 *tmp152
-+  466 set *tmp151 "F"
+-    * set *tmp163 *tmp164
++  466 set *tmp163 "F"
    467 label *label150
 -    * jump *label154 strictEqual :compare.11:a :compare.11:b
 +  468 jump *label154 strictEqual "A" 1
-   469 set *tmp155 "T"
+   469 set *tmp167 "T"
    470 jump *label155 always
    471 label *label154
--    * set *tmp155 "F"
+-    * set *tmp167 "F"
    472 label *label155
--    * set *tmp154 *tmp155
-+  473 set *tmp154 "T"
+-    * set *tmp166 *tmp167
++  473 set *tmp166 "T"
    474 label *label153
--    * print *tmp145
--    * print *tmp148
--    * print *tmp151
--    * print *tmp154
--    * assertprints :compare.11:expected :compare.11:title
-+  475 print *tmp146
-+  476 print *tmp149
-+  477 print *tmp152
-+  478 print *tmp155
-+  479 assertprints "TFFT" "comparison 12"
+-    * print *tmp157
+-    * print *tmp160
+-    * print *tmp163
+-    * print *tmp166
+-    * assertprints *tmp155 :compare.11:expected :compare.11:title
++  475 print *tmp158
++  476 print *tmp161
++  477 print *tmp164
++  478 print *tmp167
++  479 assertprints *tmp155 "TFFT" "comparison 12"
    480 label *label143
    481 set :compare.12:title "comparison 13"
    482 set :compare.12:a "A"
    483 set :compare.12:b 2
    484 set :compare.12:expected "FTFT"
-   485 assertflush
+   485 assertflush *tmp169
 -    * jump *label158 notEqual :compare.12:a :compare.12:b
--    * set *tmp159 "T"
+-    * set *tmp172 "T"
 +  486 jump *label158 notEqual "A" 2
    487 jump *label159 always
    488 label *label158
-   489 set *tmp159 "F"
+   489 set *tmp172 "F"
    490 label *label159
--    * set *tmp158 *tmp159
-+  491 set *tmp158 "F"
+-    * set *tmp171 *tmp172
++  491 set *tmp171 "F"
    492 label *label157
 -    * jump *label161 equal :compare.12:a :compare.12:b
 +  493 jump *label161 equal "A" 2
-   494 set *tmp162 "T"
+   494 set *tmp175 "T"
    495 jump *label162 always
    496 label *label161
--    * set *tmp162 "F"
+-    * set *tmp175 "F"
    497 label *label162
--    * set *tmp161 *tmp162
-+  498 set *tmp161 "T"
+-    * set *tmp174 *tmp175
++  498 set *tmp174 "T"
    499 label *label160
 -    * jump *label164 strictNotEqual :compare.12:a :compare.12:b
--    * set *tmp165 "T"
+-    * set *tmp178 "T"
 +  500 jump *label164 strictNotEqual "A" 2
    501 jump *label165 always
    502 label *label164
-   503 set *tmp165 "F"
+   503 set *tmp178 "F"
    504 label *label165
--    * set *tmp164 *tmp165
-+  505 set *tmp164 "F"
+-    * set *tmp177 *tmp178
++  505 set *tmp177 "F"
    506 label *label163
 -    * jump *label167 strictEqual :compare.12:a :compare.12:b
 +  507 jump *label167 strictEqual "A" 2
-   508 set *tmp168 "T"
+   508 set *tmp181 "T"
    509 jump *label168 always
    510 label *label167
--    * set *tmp168 "F"
+-    * set *tmp181 "F"
    511 label *label168
--    * set *tmp167 *tmp168
-+  512 set *tmp167 "T"
+-    * set *tmp180 *tmp181
++  512 set *tmp180 "T"
    513 label *label166
--    * print *tmp158
--    * print *tmp161
--    * print *tmp164
--    * print *tmp167
--    * assertprints :compare.12:expected :compare.12:title
-+  514 print *tmp159
-+  515 print *tmp162
-+  516 print *tmp165
-+  517 print *tmp168
-+  518 assertprints "FTFT" "comparison 13"
+-    * print *tmp171
+-    * print *tmp174
+-    * print *tmp177
+-    * print *tmp180
+-    * assertprints *tmp169 :compare.12:expected :compare.12:title
++  514 print *tmp172
++  515 print *tmp175
++  516 print *tmp178
++  517 print *tmp181
++  518 assertprints *tmp169 "FTFT" "comparison 13"
    519 label *label156
    520 set :compare.13:title "comparison 14"
    521 set :compare.13:a "A"
    522 set :compare.13:b "B"
    523 set :compare.13:expected "FTFT"
-   524 assertflush
+   524 assertflush *tmp183
 -    * jump *label171 notEqual :compare.13:a :compare.13:b
--    * set *tmp172 "T"
+-    * set *tmp186 "T"
 +  525 jump *label171 notEqual "A" "B"
    526 jump *label172 always
    527 label *label171
-   528 set *tmp172 "F"
+   528 set *tmp186 "F"
    529 label *label172
--    * set *tmp171 *tmp172
-+  530 set *tmp171 "F"
+-    * set *tmp185 *tmp186
++  530 set *tmp185 "F"
    531 label *label170
 -    * jump *label174 equal :compare.13:a :compare.13:b
 +  532 jump *label174 equal "A" "B"
-   533 set *tmp175 "T"
+   533 set *tmp189 "T"
    534 jump *label175 always
    535 label *label174
--    * set *tmp175 "F"
+-    * set *tmp189 "F"
    536 label *label175
--    * set *tmp174 *tmp175
-+  537 set *tmp174 "T"
+-    * set *tmp188 *tmp189
++  537 set *tmp188 "T"
    538 label *label173
 -    * jump *label177 strictNotEqual :compare.13:a :compare.13:b
--    * set *tmp178 "T"
+-    * set *tmp192 "T"
 +  539 jump *label177 strictNotEqual "A" "B"
    540 jump *label178 always
    541 label *label177
-   542 set *tmp178 "F"
+   542 set *tmp192 "F"
    543 label *label178
--    * set *tmp177 *tmp178
-+  544 set *tmp177 "F"
+-    * set *tmp191 *tmp192
++  544 set *tmp191 "F"
    545 label *label176
 -    * jump *label180 strictEqual :compare.13:a :compare.13:b
 +  546 jump *label180 strictEqual "A" "B"
-   547 set *tmp181 "T"
+   547 set *tmp195 "T"
    548 jump *label181 always
    549 label *label180
--    * set *tmp181 "F"
+-    * set *tmp195 "F"
    550 label *label181
--    * set *tmp180 *tmp181
-+  551 set *tmp180 "T"
+-    * set *tmp194 *tmp195
++  551 set *tmp194 "T"
    552 label *label179
--    * print *tmp171
--    * print *tmp174
--    * print *tmp177
--    * print *tmp180
--    * assertprints :compare.13:expected :compare.13:title
-+  553 print *tmp172
-+  554 print *tmp175
-+  555 print *tmp178
-+  556 print *tmp181
-+  557 assertprints "FTFT" "comparison 14"
+-    * print *tmp185
+-    * print *tmp188
+-    * print *tmp191
+-    * print *tmp194
+-    * assertprints *tmp183 :compare.13:expected :compare.13:title
++  553 print *tmp186
++  554 print *tmp189
++  555 print *tmp192
++  556 print *tmp195
++  557 assertprints *tmp183 "FTFT" "comparison 14"
    558 label *label169
    559 set :compare.14:title "comparison 15"
    560 set :compare.14:a "A"
    561 set :compare.14:b "A"
    562 set :compare.14:expected "TFTF"
-   563 assertflush
+   563 assertflush *tmp197
 -    * jump *label184 notEqual :compare.14:a :compare.14:b
 +  564 jump *label184 notEqual "A" "A"
-   565 set *tmp185 "T"
+   565 set *tmp200 "T"
    566 jump *label185 always
    567 label *label184
--    * set *tmp185 "F"
+-    * set *tmp200 "F"
    568 label *label185
--    * set *tmp184 *tmp185
-+  569 set *tmp184 "T"
+-    * set *tmp199 *tmp200
++  569 set *tmp199 "T"
    570 label *label183
 -    * jump *label187 equal :compare.14:a :compare.14:b
--    * set *tmp188 "T"
+-    * set *tmp203 "T"
 +  571 jump *label187 equal "A" "A"
    572 jump *label188 always
    573 label *label187
-   574 set *tmp188 "F"
+   574 set *tmp203 "F"
    575 label *label188
--    * set *tmp187 *tmp188
-+  576 set *tmp187 "F"
+-    * set *tmp202 *tmp203
++  576 set *tmp202 "F"
    577 label *label186
 -    * jump *label190 strictNotEqual :compare.14:a :compare.14:b
 +  578 jump *label190 strictNotEqual "A" "A"
-   579 set *tmp191 "T"
+   579 set *tmp206 "T"
    580 jump *label191 always
    581 label *label190
--    * set *tmp191 "F"
+-    * set *tmp206 "F"
    582 label *label191
--    * set *tmp190 *tmp191
-+  583 set *tmp190 "T"
+-    * set *tmp205 *tmp206
++  583 set *tmp205 "T"
    584 label *label189
 -    * jump *label193 strictEqual :compare.14:a :compare.14:b
--    * set *tmp194 "T"
+-    * set *tmp209 "T"
 +  585 jump *label193 strictEqual "A" "A"
    586 jump *label194 always
    587 label *label193
-   588 set *tmp194 "F"
+   588 set *tmp209 "F"
    589 label *label194
--    * set *tmp193 *tmp194
-+  590 set *tmp193 "F"
+-    * set *tmp208 *tmp209
++  590 set *tmp208 "F"
    591 label *label192
--    * print *tmp184
--    * print *tmp187
--    * print *tmp190
--    * print *tmp193
--    * assertprints :compare.14:expected :compare.14:title
-+  592 print *tmp185
-+  593 print *tmp188
-+  594 print *tmp191
-+  595 print *tmp194
-+  596 assertprints "TFTF" "comparison 15"
+-    * print *tmp199
+-    * print *tmp202
+-    * print *tmp205
+-    * print *tmp208
+-    * assertprints *tmp197 :compare.14:expected :compare.14:title
++  592 print *tmp200
++  593 print *tmp203
++  594 print *tmp206
++  595 print *tmp209
++  596 assertprints *tmp197 "TFTF" "comparison 15"
    597 label *label182
    598 stop
    599 end
@@ -2174,654 +2174,654 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * set :compare:a null
 -    * set :compare:b 0
 -    * set :compare:expected "TFFT"
-     1 assertflush
+     1 assertflush *tmp1
      2 jump *label2 notEqual null 0
-     3 set *tmp3 "T"
+     3 set *tmp4 "T"
      4 jump *label3 always
      5 label *label2
      6 label *label3
--    * set *tmp2 "T"
+-    * set *tmp3 "T"
      7 label *label1
      8 jump *label5 equal null 0
      9 jump *label6 always
     10 label *label5
-    11 set *tmp6 "F"
+    11 set *tmp7 "F"
     12 label *label6
--    * set *tmp5 "F"
+-    * set *tmp6 "F"
     13 label *label4
     14 jump *label8 strictNotEqual null 0
     15 jump *label9 always
     16 label *label8
-    17 set *tmp9 "F"
+    17 set *tmp10 "F"
     18 label *label9
--    * set *tmp8 "F"
+-    * set *tmp9 "F"
     19 label *label7
     20 jump *label11 strictEqual null 0
-    21 set *tmp12 "T"
+    21 set *tmp13 "T"
     22 jump *label12 always
     23 label *label11
     24 label *label12
--    * set *tmp11 "T"
+-    * set *tmp12 "T"
     25 label *label10
--    * print *tmp3
--    * print *tmp6
--    * print *tmp9
--    * print *tmp12
+-    * print *tmp4
+-    * print *tmp7
+-    * print *tmp10
+-    * print *tmp13
 +   26 print "T"
 +   27 print "F"
 +   28 print "F"
 +   29 print "T"
-    30 assertprints "TFFT" "comparison 1"
+    30 assertprints *tmp1 "TFFT" "comparison 1"
     31 label *label0
 -    * set :compare.1:title "comparison 2"
 -    * set :compare.1:a null
 -    * set :compare.1:b 1
 -    * set :compare.1:expected "FTFT"
-    32 assertflush
+    32 assertflush *tmp15
     33 jump *label15 notEqual null 1
     34 jump *label16 always
     35 label *label15
-    36 set *tmp16 "F"
+    36 set *tmp18 "F"
     37 label *label16
--    * set *tmp15 "F"
+-    * set *tmp17 "F"
     38 label *label14
     39 jump *label18 equal null 1
-    40 set *tmp19 "T"
+    40 set *tmp21 "T"
     41 jump *label19 always
     42 label *label18
     43 label *label19
--    * set *tmp18 "T"
+-    * set *tmp20 "T"
     44 label *label17
     45 jump *label21 strictNotEqual null 1
     46 jump *label22 always
     47 label *label21
-    48 set *tmp22 "F"
+    48 set *tmp24 "F"
     49 label *label22
--    * set *tmp21 "F"
+-    * set *tmp23 "F"
     50 label *label20
     51 jump *label24 strictEqual null 1
-    52 set *tmp25 "T"
+    52 set *tmp27 "T"
     53 jump *label25 always
     54 label *label24
     55 label *label25
--    * set *tmp24 "T"
+-    * set *tmp26 "T"
     56 label *label23
--    * print *tmp16
--    * print *tmp19
--    * print *tmp22
--    * print *tmp25
+-    * print *tmp18
+-    * print *tmp21
+-    * print *tmp24
+-    * print *tmp27
 +   57 print "F"
 +   58 print "T"
 +   59 print "F"
 +   60 print "T"
-    61 assertprints "FTFT" "comparison 2"
+    61 assertprints *tmp15 "FTFT" "comparison 2"
     62 label *label13
 -    * set :compare.2:title "comparison 3"
 -    * set :compare.2:a null
 -    * set :compare.2:b 2
 -    * set :compare.2:expected "FTFT"
-    63 assertflush
+    63 assertflush *tmp29
     64 jump *label28 notEqual null 2
     65 jump *label29 always
     66 label *label28
-    67 set *tmp29 "F"
+    67 set *tmp32 "F"
     68 label *label29
--    * set *tmp28 "F"
+-    * set *tmp31 "F"
     69 label *label27
     70 jump *label31 equal null 2
-    71 set *tmp32 "T"
+    71 set *tmp35 "T"
     72 jump *label32 always
     73 label *label31
     74 label *label32
--    * set *tmp31 "T"
+-    * set *tmp34 "T"
     75 label *label30
     76 jump *label34 strictNotEqual null 2
     77 jump *label35 always
     78 label *label34
-    79 set *tmp35 "F"
+    79 set *tmp38 "F"
     80 label *label35
--    * set *tmp34 "F"
+-    * set *tmp37 "F"
     81 label *label33
     82 jump *label37 strictEqual null 2
-    83 set *tmp38 "T"
+    83 set *tmp41 "T"
     84 jump *label38 always
     85 label *label37
     86 label *label38
--    * set *tmp37 "T"
+-    * set *tmp40 "T"
     87 label *label36
--    * print *tmp29
 -    * print *tmp32
 -    * print *tmp35
 -    * print *tmp38
+-    * print *tmp41
 +   88 print "F"
 +   89 print "T"
 +   90 print "F"
 +   91 print "T"
-    92 assertprints "FTFT" "comparison 3"
+    92 assertprints *tmp29 "FTFT" "comparison 3"
     93 label *label26
 -    * set :compare.3:title "comparison 4"
 -    * set :compare.3:a @coal
 -    * set :compare.3:b 0
 -    * set :compare.3:expected "FTFT"
-    94 assertflush
+    94 assertflush *tmp43
     95 jump *label41 notEqual @coal 0
     96 jump *label42 always
     97 label *label41
-    98 set *tmp42 "F"
+    98 set *tmp46 "F"
     99 label *label42
--    * set *tmp41 "F"
+-    * set *tmp45 "F"
    100 label *label40
    101 jump *label44 equal @coal 0
-   102 set *tmp45 "T"
+   102 set *tmp49 "T"
    103 jump *label45 always
    104 label *label44
    105 label *label45
--    * set *tmp44 "T"
+-    * set *tmp48 "T"
    106 label *label43
    107 jump *label47 strictNotEqual @coal 0
    108 jump *label48 always
    109 label *label47
-   110 set *tmp48 "F"
+   110 set *tmp52 "F"
    111 label *label48
--    * set *tmp47 "F"
+-    * set *tmp51 "F"
    112 label *label46
    113 jump *label50 strictEqual @coal 0
-   114 set *tmp51 "T"
+   114 set *tmp55 "T"
    115 jump *label51 always
    116 label *label50
    117 label *label51
--    * set *tmp50 "T"
+-    * set *tmp54 "T"
    118 label *label49
--    * print *tmp42
--    * print *tmp45
--    * print *tmp48
--    * print *tmp51
+-    * print *tmp46
+-    * print *tmp49
+-    * print *tmp52
+-    * print *tmp55
 +  119 print "F"
 +  120 print "T"
 +  121 print "F"
 +  122 print "T"
-   123 assertprints "FTFT" "comparison 4"
+   123 assertprints *tmp43 "FTFT" "comparison 4"
    124 label *label39
 -    * set :compare.4:title "comparison 5"
 -    * set :compare.4:a @coal
 -    * set :compare.4:b 1
 -    * set :compare.4:expected "TFFT"
-   125 assertflush
+   125 assertflush *tmp57
    126 jump *label54 notEqual @coal 1
-   127 set *tmp55 "T"
+   127 set *tmp60 "T"
    128 jump *label55 always
    129 label *label54
    130 label *label55
--    * set *tmp54 "T"
+-    * set *tmp59 "T"
    131 label *label53
    132 jump *label57 equal @coal 1
    133 jump *label58 always
    134 label *label57
-   135 set *tmp58 "F"
+   135 set *tmp63 "F"
    136 label *label58
--    * set *tmp57 "F"
+-    * set *tmp62 "F"
    137 label *label56
    138 jump *label60 strictNotEqual @coal 1
    139 jump *label61 always
    140 label *label60
-   141 set *tmp61 "F"
+   141 set *tmp66 "F"
    142 label *label61
--    * set *tmp60 "F"
+-    * set *tmp65 "F"
    143 label *label59
    144 jump *label63 strictEqual @coal 1
-   145 set *tmp64 "T"
+   145 set *tmp69 "T"
    146 jump *label64 always
    147 label *label63
    148 label *label64
--    * set *tmp63 "T"
+-    * set *tmp68 "T"
    149 label *label62
--    * print *tmp55
--    * print *tmp58
--    * print *tmp61
--    * print *tmp64
+-    * print *tmp60
+-    * print *tmp63
+-    * print *tmp66
+-    * print *tmp69
 +  150 print "T"
 +  151 print "F"
 +  152 print "F"
 +  153 print "T"
-   154 assertprints "TFFT" "comparison 5"
+   154 assertprints *tmp57 "TFFT" "comparison 5"
    155 label *label52
 -    * set :compare.5:title "comparison 6"
 -    * set :compare.5:a @coal
 -    * set :compare.5:b 2
 -    * set :compare.5:expected "FTFT"
-   156 assertflush
+   156 assertflush *tmp71
    157 jump *label67 notEqual @coal 2
    158 jump *label68 always
    159 label *label67
-   160 set *tmp68 "F"
+   160 set *tmp74 "F"
    161 label *label68
--    * set *tmp67 "F"
+-    * set *tmp73 "F"
    162 label *label66
    163 jump *label70 equal @coal 2
-   164 set *tmp71 "T"
+   164 set *tmp77 "T"
    165 jump *label71 always
    166 label *label70
    167 label *label71
--    * set *tmp70 "T"
+-    * set *tmp76 "T"
    168 label *label69
    169 jump *label73 strictNotEqual @coal 2
    170 jump *label74 always
    171 label *label73
-   172 set *tmp74 "F"
+   172 set *tmp80 "F"
    173 label *label74
--    * set *tmp73 "F"
+-    * set *tmp79 "F"
    174 label *label72
    175 jump *label76 strictEqual @coal 2
-   176 set *tmp77 "T"
+   176 set *tmp83 "T"
    177 jump *label77 always
    178 label *label76
    179 label *label77
--    * set *tmp76 "T"
+-    * set *tmp82 "T"
    180 label *label75
--    * print *tmp68
--    * print *tmp71
 -    * print *tmp74
 -    * print *tmp77
+-    * print *tmp80
+-    * print *tmp83
 +  181 print "F"
 +  182 print "T"
 +  183 print "F"
 +  184 print "T"
-   185 assertprints "FTFT" "comparison 6"
+   185 assertprints *tmp71 "FTFT" "comparison 6"
    186 label *label65
 -    * set :compare.6:title "comparison 7"
 -    * set :compare.6:a @coal
 -    * set :compare.6:b @lead
 -    * set :compare.6:expected "FTFT"
-   187 assertflush
+   187 assertflush *tmp85
    188 jump *label80 notEqual @coal @lead
    189 jump *label81 always
    190 label *label80
-   191 set *tmp81 "F"
+   191 set *tmp88 "F"
    192 label *label81
--    * set *tmp80 "F"
+-    * set *tmp87 "F"
    193 label *label79
    194 jump *label83 equal @coal @lead
-   195 set *tmp84 "T"
+   195 set *tmp91 "T"
    196 jump *label84 always
    197 label *label83
    198 label *label84
--    * set *tmp83 "T"
+-    * set *tmp90 "T"
    199 label *label82
    200 jump *label86 strictNotEqual @coal @lead
    201 jump *label87 always
    202 label *label86
-   203 set *tmp87 "F"
+   203 set *tmp94 "F"
    204 label *label87
--    * set *tmp86 "F"
+-    * set *tmp93 "F"
    205 label *label85
    206 jump *label89 strictEqual @coal @lead
-   207 set *tmp90 "T"
+   207 set *tmp97 "T"
    208 jump *label90 always
    209 label *label89
    210 label *label90
--    * set *tmp89 "T"
+-    * set *tmp96 "T"
    211 label *label88
--    * print *tmp81
--    * print *tmp84
--    * print *tmp87
--    * print *tmp90
+-    * print *tmp88
+-    * print *tmp91
+-    * print *tmp94
+-    * print *tmp97
 +  212 print "F"
 +  213 print "T"
 +  214 print "F"
 +  215 print "T"
-   216 assertprints "FTFT" "comparison 7"
+   216 assertprints *tmp85 "FTFT" "comparison 7"
    217 label *label78
 -    * set :compare.7:title "comparison 8"
 -    * set :compare.7:a A
 -    * set :compare.7:b A
 -    * set :compare.7:expected "TFTF"
-   218 assertflush
+   218 assertflush *tmp99
    219 jump *label93 notEqual A A
-   220 set *tmp94 "T"
+   220 set *tmp102 "T"
  
    222 label *label93
-   223 set *tmp94 "F"
+   223 set *tmp102 "F"
    224 label *label94
--    * set *tmp93 *tmp94
+-    * set *tmp101 *tmp102
    225 label *label92
    226 jump *label96 equal A A
-   227 set *tmp97 "T"
+   227 set *tmp105 "T"
  
    229 label *label96
-   230 set *tmp97 "F"
+   230 set *tmp105 "F"
    231 label *label97
--    * set *tmp96 *tmp97
+-    * set *tmp104 *tmp105
    232 label *label95
    233 jump *label99 strictNotEqual A A
-   234 set *tmp100 "T"
+   234 set *tmp108 "T"
  
    236 label *label99
-   237 set *tmp100 "F"
+   237 set *tmp108 "F"
    238 label *label100
--    * set *tmp99 *tmp100
+-    * set *tmp107 *tmp108
    239 label *label98
    240 jump *label102 strictEqual A A
-   241 set *tmp103 "T"
+   241 set *tmp111 "T"
  
    243 label *label102
-   244 set *tmp103 "F"
+   244 set *tmp111 "F"
    245 label *label103
--    * set *tmp102 *tmp103
+-    * set *tmp110 *tmp111
    246 label *label101
-   247 print *tmp94
-   248 print *tmp97
+   247 print *tmp102
+   248 print *tmp105
  
-   250 print *tmp103
-   251 assertprints "TFTF" "comparison 8"
+   250 print *tmp111
+   251 assertprints *tmp99 "TFTF" "comparison 8"
    252 label *label91
 -    * set :compare.8:title "comparison 9"
 -    * set :compare.8:a A
 -    * set :compare.8:b 0
 -    * set :compare.8:expected "TFTF"
-   253 assertflush
+   253 assertflush *tmp113
    254 jump *label106 notEqual A 0
-   255 set *tmp107 "T"
+   255 set *tmp116 "T"
  
    257 label *label106
-   258 set *tmp107 "F"
+   258 set *tmp116 "F"
    259 label *label107
--    * set *tmp106 *tmp107
+-    * set *tmp115 *tmp116
    260 label *label105
    261 jump *label109 equal A 0
-   262 set *tmp110 "T"
+   262 set *tmp119 "T"
  
    264 label *label109
-   265 set *tmp110 "F"
+   265 set *tmp119 "F"
    266 label *label110
--    * set *tmp109 *tmp110
+-    * set *tmp118 *tmp119
    267 label *label108
    268 jump *label112 strictNotEqual A 0
-   269 set *tmp113 "T"
+   269 set *tmp122 "T"
  
    271 label *label112
-   272 set *tmp113 "F"
+   272 set *tmp122 "F"
    273 label *label113
--    * set *tmp112 *tmp113
+-    * set *tmp121 *tmp122
    274 label *label111
    275 jump *label115 strictEqual A 0
-   276 set *tmp116 "T"
+   276 set *tmp125 "T"
  
    278 label *label115
-   279 set *tmp116 "F"
+   279 set *tmp125 "F"
    280 label *label116
--    * set *tmp115 *tmp116
+-    * set *tmp124 *tmp125
    281 label *label114
-   282 print *tmp107
-   283 print *tmp110
+   282 print *tmp116
+   283 print *tmp119
  
-   285 print *tmp116
-   286 assertprints "TFTF" "comparison 9"
+   285 print *tmp125
+   286 assertprints *tmp113 "TFTF" "comparison 9"
    287 label *label104
 -    * set :compare.9:title "comparison 10"
 -    * set :compare.9:a A
 -    * set :compare.9:b 1
 -    * set :compare.9:expected "FTFT"
-   288 assertflush
+   288 assertflush *tmp127
    289 jump *label119 notEqual A 1
-   290 set *tmp120 "T"
+   290 set *tmp130 "T"
  
    292 label *label119
-   293 set *tmp120 "F"
+   293 set *tmp130 "F"
    294 label *label120
--    * set *tmp119 *tmp120
+-    * set *tmp129 *tmp130
    295 label *label118
    296 jump *label122 equal A 1
-   297 set *tmp123 "T"
+   297 set *tmp133 "T"
  
    299 label *label122
-   300 set *tmp123 "F"
+   300 set *tmp133 "F"
    301 label *label123
--    * set *tmp122 *tmp123
+-    * set *tmp132 *tmp133
    302 label *label121
    303 jump *label125 strictNotEqual A 1
-   304 set *tmp126 "T"
+   304 set *tmp136 "T"
  
    306 label *label125
-   307 set *tmp126 "F"
+   307 set *tmp136 "F"
    308 label *label126
--    * set *tmp125 *tmp126
+-    * set *tmp135 *tmp136
    309 label *label124
    310 jump *label128 strictEqual A 1
-   311 set *tmp129 "T"
+   311 set *tmp139 "T"
  
    313 label *label128
-   314 set *tmp129 "F"
+   314 set *tmp139 "F"
    315 label *label129
--    * set *tmp128 *tmp129
+-    * set *tmp138 *tmp139
    316 label *label127
-   317 print *tmp120
-   318 print *tmp123
+   317 print *tmp130
+   318 print *tmp133
  
-   320 print *tmp129
-   321 assertprints "FTFT" "comparison 10"
+   320 print *tmp139
+   321 assertprints *tmp127 "FTFT" "comparison 10"
    322 label *label117
 -    * set :compare.10:title "comparison 11"
 -    * set :compare.10:a "A"
 -    * set :compare.10:b 0
 -    * set :compare.10:expected "FTFT"
-   323 assertflush
+   323 assertflush *tmp141
    324 jump *label132 notEqual "A" 0
    325 jump *label133 always
    326 label *label132
-   327 set *tmp133 "F"
+   327 set *tmp144 "F"
    328 label *label133
--    * set *tmp132 "F"
+-    * set *tmp143 "F"
    329 label *label131
    330 jump *label135 equal "A" 0
-   331 set *tmp136 "T"
+   331 set *tmp147 "T"
    332 jump *label136 always
    333 label *label135
    334 label *label136
--    * set *tmp135 "T"
+-    * set *tmp146 "T"
    335 label *label134
    336 jump *label138 strictNotEqual "A" 0
    337 jump *label139 always
    338 label *label138
-   339 set *tmp139 "F"
+   339 set *tmp150 "F"
    340 label *label139
--    * set *tmp138 "F"
+-    * set *tmp149 "F"
    341 label *label137
    342 jump *label141 strictEqual "A" 0
-   343 set *tmp142 "T"
+   343 set *tmp153 "T"
    344 jump *label142 always
    345 label *label141
    346 label *label142
--    * set *tmp141 "T"
+-    * set *tmp152 "T"
    347 label *label140
--    * print *tmp133
--    * print *tmp136
--    * print *tmp139
--    * print *tmp142
+-    * print *tmp144
+-    * print *tmp147
+-    * print *tmp150
+-    * print *tmp153
 +  348 print "F"
 +  349 print "T"
 +  350 print "F"
 +  351 print "T"
-   352 assertprints "FTFT" "comparison 11"
+   352 assertprints *tmp141 "FTFT" "comparison 11"
    353 label *label130
 -    * set :compare.11:title "comparison 12"
 -    * set :compare.11:a "A"
 -    * set :compare.11:b 1
 -    * set :compare.11:expected "TFFT"
-   354 assertflush
+   354 assertflush *tmp155
    355 jump *label145 notEqual "A" 1
-   356 set *tmp146 "T"
+   356 set *tmp158 "T"
    357 jump *label146 always
    358 label *label145
    359 label *label146
--    * set *tmp145 "T"
+-    * set *tmp157 "T"
    360 label *label144
    361 jump *label148 equal "A" 1
    362 jump *label149 always
    363 label *label148
-   364 set *tmp149 "F"
+   364 set *tmp161 "F"
    365 label *label149
--    * set *tmp148 "F"
+-    * set *tmp160 "F"
    366 label *label147
    367 jump *label151 strictNotEqual "A" 1
    368 jump *label152 always
    369 label *label151
-   370 set *tmp152 "F"
+   370 set *tmp164 "F"
    371 label *label152
--    * set *tmp151 "F"
+-    * set *tmp163 "F"
    372 label *label150
    373 jump *label154 strictEqual "A" 1
-   374 set *tmp155 "T"
+   374 set *tmp167 "T"
    375 jump *label155 always
    376 label *label154
    377 label *label155
--    * set *tmp154 "T"
+-    * set *tmp166 "T"
    378 label *label153
--    * print *tmp146
--    * print *tmp149
--    * print *tmp152
--    * print *tmp155
+-    * print *tmp158
+-    * print *tmp161
+-    * print *tmp164
+-    * print *tmp167
 +  379 print "T"
 +  380 print "F"
 +  381 print "F"
 +  382 print "T"
-   383 assertprints "TFFT" "comparison 12"
+   383 assertprints *tmp155 "TFFT" "comparison 12"
    384 label *label143
 -    * set :compare.12:title "comparison 13"
 -    * set :compare.12:a "A"
 -    * set :compare.12:b 2
 -    * set :compare.12:expected "FTFT"
-   385 assertflush
+   385 assertflush *tmp169
    386 jump *label158 notEqual "A" 2
    387 jump *label159 always
    388 label *label158
-   389 set *tmp159 "F"
+   389 set *tmp172 "F"
    390 label *label159
--    * set *tmp158 "F"
+-    * set *tmp171 "F"
    391 label *label157
    392 jump *label161 equal "A" 2
-   393 set *tmp162 "T"
+   393 set *tmp175 "T"
    394 jump *label162 always
    395 label *label161
    396 label *label162
--    * set *tmp161 "T"
+-    * set *tmp174 "T"
    397 label *label160
    398 jump *label164 strictNotEqual "A" 2
    399 jump *label165 always
    400 label *label164
-   401 set *tmp165 "F"
+   401 set *tmp178 "F"
    402 label *label165
--    * set *tmp164 "F"
+-    * set *tmp177 "F"
    403 label *label163
    404 jump *label167 strictEqual "A" 2
-   405 set *tmp168 "T"
+   405 set *tmp181 "T"
    406 jump *label168 always
    407 label *label167
    408 label *label168
--    * set *tmp167 "T"
+-    * set *tmp180 "T"
    409 label *label166
--    * print *tmp159
--    * print *tmp162
--    * print *tmp165
--    * print *tmp168
+-    * print *tmp172
+-    * print *tmp175
+-    * print *tmp178
+-    * print *tmp181
 +  410 print "F"
 +  411 print "T"
 +  412 print "F"
 +  413 print "T"
-   414 assertprints "FTFT" "comparison 13"
+   414 assertprints *tmp169 "FTFT" "comparison 13"
    415 label *label156
 -    * set :compare.13:title "comparison 14"
 -    * set :compare.13:a "A"
 -    * set :compare.13:b "B"
 -    * set :compare.13:expected "FTFT"
-   416 assertflush
+   416 assertflush *tmp183
    417 jump *label171 notEqual "A" "B"
    418 jump *label172 always
    419 label *label171
-   420 set *tmp172 "F"
+   420 set *tmp186 "F"
    421 label *label172
--    * set *tmp171 "F"
+-    * set *tmp185 "F"
    422 label *label170
    423 jump *label174 equal "A" "B"
-   424 set *tmp175 "T"
+   424 set *tmp189 "T"
    425 jump *label175 always
    426 label *label174
    427 label *label175
--    * set *tmp174 "T"
+-    * set *tmp188 "T"
    428 label *label173
    429 jump *label177 strictNotEqual "A" "B"
    430 jump *label178 always
    431 label *label177
-   432 set *tmp178 "F"
+   432 set *tmp192 "F"
    433 label *label178
--    * set *tmp177 "F"
+-    * set *tmp191 "F"
    434 label *label176
    435 jump *label180 strictEqual "A" "B"
-   436 set *tmp181 "T"
+   436 set *tmp195 "T"
    437 jump *label181 always
    438 label *label180
    439 label *label181
--    * set *tmp180 "T"
+-    * set *tmp194 "T"
    440 label *label179
--    * print *tmp172
--    * print *tmp175
--    * print *tmp178
--    * print *tmp181
+-    * print *tmp186
+-    * print *tmp189
+-    * print *tmp192
+-    * print *tmp195
 +  441 print "F"
 +  442 print "T"
 +  443 print "F"
 +  444 print "T"
-   445 assertprints "FTFT" "comparison 14"
+   445 assertprints *tmp183 "FTFT" "comparison 14"
    446 label *label169
 -    * set :compare.14:title "comparison 15"
 -    * set :compare.14:a "A"
 -    * set :compare.14:b "A"
 -    * set :compare.14:expected "TFTF"
-   447 assertflush
+   447 assertflush *tmp197
    448 jump *label184 notEqual "A" "A"
-   449 set *tmp185 "T"
+   449 set *tmp200 "T"
    450 jump *label185 always
    451 label *label184
    452 label *label185
--    * set *tmp184 "T"
+-    * set *tmp199 "T"
    453 label *label183
    454 jump *label187 equal "A" "A"
    455 jump *label188 always
    456 label *label187
-   457 set *tmp188 "F"
+   457 set *tmp203 "F"
    458 label *label188
--    * set *tmp187 "F"
+-    * set *tmp202 "F"
    459 label *label186
    460 jump *label190 strictNotEqual "A" "A"
-   461 set *tmp191 "T"
+   461 set *tmp206 "T"
    462 jump *label191 always
    463 label *label190
    464 label *label191
--    * set *tmp190 "T"
+-    * set *tmp205 "T"
    465 label *label189
    466 jump *label193 strictEqual "A" "A"
    467 jump *label194 always
    468 label *label193
-   469 set *tmp194 "F"
+   469 set *tmp209 "F"
    470 label *label194
--    * set *tmp193 "F"
+-    * set *tmp208 "F"
    471 label *label192
--    * print *tmp185
--    * print *tmp188
--    * print *tmp191
--    * print *tmp194
+-    * print *tmp200
+-    * print *tmp203
+-    * print *tmp206
+-    * print *tmp209
 +  472 print "T"
 +  473 print "F"
 +  474 print "T"
 +  475 print "F"
-   476 assertprints "TFTF" "comparison 15"
+   476 assertprints *tmp197 "TFTF" "comparison 15"
    477 label *label182
    478 stop
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-48 instructions):
      0 set A 0
-     1 assertflush
+     1 assertflush *tmp1
      2 jump *label2 notEqual null 0
--    * set *tmp3 "T"
+-    * set *tmp4 "T"
      3 jump *label3 always
      4 label *label2
      5 label *label3
@@ -2829,17 +2829,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
      7 jump *label5 equal null 0
      8 jump *label6 always
      9 label *label5
--    * set *tmp6 "F"
+-    * set *tmp7 "F"
     10 label *label6
     11 label *label4
     12 jump *label8 strictNotEqual null 0
     13 jump *label9 always
     14 label *label8
--    * set *tmp9 "F"
+-    * set *tmp10 "F"
     15 label *label9
     16 label *label7
     17 jump *label11 strictEqual null 0
--    * set *tmp12 "T"
+-    * set *tmp13 "T"
     18 jump *label12 always
     19 label *label11
     20 label *label12
@@ -2847,11 +2847,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
     29 jump *label15 notEqual null 1
     30 jump *label16 always
     31 label *label15
--    * set *tmp16 "F"
+-    * set *tmp18 "F"
     32 label *label16
     33 label *label14
     34 jump *label18 equal null 1
--    * set *tmp19 "T"
+-    * set *tmp21 "T"
     35 jump *label19 always
     36 label *label18
     37 label *label19
@@ -2859,11 +2859,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
     39 jump *label21 strictNotEqual null 1
     40 jump *label22 always
     41 label *label21
--    * set *tmp22 "F"
+-    * set *tmp24 "F"
     42 label *label22
     43 label *label20
     44 jump *label24 strictEqual null 1
--    * set *tmp25 "T"
+-    * set *tmp27 "T"
     45 jump *label25 always
     46 label *label24
     47 label *label25
@@ -2871,11 +2871,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
     56 jump *label28 notEqual null 2
     57 jump *label29 always
     58 label *label28
--    * set *tmp29 "F"
+-    * set *tmp32 "F"
     59 label *label29
     60 label *label27
     61 jump *label31 equal null 2
--    * set *tmp32 "T"
+-    * set *tmp35 "T"
     62 jump *label32 always
     63 label *label31
     64 label *label32
@@ -2883,11 +2883,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
     66 jump *label34 strictNotEqual null 2
     67 jump *label35 always
     68 label *label34
--    * set *tmp35 "F"
+-    * set *tmp38 "F"
     69 label *label35
     70 label *label33
     71 jump *label37 strictEqual null 2
--    * set *tmp38 "T"
+-    * set *tmp41 "T"
     72 jump *label38 always
     73 label *label37
     74 label *label38
@@ -2895,11 +2895,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
     83 jump *label41 notEqual @coal 0
     84 jump *label42 always
     85 label *label41
--    * set *tmp42 "F"
+-    * set *tmp46 "F"
     86 label *label42
     87 label *label40
     88 jump *label44 equal @coal 0
--    * set *tmp45 "T"
+-    * set *tmp49 "T"
     89 jump *label45 always
     90 label *label44
     91 label *label45
@@ -2907,19 +2907,19 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
     93 jump *label47 strictNotEqual @coal 0
     94 jump *label48 always
     95 label *label47
--    * set *tmp48 "F"
+-    * set *tmp52 "F"
     96 label *label48
     97 label *label46
     98 jump *label50 strictEqual @coal 0
--    * set *tmp51 "T"
+-    * set *tmp55 "T"
     99 jump *label51 always
    100 label *label50
    101 label *label51
  
    108 label *label39
-   109 assertflush
+   109 assertflush *tmp57
    110 jump *label54 notEqual @coal 1
--    * set *tmp55 "T"
+-    * set *tmp60 "T"
    111 jump *label55 always
    112 label *label54
    113 label *label55
@@ -2927,17 +2927,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    115 jump *label57 equal @coal 1
    116 jump *label58 always
    117 label *label57
--    * set *tmp58 "F"
+-    * set *tmp63 "F"
    118 label *label58
    119 label *label56
    120 jump *label60 strictNotEqual @coal 1
    121 jump *label61 always
    122 label *label60
--    * set *tmp61 "F"
+-    * set *tmp66 "F"
    123 label *label61
    124 label *label59
    125 jump *label63 strictEqual @coal 1
--    * set *tmp64 "T"
+-    * set *tmp69 "T"
    126 jump *label64 always
    127 label *label63
    128 label *label64
@@ -2945,11 +2945,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    137 jump *label67 notEqual @coal 2
    138 jump *label68 always
    139 label *label67
--    * set *tmp68 "F"
+-    * set *tmp74 "F"
    140 label *label68
    141 label *label66
    142 jump *label70 equal @coal 2
--    * set *tmp71 "T"
+-    * set *tmp77 "T"
    143 jump *label71 always
    144 label *label70
    145 label *label71
@@ -2957,11 +2957,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    147 jump *label73 strictNotEqual @coal 2
    148 jump *label74 always
    149 label *label73
--    * set *tmp74 "F"
+-    * set *tmp80 "F"
    150 label *label74
    151 label *label72
    152 jump *label76 strictEqual @coal 2
--    * set *tmp77 "T"
+-    * set *tmp83 "T"
    153 jump *label77 always
    154 label *label76
    155 label *label77
@@ -2969,11 +2969,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    164 jump *label80 notEqual @coal @lead
    165 jump *label81 always
    166 label *label80
--    * set *tmp81 "F"
+-    * set *tmp88 "F"
    167 label *label81
    168 label *label79
    169 jump *label83 equal @coal @lead
--    * set *tmp84 "T"
+-    * set *tmp91 "T"
    170 jump *label84 always
    171 label *label83
    172 label *label84
@@ -2981,11 +2981,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    174 jump *label86 strictNotEqual @coal @lead
    175 jump *label87 always
    176 label *label86
--    * set *tmp87 "F"
+-    * set *tmp94 "F"
    177 label *label87
    178 label *label85
    179 jump *label89 strictEqual @coal @lead
--    * set *tmp90 "T"
+-    * set *tmp97 "T"
    180 jump *label90 always
    181 label *label89
    182 label *label90
@@ -2993,11 +2993,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    296 jump *label132 notEqual "A" 0
    297 jump *label133 always
    298 label *label132
--    * set *tmp133 "F"
+-    * set *tmp144 "F"
    299 label *label133
    300 label *label131
    301 jump *label135 equal "A" 0
--    * set *tmp136 "T"
+-    * set *tmp147 "T"
    302 jump *label136 always
    303 label *label135
    304 label *label136
@@ -3005,19 +3005,19 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    306 jump *label138 strictNotEqual "A" 0
    307 jump *label139 always
    308 label *label138
--    * set *tmp139 "F"
+-    * set *tmp150 "F"
    309 label *label139
    310 label *label137
    311 jump *label141 strictEqual "A" 0
--    * set *tmp142 "T"
+-    * set *tmp153 "T"
    312 jump *label142 always
    313 label *label141
    314 label *label142
  
    321 label *label130
-   322 assertflush
+   322 assertflush *tmp155
    323 jump *label145 notEqual "A" 1
--    * set *tmp146 "T"
+-    * set *tmp158 "T"
    324 jump *label146 always
    325 label *label145
    326 label *label146
@@ -3025,17 +3025,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    328 jump *label148 equal "A" 1
    329 jump *label149 always
    330 label *label148
--    * set *tmp149 "F"
+-    * set *tmp161 "F"
    331 label *label149
    332 label *label147
    333 jump *label151 strictNotEqual "A" 1
    334 jump *label152 always
    335 label *label151
--    * set *tmp152 "F"
+-    * set *tmp164 "F"
    336 label *label152
    337 label *label150
    338 jump *label154 strictEqual "A" 1
--    * set *tmp155 "T"
+-    * set *tmp167 "T"
    339 jump *label155 always
    340 label *label154
    341 label *label155
@@ -3043,11 +3043,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    350 jump *label158 notEqual "A" 2
    351 jump *label159 always
    352 label *label158
--    * set *tmp159 "F"
+-    * set *tmp172 "F"
    353 label *label159
    354 label *label157
    355 jump *label161 equal "A" 2
--    * set *tmp162 "T"
+-    * set *tmp175 "T"
    356 jump *label162 always
    357 label *label161
    358 label *label162
@@ -3055,11 +3055,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    360 jump *label164 strictNotEqual "A" 2
    361 jump *label165 always
    362 label *label164
--    * set *tmp165 "F"
+-    * set *tmp178 "F"
    363 label *label165
    364 label *label163
    365 jump *label167 strictEqual "A" 2
--    * set *tmp168 "T"
+-    * set *tmp181 "T"
    366 jump *label168 always
    367 label *label167
    368 label *label168
@@ -3067,11 +3067,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    377 jump *label171 notEqual "A" "B"
    378 jump *label172 always
    379 label *label171
--    * set *tmp172 "F"
+-    * set *tmp186 "F"
    380 label *label172
    381 label *label170
    382 jump *label174 equal "A" "B"
--    * set *tmp175 "T"
+-    * set *tmp189 "T"
    383 jump *label175 always
    384 label *label174
    385 label *label175
@@ -3079,19 +3079,19 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    387 jump *label177 strictNotEqual "A" "B"
    388 jump *label178 always
    389 label *label177
--    * set *tmp178 "F"
+-    * set *tmp192 "F"
    390 label *label178
    391 label *label176
    392 jump *label180 strictEqual "A" "B"
--    * set *tmp181 "T"
+-    * set *tmp195 "T"
    393 jump *label181 always
    394 label *label180
    395 label *label181
  
    402 label *label169
-   403 assertflush
+   403 assertflush *tmp197
    404 jump *label184 notEqual "A" "A"
--    * set *tmp185 "T"
+-    * set *tmp200 "T"
    405 jump *label185 always
    406 label *label184
    407 label *label185
@@ -3099,11 +3099,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    409 jump *label187 equal "A" "A"
    410 jump *label188 always
    411 label *label187
--    * set *tmp188 "F"
+-    * set *tmp203 "F"
    412 label *label188
    413 label *label186
    414 jump *label190 strictNotEqual "A" "A"
--    * set *tmp191 "T"
+-    * set *tmp206 "T"
    415 jump *label191 always
    416 label *label190
    417 label *label191
@@ -3111,130 +3111,130 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4
    419 jump *label193 strictEqual "A" "A"
    420 jump *label194 always
    421 label *label193
--    * set *tmp194 "F"
+-    * set *tmp209 "F"
    422 label *label194
    423 label *label192
    424 print "T"
 
 Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-36 instructions):
  
-   188 assertprints "FTFT" "comparison 7"
+   188 assertprints *tmp85 "FTFT" "comparison 7"
    189 label *label78
-   190 assertflush
+   190 assertflush *tmp99
 -    * jump *label93 notEqual A A
--    * set *tmp94 "T"
+-    * set *tmp102 "T"
 -    * jump *label94 always
 -    * label *label93
--    * set *tmp94 "F"
+-    * set *tmp102 "F"
 -    * label *label94
-+  191 select *tmp94 equal A A "T" "F"
++  191 select *tmp102 equal A A "T" "F"
    192 label *label92
 -    * jump *label96 equal A A
--    * set *tmp97 "T"
+-    * set *tmp105 "T"
 -    * jump *label97 always
 -    * label *label96
--    * set *tmp97 "F"
+-    * set *tmp105 "F"
 -    * label *label97
-+  193 select *tmp97 notEqual A A "T" "F"
++  193 select *tmp105 notEqual A A "T" "F"
    194 label *label95
 -    * jump *label99 strictNotEqual A A
--    * set *tmp100 "T"
+-    * set *tmp108 "T"
 -    * jump *label100 always
 -    * label *label99
--    * set *tmp100 "F"
+-    * set *tmp108 "F"
 -    * label *label100
-+  195 select *tmp100 strictEqual A A "T" "F"
++  195 select *tmp108 strictEqual A A "T" "F"
    196 label *label98
 -    * jump *label102 strictEqual A A
--    * set *tmp103 "T"
+-    * set *tmp111 "T"
 -    * jump *label103 always
 -    * label *label102
--    * set *tmp103 "F"
+-    * set *tmp111 "F"
 -    * label *label103
-+  197 select *tmp103 strictNotEqual A A "T" "F"
++  197 select *tmp111 strictNotEqual A A "T" "F"
    198 label *label101
-   199 print *tmp94
-   200 print *tmp97
+   199 print *tmp102
+   200 print *tmp105
  
-   203 assertprints "TFTF" "comparison 8"
+   203 assertprints *tmp99 "TFTF" "comparison 8"
    204 label *label91
-   205 assertflush
+   205 assertflush *tmp113
 -    * jump *label106 notEqual A 0
--    * set *tmp107 "T"
+-    * set *tmp116 "T"
 -    * jump *label107 always
 -    * label *label106
--    * set *tmp107 "F"
+-    * set *tmp116 "F"
 -    * label *label107
-+  206 select *tmp107 equal A 0 "T" "F"
++  206 select *tmp116 equal A 0 "T" "F"
    207 label *label105
 -    * jump *label109 equal A 0
--    * set *tmp110 "T"
+-    * set *tmp119 "T"
 -    * jump *label110 always
 -    * label *label109
--    * set *tmp110 "F"
+-    * set *tmp119 "F"
 -    * label *label110
-+  208 select *tmp110 notEqual A 0 "T" "F"
++  208 select *tmp119 notEqual A 0 "T" "F"
    209 label *label108
 -    * jump *label112 strictNotEqual A 0
--    * set *tmp113 "T"
+-    * set *tmp122 "T"
 -    * jump *label113 always
 -    * label *label112
--    * set *tmp113 "F"
+-    * set *tmp122 "F"
 -    * label *label113
-+  210 select *tmp113 strictEqual A 0 "T" "F"
++  210 select *tmp122 strictEqual A 0 "T" "F"
    211 label *label111
 -    * jump *label115 strictEqual A 0
--    * set *tmp116 "T"
+-    * set *tmp125 "T"
 -    * jump *label116 always
 -    * label *label115
--    * set *tmp116 "F"
+-    * set *tmp125 "F"
 -    * label *label116
-+  212 select *tmp116 strictNotEqual A 0 "T" "F"
++  212 select *tmp125 strictNotEqual A 0 "T" "F"
    213 label *label114
-   214 print *tmp107
-   215 print *tmp110
+   214 print *tmp116
+   215 print *tmp119
  
-   218 assertprints "TFTF" "comparison 9"
+   218 assertprints *tmp113 "TFTF" "comparison 9"
    219 label *label104
-   220 assertflush
+   220 assertflush *tmp127
 -    * jump *label119 notEqual A 1
--    * set *tmp120 "T"
+-    * set *tmp130 "T"
 -    * jump *label120 always
 -    * label *label119
--    * set *tmp120 "F"
+-    * set *tmp130 "F"
 -    * label *label120
-+  221 select *tmp120 equal A 1 "T" "F"
++  221 select *tmp130 equal A 1 "T" "F"
    222 label *label118
 -    * jump *label122 equal A 1
--    * set *tmp123 "T"
+-    * set *tmp133 "T"
 -    * jump *label123 always
 -    * label *label122
--    * set *tmp123 "F"
+-    * set *tmp133 "F"
 -    * label *label123
-+  223 select *tmp123 notEqual A 1 "T" "F"
++  223 select *tmp133 notEqual A 1 "T" "F"
    224 label *label121
 -    * jump *label125 strictNotEqual A 1
--    * set *tmp126 "T"
+-    * set *tmp136 "T"
 -    * jump *label126 always
 -    * label *label125
--    * set *tmp126 "F"
+-    * set *tmp136 "F"
 -    * label *label126
-+  225 select *tmp126 strictEqual A 1 "T" "F"
++  225 select *tmp136 strictEqual A 1 "T" "F"
    226 label *label124
 -    * jump *label128 strictEqual A 1
--    * set *tmp129 "T"
+-    * set *tmp139 "T"
 -    * jump *label129 always
 -    * label *label128
--    * set *tmp129 "F"
+-    * set *tmp139 "F"
 -    * label *label129
-+  227 select *tmp129 strictNotEqual A 1 "T" "F"
++  227 select *tmp139 strictNotEqual A 1 "T" "F"
    228 label *label127
-   229 print *tmp120
-   230 print *tmp123
+   229 print *tmp130
+   230 print *tmp133
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 instructions):
      0 set A 0
-     1 assertflush
+     1 assertflush *tmp1
 -    * jump *label2 notEqual null 0
      2 jump *label3 always
      3 label *label2
@@ -3257,9 +3257,9 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
     17 label *label11
     18 label *label12
  
-    24 assertprints "TFFT" "comparison 1"
+    24 assertprints *tmp1 "TFFT" "comparison 1"
     25 label *label0
-    26 assertflush
+    26 assertflush *tmp15
 -    * jump *label15 notEqual null 1
 +   27 jump *label15 always
     28 jump *label16 always
@@ -3282,9 +3282,9 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
     42 label *label24
     43 label *label25
  
-    49 assertprints "FTFT" "comparison 2"
+    49 assertprints *tmp15 "FTFT" "comparison 2"
     50 label *label13
-    51 assertflush
+    51 assertflush *tmp29
 -    * jump *label28 notEqual null 2
 +   52 jump *label28 always
     53 jump *label29 always
@@ -3307,9 +3307,9 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
     67 label *label37
     68 label *label38
  
-    74 assertprints "FTFT" "comparison 3"
+    74 assertprints *tmp29 "FTFT" "comparison 3"
     75 label *label26
-    76 assertflush
+    76 assertflush *tmp43
 -    * jump *label41 notEqual @coal 0
 +   77 jump *label41 always
     78 jump *label42 always
@@ -3332,9 +3332,9 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
     92 label *label50
     93 label *label51
  
-    99 assertprints "FTFT" "comparison 4"
+    99 assertprints *tmp43 "FTFT" "comparison 4"
    100 label *label39
-   101 assertflush
+   101 assertflush *tmp57
 -    * jump *label54 notEqual @coal 1
    102 jump *label55 always
    103 label *label54
@@ -3357,9 +3357,9 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
    117 label *label63
    118 label *label64
  
-   124 assertprints "TFFT" "comparison 5"
+   124 assertprints *tmp57 "TFFT" "comparison 5"
    125 label *label52
-   126 assertflush
+   126 assertflush *tmp71
 -    * jump *label67 notEqual @coal 2
 +  127 jump *label67 always
    128 jump *label68 always
@@ -3382,9 +3382,9 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
    142 label *label76
    143 label *label77
  
-   149 assertprints "FTFT" "comparison 6"
+   149 assertprints *tmp71 "FTFT" "comparison 6"
    150 label *label65
-   151 assertflush
+   151 assertflush *tmp85
 -    * jump *label80 notEqual @coal @lead
 +  152 jump *label80 always
    153 jump *label81 always
@@ -3407,9 +3407,9 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
    167 label *label89
    168 label *label90
  
-   219 assertprints "FTFT" "comparison 10"
+   219 assertprints *tmp127 "FTFT" "comparison 10"
    220 label *label117
-   221 assertflush
+   221 assertflush *tmp141
 -    * jump *label132 notEqual "A" 0
 +  222 jump *label132 always
    223 jump *label133 always
@@ -3432,9 +3432,9 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
    237 label *label141
    238 label *label142
  
-   244 assertprints "FTFT" "comparison 11"
+   244 assertprints *tmp141 "FTFT" "comparison 11"
    245 label *label130
-   246 assertflush
+   246 assertflush *tmp155
 -    * jump *label145 notEqual "A" 1
    247 jump *label146 always
    248 label *label145
@@ -3457,9 +3457,9 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
    262 label *label154
    263 label *label155
  
-   269 assertprints "TFFT" "comparison 12"
+   269 assertprints *tmp155 "TFFT" "comparison 12"
    270 label *label143
-   271 assertflush
+   271 assertflush *tmp169
 -    * jump *label158 notEqual "A" 2
 +  272 jump *label158 always
    273 jump *label159 always
@@ -3482,9 +3482,9 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
    287 label *label167
    288 label *label168
  
-   294 assertprints "FTFT" "comparison 13"
+   294 assertprints *tmp169 "FTFT" "comparison 13"
    295 label *label156
-   296 assertflush
+   296 assertflush *tmp183
 -    * jump *label171 notEqual "A" "B"
 +  297 jump *label171 always
    298 jump *label172 always
@@ -3507,9 +3507,9 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
    312 label *label180
    313 label *label181
  
-   319 assertprints "FTFT" "comparison 14"
+   319 assertprints *tmp183 "FTFT" "comparison 14"
    320 label *label169
-   321 assertflush
+   321 assertflush *tmp197
 -    * jump *label184 notEqual "A" "A"
    322 jump *label185 always
    323 label *label184
@@ -3534,7 +3534,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-72 instructions):
      0 set A 0
-     1 assertflush
+     1 assertflush *tmp1
 -    * jump *label3 always
      2 label *label2
      3 label *label3
@@ -3554,9 +3554,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
     12 label *label12
     13 label *label10
  
-    18 assertprints "TFFT" "comparison 1"
+    18 assertprints *tmp1 "TFFT" "comparison 1"
     19 label *label0
-    20 assertflush
+    20 assertflush *tmp15
 -    * jump *label15 always
 -    * jump *label16 always
     21 label *label15
@@ -3576,9 +3576,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
     31 label *label25
     32 label *label23
  
-    37 assertprints "FTFT" "comparison 2"
+    37 assertprints *tmp15 "FTFT" "comparison 2"
     38 label *label13
-    39 assertflush
+    39 assertflush *tmp29
 -    * jump *label28 always
 -    * jump *label29 always
     40 label *label28
@@ -3598,9 +3598,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
     50 label *label38
     51 label *label36
  
-    56 assertprints "FTFT" "comparison 3"
+    56 assertprints *tmp29 "FTFT" "comparison 3"
     57 label *label26
-    58 assertflush
+    58 assertflush *tmp43
 -    * jump *label41 always
 -    * jump *label42 always
     59 label *label41
@@ -3620,9 +3620,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
     69 label *label51
     70 label *label49
  
-    75 assertprints "FTFT" "comparison 4"
+    75 assertprints *tmp43 "FTFT" "comparison 4"
     76 label *label39
-    77 assertflush
+    77 assertflush *tmp57
 -    * jump *label55 always
     78 label *label54
     79 label *label55
@@ -3642,9 +3642,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
     88 label *label64
     89 label *label62
  
-    94 assertprints "TFFT" "comparison 5"
+    94 assertprints *tmp57 "TFFT" "comparison 5"
     95 label *label52
-    96 assertflush
+    96 assertflush *tmp71
 -    * jump *label67 always
 -    * jump *label68 always
     97 label *label67
@@ -3664,9 +3664,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    107 label *label77
    108 label *label75
  
-   113 assertprints "FTFT" "comparison 6"
+   113 assertprints *tmp71 "FTFT" "comparison 6"
    114 label *label65
-   115 assertflush
+   115 assertflush *tmp85
 -    * jump *label80 always
 -    * jump *label81 always
    116 label *label80
@@ -3686,9 +3686,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    126 label *label90
    127 label *label88
  
-   177 assertprints "FTFT" "comparison 10"
+   177 assertprints *tmp127 "FTFT" "comparison 10"
    178 label *label117
-   179 assertflush
+   179 assertflush *tmp141
 -    * jump *label132 always
 -    * jump *label133 always
    180 label *label132
@@ -3708,9 +3708,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    190 label *label142
    191 label *label140
  
-   196 assertprints "FTFT" "comparison 11"
+   196 assertprints *tmp141 "FTFT" "comparison 11"
    197 label *label130
-   198 assertflush
+   198 assertflush *tmp155
 -    * jump *label146 always
    199 label *label145
    200 label *label146
@@ -3730,9 +3730,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    209 label *label155
    210 label *label153
  
-   215 assertprints "TFFT" "comparison 12"
+   215 assertprints *tmp155 "TFFT" "comparison 12"
    216 label *label143
-   217 assertflush
+   217 assertflush *tmp169
 -    * jump *label158 always
 -    * jump *label159 always
    218 label *label158
@@ -3752,9 +3752,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    228 label *label168
    229 label *label166
  
-   234 assertprints "FTFT" "comparison 13"
+   234 assertprints *tmp169 "FTFT" "comparison 13"
    235 label *label156
-   236 assertflush
+   236 assertflush *tmp183
 -    * jump *label171 always
 -    * jump *label172 always
    237 label *label171
@@ -3774,9 +3774,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    247 label *label181
    248 label *label179
  
-   253 assertprints "FTFT" "comparison 14"
+   253 assertprints *tmp183 "FTFT" "comparison 14"
    254 label *label169
-   255 assertflush
+   255 assertflush *tmp197
 -    * jump *label185 always
    256 label *label184
    257 label *label185
@@ -3798,53 +3798,53 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
-   132 assertprints "FTFT" "comparison 7"
+   132 assertprints *tmp85 "FTFT" "comparison 7"
    133 label *label78
-   134 assertflush
--    * select *tmp94 equal A A "T" "F"
-+  135 set *tmp94 "T"
+   134 assertflush *tmp99
+-    * select *tmp102 equal A A "T" "F"
++  135 set *tmp102 "T"
    136 label *label92
--    * select *tmp97 notEqual A A "T" "F"
-+  137 set *tmp97 "F"
+-    * select *tmp105 notEqual A A "T" "F"
++  137 set *tmp105 "F"
    138 label *label95
--    * select *tmp100 strictEqual A A "T" "F"
-+  139 set *tmp100 "T"
+-    * select *tmp108 strictEqual A A "T" "F"
++  139 set *tmp108 "T"
    140 label *label98
--    * select *tmp103 strictNotEqual A A "T" "F"
-+  141 set *tmp103 "F"
+-    * select *tmp111 strictNotEqual A A "T" "F"
++  141 set *tmp111 "F"
    142 label *label101
-   143 print *tmp94
-   144 print *tmp97
+   143 print *tmp102
+   144 print *tmp105
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
    140 label *label98
-   141 set *tmp103 "F"
+   141 set *tmp111 "F"
    142 label *label101
--    * print *tmp94
--    * print *tmp97
--    * print *tmp100
--    * print *tmp103
+-    * print *tmp102
+-    * print *tmp105
+-    * print *tmp108
+-    * print *tmp111
 +  143 print "T"
 +  144 print "F"
 +  145 print "T"
 +  146 print "F"
-   147 assertprints "TFTF" "comparison 8"
+   147 assertprints *tmp99 "TFTF" "comparison 8"
    148 label *label91
-   149 assertflush
+   149 assertflush *tmp113
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4 instructions):
  
-   132 assertprints "FTFT" "comparison 7"
+   132 assertprints *tmp85 "FTFT" "comparison 7"
    133 label *label78
-   134 assertflush
--    * set *tmp94 "T"
+   134 assertflush *tmp99
+-    * set *tmp102 "T"
    135 label *label92
--    * set *tmp97 "F"
+-    * set *tmp105 "F"
    136 label *label95
--    * set *tmp100 "T"
+-    * set *tmp108 "T"
    137 label *label98
--    * set *tmp103 "F"
+-    * set *tmp111 "F"
    138 label *label101
    139 print "T"
    140 print "F"
@@ -3852,170 +3852,170 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
     97 print "F"
-    98 assertprints "TFTF" "comparison 15"
+    98 assertprints *tmp197 "TFTF" "comparison 15"
     99 stop
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-39 instructions):
      0 set A 0
-     1 assertflush
+     1 assertflush *tmp1
 -    * print "T"
 -    * print "F"
 -    * print "F"
 -    * print "T"
 +    2 print "TFFT"
-     3 assertprints "TFFT" "comparison 1"
-     4 assertflush
+     3 assertprints *tmp1 "TFFT" "comparison 1"
+     4 assertflush *tmp15
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
 +    5 print "FTFT"
-     6 assertprints "FTFT" "comparison 2"
-     7 assertflush
+     6 assertprints *tmp15 "FTFT" "comparison 2"
+     7 assertflush *tmp29
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
 +    8 print "FTFT"
-     9 assertprints "FTFT" "comparison 3"
-    10 assertflush
+     9 assertprints *tmp29 "FTFT" "comparison 3"
+    10 assertflush *tmp43
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
 +   11 print "FTFT"
-    12 assertprints "FTFT" "comparison 4"
-    13 assertflush
+    12 assertprints *tmp43 "FTFT" "comparison 4"
+    13 assertflush *tmp57
 -    * print "T"
 -    * print "F"
 -    * print "F"
 -    * print "T"
 +   14 print "TFFT"
-    15 assertprints "TFFT" "comparison 5"
-    16 assertflush
+    15 assertprints *tmp57 "TFFT" "comparison 5"
+    16 assertflush *tmp71
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
 +   17 print "FTFT"
-    18 assertprints "FTFT" "comparison 6"
-    19 assertflush
+    18 assertprints *tmp71 "FTFT" "comparison 6"
+    19 assertflush *tmp85
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
 +   20 print "FTFT"
-    21 assertprints "FTFT" "comparison 7"
-    22 assertflush
+    21 assertprints *tmp85 "FTFT" "comparison 7"
+    22 assertflush *tmp99
 -    * print "T"
 -    * print "F"
 -    * print "T"
 -    * print "F"
 +   23 print "TFTF"
-    24 assertprints "TFTF" "comparison 8"
-    25 assertflush
-    26 select *tmp107 equal A 0 "T" "F"
+    24 assertprints *tmp99 "TFTF" "comparison 8"
+    25 assertflush *tmp113
+    26 select *tmp116 equal A 0 "T" "F"
  
-    43 print *tmp129
-    44 assertprints "FTFT" "comparison 10"
-    45 assertflush
+    43 print *tmp139
+    44 assertprints *tmp127 "FTFT" "comparison 10"
+    45 assertflush *tmp141
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
 +   46 print "FTFT"
-    47 assertprints "FTFT" "comparison 11"
-    48 assertflush
+    47 assertprints *tmp141 "FTFT" "comparison 11"
+    48 assertflush *tmp155
 -    * print "T"
 -    * print "F"
 -    * print "F"
 -    * print "T"
 +   49 print "TFFT"
-    50 assertprints "TFFT" "comparison 12"
-    51 assertflush
+    50 assertprints *tmp155 "TFFT" "comparison 12"
+    51 assertflush *tmp169
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
 +   52 print "FTFT"
-    53 assertprints "FTFT" "comparison 13"
-    54 assertflush
+    53 assertprints *tmp169 "FTFT" "comparison 13"
+    54 assertflush *tmp183
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
 +   55 print "FTFT"
-    56 assertprints "FTFT" "comparison 14"
-    57 assertflush
+    56 assertprints *tmp183 "FTFT" "comparison 14"
+    57 assertflush *tmp197
 -    * print "T"
 -    * print "F"
 -    * print "T"
 -    * print "F"
 +   58 print "TFTF"
-    59 assertprints "TFTF" "comparison 15"
+    59 assertprints *tmp197 "TFTF" "comparison 15"
     60 stop
 
 Final code before resolving virtual instructions:
 
 set A 0
-assertflush
+assertflush *tmp1
 print "TFFT"
-assertprints "TFFT" "comparison 1"
-assertflush
+assertprints *tmp1 "TFFT" "comparison 1"
+assertflush *tmp15
 print "FTFT"
-assertprints "FTFT" "comparison 2"
-assertflush
+assertprints *tmp15 "FTFT" "comparison 2"
+assertflush *tmp29
 print "FTFT"
-assertprints "FTFT" "comparison 3"
-assertflush
+assertprints *tmp29 "FTFT" "comparison 3"
+assertflush *tmp43
 print "FTFT"
-assertprints "FTFT" "comparison 4"
-assertflush
+assertprints *tmp43 "FTFT" "comparison 4"
+assertflush *tmp57
 print "TFFT"
-assertprints "TFFT" "comparison 5"
-assertflush
+assertprints *tmp57 "TFFT" "comparison 5"
+assertflush *tmp71
 print "FTFT"
-assertprints "FTFT" "comparison 6"
-assertflush
+assertprints *tmp71 "FTFT" "comparison 6"
+assertflush *tmp85
 print "FTFT"
-assertprints "FTFT" "comparison 7"
-assertflush
+assertprints *tmp85 "FTFT" "comparison 7"
+assertflush *tmp99
 print "TFTF"
-assertprints "TFTF" "comparison 8"
-assertflush
-select *tmp107 equal A 0 "T" "F"
-select *tmp110 notEqual A 0 "T" "F"
-select *tmp113 strictEqual A 0 "T" "F"
-select *tmp116 strictNotEqual A 0 "T" "F"
-print *tmp107
-print *tmp110
-print *tmp113
+assertprints *tmp99 "TFTF" "comparison 8"
+assertflush *tmp113
+select *tmp116 equal A 0 "T" "F"
+select *tmp119 notEqual A 0 "T" "F"
+select *tmp122 strictEqual A 0 "T" "F"
+select *tmp125 strictNotEqual A 0 "T" "F"
 print *tmp116
-assertprints "TFTF" "comparison 9"
-assertflush
-select *tmp120 equal A 1 "T" "F"
-select *tmp123 notEqual A 1 "T" "F"
-select *tmp126 strictEqual A 1 "T" "F"
-select *tmp129 strictNotEqual A 1 "T" "F"
-print *tmp120
-print *tmp123
-print *tmp126
-print *tmp129
-assertprints "FTFT" "comparison 10"
-assertflush
+print *tmp119
+print *tmp122
+print *tmp125
+assertprints *tmp113 "TFTF" "comparison 9"
+assertflush *tmp127
+select *tmp130 equal A 1 "T" "F"
+select *tmp133 notEqual A 1 "T" "F"
+select *tmp136 strictEqual A 1 "T" "F"
+select *tmp139 strictNotEqual A 1 "T" "F"
+print *tmp130
+print *tmp133
+print *tmp136
+print *tmp139
+assertprints *tmp127 "FTFT" "comparison 10"
+assertflush *tmp141
 print "FTFT"
-assertprints "FTFT" "comparison 11"
-assertflush
+assertprints *tmp141 "FTFT" "comparison 11"
+assertflush *tmp155
 print "TFFT"
-assertprints "TFFT" "comparison 12"
-assertflush
+assertprints *tmp155 "TFFT" "comparison 12"
+assertflush *tmp169
 print "FTFT"
-assertprints "FTFT" "comparison 13"
-assertflush
+assertprints *tmp169 "FTFT" "comparison 13"
+assertflush *tmp183
 print "FTFT"
-assertprints "FTFT" "comparison 14"
-assertflush
+assertprints *tmp183 "FTFT" "comparison 14"
+assertflush *tmp197
 print "TFTF"
-assertprints "TFTF" "comparison 15"
+assertprints *tmp197 "TFTF" "comparison 15"
 stop

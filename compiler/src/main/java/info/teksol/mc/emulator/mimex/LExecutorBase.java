@@ -109,7 +109,7 @@ public abstract class LExecutorBase implements LExecutor {
 
         builders.put("noop", NoopI::new);
 
-        builders.put("assertBounds", AssertBoundsI::new);
+        builders.put("assertbounds", AssertBoundsI::new);
         builders.put("assertequals", AssertEqualsI::new);
         builders.put("assertflush", AssertFlushI::new);
         builders.put("assertprints", AssertPrintsI::new);
@@ -539,30 +539,35 @@ public abstract class LExecutorBase implements LExecutor {
     }
 
     protected class AssertFlushI extends AbstractInstruction {
+        protected final LVar flushIndex;
 
         public AssertFlushI(LStatement statement) {
             super(statement);
+            flushIndex = assembler.var(statement.arg0());
         }
 
         @Override
         public void run() {
-            textBuffer.prepareAssert();
+            flushIndex.setnum(textBuffer.prepareAssert());
         }
     }
 
     protected class AssertPrintsI extends AbstractInstruction {
+        protected final LVar flushIndex;
         protected final LVar expected;
         protected final LVar message;
 
         public AssertPrintsI(LStatement statement) {
             super(statement);
-            expected = assembler.var(statement.arg0());
-            message = assembler.var(statement.arg1());
+            flushIndex = assembler.var(statement.arg0());
+            expected = assembler.var(statement.arg1());
+            message = assembler.var(statement.arg2());
         }
 
         @Override
         public void run() {
-            assertions.add(new Assertion(expected.printExact(), textBuffer.getAssertedOutput(), message.printExact()));
+            assertions.add(new Assertion(expected.printExact(),
+                    textBuffer.getAssertedOutput(flushIndex.numi()), message.printExact()));
         }
     }
 

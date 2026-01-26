@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -50,9 +51,10 @@ public class BuiltinFunctionAssertsBuilder extends AbstractFunctionBuilder {
             LogicValue expected = convertArgument(call.getArgument(0)).validateAsInput(messageConsumer).getValue(assembler);
             LogicValue title = convertArgument(call.getArgument(2)).validateAsInput(messageConsumer).getValue(assembler);
             assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
-            assembler.createInstruction(Opcode.ASSERT_FLUSH);
-            validateAndCompile(call.getArgument(1));           // Just print, not interested in result
-            assembler.createInstruction(Opcode.ASSERT_PRINTS, expected, title);
+            LogicVariable tmp = assembler.nextTemp();
+            assembler.createInstruction(Opcode.ASSERT_FLUSH, tmp);
+            validateAndCompile(call.getArgument(1));           // Just print, not interested in the result
+            assembler.createInstruction(Opcode.ASSERT_PRINTS, tmp, expected, title);
         }
 
         assembler.clearSubcontextType();

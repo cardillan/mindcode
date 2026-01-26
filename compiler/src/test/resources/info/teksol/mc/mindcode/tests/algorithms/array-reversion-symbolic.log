@@ -155,7 +155,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   89 set .array*0 :reverse:t
     90 label *label6
     91 label *label3
-    92 assertflush
+    92 assertflush *tmp6
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
@@ -343,7 +343,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5:
 +   87 set .array*0 :reverse:i
     88 label *label6
     89 label *label3
-    90 assertflush
+    90 assertflush *tmp6
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 6 (-1 instructions):
  
@@ -574,7 +574,7 @@ Modifications by Unroll iteration loop at line 18:5 (+7 instructions):
 +  120 set .array*0 :reverse:i
 +  121 label *label6
    122 label *label3
-   123 assertflush
+   123 assertflush *tmp6
    124 print .array*0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-5 instructions):
@@ -730,7 +730,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-5
 +  115 set .array*9 .array*0
    116 label *label6
    117 label *label3
-   118 assertflush
+   118 assertflush *tmp6
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-30 instructions):
  
@@ -839,7 +839,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
 -    * set .array*9 .array*0
     86 label *label6
     87 label *label3
-    88 assertflush
+    88 assertflush *tmp6
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
  
@@ -1421,7 +1421,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 15:
  
     74 label *label6
     75 label *label3
-    76 assertflush
+    76 assertflush *tmp6
 -    * print .array*0
 -    * print .array*1
 -    * print .array*2
@@ -1442,7 +1442,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 15:
 +   84 print 2
 +   85 print 1
 +   86 print 0
-    87 assertprints "9876543210" "reverse array"
+    87 assertprints *tmp6 "9876543210" "reverse array"
     88 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 16 (-11 instructions):
@@ -1553,12 +1553,12 @@ Modifications by Jumps phase, Single Step Elimination, pass 6, iteration 1 (-1 i
  
     10 print 1
     11 print 0
-    12 assertprints "9876543210" "reverse array"
+    12 assertprints *tmp6 "9876543210" "reverse array"
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-9 instructions):
      0 # "Function: inline void reverse(in array...)"
-     1 assertflush
+     1 assertflush *tmp6
 -    * print 9
 -    * print 8
 -    * print 7
@@ -1570,11 +1570,11 @@ Modifications by Final phase, Print Merging, iteration 1 (-9 instructions):
 -    * print 1
 -    * print 0
 +    2 print "9876543210"
-     3 assertprints "9876543210" "reverse array"
+     3 assertprints *tmp6 "9876543210" "reverse array"
 
 Final code before resolving virtual instructions:
 
 # "Function: inline void reverse(in array...)"
-assertflush
+assertflush *tmp6
 print "9876543210"
-assertprints "9876543210" "reverse array"
+assertprints *tmp6 "9876543210" "reverse array"

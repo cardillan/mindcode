@@ -7621,10 +7621,9 @@ public class MindcodeParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class AstIteratorContext extends ParserRuleContext {
 		public Token modifier;
-		public LvalueContext variable;
-		public LvalueContext lvalue() {
-			return getRuleContext(LvalueContext.class,0);
-		}
+		public Token variable;
+		public TerminalNode IDENTIFIER() { return getToken(MindcodeParser.IDENTIFIER, 0); }
+		public TerminalNode EXTIDENTIFIER() { return getToken(MindcodeParser.EXTIDENTIFIER, 0); }
 		public TerminalNode OUT() { return getToken(MindcodeParser.OUT, 0); }
 		public AstIteratorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -7663,7 +7662,16 @@ public class MindcodeParser extends Parser {
 			}
 
 			setState(957);
-			((AstIteratorContext)_localctx).variable = lvalue();
+			((AstIteratorContext)_localctx).variable = _input.LT(1);
+			_la = _input.LA(1);
+			if ( !(_la==IDENTIFIER || _la==EXTIDENTIFIER) ) {
+				((AstIteratorContext)_localctx).variable = (Token)_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -8405,18 +8413,18 @@ public class MindcodeParser extends Parser {
 		"\u0000\u03b7\u03b5\u0001\u0000\u0000\u0000\u03b8\u03b9\u0003\\.\u0000"+
 		"\u03b9[\u0001\u0000\u0000\u0000\u03ba\u03bc\u0005!\u0000\u0000\u03bb\u03ba"+
 		"\u0001\u0000\u0000\u0000\u03bb\u03bc\u0001\u0000\u0000\u0000\u03bc\u03bd"+
-		"\u0001\u0000\u0000\u0000\u03bd\u03be\u0003(\u0014\u0000\u03be]\u0001\u0000"+
-		"\u0000\u0000{_dipy\u007f\u0086\u008b\u0090\u0096\u009c\u00a2\u00a5\u00aa"+
-		"\u00b0\u00b5\u00bc\u00c1\u00c7\u00ce\u00d3\u00da\u00de\u00e4\u00e9\u00f6"+
-		"\u0100\u0106\u0109\u010c\u0112\u011d\u012a\u0130\u0135\u013c\u0142\u0148"+
-		"\u014e\u0152\u0156\u015a\u015e\u0163\u0167\u016d\u0171\u0177\u017d\u0183"+
-		"\u0187\u018d\u0191\u0195\u0199\u019e\u01a3\u01a8\u01ac\u01b0\u01b5\u01be"+
-		"\u01c2\u01c9\u01da\u01f7\u01fc\u0200\u0208\u0211\u0219\u021e\u0223\u0225"+
-		"\u0246\u0258\u025c\u0264\u0267\u026b\u026d\u0275\u028e\u02a4\u02cc\u02d3"+
-		"\u02d5\u02df\u02e4\u02e6\u02ec\u02f2\u02f7\u02fe\u030c\u0316\u0322\u032c"+
-		"\u0332\u0335\u0338\u033c\u0342\u0347\u0349\u034c\u034f\u0357\u035a\u0368"+
-		"\u036d\u0372\u0378\u037f\u0386\u0390\u0395\u039b\u03a2\u03ab\u03ae\u03b5"+
-		"\u03bb";
+		"\u0001\u0000\u0000\u0000\u03bd\u03be\u0007\u0001\u0000\u0000\u03be]\u0001"+
+		"\u0000\u0000\u0000{_dipy\u007f\u0086\u008b\u0090\u0096\u009c\u00a2\u00a5"+
+		"\u00aa\u00b0\u00b5\u00bc\u00c1\u00c7\u00ce\u00d3\u00da\u00de\u00e4\u00e9"+
+		"\u00f6\u0100\u0106\u0109\u010c\u0112\u011d\u012a\u0130\u0135\u013c\u0142"+
+		"\u0148\u014e\u0152\u0156\u015a\u015e\u0163\u0167\u016d\u0171\u0177\u017d"+
+		"\u0183\u0187\u018d\u0191\u0195\u0199\u019e\u01a3\u01a8\u01ac\u01b0\u01b5"+
+		"\u01be\u01c2\u01c9\u01da\u01f7\u01fc\u0200\u0208\u0211\u0219\u021e\u0223"+
+		"\u0225\u0246\u0258\u025c\u0264\u0267\u026b\u026d\u0275\u028e\u02a4\u02cc"+
+		"\u02d3\u02d5\u02df\u02e4\u02e6\u02ec\u02f2\u02f7\u02fe\u030c\u0316\u0322"+
+		"\u032c\u0332\u0335\u0338\u033c\u0342\u0347\u0349\u034c\u034f\u0357\u035a"+
+		"\u0368\u036d\u0372\u0378\u037f\u0386\u0390\u0395\u039b\u03a2\u03ab\u03ae"+
+		"\u03b5\u03bb";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

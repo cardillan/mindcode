@@ -149,9 +149,9 @@ public class LStatement {
 
     private static final List<LogicStatement> builtinStatements = List.of(
             s("assertequals", "expected,actual,message", "var,var,var"),
-            s("assertprints", "expected,message", "var,var"),
-            s("assertflush", "", ""),
-            s("assertBounds",
+            s("assertprints", "position,expected,message", "var,var,var"),
+            s("assertflush", "position", "var"),
+            s("assertbounds",
                     "multiple,multiple,min,lessThanEq,index,lessThanEq,max,error",
                     "@custom,var,var,@custom,var,@custom,var,var"
             ),
