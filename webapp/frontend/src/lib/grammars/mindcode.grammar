@@ -19,7 +19,8 @@
   or @left,
   ternary @right,
   assign @right,
-  case
+  case,
+  formatIdentifier
 }
 @top Program { statementList? }
 
@@ -37,7 +38,7 @@ UpdateOp<expr> { expr }
 BitOp<expr> { expr }
 
 end { kw<"end"> }
-statementList { (statement? ";" | EnhancedComment)* }
+statementList { (statement? ";" | EnhancedComment | MlogBlock)* }
 
 statement {
   expression |
@@ -57,8 +58,7 @@ statement {
   ReturnStatement { kw<"return"> expression? } |
   AtomicBlock { kw<"atomic"> ~sharedModifier statementList end } |
   Block { kw<"begin"> statementList end } |
-  DebugBlock { kw<"debug"> ~sharedModifier statementList end } | 
-  MlogBlock
+  DebugBlock { kw<"debug"> ~sharedModifier statementList end }
 }
 
 expression {
@@ -259,11 +259,11 @@ Label {
 
 @skip {} {
   FormatString {
-    formatStart (formatEscape | formatContent | formatPlaceholder | formatExpression)* formatEnd
+    formatStart (formatEscape | formatContent | formatMaybeIdentifier | formatPlaceholder | formatExpression)* formatEnd
   }
 
   formatPlaceholder {
-    FormatPlaceholderStart Identifier
+    FormatPlaceholderStart Identifier { SimpleIdentifier { !formatIdentifier formatMaybeIdentifier } }?
   }
 
   EnhancedComment {
@@ -296,6 +296,7 @@ number {
 @local tokens {
   InterpolationStart[closedBy=InterpolationEnd] { "${" }
   FormatPlaceholderStart { "$" }
+  formatMaybeIdentifier { $[a-zA-Z_] $[a-zA-Z0-9_]* }
   @precedence {
     InterpolationStart,
     FormatPlaceholderStart
