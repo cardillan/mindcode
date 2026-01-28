@@ -89,10 +89,10 @@ Actions:
 ## Compile Mindcode action help
 
 ```
-usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [--excerpt [EXCERPT]]
-                [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] [-l [LOG]]
-                [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
-                [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
+usage: mindcode cm [-h] [-c] [-w [{update,update-all}]] [--watcher-version {v0,v1}] [--watcher-port {0..65535}]
+                [--watcher-timeout {0..3600000}] [--excerpt [EXCERPT]] [-o [OUTPUT]]
+                [--output-directory OUTPUT-DIRECTORY] [-l [LOG]] [--file-references {path,uri,windows-uri}]
+                [-a FILE [FILE ...]] [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
@@ -138,8 +138,12 @@ Compile a Mindcode source file into text mlog file.
 named arguments:
   -h, --help             show this help message and exit
   -c, --clipboard        copy compiled mlog code to clipboard
-  -w, --watcher          send compiled mlog code to the Mlog Watcher  mod  in  Mindustry (the code will be injected into
-                         the selected processor)
+  -w, --watcher [{update,update-all}]
+                         invoke an specific Mlog Watcher operation on the compiled mlog code (default: update)
+                             update      send the mlog code to the selected processor
+                             update-all  update all compatible processors on the map with new code
+  --watcher-version {v0,v1}
+                         specifies the version of the Mlog Watcher mod
   --watcher-port {0..65535}
                          port number for communication with Mlog Watcher
   --watcher-timeout {0..3600000}
@@ -434,9 +438,10 @@ named arguments:
 ## Compile Schematic action help
 
 ```
-usage: mindcode cs [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [-o [OUTPUT]]
-                [--output-directory OUTPUT-DIRECTORY] [-l [LOG]] [--file-references {path,uri,windows-uri}]
-                [-a [TAG [TAG ...]]] [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
+usage: mindcode cs [-h] [-c] [-w [{update,add}]] [--watcher-version {v0,v1}] [--watcher-port {0..65535}]
+                [--watcher-timeout {0..3600000}] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] [-l [LOG]]
+                [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]]
+                [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
@@ -482,8 +487,12 @@ Compile a schematic definition file into binary msch file.
 named arguments:
   -h, --help             show this help message and exit
   -c, --clipboard        encode the created schematic into text representation and paste into clipboard
-  -w, --watcher          send created schematic to the Mlog Watcher mod in  Mindustry (the schematic will be added to or
-                         updated in the database)
+  -w, --watcher [{update,add}]
+                         invoke an specific Mlog Watcher operation on the created schematic (default: update)
+                             update      update the schematic with the same name in the schematics library
+                             add         add a new copy of the schematic to the schematics library
+  --watcher-version {v0,v1}
+                         specifies the version of the Mlog Watcher mod
   --watcher-port {0..65535}
                          port number for communication with Mlog Watcher
   --watcher-timeout {0..3600000}

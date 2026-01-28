@@ -2,7 +2,7 @@ package info.teksol.mindcode.cmdline;
 
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.profile.CompilerProfile;
-import info.teksol.mindcode.cmdline.Main.Action;
+import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherCommand;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.jspecify.annotations.NullMarked;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     public CompileMindcodeActionTest() {
-        super(Action.COMPILE_MINDCODE);
+        super(ToolAppAction.COMPILE_MINDCODE);
     }
 
     @Nested
@@ -48,15 +48,21 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
             @Test
             public void watcherArgument() throws ArgumentParserException {
                 Namespace arguments = parseCommandLine("input.mnd -o output.mlog -w --watcher-port 1234 --watcher-timeout 2000");
-                assertTrue(arguments.getBoolean("watcher"));
+                assertEquals(MlogWatcherCommand.UPDATE, arguments.get("watcher"));
                 assertEquals(1234, arguments.getInt("watcher_port"));
                 assertEquals(2000, arguments.getInt("watcher_timeout"));
             }
 
             @Test
+            public void watcherArgumentUpdateAll() throws ArgumentParserException {
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog -w update-all");
+                assertEquals(MlogWatcherCommand.UPDATE_ALL, arguments.get("watcher"));
+            }
+
+            @Test
             public void noWatcherArgument() throws ArgumentParserException {
                 Namespace arguments = parseCommandLine("input.mnd -o output.mlog");
-                assertFalse(arguments.getBoolean("watcher"));
+                assertEquals(ActionHandler.NOTHING, arguments.get("watcher"));
             }
         }
 
@@ -65,7 +71,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
             @Test
             public void inputArgumentDefault() throws ArgumentParserException {
                 Namespace arguments = parseCommandLine("");
-                assertEquals(action, Action.fromShortcut(arguments.get("action")));
+                assertEquals(action, ToolAppAction.fromShortcut(arguments.get("action")));
                 assertEquals(new File("-"), arguments.get("input"));
             }
 

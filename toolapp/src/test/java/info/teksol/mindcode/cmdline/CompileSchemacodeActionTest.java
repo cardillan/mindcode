@@ -1,7 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
 import info.teksol.mc.profile.CompilerProfile;
-import info.teksol.mindcode.cmdline.Main.Action;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.jspecify.annotations.NullMarked;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
 
     protected CompileSchemacodeActionTest() {
-        super(Action.COMPILE_SCHEMA);
+        super(ToolAppAction.COMPILE_SCHEMA);
     }
 
     @Nested
@@ -150,7 +149,7 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void createsCompilerProfileDefault() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine(Action.COMPILE_SCHEMA.getShortcut());
+        Namespace arguments = parseCommandLine(ToolAppAction.COMPILE_SCHEMA.getShortcut());
         CompilerProfile expected = CompilerProfile.fullOptimizations(true, false);
         CompilerProfile actual = new CompileSchemacodeAction().createCompilerProfile(true, arguments);
         assertEquals(expected, actual);

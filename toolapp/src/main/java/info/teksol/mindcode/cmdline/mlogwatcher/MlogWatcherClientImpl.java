@@ -2,18 +2,21 @@ package info.teksol.mindcode.cmdline.mlogwatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mindcode.cmdline.mlogwatcher.api.*;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Comparator;
 import java.util.function.Consumer;
 
-import static info.teksol.mindcode.cmdline.mlogwatcher.Response.*;
+import static info.teksol.mindcode.cmdline.mlogwatcher.api.Response.*;
 
 @NullMarked
 public class MlogWatcherClientImpl extends MlogWatcherClientBase {
     protected final ObjectMapper mapper = new ObjectMapper();
 
-    public MlogWatcherClientImpl(ToolMessageEmitter messageEmitter, int port, long timeout) {
-        super(messageEmitter, port, timeout, "/v1");
+    public MlogWatcherClientImpl(ToolMessageEmitter messageEmitter, int port, long timeout, boolean printStackTrace) {
+        super(messageEmitter, port, timeout, "/v1", printStackTrace);
     }
 
     @Override
@@ -85,10 +88,13 @@ public class MlogWatcherClientImpl extends MlogWatcherClientBase {
     }
 
     @Override
-    public void updateAllProcessorsOnMap(String mlog, String programId) {
+    public void updateAllProcessorsOnMap(String mlog, String textId) {
+        ProgramId programId = ProgramId.parse(textId);
+
         UpgradeAllProcessorsOnMapParams params = new UpgradeAllProcessorsOnMapParams();
         params.setCode(mlog);
         params.setProgramId(programId);
+        params.setVariableName(LogicVariable.PROGRAM_ID_NAME);
 
         Request request = new Request();
         request.setMethod(Request.UPGRADE_ALL_PROCESSORS_ON_MAP);
@@ -99,19 +105,32 @@ public class MlogWatcherClientImpl extends MlogWatcherClientBase {
         processRequest(request,
                 "Request to upgrade all processors on the map was sent to Mlog Watcher.",
                 result -> {
-                    if (result.getResult() instanceof TextResult textResult) {
-                        log.info("  Mlog Watcher: %s", textResult.getText().toLowerCase());
+                    if (result.getResult() instanceof ProcessorUpdateResults updates) {
+                        log.info("  Mlog Watcher: %d processors considered:", updates.getProcessorUpdates().size());
+                        updates.getProcessorUpdates().stream()
+                                .sorted(Comparator.comparing(LogicProcessor::getX).thenComparing(LogicProcessor::getY))
+                                .forEach(upd -> log.info("    %s at (%.1f, %.1f), %s: %s", upd.getType(), upd.getX(), upd.getY(),
+                                        upd.getProgramId().toVersionString(), status(upd)));
                     } else {
                         log.error("  Mlog Watcher: error processing request - unknown result");
                     }
                 });
     }
 
+    private String status(LogicProcessor update) {
+        return switch (update.getStatus()) {
+            case LogicProcessor.UPDATED -> "updated.";
+            case LogicProcessor.INCOMPATIBLE_VERSION -> "existing version incompatible.";
+            case LogicProcessor.MISSING_PROGRAM_ID -> "missing or unrecognized program id.";
+            case null, default -> "unknown failure";
+        };
+    }
+
     @Override
-    public void updateSchematic(String schematic) {
+    public void updateSchematic(String schematic, boolean overwrite) {
         PutSchematicInLibraryParams params = new PutSchematicInLibraryParams();
         params.setSchematic(schematic);
-        params.setOverwrite(true);
+        params.setOverwrite(overwrite);
 
         Request request = new Request();
         request.setMethod(Request.PUT_SCHEMATIC_IN_LIBRARY);

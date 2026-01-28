@@ -8,8 +8,8 @@ import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionCategory;
-import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherClient;
+import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherCommand;
 import info.teksol.schemacode.SchemacodeCompiler;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
@@ -33,7 +33,7 @@ public class CompileSchemacodeAction extends ActionHandler {
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
         Map<Enum<?>, CompilerOptionValue<?>> options = defaults.getOptions();
 
-        Subparser subparser = subparsers.addParser(Action.COMPILE_SCHEMA.getShortcut())
+        Subparser subparser = subparsers.addParser(ToolAppAction.COMPILE_SCHEMA.getShortcut())
                 .aliases("compile-schema", "compile-schematic")
                 .description("Compile a schematic definition file into binary msch file.")
                 .help("Compile a schematic definition file into binary msch file.");
@@ -42,7 +42,7 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .help("encode the created schematic into text representation and paste into clipboard")
                 .action(Arguments.storeTrue());
 
-        addMlogWatcherOptions(subparser, true);
+        addMlogWatcherOptions(subparser, ToolAppAction.COMPILE_SCHEMA);
 
         ArgumentGroup files = subparser.addArgumentGroup("Input/output files");
 
@@ -123,10 +123,23 @@ public class CompileSchemacodeAction extends ActionHandler {
                 toolMessages.info("\nCreated schematic was copied to the clipboard.");
             }
 
-            MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages);
+            MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages,
+                    compilerProfile.isPrintStackTrace());
             if (mlogWatcherClient != null) {
-                mlogWatcherClient.updateSchematic( encoded);
-                mlogWatcherClient.close();
+                try {
+                    switch (arguments.get("watcher")) {
+                        case MlogWatcherCommand.UPDATE ->
+                                mlogWatcherClient.updateSchematic( encoded, true);
+
+                        case MlogWatcherCommand.ADD ->
+                                mlogWatcherClient.updateSchematic( encoded, false);
+
+                        default ->
+                                throw new IllegalArgumentException("Invalid value for --watcher: " + arguments.get("watcher"));
+                    }
+                } finally {
+                    mlogWatcherClient.close();
+                }
             }
         } else {
             System.exit(1);

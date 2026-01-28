@@ -1,4 +1,4 @@
-package info.teksol.mindcode.cmdline.mlogwatcher;
+package info.teksol.mindcode.cmdline.mlogwatcher.api;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;

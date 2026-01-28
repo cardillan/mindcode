@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 
@@ -12,26 +13,26 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @NullMarked
 public class StandardNameCreator implements NameCreator {
+    public static final String SHORT_FUNCTION_PREFIX = "fn";
+
+    public static final String RETURN_VALUE = "retval";
+    public static final String RETURN_ADDRESS = "retaddr";
+    public static final String FUNCTION_FINISHED = "finished";
+
+    public static final String GLOBAL_PREFIX = ".";
+    public static final String MAIN_PREFIX = ":";
+    public static final String LOCAL_PREFIX = ":";
+    public static final String FUNCTION_PREFIX = ":";
+    public static final String DISTINCT_PREFIX = ".";
+    public static final String COMPILER_PREFIX = "*";
+    public static final String ARRAY_PREFIX = ".";
+    public static final String PROCESSOR_ARRAY_PREFIX = ".";
+    public static final String ELEMENT_PREFIX = "*";
+
     private final boolean shortFunctionPrefix;
     private final Map<String, AtomicInteger> functionPrefixCounter = new HashMap<>();
     private final Set<String> functionPrefixes = new HashSet<>();
     private int functionIndex = 0;
-
-    private static final String SHORT_FUNCTION_PREFIX = "fn";
-
-    private static final String RETURN_VALUE = "retval";
-    private static final String RETURN_ADDRESS = "retaddr";
-    private static final String FUNCTION_FINISHED = "finished";
-
-    private static final String GLOBAL_PREFIX = ".";
-    private static final String MAIN_PREFIX = ":";
-    private static final String LOCAL_PREFIX = ":";
-    private static final String FUNCTION_PREFIX = ":";
-    private static final String DISTINCT_PREFIX = ".";
-    private static final String COMPILER_PREFIX = "*";
-    private static final String ARRAY_PREFIX = ".";
-    private static final String PROCESSOR_ARRAY_PREFIX = ".";
-    private static final String ELEMENT_PREFIX = "*";
 
     private final String globalPrefix;
     private final String mainPrefix;
@@ -187,7 +188,7 @@ public class StandardNameCreator implements NameCreator {
 
     @Override
     public String programId() {
-        return COMPILER_PREFIX + "id";
+        return LogicVariable.PROGRAM_ID_NAME;
     }
 
     private String withPrefix(String prefix, String name, int index) {

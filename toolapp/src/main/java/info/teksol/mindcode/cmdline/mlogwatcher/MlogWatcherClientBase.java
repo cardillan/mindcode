@@ -17,17 +17,19 @@ public abstract class MlogWatcherClientBase implements MlogWatcherClient {
     private final String path;
     private final int port;
     private final long timeout;
+    private final boolean printStackTrace;
 
     private @Nullable LocalWebSocketClient client;
     private boolean errorReported = false;
     private final Semaphore semaphore = new Semaphore(0);
     private @Nullable String response;
 
-    public MlogWatcherClientBase(ToolMessageEmitter log, int port, long timeout, String path) {
+    public MlogWatcherClientBase(ToolMessageEmitter log, int port, long timeout, String path, boolean printStackTrace) {
         this.log = log;
         this.path = path;
         this.port = port;
         this.timeout = timeout;
+        this.printStackTrace = printStackTrace;
     }
 
     @Override
@@ -82,6 +84,11 @@ public abstract class MlogWatcherClientBase implements MlogWatcherClient {
     }
 
     protected void printError(Exception ex) {
+        if (printStackTrace) {
+            //noinspection CallToPrintStackTrace
+            ex.printStackTrace();
+        }
+
         if (!errorReported) {
             log.error("Error connecting to Mlog Watcher: %s", ex.getMessage());
             log.error("  - make sure Mindustry with active Mlog Watcher mod is running");

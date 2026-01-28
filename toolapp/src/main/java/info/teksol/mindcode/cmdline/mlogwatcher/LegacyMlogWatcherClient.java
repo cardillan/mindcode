@@ -6,8 +6,8 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class LegacyMlogWatcherClient extends MlogWatcherClientBase implements MlogWatcherClient {
 
-    public LegacyMlogWatcherClient(ToolMessageEmitter messageEmitter, int port, long timeout) {
-        super(messageEmitter, port, timeout, "");
+    public LegacyMlogWatcherClient(ToolMessageEmitter messageEmitter, int port, long timeout, boolean printStackTrace) {
+        super(messageEmitter, port, timeout, "", printStackTrace);
     }
 
     protected void onTimeout() {
@@ -34,11 +34,11 @@ public class LegacyMlogWatcherClient extends MlogWatcherClientBase implements Ml
 
     @Override
     public void updateAllProcessorsOnMap(String mlog, String programId) {
-        log.error("Updating all processors on the map is not supported by the legacy Mlog Watcher.");
+        log.error("Updating all processors on the map is not supported by the legacy Mlog Watcher mod.");
     }
 
     @Override
-    public void updateSchematic(String schematic) {
-        log.error("Updating schematics is not supported by the legacy Mlog Watcher.");
+    public void updateSchematic(String schematic, boolean overwrite) {
+        log.error("Updating schematics is not supported by the legacy Mlog Watcher mod.");
     }
 }

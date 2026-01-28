@@ -1,4 +1,4 @@
-package info.teksol.mindcode.cmdline.mlogwatcher;
+package info.teksol.mindcode.cmdline.mlogwatcher.api;
 
 public class PutSchematicInLibraryParams implements Params {
 

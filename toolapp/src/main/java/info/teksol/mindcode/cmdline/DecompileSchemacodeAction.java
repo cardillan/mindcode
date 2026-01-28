@@ -1,7 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
 import info.teksol.mc.profile.CompilerProfile;
-import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.schemacode.mindustry.SchematicsIO;
 import info.teksol.schemacode.schematics.BlockOrder;
 import info.teksol.schemacode.schematics.Decompiler;
@@ -36,7 +35,7 @@ public class DecompileSchemacodeAction extends ActionHandler {
 
     @Override
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile profile) {
-        Subparser subparser = subparsers.addParser(Action.DECOMPILE_SCHEMA.getShortcut())
+        Subparser subparser = subparsers.addParser(ToolAppAction.DECOMPILE_SCHEMA.getShortcut())
                 .aliases("decompile-schema", "decompile-schematic")
                 .description("Decompile a binary msch file into schematic definition file.")
                 .help("Decompile a binary msch file into schematic definition file.");

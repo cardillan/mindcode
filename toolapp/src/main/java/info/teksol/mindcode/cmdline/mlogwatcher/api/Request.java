@@ -1,4 +1,4 @@
-package info.teksol.mindcode.cmdline.mlogwatcher;
+package info.teksol.mindcode.cmdline.mlogwatcher.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;

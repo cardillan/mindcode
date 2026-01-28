@@ -11,8 +11,7 @@ import info.teksol.mc.profile.options.BooleanCompilerOptionValue;
 import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionCategory;
 import info.teksol.mc.profile.options.OptionMultiplicity;
-import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherClient;
-import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherClientImpl;
+import info.teksol.mindcode.cmdline.mlogwatcher.*;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.*;
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
 
 @NullMarked
 abstract class ActionHandler {
-    private static final Object NOTHING = new Object();
+    static final Object NOTHING = new Object();
     private final List<BiConsumer<CompilerProfile, Namespace>> optionSetters = new ArrayList<>();
 
     abstract Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults);
@@ -102,12 +101,32 @@ abstract class ActionHandler {
         return argument;
     }
 
-    void addMlogWatcherOptions(ArgumentContainer container, boolean schematics) {
+    void addMlogWatcherOptions(ArgumentContainer container, ToolAppAction action) {
+        String description = switch (action) {
+            case COMPILE_MINDCODE -> """
+                    invoke an specific Mlog Watcher operation on the compiled mlog code (default: update)
+                        update      send the mlog code to the selected processor
+                        update-all  update all compatible processors on the map with new code""";
+
+            case COMPILE_SCHEMA -> """
+                    invoke an specific Mlog Watcher operation on the created schematic (default: update)
+                        update      update the schematic with the same name in the schematics library
+                        add         add a new copy of the schematic to the schematics library""";
+
+            default -> throw new IllegalArgumentException("Unsupported action for Mlog Watcher options: " + action);
+        };
+
         container.addArgument("-w", "--watcher")
-                .help(schematics
-                        ? "send created schematic to the Mlog Watcher mod in Mindustry (the schematic will be added to or updated in the database)"
-                        : "send compiled mlog code to the Mlog Watcher mod in Mindustry (the code will be injected into the selected processor)")
-                .action(Arguments.storeTrue());
+                .help(description)
+                .type(LowerCaseEnumArgumentType.forEnum(MlogWatcherCommand.class, c -> c.supports(action)))
+                .nargs("?")
+                .setDefault(NOTHING)
+                .setConst(MlogWatcherCommand.UPDATE);
+
+        container.addArgument("--watcher-version")
+                .help("specifies the version of the Mlog Watcher mod")
+                .type(LowerCaseEnumArgumentType.forEnum(MlogWatcherVersion.class))
+                .setDefault(MlogWatcherVersion.V1);
 
         container.addArgument("--watcher-port")
                 .help("port number for communication with Mlog Watcher")
@@ -180,14 +199,22 @@ abstract class ActionHandler {
         }
     }
 
-    protected @Nullable MlogWatcherClient createMlogWatcherClient(Namespace arguments, ToolMessageEmitter messageEmitter) {
-        if (arguments.getBoolean("watcher")) {
+    protected @Nullable MlogWatcherClient createMlogWatcherClient(Namespace arguments, ToolMessageEmitter messageEmitter,
+            boolean printStackTrace) {
+        Object value = arguments.get("watcher");
+        if (value == NOTHING) return null;
+
+        if (value instanceof MlogWatcherCommand) {
+            MlogWatcherVersion version = arguments.get("watcher_version");
             int port = arguments.getInt("watcher_port");
             int timeout = arguments.getInt("watcher_timeout");
-            MlogWatcherClientImpl client = new MlogWatcherClientImpl(messageEmitter, port, timeout);
+            MlogWatcherClient client = switch (version) {
+                case V0 -> new LegacyMlogWatcherClient(messageEmitter, port, timeout, printStackTrace);
+                case V1 -> new MlogWatcherClientImpl(messageEmitter, port, timeout, printStackTrace);
+            };
             return client.connect() ? client : null;
         } else {
-            return null;
+            throw new IllegalArgumentException("Invalid value for --watcher: " + value);
         }
     }
 

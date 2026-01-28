@@ -2,7 +2,6 @@ package info.teksol.mindcode.cmdline;
 
 import info.teksol.mc.mindcode.decompiler.MlogDecompiler;
 import info.teksol.mc.profile.CompilerProfile;
-import info.teksol.mindcode.cmdline.Main.Action;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -17,7 +16,7 @@ public class DecompileMlogAction extends ActionHandler {
 
     @Override
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
-        Subparser subparser = subparsers.addParser(Action.DECOMPILE_MLOG.getShortcut())
+        Subparser subparser = subparsers.addParser(ToolAppAction.DECOMPILE_MLOG.getShortcut())
                 .aliases("decompile-mlog")
                 .description("Partially decompile a text mlog file into Mindcode source file.")
                 .help("Decompile a text mlog file into Mindcode source, leaving jumps and unknown instructions unresolved.");

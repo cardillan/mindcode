@@ -1,4 +1,4 @@
-package info.teksol.mindcode.cmdline.mlogwatcher;
+package info.teksol.mindcode.cmdline.mlogwatcher.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +10,10 @@ public class UpgradeAllProcessorsOnMapParams implements Params {
     private String code;
 
     @JsonProperty("program_id")
-    private String programId;
+    private ProgramId programId;
+
+    @JsonProperty("variable_name")
+    private String variableName;
 
     public String getCode() {
         byte[] bytes = Base64.getDecoder().decode(code);
@@ -22,11 +25,19 @@ public class UpgradeAllProcessorsOnMapParams implements Params {
         this.code = Base64.getEncoder().encodeToString(bytes);
     }
 
-    public String getProgramId() {
+    public ProgramId getProgramId() {
         return programId;
     }
 
-    public void setProgramId(String programId) {
+    public void setProgramId(ProgramId programId) {
         this.programId = programId;
+    }
+
+    public String getVariableName() {
+        return variableName;
+    }
+
+    public void setVariableName(String variableName) {
+        this.variableName = variableName;
     }
 }

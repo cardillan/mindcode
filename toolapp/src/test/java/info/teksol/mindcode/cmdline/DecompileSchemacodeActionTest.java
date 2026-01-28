@@ -1,6 +1,5 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.schemacode.schematics.BlockOrder;
 import info.teksol.schemacode.schematics.Decompiler;
 import info.teksol.schemacode.schematics.DirectionLevel;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @NullMarked
 class DecompileSchemacodeActionTest {
-    private final Action action = Action.DECOMPILE_SCHEMA;
+    private final ToolAppAction action = ToolAppAction.DECOMPILE_SCHEMA;
 
     protected Namespace parseCommandLine(String commandLine) throws ArgumentParserException {
         ArgumentParser parser = Main.createArgumentParser(Arguments.fileType(), 79);

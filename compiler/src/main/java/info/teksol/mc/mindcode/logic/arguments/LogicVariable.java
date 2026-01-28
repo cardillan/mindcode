@@ -26,10 +26,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     // When errors happen, the code is not given away. The name can be hard-coded
     public static final LogicVariable INVALID = LogicVariable.preserved("*invalid");
 
-    private static final String RETURN_VALUE = "*retval";
-    private static final String RETURN_ADDRESS = "*retaddr";
-    private static final String FUNCTION_FINISHED = "*finished";
-    private static final String REMOTE_WAIT_ADDRESS = "*waitaddr";
+    public static final String RETURN_VALUE_NAME = "*retval";
+    public static final String RETURN_ADDRESS_NAME = "*retaddr";
+    public static final String FUNCTION_FINISHED_NAME = "*finished";
+    public static final String REMOTE_WAIT_ADDRESS_NAME = "*waitaddr";
+    public static final String PROGRAM_ID_NAME = "*id";
 
     protected final SourcePosition sourcePosition;
     protected final String functionPrefix;
@@ -285,22 +286,22 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable fnRetVal(MindcodeFunction function, String mlog) {
         return new LogicVariable(function.getSourcePosition(), FUNCTION_RETVAL,
-                function.getName(), function.getPrefix(), function.getPrefix() + RETURN_VALUE,
+                function.getName(), function.getPrefix(), function.getPrefix() + RETURN_VALUE_NAME,
                 mlog, false, false, true, false, function.isExport());
     }
 
     public static LogicVariable fnRetAddr(MindcodeFunction function, String mlog) {
-        return new LogicVariable(function.getSourcePosition(), FUNCTION_RETADDR, ValueMutability.MUTABLE, function.getPrefix() + RETURN_ADDRESS, mlog);
+        return new LogicVariable(function.getSourcePosition(), FUNCTION_RETADDR, ValueMutability.MUTABLE, function.getPrefix() + RETURN_ADDRESS_NAME, mlog);
     }
 
     public static LogicVariable fnFinished(MindcodeFunction function, String mlog) {
         return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
-                function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_FINISHED,
+                function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_FINISHED_NAME,
                 mlog,false, false, true, false, true);
     }
 
     public static LogicVariable remoteWaitAddr() {
-        return new LogicVariable(EMPTY, ADDRESS, ValueMutability.IMMUTABLE, REMOTE_WAIT_ADDRESS, REMOTE_WAIT_ADDRESS);
+        return new LogicVariable(EMPTY, ADDRESS, ValueMutability.IMMUTABLE, REMOTE_WAIT_ADDRESS_NAME, REMOTE_WAIT_ADDRESS_NAME);
     }
 
     public static LogicVariable preserved(String name) {
@@ -340,8 +341,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable fnRetVal(String functionName, String functionPrefix) {
         return new LogicVariable(EMPTY, FUNCTION_RETVAL,
-                functionName, functionPrefix, functionPrefix + RETURN_VALUE,
-                functionPrefix + RETURN_VALUE, false, false, true, false, false);
+                functionName, functionPrefix, functionPrefix + RETURN_VALUE_NAME,
+                functionPrefix + RETURN_VALUE_NAME, false, false, true, false, false);
     }
 
     // ValueStore methods

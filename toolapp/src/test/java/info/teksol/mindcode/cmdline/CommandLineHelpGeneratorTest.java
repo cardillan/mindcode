@@ -1,6 +1,5 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mindcode.cmdline.Main.Action;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import org.jspecify.annotations.NullMarked;
@@ -40,7 +39,7 @@ public class CommandLineHelpGeneratorTest {
             if (name.equals("GENERAL")) {
                 parser.printHelp(writer);
             } else {
-                Action action = Action.valueOf(name);
+                ToolAppAction action = ToolAppAction.valueOf(name);
                 Main.ACTION_PARSERS.get(action).printHelp(writer);
             }
         } else {

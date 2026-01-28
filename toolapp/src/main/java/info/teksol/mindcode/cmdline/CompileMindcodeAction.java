@@ -8,8 +8,8 @@ import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionCategory;
-import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherClient;
+import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherCommand;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
@@ -31,7 +31,7 @@ public class CompileMindcodeAction extends ActionHandler {
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
         Map<Enum<?>, CompilerOptionValue<?>> options = defaults.getOptions();
 
-        Subparser subparser = subparsers.addParser(Action.COMPILE_MINDCODE.getShortcut())
+        Subparser subparser = subparsers.addParser(ToolAppAction.COMPILE_MINDCODE.getShortcut())
                 .aliases("compile-mindcode")
                 .description("Compile a Mindcode source file into text mlog file.")
                 .help("Compile a Mindcode source file into text mlog file.");
@@ -40,7 +40,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 .help("copy compiled mlog code to clipboard")
                 .action(Arguments.storeTrue());
 
-        addMlogWatcherOptions(subparser, false);
+        addMlogWatcherOptions(subparser, ToolAppAction.COMPILE_MINDCODE);
 
         ArgumentGroup files = subparser.addArgumentGroup("Input/output files");
 
@@ -144,11 +144,23 @@ public class CompileMindcodeAction extends ActionHandler {
                 }
             }
 
-            MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages);
+            MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages,
+                    globalProfile.isPrintStackTrace());
             if (mlogWatcherClient != null) {
-                //mlogWatcherClient.updateAllProcessorsOnMap(compiler.getOutput(), compiler.getProgramId());
-                mlogWatcherClient.updateSelectedProcessor(compiler.getOutput());
-                mlogWatcherClient.close();
+                try {
+                    switch (arguments.get("watcher")) {
+                        case MlogWatcherCommand.UPDATE ->
+                                mlogWatcherClient.updateSelectedProcessor(compiler.getOutput());
+
+                        case MlogWatcherCommand.UPDATE_ALL ->
+                                mlogWatcherClient.updateAllProcessorsOnMap(compiler.getOutput(), compiler.getProgramId());
+
+                        default ->
+                                throw new IllegalArgumentException("Invalid value for --watcher: " + arguments.get("watcher"));
+                    }
+                } finally {
+                    mlogWatcherClient.close();
+                }
             }
         }
 

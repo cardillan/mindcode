@@ -15,7 +15,7 @@ import java.util.Map;
 @NullMarked
 public class Main {
 
-    public static final Map<Action, Subparser> ACTION_PARSERS = new EnumMap<>(Action.class);
+    public static final Map<ToolAppAction, Subparser> ACTION_PARSERS = new EnumMap<>(ToolAppAction.class);
 
     private static final CompilerProfile defaults = CompilerProfile.fullOptimizations(false, false);
 
@@ -44,7 +44,7 @@ public class Main {
                 .metavar("ACTION")
                 .dest("action");
 
-        for (Action action : Action.values()) {
+        for (ToolAppAction action : ToolAppAction.values()) {
             Main.ACTION_PARSERS.put(action, action.appendSubparser(subparsers, inputFileType, defaults));
         }
 
@@ -54,7 +54,7 @@ public class Main {
     static void handleCommandLine(ArgumentParser parser, String[] args) {
         try {
             Namespace arguments = parser.parseArgs(args);
-            Action.fromShortcut(arguments.get("action")).handle(arguments);
+            ToolAppAction.fromShortcut(arguments.get("action")).handle(arguments);
         } catch (ArgumentParserException e) {
             parser.handleError(e);
         } catch (ProcessingException e) {
@@ -63,49 +63,4 @@ public class Main {
         }
     }
 
-    public enum Action {
-        COMPILE_MINDCODE("cm", new CompileMindcodeAction()),
-        DECOMPILE_MLOG("dm", new DecompileMlogAction()),
-        COMPILE_SCHEMA("cs", new CompileSchemacodeAction()),
-        DECOMPILE_SCHEMA("ds", new DecompileSchemacodeAction()),
-        ;
-
-        private final String shortcut;
-        private final ActionHandler handler;
-
-        Action(String shortcut, ActionHandler handler) {
-            this.shortcut = shortcut;
-            this.handler = handler;
-        }
-
-        public Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
-            return handler.appendSubparser(subparsers, inputFileType, defaults);
-        }
-
-        public String getShortcut() {
-            return shortcut;
-        }
-
-        void handle(Namespace namespace) {
-            handler.handle(namespace);
-        }
-
-        public CompilerProfile createCompilerProfile(Namespace arguments) {
-            return handler.createCompilerProfile(this == COMPILE_SCHEMA, arguments);
-        }
-
-        ActionHandler getHandler() {
-            return handler;
-        }
-
-        static Action fromShortcut(String shortcut) {
-            for (Action a : Action.values()) {
-                if (shortcut.equals(a.shortcut)) {
-                    return a;
-                }
-            }
-
-            throw new IllegalArgumentException("Unknown shortcut value " + shortcut);
-        }
-    }
 }

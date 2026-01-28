@@ -4,7 +4,6 @@ import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.*;
 import info.teksol.mc.profile.options.Target;
-import info.teksol.mindcode.cmdline.Main.Action;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -22,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @NullMarked
 public abstract class AbstractCommandLineTest {
-    protected final Action action;
+    protected final ToolAppAction action;
 
-    protected AbstractCommandLineTest(Action action) {
+    protected AbstractCommandLineTest(ToolAppAction action) {
         this.action = action;
     }
 
