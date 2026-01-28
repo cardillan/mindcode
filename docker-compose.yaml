@@ -1,5 +1,4 @@
 services:
-
   mindcode-db:
     image: postgres:17
     restart: on-failure
@@ -11,6 +10,8 @@ services:
       - mindcode-postgres-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - mindcode-net
 
   mindcode-web:
     build:
@@ -20,7 +21,13 @@ services:
       - mindcode-db
     ports:
       - "127.0.0.1:8080:8080"
+    networks:
+      - mindcode-net
 
 volumes:
   mindcode-postgres-data:
     driver: local
+
+networks:
+  mindcode-net:
+    driver: bridge
