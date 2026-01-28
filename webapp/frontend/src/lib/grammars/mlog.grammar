@@ -1,0 +1,89 @@
+// copied from https://github.com/JeanJPNM/mlogls/blob/aaa80957e5a313e35e61173cce4979c6d576fe3b/packages/site/src/codemirror/syntax.grammar
+@top Program { statements? }
+
+@skip { whitespace | Comment }
+
+
+statements {
+  instructionSeparator* simpleStatement (instructionSeparator simpleStatement?)*
+}
+
+simpleStatement {
+  LabelDeclaration | Instruction
+}
+
+LabelDeclaration {
+  maybeLabelName value*
+}
+
+Instruction {
+  instructionName value*
+}
+
+instructionName {
+  ControlInstructionName { @extend <identifier, "jump" | "wait" | "end" | "stop"> } | 
+  InstructionName { identifier }
+}
+
+value {
+  Boolean | NullLiteral | NumberLiteral | String | Identifier { identifier | maybeLabelName } | Color
+}
+
+@local tokens {
+  stringEnd { '"' }
+  StringFormatPlaceholder { "{" $[0-9] "}"}
+  StringEscapedBracket { "[[" }
+  StringNewLineSequence { "\\n" }
+  StringColorTag { "[" $[#a-zA-Z0-9]* "]"}
+  stringContent { ![\n] }
+
+  @precedence {
+    stringEnd,
+    StringFormatPlaceholder,
+    StringEscapedBracket,
+    StringColorTag,
+    StringNewLineSequence,
+    stringContent
+  }
+}
+
+@skip {} {
+  String {
+    '"' (
+      stringContent |
+      StringFormatPlaceholder |
+      StringEscapedBracket |
+      StringColorTag |
+      StringNewLineSequence
+    )* stringEnd
+  }
+}
+
+NullLiteral {
+  @specialize<identifier, "null">
+}
+
+Boolean {
+  @specialize<identifier, "true" | "false">
+}
+
+@external specialize { identifier } specializeIdentifier from "./mlog_tokens" {
+  NumberLiteral,
+  Color
+}
+
+@tokens {
+  instructionSeparator { "\n" | ";" }
+  whitespace { @whitespace }
+  Comment { "#" ![\n]* }
+  identifier { ![ \t\n\r#;"] ![ \t\n\r#;]* }
+  maybeLabelName { ![ \t\n\r#;"] ![ \t\n\r#;]* ":" }
+
+  @precedence {
+    instructionSeparator,
+    whitespace,
+    Comment,
+    maybeLabelName,
+    identifier
+  }
+}
