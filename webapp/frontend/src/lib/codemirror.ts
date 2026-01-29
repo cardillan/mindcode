@@ -1,27 +1,14 @@
 import type { Diagnostic } from '@codemirror/lint';
-import { basicSetup, EditorView } from 'codemirror';
+import { EditorView } from 'codemirror';
 import type { CompileResponseMessage, SourceRange } from './api';
-import { EditorSelection, Text, type Extension } from '@codemirror/state';
-import { abyss } from '@fsegurai/codemirror-theme-abyss';
-import { keymap } from '@codemirror/view';
-import { insertTab } from '@codemirror/commands';
+import { EditorSelection, Text, Compartment } from '@codemirror/state';
+import { espresso, cobalt } from 'thememirror';
 
-export function baseExtensions(): Extension {
-	return [
-		basicSetup,
-		abyss,
-		keymap.of([{ key: 'Tab', run: insertTab }]),
-		EditorView.theme({
-			'&': {
-				height: '100%',
-				width: '100%',
-				fontSize: '14px'
-			},
-			'.cm-scroller': {
-				fontFamily: 'monospace'
-			}
-		})
-	];
+// Compartment for dynamically switching themes
+export const themeCompartment = new Compartment();
+
+export function getTheme(dark: boolean) {
+	return dark ? cobalt : espresso;
 }
 
 export function updateEditor(editor: EditorView | undefined, text: string) {

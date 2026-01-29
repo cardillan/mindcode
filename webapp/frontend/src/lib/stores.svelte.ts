@@ -1,10 +1,14 @@
 import { page } from '$app/state';
-import { untrack } from 'svelte';
+import { getContext, setContext, untrack } from 'svelte';
 import type { ApiHandler, Sample } from './api';
 import { goto } from '$app/navigation';
-import { EditorView } from 'codemirror';
-import { updateEditor } from './codemirror';
+import { basicSetup, EditorView } from 'codemirror';
+import { getTheme, themeCompartment, updateEditor } from './codemirror';
 import { browser } from '$app/environment';
+import type { Attachment } from 'svelte/attachments';
+import type { EditorState, Extension } from '@codemirror/state';
+import { keymap } from '@codemirror/view';
+import { insertTab } from '@codemirror/commands';
 
 export const sourceIdKey = 's';
 export const compilerTargetKey = 'compilerTarget';
@@ -117,4 +121,80 @@ export async function syncUrl({
 	compilerTarget?.updateParams(url.searchParams);
 
 	await goto(url, { replaceState: true, noScroll: true, keepFocus: true });
+}
+
+export class ThemeStore {
+	isDark = $state(false);
+
+	constructor() {
+		if (!browser) return;
+		this.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+		$effect(() => {
+			const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+			const onChange = (e: MediaQueryListEvent) => {
+				this.isDark = e.matches;
+			};
+
+			mediaQuery.addEventListener('change', onChange);
+			return () => mediaQuery.removeEventListener('change', onChange);
+		});
+	}
+}
+
+export function setThemeContext() {
+	setContext('themeStore', new ThemeStore());
+}
+
+export function getThemeContext(): ThemeStore {
+	return getContext<ThemeStore>('themeStore');
+}
+
+export class EditorStore {
+	view = $state<EditorView>();
+
+	constructor(
+		public themeStore: ThemeStore,
+		public createEditor: (parent: Element, baseExtensions: Extension[]) => EditorView
+	) {
+		$effect(() => {
+			if (!this.view) return;
+			const editor = this.view;
+			const newTheme = getTheme(this.themeStore.isDark);
+			if (themeCompartment.get(editor.state) === newTheme) return;
+
+			editor.dispatch({
+				effects: themeCompartment.reconfigure(newTheme)
+			});
+		});
+	}
+
+	attach: Attachment = (element) => {
+		this.view = untrack(() =>
+			this.createEditor(element, [
+				basicSetup,
+				themeCompartment.of(getTheme(this.themeStore.isDark)),
+				keymap.of([{ key: 'Tab', run: insertTab }]),
+				EditorView.theme({
+					'&': {
+						height: '100%',
+						width: '100%',
+						fontSize: '14px'
+					},
+					'.cm-scroller': {
+						fontFamily: 'monospace'
+					}
+				})
+			])
+		);
+
+		return () => {
+			this.view?.destroy();
+			this.view = undefined;
+		};
+	};
+
+	get state(): EditorState | undefined {
+		return this.view?.state;
+	}
 }
