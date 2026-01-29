@@ -1,14 +1,14 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { Button } from '$lib/components/ui/button';
 	import { setThemeContext } from '$lib/stores.svelte.js';
 
 	let { children, data } = $props();
 
 	// Determine active path for highlighting
-	let currentPath = $derived($page.url.pathname);
+	let currentPath = $derived(page.url.pathname);
 
 	setThemeContext();
 </script>
