@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { syncUrl, type LocalCompilerTarget } from '$lib/hooks.svelte';
+	import { syncUrl, type LocalCompilerTarget } from '$lib/stores.svelte';
 	import * as Select from './ui/select';
 
 	let {

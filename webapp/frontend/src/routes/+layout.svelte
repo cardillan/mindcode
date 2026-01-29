@@ -3,11 +3,14 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
+	import { setThemeContext } from '$lib/stores.svelte.js';
 
 	let { children, data } = $props();
 
 	// Determine active path for highlighting
 	let currentPath = $derived($page.url.pathname);
+
+	setThemeContext();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>

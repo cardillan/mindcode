@@ -13,20 +13,30 @@
 	import { ApiHandler, type CompileResponseMessage, type SourceRange } from '$lib/api';
 	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
 	import type { PageProps } from './$types';
-	import { baseExtensions, compileMessagesToDiagnostics, jumpToRange } from '$lib/codemirror';
-	import { LocalSource, LocalCompilerTarget, syncUrl } from '$lib/hooks.svelte';
+	import { compileMessagesToDiagnostics, jumpToRange, updateEditor } from '$lib/codemirror';
+	import {
+		LocalSource,
+		LocalCompilerTarget,
+		syncUrl,
+		EditorStore,
+		getThemeContext
+	} from '$lib/stores.svelte';
 	import { goto } from '$app/navigation';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import { Compartment } from '@codemirror/state';
-	import { OutliningSpanKind } from 'typescript';
 
 	let { data }: PageProps = $props();
-	let mindcodeContainer = $state<HTMLElement>();
-	let mlogContainer = $state<HTMLElement>();
 
-	let mindcodeEditor = $state<EditorView>();
-	let mlogEditor = $state<EditorView>();
+	const theme = getThemeContext();
+
+	const mindcodeEditor = new EditorStore(theme, (parent, baseExtensions) => {
+		return new EditorView({ parent, extensions: [baseExtensions, mindcodeLanguage] });
+	});
+
+	const mlogEditor = new EditorStore(theme, (parent, baseExtensions) => {
+		return new EditorView({ parent, extensions: [baseExtensions, outLanguage.of(mlogLanguage)] });
+	});
 
 	let runOutput = $state('');
 	let runSteps = $state(0);
@@ -41,51 +51,32 @@
 	const api = new ApiHandler();
 	const localSource = new LocalSource(
 		api,
-		() => mindcodeEditor,
+		() => mindcodeEditor.view,
 		untrack(() => data.samples)
 	);
 	const compilerTarget = new LocalCompilerTarget();
 
-	onMount(() => {
-		if (mindcodeContainer) {
-			mindcodeEditor = new EditorView({
-				parent: mindcodeContainer,
-				extensions: [baseExtensions(), mindcodeLanguage]
-			});
-		}
-		if (mlogContainer) {
-			mlogEditor = new EditorView({
-				parent: mlogContainer,
-				extensions: [baseExtensions(), outLanguage.of(mlogLanguage)]
-			});
-		}
-
-		return () => {
-			mindcodeEditor?.destroy();
-			mlogEditor?.destroy();
-		};
-	});
-
 	$effect(() => {
-		if (!mlogEditor) return;
+		if (!mlogEditor.view) return;
+		const view = mlogEditor.view;
 
-		const isCurrentlyPlainText = outLanguage.get(mlogEditor.state) !== mlogLanguage;
+		const isCurrentlyPlainText = outLanguage.get(view.state) !== mlogLanguage;
 		if (isPlainText === isCurrentlyPlainText) return;
 
-		mlogEditor.dispatch({
+		view.dispatch({
 			effects: outLanguage.reconfigure(isPlainText ? [] : mlogLanguage)
 		});
 	});
 
 	function handleJumpToPosition(range: SourceRange) {
-		if (!mindcodeEditor) return;
+		if (!mindcodeEditor.view) return;
 
-		jumpToRange(mindcodeEditor, range);
+		jumpToRange(mindcodeEditor.view, range);
 	}
 
 	async function compile(run: boolean) {
-		if (!mindcodeEditor) return;
-		const source = mindcodeEditor.state.doc.toString();
+		if (!mindcodeEditor.view) return;
+		const source = mindcodeEditor.view.state.doc.toString();
 
 		loading = true;
 		runOutput = '';
@@ -109,17 +100,18 @@
 			isPlainText = data.isPlainText;
 			localSource.id = data.sourceId;
 
-			if (mlogEditor) {
-				const transaction = mlogEditor.state.update({
-					changes: { from: 0, to: mlogEditor.state.doc.length, insert: data.compiled }
+			if (mlogEditor.view) {
+				const { state } = mlogEditor.view;
+				const transaction = state.update({
+					changes: { from: 0, to: state.doc.length, insert: data.compiled }
 				});
-				mlogEditor.dispatch(transaction);
+				mlogEditor.view.dispatch(transaction);
 			}
 
-			if (mindcodeEditor) {
-				const { state } = mindcodeEditor;
+			if (mindcodeEditor.view) {
+				const { state } = mindcodeEditor.view;
 				const diagnostics = compileMessagesToDiagnostics(state.doc, errors, warnings);
-				mindcodeEditor.dispatch(setDiagnostics(state, diagnostics));
+				mindcodeEditor.view.dispatch(setDiagnostics(state, diagnostics));
 			}
 
 			await syncUrl({ localSource, compilerTarget });
@@ -131,18 +123,17 @@
 		}
 	}
 
-	function cleanEditors() {
+	async function cleanEditors() {
 		localSource.clear();
 		compilerTarget.value = '7';
+		updateEditor(mlogEditor.view, '');
+
 		errors = [];
 		warnings = [];
 		infos = [];
 		runOutput = '';
 
-		const url = new URL(page.url);
-		localSource.updateParams(url.searchParams);
-		compilerTarget.updateParams(url.searchParams);
-		goto(url, { replaceState: true, noScroll: true, keepFocus: true });
+		await syncUrl({ localSource, compilerTarget });
 	}
 </script>
 
@@ -168,7 +159,7 @@
 			<Label class="text-lg font-bold">Mindcode Source Code:</Label>
 			<div
 				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				bind:this={mindcodeContainer}
+				{@attach mindcodeEditor.attach}
 			></div>
 		</div>
 
@@ -177,7 +168,7 @@
 			<Label class="text-lg font-bold">Mindustry Logic:</Label>
 			<div
 				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				bind:this={mlogContainer}
+				{@attach mlogEditor.attach}
 			></div>
 		</div>
 	</div>

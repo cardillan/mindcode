@@ -1,31 +1,37 @@
 <script lang="ts">
 	import { EditorView } from 'codemirror';
-	import { onMount, untrack } from 'svelte';
+	import { untrack } from 'svelte';
 
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
-	import * as Select from '$lib/components/ui/select';
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
-	import { page } from '$app/state';
 	import { ApiHandler, type CompileResponseMessage, type Sample } from '$lib/api';
 	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
 	import type { PageProps } from './$types';
 	import { setDiagnostics } from '@codemirror/lint';
-	import { baseExtensions, compileMessagesToDiagnostics, updateEditor } from '$lib/codemirror';
-	import { LocalCompilerTarget, LocalSource, syncUrl } from '$lib/hooks.svelte';
-	import { goto } from '$app/navigation';
+	import { compileMessagesToDiagnostics, updateEditor } from '$lib/codemirror';
+	import {
+		EditorStore,
+		getThemeContext,
+		LocalCompilerTarget,
+		LocalSource,
+		syncUrl
+	} from '$lib/stores.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
 
-	let schemacodeContainer = $state<HTMLElement>();
-	let encodedContainer = $state<HTMLElement>();
+	const theme = getThemeContext();
 
-	let schemacodeEditor = $state<EditorView>();
-	let encodedEditor = $state<EditorView>();
+	const schemacodeEditor = new EditorStore(theme, (parent, baseExtensions) => {
+		return new EditorView({ parent, extensions: [baseExtensions, schemacodeLanguage] });
+	});
+	const encodedEditor = new EditorStore(theme, (parent, baseExtensions) => {
+		return new EditorView({ parent, extensions: [baseExtensions, EditorView.lineWrapping] });
+	});
 
 	let loading = $state(false);
 	let errors = $state<CompileResponseMessage[]>([]);
@@ -33,38 +39,18 @@
 	let infos = $state<CompileResponseMessage[]>([]);
 	const localSource = new LocalSource(
 		api,
-		() => schemacodeEditor,
+		() => schemacodeEditor.view,
 		untrack(() => data.samples)
 	);
 	const compilerTarget = new LocalCompilerTarget();
 
-	onMount(() => {
-		if (schemacodeContainer) {
-			schemacodeEditor = new EditorView({
-				parent: schemacodeContainer,
-				extensions: [baseExtensions(), schemacodeLanguage]
-			});
-		}
-		if (encodedContainer) {
-			encodedEditor = new EditorView({
-				parent: encodedContainer,
-				extensions: [baseExtensions(), EditorView.lineWrapping]
-			});
-		}
-
-		return () => {
-			schemacodeEditor?.destroy();
-			encodedEditor?.destroy();
-		};
-	});
-
 	function selectSample(sample: Sample) {
-		updateEditor(schemacodeEditor, sample.source);
+		updateEditor(schemacodeEditor.view, sample.source);
 	}
 
 	async function handleBuild() {
-		if (!schemacodeEditor) return;
-		const source = schemacodeEditor.state.doc.toString();
+		if (!schemacodeEditor.view) return;
+		const source = schemacodeEditor.view.state.doc.toString();
 		loading = true;
 		errors = [];
 		warnings = [];
@@ -81,15 +67,15 @@
 			infos = data.infos;
 			localSource.id = data.sourceId;
 
-			if (encodedEditor) {
-				updateEditor(encodedEditor, data.compiled);
+			if (encodedEditor.view) {
+				updateEditor(encodedEditor.view, data.compiled);
 			}
 
-			if (schemacodeEditor) {
-				const { state } = schemacodeEditor;
+			if (schemacodeEditor.view) {
+				const { state } = schemacodeEditor.view;
 				const diagnostics = compileMessagesToDiagnostics(state.doc, errors, warnings);
 
-				schemacodeEditor.dispatch(setDiagnostics(state, diagnostics));
+				schemacodeEditor.view.dispatch(setDiagnostics(state, diagnostics));
 			}
 
 			await syncUrl({ localSource, compilerTarget });
@@ -100,17 +86,11 @@
 		}
 	}
 
-	const targetOptions = {
-		'6': 'Target: Mindustry 6',
-		'7': 'Target: Mindustry 7',
-		'7w': 'Target: Mindustry 7 WP',
-		'8': 'Target: Mindustry 8',
-		'8w': 'Target: Mindustry 8 WP'
-	};
-
 	async function cleanEditors() {
 		localSource.clear();
 		compilerTarget.value = '7';
+		updateEditor(encodedEditor.view, '');
+
 		errors = [];
 		warnings = [];
 		infos = [];
@@ -155,7 +135,7 @@
 			<Label class="text-lg font-bold">Schemacode definition:</Label>
 			<div
 				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				bind:this={schemacodeContainer}
+				{@attach schemacodeEditor.attach}
 			></div>
 		</div>
 
@@ -164,7 +144,7 @@
 			<Label class="text-lg font-bold">Encoded schematic:</Label>
 			<div
 				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				bind:this={encodedContainer}
+				{@attach encodedEditor.attach}
 			></div>
 		</div>
 	</div>

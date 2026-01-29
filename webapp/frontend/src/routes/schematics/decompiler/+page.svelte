@@ -1,54 +1,36 @@
 <script lang="ts">
 	import { EditorView } from 'codemirror';
-	import { onMount } from 'svelte';
 
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
-	import { ApiHandler } from '$lib/api';
+	import { ApiHandler, type CompileResponseMessage } from '$lib/api';
 	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
-	import { baseExtensions } from '$lib/codemirror';
-	import { LocalSource, syncUrl } from '$lib/hooks.svelte';
+	import { EditorStore, getThemeContext, LocalSource, syncUrl } from '$lib/stores.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
+	import { updateEditor } from '$lib/codemirror';
 
-	let encodedContainer = $state<HTMLElement>();
-	let schemacodeContainer = $state<HTMLElement>();
+	const theme = getThemeContext();
 
-	let encodedEditor = $state<EditorView>();
-	let schemacodeEditor = $state<EditorView>();
-
-	let loading = $state(false);
-	let errors = $state<any[]>([]);
-	let warnings = $state<any[]>([]);
-	let infos = $state<any[]>([]);
-
-	const api = new ApiHandler();
-	const localSource = new LocalSource(api, () => encodedEditor, []);
-
-	onMount(() => {
-		if (encodedContainer) {
-			encodedEditor = new EditorView({
-				parent: encodedContainer,
-				extensions: [baseExtensions()]
-			});
-		}
-		if (schemacodeContainer) {
-			schemacodeEditor = new EditorView({
-				parent: schemacodeContainer,
-				extensions: [baseExtensions(), schemacodeLanguage]
-			});
-		}
-
-		return () => {
-			encodedEditor?.destroy();
-			schemacodeEditor?.destroy();
-		};
+	const encodedEditor = new EditorStore(theme, (parent, baseExtensions) => {
+		return new EditorView({ parent, extensions: [baseExtensions, EditorView.lineWrapping] });
+	});
+	const schemacodeEditor = new EditorStore(theme, (parent, baseExtensions) => {
+		return new EditorView({ parent, extensions: [baseExtensions, schemacodeLanguage] });
 	});
 
+	let loading = $state(false);
+	let errors = $state<CompileResponseMessage[]>([]);
+	let warnings = $state<CompileResponseMessage[]>([]);
+	let infos = $state<CompileResponseMessage[]>([]);
+
+	const api = new ApiHandler();
+	const localSource = new LocalSource(api, () => encodedEditor.view, []);
+
 	async function handleDecompile() {
-		if (!encodedEditor) return;
-		const source = encodedEditor.state.doc.toString();
+		if (!encodedEditor.view) return;
+		const source = encodedEditor.view.state.doc.toString();
 		loading = true;
 		errors = [];
 		warnings = [];
@@ -60,11 +42,11 @@
 				source
 			});
 
-			if (schemacodeEditor) {
-				const transaction = schemacodeEditor.state.update({
-					changes: { from: 0, to: schemacodeEditor.state.doc.length, insert: data.source }
+			if (schemacodeEditor.view) {
+				const transaction = schemacodeEditor.view.state.update({
+					changes: { from: 0, to: schemacodeEditor.view.state.doc.length, insert: data.source }
 				});
-				schemacodeEditor.dispatch(transaction);
+				schemacodeEditor.view.dispatch(transaction);
 			}
 			errors = data.errors;
 			warnings = data.warnings;
@@ -79,19 +61,15 @@
 		}
 	}
 
-	function cleanEditors() {
-		if (encodedEditor) {
-			const transaction = encodedEditor.state.update({
-				changes: { from: 0, to: encodedEditor.state.doc.length, insert: '' }
-			});
-			encodedEditor.dispatch(transaction);
-		}
-		if (schemacodeEditor) {
-			const transaction = schemacodeEditor.state.update({
-				changes: { from: 0, to: schemacodeEditor.state.doc.length, insert: '' }
-			});
-			schemacodeEditor.dispatch(transaction);
-		}
+	async function cleanEditors() {
+		localSource.clear();
+		updateEditor(schemacodeEditor.view, '');
+
+		errors = [];
+		warnings = [];
+		infos = [];
+
+		await syncUrl({ localSource });
 	}
 </script>
 
@@ -118,7 +96,7 @@
 			<Label class="text-lg font-bold">Encoded schematic:</Label>
 			<div
 				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				bind:this={encodedContainer}
+				{@attach encodedEditor.attach}
 			></div>
 		</div>
 
@@ -127,7 +105,7 @@
 			<Label class="text-lg font-bold">Decompiled schemacode:</Label>
 			<div
 				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				bind:this={schemacodeContainer}
+				{@attach schemacodeEditor.attach}
 			></div>
 		</div>
 	</div>
@@ -137,7 +115,7 @@
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-wrap items-center gap-2">
 				<Button onclick={handleDecompile} disabled={loading}>Decompile</Button>
-				<Button variant="outline" href="/decompiler">Erase schematic</Button>
+				<Button variant="outline" onclick={cleanEditors}>Erase schematic</Button>
 			</div>
 
 			<ProjectLinks variant="schemacode" />
