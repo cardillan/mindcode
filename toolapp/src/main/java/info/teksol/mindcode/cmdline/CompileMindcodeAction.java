@@ -68,7 +68,7 @@ public class CompileMindcodeAction extends ActionHandler {
 
         files.addArgument("--output-directory")
                 .dest("output-directory")
-                .help("show program's version number and exit")
+                .help("specifies the directory where the output files will be placed")
                 .type(Arguments.fileType().verifyIsDirectory());
 
         files.addArgument("-l", "--log")

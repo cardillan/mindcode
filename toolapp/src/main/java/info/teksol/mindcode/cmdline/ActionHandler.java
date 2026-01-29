@@ -110,6 +110,10 @@ abstract class ActionHandler {
                         upgrade-all      send it to processors with the same or lower version on the active map
                         force-update-all send it to processors matching program ID (regardless of the version)""";
 
+            case DECOMPILE_MLOG -> """
+                    use Mlog Watcher to obtain the mlog code to process (default: selected).
+                        selected    load the code from the selected processor in the game""";
+
             case COMPILE_SCHEMA -> """
                     invoke an specific Mlog Watcher operation on the created schematic (default: update)
                         update  update the schematic with the same name in the schematics library

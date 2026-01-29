@@ -20,6 +20,7 @@ public class Response {
 
     public static final String RESULT_TYPE_TEXT = "text_result";
     public static final String RESULT_TYPE_PROCESSOR_UPDATE = "processor_update_result";
+    public static final String RESULT_TYPE_MLOG_CODE = "mlog_code_result";
 
     private String status;
 
@@ -43,6 +44,10 @@ public class Response {
             @JsonSubTypes.Type(
                     value = ProcessorUpdateResults.class,
                     name = RESULT_TYPE_PROCESSOR_UPDATE
+            ),
+            @JsonSubTypes.Type(
+                    value = ProcessorExtractResults.class,
+                    name = RESULT_TYPE_MLOG_CODE
             )
     })
     private Results result;
@@ -61,8 +66,8 @@ public class Response {
         this(status, 0, RESULT_TYPE_TEXT, null);
     }
 
-    public Response(String status, Results result) {
-        this(status, 0, RESULT_TYPE_TEXT, result);
+    public Response(String status, String resultType, Results result) {
+        this(status, 0, resultType, result);
     }
 
     public Response(String status, String result) {
@@ -77,8 +82,8 @@ public class Response {
         return new Response(STATUS_SUCCESS, result);
     }
 
-    public static Response success(Results result) {
-        return new Response(STATUS_SUCCESS, result);
+    public static Response success(String resultType, Results result) {
+        return new Response(STATUS_SUCCESS, resultType, result);
     }
 
     public static Response error(String result) {

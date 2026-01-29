@@ -2,6 +2,7 @@ package info.teksol.mindcode.cmdline.mlogwatcher;
 
 import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ServerHandshake;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -84,7 +85,7 @@ public abstract class MlogWatcherClientBase implements MlogWatcherClient {
     }
 
     protected void printError(Exception ex) {
-        if (printStackTrace) {
+        if (printStackTrace && !(ex instanceof WebsocketNotConnectedException)) {
             //noinspection CallToPrintStackTrace
             ex.printStackTrace();
         }

@@ -2,6 +2,7 @@ package info.teksol.mindcode.cmdline.mlogwatcher;
 
 import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public class LegacyMlogWatcherClient extends MlogWatcherClientBase implements MlogWatcherClient {
@@ -40,5 +41,11 @@ public class LegacyMlogWatcherClient extends MlogWatcherClientBase implements Ml
     @Override
     public void updateSchematic(String schematic, boolean overwrite) {
         log.error("Updating schematics is not supported by the legacy Mlog Watcher mod.");
+    }
+
+    @Override
+    public @Nullable String extractSelectedProcessorCode() {
+        log.error("Extracting processor code is not supported by the legacy Mlog Watcher mod.");
+        return null;
     }
 }

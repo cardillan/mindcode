@@ -4,8 +4,7 @@ import info.teksol.mindcode.cmdline.ToolAppAction;
 
 import java.util.Set;
 
-import static info.teksol.mindcode.cmdline.ToolAppAction.COMPILE_MINDCODE;
-import static info.teksol.mindcode.cmdline.ToolAppAction.COMPILE_SCHEMA;
+import static info.teksol.mindcode.cmdline.ToolAppAction.*;
 
 public enum MlogWatcherCommand {
     UPDATE              (COMPILE_MINDCODE, COMPILE_SCHEMA),
@@ -13,6 +12,8 @@ public enum MlogWatcherCommand {
     UPDATE_ALL          (COMPILE_MINDCODE),
     UPGRADE_ALL         (COMPILE_MINDCODE),
     FORCE_UPDATE_ALL    (COMPILE_MINDCODE),
+
+    SELECTED            (DECOMPILE_MLOG, DECOMPILE_SCHEMA),
 
     ADD                 (COMPILE_SCHEMA),
     ;
