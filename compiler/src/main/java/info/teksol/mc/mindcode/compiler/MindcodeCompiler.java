@@ -54,9 +54,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -69,8 +66,6 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuilderContext, PreprocessorContext,
         ArrayConstructorContext, CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext,
         VariablesContext, ForcedVariableContext, OptimizerContext {
-
-    private static final Logger logger = LoggerFactory.getLogger(MindcodeCompiler.class);
 
     public static final String REMOTE_PROTOCOL_VERSION = "v1";
 
@@ -154,7 +149,6 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         try {
             compile();
         } catch (Exception e) {
-            logger.error("Internal compiler error", e);
             internalError = true;
             error(ERR.INTERNAL_ERROR);
         }
