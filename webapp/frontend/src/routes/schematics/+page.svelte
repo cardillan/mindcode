@@ -1,12 +1,8 @@
 <script lang="ts">
-	import { keymap } from '@codemirror/view';
-	import { insertTab } from '@codemirror/commands';
-	import { basicSetup, EditorView } from 'codemirror';
-	import { onMount } from 'svelte';
-	import { abyss } from '@fsegurai/codemirror-theme-abyss';
+	import { EditorView } from 'codemirror';
+	import { onMount, untrack } from 'svelte';
 
 	import { Button } from '$lib/components/ui/button';
-	import { Textarea } from '$lib/components/ui/textarea';
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import * as Select from '$lib/components/ui/select';
@@ -15,88 +11,52 @@
 	import { ApiHandler, type CompileResponseMessage, type Sample } from '$lib/api';
 	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
 	import type { PageProps } from './$types';
+	import { setDiagnostics } from '@codemirror/lint';
+	import { baseExtensions, compileMessagesToDiagnostics, updateEditor } from '$lib/codemirror';
+	import { LocalCompilerTarget, LocalSource, syncUrl } from '$lib/hooks.svelte';
+	import { goto } from '$app/navigation';
+	import TargetPicker from '$lib/components/TargetPicker.svelte';
+	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
+
 	let schemacodeContainer = $state<HTMLElement>();
 	let encodedContainer = $state<HTMLElement>();
 
 	let schemacodeEditor = $state<EditorView>();
 	let encodedEditor = $state<EditorView>();
 
-	let compilerTarget = $state('8');
-
 	let loading = $state(false);
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
-	let messages = $state<CompileResponseMessage[]>([]);
+	let infos = $state<CompileResponseMessage[]>([]);
+	const localSource = new LocalSource(
+		api,
+		() => schemacodeEditor,
+		untrack(() => data.samples)
+	);
+	const compilerTarget = new LocalCompilerTarget();
 
-	$effect(() => {
-		const s = page.url.searchParams.get('s');
-		if (s) {
-			loadSource(s);
-		}
-	});
-
-	onMount(async () => {
+	onMount(() => {
 		if (schemacodeContainer) {
 			schemacodeEditor = new EditorView({
 				parent: schemacodeContainer,
-				extensions: [commonExtensions(), schemacodeLanguage]
+				extensions: [baseExtensions(), schemacodeLanguage]
 			});
 		}
 		if (encodedContainer) {
 			encodedEditor = new EditorView({
 				parent: encodedContainer,
-				extensions: [commonExtensions(), EditorView.lineWrapping]
+				extensions: [baseExtensions(), EditorView.lineWrapping]
 			});
 		}
-		const s = page.url.searchParams.get('s');
-		if (s) {
-			loadSource(s);
-		}
+
+		return () => {
+			schemacodeEditor?.destroy();
+			encodedEditor?.destroy();
+		};
 	});
-
-	async function loadSource(id: string) {
-		if (id === 'clean' || !id) {
-			updateEditor(schemacodeEditor, '');
-			updateEditor(encodedEditor, '');
-			return;
-		}
-		try {
-			const data = await api.loadSource(id);
-			updateEditor(schemacodeEditor, data.source);
-		} catch (e) {
-			console.error(e);
-		}
-	}
-
-	function updateEditor(editor: EditorView | undefined, text: string) {
-		if (editor) {
-			const transaction = editor.state.update({
-				changes: { from: 0, to: editor.state.doc.length, insert: text }
-			});
-			editor.dispatch(transaction);
-		}
-	}
-
-	function commonExtensions() {
-		return [
-			basicSetup,
-			abyss,
-			keymap.of([{ key: 'Tab', run: insertTab }]),
-			EditorView.theme({
-				'&': {
-					height: '100%',
-					width: '100%',
-					fontSize: '14px'
-				},
-				'.cm-scroller': {
-					fontFamily: 'monospace'
-				}
-			})
-		];
-	}
 
 	function selectSample(sample: Sample) {
 		updateEditor(schemacodeEditor, sample.source);
@@ -108,21 +68,31 @@
 		loading = true;
 		errors = [];
 		warnings = [];
-		messages = [];
+		infos = [];
 
 		try {
 			const data = await api.compileSchemacode({
+				sourceId: localSource.id,
 				source,
-				target: compilerTarget
+				target: compilerTarget.value
 			});
-
-			if (encodedEditor) {
-				updateEditor(encodedEditor, data.compiledCode);
-			}
-
 			errors = data.errors;
 			warnings = data.warnings;
-			messages = data.messages;
+			infos = data.infos;
+			localSource.id = data.sourceId;
+
+			if (encodedEditor) {
+				updateEditor(encodedEditor, data.compiled);
+			}
+
+			if (schemacodeEditor) {
+				const { state } = schemacodeEditor;
+				const diagnostics = compileMessagesToDiagnostics(state.doc, errors, warnings);
+
+				schemacodeEditor.dispatch(setDiagnostics(state, diagnostics));
+			}
+
+			await syncUrl({ localSource, compilerTarget });
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -137,6 +107,16 @@
 		'8': 'Target: Mindustry 8',
 		'8w': 'Target: Mindustry 8 WP'
 	};
+
+	async function cleanEditors() {
+		localSource.clear();
+		compilerTarget.value = '7';
+		errors = [];
+		warnings = [];
+		infos = [];
+
+		await syncUrl({ localSource, compilerTarget });
+	}
 </script>
 
 <div class="container mx-auto flex flex-1 flex-col gap-4 overflow-hidden px-4 py-4">
@@ -163,7 +143,7 @@
 					size="sm"
 					class="h-auto px-2 py-1 text-primary underline"
 					onclick={() => selectSample(sample)}
-					>{sample.name}
+					>{sample.title}
 				</Button>
 			{/each}
 		</Card.Content>
@@ -190,53 +170,20 @@
 	</div>
 
 	<!-- Controls & Output -->
-	<div class="grid max-h-[40vh] shrink-0 grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">
+	<div class="grid shrink-0 grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-wrap items-center gap-2">
 				<div class="w-55">
-					<Select.Root type="single" bind:value={compilerTarget}>
-						<Select.Trigger>
-							{targetOptions[compilerTarget as keyof typeof targetOptions] || 'Select Target'}
-						</Select.Trigger>
-						<Select.Content>
-							{#each Object.entries(targetOptions) as [key, label]}
-								<Select.Item value={key}>{label}</Select.Item>
-							{/each}
-						</Select.Content>
-					</Select.Root>
+					<TargetPicker {compilerTarget} />
 				</div>
 
 				<Button onclick={handleBuild} disabled={loading}>Build</Button>
-				<Button variant="outline" href="/schematics?s=clean">Start with a new schematic</Button>
+				<Button variant="outline" onclick={cleanEditors}>Start with a new schematic</Button>
 			</div>
 
-			<div class="flex flex-wrap gap-2 text-xs text-muted-foreground">
-				<a
-					href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SCHEMACODE.markdown"
-					class="underline hover:text-primary">Schemacode syntax</a
-				>
-				|
-				<a
-					href="https://github.com/cardillan/mindcode/blob/main/README.markdown"
-					class="underline hover:text-primary">Readme</a
-				>
-				|
-				<a
-					href="https://github.com/cardillan/mindcode/blob/main/CHANGELOG.markdown"
-					class="underline hover:text-primary">Changelog</a
-				>
-			</div>
-
-			<div class="text-xs text-muted-foreground">
-				Bug reports, suggestions and questions are welcome at the <a
-					class="underline hover:text-primary"
-					href="https://github.com/cardillan/mindcode">project page</a
-				>.
-			</div>
+			<ProjectLinks variant="schemacode" />
 		</div>
 
-		<div class="flex flex-col gap-2">
-			<CompilerMessages {errors} {warnings} {messages} title="Build messages:" />
-		</div>
+		<CompilerMessages {errors} {warnings} {infos} title="Build messages:" />
 	</div>
 </div>

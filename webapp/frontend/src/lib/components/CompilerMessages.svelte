@@ -1,17 +1,16 @@
 <script lang="ts">
 	import type { CompileResponseMessage, SourceRange } from '$lib/api';
-	import { cn } from '$lib/utils';
 
 	let {
 		errors = [],
 		warnings = [],
-		messages = [],
+		infos = [],
 		title = 'Compiler messages:',
 		onJumpToPosition
 	}: {
 		errors?: CompileResponseMessage[];
 		warnings?: CompileResponseMessage[];
-		messages?: CompileResponseMessage[];
+		infos?: CompileResponseMessage[];
 		title?: string;
 		onJumpToPosition?: (range: SourceRange) => void;
 	} = $props();
@@ -32,7 +31,7 @@
 	{/if}
 {/snippet}
 
-{#if errors.length > 0 || warnings.length > 0 || messages.length > 0}
+{#if errors.length > 0 || warnings.length > 0 || infos.length > 0}
 	<div class="text-sm">
 		<p class="mt-2 font-bold">{errors.length > 0 ? 'Syntax Errors:' : title}</p>
 
@@ -75,10 +74,10 @@
 			</ul>
 		{/if}
 
-		{#if messages.length > 0}
+		{#if infos.length > 0}
 			<ul class="list-inside list-disc">
-				{#each messages as msg}
-					<li>{msg.message}</li>
+				{#each infos as info}
+					<li>{info.message}</li>
 				{/each}
 			</ul>
 		{/if}

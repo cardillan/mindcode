@@ -12,8 +12,6 @@ import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.Target;
-import info.teksol.mindcode.samples.Sample;
-import info.teksol.mindcode.samples.Samples;
 import info.teksol.schemacode.SchemacodeCompiler;
 import info.teksol.schemacode.SchematicsDecompiler;
 import org.slf4j.Logger;
@@ -33,8 +31,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class ApiController {
     private static final Logger logger = LoggerFactory.getLogger(ApiController.class);
-    private static final Map<String, Sample> samples = Samples.loadMindcodeSamples();
-    private static final Map<String, Sample> schemacodeSamples = Samples.loadSchemacodeSamples();
 
     @Autowired
     private SourceRepository sourceRepository;
@@ -66,71 +62,75 @@ public class ApiController {
         }
     }
 
-    @GetMapping("/samples")
-    public List<SampleDTO> getSamples() {
-        return samples.entrySet().stream()
-                .map(e -> new SampleDTO(e.getKey(), e.getValue().name(), e.getValue().source()))
-                .toList();
-    }
-
     @PostMapping("/compile")
     public CompileResponse compile(@RequestBody CompileRequest request) {
-        Target target = new Target(request.target());
+        Target target = new Target(request.target);
         boolean run = request.run();
-        String sourceCode = request.source();
+        Source sourceDto = getSourceDto(request.sourceId, request.source);
 
         ListMessageLogger messageLogger = new ListMessageLogger();
         MindcodeCompiler compiler = new MindcodeCompiler(
                 messageLogger,
                 CompilerProfile.fullOptimizations(true).setTarget(target).setRun(run),
-                InputFiles.fromSource(sourceCode));
+                InputFiles.fromSource(sourceDto.getSource()));
 
         final long start = System.nanoTime();
         compiler.safeCompile();
         final long end = System.nanoTime();
         logger.info("performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
-        String compiledCode = getCompilerCode(sourceCode, compiler);
+        String compiled = getCompilationMessage(sourceDto.getSource(), compiler);
+        boolean isText = compiled != null;
+        if(compiled == null) {
+            compiled = compiler.getOutput();
+        }
 
         return new CompileResponse(
-                compiledCode,
+                sourceDto.getId().toString(),
+                compiled,
                 errors(compiler),
                 warnings(compiler),
                 messages(compiler),
                 processRunOutput(compiler),
-                compiler.getSteps()
+                compiler.getSteps(),
+                isText
         );
     }
 
-    @GetMapping("/schemacode/samples")
-    public List<SampleDTO> getSchemacodeSamples() {
-        return schemacodeSamples.entrySet().stream()
-                .map(e -> new SampleDTO(e.getKey(), e.getValue().name(), e.getValue().source()))
-                .toList();
+    @PostMapping("/decompile")
+    public DecompileResponse decompileMlog(@RequestBody DecompileRequest request) {
+        Source sourceDto =  getSourceDto(request.sourceId, request.source);
+        final String decompiled = MlogDecompiler.decompile(sourceDto.getSource());
+        return new DecompileResponse(sourceDto.getId().toString(),decompiled, List.of(), List.of(), List.of());
     }
 
     @PostMapping("/schemacode/compile")
     public SchemacodeCompileResponse compileSchemacode(@RequestBody SchemacodeCompileRequest request) {
         Target target = new Target(request.target());
-        String sourceCode = request.source().trim();
+        Source sourceDto = getSourceDto(request.sourceId, request.source);
 
-        final CompilerOutput<byte[]> compilerOutput = SchemacodeCompiler.compile(InputFiles.fromSource(sourceCode), CompilerProfile.fullOptimizations(true).setTarget(target));
+        final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(
+                InputFiles.fromSource(sourceDto.getSource()),
+                CompilerProfile.fullOptimizations(true).setTarget(target));
 
-        String compiledCode = compilerOutput.hasCompilerErrors() ? "" : Base64.getEncoder().encodeToString(compilerOutput.output());
+        String compiledCode = result.getStringOutput();
 
         return new SchemacodeCompileResponse(
+                sourceDto.getId().toString(),
                 compiledCode,
-                compilerOutput.errors(CompileResponseMessage::transform),
-                compilerOutput.warnings(CompileResponseMessage::transform),
-                compilerOutput.infos(CompileResponseMessage::transform)
+                result.errors(CompileResponseMessage::transform),
+                result.warnings(CompileResponseMessage::transform),
+                result.infos(CompileResponseMessage::transform)
         );
     }
 
-    @PostMapping("/decompile/schematic")
-    public DecompileResponse decompileSchematic(@RequestBody String source) {
-        final CompilerOutput<String> compilerOutput = SchematicsDecompiler.decompile(source);
+    @PostMapping("/schemacode/decompile")
+    public DecompileResponse decompileSchematic(@RequestBody DecompileRequest request) {
+        Source sourceDto =  getSourceDto(request.sourceId, request.source);
+        final CompilerOutput<String> compilerOutput = SchematicsDecompiler.decompile(sourceDto.getSource());
 
         return new DecompileResponse(
+                sourceDto.getId().toString(),
                 compilerOutput.output(),
                 compilerOutput.errors(CompileResponseMessage::transform),
                 compilerOutput.warnings(CompileResponseMessage::transform),
@@ -138,19 +138,22 @@ public class ApiController {
         );
     }
 
-    @PostMapping("/decompile/mlog")
-    public DecompileResponse decompileMlog(@RequestBody String source) {
-        final String decompiled = MlogDecompiler.decompile(source);
-        return new DecompileResponse(decompiled, List.of(), List.of(), List.of());
+    private Source getSourceDto(String id, String source) {
+        Source sourceDto;
+        if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
+            final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
+            final Source newSource = dto
+                    .map(sdto -> sdto.withSource(source))
+                    .orElseGet(() -> new Source(source, Instant.now()));
+            sourceDto = sourceRepository.save(newSource);
+        } else {
+            sourceDto = sourceRepository.save(new Source(source, Instant.now()));
+        }
+
+        return sourceDto;
     }
 
-    private List<WebappMessage> transformMessages(List<MindcodeMessage> messages) {
-        return messages.stream()
-                .map(WebappMessage::transform)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private String getCompilerCode(String sourceCode, MindcodeCompiler compiler) {
+    private String getCompilationMessage(String sourceCode, MindcodeCompiler compiler) {
         if (compiler.hasInternalError()) {
             return """
                     Oh no! Mindcode crashed.
@@ -202,9 +205,9 @@ public class ApiController {
                     c = a * a + b * b;
                     println(c);    // <-- prints the result of the computation
                     """;
-        } else {
-            return compiler.getOutput();
         }
+
+        return null;
     }
 
     private boolean isEmpty(List<LogicInstruction> program) {
@@ -249,13 +252,22 @@ public class ApiController {
         }
     }
 
-    public record SampleDTO(String name, String title, String source) {}
-    public record CompileRequest(String source, String target, boolean run) {}
-    public record CompileResponse(String compiledCode, List<CompileResponseMessage> errors, List<CompileResponseMessage> warnings, List<CompileResponseMessage> info, String runOutput, int runSteps) {}
-    public record SchemacodeCompileRequest(String source, String target) {}
-    public record SchemacodeCompileResponse(String compiledCode, List<CompileResponseMessage> errors, List<CompileResponseMessage> warnings, List<CompileResponseMessage> info) {}
+    public record CompileRequest(String sourceId, String source, String target, boolean run) {}
+    public record CompileResponse(
+            String sourceId,
+            String compiled,
+            List<CompileResponseMessage> errors,
+            List<CompileResponseMessage> warnings,
+            List<CompileResponseMessage> infos,
+            String runOutput,
+            int runSteps,
+            boolean isPlainText) {}
+    public record SchemacodeCompileRequest(String sourceId, String source, String target) {}
+    public record SchemacodeCompileResponse(String sourceId, String compiled, List<CompileResponseMessage> errors, List<CompileResponseMessage> warnings, List<CompileResponseMessage> infos) {}
 
-    public record DecompileResponse(String source, List<CompileResponseMessage> errors, List<CompileResponseMessage> warnings, List<CompileResponseMessage> info) {}
+
+    public record DecompileRequest(String sourceId, String source) {}
+    public record DecompileResponse(String sourceId, String source, List<CompileResponseMessage> errors, List<CompileResponseMessage> warnings, List<CompileResponseMessage> infos) {}
 
     public record SourceRange(String path, int startLine, int startColumn, int endLine, int endColumn) {}
     public record CompileResponseMessage(String prefix, String message, SourceRange range) {
