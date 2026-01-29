@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping(value = "/")
+@RequestMapping(value = "/legacy")
 public class HomeController {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
     private static final Map<String, Sample> samples = Samples.loadMindcodeSamples();
@@ -57,7 +57,7 @@ public class HomeController {
         }
 
         String targetUrl = UriComponentsBuilder
-                .fromPath("/")
+                .fromPath("/legacy")
                 .queryParam("compilerTarget", compilerTarget)
                 .queryParam("s", sourceDto.getId().toString())
                 .build()
@@ -82,7 +82,7 @@ public class HomeController {
         }
 
         String targetUrl = UriComponentsBuilder
-                .fromPath("/")
+                .fromPath("/legacy")
                 .queryParam("compilerTarget", compilerTarget)
                 .queryParam("s", sourceDto.getId().toString())
                 .queryParam("run", "true")
