@@ -71,7 +71,7 @@ public class ApiController {
         ListMessageLogger messageLogger = new ListMessageLogger();
         MindcodeCompiler compiler = new MindcodeCompiler(
                 messageLogger,
-                CompilerProfile.fullOptimizations(true).setTarget(target).setRun(run),
+                CompilerProfile.fullOptimizations(false, true).setTarget(target).setRun(run),
                 InputFiles.fromSource(sourceDto.getSource()));
 
         final long start = System.nanoTime();
@@ -88,9 +88,9 @@ public class ApiController {
         return new CompileResponse(
                 sourceDto.getId().toString(),
                 compiled,
-                errors(compiler),
-                warnings(compiler),
-                messages(compiler),
+                errors(messageLogger),
+                warnings(messageLogger),
+                infos(messageLogger),
                 processRunOutput(compiler),
                 compiler.getSteps(),
                 isText
@@ -109,32 +109,35 @@ public class ApiController {
         Target target = new Target(request.target());
         Source sourceDto = getSourceDto(request.sourceId, request.source);
 
+        ListMessageLogger messageLogger = new ListMessageLogger();
         final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(
+                messageLogger,
                 InputFiles.fromSource(sourceDto.getSource()),
-                CompilerProfile.fullOptimizations(true).setTarget(target));
+                CompilerProfile.fullOptimizations(true, true).setTarget(target));
 
         String compiledCode = result.getStringOutput();
 
         return new SchemacodeCompileResponse(
                 sourceDto.getId().toString(),
                 compiledCode,
-                result.errors(CompileResponseMessage::transform),
-                result.warnings(CompileResponseMessage::transform),
-                result.infos(CompileResponseMessage::transform)
+                errors(messageLogger),
+                warnings(messageLogger),
+                infos(messageLogger)
         );
     }
 
     @PostMapping("/schemacode/decompile")
     public DecompileResponse decompileSchematic(@RequestBody DecompileRequest request) {
         Source sourceDto =  getSourceDto(request.sourceId, request.source);
-        final CompilerOutput<String> compilerOutput = SchematicsDecompiler.decompile(sourceDto.getSource());
+        ListMessageLogger messageLogger = new ListMessageLogger();
+        final CompilerOutput<String> compilerOutput = SchematicsDecompiler.decompile(messageLogger, sourceDto.getSource());
 
         return new DecompileResponse(
                 sourceDto.getId().toString(),
                 compilerOutput.output(),
-                compilerOutput.errors(CompileResponseMessage::transform),
-                compilerOutput.warnings(CompileResponseMessage::transform),
-                compilerOutput.infos(CompileResponseMessage::transform)
+                errors(messageLogger),
+                warnings(messageLogger),
+                infos(messageLogger)
         );
     }
 
@@ -214,20 +217,20 @@ public class ApiController {
         return program.isEmpty() || program.size() <= 2 && program.getFirst().getOpcode() == Opcode.END;
     }
 
-    public List<CompileResponseMessage> errors(MindcodeCompiler compiler) {
-        return formatMessages(compiler, MindcodeMessage::isError);
+    public List<CompileResponseMessage> errors(ListMessageLogger logger) {
+        return formatMessages(logger.getMessages(), MindcodeMessage::isError);
     }
 
-    public List<CompileResponseMessage> warnings(MindcodeCompiler compiler) {
-        return formatMessages(compiler, MindcodeMessage::isWarning);
+    public List<CompileResponseMessage> warnings(ListMessageLogger logger) {
+        return formatMessages(logger.getMessages(), MindcodeMessage::isWarning);
     }
 
-    public List<CompileResponseMessage> messages(MindcodeCompiler compiler) {
-        return formatMessages(compiler, MindcodeMessage::isInfo);
+    public List<CompileResponseMessage> infos(ListMessageLogger logger) {
+        return formatMessages(logger.getMessages(), MindcodeMessage::isInfo);
     }
 
-    public List<CompileResponseMessage> formatMessages(MindcodeCompiler compiler, Predicate<MindcodeMessage> filter) {
-        return compiler.getMessages().stream().filter(filter.and(m -> !(m instanceof EmulatorMessage)))
+    public List<CompileResponseMessage> formatMessages(List<MindcodeMessage> messages, Predicate<MindcodeMessage> filter) {
+        return messages.stream().filter(filter.and(m -> !(m instanceof EmulatorMessage)))
                 .map(CompileResponseMessage::transform)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
