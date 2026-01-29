@@ -51,8 +51,9 @@ public class MlogWatcherClientImpl extends MlogWatcherClientBase {
             Results result = response.getResult();
             if (result instanceof TextResult textResult) {
                 switch (textResult.getText()) {
-                    case ERR_INVALID_ARGUMENTS -> log.error("  Mlog Watcher: invalid arguments provided.");
-                    case ERR_INVALID_PROGRAM_ID -> log.error("  Mlog Watcher: invalid program ID specified.");
+                    case ERR_INVALID_ARGUMENTS -> log.error("  Mlog Watcher: Internal error: invalid arguments provided.");
+                    case ERR_INVALID_PROGRAM_ID -> log.error("  Mlog Watcher: Internal error: invalid program ID specified.");
+                    case ERR_INVALID_VERSION_SELECTION -> log.error("  Mlog Watcher: Internal error: invalid version selection specified.");
                     case ERR_NO_PROCESSOR_ATTACHED -> {
                         log.info("  Mlog Watcher: no processor selected.");
                         log.info("  (The target processor must be selected in Mindustry to receive the code.)");
@@ -60,13 +61,13 @@ public class MlogWatcherClientImpl extends MlogWatcherClientBase {
                     case ERR_NO_ACTIVE_MAP -> log.info("  Mlog Watcher: no map loaded.");
                     case ERR_NO_PROCESSORS_FOUND ->
                             log.info("  Mlog Watcher: no compatible processors found on the map.");
-                    case ERR_SCHEMATIC_IMPORT_FAILED -> log.error("  Mlog Watcher: schematic import failed.");
+                    case ERR_SCHEMATIC_IMPORT_FAILED -> log.error("  Mlog Watcher: schematic import failed (invalid schematic file?)");
                     case ERR_UNKNOWN_METHOD ->
                             log.error("  Mlog Watcher: requested method not supported (MlogWatcher version too old?).");
                     default -> log.error("  Mlog Watcher: error processing request: %s", textResult.getText());
                 }
             } else {
-                log.error("  Mlog Watcher: error processing request - unknown result");
+                log.error("  Mlog Watcher: error processing request - unknown result.");
             }
         });
     }
@@ -88,13 +89,14 @@ public class MlogWatcherClientImpl extends MlogWatcherClientBase {
     }
 
     @Override
-    public void updateAllProcessorsOnMap(String mlog, String textId) {
+    public void updateAllProcessorsOnMap(String mlog, String textId, String versionSelection) {
         ProgramId programId = ProgramId.parse(textId);
 
         UpgradeAllProcessorsOnMapParams params = new UpgradeAllProcessorsOnMapParams();
         params.setCode(mlog);
         params.setProgramId(programId);
         params.setVariableName(LogicVariable.PROGRAM_ID_NAME);
+        params.setVersionSelection(versionSelection);
 
         Request request = new Request();
         request.setMethod(Request.UPGRADE_ALL_PROCESSORS_ON_MAP);
@@ -102,8 +104,15 @@ public class MlogWatcherClientImpl extends MlogWatcherClientBase {
         request.setInvocationId(0);
         request.setParams(params);
 
+        String verb = switch (versionSelection) {
+            case UpgradeAllProcessorsOnMapParams.VERSION_SELECTION_EXACT -> "update";
+            case UpgradeAllProcessorsOnMapParams.VERSION_SELECTION_COMPATIBLE -> "upgrade";
+            case UpgradeAllProcessorsOnMapParams.VERSION_SELECTION_ANY -> "force update";
+            default -> throw new IllegalArgumentException("Invalid version selection: " + versionSelection);
+        };
+
         processRequest(request,
-                "Request to upgrade all processors on the map was sent to Mlog Watcher.",
+                "Request to " + verb + " all processors on the map was sent to Mlog Watcher.",
                 result -> {
                     if (result.getResult() instanceof ProcessorUpdateResults updates) {
                         log.info("  Mlog Watcher: %d processors considered:", updates.getProcessorUpdates().size());

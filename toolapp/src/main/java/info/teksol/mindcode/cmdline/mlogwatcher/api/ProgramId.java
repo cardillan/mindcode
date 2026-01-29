@@ -57,11 +57,14 @@ public final class ProgramId {
         this.revision = revision;
     }
 
-    public boolean shouldUpdate(ProgramId newId) {
-        return idPrefix.equals(newId.idPrefix)
-                && (newId.major > major
+    public boolean compatibleVersionMatch(ProgramId newId) {
+        return newId.major > major
                 || newId.major == major && newId.minor > minor
-                || newId.major == major && newId.minor == minor && newId.revision >= revision);
+                || newId.major == major && newId.minor == minor && newId.revision >= revision;
+    }
+
+    public boolean exactVersionMatch(ProgramId newId) {
+        return newId.major == major && newId.minor == minor && newId.revision == revision;
     }
 
     @Override

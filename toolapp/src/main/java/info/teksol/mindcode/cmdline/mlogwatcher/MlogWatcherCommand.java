@@ -8,9 +8,13 @@ import static info.teksol.mindcode.cmdline.ToolAppAction.COMPILE_MINDCODE;
 import static info.teksol.mindcode.cmdline.ToolAppAction.COMPILE_SCHEMA;
 
 public enum MlogWatcherCommand {
-    UPDATE      (COMPILE_MINDCODE, COMPILE_SCHEMA),
-    UPDATE_ALL  (COMPILE_MINDCODE),
-    ADD         (COMPILE_SCHEMA),
+    UPDATE              (COMPILE_MINDCODE, COMPILE_SCHEMA),
+
+    UPDATE_ALL          (COMPILE_MINDCODE),
+    UPGRADE_ALL         (COMPILE_MINDCODE),
+    FORCE_UPDATE_ALL    (COMPILE_MINDCODE),
+
+    ADD                 (COMPILE_SCHEMA),
     ;
 
     private final Set<ToolAppAction> supportedActions;

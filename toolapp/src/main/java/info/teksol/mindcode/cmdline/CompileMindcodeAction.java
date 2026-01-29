@@ -24,6 +24,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
+import static info.teksol.mindcode.cmdline.mlogwatcher.api.UpgradeAllProcessorsOnMapParams.*;
+
 @NullMarked
 public class CompileMindcodeAction extends ActionHandler {
 
@@ -52,9 +54,9 @@ public class CompileMindcodeAction extends ActionHandler {
 
         files.addArgument("--excerpt")
                 .help("Allows to specify a portion of the input file for processing, parts outside the specified excerpt are ignored. " +
-                      "The excerpt needs to be specified as 'line:column-line:column' (':column' may be omitted if it is equal to 1), " +
-                      "giving two positions inside the main input file separated by a dash. The start position must precede " +
-                      "the end position.")
+                        "The excerpt needs to be specified as 'line:column-line:column' (':column' may be omitted if it is equal to 1), " +
+                        "giving two positions inside the main input file separated by a dash. The start position must precede " +
+                        "the end position.")
                 .type(ExcerptSpecification.class)
                 .nargs("?");
 
@@ -78,8 +80,8 @@ public class CompileMindcodeAction extends ActionHandler {
 
         files.addArgument("-a", "--append")
                 .help("Additional Mindcode source file to be compiled along with the input file. Such additional files may " +
-                      "contain common functions. More than one file may be added this way. The excerpt argument isn't applied to " +
-                      "additional files.")
+                        "contain common functions. More than one file may be added this way. The excerpt argument isn't applied to " +
+                        "additional files.")
                 .type(Arguments.fileType())
                 .nargs("+")
                 .metavar("FILE");
@@ -149,12 +151,10 @@ public class CompileMindcodeAction extends ActionHandler {
             if (mlogWatcherClient != null) {
                 try {
                     switch (arguments.get("watcher")) {
-                        case MlogWatcherCommand.UPDATE ->
-                                mlogWatcherClient.updateSelectedProcessor(compiler.getOutput());
-
-                        case MlogWatcherCommand.UPDATE_ALL ->
-                                mlogWatcherClient.updateAllProcessorsOnMap(compiler.getOutput(), compiler.getProgramId());
-
+                        case MlogWatcherCommand.UPDATE -> mlogWatcherClient.updateSelectedProcessor(compiler.getOutput());
+                        case MlogWatcherCommand.UPDATE_ALL -> updateAll(mlogWatcherClient, compiler, VERSION_SELECTION_EXACT);
+                        case MlogWatcherCommand.UPGRADE_ALL -> updateAll(mlogWatcherClient, compiler, VERSION_SELECTION_COMPATIBLE);
+                        case MlogWatcherCommand.FORCE_UPDATE_ALL -> updateAll(mlogWatcherClient, compiler, VERSION_SELECTION_ANY);
                         default ->
                                 throw new IllegalArgumentException("Invalid value for --watcher: " + arguments.get("watcher"));
                     }
@@ -172,5 +172,9 @@ public class CompileMindcodeAction extends ActionHandler {
         if (compiler.hasCompilerErrors()) {
             System.exit(1);
         }
+    }
+
+    private void updateAll(MlogWatcherClient mlogWatcherClient, MindcodeCompiler compiler, String versionSelection) {
+        mlogWatcherClient.updateAllProcessorsOnMap(compiler.getOutput(), compiler.getProgramId(), versionSelection);
     }
 }

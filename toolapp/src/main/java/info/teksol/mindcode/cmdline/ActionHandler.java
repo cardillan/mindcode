@@ -105,13 +105,15 @@ abstract class ActionHandler {
         String description = switch (action) {
             case COMPILE_MINDCODE -> """
                     invoke an specific Mlog Watcher operation on the compiled mlog code (default: update)
-                        update      send the mlog code to the selected processor
-                        update-all  update all compatible processors on the map with new code""";
+                        update           send it to the selected processor
+                        update-all       send it to processors with the exact same version on the active map
+                        upgrade-all      send it to processors with the same or lower version on the active map
+                        force-update-all send it to processors matching program ID (regardless of the version)""";
 
             case COMPILE_SCHEMA -> """
                     invoke an specific Mlog Watcher operation on the created schematic (default: update)
-                        update      update the schematic with the same name in the schematics library
-                        add         add a new copy of the schematic to the schematics library""";
+                        update  update the schematic with the same name in the schematics library
+                        add     add a new copy of the schematic to the schematics library""";
 
             default -> throw new IllegalArgumentException("Unsupported action for Mlog Watcher options: " + action);
         };

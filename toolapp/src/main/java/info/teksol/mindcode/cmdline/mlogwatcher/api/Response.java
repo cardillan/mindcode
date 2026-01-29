@@ -10,6 +10,7 @@ public class Response {
 
     public static final String ERR_INVALID_ARGUMENTS = "invalid_arguments";
     public static final String ERR_INVALID_PROGRAM_ID = "invalid_program_id";
+    public static final String ERR_INVALID_VERSION_SELECTION = "invalid_version_selection";
     public static final String ERR_NO_PROCESSOR_ATTACHED = "no_processor_attached";
     public static final String ERR_NO_ACTIVE_MAP = "no_active_map";
     public static final String ERR_NO_PROCESSORS_FOUND = "no_processors_found";
