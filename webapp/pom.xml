@@ -163,6 +163,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.version}</version>
+                <configuration>
+                    <finalName>mindcode-webapp</finalName>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
