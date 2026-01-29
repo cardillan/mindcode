@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { mlogLanguage } from '$lib/grammars/mlog_language';
 	import { EditorView } from 'codemirror';
-	import { onMount } from 'svelte';
 
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
@@ -9,46 +8,28 @@
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
 	import { ApiHandler } from '$lib/api';
 	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
-	import { LocalSource, syncUrl } from '$lib/hooks.svelte';
-	import { baseExtensions, updateEditor } from '$lib/codemirror';
+	import { EditorStore, getThemeContext, LocalSource, syncUrl } from '$lib/stores.svelte';
+	import { updateEditor } from '$lib/codemirror';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 
-	let mlogContainer = $state<HTMLElement>();
-	let mindcodeContainer = $state<HTMLElement>();
-
-	let mlogEditor = $state<EditorView>();
-	let mindcodeEditor = $state<EditorView>();
+	const theme = getThemeContext();
+	const mlogEditor = new EditorStore(theme, (parent, baseExtensions) => {
+		return new EditorView({ parent, extensions: [baseExtensions, mlogLanguage] });
+	});
+	const mindcodeEditor = new EditorStore(theme, (parent, baseExtensions) => {
+		return new EditorView({ parent, extensions: [baseExtensions, mindcodeLanguage] });
+	});
 
 	let loading = $state(false);
 	let errors = $state<any[]>([]);
 	let warnings = $state<any[]>([]);
 	let infos = $state<any[]>([]);
 	const api = new ApiHandler();
-	const localSource = new LocalSource(api, () => mlogEditor, []);
-
-	onMount(() => {
-		if (mlogContainer) {
-			mlogEditor = new EditorView({
-				parent: mlogContainer,
-				extensions: [baseExtensions(), mlogLanguage]
-			});
-		}
-		if (mindcodeContainer) {
-			mindcodeEditor = new EditorView({
-				parent: mindcodeContainer,
-				extensions: [baseExtensions(), mindcodeLanguage]
-			});
-		}
-
-		return () => {
-			mlogEditor?.destroy();
-			mindcodeEditor?.destroy();
-		};
-	});
+	const localSource = new LocalSource(api, () => mlogEditor.view, []);
 
 	async function handleDecompile() {
-		if (!mlogEditor) return;
-		const source = mlogEditor.state.doc.toString();
+		if (!mlogEditor.view) return;
+		const source = mlogEditor.view.state.doc.toString();
 		loading = true;
 		errors = [];
 		warnings = [];
@@ -59,8 +40,8 @@
 				source
 			});
 
-			if (mindcodeEditor) {
-				updateEditor(mindcodeEditor, data.source);
+			if (mindcodeEditor.view) {
+				updateEditor(mindcodeEditor.view, data.source);
 			}
 			errors = data.errors;
 			warnings = data.warnings;
@@ -73,6 +54,17 @@
 		} finally {
 			loading = false;
 		}
+	}
+
+	async function cleanEditors() {
+		localSource.clear();
+		updateEditor(mindcodeEditor.view, '');
+
+		errors = [];
+		warnings = [];
+		infos = [];
+
+		await syncUrl({ localSource });
 	}
 </script>
 
@@ -99,7 +91,7 @@
 			<Label class="text-lg font-bold">Mlog code:</Label>
 			<div
 				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				bind:this={mlogContainer}
+				{@attach mlogEditor.attach}
 			></div>
 		</div>
 
@@ -108,7 +100,7 @@
 			<Label class="text-lg font-bold">Decompiled Mindcode:</Label>
 			<div
 				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				bind:this={mindcodeContainer}
+				{@attach mindcodeEditor.attach}
 			></div>
 		</div>
 	</div>
@@ -118,7 +110,7 @@
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-wrap items-center gap-2">
 				<Button onclick={handleDecompile} disabled={loading}>Decompile</Button>
-				<Button variant="outline" href="/decompiler">Erase mlog</Button>
+				<Button variant="outline" onclick={cleanEditors}>Erase mlog</Button>
 			</div>
 
 			<ProjectLinks />
