@@ -1,9 +1,6 @@
 <script lang="ts">
-	import { keymap } from '@codemirror/view';
-	import { insertTab } from '@codemirror/commands';
-	import { basicSetup, EditorView } from 'codemirror';
+	import { EditorView } from 'codemirror';
 	import { onMount } from 'svelte';
-	import { abyss } from '@fsegurai/codemirror-theme-abyss';
 
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
@@ -11,8 +8,10 @@
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
 	import { ApiHandler } from '$lib/api';
 	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
+	import { baseExtensions } from '$lib/codemirror';
+	import { LocalSource, syncUrl } from '$lib/hooks.svelte';
+	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 
-	const api = new ApiHandler();
 	let encodedContainer = $state<HTMLElement>();
 	let schemacodeContainer = $state<HTMLElement>();
 
@@ -22,40 +21,30 @@
 	let loading = $state(false);
 	let errors = $state<any[]>([]);
 	let warnings = $state<any[]>([]);
-	let messages = $state<any[]>([]);
+	let infos = $state<any[]>([]);
+
+	const api = new ApiHandler();
+	const localSource = new LocalSource(api, () => encodedEditor, []);
 
 	onMount(() => {
 		if (encodedContainer) {
 			encodedEditor = new EditorView({
 				parent: encodedContainer,
-				extensions: [commonExtensions()]
+				extensions: [baseExtensions()]
 			});
 		}
 		if (schemacodeContainer) {
 			schemacodeEditor = new EditorView({
 				parent: schemacodeContainer,
-				extensions: [commonExtensions(), schemacodeLanguage]
+				extensions: [baseExtensions(), schemacodeLanguage]
 			});
 		}
-	});
 
-	function commonExtensions() {
-		return [
-			basicSetup,
-			abyss,
-			keymap.of([{ key: 'Tab', run: insertTab }]),
-			EditorView.theme({
-				'&': {
-					height: '100%',
-					width: '100%',
-					fontSize: '14px'
-				},
-				'.cm-scroller': {
-					fontFamily: 'monospace'
-				}
-			})
-		];
-	}
+		return () => {
+			encodedEditor?.destroy();
+			schemacodeEditor?.destroy();
+		};
+	});
 
 	async function handleDecompile() {
 		if (!encodedEditor) return;
@@ -63,10 +52,13 @@
 		loading = true;
 		errors = [];
 		warnings = [];
-		messages = [];
+		infos = [];
 
 		try {
-			const data = await api.decompileSchematic(source);
+			const data = await api.decompileSchematic({
+				sourceId: localSource.id,
+				source
+			});
 
 			if (schemacodeEditor) {
 				const transaction = schemacodeEditor.state.update({
@@ -76,11 +68,29 @@
 			}
 			errors = data.errors;
 			warnings = data.warnings;
-			messages = data.messages;
+			infos = data.infos;
+			localSource.id = data.sourceId;
+
+			await syncUrl({ localSource });
 		} catch (e) {
 			console.error(e);
 		} finally {
 			loading = false;
+		}
+	}
+
+	function cleanEditors() {
+		if (encodedEditor) {
+			const transaction = encodedEditor.state.update({
+				changes: { from: 0, to: encodedEditor.state.doc.length, insert: '' }
+			});
+			encodedEditor.dispatch(transaction);
+		}
+		if (schemacodeEditor) {
+			const transaction = schemacodeEditor.state.update({
+				changes: { from: 0, to: schemacodeEditor.state.doc.length, insert: '' }
+			});
+			schemacodeEditor.dispatch(transaction);
 		}
 	}
 </script>
@@ -130,34 +140,9 @@
 				<Button variant="outline" href="/decompiler">Erase schematic</Button>
 			</div>
 
-			<div class="flex flex-wrap gap-2 text-xs text-muted-foreground">
-				<a
-					href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SCHEMACODE.markdown"
-					class="underline hover:text-primary">Schemacode syntax</a
-				>
-				|
-				<a
-					href="https://github.com/cardillan/mindcode/blob/main/README.markdown"
-					class="underline hover:text-primary">Readme</a
-				>
-				|
-				<a
-					href="https://github.com/cardillan/mindcode/blob/main/CHANGELOG.markdown"
-					class="underline hover:text-primary">Changelog</a
-				>
-			</div>
-
-			<div class="text-xs text-muted-foreground">
-				Bug reports, suggestions and questions are welcome at the <a
-					class="underline hover:text-primary"
-					href="https://github.com/cardillan/mindcode">project page</a
-				>.
-			</div>
+			<ProjectLinks variant="schemacode" />
 		</div>
 
-		<!-- Messages placeholder -->
-		<div class="flex flex-col gap-2">
-			<CompilerMessages {errors} {warnings} {messages} title="Decompiler messages:" />
-		</div>
+		<CompilerMessages {errors} {warnings} {infos} title="Decompiler messages:" />
 	</div>
 </div>
