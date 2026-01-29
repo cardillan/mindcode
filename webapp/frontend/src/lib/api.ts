@@ -6,6 +6,13 @@ export interface SourceRange {
 	endColumn: number;
 }
 
+export interface CompileRequest {
+	sourceId: string | undefined;
+	source: string;
+	target: string;
+	run: boolean;
+}
+
 export interface CompileResponseMessage {
 	message: string;
 	prefix: string;
@@ -13,37 +20,41 @@ export interface CompileResponseMessage {
 }
 
 export interface CompileResponse {
-	compiledCode: string;
+	sourceId: string;
+	compiled: string;
 	runOutput: string;
 	runSteps: number;
 	errors: CompileResponseMessage[];
 	warnings: CompileResponseMessage[];
-	messages: CompileResponseMessage[];
-}
-
-export interface CompileRequest {
-	source: string;
-	target: string;
-	run: boolean;
+	infos: CompileResponseMessage[];
+	isPlainText: boolean;
 }
 
 export interface SchemacodeCompileRequest {
+	sourceId: string | undefined;
 	source: string;
 	target: string;
 }
 
 export interface SchemacodeCompileResponse {
-	compiledCode: string;
+	sourceId: string;
+	compiled: string;
 	errors: CompileResponseMessage[];
 	warnings: CompileResponseMessage[];
-	messages: CompileResponseMessage[];
+	infos: CompileResponseMessage[];
+}
+
+export interface DecompileRequest {
+	sourceId: string | undefined;
+	source: string;
 }
 
 export interface DecompileResponse {
+	sourceId: string;
 	source: string;
 	errors: CompileResponseMessage[];
 	warnings: CompileResponseMessage[];
-	messages: CompileResponseMessage[];
+	infos: CompileResponseMessage[];
 }
 
 export interface ServerSource {
@@ -54,7 +65,7 @@ export interface ServerSource {
 }
 
 export interface Sample {
-	name: string;
+	id: string;
 	title: string;
 	source: string;
 }
@@ -76,7 +87,7 @@ export class ApiHandler {
 		});
 
 		if (!response.ok) {
-			throw new ApiError(response.url, response.status);
+			throw new ApiError('/api/compile', response.status);
 		}
 
 		return await response.json();
@@ -92,38 +103,38 @@ export class ApiHandler {
 		});
 
 		if (!response.ok) {
-			throw new ApiError(response.url, response.status);
+			throw new ApiError('/api/schemacode/compile', response.status);
 		}
 
 		return await response.json();
 	}
 
-	async decompileSchematic(base64EncodedSchematic: string): Promise<DecompileResponse> {
-		const response = await this.fetch('/api/decompile/schematic', {
+	async decompileSchematic(request: DecompileRequest): Promise<DecompileResponse> {
+		const response = await this.fetch('/api/schemacode/decompile', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			},
-			body: base64EncodedSchematic
+			body: JSON.stringify(request)
 		});
 
 		if (!response.ok) {
-			throw new ApiError(response.url, response.status);
+			throw new ApiError('/api/schemacode/decompile', response.status);
 		}
 		return await response.json();
 	}
 
-	async decompileMlog(mlogSource: string): Promise<DecompileResponse> {
-		const response = await this.fetch('/api/decompile/mlog', {
+	async decompileMlog(request: DecompileRequest): Promise<DecompileResponse> {
+		const response = await this.fetch('/api/decompile', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			},
-			body: mlogSource
+			body: JSON.stringify(request)
 		});
 
 		if (!response.ok) {
-			throw new ApiError(response.url, response.status);
+			throw new ApiError('/api/decompile', response.status);
 		}
 
 		return await response.json();
@@ -156,7 +167,8 @@ export class ApiHandler {
 	}
 
 	async updateSource(id: string, source: string): Promise<ServerSource> {
-		const response = await this.fetch(`/api/source/${encodeURIComponent(id)}`, {
+		const path = `/api/source/${encodeURIComponent(id)}`;
+		const response = await this.fetch(path, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'text/plain'
@@ -165,7 +177,7 @@ export class ApiHandler {
 		});
 
 		if (!response.ok) {
-			throw new ApiError(response.url, response.status);
+			throw new ApiError(path, response.status);
 		}
 
 		return await response.json();
@@ -175,7 +187,7 @@ export class ApiHandler {
 		const response = await this.fetch('/api/samples');
 
 		if (!response.ok) {
-			throw new ApiError(response.url, response.status);
+			throw new ApiError('/api/samples', response.status);
 		}
 
 		return await response.json();
@@ -185,7 +197,7 @@ export class ApiHandler {
 		const response = await this.fetch('/api/schemacode/samples');
 
 		if (!response.ok) {
-			throw new ApiError(response.url, response.status);
+			throw new ApiError('/api/schemacode/samples', response.status);
 		}
 		return await response.json();
 	}

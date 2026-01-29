@@ -1,29 +1,25 @@
 <script lang="ts">
 	import { mlogLanguage } from '$lib/grammars/mlog_language';
-	import { keymap } from '@codemirror/view';
-	import { insertTab } from '@codemirror/commands';
-	import { EditorSelection, SelectionRange, StateEffect, Text } from '@codemirror/state';
-	import { setDiagnostics, type Diagnostic } from '@codemirror/lint';
-	import { basicSetup, EditorView } from 'codemirror';
-	import { onMount } from 'svelte';
-	import { abyss } from '@fsegurai/codemirror-theme-abyss';
+	import { setDiagnostics } from '@codemirror/lint';
+	import { EditorView } from 'codemirror';
+	import { onMount, untrack } from 'svelte';
 	import { page } from '$app/state';
 
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
-	import * as Select from '$lib/components/ui/select';
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
-	import {
-		ApiHandler,
-		type CompileResponse,
-		type CompileResponseMessage,
-		type Sample,
-		type SourceRange
-	} from '$lib/api';
+	import { ApiHandler, type CompileResponseMessage, type SourceRange } from '$lib/api';
 	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
 	import type { PageProps } from './$types';
+	import { baseExtensions, compileMessagesToDiagnostics, jumpToRange } from '$lib/codemirror';
+	import { LocalSource, LocalCompilerTarget, syncUrl } from '$lib/hooks.svelte';
+	import { goto } from '$app/navigation';
+	import TargetPicker from '$lib/components/TargetPicker.svelte';
+	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
+	import { Compartment } from '@codemirror/state';
+	import { OutliningSpanKind } from 'typescript';
 
 	let { data }: PageProps = $props();
 	let mindcodeContainer = $state<HTMLElement>();
@@ -32,108 +28,59 @@
 	let mindcodeEditor = $state<EditorView>();
 	let mlogEditor = $state<EditorView>();
 
-	let compilerTarget = $state('8');
 	let runOutput = $state('');
 	let runSteps = $state(0);
 
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
-	let messages = $state<CompileResponseMessage[]>([]);
+	let infos = $state<CompileResponseMessage[]>([]);
 	let loading = $state(false);
-	const api = new ApiHandler();
+	let isPlainText = $state(false);
+	const outLanguage = new Compartment();
 
-	$effect(() => {
-		const s = page.url.searchParams.get('s');
-		if (s) {
-			loadSource(s);
-		}
-	});
+	const api = new ApiHandler();
+	const localSource = new LocalSource(
+		api,
+		() => mindcodeEditor,
+		untrack(() => data.samples)
+	);
+	const compilerTarget = new LocalCompilerTarget();
 
 	onMount(() => {
 		if (mindcodeContainer) {
 			mindcodeEditor = new EditorView({
 				parent: mindcodeContainer,
-				extensions: [commonExtensions(), mindcodeLanguage]
+				extensions: [baseExtensions(), mindcodeLanguage]
 			});
 		}
 		if (mlogContainer) {
 			mlogEditor = new EditorView({
 				parent: mlogContainer,
-				extensions: [commonExtensions(), mlogLanguage]
+				extensions: [baseExtensions(), outLanguage.of(mlogLanguage)]
 			});
 		}
 
-		// Initial load if s present
-		const s = page.url.searchParams.get('s');
-		if (s) {
-			loadSource(s);
-		}
+		return () => {
+			mindcodeEditor?.destroy();
+			mlogEditor?.destroy();
+		};
 	});
 
-	async function loadSource(id: string) {
-		if (id === 'clean') {
-			updateEditor(mindcodeEditor, '');
-			updateEditor(mlogEditor, '');
-			errors = [];
-			warnings = [];
-			messages = [];
-			runOutput = '';
-			return;
-		}
+	$effect(() => {
+		if (!mlogEditor) return;
 
-		try {
-			const data = await api.loadSource(id);
-			updateEditor(mindcodeEditor, data.source);
-		} catch (e) {
-			console.error('Failed to load source', e);
-		}
-	}
+		const isCurrentlyPlainText = outLanguage.get(mlogEditor.state) !== mlogLanguage;
+		if (isPlainText === isCurrentlyPlainText) return;
 
-	function updateEditor(editor: EditorView | undefined, text: string) {
-		if (editor) {
-			const transaction = editor.state.update({
-				changes: { from: 0, to: editor.state.doc.length, insert: text }
-			});
-			editor.dispatch(transaction);
-		}
-	}
-
-	function commonExtensions() {
-		return [
-			basicSetup,
-			abyss,
-			keymap.of([{ key: 'Tab', run: insertTab }]),
-			EditorView.theme({
-				'&': {
-					height: '100%',
-					width: '100%',
-					fontSize: '14px'
-				},
-				'.cm-scroller': {
-					fontFamily: 'monospace'
-				}
-			})
-		];
-	}
-
-	function handleCompile() {
-		compile(false);
-	}
-
-	function handleCompileAndRun() {
-		compile(true);
-	}
+		mlogEditor.dispatch({
+			effects: outLanguage.reconfigure(isPlainText ? [] : mlogLanguage)
+		});
+	});
 
 	function handleJumpToPosition(range: SourceRange) {
 		if (!mindcodeEditor) return;
 
-		const line = mindcodeEditor.state.doc.line(range.startLine);
-		const pos = line.from + range.startColumn - 1;
-
-		mindcodeEditor.dispatch({
-			selection: EditorSelection.single(pos),
-			scrollIntoView: true
-		});
+		jumpToRange(mindcodeEditor, range);
 	}
 
 	async function compile(run: boolean) {
@@ -145,48 +92,37 @@
 		runSteps = 0;
 		errors = [];
 		warnings = [];
-		messages = [];
+		infos = [];
 
 		try {
 			const data = await api.compileMindcode({
+				sourceId: localSource.id,
 				source,
-				target: compilerTarget,
+				target: compilerTarget.value,
 				run
 			});
 			runOutput = data.runOutput;
 			runSteps = data.runSteps;
 			errors = data.errors;
 			warnings = data.warnings;
-			messages = data.messages;
+			infos = data.infos;
+			isPlainText = data.isPlainText;
+			localSource.id = data.sourceId;
 
 			if (mlogEditor) {
 				const transaction = mlogEditor.state.update({
-					changes: { from: 0, to: mlogEditor.state.doc.length, insert: data.compiledCode || '' }
+					changes: { from: 0, to: mlogEditor.state.doc.length, insert: data.compiled }
 				});
 				mlogEditor.dispatch(transaction);
 			}
 
 			if (mindcodeEditor) {
-				const diagnostics: Diagnostic[] = [];
-				const { doc } = mindcodeEditor.state;
-				for (const err of errors) {
-					diagnostics.push({
-						from: err.range ? posToOffset(doc, err.range.startLine, err.range.startColumn) : 0,
-						to: err.range ? posToOffset(doc, err.range.endLine, err.range.endColumn) : 0,
-						message: err.message,
-						severity: 'error'
-					});
-				}
-				for (const warn of warnings) {
-					diagnostics.push({
-						from: warn.range ? posToOffset(doc, warn.range.startLine, warn.range.startColumn) : 0,
-						to: warn.range ? posToOffset(doc, warn.range.endLine, warn.range.endColumn) : 0,
-						message: warn.message,
-						severity: 'warning'
-					});
-				}
-				mindcodeEditor.dispatch(setDiagnostics(mindcodeEditor.state, diagnostics));
+				const { state } = mindcodeEditor;
+				const diagnostics = compileMessagesToDiagnostics(state.doc, errors, warnings);
+				mindcodeEditor.dispatch(setDiagnostics(state, diagnostics));
 			}
+
+			await syncUrl({ localSource, compilerTarget });
 		} catch (e) {
 			console.error(e);
 			runOutput = 'Error connecting to server.';
@@ -195,21 +131,18 @@
 		}
 	}
 
-	const targetOptions = {
-		'6': 'Target: Mindustry 6',
-		'7': 'Target: Mindustry 7',
-		'7w': 'Target: Mindustry 7 WP',
-		'8': 'Target: Mindustry 8',
-		'8w': 'Target: Mindustry 8 WP'
-	};
+	function cleanEditors() {
+		localSource.clear();
+		compilerTarget.value = '7';
+		errors = [];
+		warnings = [];
+		infos = [];
+		runOutput = '';
 
-	function posToOffset(doc: Text, line: number, column: number): number {
-		const lineInfo = doc.line(line);
-		return lineInfo.from + column - 1;
-	}
-
-	function selectSample(sample: Sample) {
-		updateEditor(mindcodeEditor, sample.source);
+		const url = new URL(page.url);
+		localSource.updateParams(url.searchParams);
+		compilerTarget.updateParams(url.searchParams);
+		goto(url, { replaceState: true, noScroll: true, keepFocus: true });
 	}
 </script>
 
@@ -223,7 +156,7 @@
 					variant="ghost"
 					size="sm"
 					class="h-auto px-2 py-1 text-primary underline"
-					onclick={() => selectSample(sample)}>{sample.name}</Button
+					onclick={() => localSource.selectSample(sample)}>{sample.title}</Button
 				>
 			{/each}
 		</Card.Content>
@@ -250,55 +183,19 @@
 	</div>
 
 	<!-- Controls & Output -->
-	<div class="grid max-h-[40vh] shrink-0 grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">
+	<div class="grid shrink-0 grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-wrap items-center gap-2">
 				<div class="w-55">
-					<Select.Root type="single" bind:value={compilerTarget}>
-						<Select.Trigger>
-							{targetOptions[compilerTarget as keyof typeof targetOptions] || 'Select Target'}
-						</Select.Trigger>
-						<Select.Content>
-							{#each Object.entries(targetOptions) as [key, label]}
-								<Select.Item value={key}>{label}</Select.Item>
-							{/each}
-						</Select.Content>
-					</Select.Root>
+					<TargetPicker {compilerTarget} />
 				</div>
 
-				<Button onclick={handleCompile} disabled={loading}>Compile</Button>
-				<Button onclick={handleCompileAndRun} disabled={loading}>Compile and Run</Button>
-				<Button variant="outline" href="/?s=clean">Start with a new script</Button>
+				<Button onclick={() => compile(false)} disabled={loading}>Compile</Button>
+				<Button onclick={() => compile(true)} disabled={loading}>Compile and Run</Button>
+				<Button variant="outline" onclick={cleanEditors}>Start with a new script</Button>
 			</div>
 
-			<div class="flex flex-wrap gap-2 text-xs text-muted-foreground">
-				<a
-					href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SYNTAX.markdown"
-					class="underline hover:text-primary">Mindcode syntax</a
-				>
-				|
-				<a
-					href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SYSTEM-LIBRARY.markdown"
-					class="underline hover:text-primary">System library</a
-				>
-				|
-				<a
-					href="https://github.com/cardillan/mindcode/blob/main/README.markdown"
-					class="underline hover:text-primary">Readme</a
-				>
-				|
-				<a
-					href="https://github.com/cardillan/mindcode/blob/main/CHANGELOG.markdown"
-					class="underline hover:text-primary">Changelog</a
-				>
-			</div>
-
-			<div class="text-xs text-muted-foreground">
-				Bug reports, suggestions and questions are welcome at the <a
-					class="underline hover:text-primary"
-					href="https://github.com/cardillan/mindcode">project page</a
-				>.
-			</div>
+			<ProjectLinks />
 		</div>
 
 		<div class="flex flex-col gap-2">
@@ -310,7 +207,7 @@
 			<CompilerMessages
 				{errors}
 				{warnings}
-				{messages}
+				{infos}
 				title="Compiler messages:"
 				onJumpToPosition={handleJumpToPosition}
 			/>
