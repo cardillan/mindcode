@@ -107,25 +107,25 @@ public class MlogWatcherClientImpl extends MlogWatcherClientBase {
     }
 
     @Override
-    public void updateAllProcessorsOnMap(String mlog, String textId, String versionSelection) {
+    public void updateProcessorsOnMap(String mlog, String textId, String versionSelection) {
         ProgramId programId = ProgramId.parse(textId);
 
-        UpgradeAllProcessorsOnMapParams params = new UpgradeAllProcessorsOnMapParams();
+        UpdateProcessorsOnMapParams params = new UpdateProcessorsOnMapParams();
         params.setCode(mlog);
         params.setProgramId(programId);
         params.setVariableName(LogicVariable.PROGRAM_ID_NAME);
         params.setVersionSelection(versionSelection);
 
         Request request = new Request();
-        request.setMethod(Request.UPGRADE_ALL_PROCESSORS_ON_MAP);
+        request.setMethod(Request.UPDATE_PROCESSORS_ON_MAP);
         request.setMethodVersion(1);
         request.setInvocationId(0);
         request.setParams(params);
 
         String verb = switch (versionSelection) {
-            case UpgradeAllProcessorsOnMapParams.VERSION_SELECTION_EXACT -> "update";
-            case UpgradeAllProcessorsOnMapParams.VERSION_SELECTION_COMPATIBLE -> "upgrade";
-            case UpgradeAllProcessorsOnMapParams.VERSION_SELECTION_ANY -> "force update";
+            case UpdateProcessorsOnMapParams.VERSION_SELECTION_EXACT -> "update";
+            case UpdateProcessorsOnMapParams.VERSION_SELECTION_COMPATIBLE -> "upgrade";
+            case UpdateProcessorsOnMapParams.VERSION_SELECTION_ANY -> "force update";
             default -> throw new IllegalArgumentException("Invalid version selection: " + versionSelection);
         };
 

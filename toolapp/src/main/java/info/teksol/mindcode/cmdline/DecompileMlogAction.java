@@ -4,9 +4,10 @@ import info.teksol.mc.common.PositionFormatter;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.EmulatorMessageEmitter;
 import info.teksol.mc.emulator.EmulatorSchematic;
-import info.teksol.mc.emulator.blocks.*;
-import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
+import info.teksol.mc.emulator.blocks.BlockPosition;
+import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.mimex.BasicEmulator;
+import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.mindcode.compiler.generation.variables.StandardNameCreator;
 import info.teksol.mc.mindcode.decompiler.MlogDecompiler;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -15,6 +16,8 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionCategory;
+import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherClient;
+import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherCommand;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
@@ -26,7 +29,6 @@ import org.jspecify.annotations.NullMarked;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 @NullMarked
 public class DecompileMlogAction extends ActionHandler {
@@ -36,18 +38,25 @@ public class DecompileMlogAction extends ActionHandler {
         Map<Enum<?>, CompilerOptionValue<?>> options = defaults.getOptions();
 
         Subparser subparser = subparsers.addParser(ToolAppAction.DECOMPILE_MLOG.getShortcut())
-                .aliases("decompile-mlog")
-                .description("Partially decompile a text mlog file into Mindcode source file.")
-                .help("Decompile a text mlog file into Mindcode source, leaving jumps and unknown instructions unresolved.");
+                .aliases("decompile-mlog", "process-mlog")
+                .description("Load mlog code from a file or an in-game processor for further processing (partially decompiling " +
+                        "into a Mindcode source, running on the internal emulator or sending to an in-game processor).")
+                .help("Load and process mlog code from a file or an in-game processor.");
 
         ArgumentGroup files = subparser.addArgumentGroup("Input/output");
 
         files.addArgument("input")
-                .help("Mlog text file to be decompiled into Mindcode source file.")
+                .help("Mlog text file to be decompiled into Mindcode source file. When -w extract is used, the input file must not be specified.")
+                .nargs("?")
                 .type(inputFileType);
 
-        files.addArgument("-o", "--output")
-                .help("Output file to receive decompiled Mindcode (doesn't produce an output when not specified).")
+        files.addArgument("--output-mlog")
+                .help("output file to receive decompiled Mindcode (doesn't produce an output when not specified).")
+                .nargs("?")
+                .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
+
+        files.addArgument("--output-decompiled")
+                .help("output file to receive decompiled Mindcode (doesn't produce an output when not specified).")
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
 
@@ -65,19 +74,61 @@ public class DecompileMlogAction extends ActionHandler {
     @Override
     void handle(Namespace arguments) {
         CompilerProfile profile = createCompilerProfile(false, arguments);
+
+        final PositionFormatter positionFormatter = sp -> sp.formatForIde(profile.getFileReferences());
+        ConsoleMessageLogger messageLogger = ConsoleMessageLogger.create(positionFormatter, false, true);
+        EmulatorMessageEmitter emulatorMessages = new EmulatorMessageEmitter(messageLogger);
+        ToolMessageEmitter toolMessages = new ToolMessageEmitter(messageLogger);
+
+        final MlogWatcherCommand command = arguments.get("watcher");
         final File inputFile = arguments.get("input");
         final File outputDirectory = arguments.get("output-directory");
-        String mlog = readInput(inputFile);
+
+        if (inputFile == null && command != MlogWatcherCommand.EXTRACT) {
+            toolMessages.error("No input file or Mlog Watcher source specified.");
+            return;
+        } else if (inputFile != null && command == MlogWatcherCommand.EXTRACT) {
+            toolMessages.error("Both an input file and an Mlog Watcher source specified.");
+            return;
+        }
+
+        MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages, profile.isPrintStackTrace());
+
+        String mlog;
+        if (command == MlogWatcherCommand.EXTRACT) {
+            // Couldn't connect, error already reported
+            if (mlogWatcherClient == null) return;
+            mlog = mlogWatcherClient.extractSelectedProcessorCode();
+
+            // Couldn't load, error already reported
+            if (mlog == null) return;
+        } else {
+            mlog = readInput(inputFile);
+        }
 
         if (profile.isRun()) {
             run(profile, mlog);
         }
 
-        final File outputFile = arguments.get("output");
-        if (outputFile != null) {
-            final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".dmnd");
+        final File outputMlog = arguments.get("output_mlog");
+        if (outputMlog != null) {
+            final File output = resolveOutputFile(inputFile, outputDirectory, outputMlog, ".mlog", "mlog-watcher");
+            writeOutput(output, mlog);
+        }
+
+        final File outputDecompiled = arguments.get("output_decompiled");
+        if (outputDecompiled != null) {
+            final File output = resolveOutputFile(inputFile, outputDirectory, outputDecompiled, ".dmnd", "mlog-watcher");
             String decompiled = MlogDecompiler.decompile(mlog);
             writeOutput(output, decompiled);
+        }
+
+        if (mlogWatcherClient != null) {
+            if (command == MlogWatcherCommand.UPDATE) {
+                mlogWatcherClient.updateSelectedProcessor(mlog);
+            }
+
+            mlogWatcherClient.close();
         }
     }
 
@@ -92,25 +143,12 @@ public class DecompileMlogAction extends ActionHandler {
 
         LogicBlock logicBlock = LogicBlock.createProcessor(metadata, profile.getEmulatorTarget().type(),
                 BlockPosition.ZERO_POSITION, mlog);
-        initializeLogicBlock(metadata, logicBlock);
+        logicBlock.createDefaultBlocks(metadata);
+
         EmulatorSchematic schematic = new EmulatorSchematic(List.of(logicBlock));
         Emulator emulator = new BasicEmulator(messageConsumer, profile, schematic);
 
         emulator.run(profile.getStepLimit());
         processEmulatorResults(emulatorMessages, emulator, profile.isOutputProfiling());
-    }
-
-    private void initializeLogicBlock(MindustryMetadata metadata, LogicBlock logicBlock) {
-        // All flags are already set as we want them to be
-        addBlocks(logicBlock, "cell", _ -> MemoryBlock.createMemoryCell(metadata, BlockPosition.ZERO_POSITION));
-        addBlocks(logicBlock, "bank", _ -> MemoryBlock.createMemoryBank(metadata, BlockPosition.ZERO_POSITION));
-        addBlocks(logicBlock, "display", i -> LogicDisplay.createLogicDisplay(metadata, i < 5, BlockPosition.ZERO_POSITION));
-        addBlocks(logicBlock, "message", _ -> MessageBlock.createMessage(metadata, BlockPosition.ZERO_POSITION));
-    }
-
-    private void addBlocks(LogicBlock logicBlock, String name, Function<Integer, MindustryBuilding> creator) {
-        for (int i = 1; i < 10; i++) {
-            logicBlock.addBlock(name + i, creator.apply(i));
-        }
     }
 }

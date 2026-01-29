@@ -8,8 +8,9 @@ import info.teksol.mc.emulator.Assertion;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.EmulatorMessage;
 import info.teksol.mc.emulator.EmulatorSchematic;
-import info.teksol.mc.emulator.blocks.*;
-import info.teksol.mc.emulator.blocks.graphics.LogicDisplay;
+import info.teksol.mc.emulator.blocks.BlockPosition;
+import info.teksol.mc.emulator.blocks.LogicBlock;
+import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.generated.ast.AstIndentedPrinter;
 import info.teksol.mc.messages.*;
@@ -412,23 +413,13 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         }
     }
 
-    private void initializeLogicBlock(LogicBlock logicBlock) {
-        assert metadata != null;
-
-        // All flags are already set as we want them to be
-        addBlocks(logicBlock, "cell", _ -> MemoryBlock.createMemoryCell(metadata, BlockPosition.ZERO_POSITION));
-        addBlocks(logicBlock, "bank", _ -> MemoryBlock.createMemoryBank(metadata, BlockPosition.ZERO_POSITION));
-        addBlocks(logicBlock, "display", i -> LogicDisplay.createLogicDisplay(metadata, i < 5, BlockPosition.ZERO_POSITION));
-        addBlocks(logicBlock, "message", _ -> MessageBlock.createMessage(metadata, BlockPosition.ZERO_POSITION));
-
-        logicBlockInitializer.accept(logicBlock);
-    }
-
     private void run() {
         assert metadata != null;
         LogicBlock logicBlock = LogicBlock.createProcessor(metadata, compilerProfile().getEmulatorTarget().type(),
                 BlockPosition.ZERO_POSITION, output);
-        initializeLogicBlock(logicBlock);
+        logicBlock.createDefaultBlocks(metadata);
+        logicBlockInitializer.accept(logicBlock);
+
         EmulatorSchematic schematic = new EmulatorSchematic(List.of(logicBlock));
         emulator = new BasicEmulator(messageConsumer, globalProfile, schematic);
 

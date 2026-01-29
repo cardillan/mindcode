@@ -111,8 +111,9 @@ abstract class ActionHandler {
                         force-update-all send it to processors matching program ID (regardless of the version)""";
 
             case DECOMPILE_MLOG -> """
-                    use Mlog Watcher to obtain the mlog code to process (default: selected).
-                        selected    load the code from the selected processor in the game""";
+                    use Mlog Watcher to obtain or send the mlog code from/to the game (default: update).
+                        extract          load code from the selected processor in the game
+                        update           send code loaded from a file to the selected processor""";
 
             case COMPILE_SCHEMA -> """
                     invoke an specific Mlog Watcher operation on the created schematic (default: update)
@@ -241,14 +242,21 @@ abstract class ActionHandler {
         return file != null && file.getPath().equals("-");
     }
 
-    static File resolveOutputFile(File inputFile, @Nullable File outputDirectory, @Nullable File outputFile, String extension) {
+    static File resolveOutputFile(File inputFile, @Nullable File outputDirectory, @Nullable File outputFile,
+            String extension) {
+        return resolveOutputFile(inputFile, outputDirectory, outputFile, extension, "");
+    }
+
+    static File resolveOutputFile(@Nullable File inputFile, @Nullable File outputDirectory, @Nullable File outputFile,
+            String extension, String defaultFileName) {
         if (outputFile == null) {
             if (isStdInOut(inputFile)) {
                 return inputFile;
             } else {
-                String name = inputFile.getName();
+                String name = inputFile == null ? defaultFileName : inputFile.getName();
                 int inputExt = name.lastIndexOf('.');
-                File outputDir = outputDirectory != null ? outputDirectory : inputFile.getParentFile();
+                File outputDir = outputDirectory != null ? outputDirectory :
+                        inputFile != null ? inputFile.getParentFile() : null;
                 String fileName = (inputExt < 0 ? name : name.substring(0, inputExt)) + extension;
                 return new File(outputDir, fileName);
             }

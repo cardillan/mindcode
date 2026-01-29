@@ -78,8 +78,8 @@ Actions:
   ACTION                 Type of processing
     cm (compile-mindcode)
                          Compile a Mindcode source file into text mlog file.
-    dm (decompile-mlog)  Decompile a text  mlog  file  into  Mindcode  source,  leaving  jumps  and unknown instructions
-                         unresolved.
+    dm (decompile-mlog,process-mlog)
+                         Load and process mlog code from a file or an in-game processor.
     cs (compile-schema,compile-schematic)
                          Compile a schematic definition file into binary msch file.
     ds (decompile-schema,decompile-schematic)
@@ -157,11 +157,11 @@ Input/output files:
                          excerpt are ignored. The excerpt needs  to be specified as 'line:column-line:column' (':column'
                          may be omitted if it is equal to 1),  giving two positions inside the main input file separated
                          by a dash. The start position must precede the end position.
-  -o, --output [OUTPUT]  Output file to receive compiled  mlog  code;  uses  input  file  with  .mlog extension when not
+  -o, --output [OUTPUT]  output file to receive compiled  mlog  code;  uses  input  file  with  .mlog extension when not
                          specified, or stdout when input is stdin. Use "-" to force stdout output.
   --output-directory OUTPUT-DIRECTORY
                          specifies the directory where the output files will be placed
-  -l, --log [LOG]        Output file to receive compiler messages; uses input  file  with .log extension when no file is
+  -l, --log [LOG]        output file to receive compiler messages; uses input  file  with .log extension when no file is
                          specified.
   --file-references {path,uri,windows-uri}
                          specifies the format in which a reference to a  location  in a source file is output on console
@@ -422,7 +422,8 @@ Emulator options:
 ## Decompile Mlog action help
 
 ```
-usage: mindcode dm [-h] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] [-w [{load-mlog}]]
+usage: mindcode dm [-h] [--output-mlog [OUTPUT_MLOG]] [--output-decompiled [OUTPUT_DECOMPILED]]
+                [--output-directory OUTPUT-DIRECTORY] [-w [{update,update-all,upgrade-all,force-update-all,extract}]]
                 [--watcher-version {v0,v1}] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
@@ -437,21 +438,27 @@ usage: mindcode dm [-h] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] [-w 
                 [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
                 [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
                 [--err-invalid-format {true,false}] [--err-graphics-buffer-overflow {true,false}]
-                [--err-runtime-check-failed {true,false}] input
+                [--err-runtime-check-failed {true,false}] [input]
 
-Partially decompile a text mlog file into Mindcode source file.
+Load mlog code from a file  or  an  in-game  processor  for  further  processing  (partially decompiling into a Mindcode
+source, running on the internal emulator or sending to an in-game processor).
 
 named arguments:
   -h, --help             show this help message and exit
 
 Input/output:
-  input                  Mlog text file to be decompiled into Mindcode source file.
-  -o, --output [OUTPUT]  Output file to receive decompiled Mindcode (doesn't produce an output when not specified).
+  input                  Mlog text file to be decompiled into Mindcode  source  file. When -w extract is used, the input
+                         file must not be specified.
+  --output-mlog [OUTPUT_MLOG]
+                         output file to receive decompiled Mindcode (doesn't produce an output when not specified).
+  --output-decompiled [OUTPUT_DECOMPILED]
+                         output file to receive decompiled Mindcode (doesn't produce an output when not specified).
   --output-directory OUTPUT-DIRECTORY
                          specifies the directory where the output files will be placed
-  -w, --watcher [{load-mlog}]
-                         use Mlog Watcher to obtain the mlog code to process (default: selected).
-                             selected    load the code from the selected processor in the game
+  -w, --watcher [{update,update-all,upgrade-all,force-update-all,extract}]
+                         use Mlog Watcher to obtain or send the mlog code from/to the game (default: update).
+                             extract          load code from the selected processor in the game
+                             update           send code loaded from a file to the selected processor
   --watcher-version {v0,v1}
                          specifies the version of the Mlog Watcher mod
   --watcher-port {0..65535}
@@ -587,7 +594,7 @@ named arguments:
 
 Input/output files:
   input                  Schematic definition file to be compiled into a binary msch file.
-  -o, --output [OUTPUT]  Output file to receive the resulting binary Mindustry schematic file (.msch).
+  -o, --output [OUTPUT]  output file to receive the resulting binary Mindustry schematic file (.msch).
   --output-directory OUTPUT-DIRECTORY
                          specifies the directory where the output files will be placed
   -l, --log [LOG]        output file to receive compiler messages; uses stdout/stderr when not specified
@@ -861,7 +868,7 @@ positional arguments:
 
 named arguments:
   -h, --help             show this help message and exit
-  -o, --output [OUTPUT]  Output file to receive compiled mlog  code;  uses  input  file  name with .sdf extension if not
+  -o, --output [OUTPUT]  output file to receive compiled mlog  code;  uses  input  file  name with .sdf extension if not
                          specified.
   --output-directory OUTPUT-DIRECTORY
                          specifies the directory where the output files will be placed

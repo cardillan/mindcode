@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
-import static info.teksol.mindcode.cmdline.mlogwatcher.api.UpgradeAllProcessorsOnMapParams.*;
+import static info.teksol.mindcode.cmdline.mlogwatcher.api.UpdateProcessorsOnMapParams.*;
 
 @NullMarked
 public class CompileMindcodeAction extends ActionHandler {
@@ -61,7 +61,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 .nargs("?");
 
         files.addArgument("-o", "--output")
-                .help("Output file to receive compiled mlog code; uses input file with .mlog extension when not specified, " +
+                .help("output file to receive compiled mlog code; uses input file with .mlog extension when not specified, " +
                         "or stdout when input is stdin. Use \"-\" to force stdout output.")
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
@@ -72,7 +72,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 .type(Arguments.fileType().verifyIsDirectory());
 
         files.addArgument("-l", "--log")
-                .help("Output file to receive compiler messages; uses input file with .log extension when no file is specified.")
+                .help("output file to receive compiler messages; uses input file with .log extension when no file is specified.")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate())
                 .nargs("?");
 
@@ -175,6 +175,6 @@ public class CompileMindcodeAction extends ActionHandler {
     }
 
     private void updateAll(MlogWatcherClient mlogWatcherClient, MindcodeCompiler compiler, String versionSelection) {
-        mlogWatcherClient.updateAllProcessorsOnMap(compiler.getOutput(), compiler.getProgramId(), versionSelection);
+        mlogWatcherClient.updateProcessorsOnMap(compiler.getOutput(), compiler.getProgramId(), versionSelection);
     }
 }

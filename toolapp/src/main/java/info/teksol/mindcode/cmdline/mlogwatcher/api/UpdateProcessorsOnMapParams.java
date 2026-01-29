@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-public class UpgradeAllProcessorsOnMapParams implements Params {
+public class UpdateProcessorsOnMapParams implements Params {
     public static final String VERSION_SELECTION_EXACT = "exact";
     public static final String VERSION_SELECTION_COMPATIBLE = "compatible";
     public static final String VERSION_SELECTION_ANY = "any";

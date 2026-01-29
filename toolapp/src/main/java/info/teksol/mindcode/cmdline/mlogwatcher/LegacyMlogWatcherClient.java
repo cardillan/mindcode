@@ -34,7 +34,7 @@ public class LegacyMlogWatcherClient extends MlogWatcherClientBase implements Ml
     }
 
     @Override
-    public void updateAllProcessorsOnMap(String mlog, String programId, String versionSelection) {
+    public void updateProcessorsOnMap(String mlog, String programId, String versionSelection) {
         log.error("Updating all processors on the map is not supported by the legacy Mlog Watcher mod.");
     }
 

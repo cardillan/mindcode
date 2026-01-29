@@ -45,7 +45,7 @@ public class DecompileSchemacodeAction extends ActionHandler {
                 .type(inputFileType);
 
         subparser.addArgument("-o", "--output")
-                .help("Output file to receive compiled mlog code; uses input file name with .sdf extension if not specified.")
+                .help("output file to receive compiled mlog code; uses input file name with .sdf extension if not specified.")
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
 
