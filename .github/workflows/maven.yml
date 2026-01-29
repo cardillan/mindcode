@@ -20,6 +20,10 @@ jobs:
       with:
         java-version: 22
         distribution: temurin
+    - name: Set up Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: 22
 
     # Use preinstalled PostgreSQL
     - name: Start PostgreSQL on Ubuntu
@@ -52,6 +56,13 @@ jobs:
         # restore-keys: # optional
         # The chunk size used to split up large files during upload, in bytes
         # upload-chunk-size: # optional
+
+    - name: Install frontend dependencies
+      working-directory: webapp/frontend
+      run: npm ci
+    - name: Build frontend
+      working-directory: webapp/frontend
+      run: npm run build
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
