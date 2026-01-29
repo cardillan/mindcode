@@ -26,4 +26,4 @@ RUN mvn clean package -Dmaven.test.skip
 
 EXPOSE 8080
 
-CMD java -jar $(find webapp/target -name "mindcode-webapp-*.jar" -not -name "*.original")
+CMD java -jar webapp/target/mindcode-webapp.jar
