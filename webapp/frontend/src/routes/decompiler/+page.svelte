@@ -11,6 +11,7 @@
 	import { EditorStore, getThemeContext, LocalSource, syncUrl } from '$lib/stores.svelte';
 	import { updateEditor } from '$lib/codemirror';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
+	import CopyButton from '$lib/components/CopyButton.svelte';
 
 	const theme = getThemeContext();
 	const mlogEditor = new EditorStore(theme, (parent, baseExtensions) => {
@@ -90,7 +91,7 @@
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Mlog code:</Label>
 			<div
-				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
+				class="h-[60vh] overflow-hidden rounded-md border bg-muted"
 				{@attach mlogEditor.attach}
 			></div>
 		</div>
@@ -98,10 +99,13 @@
 		<!-- Target Editor (Mindcode) -->
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Decompiled Mindcode:</Label>
-			<div
-				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				{@attach mindcodeEditor.attach}
-			></div>
+			<div class="relative">
+				<CopyButton getText={() => mindcodeEditor.view?.state.doc.toString() ?? ''} />
+				<div
+					class="h-[60vh] overflow-hidden rounded-md border bg-muted"
+					{@attach mindcodeEditor.attach}
+				></div>
+			</div>
 		</div>
 	</div>
 
