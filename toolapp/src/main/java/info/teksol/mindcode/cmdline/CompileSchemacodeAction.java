@@ -128,14 +128,9 @@ public class CompileSchemacodeAction extends ActionHandler {
             if (mlogWatcherClient != null) {
                 try {
                     switch (arguments.get("watcher")) {
-                        case MlogWatcherCommand.UPDATE ->
-                                mlogWatcherClient.updateSchematic( encoded, true);
-
-                        case MlogWatcherCommand.ADD ->
-                                mlogWatcherClient.updateSchematic( encoded, false);
-
-                        default ->
-                                throw new IllegalArgumentException("Invalid value for --watcher: " + arguments.get("watcher"));
+                        case MlogWatcherCommand.UPDATE -> mlogWatcherClient.updateSchematic( encoded, true);
+                        case MlogWatcherCommand.ADD -> mlogWatcherClient.updateSchematic( encoded, false);
+                        default -> throw new IllegalArgumentException("Invalid value for --watcher: " + arguments.get("watcher"));
                     }
                 } finally {
                     mlogWatcherClient.close();

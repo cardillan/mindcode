@@ -161,8 +161,8 @@ Input/output files:
                          specified, or stdout when input is stdin. Use "-" to force stdout output.
   --output-directory OUTPUT-DIRECTORY
                          specifies the directory where the output files will be placed
-  -l, --log [LOG]        output file to receive compiler messages; uses input  file  with .log extension when no file is
-                         specified.
+  -l, --log [LOG]        output file to receive additional procesing messages;  uses input file with .log extension when
+                         no file is specified.
   --file-references {path,uri,windows-uri}
                          specifies the format in which a reference to a  location  in a source file is output on console
                          and into the log
@@ -357,9 +357,10 @@ Debugging options:
   -s, --stacktrace       outputs a stack trace onto stderr when an unhandled exception occurs
 
 Emulator options:
-  Options to specify whether and how to run the compiled  code  on an emulated processor. The emulated processor is much
-  faster than Mindustry processors, but can't run instructions  which  obtain information from the Mindustry World. Sole
-  exceptions are memory cells ('cell1' to 'cell9') and memory banks ('bank1' to 'bank9'), which can be read and written.
+  Options to specify whether and how to run the code  or schematic in an emulated environment. The emulated processor is
+  much faster than Mindustry processors, but can't run  instructions  which obtain information from the Mindustry World.
+  Memory cells/banks and other processors can be read from or written  to if part of the schematic or, when running just
+  the code, the default processor configuration provided by Mindcode.
 
   --emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
                          selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
@@ -450,15 +451,15 @@ Input/output:
   input                  Mlog text file to be decompiled into Mindcode  source  file. When -w extract is used, the input
                          file must not be specified.
   --output-mlog [OUTPUT_MLOG]
-                         output file to receive decompiled Mindcode (doesn't produce an output when not specified).
+                         output file to receive the mlog file extracted from the processor selected in the game
   --output-decompiled [OUTPUT_DECOMPILED]
                          output file to receive decompiled Mindcode (doesn't produce an output when not specified).
   --output-directory OUTPUT-DIRECTORY
                          specifies the directory where the output files will be placed
   -w, --watcher [{update,update-all,upgrade-all,force-update-all,extract}]
                          use Mlog Watcher to obtain or send the mlog code from/to the game (default: update).
-                             extract          load code from the selected processor in the game
-                             update           send code loaded from a file to the selected processor
+                             extract     load code from the selected processor in the game
+                             update      send code loaded from a file to the selected processor
   --watcher-version {v0,v1}
                          specifies the version of the Mlog Watcher mod
   --watcher-port {0..65535}
@@ -467,9 +468,10 @@ Input/output:
                          timeout in milliseconds when trying to establish a connection to Mlog Watcher
 
 Emulator options:
-  Options to specify whether and how to run the compiled  code  on an emulated processor. The emulated processor is much
-  faster than Mindustry processors, but can't run instructions  which  obtain information from the Mindustry World. Sole
-  exceptions are memory cells ('cell1' to 'cell9') and memory banks ('bank1' to 'bank9'), which can be read and written.
+  Options to specify whether and how to run the code  or schematic in an emulated environment. The emulated processor is
+  much faster than Mindustry processors, but can't run  instructions  which obtain information from the Mindustry World.
+  Memory cells/banks and other processors can be read from or written  to if part of the schematic or, when running just
+  the code, the default processor configuration provided by Mindcode.
 
   --emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
                          selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
@@ -583,8 +585,8 @@ named arguments:
   -c, --clipboard        encode the created schematic into text representation and paste into clipboard
   -w, --watcher [{update,add}]
                          invoke an specific Mlog Watcher operation on the created schematic (default: update)
-                             update  update the schematic with the same name in the schematics library
-                             add     add a new copy of the schematic to the schematics library
+                             update      update the schematic with the same name in the schematics library
+                             add         add a new copy of the schematic to the schematics library
   --watcher-version {v0,v1}
                          specifies the version of the Mlog Watcher mod
   --watcher-port {0..65535}
@@ -793,9 +795,10 @@ Debugging options:
   -s, --stacktrace       outputs a stack trace onto stderr when an unhandled exception occurs
 
 Emulator options:
-  Options to specify whether and how to run the compiled  code  on an emulated processor. The emulated processor is much
-  faster than Mindustry processors, but can't run instructions  which  obtain information from the Mindustry World. Sole
-  exceptions are memory cells ('cell1' to 'cell9') and memory banks ('bank1' to 'bank9'), which can be read and written.
+  Options to specify whether and how to run the code  or schematic in an emulated environment. The emulated processor is
+  much faster than Mindustry processors, but can't run  instructions  which obtain information from the Mindustry World.
+  Memory cells/banks and other processors can be read from or written  to if part of the schematic or, when running just
+  the code, the default processor configuration provided by Mindcode.
 
   --emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
                          selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
@@ -858,20 +861,51 @@ Emulator options:
 ## Decompile Schematic action help
 
 ```
-usage: mindcode ds [-h] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] [-p] [-P] [-c] [-C] [-l] [-L]
-                [-s {original,horizontal,vertical}] [-d {rotatable,non-default,all}] input
+usage: mindcode ds [-h] [--output-msch [OUTPUT_MSCH]] [--output-decompiled [OUTPUT_DECOMPILED]]
+                [--output-directory OUTPUT-DIRECTORY] [-w [{update,extract,add}]] [--watcher-version {v0,v1}]
+                [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [-p] [-P] [-c] [-C] [-l] [-L]
+                [-s {original,horizontal,vertical}] [-d {rotatable,non-default,all}]
+                [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
+                [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
+                [--output-profiling [{true,false}]] [--trace-execution {true,false}]
+                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
+                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
+                [--err-parse-error {true,false}] [--err-invalid-counter {true,false}]
+                [--err-unsupported-opcode {true,false}] [--err-nonexistent-var {true,false}]
+                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
+                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--err-invalid-character {true,false}] [--err-invalid-lookup {true,false}]
+                [--err-invalid-link {true,false}] [--err-memory-access {true,false}] [--err-memory-object {true,false}]
+                [--err-unsupported-block-operation {true,false}] [--err-text-buffer-overflow {true,false}]
+                [--err-invalid-format {true,false}] [--err-graphics-buffer-overflow {true,false}]
+                [--err-runtime-check-failed {true,false}] [input]
 
 Decompile a binary msch file into schematic definition file.
 
-positional arguments:
-  input                  Mindustry schematic file to be decompiled into Schematic Definition File.
-
 named arguments:
   -h, --help             show this help message and exit
-  -o, --output [OUTPUT]  output file to receive compiled mlog  code;  uses  input  file  name with .sdf extension if not
-                         specified.
+
+Input/output:
+  input                  Mindustry schematic file to be decompiled into Schematic Definition File.
+  --output-msch [OUTPUT_MSCH]
+                         output file to receive the schematics extracted from the game in binary format
+  --output-decompiled [OUTPUT_DECOMPILED]
+                         output file to receive a decompiled schematic definition file.
   --output-directory OUTPUT-DIRECTORY
                          specifies the directory where the output files will be placed
+  -w, --watcher [{update,extract,add}]
+                         use Mlog Watcher to obtain or send the schematic from/to the game (default: update).
+                             extract     load schematic from the schematic shown on the info screen in-game
+                             update      update the schematic with the same name in the schematics library
+                             add         add a new copy of the schematic to the schematics library
+  --watcher-version {v0,v1}
+                         specifies the version of the Mlog Watcher mod
+  --watcher-port {0..65535}
+                         port number for communication with Mlog Watcher
+  --watcher-timeout {0..3600000}
+                         timeout in milliseconds when trying to establish a connection to Mlog Watcher
+
+Decompilation options:
   -p, --relative-positions
                          use relative coordinates for block positions where possible
   -P, --absolute-positions
@@ -887,6 +921,69 @@ named arguments:
   -d, --direction {rotatable,non-default,all}
                          specifies when to include direction clause  in  decompiled  schematic definition file: only for
                          blocks affected by rotation, only for block with non-default direction, or for all blocks
+
+Emulator options:
+  Options to specify whether and how to run the code  or schematic in an emulated environment. The emulated processor is
+  much faster than Mindustry processors, but can't run  instructions  which obtain information from the Mindustry World.
+  Memory cells/banks and other processors can be read from or written  to if part of the schematic or, when running just
+  the code, the default processor configuration provided by Mindcode.
+
+  --emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
+                         selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)
+  --emulator-fps {1.0..240.0}
+                         the fps used by the emulator
+  --run [{true,false}]   run the compiled code on an emulated processor
+  --run-steps {0..1000000000}
+                         the maximum number of instruction executions  to  emulate,  the execution stops when this limit
+                         is reached
+  --output-profiling [{true,false}]
+                         output the profiling data into the log file
+  --trace-execution {true,false}
+                         output instruction and variable states at each execution step
+  --dump-variables-on-stop {true,false}
+                         output variable values when the 'stop' instruction is encountered
+  --stop-on-stop-instruction {true,false}
+                         stop execution when the 'stop' instruction is encountered
+  --stop-on-end-instruction {true,false}
+                         stop execution when the 'end' instruction is encountered
+  --stop-on-program-end {true,false}
+                         stop execution when the end of instruction list is reached
+  --err-parse-error {true,false}
+                         stop execution when an error or invalid instruction is encountered during parsing
+  --err-invalid-counter {true,false}
+                         stop execution when an invalid value is written to '@counter'
+  --err-unsupported-opcode {true,false}
+                         stop execution when an instruction unsupported by the emulator is encountered
+  --err-nonexistent-var {true,false}
+                         stop execution when a nonexistent variable is being indirectly accessed
+  --err-assignment-to-fixed-var {true,false}
+                         stop execution on attempts to write a value to an unmodifiable built-in variable
+  --err-not-an-object {true,false}
+                         stop execution when a numeric value is used instead of an object
+  --err-not-a-number {true,false}
+                         stop execution when an object is used instead of a numeric value (nulls are always permitted)
+  --err-unknown-color {true,false}
+                         stop execution when an unknown color is used in a named color literal
+  --err-invalid-character {true,false}
+                         stop execution when an invalid numeric value is used in the 'printchar' instruction
+  --err-invalid-lookup {true,false}
+                         stop execution when an invalid index is used in the 'lookup' instruction
+  --err-invalid-link {true,false}
+                         stop execution when an invalid index is used in the 'getlink' instruction
+  --err-memory-access {true,false}
+                         stop execution when accessing invalid memory-cell or memory-bank index
+  --err-memory-object {true,false}
+                         stop execution when attempting to store an object in external memory
+  --err-unsupported-block-operation {true,false}
+                         stop execution when performing an unsupported operation on a block
+  --err-text-buffer-overflow {true,false}
+                         stop execution when the text buffer size (400 characters) is exceeded
+  --err-invalid-format {true,false}
+                         stop execution when no placeholder for the 'format' instruction exists in the buffer
+  --err-graphics-buffer-overflow {true,false}
+                         stop execution when the graphics buffer size (256 operations) is exceeded
+  --err-runtime-check-failed {true,false}
+                         stop execution when a compiler-generated runtime check fails.
 ```
 
 ---

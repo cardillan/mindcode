@@ -112,15 +112,19 @@ abstract class ActionHandler {
 
             case DECOMPILE_MLOG -> """
                     use Mlog Watcher to obtain or send the mlog code from/to the game (default: update).
-                        extract          load code from the selected processor in the game
-                        update           send code loaded from a file to the selected processor""";
+                        extract     load code from the selected processor in the game
+                        update      send code loaded from a file to the selected processor""";
 
             case COMPILE_SCHEMA -> """
                     invoke an specific Mlog Watcher operation on the created schematic (default: update)
-                        update  update the schematic with the same name in the schematics library
-                        add     add a new copy of the schematic to the schematics library""";
+                        update      update the schematic with the same name in the schematics library
+                        add         add a new copy of the schematic to the schematics library""";
 
-            default -> throw new IllegalArgumentException("Unsupported action for Mlog Watcher options: " + action);
+            case DECOMPILE_SCHEMA -> """
+                    use Mlog Watcher to obtain or send the schematic from/to the game (default: update).
+                        extract     load schematic from the schematic shown on the info screen in-game
+                        update      update the schematic with the same name in the schematics library
+                        add         add a new copy of the schematic to the schematics library""";
         };
 
         container.addArgument("-w", "--watcher")

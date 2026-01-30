@@ -1089,10 +1089,10 @@ The number of variables being sorted is limited by the [instruction limit](#opti
 
 ## Emulator options
 
-Options to specify whether and how to run the compiled code on an emulated processor. The emulated
+Options to specify whether and how to run the code or schematic in an emulated environment. The emulated
 processor is much faster than Mindustry processors, but can't run instructions which obtain information
-from the Mindustry World. Sole exceptions are memory cells ('cell1' to 'cell9') and memory banks
-('bank1' to 'bank9'), which can be read and written.
+from the Mindustry World. Memory cells/banks and other processors can be read from or written to if part
+of the schematic or, when running just the code, the default processor configuration provided by Mindcode.
 
 | Option                                       | Scope  | Semantic stability |
 |----------------------------------------------|--------|--------------------|

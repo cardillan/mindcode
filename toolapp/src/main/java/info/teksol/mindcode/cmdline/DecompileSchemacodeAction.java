@@ -1,6 +1,17 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.mc.common.PositionFormatter;
+import info.teksol.mc.emulator.Emulator;
+import info.teksol.mc.emulator.EmulatorMessageEmitter;
+import info.teksol.mc.emulator.EmulatorSchematic;
+import info.teksol.mc.emulator.mimex.BasicEmulator;
+import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.options.CompilerOptionValue;
+import info.teksol.mc.profile.options.OptionCategory;
+import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherClient;
+import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherCommand;
+import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.mindustry.SchematicsIO;
 import info.teksol.schemacode.schematics.BlockOrder;
 import info.teksol.schemacode.schematics.Decompiler;
@@ -16,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 @NullMarked
@@ -34,62 +46,76 @@ public class DecompileSchemacodeAction extends ActionHandler {
     }
 
     @Override
-    Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile profile) {
+    Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
+        Map<Enum<?>, CompilerOptionValue<?>> options = defaults.getOptions();
+
         Subparser subparser = subparsers.addParser(ToolAppAction.DECOMPILE_SCHEMA.getShortcut())
                 .aliases("decompile-schema", "decompile-schematic")
                 .description("Decompile a binary msch file into schematic definition file.")
                 .help("Decompile a binary msch file into schematic definition file.");
 
-        subparser.addArgument("input")
+        ArgumentGroup files = subparser.addArgumentGroup("Input/output");
+
+        files.addArgument("input")
                 .help("Mindustry schematic file to be decompiled into Schematic Definition File.")
+                .nargs("?")
                 .type(inputFileType);
 
-        subparser.addArgument("-o", "--output")
-                .help("output file to receive compiled mlog code; uses input file name with .sdf extension if not specified.")
+        files.addArgument("--output-msch")
+                .help("output file to receive the schematics extracted from the game in binary format")
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
 
-        subparser.addArgument("--output-directory")
+        files.addArgument("--output-decompiled")
+                .help("output file to receive a decompiled schematic definition file.")
+                .nargs("?")
+                .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
+
+        files.addArgument("--output-directory")
                 .dest("output-directory")
                 .help("specifies the directory where the output files will be placed")
                 .type(Arguments.fileType().verifyIsDirectory());
 
-        createArgument(subparser, "positions",
+        addMlogWatcherOptions(files, ToolAppAction.DECOMPILE_SCHEMA);
+
+        ArgumentGroup decompilation = subparser.addArgumentGroup("Decompilation options");
+
+        createArgument(decompilation, "positions",
                 (decompiler, arguments, name) -> decompiler.setRelativePositions(arguments.getBoolean(name)),
                 "-p", "--relative-positions")
                 .help("use relative coordinates for block positions where possible")
                 .action(Arguments.storeTrue())
                 .setDefault(false);
 
-        createArgument(subparser, "positions",
+        createArgument(decompilation, "positions",
                 (decompiler, arguments, name) -> decompiler.setRelativePositions(arguments.getBoolean(name)),
                 "-P", "--absolute-positions")
                 .help("use absolute coordinates for block positions")
                 .action(Arguments.storeFalse())
                 .setDefault(false);
 
-        createArgument(subparser, "connections",
+        createArgument(decompilation, "connections",
                 (decompiler, arguments, name) -> decompiler.setRelativeConnections(arguments.getBoolean(name)),
                 "-c", "--relative-connections")
                 .help("use relative coordinates for connections")
                 .action(Arguments.storeTrue())
                 .setDefault(true);
 
-        createArgument(subparser, "connections",
+        createArgument(decompilation, "connections",
                 (decompiler, arguments, name) -> decompiler.setRelativeConnections(arguments.getBoolean(name)),
                 "-C", "--absolute-connections")
                 .help("use absolute coordinates for connections")
                 .action(Arguments.storeFalse())
                 .setDefault(true);
 
-        createArgument(subparser, "links",
+        createArgument(decompilation, "links",
                 (decompiler, arguments, name) -> decompiler.setRelativeLinks(arguments.getBoolean(name)),
                 "-l", "--relative-links")
                 .help("use relative coordinates for processor links")
                 .action(Arguments.storeTrue())
                 .setDefault(false);
 
-        createArgument(subparser, "links",
+        createArgument(decompilation, "links",
                 (decompiler, arguments, name) -> decompiler.setRelativeLinks(arguments.getBoolean(name)),
                 "-L", "--absolute-links")
                 .help("use absolute coordinates for processor links")
@@ -97,14 +123,14 @@ public class DecompileSchemacodeAction extends ActionHandler {
                 .action(Arguments.storeFalse())
                 .setDefault(false);
 
-        createArgument(subparser, "sort-order",
+        createArgument(decompilation, "sort-order",
                 (decompiler, arguments, name) -> decompiler.setBlockOrder(arguments.get(name)),
                 "-s", "--sort-order")
                 .help("specifies how to order blocks in the decompiled schematic definition file")
                 .type(LowerCaseEnumArgumentType.forEnum(BlockOrder.class))
                 .setDefault(BlockOrder.ORIGINAL);
 
-        createArgument(subparser, "direction",
+        createArgument(decompilation, "direction",
                 (decompiler, arguments, name) -> decompiler.setDirectionLevel(arguments.get(name)),
                 "-d", "--direction")
                 .help("specifies when to include direction clause in decompiled schematic definition file: " +
@@ -112,6 +138,8 @@ public class DecompileSchemacodeAction extends ActionHandler {
                         "or for all blocks")
                 .type(LowerCaseEnumArgumentType.forEnum(DirectionLevel.class))
                 .setDefault(DirectionLevel.ROTATABLE);
+
+        addAllCompilerOptions(subparser, options, OptionCategory.EMULATOR);
 
         return subparser;
     }
@@ -122,20 +150,84 @@ public class DecompileSchemacodeAction extends ActionHandler {
 
     @Override
     void handle(Namespace arguments) {
+        CompilerProfile profile = createCompilerProfile(false, arguments);
+
+        final PositionFormatter positionFormatter = sp -> sp.formatForIde(profile.getFileReferences());
+        ConsoleMessageLogger messageLogger = ConsoleMessageLogger.create(positionFormatter, false, true);
+        ToolMessageEmitter toolMessages = new ToolMessageEmitter(messageLogger);
+
+        final MlogWatcherCommand command = arguments.get("watcher");
         final File inputFile = arguments.get("input");
         final File outputDirectory = arguments.get("output-directory");
-        final File outputFile = arguments.get("output");
-        final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".sdf");
 
-        try (FileInputStream fis = new FileInputStream(inputFile)) {
-            Schematic schematic = SchematicsIO.read(inputFile.getName(), fis);
-            Decompiler decompiler = new Decompiler(schematic);
-            configureDecompiler(decompiler, arguments);
-            String schemaDefinition = decompiler.buildCode();
+        if (inputFile == null && command != MlogWatcherCommand.EXTRACT) {
+            toolMessages.error("No input file or Mlog Watcher source specified.");
+            return;
+        } else if (inputFile != null && command == MlogWatcherCommand.EXTRACT) {
+            toolMessages.error("Both an input file and an Mlog Watcher source specified.");
+            return;
+        }
 
-            writeOutput(output, schemaDefinition);
-        } catch (IOException e) {
-            throw new info.teksol.mindcode.cmdline.ProcessingException(e, "Error reading file '%s': %s", inputFile.getPath(), e.getMessage());
+        MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages, profile.isPrintStackTrace());
+        try {
+            Schematic schematic;
+            if (command == MlogWatcherCommand.EXTRACT) {
+                // Couldn't connect, error already reported
+                if (mlogWatcherClient == null) return;
+                String encoded = mlogWatcherClient.extractSelectedSchematic();
+
+                // Couldn't load, error already reported
+                if (encoded == null || encoded.isEmpty()) return;
+
+                try {
+                    schematic = SchematicsIO.decode(encoded);
+                } catch (IOException e) {
+                    throw new ProcessingException(e, "Error decoding schematics loaded from MlogWatcher: %s", e.getMessage());
+                }
+            } else {
+                try (FileInputStream fis = new FileInputStream(inputFile)) {
+                    schematic = SchematicsIO.read(inputFile.getName(), fis);
+                } catch (IOException e) {
+                    throw new ProcessingException(e, "Error reading file '%s': %s", inputFile.getPath(), e.getMessage());
+                }
+            }
+
+            if (profile.isRun()) {
+                EmulatorSchematic emulatorSchematic = schematic.toEmulatorSchematic(SchematicsMetadata.getMetadata());
+                Emulator emulator = new BasicEmulator(messageLogger, profile, emulatorSchematic);
+                emulator.run(profile.getStepLimit());
+
+                EmulatorMessageEmitter emulatorMessages = new EmulatorMessageEmitter(messageLogger);
+                processEmulatorResults(emulatorMessages, emulator, profile.isOutputProfiling());
+            }
+
+            final File outputMsch = arguments.get("output_msch");
+            if (outputMsch != null) {
+                final File output = resolveOutputFile(inputFile, outputDirectory, outputMsch, ".msch", "mlog-watcher");
+                writeOutput(output, SchematicsIO.encode(schematic));
+            }
+
+            final File outputSdf = arguments.get("output_decompiled");
+            if (outputSdf != null) {
+                Decompiler decompiler = new Decompiler(schematic);
+                configureDecompiler(decompiler, arguments);
+                String schemaDefinition = decompiler.buildCode();
+                final File output = resolveOutputFile(inputFile, outputDirectory, outputSdf, ".sdf", "mlog-watcher");
+                writeOutput(output, schemaDefinition);
+            }
+
+            if (mlogWatcherClient != null) {
+                switch (command) {
+                    case UPDATE -> mlogWatcherClient.updateSchematic(SchematicsIO.encode(schematic), true);
+                    case ADD -> mlogWatcherClient.updateSchematic(SchematicsIO.encode(schematic), false);
+                }
+            }
+        } catch (IOException ex) {
+            throw new ProcessingException(ex, "Error processing schematic: %s", ex.getMessage());
+        } finally {
+            if (mlogWatcherClient != null) {
+                mlogWatcherClient.close();
+            }
         }
     }
 }

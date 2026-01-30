@@ -13,4 +13,5 @@ public interface MlogWatcherClient {
     void updateSchematic(String schematic, boolean overwrite);
 
     @Nullable String extractSelectedProcessorCode();
+    @Nullable String extractSelectedSchematic();
 }

@@ -88,7 +88,6 @@ public class SchematicsIO {
         writeMsch(msch, output);
     }
 
-
     static Tuple2<DataInputStream, Integer> skipHeader(InputStream input) throws IOException {
         for (byte b : HEADER) {
             if (input.read() != b) {
@@ -182,6 +181,21 @@ public class SchematicsIO {
         BlockPositionMap<Block> map = BlockPositionMap.mindustryToBuilder(m -> {}, msch.blocks());
         List<Block> blocks = msch.blocks().stream().map(b -> b.remap(map::translate)).toList();
         return new Schematic(msch.name(), filename, msch.description(), msch.labels(), msch.width(), msch.height(), blocks);
+    }
+
+    public static String encode(Schematic build) throws IOException {
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            write(build, output);
+            output.flush();
+            return Base64.getEncoder().encodeToString(output.toByteArray());
+        }
+    }
+
+    public static Schematic decode(String encoded) throws IOException {
+        byte[] binary = Base64.getDecoder().decode(encoded);
+        try (InputStream is = new ByteArrayInputStream(binary)) {
+            return SchematicsIO.read("", is);
+        }
     }
 
     @SuppressWarnings("UnnecessaryDefault")
@@ -402,7 +416,6 @@ public class SchematicsIO {
         }
     }
 
-    @SuppressWarnings("SpellCheckingInspection")
     private static Map<String, String> buildFallbackMap() {
         Map<String, String> map = new HashMap<>();
         map.put("dart-mech-pad", "legacy-mech-pad");

@@ -3,6 +3,7 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.PositionFormatter;
 import info.teksol.mc.emulator.EmulatorMessageEmitter;
+import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.profile.CompilerProfile;
@@ -72,7 +73,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 .type(Arguments.fileType().verifyIsDirectory());
 
         files.addArgument("-l", "--log")
-                .help("output file to receive compiler messages; uses input file with .log extension when no file is specified.")
+                .help("output file to receive additional procesing messages; uses input file with .log extension when no file is specified.")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate())
                 .nargs("?");
 
@@ -155,8 +156,7 @@ public class CompileMindcodeAction extends ActionHandler {
                         case MlogWatcherCommand.UPDATE_ALL -> updateAll(mlogWatcherClient, compiler, VERSION_SELECTION_EXACT);
                         case MlogWatcherCommand.UPGRADE_ALL -> updateAll(mlogWatcherClient, compiler, VERSION_SELECTION_COMPATIBLE);
                         case MlogWatcherCommand.FORCE_UPDATE_ALL -> updateAll(mlogWatcherClient, compiler, VERSION_SELECTION_ANY);
-                        default ->
-                                throw new IllegalArgumentException("Invalid value for --watcher: " + arguments.get("watcher"));
+                        default -> throw new IllegalArgumentException("Invalid value for --watcher: " + arguments.get("watcher"));
                     }
                 } finally {
                     mlogWatcherClient.close();
@@ -175,6 +175,10 @@ public class CompileMindcodeAction extends ActionHandler {
     }
 
     private void updateAll(MlogWatcherClient mlogWatcherClient, MindcodeCompiler compiler, String versionSelection) {
-        mlogWatcherClient.updateProcessorsOnMap(compiler.getOutput(), compiler.getProgramId(), versionSelection);
+        if (compiler.getProgramId() == null) {
+            compiler.addMessage(ToolMessage.error("Mlog Watcher: cannot update all processors on the map, no program ID defined."));
+        } else {
+            mlogWatcherClient.updateProcessorsOnMap(compiler.getOutput(), compiler.getProgramId(), versionSelection);
+        }
     }
 }

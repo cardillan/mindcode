@@ -9,6 +9,7 @@ public class Request {
     public static final String UPDATE_PROCESSORS_ON_MAP = "update_processors_on_map";
     public static final String PUT_SCHEMATIC_IN_LIBRARY = "put_schematic_in_library";
     public static final String EXTRACT_SELECTED_PROCESSOR_CODE = "extract_selected_processor_code";
+    public static final String EXTRACT_SELECTED_SCHEMATIC = "extract_selected_schematic";
 
     private String method;
 

@@ -48,4 +48,10 @@ public class LegacyMlogWatcherClient extends MlogWatcherClientBase implements Ml
         log.error("Extracting processor code is not supported by the legacy Mlog Watcher mod.");
         return null;
     }
+
+    @Override
+    public @Nullable String extractSelectedSchematic() {
+        log.error("Extracting schematic is not supported by the legacy Mlog Watcher mod.");
+        return null;
+    }
 }

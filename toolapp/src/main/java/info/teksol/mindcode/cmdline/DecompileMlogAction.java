@@ -51,7 +51,7 @@ public class DecompileMlogAction extends ActionHandler {
                 .type(inputFileType);
 
         files.addArgument("--output-mlog")
-                .help("output file to receive decompiled Mindcode (doesn't produce an output when not specified).")
+                .help("output file to receive the mlog file extracted from the processor selected in the game")
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
 
@@ -77,7 +77,6 @@ public class DecompileMlogAction extends ActionHandler {
 
         final PositionFormatter positionFormatter = sp -> sp.formatForIde(profile.getFileReferences());
         ConsoleMessageLogger messageLogger = ConsoleMessageLogger.create(positionFormatter, false, true);
-        EmulatorMessageEmitter emulatorMessages = new EmulatorMessageEmitter(messageLogger);
         ToolMessageEmitter toolMessages = new ToolMessageEmitter(messageLogger);
 
         final MlogWatcherCommand command = arguments.get("watcher");
@@ -93,51 +92,50 @@ public class DecompileMlogAction extends ActionHandler {
         }
 
         MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages, profile.isPrintStackTrace());
+        try {
+            String mlog;
+            if (command == MlogWatcherCommand.EXTRACT) {
+                // Couldn't connect, error already reported
+                if (mlogWatcherClient == null) return;
+                mlog = mlogWatcherClient.extractSelectedProcessorCode();
 
-        String mlog;
-        if (command == MlogWatcherCommand.EXTRACT) {
-            // Couldn't connect, error already reported
-            if (mlogWatcherClient == null) return;
-            mlog = mlogWatcherClient.extractSelectedProcessorCode();
-
-            // Couldn't load, error already reported
-            if (mlog == null) return;
-        } else {
-            mlog = readInput(inputFile);
-        }
-
-        if (profile.isRun()) {
-            run(profile, mlog);
-        }
-
-        final File outputMlog = arguments.get("output_mlog");
-        if (outputMlog != null) {
-            final File output = resolveOutputFile(inputFile, outputDirectory, outputMlog, ".mlog", "mlog-watcher");
-            writeOutput(output, mlog);
-        }
-
-        final File outputDecompiled = arguments.get("output_decompiled");
-        if (outputDecompiled != null) {
-            final File output = resolveOutputFile(inputFile, outputDirectory, outputDecompiled, ".dmnd", "mlog-watcher");
-            String decompiled = MlogDecompiler.decompile(mlog);
-            writeOutput(output, decompiled);
-        }
-
-        if (mlogWatcherClient != null) {
-            if (command == MlogWatcherCommand.UPDATE) {
-                mlogWatcherClient.updateSelectedProcessor(mlog);
+                // Couldn't load, error already reported
+                if (mlog == null) return;
+            } else {
+                mlog = readInput(inputFile);
             }
 
-            mlogWatcherClient.close();
+            if (profile.isRun()) {
+                run(profile, mlog, messageLogger);
+            }
+
+            final File outputMlog = arguments.get("output_mlog");
+            if (outputMlog != null) {
+                final File output = resolveOutputFile(inputFile, outputDirectory, outputMlog, ".mlog", "mlog-watcher");
+                writeOutput(output, mlog);
+            }
+
+            final File outputDecompiled = arguments.get("output_decompiled");
+            if (outputDecompiled != null) {
+                final File output = resolveOutputFile(inputFile, outputDirectory, outputDecompiled, ".dmnd", "mlog-watcher");
+                String decompiled = MlogDecompiler.decompile(mlog);
+                writeOutput(output, decompiled);
+            }
+
+            if (mlogWatcherClient != null && command == MlogWatcherCommand.UPDATE) {
+                mlogWatcherClient.updateSelectedProcessor(mlog);
+            }
+        } finally {
+            if (mlogWatcherClient != null) {
+                mlogWatcherClient.close();
+            }
         }
     }
 
-    private void run(CompilerProfile profile, String mlog) {
-        PositionFormatter positionFormatter = sp -> sp.formatForIde(profile.getFileReferences());
-        ConsoleMessageLogger messageConsumer = ConsoleMessageLogger.create(positionFormatter, false, true);
-        EmulatorMessageEmitter emulatorMessages = new EmulatorMessageEmitter(messageConsumer);
+    private void run(CompilerProfile profile, String mlog, ConsoleMessageLogger messageLogger) {
+        EmulatorMessageEmitter emulatorMessages = new EmulatorMessageEmitter(messageLogger);
 
-        InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer,
+        InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageLogger,
                 new StandardNameCreator(), profile);
         MindustryMetadata metadata = instructionProcessor.getMetadata();
 
@@ -146,7 +144,7 @@ public class DecompileMlogAction extends ActionHandler {
         logicBlock.createDefaultBlocks(metadata);
 
         EmulatorSchematic schematic = new EmulatorSchematic(List.of(logicBlock));
-        Emulator emulator = new BasicEmulator(messageConsumer, profile, schematic);
+        Emulator emulator = new BasicEmulator(messageLogger, profile, schematic);
 
         emulator.run(profile.getStepLimit());
         processEmulatorResults(emulatorMessages, emulator, profile.isOutputProfiling());
