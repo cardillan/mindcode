@@ -20,6 +20,7 @@
 	} from '$lib/stores.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
+	import CopyButton from '$lib/components/CopyButton.svelte';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
@@ -134,7 +135,7 @@
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Schemacode definition:</Label>
 			<div
-				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
+				class="h-[60vh] overflow-hidden rounded-md border bg-muted"
 				{@attach schemacodeEditor.attach}
 			></div>
 		</div>
@@ -142,10 +143,13 @@
 		<!-- Target Editor -->
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Encoded schematic:</Label>
-			<div
-				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				{@attach encodedEditor.attach}
-			></div>
+			<div class="relative">
+				<CopyButton getText={() => encodedEditor.view?.state.doc.toString() ?? ''} />
+				<div
+					class="h-[60vh] overflow-hidden rounded-md border bg-muted"
+					{@attach encodedEditor.attach}
+				></div>
+			</div>
 		</div>
 	</div>
 
