@@ -2,13 +2,14 @@ import type { Diagnostic } from '@codemirror/lint';
 import { EditorView } from 'codemirror';
 import type { CompileResponseMessage, SourceRange } from './api';
 import { EditorSelection, Text, Compartment } from '@codemirror/state';
-import { espresso, cobalt } from 'thememirror';
+import { forest } from '@fsegurai/codemirror-theme-forest';
+import { vsCodeLight } from '@fsegurai/codemirror-theme-vscode-light';
 
 // Compartment for dynamically switching themes
 export const themeCompartment = new Compartment();
 
 export function getTheme(dark: boolean) {
-	return dark ? cobalt : espresso;
+	return dark ? forest : vsCodeLight;
 }
 
 export function updateEditor(editor: EditorView | undefined, text: string) {
