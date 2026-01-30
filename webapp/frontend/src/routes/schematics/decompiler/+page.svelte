@@ -10,6 +10,7 @@
 	import { EditorStore, getThemeContext, LocalSource, syncUrl } from '$lib/stores.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import { updateEditor } from '$lib/codemirror';
+	import CopyButton from '$lib/components/CopyButton.svelte';
 
 	const theme = getThemeContext();
 
@@ -95,7 +96,7 @@
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Encoded schematic:</Label>
 			<div
-				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
+				class="h-[60vh] overflow-hidden rounded-md border bg-muted"
 				{@attach encodedEditor.attach}
 			></div>
 		</div>
@@ -103,10 +104,13 @@
 		<!-- Target Editor (Schemacode) -->
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Decompiled schemacode:</Label>
-			<div
-				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				{@attach schemacodeEditor.attach}
-			></div>
+			<div class="relative">
+				<CopyButton getText={() => schemacodeEditor.view?.state.doc.toString() ?? ''} />
+				<div
+					class="h-[60vh] overflow-hidden rounded-md border bg-muted"
+					{@attach schemacodeEditor.attach}
+				></div>
+			</div>
 		</div>
 	</div>
 

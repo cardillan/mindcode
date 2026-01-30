@@ -2,8 +2,7 @@
 	import { mlogLanguage } from '$lib/grammars/mlog_language';
 	import { setDiagnostics } from '@codemirror/lint';
 	import { EditorView } from 'codemirror';
-	import { onMount, untrack } from 'svelte';
-	import { page } from '$app/state';
+	import { untrack } from 'svelte';
 
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from '$lib/components/ui/textarea';
@@ -21,9 +20,9 @@
 		EditorStore,
 		getThemeContext
 	} from '$lib/stores.svelte';
-	import { goto } from '$app/navigation';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
+	import CopyButton from '$lib/components/CopyButton.svelte';
 	import { Compartment } from '@codemirror/state';
 
 	let { data }: PageProps = $props();
@@ -158,7 +157,7 @@
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Mindcode Source Code:</Label>
 			<div
-				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
+				class="h-[60vh] overflow-hidden rounded-md border bg-muted"
 				{@attach mindcodeEditor.attach}
 			></div>
 		</div>
@@ -166,10 +165,13 @@
 		<!-- Target Editor -->
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Mindustry Logic:</Label>
-			<div
-				class="max-h-[60vh] min-h-[60vh] flex-1 overflow-hidden rounded-md border bg-muted"
-				{@attach mlogEditor.attach}
-			></div>
+			<div class="relative">
+				<CopyButton getText={() => mlogEditor.view?.state.doc.toString() ?? ''} />
+				<div
+					class="h-[60vh] overflow-hidden rounded-md border bg-muted"
+					{@attach mlogEditor.attach}
+				></div>
+			</div>
 		</div>
 	</div>
 
