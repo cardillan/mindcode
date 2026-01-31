@@ -47,25 +47,20 @@ public class CompileSchemacodeAction extends ActionHandler {
         ArgumentGroup files = subparser.addArgumentGroup("Input/output files");
 
         files.addArgument("input")
-                .help("Schematic definition file to be compiled into a binary msch file.")
+                .help("Schematic definition file to be compiled into a binary msch file; uses stdin when not specified.")
                 .nargs("?")
                 .type(inputFileType.acceptSystemIn())
                 .setDefault(new File("-"));
 
-        files.addArgument("-o", "--output")
-                .help("output file to receive the resulting binary Mindustry schematic file (.msch).")
-                .nargs("?")
-                .type(Arguments.fileType().verifyCanCreate());
+        addOutputFileOption(files, false,
+                "output file to receive the resulting binary Mindustry schematic file (.msch).",
+                "-o", "--output");
 
-        files.addArgument("--output-directory")
-                .dest("output-directory")
-                .help("specifies the directory where the output files will be placed")
-                .type(Arguments.fileType().verifyIsDirectory());
+        addOutputFileOption(files, true,
+                "output file to receive compiler messages; uses input file with .log extension when no file is specified.",
+                "-l", "--log");
 
-        files.addArgument("-l", "--log")
-                .help("output file to receive compiler messages; uses stdout/stderr when not specified")
-                .nargs("?")
-                .type(Arguments.fileType().verifyCanCreate());
+        addOutputDirectoryOption(files);
 
         addCompilerOptions(files, options, OptionCategory.INPUT_OUTPUT);
 

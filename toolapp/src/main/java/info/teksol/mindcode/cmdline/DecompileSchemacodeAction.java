@@ -57,24 +57,19 @@ public class DecompileSchemacodeAction extends ActionHandler {
         ArgumentGroup files = subparser.addArgumentGroup("Input/output");
 
         files.addArgument("input")
-                .help("Mindustry schematic file to be decompiled into Schematic Definition File.")
+                .help("Mindustry schematic file to be decompiled into Schematic Definition File. When -w extract is used, the input file must not be specified.")
                 .nargs("?")
                 .type(inputFileType);
 
-        files.addArgument("--output-msch")
-                .help("output file to receive the schematics extracted from the game in binary format")
-                .nargs("?")
-                .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
+        addOutputFileOption(files, false,
+                "output file to receive the schematics loaded or extracted from the game in binary format.",
+                "--output-msch");
 
-        files.addArgument("--output-decompiled")
-                .help("output file to receive a decompiled schematic definition file.")
-                .nargs("?")
-                .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
+        addOutputFileOption(files, true,
+                "output file to receive a decompiled schematic definition file.",
+                "--output-decompiled");
 
-        files.addArgument("--output-directory")
-                .dest("output-directory")
-                .help("specifies the directory where the output files will be placed")
-                .type(Arguments.fileType().verifyIsDirectory());
+        addOutputDirectoryOption(files);
 
         addMlogWatcherOptions(files, ToolAppAction.DECOMPILE_SCHEMA);
 

@@ -18,7 +18,6 @@ import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionCategory;
 import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherClient;
 import info.teksol.mindcode.cmdline.mlogwatcher.MlogWatcherCommand;
-import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -50,20 +49,15 @@ public class DecompileMlogAction extends ActionHandler {
                 .nargs("?")
                 .type(inputFileType);
 
-        files.addArgument("--output-mlog")
-                .help("output file to receive the mlog file extracted from the processor selected in the game")
-                .nargs("?")
-                .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
+        addOutputFileOption(files, true,
+                "output file to receive the mlog file extracted from the processor selected in the game.",
+                "--output-mlog");
 
-        files.addArgument("--output-decompiled")
-                .help("output file to receive decompiled Mindcode (doesn't produce an output when not specified).")
-                .nargs("?")
-                .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
+        addOutputFileOption(files, true,
+                "output file to receive the decompiled Mindcode.",
+                "--output-decompiled");
 
-        files.addArgument("--output-directory")
-                .dest("output-directory")
-                .help("specifies the directory where the output files will be placed")
-                .type(Arguments.fileType().verifyIsDirectory());
+        addOutputDirectoryOption(files);
 
         addMlogWatcherOptions(files, ToolAppAction.DECOMPILE_MLOG);
 

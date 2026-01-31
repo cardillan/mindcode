@@ -20,13 +20,12 @@ Changes intended for the next regular release.
 
 **Doing**
 
-* Detect unused variables/constants/functions from AST analysis and report them as warnings.
+* Full support for parallel execution in the emulator
+  * In the web app, all four modules will support running the code
 
 * **Planned**
 
-* Full support for parallel execution in the emulator
-  * In the web app, all four modules will support running the code
-  * In the tool app, two new additional actions: run mlog (rm) and run schematics (rs).
+* Detect unused variables/constants/functions from AST analysis and report them as warnings.
 * `break` in code blocks
   * the code blocks must be labeled and the `break` must refer to the label
   * it is possible to use `begin`, `atomic` or `debug` as implicit labels (depending on the block type and only if the block is unlabeled)

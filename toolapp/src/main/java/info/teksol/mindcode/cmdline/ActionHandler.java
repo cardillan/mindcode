@@ -101,6 +101,21 @@ abstract class ActionHandler {
         return argument;
     }
 
+    void addOutputFileOption(ArgumentGroup files, boolean acceptSystemIn, String help, String... flags) {
+        FileArgumentType fileArgumentType = acceptSystemIn
+                ? Arguments.fileType().acceptSystemIn().verifyCanCreate()
+                : Arguments.fileType().verifyCanCreate();
+
+        files.addArgument(flags).help(help).nargs("?").type(fileArgumentType);
+    }
+
+    void addOutputDirectoryOption(ArgumentGroup files) {
+        files.addArgument("--output-directory")
+                .dest("output-directory")
+                .help("specifies the directory where the output files will be placed.")
+                .type(Arguments.fileType().verifyIsDirectory());
+    }
+
     void addMlogWatcherOptions(ArgumentContainer container, ToolAppAction action) {
         String description = switch (action) {
             case COMPILE_MINDCODE -> """
@@ -176,59 +191,6 @@ abstract class ActionHandler {
         }
     }
 
-    protected void processEmulatorResults(EmulatorMessageEmitter emulatorMessages, Emulator emulator, boolean outputProfiling) {
-        emulatorMessages.info("");
-        emulatorMessages.info("Emulator output (%,d steps):", emulator.getExecutionSteps());
-
-        for (ExecutorResults executor : emulator.getExecutorResults()) {
-            if (emulator.getExecutorCount() > 1) {
-                emulatorMessages.info("%n*** Output of processor %s:", executor.getProcessorId());
-            }
-            String textBufferOutput = executor.getFormattedOutput();
-            if (!textBufferOutput.isEmpty()) {
-                emulatorMessages.info(textBufferOutput);
-            } else {
-                emulatorMessages.info("The program didn't generate any output.");
-            }
-        }
-
-        if (!emulator.getAllAssertions().isEmpty()) {
-            emulatorMessages.info("The program generated the following assertions:");
-            emulator.getAllAssertions().forEach(a -> emulatorMessages.addMessage(a.createMessage()));
-        }
-
-        if (outputProfiling) {
-            for (ExecutorResults executor : emulator.getExecutorResults()) {
-                if (emulator.getExecutorCount() == 1) {
-                    emulatorMessages.debug("\n*** Code profiling result:\n");
-                } else {
-                    emulatorMessages.debug("%n*** Code profiling result of processor %s:%n", executor.getProcessorId());
-                }
-
-                emulatorMessages.debug(String.join("\n", executor.getFormattedProfile()));
-            }
-        }
-    }
-
-    protected @Nullable MlogWatcherClient createMlogWatcherClient(Namespace arguments, ToolMessageEmitter messageEmitter,
-            boolean printStackTrace) {
-        Object value = arguments.get("watcher");
-        if (value == NOTHING) return null;
-
-        if (value instanceof MlogWatcherCommand) {
-            MlogWatcherVersion version = arguments.get("watcher_version");
-            int port = arguments.getInt("watcher_port");
-            int timeout = arguments.getInt("watcher_timeout");
-            MlogWatcherClient client = switch (version) {
-                case V0 -> new LegacyMlogWatcherClient(messageEmitter, port, timeout, printStackTrace);
-                case V1 -> new MlogWatcherClientImpl(messageEmitter, port, timeout, printStackTrace);
-            };
-            return client.connect() ? client : null;
-        } else {
-            throw new IllegalArgumentException("Invalid value for --watcher: " + value);
-        }
-    }
-
     /// Creates a compiler profile.
     ///
     /// @param schematic when true, the profile is being created for the schematic builder
@@ -246,11 +208,29 @@ abstract class ActionHandler {
         return file != null && file.getPath().equals("-");
     }
 
-    static File resolveOutputFile(File inputFile, @Nullable File outputDirectory, @Nullable File outputFile,
-            String extension) {
+    static File resolveOutputFile(File inputFile, @Nullable File outputDirectory, @Nullable File outputFile, String extension) {
         return resolveOutputFile(inputFile, outputDirectory, outputFile, extension, "");
     }
 
+    /// Returns the output file determined from information provided on the command line (input file, output directory,
+    ///  output file) and a default extension + default file name.
+    /// Rules:
+    /// - outputFile is null
+    ///   - inputFile is stdin: returns stdout
+    ///   - constructs a file name:
+    ///     - inputFile is null: default file name (and a default extension if not specified by the default fle name)
+    ///     - inputFile is specified: input file name plus default extension
+    ///   - constructs an output directory:
+    ///     - outputDirectory is specified: outputDirectory
+    ///     - inputFile is specified: input file's parent directory
+    ///     - otherwise no specific deirectory
+    ///   - returns the output directory and output file from above
+    /// - outputFile is not null
+    ///   - outputFile represents stdout: returns stdout
+    ///   - outputFile is a simple file name:
+    ///     - outputDirectory is specified: returns outputFile evaluated against outputDirectory
+    ///     - otherwise, returns outputFile as is
+    ///   - outputFile is a path (absolute or relative): returns outputFile as is
     static File resolveOutputFile(@Nullable File inputFile, @Nullable File outputDirectory, @Nullable File outputFile,
             String extension, String defaultFileName) {
         if (outputFile == null) {
@@ -265,7 +245,7 @@ abstract class ActionHandler {
                 return new File(outputDir, fileName);
             }
         } else {
-            return outputFile.getParent() == null && outputDirectory != null
+            return !isStdInOut(outputFile) && outputFile.getParent() == null && outputDirectory != null
                     ? new File(outputDirectory, outputFile.getName())
                     : outputFile;
         }
@@ -338,4 +318,58 @@ abstract class ActionHandler {
         StringSelection data = new StringSelection(string);
         c.setContents(data, data);
     }
+
+    protected void processEmulatorResults(EmulatorMessageEmitter emulatorMessages, Emulator emulator, boolean outputProfiling) {
+        emulatorMessages.info("");
+        emulatorMessages.info("Emulator output (%,d steps):", emulator.getExecutionSteps());
+
+        for (ExecutorResults executor : emulator.getExecutorResults()) {
+            if (emulator.getExecutorCount() > 1) {
+                emulatorMessages.info("%n*** Output of processor %s:", executor.getProcessorId());
+            }
+            String textBufferOutput = executor.getFormattedOutput();
+            if (!textBufferOutput.isEmpty()) {
+                emulatorMessages.info(textBufferOutput);
+            } else {
+                emulatorMessages.info("The program didn't generate any output.");
+            }
+        }
+
+        if (!emulator.getAllAssertions().isEmpty()) {
+            emulatorMessages.info("The program generated the following assertions:");
+            emulator.getAllAssertions().forEach(a -> emulatorMessages.addMessage(a.createMessage()));
+        }
+
+        if (outputProfiling) {
+            for (ExecutorResults executor : emulator.getExecutorResults()) {
+                if (emulator.getExecutorCount() == 1) {
+                    emulatorMessages.debug("\n*** Code profiling result:\n");
+                } else {
+                    emulatorMessages.debug("%n*** Code profiling result of processor %s:%n", executor.getProcessorId());
+                }
+
+                emulatorMessages.debug(String.join("\n", executor.getFormattedProfile()));
+            }
+        }
+    }
+
+    protected @Nullable MlogWatcherClient createMlogWatcherClient(Namespace arguments, ToolMessageEmitter messageEmitter,
+            boolean printStackTrace) {
+        Object value = arguments.get("watcher");
+        if (value == NOTHING) return null;
+
+        if (value instanceof MlogWatcherCommand) {
+            MlogWatcherVersion version = arguments.get("watcher_version");
+            int port = arguments.getInt("watcher_port");
+            int timeout = arguments.getInt("watcher_timeout");
+            MlogWatcherClient client = switch (version) {
+                case V0 -> new LegacyMlogWatcherClient(messageEmitter, port, timeout, printStackTrace);
+                case V1 -> new MlogWatcherClientImpl(messageEmitter, port, timeout, printStackTrace);
+            };
+            return client.connect() ? client : null;
+        } else {
+            throw new IllegalArgumentException("Invalid value for --watcher: " + value);
+        }
+    }
+
 }

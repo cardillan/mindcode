@@ -61,21 +61,16 @@ public class CompileMindcodeAction extends ActionHandler {
                 .type(ExcerptSpecification.class)
                 .nargs("?");
 
-        files.addArgument("-o", "--output")
-                .help("output file to receive compiled mlog code; uses input file with .mlog extension when not specified, " +
-                        "or stdout when input is stdin. Use \"-\" to force stdout output.")
-                .nargs("?")
-                .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
+        addOutputFileOption(files, true,
+                "output file to receive compiled mlog code; uses input file with .mlog extension when not specified, " +
+                        "or stdout when input is stdin. Use \"-\" to force stdout output.",
+                "-o", "--output");
 
-        files.addArgument("--output-directory")
-                .dest("output-directory")
-                .help("specifies the directory where the output files will be placed")
-                .type(Arguments.fileType().verifyIsDirectory());
+        addOutputFileOption(files, true,
+                "output file to receive additional processing messages; uses input file with .log extension when no file is specified.",
+                "-l", "--log");
 
-        files.addArgument("-l", "--log")
-                .help("output file to receive additional procesing messages; uses input file with .log extension when no file is specified.")
-                .type(Arguments.fileType().acceptSystemIn().verifyCanCreate())
-                .nargs("?");
+        addOutputDirectoryOption(files);
 
         addCompilerOptions(files, options, OptionCategory.INPUT_OUTPUT);
 
@@ -102,21 +97,20 @@ public class CompileMindcodeAction extends ActionHandler {
     @Override
     void handle(Namespace arguments) {
         CompilerProfile globalProfile = createCompilerProfile(false, arguments);
-        File baseFile = arguments.get("input");
+        File inputFile = arguments.get("input");
         List<File> others = arguments.get("append");
         ExcerptSpecification excerpt = arguments.get("excerpt");
         if (excerpt != null) {
             globalProfile.setPositionTranslator(excerpt.toPositionTranslator());
         }
 
-        final Path basePath = isStdInOut(baseFile) ? Paths.get("") : baseFile.toPath().toAbsolutePath().normalize().getParent();
+        final Path basePath = isStdInOut(inputFile) ? Paths.get("") : inputFile.toPath().toAbsolutePath().normalize().getParent();
         final InputFiles inputFiles = InputFiles.create(basePath);
-        readFile(inputFiles, baseFile, excerpt);
+        readFile(inputFiles, inputFile, excerpt);
         if (others != null) {
             others.forEach(file -> readFile(inputFiles, file));
         }
 
-        final File inputFile = arguments.get("input");
         final File outputDirectory = arguments.get("output-directory");
         final File outputFile = arguments.get("output");
         final File outputFileLog = arguments.get("log");
