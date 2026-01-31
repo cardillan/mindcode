@@ -49,9 +49,42 @@
                                     <filesets>
                                         <fileset>
                                             <directory>frontend</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>target</directory>
                                             <includes>
                                                 <include>**/*</include>
                                             </includes>
+                                            <excludes>
+                                                <exclude>mindcode-webapp.jar</exclude>
+                                            </excludes>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>../annotations</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>../bin</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>../compiler</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>../doc</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>../exttest</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>../java</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>../schemacode</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>../support</directory>
+                                        </fileset>
+                                        <fileset>
+                                            <directory>../toolapp</directory>
                                         </fileset>
                                     </filesets>
                                 </configuration>
