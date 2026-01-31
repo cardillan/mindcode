@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed an internal error when compiling a function in the main program declared as `export`.
 * Fixed incorrect Temp variable elimination ([#298](https://github.com/cardillan/mindcode/issues/298)).
+* Fixed a possible internal error when parsing a syntactically incorrect file.
 
 ### Added
 

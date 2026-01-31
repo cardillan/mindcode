@@ -66,7 +66,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     private AstMindcodeNode visitNonNull(ParseTree tree) {
-        return Objects.requireNonNull(visitNullable(tree));
+        AstMindcodeNode astMindcodeNode = visitNullable(tree);
+        return astMindcodeNode == null ? new AstInvalid(SourcePosition.EMPTY) : astMindcodeNode;
     }
 
     private @Nullable AstExpression visitAstExpressionNullable(ParseTree tree) {
