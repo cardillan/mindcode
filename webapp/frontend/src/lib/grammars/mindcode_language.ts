@@ -22,10 +22,11 @@ export const mindcodeLanguage = LRLanguage.define({
 			styleTags({
 				'var const param': t.definitionKeyword,
 				'cached export external guarded linked noinit remote volatile in out ref inline noinline':
-					t.modifier,
-				'if then else elsif for do while break continue return case when': t.controlKeyword,
+					t.keyword,
+				'if then else elsif for do while break continue return case when begin end':
+					t.controlKeyword,
 				'def void': t.definitionKeyword,
-				'allocate heap stack require module mlog atomic debug begin end and or not': t.keyword,
+				'allocate heap stack require module mlog atomic debug and or not': t.keyword,
 				'CallExpression/Identifier/...': t.function(t.variableName),
 				'FunctionDefinition/Identifier/...': t.function(t.definition(t.variableName)),
 				'MemberExpression/MemberProperty/Identifier/...': t.propertyName,
@@ -44,7 +45,7 @@ export const mindcodeLanguage = LRLanguage.define({
 				ColorLiteral: t.color,
 				'LineComment BlockComment': t.comment,
 				EnhancedComment: t.special(t.comment),
-				'#declare #set #setlocal': t.keyword,
+				'#declare #set #setlocal': t.processingInstruction,
 				DirectiveValue: t.attributeValue,
 				'( ) [ ]': t.paren,
 				'MlogBodyStart MlogBodyEnd': t.brace,
