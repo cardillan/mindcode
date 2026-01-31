@@ -1,7 +1,7 @@
 import type { Diagnostic } from '@codemirror/lint';
 import { EditorView } from 'codemirror';
 import type { CompileResponseMessage, SourceRange } from './api';
-import { EditorSelection, Text, Compartment } from '@codemirror/state';
+import { EditorSelection, Text, Compartment, ChangeDesc, ChangeSet } from '@codemirror/state';
 import { forest } from '@fsegurai/codemirror-theme-forest';
 import { vsCodeLight } from '@fsegurai/codemirror-theme-vscode-light';
 
@@ -15,8 +15,7 @@ export function getTheme(dark: boolean) {
 export function updateEditor(editor: EditorView | undefined, text: string) {
 	if (editor) {
 		const transaction = editor.state.update({
-			changes: { from: 0, to: editor.state.doc.length, insert: text },
-			selection: editor.state.selection
+			changes: { from: 0, to: editor.state.doc.length, insert: text }
 		});
 		editor.dispatch(transaction);
 	}
