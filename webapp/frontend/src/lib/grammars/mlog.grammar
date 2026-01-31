@@ -21,12 +21,14 @@ Instruction {
 }
 
 instructionName {
-  ControlInstructionName { @extend <identifier, "jump" | "wait" | "end" | "stop"> } | 
+  ControlInstructionName { controlKeyword } |
   InstructionName { identifier }
 }
 
+controlKeyword { @specialize<identifier, "jump" | "wait" | "end" | "stop"> }
+
 value {
-  Boolean | NullLiteral | NumberLiteral | String | Identifier { identifier | maybeLabelName } | Color
+  Boolean | NullLiteral | NumberLiteral | String | Identifier { identifier | maybeLabelName | controlKeyword } | Color
 }
 
 @local tokens {
