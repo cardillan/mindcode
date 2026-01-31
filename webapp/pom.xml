@@ -40,7 +40,7 @@
                         <executions>
                             <execution>
                                 <id>clean-frontend-after-build</id>
-                                <phase>package</phase>
+                                <phase>verify</phase>
                                 <goals>
                                     <goal>clean</goal>
                                 </goals>
