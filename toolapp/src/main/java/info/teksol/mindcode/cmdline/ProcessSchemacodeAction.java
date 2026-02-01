@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 @NullMarked
-public class DecompileSchemacodeAction extends ActionHandler {
+public class ProcessSchemacodeAction extends ActionHandler {
     private final List<BiConsumer<Decompiler, Namespace>> optionSetters = new ArrayList<>();
 
     protected interface OptionSetter {
@@ -50,9 +50,10 @@ public class DecompileSchemacodeAction extends ActionHandler {
         Map<Enum<?>, CompilerOptionValue<?>> options = defaults.getOptions();
 
         Subparser subparser = subparsers.addParser(ToolAppAction.DECOMPILE_SCHEMA.getShortcut())
-                .aliases("decompile-schema", "decompile-schematic")
-                .description("Decompile a binary msch file into schematic definition file.")
-                .help("Decompile a binary msch file into schematic definition file.");
+                .aliases("process-schematic", "ds", "decompile-schematic")
+                .description("Load schematic from a binary msch file or the in-game Schematics Library for further processing (decompiling " +
+                        "into a Schemacode definition file, running on the internal emulator or sending to the in-game library)")
+                .help("Load and process a schematic from a file or the in-game Schematics Library.");
 
         ArgumentGroup files = subparser.addArgumentGroup("Input/output");
 

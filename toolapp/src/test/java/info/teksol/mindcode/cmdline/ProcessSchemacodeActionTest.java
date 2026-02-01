@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @NullMarked
-class DecompileSchemacodeActionTest {
+class ProcessSchemacodeActionTest {
     private final ToolAppAction action = ToolAppAction.DECOMPILE_SCHEMA;
 
     protected Namespace parseCommandLine(String commandLine) throws ArgumentParserException {
@@ -26,7 +26,7 @@ class DecompileSchemacodeActionTest {
     protected Decompiler parseToDecompiler(String commandLine) throws ArgumentParserException {
         Namespace arguments = parseCommandLine(commandLine);
         Decompiler decompiler = new Decompiler(Schematic.empty());
-        ((DecompileSchemacodeAction) action.getHandler()).configureDecompiler(decompiler, arguments);
+        ((ProcessSchemacodeAction) action.getHandler()).configureDecompiler(decompiler, arguments);
         return decompiler;
     }
 

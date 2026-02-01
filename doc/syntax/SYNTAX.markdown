@@ -52,7 +52,6 @@ Supporting tools:
 * [Processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown)
 * [Mlog Decompiler](TOOLS-MLOG-DECOMPILER.markdown)
 * [Testing Framework](TOOLS-TESTING-TOOL.markdown)
-* [Schematics Refresher](TOOLS-REFRESHER.markdown)
 
 Additional information on Mindcode and Mindustry Logic:
 

@@ -69,7 +69,6 @@ public class DocValidatorTest extends AbstractTestBase {
             "TOOLS-PROCESSOR-EMULATOR.markdown",
             "TOOLS-MLOG-DECOMPILER.markdown",
             "TOOLS-TESTING-TOOL.markdown",
-            "TOOLS-REFRESHER.markdown",
             "TROUBLESHOOTING.markdown",
             "MINDUSTRY-TIPS-N-TRICKS.markdown",
     };
@@ -86,6 +85,7 @@ public class DocValidatorTest extends AbstractTestBase {
 
     private static final Set<String> IGNORED_FILES = Set.of(
             "SYNTAX.markdown",
+            "TOOLS-REFRESHER.markdown",
             "TUTORIAL-MINDCODE.markdown"
     );
 

@@ -10,7 +10,3 @@ You can install this mod by creating a `SchematicsRefresher` subdirectory in the
 At this moment, new tags won't appear in the **Schematics** screen filter until the screen is closed and reopened. Also, if you had a filter active, you need to activate or deactivate it to update the list of displayed schematics matching the filter.
 
 See [Mindustry Modding Guide](https://simonwoodburyforget.github.io/mindustry-modding/) if you have trouble installing the mod—or ask a question here on GitHub.
-
----
-
-[&#xAB; Previous: Testing tool](TOOLS-TESTING-TOOL.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Troubleshooting Mindcode &#xBB;](TROUBLESHOOTING.markdown)

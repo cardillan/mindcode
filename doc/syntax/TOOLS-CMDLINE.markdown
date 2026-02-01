@@ -78,12 +78,12 @@ Actions:
   ACTION                 Type of processing
     cm (compile-mindcode)
                          Compile a Mindcode source file into text mlog file.
-    dm (decompile-mlog,process-mlog)
+    pm (process-mlog,dm,decompile-mlog)
                          Load and process mlog code from a file or an in-game processor.
     cs (compile-schema,compile-schematic)
                          Compile a schematic definition file into binary msch file.
-    ds (decompile-schema,decompile-schematic)
-                         Decompile a binary msch file into schematic definition file.
+    ps (process-schematic,ds,decompile-schematic)
+                         Load and process a schematic from a file or the in-game Schematics Library.
 ```
 
 ## Compile Mindcode action help
@@ -423,7 +423,7 @@ Emulator options:
 ## Decompile Mlog action help
 
 ```
-usage: mindcode dm [-h] [--output-mlog [OUTPUT_MLOG]] [--output-decompiled [OUTPUT_DECOMPILED]]
+usage: mindcode pm [-h] [--output-mlog [OUTPUT_MLOG]] [--output-decompiled [OUTPUT_DECOMPILED]]
                 [--output-directory OUTPUT-DIRECTORY] [-w [{update,update-all,upgrade-all,force-update-all,extract}]]
                 [--watcher-version {v0,v1}] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
@@ -863,7 +863,7 @@ Emulator options:
 ## Decompile Schematic action help
 
 ```
-usage: mindcode ds [-h] [--output-msch [OUTPUT_MSCH]] [--output-decompiled [OUTPUT_DECOMPILED]]
+usage: mindcode ps [-h] [--output-msch [OUTPUT_MSCH]] [--output-decompiled [OUTPUT_DECOMPILED]]
                 [--output-directory OUTPUT-DIRECTORY] [-w [{update,extract,add}]] [--watcher-version {v0,v1}]
                 [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [-p] [-P] [-c] [-C] [-l] [-L]
                 [-s {original,horizontal,vertical}] [-d {rotatable,non-default,all}]
@@ -882,7 +882,8 @@ usage: mindcode ds [-h] [--output-msch [OUTPUT_MSCH]] [--output-decompiled [OUTP
                 [--err-invalid-format {true,false}] [--err-graphics-buffer-overflow {true,false}]
                 [--err-runtime-check-failed {true,false}] [input]
 
-Decompile a binary msch file into schematic definition file.
+Load schematic from a binary msch file  or  the  in-game  Schematics  Library for further processing (decompiling into a
+Schemacode definition file, running on the internal emulator or sending to the in-game library)
 
 named arguments:
   -h, --help             show this help message and exit

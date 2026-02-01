@@ -30,14 +30,14 @@ import java.util.List;
 import java.util.Map;
 
 @NullMarked
-public class DecompileMlogAction extends ActionHandler {
+public class ProcessMlogAction extends ActionHandler {
 
     @Override
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
         Map<Enum<?>, CompilerOptionValue<?>> options = defaults.getOptions();
 
         Subparser subparser = subparsers.addParser(ToolAppAction.DECOMPILE_MLOG.getShortcut())
-                .aliases("decompile-mlog", "process-mlog")
+                .aliases("process-mlog", "dm", "decompile-mlog")
                 .description("Load mlog code from a file or an in-game processor for further processing (partially decompiling " +
                         "into a Mindcode source, running on the internal emulator or sending to an in-game processor).")
                 .help("Load and process mlog code from a file or an in-game processor.");

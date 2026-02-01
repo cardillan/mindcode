@@ -180,4 +180,4 @@ To create a basic unit test, a separate source file containing just the assertio
 
 ---
 
-[&#xAB; Previous: Mlog Decompiler](TOOLS-MLOG-DECOMPILER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Schematics Refresher &#xBB;](TOOLS-REFRESHER.markdown)
+[&#xAB; Previous: Mlog Decompiler](TOOLS-MLOG-DECOMPILER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Troubleshooting Mindcode &#xBB;](TROUBLESHOOTING.markdown)
