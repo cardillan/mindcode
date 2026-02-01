@@ -34,7 +34,7 @@ public class MindcodeErrorListener extends BaseErrorListener {
 
     private void reportError(int line, int charPositionInLine, @PrintFormat String format, Object... args) {
         PositionalMessage message = PositionalMessage.error(
-                new SourcePosition(inputFile, line, charPositionInLine + 1), format, args);
+                SourcePosition.createChecked(inputFile, line, charPositionInLine + 1), format, args);
         if (reportedMessages.add(message)) {
             messageConsumer.accept(message);
         }

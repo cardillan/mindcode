@@ -17,6 +17,9 @@ public interface InputFile {
     /// @return source code of this file
     String getCode();
 
+    /// @return number of lines in this file
+    int getNumberOfLines();
+
     /// @return path to the file as given when loaded
     Path getPath();
 

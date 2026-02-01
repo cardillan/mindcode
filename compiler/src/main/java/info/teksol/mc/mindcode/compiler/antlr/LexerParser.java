@@ -16,8 +16,11 @@ public class LexerParser {
 
     public static CommonTokenStream createTokenStream(MessageConsumer messageConsumer, InputFile inputFile) {
         MindcodeErrorListener errorListener = new MindcodeErrorListener(messageConsumer, inputFile);
-        // We're adding a newline at the end, because it makes some grammar definitions way easier
-        MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(inputFile.getCode() + "\n"));
+        // We're adding a missing newline at the end because it makes some grammar definitions way easier
+        int len = inputFile.getCode().length();
+        char last = len > 0 ? inputFile.getCode().charAt(len - 1) : 0;
+        MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(
+                last == '\n' || last == '\r' ? inputFile.getCode() : inputFile.getCode() + "\n"));
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
         return new CommonTokenStream(lexer);

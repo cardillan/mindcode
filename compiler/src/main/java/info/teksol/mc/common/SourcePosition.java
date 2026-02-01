@@ -43,6 +43,11 @@ public record SourcePosition(InputFile inputFile,
         }
 
         @Override
+        public int getNumberOfLines() {
+            return 1;
+        }
+
+        @Override
         public Path getPath() {
             return Path.of("");
         }
@@ -78,6 +83,12 @@ public record SourcePosition(InputFile inputFile,
     public SourcePosition(InputFile inputFile, int line, int column) {
         this(inputFile, new TextFilePosition(line, column), new TextFilePosition(line, column),
                 new TextFilePosition(line, column));
+    }
+
+    /// When reporting errors at the start of the line, it checks the line number doesn't exceed the number of lines
+    /// in the source code. Used for parser errors, as an additional newline is added for parsing and
+    public static SourcePosition createChecked(InputFile inputFile, int line, int column) {
+        return new SourcePosition(inputFile, column == 1 && line == inputFile.getNumberOfLines() + 1 ? line - 1 : line, column);
     }
 
     public SourcePosition upTo(SourcePosition end) {

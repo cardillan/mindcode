@@ -124,6 +124,9 @@ public class InputFiles {
 
         private final String absolutePath;
 
+        ///  Number of lines, computed on demand
+        private int numberOfLines = -1;
+
         private InputFileImpl(int id, boolean library, Path path) {
             this.id = id;
             this.library = library;
@@ -186,6 +189,30 @@ public class InputFiles {
         @Override
         public String getCode() {
             return fileContents.get(id);
+        }
+
+        @Override
+        public int getNumberOfLines() {
+            if (numberOfLines == -1) numberOfLines = countLines();
+            return numberOfLines;
+        }
+
+        private int countLines() {
+            String str = getCode();
+            int count = 1;
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (c == '\n') {
+                    count++;
+                } else if (c == '\r') {
+                    // Check if the next character is '\n' to avoid double-counting
+                    if (i + 1 < str.length() && str.charAt(i + 1) == '\n') {
+                        i++; // Skip the next character
+                    }
+                    count++;
+                }
+            }
+            return count;
         }
 
         private InputFiles parent() {

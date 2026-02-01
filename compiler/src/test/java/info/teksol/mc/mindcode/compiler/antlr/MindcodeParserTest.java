@@ -167,7 +167,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesUnbalancedBegin() {
-            assertGeneratesMessageRegex(4, 1, "Parse error: .*",
+            assertGeneratesMessageRegex(3, 1, "Parse error: .*",
                     """
                             begin
                                 id;
@@ -179,8 +179,7 @@ class MindcodeParserTest extends AbstractParserTest {
             assertGeneratesMessageRegex(2, 1, "Parse error: .*",
                     """
                                 id;
-                            end;
-                            """);
+                            end;""");
         }
     }
 
@@ -927,7 +926,7 @@ class MindcodeParserTest extends AbstractParserTest {
                     expectedMessages()
                             .addRegex(1, 16, "Parse error: .*")
                             .addRegex(1, 24, "Parse error: .*")
-                            .addRegex(2, 1, "Parse error: .*"),
+                            .addRegex(1, 1, "Parse error: .*"),
                     "a = if b then c else d end;");
         }
     }
@@ -1482,7 +1481,7 @@ class MindcodeParserTest extends AbstractParserTest {
             assertGeneratesMessages(
                     expectedMessages()
                             .addRegex(1, 12, "Parse error: .*")
-                            .addRegex(2, 1, "Parse error: .*"),
+                            .addRegex(1, 1, "Parse error: .*"),
                     "while a < b;");
         }
     }
