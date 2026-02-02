@@ -43,6 +43,7 @@ public class MindcodeFunction {
 
     private List<FunctionParameter> parameters = List.of();
     private @Nullable LogicLabel label;
+    private @Nullable LogicLabel atomicLabel;
     private @Nullable LogicLabel remoteLabel;
     private String prefix = "";
     private int prefixIndex = 0;
@@ -195,12 +196,16 @@ public class MindcodeFunction {
         return hasModifier(NOINLINE, EXPORT);
     }
 
-    public boolean isDeclaredInline() {
-        return hasModifier(INLINE);
+    public boolean isAtomic() {
+        return hasModifier(ATOMIC);
     }
 
     public boolean isDebug() {
         return hasModifier(DEBUG);
+    }
+
+    public boolean isDeclaredInline() {
+        return hasModifier(INLINE);
     }
 
     public boolean isVarargs() {
@@ -390,6 +395,11 @@ public class MindcodeFunction {
         return label;
     }
 
+    /// @return the label used to call this function from within an atomic block
+    public @Nullable LogicLabel getAtomicLabel() {
+        return atomicLabel == null ? label : atomicLabel;
+    }
+
     /// @return the label allocated for the remote entry point of this function (null for non-remote functions)
     public @Nullable LogicLabel getRemoteLabel() {
         return remoteLabel;
@@ -440,6 +450,10 @@ public class MindcodeFunction {
 
     public void setLabel(LogicLabel label) {
         this.label = label;
+    }
+
+    public void setAtomicLabel(LogicLabel atomicLabel) {
+        this.atomicLabel = atomicLabel;
     }
 
     public void setRemoteLabel(LogicLabel remoteLabel) {

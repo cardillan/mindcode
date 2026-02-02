@@ -29,10 +29,8 @@ class StatementListsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void refusesNestedBlocks() {
-            assertGeneratesMessage(
-                    "Nested invocation of atomic blocks.",
-                    """
+        void compilesNestedBlocks() {
+            assertCompilesTo("""
                             atomic
                                 print("start");
                                 atomic
@@ -40,7 +38,11 @@ class StatementListsBuilderTest extends AbstractCodeGeneratorTest {
                                 end;
                                 print("end");
                             end;
-                            """
+                            """,
+                    createInstruction(WAIT, "0"),
+                    createInstruction(PRINT, q("start")),
+                    createInstruction(PRINT, q("inner")),
+                    createInstruction(PRINT, q("end"))
             );
         }
     }

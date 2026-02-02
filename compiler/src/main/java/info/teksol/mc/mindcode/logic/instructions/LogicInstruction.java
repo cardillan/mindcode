@@ -229,6 +229,14 @@ public interface LogicInstruction extends MlogInstruction {
         return setInfo(InstructionInfo.FIXED_MULTILABEL, fixedMultilabel);
     }
 
+    default boolean isAtomicWait() {
+        return (boolean) getInfo(InstructionInfo.ATOMIC_WAIT);
+    }
+
+    default LogicInstruction setAtomicWait(boolean atomicWait) {
+        return setInfo(InstructionInfo.ATOMIC_WAIT, atomicWait);
+    }
+
     default LocalCompilerProfile getLocalProfile() {
         return getAstContext().getLocalProfile();
     }

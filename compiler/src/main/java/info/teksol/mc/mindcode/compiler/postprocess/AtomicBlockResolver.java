@@ -5,7 +5,6 @@ import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
-import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
@@ -35,7 +34,7 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
     }
 
     public static List<LogicInstruction> resolve(InstructionProcessor processor, List<LogicInstruction> instructions) {
-        int start = CollectionUtils.indexOf(instructions, ix -> ix.getAstContext().matches(AstContextType.ATOMIC));
+        int start = CollectionUtils.indexOf(instructions, LogicInstruction::isAtomicWait);
         return start < 0 ? instructions : new AtomicBlockResolver(processor, instructions, start).resolve();
     }
 
@@ -45,6 +44,9 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
 
     private List<LogicInstruction> resolve() {
         do {
+            // Skip comments and labels
+            while (program.get(start).getRealSize() == 0) start++;
+
             context = program.get(start).getAstContext();
             allAtomic = !context.getLocalProfile().isVolatileAtomic();
             int ipt;
@@ -92,7 +94,8 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
                 while (program.get(last).getRealSize() == 0) last--;
                 program.get(last).setComment("# The last atomic block instruction");
             } else {
-                throw new MindcodeInternalError("No 'wait' instruction found in atomic block.");
+                // This is probably a function with the atomic wait removed.
+                //throw new MindcodeInternalError("No 'wait' instruction found in atomic block.");
             }
 
             start = CollectionUtils.indexOf(program, end, ix -> ix.getAstContext().matches(AstContextType.ATOMIC));
@@ -203,17 +206,6 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
         return index;
     }
 
-    private boolean nestedAtomicContext(AstContext ixContext) {
-        if (ixContext != context && ixContext.matches(AstContextType.ATOMIC)) {
-            AstContext basicContext = ixContext.findSuperContextOfType(
-                    c -> c.matches(AstContextType.ATOMIC, AstSubcontextType.BASIC)).orElseThrow();
-
-            assert context != null;
-            return basicContext != context.parent();
-        }
-        return false;
-    }
-
     private boolean isProtected(LogicInstruction ix) {
         WorldAction action = ix.getOpcode().getAction();
         boolean noOutsideEffects = action == WorldAction.NONE || action == WorldAction.THIS
@@ -251,7 +243,7 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
 
         boolean step(LogicInstruction ix) {
             //System.out.printf("Head %d, address %d, step %d: %s%n", id, next, step, ix);
-            if (nestedAtomicContext(ix.getAstContext())) {
+            if (next != start && ix.isAtomicWait()) {
                 error = AtomicError.NESTED;
                 return false;
             }

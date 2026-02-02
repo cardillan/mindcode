@@ -222,11 +222,11 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         final LogicLabel returnLabel = assembler.nextLabel();
         returnStack.enterFunction(returnLabel, returnValue);
 
-        boolean atomic = function.hasModifier(FunctionModifier.ATOMIC);
+        boolean atomic = function.hasModifier(FunctionModifier.ATOMIC) && !isAtomicBlock();
         assembler.enterFunctionBodyAstNode(function, function.getDeclaration(),
                 atomic ? AstContextType.ATOMIC : AstContextType.FUNCTION_BODY);
         if (atomic) {
-            assembler.createWait(LogicNumber.ZERO);
+            assembler.createWait(LogicNumber.ZERO).setAtomicWait(true);
         }
 
         ValueStore result = evaluateBody(function.getBody());
@@ -246,24 +246,23 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     }
 
     private ValueStore handleStacklessFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments) {
-        assert function.getLabel() != null;
-        String functionPrefix = function.getPrefix();
+        LogicLabel label = isAtomicBlock() ? function.getAtomicLabel() : function.getLabel();
+        assert label != null;
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
         setupFunctionParameters(function, function.getParameters(), arguments, false);
-        final boolean isVoid = function.isVoid();
 
         LogicVariable retAddr = function.getFnRetAddr();
         if (function.getProfile().isSymbolicLabels()) {
             assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
-            assembler.createCallStackless(function.getLabel(), retAddr,function.getFnRetVal());
+            assembler.createCallStackless(label, retAddr,function.getFnRetVal());
         } else {
             final LogicLabel returnLabel = assembler.nextLabel();
             assembler.createSetAddress(retAddr, returnLabel).setHoistId(returnLabel);
             assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
             // We're putting INVALID as retAddr: in absolute addressing mode, the CALL instruction doesn't
             // set function return address, it is set up separately by the previous instruction
-            assembler.createCallStackless(function.getLabel(), LogicVariable.INVALID,function.getFnRetVal())
+            assembler.createCallStackless(label, LogicVariable.INVALID,function.getFnRetVal())
                     .setMarker(returnLabel).setHoistId(returnLabel);
             // Mark the position where the function must return
             assembler.createLabel(returnLabel);

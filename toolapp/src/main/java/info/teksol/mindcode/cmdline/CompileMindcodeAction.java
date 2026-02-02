@@ -141,8 +141,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 }
             }
 
-            MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages,
-                    globalProfile.isPrintStackTrace());
+            MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages);
             if (mlogWatcherClient != null) {
                 try {
                     switch (arguments.get("watcher")) {

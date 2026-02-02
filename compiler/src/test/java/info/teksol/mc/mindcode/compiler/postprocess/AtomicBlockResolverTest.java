@@ -55,7 +55,7 @@ class AtomicBlockResolverTest {
             assertGeneratesMessage(
                     "Nested invocation of atomic blocks.",
                     """
-                            void foo()
+                            noinline void foo()
                                 atomic
                                     print("foo");
                                 end;

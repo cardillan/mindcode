@@ -204,6 +204,9 @@ public class CallGraphCreator extends CompilerMessageEmitter {
         if (function.isExport()) {
             function.setRemoteLabel(processor.nextLabel());
         }
+        if (function.isAtomic()) {
+            function.setAtomicLabel(processor.nextLabel());
+        }
         function.setLabel(processor.nextLabel());
         nameCreator.setupFunctionPrefix(function);
         function.createVariables(nameCreator);

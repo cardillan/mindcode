@@ -85,7 +85,7 @@ public class ProcessMlogAction extends ActionHandler {
             return;
         }
 
-        MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages, profile.isPrintStackTrace());
+        MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages);
         try {
             String mlog;
             if (command == MlogWatcherCommand.EXTRACT) {

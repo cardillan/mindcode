@@ -75,6 +75,9 @@ public enum InstructionInfo {
     /// This is a multilabel that is targeted by an arithmetic operation on @counter. The jumps above or below
     /// must not be removed.
     FIXED_MULTILABEL(Boolean.TRUE),
+
+    /// This is the initial wait in an atomic block.
+    ATOMIC_WAIT(Boolean.FALSE),
     ;
 
     public final Object defaultValue;

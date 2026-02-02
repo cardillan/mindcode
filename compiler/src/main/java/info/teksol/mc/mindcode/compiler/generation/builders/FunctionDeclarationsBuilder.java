@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
-import info.teksol.mc.mindcode.compiler.FunctionModifier;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
@@ -96,14 +95,16 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
     }
 
     private void compileFunctionBody(MindcodeFunction function) {
-        boolean atomic = function.hasModifier(FunctionModifier.ATOMIC);
+        boolean atomic = function.isAtomic();
         assembler.enterAstNode(function.getDeclaration(), atomic ? AstContextType.ATOMIC : AstContextType.FUNCTION_BODY);
         if (function.getProfile().isSymbolicLabels()) {
             assembler.createComment("Function: " + function.getDeclaration().toSourceCode());
         }
 
         if (atomic) {
-            assembler.createWait(LogicNumber.ZERO);
+            assembler.createWait(LogicNumber.ZERO).setAtomicWait(true);
+            assert function.getAtomicLabel() != null;
+            assembler.createLabel(function.getAtomicLabel());
         }
         ValueStore valueStore = function.isVoid()
                 ? visitBody(function.getBody())

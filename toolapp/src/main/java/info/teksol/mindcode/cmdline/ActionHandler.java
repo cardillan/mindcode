@@ -353,8 +353,7 @@ abstract class ActionHandler {
         }
     }
 
-    protected @Nullable MlogWatcherClient createMlogWatcherClient(Namespace arguments, ToolMessageEmitter messageEmitter,
-            boolean printStackTrace) {
+    protected @Nullable MlogWatcherClient createMlogWatcherClient(Namespace arguments, ToolMessageEmitter messageEmitter) {
         Object value = arguments.get("watcher");
         if (value == NOTHING) return null;
 
@@ -363,8 +362,8 @@ abstract class ActionHandler {
             int port = arguments.getInt("watcher_port");
             int timeout = arguments.getInt("watcher_timeout");
             MlogWatcherClient client = switch (version) {
-                case V0 -> new LegacyMlogWatcherClient(messageEmitter, port, timeout, printStackTrace);
-                case V1 -> new MlogWatcherClientImpl(messageEmitter, port, timeout, printStackTrace);
+                case V0 -> new LegacyMlogWatcherClient(messageEmitter, port, timeout, false);
+                case V1 -> new MlogWatcherClientImpl(messageEmitter, port, timeout, false);
             };
             return client.connect() ? client : null;
         } else {

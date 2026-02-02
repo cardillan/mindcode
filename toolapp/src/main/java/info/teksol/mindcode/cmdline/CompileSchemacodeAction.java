@@ -118,8 +118,7 @@ public class CompileSchemacodeAction extends ActionHandler {
                 toolMessages.info("\nCreated schematic was copied to the clipboard.");
             }
 
-            MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages,
-                    compilerProfile.isPrintStackTrace());
+            MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages);
             if (mlogWatcherClient != null) {
                 try {
                     switch (arguments.get("watcher")) {

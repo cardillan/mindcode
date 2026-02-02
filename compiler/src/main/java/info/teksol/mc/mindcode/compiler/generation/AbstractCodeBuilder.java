@@ -134,6 +134,19 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
         codeGenerator.exitFunction(function);
     }
 
+    /// Enters an atomic block. Returns true if this is a nested atomic block.
+    protected boolean enterAtomicBlock() {
+        return codeGenerator.enterAtomicBlock();
+    }
+
+    protected void exitAtomicBlock() {
+        codeGenerator.exitAtomicBlock();
+    }
+
+    protected boolean isAtomicBlock() {
+        return codeGenerator.isAtomicBlock();
+    }
+
     protected boolean allowUndeclaredLinks() {
         return codeGenerator.allowUndeclaredLinks();
     }

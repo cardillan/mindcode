@@ -164,7 +164,7 @@ public class ProcessSchemacodeAction extends ActionHandler {
             return;
         }
 
-        MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages, profile.isPrintStackTrace());
+        MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages);
         try {
             Schematic schematic;
             if (command == MlogWatcherCommand.EXTRACT) {

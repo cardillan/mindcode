@@ -31,20 +31,16 @@ public class StatementListsBuilder extends AbstractCodeBuilder implements
 
     @Override
     public ValueStore visitAtomicBlock(AstAtomicBlock node) {
-        assembler.setSubcontextType(AstSubcontextType.BODY, 10.0);
         if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8B)) {
             error(node, ERR.ATOMIC_REQUIRES_TARGET_81);
         }
-        ValueStore result;
-        if (atomic) {
-            error(node, ERR.ATOMIC_BLOCK_NESTED);
-            result = evaluateBody(node.getExpressions());
-        } else {
-            atomic = true;
-            assembler.createWait(LogicNumber.ZERO);
-            result = evaluateBody(node.getExpressions());
-            atomic = false;
+
+        assembler.setSubcontextType(AstSubcontextType.BODY, 10.0);
+        if (!enterAtomicBlock()) {
+            assembler.createWait(LogicNumber.ZERO).setAtomicWait(true);
         }
+        ValueStore result = evaluateBody(node.getExpressions());
+        exitAtomicBlock();
         assembler.clearSubcontextType();
         return node.isFunction() ? result : LogicVoid.VOID;
     }

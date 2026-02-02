@@ -56,8 +56,11 @@ public class CodeGenerator extends CompilerMessageEmitter {
 
     private LogicLabel remoteWaitLabel = LogicLabel.INVALID;
 
-    // Nesting level of code blocks
+    /// Nesting level of code blocks
     private int nested = 0;
+
+    /// Nesting level of atomic blocks
+    private int nestedAtomic = 0;
 
     private @Nullable String programId = null;
 
@@ -143,6 +146,19 @@ public class CodeGenerator extends CompilerMessageEmitter {
         evaluator.purgeFromCache(function.getDeclaration().getBody());
         variables.exitFunction(function);
         nested--;
+    }
+
+    /// Enters an atomic block. Returns true if this is a nested atomic block.
+    protected boolean enterAtomicBlock() {
+        return nestedAtomic++ > 0;
+    }
+
+    protected void exitAtomicBlock() {
+        nestedAtomic--;
+    }
+
+    protected boolean isAtomicBlock() {
+        return nestedAtomic > 0;
     }
 
     public <T> T processInLocalScope(Supplier<T> process) {

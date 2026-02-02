@@ -434,9 +434,9 @@ print *tmp5
 > [!NOTE]
 > Atomic code execution is only supported for targets 8.1 or higher. It also relies on a very recent change to Mindustry, and therefore only works on Mindustry BE build 26609 or higher. Specifically, the latest Beta release (v8 Build 154.3 - Beta) doesn't contain the required functionality.    
 
-An atomic code execution ensures that a section of code will execute in a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including this or other processor's variables, contents of memory banks or cells, or unit and block states. This is true even at high frame rates (generally, frame rate may affect instruction scheduling, making any guarantees about atomicity of code executed outside atomic blocks impossible).
+Atomic code execution ensures that a section of code will execute in a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including processor variables, contents of memory banks or cells, or unit and block states. This guarantee is valid universally, regardless of the actual FPS rate of the game.
 
-Mindcode uses the following mechanism to make sure the code enclosed in a code block will be executed atomically: the maximum possible number of steps required to execute the atomic block is calculated, and a `wait` instruction is inserted at the beginning of the atomic block with a duration which guarantees that enough instruction quota will accumulate during the wait. This ensures that the longest code path gets executed in a single frame on the next update.
+Mindcode uses the following mechanism to make sure a section of code will be executed atomically: the maximum possible number of steps required to execute the section is calculated, and a `wait` instruction is inserted at the beginning of the section with a duration which guarantees that enough instruction quota will accumulate during the wait. This ensures that the longest code path gets executed in a single frame on the next update.
 
 ## Atomic sections
 
@@ -448,7 +448,7 @@ Mindcode provides the following constructs for creating atomic sections:
 
 The following constructs must not be contained (directly or indirectly) in an atomic section of code:
 
-* another (nested) atomic section,
+* a call to an out-of-line, non-atomic function containing another atomic section,  
 * a `wait` instruction (this also precludes synchronous remote function calls and waiting for the result of an asynchronous remote call),
 * a recursive function call,
 * a loop.
@@ -457,6 +457,8 @@ Mindcode recognizes most kinds of loops including loops in mlog blocks, but it w
 
 > [!IMPORTANT]
 > The [Loop unrolling optimization](optimizations/LOOP-UNROLLING.markdown) may unroll a loop inside an atomic section, essentially removing the loop and making the code compatible with an atomic section. However, when the optimization doesn't take place, either because of space constraints or because the optimization is disabled, the atomic section will no longer compile. Use loops within atomic sections with caution.
+
+Atomic sections may be nested and may contain calls to atomic functions. In this case, the protection is applied to the topmost atomic section. A separate atomic section is created for cases when the function is called outside an active atomic section. 
 
 ### Atomic blocks
 
