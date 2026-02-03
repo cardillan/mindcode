@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed an internal error when compiling a function in the main program declared as `export`.
 * Fixed incorrect Temp variable elimination ([#298](https://github.com/cardillan/mindcode/issues/298)).
 * Fixed a possible internal error when parsing a syntactically incorrect file.
+* Fixed incorrect handling of some privileged instructions by the Print Merging optimization ([#300](https://github.com/cardillan/mindcode/issues/300)).
 
 ### Added
 

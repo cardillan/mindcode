@@ -77,7 +77,14 @@ class PrintMerger extends BaseOptimizer {
                                 reset();
                             }
                         }
-                        case PRINTFLUSH, FORMAT, JUMP, CALL, RETURN, CALLREC, RETURNREC, MULTILABEL,
+                        case SETMARKER -> {
+                            String keyword = current.getArg(0).toMlog();
+                            if ("flushText".equals(keyword) || "texture".equals(keyword)) {
+                                reset();
+                            }
+                        }
+                        case PRINTFLUSH, FORMAT, MESSAGE, LOCALEPRINT,
+                             JUMP, CALL, RETURN, CALLREC, RETURNREC, MULTILABEL,
                              MULTIJUMP, MULTICALL, ASSERT_PRINTS, ASSERT_FLUSH -> reset();
                     }
                 }
