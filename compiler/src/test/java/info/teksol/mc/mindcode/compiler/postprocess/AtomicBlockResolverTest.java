@@ -145,7 +145,7 @@ class AtomicBlockResolverTest {
                             read *tmp1 cell1 0
                             op add *tmp0 *tmp1 1
                             write *tmp0 cell1 0
-                            print *tmp1                             # The last atomic block instruction
+                            print *tmp1                             # The last atomic section instruction
                             """
             );
         }
@@ -175,7 +175,7 @@ class AtomicBlockResolverTest {
                             print .y*1
                             print .y*2
                             print .y*3
-                            print .y*4                              # The last atomic block instruction
+                            print .y*4                              # The last atomic section instruction
                             """
             );
         }
@@ -196,7 +196,7 @@ class AtomicBlockResolverTest {
                             read :foo:x cell1 0
                             set :foo*retaddr 4
                             jump 6 always 0 0
-                            write :foo:x cell1 0                    # The last atomic block instruction
+                            write :foo:x cell1 0                    # The last atomic section instruction
                             end
                             op add :foo:x :foo:x 1
                             print :foo:x
@@ -221,7 +221,7 @@ class AtomicBlockResolverTest {
                     """
                             wait 0.05                               # 3.000 ticks for atomic execution of 6 steps at 2 ipt
                             set :foo*retaddr 3
-                            jump 4 always 0 0                       # The last atomic block instruction
+                            jump 4 always 0 0                       # The last atomic section instruction
                             end
                             read *tmp1 cell1 0
                             op add *tmp0 *tmp1 1
@@ -261,7 +261,7 @@ class AtomicBlockResolverTest {
                             set .x*elem ".x*4"
                             read *tmp3 @this .x*elem
                             op add *tmp3 *tmp3 1
-                            write *tmp3 @this .x*elem               # The last atomic block instruction
+                            write *tmp3 @this .x*elem               # The last atomic section instruction
                             print .x*0
                             end
                             draw triangle .x*1 .x*2 .x*3 .x*4 0 0
@@ -295,7 +295,7 @@ class AtomicBlockResolverTest {
                             op add @counter 18 *tmp7
                             read *tmp3 @this .x*elem
                             op add *tmp3 *tmp3 1
-                            write *tmp3 @this .x*elem               # The last atomic block instruction
+                            write *tmp3 @this .x*elem               # The last atomic section instruction
                             set .x*ret 14
                             op mul .x*ind p 2
                             op mod *tmp8 .x*ind 6
@@ -342,7 +342,7 @@ class AtomicBlockResolverTest {
                             print "c"
                             m0_skip:
                             foo bar
-                            foo "bar"                               # The last atomic block instruction
+                            foo "bar"                               # The last atomic section instruction
                             """
             );
         }
@@ -372,7 +372,7 @@ class AtomicBlockResolverTest {
                             read *tmp1 cell1 0
                             op add *tmp0 *tmp1 1
                             write *tmp0 cell1 0
-                            print *tmp1                             # The last atomic block instruction
+                            print *tmp1                             # The last atomic section instruction
                             """
             );
         }
@@ -402,7 +402,7 @@ class AtomicBlockResolverTest {
                             print .y*1
                             print .y*2
                             print .y*3
-                            print .y*4                              # The last atomic block instruction
+                            print .y*4                              # The last atomic section instruction
                             """
             );
         }
@@ -423,7 +423,7 @@ class AtomicBlockResolverTest {
                             read :foo:x cell1 0
                             set :foo*retaddr 4
                             jump 6 always 0 0
-                            write :foo:x cell1 0                    # The last atomic block instruction
+                            write :foo:x cell1 0                    # The last atomic section instruction
                             end
                             op add :foo:x :foo:x 1
                             print :foo:x
@@ -447,7 +447,7 @@ class AtomicBlockResolverTest {
                     """
                             wait 0.058334                           # 3.500 ticks for atomic execution of 7 steps at 2 ipt
                             set :foo*retaddr 3
-                            jump 4 always 0 0                       # The last atomic block instruction
+                            jump 4 always 0 0                       # The last atomic section instruction
                             end
                             read *tmp1 cell1 0
                             op add *tmp0 *tmp1 1
@@ -486,7 +486,7 @@ class AtomicBlockResolverTest {
                             set .x*elem ".x*4"
                             read *tmp3 @this .x*elem
                             op add *tmp3 *tmp3 1
-                            write *tmp3 @this .x*elem               # The last atomic block instruction
+                            write *tmp3 @this .x*elem               # The last atomic section instruction
                             print .x*0
                             end
                             draw triangle .x*1 .x*2 .x*3 .x*4 0 0
@@ -521,7 +521,7 @@ class AtomicBlockResolverTest {
                             op add @counter 18 *tmp7
                             read *tmp3 @this .x*elem
                             op add *tmp3 *tmp3 1
-                            write *tmp3 @this .x*elem               # The last atomic block instruction
+                            write *tmp3 @this .x*elem               # The last atomic section instruction
                             set .x*ret 14
                             op mul .x*ind p 2
                             op mod *tmp8 .x*ind 6
@@ -568,7 +568,7 @@ class AtomicBlockResolverTest {
                             print "c"
                             m0_skip:
                             foo bar
-                            foo "bar"                               # The last atomic block instruction
+                            foo "bar"                               # The last atomic section instruction
                             """
             );
         }

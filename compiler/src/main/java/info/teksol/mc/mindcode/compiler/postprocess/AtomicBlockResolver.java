@@ -4,7 +4,6 @@ import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
@@ -44,8 +43,10 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
 
     private List<LogicInstruction> resolve() {
         do {
-            // Skip comments and labels
-            while (program.get(start).getRealSize() == 0) start++;
+            if (!(program.get(start) instanceof WaitInstruction waitIx)) {
+                // Can't happen
+                throw new MindcodeInternalError("No 'wait' instruction found in atomic block.");
+            }
 
             context = program.get(start).getAstContext();
             allAtomic = !context.getLocalProfile().isVolatileAtomic();
@@ -78,27 +79,27 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
                 error(context.sourcePosition(), ERR.ATOMIC_BLOCK_TOO_LONG, steps, maxAllowedSteps);
             }
 
-            double sec = (double) ((1000000 * steps + (ips - 1)) / ips) / 1000000.0;
-            Optional<LogicLiteral> waitValue = processor.createLiteral(context.sourcePosition(), sec, false);
+            if (steps <= 1) {
+                program.remove(start);
+                end--;
+            } else {
+                double sec = (double) ((1000000 * steps + (ips - 1)) / ips) / 1000000.0;
+                Optional<LogicLiteral> waitValue = processor.createLiteral(context.sourcePosition(), sec, false);
 
-            if (waitValue.isEmpty()) {
-                throw new MindcodeInternalError("Cannot encode wait time (%s) to a numeric literal.", sec);
-            }
+                if (waitValue.isEmpty()) {
+                    throw new MindcodeInternalError("Cannot encode wait time (%s) to a numeric literal.", sec);
+                }
 
-            if (program.get(start) instanceof WaitInstruction waitIx) {
                 int milliTicks = (int) Math.round(60000 * sec);
                 program.set(start, waitIx.withTime(waitValue.get()).setComment(
                         String.format("# %d.%03d ticks for atomic execution of %d steps at %d ipt", milliTicks / 1000, milliTicks % 1000, steps, ipt)));
 
                 int last = end - 1;
                 while (program.get(last).getRealSize() == 0) last--;
-                program.get(last).setComment("# The last atomic block instruction");
-            } else {
-                // This is probably a function with the atomic wait removed.
-                //throw new MindcodeInternalError("No 'wait' instruction found in atomic block.");
+                program.get(last).setComment("# The last atomic section instruction");
             }
 
-            start = CollectionUtils.indexOf(program, end, ix -> ix.getAstContext().matches(AstContextType.ATOMIC));
+            start = CollectionUtils.indexOf(program, end, LogicInstruction::isAtomicWait);
         } while (start >= 0);
 
         return program;
