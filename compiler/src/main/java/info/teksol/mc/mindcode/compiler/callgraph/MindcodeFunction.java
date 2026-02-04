@@ -28,10 +28,10 @@ import static info.teksol.mc.mindcode.compiler.FunctionModifier.*;
 public class MindcodeFunction {
     public static final String BACKGROUND_PROCESS = "backgroundProcess";
 
-    private static final AtomicInteger functionIds = new AtomicInteger();
+    private static final AtomicInteger functionIds = new AtomicInteger(0);
 
     // Function id
-    private final int id = functionIds.getAndIncrement();
+    private final int id = functionIds.incrementAndGet();
 
     // Function properties
     private final AstFunctionDeclaration declaration;
