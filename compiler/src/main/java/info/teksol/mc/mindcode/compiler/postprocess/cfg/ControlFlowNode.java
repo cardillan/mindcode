@@ -12,14 +12,15 @@ import java.util.Set;
 
 @NullMarked
 public class ControlFlowNode {
-    final int index;
+    // First instruction index
+    public final int index;
     final List<LogicInstruction> instructions = new ArrayList<>();
     final Set<String> entryLabels = new HashSet<>();
     final Set<String> exitLabels = new HashSet<>();
     final Set<ControlFlowNode> successors = new HashSet<>();
     final Set<ControlFlowNode> predecessors = new HashSet<>();
 
-    public @Nullable WaitInstruction atomicWait = null;
+    @Nullable WaitInstruction atomicWait = null;
     int size = 0;
 
     public ControlFlowNode(int index) {
@@ -29,6 +30,14 @@ public class ControlFlowNode {
     public void addInstruction(LogicInstruction instruction) {
         instructions.add(instruction);
         size += instruction.getRealSize();
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public boolean isAtomicBlock() {
+        return atomicWait != null;
     }
 
     public boolean empty() {

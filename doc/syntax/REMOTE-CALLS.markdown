@@ -448,6 +448,7 @@ The following constructs must not be contained (directly or indirectly) in an at
 
 * a call to an out-of-line, non-atomic function containing another atomic section,  
 * a `wait` instruction (this also precludes synchronous remote function calls and waiting for the result of an asynchronous remote call),
+* a `setrate` instruction,
 * a recursive function call,
 * a loop.
 

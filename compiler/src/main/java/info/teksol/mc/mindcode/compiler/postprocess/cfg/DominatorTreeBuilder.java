@@ -3,15 +3,26 @@ package info.teksol.mc.mindcode.compiler.postprocess.cfg;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NullMarked
 public class DominatorTreeBuilder {
     private List<ControlFlowNode> nodes;
+    private Map<Integer, ControlFlowNode> nodeMap;
     private ControlFlowNode entryPoint = new ControlFlowNode(0);
 
     public DominatorTreeBuilder() {
-        // We assume it is a single entrypoint by default
+        // Empty map
         this.nodes = List.of(entryPoint);
+        this.nodeMap = nodes.stream().collect(Collectors.toMap(ControlFlowNode::getIndex, v -> v));
+    }
+
+    public DominatorTree build(ControlFlowNode entryPoint) {
+        setEntryPoint(entryPoint);
+        Map<Integer, Set<ControlFlowNode>> dom = computeDominators();
+        Map<Integer, ControlFlowNode> idom = computeImmediateDominators(dom);
+        Map<Integer, Set<ControlFlowNode>> tree = buildDominatorTree(idom);
+        return new DominatorTree(dom, idom, tree);
     }
 
     public void setEntryPoint(ControlFlowNode entryPoint) {
@@ -33,17 +44,18 @@ public class DominatorTreeBuilder {
         }
 
         nodes = List.copyOf(visited);
+        nodeMap = nodes.stream().collect(Collectors.toMap(ControlFlowNode::getIndex, v -> v));
     }
 
-    public Map<ControlFlowNode, Set<ControlFlowNode>> computeDominators() {
-        Map<ControlFlowNode, Set<ControlFlowNode>> dom = new HashMap<>();
+    public Map<Integer, Set<ControlFlowNode>> computeDominators() {
+        Map<Integer, Set<ControlFlowNode>> dom = new HashMap<>();
 
         // Initialization
         for (ControlFlowNode n : nodes) {
             if (n == entryPoint) {
-                dom.put(n, new HashSet<>(Set.of(entryPoint)));
+                dom.put(n.index, new HashSet<>(Set.of(entryPoint)));
             } else {
-                dom.put(n, new HashSet<>(nodes));
+                dom.put(n.index, new HashSet<>(nodes));
             }
         }
 
@@ -57,13 +69,13 @@ public class DominatorTreeBuilder {
                 Set<ControlFlowNode> newDom = new HashSet<>(nodes);
 
                 for (ControlFlowNode p : n.predecessors) {
-                    newDom.retainAll(dom.get(p));
+                    newDom.retainAll(dom.get(p.index));
                 }
 
                 newDom.add(n);
 
-                if (!newDom.equals(dom.get(n))) {
-                    dom.put(n, newDom);
+                if (!newDom.equals(dom.get(n.index))) {
+                    dom.put(n.index, newDom);
                     changed = true;
                 }
             }
@@ -73,13 +85,13 @@ public class DominatorTreeBuilder {
         return dom;
     }
 
-    public Map<ControlFlowNode, ControlFlowNode> computeImmediateDominators(Map<ControlFlowNode, Set<ControlFlowNode>> dom) {
-        Map<ControlFlowNode, ControlFlowNode> idom = new HashMap<>();
+    public Map<Integer, ControlFlowNode> computeImmediateDominators(Map<Integer, Set<ControlFlowNode>> dom) {
+        Map<Integer, ControlFlowNode> idom = new HashMap<>();
 
         for (ControlFlowNode n : nodes) {
             if (n == entryPoint) continue;
 
-            Set<ControlFlowNode> strictDominators = new HashSet<>(dom.get(n));
+            Set<ControlFlowNode> strictDominators = new HashSet<>(dom.get(n.index));
             strictDominators.remove(n);
 
             ControlFlowNode immediate = null;
@@ -88,7 +100,7 @@ public class DominatorTreeBuilder {
                 boolean isImmediate = true;
 
                 for (ControlFlowNode other : strictDominators) {
-                    if (other != d && dom.get(other).contains(d)) {
+                    if (other != d && dom.get(other.index).contains(d)) {
                         isImmediate = false;
                         break;
                     }
@@ -104,23 +116,23 @@ public class DominatorTreeBuilder {
                 throw new IllegalStateException("No immediate dominator for " + n);
             }
 
-            idom.put(n, immediate);
+            idom.put(n.index, immediate);
         }
 
         return idom;
     }
 
-    public Map<ControlFlowNode, Set<ControlFlowNode>> buildDominatorTree(Map<ControlFlowNode, ControlFlowNode> idom) {
-        Map<ControlFlowNode, Set<ControlFlowNode>> tree = new HashMap<>();
+    public Map<Integer, Set<ControlFlowNode>> buildDominatorTree(Map<Integer, ControlFlowNode> idom) {
+        Map<Integer, Set<ControlFlowNode>> tree = new HashMap<>();
 
         for (ControlFlowNode n : nodes) {
-            tree.put(n, new HashSet<>());
+            tree.put(n.index, new HashSet<>());
         }
 
-        for (Map.Entry<ControlFlowNode, ControlFlowNode> e : idom.entrySet()) {
-            ControlFlowNode child = e.getKey();
+        for (Map.Entry<Integer, ControlFlowNode> e : idom.entrySet()) {
+            Integer child = e.getKey();
             ControlFlowNode parent = e.getValue();
-            tree.get(parent).add(child);
+            tree.get(parent.index).add(nodeMap.get(child));
         }
 
         return tree;

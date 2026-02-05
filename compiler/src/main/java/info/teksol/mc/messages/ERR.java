@@ -47,7 +47,8 @@ public class ERR {
     public static final String ATOMIC_BLOCK_NESTED = "Nested invocation of atomic blocks.";
     public static final String ATOMIC_BLOCK_NO_IPT_SET = "Atomic blocks require processor IPT to be set on a world processor. Use the 'setrate' or 'ipt' compiler options.";
     public static final String ATOMIC_BLOCK_RECURSIVE = "The atomic block executes a recursive function call.";
-    public static final String ATOMIC_BLOCK_TOO_LONG = "The atomic block requires %d steps or more, exceeding the maximum allowed number of %d steps.";
+    public static final String ATOMIC_BLOCK_SETRATE = "The atomic block executes a 'setrate' instruction.";
+    public static final String ATOMIC_BLOCK_TOO_LONG = "The atomic block requires at least %d steps, exceeding the maximum allowed number of %d steps.";
     public static final String ATOMIC_BLOCK_WAIT = "The atomic block executes a 'wait' instruction.";
     public static final String ATOMIC_REQUIRES_TARGET_81 = "'atomic' requires target 8.1 or higher.";
     public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";

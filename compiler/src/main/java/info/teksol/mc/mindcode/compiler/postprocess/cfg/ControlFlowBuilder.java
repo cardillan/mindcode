@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.logic.instructions.*;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NullMarked
 public class ControlFlowBuilder {
@@ -21,7 +22,7 @@ public class ControlFlowBuilder {
     private final Map<String, List<ControlFlowNode>> nodes = new HashMap<>();
 
     /// List of entry point label (from function calls)
-    private final List<String> entryPoints = new ArrayList<>();
+    private final Set<String> entryPoints = new HashSet<>();
 
     /// The program entrypoint
     private final ControlFlowNode start = new ControlFlowNode(0);
@@ -52,8 +53,8 @@ public class ControlFlowBuilder {
                     addEntryLabel(c.getMlogOpcode());
                 }
                 case WaitInstruction w when instruction.isAtomicWait() -> {
-                    // We need separate nodes for atomic waits
-                    ensureEmpty();
+                    // We need separate nodes for atomic waits, starting exactly at the wait, no labels before
+                    if (!current.instructions.isEmpty()) next();
                     current.atomicWait = w;
                 }
                 default -> { }
@@ -68,8 +69,7 @@ public class ControlFlowBuilder {
                 case JumpInstruction ix -> {
                     if (ix.getAstContext().matches(AstContextType.JUMPS, AstSubcontextType.REMOTE_INIT)) {
                         // This jump leads to the remote function entrypoint.
-                        // We don't need - or want - this node, so we'll terminate it.
-                        // It is unreachable from any entrypoint, including start (because there's a jump in front of it)
+                        // It will be unreachable, but that's ok - we don't need it for our analysis
                         entryPoints.add(ix.getTarget().getLabel());
                         terminate();
                     } else {
@@ -96,33 +96,49 @@ public class ControlFlowBuilder {
             }
         }
 
+        // Set of entrypoints
+        Set<ControlFlowNode> entryNodeSet = entryPoints.stream().map(nodes::get).flatMap(Collection::stream).collect(Collectors.toSet());
+
+        // Remove unreachables
+        while (true) {
+            Optional<ControlFlowNode> unreachable = allNodes.stream().filter(n -> n.predecessors.isEmpty() && !entryNodeSet.contains(n)).findAny();
+            unreachable.ifPresent(ControlFlowNode::remove);
+            unreachable.ifPresent(allNodes::remove);
+            if (unreachable.isEmpty()) break;
+        }
+
+//        System.out.println("Total nodes: " + allNodes.size());
 //        for (ControlFlowNode node : allNodes) {
 //            System.out.println(node + " -> " + node.successors + (node.atomicWait != null ? " (atomic wait)" : ""));
 //            node.instructions.forEach(System.out::println);
 //        }
 
-        return new ControlFlowGraph(allNodes, entryPoints.stream().map(nodes::get).flatMap(Collection::stream).toList());
+        return new ControlFlowGraph(allNodes, List.copyOf(entryNodeSet));
+    }
+
+    private void next() {
+        current = current.next(index);
+        allNodes.add(current);
     }
 
     // If the current node is not empty, creates a new one
     private void ensureEmpty() {
-        if (!current.empty()) {
-            current = current.next(index);
-            allNodes.add(current);
-        }
+        if (!current.empty()) next();
     }
 
     // Marks this node as jumping to a new node
     // Creates a jump
     private void jump(String label, boolean unconditional) {
         current.addExitLabel(label);
-        current = unconditional ? new ControlFlowNode(index) : current.next(index);
+        // Create a node (unconnected for unconditional jump) starting at the next instruction
+        current = unconditional ? new ControlFlowNode(index + 1) : current.next(index + 1);
         allNodes.add(current);
     }
 
     private void terminate() {
         // Create an unconnected node starting at the next instruction
         current = new ControlFlowNode(index + 1);
+        allNodes.add(current);
     }
 
 

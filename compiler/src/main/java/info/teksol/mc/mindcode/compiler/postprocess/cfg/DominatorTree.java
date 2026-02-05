@@ -7,7 +7,7 @@ import java.util.Set;
 
 @NullMarked
 public record DominatorTree(
-        Map<ControlFlowNode, Set<ControlFlowNode>> dom,
-        Map<ControlFlowNode, ControlFlowNode> idom,
-        Map<ControlFlowNode, Set<ControlFlowNode>> tree) {
+        Map<Integer, Set<ControlFlowNode>> dom,
+        Map<Integer, ControlFlowNode> idom,
+        Map<Integer, Set<ControlFlowNode>> tree) {
 }

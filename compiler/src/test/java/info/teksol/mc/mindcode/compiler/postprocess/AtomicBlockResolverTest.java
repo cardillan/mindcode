@@ -98,7 +98,7 @@ class AtomicBlockResolverTest {
         @Test
         void detectsLongBlock() {
             assertGeneratesMessage(
-                    "The atomic block requires 11 steps or more, exceeding the maximum allowed number of 10 steps.",
+                    "The atomic block requires at least 11 steps, exceeding the maximum allowed number of 10 steps.",
                     """
                             volatile var x[10];
                             atomic

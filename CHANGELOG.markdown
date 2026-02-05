@@ -16,13 +16,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added the [`atomic()` intrinsic function](doc/syntax/REMOTE-CALLS.markdown#the-atomic-function) and [`atomic` function modifier](doc/syntax/REMOTE-CALLS.markdown#atomic-functions).
-* Added support for nested atomic block and atomic function calls from an atomic block. The entire topmost atomic block is executed atomically.
+* Added support for nested atomic sections and atomic function calls from an atomic section. The entire topmost atomic section is executed atomically.
 * Added support for the new version of [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown).
 * Added a validation step to the compiler to verify the generated code doesn't exceed the maximum number of instructions. The [`enforce-instruction-limit` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-instruction-limit) can be used to control this behavior.
 
 ### Changed
 
-* When an atomic block doesn't contain any protected instruction, the `wait` instruction providing the atomicity of the block is not generated.
+* When an atomic section doesn't contain any protected instruction, the `wait` instruction providing the atomicity of the section is not generated.
+* The `setrate` instruction is no longer allowed in atomic sections.
 * Changed Mindcode syntax to allow specifying multiple [function modifiers](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-modifiers) in arbitrary order. For example, it is now possible to declare a function as `inline debug` as well as `debug inline` (which was the only allower order previously).
 * Compiler and optimizer messages are no longer output on the console in the command-line application. To access these messages, a log file needs to be generated.
 * Console output is generated on the fly, instead of being cached and dumped all at once when the processing is finished.
@@ -44,9 +45,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added new `@maxUnits` sensable property.
-* Added an [atomic code block](doc/syntax/REMOTE-CALLS.markdown#atomic-blocks): a block of code guaranteed to be executed atomically (without interruption), meaning that other processors or game updates do not change the world state.
-* Added the [`setrate`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-setrate) and [`ipt` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-ipt). These options specify the rate at which a world processor executes instructions (used by the compiler when building atomic blocks).
-* Added the [`volatile-atomic` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-volatile-atomic) governing the way atomic blocks are created.
+* Added an [atomic code block](doc/syntax/REMOTE-CALLS.markdown#atomic-blocks): a section of code guaranteed to be executed atomically (without interruption), meaning that other processors or game updates do not change the world state.
+* Added the [`setrate`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-setrate) and [`ipt` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-ipt). These options specify the rate at which a world processor executes instructions (used by the compiler when building atomic sections).
+* Added the [`volatile-atomic` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-volatile-atomic) governing the way atomic sections are created.
 * Added the [`processor-id`, `program-name` and `program-version` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-processor-id). These options take string values, which are then encoded into a `*id` variable and can be used to identify the processor in the schematics.
 * Added the [`emulator-fps` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-fps) to specify the frame rate to be emulated by the processor emulator. While frames are always emulated fully by Mindcode emulator, the change in instruction scheduling caused by different frame rate only affects situations where an interaction between two or more processors is being emulated.
 * Added the ability to run the compiled schematics on the schematics emulator to the tool app.
@@ -64,7 +65,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Miscellaneous
 
 * The system of compiler options has been updated to allow determining whether a given option has been set. This allows the default values of unset options to be derived from the values of other options.
-* The transfer variable, defined for uncached external and remote variables, is no longer used for reads. Instead, a fresh new temporary variable is used each time. This may increase the number of temporary variables generated but avoids unnecessary instructions when using postfix operators on these variables. This became quite important with atomic blocks.  
+* The transfer variable, defined for uncached external and remote variables, is no longer used for reads. Instead, a fresh new temporary variable is used each time. This may increase the number of temporary variables generated but avoids unnecessary instructions when using postfix operators on these variables. This became quite important with atomic sections.  
 
 ## 3.12.1 – 2026-01-12
 
