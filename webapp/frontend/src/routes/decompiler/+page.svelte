@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
 	import { EditorView } from 'codemirror';
+	import { LoaderCircle } from '@lucide/svelte';
 
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
@@ -8,7 +9,13 @@
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
 	import { ApiHandler, type SourceRange } from '$lib/api';
 	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
-	import { EditorStore, getThemeContext, LocalCompilerTarget, LocalSource, syncUrl } from '$lib/stores.svelte';
+	import {
+		EditorStore,
+		getThemeContext,
+		LocalCompilerTarget,
+		LocalSource,
+		syncUrl
+	} from '$lib/stores.svelte';
 	import { jumpToRange, updateEditor } from '$lib/codemirror';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
@@ -26,7 +33,7 @@
 	let runOutput = $state('');
 	let runSteps = $state(0);
 
-	let loading = $state(false);
+	let loadingAction = $state<'decompile' | 'decompile-run' | null>(null);
 	let errors = $state<any[]>([]);
 	let warnings = $state<any[]>([]);
 	let infos = $state<any[]>([]);
@@ -34,7 +41,7 @@
 	const localSource = new LocalSource(api, () => mlogEditor.view, []);
 	const compilerTarget = new LocalCompilerTarget();
 
-		function handleJumpToPosition(range: SourceRange) {
+	function handleJumpToPosition(range: SourceRange) {
 		if (!mindcodeEditor.view) return;
 
 		jumpToRange(mindcodeEditor.view, range);
@@ -42,7 +49,7 @@
 	async function handleDecompile(run: boolean) {
 		if (!mlogEditor.view) return;
 		const source = mlogEditor.view.state.doc.toString();
-		loading = true;
+		loadingAction = run ? 'decompile-run' : 'decompile';
 		runOutput = '';
 		runSteps = 0;
 		errors = [];
@@ -74,7 +81,7 @@
 			runOutput = 'Error connecting to server.';
 			runSteps = 0;
 		} finally {
-			loading = false;
+			loadingAction = null;
 		}
 	}
 
@@ -140,8 +147,16 @@
 					<TargetPicker {compilerTarget} />
 				</div>
 
-				<Button onclick={() => handleDecompile(false)} disabled={loading}>Decompile</Button>
-				<Button onclick={() => handleDecompile(true)} disabled={loading}>Decompile and Run</Button>
+				<Button onclick={() => handleDecompile(false)} disabled={loadingAction !== null}>
+					{#if loadingAction === 'decompile'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
+					Decompile
+				</Button>
+				<Button onclick={() => handleDecompile(true)} disabled={loadingAction !== null}>
+					{#if loadingAction === 'decompile-run'}<LoaderCircle
+							class="mr-2 h-4 w-4 animate-spin"
+						/>{/if}
+					Decompile and Run
+				</Button>
 				<Button variant="outline" onclick={cleanEditors}>Erase mlog</Button>
 			</div>
 

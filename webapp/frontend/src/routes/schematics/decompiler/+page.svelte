@@ -1,13 +1,25 @@
 <script lang="ts">
 	import { EditorView } from 'codemirror';
+	import { LoaderCircle } from '@lucide/svelte';
 
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
-	import { ApiHandler, type CompileResponseMessage, type SourceRange, type RunResult } from '$lib/api';
+	import {
+		ApiHandler,
+		type CompileResponseMessage,
+		type SourceRange,
+		type RunResult
+	} from '$lib/api';
 	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
-	import { EditorStore, getThemeContext, LocalCompilerTarget, LocalSource, syncUrl } from '$lib/stores.svelte';
+	import {
+		EditorStore,
+		getThemeContext,
+		LocalCompilerTarget,
+		LocalSource,
+		syncUrl
+	} from '$lib/stores.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import { jumpToRange, updateEditor } from '$lib/codemirror';
 	import CopyButton from '$lib/components/CopyButton.svelte';
@@ -24,7 +36,7 @@
 	});
 
 	let runResults = $state<RunResult[]>([]);
-	let loading = $state(false);
+	let loadingAction = $state<'decompile' | 'decompile-run' | null>(null);
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
 	let infos = $state<CompileResponseMessage[]>([]);
@@ -43,7 +55,7 @@
 		if (!encodedEditor.view) return;
 		const source = encodedEditor.view.state.doc.toString();
 		runResults = [];
-		loading = true;
+		loadingAction = run ? 'decompile-run' : 'decompile';
 		errors = [];
 		warnings = [];
 		infos = [];
@@ -71,7 +83,7 @@
 			console.error(e);
 			runResults = [];
 		} finally {
-			loading = false;
+			loadingAction = null;
 		}
 	}
 
@@ -138,8 +150,16 @@
 					<TargetPicker {compilerTarget} />
 				</div>
 
-				<Button onclick={() => handleDecompile(false)} disabled={loading}>Decompile</Button>
-				<Button onclick={() => handleDecompile(true)} disabled={loading}>Decompile and Run</Button>
+				<Button onclick={() => handleDecompile(false)} disabled={loadingAction !== null}>
+					{#if loadingAction === 'decompile'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
+					Decompile
+				</Button>
+				<Button onclick={() => handleDecompile(true)} disabled={loadingAction !== null}>
+					{#if loadingAction === 'decompile-run'}<LoaderCircle
+							class="mr-2 h-4 w-4 animate-spin"
+						/>{/if}
+					Decompile and Run
+				</Button>
 				<Button variant="outline" onclick={cleanEditors}>Erase schematic</Button>
 			</div>
 
@@ -158,7 +178,12 @@
 							<CopyButton getText={() => result.output} />
 						</Card.Header>
 						<Card.Content class="pt-0">
-							<Textarea readonly value={result.output} rows={3} class="bg-muted font-mono text-xs" />
+							<Textarea
+								readonly
+								value={result.output}
+								rows={3}
+								class="bg-muted font-mono text-xs"
+							/>
 						</Card.Content>
 					</Card.Root>
 				{/each}

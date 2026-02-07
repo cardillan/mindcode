@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { EditorView } from 'codemirror';
 	import { tick, untrack } from 'svelte';
+	import { LoaderCircle } from '@lucide/svelte';
 
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
@@ -34,7 +35,7 @@
 		return new EditorView({ parent, extensions: [baseExtensions, EditorView.lineWrapping] });
 	});
 
-	let loading = $state(false);
+	let loadingAction = $state<'build' | 'build-run' | null>(null);
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
 	let infos = $state<CompileResponseMessage[]>([]);
@@ -48,7 +49,7 @@
 	async function handleBuild(run: boolean) {
 		if (!schemacodeEditor.view) return;
 		const source = schemacodeEditor.view.state.doc.toString();
-		loading = true;
+		loadingAction = run ? 'build-run' : 'build';
 		errors = [];
 		warnings = [];
 		infos = [];
@@ -81,7 +82,7 @@
 		} catch (e) {
 			console.error(e);
 		} finally {
-			loading = false;
+			loadingAction = null;
 		}
 	}
 
@@ -128,7 +129,7 @@
 					variant="ghost"
 					size="sm"
 					class="h-auto px-2 py-1 text-primary underline"
-					disabled={loading}
+					disabled={loadingAction !== null}
 					onclick={() => selectSample(sample)}
 					>{sample.title}
 				</Button>
@@ -167,8 +168,14 @@
 					<TargetPicker {compilerTarget} />
 				</div>
 
-				<Button onclick={() => handleBuild(false)} disabled={loading}>Build</Button>
-				<Button onclick={() => handleBuild(true)} disabled={loading}>Build and Run</Button>
+				<Button onclick={() => handleBuild(false)} disabled={loadingAction !== null}>
+					{#if loadingAction === 'build'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
+					Build
+				</Button>
+				<Button onclick={() => handleBuild(true)} disabled={loadingAction !== null}>
+					{#if loadingAction === 'build-run'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
+					Build and Run
+				</Button>
 				<Button variant="outline" onclick={cleanEditors}>Start with a new schematic</Button>
 			</div>
 
