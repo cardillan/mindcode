@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mlogLanguage } from '$lib/grammars/mlog_language';
+	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
 	import { setDiagnostics } from '@codemirror/lint';
 	import { EditorView } from 'codemirror';
 	import { untrack } from 'svelte';
@@ -34,7 +34,7 @@
 	});
 
 	const mlogEditor = new EditorStore(theme, (parent, baseExtensions) => {
-		return new EditorView({ parent, extensions: [baseExtensions, outLanguage.of(mlogLanguage)] });
+		return new EditorView({ parent, extensions: [baseExtensions, outLanguage.of(mlogLanguageExtension)] });
 	});
 
 	let runOutput = $state('');
@@ -59,11 +59,11 @@
 		if (!mlogEditor.view) return;
 		const view = mlogEditor.view;
 
-		const isCurrentlyPlainText = outLanguage.get(view.state) !== mlogLanguage;
+		const isCurrentlyPlainText = outLanguage.get(view.state) !== mlogLanguageExtension;
 		if (isPlainText === isCurrentlyPlainText) return;
 
 		view.dispatch({
-			effects: outLanguage.reconfigure(isPlainText ? [] : mlogLanguage)
+			effects: outLanguage.reconfigure(isPlainText ? [] : mlogLanguageExtension)
 		});
 	});
 
