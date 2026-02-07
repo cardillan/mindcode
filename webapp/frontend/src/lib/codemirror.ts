@@ -1,7 +1,7 @@
 import type { Diagnostic } from '@codemirror/lint';
 import { EditorView } from 'codemirror';
 import type { CompileResponseMessage, SourceRange } from './api';
-import { EditorSelection, Text, Compartment, ChangeDesc, ChangeSet } from '@codemirror/state';
+import { EditorSelection, Text, Compartment } from '@codemirror/state';
 import { forest } from '@fsegurai/codemirror-theme-forest';
 import { vsCodeLight } from '@fsegurai/codemirror-theme-vscode-light';
 
