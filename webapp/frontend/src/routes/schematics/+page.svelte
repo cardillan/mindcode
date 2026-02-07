@@ -7,11 +7,11 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
-	import { ApiHandler, type CompileResponseMessage, type Sample } from '$lib/api';
+	import { ApiHandler, type CompileResponseMessage, type Sample, type SourceRange } from '$lib/api';
 	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
 	import type { PageProps } from './$types';
 	import { setDiagnostics } from '@codemirror/lint';
-	import { compileMessagesToDiagnostics, updateEditor } from '$lib/codemirror';
+	import { compileMessagesToDiagnostics, jumpToRange, updateEditor } from '$lib/codemirror';
 	import {
 		EditorStore,
 		getThemeContext,
@@ -45,6 +45,12 @@
 		untrack(() => data.samples)
 	);
 	const compilerTarget = new LocalCompilerTarget();
+
+	function handleJumpToPosition(range: SourceRange) {
+		if (!schemacodeEditor.view) return;
+
+		jumpToRange(schemacodeEditor.view, range);
+	}
 
 	async function handleBuild(run: boolean) {
 		if (!schemacodeEditor.view) return;
@@ -187,6 +193,12 @@
 			<ProjectLinks variant="schemacode" />
 		</div>
 
-		<CompilerMessages {errors} {warnings} {infos} title="Build messages:" />
+		<CompilerMessages
+			{errors}
+			{warnings}
+			{infos}
+			title="Build messages:"
+			onJumpToPosition={handleJumpToPosition}
+		/>
 	</div>
 </div>
