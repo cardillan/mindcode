@@ -48,6 +48,7 @@
 		errors = [];
 		warnings = [];
 		infos = [];
+		updateEditor(mindcodeEditor.view, '');
 
 		try {
 			const data = await api.decompileMlog({
@@ -81,6 +82,7 @@
 		localSource.clear();
 		compilerTarget.value = '7';
 		updateEditor(mindcodeEditor.view, '');
+		updateEditor(mlogEditor.view, '');
 
 		errors = [];
 		warnings = [];

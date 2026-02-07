@@ -83,6 +83,7 @@
 		errors = [];
 		warnings = [];
 		infos = [];
+		updateEditor(mlogEditor.view, '');
 
 		try {
 			const data = await api.compileMindcode({
@@ -100,11 +101,7 @@
 			localSource.id = data.sourceId;
 
 			if (mlogEditor.view) {
-				const { state } = mlogEditor.view;
-				const transaction = state.update({
-					changes: { from: 0, to: state.doc.length, insert: data.compiled }
-				});
-				mlogEditor.view.dispatch(transaction);
+				updateEditor(mlogEditor.view, data.compiled);
 			}
 
 			if (mindcodeEditor.view) {
@@ -126,6 +123,7 @@
 		localSource.clear();
 		compilerTarget.value = '7';
 		updateEditor(mlogEditor.view, '');
+		updateEditor(mindcodeEditor.view, '');
 
 		errors = [];
 		warnings = [];
