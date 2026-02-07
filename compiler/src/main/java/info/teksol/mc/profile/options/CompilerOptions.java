@@ -4,6 +4,9 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public enum CompilerOptions {
+    ATOMIC_FULL_PROTECTION,
+    ATOMIC_MERGE_LEVEL,
+    ATOMIC_SAFETY_MARGIN,
     AUTO_PRINTFLUSH,
     BOUNDARY_CHECKS,
     EMULATE_STRICT_NOT_EQUAL,
@@ -15,5 +18,4 @@ public enum CompilerOptions {
     SETRATE,
     SYNTAX,
     TARGET_GUARD,
-    VOLATILE_ATOMIC,
 }

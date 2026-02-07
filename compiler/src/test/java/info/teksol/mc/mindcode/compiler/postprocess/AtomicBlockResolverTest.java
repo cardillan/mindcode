@@ -16,7 +16,7 @@ class AtomicBlockResolverTest {
         @Override
         protected CompilerProfile createCompilerProfile() {
             return super.createCompilerProfile()
-                    .setVolatileAtomic(true)
+                    .setAtomicFullProtection(false)
                     .setTarget(new Target("8"))
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
         }
@@ -121,12 +121,12 @@ class AtomicBlockResolverTest {
     }
 
     @Nested
-    class VolatileAtomic extends AbstractCodeOutputTest {
+    class PartialProtectionAtomic extends AbstractCodeOutputTest {
 
         @Override
         protected CompilerProfile createCompilerProfile() {
             return super.createCompilerProfile()
-                    .setVolatileAtomic(true)
+                    .setAtomicFullProtection(false)
                     .setTarget(new Target("8"))
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
         }
@@ -141,7 +141,7 @@ class AtomicBlockResolverTest {
                             end;
                             """,
                     """
-                            wait 0.033334                           # 2.000 ticks for atomic execution of 4 steps at 2 ipt
+                            wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
                             read *tmp1 cell1 0
                             op add *tmp0 *tmp1 1
                             write *tmp0 cell1 0
@@ -163,7 +163,7 @@ class AtomicBlockResolverTest {
                             """,
                     """
                             set p false
-                            wait 0.058334                           # 3.500 ticks for atomic execution of 7 steps at 2 ipt
+                            wait 0.05834                            # 3.500 ticks for atomic execution of 7 steps at 2 ipt
                             jump 9 equal p false
                             print .x*0
                             print .x*1
@@ -192,7 +192,7 @@ class AtomicBlockResolverTest {
                             end;
                             """,
                     """
-                            wait 0.066667                           # 4.000 ticks for atomic execution of 8 steps at 2 ipt
+                            wait 0.06667                            # 4.000 ticks for atomic execution of 8 steps at 2 ipt
                             read :foo:x cell1 0
                             set :foo*retaddr 4
                             jump 6 always 0 0
@@ -246,7 +246,7 @@ class AtomicBlockResolverTest {
                             print(x[0]);
                             """,
                     """
-                            wait 0.016667                           # 1.000 ticks for atomic execution of 2 steps at 2 ipt
+                            wait 0.01667                            # 1.000 ticks for atomic execution of 2 steps at 2 ipt
                             read *tmp1 cell1 0
                             op mul *tmp5 *tmp1 2
                             op add @counter *tmp5 4
@@ -287,7 +287,7 @@ class AtomicBlockResolverTest {
                             """,
                     """
                             set p 0
-                            wait 0.016667                           # 1.000 ticks for atomic execution of 2 steps at 2 ipt
+                            wait 0.01667                            # 1.000 ticks for atomic execution of 2 steps at 2 ipt
                             read *tmp1 cell1 0
                             set .x*ret 7
                             op mul .x*ind *tmp1 2
@@ -334,7 +334,7 @@ class AtomicBlockResolverTest {
                             end;
                             """,
                     """
-                            wait 0.041667                           # 2.500 ticks for atomic execution of 5 steps at 2 ipt
+                            wait 0.04167                            # 2.500 ticks for atomic execution of 5 steps at 2 ipt
                             foo bar                                 # a custom instruction
                             jump m0_skip always
                             print "a"
@@ -349,12 +349,12 @@ class AtomicBlockResolverTest {
     }
 
     @Nested
-    class NonvolatileAtomic extends AbstractCodeOutputTest {
+    class FullProtectionAtomic extends AbstractCodeOutputTest {
 
         @Override
         protected CompilerProfile createCompilerProfile() {
             return super.createCompilerProfile()
-                    .setVolatileAtomic(false)
+                    .setAtomicFullProtection(true)
                     .setTarget(new Target("8"))
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
         }
@@ -368,7 +368,7 @@ class AtomicBlockResolverTest {
                             end;
                             """,
                     """
-                            wait 0.041667                           # 2.500 ticks for atomic execution of 5 steps at 2 ipt
+                            wait 0.04167                            # 2.500 ticks for atomic execution of 5 steps at 2 ipt
                             read *tmp1 cell1 0
                             op add *tmp0 *tmp1 1
                             write *tmp0 cell1 0
@@ -390,7 +390,7 @@ class AtomicBlockResolverTest {
                             """,
                     """
                             set p false
-                            wait 0.066667                           # 4.000 ticks for atomic execution of 8 steps at 2 ipt
+                            wait 0.06667                            # 4.000 ticks for atomic execution of 8 steps at 2 ipt
                             jump 9 equal p false
                             print .x*0
                             print .x*1
@@ -419,7 +419,7 @@ class AtomicBlockResolverTest {
                             end;
                             """,
                     """
-                            wait 0.066667                           # 4.000 ticks for atomic execution of 8 steps at 2 ipt
+                            wait 0.06667                            # 4.000 ticks for atomic execution of 8 steps at 2 ipt
                             read :foo:x cell1 0
                             set :foo*retaddr 4
                             jump 6 always 0 0
@@ -445,7 +445,7 @@ class AtomicBlockResolverTest {
                             end;
                             """,
                     """
-                            wait 0.058334                           # 3.500 ticks for atomic execution of 7 steps at 2 ipt
+                            wait 0.05834                            # 3.500 ticks for atomic execution of 7 steps at 2 ipt
                             set :foo*retaddr 3
                             jump 4 always 0 0                       # The last atomic section instruction
                             end
@@ -513,7 +513,7 @@ class AtomicBlockResolverTest {
                             """,
                     """
                             set p 0
-                            wait 0.022917                           # 1.375 ticks for atomic execution of 11 steps at 8 ipt
+                            wait 0.02292                            # 1.375 ticks for atomic execution of 11 steps at 8 ipt
                             read *tmp1 cell1 0
                             set .x*ret 7
                             op mul .x*ind *tmp1 2
@@ -560,7 +560,7 @@ class AtomicBlockResolverTest {
                             end;
                             """,
                     """
-                            wait 0.041667                           # 2.500 ticks for atomic execution of 5 steps at 2 ipt
+                            wait 0.04167                            # 2.500 ticks for atomic execution of 5 steps at 2 ipt
                             foo bar                                 # a custom instruction
                             jump m0_skip always
                             print "a"

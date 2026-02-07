@@ -98,12 +98,12 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
                 [--encode-zero-characters [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
-                [--setrate {1..1000}] [--ipt {1..1000}] [--volatile-atomic {true,false}]
-                [--boundary-checks {true,false}] [--emulate-strict-not-equal {true,false}]
-                [--enforce-instruction-limit {true,false}] [--error-function {true,false}]
-                [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
-                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--setrate {1..1000}] [--ipt {1..1000}] [--atomic-full-protection [{true,false}]]
+                [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
+                [--emulate-strict-not-equal {true,false}] [--enforce-instruction-limit {true,false}]
+                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
+                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
+                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
                 [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
                 [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
@@ -224,8 +224,13 @@ Compiler options:
   --setrate {1..1000}    generates a 'setrate' instruction with  the  specified  value  in  the initialization code, and
                          sets the IPT value for the compiler to use
   --ipt {1..1000}        sets the IPT value for the compiler to use without generating the 'setrate' instruction
-  --volatile-atomic {true,false}
-                         when active, nonvolatile variables are not protected by atomic blocks
+  --atomic-full-protection [{true,false}]
+                         when set to 'false', nonvolatile variables are not protected by atomic blocks
+  --atomic-merge-level {0..5}
+                         specifies the length limit (in ticks) of  an  atomic  section created by merging shorter atomic
+                         sections
+  --atomic-safety-margin {0.0..4.0}
+                         number of ticks to add to the wait duration at the beginning of an atomic section
   --boundary-checks {true,false}
                          activates or deactivates runtime checks  to  catch  indexes  being  out of range when accessing
                          arrays
@@ -543,12 +548,12 @@ usage: mindcode cs [-h] [-c] [-w [{update,add}]] [--watcher-version {v0,v1}] [--
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
                 [--encode-zero-characters [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
-                [--setrate {1..1000}] [--ipt {1..1000}] [--volatile-atomic {true,false}]
-                [--boundary-checks {true,false}] [--emulate-strict-not-equal {true,false}]
-                [--enforce-instruction-limit {true,false}] [--error-function {true,false}]
-                [--error-reporting {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
-                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--setrate {1..1000}] [--ipt {1..1000}] [--atomic-full-protection [{true,false}]]
+                [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
+                [--emulate-strict-not-equal {true,false}] [--enforce-instruction-limit {true,false}]
+                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
+                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
+                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
                 [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
                 [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
@@ -664,8 +669,13 @@ Compiler options:
   --setrate {1..1000}    generates a 'setrate' instruction with  the  specified  value  in  the initialization code, and
                          sets the IPT value for the compiler to use
   --ipt {1..1000}        sets the IPT value for the compiler to use without generating the 'setrate' instruction
-  --volatile-atomic {true,false}
-                         when active, nonvolatile variables are not protected by atomic blocks
+  --atomic-full-protection [{true,false}]
+                         when set to 'false', nonvolatile variables are not protected by atomic blocks
+  --atomic-merge-level {0..5}
+                         specifies the length limit (in ticks) of  an  atomic  section created by merging shorter atomic
+                         sections
+  --atomic-safety-margin {0.0..4.0}
+                         number of ticks to add to the wait duration at the beginning of an atomic section
   --boundary-checks {true,false}
                          activates or deactivates runtime checks  to  catch  indexes  being  out of range when accessing
                          arrays

@@ -18,11 +18,15 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 @NullMarked
 public class AtomicBlockResolver extends CompilerMessageEmitter {
+    public static final boolean DEBUG_PRINT = false;
+
     private final InstructionProcessor processor;
     private final List<LogicInstruction> program;
+    private ControlFlowGraph graph = ControlFlowGraph.EMPTY;
     private Map<Integer, Set<ControlFlowNode>> domTree = Map.of();
 
     private AtomicBlockResolver(InstructionProcessor processor, List<LogicInstruction> instructions) {
@@ -30,7 +34,7 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
         this.processor = processor;
         this.program = new ArrayList<>(instructions);
 
-        computeDominators(instructions);
+        computeCfg(instructions);
     }
 
     public static List<LogicInstruction> resolve(InstructionProcessor processor, List<LogicInstruction> instructions) {
@@ -38,8 +42,12 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
         return start < 0 ? instructions : new AtomicBlockResolver(processor, instructions).resolve(start);
     }
 
-    private void computeDominators(List<LogicInstruction> program) {
-        ControlFlowGraph graph = new ControlFlowBuilder().buildControlFlowGraph(program);
+    public static void debugPrint(Supplier<String> text) {
+        if (DEBUG_PRINT) System.out.println(text.get());
+    }
+
+    private void computeCfg(List<LogicInstruction> program) {
+        graph = new ControlFlowBuilder().buildControlFlowGraph(program);
         DominatorTreeBuilder builder = new DominatorTreeBuilder();
         domTree = new HashMap<>();
 
@@ -51,10 +59,12 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
             });
         }
 
-//        System.out.println("Dominator tree:");
-//        domTree.entrySet().stream()
-//                .sorted(Comparator.comparingInt(Map.Entry::getKey))
-//                .forEach(e -> System.out.println("#" + e.getKey() + " -> " + e.getValue()));
+        if (DEBUG_PRINT) {
+            System.out.println("Dominator tree:");
+            domTree.entrySet().stream()
+                    .sorted(Comparator.comparingInt(Map.Entry::getKey))
+                    .forEach(e -> System.out.println("#" + e.getKey() + " -> " + e.getValue()));
+        }
     }
 
     // Returns true if the atomic block at the first instruction dominates the atomic block at the second instruction
@@ -75,20 +85,75 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
         return false;
     }
 
-    private @Nullable AstContext context;
-    private @Nullable AtomicError error;
-    private boolean allAtomic;
+    private final Map<Integer, BitSet> predecessorsCache = new HashMap<>();
 
-    private List<LogicInstruction> resolve(int start) {
+    /// Returns a bitset identifying CFG nodes the target is reachable from
+    private BitSet allPredecessors(int target) {
+        return predecessorsCache.computeIfAbsent(target, this::computeAllPredecessors);
+    }
+
+    private BitSet computeAllPredecessors(int target) {
+        BitSet predecessors = new BitSet(program.size());
+        predecessors.set(target);
+
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.add(target);
+        while (!queue.isEmpty()) {
+            int node = queue.remove();
+            for (ControlFlowNode predecessor : graph.nodeMap().get(node).predecessors) {
+                if (!predecessors.get(predecessor.index)) {
+                    predecessors.set(predecessor.index);
+                    queue.add(predecessor.index);
+                }
+            }
+        }
+        return predecessors;
+    }
+
+    // We're using recursion, as it is much simpler than maintaining a queue.
+    // Realistically, code longer than 1000 instructions shouldn't have atomic sections, so we're not afraid
+    // of a stack overflow. If it happens, switch to a heap-based BFS.
+    // Using the visited bitset to detect loops
+    private boolean allPathsCompatible(ControlFlowNode node, int target, int stepLimit, BitSet predecessors, BitSet visited) {
+        if (visited.get(node.index) || !node.compatible) return false;
+        visited.set(node.index);
+
+        for (ControlFlowNode successor : node.successors) {
+            // This node doesn't lie on a path from node to target, ignore it
+            if (!predecessors.get(successor.index)) continue;
+
+            if (successor.index == target) {
+                return stepLimit > 0;
+            } else if (!allPathsCompatible(successor, target, stepLimit - successor.size, predecessors, visited)) {
+                return false;
+            }
+        }
+
+        // Reached the end of a path which doesn't visit the target - that's ok
+        return true;
+    }
+
+    // Returns true if all code paths from start to target are compatible with an atomic section,
+    // including the max path length
+    private boolean allPathsCompatible(int start, int target, int stepLimit) {
+        BitSet visited = new BitSet(program.size());
+        ControlFlowNode node = graph.nodeMap().get(start);
+        return allPathsCompatible(node, target, stepLimit - node.size, allPredecessors(target), visited);
+    }
+
+    private @Nullable AstContext context;
+    private int start;          // Current start node
+    private int ipt;
+
+    private List<LogicInstruction> resolve(int startNode) {
+        this.start = startNode;
         do {
             if (!(program.get(start) instanceof WaitInstruction waitIx)) {
                 // Can't happen
                 throw new MindcodeInternalError("No 'wait' instruction found in atomic block.");
             }
 
-            context = program.get(start).getAstContext();
-            allAtomic = !context.getLocalProfile().isVolatileAtomic();
-            int ipt;
+            context = waitIx.getAstContext();
             if (processor.getProcessorType() == ProcessorType.WORLD_PROCESSOR) {
                 if (context.getLocalProfile().isDefault(CompilerOptions.IPT) && context.getGlobalProfile().isDefault(CompilerOptions.SETRATE)) {
                     error(context.sourcePosition(), ERR.ATOMIC_BLOCK_NO_IPT_SET);
@@ -99,10 +164,10 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
             }
             int ips = 60 * ipt;
             int maxAllowedSteps = 5 * ipt;
-
+            int safetyMargin = (int) Math.ceil(context.getLocalProfile().getAtomicSafetyMargin() * ipt);
 
             // This already includes the initial wait
-            AtomicBlock lastBlock = findLastBlockToMerge(start, ipt, maxAllowedSteps);
+            AtomicBlock lastBlock = findLastBlockToMerge(maxAllowedSteps, safetyMargin);
             if (lastBlock.error != null) {
                 switch (lastBlock.error) {
                     case LOOP -> error(context.sourcePosition(), ERR.ATOMIC_BLOCK_LOOPS);
@@ -126,10 +191,7 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
                         throw new MindcodeInternalError("Cannot encode wait time (%s) to a numeric literal.", sec);
                     }
 
-                    int milliTicks = (int) Math.round(60000 * sec);
-                    program.set(start, waitIx.withTime(waitValue.get()).setComment(
-                            String.format("# %d.%03d ticks for atomic execution of %d steps at %d ipt", milliTicks / 1000, milliTicks % 1000, lastBlock.steps, ipt)));
-
+                    program.set(start, waitIx.withTime(waitValue.get()).setComment(formatComment(sec, safetyMargin, lastBlock.steps)));
                     int last = lastBlock.end - 1;
                     while (program.get(last).getRealSize() == 0) last--;
                     program.get(last).setComment("# The last atomic section instruction");
@@ -142,6 +204,15 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
         return program;
     }
 
+    private String formatComment(double sec, int safetyMargin, int steps) {
+        int safetyMilliTicks = (1000 * safetyMargin / ipt);
+        int milliTicks = (int) Math.round(60000 * sec) - safetyMilliTicks;
+        return safetyMargin > 0
+                ? String.format("# %d.%03d ticks of safety margin plus %d.%03d ticks for atomic execution of %d steps at %d ipt",
+                        safetyMilliTicks/ 1000, safetyMilliTicks % 1000, milliTicks / 1000, milliTicks % 1000, steps, ipt)
+                : String.format("# %d.%03d ticks for atomic execution of %d steps at %d ipt", milliTicks / 1000, milliTicks % 1000, steps, ipt);
+    }
+
     private int findEndOfContext(AstContext context) {
         return CollectionUtils.lastIndexOf(program, ix -> ix.belongsTo(context)) + 1;
     }
@@ -149,17 +220,16 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
     private final Queue<Head> heads = new ArrayDeque<>();
     private final List<AtomicBlock> activeBlocks = new ArrayList<>();
 
-    private AtomicBlock findLastBlockToMerge(int start, int ipt, int maxAllowedSteps) {
+    private AtomicBlock findLastBlockToMerge(int maxAllowedSteps, int safetyMargin) {
         assert context != null;
         AtomicBlock firstBlock = new AtomicBlock(start, findEndOfContext(context));
+        firstBlock.steps = safetyMargin;
+        
         activeBlocks.clear();
         activeBlocks.add(firstBlock);
 
-        // If this block doesn't dominate anything else, no need to look ahead
-        firstBlock.last = !dominatesAny(firstBlock.start);
-
         heads.clear();
-        heads.offer(new Head(start));
+        heads.offer(new Head(start, safetyMargin));
 
         while (firstBlock.valid() && !heads.isEmpty()) {
             Head head = heads.poll();
@@ -168,26 +238,35 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
             }
         }
 
-        if (firstBlock.error != null) {
-            return firstBlock;
-        } else {
-            // Find the last block to process
-            int blockToMerge = 0;
-            for (int i = 0; i < activeBlocks.size() && activeBlocks.get(i).error == null; i++) {
-                // If the shortest code path is greater than a tick, stop
-                if (activeBlocks.get(i).shortestPath > ipt) break;
+        if (DEBUG_PRINT) activeBlocks.forEach(System.out::println);
+        if (firstBlock.last) return firstBlock;
+
+        // Find the last block to process
+        int blockToMerge = 0;
+        int bestUsage = firstBlock.tickUsage();
+        int maxTicks = context.getLocalProfile().getAtomicMergeLevel();
+        debugPrint(() -> "First block tick usage: " + firstBlock.tickUsage());
+
+        for (int i = 1; i < activeBlocks.size(); i++) {
+            AtomicBlock block = activeBlocks.get(i);
+            if (block.error != null || block.tickCount() > maxTicks) break;
+            int tickUsage = block.tickUsage();
+            final int index = i;
+            debugPrint(() -> "Considering merging in block " + index + ": tick usage: " + tickUsage + " steps, total " + block.steps + " steps");
+            if (tickUsage > bestUsage) {
+                bestUsage = tickUsage;
                 blockToMerge = i;
-                if (activeBlocks.get(i).last) break;
             }
-
-            // Deactivate all merged instructions
-            for (int i = 1; i <= blockToMerge; i++) {
-                int index = activeBlocks.get(i).start;
-                program.set(index, processor.createEmpty(program.get(index).getAstContext()));
-            }
-
-            return activeBlocks.get(blockToMerge);
+            if (block.last) break;
         }
+
+        // Deactivate all wait instructions in merged blocks
+        for (int i = 1; i <= blockToMerge; i++) {
+            int index = activeBlocks.get(i).start;
+            program.set(index, processor.createEmpty(program.get(index).getAstContext()));
+        }
+
+        return activeBlocks.get(blockToMerge);
     }
 
     private int findLabelIndex(LogicLabel label) {
@@ -215,25 +294,60 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
                 || (ix instanceof ReadInstruction r && r.getMemory() == LogicBuiltIn.THIS)
                 || (ix instanceof WriteInstruction w && w.getMemory() == LogicBuiltIn.THIS);
 
-        return allAtomic || ix instanceof CustomInstruction || !noOutsideEffects
+        return ix.getLocalProfile().isAtomicFullProtection() || ix instanceof CustomInstruction || !noOutsideEffects
                 || ix.getAllArguments().anyMatch(a -> a.isVolatile() && a != LogicBuiltIn.COUNTER);
     }
 
-    private static class AtomicBlock {
+    private class AtomicBlock {
         int start;                      // First instruction index
         int end;                        // Last instruction index + 1
         int steps = 0;                  // Max number of steps to cross from the very beginning
         int shortestPath = 0;           // Shortest code path reaching this block
-        boolean last = false;           // This is the last block
+        int maxMergePath;               // Maximum path to allow merging
+        boolean last;                   // This is the last block
         @Nullable AtomicError error;    // This block's error, if any
 
         public AtomicBlock(int start, int end) {
             this.start = start;
             this.end = end;
+
+            assert context != null;
+            maxMergePath = context.getLocalProfile().getAtomicMergeLevel() * ipt;
+
+            // If this block doesn't dominate anything else, no need to look further ahead
+            last = !dominatesAny(start);
+        }
+
+        private void updatePathLength(int step) {
+            steps = Math.max(steps, step);
+            if (steps > maxMergePath) last = true;
         }
 
         boolean valid() {
             return error == null;
+        }
+
+        /// The number of used instructions from the last tick
+        int tickUsage() {
+            return steps % ipt;
+        }
+
+        /// The number of ticks required to execute this block
+        int tickCount() {
+            return steps / ipt;
+        }
+
+        @Override
+        public String toString() {
+            return "AtomicBlock{" +
+                    "start=" + start +
+                    ", end=" + end +
+                    ", steps=" + steps +
+                    ", shortestPath=" + shortestPath +
+                    ", maxMergePath=" + maxMergePath +
+                    ", last=" + last +
+                    ", error=" + error +
+                    '}';
         }
     }
 
@@ -248,9 +362,10 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
         List<Integer> stack;            // Call stack
         BitSet visited;                 // Visited instructions
 
-        Head(int start) {
+        Head(int start, int initialSteps) {
             this.block = activeBlocks.getFirst();
             this.next = start;
+            this.step = initialSteps;
             stack = new ArrayList<>();
             visited = new BitSet(program.size());
         }
@@ -262,15 +377,16 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
             this.step = other.step;
             this.stack = new ArrayList<>(other.stack);
             this.visited = (BitSet) other.visited.clone();
-            //System.out.printf("Branching head %d to %d%n", other.id, id);
+            debugPrint(() -> String.format("Branching head %d to %d (block index %d)%n", other.id, id, blockIndex));
         }
 
-        // Sets the error on the current block (if any) and ends the current code path
+        // Sets the error on the current block (if any) and terminates the current code path analysis.
+        // Merging a section is not possible when any path from the start section contains incompatible
+        // instructions, and this is checked by the allPathsCompatible function
         boolean error(AtomicError error) {
             if (block != null) {
                 block.error = error;
-            } else {
-                activeBlocks.get(blockIndex).last = true;
+                block.last = true;
             }
             return false;
         }
@@ -286,7 +402,7 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
 
         boolean step(int maxAllowedSteps) {
             LogicInstruction ix = program.get(next);
-            //System.out.printf("Head %d, address %d, step %d: %s%n", id, next, step, ix);
+            debugPrint(() -> String.format("Head %d, address %d, step %d, block %d: %s", id, next, step, blockIndex, ix));
 
             if (block != null && next != block.start && ix.getOpcode() == Opcode.WAIT) {
                 return error(ix.isAtomicWait() ? AtomicError.NESTED : AtomicError.WAIT);
@@ -299,9 +415,9 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
             // to be able to report the number of steps needed to complete the block better
             if (step > maxAllowedSteps + (blockIndex == 0 && block != null ? 25 : 0)) return error(AtomicError.TOO_LONG);
 
-            // If the instruction isn't safe, extend protection
-            if (isProtected(ix) && block != null && step > block.steps) {
-                block.steps = step;
+            // If the instruction is protected, update the path length
+            if (block != null && isProtected(ix)) {
+                block.updatePathLength(step);
             }
 
             visited.set(next);
@@ -317,8 +433,8 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
 
                         if (blockIndex >= activeBlocks.size()) {
                             // Entering a new block for the first time
-                            if (!dominates(lastBlock.start, current)) {
-                                // The last block doesn't dominate this one, can't merge
+                            if (!dominates(lastBlock.start, current) || !allPathsCompatible(start, current, maxAllowedSteps)) {
+                                // The last block doesn't dominate this one or can't be reached in time: can't merge
                                 lastBlock.last = true;
                                 return false;
                             } else {
@@ -332,7 +448,7 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
                             block = activeBlocks.get(blockIndex);
                             if (block.start != current) {
                                 // Different block, can't merge
-                                lastBlock.last = true;
+                                activeBlocks.get(blockIndex - 1).last = true;
                                 return false;
                             }
                             block.shortestPath = Math.min(block.shortestPath, step);

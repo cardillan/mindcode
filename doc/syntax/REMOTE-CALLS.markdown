@@ -484,7 +484,7 @@ cell1[1] = atomic(cell[0]++);
 compiles to
 
 ```mlog
-wait 0.033334                           # 2.000 ticks for atomic execution of 4 steps at 2 ipt
+wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
 read *tmp2 :cell 0
 op add *tmp1 *tmp2 1
 write *tmp1 :cell 0                     # The last atomic section instruction
@@ -510,7 +510,7 @@ print(increment());
 compiles to:
 
 ```mlog
-wait 0.033334                           # 2.000 ticks for atomic execution of 4 steps at 2 ipt
+wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
 read *tmp2 cell1 0
 op add *tmp1 *tmp2 1
 write *tmp1 cell1 0                     # The last atomic section instruction
@@ -538,7 +538,7 @@ As can be seen, access to `x` (stored in `cell1[0]`) is part of the atomic secti
 
 ```mlog
 read :foo:b cell1 1
-wait 0.033334                           # 2.000 ticks for atomic execution of 4 steps at 2 ipt
+wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
 read *tmp4 cell1 0
 op add *tmp0 *tmp4 1
 write *tmp0 cell1 0
@@ -589,7 +589,28 @@ By default, the atomic section does not protect instructions which cannot be aff
 
 When computing the wait duration, the compiler doesn't consider unprotected instructions at the end of the execution path. Only the steps leading up to and including the last protected instruction are counted. The goal is not to protect instructions such as unconditional jumps or instructions performing returns from functions. Not protecting these instructions may allow for longer atomic sections than would be otherwise possible, especially on microprocessors. 
 
-It is possible to activate protection for all variables by setting the [`volatile-atomic`](SYNTAX-5-OTHER.markdown#option-volatile-atomic) compiler option to `false`.
+It is possible to activate protection for all variables by setting the [`atomic-full-protection`](SYNTAX-5-OTHER.markdown#option-atomic-full-protection) compiler option to `true`.
+
+## Section merging
+
+Consecutive atomic sections may be merged into a single section, resulting in just one `wait` instruction at the beginning of the merged section. This may improve the performance significantly if multiple atomic sections shorter than a single tick are executed in quick succession.
+
+Merging is possible when the last encountered section is known to be always executed before the next section, and all possible code paths leading from the first section to the next section are atomic-compatible. Stackless function calls inside or between two atomic sections also preclude these sections from being merged, even though a stackless function call inside an atomic section is supported when it is atomic-compatible.
+
+As a result, a merged section may also contain instructions that are surrounded by atomic sections without being included in them, or atomic sections which are only executed conditionally.
+
+The `atomic-merge-level` compiler option specifies the limit for merging atomic sections (expressed in ticks). The default value is one tick. When multiple possibilities to merge additional sections exist (e.g., one, two, or three ticks long), the one that has the least amount of instruction quota potentially unused in the final tick of the merged section is chosen.  
+
+```Mindcode
+#set target = 8l;
+
+for i in 0 ... 10 do
+    print(atomic(cell1[i]++));
+end;
+```
+
+> [!NOTE]
+> Atomic section may be merged with a previous one even when it is executed conditionally. When setting the `atomic-merge-level` option to a value greater than one, the final merged section may execute a `wait` several ticks longer than the actual duration of the atomic section due to the execution of the merged section(s) being skipped. Consider this possbility and the consequences for instruction scheduling when setting the `atomic-merge-level` option to a value greater than one.  
 
 ## Example
 
@@ -626,7 +647,7 @@ compiles to:
 # Pay closer attention to sections of the program manipulating @counter
 label_0:
     jump label_0 equal cell1 null
-        wait 0.033334                           # 2.000 ticks for atomic execution of 4 steps at 2 ipt
+        wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
         read *tmp1 cell1 0
         op add *tmp2 *tmp1 1
         write *tmp2 cell1 0                     # The last atomic section instruction

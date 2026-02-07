@@ -554,6 +554,9 @@ Options which affect the way the source code is compiled.
 
 | Option                                                         | Scope  | Semantic stability |
 |----------------------------------------------------------------|--------|--------------------|
+| [atomic-full-protection](#option-atomic-full-protection)       | local  | stable             |
+| [atomic-merge-level](#option-atomic-merge-level)               | local  | stable             |
+| [atomic-safety-margin](#option-atomic-safety-margin)           | local  | stable             |
 | [auto-printflush](#option-auto-printflush)                     | global | stable             |
 | [boundary-checks](#option-boundary-checks)                     | local  | stable             |
 | [emulate-strict-not-equal](#option-emulate-strict-not-equal)   | global | stable             |
@@ -565,7 +568,33 @@ Options which affect the way the source code is compiled.
 | [setrate](#option-setrate)                                     | global | stable             |
 | [syntax](#option-syntax)                                       | module | stable             |
 | [target-guard](#option-target-guard)                           | global | stable             |
-| [volatile-atomic](#option-volatile-atomic)                     | local  | stable             |
+
+### Option `atomic-full-protection`
+
+**Option scope: [local](#local-scope)**
+
+This option governs the behavior of [atomic sections](REMOTE-CALLS.markdown#atomic-code-execution). Possible values are:
+
+* `false` (the default value): only instructions interacting with the world and instructions accessing volatile variables are protected and guaranteed to be executed atomically.
+* `true`: all instructions in an atomic block are protected and guaranteed to be executed atomically.
+
+Mindcode's contract regarding variables is that only volatile variables may be accessed by other processors, and therefore non-volatile variables, including compiler-generated variables, do not need to be protected.
+
+### Option `atomic-merge-level`
+
+**Option scope: [local](#local-scope)**
+
+This option specifies whether and how can consecutive [atomic sections](REMOTE-CALLS.markdown#atomic-code-execution) be merged. Possible values are integers in the range of `0` to `5` (inclusive). The default value is `1`.
+
+The value of `0` means no atomic sections will ever be merged. Nonzero values specify the length of the merged atomic section (in ticks) that must not be exceeded when merging consecutive atomic sections. The value of this option in effect for the first section in a chain of sections to be potentially merged is used for all sections in the chain.
+
+### Option `atomic-safety-margin`
+
+**Option scope: [local](#local-scope)**
+
+This option specifies the length of time (expressed in ticks or fractions of ticks) added to the wait time of the initial `wait` instruction in an [atomic section](REMOTE-CALLS.markdown#atomic-code-execution). Possible values are decimal numbers in the range of `0` to `4` (inclusive). The default value is `0`.
+
+Depending on the Mindustry version being run and the environment used, the `wait` instruction might not fully guarantee the atomicity of the atomic section. Increasing the wait time by some safety margin might help to reduce failure rates. Values over `0.5` probably aren't reasonable in most situations.  
 
 ### Option `auto-printflush`
 
@@ -692,12 +721,12 @@ compiles to:
 
 ```mlog
 setrate 500
-wait 0.000134                           # 0.008 ticks for atomic execution of 4 steps at 500 ipt
+wait 0.00014                            # 0.008 ticks for atomic execution of 4 steps at 500 ipt
 read *tmp1 cell1 0
 op add *tmp0 *tmp1 1
 write *tmp0 cell1 0                     # The last atomic section instruction
 setrate 1000
-wait 0.000067                           # 0.004 ticks for atomic execution of 4 steps at 1000 ipt
+wait 0.00007                            # 0.004 ticks for atomic execution of 4 steps at 1000 ipt
 read *tmp4 cell1 1
 op add *tmp3 *tmp4 1
 write *tmp3 cell1 1                     # The last atomic section instruction
@@ -743,7 +772,7 @@ compiles to:
 
 ```mlog
 setrate 750
-wait 0.000089                           # 0.005 ticks for atomic execution of 4 steps at 750 ipt
+wait 0.00009                            # 0.005 ticks for atomic execution of 4 steps at 750 ipt
 read *tmp1 cell1 0
 op add *tmp0 *tmp1 1
 write *tmp0 cell1 0                     # The last atomic section instruction
@@ -786,17 +815,6 @@ The guard code is always a single `jump` instruction which jumps back to itself 
 | 8.1    | full                | `jump 0 strictEqual @bufferSize null`  |
 
 The jump target (`0`) is replaced with proper instruction address when it's not the first in the compiled code.
-
-### Option `volatile-atomic`
-
-**Option scope: [local](#local-scope)**
-
-This option governs the behavior of the [`atomic` code blocks](REMOTE-CALLS.markdown#atomic-code-execution). Possible values are:
-
-* `false`: all instructions in an atomic block are protected and guaranteed to be executed atomically.
-* `true` (the default value): only instructions interacting with the world, and instructions accessing volatile variables, are protected and guaranteed to be executed atomically.
-
-Mindcode's contract regarding variables is that only volatile variables may be accessed by other processors, and therefore non-volatile variables, including compiler-generated variables, do not need to be protected. Such variables can't be influenced from the outside and therefore don't need to be protected.
 
 ## Optimization options
 

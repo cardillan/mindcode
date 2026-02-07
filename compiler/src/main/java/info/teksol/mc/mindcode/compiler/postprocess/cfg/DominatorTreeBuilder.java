@@ -12,9 +12,9 @@ public class DominatorTreeBuilder {
     private ControlFlowNode entryPoint = new ControlFlowNode(0);
 
     public DominatorTreeBuilder() {
-        // Empty map
+        // Empty graph
         this.nodes = List.of(entryPoint);
-        this.nodeMap = nodes.stream().collect(Collectors.toMap(ControlFlowNode::getIndex, v -> v));
+        this.nodeMap = Map.of(0, entryPoint);
     }
 
     public DominatorTree build(ControlFlowNode entryPoint) {

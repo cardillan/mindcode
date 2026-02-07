@@ -340,8 +340,8 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return this;
     }
 
-    public CompilerProfile setVolatileAtomic(boolean volatileAtomic) {
-        getOption(CompilerOptions.VOLATILE_ATOMIC).setValue(volatileAtomic);
+    public CompilerProfile setAtomicFullProtection(boolean atomicFullProtection) {
+        getOption(CompilerOptions.ATOMIC_FULL_PROTECTION).setValue(atomicFullProtection);
         return this;
     }
     //</editor-fold>

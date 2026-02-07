@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.postprocess.cfg;
 
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.WaitInstruction;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -10,26 +11,36 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
+
 @NullMarked
 public class ControlFlowNode {
     // First instruction index
     public final int index;
-    final List<LogicInstruction> instructions = new ArrayList<>();
-    final Set<String> entryLabels = new HashSet<>();
-    final Set<String> exitLabels = new HashSet<>();
-    final Set<ControlFlowNode> successors = new HashSet<>();
-    final Set<ControlFlowNode> predecessors = new HashSet<>();
+    public final List<LogicInstruction> instructions = new ArrayList<>();
+    public final Set<String> entryLabels = new HashSet<>();
+    public final Set<String> exitLabels = new HashSet<>();
+    public final Set<ControlFlowNode> successors = new HashSet<>();
+    public final Set<ControlFlowNode> predecessors = new HashSet<>();
 
     @Nullable WaitInstruction atomicWait = null;
-    int size = 0;
+    public int size = 0;
+
+    /// Indicates the node is compatible with an atomic section
+    public boolean compatible = true;
 
     public ControlFlowNode(int index) {
         this.index = index;
     }
 
+    private static final Set<Opcode> INCOMPATIBLE_OPCODES = Set.of(WAIT, CALL, CALLREC, RETURN, RETURNREC, SETRATE);
+
     public void addInstruction(LogicInstruction instruction) {
         instructions.add(instruction);
         size += instruction.getRealSize();
+        if (INCOMPATIBLE_OPCODES.contains(instruction.getOpcode()) && !instruction.isAtomicWait()) {
+            compatible = false;
+        }
     }
 
     public int getIndex() {

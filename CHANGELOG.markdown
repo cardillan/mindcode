@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * When an atomic section doesn't contain any protected instruction, the `wait` instruction providing the atomicity of the section is not generated.
 * The `setrate` instruction is no longer allowed in atomic sections.
+* The `volatile-atomic` compiler option has been renamed to [`atomic-full-protection`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-atomic-full-protection), with inverted meaning.
 * Changed Mindcode syntax to allow specifying multiple [function modifiers](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-modifiers) in arbitrary order. For example, it is now possible to declare a function as `inline debug` as well as `debug inline` (which was the only allower order previously).
 * Compiler and optimizer messages are no longer output on the console in the command-line application. To access these messages, a log file needs to be generated.
 * Console output is generated on the fly, instead of being cached and dumped all at once when the processing is finished.
@@ -47,7 +48,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added new `@maxUnits` sensable property.
 * Added an [atomic code block](doc/syntax/REMOTE-CALLS.markdown#atomic-blocks): a section of code guaranteed to be executed atomically (without interruption), meaning that other processors or game updates do not change the world state.
 * Added the [`setrate`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-setrate) and [`ipt` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-ipt). These options specify the rate at which a world processor executes instructions (used by the compiler when building atomic sections).
-* Added the [`volatile-atomic` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-volatile-atomic) governing the way atomic sections are created.
+* Added the [`volatile-atomic` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-atomic-full-protection) governing the way atomic sections are created.
 * Added the [`processor-id`, `program-name` and `program-version` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-processor-id). These options take string values, which are then encoded into a `*id` variable and can be used to identify the processor in the schematics.
 * Added the [`emulator-fps` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-fps) to specify the frame rate to be emulated by the processor emulator. While frames are always emulated fully by Mindcode emulator, the change in instruction scheduling caused by different frame rate only affects situations where an interaction between two or more processors is being emulated.
 * Added the ability to run the compiled schematics on the schematics emulator to the tool app.

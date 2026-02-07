@@ -59,8 +59,16 @@ public interface LocalCompilerProfile {
         return isDefault(CompilerOptions.IPT) ? getIntValue(CompilerOptions.SETRATE) : getIntValue(CompilerOptions.IPT);
     }
 
-    default boolean isVolatileAtomic() {
-        return getBooleanValue(CompilerOptions.VOLATILE_ATOMIC);
+    default boolean isAtomicFullProtection() {
+        return getBooleanValue(CompilerOptions.ATOMIC_FULL_PROTECTION);
+    }
+
+    default int getAtomicMergeLevel() {
+        return getIntValue(CompilerOptions.ATOMIC_MERGE_LEVEL);
+    }
+
+    default double getAtomicSafetyMargin() {
+        return getDoubleValue(CompilerOptions.ATOMIC_SAFETY_MARGIN);
     }
 
     default Remarks getRemarks() {

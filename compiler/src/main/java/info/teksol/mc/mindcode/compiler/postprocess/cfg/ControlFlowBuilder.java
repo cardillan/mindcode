@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.postprocess.cfg;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.postprocess.AtomicBlockResolver;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import org.jspecify.annotations.NullMarked;
@@ -107,13 +108,16 @@ public class ControlFlowBuilder {
             if (unreachable.isEmpty()) break;
         }
 
-//        System.out.println("Total nodes: " + allNodes.size());
-//        for (ControlFlowNode node : allNodes) {
-//            System.out.println(node + " -> " + node.successors + (node.atomicWait != null ? " (atomic wait)" : ""));
-//            node.instructions.forEach(System.out::println);
-//        }
+        if (AtomicBlockResolver.DEBUG_PRINT) {
+            System.out.println("Total nodes: " + allNodes.size());
+            for (ControlFlowNode node : allNodes) {
+                System.out.println(node + " -> " + node.successors + (node.atomicWait != null ? " (atomic wait)" : ""));
+                node.instructions.forEach(System.out::println);
+            }
+        }
 
-        return new ControlFlowGraph(allNodes, List.copyOf(entryNodeSet));
+        Map<Integer, ControlFlowNode> nodeMap = allNodes.stream().collect(Collectors.toMap(ControlFlowNode::getIndex, v -> v));
+        return new ControlFlowGraph(allNodes, nodeMap, List.copyOf(entryNodeSet));
     }
 
     private void next() {

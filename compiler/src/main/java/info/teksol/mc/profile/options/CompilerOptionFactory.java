@@ -209,11 +209,23 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 1, 1000, 8));
 
-        list.add(new BooleanCompilerOptionValue(CompilerOptions.VOLATILE_ATOMIC, "",
-                "when active, nonvolatile variables are not protected by atomic blocks",
+        list.add(new BooleanCompilerOptionValue(CompilerOptions.ATOMIC_FULL_PROTECTION, "",
+                "when set to 'false', nonvolatile variables are not protected by atomic blocks",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new IntegerCompilerOptionValue(CompilerOptions.ATOMIC_MERGE_LEVEL, "",
+                "specifies the length limit (in ticks) of an atomic section created by merging shorter atomic sections",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                 OptionAvailability.UNIVERSAL, category,
-                true));
+                0, 5, 1));
+
+        list.add(new DoubleCompilerOptionValue(CompilerOptions.ATOMIC_SAFETY_MARGIN, "",
+                "number of ticks to add to the wait duration at the beginning of an atomic section",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                0, 4, 0));
 
         list.add(new BooleanCompilerOptionValue(CompilerOptions.BOUNDARY_CHECKS, "",
                 "activates or deactivates runtime checks to catch indexes being out of range when accessing arrays",
