@@ -5,7 +5,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
-	import { ApiHandler, type CompileResponseMessage, type SourceRange } from '$lib/api';
+	import { ApiHandler, type CompileResponseMessage, type SourceRange, type RunResult } from '$lib/api';
 	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
 	import { EditorStore, getThemeContext, LocalCompilerTarget, LocalSource, syncUrl } from '$lib/stores.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
@@ -23,8 +23,7 @@
 		return new EditorView({ parent, extensions: [baseExtensions, schemacodeLanguage] });
 	});
 
-	let runOutput = $state('');
-	let runSteps = $state(0);
+	let runResults = $state<RunResult[]>([]);
 	let loading = $state(false);
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
@@ -43,8 +42,7 @@
 	async function handleDecompile(run: boolean) {
 		if (!encodedEditor.view) return;
 		const source = encodedEditor.view.state.doc.toString();
-		runOutput = '';
-		runSteps = 0;
+		runResults = [];
 		loading = true;
 		errors = [];
 		warnings = [];
@@ -57,8 +55,7 @@
 				run,
 				target: compilerTarget.value
 			});
-			runOutput = data.runResults[0]?.output ?? '';
-			runSteps = data.runResults[0]?.steps ?? 0;
+			runResults = data.runResults;
 
 			if (schemacodeEditor.view) {
 				const transaction = schemacodeEditor.view.state.update({
@@ -74,8 +71,7 @@
 			await syncUrl({ localSource, compilerTarget });
 		} catch (e) {
 			console.error(e);
-			runOutput = 'Error connecting to server.';
-			runSteps = 0;
+			runResults = [];
 		} finally {
 			loading = false;
 		}
@@ -89,8 +85,7 @@
 		errors = [];
 		warnings = [];
 		infos = [];
-		runOutput = '';
-		runSteps = 0;
+		runResults = [];
 
 		await syncUrl({ localSource, compilerTarget });
 	}
@@ -137,7 +132,7 @@
 	</div>
 
 	<!-- Controls -->
-	<div class="grid max-h-[20vh] shrink-0 grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">
+	<div class="grid min-h-[20vh] shrink-0 grid-cols-1 gap-4 md:grid-cols-2">
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-wrap items-center gap-2">
 				<div class="w-55">
@@ -153,9 +148,21 @@
 		</div>
 
 		<div class="flex flex-col gap-2">
-			{#if runOutput}
-				<Label for="output">Program output ({runSteps} steps):</Label>
-				<Textarea id="output" readonly value={runOutput} rows={4} class="bg-muted font-mono" />
+			{#if runResults.length > 0}
+				<Label>Program output{runResults.length > 1 ? 's' : ''}:</Label>
+				{#each runResults as result (result.processorId)}
+					<Card.Root class="border">
+						<Card.Header class="relative pb-2">
+							<Card.Title class="text-sm">
+								Processor {result.processorId} ({result.steps} steps)
+							</Card.Title>
+							<CopyButton getText={() => result.output} />
+						</Card.Header>
+						<Card.Content class="pt-0">
+							<Textarea readonly value={result.output} rows={3} class="bg-muted font-mono text-xs" />
+						</Card.Content>
+					</Card.Root>
+				{/each}
 			{/if}
 
 			<CompilerMessages
