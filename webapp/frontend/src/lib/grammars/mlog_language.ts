@@ -1,6 +1,7 @@
-import { indentNodeProp, LRLanguage } from '@codemirror/language';
+import { indentNodeProp, LanguageSupport, LRLanguage } from '@codemirror/language';
 import { parser } from './mlog.grammar';
 import { styleTags, tags as t } from '@lezer/highlight';
+import { lineNumbers } from '@codemirror/view';
 
 // use this https://lezer-playground.vercel.app/
 // playground to test the grammar
@@ -67,3 +68,11 @@ export const mlogLanguage = LRLanguage.define({
 		commentTokens: { line: '#' }
 	}
 });
+
+export const mlogLanguageExtension = new LanguageSupport(mlogLanguage, [
+	lineNumbers({
+		formatNumber(lineNo, state) {
+			return (lineNo - 1).toString();
+		}
+	})
+]);

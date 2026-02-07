@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mlogLanguage } from '$lib/grammars/mlog_language';
+	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
 	import { EditorView } from 'codemirror';
 
 	import { Button } from '$lib/components/ui/button';
@@ -17,7 +17,7 @@
 
 	const theme = getThemeContext();
 	const mlogEditor = new EditorStore(theme, (parent, baseExtensions) => {
-		return new EditorView({ parent, extensions: [baseExtensions, mlogLanguage] });
+		return new EditorView({ parent, extensions: [baseExtensions, mlogLanguageExtension] });
 	});
 	const mindcodeEditor = new EditorStore(theme, (parent, baseExtensions) => {
 		return new EditorView({ parent, extensions: [baseExtensions, mindcodeLanguage] });
