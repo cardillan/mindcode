@@ -47,6 +47,7 @@
 		errors = [];
 		warnings = [];
 		infos = [];
+		updateEditor(schemacodeEditor.view, '');
 
 		try {
 			const data = await api.decompileSchematic({
@@ -58,10 +59,7 @@
 			runResults = data.runResults;
 
 			if (schemacodeEditor.view) {
-				const transaction = schemacodeEditor.view.state.update({
-					changes: { from: 0, to: schemacodeEditor.view.state.doc.length, insert: data.source }
-				});
-				schemacodeEditor.view.dispatch(transaction);
+				updateEditor(schemacodeEditor.view, data.source);
 			}
 			errors = data.errors;
 			warnings = data.warnings;
@@ -81,6 +79,7 @@
 		localSource.clear();
 		compilerTarget.value = '7';
 		updateEditor(schemacodeEditor.view, '');
+		updateEditor(encodedEditor.view, '');
 
 		errors = [];
 		warnings = [];
