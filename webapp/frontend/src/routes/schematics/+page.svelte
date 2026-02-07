@@ -150,7 +150,12 @@
 		<!-- Target Editor -->
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Encoded schematic:</Label>
-			<div class="relative">
+			<div
+				class={[
+					'relative transition-opacity',
+					loadingAction !== null && 'pointer-events-none opacity-50'
+				]}
+			>
 				<CopyButton getText={() => encodedEditor.view?.state.doc.toString() ?? ''} />
 				<div
 					class="h-[60vh] overflow-hidden rounded-md border bg-muted"
