@@ -11,12 +11,16 @@ import { parseMixed } from '@lezer/common';
 import { styleTags, tags as t } from '@lezer/highlight';
 import { mlogLanguage } from './mlog_language';
 
+const mlogParser = mlogLanguage.parser.configure({
+	dialect: 'mindcodeEmbed'
+});
+
 export const mindcodeLanguage = LRLanguage.define({
 	name: 'mindcode',
 	parser: parser.configure({
 		wrap: parseMixed((node) => {
 			if (node.name !== 'MlogBlockContent') return null;
-			return { parser: mlogLanguage.parser };
+			return { parser: mlogParser };
 		}),
 		props: [
 			styleTags({

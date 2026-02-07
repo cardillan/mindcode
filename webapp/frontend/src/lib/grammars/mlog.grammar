@@ -1,4 +1,5 @@
-// copied from https://github.com/JeanJPNM/mlogls/blob/aaa80957e5a313e35e61173cce4979c6d576fe3b/packages/site/src/codemirror/syntax.grammar
+// modified from https://github.com/JeanJPNM/mlogls/blob/aaa80957e5a313e35e61173cce4979c6d576fe3b/packages/site/src/codemirror/syntax.grammar
+@dialects { mindcodeEmbed }
 @top Program { statements? }
 
 @skip { whitespace | Comment }
