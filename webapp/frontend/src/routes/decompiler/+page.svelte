@@ -6,12 +6,14 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
-	import { ApiHandler } from '$lib/api';
+	import { ApiHandler, type SourceRange } from '$lib/api';
 	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
-	import { EditorStore, getThemeContext, LocalSource, syncUrl } from '$lib/stores.svelte';
-	import { updateEditor } from '$lib/codemirror';
+	import { EditorStore, getThemeContext, LocalCompilerTarget, LocalSource, syncUrl } from '$lib/stores.svelte';
+	import { jumpToRange, updateEditor } from '$lib/codemirror';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
+	import TargetPicker from '$lib/components/TargetPicker.svelte';
+	import { Textarea } from '$lib/components/ui/textarea';
 
 	const theme = getThemeContext();
 	const mlogEditor = new EditorStore(theme, (parent, baseExtensions) => {
@@ -21,25 +23,41 @@
 		return new EditorView({ parent, extensions: [baseExtensions, mindcodeLanguage] });
 	});
 
+	let runOutput = $state('');
+	let runSteps = $state(0);
+
 	let loading = $state(false);
 	let errors = $state<any[]>([]);
 	let warnings = $state<any[]>([]);
 	let infos = $state<any[]>([]);
 	const api = new ApiHandler();
 	const localSource = new LocalSource(api, () => mlogEditor.view, []);
+	const compilerTarget = new LocalCompilerTarget();
 
-	async function handleDecompile() {
+		function handleJumpToPosition(range: SourceRange) {
+		if (!mindcodeEditor.view) return;
+
+		jumpToRange(mindcodeEditor.view, range);
+	}
+	async function handleDecompile(run: boolean) {
 		if (!mlogEditor.view) return;
 		const source = mlogEditor.view.state.doc.toString();
 		loading = true;
+		runOutput = '';
+		runSteps = 0;
 		errors = [];
 		warnings = [];
 		infos = [];
+
 		try {
 			const data = await api.decompileMlog({
 				sourceId: localSource.id,
-				source
+				source,
+				target: compilerTarget.value,
+				run
 			});
+			runOutput = data.runResults[0]?.output ?? '';
+			runSteps = data.runResults[0]?.steps ?? 0;
 
 			if (mindcodeEditor.view) {
 				updateEditor(mindcodeEditor.view, data.source);
@@ -49,9 +67,11 @@
 			infos = data.infos;
 			localSource.id = data.sourceId;
 
-			await syncUrl({ localSource });
+			await syncUrl({ localSource, compilerTarget });
 		} catch (e) {
 			console.error(e);
+			runOutput = 'Error connecting to server.';
+			runSteps = 0;
 		} finally {
 			loading = false;
 		}
@@ -59,13 +79,14 @@
 
 	async function cleanEditors() {
 		localSource.clear();
+		compilerTarget.value = '7';
 		updateEditor(mindcodeEditor.view, '');
 
 		errors = [];
 		warnings = [];
 		infos = [];
 
-		await syncUrl({ localSource });
+		await syncUrl({ localSource, compilerTarget });
 	}
 </script>
 
@@ -113,13 +134,31 @@
 	<div class="grid max-h-[20vh] shrink-0 grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-wrap items-center gap-2">
-				<Button onclick={handleDecompile} disabled={loading}>Decompile</Button>
+				<div class="w-55">
+					<TargetPicker {compilerTarget} />
+				</div>
+
+				<Button onclick={() => handleDecompile(false)} disabled={loading}>Decompile</Button>
+				<Button onclick={() => handleDecompile(true)} disabled={loading}>Decompile and Run</Button>
 				<Button variant="outline" onclick={cleanEditors}>Erase mlog</Button>
 			</div>
 
 			<ProjectLinks />
 		</div>
 
-		<CompilerMessages {errors} {warnings} {infos} title="Decompiler messages:" />
+		<div class="flex flex-col gap-2">
+			{#if runOutput}
+				<Label for="output">Program output ({runSteps} steps):</Label>
+				<Textarea id="output" readonly value={runOutput} rows={4} class="bg-muted font-mono" />
+			{/if}
+
+			<CompilerMessages
+				{errors}
+				{warnings}
+				{infos}
+				title="Compiler messages:"
+				onJumpToPosition={handleJumpToPosition}
+			/>
+		</div>
 	</div>
 </div>
