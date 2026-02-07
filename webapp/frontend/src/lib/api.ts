@@ -6,6 +6,12 @@ export interface SourceRange {
 	endColumn: number;
 }
 
+export interface RunResult {
+	processorId: string;
+	output: string;
+	steps: number;
+}
+
 export interface CompileRequest {
 	sourceId: string | undefined;
 	source: string;
@@ -22,8 +28,7 @@ export interface CompileResponseMessage {
 export interface CompileResponse {
 	sourceId: string;
 	compiled: string;
-	runOutput: string;
-	runSteps: number;
+	runResult: RunResult | null;
 	errors: CompileResponseMessage[];
 	warnings: CompileResponseMessage[];
 	infos: CompileResponseMessage[];
@@ -34,11 +39,13 @@ export interface SchemacodeCompileRequest {
 	sourceId: string | undefined;
 	source: string;
 	target: string;
+	run: boolean;
 }
 
 export interface SchemacodeCompileResponse {
 	sourceId: string;
 	compiled: string;
+	runResults: RunResult[];
 	errors: CompileResponseMessage[];
 	warnings: CompileResponseMessage[];
 	infos: CompileResponseMessage[];
@@ -47,6 +54,8 @@ export interface SchemacodeCompileResponse {
 export interface DecompileRequest {
 	sourceId: string | undefined;
 	source: string;
+	target: string;
+	run: boolean;
 }
 
 export interface DecompileResponse {
@@ -55,6 +64,7 @@ export interface DecompileResponse {
 	errors: CompileResponseMessage[];
 	warnings: CompileResponseMessage[];
 	infos: CompileResponseMessage[];
+	runResults: RunResult[];
 }
 
 export interface ServerSource {

@@ -2,25 +2,37 @@ package info.teksol.mindcode.webapp;
 
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.emulator.EmulatorMessage;
-import info.teksol.mc.messages.ListMessageLogger;
-import info.teksol.mc.messages.MessageLevel;
-import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.emulator.*;
+import info.teksol.mc.emulator.blocks.BlockPosition;
+import info.teksol.mc.emulator.blocks.LogicBlock;
+import info.teksol.mc.emulator.mimex.BasicEmulator;
+import info.teksol.mc.messages.*;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.generation.variables.StandardNameCreator;
 import info.teksol.mc.mindcode.decompiler.MlogDecompiler;
+import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.Target;
 import info.teksol.schemacode.SchemacodeCompiler;
 import info.teksol.schemacode.SchematicsDecompiler;
+import info.teksol.schemacode.SchematicsMetadata;
+import info.teksol.schemacode.mindustry.SchematicsIO;
+import info.teksol.schemacode.schematics.Decompiler;
+import info.teksol.schemacode.schematics.Schematic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.stringtemplate.v4.compiler.Compiler;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -92,16 +104,48 @@ public class ApiController {
                 warnings(messageLogger),
                 infos(messageLogger),
                 processRunOutput(compiler),
-                compiler.getSteps(),
                 isText
         );
     }
 
     @PostMapping("/decompile")
     public DecompileResponse decompileMlog(@RequestBody DecompileRequest request) {
+        Target target = new Target(request.target);
+        boolean run = request.run();
         Source sourceDto =  getSourceDto(request.sourceId, request.source);
-        final String decompiled = MlogDecompiler.decompile(sourceDto.getSource());
-        return new DecompileResponse(sourceDto.getId().toString(),decompiled, List.of(), List.of(), List.of());
+        String mlog = sourceDto.getSource();
+        final String decompiled = MlogDecompiler.decompile(mlog);
+
+        ListMessageLogger messageLogger = new ListMessageLogger();
+        List<RunResult> runResults = List.of();
+
+        if(run) {
+            CompilerProfile profile = CompilerProfile.fullOptimizations(false, true).setTarget(target).setRun(run);
+            InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(
+                    messageLogger,
+                    new StandardNameCreator(),
+                    profile);
+            MindustryMetadata metadata = instructionProcessor.getMetadata();
+
+            LogicBlock logicBlock = LogicBlock.createProcessor(metadata, profile.getEmulatorTarget().type(),
+                    BlockPosition.ZERO_POSITION, mlog);
+            logicBlock.createDefaultBlocks(metadata);
+
+            EmulatorSchematic schematic = new EmulatorSchematic(List.of(logicBlock));
+            Emulator emulator = new BasicEmulator(messageLogger, profile, schematic);
+
+            emulator.run(profile.getStepLimit());
+            runResults = processEmulatorResults(emulator);
+        }
+
+        return new DecompileResponse(
+                sourceDto.getId().toString(),
+                decompiled,
+                errors(messageLogger),
+                warnings(messageLogger),
+                infos(messageLogger),
+                runResults
+        );
     }
 
     @PostMapping("/schemacode/compile")
@@ -113,31 +157,48 @@ public class ApiController {
         final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(
                 messageLogger,
                 InputFiles.fromSource(sourceDto.getSource()),
-                CompilerProfile.fullOptimizations(true, true).setTarget(target));
+                CompilerProfile.fullOptimizations(true, true).setTarget(target).setRun(request.run));
 
         String compiledCode = result.getStringOutput();
+        List<RunResult> runResults = result.emulator() instanceof Emulator emulator ? processEmulatorResults(emulator) : List.of();
 
         return new SchemacodeCompileResponse(
                 sourceDto.getId().toString(),
                 compiledCode,
                 errors(messageLogger),
                 warnings(messageLogger),
-                infos(messageLogger)
+                infos(messageLogger),
+                runResults
         );
     }
 
     @PostMapping("/schemacode/decompile")
     public DecompileResponse decompileSchematic(@RequestBody DecompileRequest request) {
-        Source sourceDto =  getSourceDto(request.sourceId, request.source);
+        Source sourceDto = getSourceDto(request.sourceId, request.source);
         ListMessageLogger messageLogger = new ListMessageLogger();
         final CompilerOutput<String> compilerOutput = SchematicsDecompiler.decompile(messageLogger, sourceDto.getSource());
+        List<RunResult> runResults = List.of();
+
+        run: if (request.run) {
+            Target target = new Target(request.target);
+            CompilerProfile profile = CompilerProfile.fullOptimizations(false, true).setTarget(target).setRun(request.run);
+            Schematic schematic = parseSchematic(sourceDto.getSource(), messageLogger);
+            if(schematic == null) break run;
+
+            EmulatorSchematic emulatorSchematic = schematic.toEmulatorSchematic(SchematicsMetadata.getMetadata());
+            Emulator emulator = new BasicEmulator(messageLogger, profile, emulatorSchematic);
+            emulator.run(profile.getStepLimit());
+
+            runResults = processEmulatorResults(emulator);
+        }
 
         return new DecompileResponse(
                 sourceDto.getId().toString(),
                 compilerOutput.output(),
                 errors(messageLogger),
                 warnings(messageLogger),
-                infos(messageLogger)
+                infos(messageLogger),
+                runResults
         );
     }
 
@@ -235,8 +296,10 @@ public class ApiController {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private String processRunOutput(MindcodeCompiler compiler) {
+    private RunResult processRunOutput(MindcodeCompiler compiler) {
         if (compiler.hasCompilerErrors()) {
+            return null;
+        } else if(!compiler.compilerProfile().isRun()) {
             return null;
         } else {
             String output = compiler.getTextBufferOutput();
@@ -251,7 +314,47 @@ public class ApiController {
                 text = text + "\n" + emulatorError.get().message();
             }
 
-            return text;
+            String processorId = compiler.getEmulator().getExecutorResults(0).getProcessorId();
+            int steps = compiler.getSteps();
+
+            return new RunResult(processorId, text, steps);
+        }
+    }
+
+    private List<RunResult> processEmulatorResults(Emulator emulator) {
+        ArrayList<RunResult> results = new ArrayList<>();
+
+        for(ExecutorResults executorResult : emulator.getExecutorResults()) {
+            String id =  executorResult.getProcessorId();
+            int steps = executorResult.getSteps();
+            String output = executorResult.getFormattedOutput();
+            if(output.isEmpty()) {
+                output = "The program didn't generate any output.";
+            }
+            results.add(new RunResult(id, output, steps));
+        }
+
+        return results;
+    }
+
+    private Schematic parseSchematic(String encodedSchematic, MessageConsumer messageConsumer) {
+        if (encodedSchematic.isBlank()) {
+            return null;
+        }
+
+        final byte[] binary;
+        try {
+            binary = Base64.getDecoder().decode(encodedSchematic.trim());
+        } catch (IllegalArgumentException e) {
+            messageConsumer.addMessage(ToolMessage.error("Error decoding schematics string: " + e.getMessage()));
+            return null;
+        }
+
+        try (InputStream is = new ByteArrayInputStream(binary)) {
+            return SchematicsIO.read("", is);
+        } catch (Exception e) {
+            messageConsumer.addMessage(ToolMessage.error("Error decoding schematics: " + e.getMessage()));
+            return null;
         }
     }
 
@@ -262,15 +365,28 @@ public class ApiController {
             List<CompileResponseMessage> errors,
             List<CompileResponseMessage> warnings,
             List<CompileResponseMessage> infos,
-            String runOutput,
-            int runSteps,
+            RunResult runResult,
             boolean isPlainText) {}
-    public record SchemacodeCompileRequest(String sourceId, String source, String target) {}
-    public record SchemacodeCompileResponse(String sourceId, String compiled, List<CompileResponseMessage> errors, List<CompileResponseMessage> warnings, List<CompileResponseMessage> infos) {}
+    public record SchemacodeCompileRequest(String sourceId, String source, String target, boolean run) {}
+    public record SchemacodeCompileResponse(
+            String sourceId,
+            String compiled,
+            List<CompileResponseMessage> errors,
+            List<CompileResponseMessage> warnings,
+            List<CompileResponseMessage> infos,
+            List<RunResult> runResults) {}
 
 
-    public record DecompileRequest(String sourceId, String source) {}
-    public record DecompileResponse(String sourceId, String source, List<CompileResponseMessage> errors, List<CompileResponseMessage> warnings, List<CompileResponseMessage> infos) {}
+    public record RunResult(String processorId, String output, int steps) {}
+
+    public record DecompileRequest(String sourceId, String source, String target, boolean run) {}
+    public record DecompileResponse(
+        String sourceId,
+        String source,
+        List<CompileResponseMessage> errors,
+        List<CompileResponseMessage> warnings,
+        List<CompileResponseMessage> infos,
+        List<RunResult> runResults) {}
 
     public record SourceRange(String path, int startLine, int startColumn, int endLine, int endColumn) {}
     public record CompileResponseMessage(String prefix, String message, SourceRange range) {
