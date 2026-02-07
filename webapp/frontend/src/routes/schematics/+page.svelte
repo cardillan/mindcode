@@ -56,6 +56,7 @@
 		errors = [];
 		warnings = [];
 		infos = [];
+		updateEditor(encodedEditor.view, '');
 
 		try {
 			const data = await api.compileSchemacode({
@@ -92,6 +93,7 @@
 		localSource.clear();
 		compilerTarget.value = '7';
 		updateEditor(encodedEditor.view, '');
+		updateEditor(schemacodeEditor.view, '');
 
 		errors = [];
 		warnings = [];
