@@ -129,7 +129,12 @@
 		<!-- Target Editor (Mindcode) -->
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Decompiled Mindcode:</Label>
-			<div class="relative">
+			<div
+				class={[
+					'relative transition-opacity',
+					loadingAction !== null && 'pointer-events-none opacity-50'
+				]}
+			>
 				<CopyButton getText={() => mindcodeEditor.view?.state.doc.toString() ?? ''} />
 				<div
 					class="h-[60vh] overflow-hidden rounded-md border bg-muted"
