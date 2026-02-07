@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { EditorView } from 'codemirror';
-	import { untrack } from 'svelte';
+	import { tick, untrack } from 'svelte';
 
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
@@ -45,10 +45,6 @@
 	);
 	const compilerTarget = new LocalCompilerTarget();
 
-	function selectSample(sample: Sample) {
-		updateEditor(schemacodeEditor.view, sample.source);
-	}
-
 	async function handleBuild(run: boolean) {
 		if (!schemacodeEditor.view) return;
 		const source = schemacodeEditor.view.state.doc.toString();
@@ -89,6 +85,12 @@
 		}
 	}
 
+	async function selectSample(sample: Sample) {
+		localSource.selectSample(sample);
+		await tick();
+		await handleBuild(false);
+	}
+
 	async function cleanEditors() {
 		localSource.clear();
 		compilerTarget.value = '7';
@@ -126,6 +128,7 @@
 					variant="ghost"
 					size="sm"
 					class="h-auto px-2 py-1 text-primary underline"
+					disabled={loading}
 					onclick={() => selectSample(sample)}
 					>{sample.title}
 				</Button>

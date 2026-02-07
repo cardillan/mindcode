@@ -63,7 +63,6 @@ export class LocalSource {
 	}
 
 	selectSample(sample: Sample) {
-		this.id = undefined;
 		this.isLoading = false;
 		this.#value = sample.source;
 	}

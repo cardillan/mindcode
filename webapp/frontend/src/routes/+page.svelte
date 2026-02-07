@@ -2,14 +2,14 @@
 	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
 	import { setDiagnostics } from '@codemirror/lint';
 	import { EditorView } from 'codemirror';
-	import { untrack } from 'svelte';
+	import { tick, untrack } from 'svelte';
 
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
-	import { ApiHandler, type CompileResponseMessage, type SourceRange } from '$lib/api';
+	import { ApiHandler, type CompileResponseMessage, type Sample, type SourceRange } from '$lib/api';
 	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
 	import type { PageProps } from './$types';
 	import { compileMessagesToDiagnostics, jumpToRange, updateEditor } from '$lib/codemirror';
@@ -119,6 +119,12 @@
 		}
 	}
 
+	async function selectSample(sample: Sample) {
+		localSource.selectSample(sample);
+		await tick();
+		await compile(false);
+	}
+
 	async function cleanEditors() {
 		localSource.clear();
 		compilerTarget.value = '7';
@@ -145,7 +151,8 @@
 					variant="ghost"
 					size="sm"
 					class="h-auto px-2 py-1 text-primary underline"
-					onclick={() => localSource.selectSample(sample)}>{sample.title}</Button
+					disabled={loading}
+					onclick={() => selectSample(sample)}>{sample.title}</Button
 				>
 			{/each}
 		</Card.Content>
