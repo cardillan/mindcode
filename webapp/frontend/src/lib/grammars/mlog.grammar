@@ -28,7 +28,13 @@ instructionName {
 controlKeyword { @specialize<identifier, "jump" | "wait" | "end" | "stop"> }
 
 value {
-  Boolean | NullLiteral | NumberLiteral | String | Identifier { identifier | maybeLabelName | controlKeyword } | Color
+  Boolean |
+  NullLiteral |
+  NumberLiteral |
+  String |
+  Identifier { identifier | maybeLabelName | controlKeyword } |
+  Color |
+  GlobalIdentifier
 }
 
 @local tokens {
@@ -71,7 +77,8 @@ Boolean {
 
 @external specialize { identifier } specializeIdentifier from "./mlog_tokens" {
   NumberLiteral,
-  Color
+  Color,
+  GlobalIdentifier
 }
 
 @tokens {

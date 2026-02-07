@@ -47,6 +47,7 @@ export const mlogLanguage = LRLanguage.define({
 			}),
 			styleTags({
 				Identifier: t.variableName,
+				GlobalIdentifier: t.special(t.variableName),
 				Comment: t.lineComment,
 				Boolean: t.bool,
 				Color: t.number,
