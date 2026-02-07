@@ -59,8 +59,7 @@ export const mlogLanguage = LRLanguage.define({
 				StringEscapedBracket: t.escape,
 				StringColorTag: t.tagName,
 				StringNewLineSequence: t.escape,
-				// TODO: fix
-				"Instruction/';'": t.punctuation
+				';': t.punctuation
 			})
 		]
 	}),

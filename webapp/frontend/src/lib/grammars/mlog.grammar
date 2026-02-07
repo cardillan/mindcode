@@ -75,6 +75,7 @@ Boolean {
 }
 
 @tokens {
+  ";"
   instructionSeparator { "\n" | ";" }
   whitespace { @whitespace }
   Comment { "#" ![\n]* }
