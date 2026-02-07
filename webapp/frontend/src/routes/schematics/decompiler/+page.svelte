@@ -5,12 +5,14 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
-	import { ApiHandler, type CompileResponseMessage } from '$lib/api';
+	import { ApiHandler, type CompileResponseMessage, type SourceRange } from '$lib/api';
 	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
-	import { EditorStore, getThemeContext, LocalSource, syncUrl } from '$lib/stores.svelte';
+	import { EditorStore, getThemeContext, LocalCompilerTarget, LocalSource, syncUrl } from '$lib/stores.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
-	import { updateEditor } from '$lib/codemirror';
+	import { jumpToRange, updateEditor } from '$lib/codemirror';
 	import CopyButton from '$lib/components/CopyButton.svelte';
+	import TargetPicker from '$lib/components/TargetPicker.svelte';
+	import { Textarea } from '$lib/components/ui/textarea';
 
 	const theme = getThemeContext();
 
@@ -21,6 +23,8 @@
 		return new EditorView({ parent, extensions: [baseExtensions, schemacodeLanguage] });
 	});
 
+	let runOutput = $state('');
+	let runSteps = $state(0);
 	let loading = $state(false);
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
@@ -28,10 +32,19 @@
 
 	const api = new ApiHandler();
 	const localSource = new LocalSource(api, () => encodedEditor.view, []);
+	const compilerTarget = new LocalCompilerTarget();
 
-	async function handleDecompile() {
+	function handleJumpToPosition(range: SourceRange) {
+		if (!schemacodeEditor.view) return;
+
+		jumpToRange(schemacodeEditor.view, range);
+	}
+
+	async function handleDecompile(run: boolean) {
 		if (!encodedEditor.view) return;
 		const source = encodedEditor.view.state.doc.toString();
+		runOutput = '';
+		runSteps = 0;
 		loading = true;
 		errors = [];
 		warnings = [];
@@ -40,8 +53,12 @@
 		try {
 			const data = await api.decompileSchematic({
 				sourceId: localSource.id,
-				source
+				source,
+				run,
+				target: compilerTarget.value
 			});
+			runOutput = data.runResults[0]?.output ?? '';
+			runSteps = data.runResults[0]?.steps ?? 0;
 
 			if (schemacodeEditor.view) {
 				const transaction = schemacodeEditor.view.state.update({
@@ -54,9 +71,11 @@
 			infos = data.infos;
 			localSource.id = data.sourceId;
 
-			await syncUrl({ localSource });
+			await syncUrl({ localSource, compilerTarget });
 		} catch (e) {
 			console.error(e);
+			runOutput = 'Error connecting to server.';
+			runSteps = 0;
 		} finally {
 			loading = false;
 		}
@@ -64,13 +83,16 @@
 
 	async function cleanEditors() {
 		localSource.clear();
+		compilerTarget.value = '7';
 		updateEditor(schemacodeEditor.view, '');
 
 		errors = [];
 		warnings = [];
 		infos = [];
+		runOutput = '';
+		runSteps = 0;
 
-		await syncUrl({ localSource });
+		await syncUrl({ localSource, compilerTarget });
 	}
 </script>
 
@@ -118,13 +140,31 @@
 	<div class="grid max-h-[20vh] shrink-0 grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-wrap items-center gap-2">
-				<Button onclick={handleDecompile} disabled={loading}>Decompile</Button>
+				<div class="w-55">
+					<TargetPicker {compilerTarget} />
+				</div>
+
+				<Button onclick={() => handleDecompile(false)} disabled={loading}>Decompile</Button>
+				<Button onclick={() => handleDecompile(true)} disabled={loading}>Decompile and Run</Button>
 				<Button variant="outline" onclick={cleanEditors}>Erase schematic</Button>
 			</div>
 
 			<ProjectLinks variant="schemacode" />
 		</div>
 
-		<CompilerMessages {errors} {warnings} {infos} title="Decompiler messages:" />
+		<div class="flex flex-col gap-2">
+			{#if runOutput}
+				<Label for="output">Program output ({runSteps} steps):</Label>
+				<Textarea id="output" readonly value={runOutput} rows={4} class="bg-muted font-mono" />
+			{/if}
+
+			<CompilerMessages
+				{errors}
+				{warnings}
+				{infos}
+				title="Decompiler messages:"
+				onJumpToPosition={handleJumpToPosition}
+			/>
+		</div>
 	</div>
 </div>

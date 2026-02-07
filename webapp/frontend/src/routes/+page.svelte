@@ -91,8 +91,8 @@
 				target: compilerTarget.value,
 				run
 			});
-			runOutput = data.runOutput;
-			runSteps = data.runSteps;
+			runOutput = data.runResult?.output ?? '';
+			runSteps = data.runResult?.steps ?? 0;
 			errors = data.errors;
 			warnings = data.warnings;
 			infos = data.infos;
@@ -131,6 +131,7 @@
 		warnings = [];
 		infos = [];
 		runOutput = '';
+		runSteps = 0;
 
 		await syncUrl({ localSource, compilerTarget });
 	}

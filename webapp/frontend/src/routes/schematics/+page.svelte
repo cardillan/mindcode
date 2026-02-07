@@ -49,7 +49,7 @@
 		updateEditor(schemacodeEditor.view, sample.source);
 	}
 
-	async function handleBuild() {
+	async function handleBuild(run: boolean) {
 		if (!schemacodeEditor.view) return;
 		const source = schemacodeEditor.view.state.doc.toString();
 		loading = true;
@@ -61,7 +61,8 @@
 			const data = await api.compileSchemacode({
 				sourceId: localSource.id,
 				source,
-				target: compilerTarget.value
+				target: compilerTarget.value,
+				run
 			});
 			errors = data.errors;
 			warnings = data.warnings;
@@ -161,7 +162,8 @@
 					<TargetPicker {compilerTarget} />
 				</div>
 
-				<Button onclick={handleBuild} disabled={loading}>Build</Button>
+				<Button onclick={() => handleBuild(false)} disabled={loading}>Build</Button>
+				<Button onclick={() => handleBuild(true)} disabled={loading}>Build and Run</Button>
 				<Button variant="outline" onclick={cleanEditors}>Start with a new schematic</Button>
 			</div>
 
