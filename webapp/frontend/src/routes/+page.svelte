@@ -3,6 +3,7 @@
 	import { setDiagnostics } from '@codemirror/lint';
 	import { EditorView } from 'codemirror';
 	import { tick, untrack } from 'svelte';
+	import { LoaderCircle } from '@lucide/svelte';
 
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from '$lib/components/ui/textarea';
@@ -34,7 +35,10 @@
 	});
 
 	const mlogEditor = new EditorStore(theme, (parent, baseExtensions) => {
-		return new EditorView({ parent, extensions: [baseExtensions, outLanguage.of(mlogLanguageExtension)] });
+		return new EditorView({
+			parent,
+			extensions: [baseExtensions, outLanguage.of(mlogLanguageExtension)]
+		});
 	});
 
 	let runOutput = $state('');
@@ -43,7 +47,7 @@
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
 	let infos = $state<CompileResponseMessage[]>([]);
-	let loading = $state(false);
+	let loadingAction = $state<'compile' | 'compile-run' | null>(null);
 	let isPlainText = $state(false);
 	const outLanguage = new Compartment();
 
@@ -77,7 +81,7 @@
 		if (!mindcodeEditor.view) return;
 		const source = mindcodeEditor.view.state.doc.toString();
 
-		loading = true;
+		loadingAction = run ? 'compile-run' : 'compile';
 		runOutput = '';
 		runSteps = 0;
 		errors = [];
@@ -115,7 +119,7 @@
 			console.error(e);
 			runOutput = 'Error connecting to server.';
 		} finally {
-			loading = false;
+			loadingAction = null;
 		}
 	}
 
@@ -151,7 +155,7 @@
 					variant="ghost"
 					size="sm"
 					class="h-auto px-2 py-1 text-primary underline"
-					disabled={loading}
+					disabled={loadingAction !== null}
 					onclick={() => selectSample(sample)}>{sample.title}</Button
 				>
 			{/each}
@@ -189,8 +193,16 @@
 					<TargetPicker {compilerTarget} />
 				</div>
 
-				<Button onclick={() => compile(false)} disabled={loading}>Compile</Button>
-				<Button onclick={() => compile(true)} disabled={loading}>Compile and Run</Button>
+				<Button onclick={() => compile(false)} disabled={loadingAction !== null}>
+					{#if loadingAction === 'compile'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
+					Compile
+				</Button>
+				<Button onclick={() => compile(true)} disabled={loadingAction !== null}>
+					{#if loadingAction === 'compile-run'}<LoaderCircle
+							class="mr-2 h-4 w-4 animate-spin"
+						/>{/if}
+					Compile and Run
+				</Button>
 				<Button variant="outline" onclick={cleanEditors}>Start with a new script</Button>
 			</div>
 
