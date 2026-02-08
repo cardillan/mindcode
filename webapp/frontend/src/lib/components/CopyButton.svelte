@@ -4,10 +4,12 @@
 
 	let {
 		getText,
-		class: className = ''
+		class: className = '',
+		floating = false
 	}: {
 		getText: () => string;
 		class?: string;
+		floating?: boolean;
 	} = $props();
 
 	let copied = $state(false);
@@ -24,15 +26,16 @@
 
 <Button
 	variant="outline"
-	size="sm"
-	class="absolute top-2 right-2 z-10 h-8 gap-1.5 opacity-80 hover:opacity-100 {className}"
+	size="icon"
+	class={[
+		floating && 'absolute top-2 right-2 z-10 h-8 gap-1.5 opacity-80 hover:opacity-100',
+		className
+	]}
 	onclick={handleCopy}
 >
 	{#if copied}
 		<CheckIcon class="h-4 w-4" />
-		Copied!
 	{:else}
 		<CopyIcon class="h-4 w-4" />
-		Copy
 	{/if}
 </Button>
