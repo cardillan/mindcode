@@ -121,7 +121,10 @@
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Mlog code:</Label>
 			<div
-				class="h-[60vh] overflow-hidden rounded-md border bg-muted"
+				class={[
+					'h-[60vh] overflow-hidden rounded-md border bg-muted transition-opacity',
+					localSource.isLoading && 'pointer-events-none opacity-50'
+				]}
 				{@attach mlogEditor.attach}
 			></div>
 		</div>
@@ -132,7 +135,7 @@
 			<div
 				class={[
 					'relative transition-opacity',
-					loadingAction !== null && 'pointer-events-none opacity-50'
+					(localSource.isLoading || loadingAction !== null) && 'pointer-events-none opacity-50'
 				]}
 			>
 				<CopyButton getText={() => mindcodeEditor.view?.state.doc.toString() ?? ''} />
@@ -152,11 +155,17 @@
 					<TargetPicker {compilerTarget} />
 				</div>
 
-				<Button onclick={() => handleDecompile(false)} disabled={loadingAction !== null}>
+				<Button
+					onclick={() => handleDecompile(false)}
+					disabled={localSource.isLoading || loadingAction !== null}
+				>
 					{#if loadingAction === 'decompile'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
 					Decompile
 				</Button>
-				<Button onclick={() => handleDecompile(true)} disabled={loadingAction !== null}>
+				<Button
+					onclick={() => handleDecompile(true)}
+					disabled={localSource.isLoading || loadingAction !== null}
+				>
 					{#if loadingAction === 'decompile-run'}<LoaderCircle
 							class="mr-2 h-4 w-4 animate-spin"
 						/>{/if}

@@ -135,7 +135,7 @@
 					variant="ghost"
 					size="sm"
 					class="h-auto px-2 py-1 text-primary underline"
-					disabled={loadingAction !== null}
+					disabled={localSource.isLoading || loadingAction !== null}
 					onclick={() => selectSample(sample)}
 					>{sample.title}
 				</Button>
@@ -148,7 +148,10 @@
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Schemacode definition:</Label>
 			<div
-				class="h-[60vh] overflow-hidden rounded-md border bg-muted"
+				class={[
+					'h-[60vh] overflow-hidden rounded-md border bg-muted transition-opacity',
+					localSource.isLoading && 'pointer-events-none opacity-50'
+				]}
 				{@attach schemacodeEditor.attach}
 			></div>
 		</div>
@@ -159,7 +162,7 @@
 			<div
 				class={[
 					'relative transition-opacity',
-					loadingAction !== null && 'pointer-events-none opacity-50'
+					(localSource.isLoading || loadingAction !== null) && 'pointer-events-none opacity-50'
 				]}
 			>
 				<CopyButton getText={() => encodedEditor.view?.state.doc.toString() ?? ''} />
@@ -179,11 +182,17 @@
 					<TargetPicker {compilerTarget} />
 				</div>
 
-				<Button onclick={() => handleBuild(false)} disabled={loadingAction !== null}>
+				<Button
+					onclick={() => handleBuild(false)}
+					disabled={localSource.isLoading || loadingAction !== null}
+				>
 					{#if loadingAction === 'build'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
 					Build
 				</Button>
-				<Button onclick={() => handleBuild(true)} disabled={loadingAction !== null}>
+				<Button
+					onclick={() => handleBuild(true)}
+					disabled={localSource.isLoading || loadingAction !== null}
+				>
 					{#if loadingAction === 'build-run'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
 					Build and Run
 				</Button>
