@@ -1787,7 +1787,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     class ShortCircuiting {
         @Test
         void allowsCaseStatementInShortCircuiting() {
-            // Maeke sure there isn't an error - see #296
+            // Make sure there isn't an error - see #296
             assertCompilesTo("""
                             if @links < 1000 and @unit in (@flare, @poly, @mega) then
                                 print("Yes");
@@ -1806,6 +1806,25 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(LABEL, label(4)),
                     createInstruction(JUMP, "__start__", "equal", tmp(1), "false"),
                     createInstruction(PRINT, q("Yes"))
+            );
+        }
+
+        @Test
+        void processesFunctionReturns() {
+            assertCompilesTo("""
+                            param p = 1;
+                            
+                            inline def foo()
+                                return rand(10) > 5;
+                            end;
+                        
+                            print(foo() and p);
+                            """,
+                    createInstruction(SET, "p", "1"),
+                    createInstruction(OP, "rand", tmp(1), "10"),
+                    createInstruction(OP, "greaterThan", tmp(4), tmp(1), "5"),
+                    createInstruction(SELECT, tmp(3), "notEqual", "p", "false", tmp(4), "false"),
+                    createInstruction(PRINT, tmp(3))
             );
         }
     }

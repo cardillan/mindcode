@@ -42,10 +42,10 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
     final Set<LogicInstruction> keep = Collections.newSetFromMap(new IdentityHashMap<>());
 
     /// When an END instruction is encountered, the optimizer accumulates current variable definitions here. Definitions
-    /// from this structure are kept for uninitialized variables, so that any values written before the END instruction
+    /// from this structure are kept for uninitialized variables so that any values written before the END instruction
     /// executions are preserved.
     ///
-    /// Only main variables are stored here. Global variable writes are always preserved, and local variables
+    /// Only the main variables are stored here. Global variable writes are always preserved, and local variables
     /// generally do not keep their value between function calls.
     final Map<LogicVariable, List<LogicInstruction>> orphans = new HashMap<>();
 
@@ -1284,7 +1284,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
         private VariableStates processContext(AstContext context, VariableStates variableStates, boolean modifyInstructions,
                 DataFlowInstructionProcessor dfProcessor) {
             variableStates = DataFlowOptimizer.this.processDefaultContext(context, context, variableStates, modifyInstructions,
-                    (lc, c, vs, mod) -> processInstruction(lc, context, vs,mod,dfProcessor));
+                    (lc, c, vs, mod) -> processInstruction(lc, context, vs,mod, dfProcessor));
             return getFinalStates(variableStates);
         }
 
@@ -1299,7 +1299,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
             seek(leadingPart);
             variableStates = DataFlowOptimizer.this.processDefaultContext(leadingPart, leadingPart,
                     variableStates, modifyInstructions,
-                    (lc, c, vs, mod) -> processInstruction(lc, leadingPart, vs,mod,dfProcessor));
+                    (lc, c, vs, mod) -> processInstruction(lc, leadingPart, vs,mod, dfProcessor));
 
             trace(() -> "=== Processing trailing part of short-circuiting context; cx#" + trailingPart.id);
             seek(trailingPart);
@@ -1347,7 +1347,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
                     default -> {}
                 }
             }
-            return dfProcessor == defaultDfProcessor
+            return dfProcessor == defaultDfProcessor && instruction.getAstContext() == context
                     ? variableStates
                     : dfProcessor.processInstruction(localContext, context, variableStates, instruction);
         }

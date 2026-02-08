@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed incorrect Temp variable elimination ([#298](https://github.com/cardillan/mindcode/issues/298)).
 * Fixed a possible internal error when parsing a syntactically incorrect file.
 * Fixed incorrect handling of some privileged instructions by the Print Merging optimization ([#300](https://github.com/cardillan/mindcode/issues/300)).
+* Fixed incorrect handling of function calls in short-circuit expressions by the Data Flow Optimization ([#301](https://github.com/cardillan/mindcode/issues/301)).
 
 ### Added
 
