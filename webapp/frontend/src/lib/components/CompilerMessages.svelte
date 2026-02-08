@@ -33,7 +33,9 @@
 
 {#if errors.length > 0 || warnings.length > 0 || infos.length > 0}
 	<div class="text-sm">
-		<p class="mt-2 font-bold">{errors.length > 0 ? 'Syntax Errors:' : title}</p>
+		<p class="mt-2 font-bold">
+			{errors.length > 0 ? 'Errors:' : warnings.length > 0 ? 'Warnings:' : title}
+		</p>
 
 		{#if errors.length > 0}
 			<ul class="list-inside list-disc">

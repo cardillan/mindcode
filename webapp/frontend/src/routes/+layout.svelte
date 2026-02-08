@@ -2,13 +2,41 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { page } from '$app/state';
-	import { Button } from '$lib/components/ui/button';
+	import { goto } from '$app/navigation';
+	import * as Select from '$lib/components/ui/select';
 	import { setThemeContext } from '$lib/stores.svelte.js';
 
 	let { children, data } = $props();
 
-	// Determine active path for highlighting
+	// Determine active path and tool
 	let currentPath = $derived(page.url.pathname);
+
+	let currentTool = $derived.by(() => {
+		if (currentPath === '/') return 'compiler';
+		if (currentPath === '/decompiler') return 'decompiler';
+		if (currentPath === '/schematics') return 'schematics';
+		if (currentPath === '/schematics/decompiler') return 'schematics-decompiler';
+		return 'compiler';
+	});
+
+	const tools = [
+		{ value: 'compiler', label: 'Mindcode Compiler', path: '/' },
+		{ value: 'decompiler', label: 'Mlog Decompiler', path: '/decompiler' },
+		{ value: 'schematics', label: 'Schematics Builder', path: '/schematics' },
+		{
+			value: 'schematics-decompiler',
+			label: 'Schematics Decompiler',
+			path: '/schematics/decompiler'
+		}
+	];
+
+	function handleToolChange(value: string | undefined) {
+		if (!value) return;
+		const tool = tools.find((t) => t.value === value);
+		if (tool) {
+			goto(tool.path);
+		}
+	}
 
 	setThemeContext();
 </script>
@@ -18,45 +46,20 @@
 <div class="flex min-h-screen flex-col bg-background text-foreground">
 	<header class="shrink-0 border-b bg-card">
 		<div class="container mx-auto px-4 py-3">
-			<div class="mb-2 flex items-center justify-between">
-				<h1 class="text-2xl font-bold">Mindcode Compiler</h1>
+			<div class="flex items-center gap-4">
+				<h1 class="text-xl font-bold md:text-2xl">Mindcode</h1>
+
+				<Select.Root type="single" bind:value={() => currentTool, handleToolChange}>
+					<Select.Trigger class="w-50 md:w-62.5">
+						{tools.find((t) => t.value === currentTool)?.label || 'Select tool...'}
+					</Select.Trigger>
+					<Select.Content>
+						{#each tools as tool}
+							<Select.Item value={tool.value}>{tool.label}</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
 			</div>
-			<nav>
-				<ul class="flex gap-2 overflow-x-auto pb-2">
-					<li>
-						<Button variant={currentPath === '/' ? 'default' : 'secondary'} size="sm" href="/">
-							Mindcode Compiler
-						</Button>
-					</li>
-					<li>
-						<Button
-							variant={currentPath.startsWith('/decompiler') ? 'default' : 'secondary'}
-							size="sm"
-							href="/decompiler"
-						>
-							Mlog Decompiler
-						</Button>
-					</li>
-					<li>
-						<Button
-							variant={currentPath === '/schematics' ? 'default' : 'secondary'}
-							size="sm"
-							href="/schematics"
-						>
-							Schematics Builder
-						</Button>
-					</li>
-					<li>
-						<Button
-							variant={currentPath === '/schematics/decompiler' ? 'default' : 'secondary'}
-							size="sm"
-							href="/schematics/decompiler"
-						>
-							Schematics Decompiler
-						</Button>
-					</li>
-				</ul>
-			</nav>
 		</div>
 	</header>
 

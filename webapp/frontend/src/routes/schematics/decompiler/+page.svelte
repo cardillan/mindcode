@@ -1,11 +1,7 @@
 <script lang="ts">
 	import { EditorView } from 'codemirror';
-	import { LoaderCircle } from '@lucide/svelte';
-
-	import { Button } from '$lib/components/ui/button';
+	import { Code, Play } from '@lucide/svelte';
 	import * as Card from '$lib/components/ui/card';
-	import { Label } from '$lib/components/ui/label';
-	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
 	import {
 		ApiHandler,
 		type CompileResponseMessage,
@@ -22,9 +18,11 @@
 	} from '$lib/stores.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import { jumpToRange, updateEditor } from '$lib/codemirror';
-	import CopyButton from '$lib/components/CopyButton.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
-	import { Textarea } from '$lib/components/ui/textarea';
+	import ControlBar from '$lib/components/ControlBar.svelte';
+	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
+	import EditorLayout from '$lib/components/EditorLayout.svelte';
+	import { Button } from '$lib/components/ui/button';
 
 	const theme = getThemeContext();
 
@@ -119,97 +117,61 @@
 		</Card.Content>
 	</Card.Root>
 
-	<div class="grid flex-1 grid-cols-1 gap-4 md:grid-cols-2">
-		<!-- Source Editor (Encoded) -->
-		<div class="flex flex-col gap-2">
-			<Label class="text-lg font-bold">Encoded schematic:</Label>
-			<div
-				class={[
-					'h-[60vh] overflow-hidden rounded-md border bg-muted transition-opacity',
-					localSource.isLoading && 'pointer-events-none opacity-50'
-				]}
-				{@attach encodedEditor.attach}
-			></div>
-		</div>
-
-		<!-- Target Editor (Schemacode) -->
-		<div class="flex flex-col gap-2">
-			<Label class="text-lg font-bold">Decompiled schemacode:</Label>
-			<div
-				class={[
-					'relative transition-opacity',
-					(localSource.isLoading || loadingAction !== null) && 'pointer-events-none opacity-50'
-				]}
-			>
-				<CopyButton getText={() => schemacodeEditor.view?.state.doc.toString() ?? ''} />
-				<div
-					class="h-[60vh] overflow-hidden rounded-md border bg-muted"
-					{@attach schemacodeEditor.attach}
-				></div>
-			</div>
-		</div>
+	<!-- Control Bar (Desktop) -->
+	<div class="hidden shrink-0 md:block">
+		<ControlBar
+			primaryActions={[
+				{ label: 'Decompile', onclick: () => handleDecompile(false), icon: Code },
+				{ label: 'Decompile and Run', onclick: () => handleDecompile(true), icon: Play }
+			]}
+			secondaryActions={[{ label: 'Erase schematic', onclick: cleanEditors, variant: 'outline' }]}
+			loading={localSource.isLoading || loadingAction !== null}
+		>
+			<TargetPicker {compilerTarget} />
+		</ControlBar>
 	</div>
 
-	<!-- Controls -->
-	<div class="grid min-h-[20vh] shrink-0 grid-cols-1 gap-4 md:grid-cols-2">
-		<div class="flex flex-col gap-4">
-			<div class="flex flex-wrap items-center gap-2">
-				<div class="w-55">
-					<TargetPicker {compilerTarget} />
-				</div>
-
-				<Button
-					onclick={() => handleDecompile(false)}
-					disabled={localSource.isLoading || loadingAction !== null}
-				>
-					{#if loadingAction === 'decompile'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
-					Decompile
-				</Button>
-				<Button
-					onclick={() => handleDecompile(true)}
-					disabled={localSource.isLoading || loadingAction !== null}
-				>
-					{#if loadingAction === 'decompile-run'}<LoaderCircle
-							class="mr-2 h-4 w-4 animate-spin"
-						/>{/if}
-					Decompile and Run
-				</Button>
-				<Button variant="outline" onclick={cleanEditors}>Erase schematic</Button>
-			</div>
-
-			<ProjectLinks variant="schemacode" />
-		</div>
-
-		<div class="flex flex-col gap-2">
-			{#if runResults.length > 0}
-				<Label>Program output{runResults.length > 1 ? 's' : ''}:</Label>
-				{#each runResults as result (result.processorId)}
-					<Card.Root class="border">
-						<Card.Header class="relative pb-2">
-							<Card.Title class="text-sm">
-								Processor {result.processorId} ({result.steps} steps)
-							</Card.Title>
-							<CopyButton getText={() => result.output} />
-						</Card.Header>
-						<Card.Content class="pt-0">
-							<Textarea
-								readonly
-								value={result.output}
-								rows={3}
-								class="bg-muted font-mono text-xs"
-							/>
-						</Card.Content>
-					</Card.Root>
-				{/each}
-			{/if}
-
-			<CompilerMessages
-				{errors}
-				{warnings}
-				{infos}
-				title="Decompiler messages:"
-				onJumpToPosition={handleJumpToPosition}
-			/>
-		</div>
+	<!-- Mobile: Samples and Settings -->
+	<div class="flex shrink-0 flex-wrap items-center gap-2 md:hidden">
+		<TargetPicker {compilerTarget} />
+		<div class="flex-1"></div>
+		<Button
+			variant="outline"
+			onclick={cleanEditors}
+			disabled={localSource.isLoading || loadingAction !== null}
+		>
+			Erase schemacode
+		</Button>
 	</div>
+
+	<!-- Editor Layout -->
+	<EditorLayout
+		inputLabel="Encoded schematic"
+		inputEditor={encodedEditor}
+		inputLoading={localSource.isLoading}
+		outputLabel="Decompiled schemacode"
+		outputEditor={schemacodeEditor}
+		outputLoading={localSource.isLoading || loadingAction !== null}
+		{runResults}
+		{errors}
+		{warnings}
+		{infos}
+		onJumpToPosition={handleJumpToPosition}
+	/>
+
+	<!-- Bottom Action Bar (Mobile) -->
+	<BottomActionBar
+		primaryAction={{
+			label: 'Decompile',
+			icon: Code,
+			onclick: () => handleDecompile(false)
+		}}
+		secondaryAction={{
+			label: 'Decompile and Run',
+			icon: Play,
+			onclick: () => handleDecompile(true)
+		}}
+		loading={localSource.isLoading || loadingAction !== null}
+	/>
+	<ProjectLinks variant="schemacode" />
 </div>

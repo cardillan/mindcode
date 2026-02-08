@@ -3,14 +3,18 @@
 	import { setDiagnostics } from '@codemirror/lint';
 	import { EditorView } from 'codemirror';
 	import { tick, untrack } from 'svelte';
-	import { LoaderCircle } from '@lucide/svelte';
+	import { Play, Code } from '@lucide/svelte';
 
-	import { Button } from '$lib/components/ui/button';
-	import { Textarea } from '$lib/components/ui/textarea';
-	import * as Card from '$lib/components/ui/card';
-	import { Label } from '$lib/components/ui/label';
-	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
-	import { ApiHandler, type CompileResponseMessage, type Sample, type SourceRange } from '$lib/api';
+	import EditorLayout from '$lib/components/EditorLayout.svelte';
+	import ControlBar from '$lib/components/ControlBar.svelte';
+	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
+	import {
+		ApiHandler,
+		type CompileResponseMessage,
+		type RunResult,
+		type Sample,
+		type SourceRange
+	} from '$lib/api';
 	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
 	import type { PageProps } from './$types';
 	import { compileMessagesToDiagnostics, jumpToRange, updateEditor } from '$lib/codemirror';
@@ -23,8 +27,9 @@
 	} from '$lib/stores.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
-	import CopyButton from '$lib/components/CopyButton.svelte';
 	import { Compartment } from '@codemirror/state';
+	import SamplePicker from '$lib/components/SamplePicker.svelte';
+	import { Button } from '$lib/components/ui/button';
 
 	let { data }: PageProps = $props();
 
@@ -41,8 +46,7 @@
 		});
 	});
 
-	let runOutput = $state('');
-	let runSteps = $state(0);
+	let runResults = $state<RunResult[]>([]);
 
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
@@ -73,7 +77,6 @@
 
 	function handleJumpToPosition(range: SourceRange) {
 		if (!mindcodeEditor.view) return;
-
 		jumpToRange(mindcodeEditor.view, range);
 	}
 
@@ -82,8 +85,7 @@
 		const source = mindcodeEditor.view.state.doc.toString();
 
 		loadingAction = run ? 'compile-run' : 'compile';
-		runOutput = '';
-		runSteps = 0;
+		runResults = [];
 		errors = [];
 		warnings = [];
 		infos = [];
@@ -96,8 +98,7 @@
 				target: compilerTarget.value,
 				run
 			});
-			runOutput = data.runResult?.output ?? '';
-			runSteps = data.runResult?.steps ?? 0;
+			runResults = data.runResult ? [data.runResult] : [];
 			errors = data.errors;
 			warnings = data.warnings;
 			infos = data.infos;
@@ -117,7 +118,7 @@
 			await syncUrl({ localSource, compilerTarget });
 		} catch (e) {
 			console.error(e);
-			runOutput = 'Error connecting to server.';
+			runResults = [];
 		} finally {
 			loadingAction = null;
 		}
@@ -138,104 +139,78 @@
 		errors = [];
 		warnings = [];
 		infos = [];
-		runOutput = '';
-		runSteps = 0;
+		runResults = [];
 
 		await syncUrl({ localSource, compilerTarget });
 	}
 </script>
 
-<div class="container mx-auto flex flex-col gap-4 overflow-hidden px-4 py-4">
-	<!-- Samples -->
-	<Card.Root class="shrink-0">
-		<Card.Content class="flex flex-wrap items-center gap-2 p-4">
-			<span class="text-sm font-semibold">Examples:</span>
-			{#each data.samples as sample}
-				<Button
-					variant="ghost"
-					size="sm"
-					class="h-auto px-2 py-1 text-primary underline"
-					disabled={localSource.isLoading || loadingAction !== null}
-					onclick={() => selectSample(sample)}>{sample.title}</Button
-				>
-			{/each}
-		</Card.Content>
-	</Card.Root>
-
-	<div class="grid flex-1 grid-cols-1 gap-4 md:grid-cols-2">
-		<!-- Source Editor -->
-		<div class="flex flex-col gap-2">
-			<Label class="text-lg font-bold">Mindcode Source Code:</Label>
-			<div
-				class={[
-					'h-[60vh] overflow-hidden rounded-md border bg-muted transition-opacity',
-					localSource.isLoading && 'pointer-events-none opacity-50'
-				]}
-				{@attach mindcodeEditor.attach}
-			></div>
-		</div>
-
-		<!-- Target Editor -->
-		<div class="flex flex-col gap-2">
-			<Label class="text-lg font-bold">Mindustry Logic:</Label>
-			<div
-				class={[
-					'relative transition-opacity',
-					(localSource.isLoading || loadingAction !== null) && 'pointer-events-none opacity-50'
-				]}
-			>
-				<CopyButton getText={() => mlogEditor.view?.state.doc.toString() ?? ''} />
-				<div
-					class="h-[60vh] overflow-hidden rounded-md border bg-muted"
-					{@attach mlogEditor.attach}
-				></div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Controls & Output -->
-	<div class="grid shrink-0 grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">
-		<div class="flex flex-col gap-4">
-			<div class="flex flex-wrap items-center gap-2">
-				<div class="w-55">
-					<TargetPicker {compilerTarget} />
-				</div>
-
-				<Button
-					onclick={() => compile(false)}
-					disabled={localSource.isLoading || loadingAction !== null}
-				>
-					{#if loadingAction === 'compile'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
-					Compile
-				</Button>
-				<Button
-					onclick={() => compile(true)}
-					disabled={localSource.isLoading || loadingAction !== null}
-				>
-					{#if loadingAction === 'compile-run'}<LoaderCircle
-							class="mr-2 h-4 w-4 animate-spin"
-						/>{/if}
-					Compile and Run
-				</Button>
-				<Button variant="outline" onclick={cleanEditors}>Start with a new script</Button>
-			</div>
-
-			<ProjectLinks />
-		</div>
-
-		<div class="flex flex-col gap-2">
-			{#if runOutput}
-				<Label for="output">Program output ({runSteps} steps):</Label>
-				<Textarea id="output" readonly value={runOutput} rows={4} class="bg-muted font-mono" />
-			{/if}
-
-			<CompilerMessages
-				{errors}
-				{warnings}
-				{infos}
-				title="Compiler messages:"
-				onJumpToPosition={handleJumpToPosition}
+<div class="container mx-auto flex flex-col gap-4 px-4 py-4">
+	<!-- Control Bar (Desktop) -->
+	<div class="hidden shrink-0 md:block">
+		<ControlBar
+			primaryActions={[
+				{ label: 'Compile', onclick: () => compile(false), icon: Code },
+				{ label: 'Compile and Run', onclick: () => compile(true), icon: Play }
+			]}
+			secondaryActions={[{ label: 'Erase mindcode', onclick: cleanEditors, variant: 'outline' }]}
+			loading={localSource.isLoading || loadingAction !== null}
+		>
+			<TargetPicker {compilerTarget} />
+			<SamplePicker
+				samples={data.samples}
+				onSelect={selectSample}
+				disabled={localSource.isLoading || loadingAction !== null}
 			/>
-		</div>
+		</ControlBar>
 	</div>
+
+	<!-- Mobile: Samples and Settings -->
+	<div class="flex shrink-0 flex-wrap items-center gap-2 md:hidden">
+		<TargetPicker {compilerTarget} />
+		<SamplePicker
+			samples={data.samples}
+			onSelect={selectSample}
+			disabled={localSource.isLoading || loadingAction !== null}
+		/>
+		<div class="flex-1"></div>
+		<Button
+			variant="outline"
+			onclick={cleanEditors}
+			disabled={localSource.isLoading || loadingAction !== null}
+		>
+			Erase mindcode
+		</Button>
+	</div>
+
+	<!-- Editor Layout -->
+	<EditorLayout
+		inputLabel="Mindcode Source Code"
+		inputEditor={mindcodeEditor}
+		inputLoading={localSource.isLoading}
+		outputLabel="Mindustry Logic"
+		outputEditor={mlogEditor}
+		outputLoading={localSource.isLoading || loadingAction !== null}
+		{runResults}
+		{errors}
+		{warnings}
+		{infos}
+		onJumpToPosition={handleJumpToPosition}
+	/>
+
+	<!-- Bottom Action Bar (Mobile) -->
+	<BottomActionBar
+		primaryAction={{
+			label: 'Compile',
+			icon: Code,
+			onclick: () => compile(false)
+		}}
+		secondaryAction={{
+			label: 'Compile and Run',
+			icon: Play,
+			onclick: () => compile(true)
+		}}
+		loading={localSource.isLoading || loadingAction !== null}
+	/>
+	<ProjectLinks />
 </div>

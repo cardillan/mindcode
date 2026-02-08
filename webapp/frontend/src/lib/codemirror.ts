@@ -54,10 +54,12 @@ export function posToOffset(doc: Text, line: number, column: number): number {
 }
 
 export function jumpToRange(editor: EditorView, range: SourceRange) {
-	const offset = posToOffset(editor.state.doc, range.startLine, range.startColumn);
+	const start = posToOffset(editor.state.doc, range.startLine, range.startColumn);
+	const end = posToOffset(editor.state.doc, range.endLine, range.endColumn);
 
 	editor.dispatch({
-		selection: EditorSelection.single(offset),
+		selection: EditorSelection.range(start, end),
 		scrollIntoView: true
 	});
+	editor.focus();
 }

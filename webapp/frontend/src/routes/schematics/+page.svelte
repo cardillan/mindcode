@@ -1,13 +1,16 @@
 <script lang="ts">
 	import { EditorView } from 'codemirror';
 	import { tick, untrack } from 'svelte';
-	import { LoaderCircle } from '@lucide/svelte';
+	import { Code, Play } from '@lucide/svelte';
 
-	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
-	import { Label } from '$lib/components/ui/label';
-	import CompilerMessages from '$lib/components/CompilerMessages.svelte';
-	import { ApiHandler, type CompileResponseMessage, type Sample, type SourceRange } from '$lib/api';
+	import {
+		ApiHandler,
+		type CompileResponseMessage,
+		type RunResult,
+		type Sample,
+		type SourceRange
+	} from '$lib/api';
 	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
 	import type { PageProps } from './$types';
 	import { setDiagnostics } from '@codemirror/lint';
@@ -21,7 +24,11 @@
 	} from '$lib/stores.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
-	import CopyButton from '$lib/components/CopyButton.svelte';
+	import ControlBar from '$lib/components/ControlBar.svelte';
+	import SamplePicker from '$lib/components/SamplePicker.svelte';
+	import EditorLayout from '$lib/components/EditorLayout.svelte';
+	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
+	import { Button } from '$lib/components/ui/button';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
@@ -35,6 +42,7 @@
 		return new EditorView({ parent, extensions: [baseExtensions, EditorView.lineWrapping] });
 	});
 
+	let runResults = $state<RunResult[]>([]);
 	let loadingAction = $state<'build' | 'build-run' | null>(null);
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
@@ -68,6 +76,7 @@
 				target: compilerTarget.value,
 				run
 			});
+			runResults = data.runResults;
 			errors = data.errors;
 			warnings = data.warnings;
 			infos = data.infos;
@@ -116,98 +125,83 @@
 	<!-- Samples -->
 	<Card.Root class="shrink-0">
 		<Card.Content class="flex flex-wrap items-center gap-2 p-4">
-			<div class="mb-2 w-full">
-				<p class="mb-2 text-sm">
-					Here you can compile a schematics definition written in <a
-						href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SCHEMACODE.markdown"
-						class="text-primary underline">Schemacode</a
-					>, a schema definition language, into a text representation to be pasted into Mindustry
-					using the <strong>Import schematics...</strong> button. If your schematics contain
-					processors, you can specify code for the processor using either Mindustry Logic or
-					Mindcode. You can also decompile an existing schematics using the
-					<a href="/decompiler" class="text-primary underline">Decompiler</a> and modify the resulting
-					code.
-				</p>
-				<p class="text-sm font-semibold">Examples:</p>
-			</div>
-			{#each data.samples as sample}
-				<Button
-					variant="ghost"
-					size="sm"
-					class="h-auto px-2 py-1 text-primary underline"
-					disabled={localSource.isLoading || loadingAction !== null}
-					onclick={() => selectSample(sample)}
-					>{sample.title}
-				</Button>
-			{/each}
+			<p class="text-sm">
+				Here you can compile a schematics definition written in <a
+					href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SCHEMACODE.markdown"
+					class="text-primary underline">Schemacode</a
+				>, a schema definition language, into a text representation to be pasted into Mindustry
+				using the <strong>Import schematics...</strong> button. If your schematics contain
+				processors, you can specify code for the processor using either Mindustry Logic or Mindcode.
+				You can also decompile an existing schematics using the
+				<a href="/decompiler" class="text-primary underline">Decompiler</a> and modify the resulting code.
+			</p>
 		</Card.Content>
 	</Card.Root>
 
-	<div class="grid flex-1 grid-cols-1 gap-4 md:grid-cols-2">
-		<!-- Source Editor -->
-		<div class="flex flex-col gap-2">
-			<Label class="text-lg font-bold">Schemacode definition:</Label>
-			<div
-				class={[
-					'h-[60vh] overflow-hidden rounded-md border bg-muted transition-opacity',
-					localSource.isLoading && 'pointer-events-none opacity-50'
-				]}
-				{@attach schemacodeEditor.attach}
-			></div>
-		</div>
-
-		<!-- Target Editor -->
-		<div class="flex flex-col gap-2">
-			<Label class="text-lg font-bold">Encoded schematic:</Label>
-			<div
-				class={[
-					'relative transition-opacity',
-					(localSource.isLoading || loadingAction !== null) && 'pointer-events-none opacity-50'
-				]}
-			>
-				<CopyButton getText={() => encodedEditor.view?.state.doc.toString() ?? ''} />
-				<div
-					class="h-[60vh] overflow-hidden rounded-md border bg-muted"
-					{@attach encodedEditor.attach}
-				></div>
-			</div>
-		</div>
+	<!-- Control Bar (Desktop) -->
+	<div class="hidden shrink-0 md:block">
+		<ControlBar
+			primaryActions={[
+				{ label: 'Build', onclick: () => handleBuild(false), icon: Code },
+				{ label: 'Build and Run', onclick: () => handleBuild(true), icon: Play }
+			]}
+			secondaryActions={[{ label: 'Erase schemacode', onclick: cleanEditors, variant: 'outline' }]}
+			loading={localSource.isLoading || loadingAction !== null}
+		>
+			<TargetPicker {compilerTarget} />
+			<SamplePicker
+				samples={data.samples}
+				onSelect={selectSample}
+				disabled={localSource.isLoading || loadingAction !== null}
+			/>
+		</ControlBar>
 	</div>
 
-	<!-- Controls & Output -->
-	<div class="grid shrink-0 grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">
-		<div class="flex flex-col gap-4">
-			<div class="flex flex-wrap items-center gap-2">
-				<div class="w-55">
-					<TargetPicker {compilerTarget} />
-				</div>
-
-				<Button
-					onclick={() => handleBuild(false)}
-					disabled={localSource.isLoading || loadingAction !== null}
-				>
-					{#if loadingAction === 'build'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
-					Build
-				</Button>
-				<Button
-					onclick={() => handleBuild(true)}
-					disabled={localSource.isLoading || loadingAction !== null}
-				>
-					{#if loadingAction === 'build-run'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
-					Build and Run
-				</Button>
-				<Button variant="outline" onclick={cleanEditors}>Start with a new schematic</Button>
-			</div>
-
-			<ProjectLinks variant="schemacode" />
-		</div>
-
-		<CompilerMessages
-			{errors}
-			{warnings}
-			{infos}
-			title="Build messages:"
-			onJumpToPosition={handleJumpToPosition}
+	<!-- Mobile: Samples and Settings -->
+	<div class="flex shrink-0 flex-wrap items-center gap-2 md:hidden">
+		<TargetPicker {compilerTarget} />
+		<SamplePicker
+			samples={data.samples}
+			onSelect={selectSample}
+			disabled={localSource.isLoading || loadingAction !== null}
 		/>
+		<div class="flex-1"></div>
+		<Button
+			variant="outline"
+			onclick={cleanEditors}
+			disabled={localSource.isLoading || loadingAction !== null}
+		>
+			Erase schemacode
+		</Button>
 	</div>
+
+	<EditorLayout
+		inputLabel="Schemacode definition"
+		inputEditor={schemacodeEditor}
+		inputLoading={localSource.isLoading}
+		outputLabel="Encoded schematic"
+		outputEditor={encodedEditor}
+		outputLoading={localSource.isLoading || loadingAction !== null}
+		{runResults}
+		{errors}
+		{warnings}
+		{infos}
+		onJumpToPosition={handleJumpToPosition}
+	/>
+
+	<!-- Bottom Action Bar (Mobile) -->
+	<BottomActionBar
+		primaryAction={{
+			label: 'Build',
+			icon: Code,
+			onclick: () => handleBuild(false)
+		}}
+		secondaryAction={{
+			label: 'Build and Run',
+			icon: Play,
+			onclick: () => handleBuild(true)
+		}}
+		loading={localSource.isLoading || loadingAction !== null}
+	/>
+	<ProjectLinks variant="schemacode" />
 </div>
