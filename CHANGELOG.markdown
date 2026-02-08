@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.14.0 – Unreleased
+## 3.14.0 – 2026-02-08
 
 > [!NOTE]
 > [Atomic code execution](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26658 or later). The latest beta release (v154.3) doesn't provide necessary support for atomic code execution.
