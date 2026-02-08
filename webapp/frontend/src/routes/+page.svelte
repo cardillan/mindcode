@@ -155,7 +155,7 @@
 					variant="ghost"
 					size="sm"
 					class="h-auto px-2 py-1 text-primary underline"
-					disabled={loadingAction !== null}
+					disabled={localSource.isLoading || loadingAction !== null}
 					onclick={() => selectSample(sample)}>{sample.title}</Button
 				>
 			{/each}
@@ -167,7 +167,10 @@
 		<div class="flex flex-col gap-2">
 			<Label class="text-lg font-bold">Mindcode Source Code:</Label>
 			<div
-				class="h-[60vh] overflow-hidden rounded-md border bg-muted"
+				class={[
+					'h-[60vh] overflow-hidden rounded-md border bg-muted transition-opacity',
+					localSource.isLoading && 'pointer-events-none opacity-50'
+				]}
 				{@attach mindcodeEditor.attach}
 			></div>
 		</div>
@@ -178,7 +181,7 @@
 			<div
 				class={[
 					'relative transition-opacity',
-					loadingAction !== null && 'pointer-events-none opacity-50'
+					(localSource.isLoading || loadingAction !== null) && 'pointer-events-none opacity-50'
 				]}
 			>
 				<CopyButton getText={() => mlogEditor.view?.state.doc.toString() ?? ''} />
@@ -198,11 +201,17 @@
 					<TargetPicker {compilerTarget} />
 				</div>
 
-				<Button onclick={() => compile(false)} disabled={loadingAction !== null}>
+				<Button
+					onclick={() => compile(false)}
+					disabled={localSource.isLoading || loadingAction !== null}
+				>
 					{#if loadingAction === 'compile'}<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />{/if}
 					Compile
 				</Button>
-				<Button onclick={() => compile(true)} disabled={loadingAction !== null}>
+				<Button
+					onclick={() => compile(true)}
+					disabled={localSource.isLoading || loadingAction !== null}
+				>
 					{#if loadingAction === 'compile-run'}<LoaderCircle
 							class="mr-2 h-4 w-4 animate-spin"
 						/>{/if}
