@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.14.0 – Unreleased
 
+> [!NOTE]
+> [Atomic code execution](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26658 or higher). The latest beta release (v154.3) doesn't provide necessary support for atomic code execution.
+
+> [!NOTE]
+> The new [Mlog Watcher functionality](doc/syntax/TOOLS-MLOG-WATCHER.markdown) available with the tool app requires a new version of the Mlog Watcher mod. The new version has not yet been released, but a Mindustry 8-compatible build is available [here](https://github.com/Sharlottes/MlogWatcher/actions/runs/21562595822). To use that version, the `--watcher-version v1` command line argument must be specified.   
+
 ### Fixed
 
 * Fixed an internal error when compiling a function in the main program declared as `export`.
@@ -18,7 +24,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added the [`atomic()` intrinsic function](doc/syntax/REMOTE-CALLS.markdown#the-atomic-function) and [`atomic` function modifier](doc/syntax/REMOTE-CALLS.markdown#atomic-functions).
 * Added support for nested atomic sections and atomic function calls from an atomic section. The entire topmost atomic section is executed atomically.
-* Added support for the new version of [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown).
+* Added support [atomic section merging](doc/syntax/REMOTE-CALLS.markdown#atomic-section-merging). The duration limit of a merged section can be specified using the [`atomic-merge-level` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-atomic-merge-level) (one tick by default).
+* Added a [`atomic-safety-margin` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-atomic-safety-margin). No safety margin is necessary with the latest Mindustry BE build, though.
+* Added support for the new version of [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) in the tool app. To use the new Mlog Watcher mod, the  `--watcher-version v1` command-line argument needs to be specified.
 * Added a validation step to the compiler to verify the generated code doesn't exceed the maximum number of instructions. The [`enforce-instruction-limit` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-instruction-limit) can be used to control this behavior.
 
 ### Changed
@@ -33,7 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Deprecated
 
 * The `dm` (decompile mlog) and `ds` (decompile schematic) command-line arguments are deprecated. Use `pm` and `ps` instead ("p" stands for "process" as the command-line tool now allows more actions to be performed in addition to decompilation, such as running it on the internal emulator). 
-* The Schematics Refresher mod is deprecated and will be no longer maintained. The Mlog Watcher provides better functionality for managing schematics in the game.
+* The Schematics Refresher mod is deprecated and will be no longer maintained. The Mlog Watcher mod will provide better functionality for managing schematics in the game.
 
 ## 3.13.0 – 2026-01-18
 

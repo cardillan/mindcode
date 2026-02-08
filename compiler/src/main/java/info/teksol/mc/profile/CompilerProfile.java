@@ -292,6 +292,21 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     //</editor-fold>
 
     //<editor-fold desc="Compiler Options">
+    public CompilerProfile setAtomicFullProtection(boolean atomicFullProtection) {
+        getOption(CompilerOptions.ATOMIC_FULL_PROTECTION).setValue(atomicFullProtection);
+        return this;
+    }
+
+    public CompilerProfile setAtomicMergeLevel(int atomicMergeLevel) {
+        getOption(CompilerOptions.ATOMIC_MERGE_LEVEL).setValue(atomicMergeLevel);
+        return this;
+    }
+
+    public CompilerProfile setAtomicSafetyMargin(double atomicSafetyMargin) {
+        getOption(CompilerOptions.ATOMIC_SAFETY_MARGIN).setValue(atomicSafetyMargin);
+        return this;
+    }
+
     public CompilerProfile setAutoPrintflush(boolean autoPrintflush) {
         getOption(CompilerOptions.AUTO_PRINTFLUSH).setValue(autoPrintflush);
         return this;
@@ -326,6 +341,11 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return this;
     }
 
+    public CompilerProfile setSetrate(int setrate) {
+        getOption(CompilerOptions.SETRATE).setValue(setrate);
+        return this;
+    }
+
     public SyntacticMode getSyntacticMode() {
         return getEnumValue(CompilerOptions.SYNTAX);
     }
@@ -337,11 +357,6 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
 
     public CompilerProfile setTargetGuard(boolean targetGuard) {
         getOption(CompilerOptions.TARGET_GUARD).setValue(targetGuard);
-        return this;
-    }
-
-    public CompilerProfile setAtomicFullProtection(boolean atomicFullProtection) {
-        getOption(CompilerOptions.ATOMIC_FULL_PROTECTION).setValue(atomicFullProtection);
         return this;
     }
     //</editor-fold>

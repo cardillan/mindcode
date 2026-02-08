@@ -33,7 +33,7 @@ public class ControlFlowNode {
         this.index = index;
     }
 
-    private static final Set<Opcode> INCOMPATIBLE_OPCODES = Set.of(WAIT, CALL, CALLREC, RETURN, RETURNREC, SETRATE);
+    private static final Set<Opcode> INCOMPATIBLE_OPCODES = Set.of(WAIT, CALL, CALLREC, MULTICALL, RETURN, RETURNREC, SETRATE);
 
     public void addInstruction(LogicInstruction instruction) {
         instructions.add(instruction);

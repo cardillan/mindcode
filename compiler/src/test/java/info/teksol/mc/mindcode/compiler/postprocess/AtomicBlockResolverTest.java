@@ -11,6 +11,333 @@ import org.junit.jupiter.api.Test;
 class AtomicBlockResolverTest {
 
     @Nested
+    class AtomicSectionMerging extends AbstractCodeOutputTest {
+
+        @Override
+        protected CompilerProfile createCompilerProfile() {
+            return super.createCompilerProfile()
+                    .setAtomicMergeLevel(5)
+                    .setSetrate(10)
+                    .setTarget(new Target("8w"))
+                    .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
+        }
+
+        @Test
+        void mergeTwoTouchingSection() {
+            assertOutputs("""
+                            atomic(cell1[0]++);
+                            atomic(cell1[1]++);
+                            """,
+                    """
+                            setrate 10
+                            wait 0.01167                            # 0.700 ticks for atomic execution of 7 steps at 10 ipt
+                            read *tmp1 cell1 0
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 0
+                            read *tmp4 cell1 1
+                            op add *tmp3 *tmp4 1
+                            write *tmp3 cell1 1                     # The last atomic section instruction
+                            """
+            );
+        }
+
+        @Test
+        void mergeTwoConsecutiveSection() {
+            assertOutputs("""
+                            println(atomic(cell1[0]++));
+                            atomic(cell1[1]++);
+                            """,
+                    """
+                            setrate 10
+                            wait 0.015                              # 0.900 ticks for atomic execution of 9 steps at 10 ipt
+                            read *tmp1 cell1 0
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 0
+                            print *tmp1
+                            print "\\n"
+                            read *tmp4 cell1 1
+                            op add *tmp3 *tmp4 1
+                            write *tmp3 cell1 1                     # The last atomic section instruction
+                            """
+            );
+        }
+
+        @Test
+        void mergeInUnrolledLoop() {
+            assertOutputs("""
+                            for i in 0 ... 8 do
+                                atomic(cell1[i]++);
+                            end;
+                            """,
+                    """
+                            setrate 10
+                            wait 0.03167                            # 1.900 ticks for atomic execution of 19 steps at 10 ipt
+                            read *tmp2 cell1 0
+                            op add *tmp1 *tmp2 1
+                            write *tmp1 cell1 0
+                            read *tmp2 cell1 1
+                            op add *tmp1 *tmp2 1
+                            write *tmp1 cell1 1
+                            read *tmp2 cell1 2
+                            op add *tmp1 *tmp2 1
+                            write *tmp1 cell1 2
+                            read *tmp2 cell1 3
+                            op add *tmp1 *tmp2 1
+                            write *tmp1 cell1 3
+                            read *tmp2 cell1 4
+                            op add *tmp1 *tmp2 1
+                            write *tmp1 cell1 4
+                            read *tmp2 cell1 5
+                            op add *tmp1 *tmp2 1
+                            write *tmp1 cell1 5                     # The last atomic section instruction
+                            wait 0.01167                            # 0.700 ticks for atomic execution of 7 steps at 10 ipt
+                            read *tmp2 cell1 6
+                            op add *tmp1 *tmp2 1
+                            write *tmp1 cell1 6
+                            read *tmp2 cell1 7
+                            op add *tmp1 *tmp2 1
+                            write *tmp1 cell1 7                     # The last atomic section instruction
+                            """
+            );
+        }
+
+        @Test
+        void mergeConditionalSection() {
+            assertOutputs("""
+                            if atomic(cell1[0]++) then
+                                atomic(cell1[1]++);
+                            end;
+                            print("Done");
+                            """,
+                    """
+                            setrate 10
+                            wait 0.01334                            # 0.800 ticks for atomic execution of 8 steps at 10 ipt
+                            read *tmp1 cell1 0
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 0
+                            jump 9 equal *tmp1 false
+                            read *tmp5 cell1 1
+                            op add *tmp4 *tmp5 1
+                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            print "Done"
+                            """
+            );
+        }
+
+        @Test
+        void mergeSectionsAtLowIpt() {
+            assertOutputs("""
+                            #set setrate = 2;
+                            #set atomic-merge-level = 5;
+                            param p = false;
+                            atomic(cell1[0]++);
+                            if p then
+                                print("Hooray!");
+                            end;
+                            atomic(cell1[1]++);
+                            print("Done");
+                            """,
+                    """
+                            setrate 2
+                            set p false
+                            wait 0.075                              # 4.500 ticks for atomic execution of 9 steps at 2 ipt
+                            read *tmp1 cell1 0
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 0
+                            jump 8 equal p false
+                            print "Hooray!"
+                            read *tmp5 cell1 1
+                            op add *tmp4 *tmp5 1
+                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            print "Done"
+                            """
+            );
+        }
+
+        @Test
+        void noMergeAcrossLongCodePath() {
+            assertOutputs("""
+                            #set setrate = 2;
+                            #set atomic-merge-level = 5;
+                            param p = false;
+                            atomic(cell1[0]++);
+                            if p then
+                                for i in 0 ... 30 do print(p); end;
+                            end;
+                            atomic(cell1[1]++);
+                            print("Done");
+                            """,
+                    """
+                            setrate 2
+                            set p false
+                            wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
+                            read *tmp1 cell1 0
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 0                     # The last atomic section instruction
+                            jump 37 equal p false
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            print p
+                            wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
+                            read *tmp5 cell1 1
+                            op add *tmp4 *tmp5 1
+                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            print "Done"
+                            """
+            );
+        }
+
+        @Test
+        void mergeWithLoopOnIndependentPath() {
+            assertOutputs("""
+                            param p = false;
+                            atomic(cell1[0]++);
+                            if p then
+                                atomic(cell1[1]++);
+                            end;
+                            do while @time < 100;
+                            print("Done");
+                            """,
+                    """
+                            setrate 10
+                            set p false
+                            wait 0.01334                            # 0.800 ticks for atomic execution of 8 steps at 10 ipt
+                            read *tmp1 cell1 0
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 0
+                            jump 10 equal p false
+                            read *tmp5 cell1 1
+                            op add *tmp4 *tmp5 1
+                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            jump 10 lessThan @time 100
+                            print "Done"
+                            """
+            );
+        }
+
+        @Test
+        void noMergeWithLoopOnPath() {
+            assertOutputs("""
+                            atomic(cell1[0]++);
+                            do while @time < 100;
+                            atomic(cell1[1]++);
+                            print("Done");
+                            """,
+                    """
+                            setrate 10
+                            wait 0.00667                            # 0.400 ticks for atomic execution of 4 steps at 10 ipt
+                            read *tmp1 cell1 0
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 0                     # The last atomic section instruction
+                            jump 5 lessThan @time 100
+                            wait 0.00667                            # 0.400 ticks for atomic execution of 4 steps at 10 ipt
+                            read *tmp5 cell1 1
+                            op add *tmp4 *tmp5 1
+                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            print "Done"
+                            """
+            );
+        }
+
+        @Test
+        void mergeWithWaitOnIndependentPath() {
+            assertOutputs("""
+                            param p = false;
+                            atomic(cell1[0]++);
+                            if p then
+                                atomic(cell1[1]++);
+                            end;
+                            wait(1);
+                            print("Done");
+                            """,
+                    """
+                            setrate 10
+                            set p false
+                            wait 0.01334                            # 0.800 ticks for atomic execution of 8 steps at 10 ipt
+                            read *tmp1 cell1 0
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 0
+                            jump 10 equal p false
+                            read *tmp5 cell1 1
+                            op add *tmp4 *tmp5 1
+                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            wait 1
+                            print "Done"
+                            """
+            );
+        }
+
+        @Test
+        void noMergeWithWaitOnPath() {
+            assertOutputs("""
+                            atomic(cell1[0]++);
+                            wait(1);
+                            atomic(cell1[1]++);
+                            print("Done");
+                            """,
+                    """
+                            setrate 10
+                            wait 0.00667                            # 0.400 ticks for atomic execution of 4 steps at 10 ipt
+                            read *tmp1 cell1 0
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 0                     # The last atomic section instruction
+                            wait 1
+                            wait 0.00667                            # 0.400 ticks for atomic execution of 4 steps at 10 ipt
+                            read *tmp4 cell1 1
+                            op add *tmp3 *tmp4 1
+                            write *tmp3 cell1 1                     # The last atomic section instruction
+                            print "Done"
+                            """
+            );
+        }
+
+        @Test
+        void removeEmptySections() {
+            assertOutputs("""
+                            param p = "Middle";
+                            print("Init");
+                            atomic(print(p));
+                            printflush(message1);
+                            """,
+                    """
+                            setrate 10
+                            set p "Middle"
+                            print "Init"
+                            print p
+                            printflush message1
+                            """
+            );
+        }
+    }
+
+    @Nested
     class ErrorDetection extends AbstractCodeOutputTest {
 
         @Override

@@ -123,11 +123,17 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
             if (!predecessors.get(successor.index)) continue;
 
             if (successor.index == target) {
-                return stepLimit > 0;
+                if (stepLimit <= 0) {
+                    visited.clear(node.index);
+                    return false;
+                }
             } else if (!allPathsCompatible(successor, target, stepLimit - successor.size, predecessors, visited)) {
+                visited.clear(node.index);
                 return false;
             }
         }
+
+        visited.clear(node.index);
 
         // Reached the end of a path which doesn't visit the target - that's ok
         return true;

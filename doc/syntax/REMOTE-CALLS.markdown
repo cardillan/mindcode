@@ -436,6 +436,9 @@ Atomic code execution ensures that a section of code will execute in a single fr
 
 Mindcode uses the following mechanism to make sure a section of code will be executed atomically: the maximum possible number of steps required to execute the section is calculated, and a `wait` instruction is inserted at the beginning of the section with a duration which guarantees that enough instruction quota will accumulate during the wait. This ensures that the longest code path gets executed in a single frame on the next update.
 
+> [!IMPORTANT]
+> The atomic code execution mechanism is guaranteed to work properly under different FPS rates, after map reloads, and generally under any condition that may arise in the game, except hyper processors with insufficient cryofluid. 
+
 ## Atomic sections
 
 Mindcode provides the following constructs for creating atomic sections:
@@ -591,13 +594,13 @@ When computing the wait duration, the compiler doesn't consider unprotected inst
 
 It is possible to activate protection for all variables by setting the [`atomic-full-protection`](SYNTAX-5-OTHER.markdown#option-atomic-full-protection) compiler option to `true`.
 
-## Section merging
+## Atomic section merging
 
 Consecutive atomic sections may be merged into a single section, resulting in just one `wait` instruction at the beginning of the merged section. This may improve the performance significantly if multiple atomic sections shorter than a single tick are executed in quick succession.
 
-Merging is possible when the last encountered section is known to be always executed before the next section, and all possible code paths leading from the first section to the next section are atomic-compatible. Stackless function calls inside or between two atomic sections also preclude these sections from being merged, even though a stackless function call inside an atomic section is supported when it is atomic-compatible.
+It is not required for the atomic sections to touch to be eligible for merging. Therefore, a merged section may also contain instructions that are surrounded by atomic sections without being included in them, or atomic sections which are only executed conditionally.
 
-As a result, a merged section may also contain instructions that are surrounded by atomic sections without being included in them, or atomic sections which are only executed conditionally.
+Merging is possible when the last encountered section is known to be always executed before the next section, and all possible code paths leading from the first section to the next section are atomic-compatible. Stackless function calls inside or between two atomic sections also preclude these sections from being merged, even though a stackless function call inside an atomic section is supported when it is atomic-compatible. This limitation includes uninlined access to internal arrays implemented as `@counter` tables. 
 
 The `atomic-merge-level` compiler option specifies the limit for merging atomic sections (expressed in ticks). The default value is one tick. When multiple possibilities to merge additional sections exist (e.g., one, two, or three ticks long), the one that has the least amount of instruction quota potentially unused in the final tick of the merged section is chosen.  
 
