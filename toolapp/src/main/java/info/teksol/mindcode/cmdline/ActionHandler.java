@@ -125,7 +125,7 @@ abstract class ActionHandler {
                         upgrade-all      send it to processors with the same or lower version on the active map
                         force-update-all send it to processors matching program ID (regardless of the version)""";
 
-            case DECOMPILE_MLOG -> """
+            case PROCESS_MLOG -> """
                     use Mlog Watcher to obtain or send the mlog code from/to the game (default: update).
                         extract     load code from the selected processor in the game
                         update      send code loaded from a file to the selected processor""";
@@ -135,7 +135,7 @@ abstract class ActionHandler {
                         update      update the schematic with the same name in the schematics library
                         add         add a new copy of the schematic to the schematics library""";
 
-            case DECOMPILE_SCHEMA -> """
+            case PROCESS_SCHEMA -> """
                     use Mlog Watcher to obtain or send the schematic from/to the game (default: update).
                         extract     load schematic from the schematic shown on the info screen in-game
                         update      update the schematic with the same name in the schematics library

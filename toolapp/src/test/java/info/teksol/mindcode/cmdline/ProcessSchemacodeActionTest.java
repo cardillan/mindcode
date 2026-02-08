@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @NullMarked
 class ProcessSchemacodeActionTest {
-    private final ToolAppAction action = ToolAppAction.DECOMPILE_SCHEMA;
+    private final ToolAppAction action = ToolAppAction.PROCESS_SCHEMA;
 
     protected Namespace parseCommandLine(String commandLine) throws ArgumentParserException {
         ArgumentParser parser = Main.createArgumentParser(Arguments.fileType(), 79);

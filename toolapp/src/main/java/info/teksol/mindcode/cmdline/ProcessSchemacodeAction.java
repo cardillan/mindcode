@@ -49,7 +49,7 @@ public class ProcessSchemacodeAction extends ActionHandler {
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
         Map<Enum<?>, CompilerOptionValue<?>> options = defaults.getOptions();
 
-        Subparser subparser = subparsers.addParser(ToolAppAction.DECOMPILE_SCHEMA.getShortcut())
+        Subparser subparser = subparsers.addParser(ToolAppAction.PROCESS_SCHEMA.getShortcut())
                 .aliases("process-schematic", "ds", "decompile-schematic")
                 .description("Load schematic from a binary msch file or the in-game Schematics Library for further processing (decompiling " +
                         "into a Schemacode definition file, running on the internal emulator or sending to the in-game library)")
@@ -72,7 +72,7 @@ public class ProcessSchemacodeAction extends ActionHandler {
 
         addOutputDirectoryOption(files);
 
-        addMlogWatcherOptions(files, ToolAppAction.DECOMPILE_SCHEMA);
+        addMlogWatcherOptions(files, ToolAppAction.PROCESS_SCHEMA);
 
         ArgumentGroup decompilation = subparser.addArgumentGroup("Decompilation options");
 

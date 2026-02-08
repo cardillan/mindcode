@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## 3.14.0 – Unreleased
 
 > [!NOTE]
-> [Atomic code execution](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26658 or higher). The latest beta release (v154.3) doesn't provide necessary support for atomic code execution.
+> [Atomic code execution](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26658 or later). The latest beta release (v154.3) doesn't provide necessary support for atomic code execution.
 
 > [!NOTE]
 > The new [Mlog Watcher functionality](doc/syntax/TOOLS-MLOG-WATCHER.markdown) available with the tool app requires a new version of the Mlog Watcher mod. The new version has not yet been released, but a Mindustry 8-compatible build is available [here](https://github.com/Sharlottes/MlogWatcher/actions/runs/21562595822). To use that version, the `--watcher-version v1` command line argument must be specified.   
@@ -26,7 +26,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for nested atomic sections and atomic function calls from an atomic section. The entire topmost atomic section is executed atomically.
 * Added support [atomic section merging](doc/syntax/REMOTE-CALLS.markdown#atomic-section-merging). The duration limit of a merged section can be specified using the [`atomic-merge-level` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-atomic-merge-level) (one tick by default).
 * Added a [`atomic-safety-margin` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-atomic-safety-margin). No safety margin is necessary with the latest Mindustry BE build, though.
-* Added support for the new version of [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) in the tool app. To use the new Mlog Watcher mod, the  `--watcher-version v1` command-line argument needs to be specified.
+* Added new tool app functionalities:
+  * Support for the new version of [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown), providing several useful new ways to send or extract mlog code and schematics to/from a running game. To use the new Mlog Watcher mod, the `--watcher-version v1` command-line argument needs to be specified.
+  * Ability to execute mlog code loaded from a file on the processor emulator and for sending it to the Mlog Watcher. Use the new `pm` or `process-mlog` command-line argument.  
+  * Ability to execute schematics loaded from a file on the processor emulator and for sending it to the new version of the Mlog Watcher. Use the new `ps` or `process-schematic` command-line argument.
 * Added a validation step to the compiler to verify the generated code doesn't exceed the maximum number of instructions. The [`enforce-instruction-limit` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-instruction-limit) can be used to control this behavior.
 
 ### Changed
@@ -1080,7 +1083,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 * Added support for multiple loop variables in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops). Each iteration processes as many elements from the list as there are loop variables.
 * Added an `out` keyword to be used with loop control variables in list iteration loop, allowing [list elements to be modified](doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-variables-in-the-list).
 * Added a new GUI option to choose an optimization level in the web app when compiling Mindcode or building Schemacode.
-* Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](doc/syntax/TOOLS-CMDLINE.markdown#running-the-compiled-code). The output is shown in a separate control in the web app or written to the log when using the command line tool.
+* Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](doc/syntax/TOOLS-CMDLINE.markdown#running-mlog-code-or-schematics). The output is shown in a separate control in the web app or written to the log when using the command line tool.
 * Added a capability to the command line tool to compile several source files at once using the [`--append` command line argument](doc/syntax/TOOLS-CMDLINE.markdown#additional-input-files).
 * Added new optimization level, `experimental`. When using this setting, the [Data Flow optimizer](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown) doesn't assume the assignments to global variables might be changed by editing the compiled code, allowing performing more optimizations on them. Program parameters must be used instead of global variables for program parametrization if this optimization level is used.
 * Added [formattable string literals](doc/syntax/SYNTAX.markdown#formattable-string-literals), which allow formatting outputs of the `print` and `println` functions the same way as `printf` does.
@@ -1634,7 +1637,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
   and in the command line tool, so the change doesn't break existing code.
 * Added support for the reintroduced `ucontrol pathfind` instruction. When issued, navigates the current unit to a given
   location using AI to avoid obstacles. See [`ucontrol`](doc/syntax/FUNCTIONS-71.markdown#instruction-unit-control).
-* Added command line options for [Schematic Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schematic-action-help)
+* Added command line options for [Schematic Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#process-schematic-action-help)
   to specify order in which blocks are written to the schematic definition file and when to generate the `facing`
   directive.
 * Added support for [color configuration](doc/syntax/SCHEMACODE.markdown#color-configuration) and

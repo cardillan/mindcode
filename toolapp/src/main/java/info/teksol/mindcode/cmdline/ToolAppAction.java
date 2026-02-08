@@ -8,9 +8,9 @@ import net.sourceforge.argparse4j.inf.Subparsers;
 
 public enum ToolAppAction {
     COMPILE_MINDCODE("cm", new CompileMindcodeAction()),
-    DECOMPILE_MLOG("pm", new ProcessMlogAction()),
+    PROCESS_MLOG("pm", new ProcessMlogAction()),
     COMPILE_SCHEMA("cs", new CompileSchemacodeAction()),
-    DECOMPILE_SCHEMA("ps", new ProcessSchemacodeAction()),
+    PROCESS_SCHEMA("ps", new ProcessSchemacodeAction()),
     ;
 
     private final String shortcut;

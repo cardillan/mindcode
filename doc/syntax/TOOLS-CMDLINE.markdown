@@ -10,9 +10,9 @@ After building the project, an executable jar file is created at `compiler\targe
 The command line tool supports three different actions. The action is specified by the first command line argument, which must be one of the following:
 
 * `cm` or `compile-mindcode`: compiles a Mindcode source to mlog.
-* `dm` or `decompile-mlog`: partially decompiles an mlog code into Mindcode. The resulting code needs to be manually edited to create loops and conditions present in the original mlog.
+* `pm` or `process-mlog`: loads mlog code from a file or an in-game processor for further processing (partially decompiling into a Mindcode source, running on the internal emulator or sending to an in-game processor). In the case of decompilation, the resulting code needs to be manually edited to create loops and conditions present in the original mlog.
 * `cs` or `compile-schematic`: builds a schematic from a Schemacode source into a binary `.msch` file.
-* `ds` or `decompile-schematic`: decompiles a binary `.msch` file to a Schemacode source.
+* `ps` or `process-schematic`: loads schematic from a binary `.msch` file or the in-game Schematics Library for further processing (decompiling into a Schemacode definition file, running on the internal emulator or sending to the in-game library).
 
 Command-line arguments (e.g., `--remarks`) are case-sensitive. Values of command-line options (e.g., `none`) are generally case-insensitive. It is possible to use both `--remarks none` and `--remarks NONE`, although the lower-case specification is preferred. All multi-word command-ine options use _kebab-case_ convention. 
 
@@ -38,7 +38,7 @@ The `-l` argument can be used to specify a log file, a file which receives messa
 
 ## Mlog Watcher integration
 
-The command-line tool can send the compiled code directly into a processor in a running Mindustry game through the Mlog Watcher mod. See [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) for details.
+The command-line tool can send the compiled code or schematic directly into a processor in a running Mindustry game through the Mlog Watcher mod. See [Mlog Watcher](TOOLS-MLOG-WATCHER.markdown) for details.
 
 ## Clipboard integration
 
@@ -47,15 +47,15 @@ When compiling Mindcode or building a schematic, the `-c` or `--clipboard` argum
 * _Compile Mindcode_ action: clipboard contains mlog instructions which can be pasted into a processor on the processor configuration screen, by using **Edit/Import from clipboard** command.
 * _Compile Schematic_ action: clipboard contains a schematic encoded into Mindustry Schematic string, which can be pasted as a new schematic on the Schematics screen, by using **Import schematic.../Import from clipboard** command. 
 
-## Running the compiled code
+## Running mlog code or schematics
 
-When performing the _Compile Mindcode_ action, it is possible to use the `--run` command line option to run the resulting mlog code on an emulated processor. The processor is much faster than Mindustry Logic processors but supports only very few operations that interact with the Mindustry World.
+It is possible to use the `--run` command line option to run mlog code or schematic on a built-in processor/schematic emulator. The processor is much faster than Mindustry Logic processors but supports only very few operations that interact with the Mindustry World.
 
 The behavior of the processor emulator can be further modified through the execution flags. For more details, refer to the [processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown) documentation.
 
 ## Compiler options
 
-Compiler options, such as target Mindustry Logic version and compiler optimizations, can be specified for _Compile Mindcode_ and _Compile schema_ actions. See the command line help for more details.
+Compiler options, such as target Mindustry Logic version and compiler optimizations, can be specified for the [Compile Mindcode](#compile-mindcode-action-help) and [Compile schematic](#compile-schematic-action-help) actions. See the command line help for more details.
 
 # Command line help
 
@@ -425,7 +425,7 @@ Emulator options:
                          stop execution when a compiler-generated runtime check fails.
 ```
 
-## Decompile Mlog action help
+## Process Mlog action help
 
 ```
 usage: mindcode pm [-h] [--output-mlog [OUTPUT_MLOG]] [--output-decompiled [OUTPUT_DECOMPILED]]
@@ -870,7 +870,7 @@ Emulator options:
                          stop execution when a compiler-generated runtime check fails.
 ```
 
-## Decompile Schematic action help
+## Process Schematic action help
 
 ```
 usage: mindcode ps [-h] [--output-msch [OUTPUT_MSCH]] [--output-decompiled [OUTPUT_DECOMPILED]]

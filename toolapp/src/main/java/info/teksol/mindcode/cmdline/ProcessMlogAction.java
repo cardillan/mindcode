@@ -36,7 +36,7 @@ public class ProcessMlogAction extends ActionHandler {
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
         Map<Enum<?>, CompilerOptionValue<?>> options = defaults.getOptions();
 
-        Subparser subparser = subparsers.addParser(ToolAppAction.DECOMPILE_MLOG.getShortcut())
+        Subparser subparser = subparsers.addParser(ToolAppAction.PROCESS_MLOG.getShortcut())
                 .aliases("process-mlog", "dm", "decompile-mlog")
                 .description("Load mlog code from a file or an in-game processor for further processing (partially decompiling " +
                         "into a Mindcode source, running on the internal emulator or sending to an in-game processor).")
@@ -59,7 +59,7 @@ public class ProcessMlogAction extends ActionHandler {
 
         addOutputDirectoryOption(files);
 
-        addMlogWatcherOptions(files, ToolAppAction.DECOMPILE_MLOG);
+        addMlogWatcherOptions(files, ToolAppAction.PROCESS_MLOG);
 
         addAllCompilerOptions(subparser, options, OptionCategory.EMULATOR);
         return subparser;
