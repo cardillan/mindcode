@@ -46,7 +46,7 @@ If the front condition can be eliminated, the full loop rotation typically decre
 Note: performing the loop rotation often requires inverting the condition of some conditional jumps in the duplicated condition. When the condition includes a strict equal comparison (`===` or `!==`), such operations may increase the execution time of the rotated condition. This might decrease or outright remove the optimization benefit from loop executions but still saves executing the condition on the first entry to the loop:
 
 ```Mindcode
-#set target = 7;
+#set target = 7m;
 var index = 0;
 var a = 0;
 

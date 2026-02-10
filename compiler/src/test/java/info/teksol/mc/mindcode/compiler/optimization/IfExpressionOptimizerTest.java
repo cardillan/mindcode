@@ -35,7 +35,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
         @Test
         void optimizesTrueBranchInvertible() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             str = if x >= 0 then
                                 "positive";
                             else
@@ -167,6 +167,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                                 end;
                             end;
                             """,
+                    createInstruction(LABEL, label(0)),
                     createInstruction(JUMP, label(2), "lessThanEq", ":y", "0"),
                     createInstruction(JUMP, label(3), "lessThanEq", ":x", "0"),
                     createInstruction(JUMP, label(2), "equal", ":z", "0"),
@@ -176,6 +177,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                     createInstruction(SET, tmp(2), "-2"),
                     createInstruction(LABEL, label(4)),
                     createInstruction(SET, ":y", tmp(2)),
+                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(2))
             );
         }
@@ -183,7 +185,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
         @Test
         void optimizesChainedStatements() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             y = if x < 0 then
                                 "negative";
                             elsif x > 0 then
@@ -207,7 +209,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
         @Test
         void pullsInstructionsIntoBranches() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             param a = 5;
                             print(a < 10 ? "units" : a < 100 ? "tens" : a < 1000 ? "hundreds" : "thousands");
                             """,
@@ -262,7 +264,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
         @Test
         void swapsBranches() {
             assertCompilesTo("""
-                            #set target = 8.0;
+                            #set target = 8.0m;
                             
                             if a and b === null then
                                 print("Positive");
@@ -284,7 +286,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
         @Test
         void movesTrueBranchInFrontWithOr() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             str = if x >= 0 or y >= 0 then
                                 "positive";
                             else
@@ -306,7 +308,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
         @Test
         void notMovesTrueBranchInFrontWithAnd() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             str = if x >= 0 and y >= 0 then
                                 "positive";
                             else
@@ -330,7 +332,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
         @Test
         void movesFalseBranchInFrontWithAnd() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             str = if x >= 0 and y >= 0 then
                                 x = -x;
                                 "positive";
@@ -352,7 +354,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
         @Test
         void notMovesFalseBranchInFrontWithOr() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             str = if x >= 0 or y >= 0 then
                                 x = -x;
                                 "positive";
@@ -496,6 +498,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                                 end;
                             end;
                             """,
+                    createInstruction(LABEL, label(0)),
                     createInstruction(JUMP, label(2), "lessThanEq", ":y", "0"),
                     createInstruction(JUMP, label(3), "lessThanEq", ":x", "0"),
                     createInstruction(JUMP, label(3), "greaterThanEq", ":x", "10"),
@@ -506,6 +509,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                     createInstruction(SET, tmp(3), "-2"),
                     createInstruction(LABEL, label(4)),
                     createInstruction(SET, ":y", tmp(3)),
+                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(2))
             );
         }
@@ -513,7 +517,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
         @Test
         void optimizesChainedStatements() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             #set optimization = advanced;
                             noinit var x, y;
                             y = if x < 0 and y < 0 then
@@ -544,7 +548,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
         @Test
         void pullsInstructionsIntoBranches() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             param a = 5;
                             print(a < 10 and b < 10 ? "units" : a < 100 and b < 100 ? "tens" : a < 1000 and b < 1000  ? "hundreds" : "thousands");
                             """,

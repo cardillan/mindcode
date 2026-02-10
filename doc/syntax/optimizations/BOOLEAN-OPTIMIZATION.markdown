@@ -21,7 +21,7 @@ Whether the optimization is applied depends on the optimization goal:
 Example:
 
 ```Mindcode
-#set target = 8.1;
+#set target = 8.1m;
 print(rand(10) < 5 ? "low" : "high");
 ```
 
@@ -36,7 +36,7 @@ print *tmp2
 The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch.
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 if switch1.enabled then
     a = "on";
@@ -70,7 +70,7 @@ print :c
 Even when the assignments modify one or both variables used in the branch condition, or a simple single expression is used in one of the branches, the `select` optimization can compensate for that:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 noinit var a, b;
 
@@ -150,7 +150,7 @@ This optimization allows the condition to be processed as a [Fully evaluated exp
 Due to the preconditions listed above, the optimization only happens when the second term in the condition is a simple variable when the optimization goal is `speed` or `neutral`. The combined effects of both optimizations taking place can be seen here:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 if switch1.enabled and a then
     x = 10; y = 20;
 else
@@ -173,7 +173,7 @@ print :y
 Just switching the terms in the condition precludes the optimization:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 if a and switch1.enabled then
     x = 10; y = 20;
 else
@@ -202,7 +202,7 @@ print :y
 If both the true and the false branches write to just one variable without any additional computations, it is again possible to replace the expression with a sequence of `select` instructions (the `op` instructions can't be used in this case, as they do not allow handling intermediate results). Unlike the case of the fully evaluated condition, each `select` instruction evaluates a piece of the original condition:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 print(a > 0 or b > 0 ? 10 : 20);
 ```
 
@@ -222,7 +222,7 @@ This optimization only happens when the short-circuit condition can be converted
 An example of the optimization applied under the `size` optimization goal:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 #set goal = size;
 volatile x = (switch1.enabled and sorter1.config == @coal);
 ```
@@ -243,7 +243,7 @@ When none of the above optimizations can be made, the optimizer tries to replace
 Example:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 volatile x = switch1.enabled and !@unit.@dead and amount > 0 ? "yes" : "no";
 ```
 
@@ -262,7 +262,7 @@ set .x "no"
 For comparison, the unoptimized code would look like this:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 #set boolean-optimization = none;
 volatile x = switch1.enabled and !@unit.@dead and amount > 0 ? "yes" : "no";
 ```

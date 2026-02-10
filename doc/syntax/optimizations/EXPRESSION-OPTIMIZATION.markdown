@@ -76,7 +76,7 @@ This additional instruction can be removed in either of the following cases:
 Examples:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 #set remarks = comments;
 
 /// a || b is computed first, and as it is used in another `op or` instruction, the additional instruction is removed
@@ -131,7 +131,7 @@ The `read` and `write` instructions accessing variables in current processor usi
 Example:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 param a = "x";
 param b = "y";
@@ -175,7 +175,7 @@ When the [`builtin-evaluation` option](../SYNTAX-5-OTHER.markdown#option-builtin
 Some Mindustry content objects may have different logic IDs in different Mindustry versions (these objects are called _unstable_). For these objects, the above optimizations only happen when the `builtin-evaluation` option is set to `full`:
 
 ```Mindcode
-#set target = 7;
+#set target = 7m;
 #set builtin-evaluation = full;
 println(lookup(:item, 18));
 println(@tungsten.@id);

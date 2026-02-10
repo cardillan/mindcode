@@ -249,8 +249,8 @@ See also [`printExactFast`](#printexactfast)
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                 192 |                 12 |
-| Function body                            |                 193 |                 13 |
+| Inlined function                         |                 192 |                 13 |
+| Function body                            |                 193 |                 14 |
 | Function call                            |                   4 |                  4 |
 
 Prints the number passed in as a parameter into the text buffer in a binary base, always outputting 64 binary digits.
@@ -272,8 +272,8 @@ itself, except the conversion of the number from a `double` to a 64-bit integer 
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                  64 |                 14 |
-| Function body                            |                  65 |                 15 |
+| Inlined function                         |                  64 |                 15 |
+| Function body                            |                  65 |                 16 |
 | Function call                            |                   4 |                  4 |
 
 **Note:** Function can be compiled for all Mindustry Logic versions. The displayed statistics is valid for

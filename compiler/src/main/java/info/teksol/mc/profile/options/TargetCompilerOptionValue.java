@@ -18,10 +18,11 @@ public class TargetCompilerOptionValue extends CompilerOptionValue<Target> {
 
     @Override
     public @Nullable Target convert(String value) {
-        ProcessorType type = ProcessorType.byCode(value.charAt(value.length() - 1));
+        char code = value.charAt(value.length() - 1);
+        ProcessorType type = Character.isDigit(code) ? ProcessorType.NO_PROCESSOR : ProcessorType.byCode(code);
         ProcessorVersion version = ProcessorVersion.byCode(value.substring(
                 value.startsWith("ML") ? 2 : 0,
-                value.length() - (type == null ? 0 : 1)));
+                value.length() - (type == null || Character.isDigit(code) ? 0 : 1)));
 
         return version == null ? null : new Target(version, type != null ? type : ProcessorType.S);
     }

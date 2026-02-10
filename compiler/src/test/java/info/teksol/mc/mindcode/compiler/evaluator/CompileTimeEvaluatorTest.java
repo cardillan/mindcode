@@ -116,7 +116,7 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
     void refusesMlog7IncompatibleConstants() {
         assertGeneratesMessage(
                 "Value '1.0E40' does not have a valid mlog representation.",
-                "#set target = 7; const A = 10**40;"
+                "#set target = 7m; const A = 10**40;"
         );
     }
 
@@ -125,7 +125,7 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessages(
                 expectedMessages(),
                 """
-                        #set target = 8;
+                        #set target = 8m;
                         const A = 10**40;"""
         );
     }
@@ -239,7 +239,7 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                         .add("Unknown function 'acos'.")
                         .add("Unknown function 'atan'."),
                 """
-                        #set target = 6;
+                        #set target = 6m;
                         print(asin(0) + acos(0) + atan(0));
                         """
         );
@@ -297,7 +297,7 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
     @Test
     void resolvesConstantExpressionsVersion7() {
         assertCompilesTo("""
-                        #set target = 7;
+                        #set target = 7m;
                         print(log10(10 ** 50));
                         """,
                 createInstruction(PRINT, "50")

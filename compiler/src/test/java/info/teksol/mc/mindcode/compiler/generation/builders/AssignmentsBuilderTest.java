@@ -216,7 +216,7 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void emulatesEmodInTarget7() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             e %%= f;
                             """,
                     createInstruction(OP, "mod", ":e", ":e", ":f"),
@@ -228,7 +228,7 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void emulatesUshrInTarget7() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             a >>>= b;
                             """,
                     createInstruction(SET, ":a", ":a"),

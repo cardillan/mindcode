@@ -50,6 +50,7 @@ public class ERR {
     public static final String ATOMIC_BLOCK_SETRATE = "The atomic block executes a 'setrate' instruction.";
     public static final String ATOMIC_BLOCK_TOO_LONG = "The atomic block requires at least %d steps, exceeding the maximum allowed number of %d steps.";
     public static final String ATOMIC_BLOCK_WAIT = "The atomic block executes a 'wait' instruction.";
+    public static final String ATOMIC_REQUIRES_PROCESSOR = "'atomic' requires a processor to be specified in the 'target' compiler option.";
     public static final String ATOMIC_REQUIRES_TARGET_81 = "'atomic' requires target 8.1 or higher.";
     public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";

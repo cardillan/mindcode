@@ -30,6 +30,6 @@ public record OpcodeVariant(
 
     public boolean isAvailableIn(ProcessorVersion version, ProcessorType type) {
         return versionFrom.ordinal() <= version.ordinal() && version.ordinal() <= versionTo.ordinal()
-                && type.ordinal() >= this.type.ordinal();
+                && (type.privileged() || !this.type.privileged());
     }
 }

@@ -115,7 +115,7 @@ class SingleStepEliminator extends BaseOptimizer {
             int index = optimizationContext.getProgram().size() - 1;
             while (index >= 0) {
                 LogicInstruction lastIx = optimizationContext.getProgram().get(index);
-                if (isJumpToStart(lastIx)) {
+                if (isJumpToStart(lastIx) && (!activeLabel(index) || emptyLoop(lastIx))) {
                     optimizationContext.removeInstruction(index);
                 } else if (lastIx.isReal()) {
                     break;
@@ -135,6 +135,28 @@ class SingleStepEliminator extends BaseOptimizer {
         }
 
         return instruction instanceof EndInstruction;
+    }
+
+    private boolean activeLabel(int index) {
+        while (index > 0) {
+            LogicInstruction ix = optimizationContext.getProgram().get(--index);
+            if (ix.getRealSize() != 0) return false;
+            if (ix instanceof LabeledInstruction l && optimizationContext.isActive(l.getLabel())) return true;
+        }
+        return true;
+    }
+
+    private boolean emptyLoop(LogicInstruction instruction) {
+        if (instruction instanceof JumpInstruction jump) {
+            int targetIndex = optimizationContext.getLabelInstructionIndex(jump.getTarget());
+            List<LogicInstruction> program = optimizationContext.getProgram();
+            while (targetIndex < program.size()) {
+                if (program.get(targetIndex) == jump) return true;
+                if (program.get(targetIndex).getRealSize() != 0) return false;
+                targetIndex++;
+            }
+        }
+        return false;
     }
 
     private boolean equal(JumpInstruction jump1, JumpInstruction jump2) {

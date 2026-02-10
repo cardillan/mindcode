@@ -209,4 +209,21 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
                 createInstruction(RETURN, ":foo*retaddr")
         );
     }
+
+    @Test
+    void keepsEndLabelForNonProcessorCode() {
+        assertCompilesTo("""
+                        #set target = 8;
+                        if @time < 10 then
+                            print("yes");
+                        end;
+                        """,
+                createInstruction(JUMP, label(0), "greaterThanEq", "@time", "10"),
+                createInstruction(PRINT, q("yes")),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(LABEL, label(1)),
+                createInstruction(END)
+        );
+    }
 }

@@ -344,7 +344,7 @@ class AtomicBlockResolverTest {
         protected CompilerProfile createCompilerProfile() {
             return super.createCompilerProfile()
                     .setAtomicFullProtection(false)
-                    .setTarget(new Target("8"))
+                    .setTarget(new Target("8m"))
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
         }
 
@@ -454,7 +454,7 @@ class AtomicBlockResolverTest {
         protected CompilerProfile createCompilerProfile() {
             return super.createCompilerProfile()
                     .setAtomicFullProtection(false)
-                    .setTarget(new Target("8"))
+                    .setTarget(new Target("8m"))
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
         }
 
@@ -682,7 +682,7 @@ class AtomicBlockResolverTest {
         protected CompilerProfile createCompilerProfile() {
             return super.createCompilerProfile()
                     .setAtomicFullProtection(true)
-                    .setTarget(new Target("8"))
+                    .setTarget(new Target("8m"))
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
         }
 

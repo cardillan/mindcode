@@ -1,6 +1,6 @@
 # Mindustry 8
 
-[Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases) is now available. The new functionality of Mindustry Logic is already supported by Mindcode when setting the language target to `8` either by command-line argument, or by the `#set target = 8;` directive.
+[Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases) is now available. The new functionality of Mindustry Logic is already supported by Mindcode when setting the language target to `8` either by command-line argument, or by the `#set target = 8m;` directive.
 
 The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8.1](FUNCTIONS-81.markdown).
 
@@ -82,7 +82,7 @@ Apart from the `printf()`, Mindcode supports new `format()` function, which just
 The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of this placeholder is then replaced by the value supplied to the `format`. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. That opens up a lot of possibilities for building outputs dynamically; for example, to print numbers with thousands separators:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 // Formats a number into the text buffer, without external memory.
 // The text buffer must not contain placeholders {0} and {1}. It must contain at least one other placeholder ({2} or higher).
@@ -145,7 +145,7 @@ format max
 To prevent the new Print Merging optimization interfering with custom uses of the format instruction, it isn't used if a string constant containing a `{0}` substring, or some other specific substrings that might lead to the code creating `{0}` in the text buffer, are detected in the program. This leaves the placeholders `{1}` to `{9}` to be used freely by the user. It even allows interleaving the old-fashioned prints with the new `format` with no restrictions:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 param a = 10;               // prevent a from being propagated as a constant
 println("{2} {1}");         // if you use "{1} {0}" instead, the output will be the same, but different optimization will happen 
 format("Before");
@@ -182,7 +182,7 @@ When an object is used as instruction argument, the corresponding icon is output
 The Print Merging optimization handles the `printchar` instructions when possible:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 for i in 0 ... 4 do
     itemType = lookup(:item, i);
     printchar(itemType);
@@ -238,7 +238,7 @@ Mindustry 8 allows reading and writing variables of another processor, addressin
 This functionality is accessible in Mindcode via the new `read()` and `write()` methods:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 x = processor1.read("x");
 y = processor1.read("y");
 processor1.write(x + y, "z");
@@ -274,7 +274,7 @@ A length of a string can be obtained by sensing it's `@size` property. This func
 Similarly to strings, it is possible to read characters from message blocks using the `read` instruction. The mechanics is the same as in the case of strings: both `char()` and `strlen()` functions can be used with message blocks:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 print("ABCD");
 printflush(message1);

@@ -350,7 +350,7 @@ The `ascii()` function takes a string constant as an argument, and returns the A
 The function allows converting built-in string constants (most importantly, icons) to their ASCII values and using them with `printchar()`. Since the ASCII values are numbers, they can be stored in external variables:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 external(cell1) a = ascii(ITEM_COAL);
 printchar(a);
 ```
@@ -370,7 +370,7 @@ The `char()` function returns the ASCII value of a character at a given position
 The values obtained from this function may be used with `printchar()`:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 param data = "Dbftbs!djqifs";
 linked message1;
 
@@ -410,7 +410,7 @@ jump 2 always 0 0
 The `strlen()` function returns the length of a string passed in as an argument. The function requires target `8` or higher.
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 param data = "Dbftbs!djqifs";
 println(strlen(data));
 printflush(message1);
@@ -444,7 +444,7 @@ When the function produces a string that cannot be encoded, a compilation error 
 Example:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 const offset = 35;
 const data = encode(offset, 0, 1, 2, 5, 10, 20, 50);

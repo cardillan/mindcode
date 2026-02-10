@@ -246,7 +246,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     @Test
     void generatesNoImprecisionWarningForFloatLiteralsVersion8() {
         assertCompiles("""
-                #set target = 8;
+                #set target = 8m;
                 var a = 1e25;
                 """
         );
@@ -257,7 +257,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessage(
                 "Loss of precision while creating mlog literal (original value 1e25, encoded value 9.999999562023526E24).",
                 """
-                        #set target = 7;
+                        #set target = 7m;
                         var a = 1e25;
                         """
         );
@@ -339,14 +339,14 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     void refusesColorLiteralsIn6() {
         assertGeneratesMessage(
                 "Color literals require language target 7 or higher.",
-                "#set target = 6; a = %123456;");
+                "#set target = 6m; a = %123456;");
     }
 
     @Test
     void refusesNamedColorLiteralsIn7() {
         assertGeneratesMessage(
                 "Named color literals require language target 8 or higher.",
-                "#set target = 7; a = %[red];");
+                "#set target = 7m; a = %[red];");
     }
 
     @Test

@@ -6,6 +6,7 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public enum ProcessorType {
+    NO_PROCESSOR            ("Micro Processor",  1,  true),
     MICRO_PROCESSOR         ("Micro Processor",  2, false),
     LOGIC_PROCESSOR         ("Logic Processor",  8, false),
     HYPER_PROCESSOR         ("Hyper Processor", 25, false),
@@ -36,6 +37,7 @@ public enum ProcessorType {
 
     public String code() {
         return switch (this) {
+            case NO_PROCESSOR -> "";
             case MICRO_PROCESSOR -> "m";
             case LOGIC_PROCESSOR -> "l";
             case HYPER_PROCESSOR -> "h";
@@ -43,8 +45,9 @@ public enum ProcessorType {
         };
     }
 
-    public String typeName() {
+    public String emulatorTypeName() {
         return switch (this) {
+            case NO_PROCESSOR -> "@world-processor";            // Due to compatibility with world-processor instructions
             case MICRO_PROCESSOR -> "@micro-processor";
             case LOGIC_PROCESSOR -> "@logic-processor";
             case HYPER_PROCESSOR -> "@hyper-processor";

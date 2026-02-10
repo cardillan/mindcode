@@ -10,6 +10,7 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 
@@ -33,6 +34,9 @@ public class StatementListsBuilder extends AbstractCodeBuilder implements
     public ValueStore visitAtomicBlock(AstAtomicBlock node) {
         if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8B)) {
             error(node, ERR.ATOMIC_REQUIRES_TARGET_81);
+        }
+        if (processor.getProcessorType() == ProcessorType.NO_PROCESSOR) {
+            error(node, ERR.ATOMIC_REQUIRES_PROCESSOR);
         }
 
         assembler.setSubcontextType(AstSubcontextType.BODY, 10.0);

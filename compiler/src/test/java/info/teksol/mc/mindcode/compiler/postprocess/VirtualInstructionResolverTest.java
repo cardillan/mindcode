@@ -20,7 +20,7 @@ class VirtualInstructionResolverTest extends AbstractCodeGeneratorTest {
 
     private String createCode(RuntimeErrorReporting checks, boolean external) {
         return """
-                #set target = 7;
+                #set target = 7m;
                 #set error-reporting = %s;
                 #set array-optimization = none;
                 allocate heap in cell1;
@@ -418,7 +418,7 @@ class VirtualInstructionResolverTest extends AbstractCodeGeneratorTest {
             // return addresses for the array element access), and loop unrolling second. The loop unrolling
             // must copy the setaddr instructions back into the loop. The order of the instruction matters!
             assertCompilesTo("""
-                    #set target = 7;
+                    #set target = 7m;
                     #set instruction-limit = 60;
                     #set array-optimization = none;
                     

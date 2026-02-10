@@ -6,6 +6,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIt
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -136,6 +137,9 @@ class JumpThreading extends BaseOptimizer {
         // Find next real instruction
         // If null, it means the jump leads to a label which doesn't have a valid instruction after
         LogicInstruction next = firstInstruction(target + 1, LogicInstruction::isReal);
+        if (next == null && getGlobalProfile().getTarget().type() == ProcessorType.NO_PROCESSOR) {
+            throw new MindcodeInternalError("Jump to the program end");
+        }
         
         // Redirect compatible jumps
         if (next instanceof JumpInstruction ix && (ix.isUnconditional() || isIdenticalJump(firstJump, ix))) {
@@ -148,7 +152,7 @@ class JumpThreading extends BaseOptimizer {
         }
 
         // Handle end instruction
-        if (next == null || (next instanceof EndInstruction)) {
+        if (getGlobalProfile().getTarget().type() != ProcessorType.NO_PROCESSOR && (next == null || (next instanceof EndInstruction))) {
             createStartLabel();
             return new JumpRedirection(FIRST_LABEL, null);
         }

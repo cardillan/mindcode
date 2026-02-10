@@ -40,7 +40,7 @@ Keywords are declared using `#declare` statement:
 Example: if the `ulocate building` instruction was extended to accept additional block groups, the new keywords could be declared like this:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 #declare blockGroup :conveyor, :processor;
 
 var x, y;
@@ -129,7 +129,7 @@ For better understanding, the creation of custom instructions will be demonstrat
 The `format` instruction was introduced in Mindustry Logic 8. When compiling for Mindustry Logic 7, the instruction isn't available. We can create it using this code:
 
 ```Mindcode
-#set target = 7;
+#set target = 7m;
 inline void format(value)
     mlogText("format", in value);
 end;
@@ -160,7 +160,7 @@ Considerations:
 Mindustry 8 Logic adds new variants of the `draw` instruction, `print` being one of them. Under the Mindustry Logic 8 language target, this instruction is mapped to the `drawPrint()` function. We can create it explicitly through this:
 
 ```Mindcode
-#set target = 7;
+#set target = 7m;
 inline void drawPrint(x, y, alignment)
     mlogText("draw", "print", in x, in y, alignment, 0, 0, 0);
 end;

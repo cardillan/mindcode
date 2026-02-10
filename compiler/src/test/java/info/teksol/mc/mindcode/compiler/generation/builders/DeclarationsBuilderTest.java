@@ -213,7 +213,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         void refusesMlog7UnrepresentableValues() {
             assertGeneratesMessage(
                     "Value '1e70' does not have a valid mlog representation.",
-                    "#set target = 7; const a = 1e70;");
+                    "#set target = 7m; const a = 1e70;");
         }
 
         @Test
@@ -670,7 +670,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         void reportsUnsupportedCategory() {
             assertGeneratesMessage(
                     "Keyword category 'alignment' is not available in current language target.",
-                    "#set target = 7; #declare alignment :random;");
+                    "#set target = 7m; #declare alignment :random;");
         }
     }
 
@@ -713,7 +713,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         void refusesMlog7UnrepresentableValues() {
             assertGeneratesMessage(
                     "Value '1e70' does not have a valid mlog representation.",
-                    "#set target = 7; param a = 1e70;\n");
+                    "#set target = 7m; param a = 1e70;\n");
         }
 
         @Test

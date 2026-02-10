@@ -51,7 +51,7 @@ public class CompatibilityLibraryGeneratorTest {
              *
              * ```
              * // Set the target appropriately
-             * #set target = 8;
+             * #set target = 8m;
              *
              * require compatibility;
              *

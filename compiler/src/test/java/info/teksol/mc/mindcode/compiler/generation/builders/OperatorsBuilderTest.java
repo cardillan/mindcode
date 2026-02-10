@@ -144,7 +144,7 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesEqualitiesInTarget7() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             a == b;
                             c != d;
                             e === f;
@@ -176,7 +176,7 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void emulatesEmodInTarget7() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             e %% f;
                             """,
                     createInstruction(OP, "mod", tmp(0), ":e", ":f"),
@@ -188,7 +188,7 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void emulatesUshrInTarget7() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             a >>> b;
                             """,
                     createInstruction(SET, tmp(0), ":a"),

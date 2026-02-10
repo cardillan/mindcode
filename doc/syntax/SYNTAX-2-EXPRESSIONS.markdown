@@ -278,7 +278,7 @@ Shifting left is equivalent to an integer multiplication by a given power of two
 The difference between the signed (`>>`) and unsigned (`>>>`) right shift operators concerns negative numbers: the signed operator copies the value of the leftmost bit (the sign bit) to lower bits when shifting, while the unsigned operator shifts in zeroes:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 println(-1 >> 60);
 println(-1 >>> 60);
 ```
@@ -525,7 +525,7 @@ If the result of a constant expression is a value that [cannot be encoded into a
 When evaluating expressions, it isn't required that all the intermediate values can also be encoded to mlog, just the final ones:
 
 ```Mindcode
-#set target = 7;
+#set target = 7m;
 print(10 ** 50);            // Cannot be evaluated
 print(10 ** (2 * 24));      // Multiplication can be evaluated, exponentiation cannot
 print(log10(10 ** 45));     // Can be evaluated even though 10 ** 50 cannot

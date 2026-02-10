@@ -89,7 +89,7 @@ the loop won't be unrolled, and the code will loop through all unit types availa
 The `full` setting ensures even the unstable built-in variables will be compile-time evaluated, using the value corresponding to the Mindustry version specified by the `target` option. This not only allows performing more optimizations (such as unroll loops) but also allows using the built-in variables to specify array sizes. However, the code will only produce a correct result when run on the processor of the correct Mindustry version:
 
 ```Mindcode
-#set target = 7;
+#set target = 7m;
 #set builtin-evaluation = full;
 
 // This wouldn't compile on the compatible setting
@@ -170,8 +170,8 @@ The target versions consist of a major and minor version number. As of now, thes
 The target can be set using either just a major or both major and minor version numbers. When specifying both numbers, the specified version is used. When specifying just the major version, the most recent minor version in the given major category is used. Example:
 
 ```
-#set target = 7;        // Sets version 7.1
-#set target = 7.0;      // Sets version 7.0
+#set target = 7m;        // Sets version 7.1
+#set target = 7.0m;      // Sets version 7.0
 ```
 
 The processor type is specified by appending a one-letter suffix to the version number:
@@ -234,7 +234,7 @@ The `author` directive can be specified multiple times, and can be included in a
 Example:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 #set author = cardillan, "Mickey Mouse";
 #set author = "Rameses Niblick the Third";
 
@@ -631,7 +631,7 @@ Allows or disallows using the `select` instruction to emulate a `jump strictNotE
 Example:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 while @unit.@dead === 1 do
     ubind(@mono);

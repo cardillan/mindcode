@@ -35,7 +35,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         @Test
         void handlesArrays() {
             assertCompilesTo("""
-                            #set target = 8.0;
+                            #set target = 8.0m;
                             #set use-text-jump-tables = false;
                             #set array-optimization = none;
                             const SIZE = 2;
@@ -339,7 +339,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         @Test
         void avoidsIncompatibleLiterals() {
             assertCompilesTo("""
-                            #set target = 7;
+                            #set target = 7m;
                             base = 2;
                             a = base ** 8;
                             b = base ** a;

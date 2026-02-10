@@ -484,7 +484,7 @@ When compiling code for Mindustry 8, the `mlog` modifier allows you to create va
 Example:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 volatile mlog(@ore-copper.@name)  ore_copper = @copper;
 volatile mlog(@ore-lead.@name)    ore_lead = @lead;
@@ -1518,7 +1518,7 @@ All exported variables are implicitly `volatile`, so the `volatile` modifier is 
 Example:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 // Exported variables, a unitialized, b initialized
 export a, b = 10;
@@ -1535,7 +1535,7 @@ Target 8 or higher is required to use remote variables.
 External variables and arrays are stored in another processor. They are declared using the [`remote` storage modifier](#storage-modifiers). The `remote` modifier specifies the processor the variable is stored in, and it may be specified as a linked variable, linked block, or a regular variable:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 linked processor1, processor2;
 var proc;
 

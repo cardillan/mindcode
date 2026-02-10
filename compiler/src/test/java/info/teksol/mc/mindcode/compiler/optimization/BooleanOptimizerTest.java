@@ -57,7 +57,7 @@ class BooleanOptimizerTest extends AbstractOptimizerTest<BooleanOptimizer> {
         @Test
         void optimizesChainedStatements() {
             assertCompilesTo("""
-                            #set target = 8;
+                            #set target = 8m;
                             #set optimization = experimental;
                             param x = 5;
                             y = if x < 0 then
@@ -123,7 +123,7 @@ class BooleanOptimizerTest extends AbstractOptimizerTest<BooleanOptimizer> {
         @Test
         void optimizesFunctionCallArgumentsUsingSelect() {
             assertCompilesTo("""
-                            #set target = 8;
+                            #set target = 8m;
                             #set goal = size;
                             param a = 5;
                             print(a < 10 ? "units" : a < 100 ? "tens" : a < 1000 ? "hundreds" : "thousands");
@@ -520,7 +520,7 @@ class BooleanOptimizerTest extends AbstractOptimizerTest<BooleanOptimizer> {
             assertCompilesTo(
                     expectedMessages().add("Variable 'x' is not used."),
                     """
-                            #set target = 7;
+                            #set target = 7m;
                             volatile x = switch1.enabled and !@unit.@dead and amount > 0 ? "yes" : "no";
                             """,
                     createInstruction(SENSOR, tmp(0), "switch1", "@enabled"),

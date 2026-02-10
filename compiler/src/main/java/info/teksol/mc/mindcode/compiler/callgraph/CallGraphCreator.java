@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
@@ -282,8 +283,13 @@ public class CallGraphCreator extends CompilerMessageEmitter {
             }
         }
 
-        if (function.hasModifier(FunctionModifier.ATOMIC) && !processor.getProcessorVersion().atLeast(ProcessorVersion.V8B)) {
-            error(function.getDeclaration(), ERR.ATOMIC_REQUIRES_TARGET_81);
+        if (function.hasModifier(FunctionModifier.ATOMIC)) {
+            if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8B)) {
+                error(function.getDeclaration(), ERR.ATOMIC_REQUIRES_TARGET_81);
+            }
+            if (processor.getProcessorType() == ProcessorType.NO_PROCESSOR) {
+                error(function.getDeclaration(), ERR.ATOMIC_REQUIRES_PROCESSOR);
+            }
         }
 
         List<AstFunctionParameter> params = function.getDeclaredParameters();

@@ -17,10 +17,11 @@ public final class Target {
     }
 
     public Target(String value) {
-        ProcessorType type = ProcessorType.byCode(value.charAt(value.length() - 1));
+        char code = value.charAt(value.length() - 1);
+        ProcessorType type = Character.isDigit(code) ? ProcessorType.NO_PROCESSOR : ProcessorType.byCode(code);
         ProcessorVersion version = ProcessorVersion.byCode(value.substring(
                 value.startsWith("ML") ? 2 : 0,
-                value.length() - (type == null ? 0 : 1)));
+                value.length() - (type == null || Character.isDigit(code) ? 0 : 1)));
 
         if (version == null) {
             throw new IllegalArgumentException("Invalid target: " + value);

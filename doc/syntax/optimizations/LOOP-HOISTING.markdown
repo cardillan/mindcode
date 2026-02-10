@@ -61,7 +61,7 @@ Hoisting the instructions setting up return addresses is not possible when [`sym
 When the `select` optimization is available, Loop Hoisting is capable of handling some conditional expressions as well:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 #set symbolic-labels = true;
 param MAX = 10;
 for i in 1 ... MAX do

@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.15.0 – Unreleased
 
+### Changed
 
+* Changed the meaning of the `target` compiler option: when no processor type is specified, the compiler generates the code for a processor-less execution. Privileged instructions are supported, but atomic sections and waits aren't.  
 
 ## 3.14.0 – 2026-02-08
 

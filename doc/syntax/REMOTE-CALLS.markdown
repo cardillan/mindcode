@@ -66,7 +66,7 @@ Variables to be accessed remotely must be declared using the [`export` keyword](
 Function to be called remotely must be declared using the `export` keyword:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 module library;
 
@@ -103,7 +103,7 @@ It is possible to call the `backgroundProcess()` function explicitly. In this ca
 Example of a module with a background process:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 module backgroundProcess;
 
@@ -366,7 +366,7 @@ Local call of a remote function also sets the function's `:functionName*finished
 To access arbitrary remote processor variables using the `read` and `write` instructions., `read(variable)`  and `write(value, variable)` methods must be used, to be called on processors:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 print(processor1.read("foo"));
 processor2.write(@coal, "bar");
 ```
@@ -402,7 +402,7 @@ The following restrictions apply to remote variables declared with storage speci
 * When the mlog name is present, only one variable can be specified per declaration (as otherwise multiple variables would share the same mlog name and would be redundant).
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 #set remarks = comments;
 
 /// Remote variables named using Mindcode's naming convention
@@ -467,7 +467,7 @@ Atomic sections may be nested and may contain calls to atomic functions. In this
 The atomic block has the following syntax:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 atomic
     // Atomic section of code
@@ -479,7 +479,7 @@ end;
 The `atomic()` function is used to execute a single expression atomically, returning its value:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 cell1[1] = atomic(cell[0]++);
 ```
@@ -501,7 +501,7 @@ As seen in the above example, instructions needed to store the result aren't par
 A function can be declared using the `atomic` keyword, in which case the function body is executed atomically:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 atomic def increment()
     cell1[0]++;
@@ -524,7 +524,7 @@ print *tmp2
 > Inline atomic functions guarantee that access to the arguments passed by reference is protected by the atomic section, but other arguments aren't. Example:
  
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 
 external(cell1[0]) x;
 external(cell1[1]) y;
@@ -562,10 +562,13 @@ To be able to compute the correct wait time, the compiler needs to know the spee
 
 Notes:
 
-* In the case of non-privileged processors (micro-, logic-, or hyper-processor), the instruction rate can be increased using an overdrive projector or overdrive dome. Mindcode always assumes the basic processor speed, because the overdrive projector or dome may fail during gameplay, which might cause the atomic code section to not execute properly.
+* In the case of non-privileged processors (micro-, logic-, or hyper-processor), the instruction rate can be increased using an overdrive projector or overdrive dome. Mindcode always assumes the basic processor speed because the overdrive projector or dome may fail during gameplay, which might cause the atomic code section to not execute properly.
 * The world processor's speed can be changed using the `setrate` instruction, up to 1000 instructions per tick. The program must use the [`setrate`](SYNTAX-5-OTHER.markdown#option-setrate) or [`ipt` compiler option](SYNTAX-5-OTHER.markdown#option-ipt) to specify the actual instruction rate that will be in effect during execution.
 
 Use the [`target` compiler option](SYNTAX-5-OTHER.markdown#option-target) to inform the compiler about the type of the processor that will be used. When the source code is being compiled as part of building a schematic, the actual type of the processor is determined by the schematic definition.
+
+> [!NOTE]
+> When the `target` compiler option doesn't specify sa processor type, Mindcode generates code for a non-processor environment (e.g., code to be run by a Map Objective). This code is run all at once, without any time delays, and atomic sections are not supported.  
 
 > [!WARNING]
 > Running the compiled code on a processor slower than the compilation target or the declared IPT rate will cause the atomic sections not to be executed atomically. This is true even when the code section is short, because at frame rates higher than 60 FPS instructions are executed in bursts shorter than the processor's IPT. Mindcode computes the wait duration to exactly cover the execution time of the atomic section, which means there isn't any margin to accommodate slower processor speeds.

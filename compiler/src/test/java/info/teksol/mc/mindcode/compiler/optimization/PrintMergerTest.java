@@ -178,7 +178,7 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     void observesLocalOptions() {
         // In target 8, print merging by format is active, which doesn't have the limit.
         assertCompilesTo("""
-                        #set target = 7;
+                        #set target = 7m;
                         println("This sentence is longer than 34 characters");
                         #setlocal print-merging = basic;
                         println("This sentence is also longer than 34 characters");

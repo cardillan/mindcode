@@ -161,7 +161,7 @@ The Mindcode compiler supports two functions which generate _assertions_. Assert
 Unit tests testing the `math` and `printing` libraries look like this:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 require math;
 require printing;
 

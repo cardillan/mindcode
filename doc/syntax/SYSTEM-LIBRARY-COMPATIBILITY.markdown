@@ -29,7 +29,7 @@ incorporated into a larger program. Typically, a program for running the test wi
 
 ```
 // Set the target appropriately
-#set target = 8;
+#set target = 8m;
 
 require compatibility;
 

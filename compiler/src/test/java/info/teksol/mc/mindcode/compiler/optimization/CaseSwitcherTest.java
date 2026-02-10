@@ -1153,7 +1153,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
         @Test
         void processesMultipleTranslations() {
             assertCompilesTo("""
-                            #set target = 8;
+                            #set target = 8m;
                             #set goal = size;
                             a = b = '0';
                             while true do

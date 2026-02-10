@@ -77,7 +77,7 @@ Assuming the case expression conforms to the requirements described above, the f
 The basic case is:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 volatile output = case input
     when 0 then 'A';
     when 1 then 'B';
@@ -149,7 +149,7 @@ When [`unsafe-case-optimization`](../SYNTAX-5-OTHER.markdown#option-unsafe-case-
 The most complex value translations consist of up to eight instructions. When the optimization goal is speed, another solution will probably perform better than the more complex cases. When optimizing for size, though, even the largest value translations may be smaller than any of the alternatives:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 #set goal = size;
 volatile var value;
 case value
@@ -180,7 +180,7 @@ select .value equal *tmp3 59 .value *tmp8
 When a single case expression assigns new values to several distinct variables, the optimization may be applied to each of them separately. Handling of the input value (e.g., translating it to logic id or applying an offset) is performed just once and shared by all translated variables. Example:
 
 ```Mindcode
-#set target = 8;
+#set target = 8m;
 #set goal = size;
 a = '0';
 while true do
@@ -306,7 +306,7 @@ The example illustrates the following optimization aspects:
 The sample has been artificially constructed to demonstrate the above effects.
 
 ```Mindcode
-#set target = 7;
+#set target = 7m;
 #set builtin-evaluation = full;
 #set symbolic-labels = true;
 #set instruction-limit = 150;
