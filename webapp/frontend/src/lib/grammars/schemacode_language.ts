@@ -59,7 +59,14 @@ export const schemacodeLanguage = LRLanguage.define({
 				ProcessorLinks: delimitedIndent({ closing: 'end', align: false })
 			}),
 			foldNodeProp.add({
-				'SchematicDefinition ProcessorConfiguration ProcessorLinks': foldInside
+				'SchematicDefinition ProcessorConfiguration ProcessorLinks': foldInside,
+				TextBlock(node, state) {
+					const len = state.doc.length;
+					// fold everything between the """ delimiters
+					const from = Math.min(node.from + 3, len);
+					const to = Math.min(node.to - 3, len);
+					return { from, to };
+				}
 			}),
 			styleTags({
 				Identifier: t.variableName,
