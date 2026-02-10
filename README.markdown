@@ -25,12 +25,9 @@ Mindcode can generate code for several Mindustry versions. The target can be sel
 * **6.0 Build 126.2**: use `#set target = 6;` to select it.
 * **7.0 Build 146** (the default one): use `#set target = 7;` to explicitly select it.  
 * **v8 Build 149 Beta**: use `#set target = 8.0;` to select it.
-* **v8 Build 150 Beta** or later: use `#set target = 8;` (or `8.1`) to select it.
+* **v8 Build 155 Beta** or later: use `#set target = 8;` (or `8.1`) to select it.
 
-At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry versions (154.3 Beta or BE build 26613).
-
-> [!NOTE]
-> The [atomic code blocks](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26658 or later). The latest beta release (v154.3) doesn't provide necessary support for atomic code blocks. 
+At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry version (BE build 26676).
 
 [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality in Mindustry 8.
 

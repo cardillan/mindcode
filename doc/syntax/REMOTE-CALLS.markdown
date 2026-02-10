@@ -430,7 +430,7 @@ print *tmp5
 # Atomic code execution
 
 > [!NOTE]
-> Atomic code execution is only supported for targets 8.1 or higher. It also relies on a very recent change to Mindustry, and therefore only works on Mindustry BE build 26609 or higher. Specifically, the latest Beta release (v8 Build 154.3 - Beta) doesn't contain the required functionality.    
+> Atomic code execution is only supported for targets 8.1 or higher. It also relies on a fairly recent change to Mindustry, and therefore only reliably executes on Mindustry Beta 155 or later.    
 
 Atomic code execution ensures that a section of code will execute in a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including processor variables, contents of memory banks or cells, or unit and building states. This guarantee is valid universally, regardless of the actual FPS rate of the game.
 

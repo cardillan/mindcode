@@ -16,7 +16,7 @@ Changes intended for the next regular release.
 
 **Done**
 
-* Only output errors and warnings on the console (on stderr), everything else to the log
+* UI redesign by JeanJPNM
 
 **Doing**
 

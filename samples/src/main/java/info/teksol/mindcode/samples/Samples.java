@@ -19,7 +19,7 @@ public class Samples {
                 "heal-damaged-building",
                 "mining-drone",
                 "upgrade-conveyors",
-                "sum-of-primes"
+                "run:sum-of-primes"
         );
 
         return sampleNames.stream().map(Samples::loadMindcodeSample)
@@ -53,8 +53,9 @@ public class Samples {
     }
 
     private static Sample loadSample(String path, String sampleName, String extension) {
-        boolean slow = sampleName.startsWith("slow:");
-        boolean relaxed = sampleName.startsWith("relaxed:");
+        boolean runnable = sampleName.contains("run:");
+        boolean slow = sampleName.contains("slow:");
+        boolean relaxed = sampleName.contains("relaxed:");
         String fileName = sampleName.replaceAll(".*:", "");
 
         URL sample = Samples.class.getClassLoader().getResource(path + fileName + extension);
@@ -65,7 +66,7 @@ public class Samples {
         try (final BufferedReader reader = new BufferedReader(new InputStreamReader(sample.openStream()))) {
             final StringWriter out = new StringWriter();
             reader.transferTo(out);
-            return new Sample(fileName, out.toString(), slow, relaxed);
+            return new Sample(fileName, out.toString(), runnable, slow, relaxed);
         } catch (IOException e) {
             throw new RuntimeException("Failed to read sample file: " + fileName);
         }

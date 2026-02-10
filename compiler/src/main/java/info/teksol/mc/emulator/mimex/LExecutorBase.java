@@ -163,10 +163,7 @@ public abstract class LExecutorBase implements LExecutor {
     public void runTick(int executorIndex, double delta) {
         this.delta = delta;
 
-        int ipt = this.ipt.numi();
-        accumulator += delta * ipt;
-
-        int maxAccumulator = maxInstructionScale * ipt;
+        int maxAccumulator = maxInstructionScale * ipt.numi();
         if (accumulator > maxAccumulator) {
             accumulatorLoss += accumulator - maxAccumulator;
             accumulator = maxAccumulator;
@@ -190,6 +187,8 @@ public abstract class LExecutorBase implements LExecutor {
                 break;
             }
         }
+
+        accumulator += delta * ipt.numi();
     }
 
     public void runOnce() {
