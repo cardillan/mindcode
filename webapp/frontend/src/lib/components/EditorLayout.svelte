@@ -1,32 +1,28 @@
 <script lang="ts">
-	import { Label } from '$lib/components/ui/label';
-	import { Button } from '$lib/components/ui/button';
 	import CopyButton from './CopyButton.svelte';
 	import TabsOutput from './TabsOutput.svelte';
-	import { Maximize2, Minimize2, ChevronDown, ChevronUp } from '@lucide/svelte';
 	import type { EditorStore } from '$lib/stores.svelte';
 	import type { CompileResponseMessage, RunResult, SourceRange } from '$lib/api';
 	import CompilerMessages from './CompilerMessages.svelte';
+	import EditorLayoutTabs from './EditorLayoutTabs.svelte';
+	import { TabsTrigger } from './ui/tabs';
+	import TabsContent from './ui/tabs/tabs-content.svelte';
 
 	let {
 		inputLabel,
 		inputEditor,
 		inputLoading = false,
-		outputLabel,
 		outputEditor,
 		outputLoading = false,
 		runResults = [],
 		errors = [],
 		warnings = [],
 		infos = [],
-		onJumpToPosition,
-		// Layout options
-		collapsible = true
+		onJumpToPosition
 	}: {
 		inputLabel: string;
 		inputEditor: EditorStore;
 		inputLoading?: boolean;
-		outputLabel: string;
 		outputEditor: EditorStore;
 		outputLoading?: boolean;
 		runResults?: RunResult[];
@@ -34,17 +30,9 @@
 		warnings?: CompileResponseMessage[];
 		infos?: CompileResponseMessage[];
 		onJumpToPosition?: (range: SourceRange) => void;
-		// Layout options
-		collapsible?: boolean;
 	} = $props();
 
-	let inputCollapsed = $state(false);
-	let outputCollapsed = $state(false);
 	let fullscreen = $state<'input' | 'output' | null>(null);
-
-	function toggleFullscreen(section: 'input' | 'output') {
-		fullscreen = fullscreen === section ? null : section;
-	}
 </script>
 
 <div class="flex h-full flex-col gap-4">
@@ -62,123 +50,69 @@
 				fullscreen === 'input' && 'md:col-span-2'
 			]}
 		>
-			<!-- Header with label and collapse/fullscreen controls -->
-			<div class="flex items-center justify-between">
-				<Label class="text-lg font-bold">{inputLabel}</Label>
-				<div class="flex gap-1">
-					{#if collapsible}
-						<Button
-							variant="ghost"
-							size="icon"
-							class="h-8 w-8 md:hidden"
-							onclick={() => (inputCollapsed = !inputCollapsed)}
-						>
-							{#if inputCollapsed}
-								<ChevronDown class="h-4 w-4" />
-							{:else}
-								<ChevronUp class="h-4 w-4" />
-							{/if}
-							<span class="sr-only">{inputCollapsed ? 'Expand' : 'Collapse'} input</span>
-						</Button>
-					{/if}
-					<Button
-						variant="ghost"
-						size="icon"
-						class="h-8 w-8"
-						onclick={() => toggleFullscreen('input')}
-					>
-						{#if fullscreen === 'input'}
-							<Minimize2 class="h-4 w-4" />
-							<span class="sr-only">Exit fullscreen</span>
-						{:else}
-							<Maximize2 class="h-4 w-4" />
-							<span class="sr-only">Fullscreen input</span>
-						{/if}
-					</Button>
-				</div>
-			</div>
+			<EditorLayoutTabs
+				value="code"
+				minimizeLabel="Minimize input"
+				restoreLabel="Restore input"
+				maximizeLabel="Maximize input"
+				onModeChange={(mode) => {
+					if (mode === 'maximized') {
+						fullscreen = 'input';
+					} else if (fullscreen === 'input') {
+						fullscreen = null;
+					}
+				}}
+			>
+				{#snippet tabTriggers()}
+					<TabsTrigger value="code">{inputLabel}</TabsTrigger>
+				{/snippet}
 
-			<!-- Editor container -->
-			<div
-				class={[
-					'h-[60dvh] rounded-md border bg-muted transition-opacity',
-					inputLoading && 'pointer-events-none opacity-50',
-					inputCollapsed && 'hidden'
-				]}
-				{@attach inputEditor.attach}
-			></div>
+				<TabsContent value="code" class="h-full">
+					<div
+						class={[
+							'h-full rounded-md border bg-muted transition-opacity',
+							inputLoading && 'pointer-events-none opacity-50'
+						]}
+						{@attach inputEditor.attach}
+					></div>
+				</TabsContent>
+			</EditorLayoutTabs>
 
 			<CompilerMessages {errors} {warnings} {onJumpToPosition} />
 		</div>
 
-		<!-- Output Section -->
-		<div
+		<TabsOutput
+			minimizeLabel="Minimize output"
+			restoreLabel="Restore output"
+			maximizeLabel="Maximize output"
+			disableTriggers={outputLoading}
+			{runResults}
+			messages={infos}
+			{onJumpToPosition}
 			class={[
-				'flex flex-col gap-2',
+				'self-start',
 				fullscreen === 'input' && 'hidden',
 				fullscreen === 'output' && 'md:col-span-2'
 			]}
+			onModeChange={(mode) => {
+				if (mode === 'maximized') {
+					fullscreen = 'output';
+				} else if (fullscreen === 'output') {
+					fullscreen = null;
+				}
+			}}
 		>
-			<!-- Header with label and collapse/fullscreen controls -->
-			<div class="flex items-center justify-between">
-				<Label class="text-lg font-bold">{outputLabel}</Label>
-				<div class="flex gap-1">
-					{#if collapsible}
-						<Button
-							variant="ghost"
-							size="icon"
-							class="h-8 w-8 md:hidden"
-							onclick={() => (outputCollapsed = !outputCollapsed)}
-						>
-							{#if outputCollapsed}
-								<ChevronDown class="h-4 w-4" />
-							{:else}
-								<ChevronUp class="h-4 w-4" />
-							{/if}
-							<span class="sr-only">{outputCollapsed ? 'Expand' : 'Collapse'} output</span>
-						</Button>
-					{/if}
-					<Button
-						variant="ghost"
-						size="icon"
-						class="h-8 w-8"
-						onclick={() => toggleFullscreen('output')}
-					>
-						{#if fullscreen === 'output'}
-							<Minimize2 class="h-4 w-4" />
-							<span class="sr-only">Exit fullscreen</span>
-						{:else}
-							<Maximize2 class="h-4 w-4" />
-							<span class="sr-only">Fullscreen output</span>
-						{/if}
-					</Button>
-				</div>
-			</div>
-
-			<!-- Editor with tabs for run results/messages -->
-			<div class={['flex flex-col gap-2', outputCollapsed && 'hidden']}>
-				<!-- Main editor output -->
-				<div
-					class={['relative transition-opacity', outputLoading && 'pointer-events-none opacity-50']}
-				>
-					<CopyButton floating getText={() => outputEditor.view?.state.doc.toString() ?? ''} />
-					<div
-						class={['h-[30dvh] rounded-md border bg-muted', fullscreen === 'output' && 'h-[60dvh]']}
-						{@attach outputEditor.attach}
-					></div>
-				</div>
-
-				<!-- Tabs for run results and messages -->
+			{#snippet editor()}
 				<div
 					class={[
-						'h-[calc(30dvh-(--spacing(2)))] rounded-md border bg-muted',
-						fullscreen === 'output' && 'hidden'
+						'relative h-full transition-opacity',
+						outputLoading && 'pointer-events-none opacity-50'
 					]}
 				>
-					<!-- // fullscreen === 'output' ? 'h-[calc(100vh-55rem)]' : 'h-[15dvh] md:h-[15dvh]' -->
-					<TabsOutput {runResults} messages={infos} {onJumpToPosition} />
+					<CopyButton floating getText={() => outputEditor.view?.state.doc.toString() ?? ''} />
+					<div class="h-full rounded-md border bg-muted" {@attach outputEditor.attach}></div>
 				</div>
-			</div>
-		</div>
+			{/snippet}
+		</TabsOutput>
 	</div>
 </div>

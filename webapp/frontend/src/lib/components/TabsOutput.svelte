@@ -6,26 +6,49 @@
 	import type { CompileResponseMessage, RunResult, SourceRange } from '$lib/api';
 	import { Textarea } from './ui/textarea';
 	import * as Select from './ui/select';
-	import { untrack } from 'svelte';
+	import { untrack, type Snippet } from 'svelte';
+	import EditorLayoutTabs, { type CollapsibleTabsMode } from './EditorLayoutTabs.svelte';
+	import type { ClassValue } from 'svelte/elements';
 
+	type TabName = 'code' | 'run-results' | 'messages';
+
+	interface TabsOutputProps {
+		class?: ClassValue;
+		runResults?: RunResult[];
+		messages?: CompileResponseMessage[];
+		disableTriggers?: boolean;
+		maximizeLabel: string;
+		minimizeLabel: string;
+		restoreLabel: string;
+		onJumpToPosition?: (range: SourceRange) => void;
+		onModeChange?: (mode: CollapsibleTabsMode) => void;
+		editor: Snippet;
+	}
 	let {
 		runResults = [],
 		messages = [],
-		onJumpToPosition
-	}: {
-		runResults?: RunResult[];
-		messages?: CompileResponseMessage[];
-		onJumpToPosition?: (range: SourceRange) => void;
-	} = $props();
+		disableTriggers = false,
+		class: className,
+		maximizeLabel,
+		minimizeLabel,
+		restoreLabel,
+		onJumpToPosition,
+		onModeChange,
+		editor
+	}: TabsOutputProps = $props();
 
 	// Determine which tabs are available
 	let hasRunResults = $derived(runResults.length > 0);
 	let hasMessages = $derived(messages.length > 0);
 
 	// Determine default active tab (first available)
-	let defaultTab = $derived(
-		hasRunResults ? 'run-results' : hasMessages ? 'messages' : 'run-results'
-	);
+	let preferredTab = $state<TabName>('code');
+
+	const selectedTab = $derived.by((): TabName => {
+		if (preferredTab === 'run-results' && !hasRunResults) return 'code';
+		if (preferredTab === 'messages' && !hasMessages) return 'code';
+		return preferredTab;
+	});
 
 	// For multi-processor outputs, create sub-tabs
 	let processorTabs = $derived(
@@ -42,14 +65,30 @@
 	const selectedProcessor = $derived(processorTabs.find((tab) => tab.id === selectedProcessorId));
 </script>
 
-<Tabs.Root value={defaultTab} class="flex h-full flex-1 flex-col">
-	<Tabs.List class="w-full">
-		<Tabs.Trigger value="run-results">Run Output</Tabs.Trigger>
-		<Tabs.Trigger value="messages">Messages</Tabs.Trigger>
-	</Tabs.List>
+<EditorLayoutTabs
+	bind:value={() => selectedTab, (tab) => (preferredTab = tab)}
+	{maximizeLabel}
+	{minimizeLabel}
+	{restoreLabel}
+	{onModeChange}
+	class={className}
+>
+	{#snippet tabTriggers()}
+		<Tabs.Trigger value="code" disabled={disableTriggers}>Code</Tabs.Trigger>
+		{#if hasRunResults}
+			<Tabs.Trigger value="run-results" disabled={disableTriggers}>Output</Tabs.Trigger>
+		{/if}
+		{#if hasMessages}
+			<Tabs.Trigger value="messages" disabled={disableTriggers}>Messages</Tabs.Trigger>
+		{/if}
+	{/snippet}
+
+	<Tabs.Content value="code" class="h-full">
+		{@render editor()}
+	</Tabs.Content>
 
 	{#if hasRunResults}
-		<Tabs.Content value="run-results" class="flex-1">
+		<Tabs.Content value="run-results" class="h-full">
 			<Card.Root class="h-full p-1">
 				<Card.Content class="flex h-full flex-col gap-2 p-0">
 					<Select.Root type="single" bind:value={selectedProcessorId}>
@@ -71,31 +110,15 @@
 				</Card.Content>
 			</Card.Root>
 		</Tabs.Content>
-	{:else}
-		<Tabs.Content value="run-results" class="flex-1">
-			<Card.Root class="h-full">
-				<Card.Content class="flex h-full items-center justify-center text-muted-foreground">
-					No run outputs to display.
-				</Card.Content>
-			</Card.Root>
-		</Tabs.Content>
 	{/if}
 
 	{#if hasMessages}
-		<Tabs.Content value="messages" class="flex-1 overflow-scroll">
-			<Card.Root>
+		<Tabs.Content value="messages" class="h-full">
+			<Card.Root class="h-full overflow-scroll">
 				<Card.Content>
 					<CompilerMessages infos={messages} title="Compiler messages:" {onJumpToPosition} />
 				</Card.Content>
 			</Card.Root>
 		</Tabs.Content>
-	{:else}
-		<Tabs.Content value="messages" class="flex-1">
-			<Card.Root class="h-full">
-				<Card.Content class="flex h-full items-center justify-center text-muted-foreground">
-					No messages to display.
-				</Card.Content>
-			</Card.Root>
-		</Tabs.Content>
 	{/if}
-</Tabs.Root>
+</EditorLayoutTabs>

@@ -188,7 +188,6 @@
 		inputLabel="Mindcode Source Code"
 		inputEditor={mindcodeEditor}
 		inputLoading={localSource.isLoading}
-		outputLabel="Mindustry Logic"
 		outputEditor={mlogEditor}
 		outputLoading={localSource.isLoading || loadingAction !== null}
 		{runResults}
