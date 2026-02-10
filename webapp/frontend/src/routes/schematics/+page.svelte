@@ -179,7 +179,6 @@
 		inputLabel="Schemacode definition"
 		inputEditor={schemacodeEditor}
 		inputLoading={localSource.isLoading}
-		outputLabel="Encoded schematic"
 		outputEditor={encodedEditor}
 		outputLoading={localSource.isLoading || loadingAction !== null}
 		{runResults}

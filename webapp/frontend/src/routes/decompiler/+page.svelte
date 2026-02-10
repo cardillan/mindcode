@@ -144,7 +144,6 @@
 		inputLabel="Mlog code"
 		inputEditor={mlogEditor}
 		inputLoading={localSource.isLoading}
-		outputLabel="Decompiled Mindcode"
 		outputEditor={mindcodeEditor}
 		outputLoading={localSource.isLoading || loadingAction !== null}
 		{runResults}
