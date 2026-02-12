@@ -89,6 +89,7 @@ public class CodeGenerator extends CompilerMessageEmitter {
         nodeVisitor.registerVisitor(new IfExpressionsBuilder(this, context));
         nodeVisitor.registerVisitor(new IteratedForLoopStatementsBuilder(this, context));
         nodeVisitor.registerVisitor(new LiteralsBuilder(this, context));
+        nodeVisitor.registerVisitor(new LoopStatementsBuilder(this, context));
         nodeVisitor.registerVisitor(new MemberAccessBuilder(this, context));
         nodeVisitor.registerVisitor(new MlogBlocksBuilder(this, context));
         nodeVisitor.registerVisitor(new OperatorsBuilder(this, context));

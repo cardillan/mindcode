@@ -11,12 +11,13 @@ import java.util.Objects;
 
 @NullMarked
 @AstNode
-public class AstAtomicBlock extends AstExpression {
+public class AstAtomicBlock extends AstLabeledExpression {
     private final List<AstMindcodeNode> expressions;
     private final boolean function;
 
-    public AstAtomicBlock(SourcePosition sourcePosition, List<AstMindcodeNode> expressions, boolean function) {
-        super(sourcePosition, expressions);
+    public AstAtomicBlock(SourcePosition sourcePosition, @Nullable AstIdentifier label, List<AstMindcodeNode> expressions,
+            boolean function) {
+        super(sourcePosition, label, expressions);
         this.expressions = Objects.requireNonNull(expressions);
         this.function = function;
     }
@@ -36,8 +37,8 @@ public class AstAtomicBlock extends AstExpression {
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         AstAtomicBlock that = (AstAtomicBlock) o;
         return Objects.equals(expressions, that.expressions) && function == that.function;

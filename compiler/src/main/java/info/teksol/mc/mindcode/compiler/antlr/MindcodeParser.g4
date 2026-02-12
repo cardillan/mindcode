@@ -114,12 +114,14 @@ statement
         WHILE condition = expression DO body = astStatementList? END                    # astWhileLoopStatement
     | (label = IDENTIFIER COLON)?
         DO body = astStatementList? WHILE condition = expression                        # astDoWhileLoopStatement
-    | BREAK label = IDENTIFIER?                                                         # astBreakStatement
-    | CONTINUE label = IDENTIFIER?                                                      # astContinueStatement
+    | (label = IDENTIFIER COLON)?
+        LOOP body = astStatementList? END                                               # astInfiniteLoopStatement
+    | BREAK label = (IDENTIFIER | DO | LOOP | FOR | WHILE | ATOMIC | BEGIN | DEBUG )?   # astBreakStatement
+    | CONTINUE label = (IDENTIFIER | DO | LOOP | FOR | WHILE)?                          # astContinueStatement
     | RETURN value = expression?                                                        # astReturnStatement
-    | ATOMIC exp = astStatementList? END                                                # astAtomicBlock
-    | BEGIN exp = astStatementList? END                                                 # astCodeBlock
-    | DEBUG exp = astStatementList? END                                                 # astDebugBlock
+    | (label = IDENTIFIER COLON)? ATOMIC exp = astStatementList? END                    # astAtomicBlock
+    | (label = IDENTIFIER COLON)? BEGIN exp = astStatementList? END                     # astCodeBlock
+    | (label = IDENTIFIER COLON)? DEBUG exp = astStatementList? END                     # astDebugBlock
     | MLOG variables = mlogVariableList? LBRACE block = mlogBlock                       # astMlogBlock
                 // No RBRACE: RBRACE is converted to semicolon to serve as statement separator
     ;

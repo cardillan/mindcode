@@ -275,6 +275,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstDoWhileLoopStatement(MindcodeParser.AstDoWhileLoopStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astInfiniteLoopStatement}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstInfiniteLoopStatement(MindcodeParser.AstInfiniteLoopStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astBreakStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree

@@ -32,7 +32,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
 
     private void createDoWhileLoop(AstWhileLoopStatement node) {
         final LogicLabel beginLabel = assembler.nextLabel();
-        LoopLabels loopLabels = enterLoop(node);
+        LoopLabels loopLabels = enterLoop(node, "do");
 
         // Loop body
         assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
@@ -56,7 +56,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
 
     private void createWhileLoop(AstWhileLoopStatement node) {
         final LogicLabel beginLabel = assembler.nextLabel();
-        LoopLabels loopLabels = enterLoop(node);
+        LoopLabels loopLabels = enterLoop(node, "while");
 
         // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);

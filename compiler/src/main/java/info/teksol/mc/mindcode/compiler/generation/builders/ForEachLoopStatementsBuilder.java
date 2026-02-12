@@ -56,7 +56,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             symbolicLabels = node.getProfile().isSymbolicLabels();
             nullCounterNoop = node.getProfile().isNullCounterIsNoop();
             iterationGroups = node.getIteratorGroups().stream().map(this::processIteratorGroup).toList();
-            loopLabels = enterLoop(node);
+            loopLabels = enterLoop(node, "for");
             allowContinue(false);
         }
 

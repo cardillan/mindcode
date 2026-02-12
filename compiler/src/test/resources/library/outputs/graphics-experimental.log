@@ -52,69 +52,69 @@ Final code before resolving virtual instructions:
    30:  draw scale -1 1 0 0 0 0
    31:  draw translate -176 0 0 0 0 0
    32:  sensor *tmp12 display1 @type
-   33:  jump *label18 notEqual *tmp12 @logic-display
+   33:  jump *label19 notEqual *tmp12 @logic-display
    34:  draw rotate 0 0 90 0 0 0
    35:  draw translate 0 -80 0 0 0 0
-   36:  jump *label17 always 0 0
-        label *label18
-   37:  jump *label21 notEqual *tmp12 @large-logic-display
+   36:  jump *label18 always 0 0
+        label *label19
+   37:  jump *label22 notEqual *tmp12 @large-logic-display
    38:  draw rotate 0 0 90 0 0 0
    39:  draw translate 0 -176 0 0 0 0
-   40:  jump *label17 always 0 0
-        label *label21
+   40:  jump *label18 always 0 0
+        label *label22
    41:  stop
-        label *label17
+        label *label18
    42:  sensor *tmp15 display2 @type
-   43:  jump *label26 notEqual *tmp15 @logic-display
+   43:  jump *label27 notEqual *tmp15 @logic-display
    44:  draw rotate 0 0 270 0 0 0
    45:  draw translate -80 0 0 0 0 0
-   46:  jump *label25 always 0 0
-        label *label26
-   47:  jump *label29 notEqual *tmp15 @large-logic-display
+   46:  jump *label26 always 0 0
+        label *label27
+   47:  jump *label30 notEqual *tmp15 @large-logic-display
    48:  draw rotate 0 0 270 0 0 0
    49:  draw translate -176 0 0 0 0 0
-   50:  jump *label25 always 0 0
-        label *label29
+   50:  jump *label26 always 0 0
+        label *label30
    51:  stop
-        label *label25
+        label *label26
    52:  sensor *tmp18 display3 @type
-   53:  jump *label34 notEqual *tmp18 @logic-display
+   53:  jump *label35 notEqual *tmp18 @logic-display
    54:  draw rotate 0 0 180 0 0 0
    55:  draw translate -80 -80 0 0 0 0
-   56:  jump *label33 always 0 0
-        label *label34
-   57:  jump *label37 notEqual *tmp18 @large-logic-display
+   56:  jump *label34 always 0 0
+        label *label35
+   57:  jump *label38 notEqual *tmp18 @large-logic-display
    58:  draw rotate 0 0 180 0 0 0
    59:  draw translate -176 -176 0 0 0 0
-   60:  jump *label33 always 0 0
-        label *label37
+   60:  jump *label34 always 0 0
+        label *label38
    61:  stop
-        label *label33
+        label *label34
    62:  sensor *tmp21 display4 @type
-   63:  jump *label42 notEqual *tmp21 @logic-display
+   63:  jump *label43 notEqual *tmp21 @logic-display
    64:  draw scale 1 -1 0 0 0 0
    65:  draw translate 0 -80 0 0 0 0
-   66:  jump *label41 always 0 0
-        label *label42
-   67:  jump *label45 notEqual *tmp21 @large-logic-display
+   66:  jump *label42 always 0 0
+        label *label43
+   67:  jump *label46 notEqual *tmp21 @large-logic-display
    68:  draw scale 1 -1 0 0 0 0
    69:  draw translate 0 -176 0 0 0 0
-   70:  jump *label41 always 0 0
-        label *label45
+   70:  jump *label42 always 0 0
+        label *label46
    71:  stop
-        label *label41
+        label *label42
    72:  sensor *tmp24 display5 @type
-   73:  jump *label50 notEqual *tmp24 @logic-display
+   73:  jump *label51 notEqual *tmp24 @logic-display
    74:  draw scale -1 1 0 0 0 0
    75:  draw translate -80 0 0 0 0 0
-   76:  jump *label49 always 0 0
-        label *label50
-   77:  jump *label53 notEqual *tmp24 @large-logic-display
+   76:  jump *label50 always 0 0
+        label *label51
+   77:  jump *label54 notEqual *tmp24 @large-logic-display
    78:  draw scale -1 1 0 0 0 0
    79:  draw translate -176 0 0 0 0 0
-   80:  jump *label49 always 0 0
-        label *label53
+   80:  jump *label50 always 0 0
+        label *label54
    81:  stop
-        label *label49
+        label *label50
    82:  draw scale 2.225 2.225 0 0 0 0
    83:  draw scale 0.4795454545454546 0.4795454545454546 0 0 0 0

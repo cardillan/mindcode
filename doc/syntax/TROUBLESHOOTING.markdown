@@ -44,9 +44,9 @@ Mindcode provides several tools for making debugging the compiled code a bit eas
 
 ### Debug-specific code
 
-As Mindcode doesn't provide a debugger, you can only inspect the state of your running program by including specific code to output important information onto message blocks, or by watching variables in the actual processor in the Vars screen. In the first case, you'll probably need to add message blocks to your design to output the information onto, in the second case, you'll probably need to pause or stop the program execution to be able to inspect the values of your variables at a defined state.
+As Mindcode doesn't provide a debugger, you can only inspect the state of your running program by including specific code to output important information onto message blocks or by watching variables in the actual processor in the Vars screen. In the first case, you'll probably need to add message blocks to your design to output the information onto. In the second case, you'll probably need to pause or stop the program execution to be able to inspect the values of your variables when the processor is not running.
 
-This requires to add a code that is only used for the actual debugging process. Mindcode provides the following tools for including the debug-specific code only when needed:
+This requires adding a code only used for the actual debugging process. Mindcode provides the following tools for including the debug-specific code only when needed:
 
 * A debug code block: `debug <some code> end;`. Debug block is not compiled, unless `debug` is set to `true`.
 * A debug function: `debug void foo() <some code> end;`. Calls to debug functions are not compiled, unless `debug` is set to `true`.
@@ -57,13 +57,13 @@ By setting the [`debug` compiler option](SYNTAX-5-OTHER.markdown#option-debug) t
 * Statements in debug blocks are included in the compiled code.
 * Calls to debug functions are compiled.
 
-Compiling code with debug support enabled may result in larger code (both due to additional code in debug blocks and debug functions, and due to some optimizations not being performed to preserve user-defined variables). At the same time, loops may not get unrolled in debug mode.
+Compiling code with debug support enabled may result in larger code (both due to additional code in debug blocks and debug functions, and due to some optimizations not being performed to preserve user-defined variables). If the new code size exceeds the mlog code size limit (1000 instructions), you can use the [MlogAssertions mod](https://github.com/cardillan/MlogAssertions) to increase the instruction limit (up to 2000 instructions) to be able to still run the compiled code.
 
-When entering the processor screen while the program is running doesn't stop program execution. To get a meaningful insight nto the state of the program, you may need to stop it. Stopping the program is possible in several ways:
+When entering the processor screen while the program is running doesn't stop program execution. To get a meaningful insight into the state of the program, you may need to stop it. Stopping the program is possible in several ways:
 
-* By pausing the game. In this case, it might be difficult to stop the program at a well-defined time.
-* By including a `stop` instruction in the program (provided by the `stopProcessor()` or `error()` functions, or by compiler-generated [runtime checks](SYNTAX-5-OTHER.markdown#option-error-reporting)). However, once stopped, the program execution can't be resumed, the whole processor needs to be restarted.
-* By implementing a pause functionality. The program might wait for some user-interaction, for example until a switch is pressed by the user. This allows to stop the program at a well-defined point while maintaining the ability to resume its execution. The easiest way for this is to declare the function performing the pause as `debug` - this way the program will only pause when compiled with debug support enabled. 
+* By pausing the game. In this case, it might be challenging to stop the program at a well-defined time.
+* By including a `stop` instruction in the program (provided by the `stopProcessor()` or `error()` functions, or by compiler-generated [runtime checks](SYNTAX-5-OTHER.markdown#option-error-reporting)). However, once stopped, the program execution can't be resumed; the whole processor needs to be restarted.
+* By implementing a pause functionality. The program might wait for some user-interaction, for example, until the user presses a switch. This allows stopping the program at a well-defined point while maintaining the ability to resume its execution. The easiest way for this is to declare the function performing the pause as `debug` - this way the program will only pause when compiled with debug support enabled. 
 
 Example:
 
@@ -103,7 +103,7 @@ end;
 
 ### The `error()` function
 
-The built-in `error()` function serves for logging diagnostic information when an unexpected situation is encountered by the program. The infromation is stored in special variables or displayed in-game, and the processor is stopped.
+The built-in `error()` function serves for logging diagnostic information when the program encounters an unexpected situation. The information is stored in special variables or displayed in-game, and the processor is stopped.
 
 > [!NOTE]
 > When the `error-function` option is set to `false`, or the `error-reporting` option is set to `none`, calls to the `error()` function are ignored and not compiled into the final code.
@@ -155,7 +155,7 @@ label_4:
 
 ### Running the compiled code in an emulator
 
-Both the web app and the command line tool allow the compiled code [to be run on an emulated processor](TOOLS-CMDLINE.markdown#running-the-compiled-code). While the emulator supports almost no interaction with the Mindustry World (the sole exception at this time is access to memory cells and memory banks), it can still be used to debug code that doesn't access the outside world (e.g., by commenting out the offending statements in the source code).
+Both the web app and the command line tool allow the compiled code [to be run on an emulated processor](TOOLS-CMDLINE.markdown#running-mlog-code-or-schematics). While the emulator supports almost no interaction with the Mindustry World, it can still be used to debug code that doesn't access the outside world.
 
 An expansion of this feature is planned, where a static mindustry World would be simulated to some extent for the running code to interact with.
 
@@ -167,7 +167,7 @@ For even more detailed insight into the execution of the program, the state of v
 
 The other option to debug a Mindcode program is to examine its behavior in actual Mindustry World. Mindustry provides a way to inspect the program's variables in the **Vars** screen of the Mindustry processor shows all variables and their values, but the variables are displayed in the order in which they were created. This typically results in a very chaotic order of variables, where variables defined by the user are mixed with temporary variables, making it quite difficult to find a specific variable in large enough programs.
 
-It is possible to use the [`sort-variables`](SYNTAX-5-OTHER.markdown#option-sort-variables) compiler directive, or the `--sort-variables` command-line option, to make variables be displayed in a Mindustry processor in a well-defined order. Mindcode compiler ensures that by prepending a special block at the beginning of the program which creates user-defined variables in a specific order without altering their value. (The `packcolor` instruction is used, which can read - and therefore create - up to four variables per instruction, without any side effects. The result is not stored anywhere so that the variable-ordering code block doesn't change values of any variables, and therefore the behavior of the program remains unaltered, except for an unavoidable difference in total runtime of the program.)
+It is possible to use the [`sort-variables`](SYNTAX-5-OTHER.markdown#option-sort-variables) compiler directive, or the `--sort-variables` command-line option, to make variables be displayed in a Mindustry processor in a well-defined order. Mindcode compiler ensures that by prepending a special block at the beginning of the program which creates user-defined variables in a specific order without altering their value. (The `packcolor` instruction is used, which can read – and therefore create – up to four variables per instruction, without any side effects. The result is not stored anywhere so that the variable-ordering code block doesn't change values of any variables, and therefore the behavior of the program remains unaltered, except for an unavoidable difference in the total runtime of the program.)
 
 An example of a program created with sorting variables:
 

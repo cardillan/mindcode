@@ -1522,7 +1522,7 @@ public class OptimizationContext extends CompilerMessageEmitter {
         /// instruction position lies outside the program range, null is returned and no exception is thrown.
         ///
         /// @param offset offset relative to the current position
-        /// @return instruction at given offset relative to current position, or null
+        /// @return instruction at the given offset relative to current position, or null
         public LogicInstruction peek(int offset) {
             checkClosed();
             return test(instructionAt(cursor + offset));

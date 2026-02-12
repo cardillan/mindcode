@@ -58,6 +58,7 @@ IF                      : 'if' ;
 IN                      : 'in' ;
 INLINE                  : 'inline' ;
 LINKED                  : 'linked' ;
+LOOP                    : 'loop' ;
 MODULE                  : 'module' ;
 MLOG                    : 'mlog' ;
 NOINIT                  : 'noinit' ;

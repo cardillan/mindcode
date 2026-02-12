@@ -485,6 +485,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAstInfiniteLoopStatement(MindcodeParser.AstInfiniteLoopStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstInfiniteLoopStatement(MindcodeParser.AstInfiniteLoopStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAstBreakStatement(MindcodeParser.AstBreakStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -6,17 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.15.0 – Unreleased
 
+> [!NOTE]
+> [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in Minddustry build 155 Beta or later.
+
+> [!NOTE]
+> The new [Mlog Watcher functionality](doc/syntax/TOOLS-MLOG-WATCHER.markdown) available with the tool app requires a new version of the Mlog Watcher mod. The new version has not yet been released, but a Mindustry 8-compatible binary is available [here](https://github.com/Sharlottes/MlogWatcher/actions/runs/21562595822). To use that version, the `--watcher-version v1` command line argument must be specified.
+
+### Added
+
+* **Breaking**: the `loop` keyword has been reintroduced, to create [infinite loops](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#infinite-loops). Code that uses `loop` as a function or variable name will not compile, and the variable or function will have to be renamed.
+* Added the possibility to use the `break` statement to [exit code blocks](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#break-in-a-code-block).
+* Added [implicit labels](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#implicit-labels) to loops and code blocks. 
+
 ### Changed
 
-* Changed the meaning of the `target` compiler option: when no processor type is specified, the compiler generates the code for a processor-less execution. Privileged instructions are supported, but atomic sections and waits aren't.  
+* **Breaking**: Changed the meaning of the `target` compiler option: when no processor type is specified, the compiler generates the code for a processor-less execution. Privileged instructions are supported, but atomic sections and waits aren't.  
 
 ## 3.14.0 – 2026-02-08
 
 > [!NOTE]
-> [Atomic code execution](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26658 or later). The latest beta release (v154.3) doesn't provide necessary support for atomic code execution.
+> [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26658 or later). The latest beta release (v154.3) doesn't provide necessary support for atomic code execution.
 
 > [!NOTE]
-> The new [Mlog Watcher functionality](doc/syntax/TOOLS-MLOG-WATCHER.markdown) available with the tool app requires a new version of the Mlog Watcher mod. The new version has not yet been released, but a Mindustry 8-compatible build is available [here](https://github.com/Sharlottes/MlogWatcher/actions/runs/21562595822). To use that version, the `--watcher-version v1` command line argument must be specified.   
+> The new [Mlog Watcher functionality](doc/syntax/TOOLS-MLOG-WATCHER.markdown) available with the tool app requires a new version of the Mlog Watcher mod. The new version has not yet been released, but a Mindustry 8-compatible binary is available [here](https://github.com/Sharlottes/MlogWatcher/actions/runs/21562595822). To use that version, the `--watcher-version v1` command line argument must be specified.   
 
 ### Fixed
 
@@ -55,7 +67,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## 3.13.0 – 2026-01-18
 
 > [!NOTE]
-> [Atomic code execution](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26609 or higher). The latest beta release (v154.3) doesn't provide necessary support for atomic code execution.
+> [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26609 or higher). The latest beta release (v154.3) doesn't provide necessary support for atomic code execution.
 
 ### Fixed
 
@@ -71,7 +83,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added the [`emulator-fps` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-fps) to specify the frame rate to be emulated by the processor emulator. While frames are always emulated fully by Mindcode emulator, the change in instruction scheduling caused by different frame rate only affects situations where an interaction between two or more processors is being emulated.
 * Added the ability to run the compiled schematics on the schematics emulator to the tool app.
 * Added support for sensing `@x` and `@y` in blocks when emulating schematics.
-* Added the [`encode-zero-characters` compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-encode-zero-characters), which allows encoding zero characters in string literals. Use with caution: resulting code cannot be edited or passed via clipboard. Option has no effect in the web app. 
+* Added the [`encode-zero-characters` compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-encode-zero-characters), which allows encoding zero characters in string literals. Use with caution: resulting code cannot be edited or passed via clipboard. Option has no effect when used in the web app. 
 
 ### Changed
 

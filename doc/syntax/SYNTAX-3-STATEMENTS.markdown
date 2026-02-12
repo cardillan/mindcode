@@ -10,6 +10,7 @@ There are several types of loops:
 * [range iteration loops](#range-iteration-loops)
 * [list iteration loops](#list-iteration-loops)
 * [C-style loops](#c-style-loops)
+* [Infinite loops](#infinite-loops)
 
 ## While Loops
 
@@ -391,40 +392,62 @@ for var x = SW_X, y = SW_Y; x < NE_X && j < NE_Y ; x += dx do
 end;
 ```
 
-## Break and continue
+## Infinite Loops
 
-You can use a `break` or `continue` statement inside a loop in the usual sense (`break` exits the loop, `continue` skips the rest of the current iteration):
+It is possible to easily create infinite loops using the `loop` keyword. The main advantage is that the infinite loop can be used in the global scope even with strict syntax. This allows easily creating programs that have an initialization part and a main part which loops indefinitely, as is usual in mlog programs:
 
 ```Mindcode
-while not within(x, y, 6) do
-    approach(x, y, 4);
-    if @unit.@dead == 1 then
-        break;
+#set syntax = strict;
+#set symbolic-labels = true;
+#set remarks = comments;
+
+/// Initialization code (link guard)
+guarded linked switch1;
+
+/// Another initialization
+var counter = 0;
+
+/// Initialization code again
+begin
+    switch1.enabled = false;
+end;
+
+/// The main code: an infinite loop
+loop
+    print(counter++);
+    printflush(message1);
+    if switch1.enabled then
+        switch1.enabled = false;
+        counter = 0;
     end;
-    // ...
 end;
 ```
 
-### Using labels with break or continue
+compiles to:
 
-An unlabeled `break` statement exits the innermost `for` or `while` statement, however a labeled `break` can exit from an outer statement. It is necessary to mark the outer statement with a label, and then use the `break <label>` syntax, as shown here:
-
-```Mindcode
-MainLoop:
-for var i in 1 .. 10 do
-    for var j in 5 .. 20 do
-        if i > j then
-            break MainLoop;
-        end;
-        print(j);
-    end;
-end;
+```mlog
+# Mlog code compiled with support for symbolic labels
+# You can safely add/remove instructions, in most parts of the program
+# Pay closer attention to sections of the program manipulating @counter
+    # Initialization code (link guard)
+label_0:
+    jump label_0 equal switch1 null
+    # Another initialization
+    set .counter 0
+    # Initialization code again
+        control enabled switch1 false 0 0 0
+    # The main code: an infinite loop
+    label_3:
+        set *tmp1 .counter
+        op add .counter .counter 1
+        print *tmp1
+        printflush message1
+        sensor *tmp2 switch1 @enabled
+        jump label_3 equal *tmp2 false
+            control enabled switch1 false 0 0 0
+            set .counter 0
+        jump label_3 always 0 0
 ```
-
-Similarly, `continue MainLoop;` skips the rest of the current iteration of both the inner loop and the main loop. Every loop in Mindcode can be marked with a label, and the break or continue statements can use those labels to specify which of the currently active loops they operate on.
-
-> [!TIP]
-> Usually, a `break` or `continue` statement will be the last statements in a block of code (typically in an `if` or `case` statement). It doesn't make sense to put additional statements or expressions after a `break` or `continue`, since that code would never get executed and will be removed by the optimizer.
 
 # Conditionals
 
@@ -539,6 +562,98 @@ end;
 ```
 
 Variables declared in a code block are local to the code block.
+
+# Break and continue
+
+You can use a `break` or `continue` statement inside a loop in the usual sense (`break` exits the loop, `continue` skips the rest of the current iteration):
+
+```Mindcode
+while not within(x, y, 6) do
+    approach(x, y, 4);
+    if @unit.@dead == 1 then
+        break;
+    end;
+    // ...
+end;
+```
+
+## Using labels with break or continue
+
+An unlabeled `break` statement exits the innermost loop, however a labeled `break` can exit from an outer statement. It is necessary to mark the outer statement with a label, and then use the `break <label>` syntax, as shown here:
+
+```Mindcode
+MainLoop:
+for var i in 1 .. 10 do
+    for var j in 5 .. 20 do
+        if i > j then
+            break MainLoop;
+        end;
+        print(j);
+    end;
+end;
+```
+
+Similarly, `continue MainLoop;` skips the rest of the current iteration in both the inner loop and the main loop. Every loop in Mindcode can be marked with a label, and the break or continue statements can use those labels to specify which of the currently active loops they operate on.
+
+When an explicit label is not specified for a `loop` statement, it is possible to use an implicit label `loop`:
+
+```Mindcode
+loop
+    println("Outer 1");
+    while true do
+        println("Inner 1");
+        break loop;
+        println("Inner 2");
+    end;
+    println("Outer 2");
+end;
+```
+
+Both the `print("Inner 2");` and `print("Outer 2");` statements are skipped by the `break loop;` statement.
+
+## `break` in a code block
+
+It is possible to use the `break` statement to exit a code block, be it a [regular](#code-blocks), [`debug`](TROUBLESHOOTING.markdown#debug-specific-code) or [`atomic`](REMOTE-CALLS.markdown#atomic-blocks) block. A label needs to be used with the `break` statement meant to exit a code block. Labels are specified in the same way as in the case of loops:
+
+```Mindcode
+MainBlock: begin
+    print("Before");
+    break MainBlock;
+    print("After");     // Unreachable code
+end;
+```
+
+## Implicit labels
+
+The keyword that opens a loop (that is, `do`, `for`, `loop` and `while`) or a code block (`atomic`, `begin` and `debug`) can be used as a label in `break` and `continue` statements, assuming that an explicit label hasn't been assigned to the loop or code block. This implicit label can be used only when its use is unambiguous, meaning that only one instance of the loop or code block is active at that point in the program. For example:
+
+```Mindcode
+for i in 0 ... 10 do
+    j = ceil(rand(100));
+    while j > 0 do
+        if j * i < 10 then
+            break for;
+        end;
+        j--;
+    end;
+    println(i);
+end;
+
+printflush(message1);
+```
+
+The implicit labels become ambiguous when the same types of loops or blocks are nested:
+
+```
+for i in 0 ... 10 do
+    for j in 0 ... 10 do
+        println(i, ", ", j);
+        if i * j > 75 then
+            break for;          /// Error: ambiguous label 'for'
+        end;
+    end;
+end;
+```
 
 # The `end()` function
 

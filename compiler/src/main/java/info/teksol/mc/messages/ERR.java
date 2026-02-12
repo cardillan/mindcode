@@ -6,6 +6,7 @@ import org.jspecify.annotations.NullMarked;
 public class ERR {
     public static final String ALLOCATION_MULTIPLE_HEAP = "Multiple heap allocation declarations.";
     public static final String ALLOCATION_MULTIPLE_STACK = "Multiple stack allocation declarations.";
+    public static final String AMBIGUOUS_LABEL = "Ambiguous label '%s'.";
     public static final String ARGUMENT_IN_MODIFIER_NOT_ALLOWED = "Parameter '%s' isn't input, 'in' modifier not allowed.";
     public static final String ARGUMENT_IN_OUT_MODIFIER_REQUESTED = "Parameter '%s' is declared 'in out' and no 'in' or 'out' argument modifier was used.";
     public static final String ARGUMENT_KEYWORD_INVALID_VALUE = "Invalid value '%s' for keyword parameter: allowed values are '%s'.";
@@ -52,7 +53,9 @@ public class ERR {
     public static final String ATOMIC_BLOCK_WAIT = "The atomic block executes a 'wait' instruction.";
     public static final String ATOMIC_REQUIRES_PROCESSOR = "'atomic' requires a processor to be specified in the 'target' compiler option.";
     public static final String ATOMIC_REQUIRES_TARGET_81 = "'atomic' requires target 8.1 or higher.";
-    public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";
+    public static final String BREAK_OUTSIDE_LOOP = "'break' statement outside of a do/while/for loop or a labeled code block.";
+    public static final String BREAK_OUTSIDE_LOOP_NO_LABEL = "'break' statement without a label outside of a do/while/for loop.";
+    public static final String CONTINUE_OUTSIDE_LOOP = "'continue' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";
     public static final String COMPILER_TYPE_INCOMPATIBLE = "This processor type is incompatible with the actual processor type in the schematics (%s) which contains this code.";
     public static final String CONSTANT_STRING_OR_KEYWORD_REQUIRED = "Constant string expression or keyword required.";
@@ -197,7 +200,7 @@ public class ERR {
     public static final String SUBARRAY_INVALID_RANGE = "Empty or invalid subarray range.";
     public static final String SUBARRAY_MUTABLE_RANGE = "Subarray specification must use constant range.";
     public static final String SUBARRAY_NON_INTEGER_RANGE = "Subarray specification must use integer range.";
-    public static final String UNDEFINED_LOOP_LABEL = "Undefined loop label '%s'.";
+    public static final String UNDEFINED_LABEL = "Undefined label '%s'.";
     public static final String UNSUPPORTED_STRING_EXPRESSION = "Unsupported string expression.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIER = "Modifier '%s' cannot be used with '%s'.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIERS = "Modifiers %s are mutually exclusive.";

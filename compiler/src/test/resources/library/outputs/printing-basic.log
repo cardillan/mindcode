@@ -555,79 +555,79 @@ Final code before resolving virtual instructions:
    24:  assertflush *tmp6
    25:  print "{2}"
    26:  op floor :formatNumber:n 1234567 0
-        label *label281
+        label *label282
    27:  op mod :formatNumber:mod :formatNumber:n 1000
    28:  select *tmp59 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
    29:  select *tmp57 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp59
    30:  format *tmp57
    31:  format :formatNumber:mod
    32:  op idiv :formatNumber:n :formatNumber:n 1000
-   33:  jump *label281 greaterThan :formatNumber:n 999
+   33:  jump *label282 greaterThan :formatNumber:n 999
    34:  format :formatNumber:n
    35:  assertprints *tmp6 "1,234,567" "printNumber(1234567)"
    36:  assertflush *tmp7
    37:  print "{2}"
    38:  op floor :formatNumber:n 1234567 0
    39:  format "-{2}"
-        label *label290
+        label *label291
    40:  op mod :formatNumber:mod :formatNumber:n 1000
    41:  select *tmp59 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
    42:  select *tmp57 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp59
    43:  format *tmp57
    44:  format :formatNumber:mod
    45:  op idiv :formatNumber:n :formatNumber:n 1000
-   46:  jump *label290 greaterThan :formatNumber:n 999
+   46:  jump *label291 greaterThan :formatNumber:n 999
    47:  format :formatNumber:n
    48:  assertprints *tmp7 "-1,234,567" "printNumber(-1234567)"
    49:  assertflush *tmp8
    50:  print "{2}"
    51:  op floor :formatNumber:n 9009099999 0
-        label *label299
+        label *label300
    52:  op mod :formatNumber:mod :formatNumber:n 1000
    53:  select *tmp59 greaterThanEq :formatNumber:mod 10 "{2},0{1}" "{2},00{1}"
    54:  select *tmp57 greaterThanEq :formatNumber:mod 100 "{2},{1}" *tmp59
    55:  format *tmp57
    56:  format :formatNumber:mod
    57:  op idiv :formatNumber:n :formatNumber:n 1000
-   58:  jump *label299 greaterThan :formatNumber:n 999
+   58:  jump *label300 greaterThan :formatNumber:n 999
    59:  format :formatNumber:n
    60:  assertprints *tmp8 "9,009,099,999" "printNumber(9009099999)"
    61:  assertflush *tmp9
    62:  print "{2}"
    63:  set :formatBinaryNumber:digits 0
    64:  op floor :formatBinaryNumber:n 0b1001 0
-        label *label208
+        label *label209
    65:  op and *tmp64 :formatBinaryNumber:n 1
    66:  format "{2}{1}"
    67:  format *tmp64
    68:  op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
    69:  op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
-   70:  jump *label208 greaterThan :formatBinaryNumber:n 0
-   71:  jump *label214 lessThanEq :formatBinaryNumber:digits 0
-        label *label212
+   70:  jump *label209 greaterThan :formatBinaryNumber:n 0
+   71:  jump *label215 lessThanEq :formatBinaryNumber:digits 0
+        label *label213
    72:  format "{2}0"
    73:  op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
-   74:  jump *label212 greaterThan :formatBinaryNumber:digits 0
-        label *label214
+   74:  jump *label213 greaterThan :formatBinaryNumber:digits 0
+        label *label215
    75:  format "0b"
    76:  assertprints *tmp9 "0b1001" "printBinaryNumber(0b1001, 0)"
    77:  assertflush *tmp10
    78:  print "{2}"
    79:  set :formatBinaryNumber:digits 6
    80:  op floor :formatBinaryNumber:n 0b1010 0
-        label *label220
+        label *label221
    81:  op and *tmp64 :formatBinaryNumber:n 1
    82:  format "{2}{1}"
    83:  format *tmp64
    84:  op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
    85:  op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
-   86:  jump *label220 greaterThan :formatBinaryNumber:n 0
-   87:  jump *label226 lessThanEq :formatBinaryNumber:digits 0
-        label *label224
+   86:  jump *label221 greaterThan :formatBinaryNumber:n 0
+   87:  jump *label227 lessThanEq :formatBinaryNumber:digits 0
+        label *label225
    88:  format "{2}0"
    89:  op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
-   90:  jump *label224 greaterThan :formatBinaryNumber:digits 0
-        label *label226
+   90:  jump *label225 greaterThan :formatBinaryNumber:digits 0
+        label *label227
    91:  format "0b"
    92:  assertprints *tmp10 "0b001010" "printBinaryNumber(0b1010, 6)"
    93:  assertflush *tmp11
@@ -635,145 +635,145 @@ Final code before resolving virtual instructions:
    95:  set :formatBinaryNumber:digits 6
    96:  format "-{2}"
    97:  op floor :formatBinaryNumber:n 10 0
-        label *label232
+        label *label233
    98:  op and *tmp64 :formatBinaryNumber:n 1
    99:  format "{2}{1}"
   100:  format *tmp64
   101:  op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
   102:  op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
-  103:  jump *label232 greaterThan :formatBinaryNumber:n 0
-  104:  jump *label238 lessThanEq :formatBinaryNumber:digits 0
-        label *label236
+  103:  jump *label233 greaterThan :formatBinaryNumber:n 0
+  104:  jump *label239 lessThanEq :formatBinaryNumber:digits 0
+        label *label237
   105:  format "{2}0"
   106:  op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
-  107:  jump *label236 greaterThan :formatBinaryNumber:digits 0
-        label *label238
+  107:  jump *label237 greaterThan :formatBinaryNumber:digits 0
+        label *label239
   108:  format "0b"
   109:  assertprints *tmp11 "-0b001010" "printBinaryNumber(-0b1010, 6)"
   110:  assertflush *tmp12
   111:  print "{2}"
   112:  set :formatHexNumber:digits 0
   113:  op floor :formatHexNumber:n 0xABCDEF 0
-        label *label447
+        label *label448
   114:  op mod :formatHexNumber:digit :formatHexNumber:n 16
   115:  multijump :formatHexNumber:digit 0 0
-        multilabel *label825
-  116:  jump *label463 always 0 0
-        multilabel *label819
-  117:  format "{2}A"
-  118:  jump *label463 always 0 0
+        multilabel *label826
+  116:  jump *label464 always 0 0
         multilabel *label820
-  119:  format "{2}B"
-  120:  jump *label463 always 0 0
+  117:  format "{2}A"
+  118:  jump *label464 always 0 0
         multilabel *label821
-  121:  format "{2}C"
-  122:  jump *label463 always 0 0
+  119:  format "{2}B"
+  120:  jump *label464 always 0 0
         multilabel *label822
-  123:  format "{2}D"
-  124:  jump *label463 always 0 0
+  121:  format "{2}C"
+  122:  jump *label464 always 0 0
         multilabel *label823
-  125:  format "{2}E"
-  126:  jump *label463 always 0 0
+  123:  format "{2}D"
+  124:  jump *label464 always 0 0
         multilabel *label824
+  125:  format "{2}E"
+  126:  jump *label464 always 0 0
+        multilabel *label825
   127:  format "{2}F"
-  128:  jump *label463 always 0 0
-        multilabel *label818
+  128:  jump *label464 always 0 0
+        multilabel *label819
   129:  format "{2}{1}"
   130:  format :formatHexNumber:digit
-        label *label463
+        label *label464
   131:  op shr :formatHexNumber:n :formatHexNumber:n 4
   132:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  133:  jump *label447 greaterThan :formatHexNumber:n 0
-  134:  jump *label469 lessThanEq :formatHexNumber:digits 0
-        label *label467
+  133:  jump *label448 greaterThan :formatHexNumber:n 0
+  134:  jump *label470 lessThanEq :formatHexNumber:digits 0
+        label *label468
   135:  format "{2}0"
   136:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  137:  jump *label467 greaterThan :formatHexNumber:digits 0
-        label *label469
+  137:  jump *label468 greaterThan :formatHexNumber:digits 0
+        label *label470
   138:  format "0x"
   139:  assertprints *tmp12 "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
   140:  assertflush *tmp13
   141:  print "{2}"
   142:  set :formatHexNumber:digits 0
   143:  op floor :formatHexNumber:n 0x1234567890 0
-        label *label475
+        label *label476
   144:  op mod :formatHexNumber:digit :formatHexNumber:n 16
   145:  multijump :formatHexNumber:digit 0 0
-        multilabel *label835
-  146:  jump *label491 always 0 0
-        multilabel *label829
-  147:  format "{2}A"
-  148:  jump *label491 always 0 0
+        multilabel *label836
+  146:  jump *label492 always 0 0
         multilabel *label830
-  149:  format "{2}B"
-  150:  jump *label491 always 0 0
+  147:  format "{2}A"
+  148:  jump *label492 always 0 0
         multilabel *label831
-  151:  format "{2}C"
-  152:  jump *label491 always 0 0
+  149:  format "{2}B"
+  150:  jump *label492 always 0 0
         multilabel *label832
-  153:  format "{2}D"
-  154:  jump *label491 always 0 0
+  151:  format "{2}C"
+  152:  jump *label492 always 0 0
         multilabel *label833
-  155:  format "{2}E"
-  156:  jump *label491 always 0 0
+  153:  format "{2}D"
+  154:  jump *label492 always 0 0
         multilabel *label834
+  155:  format "{2}E"
+  156:  jump *label492 always 0 0
+        multilabel *label835
   157:  format "{2}F"
-  158:  jump *label491 always 0 0
-        multilabel *label828
+  158:  jump *label492 always 0 0
+        multilabel *label829
   159:  format "{2}{1}"
   160:  format :formatHexNumber:digit
-        label *label491
+        label *label492
   161:  op shr :formatHexNumber:n :formatHexNumber:n 4
   162:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  163:  jump *label475 greaterThan :formatHexNumber:n 0
-  164:  jump *label497 lessThanEq :formatHexNumber:digits 0
-        label *label495
+  163:  jump *label476 greaterThan :formatHexNumber:n 0
+  164:  jump *label498 lessThanEq :formatHexNumber:digits 0
+        label *label496
   165:  format "{2}0"
   166:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  167:  jump *label495 greaterThan :formatHexNumber:digits 0
-        label *label497
+  167:  jump *label496 greaterThan :formatHexNumber:digits 0
+        label *label498
   168:  format "0x"
   169:  assertprints *tmp13 "0x1234567890" "printHexNumber(0x1234567890, 0)"
   170:  assertflush *tmp14
   171:  print "{2}"
   172:  set :formatHexNumber:digits 8
   173:  op floor :formatHexNumber:n 0xAABBCC 0
-        label *label503
+        label *label504
   174:  op mod :formatHexNumber:digit :formatHexNumber:n 16
   175:  multijump :formatHexNumber:digit 0 0
-        multilabel *label845
-  176:  jump *label519 always 0 0
-        multilabel *label839
-  177:  format "{2}A"
-  178:  jump *label519 always 0 0
+        multilabel *label846
+  176:  jump *label520 always 0 0
         multilabel *label840
-  179:  format "{2}B"
-  180:  jump *label519 always 0 0
+  177:  format "{2}A"
+  178:  jump *label520 always 0 0
         multilabel *label841
-  181:  format "{2}C"
-  182:  jump *label519 always 0 0
+  179:  format "{2}B"
+  180:  jump *label520 always 0 0
         multilabel *label842
-  183:  format "{2}D"
-  184:  jump *label519 always 0 0
+  181:  format "{2}C"
+  182:  jump *label520 always 0 0
         multilabel *label843
-  185:  format "{2}E"
-  186:  jump *label519 always 0 0
+  183:  format "{2}D"
+  184:  jump *label520 always 0 0
         multilabel *label844
+  185:  format "{2}E"
+  186:  jump *label520 always 0 0
+        multilabel *label845
   187:  format "{2}F"
-  188:  jump *label519 always 0 0
-        multilabel *label838
+  188:  jump *label520 always 0 0
+        multilabel *label839
   189:  format "{2}{1}"
   190:  format :formatHexNumber:digit
-        label *label519
+        label *label520
   191:  op shr :formatHexNumber:n :formatHexNumber:n 4
   192:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  193:  jump *label503 greaterThan :formatHexNumber:n 0
-  194:  jump *label525 lessThanEq :formatHexNumber:digits 0
-        label *label523
+  193:  jump *label504 greaterThan :formatHexNumber:n 0
+  194:  jump *label526 lessThanEq :formatHexNumber:digits 0
+        label *label524
   195:  format "{2}0"
   196:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  197:  jump *label523 greaterThan :formatHexNumber:digits 0
-        label *label525
+  197:  jump *label524 greaterThan :formatHexNumber:digits 0
+        label *label526
   198:  format "0x"
   199:  assertprints *tmp14 "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
   200:  assertflush *tmp15
@@ -781,42 +781,42 @@ Final code before resolving virtual instructions:
   202:  set :formatHexNumber:digits 8
   203:  format "-{2}"
   204:  op floor :formatHexNumber:n 11189196 0
-        label *label531
+        label *label532
   205:  op mod :formatHexNumber:digit :formatHexNumber:n 16
   206:  multijump :formatHexNumber:digit 0 0
-        multilabel *label855
-  207:  jump *label547 always 0 0
-        multilabel *label849
-  208:  format "{2}A"
-  209:  jump *label547 always 0 0
+        multilabel *label856
+  207:  jump *label548 always 0 0
         multilabel *label850
-  210:  format "{2}B"
-  211:  jump *label547 always 0 0
+  208:  format "{2}A"
+  209:  jump *label548 always 0 0
         multilabel *label851
-  212:  format "{2}C"
-  213:  jump *label547 always 0 0
+  210:  format "{2}B"
+  211:  jump *label548 always 0 0
         multilabel *label852
-  214:  format "{2}D"
-  215:  jump *label547 always 0 0
+  212:  format "{2}C"
+  213:  jump *label548 always 0 0
         multilabel *label853
-  216:  format "{2}E"
-  217:  jump *label547 always 0 0
+  214:  format "{2}D"
+  215:  jump *label548 always 0 0
         multilabel *label854
+  216:  format "{2}E"
+  217:  jump *label548 always 0 0
+        multilabel *label855
   218:  format "{2}F"
-  219:  jump *label547 always 0 0
-        multilabel *label848
+  219:  jump *label548 always 0 0
+        multilabel *label849
   220:  format "{2}{1}"
   221:  format :formatHexNumber:digit
-        label *label547
+        label *label548
   222:  op shr :formatHexNumber:n :formatHexNumber:n 4
   223:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  224:  jump *label531 greaterThan :formatHexNumber:n 0
-  225:  jump *label553 lessThanEq :formatHexNumber:digits 0
-        label *label551
+  224:  jump *label532 greaterThan :formatHexNumber:n 0
+  225:  jump *label554 lessThanEq :formatHexNumber:digits 0
+        label *label552
   226:  format "{2}0"
   227:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  228:  jump *label551 greaterThan :formatHexNumber:digits 0
-        label *label553
+  228:  jump *label552 greaterThan :formatHexNumber:digits 0
+        label *label554
   229:  format "0x"
   230:  assertprints *tmp15 "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
   231:  assertflush *tmp16

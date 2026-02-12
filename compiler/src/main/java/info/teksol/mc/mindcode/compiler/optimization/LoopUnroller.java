@@ -69,7 +69,7 @@ class LoopUnroller extends BaseOptimizer {
 
     private boolean hasSupportedStructure(AstContext loop) {
         String structure = loop.children().stream().map(c -> SYMBOL_MAP.get(c.subcontextType())).collect(Collectors.joining());
-        return structure.contains("b") && structure.matches("i?h?c?h?b?u?c?f");
+        return structure.contains("b") && structure.contains("c") && structure.matches("i?h?c?h?b?u?c?f");
     }
 
     private boolean hasSupportedIterationStructure(AstContext loop) {

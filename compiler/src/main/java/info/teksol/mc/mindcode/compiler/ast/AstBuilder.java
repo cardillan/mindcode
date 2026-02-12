@@ -236,22 +236,25 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstAtomicBlock visitAstAtomicBlock(MindcodeParser.AstAtomicBlockContext ctx) {
-        return new AstAtomicBlock(pos(ctx), processBody(ctx.exp), false);
+        return new AstAtomicBlock(pos(ctx), identifierIfNonNull(ctx.label),
+                processBody(ctx.exp), false);
     }
 
     @Override
     public AstAtomicBlock visitAstFunctionAtomic(MindcodeParser.AstFunctionAtomicContext ctx) {
-        return new AstAtomicBlock(pos(ctx), List.of(visitNonNull(ctx.exp)), true);
+        return new AstAtomicBlock(pos(ctx), null, List.of(visitNonNull(ctx.exp)), true);
     }
 
     @Override
     public AstCodeBlock visitAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx) {
-        return new AstCodeBlock(pos(ctx), processBody(ctx.exp), false);
+        return new AstCodeBlock(pos(ctx), identifierIfNonNull(ctx.label),
+                processBody(ctx.exp), false);
     }
 
     @Override
     public AstCodeBlock visitAstDebugBlock(MindcodeParser.AstDebugBlockContext ctx) {
-        return new AstCodeBlock(pos(ctx), processBody(ctx.exp), true);
+        return new AstCodeBlock(pos(ctx), identifierIfNonNull(ctx.label),
+                processBody(ctx.exp), true);
     }
 
     @Override
@@ -554,6 +557,11 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 visitAstExpression(ctx.condition),
                 processBody(ctx.body),
                 true);
+    }
+
+    @Override
+    public AstLoopStatement visitAstInfiniteLoopStatement(AstInfiniteLoopStatementContext ctx) {
+        return new AstLoopStatement(pos(ctx), identifierIfNonNull(ctx.label), processBody(ctx.body));
     }
 
     @Override

@@ -960,6 +960,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, ":a", "10"),
                     createInstruction(PRINT, ":a"),
                     createInstruction(PRINT, ".a"),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(LABEL, label(0))
             );
         }
@@ -1089,10 +1090,11 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             external(cell1[1]) b = a;
                             begin print(b); end;
                             """,
-                    createInstruction(READ, tmp(0), "cell1", "0"),
-                    createInstruction(WRITE, tmp(0), "cell1", "1"),
-                    createInstruction(READ, tmp(2), "cell1", "1"),
-                    createInstruction(PRINT, tmp(2))
+                    createInstruction(READ, tmp(2), "cell1", "0"),
+                    createInstruction(WRITE, tmp(2), "cell1", "1"),
+                    createInstruction(READ, tmp(3), "cell1", "1"),
+                    createInstruction(PRINT, tmp(3)),
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -1107,7 +1109,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(JUMP, label(0), "equal", "switch1", "null"),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "message1", "null"),
-                    createInstruction(PRINTFLUSH, "message1")
+                    createInstruction(PRINTFLUSH, "message1"),
+                    createInstruction(LABEL, label(2))
             );
         }
 
@@ -1125,12 +1128,13 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                                 foo();
                             end;
                             """,
-                    createInstruction(SET, ":fn0:a", "10"),
-                    createInstruction(PRINT, ":fn0:a"),
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(SET, ":fn1:a", "10"),
-                    createInstruction(PRINT, ":fn1:a"),
-                    createInstruction(LABEL, label(1))
+                    createInstruction(SET, ":foo:a", "10"),
+                    createInstruction(PRINT, ":foo:a"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, ":foo.1:a", "10"),
+                    createInstruction(PRINT, ":foo.1:a"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -1152,8 +1156,9 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, ".a", "1"),
                     createInstruction(PRINT, ".a"),
-                    createInstruction(SET, ":fn0:a", "10"),
-                    createInstruction(PRINT, ":fn0:a"),
+                    createInstruction(SET, ":foo:a", "10"),
+                    createInstruction(PRINT, ":foo:a"),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(LABEL, label(0))
             );
         }
@@ -1172,7 +1177,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, "def", "2"),
                     createInstruction(PRINT, "ghi"),
                     createInstruction(SET, tmp(0), "jkl"),
-                    createInstruction(PRINT, tmp(0))
+                    createInstruction(PRINT, tmp(0)),
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -1187,14 +1193,15 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             remote(processor1) mlog(":d" + "0") var d;
                             begin print(a, b, c, d); end;
                             """,
-                    createInstruction(READ, tmp(0), "processor1", q(".a")),
-                    createInstruction(PRINT, tmp(0)),
-                    createInstruction(READ, tmp(2), "processor1", q(":b")),
-                    createInstruction(PRINT, tmp(2)),
-                    createInstruction(READ, tmp(3), "processor1", q(".c")),
-                    createInstruction(PRINT, tmp(3)),
-                    createInstruction(READ, tmp(6), "processor1", q(":d0")),
-                    createInstruction(PRINT, tmp(6))
+                    createInstruction(READ, tmp(6), "processor1", q(".a")),
+                    createInstruction(PRINT, tmp(6)),
+                    createInstruction(READ, tmp(7), "processor1", q(":b")),
+                    createInstruction(PRINT, tmp(7)),
+                    createInstruction(READ, tmp(8), "processor1", q(".c")),
+                    createInstruction(PRINT, tmp(8)),
+                    createInstruction(READ, tmp(9), "processor1", q(":d0")),
+                    createInstruction(PRINT, tmp(9)),
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -1218,6 +1225,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, ":a", "10"),
                     createInstruction(PRINT, ":a"),
                     createInstruction(PRINT, ".a"),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(LABEL, label(0))
             );
         }

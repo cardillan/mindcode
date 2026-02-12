@@ -239,6 +239,7 @@ This is a list of Mindcode keywords:
 * `in`
 * `inline`
 * `linked`
+* `loop`
 * `mlog`
 * `module`
 * `noinit`

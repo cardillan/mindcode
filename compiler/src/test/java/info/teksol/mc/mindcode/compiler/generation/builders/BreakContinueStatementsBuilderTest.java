@@ -174,7 +174,7 @@ class BreakContinueStatementsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesBreaksOutsideLoop() {
-            assertGeneratesMessage("'break' statement outside of a do/while/for loop.",
+            assertGeneratesMessage("'break' statement outside of a do/while/for loop or a labeled code block.",
                     """
                             while a do
                                 print(a);

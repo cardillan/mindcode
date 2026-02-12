@@ -11,12 +11,12 @@ import java.util.Objects;
 
 @NullMarked
 @AstNode
-public class AstCodeBlock extends AstExpression {
+public class AstCodeBlock extends AstLabeledExpression {
     private final List<AstMindcodeNode> expressions;
     private final boolean debug;
 
-    public AstCodeBlock(SourcePosition sourcePosition, List<AstMindcodeNode> expressions, boolean debug) {
-        super(sourcePosition, expressions);
+    public AstCodeBlock(SourcePosition sourcePosition, @Nullable AstIdentifier label, List<AstMindcodeNode> expressions, boolean debug) {
+        super(sourcePosition, label, expressions);
         this.expressions = Objects.requireNonNull(expressions);
         this.debug = debug;
     }

@@ -9,7 +9,7 @@
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
-    24 label *label5
+    24 label *label6
     25 set *tmp9 :lineLength
     26 writearr<internal:folded:compact> 1 .currentLine[] *tmp9
 -    * set *tmp11 :lineLength
@@ -19,8 +19,8 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructi
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 instructions):
  
-    11 label *label3
-    12 jump *label5 greaterThan :j *tmp0
+    11 label *label4
+    12 jump *label6 greaterThan :j *tmp0
     13 set *tmp1 :j
 -    * op sub *tmp3 :j 1
 -    * set *tmp4 *tmp3
@@ -30,16 +30,16 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 inst
     17 readarr<internal:folded:compact> *tmp7 .previousLine[] *tmp6
  
     21 op add :j :j 1
-    22 jump *label3 always
-    23 label *label5
+    22 jump *label4 always
+    23 label *label6
 -    * set *tmp9 :lineLength
 -    * writearr<internal:folded:compact> 1 .currentLine[] *tmp9
 +   24 writearr<internal:folded:compact> 1 .currentLine[] :lineLength
     25 op add :lineLength :lineLength 1
     26 set *tmp12 :lineLength
     27 set :c 0
-    28 label *label6
-    29 jump *label8 greaterThanEq :c *tmp12
+    28 label *label7
+    29 jump *label9 greaterThanEq :c *tmp12
 -    * set *tmp13 :c
 -    * readarr<internal:folded:compact> *tmp14 .currentLine[] *tmp13
 +   30 readarr<internal:folded:compact:src> *tmp14 .currentLine[] :c
@@ -49,16 +49,16 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 inst
 -    * readarr<internal:folded:compact> *tmp18 .currentLine[] *tmp17
 +   33 readarr<internal:folded:compact:dst> *tmp18 .currentLine[] :c
     34 writearr<internal:folded:compact> *tmp18 .previousLine[] *tmp15
-    35 label *label7
+    35 label *label8
     36 op add :c :c 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      9 set *tmp0 :lineLength
     10 set :j 1
-    11 label *label3
--    * jump *label5 greaterThan :j *tmp0
-+   12 jump *label5 greaterThan :j :lineLength
+    11 label *label4
+-    * jump *label6 greaterThan :j *tmp0
++   12 jump *label6 greaterThan :j :lineLength
     13 set *tmp1 :j
     14 op sub *tmp4 :j 1
     15 set *tmp6 :j
@@ -68,34 +68,34 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     18 op add *tmp8 *tmp5 *tmp7
 -    * writearr<internal:folded:compact> *tmp8 .currentLine[] *tmp1
 +   19 writearr<internal:folded:compact> *tmp8 .currentLine[] :j
-    20 label *label4
+    20 label *label5
     21 op add :j :j 1
-    22 jump *label3 always
+    22 jump *label4 always
  
     26 set *tmp12 :lineLength
     27 set :c 0
-    28 label *label6
--    * jump *label8 greaterThanEq :c *tmp12
-+   29 jump *label8 greaterThanEq :c :lineLength
+    28 label *label7
+-    * jump *label9 greaterThanEq :c *tmp12
++   29 jump *label9 greaterThanEq :c :lineLength
     30 readarr<internal:folded:compact:src> *tmp14 .currentLine[] :c
     31 op add :total :total *tmp14
     32 set *tmp15 :c
     33 readarr<internal:folded:compact:dst> *tmp18 .currentLine[] :c
 -    * writearr<internal:folded:compact> *tmp18 .previousLine[] *tmp15
 +   34 writearr<internal:folded:compact> *tmp18 .previousLine[] :c
-    35 label *label7
+    35 label *label8
     36 op add :c :c 1
-    37 jump *label6 always
+    37 jump *label7 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
  
-     6 label *label0
-     7 jump *label2 greaterThan :i TRIANGLE_SIZE
+     6 label *label1
+     7 jump *label3 greaterThan :i TRIANGLE_SIZE
      8 set water 1
 -    * set *tmp0 :lineLength
      9 set :j 1
-    10 label *label3
-    11 jump *label5 greaterThan :j :lineLength
+    10 label *label4
+    11 jump *label6 greaterThan :j :lineLength
 -    * set *tmp1 :j
     12 op sub *tmp4 :j 1
 -    * set *tmp6 :j
@@ -103,24 +103,24 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
     14 readarr<internal:folded:compact> *tmp7 .previousLine[] :j
     15 op add *tmp8 *tmp5 *tmp7
  
-    20 label *label5
+    20 label *label6
     21 writearr<internal:folded:compact> 1 .currentLine[] :lineLength
     22 op add :lineLength :lineLength 1
 -    * set *tmp12 :lineLength
     23 set :c 0
-    24 label *label6
-    25 jump *label8 greaterThanEq :c :lineLength
+    24 label *label7
+    25 jump *label9 greaterThanEq :c :lineLength
     26 readarr<internal:folded:compact:src> *tmp14 .currentLine[] :c
     27 op add :total :total *tmp14
 -    * set *tmp15 :c
     28 readarr<internal:folded:compact:dst> *tmp18 .currentLine[] :c
     29 writearr<internal:folded:compact> *tmp18 .previousLine[] :c
-    30 label *label7
+    30 label *label8
 
 Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-30 instructions):
  
-    10 label *label3
-    11 jump *label5 greaterThan :j :lineLength
+    10 label *label4
+    11 jump *label6 greaterThan :j :lineLength
     12 op sub *tmp4 :j 1
 -    * readarr<internal:folded:compact> *tmp5 .previousLine[] *tmp4
 -    * readarr<internal:folded:compact> *tmp7 .previousLine[] :j
@@ -129,16 +129,16 @@ Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-30 in
     15 op add *tmp8 *tmp5 *tmp7
 -    * writearr<internal:folded:compact> *tmp8 .currentLine[] :j
 +   16 writearr<lookup:liquid> *tmp8 .currentLine[] :j
-    17 label *label4
+    17 label *label5
     18 op add :j :j 1
-    19 jump *label3 always
-    20 label *label5
+    19 jump *label4 always
+    20 label *label6
 -    * writearr<internal:folded:compact> 1 .currentLine[] :lineLength
 +   21 writearr<lookup:liquid> 1 .currentLine[] :lineLength
     22 op add :lineLength :lineLength 1
     23 set :c 0
-    24 label *label6
-    25 jump *label8 greaterThanEq :c :lineLength
+    24 label *label7
+    25 jump *label9 greaterThanEq :c :lineLength
 -    * readarr<internal:folded:compact:src> *tmp14 .currentLine[] :c
 +   26 readarr<lookup:liquid> *tmp14 .currentLine[] :c
     27 op add :total :total *tmp14
@@ -146,51 +146,51 @@ Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-30 in
 -    * writearr<internal:folded:compact> *tmp18 .previousLine[] :c
 +   28 readarr<lookup:liquid> *tmp18 .currentLine[] :c
 +   29 writearr<lookup:item> *tmp18 .previousLine[] :c
-    30 label *label7
+    30 label *label8
     31 op add :c :c 1
-    32 jump *label6 always
+    32 jump *label7 always
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      5 set :i 3
-     6 label *label0
-     7 jump *label2 greaterThan :i TRIANGLE_SIZE
-+    8 label *label9
+     6 label *label1
+     7 jump *label3 greaterThan :i TRIANGLE_SIZE
++    8 label *label10
      9 set water 1
     10 set :j 1
-    11 label *label3
-    12 jump *label5 greaterThan :j :lineLength
-+   13 label *label10
+    11 label *label4
+    12 jump *label6 greaterThan :j :lineLength
++   13 label *label11
     14 op sub *tmp4 :j 1
     15 readarr<lookup:item> *tmp5 .previousLine[] *tmp4
     16 readarr<lookup:item> *tmp7 .previousLine[] :j
  
     18 writearr<lookup:liquid> *tmp8 .currentLine[] :j
-    19 label *label4
+    19 label *label5
     20 op add :j :j 1
--    * jump *label3 always
-+   21 jump *label10 lessThanEq :j :lineLength
-    22 label *label5
+-    * jump *label4 always
++   21 jump *label11 lessThanEq :j :lineLength
+    22 label *label6
     23 writearr<lookup:liquid> 1 .currentLine[] :lineLength
     24 op add :lineLength :lineLength 1
     25 set :c 0
-    26 label *label6
-    27 jump *label8 greaterThanEq :c :lineLength
-+   28 label *label11
+    26 label *label7
+    27 jump *label9 greaterThanEq :c :lineLength
++   28 label *label12
     29 readarr<lookup:liquid> *tmp14 .currentLine[] :c
     30 op add :total :total *tmp14
     31 readarr<lookup:liquid> *tmp18 .currentLine[] :c
     32 writearr<lookup:item> *tmp18 .previousLine[] :c
-    33 label *label7
+    33 label *label8
     34 op add :c :c 1
--    * jump *label6 always
-+   35 jump *label11 lessThan :c :lineLength
-    36 label *label8
-    37 label *label1
+-    * jump *label7 always
++   35 jump *label12 lessThan :c :lineLength
+    36 label *label9
+    37 label *label2
     38 op add :i :i 1
--    * jump *label0 always
-+   39 jump *label9 lessThanEq :i TRIANGLE_SIZE
-    40 label *label2
+-    * jump *label1 always
++   39 jump *label10 lessThanEq :i TRIANGLE_SIZE
+    40 label *label3
     41 assertequals 1023 :total "Sum of Pascal triangle"
     42 stop
 
@@ -198,32 +198,32 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      4 set lead 1
      5 set :i 3
-     6 label *label0
--    * jump *label2 greaterThan :i TRIANGLE_SIZE
-+    7 jump *label2 greaterThan 3 TRIANGLE_SIZE
-     8 label *label9
+     6 label *label1
+-    * jump *label3 greaterThan :i TRIANGLE_SIZE
++    7 jump *label3 greaterThan 3 TRIANGLE_SIZE
+     8 label *label10
      9 set water 1
     10 set :j 1
-    11 label *label3
--    * jump *label5 greaterThan :j :lineLength
-+   12 jump *label5 greaterThan 1 :lineLength
-    13 label *label10
+    11 label *label4
+-    * jump *label6 greaterThan :j :lineLength
++   12 jump *label6 greaterThan 1 :lineLength
+    13 label *label11
     14 op sub *tmp4 :j 1
     15 readarr<lookup:item> *tmp5 .previousLine[] *tmp4
  
     24 op add :lineLength :lineLength 1
     25 set :c 0
-    26 label *label6
--    * jump *label8 greaterThanEq :c :lineLength
-+   27 jump *label8 greaterThanEq 0 :lineLength
-    28 label *label11
+    26 label *label7
+-    * jump *label9 greaterThanEq :c :lineLength
++   27 jump *label9 greaterThanEq 0 :lineLength
+    28 label *label12
     29 readarr<lookup:liquid> *tmp14 .currentLine[] :c
     30 op add :total :total *tmp14
 
 Modifications by Virtual Instruction Expansion:
  
-    12 jump *label5 greaterThan 1 :lineLength
-    13 label *label10
+    12 jump *label6 greaterThan 1 :lineLength
+    13 label *label11
     14 op sub *tmp4 :j 1
 -    * readarr<lookup:item> *tmp5 .previousLine[] *tmp4
 -    * readarr<lookup:item> *tmp7 .previousLine[] :j
@@ -238,19 +238,19 @@ Modifications by Virtual Instruction Expansion:
 +   22 lookup liquid *tmp21 :j
 +   23 sensor .currentLine*elem *tmp21 @name
 +   24 write *tmp8 @this .currentLine*elem
-    25 label *label4
+    25 label *label5
     26 op add :j :j 1
-    27 jump *label10 lessThanEq :j :lineLength
-    28 label *label5
+    27 jump *label11 lessThanEq :j :lineLength
+    28 label *label6
 -    * writearr<lookup:liquid> 1 .currentLine[] :lineLength
 +   29 lookup liquid *tmp22 :lineLength
 +   30 sensor .currentLine*elem *tmp22 @name
 +   31 write 1 @this .currentLine*elem
     32 op add :lineLength :lineLength 1
     33 set :c 0
-    34 label *label6
-    35 jump *label8 greaterThanEq 0 :lineLength
-    36 label *label11
+    34 label *label7
+    35 jump *label9 greaterThanEq 0 :lineLength
+    36 label *label12
 -    * readarr<lookup:liquid> *tmp14 .currentLine[] :c
 +   37 lookup liquid *tmp23 :c
 +   38 sensor .currentLine*elem *tmp23 @name
@@ -262,13 +262,13 @@ Modifications by Virtual Instruction Expansion:
 +   42 lookup item *tmp25 :c
 +   43 sensor .previousLine*elem *tmp25 @name
 +   44 write *tmp18 @this .previousLine*elem
-    45 label *label7
+    45 label *label8
     46 op add :c :c 1
-    47 jump *label11 lessThan :c :lineLength
+    47 jump *label12 lessThan :c :lineLength
 
 Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
-    46 label *label2
+    46 label *label3
     47 assertequals 1023 :total "Sum of Pascal triangle"
     48 stop
 -    * end
@@ -281,12 +281,12 @@ set :lineLength 2
 set copper 1
 set lead 1
 set :i 3
-jump *label2 greaterThan 3 TRIANGLE_SIZE
-label *label9
+jump *label3 greaterThan 3 TRIANGLE_SIZE
+label *label10
 set water 1
 set :j 1
-jump *label5 greaterThan 1 :lineLength
-label *label10
+jump *label6 greaterThan 1 :lineLength
+label *label11
 op sub *tmp4 :j 1
 lookup item *tmp19 *tmp4
 sensor .previousLine*elem *tmp19 @name
@@ -299,15 +299,15 @@ lookup liquid *tmp21 :j
 sensor .currentLine*elem *tmp21 @name
 write *tmp8 @this .currentLine*elem
 op add :j :j 1
-jump *label10 lessThanEq :j :lineLength
-label *label5
+jump *label11 lessThanEq :j :lineLength
+label *label6
 lookup liquid *tmp22 :lineLength
 sensor .currentLine*elem *tmp22 @name
 write 1 @this .currentLine*elem
 op add :lineLength :lineLength 1
 set :c 0
-jump *label8 greaterThanEq 0 :lineLength
-label *label11
+jump *label9 greaterThanEq 0 :lineLength
+label *label12
 lookup liquid *tmp23 :c
 sensor .currentLine*elem *tmp23 @name
 read *tmp14 @this .currentLine*elem
@@ -317,10 +317,10 @@ lookup item *tmp25 :c
 sensor .previousLine*elem *tmp25 @name
 write *tmp18 @this .previousLine*elem
 op add :c :c 1
-jump *label11 lessThan :c :lineLength
-label *label8
+jump *label12 lessThan :c :lineLength
+label *label9
 op add :i :i 1
-jump *label9 lessThanEq :i TRIANGLE_SIZE
-label *label2
+jump *label10 lessThanEq :i TRIANGLE_SIZE
+label *label3
 assertequals 1023 :total "Sum of Pascal triangle"
 stop

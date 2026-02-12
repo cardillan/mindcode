@@ -225,7 +225,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             end;
                             """,
                     List.of(
-                            new AstCodeBlock(EMPTY, List.of(identifier), false)
+                            new AstCodeBlock(EMPTY, null, List.of(identifier), false)
                     )
             );
         }
@@ -237,7 +237,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             end;
                             """,
                     List.of(
-                            new AstCodeBlock(EMPTY, List.of(), false)
+                            new AstCodeBlock(EMPTY, null, List.of(), false)
                     )
             );
         }
@@ -250,7 +250,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             end;
                             """,
                     List.of(
-                            new AstCodeBlock(EMPTY, List.of(identifier), true)
+                            new AstCodeBlock(EMPTY, null, List.of(identifier), true)
                     )
             );
         }

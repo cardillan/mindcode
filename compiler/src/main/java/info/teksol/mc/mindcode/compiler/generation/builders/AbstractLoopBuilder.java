@@ -18,10 +18,10 @@ public abstract class AbstractLoopBuilder extends AbstractCodeBuilder {
         super(codeGenerator, context);
     }
 
-    protected LoopLabels enterLoop(AstLabeledStatement loopNode) {
+    protected LoopLabels enterLoop(AstLabeledStatement loopNode, String defaultLoopLabel) {
         final LogicLabel continueLabel = assembler.nextLabel();
         final LogicLabel breakLabel = assembler.nextLabel();
-        return variables.getLoopStack().enterLoop(loopNode.getLabel(), breakLabel, continueLabel);
+        return variables.getLoopStack().enterLoop(loopNode.getLabel(), defaultLoopLabel, breakLabel, continueLabel);
     }
 
     protected LogicLabel getBreakLabel(AstBreakStatement loopNode) {

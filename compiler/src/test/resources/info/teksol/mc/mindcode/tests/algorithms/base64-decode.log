@@ -36,69 +36,69 @@ Pass 2: speed optimization selection (cost limit 959):
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
-    48 assertprints *tmp0 "All Hail the King!" "Decoded value"
-    49 end
-    50 label *label0
+    49 label *label2
+    50 end
+    51 label *label0
 -    * set *tmp9 :charToInt:ch
--    * jump *label17 lessThan *tmp9 65
--    * jump *label16 lessThanEq *tmp9 90
-+   51 jump *label17 lessThan :charToInt:ch 65
-+   52 jump *label16 lessThanEq :charToInt:ch 90
-    53 label *label17
-    54 jump *label15 always
-    55 label *label16
+-    * jump *label18 lessThan *tmp9 65
+-    * jump *label17 lessThanEq *tmp9 90
++   52 jump *label18 lessThan :charToInt:ch 65
++   53 jump *label17 lessThanEq :charToInt:ch 90
+    54 label *label18
+    55 jump *label16 always
+    56 label *label17
  
-    57 set *tmp8 *tmp10
-    58 jump *label14 always
-    59 label *label15
--    * jump *label20 lessThan *tmp9 97
--    * jump *label19 lessThanEq *tmp9 122
-+   60 jump *label20 lessThan :charToInt:ch 97
-+   61 jump *label19 lessThanEq :charToInt:ch 122
-    62 label *label20
-    63 jump *label18 always
-    64 label *label19
+    58 set *tmp8 *tmp10
+    59 jump *label15 always
+    60 label *label16
+-    * jump *label21 lessThan *tmp9 97
+-    * jump *label20 lessThanEq *tmp9 122
++   61 jump *label21 lessThan :charToInt:ch 97
++   62 jump *label20 lessThanEq :charToInt:ch 122
+    63 label *label21
+    64 jump *label19 always
+    65 label *label20
  
-    67 set *tmp8 *tmp12
-    68 jump *label14 always
-    69 label *label18
--    * jump *label22 equal *tmp9 43
--    * jump *label22 equal *tmp9 45
-+   70 jump *label22 equal :charToInt:ch 43
-+   71 jump *label22 equal :charToInt:ch 45
-    72 jump *label21 always
-    73 label *label22
-    74 set *tmp8 62
-    75 jump *label14 always
-    76 label *label21
--    * jump *label24 equal *tmp9 95
--    * jump *label24 equal *tmp9 47
-+   77 jump *label24 equal :charToInt:ch 95
-+   78 jump *label24 equal :charToInt:ch 47
-    79 jump *label23 always
-    80 label *label24
-    81 set *tmp8 63
+    68 set *tmp8 *tmp12
+    69 jump *label15 always
+    70 label *label19
+-    * jump *label23 equal *tmp9 43
+-    * jump *label23 equal *tmp9 45
++   71 jump *label23 equal :charToInt:ch 43
++   72 jump *label23 equal :charToInt:ch 45
+    73 jump *label22 always
+    74 label *label23
+    75 set *tmp8 62
+    76 jump *label15 always
+    77 label *label22
+-    * jump *label25 equal *tmp9 95
+-    * jump *label25 equal *tmp9 47
++   78 jump *label25 equal :charToInt:ch 95
++   79 jump *label25 equal :charToInt:ch 47
+    80 jump *label24 always
+    81 label *label25
+    82 set *tmp8 63
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-3 instructions):
  
-    18 label *label9
+    18 label *label10
     19 op or *tmp3 *tmp2 :charToInt*retval
     20 set :decode64:bytes *tmp3
 -    * set *tmp4 :decode64:index
     21 op add :decode64:index :decode64:index 1
-    22 label *label7
+    22 label *label8
     23 op add :decode64:i :decode64:i 1
  
-    91 set :printbyte:ch *tmp13
-    92 jump *label26 equal :printbyte:ch false
-    93 printchar :printbyte:ch
+    92 set :printbyte:ch *tmp13
+    93 jump *label27 equal :printbyte:ch false
+    94 printchar :printbyte:ch
 -    * set *tmp14 :printbyte:ch
-    94 jump *label27 always
-    95 label *label26
--    * set *tmp14 null
+    95 jump *label28 always
     96 label *label27
-    97 label *label25
-    98 return :printbyte*retaddr
+-    * set *tmp14 null
+    97 label *label28
+    98 label *label26
+    99 return :printbyte*retaddr
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 instructions):
  
@@ -110,225 +110,225 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 inst
 +   12 read :decode64:src data :decode64:index
     13 op shl *tmp2 :decode64:bytes 6
     14 set :charToInt:ch :decode64:src
-    15 setaddr :charToInt*retaddr *label9 (h:*label9)
-    16 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
-    17 label *label9
+    15 setaddr :charToInt*retaddr *label10 (h:*label10)
+    16 call *label0 *invalid :charToInt*retval (m:*label10) (h:*label10)
+    17 label *label10
 -    * op or *tmp3 *tmp2 :charToInt*retval
 -    * set :decode64:bytes *tmp3
 +   18 op or :decode64:bytes *tmp2 :charToInt*retval
     19 op add :decode64:index :decode64:index 1
-    20 label *label7
+    20 label *label8
     21 op add :decode64:i :decode64:i 1
-    22 jump *label6 always
-    23 label *label8
+    22 jump *label7 always
+    23 label *label9
     24 remark "Printing text"
 -    * op shr *tmp5 :decode64:bytes 16
 -    * set :printbyte:byte *tmp5
 +   25 op shr :printbyte:byte :decode64:bytes 16
-    26 setaddr :printbyte*retaddr *label10 (h:*label10)
-    27 call *label1 *invalid :printbyte*retval (m:*label10) (h:*label10)
-    28 label *label10
+    26 setaddr :printbyte*retaddr *label11 (h:*label11)
+    27 call *label1 *invalid :printbyte*retval (m:*label11) (h:*label11)
+    28 label *label11
 -    * op shr *tmp6 :decode64:bytes 8
 -    * set :printbyte:byte *tmp6
 +   29 op shr :printbyte:byte :decode64:bytes 8
-    30 setaddr :printbyte*retaddr *label11 (h:*label11)
-    31 call *label1 *invalid :printbyte*retval (m:*label11) (h:*label11)
-    32 label *label11
+    30 setaddr :printbyte*retaddr *label12 (h:*label12)
+    31 call *label1 *invalid :printbyte*retval (m:*label12) (h:*label12)
+    32 label *label12
  
-    48 label *label17
-    49 jump *label15 always
-    50 label *label16
+    49 label *label18
+    50 jump *label16 always
+    51 label *label17
 -    * op sub *tmp10 :charToInt:ch 65
 -    * set *tmp8 *tmp10
-+   51 op sub *tmp8 :charToInt:ch 65
-    52 jump *label14 always
-    53 label *label15
-    54 jump *label20 lessThan :charToInt:ch 97
++   52 op sub *tmp8 :charToInt:ch 65
+    53 jump *label15 always
+    54 label *label16
+    55 jump *label21 lessThan :charToInt:ch 97
  
-    57 jump *label18 always
-    58 label *label19
-    59 op sub *tmp11 :charToInt:ch 97
+    58 jump *label19 always
+    59 label *label20
+    60 op sub *tmp11 :charToInt:ch 97
 -    * op add *tmp12 *tmp11 26
 -    * set *tmp8 *tmp12
-+   60 op add *tmp8 *tmp11 26
-    61 jump *label14 always
-    62 label *label18
-    63 jump *label22 equal :charToInt:ch 43
++   61 op add *tmp8 *tmp11 26
+    62 jump *label15 always
+    63 label *label19
+    64 jump *label23 equal :charToInt:ch 43
  
-    81 return :charToInt*retaddr
-    82 end
-    83 label *label1
+    82 return :charToInt*retaddr
+    83 end
+    84 label *label1
 -    * op and *tmp13 :printbyte:byte 0xFF
 -    * set :printbyte:ch *tmp13
-+   84 op and :printbyte:ch :printbyte:byte 0xFF
-    85 jump *label26 equal :printbyte:ch false
-    86 printchar :printbyte:ch
-    87 jump *label27 always
++   85 op and :printbyte:ch :printbyte:byte 0xFF
+    86 jump *label27 equal :printbyte:ch false
+    87 printchar :printbyte:ch
+    88 jump *label28 always
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-2 instructions):
  
-    61 jump *label14 always
-    62 label *label18
-    63 jump *label22 equal :charToInt:ch 43
--    * jump *label22 equal :charToInt:ch 45
--    * jump *label21 always
-+   64 jump *label21 notEqual :charToInt:ch 45
-    65 label *label22
-    66 set *tmp8 62
-    67 jump *label14 always
-    68 label *label21
-    69 jump *label24 equal :charToInt:ch 95
--    * jump *label24 equal :charToInt:ch 47
--    * jump *label23 always
-+   70 jump *label23 notEqual :charToInt:ch 47
-    71 label *label24
-    72 set *tmp8 63
-    73 jump *label14 always
+    62 jump *label15 always
+    63 label *label19
+    64 jump *label23 equal :charToInt:ch 43
+-    * jump *label23 equal :charToInt:ch 45
+-    * jump *label22 always
++   65 jump *label22 notEqual :charToInt:ch 45
+    66 label *label23
+    67 set *tmp8 62
+    68 jump *label15 always
+    69 label *label22
+    70 jump *label25 equal :charToInt:ch 95
+-    * jump *label25 equal :charToInt:ch 47
+-    * jump *label24 always
++   71 jump *label24 notEqual :charToInt:ch 47
+    72 label *label25
+    73 set *tmp8 63
+    74 jump *label15 always
 
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
-    35 call *label1 *invalid :printbyte*retval (m:*label12) (h:*label12)
-    36 label *label12
-    37 label *label4
+    35 call *label1 *invalid :printbyte*retval (m:*label13) (h:*label13)
+    36 label *label13
+    37 label *label5
 -    * op notEqual *tmp7 :decode64:src null
--    * jump *label3 notEqual *tmp7 false
-+   38 jump *label3 notEqual :decode64:src null
-    39 label *label5
+-    * jump *label4 notEqual *tmp7 false
++   38 jump *label4 notEqual :decode64:src null
+    39 label *label6
     40 printflush message1
-    41 label *label2
+    41 label *label3
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
  
-    81 op and :printbyte:ch :printbyte:byte 0xFF
-    82 jump *label26 equal :printbyte:ch false
-    83 printchar :printbyte:ch
--    * jump *label27 always
-    84 label *label26
+    82 op and :printbyte:ch :printbyte:byte 0xFF
+    83 jump *label27 equal :printbyte:ch false
+    84 printchar :printbyte:ch
+-    * jump *label28 always
     85 label *label27
-    86 label *label25
+    86 label *label28
+    87 label *label26
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    56 jump *label18 always
-    57 label *label19
-    58 op sub *tmp11 :charToInt:ch 97
+    57 jump *label19 always
+    58 label *label20
+    59 op sub *tmp11 :charToInt:ch 97
 -    * op add *tmp8 *tmp11 26
-+   59 op sub *tmp8 :charToInt:ch 71
-    60 jump *label14 always
-    61 label *label18
-    62 jump *label22 equal :charToInt:ch 43
++   60 op sub *tmp8 :charToInt:ch 71
+    61 jump *label15 always
+    62 label *label19
+    63 jump *label23 equal :charToInt:ch 43
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-    55 label *label20
-    56 jump *label18 always
-    57 label *label19
+    56 label *label21
+    57 jump *label19 always
+    58 label *label20
 -    * op sub *tmp11 :charToInt:ch 97
-    58 op sub *tmp8 :charToInt:ch 71
-    59 jump *label14 always
-    60 label *label18
+    59 op sub *tmp8 :charToInt:ch 71
+    60 jump *label15 always
+    61 label *label19
 
 Modifications by Iterated phase, Loop Hoisting, pass 1, iteration 1:
  
-     3 label *label3
+     3 label *label4
      4 set :decode64:bytes 0
      5 set :decode64:i 0
-+    6 setaddr :charToInt*retaddr *label9 (h:*label9)
-     7 label *label6
-     8 jump *label8 greaterThanEq :decode64:i 4
++    6 setaddr :charToInt*retaddr *label10 (h:*label10)
+     7 label *label7
+     8 jump *label9 greaterThanEq :decode64:i 4
      9 remark "Reading character number "
  
     13 read :decode64:src data :decode64:index
     14 op shl *tmp2 :decode64:bytes 6
     15 set :charToInt:ch :decode64:src
--    * setaddr :charToInt*retaddr *label9 (h:*label9)
-    16 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
-    17 label *label9
+-    * setaddr :charToInt*retaddr *label10 (h:*label10)
+    16 call *label0 *invalid :charToInt*retval (m:*label10) (h:*label10)
+    17 label *label10
     18 op or :decode64:bytes *tmp2 :charToInt*retval
 
 Modifications by Iterated phase, Loop Hoisting, pass 1, iteration 2:
      0 set data "QWxsIEhhaWwgdGhlIEtpbmch"
      1 assertflush *tmp0
      2 set :decode64:index 0
-+    3 setaddr :charToInt*retaddr *label9 (h:*label9)
-     4 label *label3
++    3 setaddr :charToInt*retaddr *label10 (h:*label10)
+     4 label *label4
      5 set :decode64:bytes 0
      6 set :decode64:i 0
--    * setaddr :charToInt*retaddr *label9 (h:*label9)
-     7 label *label6
-     8 jump *label8 greaterThanEq :decode64:i 4
+-    * setaddr :charToInt*retaddr *label10 (h:*label10)
+     7 label *label7
+     8 jump *label9 greaterThanEq :decode64:i 4
      9 remark "Reading character number "
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      6 set :decode64:i 0
-     7 label *label6
-     8 jump *label8 greaterThanEq :decode64:i 4
-+    9 label *label28
+     7 label *label7
+     8 jump *label9 greaterThanEq :decode64:i 4
++    9 label *label29
     10 remark "Reading character number "
     11 remark :decode64:i
     12 remark " "
  
     20 op add :decode64:index :decode64:index 1
-    21 label *label7
+    21 label *label8
     22 op add :decode64:i :decode64:i 1
--    * jump *label6 always
-+   23 jump *label28 lessThan :decode64:i 4
-    24 label *label8
+-    * jump *label7 always
++   23 jump *label29 lessThan :decode64:i 4
+    24 label *label9
     25 remark "Printing text"
     26 op shr :printbyte:byte :decode64:bytes 16
 
 Modifications by Inline function 'printbyte' defined at line 15:1 (-2 instructions):
  
-    24 label *label8
+    24 label *label9
     25 remark "Printing text"
     26 op shr :printbyte:byte :decode64:bytes 16
--    * setaddr :printbyte*retaddr *label10 (h:*label10)
--    * call *label1 *invalid :printbyte*retval (m:*label10) (h:*label10)
--    * label *label10
-+   27 label *label29
-+   28 op and :printbyte:ch :printbyte:byte 0xFF
-+   29 jump *label30 equal :printbyte:ch false
-+   30 printchar :printbyte:ch
-+   31 label *label30
-+   32 label *label31
-+   33 label *label32
-    34 op shr :printbyte:byte :decode64:bytes 8
 -    * setaddr :printbyte*retaddr *label11 (h:*label11)
 -    * call *label1 *invalid :printbyte*retval (m:*label11) (h:*label11)
 -    * label *label11
-+   35 label *label33
-+   36 op and :printbyte:ch :printbyte:byte 0xFF
-+   37 jump *label34 equal :printbyte:ch false
-+   38 printchar :printbyte:ch
-+   39 label *label34
-+   40 label *label35
-+   41 label *label36
-    42 set :printbyte:byte :decode64:bytes
++   27 label *label30
++   28 op and :printbyte:ch :printbyte:byte 0xFF
++   29 jump *label31 equal :printbyte:ch false
++   30 printchar :printbyte:ch
++   31 label *label31
++   32 label *label32
++   33 label *label33
+    34 op shr :printbyte:byte :decode64:bytes 8
 -    * setaddr :printbyte*retaddr *label12 (h:*label12)
 -    * call *label1 *invalid :printbyte*retval (m:*label12) (h:*label12)
 -    * label *label12
-+   43 label *label37
++   35 label *label34
++   36 op and :printbyte:ch :printbyte:byte 0xFF
++   37 jump *label35 equal :printbyte:ch false
++   38 printchar :printbyte:ch
++   39 label *label35
++   40 label *label36
++   41 label *label37
+    42 set :printbyte:byte :decode64:bytes
+-    * setaddr :printbyte*retaddr *label13 (h:*label13)
+-    * call *label1 *invalid :printbyte*retval (m:*label13) (h:*label13)
+-    * label *label13
++   43 label *label38
 +   44 op and :printbyte:ch :printbyte:byte 0xFF
-+   45 jump *label38 equal :printbyte:ch false
++   45 jump *label39 equal :printbyte:ch false
 +   46 printchar :printbyte:ch
-+   47 label *label38
-+   48 label *label39
-+   49 label *label40
-    50 label *label4
-    51 jump *label3 notEqual :decode64:src null
-    52 label *label5
++   47 label *label39
++   48 label *label40
++   49 label *label41
+    50 label *label5
+    51 jump *label4 notEqual :decode64:src null
+    52 label *label6
  
-    89 label *label13
-    90 return :charToInt*retaddr
-    91 end
+    90 label *label14
+    91 return :charToInt*retaddr
+    92 end
 -    * label *label1
 -    * op and :printbyte:ch :printbyte:byte 0xFF
--    * jump *label26 equal :printbyte:ch false
+-    * jump *label27 equal :printbyte:ch false
 -    * printchar :printbyte:ch
--    * label *label26
 -    * label *label27
--    * label *label25
+-    * label *label28
+-    * label *label26
 -    * return :printbyte*retaddr
 -    * end
 
@@ -336,159 +336,159 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      5 set :decode64:bytes 0
      6 set :decode64:i 0
-     7 label *label6
--    * jump *label8 greaterThanEq :decode64:i 4
-+    8 jump *label8 greaterThanEq 0 4
-     9 label *label28
+     7 label *label7
+-    * jump *label9 greaterThanEq :decode64:i 4
++    8 jump *label9 greaterThanEq 0 4
+     9 label *label29
     10 remark "Reading character number "
     11 remark :decode64:i
  
-    41 label *label36
+    41 label *label37
     42 set :printbyte:byte :decode64:bytes
-    43 label *label37
+    43 label *label38
 -    * op and :printbyte:ch :printbyte:byte 0xFF
 +   44 op and :printbyte:ch :decode64:bytes 0xFF
-    45 jump *label38 equal :printbyte:ch false
+    45 jump *label39 equal :printbyte:ch false
     46 printchar :printbyte:ch
-    47 label *label38
+    47 label *label39
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-    39 label *label34
-    40 label *label35
-    41 label *label36
+    39 label *label35
+    40 label *label36
+    41 label *label37
 -    * set :printbyte:byte :decode64:bytes
-    42 label *label37
+    42 label *label38
     43 op and :printbyte:ch :decode64:bytes 0xFF
-    44 jump *label38 equal :printbyte:ch false
+    44 jump *label39 equal :printbyte:ch false
 
 Modifications by Fast-dispatch case at line 7:5 (-8 instructions):
  
-    54 assertprints *tmp0 "All Hail the King!" "Decoded value"
-    55 end
-    56 label *label0
--    * jump *label17 lessThan :charToInt:ch 65
--    * jump *label16 lessThanEq :charToInt:ch 90
--    * label *label17
--    * jump *label15 always
-+   57 multijump :charToInt:ch 0 0 (m:*label42)
-+   58 multilabel *label48 (m:*label42)
-+   59 multilabel *label43 (m:*label42)
-+   60 label *label41
-+   61 set *tmp8 null
-+   62 jump *label14 always
-+   63 jump *label14 always
-+   64 label *label15
-+   65 multilabel *label47 (m:*label42)
-+   66 label *label19
-+   67 op sub *tmp8 :charToInt:ch 71
-+   68 jump *label14 always
-+   69 label *label18
-+   70 multilabel *label44 (m:*label42)
-+   71 label *label22
-+   72 set *tmp8 62
-+   73 jump *label14 always
-+   74 label *label21
-+   75 multilabel *label45 (m:*label42)
-+   76 label *label24
-+   77 set *tmp8 63
-+   78 jump *label14 always
-+   79 multilabel *label46 (m:*label42)
-    80 label *label16
-    81 op sub *tmp8 :charToInt:ch 65
--    * jump *label14 always
--    * label *label15
--    * jump *label20 lessThan :charToInt:ch 97
--    * jump *label19 lessThanEq :charToInt:ch 122
--    * label *label20
--    * jump *label18 always
--    * label *label19
--    * op sub *tmp8 :charToInt:ch 71
--    * jump *label14 always
+    55 label *label2
+    56 end
+    57 label *label0
+-    * jump *label18 lessThan :charToInt:ch 65
+-    * jump *label17 lessThanEq :charToInt:ch 90
 -    * label *label18
--    * jump *label22 equal :charToInt:ch 43
--    * jump *label21 notEqual :charToInt:ch 45
--    * label *label22
--    * set *tmp8 62
--    * jump *label14 always
+-    * jump *label16 always
++   58 multijump :charToInt:ch 0 0 (m:*label43)
++   59 multilabel *label49 (m:*label43)
++   60 multilabel *label44 (m:*label43)
++   61 label *label42
++   62 set *tmp8 null
++   63 jump *label15 always
++   64 jump *label15 always
++   65 label *label16
++   66 multilabel *label48 (m:*label43)
++   67 label *label20
++   68 op sub *tmp8 :charToInt:ch 71
++   69 jump *label15 always
++   70 label *label19
++   71 multilabel *label45 (m:*label43)
++   72 label *label23
++   73 set *tmp8 62
++   74 jump *label15 always
++   75 label *label22
++   76 multilabel *label46 (m:*label43)
++   77 label *label25
++   78 set *tmp8 63
++   79 jump *label15 always
++   80 multilabel *label47 (m:*label43)
+    81 label *label17
+    82 op sub *tmp8 :charToInt:ch 65
+-    * jump *label15 always
+-    * label *label16
+-    * jump *label21 lessThan :charToInt:ch 97
+-    * jump *label20 lessThanEq :charToInt:ch 122
 -    * label *label21
--    * jump *label24 equal :charToInt:ch 95
--    * jump *label23 notEqual :charToInt:ch 47
--    * label *label24
--    * set *tmp8 63
--    * jump *label14 always
+-    * jump *label19 always
+-    * label *label20
+-    * op sub *tmp8 :charToInt:ch 71
+-    * jump *label15 always
+-    * label *label19
+-    * jump *label23 equal :charToInt:ch 43
+-    * jump *label22 notEqual :charToInt:ch 45
 -    * label *label23
+-    * set *tmp8 62
+-    * jump *label15 always
+-    * label *label22
+-    * jump *label25 equal :charToInt:ch 95
+-    * jump *label24 notEqual :charToInt:ch 47
+-    * label *label25
+-    * set *tmp8 63
+-    * jump *label15 always
+-    * label *label24
 -    * set *tmp8 null
-    82 label *label14
-    83 set :charToInt*retval *tmp8
-    84 label *label13
+    83 label *label15
+    84 set :charToInt*retval *tmp8
+    85 label *label14
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
  
      5 set :decode64:bytes 0
      6 set :decode64:i 0
-     7 label *label6
--    * jump *label8 greaterThanEq 0 4
-     8 label *label28
+     7 label *label7
+-    * jump *label9 greaterThanEq 0 4
+     8 label *label29
      9 remark "Reading character number "
     10 remark :decode64:i
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  
-    58 multilabel *label43 (m:*label42)
-    59 label *label41
-    60 set *tmp8 null
--    * jump *label14 always
-    61 jump *label14 always
-    62 label *label15
-    63 multilabel *label47 (m:*label42)
+    59 multilabel *label44 (m:*label43)
+    60 label *label42
+    61 set *tmp8 null
+-    * jump *label15 always
+    62 jump *label15 always
+    63 label *label16
+    64 multilabel *label48 (m:*label43)
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
-    57 multilabel *label48 (m:*label42)
-    58 multilabel *label43 (m:*label42)
-    59 label *label41
+    58 multilabel *label49 (m:*label43)
+    59 multilabel *label44 (m:*label43)
+    60 label *label42
 -    * set *tmp8 null
-+   60 set :charToInt*retval null
-    61 jump *label14 always
-    62 label *label15
-    63 multilabel *label47 (m:*label42)
-    64 label *label19
++   61 set :charToInt*retval null
+    62 jump *label15 always
+    63 label *label16
+    64 multilabel *label48 (m:*label43)
+    65 label *label20
 -    * op sub *tmp8 :charToInt:ch 71
-+   65 op sub :charToInt*retval :charToInt:ch 71
-    66 jump *label14 always
-    67 label *label18
-    68 multilabel *label44 (m:*label42)
-    69 label *label22
++   66 op sub :charToInt*retval :charToInt:ch 71
+    67 jump *label15 always
+    68 label *label19
+    69 multilabel *label45 (m:*label43)
+    70 label *label23
 -    * set *tmp8 62
-+   70 set :charToInt*retval 62
-    71 jump *label14 always
-    72 label *label21
-    73 multilabel *label45 (m:*label42)
-    74 label *label24
++   71 set :charToInt*retval 62
+    72 jump *label15 always
+    73 label *label22
+    74 multilabel *label46 (m:*label43)
+    75 label *label25
 -    * set *tmp8 63
-+   75 set :charToInt*retval 63
-    76 jump *label14 always
-    77 multilabel *label46 (m:*label42)
-    78 label *label16
++   76 set :charToInt*retval 63
+    77 jump *label15 always
+    78 multilabel *label47 (m:*label43)
+    79 label *label17
 -    * op sub *tmp8 :charToInt:ch 65
-+   79 op sub :charToInt*retval :charToInt:ch 65
-    80 label *label14
++   80 op sub :charToInt*retval :charToInt:ch 65
+    81 label *label15
 -    * set :charToInt*retval *tmp8
-    81 label *label13
-    82 return :charToInt*retaddr
-    83 end
+    82 label *label14
+    83 return :charToInt*retaddr
+    84 end
 
 Modifications by Unroll loop at line 24:9 (+23 instructions):
      0 set data "QWxsIEhhaWwgdGhlIEtpbmch"
      1 assertflush *tmp0
      2 set :decode64:index 0
--    * setaddr :charToInt*retaddr *label9 (h:*label9)
-     3 label *label3
+-    * setaddr :charToInt*retaddr *label10 (h:*label10)
+     3 label *label4
      4 set :decode64:bytes 0
 -    * set :decode64:i 0
--    * label *label6
--    * label *label28
+-    * label *label7
+-    * label *label29
 -    * remark "Reading character number "
 -    * remark :decode64:i
 -    * remark " "
@@ -496,16 +496,16 @@ Modifications by Unroll loop at line 24:9 (+23 instructions):
 -    * read :decode64:src data :decode64:index
 -    * op shl *tmp2 :decode64:bytes 6
 -    * set :charToInt:ch :decode64:src
--    * call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
--    * label *label9
+-    * call *label0 *invalid :charToInt*retval (m:*label10) (h:*label10)
+-    * label *label10
 -    * op or :decode64:bytes *tmp2 :charToInt*retval
 -    * op add :decode64:index :decode64:index 1
--    * label *label7
--    * op add :decode64:i :decode64:i 1
--    * jump *label28 lessThan :decode64:i 4
 -    * label *label8
+-    * op add :decode64:i :decode64:i 1
+-    * jump *label29 lessThan :decode64:i 4
+-    * label *label9
 +    5 set :decode64:i 0
-+    6 label *label49
++    6 label *label50
 +    7 remark "Reading character number "
 +    8 remark :decode64:i
 +    9 remark " "
@@ -513,12 +513,12 @@ Modifications by Unroll loop at line 24:9 (+23 instructions):
 +   11 read :decode64:src data :decode64:index
 +   12 op shl *tmp2 :decode64:bytes 6
 +   13 set :charToInt:ch :decode64:src
-+   14 setaddr :charToInt*retaddr *label50
-+   15 call *label0 *invalid :charToInt*retval (m:*label50) (h:*label50)
-+   16 label *label50
++   14 setaddr :charToInt*retaddr *label51
++   15 call *label0 *invalid :charToInt*retval (m:*label51) (h:*label51)
++   16 label *label51
 +   17 op or :decode64:bytes *tmp2 :charToInt*retval
 +   18 op add :decode64:index :decode64:index 1
-+   19 label *label51
++   19 label *label52
 +   20 op add :decode64:i :decode64:i 1
 +   21 remark "Reading character number "
 +   22 remark :decode64:i
@@ -527,12 +527,12 @@ Modifications by Unroll loop at line 24:9 (+23 instructions):
 +   25 read :decode64:src data :decode64:index
 +   26 op shl *tmp2 :decode64:bytes 6
 +   27 set :charToInt:ch :decode64:src
-+   28 setaddr :charToInt*retaddr *label52
-+   29 call *label0 *invalid :charToInt*retval (m:*label52) (h:*label52)
-+   30 label *label52
++   28 setaddr :charToInt*retaddr *label53
++   29 call *label0 *invalid :charToInt*retval (m:*label53) (h:*label53)
++   30 label *label53
 +   31 op or :decode64:bytes *tmp2 :charToInt*retval
 +   32 op add :decode64:index :decode64:index 1
-+   33 label *label53
++   33 label *label54
 +   34 op add :decode64:i :decode64:i 1
 +   35 remark "Reading character number "
 +   36 remark :decode64:i
@@ -541,12 +541,12 @@ Modifications by Unroll loop at line 24:9 (+23 instructions):
 +   39 read :decode64:src data :decode64:index
 +   40 op shl *tmp2 :decode64:bytes 6
 +   41 set :charToInt:ch :decode64:src
-+   42 setaddr :charToInt*retaddr *label54
-+   43 call *label0 *invalid :charToInt*retval (m:*label54) (h:*label54)
-+   44 label *label54
++   42 setaddr :charToInt*retaddr *label55
++   43 call *label0 *invalid :charToInt*retval (m:*label55) (h:*label55)
++   44 label *label55
 +   45 op or :decode64:bytes *tmp2 :charToInt*retval
 +   46 op add :decode64:index :decode64:index 1
-+   47 label *label55
++   47 label *label56
 +   48 op add :decode64:i :decode64:i 1
 +   49 remark "Reading character number "
 +   50 remark :decode64:i
@@ -555,17 +555,17 @@ Modifications by Unroll loop at line 24:9 (+23 instructions):
 +   53 read :decode64:src data :decode64:index
 +   54 op shl *tmp2 :decode64:bytes 6
 +   55 set :charToInt:ch :decode64:src
-+   56 setaddr :charToInt*retaddr *label56
-+   57 call *label0 *invalid :charToInt*retval (m:*label56) (h:*label56)
-+   58 label *label56
++   56 setaddr :charToInt*retaddr *label57
++   57 call *label0 *invalid :charToInt*retval (m:*label57) (h:*label57)
++   58 label *label57
 +   59 op or :decode64:bytes *tmp2 :charToInt*retval
 +   60 op add :decode64:index :decode64:index 1
-+   61 label *label57
++   61 label *label58
 +   62 op add :decode64:i :decode64:i 1
-+   63 label *label8
++   63 label *label9
     64 remark "Printing text"
     65 op shr :printbyte:byte :decode64:bytes 16
-    66 label *label29
+    66 label *label30
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-3 instructions):
  
@@ -576,9 +576,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-3
 +   11 read :charToInt:ch data :decode64:index
     12 op shl *tmp2 :decode64:bytes 6
 -    * set :charToInt:ch :decode64:src
-    13 setaddr :charToInt*retaddr *label50
-    14 call *label0 *invalid :charToInt*retval (m:*label50) (h:*label50)
-    15 label *label50
+    13 setaddr :charToInt*retaddr *label51
+    14 call *label0 *invalid :charToInt*retval (m:*label51) (h:*label51)
+    15 label *label51
  
     21 remark :decode64:i
     22 remark " "
@@ -587,9 +587,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-3
 +   24 read :charToInt:ch data :decode64:index
     25 op shl *tmp2 :decode64:bytes 6
 -    * set :charToInt:ch :decode64:src
-    26 setaddr :charToInt*retaddr *label52
-    27 call *label0 *invalid :charToInt*retval (m:*label52) (h:*label52)
-    28 label *label52
+    26 setaddr :charToInt*retaddr *label53
+    27 call *label0 *invalid :charToInt*retval (m:*label53) (h:*label53)
+    28 label *label53
  
     34 remark :decode64:i
     35 remark " "
@@ -598,14 +598,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-3
 +   37 read :charToInt:ch data :decode64:index
     38 op shl *tmp2 :decode64:bytes 6
 -    * set :charToInt:ch :decode64:src
-    39 setaddr :charToInt*retaddr *label54
-    40 call *label0 *invalid :charToInt*retval (m:*label54) (h:*label54)
-    41 label *label54
+    39 setaddr :charToInt*retaddr *label55
+    40 call *label0 *invalid :charToInt*retval (m:*label55) (h:*label55)
+    41 label *label55
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
  
      5 set :decode64:i 0
-     6 label *label49
+     6 label *label50
      7 remark "Reading character number "
 -    * remark :decode64:i
 +    8 remark 0
@@ -614,13 +614,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
     11 read :charToInt:ch data :decode64:index
 -    * op shl *tmp2 :decode64:bytes 6
 +   12 op shl *tmp2 0 6
-    13 setaddr :charToInt*retaddr *label50
-    14 call *label0 *invalid :charToInt*retval (m:*label50) (h:*label50)
-    15 label *label50
+    13 setaddr :charToInt*retaddr *label51
+    14 call *label0 *invalid :charToInt*retval (m:*label51) (h:*label51)
+    15 label *label51
 -    * op or :decode64:bytes *tmp2 :charToInt*retval
 +   16 op or :decode64:bytes 0 :charToInt*retval
     17 op add :decode64:index :decode64:index 1
-    18 label *label51
+    18 label *label52
 -    * op add :decode64:i :decode64:i 1
 +   19 op add :decode64:i 0 1
     20 remark "Reading character number "
@@ -632,7 +632,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
  
     29 op or :decode64:bytes *tmp2 :charToInt*retval
     30 op add :decode64:index :decode64:index 1
-    31 label *label53
+    31 label *label54
 -    * op add :decode64:i :decode64:i 1
 +   32 op add :decode64:i 1 1
     33 remark "Reading character number "
@@ -644,7 +644,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
  
     42 op or :decode64:bytes *tmp2 :charToInt*retval
     43 op add :decode64:index :decode64:index 1
-    44 label *label55
+    44 label *label56
 -    * op add :decode64:i :decode64:i 1
 +   45 op add :decode64:i 2 1
     46 remark "Reading character number "
@@ -656,10 +656,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
  
     56 op or :decode64:bytes *tmp2 :charToInt*retval
     57 op add :decode64:index :decode64:index 1
-    58 label *label57
+    58 label *label58
 -    * op add :decode64:i :decode64:i 1
 +   59 op add :decode64:i 3 1
-    60 label *label8
+    60 label *label9
     61 remark "Printing text"
     62 op shr :printbyte:byte :decode64:bytes 16
 
@@ -667,22 +667,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-7
  
      1 assertflush *tmp0
      2 set :decode64:index 0
-     3 label *label3
+     3 label *label4
 -    * set :decode64:bytes 0
 -    * set :decode64:i 0
-     4 label *label49
+     4 label *label50
      5 remark "Reading character number "
      6 remark 0
      7 remark " "
      8 remark "from input data quartet"
      9 read :charToInt:ch data :decode64:index
 -    * op shl *tmp2 0 6
-    10 setaddr :charToInt*retaddr *label50
-    11 call *label0 *invalid :charToInt*retval (m:*label50) (h:*label50)
-    12 label *label50
+    10 setaddr :charToInt*retaddr *label51
+    11 call *label0 *invalid :charToInt*retval (m:*label51) (h:*label51)
+    12 label *label51
     13 op or :decode64:bytes 0 :charToInt*retval
     14 op add :decode64:index :decode64:index 1
-    15 label *label51
+    15 label *label52
 -    * op add :decode64:i 0 1
     16 remark "Reading character number "
     17 remark 1
@@ -690,7 +690,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-7
  
     25 op or :decode64:bytes *tmp2 :charToInt*retval
     26 op add :decode64:index :decode64:index 1
-    27 label *label53
+    27 label *label54
 -    * op add :decode64:i 1 1
     28 remark "Reading character number "
     29 remark 2
@@ -698,7 +698,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-7
  
     37 op or :decode64:bytes *tmp2 :charToInt*retval
     38 op add :decode64:index :decode64:index 1
-    39 label *label55
+    39 label *label56
 -    * op add :decode64:i 2 1
     40 remark "Reading character number "
     41 remark 3
@@ -706,21 +706,21 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-7
  
     50 op or :decode64:bytes *tmp2 :charToInt*retval
     51 op add :decode64:index :decode64:index 1
-    52 label *label57
+    52 label *label58
 -    * op add :decode64:i 3 1
-    53 label *label8
+    53 label *label9
     54 remark "Printing text"
     55 op shr :printbyte:byte :decode64:bytes 16
 
 Modifications by Iterated phase, Expression Optimization, pass 3, iteration 1:
  
-    10 setaddr :charToInt*retaddr *label50
-    11 call *label0 *invalid :charToInt*retval (m:*label50) (h:*label50)
-    12 label *label50
+    10 setaddr :charToInt*retaddr *label51
+    11 call *label0 *invalid :charToInt*retval (m:*label51) (h:*label51)
+    12 label *label51
 -    * op or :decode64:bytes 0 :charToInt*retval
 +   13 set :decode64:bytes :charToInt*retval
     14 op add :decode64:index :decode64:index 1
-    15 label *label51
+    15 label *label52
     16 remark "Reading character number "
 
 Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
@@ -730,157 +730,158 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
     20 read :charToInt:ch data :decode64:index
 -    * op shl *tmp2 :decode64:bytes 6
 +   21 op shl *tmp2 :charToInt*retval 6
-    22 setaddr :charToInt*retaddr *label52
-    23 call *label0 *invalid :charToInt*retval (m:*label52) (h:*label52)
-    24 label *label52
+    22 setaddr :charToInt*retaddr *label53
+    23 call *label0 *invalid :charToInt*retval (m:*label53) (h:*label53)
+    24 label *label53
 
 Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-1 instructions):
  
-    10 setaddr :charToInt*retaddr *label50
-    11 call *label0 *invalid :charToInt*retval (m:*label50) (h:*label50)
-    12 label *label50
+    10 setaddr :charToInt*retaddr *label51
+    11 call *label0 *invalid :charToInt*retval (m:*label51) (h:*label51)
+    12 label *label51
 -    * set :decode64:bytes :charToInt*retval
     13 op add :decode64:index :decode64:index 1
-    14 label *label51
+    14 label *label52
     15 remark "Reading character number "
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 (-1 instructions):
  
      1 assertflush *tmp0
      2 set :decode64:index 0
-     3 label *label3
--    * label *label49
+     3 label *label4
+-    * label *label50
      4 remark "Reading character number "
      5 remark 0
      6 remark " "
  
-    10 call *label0 *invalid :charToInt*retval (m:*label50) (h:*label50)
-    11 label *label50
+    10 call *label0 *invalid :charToInt*retval (m:*label51) (h:*label51)
+    11 label *label51
     12 op add :decode64:index :decode64:index 1
--    * label *label51
+-    * label *label52
     13 remark "Reading character number "
     14 remark 1
     15 remark " "
  
-    21 label *label52
+    21 label *label53
     22 op or :decode64:bytes *tmp2 :charToInt*retval
     23 op add :decode64:index :decode64:index 1
--    * label *label53
+-    * label *label54
     24 remark "Reading character number "
     25 remark 2
     26 remark " "
  
-    32 label *label54
+    32 label *label55
     33 op or :decode64:bytes *tmp2 :charToInt*retval
     34 op add :decode64:index :decode64:index 1
--    * label *label55
+-    * label *label56
     35 remark "Reading character number "
     36 remark 3
     37 remark " "
  
-    44 label *label56
+    44 label *label57
     45 op or :decode64:bytes *tmp2 :charToInt*retval
     46 op add :decode64:index :decode64:index 1
--    * label *label57
--    * label *label8
+-    * label *label58
+-    * label *label9
     47 remark "Printing text"
     48 op shr :printbyte:byte :decode64:bytes 16
--    * label *label29
+-    * label *label30
     49 op and :printbyte:ch :printbyte:byte 0xFF
-    50 jump *label30 equal :printbyte:ch false
+    50 jump *label31 equal :printbyte:ch false
     51 printchar :printbyte:ch
-    52 label *label30
--    * label *label31
+    52 label *label31
 -    * label *label32
-    53 op shr :printbyte:byte :decode64:bytes 8
 -    * label *label33
+    53 op shr :printbyte:byte :decode64:bytes 8
+-    * label *label34
     54 op and :printbyte:ch :printbyte:byte 0xFF
-    55 jump *label34 equal :printbyte:ch false
+    55 jump *label35 equal :printbyte:ch false
     56 printchar :printbyte:ch
-    57 label *label34
--    * label *label35
+    57 label *label35
 -    * label *label36
 -    * label *label37
+-    * label *label38
     58 op and :printbyte:ch :decode64:bytes 0xFF
-    59 jump *label38 equal :printbyte:ch false
+    59 jump *label39 equal :printbyte:ch false
     60 printchar :printbyte:ch
-    61 label *label38
--    * label *label39
+    61 label *label39
 -    * label *label40
--    * label *label4
-    62 jump *label3 notEqual :decode64:src null
+-    * label *label41
 -    * label *label5
+    62 jump *label4 notEqual :decode64:src null
+-    * label *label6
     63 printflush message1
--    * label *label2
+-    * label *label3
     64 assertprints *tmp0 "All Hail the King!" "Decoded value"
+-    * label *label2
     65 end
     66 label *label0
-    67 multijump :charToInt:ch 0 0 (m:*label42)
-    68 multilabel *label48 (m:*label42)
-    69 multilabel *label43 (m:*label42)
--    * label *label41
+    67 multijump :charToInt:ch 0 0 (m:*label43)
+    68 multilabel *label49 (m:*label43)
+    69 multilabel *label44 (m:*label43)
+-    * label *label42
     70 set :charToInt*retval null
-    71 jump *label14 always
--    * label *label15
-    72 multilabel *label47 (m:*label42)
--    * label *label19
-    73 op sub :charToInt*retval :charToInt:ch 71
-    74 jump *label14 always
--    * label *label18
-    75 multilabel *label44 (m:*label42)
--    * label *label22
-    76 set :charToInt*retval 62
-    77 jump *label14 always
--    * label *label21
-    78 multilabel *label45 (m:*label42)
--    * label *label24
-    79 set :charToInt*retval 63
-    80 jump *label14 always
-    81 multilabel *label46 (m:*label42)
+    71 jump *label15 always
 -    * label *label16
+    72 multilabel *label48 (m:*label43)
+-    * label *label20
+    73 op sub :charToInt*retval :charToInt:ch 71
+    74 jump *label15 always
+-    * label *label19
+    75 multilabel *label45 (m:*label43)
+-    * label *label23
+    76 set :charToInt*retval 62
+    77 jump *label15 always
+-    * label *label22
+    78 multilabel *label46 (m:*label43)
+-    * label *label25
+    79 set :charToInt*retval 63
+    80 jump *label15 always
+    81 multilabel *label47 (m:*label43)
+-    * label *label17
     82 op sub :charToInt*retval :charToInt:ch 65
-    83 label *label14
--    * label *label13
+    83 label *label15
+-    * label *label14
     84 return :charToInt*retaddr
 -    * end
 
 Modifications by Jumps phase, Jump Threading, pass 5, iteration 1:
  
-    68 multilabel *label48 (m:*label42)
-    69 multilabel *label43 (m:*label42)
+    68 multilabel *label49 (m:*label43)
+    69 multilabel *label44 (m:*label43)
     70 set :charToInt*retval null
--    * jump *label14 always
+-    * jump *label15 always
 +   71 return :charToInt*retaddr
-    72 multilabel *label47 (m:*label42)
+    72 multilabel *label48 (m:*label43)
     73 op sub :charToInt*retval :charToInt:ch 71
--    * jump *label14 always
+-    * jump *label15 always
 +   74 return :charToInt*retaddr
-    75 multilabel *label44 (m:*label42)
+    75 multilabel *label45 (m:*label43)
     76 set :charToInt*retval 62
--    * jump *label14 always
+-    * jump *label15 always
 +   77 return :charToInt*retaddr
-    78 multilabel *label45 (m:*label42)
+    78 multilabel *label46 (m:*label43)
     79 set :charToInt*retval 63
--    * jump *label14 always
+-    * jump *label15 always
 +   80 return :charToInt*retaddr
-    81 multilabel *label46 (m:*label42)
+    81 multilabel *label47 (m:*label43)
     82 op sub :charToInt*retval :charToInt:ch 65
-    83 label *label14
+    83 label *label15
 
 Modifications by Final phase, Print Merging, iteration 1:
  
      1 assertflush *tmp0
      2 set :decode64:index 0
-     3 label *label3
+     3 label *label4
 -    * remark "Reading character number "
 -    * remark 0
 -    * remark " "
 -    * remark "from input data quartet"
 +    4 remark "Reading character number 0 from input data quartet"
      5 read :charToInt:ch data :decode64:index
-     6 setaddr :charToInt*retaddr *label50
-     7 call *label0 *invalid :charToInt*retval (m:*label50) (h:*label50)
-     8 label *label50
+     6 setaddr :charToInt*retaddr *label51
+     7 call *label0 *invalid :charToInt*retval (m:*label51) (h:*label51)
+     8 label *label51
      9 op add :decode64:index :decode64:index 1
 -    * remark "Reading character number "
 -    * remark 1
@@ -889,9 +890,9 @@ Modifications by Final phase, Print Merging, iteration 1:
 +   10 remark "Reading character number 1 from input data quartet"
     11 read :charToInt:ch data :decode64:index
     12 op shl *tmp2 :charToInt*retval 6
-    13 setaddr :charToInt*retaddr *label52
+    13 setaddr :charToInt*retaddr *label53
  
-    15 label *label52
+    15 label *label53
     16 op or :decode64:bytes *tmp2 :charToInt*retval
     17 op add :decode64:index :decode64:index 1
 -    * remark "Reading character number "
@@ -901,9 +902,9 @@ Modifications by Final phase, Print Merging, iteration 1:
 +   18 remark "Reading character number 2 from input data quartet"
     19 read :charToInt:ch data :decode64:index
     20 op shl *tmp2 :decode64:bytes 6
-    21 setaddr :charToInt*retaddr *label54
+    21 setaddr :charToInt*retaddr *label55
  
-    23 label *label54
+    23 label *label55
     24 op or :decode64:bytes *tmp2 :charToInt*retval
     25 op add :decode64:index :decode64:index 1
 -    * remark "Reading character number "
@@ -920,72 +921,72 @@ Final code before resolving virtual instructions:
 set data "QWxsIEhhaWwgdGhlIEtpbmch"
 assertflush *tmp0
 set :decode64:index 0
-label *label3
+label *label4
 remark "Reading character number 0 from input data quartet"
 read :charToInt:ch data :decode64:index
-setaddr :charToInt*retaddr *label50
+setaddr :charToInt*retaddr *label51
 call *label0 *invalid :charToInt*retval
-label *label50
+label *label51
 op add :decode64:index :decode64:index 1
 remark "Reading character number 1 from input data quartet"
 read :charToInt:ch data :decode64:index
 op shl *tmp2 :charToInt*retval 6
-setaddr :charToInt*retaddr *label52
+setaddr :charToInt*retaddr *label53
 call *label0 *invalid :charToInt*retval
-label *label52
+label *label53
 op or :decode64:bytes *tmp2 :charToInt*retval
 op add :decode64:index :decode64:index 1
 remark "Reading character number 2 from input data quartet"
 read :charToInt:ch data :decode64:index
 op shl *tmp2 :decode64:bytes 6
-setaddr :charToInt*retaddr *label54
+setaddr :charToInt*retaddr *label55
 call *label0 *invalid :charToInt*retval
-label *label54
+label *label55
 op or :decode64:bytes *tmp2 :charToInt*retval
 op add :decode64:index :decode64:index 1
 remark "Reading character number 3 from input data quartet"
 read :decode64:src data :decode64:index
 op shl *tmp2 :decode64:bytes 6
 set :charToInt:ch :decode64:src
-setaddr :charToInt*retaddr *label56
+setaddr :charToInt*retaddr *label57
 call *label0 *invalid :charToInt*retval
-label *label56
+label *label57
 op or :decode64:bytes *tmp2 :charToInt*retval
 op add :decode64:index :decode64:index 1
 remark "Printing text"
 op shr :printbyte:byte :decode64:bytes 16
 op and :printbyte:ch :printbyte:byte 0xFF
-jump *label30 equal :printbyte:ch false
+jump *label31 equal :printbyte:ch false
 printchar :printbyte:ch
-label *label30
+label *label31
 op shr :printbyte:byte :decode64:bytes 8
 op and :printbyte:ch :printbyte:byte 0xFF
-jump *label34 equal :printbyte:ch false
+jump *label35 equal :printbyte:ch false
 printchar :printbyte:ch
-label *label34
+label *label35
 op and :printbyte:ch :decode64:bytes 0xFF
-jump *label38 equal :printbyte:ch false
+jump *label39 equal :printbyte:ch false
 printchar :printbyte:ch
-label *label38
-jump *label3 notEqual :decode64:src null
+label *label39
+jump *label4 notEqual :decode64:src null
 printflush message1
 assertprints *tmp0 "All Hail the King!" "Decoded value" # Origin: 46, keys: 97 .. 122
 end
 label *label0
 multijump :charToInt:ch 0 0
-multilabel *label48
-multilabel *label43
+multilabel *label49
+multilabel *label44
 set :charToInt*retval null
 return :charToInt*retaddr
-multilabel *label47
+multilabel *label48
 op sub :charToInt*retval :charToInt:ch 71
 return :charToInt*retaddr
-multilabel *label44
+multilabel *label45
 set :charToInt*retval 62
 return :charToInt*retaddr
-multilabel *label45
+multilabel *label46
 set :charToInt*retval 63
 return :charToInt*retaddr
-multilabel *label46
+multilabel *label47
 op sub :charToInt*retval :charToInt:ch 65
 return :charToInt*retaddr

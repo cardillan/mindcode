@@ -83,7 +83,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
 
 
         final LogicLabel beginLabel = assembler.nextLabel();
-        LoopLabels loopLabels = enterLoop(node);
+        LoopLabels loopLabels = enterLoop(node, "for");
 
         // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, multiplier);

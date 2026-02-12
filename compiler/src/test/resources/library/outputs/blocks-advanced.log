@@ -29,15 +29,15 @@ Pass 1: speed optimization selection (cost limit 920):
 Final code before resolving virtual instructions:
 
     0:  set :findLinkedBlocks:message message1
-        label *label1
+        label *label2
     1:  set :display null
     2:  set :message null
     3:  set :switch null
     4:  set :memory null
     5:  print "Example program.\nTrying to locate linked blocks"
     6:  set :findLinkedBlocks:n @links
-    7:  jump *label14 lessThanEq :findLinkedBlocks:n 0
-        label *label37
+    7:  jump *label15 lessThanEq :findLinkedBlocks:n 0
+        label *label38
     8:  op sub :findLinkedBlocks:n :findLinkedBlocks:n 1
     9:  getlink :findLinkedBlocks:block :findLinkedBlocks:n
    10:  print "\nFound: "
@@ -46,18 +46,18 @@ Final code before resolving virtual instructions:
    13:  select :findLinkedBlocks:variable equal @large-logic-display :findLinkedBlocks:type :findLinkedBlocks:block :display
    14:  set :display :findLinkedBlocks:variable
    15:  set :findLinkedBlocks:variable :message
-   16:  jump *label45 notEqual @message :findLinkedBlocks:type
+   16:  jump *label46 notEqual @message :findLinkedBlocks:type
    17:  set :findLinkedBlocks:variable :findLinkedBlocks:block
    18:  set :findLinkedBlocks:message :findLinkedBlocks:block
-        label *label45
+        label *label46
    19:  set :message :findLinkedBlocks:variable
    20:  select :findLinkedBlocks:variable equal @switch :findLinkedBlocks:type :findLinkedBlocks:block :switch
    21:  set :switch :findLinkedBlocks:variable
    22:  select :findLinkedBlocks:variable equal @memory-bank :findLinkedBlocks:type :findLinkedBlocks:block :memory
    23:  select :findLinkedBlocks:variable equal @memory-cell :findLinkedBlocks:type :findLinkedBlocks:block :findLinkedBlocks:variable
    24:  set :memory :findLinkedBlocks:variable
-   25:  jump *label37 greaterThan :findLinkedBlocks:n 0
-        label *label14
+   25:  jump *label38 greaterThan :findLinkedBlocks:n 0
+        label *label15
    26:  print "\nDisplay: {0}\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nMemory: "
    27:  format :display
    28:  op and :findLinkedBlocks:foundAll 1 :display
@@ -68,5 +68,5 @@ Final code before resolving virtual instructions:
    33:  print :memory
    34:  op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :memory
    35:  printflush :findLinkedBlocks:message
-   36:  jump *label1 equal :findLinkedBlocks:foundAll false
+   36:  jump *label2 equal :findLinkedBlocks:foundAll false
    37:  assertequals :message message1 "Located message1 block"

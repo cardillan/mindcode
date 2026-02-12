@@ -24,6 +24,7 @@ class StatementListsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(OP, "add", tmp(0), tmp(1), "1"),
                     createInstruction(WRITE, tmp(0), "cell1", "0"),
                     createInstruction(SET, ":i", tmp(2)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, ":i")
             );
         }
@@ -42,7 +43,9 @@ class StatementListsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(WAIT, "0"),
                     createInstruction(PRINT, q("start")),
                     createInstruction(PRINT, q("inner")),
-                    createInstruction(PRINT, q("end"))
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(PRINT, q("end")),
+                    createInstruction(LABEL, label(0))
             );
         }
     }

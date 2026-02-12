@@ -7,7 +7,9 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
+import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
@@ -39,13 +41,19 @@ public class StatementListsBuilder extends AbstractCodeBuilder implements
             error(node, ERR.ATOMIC_REQUIRES_PROCESSOR);
         }
 
+        final LogicLabel breakLabel = assembler.nextLabel();
+        LoopLabels loopLabels =  variables.getLoopStack().enterBlock(node.getLabel(), breakLabel, "atomic");
+
         assembler.setSubcontextType(AstSubcontextType.BODY, 10.0);
         if (!enterAtomicBlock()) {
             assembler.createWait(LogicNumber.ZERO).setAtomicWait(true);
         }
         ValueStore result = evaluateBody(node.getExpressions());
         exitAtomicBlock();
+        assembler.createLabel(breakLabel);
         assembler.clearSubcontextType();
+        variables.getLoopStack().exitLoop(loopLabels);
+
         return node.isFunction() ? result : LogicVoid.VOID;
     }
 
@@ -55,9 +63,15 @@ public class StatementListsBuilder extends AbstractCodeBuilder implements
         if (node.isDebug() && !node.getProfile().isDebug()) {
             assembler.setActive(false);
         }
+        final LogicLabel breakLabel = assembler.nextLabel();
+        LoopLabels loopLabels =  variables.getLoopStack().enterBlock(node.getLabel(), breakLabel,
+                node.isDebug() ? "debug" : "begin");
+
         assembler.setSubcontextType(AstSubcontextType.BODY, 1.0);
         ValueStore result = evaluateBody(node.getExpressions());
+        assembler.createLabel(breakLabel);
         assembler.clearSubcontextType();
+        variables.getLoopStack().exitLoop(loopLabels);
         assembler.setActive(active);
         return result;
     }

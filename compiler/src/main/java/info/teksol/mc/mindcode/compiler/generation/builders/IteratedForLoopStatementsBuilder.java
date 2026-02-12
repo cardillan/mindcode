@@ -26,7 +26,7 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
         visitBody(node.getInitialize());
 
         final LogicLabel beginLabel = assembler.nextLabel();
-        LoopLabels loopLabels = enterLoop(node);
+        LoopLabels loopLabels = enterLoop(node, "for");
 
         // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);

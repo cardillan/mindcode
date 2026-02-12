@@ -458,6 +458,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAstDoWhileLoopStatement(MindcodeParser.AstDoWhileLoopStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code astInfiniteLoopStatement}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstInfiniteLoopStatement(MindcodeParser.AstInfiniteLoopStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astInfiniteLoopStatement}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstInfiniteLoopStatement(MindcodeParser.AstInfiniteLoopStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astBreakStatement}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
