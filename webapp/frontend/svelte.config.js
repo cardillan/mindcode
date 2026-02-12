@@ -9,13 +9,11 @@ const config = {
 			pages: '../src/main/resources/static',
 			assets: '../src/main/resources/static',
 			// SPA fallback so client routing works for non-prerendered routes
-			fallback: 'index.html'
+			fallback: '200.html'
 		}),
 		prerender: {
 			// Crawl and prerender all reachable pages
 			entries: ['*']
-		},
-		alias: {
 		}
 	},
 	preprocess: [mdsvex()],
