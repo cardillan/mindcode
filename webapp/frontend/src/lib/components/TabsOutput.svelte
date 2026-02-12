@@ -103,7 +103,11 @@
 					</Select.Root>
 					{#if selectedProcessor}
 						<div class="relative flex-1">
-							<Textarea readonly value={selectedProcessor.content} class="h-full w-full" />
+							<Textarea
+								readonly
+								value={selectedProcessor.content}
+								class="h-full w-full resize-none"
+							/>
 							<CopyButton floating getText={() => selectedProcessor.content} />
 						</div>
 					{/if}
