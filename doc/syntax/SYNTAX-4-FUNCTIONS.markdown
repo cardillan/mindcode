@@ -343,6 +343,19 @@ op sub *tmp0 MAX MIN
 print *tmp0
 ```
 
+> [!NOTE]
+> Enhanced comments can only be used at places where a statement can start, it is not possible to insert them in the middle of a statement. The following example demonstrates it:
+>
+> ```
+> for i = 0;            /// Cannot put an enhanced commment here
+>     i < 10;           /// Neither here
+>     i++               /// Nope
+> do
+>     /// But it can be here
+>     println(i);       /// Or here
+> end;
+> ```
+
 ## The `ascii()` function
 
 The `ascii()` function takes a string constant as an argument, and returns the ASCII value of its first character.

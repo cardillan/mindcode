@@ -64,30 +64,15 @@ Additional information on Mindcode and Mindustry Logic:
 
 ## Program structure
 
-Mindcode program is a sequence of expressions or statements. Semicolons separate statements and expressions, as in `a = 5; b = 10;`. Expressions have a value: `1 + 2` is an expression whose value is `3`. Whitespace (spaces, tabs, new-line characters) serves to separate individual _tokens_: keywords, identifiers, operators, and so on, but is otherwise ignored. Indentation, while recommended, is ignored by the compiler.
+Mindcode program is a sequence of expressions and statements. Semicolons separate statements and expressions, as in `a = 5; b = 10;`. Expressions have a value: `1 + 2` is an expression whose value is `3`. Whitespace (spaces, tabs, new-line characters) serves to separate individual _tokens_: keywords, identifiers, operators, and so on, but is otherwise ignored. Indentation, while recommended, is ignored by the compiler.
 
 Mindcode identifiers and keywords are case-sensitive -- `if` is different from `If` (first is a keyword, the second is not and could be used as a variable or function name).
 
 A text enclosed between `/*` and `*/` is a comment that can span several lines. Additionally, anything following a `//` is a comment till the end of the line. Comments are completely ignored by Mindcode.
 
-You can use the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remarks) to place comments or notes directly to the compiled code. An enhanced comment is a comment that starts with `///` (three slashes instead of two). This is an [alternative way to enter remarks](SYNTAX-4-FUNCTIONS.markdown#enhanced-comments) into the compiled code.
-
-> [!NOTE]
-> Enhanced comments can only be used at places where a statement can start, it is not possible to insert them in the middle of a statement. The following code demonstrates it:
-> 
-> ```
-> for i = 0;            /// Cannot put an enhanced commment here
->     i < 10;           /// Neither here
->     i++               /// Nope
-> do
->     /// But it can be here
->     println(i);       /// Or here
-> end;
-> ```
-
 ### Modules
 
-A source file contains either a program or a module. Modules are declared using the `module` keyword, and are primarily used when defining remote functions and variables, supported in Mindustry 8. See [Remote functions and variables](REMOTE-CALLS.markdown) for more information.  
+A source file contains either a program or a module. Modules are declared using the `module` keyword, and are primarily used for creating reusable libraries or remote functions and variables, supported in Mindustry 8. See [Remote functions and variables](REMOTE-CALLS.markdown#remote-functions-and-variables) for more information.  
 
 ### Libraries and external files
 
@@ -122,7 +107,7 @@ All examples in this documentation are run on the `basic` level, unless specifie
 
 ## Compilation target
 
-By default, Mindcode produces code compatible with Mindustry version 7, build 146. It is possible to generate code for different game versions, including the not-yet- released development (a.k.a. "bleeding edge") version. See the [`target` option](SYNTAX-5-OTHER.markdown#option-target) for ways to change the target version, or [Mindustry 8](MINDUSTRY-8.markdown) for more information on running the Bleeding-edge version of the game.
+By default, Mindcode produces code compatible with Mindustry version 7, build 146. It is possible to generate code for different game versions, including the not-yet- released development (a.k.a. "bleeding edge") version. See the [`target` option](SYNTAX-5-OTHER.markdown#option-target) for ways to change the target version, or [Mindustry 8](MINDUSTRY-8.markdown) for more information on running the bleeding-edge version of the game.
 
 ## Syntax modes
 
@@ -138,18 +123,15 @@ Code adhering to the strict syntax produces the same output regardless of the sy
 
 ### Relaxed syntax
 
-* **Code in global scope.** It is permissible to place executable code outside a code block (e.g., `print("Hello!"); printflush(message1);` is a valid source code).
+* **Code in global scope.** It is permissible to place executable code outside a code block (e.g., `print("Hello!"); printflush(message1);` is a valid Mindcode program).
 * **Optional variable declarations.** While variables can be explicitly declared, these declarations are optional. When variables aren't declared, they can be used freely in the source code, and their scope is determined by naming convention.
 
 > [!TIP]
-> Using the naming convention to determine variable scopes leads to some constraints on allowed variable names: names of linked blocks generally cannot be used to name any other variable, and upper-case variable names (which are global by convention) cannot be used as function parameters. 
+> Using the naming convention to determine variable scopes leads to some constraints on allowed variable names: names of linked blocks cannot be used to name any other variable, and upper-case variable names (which are global by convention) cannot be used as function parameters. 
 
 ### Strict syntax
 
-> [!NOTE]
-> Strict syntax is currently an experimental feature and its rules might still change.
-
-* **No code in global scope.** Only declarations are allowed in the global scope. All code must be enclosed either in a code block (i.e., between the `begin` and `end` keywords), or in a function.
+* **No code in global scope.** Only declarations are allowed in the global scope. All code must be enclosed either in a [code block](SYNTAX-3-STATEMENTS.markdown#code-blocks) (i.e., between the `begin` and `end` keywords), in an [infinite loop](SYNTAX-3-STATEMENTS.markdown#infinite-loops), or in a function.
 * **Explicit variable declarations.** All variables must be declared before being used, even variables representing linked blocks. The variables are valid in the code block in which they were declared.
 
 > [!TIP]
@@ -158,7 +140,7 @@ Code adhering to the strict syntax produces the same output regardless of the sy
 The requirement to declare variables explicitly helps to identify misspelled variable names, as unknown variable names cause compilation errors, and cases when a single variable is used for multiple different purposes, as repeated variable declarations also cause compilation errors.
 
 > [!TIP]
-> In strict mode, the additional constraints on variable names are not enforced. Variables can be named after linked blocks, and upper-case identifiers can be used for local variables, including function parameters.
+> In strict mode, there are no constraints on variable names. Variables may be named after linked blocks, and upper-case identifiers may be used for local variables, including function parameters.
 
 Example of a code adhering to the strict syntax:
 
@@ -174,7 +156,7 @@ param UNIT_TYPE = @flare;       /// Type of unit to use:
 
 // A global, external variable
 external total = 0;
-var message = findMessage();   // Initialization through function call is possible
+var message = findMessage();   // Initialization through a function call is possible
 
 // All code must be enclosed in a code block or in a function
 begin

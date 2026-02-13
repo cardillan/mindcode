@@ -54,6 +54,53 @@ class WhileLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Nested
+    class InfiniteLoops {
+        @Test
+        void compilesInfiniteLoop() {
+            assertCompilesTo("""
+                            loop
+                                cell1[a++] = cell1[b--];
+                            end;
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(0), ":a"),
+                    createInstruction(OP, "add", ":a", ":a", "1"),
+                    createInstruction(SET, tmp(1), tmp(0)),
+                    createInstruction(SET, tmp(3), ":b"),
+                    createInstruction(OP, "sub", ":b", ":b", "1"),
+                    createInstruction(SET, tmp(4), tmp(3)),
+                    createInstruction(READ, tmp(6), "cell1", tmp(4)),
+                    createInstruction(WRITE, tmp(6), "cell1", tmp(1)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void compilesEmptyInfiniteLoop() {
+            assertCompilesTo("""
+                            loop
+                            end;
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void refusesAssigningLoopsToVariables() {
+            assertGeneratesMessages(expectedMessages()
+                            .addRegex("Parse error: .*").atLeast(1),
+                    """
+                            a = loop print("Hello"); end;
+                            """);
+        }
+    }
+
+    @Nested
     class WhileLoops {
         @Test
         void compilesWhileLoop() {

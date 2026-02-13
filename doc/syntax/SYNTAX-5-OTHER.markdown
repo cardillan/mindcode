@@ -155,7 +155,7 @@ In the past, Mindustry processor behavior has been inconsistent when assigning `
 
 **Option scope: [module](#module-scope)**
 
-Use the `target` option to specify the Mindcode/Mindustry Logic version and the processor type to be used by the compiler and processor emulator. Compiler will generate code compatible with the selected processor version and type, and both the compiler and processor emulator recognize Mindustry objects, built-in variables and other elements available in a given Mindustry Logic version.
+Use the `target` option to specify the Mindcode/Mindustry Logic version and the processor type to be used by the compiler and processor emulator. Compiler will generate code compatible with the selected processor version and type, and both the compiler and processor emulator recognize Mindustry objects, built-in variables and other elements available in a given Mindustry Logic version. The default value is `7m`.
 
 The target versions consist of a major and minor version number. As of now, these versions exist:
 
@@ -176,7 +176,7 @@ The target can be set using either just a major or both major and minor version 
 
 The processor type is specified by appending a one-letter suffix to the version number:
 
-* `m` or `M` for micro-processor (the default when not specified),
+* `m` or `M` for micro-processor,
 * `l` or `L` for logic-processor,
 * `h` or `H` for hyper-processor,
 * `w` or `W` for world-processor.
@@ -186,11 +186,20 @@ The processor type is specified by appending a one-letter suffix to the version 
 #set target = 8L;     // Logic-processor, version 8
 ```
 
-Note that when the Mindcode is compiled to configure a schematic-defined processor when building a schematic, the processor type is taken from the schematic definition and the target version is ignored. A warning is emitted   
+When no processor type is specified (e.g., `#set target = 8;`), the code is compiled for a non-processor context. At this moment, the non-processor contexts exist in the Mindustry 8 version only:
+
+* a logic filter in the map generation screen,
+* a logic code run on Map Objective completion.
+
+Some optimizations are avoided for the non-processor context, as the code might not naturally loop in such a context, and [atomic sections](REMOTE-CALLS.markdown#atomic-sections) are unavailable completely – there's no support for the `wait` instruction, and the entire code effectively runs atomically anyway. 
+
+Note that when the Mindcode is compiled to configure a schematic-defined processor when building a schematic, the processor type is taken from the schematic definition and the target version is ignored. When the processor type specified by the `target` option is more powerful than the processor type specified in the schematic definition (e.g., the code specifies a world processor, but the schematic specifies a logic processor), an error is produced. A non-processor context is compatible with any processor type specified by the schematic.
 
 #### Module targets
 
 Option `target`, when set within a module, specifies the target supported by the module. If the global `target` setting isn't compatible with the target specified by the module, a compilation error occurs with a message 'Module target \<target\> is incompatible with global target \<target\>.'
+
+The processor type specified by the global option must be stronger than or equal to the processor type specified by the module option. When the module doesn't specify any processor type, the processor type specified by the global option is used.
 
 Target compatibility matrix:
 

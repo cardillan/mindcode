@@ -394,7 +394,7 @@ end;
 
 ## Infinite Loops
 
-It is possible to easily create infinite loops using the `loop` keyword. The main advantage is that the infinite loop can be used in the global scope even with strict syntax. This allows easily creating programs that have an initialization part and a main part which loops indefinitely, as is usual in mlog programs:
+It is possible to easily create infinite loops using the `loop` keyword. The main advantage is that the infinite loop can be used in the global scope even with strict syntax. This supports easy creation of programs that have an initialization part and a main part which loops indefinitely, which is often the case in mlog programs:
 
 ```Mindcode
 #set syntax = strict;
@@ -563,6 +563,8 @@ end;
 
 Variables declared in a code block are local to the code block.
 
+In the strict syntax mode, executable code needs to be enclosed in a code block, a function, or an infinite loop.
+
 # Break and continue
 
 You can use a `break` or `continue` statement inside a loop in the usual sense (`break` exits the loop, `continue` skips the rest of the current iteration):
@@ -623,16 +625,19 @@ MainBlock: begin
 end;
 ```
 
+> [!NOTE]
+> The `break` statement used without a label can break only out of loops, never out of a code block.
+
 ## Implicit labels
 
-The keyword that opens a loop (that is, `do`, `for`, `loop` and `while`) or a code block (`atomic`, `begin` and `debug`) can be used as a label in `break` and `continue` statements, assuming that an explicit label hasn't been assigned to the loop or code block. This implicit label can be used only when its use is unambiguous, meaning that only one instance of the loop or code block is active at that point in the program. For example:
+The keyword that opens a loop (that is, `do`, `for`, `loop` and `while`) or a code block (`atomic`, `begin` and `debug`) can be used as a label in `break` and `continue` statements, assuming that an explicit label hasn't been assigned to the loop or code block. This implicit label can be used only when its use is unambiguous, meaning that only one instance of a matching loop or code block is active at that point in the program. For example:
 
 ```Mindcode
 for i in 0 ... 10 do
     j = ceil(rand(100));
     while j > 0 do
         if j * i < 10 then
-            break for;
+            break for;      // Breaks the outer loop
         end;
         j--;
     end;
@@ -649,7 +654,7 @@ for i in 0 ... 10 do
     for j in 0 ... 10 do
         println(i, ", ", j);
         if i * j > 75 then
-            break for;          /// Error: ambiguous label 'for'
+            break for;          // Error: the label 'for' is ambiguous here
         end;
     end;
 end;
