@@ -121,6 +121,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Mindcode: Schematics editor</title>
+</svelte:head>
+
 <div class="container mx-auto flex flex-1 flex-col gap-4 overflow-hidden px-4 py-4">
 	<!-- Samples -->
 	<Card.Root class="shrink-0">

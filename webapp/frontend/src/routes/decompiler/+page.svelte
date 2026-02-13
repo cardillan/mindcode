@@ -94,6 +94,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Mindcode: Mlog decompiler</title>
+</svelte:head>
+
 <div class="container mx-auto flex flex-col gap-4 px-4 py-4">
 	<!-- Info Card -->
 	<Card.Root class="shrink-0 border-dashed bg-muted/50">
