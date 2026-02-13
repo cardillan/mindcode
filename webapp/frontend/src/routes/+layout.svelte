@@ -2,9 +2,14 @@
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { page } from '$app/state';
-	import { goto } from '$app/navigation';
 	import * as Select from '$lib/components/ui/select';
 	import { setThemeContext } from '$lib/stores.svelte.js';
+
+	interface Tool {
+		value: string;
+		label: string;
+		path: string;
+	}
 
 	let { children, data } = $props();
 
@@ -16,10 +21,10 @@
 		if (currentPath === '/decompiler') return 'decompiler';
 		if (currentPath === '/schematics') return 'schematics';
 		if (currentPath === '/schematics/decompiler') return 'schematics-decompiler';
-		return 'compiler';
+		return '';
 	});
 
-	const tools = [
+	const tools: Tool[] = [
 		{ value: 'compiler', label: 'Mindcode Compiler', path: '/' },
 		{ value: 'decompiler', label: 'Mlog Decompiler', path: '/decompiler' },
 		{ value: 'schematics', label: 'Schematics Builder', path: '/schematics' },
@@ -29,14 +34,6 @@
 			path: '/schematics/decompiler'
 		}
 	];
-
-	function handleToolChange(value: string | undefined) {
-		if (!value) return;
-		const tool = tools.find((t) => t.value === value);
-		if (tool) {
-			goto(tool.path);
-		}
-	}
 
 	setThemeContext();
 </script>
@@ -49,13 +46,15 @@
 			<div class="flex items-center gap-4">
 				<h1 class="text-xl font-bold md:text-2xl">Mindcode</h1>
 
-				<Select.Root type="single" bind:value={() => currentTool, handleToolChange}>
+				<Select.Root type="single" value={currentTool}>
 					<Select.Trigger class="w-50 md:w-62.5">
 						{tools.find((t) => t.value === currentTool)?.label || 'Select tool...'}
 					</Select.Trigger>
 					<Select.Content>
 						{#each tools as tool}
-							<Select.Item value={tool.value}>{tool.label}</Select.Item>
+							<a href={tool.path}>
+								<Select.Item value={tool.value}>{tool.label}</Select.Item>
+							</a>
 						{/each}
 					</Select.Content>
 				</Select.Root>
