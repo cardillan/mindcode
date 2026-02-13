@@ -100,6 +100,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Mindcode: Schematics decompiler</title>
+</svelte:head>
+
 <div class="container mx-auto flex flex-col gap-4 overflow-hidden px-4 py-4">
 	<Card.Root class="shrink-0 border-dashed bg-muted/50">
 		<Card.Content class="p-4 text-sm">
