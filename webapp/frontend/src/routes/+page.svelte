@@ -145,6 +145,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Mindcode: a Mindustry Logic high-level language</title>
+</svelte:head>
+
 <div class="container mx-auto flex flex-col gap-4 px-4 py-4">
 	<!-- Control Bar (Desktop) -->
 	<div class="hidden shrink-0 md:block">
