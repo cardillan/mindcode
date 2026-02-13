@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
 	import { EditorView } from 'codemirror';
-	import { Code, Play } from '@lucide/svelte';
+	import { Code, Play, Trash2 } from '@lucide/svelte';
 
 	import * as Card from '$lib/components/ui/card';
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
@@ -19,7 +19,7 @@
 	import { jumpToRange, updateEditor } from '$lib/codemirror';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
-	import { Button } from '$lib/components/ui/button';
+	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
 
 	const theme = getThemeContext();
 	const mlogEditor = new EditorStore(theme, (parent, baseExtensions) => {
@@ -119,7 +119,6 @@
 				{ label: 'Decompile', onclick: () => handleDecompile(false), icon: Code },
 				{ label: 'Decompile and Run', onclick: () => handleDecompile(true), icon: Play }
 			]}
-			secondaryActions={[{ label: 'Erase mlog', onclick: cleanEditors, variant: 'outline' }]}
 			loading={localSource.isLoading || loadingAction !== null}
 		>
 			<TargetPicker {compilerTarget} />
@@ -129,14 +128,6 @@
 	<!-- Mobile: Settings -->
 	<div class="flex shrink-0 items-center gap-2 md:hidden">
 		<TargetPicker {compilerTarget} />
-		<div class="flex-1"></div>
-		<Button
-			variant="outline"
-			onclick={cleanEditors}
-			disabled={localSource.isLoading || loadingAction !== null}
-		>
-			Erase schemacode
-		</Button>
 	</div>
 
 	<!-- Editor Layout -->
@@ -151,7 +142,13 @@
 		{warnings}
 		{infos}
 		onJumpToPosition={handleJumpToPosition}
-	/>
+	>
+		{#snippet inputActions()}
+			<EditorActionButton tooltip="Erase mlog" onClick={cleanEditors}>
+				<Trash2 class="size-4" />
+			</EditorActionButton>
+		{/snippet}
+	</EditorLayout>
 
 	<!-- Bottom Action Bar (Mobile) -->
 	<BottomActionBar
