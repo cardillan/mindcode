@@ -3,7 +3,7 @@
 	import { setDiagnostics } from '@codemirror/lint';
 	import { EditorView } from 'codemirror';
 	import { tick, untrack } from 'svelte';
-	import { Play, Code } from '@lucide/svelte';
+	import { Play, Code, Cpu, Trash2 } from '@lucide/svelte';
 
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
 	import ControlBar from '$lib/components/ControlBar.svelte';
@@ -29,7 +29,7 @@
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import { Compartment } from '@codemirror/state';
 	import SamplePicker from '$lib/components/SamplePicker.svelte';
-	import { Button } from '$lib/components/ui/button';
+	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
 
 	let { data }: PageProps = $props();
 
@@ -153,7 +153,6 @@
 				{ label: 'Compile', onclick: () => compile(false), icon: Code },
 				{ label: 'Compile and Run', onclick: () => compile(true), icon: Play }
 			]}
-			secondaryActions={[{ label: 'Erase mindcode', onclick: cleanEditors, variant: 'outline' }]}
 			loading={localSource.isLoading || loadingAction !== null}
 		>
 			<TargetPicker {compilerTarget} />
@@ -173,14 +172,6 @@
 			onSelect={selectSample}
 			disabled={localSource.isLoading || loadingAction !== null}
 		/>
-		<div class="flex-1"></div>
-		<Button
-			variant="outline"
-			onclick={cleanEditors}
-			disabled={localSource.isLoading || loadingAction !== null}
-		>
-			Erase mindcode
-		</Button>
 	</div>
 
 	<!-- Editor Layout -->
@@ -195,7 +186,18 @@
 		{warnings}
 		{infos}
 		onJumpToPosition={handleJumpToPosition}
-	/>
+	>
+		{#snippet inputActions()}
+			<EditorActionButton tooltip="Erase mindcode" onClick={cleanEditors}>
+				<Trash2 class="size-4" />
+			</EditorActionButton>
+		{/snippet}
+		{#snippet outputActions()}
+			<EditorActionButton tooltip="Send to MlogWatcher">
+				<Cpu class="size-4" />
+			</EditorActionButton>
+		{/snippet}
+	</EditorLayout>
 
 	<!-- Bottom Action Bar (Mobile) -->
 	<BottomActionBar

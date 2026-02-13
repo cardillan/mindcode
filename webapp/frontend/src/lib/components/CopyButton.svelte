@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CopyIcon, CheckIcon } from '@lucide/svelte';
-	import { Button } from '$lib/components/ui/button';
+	import EditorActionButton from './EditorActionButton.svelte';
 
 	let {
 		getText,
@@ -24,18 +24,17 @@
 	}
 </script>
 
-<Button
-	variant="outline"
-	size="icon"
+<EditorActionButton
+	onClick={handleCopy}
+	tooltip={copied ? 'Copied!' : 'Copy to clipboard'}
 	class={[
 		floating && 'absolute top-2 right-2 z-10 h-8 gap-1.5 opacity-80 hover:opacity-100',
 		className
 	]}
-	onclick={handleCopy}
 >
 	{#if copied}
-		<CheckIcon class="h-4 w-4" />
+		<CheckIcon class="wrap size-4" />
 	{:else}
-		<CopyIcon class="h-4 w-4" />
+		<CopyIcon class="size-4" />
 	{/if}
-</Button>
+</EditorActionButton>

@@ -7,6 +7,8 @@
 	import EditorLayoutTabs from './EditorLayoutTabs.svelte';
 	import { TabsTrigger } from './ui/tabs';
 	import TabsContent from './ui/tabs/tabs-content.svelte';
+	import * as ButtonGroup from './ui/button-group';
+	import type { Snippet } from 'svelte';
 
 	let {
 		inputLabel,
@@ -18,7 +20,9 @@
 		errors = [],
 		warnings = [],
 		infos = [],
-		onJumpToPosition
+		onJumpToPosition,
+		inputActions,
+		outputActions
 	}: {
 		inputLabel: string;
 		inputEditor: EditorStore;
@@ -30,6 +34,8 @@
 		warnings?: CompileResponseMessage[];
 		infos?: CompileResponseMessage[];
 		onJumpToPosition?: (range: SourceRange) => void;
+		inputActions?: Snippet;
+		outputActions?: Snippet;
 	} = $props();
 
 	let fullscreen = $state<'input' | 'output' | null>(null);
@@ -70,11 +76,17 @@
 				<TabsContent value="code" class="h-full">
 					<div
 						class={[
-							'h-full rounded-md border bg-muted transition-opacity',
+							'relative h-full transition-opacity ',
 							inputLoading && 'pointer-events-none opacity-50'
 						]}
-						{@attach inputEditor.attach}
-					></div>
+					>
+						<div class="h-full rounded-md border bg-muted" {@attach inputEditor.attach}></div>
+						{#if inputActions}
+							<ButtonGroup.Root class="absolute top-2 right-2 z-10 opacity-60 hover:opacity-100">
+								{@render inputActions()}
+							</ButtonGroup.Root>
+						{/if}
+					</div>
 				</TabsContent>
 			</EditorLayoutTabs>
 
@@ -109,8 +121,11 @@
 						outputLoading && 'pointer-events-none opacity-50'
 					]}
 				>
-					<CopyButton floating getText={() => outputEditor.view?.state.doc.toString() ?? ''} />
 					<div class="h-full rounded-md border bg-muted" {@attach outputEditor.attach}></div>
+					<ButtonGroup.Root class="absolute top-2 right-2 z-10 opacity-60 hover:opacity-100">
+						{@render outputActions?.()}
+						<CopyButton getText={() => outputEditor.view?.state.doc.toString() ?? ''} />
+					</ButtonGroup.Root>
 				</div>
 			{/snippet}
 		</TabsOutput>

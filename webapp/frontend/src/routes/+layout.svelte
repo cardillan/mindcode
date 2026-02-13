@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import * as Select from '$lib/components/ui/select';
 	import { setThemeContext } from '$lib/stores.svelte.js';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 
 	interface Tool {
 		value: string;
@@ -63,7 +64,9 @@
 	</header>
 
 	<main class="flex-1">
-		{@render children()}
+		<Tooltip.Provider>
+			{@render children()}
+		</Tooltip.Provider>
 	</main>
 
 	<footer class="mt-8 shrink-0 border-t bg-card">

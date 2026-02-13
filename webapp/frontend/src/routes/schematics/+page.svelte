@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { EditorView } from 'codemirror';
 	import { tick, untrack } from 'svelte';
-	import { Code, Play } from '@lucide/svelte';
+	import { Code, Cpu, Play, Trash2 } from '@lucide/svelte';
 
 	import * as Card from '$lib/components/ui/card';
 	import {
@@ -28,7 +28,7 @@
 	import SamplePicker from '$lib/components/SamplePicker.svelte';
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
-	import { Button } from '$lib/components/ui/button';
+	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
@@ -145,7 +145,6 @@
 				{ label: 'Build', onclick: () => handleBuild(false), icon: Code },
 				{ label: 'Build and Run', onclick: () => handleBuild(true), icon: Play }
 			]}
-			secondaryActions={[{ label: 'Erase schemacode', onclick: cleanEditors, variant: 'outline' }]}
 			loading={localSource.isLoading || loadingAction !== null}
 		>
 			<TargetPicker {compilerTarget} />
@@ -165,14 +164,6 @@
 			onSelect={selectSample}
 			disabled={localSource.isLoading || loadingAction !== null}
 		/>
-		<div class="flex-1"></div>
-		<Button
-			variant="outline"
-			onclick={cleanEditors}
-			disabled={localSource.isLoading || loadingAction !== null}
-		>
-			Erase schemacode
-		</Button>
 	</div>
 
 	<EditorLayout
@@ -186,7 +177,18 @@
 		{warnings}
 		{infos}
 		onJumpToPosition={handleJumpToPosition}
-	/>
+	>
+		{#snippet inputActions()}
+			<EditorActionButton tooltip="Erase schemacode" onClick={cleanEditors}>
+				<Trash2 class="size-4" />
+			</EditorActionButton>
+		{/snippet}
+		{#snippet outputActions()}
+			<EditorActionButton tooltip="Send to MlogWatcher">
+				<Cpu class="size-4" />
+			</EditorActionButton>
+		{/snippet}
+	</EditorLayout>
 
 	<!-- Bottom Action Bar (Mobile) -->
 	<BottomActionBar
