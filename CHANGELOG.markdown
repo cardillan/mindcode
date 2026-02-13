@@ -20,6 +20,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
+* The web application has been completely overhauled. The highlights of the new web app are:
+  * Modern, mobile-friendly design.
+  * The compilation happens without page refresh, meaning the edit history of the code is not lost on compilation. It is also possible to undo (`Ctrl-Z`) the action of loading an example code or clearing the editor.
+  * Syntax highlighting in the editor. All syntaxes (Mindcode including mlog blocks, Schemacode) are supported.
+  * Indicating syntax errors from the last compilation directly in the editor.
+  * Support for running schematics and generic mlog code on the built-in processor emulator. 
 * **Breaking**: Changed the meaning of the [`target` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target): when no processor type is specified, the compiler generates the code for a non-processor context. Privileged instructions are supported, but atomic sections and waits aren't.  
 
 ## 3.14.0 – 2026-02-08
@@ -702,7 +708,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Added
 
-* Added [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords) as a preferred way to specify mlog keywords to Logic functions ([#215](https://github.com/cardillan/mindcode/issues/215)).
+* Added [mlog keywords](doc/syntax/SYNTAX-0-BASICS.markdown#mlog-keywords) as a preferred way to specify mlog keywords to Logic functions ([#215](https://github.com/cardillan/mindcode/issues/215)).
 * Added support for passing mlog keywords and formattable string literals as arguments to inline functions.
 * Added support for creating constants out of mlog keywords.
 * Added known mlog keywords to the file type definitions of the [provided IntelliJ IDEA IDE settings](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea).
@@ -746,7 +752,7 @@ The newly added features are fully functional. There's an unfinished support for
 * Added support for [internal and external arrays/subarrays](doc/syntax/SYNTAX-1-VARIABLES.markdown#arrays) (closes [#213](https://github.com/cardillan/mindcode/issues/213)).
 * Added parallel iteration through arrays/lists in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops).
 * Added support for the new `printchar` instruction in compiler, optimizer, and processor emulator.
-* Added [character literals](doc/syntax/SYNTAX.markdown#character-literals) (e.g., `'A'`). The value of the literal is the ASCII value of the character in quotes.
+* Added [character literals](doc/syntax/SYNTAX-0-BASICS.markdown#character-literals) (e.g., `'A'`). The value of the literal is the ASCII value of the character in quotes.
 * Added the [`ascii()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-ascii-function). The function takes a string literal or constant and returns the ASCII value of its first character.
 * Added the possibility to specify storage different from the heap when declaring external variables.
 
@@ -1104,7 +1110,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 * Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](doc/syntax/TOOLS-CMDLINE.markdown#running-mlog-code-or-schematics). The output is shown in a separate control in the web app or written to the log when using the command line tool.
 * Added a capability to the command line tool to compile several source files at once using the [`--append` command line argument](doc/syntax/TOOLS-CMDLINE.markdown#additional-input-files).
 * Added new optimization level, `experimental`. When using this setting, the [Data Flow optimizer](doc/syntax/optimizations/DATA-FLOW-OPTIMIZATION.markdown) doesn't assume the assignments to global variables might be changed by editing the compiled code, allowing performing more optimizations on them. Program parameters must be used instead of global variables for program parametrization if this optimization level is used.
-* Added [formattable string literals](doc/syntax/SYNTAX.markdown#formattable-string-literals), which allow formatting outputs of the `print` and `println` functions the same way as `printf` does.
+* Added [formattable string literals](doc/syntax/SYNTAX-0-BASICS.markdown#formattable-string-literals), which allow formatting outputs of the `print` and `println` functions the same way as `printf` does.
 * Added [enhanced comments](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#enhanced-comments), an alternative way to enter remarks.
 * Added new [`sort-variables` compiler directive](doc/syntax/SYNTAX-5-OTHER.markdown#option-sort-variables) which ensures that user variables will be accessed in a well-defined order, to make inspecting the variables in the Mindustry processors **Vars** screen easier.
 * Added generation of signature at the end of the compiled code. The signature is a `print` instruction (which is not executed) with the text `Compiled by Mindcode - github.com/cardillan/mindcode`. The signature is not added should the instruction limit be exceeded or when the program doesn't naturally end in an unconditional jump. Adding the signature can be disabled in the command line tool by the `--no-signature` command line argument.
@@ -1762,7 +1768,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 ### Changed
 
 * Changed [`ubind` function](doc/syntax/FUNCTIONS-70.markdown#instruction-unit-bind) to return the freshly bound unit.
-* Changed [encoding of numeric values to mlog](doc/syntax/SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic).
+* Changed [encoding of numeric values to mlog](doc/syntax/SYNTAX-0-BASICS.markdown#specifics-of-numeric-literals-in-mindustry-logic).
 
 ### Fixed
 
@@ -1774,10 +1780,10 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Added
 
-* Added support for using [binary numeric literals](doc/syntax/SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic)
+* Added support for using [binary numeric literals](doc/syntax/SYNTAX-0-BASICS.markdown#specifics-of-numeric-literals-in-mindustry-logic)
   (e.g., `0b00101`) in a Mindcode source code.
 * Added support for using
-  [scientific notation in numeric literals](doc/syntax/SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic)
+  [scientific notation in numeric literals](doc/syntax/SYNTAX-0-BASICS.markdown#specifics-of-numeric-literals-in-mindustry-logic)
   in a Mindcode source code. Literals compatible with mlog are kept unchanged, literals unrecognized by mlog (e.g., `1.5e-5`)
   are converted to mlog-compatible representation (in this case, `15e-6`).
 * Added [simple expression optimizer](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown).

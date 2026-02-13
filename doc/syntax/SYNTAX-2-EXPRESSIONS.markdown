@@ -260,7 +260,7 @@ for i in 1 .. TOTAL do
 end;
 ```
 
-Compile-time string concatenation isn't supported for [formattable string literals](SYNTAX.markdown#formattable-string-literals).
+Compile-time string concatenation isn't supported for [formattable string literals](SYNTAX-0-BASICS.markdown#formattable-string-literals).
 
 ## Shift operators
 
@@ -520,7 +520,7 @@ Furthermore, expressions that contain some constant subexpressions (e.g., `ticks
 
 ## Constant expressions in Mindustry Logic 7 and earlier
 
-If the result of a constant expression is a value that [cannot be encoded into an mlog literal](SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic), the expression isn't evaluated at compile time, but rather computed at runtime. If the resulting value can only be encoded to mlog with loss of precision, the expression isn't evaluated at compile time, unless the value is assigned to a constant or program parameter. In such a case, a warning is issued.   
+If the result of a constant expression is a value that [cannot be encoded into an mlog literal](SYNTAX-0-BASICS.markdown#specifics-of-numeric-literals-in-mindustry-logic), the expression isn't evaluated at compile time, but rather computed at runtime. If the resulting value can only be encoded to mlog with loss of precision, the expression isn't evaluated at compile time, unless the value is assigned to a constant or program parameter. In such a case, a warning is issued.   
 
 When evaluating expressions, it isn't required that all the intermediate values can also be encoded to mlog, just the final ones:
 

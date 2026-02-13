@@ -29,7 +29,7 @@ All numeric values, both integer and floating-point, are stored as `double`, a 6
 >
 > While `long` values are able to keep 64 bits, `double` values only hold 53 significant bits of precision. Processor variables are therefore limited to 53 significant bits after integer conversion. When an integer operation produces a number between 2<sup>53</sup> and 2<sup>63</sup>-1, the result is rounded to the closest double representation for storage in a processor variable. This rounding during a _double conversion_ on a number exceeding the safe integer range (i.e., outside the -2<sup>53</sup> to 2<sup>53</sup> range) may destroy information stored in individual bits of the number's integer representation.
 >
-> Every intermediate result during expression evaluation is stored in a processor variable, so the integer/double conversion may happen at every step of computation in mlog.
+> Every intermediate result during expression evaluation is stored in a processor variable, so the integer/double conversion may happen at every step of an mlog computation.
 
 Producing integer numbers this large would be somewhat unusual in a typical Mindustry Logic program, except using bitwise operations to manipulate individual bits. In these cases, make sure to use at most 53 bits of each variable. Using 54 bits is not safe, because performing bitwise complement (operation inverting all bits) on values larger than 2<sup>53</sup>-1 may lead to loss of precision as well.
  
@@ -38,7 +38,7 @@ Producing integer numbers this large would be somewhat unusual in a typical Mind
 Linked blocks provide the most basic means for a processor to interact with blocks (i.e., buildings) in the Mindustry World. When a block is linked to a processor, a special, read-only variable which represents the linked block is created in the processor. The variable name is created using a base block name, i.e., the one-word representation of the block type name (e.g., `battery` for `@battery-large` or `cell` for `@memory-cell`) and a unique number starting from one.
 
 > [!IMPORTANT]
-> Logic processors silently ignore assignments to variables representing linked blocks. If a processor variable with the same name as a newly linked block exists in a processor when the block is linked, it is removed from the processor and replaced by a processor variable representing the linked block. 
+> Logic processors silently ignore assignments to variables representing linked blocks. When a processor variable with the same name as a newly linked block exists in a processor when the block is linked, it is removed from the processor and replaced by a processor variable representing the linked block. 
 
 Since linked blocks are present as special processor variables, Mindcode makes sure to handle these variables correctly, depending on a list of known base block names. Any variable name consisting of a base block name and a positive integer may potentially represent linked blocks.
 
@@ -190,7 +190,7 @@ Only numeric values are supported by memory block elements. When the program att
 
 # Mindcode variables
 
-Depending on the [syntax mode](SYNTAX.markdown#syntax-modes), variables are created either through explicit variable declarations or through using them in the source code.
+Depending on the [syntax mode](SYNTAX-0-BASICS.markdown#syntax-modes), variables are created either through explicit variable declarations or through using them in the source code.
 
 > [!NOTE]
 > Variables created using a declaration are called 'explicit' or 'declared' variables. Variables used in the code without prior declaration are called 'implicit' variables.
@@ -227,16 +227,16 @@ Variables are limited to a certain scope and are considered nonexistent outside 
 * Global: encompasses the entire program. Global variables are generally accessible from anywhere in the program.
 * Main: encompasses the main program body. The main program body generally consists of all code outside user-defined functions.  
 * Local: encompasses a single user-defined function. Function parameters are also local to their function. 
-* Code block: encompasses a single body of statement, e.g., body of a while loop, a branch of the else statement, or an explicitly marked code block. If a code block contains nested code blocks, the scope of the outer block includes all inner blocks. 
+* Code block: encompasses a single body of statement, e.g., body of a while loop, a branch of the else statement, or an explicitly marked code block. If a code block contains nested code block(s), variables from an outer block are available in the inner block(s). 
 
 ## Implicit variables
 
-Implicit variables are only supported in the [`relaxed` syntax](SYNTAX.markdown#syntax-modes) , and are created when first encountered in the code. The kind and scope of the variable is determined by the name of the variable:
+Implicit variables are only supported in the [`relaxed` syntax](SYNTAX-0-BASICS.markdown#syntax-modes) , and are created when first encountered in the code. The kind and scope of the variable is determined by the name of the variable:
 
-* **Linked variables**: if the variable name corresponds to a known linked block, it is automatically regarded as a linked variable referring to that block, and its scope is global (e.g., `cell1` or `switch2`). To use a linked block not recognized by Mindcode (e.g., a block provided by a mod extension), an explicit declaration is required. 
-* **External variables**: if the variable name starts with the `$` prefix, the variable is external, residing in a common external memory pool (a _heap_). Scope of external variables is global (e.g., `$Total`). See [Heap](#heap) for information on heap declaration.
-* **Global variables**: if the variable name doesn't contain lowercase characters, it is a regular variable in the global scope (e.g., `COUNT`).
-* **Main/local variables**: if the variable name contains at least one lowercase character, it is a regular variable in either the main (if used outside a function) or local (if used within a function) scope (e.g., `unitType`).
+* **Linked variables**: if the variable name corresponds to a known linked block (e.g., `cell1` or `switch2`), it is automatically regarded as a linked variable referring to that block, and its scope is global. To use a linked block not recognized by Mindcode (e.g., a block provided by a mod extension), an explicit declaration is required. 
+* **External variables**: if the variable name starts with the `$` prefix (e.g., `$Total`), the variable is external, residing in a common external memory pool (a _heap_). Scope of external variables is global. See [Heap](#heap) for information on heap declaration.
+* **Global variables**: if the variable name doesn't contain lowercase characters (e.g., `COUNT`), it is a regular variable in the global scope.
+* **Main/local variables**: if the variable name contains at least one lowercase character (e.g., `unitType`), it is a regular variable in either the main (if used outside a function) or local (if used within a function) scope.
 
 An example code using implicit variables:
 
@@ -322,7 +322,10 @@ As implicit arrays are stored in memory blocks, they can only hold numeric value
 
 ## External arrays
 
-External arrays are explicitly declared and are allocated on the [heap](#heap) similarly to other external variables. The array size is specified when declaring the array, but Mindcode again doesn't check bounds when accessing external arrays in any way. Accessing an element outside the bounds of an external array may cause other elements or variables stored on the heap to be accessed instead. 
+External arrays are explicitly declared and are allocated on the [heap](#heap) similarly to other external variables. The array size is specified when declaring the array. 
+Accessing an element outside the bounds of an external array may cause other elements or variables stored on the heap to be accessed instead.
+
+When the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) is set to some other value than `none`, Mindcode generates runtime checks using the metod specified by the compiler option to detect out-of-bounds array accesses.
 
 As external arrays are stored in memory blocks, they can only hold numeric values.
 
@@ -330,7 +333,9 @@ As external arrays are stored in memory blocks, they can only hold numeric value
 
 Mindustry Logic doesn't provide a specialized mechanism for creating arrays out of internal variables. However, it is possible to create a reasonably efficient implementation of random access arrays using _`@counter` arrays_, named as such since accessing an element of such arrays involves manipulating the `@counter` variable. Individual elements of such arrays are stored in processor variables (one variable per array element), and therefore can hold non-numerical values as well, such as unit or block references, items, liquids, strings, and so on.
 
-Accessing individual elements of internal arrays is slower than accessing elements of external arrays and consumes additional instruction space for `@counter` tables. However, when Mindcode is able to resolve the index during compilation to a numeric value, the variable corresponding to the element is accessed directly, providing performance which can be even better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g., when unrolling all loops in the program), the `@counter` tables might be eliminated entirely, keeping only the individual element variables in the resulting code.
+When the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) is set to some other value than `none`, Mindcode generates runtime checks using the metod specified by the compiler option to detect out-of-bounds array accesses.
+
+Accessing individual elements of internal arrays is slower than accessing elements of external arrays and consumes additional instruction space for `@counter` tables. However, when Mindcode is able to resolve the index during compilation to a numeric value, the variable corresponding to the element is accessed directly, with a performance better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g., when unrolling all loops in the program), the `@counter` tables might be eliminated entirely, keeping only the individual element variables in the resulting code.
 
 Several different implementations of internal arrays are available in target 8 or higher, some of them may perform better than normal `@counter` tables available in Mindustry 7. The [Array Optimization](optimizations/ARRAY-OPTIMIZATION.markdown) chooses the most efficient implementation for each array or individual array access. 
 
@@ -589,7 +594,7 @@ const links[] = (switch1, switch2, switch3);
 
 Compile-time evaluation uses the same rules as Mindustry Logic, i.e., `const ERROR = 1 / 0` is a valid constant declaration which creates a constant `ERROR` with a value of `null`.
 
-If a numeric value is assigned to a constant, and it isn't possible to [encode the value into an mlog literal](SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic), a compilation error occurs.
+If a numeric value is assigned to a constant, and it isn't possible to [encode the value into an mlog literal](SYNTAX-0-BASICS.markdown#specifics-of-numeric-literals-in-mindustry-logic), a compilation error occurs.
 
 Among other uses, constants can be used to optionally exclude sections of code while compiling:
 
@@ -1589,7 +1594,7 @@ Program parameters must be declared in global scope and are therefore always glo
 * linked blocks,
 * built-in variables, except built-in variables known not to be constant.
 
-If a numeric value is assigned to a parameter, and it isn't possible to [encode the value into an mlog literal](SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic), a compilation error occurs.
+If a numeric value is assigned to a parameter, and it isn't possible to [encode the value into an mlog literal](SYNTAX-0-BASICS.markdown#specifics-of-numeric-literals-in-mindustry-logic), a compilation error occurs.
 
 > [!TIP]
 > Even in strict syntax mode, linked blocks can be assigned to a program parameter without prior declaration.
@@ -1706,4 +1711,4 @@ end
 
 ---
 
-[Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Expressions &#xBB;](SYNTAX-2-EXPRESSIONS.markdown)
+[&#xAB; Previous: Mindcode Basics](SYNTAX-0-BASICS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Expressions &#xBB;](SYNTAX-2-EXPRESSIONS.markdown)

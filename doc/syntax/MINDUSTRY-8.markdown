@@ -207,7 +207,7 @@ format :amount
 printflush message1
 ```
 
-To make using the `printchar()` function easier, [character literals](SYNTAX.markdown#character-literals) were added to Mindcode. 
+To make using the `printchar()` function easier, [character literals](SYNTAX-0-BASICS.markdown#character-literals) were added to Mindcode. 
 
 ## `select` instruction
 

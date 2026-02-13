@@ -793,7 +793,7 @@ An alternative way to specify the processor speed is the [`ipt` compiler option]
 
 **Option scope: [module](#module-scope)**
 
-Chooses the [syntax mode](SYNTAX.markdown#syntax-modes) to be used for compilation. Possible values are:
+Chooses the [syntax mode](SYNTAX-0-BASICS.markdown#syntax-modes) to be used for compilation. Possible values are:
 
 * `relaxed` (the default value): useful for shorter scripts, as it requires less boilerplate code.
 * `strict`: useful for larger projects, as it enforces additional rules designed to make source code more maintainable.

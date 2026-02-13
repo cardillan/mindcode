@@ -30,7 +30,7 @@ The `--excerpt` option is applied only to the main input file, not to the files 
 
 When performing the _Compile Mindcode_ action, it is possible to use the `-a` or `--append` command line parameter to specify additional source files to be compiled along with the input file. The source files are parsed separately, and error messages that may be generated during the compilation include the name of the file where the error occurred.
 
-The `--append` command-line option has the same effect as the [`require` statement](SYNTAX.markdown#libraries-and-external-files).
+The `--append` command-line option has the same effect as the [`require` statement](SYNTAX-0-BASICS.markdown#libraries-and-external-files).
 
 ## Log file
 

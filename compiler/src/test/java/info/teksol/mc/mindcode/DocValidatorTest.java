@@ -50,6 +50,7 @@ public class DocValidatorTest extends AbstractTestBase {
     private static final String EMULATOR_FILE = SYNTAX_REL_PATH + "TOOLS-PROCESSOR-EMULATOR.markdown";
 
     private static final String[] MAIN_SEQUENCE = {
+            "SYNTAX-0-BASICS.markdown",
             "SYNTAX-1-VARIABLES.markdown",
             "SYNTAX-2-EXPRESSIONS.markdown",
             "SYNTAX-3-STATEMENTS.markdown",
