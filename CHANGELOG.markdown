@@ -26,7 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * Syntax highlighting in the editor. All syntaxes (Mindcode including mlog blocks, Schemacode) are supported.
   * Indicating syntax errors from the last compilation directly in the editor.
   * Support for running schematics and generic mlog code on the built-in processor emulator. 
-* **Breaking**: Changed the meaning of the [`target` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target): when no processor type is specified, the compiler generates the code for a non-processor context. Privileged instructions are supported, but atomic sections and waits aren't.  
+* **Breaking**: Changed the meaning of the [`target` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target): when no processor type is specified, the compiler generates the code for a non-processor context. Privileged instructions are supported, but atomic sections and waits aren't.
 
 ## 3.14.0 – 2026-02-08
 

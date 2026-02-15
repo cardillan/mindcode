@@ -197,7 +197,7 @@ Apart from the `printf()`, Mindcode supports a new `format()` function, which ju
 
 ## Remarks
 
-The `remark()` function has the same syntax as the `print()` function and supports both the plain text output and compile-time formatting modes just like the `print()` function does. It also produces `print` instructions, but the way these instructions are generated into the code can be controlled using the [`remarks` option](SYNTAX-5-OTHER.markdown#option-remarks):
+The `remark()` function has the same syntax as the `print()` function and supports both the plain text output and compile-time formatting modes just like the `print()` function does. It msy also produce `print` instructions, but the way these instructions are generated into the code can be controlled using the [`remarks` option](SYNTAX-5-OTHER.markdown#option-remarks):
 
 * `none`: remarks are suppressed in the compiled code—they do not appear there at all.
 * `comments`: remarks are output as mlog comments into the compiled code. Expressions in remarks are output as separate comments with the mlog name of the variable holding the value of the expression.

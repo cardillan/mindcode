@@ -1,6 +1,6 @@
 # Mlog Watcher
 
-Mlog Watcher is a Mindustry mod by [Sharlottes](https://github.com/Sharlottes) which can be found on [GitHub](https://github.com/Sharlottes/MlogWatcher). Thanks to Mlog Watcher, it is possible to automatically send mlog code or shcematic directly to the running game, and even extract mlog code or schematics from the game for processing. This is a much easier and vastly superior way compared to transferring the code via clipboard.
+Mlog Watcher is a Mindustry mod by [Sharlottes](https://github.com/Sharlottes) which can be found on [GitHub](https://github.com/Sharlottes/MlogWatcher). Thanks to Mlog Watcher, it is possible to automatically send mlog code or schematic directly to the running game; and even extract mlog code or schematics from the game for processing. This is a much easier and vastly superior way compared to transferring the schematic or code via clipboard.
 
 Both the web app and the command-line tool can interact with the Mlog Watcher.
 

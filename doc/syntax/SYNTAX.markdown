@@ -8,6 +8,8 @@ This documentation covers the Mindcode syntax, libraries, supporting tools, best
 
 # Contents
 
+Mindcode syntax is covered in the following topics:
+
 * [Mindcode Basics](SYNTAX-0-BASICS.markdown)
 * [Variables](SYNTAX-1-VARIABLES.markdown)
 * [Expressions](SYNTAX-2-EXPRESSIONS.markdown)
@@ -18,7 +20,7 @@ Mindcode provides access to most mlog instructions via Logic functions:
 
 * [Function reference for target 7.1](FUNCTIONS-71.markdown) (for the latest stable Mindustry version)
 * [Function reference for target 8.1](FUNCTIONS-81.markdown) (for the latest Mindustry beta release)
-* See [Logic functions](FUNCTIONS.markdown) for all supported versions.
+* See [Logic functions](FUNCTIONS.markdown) for all existing targets.
 
 A [System Library](SYSTEM-LIBRARY.markdown), consisting of several separate modules, is available:
 

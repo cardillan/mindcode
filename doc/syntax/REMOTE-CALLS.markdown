@@ -429,15 +429,15 @@ print *tmp5
 
 # Atomic code execution
 
-> [!NOTE]
-> Atomic code execution is only supported for targets 8.1 or higher. It also relies on a fairly recent change to Mindustry, and therefore only reliably executes on Mindustry Beta 155 or later.    
+> [!IMPORTANT]
+> Atomic code execution is only supported for targets 8.1 or higher and requires Mindustry Beta 155 or later for proper functioning.    
 
 Atomic code execution ensures that a section of code will execute in a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including processor variables, contents of memory banks or cells, or unit and building states. This guarantee is valid universally, regardless of the actual FPS rate of the game.
 
 Mindcode uses the following mechanism to make sure a section of code will be executed atomically: the maximum possible number of steps required to execute the section is calculated, and a `wait` instruction is inserted at the beginning of the section with a duration which guarantees that enough instruction quota will accumulate during the wait. This ensures that the longest code path gets executed in a single frame on the next update.
 
-> [!IMPORTANT]
-> The atomic code execution mechanism is guaranteed to work properly under different FPS rates, after map reloads, and generally under any condition that may arise in the game, except hyper processors with insufficient cryofluid. 
+> [!NOTE]
+> The atomic code execution mechanism is guaranteed to work properly under different FPS rates, after map reloads, and generally under any condition that may arise in the game, except hyper-processors with insufficient cryofluid. 
 
 ## Atomic sections
 

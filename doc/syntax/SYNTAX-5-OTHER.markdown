@@ -747,11 +747,11 @@ An alternative way to specify the processor speed is the [`setrate` compiler opt
 
 **Option scope: [local](#local-scope)**
 
-This option controls the way remarks, generated through the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remarks), are propagated to the compiled code. Remarks are written into the compiled code as `print` instructions. Possible values of the `remarks` option are:
+This option controls the way remarks, generated through the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remarks), are propagated to the compiled code. Possible values of the `remarks` option are:
 
 * `none`: remarks are suppressed in the compiled code—they do not appear there at all.
 * `comments`: remarks are output as mlog comments into the compiled code. Expressions in remarks are output as separate comments with the mlog name of the variable holding the value of the expression.
-* `passive`: remarks are included in the compiled code, but a jump is generated in front each block of continuous remarks, so that the print statements themselves aren't executed. This is the default value.
+* `passive` (the default value): remarks are included in the compiled code, but a jump is generated in front each block of continuous remarks, so that the print statements themselves aren't executed. This is the default value.
 * `active`: remarks are included in the compiled code and are executed, producing actual output to the text buffer.
 
 Converting remarks to comments may improve code readability. Remarks in a loop may help identify individual iterations when the loop is unrolled, for example. However, when the code is inserted into an mlog processor, the comments are not preserved.

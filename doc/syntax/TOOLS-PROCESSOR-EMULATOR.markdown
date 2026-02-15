@@ -20,7 +20,7 @@ At the beginning of the executions all the memory cells and memory banks are emp
 
 ## Supported variables
 
-All constant mlog variables corresponding to the emulator target are supported.
+All constant mlog variables corresponding to the emulator target are supported. Additionally, the following built-in variables are provided:
 
 | Variable      | Target | Value or behavior                         |
 |---------------|:------:|-------------------------------------------|
@@ -29,7 +29,6 @@ All constant mlog variables corresponding to the emulator target are supported.
 | `@links`      |  6.0+  | fully emulated                            |
 | `@maph`       |  6.0+  | 300                                       |
 | `@mapw`       |  6.0+  | 200                                       |
-| `@minute`     |  7.0+  | emulated time flow                        |
 | `@minute`     |  7.0+  | emulated time flow                        |
 | `@second`     |  7.0+  | emulated time flow                        |
 | `@this`       |  6.0+  | current processor                         |
@@ -43,7 +42,7 @@ All constant mlog variables corresponding to the emulator target are supported.
 
 ## Supported instructions
 
-Unless specified otherwise in the table, the listed instructions are fully emulated. Unlisted instructions are not supported and, unless specifically configured, they stop the execution of the program. Since the Mindustry World at large isn't simulated, it is not possible to meaningfully emulate these instructions.
+The listed instructions are emulated, either fully or with a specific implementation described in the table. Unlisted instructions are not supported and, unless specifically configured, they stop the execution of the program. Since the Mindustry World at large isn't simulated, it is not possible to meaningfully emulate these instructions.
 
 | Instruction   | Target | Implementation details                |
 |---------------|:------:|---------------------------------------|
@@ -77,9 +76,9 @@ Unless specified otherwise in the table, the listed instructions are fully emula
 Notes
 
 * Printing to the text buffer is fully supported, and the text produced by the program is displayed when the execution ends.
-  * The size of the text buffer is limited to 10,000 characters.
+  * The overall size of the text buffer is limited to 10,000 characters.
   * The `format` instruction is fully supported. Only text produced since the last `printflush` instructions is available for formatting.
-  * When the contents of the text buffer encountered at the `printflush` instruction is the same as the content encountered at the previous `printflush` instruction, the text isn't written to the text buffer again, just the number of the text block repetitions is outputted.
+  * When the contents of the text buffer encountered at the `printflush` instruction is the same as the content encountered at the previous `printflush` instruction, the text isn't generated again, just the number of the text block repetitions is output.
   * `draw print` instruction is handled like the `printflush` instructions: the text consumed by the `draw print` instruction isn't removed from the text buffer and is included in the program output.
 * The `read` and `write` instructions in targets 8.0 and higher emulate access to other processor variables faithfully (non-existent variables aren't accesible).
 * The `sensor` instruction is supported for a limited number of properties:
@@ -88,10 +87,10 @@ Notes
     * `@type`: returns the type of the object (e.g., `@memory-cell`)
     * `@name`: returns the name of the object if it exists (e.g., `lead` for `@lead`)
     * `@id`: returns the ID of the object if it exists (e.g., `1` for `@lead`)
-    * `@x`, `@y`: returns the block position if the object is a block created from a schematic, otherwise 0/null.
+    * `@x`, `@y`: returns the block position if the object is a block created from a schematic, otherwise `0` or `null`.
   * Version 8.0+:
     * `@size`, `@bufferSize`: returns the length when invoked on a string.
-* The `wait` instruction's effect on processor scheduling is emulated, but the instruction doesn't pause the emulation. 
+* The `wait` instruction's effect on processor scheduling and time variables is emulated, but the instruction doesn't pause the emulation. 
 
 ## Irregular situation handling
 
