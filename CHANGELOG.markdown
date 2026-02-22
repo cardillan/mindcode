@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.15.0 – Unreleased
+## 3.15.0 – 2026-02-22
 
 > [!NOTE]
 > [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in Minddustry build 155 Beta or later.
@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed a possible error in the tool app handling command-line parameters.  
+* Fixed a possible error in the tool app handling command-line parameters ([#302](https://github.com/cardillan/mindcode/issues/302)).  
 
 ### Added
 
@@ -24,12 +24,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* The web application has been completely overhauled. The highlights of the new web app are:
-  * Modern, mobile-friendly design.
-  * The compilation happens without page refresh, meaning the edit history of the code is not lost on compilation. It is also possible to undo (`Ctrl-Z`) the action of loading an example code or clearing the editor.
-  * Syntax highlighting in the editor. All syntaxes (Mindcode including mlog blocks, Schemacode) are supported.
-  * Indicating syntax errors from the last compilation directly in the editor.
-  * Support for running schematics and generic mlog code on the built-in processor emulator. 
 * **Breaking**: Changed the meaning of the [`target` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target): when no processor type is specified, the compiler generates the code for a non-processor context. Privileged instructions are supported, but atomic sections and waits aren't.
 
 ## 3.14.0 – 2026-02-08
