@@ -704,4 +704,4 @@ If client is a mobile device, tries to print a property ending in ".mobile" firs
 
 ---
 
-[&#xAB; Previous: Function reference for target 7.1](FUNCTIONS-71.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; [Next: Function reference for target 8.1 &#xBB;](FUNCTIONS-81.markdown)
+[&#xAB; Previous: Function reference for target 7.1](FUNCTIONS-71.markdown) &nbsp; | &nbsp; [Up: Logic functions](FUNCTIONS.markdown) &nbsp; [Next: Function reference for target 8.1 &#xBB;](FUNCTIONS-81.markdown)

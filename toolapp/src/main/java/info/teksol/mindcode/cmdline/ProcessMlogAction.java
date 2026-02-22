@@ -73,7 +73,7 @@ public class ProcessMlogAction extends ActionHandler {
         ConsoleMessageLogger messageLogger = ConsoleMessageLogger.create(positionFormatter, false, true);
         ToolMessageEmitter toolMessages = new ToolMessageEmitter(messageLogger);
 
-        final MlogWatcherCommand command = arguments.get("watcher");
+        final MlogWatcherCommand command = getMlogWatcherCommand(arguments);
         final File inputFile = arguments.get("input");
         final File outputDirectory = arguments.get("output-directory");
 

@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 > [!NOTE]
 > The new [Mlog Watcher functionality](doc/syntax/TOOLS-MLOG-WATCHER.markdown) available with the tool app requires a new version of the Mlog Watcher mod. The new version has not yet been released, but a Mindustry 8-compatible binary is available [here](https://github.com/Sharlottes/MlogWatcher/actions/runs/21562595822). To use that version, the `--watcher-version v1` command line argument must be specified.
 
+### Fixed
+
+* Fixed a possible error in the tool app handling command-line parameters.  
+
 ### Added
 
 * **Breaking**: the `loop` keyword has been reintroduced, to create [infinite loops](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#infinite-loops). Code that uses `loop` as a function or variable name will not compile, and the variable or function will have to be renamed.

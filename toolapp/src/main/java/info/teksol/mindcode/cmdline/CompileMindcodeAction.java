@@ -141,15 +141,16 @@ public class CompileMindcodeAction extends ActionHandler {
                 }
             }
 
+            MlogWatcherCommand watcherCommand = getMlogWatcherCommand(arguments);
             MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages);
             if (mlogWatcherClient != null) {
                 try {
-                    switch (arguments.get("watcher")) {
+                    switch (watcherCommand) {
                         case MlogWatcherCommand.UPDATE -> mlogWatcherClient.updateSelectedProcessor(compiler.getOutput());
                         case MlogWatcherCommand.UPDATE_ALL -> updateAll(mlogWatcherClient, compiler, VERSION_SELECTION_EXACT);
                         case MlogWatcherCommand.UPGRADE_ALL -> updateAll(mlogWatcherClient, compiler, VERSION_SELECTION_COMPATIBLE);
                         case MlogWatcherCommand.FORCE_UPDATE_ALL -> updateAll(mlogWatcherClient, compiler, VERSION_SELECTION_ANY);
-                        default -> throw new IllegalArgumentException("Invalid value for --watcher: " + arguments.get("watcher"));
+                        case null, default -> throw new IllegalArgumentException("Invalid value for --watcher: " + arguments.get("watcher"));
                     }
                 } finally {
                     mlogWatcherClient.close();

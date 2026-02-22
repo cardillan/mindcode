@@ -118,13 +118,14 @@ public class CompileSchemacodeAction extends ActionHandler {
                 toolMessages.info("\nCreated schematic was copied to the clipboard.");
             }
 
+            MlogWatcherCommand watcherCommand = getMlogWatcherCommand(arguments);
             MlogWatcherClient mlogWatcherClient = createMlogWatcherClient(arguments, toolMessages);
             if (mlogWatcherClient != null) {
                 try {
-                    switch (arguments.get("watcher")) {
+                    switch (watcherCommand) {
                         case MlogWatcherCommand.UPDATE -> mlogWatcherClient.updateSchematic( encoded, true);
                         case MlogWatcherCommand.ADD -> mlogWatcherClient.updateSchematic( encoded, false);
-                        default -> throw new IllegalArgumentException("Invalid value for --watcher: " + arguments.get("watcher"));
+                        case null, default -> throw new IllegalArgumentException("Invalid value for --watcher: " + arguments.get("watcher"));
                     }
                 } finally {
                     mlogWatcherClient.close();

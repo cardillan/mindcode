@@ -545,4 +545,4 @@ Sets a property of a unit or building.
 
 ---
 
-[&#xAB; Previous: Function reference for target 7.0](FUNCTIONS-70.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; [Next: Function reference for target 8.0 &#xBB;](FUNCTIONS-80.markdown)
+[&#xAB; Previous: Function reference for target 7.0](FUNCTIONS-70.markdown) &nbsp; | &nbsp; [Up: Logic functions](FUNCTIONS.markdown) &nbsp; [Next: Function reference for target 8.0 &#xBB;](FUNCTIONS-80.markdown)

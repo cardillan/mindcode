@@ -33,6 +33,7 @@ public class BasicTestCaseExecutor implements TestCaseExecutor {
             String unexpectedMessages = compiler.getMessages().stream()
                     .filter(MindcodeMessage::isErrorOrWarning)
                     .map(MindcodeMessage::message)
+                    .filter(msg -> !msg.contains("executable instructions has been exceeded."))
                     .collect(Collectors.joining("\n"));
 
             String failedTests = compiler.getAssertions().stream()

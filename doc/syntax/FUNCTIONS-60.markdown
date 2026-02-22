@@ -232,4 +232,4 @@ Requires a bound unit.
 
 ---
 
-[Up: Contents](SYNTAX.markdown) &nbsp; [Next: Function reference for target 7.0 &#xBB;](FUNCTIONS-70.markdown)
+[Up: Logic functions](FUNCTIONS.markdown) &nbsp; [Next: Function reference for target 7.0 &#xBB;](FUNCTIONS-70.markdown)

@@ -353,6 +353,10 @@ abstract class ActionHandler {
         }
     }
 
+    protected @Nullable MlogWatcherCommand getMlogWatcherCommand(Namespace arguments) {
+        return arguments.get("watcher") instanceof MlogWatcherCommand c ? c : null;
+    }
+
     protected @Nullable MlogWatcherClient createMlogWatcherClient(Namespace arguments, ToolMessageEmitter messageEmitter) {
         Object value = arguments.get("watcher");
         if (value == NOTHING) return null;

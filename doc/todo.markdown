@@ -16,7 +16,6 @@ Changes intended for the next regular release.
 
 **Done**
 
-* UI redesign by JeanJPNM
 * `break` in code blocks
   * the code blocks must be labeled and the `break` must refer to the label
   * it is possible to use `begin`, `atomic` or `debug` as implicit labels (depending on the block type and only if the block is unlabeled)
@@ -24,6 +23,8 @@ Changes intended for the next regular release.
   * In the web app, all four modules will support running the code
 
 **Doing**
+
+* UI redesign by JeanJPNM
 
 * **Planned**
 

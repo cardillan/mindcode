@@ -149,7 +149,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
             w.println();
 
             if (prev >= 0) w.printf("[&#xAB; Previous: %s](%s) &nbsp; | &nbsp; ", navigation[prev], navigation[prev + 1]);
-            w.printf("[Up: Contents](SYNTAX.markdown)");
+            w.printf("[Up: Logic functions](FUNCTIONS.markdown)");
             if (next < navigation.length - 1) w.printf(" &nbsp; [Next: %s &#xBB;](%s)", navigation[next], navigation[next + 1]);
             w.println();
         }
