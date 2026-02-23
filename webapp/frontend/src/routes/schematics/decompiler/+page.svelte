@@ -9,13 +9,7 @@
 		type RunResult
 	} from '$lib/api';
 	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
-	import {
-		EditorStore,
-		getThemeContext,
-		LocalCompilerTarget,
-		LocalSource,
-		syncUrl
-	} from '$lib/stores.svelte';
+	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import { jumpToRange, updateEditor } from '$lib/codemirror';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
@@ -23,13 +17,19 @@
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
+	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 
 	const theme = getThemeContext();
 
-	const encodedEditor = new EditorStore(theme, (parent, baseExtensions) => {
-		return new EditorView({ parent, extensions: [baseExtensions, EditorView.lineWrapping] });
+	const api = new ApiHandler();
+	const encodedEditor = new InputEditorStore({
+		theme,
+		api,
+		createEditor(baseExtensions) {
+			return new EditorView({ extensions: [baseExtensions, EditorView.lineWrapping] });
+		}
 	});
-	const schemacodeEditor = new EditorStore(theme, (parent, baseExtensions) => {
+	const schemacodeEditor = new OutputEditorStore(theme, (parent, baseExtensions) => {
 		return new EditorView({ parent, extensions: [baseExtensions, schemacodeLanguage] });
 	});
 
@@ -39,8 +39,6 @@
 	let warnings = $state<CompileResponseMessage[]>([]);
 	let infos = $state<CompileResponseMessage[]>([]);
 
-	const api = new ApiHandler();
-	const localSource = new LocalSource(api, () => encodedEditor.view, []);
 	const compilerTarget = new LocalCompilerTarget();
 
 	function handleJumpToPosition(range: SourceRange) {
@@ -61,7 +59,7 @@
 
 		try {
 			const data = await api.decompileSchematic({
-				sourceId: localSource.id,
+				sourceId: encodedEditor.sourceId,
 				source,
 				run,
 				target: compilerTarget.value
@@ -74,9 +72,9 @@
 			errors = data.errors;
 			warnings = data.warnings;
 			infos = data.infos;
-			localSource.id = data.sourceId;
+			encodedEditor.setEditorId(data.sourceId);
 
-			await syncUrl({ localSource, compilerTarget });
+			await syncUrl({ sourceId: encodedEditor.sourceId, compilerTarget: compilerTarget.value });
 		} catch (e) {
 			console.error(e);
 			runResults = [];
@@ -86,7 +84,7 @@
 	}
 
 	async function cleanEditors() {
-		localSource.clear();
+		encodedEditor.clear({ preserveUrl: true });
 		compilerTarget.value = '7';
 		updateEditor(schemacodeEditor.view, '');
 		updateEditor(encodedEditor.view, '');
@@ -96,7 +94,7 @@
 		infos = [];
 		runResults = [];
 
-		await syncUrl({ localSource, compilerTarget });
+		await syncUrl({ sourceId: encodedEditor.sourceId, compilerTarget: compilerTarget.value });
 	}
 </script>
 
@@ -128,7 +126,7 @@
 				{ label: 'Decompile', onclick: () => handleDecompile(false), icon: Code },
 				{ label: 'Decompile and Run', onclick: () => handleDecompile(true), icon: Play }
 			]}
-			loading={localSource.isLoading || loadingAction !== null}
+			loading={encodedEditor.isLoading || loadingAction !== null}
 		>
 			<TargetPicker {compilerTarget} />
 		</ControlBar>
@@ -143,9 +141,9 @@
 	<EditorLayout
 		inputLabel="Encoded schematic"
 		inputEditor={encodedEditor}
-		inputLoading={localSource.isLoading}
+		inputLoading={encodedEditor.isLoading}
 		outputEditor={schemacodeEditor}
-		outputLoading={localSource.isLoading || loadingAction !== null}
+		outputLoading={encodedEditor.isLoading || loadingAction !== null}
 		{runResults}
 		{errors}
 		{warnings}
@@ -171,7 +169,7 @@
 			icon: Play,
 			onclick: () => handleDecompile(true)
 		}}
-		loading={localSource.isLoading || loadingAction !== null}
+		loading={encodedEditor.isLoading || loadingAction !== null}
 	/>
 	<ProjectLinks variant="schemacode" />
 </div>

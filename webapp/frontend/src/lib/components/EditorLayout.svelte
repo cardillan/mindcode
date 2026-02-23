@@ -1,7 +1,6 @@
 <script lang="ts">
 	import CopyButton from './CopyButton.svelte';
 	import TabsOutput from './TabsOutput.svelte';
-	import type { EditorStore } from '$lib/stores.svelte';
 	import type { CompileResponseMessage, RunResult, SourceRange } from '$lib/api';
 	import CompilerMessages from './CompilerMessages.svelte';
 	import EditorLayoutTabs from './EditorLayoutTabs.svelte';
@@ -9,6 +8,7 @@
 	import TabsContent from './ui/tabs/tabs-content.svelte';
 	import * as ButtonGroup from './ui/button-group';
 	import type { Snippet } from 'svelte';
+	import type { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 
 	let {
 		inputLabel,
@@ -25,9 +25,9 @@
 		outputActions
 	}: {
 		inputLabel: string;
-		inputEditor: EditorStore;
+		inputEditor: InputEditorStore;
 		inputLoading?: boolean;
-		outputEditor: EditorStore;
+		outputEditor: OutputEditorStore;
 		outputLoading?: boolean;
 		runResults?: RunResult[];
 		errors?: CompileResponseMessage[];

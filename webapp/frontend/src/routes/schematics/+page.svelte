@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { EditorView } from 'codemirror';
-	import { tick, untrack } from 'svelte';
+	import { tick } from 'svelte';
 	import { Code, Cpu, Play, Trash2 } from '@lucide/svelte';
 
 	import * as Card from '$lib/components/ui/card';
@@ -15,13 +15,7 @@
 	import type { PageProps } from './$types';
 	import { setDiagnostics } from '@codemirror/lint';
 	import { compileMessagesToDiagnostics, jumpToRange, updateEditor } from '$lib/codemirror';
-	import {
-		EditorStore,
-		getThemeContext,
-		LocalCompilerTarget,
-		LocalSource,
-		syncUrl
-	} from '$lib/stores.svelte';
+	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import ControlBar from '$lib/components/ControlBar.svelte';
@@ -29,16 +23,21 @@
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
+	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
 
 	const theme = getThemeContext();
 
-	const schemacodeEditor = new EditorStore(theme, (parent, baseExtensions) => {
-		return new EditorView({ parent, extensions: [baseExtensions, schemacodeLanguage] });
+	const schemacodeEditor = new InputEditorStore({
+		theme,
+		api,
+		createEditor(baseExtensions) {
+			return new EditorView({ extensions: [baseExtensions, schemacodeLanguage] });
+		}
 	});
-	const encodedEditor = new EditorStore(theme, (parent, baseExtensions) => {
+	const encodedEditor = new OutputEditorStore(theme, (parent, baseExtensions) => {
 		return new EditorView({ parent, extensions: [baseExtensions, EditorView.lineWrapping] });
 	});
 
@@ -47,11 +46,6 @@
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
 	let infos = $state<CompileResponseMessage[]>([]);
-	const localSource = new LocalSource(
-		api,
-		() => schemacodeEditor.view,
-		untrack(() => data.samples)
-	);
 	const compilerTarget = new LocalCompilerTarget();
 
 	function handleJumpToPosition(range: SourceRange) {
@@ -71,7 +65,7 @@
 
 		try {
 			const data = await api.compileSchemacode({
-				sourceId: localSource.id,
+				sourceId: schemacodeEditor.sourceId,
 				source,
 				target: compilerTarget.value,
 				run
@@ -80,7 +74,7 @@
 			errors = data.errors;
 			warnings = data.warnings;
 			infos = data.infos;
-			localSource.id = data.sourceId;
+			schemacodeEditor.setEditorId(data.sourceId);
 
 			if (encodedEditor.view) {
 				updateEditor(encodedEditor.view, data.compiled);
@@ -92,8 +86,6 @@
 
 				schemacodeEditor.view.dispatch(setDiagnostics(state, diagnostics));
 			}
-
-			await syncUrl({ localSource, compilerTarget });
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -102,22 +94,21 @@
 	}
 
 	async function selectSample(sample: Sample) {
-		localSource.selectSample(sample);
+		schemacodeEditor.selectSample(sample);
 		await tick();
 		await handleBuild(false);
 	}
 
 	async function cleanEditors() {
-		localSource.clear();
+		schemacodeEditor.clear({ preserveUrl: true });
 		compilerTarget.value = '7';
 		updateEditor(encodedEditor.view, '');
-		updateEditor(schemacodeEditor.view, '');
 
 		errors = [];
 		warnings = [];
 		infos = [];
 
-		await syncUrl({ localSource, compilerTarget });
+		await syncUrl({ sourceId: null, compilerTarget: compilerTarget.value });
 	}
 </script>
 
@@ -149,13 +140,13 @@
 				{ label: 'Build', onclick: () => handleBuild(false), icon: Code },
 				{ label: 'Build and Run', onclick: () => handleBuild(true), icon: Play }
 			]}
-			loading={localSource.isLoading || loadingAction !== null}
+			loading={schemacodeEditor.isLoading || loadingAction !== null}
 		>
 			<TargetPicker {compilerTarget} />
 			<SamplePicker
 				samples={data.samples}
 				onSelect={selectSample}
-				disabled={localSource.isLoading || loadingAction !== null}
+				disabled={schemacodeEditor.isLoading || loadingAction !== null}
 			/>
 		</ControlBar>
 	</div>
@@ -166,16 +157,16 @@
 		<SamplePicker
 			samples={data.samples}
 			onSelect={selectSample}
-			disabled={localSource.isLoading || loadingAction !== null}
+			disabled={schemacodeEditor.isLoading || loadingAction !== null}
 		/>
 	</div>
 
 	<EditorLayout
 		inputLabel="Schemacode definition"
 		inputEditor={schemacodeEditor}
-		inputLoading={localSource.isLoading}
+		inputLoading={schemacodeEditor.isLoading}
 		outputEditor={encodedEditor}
-		outputLoading={localSource.isLoading || loadingAction !== null}
+		outputLoading={schemacodeEditor.isLoading || loadingAction !== null}
 		{runResults}
 		{errors}
 		{warnings}
@@ -206,7 +197,7 @@
 			icon: Play,
 			onclick: () => handleBuild(true)
 		}}
-		loading={localSource.isLoading || loadingAction !== null}
+		loading={schemacodeEditor.isLoading || loadingAction !== null}
 	/>
 	<ProjectLinks variant="schemacode" />
 </div>

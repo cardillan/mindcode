@@ -9,23 +9,25 @@
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
 	import { ApiHandler, type RunResult, type SourceRange } from '$lib/api';
 	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
-	import {
-		EditorStore,
-		getThemeContext,
-		LocalCompilerTarget,
-		LocalSource,
-		syncUrl
-	} from '$lib/stores.svelte';
+	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
 	import { jumpToRange, updateEditor } from '$lib/codemirror';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
+	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 
 	const theme = getThemeContext();
-	const mlogEditor = new EditorStore(theme, (parent, baseExtensions) => {
-		return new EditorView({ parent, extensions: [baseExtensions, mlogLanguageExtension] });
+
+	const api = new ApiHandler();
+	const mlogEditor = new InputEditorStore({
+		theme,
+		api,
+		createEditor: (baseExtensions) => {
+			return new EditorView({ extensions: [baseExtensions, mlogLanguageExtension] });
+		}
 	});
-	const mindcodeEditor = new EditorStore(theme, (parent, baseExtensions) => {
+
+	const mindcodeEditor = new OutputEditorStore(theme, (parent, baseExtensions) => {
 		return new EditorView({ parent, extensions: [baseExtensions, mindcodeLanguage] });
 	});
 
@@ -35,8 +37,6 @@
 	let errors = $state<any[]>([]);
 	let warnings = $state<any[]>([]);
 	let infos = $state<any[]>([]);
-	const api = new ApiHandler();
-	const localSource = new LocalSource(api, () => mlogEditor.view, []);
 	const compilerTarget = new LocalCompilerTarget();
 
 	function handleJumpToPosition(range: SourceRange) {
@@ -56,7 +56,7 @@
 
 		try {
 			const data = await api.decompileMlog({
-				sourceId: localSource.id,
+				sourceId: mlogEditor.sourceId,
 				source,
 				target: compilerTarget.value,
 				run
@@ -69,9 +69,7 @@
 			errors = data.errors;
 			warnings = data.warnings;
 			infos = data.infos;
-			localSource.id = data.sourceId;
-
-			await syncUrl({ localSource, compilerTarget });
+			mlogEditor.setEditorId(data.sourceId);
 		} catch (e) {
 			console.error(e);
 			runResults = [];
@@ -81,16 +79,16 @@
 	}
 
 	async function cleanEditors() {
-		localSource.clear();
+		mlogEditor.clear({ preserveUrl: true });
 		compilerTarget.value = '7';
+
 		updateEditor(mindcodeEditor.view, '');
-		updateEditor(mlogEditor.view, '');
 
 		errors = [];
 		warnings = [];
 		infos = [];
 
-		await syncUrl({ localSource, compilerTarget });
+		await syncUrl({ sourceId: null, compilerTarget: compilerTarget.value });
 	}
 </script>
 
@@ -123,7 +121,7 @@
 				{ label: 'Decompile', onclick: () => handleDecompile(false), icon: Code },
 				{ label: 'Decompile and Run', onclick: () => handleDecompile(true), icon: Play }
 			]}
-			loading={localSource.isLoading || loadingAction !== null}
+			loading={mlogEditor.isLoading || loadingAction !== null}
 		>
 			<TargetPicker {compilerTarget} />
 		</ControlBar>
@@ -138,9 +136,9 @@
 	<EditorLayout
 		inputLabel="Mlog code"
 		inputEditor={mlogEditor}
-		inputLoading={localSource.isLoading}
+		inputLoading={mlogEditor.isLoading}
 		outputEditor={mindcodeEditor}
-		outputLoading={localSource.isLoading || loadingAction !== null}
+		outputLoading={mlogEditor.isLoading || loadingAction !== null}
 		{runResults}
 		{errors}
 		{warnings}
@@ -166,7 +164,7 @@
 			icon: Play,
 			onclick: () => handleDecompile(true)
 		}}
-		loading={localSource.isLoading || loadingAction !== null}
+		loading={mlogEditor.isLoading || loadingAction !== null}
 	/>
 	<ProjectLinks />
 </div>
