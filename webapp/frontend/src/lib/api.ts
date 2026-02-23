@@ -13,7 +13,7 @@ export interface RunResult {
 }
 
 export interface CompileRequest {
-	sourceId: string | undefined;
+	sourceId: string | null;
 	source: string;
 	target: string;
 	run: boolean;
@@ -36,7 +36,7 @@ export interface CompileResponse {
 }
 
 export interface SchemacodeCompileRequest {
-	sourceId: string | undefined;
+	sourceId: string | null;
 	source: string;
 	target: string;
 	run: boolean;
@@ -52,7 +52,7 @@ export interface SchemacodeCompileResponse {
 }
 
 export interface DecompileRequest {
-	sourceId: string | undefined;
+	sourceId: string | null;
 	source: string;
 	target: string;
 	run: boolean;

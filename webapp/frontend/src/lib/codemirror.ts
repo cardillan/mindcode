@@ -1,21 +1,62 @@
 import type { Diagnostic } from '@codemirror/lint';
 import { EditorView } from 'codemirror';
 import type { CompileResponseMessage, SourceRange } from './api';
-import { EditorSelection, Text, Compartment } from '@codemirror/state';
+import {
+	EditorSelection,
+	Text,
+	Compartment,
+	StateField,
+	Facet,
+	StateEffect,
+	type TransactionSpec
+} from '@codemirror/state';
 import { forest } from '@fsegurai/codemirror-theme-forest';
 import { vsCodeLight } from '@fsegurai/codemirror-theme-vscode-light';
+import { invertedEffects } from '@codemirror/commands';
 
 // Compartment for dynamically switching themes
 export const themeCompartment = new Compartment();
+
+export const defaultDocId = Facet.define<string | null, string | null>({
+	combine: (values) => values[values.length - 1]
+});
+
+export const updateDocId = StateEffect.define<string | null>();
+export const invertUpdateDocId = invertedEffects.of((tr) => {
+	for (const effect of tr.effects) {
+		if (effect.is(updateDocId)) {
+			const currentId = tr.startState.field(currentDocId);
+			return [updateDocId.of(currentId)];
+		}
+	}
+
+	return [];
+});
+
+export const currentDocId = StateField.define<string | null>({
+	create(state) {
+		return state.facet(defaultDocId);
+	},
+	update(value, tr) {
+		for (const effect of tr.effects) {
+			if (effect.is(updateDocId)) {
+				value = effect.value;
+			}
+		}
+
+		return value;
+	}
+});
 
 export function getTheme(dark: boolean) {
 	return dark ? forest : vsCodeLight;
 }
 
-export function updateEditor(editor: EditorView | undefined, text: string) {
+export function updateEditor(editor: EditorView | undefined, text: string, spec?: TransactionSpec) {
 	if (editor) {
 		const transaction = editor.state.update({
-			changes: { from: 0, to: editor.state.doc.length, insert: text }
+			changes: { from: 0, to: editor.state.doc.length, insert: text },
+			...spec
 		});
 		editor.dispatch(transaction);
 	}
