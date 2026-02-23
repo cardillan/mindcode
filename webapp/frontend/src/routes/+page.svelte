@@ -17,29 +17,37 @@
 	} from '$lib/api';
 	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
 	import type { PageProps } from './$types';
-	import { compileMessagesToDiagnostics, jumpToRange, updateEditor } from '$lib/codemirror';
 	import {
-		LocalSource,
-		LocalCompilerTarget,
-		syncUrl,
-		EditorStore,
-		getThemeContext
-	} from '$lib/stores.svelte';
+		compileMessagesToDiagnostics,
+		jumpToRange,
+		updateDocId,
+		updateEditor
+	} from '$lib/codemirror';
+	import { LocalCompilerTarget, syncUrl, getThemeContext } from '$lib/stores.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import { Compartment } from '@codemirror/state';
 	import SamplePicker from '$lib/components/SamplePicker.svelte';
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
+	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 
 	let { data }: PageProps = $props();
 
 	const theme = getThemeContext();
+	const api = new ApiHandler();
 
-	const mindcodeEditor = new EditorStore(theme, (parent, baseExtensions) => {
-		return new EditorView({ parent, extensions: [baseExtensions, mindcodeLanguage] });
+	const mindcodeEditor = new InputEditorStore({
+		api,
+		theme,
+		samples: untrack(() => data.samples),
+		createEditor(baseExtensions) {
+			return new EditorView({
+				extensions: [baseExtensions, mindcodeLanguage]
+			});
+		}
 	});
 
-	const mlogEditor = new EditorStore(theme, (parent, baseExtensions) => {
+	const mlogEditor = new OutputEditorStore(theme, (parent, baseExtensions) => {
 		return new EditorView({
 			parent,
 			extensions: [baseExtensions, outLanguage.of(mlogLanguageExtension)]
@@ -55,12 +63,6 @@
 	let isPlainText = $state(false);
 	const outLanguage = new Compartment();
 
-	const api = new ApiHandler();
-	const localSource = new LocalSource(
-		api,
-		() => mindcodeEditor.view,
-		untrack(() => data.samples)
-	);
 	const compilerTarget = new LocalCompilerTarget();
 
 	$effect(() => {
@@ -93,7 +95,7 @@
 
 		try {
 			const data = await api.compileMindcode({
-				sourceId: localSource.id,
+				sourceId: mindcodeEditor.sourceId,
 				source,
 				target: compilerTarget.value,
 				run
@@ -103,7 +105,7 @@
 			warnings = data.warnings;
 			infos = data.infos;
 			isPlainText = data.isPlainText;
-			localSource.id = data.sourceId;
+			mindcodeEditor.setEditorId(data.sourceId);
 
 			if (mlogEditor.view) {
 				updateEditor(mlogEditor.view, data.compiled);
@@ -112,10 +114,10 @@
 			if (mindcodeEditor.view) {
 				const { state } = mindcodeEditor.view;
 				const diagnostics = compileMessagesToDiagnostics(state.doc, errors, warnings);
-				mindcodeEditor.view.dispatch(setDiagnostics(state, diagnostics));
+				mindcodeEditor.view.dispatch(setDiagnostics(state, diagnostics), {
+					effects: updateDocId.of(data.sourceId)
+				});
 			}
-
-			await syncUrl({ localSource, compilerTarget });
 		} catch (e) {
 			console.error(e);
 			runResults = [];
@@ -125,23 +127,22 @@
 	}
 
 	async function selectSample(sample: Sample) {
-		localSource.selectSample(sample);
+		mindcodeEditor.selectSample(sample);
 		await tick();
 		await compile(false);
 	}
 
 	async function cleanEditors() {
-		localSource.clear();
+		mindcodeEditor.clear({ preserveUrl: true });
 		compilerTarget.value = '7';
 		updateEditor(mlogEditor.view, '');
-		updateEditor(mindcodeEditor.view, '');
 
 		errors = [];
 		warnings = [];
 		infos = [];
 		runResults = [];
 
-		await syncUrl({ localSource, compilerTarget });
+		await syncUrl({ sourceId: null, compilerTarget: compilerTarget.value });
 	}
 </script>
 
@@ -157,13 +158,13 @@
 				{ label: 'Compile', onclick: () => compile(false), icon: Code },
 				{ label: 'Compile and Run', onclick: () => compile(true), icon: Play }
 			]}
-			loading={localSource.isLoading || loadingAction !== null}
+			loading={mindcodeEditor.isLoading || loadingAction !== null}
 		>
 			<TargetPicker {compilerTarget} />
 			<SamplePicker
 				samples={data.samples}
 				onSelect={selectSample}
-				disabled={localSource.isLoading || loadingAction !== null}
+				disabled={mindcodeEditor.isLoading || loadingAction !== null}
 			/>
 		</ControlBar>
 	</div>
@@ -174,7 +175,7 @@
 		<SamplePicker
 			samples={data.samples}
 			onSelect={selectSample}
-			disabled={localSource.isLoading || loadingAction !== null}
+			disabled={mindcodeEditor.isLoading || loadingAction !== null}
 		/>
 	</div>
 
@@ -182,9 +183,9 @@
 	<EditorLayout
 		inputLabel="Mindcode Source Code"
 		inputEditor={mindcodeEditor}
-		inputLoading={localSource.isLoading}
+		inputLoading={mindcodeEditor.isLoading}
 		outputEditor={mlogEditor}
-		outputLoading={localSource.isLoading || loadingAction !== null}
+		outputLoading={mindcodeEditor.isLoading || loadingAction !== null}
 		{runResults}
 		{errors}
 		{warnings}
@@ -215,7 +216,7 @@
 			icon: Play,
 			onclick: () => compile(true)
 		}}
-		loading={localSource.isLoading || loadingAction !== null}
+		loading={mindcodeEditor.isLoading || loadingAction !== null}
 	/>
 	<ProjectLinks />
 </div>

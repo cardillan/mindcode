@@ -18,7 +18,7 @@
 
 	async function setValue(value: string) {
 		compilerTarget.value = value;
-		await syncUrl({ compilerTarget });
+		await syncUrl({ compilerTarget: value });
 	}
 </script>
 
