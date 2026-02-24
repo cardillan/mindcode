@@ -96,7 +96,7 @@
 	async function selectSample(sample: Sample) {
 		schemacodeEditor.selectSample(sample);
 		await tick();
-		await handleBuild(false);
+		await handleBuild(sample.runnable);
 	}
 
 	async function cleanEditors() {
