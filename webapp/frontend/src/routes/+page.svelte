@@ -129,7 +129,7 @@
 	async function selectSample(sample: Sample) {
 		mindcodeEditor.selectSample(sample);
 		await tick();
-		await compile(false);
+		await compile(sample.runnable);
 	}
 
 	async function cleanEditors() {

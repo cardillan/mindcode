@@ -1,8 +1,14 @@
 import { existsSync } from 'node:fs';
-import { readFile, readdir } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Sample } from './api';
+
+interface SampleMetadata {
+	filename: string;
+	title: string;
+	runnable: boolean;
+}
 
 /**
  * Finds the project root directory by looking for the root pom.xml file.
@@ -63,17 +69,23 @@ export async function getProjectRevision(): Promise<string> {
  */
 export async function getMindcodeSamples(): Promise<Sample[]> {
 	const projectRoot = await findProjectRoot();
-	const samplesDir = join(
-		projectRoot,
-		'samples',
-		'src',
-		'main',
-		'resources',
-		'samples',
-		'mindcode'
+	const samplesDir = join(projectRoot, 'samples', 'src', 'main', 'resources', 'samples');
+
+	const metadataPath = join(samplesDir, 'mindcode.json');
+	const metadataContent = await readFile(metadataPath, 'utf-8');
+	const metadata: SampleMetadata[] = JSON.parse(metadataContent);
+
+	const sources = await readSamplesFromDirectory(
+		join(samplesDir, 'mindcode'),
+		metadata.map((m) => m.filename)
 	);
 
-	return readSamplesFromDirectory(samplesDir, '.mnd');
+	return metadata.map((meta, index) => {
+		const id = meta.filename.slice(0, meta.filename.lastIndexOf('.'));
+		const { title, runnable } = meta;
+		const source = sources[index];
+		return { id, title, source, runnable };
+	});
 }
 
 /**
@@ -83,17 +95,22 @@ export async function getMindcodeSamples(): Promise<Sample[]> {
  */
 export async function getSchemacodeSamples(): Promise<Sample[]> {
 	const projectRoot = await findProjectRoot();
-	const samplesDir = join(
-		projectRoot,
-		'samples',
-		'src',
-		'main',
-		'resources',
-		'samples',
-		'schematics'
+	const samplesDir = join(projectRoot, 'samples', 'src', 'main', 'resources', 'samples');
+	const metadataPath = join(samplesDir, 'schematics.json');
+	const metadataContent = await readFile(metadataPath, 'utf-8');
+	const metadata: SampleMetadata[] = JSON.parse(metadataContent);
+
+	const sources = await readSamplesFromDirectory(
+		join(samplesDir, 'schematics'),
+		metadata.map((m) => m.filename)
 	);
 
-	return readSamplesFromDirectory(samplesDir, '.sdf');
+	return metadata.map((meta, index) => {
+		const id = meta.filename.slice(0, meta.filename.lastIndexOf('.'));
+		const { title, runnable } = meta;
+		const source = sources[index];
+		return { id, title, source, runnable };
+	});
 }
 
 /**
@@ -103,38 +120,19 @@ export async function getSchemacodeSamples(): Promise<Sample[]> {
  * @param extension The file extension to filter by
  * @returns Array of Sample objects
  */
-async function readSamplesFromDirectory(dir: string, extension: string): Promise<Sample[]> {
+async function readSamplesFromDirectory(dir: string, files: string[]): Promise<string[]> {
 	if (!existsSync(dir)) {
 		console.warn(`Samples directory not found: ${dir}`);
 		return [];
 	}
 
-	const files = (await readdir(dir)).filter((f) => f.endsWith(extension));
-
 	return Promise.all(
-		files.map(async (file): Promise<Sample> => {
+		files.map(async (file): Promise<string> => {
 			const filePath = join(dir, file);
 			const source = await readFile(filePath, 'utf-8');
-			const id = file.replace(extension, '');
-			const title = formatSampleTitle(id);
-
-			return { id, title, source };
+			return source;
 		})
 	);
-}
-
-/**
- * Converts a kebab-case filename to a Title Case title.
- * e.g., "sum-of-primes" -> "Sum Of Primes"
- *
- * @param id The sample id (filename without extension)
- * @returns The formatted title
- */
-function formatSampleTitle(id: string): string {
-	return id
-		.split('-')
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(' ');
 }
 
 /**
