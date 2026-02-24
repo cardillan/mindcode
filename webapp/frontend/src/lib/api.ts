@@ -78,6 +78,7 @@ export interface Sample {
 	id: string;
 	title: string;
 	source: string;
+	runnable: boolean;
 }
 
 export class ApiHandler {
@@ -190,25 +191,6 @@ export class ApiHandler {
 			throw new ApiError(path, response.status);
 		}
 
-		return await response.json();
-	}
-
-	async getSamples(): Promise<Sample[]> {
-		const response = await this.fetch('/api/samples');
-
-		if (!response.ok) {
-			throw new ApiError('/api/samples', response.status);
-		}
-
-		return await response.json();
-	}
-
-	async getSchemacodeSamples(): Promise<Sample[]> {
-		const response = await this.fetch('/api/schemacode/samples');
-
-		if (!response.ok) {
-			throw new ApiError('/api/schemacode/samples', response.status);
-		}
 		return await response.json();
 	}
 }
