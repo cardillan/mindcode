@@ -160,7 +160,7 @@
 			]}
 			loading={mindcodeEditor.isLoading || loadingAction !== null}
 		>
-			<TargetPicker {compilerTarget} />
+			<TargetPicker {compilerTarget} pickProcessor />
 			<SamplePicker
 				samples={data.samples}
 				onSelect={selectSample}
@@ -171,7 +171,7 @@
 
 	<!-- Mobile: Samples and Settings -->
 	<div class="flex shrink-0 flex-wrap items-center gap-2 md:hidden">
-		<TargetPicker {compilerTarget} />
+		<TargetPicker {compilerTarget} pickProcessor />
 		<SamplePicker
 			samples={data.samples}
 			onSelect={selectSample}

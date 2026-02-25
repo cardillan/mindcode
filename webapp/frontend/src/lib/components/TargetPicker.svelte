@@ -4,13 +4,15 @@
 	import * as Select from './ui/select';
 
 	let {
-		compilerTarget
+		compilerTarget,
+		pickProcessor = false
 	}: {
 		compilerTarget: LocalCompilerTarget;
+		pickProcessor?: boolean;
 	} = $props();
 
 	let gameVersion = $state(untrack(() => compilerTarget.value.slice(0, 1)));
-	let processorType = $state(untrack(() => compilerTarget.value.slice(1) || 'none'));
+	let processorType = $state(untrack(() => compilerTarget.value.slice(1) || 'm'));
 
 	const gameVersions = {
 		'6': 'Mindustry 6',
@@ -45,13 +47,15 @@
 	</Select.Content>
 </Select.Root>
 
-<Select.Root type="single" bind:value={processorType} onValueChange={setValue}>
-	<Select.Trigger>
-		{processorTypes[processorType as keyof typeof processorTypes] || 'Select Processor'}
-	</Select.Trigger>
-	<Select.Content>
-		{#each Object.entries(processorTypes) as [key, label]}
-			<Select.Item value={key}>{label}</Select.Item>
-		{/each}
-	</Select.Content>
-</Select.Root>
+{#if pickProcessor}
+	<Select.Root type="single" bind:value={processorType} onValueChange={setValue}>
+		<Select.Trigger>
+			{processorTypes[processorType as keyof typeof processorTypes] || 'Select Processor'}
+		</Select.Trigger>
+		<Select.Content>
+			{#each Object.entries(processorTypes) as [key, label]}
+				<Select.Item value={key}>{label}</Select.Item>
+			{/each}
+		</Select.Content>
+	</Select.Root>
+{/if}
