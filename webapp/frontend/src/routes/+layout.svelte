@@ -5,6 +5,8 @@
 	import * as Select from '$lib/components/ui/select';
 	import { setThemeContext } from '$lib/stores.svelte.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { foldChevronDownId, foldChevronRightId } from '$lib/editors.svelte.js';
+	import { ChevronDown, ChevronRight } from '@lucide/svelte';
 
 	interface Tool {
 		value: string;
@@ -40,6 +42,15 @@
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
+
+<!-- Templates for CodeMirror fold gutter icons -->
+<template id={foldChevronRightId}>
+	<ChevronRight />
+</template>
+
+<template id={foldChevronDownId}>
+	<ChevronDown />
+</template>
 
 <div class="flex min-h-screen flex-col bg-background text-foreground">
 	<header class="shrink-0 border-b bg-card">
