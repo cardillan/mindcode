@@ -50,16 +50,21 @@ statement {
   kw<"require"> (String | Identifier) (kw<"remote"> commaSep<Identifier>)? |
   FunctionDefinition | 
   LabeledStatement |
+  Loop |
   ForLoop |
   WhileLoop |
   DoWhileLoop |
-  BreakStatement { kw<"break"> Identifier? } |
-  ContinueStatement { kw<"continue"> Identifier? } |
+  BreakStatement { kw<"break"> (Identifier | kw<"do"> | kw<"loop"> | kw<"for"> | kw<"while"> | kw<"atomic"> | kw<"begin"> | kw<"debug">)? } |
+  ContinueStatement { kw<"continue"> (Identifier | kw<"do"> | kw<"loop"> | kw<"for"> | kw<"while">)? } |
   ReturnStatement { kw<"return"> expression? } |
-  AtomicBlock { kw<"atomic"> ~sharedModifier statementList end } |
-  Block { kw<"begin"> statementList end } |
-  DebugBlock { kw<"debug"> ~sharedModifier statementList end }
+  AtomicBlock |
+  Block |
+  DebugBlock
 }
+
+AtomicBlock { kw<"atomic"> ~sharedModifier statementList end }
+Block { kw<"begin"> statementList end }
+DebugBlock { kw<"debug"> ~sharedModifier statementList end }
 
 expression {
   lvalue |
@@ -214,7 +219,11 @@ functionModifier {
 }
 
 LabeledStatement {
-  Label (ForLoop | WhileLoop | DoWhileLoop)
+  Label (ForLoop | WhileLoop | DoWhileLoop | Loop | AtomicBlock | Block | DebugBlock)
+}
+
+Loop {
+  kw<"loop"> statementList end
 }
 
 ForLoop {
