@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { EditorView } from 'codemirror';
 	import { Code, Play, Trash2 } from '@lucide/svelte';
 	import * as Card from '$lib/components/ui/card';
 	import {
@@ -22,11 +21,7 @@
 	const theme = getThemeContext();
 
 	const api = new ApiHandler();
-	const encodedEditor = new InputEditorStore({
-		theme,
-		api,
-		extensions: [EditorView.lineWrapping]
-	});
+	const encodedEditor = new InputEditorStore({ theme, api });
 	const schemacodeEditor = new OutputEditorStore(theme, [schemacodeLanguage]);
 
 	let runResults = $state<RunResult[]>([]);

@@ -338,6 +338,7 @@ function commonExtensions(themeStore: ThemeStore) {
 				paddingRight: 0
 			}
 		}),
-		themeCompartment.of(getTheme(themeStore.isDark))
+		themeCompartment.of(getTheme(themeStore.isDark)),
+		EditorView.lineWrapping
 	];
 }
