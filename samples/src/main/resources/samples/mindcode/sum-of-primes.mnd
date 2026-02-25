@@ -5,6 +5,8 @@
 //
 // The code will run on a Mindustry processor too, albeit quite slowly.
 
+#set syntax = strict;
+
 // Program parametrization
 param MEMORY = bank1;           // Available in emulated environment
 param VALUE = 5000;             // Use a value between 0 and 49150
@@ -90,7 +92,7 @@ end;
 void printNumber(n)
     var index = 0;
     var decimal = 0;
-    while true do
+    loop
         MEMORY[index] = n % 10;
         n \= 10;
         index++;

@@ -152,7 +152,7 @@ abstract class ActionHandler {
         container.addArgument("--watcher-version")
                 .help("specifies the version of the Mlog Watcher mod")
                 .type(LowerCaseEnumArgumentType.forEnum(MlogWatcherVersion.class))
-                .setDefault(MlogWatcherVersion.V0);
+                .setDefault(MlogWatcherVersion.V1);
 
         container.addArgument("--watcher-port")
                 .help("port number for communication with Mlog Watcher")

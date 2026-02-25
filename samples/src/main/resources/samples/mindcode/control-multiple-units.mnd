@@ -19,29 +19,27 @@ var angle = 0;
 var types[UNITS] = (@poly, @poly, @mega, @poly, @poly, @mega);
 var units[UNITS];
 
-// The main code needs to be enclosed in a code block (begin ... end)
-begin
-    while true do
-        // The out keyword here means any change in unit gets propagated
-        // to the corresponding units element
-        for var type in types; var out unit in units do
-            if unit == null or unit.@dead then
-                // Finds a free unit of given type, not returning until such a unit is found
-                // Sets the flags of these units to a nonzero value
-                // Stores the acquired units in the array
-                unit = findFreeUnit(type, flag);
-            end;
-
-            if unit != null then
-                // Binds the unit stored in a variable
-                ubind(unit);
-                move(@thisx + 15 * sin(angle), @thisy + 15 * cos(angle));
-                print($"Currently bound unit is ${@unit}.");
-                printflush(message);
-                angle += 20;
-            end;
-
-            wait(0.8);
+// The main code needs to be enclosed in a code block or an infinite loop
+loop
+    // The out keyword here means any change in unit gets propagated
+    // to the corresponding units element
+    for var type in types; var out unit in units do
+        if unit == null or unit.@dead then
+            // Finds a free unit of given type, not returning until such a unit is found
+            // Sets the flags of these units to a nonzero value
+            // Stores the acquired units in the array
+            unit = findFreeUnit(type, flag);
         end;
+
+        if unit != null then
+            // Binds the unit stored in a variable
+            ubind(unit);
+            move(@thisx + 15 * sin(angle), @thisy + 15 * cos(angle));
+            print($"Currently bound unit is ${@unit}.");
+            printflush(message);
+            angle += 20;
+        end;
+
+        wait(0.8);
     end;
 end;

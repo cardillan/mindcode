@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.16.0 – Unreleased
+
+### Changed
+
+* The web application has been completely overhauled. The highlights of the new web app are:
+  * Modern, mobile-friendly design.
+  * The compilation happens without page refresh, meaning the edit history of the code is not lost on compilation. It is also possible to undo (`Ctrl-Z`) the action of loading an example code or clearing the editor.
+  * Syntax highlighting in the editor. All syntaxes (Mindcode including mlog blocks, Schemacode) are supported.
+  * Indicating syntax errors from the last compilation directly in the editor.
+  * Support for running schematics and generic mlog code on the built-in processor emulator.
+
 ## 3.15.0 – 2026-02-22
 
 > [!NOTE]

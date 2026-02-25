@@ -65,7 +65,7 @@ end;
  * The function doesn't use units that are controlled by a player or a different processor.
 */
 def findClosestUnit(x, y, unit_type, initial_flag)
-    while true do
+    loop
         ubind(unit_type);
         // No unit of this type exists
         if @unit == null then return null; end;
@@ -118,7 +118,7 @@ end;
  */
 def waitForFreeUnit(unit_type, initial_flag)
     // Keep looking for unit until one is found
-    while true do
+    loop
         ubind(unit_type);
         if @unit != null then
             if @unit.@controlled == 0 then
@@ -149,7 +149,7 @@ end;
  */
 def waitForFreeUnit(message, preface, unit_type, initial_flag)
     // Keep looking for unit until one is found
-    while true do
+    loop
         ubind(unit_type);
         if @unit == null then
             print($"${preface}No unit of type $unit_type found.");
@@ -163,4 +163,3 @@ def waitForFreeUnit(message, preface, unit_type, initial_flag)
         end;
     end;
 end;
-

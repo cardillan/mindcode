@@ -1,3 +1,5 @@
+#set syntax = strict;
+
 // Units is a system library providing functions for easy acquisition of units
 require units;
 

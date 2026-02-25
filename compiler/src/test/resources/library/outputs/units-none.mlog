@@ -57,21 +57,20 @@ set :findClosestUnit:x :x
 set :findClosestUnit:y :y
 set :findClosestUnit:unit_type :unit_type
 set :findClosestUnit:initial_flag :initial_flag
-jump 120 equal true false
 ubind :findClosestUnit:unit_type
 op equal *tmp19 @unit null
-jump 67 equal *tmp19 false
+jump 66 equal *tmp19 false
 set *tmp18 null
-jump 121 always 0 0
+jump 120 always 0 0
 set *tmp20 null
-jump 68 always 0 0
+jump 67 always 0 0
 set *tmp20 null
 set :findClosestUnit:first_unit @unit
 set :findClosestUnit:best_unit null
 set :findClosestUnit:best_distance 10000000000
 sensor *tmp21 @unit @controlled
 op equal *tmp22 *tmp21 0
-jump 90 equal *tmp22 false
+jump 89 equal *tmp22 false
 sensor *tmp24 @unit @x
 op sub *tmp25 *tmp24 :findClosestUnit:x
 sensor *tmp26 @unit @y
@@ -79,43 +78,43 @@ op sub *tmp27 *tmp26 :findClosestUnit:y
 op len *tmp28 *tmp25 *tmp27
 set :findClosestUnit:distance *tmp28
 op lessThan *tmp29 :findClosestUnit:distance :findClosestUnit:best_distance
-jump 87 equal *tmp29 false
+jump 86 equal *tmp29 false
 set :findClosestUnit:best_distance :findClosestUnit:distance
 set *tmp31 @unit
 set :findClosestUnit:best_unit *tmp31
 set *tmp30 :findClosestUnit:best_unit
-jump 88 always 0 0
+jump 87 always 0 0
 set *tmp30 null
 set *tmp23 *tmp30
-jump 99 always 0 0
+jump 98 always 0 0
 sensor *tmp32 :findClosestUnit:first_unit @dead
 op equal *tmp33 *tmp32 1
-jump 97 equal *tmp33 false
+jump 96 equal *tmp33 false
 set *tmp35 @unit
 set :findClosestUnit:first_unit *tmp35
 set *tmp34 :findClosestUnit:first_unit
-jump 98 always 0 0
+jump 97 always 0 0
 set *tmp34 null
 set *tmp23 *tmp34
 ubind :findClosestUnit:unit_type
 op notEqual *tmp36 :findClosestUnit:first_unit @unit
-jump 71 notEqual *tmp36 false
+jump 70 notEqual *tmp36 false
 op equal *tmp37 :findClosestUnit:best_unit null
-jump 108 equal *tmp37 false
+jump 107 equal *tmp37 false
 set *tmp18 null
-jump 121 always 0 0
+jump 120 always 0 0
 set *tmp38 null
-jump 109 always 0 0
+jump 108 always 0 0
 set *tmp38 null
 sensor *tmp39 :findClosestUnit:best_unit @controlled
 op equal *tmp40 *tmp39 0
-jump 118 equal *tmp40 false
+jump 117 equal *tmp40 false
 ubind :findClosestUnit:best_unit
 ucontrol flag :findClosestUnit:initial_flag 0 0 0 0
 set *tmp18 :findClosestUnit:best_unit
-jump 121 always 0 0
+jump 120 always 0 0
 set *tmp41 null
-jump 119 always 0 0
+jump 118 always 0 0
 set *tmp41 null
 jump 59 always 0 0
 set *tmp18 null
@@ -123,23 +122,22 @@ print *tmp18
 print "\n"
 set :waitForFreeUnit:unit_type :unit_type
 set :waitForFreeUnit:initial_flag :initial_flag
-jump 142 equal true false
 ubind :waitForFreeUnit:unit_type
 op notEqual *tmp43 @unit null
-jump 140 equal *tmp43 false
+jump 138 equal *tmp43 false
 sensor *tmp45 @unit @controlled
 op equal *tmp46 *tmp45 0
-jump 137 equal *tmp46 false
+jump 135 equal *tmp46 false
 ucontrol flag :waitForFreeUnit:initial_flag 0 0 0 0
 set *tmp42 @unit
-jump 143 always 0 0
+jump 141 always 0 0
 set *tmp47 null
-jump 138 always 0 0
+jump 136 always 0 0
 set *tmp47 null
 set *tmp44 *tmp47
-jump 141 always 0 0
+jump 139 always 0 0
 set *tmp44 null
-jump 125 always 0 0
+jump 124 always 0 0
 set *tmp42 null
 print *tmp42
 print "\n"
@@ -147,10 +145,9 @@ set :waitForFreeUnit.1:message :message
 set :waitForFreeUnit.1:preface :preface
 set :waitForFreeUnit.1:unit_type :unit_type
 set :waitForFreeUnit.1:initial_flag :initial_flag
-jump 178 equal true false
 ubind :waitForFreeUnit.1:unit_type
 op equal *tmp49 @unit null
-jump 161 equal *tmp49 false
+jump 158 equal *tmp49 false
 print :waitForFreeUnit.1:preface
 print "No unit of type "
 print :waitForFreeUnit.1:unit_type
@@ -158,10 +155,10 @@ print " "
 print "found."
 printflush :waitForFreeUnit.1:message
 set *tmp50 null
-jump 177 always 0 0
+jump 174 always 0 0
 sensor *tmp51 @unit @controlled
 op notEqual *tmp52 *tmp51 0
-jump 172 equal *tmp52 false
+jump 169 equal *tmp52 false
 print :waitForFreeUnit.1:preface
 print "Looking for a free "
 print :waitForFreeUnit.1:unit_type
@@ -169,13 +166,13 @@ print "."
 print ".."
 printflush :waitForFreeUnit.1:message
 set *tmp53 null
-jump 176 always 0 0
+jump 173 always 0 0
 ucontrol flag :waitForFreeUnit.1:initial_flag 0 0 0 0
 set *tmp48 @unit
-jump 179 always 0 0
+jump 176 always 0 0
 set *tmp53 null
 set *tmp50 *tmp53
-jump 149 always 0 0
+jump 147 always 0 0
 set *tmp48 null
 print *tmp48
 print "\n"

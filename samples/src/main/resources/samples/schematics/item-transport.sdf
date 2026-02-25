@@ -1,7 +1,8 @@
 schematic
     name = "Item Transport"
+    target = 8
     description = """
-        Simple item transport schematics. Requires Mindustry BE.
+        Simple item transport schematics. Requires Mindustry 8 Beta.
 
         Uses one of five predefined types of units for transport. Utilizes a separate processor
         and a new Mindcode remote call mechanism to switch to a more preferred unit type
@@ -30,14 +31,13 @@ end
 
 
 UnitMonitor = """
-    #set target = 8;
     #set syntax = strict;
 
     module UnitMonitor;
 
-    linked message1;
-
     require units;
+
+    linked message1;
 
     // Unit types in preferred order
     // Change or add new units as necessary
@@ -50,7 +50,7 @@ UnitMonitor = """
         var currentType = currentUnit.@type;
         print("Trying to find unit better than ", currentUnit);
         printflush(message1);
-        while true do
+        loop
             for var type in types do
                 if type == currentType then break; end;
                 print("Finding unit: ", type);
@@ -67,14 +67,13 @@ UnitMonitor = """
     """
 
 Main = """
-    #set target = 8;
     #set syntax = strict;
 
     require "UnitMonitor" remote processor1;
 
     // This declaration ensures all these blocks are available before the code continues
-    linked sorter1, message1;
-    linked storage = vault1;
+    guarded linked sorter1, message1;
+    guarded linked storage = vault1;
 
     // Unique flag to mark our units
     const FLAG = 1764335678894;
@@ -98,7 +97,7 @@ Main = """
         // Start searching for a better unit
         async(processor1.findUnit(@unit));
 
-        while true do
+        loop
             moveItems();
 
             // Try to see whether a better unit has been found
