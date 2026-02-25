@@ -53,7 +53,7 @@ export interface InputEditorStoreOptions {
 	api: ApiHandler;
 	theme: ThemeStore;
 	samples?: Sample[];
-	createEditor: (baseExtensions: Extension[]) => EditorView;
+	extensions?: Extension[];
 }
 
 const keepCurrentUrl = Annotation.define<boolean>();
@@ -62,29 +62,50 @@ export class InputEditorStore {
 	view = $state<EditorView>();
 	isLoading = $state(true);
 	readonly #id = $derived(browser ? page.url.searchParams.get(sourceIdKey) : null);
+	/** Reactive value kept in sync with the id stored in the editor's state */
+	sourceId = $state<string | null>(this.#id);
 
-	get sourceId() {
-		return this.view?.state.field(currentDocId) || null;
-	}
-
-	constructor({ api, createEditor, theme, samples = [] }: InputEditorStoreOptions) {
+	constructor({ api, theme, samples = [], extensions = [] }: InputEditorStoreOptions) {
+		const sampleIds = new Set(samples.map((s) => s.id));
 		// handle editor creation and destruction
 		$effect.pre(() => {
 			untrack(() => {
-				this.view = createEditor([
-					commonExtensions(theme),
-					defaultDocId.of(null),
-					currentDocId,
-					invertUpdateDocId,
-					EditorView.updateListener.of((update) => {
-						const docId = update.state.field(currentDocId);
-						if (this.#id === docId) return;
-						if (update.transactions.some((tr) => tr.annotation(keepCurrentUrl))) return;
+				this.view = new EditorView({
+					extensions: [
+						commonExtensions(theme),
+						defaultDocId.of(null),
+						currentDocId,
+						invertUpdateDocId,
+						EditorView.updateListener.of((update) => {
+							this.sourceId = update.state.field(currentDocId);
+						}),
+						EditorView.updateListener.of((update) => {
+							if (this.isLoading) return;
 
-						syncUrl({ sourceId: docId, replaceState: false });
-					})
-				]);
-				this.view.dispatch();
+							const docId = update.state.field(currentDocId);
+							if (this.#id === docId) return;
+							if (update.transactions.some((tr) => tr.annotation(keepCurrentUrl))) return;
+
+							syncUrl({ sourceId: docId, replaceState: false });
+						}),
+						extensions
+					],
+					// Intercepts transactions on the input editor to reset the
+					// source id when a sample is modified. This allows the server to not have to
+					// save the source code if the sourceId is a sample id.
+					dispatchTransactions(trs, view) {
+						// get the id before the changes
+						const originalDocId = view.state.field(currentDocId);
+						view.update(trs);
+
+						if (!originalDocId || !sampleIds.has(originalDocId)) return;
+						const newDocId = view.state.field(currentDocId);
+
+						if (trs.some((tr) => tr.docChanged) && newDocId === originalDocId) {
+							view.dispatch(view.state.update({ effects: updateDocId.of(null) }));
+						}
+					}
+				});
 			});
 
 			return () => {
@@ -131,7 +152,7 @@ export class InputEditorStore {
 
 			if (sample) {
 				view.dispatch({
-					effects: updateDocId.of(null),
+					effects: updateDocId.of(sample.id),
 					changes: { from: 0, to: view.state.doc.length, insert: sample.source }
 				});
 				this.isLoading = false;
@@ -158,8 +179,12 @@ export class InputEditorStore {
 		if (!this.view) return;
 
 		this.isLoading = false;
+
+		// avoid triggering an id reset if the same sample is selected again
+		if (this.sourceId === sample.id) return;
+
 		this.view.dispatch({
-			effects: updateDocId.of(null),
+			effects: updateDocId.of(sample.id),
 			changes: { from: 0, to: this.view.state.doc.length, insert: sample.source },
 			annotations: [keepCurrentUrl.of(preserveUrl)]
 		});
@@ -198,7 +223,7 @@ export class OutputEditorStore {
 
 	constructor(
 		public theme: ThemeStore,
-		public createEditor: (parent: Element, baseExtensions: Extension[]) => EditorView
+		public extensions: Extension[] = []
 	) {
 		$effect(() => {
 			if (!this.view) return;
@@ -213,7 +238,12 @@ export class OutputEditorStore {
 	}
 
 	attach: Attachment = (element) => {
-		this.view = untrack(() => this.createEditor(element, commonExtensions(this.theme)));
+		this.view = untrack(() => {
+			return new EditorView({
+				parent: element,
+				extensions: [commonExtensions(this.theme), this.extensions]
+			});
+		});
 
 		return () => {
 			this.view?.destroy();

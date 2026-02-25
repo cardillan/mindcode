@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
-	import { EditorView } from 'codemirror';
 	import { Code, Play, Trash2 } from '@lucide/svelte';
 
 	import * as Card from '$lib/components/ui/card';
@@ -22,14 +21,10 @@
 	const mlogEditor = new InputEditorStore({
 		theme,
 		api,
-		createEditor: (baseExtensions) => {
-			return new EditorView({ extensions: [baseExtensions, mlogLanguageExtension] });
-		}
+		extensions: [mlogLanguageExtension]
 	});
 
-	const mindcodeEditor = new OutputEditorStore(theme, (parent, baseExtensions) => {
-		return new EditorView({ parent, extensions: [baseExtensions, mindcodeLanguage] });
-	});
+	const mindcodeEditor = new OutputEditorStore(theme, [mindcodeLanguage]);
 
 	let runResults = $state<RunResult[]>([]);
 
