@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { EditorView } from 'codemirror';
 	import { tick } from 'svelte';
 	import { Code, Cpu, Play, Trash2 } from '@lucide/svelte';
 
@@ -35,7 +34,7 @@
 		api,
 		extensions: [schemacodeLanguage]
 	});
-	const encodedEditor = new OutputEditorStore(theme, [EditorView.lineWrapping]);
+	const encodedEditor = new OutputEditorStore(theme);
 
 	let runResults = $state<RunResult[]>([]);
 	let loadingAction = $state<'build' | 'build-run' | null>(null);
