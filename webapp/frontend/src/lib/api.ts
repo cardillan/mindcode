@@ -160,39 +160,6 @@ export class ApiHandler {
 
 		return await response.json();
 	}
-
-	async saveSource(source: string): Promise<ServerSource> {
-		const response = await this.fetch('/api/source', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'text/plain'
-			},
-			body: source
-		});
-
-		if (!response.ok) {
-			throw new ApiError(response.url, response.status);
-		}
-
-		return await response.json();
-	}
-
-	async updateSource(id: string, source: string): Promise<ServerSource> {
-		const path = `/api/source/${encodeURIComponent(id)}`;
-		const response = await this.fetch(path, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'text/plain'
-			},
-			body: source
-		});
-
-		if (!response.ok) {
-			throw new ApiError(path, response.status);
-		}
-
-		return await response.json();
-	}
 }
 
 export class ApiError extends Error {

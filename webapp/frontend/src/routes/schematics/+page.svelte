@@ -33,13 +33,9 @@
 	const schemacodeEditor = new InputEditorStore({
 		theme,
 		api,
-		createEditor(baseExtensions) {
-			return new EditorView({ extensions: [baseExtensions, schemacodeLanguage] });
-		}
+		extensions: [schemacodeLanguage]
 	});
-	const encodedEditor = new OutputEditorStore(theme, (parent, baseExtensions) => {
-		return new EditorView({ parent, extensions: [baseExtensions, EditorView.lineWrapping] });
-	});
+	const encodedEditor = new OutputEditorStore(theme, [EditorView.lineWrapping]);
 
 	let runResults = $state<RunResult[]>([]);
 	let loadingAction = $state<'build' | 'build-run' | null>(null);
@@ -147,6 +143,7 @@
 				samples={data.samples}
 				onSelect={selectSample}
 				disabled={schemacodeEditor.isLoading || loadingAction !== null}
+				selectedId={schemacodeEditor.sourceId}
 			/>
 		</ControlBar>
 	</div>
@@ -158,6 +155,7 @@
 			samples={data.samples}
 			onSelect={selectSample}
 			disabled={schemacodeEditor.isLoading || loadingAction !== null}
+			selectedId={schemacodeEditor.sourceId}
 		/>
 	</div>
 

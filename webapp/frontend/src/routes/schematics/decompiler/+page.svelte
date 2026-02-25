@@ -25,13 +25,9 @@
 	const encodedEditor = new InputEditorStore({
 		theme,
 		api,
-		createEditor(baseExtensions) {
-			return new EditorView({ extensions: [baseExtensions, EditorView.lineWrapping] });
-		}
+		extensions: [EditorView.lineWrapping]
 	});
-	const schemacodeEditor = new OutputEditorStore(theme, (parent, baseExtensions) => {
-		return new EditorView({ parent, extensions: [baseExtensions, schemacodeLanguage] });
-	});
+	const schemacodeEditor = new OutputEditorStore(theme, [schemacodeLanguage]);
 
 	let runResults = $state<RunResult[]>([]);
 	let loadingAction = $state<'decompile' | 'decompile-run' | null>(null);

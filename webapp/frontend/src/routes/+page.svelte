@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
 	import { setDiagnostics } from '@codemirror/lint';
-	import { EditorView } from 'codemirror';
 	import { tick, untrack } from 'svelte';
 	import { Play, Code, Cpu, Trash2 } from '@lucide/svelte';
 
@@ -40,19 +39,11 @@
 		api,
 		theme,
 		samples: untrack(() => data.samples),
-		createEditor(baseExtensions) {
-			return new EditorView({
-				extensions: [baseExtensions, mindcodeLanguage]
-			});
-		}
+		extensions: [mindcodeLanguage]
 	});
 
-	const mlogEditor = new OutputEditorStore(theme, (parent, baseExtensions) => {
-		return new EditorView({
-			parent,
-			extensions: [baseExtensions, outLanguage.of(mlogLanguageExtension)]
-		});
-	});
+	const outLanguage = new Compartment();
+	const mlogEditor = new OutputEditorStore(theme, [outLanguage.of(mlogLanguageExtension)]);
 
 	let runResults = $state<RunResult[]>([]);
 
@@ -61,7 +52,6 @@
 	let infos = $state<CompileResponseMessage[]>([]);
 	let loadingAction = $state<'compile' | 'compile-run' | null>(null);
 	let isPlainText = $state(false);
-	const outLanguage = new Compartment();
 
 	const compilerTarget = new LocalCompilerTarget();
 
@@ -165,6 +155,7 @@
 				samples={data.samples}
 				onSelect={selectSample}
 				disabled={mindcodeEditor.isLoading || loadingAction !== null}
+				selectedId={mindcodeEditor.sourceId}
 			/>
 		</ControlBar>
 	</div>
@@ -176,6 +167,7 @@
 			samples={data.samples}
 			onSelect={selectSample}
 			disabled={mindcodeEditor.isLoading || loadingAction !== null}
+			selectedId={mindcodeEditor.sourceId}
 		/>
 	</div>
 

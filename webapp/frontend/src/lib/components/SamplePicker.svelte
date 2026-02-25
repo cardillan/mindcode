@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import type { Sample } from '$lib/api';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
@@ -14,22 +13,34 @@
 	let {
 		samples,
 		onSelect,
-		disabled = false
-	}: { samples: Sample[]; onSelect: (sample: Sample) => void; disabled?: boolean } = $props();
+		disabled = false,
+		selectedId = null
+	}: {
+		samples: Sample[];
+		onSelect: (sample: Sample) => void;
+		disabled?: boolean;
+		selectedId?: string | null;
+	} = $props();
 
 	let open = $state(false);
 	let isDesktop = $state(false);
+	const selectedTitle = $derived.by(() => {
+		if (selectedId === null) return null;
+
+		const sample = samples.find((s) => s.id === selectedId);
+		if (!sample) return null;
+
+		return sample.title;
+	});
 
 	function checkScreenSize() {
 		isDesktop = window.innerWidth >= 768;
 	}
 
 	onMount(() => {
-		if (browser) {
-			checkScreenSize();
-			window.addEventListener('resize', checkScreenSize);
-			return () => window.removeEventListener('resize', checkScreenSize);
-		}
+		checkScreenSize();
+		window.addEventListener('resize', checkScreenSize);
+		return () => window.removeEventListener('resize', checkScreenSize);
 	});
 
 	function handleSampleSelect(sample: Sample) {
@@ -39,7 +50,9 @@
 </script>
 
 {#snippet button({ props }: ButtonArgs)}
-	<Button {...props} variant="outline">Select a sample...</Button>
+	<Button {...props} variant="outline">
+		{selectedTitle ?? 'Select a sample...'}
+	</Button>
 {/snippet}
 
 {#if isDesktop}
