@@ -43,6 +43,10 @@ import {
 } from '@codemirror/autocomplete';
 import { highlightSelectionMatches, search, searchKeymap } from '@codemirror/search';
 import EditorSearchPanel from './components/EditorSearchPanel.svelte';
+
+export const foldChevronDownId = 'fold-chevron-down';
+export const foldChevronRightId = 'fold-chevron-right';
+
 export type EditorStoreType = 'input' | 'output';
 
 export interface InputEditorStoreOptions {
@@ -228,7 +232,20 @@ function commonExtensions(themeStore: ThemeStore) {
 		highlightActiveLineGutter(),
 		highlightSpecialChars(),
 		history(),
-		foldGutter(),
+		foldGutter({
+			markerDOM(open) {
+				const div = document.createElement('div');
+				const templateId = open ? foldChevronDownId : foldChevronRightId;
+				const template = document.getElementById(templateId) as HTMLTemplateElement | null;
+				if (template) {
+					div.appendChild(template.content.cloneNode(true));
+				} else {
+					// fallback to a simple marker if the template is missing (shouldn't happen)
+					div.textContent = open ? '⌄' : '›';
+				}
+				return div;
+			}
+		}),
 		drawSelection(),
 		dropCursor(),
 		EditorState.allowMultipleSelections.of(true),
