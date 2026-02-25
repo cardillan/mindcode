@@ -17,11 +17,12 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.Target;
+import info.teksol.mindcode.samples.Sample;
+import info.teksol.mindcode.samples.Samples;
 import info.teksol.schemacode.SchemacodeCompiler;
 import info.teksol.schemacode.SchematicsDecompiler;
 import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.mindustry.SchematicsIO;
-import info.teksol.schemacode.schematics.Decompiler;
 import info.teksol.schemacode.schematics.Schematic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.stringtemplate.v4.compiler.Compiler;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -43,6 +43,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class ApiController {
     private static final Logger logger = LoggerFactory.getLogger(ApiController.class);
+    private static final Map<String, Sample> mindcodeSamples = Samples.loadMindcodeSamples();
+    private static final Map<String, Sample> schemacodeSamples = Samples.loadSchemacodeSamples();
 
     @Autowired
     private SourceRepository sourceRepository;
@@ -57,48 +59,33 @@ public class ApiController {
         }
     }
 
-    @PostMapping("/source")
-    public Source saveSource(@RequestBody String source) {
-        return sourceRepository.save(new Source(source, Instant.now()));
-    }
-
-    @PutMapping("/source/{id}")
-    public Source updateSource(@PathVariable String id, @RequestBody String source) {
-        try {
-            UUID uuid = UUID.fromString(id);
-            return sourceRepository.findById(uuid)
-                    .map(s -> sourceRepository.save(s.withSource(source)))
-                    .orElseGet(() -> sourceRepository.save(new Source(uuid, source, Instant.now())));
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid ID format");
-        }
-    }
-
     @PostMapping("/compile")
     public CompileResponse compile(@RequestBody CompileRequest request) {
         Target target = new Target(request.target);
         boolean run = request.run();
-        Source sourceDto = getSourceDto(request.sourceId, request.source);
+        ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.compileMindcode);
 
         ListMessageLogger messageLogger = new ListMessageLogger();
         MindcodeCompiler compiler = new MindcodeCompiler(
                 messageLogger,
-                CompilerProfile.fullOptimizations(false, true).setTarget(target).setRun(run),
-                InputFiles.fromSource(sourceDto.getSource()));
+                CompilerProfile.fullOptimizations(false, true)
+                        .setTarget(target)
+                        .setRun(run),
+                InputFiles.fromSource(apiSource.content));
 
         final long start = System.nanoTime();
         compiler.safeCompile();
         final long end = System.nanoTime();
         logger.info("performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
-        String compiled = getCompilationMessage(sourceDto.getSource(), compiler);
+        String compiled = getCompilationMessage(apiSource.content, compiler);
         boolean isText = compiled != null;
         if(compiled == null) {
             compiled = compiler.getOutput();
         }
 
         return new CompileResponse(
-                sourceDto.getId().toString(),
+                apiSource.id,
                 compiled,
                 errors(messageLogger),
                 warnings(messageLogger),
@@ -112,15 +99,17 @@ public class ApiController {
     public DecompileResponse decompileMlog(@RequestBody DecompileRequest request) {
         Target target = new Target(request.target);
         boolean run = request.run();
-        Source sourceDto =  getSourceDto(request.sourceId, request.source);
-        String mlog = sourceDto.getSource();
+        ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.other);
+        String mlog = apiSource.content;
         final String decompiled = MlogDecompiler.decompile(mlog);
 
         ListMessageLogger messageLogger = new ListMessageLogger();
         List<RunResult> runResults = List.of();
 
         if(run) {
-            CompilerProfile profile = CompilerProfile.fullOptimizations(false, true).setTarget(target).setRun(run);
+            CompilerProfile profile = CompilerProfile.fullOptimizations(false, true)
+                    .setTarget(target)
+                    .setRun(true);
             InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(
                     messageLogger,
                     new StandardNameCreator(),
@@ -139,7 +128,7 @@ public class ApiController {
         }
 
         return new DecompileResponse(
-                sourceDto.getId().toString(),
+                apiSource.id,
                 decompiled,
                 errors(messageLogger),
                 warnings(messageLogger),
@@ -151,19 +140,21 @@ public class ApiController {
     @PostMapping("/schemacode/compile")
     public SchemacodeCompileResponse compileSchemacode(@RequestBody SchemacodeCompileRequest request) {
         Target target = new Target(request.target());
-        Source sourceDto = getSourceDto(request.sourceId, request.source);
+        ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.other);
 
         ListMessageLogger messageLogger = new ListMessageLogger();
         final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(
                 messageLogger,
-                InputFiles.fromSource(sourceDto.getSource()),
-                CompilerProfile.fullOptimizations(true, true).setTarget(target).setRun(request.run));
+                InputFiles.fromSource(apiSource.content),
+                CompilerProfile.fullOptimizations(true, true)
+                        .setTarget(target)
+                        .setRun(request.run));
 
         String compiledCode = result.getStringOutput();
         List<RunResult> runResults = result.emulator() instanceof Emulator emulator ? processEmulatorResults(emulator) : List.of();
 
         return new SchemacodeCompileResponse(
-                sourceDto.getId().toString(),
+                apiSource.id,
                 compiledCode,
                 errors(messageLogger),
                 warnings(messageLogger),
@@ -174,15 +165,17 @@ public class ApiController {
 
     @PostMapping("/schemacode/decompile")
     public DecompileResponse decompileSchematic(@RequestBody DecompileRequest request) {
-        Source sourceDto = getSourceDto(request.sourceId, request.source);
+        ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.other);
         ListMessageLogger messageLogger = new ListMessageLogger();
-        final CompilerOutput<String> compilerOutput = SchematicsDecompiler.decompile(messageLogger, sourceDto.getSource());
+        final CompilerOutput<String> compilerOutput = SchematicsDecompiler.decompile(messageLogger, apiSource.content);
         List<RunResult> runResults = List.of();
 
         run: if (request.run) {
             Target target = new Target(request.target);
-            CompilerProfile profile = CompilerProfile.fullOptimizations(false, true).setTarget(target).setRun(request.run);
-            Schematic schematic = parseSchematic(sourceDto.getSource(), messageLogger);
+            CompilerProfile profile = CompilerProfile.fullOptimizations(false, true)
+                    .setTarget(target)
+                    .setRun(true);
+            Schematic schematic = parseSchematic(apiSource.content, messageLogger);
             if(schematic == null) break run;
 
             EmulatorSchematic emulatorSchematic = schematic.toEmulatorSchematic(SchematicsMetadata.getMetadata());
@@ -193,7 +186,7 @@ public class ApiController {
         }
 
         return new DecompileResponse(
-                sourceDto.getId().toString(),
+                apiSource.id,
                 compilerOutput.output(),
                 errors(messageLogger),
                 warnings(messageLogger),
@@ -202,19 +195,26 @@ public class ApiController {
         );
     }
 
-    private Source getSourceDto(String id, String source) {
-        Source sourceDto;
-        if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
+    private ApiSource getApiSource(String id, String source, GetSourceMode mode) {
+        ApiSource apiSource;
+        if (mode == GetSourceMode.compileMindcode && mindcodeSamples.containsKey(id)) {
+            apiSource = new ApiSource(id, source);
+        } else if (mode == GetSourceMode.compileSchemacode && schemacodeSamples.containsKey(id)) {
+            apiSource = new ApiSource(id, source);
+        } else if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
             final Source newSource = dto
                     .map(sdto -> sdto.withSource(source))
                     .orElseGet(() -> new Source(source, Instant.now()));
-            sourceDto = sourceRepository.save(newSource);
+
+            final Source sourceDto = sourceRepository.save(newSource);
+            apiSource = new ApiSource(sourceDto.getId().toString(), source);
         } else {
-            sourceDto = sourceRepository.save(new Source(source, Instant.now()));
+            Source sourceDto = sourceRepository.save(new Source(source, Instant.now()));
+            apiSource = new ApiSource(sourceDto.getId().toString(), source);
         }
 
-        return sourceDto;
+        return apiSource;
     }
 
     private String getCompilationMessage(String sourceCode, MindcodeCompiler compiler) {
@@ -357,6 +357,25 @@ public class ApiController {
             return null;
         }
     }
+
+
+    private enum GetSourceMode {
+        compileMindcode,
+        compileSchemacode,
+        other,
+    }
+
+    /**
+     * <p>
+     *     Can represent either a {@link Source} object loaded from the server (saved on compile requests)
+     *     or a sample received for compilation (not saved on compile requests).
+     * </p>
+     * <p>
+     *     This class had to be created because {@link Source} only supports {@link UUID} ids, which
+     *     are not compatible with the sample ids.
+     * </p>
+     */
+    private record ApiSource(String id, String content) {}
 
     public record CompileRequest(String sourceId, String source, String target, boolean run) {}
     public record CompileResponse(
