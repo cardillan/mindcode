@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { syncUrl, type LocalCompilerTarget } from '$lib/stores.svelte';
+	import { untrack } from 'svelte';
 	import * as Select from './ui/select';
 
 	let {
@@ -8,26 +9,48 @@
 		compilerTarget: LocalCompilerTarget;
 	} = $props();
 
-	const targetOptions = {
-		'6': 'Target: Mindustry 6',
-		'7': 'Target: Mindustry 7',
-		'7w': 'Target: Mindustry 7 WP',
-		'8': 'Target: Mindustry 8',
-		'8w': 'Target: Mindustry 8 WP'
+	let gameVersion = $state(untrack(() => compilerTarget.value.slice(0, 1)));
+	let processorType = $state(untrack(() => compilerTarget.value.slice(1) || 'none'));
+
+	const gameVersions = {
+		'6': 'Mindustry 6',
+		'7': 'Mindustry 7',
+		'8': 'Mindustry 8'
+	};
+	const processorTypes = {
+		// can't use an empty string as a value for the "none" option
+		// because it will cause the Select component to have "disabled" styles
+		none: 'No processor',
+		m: 'Micro processor',
+		l: 'Logic processor',
+		h: 'Hyper processor',
+		w: 'World processor'
 	};
 
-	async function setValue(value: string) {
-		compilerTarget.value = value;
-		await syncUrl({ compilerTarget: value });
+	async function setValue() {
+		const suffix = processorType === 'none' ? '' : processorType;
+		compilerTarget.value = gameVersion + suffix;
+		await syncUrl({ compilerTarget: compilerTarget.value });
 	}
 </script>
 
-<Select.Root type="single" bind:value={() => compilerTarget.value, setValue}>
+<Select.Root type="single" bind:value={gameVersion} onValueChange={setValue}>
 	<Select.Trigger>
-		{targetOptions[compilerTarget.value as keyof typeof targetOptions] || 'Select Target'}
+		{gameVersions[gameVersion as keyof typeof gameVersions] || 'Select Target'}
 	</Select.Trigger>
 	<Select.Content>
-		{#each Object.entries(targetOptions) as [key, label]}
+		{#each Object.entries(gameVersions) as [key, label]}
+			<Select.Item value={key}>{label}</Select.Item>
+		{/each}
+	</Select.Content>
+</Select.Root>
+
+<Select.Root type="single" bind:value={processorType} onValueChange={setValue}>
+	<Select.Trigger>
+		{processorTypes[processorType as keyof typeof processorTypes] || 'Select Processor'}
+	</Select.Trigger>
+	<Select.Content>
+		{#each Object.entries(processorTypes) as [key, label]}
 			<Select.Item value={key}>{label}</Select.Item>
 		{/each}
 	</Select.Content>
