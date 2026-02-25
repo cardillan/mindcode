@@ -1,6 +1,5 @@
 @precedence { 
   dot, 
-  dots @left,
   declModifierBracket,
   stat,
   call,
@@ -12,6 +11,7 @@
   shift @left,
   bitAnd @left,
   bitOr @left,
+  dots @left,
   inList @left,
   rel @left,
   equal @left,
