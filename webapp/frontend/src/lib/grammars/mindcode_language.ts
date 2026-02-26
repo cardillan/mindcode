@@ -27,7 +27,7 @@ export const mindcodeLanguage = LRLanguage.define({
 				'var const param': t.definitionKeyword,
 				'cached export external guarded linked noinit remote volatile in out ref inline noinline':
 					t.keyword,
-				'if then else elsif for do while break continue return case when begin end':
+				'if then else elsif loop for do while break continue return case when begin end':
 					t.controlKeyword,
 				'def void': t.definitionKeyword,
 				'allocate heap stack require module mlog atomic debug and or not': t.keyword,
@@ -71,7 +71,7 @@ export const mindcodeLanguage = LRLanguage.define({
 						closing: 'end',
 						align: false
 					}),
-				'ForLoop WhileLoop': delimitedIndent({
+				'Loop ForLoop WhileLoop': delimitedIndent({
 					closing: 'end',
 					align: false
 				}),
@@ -79,7 +79,7 @@ export const mindcodeLanguage = LRLanguage.define({
 				MlogBlock: delimitedIndent({ closing: '}', align: false })
 			}),
 			foldNodeProp.add({
-				'Block IfExpression FunctionDefinition CaseExpression AtomicBlock DebugBlock ForLoop WhileLoop MlogBlock':
+				'Block IfExpression FunctionDefinition CaseExpression AtomicBlock DebugBlock ForLoop Loop WhileLoop MlogBlock':
 					foldInside,
 				DoWhileLoop(node) {
 					const firstChild = node.getChild('do');
@@ -87,6 +87,12 @@ export const mindcodeLanguage = LRLanguage.define({
 					if (!lastChild || !firstChild || lastChild.to <= firstChild.to) return null;
 
 					return { from: firstChild.to, to: lastChild.from };
+				},
+				FunctionDefinition(node) {
+					const name = node.getChild('Identifier');
+					const end = node.getChild('end');
+					if (!name || !end) return null;
+					return { from: name.to, to: end.from };
 				}
 			})
 		]
