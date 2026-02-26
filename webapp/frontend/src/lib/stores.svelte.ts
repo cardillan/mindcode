@@ -5,17 +5,21 @@ import { browser } from '$app/environment';
 
 export const sourceIdKey = 's';
 export const compilerTargetKey = 'compilerTarget';
+export const defaultGameVersion = '7';
+export const defaultProcessorType = 'm';
+
+const defaultTarget = defaultGameVersion + defaultProcessorType;
 
 export class LocalCompilerTarget {
-	value = $state('7');
+	value = $state(defaultTarget);
 
 	constructor() {
 		this.value = untrack(
-			() => (browser ? page.url.searchParams.get(compilerTargetKey) : null) || '7'
+			() => (browser ? page.url.searchParams.get(compilerTargetKey) : null) || defaultTarget
 		);
 
 		$effect(() => {
-			this.value = page.url.searchParams.get(compilerTargetKey) || '7';
+			this.value = page.url.searchParams.get(compilerTargetKey) || defaultTarget;
 		});
 	}
 
