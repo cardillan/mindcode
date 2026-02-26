@@ -225,6 +225,19 @@ export class OutputEditorStore {
 		public theme: ThemeStore,
 		public extensions: Extension[] = []
 	) {
+		$effect.pre(() => {
+			untrack(() => {
+				this.view = new EditorView({
+					extensions: [commonExtensions(theme), ...extensions]
+				});
+			});
+
+			return () => {
+				this.view?.destroy();
+				this.view = undefined;
+			};
+		});
+
 		$effect(() => {
 			if (!this.view) return;
 			const editor = this.view;
@@ -238,17 +251,9 @@ export class OutputEditorStore {
 	}
 
 	attach: Attachment = (element) => {
-		this.view = untrack(() => {
-			return new EditorView({
-				parent: element,
-				extensions: [commonExtensions(this.theme), this.extensions]
-			});
-		});
-
-		return () => {
-			this.view?.destroy();
-			this.view = undefined;
-		};
+		const view = this.view;
+		if (!view) return;
+		element.appendChild(view.dom);
 	};
 
 	get state(): EditorState | undefined {
