@@ -2,7 +2,7 @@
 @dialects { mindcodeEmbed }
 @top Program { statements? }
 
-@skip { whitespace | Comment }
+@skip { whitespace | Comment | MindcodeComment }
 
 
 statements {
@@ -87,6 +87,7 @@ Boolean {
   instructionSeparator { "\n" | ";" }
   whitespace { @whitespace }
   Comment { "#" ![\n]* }
+  MindcodeComment[@dialect=mindcodeEmbed] { "//" ![\n]* }
   identifier { ![ \t\n\r#;"] ![ \t\n\r#;]* }
   maybeLabelName { ![ \t\n\r#;"] ![ \t\n\r#;]* ":" }
 
@@ -94,6 +95,7 @@ Boolean {
     instructionSeparator,
     whitespace,
     Comment,
+    MindcodeComment,
     maybeLabelName,
     identifier
   }
