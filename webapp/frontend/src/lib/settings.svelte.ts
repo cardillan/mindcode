@@ -6,10 +6,12 @@ const storageKey = 'mindcode-settings';
 
 export interface Settings {
 	mlogWatcherPort: number;
+	lineWrapping: boolean;
 }
 
 const defaultSettings: Settings = {
-	mlogWatcherPort: 9992
+	mlogWatcherPort: 9992,
+	lineWrapping: true
 };
 
 /**
@@ -18,6 +20,7 @@ const defaultSettings: Settings = {
  */
 export class SettingsStore {
 	mlogWatcherPort = $state(defaultSettings.mlogWatcherPort);
+	lineWrapping = $state(defaultSettings.lineWrapping);
 
 	constructor() {
 		if (!browser) return;
@@ -27,7 +30,8 @@ export class SettingsStore {
 		// Auto-save settings when they change
 		$effect(() => {
 			const currentSettings: Settings = {
-				mlogWatcherPort: this.mlogWatcherPort
+				mlogWatcherPort: this.mlogWatcherPort,
+				lineWrapping: this.lineWrapping
 			};
 
 			this.#saveSettings(currentSettings);
@@ -45,6 +49,7 @@ export class SettingsStore {
 
 				// Apply loaded settings with defaults as fallback
 				this.mlogWatcherPort = parsed.mlogWatcherPort ?? defaultSettings.mlogWatcherPort;
+				this.lineWrapping = parsed.lineWrapping ?? defaultSettings.lineWrapping;
 			}
 		} catch (error) {
 			console.error('Failed to load settings from localStorage:', error);
@@ -69,6 +74,7 @@ export class SettingsStore {
 	 */
 	reset() {
 		this.mlogWatcherPort = defaultSettings.mlogWatcherPort;
+		this.lineWrapping = defaultSettings.lineWrapping;
 	}
 
 	/**
@@ -76,7 +82,8 @@ export class SettingsStore {
 	 */
 	export(): Settings {
 		return {
-			mlogWatcherPort: this.mlogWatcherPort
+			mlogWatcherPort: this.mlogWatcherPort,
+			lineWrapping: this.lineWrapping
 		};
 	}
 
@@ -86,6 +93,9 @@ export class SettingsStore {
 	import(settings: Partial<Settings>) {
 		if (settings.mlogWatcherPort !== undefined) {
 			this.mlogWatcherPort = settings.mlogWatcherPort;
+		}
+		if (settings.lineWrapping !== undefined) {
+			this.lineWrapping = settings.lineWrapping;
 		}
 	}
 }

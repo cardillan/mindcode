@@ -23,18 +23,21 @@
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
+	import { getSettingsContext } from '$lib/settings.svelte';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
 
 	const theme = getThemeContext();
+	const settings = getSettingsContext();
 
 	const schemacodeEditor = new InputEditorStore({
 		theme,
 		api,
-		extensions: [schemacodeLanguage]
+		extensions: [schemacodeLanguage],
+		settings
 	});
-	const encodedEditor = new OutputEditorStore(theme);
+	const encodedEditor = new OutputEditorStore(theme, [], settings);
 
 	let runResults = $state<RunResult[]>([]);
 	let loadingAction = $state<'build' | 'build-run' | null>(null);

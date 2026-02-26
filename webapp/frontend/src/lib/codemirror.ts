@@ -16,6 +16,7 @@ import { invertedEffects } from '@codemirror/commands';
 
 // Compartment for dynamically switching themes
 export const themeCompartment = new Compartment();
+export const lineWrappingCompartment = new Compartment();
 
 export const defaultDocId = Facet.define<string | null, string | null>({
 	combine: (values) => values[values.length - 1]

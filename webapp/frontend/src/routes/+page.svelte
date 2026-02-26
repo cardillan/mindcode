@@ -44,11 +44,16 @@
 		api,
 		theme,
 		samples: untrack(() => data.samples),
-		extensions: [mindcodeLanguage]
+		extensions: [mindcodeLanguage],
+		settings
 	});
 
 	const outLanguage = new Compartment();
-	const mlogEditor = new OutputEditorStore(theme, [outLanguage.of(mlogLanguageExtension)]);
+	const mlogEditor = new OutputEditorStore(
+		theme,
+		[outLanguage.of(mlogLanguageExtension)],
+		settings
+	);
 	const channel = new MlogWatcherStore(() => settings.mlogWatcherPort);
 
 	let runResults = $state<RunResult[]>([]);
