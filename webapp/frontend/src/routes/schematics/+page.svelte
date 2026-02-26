@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tick } from 'svelte';
-	import { Code, Cpu, Play, Trash2 } from '@lucide/svelte';
+	import { Code, Play, Trash2 } from '@lucide/svelte';
 
 	import * as Card from '$lib/components/ui/card';
 	import {
@@ -173,11 +173,6 @@
 		{#snippet inputActions()}
 			<EditorActionButton tooltip="Erase schemacode" onClick={cleanEditors}>
 				<Trash2 class="size-4" />
-			</EditorActionButton>
-		{/snippet}
-		{#snippet outputActions()}
-			<EditorActionButton tooltip="Send to MlogWatcher">
-				<Cpu class="size-4" />
 			</EditorActionButton>
 		{/snippet}
 	</EditorLayout>
