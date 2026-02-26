@@ -33,7 +33,7 @@
 	]}
 >
 	{#if copied}
-		<CheckIcon class="wrap size-4" />
+		<CheckIcon class="size-4" />
 	{:else}
 		<CopyIcon class="size-4" />
 	{/if}
