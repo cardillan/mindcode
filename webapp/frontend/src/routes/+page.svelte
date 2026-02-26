@@ -2,7 +2,7 @@
 	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
 	import { setDiagnostics } from '@codemirror/lint';
 	import { tick, untrack } from 'svelte';
-	import { Play, Code, Cpu, Trash2 } from '@lucide/svelte';
+	import { Play, Code, Trash2 } from '@lucide/svelte';
 
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
 	import ControlBar from '$lib/components/ControlBar.svelte';
@@ -23,16 +23,21 @@
 		updateEditor
 	} from '$lib/codemirror';
 	import { LocalCompilerTarget, syncUrl, getThemeContext } from '$lib/stores.svelte';
+	import { getSettingsContext } from '$lib/settings.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import { Compartment } from '@codemirror/state';
 	import SamplePicker from '$lib/components/SamplePicker.svelte';
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
+	import { MlogWatcherStore } from '$lib/mlog_watcher';
+	import MlogWatcherButton from '$lib/components/MlogWatcherButton.svelte';
+	import SettingsButton from '$lib/components/SettingsButton.svelte';
 
 	let { data }: PageProps = $props();
 
 	const theme = getThemeContext();
+	const settings = getSettingsContext();
 	const api = new ApiHandler();
 
 	const mindcodeEditor = new InputEditorStore({
@@ -44,6 +49,7 @@
 
 	const outLanguage = new Compartment();
 	const mlogEditor = new OutputEditorStore(theme, [outLanguage.of(mlogLanguageExtension)]);
+	const channel = new MlogWatcherStore(() => settings.mlogWatcherPort);
 
 	let runResults = $state<RunResult[]>([]);
 
@@ -157,6 +163,7 @@
 				disabled={mindcodeEditor.isLoading || loadingAction !== null}
 				selectedId={mindcodeEditor.sourceId}
 			/>
+			<SettingsButton />
 		</ControlBar>
 	</div>
 
@@ -169,6 +176,7 @@
 			disabled={mindcodeEditor.isLoading || loadingAction !== null}
 			selectedId={mindcodeEditor.sourceId}
 		/>
+		<SettingsButton />
 	</div>
 
 	<!-- Editor Layout -->
@@ -190,9 +198,7 @@
 			</EditorActionButton>
 		{/snippet}
 		{#snippet outputActions()}
-			<EditorActionButton tooltip="Send to MlogWatcher">
-				<Cpu class="size-4" />
-			</EditorActionButton>
+			<MlogWatcherButton {channel} getText={() => mlogEditor.view?.state.doc.toString() ?? ''} />
 		{/snippet}
 	</EditorLayout>
 

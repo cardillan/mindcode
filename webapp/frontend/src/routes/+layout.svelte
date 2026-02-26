@@ -4,9 +4,11 @@
 	import { page } from '$app/state';
 	import * as Select from '$lib/components/ui/select';
 	import { setThemeContext } from '$lib/stores.svelte.js';
+	import { setSettingsContext } from '$lib/settings.svelte.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { foldChevronDownId, foldChevronRightId } from '$lib/editors.svelte.js';
 	import { ChevronDown, ChevronRight } from '@lucide/svelte';
+	import { Toaster } from '$lib/components/ui/sonner';
 
 	interface Tool {
 		value: string;
@@ -39,6 +41,7 @@
 	];
 
 	setThemeContext();
+	setSettingsContext();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
@@ -51,6 +54,8 @@
 <template id={foldChevronDownId}>
 	<ChevronDown />
 </template>
+
+<Toaster />
 
 <div class="flex min-h-screen flex-col bg-background text-foreground">
 	<header class="shrink-0 border-b bg-card">
