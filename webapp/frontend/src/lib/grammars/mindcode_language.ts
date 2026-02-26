@@ -79,7 +79,7 @@ export const mindcodeLanguage = LRLanguage.define({
 				MlogBlock: delimitedIndent({ closing: '}', align: false })
 			}),
 			foldNodeProp.add({
-				'Block IfExpression FunctionDefinition CaseExpression AtomicBlock DebugBlock ForLoop Loop WhileLoop MlogBlock':
+				'Block IfExpression CaseExpression AtomicBlock DebugBlock ForLoop Loop WhileLoop':
 					foldInside,
 				DoWhileLoop(node) {
 					const firstChild = node.getChild('do');
@@ -93,6 +93,12 @@ export const mindcodeLanguage = LRLanguage.define({
 					const end = node.getChild('end');
 					if (!name || !end) return null;
 					return { from: name.to, to: end.from };
+				},
+				MlogBlock(node) {
+					const start = node.getChild('MlogBodyStart');
+					const end = node.getChild('MlogBodyEnd');
+					if (!start || !end) return null;
+					return { from: start.to, to: end.from };
 				}
 			})
 		]
