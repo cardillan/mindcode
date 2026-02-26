@@ -18,12 +18,18 @@
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 	import { getSettingsContext } from '$lib/settings.svelte';
+	import { EditorView } from 'codemirror';
 
 	const theme = getThemeContext();
 	const settings = getSettingsContext();
 
 	const api = new ApiHandler();
-	const encodedEditor = new InputEditorStore({ theme, api, settings });
+	const encodedEditor = new InputEditorStore({
+		theme,
+		api,
+		settings,
+		extensions: [EditorView.lineWrapping]
+	});
 	const schemacodeEditor = new OutputEditorStore(theme, [schemacodeLanguage], settings);
 
 	let runResults = $state<RunResult[]>([]);
