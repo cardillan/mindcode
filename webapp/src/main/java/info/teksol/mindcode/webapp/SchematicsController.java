@@ -63,7 +63,7 @@ public class SchematicsController {
     @GetMapping
     public ModelAndView getHomePage(@RequestParam(name = "s", defaultValue = "") String id,
                                     @RequestParam(name = "compilerTarget", defaultValue = "7s") String compilerTarget) {
-        Target target = new Target(compilerTarget);
+        Target target = Target.fromString(compilerTarget);
         final String sampleName;
         final String sourceCode;
         if (samples.containsKey(id)) {

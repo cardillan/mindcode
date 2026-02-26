@@ -3,6 +3,7 @@ package info.teksol.mc.profile.options;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -13,10 +14,20 @@ public final class Target {
 
     public Target(ProcessorVersion version, ProcessorType type) {
         this.version = version;
-        this.type = type;
+        this.type = type.isSupportedBy(version) ? type : ProcessorType.MICRO_PROCESSOR;
     }
 
-    public Target(String value) {
+    public static Target fromString(String value) {
+        Target target = fromStringNullable(value);
+
+        if (target == null) {
+            throw new IllegalArgumentException("Invalid target: " + value);
+        }
+
+        return target;
+    }
+
+    public static @Nullable Target fromStringNullable(String value) {
         char code = value.charAt(value.length() - 1);
         ProcessorType type = Character.isDigit(code) ? ProcessorType.NO_PROCESSOR : ProcessorType.byCode(code);
         ProcessorVersion version = ProcessorVersion.byCode(value.substring(
@@ -24,11 +35,10 @@ public final class Target {
                 value.length() - (type == null || Character.isDigit(code) ? 0 : 1)));
 
         if (version == null) {
-            throw new IllegalArgumentException("Invalid target: " + value);
+            return null;
         }
 
-        this.version = version;
-        this.type = type != null ? type : ProcessorType.S;
+        return new Target(version, type != null ? type : ProcessorType.S);
     }
 
     public ProcessorVersion version() {

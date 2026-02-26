@@ -7,10 +7,7 @@ import info.teksol.mc.emulator.ExecutorResults;
 import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.CompilerProfile;
-import info.teksol.mc.profile.options.BooleanCompilerOptionValue;
-import info.teksol.mc.profile.options.CompilerOptionValue;
-import info.teksol.mc.profile.options.OptionCategory;
-import info.teksol.mc.profile.options.OptionMultiplicity;
+import info.teksol.mc.profile.options.*;
 import info.teksol.mindcode.cmdline.mlogwatcher.*;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
@@ -66,6 +63,8 @@ abstract class ActionHandler {
 
         if (option instanceof BooleanCompilerOptionValue booleanOption) {
             argument.type(Arguments.booleanType(booleanOption.getTrueValue(), booleanOption.getFalseValue()));
+        } else if (option instanceof TargetCompilerOptionValue targetOption) {
+            argument.type(this::convertTarget);
         } else if (option.getValueType().isEnum()) {
             argument.type(LowerCaseEnumArgumentType.forClass(option.getValueType()));
         } else {
@@ -99,6 +98,15 @@ abstract class ActionHandler {
         }
 
         return argument;
+    }
+
+    public Target convertTarget(ArgumentParser parser, Argument arg, String value) throws ArgumentParserException {
+        Target target = Target.fromStringNullable(value);
+        if (target == null) {
+            throw new ArgumentParserException("Could not convert target", parser, arg);
+        } else {
+            return target;
+        }
     }
 
     void addOutputFileOption(ArgumentGroup files, boolean acceptSystemIn, String help, String... flags) {

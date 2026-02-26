@@ -147,7 +147,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         if (strTarget.isBlank()) return;
 
         try {
-            Target target = new Target(strTarget);
+            Target target = Target.fromString(strTarget);
             getCompilerProfile().setTarget(target);
             SchematicsMetadata.setMetadata(MindustryMetadata.forVersion(target.version()));
         } catch (IllegalArgumentException e) {

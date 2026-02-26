@@ -99,7 +99,7 @@ public class HomeController {
             @RequestParam(name = "compilerTarget", defaultValue = "7s") String compilerTarget,
             @RequestParam(name = "run", defaultValue = "false") String compileAndRun
     ) {
-        Target target = new Target(compilerTarget);
+        Target target = Target.fromString(compilerTarget);
         boolean run = "true".equals(compileAndRun);
         final String sampleName;
         final String sourceCode;

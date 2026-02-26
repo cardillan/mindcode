@@ -6,21 +6,31 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public enum ProcessorType {
-    NO_PROCESSOR            ("Micro Processor",  1,  true),
-    MICRO_PROCESSOR         ("Micro Processor",  2, false),
-    LOGIC_PROCESSOR         ("Logic Processor",  8, false),
-    HYPER_PROCESSOR         ("Hyper Processor", 25, false),
-    WORLD_PROCESSOR         ("World processor",  8,  true),
+    NO_PROCESSOR            (ProcessorVersion.V8A, "Micro Processor",  1,  true),
+    MICRO_PROCESSOR         (ProcessorVersion.V6,  "Micro Processor",  2, false),
+    LOGIC_PROCESSOR         (ProcessorVersion.V6,  "Logic Processor",  8, false),
+    HYPER_PROCESSOR         (ProcessorVersion.V6,  "Hyper Processor", 25, false),
+    WORLD_PROCESSOR         (ProcessorVersion.V7,  "World processor",  8,  true),
     ;
 
+    private final ProcessorVersion minimalVersion;
     private final String title;
     private final int ipt;
     private final boolean privileged;
 
-    ProcessorType(String title, int ipt, boolean privileged) {
+    ProcessorType(ProcessorVersion minimalVersion, String title, int ipt, boolean privileged) {
+        this.minimalVersion = minimalVersion;
         this.title = title;
         this.ipt = ipt;
         this.privileged = privileged;
+    }
+
+    public ProcessorVersion getMinimalVersion() {
+        return minimalVersion;
+    }
+
+    public boolean isSupportedBy(ProcessorVersion version) {
+        return version.atLeast(minimalVersion);
     }
 
     public String getTitle() {

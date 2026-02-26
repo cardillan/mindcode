@@ -56,13 +56,13 @@ public abstract class AbstractCommandLineTest {
             @Test
             public void shortArgument6() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("-t 6");
-                assertEquals(new Target("6"), profile.getTarget());
+                assertEquals(Target.fromString("6"), profile.getTarget());
             }
 
             @Test
             public void longArgument7_0W() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("-t 7.0w");
-                assertEquals(new Target("7.0w"), profile.getTarget());
+                assertEquals(Target.fromString("7.0w"), profile.getTarget());
             }
         }
 

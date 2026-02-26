@@ -226,11 +226,11 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     }
 
     public ProcessorVersion getProcessorVersion() {
-        return this.<Target>getOption(EnvironmentOptions.TARGET).getValue().version();
+        return getTarget().version();
     }
 
     public ProcessorType getProcessorType() {
-        return this.<Target>getOption(EnvironmentOptions.TARGET).getValue().type();
+        return getTarget().type();
     }
 
     public Target getCompilerTarget() {

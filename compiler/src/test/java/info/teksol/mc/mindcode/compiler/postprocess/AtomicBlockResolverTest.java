@@ -18,7 +18,7 @@ class AtomicBlockResolverTest {
             return super.createCompilerProfile()
                     .setAtomicMergeLevel(5)
                     .setSetrate(10)
-                    .setTarget(new Target("8w"))
+                    .setTarget(Target.fromString("8w"))
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
         }
 
@@ -344,7 +344,7 @@ class AtomicBlockResolverTest {
         protected CompilerProfile createCompilerProfile() {
             return super.createCompilerProfile()
                     .setAtomicFullProtection(false)
-                    .setTarget(new Target("8m"))
+                    .setTarget(Target.fromString("8m"))
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
         }
 
@@ -454,7 +454,7 @@ class AtomicBlockResolverTest {
         protected CompilerProfile createCompilerProfile() {
             return super.createCompilerProfile()
                     .setAtomicFullProtection(false)
-                    .setTarget(new Target("8m"))
+                    .setTarget(Target.fromString("8m"))
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
         }
 
@@ -682,7 +682,7 @@ class AtomicBlockResolverTest {
         protected CompilerProfile createCompilerProfile() {
             return super.createCompilerProfile()
                     .setAtomicFullProtection(true)
-                    .setTarget(new Target("8m"))
+                    .setTarget(Target.fromString("8m"))
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
         }
 
