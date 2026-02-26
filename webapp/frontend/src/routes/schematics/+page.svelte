@@ -24,6 +24,7 @@
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 	import { getSettingsContext } from '$lib/settings.svelte';
+	import { EditorView } from 'codemirror';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
@@ -37,7 +38,7 @@
 		extensions: [schemacodeLanguage],
 		settings
 	});
-	const encodedEditor = new OutputEditorStore(theme, [], settings);
+	const encodedEditor = new OutputEditorStore(theme, [EditorView.lineWrapping], settings);
 
 	let runResults = $state<RunResult[]>([]);
 	let loadingAction = $state<'build' | 'build-run' | null>(null);
