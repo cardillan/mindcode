@@ -5288,22 +5288,6 @@ Modifications by Unroll iteration loop at line 169:9 (+7 instructions):
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     4 # "Function: inline void locateDomeAndCore()"
-     5 set .DOME dome1
-     6 label *label3
--    * jump *label5 notEqual .DOME null
-+    7 jump *label5 notEqual dome1 null
-     8 label *label381
-     9 print "[gold]Waiting for an overdrive dome to be connected..."
-    10 printflush message1
-    11 set .DOME dome1
-    12 label *label4
--    * jump *label381 equal .DOME null
-+   13 jump *label381 equal dome1 null
-    14 label *label5
-    15 print "[gold]Locating core..."
-    16 printflush message1
- 
     18 label *label6
     19 set :locateDomeAndCore:type @flare
     20 label *label384
@@ -6577,13 +6561,13 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
      4 # "Function: inline void locateDomeAndCore()"
      5 set .DOME dome1
 -    * label *label3
-     6 jump *label5 notEqual dome1 null
+     6 jump *label5 notEqual .DOME null
      7 label *label381
      8 print "[gold]Waiting for an overdrive dome to be connected..."
      9 printflush message1
     10 set .DOME dome1
 -    * label *label4
-    11 jump *label381 equal dome1 null
+    11 jump *label381 equal .DOME null
     12 label *label5
     13 print "[gold]Locating core..."
     14 printflush message1
@@ -8330,12 +8314,12 @@ set UNIT_TYPE @flare
 remark "Do not modify anything below this line."
 # "Function: inline void locateDomeAndCore()"
 set .DOME dome1
-jump *label5 notEqual dome1 null
+jump *label5 notEqual .DOME null
 label *label381
 print "[gold]Waiting for an overdrive dome to be connected..."
 printflush message1
 set .DOME dome1
-jump *label381 equal dome1 null
+jump *label381 equal .DOME null
 label *label5
 print "[gold]Locating core..."
 printflush message1

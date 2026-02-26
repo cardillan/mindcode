@@ -92,14 +92,14 @@ which produces:
 # Mlog code compiled with support for symbolic labels
 # You can safely add/remove instructions, in most parts of the program
 # Pay closer attention to sections of the program manipulating @counter
-    sensor *tmp0 switch1 @enabled
-    jump label_7 equal *tmp0 false
-label_2:
-    sensor *tmp1 switch2 @enabled
+    sensor *tmp1 switch1 @enabled
     jump label_7 equal *tmp1 false
+label_2:
+    sensor *tmp3 switch2 @enabled
+    jump label_7 equal *tmp3 false
         print "Doing something."
-    sensor *tmp0 switch1 @enabled
-    jump label_2 notEqual *tmp0 false
+    sensor *tmp1 switch1 @enabled
+    jump label_2 notEqual *tmp1 false
     label_7:
     print "A switch has been reset."
 ```

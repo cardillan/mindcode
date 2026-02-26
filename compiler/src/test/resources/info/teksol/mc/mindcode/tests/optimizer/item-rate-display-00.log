@@ -1,5 +1,5 @@
-   205 instructions before optimizations.
-    34 instructions eliminated by Temp Variables Elimination (7 iterations).
+   206 instructions before optimizations.
+    35 instructions eliminated by Temp Variables Elimination (7 iterations).
     16 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Jump Normalization (6 iterations).
     12 instructions eliminated by Condition Optimization (7 iterations).
@@ -111,7 +111,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-16 instruct
    194 write :maximum COORD POSITION
    195 op sub *tmp74 @time :start
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-34 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-35 instructions):
  
     13 set .INDEX 256
     14 set .SIZE 511
@@ -319,6 +319,14 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-34 ins
    172 set :loops 0
    173 label *label31
    174 op lessThan *tmp79 @time :wait
+ 
+   184 label *label8
+   185 jump *label7 always
+   186 label *label9
+-    * set *tmp80 switch1
+-    * control enabled *tmp80 0
++  187 control enabled switch1 0
+   188 end
 
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-12 instructions):
  

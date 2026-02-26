@@ -1,5 +1,5 @@
-   188 instructions before optimizations.
-    19 instructions eliminated by Temp Variables Elimination (6 iterations).
+   189 instructions before optimizations.
+    20 instructions eliminated by Temp Variables Elimination (6 iterations).
      2 instructions eliminated by Case Expression Optimization.
     20 instructions eliminated by Dead Code Elimination (5 iterations).
      1 instructions eliminated by Jump Normalization (5 iterations).
@@ -198,7 +198,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructi
    140 label *label33
    141 label *label30
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 instructions):
  
      6 op equal *tmp0 .SOURCE_MEMORY null
      7 jump *label2 equal *tmp0 false
@@ -316,6 +316,14 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 ins
    150 print "Item Rate Meter"
    151 print "\n"
    152 print "Total items: [gold]"
+ 
+   182 label *label25
+   183 jump *label24 always
+   184 label *label26
+-    * set *tmp57 switch1
+-    * control enabled *tmp57 0
++  185 control enabled switch1 0
+   186 end
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-5 instructions):
  
@@ -670,8 +678,8 @@ Modifications by Fast-dispatch case at line 13:9 (-1 instructions):
     16 print :block
     17 sensor *tmp6 :block @type
 -    * jump *label7 notEqual *tmp6 @message
-+   18 sensor *tmp58 *tmp6 @id
-+   19 multijump *tmp58 0 0 (m:*label45)
++   18 sensor *tmp59 *tmp6 @id
++   19 multijump *tmp59 0 0 (m:*label45)
 +   20 multilabel *label50 (m:*label45)
 +   21 multilabel *label46 (m:*label45)
 +   22 label *label44
@@ -722,7 +730,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
      9 label *label41
     10 op sub :n :n 1
  
-    16 multijump *tmp58 0 0 (m:*label45)
+    16 multijump *tmp59 0 0 (m:*label45)
     17 multilabel *label50 (m:*label45)
     18 multilabel *label46 (m:*label45)
 -    * label *label44
@@ -916,8 +924,8 @@ getlink :block :n
 print "\nFound: "
 print :block
 sensor *tmp6 :block @type
-sensor *tmp58 *tmp6 @id
-multijump *tmp58 0 0
+sensor *tmp59 *tmp6 @id
+multijump *tmp59 0 0
 multilabel *label50
 multilabel *label46
 jump *label6 always

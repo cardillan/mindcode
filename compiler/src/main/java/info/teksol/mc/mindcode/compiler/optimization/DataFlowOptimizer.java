@@ -191,7 +191,8 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
                 if (instruction.getArgumentType(i).isInput()
                         && instruction.getArgumentType(i) != InstructionParameterType.LABEL
                         && arguments.get(i) instanceof LogicVariable variable
-                        && (replacement = valueReplacements.get(variable)) != null) {
+                        && (replacement = valueReplacements.get(variable)) != null
+                        && (replacement.getMutability() != ValueMutability.VOLATILE || variable.isTemporaryVariable())) {
                     arguments.set(i, replacement);
                     updated = true;
                 }

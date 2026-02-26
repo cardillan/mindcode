@@ -6,115 +6,120 @@
      1 instructions eliminated by Single Step Elimination (5 iterations).
      6 instructions eliminated by Boolean Optimization (6 iterations).
        2 fully-evaluated expressions optimized using selects.
-    32 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+    27 instructions eliminated by Data Flow Optimization (2 passes, 10 iterations).
      2 instructions eliminated by Function Inlining (3 iterations).
      2 function calls inlined by Function Inlining.
     10 instructions eliminated by Jump Straightening (5 iterations).
-    84 instructions after optimizations.
+    89 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 909):
+Pass 1: speed optimization selection (cost limit 904):
   * Inline function 'displaySize' defined at *graphics:102:1     size    +2, benefit        7.0, efficiency      3.500 (-6 instructions)
     Inline function call at line 10:38                           size    +3, benefit        3.5, efficiency      1.167
     Inline function call at line 11:38                           size    +3, benefit        3.5, efficiency      1.167
 
 Final code before resolving virtual instructions:
 
-    0:  sensor :displaySize:type display1 @type
-    1:  select *tmp34 equal :displaySize:type @large-logic-display 176 null
-    2:  select *tmp32 equal :displaySize:type @logic-display 80 *tmp34
-    3:  assertequals 176 *tmp32 "large display size"
-    4:  sensor :displaySize:type display5 @type
-    5:  select *tmp34 equal :displaySize:type @large-logic-display 176 null
-    6:  select *tmp32 equal :displaySize:type @logic-display 80 *tmp34
-    7:  assertequals 80 *tmp32 "small display size"
-    8:  assertequals 0.2 0.2 "red channel"
-    9:  assertequals 0.4 0.4 "green channel"
-   10:  assertequals 0.6 0.6 "blue channel"
-   11:  assertequals 0.8 0.8 "alpha channel"
-   12:  draw rotate 0 0 90 0 0 0
-   13:  draw translate 0 -80 0 0 0 0
-   14:  draw rotate 0 0 270 0 0 0
-   15:  draw translate -80 0 0 0 0 0
-   16:  draw rotate 0 0 180 0 0 0
-   17:  draw translate -80 -80 0 0 0 0
-   18:  draw scale 1 -1 0 0 0 0
-   19:  draw translate 0 -80 0 0 0 0
-   20:  draw scale -1 1 0 0 0 0
-   21:  draw translate -80 0 0 0 0 0
-   22:  draw rotate 0 0 90 0 0 0
-   23:  draw translate 0 -176 0 0 0 0
-   24:  draw rotate 0 0 270 0 0 0
-   25:  draw translate -176 0 0 0 0 0
-   26:  draw rotate 0 0 180 0 0 0
-   27:  draw translate -176 -176 0 0 0 0
-   28:  draw scale 1 -1 0 0 0 0
-   29:  draw translate 0 -176 0 0 0 0
-   30:  draw scale -1 1 0 0 0 0
-   31:  draw translate -176 0 0 0 0 0
-   32:  sensor *tmp12 display1 @type
-   33:  jump *label19 notEqual *tmp12 @logic-display
-   34:  draw rotate 0 0 90 0 0 0
-   35:  draw translate 0 -80 0 0 0 0
-   36:  jump *label18 always 0 0
+    0:  set :displaySize:display display1
+    1:  sensor :displaySize:type :displaySize:display @type
+    2:  select *tmp34 equal :displaySize:type @large-logic-display 176 null
+    3:  select *tmp32 equal :displaySize:type @logic-display 80 *tmp34
+    4:  assertequals 176 *tmp32 "large display size"
+    5:  set :displaySize:display display5
+    6:  sensor :displaySize:type :displaySize:display @type
+    7:  select *tmp34 equal :displaySize:type @large-logic-display 176 null
+    8:  select *tmp32 equal :displaySize:type @logic-display 80 *tmp34
+    9:  assertequals 80 *tmp32 "small display size"
+   10:  assertequals 0.2 0.2 "red channel"
+   11:  assertequals 0.4 0.4 "green channel"
+   12:  assertequals 0.6 0.6 "blue channel"
+   13:  assertequals 0.8 0.8 "alpha channel"
+   14:  draw rotate 0 0 90 0 0 0
+   15:  draw translate 0 -80 0 0 0 0
+   16:  draw rotate 0 0 270 0 0 0
+   17:  draw translate -80 0 0 0 0 0
+   18:  draw rotate 0 0 180 0 0 0
+   19:  draw translate -80 -80 0 0 0 0
+   20:  draw scale 1 -1 0 0 0 0
+   21:  draw translate 0 -80 0 0 0 0
+   22:  draw scale -1 1 0 0 0 0
+   23:  draw translate -80 0 0 0 0 0
+   24:  draw rotate 0 0 90 0 0 0
+   25:  draw translate 0 -176 0 0 0 0
+   26:  draw rotate 0 0 270 0 0 0
+   27:  draw translate -176 0 0 0 0 0
+   28:  draw rotate 0 0 180 0 0 0
+   29:  draw translate -176 -176 0 0 0 0
+   30:  draw scale 1 -1 0 0 0 0
+   31:  draw translate 0 -176 0 0 0 0
+   32:  draw scale -1 1 0 0 0 0
+   33:  draw translate -176 0 0 0 0 0
+   34:  set :rotateLeft:display display1
+   35:  sensor *tmp12 :rotateLeft:display @type
+   36:  jump *label19 notEqual *tmp12 @logic-display
+   37:  draw rotate 0 0 90 0 0 0
+   38:  draw translate 0 -80 0 0 0 0
+   39:  jump *label18 always 0 0
         label *label19
-   37:  jump *label22 notEqual *tmp12 @large-logic-display
-   38:  draw rotate 0 0 90 0 0 0
-   39:  draw translate 0 -176 0 0 0 0
-   40:  jump *label18 always 0 0
+   40:  jump *label22 notEqual *tmp12 @large-logic-display
+   41:  draw rotate 0 0 90 0 0 0
+   42:  draw translate 0 -176 0 0 0 0
+   43:  jump *label18 always 0 0
         label *label22
-   41:  stop
+   44:  stop
         label *label18
-   42:  sensor *tmp15 display2 @type
-   43:  jump *label27 notEqual *tmp15 @logic-display
-   44:  draw rotate 0 0 270 0 0 0
-   45:  draw translate -80 0 0 0 0 0
-   46:  jump *label26 always 0 0
-        label *label27
-   47:  jump *label30 notEqual *tmp15 @large-logic-display
+   45:  set :rotateRight:display display2
+   46:  sensor *tmp15 :rotateRight:display @type
+   47:  jump *label27 notEqual *tmp15 @logic-display
    48:  draw rotate 0 0 270 0 0 0
-   49:  draw translate -176 0 0 0 0 0
+   49:  draw translate -80 0 0 0 0 0
    50:  jump *label26 always 0 0
+        label *label27
+   51:  jump *label30 notEqual *tmp15 @large-logic-display
+   52:  draw rotate 0 0 270 0 0 0
+   53:  draw translate -176 0 0 0 0 0
+   54:  jump *label26 always 0 0
         label *label30
-   51:  stop
+   55:  stop
         label *label26
-   52:  sensor *tmp18 display3 @type
-   53:  jump *label35 notEqual *tmp18 @logic-display
-   54:  draw rotate 0 0 180 0 0 0
-   55:  draw translate -80 -80 0 0 0 0
-   56:  jump *label34 always 0 0
+   56:  set :upsideDown:display display3
+   57:  sensor *tmp18 :upsideDown:display @type
+   58:  jump *label35 notEqual *tmp18 @logic-display
+   59:  draw rotate 0 0 180 0 0 0
+   60:  draw translate -80 -80 0 0 0 0
+   61:  jump *label34 always 0 0
         label *label35
-   57:  jump *label38 notEqual *tmp18 @large-logic-display
-   58:  draw rotate 0 0 180 0 0 0
-   59:  draw translate -176 -176 0 0 0 0
-   60:  jump *label34 always 0 0
+   62:  jump *label38 notEqual *tmp18 @large-logic-display
+   63:  draw rotate 0 0 180 0 0 0
+   64:  draw translate -176 -176 0 0 0 0
+   65:  jump *label34 always 0 0
         label *label38
-   61:  stop
+   66:  stop
         label *label34
-   62:  sensor *tmp21 display4 @type
-   63:  jump *label43 notEqual *tmp21 @logic-display
-   64:  draw scale 1 -1 0 0 0 0
-   65:  draw translate 0 -80 0 0 0 0
-   66:  jump *label42 always 0 0
+   67:  set :flipVertical:display display4
+   68:  sensor *tmp21 :flipVertical:display @type
+   69:  jump *label43 notEqual *tmp21 @logic-display
+   70:  draw scale 1 -1 0 0 0 0
+   71:  draw translate 0 -80 0 0 0 0
+   72:  jump *label42 always 0 0
         label *label43
-   67:  jump *label46 notEqual *tmp21 @large-logic-display
-   68:  draw scale 1 -1 0 0 0 0
-   69:  draw translate 0 -176 0 0 0 0
-   70:  jump *label42 always 0 0
+   73:  jump *label46 notEqual *tmp21 @large-logic-display
+   74:  draw scale 1 -1 0 0 0 0
+   75:  draw translate 0 -176 0 0 0 0
+   76:  jump *label42 always 0 0
         label *label46
-   71:  stop
+   77:  stop
         label *label42
-   72:  sensor *tmp24 display5 @type
-   73:  jump *label51 notEqual *tmp24 @logic-display
-   74:  draw scale -1 1 0 0 0 0
-   75:  draw translate -80 0 0 0 0 0
-   76:  jump *label50 always 0 0
+   78:  jump *label51 notEqual :displaySize:type @logic-display
+   79:  draw scale -1 1 0 0 0 0
+   80:  draw translate -80 0 0 0 0 0
+   81:  jump *label50 always 0 0
         label *label51
-   77:  jump *label54 notEqual *tmp24 @large-logic-display
-   78:  draw scale -1 1 0 0 0 0
-   79:  draw translate -176 0 0 0 0 0
-   80:  jump *label50 always 0 0
+   82:  jump *label54 notEqual :displaySize:type @large-logic-display
+   83:  draw scale -1 1 0 0 0 0
+   84:  draw translate -176 0 0 0 0 0
+   85:  jump *label50 always 0 0
         label *label54
-   81:  stop
+   86:  stop
         label *label50
-   82:  draw scale 2.225 2.225 0 0 0 0
-   83:  draw scale 0.4795454545454546 0.4795454545454546 0 0 0 0
+   87:  draw scale 2.225 2.225 0 0 0 0
+   88:  draw scale 0.4795454545454546 0.4795454545454546 0 0 0 0

@@ -56,12 +56,12 @@ print(a, b, c);
 compiles to:
 
 ```mlog
-sensor *tmp0 switch1 @enabled
-select :a notEqual *tmp0 false "on" "off"
-select :b notEqual *tmp0 false @coal :b
-select :c notEqual *tmp0 false 50 :c
-sensor *tmp2 switch2 @enabled
-select :a notEqual *tmp2 false "paused" :a
+sensor *tmp1 switch1 @enabled
+select :a notEqual *tmp1 false "on" "off"
+select :b notEqual *tmp1 false @coal :b
+select :c notEqual *tmp1 false 50 :c
+sensor *tmp4 switch2 @enabled
+select :a notEqual *tmp4 false "paused" :a
 print :a
 print :b
 print :c
@@ -162,10 +162,10 @@ print(x, y);
 compiles to:
 
 ```mlog
-sensor *tmp0 switch1 @enabled
-op land *tmp2 *tmp0 :a
-select :x notEqual *tmp2 false 10 5
-select :y notEqual *tmp2 false 20 7
+sensor *tmp1 switch1 @enabled
+op land *tmp3 *tmp1 :a
+select :x notEqual *tmp3 false 10 5
+select :y notEqual *tmp3 false 20 7
 print :x
 print :y
 ```
@@ -186,8 +186,8 @@ compiles to:
 
 ```mlog
 jump 6 equal :a false
-sensor *tmp0 switch1 @enabled
-jump 6 equal *tmp0 false
+sensor *tmp1 switch1 @enabled
+jump 6 equal *tmp1 false
 set :x 10
 set :y 20
 jump 8 always 0 0
@@ -230,10 +230,10 @@ volatile x = (switch1.enabled and sorter1.config == @coal);
 compiles to:
 
 ```mlog
-sensor *tmp0 switch1 @enabled
-op notEqual *tmp4 *tmp0 false
-sensor *tmp1 sorter1 @config
-select .x equal *tmp1 @coal *tmp4 false
+sensor *tmp1 switch1 @enabled
+op notEqual *tmp6 *tmp1 false
+sensor *tmp3 sorter1 @config
+select .x equal *tmp3 @coal *tmp6 false
 ```
 
 ### Last jump conversion
@@ -250,10 +250,10 @@ volatile x = switch1.enabled and !@unit.@dead and amount > 0 ? "yes" : "no";
 compiles to:
 
 ```mlog
-sensor *tmp0 switch1 @enabled
-jump 6 equal *tmp0 false
-sensor *tmp1 @unit @dead
-jump 6 notEqual *tmp1 false
+sensor *tmp1 switch1 @enabled
+jump 6 equal *tmp1 false
+sensor *tmp2 @unit @dead
+jump 6 notEqual *tmp2 false
 select .x lessThanEq :amount 0 "no" "yes"
 jump 0 always 0 0
 set .x "no"
@@ -270,10 +270,10 @@ volatile x = switch1.enabled and !@unit.@dead and amount > 0 ? "yes" : "no";
 compiles to:
 
 ```mlog
-sensor *tmp0 switch1 @enabled
-jump 7 equal *tmp0 false
-sensor *tmp1 @unit @dead
-jump 7 notEqual *tmp1 false
+sensor *tmp1 switch1 @enabled
+jump 7 equal *tmp1 false
+sensor *tmp2 @unit @dead
+jump 7 notEqual *tmp2 false
 jump 7 lessThanEq :amount 0
 set .x "yes"
 jump 0 always 0 0

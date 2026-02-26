@@ -17,9 +17,11 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             switch1.enabled = !switch1.enabled;
                             """,
-                    createInstruction(SENSOR, tmp(1), "switch1", "@enabled"),
-                    createInstruction(OP, "equal", tmp(2), tmp(1), "false"),
-                    createInstruction(CONTROL, "enabled", "switch1", tmp(2))
+                    createInstruction(SET, tmp(0), "switch1"),
+                    createInstruction(SET, tmp(2), "switch1"),
+                    createInstruction(SENSOR, tmp(3), tmp(2), "@enabled"),
+                    createInstruction(OP, "equal", tmp(4), tmp(3), "false"),
+                    createInstruction(CONTROL, "enabled", tmp(0), tmp(4))
             );
         }
 
@@ -32,9 +34,11 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
                             
                             foo(out switch1.enabled);
                             """,
+                    createInstruction(SET, tmp(0), "switch1"),
                     createInstruction(SET, ":foo:value", "false"),
                     createInstruction(LABEL, label(0)),
-                    createInstruction(CONTROL, "enabled", "switch1", ":foo:value")
+                    createInstruction(CONTROL, "enabled", tmp(0), ":foo:value")
+
             );
         }
 

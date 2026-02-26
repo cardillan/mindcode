@@ -4,7 +4,7 @@
      6 instructions eliminated by Condition Optimization (6 iterations).
      5 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
-    11 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
+    11 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
      4 instructions added by Loop Rotation (3 iterations).
        3 loop conditions were partially rotated.
      1 instructions eliminated by Jump Straightening (6 iterations).
@@ -437,21 +437,6 @@ Modifications by Full loop rotation at line 17:1 (+2 instructions):
     21 read :shipped .BANK 511
     22 read .MULTIPLIER .BANK 510
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
- 
-     2 set .VAULT vault1
-     3 set .BANK bank1
-     4 label *label0
--    * jump *label3 equal .SORTER null
--    * jump *label3 equal .VAULT null
--    * jump *label2 notEqual .BANK null
-+    5 jump *label3 equal sorter1 null
-+    6 jump *label3 equal vault1 null
-+    7 jump *label2 notEqual bank1 null
-     8 label *label3
-     9 label *label21
-    10 print "Missing sorter, vault or memory bank."
-
 Modifications by Partial loop rotation at line 38:1 (+2 instructions):
  
     29 sensor *tmp14 .SORTER @dead
@@ -591,9 +576,9 @@ set .SIGN_MILLIS null
 set .SORTER sorter1
 set .VAULT vault1
 set .BANK bank1
-jump *label3 equal sorter1 null
-jump *label3 equal vault1 null
-jump *label2 notEqual bank1 null
+jump *label3 equal .SORTER null
+jump *label3 equal .VAULT null
+jump *label2 notEqual .BANK null
 label *label3
 label *label21
 print "Missing sorter, vault or memory bank."

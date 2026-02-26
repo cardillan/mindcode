@@ -1,5 +1,5 @@
-   138 instructions before optimizations.
-    19 instructions eliminated by Temp Variables Elimination (6 iterations).
+   139 instructions before optimizations.
+    20 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instructions eliminated by Case Expression Optimization.
      8 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Normalization (5 iterations).
@@ -111,7 +111,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructi
     79 printflush .MESSAGE
     80 label *label1
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 instructions):
  
     11 jump *label2 always
     12 label *label3
@@ -203,6 +203,14 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 ins
    125 set :loops 0
    126 label *label29
    127 op lessThan *tmp44 @time :wait
+ 
+   137 label *label24
+   138 jump *label23 always
+   139 label *label25
+-    * set *tmp45 switch1
+-    * control enabled *tmp45 0
++  140 control enabled switch1 0
+   141 end
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-7 instructions):
  
