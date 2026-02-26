@@ -138,7 +138,7 @@ CaseAlternative {
 
 Directive {
   (dir<"#set"> | dir<"#setlocal">) DirectiveValue ("=" commaSep<DirectiveValue>)? |
-  dir<"#declare"> SimpleIdentifier ("=" commaSep<(KeywordLiteral | Identifier)>)?
+  dir<"#declare"> SimpleIdentifier commaSep<(KeywordLiteral | Identifier)>
 }
 
 VariableDeclaration {
