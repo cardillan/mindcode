@@ -6,6 +6,7 @@
 	import { Label } from './ui/label';
 	import { Separator } from './ui/separator';
 	import { getSettingsContext } from '$lib/settings.svelte';
+	import Switch from './ui/switch/switch.svelte';
 
 	const settings = getSettingsContext();
 </script>
@@ -43,6 +44,14 @@
 							min="1"
 							max="65535"
 						/>
+					</div>
+				</div>
+				<Separator />
+				<div class="grid gap-2">
+					<h5 class="text-sm font-medium tracking-wide text-muted-foreground">Editor Options</h5>
+					<div class="flex items-center justify-between">
+						<Label for="line-wrap" class="text-sm">Line Wrapping</Label>
+						<Switch id="line-wrap" bind:checked={settings.lineWrapping} />
 					</div>
 				</div>
 			</div>
