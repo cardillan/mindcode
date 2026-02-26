@@ -14,17 +14,20 @@
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
+	import { getSettingsContext } from '$lib/settings.svelte';
 
 	const theme = getThemeContext();
+	const settings = getSettingsContext();
 
 	const api = new ApiHandler();
 	const mlogEditor = new InputEditorStore({
 		theme,
 		api,
-		extensions: [mlogLanguageExtension]
+		extensions: [mlogLanguageExtension],
+		settings
 	});
 
-	const mindcodeEditor = new OutputEditorStore(theme, [mindcodeLanguage]);
+	const mindcodeEditor = new OutputEditorStore(theme, [mindcodeLanguage], settings);
 
 	let runResults = $state<RunResult[]>([]);
 

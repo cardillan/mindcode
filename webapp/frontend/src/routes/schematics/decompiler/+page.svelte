@@ -17,12 +17,14 @@
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
+	import { getSettingsContext } from '$lib/settings.svelte';
 
 	const theme = getThemeContext();
+	const settings = getSettingsContext();
 
 	const api = new ApiHandler();
-	const encodedEditor = new InputEditorStore({ theme, api });
-	const schemacodeEditor = new OutputEditorStore(theme, [schemacodeLanguage]);
+	const encodedEditor = new InputEditorStore({ theme, api, settings });
+	const schemacodeEditor = new OutputEditorStore(theme, [schemacodeLanguage], settings);
 
 	let runResults = $state<RunResult[]>([]);
 	let loadingAction = $state<'decompile' | 'decompile-run' | null>(null);

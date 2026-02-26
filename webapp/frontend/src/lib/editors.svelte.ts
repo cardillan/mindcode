@@ -3,6 +3,7 @@ import {
 	defaultDocId,
 	getTheme,
 	invertUpdateDocId,
+	lineWrappingCompartment,
 	themeCompartment,
 	updateDocId
 } from './codemirror';
@@ -43,6 +44,7 @@ import {
 } from '@codemirror/autocomplete';
 import { highlightSelectionMatches, search, searchKeymap } from '@codemirror/search';
 import EditorSearchPanel from './components/EditorSearchPanel.svelte';
+import { SettingsStore } from './settings.svelte';
 
 export const foldChevronDownId = 'fold-chevron-down';
 export const foldChevronRightId = 'fold-chevron-right';
@@ -54,6 +56,7 @@ export interface InputEditorStoreOptions {
 	theme: ThemeStore;
 	samples?: Sample[];
 	extensions?: Extension[];
+	settings: SettingsStore;
 }
 
 const keepCurrentUrl = Annotation.define<boolean>();
@@ -65,14 +68,14 @@ export class InputEditorStore {
 	/** Reactive value kept in sync with the id stored in the editor's state */
 	sourceId = $state<string | null>(this.#id);
 
-	constructor({ api, theme, samples = [], extensions = [] }: InputEditorStoreOptions) {
+	constructor({ api, theme, samples = [], extensions = [], settings }: InputEditorStoreOptions) {
 		const sampleIds = new Set(samples.map((s) => s.id));
 		// handle editor creation and destruction
 		$effect.pre(() => {
 			untrack(() => {
 				this.view = new EditorView({
 					extensions: [
-						commonExtensions(theme),
+						commonExtensions(theme, settings),
 						defaultDocId.of(null),
 						currentDocId,
 						invertUpdateDocId,
@@ -114,17 +117,8 @@ export class InputEditorStore {
 			};
 		});
 
-		// sync editor theme with theme store
-		$effect(() => {
-			if (!this.view) return;
-			const editor = this.view;
-			const newTheme = getTheme(theme.isDark);
-			if (themeCompartment.get(editor.state) === newTheme) return;
-
-			editor.dispatch({
-				effects: themeCompartment.reconfigure(newTheme)
-			});
-		});
+		syncEditorTheme(() => this.view, theme);
+		syncEditorLineWrapping(() => this.view, settings);
 
 		let firstLoad = true;
 		// sync editor content with sourceId from URL
@@ -223,12 +217,13 @@ export class OutputEditorStore {
 
 	constructor(
 		public theme: ThemeStore,
-		public extensions: Extension[] = []
+		public extensions: Extension[] = [],
+		public settings: SettingsStore
 	) {
 		$effect.pre(() => {
 			untrack(() => {
 				this.view = new EditorView({
-					extensions: [commonExtensions(theme), ...extensions]
+					extensions: [commonExtensions(theme, settings), ...extensions]
 				});
 			});
 
@@ -238,16 +233,8 @@ export class OutputEditorStore {
 			};
 		});
 
-		$effect(() => {
-			if (!this.view) return;
-			const editor = this.view;
-			const newTheme = getTheme(this.theme.isDark);
-			if (themeCompartment.get(editor.state) === newTheme) return;
-
-			editor.dispatch({
-				effects: themeCompartment.reconfigure(newTheme)
-			});
-		});
+		syncEditorTheme(() => this.view, theme);
+		syncEditorLineWrapping(() => this.view, settings);
 	}
 
 	attach: Attachment = (element) => {
@@ -261,7 +248,34 @@ export class OutputEditorStore {
 	}
 }
 
-function commonExtensions(themeStore: ThemeStore) {
+function syncEditorTheme(getView: () => EditorView | undefined, themeStore: ThemeStore) {
+	$effect(() => {
+		const view = getView();
+		if (!view) return;
+		const editor = view;
+		const newTheme = getTheme(themeStore.isDark);
+		if (themeCompartment.get(editor.state) === newTheme) return;
+
+		view.dispatch({
+			effects: themeCompartment.reconfigure(newTheme)
+		});
+	});
+}
+
+function syncEditorLineWrapping(getView: () => EditorView | undefined, settings: SettingsStore) {
+	$effect(() => {
+		const view = getView();
+		if (!view) return;
+
+		view.dispatch({
+			effects: lineWrappingCompartment.reconfigure(
+				settings.lineWrapping ? EditorView.lineWrapping : []
+			)
+		});
+	});
+}
+
+function commonExtensions(themeStore: ThemeStore, settings: SettingsStore): Extension[] {
 	return [
 		lineNumbers(),
 		highlightActiveLineGutter(),
@@ -344,6 +358,6 @@ function commonExtensions(themeStore: ThemeStore) {
 			}
 		}),
 		themeCompartment.of(getTheme(themeStore.isDark)),
-		EditorView.lineWrapping
+		lineWrappingCompartment.of(settings.lineWrapping ? EditorView.lineWrapping : [])
 	];
 }
