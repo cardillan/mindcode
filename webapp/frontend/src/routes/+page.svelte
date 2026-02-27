@@ -32,7 +32,6 @@
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 	import { MlogWatcherStore } from '$lib/mlog_watcher';
 	import MlogWatcherButton from '$lib/components/MlogWatcherButton.svelte';
-	import SettingsButton from '$lib/components/SettingsButton.svelte';
 
 	let { data }: PageProps = $props();
 
@@ -170,7 +169,6 @@
 				disabled={mindcodeEditor.isLoading || loadingAction !== null}
 				selectedId={mindcodeEditor.sourceId}
 			/>
-			<SettingsButton />
 		</ControlBar>
 	</div>
 
@@ -183,7 +181,6 @@
 			disabled={mindcodeEditor.isLoading || loadingAction !== null}
 			selectedId={mindcodeEditor.sourceId}
 		/>
-		<SettingsButton />
 	</div>
 
 	<!-- Editor Layout -->
