@@ -63,6 +63,7 @@
 	let infos = $state<CompileResponseMessage[]>([]);
 	let loadingAction = $state<'compile' | 'compile-run' | null>(null);
 	let isPlainText = $state(false);
+	let editorLayout = $state<EditorLayout>();
 
 	const compilerTarget = new LocalCompilerTarget();
 
@@ -93,6 +94,7 @@
 		warnings = [];
 		infos = [];
 		updateEditor(mlogEditor.view, '');
+		editorLayout?.ensureOutputIsVisible();
 
 		try {
 			const data = await api.compileMindcode({
@@ -186,6 +188,7 @@
 
 	<!-- Editor Layout -->
 	<EditorLayout
+		bind:this={editorLayout}
 		inputLabel="Mindcode Source Code"
 		inputEditor={mindcodeEditor}
 		inputLoading={mindcodeEditor.isLoading}

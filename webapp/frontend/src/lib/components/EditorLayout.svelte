@@ -3,7 +3,7 @@
 	import TabsOutput from './TabsOutput.svelte';
 	import type { CompileResponseMessage, RunResult, SourceRange } from '$lib/api';
 	import CompilerMessages from './CompilerMessages.svelte';
-	import EditorLayoutTabs from './EditorLayoutTabs.svelte';
+	import EditorLayoutTabs, { type CollapsibleTabsMode } from './EditorLayoutTabs.svelte';
 	import { TabsTrigger } from './ui/tabs';
 	import TabsContent from './ui/tabs/tabs-content.svelte';
 	import * as ButtonGroup from './ui/button-group';
@@ -38,34 +38,43 @@
 		outputActions?: Snippet;
 	} = $props();
 
-	let fullscreen = $state<'input' | 'output' | null>(null);
+	let inputMode = $state<CollapsibleTabsMode>('normal');
+	let outputMode = $state<CollapsibleTabsMode>('normal');
+
+	export function ensureOutputIsVisible() {
+		if (outputMode === 'minimized') {
+			outputMode = 'normal';
+		}
+		if (inputMode === 'maximized') {
+			inputMode = 'normal';
+		}
+	}
 </script>
 
 <div class="flex h-full flex-col gap-4">
 	<div
 		class={[
-			'grid flex-1 gap-4',
-			fullscreen !== null ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'
+			'grid flex-1 grid-cols-1 gap-4',
+			inputMode !== 'maximized' && outputMode !== 'maximized' && 'md:grid-cols-2'
 		]}
 	>
 		<!-- Input Editor Section -->
 		<div
 			class={[
 				'flex flex-col gap-2',
-				fullscreen === 'output' && 'hidden',
-				fullscreen === 'input' && 'md:col-span-2'
+				outputMode === 'maximized' && 'hidden',
+				inputMode === 'maximized' && 'md:col-span-2'
 			]}
 		>
 			<EditorLayoutTabs
+				bind:mode={inputMode}
 				value="code"
 				minimizeLabel="Minimize input"
 				restoreLabel="Restore input"
 				maximizeLabel="Maximize input"
 				onModeChange={(mode) => {
 					if (mode === 'maximized') {
-						fullscreen = 'input';
-					} else if (fullscreen === 'input') {
-						fullscreen = null;
+						outputMode = 'normal';
 					}
 				}}
 			>
@@ -94,6 +103,7 @@
 		</div>
 
 		<TabsOutput
+			bind:mode={outputMode}
 			minimizeLabel="Minimize output"
 			restoreLabel="Restore output"
 			maximizeLabel="Maximize output"
@@ -103,14 +113,12 @@
 			{onJumpToPosition}
 			class={[
 				'self-start',
-				fullscreen === 'input' && 'hidden',
-				fullscreen === 'output' && 'md:col-span-2'
+				inputMode === 'maximized' && 'hidden',
+				outputMode === 'maximized' && 'md:col-span-2'
 			]}
 			onModeChange={(mode) => {
 				if (mode === 'maximized') {
-					fullscreen = 'output';
-				} else if (fullscreen === 'output') {
-					fullscreen = null;
+					inputMode = 'normal';
 				}
 			}}
 		>
