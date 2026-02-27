@@ -37,6 +37,7 @@
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
 	let infos = $state<CompileResponseMessage[]>([]);
+	let editorLayout = $state<EditorLayout>();
 
 	const compilerTarget = new LocalCompilerTarget();
 
@@ -55,6 +56,7 @@
 		warnings = [];
 		infos = [];
 		updateEditor(schemacodeEditor.view, '');
+		editorLayout?.ensureOutputIsVisible();
 
 		try {
 			const data = await api.decompileSchematic({
@@ -138,6 +140,7 @@
 
 	<!-- Editor Layout -->
 	<EditorLayout
+		bind:this={editorLayout}
 		inputLabel="Encoded schematic"
 		inputEditor={encodedEditor}
 		inputLoading={encodedEditor.isLoading}
