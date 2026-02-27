@@ -3,7 +3,7 @@ export class Completer<T> {
 	readonly promise: Promise<T>;
 	hasResolved = false;
 	private resolver!: (value: T) => void;
-	private rejecter!: (reason?: any) => void;
+	private rejecter!: (reason?: unknown) => void;
 
 	constructor() {
 		this.promise = new Promise<T>((resolve, reject) => {
@@ -17,7 +17,7 @@ export class Completer<T> {
 		this.resolver(value);
 	}
 
-	reject(reason?: any) {
+	reject(reason?: unknown) {
 		this.rejecter(reason);
 	}
 }

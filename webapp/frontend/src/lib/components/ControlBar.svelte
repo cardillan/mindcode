@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import { LoaderCircle } from '@lucide/svelte';
+	import type { Component, Snippet } from 'svelte';
 
 	type Action = {
 		label: string;
-		icon?: any;
+		icon?: Component;
 		onclick: () => void;
 		variant?: 'default' | 'secondary' | 'outline' | 'ghost';
 	};
@@ -16,7 +17,7 @@
 	}: {
 		primaryActions?: Action[];
 		loading?: boolean;
-		children?: any;
+		children?: Snippet;
 	} = $props();
 </script>
 

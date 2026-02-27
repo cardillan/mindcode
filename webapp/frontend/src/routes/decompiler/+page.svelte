@@ -6,7 +6,12 @@
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
 	import ControlBar from '$lib/components/ControlBar.svelte';
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
-	import { ApiHandler, type RunResult, type SourceRange } from '$lib/api';
+	import {
+		ApiHandler,
+		type CompileResponseMessage,
+		type RunResult,
+		type SourceRange
+	} from '$lib/api';
 	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
 	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
 	import { jumpToRange, updateEditor } from '$lib/codemirror';
@@ -32,9 +37,9 @@
 	let runResults = $state<RunResult[]>([]);
 
 	let loadingAction = $state<'decompile' | 'decompile-run' | null>(null);
-	let errors = $state<any[]>([]);
-	let warnings = $state<any[]>([]);
-	let infos = $state<any[]>([]);
+	let errors = $state<CompileResponseMessage[]>([]);
+	let warnings = $state<CompileResponseMessage[]>([]);
+	let infos = $state<CompileResponseMessage[]>([]);
 	const compilerTarget = new LocalCompilerTarget();
 
 	function handleJumpToPosition(range: SourceRange) {
