@@ -45,6 +45,7 @@
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
 	let infos = $state<CompileResponseMessage[]>([]);
+	let editorLayout = $state<EditorLayout>();
 	const compilerTarget = new LocalCompilerTarget();
 
 	function handleJumpToPosition(range: SourceRange) {
@@ -61,6 +62,7 @@
 		warnings = [];
 		infos = [];
 		updateEditor(encodedEditor.view, '');
+		editorLayout?.ensureOutputIsVisible();
 
 		try {
 			const data = await api.compileSchemacode({
@@ -163,6 +165,7 @@
 	</div>
 
 	<EditorLayout
+		bind:this={editorLayout}
 		inputLabel="Schemacode definition"
 		inputEditor={schemacodeEditor}
 		inputLoading={schemacodeEditor.isLoading}

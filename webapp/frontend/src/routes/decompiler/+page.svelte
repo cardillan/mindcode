@@ -40,6 +40,7 @@
 	let errors = $state<CompileResponseMessage[]>([]);
 	let warnings = $state<CompileResponseMessage[]>([]);
 	let infos = $state<CompileResponseMessage[]>([]);
+	let editorLayout = $state<EditorLayout>();
 	const compilerTarget = new LocalCompilerTarget();
 
 	function handleJumpToPosition(range: SourceRange) {
@@ -56,6 +57,7 @@
 		warnings = [];
 		infos = [];
 		updateEditor(mindcodeEditor.view, '');
+		editorLayout?.ensureOutputIsVisible();
 
 		try {
 			const data = await api.decompileMlog({
@@ -137,6 +139,7 @@
 
 	<!-- Editor Layout -->
 	<EditorLayout
+		bind:this={editorLayout}
 		inputLabel="Mlog code"
 		inputEditor={mlogEditor}
 		inputLoading={mlogEditor.isLoading}

@@ -13,6 +13,7 @@
 	type TabName = 'code' | 'run-results' | 'messages';
 
 	interface TabsOutputProps {
+		mode?: CollapsibleTabsMode;
 		class?: ClassValue;
 		runResults?: RunResult[];
 		messages?: CompileResponseMessage[];
@@ -25,6 +26,7 @@
 		editor: Snippet;
 	}
 	let {
+		mode = $bindable('normal'),
 		runResults = [],
 		messages = [],
 		disableTriggers = false,
@@ -67,6 +69,7 @@
 
 <EditorLayoutTabs
 	bind:value={() => selectedTab, (tab) => (preferredTab = tab)}
+	bind:mode
 	{maximizeLabel}
 	{minimizeLabel}
 	{restoreLabel}
