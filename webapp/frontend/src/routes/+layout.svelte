@@ -9,6 +9,7 @@
 	import { foldChevronDownId, foldChevronRightId } from '$lib/editors.svelte.js';
 	import { ChevronDown, ChevronRight } from '@lucide/svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
+	import SettingsButton from '$lib/components/SettingsButton.svelte';
 
 	interface Tool {
 		value: string;
@@ -59,9 +60,9 @@
 
 <div class="flex min-h-screen flex-col bg-background text-foreground">
 	<header class="shrink-0 border-b bg-card">
-		<div class="container mx-auto px-4 py-3">
+		<div class="container mx-auto flex justify-between px-4 py-3">
 			<div class="flex items-center gap-4">
-				<h1 class="text-xl font-bold md:text-2xl">Mindcode</h1>
+				<h1 class="text-xl font-bold max-[400px]:hidden md:text-2xl">Mindcode</h1>
 
 				<Select.Root type="single" value={currentTool}>
 					<Select.Trigger class="w-50 md:w-62.5">
@@ -76,6 +77,8 @@
 					</Select.Content>
 				</Select.Root>
 			</div>
+
+			<SettingsButton />
 		</div>
 	</header>
 
