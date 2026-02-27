@@ -42,8 +42,9 @@ export class MlogWatcherChannel {
 	}
 }
 
-export function isMlogWatcherChannelError(value: any): value is MlogWatcherChannelError {
-	return value && typeof value === 'object' && value[mlogWatcherChannelErrorTag] === true;
+export function isMlogWatcherChannelError(value: unknown): value is MlogWatcherChannelError {
+	if (!value || typeof value !== 'object') return false;
+	return mlogWatcherChannelErrorTag in value && value[mlogWatcherChannelErrorTag] === true;
 }
 
 /** Helper function to create mlog watcher channel errors with strong typing. */

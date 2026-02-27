@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import { LoaderCircle, X } from '@lucide/svelte';
+	import type { Component } from 'svelte';
 
 	let {
 		primaryAction,
@@ -9,8 +10,8 @@
 		visible = true,
 		onDismiss
 	}: {
-		primaryAction: { label: string; icon?: any; onclick: () => void };
-		secondaryAction?: { label: string; icon?: any; onclick: () => void };
+		primaryAction: { label: string; icon?: Component; onclick: () => void };
+		secondaryAction?: { label: string; icon?: Component; onclick: () => void };
 		loading?: boolean;
 		visible?: boolean;
 		onDismiss?: () => void;
