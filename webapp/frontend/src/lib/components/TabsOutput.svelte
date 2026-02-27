@@ -6,11 +6,11 @@
 	import type { CompileResponseMessage, RunResult, SourceRange } from '$lib/api';
 	import { Textarea } from './ui/textarea';
 	import * as Select from './ui/select';
-	import { untrack, type Snippet } from 'svelte';
+	import { type Snippet } from 'svelte';
 	import EditorLayoutTabs, { type CollapsibleTabsMode } from './EditorLayoutTabs.svelte';
 	import type { ClassValue } from 'svelte/elements';
 
-	type TabName = 'code' | 'run-results' | 'messages';
+	type TabName = 'code' | 'output';
 
 	interface TabsOutputProps {
 		mode?: CollapsibleTabsMode;
@@ -40,15 +40,13 @@
 	}: TabsOutputProps = $props();
 
 	// Determine which tabs are available
-	let hasRunResults = $derived(runResults.length > 0);
-	let hasMessages = $derived(messages.length > 0);
+	let hasOutput = $derived(runResults.length > 0 || messages.length > 0);
 
 	// Determine default active tab (first available)
 	let preferredTab = $state<TabName>('code');
 
 	const selectedTab = $derived.by((): TabName => {
-		if (preferredTab === 'run-results' && !hasRunResults) return 'code';
-		if (preferredTab === 'messages' && !hasMessages) return 'code';
+		if (preferredTab === 'output' && !hasOutput) return 'code';
 		return preferredTab;
 	});
 
@@ -63,8 +61,8 @@
 		}))
 	);
 
-	let selectedProcessorId = $derived(untrack(() => processorTabs[0]?.id));
-	const selectedProcessor = $derived(processorTabs.find((tab) => tab.id === selectedProcessorId));
+	let selectedOutput = $state('compiler-messages');
+	const selectedProcessor = $derived(processorTabs.find((tab) => tab.id === selectedOutput));
 </script>
 
 <EditorLayoutTabs
@@ -78,11 +76,8 @@
 >
 	{#snippet tabTriggers()}
 		<Tabs.Trigger value="code" disabled={disableTriggers}>Code</Tabs.Trigger>
-		{#if hasRunResults}
-			<Tabs.Trigger value="run-results" disabled={disableTriggers}>Output</Tabs.Trigger>
-		{/if}
-		{#if hasMessages}
-			<Tabs.Trigger value="messages" disabled={disableTriggers}>Messages</Tabs.Trigger>
+		{#if hasOutput}
+			<Tabs.Trigger value="output" disabled={disableTriggers}>Output</Tabs.Trigger>
 		{/if}
 	{/snippet}
 
@@ -90,15 +85,20 @@
 		{@render editor()}
 	</Tabs.Content>
 
-	{#if hasRunResults}
-		<Tabs.Content value="run-results" class="h-full">
+	{#if hasOutput}
+		<Tabs.Content value="output" class="h-full">
 			<Card.Root class="h-full p-1">
 				<Card.Content class="flex h-full flex-col gap-2 p-0">
-					<Select.Root type="single" bind:value={selectedProcessorId}>
+					<Select.Root type="single" bind:value={selectedOutput}>
 						<Select.Trigger class="w-full">
-							{selectedProcessor?.label ?? 'Select a processor...'}
+							{#if selectedOutput === 'compiler-messages'}
+								Compiler messages
+							{:else}
+								{selectedProcessor?.label ?? 'Select an output...'}
+							{/if}
 						</Select.Trigger>
 						<Select.Content>
+							<Select.Item value="compiler-messages">Compiler messages</Select.Item>
 							{#each processorTabs as tab}
 								<Select.Item value={tab.id}>{tab.label}</Select.Item>
 							{/each}
@@ -113,17 +113,11 @@
 							/>
 							<CopyButton floating getText={() => selectedProcessor.content} />
 						</div>
+					{:else if selectedOutput === 'compiler-messages'}
+						<div class="flex-1 overflow-scroll px-5">
+							<CompilerMessages infos={messages} title="Compiler messages:" {onJumpToPosition} />
+						</div>
 					{/if}
-				</Card.Content>
-			</Card.Root>
-		</Tabs.Content>
-	{/if}
-
-	{#if hasMessages}
-		<Tabs.Content value="messages" class="h-full">
-			<Card.Root class="h-full overflow-scroll">
-				<Card.Content>
-					<CompilerMessages infos={messages} title="Compiler messages:" {onJumpToPosition} />
 				</Card.Content>
 			</Card.Root>
 		</Tabs.Content>
