@@ -20,6 +20,10 @@ jobs:
       with:
         java-version: 22
         distribution: temurin
+    - name: Set up Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: 22
 
     # Use preinstalled PostgreSQL
     - name: Start PostgreSQL on Ubuntu

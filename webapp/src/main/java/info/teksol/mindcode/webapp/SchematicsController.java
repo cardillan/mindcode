@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Controller
-@RequestMapping(value = "/schematics")
+@RequestMapping(value = "/legacy/schematics")
 public class SchematicsController {
     private static final Logger logger = LoggerFactory.getLogger(SchematicsController.class);
     private static final Map<String, Sample> samples = Samples.loadSchemacodeSamples();
@@ -51,7 +51,7 @@ public class SchematicsController {
         }
 
         String targetUrl = UriComponentsBuilder
-                .fromPath("/schematics")
+                .fromPath("/legacy/schematics")
                 .queryParam("compilerTarget", compilerTarget)
                 .queryParam("s", schematicDto.getId().toString())
                 .build()

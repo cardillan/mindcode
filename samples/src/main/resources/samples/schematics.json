@@ -1,0 +1,52 @@
+[
+  {
+    "filename": "detector.sdf",
+    "title": "Property Detector",
+    "runnable": false
+  },
+  {
+    "filename": "healing-center.sdf",
+    "title": "Healing Center",
+    "runnable": false
+  },
+  {
+    "filename": "on-off-switch.sdf",
+    "title": "On/Off Switch",
+    "runnable": false
+  },
+  {
+    "filename": "regulator.sdf",
+    "title": "Regulator",
+    "runnable": false
+  },
+  {
+    "filename": "overdrive-dome-supply.sdf",
+    "title": "Overdrive Dome Supply",
+    "runnable": false
+  },
+  {
+    "filename": "worker-recall-station.sdf",
+    "title": "Unit Recall Station",
+    "runnable": false
+  },
+  {
+    "filename": "scrap-to-metaglass-2.sdf",
+    "title": "Scrap to Metaglass",
+    "runnable": false
+  },
+  {
+    "filename": "item-transport.sdf",
+    "title": "Item Transport",
+    "runnable": false
+  },
+  {
+    "filename": "payload-hub.sdf",
+    "title": "Payload Hub",
+    "runnable": false
+  },
+  {
+    "filename": "mandelbrot-generator.sdf",
+    "title": "Mandelbrot Generator",
+    "runnable": false
+  }
+]

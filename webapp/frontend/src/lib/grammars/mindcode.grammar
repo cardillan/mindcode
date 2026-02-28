@@ -1,0 +1,389 @@
+@precedence { 
+  dot, 
+  declModifierBracket,
+  stat,
+  call,
+  prefix,
+
+  exp @left,
+  times @left,
+  plus @left,
+  shift @left,
+  bitAnd @left,
+  bitOr @left,
+  dots @left,
+  inList @left,
+  rel @left,
+  equal @left,
+  and @left,
+  or @left,
+  ternary @right,
+  assign @right,
+  case,
+  formatIdentifier
+}
+@top Program { statementList? }
+
+@skip { space | LineComment | BlockComment | doubleLineComment }
+
+commaSep<term> { term ("," term)* }
+semiColonSep<term> { term (";" term)* }
+kw<term> { @specialize[@name={term}]<SimpleIdentifier, term> }
+dir<term> { @specialize[@name={term}]<directiveName, term> }
+
+ArithOp<expr> { expr }
+LogicOp<expr> { expr }
+CompareOp<expr> { expr }
+UpdateOp<expr> { expr }
+BitOp<expr> { expr }
+
+end { kw<"end"> }
+statementList { (statement? ";" | EnhancedComment | MlogBlock)* }
+
+statement {
+  expression |
+  Directive |
+  VariableDeclaration |
+  kw<"module"> Identifier |
+  kw<"allocate"> commaSep<allocation> |
+  kw<"param"> Identifier "=" expression |
+  kw<"require"> (String | Identifier) (kw<"remote"> commaSep<Identifier>)? |
+  FunctionDefinition | 
+  LabeledStatement |
+  Loop |
+  ForLoop |
+  WhileLoop |
+  DoWhileLoop |
+  BreakStatement { kw<"break"> (Identifier | kw<"do"> | kw<"loop"> | kw<"for"> | kw<"while"> | kw<"atomic"> | kw<"begin"> | kw<"debug">)? } |
+  ContinueStatement { kw<"continue"> (Identifier | kw<"do"> | kw<"loop"> | kw<"for"> | kw<"while">)? } |
+  ReturnStatement { kw<"return"> expression? } |
+  AtomicBlock |
+  Block |
+  DebugBlock
+}
+
+AtomicBlock { kw<"atomic"> ~sharedModifier statementList end }
+Block { kw<"begin"> statementList end }
+DebugBlock { kw<"debug"> ~sharedModifier statementList end }
+
+expression {
+  lvalue |
+  Range |
+  KeywordLiteral |
+  CallExpression |
+  AtomicExpression { kw<"atomic"> ~sharedModifier !call "(" expression ")" } |
+  CaseExpression |
+  IfExpression |
+  FormatString |
+  String |
+  ColorLiteral |
+  number |
+  CharLiteral |
+  kw<"null"> |
+  kw<"true"> |
+  kw<"false"> |
+  IncDec { lvalue ("++" | "--") } |
+  // yes this is wrong, however this parser
+  // doesn't need to be correct, just enough to have
+  // syntax highlighting
+  // "--a.b" is parsed as (--a).b
+  IncDecPrefix { ("++" | "--") !prefix lvalue } |
+  BinaryExpression |
+  UnaryExpression |
+  TernaryExpression |
+  AssignmentExpression |
+  "(" expression ")"
+}
+
+lvalue {
+  Identifier | MemberExpression
+}
+
+MemberExpression {
+  expression !dot "." MemberProperty { Identifier } |
+  expression !dot "[" expression "]"
+}
+
+Range {
+  expression !dots (".." | "...") expression
+}
+
+Identifier {
+  SimpleIdentifier |
+  BuiltinIdentifier |
+  ExternalIdentifier
+}
+
+CallExpression {
+  (expression | Identifier { EndIdentifier }) !call ArgumentList { "(" commaSep<callArgument>? ")" }
+}
+
+callArgument {
+  (kw<"in"> | kw<"out"> | kw<"ref">)+ Identifier | expression
+}
+
+IfExpression {
+  kw<"if"> expression kw<"then"> statementList
+  (kw<"elsif"> expression kw<"then"> statementList)* 
+  (kw<"else"> statementList)? end
+}
+
+CaseExpression {
+  kw<"case"> expression CaseAlternative* (kw<"else"> statementList)? end
+}
+
+CaseAlternative {
+  !case kw<"when"> commaSep<expression> kw<"then"> statementList?
+}
+
+Directive {
+  (dir<"#set"> | dir<"#setlocal">) DirectiveValue ("=" commaSep<DirectiveValue>)? |
+  dir<"#declare"> SimpleIdentifier commaSep<(KeywordLiteral | Identifier)>
+}
+
+VariableDeclaration {
+  declarationModifier* kw<"var"> commaSep<VariableDeclarationItem> |
+  declarationModifier+ commaSep<VariableDeclarationItem>
+}
+
+VariableDeclarationItem {
+  Identifier ("=" expression)? |
+  Identifier "[" expression? "]" ("=" ValueList)?
+}
+
+ValueList {
+  "(" commaSep<expression> ")"
+}
+
+declarationModifier {
+  kw<"const"> |
+  kw<"cached"> |
+  kw<"export"> ~sharedModifier |
+  kw<"external"> ("(" Identifier ("[" expression "]")? ")")? |
+  kw<"guarded"> |
+  kw<"linked"> |
+  kw<"mlog"> "(" commaSep<expression ~mlogAmbig> ")" |
+  kw<"noinit"> |
+  kw<"remote"> ~sharedModifier ("(" Identifier? ")")? |
+  kw<"volatile">
+}
+
+
+allocation {
+  (kw<"heap"> | kw<"stack">) kw<"in"> Identifier ("[" Range "]")?
+}
+
+BinaryExpression {
+  expression !exp ArithOp<"**"> expression |
+  expression !times ArithOp<"/" | "%" | "*" | "\\" | "%%"> expression |
+  expression !plus ArithOp<"+" | "-"> expression |
+  expression !shift BitOp<">>>" | ">>" | "<<"> expression |
+  expression !rel CompareOp<"<" | "<=" | ">" | ">="> expression |
+  expression !equal CompareOp<"==" | "===" | "!=" | "!=="> expression |
+  expression !bitOr BitOp<"|" | "^"> expression |
+  expression !bitAnd BitOp<"&"> expression |
+  expression !inList (kw<"not">? kw<"in">) expression |
+  expression !and LogicOp<"&&" | kw<"and">> expression |
+  expression !or LogicOp<"||" | kw<"or">> expression
+}
+
+UnaryExpression {
+  !prefix (ArithOp<"+" | "-" | "~" | "!"> | kw<"not">) expression
+}
+
+TernaryExpression {
+  expression !ternary "?" expression ":" expression
+}
+
+AssignmentExpression {
+  expression !assign
+  UpdateOp<"=" | "**=" |
+    "*=" | "/=" | "\\=" | "%=" | "%%=" |
+    "+=" | "-=" | "<<=" | ">>=" | ">>>=" |
+    "&=" | "|=" | "^=" | "&&=" | "||=">
+  expression
+}
+
+FunctionDefinition {
+  functionModifier* (kw<"void"> | kw<"def">) Identifier ParameterList { "(" commaSep<functionParameter>? ")" } 
+    FunctionBody { statementList }
+  end
+}
+
+functionParameter {
+  (kw<"in"> | kw<"out"> | kw<"ref">)* Identifier "..."?
+}
+
+functionModifier {
+  kw<"atomic"> ~sharedModifier | kw<"debug"> ~sharedModifier | kw<"inline"> | kw<"noinline"> | kw<"export"> ~sharedModifier | kw<"remote"> ~sharedModifier
+}
+
+LabeledStatement {
+  Label (ForLoop | WhileLoop | DoWhileLoop | Loop | AtomicBlock | Block | DebugBlock)
+}
+
+Loop {
+  kw<"loop"> statementList end
+}
+
+ForLoop {
+  kw<"for"> semiColonSep<iterationGroup> kw<"do"> statementList end |
+  kw<"for"> (VariableDeclaration ~forAmbig | commaSep<expression ~forAmbig>) ";" expression? ";" commaSep<expression>? kw<"do"> statementList end
+}
+
+iterationGroup {
+  kw<"var">? commaSep<iteratorVar> kw<"in"> commaSep<expression> kw<"descending">?
+}
+
+iteratorVar {
+  kw<"out">? Identifier ~forAmbig
+}
+
+WhileLoop {
+  ~while kw<"while"> expression kw<"do"> statementList end
+}
+
+DoWhileLoop {
+  kw<"do"> statementList ~while kw<"while"> expression
+}
+
+MlogBlock {
+  kw<"mlog"> ("(" commaSep<mlogParamVar>? ")")? mlogBody
+}
+
+mlogParamVar {
+  (kw<"in"> | kw<"out">)* Identifier ~mlogAmbig
+}
+
+@skip {} {
+  mlogBody {
+    MlogBodyStart MlogBlockContent { (mlogString | rawMlogToken | mlogToken)* } MlogBodyEnd
+  }
+}
+
+
+Label {
+    Identifier ":"
+}
+
+@skip {} {
+  FormatString {
+    formatStart (formatEscape | formatContent | formatMaybeIdentifier | formatPlaceholder | formatExpression)* formatEnd
+  }
+
+  formatPlaceholder {
+    FormatPlaceholderStart Identifier { SimpleIdentifier { !formatIdentifier formatMaybeIdentifier } }?
+  }
+
+  EnhancedComment {
+    enhancedCommentStart (enhancedCommentInterpolation | enhancedCommentContent | enhancedCommentPlaceholder)* enhancedCommentEnd
+  }
+
+  enhancedCommentPlaceholder {
+    enhancedCommentFormatPlaceholderStart Identifier
+  }
+
+  String {
+    stringStart (stringEscape | stringContent)* stringEnd
+  }
+}
+
+formatExpression[@name=Interpolation] {
+  InterpolationStart expression InterpolationEnd
+}
+
+enhancedCommentInterpolation[@name=Interpolation] {
+  enhancedCommentInterpolationStart expression InterpolationEnd
+}
+
+number {
+  (BinaryLiteral | HexLiteral | IntLiteral | FloatLiteral)
+}
+
+@external tokens endCall from './mindcode_tokens' { EndIdentifier }
+
+@local tokens {
+  InterpolationStart[closedBy=InterpolationEnd] { "${" }
+  FormatPlaceholderStart { "$" }
+  formatMaybeIdentifier { $[a-zA-Z_] $[a-zA-Z0-9_]* }
+  @precedence {
+    InterpolationStart,
+    FormatPlaceholderStart
+  }
+  formatEscape[@name=Escape] { "\\" $[$\\n] }
+  formatEnd { '"' }
+  @else formatContent
+}
+
+@local tokens {
+  enhancedCommentInterpolationStart[@name=InterpolationStart,closedBy=InterpolationEnd] { "${" }
+  enhancedCommentFormatPlaceholderStart[@name=FormatPlaceholderStart] { "$" }
+  @precedence {
+    enhancedCommentInterpolationStart,
+    enhancedCommentFormatPlaceholderStart
+  }
+  enhancedCommentEnd { "\n" | @eof }
+  @else enhancedCommentContent
+}
+
+@local tokens {
+  stringEnd { '"' }
+  stringEscape[@name=Escape] { "\\" $[\\n] }
+  @else stringContent
+}
+
+@local tokens {
+  mlogString { '"' !["]* '"' }
+  MlogBodyEnd[openedBy="MlogBodyStart"] { "}" }
+  rawMlogToken { ':' !["#; \t\r\n] ![#; \t\r\n]* }
+  @else mlogToken
+}
+
+@tokens {
+  "..." ".." "?" ":" "," ";"
+  space { @whitespace+ }
+  enhancedCommentStart { "///" }
+  LineComment { "//" ![\n]* }
+  doubleLineComment[@name=LineComment] { "////" ![\n]* }
+  BlockComment { "/*" blockCommentRest }
+  blockCommentRest { ![*] blockCommentRest | "*" blockCommentAfterStar }
+  blockCommentAfterStar { "/" | "*" blockCommentAfterStar | ![/*] blockCommentRest }
+  @precedence {
+    doubleLineComment,
+    enhancedCommentStart,
+    LineComment,
+    "/"
+  }
+
+  SimpleIdentifier { "@@"? $[a-zA-Z_] $[a-zA-Z0-9_]* }
+  ExternalIdentifier { "$" $[a-zA-Z_] $[a-zA-Z0-9_]* }
+  directiveName { "#" $[a-zA-Z]+ }
+  BuiltinIdentifier { "@" $[a-zA-Z_] ($[-a-zA-Z0-9_]* $[a-zA-Z0-9_])? }
+  @precedence {
+    SimpleIdentifier,
+    ExternalIdentifier,
+    BuiltinIdentifier
+  }
+
+  KeywordLiteral { ":" $[a-zA-Z_] ($[-a-zA-Z0-9_]* $[a-zA-Z0-9_])? }
+  DirectiveValue { $[-a-zA-Z0-9_.]+ }
+  formatStart { '$"' }
+  stringStart { '"' }
+  InterpolationEnd[openedBy=InterpolationStart] { "}" }
+  ColorLiteral { "%" ($[0-9a-fA-F]+ | "[" $[a-zA-Z_]+ "]") }
+  BinaryLiteral { "0b" $[01]+ }
+  HexLiteral { "0x" $[0-9a-fA-F]+ }
+  IntLiteral { $[0-9]+ }
+  floatExponent { $[eE]$[+-]? $[0-9]+ } 
+  FloatLiteral { $[0-9]+ floatExponent | $[0-9]* "." $[0-9]+ floatExponent? }
+  CharEscape { "\\" $[\\n] }
+  CharLiteral { "'" (![\n\r'] | CharEscape) "'" }
+  MlogBodyStart[closedBy="MlogBodyEnd"] { "{" }
+
+  @precedence {
+    BinaryLiteral,
+    HexLiteral,
+    FloatLiteral,
+    IntLiteral
+  }
+}

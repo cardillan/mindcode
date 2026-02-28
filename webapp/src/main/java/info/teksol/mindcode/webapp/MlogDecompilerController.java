@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Controller
-@RequestMapping(value = "/mlog-decompiler")
+@RequestMapping(value = "/legacy/mlog-decompiler")
 public class MlogDecompilerController {
     private static final Logger logger = LoggerFactory.getLogger(MlogDecompilerController.class);
 

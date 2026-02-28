@@ -1,1 +1,1 @@
-web: java -Dserver.port=${PORT} -classpath $( find webapp -type f -name '*.jar' | tr '\n' ':' ) info.teksol.mindcode.webapp.WebappApplication
+web: java -Dserver.port=${PORT} -jar webapp/target/mindcode-webapp.jar

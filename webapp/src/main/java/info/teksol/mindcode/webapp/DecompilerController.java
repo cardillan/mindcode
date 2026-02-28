@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Controller
-@RequestMapping(value = "/decompiler")
+@RequestMapping(value = "/legacy/decompiler")
 public class DecompilerController {
     private static final Logger logger = LoggerFactory.getLogger(DecompilerController.class);
 

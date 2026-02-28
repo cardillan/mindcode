@@ -1,0 +1,166 @@
+@top Program { definition* }
+
+@skip { space | LineComment | BlockComment }
+
+commaSep<term> { term ("," term)* }
+kw<term> { @specialize[@name={term}]<Identifier, term> }
+
+definition {
+  SchematicDefinition |
+  StringAssignment
+}
+
+SchematicDefinition {
+  (Identifier ":")? kw<"schematic"> SchematicItem* kw<"end">
+}
+
+SchematicItem {
+  Attribute |
+  BlockItem
+}
+
+StringAssignment {
+  Identifier "=" (String | TextBlock | Identifier)
+}
+
+Attribute {
+  (kw<"name"> | kw<"description"> | kw<"tag">) "=" (String | TextBlock | Identifier) |
+  kw<"filename"> "=" String |
+  kw<"dimensions"> "=" Coordinates |
+  kw<"target"> "=" (Int | Version)
+}
+
+BlockItem {
+  (commaSep<Identifier> ":")? Ref kw<"at"> position Direction? Configuration?
+}
+
+position {
+  Coordinates |
+  RelativeCoordinates |
+  CoordinatesRelativeTo
+}
+
+Coordinates {
+  "(" Int "," Int ")"
+}
+
+RelativeCoordinates {
+  ("+" | "-") Coordinates
+}
+
+CoordinatesRelativeTo {
+  Identifier RelativeCoordinates
+}
+
+Direction {
+  kw<"facing"> (kw<"north"> | kw<"south"> | kw<"east"> | kw<"west">)
+}
+
+Configuration {
+  kw<"virtual"> |
+  kw<"color"> kw<"rgba"> "(" commaSep<Int> ")" |
+  kw<"connected"> kw<"to"> ConnectionList |
+  kw<"block"> Ref |
+  kw<"command"> Ref |
+  kw<"item"> Ref |
+  kw<"liquid"> Ref |
+  kw<"unit"> Ref |
+  kw<"text"> (String | TextBlock | Identifier) |
+  kw<"enabled"> |
+  kw<"disabled"> |
+  ProcessorConfiguration
+}
+
+ConnectionList {
+  commaSep<connection>
+}
+
+connection {
+  Coordinates |
+  RelativeCoordinates |
+  Identifier
+}
+
+ProcessorConfiguration {
+  kw<"processor"> ProcessorLinks? ProcessorSourceAssignment? kw<"end">
+}
+
+ProcessorSourceAssignment {
+  (kw<"mindcode"> | kw<"mlog">) "=" ProcessorSource
+}
+
+ProcessorLinks {
+  kw<"links"> LinkDef* kw<"end">
+}
+
+ProcessorSource {
+  processorSourceSnippet ("+" processorSourceSnippet)*
+}
+
+processorSourceSnippet {
+  (String | TextBlock | Identifier) | FileReference { kw<"file"> (String | TextBlock | Identifier) }
+}
+
+LinkDef {
+  LinkPattern | 
+  connection (kw<"as"> Identifier kw<"virtual">?)?
+}
+
+
+
+@skip {} {
+  String { '"' StringContent { singleLineStringContent* } singleLineStringEnd }
+}
+
+@skip {} {
+  multilineSingleQuoteString { "'''" TextBlockContent { multilineSingleQuoteStringContent* } multilineSingleQuoteStringEnd }
+}
+
+@skip {} {
+  multilineDoubleQuoteString { '"""' TextBlockContent { multilineDoubleQuoteStringContent* } multilineDoubleQuoteStringEnd }
+}
+
+TextBlock { multilineSingleQuoteString | multilineDoubleQuoteString }
+
+@local tokens {
+  singleLineStringEnd { '"' }
+  @else singleLineStringContent
+}
+
+@local tokens {
+  multilineSingleQuoteStringEnd { "'''" }
+  @else multilineSingleQuoteStringContent
+}
+
+@local tokens {
+  multilineDoubleQuoteStringEnd { '"""' }
+  @else multilineDoubleQuoteStringContent
+}
+
+@tokens {
+  space { @whitespace+ }
+  LineComment { "//" ![\n]* }
+  BlockComment { "/*" blockCommentRest }
+  blockCommentRest { ![*] blockCommentRest | "*" blockCommentAfterStar }
+  blockCommentAfterStar { "/" | "*" blockCommentAfterStar | ![/*] blockCommentRest }
+  
+  // the only difference between an Identifier and a LinkPattern is that 
+  // LinkPattern can contain an asterisk, so the external specializer
+  // handles that for us
+  Identifier { $[a-zA-Z_*] $[a-zA-Z0-9_\-*]* }
+  Ref { "@" $[a-zA-Z_] $[a-zA-Z0-9_\-]* }
+  
+  Int { ("+" | "-")? $[0-9]+ }
+  Version { $[0-9]+ "." $[0-9]+ $[sSwW]? | $[0-9]+ $[sSwW] }
+
+  @precedence {
+    Version,
+    Int
+  }
+  
+  "(" ")" "," ":" "." ".." "..." "+" "-" "="
+}
+
+@external specialize { Identifier } specializeIdentifier from "./schemacode_tokens" {
+  LinkPattern
+}

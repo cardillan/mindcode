@@ -1,0 +1,176 @@
+<script lang="ts">
+	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
+	import { Code, Play, Trash2 } from '@lucide/svelte';
+
+	import * as Card from '$lib/components/ui/card';
+	import EditorLayout from '$lib/components/EditorLayout.svelte';
+	import ControlBar from '$lib/components/ControlBar.svelte';
+	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
+	import {
+		ApiHandler,
+		type CompileResponseMessage,
+		type RunResult,
+		type SourceRange
+	} from '$lib/api';
+	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
+	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
+	import { jumpToRange, updateEditor } from '$lib/codemirror';
+	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
+	import TargetPicker from '$lib/components/TargetPicker.svelte';
+	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
+	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
+	import { getSettingsContext } from '$lib/settings.svelte';
+
+	const theme = getThemeContext();
+	const settings = getSettingsContext();
+
+	const api = new ApiHandler();
+	const mlogEditor = new InputEditorStore({
+		theme,
+		api,
+		extensions: [mlogLanguageExtension],
+		settings
+	});
+
+	const mindcodeEditor = new OutputEditorStore(theme, [mindcodeLanguage], settings);
+
+	let runResults = $state<RunResult[]>([]);
+
+	let loadingAction = $state<'decompile' | 'decompile-run' | null>(null);
+	let errors = $state<CompileResponseMessage[]>([]);
+	let warnings = $state<CompileResponseMessage[]>([]);
+	let infos = $state<CompileResponseMessage[]>([]);
+	let editorLayout = $state<EditorLayout>();
+	const compilerTarget = new LocalCompilerTarget();
+
+	function handleJumpToPosition(range: SourceRange) {
+		if (!mindcodeEditor.view) return;
+		jumpToRange(mindcodeEditor.view, range);
+	}
+
+	async function handleDecompile(run: boolean) {
+		if (!mlogEditor.view) return;
+		const source = mlogEditor.view.state.doc.toString();
+		loadingAction = run ? 'decompile-run' : 'decompile';
+		runResults = [];
+		errors = [];
+		warnings = [];
+		infos = [];
+		updateEditor(mindcodeEditor.view, '');
+		editorLayout?.ensureOutputIsVisible();
+
+		try {
+			const data = await api.decompileMlog({
+				sourceId: mlogEditor.sourceId,
+				source,
+				target: compilerTarget.value,
+				run
+			});
+			runResults = data.runResults;
+
+			if (mindcodeEditor.view) {
+				updateEditor(mindcodeEditor.view, data.source);
+			}
+			errors = data.errors;
+			warnings = data.warnings;
+			infos = data.infos;
+			mlogEditor.setEditorId(data.sourceId);
+		} catch (e) {
+			console.error(e);
+			runResults = [];
+		} finally {
+			loadingAction = null;
+		}
+	}
+
+	async function cleanEditors() {
+		mlogEditor.clear({ preserveUrl: true });
+		compilerTarget.value = '7';
+
+		updateEditor(mindcodeEditor.view, '');
+
+		errors = [];
+		warnings = [];
+		infos = [];
+
+		await syncUrl({ sourceId: null, compilerTarget: compilerTarget.value });
+	}
+</script>
+
+<svelte:head>
+	<title>Mindcode: Mlog decompiler</title>
+</svelte:head>
+
+<div class="container mx-auto flex flex-col gap-4 px-4 py-4">
+	<!-- Info Card -->
+	<Card.Root class="shrink-0 border-dashed bg-muted/50">
+		<Card.Content class="p-4 text-sm">
+			<p>
+				Here you can partially decompile an mlog code into Mindcode. <strong
+					>The resulting code cannot be directly compiled by Mindcode.</strong
+				>
+				Jump instructions in the original mlog are transcribed as <strong>if</strong>
+				and <strong>goto</strong> statements which aren't supported by Mindcode and must be rewritten
+				using conditional statements, loops and other high-level constructs. The decompiler is mainly
+				useful to produce expressions and function calls in the correct Mindcode syntax, saving some time
+				and possibly helping to avoid some mistakes compared to a manual rewrite of the entire mlog code
+				from scratch.
+			</p>
+		</Card.Content>
+	</Card.Root>
+
+	<!-- Control Bar (Desktop) -->
+	<div class="hidden shrink-0 md:block">
+		<ControlBar
+			primaryActions={[
+				{ label: 'Decompile', onclick: () => handleDecompile(false), icon: Code },
+				{ label: 'Decompile and Run', onclick: () => handleDecompile(true), icon: Play }
+			]}
+			loading={mlogEditor.isLoading || loadingAction !== null}
+		>
+			<TargetPicker {compilerTarget} />
+		</ControlBar>
+	</div>
+
+	<!-- Mobile: Settings -->
+	<div class="flex shrink-0 items-center gap-2 md:hidden">
+		<TargetPicker {compilerTarget} />
+	</div>
+
+	<!-- Editor Layout -->
+	<EditorLayout
+		bind:this={editorLayout}
+		inputLabel="Mlog code"
+		inputEditor={mlogEditor}
+		inputLoading={mlogEditor.isLoading}
+		outputEditor={mindcodeEditor}
+		outputLoading={mlogEditor.isLoading || loadingAction !== null}
+		{runResults}
+		{errors}
+		{warnings}
+		{infos}
+		onJumpToPosition={handleJumpToPosition}
+	>
+		{#snippet inputActions()}
+			<EditorActionButton tooltip="Erase mlog" onClick={cleanEditors}>
+				<Trash2 class="size-4" />
+			</EditorActionButton>
+		{/snippet}
+	</EditorLayout>
+
+	<!-- Bottom Action Bar (Mobile) -->
+	<BottomActionBar
+		primaryAction={{
+			label: 'Decompile',
+			icon: Code,
+			onclick: () => handleDecompile(false)
+		}}
+		secondaryAction={{
+			label: 'Decompile and Run',
+			icon: Play,
+			onclick: () => handleDecompile(true)
+		}}
+		loading={mlogEditor.isLoading || loadingAction !== null}
+	/>
+	<ProjectLinks />
+</div>

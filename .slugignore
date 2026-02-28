@@ -1,0 +1,5 @@
+webapp/frontend/node_modules
+webapp/frontend/.svelte-kit
+webapp/frontend/README.md
+webapp/frontend/components.json
+webapp/frontend/eslint.config.json

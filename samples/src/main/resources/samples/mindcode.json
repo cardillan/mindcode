@@ -1,0 +1,42 @@
+[
+  {
+    "filename": "control-multiple-units.mnd",
+    "title": "Controlling units",
+    "runnable": false
+  },
+  {
+    "filename": "one-thorium.mnd",
+    "title": "Controlling a block",
+    "runnable": false
+  },
+  {
+    "filename": "many-thorium.mnd",
+    "title": "Controlling many blocks",
+    "runnable": false
+  },
+  {
+    "filename": "heal-damaged-building.mnd",
+    "title": "Healing buildings",
+    "runnable": false
+  },
+  {
+    "filename": "mining-drone.mnd",
+    "title": "Mining drone",
+    "runnable": false
+  },
+  {
+    "filename": "item-transport.mnd",
+    "title": "Item Transport",
+    "runnable": false
+  },
+  {
+    "filename": "upgrade-conveyors.mnd",
+    "title": "Upgrade conveyors",
+    "runnable": false
+  },
+  {
+    "filename": "sum-of-primes.mnd",
+    "title": "Sum of primes",
+    "runnable": true
+  }
+]
