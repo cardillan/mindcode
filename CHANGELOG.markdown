@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed compiler crashing when an unsupported combination of processor version and processor type is specified (e.g., `#set target = 6;`).
 * Fixed wrong handling of linked blocks by the DFO ([#303](https://github.com/cardillan/mindcode/issues/303)).
+* Fixed Boolean Optimization bugs ([#304](https://github.com/cardillan/mindcode/issues/304)):
+  * The optimization may crash when compiling for targets 8.0 and lower.
+  * The optimization incorrectly processes some noninteger values. 
 
 ### Changed
 

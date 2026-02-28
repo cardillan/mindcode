@@ -537,4 +537,40 @@ class BooleanOptimizerTest extends AbstractOptimizerTest<BooleanOptimizer> {
             );
         }
     }
+
+    @Nested
+    class Target7 {
+
+        @Test
+        void avoidsSelect() {
+            assertCompilesTo(
+                    """
+                            #set target = 7m;
+                            noinit var x;
+                            
+                            if x < 0.4 then
+                                y = 1.8;
+                            elsif x < 0.7 then
+                                y = 1.2;
+                            else
+                                y = 0.8;
+                            end;
+                            
+                            print(y);
+                            """,
+                    createInstruction(JUMP, label(0), "greaterThanEq", ".x", "0.4"),
+                    createInstruction(SET, ":y", "1.8"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "greaterThanEq", ".x", "0.7"),
+                    createInstruction(SET, ":y", "1.2"),
+                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, ":y", "0.8"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(PRINT, ":y")
+            );
+        }
+    }
 }

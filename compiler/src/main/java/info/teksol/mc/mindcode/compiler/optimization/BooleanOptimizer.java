@@ -58,6 +58,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         String before = optimizationContext.getProgramTextFullAst();
         boolean result = applySelectOptimization(ifExpression);
         if (result) {
+            System.out.println("Context: #" + ifExpression.id);
             System.out.println("Before:\n" + before);
             System.out.println("\n\nAfter:\n" + optimizationContext.getProgramTextFullAst());
             System.out.println("\n\n");
@@ -596,6 +597,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
         LogicVariable result = instruction.getResult();
         if (resolved.contains(result)) return;
 
+        boolean replaced = false;
         if (results.contains(result)) {
             LogicValue trueValue = trueContent.assignments.getOrDefault(result, result);
             LogicValue falseValue = falseContent.assignments.getOrDefault(result, result);
@@ -605,9 +607,14 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
             if (t.isOne() && f.isZero() || t.isZero() && f.isOne() && condition.hasInverse(false)) {
                 Condition adjusted = t.isZero() ? condition.inverse(false) : condition;
                 instructions.createOp(adjusted.toOperation(), result, x, y);
-            } else {
+                replaced = true;
+            } else if (hasSelect) {
                 instructions.createSelect(result, condition, x, y, t, f);
+                replaced = true;
             }
+        }
+
+        if (replaced) {
             resolved.add(result);
         } else {
             instructions.addToContext(instruction);
@@ -724,7 +731,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
             if (assignments.size() == 1) {
                 LogicValue value = assignments.values().iterator().next();
                 if (value instanceof LogicBoolean booleanValue) return booleanValue;
-                if (value.isNumericConstant() && (value.getIntValue() == 0 || value.getIntValue() == 1)) {
+                if (value.isConstant() && value.isInteger() && (value.getIntValue() == 0 || value.getIntValue() == 1)) {
                     return LogicBoolean.get(value.getIntValue() == 1);
                 }
             }
