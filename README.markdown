@@ -20,14 +20,14 @@
 
 ## Supported Mindustry versions
 
-Mindcode can generate code for several Mindustry versions. The target can be selected in the web app using a combobox or by including one of the following commands in the source code: 
+Mindcode can generate code for several Mindustry versions and different types of processors. The target can be selected in the web app using a combobox or by including one of the following commands in the source code: 
 
 * **6.0 Build 126.2**: use `#set target = 6m;` to select it (`m` denotes a micro-processor, use `l`, `h` or `w` for a logic-, hyper- or world-processor).
 * **7.0 Build 146** (the default one): use `#set target = 7m;` to explicitly select it.  
 * **v8 Build 149 Beta**: use `#set target = 8.0m;` to select it.
 * **v8 Build 155 Beta** or later: use `#set target = 8m;` (or `8.1m`) to select it.
 
-At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry version (BE build 26676).
+At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry version (BE build 26776).
 
 [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality in Mindustry 8.
 
@@ -49,13 +49,13 @@ See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3
 
 The most important recent changes to Mindcode include:
 
-* Mindustry Logic 8
+* Mindustry 8 specific features
   * Complete support for [the latest Mindustry 8 pre-release](/doc/syntax/MINDUSTRY-8.markdown).
   * [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) guaranteed to be executed atomically – without interruption.
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
   * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities. 
   * New string/character-based instructions and character literals.
-* Language features
+* Language/compiler features
   * Short-circuit evaluation of boolean expressions.
   * Improved [Loop Rotation](doc/syntax/optimizations/LOOP-ROTATION.markdown) and [Loop Hoisting](doc/syntax/optimizations/LOOP-HOISTING.markdown) optimizations.
   * The [`in` operator](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#rangelist-membership-operator) for testing range or list membership.
@@ -65,8 +65,6 @@ The most important recent changes to Mindcode include:
   * [Processor emulator](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown) for all supported Mindcode targets, including schematic emulation.
   * Reporting compiled code size broken down by function.  
   * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
-  * Using Mindustry Logic metadata corresponding to the target selected for compilation.
-  * Profiling information for code executed using the built-in processor emulator.
 
 See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 
@@ -95,7 +93,7 @@ The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), availabl
 
 To learn more about Mindustry Logic, you can find more information about it here:
 
-* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated January 2026)
+* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated February 2026)
 
 You can also get help on these Discord servers:
 
