@@ -44,7 +44,8 @@ import {
 } from '@codemirror/autocomplete';
 import { highlightSelectionMatches, search, searchKeymap } from '@codemirror/search';
 import EditorSearchPanel from './components/EditorSearchPanel.svelte';
-import { SettingsStore } from './settings.svelte';
+import type { Settings } from './settings.svelte';
+import { toast } from 'svelte-sonner';
 
 export const foldChevronDownId = 'fold-chevron-down';
 export const foldChevronRightId = 'fold-chevron-right';
@@ -56,15 +57,16 @@ export interface InputEditorStoreOptions {
 	theme: ThemeStore;
 	samples?: Sample[];
 	extensions?: Extension[];
-	settings: SettingsStore;
+	settings: Settings;
 }
 
 const keepCurrentUrl = Annotation.define<boolean>();
+const internalUpdate = Annotation.define<boolean>();
 
 export class InputEditorStore {
 	view = $state<EditorView>();
 	isLoading = $state(true);
-	readonly #id = $derived(browser ? page.url.searchParams.get(sourceIdKey) : null);
+	#id = $derived(browser ? page.url.searchParams.get(sourceIdKey) : null);
 	/** Reactive value kept in sync with the id stored in the editor's state */
 	sourceId = $state<string | null>(this.#id);
 
@@ -89,6 +91,7 @@ export class InputEditorStore {
 							if (this.#id === docId) return;
 							if (update.transactions.some((tr) => tr.annotation(keepCurrentUrl))) return;
 
+							this.#id = docId;
 							syncUrl({ sourceId: docId, replaceState: false });
 						}),
 						extensions
@@ -97,16 +100,19 @@ export class InputEditorStore {
 					// source id when a sample is modified. This allows the server to not have to
 					// save the source code if the sourceId is a sample id.
 					dispatchTransactions(trs, view) {
-						// get the id before the changes
-						const originalDocId = view.state.field(currentDocId);
-						view.update(trs);
+						const docId = view.state.field(currentDocId);
 
-						if (!originalDocId || !sampleIds.has(originalDocId)) return;
-						const newDocId = view.state.field(currentDocId);
-
-						if (trs.some((tr) => tr.docChanged) && newDocId === originalDocId) {
-							view.dispatch(view.state.update({ effects: updateDocId.of(null) }));
+						if (shouldResetDocId(trs, docId, sampleIds)) {
+							const tr = view.state.update(
+								{
+									effects: updateDocId.of(null)
+								},
+								...trs
+							);
+							view.update([tr]);
+							return;
 						}
+						view.update(trs);
 					}
 				});
 			});
@@ -120,51 +126,67 @@ export class InputEditorStore {
 		syncEditorTheme(() => this.view, theme);
 		syncEditorLineWrapping(() => this.view, settings);
 
-		let firstLoad = true;
 		// sync editor content with sourceId from URL
 		$effect(() => {
 			const view = this.view;
 			if (!view) return;
 
-			// don't update if the ids are the same
-			if (view.state.field(currentDocId) === this.#id) {
-				this.isLoading = false;
-				return;
-			}
+			const id = this.#id;
+			const docId = view.state.field(currentDocId);
 
-			if (!this.#id) {
-				view.dispatch({
-					effects: updateDocId.of(null),
-					changes: { from: 0, to: view.state.doc.length, insert: '' }
-				});
-				this.isLoading = false;
-				firstLoad = false;
-				return;
-			}
+			untrack(() => {
+				// don't update if the ids are the same
+				if (docId === id) {
+					this.isLoading = false;
+					return;
+				}
 
-			const sample = samples.find((s) => s.id === this.#id);
+				if (!id) {
+					view.dispatch({
+						effects: updateDocId.of(null),
+						changes: { from: 0, to: view.state.doc.length, insert: '' },
+						annotations: internalUpdate.of(true)
+					});
+					this.isLoading = false;
+					return;
+				}
 
-			if (sample) {
-				view.dispatch({
-					effects: updateDocId.of(sample.id),
-					changes: { from: 0, to: view.state.doc.length, insert: sample.source }
-				});
-				this.isLoading = false;
-				firstLoad = false;
-				return;
-			}
+				const sample = samples.find((s) => s.id === id);
 
-			untrack(() => (this.isLoading = true));
-			api.loadSource(this.#id).then((serverSource) => {
-				this.isLoading = false;
-				// console.log(serverSource);
-				view.dispatch({
-					effects: updateDocId.of(serverSource.id),
-					changes: { from: 0, to: view.state.doc.length, insert: serverSource.source },
-					// don't add this change to the undo history
-					annotations: Transaction.addToHistory.of(!firstLoad)
-				});
-				firstLoad = false;
+				if (sample) {
+					view.dispatch({
+						effects: updateDocId.of(sample.id),
+						changes: { from: 0, to: view.state.doc.length, insert: sample.source },
+						annotations: internalUpdate.of(true)
+					});
+					this.isLoading = false;
+					return;
+				}
+
+				this.isLoading = true;
+				api
+					.loadSource(id)
+					.then((serverSource) => {
+						view.dispatch({
+							effects: updateDocId.of(serverSource.id),
+							changes: { from: 0, to: view.state.doc.length, insert: serverSource.source },
+							annotations: internalUpdate.of(true)
+						});
+						this.isLoading = false;
+					})
+					.catch((error) => {
+						toast.error('Failed to load the source. Please check the URL and try again.');
+						console.error('Error loading source:', error);
+
+						view.dispatch({
+							// preserve the id in case the user wants to reload
+							effects: updateDocId.of(id),
+							changes: { from: 0, to: view.state.doc.length, insert: '' },
+							annotations: internalUpdate.of(true)
+						});
+						this.isLoading = false;
+						return;
+					});
 			});
 		});
 	}
@@ -180,7 +202,7 @@ export class InputEditorStore {
 		this.view.dispatch({
 			effects: updateDocId.of(sample.id),
 			changes: { from: 0, to: this.view.state.doc.length, insert: sample.source },
-			annotations: [keepCurrentUrl.of(preserveUrl)]
+			annotations: [keepCurrentUrl.of(preserveUrl), internalUpdate.of(true)]
 		});
 	}
 
@@ -190,7 +212,7 @@ export class InputEditorStore {
 		this.view.dispatch({
 			effects: updateDocId.of(null),
 			changes: { from: 0, to: this.view.state.doc.length, insert: '' },
-			annotations: [keepCurrentUrl.of(preserveUrl)]
+			annotations: [keepCurrentUrl.of(preserveUrl), internalUpdate.of(true)]
 		});
 	}
 
@@ -201,7 +223,11 @@ export class InputEditorStore {
 
 		this.view.dispatch({
 			effects: updateDocId.of(newId),
-			annotations: [Transaction.addToHistory.of(addToHistory), keepCurrentUrl.of(preserveUrl)]
+			annotations: [
+				Transaction.addToHistory.of(addToHistory),
+				keepCurrentUrl.of(preserveUrl),
+				internalUpdate.of(true)
+			]
 		});
 	}
 
@@ -218,7 +244,7 @@ export class OutputEditorStore {
 	constructor(
 		public theme: ThemeStore,
 		public extensions: Extension[] = [],
-		public settings: SettingsStore
+		public settings: Settings
 	) {
 		$effect.pre(() => {
 			untrack(() => {
@@ -256,26 +282,29 @@ function syncEditorTheme(getView: () => EditorView | undefined, themeStore: Them
 		const newTheme = getTheme(themeStore.isDark);
 		if (themeCompartment.get(editor.state) === newTheme) return;
 
-		view.dispatch({
-			effects: themeCompartment.reconfigure(newTheme)
+		untrack(() => {
+			view.dispatch({
+				effects: themeCompartment.reconfigure(newTheme)
+			});
 		});
 	});
 }
 
-function syncEditorLineWrapping(getView: () => EditorView | undefined, settings: SettingsStore) {
+function syncEditorLineWrapping(getView: () => EditorView | undefined, settings: Settings) {
 	$effect(() => {
 		const view = getView();
 		if (!view) return;
+		const { lineWrapping } = settings;
 
-		view.dispatch({
-			effects: lineWrappingCompartment.reconfigure(
-				settings.lineWrapping ? EditorView.lineWrapping : []
-			)
+		untrack(() => {
+			view.dispatch({
+				effects: lineWrappingCompartment.reconfigure(lineWrapping ? EditorView.lineWrapping : [])
+			});
 		});
 	});
 }
 
-function commonExtensions(themeStore: ThemeStore, settings: SettingsStore): Extension[] {
+function commonExtensions(themeStore: ThemeStore, settings: Settings): Extension[] {
 	return [
 		lineNumbers(),
 		highlightActiveLineGutter(),
@@ -360,4 +389,20 @@ function commonExtensions(themeStore: ThemeStore, settings: SettingsStore): Exte
 		themeCompartment.of(getTheme(themeStore.isDark)),
 		lineWrappingCompartment.of(settings.lineWrapping ? EditorView.lineWrapping : [])
 	];
+}
+
+export function shouldResetDocId(
+	transactions: readonly Transaction[],
+	docId: string | null,
+	sampleIds: Set<string>
+): boolean {
+	const isSample = docId && sampleIds.has(docId);
+
+	if (!isSample) return false;
+
+	const hasUserEdit = transactions.some(
+		(transaction) => transaction.docChanged && !transaction.annotation(internalUpdate)
+	);
+
+	return hasUserEdit;
 }
