@@ -22,7 +22,7 @@ attribute
     | Dimensions Assign coordinates                 # dimensions
     | Tag Assign tag=textDef                        # schemaTag
     | Filename Assign filename=simpleStringLiteral  # filename
-    | Target Assign version=(Int | Version)         # target
+    | Target Assign version=Version                 # target
     ;
 
 block
@@ -179,7 +179,7 @@ Int             : ( '+' | '-' )? [0-9]+;
 Id              : [_a-zA-Z] [-a-zA-Z_0-9]*;
 Ref             : '@' [_a-zA-Z] [-a-zA-Z_0-9]*;
 Pattern         : [_a-zA-Z*] [-a-zA-Z_0-9*]*;
-Version         : [0-9]+ [sSwW] | [0-9]+ '.' [0-9]+ ( [sSwW] )? ;
+Version         : [0-9]+ ( '.' [0-9]+ )?;
 
 Comment         : '/*' .*? '*/' -> skip;
 SLComment       : ('//' ~('\r' | '\n')* '\r'? '\n') -> skip;
