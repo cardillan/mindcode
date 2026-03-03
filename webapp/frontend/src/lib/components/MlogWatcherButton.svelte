@@ -3,7 +3,11 @@
 	import { Check, CircleAlert, Cpu, LoaderCircle } from '@lucide/svelte';
 	import EditorActionButton from './EditorActionButton.svelte';
 
-	let { channel, getText }: { channel: MlogWatcherStore; getText: () => string } = $props();
+	let {
+		channel,
+		getText,
+		disabled = false
+	}: { channel: MlogWatcherStore; getText: () => string; disabled?: boolean } = $props();
 
 	let status = $state<'idle' | 'sent' | 'loading' | 'error'>('idle');
 	// using ReturnType to avoid issues caused by @types/node
@@ -27,6 +31,7 @@
 <EditorActionButton
 	tooltip={status === 'sent' ? 'Sent!' : 'Send to MlogWatcher'}
 	onClick={sendToMlogWatcher}
+	{disabled}
 >
 	{#if status === 'sent'}
 		<Check class="size-4" />

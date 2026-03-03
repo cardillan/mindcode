@@ -9,6 +9,7 @@
 	import { type Snippet } from 'svelte';
 	import EditorLayoutTabs, { type CollapsibleTabsMode } from './EditorLayoutTabs.svelte';
 	import type { ClassValue } from 'svelte/elements';
+	import type { EditorView } from 'codemirror';
 
 	type TabName = 'code' | 'output';
 
@@ -23,8 +24,11 @@
 		restoreLabel: string;
 		onJumpToPosition?: (range: SourceRange) => void;
 		onModeChange?: (mode: CollapsibleTabsMode) => void;
+		tabActions?: Snippet<[showingCode: boolean]>;
 		editor: Snippet;
+		view?: EditorView;
 	}
+
 	let {
 		mode = $bindable('normal'),
 		runResults = [],
@@ -36,11 +40,15 @@
 		restoreLabel,
 		onJumpToPosition,
 		onModeChange,
-		editor
+		tabActions: outputActions,
+		editor,
+		view
 	}: TabsOutputProps = $props();
 
 	// Determine which tabs are available
-	let hasOutput = $derived(runResults.length > 0 || messages.length > 0);
+	const hasCompilerMessages = $derived(messages.length > 0);
+	const hasRunResults = $derived(runResults.length > 0);
+	const hasOutput = $derived(hasRunResults || hasCompilerMessages);
 
 	// Determine default active tab (first available)
 	let preferredTab = $state<TabName>('code');
@@ -61,8 +69,20 @@
 		}))
 	);
 
-	let selectedOutput = $state('compiler-messages');
+	let selectedOutput = $derived(
+		hasCompilerMessages ? 'compiler-messages' : (processorTabs[0]?.id ?? '')
+	);
 	const selectedProcessor = $derived(processorTabs.find((tab) => tab.id === selectedOutput));
+
+	function getCopyText() {
+		if (selectedTab === 'code') {
+			return view?.state.doc.toString() ?? '';
+		}
+		if (selectedProcessor) {
+			return selectedProcessor.content;
+		}
+		return '';
+	}
 </script>
 
 <EditorLayoutTabs
@@ -79,6 +99,11 @@
 		{#if hasOutput}
 			<Tabs.Trigger value="output" disabled={disableTriggers}>Output</Tabs.Trigger>
 		{/if}
+	{/snippet}
+
+	{#snippet tabActions(tab)}
+		{@render outputActions?.(tab === 'code')}
+		<CopyButton getText={getCopyText} disabled={selectedTab !== 'code' && !selectedProcessor} />
 	{/snippet}
 
 	<Tabs.Content value="code" class="h-full">
@@ -98,23 +123,22 @@
 							{/if}
 						</Select.Trigger>
 						<Select.Content>
-							<Select.Item value="compiler-messages">Compiler messages</Select.Item>
+							{#if hasCompilerMessages}
+								<Select.Item value="compiler-messages">Compiler messages</Select.Item>
+							{/if}
 							{#each processorTabs as tab}
 								<Select.Item value={tab.id}>{tab.label}</Select.Item>
 							{/each}
 						</Select.Content>
 					</Select.Root>
 					{#if selectedProcessor}
-						<div class="relative flex-1">
-							<Textarea
-								readonly
-								value={selectedProcessor.content}
-								class="h-full w-full resize-none"
-							/>
-							<CopyButton floating getText={() => selectedProcessor.content} />
-						</div>
+						<Textarea
+							readonly
+							value={selectedProcessor.content}
+							class="w-full flex-1 resize-none overflow-y-auto"
+						/>
 					{:else if selectedOutput === 'compiler-messages'}
-						<div class="flex-1 overflow-scroll px-5">
+						<div class="flex-1 overflow-y-scroll px-5">
 							<CompilerMessages infos={messages} title="Compiler messages:" {onJumpToPosition} />
 						</div>
 					{/if}

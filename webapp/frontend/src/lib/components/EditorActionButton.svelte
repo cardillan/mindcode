@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { Button } from './ui/button';
+	import { Button, type ButtonVariant } from './ui/button';
 	import * as Tooltip from './ui/tooltip';
 	import type { ClassValue } from 'svelte/elements';
 
@@ -8,12 +8,16 @@
 		onClick,
 		children,
 		tooltip,
-		class: className = ''
+		class: className = '',
+		disabled = false,
+		variant = 'secondary'
 	}: {
 		onClick?: () => void;
 		children: Snippet;
 		tooltip: string;
+		disabled?: boolean;
 		class?: ClassValue;
+		variant?: ButtonVariant;
 	} = $props();
 </script>
 
@@ -22,10 +26,11 @@
 		{#snippet child({ props })}
 			<Button
 				{...props}
-				variant="outline"
+				{variant}
 				size="icon"
-				class={[props.class, className]}
+				class={[props.class, className, 'cursor-pointer']}
 				onclick={onClick}
+				{disabled}
 			>
 				{@render children()}
 			</Button>

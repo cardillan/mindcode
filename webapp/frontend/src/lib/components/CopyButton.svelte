@@ -5,11 +5,13 @@
 	let {
 		getText,
 		class: className = '',
-		floating = false
+		floating = false,
+		disabled = false
 	}: {
 		getText: () => string;
 		class?: string;
 		floating?: boolean;
+		disabled?: boolean;
 	} = $props();
 
 	let copied = $state(false);
@@ -27,8 +29,9 @@
 <EditorActionButton
 	onClick={handleCopy}
 	tooltip={copied ? 'Copied!' : 'Copy to clipboard'}
+	{disabled}
 	class={[
-		floating && 'absolute top-2 right-2 z-10 h-8 gap-1.5 opacity-80 hover:opacity-100',
+		floating && 'absolute top-2 right-2 z-10 gap-1.5 opacity-80 hover:opacity-100',
 		className
 	]}
 >
