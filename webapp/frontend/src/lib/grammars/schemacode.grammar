@@ -11,10 +11,10 @@ definition {
 }
 
 SchematicDefinition {
-  (Identifier ":")? kw<"schematic"> SchematicItem* kw<"end">
+  (Identifier ":")? kw<"schematic"> schematicItem* kw<"end">
 }
 
-SchematicItem {
+schematicItem {
   Attribute |
   BlockItem
 }
@@ -151,7 +151,9 @@ TextBlock { multilineSingleQuoteString | multilineDoubleQuoteString }
   Ref { "@" $[a-zA-Z_] $[a-zA-Z0-9_\-]* }
   
   Int { ("+" | "-")? $[0-9]+ }
-  Version { $[0-9]+ "." $[0-9]+ $[sSwW]? | $[0-9]+ $[sSwW] }
+  // Still preserving processor specification support to not break
+  // syntax highlighting on old code
+  Version { $[0-9]+ "." $[0-9]+ $[a-zA-Z]? | $[0-9]+ $[a-zA-Z] }
 
   @precedence {
     Version,

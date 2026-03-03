@@ -1,0 +1,15 @@
+# Comments { "dialect": "mindcodeEmbed" }
+
+# Regular comment
+// Mindcode comment
+set count 0 # this should work
+set count 1 // this should also work
+
+==>
+
+Program(
+  Comment,
+  MindcodeComment,
+  Instruction(...), Comment,
+  Instruction(...), MindcodeComment
+)
