@@ -61,7 +61,7 @@ public class ApiController {
 
     @PostMapping("/compile")
     public CompileResponse compile(@RequestBody CompileRequest request) {
-        Target target = new Target(request.target);
+        Target target = Target.fromString(request.target);
         boolean run = request.run();
         ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.compileMindcode);
 
@@ -97,7 +97,7 @@ public class ApiController {
 
     @PostMapping("/decompile")
     public DecompileResponse decompileMlog(@RequestBody DecompileRequest request) {
-        Target target = new Target(request.target);
+        Target target = Target.fromString(request.target);
         boolean run = request.run();
         ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.other);
         String mlog = apiSource.content;
@@ -139,7 +139,7 @@ public class ApiController {
 
     @PostMapping("/schemacode/compile")
     public SchemacodeCompileResponse compileSchemacode(@RequestBody SchemacodeCompileRequest request) {
-        Target target = new Target(request.target());
+        Target target = Target.fromString(request.target);
         ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.other);
 
         ListMessageLogger messageLogger = new ListMessageLogger();
@@ -171,7 +171,7 @@ public class ApiController {
         List<RunResult> runResults = List.of();
 
         run: if (request.run) {
-            Target target = new Target(request.target);
+            Target target = Target.fromString(request.target);
             CompilerProfile profile = CompilerProfile.fullOptimizations(false, true)
                     .setTarget(target)
                     .setRun(true);
