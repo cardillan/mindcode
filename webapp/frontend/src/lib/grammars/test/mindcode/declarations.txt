@@ -1,0 +1,25 @@
+# Allocate heap
+
+allocate heap in bank1;
+
+==>
+
+Program(
+  allocate, heap, in, Identifier(...)
+)
+
+# Declare arrays
+
+var a[10];
+external $a[10];
+
+==>
+
+Program(
+  VariableDeclaration(
+    var, VariableDeclarationItem(Identifier(SimpleIdentifier), IntLiteral)
+  ),
+  VariableDeclaration(
+    external, VariableDeclarationItem(Identifier(ExternalIdentifier), IntLiteral)
+  )
+)

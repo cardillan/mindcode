@@ -1,0 +1,17 @@
+# Function definition
+
+void setBit(bitIndex)
+  MEMORY[bitIndex \ MOD] |= (1 << (bitIndex % MOD));
+end;
+
+==>
+
+Program(
+  FunctionDefinition(
+    void, Identifier(...), ParameterList(Identifier(...)), 
+      FunctionBody(
+        AssignmentExpression(...),
+      ),
+    end
+  )
+)  

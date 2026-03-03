@@ -1,0 +1,35 @@
+# Case expression
+f = case a
+    when 1 then x; y; z;
+    when 2, 3, 4 then y;
+    when 5 .. 10, 15 ... 20 then z;
+    else w;
+end;
+
+g = case x
+end;
+
+h = case z
+    else 0;
+end;
+
+==>
+
+Program(
+  AssignmentExpression(
+    Identifier(...), UpdateOp, CaseExpression(case, Identifier(...), 
+      CaseAlternative(when, IntLiteral, then, 
+        Identifier(...), Identifier(...), Identifier(...),
+      ),
+      CaseAlternative(when, IntLiteral, ",", IntLiteral, ",", IntLiteral, then,
+        Identifier(...),
+      ),
+      CaseAlternative(when, Range(IntLiteral, "..", IntLiteral), ",", Range(IntLiteral, "...", IntLiteral), then,
+        Identifier(...),
+      ),
+      else, Identifier(...),
+    end)
+  ),
+  AssignmentExpression(Identifier(...), UpdateOp, CaseExpression(case, Identifier(...), end)),
+  AssignmentExpression(Identifier(...), UpdateOp, CaseExpression(case, Identifier(...), else, IntLiteral, end))
+)

@@ -1,0 +1,99 @@
+# While loops
+
+while @unit == null do
+  ubind(@poly);
+end;
+
+==>
+
+Program(
+  WhileLoop(
+    while, BinaryExpression(Identifier(...), CompareOp, null), do,
+      CallExpression(...),
+    end
+  )
+)
+
+# Do while loops
+
+do
+    ubind(@poly);
+while @unit == null;
+
+==> 
+
+Program(
+  DoWhileLoop(
+    do,
+      CallExpression(...),
+    while, BinaryExpression(Identifier(...), CompareOp, null)
+  )
+)
+
+# Range iteration loops
+
+var sum = 0;
+for var n in firstIndex + 1 .. lastIndex - 1 do
+    sum += cell1[n];
+end;
+
+==> 
+
+Program(
+  VariableDeclaration(
+    var, VariableDeclarationItem(Identifier(...), IntLiteral)
+  ),
+  ForLoop(
+    for, var, Identifier(...), in, Range(...), do,
+      AssignmentExpression(...),
+    end
+  )
+)
+
+# Descending iteration loops
+
+for var n in 14 ... 18 descending do
+    println(n);
+end;
+printflush(message1);
+
+==>
+
+Program(
+  ForLoop(
+    for, var, Identifier(...), in, Range(IntLiteral, "...", IntLiteral), descending, do,
+      CallExpression(...),
+    end
+  ),
+  CallExpression(...)
+)
+
+# Implicit loop label
+
+loop
+    println("Outer 1");
+    while true do
+        println("Inner 1");
+        break loop;
+        println("Inner 2");
+    end;
+    println("Outer 2");
+end;
+
+==> 
+
+Program(
+  Loop(
+    loop,
+      CallExpression(...),
+      WhileLoop(
+        while, true, do,
+          CallExpression(...),
+          BreakStatement(break, loop),
+          CallExpression(...),
+        end
+      ),
+      CallExpression(...),
+    end
+  )
+)

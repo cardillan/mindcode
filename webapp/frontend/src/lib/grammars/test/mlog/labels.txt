@@ -1,0 +1,22 @@
+# Labels
+
+set count 0
+
+main: # comment
+  print count
+  print "\n"
+  op add count count 1
+  jump main lessThan count 10
+  printflush message1
+
+==>
+
+Program(
+  Instruction(...),
+  LabelDeclaration, Comment,
+  Instruction(...),
+  Instruction(...),
+  Instruction(...),
+  Instruction(...),
+  Instruction(...)
+)

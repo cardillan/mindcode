@@ -1,0 +1,367 @@
+# Comments
+// This is a line comment
+/**
+  This is a block comment
+*/
+
+==>
+
+Program(
+  LineComment,
+  BlockComment
+)
+
+# Single line strings are accepted where they should
+str = "string definition"
+
+schematic
+  name = "Test schematic"
+  description = "ingle line description"
+  tag = "string tag"
+  filename = "test.msch"
+
+  @message at (0, 0) text "Message text content"
+  @micro-processor at (0, 1) processor
+    mlog = "printchar @router; printflush message1"
+  end
+  @micro-processor at (0, 2) processor
+    mlog = file "source.mlog"
+  end
+end
+
+==>
+
+Program(
+  StringAssignment(Identifier, "=", String(...)),
+  SchematicDefinition(schematic,
+    Attribute(name, "=", String(...)),
+    Attribute(description, "=", String(...)),
+    Attribute(tag, "=", String(...)),
+    Attribute(filename, "=", String(...)),
+    BlockItem(Ref, at, Coordinates("(", Int, ",", Int, ")"), Configuration(text, String(...))),
+    BlockItem(Ref, at, Coordinates("(", Int, ",", Int, ")"), Configuration(
+      ProcessorConfiguration(
+        processor,
+          ProcessorSourceAssignment(
+            mlog, "=", ProcessorSource(String(...))
+          ),
+        end
+      ))  
+    ),
+    BlockItem(Ref, at, Coordinates("(", Int, ",", Int, ")"), Configuration(
+      ProcessorConfiguration(
+        processor,
+          ProcessorSourceAssignment(
+            mlog, "=", ProcessorSource(FileReference(file, String(...)))
+          ),
+        end
+      ))  
+    ),
+  end)
+)
+
+# Text blocks are accepted where they should
+str = """string definition"""
+
+schematic
+  name = """Test schematic"""
+  description = """Single line description"""
+  tag = """string tag"""
+
+  @message at (0, 0) text """Message text content"""
+  @micro-processor at (0, 1) processor
+    mlog = """printchar @router; printflush message1"""
+  end
+  @micro-processor at (0, 2) processor
+    mlog = file """source.mlog"""
+  end
+end
+
+==>
+
+Program(
+  StringAssignment(Identifier, "=", TextBlock(...)),
+  SchematicDefinition(schematic,
+    Attribute(name, "=", TextBlock(...)),
+    Attribute(description, "=", TextBlock(...)),
+    Attribute(tag, "=", TextBlock(...)),
+    BlockItem(Ref, at, Coordinates("(", Int, ",", Int, ")"), Configuration(text, TextBlock(...))),
+    BlockItem(Ref, at, Coordinates("(", Int, ",", Int, ")"), Configuration(
+      ProcessorConfiguration(
+        processor,
+          ProcessorSourceAssignment(
+            mlog, "=", ProcessorSource(TextBlock(...))
+          ),
+        end
+      ))  
+    ),
+    BlockItem(Ref, at, Coordinates("(", Int, ",", Int, ")"), Configuration(
+      ProcessorConfiguration(
+        processor,
+          ProcessorSourceAssignment(
+            mlog, "=", ProcessorSource(FileReference(file, TextBlock(...)))
+          ),
+        end
+      ))  
+    ),
+  end)
+)
+
+# Dimensions
+schematic
+  dimensions = (10, 15)
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    Attribute(dimensions, "=", Coordinates("(" Int, ",", Int ")"))
+  end)
+)
+
+# Relative positions
+schematic
+  @message at (0, 0)
+  @micro-processor at +(0, 1)
+  @micro-processor at -(1, 1)
+end
+
+==> 
+
+Program(
+  SchematicDefinition(schematic,
+    BlockItem(Ref, at, Coordinates(...)),
+    BlockItem(Ref, at, RelativeCoordinates("+", Coordinates(...))),
+    BlockItem(Ref, at, RelativeCoordinates("-", Coordinates(...))),
+  end)
+)
+
+# Coordinates relative to named blocks
+schematic
+  center: @router at (2, 2)
+  @conveyor at center +(1, 0)
+  @titanium-conveyor at center -(0, 1)
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    BlockItem(Identifier, ":", Ref, at, Coordinates(...)),
+    BlockItem(Ref, at, CoordinatesRelativeTo(...)),
+    BlockItem(Ref, at, CoordinatesRelativeTo(...))
+  end)
+)
+
+# Facing directions
+schematic
+  @conveyor at (0, 1) facing north
+  @conveyor at (1, 0) facing east
+  @conveyor at (0, -1) facing south
+  @conveyor at (-1, 0) facing west
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    BlockItem(Ref, at, Coordinates(...), Direction(facing, north)),
+    BlockItem(Ref, at, Coordinates(...), Direction(facing, east)),
+    BlockItem(Ref, at, Coordinates(...), Direction(facing, south)),
+    BlockItem(Ref, at, Coordinates(...), Direction(facing, west)),
+  end)
+)
+
+# Virtual blocks
+schematic
+  @switch at (0, 0) virtual
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    BlockItem(Ref, at, Coordinates(...), Configuration(virtual)),
+  end)
+)
+
+# Color configuration
+schematic
+  @illuminator at (0, 0) color rgba (255, 128, 64, 200)
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    BlockItem(Ref, at, Coordinates(...), Configuration(
+      color, rgba, "(", Int, ",", Int, ",", Int, ",", Int, ")")
+    ),
+  end)
+)
+
+# Connected to configuration
+schematic
+  @power-node at (0, 0) connected to (1, 0), (2, 0), +(1, 1)
+end
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    BlockItem(Ref, at, Coordinates(...), Configuration(
+      connected, to, ConnectionList(Coordinates(...), ",", Coordinates(...), ",", RelativeCoordinates(...)))),
+  end)
+)
+
+# Block configuration types
+schematic
+  @unloader at (0, 0) item @copper
+  @mass-driver at (1, 0) block @mass-driver
+  @command-center at (2, 0) command @flare
+  @liquid-source at (3, 0) liquid @water
+  @unit-factory at (4, 0) unit @dagger
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    BlockItem(Ref, at, Coordinates(...), Configuration(item, Ref)),
+    BlockItem(Ref, at, Coordinates(...), Configuration(block, Ref)),
+    BlockItem(Ref, at, Coordinates(...), Configuration(command, Ref)),
+    BlockItem(Ref, at, Coordinates(...), Configuration(liquid, Ref)),
+    BlockItem(Ref, at, Coordinates(...), Configuration(unit, Ref)),
+  end)
+)
+
+# Disabled state
+schematic
+  @switch at (0, 0) disabled
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    BlockItem(Ref, at, Coordinates(...), Configuration(disabled)),
+  end)
+)
+
+# Link patterns
+schematic
+  @micro-processor at (0, 0) processor
+    links
+      switch*
+      cell*
+      node1 as virtual_node virtual
+    end
+  end
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    BlockItem(Ref, at, Coordinates(...), Configuration(ProcessorConfiguration(processor,
+      ProcessorLinks(links,
+        LinkDef(LinkPattern),
+        LinkDef(LinkPattern),
+        LinkDef(Identifier, as, Identifier, virtual),
+      end),
+    end))),
+  end)
+)
+
+# Concatenated processor sources
+schematic
+  @micro-processor at (0, 0) processor
+    mlog = "print 1" + file "part2.mlog" + """
+      print 3
+      printflush message1
+      """
+  end
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    BlockItem(Ref, at, Coordinates(...), Configuration(ProcessorConfiguration(processor,
+      ProcessorSourceAssignment(mlog ,"=", ProcessorSource(
+        String(...), "+",
+        FileReference(file, String(...)), "+",
+        TextBlock(TextBlockContent))
+      ),
+    end))),
+  end)
+)
+
+# Tags
+schematic
+  tag = "Defense"
+  tag = "Power"
+  tag = ROUTER
+  tag = BLOCK_CORE_NUCLEUS
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    Attribute(tag, "=", String(...)),
+    Attribute(tag, "=", String(...)),
+    Attribute(tag, "=", Identifier),
+    Attribute(tag, "=", Identifier),
+  end)
+)
+
+# Multiple labels and virtual links
+schematic
+  power1, power2: @battery-large at (0, 0)
+  msg: @message at (1, 0) text "Alert!"
+  
+  @micro-processor at (2, 0) processor
+    links
+      power1
+      power2 as batteries
+      msg as message virtual
+    end
+    mlog = "set done true"
+  end
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+    BlockItem(Identifier, ",", Identifier, ":", Ref, at, Coordinates(...)),
+    BlockItem(Identifier,":", Ref, at, Coordinates(...), Configuration(text, String(...))),
+    BlockItem(Ref, at, Coordinates(...), Configuration(ProcessorConfiguration(processor,
+      ProcessorLinks(links,
+        LinkDef(Identifier),
+        LinkDef(Identifier, as, Identifier),
+        LinkDef(Identifier, as, Identifier, virtual),
+      end),
+      ProcessorSourceAssignment(mlog, "=", ProcessorSource(String(...))),
+    end))),
+  end)
+)
+
+# Target versions
+
+schematic
+  target = 6
+  target = 7
+  target = 8
+end
+
+==>
+
+Program(
+  SchematicDefinition(schematic,
+  Attribute(target, "=", Int),
+  Attribute(target, "=", Int),
+  Attribute(target, "=", Int),
+  end)
+)

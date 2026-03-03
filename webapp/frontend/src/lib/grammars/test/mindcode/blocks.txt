@@ -1,0 +1,25 @@
+# Mlog Block
+
+mlog(in switch, out time) {
+    # here starts the mlog block
+    print $message                      # accessing an undeclared variable
+    printflush message1                 # accessing a linked block using its implicit name
+    control enabled switch false        # accessing a linked block using its Mindcode name
+    set start @second                   # setting an mlog variable
+    // Here we loop till the button is pressed. (This comment is ignored.)
+    loop:                               # a label
+        sensor enabled switch @enabled
+    jump loop notEqual enabled false
+    op sub time @second start           # setting the output variable
+    # here ends the mlog block
+}
+
+==> 
+
+Program(
+  MlogBlock(
+    mlog, in, Identifier(...), out, Identifier(...), MlogBodyStart, 
+      MlogBlockContent
+    MlogBodyEnd
+  )
+)

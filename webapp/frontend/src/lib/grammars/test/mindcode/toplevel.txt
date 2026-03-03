@@ -1,0 +1,41 @@
+# Require
+
+require units;
+require "library\drawings.mnd";
+
+==>
+
+Program(
+  require, Identifier(...),
+  require, String
+)
+
+# Directives
+
+#set option;
+#set option = value;
+#set option = value,value;
+#set option = 7;
+#declare category :keyword;
+#declare category :keyword1, :keyword2;
+#declare category @builtin;
+#declare category @builtin1, @builtin2;
+#declare category identifier;
+#declare category identifier1, identifier2;
+#declare category :keyword, @builtin, identifier;
+
+==> 
+
+Program(
+  Directive("#set", DirectiveValue),
+  Directive("#set", DirectiveValue, DirectiveValue),
+  Directive("#set", DirectiveValue, DirectiveValue, DirectiveValue),
+  Directive("#set", DirectiveValue, DirectiveValue),
+  Directive("#declare", SimpleIdentifier, KeywordLiteral),
+  Directive("#declare", SimpleIdentifier, KeywordLiteral, KeywordLiteral),
+  Directive("#declare", SimpleIdentifier, Identifier(...)),
+  Directive("#declare", SimpleIdentifier, Identifier(...), Identifier(BuiltinIdentifier)),
+  Directive("#declare", SimpleIdentifier, Identifier(...)),
+  Directive("#declare", SimpleIdentifier, Identifier(...), Identifier(SimpleIdentifier)),
+  Directive("#declare", SimpleIdentifier, KeywordLiteral, Identifier(...), Identifier(...))
+)
