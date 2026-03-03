@@ -202,8 +202,12 @@
 				<Trash2 class="size-4" />
 			</EditorActionButton>
 		{/snippet}
-		{#snippet outputActions()}
-			<MlogWatcherButton {channel} getText={() => mlogEditor.view?.state.doc.toString() ?? ''} />
+		{#snippet outputActions(showingCode)}
+			<MlogWatcherButton
+				{channel}
+				getText={() => mlogEditor.view?.state.doc.toString() ?? ''}
+				disabled={!showingCode}
+			/>
 		{/snippet}
 	</EditorLayout>
 

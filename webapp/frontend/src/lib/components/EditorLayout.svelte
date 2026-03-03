@@ -1,12 +1,10 @@
 <script lang="ts">
-	import CopyButton from './CopyButton.svelte';
 	import TabsOutput from './TabsOutput.svelte';
 	import type { CompileResponseMessage, RunResult, SourceRange } from '$lib/api';
 	import CompilerMessages from './CompilerMessages.svelte';
 	import EditorLayoutTabs, { type CollapsibleTabsMode } from './EditorLayoutTabs.svelte';
 	import { TabsTrigger } from './ui/tabs';
 	import TabsContent from './ui/tabs/tabs-content.svelte';
-	import * as ButtonGroup from './ui/button-group';
 	import type { Snippet } from 'svelte';
 	import type { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 
@@ -35,7 +33,7 @@
 		infos?: CompileResponseMessage[];
 		onJumpToPosition?: (range: SourceRange) => void;
 		inputActions?: Snippet;
-		outputActions?: Snippet;
+		outputActions?: Snippet<[showingCode: boolean]>;
 	} = $props();
 
 	let inputMode = $state<CollapsibleTabsMode>('normal');
@@ -77,6 +75,7 @@
 						outputMode = 'normal';
 					}
 				}}
+				tabActions={inputActions}
 			>
 				{#snippet tabTriggers()}
 					<TabsTrigger value="code">{inputLabel}</TabsTrigger>
@@ -90,11 +89,6 @@
 						]}
 					>
 						<div class="h-full rounded-md border bg-muted" {@attach inputEditor.attach}></div>
-						{#if inputActions}
-							<ButtonGroup.Root class="absolute top-2 right-2 z-10 opacity-60 hover:opacity-100">
-								{@render inputActions()}
-							</ButtonGroup.Root>
-						{/if}
 					</div>
 				</TabsContent>
 			</EditorLayoutTabs>
@@ -104,6 +98,7 @@
 
 		<TabsOutput
 			bind:mode={outputMode}
+			view={outputEditor.view}
 			minimizeLabel="Minimize output"
 			restoreLabel="Restore output"
 			maximizeLabel="Maximize output"
@@ -116,6 +111,7 @@
 				inputMode === 'maximized' && 'hidden',
 				outputMode === 'maximized' && 'md:col-span-2'
 			]}
+			tabActions={outputActions}
 			onModeChange={(mode) => {
 				if (mode === 'maximized') {
 					inputMode = 'normal';
@@ -130,10 +126,6 @@
 					]}
 				>
 					<div class="h-full rounded-md border bg-muted" {@attach outputEditor.attach}></div>
-					<ButtonGroup.Root class="absolute top-2 right-2 z-10 opacity-60 hover:opacity-100">
-						{@render outputActions?.()}
-						<CopyButton getText={() => outputEditor.view?.state.doc.toString() ?? ''} />
-					</ButtonGroup.Root>
 				</div>
 			{/snippet}
 		</TabsOutput>
