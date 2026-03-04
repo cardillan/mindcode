@@ -10,6 +10,7 @@ import {
 import { parseMixed } from '@lezer/common';
 import { styleTags, tags as t } from '@lezer/highlight';
 import { mlogLanguage } from './mlog_language';
+import { styledFoldGutter } from '$lib/codemirror';
 
 const mlogParser = mlogLanguage.parser.configure({
 	dialect: 'mindcodeEmbed'
@@ -109,5 +110,5 @@ export const mindcodeLanguage = LRLanguage.define({
 });
 
 export function mindcode() {
-	return new LanguageSupport(mindcodeLanguage);
+	return new LanguageSupport(mindcodeLanguage, styledFoldGutter());
 }

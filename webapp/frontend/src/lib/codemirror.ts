@@ -8,11 +8,16 @@ import {
 	StateField,
 	Facet,
 	StateEffect,
-	type TransactionSpec
+	type TransactionSpec,
+	type Extension
 } from '@codemirror/state';
 import { forest } from '@fsegurai/codemirror-theme-forest';
 import { vsCodeLight } from '@fsegurai/codemirror-theme-vscode-light';
 import { invertedEffects } from '@codemirror/commands';
+import { foldGutter } from '@codemirror/language';
+
+export const foldChevronDownId = 'fold-chevron-down';
+export const foldChevronRightId = 'fold-chevron-right';
 
 // Compartment for dynamically switching themes
 export const themeCompartment = new Compartment();
@@ -104,4 +109,21 @@ export function jumpToRange(editor: EditorView, range: SourceRange) {
 		scrollIntoView: true
 	});
 	editor.focus();
+}
+
+export function styledFoldGutter(): Extension {
+	return foldGutter({
+		markerDOM(open) {
+			const div = document.createElement('div');
+			const templateId = open ? foldChevronDownId : foldChevronRightId;
+			const template = document.getElementById(templateId) as HTMLTemplateElement | null;
+			if (template) {
+				div.appendChild(template.content.cloneNode(true));
+			} else {
+				// fallback to a simple marker if the template is missing (shouldn't happen)
+				div.textContent = open ? '⌄' : '›';
+			}
+			return div;
+		}
+	});
 }

@@ -14,7 +14,7 @@
 		type Sample,
 		type SourceRange
 	} from '$lib/api';
-	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
+	import { mindcode } from '$lib/grammars/mindcode_language';
 	import type { PageProps } from './$types';
 	import {
 		compileMessagesToDiagnostics,
@@ -43,7 +43,7 @@
 		api,
 		theme,
 		samples: untrack(() => data.samples),
-		extensions: [mindcodeLanguage],
+		extensions: [mindcode()],
 		settings
 	});
 

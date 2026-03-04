@@ -10,7 +10,7 @@
 		type Sample,
 		type SourceRange
 	} from '$lib/api';
-	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
+	import { schemacode } from '$lib/grammars/schemacode_language';
 	import type { PageProps } from './$types';
 	import { setDiagnostics } from '@codemirror/lint';
 	import { compileMessagesToDiagnostics, jumpToRange, updateEditor } from '$lib/codemirror';
@@ -35,7 +35,7 @@
 	const schemacodeEditor = new InputEditorStore({
 		theme,
 		api,
-		extensions: [schemacodeLanguage],
+		extensions: [schemacode()],
 		settings
 	});
 	const encodedEditor = new OutputEditorStore(theme, [EditorView.lineWrapping], settings);

@@ -30,7 +30,6 @@ import type { ApiHandler, Sample } from './api';
 import {
 	bracketMatching,
 	defaultHighlightStyle,
-	foldGutter,
 	foldKeymap,
 	indentOnInput,
 	syntaxHighlighting
@@ -46,9 +45,6 @@ import { highlightSelectionMatches, search, searchKeymap } from '@codemirror/sea
 import EditorSearchPanel from './components/EditorSearchPanel.svelte';
 import type { Settings } from './settings.svelte';
 import { toast } from 'svelte-sonner';
-
-export const foldChevronDownId = 'fold-chevron-down';
-export const foldChevronRightId = 'fold-chevron-right';
 
 export type EditorStoreType = 'input' | 'output';
 
@@ -78,7 +74,6 @@ export class InputEditorStore {
 				this.view = new EditorView({
 					extensions: [
 						commonExtensions(theme, settings),
-						customFoldGutter(),
 						defaultDocId.of(null),
 						currentDocId,
 						invertUpdateDocId,
@@ -376,23 +371,6 @@ function commonExtensions(themeStore: ThemeStore, settings: Settings): Extension
 		themeCompartment.of(getTheme(themeStore.isDark)),
 		lineWrappingCompartment.of(settings.lineWrapping ? EditorView.lineWrapping : [])
 	];
-}
-
-function customFoldGutter(): Extension {
-	return foldGutter({
-		markerDOM(open) {
-			const div = document.createElement('div');
-			const templateId = open ? foldChevronDownId : foldChevronRightId;
-			const template = document.getElementById(templateId) as HTMLTemplateElement | null;
-			if (template) {
-				div.appendChild(template.content.cloneNode(true));
-			} else {
-				// fallback to a simple marker if the template is missing (shouldn't happen)
-				div.textContent = open ? '⌄' : '›';
-			}
-			return div;
-		}
-	});
 }
 
 export function shouldResetDocId(
