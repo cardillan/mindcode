@@ -149,8 +149,6 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         try {
             compile();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace(System.out);
             internalError = true;
             error(ERR.INTERNAL_ERROR);
         }
