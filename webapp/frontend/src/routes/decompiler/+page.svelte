@@ -12,7 +12,7 @@
 		type RunResult,
 		type SourceRange
 	} from '$lib/api';
-	import { mindcodeLanguage } from '$lib/grammars/mindcode_language';
+	import { mindcode } from '$lib/grammars/mindcode_language';
 	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
 	import { jumpToRange, updateEditor } from '$lib/codemirror';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
@@ -32,7 +32,7 @@
 		settings
 	});
 
-	const mindcodeEditor = new OutputEditorStore(theme, [mindcodeLanguage], settings);
+	const mindcodeEditor = new OutputEditorStore(theme, [mindcode()], settings);
 
 	let runResults = $state<RunResult[]>([]);
 

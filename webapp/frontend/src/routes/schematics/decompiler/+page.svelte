@@ -7,7 +7,7 @@
 		type SourceRange,
 		type RunResult
 	} from '$lib/api';
-	import { schemacodeLanguage } from '$lib/grammars/schemacode_language';
+	import { schemacode } from '$lib/grammars/schemacode_language';
 	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import { jumpToRange, updateEditor } from '$lib/codemirror';
@@ -30,7 +30,7 @@
 		settings,
 		extensions: [EditorView.lineWrapping]
 	});
-	const schemacodeEditor = new OutputEditorStore(theme, [schemacodeLanguage], settings);
+	const schemacodeEditor = new OutputEditorStore(theme, [schemacode()], settings);
 
 	let runResults = $state<RunResult[]>([]);
 	let loadingAction = $state<'decompile' | 'decompile-run' | null>(null);

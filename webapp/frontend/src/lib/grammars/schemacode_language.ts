@@ -11,6 +11,7 @@ import { styleTags, tags as t } from '@lezer/highlight';
 import { parseMixed, type Input, type SyntaxNode } from '@lezer/common';
 import { mlogLanguage } from './mlog_language';
 import { mindcodeLanguage } from './mindcode_language';
+import { styledFoldGutter } from '$lib/codemirror';
 
 interface LookupData {
 	mlog: Set<string>;
@@ -100,7 +101,7 @@ export const schemacodeLanguage = LRLanguage.define({
 });
 
 export function schemacode() {
-	return new LanguageSupport(schemacodeLanguage);
+	return new LanguageSupport(schemacodeLanguage, styledFoldGutter());
 }
 
 function getLookupData(root: SyntaxNode, input: Input): LookupData {

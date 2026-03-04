@@ -5,7 +5,7 @@
 	import { setThemeContext } from '$lib/stores.svelte.js';
 	import { setSettingsContext } from '$lib/settings.svelte.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { foldChevronDownId, foldChevronRightId } from '$lib/editors.svelte.js';
+	import { foldChevronDownId, foldChevronRightId } from '$lib/codemirror.js';
 	import { ChevronDown, ChevronRight } from '@lucide/svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import SettingsButton from '$lib/components/SettingsButton.svelte';
