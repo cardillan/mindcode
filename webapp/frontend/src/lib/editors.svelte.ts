@@ -4,6 +4,7 @@ import {
 	getTheme,
 	invertUpdateDocId,
 	lineWrappingCompartment,
+	styledFoldGutter,
 	themeCompartment,
 	updateDocId
 } from './codemirror';
@@ -328,6 +329,7 @@ function commonExtensions(themeStore: ThemeStore, settings: Settings): Extension
 			...lintKeymap,
 			{ key: 'Tab', run: insertTab }
 		]),
+		styledFoldGutter(),
 		search({
 			createPanel(view) {
 				const dom = document.createElement('div');
