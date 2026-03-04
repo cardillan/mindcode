@@ -1,6 +1,5 @@
 <script lang="ts">
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
 	import { page } from '$app/state';
 	import * as Select from '$lib/components/ui/select';
 	import { setThemeContext } from '$lib/stores.svelte.js';
@@ -44,8 +43,6 @@
 	setThemeContext();
 	setSettingsContext();
 </script>
-
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 <!-- Templates for CodeMirror fold gutter icons -->
 <template id={foldChevronRightId}>
