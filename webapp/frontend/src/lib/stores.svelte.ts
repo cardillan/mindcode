@@ -1,5 +1,5 @@
 import { page } from '$app/state';
-import { getContext, setContext, untrack } from 'svelte';
+import { getContext, setContext } from 'svelte';
 import { goto } from '$app/navigation';
 import { browser } from '$app/environment';
 
@@ -8,23 +8,21 @@ export const compilerTargetKey = 'compilerTarget';
 export const defaultGameVersion = '7';
 export const defaultProcessorType = 'm';
 
-const defaultTarget = defaultGameVersion + defaultProcessorType;
-
 export class LocalCompilerTarget {
-	value = $state(defaultTarget);
+	value: string;
 
-	constructor() {
-		this.value = untrack(
-			() => (browser ? page.url.searchParams.get(compilerTargetKey) : null) || defaultTarget
+	constructor(public defaultValue: string = defaultGameVersion) {
+		this.value = $derived(
+			browser ? page.url.searchParams.get(compilerTargetKey) || defaultValue : defaultValue
 		);
-
-		$effect(() => {
-			this.value = page.url.searchParams.get(compilerTargetKey) || defaultTarget;
-		});
 	}
 
 	updateParams(searchParams: URLSearchParams) {
 		searchParams.set(compilerTargetKey, this.value);
+	}
+
+	resetToDefault() {
+		this.value = this.defaultValue;
 	}
 }
 

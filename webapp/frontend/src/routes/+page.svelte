@@ -22,7 +22,13 @@
 		updateDocId,
 		updateEditor
 	} from '$lib/codemirror';
-	import { LocalCompilerTarget, syncUrl, getThemeContext } from '$lib/stores.svelte';
+	import {
+		LocalCompilerTarget,
+		syncUrl,
+		getThemeContext,
+		defaultGameVersion,
+		defaultProcessorType
+	} from '$lib/stores.svelte';
 	import { getSettingsContext } from '$lib/settings.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
@@ -64,7 +70,7 @@
 	let isPlainText = $state(false);
 	let editorLayout = $state<EditorLayout>();
 
-	const compilerTarget = new LocalCompilerTarget();
+	const compilerTarget = new LocalCompilerTarget(defaultGameVersion + defaultProcessorType);
 
 	$effect(() => {
 		if (!mlogEditor.view) return;
@@ -136,7 +142,7 @@
 
 	async function cleanEditors() {
 		mindcodeEditor.clear({ preserveUrl: true });
-		compilerTarget.value = '7';
+		compilerTarget.resetToDefault();
 		updateEditor(mlogEditor.view, '');
 
 		errors = [];

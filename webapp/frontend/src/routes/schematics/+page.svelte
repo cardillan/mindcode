@@ -102,7 +102,7 @@
 
 	async function cleanEditors() {
 		schemacodeEditor.clear({ preserveUrl: true });
-		compilerTarget.value = '7';
+		compilerTarget.resetToDefault();
 		updateEditor(encodedEditor.view, '');
 
 		errors = [];
