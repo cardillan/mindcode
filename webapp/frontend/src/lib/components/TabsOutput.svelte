@@ -135,7 +135,7 @@
 						<Textarea
 							readonly
 							value={selectedProcessor.content}
-							class="w-full flex-1 resize-none overflow-y-auto"
+							class="w-full flex-1 resize-none"
 						/>
 					{:else if selectedOutput === 'compiler-messages'}
 						<div class="flex-1 overflow-y-scroll px-5">
