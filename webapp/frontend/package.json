@@ -15,6 +15,9 @@
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run"
 	},
+	"engines": {
+		"node": ">=22"
+	},
 	"devDependencies": {
 		"@codemirror/autocomplete": "^6.20.0",
 		"@codemirror/commands": "^6.10.2",
