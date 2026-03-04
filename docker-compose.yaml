@@ -16,6 +16,8 @@ services:
   mindcode-web:
     build:
       context: .
+      args:
+        SKIP_FRONTEND: ${SKIP_FRONTEND:-false}
 
     depends_on:
       - mindcode-db
