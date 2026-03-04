@@ -2,6 +2,8 @@ FROM eclipse-temurin:22
 
 WORKDIR /srv
 
+ARG SKIP_FRONTEND=false
+
 RUN apt update && apt -y install maven
 
 COPY pom.xml pom.xml
@@ -22,7 +24,7 @@ ENV SPRING_DATASOURCE_USERNAME postgres
 ENV SPRING_DATASOURCE_PASSWORD pg_password
 
 # Skip tests because postgres is only available at runtime
-RUN mvn clean package -Dmaven.test.skip
+RUN mvn clean package -Dmaven.test.skip -DskipFrontend=${SKIP_FRONTEND}
 
 EXPOSE 8080
 

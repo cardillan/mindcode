@@ -21,6 +21,7 @@
         <maven.compiler.target>22</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>3.4.0</spring.version>
+        <skipFrontend>false</skipFrontend>
     </properties>
 
     <profiles>
@@ -201,6 +202,7 @@
                 <configuration>
                     <workingDirectory>frontend</workingDirectory>
                     <nodeVersion>v22.22.0</nodeVersion>
+                    <skip>${skipFrontend}</skip>
                 </configuration>
                 <executions>
                     <execution>
