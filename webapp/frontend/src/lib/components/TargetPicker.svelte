@@ -51,6 +51,9 @@
 		let suffix = value.slice(1) || 'none';
 
 		const gameVersion = isValidGameVersion(prefix) ? prefix : defaultGameVersion;
+		if (!pickProcessor) {
+			return [gameVersion, 'none'];
+		}
 		const processorType = isValidProcessorType(gameVersion, suffix) ? suffix : defaultProcessorType;
 
 		return [gameVersion, processorType];
@@ -66,7 +69,7 @@
 	}
 
 	async function setValue() {
-		if (!isValidProcessorType(gameVersion, processorType)) {
+		if (pickProcessor && !isValidProcessorType(gameVersion, processorType)) {
 			processorType = defaultProcessorType;
 		}
 		const suffix = processorType === 'none' ? '' : processorType;

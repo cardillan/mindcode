@@ -86,7 +86,7 @@
 
 	async function cleanEditors() {
 		encodedEditor.clear({ preserveUrl: true });
-		compilerTarget.value = '7';
+		compilerTarget.resetToDefault();
 		updateEditor(schemacodeEditor.view, '');
 		updateEditor(encodedEditor.view, '');
 

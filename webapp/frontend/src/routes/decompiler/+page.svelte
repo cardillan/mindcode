@@ -85,7 +85,7 @@
 
 	async function cleanEditors() {
 		mlogEditor.clear({ preserveUrl: true });
-		compilerTarget.value = '7';
+		compilerTarget.resetToDefault();
 
 		updateEditor(mindcodeEditor.view, '');
 
