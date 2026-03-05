@@ -143,6 +143,7 @@
 		inputLabel="Mlog code"
 		inputEditor={mlogEditor}
 		inputLoading={mlogEditor.isLoading}
+		outputCodeTitle="Decompiled Mindcode"
 		outputEditor={mindcodeEditor}
 		outputLoading={mlogEditor.isLoading || loadingAction !== null}
 		{runResults}

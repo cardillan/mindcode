@@ -12,6 +12,7 @@
 		inputLabel,
 		inputEditor,
 		inputLoading = false,
+		outputCodeTitle: codeOutputTitle,
 		outputEditor,
 		outputLoading = false,
 		runResults = [],
@@ -25,6 +26,7 @@
 		inputLabel: string;
 		inputEditor: InputEditorStore;
 		inputLoading?: boolean;
+		outputCodeTitle: string;
 		outputEditor: OutputEditorStore;
 		outputLoading?: boolean;
 		runResults?: RunResult[];
@@ -106,6 +108,7 @@
 			{runResults}
 			messages={infos}
 			{onJumpToPosition}
+			codeTitle={codeOutputTitle}
 			class={[
 				'self-start',
 				inputMode === 'maximized' && 'hidden',

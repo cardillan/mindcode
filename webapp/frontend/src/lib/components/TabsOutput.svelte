@@ -15,6 +15,7 @@
 
 	interface TabsOutputProps {
 		mode?: CollapsibleTabsMode;
+		codeTitle?: string;
 		class?: ClassValue;
 		runResults?: RunResult[];
 		messages?: CompileResponseMessage[];
@@ -31,6 +32,7 @@
 
 	let {
 		mode = $bindable('normal'),
+		codeTitle = 'Code',
 		runResults = [],
 		messages = [],
 		disableTriggers = false,
@@ -95,7 +97,7 @@
 	class={className}
 >
 	{#snippet tabTriggers()}
-		<Tabs.Trigger value="code" disabled={disableTriggers}>Code</Tabs.Trigger>
+		<Tabs.Trigger value="code" disabled={disableTriggers}>{codeTitle}</Tabs.Trigger>
 		{#if hasOutput}
 			<Tabs.Trigger value="output" disabled={disableTriggers}>Output</Tabs.Trigger>
 		{/if}
