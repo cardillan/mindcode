@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { tick, untrack } from 'svelte';
 	import { Code, Play, Trash2 } from '@lucide/svelte';
 
 	import * as Card from '$lib/components/ui/card';
@@ -36,6 +36,7 @@
 	const schemacodeEditor = new InputEditorStore({
 		theme,
 		api,
+		samples: untrack(() => data.samples),
 		extensions: [schemacode()],
 		settings
 	});
