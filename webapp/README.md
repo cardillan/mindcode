@@ -1,4 +1,4 @@
-# Mindcode frontend
+# Mindcode webapp
 
 The frontend for mindcode is built using [svelte kit](https://svelte.dev/docs/kit/introduction).
 
