@@ -11,9 +11,10 @@
 	import type { ClassValue } from 'svelte/elements';
 	import type { EditorView } from 'codemirror';
 
-	type TabName = 'code' | 'output';
+	export type OutputTabName = 'code' | 'output';
 
 	interface TabsOutputProps {
+		tab?: OutputTabName;
 		mode?: CollapsibleTabsMode;
 		codeTitle?: string;
 		class?: ClassValue;
@@ -31,6 +32,7 @@
 	}
 
 	let {
+		tab = $bindable('code'),
 		mode = $bindable('normal'),
 		codeTitle = 'Code',
 		runResults = [],
@@ -52,27 +54,25 @@
 	const hasRunResults = $derived(runResults.length > 0);
 	const hasOutput = $derived(hasRunResults || hasCompilerMessages);
 
-	// Determine default active tab (first available)
-	let preferredTab = $state<TabName>('code');
-
-	const selectedTab = $derived.by((): TabName => {
-		if (preferredTab === 'output' && !hasOutput) return 'code';
-		return preferredTab;
+	const selectedTab = $derived.by((): OutputTabName => {
+		if (tab === 'output' && !hasOutput) return 'code';
+		return tab;
 	});
 
 	// For multi-processor outputs, create sub-tabs
 	let processorTabs = $derived(
-		runResults.map((p, idx) => ({
-			id: `processor-${idx}`,
+		runResults.map((p) => ({
+			id: p.processorId,
 			label: `${p.processorId} (${p.steps} steps)`,
-			content: p.output,
-			processorId: p.processorId,
-			stepCount: p.steps
+			content: p.output
 		}))
 	);
 
+	// caching to preserve the selection when the code is
+	// recompiled and the run results are updated
+	const firstProcessorId = $derived(processorTabs[0]?.id);
 	let selectedOutput = $derived(
-		processorTabs[0]?.id ?? (hasCompilerMessages ? 'compiler-messages' : '')
+		firstProcessorId ?? (hasCompilerMessages ? 'compiler-messages' : '')
 	);
 	const selectedProcessor = $derived(processorTabs.find((tab) => tab.id === selectedOutput));
 
@@ -88,7 +88,7 @@
 </script>
 
 <EditorLayoutTabs
-	bind:value={() => selectedTab, (tab) => (preferredTab = tab)}
+	bind:value={() => selectedTab, (newTab) => (tab = newTab)}
 	bind:mode
 	{maximizeLabel}
 	{minimizeLabel}

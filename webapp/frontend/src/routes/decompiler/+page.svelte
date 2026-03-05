@@ -20,6 +20,7 @@
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 	import { getSettingsContext } from '$lib/settings.svelte';
+	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
 
 	const theme = getThemeContext();
 	const settings = getSettingsContext();
@@ -41,6 +42,7 @@
 	let warnings = $state<CompileResponseMessage[]>([]);
 	let infos = $state<CompileResponseMessage[]>([]);
 	let editorLayout = $state<EditorLayout>();
+	let outputTab = $state<OutputTabName>('code');
 	const compilerTarget = new LocalCompilerTarget();
 
 	function handleJumpToPosition(range: SourceRange) {
@@ -52,6 +54,7 @@
 		if (!mlogEditor.view) return;
 		const source = mlogEditor.view.state.doc.toString();
 		loadingAction = run ? 'decompile-run' : 'decompile';
+		outputTab = run ? 'output' : 'code';
 		runResults = [];
 		errors = [];
 		warnings = [];
@@ -143,6 +146,7 @@
 		inputLabel="Mlog code"
 		inputEditor={mlogEditor}
 		inputLoading={mlogEditor.isLoading}
+		bind:outputTab
 		outputCodeTitle="Decompiled Mindcode"
 		outputEditor={mindcodeEditor}
 		outputLoading={mlogEditor.isLoading || loadingAction !== null}

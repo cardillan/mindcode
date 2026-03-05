@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TabsOutput from './TabsOutput.svelte';
+	import TabsOutput, { type OutputTabName } from './TabsOutput.svelte';
 	import type { CompileResponseMessage, RunResult, SourceRange } from '$lib/api';
 	import CompilerMessages from './CompilerMessages.svelte';
 	import EditorLayoutTabs, { type CollapsibleTabsMode } from './EditorLayoutTabs.svelte';
@@ -13,6 +13,7 @@
 		inputEditor,
 		inputLoading = false,
 		outputCodeTitle: codeOutputTitle,
+		outputTab = $bindable('code'),
 		outputEditor,
 		outputLoading = false,
 		runResults = [],
@@ -27,6 +28,7 @@
 		inputEditor: InputEditorStore;
 		inputLoading?: boolean;
 		outputCodeTitle: string;
+		outputTab?: OutputTabName;
 		outputEditor: OutputEditorStore;
 		outputLoading?: boolean;
 		runResults?: RunResult[];
@@ -100,6 +102,7 @@
 
 		<TabsOutput
 			bind:mode={outputMode}
+			bind:tab={outputTab}
 			view={outputEditor.view}
 			minimizeLabel="Minimize output"
 			restoreLabel="Restore output"
