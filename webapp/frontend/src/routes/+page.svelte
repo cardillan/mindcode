@@ -195,6 +195,7 @@
 		inputLabel="Mindcode Source Code"
 		inputEditor={mindcodeEditor}
 		inputLoading={mindcodeEditor.isLoading}
+		outputCodeTitle="Mlog Code"
 		outputEditor={mlogEditor}
 		outputLoading={mindcodeEditor.isLoading || loadingAction !== null}
 		{runResults}

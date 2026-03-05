@@ -169,6 +169,7 @@
 		inputLabel="Schemacode definition"
 		inputEditor={schemacodeEditor}
 		inputLoading={schemacodeEditor.isLoading}
+		outputCodeTitle="Encoded Schematic"
 		outputEditor={encodedEditor}
 		outputLoading={schemacodeEditor.isLoading || loadingAction !== null}
 		{runResults}

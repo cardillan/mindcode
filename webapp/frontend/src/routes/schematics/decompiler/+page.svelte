@@ -144,6 +144,7 @@
 		inputLabel="Encoded schematic"
 		inputEditor={encodedEditor}
 		inputLoading={encodedEditor.isLoading}
+		outputCodeTitle="Decompiled Schemacode"
 		outputEditor={schemacodeEditor}
 		outputLoading={encodedEditor.isLoading || loadingAction !== null}
 		{runResults}
