@@ -25,6 +25,7 @@
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 	import { getSettingsContext } from '$lib/settings.svelte';
 	import { EditorView } from 'codemirror';
+	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
@@ -46,6 +47,7 @@
 	let warnings = $state<CompileResponseMessage[]>([]);
 	let infos = $state<CompileResponseMessage[]>([]);
 	let editorLayout = $state<EditorLayout>();
+	let outputTab = $state<OutputTabName>('code');
 	const compilerTarget = new LocalCompilerTarget();
 
 	function handleJumpToPosition(range: SourceRange) {
@@ -58,6 +60,8 @@
 		if (!schemacodeEditor.view) return;
 		const source = schemacodeEditor.view.state.doc.toString();
 		loadingAction = run ? 'build-run' : 'build';
+		outputTab = run ? 'output' : 'code';
+		runResults = [];
 		errors = [];
 		warnings = [];
 		infos = [];
@@ -169,6 +173,7 @@
 		inputLabel="Schemacode definition"
 		inputEditor={schemacodeEditor}
 		inputLoading={schemacodeEditor.isLoading}
+		bind:outputTab
 		outputCodeTitle="Encoded Schematic"
 		outputEditor={encodedEditor}
 		outputLoading={schemacodeEditor.isLoading || loadingAction !== null}

@@ -38,6 +38,7 @@
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 	import { MlogWatcherStore } from '$lib/mlog_watcher';
 	import MlogWatcherButton from '$lib/components/MlogWatcherButton.svelte';
+	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
 
 	let { data }: PageProps = $props();
 
@@ -69,6 +70,7 @@
 	let loadingAction = $state<'compile' | 'compile-run' | null>(null);
 	let isPlainText = $state(false);
 	let editorLayout = $state<EditorLayout>();
+	let outputTab = $state<OutputTabName>('code');
 
 	const compilerTarget = new LocalCompilerTarget(defaultGameVersion + defaultProcessorType);
 
@@ -94,6 +96,7 @@
 		const source = mindcodeEditor.view.state.doc.toString();
 
 		loadingAction = run ? 'compile-run' : 'compile';
+		outputTab = run ? 'output' : 'code';
 		runResults = [];
 		errors = [];
 		warnings = [];
@@ -195,6 +198,7 @@
 		inputLabel="Mindcode Source Code"
 		inputEditor={mindcodeEditor}
 		inputLoading={mindcodeEditor.isLoading}
+		bind:outputTab
 		outputCodeTitle="Mlog Code"
 		outputEditor={mlogEditor}
 		outputLoading={mindcodeEditor.isLoading || loadingAction !== null}

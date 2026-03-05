@@ -19,6 +19,7 @@
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 	import { getSettingsContext } from '$lib/settings.svelte';
 	import { EditorView } from 'codemirror';
+	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
 
 	const theme = getThemeContext();
 	const settings = getSettingsContext();
@@ -38,6 +39,7 @@
 	let warnings = $state<CompileResponseMessage[]>([]);
 	let infos = $state<CompileResponseMessage[]>([]);
 	let editorLayout = $state<EditorLayout>();
+	let outputTab = $state<OutputTabName>('code');
 
 	const compilerTarget = new LocalCompilerTarget();
 
@@ -52,6 +54,7 @@
 		const source = encodedEditor.view.state.doc.toString();
 		runResults = [];
 		loadingAction = run ? 'decompile-run' : 'decompile';
+		outputTab = run ? 'output' : 'code';
 		errors = [];
 		warnings = [];
 		infos = [];
@@ -144,6 +147,7 @@
 		inputLabel="Encoded schematic"
 		inputEditor={encodedEditor}
 		inputLoading={encodedEditor.isLoading}
+		bind:outputTab
 		outputCodeTitle="Decompiled Schemacode"
 		outputEditor={schemacodeEditor}
 		outputLoading={encodedEditor.isLoading || loadingAction !== null}
