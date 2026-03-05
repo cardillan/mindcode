@@ -18,6 +18,7 @@ public class Samples {
                 "relaxed:many-thorium",
                 "heal-damaged-building",
                 "mining-drone",
+                "item-transport",
                 "upgrade-conveyors",
                 "run:sum-of-primes"
         );
