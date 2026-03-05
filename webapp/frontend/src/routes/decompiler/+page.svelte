@@ -2,7 +2,6 @@
 	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
 	import { Code, Play, Trash2 } from '@lucide/svelte';
 
-	import * as Card from '$lib/components/ui/card';
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
 	import ControlBar from '$lib/components/ControlBar.svelte';
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
@@ -21,6 +20,7 @@
 	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
 	import { getSettingsContext } from '$lib/settings.svelte';
 	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
+	import PageInfoCard from '$lib/components/PageInfoCard.svelte';
 
 	const theme = getThemeContext();
 	const settings = getSettingsContext();
@@ -106,21 +106,18 @@
 
 <div class="container mx-auto flex flex-col gap-4 px-4 py-4">
 	<!-- Info Card -->
-	<Card.Root class="shrink-0 border-dashed bg-muted/50">
-		<Card.Content class="p-4 text-sm">
-			<p>
-				Here you can partially decompile an mlog code into Mindcode. <strong
-					>The resulting code cannot be directly compiled by Mindcode.</strong
-				>
-				Jump instructions in the original mlog are transcribed as <strong>if</strong>
-				and <strong>goto</strong> statements which aren't supported by Mindcode and must be rewritten
-				using conditional statements, loops and other high-level constructs. The decompiler is mainly
-				useful to produce expressions and function calls in the correct Mindcode syntax, saving some time
-				and possibly helping to avoid some mistakes compared to a manual rewrite of the entire mlog code
-				from scratch.
-			</p>
-		</Card.Content>
-	</Card.Root>
+	<PageInfoCard>
+		<p>
+			Here you can partially decompile an mlog code into Mindcode. <strong
+				>The resulting code cannot be directly compiled by Mindcode.</strong
+			>
+			Jump instructions in the original mlog are transcribed as <strong>if</strong>
+			and <strong>goto</strong> statements which aren't supported by Mindcode and must be rewritten using
+			conditional statements, loops and other high-level constructs. The decompiler is mainly useful to
+			produce expressions and function calls in the correct Mindcode syntax, saving some time and possibly
+			helping to avoid some mistakes compared to a manual rewrite of the entire mlog code from scratch.
+		</p>
+	</PageInfoCard>
 
 	<!-- Control Bar (Desktop) -->
 	<div class="hidden shrink-0 md:block">

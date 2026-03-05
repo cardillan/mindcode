@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Code, Play, Trash2 } from '@lucide/svelte';
-	import * as Card from '$lib/components/ui/card';
 	import {
 		ApiHandler,
 		type CompileResponseMessage,
@@ -20,6 +19,7 @@
 	import { getSettingsContext } from '$lib/settings.svelte';
 	import { EditorView } from 'codemirror';
 	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
+	import PageInfoCard from '$lib/components/PageInfoCard.svelte';
 
 	const theme = getThemeContext();
 	const settings = getSettingsContext();
@@ -107,21 +107,19 @@
 </svelte:head>
 
 <div class="container mx-auto flex flex-col gap-4 overflow-hidden px-4 py-4">
-	<Card.Root class="shrink-0 border-dashed bg-muted/50">
-		<Card.Content class="p-4 text-sm">
-			<p class="mb-2">
-				Here you can decompile schematics copied from Mindustry into Schemacode, a schema definition
-				language, which can then be modified and compiled back into a schema again. Press the <strong
-					>Export</strong
-				>
-				button on a Mindustry schematic, choose <strong>Copy to clipboard</strong> and paste the
-				text into the left pane. Then press <strong>Decompile</strong>. You can compile the
-				Schematic definition back to Mindustry schematics on the
-				<a href="/schematics" class="text-primary underline">Schematics Builder</a> page.
-			</p>
-			<p>If your schematic contains processor(s), the code is decompiled into mlog.</p>
-		</Card.Content>
-	</Card.Root>
+	<PageInfoCard>
+		<p class="mb-2">
+			Here you can decompile schematics copied from Mindustry into Schemacode, a schema definition
+			language, which can then be modified and compiled back into a schema again. Press the <strong
+				>Export</strong
+			>
+			button on a Mindustry schematic, choose <strong>Copy to clipboard</strong> and paste the text
+			into the left pane. Then press <strong>Decompile</strong>. You can compile the Schematic
+			definition back to Mindustry schematics on the
+			<a href="/schematics" class="text-primary underline">Schematics Builder</a> page.
+		</p>
+		<p>If your schematic contains processor(s), the code is decompiled into mlog.</p>
+	</PageInfoCard>
 
 	<!-- Control Bar (Desktop) -->
 	<div class="hidden shrink-0 md:block">

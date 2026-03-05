@@ -2,7 +2,6 @@
 	import { tick, untrack } from 'svelte';
 	import { Code, Play, Trash2 } from '@lucide/svelte';
 
-	import * as Card from '$lib/components/ui/card';
 	import {
 		ApiHandler,
 		type CompileResponseMessage,
@@ -26,6 +25,7 @@
 	import { getSettingsContext } from '$lib/settings.svelte';
 	import { EditorView } from 'codemirror';
 	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
+	import PageInfoCard from '$lib/components/PageInfoCard.svelte';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
@@ -124,21 +124,18 @@
 
 <div class="container mx-auto flex flex-1 flex-col gap-4 overflow-hidden px-4 py-4">
 	<!-- Samples -->
-	<Card.Root class="shrink-0">
-		<Card.Content class="flex flex-wrap items-center gap-2 p-4">
-			<p class="text-sm">
-				Here you can compile a schematics definition written in <a
-					href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SCHEMACODE.markdown"
-					class="text-primary underline">Schemacode</a
-				>, a schema definition language, into a text representation to be pasted into Mindustry
-				using the <strong>Import schematics...</strong> button. If your schematics contain
-				processors, you can specify code for the processor using either Mindustry Logic or Mindcode.
-				You can also decompile an existing schematics using the
-				<a href="/decompiler" class="text-primary underline">Decompiler</a> and modify the resulting code.
-			</p>
-		</Card.Content>
-	</Card.Root>
-
+	<PageInfoCard>
+		<p>
+			Here you can compile a schematics definition written in <a
+				href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SCHEMACODE.markdown"
+				class="text-primary underline">Schemacode</a
+			>, a schema definition language, into a text representation to be pasted into Mindustry using
+			the <strong>Import schematics...</strong> button. If your schematics contain processors, you
+			can specify code for the processor using either Mindustry Logic or Mindcode. You can also
+			decompile an existing schematics using the
+			<a href="/decompiler" class="text-primary underline">Decompiler</a> and modify the resulting code.
+		</p>
+	</PageInfoCard>
 	<!-- Control Bar (Desktop) -->
 	<div class="hidden shrink-0 md:block">
 		<ControlBar
