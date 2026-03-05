@@ -72,7 +72,7 @@
 	);
 
 	let selectedOutput = $derived(
-		hasCompilerMessages ? 'compiler-messages' : (processorTabs[0]?.id ?? '')
+		processorTabs[0]?.id ?? (hasCompilerMessages ? 'compiler-messages' : '')
 	);
 	const selectedProcessor = $derived(processorTabs.find((tab) => tab.id === selectedOutput));
 
