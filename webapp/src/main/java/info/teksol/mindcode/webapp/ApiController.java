@@ -140,7 +140,7 @@ public class ApiController {
     @PostMapping("/schemacode/compile")
     public SchemacodeCompileResponse compileSchemacode(@RequestBody SchemacodeCompileRequest request) {
         Target target = Target.fromString(request.target);
-        ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.other);
+        ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.compileSchemacode);
 
         ListMessageLogger messageLogger = new ListMessageLogger();
         final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(
