@@ -107,7 +107,7 @@
 </svelte:head>
 
 <div class="container mx-auto flex flex-col gap-4 overflow-hidden px-4 py-4">
-	<PageInfoCard>
+	<PageInfoCard cardId="schematics-decompiler" heading="About Schematics Decompiler">
 		<p class="mb-2">
 			Here you can decompile schematics copied from Mindustry into Schemacode, a schema definition
 			language, which can then be modified and compiled back into a schema again. Press the <strong

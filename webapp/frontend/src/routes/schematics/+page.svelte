@@ -124,7 +124,7 @@
 
 <div class="container mx-auto flex flex-1 flex-col gap-4 overflow-hidden px-4 py-4">
 	<!-- Samples -->
-	<PageInfoCard>
+	<PageInfoCard cardId="schematics-builder" heading="About Schematics Builder">
 		<p>
 			Here you can compile a schematics definition written in <a
 				href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SCHEMACODE.markdown"
