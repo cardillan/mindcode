@@ -9,7 +9,7 @@ export class MlogWatcherChannel {
 	ready: Promise<void>;
 
 	constructor(port: number) {
-		this.socket = new WebSocket(`ws://localhost:${port}/mlog-watcher`);
+		this.socket = new WebSocket(`ws://localhost:${port}`);
 
 		this.ready = new Promise((resolve, reject) => {
 			this.socket.onopen = () => {
