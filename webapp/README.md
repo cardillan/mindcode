@@ -12,10 +12,17 @@ To prevent the frontend from being built unecessarily, you may use `-DskipFronte
 
 ## Development (frontend)
 
+Dependencies are managed with npm. To install them, run
+
+```sh
+# run from webapp/frontend
+npm install 
+```
+
 If you need to make changes to the frontend, run
 
 ```sh
-cd webapp/frontend
+# run from webapp/frontend
 npm run dev
 ```
 
