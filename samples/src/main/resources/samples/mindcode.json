@@ -31,12 +31,12 @@
   },
   {
     "filename": "upgrade-conveyors.mnd",
-    "title": "Upgrade conveyors",
+    "title": "Building",
     "runnable": false
   },
   {
     "filename": "sum-of-primes.mnd",
-    "title": "Sum of primes",
+    "title": "Computing",
     "runnable": true
   }
 ]

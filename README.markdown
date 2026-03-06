@@ -62,6 +62,7 @@ The most important recent changes to Mindcode include:
   * Local compiler options.
   * Significantly improved optimization of `case` expressions.
 * Other functionality
+  * Mobile-friendly [web application](http://mindcode.herokuapp.com/) with syntax highlighting.
   * [Processor emulator](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown) for all supported Mindcode targets, including schematic emulation.
   * Reporting compiled code size broken down by function.  
   * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
@@ -72,9 +73,9 @@ See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 
 ### Online
 
-Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in the _Mindcode Source Code_ text area, then press the **Compile** button. The _Mindustry Logic_ text area will contain the mlog version of your Mindcode. Copy the mlog code into the clipboard. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. Select **Import from Clipboard**. Mindustry is now ready to execute your code.
+Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in the _Mindcode Source Code_ text area, then press the **Compile** button. The _Mlog Code_ text area will contain the mlog version of your Mindcode. Copy the mlog code into the clipboard. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. Select **Import from Clipboard**. Mindustry is now ready to execute your code.
 
-You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. The output produced by `print` instructions in your code will be displayed. Very limited interaction with the Mindustry World is supported.
+You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. The output produced by `print` instructions in your code will be displayed. Very limited interaction with an emulated Mindustry World is supported.
 
 > [!TIP]
 > Mindcode performs a variety of different optimizations. The mlog code it produces may bear little resemblance to the source code at a first glance.
@@ -85,7 +86,7 @@ Alternatively, you can download the command-line compiler and use Mindcode [from
 
 ### Support mods
 
-Mindcode can interface with the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) to inject the compiled code into the selected processor in Mindustry World directly, avoiding the use of the clipboard.
+Mindcode can interface with the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) to inject the compiled code into the selected processor in Mindustry World directly, avoiding the use of the clipboard. Both the online and offline versions of Mindcode support this feature.
 
 The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), available for Mindustry 7/8, allows efficient [array-bounds checking](/doc/syntax/SYNTAX-5-OTHER.markdown#option-error-reporting) for both internal and external arrays, making this kind of bugs easier to detect. 
 
@@ -102,7 +103,11 @@ You can also get help on these Discord servers:
 
 ## Contributing
 
-See [CONTRIBUTING](CONTRIBUTING.markdown).
+If you're interested in helping with this project, please see [CONTRIBUTING](CONTRIBUTING.markdown).
+
+Mindcode was initially created by [François Beausoleil](https://github.com/francois), and since 2023 has been maintained by [cardillan](https://github.com/cardillan). The new front-end was developed by [JeanJPNM](https://github.com/JeanJPNM).
+
+For other contributors, please see [Contributors (GitHub)](https://github.com/cardillan/mindcode/graphs/contributors).
 
 # License
 
