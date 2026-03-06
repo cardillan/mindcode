@@ -106,7 +106,7 @@
 
 <div class="container mx-auto flex flex-col gap-4 px-4 py-4">
 	<!-- Info Card -->
-	<PageInfoCard>
+	<PageInfoCard cardId="mlog-decompiler" heading="About Mlog Decompiler">
 		<p>
 			Here you can partially decompile an mlog code into Mindcode. <strong
 				>The resulting code cannot be directly compiled by Mindcode.</strong
