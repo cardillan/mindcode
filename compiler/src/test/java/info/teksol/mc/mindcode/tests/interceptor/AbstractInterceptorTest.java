@@ -63,7 +63,7 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
                     ip, getRootAstContext());
             List<LogicInstruction> instructions = resolver.resolve(program);
             String code = LogicInstructionPrinter.toString(ip, instructions,
-                    compiler.globalCompilerProfile().isSymbolicLabels(), compiler.globalCompilerProfile().getMlogIndent());
+                    compiler.globalCompilerProfile().isSymbolicLabels(), compiler.globalCompilerProfile().getMlogIndent(), true);
 
             LogicBlock logicBlock = LogicBlock.createLogicProcessor(ip.getMetadata(), BlockPosition.ZERO_POSITION, code);
             logicBlock.addBlock("bank1", MemoryBlock.createMemoryBank(ip.getMetadata(), BlockPosition.ZERO_POSITION));

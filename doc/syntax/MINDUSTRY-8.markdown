@@ -478,6 +478,10 @@ Plays a sound, either in a specific position on the world map or with a global v
 * `@sfx-mechStepSmall`
 * `@sfx-padLand`
 * `@sfx-padLaunch`
+* `@sfx-payloadDrop1`
+* `@sfx-payloadDrop2`
+* `@sfx-payloadDrop3`
+* `@sfx-payloadPickup`
 * `@sfx-plantBreak`
 * `@sfx-rain`
 * `@sfx-rockBreak`

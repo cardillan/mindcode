@@ -1,9 +1,13 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.ContextFactory;
+import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstLiteralString;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.util.Utf8Utils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -11,6 +15,7 @@ import java.util.Objects;
 
 @NullMarked
 public class LogicString extends AbstractArgument implements LogicLiteral {
+    public static final int MAX_STRING_SIZE = 65535;
     public static final LogicString NEW_LINE = create(SourcePosition.EMPTY, "\\n");
 
     private final SourcePosition sourcePosition;
@@ -22,6 +27,12 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
         this.sourcePosition = sourcePosition;
         this.literal = Objects.requireNonNull(literal);
         this.value = Objects.requireNonNull(value);
+
+        int size = Utf8Utils.utf8Length(value);
+        if (size > MAX_STRING_SIZE) {
+            ContextFactory.getMessageContext().addMessage(PositionalMessage.error(sourcePosition,
+                    ERR.STRING_SIZE_LIMIT_EXCEEDED, MAX_STRING_SIZE, size - MAX_STRING_SIZE));
+        }
     }
 
     private LogicString(SourcePosition sourcePosition, String value) {

@@ -336,6 +336,26 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Test
+    void refusesTooLargeStringLiterals() {
+        assertGeneratesMessages(
+                expectedMessages().add("The string size limit of 65,535 bytes has been exceeded by 1 bytes.").repeat(2),
+                """
+                        inline def f(s)
+                            s + s;
+                        end;
+                        
+                        inline def g(s)
+                            f(f(f(f(s))));
+                        end;
+                        
+                        const x = g(g(g("0123456789ABCDEF")));
+                        
+                        print(x);
+                        """
+        );
+    }
+
+    @Test
     void refusesColorLiteralsIn6() {
         assertGeneratesMessage(
                 "Color literals require language target 7 or higher.",

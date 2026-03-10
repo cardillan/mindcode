@@ -4,11 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.17.0 – Unreleased
+
+### Added
+
+* Added a limit on the maximum length of mlog string literals (65,535 bytes in UTF-8 encoding). String literals larger than this limit cause compilation errors.
+* Added a limit on the maximum generated mlog code size (102,400 bytes in UTF-8 encoding). When the generated or loaded mlog code exceeds this limit, an error or warning is generated, depending on the value of the [`enforce-instruction-limit` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-instruction-limit).
+
+### Changed
+
+* The new version of the Mlog Watcher mod is now used by default by the tool app. 
+
 ## 3.16.0 – 2026-03-06
 
 ### Changed
 
-* The `target` attribute specified in a Schemacode definition file now expects only the version number (e.g., `target = 8.0`). The processor type cannot be specified using the `target` attribute, but is inferred from the block type in the schematic.
+* The `target` attribute specified in a Schemacode definition file now expects only the version number (e.g., `target = 8.0`). The processor type cannot be specified using the `target` attribute – it is inferred from the block type in the schematic.
 * The web application has been completely overhauled. The highlights of the new web app are:
   * Modern, mobile-friendly design.
   * The compilation happens without page refresh, meaning the edit history of the code is not lost on compilation. It is also possible to undo (`Ctrl-Z`) the action of loading an example code or clearing the editor.

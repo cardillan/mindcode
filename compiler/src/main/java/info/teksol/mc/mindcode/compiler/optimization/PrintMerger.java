@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.util.Utf8Utils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -137,8 +138,9 @@ class PrintMerger extends BaseOptimizer {
             String str1 = printValue(prev);
             String str2 = printValue(current);
             // Do not merge strings if the combined length is over 34, unless advanced
-            if (str1 != null && str2 != null && (advanced(previous) && advanced(current) || str1.length() + str2.length() <= 34)) {
-                PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(str1 + str2));
+            if (str1 != null && str2 != null && (advanced(previous) && advanced(current) || str1.length() + str2.length() <= 34)
+                    && Utf8Utils.utf8Length(str1) + Utf8Utils.utf8Length(str2) <= LogicString.MAX_STRING_SIZE) {
+                PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(prev.sourcePosition(), str1 + str2));
                 removeInstruction(this.previous);
                 iterator.set(merged);
                 this.previous = merged;

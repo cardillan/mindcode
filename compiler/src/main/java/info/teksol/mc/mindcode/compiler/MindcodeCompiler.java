@@ -50,6 +50,7 @@ import info.teksol.mc.profile.DirectiveProcessor;
 import info.teksol.mc.profile.FinalCodeOutput;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.util.CollectionUtils;
+import info.teksol.mc.util.Utf8Utils;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -351,8 +352,19 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
             }
         }
 
+        String pureMlog = LogicInstructionPrinter.toString(instructionProcessor, instructions,
+                false, 0, false);
+        int mlogEncodedSize = Utf8Utils.utf8Length(pureMlog);
+        if (mlogEncodedSize > Globals.MAX_MLOG_BYTE_LENGTH) {
+            if (globalProfile.isEnforceInstructionLimit()) {
+                error(ERR.CODE_SIZE_LIMIT_EXCEEDED, Globals.MAX_MLOG_BYTE_LENGTH, mlogEncodedSize - Globals.MAX_MLOG_BYTE_LENGTH);
+            } else {
+                warn(ERR.CODE_SIZE_LIMIT_EXCEEDED, Globals.MAX_MLOG_BYTE_LENGTH, mlogEncodedSize - Globals.MAX_MLOG_BYTE_LENGTH);
+            }
+        }
+
         output = LogicInstructionPrinter.toString(instructionProcessor, resolver.generateSymbolicLabels(instructions),
-                globalProfile.isSymbolicLabels(), globalProfile.getMlogIndent());
+                globalProfile.isSymbolicLabels(), globalProfile.getMlogIndent(), true);
 
         if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.PRINTER) <= 0) return;
 

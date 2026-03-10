@@ -41,7 +41,7 @@ Mindcode provides the web application and the command-line compiler for compilin
 * `advanced`: all standard optimizations are performed.
 * `experimental` (the default): experimental optimizations are kept in a separate category either because they're new and can be easily switched off if there's a bug in them, or because they break backwards compatibility and need to be deactivated until older code is updated to the new standard.
 
-All examples in this documentation are run on the `basic` level, unless specified otherwise.
+All examples in this documentation are run on the `experimental` level, unless specified otherwise.
 
 ## Compilation target
 
@@ -62,7 +62,7 @@ Code adhering to the strict syntax produces the same output regardless of the sy
 ### Relaxed syntax
 
 * **Code in global scope.** It is permissible to place executable code outside a code block (e.g., `print("Hello!"); printflush(message1);` is a valid Mindcode program).
-* **Optional variable declarations.** While variables can be explicitly declared, these declarations are optional. When variables aren't declared, they can be used freely in the source code, and their scope is determined by naming convention.
+* **Optional variable declarations.** While variables can be explicitly declared, these declarations are optional. When variables aren't declared, they can be used freely in the source code, and their scope is determined by a naming convention (variables not containing a lower-case character are global, all other are local).
 
 > [!TIP]
 > Using the naming convention to determine variable scopes leads to some constraints on allowed variable names: names of linked blocks cannot be used to name any other variable, and upper-case variable names (which are global by convention) cannot be used as function parameters. 
@@ -70,7 +70,7 @@ Code adhering to the strict syntax produces the same output regardless of the sy
 ### Strict syntax
 
 * **No code in global scope.** Only declarations are allowed in the global scope. All code must be enclosed either in a [code block](SYNTAX-3-STATEMENTS.markdown#code-blocks) (i.e., between the `begin` and `end` keywords), in an [infinite loop](SYNTAX-3-STATEMENTS.markdown#infinite-loops), or in a function.
-* **Explicit variable declarations.** All variables must be declared before being used, even variables representing linked blocks. The variables are valid in the code block in which they were declared.
+* **Explicit variable declarations.** All variables must be declared before being used, even variables representing linked blocks (the only exception is using a linked block name in the `allocate stack` or `allocate heap` declarations). The variables are valid in the code block in which they were declared.
 
 > [!TIP]
 > At this moment, several code blocks can exist in the global scope. They are compiled in the order in which they're encountered in the program. In future versions of Mindcode, however, multiple top-level code blocks might be disallowed.
@@ -365,6 +365,9 @@ Finally, there are string literals, a sequence of characters enclosed in double 
 
 > [!NOTE]
 > It is not possible to include a double quote inside string literals because Mindustry Logic itself doesn't support them. Trying to include a double quote in a string literal using backslash escape, as is usual in other languages (e.g., `"This is an embedded \"quote\""`) leads to syntax error.   
+
+> [!NOTE]
+> The maximum size of an mlog string literal, when stored in UTF-8 encoding, is 65,535 bytes. Larger string literals cause compilation errors.
 
 ### Formattable string literals
 

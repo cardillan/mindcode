@@ -3,6 +3,7 @@ package info.teksol.mc.emulator.mimex;
 import info.teksol.mc.common.Globals;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
+import info.teksol.mc.util.Utf8Utils;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
@@ -187,6 +188,11 @@ public abstract class LParserBase implements LParser {
     public List<LStatement> parse() {
         jumps.clear();
         jumpLocations.clear();
+
+        if (Utf8Utils.utf8Length(chars) > Globals.MAX_MLOG_BYTE_LENGTH) {
+            error("Mlog file too long. Max length: %,d bytes", Globals.MAX_MLOG_BYTE_LENGTH);
+            return List.of();
+        }
 
         while (pos < chars.length) {
             if (line == Globals.MAX_INSTRUCTIONS && enforceInstructionLimit) {

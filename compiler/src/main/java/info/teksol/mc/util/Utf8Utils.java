@@ -28,6 +28,40 @@ public class Utf8Utils {
         return sbr.toString();
     }
 
+    public static int utf8Length(String s) {
+        int len = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            if (c != 0 && c <= 0x7F) {
+                len += 1;
+            } else if (c <= 0x7FF) {
+                len += 2;
+            } else {
+                len += 3;
+            }
+        }
+
+        return len;
+    }
+
+    public static int utf8Length(char[] chars) {
+        int len = 0;
+
+        for (char c : chars) {
+            if (c != 0 && c <= 0x7F) {
+                len += 1;
+            } else if (c <= 0x7FF) {
+                len += 2;
+            } else {
+                len += 3;
+            }
+        }
+
+        return len;
+    }
+
     public static String encode(int[] values) {
         return encode(IntStream.of(values));
     }

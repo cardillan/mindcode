@@ -57,6 +57,7 @@ public class ERR {
     public static final String BREAK_OUTSIDE_LOOP_NO_LABEL = "'break' statement without a label outside of a do/while/for loop.";
     public static final String CONTINUE_OUTSIDE_LOOP = "'continue' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";
+    public static final String CODE_SIZE_LIMIT_EXCEEDED = "The compiled code size limit of %,d bytes has been exceeded by %,d bytes.";
     public static final String COMPILER_TYPE_INCOMPATIBLE = "This processor type is incompatible with the actual processor type in the schematics (%s) which contains this code.";
     public static final String CONSTANT_STRING_OR_KEYWORD_REQUIRED = "Constant string expression or keyword required.";
     public static final String CONTINUE_NOT_ALLOWED = "The 'continue' statement not allowed in this context.";
@@ -196,6 +197,7 @@ public class ERR {
     public static final String SCOPE_CODE_OUTSIDE_CODE_BLOCK = "Code outside a main code block or function.";
     public static final String SCOPE_DECLARATION_WITHIN_CODE_BLOCK = "Statement or declaration not allowed within a main code block or function.";
     public static final String SETLOCAL_NOT_USED = "The '#setlocal' directive must precede a statement or an expression.";
+    public static final String STRING_SIZE_LIMIT_EXCEEDED = "The string size limit of %,d bytes has been exceeded by %,d bytes.";
     public static final String SUBARRAY_INDEX_OUT_OF_BOUNDS = "Subarray index %d out of range %d .. %d.";
     public static final String SUBARRAY_INVALID_RANGE = "Empty or invalid subarray range.";
     public static final String SUBARRAY_MUTABLE_RANGE = "Subarray specification must use constant range.";
