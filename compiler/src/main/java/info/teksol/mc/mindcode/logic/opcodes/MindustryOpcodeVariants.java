@@ -240,6 +240,7 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("dragMultiplier"),        in("value"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("ban"),                   in("value"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("unban"),                 in("value"));
+        add(list, V8B, MAX, W, FUNC, Opcode.SETRULE,   rule("pauseDisabled"),         in("value"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("buildSpeed"),            in("value"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("unitHealth"),            in("value"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("unitBuildSpeed"),        in("value"), in("team"));

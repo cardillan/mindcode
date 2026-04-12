@@ -11,8 +11,8 @@
     19 instructions after optimizations.
 
 Pass 1: size optimization selection (cost limit 384):
-  * Translate case at line 11:5                                  size   -96, benefit     1096.9, efficiency     96.000 (-96 instructions)
-    Convert case at line 11:5 (segments: 30)                     size   -17, benefit     1096.6, efficiency     17.000
+  * Translate case at line 11:5                                  size   -96, benefit     1097.1, efficiency     96.000 (-96 instructions)
+    Convert case at line 11:5 (segments: 30)                     size   -17, benefit     1096.8, efficiency     17.000
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -625,7 +625,7 @@ Modifications by Translate case at line 11:5 (-96 instructions):
 -    * set *tmp2 0
 -    * label *label5
 +    8 sensor *tmp8 :block @id
-+    9 read *tmp9 "000000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J0000000000000000000000000" *tmp8
++    9 read *tmp9 "000000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J00000000000000000000000000" *tmp8
 +   10 op sub *tmp10 *tmp9 48
 +   11 select *tmp11 strictEqual *tmp8 null 1 *tmp10
 +   12 select *tmp2 strictEqual *tmp9 null 0 *tmp11
@@ -656,14 +656,14 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 260 @blockCount "Verify block count"
+assertequals 261 @blockCount "Verify block count"
 set :total 0
 set :i -1
 label *label58
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
 sensor *tmp8 :block @id
-read *tmp9 "000000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J0000000000000000000000000" *tmp8
+read *tmp9 "000000000000000003456789:;<=>00?@AB000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000CD0EF000000000000GH000I00000000J00000000000000000000000000" *tmp8
 op sub *tmp10 *tmp9 48
 select *tmp11 strictEqual *tmp8 null 1 *tmp10
 select *tmp2 strictEqual *tmp9 null 0 *tmp11

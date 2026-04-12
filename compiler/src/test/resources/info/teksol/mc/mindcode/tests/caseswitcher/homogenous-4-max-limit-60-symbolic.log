@@ -5,13 +5,13 @@
      1 instructions eliminated by Jump Normalization (4 iterations).
      2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
        1 loop conditions were partially rotated.
-     5 instructions eliminated by Case Switching (4 iterations).
+     4 instructions eliminated by Case Switching (4 iterations).
      1 case expressions converted to switched jumps by Case Switching.
-    41 instructions after optimizations.
+    42 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 13):
-  * Convert case at line 11:5 (segments: 17)                     size    -5, benefit      570.7, efficiency   Infinity (-5 instructions)
-  ! Convert case at line 11:5 (segments: 1)                      size  +235, benefit      591.2, efficiency      2.516
+  * Convert case at line 11:5 (segments: 17)                     size    -4, benefit      570.5, efficiency   Infinity (-4 instructions)
+  ! Convert case at line 11:5 (segments: 1, padded high)         size  +236, benefit      591.3, efficiency      2.505
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -221,7 +221,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     55 print :hash
     56 assertequals 2727247113 :hash "Test selected blocks"
 
-Modifications by Convert case at line 11:5 (segments: 17) (-5 instructions):
+Modifications by Convert case at line 11:5 (segments: 17) (-4 instructions):
  
      5 label *label10
      6 lookup block :block :i
@@ -279,17 +279,18 @@ Modifications by Convert case at line 11:5 (segments: 17) (-5 instructions):
 +   30 label *label15
 +   31 jump *label9 lessThan *tmp9 235
 +   32 jump *label11 lessThan *tmp9 259
-+   33 jump *label9 always
-+   34 label *label12
-+   35 jump *label9 strictEqual *tmp9 null
-    36 label *label9
-    37 set *tmp2 true
-    38 jump *label7 always
-    39 label *label8
-+   40 label *label11
-    41 set *tmp2 false
-    42 label *label7
-    43 label *label6
++   33 jump *label11 greaterThanEq *tmp9 260
++   34 jump *label9 always
++   35 label *label12
++   36 jump *label9 strictEqual *tmp9 null
+    37 label *label9
+    38 set *tmp2 true
+    39 jump *label7 always
+    40 label *label8
++   41 label *label11
+    42 set *tmp2 false
+    43 label *label7
+    44 label *label6
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -314,7 +315,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 260 @blockCount "Verify block count"
+assertequals 261 @blockCount "Verify block count"
 set :hash 0
 set :i -1
 label *label10
@@ -345,6 +346,7 @@ jump *label9 always
 label *label15
 jump *label9 lessThan *tmp9 235
 jump *label11 lessThan *tmp9 259
+jump *label11 greaterThanEq *tmp9 260
 jump *label9 always
 label *label12
 jump *label9 strictEqual *tmp9 null

@@ -5,16 +5,16 @@
      1 instructions eliminated by Jump Normalization (4 iterations).
      2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
        1 loop conditions were partially rotated.
-   237 instructions added by Case Switching (4 iterations).
+   238 instructions added by Case Switching (4 iterations).
      1 case expressions converted to switched jumps by Case Switching.
-   280 instructions after optimizations.
+   281 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 456):
-  o Convert case at line 11:5 (segments: 5)                      size    -8, benefit      474.0, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 5)                      size    -7, benefit      474.1, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 13)                     size    -6, benefit      528.2, efficiency   Infinity
+  o Convert case at line 11:5 (segments: 5)                      size    -8, benefit      474.3, efficiency   Infinity
+  o Convert case at line 11:5 (segments: 5)                      size    -7, benefit      474.4, efficiency   Infinity
+  o Convert case at line 11:5 (segments: 13)                     size    -6, benefit      528.3, efficiency   Infinity
   o Convert case at line 11:5 (segments: 13)                     size    -4, benefit      528.7, efficiency   Infinity
-  * Convert case at line 11:5 (segments: 1, padded both)         size  +237, benefit      546.1, efficiency      2.304 (+237 instructions)
+  * Convert case at line 11:5 (segments: 1, padded both)         size  +238, benefit      546.2, efficiency      2.295 (+238 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -216,7 +216,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     52 print :hash
     53 assertequals 3138715214 :hash "Test selected blocks"
 
-Modifications by Convert case at line 11:5 (segments: 1, padded both) (+237 instructions):
+Modifications by Convert case at line 11:5 (segments: 1, padded both) (+238 instructions):
  
      4 label *label10
      5 lookup block :block :i
@@ -769,16 +769,18 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (+237 inst
 +  526 jump *label11 always
 +  527 multilabel *label273 (m:*label13)
 +  528 jump *label11 always
-   529 label *label9
-   530 set *tmp2 true
-   531 jump *label7 always
-   532 label *label8
-+  533 label *label12
-+  534 jump *label9 strictEqual *tmp9 null
-+  535 label *label11
-   536 set *tmp2 false
-   537 label *label7
-   538 label *label6
++  529 multilabel *label274 (m:*label13)
++  530 jump *label11 always
+   531 label *label9
+   532 set *tmp2 true
+   533 jump *label7 always
+   534 label *label8
++  535 label *label12
++  536 jump *label9 strictEqual *tmp9 null
++  537 label *label11
+   538 set *tmp2 false
+   539 label *label7
+   540 label *label6
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set :hash 0
@@ -1327,6 +1329,8 @@ jump *label11 always
 multilabel *label272
 jump *label11 always
 multilabel *label273
+jump *label11 always
+multilabel *label274
 jump *label11 always
 label *label9
 set *tmp2 true

@@ -10,7 +10,7 @@
     21 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 453):
-  * Convert case at line 11:5 (segments: 1)                      size   -25, benefit      616.2, efficiency   Infinity (-25 instructions)
+  * Convert case at line 11:5 (segments: 1, padded high)         size   -25, benefit      616.3, efficiency   Infinity (-25 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -220,7 +220,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     54 print :hash
     55 assertequals 2727247113 :hash "Test selected blocks"
 
-Modifications by Convert case at line 11:5 (segments: 1) (-25 instructions):
+Modifications by Convert case at line 11:5 (segments: 1, padded high) (-25 instructions):
  
      4 jump *label3 greaterThanEq :i @blockCount
      5 label *label10
@@ -292,7 +292,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 260 @blockCount "Verify block count"
+assertequals 261 @blockCount "Verify block count"
 set :hash 0
 set :i -1
 label *label10
@@ -306,7 +306,7 @@ label *label9
 set *tmp2 true                          # Origin: 5, keys: 17 .. 28, 31 .. 34, 203, 204, 206, 207, 220, 221, 225, 234, 259
 jump *label7 always
 multilabel *label15
-set *tmp2 false                         # Origin: 5, keys: 1 .. 16, 29, 30, 35 .. 202, 205, 208 .. 219, 222 .. 224, 226 .. 233, 235 .. 258
+set *tmp2 false                         # Origin: 5, keys: 1 .. 16, 29, 30, 35 .. 202, 205, 208 .. 219, 222 .. 224, 226 .. 233, 235 .. 258, 260
 label *label7
 jump *label4 equal *tmp2 false
 op mul *tmp5 :hash 31

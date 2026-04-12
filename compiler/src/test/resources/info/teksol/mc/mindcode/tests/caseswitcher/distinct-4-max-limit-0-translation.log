@@ -512,7 +512,7 @@ Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 260 @blockCount "Verify block count"
+assertequals 261 @blockCount "Verify block count"
 set :total 0
 set :i -1
 label *label62

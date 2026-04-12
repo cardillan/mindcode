@@ -490,6 +490,7 @@ Set a game rule.
 |`setrule(:dragMultiplier, value)`|`setrule dragMultiplier value 0 0 0 0`|
 |`setrule(:ban, value)`|`setrule ban value 0 0 0 0`|
 |`setrule(:unban, value)`|`setrule unban value 0 0 0 0`|
+|`setrule(:pauseDisabled, value)`|`setrule pauseDisabled value 0 0 0 0`|
 |`setrule(:buildSpeed, value, team)`|`setrule buildSpeed value team 0 0 0`|
 |`setrule(:unitHealth, value, team)`|`setrule unitHealth value team 0 0 0`|
 |`setrule(:unitBuildSpeed, value, team)`|`setrule unitBuildSpeed value team 0 0 0`|

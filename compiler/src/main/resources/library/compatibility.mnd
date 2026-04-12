@@ -2595,6 +2595,8 @@ inline void _compatibilityTest81()
         select e1 equal id 258 e1 "\n@landing-pad"
         sensor id @tile-logic-display @id
         select e1 equal id 259 e1 "\n@tile-logic-display"
+        sensor id @large-canvas @id
+        select e1 equal id 260 e1 "\n@large-canvas"
         sensor id @dagger @id
         select e1 equal id 0 e1 "\n@dagger"
         sensor id @mace @id
@@ -2764,7 +2766,7 @@ inline void _compatibilityTest81()
         sensor id @arkycite @id
         select e1 equal id 10 e1 "\n@arkycite"
 
-        select e2 strictEqual @blockCount 260 e2 "\n@blockCount"
+        select e2 strictEqual @blockCount 261 e2 "\n@blockCount"
         select e2 strictEqual @itemCount 20 e2 "\n@itemCount"
         select e2 strictEqual @liquidCount 11 e2 "\n@liquidCount"
         select e2 strictEqual @sfx-click 34 e2 "\n@sfx-click"

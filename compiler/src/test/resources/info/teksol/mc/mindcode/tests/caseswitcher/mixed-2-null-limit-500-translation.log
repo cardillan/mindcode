@@ -10,9 +10,9 @@
     13 instructions after optimizations.
 
 Pass 1: size optimization selection (cost limit 372):
-  * Translate case at line 11:5                                  size  -114, benefit     1443.5, efficiency    114.000 (-114 instructions)
-    Convert case at line 11:5 (segments: 34)                     size   -26, benefit     1371.0, efficiency     26.000
-    Convert case at line 11:5 (segments: 34)                     size   -25, benefit     1371.1, efficiency     25.000
+  * Translate case at line 11:5                                  size  -114, benefit     1443.9, efficiency    114.000 (-114 instructions)
+    Convert case at line 11:5 (segments: 34)                     size   -26, benefit     1371.4, efficiency     26.000
+    Convert case at line 11:5 (segments: 34)                     size   -25, benefit     1371.5, efficiency     25.000
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -700,7 +700,7 @@ Modifications by Translate case at line 11:5 (-114 instructions):
 -    * set *tmp3 48
 -    * label *label6
 +    8 sensor *tmp7 *tmp1 @id
-+    9 read *tmp8 "0000BCDEFGHIJK000000000000000LLMMMM000000NNNN000000000000000OOOOPP00000000000000000000000000000000000000000000000000000000000000000000000000000000P000000000000000000000000000000000000000000000000000000000000000000000Q0000000000000RST00UVWX00YZ00000000000000000" *tmp7
++    9 read *tmp8 "0000BCDEFGHIJK000000000000000LLMMMM000000NNNN000000000000000OOOOPP00000000000000000000000000000000000000000000000000000000000000000000000000000000P000000000000000000000000000000000000000000000000000000000000000000000Q0000000000000RST00UVWX00YZ000000000000000000" *tmp7
 +   10 select *tmp3 strictEqual *tmp7 null 65 *tmp8
     11 label *label5
     12 jump *label59 equal *tmp3 48
@@ -736,7 +736,7 @@ label *label61
 lookup block *tmp1 :printAll:i
 # "Function: def identifyBlock(in block)"
 sensor *tmp7 *tmp1 @id
-read *tmp8 "0000BCDEFGHIJK000000000000000LLMMMM000000NNNN000000000000000OOOOPP00000000000000000000000000000000000000000000000000000000000000000000000000000000P000000000000000000000000000000000000000000000000000000000000000000000Q0000000000000RST00UVWX00YZ00000000000000000" *tmp7
+read *tmp8 "0000BCDEFGHIJK000000000000000LLMMMM000000NNNN000000000000000OOOOPP00000000000000000000000000000000000000000000000000000000000000000000000000000000P000000000000000000000000000000000000000000000000000000000000000000000Q0000000000000RST00UVWX00YZ000000000000000000" *tmp7
 select *tmp3 strictEqual *tmp7 null 65 *tmp8
 jump *label59 equal *tmp3 48
 printchar *tmp3

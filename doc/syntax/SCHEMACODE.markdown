@@ -449,6 +449,7 @@ All supported block types are listed below.
 
 * `@canvas`
 * `@hyper-processor`
+* `@large-canvas`
 * `@large-logic-display`
 * `@logic-display`
 * `@logic-processor`

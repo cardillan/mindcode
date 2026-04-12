@@ -20,12 +20,12 @@
 
 Pass 1: speed optimization selection (cost limit 637):
   * Full loop rotation at line 160:1                             size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
-  o Fast-dispatch case at line 20:9                              size    -9, benefit     4899.0, efficiency   Infinity
-  o Convert case at line 20:9 (segments: 1, padded low)          size    -8, benefit     5141.8, efficiency   Infinity
+  o Fast-dispatch case at line 20:9                              size    -9, benefit     4899.4, efficiency   Infinity
+  o Convert case at line 20:9 (segments: 1, padded low)          size    -8, benefit     5143.7, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 636):
-  o Fast-dispatch case at line 20:9                              size    -9, benefit     4899.0, efficiency   Infinity
-  * Convert case at line 20:9 (segments: 1, padded low)          size    -8, benefit     5141.8, efficiency   Infinity (-8 instructions)
+  o Fast-dispatch case at line 20:9                              size    -9, benefit     4899.4, efficiency   Infinity
+  * Convert case at line 20:9 (segments: 1, padded low)          size    -8, benefit     5143.7, efficiency   Infinity (-8 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  

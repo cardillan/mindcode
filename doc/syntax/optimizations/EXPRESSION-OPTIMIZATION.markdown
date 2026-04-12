@@ -121,7 +121,7 @@ The `readarr`/`writearr` instruction is a virtual instruction which represents i
 
 ## The `read`/`write` instructions
 
-When the `read` instruction accesses a character in a constant string at a constant index, the instruction is replaced by a `set` instruction accessing the character directly. 
+When the `read` instruction accesses a character in a constant string at a constant index, the instruction is replaced by a `set` instruction setting the character value directly. 
 
 The `read` and `write` instructions accessing variables in current processor using a constant name are replaced with a `set` instruction accessing the processor variable directly.
 

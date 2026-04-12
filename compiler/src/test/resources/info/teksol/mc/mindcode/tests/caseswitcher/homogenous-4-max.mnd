@@ -21,7 +21,7 @@ def isWall(block)
 end;
 
 begin
-    assertEquals(260, @blockCount, "Verify block count");
+    assertEquals(261, @blockCount, "Verify block count");
 
     var hash = 0;
     for var i in -1 ... @blockCount do

@@ -10,7 +10,7 @@
     20 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 455):
-  * Convert case at line 11:5 (segments: 1, padded high)         size   -24, benefit      593.7, efficiency   Infinity (-24 instructions)
+  * Convert case at line 11:5 (segments: 1, padded high)         size   -24, benefit      593.8, efficiency   Infinity (-24 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -298,7 +298,7 @@ label *label9
 set *tmp2 true                          # Origin: 4, keys: 17 .. 28, 31 .. 34, 203, 204, 206, 207, 220, 221, 225, 234
 jump *label7 always
 multilabel *label15
-set *tmp2 false                         # Origin: 4, keys: 1 .. 16, 29, 30, 35 .. 202, 205, 208 .. 219, 222 .. 224, 226 .. 233, 235 .. 259
+set *tmp2 false                         # Origin: 4, keys: 1 .. 16, 29, 30, 35 .. 202, 205, 208 .. 219, 222 .. 224, 226 .. 233, 235 .. 260
 label *label7
 jump *label4 equal *tmp2 false
 op mul *tmp5 :hash 31

@@ -6,14 +6,14 @@
      1 instructions eliminated by Condition Optimization (5 iterations).
      2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
        1 loop conditions were partially rotated.
-   208 instructions added by Case Switching (4 iterations).
+   210 instructions added by Case Switching (4 iterations).
      1 case expressions converted to switched jumps by Case Switching.
-   331 instructions after optimizations.
+   333 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 376):
-  o Convert case at line 11:5 (segments: 34)                     size   -19, benefit     1184.5, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 4)                      size   +43, benefit     1187.2, efficiency     27.610
-  * Convert case at line 11:5 (segments: 1)                      size  +208, benefit     1210.0, efficiency      5.817 (+208 instructions)
+  o Convert case at line 11:5 (segments: 34)                     size   -18, benefit     1184.5, efficiency   Infinity
+  o Convert case at line 11:5 (segments: 4, padded high)         size   +45, benefit     1187.2, efficiency     26.381
+  * Convert case at line 11:5 (segments: 1, padded high)         size  +210, benefit     1210.2, efficiency      5.763 (+210 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -496,7 +496,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
    185 assertequals 0x0FFFFFFF :total "Test selected blocks"
    186 label *label0
 
-Modifications by Convert case at line 11:5 (segments: 1) (+208 instructions):
+Modifications by Convert case at line 11:5 (segments: 1, padded high) (+210 instructions):
  
      5 label *label62
      6 lookup block :block :i
@@ -1024,9 +1024,9 @@ Modifications by Convert case at line 11:5 (segments: 1) (+208 instructions):
 +  526 multilabel *label324 (m:*label65)
 +  527 jump *label63 always
 +  528 multilabel *label325 (m:*label65)
-+  529 label *label59
-+  530 set *tmp2 27
-+  531 jump *label5 always
++  529 jump *label59 always
++  530 multilabel *label326 (m:*label65)
++  531 jump *label63 always
    532 label *label7
    533 set *tmp2 1
    534 jump *label5 always
@@ -1185,14 +1185,14 @@ Modifications by Convert case at line 11:5 (segments: 1) (+208 instructions):
    637 label *label56
 -    * jump *label59 equal :block @tile-logic-display
 -    * jump *label58 always
--    * label *label59
--    * set *tmp2 27
--    * jump *label5 always
-   638 label *label58
-+  639 label *label63
-   640 set *tmp2 0
-   641 label *label5
-   642 label *label4
+   638 label *label59
+   639 set *tmp2 27
+   640 jump *label5 always
+   641 label *label58
++  642 label *label63
+   643 set *tmp2 0
+   644 label *label5
+   645 label *label4
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -1217,7 +1217,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 260 @blockCount "Verify block count"
+assertequals 261 @blockCount "Verify block count"
 set :total 0
 set :i -1
 label *label62
@@ -1744,8 +1744,9 @@ jump *label63 always
 multilabel *label324
 jump *label63 always
 multilabel *label325
-set *tmp2 27
-jump *label5 always
+jump *label59 always
+multilabel *label326
+jump *label63 always
 label *label7
 set *tmp2 1
 jump *label5 always
@@ -1824,6 +1825,9 @@ set *tmp2 25
 jump *label5 always
 label *label57
 set *tmp2 26
+jump *label5 always
+label *label59
+set *tmp2 27
 jump *label5 always
 label *label63
 set *tmp2 0

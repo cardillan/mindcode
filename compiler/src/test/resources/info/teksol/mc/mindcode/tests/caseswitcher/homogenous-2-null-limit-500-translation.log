@@ -10,10 +10,10 @@
     19 instructions after optimizations.
 
 Pass 1: size optimization selection (cost limit 456):
-  * Translate case at line 11:5                                  size   -24, benefit      523.5, efficiency     24.000 (-24 instructions)
-    Convert case at line 11:5 (segments: 5)                      size    -8, benefit      474.0, efficiency      8.000
-    Convert case at line 11:5 (segments: 5)                      size    -7, benefit      474.1, efficiency      7.000
-    Convert case at line 11:5 (segments: 13)                     size    -6, benefit      528.2, efficiency      6.000
+  * Translate case at line 11:5                                  size   -24, benefit      523.6, efficiency     24.000 (-24 instructions)
+    Convert case at line 11:5 (segments: 5)                      size    -8, benefit      474.3, efficiency      8.000
+    Convert case at line 11:5 (segments: 5)                      size    -7, benefit      474.4, efficiency      7.000
+    Convert case at line 11:5 (segments: 13)                     size    -6, benefit      528.3, efficiency      6.000
     Convert case at line 11:5 (segments: 13)                     size    -4, benefit      528.7, efficiency      4.000
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -254,7 +254,7 @@ Modifications by Translate case at line 11:5 (-24 instructions):
 -    * set *tmp2 false
 -    * label *label7
 +    7 sensor *tmp9 :block @id
-+    8 read *tmp10 "00000000000000000111111111111001111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000110110000000000001100010000000010000000000000000000000000" *tmp9
++    8 read *tmp10 "000000000000000001111111111110011110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001101100000000000011000100000000100000000000000000000000000" *tmp9
 +    9 op sub *tmp11 *tmp10 48
 +   10 select *tmp12 strictEqual *tmp9 null true *tmp11
 +   11 select *tmp2 strictEqual *tmp10 null false *tmp12
@@ -289,7 +289,7 @@ label *label10
 lookup block :block :i
 # "Function: def isWall(in block)"
 sensor *tmp9 :block @id
-read *tmp10 "00000000000000000111111111111001111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000110110000000000001100010000000010000000000000000000000000" *tmp9
+read *tmp10 "000000000000000001111111111110011110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001101100000000000011000100000000100000000000000000000000000" *tmp9
 op sub *tmp11 *tmp10 48
 select *tmp12 strictEqual *tmp9 null true *tmp11
 select *tmp2 strictEqual *tmp10 null false *tmp12

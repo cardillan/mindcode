@@ -5,13 +5,13 @@
      1 instructions eliminated by Jump Normalization (4 iterations).
      2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
        1 loop conditions were partially rotated.
-   235 instructions added by Case Switching (4 iterations).
+   236 instructions added by Case Switching (4 iterations).
      1 case expressions converted to switched jumps by Case Switching.
-   281 instructions after optimizations.
+   282 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 453):
-  o Convert case at line 11:5 (segments: 17)                     size    -5, benefit      570.7, efficiency   Infinity
-  * Convert case at line 11:5 (segments: 1)                      size  +235, benefit      591.2, efficiency      2.516 (+235 instructions)
+  o Convert case at line 11:5 (segments: 17)                     size    -4, benefit      570.5, efficiency   Infinity
+  * Convert case at line 11:5 (segments: 1, padded high)         size  +236, benefit      591.3, efficiency      2.505 (+236 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -221,7 +221,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     55 print :hash
     56 assertequals 2727247113 :hash "Test selected blocks"
 
-Modifications by Convert case at line 11:5 (segments: 1) (+235 instructions):
+Modifications by Convert case at line 11:5 (segments: 1, padded high) (+236 instructions):
  
      5 label *label10
      6 lookup block :block :i
@@ -776,16 +776,18 @@ Modifications by Convert case at line 11:5 (segments: 1) (+235 instructions):
 +  527 jump *label11 always
 +  528 multilabel *label273 (m:*label13)
 +  529 jump *label9 always
-+  530 label *label12
-+  531 jump *label9 strictEqual *tmp9 null
-   532 label *label9
-   533 set *tmp2 true
-   534 jump *label7 always
-   535 label *label8
-+  536 label *label11
-   537 set *tmp2 false
-   538 label *label7
-   539 label *label6
++  530 multilabel *label274 (m:*label13)
++  531 jump *label11 always
++  532 label *label12
++  533 jump *label9 strictEqual *tmp9 null
+   534 label *label9
+   535 set *tmp2 true
+   536 jump *label7 always
+   537 label *label8
++  538 label *label11
+   539 set *tmp2 false
+   540 label *label7
+   541 label *label6
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -810,7 +812,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 
 Final code before resolving virtual instructions:
 
-assertequals 260 @blockCount "Verify block count"
+assertequals 261 @blockCount "Verify block count"
 set :hash 0
 set :i -1
 label *label10
@@ -1338,6 +1340,8 @@ multilabel *label272
 jump *label11 always
 multilabel *label273
 jump *label9 always
+multilabel *label274
+jump *label11 always
 label *label12
 jump *label9 strictEqual *tmp9 null
 label *label9
