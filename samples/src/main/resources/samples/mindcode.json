@@ -2,41 +2,57 @@
   {
     "filename": "control-multiple-units.mnd",
     "title": "Controlling units",
+    "minVersion": 6,
+    "maxVersion": 8,
     "runnable": false
   },
   {
     "filename": "one-thorium.mnd",
     "title": "Controlling a block",
+    "minVersion": 6,
+    "maxVersion": 8,
     "runnable": false
   },
   {
     "filename": "many-thorium.mnd",
     "title": "Controlling many blocks",
+    "minVersion": 6,
+    "maxVersion": 8,
     "runnable": false
   },
   {
     "filename": "heal-damaged-building.mnd",
     "title": "Healing buildings",
+    "minVersion": 6,
+    "maxVersion": 8,
     "runnable": false
   },
   {
     "filename": "mining-drone.mnd",
     "title": "Mining drone",
+    "minVersion": 6,
+    "maxVersion": 8,
     "runnable": false
   },
   {
     "filename": "item-transport.mnd",
     "title": "Item Transport",
+    "minVersion": 6,
+    "maxVersion": 8,
     "runnable": false
   },
   {
     "filename": "upgrade-conveyors.mnd",
     "title": "Building",
+    "minVersion": 6,
+    "maxVersion": 8,
     "runnable": false
   },
   {
     "filename": "sum-of-primes.mnd",
     "title": "Computing",
+    "minVersion": 6,
+    "maxVersion": 8,
     "runnable": true
   }
 ]
