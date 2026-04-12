@@ -18,7 +18,7 @@ mass-driver-monitor-00.mnd:                       181   6E6F762403154535   7CB1B
 mass-driver-monitor-surge-alloy-00.mnd:            88   84BE8CA14CE3386F   258551AC9AB9410E
 reactor-control-00.mnd:                           339   0B5F71D4A736D2F1   D9677DFD97BDBD9F
 reactor-control-battery-level-00.mnd:             572   BEBDD58A4C35FD11   A565FD403EA10357
-regulator-00.mnd:                                 119   2AFCF1D4D2C43E14   385ACA715552AB6A
+regulator-00.mnd:                                 119   2AFCF1D4D2C43E14   6A54F261F590436E
 remote-vault-00.mnd:                               68   9EA444978E177496   5B693A206F892FA5
 storage-display-00.mnd:                           531   2F638AC4A4196293   6D21B9F8E530D626
 unit-housekeeping-00.mnd:                          91   F607CA415057529A   65A90F544A1730CE

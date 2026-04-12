@@ -4,16 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.17.0 – Unreleased
+## 3.16.1 – 2026-04-12
+
+### Fixed
+
+* Fixed incorrect Condition Optimization ([#307](https://github.com/cardillan/mindcode/issues/307)).  
 
 ### Added
 
 * Added a limit on the maximum length of mlog string literals (65,535 bytes in UTF-8 encoding). String literals larger than this limit cause compilation errors.
 * Added a limit on the maximum generated mlog code size (102,400 bytes in UTF-8 encoding). When the generated or loaded mlog code exceeds this limit, an error or warning is generated, depending on the value of the [`enforce-instruction-limit` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-instruction-limit).
+* Added support for the new `setrule pauseDisabled` instruction.
 
 ### Changed
 
-* The new version of the Mlog Watcher mod is now used by default by the tool app. 
+* The new version of the Mlog Watcher mod is now used by default by the tool app.
+* Updated the Mindustry metadata to the latest version, adding the new `@large-canvas` block.  
 
 ## 3.16.0 – 2026-03-06
 

@@ -3,7 +3,7 @@
      1 instructions eliminated by Case Expression Optimization.
     27 instructions eliminated by Dead Code Elimination (7 iterations).
      1 instructions eliminated by Jump Normalization (5 iterations).
-    12 instructions eliminated by Condition Optimization (3 passes, 8 iterations).
+    12 instructions eliminated by Condition Optimization (6 iterations).
      8 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      2 instructions modified by Expression Optimization (3 iterations).
      9 instructions eliminated by Boolean Optimization (6 iterations).
@@ -1076,17 +1076,6 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
    102 op add .CYCLES 0 1
    103 op xor .ON .INVERTED true
 
-Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
- 
-   161 print :pct
-   162 print "%"
-   163 print "[]"
--    * jump *label49 equal .INVERTED false
-+  164 jump *label49 strictNotEqual *tmp14 @inverted-sorter
-   165 print "\n"
-   166 print "Activate above [green]"
-   167 print PCT_HIGH
-
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  
     38 multilabel *label60 (m:*label58)
@@ -1159,17 +1148,6 @@ Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1
    149 label *label45
    150 label *label46
    151 label *label44
-
-Modifications by Jumps phase, Condition Optimization, pass 4, iteration 1:
- 
-   120 set .STATE false
-   121 op add .CYCLES .CYCLES 1
-   122 set .ON .INVERTED
--    * select .ACTIVE_TEXT notEqual .INVERTED false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
-+  123 select .ACTIVE_TEXT strictEqual *tmp14 @inverted-sorter "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
-   124 label *label45
-   125 label *label42
-   126 label *label36
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -1275,7 +1253,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 -    * print "[]"
 +  115 print "\nLevel: [gold]{0}%[]"
 +  116 format :pct
-   117 jump *label49 strictNotEqual *tmp14 @inverted-sorter
+   117 jump *label49 equal .INVERTED false
 -    * print "\n"
 -    * print "Activate above [green]"
 -    * print PCT_HIGH
@@ -1442,13 +1420,13 @@ jump *label45 equal .STATE false
 set .STATE false
 op add .CYCLES .CYCLES 1
 set .ON .INVERTED
-select .ACTIVE_TEXT strictEqual *tmp14 @inverted-sorter "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
+select .ACTIVE_TEXT notEqual .INVERTED false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
 label *label45
 label *label42
 label *label36
 print "\nLevel: [gold]{0}%[]"
 format :pct
-jump *label49 strictNotEqual *tmp14 @inverted-sorter
+jump *label49 equal .INVERTED false
 print "\nActivate above [green]{0}%[]\nDeactivate below [salmon]{0}%[]"
 format PCT_HIGH
 format PCT_LOW

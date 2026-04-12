@@ -3,7 +3,7 @@
      1 instructions eliminated by Case Expression Optimization.
     27 instructions eliminated by Dead Code Elimination (7 iterations).
      1 instructions eliminated by Jump Normalization (5 iterations).
-    12 instructions eliminated by Condition Optimization (2 passes, 7 iterations).
+    12 instructions eliminated by Condition Optimization (6 iterations).
      7 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      2 instructions modified by Expression Optimization (3 iterations).
      9 instructions eliminated by Boolean Optimization (6 iterations).
@@ -1425,17 +1425,6 @@ Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1
    438 label *label46
    439 label *label44
 
-Modifications by Jumps phase, Condition Optimization, pass 4, iteration 1:
- 
-   415 set .STATE false
-   416 op add .CYCLES .CYCLES 1
-   417 set .ON .INVERTED
--    * select .ACTIVE_TEXT notEqual .INVERTED false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
-+  418 select .ACTIVE_TEXT strictEqual *tmp14 @inverted-sorter "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
-   419 label *label45
-   420 label *label42
-   421 label *label36
-
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
      1 set PCT_LOW 60
@@ -2002,7 +1991,7 @@ jump *label45 equal .STATE false
 set .STATE false
 op add .CYCLES .CYCLES 1
 set .ON .INVERTED
-select .ACTIVE_TEXT strictEqual *tmp14 @inverted-sorter "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
+select .ACTIVE_TEXT notEqual .INVERTED false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
 label *label45
 label *label42
 label *label36

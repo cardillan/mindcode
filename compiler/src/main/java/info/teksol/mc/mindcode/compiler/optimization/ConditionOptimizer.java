@@ -27,6 +27,7 @@ class ConditionOptimizer extends BaseOptimizer {
                 if (logicIterator.next() instanceof ConditionalInstruction cond && cond.isConditional() && !cond.getCondition().isStrict()) {
                     Tuple2<LogicValue, LogicValue> condArgs = extractConstantOperand(cond);
                     if (condArgs.e1().isNumericLiteral() && condArgs.e2() instanceof LogicVariable variable
+                            && !variable.isGlobalVariable()
                             && findDefiningInstruction(logicIterator, cond, variable) instanceof OpInstruction oper
                             && !oper.isUpdating() && oper.getResult().equals(variable)) {
 
