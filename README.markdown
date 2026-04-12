@@ -27,7 +27,7 @@ Mindcode can generate code for several Mindustry versions and different types of
 * **v8 Build 149 Beta**: use `#set target = 8.0m;` to select it.
 * **v8 Build 155 Beta** or later: use `#set target = 8m;` (or `8.1m`) to select it.
 
-At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry version (BE build 26776).
+At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry version (157 Beta / BE build 26951).
 
 [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality in Mindustry 8.
 
@@ -94,7 +94,7 @@ The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), availabl
 
 To learn more about Mindustry Logic, you can find more information about it here:
 
-* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated February 2026)
+* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated April 2026)
 
 You can also get help on these Discord servers:
 
