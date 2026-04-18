@@ -659,8 +659,10 @@ end
 By specifying the `const` modifier it is possible to create a constant array. A constant array must be initialized, and its elements cannot be modified after initialization. Processor variables are not allocated for constant array elements; the constant values are used instead.
 
 ```Mindcode
-var array[3] = (rand(4), rand(4), rand(4));
-const colors[] = ("[red]", "[green]", "[blue]", "[crimson]");
+#set use-text-jump-tables = false;
+
+var array[3] = (rand(5), rand(5), rand(5));
+const colors[] = ("[red]", "[green]", "[blue]", "[crimson]", "[gold]");
 print(colors[floor(array[0])]);
 print(array);
 ```
@@ -668,19 +670,21 @@ print(array);
 compiles into
 
 ```mlog
-op rand *tmp0 4 0
-op rand *tmp1 4 0
-op rand *tmp2 4 0
+op rand *tmp0 5 0
+op rand *tmp1 5 0
+op rand *tmp2 5 0
 op floor *tmp4 *tmp0 0
 op mul *tmp7 *tmp4 2
 op add @counter *tmp7 6
 set *tmp6 "[red]"
-jump 13 always 0 0
+jump 15 always 0 0
 set *tmp6 "[green]"
-jump 13 always 0 0
+jump 15 always 0 0
 set *tmp6 "[blue]"
-jump 13 always 0 0
+jump 15 always 0 0
 set *tmp6 "[crimson]"
+jump 15 always 0 0
+set *tmp6 "[gold]"
 print *tmp6
 print *tmp0
 print *tmp1

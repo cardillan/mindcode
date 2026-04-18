@@ -1,11 +1,11 @@
-import { page } from '$app/state';
-import { getContext, setContext } from 'svelte';
-import { goto } from '$app/navigation';
-import { browser } from '$app/environment';
+import {page} from '$app/state';
+import {getContext, setContext} from 'svelte';
+import {goto} from '$app/navigation';
+import {browser} from '$app/environment';
 
 export const sourceIdKey = 's';
 export const compilerTargetKey = 'compilerTarget';
-export const defaultGameVersion = '7';
+export const defaultGameVersion = '8';
 export const defaultProcessorType = 'm';
 
 export class LocalCompilerTarget {

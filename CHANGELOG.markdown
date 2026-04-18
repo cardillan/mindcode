@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.16.2 – 2026-04-19
+
+### Added
+
+* Added support for the new `bullet` instruction and for the new sensable/settable properties (`@pingX`, `@pingY`, `@pingText`, `@bulletLifetime` and `@bulletTime`).
+
+### Changed
+
+* The default compiler target is now `8m`.
+
 ## 3.16.1 – 2026-04-12
 
 ### Fixed

@@ -25,19 +25,8 @@ println($"Step $i of $MAX_VALUE");
 produces
 
 ```mlog
-print "Step "
-print :i
-print " of 10\n"
-```
-
-On the basic optimization level, the output would be:
-
-```
-print "Step "
-print i
-print " of "
-print 10
-print "\n"
+print "Step {0} of 10\n"
+format :i
 ```
 
 ## The `format` instruction

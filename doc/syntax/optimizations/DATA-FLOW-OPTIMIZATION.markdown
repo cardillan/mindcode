@@ -112,9 +112,8 @@ produces
 
 ```mlog
 op add :c @tick 20
-print "10, 20, "
-print :c
-print "."
+print "10, 20, {0}."
+format :c
 ```
 
 ## Constant folding

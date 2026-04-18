@@ -571,7 +571,7 @@ The long-term goal is to produce identical, optimal code in both of these cases.
 
 ## Arrays in non-unrolled loops
 
-When the loop cannot get unrolled for some reason, list iteration loops are generally faster than loops using index-based array access. When more than a single variable is used, or when the array is modified in the loop, list iteration loops provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space.  
+When the loop cannot get unrolled for some reason, list iteration loops are generally a little faster than loops using index-based array access. When more than a single variable is used, or when the array is modified in the loop, list iteration loops provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space.  
 
 Example of simple array access:
 
@@ -589,7 +589,7 @@ for var a in array do
 end;
 
 var y = 0;
-/// Index-based access (7 instructions per iteration)
+/// Index-based access (6 instructions per iteration)
 for var i in 0 ... length(array) do
     y += array[i];
 end;
@@ -605,34 +605,27 @@ produces
 # Pay closer attention to sections of the program manipulating @counter
     set .x 0
     # List iteration loop (5 instructions per iteration)
-    set :a .array*0
+    set :a derelict
     op add *tmp0 @counter 1
     jump label_12 always 0 0
-    set :a .array*1
+    set :a sharded
     op add *tmp0 @counter 1
     jump label_12 always 0 0
-    set :a .array*2
+    set :a crux
     op add *tmp0 @counter 1
     jump label_12 always 0 0
-    set :a .array*3
+    set :a malis
     set *tmp0 null
     label_12:
         op add .x .x :a
         set @counter *tmp0
     set .y 0
-    # Index-based access (7 instructions per iteration)
+    # Index-based access (6 instructions per iteration)
     set :i 0
 label_16:
-        op mul *tmp3 :i 2
-        op add @counter @counter *tmp3
-        set *tmp2 .array*0
-        jump label_25 always 0 0
-        set *tmp2 .array*1
-        jump label_25 always 0 0
-        set *tmp2 .array*2
-        jump label_25 always 0 0
-        set *tmp2 .array*3
-    label_25:
+            lookup team *tmp3 :i
+            sensor .array*elem *tmp3 @name
+            read *tmp2 @this .array*elem
         op add .y .y *tmp2
     op add :i :i 1
     jump label_16 lessThan :i 4
@@ -654,7 +647,7 @@ for var out x in a; var y in b; var z in c do
     x = y + z;
 end;
 
-/// Index-based access (15 instructions per iteration)
+/// Index-based access (12 instructions per iteration)
 for var i in 0 ... length(a) do
     a[i] = b[i] + c[i];
 end;
@@ -669,69 +662,50 @@ produces
 # You can safely add/remove instructions, in most parts of the program
 # Pay closer attention to sections of the program manipulating @counter
     # List iteration loop (7 instructions per iteration)
-    set :y .b*0
-    set :z .c*0
+    set :y water
+    set :z copper
     op add *tmp0 @counter 1
     jump label_18 always 0 0
-    set .a*0 :x
-    set :y .b*1
-    set :z .c*1
+    set derelict :x
+    set :y slag
+    set :z lead
     op add *tmp0 @counter 1
     jump label_18 always 0 0
-    set .a*1 :x
-    set :y .b*2
-    set :z .c*2
+    set sharded :x
+    set :y oil
+    set :z metaglass
     op add *tmp0 @counter 1
     jump label_18 always 0 0
-    set .a*2 :x
-    set :y .b*3
-    set :z .c*3
+    set crux :x
+    set :y cryofluid
+    set :z graphite
     set *tmp0 null
     label_18:
         op add :x :y :z
         set @counter *tmp0
-    set .a*3 :x
-    # Index-based access (15 instructions per iteration)
+    set malis :x
+    # Index-based access (12 instructions per iteration)
     set :i 0
 label_22:
-        op mul *tmp9 :i 2
-        op add @counter @counter *tmp9
-        set *tmp5 .b*0
-        jump label_31 always 0 0
-        set *tmp5 .b*1
-        jump label_31 always 0 0
-        set *tmp5 .b*2
-        jump label_31 always 0 0
-        set *tmp5 .b*3
-    label_31:
-        op add @counter @counter *tmp9
-        set *tmp7 .c*0
-        jump label_39 always 0 0
-        set *tmp7 .c*1
-        jump label_39 always 0 0
-        set *tmp7 .c*2
-        jump label_39 always 0 0
-        set *tmp7 .c*3
-    label_39:
+            lookup liquid *tmp9 :i
+            sensor .b*elem *tmp9 @name
+            read *tmp5 @this .b*elem
+            lookup item *tmp10 :i
+            sensor .c*elem *tmp10 @name
+            read *tmp7 @this .c*elem
         op add *tmp8 *tmp5 *tmp7
-        op add @counter @counter *tmp9
-        set .a*0 *tmp8
-        jump label_48 always 0 0
-        set .a*1 *tmp8
-        jump label_48 always 0 0
-        set .a*2 *tmp8
-        jump label_48 always 0 0
-        set .a*3 *tmp8
-    label_48:
+            lookup team *tmp11 :i
+            sensor .a*elem *tmp11 @name
+            write *tmp8 @this .a*elem
     op add :i :i 1
     jump label_22 lessThan :i 4
-    print .a*0
-    print .a*1
-    print .a*2
-    print .a*3
+    print derelict
+    print sharded
+    print crux
+    print malis
 ```
 
-The reason is that in the list iteration loop, all array accesses are performed using direct access to elements, while in index-based access, each array element is accessed separately using a jump table.
+The reason is that in the list iteration loop, all array accesses are performed using direct access to elements, while in index-based access, each array element is accessed separately using lookup access. When `@counter` arrays are used instead of lookup arrays for some reason, the difference is even greater.
 
 Optimizations aimed at merging multiple array accesses are planned but aren't yet available.
 

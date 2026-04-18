@@ -200,23 +200,19 @@ jump 2 always 0 0
 draw triangle MAX MIN .A :i :foo:n 0
 set MIN 10
 set MAX 50
-set *tmp1 "not first"
-jump 7 notEqual .A null
-set *tmp1 "first"
+select *tmp1 equal .A null "first" "not first"
 set :i MIN
-jump 16 greaterThan MIN MAX
+jump 14 greaterThan MIN MAX
 print :i
 op add .A .A 1
 op mul :foo:n 2 :i
 print :foo:n
 op add .A .A 1
 op add :i :i 1
-jump 9 lessThanEq :i MAX
-print "\n"
-print *tmp1
-print ": "
-print .A
-print "\n"
+jump 7 lessThanEq :i MAX
+print "\n{0}: {0}\n"
+format *tmp1
+format .A
 ```
 
 The number of variables being sorted is limited by the [instruction limit](SYNTAX-5-OTHER.markdown#option-instruction-limit). Should the resulting program size exceed the instruction limit, some or all variables will remain unordered.

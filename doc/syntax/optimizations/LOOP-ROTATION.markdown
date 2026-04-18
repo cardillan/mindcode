@@ -36,9 +36,8 @@ op max :m .a .b
 op min .b .a .b
 op mod .a :m .b
 jump 2 greaterThan .a 0
-print "The largest common divisor is "
-print .b
-print "."
+print "The largest common divisor is {0}."
+format .b
 ```
 
 If the front condition can be eliminated, the full loop rotation typically decreases the code size and decreases execution time in simple cases. In more complex cases, the code size may actually increase (when the condition performs additional computation with effects outside the condition), which makes it a [dynamic optimization](../SYNTAX-6-OPTIMIZATIONS.markdown#static-and-dynamic-optimizations).

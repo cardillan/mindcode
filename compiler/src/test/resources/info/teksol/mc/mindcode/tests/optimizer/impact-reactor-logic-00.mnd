@@ -1,3 +1,5 @@
+#set target = 7m;
+
 printflush(message1);
 
 FUEL = @blast-compound;

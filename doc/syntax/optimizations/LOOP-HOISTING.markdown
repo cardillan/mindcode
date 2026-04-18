@@ -118,9 +118,8 @@ compiles to:
     label_3:
         op pow *tmp0 :i 2
         print :i
-        print "**2 = "
-        print *tmp0
-        print "\n"
+        print "**2 = {0}\n"
+        format *tmp0
     op add :i :i 1
     jump label_3 lessThan :i *tmp1
 ```

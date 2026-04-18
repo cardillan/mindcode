@@ -60,6 +60,7 @@ ucontrol approach @thisx @thisy 12 0 0
 The optimization handles even nested `if` expressions, such as
 
 ```Mindcode
+#set target = 7m;       // Prevents using the `select` instruction.
 print(a < 100 ? a < 10 ? "units" : "tens" : a < 1000 ? "hundreds" : "thousands");
 ```
 
@@ -144,6 +145,8 @@ The additional instruction can be avoided when the true and false branches in th
 optimizer detects such a situation, it does exactly that:
 
 ```Mindcode
+#set target = 7m;       // Prevents using the `select` instruction.
+
 if @unit.@dead === 0 then
     print("alive");
 else
@@ -166,6 +169,8 @@ print "alive"
 The `elsif` statements are equivalent to nesting the elsif part in the `else` branch of the outer expression. Optimizations of these nested statements work as expected:
 
 ```Mindcode
+#set target = 7m;       // Prevents using the `select` instruction.
+
 y = if x < 0 then
     "negative";
 elsif x > 0 then

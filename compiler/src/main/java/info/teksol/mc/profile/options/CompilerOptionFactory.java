@@ -90,7 +90,7 @@ public class CompilerOptionFactory {
                 "selects target processor version and type (a 'm', 'l', 'h' or 'w' suffix specifies the type)",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.MODULE,
                 OptionAvailability.UNIVERSAL, category,
-                new Target(ProcessorVersion.V7A, ProcessorType.S)));
+                new Target(ProcessorVersion.V8B, ProcessorType.S)));
 
         list.add(new IntegerCompilerOptionValue(EnvironmentOptions.INSTRUCTION_LIMIT, "i",
                 "sets the maximal number of instructions for the speed optimizations",
