@@ -45,6 +45,7 @@ generated code use mlog opcodes.
   * [Instruction `Get Block`](#instruction-get-block)
   * [Instruction `Set Block`](#instruction-set-block)
   * [Instruction `Spawn Unit`](#instruction-spawn-unit)
+  * [Instruction `Spawn Bullet`](#instruction-spawn-bullet)
   * [Instruction `Apply Status`](#instruction-apply-status)
   * [Instruction `Weather Sense`](#instruction-weather-sense)
   * [Instruction `Weather Set`](#instruction-weather-set)
@@ -225,7 +226,7 @@ Get data from a building or unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = object.sensor(property)`<br/>`property` - accepts `@totalItems`, `@firstItem`, `@totalLiquids`, `@totalPower`, `@itemCapacity`, `@liquidCapacity`, `@powerCapacity`, `@powerNetStored`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@ammo`, `@ammoCapacity`, `@currentAmmoType`, `@memoryCapacity`, `@health`, `@maxHealth`, `@heat`, `@shield`, `@armor`, `@efficiency`, `@progress`, `@timescale`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@shootX`, `@shootY`, `@cameraX`, `@cameraY`, `@cameraWidth`, `@cameraHeight`, `@displayWidth`, `@displayHeight`, `@bufferSize`, `@operations`, `@size`, `@solid`, `@dead`, `@range`, `@shooting`, `@boosting`, `@mineX`, `@mineY`, `@mining`, `@buildX`, `@buildY`, `@building`, `@breaking`, `@speed`, `@team`, `@type`, `@flag`, `@controlled`, `@controller`, `@name`, `@payloadCount`, `@payloadType`, `@totalPayload`, `@payloadCapacity`, `@maxUnits`, `@id`, `@selectedBlock`, `@selectedRotation`, `@enabled`, `@config`, `@color`.|`sensor result object property`|
+|`result = object.sensor(property)`<br/>`property` - accepts `@totalItems`, `@firstItem`, `@totalLiquids`, `@totalPower`, `@itemCapacity`, `@liquidCapacity`, `@powerCapacity`, `@powerNetStored`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@ammo`, `@ammoCapacity`, `@currentAmmoType`, `@memoryCapacity`, `@health`, `@maxHealth`, `@heat`, `@shield`, `@armor`, `@efficiency`, `@progress`, `@timescale`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@shootX`, `@shootY`, `@cameraX`, `@cameraY`, `@cameraWidth`, `@cameraHeight`, `@displayWidth`, `@displayHeight`, `@bufferSize`, `@operations`, `@size`, `@solid`, `@dead`, `@range`, `@shooting`, `@boosting`, `@mineX`, `@mineY`, `@mining`, `@buildX`, `@buildY`, `@pingX`, `@pingY`, `@pingText`, `@building`, `@breaking`, `@speed`, `@team`, `@type`, `@flag`, `@controlled`, `@controller`, `@name`, `@payloadCount`, `@payloadType`, `@totalPayload`, `@payloadCapacity`, `@maxUnits`, `@id`, `@selectedBlock`, `@selectedRotation`, `@bulletLifetime`, `@bulletTime`, `@enabled`, `@config`, `@color`.|`sensor result object property`|
 
 ## Instruction `Operation`
 
@@ -423,6 +424,16 @@ Spawn unit at a location.
 |-------------|---------------------|
 |`result = spawn(unit, x, y, rotation, team)`<br/>`unit` - accepts `@dagger`, `@mace`, `@fortress`, `@scepter`, `@reign`, `@nova`, `@pulsar`, `@quasar`, `@vela`, `@corvus`, `@crawler`, `@atrax`, `@spiroct`, `@arkyid`, `@toxopid`, `@flare`, `@horizon`, `@zenith`, `@antumbra`, `@eclipse`, `@mono`, `@poly`, `@mega`, `@quad`, `@oct`, `@risso`, `@minke`, `@bryde`, `@sei`, `@omura`, `@retusa`, `@oxynoe`, `@cyerce`, `@aegires`, `@navanax`, `@alpha`, `@beta`, `@gamma`, `@stell`, `@locus`, `@precept`, `@vanquish`, `@conquer`, `@merui`, `@cleroi`, `@anthicus`, `@anthicus-missile`, `@tecta`, `@collaris`, `@elude`, `@avert`, `@obviate`, `@quell`, `@quell-missile`, `@disrupt`, `@disrupt-missile`, `@renale`, `@latum`, `@evoke`, `@incite`, `@emanate`, `@block`, `@manifold`, `@assembly-drone`, `@scathe-missile`, `@scathe-missile-phase`, `@scathe-missile-surge`, `@scathe-missile-surge-split`, `@turret-unit-build-tower`.|`spawn unit x y rotation team result`|
 
+## Instruction `Spawn Bullet`
+
+Spawns a bullet at a location.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`result = bullet(from, index, x, y, rotation, team, owner, damage, velocityScl, lifeScl, aimX, aimY)`|`bullet result from index x y rotation team owner damage velocityScl lifeScl aimX aimY`|
+
 ## Instruction `Apply Status`
 
 Apply or clear a status effect from a unit.
@@ -431,8 +442,8 @@ Apply or clear a status effect from a unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`applyStatus(status, unit, duration)`<br/>`status` - one of `:burning`, `:freezing`, `:unmoving`, `:wet`, `:melting`, `:sapped`, `:electrified`, `:spore-slowed`, `:tarred`, `:overdrive`, `:overclock`, `:boss`, `:shocked`, `:blasted`, `:corroded`.|`status false status unit duration`|
-|`clearStatus(status, unit)`<br/>`status` - one of `:burning`, `:freezing`, `:unmoving`, `:wet`, `:melting`, `:sapped`, `:electrified`, `:spore-slowed`, `:tarred`, `:overdrive`, `:overclock`, `:boss`, `:shocked`, `:blasted`, `:corroded`.|`status true status unit 0`|
+|`applyStatus(status, unit, duration)`<br/>`status` - one of `:burning`, `:freezing`, `:unmoving`, `:fast`, `:wet`, `:melting`, `:sapped`, `:electrified`, `:spore-slowed`, `:tarred`, `:overdrive`, `:overclock`, `:boss`, `:shocked`, `:blasted`, `:corroded`.|`status false status unit duration`|
+|`clearStatus(status, unit)`<br/>`status` - one of `:burning`, `:freezing`, `:unmoving`, `:fast`, `:wet`, `:melting`, `:sapped`, `:electrified`, `:spore-slowed`, `:tarred`, `:overdrive`, `:overclock`, `:boss`, `:shocked`, `:blasted`, `:corroded`.|`status true status unit 0`|
 
 ## Instruction `Weather Sense`
 
@@ -649,7 +660,7 @@ Sets a property of a unit or building.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`object.setprop(property, value)`<br/>`property` - accepts `@totalPower`, `@health`, `@shield`, `@armor`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@speed`, `@team`, `@flag`, `@payloadType`.|`setprop property object value`|
+|`object.setprop(property, value)`<br/>`property` - accepts `@totalPower`, `@health`, `@shield`, `@armor`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@speed`, `@team`, `@flag`, `@payloadType`, `@bulletLifetime`, `@bulletTime`.|`setprop property object value`|
 
 ## Instruction `Play Sound`
 

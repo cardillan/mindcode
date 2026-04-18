@@ -62,7 +62,7 @@ public class InstructionSamplesTest {
         assertTrue(new File(".." + File.separatorChar + "README.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W, new StandardNameCreator(false));
         List<LogicInstruction> instructions = processor.getOpcodeVariants().stream()
-                .filter(v -> !v.opcode().isVirtual())
+                .filter(v -> !v.virtual() && !v.opcode().isVirtual())
                 .flatMap(v -> createOpcodeSamples(processor, v).stream())
                 .collect(Collectors.toList());
 

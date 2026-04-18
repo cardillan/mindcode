@@ -56,6 +56,7 @@ public enum Opcode {
     GETBLOCK        (READS,  "getblock",         "GetBlock"),
     SETBLOCK        (WRITES, "setblock",         "SetBlock"),
     SPAWN           (WRITES, "spawn",            "SpawnUnit"),
+    BULLET          (WRITES, "bullet",           "SpawnBullet"),
     STATUS          (WRITES, "status",           "ApplyStatus"),
     WEATHERSENSE    (READS,  "weathersense",     "WeatherSense"),
     WEATHERSET      (WRITES, "weatherset",       "WeatherSet"),

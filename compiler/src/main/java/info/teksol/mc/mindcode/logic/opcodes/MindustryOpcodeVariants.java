@@ -46,10 +46,10 @@ public class MindustryOpcodeVariants {
         List<OpcodeVariant> list = new ArrayList<>();
         add(list, V6,  MAX, S, NONE, Opcode.NOOP);
 
-        add(list, V6,   V7A, S, NONE, Opcode.READ,       res("result"), block("cell1"), in("at"));
-        add(list, V6,   V7A, S, NONE, Opcode.WRITE,      in("value"),   block("cell1"), in("at"));
-        add(list, V8A,  MAX, S, PROP, Opcode.READ,       res("result"), block("processor1"), in("name"));
-        add(list, V8A,  MAX, S, PROP, Opcode.WRITE,      in("value"),   block("processor1"), in("name"));
+        add(list, V6,   V7A, S, NONE, Opcode.READ,       result(), block("cell1"), in("at"));
+        add(list, V6,   V7A, S, NONE, Opcode.WRITE,      in("value"), block("cell1"), in("at"));
+        add(list, V8A,  MAX, S, PROP, Opcode.READ,       result(), block("processor1"), in("name"));
+        add(list, V8A,  MAX, S, PROP, Opcode.WRITE,      in("value"), block("processor1"), in("name"));
 
         add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("clear"),      in("r"), in("g"), in("b"));
         add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("color"),      in("r"), in("g"), in("b"), in("a"));
@@ -85,73 +85,73 @@ public class MindustryOpcodeVariants {
         add(list, V6,  V6,  S, PROP, Opcode.CONTROL,    bctrl("color"),     block("block"), in("r"), in("g"), in("b"));
         add(list, V7,  MAX, S, PROP, Opcode.CONTROL,    bctrl("color"),     block("block"), in("packedColor"));
 
-        add(list, V6,  MAX, S, BOTH, Opcode.RADAR,      radar("attr1"), radar("attr2"), radar("attr3"), radarSort("sort"), block("turret"), in("order"), res("result"));
+        add(list, V6,  MAX, S, BOTH, Opcode.RADAR,      radar("attr1"), radar("attr2"), radar("attr3"), radarSort("sort"), block("turret"), in("order"), result());
 
-        add(list, V6,  MAX, S, PROP, Opcode.SENSOR,     res("result"),      block("object"), sensor("property"));
+        add(list, V6,  MAX, S, PROP, Opcode.SENSOR,     result(),      block("object"), sensor("property"));
 
-        add(list, V6,  MAX, S, NONE, Opcode.SET,        res("result"),      block("value"));
+        add(list, V6,  MAX, S, NONE, Opcode.SET,        result(),      block("value"));
 
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("add"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("sub"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("mul"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("div"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("idiv"),         res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("mod"),          res("result"),  in("a"), in("b"));
-        add(list, V8B, MAX, S, NONE, Opcode.OP,         op("emod"),         res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("pow"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("equal"),        res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("notEqual"),     res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("land"),         res("result"),  in("a"), in("b"));
-    virtual(list, V6,  MAX, S, NONE, Opcode.OP,         op("lor"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("lessThan"),     res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("lessThanEq"),   res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("greaterThan"),  res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("greaterThanEq"),res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("strictEqual"),  res("result"),  in("a"), in("b"));
-    virtual(list, V8B, MAX, S, NONE, Opcode.OP,       op("strictNotEqual"), res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("shl"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("shr"),          res("result"),  in("a"), in("b"));
-        add(list, V8B, MAX, S, NONE, Opcode.OP,         op("ushr"),         res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("or"),           res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("and"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("xor"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("not"),          res("result"),  in("a"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("max"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("min"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("angle"),        res("result"),  in("a"), in("b"));
-        add(list, V7,  MAX, S, FUNC, Opcode.OP,         op("angleDiff"),    res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("len"),          res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("noise"),        res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("abs"),          res("result"),  in("a"));
-        add(list, V8B, MAX, S, FUNC, Opcode.OP,         op("sign"),         res("result"),  in("a"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("log"),          res("result"),  in("a"));
-        add(list, V8B, MAX, S, FUNC, Opcode.OP,         op("logn"),         res("result"),  in("a"), in("b"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("log10"),        res("result"),  in("a"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("floor"),        res("result"),  in("a"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("ceil"),         res("result"),  in("a"));
-        add(list, V8B, MAX, S, FUNC, Opcode.OP,         op("round"),        res("result"),  in("a"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("sqrt"),         res("result"),  in("a"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("rand"),         res("result"),  in("a"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("sin"),          res("result"),  in("a"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("cos"),          res("result"),  in("a"));
-        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("tan"),          res("result"),  in("a"));
-        add(list, V7,  MAX, S, FUNC, Opcode.OP,         op("asin"),         res("result"),  in("a"));
-        add(list, V7,  MAX, S, FUNC, Opcode.OP,         op("acos"),         res("result"),  in("a"));
-        add(list, V7,  MAX, S, FUNC, Opcode.OP,         op("atan"),         res("result"),  in("a"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("add"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("sub"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("mul"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("div"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("idiv"),         result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("mod"),          result(),  in("a"), in("b"));
+        add(list, V8B, MAX, S, NONE, Opcode.OP,         op("emod"),         result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("pow"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("equal"),        result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("notEqual"),     result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("land"),         result(),  in("a"), in("b"));
+    virtual(list, V6,  MAX, S, NONE, Opcode.OP,         op("lor"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("lessThan"),     result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("lessThanEq"),   result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("greaterThan"),  result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("greaterThanEq"),result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("strictEqual"),  result(),  in("a"), in("b"));
+    virtual(list, V8B, MAX, S, NONE, Opcode.OP,       op("strictNotEqual"), result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("shl"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("shr"),          result(),  in("a"), in("b"));
+        add(list, V8B, MAX, S, NONE, Opcode.OP,         op("ushr"),         result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("or"),           result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("and"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("xor"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, NONE, Opcode.OP,         op("not"),          result(),  in("a"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("max"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("min"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("angle"),        result(),  in("a"), in("b"));
+        add(list, V7,  MAX, S, FUNC, Opcode.OP,         op("angleDiff"),    result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("len"),          result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("noise"),        result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("abs"),          result(),  in("a"));
+        add(list, V8B, MAX, S, FUNC, Opcode.OP,         op("sign"),         result(),  in("a"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("log"),          result(),  in("a"));
+        add(list, V8B, MAX, S, FUNC, Opcode.OP,         op("logn"),         result(),  in("a"), in("b"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("log10"),        result(),  in("a"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("floor"),        result(),  in("a"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("ceil"),         result(),  in("a"));
+        add(list, V8B, MAX, S, FUNC, Opcode.OP,         op("round"),        result(),  in("a"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("sqrt"),         result(),  in("a"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("rand"),         result(),  in("a"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("sin"),          result(),  in("a"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("cos"),          result(),  in("a"));
+        add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("tan"),          result(),  in("a"));
+        add(list, V7,  MAX, S, FUNC, Opcode.OP,         op("asin"),         result(),  in("a"));
+        add(list, V7,  MAX, S, FUNC, Opcode.OP,         op("acos"),         result(),  in("a"));
+        add(list, V7,  MAX, S, FUNC, Opcode.OP,         op("atan"),         result(),  in("a"));
 
-        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("equal"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
-        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("lessThan"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
-        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("greaterThanEq"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
-        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("notEqual"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
-        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("lessThanEq"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
-        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("greaterThan"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
-        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("strictEqual"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
-    virtual(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("strictNotEqual"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
-        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("always"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, result(), cond("equal"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, result(), cond("lessThan"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, result(), cond("greaterThanEq"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, result(), cond("notEqual"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, result(), cond("lessThanEq"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, result(), cond("greaterThan"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, result(), cond("strictEqual"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+    virtual(list, V8B, MAX, S, NONE, Opcode.SELECT, result(), cond("strictNotEqual"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, result(), cond("always"), in("valueIfTrue"), in("ValueIfFalse"));
 
-        add(list, V7,  MAX, S, FUNC, Opcode.LOOKUP,     lookup("type"), res("result"), in("index"));
+        add(list, V7,  MAX, S, FUNC, Opcode.LOOKUP,     lookup("type"), result(), in("index"));
 
-        add(list, V7,  MAX, S, FUNC, Opcode.PACKCOLOR,  res("result"), in("r"), in("g"), in("b"), in("a"));
+        add(list, V7,  MAX, S, FUNC, Opcode.PACKCOLOR,  result(), in("r"), in("g"), in("b"), in("a"));
 
         add(list, V8B, MAX, S, FUNC, Opcode.UNPACKCOLOR,out("r"), out("g"), out("b"), out("a"), in("color"));
 
@@ -193,10 +193,10 @@ public class MindustryOpcodeVariants {
         add(list, V6,  V6,  S, FUNC, Opcode.UCONTROL,   uctrl("getBlock"),  in("x"), in("y"), out("type"), out("building"));
         add(list, V7,  V7,  S, FUNC, Opcode.UCONTROL,   uctrl("getBlock"),  in("x"), in("y"), out("type"), out("building"), out("floor"));
         add(list, V7A, MAX, S, FUNC, Opcode.UCONTROL,   uctrl("getBlock"),  in("x"), in("y"), out("type"), res("building"), out("floor"));
-        add(list, V6,  MAX, S, FUNC, Opcode.UCONTROL,   uctrl("within"),    in("x"), in("y"), in("radius"), res("result"));
+        add(list, V6,  MAX, S, FUNC, Opcode.UCONTROL,   uctrl("within"),    in("x"), in("y"), in("radius"), result());
         add(list, V7,  MAX, S, FUNC, Opcode.UCONTROL,   uctrl("unbind"));
 
-        add(list, V6,  MAX, S, FUNC, Opcode.URADAR, radar("attr1"), radar("attr2"), radar("attr3"), radarSort("sort"), unused("0"), in("order"), res("result"));
+        add(list, V6,  MAX, S, FUNC, Opcode.URADAR, radar("attr1"), radar("attr2"), radar("attr3"), radarSort("sort"), unused("0"), in("order"), result());
 
         add(list, V6,  MAX, S, FUNC, Opcode.ULOCATE, locate("ore"),      unused("core"), unused("true"), ore("oreType"), out("outx"), out("outy"), res("found"), unusedOut("building"));
         add(list, V6,  V7,  S, FUNC, Opcode.ULOCATE, locate("building"), group("group"), in("enemy"), unused("@copper"), out("outx"), out("outy"), res("found"), out("building"));
@@ -206,18 +206,21 @@ public class MindustryOpcodeVariants {
         add(list, V7A, MAX, S, FUNC, Opcode.ULOCATE, locate("spawn"),    unused("core"), unused("true"), unused("@copper"), out("outx"), out("outy"), out("found"), res("building"));
         add(list, V7A, MAX, S, FUNC, Opcode.ULOCATE, locate("damaged"),  unused("core"), unused("true"), unused("@copper"), out("outx"), out("outy"), out("found"), res("building"));
 
-        add(list, V7,  MAX, W, FUNC, Opcode.GETBLOCK, layer("layer"), res("result"), in("x"), in("y"));
+        add(list, V7,  MAX, W, FUNC, Opcode.GETBLOCK, layer("layer"), result(), in("x"), in("y"));
 
         add(list, V7,  MAX, W, FUNC, Opcode.SETBLOCK, layerset("floor"), in("to"), in("x"), in("y"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETBLOCK, layerset("ore"),  ore("to"), in("x"), in("y"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETBLOCK, layerset("block"), in("to"), in("x"), in("y"), in("team"), in("rotation"));
 
-        add(list, V7,  MAX, W, FUNC, Opcode.SPAWN, unit("unit"), in("x"), in("y"), in("rotation"), in("team"), res("result"));
+        add(list, V7,  MAX, W, FUNC, Opcode.SPAWN, unit("unit"), in("x"), in("y"), in("rotation"), in("team"), result());
+
+        add(list, V8B, MAX, W, FUNC, Opcode.BULLET, result(), in("from"), in("index"), in("x"), in("y"), in("rotation"), in("team"),
+                                                                                                 in("owner"), in("damage"), in("velocityScl"), in("lifeScl"), in("aimX"), in("aimY"));
 
         add(list, V7,  MAX, W, FUNC, Opcode.STATUS, clear("false"), status("status"), in("unit"), in("duration"));
         add(list, V7,  MAX, W, FUNC, Opcode.STATUS, clear("true"),  status("status"), in("unit"));
 
-        add(list, V8A, MAX, W, FUNC, Opcode.WEATHERSENSE, res("result"),  weather("weather"));
+        add(list, V8A, MAX, W, FUNC, Opcode.WEATHERSENSE, result(),  weather("weather"));
         add(list, V8A, MAX, W, FUNC, Opcode.WEATHERSET,   weather("weather"),  bool("active"));
 
         add(list, V7,  MAX, W, FUNC, Opcode.SPAWNWAVE, in("x"),  in("y"), in("natural"));
@@ -305,17 +308,17 @@ public class MindustryOpcodeVariants {
 
         add(list, V7,  MAX, W, FUNC, Opcode.SETRATE, in("ipt"));
 
-        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("unitCount"),   res("result"), in("team"), unused("0"), in("type"));
-        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("playerCount"), res("result"), in("team"));
-        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("coreCount"),   res("result"), in("team"));
-        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("buildCount"),  res("result"), in("team"), unused("0"), in("type"));
-        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("unit"),        res("result"), in("team"), in("index"), in("type"));
-        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("player"),      res("result"), in("team"), in("index"));
-        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("core"),        res("result"), in("team"), in("index"));
-        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("build"),       res("result"), in("team"), in("index"), in("type"));
+        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("unitCount"),   result(), in("team"), unused("0"), in("type"));
+        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("playerCount"), result(), in("team"));
+        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("coreCount"),   result(), in("team"));
+        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("buildCount"),  result(), in("team"), unused("0"), in("type"));
+        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("unit"),        result(), in("team"), in("index"), in("type"));
+        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("player"),      result(), in("team"), in("index"));
+        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("core"),        result(), in("team"), in("index"));
+        add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("build"),       result(), in("team"), in("index"), in("type"));
 
         add(list, V7,  MAX, W, FUNC, Opcode.SYNC,    vltl("var"));
-        add(list, V7,  MAX, W, FUNC, Opcode.GETFLAG, res("result"), in("flag"));
+        add(list, V7,  MAX, W, FUNC, Opcode.GETFLAG, result(), in("flag"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETFLAG, in("flag"), in("value"));
         add(list, V7,  MAX, W, PROP, Opcode.SETPROP, settable("property"), block("object"), in("value"));
 
@@ -377,8 +380,8 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.MULTILABEL,  label("address"));
         add(list, V6,  MAX, S, NONE, Opcode.MULTIJUMP,   label("address"), in("value"), in("offset"));
         add(list, V6,  MAX, S, NONE, Opcode.MULTICALL,   label("address"), in("offset"));
-        add(list, V6,  MAX, S, NONE, Opcode.SETADDR,     res("result"),   in("address"));
-        add(list, V6,  MAX, S, NONE, Opcode.READARR,     res("result"), array("array"), in("at"));
+        add(list, V6,  MAX, S, NONE, Opcode.SETADDR,     result(), in("address"));
+        add(list, V6,  MAX, S, NONE, Opcode.READARR,     result(), array("array"), in("at"));
         add(list, V6,  MAX, S, NONE, Opcode.WRITEARR,    in("value"),   array("array"), in("at"));
         add(list, V6,  MAX, S, NONE, Opcode.REMARK,      in("remark"));
         add(list, V6,  MAX, S, NONE, Opcode.COMMENT,     in("comment"));
@@ -488,6 +491,10 @@ public class MindustryOpcodeVariants {
 
     public static NamedParameter radarSort(String name) {
         return new NamedParameter(InstructionParameterType.RADAR_SORT, name);
+    }
+
+    public static NamedParameter result() {
+        return new NamedParameter(InstructionParameterType.RESULT, "result");
     }
 
     public static NamedParameter res(String name) {

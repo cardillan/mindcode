@@ -138,7 +138,7 @@ Mindustry 8 provides a limited ability to convert indexes to variable names with
 Lookup arrays provide enormous savings of both code size and execution time for large arrays: each access takes either one or three instructions, and no table is generated. However, using lookup arrays also imposes some restrictions:
 
 * The compilation target needs to be set to `8.0` or higher.
-* Each lookup array needs a specific type of Mindustry content. Therefore, at most five arrays can be used in a single program (using blocks, units, items, liquids, and teams), and for most content types, the array size is quite limited.
+* Each lookup array needs a specific type of Mindustry content. Therefore, at most five lookup arrays can be used in a single program (using blocks, units, items, liquids, and teams), and for most content types, the array size is quite limited.
 * Array elements are named after Mindustry content. This has two disadvantages:
     * inspecting variable names in a Mindustry processor while debugging makes it much harder to figure out which variable represents which array element,
     * when a variable is declared using a specific mlog name (e.g. `mlog("coal") var foo`), the name becomes unavailable for lookup arrays, restricting or preventing the use of the corresponding mindustry content type for lookup arrays.

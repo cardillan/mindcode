@@ -568,7 +568,7 @@ Notes:
 Use the [`target` compiler option](SYNTAX-5-OTHER.markdown#option-target) to inform the compiler about the type of the processor that will be used. When the source code is being compiled as part of building a schematic, the actual type of the processor is determined by the schematic definition.
 
 > [!NOTE]
-> When the `target` compiler option doesn't specify sa processor type, Mindcode generates code for a non-processor environment (e.g., code to be run by a Map Objective). This code is run all at once, without any time delays, and atomic sections are not supported.  
+> When the `target` compiler option doesn't specify a processor type, Mindcode generates code for a non-processor environment (e.g., code to be run by a Map Objective). This code is run all at once, without any time delays, and atomic sections are not supported.  
 
 > [!WARNING]
 > Running the compiled code on a processor slower than the compilation target or the declared IPT rate will cause the atomic sections not to be executed atomically. This is true even when the code section is short, because at frame rates higher than 60 FPS instructions are executed in bursts shorter than the processor's IPT. Mindcode computes the wait duration to exactly cover the execution time of the atomic section, which means there isn't any margin to accommodate slower processor speeds.
@@ -595,13 +595,13 @@ By default, the atomic section does not protect instructions which cannot be aff
 
 When computing the wait duration, the compiler doesn't consider unprotected instructions at the end of the execution path. Only the steps leading up to and including the last protected instruction are counted. The goal is not to protect instructions such as unconditional jumps or instructions performing returns from functions. Not protecting these instructions may allow for longer atomic sections than would be otherwise possible, especially on microprocessors. 
 
-It is possible to activate protection for all variables by setting the [`atomic-full-protection`](SYNTAX-5-OTHER.markdown#option-atomic-full-protection) compiler option to `true`.
+It is possible to activate protection for all instructions by setting the [`atomic-full-protection`](SYNTAX-5-OTHER.markdown#option-atomic-full-protection) compiler option to `true`.
 
 ## Atomic section merging
 
 Consecutive atomic sections may be merged into a single section, resulting in just one `wait` instruction at the beginning of the merged section. This may improve the performance significantly if multiple atomic sections shorter than a single tick are executed in quick succession.
 
-It is not required for the atomic sections to touch to be eligible for merging. Therefore, a merged section may also contain instructions that are surrounded by atomic sections without being included in them, or atomic sections which are only executed conditionally.
+It is not required for the atomic section to immediately follow the previous one to be eligible for merging. Therefore, a merged section may also contain instructions that are surrounded by atomic sections without being included in them, or atomic sections which are only executed conditionally.
 
 Merging is possible when the last encountered section is known to be always executed before the next section, and all possible code paths leading from the first section to the next section are atomic-compatible. Stackless function calls inside or between two atomic sections also preclude these sections from being merged, even though a stackless function call inside an atomic section is supported when it is atomic-compatible. This limitation includes uninlined access to internal arrays implemented as `@counter` tables. 
 
@@ -634,12 +634,9 @@ linked message1;
 // The counter, stored in a memory cell
 external(cell1[0]) counter;
 
-var value;
-atomic
-    value = ++counter;  
-end;
+var value = atomic(++counter);
 
-while true do
+loop
     print(value);
     printflush(message1);
 end;
@@ -657,7 +654,7 @@ label_0:
         read *tmp1 cell1 0
         op add *tmp2 *tmp1 1
         write *tmp2 cell1 0                     # The last atomic section instruction
-label_5:
+    label_5:
         print *tmp2
         printflush message1
         jump label_5 always 0 0
