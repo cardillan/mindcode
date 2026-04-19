@@ -14,12 +14,14 @@
 		samples,
 		onSelect,
 		disabled = false,
-		selectedId = null
+		selectedId = null,
+		currentVersion
 	}: {
 		samples: Sample[];
 		onSelect: (sample: Sample) => void;
 		disabled?: boolean;
 		selectedId?: string | null;
+		currentVersion: number;
 	} = $props();
 
 	let open = $state(false);
@@ -31,6 +33,12 @@
 		if (!sample) return null;
 
 		return sample.title;
+	});
+
+	const allowedSamples = $derived.by(() => {
+		return samples.filter((sample) => {
+			return currentVersion >= sample.minVersion && currentVersion <= sample.maxVersion;
+		});
 	});
 
 	function checkScreenSize() {
@@ -64,7 +72,7 @@
 				<Command.List>
 					<Command.Empty>No results found.</Command.Empty>
 					<Command.Group>
-						{#each samples as sample (sample.title)}
+						{#each allowedSamples as sample (sample.title)}
 							<Command.Item value={sample.title} onSelect={() => handleSampleSelect(sample)}>
 								{sample.title}
 							</Command.Item>
@@ -84,7 +92,7 @@
 					<Command.List>
 						<Command.Empty>No results found.</Command.Empty>
 						<Command.Group>
-							{#each samples as sample (sample.title)}
+							{#each allowedSamples as sample (sample.title)}
 								<Command.Item value={sample.title} onSelect={() => handleSampleSelect(sample)}>
 									{sample.title}
 								</Command.Item>

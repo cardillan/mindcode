@@ -151,6 +151,7 @@
 				onSelect={selectSample}
 				disabled={schemacodeEditor.isLoading || loadingAction !== null}
 				selectedId={schemacodeEditor.sourceId}
+				currentVersion={compilerTarget.version}
 			/>
 		</ControlBar>
 	</div>
@@ -163,6 +164,7 @@
 			onSelect={selectSample}
 			disabled={schemacodeEditor.isLoading || loadingAction !== null}
 			selectedId={schemacodeEditor.sourceId}
+			currentVersion={compilerTarget.version}
 		/>
 	</div>
 

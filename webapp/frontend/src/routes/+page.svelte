@@ -22,13 +22,7 @@
 		updateDocId,
 		updateEditor
 	} from '$lib/codemirror';
-	import {
-		LocalCompilerTarget,
-		syncUrl,
-		getThemeContext,
-		defaultGameVersion,
-		defaultProcessorType
-	} from '$lib/stores.svelte';
+	import { LocalCompilerTarget, syncUrl, getThemeContext } from '$lib/stores.svelte';
 	import { getSettingsContext } from '$lib/settings.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
@@ -72,7 +66,7 @@
 	let editorLayout = $state<EditorLayout>();
 	let outputTab = $state<OutputTabName>('code');
 
-	const compilerTarget = new LocalCompilerTarget(defaultGameVersion + defaultProcessorType);
+	const compilerTarget = new LocalCompilerTarget();
 
 	$effect(() => {
 		if (!mlogEditor.view) return;
@@ -177,6 +171,7 @@
 				onSelect={selectSample}
 				disabled={mindcodeEditor.isLoading || loadingAction !== null}
 				selectedId={mindcodeEditor.sourceId}
+				currentVersion={compilerTarget.version}
 			/>
 		</ControlBar>
 	</div>
@@ -189,6 +184,7 @@
 			onSelect={selectSample}
 			disabled={mindcodeEditor.isLoading || loadingAction !== null}
 			selectedId={mindcodeEditor.sourceId}
+			currentVersion={compilerTarget.version}
 		/>
 	</div>
 

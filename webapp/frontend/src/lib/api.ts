@@ -79,6 +79,8 @@ export interface Sample {
 	title: string;
 	source: string;
 	runnable: boolean;
+	minVersion: number;
+	maxVersion: number;
 }
 
 export class ApiHandler {

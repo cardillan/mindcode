@@ -8,6 +8,8 @@ interface SampleMetadata {
 	filename: string;
 	title: string;
 	runnable: boolean;
+	minVersion: number;
+	maxVersion: number;
 }
 
 /**
@@ -82,9 +84,17 @@ export async function getMindcodeSamples(): Promise<Sample[]> {
 
 	return metadata.map((meta, index) => {
 		const id = meta.filename.slice(0, meta.filename.lastIndexOf('.'));
-		const { title, runnable } = meta;
+		const { title, runnable, minVersion, maxVersion } = meta;
 		const source = sources[index];
-		return { id, title, source, runnable };
+
+		return {
+			id,
+			title,
+			source,
+			runnable,
+			minVersion,
+			maxVersion
+		};
 	});
 }
 
@@ -107,9 +117,9 @@ export async function getSchemacodeSamples(): Promise<Sample[]> {
 
 	return metadata.map((meta, index) => {
 		const id = meta.filename.slice(0, meta.filename.lastIndexOf('.'));
-		const { title, runnable } = meta;
+		const { title, runnable, minVersion, maxVersion } = meta;
 		const source = sources[index];
-		return { id, title, source, runnable };
+		return { id, title, source, runnable, minVersion, maxVersion };
 	});
 }
 

@@ -1,29 +1,73 @@
-import {page} from '$app/state';
-import {getContext, setContext} from 'svelte';
-import {goto} from '$app/navigation';
-import {browser} from '$app/environment';
+import { page } from '$app/state';
+import { getContext, setContext } from 'svelte';
+import { goto } from '$app/navigation';
+import { browser } from '$app/environment';
+
+const validProcessors = ['none', 'm', 'l', 'h', 'w'] as const;
+
+export type GameVersion = 6 | 7 | 8;
+export type ProcessorType = (typeof validProcessors)[number];
 
 export const sourceIdKey = 's';
 export const compilerTargetKey = 'compilerTarget';
-export const defaultGameVersion = '8';
+export const defaultGameVersion = 8;
 export const defaultProcessorType = 'm';
 
 export class LocalCompilerTarget {
-	value: string;
+	version: GameVersion;
+	processor: ProcessorType;
 
-	constructor(public defaultValue: string = defaultGameVersion) {
-		this.value = $derived(
-			browser ? page.url.searchParams.get(compilerTargetKey) || defaultValue : defaultValue
-		);
+	constructor(
+		public defaultVersion: GameVersion = defaultGameVersion,
+		public defaultProcessor: ProcessorType = defaultProcessorType
+	) {
+		const defaults = {
+			version: defaultVersion,
+			processor: defaultProcessor
+		};
+
+		const parsed = $derived.by(() => {
+			if (!browser) return defaults;
+			const value = page.url.searchParams.get(compilerTargetKey);
+
+			if (!value) return defaults;
+			return parseCompilerTarget(value);
+		});
+		this.version = $derived(parsed.version);
+		this.processor = $derived(parsed.processor);
 	}
 
-	updateParams(searchParams: URLSearchParams) {
-		searchParams.set(compilerTargetKey, this.value);
+	get value() {
+		return this.version + (this.processor !== 'none' ? this.processor : '');
 	}
 
 	resetToDefault() {
-		this.value = this.defaultValue;
+		this.version = this.defaultVersion;
+		this.processor = this.defaultProcessor;
 	}
+}
+
+export function isValidGameVersion(value: number): value is GameVersion {
+	if (!Number.isInteger(value)) return false;
+	return value >= 6 && value <= 8;
+}
+
+export function isValidProcessorType(value: string): value is ProcessorType {
+	return validProcessors.includes(value as ProcessorType);
+}
+
+export function parseCompilerTarget(value: string): {
+	version: GameVersion;
+	processor: ProcessorType;
+} {
+	const version = Number(value.slice(0, 1));
+	const processor = value.slice(1) || 'none';
+
+	if (!isValidGameVersion(version) || !isValidProcessorType(processor)) {
+		return { version: defaultGameVersion, processor: defaultProcessorType };
+	}
+
+	return { version, processor };
 }
 
 function updateParams(searchParams: URLSearchParams, key: string, value: string | null) {

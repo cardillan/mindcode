@@ -1,15 +1,15 @@
 <script lang="ts">
 	import {
-		defaultGameVersion,
 		defaultProcessorType,
+		isValidGameVersion,
+		parseCompilerTarget,
 		syncUrl,
-		type LocalCompilerTarget
+		type GameVersion,
+		type LocalCompilerTarget,
+		type ProcessorType
 	} from '$lib/stores.svelte';
 	import { untrack } from 'svelte';
 	import * as Select from './ui/select';
-
-	type GameVersion = '6' | '7' | '8';
-	type ProcessorType = 'none' | 'm' | 'l' | 'h' | 'w';
 
 	let {
 		compilerTarget,
@@ -47,20 +47,17 @@
 	let processorType = $state(initialProcessorType);
 
 	function getInitialValues(value: string): [GameVersion, ProcessorType] {
-		let prefix = value.slice(0, 1);
-		let suffix = value.slice(1) || 'none';
+		let { version, processor } = parseCompilerTarget(value);
 
-		const gameVersion = isValidGameVersion(prefix) ? prefix : defaultGameVersion;
 		if (!pickProcessor) {
-			return [gameVersion, 'none'];
+			return [version, 'none'];
 		}
-		const processorType = isValidProcessorType(gameVersion, suffix) ? suffix : defaultProcessorType;
 
-		return [gameVersion, processorType];
-	}
+		if (!isValidProcessorType(version, processor)) {
+			processor = defaultProcessorType;
+		}
 
-	function isValidGameVersion(version: string): version is GameVersion {
-		return version in gameVersions;
+		return [version, processor];
 	}
 
 	function isValidProcessorType(gameVersion: GameVersion, type: string): type is ProcessorType {
@@ -72,13 +69,25 @@
 		if (pickProcessor && !isValidProcessorType(gameVersion, processorType)) {
 			processorType = defaultProcessorType;
 		}
-		const suffix = processorType === 'none' ? '' : processorType;
-		compilerTarget.value = gameVersion + suffix;
+		compilerTarget.version = gameVersion;
+		compilerTarget.processor = processorType;
 		await syncUrl({ compilerTarget: compilerTarget.value });
 	}
 </script>
 
-<Select.Root type="single" bind:value={gameVersion} onValueChange={setValue}>
+<Select.Root
+	type="single"
+	bind:value={
+		() => gameVersion.toString(),
+		(value) => {
+			const version = Number(value);
+			if (isValidGameVersion(version)) {
+				gameVersion = version;
+			}
+		}
+	}
+	onValueChange={setValue}
+>
 	<Select.Trigger>
 		{gameVersions[gameVersion] || 'Select Target'}
 	</Select.Trigger>
