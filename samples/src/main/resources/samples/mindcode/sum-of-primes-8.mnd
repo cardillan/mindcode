@@ -1,0 +1,90 @@
+// This script computes sum of prime numbers up to the given value
+// Press "Compile and Run" to see the results of the computation
+//
+// An optimized version of the Sieve of Eratosthenes is used to identify and sum the prime numbers.
+//
+// The code will run on a Mindustry processor too, albeit quite slowly.
+
+#set target = 8m;
+#set syntax = strict;
+
+// Using a system library to print the result
+require printing;
+
+// Program parametrization
+param MEMORY = bank1;           // Available in emulated environment
+param VALUE = 5000;             // Use a value between 0 and 49150
+
+// Number of bits to store in a single memory slot
+// Since Mindustry Logic stores the values as double, not all 64 bits can be used.
+const MOD = 48;
+
+// We need to declare linked blocks we'll use
+// This one is used to output messages onto
+linked message1;
+
+begin
+    // Need to clear the bank at the beginning
+    for var i in 0 ... 512 do MEMORY[i] = 0; end;
+
+    var result = sumPrimesUpTo(VALUE);
+    print("The sum of all primes between 0 and ");
+    printNumber(VALUE);
+    print(" is ");
+    printNumber(result);
+    print(".");
+    printflush(message1);
+end;
+
+void setBit(bitIndex)
+  MEMORY[bitIndex \ MOD] |= (1 << (bitIndex % MOD));
+end;
+
+def getBit(bitIndex)
+  MEMORY[bitIndex \ MOD] & (1 << (bitIndex % MOD));
+end;
+
+def testAndSetMultiples(n, maximum)
+    var result;
+    if result = !getBit(n \ 2) then
+        var max = maximum \ 2;
+        for var i = n * n \ 2 ; i <= max ; i += n do
+            setBit(i);
+        end;
+    end;
+    result;
+end;
+
+def sumPrimesUpTo(maximum)
+    if maximum < 3 then return maximum & 2; end;
+
+    var sum = 2 + 3;
+    var i = 5;
+    var sqrtMax = ceil(sqrt(maximum));
+
+    while i <= sqrtMax do
+        if testAndSetMultiples(i, maximum) then
+            sum += i;
+        end;
+        i += 2;
+        if testAndSetMultiples(i, maximum) then
+            sum += i;
+        end;
+        i += 4;
+    end;
+
+    while i <= maximum do
+        if !getBit(i \ 2) then
+            sum += i;
+        end;
+        i += 2;
+        if !getBit(i \ 2) then
+            if i <= maximum then
+                sum += i;
+            end;
+        end;
+        i += 4;
+    end;
+
+    sum;
+end;

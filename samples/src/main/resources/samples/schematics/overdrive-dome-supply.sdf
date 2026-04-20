@@ -17,6 +17,9 @@ schematic
 
         Use switch to activate/deactivate supply.
         """
+    tag = "Schematic Builder"
+    tag = BLOCK-MICRO-PROCESSOR
+    tag = BLOCK-OVERDRIVE-DOME
 
 dome1:
     @overdrive-dome      at ( 0,  0)

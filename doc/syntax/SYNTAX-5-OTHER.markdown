@@ -155,7 +155,7 @@ In the past, Mindustry processor behavior has been inconsistent when assigning `
 
 **Option scope: [module](#module-scope)**
 
-Use the `target` option to specify the Mindcode/Mindustry Logic version and the processor type to be used by the compiler and processor emulator. Compiler will generate code compatible with the selected processor version and type, and both the compiler and processor emulator recognize Mindustry objects, built-in variables, and other elements available in a given Mindustry Logic version. The default value is `7m`.
+Use the `target` option to specify the Mindcode/Mindustry Logic version and the processor type to be used by the compiler and processor emulator. Compiler will generate code compatible with the selected processor version and type, and both the compiler and processor emulator recognize Mindustry objects, built-in variables, and other elements available in a given Mindustry Logic version. The default value is `8m`.
 
 The target versions consist of a major and minor version number. As of now, these versions exist:
 

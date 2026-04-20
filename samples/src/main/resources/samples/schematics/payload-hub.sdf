@@ -8,6 +8,8 @@ schematic
         Usage: configure the Payload Source to produce the desired output, and click the button to generate one instance.
         Click the Payload Void button to destroy selected units.
         """
+    tag = "Schematic Builder"
+    tag = BLOCK-MICRO-PROCESSOR
 
 p0-source1, p1-source1:
     @payload-source      at ( 0,  1) facing north

@@ -9,6 +9,7 @@ schematic
         Sand or lead is never produced by the factory.
         """
     tag = "Schematic Builder"
+    tag = BLOCK-MICRO-PROCESSOR
     tag = ITEM-METAGLASS
 
     @bridge-conveyor     at (0, 0) facing south connected to +(3, 0)

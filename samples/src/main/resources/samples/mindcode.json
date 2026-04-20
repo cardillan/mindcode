@@ -52,6 +52,13 @@
     "filename": "sum-of-primes.mnd",
     "title": "Computing",
     "minVersion": 6,
+    "maxVersion": 7,
+    "runnable": true
+  },
+  {
+    "filename": "sum-of-primes-8.mnd",
+    "title": "Computing",
+    "minVersion": 8,
     "maxVersion": 8,
     "runnable": true
   }

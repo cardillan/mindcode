@@ -25,9 +25,9 @@ Mindcode can generate code for several Mindustry versions and different types of
 * **6.0 Build 126.2**: use `#set target = 6m;` to select it (`m` denotes a micro-processor, use `l`, `h` or `w` for a logic-, hyper- or world-processor).
 * **7.0 Build 146** (the default one): use `#set target = 7m;` to explicitly select it.  
 * **v8 Build 149 Beta**: use `#set target = 8.0m;` to select it.
-* **v8 Build 155 Beta** or later: use `#set target = 8m;` (or `8.1m`) to select it.
+* **v8 Build 157.3** or later: use `#set target = 8m;` (or `8.1m`) to select it.
 
-At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry version (157 Beta / BE build 26951).
+At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry BE version.
 
 [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality in Mindustry 8.
 
@@ -50,7 +50,7 @@ See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3
 The most important recent changes to Mindcode include:
 
 * Mindustry 8 specific features
-  * Complete support for [the latest Mindustry 8 pre-release](/doc/syntax/MINDUSTRY-8.markdown).
+  * Complete support for [the current Mindustry 8 release](/doc/syntax/MINDUSTRY-8.markdown).
   * [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) guaranteed to be executed atomically – without interruption.
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
   * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities. 

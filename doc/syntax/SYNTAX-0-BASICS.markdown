@@ -2,7 +2,7 @@
 
 ## Program structure
 
-Mindcode program is a sequence of expressions and statements. Semicolons separate statements and expressions, as in `a = 5; b = 10;`. Expressions have a value: `1 + 2` is an expression whose value is `3`. Whitespace (spaces, tabs, new-line characters) serves to separate individual _tokens_: keywords, identifiers, operators, and so on, but is otherwise ignored. Indentation, while recommended, is ignored by the compiler.
+Mindcode program is a sequence of expressions and statements. Semicolons separate statements and expressions, as in `a = 5; b = 10;`. Expressions have a value: `1 + 2` is an expression whose value is `3`. Whitespace (spaces, tabs, new-line characters) serves to separate individual _tokens_: keywords, identifiers, operators, and so on, but is otherwise ignored, as well as indentation.
 
 Mindcode identifiers and keywords are case-sensitive -- `if` is different from `If` (first is a keyword, the second is not and could be used as a variable or function name).
 
@@ -25,7 +25,7 @@ The `require` statement can appear anywhere in the compiled code, although it is
 
 A file added though a `require` statement can also use a `require` statement. Circular dependencies between files are resolved, and each file is compiled only once.
 
-In the web application, the `require` statement can only be used to import system libraries or source code contained in string values within a [Schemacode file](SCHEMACODE.markdown). Using the statement with external files is not supported.
+In the web application, the `require` statement can only be used to import system libraries or source code contained in string values within a [Schemacode file](SCHEMACODE.markdown). Using the `require` statement with external files is not supported by the web application.
 
 In the command-line tool, using the `require` statement with external files is analogous to the [`--append` command-line argument](TOOLS-CMDLINE.markdown#additional-input-files).
 
@@ -45,7 +45,7 @@ All examples in this documentation are run on the `experimental` level, unless s
 
 ## Compilation target
 
-By default, Mindcode produces code compatible with Mindustry version 7, build 146. It is possible to generate code for different game versions, including the not-yet- released development (a.k.a. "bleeding edge") version. See the [`target` option](SYNTAX-5-OTHER.markdown#option-target) for ways to change the target version, or [Mindustry 8](MINDUSTRY-8.markdown) for more information on running the bleeding-edge version of the game.
+By default, Mindcode produces code compatible with Mindustry version 8, build 157.3. It is possible to generate code for different game versions, including the not-yet- released development (a.k.a. "bleeding edge") version. See the [`target` option](SYNTAX-5-OTHER.markdown#option-target) for ways to change the target version, or [Using development versions of Mindustry (PC version)](MINDUSTRY-TIPS-N-TRICKS.markdown#using-development-versions-of-mindustry-pc-version) for more information on running the bleeding-edge version of the game.
 
 ## Syntax modes
 

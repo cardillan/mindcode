@@ -9,6 +9,8 @@ schematic
         once it becomes available. The task to find a better unit runs in parallel on the second processor,
         allowing the item transport to run uninterrupted.
         """
+    tag = "Schematic Builder"
+    tag = BLOCK-MICRO-PROCESSOR
 
     @micro-processor     at ( 1,  0) processor
         links p0-* end
