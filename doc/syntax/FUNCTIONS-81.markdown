@@ -42,6 +42,7 @@ generated code use mlog opcodes.
   * [Instruction `Unit Radar`](#instruction-unit-radar)
   * [Instruction `Unit Locate`](#instruction-unit-locate)
 * World Processor
+  * [Instruction `Query`](#instruction-query)
   * [Instruction `Get Block`](#instruction-get-block)
   * [Instruction `Set Block`](#instruction-set-block)
   * [Instruction `Spawn Unit`](#instruction-spawn-unit)
@@ -391,6 +392,20 @@ Requires a bound unit.
 These instructions are only available to the World Processor,
 which can be placed in custom-created levels in Mindustry 7 or higher.
 
+
+## Instruction `Query`
+
+Queries units/buildings in a specified area.
+Results are outputted into `@queries`.
+Results can be read from `@queries` using the Read instruction and an index.
+Length of `@queries` can be sensed using `@size` as a parameter.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`queryRectangle(type, team, x, y, width, height)`<br/>`type` - one of `:unit`, `:building`.|`query false type team x y width height`|
+|`queryCircle(type, team, x, y, radius)`<br/>`type` - one of `:unit`, `:building`.|`query true type team x y radius 0`|
 
 ## Instruction `Get Block`
 

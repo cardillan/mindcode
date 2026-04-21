@@ -87,7 +87,13 @@ public enum InstructionParameterType {
     /// Output parameter. Sets a value of a variable in a parameter list.
     OUTPUT          (Flags.OUTPUT),
 
-    /// A const parameter. Specifies properties of units searchable by radar. 
+    /// True/false to set/clear status in `status` instruction.
+    QUERY_AREA      (Flags.SELECTOR | Flags.FUNCTION, _ -> Set.of("true", "false")),
+
+    /// TYpe of queries object in the `query` instruction.
+    QUERY_TYPE      ("queryType", Flags.KEYWORD, MindustryMetadata::getQueryTypes, queryType),
+
+    /// A const parameter. Specifies properties of units searchable by radar.
     RADAR           ("category", Flags.KEYWORD, MindustryMetadata::getRadarTargets, radarTarget),
 
     /// A const parameter. Specifies property to sort radar outputs by. 

@@ -239,15 +239,20 @@ public class BaseFunctionMapper extends CompilerMessageEmitter implements Functi
     private String functionName(OpcodeVariant opcodeVariant, @Nullable NamedParameter selector) {
         return switch (opcodeVariant.opcode()) {
             case DRAW   -> switch (Objects.requireNonNull(selector).name()) {
-                    case "print" -> "drawPrint";
-                    default      -> selector.name();
+                case "print" -> "drawPrint";
+                default      -> selector.name();
+            };
+            case QUERY -> switch (opcodeVariant.namedParameters().getFirst().name()) {
+                case "true"  -> "queryCircle";
+                case "false" -> "queryRectangle";
+                default      -> throw new MindcodeInternalError("Opcode variant " + opcodeVariant + " not mapped to a function.");
             };
             case STOP   -> "stopProcessor";
             case STATUS -> switch (opcodeVariant.namedParameters().getFirst().name()) {
-                    case "true"  -> "clearStatus";
-                    case "false" -> "applyStatus";
-                    default      -> throw new MindcodeInternalError("Opcode variant " + opcodeVariant + " not mapped to a function.");
-                };
+                case "true"  -> "clearStatus";
+                case "false" -> "applyStatus";
+                default      -> throw new MindcodeInternalError("Opcode variant " + opcodeVariant + " not mapped to a function.");
+            };
             default     -> selector == null ? opcodeVariant.opcode().toString() : selector.name();
         };
     }

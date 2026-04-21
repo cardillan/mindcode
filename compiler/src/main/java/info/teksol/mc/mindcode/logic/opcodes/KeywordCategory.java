@@ -18,6 +18,7 @@ public enum KeywordCategory {
     blockGroup,
     lookupType,
     markerType,
+    queryType,
     radarSort,
     radarTarget,
     settableTileLayer,

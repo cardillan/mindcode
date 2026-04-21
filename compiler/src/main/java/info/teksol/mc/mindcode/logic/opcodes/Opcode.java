@@ -53,6 +53,7 @@ public enum Opcode {
     ULOCATE         (READS,  "ulocate",          "UnitLocate"),
 
     // WORLD
+    QUERY           (READS,  "query",            "Query"),
     GETBLOCK        (READS,  "getblock",         "GetBlock"),
     SETBLOCK        (WRITES, "setblock",         "SetBlock"),
     SPAWN           (WRITES, "spawn",            "SpawnUnit"),

@@ -91,6 +91,7 @@ public class MindustryMetadata {
     private final AtomicReference<@Nullable Set<String>> markerTypes = new AtomicReference<>();
     private final AtomicReference<@Nullable Set<String>> messageTypes = new AtomicReference<>();
     private final AtomicReference<@Nullable Set<String>> operations = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> queryTypes = new AtomicReference<>();
     private final AtomicReference<@Nullable Set<String>> radarSorts = new AtomicReference<>();
     private final AtomicReference<@Nullable Set<String>> radarTargets = new AtomicReference<>();
     private final AtomicReference<@Nullable Set<String>> soundNames = new AtomicReference<>();
@@ -358,6 +359,11 @@ public class MindustryMetadata {
 
     public Set<String> getOperations() {
         return cacheInstance(operations, () -> new NamedReader("mimex-operations.txt").createFromResource());
+    }
+
+    public Set<String> getQueryTypes() {
+        return cacheInstance(queryTypes, () -> new NamedReader("mimex-query-types.txt",
+                "queryable", "true"::equalsIgnoreCase).createFromResource());
     }
 
     public Set<String> getRadarSorts() {
