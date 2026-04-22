@@ -242,11 +242,6 @@ public class BaseFunctionMapper extends CompilerMessageEmitter implements Functi
                 case "print" -> "drawPrint";
                 default      -> selector.name();
             };
-            case QUERY -> switch (opcodeVariant.namedParameters().getFirst().name()) {
-                case "true"  -> "queryCircle";
-                case "false" -> "queryRectangle";
-                default      -> throw new MindcodeInternalError("Opcode variant " + opcodeVariant + " not mapped to a function.");
-            };
             case STOP   -> "stopProcessor";
             case STATUS -> switch (opcodeVariant.namedParameters().getFirst().name()) {
                 case "true"  -> "clearStatus";

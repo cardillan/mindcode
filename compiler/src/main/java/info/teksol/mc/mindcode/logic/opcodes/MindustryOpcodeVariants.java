@@ -206,8 +206,8 @@ public class MindustryOpcodeVariants {
         add(list, V7A, MAX, S, FUNC, Opcode.ULOCATE, locate("spawn"),    unused("core"), unused("true"), unused("@copper"), out("outx"), out("outy"), out("found"), res("building"));
         add(list, V7A, MAX, S, FUNC, Opcode.ULOCATE, locate("damaged"),  unused("core"), unused("true"), unused("@copper"), out("outx"), out("outy"), out("found"), res("building"));
 
-        add(list, V8B, MAX, W, FUNC, Opcode.QUERY,   queryarea("false"), querytype("type"), in("team"), in("x"), in("y"), in("width"), in("height"));
-        add(list, V8B, MAX, W, FUNC, Opcode.QUERY,   queryarea("true"),  querytype("type"), in("team"), in("x"), in("y"), in("radius"));
+        add(list, V8B, MAX, W, FUNC, Opcode.QUERY,   queryshape("circle"), querytype("type"), in("team"), in("x"), in("y"), in("radius"));
+        add(list, V8B, MAX, W, FUNC, Opcode.QUERY,   queryshape("rect"),   querytype("type"), in("team"), in("x"), in("y"), in("width"), in("height"));
 
         add(list, V7,  MAX, W, FUNC, Opcode.GETBLOCK, layer("layer"), result(), in("x"), in("y"));
 
@@ -488,8 +488,8 @@ public class MindustryOpcodeVariants {
         return new NamedParameter(InstructionParameterType.OUTPUT, name);
     }
 
-    public static NamedParameter queryarea(String name) {
-        return new NamedParameter(InstructionParameterType.QUERY_AREA, name);
+    public static NamedParameter queryshape(String name) {
+        return new NamedParameter(InstructionParameterType.QUERY_SHAPE, name);
     }
 
     public static NamedParameter querytype(String name) {

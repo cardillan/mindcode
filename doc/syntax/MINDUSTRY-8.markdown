@@ -329,6 +329,10 @@ Rounds the argument to the closest integer. Prior to version 8, the same operati
 
 ## World processor instructions
 
+### `query`
+
+Allows performing spatial search for buildings or units in a given area. The collected units are available in the `@queries` list, which can be accessed using `read`.
+
 ### `weathersense`, `weatherset`
 
 Allows determining whether a given weather type is active or activate/deactivate it. Supported weathers are `@snowing`, `@rain`, `@sandstorm`, `@sporestorm`, `@fog` and `@suspend-particles`

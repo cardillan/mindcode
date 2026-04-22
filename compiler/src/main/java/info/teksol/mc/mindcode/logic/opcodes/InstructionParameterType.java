@@ -88,7 +88,7 @@ public enum InstructionParameterType {
     OUTPUT          (Flags.OUTPUT),
 
     /// True/false to set/clear status in `status` instruction.
-    QUERY_AREA      (Flags.SELECTOR | Flags.FUNCTION, _ -> Set.of("true", "false")),
+    QUERY_SHAPE     ("queryShape", Flags.SELECTOR, MindustryMetadata::getQueryShapes, queryShape),
 
     /// TYpe of queries object in the `query` instruction.
     QUERY_TYPE      ("queryType", Flags.KEYWORD, MindustryMetadata::getQueryTypes, queryType),

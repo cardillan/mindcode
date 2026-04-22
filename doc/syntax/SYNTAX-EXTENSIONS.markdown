@@ -25,6 +25,8 @@ While mods probably cannot specify a new keyword, a custom Mindustry client coul
 | blockGroup        | group of blocks to look for in the `ulocate building` instruction |
 | lookupType        | the content type in the `lookup` instruction                      |
 | markerType        | type of marker to create in the `makemarker` instruction          |
+| queryShape        | shape of the area used by the `query` instruction                 |
+| queryType         | type of objects searched for by the `query` instruction           |
 | radarSort         | sort order for the `radar` and `uradar` instructions              |
 | radarTarget       | targeting flags for the `radar` and `uradar` instructions         |
 | settableTileLayer | layer to update in the `setblock` world-processor instruction     |
