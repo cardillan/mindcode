@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.decompiler;
 
-import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.functions.BaseFunctionMapper;
 import info.teksol.mc.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mc.mindcode.compiler.generation.variables.StandardNameCreator;
@@ -27,8 +26,6 @@ public class MlogDecompiler {
     private int labelIndex;
 
     private final StringBuilder output = new StringBuilder();
-
-    private static final AstContext STATIC_AST_CONTEXT = AstContext.createStaticRootNode();
 
     public static String decompile(String mlog) {
         return decompile(mlog, true);

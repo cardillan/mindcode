@@ -2,7 +2,10 @@ package info.teksol.mindcode.webapp;
 
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.emulator.*;
+import info.teksol.mc.emulator.Emulator;
+import info.teksol.mc.emulator.EmulatorMessage;
+import info.teksol.mc.emulator.EmulatorSchematic;
+import info.teksol.mc.emulator.ExecutorResults;
 import info.teksol.mc.emulator.blocks.BlockPosition;
 import info.teksol.mc.emulator.blocks.LogicBlock;
 import info.teksol.mc.emulator.mimex.BasicEmulator;
@@ -124,7 +127,7 @@ public class ApiController {
             Emulator emulator = new BasicEmulator(messageLogger, profile, schematic);
 
             emulator.run(profile.getStepLimit());
-            runResults = processEmulatorResults(emulator);
+            runResults = processEmulatorResults(emulator, messageLogger);
         }
 
         return new DecompileResponse(
@@ -151,7 +154,7 @@ public class ApiController {
                         .setRun(request.run));
 
         String compiledCode = result.getStringOutput();
-        List<RunResult> runResults = result.emulator() instanceof Emulator emulator ? processEmulatorResults(emulator) : List.of();
+        List<RunResult> runResults = result.emulator() instanceof Emulator emulator ? processEmulatorResults(emulator, messageLogger) : List.of();
 
         return new SchemacodeCompileResponse(
                 apiSource.id,
@@ -182,7 +185,7 @@ public class ApiController {
             Emulator emulator = new BasicEmulator(messageLogger, profile, emulatorSchematic);
             emulator.run(profile.getStepLimit());
 
-            runResults = processEmulatorResults(emulator);
+            runResults = processEmulatorResults(emulator, messageLogger);
         }
 
         return new DecompileResponse(
@@ -321,8 +324,13 @@ public class ApiController {
         }
     }
 
-    private List<RunResult> processEmulatorResults(Emulator emulator) {
+    private List<RunResult> processEmulatorResults(Emulator emulator, ListMessageLogger messageLogger) {
         ArrayList<RunResult> results = new ArrayList<>();
+
+        Optional<EmulatorMessage> emulatorError = messageLogger.getMessages().stream()
+                .filter(m -> m.level() == MessageLevel.ERROR && m instanceof EmulatorMessage)
+                .map(EmulatorMessage.class::cast)
+                .findFirst();
 
         for(ExecutorResults executorResult : emulator.getExecutorResults()) {
             String id =  executorResult.getProcessorId();
@@ -330,6 +338,9 @@ public class ApiController {
             String output = executorResult.getFormattedOutput();
             if(output.isEmpty()) {
                 output = "The program didn't generate any output.";
+            }
+            if (emulatorError.isPresent()) {
+                output = output + "\n" + emulatorError.get().message();
             }
             results.add(new RunResult(id, output, steps));
         }
