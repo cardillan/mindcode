@@ -23,9 +23,9 @@
 Mindcode can generate code for several Mindustry versions and different types of processors. The target can be selected in the web app using a combobox or by including one of the following commands in the source code: 
 
 * **6.0 Build 126.2**: use `#set target = 6m;` to select it (`m` denotes a micro-processor, use `l`, `h` or `w` for a logic-, hyper- or world-processor).
-* **7.0 Build 146** (the default one): use `#set target = 7m;` to explicitly select it.  
+* **7.0 Build 146**: use `#set target = 7m;` to select it.  
 * **v8 Build 149 Beta**: use `#set target = 8.0m;` to select it.
-* **v8 Build 157.3** or later: use `#set target = 8m;` (or `8.1m`) to select it.
+* **v8 Build 157.4** or later (the default one): use `#set target = 8m;` (or `8.1m`) to explicitly select it.
 
 At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry BE version.
 
