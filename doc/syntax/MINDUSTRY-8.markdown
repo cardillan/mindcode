@@ -331,7 +331,11 @@ Rounds the argument to the closest integer. Prior to version 8, the same operati
 
 ### `query`
 
-Allows performing spatial search for buildings or units in a given area. The collected units are available in the `@queries` list, which can be accessed using `read`.
+Allows performing spatial search for buildings or units in a given area. The collected units are available in the `@queries` list, which can be accessed using the `read` instruction. Mindcode allows accessing the `@queries` elements using the array access syntax, e.g. `@queries[index]`.
+
+### `bullet`
+
+Spawns a bullet at given coordinates.
 
 ### `weathersense`, `weatherset`
 

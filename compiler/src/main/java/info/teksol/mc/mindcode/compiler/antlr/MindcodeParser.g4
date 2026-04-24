@@ -192,13 +192,13 @@ valueList
 // For assignments, a generic expression can be a target, to support constructs like
 // getlink(index).enabled = true
 lvalue
-    : id = IDENTIFIER                                                                       # astIdentifier
-    | id = EXTIDENTIFIER                                                                    # astIdentifierExt
-    | builtin = BUILTINIDENTIFIER                                                           # astBuiltInIdentifier
-    | array = (IDENTIFIER | EXTIDENTIFIER) LBRACKET index = expression RBRACKET             # astArrayAccess
-    | array = (IDENTIFIER | EXTIDENTIFIER) LBRACKET range = astRange RBRACKET               # astSubarray
-    | processor = IDENTIFIER DOT array = IDENTIFIER LBRACKET index = expression RBRACKET    # astRemoteArray
-    | processor = IDENTIFIER DOT array = IDENTIFIER LBRACKET range = astRange RBRACKET      # astRemoteSubarray
+    : id = IDENTIFIER                                                                               # astIdentifier
+    | id = EXTIDENTIFIER                                                                            # astIdentifierExt
+    | builtin = BUILTINIDENTIFIER                                                                   # astBuiltInIdentifier
+    | array = (IDENTIFIER | EXTIDENTIFIER | BUILTINIDENTIFIER) LBRACKET index = expression RBRACKET # astArrayAccess
+    | array = (IDENTIFIER | EXTIDENTIFIER | BUILTINIDENTIFIER) LBRACKET range = astRange RBRACKET   # astSubarray
+    | processor = IDENTIFIER DOT array = IDENTIFIER LBRACKET index = expression RBRACKET            # astRemoteArray
+    | processor = IDENTIFIER DOT array = IDENTIFIER LBRACKET range = astRange RBRACKET              # astRemoteSubarray
     ;
 
 

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @NullMarked
 @AstNode(printFlat = true)
-public class AstBuiltInIdentifier extends AstExpression {
+public class AstBuiltInIdentifier extends AstExpression implements AstNamedElement {
     private final String name;
 
     public AstBuiltInIdentifier(SourcePosition sourcePosition, String name) {

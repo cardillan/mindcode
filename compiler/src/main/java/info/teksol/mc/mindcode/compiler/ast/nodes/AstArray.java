@@ -8,5 +8,5 @@ public interface AstArray {
 
     @Nullable AstIdentifier getProcessor();
 
-    AstIdentifier getArray();
+    AstNamedElement getArray();
 }

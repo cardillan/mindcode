@@ -66,6 +66,34 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     )
             );
         }
+
+        @Test
+        void buildsBuiltinArrayAccess() {
+            assertBuildsTo("""
+                            @queries[index];
+                            """,
+                    List.of(
+                            new AstArrayAccess(EMPTY,
+                                    new AstBuiltInIdentifier(EMPTY, "@queries"),
+                                    new AstIdentifier(EMPTY, "index")
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsBuiltinSubarray() {
+            assertBuildsTo("""
+                            @queries[10 ... 20];
+                            """,
+                    List.of(
+                            new AstSubarray(EMPTY,
+                                    new AstBuiltInIdentifier(EMPTY, "@queries"),
+                                    new AstRange(EMPTY, number(10), number(20), true)
+                            )
+                    )
+            );
+        }
     }
 
     @Nested

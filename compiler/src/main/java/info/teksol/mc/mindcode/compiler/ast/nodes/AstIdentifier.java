@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @NullMarked
 @AstNode(printFlat = true)
-public class AstIdentifier extends AstExpression implements Comparable<AstIdentifier> {
+public class AstIdentifier extends AstExpression implements AstNamedElement, Comparable<AstIdentifier> {
     private final String name;
     private final boolean external;
 

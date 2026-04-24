@@ -153,6 +153,13 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return SourcePosition.create(inputFile, node.getSymbol());
     }
 
+    private AstBuiltInIdentifier builtin(Token token) {
+        if (token.getType() != MindcodeLexer.BUILTINIDENTIFIER) {
+            throw new MindcodeInternalError("Expected builtin identifier, found: " + token.getText());
+        }
+        return new AstBuiltInIdentifier(pos(token), token.getText());
+    }
+
     private AstIdentifier identifier(Token token) {
         return new AstIdentifier(pos(token), token.getText(), token.getType() == MindcodeLexer.EXTIDENTIFIER);
     }
@@ -597,16 +604,20 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstArrayAccess visitAstArrayAccess(MindcodeParser.AstArrayAccessContext ctx) {
-        return new AstArrayAccess(pos(ctx),
-                identifier(ctx.array),
-                visitAstExpression(ctx.index));
+        AstNamedElement array = ctx.array.getType() == MindcodeLexer.BUILTINIDENTIFIER
+                ? builtin(ctx.array)
+                : identifier(ctx.array);
+
+        return new AstArrayAccess(pos(ctx), array, visitAstExpression(ctx.index));
     }
 
     @Override
     public AstMindcodeNode visitAstSubarray(AstSubarrayContext ctx) {
-        return new AstSubarray(pos(ctx),
-                identifier(ctx.array),
-                visitAstRange(ctx.range));
+        AstNamedElement array = ctx.array.getType() == MindcodeLexer.BUILTINIDENTIFIER
+                ? builtin(ctx.array)
+                : identifier(ctx.array);
+
+        return new AstSubarray(pos(ctx), array, visitAstRange(ctx.range));
     }
 
     @Override

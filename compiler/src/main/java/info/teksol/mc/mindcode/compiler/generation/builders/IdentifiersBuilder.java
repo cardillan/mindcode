@@ -30,6 +30,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
         AstKeywordVisitor<ValueStore>,
         AstSubarrayVisitor<ValueStore> {
     private static final Set<ArgumentType> memoryExpressionTypes = Set.of(
+            BUILT_IN,
             GLOBAL_VARIABLE,
             LOCAL_VARIABLE,
             PARAMETER,
@@ -44,6 +45,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
         ValueStore valueStore = evaluateArrayAccess(node);
         return switch (valueStore) {
             case LogicVariable memory -> memoryArrayAccess(node, memory);
+            case LogicBuiltIn builtin -> memoryArrayAccess(node, builtin);
             case ArrayStore array -> storeArrayAccess(node, array);
             case null, default -> {
                 error(node.getArray(), ERR.ARRAY_INVALID, node.getArray().getName());
@@ -104,7 +106,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
         }
     }
 
-    private ValueStore memoryArrayAccess(AstArrayAccess node, LogicVariable memory) {
+    private ValueStore memoryArrayAccess(AstArrayAccess node, LogicValue memory) {
         LogicValue index = assembler.defensiveCopy(evaluate(node.getIndex()), TMP_VARIABLE);
         return new ExternalVariable(node.getArray().sourcePosition(), resolveMemory(node, memory), index, assembler.unprotectedTemp());
     }
@@ -123,7 +125,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
     }
 
     // TODO TYPES: type checking of the memory variable
-    private LogicVariable resolveMemory(AstArrayAccess node, LogicVariable memory) {
+    private LogicValue resolveMemory(AstArrayAccess node, LogicValue memory) {
         if (memoryExpressionTypes.contains(memory.getType()) || memory.isMainVariable()) {
             if (memory instanceof LogicParameter parameter && !memoryExpressionTypes.contains(parameter.getValue().getType())) {
                 error(node.getArray(), ERR.ARRAY_PARAMETER_NOT_MEMORY, parameter.getName());

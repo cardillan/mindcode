@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.16.2 – 2026-04-19
+## 3.16.2 – 2026-04-25
 
 ### Added
 
 * Added support for the new `bullet` instruction and for the new sensable/settable properties (`@pingX`, `@pingY`, `@pingText`, `@bulletLifetime` and `@bulletTime`).
+* Added support for the new `query` instruction and the `@queries` built-in array.
 
 ### Changed
 

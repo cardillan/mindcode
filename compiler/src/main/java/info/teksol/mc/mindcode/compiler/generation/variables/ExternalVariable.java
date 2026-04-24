@@ -14,11 +14,11 @@ import java.util.function.Consumer;
 @NullMarked
 public class ExternalVariable implements ValueStore {
     private final SourcePosition sourcePosition;
-    private final LogicVariable memory;
+    private final LogicValue memory;
     private final LogicValue index;
     private final LogicVariable transferVariable;
 
-    public ExternalVariable(SourcePosition sourcePosition, LogicVariable memory, LogicValue index, LogicVariable transferVariable) {
+    public ExternalVariable(SourcePosition sourcePosition, LogicValue memory, LogicValue index, LogicVariable transferVariable) {
         this.sourcePosition = sourcePosition;
         this.memory = memory;
         this.index = index;

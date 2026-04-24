@@ -12,17 +12,17 @@ import java.util.Objects;
 @AstNode
 public class AstArrayAccess extends AstExpression implements AstArray {
     private final @Nullable AstIdentifier processor;
-    private final AstIdentifier array;
+    private final AstNamedElement array;
     private final AstExpression index;
 
-    public AstArrayAccess(SourcePosition sourcePosition, AstIdentifier array, AstExpression index) {
+    public AstArrayAccess(SourcePosition sourcePosition, AstNamedElement array, AstExpression index) {
         super(sourcePosition, children(array, index));
         this.processor = null;
         this.array = Objects.requireNonNull(array);
         this.index = Objects.requireNonNull(index);
     }
 
-    public AstArrayAccess(SourcePosition sourcePosition, AstIdentifier processor, AstIdentifier array, AstExpression index) {
+    public AstArrayAccess(SourcePosition sourcePosition, AstIdentifier processor, AstNamedElement array, AstExpression index) {
         super(sourcePosition, children(array, index));
         this.processor = Objects.requireNonNull(processor);
         this.array = Objects.requireNonNull(array);
@@ -33,7 +33,7 @@ public class AstArrayAccess extends AstExpression implements AstArray {
         return processor;
     }
 
-    public AstIdentifier getArray() {
+    public AstNamedElement getArray() {
         return array;
     }
 
