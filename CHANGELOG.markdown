@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.16.2 – 2026-04-25
 
+### Fixed
+
+* Fixed incorrect decompilation of a `read` instruction reading a character value from a constant string in Mlog Decompiler.
+
 ### Added
 
 * Added support for the new `bullet` instruction and for the new sensable/settable properties (`@pingX`, `@pingY`, `@pingText`, `@bulletLifetime` and `@bulletTime`).

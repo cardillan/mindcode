@@ -193,7 +193,13 @@ public class MlogDecompiler {
     private void decompile(MlogInstruction ix) {
         if ((ix.getOpcode() == Opcode.READ || ix.getOpcode() == Opcode.WRITE) && !ix.getArg(2).toMlog().startsWith("\"")) {
             switch (ix.getOpcode()) {
-                case READ -> cmdIndent(ix, 0, " = ", 1, "[", 2, "]");
+                case READ -> {
+                    if (ix.getArg(1).toMlog().startsWith("\"")) {
+                        cmdIndent(ix, 0, " = char(", 1, ", ", 2, ")");
+                    } else {
+                        cmdIndent(ix, 0, " = ", 1, "[", 2, "]");
+                    }
+                }
                 case WRITE -> cmdIndent(ix, 1, "[", 2, "] = ", 0);
             }
             return;
