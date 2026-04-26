@@ -1,6 +1,7 @@
 import { toast } from 'svelte-sonner';
 import { isMlogWatcherChannelError, MlogWatcherChannel } from './channel';
 import { Completer } from './completer';
+import type { UpdateProcessorsOnMapParams } from './protocol';
 
 /**
  * Manages a lazily initialized MlogWatcherChannel.
@@ -8,6 +9,10 @@ import { Completer } from './completer';
  */
 export class MlogWatcherStore {
 	private channel = new Completer<MlogWatcherChannel>();
+	/**
+	 * This reactive property helps us have a lazily intialized channel
+	 * that is disposed and recreated when the port changes.
+	 */
 	#initialized = $state(false);
 
 	constructor(port: () => number) {
@@ -39,9 +44,29 @@ export class MlogWatcherStore {
 		});
 	}
 
-	async send(mlog: string) {
+	/** Ensures the channel is/has been initialized, returns a promise resolving to the channel */
+	private getChannel() {
 		this.#initialized = true;
-		const channel = await this.channel.promise;
-		await channel.send(mlog);
+		return this.channel.promise;
+	}
+
+	async updateSelectedProcessor(code: string) {
+		const channel = await this.getChannel();
+		return await channel.updateSelectedProcessor(code);
+	}
+
+	async updateProcessorsOnMap(params: UpdateProcessorsOnMapParams) {
+		const channel = await this.getChannel();
+		return await channel.updateProcessorsOnMap(params);
+	}
+
+	async putSchematicInLibrary(schematic: string, overwrite: boolean) {
+		const channel = await this.getChannel();
+		return await channel.putSchematicInLibrary(schematic, overwrite);
+	}
+
+	async extractSelectedProcessorCode() {
+		const channel = await this.getChannel();
+		return await channel.extractSelectedProcessorCode();
 	}
 }

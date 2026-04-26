@@ -2,6 +2,7 @@
 	import type { MlogWatcherStore } from '$lib/mlog_watcher';
 	import { Check, CircleAlert, Cpu, LoaderCircle } from '@lucide/svelte';
 	import EditorActionButton from './EditorActionButton.svelte';
+	import { toast } from 'svelte-sonner';
 
 	let {
 		channel,
@@ -19,10 +20,38 @@
 		const text = getText();
 		status = 'loading';
 		try {
-			await channel.send(text);
-			status = 'sent';
-		} catch {
+			const response = await channel.updateSelectedProcessor(text);
+			if (response.status === 'success') {
+				status = 'sent';
+			} else {
+				status = 'error';
+				const errorCode = response.result.text;
+				let description = '';
+				switch (errorCode) {
+					case 'no_processor_attached':
+						description = 'No processor has been selected.';
+						break;
+					case 'internal_error':
+						description = 'An internal error occurred while processing the mlog code.';
+						break;
+					case 'invalid_arguments':
+					case 'unknown_method':
+					case 'unsupported_method_version':
+						description = 'The MlogWatcher version is incompatible with this feature.';
+						break;
+					default:
+						description = 'An unknown error occurred.';
+						// typescript will generate an error if there is a case that is not covered
+						// by any case body
+						errorCode satisfies never;
+				}
+				toast.error(`Failed to send to MlogWatcher: ${description} (Error code: ${errorCode})`, {
+					duration: 8000
+				});
+			}
+		} catch (e) {
 			status = 'error';
+			console.error(e);
 		}
 		timeoutId = setTimeout(() => (status = 'idle'), 2000);
 	}
