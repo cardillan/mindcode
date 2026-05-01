@@ -329,7 +329,7 @@ abstract class ActionHandler {
 
     protected void processEmulatorResults(EmulatorMessageEmitter emulatorMessages, Emulator emulator, boolean outputProfiling) {
         emulatorMessages.info("");
-        emulatorMessages.info("Emulator output (%,d steps):", emulator.getExecutionSteps());
+        emulatorMessages.info("Emulator output (%,d steps, %,.02f sec):", emulator.getExecutionSteps(), emulator.getExecutionTime());
 
         for (ExecutorResults executor : emulator.getExecutorResults()) {
             if (emulator.getExecutorCount() > 1) {

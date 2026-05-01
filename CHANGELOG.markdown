@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.16.3 – Unreleased
+
+### Fixed
+
+* Fixed a procesor emulator error in handling the `setrate` instruction, rendering it ineffective.
+
+### Added
+
+* Added support for displaying emulated game time spent by the processor emulator.   
+
 ## 3.16.2 – 2026-04-25
 
 ### Fixed

@@ -15,6 +15,8 @@ public interface Emulator {
     int getExecutionSteps();
     int getNoopSteps();
 
+    double getExecutionTime();
+
     List<Assertion> getAllAssertions();
 
     int getExecutorCount();

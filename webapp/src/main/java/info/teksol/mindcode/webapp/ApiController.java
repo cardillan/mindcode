@@ -319,8 +319,9 @@ public class ApiController {
 
             String processorId = compiler.getEmulator().getExecutorResults(0).getProcessorId();
             int steps = compiler.getSteps();
+            double time = compiler.getEmulator().getExecutionTime();
 
-            return new RunResult(processorId, text, steps);
+            return new RunResult(processorId, text, steps, time);
         }
     }
 
@@ -335,6 +336,7 @@ public class ApiController {
         for(ExecutorResults executorResult : emulator.getExecutorResults()) {
             String id =  executorResult.getProcessorId();
             int steps = executorResult.getSteps();
+            double time = emulator.getExecutionTime();
             String output = executorResult.getFormattedOutput();
             if(output.isEmpty()) {
                 output = "The program didn't generate any output.";
@@ -342,7 +344,7 @@ public class ApiController {
             if (emulatorError.isPresent()) {
                 output = output + "\n" + emulatorError.get().message();
             }
-            results.add(new RunResult(id, output, steps));
+            results.add(new RunResult(id, output, steps, time));
         }
 
         return results;
@@ -407,7 +409,7 @@ public class ApiController {
             List<RunResult> runResults) {}
 
 
-    public record RunResult(String processorId, String output, int steps) {}
+    public record RunResult(String processorId, String output, int steps, double time) {}
 
     public record DecompileRequest(String sourceId, String source, String target, boolean run) {}
     public record DecompileResponse(

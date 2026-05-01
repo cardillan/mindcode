@@ -63,7 +63,7 @@
 	let processorTabs = $derived(
 		runResults.map((p) => ({
 			id: p.processorId,
-			label: `${p.processorId} (${p.steps} steps)`,
+			label: `${p.processorId} (${p.steps.toLocaleString()} steps, ${p.time.toFixed(2)} sec)`,
 			content: p.output
 		}))
 	);

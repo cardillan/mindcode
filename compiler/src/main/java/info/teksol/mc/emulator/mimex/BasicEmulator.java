@@ -22,6 +22,7 @@ public class BasicEmulator implements Emulator {
     public final int stepLimit;
     public final double fps;
 
+    public int frame = 0;
     public int step = 1;
     public int noopSteps;
 
@@ -65,11 +66,11 @@ public class BasicEmulator implements Emulator {
 
         messageHandler.trace("%nProgram execution trace:");
 
-        int frame = 1;
         double tickValue = 0f;
         double delta = 60f / fps;
 
         while (!running.isEmpty()) {
+            frame++;
             globalVars.update(tickValue);
 
             messageHandler.trace("%nFrame %d: @tick %.2f,  @time %.2f, delta %.4f", frame, tickValue, globalVars.getTime(), delta);
@@ -83,7 +84,6 @@ public class BasicEmulator implements Emulator {
                 running.set(index, executor.active());
             }
 
-            frame++;
             tickValue += delta;
         }
     }
@@ -114,6 +114,11 @@ public class BasicEmulator implements Emulator {
     @Override
     public int getNoopSteps() {
         return noopSteps;
+    }
+
+    @Override
+    public double getExecutionTime() {
+        return frame / fps;
     }
 
     @Override

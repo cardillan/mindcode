@@ -10,6 +10,7 @@ export interface RunResult {
 	processorId: string;
 	output: string;
 	steps: number;
+	time: number;
 }
 
 export interface CompileRequest {

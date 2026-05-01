@@ -148,7 +148,7 @@ public class LExecutor70 extends LExecutor60 {
 
         @Override
         public void run() {
-            ipt.setnum(Math.min(Math.max(1, amount.numi()), 1000));
+            ipt.numval = Math.min(Math.max(1, amount.numi()), 1000);
         }
     }
 }
