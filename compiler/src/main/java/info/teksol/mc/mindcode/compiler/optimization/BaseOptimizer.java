@@ -233,8 +233,8 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.getVariableStates(instruction);
     }
 
-    public void clearVariableStates() {
-        optimizationContext.clearVariableStates();
+    public void clearDfoVariableStates() {
+        optimizationContext.clearDfoVariableStates();
     }
 
     public List<LogicInstruction> getVariableReferences(LogicVariable variable) {

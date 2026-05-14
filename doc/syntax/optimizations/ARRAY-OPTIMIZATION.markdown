@@ -265,14 +265,14 @@ Runtime bound checks aren't included in the tables, as their size and execution 
 
 The code size and performance are described in tables. Column headers denote the factors that are considered, using this notation:
 
-* table organization
-    * `U`: unfolded
-    * `M`: multiplexed unfolded (only shown when different from an unfolded table)
-    * `F`: folded
-* Dispatching method:
-    * `T`: Text-based jump dispatching
-    * `D`: Direct addressing
-    * `S`: Symbolic labels
+* Table organization
+  * `U`: Unfolded
+  * `M`: Multiplexed unfolded (only shown when different from an unfolded table)
+  * `F`: Folded
+* Dispatching method
+  * `T`: Text-based jump dispatching
+  * `A`: Absolute addressing (no symbolic labels)
+  * `S`: Symbolic labels
 
 When expressing the code size, `n` represents the number of elements in the array. For odd-sized folded arrays, `n` is rounded up to the next even number.
 
@@ -282,7 +282,7 @@ The "setup index" instruction either multiplies the index by two or passes it as
 
 **Array access code size**
 
-| Instruction            |  U/T  |  U/D  |  U/S  |  F/T  |  F/D  |  F/S  |
+| Instruction            |  U/T  |  U/A  |  U/S  |  F/T  |  F/A  |  F/S  |
 |------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | set return address     |   1   |   1   |       |   1   |   1   |       |
 | setup index            |       |   1   |   1   |   1   |   1   |   1   |
@@ -293,7 +293,7 @@ The "setup index" instruction either multiplies the index by two or passes it as
 
 **Shared jump table code size**
 
-| Instruction            |  U/T   |  U/D   |   U/S    |  F/T  |  F/D  |   F/S   |
+| Instruction            |  U/T   |  U/A   |   U/S    |  F/T  |  F/A  |   F/S   |
 |------------------------|:------:|:------:|:--------:|:-----:|:-----:|:-------:|
 | compute branch address |        |        |          |       |       |    1    |
 | jump to branch         |        |        |    1     |       |       |    1    |      
@@ -302,7 +302,7 @@ The "setup index" instruction either multiplies the index by two or passes it as
 
 **Instructions executed**
 
-| Instruction            |  U/T  |  U/D  |  U/S  |  F/T  |  F/D  |  F/S  |
+| Instruction            |  U/T  |  U/A  |  U/S  |  F/T  |  F/A  |  F/S  |
 |------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | set return address     |   1   |   1   |       |   1   |   1   |       |
 | setup index            |       |   1   |   1   |   1   |   1   |   1   |
@@ -318,7 +318,7 @@ The "setup index" instruction either multiplies the index by two or passes it as
 
 **Array access code size**
 
-| Instruction            |   U/T    |   U/D    |   U/S    |   F/T   |   F/D   |   F/S   |
+| Instruction            |   U/T    |   U/A    |   U/S    |   F/T   |   F/A   |   F/S   |
 |------------------------|:--------:|:--------:|:--------:|:-------:|:-------:|:-------:|
 | setup index            |          |    1     |    1     |         |    1    |    1    |
 | compute branch address |          |          |          |         |    1    |    1    |      
@@ -329,7 +329,7 @@ The "setup index" instruction either multiplies the index by two or passes it as
 
 **Instructions executed**
 
-| Instruction            |  U/T  |  U/D  |  U/S  |  F/T  |  F/D  |  F/S  |
+| Instruction            |  U/T  |  U/A  |  U/S  |  F/T  |  F/A  |  F/S  |
 |------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | setup index            |       |   1   |   1   |       |   1   |   1   |
 | compute branch address |       |       |       |       |   1   |   1   |      
@@ -344,7 +344,7 @@ In the case of regular arrays, the table accessing the elements for reading may 
 
 **Array access code size**
 
-| Instruction                         |  U/T  |  U/D  |  U/S  |  M/T  |  M/D  |  M/S  |  F/T  |  F/D  |  F/S  |
+| Instruction                         |  U/T  |  U/A  |  U/S  |  M/T  |  M/A  |  M/S  |  F/T  |  F/A  |  F/S  |
 |-------------------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | set remote processor                |       |       |       |   1   |   1   |   1   |       |       |       |
 | set return address                  |   1   |   1   |       |   1   |   1   |       |   1   |   1   |       |
@@ -359,7 +359,7 @@ In the case of regular arrays, the table accessing the elements for reading may 
 
 **Shared jump table code size**
 
-| Instruction            |  U/T   |  U/D   |   U/S    |  M/T   |  M/D   |   M/S    |  F/T  |  F/D  |   F/S   |
+| Instruction            |  U/T   |  U/A   |   U/S    |  M/T   |  M/A   |   M/S    |  F/T  |  F/A  |   F/S   |
 |------------------------|:------:|:------:|:--------:|:------:|:------:|:--------:|:-----:|:-----:|:-------:|
 | compute branch address |        |        |          |        |        |          |       |       |    1    |
 | jump to branch         |        |        |    1     |        |        |    1     |       |       |    1    |      
@@ -368,7 +368,7 @@ In the case of regular arrays, the table accessing the elements for reading may 
 
 **Instructions executed**
 
-| Instruction                           |   U/T   |   U/D   |   U/S   |   M/T   |   M/D   |   M/S   |   F/T   |   F/D   |   F/S   |
+| Instruction                           |   U/T   |   U/A   |   U/S   |   M/T   |   M/A   |   M/S   |   F/T   |   F/A   |   F/S   |
 |---------------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
 | set remote processor                  |         |         |         |    1    |    1    |    1    |         |         |         |
 | set return address                    |    1    |    1    |         |    1    |    1    |         |    1    |    1    |         |
@@ -391,7 +391,7 @@ Note: multiplexed remote arrays are handled equally to simple remote arrays, as 
 
 **Array access code size**
 
-| Instruction            |  U/T   |   U/D    |   U/S    |  F/T  |   F/D   |   F/S   |
+| Instruction            |  U/T   |   U/A    |   U/S    |  F/T  |   F/A   |   F/S   |
 |------------------------|:------:|:--------:|:--------:|:-----:|:-------:|:-------:|
 | setup index            |        |    1     |    1     |       |    1    |    1    |
 | compute branch address |        |          |          |       |    1    |    1    |      
@@ -401,7 +401,7 @@ Note: multiplexed remote arrays are handled equally to simple remote arrays, as 
 
 **Instructions executed**
 
-| Instruction            |  U/T  |  U/D  |  U/S  |  F/T  |  F/D  |  F/S  |
+| Instruction            |  U/T  |  U/A  |  U/S  |  F/T  |  F/A  |  F/S  |
 |------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | setup index            |       |   1   |   1   |       |   1   |   1   |
 | compute branch address |       |       |       |       |   1   |   1   |      
@@ -429,7 +429,7 @@ For constant arrays, regular tables are initially used (folded when the `select`
 
 This table sums up the execution times of different array implementations:
 
-| Array implementation | U/T | U/D | U/S | M/T | M/D | M/S | F/T | F/D | F/S |
+| Array implementation | U/T | U/A | U/S | M/T | M/A | M/S | F/T | F/A | F/S |
 |----------------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | Non-inlined compact  |  5  |  6  |  7  |  5  |  6  |  7  |  6  |  7  |  8  |      
 | Non-inlined regular  | 4.8 | 5.8 | 6.8 | 5.8 | 6.8 | 7.8 | 5.8 | 6.8 | 7.8 |      
@@ -457,16 +457,16 @@ Compact tables can get promoted to regular ones. If the array is only read or on
 This optimization inlines the table to the place of array access.
 
 * Inlining saves between one and four execution steps, depending on the original implementation of the array.
-* Inlining the last non-inlined array access means the original table is eliminated, decreasing code size. The last non-inlined array access using a specific table is always inlined.
-* When [text-based table dispatch](#text-based-table-dispatch) is available, inlined arrays may also be folded if possible.
+* Inlining a single non-inlined array access using a specific table means the original table is eliminated, decreasing the code size; therefore it is always applied.
+* When [text-based table dispatch](#text-based-table-dispatch) is available, inlined arrays are folded for compact tables or read access usig regular tables.
 
 The optimizer considers possible optimizations for the following groups of array accesses:
 
-* All non-inlined array accesses sharing an instance of the table. The optimization affects either all of these instructions or none of them. When the optimization succeeds, the original table is replaced by the optimized one(s). This decreases the cost of the optimization by eliminating the original table.
-* Inlining (possibly combined with folding) of every array access is considered separately. In this case, since not all array accesses using the same table are inlined, the original table used by other, non-inlined instructions cannot be eliminated. Inlining only some instead of all instructions only happens when there isn't enough instruction space to inline all of them.
+* All non-inlined array accesses sharing an instance of the table. The optimization affects either all of these instructions or none of them. When the optimization succeeds, the original table is replaced by the optimized ones.
+* Inlining (possibly combined with folding) of every array access is considered separately. In this case, since not all array accesses using the same table are inlined, the original table used by other, non-inlined instructions cannot be eliminated. Inlining only some instead of all array accesses using the same table only happens when there isn't enough instruction space to inline all of them.
 * Unfolding or promoting each inlined array access is also considered separately. Since the array access is inlined, only its table is affected by the optimization.
 
-Note: it doesn't make sense to consider unfolding or promoting individual, non-inlined instructions. If the optimization benefits one such instruction, it benefits all of them in the same way, and applying the optimization to all allows eliminating the original table.
+Note: it doesn't make sense to consider unfolding or promoting individual non-inlined accesses. If the optimization benefits one such access, it benefits all of them in the same way, and applying the optimization to all is considered as stated above.
 
 The [dynamic optimization](../SYNTAX-6-OPTIMIZATIONS.markdown#static-and-dynamic-optimizations) mechanism is used to choose which optimizations to perform.
 

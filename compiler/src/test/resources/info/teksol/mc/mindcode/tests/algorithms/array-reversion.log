@@ -5,7 +5,7 @@
      1 instructions eliminated by Condition Optimization (8 iterations).
     17 instructions eliminated by Single Step Elimination (4 passes, 15 iterations).
     20 instructions eliminated by Expression Optimization (5 iterations).
-    75 instructions eliminated by Data Flow Optimization (4 passes, 34 iterations).
+    75 instructions eliminated by Data Flow Optimization (4 passes, 35 iterations).
        1 loop conditions were partially rotated.
     42 instructions added by Loop Unrolling (7 iterations).
      2 loops unrolled by Loop Unrolling.
@@ -576,7 +576,7 @@ Modifications by Unroll iteration loop at line 18:5 (+7 instructions):
    122 assertflush *tmp6
    123 print .array*0
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-5 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set :i 0
      1 label *label1
 -    * jump *label3 greaterThanEq :i 10
@@ -669,67 +669,66 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-5
     72 label *label53
     73 label *label54
 -    * set .array*5 :reverse:j
--    * set .array*4 :reverse:i
 +   74 set .array*5 .array*4
-    75 set :reverse:i .array*6
-    76 set :reverse:j .array*3
-    77 label *label57
+    75 set .array*4 :reverse:i
+    76 set :reverse:i .array*6
+    77 set :reverse:j .array*3
+    78 label *label57
 -    * op sub :reverse:count :reverse:count 1
 -    * jump *label58 greaterThanEq :reverse:count 0
-+   78 op sub :reverse:count -1 1
-+   79 jump *label58 greaterThanEq -2 0
-    80 jump *label7 always
-    81 label *label58
-    82 label *label59
-    83 label *label60
++   79 op sub :reverse:count -1 1
++   80 jump *label58 greaterThanEq -2 0
+    81 jump *label7 always
+    82 label *label58
+    83 label *label59
+    84 label *label60
 -    * set .array*6 :reverse:j
--    * set .array*3 :reverse:i
-+   84 set .array*6 .array*3
-    85 set :reverse:i .array*7
-    86 set :reverse:j .array*2
-    87 label *label63
++   85 set .array*6 .array*3
+    86 set .array*3 :reverse:i
+    87 set :reverse:i .array*7
+    88 set :reverse:j .array*2
+    89 label *label63
 -    * op sub :reverse:count :reverse:count 1
 -    * jump *label64 greaterThanEq :reverse:count 0
-+   88 op sub :reverse:count -2 1
-+   89 jump *label64 greaterThanEq -3 0
-    90 jump *label7 always
-    91 label *label64
-    92 label *label65
-    93 label *label66
++   90 op sub :reverse:count -2 1
++   91 jump *label64 greaterThanEq -3 0
+    92 jump *label7 always
+    93 label *label64
+    94 label *label65
+    95 label *label66
 -    * set .array*7 :reverse:j
--    * set .array*2 :reverse:i
-+   94 set .array*7 .array*2
-    95 set :reverse:i .array*8
-    96 set :reverse:j .array*1
-    97 label *label69
++   96 set .array*7 .array*2
+    97 set .array*2 :reverse:i
+    98 set :reverse:i .array*8
+    99 set :reverse:j .array*1
+   100 label *label69
 -    * op sub :reverse:count :reverse:count 1
 -    * jump *label70 greaterThanEq :reverse:count 0
-+   98 op sub :reverse:count -3 1
-+   99 jump *label70 greaterThanEq -4 0
-   100 jump *label7 always
-   101 label *label70
-   102 label *label71
-   103 label *label72
++  101 op sub :reverse:count -3 1
++  102 jump *label70 greaterThanEq -4 0
+   103 jump *label7 always
+   104 label *label70
+   105 label *label71
+   106 label *label72
 -    * set .array*8 :reverse:j
--    * set .array*1 :reverse:i
-+  104 set .array*8 .array*1
-   105 set :reverse:i .array*9
-   106 set :reverse:j .array*0
-   107 label *label75
++  107 set .array*8 .array*1
+   108 set .array*1 :reverse:i
+   109 set :reverse:i .array*9
+   110 set :reverse:j .array*0
+   111 label *label75
 -    * op sub :reverse:count :reverse:count 1
 -    * jump *label76 greaterThanEq :reverse:count 0
-+  108 op sub :reverse:count -4 1
-+  109 jump *label76 greaterThanEq -5 0
-   110 jump *label7 always
-   111 label *label76
-   112 label *label77
-   113 label *label78
++  112 op sub :reverse:count -4 1
++  113 jump *label76 greaterThanEq -5 0
+   114 jump *label7 always
+   115 label *label76
+   116 label *label77
+   117 label *label78
 -    * set .array*9 :reverse:j
--    * set .array*0 :reverse:i
-+  114 set .array*9 .array*0
-   115 label *label7
-   116 label *label4
-   117 assertflush *tmp6
++  118 set .array*9 .array*0
+   119 set .array*0 :reverse:i
+   120 label *label7
+   121 label *label4
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-30 instructions):
  
@@ -783,64 +782,68 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
     49 jump *label7 always
     50 label *label46
  
-    52 label *label48
     53 set .array*4 .array*5
     54 set .array*5 :reverse:i
--    * set :reverse:i :reverse:i
+    55 set :reverse:i :reverse:i
 -    * set :reverse:j :reverse:j
-    55 label *label51
+    56 label *label51
 -    * op sub :reverse:count 0 1
-    56 jump *label52 greaterThanEq -1 0
-    57 jump *label7 always
-    58 label *label52
-    59 label *label53
-    60 label *label54
+    57 jump *label52 greaterThanEq -1 0
+    58 jump *label7 always
+    59 label *label52
+    60 label *label53
+    61 label *label54
 -    * set .array*5 .array*4
--    * set :reverse:i .array*6
+-    * set .array*4 :reverse:i
+    62 set :reverse:i .array*6
 -    * set :reverse:j .array*3
-    61 label *label57
+    63 label *label57
 -    * op sub :reverse:count -1 1
-    62 jump *label58 greaterThanEq -2 0
-    63 jump *label7 always
-    64 label *label58
-    65 label *label59
-    66 label *label60
+    64 jump *label58 greaterThanEq -2 0
+    65 jump *label7 always
+    66 label *label58
+    67 label *label59
+    68 label *label60
 -    * set .array*6 .array*3
--    * set :reverse:i .array*7
+-    * set .array*3 :reverse:i
+    69 set :reverse:i .array*7
 -    * set :reverse:j .array*2
-    67 label *label63
+    70 label *label63
 -    * op sub :reverse:count -2 1
-    68 jump *label64 greaterThanEq -3 0
-    69 jump *label7 always
-    70 label *label64
-    71 label *label65
-    72 label *label66
+    71 jump *label64 greaterThanEq -3 0
+    72 jump *label7 always
+    73 label *label64
+    74 label *label65
+    75 label *label66
 -    * set .array*7 .array*2
--    * set :reverse:i .array*8
+-    * set .array*2 :reverse:i
+    76 set :reverse:i .array*8
 -    * set :reverse:j .array*1
-    73 label *label69
+    77 label *label69
 -    * op sub :reverse:count -3 1
-    74 jump *label70 greaterThanEq -4 0
-    75 jump *label7 always
-    76 label *label70
-    77 label *label71
-    78 label *label72
+    78 jump *label70 greaterThanEq -4 0
+    79 jump *label7 always
+    80 label *label70
+    81 label *label71
+    82 label *label72
 -    * set .array*8 .array*1
--    * set :reverse:i .array*9
+-    * set .array*1 :reverse:i
+    83 set :reverse:i .array*9
 -    * set :reverse:j .array*0
-    79 label *label75
+    84 label *label75
 -    * op sub :reverse:count -4 1
-    80 jump *label76 greaterThanEq -5 0
-    81 jump *label7 always
-    82 label *label76
-    83 label *label77
-    84 label *label78
+    85 jump *label76 greaterThanEq -5 0
+    86 jump *label7 always
+    87 label *label76
+    88 label *label77
+    89 label *label78
 -    * set .array*9 .array*0
-    85 label *label7
-    86 label *label4
-    87 assertflush *tmp6
+-    * set .array*0 :reverse:i
+    90 label *label7
+    91 label *label4
+    92 assertflush *tmp6
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-6 instructions):
  
     43 set .array*3 .array*6
     44 set .array*6 :reverse:i
@@ -849,6 +852,44 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
     46 label *label45
     47 jump *label46 greaterThanEq 0 0
     48 jump *label7 always
+ 
+    51 label *label48
+    52 set .array*4 .array*5
+    53 set .array*5 :reverse:i
+-    * set :reverse:i :reverse:i
+    54 label *label51
+    55 jump *label52 greaterThanEq -1 0
+    56 jump *label7 always
+    57 label *label52
+    58 label *label53
+    59 label *label54
+-    * set :reverse:i .array*6
+    60 label *label57
+    61 jump *label58 greaterThanEq -2 0
+    62 jump *label7 always
+    63 label *label58
+    64 label *label59
+    65 label *label60
+-    * set :reverse:i .array*7
+    66 label *label63
+    67 jump *label64 greaterThanEq -3 0
+    68 jump *label7 always
+    69 label *label64
+    70 label *label65
+    71 label *label66
+-    * set :reverse:i .array*8
+    72 label *label69
+    73 jump *label70 greaterThanEq -4 0
+    74 jump *label7 always
+    75 label *label70
+    76 label *label71
+    77 label *label72
+-    * set :reverse:i .array*9
+    78 label *label75
+    79 jump *label76 greaterThanEq -5 0
+    80 jump *label7 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4:
  
     89 print .array*2
     90 print .array*3

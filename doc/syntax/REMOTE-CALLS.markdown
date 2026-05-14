@@ -455,12 +455,12 @@ The following constructs must not be contained (directly or indirectly) in an at
 * a recursive function call,
 * a loop.
 
-Mindcode recognizes most kinds of loops including loops in mlog blocks, but it won't recognize jumps or loops resulting from `@counter` manipuation. Such jumps and loops may cause malfunction of atomic sections.
+Mindcode recognizes most kinds of loops including loops in mlog blocks, but it doesn't recognize jumps or loops resulting from `@counter` manipuation. Such jumps and loops may cause malfunction of the atomic section containing such code.
 
 > [!IMPORTANT]
 > The [Loop unrolling optimization](optimizations/LOOP-UNROLLING.markdown) may unroll a loop inside an atomic section, essentially removing the loop and making the code compatible with an atomic section. However, when the optimization doesn't take place, either because of space constraints or because the optimization is disabled, the atomic section will no longer compile. Use loops within atomic sections with caution.
 
-Atomic sections may be nested and may contain calls to atomic functions. In this case, the protection is applied to the topmost atomic section. A separate atomic section is created for cases when the function is called outside an active atomic section. 
+Atomic sections may be nested and may contain calls to atomic functions (both inlined and non-inlined ones). In that case, the protection is applied to the topmost atomic section.
 
 ### Atomic blocks
 
@@ -589,8 +589,8 @@ Executing several atomic sections in quick succession or in a loop may result in
 
 By default, the atomic section does not protect instructions which cannot be affected by outside processors or changes in the Mindustry world. An instruction is unprotected when all the following conditions are met:
 
-* The instruction doesn't interact with the world at all (interactions with the current processor, such as `print` instruction, are allowed).
-* The instruction doesn't have a volatile avariable as an operand (`@counter` is allowed).
+* The instruction doesn't interact with the world at all (interactions with the current processor, such as the `print` instruction, are allowed).
+* The instruction doesn't have a volatile avariable as an operand (while `@counter` is technically volatile, it is allowed).
 * The instruction is not a custom instruction (created in an mlog block on using one of `mlog()`, `mlogSafe()` or `mlogText()` functions).
 
 When computing the wait duration, the compiler doesn't consider unprotected instructions at the end of the execution path. Only the steps leading up to and including the last protected instruction are counted. The goal is not to protect instructions such as unconditional jumps or instructions performing returns from functions. Not protecting these instructions may allow for longer atomic sections than would be otherwise possible, especially on microprocessors. 

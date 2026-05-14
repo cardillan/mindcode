@@ -210,7 +210,7 @@ class ExpressionOptimizer extends BaseOptimizer {
             // - the second is the floor operation
             // - the second operates on the result of the first
             if (list.size() == 2 && list.getFirst() == ix && list.getLast() instanceof OpInstruction ox
-                    && ox.getOperation() == Operation.FLOOR && ox.getX().equals(ix.getResult())) {
+                    && isEffectiveFloor(ox, ix.getResult())) {
 
                 replaceInstruction(ox, createOp(ox.getAstContext(),
                         Operation.IDIV, ox.getResult(), ops.e1(), ops.e2()));
@@ -221,6 +221,12 @@ class ExpressionOptimizer extends BaseOptimizer {
             }
         }
     }
+
+    private boolean isEffectiveFloor(OpInstruction ox, LogicValue input) {
+        return ox.getOperation() == Operation.FLOOR && ox.getX().equals(input) ||
+                ox.getOperation() == Operation.IDIV && ox.getX().equals(input) && ox.getY().isOne();
+    }
+
 
     private boolean acceptsBoolean(LogicInstruction instruction) {
         if (instruction instanceof OpInstruction op) {

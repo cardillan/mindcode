@@ -62,7 +62,7 @@ public class OptimizationContext extends CompilerMessageEmitter {
     /// Holds list of invariant instruction which could be hoisted if the loop gets fully rotated
     private final Map<AstContext, List<LogicInstruction>> loopInvariants = new HashMap<>();
 
-    /// Variables affected by added, removed or changed instructions are added to the stale list
+    /// Variables affected by added, removed, or changed instructions are added to the stale list
     /// The information collected by DFO about these variables is unusable.
     private final Set<LogicVariable> staleVariables = new HashSet<>();
 
@@ -111,6 +111,7 @@ public class OptimizationContext extends CompilerMessageEmitter {
         labels.clear();
         labelReferences.clear();
         variableReferences.clear();
+        staleVariables.clear();
 
         instructionStream()
                 .filter(LabelInstruction.class::isInstance)
@@ -509,10 +510,9 @@ public class OptimizationContext extends CompilerMessageEmitter {
         return staleVariables.contains(argument);
     }
 
-    public void clearVariableStates() {
+    public void clearDfoVariableStates() {
         variableStates.clear();
         firstPassStates.clear();
-        staleVariables.clear();
         loopVariables.clear();
     }
 

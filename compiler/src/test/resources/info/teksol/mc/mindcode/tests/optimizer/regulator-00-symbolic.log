@@ -756,7 +756,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    177 set *tmp47 "\nCurrently active:[green]"
    178 jump *label48 always
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
  
      3 set .SORTER null
      4 set .SWITCH null
@@ -767,49 +767,48 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * set .MESSAGE .SENSOR
 -    * set .MAXIMUM .ON
 -    * set .ACTIVE_TEXT .MESSAGE
--    * set .CYCLES 0
 +    6 set .START null
 +    7 set .SENSOR null
 +    8 set .ON .SWITCH
 +    9 set .MESSAGE .STATE
 +   10 set .MAXIMUM .START
 +   11 set .ACTIVE_TEXT .SENSOR
-    12 label *label0
-    13 print "Configuring regulator..."
-    14 print "\n"
+    12 set .CYCLES 0
+    13 label *label0
+    14 print "Configuring regulator..."
  
-   107 op strictEqual .INVERTED *tmp14 @inverted-sorter
-   108 # "Function: inline def setState(in newState)"
-   109 set :setState:newState true
+   108 op strictEqual .INVERTED *tmp14 @inverted-sorter
+   109 # "Function: inline def setState(in newState)"
+   110 set :setState:newState true
 -    * jump *label24 equal .STATE true
-+  110 jump *label24 equal null true
-   111 set .STATE true
-   112 op add .CYCLES 0 1
++  111 jump *label24 equal null true
+   112 set .STATE true
+   113 op add .CYCLES 0 1
 -    * op xor .ON .INVERTED :setState:newState
-+  113 op xor .ON .INVERTED true
-   114 jump *label26 equal .ON false
-   115 set *tmp20 "\nCurrently active:[green]"
-   116 jump *label27 always
++  114 op xor .ON .INVERTED true
+   115 jump *label26 equal .ON false
+   116 set *tmp20 "\nCurrently active:[green]"
+   117 jump *label27 always
  
-   152 jump *label38 equal .STATE true
-   153 set .STATE true
-   154 op add .CYCLES .CYCLES 1
+   153 jump *label38 equal .STATE true
+   154 set .STATE true
+   155 op add .CYCLES .CYCLES 1
 -    * op xor .ON .INVERTED :setState.1:newState
-+  155 op xor .ON .INVERTED true
-   156 jump *label40 equal .ON false
-   157 set *tmp40 "\nCurrently active:[green]"
-   158 jump *label41 always
++  156 op xor .ON .INVERTED true
+   157 jump *label40 equal .ON false
+   158 set *tmp40 "\nCurrently active:[green]"
+   159 jump *label41 always
  
-   171 jump *label45 equal .STATE false
-   172 set .STATE false
-   173 op add .CYCLES .CYCLES 1
+   172 jump *label45 equal .STATE false
+   173 set .STATE false
+   174 op add .CYCLES .CYCLES 1
 -    * op xor .ON .INVERTED :setState.2:newState
-+  174 op xor .ON .INVERTED false
-   175 jump *label47 equal .ON false
-   176 set *tmp47 "\nCurrently active:[green]"
-   177 jump *label48 always
++  175 op xor .ON .INVERTED false
+   176 jump *label47 equal .ON false
+   177 set *tmp47 "\nCurrently active:[green]"
+   178 jump *label48 always
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-4 instructions):
  
      5 set .STATE null
      6 set .START null
@@ -818,6 +817,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
 -    * set .MESSAGE .STATE
 -    * set .MAXIMUM .START
 -    * set .ACTIVE_TEXT .SENSOR
+-    * set .CYCLES 0
 +    8 set .ON null
 +    9 set .MESSAGE null
 +   10 set .MAXIMUM null

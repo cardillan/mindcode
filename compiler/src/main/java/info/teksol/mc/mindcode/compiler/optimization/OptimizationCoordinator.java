@@ -177,8 +177,8 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
 
         boolean modified = false;
         for (Optimization optimization : phase.optimizations) {
+            optimizationContext.rebuildIndexes();
             if (phase.breaksContextStructure()) {
-                optimizationContext.rebuildIndexes();
                 optimizationContext.removeInactiveInstructions();
             }
 

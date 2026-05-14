@@ -14,6 +14,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added support for displaying emulated game time spent by the processor emulator.   
 
+### Changed
+
+* The variable reference index is recreated before each optimization, potentially allowing more optimizations to be performed.  
+* The [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) has been updated to handle integer division by one the same as the `op floor` instruction.  
+
 ## 3.16.2 – 2026-04-25
 
 ### Fixed

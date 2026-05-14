@@ -5,7 +5,7 @@
      4 instructions eliminated by Jump Normalization (6 iterations).
     15 instructions eliminated by Condition Optimization (7 iterations).
     31 instructions eliminated by Single Step Elimination (4 passes, 10 iterations).
-   198 instructions eliminated by Data Flow Optimization (5 passes, 20 iterations).
+   198 instructions eliminated by Data Flow Optimization (5 passes, 21 iterations).
      1 instructions added by Loop Rotation (4 iterations).
        3 loop conditions were partially rotated.
    414 instructions added by Loop Unrolling (9 iterations).
@@ -2107,7 +2107,7 @@ Modifications by Unroll iteration loop at line 71:5 (+103 instructions):
    326 set :x 71
    327 set :y 152
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-3 instructions):
  
     99 set :index 0
    100 set :item @sand
@@ -2128,412 +2128,594 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
    109 set :x 93
    110 draw color 255 255 255 255
  
-   113 label *label123
-   114 set :item @copper
    115 label *label126
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   116 op add *tmp24 :x 8
+   117 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label127 notEqual :index 8
-+  116 op add *tmp24 7 8
-+  117 op add *tmp27 132 7
-+  118 draw image 15 139 @copper 16 0
++  118 draw image *tmp24 *tmp27 @copper 16 0
 +  119 op add :index 1 1
-+  120 op sub :y 132 20
+   120 op sub :y :y 20
+-    * jump *label127 notEqual :index 8
 +  121 jump *label127 notEqual 2 8
    122 set :y 152
    123 set :x 93
    124 draw color 255 255 255 255
  
-   127 label *label129
-   128 set :item @lead
    129 label *label132
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   130 op add *tmp24 :x 8
+   131 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label133 notEqual :index 8
-+  130 op add *tmp24 7 8
-+  131 op add *tmp27 112 7
-+  132 draw image 15 119 @lead 16 0
++  132 draw image *tmp24 *tmp27 @lead 16 0
 +  133 op add :index 2 1
-+  134 op sub :y 112 20
+   134 op sub :y :y 20
+-    * jump *label133 notEqual :index 8
 +  135 jump *label133 notEqual 3 8
    136 set :y 152
    137 set :x 93
    138 draw color 255 255 255 255
  
-   141 label *label135
-   142 set :item @coal
    143 label *label138
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   144 op add *tmp24 :x 8
+   145 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label139 notEqual :index 8
-+  144 op add *tmp24 7 8
-+  145 op add *tmp27 92 7
-+  146 draw image 15 99 @coal 16 0
++  146 draw image *tmp24 *tmp27 @coal 16 0
 +  147 op add :index 3 1
-+  148 op sub :y 92 20
+   148 op sub :y :y 20
+-    * jump *label139 notEqual :index 8
 +  149 jump *label139 notEqual 4 8
    150 set :y 152
    151 set :x 93
    152 draw color 255 255 255 255
  
-   155 label *label141
-   156 set :item @titanium
    157 label *label144
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   158 op add *tmp24 :x 8
+   159 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label145 notEqual :index 8
-+  158 op add *tmp24 7 8
-+  159 op add *tmp27 72 7
-+  160 draw image 15 79 @titanium 16 0
++  160 draw image *tmp24 *tmp27 @titanium 16 0
 +  161 op add :index 4 1
-+  162 op sub :y 72 20
+   162 op sub :y :y 20
+-    * jump *label145 notEqual :index 8
 +  163 jump *label145 notEqual 5 8
    164 set :y 152
    165 set :x 93
    166 draw color 255 255 255 255
  
-   169 label *label147
-   170 set :item @thorium
    171 label *label150
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   172 op add *tmp24 :x 8
+   173 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label151 notEqual :index 8
-+  172 op add *tmp24 7 8
-+  173 op add *tmp27 52 7
-+  174 draw image 15 59 @thorium 16 0
++  174 draw image *tmp24 *tmp27 @thorium 16 0
 +  175 op add :index 5 1
-+  176 op sub :y 52 20
+   176 op sub :y :y 20
+-    * jump *label151 notEqual :index 8
 +  177 jump *label151 notEqual 6 8
    178 set :y 152
    179 set :x 93
    180 draw color 255 255 255 255
  
-   183 label *label153
-   184 set :item @scrap
    185 label *label156
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   186 op add *tmp24 :x 8
+   187 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label157 notEqual :index 8
-+  186 op add *tmp24 7 8
-+  187 op add *tmp27 32 7
-+  188 draw image 15 39 @scrap 16 0
++  188 draw image *tmp24 *tmp27 @scrap 16 0
 +  189 op add :index 6 1
-+  190 op sub :y 32 20
+   190 op sub :y :y 20
+-    * jump *label157 notEqual :index 8
 +  191 jump *label157 notEqual 7 8
    192 set :y 152
    193 set :x 93
    194 draw color 255 255 255 255
  
-   197 label *label159
-   198 set :item @graphite
    199 label *label162
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   200 op add *tmp24 :x 8
+   201 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label163 notEqual :index 8
-+  200 op add *tmp24 7 8
-+  201 op add *tmp27 12 7
-+  202 draw image 15 19 @graphite 16 0
++  202 draw image *tmp24 *tmp27 @graphite 16 0
 +  203 op add :index 7 1
-+  204 op sub :y 12 20
+   204 op sub :y :y 20
+-    * jump *label163 notEqual :index 8
 +  205 jump *label163 notEqual 8 8
    206 set :y 152
    207 set :x 93
    208 draw color 255 255 255 255
  
-   211 label *label165
-   212 set :item @metaglass
    213 label *label168
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   214 op add *tmp24 :x 8
+   215 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label169 notEqual :index 8
-+  214 op add *tmp24 93 8
-+  215 op add *tmp27 152 7
-+  216 draw image 101 159 @metaglass 16 0
++  216 draw image *tmp24 *tmp27 @metaglass 16 0
 +  217 op add :index 8 1
-+  218 op sub :y 152 20
+   218 op sub :y :y 20
+-    * jump *label169 notEqual :index 8
 +  219 jump *label169 notEqual 9 8
    220 set :y 152
    221 set :x 93
    222 draw color 255 255 255 255
  
-   225 label *label171
-   226 set :item @silicon
    227 label *label174
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   228 op add *tmp24 :x 8
+   229 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label175 notEqual :index 8
-+  228 op add *tmp24 93 8
-+  229 op add *tmp27 132 7
-+  230 draw image 101 139 @silicon 16 0
++  230 draw image *tmp24 *tmp27 @silicon 16 0
 +  231 op add :index 9 1
-+  232 op sub :y 132 20
+   232 op sub :y :y 20
+-    * jump *label175 notEqual :index 8
 +  233 jump *label175 notEqual 10 8
    234 set :y 152
    235 set :x 93
    236 draw color 255 255 255 255
  
-   239 label *label177
-   240 set :item @pyratite
    241 label *label180
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   242 op add *tmp24 :x 8
+   243 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label181 notEqual :index 8
-+  242 op add *tmp24 93 8
-+  243 op add *tmp27 112 7
-+  244 draw image 101 119 @pyratite 16 0
++  244 draw image *tmp24 *tmp27 @pyratite 16 0
 +  245 op add :index 10 1
-+  246 op sub :y 112 20
+   246 op sub :y :y 20
+-    * jump *label181 notEqual :index 8
 +  247 jump *label181 notEqual 11 8
    248 set :y 152
    249 set :x 93
    250 draw color 255 255 255 255
  
-   253 label *label183
-   254 set :item @blast-compound
    255 label *label186
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   256 op add *tmp24 :x 8
+   257 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label187 notEqual :index 8
-+  256 op add *tmp24 93 8
-+  257 op add *tmp27 92 7
-+  258 draw image 101 99 @blast-compound 16 0
++  258 draw image *tmp24 *tmp27 @blast-compound 16 0
 +  259 op add :index 11 1
-+  260 op sub :y 92 20
+   260 op sub :y :y 20
+-    * jump *label187 notEqual :index 8
 +  261 jump *label187 notEqual 12 8
    262 set :y 152
    263 set :x 93
    264 draw color 255 255 255 255
  
-   267 label *label189
-   268 set :item @plastanium
    269 label *label192
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   270 op add *tmp24 :x 8
+   271 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label193 notEqual :index 8
-+  270 op add *tmp24 93 8
-+  271 op add *tmp27 72 7
-+  272 draw image 101 79 @plastanium 16 0
++  272 draw image *tmp24 *tmp27 @plastanium 16 0
 +  273 op add :index 12 1
-+  274 op sub :y 72 20
+   274 op sub :y :y 20
+-    * jump *label193 notEqual :index 8
 +  275 jump *label193 notEqual 13 8
    276 set :y 152
    277 set :x 93
    278 draw color 255 255 255 255
  
-   281 label *label195
-   282 set :item @phase-fabric
    283 label *label198
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   284 op add *tmp24 :x 8
+   285 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label199 notEqual :index 8
-+  284 op add *tmp24 93 8
-+  285 op add *tmp27 52 7
-+  286 draw image 101 59 @phase-fabric 16 0
++  286 draw image *tmp24 *tmp27 @phase-fabric 16 0
 +  287 op add :index 13 1
-+  288 op sub :y 52 20
+   288 op sub :y :y 20
+-    * jump *label199 notEqual :index 8
 +  289 jump *label199 notEqual 14 8
    290 set :y 152
    291 set :x 93
    292 draw color 255 255 255 255
  
-   295 label *label201
-   296 set :item @surge-alloy
    297 label *label204
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   298 op add *tmp24 :x 8
+   299 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
--    * op sub :y :y 20
--    * jump *label205 notEqual :index 8
-+  298 op add *tmp24 93 8
-+  299 op add *tmp27 32 7
-+  300 draw image 101 39 @surge-alloy 16 0
++  300 draw image *tmp24 *tmp27 @surge-alloy 16 0
 +  301 op add :index 14 1
-+  302 op sub :y 32 20
+   302 op sub :y :y 20
+-    * jump *label205 notEqual :index 8
 +  303 jump *label205 notEqual 15 8
    304 set :y 152
    305 set :x 93
    306 draw color 255 255 255 255
  
-   309 label *label207
-   310 set :item @spore-pod
    311 label *label210
--    * op add *tmp24 :x 8
--    * op add *tmp27 :y 7
+   312 op add *tmp24 :x 8
+   313 op add *tmp27 :y 7
 -    * draw image *tmp24 *tmp27 :item 16 0
 -    * op add :index :index 1
 -    * op sub :y :y 20
 -    * jump *label211 notEqual :index 8
 -    * set :y 152
 -    * set :x 93
-+  312 op add *tmp24 93 8
-+  313 op add *tmp27 12 7
-+  314 draw image 101 19 @spore-pod 16 0
++  314 draw image *tmp24 *tmp27 @spore-pod 16 0
 +  315 op add :index 15 1
-+  316 op sub :y 12 20
-+  317 jump *label211 notEqual 16 8
-   318 draw color 255 255 255 255
-   319 label *label211
-   320 label *label212
++  316 jump *label211 notEqual 16 8
+   317 draw color 255 255 255 255
+   318 label *label211
+   319 label *label212
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-113 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-64 instructions):
+ 
+    78 op div .LIMIT .CAPACITY 5
+    79 draw stroke 2
+    80 set :x 7
+-    * set :y 152
+    81 draw color 0 0 80 255
+    82 jump *label26 equal true false
+    83 draw rect 0 0 23 176
+ 
+    95 label *label30
+    96 label *label28
+    97 draw color 255 255 255 255
+-    * set :index 0
+-    * set :item @sand
+    98 label *label120
+-    * op add *tmp24 7 8
+-    * op add *tmp27 152 7
+    99 draw image 15 159 @sand 16 0
+-    * op add :index 0 1
+   100 op sub :y 152 20
+   101 jump *label121 notEqual 1 8
+-    * set :y 152
+-    * set :x 93
+   102 draw color 255 255 255 255
+   103 label *label121
+   104 label *label122
+   105 label *label123
+-    * set :item @copper
+   106 label *label126
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @copper 16 0
+-    * op add :index 1 1
+-    * op sub :y :y 20
++  107 op add *tmp24 7 8
++  108 op add *tmp27 132 7
++  109 draw image 15 139 @copper 16 0
++  110 op sub :y 132 20
+   111 jump *label127 notEqual 2 8
+-    * set :y 152
+-    * set :x 93
+   112 draw color 255 255 255 255
+   113 label *label127
+   114 label *label128
+   115 label *label129
+-    * set :item @lead
+   116 label *label132
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @lead 16 0
+-    * op add :index 2 1
+-    * op sub :y :y 20
++  117 op add *tmp24 7 8
++  118 op add *tmp27 112 7
++  119 draw image 15 119 @lead 16 0
++  120 op sub :y 112 20
+   121 jump *label133 notEqual 3 8
+-    * set :y 152
+-    * set :x 93
+   122 draw color 255 255 255 255
+   123 label *label133
+   124 label *label134
+   125 label *label135
+-    * set :item @coal
+   126 label *label138
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @coal 16 0
+-    * op add :index 3 1
+-    * op sub :y :y 20
++  127 op add *tmp24 7 8
++  128 op add *tmp27 92 7
++  129 draw image 15 99 @coal 16 0
++  130 op sub :y 92 20
+   131 jump *label139 notEqual 4 8
+-    * set :y 152
+-    * set :x 93
+   132 draw color 255 255 255 255
+   133 label *label139
+   134 label *label140
+   135 label *label141
+-    * set :item @titanium
+   136 label *label144
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @titanium 16 0
+-    * op add :index 4 1
+-    * op sub :y :y 20
++  137 op add *tmp24 7 8
++  138 op add *tmp27 72 7
++  139 draw image 15 79 @titanium 16 0
++  140 op sub :y 72 20
+   141 jump *label145 notEqual 5 8
+-    * set :y 152
+-    * set :x 93
+   142 draw color 255 255 255 255
+   143 label *label145
+   144 label *label146
+   145 label *label147
+-    * set :item @thorium
+   146 label *label150
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @thorium 16 0
+-    * op add :index 5 1
+-    * op sub :y :y 20
++  147 op add *tmp24 7 8
++  148 op add *tmp27 52 7
++  149 draw image 15 59 @thorium 16 0
++  150 op sub :y 52 20
+   151 jump *label151 notEqual 6 8
+-    * set :y 152
+-    * set :x 93
+   152 draw color 255 255 255 255
+   153 label *label151
+   154 label *label152
+   155 label *label153
+-    * set :item @scrap
+   156 label *label156
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @scrap 16 0
+-    * op add :index 6 1
+-    * op sub :y :y 20
++  157 op add *tmp24 7 8
++  158 op add *tmp27 32 7
++  159 draw image 15 39 @scrap 16 0
++  160 op sub :y 32 20
+   161 jump *label157 notEqual 7 8
+-    * set :y 152
+-    * set :x 93
+   162 draw color 255 255 255 255
+   163 label *label157
+   164 label *label158
+   165 label *label159
+-    * set :item @graphite
+   166 label *label162
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @graphite 16 0
+-    * op add :index 7 1
+-    * op sub :y :y 20
++  167 op add *tmp24 7 8
++  168 op add *tmp27 12 7
++  169 draw image 15 19 @graphite 16 0
++  170 op sub :y 12 20
+   171 jump *label163 notEqual 8 8
+   172 set :y 152
+   173 set :x 93
+ 
+   175 label *label163
+   176 label *label164
+   177 label *label165
+-    * set :item @metaglass
+   178 label *label168
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @metaglass 16 0
+-    * op add :index 8 1
+-    * op sub :y :y 20
++  179 op add *tmp24 93 8
++  180 op add *tmp27 152 7
++  181 draw image 101 159 @metaglass 16 0
++  182 op sub :y 152 20
+   183 jump *label169 notEqual 9 8
+-    * set :y 152
+-    * set :x 93
+   184 draw color 255 255 255 255
+   185 label *label169
+   186 label *label170
+   187 label *label171
+-    * set :item @silicon
+   188 label *label174
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @silicon 16 0
+-    * op add :index 9 1
+-    * op sub :y :y 20
++  189 op add *tmp24 93 8
++  190 op add *tmp27 132 7
++  191 draw image 101 139 @silicon 16 0
++  192 op sub :y 132 20
+   193 jump *label175 notEqual 10 8
+-    * set :y 152
+-    * set :x 93
+   194 draw color 255 255 255 255
+   195 label *label175
+   196 label *label176
+   197 label *label177
+-    * set :item @pyratite
+   198 label *label180
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @pyratite 16 0
+-    * op add :index 10 1
+-    * op sub :y :y 20
++  199 op add *tmp24 93 8
++  200 op add *tmp27 112 7
++  201 draw image 101 119 @pyratite 16 0
++  202 op sub :y 112 20
+   203 jump *label181 notEqual 11 8
+-    * set :y 152
+-    * set :x 93
+   204 draw color 255 255 255 255
+   205 label *label181
+   206 label *label182
+   207 label *label183
+-    * set :item @blast-compound
+   208 label *label186
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @blast-compound 16 0
+-    * op add :index 11 1
+-    * op sub :y :y 20
++  209 op add *tmp24 93 8
++  210 op add *tmp27 92 7
++  211 draw image 101 99 @blast-compound 16 0
++  212 op sub :y 92 20
+   213 jump *label187 notEqual 12 8
+-    * set :y 152
+-    * set :x 93
+   214 draw color 255 255 255 255
+   215 label *label187
+   216 label *label188
+   217 label *label189
+-    * set :item @plastanium
+   218 label *label192
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @plastanium 16 0
+-    * op add :index 12 1
+-    * op sub :y :y 20
++  219 op add *tmp24 93 8
++  220 op add *tmp27 72 7
++  221 draw image 101 79 @plastanium 16 0
++  222 op sub :y 72 20
+   223 jump *label193 notEqual 13 8
+-    * set :y 152
+-    * set :x 93
+   224 draw color 255 255 255 255
+   225 label *label193
+   226 label *label194
+   227 label *label195
+-    * set :item @phase-fabric
+   228 label *label198
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @phase-fabric 16 0
+-    * op add :index 13 1
+-    * op sub :y :y 20
++  229 op add *tmp24 93 8
++  230 op add *tmp27 52 7
++  231 draw image 101 59 @phase-fabric 16 0
++  232 op sub :y 52 20
+   233 jump *label199 notEqual 14 8
+-    * set :y 152
+-    * set :x 93
+   234 draw color 255 255 255 255
+   235 label *label199
+   236 label *label200
+   237 label *label201
+-    * set :item @surge-alloy
+   238 label *label204
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @surge-alloy 16 0
+-    * op add :index 14 1
+-    * op sub :y :y 20
++  239 op add *tmp24 93 8
++  240 op add *tmp27 32 7
++  241 draw image 101 39 @surge-alloy 16 0
++  242 op sub :y 32 20
+   243 jump *label205 notEqual 15 8
+-    * set :y 152
+-    * set :x 93
+   244 draw color 255 255 255 255
+   245 label *label205
+   246 label *label206
+   247 label *label207
+-    * set :item @spore-pod
+   248 label *label210
+-    * op add *tmp24 :x 8
+-    * op add *tmp27 :y 7
+-    * draw image *tmp24 *tmp27 @spore-pod 16 0
+-    * op add :index 15 1
++  249 op add *tmp24 93 8
++  250 op add *tmp27 12 7
++  251 draw image 101 19 @spore-pod 16 0
+   252 jump *label211 notEqual 16 8
+   253 draw color 255 255 255 255
+   254 label *label211
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-48 instructions):
  
     77 sensor .CAPACITY .CONTAINER @itemCapacity
     78 op div .LIMIT .CAPACITY 5
     79 draw stroke 2
 -    * set :x 7
--    * set :y 152
     80 draw color 0 0 80 255
     81 jump *label26 equal true false
     82 draw rect 0 0 23 176
  
-    94 label *label30
-    95 label *label28
     96 draw color 255 255 255 255
--    * set :index 0
--    * set :item @sand
     97 label *label120
--    * op add *tmp24 7 8
--    * op add *tmp27 152 7
     98 draw image 15 159 @sand 16 0
--    * op add :index 0 1
 -    * op sub :y 152 20
     99 jump *label121 notEqual 1 8
--    * set :y 152
--    * set :x 93
    100 draw color 255 255 255 255
    101 label *label121
    102 label *label122
    103 label *label123
--    * set :item @copper
    104 label *label126
 -    * op add *tmp24 7 8
 -    * op add *tmp27 132 7
    105 draw image 15 139 @copper 16 0
--    * op add :index 1 1
 -    * op sub :y 132 20
    106 jump *label127 notEqual 2 8
--    * set :y 152
--    * set :x 93
    107 draw color 255 255 255 255
    108 label *label127
    109 label *label128
    110 label *label129
--    * set :item @lead
    111 label *label132
 -    * op add *tmp24 7 8
 -    * op add *tmp27 112 7
    112 draw image 15 119 @lead 16 0
--    * op add :index 2 1
 -    * op sub :y 112 20
    113 jump *label133 notEqual 3 8
--    * set :y 152
--    * set :x 93
    114 draw color 255 255 255 255
    115 label *label133
    116 label *label134
    117 label *label135
--    * set :item @coal
    118 label *label138
 -    * op add *tmp24 7 8
 -    * op add *tmp27 92 7
    119 draw image 15 99 @coal 16 0
--    * op add :index 3 1
 -    * op sub :y 92 20
    120 jump *label139 notEqual 4 8
--    * set :y 152
--    * set :x 93
    121 draw color 255 255 255 255
    122 label *label139
    123 label *label140
    124 label *label141
--    * set :item @titanium
    125 label *label144
 -    * op add *tmp24 7 8
 -    * op add *tmp27 72 7
    126 draw image 15 79 @titanium 16 0
--    * op add :index 4 1
 -    * op sub :y 72 20
    127 jump *label145 notEqual 5 8
--    * set :y 152
--    * set :x 93
    128 draw color 255 255 255 255
    129 label *label145
    130 label *label146
    131 label *label147
--    * set :item @thorium
    132 label *label150
 -    * op add *tmp24 7 8
 -    * op add *tmp27 52 7
    133 draw image 15 59 @thorium 16 0
--    * op add :index 5 1
 -    * op sub :y 52 20
    134 jump *label151 notEqual 6 8
--    * set :y 152
--    * set :x 93
    135 draw color 255 255 255 255
    136 label *label151
    137 label *label152
    138 label *label153
--    * set :item @scrap
    139 label *label156
 -    * op add *tmp24 7 8
 -    * op add *tmp27 32 7
    140 draw image 15 39 @scrap 16 0
--    * op add :index 6 1
 -    * op sub :y 32 20
    141 jump *label157 notEqual 7 8
--    * set :y 152
--    * set :x 93
    142 draw color 255 255 255 255
    143 label *label157
    144 label *label158
    145 label *label159
--    * set :item @graphite
    146 label *label162
 -    * op add *tmp24 7 8
 -    * op add *tmp27 12 7
    147 draw image 15 19 @graphite 16 0
--    * op add :index 7 1
 -    * op sub :y 12 20
    148 jump *label163 notEqual 8 8
 -    * set :y 152
@@ -2542,114 +2724,82 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    150 label *label163
    151 label *label164
    152 label *label165
--    * set :item @metaglass
    153 label *label168
 -    * op add *tmp24 93 8
 -    * op add *tmp27 152 7
    154 draw image 101 159 @metaglass 16 0
--    * op add :index 8 1
 -    * op sub :y 152 20
    155 jump *label169 notEqual 9 8
--    * set :y 152
--    * set :x 93
    156 draw color 255 255 255 255
    157 label *label169
    158 label *label170
    159 label *label171
--    * set :item @silicon
    160 label *label174
 -    * op add *tmp24 93 8
 -    * op add *tmp27 132 7
    161 draw image 101 139 @silicon 16 0
--    * op add :index 9 1
 -    * op sub :y 132 20
    162 jump *label175 notEqual 10 8
--    * set :y 152
--    * set :x 93
    163 draw color 255 255 255 255
    164 label *label175
    165 label *label176
    166 label *label177
--    * set :item @pyratite
    167 label *label180
 -    * op add *tmp24 93 8
 -    * op add *tmp27 112 7
    168 draw image 101 119 @pyratite 16 0
--    * op add :index 10 1
 -    * op sub :y 112 20
    169 jump *label181 notEqual 11 8
--    * set :y 152
--    * set :x 93
    170 draw color 255 255 255 255
    171 label *label181
    172 label *label182
    173 label *label183
--    * set :item @blast-compound
    174 label *label186
 -    * op add *tmp24 93 8
 -    * op add *tmp27 92 7
    175 draw image 101 99 @blast-compound 16 0
--    * op add :index 11 1
 -    * op sub :y 92 20
    176 jump *label187 notEqual 12 8
--    * set :y 152
--    * set :x 93
    177 draw color 255 255 255 255
    178 label *label187
    179 label *label188
    180 label *label189
--    * set :item @plastanium
    181 label *label192
 -    * op add *tmp24 93 8
 -    * op add *tmp27 72 7
    182 draw image 101 79 @plastanium 16 0
--    * op add :index 12 1
 -    * op sub :y 72 20
    183 jump *label193 notEqual 13 8
--    * set :y 152
--    * set :x 93
    184 draw color 255 255 255 255
    185 label *label193
    186 label *label194
    187 label *label195
--    * set :item @phase-fabric
    188 label *label198
 -    * op add *tmp24 93 8
 -    * op add *tmp27 52 7
    189 draw image 101 59 @phase-fabric 16 0
--    * op add :index 13 1
 -    * op sub :y 52 20
    190 jump *label199 notEqual 14 8
--    * set :y 152
--    * set :x 93
    191 draw color 255 255 255 255
    192 label *label199
    193 label *label200
    194 label *label201
--    * set :item @surge-alloy
    195 label *label204
 -    * op add *tmp24 93 8
 -    * op add *tmp27 32 7
    196 draw image 101 39 @surge-alloy 16 0
--    * op add :index 14 1
 -    * op sub :y 32 20
    197 jump *label205 notEqual 15 8
--    * set :y 152
--    * set :x 93
    198 draw color 255 255 255 255
    199 label *label205
    200 label *label206
    201 label *label207
--    * set :item @spore-pod
    202 label *label210
 -    * op add *tmp24 93 8
 -    * op add *tmp27 12 7
    203 draw image 101 19 @spore-pod 16 0
--    * op add :index 15 1
--    * op sub :y 12 20
    204 jump *label211 notEqual 16 8
    205 draw color 255 255 255 255
-   206 label *label211
 
 Modifications by Fast-dispatch case at line 165:5 (-8 instructions):
  

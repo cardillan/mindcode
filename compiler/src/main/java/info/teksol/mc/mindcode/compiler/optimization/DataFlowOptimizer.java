@@ -99,7 +99,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
         labelStates.clear();
         functionEndStates.clear();
 
-        clearVariableStates();
+        clearDfoVariableStates();
         optimizationContext.getProgram().forEach(ix -> {
             if (ix instanceof ArrayAccessInstruction aix) aix.resetCompactAccess();
         });
