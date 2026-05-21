@@ -36,7 +36,7 @@
 		"@lezer/lr": "^1.4.8",
 		"@lucide/svelte": "^0.577.0",
 		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.49.1",
+		"@sveltejs/kit": "^2.60.1",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@tailwindcss/vite": "^4.1.17",
 		"@types/node": "~22.19.13",
