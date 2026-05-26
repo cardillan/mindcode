@@ -17,7 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * The variable reference index is recreated before each optimization, potentially allowing more optimizations to be performed.  
-* The [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) has been updated to handle integer division by one the same as the `op floor` instruction.  
+* The [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) has been updated to handle integer division by one the same as the `op floor` instruction.
+* The mlog parser raises an error when the code contains duplicate labels, regardless of the processor version. This behavior matches the latest Mindustry version; in older Mindustry versions the code is still accepted. 
 
 ## 3.16.2 – 2026-04-25
 

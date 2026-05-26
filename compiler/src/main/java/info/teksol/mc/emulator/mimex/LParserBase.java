@@ -149,7 +149,11 @@ public abstract class LParserBase implements LParser {
                 if (jumpLocations.size() >= Globals.MAX_JUMPS) {
                     error("Too many jump locations. Max jumps: %d", Globals.MAX_JUMPS);
                 }
-                jumpLocations.put(tokens[0].substring(0, tokens[0].length() - 1), line);
+                String label = tokens[0].substring(0, tokens[0].length() - 1);
+                if (jumpLocations.containsKey(label)) {
+                    error("Jump label already defined: \"%s\".", label);
+                }
+                jumpLocations.put(label, line);
             } else {
                 String jumpLoc = null;
                 boolean wasJump = tokens[0].equals("jump") && tok > 1 && !strings.canParseInt(tokens[1]);
