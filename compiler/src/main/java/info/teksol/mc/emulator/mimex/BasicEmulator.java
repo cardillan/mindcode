@@ -42,7 +42,7 @@ public class BasicEmulator implements Emulator {
                 .map(LogicBlock.class::cast)
                 .forEach(logicBlock -> {
                     LParser parser = LParser.create(messageHandler, metadata, strings, logicBlock.getCode(),
-                            logicBlock.isPrivileged(), profile.isEnforceInstructionLimit());
+                            logicBlock.isPrivileged(), profile.isEnforceSizeLimits());
                     LAssembler assembler = LAssembler.create(messageHandler, metadata, strings, globalVars, logicBlock.isPrivileged());
                     LExecutor executor = LExecutor.create(metadata, assembler, this, logicBlock);
                     executor.load(parser);

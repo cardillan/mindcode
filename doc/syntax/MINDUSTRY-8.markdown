@@ -29,9 +29,9 @@ A number of properties to be used with the `sensor` instructions were added. Min
 The `format` instruction allows dynamic text formatting. It is possible to output special placeholders `{0}` to `{9}` into the text buffer. The `format` instruction then replaces a placeholder with actual value. Example:
 
 ```
-print `Test: {1}{0}`
-format `A`
-format `B`
+print "Test: {1}{0}"
+format "A"
+format "B"
 printflush message1
 ```
 
@@ -95,19 +95,19 @@ Note: `formatNumber` and `printNumber` functions, identical to those above, are 
 The [Print Merging optimization](optimizations/PRINT-MERGING.markdown) was enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language targets earlier than `8` compiles into
 
 ```
-print `Minimum: `
+print "Minimum: "
 print min
-print `, middle: `
+print ", middle: "
 print mid
-print `, maximum: `
+print ", maximum: "
 print max
-print `\n`
+print "\n"
 ```
 
 The new Print Merging optimization utilizing `format` saves three instructions by producing
 
 ```
-print `Minimum: {0}, middle: {0}, maximum: {0}\n`
+print "Minimum: {0}, middle: {0}, maximum: {0}\n"
 format min
 format mid
 format max
@@ -289,7 +289,7 @@ New `draw rotate`, `draw translate` and `draw scale` can be used to rotate, tran
 
 These instructions are represented by `rotate()`, `translate()`, `scale()` and `reset()` functions. By issuing `reset(); rotate(90); translate(0, -176);` it is possible to rotate the output by 90 degrees counterclockwise when drawing to the large display.
 
-Figuring out the correct transformations isn't always easy. Issuing incorrect ones may result in all the output being drawn off-screen, which might be challenging to diagnose. For this reason, the following system functions are defined:
+Figuring out the correct transformations isn't always easy. Issuing incorrect ones may result in all the output being drawn off-screen, which might be challenging to diagnose. For this reason, the following functions in the [`graphics` library](SYSTEM-LIBRARY-GRAPHICS.markdown) are defined:
 
 * `rotateLeftLarge()`, `rotateRightLarge()`, `upsideDownLarge()`: ensures the output to the large display will be rotated left, right or upside down by issuing `reset()`, `rotate()` and `translate()` as needed.
 * `flipVerticalLarge()`, `flipHorizontalLarge()`: flips output to the large display vertically or horizontally.   
@@ -303,7 +303,7 @@ Note: these new instructions map either to functions or to operators. When compi
 
 ### `unpackcolor`
 
-Reverses the `packcolor` instruction. Prior to version 8, the same operation may be performed by the `unpackcolor()` function from the `graphics` library.  
+Reverses the `packcolor` instruction. Prior to version 8, the same operation may be performed by the `unpackcolor()` function from the [`graphics` library](SYSTEM-LIBRARY-GRAPHICS.markdown).  
 
 ### `op emod`
 

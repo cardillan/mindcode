@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @NullMarked
@@ -175,28 +176,39 @@ abstract class ActionHandler {
                 .setDefault(500);
     }
 
-    void addCompilerOptions(ArgumentContainer container, Map<Enum<?>, CompilerOptionValue<?>> options, OptionCategory category) {
+    void addCompilerOptions(ArgumentContainer container, Map<Enum<?>, CompilerOptionValue<?>> options, OptionCategory category,
+            Predicate<Enum<?>> filter) {
         for (CompilerOptionValue<?> option : options.values()) {
-            if (option.getAvailability().isCommandline() && option.getCategory() == category) {
-                createArgument(container, option);
+            if (filter.test(option.option)) {
+                if (option.getAvailability().isCommandline() && option.getCategory() == category) {
+                    createArgument(container, option);
+                }
             }
         }
     }
 
-    void addCompilerOptions(Subparser subparser, Map<Enum<?>, CompilerOptionValue<?>> options, OptionCategory category) {
+    void addCompilerOptions(ArgumentContainer container, Map<Enum<?>, CompilerOptionValue<?>> options, OptionCategory category) {
+        addCompilerOptions(container, options, category, _ -> true);
+    }
+
+    void addCompilerOptions(Subparser subparser, Map<Enum<?>, CompilerOptionValue<?>> options, OptionCategory category, Predicate<Enum<?>> filter) {
         ArgumentGroup container = subparser.addArgumentGroup(category.title);
         String description = category.description.replaceAll("\\s+", " ").trim();
         if (!description.isEmpty()) {
             container.description(description);
         }
 
-        addCompilerOptions(container, options, category);
+        addCompilerOptions(container, options, category, filter);
+    }
+
+    void addAllCompilerOptions(Subparser subparser, Map<Enum<?>, CompilerOptionValue<?>> options, Predicate<Enum<?>> filter, OptionCategory... categories) {
+        for (OptionCategory category : categories) {
+            addCompilerOptions(subparser, options, category, filter);
+        }
     }
 
     void addAllCompilerOptions(Subparser subparser, Map<Enum<?>, CompilerOptionValue<?>> options, OptionCategory... categories) {
-        for (OptionCategory category : categories) {
-            addCompilerOptions(subparser, options, category);
-        }
+        addAllCompilerOptions(subparser, options, _ -> true, categories);
     }
 
     /// Creates a compiler profile.

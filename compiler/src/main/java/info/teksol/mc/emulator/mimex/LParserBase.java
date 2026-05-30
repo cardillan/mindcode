@@ -1,7 +1,6 @@
 package info.teksol.mc.emulator.mimex;
 
 import info.teksol.mc.common.Globals;
-import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.util.Utf8Utils;
 import org.intellij.lang.annotations.PrintFormat;
@@ -14,7 +13,7 @@ import java.util.Map;
 
 @NullMarked
 public abstract class LParserBase implements LParser {
-    private final EmulatorMessageHandler errorHandler;
+    private final ParserMessageHandler errorHandler;
     private final MindustryMetadata metadata;
     private final LStrings strings;
     private final Map<String, String> opNameChanges = opNameChanges();
@@ -29,11 +28,13 @@ public abstract class LParserBase implements LParser {
     private final char[] chars;
 
     // An error was encountered (and reported) during parsing
+    private boolean includeComments = false;
+    private boolean includeLabels = false;
     private boolean error;
     private int pos;
     private int line;
 
-    public LParserBase(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
+    public LParserBase(ParserMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
             boolean privileged, boolean enforceInstructionLimit) {
         this.errorHandler = errorHandler;
         this.strings = strings;
@@ -55,12 +56,18 @@ public abstract class LParserBase implements LParser {
     }
 
     void comment() {
+        int from = pos;
+
         //read until \n or eof
         while (pos < chars.length && chars[pos++] != '\n') ;
+
+        if (includeComments) {
+            statements.add(new CommentStatement(new String(chars, from, pos - from)));
+        }
     }
 
     void error(@PrintFormat String format, Object... args) {
-        if (errorHandler.error(ExecutionFlag.ERR_PARSE_ERROR, format, args)) {
+        if (errorHandler.error(format, args)) {
             error = true;
         }
     }
@@ -154,6 +161,9 @@ public abstract class LParserBase implements LParser {
                     error("Jump label already defined: \"%s\".", label);
                 }
                 jumpLocations.put(label, line);
+                if (includeLabels) {
+                    statements.add(new LabelStatement(tokens[0]));
+                }
             } else {
                 String jumpLoc = null;
                 boolean wasJump = tokens[0].equals("jump") && tok > 1 && !strings.canParseInt(tokens[1]);
@@ -186,6 +196,18 @@ public abstract class LParserBase implements LParser {
                 line++;
             }
         }
+    }
+
+    @Override
+    public LParser includeComments() {
+        includeComments = true;
+        return this;
+    }
+
+    @Override
+    public LParser includeLabels() {
+        includeLabels = true;
+        return this;
     }
 
     @Override

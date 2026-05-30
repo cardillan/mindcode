@@ -7,5 +7,6 @@ public enum EnvironmentOptions {
     BUILTIN_EVALUATION,
     INSTRUCTION_LIMIT,
     NULL_COUNTER_IS_NOOP,
+    PROCESSOR_SIZE_LIMIT,
     TARGET,
 }

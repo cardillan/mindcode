@@ -14,7 +14,7 @@ import static info.teksol.mc.emulator.ExecutionFlag.DUMP_VARIABLES_ON_STOP;
 import static info.teksol.mc.emulator.ExecutionFlag.TRACE_EXECUTION;
 
 @NullMarked
-public class EmulatorMessageHandler extends EmulatorMessageEmitter {
+public class EmulatorMessageHandler extends EmulatorMessageEmitter implements ParserMessageHandler {
     private final Set<ExecutionFlag> flags;
 
     /// A runtime error was encountered
@@ -55,6 +55,11 @@ public class EmulatorMessageHandler extends EmulatorMessageEmitter {
     public void beginExecution(int index, LInstruction instruction) {
         this.index = index;
         this.instruction = instruction;
+    }
+
+    @Override
+    public boolean error(@PrintFormat String message, Object... args) {
+        return error(ExecutionFlag.ERR_PARSE_ERROR, message, args);
     }
 
     public boolean error(ExecutionFlag flag, @PrintFormat String message, Object... args) {

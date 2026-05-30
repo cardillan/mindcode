@@ -4,6 +4,7 @@ import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.optimization.CompilerMessage;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
@@ -13,6 +14,10 @@ public class CompilerMessageEmitter extends AbstractMessageEmitter {
 
     public CompilerMessageEmitter(MessageConsumer messageConsumer) {
         super(messageConsumer);
+    }
+
+    public void message(MessageLevel level, SourceElement node, @PrintFormat String format, Object... args) {
+        addMessage(PositionalMessage.message(level, node.sourcePosition(), format, args));
     }
 
     public void error(SourceElement node, @PrintFormat String format, Object... args) {

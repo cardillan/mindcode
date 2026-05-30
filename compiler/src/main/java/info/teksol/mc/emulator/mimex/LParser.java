@@ -11,11 +11,14 @@ import java.util.List;
 
 @NullMarked
 public interface LParser {
+    LParser includeComments();
+    LParser includeLabels();
+
     List<LStatement> parse();
 
     boolean isError();
 
-    static LParser create(EmulatorMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
+    static LParser create(ParserMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
             boolean privileged, boolean enforceInstructionLimit) {
         return switch (metadata.getProcessorVersion()) {
             case V6         -> new LParser60(errorHandler, metadata, strings, code, privileged, enforceInstructionLimit);

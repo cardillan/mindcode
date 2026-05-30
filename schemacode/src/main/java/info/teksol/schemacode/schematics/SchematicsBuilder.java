@@ -3,6 +3,7 @@ package info.teksol.schemacode.schematics;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
@@ -16,6 +17,7 @@ import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.schematics.BlockPositionResolver.AstBlockPosition;
+import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -34,6 +36,8 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
     private BlockPositionMap<BlockPosition> astPositionMap;
     private BlockPositionMap<Block> positionMap;
 
+    private boolean error = false;
+
     public SchematicsBuilder(InputFiles inputFiles, CompilerProfile compilerProfile,
             MessageConsumer messageConsumer, AstDefinitions astDefinitions) {
         super(messageConsumer);
@@ -45,6 +49,12 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
     public static SchematicsBuilder create(InputFiles inputFiles, CompilerProfile compilerProfile,
             AstDefinitions definitions, MessageConsumer messageConsumer) {
         return new SchematicsBuilder(inputFiles, compilerProfile, messageConsumer, definitions);
+    }
+
+    @Override
+    public void addMessage(@NonNull MindcodeMessage message) {
+        super.addMessage(message);
+        error |= message.isError();
     }
 
     public CompilerProfile getCompilerProfile() {
@@ -87,7 +97,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         processTarget();
 
         Map<String, Long> labelCounts = astSchematic.blocks().stream()
-                .filter(b -> b.labels() != null && !b.labels().isEmpty())
+                .filter(b -> !b.labels().isEmpty())
                 .flatMap(b -> b.labels().stream())
                 .collect(Collectors.groupingBy(l -> l, Collectors.counting()));
 
@@ -118,8 +128,10 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
                     ? Direction.EAST
                     : Direction.valueOf(astBlock.direction().direction().toUpperCase());
             Configuration configuration = convertAstConfiguration(blockPos, astBlock.configuration());
-            blocks.add(new Block(astBlock.sourcePosition(), index, astBlock.labels(), type, blockPos.position(), direction,
-                    configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass())));
+            Block block = new Block(astBlock.sourcePosition(), index, astBlock.labels(), type, blockPos.position(), direction,
+                    configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass()));
+            configuration.validate(this, astBlock, block);
+            blocks.add(block);
         }
 
         String name = getStringAttribute("name", "");
@@ -201,7 +213,9 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         }
 
         Schematic schematic = new Schematic(name, filename, description, labels, dim.x(), dim.y(), repositioned);
-        addMessage(ToolMessage.info("Created schematic '%s' with dimensions %s.", name, dim.toStringAbsolute()));
+        if (!error) {
+            addMessage(ToolMessage.info("Created schematic '%s' with dimensions %s.", name, dim.toStringAbsolute()));
+        }
         return schematic;
     }
 

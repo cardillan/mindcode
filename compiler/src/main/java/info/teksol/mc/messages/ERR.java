@@ -58,6 +58,7 @@ public class ERR {
     public static final String CONTINUE_OUTSIDE_LOOP = "'continue' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";
     public static final String CODE_SIZE_LIMIT_EXCEEDED = "The compiled code size limit of %,d bytes has been exceeded by %,d bytes.";
+    public static final String CONFIG_SIZE_LIMIT_EXCEEDED = "The compressed code size of %,d bytes exceeds the maximum size of %,d bytes.";
     public static final String COMPILER_TYPE_INCOMPATIBLE = "This processor type is incompatible with the actual processor type in the schematics (%s) which contains this code.";
     public static final String CONSTANT_STRING_OR_KEYWORD_REQUIRED = "Constant string expression or keyword required.";
     public static final String CONTINUE_NOT_ALLOWED = "The 'continue' statement not allowed in this context.";

@@ -2,9 +2,6 @@ package info.teksol.mindcode.cmdline.mlogwatcher.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 public class UpdateProcessorsOnMapParams implements Params {
     public static final String VERSION_SELECTION_EXACT = "exact";
     public static final String VERSION_SELECTION_COMPATIBLE = "compatible";
@@ -22,13 +19,11 @@ public class UpdateProcessorsOnMapParams implements Params {
     private String versionSelection;
 
     public String getCode() {
-        byte[] bytes = Base64.getDecoder().decode(code);
-        return new String(bytes, StandardCharsets.UTF_8);
+        return code;
     }
 
     public void setCode(String code) {
-        byte[] bytes = code.getBytes(StandardCharsets.UTF_8);
-        this.code = Base64.getEncoder().encodeToString(bytes);
+        this.code = code;
     }
 
     public ProgramId getProgramId() {

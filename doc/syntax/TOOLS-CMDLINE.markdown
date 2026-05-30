@@ -94,13 +94,14 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [-l [LOG]] [--output-directory OUTPUT-DIRECTORY] [--file-references {path,uri,windows-uri}]
                 [-a FILE [FILE ...]] [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
-                [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
-                [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
-                [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
-                [--encode-zero-characters [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
+                [--processor-size-limit {1..1000000}] [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}]
+                [--no-argument-padding [{true,false}]] [--function-prefix {short,long}] [--author author [author ...]]
+                [--no-signature] [--processor-id processor_ID] [--program-name program_name]
+                [--program-version program_version] [--encode-zero-characters [{true,false}]]
+                [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--setrate {1..1000}] [--ipt {1..1000}] [--atomic-full-protection [{true,false}]]
                 [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
-                [--emulate-strict-not-equal {true,false}] [--enforce-instruction-limit {true,false}]
+                [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
                 [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
                 [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
                 [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
@@ -184,6 +185,8 @@ Environment options:
   --null-counter-is-noop {true,false}
                          when active, Mindcode assumes assigning a 'null' to  '@counter' is ignored by the processor and
                          may produce code depending on this behavior
+  --processor-size-limit {1..1000000}
+                         sets the maximum supported size of the processor's configuration in the game (in bytes)
 
 Mlog formatting options:
   Options determining how the mlog code  is  generated  and  formatted,  including  instructions generated to carry over
@@ -211,7 +214,10 @@ Mlog formatting options:
                          sets the program version to be stored in the compiled code
   --encode-zero-characters [{true,false}]
                          allow encoding zero characters into mlog string  literals (WARNING: the resulting code can't be
-                         edited as a teext or copied/pasted to/from the clipboard!)
+                         edited as a text or copied/pasted to/from the clipboard!)
+  --reformat-mlog [{true,false}]
+                         reformats the generated mlog code the same  way in-game processors do (removes comments, labels
+                         and indents)
 
 Compiler options:
   Options which affect the way the source code is compiled.
@@ -236,8 +242,8 @@ Compiler options:
                          arrays
   --emulate-strict-not-equal {true,false}
                          use the 'select' instruction to emulate jump with the !== (strict not equal) condition
-  --enforce-instruction-limit {true,false}
-                         generate compilation error when the instruction limit is exceeded
+  --enforce-size-limits {true,false}
+                         generate compilation error when the instruction or size limits are exceeded
   --error-function {true,false}
                          activates or deactivates the  error()  function  (when  set  to  'false', error() function does
                          nothing)
@@ -544,13 +550,14 @@ usage: mindcode cs [-h] [-c] [-w [{update,add}]] [--watcher-version {v0,v1}] [--
                 [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]]
                 [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
-                [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
-                [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
-                [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
-                [--encode-zero-characters [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
+                [--processor-size-limit {1..1000000}] [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}]
+                [--no-argument-padding [{true,false}]] [--function-prefix {short,long}] [--author author [author ...]]
+                [--no-signature] [--processor-id processor_ID] [--program-name program_name]
+                [--program-version program_version] [--encode-zero-characters [{true,false}]]
+                [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--setrate {1..1000}] [--ipt {1..1000}] [--atomic-full-protection [{true,false}]]
                 [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
-                [--emulate-strict-not-equal {true,false}] [--enforce-instruction-limit {true,false}]
+                [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
                 [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
                 [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
                 [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
@@ -629,6 +636,8 @@ Environment options:
   --null-counter-is-noop {true,false}
                          when active, Mindcode assumes assigning a 'null' to  '@counter' is ignored by the processor and
                          may produce code depending on this behavior
+  --processor-size-limit {1..1000000}
+                         sets the maximum supported size of the processor's configuration in the game (in bytes)
 
 Mlog formatting options:
   Options determining how the mlog code  is  generated  and  formatted,  including  instructions generated to carry over
@@ -656,7 +665,10 @@ Mlog formatting options:
                          sets the program version to be stored in the compiled code
   --encode-zero-characters [{true,false}]
                          allow encoding zero characters into mlog string  literals (WARNING: the resulting code can't be
-                         edited as a teext or copied/pasted to/from the clipboard!)
+                         edited as a text or copied/pasted to/from the clipboard!)
+  --reformat-mlog [{true,false}]
+                         reformats the generated mlog code the same  way in-game processors do (removes comments, labels
+                         and indents)
 
 Compiler options:
   Options which affect the way the source code is compiled.
@@ -681,8 +693,8 @@ Compiler options:
                          arrays
   --emulate-strict-not-equal {true,false}
                          use the 'select' instruction to emulate jump with the !== (strict not equal) condition
-  --enforce-instruction-limit {true,false}
-                         generate compilation error when the instruction limit is exceeded
+  --enforce-size-limits {true,false}
+                         generate compilation error when the instruction or size limits are exceeded
   --error-function {true,false}
                          activates or deactivates the  error()  function  (when  set  to  'false', error() function does
                          nothing)

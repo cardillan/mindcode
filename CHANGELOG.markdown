@@ -13,12 +13,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added support for displaying emulated game time spent by the processor emulator.   
+* Added support for displaying emulated game time spent by the processor emulator.
+* Added new [`processor-size-limit`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-processor-size-limit) and [`reformat-mlog`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-reformat-mlog) compiler options.
+* Added a limit on the maximum generated processor configuration size, specified by the [`processor-size-limit`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-processor-size-limit) option. When the generated mlog code exceeds this limit, an error or warning is generated, depending on the value of the [`enforce-size-limits` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-size-limits).
 
 ### Changed
 
+* **Breaking:** the `enforce-instructionlimit` poption has been renamed to [`enforce-size-limits`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-size-limits).
+* Changed the web app to use the new MlogWatcher API.
 * The variable reference index is recreated before each optimization, potentially allowing more optimizations to be performed.  
-* The [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) has been updated to handle integer division by one the same as the `op floor` instruction.
+* Changed the [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) to handle integer division by one the same as the `op floor` instruction.
 * The mlog parser raises an error when the code contains duplicate labels, regardless of the processor version. This behavior matches the latest Mindustry version; in older Mindustry versions the code is still accepted. 
 
 ## 3.16.2 – 2026-04-25
@@ -45,7 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added a limit on the maximum length of mlog string literals (65,535 bytes in UTF-8 encoding). String literals larger than this limit cause compilation errors.
-* Added a limit on the maximum generated mlog code size (102,400 bytes in UTF-8 encoding). When the generated or loaded mlog code exceeds this limit, an error or warning is generated, depending on the value of the [`enforce-instruction-limit` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-instruction-limit).
+* Added a limit on the maximum generated mlog code size (102,400 bytes in UTF-8 encoding). When the generated or loaded mlog code exceeds this limit, an error or warning is generated, depending on the value of the [`enforce-size-limits` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-size-limits).
 * Added support for the new `setrule pauseDisabled` instruction.
 
 ### Changed
@@ -124,7 +128,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * Support for the new version of [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown), providing several useful new ways to send or extract mlog code and schematics to/from a running game. To use the new Mlog Watcher mod, the `--watcher-version v1` command-line argument needs to be specified.
   * Ability to execute mlog code loaded from a file on the processor emulator and for sending it to the Mlog Watcher. Use the new `pm` or `process-mlog` command-line argument.  
   * Ability to execute schematics loaded from a file on the processor emulator and for sending it to the new version of the Mlog Watcher. Use the new `ps` or `process-schematic` command-line argument.
-* Added a validation step to the compiler to verify the generated code doesn't exceed the maximum number of instructions. The [`enforce-instruction-limit` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-instruction-limit) can be used to control this behavior.
+* Added a validation step to the compiler to verify the generated code doesn't exceed the maximum number of instructions. The [`enforce-size-limits` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-size-limits) can be used to control this behavior.
 
 ### Changed
 

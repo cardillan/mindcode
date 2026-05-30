@@ -12,10 +12,12 @@ public class Response {
     public static final String ERR_INVALID_PROGRAM_ID = "invalid_program_id";
     public static final String ERR_INVALID_VERSION_SELECTION = "invalid_version_selection";
     public static final String ERR_NO_PROCESSOR_ATTACHED = "no_processor_attached";
+    public static final String ERR_CODE_SIZE_TOO_LARGE = "code_size_too_large";
     public static final String ERR_NO_ACTIVE_MAP = "no_active_map";
     public static final String ERR_NO_PROCESSORS_FOUND = "no_processors_found";
     public static final String ERR_SCHEMATIC_IMPORT_FAILED = "schematic_import_failed";
     public static final String ERR_UNKNOWN_METHOD = "unknown_method";
+    public static final String ERR_UNSUPPORTED_METHOD_VERSION = "unsupported_method_version";
     public static final String ERR_INTERNAL_ERROR = "internal_error";
     public static final String ERR_NO_SCHEMATIC_SELECTED = "no_schematic_selected";
     public static final String ERR_SCHEMATIC_EXTRACTION_FAILED = "schematic_extraction_failed";
@@ -64,6 +66,10 @@ public class Response {
         this.result = result;
     }
 
+    public static boolean isSuccess(String result) {
+        return STATUS_SUCCESS.equals(result);
+    }
+
     public Response(String status) {
         this(status, 0, RESULT_TYPE_TEXT, null);
     }
@@ -90,6 +96,10 @@ public class Response {
 
     public static Response error(String result) {
         return new Response(STATUS_ERROR, result);
+    }
+
+    public static Response fromResult(String result) {
+        return isSuccess(result) ? success() : error(result);
     }
 
     // getters & setters

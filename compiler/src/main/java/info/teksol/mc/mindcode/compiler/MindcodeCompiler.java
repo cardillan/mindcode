@@ -10,8 +10,9 @@ import info.teksol.mc.emulator.EmulatorMessage;
 import info.teksol.mc.emulator.EmulatorSchematic;
 import info.teksol.mc.emulator.blocks.BlockPosition;
 import info.teksol.mc.emulator.blocks.LogicBlock;
-import info.teksol.mc.emulator.blocks.MindustryBuilding;
 import info.teksol.mc.emulator.mimex.BasicEmulator;
+import info.teksol.mc.emulator.mimex.LParser;
+import info.teksol.mc.emulator.mimex.LStrings;
 import info.teksol.mc.generated.ast.AstIndentedPrinter;
 import info.teksol.mc.messages.*;
 import info.teksol.mc.mindcode.compiler.antlr.LexerParser;
@@ -49,17 +50,23 @@ import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.DirectiveProcessor;
 import info.teksol.mc.profile.FinalCodeOutput;
 import info.teksol.mc.profile.GlobalCompilerProfile;
+import info.teksol.mc.profile.options.Target;
 import info.teksol.mc.util.CollectionUtils;
 import info.teksol.mc.util.Utf8Utils;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.zip.DeflaterOutputStream;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
@@ -345,26 +352,30 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         }
 
         if (executableInstructions.size() > Globals.MAX_INSTRUCTIONS) {
-            if (globalProfile.isEnforceInstructionLimit()) {
+            if (globalProfile.isEnforceSizeLimits()) {
                 error(ERR.INSTRUCTION_LIMIT_EXCEEDED, globalProfile.getInstructionLimit());
             } else {
                 warn(ERR.INSTRUCTION_LIMIT_EXCEEDED, globalProfile.getInstructionLimit());
             }
         }
 
-        String pureMlog = LogicInstructionPrinter.toString(instructionProcessor, instructions,
-                false, 0, false);
-        int mlogEncodedSize = Utf8Utils.utf8Length(pureMlog);
+        String code = LogicInstructionPrinter.toString(instructionProcessor, resolver.generateSymbolicLabels(instructions),
+                globalProfile.isSymbolicLabels(), globalProfile.getMlogIndent(), true);
+
+        output = globalProfile.isReformatMlog() ? reformat(code) : code;
+
+        int mlogEncodedSize = Utf8Utils.utf8Length(output);
         if (mlogEncodedSize > Globals.MAX_MLOG_BYTE_LENGTH) {
-            if (globalProfile.isEnforceInstructionLimit()) {
+            if (globalProfile.isEnforceSizeLimits()) {
                 error(ERR.CODE_SIZE_LIMIT_EXCEEDED, Globals.MAX_MLOG_BYTE_LENGTH, mlogEncodedSize - Globals.MAX_MLOG_BYTE_LENGTH);
             } else {
                 warn(ERR.CODE_SIZE_LIMIT_EXCEEDED, Globals.MAX_MLOG_BYTE_LENGTH, mlogEncodedSize - Globals.MAX_MLOG_BYTE_LENGTH);
             }
         }
 
-        output = LogicInstructionPrinter.toString(instructionProcessor, resolver.generateSymbolicLabels(instructions),
-                globalProfile.isSymbolicLabels(), globalProfile.getMlogIndent(), true);
+        if (!globalProfile.isSchematic()) {
+            verifyCodeSize(output);
+        }
 
         if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.PRINTER) <= 0) return;
 
@@ -419,9 +430,38 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         info("%s", sbr);
     }
 
-    private void addBlocks(LogicBlock logicBlock, String name, Function<Integer, MindustryBuilding> creator) {
-        for (int i = 1; i < 10; i++) {
-            logicBlock.addBlock(name + i, creator.apply(i));
+    private String reformat(String code) {
+        assert metadata != null;
+        Target target = globalProfile.getTarget();
+        LStrings strings = LStrings.create(target.version());
+        LParser parser = LParser.create((_, _) -> false, metadata, strings, code, true, false);
+        return parser.parse().stream().map(Object::toString).collect(Collectors.joining("\n"));
+    }
+
+    private void verifyCodeSize(String pureMlog) {
+        byte[] bytes = pureMlog.getBytes(StandardCharsets.UTF_8);
+        try {
+            var byteStream = new ByteArrayOutputStream();
+            var stream = new DataOutputStream(new DeflaterOutputStream(byteStream));
+
+            //current version of config format
+            stream.write(1);
+
+            //write string data
+            stream.writeInt(bytes.length);
+            stream.write(bytes);
+            stream.close();
+
+            int size = byteStream.size();
+            if (size > globalProfile.getProcessorSizeLimit()) {
+                if (globalProfile.isEnforceSizeLimits()) {
+                    error(ERR.CONFIG_SIZE_LIMIT_EXCEEDED, size, globalProfile.getProcessorSizeLimit());
+                } else {
+                    warn(ERR.CONFIG_SIZE_LIMIT_EXCEEDED, size, globalProfile.getProcessorSizeLimit());
+                }
+            }
+        } catch (IOException e) {
+            throw new MindcodeInternalError(e, "Error encoding processor code.");
         }
     }
 

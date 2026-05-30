@@ -1,5 +1,6 @@
 package info.teksol.mc.profile.options;
 
+import info.teksol.mc.common.Globals;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
@@ -80,7 +81,6 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.NONE, category,
                 new Target(ProcessorVersion.V7A, ProcessorType.MICRO_PROCESSOR)));
-
     }
 
     private static void addEnvironmentOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
@@ -111,6 +111,12 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 true));
+
+        list.add(new IntegerCompilerOptionValue(EnvironmentOptions.PROCESSOR_SIZE_LIMIT, "",
+                "sets the maximum supported size of the processor's configuration in the game (in bytes)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, 1_000_000, Globals.MAX_PROCESSOR_CFG_SIZE - Globals.CFG_SIZE_SAFETY_MARGIN));
     }
 
     private static void addMlogFormatOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
@@ -173,7 +179,13 @@ public class CompilerOptionFactory {
 
         list.add(new BooleanCompilerOptionValue(MlogFormatOptions.ENCODE_ZERO_CHARACTERS, "",
                 "allow encoding zero characters into mlog string literals (WARNING: the resulting code " +
-                        "can't be edited as a teext or copied/pasted to/from the clipboard!)",
+                        "can't be edited as a text or copied/pasted to/from the clipboard!)",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
+        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.REFORMAT_MLOG, "",
+                "reformats the generated mlog code the same way in-game processors do (removes comments, labels and indents)",
                 OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 false).setConstValue(true));
@@ -239,8 +251,8 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 true));
 
-        list.add(new BooleanCompilerOptionValue(CompilerOptions.ENFORCE_INSTRUCTION_LIMIT, "",
-                "generate compilation error when the instruction limit is exceeded",
+        list.add(new BooleanCompilerOptionValue(CompilerOptions.ENFORCE_SIZE_LIMITS, "",
+                "generate compilation error when the instruction or size limits are exceeded",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 false));

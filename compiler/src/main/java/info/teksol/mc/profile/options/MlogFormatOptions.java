@@ -14,4 +14,5 @@ public enum MlogFormatOptions {
     PROCESSOR_ID,
     PROGRAM_NAME,
     PROGRAM_VERSION,
+    REFORMAT_MLOG,
 }

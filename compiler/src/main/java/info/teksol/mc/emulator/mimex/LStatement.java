@@ -22,6 +22,11 @@ public class LStatement {
         this.arguments = arguments;
     }
 
+    /// Virtual statements are not included in the final statement list. Comments and labels are virtual.
+    public boolean virtual() {
+        return false;
+    }
+
     public boolean privileged() {
         return privileged;
     }

@@ -30,6 +30,11 @@ public record PositionalMessage(MessageLevel level, SourcePosition sourcePositio
         return this;
     }
 
+    public static PositionalMessage message(MessageLevel level, SourcePosition sourcePosition, @PrintFormat String format, Object... args) {
+        Objects.requireNonNull(sourcePosition);
+        return new PositionalMessage(level, sourcePosition, String.format(Locale.US, format, args));
+    }
+
     public static PositionalMessage error(SourcePosition sourcePosition, @PrintFormat String format, Object... args) {
         Objects.requireNonNull(sourcePosition);
         return new PositionalMessage(MessageLevel.ERROR, sourcePosition, String.format(Locale.US, format, args));

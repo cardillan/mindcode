@@ -65,6 +65,10 @@ public interface GlobalCompilerProfile {
         return getIntValue(EnvironmentOptions.INSTRUCTION_LIMIT);
     }
 
+    default int getProcessorSizeLimit() {
+        return getIntValue(EnvironmentOptions.PROCESSOR_SIZE_LIMIT);
+    }
+
     ProcessorVersion getProcessorVersion();
 
     ProcessorType getProcessorType();
@@ -114,6 +118,10 @@ public interface GlobalCompilerProfile {
     default String getProgramName() {
         return getStringValue(MlogFormatOptions.PROGRAM_NAME);
     }
+
+    default boolean isReformatMlog() {
+        return getBooleanValue(MlogFormatOptions.REFORMAT_MLOG);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Compiler Options">
@@ -125,9 +133,9 @@ public interface GlobalCompilerProfile {
         return getBooleanValue(CompilerOptions.EMULATE_STRICT_NOT_EQUAL);
     }
 
-    default boolean isEnforceInstructionLimit() {
-        return isDefault(CompilerOptions.ENFORCE_INSTRUCTION_LIMIT) ? isSchematic()
-                : getBooleanValue(CompilerOptions.ENFORCE_INSTRUCTION_LIMIT);
+    default boolean isEnforceSizeLimits() {
+        return isDefault(CompilerOptions.ENFORCE_SIZE_LIMITS) ? isSchematic()
+                : getBooleanValue(CompilerOptions.ENFORCE_SIZE_LIMITS);
     }
 
     boolean useEmulatedStrictNotEqual();

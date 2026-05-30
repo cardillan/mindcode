@@ -70,8 +70,10 @@ public class MlogWatcherClientImpl extends MlogWatcherClientBase {
                     }
                     case ERR_NO_ACTIVE_MAP ->               log.info("  Mlog Watcher: no map loaded.");
                     case ERR_NO_PROCESSORS_FOUND ->         log.info("  Mlog Watcher: no compatible processors found on the map.");
+                    case ERR_CODE_SIZE_TOO_LARGE ->         log.error("  Mlog Watcher: code size to be injected is too large.");
                     case ERR_SCHEMATIC_IMPORT_FAILED ->     log.error("  Mlog Watcher: schematic import failed (invalid schematic file?)");
                     case ERR_UNKNOWN_METHOD ->              log.error("  Mlog Watcher: requested method not supported (MlogWatcher version too old?).");
+                    case ERR_UNSUPPORTED_METHOD_VERSION ->  log.error("  Mlog Watcher: requested method version not supported (MlogWatcher version too old?).");
                     case ERR_INTERNAL_ERROR ->              log.error("  Mlog Watcher: internal MlogWatcher error. Please report this to the mod author.");
                     case ERR_NO_SCHEMATIC_SELECTED ->       {
                         log.error("  Mlog Watcher: no schematic selected.");

@@ -1,6 +1,8 @@
 package info.teksol.schemacode.mindustry;
 
 import info.teksol.mc.common.InputFile;
+import info.teksol.mc.common.SourceElement;
+import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
@@ -63,7 +65,7 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
 
             return new ByteArray(byteStream.toByteArray());
         } catch (IOException e) {
-            throw new SchematicsInternalError(e, "Error decoding processor configuration.");
+            throw new SchematicsInternalError(e, "Error encoding processor configuration.");
         }
     }
 
@@ -109,6 +111,30 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
         List<Link> links = this.links.stream().map(l -> new Link(l.name, mapping.apply(l.position))).toList();
         return new ProcessorConfiguration(links, code);
     }
+
+    @Override
+    public void validate(SchematicsBuilder builder, SourceElement astBlock, Block block) {
+        validate(builder, astBlock, block, false);
+
+        // Here we simply parse and reformat the code, even though it would be possible and more efficient
+        // to avoid that for code compiled from Mindcode. This makes for a bit simpler design here.
+        validate(builder, astBlock, block.withReformattedCode(builder.getCompilerProfile().getSchematicTarget()), true);
+    }
+
+    private void validate(SchematicsBuilder builder, SourceElement astBlock, Block block, boolean reformatted) {
+        int maxSize = builder.getCompilerProfile().getProcessorSizeLimit();
+        Configuration configuration = block.configuration().encode(block);
+        if (configuration instanceof ByteArray array) {
+            if (array.size() > maxSize) {
+                builder.message(builder.getCompilerProfile().isEnforceSizeLimits() ? MessageLevel.ERROR : MessageLevel.WARNING,
+                        astBlock, "%s configuration size of %,d bytes exceeds the maximum size of %,d bytes.",
+                        reformatted ? "Reformatted processor" : "Processor", array.size(), maxSize);
+            }
+        } else {
+            throw new SchematicsInternalError("Unexpected configuration type - expected ByteArray, got %s.", configuration.getClass().getSimpleName());
+        }
+    }
+
 
     public static ProcessorConfiguration fromAstConfiguration(SchematicsBuilder builder, AstProcessor processor, BlockPosition blockPos) {
         List<Link> links = processor.links().stream()

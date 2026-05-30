@@ -1,8 +1,10 @@
 package info.teksol.schemacode.config;
 
+import info.teksol.mc.common.SourceElement;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.Block;
+import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.util.function.UnaryOperator;
 
@@ -24,5 +26,8 @@ public interface Configuration {
 
     default Configuration remap(UnaryOperator<Position> mapping) {
         return this;
+    }
+
+    default void validate(SchematicsBuilder builder, SourceElement astBlock, Block block) {
     }
 }
