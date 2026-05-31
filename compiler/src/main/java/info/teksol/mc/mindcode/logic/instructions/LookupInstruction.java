@@ -41,4 +41,9 @@ public class LookupInstruction extends BaseResultInstruction {
     public final LogicValue getIndex() {
         return (LogicValue) getArg(2);
     }
+
+    public LookupInstruction withIndex(LogicValue index) {
+        assert getArgumentTypes() != null;
+        return new LookupInstruction(astContext, List.of(getType(), getResult(), index), getArgumentTypes()).copyInfo(this);
+    }
 }

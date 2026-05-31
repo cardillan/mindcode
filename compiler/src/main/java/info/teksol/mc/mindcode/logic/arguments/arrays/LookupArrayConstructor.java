@@ -72,7 +72,7 @@ public class LookupArrayConstructor extends TablelessArrayConstructor {
         LogicVariable tmp0 = creator.nextTemp();
 
         if (!instruction.isCompactAccessTarget()) {
-            creator.createLookup(type, tmp0, instruction.getIndex());
+            creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex())).createLookup(type, tmp0, instruction.getIndex());
             creator.createSensor(arrayElem, tmp0, LogicBuiltIn.NAME);
         }
 

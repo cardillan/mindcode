@@ -1,15 +1,15 @@
    179 instructions before optimizations.
-    12 instructions eliminated by Temp Variables Elimination (2 passes, 5 iterations).
+    12 instructions eliminated by Temp Variables Elimination (2 passes, 6 iterations).
      2 instructions eliminated by Case Expression Optimization.
     30 instructions eliminated by Dead Code Elimination (7 iterations).
-     1 instructions eliminated by Jump Normalization (4 iterations).
-    12 instructions eliminated by Condition Optimization (5 iterations).
-    12 instructions eliminated by Single Step Elimination (5 iterations).
-     2 instructions modified by Expression Optimization (2 iterations).
-     1 instructions eliminated by Boolean Optimization (5 iterations).
+     1 instructions eliminated by Jump Normalization (5 iterations).
+    12 instructions eliminated by Condition Optimization (6 iterations).
+    12 instructions eliminated by Single Step Elimination (6 iterations).
+     2 instructions modified by Expression Optimization (3 iterations).
+     1 instructions eliminated by Boolean Optimization (6 iterations).
        1 fully-evaluated expressions optimized using selects.
-     2 instructions eliminated by Data Flow Optimization (4 iterations).
-    10 instructions eliminated by Jump Straightening (6 iterations).
+     2 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
+    10 instructions eliminated by Jump Straightening (7 iterations).
      2 instructions updated by Jump Threading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
      2 instructions eliminated by Print Merging.
@@ -610,16 +610,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    146 label *label42
    147 op add :index :index 1
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
-     0 set .UNIT @mega
--    * sensor .THIS_X @this @x
--    * sensor .THIS_Y @this @y
-+    1 set .THIS_X @thisx
-+    2 set .THIS_Y @thisy
-     3 set :first_unit null
-     4 set :index 1
-     5 label *label0
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     30 set .UNIT *tmp4
@@ -630,23 +620,76 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     34 print ": gathering information..."
     35 label *label3
     36 label *label4
- 
-   132 jump *label46 always
-   133 label *label45
-   134 jump *label49 equal :flag 0
--    * ucontrol within .THIS_X .THIS_Y 8 *tmp51
-+  135 ucontrol within @thisx @thisy 8 *tmp51
-   136 jump *label51 equal *tmp51 false
-   137 ucontrol flag 0
-   138 jump *label52 always
-   139 label *label51
--    * ucontrol approach .THIS_X .THIS_Y 4
-+  140 ucontrol approach @thisx @thisy 4
-   141 label *label52
-   142 label *label49
-   143 label *label50
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
+     0 set .UNIT @mega
+-    * sensor .THIS_X @this @x
+-    * sensor .THIS_Y @this @y
++    1 set .THIS_X @thisx
++    2 set .THIS_Y @thisy
+     3 set :first_unit null
+     4 set :index 1
+     5 label *label0
+
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    42 jump *label15 always
+    43 label *label14
+    44 jump *label18 strictEqual @unit :first_unit
+-    * label *label19
+    45 op strictEqual *tmp11 :first_unit null
+    46 jump *label16 equal *tmp11 false
+    47 label *label18
+ 
+    60 sensor :flag @unit @flag
+    61 sensor :items @unit @totalItems
+    62 sensor :item @unit @firstItem
+-    * sensor *tmp20 @unit @controller
+-    * jump *label22 notEqual *tmp20 @this
+-    * set :controlled 0
+-    * label *label22
+-    * label *label23
++   63 sensor *tmp20 @unit @controller
++   64 select :controlled equal *tmp20 @this 0 :controlled
+    65 jump *label26 notEqual :flag 0
+-    * label *label28
+    66 jump *label26 greaterThan :items 0
+-    * label *label27
+    67 jump *label24 equal :controlled 0
+-    * label *label29
+    68 sensor *tmp26 @unit @controller
+    69 jump *label24 equal *tmp26 @this
+    70 label *label26
+ 
+   108 label *label24
+   109 label *label25
+   110 jump *label41 notEqual :controlled 0
+-    * label *label44
+   111 sensor *tmp41 switch1 @enabled
+   112 jump *label41 equal *tmp41 false
+-    * label *label43
+   113 jump *label45 lessThanEq :items 0
+   114 ucontrol flag 1
+   115 ulocate building core false @copper .CORE_X .CORE_Y *tmp46 .CORE
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+ 
+   123 jump *label46 always
+   124 label *label45
+   125 jump *label49 equal :flag 0
+-    * ucontrol within .THIS_X .THIS_Y 8 *tmp51
++  126 ucontrol within @thisx @thisy 8 *tmp51
+   127 jump *label51 equal *tmp51 false
+   128 ucontrol flag 0
+   129 jump *label52 always
+   130 label *label51
+-    * ucontrol approach .THIS_X .THIS_Y 4
++  131 ucontrol approach @thisx @thisy 4
+   132 label *label52
+   133 label *label49
+   134 label *label50
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-2 instructions):
      0 set .UNIT @mega
 -    * set .THIS_X @thisx
 -    * set .THIS_Y @thisy
@@ -654,48 +697,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
      2 set :index 1
      3 label *label0
 
-Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 instructions):
- 
-    40 jump *label15 always
-    41 label *label14
-    42 jump *label18 strictEqual @unit :first_unit
--    * label *label19
-    43 op strictEqual *tmp11 :first_unit null
-    44 jump *label16 equal *tmp11 false
-    45 label *label18
- 
-    58 sensor :flag @unit @flag
-    59 sensor :items @unit @totalItems
-    60 sensor :item @unit @firstItem
--    * sensor *tmp20 @unit @controller
--    * jump *label22 notEqual *tmp20 @this
--    * set :controlled 0
--    * label *label22
--    * label *label23
-+   61 sensor *tmp20 @unit @controller
-+   62 select :controlled equal *tmp20 @this 0 :controlled
-    63 jump *label26 notEqual :flag 0
--    * label *label28
-    64 jump *label26 greaterThan :items 0
--    * label *label27
-    65 jump *label24 equal :controlled 0
--    * label *label29
-    66 sensor *tmp26 @unit @controller
-    67 jump *label24 equal *tmp26 @this
-    68 label *label26
- 
-   106 label *label24
-   107 label *label25
-   108 jump *label41 notEqual :controlled 0
--    * label *label44
-   109 sensor *tmp41 switch1 @enabled
-   110 jump *label41 equal *tmp41 false
--    * label *label43
-   111 jump *label45 lessThanEq :items 0
-   112 ucontrol flag 1
-   113 ulocate building core false @copper .CORE_X .CORE_Y *tmp46 .CORE
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
  
      4 sensor *tmp2 switch2 @enabled
      5 jump *label3 equal *tmp2 false
@@ -790,7 +792,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
 -    * label *label2
 -    * end
 
-Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
+Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  
     32 print .UNIT
     33 print ": no active unit found."

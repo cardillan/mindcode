@@ -6,6 +6,7 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
@@ -19,12 +20,11 @@ public interface ContextlessInstructionCreator {
 
     InstructionProcessor getProcessor();
 
-    /// Applies the provided side effects to the next instruction to be created.
-    default ContextlessInstructionCreator withSideEffects(SideEffects sideEffects) {
-        getProcessor().withSideEffects(sideEffects);
+    /// Applies the provided effects to the next instruction to be created.
+    default ContextlessInstructionCreator withEffects(Consumer<LogicInstruction> decorator) {
+        getProcessor().withEffects(decorator);
         return this;
     }
-
 
     LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments);
 

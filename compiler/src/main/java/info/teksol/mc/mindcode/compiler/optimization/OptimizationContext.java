@@ -1871,8 +1871,8 @@ public class OptimizationContext extends CompilerMessageEmitter {
         }
 
         @Override
-        public LogicList withSideEffects(SideEffects sideEffects) {
-            instructionProcessor.withSideEffects(sideEffects);
+        public LogicList withEffects(Consumer<LogicInstruction> decorator) {
+            instructionProcessor.withEffects(decorator);
             return this;
         }
 

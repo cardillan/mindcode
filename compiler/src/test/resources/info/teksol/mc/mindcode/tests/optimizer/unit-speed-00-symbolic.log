@@ -165,18 +165,6 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-6
     83 print UNIT
     84 print "):"
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-    73 ucontrol flag 0
-    74 op sub :elapsed :finish :start
-    75 op div *tmp29 :distance :elapsed
--    * op mul *tmp30 *tmp29 100000
--    * op floor *tmp31 *tmp30
-+   76 op idiv *tmp31 *tmp29 0.00001
-    77 op div :speed *tmp31 100
-    78 label *label15
-    79 sensor *tmp33 switch1 @enabled
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      2 set .SY 10
@@ -256,6 +244,18 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     62 op sub *tmp25 10 .DY
     63 op abs *tmp26 *tmp25
     64 op div *tmp27 *tmp26 2
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    66 ucontrol flag 0
+    67 op sub :elapsed :finish :start
+    68 op div *tmp29 :distance :elapsed
+-    * op mul *tmp30 *tmp29 100000
+-    * op floor *tmp31 *tmp30
++   69 op idiv *tmp31 *tmp29 0.00001
+    70 op div :speed *tmp31 100
+    71 label *label15
+    72 sensor *tmp33 switch1 @enabled
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  

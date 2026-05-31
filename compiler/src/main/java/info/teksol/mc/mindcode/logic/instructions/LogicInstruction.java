@@ -237,6 +237,14 @@ public interface LogicInstruction extends MlogInstruction {
         return setInfo(InstructionInfo.ATOMIC_WAIT, atomicWait);
     }
 
+    default LogicValue getNonNegativeInt() {
+        return (LogicValue) getInfo(InstructionInfo.NON_NEGATIVE_INT);
+    }
+
+    default LogicInstruction setNonNegativeInt(LogicValue nonNegative) {
+        return setInfo(InstructionInfo.NON_NEGATIVE_INT, nonNegative);
+    }
+
     default LocalCompilerProfile getLocalProfile() {
         return getAstContext().getLocalProfile();
     }

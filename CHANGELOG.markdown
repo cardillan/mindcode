@@ -19,11 +19,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* **Breaking:** the `enforce-instructionlimit` poption has been renamed to [`enforce-size-limits`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-size-limits).
+* **Breaking:** the `enforce-instruction-limit` option has been renamed to [`enforce-size-limits`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-size-limits).
 * Changed the web app to use the new MlogWatcher API.
-* The variable reference index is recreated before each optimization, potentially allowing more optimizations to be performed.  
 * Changed the [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) to handle integer division by one the same as the `op floor` instruction.
-* The mlog parser raises an error when the code contains duplicate labels, regardless of the processor version. This behavior matches the latest Mindustry version; in older Mindustry versions the code is still accepted. 
+* Changed the mlog parser to raise an error when the code contains duplicate labels, regardless of the processor version. This behavior matches the latest Mindustry version; in older Mindustry versions the code is still accepted. 
+* Changed the [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) and [Array Optimization](doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) to [remove an `op floor` instruction when applied to the array index](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#handling-non-negative-implicit-integer-conversions).
+* The variable reference index is recreated before each optimization, potentially allowing more optimizations to be performed.
 
 ## 3.16.2 – 2026-04-25
 

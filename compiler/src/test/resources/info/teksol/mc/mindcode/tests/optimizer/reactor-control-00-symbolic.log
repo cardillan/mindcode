@@ -1853,18 +1853,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    553 label *label153
    554 op min .REACTORS_ON .REACTORS_ON :reactors
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-   249 label *label56
-   250 set :nextBattery *tmp101
-   251 sensor *tmp103 :nextBattery @powerNetOut
--    * op mul *tmp104 *tmp103 1.05
--    * op floor *tmp105 *tmp104
-+  252 op idiv *tmp105 *tmp103 0.9523809523809523
-   253 op max :neededPower *tmp105 1000
-   254 jump *label59 notEqual .REACTORS_ON 0
-   255 jump *label61 lessThan :total_battery 25000
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
      0 set PLANT_PROTECTION 1
      1 set FAST_START 1
@@ -1909,53 +1897,53 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    250 set :nextBattery *tmp101
 -    * sensor *tmp103 :nextBattery @powerNetOut
 +  251 sensor *tmp103 *tmp101 @powerNetOut
-   252 op idiv *tmp105 *tmp103 0.9523809523809523
-   253 op max :neededPower *tmp105 1000
-   254 jump *label59 notEqual .REACTORS_ON 0
+   252 op mul *tmp104 *tmp103 1.05
+   253 op floor *tmp105 *tmp104
+   254 op max :neededPower *tmp105 1000
  
-   309 label *label77
-   310 label *label74
-   311 label *label75
+   310 label *label77
+   311 label *label74
+   312 label *label75
 -    * jump *label78 equal :canStart false
-+  312 jump *label78 equal *tmp121 false
-   313 label *label81
-   314 jump *label78 lessThanEq @time :nextStart
-   315 label *label80
++  313 jump *label78 equal *tmp121 false
+   314 label *label81
+   315 jump *label78 lessThanEq @time :nextStart
+   316 label *label80
  
-   320 set *tmp133 1
-   321 label *label83
-   322 set :start_at_once *tmp133
+   321 set *tmp133 1
+   322 label *label83
+   323 set :start_at_once *tmp133
 -    * op add *tmp135 .REACTORS_ON :start_at_once
-+  323 op add *tmp135 .REACTORS_ON *tmp133
-   324 op min .REACTORS_ON *tmp135 :reactors
-   325 op add :nextStart @time 2000
-   326 label *label78
++  324 op add *tmp135 .REACTORS_ON *tmp133
+   325 op min .REACTORS_ON *tmp135 :reactors
+   326 op add :nextStart @time 2000
+   327 label *label78
  
-   390 sensor *tmp159 switch2 @enabled
-   391 jump *label107 equal *tmp159 false
-   392 label *label109
+   391 sensor *tmp159 switch2 @enabled
+   392 jump *label107 equal *tmp159 false
+   393 label *label109
 -    * op mul :min_level 0.5 :required_capacity
-+  393 op mul :min_level :reactors 50000
-   394 set :commit_level 0
-   395 jump *label111 equal .CAN_COMMIT false
-   396 label *label115
++  394 op mul :min_level :reactors 50000
+   395 set :commit_level 0
+   396 jump *label111 equal .CAN_COMMIT false
+   397 label *label115
  
-   399 jump *label111 greaterThanEq .REACTORS_ON :reactors
-   400 label *label113
-   401 op sub *tmp165 :battery_change 1500
+   400 jump *label111 greaterThanEq .REACTORS_ON :reactors
+   401 label *label113
+   402 op sub *tmp165 :battery_change 1500
 -    * op sub :p *tmp165 1000
-+  402 op sub :p :battery_change 2500
-   403 op mul *tmp167 :p 0.00472972972972973
-   404 op add *tmp168 -5 *tmp167
-   405 op mul *tmp169 :p *tmp168
++  403 op sub :p :battery_change 2500
+   404 op mul *tmp167 :p 0.00472972972972973
+   405 op add *tmp168 -5 *tmp167
+   406 op mul *tmp169 :p *tmp168
  
-   501 op equal :startup .MODE 1
-   502 set :reactors 0
-   503 set :boosts 0
+   502 op equal :startup .MODE 1
+   503 set :reactors 0
+   504 set :boosts 0
 -    * set :enabled true
-   504 set :n .START
-   505 label *label140
-   506 jump *label142 greaterThanEq :n @links
+   505 set :n .START
+   506 label *label140
+   507 jump *label142 greaterThanEq :n @links
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7 instructions):
  
@@ -1997,32 +1985,44 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
    246 label *label56
 -    * set :nextBattery *tmp101
    247 sensor *tmp103 *tmp101 @powerNetOut
-   248 op idiv *tmp105 *tmp103 0.9523809523809523
-   249 op max :neededPower *tmp105 1000
+   248 op mul *tmp104 *tmp103 1.05
+   249 op floor *tmp105 *tmp104
  
-   289 label *label67
-   290 set *tmp121 false
-   291 label *label68
+   290 label *label67
+   291 set *tmp121 false
+   292 label *label68
 -    * set :canStart *tmp121
-   292 jump *label72 lessThan :net_power :neededPower
-   293 set .OUTPUT_3 .OUTPUT_2
-   294 set .OUTPUT_2 .OUTPUT_1
+   293 jump *label72 lessThan :net_power :neededPower
+   294 set .OUTPUT_3 .OUTPUT_2
+   295 set .OUTPUT_2 .OUTPUT_1
  
-   314 label *label82
-   315 set *tmp133 1
-   316 label *label83
+   315 label *label82
+   316 set *tmp133 1
+   317 label *label83
 -    * set :start_at_once *tmp133
-   317 op add *tmp135 .REACTORS_ON *tmp133
-   318 op min .REACTORS_ON *tmp135 :reactors
-   319 op add :nextStart @time 2000
+   318 op add *tmp135 .REACTORS_ON *tmp133
+   319 op min .REACTORS_ON *tmp135 :reactors
+   320 op add :nextStart @time 2000
  
-   392 label *label114
-   393 jump *label111 greaterThanEq .REACTORS_ON :reactors
-   394 label *label113
+   393 label *label114
+   394 jump *label111 greaterThanEq .REACTORS_ON :reactors
+   395 label *label113
 -    * op sub *tmp165 :battery_change 1500
-   395 op sub :p :battery_change 2500
-   396 op mul *tmp167 :p 0.00472972972972973
-   397 op add *tmp168 -5 *tmp167
+   396 op sub :p :battery_change 2500
+   397 op mul *tmp167 :p 0.00472972972972973
+   398 op add *tmp168 -5 *tmp167
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+   245 set *tmp101 battery2
+   246 label *label56
+   247 sensor *tmp103 *tmp101 @powerNetOut
+-    * op mul *tmp104 *tmp103 1.05
+-    * op floor *tmp105 *tmp104
++  248 op idiv *tmp105 *tmp103 0.9523809523809523
+   249 op max :neededPower *tmp105 1000
+   250 jump *label59 notEqual .REACTORS_ON 0
+   251 jump *label61 lessThan :total_battery 25000
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  

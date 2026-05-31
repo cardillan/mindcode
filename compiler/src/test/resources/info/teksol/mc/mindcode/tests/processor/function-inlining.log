@@ -1,15 +1,15 @@
     62 instructions before optimizations.
-     5 instructions eliminated by Temp Variables Elimination (7 iterations).
+     5 instructions eliminated by Temp Variables Elimination (8 iterations).
     11 instructions eliminated by Dead Code Elimination (8 iterations).
-    16 instructions eliminated by Jump Normalization (6 iterations).
-     1 instructions eliminated by Single Step Elimination (7 iterations).
-    16 instructions modified by Expression Optimization (4 iterations).
-   868 instructions eliminated by Data Flow Optimization (19 passes, 59 iterations).
+    16 instructions eliminated by Jump Normalization (7 iterations).
+     1 instructions eliminated by Single Step Elimination (8 iterations).
+    16 instructions modified by Expression Optimization (5 iterations).
+   868 instructions eliminated by Data Flow Optimization (19 passes, 60 iterations).
      1 loops improved by Loop Hoisting.
        1 loop conditions were partially rotated.
-  1552 instructions added by Loop Unrolling (22 iterations).
+  1552 instructions added by Loop Unrolling (23 iterations).
     16 loops unrolled by Loop Unrolling.
-   202 instructions added by Function Inlining (22 iterations).
+   202 instructions added by Function Inlining (23 iterations).
      8 function calls inlined by Function Inlining.
     15 instructions eliminated by Print Merging.
    900 instructions after optimizations.
@@ -10361,7 +10361,7 @@ Modifications by Iterated phase, Expression Optimization, pass 3, iteration 1:
   1694 op add :foo:sum :foo:sum *tmp15
   1695 label *label912
 
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
  
      5 label *label145
      6 set :foo:sum *tmp15
@@ -10507,7 +10507,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
   1696 op add :foo:sum :foo:sum *tmp15
   1697 label *label913
 
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-16 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-16 instructions):
  
      3 op rand :foo:r 10
      4 op add *tmp15 11 :foo:r
@@ -10637,7 +10637,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-1
   1678 op add :foo:sum *tmp15 *tmp15
   1679 label *label912
 
-Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 6, iteration 1 (-1 instructions):
  
    912 print "|"
    913 assertprints *tmp0 "550|1050|1550|2050|600|1100|1600|2100|650|1150|1650|2150|700|1200|1700|2200|" "function-inlining"

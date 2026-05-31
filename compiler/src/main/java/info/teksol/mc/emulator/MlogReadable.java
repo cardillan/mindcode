@@ -1,5 +1,6 @@
 package info.teksol.mc.emulator;
 
+import info.teksol.mc.evaluator.ExpressionEvaluator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -12,4 +13,8 @@ public interface MlogReadable {
     long getLongValue();
 
     boolean isObject();
+
+    default boolean getBooleanValue() {
+        return !ExpressionEvaluator.equals(getDoubleValue(), 0.0);
+    }
 }

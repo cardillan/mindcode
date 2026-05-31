@@ -6,16 +6,16 @@
     22 instructions eliminated by Condition Optimization (6 iterations).
     12 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
-     3 instructions eliminated by If Expression Optimization (3 iterations).
+     4 instructions eliminated by If Expression Optimization (3 iterations).
     14 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      1 instructions added by Loop Rotation (3 iterations).
        5 loop conditions were partially rotated.
      4 instructions eliminated by Jump Straightening (6 iterations).
      1 instructions updated by Jump Threading.
     14 instructions eliminated by Print Merging.
-   184 instructions after optimizations.
+   183 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 797):
+Pass 1: speed optimization selection (cost limit 798):
   * Full loop rotation at line 91:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -1064,6 +1064,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    167 op div .MUL 60 CAPACITY
    168 jump *label37 equal .MEMORY null
 
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
+ 
+   158 label *label35
+   159 set *tmp62 176
+   160 label *label36
+-    * op sub :crh *tmp62 0
++  161 set :crh *tmp62
+   162 label *label33
+   163 label *label34
+   164 label *label24
+
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      6 set .MESSAGE null
@@ -1128,7 +1139,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
    254 drawflush .DISPLAY
    255 print "Mass Driver Monitor"
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-3 instructions):
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-4 instructions):
  
     75 set :crx 0
     76 op sub :clw 82 2
@@ -1212,36 +1223,39 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    147 op add :crw 83 1
    148 set :cry 0
 -    * jump *label35 greaterThanEq TO_INDEX 16
-+  149 set *tmp62 176
++  149 set :crh 176
 +  150 jump *label36 greaterThanEq TO_INDEX 16
    151 op mod *tmp63 TO_INDEX 8
    152 op mul *tmp64 *tmp63 22
-   153 op add *tmp62 4 *tmp64
+-    * op add *tmp62 4 *tmp64
++  153 op add :crh 4 *tmp64
    154 jump *label36 always
 -    * label *label35
 -    * set *tmp62 176
    155 label *label36
-   156 op sub :crh *tmp62 0
-   157 label *label33
+-    * set :crh *tmp62
+   156 label *label33
+   157 label *label34
+   158 label *label24
 
 Modifications by Full loop rotation at line 91:1 (+1 instructions):
  
-   176 label *label42
-   177 sensor *tmp76 .SWITCH @enabled
-   178 jump *label44 notEqual *tmp76 0
-+  179 label *label62
-   180 set :start @time
-   181 draw color 0 0 80 255
-   182 draw rect :clx :cly :clw :clh
+   175 label *label42
+   176 sensor *tmp76 .SWITCH @enabled
+   177 jump *label44 notEqual *tmp76 0
++  178 label *label62
+   179 set :start @time
+   180 draw color 0 0 80 255
+   181 draw rect :clx :cly :clw :clh
  
-   256 print "ms"
-   257 printflush .MESSAGE
-   258 label *label43
+   255 print "ms"
+   256 printflush .MESSAGE
+   257 label *label43
 -    * jump *label42 always
-+  259 sensor *tmp76 .SWITCH @enabled
-+  260 jump *label62 equal *tmp76 0
-   261 label *label44
-   262 end
++  258 sensor *tmp76 .SWITCH @enabled
++  259 jump *label62 equal *tmp76 0
+   260 label *label44
+   261 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -1254,23 +1268,23 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     10 print "Mass Driver Monitor"
     11 print "\n"
  
-   163 jump *label37 equal .MEMORY null
-   164 set :n 0
-   165 label *label39
+   162 jump *label37 equal .MEMORY null
+   163 set :n 0
+   164 label *label39
 -    * jump *label41 greaterThanEq :n @links
-+  166 jump *label41 greaterThanEq 0 @links
-   167 label *label60
-   168 write 0 .MEMORY :n
-   169 label *label40
++  165 jump *label41 greaterThanEq 0 @links
+   166 label *label60
+   167 write 0 .MEMORY :n
+   168 label *label40
  
-   185 set :index FROM_INDEX
-   186 set :n 0
-   187 label *label45
+   184 set :index FROM_INDEX
+   185 set :n 0
+   186 label *label45
 -    * jump *label47 greaterThanEq :n @links
-+  188 jump *label47 greaterThanEq 0 @links
-   189 label *label61
-   190 getlink :driver :n
-   191 sensor *tmp81 :driver @type
++  187 jump *label47 greaterThanEq 0 @links
+   188 label *label61
+   189 getlink :driver :n
+   190 sensor *tmp81 :driver @type
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
  
@@ -1310,22 +1324,11 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
  
    147 op mod *tmp63 TO_INDEX 8
    148 op mul *tmp64 *tmp63 22
-   149 op add *tmp62 4 *tmp64
+   149 op add :crh 4 *tmp64
 -    * jump *label36 always
    150 label *label36
-   151 op sub :crh *tmp62 0
-   152 label *label33
-
-Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
- 
-   148 op mul *tmp64 *tmp63 22
-   149 op add *tmp62 4 *tmp64
-   150 label *label36
--    * op sub :crh *tmp62 0
-+  151 set :crh *tmp62
-   152 label *label33
-   153 label *label34
-   154 label *label24
+   151 label *label33
+   152 label *label34
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -1333,20 +1336,20 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
      2 set TO_INDEX 16
      3 set CAPACITY 120
  
-   155 label *label37
-   156 control enabled .SWITCH 0
-   157 sensor *tmp76 .SWITCH @enabled
+   154 label *label37
+   155 control enabled .SWITCH 0
+   156 sensor *tmp76 .SWITCH @enabled
 -    * jump *label44 notEqual *tmp76 0
-+  158 jump __start__ notEqual *tmp76 0
-   159 label *label62
-   160 set :start @time
-   161 draw color 0 0 80 255
++  157 jump __start__ notEqual *tmp76 0
+   158 label *label62
+   159 set :start @time
+   160 draw color 0 0 80 255
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   232 printflush .MESSAGE
-   233 sensor *tmp76 .SWITCH @enabled
-   234 jump *label62 equal *tmp76 0
+   231 printflush .MESSAGE
+   232 sensor *tmp76 .SWITCH @enabled
+   233 jump *label62 equal *tmp76 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
@@ -1399,22 +1402,22 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
     48 printflush .MESSAGE
     49 jump *label58 equal .DISPLAY null
  
-   211 jump *label61 lessThan :n @links
-   212 label *label47
-   213 drawflush .DISPLAY
+   210 jump *label61 lessThan :n @links
+   211 label *label47
+   212 drawflush .DISPLAY
 -    * print "Mass Driver Monitor"
 -    * print "\n"
-+  214 print "Mass Driver Monitor\n[lightgray]Draw time: {0} ms"
-   215 op sub *tmp117 @time :start
-   216 op floor *tmp118 *tmp117
++  213 print "Mass Driver Monitor\n[lightgray]Draw time: {0} ms"
+   214 op sub *tmp117 @time :start
+   215 op floor *tmp118 *tmp117
 -    * print "[lightgray]Draw time: "
 -    * print *tmp118
 -    * print " "
 -    * print "ms"
-+  217 format *tmp118
-   218 printflush .MESSAGE
-   219 sensor *tmp76 .SWITCH @enabled
-   220 jump *label62 equal *tmp76 0
++  216 format *tmp118
+   217 printflush .MESSAGE
+   218 sensor *tmp76 .SWITCH @enabled
+   219 jump *label62 equal *tmp76 0
 
 Final code before resolving virtual instructions:
 
@@ -1543,13 +1546,12 @@ jump *label33 lessThan TO_INDEX 8
 op sub :crx 93 2
 op add :crw 83 1
 set :cry 0
-set *tmp62 176
+set :crh 176
 jump *label36 greaterThanEq TO_INDEX 16
 op mod *tmp63 TO_INDEX 8
 op mul *tmp64 *tmp63 22
-op add *tmp62 4 *tmp64
+op add :crh 4 *tmp64
 label *label36
-set :crh *tmp62
 label *label33
 label *label24
 label *label18

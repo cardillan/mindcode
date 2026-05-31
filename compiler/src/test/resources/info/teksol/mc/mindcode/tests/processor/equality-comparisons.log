@@ -1,13 +1,13 @@
    588 instructions before optimizations.
-    60 instructions eliminated by Temp Variables Elimination (6 iterations).
+    60 instructions eliminated by Temp Variables Elimination (7 iterations).
     15 instructions eliminated by Dead Code Elimination (4 iterations).
-    24 instructions eliminated by Jump Normalization (5 iterations).
-    60 instructions eliminated by Condition Optimization (6 iterations).
-    73 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     4 instructions modified by Expression Optimization (3 iterations).
-    36 instructions eliminated by Boolean Optimization (6 iterations).
+    24 instructions eliminated by Jump Normalization (6 iterations).
+    60 instructions eliminated by Condition Optimization (7 iterations).
+    73 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
+     4 instructions modified by Expression Optimization (4 iterations).
+    36 instructions eliminated by Boolean Optimization (7 iterations).
        12 fully-evaluated expressions optimized using selects.
-   220 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+   220 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
     39 instructions eliminated by Print Merging.
     61 instructions after optimizations.
 
@@ -3816,7 +3816,7 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
    143 print *tmp102
    144 print *tmp105
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
  
    140 label *label98
    141 set *tmp111 "F"
@@ -3833,7 +3833,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
    148 label *label91
    149 assertflush *tmp113
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-4 instructions):
  
    132 assertprints *tmp85 "FTFT" "comparison 7"
    133 label *label78
@@ -3849,7 +3849,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
    139 print "T"
    140 print "F"
 
-Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
     97 print "F"
     98 assertprints *tmp197 "TFTF" "comparison 15"

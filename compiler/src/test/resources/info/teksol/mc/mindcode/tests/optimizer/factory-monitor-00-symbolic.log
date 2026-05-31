@@ -7,24 +7,24 @@
      1 instructions modified by Expression Optimization (3 iterations).
      8 instructions eliminated by Boolean Optimization (6 iterations).
        4 fully-evaluated expressions optimized using selects.
-     3 instructions eliminated by If Expression Optimization (3 iterations).
+     4 instructions eliminated by If Expression Optimization (3 iterations).
     20 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
        1 loop conditions were fully rotated.
        3 loop conditions were partially rotated.
    137 instructions added by Case Switching (5 iterations).
      1 case expressions converted to switched jumps by Case Switching.
     13 instructions eliminated by Jump Straightening (2 passes, 7 iterations).
-     2 instructions updated by Jump Threading.
+     3 instructions updated by Jump Threading.
     22 instructions eliminated by Print Merging.
-   471 instructions after optimizations.
+   470 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 637):
+Pass 1: speed optimization selection (cost limit 638):
   * Full loop rotation at line 160:1                             size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
   o Convert case at line 20:9 (segments: 13)                     size    +4, benefit     4748.6, efficiency   1187.141
   o Convert case at line 20:9 (segments: 5, padded low)          size    +8, benefit     4753.4, efficiency    594.169
   o Convert case at line 20:9 (segments: 1, padded low)          size  +137, benefit     4796.5, efficiency     35.011
 
-Pass 1: speed optimization selection (cost limit 636):
+Pass 1: speed optimization selection (cost limit 637):
   o Convert case at line 20:9 (segments: 13)                     size    +4, benefit     4748.6, efficiency   1187.141
   o Convert case at line 20:9 (segments: 5, padded low)          size    +8, benefit     4753.4, efficiency    594.169
   * Convert case at line 20:9 (segments: 1, padded low)          size  +137, benefit     4796.5, efficiency     35.011 (+137 instructions)
@@ -1665,6 +1665,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
     16 label *label0
     17 jump *label3 equal .DISPLAY null
 
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
+ 
+   270 label *label51
+   271 set *tmp80 176
+   272 label *label52
+-    * op sub :crh *tmp80 0
++  273 set :crh *tmp80
+   274 jump *label50 always
+   275 label *label49
+   276 set :crx 0
+
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1 (-1 instructions):
  
     14 set .MUL1 null
@@ -1797,7 +1808,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-8 i
    411 set :blue 0
    412 label *label82
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-3 instructions):
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-4 instructions):
  
    189 set :crx 0
    190 op sub :clw 82 2
@@ -1878,47 +1889,50 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    257 op add :crw 83 1
    258 set :cry 0
 -    * jump *label51 greaterThanEq TO_INDEX 16
-+  259 set *tmp80 176
++  259 set :crh 176
 +  260 jump *label52 greaterThanEq TO_INDEX 16
    261 op mod *tmp81 TO_INDEX 8
    262 op mul *tmp82 *tmp81 22
-   263 op add *tmp80 4 *tmp82
+-    * op add *tmp80 4 *tmp82
++  263 op add :crh 4 *tmp82
    264 jump *label52 always
 -    * label *label51
 -    * set *tmp80 176
    265 label *label52
-   266 op sub :crh *tmp80 0
-   267 jump *label50 always
+-    * set :crh *tmp80
+   266 jump *label50 always
+   267 label *label49
+   268 set :crx 0
 
 Modifications by Full loop rotation at line 160:1 (+1 instructions):
  
-   277 label *label53
-   278 sensor *tmp87 .SWITCH @enabled
-   279 jump *label55 notEqual *tmp87 0
-+  280 label *label93
-   281 set :start @time
-   282 print "Universal Factory Monitor"
-   283 print "\n"
+   276 label *label53
+   277 sensor *tmp87 .SWITCH @enabled
+   278 jump *label55 notEqual *tmp87 0
++  279 label *label93
+   280 set :start @time
+   281 print "Universal Factory Monitor"
+   282 print "\n"
  
-   435 print " ms"
-   436 printflush .MESSAGE
-   437 label *label54
+   434 print " ms"
+   435 printflush .MESSAGE
+   436 label *label54
 -    * jump *label53 always
-+  438 sensor *tmp87 .SWITCH @enabled
-+  439 jump *label93 equal *tmp87 0
-   440 label *label55
-   441 end
++  437 sensor *tmp87 .SWITCH @enabled
++  438 jump *label93 equal *tmp87 0
+   439 label *label55
+   440 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   290 set :index FROM_INDEX
-   291 set :n 0
-   292 label *label56
+   289 set :index FROM_INDEX
+   290 set :n 0
+   291 label *label56
 -    * jump *label58 greaterThanEq :n @links
-+  293 jump *label58 greaterThanEq 0 @links
-   294 label *label92
-   295 jump *label59 lessThan :index TO_INDEX
-   296 jump *label58 always
++  292 jump *label58 greaterThanEq 0 @links
+   293 label *label92
+   294 jump *label59 lessThan :index TO_INDEX
+   295 jump *label58 always
 
 Modifications by Convert case at line 20:9 (segments: 1, padded low) (+137 instructions):
  
@@ -2327,49 +2341,38 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
  
    542 op mod *tmp81 TO_INDEX 8
    543 op mul *tmp82 *tmp81 22
-   544 op add *tmp80 4 *tmp82
+   544 op add :crh 4 *tmp82
 -    * jump *label52 always
    545 label *label52
-   546 op sub :crh *tmp80 0
-   547 jump *label50 always
-
-Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
- 
-   543 op mul *tmp82 *tmp81 22
-   544 op add *tmp80 4 *tmp82
-   545 label *label52
--    * op sub :crh *tmp80 0
-+  546 set :crh *tmp80
-   547 jump *label50 always
-   548 label *label49
-   549 set :crx 0
+   546 jump *label50 always
+   547 label *label49
 
 Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1 (-2 instructions):
  
-   678 label *label81
-   679 op greaterThanEq *tmp158 :boost EXPECTED_BOOST
-   680 op land *tmp159 *tmp124 *tmp158
+   677 label *label81
+   678 op greaterThanEq *tmp158 :boost EXPECTED_BOOST
+   679 op land *tmp159 *tmp124 *tmp158
 -    * select *tmp160 notEqual *tmp159 false 0 255
 -    * set :red *tmp160
 -    * select *tmp162 greaterThan :minimum 33 255 0
 -    * set :green *tmp162
-+  681 select :red notEqual *tmp159 false 0 255
-+  682 select :green greaterThan :minimum 33 255 0
-   683 set :blue 0
-   684 label *label82
-   685 label *label78
++  680 select :red notEqual *tmp159 false 0 255
++  681 select :green greaterThan :minimum 33 255 0
+   682 set :blue 0
+   683 label *label82
+   684 label *label78
 
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-1 instructions):
  
-   550 set :n 0
-   551 jump *label58 greaterThanEq 0 @links
-   552 label *label92
+   549 set :n 0
+   550 jump *label58 greaterThanEq 0 @links
+   551 label *label92
 -    * jump *label59 lessThan :index TO_INDEX
 -    * jump *label58 always
-+  553 jump *label58 greaterThanEq :index TO_INDEX
-   554 label *label59
-   555 getlink :factory :n
-   556 sensor *tmp93 :factory @type
++  552 jump *label58 greaterThanEq :index TO_INDEX
+   553 label *label59
+   554 getlink :factory :n
+   555 sensor *tmp93 :factory @type
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -2377,29 +2380,38 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
      2 set TO_INDEX 16
      3 set EXPECTED_BOOST 1.5
  
-   536 label *label34
-   537 control enabled .SWITCH 0
-   538 sensor *tmp87 .SWITCH @enabled
--    * jump *label55 notEqual *tmp87 0
-+  539 jump __start__ notEqual *tmp87 0
-   540 label *label93
-   541 set :start @time
-   542 print "Universal Factory Monitor"
+   519 op add :crw 83 1
+   520 set :cry 0
+   521 set :crh 176
+-    * jump *label52 greaterThanEq TO_INDEX 16
++  522 jump *label50 greaterThanEq TO_INDEX 16
+   523 op mod *tmp81 TO_INDEX 8
+   524 op mul *tmp82 *tmp81 22
+   525 op add :crh 4 *tmp82
  
-   600 op add *tmp131 :x 7
-   601 op add *tmp132 :y 7
-   602 draw image *tmp131 *tmp132 :icon 16 0
+   535 label *label34
+   536 control enabled .SWITCH 0
+   537 sensor *tmp87 .SWITCH @enabled
+-    * jump *label55 notEqual *tmp87 0
++  538 jump __start__ notEqual *tmp87 0
+   539 label *label93
+   540 set :start @time
+   541 print "Universal Factory Monitor"
+ 
+   599 op add *tmp131 :x 7
+   600 op add *tmp132 :y 7
+   601 draw image *tmp131 *tmp132 :icon 16 0
 -    * jump *label76 always
-+  603 jump *label74 always
-   604 label *label75
-   605 draw color 255 80 80 255
-   606 op add *tmp133 :y 3
++  602 jump *label74 always
+   603 label *label75
+   604 draw color 255 80 80 255
+   605 op add *tmp133 :y 3
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   683 printflush .MESSAGE
-   684 sensor *tmp87 .SWITCH @enabled
-   685 jump *label93 equal *tmp87 0
+   681 printflush .MESSAGE
+   682 sensor *tmp87 .SWITCH @enabled
+   683 jump *label93 equal *tmp87 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
@@ -2466,28 +2478,28 @@ Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
    424 jump *label29 notEqual .TYPE null
    425 label *label31
  
-   520 jump __start__ notEqual *tmp87 0
-   521 label *label93
-   522 set :start @time
+   518 jump __start__ notEqual *tmp87 0
+   519 label *label93
+   520 set :start @time
 -    * print "Universal Factory Monitor"
 -    * print "\n"
 -    * print "Monitoring: "
-+  523 print "Universal Factory Monitor\nMonitoring: "
-   524 print .TYPE
-   525 draw color 0 0 80 255
-   526 draw rect :clx :cly :clw :clh
++  521 print "Universal Factory Monitor\nMonitoring: "
+   522 print .TYPE
+   523 draw color 0 0 80 255
+   524 draw rect :clx :cly :clw :clh
  
-   656 drawflush .DISPLAY
-   657 op sub *tmp173 @time :start
-   658 op floor *tmp174 *tmp173
+   654 drawflush .DISPLAY
+   655 op sub *tmp173 @time :start
+   656 op floor *tmp174 *tmp173
 -    * print "\nDraw time: "
 -    * print *tmp174
 -    * print " ms"
-+  659 print "\nDraw time: {0} ms"
-+  660 format *tmp174
-   661 printflush .MESSAGE
-   662 sensor *tmp87 .SWITCH @enabled
-   663 jump *label93 equal *tmp87 0
++  657 print "\nDraw time: {0} ms"
++  658 format *tmp174
+   659 printflush .MESSAGE
+   660 sensor *tmp87 .SWITCH @enabled
+   661 jump *label93 equal *tmp87 0
 
 Final code before resolving virtual instructions:
 
@@ -2993,13 +3005,11 @@ jump *label49 lessThan TO_INDEX 8
 op sub :crx 93 2
 op add :crw 83 1
 set :cry 0
-set *tmp80 176
-jump *label52 greaterThanEq TO_INDEX 16
+set :crh 176
+jump *label50 greaterThanEq TO_INDEX 16
 op mod *tmp81 TO_INDEX 8
 op mul *tmp82 *tmp81 22
-op add *tmp80 4 *tmp82
-label *label52
-set :crh *tmp80
+op add :crh 4 *tmp82
 jump *label50 always
 label *label49
 set :crx 0

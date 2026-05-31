@@ -8,7 +8,7 @@
      2 instructions modified by Expression Optimization (2 iterations).
      1 instructions eliminated by Boolean Optimization (5 iterations).
        1 fully-evaluated expressions optimized using selects.
-     2 instructions eliminated by Data Flow Optimization (6 iterations).
+     2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      3 instructions eliminated by Case Switching (4 iterations).
      2 case expressions converted to fast dispatch by Case Switching.
     10 instructions eliminated by Jump Straightening (6 iterations).
@@ -17,8 +17,8 @@
      2 instructions eliminated by Print Merging.
     90 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 904):
-  * Fast-dispatch case at line 19:16                             size    -2, benefit        6.3, efficiency   Infinity (-2 instructions)
+Pass 1: speed optimization selection (cost limit 902):
+  * Fast-dispatch case at line 19:16                             size    -2, benefit        6.3, efficiency   Infinity (-4 instructions)
   o Fast-dispatch case at line 60:13                             size    -2, benefit        6.3, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 906):
@@ -623,16 +623,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    145 label *label42
    146 op add :index :index 1
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
-     0 set .UNIT @mega
--    * sensor .THIS_X @this @x
--    * sensor .THIS_Y @this @y
-+    1 set .THIS_X @thisx
-+    2 set .THIS_Y @thisy
-     3 set :first_unit null
-     4 set :index 1
-     5 label *label0
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     30 set .UNIT *tmp4
@@ -643,21 +633,115 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     34 print ": gathering information..."
     35 label *label3
     36 label *label4
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
+     0 set .UNIT @mega
+-    * sensor .THIS_X @this @x
+-    * sensor .THIS_Y @this @y
++    1 set .THIS_X @thisx
++    2 set .THIS_Y @thisy
+     3 set :first_unit null
+     4 set :index 1
+     5 label *label0
+
+Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 instructions):
  
-   131 jump *label46 always
-   132 label *label45
-   133 jump *label49 equal :flag 0
+    42 jump *label15 always
+    43 label *label14
+    44 jump *label18 strictEqual @unit :first_unit
+-    * label *label19
+    45 jump *label16 strictNotEqual :first_unit null
+    46 label *label18
+    47 printflush message1
+ 
+    59 sensor :flag @unit @flag
+    60 sensor :items @unit @totalItems
+    61 sensor :item @unit @firstItem
+-    * sensor *tmp20 @unit @controller
+-    * jump *label22 notEqual *tmp20 @this
+-    * set :controlled 0
+-    * label *label22
+-    * label *label23
++   62 sensor *tmp20 @unit @controller
++   63 select :controlled equal *tmp20 @this 0 :controlled
+    64 jump *label26 notEqual :flag 0
+-    * label *label28
+    65 jump *label26 greaterThan :items 0
+-    * label *label27
+    66 jump *label24 equal :controlled 0
+-    * label *label29
+    67 sensor *tmp26 @unit @controller
+    68 jump *label24 equal *tmp26 @this
+    69 label *label26
+ 
+   107 label *label24
+   108 label *label25
+   109 jump *label41 notEqual :controlled 0
+-    * label *label44
+   110 sensor *tmp41 switch1 @enabled
+   111 jump *label41 equal *tmp41 false
+-    * label *label43
+   112 jump *label45 lessThanEq :items 0
+   113 ucontrol flag 1
+   114 ulocate building core false @copper .CORE_X .CORE_Y *tmp46 .CORE
+
+Modifications by Fast-dispatch case at line 19:16 (-2 instructions):
+ 
+     5 label *label0
+     6 sensor *tmp2 switch2 @enabled
+     7 jump *label3 equal *tmp2 false
+-    * jump *label6 notEqual .UNIT @flare
++    8 sensor *tmp53 .UNIT @id
++    9 multijump *tmp53 0 0 (m:*label54)
++   10 multilabel *label60 (m:*label54)
++   11 multilabel *label55 (m:*label54)
++   12 label *label53
++   13 set *tmp4 null
++   14 jump *label5 always
++   15 multilabel *label56 (m:*label54)
+    16 label *label7
+    17 set *tmp4 @mono
+    18 jump *label5 always
+    19 label *label6
+-    * jump *label8 notEqual .UNIT @mono
++   20 multilabel *label57 (m:*label54)
+    21 label *label9
+    22 set *tmp4 @poly
+    23 jump *label5 always
+    24 label *label8
+-    * jump *label10 notEqual .UNIT @poly
++   25 multilabel *label58 (m:*label54)
+    26 label *label11
+    27 set *tmp4 @mega
+    28 jump *label5 always
+    29 label *label10
+-    * jump *label12 notEqual .UNIT @mega
++   30 multilabel *label59 (m:*label54)
+    31 label *label13
+    32 set *tmp4 @flare
+-    * jump *label5 always
+-    * label *label12
+-    * set *tmp4 null
+    33 label *label5
+    34 set .UNIT *tmp4
+    35 set :first_unit null
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+   126 jump *label46 always
+   127 label *label45
+   128 jump *label49 equal :flag 0
 -    * ucontrol within .THIS_X .THIS_Y 8 *tmp51
-+  134 ucontrol within @thisx @thisy 8 *tmp51
-   135 jump *label51 equal *tmp51 false
-   136 ucontrol flag 0
-   137 jump *label52 always
-   138 label *label51
++  129 ucontrol within @thisx @thisy 8 *tmp51
+   130 jump *label51 equal *tmp51 false
+   131 ucontrol flag 0
+   132 jump *label52 always
+   133 label *label51
 -    * ucontrol approach .THIS_X .THIS_Y 4
-+  139 ucontrol approach @thisx @thisy 4
-   140 label *label52
-   141 label *label49
-   142 label *label50
++  134 ucontrol approach @thisx @thisy 4
+   135 label *label52
+   136 label *label49
+   137 label *label50
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
      0 set .UNIT @mega
@@ -666,88 +750,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
      1 set :first_unit null
      2 set :index 1
      3 label *label0
-
-Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 instructions):
- 
-    40 jump *label15 always
-    41 label *label14
-    42 jump *label18 strictEqual @unit :first_unit
--    * label *label19
-    43 jump *label16 strictNotEqual :first_unit null
-    44 label *label18
-    45 printflush message1
- 
-    57 sensor :flag @unit @flag
-    58 sensor :items @unit @totalItems
-    59 sensor :item @unit @firstItem
--    * sensor *tmp20 @unit @controller
--    * jump *label22 notEqual *tmp20 @this
--    * set :controlled 0
--    * label *label22
--    * label *label23
-+   60 sensor *tmp20 @unit @controller
-+   61 select :controlled equal *tmp20 @this 0 :controlled
-    62 jump *label26 notEqual :flag 0
--    * label *label28
-    63 jump *label26 greaterThan :items 0
--    * label *label27
-    64 jump *label24 equal :controlled 0
--    * label *label29
-    65 sensor *tmp26 @unit @controller
-    66 jump *label24 equal *tmp26 @this
-    67 label *label26
- 
-   105 label *label24
-   106 label *label25
-   107 jump *label41 notEqual :controlled 0
--    * label *label44
-   108 sensor *tmp41 switch1 @enabled
-   109 jump *label41 equal *tmp41 false
--    * label *label43
-   110 jump *label45 lessThanEq :items 0
-   111 ucontrol flag 1
-   112 ulocate building core false @copper .CORE_X .CORE_Y *tmp46 .CORE
-
-Modifications by Fast-dispatch case at line 19:16 (-2 instructions):
- 
-     3 label *label0
-     4 sensor *tmp2 switch2 @enabled
-     5 jump *label3 equal *tmp2 false
--    * jump *label6 notEqual .UNIT @flare
-+    6 sensor *tmp53 .UNIT @id
-+    7 multijump *tmp53 0 0 (m:*label54)
-+    8 multilabel *label60 (m:*label54)
-+    9 multilabel *label55 (m:*label54)
-+   10 label *label53
-+   11 set *tmp4 null
-+   12 jump *label5 always
-+   13 multilabel *label56 (m:*label54)
-    14 label *label7
-    15 set *tmp4 @mono
-    16 jump *label5 always
-    17 label *label6
--    * jump *label8 notEqual .UNIT @mono
-+   18 multilabel *label57 (m:*label54)
-    19 label *label9
-    20 set *tmp4 @poly
-    21 jump *label5 always
-    22 label *label8
--    * jump *label10 notEqual .UNIT @poly
-+   23 multilabel *label58 (m:*label54)
-    24 label *label11
-    25 set *tmp4 @mega
-    26 jump *label5 always
-    27 label *label10
--    * jump *label12 notEqual .UNIT @mega
-+   28 multilabel *label59 (m:*label54)
-    29 label *label13
-    30 set *tmp4 @flare
--    * jump *label5 always
--    * label *label12
--    * set *tmp4 null
-    31 label *label5
-    32 set .UNIT *tmp4
-    33 set :first_unit null
 
 Modifications by Fast-dispatch case at line 60:13 (-1 instructions):
  

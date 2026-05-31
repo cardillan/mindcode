@@ -1,9 +1,9 @@
 Name                                     Instructions   Source CRC         Compiled CRC    
 breakout-00.mnd:                                  179   DAE429A013DB4541   3120D48BBF7DA9C7
 detector-00.mnd:                                  128   0E3BEC8B5680A194   2E8F475A0CD4EEBE
-factory-monitor-00.mnd:                           471   863D948F911F2E7A   40A3C9E2E030B750
+factory-monitor-00.mnd:                           470   863D948F911F2E7A   21BB05D8193A8337
 factory-monitor-silicon-00.mnd:                   269   92331871E01FEB02   A3BA11432082544C
-factory-monitor-surge-alloy-00.mnd:               174   B570A56D64509A07   12EE7BF410625829
+factory-monitor-surge-alloy-00.mnd:               174   B570A56D64509A07   2045AB6CDACC9271
 impact-reactor-logic-00.mnd:                      801   76EAE225FB4E0441   D5713D5ACA7E63A3
 instant-overdrive-dome-01.mnd:                    854   FC2767B9BB219136   5FE86B9EB9619F5A
 item-counter-00.mnd:                               90   DBF0CE14BD53EC86   BE360F7DFF0BB7E6
@@ -14,7 +14,7 @@ level-display-00.mnd:                              86   B0F2701257FEF4C3   A50E1
 level-display-water-cryo-00.mnd:                   80   3B59D99D61A51686   F6ECDFBC5D07883D
 level-meter-00.mnd:                               287   C7BCD2A84C470E15   BD5ABEDC994DCF1B
 map-setup-00.mnd:                                 930   95F602FA758275E6   23BE7168DDB32472
-mass-driver-monitor-00.mnd:                       184   6E6F762403154535   ABC129485D8D5532
+mass-driver-monitor-00.mnd:                       183   6E6F762403154535   1FF3E7404987F34B
 mass-driver-monitor-surge-alloy-00.mnd:           232   84BE8CA14CE3386F   EFCD8824E55C9726
 reactor-control-00.mnd:                           424   0B5F71D4A736D2F1   E63BBD3695941A99
 reactor-control-battery-level-00.mnd:             572   BEBDD58A4C35FD11   304959A8E0FE2596

@@ -52,7 +52,8 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
                 tmp = LogicVariable.INVALID;  // Won't be used
             } else if (folded()) {
                 LogicVariable tmp1 = creator.nextTemp();
-                creator.createOp(Operation.MUL, tmp1, instruction.getIndex(), LogicNumber.TWO);
+                creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
+                        .createOp(Operation.SHL, tmp1, instruction.getIndex(), LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
                 generateBoundsCheck(astContext, consumer, tmp1, 2);
                 LogicVariable tmp2 = creator.nextTemp();
                 LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
@@ -60,7 +61,8 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
                 tmp = tmp2;
             } else {
                 tmp = creator.nextTemp();
-                creator.createOp(Operation.MUL, tmp, instruction.getIndex(), LogicNumber.TWO);
+                creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
+                        .createOp(Operation.SHL, tmp, instruction.getIndex(), LogicNumber.ONE);
                 generateBoundsCheck(astContext, consumer, tmp, 2);
             }
 
@@ -69,9 +71,11 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
 
             List<LogicLabel> branchLabels = new ArrayList<>();
             if (useTextTables) {
-                creator.withSideEffects(createSideEffects()).createMultiJump(instruction.getIndex(), marker).setJumpTable(branchLabels);
+                creator.withEffects(ix -> ix.setSideEffects(createSideEffects()).setNonNegativeInt(instruction.getIndex()))
+                        .createMultiJump(instruction.getIndex(), marker).setJumpTable(branchLabels);
             } else {
-                creator.withSideEffects(createSideEffects()).createMultiJump(firstLabel, tmp, LogicNumber.ZERO, marker);
+                creator.withEffects(ix -> ix.setSideEffects(createSideEffects()).setNonNegativeInt(instruction.getIndex()))
+                        .createMultiJump(firstLabel, tmp, LogicNumber.ZERO, marker);
             }
 
             Runnable createExit = () -> creator.createJumpUnconditional(finalLabel);

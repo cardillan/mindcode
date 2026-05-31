@@ -1575,32 +1575,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    594 label *label127
    595 set :start_reactor*retval :start_reactor:supply_fuel
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-3 instructions):
- 
-   399 label *label83
-   400 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
-   401 op mul *tmp105 :calc_charge_req:time_left :calc_charge_req:time_left
--    * op mul *tmp106 *tmp105 25
--    * op floor :calc_charge_req:charge_req *tmp106
-+  402 op idiv :calc_charge_req:charge_req *tmp105 0.04
-   403 set :calc_charge_req*retval :calc_charge_req:charge_req
-   404 jump *label81 always
-   405 set :calc_charge_req*retval null
- 
-   534 label *label112
-   535 op add *tmp171 :start_reactor:flow_units :start_reactor:charge_units
-   536 jump *label114 greaterThanEq *tmp171 1
--    * op mul *tmp174 :start_reactor:flow_units 1000
--    * op floor *tmp175 *tmp174
-+  537 op idiv *tmp175 :start_reactor:flow_units 0.001
-   538 op div :start_reactor:flow *tmp175 10
--    * op mul *tmp177 :start_reactor:charge_units 1000
--    * op floor *tmp178 *tmp177
-+  539 op idiv *tmp178 :start_reactor:charge_units 0.001
-   540 op div :start_reactor:charge *tmp178 10
-   541 print "WAIT power. (%"
-   542 print :start_reactor:charge
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-7 instructions):
  
     33 set *tmp5 @tick
@@ -1831,57 +1805,57 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-7
    383 return :update_fuel*retaddr
    384 end
  
-   399 op idiv :calc_charge_req:charge_req *tmp105 0.04
-   400 set :calc_charge_req*retval :calc_charge_req:charge_req
-   401 jump *label81 always
+   400 op floor :calc_charge_req:charge_req *tmp106
+   401 set :calc_charge_req*retval :calc_charge_req:charge_req
+   402 jump *label81 always
 -    * set :calc_charge_req*retval null
-   402 label *label81
-   403 return :calc_charge_req*retaddr
-   404 end
+   403 label *label81
+   404 return :calc_charge_req*retaddr
+   405 end
  
-   467 call *label2 *invalid :calc_charge_req*retval (m:*label103) (h:*label103)
-   468 label *label103
-   469 set :start_reactor:charge_req :calc_charge_req*retval
+   468 call *label2 *invalid :calc_charge_req*retval (m:*label103) (h:*label103)
+   469 label *label103
+   470 set :start_reactor:charge_req :calc_charge_req*retval
 -    * op sub *tmp147 :start_reactor:charge :start_reactor:charge_req
-+  470 op sub *tmp147 :start_reactor:charge :calc_charge_req*retval
-   471 jump *label104 greaterThanEq *tmp147 .PWR_ABORT
-   472 label *label107
-   473 jump *label104 greaterThanEq :start_reactor:surplus .FLOW_ABORT
++  471 op sub *tmp147 :start_reactor:charge :calc_charge_req*retval
+   472 jump *label104 greaterThanEq *tmp147 .PWR_ABORT
+   473 label *label107
+   474 jump *label104 greaterThanEq :start_reactor:surplus .FLOW_ABORT
  
-   483 print :start_reactor:time_left
-   484 print " "
-   485 print "secs, req "
+   484 print :start_reactor:time_left
+   485 print " "
+   486 print "secs, req "
 -    * print :start_reactor:charge_req
-+  486 print :calc_charge_req*retval
-   487 print "J"
-   488 print "\n"
-   489 label *label105
++  487 print :calc_charge_req*retval
+   488 print "J"
+   489 print "\n"
+   490 label *label105
  
-   587 label *label127
-   588 set :start_reactor*retval :start_reactor:supply_fuel
-   589 jump *label86 always
+   590 label *label127
+   591 set :start_reactor*retval :start_reactor:supply_fuel
+   592 jump *label86 always
 -    * set :start_reactor*retval null
-   590 label *label86
-   591 return :start_reactor*retaddr
-   592 end
+   593 label *label86
+   594 return :start_reactor*retaddr
+   595 end
  
-   609 control enabled reactor5 false
-   610 set :check_radar*retval true
-   611 jump *label128 always
+   612 control enabled reactor5 false
+   613 set :check_radar*retval true
+   614 jump *label128 always
 -    * set *tmp198 null
-   612 jump *label130 always
-   613 label *label129
-   614 control enabled projector1 false
-   615 control enabled projector2 false
-   616 set :check_radar*retval false
-   617 jump *label128 always
+   615 jump *label130 always
+   616 label *label129
+   617 control enabled projector1 false
+   618 control enabled projector2 false
+   619 set :check_radar*retval false
+   620 jump *label128 always
 -    * set *tmp198 null
-   618 label *label130
+   621 label *label130
 -    * set :check_radar*retval *tmp198
-+  619 set :check_radar*retval null
-   620 label *label128
-   621 return :check_radar*retaddr
-   622 end
++  622 set :check_radar*retval null
+   623 label *label128
+   624 return :check_radar*retaddr
+   625 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-16 instructions):
      0 printflush message1
@@ -2002,21 +1976,21 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    362 set *tmp97 .FUEL
    363 jump *label80 always
  
-   452 setaddr :calc_charge_req*retaddr *label103 (h:*label103)
-   453 call *label2 *invalid :calc_charge_req*retval (m:*label103) (h:*label103)
-   454 label *label103
+   453 setaddr :calc_charge_req*retaddr *label103 (h:*label103)
+   454 call *label2 *invalid :calc_charge_req*retval (m:*label103) (h:*label103)
+   455 label *label103
 -    * set :start_reactor:charge_req :calc_charge_req*retval
-   455 op sub *tmp147 :start_reactor:charge :calc_charge_req*retval
-   456 jump *label104 greaterThanEq *tmp147 .PWR_ABORT
-   457 label *label107
+   456 op sub *tmp147 :start_reactor:charge :calc_charge_req*retval
+   457 jump *label104 greaterThanEq *tmp147 .PWR_ABORT
+   458 label *label107
  
-   601 set :check_radar*retval false
-   602 jump *label128 always
-   603 label *label130
+   604 set :check_radar*retval false
+   605 jump *label128 always
+   606 label *label130
 -    * set :check_radar*retval null
-   604 label *label128
-   605 return :check_radar*retaddr
-   606 end
+   607 label *label128
+   608 return :check_radar*retaddr
+   609 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3 instructions):
  
@@ -2036,6 +2010,32 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
     30 set :t_startup1 *tmp5
     31 set :t_startup2 *tmp5
     32 set :t_startup3 *tmp5
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-3 instructions):
+ 
+   379 label *label83
+   380 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
+   381 op mul *tmp105 :calc_charge_req:time_left :calc_charge_req:time_left
+-    * op mul *tmp106 *tmp105 25
+-    * op floor :calc_charge_req:charge_req *tmp106
++  382 op idiv :calc_charge_req:charge_req *tmp105 0.04
+   383 set :calc_charge_req*retval :calc_charge_req:charge_req
+   384 jump *label81 always
+   385 label *label81
+ 
+   512 label *label112
+   513 op add *tmp171 :start_reactor:flow_units :start_reactor:charge_units
+   514 jump *label114 greaterThanEq *tmp171 1
+-    * op mul *tmp174 :start_reactor:flow_units 1000
+-    * op floor *tmp175 *tmp174
++  515 op idiv *tmp175 :start_reactor:flow_units 0.001
+   516 op div :start_reactor:flow *tmp175 10
+-    * op mul *tmp177 :start_reactor:charge_units 1000
+-    * op floor *tmp178 *tmp177
++  517 op idiv *tmp178 :start_reactor:charge_units 0.001
+   518 op div :start_reactor:charge *tmp178 10
+   519 print "WAIT power. (%"
+   520 print :start_reactor:charge
 
 Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-8 instructions):
  

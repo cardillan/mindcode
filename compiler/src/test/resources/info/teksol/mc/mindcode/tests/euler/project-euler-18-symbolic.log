@@ -5,17 +5,17 @@
      2 instructions eliminated by Condition Optimization (2 passes, 9 iterations).
      1 instructions eliminated by Single Step Elimination (8 iterations).
      2 instructions modified by Expression Optimization (5 iterations).
-  1177 instructions eliminated by Data Flow Optimization (18 passes, 57 iterations).
+  1178 instructions eliminated by Data Flow Optimization (17 passes, 56 iterations).
      1 loops improved by Loop Hoisting.
        2 loop conditions were partially rotated.
-  1268 instructions added by Loop Unrolling (20 iterations).
+  1269 instructions added by Loop Unrolling (20 iterations).
     15 loops unrolled by Loop Unrolling.
    837 instructions after optimizations.
 
 Pass 3: speed optimization selection (cost limit 856):
   * Unroll loop at line 9:5                                      size  +218, benefit      700.0, efficiency      3.211 (+162 instructions)
 
-Pass 4: speed optimization selection (cost limit 709):
+Pass 4: speed optimization selection (cost limit 708):
     Unroll loop at line 10:9                                     size  +123, benefit      750.0, efficiency      6.098
     Unroll loop at line 10:9                                     size  +114, benefit      700.0, efficiency      6.140
     Unroll loop at line 10:9                                     size  +105, benefit      650.0, efficiency      6.190
@@ -29,7 +29,7 @@ Pass 4: speed optimization selection (cost limit 709):
     Unroll loop at line 10:9                                     size   +33, benefit      250.0, efficiency      7.576
     Unroll loop at line 10:9                                     size   +24, benefit      200.0, efficiency      8.333
     Unroll loop at line 10:9                                     size   +15, benefit      150.0, efficiency     10.000
-  * Unroll loop at line 10:9                                     size    +5, benefit      100.0, efficiency     20.000 (+1 instructions)
+  * Unroll loop at line 10:9                                     size    +6, benefit      100.0, efficiency     16.667 (+0 instructions)
 
 Pass 4: speed optimization selection (cost limit 708):
     Unroll loop at line 10:9                                     size  +123, benefit      750.0, efficiency      6.098
@@ -6506,37 +6506,7 @@ Modifications by Iterated phase, Expression Optimization, pass 4, iteration 1:
    695 label *label255
    696 # "Function: inline def r(in row, in col)"
 
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
- 
-   691 label *label254
-   692 # "Function: inline def r(in row, in col)"
-   693 set *tmp607 :run:col
--    * read *tmp605 bank1 *tmp607
-+  694 read *tmp605 bank1 :run:col
-   695 label *label255
-   696 # "Function: inline def r(in row, in col)"
-   697 op add *tmp614 16 :run:col
- 
-   704 op max *tmp626 *tmp612 *tmp620
-   705 op add *tmp627 *tmp605 *tmp626
-   706 # "Function: inline def w(in row, in col, in num)"
--    * write *tmp627 bank1 *tmp607
-+  707 write *tmp627 bank1 :run:col
-   708 label *label258
-   709 label *label259
-   710 op sub :run:col :run:col 1
-
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-1 instructions):
- 
-   690 label *label253
-   691 label *label254
-   692 # "Function: inline def r(in row, in col)"
--    * set *tmp607 :run:col
-   693 read *tmp605 bank1 :run:col
-   694 label *label255
-   695 # "Function: inline def r(in row, in col)"
-
-Modifications by Unroll loop at line 10:9 (+8 instructions):
+Modifications by Unroll loop at line 10:9 (+9 instructions):
  
    686 jump *label245 greaterThanEq :run:col 0
    687 label *label251
@@ -6545,7 +6515,8 @@ Modifications by Unroll loop at line 10:9 (+8 instructions):
 -    * label *label253
 -    * label *label254
 -    * # "Function: inline def r(in row, in col)"
--    * read *tmp605 bank1 :run:col
+-    * set *tmp607 :run:col
+-    * read *tmp605 bank1 *tmp607
 -    * label *label255
 -    * # "Function: inline def r(in row, in col)"
 -    * op add *tmp614 16 :run:col
@@ -6558,7 +6529,7 @@ Modifications by Unroll loop at line 10:9 (+8 instructions):
 -    * op max *tmp626 *tmp612 *tmp620
 -    * op add *tmp627 *tmp605 *tmp626
 -    * # "Function: inline def w(in row, in col, in num)"
--    * write *tmp627 bank1 :run:col
+-    * write *tmp627 bank1 *tmp607
 -    * label *label258
 -    * label *label259
 -    * op sub :run:col :run:col 1
@@ -6567,105 +6538,161 @@ Modifications by Unroll loop at line 10:9 (+8 instructions):
 +  689 set :run:col 1
 +  690 label *label262
 +  691 # "Function: inline def r(in row, in col)"
-+  692 read *tmp605 bank1 :run:col
-+  693 label *label263
-+  694 # "Function: inline def r(in row, in col)"
-+  695 op add *tmp614 16 :run:col
-+  696 read *tmp612 bank1 *tmp614
-+  697 label *label264
-+  698 # "Function: inline def r(in row, in col)"
-+  699 op add *tmp622 :run:col 17
-+  700 read *tmp620 bank1 *tmp622
-+  701 label *label265
-+  702 op max *tmp626 *tmp612 *tmp620
-+  703 op add *tmp627 *tmp605 *tmp626
-+  704 # "Function: inline def w(in row, in col, in num)"
-+  705 write *tmp627 bank1 :run:col
-+  706 label *label266
-+  707 label *label267
-+  708 op sub :run:col :run:col 1
-+  709 # "Function: inline def r(in row, in col)"
-+  710 read *tmp605 bank1 :run:col
-+  711 label *label268
-+  712 # "Function: inline def r(in row, in col)"
-+  713 op add *tmp614 16 :run:col
-+  714 read *tmp612 bank1 *tmp614
-+  715 label *label269
-+  716 # "Function: inline def r(in row, in col)"
-+  717 op add *tmp622 :run:col 17
-+  718 read *tmp620 bank1 *tmp622
-+  719 label *label270
-+  720 op max *tmp626 *tmp612 *tmp620
-+  721 op add *tmp627 *tmp605 *tmp626
-+  722 # "Function: inline def w(in row, in col, in num)"
-+  723 write *tmp627 bank1 :run:col
-+  724 label *label271
-+  725 label *label272
-+  726 op sub :run:col :run:col 1
-+  727 label *label260
-   728 label *label261
-   729 label *label124
-   730 label *label121
++  692 set *tmp607 :run:col
++  693 read *tmp605 bank1 *tmp607
++  694 label *label263
++  695 # "Function: inline def r(in row, in col)"
++  696 op add *tmp614 16 :run:col
++  697 read *tmp612 bank1 *tmp614
++  698 label *label264
++  699 # "Function: inline def r(in row, in col)"
++  700 op add *tmp622 :run:col 17
++  701 read *tmp620 bank1 *tmp622
++  702 label *label265
++  703 op max *tmp626 *tmp612 *tmp620
++  704 op add *tmp627 *tmp605 *tmp626
++  705 # "Function: inline def w(in row, in col, in num)"
++  706 write *tmp627 bank1 *tmp607
++  707 label *label266
++  708 label *label267
++  709 op sub :run:col :run:col 1
++  710 # "Function: inline def r(in row, in col)"
++  711 set *tmp607 :run:col
++  712 read *tmp605 bank1 *tmp607
++  713 label *label268
++  714 # "Function: inline def r(in row, in col)"
++  715 op add *tmp614 16 :run:col
++  716 read *tmp612 bank1 *tmp614
++  717 label *label269
++  718 # "Function: inline def r(in row, in col)"
++  719 op add *tmp622 :run:col 17
++  720 read *tmp620 bank1 *tmp622
++  721 label *label270
++  722 op max *tmp626 *tmp612 *tmp620
++  723 op add *tmp627 *tmp605 *tmp626
++  724 # "Function: inline def w(in row, in col, in num)"
++  725 write *tmp627 bank1 *tmp607
++  726 label *label271
++  727 label *label272
++  728 op sub :run:col :run:col 1
++  729 label *label260
+   730 label *label261
+   731 label *label124
+   732 label *label121
 
 Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
  
    689 set :run:col 1
    690 label *label262
    691 # "Function: inline def r(in row, in col)"
+-    * set *tmp607 :run:col
+-    * read *tmp605 bank1 *tmp607
++  692 set *tmp607 1
++  693 read *tmp605 bank1 :run:col
+   694 label *label263
+   695 # "Function: inline def r(in row, in col)"
+-    * op add *tmp614 16 :run:col
+-    * read *tmp612 bank1 *tmp614
++  696 op add *tmp614 16 1
++  697 read *tmp612 bank1 17
+   698 label *label264
+   699 # "Function: inline def r(in row, in col)"
+-    * op add *tmp622 :run:col 17
+-    * read *tmp620 bank1 *tmp622
++  700 op add *tmp622 1 17
++  701 read *tmp620 bank1 18
+   702 label *label265
+   703 op max *tmp626 *tmp612 *tmp620
+   704 op add *tmp627 *tmp605 *tmp626
+   705 # "Function: inline def w(in row, in col, in num)"
+-    * write *tmp627 bank1 *tmp607
++  706 write *tmp627 bank1 :run:col
+   707 label *label266
+   708 label *label267
+-    * op sub :run:col :run:col 1
++  709 op sub :run:col 1 1
+   710 # "Function: inline def r(in row, in col)"
+-    * set *tmp607 :run:col
+-    * read *tmp605 bank1 *tmp607
++  711 set *tmp607 0
++  712 read *tmp605 bank1 :run:col
+   713 label *label268
+   714 # "Function: inline def r(in row, in col)"
+-    * op add *tmp614 16 :run:col
+-    * read *tmp612 bank1 *tmp614
++  715 op add *tmp614 16 0
++  716 read *tmp612 bank1 16
+   717 label *label269
+   718 # "Function: inline def r(in row, in col)"
+-    * op add *tmp622 :run:col 17
+-    * read *tmp620 bank1 *tmp622
++  719 op add *tmp622 0 17
++  720 read *tmp620 bank1 17
+   721 label *label270
+   722 op max *tmp626 *tmp612 *tmp620
+   723 op add *tmp627 *tmp605 *tmp626
+   724 # "Function: inline def w(in row, in col, in num)"
+-    * write *tmp627 bank1 *tmp607
++  725 write *tmp627 bank1 :run:col
+   726 label *label271
+   727 label *label272
+-    * op sub :run:col :run:col 1
++  728 op sub :run:col 0 1
+   729 label *label260
+   730 label *label261
+   731 label *label124
+
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-7 instructions):
+ 
+   689 set :run:col 1
+   690 label *label262
+   691 # "Function: inline def r(in row, in col)"
+-    * set *tmp607 1
 -    * read *tmp605 bank1 :run:col
 +  692 read *tmp605 bank1 1
    693 label *label263
    694 # "Function: inline def r(in row, in col)"
--    * op add *tmp614 16 :run:col
--    * read *tmp612 bank1 *tmp614
-+  695 op add *tmp614 16 1
-+  696 read *tmp612 bank1 17
-   697 label *label264
-   698 # "Function: inline def r(in row, in col)"
--    * op add *tmp622 :run:col 17
--    * read *tmp620 bank1 *tmp622
-+  699 op add *tmp622 1 17
-+  700 read *tmp620 bank1 18
-   701 label *label265
-   702 op max *tmp626 *tmp612 *tmp620
-   703 op add *tmp627 *tmp605 *tmp626
-   704 # "Function: inline def w(in row, in col, in num)"
+-    * op add *tmp614 16 1
+   695 read *tmp612 bank1 17
+   696 label *label264
+   697 # "Function: inline def r(in row, in col)"
+-    * op add *tmp622 1 17
+   698 read *tmp620 bank1 18
+   699 label *label265
+   700 op max *tmp626 *tmp612 *tmp620
+   701 op add *tmp627 *tmp605 *tmp626
+   702 # "Function: inline def w(in row, in col, in num)"
 -    * write *tmp627 bank1 :run:col
-+  705 write *tmp627 bank1 1
-   706 label *label266
-   707 label *label267
--    * op sub :run:col :run:col 1
-+  708 op sub :run:col 1 1
-   709 # "Function: inline def r(in row, in col)"
++  703 write *tmp627 bank1 1
+   704 label *label266
+   705 label *label267
+   706 op sub :run:col 1 1
+   707 # "Function: inline def r(in row, in col)"
+-    * set *tmp607 0
 -    * read *tmp605 bank1 :run:col
-+  710 read *tmp605 bank1 0
-   711 label *label268
-   712 # "Function: inline def r(in row, in col)"
--    * op add *tmp614 16 :run:col
--    * read *tmp612 bank1 *tmp614
-+  713 op add *tmp614 16 0
-+  714 read *tmp612 bank1 16
-   715 label *label269
-   716 # "Function: inline def r(in row, in col)"
--    * op add *tmp622 :run:col 17
--    * read *tmp620 bank1 *tmp622
-+  717 op add *tmp622 0 17
-+  718 read *tmp620 bank1 17
-   719 label *label270
-   720 op max *tmp626 *tmp612 *tmp620
-   721 op add *tmp627 *tmp605 *tmp626
-   722 # "Function: inline def w(in row, in col, in num)"
++  708 read *tmp605 bank1 0
+   709 label *label268
+   710 # "Function: inline def r(in row, in col)"
+-    * op add *tmp614 16 0
+   711 read *tmp612 bank1 16
+   712 label *label269
+   713 # "Function: inline def r(in row, in col)"
+-    * op add *tmp622 0 17
+   714 read *tmp620 bank1 17
+   715 label *label270
+   716 op max *tmp626 *tmp612 *tmp620
+   717 op add *tmp627 *tmp605 *tmp626
+   718 # "Function: inline def w(in row, in col, in num)"
 -    * write *tmp627 bank1 :run:col
-+  723 write *tmp627 bank1 0
-   724 label *label271
-   725 label *label272
--    * op sub :run:col :run:col 1
-+  726 op sub :run:col 0 1
-   727 label *label260
-   728 label *label261
-   729 label *label124
++  719 write *tmp627 bank1 0
+   720 label *label271
+   721 label *label272
+-    * op sub :run:col 0 1
+   722 label *label260
+   723 label *label261
+   724 label *label124
 
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-7 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 3 (-2 instructions):
  
    686 jump *label245 greaterThanEq :run:col 0
    687 label *label251
@@ -6674,16 +6701,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-7
    689 label *label262
    690 # "Function: inline def r(in row, in col)"
    691 read *tmp605 bank1 1
-   692 label *label263
-   693 # "Function: inline def r(in row, in col)"
--    * op add *tmp614 16 1
-   694 read *tmp612 bank1 17
-   695 label *label264
-   696 # "Function: inline def r(in row, in col)"
--    * op add *tmp622 1 17
-   697 read *tmp620 bank1 18
-   698 label *label265
-   699 op max *tmp626 *tmp612 *tmp620
  
    702 write *tmp627 bank1 1
    703 label *label266
@@ -6692,23 +6709,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-7
    705 # "Function: inline def r(in row, in col)"
    706 read *tmp605 bank1 0
    707 label *label268
-   708 # "Function: inline def r(in row, in col)"
--    * op add *tmp614 16 0
-   709 read *tmp612 bank1 16
-   710 label *label269
-   711 # "Function: inline def r(in row, in col)"
--    * op add *tmp622 0 17
-   712 read *tmp620 bank1 17
-   713 label *label270
-   714 op max *tmp626 *tmp612 *tmp620
- 
-   717 write *tmp627 bank1 0
-   718 label *label271
-   719 label *label272
--    * op sub :run:col 0 1
-   720 label *label260
-   721 label *label261
-   722 label *label124
 
 Modifications by Unroll loop at line 10:9 (+19 instructions):
  

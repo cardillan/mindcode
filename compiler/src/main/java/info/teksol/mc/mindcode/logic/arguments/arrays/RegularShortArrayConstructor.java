@@ -100,26 +100,31 @@ public class RegularShortArrayConstructor extends TablelessArrayConstructor {
 
         if (arraySize == 4) {
             LogicVariable tmp0 = creator.nextTemp();
-            creator.createSelect(tmp0, Condition.EQUAL, instruction.getIndex(), LogicNumber.ZERO,
-                    valueExtractor.apply(arrayStore.getElements().get(0)),
-                    valueExtractor.apply(arrayStore.getElements().get(1)));
+            creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
+                    .createSelect(tmp0, Condition.LESS_THAN, instruction.getIndex(), LogicNumber.ONE,
+                            valueExtractor.apply(arrayStore.getElements().get(0)),
+                            valueExtractor.apply(arrayStore.getElements().get(1)));
 
 
             LogicVariable tmp1 = creator.nextTemp();
-            creator.createSelect(tmp1, Condition.EQUAL, instruction.getIndex(), LogicNumber.TWO,
-                    valueExtractor.apply(arrayStore.getElements().get(2)),
-                    valueExtractor.apply(arrayStore.getElements().get(3)));
+            creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
+                    .createSelect(tmp1, Condition.LESS_THAN, instruction.getIndex(), LogicNumber.THREE,
+                            valueExtractor.apply(arrayStore.getElements().get(2)),
+                            valueExtractor.apply(arrayStore.getElements().get(3)));
 
-            creator.createSelect(result, Condition.LESS_THAN, instruction.getIndex(), LogicNumber.TWO,
-                    tmp0, tmp1);
+            creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
+                    .createSelect(result, Condition.LESS_THAN, instruction.getIndex(), LogicNumber.TWO,
+                            tmp0, tmp1);
         } else {
-            creator.createSelect(result, Condition.EQUAL, instruction.getIndex(), LogicNumber.ZERO,
-                    valueExtractor.apply(arrayStore.getElements().get(0)),
-                    valueExtractor.apply(arrayStore.getElements().get(1)));
+            creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
+                    .createSelect(result, Condition.LESS_THAN, instruction.getIndex(), LogicNumber.ONE,
+                            valueExtractor.apply(arrayStore.getElements().get(0)),
+                            valueExtractor.apply(arrayStore.getElements().get(1)));
 
             if (arraySize == 3) {
-                creator.createSelect(result, Condition.EQUAL, instruction.getIndex(), LogicNumber.TWO,
-                        valueExtractor.apply(arrayStore.getElements().get(2)), result);
+                creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
+                        .createSelect(result, Condition.LESS_THAN, instruction.getIndex(), LogicNumber.TWO,
+                                result, valueExtractor.apply(arrayStore.getElements().get(2)));
             }
         }
     }
@@ -156,7 +161,8 @@ public class RegularShortArrayConstructor extends TablelessArrayConstructor {
         LogicLabel elseLabel = processor.nextLabel();
         LogicLabel endLabel = processor.nextLabel();
 
-        creator.createJump(elseLabel, Condition.NOT_EQUAL, instruction.getIndex(), LogicNumber.create(startIndex));
+        creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
+                .createJump(elseLabel, Condition.GREATER_THAN_EQ, instruction.getIndex(), LogicNumber.create(startIndex + 1));
 
         creator.setSubcontextType(AstSubcontextType.BODY, 0.5);
         operation.accept(arrayStore.getElements().get(startIndex));

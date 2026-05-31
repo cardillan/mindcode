@@ -204,16 +204,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
     21 label *label6
     22 label *label4
 
-Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-1 instructions):
- 
-    10 label *label12
-    11 op add *tmp1 :i 1
-    12 # "Function: inline def testAndSwap(in i, in j, in sorted)"
--    * set :sorted :sorted
-    13 read :testAndSwap:a ARRAY :i
-    14 read :testAndSwap:b ARRAY *tmp1
-    15 jump *label8 lessThanEq :testAndSwap:a :testAndSwap:b
-
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      6 set :sorted true
@@ -225,14 +215,24 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     11 op add *tmp1 :i 1
     12 # "Function: inline def testAndSwap(in i, in j, in sorted)"
  
-    27 label *label2
-    28 set :i 0
-    29 label *label9
+    28 label *label2
+    29 set :i 0
+    30 label *label9
 -    * jump *label11 greaterThanEq :i SIZE
-+   30 jump *label11 greaterThanEq 0 SIZE
-    31 label *label13
-    32 read *tmp20 FINAL :i
-    33 read *tmp21 ARRAY :i
++   31 jump *label11 greaterThanEq 0 SIZE
+    32 label *label13
+    33 read *tmp20 FINAL :i
+    34 read *tmp21 ARRAY :i
+
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-1 instructions):
+ 
+    10 label *label12
+    11 op add *tmp1 :i 1
+    12 # "Function: inline def testAndSwap(in i, in j, in sorted)"
+-    * set :sorted :sorted
+    13 read :testAndSwap:a ARRAY :i
+    14 read :testAndSwap:b ARRAY *tmp1
+    15 jump *label8 lessThanEq :testAndSwap:a :testAndSwap:b
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  

@@ -1,21 +1,21 @@
     71 instructions before optimizations.
-     7 instructions eliminated by Temp Variables Elimination (7 iterations).
+     7 instructions eliminated by Temp Variables Elimination (8 iterations).
      1 instructions eliminated by Case Expression Optimization.
      3 instructions eliminated by Dead Code Elimination (4 iterations).
-     1 instructions eliminated by Jump Normalization (6 iterations).
-     1 instructions eliminated by Condition Optimization (7 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
-     1 instructions modified by Expression Optimization (4 iterations).
-    14 instructions eliminated by Data Flow Optimization (5 passes, 17 iterations).
+     1 instructions eliminated by Jump Normalization (7 iterations).
+     1 instructions eliminated by Condition Optimization (8 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 9 iterations).
+     1 instructions modified by Expression Optimization (5 iterations).
+    14 instructions eliminated by Data Flow Optimization (5 passes, 18 iterations).
      2 loops improved by Loop Hoisting.
        1 loop conditions were partially rotated.
-    23 instructions added by Loop Unrolling (7 iterations).
+    23 instructions added by Loop Unrolling (8 iterations).
      1 loops unrolled by Loop Unrolling.
-     2 instructions eliminated by Function Inlining (7 iterations).
+     2 instructions eliminated by Function Inlining (8 iterations).
      3 function calls inlined by Function Inlining.
-     8 instructions eliminated by Case Switching (7 iterations).
+     8 instructions eliminated by Case Switching (8 iterations).
      1 case expressions converted to fast dispatch by Case Switching.
-     2 instructions eliminated by Jump Straightening (7 iterations).
+     2 instructions eliminated by Jump Straightening (8 iterations).
      4 instructions updated by Jump Threading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     12 instructions modified by Print Merging.
@@ -723,7 +723,7 @@ Modifications by Iterated phase, Expression Optimization, pass 3, iteration 1:
     15 label *label52
     16 remark "Reading character number "
 
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
  
     18 remark " "
     19 remark "from input data quartet"
@@ -734,7 +734,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
     23 call *label0 *invalid :charToInt*retval (m:*label53) (h:*label53)
     24 label *label53
 
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-1 instructions):
  
     10 setaddr :charToInt*retaddr *label51
     11 call *label0 *invalid :charToInt*retval (m:*label51) (h:*label51)
@@ -744,7 +744,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-1
     14 label *label52
     15 remark "Reading character number "
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Unreachable Code Elimination, pass 6, iteration 1 (-1 instructions):
  
      1 assertflush *tmp0
      2 set :decode64:index 0
@@ -845,7 +845,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 
     84 return :charToInt*retaddr
 -    * end
 
-Modifications by Jumps phase, Jump Threading, pass 5, iteration 1:
+Modifications by Jumps phase, Jump Threading, pass 6, iteration 1:
  
     68 multilabel *label49 (m:*label43)
     69 multilabel *label44 (m:*label43)

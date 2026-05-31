@@ -1,22 +1,22 @@
    133 instructions before optimizations.
-    28 instructions eliminated by Temp Variables Elimination (7 iterations).
+    28 instructions eliminated by Temp Variables Elimination (6 iterations).
      4 instructions eliminated by Dead Code Elimination (4 iterations).
-     6 instructions eliminated by Condition Optimization (6 iterations).
-     5 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     1 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
-    11 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
-     4 instructions added by Loop Rotation (3 iterations).
+     6 instructions eliminated by Condition Optimization (5 iterations).
+     5 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     1 instructions eliminated by Expression Optimization (2 iterations).
+    11 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+     4 instructions added by Loop Rotation (2 iterations).
        3 loop conditions were partially rotated.
-     1 instructions eliminated by Jump Straightening (6 iterations).
+     1 instructions eliminated by Jump Straightening (5 iterations).
      3 instructions updated by Jump Threading.
     11 instructions eliminated by Print Merging.
     70 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 921):
-  * Full loop rotation at line 17:1                              size    +2, benefit       26.0, efficiency     13.000 (+2 instructions)
+  * Full loop rotation at line 17:1                              size    +2, benefit       26.0, efficiency     13.000 (+1 instructions)
     Partial loop rotation at line 38:1                           size    +2, benefit       25.0, efficiency     12.500
 
-Pass 1: speed optimization selection (cost limit 919):
+Pass 1: speed optimization selection (cost limit 920):
   * Partial loop rotation at line 38:1                           size    +2, benefit       25.0, efficiency     12.500 (+2 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
@@ -265,18 +265,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     55 label *label13
     56 read :shipped .BANK .IND_SHIPPED
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-    70 write @time .BANK .IND_TIME
-    71 op add *tmp47 :index 1
-    72 op mod :index *tmp47 .SAMPLES
--    * op mul *tmp49 60000 :flow_rate
--    * op floor :flow_rate_str *tmp49
-+   73 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
-    74 op div :seconds .MILLIS 1000
-    75 op sub :elapsed @time :start
-    76 print "Measured interval: "
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
      4 set .IND_SESSION_KEY 509
@@ -342,18 +330,18 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     70 op add *tmp47 :index 1
 -    * op mod :index *tmp47 .SAMPLES
 +   71 op mod :index *tmp47 10
-    72 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
-    73 op div :seconds .MILLIS 1000
-    74 op sub :elapsed @time :start
+    72 op mul *tmp49 60000 :flow_rate
+    73 op floor :flow_rate_str *tmp49
+    74 op div :seconds .MILLIS 1000
  
-    80 print "\nItems shipped: "
-    81 print :shipped
-    82 print "\nContainer level: "
+    81 print "\nItems shipped: "
+    82 print :shipped
+    83 print "\nContainer level: "
 -    * print :level
-+   83 print 0
-    84 print "\nFlow rate: "
-    85 print :flow_rate_str
-    86 print "\nTotal: "
++   84 print 0
+    85 print "\nFlow rate: "
+    86 print :flow_rate_str
+    87 print "\nTotal: "
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9 instructions):
 -    * set .DELAY 1000
@@ -375,6 +363,27 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
     25 set :wait 0
     26 label *label6
     27 sensor *tmp14 .SORTER @dead
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    45 label *label13
+    46 read :shipped .BANK 511
+    47 sensor :item .SORTER @config
+-    * op add :total 0 :shipped
++   48 set :total :shipped
+    49 jump *label14 greaterThanEq .MILLIS 10000
+    50 op add .MILLIS .MILLIS 1000
+    51 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
+ 
+    60 write @time .BANK 508
+    61 op add *tmp47 :index 1
+    62 op mod :index *tmp47 10
+-    * op mul *tmp49 60000 :flow_rate
+-    * op floor :flow_rate_str *tmp49
++   63 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
+    64 op div :seconds .MILLIS 1000
+    65 op sub :elapsed @time :start
+    66 print "Measured interval: "
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
@@ -437,6 +446,38 @@ Modifications by Full loop rotation at line 17:1 (+2 instructions):
     21 read :shipped .BANK 511
     22 read .MULTIPLIER .BANK 510
 
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    52 label *label14
+    53 read :last_total .BANK :index
+    54 label *label15
+-    * write :total .BANK :index
+-    * op sub *tmp40 :total :last_total
++   55 write :shipped .BANK :index
++   56 op sub *tmp40 :shipped :last_total
+    57 op div :flow_rate *tmp40 .SIGN_MILLIS
+    58 write :flow_rate .BANK 507
+    59 write @time .BANK 508
+ 
+    74 print "\nFlow rate: "
+    75 print :flow_rate_str
+    76 print "\nTotal: "
+-    * print :total
++   77 print :shipped
+    78 print "\nLast total: "
+    79 print :last_total
+    80 print "\nIndex: "
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+    44 label *label13
+    45 read :shipped .BANK 511
+    46 sensor :item .SORTER @config
+-    * set :total :shipped
+    47 jump *label14 greaterThanEq .MILLIS 10000
+    48 op add .MILLIS .MILLIS 1000
+    49 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
+
 Modifications by Partial loop rotation at line 38:1 (+2 instructions):
  
     29 sensor *tmp14 .SORTER @dead
@@ -447,60 +488,17 @@ Modifications by Partial loop rotation at line 38:1 (+2 instructions):
     34 op strictEqual *tmp17 *tmp16 0
     35 jump *label8 equal *tmp17 false
  
-    93 jump *label19 lessThan @time :wait
-    94 label *label18
-    95 label *label7
+    92 jump *label19 lessThan @time :wait
+    93 label *label18
+    94 label *label7
 -    * jump *label6 always
-+   96 sensor *tmp14 .SORTER @dead
-+   97 op strictEqual *tmp15 *tmp14 0
-+   98 jump *label22 notEqual *tmp15 false
-    99 label *label8
-   100 end
++   95 sensor *tmp14 .SORTER @dead
++   96 op strictEqual *tmp15 *tmp14 0
++   97 jump *label22 notEqual *tmp15 false
+    98 label *label8
+    99 end
 
-Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
- 
-    45 label *label13
-    46 read :shipped .BANK 511
-    47 sensor :item .SORTER @config
--    * op add :total 0 :shipped
-+   48 set :total :shipped
-    49 jump *label14 greaterThanEq .MILLIS 10000
-    50 op add .MILLIS .MILLIS 1000
-    51 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
- 
-    53 label *label14
-    54 read :last_total .BANK :index
-    55 label *label15
--    * write :total .BANK :index
--    * op sub *tmp40 :total :last_total
-+   56 write :shipped .BANK :index
-+   57 op sub *tmp40 :shipped :last_total
-    58 op div :flow_rate *tmp40 .SIGN_MILLIS
-    59 write :flow_rate .BANK 507
-    60 write @time .BANK 508
- 
-    75 print "\nFlow rate: "
-    76 print :flow_rate_str
-    77 print "\nTotal: "
--    * print :total
-+   78 print :shipped
-    79 print "\nLast total: "
-    80 print :last_total
-    81 print "\nIndex: "
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
- 
-    45 label *label13
-    46 read :shipped .BANK 511
-    47 sensor :item .SORTER @config
--    * set :total :shipped
-    48 jump *label14 greaterThanEq .MILLIS 10000
-    49 op add .MILLIS .MILLIS 1000
-    50 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
-
-Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
+Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
      1 set .SIGN_MILLIS null
      2 set .SORTER sorter1
@@ -524,7 +522,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
     37 op add :wait :wait 1000
     38 jump *label12 lessThanEq :start :wait
 
-Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
     88 sensor *tmp14 .SORTER @dead
     89 op strictEqual *tmp15 *tmp14 0

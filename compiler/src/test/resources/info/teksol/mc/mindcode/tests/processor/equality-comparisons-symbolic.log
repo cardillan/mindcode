@@ -1,12 +1,12 @@
    588 instructions before optimizations.
     15 instructions eliminated by Dead Code Elimination (4 iterations).
-    24 instructions eliminated by Jump Normalization (5 iterations).
-    12 instructions eliminated by Condition Optimization (6 iterations).
-    73 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     4 instructions modified by Expression Optimization (3 iterations).
-    36 instructions eliminated by Boolean Optimization (6 iterations).
+    24 instructions eliminated by Jump Normalization (6 iterations).
+     8 instructions eliminated by Condition Optimization (7 iterations).
+    73 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
+     8 instructions modified by Expression Optimization (2 passes, 4 iterations).
+    36 instructions eliminated by Boolean Optimization (7 iterations).
        12 fully-evaluated expressions optimized using selects.
-   328 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+   332 instructions eliminated by Data Flow Optimization (3 passes, 12 iterations).
     39 instructions eliminated by Print Merging.
     61 instructions after optimizations.
 
@@ -3032,10 +3032,48 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-4
    510 label *label192
    511 print "T"
 
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
+ 
+   224 label *label78
+   225 # "Function: inline def compare(in title, in a, in b, in expected)"
+   226 assertflush *tmp99
+-    * op equal *tmp100 A A
++  227 set *tmp100 true
+   228 # "Function: inline def eval(in b)"
+   229 jump *label93 equal *tmp100 false
+   230 set *tmp102 "T"
+ 
+   233 set *tmp102 "F"
+   234 label *label94
+   235 label *label92
+-    * op notEqual *tmp103 A A
++  236 set *tmp103 false
+   237 # "Function: inline def eval(in b)"
+   238 jump *label96 equal *tmp103 false
+   239 set *tmp105 "T"
+ 
+   242 set *tmp105 "F"
+   243 label *label97
+   244 label *label95
+-    * op strictEqual *tmp106 A A
++  245 set *tmp106 true
+   246 # "Function: inline def eval(in b)"
+   247 jump *label99 equal *tmp106 false
+   248 set *tmp108 "T"
+ 
+   251 set *tmp108 "F"
+   252 label *label100
+   253 label *label98
+-    * op strictNotEqual *tmp109 A A
++  254 set *tmp109 false
+   255 # "Function: inline def eval(in b)"
+   256 jump *label102 equal *tmp109 false
+   257 set *tmp111 "T"
+
 Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-36 instructions):
  
    226 assertflush *tmp99
-   227 op equal *tmp100 A A
+   227 set *tmp100 true
    228 # "Function: inline def eval(in b)"
 -    * jump *label93 equal *tmp100 false
 -    * set *tmp102 "T"
@@ -3045,7 +3083,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-36 
 -    * label *label94
 +  229 select *tmp102 notEqual *tmp100 false "T" "F"
    230 label *label92
-   231 op notEqual *tmp103 A A
+   231 set *tmp103 false
    232 # "Function: inline def eval(in b)"
 -    * jump *label96 equal *tmp103 false
 -    * set *tmp105 "T"
@@ -3055,7 +3093,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-36 
 -    * label *label97
 +  233 select *tmp105 notEqual *tmp103 false "T" "F"
    234 label *label95
-   235 op strictEqual *tmp106 A A
+   235 set *tmp106 true
    236 # "Function: inline def eval(in b)"
 -    * jump *label99 equal *tmp106 false
 -    * set *tmp108 "T"
@@ -3065,7 +3103,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-36 
 -    * label *label100
 +  237 select *tmp108 notEqual *tmp106 false "T" "F"
    238 label *label98
-   239 op strictNotEqual *tmp109 A A
+   239 set *tmp109 false
    240 # "Function: inline def eval(in b)"
 -    * jump *label102 equal *tmp109 false
 -    * set *tmp111 "T"
@@ -3504,85 +3542,59 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-24 in
    424 label *label193
    425 label *label194
 
-Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-12 instructions):
+Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-8 instructions):
  
-   210 label *label78
-   211 # "Function: inline def compare(in title, in a, in b, in expected)"
-   212 assertflush *tmp99
--    * op equal *tmp100 A A
-   213 # "Function: inline def eval(in b)"
--    * select *tmp102 notEqual *tmp100 false "T" "F"
-+  214 select *tmp102 equal A A "T" "F"
-   215 label *label92
--    * op notEqual *tmp103 A A
-   216 # "Function: inline def eval(in b)"
--    * select *tmp105 notEqual *tmp103 false "T" "F"
-+  217 select *tmp105 notEqual A A "T" "F"
-   218 label *label95
--    * op strictEqual *tmp106 A A
-   219 # "Function: inline def eval(in b)"
--    * select *tmp108 notEqual *tmp106 false "T" "F"
-+  220 select *tmp108 strictEqual A A "T" "F"
-   221 label *label98
--    * op strictNotEqual *tmp109 A A
-   222 # "Function: inline def eval(in b)"
--    * select *tmp111 notEqual *tmp109 false "T" "F"
-+  223 select *tmp111 strictNotEqual A A "T" "F"
-   224 label *label101
-   225 print *tmp102
-   226 print *tmp105
- 
-   230 label *label91
-   231 # "Function: inline def compare(in title, in a, in b, in expected)"
-   232 assertflush *tmp113
+   234 label *label91
+   235 # "Function: inline def compare(in title, in a, in b, in expected)"
+   236 assertflush *tmp113
 -    * op equal *tmp114 A 0
-   233 # "Function: inline def eval(in b)"
+   237 # "Function: inline def eval(in b)"
 -    * select *tmp116 notEqual *tmp114 false "T" "F"
-+  234 select *tmp116 equal A 0 "T" "F"
-   235 label *label105
++  238 select *tmp116 equal A 0 "T" "F"
+   239 label *label105
 -    * op notEqual *tmp117 A 0
-   236 # "Function: inline def eval(in b)"
+   240 # "Function: inline def eval(in b)"
 -    * select *tmp119 notEqual *tmp117 false "T" "F"
-+  237 select *tmp119 notEqual A 0 "T" "F"
-   238 label *label108
++  241 select *tmp119 notEqual A 0 "T" "F"
+   242 label *label108
 -    * op strictEqual *tmp120 A 0
-   239 # "Function: inline def eval(in b)"
+   243 # "Function: inline def eval(in b)"
 -    * select *tmp122 notEqual *tmp120 false "T" "F"
-+  240 select *tmp122 strictEqual A 0 "T" "F"
-   241 label *label111
++  244 select *tmp122 strictEqual A 0 "T" "F"
+   245 label *label111
 -    * op strictNotEqual *tmp123 A 0
-   242 # "Function: inline def eval(in b)"
+   246 # "Function: inline def eval(in b)"
 -    * select *tmp125 notEqual *tmp123 false "T" "F"
-+  243 select *tmp125 strictNotEqual A 0 "T" "F"
-   244 label *label114
-   245 print *tmp116
-   246 print *tmp119
++  247 select *tmp125 strictNotEqual A 0 "T" "F"
+   248 label *label114
+   249 print *tmp116
+   250 print *tmp119
  
-   250 label *label104
-   251 # "Function: inline def compare(in title, in a, in b, in expected)"
-   252 assertflush *tmp127
+   254 label *label104
+   255 # "Function: inline def compare(in title, in a, in b, in expected)"
+   256 assertflush *tmp127
 -    * op equal *tmp128 A 1
-   253 # "Function: inline def eval(in b)"
+   257 # "Function: inline def eval(in b)"
 -    * select *tmp130 notEqual *tmp128 false "T" "F"
-+  254 select *tmp130 equal A 1 "T" "F"
-   255 label *label118
++  258 select *tmp130 equal A 1 "T" "F"
+   259 label *label118
 -    * op notEqual *tmp131 A 1
-   256 # "Function: inline def eval(in b)"
+   260 # "Function: inline def eval(in b)"
 -    * select *tmp133 notEqual *tmp131 false "T" "F"
-+  257 select *tmp133 notEqual A 1 "T" "F"
-   258 label *label121
++  261 select *tmp133 notEqual A 1 "T" "F"
+   262 label *label121
 -    * op strictEqual *tmp134 A 1
-   259 # "Function: inline def eval(in b)"
+   263 # "Function: inline def eval(in b)"
 -    * select *tmp136 notEqual *tmp134 false "T" "F"
-+  260 select *tmp136 strictEqual A 1 "T" "F"
-   261 label *label124
++  264 select *tmp136 strictEqual A 1 "T" "F"
+   265 label *label124
 -    * op strictNotEqual *tmp137 A 1
-   262 # "Function: inline def eval(in b)"
+   266 # "Function: inline def eval(in b)"
 -    * select *tmp139 notEqual *tmp137 false "T" "F"
-+  263 select *tmp139 strictNotEqual A 1 "T" "F"
-   264 label *label127
-   265 print *tmp130
-   266 print *tmp133
++  267 select *tmp139 strictNotEqual A 1 "T" "F"
+   268 label *label127
+   269 print *tmp130
+   270 print *tmp133
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-72 instructions):
  
@@ -3761,155 +3773,203 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    161 label *label90
    162 label *label88
  
-   229 # "Function: inline def compare(in title, in a, in b, in expected)"
-   230 assertflush *tmp141
-   231 # "Function: inline def eval(in b)"
+   233 # "Function: inline def compare(in title, in a, in b, in expected)"
+   234 assertflush *tmp141
+   235 # "Function: inline def eval(in b)"
 -    * jump *label132 always
 -    * jump *label133 always
-   232 label *label132
-   233 label *label133
-   234 label *label131
-   235 # "Function: inline def eval(in b)"
--    * jump *label136 always
-   236 label *label135
-   237 label *label136
-   238 label *label134
+   236 label *label132
+   237 label *label133
+   238 label *label131
    239 # "Function: inline def eval(in b)"
+-    * jump *label136 always
+   240 label *label135
+   241 label *label136
+   242 label *label134
+   243 # "Function: inline def eval(in b)"
 -    * jump *label138 always
 -    * jump *label139 always
-   240 label *label138
-   241 label *label139
-   242 label *label137
-   243 # "Function: inline def eval(in b)"
+   244 label *label138
+   245 label *label139
+   246 label *label137
+   247 # "Function: inline def eval(in b)"
 -    * jump *label142 always
-   244 label *label141
-   245 label *label142
-   246 label *label140
+   248 label *label141
+   249 label *label142
+   250 label *label140
  
-   253 # "Function: inline def compare(in title, in a, in b, in expected)"
-   254 assertflush *tmp155
-   255 # "Function: inline def eval(in b)"
--    * jump *label146 always
-   256 label *label145
-   257 label *label146
-   258 label *label144
+   257 # "Function: inline def compare(in title, in a, in b, in expected)"
+   258 assertflush *tmp155
    259 # "Function: inline def eval(in b)"
+-    * jump *label146 always
+   260 label *label145
+   261 label *label146
+   262 label *label144
+   263 # "Function: inline def eval(in b)"
 -    * jump *label148 always
 -    * jump *label149 always
-   260 label *label148
-   261 label *label149
-   262 label *label147
-   263 # "Function: inline def eval(in b)"
+   264 label *label148
+   265 label *label149
+   266 label *label147
+   267 # "Function: inline def eval(in b)"
 -    * jump *label151 always
 -    * jump *label152 always
-   264 label *label151
-   265 label *label152
-   266 label *label150
-   267 # "Function: inline def eval(in b)"
+   268 label *label151
+   269 label *label152
+   270 label *label150
+   271 # "Function: inline def eval(in b)"
 -    * jump *label155 always
-   268 label *label154
-   269 label *label155
-   270 label *label153
+   272 label *label154
+   273 label *label155
+   274 label *label153
  
-   277 # "Function: inline def compare(in title, in a, in b, in expected)"
-   278 assertflush *tmp169
-   279 # "Function: inline def eval(in b)"
+   281 # "Function: inline def compare(in title, in a, in b, in expected)"
+   282 assertflush *tmp169
+   283 # "Function: inline def eval(in b)"
 -    * jump *label158 always
 -    * jump *label159 always
-   280 label *label158
-   281 label *label159
-   282 label *label157
-   283 # "Function: inline def eval(in b)"
--    * jump *label162 always
-   284 label *label161
-   285 label *label162
-   286 label *label160
+   284 label *label158
+   285 label *label159
+   286 label *label157
    287 # "Function: inline def eval(in b)"
+-    * jump *label162 always
+   288 label *label161
+   289 label *label162
+   290 label *label160
+   291 # "Function: inline def eval(in b)"
 -    * jump *label164 always
 -    * jump *label165 always
-   288 label *label164
-   289 label *label165
-   290 label *label163
-   291 # "Function: inline def eval(in b)"
+   292 label *label164
+   293 label *label165
+   294 label *label163
+   295 # "Function: inline def eval(in b)"
 -    * jump *label168 always
-   292 label *label167
-   293 label *label168
-   294 label *label166
+   296 label *label167
+   297 label *label168
+   298 label *label166
  
-   301 # "Function: inline def compare(in title, in a, in b, in expected)"
-   302 assertflush *tmp183
-   303 # "Function: inline def eval(in b)"
+   305 # "Function: inline def compare(in title, in a, in b, in expected)"
+   306 assertflush *tmp183
+   307 # "Function: inline def eval(in b)"
 -    * jump *label171 always
 -    * jump *label172 always
-   304 label *label171
-   305 label *label172
-   306 label *label170
-   307 # "Function: inline def eval(in b)"
--    * jump *label175 always
-   308 label *label174
-   309 label *label175
-   310 label *label173
+   308 label *label171
+   309 label *label172
+   310 label *label170
    311 # "Function: inline def eval(in b)"
+-    * jump *label175 always
+   312 label *label174
+   313 label *label175
+   314 label *label173
+   315 # "Function: inline def eval(in b)"
 -    * jump *label177 always
 -    * jump *label178 always
-   312 label *label177
-   313 label *label178
-   314 label *label176
-   315 # "Function: inline def eval(in b)"
+   316 label *label177
+   317 label *label178
+   318 label *label176
+   319 # "Function: inline def eval(in b)"
 -    * jump *label181 always
-   316 label *label180
-   317 label *label181
-   318 label *label179
+   320 label *label180
+   321 label *label181
+   322 label *label179
  
-   325 # "Function: inline def compare(in title, in a, in b, in expected)"
-   326 assertflush *tmp197
-   327 # "Function: inline def eval(in b)"
--    * jump *label185 always
-   328 label *label184
-   329 label *label185
-   330 label *label183
+   329 # "Function: inline def compare(in title, in a, in b, in expected)"
+   330 assertflush *tmp197
    331 # "Function: inline def eval(in b)"
+-    * jump *label185 always
+   332 label *label184
+   333 label *label185
+   334 label *label183
+   335 # "Function: inline def eval(in b)"
 -    * jump *label187 always
 -    * jump *label188 always
-   332 label *label187
-   333 label *label188
-   334 label *label186
-   335 # "Function: inline def eval(in b)"
--    * jump *label191 always
-   336 label *label190
-   337 label *label191
-   338 label *label189
+   336 label *label187
+   337 label *label188
+   338 label *label186
    339 # "Function: inline def eval(in b)"
+-    * jump *label191 always
+   340 label *label190
+   341 label *label191
+   342 label *label189
+   343 # "Function: inline def eval(in b)"
 -    * jump *label193 always
 -    * jump *label194 always
-   340 label *label193
-   341 label *label194
-   342 label *label192
+   344 label *label193
+   345 label *label194
+   346 label *label192
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+ 
+   170 assertflush *tmp99
+   171 set *tmp100 true
+   172 # "Function: inline def eval(in b)"
+-    * select *tmp102 notEqual *tmp100 false "T" "F"
++  173 select *tmp102 notEqual true false "T" "F"
+   174 label *label92
+   175 set *tmp103 false
+   176 # "Function: inline def eval(in b)"
+-    * select *tmp105 notEqual *tmp103 false "T" "F"
++  177 select *tmp105 notEqual false false "T" "F"
+   178 label *label95
+   179 set *tmp106 true
+   180 # "Function: inline def eval(in b)"
+-    * select *tmp108 notEqual *tmp106 false "T" "F"
++  181 select *tmp108 notEqual true false "T" "F"
+   182 label *label98
+   183 set *tmp109 false
+   184 # "Function: inline def eval(in b)"
+-    * select *tmp111 notEqual *tmp109 false "T" "F"
++  185 select *tmp111 notEqual false false "T" "F"
+   186 label *label101
+   187 print *tmp102
+   188 print *tmp105
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4 instructions):
+ 
+   168 label *label78
+   169 # "Function: inline def compare(in title, in a, in b, in expected)"
+   170 assertflush *tmp99
+-    * set *tmp100 true
+   171 # "Function: inline def eval(in b)"
+   172 select *tmp102 notEqual true false "T" "F"
+   173 label *label92
+-    * set *tmp103 false
+   174 # "Function: inline def eval(in b)"
+   175 select *tmp105 notEqual false false "T" "F"
+   176 label *label95
+-    * set *tmp106 true
+   177 # "Function: inline def eval(in b)"
+   178 select *tmp108 notEqual true false "T" "F"
+   179 label *label98
+-    * set *tmp109 false
+   180 # "Function: inline def eval(in b)"
+   181 select *tmp111 notEqual false false "T" "F"
+   182 label *label101
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
    169 # "Function: inline def compare(in title, in a, in b, in expected)"
    170 assertflush *tmp99
    171 # "Function: inline def eval(in b)"
--    * select *tmp102 equal A A "T" "F"
+-    * select *tmp102 notEqual true false "T" "F"
 +  172 set *tmp102 "T"
    173 label *label92
    174 # "Function: inline def eval(in b)"
--    * select *tmp105 notEqual A A "T" "F"
+-    * select *tmp105 notEqual false false "T" "F"
 +  175 set *tmp105 "F"
    176 label *label95
    177 # "Function: inline def eval(in b)"
--    * select *tmp108 strictEqual A A "T" "F"
+-    * select *tmp108 notEqual true false "T" "F"
 +  178 set *tmp108 "T"
    179 label *label98
    180 # "Function: inline def eval(in b)"
--    * select *tmp111 strictNotEqual A A "T" "F"
+-    * select *tmp111 notEqual false false "T" "F"
 +  181 set *tmp111 "F"
    182 label *label101
    183 print *tmp102
    184 print *tmp105
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
  
    180 # "Function: inline def eval(in b)"
    181 set *tmp111 "F"
@@ -3926,7 +3986,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
    188 label *label91
    189 # "Function: inline def compare(in title, in a, in b, in expected)"
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-4 instructions):
  
    169 # "Function: inline def compare(in title, in a, in b, in expected)"
    170 assertflush *tmp99
@@ -3945,7 +4005,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-4
    179 print "T"
    180 print "F"
 
-Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
    172 print "F"
    173 assertprints *tmp197 "TFTF" "comparison 15"

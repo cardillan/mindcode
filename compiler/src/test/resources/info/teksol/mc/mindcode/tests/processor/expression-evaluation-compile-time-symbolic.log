@@ -1,8 +1,7 @@
    154 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
-     1 instructions eliminated by Expression Optimization (2 iterations).
-    82 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+    83 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
     11 instructions added by Function Inlining (3 iterations).
      6 function calls inlined by Function Inlining.
     79 instructions after optimizations.
@@ -38,25 +37,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
    147 op div *tmp11 *tmp8 100000000
    148 assertequals :assertEqualsRound:expected *tmp11 :assertEqualsRound:title
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-   125 op xor :a :a 2
-   126 assertequals 1 :a "^="
-   127 set :a 1
--    * op land :a :a 0
-+  128 set :a false
-   129 assertequals false :a "&&="
-   130 set :a 1
-   131 op land :a :a 2
-   132 assertequals true :a "&&="
-   133 set :a 0
--    * op lor :a :a 2
-+  134 set :a true
-   135 assertequals true :a "||="
-   136 assertequals 17 17 "Logic ID"
-   137 stop
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     33 assertequals -1 -1 "not 1"
     34 assertequals -65536 -65536 "not 2"
@@ -149,35 +130,37 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
    124 set :a 3
 -    * op xor :a :a 2
 -    * assertequals 1 :a "^="
--    * set :a 1
 +  125 op xor :a 3 2
 +  126 assertequals 1 1 "^="
-   127 set :a false
+   127 set :a 1
+-    * op land :a :a 0
 -    * assertequals false :a "&&="
-+  128 assertequals false false "&&="
-   129 set :a 1
++  128 op land :a 1 0
++  129 assertequals false false "&&="
+   130 set :a 1
 -    * op land :a :a 2
 -    * assertequals true :a "&&="
--    * set :a 0
-+  130 op land :a 1 2
-+  131 assertequals true true "&&="
-   132 set :a true
++  131 op land :a 1 2
++  132 assertequals true true "&&="
+   133 set :a 0
+-    * op lor :a :a 2
 -    * assertequals true :a "||="
-+  133 assertequals true true "||="
-   134 assertequals 17 17 "Logic ID"
-   135 stop
-   136 end
++  134 op lor :a 0 2
++  135 assertequals true true "||="
+   136 assertequals 17 17 "Logic ID"
+   137 stop
+   138 end
  
-   139 op mul *tmp7 :assertEqualsRound:actual 100000000
-   140 # "Function: inline def round(in x)"
-   141 set :round:x *tmp7
+   141 op mul *tmp7 :assertEqualsRound:actual 100000000
+   142 # "Function: inline def round(in x)"
+   143 set :round:x *tmp7
 -    * op add *tmp9 :round:x 0.5
-+  142 op add *tmp9 *tmp7 0.5
-   143 op floor *tmp8 *tmp9
-   144 label *label6
-   145 op div *tmp11 *tmp8 100000000
++  144 op add *tmp9 *tmp7 0.5
+   145 op floor *tmp8 *tmp9
+   146 label *label6
+   147 op div *tmp11 *tmp8 100000000
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-38 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-41 instructions):
  
     32 assertequals 1 1 "xor"
     33 assertequals -1 -1 "not 1"
@@ -241,12 +224,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
 -    * set :a 3
 -    * op xor :a 3 2
     93 assertequals 1 1 "^="
--    * set :a false
+-    * set :a 1
+-    * op land :a 1 0
     94 assertequals false false "&&="
 -    * set :a 1
 -    * op land :a 1 2
     95 assertequals true true "&&="
--    * set :a true
+-    * set :a 0
+-    * op lor :a 0 2
     96 assertequals true true "||="
     97 assertequals 17 17 "Logic ID"
     98 stop

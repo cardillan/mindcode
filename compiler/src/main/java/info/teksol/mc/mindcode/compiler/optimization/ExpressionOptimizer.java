@@ -37,7 +37,15 @@ class ExpressionOptimizer extends BaseOptimizer {
     protected boolean optimizeProgram(OptimizationPhase phase) {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
-                switch (it.next()) {
+                LogicInstruction next = it.next();
+                if (next.getNonNegativeInt() instanceof LogicVariable variable && variable != LogicVariable.INVALID
+                        && optimizationContext.findDefiningInstruction(next, variable) instanceof OpInstruction op
+                        && op.getOperation() == Operation.FLOOR
+                        && op.getResult().equals(variable)) {
+                    it.set(next = instructionProcessor.replaceAllArgs(next, variable, op.getX()));
+                }
+
+                switch (next) {
                     case LookupInstruction ix       -> processLookupInstruction(it, ix);
                     case OpInstruction ix           -> processOpInstruction(it, ix);
                     case PackColorInstruction ix    -> processPackColorInstruction(it, ix);

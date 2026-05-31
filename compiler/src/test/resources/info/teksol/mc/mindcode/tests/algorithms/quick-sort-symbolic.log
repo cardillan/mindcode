@@ -212,24 +212,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    101 label *label7
    102 label *label5
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
- 
-    76 push bank1 :quicksort:right
-    77 push bank1 :quicksort:pivot_index
-    78 push bank1 :quicksort:new_pivot_index
--    * set :quicksort:left :quicksort:left
-    79 set :quicksort:right *tmp49
-    80 callrec bank1 *label0 *label20 :quicksort*retval
-    81 label *label20
- 
-    89 push bank1 :quicksort:pivot_index
-    90 push bank1 :quicksort:new_pivot_index
-    91 set :quicksort:left *tmp50
--    * set :quicksort:right :quicksort:right
-    92 callrec bank1 *label0 *label21 :quicksort*retval
-    93 label *label21
-    94 pop bank1 :quicksort:new_pivot_index
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
     11 jump *label4 greaterThanEq :i SIZE
@@ -383,6 +365,24 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
     60 jump *label8 always
     61 label *label8
     62 set :quicksort:new_pivot_index :partition:index
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+    65 push bank1 :quicksort:right
+    66 push bank1 :quicksort:pivot_index
+    67 push bank1 :quicksort:new_pivot_index
+-    * set :quicksort:left :quicksort:left
+    68 set :quicksort:right *tmp49
+    69 callrec bank1 *label0 *label20 :quicksort*retval
+    70 label *label20
+ 
+    78 push bank1 :quicksort:pivot_index
+    79 push bank1 :quicksort:new_pivot_index
+    80 set :quicksort:left *tmp50
+-    * set :quicksort:right :quicksort:right
+    81 callrec bank1 *label0 *label21 :quicksort*retval
+    82 label *label21
+    83 pop bank1 :quicksort:new_pivot_index
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  

@@ -1,15 +1,15 @@
     90 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination (8 iterations).
+     1 instructions eliminated by Temp Variables Elimination (9 iterations).
      1 instructions eliminated by Dead Code Elimination (4 iterations).
-     1 instructions eliminated by Jump Normalization (7 iterations).
-     1 instructions eliminated by Condition Optimization (8 iterations).
-     1 instructions eliminated by Single Step Elimination (8 iterations).
-    18 instructions eliminated by Expression Optimization (5 iterations).
-    31 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
+     1 instructions eliminated by Jump Normalization (8 iterations).
+     1 instructions eliminated by Condition Optimization (9 iterations).
+     1 instructions eliminated by Single Step Elimination (9 iterations).
+    18 instructions eliminated by Expression Optimization (6 iterations).
+    31 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
        2 loop conditions were partially rotated.
-    27 instructions added by Loop Unrolling (7 iterations).
+    27 instructions added by Loop Unrolling (8 iterations).
      2 loops unrolled by Loop Unrolling.
-     2 instructions eliminated by Array Optimization (7 iterations).
+     2 instructions eliminated by Array Optimization (8 iterations).
      8 instructions eliminated by Print Merging.
     38 instructions after optimizations.
 
@@ -561,7 +561,7 @@ Modifications by Iterated phase, Expression Optimization, pass 3, iteration 1 (-
     91 label *label77
     92 label *label24
 
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
  
     55 label *label68
     56 print "-"
@@ -612,7 +612,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
     92 label *label24
     93 label *label21
 
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-9 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-9 instructions):
  
     54 print water
     55 label *label68
@@ -670,7 +670,7 @@ Modifications by Virtual Instruction Expansion:
     46 label *label19
     47 jump *label18 greaterThan :countDigits:number 0
 
-Modifications by Jumps phase, Single Step Elimination, pass 6, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 7, iteration 1 (-1 instructions):
  
     47 print "-"
     48 print nitrogen

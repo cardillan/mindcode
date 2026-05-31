@@ -1,17 +1,17 @@
    465 instructions before optimizations.
-    82 instructions eliminated by Temp Variables Elimination (9 iterations).
-     1 instructions eliminated by Condition Optimization (2 passes, 10 iterations).
-     1 instructions eliminated by Single Step Elimination (9 iterations).
-     2 instructions modified by Expression Optimization (2 passes, 6 iterations).
-     3 instructions eliminated by Boolean Optimization (9 iterations).
+    83 instructions eliminated by Temp Variables Elimination (2 passes, 9 iterations).
+     1 instructions eliminated by Condition Optimization (2 passes, 9 iterations).
+     1 instructions eliminated by Single Step Elimination (8 iterations).
+     2 instructions modified by Expression Optimization (2 passes, 5 iterations).
+     3 instructions eliminated by Boolean Optimization (8 iterations).
        1 fully-evaluated expressions optimized using selects.
-   193 instructions eliminated by Data Flow Optimization (4 passes, 18 iterations).
-    11 instructions added by Function Inlining (7 iterations).
+   191 instructions eliminated by Data Flow Optimization (3 passes, 15 iterations).
+    11 instructions added by Function Inlining (6 iterations).
      6 function calls inlined by Function Inlining.
-   196 instructions after optimizations.
+   197 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 789):
-  * Inline function 'assertEqualsRound' defined at line 3:1      size   +19, benefit       27.0, efficiency      1.421 (-7 instructions)
+  * Inline function 'assertEqualsRound' defined at line 3:1      size   +19, benefit       27.0, efficiency      1.421 (-8 instructions)
     Inline function call at line 87:1                            size    +4, benefit        4.5, efficiency      1.125
     Inline function call at line 88:1                            size    +4, benefit        4.5, efficiency      1.125
     Inline function call at line 89:1                            size    +4, benefit        4.5, efficiency      1.125
@@ -2069,6 +2069,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1
    262 label *label81
    263 op sub :a 2 zero
 
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
+ 
+    50 label *label18
+    51 op notEqual *tmp44 0 *tmp33
+    52 assertequals false *tmp44 "notEqual null"
+-    * op add *tmp45 zero 0
++   53 set *tmp45 zero
+    54 label *label19
+    55 op land *tmp47 1 *tmp45
+    56 assertequals false *tmp47 "land 1"
+
 Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-3 instructions):
  
    281 assertequals true :a "||="
@@ -2203,6 +2214,51 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
+    52 assertequals false *tmp44 "notEqual null"
+    53 set *tmp45 zero
+    54 label *label19
+-    * op land *tmp47 1 *tmp45
++   55 op land *tmp47 1 zero
+    56 assertequals false *tmp47 "land 1"
+    57 label *label20
+    58 op land *tmp50 1 *tmp6
+ 
+    62 op lessThan *tmp53 0 *tmp51
+    63 assertequals true *tmp53 "lessThan 1"
+    64 label *label22
+-    * op lessThan *tmp56 1 *tmp45
++   65 op lessThan *tmp56 1 zero
+    66 assertequals false *tmp56 "lessThan 2"
+    67 label *label23
+    68 op lessThanEq *tmp59 1 *tmp51
+    69 assertequals true *tmp59 "lessThanEq 1"
+    70 label *label24
+-    * op lessThanEq *tmp62 1 *tmp45
++   71 op lessThanEq *tmp62 1 zero
+    72 assertequals false *tmp62 "lessThanEq 2"
+    73 label *label25
+    74 op greaterThan *tmp65 2 *tmp51
+ 
+   106 op xor *tmp94 3 *tmp6
+   107 assertequals 1 *tmp94 "xor"
+   108 label *label35
+-    * op not *tmp97 *tmp45
++  109 op not *tmp97 zero
+   110 assertequals -1 *tmp97 "not 1"
+   111 op add *tmp98 zero 65535
+   112 label *label36
+ 
+   139 label *label44
+   140 assertequals 1 *tmp123 "sign(2)"
+   141 label *label45
+-    * op greaterThan *tmp130 *tmp45 0
+-    * op lessThan *tmp131 *tmp45 0
++  142 op greaterThan *tmp130 zero 0
++  143 op lessThan *tmp131 zero 0
+   144 op sub *tmp129 *tmp130 *tmp131
+   145 label *label46
+   146 assertequals 0 *tmp129 "sign(0)"
+ 
    190 set :assertEqualsRound:actual *tmp170
    191 set :assertEqualsRound:title "sin"
    192 label *label95
@@ -2292,68 +2348,83 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    266 label *label112
    267 label *label71
    268 op sub *tmp188 -8 zero
+   269 assertequals -8 *tmp188 "unary minus"
+   270 label *label72
+-    * op equal *tmp191 *tmp45 false
++  271 op equal *tmp191 zero false
+   272 assertequals 1 *tmp191 "boolean negation 1"
+   273 label *label73
+   274 op equal *tmp194 *tmp51 false
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-18 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-19 instructions):
  
-   186 op add *tmp168 zero 90
-   187 label *label59
-   188 op sin *tmp170 *tmp168
+    50 label *label18
+    51 op notEqual *tmp44 0 *tmp33
+    52 assertequals false *tmp44 "notEqual null"
+-    * set *tmp45 zero
+    53 label *label19
+    54 op land *tmp47 1 zero
+    55 assertequals false *tmp47 "land 1"
+ 
+   185 op add *tmp168 zero 90
+   186 label *label59
+   187 op sin *tmp170 *tmp168
 -    * set :assertEqualsRound:expected 1
 -    * set :assertEqualsRound:actual *tmp170
 -    * set :assertEqualsRound:title "sin"
-   189 label *label95
-   190 op mul :round.1:x *tmp170 100000000
-   191 op add *tmp233 :round.1:x 0.5
+   188 label *label95
+   189 op mul :round.1:x *tmp170 100000000
+   190 op add *tmp233 :round.1:x 0.5
  
-   197 op add *tmp171 zero 180
-   198 label *label61
-   199 op cos *tmp173 *tmp171
+   196 op add *tmp171 zero 180
+   197 label *label61
+   198 op cos *tmp173 *tmp171
 -    * set :assertEqualsRound:expected -1
 -    * set :assertEqualsRound:actual *tmp173
 -    * set :assertEqualsRound:title "cos"
-   200 label *label98
-   201 op mul :round.1:x *tmp173 100000000
-   202 op add *tmp233 :round.1:x 0.5
+   199 label *label98
+   200 op mul :round.1:x *tmp173 100000000
+   201 op add *tmp233 :round.1:x 0.5
  
-   208 op add *tmp174 zero 45
-   209 label *label63
-   210 op tan *tmp176 *tmp174
+   207 op add *tmp174 zero 45
+   208 label *label63
+   209 op tan *tmp176 *tmp174
 -    * set :assertEqualsRound:expected 1
 -    * set :assertEqualsRound:actual *tmp176
 -    * set :assertEqualsRound:title "tan"
-   211 label *label101
-   212 op mul :round.1:x *tmp176 100000000
-   213 op add *tmp233 :round.1:x 0.5
+   210 label *label101
+   211 op mul :round.1:x *tmp176 100000000
+   212 op add *tmp233 :round.1:x 0.5
  
-   218 label *label103
-   219 label *label65
-   220 op asin *tmp179 *tmp51
+   217 label *label103
+   218 label *label65
+   219 op asin *tmp179 *tmp51
 -    * set :assertEqualsRound:expected 90
 -    * set :assertEqualsRound:actual *tmp179
 -    * set :assertEqualsRound:title "asin"
-   221 label *label104
-   222 op mul :round.1:x *tmp179 100000000
-   223 op add *tmp233 :round.1:x 0.5
+   220 label *label104
+   221 op mul :round.1:x *tmp179 100000000
+   222 op add *tmp233 :round.1:x 0.5
  
-   228 label *label106
-   229 label *label67
-   230 op acos *tmp182 *tmp51
+   227 label *label106
+   228 label *label67
+   229 op acos *tmp182 *tmp51
 -    * set :assertEqualsRound:expected 0
 -    * set :assertEqualsRound:actual *tmp182
 -    * set :assertEqualsRound:title "acos"
-   231 label *label107
-   232 op mul :round.1:x *tmp182 100000000
-   233 op add *tmp233 :round.1:x 0.5
+   230 label *label107
+   231 op mul :round.1:x *tmp182 100000000
+   232 op add *tmp233 :round.1:x 0.5
  
-   238 label *label109
-   239 label *label69
-   240 op atan *tmp185 *tmp51
+   237 label *label109
+   238 label *label69
+   239 op atan *tmp185 *tmp51
 -    * set :assertEqualsRound:expected 45
 -    * set :assertEqualsRound:actual *tmp185
 -    * set :assertEqualsRound:title "atan"
-   241 label *label110
-   242 op mul :round.1:x *tmp185 100000000
-   243 op add *tmp233 :round.1:x 0.5
+   240 label *label110
+   241 op mul :round.1:x *tmp185 100000000
+   242 op add *tmp233 :round.1:x 0.5
 
 Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-1 instructions):
  
@@ -2384,100 +2455,75 @@ Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1 (-1
 -    * op notEqual *tmp44 0 *tmp33
 +   50 op notEqual *tmp44 zero 0
     51 assertequals false *tmp44 "notEqual null"
-    52 op add *tmp45 zero 0
-    53 label *label19
+    52 label *label19
+    53 op land *tmp47 1 zero
  
-    58 assertequals true *tmp50 "land 2"
-    59 op add *tmp51 zero 1
-    60 label *label21
+    57 assertequals true *tmp50 "land 2"
+    58 op add *tmp51 zero 1
+    59 label *label21
 -    * op lessThan *tmp53 0 *tmp51
-+   61 op greaterThan *tmp53 zero -1
-    62 assertequals true *tmp53 "lessThan 1"
-    63 label *label22
--    * op lessThan *tmp56 1 *tmp45
-+   64 op greaterThan *tmp56 zero 1
-    65 assertequals false *tmp56 "lessThan 2"
-    66 label *label23
++   60 op greaterThan *tmp53 zero -1
+    61 assertequals true *tmp53 "lessThan 1"
+    62 label *label22
+    63 op lessThan *tmp56 1 zero
+    64 assertequals false *tmp56 "lessThan 2"
+    65 label *label23
 -    * op lessThanEq *tmp59 1 *tmp51
-+   67 op greaterThanEq *tmp59 zero 0
-    68 assertequals true *tmp59 "lessThanEq 1"
-    69 label *label24
--    * op lessThanEq *tmp62 1 *tmp45
-+   70 op greaterThanEq *tmp62 zero 1
-    71 assertequals false *tmp62 "lessThanEq 2"
-    72 label *label25
++   66 op greaterThanEq *tmp59 zero 0
+    67 assertequals true *tmp59 "lessThanEq 1"
+    68 label *label24
+    69 op lessThanEq *tmp62 1 zero
+    70 assertequals false *tmp62 "lessThanEq 2"
+    71 label *label25
 -    * op greaterThan *tmp65 2 *tmp51
-+   73 op lessThan *tmp65 zero 1
-    74 assertequals true *tmp65 "greaterThan 1"
-    75 label *label26
++   72 op lessThan *tmp65 zero 1
+    73 assertequals true *tmp65 "greaterThan 1"
+    74 label *label26
 -    * op greaterThan *tmp68 1 *tmp6
-+   76 op lessThan *tmp68 zero -1
-    77 assertequals false *tmp68 "greaterThan 2"
-    78 label *label27
++   75 op lessThan *tmp68 zero -1
+    76 assertequals false *tmp68 "greaterThan 2"
+    77 label *label27
 -    * op greaterThanEq *tmp71 1 *tmp51
-+   79 op lessThanEq *tmp71 zero 0
-    80 assertequals true *tmp71 "greaterThanEq 1"
-    81 label *label28
++   78 op lessThanEq *tmp71 zero 0
+    79 assertequals true *tmp71 "greaterThanEq 1"
+    80 label *label28
 -    * op greaterThanEq *tmp74 1 *tmp6
-+   82 op lessThanEq *tmp74 zero -1
-    83 assertequals false *tmp74 "greaterThanEq 2"
-    84 op strictEqual *tmp75 0 NULL
-    85 assertequals false *tmp75 "strictEqual 1"
++   81 op lessThanEq *tmp74 zero -1
+    82 assertequals false *tmp74 "greaterThanEq 2"
+    83 op strictEqual *tmp75 0 NULL
+    84 assertequals false *tmp75 "strictEqual 1"
  
-   126 op abs *tmp114 *tmp112
-   127 assertequals 2 *tmp114 "abs"
-   128 label *label41
+   125 op abs *tmp114 *tmp112
+   126 assertequals 2 *tmp114 "abs"
+   127 label *label41
 -    * op greaterThan *tmp118 *tmp112 0
 -    * op lessThan *tmp119 *tmp112 0
-+  129 op greaterThan *tmp118 zero 2
-+  130 op lessThan *tmp119 zero 2
-   131 op sub *tmp117 *tmp118 *tmp119
-   132 label *label42
-   133 assertequals -1 *tmp117 "sign(-2)"
-   134 label *label43
++  128 op greaterThan *tmp118 zero 2
++  129 op lessThan *tmp119 zero 2
+   130 op sub *tmp117 *tmp118 *tmp119
+   131 label *label42
+   132 assertequals -1 *tmp117 "sign(-2)"
+   133 label *label43
 -    * op greaterThan *tmp124 *tmp6 0
 -    * op lessThan *tmp125 *tmp6 0
-+  135 op greaterThan *tmp124 zero -2
-+  136 op lessThan *tmp125 zero -2
-   137 op sub *tmp123 *tmp124 *tmp125
-   138 label *label44
-   139 assertequals 1 *tmp123 "sign(2)"
-   140 label *label45
--    * op greaterThan *tmp130 *tmp45 0
--    * op lessThan *tmp131 *tmp45 0
-+  141 op greaterThan *tmp130 zero 0
-+  142 op lessThan *tmp131 zero 0
-   143 op sub *tmp129 *tmp130 *tmp131
-   144 label *label46
-   145 assertequals 0 *tmp129 "sign(0)"
++  134 op greaterThan *tmp124 zero -2
++  135 op lessThan *tmp125 zero -2
+   136 op sub *tmp123 *tmp124 *tmp125
+   137 label *label44
+   138 assertequals 1 *tmp123 "sign(2)"
  
-   249 op sub *tmp188 -8 zero
-   250 assertequals -8 *tmp188 "unary minus"
-   251 label *label72
--    * op equal *tmp191 *tmp45 false
-+  252 op equal *tmp191 zero 0
-   253 assertequals 1 *tmp191 "boolean negation 1"
-   254 label *label73
+   251 op equal *tmp191 zero false
+   252 assertequals 1 *tmp191 "boolean negation 1"
+   253 label *label73
 -    * op equal *tmp194 *tmp51 false
-+  255 op equal *tmp194 zero -1
-   256 assertequals 0 *tmp194 "boolean negation 2"
-   257 label *label74
++  254 op equal *tmp194 zero -1
+   255 assertequals 0 *tmp194 "boolean negation 2"
+   256 label *label74
 -    * op equal *tmp197 *tmp6 false
-+  258 op equal *tmp197 zero -2
-   259 assertequals 0 *tmp197 "boolean negation 3"
-   260 label *label75
-   261 assertequals 16 *tmp26 "**="
-
-Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
- 
-    49 label *label18
-    50 op notEqual *tmp44 zero 0
-    51 assertequals false *tmp44 "notEqual null"
--    * op add *tmp45 zero 0
-+   52 set *tmp45 zero
-    53 label *label19
-    54 op land *tmp47 1 *tmp45
-    55 assertequals false *tmp47 "land 1"
++  257 op equal *tmp197 zero -2
+   258 assertequals 0 *tmp197 "boolean negation 3"
+   259 label *label75
+   260 assertequals 16 *tmp26 "**="
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
@@ -2495,37 +2541,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     50 op notEqual *tmp44 zero 0
 -    * assertequals false *tmp44 "notEqual null"
 +   51 assertequals false *tmp38 "notEqual null"
-    52 set *tmp45 zero
-    53 label *label19
--    * op land *tmp47 1 *tmp45
-+   54 op land *tmp47 1 zero
-    55 assertequals false *tmp47 "land 1"
-    56 label *label20
-    57 op land *tmp50 1 *tmp6
+    52 label *label19
+    53 op land *tmp47 1 zero
+    54 assertequals false *tmp47 "land 1"
  
-   105 op xor *tmp94 3 *tmp6
-   106 assertequals 1 *tmp94 "xor"
-   107 label *label35
--    * op not *tmp97 *tmp45
-+  108 op not *tmp97 zero
-   109 assertequals -1 *tmp97 "not 1"
-   110 op add *tmp98 zero 65535
-   111 label *label36
- 
-   250 assertequals -8 *tmp188 "unary minus"
-   251 label *label72
-   252 op equal *tmp191 zero 0
--    * assertequals 1 *tmp191 "boolean negation 1"
-+  253 assertequals 1 *tmp29 "boolean negation 1"
-   254 label *label73
-   255 op equal *tmp194 zero -1
+   252 assertequals 1 *tmp191 "boolean negation 1"
+   253 label *label73
+   254 op equal *tmp194 zero -1
 -    * assertequals 0 *tmp194 "boolean negation 2"
-+  256 assertequals 0 *tmp32 "boolean negation 2"
-   257 label *label74
-   258 op equal *tmp197 zero -2
-   259 assertequals 0 *tmp197 "boolean negation 3"
++  255 assertequals 0 *tmp32 "boolean negation 2"
+   256 label *label74
+   257 op equal *tmp197 zero -2
+   258 assertequals 0 *tmp197 "boolean negation 3"
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-5 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-3 instructions):
  
     38 op equal *tmp32 zero -1
     39 assertequals false *tmp32 "equal 2"
@@ -2540,82 +2569,68 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-5
     48 label *label18
 -    * op notEqual *tmp44 zero 0
     49 assertequals false *tmp38 "notEqual null"
--    * set *tmp45 zero
     50 label *label19
     51 op land *tmp47 1 zero
-    52 assertequals false *tmp47 "land 1"
  
-   246 op sub *tmp188 -8 zero
-   247 assertequals -8 *tmp188 "unary minus"
-   248 label *label72
--    * op equal *tmp191 zero 0
-   249 assertequals 1 *tmp29 "boolean negation 1"
-   250 label *label73
+   249 op equal *tmp191 zero false
+   250 assertequals 1 *tmp191 "boolean negation 1"
+   251 label *label73
 -    * op equal *tmp194 zero -1
-   251 assertequals 0 *tmp32 "boolean negation 2"
-   252 label *label74
-   253 op equal *tmp197 zero -2
+   252 assertequals 0 *tmp32 "boolean negation 2"
+   253 label *label74
+   254 op equal *tmp197 zero -2
 
 Modifications by Virtual Instruction Expansion:
  
-   283 label *label88
-   284 assertequals true *tmp50 "&&="
-   285 label *label89
+   284 label *label88
+   285 assertequals true *tmp50 "&&="
+   286 label *label89
 -    * op lor :a 0 *tmp6
-+  286 op or *tmp236 0 *tmp6
-+  287 op notEqual :a *tmp236 false
-   288 assertequals true :a "||="
-   289 assertequals %ff0000ff %ff0000 "short color literals"
-   290 assertequals %ffffffff %[white] "named color literals"
++  287 op or *tmp236 0 *tmp6
++  288 op notEqual :a *tmp236 false
+   289 assertequals true :a "||="
+   290 assertequals %ff0000ff %ff0000 "short color literals"
+   291 assertequals %ffffffff %[white] "named color literals"
 
 Modifications by Iterated phase, Expression Optimization, pass 4, iteration 1:
  
-   283 label *label88
-   284 assertequals true *tmp50 "&&="
-   285 label *label89
+   284 label *label88
+   285 assertequals true *tmp50 "&&="
+   286 label *label89
 -    * op or *tmp236 0 *tmp6
-+  286 set *tmp236 *tmp6
-   287 op notEqual :a *tmp236 false
-   288 assertequals true :a "||="
-   289 assertequals %ff0000ff %ff0000 "short color literals"
++  287 set *tmp236 *tmp6
+   288 op notEqual :a *tmp236 false
+   289 assertequals true :a "||="
+   290 assertequals %ff0000ff %ff0000 "short color literals"
 
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
+Modifications by Iterated phase, Temp Variables Elimination, pass 4, iteration 1 (-1 instructions):
  
-   284 assertequals true *tmp50 "&&="
-   285 label *label89
-   286 set *tmp236 *tmp6
+   284 label *label88
+   285 assertequals true *tmp50 "&&="
+   286 label *label89
+-    * set *tmp236 *tmp6
 -    * op notEqual :a *tmp236 false
 +  287 op notEqual :a *tmp6 false
    288 assertequals true :a "||="
    289 assertequals %ff0000ff %ff0000 "short color literals"
    290 assertequals %ffffffff %[white] "named color literals"
 
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-1 instructions):
+Modifications by Jumps phase, Condition Optimization, pass 6, iteration 1:
  
-   283 label *label88
-   284 assertequals true *tmp50 "&&="
-   285 label *label89
--    * set *tmp236 *tmp6
-   286 op notEqual :a *tmp6 false
-   287 assertequals true :a "||="
-   288 assertequals %ff0000ff %ff0000 "short color literals"
-
-Modifications by Iterated phase, Condition Optimization, pass 5, iteration 1:
- 
-   283 label *label88
-   284 assertequals true *tmp50 "&&="
-   285 label *label89
+   186 assertequals 1 *tmp94 "^="
+   187 assertequals false *tmp47 "&&="
+   188 assertequals true *tmp50 "&&="
 -    * op notEqual :a *tmp6 false
-+  286 op notEqual :a zero -2
-   287 assertequals true :a "||="
-   288 assertequals %ff0000ff %ff0000 "short color literals"
-   289 assertequals %ffffffff %[white] "named color literals"
++  189 op notEqual :a zero -2
+   190 assertequals true :a "||="
+   191 assertequals %ff0000ff %ff0000 "short color literals"
+   192 assertequals %ffffffff %[white] "named color literals"
 
-Modifications by Jumps phase, Single Step Elimination, pass 7, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 6, iteration 1 (-1 instructions):
  
-   193 sensor *tmp230 *tmp229 @id
-   194 assertequals 17 *tmp230 "Logic ID"
-   195 stop
+   194 sensor *tmp230 *tmp229 @id
+   195 assertequals 17 *tmp230 "Logic ID"
+   196 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -2662,11 +2677,11 @@ assertequals true *tmp50 "land 2"
 op add *tmp51 zero 1
 op greaterThan *tmp53 zero -1
 assertequals true *tmp53 "lessThan 1"
-op greaterThan *tmp56 zero 1
+op lessThan *tmp56 1 zero
 assertequals false *tmp56 "lessThan 2"
 op greaterThanEq *tmp59 zero 0
 assertequals true *tmp59 "lessThanEq 1"
-op greaterThanEq *tmp62 zero 1
+op lessThanEq *tmp62 1 zero
 assertequals false *tmp62 "lessThanEq 2"
 op lessThan *tmp65 zero 1
 assertequals true *tmp65 "greaterThan 1"
@@ -2788,7 +2803,8 @@ op div *tmp235 *tmp232 100000000
 assertequals 45 *tmp235 "atan"
 op sub *tmp188 -8 zero
 assertequals -8 *tmp188 "unary minus"
-assertequals 1 *tmp29 "boolean negation 1"
+op equal *tmp191 zero false
+assertequals 1 *tmp191 "boolean negation 1"
 assertequals 0 *tmp32 "boolean negation 2"
 op equal *tmp197 zero -2
 assertequals 0 *tmp197 "boolean negation 3"

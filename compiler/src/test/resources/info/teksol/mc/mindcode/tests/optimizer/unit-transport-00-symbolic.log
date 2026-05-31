@@ -2677,28 +2677,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
   1006 label *label232
   1007 control enabled switch1 false
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
- 
-   567 op idiv *tmp192 :turnaround_ms 100
-   568 op div :turnaround_str *tmp192 10
-   569 op div :items_per_ms_unit .UNIT_CAPACITY :turnaround_ms
--    * op mul *tmp195 :items_per_ms_unit 60000
--    * op floor :items_per_min_unit *tmp195
-+  570 op idiv :items_per_min_unit :items_per_ms_unit 0.000016666666666666667
-   571 op add *tmp197 :min_level :max_level
-   572 op div :this_level *tmp197 2
-   573 op sub *tmp199 :last_level :this_level
- 
-   575 op div :corr_per_ms :corr :elapsed_ms
-   576 set :last_level :this_level
-   577 op add :total_flow_per_ms :items_per_ms :corr_per_ms
--    * op mul *tmp203 60000 :corr_per_ms
--    * op floor :corr_per_min *tmp203
-+  578 op idiv :corr_per_min :corr_per_ms 0.000016666666666666667
-   579 set .CORR_SIGN "[]([green]"
-   580 jump *label140 lessThan :corr_per_min 0
-   581 set .CORR_SIGN "[]([green]+"
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      8 set OVERALLOCATION_HIGH 0.75
@@ -2944,67 +2922,67 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    566 op mul .WAIT_LIMIT :turnaround_ms .DEC_OVERALLOCATION
    567 op idiv *tmp192 :turnaround_ms 100
  
-   595 set :trigger *tmp210
-   596 jump *label150 equal :wait_time 0
-   597 label *label151
+   597 set :trigger *tmp210
+   598 jump *label150 equal :wait_time 0
+   599 label *label151
 -    * jump *label148 lessThanEq :trigger :remote_wait_time
-+  598 jump *label148 lessThanEq *tmp210 :remote_wait_time
-   599 label *label150
-   600 jump *label152 equal STABILIZATION false
-   601 set :total_flow_3 :total_flow_2
-   602 set :total_flow_2 :total_flow_1
-   603 set :total_flow_1 :total_flow_per_ms
-   604 op add *tmp215 :total_flow_3 :total_flow_2
++  600 jump *label148 lessThanEq *tmp210 :remote_wait_time
+   601 label *label150
+   602 jump *label152 equal STABILIZATION false
+   603 set :total_flow_3 :total_flow_2
+   604 set :total_flow_2 :total_flow_1
+   605 set :total_flow_1 :total_flow_per_ms
+   606 op add *tmp215 :total_flow_3 :total_flow_2
 -    * op add *tmp216 *tmp215 :total_flow_1
-+  605 op add *tmp216 *tmp215 :total_flow_per_ms
-   606 op div :total_flow_per_ms *tmp216 3
-   607 label *label152
-   608 label *label153
-   609 op div *tmp218 :total_flow_per_ms :items_per_ms_unit
++  607 op add *tmp216 *tmp215 :total_flow_per_ms
+   608 op div :total_flow_per_ms *tmp216 3
+   609 label *label152
+   610 label *label153
+   611 op div *tmp218 :total_flow_per_ms :items_per_ms_unit
 -    * op add *tmp219 *tmp218 .INC_OVERALLOCATION
-+  610 op add *tmp219 *tmp218 OVERALLOCATION_LOW
-   611 op ceil :new_target *tmp219
++  612 op add *tmp219 *tmp218 OVERALLOCATION_LOW
+   613 op ceil :new_target *tmp219
 -    * op mul :level_boost .TRIGGER_BOOST :trigger
-+  612 op mul :level_boost 2 *tmp210
-   613 op add *tmp222 :new_target :level_boost
-   614 op min :new_target *tmp222 MAX_UNITS
-   615 op sub *tmp224 :new_target :active
-   616 op max *tmp225 *tmp224 0
-   617 op min :new_change *tmp225 .INC_LIMIT
++  614 op mul :level_boost 2 *tmp210
+   615 op add *tmp222 :new_target :level_boost
+   616 op min :new_target *tmp222 MAX_UNITS
+   617 op sub *tmp224 :new_target :active
+   618 op max *tmp225 *tmp224 0
+   619 op min :new_change *tmp225 .INC_LIMIT
 -    * set .INC_LIMIT .INC_MAX
-+  618 set .INC_LIMIT 6
-   619 op lessThanEq *tmp227 :new_change 0
++  620 set .INC_LIMIT 6
+   621 op lessThanEq *tmp227 :new_change 0
 -    * op mul .DEC_LIMIT *tmp227 .DEC_MAX
-+  620 op mul .DEC_LIMIT *tmp227 -1
-   621 jump *label149 always
-   622 label *label148
-   623 op idiv *tmp229 :wait_time .WAIT_LIMIT
-   624 op mul *tmp230 -1 *tmp229
-   625 op max :new_change *tmp230 .DEC_LIMIT
-   626 op greaterThanEq *tmp232 :new_change 0
++  622 op mul .DEC_LIMIT *tmp227 -1
+   623 jump *label149 always
+   624 label *label148
+   625 op idiv *tmp229 :wait_time .WAIT_LIMIT
+   626 op mul *tmp230 -1 *tmp229
+   627 op max :new_change *tmp230 .DEC_LIMIT
+   628 op greaterThanEq *tmp232 :new_change 0
 -    * op mul .INC_LIMIT *tmp232 .INC_MAX
 -    * set .DEC_LIMIT .DEC_MAX
-+  627 op mul .INC_LIMIT *tmp232 6
-+  628 set .DEC_LIMIT -1
-   629 label *label149
-   630 op add *tmp234 :active :new_change
-   631 op max .TARGET *tmp234 1
++  629 op mul .INC_LIMIT *tmp232 6
++  630 set .DEC_LIMIT -1
+   631 label *label149
+   632 op add *tmp234 :active :new_change
+   633 op max .TARGET *tmp234 1
  
-   646 label *label155
-   647 label *label134
-   648 label *label135
+   648 label *label155
+   649 label *label134
+   650 label *label135
 -    * print .MESSAGE
-+  649 print ""
-   650 print "Moving [green]"
-   651 print .ITEM
-   652 print "["
-   653 print "]"
-   654 print .DIRECTION
++  651 print ""
+   652 print "Moving [green]"
+   653 print .ITEM
+   654 print "["
+   655 print "]"
+   656 print .DIRECTION
 -    * print .LINK_TXT
-+  655 print *tmp96
-   656 print .AUTO_ALLOCATION_TXT
-   657 jump *label156 lessThanEq .TARGET 0
-   658 jump *label158 lessThan :active .TARGET
++  657 print *tmp96
+   658 print .AUTO_ALLOCATION_TXT
+   659 jump *label156 lessThanEq .TARGET 0
+   660 jump *label158 lessThan :active .TARGET
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-20 instructions):
  
@@ -3104,21 +3082,21 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    514 set .ITEM_ICON *tmp165
    515 set .STATE_LIMIT 1
  
-   574 label *label144
-   575 set *tmp210 false
-   576 label *label145
+   576 label *label144
+   577 set *tmp210 false
+   578 label *label145
 -    * set :trigger *tmp210
-   577 jump *label150 equal :wait_time 0
-   578 label *label151
-   579 jump *label148 lessThanEq *tmp210 :remote_wait_time
+   579 jump *label150 equal :wait_time 0
+   580 label *label151
+   581 jump *label148 lessThanEq *tmp210 :remote_wait_time
  
-   622 set :wait_time 0
-   623 set :remote_wait_time 0
-   624 jump *label154 lessThan @tick .MESSAGE_TIMEOUT
+   624 set :wait_time 0
+   625 set :remote_wait_time 0
+   626 jump *label154 lessThan @tick .MESSAGE_TIMEOUT
 -    * set .MESSAGE ""
-   625 label *label154
-   626 label *label155
-   627 label *label134
+   627 label *label154
+   628 label *label155
+   629 label *label134
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
  
@@ -3172,6 +3150,28 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4:
    340 jump *label75 equal AUTO_ALLOCATION false
    341 set .CORR_SIGN "[]([green]+"
    342 set :corr_per_min 0
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+   548 op idiv *tmp192 :turnaround_ms 100
+   549 op div :turnaround_str *tmp192 10
+   550 op div :items_per_ms_unit .UNIT_CAPACITY :turnaround_ms
+-    * op mul *tmp195 :items_per_ms_unit 60000
+-    * op floor :items_per_min_unit *tmp195
++  551 op idiv :items_per_min_unit :items_per_ms_unit 0.000016666666666666667
+   552 op add *tmp197 :min_level :max_level
+   553 op div :this_level *tmp197 2
+   554 op sub *tmp199 :last_level :this_level
+ 
+   556 op div :corr_per_ms :corr :elapsed_ms
+   557 set :last_level :this_level
+   558 op add :total_flow_per_ms :items_per_ms :corr_per_ms
+-    * op mul *tmp203 60000 :corr_per_ms
+-    * op floor :corr_per_min *tmp203
++  559 op idiv :corr_per_min :corr_per_ms 0.000016666666666666667
+   560 set .CORR_SIGN "[]([green]"
+   561 jump *label140 lessThan :corr_per_min 0
+   562 set .CORR_SIGN "[]([green]+"
 
 Modifications by Iterated phase, Loop Hoisting, pass 1, iteration 1:
  
@@ -3878,6 +3878,16 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    585 label *label155
    586 label *label134
 
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+ 
+   282 set .TRANSFER_START @tick
+   283 op sub .LOOP_START @tick 60
+   284 set .LAST_ITEM @mono
+-    * op add .MESSAGE_TIMEOUT @tick 600
+   285 set .WAIT_LIMIT 30000
+   286 set :items_in_transit 0
+   287 set :items_per_min_unit "--"
+
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
     42 sensor *tmp12 @unit @controller
@@ -3889,24 +3899,14 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
     47 op add .TARGET .TARGET *tmp18
     48 label *label6
  
-   532 select .CORR_SIGN greaterThanEq :corr_per_min 0 "[]([green]+" "[]([green]"
-   533 set .SPEED_UNIT_TXT "[])/min"
-   534 jump *label142 equal :alive false
+   531 select .CORR_SIGN greaterThanEq :corr_per_min 0 "[]([green]+" "[]([green]"
+   532 set .SPEED_UNIT_TXT "[])/min"
+   533 jump *label142 equal :alive false
 -    * select *tmp369 lessThan :min_level .LOW_LEVEL_TRIGGER true false
-+  535 op lessThan *tmp369 :min_level .LOW_LEVEL_TRIGGER
-   536 select *tmp210 greaterThan :max_level .HIGH_LEVEL_TRIGGER true *tmp369
-   537 label *label249
-   538 jump *label150 equal :wait_time 0
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
- 
-   282 set .TRANSFER_START @tick
-   283 op sub .LOOP_START @tick 60
-   284 set .LAST_ITEM @mono
--    * op add .MESSAGE_TIMEOUT @tick 600
-   285 set .WAIT_LIMIT 30000
-   286 set :items_in_transit 0
-   287 set :items_per_min_unit "--"
++  534 op lessThan *tmp369 :min_level .LOW_LEVEL_TRIGGER
+   535 select *tmp210 greaterThan :max_level .HIGH_LEVEL_TRIGGER true *tmp369
+   536 label *label249
+   537 jump *label150 equal :wait_time 0
 
 Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1 (-3 instructions):
  

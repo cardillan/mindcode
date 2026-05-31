@@ -439,18 +439,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    102 label *label28
    103 print "Item Counter                  "
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-    73 set *tmp42 :lastCell
-    74 op mul *tmp44 :rate 16.666666666666668
-    75 write *tmp44 .MEMORY *tmp42
--    * op mul *tmp45 :rate 60000
--    * op floor :ratePerMin *tmp45
-+   76 op idiv :ratePerMin :rate 0.000016666666666666667
-    77 jump *label25 greaterThan :duration .BATCH_DURATION
-    78 op add *tmp49 :batch .BATCH_STEP
-    79 op min :batch *tmp49 .EFF_MAX_BATCH
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     46 set :batch .EFF_MIN_BATCH
@@ -467,14 +455,15 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     74 op mul *tmp44 :rate 16.666666666666668
 -    * write *tmp44 .MEMORY *tmp42
 +   75 write *tmp44 .MEMORY :lastCell
-    76 op idiv :ratePerMin :rate 0.000016666666666666667
+    76 op mul *tmp45 :rate 60000
+    77 op floor :ratePerMin *tmp45
 -    * jump *label25 greaterThan :duration .BATCH_DURATION
 -    * op add *tmp49 :batch .BATCH_STEP
-+   77 jump *label25 greaterThan :duration 2000
-+   78 op add *tmp49 :batch 10
-    79 op min :batch *tmp49 .EFF_MAX_BATCH
-    80 label *label25
-    81 label *label26
++   78 jump *label25 greaterThan :duration 2000
++   79 op add *tmp49 :batch 10
+    80 op min :batch *tmp49 .EFF_MAX_BATCH
+    81 label *label25
+    82 label *label26
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
  
@@ -499,7 +488,19 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
 -    * set *tmp42 :lastCell
     71 op mul *tmp44 :rate 16.666666666666668
     72 write *tmp44 .MEMORY :lastCell
-    73 op idiv :ratePerMin :rate 0.000016666666666666667
+    73 op mul *tmp45 :rate 60000
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    70 op div :rate :batch :duration
+    71 op mul *tmp44 :rate 16.666666666666668
+    72 write *tmp44 .MEMORY :lastCell
+-    * op mul *tmp45 :rate 60000
+-    * op floor :ratePerMin *tmp45
++   73 op idiv :ratePerMin :rate 0.000016666666666666667
+    74 jump *label25 greaterThan :duration 2000
+    75 op add *tmp49 :batch 10
+    76 op min :batch *tmp49 .EFF_MAX_BATCH
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  

@@ -637,83 +637,85 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    225 label *label15
    226 label *label12
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
- 
-     1 set EXPECTED_BOOST 1.5
-     2 op mul *tmp0 EXPECTED_BOOST 16
-     3 op div .EXPECTED_FLOW *tmp0 75
--    * op mul *tmp2 .EXPECTED_FLOW 3600
--    * op floor .EXPECTED_FLOW_STR *tmp2
-+    4 op idiv .EXPECTED_FLOW_STR .EXPECTED_FLOW 0.0002777777777777778
-     5 jump *label0 equal bank1 null
-     6 set .BAR_LENGTH 53
-     7 set .BAR_SPACE 74
- 
-    47 op sub :pos2 :pos 7
-    48 draw color 255 255 16 255
-    49 draw triangle 156 :pos1 164 :pos 156 :pos2
--    * op mul *tmp26 3600 :rate
--    * op floor :flow_str *tmp26
-+   50 op idiv :flow_str :rate 0.0002777777777777778
-    51 jump *label10 always
-    52 label *label9
-    53 draw color 0 0 80 255
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set FROM_INDEX 0
      1 set EXPECTED_BOOST 1.5
      2 op mul *tmp0 EXPECTED_BOOST 16
 -    * op div .EXPECTED_FLOW *tmp0 75
 +    3 op div .EXPECTED_FLOW EXPECTED_BOOST 4.6875
-     4 op idiv .EXPECTED_FLOW_STR .EXPECTED_FLOW 0.0002777777777777778
-     5 jump *label0 equal bank1 null
-     6 set .BAR_LENGTH 53
+     4 op mul *tmp2 .EXPECTED_FLOW 3600
+     5 op floor .EXPECTED_FLOW_STR *tmp2
+     6 jump *label0 equal bank1 null
  
-    11 set .BAR_SPACE 88
-    12 label *label1
-    13 set :lastRate null
+    12 set .BAR_SPACE 88
+    13 label *label1
+    14 set :lastRate null
 -    * set :icon :lastRate
 -    * set :flow_str :icon
-+   14 set :icon null
-+   15 set :flow_str :lastRate
-    16 control enabled switch1 0
-    17 label *label2
-    18 sensor *tmp8 switch1 @enabled
++   15 set :icon null
++   16 set :flow_str :lastRate
+    17 control enabled switch1 0
+    18 label *label2
+    19 sensor *tmp8 switch1 @enabled
  
-    85 sensor :e :smelter @enabled
-    86 sensor :power :smelter @totalPower
-    87 sensor :boost :smelter @timescale
+    87 sensor :e :smelter @enabled
+    88 sensor :power :smelter @totalPower
+    89 sensor :boost :smelter @timescale
 -    * jump *label16 greaterThanEq :l :minimum
-+   88 jump *label16 greaterThanEq :l 21
-    89 set :minimum :l
-    90 set :icon @lead
-    91 label *label16
++   90 jump *label16 greaterThanEq :l 21
+    91 set :minimum :l
+    92 set :icon @lead
+    93 label *label16
  
-   168 draw lineRect :xm1 :ym1 16 16
-   169 draw stroke 2
-   170 label *label29
+   170 draw lineRect :xm1 :ym1 16 16
+   171 draw stroke 2
+   172 label *label29
 -    * op add :x :x 16
-+  171 op add :x *tmp57 21
-   172 op mul *tmp84 :power :e
-   173 jump *label32 notEqual *tmp84 0
-   174 set :red 255
++  173 op add :x *tmp57 21
+   174 op mul *tmp84 :power :e
+   175 jump *label32 notEqual *tmp84 0
+   176 set :red 255
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
      0 set FROM_INDEX 0
      1 set EXPECTED_BOOST 1.5
 -    * op mul *tmp0 EXPECTED_BOOST 16
      2 op div .EXPECTED_FLOW EXPECTED_BOOST 4.6875
-     3 op idiv .EXPECTED_FLOW_STR .EXPECTED_FLOW 0.0002777777777777778
-     4 jump *label0 equal bank1 null
+-    * op mul *tmp2 .EXPECTED_FLOW 3600
++    3 op mul *tmp2 EXPECTED_BOOST 768
+     4 op floor .EXPECTED_FLOW_STR *tmp2
+     5 jump *label0 equal bank1 null
+     6 set .BAR_LENGTH 53
  
-    11 label *label1
-    12 set :lastRate null
-    13 set :icon null
+    12 label *label1
+    13 set :lastRate null
+    14 set :icon null
 -    * set :flow_str :lastRate
-+   14 set :flow_str null
-    15 control enabled switch1 0
-    16 label *label2
-    17 sensor *tmp8 switch1 @enabled
++   15 set :flow_str null
+    16 control enabled switch1 0
+    17 label *label2
+    18 sensor *tmp8 switch1 @enabled
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
+     0 set FROM_INDEX 0
+     1 set EXPECTED_BOOST 1.5
+     2 op div .EXPECTED_FLOW EXPECTED_BOOST 4.6875
+-    * op mul *tmp2 EXPECTED_BOOST 768
+-    * op floor .EXPECTED_FLOW_STR *tmp2
++    3 op idiv .EXPECTED_FLOW_STR EXPECTED_BOOST 0.0013020833333333333
+     4 jump *label0 equal bank1 null
+     5 set .BAR_LENGTH 53
+     6 set .BAR_SPACE 74
+ 
+    46 op sub :pos2 :pos 7
+    47 draw color 255 255 16 255
+    48 draw triangle 156 :pos1 164 :pos 156 :pos2
+-    * op mul *tmp26 3600 :rate
+-    * op floor :flow_str *tmp26
++   49 op idiv :flow_str :rate 0.0002777777777777778
+    50 jump *label10 always
+    51 label *label9
+    52 draw color 0 0 80 255
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
@@ -738,7 +740,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-12 
  
      1 set EXPECTED_BOOST 1.5
      2 op div .EXPECTED_FLOW EXPECTED_BOOST 4.6875
-     3 op idiv .EXPECTED_FLOW_STR .EXPECTED_FLOW 0.0002777777777777778
+     3 op idiv .EXPECTED_FLOW_STR EXPECTED_BOOST 0.0013020833333333333
 -    * jump *label0 equal bank1 null
 -    * set .BAR_LENGTH 53
 -    * set .BAR_SPACE 74
@@ -929,7 +931,7 @@ label __start__
 set FROM_INDEX 0
 set EXPECTED_BOOST 1.5
 op div .EXPECTED_FLOW EXPECTED_BOOST 4.6875
-op idiv .EXPECTED_FLOW_STR .EXPECTED_FLOW 0.0002777777777777778
+op idiv .EXPECTED_FLOW_STR EXPECTED_BOOST 0.0013020833333333333
 select .BAR_LENGTH notEqual bank1 null 53 61
 select .BAR_SPACE notEqual bank1 null 74 88
 set :lastRate null

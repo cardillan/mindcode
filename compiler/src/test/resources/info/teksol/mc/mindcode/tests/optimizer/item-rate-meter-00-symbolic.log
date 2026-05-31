@@ -524,18 +524,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    123 label *label39
    124 write :index .TARGET_MEMORY :startIndex
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-   130 print "["
-   131 print "]"
-   132 print "\n"
--    * op mul *tmp54 :rate 3600
--    * op floor *tmp55 *tmp54
-+  133 op idiv *tmp55 :rate 0.0002777777777777778
-   134 print "Current rate [green]"
-   135 print *tmp55
-   136 print "["
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      1 set .SOURCE_MEMORY null
@@ -557,6 +545,18 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     74 label *label22
     75 label *label23
     76 set :prevTick @tick
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+   130 print "["
+   131 print "]"
+   132 print "\n"
+-    * op mul *tmp54 :rate 3600
+-    * op floor *tmp55 *tmp54
++  133 op idiv *tmp55 :rate 0.0002777777777777778
+   134 print "Current rate [green]"
+   135 print *tmp55
+   136 print "["
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  

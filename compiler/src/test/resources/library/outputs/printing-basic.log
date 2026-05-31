@@ -1,22 +1,23 @@
    494 instructions before optimizations.
-    27 instructions eliminated by Temp Variables Elimination (7 iterations).
+    27 instructions eliminated by Temp Variables Elimination (8 iterations).
      1 instructions eliminated by Case Expression Optimization.
     38 instructions eliminated by Dead Code Elimination (6 iterations).
-    91 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
-    22 instructions eliminated by Condition Optimization (7 iterations).
-   111 instructions eliminated by Single Step Elimination (4 passes, 10 iterations).
-    24 instructions modified by Expression Optimization (2 passes, 4 iterations).
-    10 instructions eliminated by Boolean Optimization (3 passes, 8 iterations).
+    91 instructions eliminated by Jump Normalization (2 passes, 7 iterations).
+    22 instructions eliminated by Condition Optimization (8 iterations).
+   111 instructions eliminated by Single Step Elimination (4 passes, 11 iterations).
+    19 instructions modified by Expression Optimization (2 passes, 5 iterations).
+    10 instructions eliminated by Boolean Optimization (3 passes, 9 iterations).
        2 fully-evaluated expressions optimized using selects.
   1054 instructions eliminated by Data Flow Optimization (30 passes, 100 iterations).
+     2 loops improved by Loop Hoisting.
        7 loop conditions were partially rotated.
-   896 instructions added by Loop Unrolling (35 iterations).
+   896 instructions added by Loop Unrolling (36 iterations).
     18 loops unrolled by Loop Unrolling.
-   798 instructions added by Function Inlining (35 iterations).
+   798 instructions added by Function Inlining (36 iterations).
     34 function calls inlined by Function Inlining.
-    24 instructions eliminated by Case Switching (35 iterations).
+    24 instructions eliminated by Case Switching (36 iterations).
      4 case expressions converted to fast dispatch by Case Switching.
-     7 instructions eliminated by Jump Straightening (7 iterations).
+     7 instructions eliminated by Jump Straightening (8 iterations).
     30 instructions updated by Jump Threading.
    256 instructions eliminated by Unreachable Code Elimination (2 iterations).
    249 instructions eliminated by Print Merging.
@@ -376,7 +377,7 @@ Pass 1: speed optimization selection (cost limit 81):
 Pass 1: speed optimization selection (cost limit 87):
   * Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity (-6 instructions)
 
-Pass 2: speed optimization selection (cost limit 226):
+Pass 2: speed optimization selection (cost limit 221):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389
@@ -389,9 +390,9 @@ Pass 2: speed optimization selection (cost limit 226):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:341:9                               size   +90, benefit     1600.0, efficiency     17.778
-  * Unroll loop at *printing:341:9                               size   +28, benefit     1600.0, efficiency     57.143 (+28 instructions)
+  * Unroll loop at *printing:341:9                               size   +26, benefit     1600.0, efficiency     61.538 (+23 instructions)
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
-    Unroll loop at *printing:367:9                               size   +11, benefit      400.0, efficiency     36.364
+    Unroll loop at *printing:367:9                               size   +16, benefit      400.0, efficiency     25.000
 
 Pass 2: speed optimization selection (cost limit 198):
     Unroll loop at *printing:263:13                              size   +27, benefit       37.5, efficiency      1.389

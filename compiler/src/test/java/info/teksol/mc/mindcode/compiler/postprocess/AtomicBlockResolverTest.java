@@ -575,7 +575,7 @@ class AtomicBlockResolverTest {
                     """
                             wait 0.01667                            # 1.000 ticks for atomic execution of 2 steps at 2 ipt
                             read *tmp1 cell1 0
-                            op mul *tmp5 *tmp1 2
+                            op shl *tmp5 *tmp1 1
                             op add @counter *tmp5 4
                             set .x*elem ".x*0"
                             jump 13 always 0 0
@@ -617,14 +617,14 @@ class AtomicBlockResolverTest {
                             wait 0.01667                            # 1.000 ticks for atomic execution of 2 steps at 2 ipt
                             read *tmp1 cell1 0
                             set .x*ret 7
-                            op mul .x*ind *tmp1 2
+                            op shl .x*ind *tmp1 1
                             op mod *tmp7 .x*ind 6
                             op add @counter 18 *tmp7
                             read *tmp3 @this .x*elem
                             op add *tmp3 *tmp3 1
                             write *tmp3 @this .x*elem               # The last atomic section instruction
                             set .x*ret 14
-                            op mul .x*ind p 2
+                            op shl .x*ind p 1
                             op mod *tmp8 .x*ind 6
                             op add @counter 18 *tmp8
                             read *tmp5 @this .x*elem
@@ -800,7 +800,7 @@ class AtomicBlockResolverTest {
                     """
                             wait 0.075                              # 4.500 ticks for atomic execution of 9 steps at 2 ipt
                             read *tmp1 cell1 0
-                            op mul *tmp5 *tmp1 2
+                            op shl *tmp5 *tmp1 1
                             op add @counter *tmp5 4
                             set .x*elem ".x*0"
                             jump 13 always 0 0
@@ -843,14 +843,14 @@ class AtomicBlockResolverTest {
                             wait 0.02292                            # 1.375 ticks for atomic execution of 11 steps at 8 ipt
                             read *tmp1 cell1 0
                             set .x*ret 7
-                            op mul .x*ind *tmp1 2
+                            op shl .x*ind *tmp1 1
                             op mod *tmp7 .x*ind 6
                             op add @counter 18 *tmp7
                             read *tmp3 @this .x*elem
                             op add *tmp3 *tmp3 1
                             write *tmp3 @this .x*elem               # The last atomic section instruction
                             set .x*ret 14
-                            op mul .x*ind p 2
+                            op shl .x*ind p 1
                             op mod *tmp8 .x*ind 6
                             op add @counter 18 *tmp8
                             read *tmp5 @this .x*elem

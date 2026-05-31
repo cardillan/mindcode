@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -78,6 +79,10 @@ public enum InstructionInfo {
 
     /// This is the initial wait in an atomic block.
     ATOMIC_WAIT(Boolean.FALSE),
+
+    /// This instruction performs an integer conversion on the given argument, and the argument is expected
+    /// to be non-negative values. A preceding floor operation may be removed.
+    NON_NEGATIVE_INT(LogicVariable.INVALID),
     ;
 
     public final Object defaultValue;

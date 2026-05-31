@@ -673,23 +673,24 @@ compiles into
 op rand *tmp0 5 0
 op rand *tmp1 5 0
 op rand *tmp2 5 0
-op floor *tmp4 *tmp0 0
-op mul *tmp7 *tmp4 2
-op add @counter *tmp7 6
+op shl *tmp7 *tmp0 1
+op add @counter *tmp7 5
 set *tmp6 "[red]"
-jump 15 always 0 0
+jump 14 always 0 0
 set *tmp6 "[green]"
-jump 15 always 0 0
+jump 14 always 0 0
 set *tmp6 "[blue]"
-jump 15 always 0 0
+jump 14 always 0 0
 set *tmp6 "[crimson]"
-jump 15 always 0 0
+jump 14 always 0 0
 set *tmp6 "[gold]"
 print *tmp6
 print *tmp0
 print *tmp1
 print *tmp2
 ```
+
+Note: the `floor` operation got replaced by `shl` in the compiled code, which implicitly performs `floor` in its input parameters.
 
 ### Constants representing built-in icons
 

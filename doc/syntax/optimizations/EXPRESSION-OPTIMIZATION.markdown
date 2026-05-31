@@ -2,6 +2,32 @@
 
 This optimization looks for certain expressions that can be performed more efficiently. Many optimizations for different instructions are available.
 
+## Handling non-negative implicit integer conversions
+
+Some instructions perform implicit integer conversions on their argument(s). When the expected values passed to the instructions are known to be non-negative, it is possible to remove a preceding `floor` operation, because the implicit integer conversion has the same effect. When this situation is detected, the argument in question is replaced by the operand of the `op floor` instruction instead of its result.
+
+Currently, only array indexes are handled in this way. When a `floor()` function is used on an array index, the corresponding `op floor` instruction may be removed (assuming the value isn't used anywhere else). Example:
+
+```Mindcode
+#set use-text-jump-tables = false;
+#set target = 8.0;
+
+volatile var a[6];
+printchar(a[floor(rand(length(a)))]);
+```
+
+compiles to:
+
+```mlog
+op rand *tmp0 6 0
+lookup team *tmp4 *tmp0
+sensor .a*elem *tmp4 @name
+read *tmp3 @this .a*elem
+printchar *tmp3
+end
+draw triangle derelict sharded crux malis green blue
+```
+
 ## The `lookup` instruction
 
 If the logic ID used in the `lookup` instruction is an integer constant, Mindcode searches for the appropriate item, liquid, block, or unit type with given ID and if it finds one, the instruction is replaced by a `set` instruction setting the output variable directly to the item, liquid, block, or unit type.
@@ -126,7 +152,7 @@ When the `read` instruction accesses a character in a constant string at a const
 The `read` and `write` instructions accessing variables in current processor using a constant name are replaced with a `set` instruction accessing the processor variable directly.
 
 > [!IMPORTANT]
-> This optimization ensures the creation of the corresponding processor variable, as it includes its name in the `set` instruction. Since the `read` and `write` instructions' behavior depends on whether the target variable exists in the processor or not, this optimization may alter the behavior of the program. For this reason, this optimization is only performed on `advanced` level.       
+> This optimization causes the creation of the corresponding processor variable, as it includes its name in the `set` instruction. Since the `read` and `write` instructions' behavior depends on whether the target variable exists in the processor or not, this optimization may alter the behavior of the program. For this reason, this optimization is only performed on `advanced` level.       
 
 Example:
 

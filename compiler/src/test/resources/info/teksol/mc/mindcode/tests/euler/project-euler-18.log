@@ -5,17 +5,17 @@
      2 instructions eliminated by Condition Optimization (2 passes, 9 iterations).
      1 instructions eliminated by Single Step Elimination (8 iterations).
      2 instructions modified by Expression Optimization (5 iterations).
-  1176 instructions eliminated by Data Flow Optimization (18 passes, 57 iterations).
+  1177 instructions eliminated by Data Flow Optimization (17 passes, 56 iterations).
      1 loops improved by Loop Hoisting.
        2 loop conditions were partially rotated.
-  1268 instructions added by Loop Unrolling (20 iterations).
+  1269 instructions added by Loop Unrolling (20 iterations).
     15 loops unrolled by Loop Unrolling.
    837 instructions after optimizations.
 
 Pass 3: speed optimization selection (cost limit 856):
   * Unroll loop at line 9:5                                      size  +218, benefit      700.0, efficiency      3.211 (+162 instructions)
 
-Pass 4: speed optimization selection (cost limit 709):
+Pass 4: speed optimization selection (cost limit 708):
     Unroll loop at line 10:9                                     size  +123, benefit      750.0, efficiency      6.098
     Unroll loop at line 10:9                                     size  +114, benefit      700.0, efficiency      6.140
     Unroll loop at line 10:9                                     size  +105, benefit      650.0, efficiency      6.190
@@ -29,7 +29,7 @@ Pass 4: speed optimization selection (cost limit 709):
     Unroll loop at line 10:9                                     size   +33, benefit      250.0, efficiency      7.576
     Unroll loop at line 10:9                                     size   +24, benefit      200.0, efficiency      8.333
     Unroll loop at line 10:9                                     size   +15, benefit      150.0, efficiency     10.000
-  * Unroll loop at line 10:9                                     size    +5, benefit      100.0, efficiency     20.000 (+1 instructions)
+  * Unroll loop at line 10:9                                     size    +6, benefit      100.0, efficiency     16.667 (+0 instructions)
 
 Pass 4: speed optimization selection (cost limit 708):
     Unroll loop at line 10:9                                     size  +123, benefit      750.0, efficiency      6.098
@@ -6010,37 +6010,7 @@ Modifications by Iterated phase, Expression Optimization, pass 4, iteration 1:
    520 label *label255
    521 op add *tmp614 16 :run:col
 
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
- 
-   516 label *label253
-   517 label *label254
-   518 set *tmp607 :run:col
--    * read *tmp605 bank1 *tmp607
-+  519 read *tmp605 bank1 :run:col
-   520 label *label255
-   521 op add *tmp614 16 :run:col
-   522 read *tmp612 bank1 *tmp614
- 
-   526 label *label257
-   527 op max *tmp626 *tmp612 *tmp620
-   528 op add *tmp627 *tmp605 *tmp626
--    * write *tmp627 bank1 *tmp607
-+  529 write *tmp627 bank1 :run:col
-   530 label *label258
-   531 label *label259
-   532 op sub :run:col :run:col 1
-
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-1 instructions):
- 
-   515 set :run:col 1
-   516 label *label253
-   517 label *label254
--    * set *tmp607 :run:col
-   518 read *tmp605 bank1 :run:col
-   519 label *label255
-   520 op add *tmp614 16 :run:col
-
-Modifications by Unroll loop at line 10:9 (+8 instructions):
+Modifications by Unroll loop at line 10:9 (+9 instructions):
  
    512 jump *label245 greaterThanEq :run:col 0
    513 label *label251
@@ -6048,7 +6018,8 @@ Modifications by Unroll loop at line 10:9 (+8 instructions):
 -    * set :run:col 1
 -    * label *label253
 -    * label *label254
--    * read *tmp605 bank1 :run:col
+-    * set *tmp607 :run:col
+-    * read *tmp605 bank1 *tmp607
 -    * label *label255
 -    * op add *tmp614 16 :run:col
 -    * read *tmp612 bank1 *tmp614
@@ -6058,7 +6029,7 @@ Modifications by Unroll loop at line 10:9 (+8 instructions):
 -    * label *label257
 -    * op max *tmp626 *tmp612 *tmp620
 -    * op add *tmp627 *tmp605 *tmp626
--    * write *tmp627 bank1 :run:col
+-    * write *tmp627 bank1 *tmp607
 -    * label *label258
 -    * label *label259
 -    * op sub :run:col :run:col 1
@@ -6066,91 +6037,140 @@ Modifications by Unroll loop at line 10:9 (+8 instructions):
 -    * label *label260
 +  515 set :run:col 1
 +  516 label *label262
-+  517 read *tmp605 bank1 :run:col
-+  518 label *label263
-+  519 op add *tmp614 16 :run:col
-+  520 read *tmp612 bank1 *tmp614
-+  521 label *label264
-+  522 op add *tmp622 :run:col 17
-+  523 read *tmp620 bank1 *tmp622
-+  524 label *label265
-+  525 op max *tmp626 *tmp612 *tmp620
-+  526 op add *tmp627 *tmp605 *tmp626
-+  527 write *tmp627 bank1 :run:col
-+  528 label *label266
-+  529 label *label267
-+  530 op sub :run:col :run:col 1
-+  531 read *tmp605 bank1 :run:col
-+  532 label *label268
-+  533 op add *tmp614 16 :run:col
-+  534 read *tmp612 bank1 *tmp614
-+  535 label *label269
-+  536 op add *tmp622 :run:col 17
-+  537 read *tmp620 bank1 *tmp622
-+  538 label *label270
-+  539 op max *tmp626 *tmp612 *tmp620
-+  540 op add *tmp627 *tmp605 *tmp626
-+  541 write *tmp627 bank1 :run:col
-+  542 label *label271
-+  543 label *label272
-+  544 op sub :run:col :run:col 1
-+  545 label *label260
-   546 label *label261
-   547 label *label124
-   548 label *label121
++  517 set *tmp607 :run:col
++  518 read *tmp605 bank1 *tmp607
++  519 label *label263
++  520 op add *tmp614 16 :run:col
++  521 read *tmp612 bank1 *tmp614
++  522 label *label264
++  523 op add *tmp622 :run:col 17
++  524 read *tmp620 bank1 *tmp622
++  525 label *label265
++  526 op max *tmp626 *tmp612 *tmp620
++  527 op add *tmp627 *tmp605 *tmp626
++  528 write *tmp627 bank1 *tmp607
++  529 label *label266
++  530 label *label267
++  531 op sub :run:col :run:col 1
++  532 set *tmp607 :run:col
++  533 read *tmp605 bank1 *tmp607
++  534 label *label268
++  535 op add *tmp614 16 :run:col
++  536 read *tmp612 bank1 *tmp614
++  537 label *label269
++  538 op add *tmp622 :run:col 17
++  539 read *tmp620 bank1 *tmp622
++  540 label *label270
++  541 op max *tmp626 *tmp612 *tmp620
++  542 op add *tmp627 *tmp605 *tmp626
++  543 write *tmp627 bank1 *tmp607
++  544 label *label271
++  545 label *label272
++  546 op sub :run:col :run:col 1
++  547 label *label260
+   548 label *label261
+   549 label *label124
+   550 label *label121
 
 Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
  
    514 label *label252
    515 set :run:col 1
    516 label *label262
+-    * set *tmp607 :run:col
+-    * read *tmp605 bank1 *tmp607
++  517 set *tmp607 1
++  518 read *tmp605 bank1 :run:col
+   519 label *label263
+-    * op add *tmp614 16 :run:col
+-    * read *tmp612 bank1 *tmp614
++  520 op add *tmp614 16 1
++  521 read *tmp612 bank1 17
+   522 label *label264
+-    * op add *tmp622 :run:col 17
+-    * read *tmp620 bank1 *tmp622
++  523 op add *tmp622 1 17
++  524 read *tmp620 bank1 18
+   525 label *label265
+   526 op max *tmp626 *tmp612 *tmp620
+   527 op add *tmp627 *tmp605 *tmp626
+-    * write *tmp627 bank1 *tmp607
++  528 write *tmp627 bank1 :run:col
+   529 label *label266
+   530 label *label267
+-    * op sub :run:col :run:col 1
+-    * set *tmp607 :run:col
+-    * read *tmp605 bank1 *tmp607
++  531 op sub :run:col 1 1
++  532 set *tmp607 0
++  533 read *tmp605 bank1 :run:col
+   534 label *label268
+-    * op add *tmp614 16 :run:col
+-    * read *tmp612 bank1 *tmp614
++  535 op add *tmp614 16 0
++  536 read *tmp612 bank1 16
+   537 label *label269
+-    * op add *tmp622 :run:col 17
+-    * read *tmp620 bank1 *tmp622
++  538 op add *tmp622 0 17
++  539 read *tmp620 bank1 17
+   540 label *label270
+   541 op max *tmp626 *tmp612 *tmp620
+   542 op add *tmp627 *tmp605 *tmp626
+-    * write *tmp627 bank1 *tmp607
++  543 write *tmp627 bank1 :run:col
+   544 label *label271
+   545 label *label272
+-    * op sub :run:col :run:col 1
++  546 op sub :run:col 0 1
+   547 label *label260
+   548 label *label261
+   549 label *label124
+
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-7 instructions):
+ 
+   514 label *label252
+   515 set :run:col 1
+   516 label *label262
+-    * set *tmp607 1
 -    * read *tmp605 bank1 :run:col
 +  517 read *tmp605 bank1 1
    518 label *label263
--    * op add *tmp614 16 :run:col
--    * read *tmp612 bank1 *tmp614
-+  519 op add *tmp614 16 1
-+  520 read *tmp612 bank1 17
-   521 label *label264
--    * op add *tmp622 :run:col 17
--    * read *tmp620 bank1 *tmp622
-+  522 op add *tmp622 1 17
-+  523 read *tmp620 bank1 18
-   524 label *label265
-   525 op max *tmp626 *tmp612 *tmp620
-   526 op add *tmp627 *tmp605 *tmp626
+-    * op add *tmp614 16 1
+   519 read *tmp612 bank1 17
+   520 label *label264
+-    * op add *tmp622 1 17
+   521 read *tmp620 bank1 18
+   522 label *label265
+   523 op max *tmp626 *tmp612 *tmp620
+   524 op add *tmp627 *tmp605 *tmp626
 -    * write *tmp627 bank1 :run:col
-+  527 write *tmp627 bank1 1
-   528 label *label266
-   529 label *label267
--    * op sub :run:col :run:col 1
++  525 write *tmp627 bank1 1
+   526 label *label266
+   527 label *label267
+   528 op sub :run:col 1 1
+-    * set *tmp607 0
 -    * read *tmp605 bank1 :run:col
-+  530 op sub :run:col 1 1
-+  531 read *tmp605 bank1 0
-   532 label *label268
--    * op add *tmp614 16 :run:col
--    * read *tmp612 bank1 *tmp614
-+  533 op add *tmp614 16 0
-+  534 read *tmp612 bank1 16
-   535 label *label269
--    * op add *tmp622 :run:col 17
--    * read *tmp620 bank1 *tmp622
-+  536 op add *tmp622 0 17
-+  537 read *tmp620 bank1 17
-   538 label *label270
-   539 op max *tmp626 *tmp612 *tmp620
-   540 op add *tmp627 *tmp605 *tmp626
++  529 read *tmp605 bank1 0
+   530 label *label268
+-    * op add *tmp614 16 0
+   531 read *tmp612 bank1 16
+   532 label *label269
+-    * op add *tmp622 0 17
+   533 read *tmp620 bank1 17
+   534 label *label270
+   535 op max *tmp626 *tmp612 *tmp620
+   536 op add *tmp627 *tmp605 *tmp626
 -    * write *tmp627 bank1 :run:col
-+  541 write *tmp627 bank1 0
-   542 label *label271
-   543 label *label272
--    * op sub :run:col :run:col 1
-+  544 op sub :run:col 0 1
-   545 label *label260
-   546 label *label261
-   547 label *label124
++  537 write *tmp627 bank1 0
+   538 label *label271
+   539 label *label272
+-    * op sub :run:col 0 1
+   540 label *label260
+   541 label *label261
+   542 label *label124
 
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-7 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 3 (-2 instructions):
  
    512 jump *label245 greaterThanEq :run:col 0
    513 label *label251
@@ -6159,13 +6179,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-7
    515 label *label262
    516 read *tmp605 bank1 1
    517 label *label263
--    * op add *tmp614 16 1
-   518 read *tmp612 bank1 17
-   519 label *label264
--    * op add *tmp622 1 17
-   520 read *tmp620 bank1 18
-   521 label *label265
-   522 op max *tmp626 *tmp612 *tmp620
  
    524 write *tmp627 bank1 1
    525 label *label266
@@ -6173,21 +6186,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-7
 -    * op sub :run:col 1 1
    527 read *tmp605 bank1 0
    528 label *label268
--    * op add *tmp614 16 0
    529 read *tmp612 bank1 16
-   530 label *label269
--    * op add *tmp622 0 17
-   531 read *tmp620 bank1 17
-   532 label *label270
-   533 op max *tmp626 *tmp612 *tmp620
- 
-   535 write *tmp627 bank1 0
-   536 label *label271
-   537 label *label272
--    * op sub :run:col 0 1
-   538 label *label260
-   539 label *label261
-   540 label *label124
 
 Modifications by Unroll loop at line 10:9 (+19 instructions):
  

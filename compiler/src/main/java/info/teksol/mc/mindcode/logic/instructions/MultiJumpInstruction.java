@@ -54,4 +54,9 @@ public class MultiJumpInstruction extends BaseInstruction implements MultiTarget
                         && getTarget() instanceof LogicLabel
                         && getOffset().getIntValue() != 0 ? 1 : 0);
     }
+
+    public MultiJumpInstruction withTarget(LogicValue target) {
+        assert getArgumentTypes() != null;
+        return new MultiJumpInstruction(astContext, List.of(target, getArg(1), getArg(2)), getArgumentTypes()).copyInfo(this);
+    }
 }

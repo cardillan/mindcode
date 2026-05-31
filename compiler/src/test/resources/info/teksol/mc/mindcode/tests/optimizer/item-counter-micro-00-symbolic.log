@@ -735,28 +735,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    212 label *label45
    213 label *label20
 
-Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
- 
-   126 set *tmp44 :lastCell
-   127 op mul *tmp46 :rate 166.66666666666666
-   128 write *tmp46 .MEMORY *tmp44
--    * op mul *tmp47 :rate 600000
--    * op floor :ratePerMin *tmp47
-+  129 op idiv :ratePerMin :rate 0.0000016666666666666667
-   130 jump *label32 greaterThan :duration .BATCH_DURATION
-   131 op add *tmp51 .BATCH .BATCH_STEP
-   132 op min .BATCH *tmp51 .EFF_MAX_BATCH
- 
-   198 print "] ms"
-   199 print "\n"
-   200 op sub *tmp79 @time :start
--    * op div *tmp80 *tmp79 2
--    * op floor *tmp81 *tmp80
-+  201 op idiv *tmp81 *tmp79 2
-   202 print "[lightgray]Loop time: "
-   203 print *tmp81
-   204 print " "
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      2 set :lastCell 0
@@ -808,14 +786,15 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    127 op mul *tmp46 :rate 166.66666666666666
 -    * write *tmp46 .MEMORY *tmp44
 +  128 write *tmp46 .MEMORY :lastCell
-   129 op idiv :ratePerMin :rate 0.0000016666666666666667
+   129 op mul *tmp47 :rate 600000
+   130 op floor :ratePerMin *tmp47
 -    * jump *label32 greaterThan :duration .BATCH_DURATION
 -    * op add *tmp51 .BATCH .BATCH_STEP
-+  130 jump *label32 greaterThan :duration 2000
-+  131 op add *tmp51 .BATCH 1
-   132 op min .BATCH *tmp51 .EFF_MAX_BATCH
-   133 op mul .BATCH_TXT .BATCH 10
-   134 label *label32
++  131 jump *label32 greaterThan :duration 2000
++  132 op add *tmp51 .BATCH 1
+   133 op min .BATCH *tmp51 .EFF_MAX_BATCH
+   134 op mul .BATCH_TXT .BATCH 10
+   135 label *label32
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
  
@@ -870,7 +849,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
 -    * set *tmp44 :lastCell
    124 op mul *tmp46 :rate 166.66666666666666
    125 write *tmp46 .MEMORY :lastCell
-   126 op idiv :ratePerMin :rate 0.0000016666666666666667
+   126 op mul *tmp47 :rate 600000
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
  
@@ -910,6 +889,28 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-4
     90 set :ratePerMin 0
     91 set :startTime @time
     92 label *label19
+
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+   119 op div :rate .BATCH :duration
+   120 op mul *tmp46 :rate 166.66666666666666
+   121 write *tmp46 .MEMORY :lastCell
+-    * op mul *tmp47 :rate 600000
+-    * op floor :ratePerMin *tmp47
++  122 op idiv :ratePerMin :rate 0.0000016666666666666667
+   123 jump *label32 greaterThan :duration 2000
+   124 op add *tmp51 .BATCH 1
+   125 op min .BATCH *tmp51 .EFF_MAX_BATCH
+ 
+   191 print "] ms"
+   192 print "\n"
+   193 op sub *tmp79 @time :start
+-    * op div *tmp80 *tmp79 2
+-    * op floor *tmp81 *tmp80
++  194 op idiv *tmp81 *tmp79 2
+   195 print "[lightgray]Loop time: "
+   196 print *tmp81
+   197 print " "
 
 Modifications by Full loop rotation at line 69:1 (+1 instructions):
  

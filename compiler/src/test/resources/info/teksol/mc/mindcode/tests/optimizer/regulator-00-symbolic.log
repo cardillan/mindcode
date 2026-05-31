@@ -8,7 +8,7 @@
      2 instructions modified by Expression Optimization (3 iterations).
      9 instructions eliminated by Boolean Optimization (6 iterations).
        3 fully-evaluated expressions optimized using selects.
-     7 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
+     7 instructions eliminated by Data Flow Optimization (2 passes, 10 iterations).
      1 instructions added by Loop Rotation (3 iterations).
        3 loop conditions were partially rotated.
    131 instructions added by Case Switching (5 iterations).
@@ -866,6 +866,26 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-3
     10 print "Configuring regulator..."
     11 print "\n"
 
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
+ 
+   105 # "Function: inline def setState(in newState)"
+   106 jump *label24 equal null true
+   107 set .STATE true
+-    * op add .CYCLES 0 1
++  108 set .CYCLES 1
+   109 op xor .ON .INVERTED true
+   110 jump *label26 equal .ON false
+   111 set *tmp20 "\nCurrently active:[green]"
+ 
+   165 jump *label45 equal .STATE false
+   166 set .STATE false
+   167 op add .CYCLES .CYCLES 1
+-    * op xor .ON .INVERTED false
++  168 set .ON .INVERTED
+   169 jump *label47 equal .ON false
+   170 set *tmp47 "\nCurrently active:[green]"
+   171 jump *label48 always
+
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
     12 set :n @links
@@ -904,7 +924,7 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
 Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-9 instructions):
  
    108 set .STATE true
-   109 op add .CYCLES 0 1
+   109 set .CYCLES 1
    110 op xor .ON .INVERTED true
 -    * jump *label26 equal .ON false
 -    * set *tmp20 "\nCurrently active:[green]"
@@ -941,7 +961,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-9 i
  
    156 set .STATE false
    157 op add .CYCLES .CYCLES 1
-   158 op xor .ON .INVERTED false
+   158 set .ON .INVERTED
 -    * jump *label47 equal .ON false
 -    * set *tmp47 "\nCurrently active:[green]"
 -    * jump *label48 always
@@ -973,6 +993,15 @@ Modifications by Full loop rotation at line 72:1 (+1 instructions):
    226 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+   157 set .STATE false
+   158 op add .CYCLES .CYCLES 1
+   159 set .ON .INVERTED
+-    * select *tmp47 notEqual .ON false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
++  160 select *tmp47 notEqual .INVERTED false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
+   161 set .ACTIVE_TEXT *tmp47
+   162 label *label45
+   163 label *label46
  
    197 print .ACTIVE_TEXT
    198 set :n .START
@@ -1359,39 +1388,8 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
    385 # "Function: inline def setState(in newState)"
 -    * jump *label24 equal null true
    386 set .STATE true
-   387 op add .CYCLES 0 1
+   387 set .CYCLES 1
    388 op xor .ON .INVERTED true
-
-Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
- 
-   384 op strictEqual .INVERTED *tmp14 @inverted-sorter
-   385 # "Function: inline def setState(in newState)"
-   386 set .STATE true
--    * op add .CYCLES 0 1
-+  387 set .CYCLES 1
-   388 op xor .ON .INVERTED true
-   389 select *tmp20 notEqual .ON false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
-   390 set .ACTIVE_TEXT *tmp20
- 
-   434 jump *label45 equal .STATE false
-   435 set .STATE false
-   436 op add .CYCLES .CYCLES 1
--    * op xor .ON .INVERTED false
-+  437 set .ON .INVERTED
-   438 select *tmp47 notEqual .ON false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
-   439 set .ACTIVE_TEXT *tmp47
-   440 label *label45
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
- 
-   435 set .STATE false
-   436 op add .CYCLES .CYCLES 1
-   437 set .ON .INVERTED
--    * select *tmp47 notEqual .ON false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
-+  438 select *tmp47 notEqual .INVERTED false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
-   439 set .ACTIVE_TEXT *tmp47
-   440 label *label45
-   441 label *label46
 
 Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1 (-3 instructions):
  

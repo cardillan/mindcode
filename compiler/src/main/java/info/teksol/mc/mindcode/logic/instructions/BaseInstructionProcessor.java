@@ -57,7 +57,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     private int labelIndex = 0;
     private int markerIndex = 0;
 
-    private @Nullable SideEffects sideEffects;
+    private @Nullable Consumer<LogicInstruction> decorator = null;
 
     record InstructionProcessorParameters(
             MessageConsumer messageConsumer,
@@ -143,8 +143,8 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             CompilerProfile.fullOptimizations(false, false));
 
     @Override
-    public BaseInstructionProcessor withSideEffects(SideEffects sideEffects) {
-        this.sideEffects = sideEffects;
+    public ContextlessInstructionCreator withEffects(Consumer<LogicInstruction> decorator) {
+        this.decorator = decorator;
         return this;
     }
 
@@ -198,9 +198,9 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             default          ->  createGenericInstruction(astContext, opcode, args, params);
         };
 
-        if (sideEffects != null) {
-            instruction.setSideEffects(sideEffects);
-            sideEffects = null;
+        if (decorator != null) {
+            decorator.accept(instruction);
+            decorator = null;
         }
 
         return instruction;
