@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.16.3 – Unreleased
+## 3.16.3 – 2026-06-02
 
 ### Fixed
 
@@ -307,7 +307,7 @@ Note: the new features in this release bring about [changes to the best practice
 * **Breaking**: change to options governing runtime check generation:
     * the `error-reporting` option now specifies the mechanism to be used by the compiler to report runtime errors. When set to `none`, no runtime checks occur, regardless of other settings. This was previously governed by the `boundary-checks` option.
     * the `boundary-checks` option now takes a value of `true` or `false`, activating/deactivating boundary checks on array accesses.
-    * the `error-function` option takes a value of `true` or `false`. When `true`, the error is reported using the mechanism specified by `error-reporting`; when false`, the `error()` function has no effect.
+    * the `error-function` option takes a value of `true` or `false`. When `true`, the error is reported using the mechanism specified by `error-reporting`; when `false`, the `error()` function has no effect.
 * **Breaking**: specifying the mlog name of a variable using the `remote` modifier is no longer supported. The `remote` modifier now takes only the name of the remote processor as a parameter, enclosed in parentheses. Use the [`mlog` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#mlog-modifier) to specify the mlog name of the remote variable.
 * The `mlog` variable name must not match a linked block name.
 * The `mlog` modifier accepts multiple expressions, allowing to specify names for individual array elements.

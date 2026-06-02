@@ -93,7 +93,7 @@ read .output "ABC" :input
 
 Note that input values other than `0`, `1`, or `2` result in a `null`, which is what the original case expression does too.
 
-Further on, we call the input values explicitly handled by the case expression "keys" and the possible values assigned to `output` "output values."
+Further on, we call the input values explicitly handled by the case expression _keys_ and the possible values assigned to `output` _output values_.
 
 Assuming the case statement can be implemented using value translation, several factors may complicate things:
 
