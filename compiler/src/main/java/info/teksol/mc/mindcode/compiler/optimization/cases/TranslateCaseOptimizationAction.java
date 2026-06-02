@@ -133,7 +133,8 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
         final AstContext astContext = param.context();
 
         AstContext initContext = astContext.findSubcontext(INIT);
-        Predicate<LogicInstruction> matcher = ix -> ix.belongsTo(astContext) && !ix.belongsTo(initContext);
+        Predicate<LogicInstruction> matcher = ix -> ix.belongsTo(astContext);
+        List<LogicInstruction> initialization = optimizationContext.instructions(ix -> ix.belongsTo(initContext));
 
         // We'll completely replace the case statement with a new body
         index = optimizationContext.firstInstructionIndex(matcher);
@@ -144,6 +145,9 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
         // Remove the original code entirely
         optimizationContext.removeMatchingInstructions(matcher);
         applied = true;
+
+        // Reinsert initialization code
+        initialization.forEach(ix -> optimizationContext.insertInstruction(index++, ix.withContext(newAstContext)));
 
         LogicVariable input;
         if (param.mindustryContent()) {
@@ -173,8 +177,7 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
     private int nullPlaceholder;
     private int voidPlaceholder;
 
-    private void createTranslation(LocalContextfulInstructionsCreator creator, LogicVariable input,
-            Translation t) {
+    private void createTranslation(LocalContextfulInstructionsCreator creator, LogicVariable input, Translation t) {
         final CaseExpression expression = param.caseExpression();
         final ValueAnalyzer analyzer = t.analyzer;
 

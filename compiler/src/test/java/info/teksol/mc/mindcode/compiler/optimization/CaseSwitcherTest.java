@@ -885,6 +885,23 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
         }
 
         @Test
+        void processesExpressionsOnInput() {
+            assertCompilesTo("""
+                            param p = 0;
+                            
+                            printchar(case p \\ 10
+                                when 0 then 'A';
+                                when 1 then 'B';
+                            end);
+                            """,
+                    createInstruction(SET, "p", "0"),
+                    createInstruction(OP, "idiv", tmp(1), "p", "10"),
+                    createInstruction(READ, tmp(0), q("AB"), tmp(1)),
+                    createInstruction(PRINTCHAR, tmp(0))
+            );
+        }
+
+        @Test
         void processesOutputOffsetToNull() {
             assertCompilesTo("""
                             param input = 0;

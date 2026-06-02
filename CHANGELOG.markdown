@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed an internal error when using a built-in variable as an array index ([#316](https://github.com/cardillan/mindcode/issues/316)).
+* Fixed a case statement with an expression causing an internal error ([#318](https://github.com/cardillan/mindcode/issues/318)).
 * Fixed a procesor emulator error in handling the `setrate` instruction, rendering it ineffective.
 
 ### Added
