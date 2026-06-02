@@ -536,8 +536,18 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
                     createInstruction(PRINT, tmp(1))
             );
         }
-    }
 
+        @Test
+        void replacesFloorWithRound() {
+            assertCompilesTo("""
+                        #set data-flow-optimization = experimental;
+                        print(floor(@second + 0.5));
+                        """,
+                    createInstruction(OP, "round", tmp(1), "@second"),
+                    createInstruction(PRINT, tmp(1))
+            );
+        }
+    }
 
     @Nested
     class NonNegativeIntConversion extends AbstractOptimizerTest<ArrayOptimizer> {

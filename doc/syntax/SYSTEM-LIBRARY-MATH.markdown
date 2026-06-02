@@ -43,7 +43,7 @@ Uses the `len` instruction for efficient hypotenuse calculation.
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                   2 |                  2 |
+| Inlined function                         |                   1 |                  1 |
 
 Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gives '2` and `round(-1.5)` gives `1`.
 

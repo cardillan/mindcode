@@ -4,17 +4,18 @@
      2 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
      3 instructions eliminated by Condition Optimization (7 iterations).
      2 instructions eliminated by Single Step Elimination (7 iterations).
+     4 instructions modified by Expression Optimization (4 iterations).
      1 instructions eliminated by Boolean Optimization (7 iterations).
        1 fully-evaluated expressions optimized using selects.
-   526 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
+   530 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
        2 loop conditions were partially rotated.
   1021 instructions added by Loop Unrolling (5 iterations).
      1 loops unrolled by Loop Unrolling.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     20 instructions eliminated by Print Merging.
-   572 instructions after optimizations.
+   568 instructions after optimizations.
 
-Pass 3: speed optimization selection (cost limit 915):
+Pass 3: speed optimization selection (cost limit 919):
   * Unroll loop at line 8:1                                      size  +508, benefit    25600.0, efficiency     50.394 (+508 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
@@ -341,6 +342,41 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     49 write :powerNetStored bank1 :tmp
     50 op sub :diff :powerNetStored :last
 
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
+ 
+    28 write :powerNetOut bank1 :index
+    29 op div *tmp17 .ACCU_CONS 40
+    30 op add *tmp18 *tmp17 0.5
+-    * op floor :consumption *tmp18
++   31 op round :consumption *tmp17
+    32 write :consumption bank1 508
+    33 op add :tmp :index 100
+    34 read *tmp25 bank1 :tmp
+ 
+    37 write :powerNetIn bank1 :tmp
+    38 op div *tmp28 .ACCU_PROD 40
+    39 op add *tmp29 *tmp28 0.5
+-    * op floor :production *tmp29
++   40 op round :production *tmp28
+    41 write :production bank1 509
+    42 op sub *tmp33 .ACCU_PROD .ACCU_CONS
+    43 op div *tmp34 *tmp33 40
+    44 op add *tmp35 *tmp34 0.5
+-    * op floor :net_power *tmp35
++   45 op round :net_power *tmp34
+    46 write :net_power bank1 510
+    47 op add :tmp :index 200
+    48 read :last bank1 :tmp
+ 
+    50 op sub :diff :powerNetStored :last
+    51 op div *tmp46 :diff 6
+    52 op add *tmp47 *tmp46 0.5
+-    * op floor :battery_change *tmp47
++   53 op round :battery_change *tmp46
+    54 write :battery_change bank1 511
+    55 op add *tmp51 :index 1
+    56 op mod :index *tmp51 40
+
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
      3 set :addr 0
@@ -385,7 +421,7 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 i
     20 sensor :powerNetIn battery1 @powerNetIn
     21 sensor :powerNetOut battery1 @powerNetOut
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-4 instructions):
  
      2 printflush message1
      3 set :addr 0
@@ -395,6 +431,35 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
      6 label *label13
      7 write 0 bank1 :addr
      8 label *label1
+ 
+    25 op add .ACCU_CONS .ACCU_CONS :powerNetOut
+    26 write :powerNetOut bank1 :index
+    27 op div *tmp17 .ACCU_CONS 40
+-    * op add *tmp18 *tmp17 0.5
+    28 op round :consumption *tmp17
+    29 write :consumption bank1 508
+    30 op add :tmp :index 100
+ 
+    33 op add .ACCU_PROD .ACCU_PROD :powerNetIn
+    34 write :powerNetIn bank1 :tmp
+    35 op div *tmp28 .ACCU_PROD 40
+-    * op add *tmp29 *tmp28 0.5
+    36 op round :production *tmp28
+    37 write :production bank1 509
+    38 op sub *tmp33 .ACCU_PROD .ACCU_CONS
+    39 op div *tmp34 *tmp33 40
+-    * op add *tmp35 *tmp34 0.5
+    40 op round :net_power *tmp34
+    41 write :net_power bank1 510
+    42 op add :tmp :index 200
+ 
+    44 write :powerNetStored bank1 :tmp
+    45 op sub :diff :powerNetStored :last
+    46 op div *tmp46 :diff 6
+-    * op add *tmp47 *tmp46 0.5
+    47 op round :battery_change *tmp46
+    48 write :battery_change bank1 511
+    49 op add *tmp51 :index 1
 
 Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
  
@@ -7110,31 +7175,31 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 
    516 set .ACCU_PROD 0
    517 set :index 0
  
-   581 print "]"
-   582 set :loops 0
-   583 set :start @time
+   577 print "]"
+   578 set :loops 0
+   579 set :start @time
 -    * label *label8
-   584 jump *label10 lessThan @time :start
-   585 label *label14
-   586 jump *label10 greaterThanEq @time :wait
-   587 op add :loops :loops 1
+   580 jump *label10 lessThan @time :start
+   581 label *label14
+   582 jump *label10 greaterThanEq @time :wait
+   583 op add :loops :loops 1
 -    * label *label9
-   588 jump *label14 greaterThanEq @time :start
-   589 label *label10
-   590 print "\n"
-   591 print "[lightgray]Loops: "
-   592 print :loops
-   593 printflush message1
+   584 jump *label14 greaterThanEq @time :start
+   585 label *label10
+   586 print "\n"
+   587 print "[lightgray]Loops: "
+   588 print :loops
+   589 printflush message1
 -    * label *label4
-   594 jump *label3 always
+   590 jump *label3 always
 -    * label *label5
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
  
-   555 write :battery_change bank1 511
-   556 op add *tmp51 :index 1
-   557 op mod :index *tmp51 40
+   551 write :battery_change bank1 511
+   552 op add *tmp51 :index 1
+   553 op mod :index *tmp51 40
 -    * print "Measured interval: [green]"
 -    * print 6
 -    * print "["
@@ -7159,24 +7224,24 @@ Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
 -    * print :battery_change
 -    * print "["
 -    * print "]"
-+  558 print "Measured interval: [green]6[] seconds\nConsumption: [green]{0}[]\nProduction: [green]{0}[]\nNet power: [green]{0}[]\nBattery change: [green]{0}[]"
-+  559 format :consumption
-+  560 format :production
-+  561 format :net_power
-+  562 format :battery_change
-   563 set :loops 0
-   564 set :start @time
-   565 jump *label10 lessThan @time :start
++  554 print "Measured interval: [green]6[] seconds\nConsumption: [green]{0}[]\nProduction: [green]{0}[]\nNet power: [green]{0}[]\nBattery change: [green]{0}[]"
++  555 format :consumption
++  556 format :production
++  557 format :net_power
++  558 format :battery_change
+   559 set :loops 0
+   560 set :start @time
+   561 jump *label10 lessThan @time :start
  
-   568 op add :loops :loops 1
-   569 jump *label14 greaterThanEq @time :start
-   570 label *label10
+   564 op add :loops :loops 1
+   565 jump *label14 greaterThanEq @time :start
+   566 label *label10
 -    * print "\n"
 -    * print "[lightgray]Loops: "
-+  571 print "\n[lightgray]Loops: "
-   572 print :loops
-   573 printflush message1
-   574 jump *label3 always
++  567 print "\n[lightgray]Loops: "
+   568 print :loops
+   569 printflush message1
+   570 jump *label3 always
 
 Final code before resolving virtual instructions:
 
@@ -7711,8 +7776,7 @@ op sub .ACCU_CONS .ACCU_CONS *tmp14
 op add .ACCU_CONS .ACCU_CONS :powerNetOut
 write :powerNetOut bank1 :index
 op div *tmp17 .ACCU_CONS 40
-op add *tmp18 *tmp17 0.5
-op floor :consumption *tmp18
+op round :consumption *tmp17
 write :consumption bank1 508
 op add :tmp :index 100
 read *tmp25 bank1 :tmp
@@ -7720,21 +7784,18 @@ op sub .ACCU_PROD .ACCU_PROD *tmp25
 op add .ACCU_PROD .ACCU_PROD :powerNetIn
 write :powerNetIn bank1 :tmp
 op div *tmp28 .ACCU_PROD 40
-op add *tmp29 *tmp28 0.5
-op floor :production *tmp29
+op round :production *tmp28
 write :production bank1 509
 op sub *tmp33 .ACCU_PROD .ACCU_CONS
 op div *tmp34 *tmp33 40
-op add *tmp35 *tmp34 0.5
-op floor :net_power *tmp35
+op round :net_power *tmp34
 write :net_power bank1 510
 op add :tmp :index 200
 read :last bank1 :tmp
 write :powerNetStored bank1 :tmp
 op sub :diff :powerNetStored :last
 op div *tmp46 :diff 6
-op add *tmp47 *tmp46 0.5
-op floor :battery_change *tmp47
+op round :battery_change *tmp46
 write :battery_change bank1 511
 op add *tmp51 :index 1
 op mod :index *tmp51 40

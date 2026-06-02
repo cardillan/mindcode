@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIt
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NullMarked;
@@ -190,7 +191,6 @@ class ExpressionOptimizer extends BaseOptimizer {
         }
 
         if (ix.getOperation() == Operation.BOOLEAN_OR) {
-            List<LogicInstruction> references = optimizationContext.getVariableReferences(ix.getResult());
             if (!ix.getResult().isVolatile() && optimizationContext.getVariableReferences(ix.getResult())
                     .stream().allMatch(this::acceptsBoolean)) {
                 logicIterator.set(ix.withOperands(Operation.BITWISE_OR, ix.getX(), ix.getY()));
@@ -202,6 +202,18 @@ class ExpressionOptimizer extends BaseOptimizer {
                     logicIterator.set(ix.withOperands(Operation.BITWISE_OR, ix.getX(), ix.getY()));
                     return;
                 }
+            }
+        }
+
+        if (instructionProcessor.isSupported(Opcode.OP, List.of(Operation.ROUND))
+                && ix.getOperation() == Operation.FLOOR
+                && ix.getX() instanceof LogicVariable variable && variable.isTemporaryVariable()
+                && optimizationContext.findDefiningInstruction(ix, variable) instanceof OpInstruction op
+                && op.getOperation() == Operation.ADD) {
+            Tuple2<LogicValue, LogicValue> args = extractConstantOperand(op);
+            if (args.e1().isNumericConstant() && args.e1().getDoubleValue() == 0.5) {
+                logicIterator.set(createOp(ix.getAstContext(), Operation.ROUND, ix.getResult(), args.e2()));
+                return;
             }
         }
 
@@ -230,11 +242,14 @@ class ExpressionOptimizer extends BaseOptimizer {
         }
     }
 
+    private boolean isOneHalf(LogicArgument value) {
+        return value.isNumericLiteral() && value.getDoubleValue() == 0.5;
+    }
+
     private boolean isEffectiveFloor(OpInstruction ox, LogicValue input) {
         return ox.getOperation() == Operation.FLOOR && ox.getX().equals(input) ||
                 ox.getOperation() == Operation.IDIV && ox.getX().equals(input) && ox.getY().isOne();
     }
-
 
     private boolean acceptsBoolean(LogicInstruction instruction) {
         if (instruction instanceof OpInstruction op) {

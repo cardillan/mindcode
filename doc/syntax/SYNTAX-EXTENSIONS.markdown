@@ -364,8 +364,7 @@ sensor enabled switch1 @enabled
 jump m0_loop notEqual enabled false
 op sub :time @second start              # setting the output variable
 # here ends the mlog block
-op add *tmp1 :time 0.5
-op floor *tmp0 *tmp1 0
+op round *tmp0 :time 0
 print *tmp0
 printflush message1
 ```

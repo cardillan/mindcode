@@ -136,6 +136,7 @@ select .z notEqual *tmp5 false "yes" "no"
 In some cases, an expression consisting of several instructions can be simplified to use fewer instructions, while producing identical results.
 
 * The `op floor` instruction (or the `op idiv output input 1` instruction, which has the same effect) applied to a result of a multiplication or a division by a constant: the optimization combines the two operations into one integer division (`idiv`) operation. In the case of multiplication, the constant operand is inverted to become the divisor in the `idiv` operation.
+* When the `op round` instruction is available, a sequence of `op add` and `op floor` instructions (as in `floor(x + 0.5)`) is replaced with the `op round` instruction (as in `round(x)`). 
 
 ## The `packcolor` instruction
 

@@ -290,63 +290,62 @@ op floor :printExactFast:exp *tmp85 0
 op sub *tmp87 0 :printExactFast:exp
 op pow *tmp88 10 *tmp87
 op mul :printExactFast:base :printExactFast:n *tmp88
-op add *tmp91 :printExactFast:base 0.5
-op floor *tmp90 *tmp91 0
+op round *tmp90 :printExactFast:base 0
 op sub *tmp93 :printExactFast:base *tmp90
 op abs :printExactFast:cmp *tmp93 0
-jump 298 lessThan :printExactFast:cmp 0.000000000000001
-jump 300 lessThanEq :printExactFast:cmp 0.00001
+jump 297 lessThan :printExactFast:cmp 0.000000000000001
+jump 299 lessThanEq :printExactFast:cmp 0.00001
 print :printExactFast:base
-jump 348 always 0 0
+jump 347 always 0 0
 op floor *tmp98 :printExactFast:base 0
 print *tmp98
 print "."
 op mod *tmp99 :printExactFast:base 1
 op mul :printExactFast:base *tmp99 100000
 op floor :printExactFast:t :printExactFast:base 0
-jump 312 greaterThanEq :printExactFast:t 100
-jump 310 greaterThanEq :printExactFast:t 10
+jump 311 greaterThanEq :printExactFast:t 100
+jump 309 greaterThanEq :printExactFast:t 10
 print "0000"
-jump 317 always 0 0
+jump 316 always 0 0
 print "000"
-jump 317 always 0 0
-jump 315 greaterThanEq :printExactFast:t 1000
+jump 316 always 0 0
+jump 314 greaterThanEq :printExactFast:t 1000
 print "00"
-jump 317 always 0 0
-jump 317 greaterThanEq :printExactFast:t 10000
+jump 316 always 0 0
+jump 316 greaterThanEq :printExactFast:t 10000
 print "0"
 print :printExactFast:t
 op mod *tmp99 :printExactFast:base 1
 op mul :printExactFast:base *tmp99 100000
 op floor :printExactFast:t :printExactFast:base 0
-jump 327 greaterThanEq :printExactFast:t 100
-jump 325 greaterThanEq :printExactFast:t 10
+jump 326 greaterThanEq :printExactFast:t 100
+jump 324 greaterThanEq :printExactFast:t 10
 print "0000"
-jump 332 always 0 0
+jump 331 always 0 0
 print "000"
-jump 332 always 0 0
-jump 330 greaterThanEq :printExactFast:t 1000
+jump 331 always 0 0
+jump 329 greaterThanEq :printExactFast:t 1000
 print "00"
-jump 332 always 0 0
-jump 332 greaterThanEq :printExactFast:t 10000
+jump 331 always 0 0
+jump 331 greaterThanEq :printExactFast:t 10000
 print "0"
 print :printExactFast:t
 op mod *tmp99 :printExactFast:base 1
 op mul :printExactFast:base *tmp99 100000
 op floor :printExactFast:t :printExactFast:base 0
-jump 342 greaterThanEq :printExactFast:t 100
-jump 340 greaterThanEq :printExactFast:t 10
+jump 341 greaterThanEq :printExactFast:t 100
+jump 339 greaterThanEq :printExactFast:t 10
 print "0000"
-jump 347 always 0 0
+jump 346 always 0 0
 print "000"
-jump 347 always 0 0
-jump 345 greaterThanEq :printExactFast:t 1000
+jump 346 always 0 0
+jump 344 greaterThanEq :printExactFast:t 1000
 print "00"
-jump 347 always 0 0
-jump 347 greaterThanEq :printExactFast:t 10000
+jump 346 always 0 0
+jump 346 greaterThanEq :printExactFast:t 10000
 print "0"
 print :printExactFast:t
-jump 351 equal :printExactFast:exp 0
+jump 350 equal :printExactFast:exp 0
 print "E"
 print :printExactFast:exp
 set @counter :printExactFast*retaddr

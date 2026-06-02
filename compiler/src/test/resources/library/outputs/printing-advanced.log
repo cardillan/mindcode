@@ -5,10 +5,10 @@
     87 instructions eliminated by Jump Normalization (7 iterations).
     22 instructions eliminated by Condition Optimization (8 iterations).
    126 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
-    33 instructions modified by Expression Optimization (2 passes, 5 iterations).
+    34 instructions modified by Expression Optimization (3 passes, 5 iterations).
      6 instructions eliminated by Boolean Optimization (9 iterations).
        2 fully-evaluated expressions optimized using selects.
-   749 instructions eliminated by Data Flow Optimization (32 passes, 103 iterations).
+   750 instructions eliminated by Data Flow Optimization (32 passes, 103 iterations).
      2 loops improved by Loop Hoisting.
        7 loop conditions were partially rotated.
   1012 instructions added by Loop Unrolling (35 iterations).
@@ -21,10 +21,10 @@
     58 instructions updated by Jump Threading.
    343 instructions eliminated by Unreachable Code Elimination (2 iterations).
    157 instructions eliminated by Print Merging.
-   352 instructions after optimizations.
+   351 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 627):
-  * Unroll iteration loop at *printing:22:5                      size    -5, benefit       11.0, efficiency   Infinity (-5 instructions)
+  * Unroll iteration loop at *printing:22:5                      size    -5, benefit       11.0, efficiency   Infinity (-6 instructions)
     Unroll iteration loop at *printing:340:5                     size    +7, benefit        7.0, efficiency      1.000
     Unroll iteration loop at *printing:366:5                     size   +11, benefit        7.0, efficiency      0.636
     Inline function 'printNumber' defined at *printing:77:1      size   +77, benefit       24.5, efficiency      0.318
@@ -68,13 +68,13 @@ Pass 1: speed optimization selection (cost limit 627):
     Inline function call at line 39:40                           size   +25, benefit        3.5, efficiency      0.140
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 632):
+Pass 1: speed optimization selection (cost limit 633):
   * Unroll iteration loop at *printing:340:5                     size    +7, benefit        7.0, efficiency      1.000 (+1 instructions)
     Unroll iteration loop at *printing:366:5                     size   +11, benefit        7.0, efficiency      0.636
     Inline function 'printNumber' defined at *printing:77:1      size   +77, benefit       24.5, efficiency      0.318
     Inline function 'printBinaryNumber' defined at *printing:140:1 size   +33, benefit       12.0, efficiency      0.364
     Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142
-    Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
+    Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
     Inline function 'printExactSlow' defined at *printing:300:1  size  +224, benefit       35.0, efficiency      0.156
     Inline function call at line 6:19                            size   +13, benefit        3.5, efficiency      0.269
     Inline function call at line 7:19                            size   +13, benefit        3.5, efficiency      0.269
@@ -90,16 +90,16 @@ Pass 1: speed optimization selection (cost limit 632):
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 19:29                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 30:22                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 31:19                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 32:35                           size   +25, benefit        3.5, efficiency      0.140
@@ -112,12 +112,12 @@ Pass 1: speed optimization selection (cost limit 632):
     Inline function call at line 39:40                           size   +25, benefit        3.5, efficiency      0.140
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 631):
+Pass 1: speed optimization selection (cost limit 632):
   * Unroll iteration loop at *printing:366:5                     size   +11, benefit        7.0, efficiency      0.636 (+3 instructions)
     Inline function 'printNumber' defined at *printing:77:1      size   +77, benefit       24.5, efficiency      0.318
     Inline function 'printBinaryNumber' defined at *printing:140:1 size   +33, benefit       12.0, efficiency      0.364
     Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142
-    Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
+    Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
     Inline function 'printExactSlow' defined at *printing:300:1  size  +224, benefit       35.0, efficiency      0.156
     Inline function call at line 6:19                            size   +13, benefit        3.5, efficiency      0.269
     Inline function call at line 7:19                            size   +13, benefit        3.5, efficiency      0.269
@@ -133,16 +133,16 @@ Pass 1: speed optimization selection (cost limit 631):
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 19:29                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 30:22                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 31:19                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 32:35                           size   +25, benefit        3.5, efficiency      0.140
@@ -155,11 +155,11 @@ Pass 1: speed optimization selection (cost limit 631):
     Inline function call at line 39:40                           size   +25, benefit        3.5, efficiency      0.140
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 628):
+Pass 1: speed optimization selection (cost limit 629):
     Inline function 'printNumber' defined at *printing:77:1      size   +77, benefit       24.5, efficiency      0.318
   * Inline function 'printBinaryNumber' defined at *printing:140:1 size   +33, benefit       12.0, efficiency      0.364 (+17 instructions)
     Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142
-    Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
+    Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
     Inline function 'printExactSlow' defined at *printing:300:1  size  +224, benefit       35.0, efficiency      0.156
     Inline function call at line 6:19                            size   +13, benefit        3.5, efficiency      0.269
     Inline function call at line 7:19                            size   +13, benefit        3.5, efficiency      0.269
@@ -175,16 +175,57 @@ Pass 1: speed optimization selection (cost limit 628):
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 19:29                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 30:22                           size   +25, benefit        3.5, efficiency      0.140
+    Inline function call at line 31:19                           size   +25, benefit        3.5, efficiency      0.140
+    Inline function call at line 32:35                           size   +25, benefit        3.5, efficiency      0.140
+    Inline function call at line 33:35                           size   +25, benefit        3.5, efficiency      0.140
+    Inline function call at line 34:35                           size   +25, benefit        3.5, efficiency      0.140
+    Inline function call at line 35:38                           size   +25, benefit        3.5, efficiency      0.140
+    Inline function call at line 36:35                           size   +25, benefit        3.5, efficiency      0.140
+    Inline function call at line 37:38                           size   +25, benefit        3.5, efficiency      0.140
+    Inline function call at line 38:39                           size   +25, benefit        3.5, efficiency      0.140
+    Inline function call at line 39:40                           size   +25, benefit        3.5, efficiency      0.140
+  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
+
+Pass 1: speed optimization selection (cost limit 612):
+  * Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000 (+1 instructions)
+    Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000
+    Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000
+    Inline function 'printNumber' defined at *printing:77:1      size   +77, benefit       24.5, efficiency      0.318
+    Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142
+    Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
+    Inline function 'printExactSlow' defined at *printing:300:1  size  +224, benefit       35.0, efficiency      0.156
+    Inline function call at line 6:19                            size   +13, benefit        3.5, efficiency      0.269
+    Inline function call at line 7:19                            size   +13, benefit        3.5, efficiency      0.269
+    Inline function call at line 8:19                            size   +13, benefit        3.5, efficiency      0.269
+    Inline function call at line 9:20                            size   +13, benefit        3.5, efficiency      0.269
+    Inline function call at line 10:27                           size   +13, benefit        3.5, efficiency      0.269
+    Inline function call at line 11:28                           size   +13, benefit        3.5, efficiency      0.269
+    Inline function call at line 12:31                           size   +13, benefit        3.5, efficiency      0.269
+    Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
+    Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
+    Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
+    Inline function call at line 19:29                           size   +38, benefit        4.0, efficiency      0.105
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 30:22                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 31:19                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 32:35                           size   +25, benefit        3.5, efficiency      0.140
@@ -200,10 +241,9 @@ Pass 1: speed optimization selection (cost limit 628):
 Pass 1: speed optimization selection (cost limit 611):
   * Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000 (+1 instructions)
     Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000
-    Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000
     Inline function 'printNumber' defined at *printing:77:1      size   +77, benefit       24.5, efficiency      0.318
     Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142
-    Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
+    Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
     Inline function 'printExactSlow' defined at *printing:300:1  size  +224, benefit       35.0, efficiency      0.156
     Inline function call at line 6:19                            size   +13, benefit        3.5, efficiency      0.269
     Inline function call at line 7:19                            size   +13, benefit        3.5, efficiency      0.269
@@ -216,16 +256,16 @@ Pass 1: speed optimization selection (cost limit 611):
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 19:29                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 30:22                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 31:19                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 32:35                           size   +25, benefit        3.5, efficiency      0.140
@@ -240,10 +280,9 @@ Pass 1: speed optimization selection (cost limit 611):
 
 Pass 1: speed optimization selection (cost limit 610):
   * Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000 (+1 instructions)
-    Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000
     Inline function 'printNumber' defined at *printing:77:1      size   +77, benefit       24.5, efficiency      0.318
     Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142
-    Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
+    Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
     Inline function 'printExactSlow' defined at *printing:300:1  size  +224, benefit       35.0, efficiency      0.156
     Inline function call at line 6:19                            size   +13, benefit        3.5, efficiency      0.269
     Inline function call at line 7:19                            size   +13, benefit        3.5, efficiency      0.269
@@ -256,16 +295,16 @@ Pass 1: speed optimization selection (cost limit 610):
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 19:29                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 30:22                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 31:19                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 32:35                           size   +25, benefit        3.5, efficiency      0.140
@@ -279,48 +318,9 @@ Pass 1: speed optimization selection (cost limit 610):
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 609):
-  * Unroll loop at *printing:106:5                               size   +10, benefit      200.0, efficiency     20.000 (+1 instructions)
-    Inline function 'printNumber' defined at *printing:77:1      size   +77, benefit       24.5, efficiency      0.318
-    Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142
-    Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
-    Inline function 'printExactSlow' defined at *printing:300:1  size  +224, benefit       35.0, efficiency      0.156
-    Inline function call at line 6:19                            size   +13, benefit        3.5, efficiency      0.269
-    Inline function call at line 7:19                            size   +13, benefit        3.5, efficiency      0.269
-    Inline function call at line 8:19                            size   +13, benefit        3.5, efficiency      0.269
-    Inline function call at line 9:20                            size   +13, benefit        3.5, efficiency      0.269
-    Inline function call at line 10:27                           size   +13, benefit        3.5, efficiency      0.269
-    Inline function call at line 11:28                           size   +13, benefit        3.5, efficiency      0.269
-    Inline function call at line 12:31                           size   +13, benefit        3.5, efficiency      0.269
-    Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 19:29                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 30:22                           size   +25, benefit        3.5, efficiency      0.140
-    Inline function call at line 31:19                           size   +25, benefit        3.5, efficiency      0.140
-    Inline function call at line 32:35                           size   +25, benefit        3.5, efficiency      0.140
-    Inline function call at line 33:35                           size   +25, benefit        3.5, efficiency      0.140
-    Inline function call at line 34:35                           size   +25, benefit        3.5, efficiency      0.140
-    Inline function call at line 35:38                           size   +25, benefit        3.5, efficiency      0.140
-    Inline function call at line 36:35                           size   +25, benefit        3.5, efficiency      0.140
-    Inline function call at line 37:38                           size   +25, benefit        3.5, efficiency      0.140
-    Inline function call at line 38:39                           size   +25, benefit        3.5, efficiency      0.140
-    Inline function call at line 39:40                           size   +25, benefit        3.5, efficiency      0.140
-  o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 608):
   * Inline function 'printNumber' defined at *printing:77:1      size   +77, benefit       24.5, efficiency      0.318 (+54 instructions)
     Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142
-    Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
+    Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
     Inline function 'printExactSlow' defined at *printing:300:1  size  +224, benefit       35.0, efficiency      0.156
     Inline function call at line 6:19                            size   +13, benefit        3.5, efficiency      0.269
     Inline function call at line 7:19                            size   +13, benefit        3.5, efficiency      0.269
@@ -333,16 +333,16 @@ Pass 1: speed optimization selection (cost limit 608):
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 19:29                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 30:22                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 31:19                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 32:35                           size   +25, benefit        3.5, efficiency      0.140
@@ -355,24 +355,24 @@ Pass 1: speed optimization selection (cost limit 608):
     Inline function call at line 39:40                           size   +25, benefit        3.5, efficiency      0.140
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 554):
+Pass 1: speed optimization selection (cost limit 555):
     Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142
-    Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
+    Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
   * Inline function 'printExactSlow' defined at *printing:300:1  size  +224, benefit       35.0, efficiency      0.156 (+132 instructions)
     Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 19:29                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
     Inline function call at line 30:22                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 31:19                           size   +25, benefit        3.5, efficiency      0.140
     Inline function call at line 32:35                           size   +25, benefit        3.5, efficiency      0.140
@@ -385,112 +385,112 @@ Pass 1: speed optimization selection (cost limit 554):
     Inline function call at line 39:40                           size   +25, benefit        3.5, efficiency      0.140
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 422):
+Pass 1: speed optimization selection (cost limit 423):
   * Inline function 'printHexNumber' defined at *printing:212:1  size  +113, benefit       16.0, efficiency      0.142 (+93 instructions)
-    Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
+    Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
     Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 19:29                           size   +38, benefit        4.0, efficiency      0.105
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit      268.8, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 329):
+Pass 1: speed optimization selection (cost limit 330):
   * Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439 (+110 instructions)
     Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
     Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439
     Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 219):
+Pass 1: speed optimization selection (cost limit 220):
   ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
   * Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439 (+110 instructions)
     Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 109):
+Pass 1: speed optimization selection (cost limit 110):
   ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
   * Unroll loop at *printing:169:5                               size  +123, benefit      300.0, efficiency      2.439 (+110 instructions)
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
-    Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-    Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
+    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
   o Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity
 
 Pass 1: speed optimization selection (cost limit 0):
   ! Unroll loop at *printing:169:5                               size  +223, benefit      500.0, efficiency      2.242
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
-  ! Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
+  ! Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
   * Fast-dispatch case at *printing:171:9                        size    -8, benefit       67.2, efficiency   Infinity (-6 instructions)
 
-Pass 1: speed optimization selection (cost limit 5):
+Pass 1: speed optimization selection (cost limit 6):
   ! Unroll loop at *printing:169:5                               size  +169, benefit      500.0, efficiency      2.959
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +395, benefit       35.0, efficiency      0.089
-  ! Inline function call at line 20:22                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 21:19                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 22:19                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 23:35                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 24:35                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 25:22                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 26:30                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 27:38                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 28:40                           size   +44, benefit        3.5, efficiency      0.080
-  ! Inline function call at line 29:41                           size   +44, benefit        3.5, efficiency      0.080
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
+  ! Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
 
-Pass 2: speed optimization selection (cost limit 138):
+Pass 2: speed optimization selection (cost limit 139):
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +8, benefit      150.0, efficiency     18.750
@@ -512,19 +512,19 @@ Pass 2: speed optimization selection (cost limit 138):
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
     Unroll loop at *printing:367:9                               size   +16, benefit      400.0, efficiency     25.000
     Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
+    Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 21:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 22:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 23:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 24:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 25:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 26:30                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 27:38                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 28:40                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 29:41                           size   +42, benefit        3.5, efficiency      0.083
 
-Pass 2: speed optimization selection (cost limit 145):
+Pass 2: speed optimization selection (cost limit 146):
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +8, benefit      150.0, efficiency     18.750
@@ -545,19 +545,19 @@ Pass 2: speed optimization selection (cost limit 145):
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
     Unroll loop at *printing:367:9                               size   +11, benefit      400.0, efficiency     36.364
     Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
+    Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 21:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 22:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 23:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 24:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 25:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 26:30                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 27:38                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 28:40                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 29:41                           size   +42, benefit        3.5, efficiency      0.083
 
-Pass 2: speed optimization selection (cost limit 147):
+Pass 2: speed optimization selection (cost limit 148):
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +8, benefit      150.0, efficiency     18.750
@@ -577,19 +577,19 @@ Pass 2: speed optimization selection (cost limit 147):
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
     Unroll loop at *printing:367:9                               size   +11, benefit      400.0, efficiency     36.364
     Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
+    Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 21:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 22:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 23:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 24:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 25:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 26:30                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 27:38                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 28:40                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 29:41                           size   +42, benefit        3.5, efficiency      0.083
 
-Pass 2: speed optimization selection (cost limit 149):
+Pass 2: speed optimization selection (cost limit 150):
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +8, benefit      150.0, efficiency     18.750
@@ -608,19 +608,19 @@ Pass 2: speed optimization selection (cost limit 149):
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
     Unroll loop at *printing:367:9                               size   +11, benefit      400.0, efficiency     36.364
     Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
+    Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 21:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 22:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 23:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 24:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 25:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 26:30                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 27:38                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 28:40                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 29:41                           size   +42, benefit        3.5, efficiency      0.083
 
-Pass 2: speed optimization selection (cost limit 151):
+Pass 2: speed optimization selection (cost limit 152):
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +8, benefit      150.0, efficiency     18.750
@@ -638,19 +638,19 @@ Pass 2: speed optimization selection (cost limit 151):
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
     Unroll loop at *printing:367:9                               size   +11, benefit      400.0, efficiency     36.364
     Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
+    Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 21:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 22:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 23:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 24:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 25:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 26:30                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 27:38                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 28:40                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 29:41                           size   +42, benefit        3.5, efficiency      0.083
 
-Pass 2: speed optimization selection (cost limit 123):
+Pass 2: speed optimization selection (cost limit 124):
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +8, benefit      150.0, efficiency     18.750
@@ -667,19 +667,19 @@ Pass 2: speed optimization selection (cost limit 123):
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
   * Unroll loop at *printing:367:9                               size   +11, benefit      400.0, efficiency     36.364 (+11 instructions)
     Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
+    Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 21:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 22:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 23:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 24:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 25:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 26:30                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 27:38                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 28:40                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 29:41                           size   +42, benefit        3.5, efficiency      0.083
 
-Pass 2: speed optimization selection (cost limit 112):
+Pass 2: speed optimization selection (cost limit 113):
   * Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333 (+0 instructions)
     Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333
     Unroll loop at *printing:48:5                                size    +8, benefit      150.0, efficiency     18.750
@@ -695,19 +695,19 @@ Pass 2: speed optimization selection (cost limit 112):
     Unroll loop at *printing:341:9                               size   +90, benefit     1600.0, efficiency     17.778
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
     Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
+    Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 21:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 22:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 23:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 24:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 25:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 26:30                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 27:38                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 28:40                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 29:41                           size   +42, benefit        3.5, efficiency      0.083
 
-Pass 2: speed optimization selection (cost limit 112):
+Pass 2: speed optimization selection (cost limit 113):
   * Unroll loop at *printing:48:5                                size    +3, benefit      100.0, efficiency     33.333 (+0 instructions)
     Unroll loop at *printing:48:5                                size    +8, benefit      150.0, efficiency     18.750
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
@@ -722,19 +722,19 @@ Pass 2: speed optimization selection (cost limit 112):
     Unroll loop at *printing:341:9                               size   +90, benefit     1600.0, efficiency     17.778
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
     Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
+    Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 21:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 22:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 23:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 24:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 25:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 26:30                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 27:38                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 28:40                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 29:41                           size   +42, benefit        3.5, efficiency      0.083
 
-Pass 2: speed optimization selection (cost limit 112):
+Pass 2: speed optimization selection (cost limit 113):
   * Unroll loop at *printing:48:5                                size    +8, benefit      150.0, efficiency     18.750 (+4 instructions)
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
@@ -748,19 +748,19 @@ Pass 2: speed optimization selection (cost limit 112):
     Unroll loop at *printing:341:9                               size   +90, benefit     1600.0, efficiency     17.778
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
     Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
+    Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 21:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 22:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 23:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 24:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 25:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 26:30                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 27:38                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 28:40                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 29:41                           size   +42, benefit        3.5, efficiency      0.083
 
-Pass 2: speed optimization selection (cost limit 108):
+Pass 2: speed optimization selection (cost limit 109):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
@@ -773,19 +773,19 @@ Pass 2: speed optimization selection (cost limit 108):
   * Unroll loop at *printing:341:9                               size   +90, benefit     1600.0, efficiency     17.778 (+26 instructions)
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
     Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
+    Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 21:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 22:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 23:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 24:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 25:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 26:30                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 27:38                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 28:40                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 29:41                           size   +42, benefit        3.5, efficiency      0.083
 
-Pass 2: speed optimization selection (cost limit 82):
+Pass 2: speed optimization selection (cost limit 83):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
@@ -797,19 +797,19 @@ Pass 2: speed optimization selection (cost limit 82):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500
   * Unroll loop at *printing:263:13                              size   +27, benefit      375.0, efficiency     13.889 (+27 instructions)
-  ! Inline function 'printExactFast' defined at *printing:242:1  size  +386, benefit       35.0, efficiency      0.091
-    Inline function call at line 20:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 21:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 22:19                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 23:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 24:35                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 25:22                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 26:30                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 27:38                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 28:40                           size   +43, benefit        3.5, efficiency      0.081
-    Inline function call at line 29:41                           size   +43, benefit        3.5, efficiency      0.081
+  ! Inline function 'printExactFast' defined at *printing:242:1  size  +377, benefit       35.0, efficiency      0.093
+    Inline function call at line 20:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 21:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 22:19                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 23:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 24:35                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 25:22                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 26:30                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 27:38                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 28:40                           size   +42, benefit        3.5, efficiency      0.083
+    Inline function call at line 29:41                           size   +42, benefit        3.5, efficiency      0.083
 
-Pass 2: speed optimization selection (cost limit 55):
+Pass 2: speed optimization selection (cost limit 56):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
@@ -820,18 +820,18 @@ Pass 2: speed optimization selection (cost limit 55):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   * Unroll loop at *printing:367:9                               size   +32, benefit      400.0, efficiency     12.500 (+8 instructions)
-  ! Inline function call at line 20:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 21:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 22:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 23:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 24:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 25:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 26:30                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 27:38                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 28:40                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 29:41                           size   +70, benefit        3.5, efficiency      0.050
+  ! Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
-Pass 2: speed optimization selection (cost limit 47):
+Pass 2: speed optimization selection (cost limit 48):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
@@ -841,18 +841,18 @@ Pass 2: speed optimization selection (cost limit 47):
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Inline function call at line 20:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 21:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 22:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 23:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 24:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 25:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 26:30                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 27:38                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 28:40                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 29:41                           size   +70, benefit        3.5, efficiency      0.050
+  ! Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
-Pass 3: speed optimization selection (cost limit 47):
+Pass 3: speed optimization selection (cost limit 48):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
@@ -862,39 +862,18 @@ Pass 3: speed optimization selection (cost limit 47):
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Inline function call at line 20:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 21:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 22:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 23:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 24:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 25:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 26:30                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 27:38                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 28:40                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 29:41                           size   +70, benefit        3.5, efficiency      0.050
+  ! Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
-Pass 4: speed optimization selection (cost limit 77):
-  ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
-  * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (+7 instructions)
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Inline function call at line 20:22                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 21:19                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 22:19                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 23:35                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 24:35                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 25:22                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 26:30                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 27:38                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 28:40                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 29:41                           size   +70, benefit        3.5, efficiency      0.050
-
-Pass 4: speed optimization selection (cost limit 70):
+Pass 4: speed optimization selection (cost limit 78):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (+7 instructions)
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
@@ -903,18 +882,19 @@ Pass 4: speed optimization selection (cost limit 70):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-    Inline function call at line 20:22                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 21:19                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 22:19                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 23:35                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 24:35                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 25:22                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 26:30                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 27:38                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 28:40                           size   +70, benefit        3.5, efficiency      0.050
-    Inline function call at line 29:41                           size   +70, benefit        3.5, efficiency      0.050
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+    Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
-Pass 4: speed optimization selection (cost limit 63):
+Pass 4: speed optimization selection (cost limit 71):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (+7 instructions)
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
@@ -922,68 +902,88 @@ Pass 4: speed optimization selection (cost limit 63):
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Inline function call at line 20:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 21:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 22:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 23:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 24:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 25:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 26:30                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 27:38                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 28:40                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 29:41                           size   +70, benefit        3.5, efficiency      0.050
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+    Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
+    Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
-Pass 4: speed optimization selection (cost limit 56):
+Pass 4: speed optimization selection (cost limit 64):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (+7 instructions)
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
     Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Inline function call at line 20:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 21:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 22:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 23:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 24:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 25:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 26:30                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 27:38                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 28:40                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 29:41                           size   +70, benefit        3.5, efficiency      0.050
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+  ! Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
-Pass 4: speed optimization selection (cost limit 49):
+Pass 4: speed optimization selection (cost limit 57):
+  ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
+  * Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075 (+7 instructions)
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+    Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
+  ! Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
+
+Pass 4: speed optimization selection (cost limit 50):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Inline function call at line 20:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 21:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 22:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 23:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 24:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 25:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 26:30                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 27:38                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 28:40                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 29:41                           size   +70, benefit        3.5, efficiency      0.050
+  ! Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
-Pass 5: speed optimization selection (cost limit 49):
+Pass 5: speed optimization selection (cost limit 50):
   ! Unroll loop at *printing:169:5                               size  +160, benefit      500.0, efficiency      3.125
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
   ! Unroll loop at *printing:313:9                               size   +53, benefit      375.0, efficiency      7.075
-  ! Inline function call at line 20:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 21:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 22:19                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 23:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 24:35                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 25:22                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 26:30                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 27:38                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 28:40                           size   +70, benefit        3.5, efficiency      0.050
-  ! Inline function call at line 29:41                           size   +70, benefit        3.5, efficiency      0.050
+  ! Inline function call at line 20:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 21:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 22:19                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 23:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 24:35                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 25:22                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 26:30                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 27:38                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 28:40                           size   +69, benefit        3.5, efficiency      0.051
+  ! Inline function call at line 29:41                           size   +69, benefit        3.5, efficiency      0.051
 
 Final code before resolving virtual instructions:
 
@@ -1308,88 +1308,87 @@ Final code before resolving virtual instructions:
   289:  op sub *tmp87 0 :printExactFast:exp
   290:  op pow *tmp88 10 *tmp87
   291:  op mul :printExactFast:base :printExactFast:n *tmp88
-  292:  op add *tmp91 :printExactFast:base 0.5
-  293:  op floor *tmp90 *tmp91 0
-  294:  op sub *tmp93 :printExactFast:base *tmp90
-  295:  op abs :printExactFast:cmp *tmp93 0
-  296:  jump *label124 lessThan :printExactFast:cmp 0.000000000000001
-  297:  jump *label122 lessThanEq :printExactFast:cmp 0.00001
+  292:  op round *tmp90 :printExactFast:base 0
+  293:  op sub *tmp93 :printExactFast:base *tmp90
+  294:  op abs :printExactFast:cmp *tmp93 0
+  295:  jump *label124 lessThan :printExactFast:cmp 0.000000000000001
+  296:  jump *label122 lessThanEq :printExactFast:cmp 0.00001
         label *label124
-  298:  print :printExactFast:base
-  299:  jump *label123 always 0 0
+  297:  print :printExactFast:base
+  298:  jump *label123 always 0 0
         label *label122
-  300:  op floor *tmp98 :printExactFast:base 0
-  301:  print *tmp98
-  302:  print "."
-  303:  op mod *tmp99 :printExactFast:base 1
-  304:  op mul :printExactFast:base *tmp99 100000
-  305:  op floor :printExactFast:t :printExactFast:base 0
-  306:  jump *label1016 greaterThanEq :printExactFast:t 100
-  307:  jump *label1014 greaterThanEq :printExactFast:t 10
-  308:  print "0000"
-  309:  jump *label1021 always 0 0
+  299:  op floor *tmp98 :printExactFast:base 0
+  300:  print *tmp98
+  301:  print "."
+  302:  op mod *tmp99 :printExactFast:base 1
+  303:  op mul :printExactFast:base *tmp99 100000
+  304:  op floor :printExactFast:t :printExactFast:base 0
+  305:  jump *label1016 greaterThanEq :printExactFast:t 100
+  306:  jump *label1014 greaterThanEq :printExactFast:t 10
+  307:  print "0000"
+  308:  jump *label1021 always 0 0
         label *label1014
-  310:  print "000"
-  311:  jump *label1021 always 0 0
+  309:  print "000"
+  310:  jump *label1021 always 0 0
         label *label1016
-  312:  jump *label1017 greaterThanEq :printExactFast:t 1000
-  313:  print "00"
-  314:  jump *label1020 always 0 0
+  311:  jump *label1017 greaterThanEq :printExactFast:t 1000
+  312:  print "00"
+  313:  jump *label1020 always 0 0
         label *label1017
-  315:  jump *label1018 greaterThanEq :printExactFast:t 10000
-  316:  print "0"
+  314:  jump *label1018 greaterThanEq :printExactFast:t 10000
+  315:  print "0"
         label *label1018
         label *label1020
         label *label1021
-  317:  print :printExactFast:t
-  318:  op mod *tmp99 :printExactFast:base 1
-  319:  op mul :printExactFast:base *tmp99 100000
-  320:  op floor :printExactFast:t :printExactFast:base 0
-  321:  jump *label1026 greaterThanEq :printExactFast:t 100
-  322:  jump *label1024 greaterThanEq :printExactFast:t 10
-  323:  print "0000"
-  324:  jump *label1031 always 0 0
+  316:  print :printExactFast:t
+  317:  op mod *tmp99 :printExactFast:base 1
+  318:  op mul :printExactFast:base *tmp99 100000
+  319:  op floor :printExactFast:t :printExactFast:base 0
+  320:  jump *label1026 greaterThanEq :printExactFast:t 100
+  321:  jump *label1024 greaterThanEq :printExactFast:t 10
+  322:  print "0000"
+  323:  jump *label1031 always 0 0
         label *label1024
-  325:  print "000"
-  326:  jump *label1031 always 0 0
+  324:  print "000"
+  325:  jump *label1031 always 0 0
         label *label1026
-  327:  jump *label1027 greaterThanEq :printExactFast:t 1000
-  328:  print "00"
-  329:  jump *label1030 always 0 0
+  326:  jump *label1027 greaterThanEq :printExactFast:t 1000
+  327:  print "00"
+  328:  jump *label1030 always 0 0
         label *label1027
-  330:  jump *label1028 greaterThanEq :printExactFast:t 10000
-  331:  print "0"
+  329:  jump *label1028 greaterThanEq :printExactFast:t 10000
+  330:  print "0"
         label *label1028
         label *label1030
         label *label1031
-  332:  print :printExactFast:t
-  333:  op mod *tmp99 :printExactFast:base 1
-  334:  op mul :printExactFast:base *tmp99 100000
-  335:  op floor :printExactFast:t :printExactFast:base 0
-  336:  jump *label1036 greaterThanEq :printExactFast:t 100
-  337:  jump *label1034 greaterThanEq :printExactFast:t 10
-  338:  print "0000"
-  339:  jump *label1041 always 0 0
+  331:  print :printExactFast:t
+  332:  op mod *tmp99 :printExactFast:base 1
+  333:  op mul :printExactFast:base *tmp99 100000
+  334:  op floor :printExactFast:t :printExactFast:base 0
+  335:  jump *label1036 greaterThanEq :printExactFast:t 100
+  336:  jump *label1034 greaterThanEq :printExactFast:t 10
+  337:  print "0000"
+  338:  jump *label1041 always 0 0
         label *label1034
-  340:  print "000"
-  341:  jump *label1041 always 0 0
+  339:  print "000"
+  340:  jump *label1041 always 0 0
         label *label1036
-  342:  jump *label1037 greaterThanEq :printExactFast:t 1000
-  343:  print "00"
-  344:  jump *label1040 always 0 0
+  341:  jump *label1037 greaterThanEq :printExactFast:t 1000
+  342:  print "00"
+  343:  jump *label1040 always 0 0
         label *label1037
-  345:  jump *label1038 greaterThanEq :printExactFast:t 10000
-  346:  print "0"
+  344:  jump *label1038 greaterThanEq :printExactFast:t 10000
+  345:  print "0"
         label *label1038
         label *label1040
         label *label1041
-  347:  print :printExactFast:t
+  346:  print :printExactFast:t
         label *label123
-  348:  jump *label138 equal :printExactFast:exp 0
-  349:  print "E"
-  350:  print :printExactFast:exp
+  347:  jump *label138 equal :printExactFast:exp 0
+  348:  print "E"
+  349:  print :printExactFast:exp
         label *label138
-  351:  return :printExactFast*retaddr
+  350:  return :printExactFast*retaddr
 
 
         'stop' instruction encountered, dumping variable values:
@@ -1447,7 +1446,6 @@ Final code before resolving virtual instructions:
 *tmp87: 50.0
 *tmp88: 1.0E50
 :printExactFast:base: 1.2345000000000002
-*tmp91: 1.7345000000000002
 *tmp90: 1.0
 *tmp93: 0.23450000000000015
 :printExactFast:cmp: 0.23450000000000015

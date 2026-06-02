@@ -1,9 +1,5 @@
 This file Lists the issues and ideas being actively worked or pondered upon. Updated occasionally. 
 
-# Change in default language target
-
-The default language target will be bumped to `8` as soon as regular Mindustry 8 release is made.
-
 # Roadmap
 
 A broad plan for the next few releases. Everything may change, though.
@@ -21,14 +17,14 @@ Changes intended for the next regular release.
   * it is possible to use `begin`, `atomic` or `debug` as implicit labels (depending on the block type and only if the block is unlabeled)
 * Full support for parallel execution in the emulator
   * In the web app, all four modules will support running the code
+* UI redesign by JeanJPNM
+* Expression optimization: replace `floor(x + 0.5)` with `round(x)`.
 
 **Doing**
 
-* UI redesign by JeanJPNM
 
 * **Planned**
 
-* Expression optimization: replace `floor(x + 0.5)` with `round(x)`.
 * Detect unused variables/constants/functions from AST analysis and report them as warnings.
 * If expression telescoping optimization
 

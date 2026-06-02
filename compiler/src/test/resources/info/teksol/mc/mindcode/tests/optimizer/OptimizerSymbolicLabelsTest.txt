@@ -16,13 +16,13 @@ level-meter-00.mnd:                               287   C7BCD2A84C470E15   BD5AB
 map-setup-00.mnd:                                 930   95F602FA758275E6   23BE7168DDB32472
 mass-driver-monitor-00.mnd:                       183   6E6F762403154535   1FF3E7404987F34B
 mass-driver-monitor-surge-alloy-00.mnd:           232   84BE8CA14CE3386F   EFCD8824E55C9726
-reactor-control-00.mnd:                           424   0B5F71D4A736D2F1   E63BBD3695941A99
-reactor-control-battery-level-00.mnd:             572   BEBDD58A4C35FD11   304959A8E0FE2596
+reactor-control-00.mnd:                           423   0B5F71D4A736D2F1   0841EE07F6A5D447
+reactor-control-battery-level-00.mnd:             568   BEBDD58A4C35FD11   8DBB6EB9C3D0E7F3
 regulator-00.mnd:                                 265   2AFCF1D4D2C43E14   252FD72FD735F41E
 remote-vault-00.mnd:                               68   9EA444978E177496   0072051150992E0D
 storage-display-00.mnd:                           583   2F638AC4A4196293   C7F2DAE02439BD74
 unit-housekeeping-00.mnd:                          94   F607CA415057529A   BD1962C008FF3DAD
-unit-speed-00.mnd:                                 71   2A68EEB3B75D1513   F7F78A7717D6DD70
+unit-speed-00.mnd:                                 70   2A68EEB3B75D1513   F483879D87C94498
 unit-transport-00.mnd:                            631   26FE3A15D7EA529B   73E4DB872504B996
 unit-transport-flow-rate-00.mnd:                   70   DED7F4641C02F55B   0F1DFC6C4C85BBDD
 unit-transport-single-00.mnd:                     320   84D86A0302D78B2F   9EA82D52340DE169

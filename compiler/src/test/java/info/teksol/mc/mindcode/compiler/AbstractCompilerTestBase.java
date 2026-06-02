@@ -242,12 +242,13 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
     // Common constants for creating instructions
     protected static final Operation
             add         = Operation.ADD,
-            sub         = Operation.SUB,
-            rand        = Operation.RAND,
             div         = Operation.DIV,
             floor       = Operation.FLOOR,
             idiv        = Operation.IDIV,
-            mul         = Operation.MUL;
+            mul         = Operation.MUL,
+            rand        = Operation.RAND,
+            round       = Operation.ROUND,
+            sub         = Operation.SUB;
 
     protected final LogicNumber
             K0001       = LogicNumber.create(ip, "0.001"),

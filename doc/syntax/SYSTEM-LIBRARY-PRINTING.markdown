@@ -194,8 +194,8 @@ See also [`formatBinaryNumber`](#formatbinarynumber)
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                  72 |                 45 |
-| Function body                            |                  73 |                 46 |
+| Inlined function                         |                  71 |                 44 |
+| Function body                            |                  72 |                 45 |
 | Function call                            |                   4 |                  4 |
 
 Prints the value into the text buffer without rounding to the nearest integer value.

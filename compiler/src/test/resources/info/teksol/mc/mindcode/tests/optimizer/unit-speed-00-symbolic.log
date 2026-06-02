@@ -3,36 +3,36 @@
      6 instructions eliminated by Condition Optimization (5 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
-     7 instructions eliminated by Data Flow Optimization (9 iterations).
+     8 instructions eliminated by Data Flow Optimization (2 passes, 10 iterations).
      5 instructions added by Loop Rotation (2 iterations).
        6 loop conditions were partially rotated.
      1 instructions updated by Jump Threading.
     10 instructions eliminated by Print Merging.
-    71 instructions after optimizations.
+    70 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 923):
-  * Full loop rotation at line 17:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
+  * Full loop rotation at line 17:1                              size    +1, benefit       26.0, efficiency     26.000 (+0 instructions)
     Full loop rotation at line 24:1                              size    +1, benefit       26.0, efficiency     26.000
     Full loop rotation at line 32:1                              size    +1, benefit       26.0, efficiency     26.000
     Full loop rotation at line 45:1                              size    +1, benefit       26.0, efficiency     26.000
     Full loop rotation at line 58:1                              size    +1, benefit       26.0, efficiency     26.000
 
-Pass 1: speed optimization selection (cost limit 922):
+Pass 1: speed optimization selection (cost limit 923):
   * Full loop rotation at line 24:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
     Full loop rotation at line 32:1                              size    +1, benefit       26.0, efficiency     26.000
     Full loop rotation at line 45:1                              size    +1, benefit       26.0, efficiency     26.000
     Full loop rotation at line 58:1                              size    +1, benefit       26.0, efficiency     26.000
 
-Pass 1: speed optimization selection (cost limit 921):
+Pass 1: speed optimization selection (cost limit 922):
   * Full loop rotation at line 32:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
     Full loop rotation at line 45:1                              size    +1, benefit       26.0, efficiency     26.000
     Full loop rotation at line 58:1                              size    +1, benefit       26.0, efficiency     26.000
 
-Pass 1: speed optimization selection (cost limit 920):
+Pass 1: speed optimization selection (cost limit 921):
   * Full loop rotation at line 45:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
     Full loop rotation at line 58:1                              size    +1, benefit       26.0, efficiency     26.000
 
-Pass 1: speed optimization selection (cost limit 919):
+Pass 1: speed optimization selection (cost limit 920):
   * Full loop rotation at line 58:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 instructions):
@@ -247,6 +247,15 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
 
 Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
+     3 op len *tmp3 0 *tmp2
+     4 op mul *tmp4 100 *tmp3
+     5 op add *tmp5 *tmp4 0.5
+-    * op floor *tmp6 *tmp5
++    6 op round *tmp6 *tmp4
+     7 op div *tmp7 *tmp6 100
+     8 op sub :distance *tmp7 2
+     9 ubind UNIT
+ 
     66 ucontrol flag 0
     67 op sub :elapsed :finish :start
     68 op div *tmp29 :distance :elapsed
@@ -292,74 +301,84 @@ Modifications by Full loop rotation at line 17:1 (+1 instructions):
     32 control enabled switch1 false
     33 label *label6
 
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     2 op sub *tmp2 .DY 10
+     3 op len *tmp3 0 *tmp2
+     4 op mul *tmp4 100 *tmp3
+-    * op add *tmp5 *tmp4 0.5
+     5 op round *tmp6 *tmp4
+     6 op div *tmp7 *tmp6 100
+     7 op sub :distance *tmp7 2
+
 Modifications by Full loop rotation at line 24:1 (+1 instructions):
  
-    33 label *label6
-    34 sensor *tmp14 @unit @controlled
-    35 jump *label8 equal *tmp14 0
-+   36 label *label20
-    37 print "Searching free "
-    38 print UNIT
-    39 printflush message1
-    40 ubind UNIT
-    41 label *label7
+    32 label *label6
+    33 sensor *tmp14 @unit @controlled
+    34 jump *label8 equal *tmp14 0
++   35 label *label20
+    36 print "Searching free "
+    37 print UNIT
+    38 printflush message1
+    39 ubind UNIT
+    40 label *label7
 -    * jump *label6 always
-+   42 sensor *tmp14 @unit @controlled
-+   43 jump *label20 notEqual *tmp14 0
-    44 label *label8
-    45 ucontrol flag 1
-    46 label *label9
++   41 sensor *tmp14 @unit @controlled
++   42 jump *label20 notEqual *tmp14 0
+    43 label *label8
+    44 ucontrol flag 1
+    45 label *label9
 
 Modifications by Full loop rotation at line 32:1 (+1 instructions):
  
-    46 label *label9
-    47 ucontrol within 10 10 1 *tmp16
-    48 jump *label11 notEqual *tmp16 false
-+   49 label *label21
-    50 print "Moving to start"
-    51 printflush message1
-    52 ucontrol move 10 10
-    53 label *label10
+    45 label *label9
+    46 ucontrol within 10 10 1 *tmp16
+    47 jump *label11 notEqual *tmp16 false
++   48 label *label21
+    49 print "Moving to start"
+    50 printflush message1
+    51 ucontrol move 10 10
+    52 label *label10
 -    * jump *label9 always
-+   54 ucontrol within 10 10 1 *tmp16
-+   55 jump *label21 equal *tmp16 false
-    56 label *label11
-    57 print "Moving to destination"
-    58 printflush message1
++   53 ucontrol within 10 10 1 *tmp16
++   54 jump *label21 equal *tmp16 false
+    55 label *label11
+    56 print "Moving to destination"
+    57 printflush message1
 
 Modifications by Full loop rotation at line 45:1 (+1 instructions):
  
-    61 label *label12
-    62 ucontrol within 10 .DY 1 *tmp19
-    63 jump *label14 notEqual *tmp19 false
-+   64 label *label22
-    65 ucontrol move 10 .DY
-    66 label *label13
+    60 label *label12
+    61 ucontrol within 10 .DY 1 *tmp19
+    62 jump *label14 notEqual *tmp19 false
++   63 label *label22
+    64 ucontrol move 10 .DY
+    65 label *label13
 -    * jump *label12 always
-+   67 ucontrol within 10 .DY 1 *tmp19
-+   68 jump *label22 equal *tmp19 false
-    69 label *label14
-    70 set :finish @time
-    71 op sub *tmp25 10 .DY
++   66 ucontrol within 10 .DY 1 *tmp19
++   67 jump *label22 equal *tmp19 false
+    68 label *label14
+    69 set :finish @time
+    70 op sub *tmp25 10 .DY
 
 Modifications by Full loop rotation at line 58:1 (+1 instructions):
  
-    80 label *label15
-    81 sensor *tmp33 switch1 @enabled
-    82 jump *label17 notEqual *tmp33 false
-+   83 label *label23
-    84 print "Measurement results ("
-    85 print UNIT
-    86 print "):"
+    79 label *label15
+    80 sensor *tmp33 switch1 @enabled
+    81 jump *label17 notEqual *tmp33 false
++   82 label *label23
+    83 print "Measurement results ("
+    84 print UNIT
+    85 print "):"
  
-    99 print "\nPress button to repeat"
-   100 printflush message1
-   101 label *label16
+    98 print "\nPress button to repeat"
+    99 printflush message1
+   100 label *label16
 -    * jump *label15 always
-+  102 sensor *tmp33 switch1 @enabled
-+  103 jump *label23 equal *tmp33 false
-   104 label *label17
-   105 end
++  101 sensor *tmp33 switch1 @enabled
++  102 jump *label23 equal *tmp33 false
+   103 label *label17
+   104 end
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
@@ -367,39 +386,39 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
      2 op sub .DY @maph 10
      3 op sub *tmp2 .DY 10
  
-    69 op idiv *tmp31 *tmp29 0.00001
-    70 op div :speed *tmp31 100
-    71 sensor *tmp33 switch1 @enabled
+    68 op idiv *tmp31 *tmp29 0.00001
+    69 op div :speed *tmp31 100
+    70 sensor *tmp33 switch1 @enabled
 -    * jump *label17 notEqual *tmp33 false
-+   72 jump __start__ notEqual *tmp33 false
-    73 label *label23
-    74 print "Measurement results ("
-    75 print UNIT
++   71 jump __start__ notEqual *tmp33 false
+    72 label *label23
+    73 print "Measurement results ("
+    74 print UNIT
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
-    90 printflush message1
-    91 sensor *tmp33 switch1 @enabled
-    92 jump *label23 equal *tmp33 false
+    89 printflush message1
+    90 sensor *tmp33 switch1 @enabled
+    91 jump *label23 equal *tmp33 false
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
  
-    19 sensor *tmp10 switch1 @enabled
-    20 jump *label5 notEqual *tmp10 false
-    21 label *label19
+    18 sensor *tmp10 switch1 @enabled
+    19 jump *label5 notEqual *tmp10 false
+    20 label *label19
 -    * print "Press button to start measuring "
 -    * print UNIT
 -    * print " speed."
-+   22 print "Press button to start measuring {0} speed."
-+   23 format UNIT
-    24 printflush message1
-    25 sensor *tmp10 switch1 @enabled
-    26 jump *label19 equal *tmp10 false
++   21 print "Press button to start measuring {0} speed."
++   22 format UNIT
+    23 printflush message1
+    24 sensor *tmp10 switch1 @enabled
+    25 jump *label19 equal *tmp10 false
  
-    70 sensor *tmp33 switch1 @enabled
-    71 jump __start__ notEqual *tmp33 false
-    72 label *label23
+    69 sensor *tmp33 switch1 @enabled
+    70 jump __start__ notEqual *tmp33 false
+    71 label *label23
 -    * print "Measurement results ("
 -    * print UNIT
 -    * print "):"
@@ -416,16 +435,16 @@ Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
 -    * print :speed
 -    * print "tiles/s"
 -    * print "\nPress button to repeat"
-+   73 print "Measurement results ({0}):\nMap dimensions: {0}x{0}\nElapsed time: {0}ms\nDistance travelled: {0}\nSpeed: {0}tiles/s\nPress button to repeat"
-+   74 format UNIT
-+   75 format @mapw
-+   76 format @maph
-+   77 format :elapsed
-+   78 format :distance
-+   79 format :speed
-    80 printflush message1
-    81 sensor *tmp33 switch1 @enabled
-    82 jump *label23 equal *tmp33 false
++   72 print "Measurement results ({0}):\nMap dimensions: {0}x{0}\nElapsed time: {0}ms\nDistance travelled: {0}\nSpeed: {0}tiles/s\nPress button to repeat"
++   73 format UNIT
++   74 format @mapw
++   75 format @maph
++   76 format :elapsed
++   77 format :distance
++   78 format :speed
+    79 printflush message1
+    80 sensor *tmp33 switch1 @enabled
+    81 jump *label23 equal *tmp33 false
 
 Final code before resolving virtual instructions:
 
@@ -435,8 +454,7 @@ op sub .DY @maph 10
 op sub *tmp2 .DY 10
 op len *tmp3 0 *tmp2
 op mul *tmp4 100 *tmp3
-op add *tmp5 *tmp4 0.5
-op floor *tmp6 *tmp5
+op round *tmp6 *tmp4
 op div *tmp7 *tmp6 100
 op sub :distance *tmp7 2
 ubind UNIT
