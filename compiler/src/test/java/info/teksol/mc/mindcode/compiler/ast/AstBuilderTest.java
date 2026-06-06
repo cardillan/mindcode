@@ -904,7 +904,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             new AstVariablesDeclaration(EMPTY, null,
                                     List.of(
                                             new AstVariableModifier(EMPTY, Modifier.GUARDED, null),
-                                            new AstVariableModifier(EMPTY, Modifier.LINKED, null)
+                                            new AstVariableModifier(EMPTY, Modifier.LINKED, new AstLinkedParameters(EMPTY, null))
                                     ),
                                     List.of(
                                             new AstVariableSpecification(EMPTY, id("cell1"), null),
@@ -922,10 +922,28 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             """,
                     List.of(
                             new AstVariablesDeclaration(EMPTY, null,
-                                    List.of(new AstVariableModifier(EMPTY, Modifier.LINKED, null)),
+                                    List.of(new AstVariableModifier(EMPTY, Modifier.LINKED, new AstLinkedParameters(EMPTY, null))),
                                     List.of(
                                             new AstVariableSpecification(EMPTY, id("cell1"), null),
                                             new AstVariableSpecification(EMPTY, id("cell2"), null)
+                                    )
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsSymbolicLinkedVariables() {
+            assertBuildsTo("""
+                            linked(@memory-cell) x, y;
+                            """,
+                    List.of(
+                            new AstVariablesDeclaration(EMPTY, null,
+                                    List.of(new AstVariableModifier(EMPTY, Modifier.LINKED,
+                                            new AstLinkedParameters(EMPTY, new AstBuiltInIdentifier(EMPTY, "@memory-cell")))),
+                                    List.of(
+                                            new AstVariableSpecification(EMPTY, id("x"), null),
+                                            new AstVariableSpecification(EMPTY, id("y"), null)
                                     )
                             )
                     )

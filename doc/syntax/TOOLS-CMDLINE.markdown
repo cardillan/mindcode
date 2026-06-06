@@ -548,8 +548,8 @@ Emulator options:
 usage: mindcode cs [-h] [-c] [-w [{update,add}]] [--watcher-version {v0,v1}] [--watcher-port {0..65535}]
                 [--watcher-timeout {0..3600000}] [-o [OUTPUT]] [-l [LOG]] [--output-directory OUTPUT-DIRECTORY]
                 [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]]
-                [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
-                [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
+                [--allow-unsatisfied-links [{true,false}]] [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
+                [-i {1..100000}] [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--processor-size-limit {1..1000000}] [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}]
                 [--no-argument-padding [{true,false}]] [--function-prefix {short,long}] [--author author [author ...]]
                 [--no-signature] [--processor-id processor_ID] [--program-name program_name]
@@ -619,9 +619,14 @@ Input/output files:
                          and into the log
 
 Schematic creation:
+  Options that affect the way schematics are created.
+
   -a, --add-tag [TAG [TAG ...]]
                          defines additional tag(s) to add  to  the  schematic,  plain  text  and symbolic icon names are
                          supported
+  --allow-unsatisfied-links [{true,false}]
+                         linked blocks declared in Mindcode source code but  not present in the schematic only produce a
+                         warning
 
 Environment options:
   Options to specify the target environment for the  code  being  compiled. This includes the Mindustry version, as well

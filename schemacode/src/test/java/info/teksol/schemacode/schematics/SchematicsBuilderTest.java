@@ -841,7 +841,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 schematic
                     dimensions = (1, 1)
                     @micro-processor at (0, 0) processor
-                        mindcode = "print(@this); printflush(message1);"
+                        mindcode = "linked noinit message1; print(@this); printflush(message1);"
                     end
                 end
                 """);
@@ -1054,5 +1054,56 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
         );
 
         assertAstEquals(expected, actual);
+    }
+
+    @Test
+    void buildsSchematicsWithSymbolicLinks() {
+        Schematic actual = buildSchematics("""
+                        schematic
+                            @micro-processor at (0, 0) processor links * end mindcode = code end
+                        onOff:
+                            @switch at +(1, 0)
+                        output:
+                            @unloader at +(1, 0)
+                        end
+
+                        code = \"""
+                            linked(@switch) onOff;
+                            linked(@unloader) output;
+                            output.enabled = onOff.enabled;
+                        \"""
+                """);
+
+        Schematic expected = new Schematic("", "", "", List.of(), 3, 1,
+                List.of(
+                        block(pos(2, 5), "@micro-processor", P0_0, Direction.EAST,
+                                new ProcessorConfiguration(
+                                        List.of(
+                                                new Link("unloader1", 2, 0),
+                                                new Link("switch1", 1, 0)
+                                        ),
+                                        "sensor *tmp3 switch1 @enabled\ncontrol enabled unloader1 *tmp3 0 0 0\n"
+                                )
+                        ),
+                        block(pos(10, 1), List.of("onOff"), "@switch", P1_0, Direction.EAST, BooleanConfiguration.FALSE),
+                        block(pos(12, 1), List.of("output"), "@unloader", P2_0, Direction.EAST, EmptyConfiguration.EMPTY)
+                )
+        );
+
+        assertAstEquals(expected, actual);
+    }
+
+    @Test
+    void reportsUnusedLinks() {
+        assertGeneratesWarnings(
+                ExpectedMessages.create()
+                        .add("Incompatible link name 'onOff' for block type '@switch'."),
+                """
+                        schematic
+                            @micro-processor at (0, 0) processor links * end mlog = "" end
+                        onOff:
+                            @switch at +(1, 0)
+                        end
+                """);
     }
 }

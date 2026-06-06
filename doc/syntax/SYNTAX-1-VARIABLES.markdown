@@ -412,13 +412,13 @@ Storage modifiers are only allowed in the global scope. At most one of the stora
 
 Other modifiers are compatible only with specific storage modifiers. This table specifies which modifiers are compatible with which storage modifiers and scopes:
 
-| Modifier   | Compatible with                        | Scope           |
-|------------|----------------------------------------|-----------------|
-| `cached`   | `external`, `remote`                   | global          |
-| `guarded`  | `linked` or none                       | global          |
-| `mlog`     | `export`, `remote` or none             | global          |
-| `noinit`   | `export`, `external`, `remote` or none | global or local |
-| `volatile` | `export` or none                       | global          |
+| Modifier   | Compatible with                                 | Scope           |
+|------------|-------------------------------------------------|-----------------|
+| `cached`   | `external`, `remote`                            | global          |
+| `guarded`  | `linked` or none                                | global          |
+| `mlog`     | `export`, `remote` or none                      | global          |
+| `noinit`   | `export`, `external`, `linked`, remote` or none | global or local |
+| `volatile` | `export` or none                                | global          |
 
 ### `cached` modifier
 
@@ -507,14 +507,16 @@ The variables are declared `volatile`, as this ensures they will be available fo
 
 ### `noinit` modifier
 
-Can be used with the `export`, `external` or `remote` modifier, or without a storage modifier. This modifier cannot be used for declaring arrays or when the declared variable is assigned an initial value.
+Can be used with the `export`, `external`, `linked` or `remote` modifier, or without a storage modifier. This modifier cannot be used for declaring arrays or when the declared variable is assigned an initial value.
 
-The `noinit` modifier can be used for two purposes:
+The `noinit` modifier can be used with `export`, `external` or `remote` modifiers for two purposes:
 
 * To suppress the "uninitialized variable" warning for the declared variable. Uninitialized global variables retain the last value assigned to them in the last iteration of the program.
 * When used with the `cached` modifier, the initial value of the variable is not read from the external memory or remote processor at all; the variable only allows writing new values to the memory/processor.
 
 Cached `noinit` variables are useful for a sending side of a unidirectional communication between processors in situations where the variable is also read locally, and is read more often then it is written to. The variable is read without any performance penalty, but all the writes are automatically propagated to the external memory.
+
+When used with the `linked` modifier, the `noinit` modifier suppresses the "unsatisfied link" error or warning. This message is generated when no link specified in the schematic definition file matches the link name (either the literal or the symbolic one). This situation usually means that a block expected by the code is missing from the schematic. If the linked block is intentionally not included in the schematic (for example, to be provided by a player after the schematic is built in the game), use this modifier to suppress the message. 
 
 ### `volatile` modifier
 
@@ -1421,6 +1423,7 @@ A warning is generated if the name of the linked block used in the linked variab
 When declaring linked variables, these additional modifiers can be used:
 
 * [`guarded`](#guarded-modifier)
+* [`noinit`](#noinit-modifier)
 
 Example:
 
@@ -1436,17 +1439,55 @@ end;
 ```
 
 > [!IMPORTANT]
-> Linked variables (both implicit and explicit ones) reflect the changes made to linked blocks during the execution of the program. For example, if `switch1` is linked to the processor, but then is destroyed, the value of `switch1` turns to `null`. If the switch is then rebuilt by the user and linked to the processor under the same name, the linked variable will automatically reconnect to the new instance of the switch when it becomes available.
+> Linked variables (both implicit and explicit ones) reflect the changes made to linked blocks during the execution of the program. For example, when `switch1` is linked to the processor, but then is destroyed, the value of `switch1` turns to `null`. If the switch is then rebuilt by the user and linked to the processor under the same name, the linked variable will automatically reconnect to the new instance of the switch when it becomes available.
 > 
 > It is important to consider that in some cases the new block linked to the processor under the same name as a previously linked and subsequently destroyed block may be of a different type (e.g., replacing sorter `sorter1` with inverted sorter will link the inverted sorter also under the name `sorter1`).  
 > 
-> When a linked block is stored in a regular variable or program parameter, the variable will always refer to the same instance of the block that was assigned to it. When such a block gets destroyed, it still appears to be present (doesn't become `null`), and can only be recognized as missing by querying the `@dead` property.
+> When a linked block is stored in a regular variable or program parameter, the variable will always refer to the same instance of the block that was assigned to it. When such a block gets destroyed, it still appears to be present (doesn't become `null`), and can only be recognized as destroyed by querying the `@dead` property.
+
+### Symbolic link names
+
+Schemacode and Mindcode support symbolic link names. A symbolic link name can be used in Schemacode to label a given block and to link that block to one or more processors using the symbolic name. In Mindcode the symbolic name serves as an identifier that represents the given linked block. When compiling Mindcode or Schemacode, the symbolic link names are resolved to literal block names. This simplifies the management of linked blocks in large schematics, as the block can be assigned a descriptive symbolic name which can be consistently used in every source file. This makes it easier to copy or move code between processors too.
+ 
+To declare a symbolic link, it is necessary to pass the type of the linked block as a parameter to the `linked` modifier:
+
+```Mindcode
+linked(@switch) up, down;
+linked(@message) output;
+linked switch1;
+linked onOff = switch2;
+
+// Here we're using literal link names assinged by the compiler to 'up' and 'down'.
+// This is only posible in relaxed syntax mode and is strongly discouraged.
+switch3.enabled = false;
+switch4.enabled = false;
+```
+
+When Mindcode is compiled, the symbolic link names are resolved into literal link names, based on the type of the linked block declared in the `linked` modifier. The names are generated using the base block name and an index starting at 1. When a literal block link name is used in a variable declaration, symbolic link name resolution avoids the literal block link name, regardless of the declaration order.
+
+In the above example, the symbolic link names would be resolved into literal link names like this:
+
+| Symbolic name | Literal name |
+|---------------|--------------|
+| `up`          | `switch3`    |
+| `down`        | `switch4`    |
+| `output`      | `message1`   |
+
+Neither `switch1` nor `switch2` can be used to resolve a symbolic link name, as both these names are declared as literal linked variables. `switch3` and `switch4` do not appear in any linked block declaration, and therefore are used to resolve the symbolic link names.
+
+When compiling Mindcode as part of Schemacode building, the results of symbolic link name resolution are passed on to Schemacode, which uses them when building the schematic.
+
+> [!NOTE]
+> To prevent confusion, it is not possible to use a literal block link name as a symbolic link name, even if it is a linked block of a different type (e.g., `linked(@switch) message1` is disallowed).
+
+> [!NOTE]
+> In relaxed syntax mode, it is possible to use a literal link name assigned by the compiler instead of the symbolic name to access the linked block, although the practice is strongly discouraged. In strict syntax mode, this isn't possible, as the literal block name is not declared in the source code and as such is not recognized by the compiler.
 
 ## External variables
 
 External variables and arrays represent cells in a memory block. They are declared using the [`external` storage modifier](#storage-modifiers).
 
-The `external` modifier can optionally specify storage for the declared variables or arrays. The storage specification consist of the name of the memory block (e.g., `cell1`, `bank2`, or a variable), and optionally an index or range in square brackets. When no index or range is specified, index `0` is assumed. When a storage clause is specified, all variables declared after the `external` keyword are allocated in given memory block, starting at the given index/range. If more space than provided by a given range is required for variables, an error is reported.
+The `external` modifier can optionally specify storage for the declared variables or arrays. The storage specification consists of the name of the memory block (e.g., `cell1`, `bank2`, or a variable), and optionally an index or range in square brackets. When no index or range is specified, index `0` is assumed. When a storage clause is specified, all variables declared after the `external` keyword are allocated in given memory block, starting at the given index/range. If more space than provided by a given range is required for variables, an error is reported.
 
 Examples:
 

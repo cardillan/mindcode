@@ -378,7 +378,7 @@ public class CodeGenerator extends CompilerMessageEmitter {
         }
 
         // Completely skip function declarations to prevent creating AST contexts for them
-        if (node instanceof AstFunctionDeclaration declaration) {
+        if (node instanceof AstFunctionDeclaration) {
             return LogicVoid.VOID;
         }
 

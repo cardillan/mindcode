@@ -17,8 +17,10 @@ import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 @NullMarked
 public class AbstractFunctionMapperTest {
@@ -76,6 +78,11 @@ public class AbstractFunctionMapperTest {
         @Override
         public MindustryMetadata metadata() {
             return instructionProcessor.getMetadata();
+        }
+
+        @Override
+        public @Nullable Map<String, String> schematicLinks() {
+            return null;
         }
     }
 

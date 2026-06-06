@@ -135,6 +135,12 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @return true if the instruction is supported
     boolean isSupported(Opcode opcode, List<LogicArgument> arguments);
 
+    /// Determines whether the identifier is a base block name (such as switch, cell, projector, etc.).
+    ///
+    /// @param identifier identifier to check
+    /// @return true if it conforms to Mindustry Logic base block name
+    boolean isBaseBlockName(String identifier);
+
     /// Determines whether the identifier could be a block name (such as switch1, cell2, projector3, etc.).
     ///
     /// @param identifier identifier to check

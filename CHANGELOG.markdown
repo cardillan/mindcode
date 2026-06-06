@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.17.0 – Unreleased
+
+### Fixed
+
+* Fixed the schemacode action not producing the log file when requested by a command-line argument.   
+
+### Added
+
+* Added support for symbolic link names (affects both [Mindcode](/doc/syntax/SYNTAX-1-VARIABLES.markdown#symbolic-link-names) and [Schemacode](/doc/syntax/SCHEMACODE.markdown#linking-by-a-symbolic-name)). Makes handling links in complex schematics much easier ([#284](https://github.com/cardillan/mindcode/issues/284)).
+
 ## 3.16.3 – 2026-06-02
 
 ### Fixed

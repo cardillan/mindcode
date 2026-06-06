@@ -11,6 +11,7 @@ public enum OptionCategory {
             """),
 
     SCHEMATICS("Schematic creation", """
+            Options that affect the way schematics are created.
             """),
 
     ENVIRONMENT("Environment options", """

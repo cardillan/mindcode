@@ -152,6 +152,7 @@ declModifier
     | modifier = EXTERNAL LPAREN memory = IDENTIFIER LBRACKET range = astRange RBRACKET RPAREN
     | modifier = GUARDED
     | modifier = LINKED
+    | modifier = LINKED LPAREN type = BUILTINIDENTIFIER RPAREN
     | modifier = MLOG LPAREN mlog = expressionList RPAREN
     | modifier = NOINIT
     | modifier = REMOTE processor = IDENTIFIER?

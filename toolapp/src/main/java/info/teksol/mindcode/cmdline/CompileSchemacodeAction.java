@@ -24,6 +24,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 
 @NullMarked
@@ -131,7 +132,14 @@ public class CompileSchemacodeAction extends ActionHandler {
                     mlogWatcherClient.close();
                 }
             }
-        } else {
+        }
+
+        if (!isStdInOut(logFile)) {
+            List<String> messages = messageLogger.getMessages().stream().map(m -> m.formatMessage(positionFormatter)).toList();
+            writeOutputToFile(logFile, messages);
+        }
+
+        if (result.output() == null) {
             System.exit(1);
         }
     }

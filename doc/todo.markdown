@@ -12,21 +12,22 @@ Changes intended for the next regular release.
 
 **Done**
 
-* `break` in code blocks
-  * the code blocks must be labeled and the `break` must refer to the label
-  * it is possible to use `begin`, `atomic` or `debug` as implicit labels (depending on the block type and only if the block is unlabeled)
-* Full support for parallel execution in the emulator
-  * In the web app, all four modules will support running the code
-* UI redesign by JeanJPNM
-* Expression optimization: replace `floor(x + 0.5)` with `round(x)`.
-
 **Doing**
 
+* Symbolic link names
 
 * **Planned**
 
 * Detect unused variables/constants/functions from AST analysis and report them as warnings.
 * If expression telescoping optimization
+* Array code injection optimization
+* Converting arrays to const arrays when possible
+* Function argument substitution: when all function calls take the same argument, the argument may be substituted. If the argument is a variable, the following may happen:
+  * the argument is a global variable: no substitution
+  * the argument is a local variable:
+    * `in` parameter: if the function does not modify the parameter, substitute.
+    * `out` parameter: if the function always writes a value to the parameter, substitute.
+    * `in out` parameter: always substitute.
 
 ## Next releases
 
@@ -86,18 +87,50 @@ These are topics that I've spent some time thinking about and still want them, b
 
 # Issue details
 
+## Namespaces
+
+From Discord:
+
+Also, I probably need to introduce namespaces somehow. The code above is stored in a separate file which is then `require`d in other source files, and the `offset` constant is polluting the global (and only) namespace.
+
+I'll implement a simplified mechanism probably:
+- There will be no hierarchical namespaces at first (i.e., no `cardillan.foo.bar.baz`).
+- Namespace will be defined by the `module` declaration. There can be at most one `module` declaration per source file. (We already have this.)
+- Variables, functions, etc. will be declared `global`, `public` or `private`. Private will be the default.
+  - Private: inaccessible outside its namespace/module.
+  - Public: accessible via fully qualified name: `cardillan.foo()`.
+  - Global: accessible via unqualified or fully qualified name.
+- Program parameters and linked blocks are always global; can't be declared public or private.
+- It will still be possible to `require` files that don't have any `module` declaration. All declarations in such files will be global - `public` and `private` will be forbidden.
+- `global require "library.mnd";` will import all public declarations into global namespace.
+  - The `remote` specification will be moved in front of `require` for consistency: `remote processor1 require "builder.mnd";`
+  - This makes it consistent with variable declaration: `remote processor1 var x;`.
+  - `global require` won't be allowed in modules, so that modules won't unexpectedly pollute global namespace.
+- Later, system generated namespaces (e.g., `wp` for world processor functions) will be somehow added.
+- Module declarations will shadow global declarations.
+  - `global.foo` accesses `foo` in the global namespace. Also solves the problem with local variables shadowing global ones.
+- Declaration order still matters. If a module accesses an outside global variable, the variable must exist before the `require` statement.
+- Mlog variable names will include the namespace prefix (none for globals).
+
+Also, global identifiers will only be available via `global.` qualification in a module. That way an identifier used in a module cannot be unexpectedly resolved as a global one.
+Global namespace therefore only exists in the context of the main program, or in required files that do not create a module.
+Hm, required files not creating a module are problematic, and it will only be allowed to require them in the main program. I'll probably deprecate and remove this usage.
+
 ## Autolinked variables
 
 Support for declaring a variable as a block of a certain type, e.g.
 
 ```
-linked @message msg, @switch button, @memory-bank storage;
+autolinked @message msg, @switch button, @memory-bank storage;
 ```
 
 Mindcode would generate code to iterate through linked blocks and automatically assign them to variables:
 
 - `msg` would be assigned the first block of type `@message`
-- `button` would
+- `button` would be assigned the first block of type `@switch`
+- `storage` would be assigned the first block of type `@memory-bank`
+
+Note: a separate `autolinked` keyword is used instead of `linked` to avoid confusion with the `link` keyword used for linking blocks.
 
 ## Refactoring of Mindustry Logic functions
 

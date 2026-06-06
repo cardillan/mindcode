@@ -31,7 +31,11 @@ public record BlockType(
     }
 
     public String getBaseLinkName() {
-        String name = this.name.substring(1);
+        return getBaseLinkName(name);
+    }
+
+    public static String getBaseLinkName(String blockName) {
+        String name = blockName.substring(1);
         if (name.contains("-")) {
             String[] s = name.split("-");
             //filter out 'large' and numbers at the end of block names

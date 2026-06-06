@@ -122,8 +122,10 @@ public class ERR {
     public static final String INTERNAL_ERROR_OPTIMIZER_ACTION = "Error applying dynamic optimization by %s. As a workaround, turn off the optimization by issuing '#set %s = none;'";
     public static final String INSTRUCTION_LIMIT_EXCEEDED = "The limit of %d executable instructions has been exceeded.";
     public static final String INVALID_KEYWORD_USE = "Invalid use of mlog keyword.";
+    public static final String INVALID_LINKED_TYPE_SPEC = "Invalid linked block type specification ('%s' is not a block type).";
     public static final String INVALID_MLOG_KEYWORD = "Keyword only allowed as the only value of the 'mlog' modifier in array declaration.";
     public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic links. Please set 'symbolic-links' to 'false'.";
+    public static final String LINK_TYPE_MISMATCH = "The expected block type '%s' differs from the actual block type '%s' as defined in the schematic.";
     public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals require language target 7 or higher.";
     public static final String LITERAL_INTEGER_TOO_LARGE = "Literal '%s' exceeds maximum possible value (%s).";
     public static final String LITERAL_INVALID_CHAR_FORMAT = "Invalid format of character literal.";
@@ -204,6 +206,9 @@ public class ERR {
     public static final String SUBARRAY_MUTABLE_RANGE = "Subarray specification must use constant range.";
     public static final String SUBARRAY_NON_INTEGER_RANGE = "Subarray specification must use integer range.";
     public static final String UNDEFINED_LABEL = "Undefined label '%s'.";
+    public static final String UNSATISFIED_LINK = "No block is linked to the processor as '%s' in the schematic definition.";
+    public static final String UNSUPPORTED_LINK_NAME = "Symbolic link name is required ('%s' denotes a literal link name).";
+    public static final String UNSUPPORTED_INITIAL_LINK_VALUE = "Initial value not supported for symbolic links.";
     public static final String UNSUPPORTED_STRING_EXPRESSION = "Unsupported string expression.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIER = "Modifier '%s' cannot be used with '%s'.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIERS = "Modifiers %s are mutually exclusive.";

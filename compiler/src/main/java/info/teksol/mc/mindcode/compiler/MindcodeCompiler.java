@@ -26,6 +26,8 @@ import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraphCreator;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraphCreatorContext;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.declarations.DeclarationsProcessor;
+import info.teksol.mc.mindcode.compiler.declarations.DeclarationsProcessorContext;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluatorContext;
 import info.teksol.mc.mindcode.compiler.generation.*;
@@ -72,8 +74,8 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
 public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuilderContext, PreprocessorContext,
-        ArrayConstructorContext, CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext,
-        VariablesContext, ForcedVariableContext, OptimizerContext {
+        ArrayConstructorContext, CallGraphCreatorContext, DeclarationsProcessorContext, CompileTimeEvaluatorContext,
+        CodeGeneratorContext, VariablesContext, ForcedVariableContext, OptimizerContext {
 
     public static final String REMOTE_PROTOCOL_VERSION = "v1";
 
@@ -87,6 +89,9 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
     private @Nullable MindustryMetadata metadata;
     private @Nullable CompileTimeEvaluator compileTimeEvaluator;
     private @Nullable CodeGenerator codeGenerator;
+
+    // Schemacode-specific
+    private @Nullable Map<String, String> schematicLinks;
 
     // Intermediate and final results
     private final Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
@@ -278,6 +283,9 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
         rootAstContext = AstContext.createRootNode(globalProfile);
         variables = new Variables(this);
+
+        DeclarationsProcessor.processDeclarations(this, astProgram);
+
         assembler = new CodeAssembler(this);
         compileTimeEvaluator = new CompileTimeEvaluator(this);
 
@@ -350,6 +358,8 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         if (globalProfile.isPrintCodeSize()) {
             outputFunctionSizes();
         }
+
+        outputSymbolicNameMap();
 
         if (executableInstructions.size() > Globals.MAX_INSTRUCTIONS) {
             if (globalProfile.isEnforceSizeLimits()) {
@@ -427,7 +437,24 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
                 });
         fmt.close();
 
-        info("%s", sbr);
+        info("%s%n", sbr);
+    }
+
+    private void outputSymbolicNameMap() {
+        Map<String, String> symbolicNameMap = getSymbolicNameMap();
+        if (symbolicNameMap.isEmpty()) return;
+
+        int length = symbolicNameMap.keySet().stream().mapToInt(String::length).max().orElse(0);
+        String format = "\n    %-" + length + "s -> %s";
+
+        StringBuilder sbr = new StringBuilder("\nSymbolic link resolution:");
+        Formatter fmt = new Formatter(sbr);
+        symbolicNameMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(e -> fmt.format(format, e.getKey(), e.getValue()));
+        fmt.close();
+
+        info("%s\n", sbr);
     }
 
     private String reformat(String code) {
@@ -563,6 +590,14 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         return runtimeError;
     }
 
+    public void setSchematicLinks(Map<String, String> schematicLinks) {
+        this.schematicLinks = schematicLinks;
+    }
+
+    public Map<String, String> getSymbolicNameMap() {
+        return variables == null ? Map.of() : variables.getSymbolicNameMap();
+    }
+
     // Context implementations
     @Override
     public MessageConsumer messageConsumer() {
@@ -650,6 +685,10 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
     @Override
     public Variables variables() {
         return Objects.requireNonNull(variables);
+    }
+
+    public @Nullable Map<String, String> schematicLinks() {
+        return schematicLinks;
     }
 
     @Override

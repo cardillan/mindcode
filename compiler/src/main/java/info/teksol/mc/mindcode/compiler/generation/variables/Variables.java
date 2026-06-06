@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.BuiltinEvaluation;
@@ -45,9 +46,12 @@ public class Variables extends CompilerMessageEmitter {
     private final InstructionProcessor processor;
     private final NameCreator nameCreator;
     private final Map<String, ValueStore> globalVariables;
+    private final @Nullable Map<String, String> schematicLinks;
     private final Map<String, StructuredValueStore> structuredVariables = new HashMap<>();
     private final Deque<FunctionContext> contextStack = new ArrayDeque<>();
     private final Map<String, List<SourcePosition>> mlogNames = new HashMap<>();
+    private final Set<String> linkedNames = new HashSet<>();
+    private final Map<String, String> symbolicNameMap = new HashMap<>();
     private FunctionContext functionContext = new GlobalContext();
 
     private HeapTracker heapTracker;
@@ -59,6 +63,7 @@ public class Variables extends CompilerMessageEmitter {
         nameCreator = context.nameCreator();
         heapTracker = HeapTracker.createDefaultTracker(context);
         globalVariables = context.metadata().getIcons().createIconMapAsValueStore();
+        schematicLinks = context.schematicLinks();
         putVariable("@@MINDUSTRY_VERSION", LogicString.create(globalProfile.getProcessorVersion().mimexVersion));
         putVariable("@@TARGET_MAJOR", LogicNumber.create(globalProfile.getProcessorVersion().major));
         putVariable("@@TARGET_MINOR", LogicNumber.create(globalProfile.getProcessorVersion().minor));
@@ -140,6 +145,14 @@ public class Variables extends CompilerMessageEmitter {
         functionContext.replaceFunctionVariable(identifier, variable);
     }
 
+    public void addLinkedName(String name) {
+        linkedNames.add(name);
+    }
+
+    public Map<String, String> getSymbolicNameMap() {
+        return symbolicNameMap;
+    }
+
     /// Creates an implicit variable. Used in the relaxed syntax setting only. Analyzes the identifier to create
     ///  the correct variable type and put it into the correct variable list.
     ///
@@ -149,6 +162,7 @@ public class Variables extends CompilerMessageEmitter {
         if (identifier.isExternal()) {
             return registerGlobalVariable(identifier, heapTracker.createVariable(identifier, Modifiers.EMPTY));
         } else if (isLinkedVariable(identifier)) {
+            validateExpectedLinkName(identifier);
             return registerGlobalVariable(identifier, LogicVariable.block(identifier));
         } else if (isGlobalVariable(identifier)) {
             return registerGlobalVariable(identifier, LogicVariable.global(identifier, nameCreator.global(identifier.getName())));
@@ -188,16 +202,63 @@ public class Variables extends CompilerMessageEmitter {
     ///
     /// @param identifier variable name
     /// @return ValueStore instance representing the linked variable
-    public LogicVariable createLinkedVariable(AstIdentifier identifier, AstIdentifier linkedTo) {
+    public LogicVariable createLinkedVariable(AstIdentifier identifier, Modifiers modifiers, AstIdentifier linkedTo) {
         verifyGlobalDeclaration(identifier, identifier);
 
-        if (!isLinkedVariable(linkedTo)) {
-            warn(linkedTo, WARN.LINKED_VARIABLE_NOT_RECOGNIZED, linkedTo.getName());
+        if (!modifiers.contains(NOINIT)) {
+            validateExpectedLinkName(linkedTo);
         }
 
-        LogicVariable result = LogicVariable.block(identifier, linkedTo);
+        String linkedName;
+        if (modifiers.getParameters(LINKED) instanceof String typeName) {
+            if (identifier != linkedTo) {
+                error(linkedTo, ERR.UNSUPPORTED_INITIAL_LINK_VALUE);
+            }
+
+            if (processor.isBlockName(identifier.getName())) {
+                error(identifier, ERR.UNSUPPORTED_LINK_NAME, identifier.getName());
+            }
+
+            if (schematicLinks != null) {
+                 String schematicType = schematicLinks.getOrDefault(identifier.getName(), "");
+                 if (!schematicType.isEmpty() && !schematicType.equals(typeName)) {
+                     error(identifier, ERR.LINK_TYPE_MISMATCH, typeName, schematicType);
+                 }
+            }
+
+            // Symbolic linked block name
+            // Devised from the provided block type even when not recognized
+            String linkName = BlockType.getBaseLinkName(typeName);
+            for (int i = 1; ; i++) {
+                String test = linkName + i;
+                if (!linkedNames.contains(test)) {
+                    linkedNames.add(test);
+                    linkedName = test;
+                    break;
+                }
+            }
+            symbolicNameMap.put(identifier.getName(), linkedName);
+        } else {
+            linkedName = linkedTo.getName();
+
+            if (!isLinkedVariable(linkedTo)) {
+                warn(linkedTo, WARN.LINKED_VARIABLE_NOT_RECOGNIZED, linkedName);
+            }
+        }
+
+        LogicVariable result = LogicVariable.block(identifier, linkedName);
         putVariableIfAbsent(identifier.getName(), result);
         return result;
+    }
+
+    private void validateExpectedLinkName(AstIdentifier identifier) {
+        if (schematicLinks != null && !schematicLinks.containsKey(identifier.getName())) {
+            if (globalProfile.allowUnsatisfiedLinks()) {
+                warn(identifier, ERR.UNSATISFIED_LINK, identifier.getName());
+            } else {
+                error(identifier, ERR.UNSATISFIED_LINK, identifier.getName());
+            }
+        }
     }
 
     private HeapTracker getHeapTracker(Modifiers modifiers) {
@@ -329,6 +390,7 @@ public class Variables extends CompilerMessageEmitter {
         }
 
         if (allowUndeclaredLinks && isLinkedVariable(identifier)) {
+            validateExpectedLinkName(identifier);
             return registerGlobalVariable(identifier, LogicVariable.block(identifier));
         }
 

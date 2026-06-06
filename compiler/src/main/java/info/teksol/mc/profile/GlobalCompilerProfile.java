@@ -46,6 +46,10 @@ public interface GlobalCompilerProfile {
         return this.<String>getOption(SchematicOptions.ADD_TAG).getValues();
     }
 
+    default boolean allowUnsatisfiedLinks() {
+        return getBooleanValue(SchematicOptions.ALLOW_UNSATISFIED_LINKS);
+    }
+
     default Target getSchematicTarget() {
         return this.<Target>getOption(SchematicOptions.SCHEMATIC_TARGET).getValue();
     }

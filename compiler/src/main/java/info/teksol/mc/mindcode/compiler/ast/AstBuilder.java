@@ -160,6 +160,10 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstBuiltInIdentifier(pos(token), token.getText());
     }
 
+    private @Nullable AstBuiltInIdentifier builtinIfNonNull(@Nullable Token token) {
+        return token == null ? null : builtin(token);
+    }
+
     private AstIdentifier identifier(Token token) {
         return new AstIdentifier(pos(token), token.getText(), token.getType() == MindcodeLexer.EXTIDENTIFIER);
     }
@@ -419,6 +423,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
             return new AstRemoteParameters(pos(ctx), identifier(ctx.processor));
         } else if (modifier == Modifier.MLOG) {
             return new AstMlogParameters(pos(ctx), processExpressionList(ctx.mlog));
+        } else if (modifier == Modifier.LINKED) {
+            return new AstLinkedParameters(pos(ctx), builtinIfNonNull(ctx.type));
         } else {
             return null;
         }

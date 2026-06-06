@@ -555,20 +555,26 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
 
     private @Nullable Set<String> blockNames;
 
-    @Override
-    public boolean isBlockName(String identifier) {
+    private Set<String> getBlockNames() {
         if (blockNames == null) {
             blockNames = new HashSet<>(BlockType.getBaseLinkNames(getMetadata()));
         }
+        return blockNames;
+    }
+
+    @Override
+    public boolean isBlockName(String identifier) {
         Matcher matcher = BLOCK_NAME_PATTERN.matcher(identifier);
-        return matcher.find() && blockNames.contains(matcher.group(1));
+        return matcher.find() && getBlockNames().contains(matcher.group(1));
+    }
+
+    @Override
+    public boolean isBaseBlockName(String identifier) {
+        return getBlockNames().contains(identifier);
     }
 
     public void addBlockName(String identifier) {
-        if (blockNames == null) {
-            blockNames = new HashSet<>(BlockType.getBaseLinkNames(getMetadata()));
-        }
-        blockNames.add(identifier);
+        getBlockNames().add(identifier);
     }
 
     @Override

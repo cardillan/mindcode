@@ -20,7 +20,7 @@ public enum Modifier {
     CACHED          (MindcodeLexer.CACHED, EXTERNAL, REMOTE),
     GUARDED         (MindcodeLexer.GUARDED, NONE, LINKED),
     MLOG            (MindcodeLexer.MLOG, NONE, EXPORT, REMOTE),
-    NOINIT          (MindcodeLexer.NOINIT, NONE, EXPORT, EXTERNAL, REMOTE),
+    NOINIT          (MindcodeLexer.NOINIT, NONE, LINKED, EXPORT, EXTERNAL, REMOTE),
     VOLATILE        (MindcodeLexer.VOLATILE, NONE, EXPORT),
     ;
 

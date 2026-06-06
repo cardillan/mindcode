@@ -14,6 +14,8 @@ import java.util.function.Consumer;
 
 @NullMarked
 public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicAddress {
+    public static final LogicBuiltIn INVALID = create("@", false);
+
     public static final LogicBuiltIn COUNTER = create("@counter", true);
     public static final LogicBuiltIn LINKS = create("@links", true);
     public static final LogicBuiltIn UNIT = create("@unit", true);

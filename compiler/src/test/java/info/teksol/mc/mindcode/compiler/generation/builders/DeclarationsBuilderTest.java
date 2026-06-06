@@ -1235,4 +1235,89 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompiles("#set syntax = strict; noinit var a;");
         }
     }
+
+    @Nested
+    class SymbolicLinks {
+
+        @Test
+        void assignsSymbolicLinks() {
+            assertCompilesTo("""
+                            guarded linked(@message) one, two;
+                            linked(@switch) s1, s2;
+                            s1.enabled = s2.enabled;
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", "message1", "null"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(1), "equal", "message2", "null"),
+                    createInstruction(SET, tmp(0), "switch1"),
+                    createInstruction(SET, tmp(2), "switch2"),
+                    createInstruction(SENSOR, tmp(3), tmp(2), "@enabled"),
+                    createInstruction(CONTROL, "enabled", tmp(0), tmp(3))
+            );
+        }
+
+        @Test
+        void respectsLiteralLinkNames() {
+            assertCompilesTo("""
+                            guarded linked(@message) one, two;
+                            linked message1;
+                            printflush(message1);
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", "message2", "null"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(1), "equal", "message3", "null"),
+                    createInstruction(PRINTFLUSH, "message1")
+            );
+        }
+
+        @Test
+        void respectsExplicitlyDeclaredBlockTypes() {
+            assertCompilesTo("""
+                            #declare linkedBlock mammal;
+                            guarded linked(@land-mammal) cow, cat;
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", "mammal1", "null"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(1), "equal", "mammal2", "null")
+            );
+        }
+
+        @Test
+        void reportsUnknownBlockType() {
+            assertGeneratesMessage(
+                    "Unknown linked block type specification '@land-mammal' (must use block type, e.g. '@memory-cell').",
+                    "linked(@land-mammal) cow, cat;");
+        }
+
+        @Test
+        void refusesInvalidBlockTypes() {
+            assertGeneratesMessage(
+                    "Invalid linked block type specification ('@mega' is not a block type).",
+                    "linked(@mega) a, b;");
+        }
+
+        @Test
+        void refusesLiteralLinkNames() {
+            assertGeneratesMessage(
+                    "Symbolic link name is required ('cell1' denotes a literal link name).",
+                    "linked(@message) foo, cell1;");
+        }
+
+        @Test
+        void refusesInitializedLinks() {
+            assertGeneratesMessage(
+                    "Initial value not supported for symbolic links.",
+                    "linked(@message) foo = message2;");
+        }
+
+        @Test
+        void reportsMultipleDeclarations() {
+            assertGeneratesMessage(
+                    "Multiple module declarations in one source file are not allowed.",
+                    "module a; module b;");
+        }
+    }
 }

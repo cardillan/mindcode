@@ -127,7 +127,10 @@ cell1, cell2: @memory-cell at (3, 5)
 
 creates a memory cell at coordinates (3, 5) and assigns labels `cell1` and `cell2` to it.
 
-Labels are useful for creating references to labeled blocks.
+Labels are useful for creating references to labeled blocks. As labels may be used directly as link names when specifying [processor links](#processor-links), it is often desirable to use a literal or symbolic link name for a block label. 
+
+> [!NOTE]
+> For more complex schematic, using [symbolic link names](#linking-by-a-symbolic-name) as labels is strongly recommended. Symbolic names can describe the function of the block in the schematic, and using them leaves the task of assigning literal link names to blocks in different processors to the compiler, simplifying the link management and maintenance significantly.    
 
 ## Block type
 
@@ -887,7 +890,9 @@ When the block label contains a dash character (`-`), only the part of the label
 used as a link name. The above example therefore links the switch to both processors as `switch1`, while each 
 message block is linked to separate processor as `message1`.
 
-#### Linking by name
+It is also possible to use patterns and prefixes together with [symbolic link names](#linking-by-a-symbolic-name), although this is typically not needed.
+
+#### Linking by a literal name
 
 Named links allow linking blocks to the processor directly using the block labels. It is possible to specify a link 
 name for the label; if it isn't specified, the label is used as a link name. Any prefix is stripped away again:
@@ -906,6 +911,36 @@ schematic
     a-message1:   @message at +(1, 0)
     b-message1:   @message at +(1, 0)
 end
+```
+
+#### Linking by a symbolic name
+
+Linking by a symbolic name works similarly to linking by a literal name, except the actual link names are assigned by the Mindcode compiler when compiling the code. This makes it much easier to link the same block to different processors using the same symbolic name, without having to readjust the link indexes in case a conflict arises.
+
+A symbolic link name corresponding to each linked block must be declared in the Mindcode source code so that the Mindcode compiler can assign the correct link names. When a corresponding symbolic link name is not declared in the Mindcode source, an error is generated, as the unresolved symbolic link name cannot be used to create the link in the schematic.  
+
+```
+schematic
+    @micro-processor at (0, 0) processor
+        links 
+            onOff                     // linked using symbolic link name "onOff"       
+            a-mainMessage             // linked using symbolic link name "mainMessage", prefix stripped
+            a-status as statusMessage // linked using symbolic link name "statusMessage"
+        end
+        mindcode = code
+    end
+    onOff:          @switch  at +(1, 0)
+    a-mainMessage:  @message at +(1, 0)
+    a-status:       @message at +(1, 0)
+end
+
+code = """
+    linked(@switch) onOff;
+    linked(@message) mainMessage, statusMessage;
+    
+    print("Symbolic link demo"); printflush(mainMessage);
+    print("The status is " + onOff.@enabled ? "on" : "off"); printflush(statusMessage);
+    """
 ```
 
 #### Linking by position
@@ -1072,15 +1107,15 @@ parametrize a common code shared between multiple processors, for example:
 ```
 schematic
     @micro-processor at (0, 0) processor
-        mindcode = "pos_x = 0; pos_y = 0; " + file "fractal.mnd"
+        mindcode = "const pos_x = 0, pos_y = 0; " + file "fractal.mnd"
     end
     @micro-processor at (0, 1) processor
-        mindcode = "pos_x = 100; pos_y = 100; " + file "fractal.mnd"
+        mindcode = "const pos_x = 100, pos_y = 100; " + file "fractal.mnd"
     end
 end
 ```
 
-It is assumed that the code stored in `fractal.mnd` uses the `pos_x` and `pos_y` variables, specifically the values 
+It is assumed that the code stored in `fractal.mnd` uses the `pos_x` and `pos_y` constants, specifically the values 
 assigned to them in the preceding code snippet.
 
 This feature may be especially useful for parametrizing Mindcode. Since the code for each processor is compiled 

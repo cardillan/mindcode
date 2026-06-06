@@ -21,9 +21,7 @@ import info.teksol.schemacode.schematics.SchematicsBuilder;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -156,15 +154,33 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                         l.getKey().toStringAbsolute(),
                         l.getValue().stream().map(Link::name).collect(Collectors.joining("', '"))));
 
+        // Gather expected link names
+        Map<String, String> schematicLinks = links.stream()
+                .collect(Collectors.toMap(Link::name, link -> getLinkBlockType(builder, link)));
+
+        Map<String, String> symbolicNameMap = new HashMap<>();
+        String mlog = convertToMlog(builder, processor, ProcessorType.fromBlockType(blockPos.blockType()), schematicLinks, symbolicNameMap);
+
+        // Translate names
+        links = links.stream().map(link -> link.withName(symbolicNameMap.getOrDefault(link.name(), link.name()))).toList();
+
+        // A set of names which were resolved by Mindcode and therefore have been type-checked already
+        Set<String> resolvedNames = new HashSet<>(symbolicNameMap.values());
+
         // Verify link names
         links.stream()
-                .filter(l -> !compatibleLinkName(builder, l))
+                .filter(l -> !resolvedNames.contains(l.name) && !compatibleLinkName(builder, l))
                 .forEachOrdered(l -> builder.error(processor, "Incompatible link name '%s' for block type '%s'.", l.name,
                         builder.getBlockPosition(l.position).blockType().name()));
 
-        String mlog = convertToMlog(builder, processor, ProcessorType.fromBlockType(blockPos.blockType()));
         return new ProcessorConfiguration(links, mlog);
     }
+
+    private static String getLinkBlockType(SchematicsBuilder builder, Link link) {
+        BlockPosition position = builder.getBlockPosition(link.position);
+        return position == null ? "" : position.blockType().name();
+    }
+
 
     private static boolean compatibleLinkName(SchematicsBuilder builder, Link link) {
         BlockPosition position = builder.getBlockPosition(link.position);
@@ -173,7 +189,8 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
         return link.name().startsWith(baseName) && link.name.substring(baseName.length()).matches("[1-9]\\d*");
     }
 
-    private static String convertToMlog(SchematicsBuilder builder, AstProcessor processor, ProcessorType type) {
+    private static String convertToMlog(SchematicsBuilder builder, AstProcessor processor, ProcessorType type,
+            Map<String, String> schematicLinks, Map<String, String> symbolicNameMap) {
         return switch (processor.language()) {
             case NONE -> "";
             case MLOG -> processor.program().getProgramText(builder);
@@ -193,11 +210,13 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                 MindcodeCompiler compiler = new MindcodeCompiler(messages::add,
                         compilerProfile.duplicate(true).setRun(false).setSchematicTarget(schematicTarget),
                         builder.getInputFiles());
+                compiler.setSchematicLinks(schematicLinks);
                 compiler.compile(fileToCompile);
+                symbolicNameMap.putAll(compiler.getSymbolicNameMap());
 
                 messages.forEach(builder::addMessage);
                 if (messages.stream().anyMatch(MindcodeMessage::isError)) {
-                    builder.error(processor, "Compile errors in Mindcode source code.");
+                    builder.error(processor.program(), "Compile errors in Mindcode source code.");
                     yield "";
                 }
 
@@ -225,6 +244,10 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
         public int compareTo(Link o) {
             int pos = position.compareTo(o.position);
             return pos == 0 ? name.compareTo(o.name) : pos;
+        }
+
+        Link withName(String name) {
+            return new Link(name, position);
         }
     }
 }

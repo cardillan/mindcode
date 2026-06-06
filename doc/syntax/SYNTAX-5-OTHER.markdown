@@ -1151,6 +1151,25 @@ Note on the `linked` category: when a block is linked into the processor, a vari
 
 The number of variables being sorted is limited by the [instruction limit](#option-instruction-limit). Should the resulting program size exceed the instruction limit, some or all variables will remain unordered.
 
+## Schematic creation
+
+Options that affect the way schematics are created.
+
+| Option                                                     | Scope  | Semantic stability |
+|------------------------------------------------------------|--------|--------------------|
+| [allow-unsatisfied-links](#option-allow-unsatisfied-links) | global | stable             |
+
+### Option `allow-unsatisfied-links`
+
+**Option scope: [global](#global-scope)**
+
+Specifies whether unsatisfied links are allowed when creating schematics. Possible values are:
+
+* `false` (the default value): unsatisfied links cause build errors.
+* `true` (or omitted): unsatisfied links are allowed and reported as warnings.
+
+An unsatisfied link is a literal or symbolic link name declared in Mindcode, which doesn't have a corrsponding link set up in the enclosing processor's configuration in the schematic.  
+
 ## Emulator options
 
 Options to specify whether and how to run the code or schematic in an emulated environment. The emulated

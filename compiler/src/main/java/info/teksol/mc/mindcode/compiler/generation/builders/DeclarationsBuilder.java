@@ -14,11 +14,13 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.opcodes.KeywordCategory;
 import info.teksol.mc.profile.SyntacticMode;
 import info.teksol.mc.profile.options.Target;
 import info.teksol.mc.util.StringUtils;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -513,10 +515,10 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         LogicVariable variable;
 
         if (specification.getExpressions().isEmpty()) {
-            variable = variables.createLinkedVariable(specification.getIdentifier(), specification.getIdentifier());
+            variable = variables.createLinkedVariable(specification.getIdentifier(), modifiers, specification.getIdentifier());
         } else if (specification.getExpressions().size() == 1) {
             if (specification.getExpressions().getFirst() instanceof AstIdentifier linkedTo) {
-                variable = variables.createLinkedVariable(specification.getIdentifier(), linkedTo);
+                variable = variables.createLinkedVariable(specification.getIdentifier(), modifiers, linkedTo);
             } else {
                 error(specification.getExpressions().getFirst(), ERR.IDENTIFIER_EXPECTED);
                 compile(specification.getExpressions().getFirst());
@@ -604,8 +606,29 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             case AstMlogParameters param -> new ModifierParametrization<>(modifier,
                     new MlogSpecification(resolveMlogNames(param.getMlogNames())));
 
-            case null, default ->  new ModifierParametrization<>(modifier, null);
+            case AstLinkedParameters param -> new ModifierParametrization<>(modifier,
+                    resolveSymbolicLinkType(param.getType()));
+
+            case null ->  new ModifierParametrization<>(modifier, null);
+
+            default -> throw new MindcodeInternalError("Unhandled parametrization: " + modifier.getParametrization());
         };
+    }
+
+    private @Nullable String resolveSymbolicLinkType(@Nullable AstBuiltInIdentifier identifier) {
+        if (identifier == null) return null;
+
+        String typeName = identifier.getName();
+        String blockName = BlockType.getBaseLinkName(typeName);
+        if (!processor.isBaseBlockName(blockName)) {
+            if (processor.isValidBuiltIn(typeName)) {
+                error(identifier, ERR.INVALID_LINKED_TYPE_SPEC, typeName);
+            } else {
+                warn(identifier, WARN.LINKED_UNKNOWN_TYPE_SPEC, typeName);
+            }
+        }
+
+        return typeName;
     }
 
     private List<LogicArgument> resolveMlogNames(List<AstExpression> mlogNames) {
