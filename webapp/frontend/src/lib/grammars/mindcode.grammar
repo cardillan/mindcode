@@ -161,7 +161,7 @@ declarationModifier {
   kw<"export"> ~sharedModifier |
   kw<"external"> ("(" Identifier ("[" expression "]")? ")")? |
   kw<"guarded"> |
-  kw<"linked"> |
+  kw<"linked"> ("(" Identifier ")")? |
   kw<"mlog"> "(" commaSep<expression ~mlogAmbig> ")" |
   kw<"noinit"> |
   kw<"remote"> ~sharedModifier ("(" Identifier? ")")? |
