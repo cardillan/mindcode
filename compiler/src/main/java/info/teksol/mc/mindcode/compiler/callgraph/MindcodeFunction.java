@@ -51,6 +51,8 @@ public class MindcodeFunction {
     private LogicVariable fnRetAddr = LogicVariable.INVALID;
     private LogicVariable fnFinished = LogicVariable.INVALID;
 
+    private final Map<String, SourcePosition> unresolvedGlobals;
+
     /// Index of the function in the remote call dispatch table
     /// The dispatch table starts at index 1.
     private int remoteIndex = 0;
@@ -95,6 +97,7 @@ public class MindcodeFunction {
         this.module = Objects.requireNonNull(module);
         this.entryPoint = entryPoint;
         parameterCount = declaration.getParameterCount();
+        unresolvedGlobals = new HashMap<>();
     }
 
     private MindcodeFunction(NameCreator nameCreator, MindcodeFunction other) {
@@ -106,6 +109,7 @@ public class MindcodeFunction {
         placementCount = other.placementCount;
         visited = other.visited;
         copyNumber = other.copyNumber;
+        unresolvedGlobals = other.unresolvedGlobals;
         inlined = true;
 
         functionCalls.addAll(other.functionCalls);
@@ -121,6 +125,22 @@ public class MindcodeFunction {
     /// Prepares an inlined function for call (by setting up a prefix for it)
     public MindcodeFunction prepareInlinedForCall(NameCreator nameCreator) {
         return new MindcodeFunction(nameCreator, this);
+    }
+
+    public void addUnresolvedGlobals(Set<String> unresolvedGlobals, SourcePosition sourcePosition) {
+        unresolvedGlobals.forEach(name -> this.unresolvedGlobals.putIfAbsent(name, sourcePosition));
+    }
+
+    public Map<String, SourcePosition> getUnresolvedGlobals() {
+        return unresolvedGlobals;
+    }
+
+    public void putUnresolvedGlobals(Map<String, SourcePosition> unresolvedGlobals) {
+        this.unresolvedGlobals.putAll(unresolvedGlobals);
+    }
+
+    public SourcePosition testUnresolvedGlobal(String name) {
+        return unresolvedGlobals.remove(name);
     }
 
     public int nextCopyNumber() {

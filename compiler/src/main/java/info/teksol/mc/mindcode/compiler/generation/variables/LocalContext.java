@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
@@ -117,8 +118,18 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
     }
 
     @Override
+    public boolean isLocal() {
+        return true;
+    }
+
+    @Override
     public MindcodeFunction function() {
         return function;
+    }
+
+    @Override
+    public @Nullable SourcePosition testUnresolvedGlobal(String name) {
+        return function.testUnresolvedGlobal(name);
     }
 
     @Override

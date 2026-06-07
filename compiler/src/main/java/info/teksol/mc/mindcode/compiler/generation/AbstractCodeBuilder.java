@@ -134,6 +134,10 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
         codeGenerator.exitFunction(function);
     }
 
+    public MindcodeFunction currentFunction() {
+        return codeGenerator.currentFunction();
+    }
+
     /// Enters an atomic block. Returns true if this is a nested atomic block.
     protected boolean enterAtomicBlock() {
         return codeGenerator.enterAtomicBlock();

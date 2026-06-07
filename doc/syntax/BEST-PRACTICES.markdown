@@ -4,6 +4,17 @@ This document contains some tips on writing a better-performing code in Mindcode
 
 As Mindcode undergoes development, the beast practices may change as new versions are released. Significant changes to the best practices are therefore described here.
 
+## Mindcode 3.17
+
+Mindcode 3.17 introduces a new feature: symbolic names for schematic links. Instead of assigning literal link names to processor links in Schemacode, which then need to be used in the corresponding processor's code, Mindcode 3.17 allows assigning symbolic names to links, both [in Schemacode](SCHEMACODE.markdown#linking-by-a-symbolic-name) and [in Mindcode](SYNTAX-1-VARIABLES.markdown#symbolic-link-names). Using symbolic link names is strongly suggested, as it brings the following benefits:
+
+* A well-chosen symbolic block name carries additional information about the purpose or meaning of the block.
+* The chosen symbolic link name is the same in Schemacode and Mindcode, allowing to easily find all references to the given block in a more complex code-base.
+* Literal link names are assigned by the Mindcode compiler, using numerical indexes starting at one without any gaps, avoiding potential link mixup when the schematic is built due to an existing (at the time of this writing) [Mindustry bug](https://github.com/Anuken/Mindustry/issues/12185).
+* Symbolic link names avoid the need to manually handle different indexes assigned to the same block in different processors, or to link all blocks to all processors trying to keep a consistent naming convention while avoiding the aforementioned bug.
+
+For a complex schematic using symbolic link names to a great benefit, see the [Base Builder project](https://github.com/cardillan/golem/tree/main/base-builder#base-builder).
+
 ## Mindcode 3.11
 
 The most important change in the 3.11 release comes with the ability to short-circuit boolean expressions and some other related changes to the handling of boolean expressions.
@@ -74,7 +85,7 @@ Mindcode provides an [option](SYNTAX-5-OTHER.markdown#option-symbolic-labels) fo
 
 # The `case` expressions
 
-Mindcode provides a very powerful optimization for `case` expressions, in case where all the `when` values are either integer constants, or constant Mindustry objects of the same type (blocks, items, etc.).
+Mindcode provides a very powerful optimization for `case` expressions, if all the `when` values are either integer constants, or constant Mindustry objects of the same type (blocks, items, etc.).
 
 As an extreme example, in target `8.0` or higher Mindcode may be capable of converting the entire case expression into a single instruction:
 
@@ -571,7 +582,7 @@ The long-term goal is to produce identical, optimal code in both of these cases.
 
 ## Arrays in non-unrolled loops
 
-When the loop cannot get unrolled for some reason, list iteration loops are generally a little faster than loops using index-based array access. When more than a single variable is used, or when the array is modified in the loop, list iteration loops provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space.  
+When the loop cannot get unrolled for some reason, list iteration loops are generally a little faster than loops using index-based array access. When more than one loop variable is used, or when the array is modified in the loop, list iteration loops may provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space.  
 
 Example of simple array access:
 

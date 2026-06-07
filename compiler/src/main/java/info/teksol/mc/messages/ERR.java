@@ -206,6 +206,7 @@ public class ERR {
     public static final String SUBARRAY_MUTABLE_RANGE = "Subarray specification must use constant range.";
     public static final String SUBARRAY_NON_INTEGER_RANGE = "Subarray specification must use integer range.";
     public static final String UNDEFINED_LABEL = "Undefined label '%s'.";
+    public static final String UNRESOLVED_GLOBAL = "This function call may execute code accessing a global variable or constant '%s', which has not been created yet.";
     public static final String UNSATISFIED_LINK = "No block is linked to the processor as '%s' in the schematic definition.";
     public static final String UNSUPPORTED_LINK_NAME = "Symbolic link name is required ('%s' denotes a literal link name).";
     public static final String UNSUPPORTED_INITIAL_LINK_VALUE = "Initial value not supported for symbolic links.";

@@ -8,11 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed the schemacode action not producing the log file when requested by a command-line argument.   
+* Fixed the schemacode action not producing the log file when requested by a command-line argument.
 
 ### Added
 
 * Added support for symbolic link names (affects both [Mindcode](/doc/syntax/SYNTAX-1-VARIABLES.markdown#symbolic-link-names) and [Schemacode](/doc/syntax/SCHEMACODE.markdown#linking-by-a-symbolic-name)). Makes handling links in complex schematics much easier ([#284](https://github.com/cardillan/mindcode/issues/284)).
+* Added an error message indicating a variable or constant might be accessed via function call before its declaration gets processed ([#297](https://github.com/cardillan/mindcode/issues/297)).
 
 ## 3.16.3 – 2026-06-02
 
@@ -96,7 +97,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## 3.15.0 – 2026-02-22
 
 > [!NOTE]
-> [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in Minddustry build 155 Beta or later.
+> [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in Mindustry build 155 Beta or later.
 
 > [!NOTE]
 > The new [Mlog Watcher functionality](doc/syntax/TOOLS-MLOG-WATCHER.markdown) available with the tool app requires a new version of the Mlog Watcher mod. The new version has not yet been released, but a Mindustry 8-compatible binary is available [here](https://github.com/Sharlottes/MlogWatcher/actions/runs/21562595822). To use that version, the `--watcher-version v1` command line argument must be specified.

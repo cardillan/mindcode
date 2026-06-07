@@ -180,7 +180,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             error(node.getName(), ERR.VARIABLE_NAME_RESERVED_FOR_LINKS, node.getParameterName());
         }
 
-        ValueStore valueStore = evaluate(node.getValue());
+        ValueStore valueStore = processInLocalScope(() -> evaluate(node.getValue()));
         LogicValue parameterValue;
         if (valueStore instanceof IntermediateValue value) {
             error(node, ERR.LITERAL_NO_VALID_REPRESENTATION_PARAM,
@@ -195,6 +195,8 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
         ValueStore parameter = variables.createParameter(node, parameterValue);
         parameter.setValue(assembler, parameterValue);
+
+        variables.removeUnresolvedGlobal(node.getParameterName());
         return LogicVoid.VOID;
     }
 
@@ -246,6 +248,8 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             } else {
                 processVariable(specification, modifiers);
             }
+
+            variables.removeUnresolvedGlobal(specification.getName());
         }
 
         return LogicVoid.VOID;

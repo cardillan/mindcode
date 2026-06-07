@@ -16,6 +16,7 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.profile.GlobalCompilerProfile;
+import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -56,6 +57,8 @@ public class Variables extends CompilerMessageEmitter {
 
     private HeapTracker heapTracker;
 
+    private final Set<String> unresolvedGlobals = new HashSet<>();
+
     public Variables(VariablesContext context) {
         super(context.messageConsumer());
         globalProfile = context.globalCompilerProfile();
@@ -68,6 +71,18 @@ public class Variables extends CompilerMessageEmitter {
         putVariable("@@TARGET_MAJOR", LogicNumber.create(globalProfile.getProcessorVersion().major));
         putVariable("@@TARGET_MINOR", LogicNumber.create(globalProfile.getProcessorVersion().minor));
         putVariable("@@PROCESSOR_TYPE", LogicString.create(globalProfile.getProcessorType().code()));
+    }
+
+    public void addUnresolvedGlobal(String name) {
+        unresolvedGlobals.add(name);
+    }
+
+    public void removeUnresolvedGlobal(String name) {
+        unresolvedGlobals.remove(name);
+    }
+
+    public Set<String> getUnresolvedGlobals() {
+        return unresolvedGlobals;
     }
 
     public NameCreator nameCreator() {
@@ -98,11 +113,11 @@ public class Variables extends CompilerMessageEmitter {
         return functionContext.getVarargs();
     }
 
-    private boolean isGlobalVariable(AstIdentifier identifier) {
+    private boolean isGlobalVariableName(AstIdentifier identifier) {
         return identifier.isExternal() || processor.isGlobalName(identifier.getName());
     }
 
-    private boolean isLinkedVariable(AstIdentifier identifier) {
+    private boolean isLinkedVariableName(AstIdentifier identifier) {
         return processor.isBlockName(identifier.getName());
     }
 
@@ -161,10 +176,10 @@ public class Variables extends CompilerMessageEmitter {
     private ValueStore createImplicitVariable(AstIdentifier identifier) {
         if (identifier.isExternal()) {
             return registerGlobalVariable(identifier, heapTracker.createVariable(identifier, Modifiers.EMPTY));
-        } else if (isLinkedVariable(identifier)) {
+        } else if (isLinkedVariableName(identifier)) {
             validateExpectedLinkName(identifier);
             return registerGlobalVariable(identifier, LogicVariable.block(identifier));
-        } else if (isGlobalVariable(identifier)) {
+        } else if (isGlobalVariableName(identifier)) {
             return registerGlobalVariable(identifier, LogicVariable.global(identifier, nameCreator.global(identifier.getName())));
         } else {
             return verifyMlogConflicts(functionContext.registerFunctionVariable(identifier,
@@ -189,7 +204,7 @@ public class Variables extends CompilerMessageEmitter {
     /// @param value value assigned to the parameter
     /// @return ValueStore instance representing the parameter's variable
     public ValueStore createParameter(AstParameter parameter, LogicValue value) {
-        ValueStore result = verifyGlobalDeclaration(parameter, parameter.getName())
+        ValueStore result = verifyGlobalDeclaration(parameter.getName(), parameter.getName())
                 ? LogicParameter.parameter(parameter.getName(), value)
                 : LogicParameter.parameter(new AstIdentifier(SourcePosition.EMPTY, "invalid"), value);
 
@@ -241,7 +256,7 @@ public class Variables extends CompilerMessageEmitter {
         } else {
             linkedName = linkedTo.getName();
 
-            if (!isLinkedVariable(linkedTo)) {
+            if (!isLinkedVariableName(linkedTo)) {
                 warn(linkedTo, WARN.LINKED_VARIABLE_NOT_RECOGNIZED, linkedName);
             }
         }
@@ -379,7 +394,16 @@ public class Variables extends CompilerMessageEmitter {
         // Look for local variables first
         if (local && functionContext.variables().containsKey(identifier.getName())) {
             return Objects.requireNonNull(functionContext.variables().get(identifier.getName()));
-        } else if (globalVariables.containsKey(identifier.getName())) {
+        }
+
+        // Verify undeclared global access
+        SourcePosition callPosition = functionContext.testUnresolvedGlobal(identifier.getName());
+        if (callPosition != null) {
+            reportedErrors.add(identifier);
+            error(callPosition, ERR.UNRESOLVED_GLOBAL, identifier.getName());
+        }
+
+        if (globalVariables.containsKey(identifier.getName())) {
             return Objects.requireNonNull(globalVariables.get(identifier.getName()));
         }
 
@@ -389,7 +413,7 @@ public class Variables extends CompilerMessageEmitter {
             return LogicNull.NULL;
         }
 
-        if (allowUndeclaredLinks && isLinkedVariable(identifier)) {
+        if (allowUndeclaredLinks && isLinkedVariableName(identifier)) {
             validateExpectedLinkName(identifier);
             return registerGlobalVariable(identifier, LogicVariable.block(identifier));
         }
@@ -401,7 +425,8 @@ public class Variables extends CompilerMessageEmitter {
             }
         }
 
-        return createImplicitVariable(identifier);
+        return identifier.getProfile().getSyntacticMode() == SyntacticMode.STRICT
+                ? LogicVariable.INVALID : createImplicitVariable(identifier);
     }
 
     /// Tries to find a variable among declared variables (local, then global). Returns null when not found.

@@ -149,6 +149,10 @@ public class CodeGenerator extends CompilerMessageEmitter {
         nested--;
     }
 
+    protected MindcodeFunction currentFunction() {
+        return variables.currentFunction();
+    }
+
     /// Enters an atomic block. Returns true if this is a nested atomic block.
     protected boolean enterAtomicBlock() {
         return nestedAtomic++ > 0;

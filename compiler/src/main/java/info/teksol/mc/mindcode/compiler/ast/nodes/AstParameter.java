@@ -19,6 +19,11 @@ public class AstParameter extends AstDeclaration {
         this.value = value;
     }
 
+    @Override
+    public AstNodeScope getScope() {
+        return AstNodeScope.NONE;
+    }
+
     public AstIdentifier getName() {
         return name;
     }

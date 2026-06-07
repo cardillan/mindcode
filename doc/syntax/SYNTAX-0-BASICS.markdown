@@ -2,11 +2,35 @@
 
 ## Program structure
 
-Mindcode program is a sequence of expressions and statements. Semicolons separate statements and expressions, as in `a = 5; b = 10;`. Expressions have a value: `1 + 2` is an expression whose value is `3`. Whitespace (spaces, tabs, new-line characters) serves to separate individual _tokens_: keywords, identifiers, operators, and so on, but is otherwise ignored, as well as indentation.
+Mindcode program is a sequence of declarations, expressions, and statements. Semicolons separate declarations, statements, and expressions, as in `a = 5; b = 10;`. Expressions have a value: `1 + 2` is an expression whose value is `3`. Whitespace (spaces, tabs, new-line characters) serves to separate individual _tokens_: keywords, identifiers, operators, and so on, but is otherwise ignored, as well as indentation.
 
 Mindcode identifiers and keywords are case-sensitive -- `if` is different from `If` (first is a keyword, the second is not and could be used as a variable or function name).
 
 A text enclosed between `/*` and `*/` is a comment that can span several lines. Additionally, anything following a `//` is a comment till the end of the line. Comments are completely ignored by Mindcode.
+
+Some declarations (such as function declarations or some compiler options) may only appear at the top-level of the program, i.e., must not be nested inside functions or code blocks.
+
+[Function declarations](SYNTAX-4-FUNCTIONS.markdown#user-defined-functions) may appear in any order and may be called from a place in the source code which precedes their definition. [Global variables and constants](SYNTAX-1-VARIABLES.markdown#mindcode-variables), as well as [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters), must be declared before their first use. If a function call accesses a global variable which has not been declared yet, the compiler generates an error, even if the function being called does not precede the declaration of the variable. Example:
+
+```Mindcode
+increase(5);
+
+var level = 0;
+
+def increase(amount)
+    level += amount;
+    println("Current level: $level");
+    printflush(message1);
+end;
+```
+
+This program generates the following error:
+
+```
+This function call may execute code accessing a global variable or constant 'level', which has not been created yet.
+```
+
+To resolvethis error, move the declaration of the `level` variable in front of the function call.
 
 ### Modules
 

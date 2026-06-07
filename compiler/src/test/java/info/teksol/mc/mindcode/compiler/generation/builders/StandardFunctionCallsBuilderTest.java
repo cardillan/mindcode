@@ -474,6 +474,41 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(in x);
                             """);
         }
+
+        @Test
+        void reportsUnresolvedGlobalsRelaxed() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("This function call may execute code accessing a global variable or constant 'COUNT', which has not been created yet.")
+                            .add("Multiple declarations of 'COUNT'."),
+                    """
+                            foo();
+                            var COUNT;
+                            inline def foo()
+                                bar();
+                            end;
+                            inline def bar()
+                                print(++COUNT);
+                            end;
+                            """);
+        }
+
+        @Test
+        void reportsUnresolvedGlobalsStrict() {
+            assertGeneratesMessage("This function call may execute code accessing a global variable or constant 'COUNT', which has not been created yet.",
+                    """
+                            #set syntax = strict;
+                            begin
+                                foo();
+                            end;
+                            var COUNT;
+                            inline def foo()
+                                bar();
+                            end;
+                            inline def bar()
+                                print(++COUNT);
+                            end;
+                            """);
+        }
     }
 
     @Nested

@@ -77,6 +77,11 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             // Exactly one match by name: process the function
             // If it was a loose match, the call will provide detailed error messages on argument mismatches
             MindcodeFunction function = matches.getFirst();
+            function.addUnresolvedGlobals(variables.getUnresolvedGlobals(), call.sourcePosition());
+            if (isLocalContext()) {
+                // Inherit unresolved globals from the outer function call
+                function.putUnresolvedGlobals(currentFunction().getUnresolvedGlobals());
+            }
             boolean active = assembler.isActive();
             if (function.isDebug() && !call.getProfile().isDebug()) {
                 assembler.setActive(false);

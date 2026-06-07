@@ -12,22 +12,26 @@ Changes intended for the next regular release.
 
 **Done**
 
-**Doing**
-
 * Symbolic link names
+* Exporting schematics to Mlog Watcher from the web app.
+* Detect unused variables/constants/functions from AST analysis and report them as warnings.
+
+* **Doing**
+
 
 * **Planned**
 
-* Detect unused variables/constants/functions from AST analysis and report them as warnings.
-* If expression telescoping optimization
-* Array code injection optimization
 * Converting arrays to const arrays when possible
+* Array code injection optimization
+* If expression telescoping optimization
 * Function argument substitution: when all function calls take the same argument, the argument may be substituted. If the argument is a variable, the following may happen:
   * the argument is a global variable: no substitution
   * the argument is a local variable:
     * `in` parameter: if the function does not modify the parameter, substitute.
     * `out` parameter: if the function always writes a value to the parameter, substitute.
     * `in out` parameter: always substitute.
+* Internal stack
+* Local arrays
 
 ## Next releases
 

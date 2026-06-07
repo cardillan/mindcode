@@ -24,24 +24,30 @@ public class DeclarationsProcessor extends CompilerMessageEmitter {
     }
 
     private void processDeclarations() {
-        visitNode(program);
+        visit(program);
     }
 
-    private void visitNode(AstMindcodeNode nodeToVisit) {
+    private void visit(AstMindcodeNode node) {
         // We don't enter a local scope at all, therefore, we only ever process the global scope
-        if (nodeToVisit.getScope() == AstNodeScope.LOCAL) {
-            return;
+        // Do not process code from remote modules
+        if (node.getScope() == AstNodeScope.LOCAL || node instanceof AstModule module && !module.getRemoteProcessors().isEmpty()) return;
+
+        if (node instanceof AstParameter parameter) {
+            variables.addUnresolvedGlobal(parameter.getParameterName());
         }
 
-        if (nodeToVisit instanceof AstVariablesDeclaration declaration
-                && declaration.getModifiers().stream().map(AstVariableModifier::getModifier).anyMatch(LINKED_MODIFIERS::contains)) {
-            declaration.getVariables().forEach(this::processVariableSpecification);
+        if (node instanceof AstVariablesDeclaration declaration) {
+            declaration.getVariables().stream().map(AstVariableSpecification::getName).forEach(variables::addUnresolvedGlobal);
+
+            if (declaration.getModifiers().stream().map(AstVariableModifier::getModifier).anyMatch(LINKED_MODIFIERS::contains)) {
+                declaration.getVariables().forEach(this::processLinkedVariableSpecification);
+            }
         }
 
-        nodeToVisit.getChildren().forEach(this::visitNode);
+        node.getChildren().forEach(this::visit);
     }
 
-    private void processVariableSpecification(AstVariableSpecification specification) {
+    private void processLinkedVariableSpecification(AstVariableSpecification specification) {
         if (specification.getExpressions().isEmpty()) {
             variables.addLinkedName(specification.getName());
         } else {

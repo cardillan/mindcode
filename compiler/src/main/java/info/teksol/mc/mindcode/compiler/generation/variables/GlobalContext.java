@@ -1,11 +1,13 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,8 +22,18 @@ public class GlobalContext implements FunctionContext {
     }
 
     @Override
+    public boolean isLocal() {
+        return false;
+    }
+
+    @Override
     public MindcodeFunction function() {
         throw new MindcodeInternalError("Function not available in global context");
+    }
+
+    @Override
+    public @Nullable SourcePosition testUnresolvedGlobal(String name) {
+        return null;
     }
 
     @Override
