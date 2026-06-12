@@ -31,7 +31,7 @@ public record AstConnection(SourcePosition sourcePosition, @Nullable AstCoordina
         if (position != null) {
             return position.evaluate(builder, lastPosition);
         } else {
-            return builder.getBlockPosition(this, id).position();
+            return builder.getBlockPosition(this, id);
         }
     }
 

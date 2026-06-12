@@ -25,6 +25,10 @@ public class AstIdentifier extends AstExpression implements AstNamedElement, Com
         this.external = external;
     }
 
+    public AstIdentifier withName(String name) {
+        return new AstIdentifier(sourcePosition(), name, external);
+    }
+
     public boolean isIntrinsic() {
         return name.startsWith("@@");
     }

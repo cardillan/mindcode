@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 public class Samples {
 
+    // TODO: load the list of samples from the json file
     public static Map<String, Sample> loadMindcodeSamples() {
         final List<String> sampleNames = List.of(
                 "control-multiple-units",
@@ -27,6 +28,7 @@ public class Samples {
                 .collect(Collectors.toMap(Sample::name, s -> s));
     }
 
+    // TODO: load the list of samples from the json file
     public static Map<String, Sample> loadSchemacodeSamples() {
         final List<String> sampleNames = List.of(
                 "detector",
@@ -38,7 +40,7 @@ public class Samples {
                 "scrap-to-metaglass-2",
                 "item-transport",
                 "payload-hub",
-                "slow:mandelbrot-generator"
+                "slow:mandelbrot-generator-8"
         );
 
         return sampleNames.stream().map(Samples::loadSchemacodeSample)

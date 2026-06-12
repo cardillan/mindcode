@@ -19,10 +19,12 @@ import info.teksol.mc.mindcode.logic.opcodes.KeywordCategory;
 import info.teksol.mc.profile.SyntacticMode;
 import info.teksol.mc.profile.options.Target;
 import info.teksol.mc.util.StringUtils;
+import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.compiler.Modifier.*;
@@ -239,7 +241,9 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                 // Report error and do nothing
                 error(specification.getIdentifier(), ERR.VARIABLE_INTRINSIC_IDENTIFIER, specification.getName());
             } else if (specification.isArray()) {
-                node.getModifiers().forEach(this::validateArrayModifiers);
+                Consumer<AstVariableModifier> validator = modifiers.contains(LINKED)
+                        ? this::validateLinkedArrayModifiers : this::validateRegularArrayModifiers;
+                node.getModifiers().forEach(validator);
                 if (isLocalContext()) {
                     error(specification, ERR.ARRAY_LOCAL);
                 }
@@ -257,7 +261,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
     private void initializeRemoteProcessors(AstRequire node) {
         verifyMinimalRemoteTarget(node);
-        boolean reportRemoteErrors = true;
 
         // Assign remote function indexes
         AstModule module = getModule(node);
@@ -270,14 +273,13 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
         int index = 0;
         for (AstIdentifier identifier : node.getProcessors()) {
-            LogicVariable processor = processors.get(index++);
+            LogicVariable processor = processors.get(index);
 
             // Processor members
             Map<String, ValueStore> members = callGraph.getFunctions().stream()
                     .filter(f -> f.getModule() == module)
                     .collect(Collectors.toMap(MindcodeFunction::getName, f -> createFunctionOutputs(f, processor)));
-            createRemoteVariables(module, processor, node.getProcessors().size() > 1, reportRemoteErrors, members);
-            reportRemoteErrors = false;
+            createRemoteVariables(module, processor, node.getProcessors().size() > 1, index == 0, members);
 
             StructuredValueStore processorStructure = new StructuredValueStore(identifier.sourcePosition(), processor, identifier.getName(), members);
             variables.registerStructuredVariable(identifier, processorStructure);
@@ -290,6 +292,8 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                 assembler.createRead(tmp, processor, initializedName);
                 assembler.createJump(label, Condition.NOT_EQUAL, tmp, LogicString.create(remoteSignature));
             }
+
+            index++;
         }
     }
 
@@ -330,7 +334,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             String name = identifier.getName();
 
             if (specification.isArray()) {
-                node.getModifiers().forEach(this::validateArrayModifiers);
+                node.getModifiers().forEach(this::validateRemoteArrayModifiers);
                 if (isLocalContext()) {
                     error(specification, ERR.ARRAY_LOCAL);
                 }
@@ -364,64 +368,67 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         }
     }
 
-    private int getArraySize(AstVariableSpecification specification, Modifiers modifiers, boolean reportArrayErrors) {
-        int declaredSize = getDeclaredArraySize(specification, modifiers);
-        int initialSize = specification.getExpressions().size();
-
-        if (declaredSize > 0 && initialSize > 0) {
-            if (reportArrayErrors && initialSize != declaredSize) {
-                error(specification, ERR.ARRAY_SIZE_MISMATCH);
-            }
-            declaredSize = initialSize;
-        } else if (reportArrayErrors && declaredSize < 0 && initialSize == 0) {
-            error(specification, ERR.ARRAY_SIZE_NOT_SPECIFIED);
-        }
-
-        if (declaredSize <= 0) {
-            declaredSize = initialSize;
-        }
-
-        return declaredSize;
+    private boolean containsRange(List<AstExpression> expressions) {
+        return expressions.stream().anyMatch(AstRange.class::isInstance);
     }
 
-    private void processArray(AstVariableSpecification specification, Modifiers modifiers) {
-        int declaredSize = getArraySize(specification, modifiers, true);
-        int initialSize = specification.getExpressions().size();
-
-        List<ValueStore> initialValues = specification.getExpressions().stream()
-                .map(node -> processInLocalScope(() -> evaluate(node)))
-                .toList();
-
-        if (modifiers.contains(CONST)) {
-            if (initialValues.isEmpty()) {
-                error(specification, ERR.ARRAY_CONST_NOT_INITIALIZED);
-            }
-
-            initialValues.stream().filter(v -> !(v instanceof LogicValue value && isNonvolatileConstant(value)))
-                    .forEach(v -> error(v, ERR.ARRAY_CONST_NOT_CONSTANT));
-        }
-
-        ArrayStore array = variables.createArray(specification.getIdentifier(), modifiers, declaredSize, initialValues);
-
-        if (!modifiers.contains(CONST)) {
-            for (int i = 0; i < initialSize; i++) {
-                array.getElements().get(i).setValue(assembler, initialValues.get(i).getValue(assembler));
-            }
-
-            if (modifiers.containsAny(EXPORT, VOLATILE)) {
-                array.getElements().stream()
-                        .filter(LogicVariable.class::isInstance)
-                        .map(LogicVariable.class::cast)
-                        .forEach(context::addForcedVariable);
-            }
-        }
+    private @Nullable AstIdentifier getLinkIdentifier(AstExpression expression, boolean reportErrors) {
+        if (expression instanceof AstIdentifier identifier) return identifier;
+        if (reportErrors) error(expression, ERR.LINK_EXPECTED);
+        return null;
     }
 
-    private void validateArrayModifiers(AstVariableModifier element) {
-        switch (element.getModifier()) {
-            case CACHED, GUARDED, LINKED, NOINIT -> error(element,
-                    ERR.ARRAY_UNSUPPORTED_MODIFIER, element.getModifier().keyword());
+    private @Nullable Tuple2<String, Integer> extractIndex(@Nullable AstIdentifier identifier) {
+        if (identifier == null) return null;
+
+        String name = identifier.getName();
+        int index = name.length();
+        while (index > 0 && Character.isDigit(name.charAt(index - 1))) index--;
+
+        if (index > 0 && index < name.length()) {
+            String base = name.substring(0, index);
+            String number = name.substring(index);
+
+            if (!number.startsWith("0")) {
+                try {
+                    // All is okay here: the parsed number can't be zero or negative
+                    return new Tuple2<>(base, Integer.parseInt(number));
+                } catch (NumberFormatException ex) {
+                    // Ignore - will be reported as the link error
+                }
+            }
         }
+
+        error(identifier, ERR.LINK_EXPECTED);
+        return null;
+    }
+
+    private List<AstIdentifier> createLinkedIdentifiersList(AstVariableSpecification specification, boolean reportErrors) {
+        if (specification.getExpressions().size() != 1 || !(specification.getExpressions().getFirst() instanceof AstRange range)) {
+            throw new MindcodeInternalError("A single range is expected.");
+        }
+
+        AstIdentifier firstId = getLinkIdentifier(range.getFirstValue(), reportErrors);
+        AstIdentifier lastId = getLinkIdentifier(range.getLastValue(), reportErrors);
+        Tuple2<String, Integer> first = extractIndex(firstId);
+        Tuple2<String, Integer> last = extractIndex(lastId);
+        if (first == null || last == null) return List.of();  // Error already reported
+
+        if (first.e1().equals(last.e1())) {
+            String base = first.e1();
+            int start = first.e2();
+            int end = last.e2() - (range.isExclusive() ? 1 : 0);
+            if (start <= end) {
+                List<AstIdentifier> list = new ArrayList<>(end - start + 1);
+                for (int i = start; i <= end; i++) {
+                    list.add((i < end ? firstId : lastId).withName(base + i));
+                }
+                return list;
+            }
+        }
+
+        if (reportErrors) error(specification.getExpressions().getFirst(), ERR.ARRAY_LINKED_INVALID_RANGE);
+        return List.of();
     }
 
     private int getDeclaredArraySize(AstVariableSpecification specification, Modifiers modifiers) {
@@ -445,6 +452,111 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
         // Error
         return 0;
+    }
+
+    private int getInitialArraySize(AstVariableSpecification specification) {
+        return containsRange(specification.getExpressions())
+                ? createLinkedIdentifiersList(specification, true).size()
+                : specification.getExpressions().size();
+    }
+
+    private int getArraySize(AstVariableSpecification specification, Modifiers modifiers, boolean reportArrayErrors) {
+        int declaredSize = getDeclaredArraySize(specification, modifiers);
+        int initialSize = getInitialArraySize(specification);
+
+        if (declaredSize > 0 && initialSize > 0) {
+            if (reportArrayErrors && initialSize != declaredSize) {
+                error(specification, ERR.ARRAY_SIZE_MISMATCH);
+            }
+            declaredSize = initialSize;
+        } else if (reportArrayErrors && declaredSize < 0 && initialSize == 0) {
+            error(specification, ERR.ARRAY_SIZE_NOT_SPECIFIED);
+        }
+
+        if (declaredSize <= 0) {
+            declaredSize = initialSize;
+        }
+
+        return declaredSize;
+    }
+
+    private void processArray(AstVariableSpecification specification, Modifiers modifiers) {
+        int declaredSize = getArraySize(specification, modifiers, true);
+
+        List<ValueStore> initialValues = containsRange(specification.getExpressions())
+                ? createLinkedIdentifiersList(specification, false).stream()
+                .map(identifier -> (ValueStore) variables.createLinkedVariable(identifier, modifiers, identifier))
+                .toList()
+                : specification.getExpressions().stream()
+                .map(node -> processInLocalScope(() -> evaluate(node)))
+                .toList();
+
+        int initialSize = initialValues.size();
+
+
+        if (modifiers.contains(CONST)) {
+            if (specification.getExpressions().isEmpty()) {
+                error(specification, ERR.ARRAY_CONST_NOT_INITIALIZED);
+            } else {
+                for (int i = 0; i < initialValues.size(); i++) {
+                    ValueStore value = initialValues.get(i);
+                    if (!(value instanceof LogicValue val && isNonvolatileConstant(val))) {
+                        error(i < specification.getExpressions().size() ? specification.getExpressions().get(i) : value,
+                                ERR.ARRAY_CONST_NOT_CONSTANT);
+                    }
+                }
+            }
+        }
+
+        if (modifiers.contains(LINKED)) {
+            if (specification.getExpressions().isEmpty()) {
+                error(specification, ERR.ARRAY_LINKED_NOT_INITIALIZED);
+            } else {
+                for (int i = 0; i < initialValues.size(); i++) {
+                    ValueStore value = initialValues.get(i);
+                    if (!(value instanceof LogicVariable var && var.getType() == BLOCK)) {
+                        error(i < specification.getExpressions().size() ? specification.getExpressions().get(i) : value,
+                                ERR.ARRAY_LINKED_NOT_LINKS);
+                    }
+                }
+            }
+        }
+
+
+        ArrayStore array = variables.createArray(specification.getIdentifier(), modifiers, declaredSize, initialValues);
+
+        if (!modifiers.contains(CONST) && !modifiers.contains(LINKED)) {
+            for (int i = 0; i < initialSize; i++) {
+                array.getElements().get(i).setValue(assembler, initialValues.get(i).getValue(assembler));
+            }
+
+            if (modifiers.containsAny(EXPORT, VOLATILE)) {
+                array.getElements().stream()
+                        .filter(LogicVariable.class::isInstance)
+                        .map(LogicVariable.class::cast)
+                        .forEach(context::addForcedVariable);
+            }
+        }
+    }
+
+    private void validateRemoteArrayModifiers(AstVariableModifier element) {
+        switch (element.getModifier()) {
+            case CACHED, GUARDED, LINKED, NOINIT -> error(element,
+                    ERR.REMOTE_ARRAY_UNSUPPORTED_MODIFIER, element.getModifier().keyword());
+        }
+    }
+
+    private void validateRegularArrayModifiers(AstVariableModifier element) {
+        switch (element.getModifier()) {
+            case CACHED, GUARDED, LINKED, NOINIT -> error(element,
+                    ERR.ARRAY_UNSUPPORTED_MODIFIER, element.getModifier().keyword());
+        }
+    }
+
+    private void validateLinkedArrayModifiers(AstVariableModifier element) {
+        if (element.getModifier() == CACHED) {
+            error(element, ERR.ARRAY_UNSUPPORTED_MODIFIER, element.getModifier().keyword());
+        }
     }
 
     private void processVariable(AstVariableSpecification specification, Modifiers modifiers) {
@@ -509,9 +621,12 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             // Local variables need to be created within the parent node, as the current node is the
             // AstVariablesDeclaration node. If the variable was created within the current node, it
             // would fall out of scope when AstVariablesDeclaration node processing finishes.
-            case NONE, EXPORT, REMOTE -> variables.createVariable(isLocalContext(), specification.getIdentifier(), VariableScope.PARENT_NODE, modifiers);
+            case NONE, EXPORT, REMOTE ->
+                    variables.createVariable(isLocalContext(), specification.getIdentifier(), VariableScope.PARENT_NODE, modifiers);
 
-            default -> { throw new MindcodeInternalError("Unhandled combination of modifiers: " + modifiers); }
+            default -> {
+                throw new MindcodeInternalError("Unhandled combination of modifiers: " + modifiers);
+            }
         };
     }
 
@@ -613,7 +728,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             case AstLinkedParameters param -> new ModifierParametrization<>(modifier,
                     resolveSymbolicLinkType(param.getType()));
 
-            case null ->  new ModifierParametrization<>(modifier, null);
+            case null -> new ModifierParametrization<>(modifier, null);
 
             default -> throw new MindcodeInternalError("Unhandled parametrization: " + modifier.getParametrization());
         };
@@ -643,7 +758,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                 case LogicKeyword kw -> arguments.add(kw);
                 default -> {
                     error(mlogName, ERR.CONSTANT_STRING_OR_KEYWORD_REQUIRED);
-                    arguments.add(LogicString.create(mlogName.sourcePosition(),""));
+                    arguments.add(LogicString.create(mlogName.sourcePosition(), ""));
                 }
             }
         }

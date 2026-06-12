@@ -1483,6 +1483,33 @@ When compiling Mindcode as part of Schemacode building, the results of symbolic 
 > [!NOTE]
 > In relaxed syntax mode, it is possible to use a literal link name assigned by the compiler instead of the symbolic name to access the linked block, although the practice is strongly discouraged. In strict syntax mode, this isn't possible, as the literal block name is not declared in the source code and as such is not recognized by the compiler.
 
+### Linked arrays
+
+Linked array is an array of linked variables. A linked array must be initialized, and its elements cannot be modified after initialization. Processor variables are not allocated for linked array elements; the linked blocks themselves are used instead.
+
+There are two ways to initialize a linked array:
+
+* By listing the linked blocks: the array consists of the blocks listed. Either literal or symbolic names (or both) can be used; when using symbolic names, the actual type of the linked block must be specified by the parameter to the `linked` modifier; therefore, all symbolic block names in the array must refer to the same block type.
+* By specifying a range of linked blocks: the range must contain linked block names for both lower and upper bounds, the base block name must be the same in both link names, and the numerical index must be higher in the upper bound than in the lower bound. The array contains all linked blocks identified by the links in the given range. Both symbolic and literal names can be used.
+
+Linked arrays create both the array variable, and variables for each element of the array, even when specified by a range operator. The individual elements of the array are also available as individual variables in the program. When an exclusive range is used in the declaration, the block represented by the upper bound is not part of the array and is not created/declared by the declaration.
+
+Example:
+
+```Mindcode
+// An array of blocks of different types
+linked array[] = (switch1, switch2, message1, display2);
+
+// An array of memory banks, specified by literal names
+linked memory[] = (bank1 ... bank6);
+
+// An array of crucibles, specified by symbolic names
+linked(@silicon-crucible) plants[] = (plant1 .. plant8);
+
+// plant3 was created by the above declaration and can be used as a linked variable 
+plant3.enabled = array[floor(rand(2))].enabled;
+```
+
 ## External variables
 
 External variables and arrays represent cells in a memory block. They are declared using the [`external` storage modifier](#storage-modifiers).

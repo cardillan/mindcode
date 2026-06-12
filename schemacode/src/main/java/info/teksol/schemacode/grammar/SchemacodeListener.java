@@ -120,6 +120,26 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 */
 	void exitTarget(SchemacodeParser.TargetContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#number}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumber(SchemacodeParser.NumberContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#number}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumber(SchemacodeParser.NumberContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#versionNumber}.
+	 * @param ctx the parse tree
+	 */
+	void enterVersionNumber(SchemacodeParser.VersionNumberContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#versionNumber}.
+	 * @param ctx the parse tree
+	 */
+	void exitVersionNumber(SchemacodeParser.VersionNumberContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#block}.
 	 * @param ctx the parse tree
 	 */
@@ -130,6 +150,16 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 */
 	void exitBlock(SchemacodeParser.BlockContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#blockId}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlockId(SchemacodeParser.BlockIdContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#blockId}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlockId(SchemacodeParser.BlockIdContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#labelList}.
 	 * @param ctx the parse tree
 	 */
@@ -139,6 +169,54 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLabelList(SchemacodeParser.LabelListContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code simplePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 */
+	void enterSimplePosition(SchemacodeParser.SimplePositionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code simplePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 */
+	void exitSimplePosition(SchemacodeParser.SimplePositionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code inclusiveRangePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 */
+	void enterInclusiveRangePosition(SchemacodeParser.InclusiveRangePositionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code inclusiveRangePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 */
+	void exitInclusiveRangePosition(SchemacodeParser.InclusiveRangePositionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code exclusiveRangePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 */
+	void enterExclusiveRangePosition(SchemacodeParser.ExclusiveRangePositionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code exclusiveRangePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 */
+	void exitExclusiveRangePosition(SchemacodeParser.ExclusiveRangePositionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code areaPosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 */
+	void enterAreaPosition(SchemacodeParser.AreaPositionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code areaPosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 */
+	void exitAreaPosition(SchemacodeParser.AreaPositionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#position}.
 	 * @param ctx the parse tree

@@ -1106,4 +1106,57 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                         end
                 """);
     }
+
+    @Test
+    void buildsBlockArraysHorizontal() {
+        Schematic actual = buildSchematics("""
+                schematic
+                    @copper-wall-large at (0, 0) * (2, 2) horizontal
+                end
+                """);
+
+        Schematic expected = new Schematic("", "", "", List.of(), 4, 4,
+                List.of(
+                        block(pos(2, 5), "@copper-wall-large", P0_0, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block(pos(2, 5), "@copper-wall-large", P2_0, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block(pos(2, 5), "@copper-wall-large", P0_2, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block(pos(2, 5), "@copper-wall-large", P2_2, Direction.EAST, EmptyConfiguration.EMPTY)
+                )
+        );
+
+        assertAstEquals(expected, actual);
+    }
+
+    @Test
+    void buildsBlockArraysVertical() {
+        Schematic actual = buildSchematics("""
+                schematic
+                    @copper-wall-large at (0, 0) * (2, 2) vertical
+                end
+                """);
+
+        Schematic expected = new Schematic("", "", "", List.of(), 4, 4,
+                List.of(
+                        block(pos(2, 5), "@copper-wall-large", P0_0, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block(pos(2, 5), "@copper-wall-large", P0_2, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block(pos(2, 5), "@copper-wall-large", P2_0, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block(pos(2, 5), "@copper-wall-large", P2_2, Direction.EAST, EmptyConfiguration.EMPTY)
+                )
+        );
+
+        assertAstEquals(expected, actual);
+    }
+
+    @Test
+    void reportsEmptyBlockArrays() {
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .add("The block array is empty."),
+                """
+                        schematic
+                            @copper-wall-large at (0, 0) * (0, 2)
+                        end
+                        """
+        );
+    }
 }

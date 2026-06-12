@@ -8,9 +8,9 @@ import info.teksol.schemacode.grammar.SchemacodeBaseVisitor;
 import info.teksol.schemacode.grammar.SchemacodeParser;
 import info.teksol.schemacode.grammar.SchemacodeParser.*;
 import info.teksol.schemacode.schematics.Language;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -100,7 +100,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     @Override
     public AstSchemaItem visitTarget(TargetContext ctx) {
         return new AstSchemaAttribute(pos(ctx.getStart()), "target",
-                new AstStringLiteral(pos(ctx.version), ctx.version.getText()));
+                new AstStringLiteral(pos(ctx.versionNumber().getStart()), ctx.versionNumber().getText()));
     }
 
     // Blocks
@@ -109,7 +109,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     public AstSchemaItem visitBlock(SchemacodeParser.BlockContext ctx) {
         List<String> labels = processLabels(ctx.labels);
         String type = ctx.type.getText();
-        AstCoordinates position = visitPosition(ctx.position());
+        AstBlockPosition position = (AstBlockPosition) visit(ctx.blockPosition());
         AstDirection direction = maybeVisit(ctx.direction());
         AstConfiguration configuration = maybeVisit(ctx.configuration());
 
@@ -265,6 +265,33 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     // Coordinates & direction
 
     @Override
+    public AstSchemaItem visitAreaPosition(AreaPositionContext ctx) {
+        return new AstBlockPosition(pos(ctx.getStart()), visitPosition(ctx.start),
+                AstBlockPosition.BlockArray.AREA, visitCoordinates(ctx.size),
+                ctx.Vertical() == null);
+    }
+
+    @Override
+    public AstSchemaItem visitExclusiveRangePosition(ExclusiveRangePositionContext ctx) {
+        return new AstBlockPosition(pos(ctx.getStart()), visitPosition(ctx.start),
+                AstBlockPosition.BlockArray.EXCLUSIVE, visitCoordinates(ctx.end),
+                ctx.Vertical() == null);
+    }
+
+    @Override
+    public AstSchemaItem visitInclusiveRangePosition(InclusiveRangePositionContext ctx) {
+        return new AstBlockPosition(pos(ctx.getStart()), visitPosition(ctx.start),
+                AstBlockPosition.BlockArray.INCLUSIVE, visitCoordinates(ctx.end),
+                ctx.Vertical() == null);
+    }
+
+    @Override
+    public AstSchemaItem visitSimplePosition(SimplePositionContext ctx) {
+        return new AstBlockPosition(pos(ctx.getStart()), visitPosition(ctx.start),
+                AstBlockPosition.BlockArray.SINGLE, null, false);
+    }
+
+    @Override
     public AstCoordinates visitPosition(SchemacodeParser.PositionContext ctx) {
         return (AstCoordinates) super.visitPosition(ctx);
     }
@@ -303,9 +330,8 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     private static List<String> processLabels(SchemacodeParser.@Nullable LabelListContext labels) {
         return labels == null
                 ? List.of()
-                : labels.Id().stream()
-                .map(TerminalNode::getSymbol)
-                .map(Token::getText)
+                : labels.blockId().stream()
+                .map(RuleContext::getText)
                 .toList();
     }
 

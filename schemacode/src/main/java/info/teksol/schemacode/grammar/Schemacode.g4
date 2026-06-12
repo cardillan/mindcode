@@ -22,15 +22,28 @@ attribute
     | Dimensions Assign coordinates                 # dimensions
     | Tag Assign tag=textDef                        # schemaTag
     | Filename Assign filename=simpleStringLiteral  # filename
-    | Target Assign version=Version                 # target
+    | Target Assign version=versionNumber           # target
     ;
+
+number : (Int | SignedInt);
+
+versionNumber : ( Int | Version );
 
 block
-    : labels=labelList? type=Ref At pos=position dir=direction? cfg=configuration?
+    : labels=labelList? type=Ref At pos=blockPosition dir=direction? cfg=configuration?
     ;
 
+blockId : (Id | BlockId);
+
 labelList
-    : Id (Comma Id)* Colon
+    : blockId (Comma blockId)* Colon
+    ;
+
+blockPosition
+    : start=position                                                                # simplePosition
+    | start=position Dot2 end=coordinates ( orientation=(Horizontal | Vertical) )?  # inclusiveRangePosition
+    | start=position Dot3 end=coordinates ( orientation=(Horizontal | Vertical) )?  # exclusiveRangePosition
+    | start=position Mul size=coordinates ( orientation=(Horizontal | Vertical) )?  # areaPosition
     ;
 
 position
@@ -40,7 +53,7 @@ position
     ;
 
 coordinates
-    : LeftParen x=Int Comma y=Int RightParen
+    : LeftParen x=number Comma y=number RightParen
     ;
 
 relativeCoordinates
@@ -70,7 +83,7 @@ configuration
     ;
 
 colorDef
-    : Rgba LeftParen red=Int Comma green=Int Comma blue=Int Comma alpha=Int RightParen
+    : Rgba LeftParen red=number Comma green=number Comma blue=number Comma alpha=number RightParen
     ;
 
 connectionList
@@ -92,7 +105,7 @@ processorLinks
     ;
 
 linkDef
-    : linkPattern=Pattern                                   # linkPattern
+    : linkPattern=(Mul | Pattern)                           # linkPattern
     | linkPos=connection ( As alias=Id virtual=Virtual? )?  # linkPos
     ;
 
@@ -137,6 +150,7 @@ End             : 'end';
 Facing          : 'facing';
 File            : 'file';
 Filename        : 'filename';
+Horizontal      : 'horizontal';
 Item            : 'item';
 Links           : 'links';
 Liquid          : 'liquid';
@@ -152,6 +166,7 @@ Target          : 'target';
 Text            : 'text';
 To              : 'to';
 Unit            : 'unit';
+Vertical        : 'vertical';
 Virtual         : 'virtual';
 
 Assign          : '=';
@@ -161,6 +176,7 @@ Dot             : '.';
 Dot2            : '..';
 Dot3            : '...';
 Minus           : '-';
+Mul             : '*';
 Plus            : '+';
 
 North           : 'north';
@@ -175,11 +191,13 @@ TextBlock1      : '"""' [ \t]* [\r\n] .*? '"""';
 TextBlock2      : '\'\'\'' [ \t]* [\r\n] .*? '\'\'\'';
 TextLine        : '"' ( ~('\n'|'\r') )*? '"';
 
-Int             : ( '+' | '-' )? [0-9]+;
+Int             : [0-9]+;
+SignedInt       : ( '+' | '-' ) [0-9]+;
 Id              : [_a-zA-Z] [-a-zA-Z_0-9]*;
+BlockId         : [_a-zA-Z] [-a-zA-Z_0-9]* '#';
 Ref             : '@' [_a-zA-Z] [-a-zA-Z_0-9]*;
 Pattern         : [_a-zA-Z*] [-a-zA-Z_0-9*]*;
-Version         : [0-9]+ ( '.' [0-9]+ )?;
+Version         : [0-9]+ '.' [0-9]+;
 
 Comment         : '/*' .*? '*/' -> skip;
 SLComment       : ('//' ~('\r' | '\n')* '\r'? '\n') -> skip;

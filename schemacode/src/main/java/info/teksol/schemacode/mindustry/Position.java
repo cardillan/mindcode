@@ -37,6 +37,10 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
         return invalid() || offset == 0 ? this : new Position(x + offset, y + offset);
     }
 
+    public Position add(int offsetX, int offsetY) {
+        return invalid() || offsetX == 0 && offsetY == 0 ? this : new Position(x + offsetX, y + offsetY);
+    }
+
     /**
      * Subtracts another 2D grid point from this point.
      *
@@ -61,6 +65,10 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
 
     public boolean zero() {
         return x == 0 && y == 0;
+    }
+
+    public boolean emptyArea() {
+        return x == 0 || y == 0;
     }
 
     public boolean invalid() {

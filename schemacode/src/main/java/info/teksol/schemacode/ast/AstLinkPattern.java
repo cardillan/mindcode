@@ -16,7 +16,7 @@ public record AstLinkPattern(SourcePosition sourcePosition, String match) implem
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder builder, Position processorPosition) {
         Pattern pattern = Pattern.compile(match.replace("*", ".*"));
         builder.getAstLabelMap().entrySet().stream()
-                .filter(e -> !e.getKey().startsWith("#"))
+                .filter(e -> e.getKey().charAt(0) != SchematicsBuilder.INDEX_KEY_CHAR)
                 .filter(e -> pattern.matcher(e.getKey()).matches())
                 .map(e -> new Link(stripPrefix(e.getKey()), e.getValue().position()))
                 .forEachOrdered(linkConsumer);

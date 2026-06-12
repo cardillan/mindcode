@@ -77,17 +77,63 @@ public interface SchemacodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTarget(SchemacodeParser.TargetContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#number}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumber(SchemacodeParser.NumberContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#versionNumber}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVersionNumber(SchemacodeParser.VersionNumberContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBlock(SchemacodeParser.BlockContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#blockId}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockId(SchemacodeParser.BlockIdContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#labelList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLabelList(SchemacodeParser.LabelListContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code simplePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSimplePosition(SchemacodeParser.SimplePositionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code inclusiveRangePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInclusiveRangePosition(SchemacodeParser.InclusiveRangePositionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code exclusiveRangePosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExclusiveRangePosition(SchemacodeParser.ExclusiveRangePositionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code areaPosition}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAreaPosition(SchemacodeParser.AreaPositionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#position}.
 	 * @param ctx the parse tree

@@ -624,15 +624,15 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitVariableSpecification(MindcodeParser.VariableSpecificationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#valueList}.
+	 * Enter a parse tree produced by {@link MindcodeParser#initialValuesList}.
 	 * @param ctx the parse tree
 	 */
-	void enterValueList(MindcodeParser.ValueListContext ctx);
+	void enterInitialValuesList(MindcodeParser.InitialValuesListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#valueList}.
+	 * Exit a parse tree produced by {@link MindcodeParser#initialValuesList}.
 	 * @param ctx the parse tree
 	 */
-	void exitValueList(MindcodeParser.ValueListContext ctx);
+	void exitInitialValuesList(MindcodeParser.InitialValuesListContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code astIdentifier}
 	 * labeled alternative in {@link MindcodeParser#lvalue}.

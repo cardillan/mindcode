@@ -665,13 +665,13 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValueList(MindcodeParser.ValueListContext ctx) { }
+	@Override public void enterInitialValuesList(MindcodeParser.InitialValuesListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValueList(MindcodeParser.ValueListContext ctx) { }
+	@Override public void exitInitialValuesList(MindcodeParser.InitialValuesListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

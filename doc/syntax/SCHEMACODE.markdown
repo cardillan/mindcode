@@ -114,7 +114,7 @@ Block definition specifies the type and configuration of a block placed at certa
 The syntax of the block definition is:
 
 ```
-[labels] <block-type> at <block-position> [facing <direction>] [configuration]
+[labels] <block-type> at <block-position> [block-array-specification] [facing <direction>] [configuration]
 ```
 
 ## Labels
@@ -131,6 +131,14 @@ Labels are useful for creating references to labeled blocks. As labels may be us
 
 > [!NOTE]
 > For more complex schematic, using [symbolic link names](#linking-by-a-symbolic-name) as labels is strongly recommended. Symbolic names can describe the function of the block in the schematic, and using them leaves the task of assigning literal link names to blocks in different processors to the compiler, simplifying the link management and maintenance significantly.    
+
+### Array labels
+
+Block labels may end with a `#` character, representing an _array label_. In this case, Schemacode generates unique label for each new block by replacing the `#` character with an index starting at `1`, in the order they're encountered in the definition file. Array labels may be specified multiple times in the definition file, each occurrence being replaced with a unique label.
+
+When used with a [block array](#block-array), names are generated from the label array for blocks that do not have a regular label assigned. The array label may be used stand-alone or in conjunction with regular labels, but at most one label array can be used per block array.
+
+Array labels may be either symbolic (e.g., `button#`) or literal (`switch#`). Literal link names must conform to the naming scheme of all the block types they represent. Symbolic names may represent blocks of different types, assuming they are properly resolved to the correct block type in the attached Mindcode source.
 
 ## Block type
 
@@ -515,8 +523,66 @@ coordinates. This makes it quite natural to design schematic starting in the low
 
 Block position may also be negative (see [Origin and dimensions calculation](#origin-and-dimensions-calculation)).
 
-Correctly positioning blocks, especially blocks larger than 1x1, can be a bit tricky. For more complex layouts, it is 
-easier to create the schematic in Mindustry, decompile to Schemacode definition, and modify the resulting file.   
+Correctly positioning blocks, especially blocks larger than 1x1, can be a bit tricky. For more complex layouts, it is easier to create the schematic in Mindustry, decompile to Schemacode definition, and modify the resulting file.
+
+### Block array
+
+Block arrays are rectangular areas filled with blocks of the same type and configuration, without empty space. A block array always contains a block at the specified position (an _anchor block_). To create a block array, an array specification needs to be specified after the block position:
+
+```
+<area-operator> (x, y) [<array-orientation>]
+```
+
+where `<area-operator>` is one of the following:
+
+* `..` - inclusive range operator. The array will cover the smallest rectangular area which contains the anchor block and a block at the `(x, y)` coordinates.
+* `...` - exclusive range operator. The array will cover the largest rectangular area which contains the anchor block and no block at the `(x, y)` coordinates.
+* `*` - area size operator. The array will start at the anchor block and extend `x` blocks horizontally and `y` blocks vertically.
+
+For range operators, the following rules apply:
+
+* The coordinates are interpreted using the same coordination system as the block position coordinates – that is, absolutely if the block position was specified absolutely, and relatively if the block position was specified relatively.
+* If the array coordinate is higher than the corresponding block coordinate, the array extends to the right or up from the anchor block. If the array coordinate is lower than the corresponding block coordinate, the array extends to the left or down from the anchor block.
+
+For area size operator, the following rules apply:
+
+* When a dimension is positive, the array extends to the right or up from the anchor block. When a dimension is negative, the array extends to the left or down from the anchor block.
+
+Area size operator is most useful when creating an aray of fixed size (e.g., a tile display of given dimensions). The range operators are most useful when trying to cover an area up to a certain position (e.g., a wall).
+
+The `<array-orientation>` is optional and can be one of the following:
+
+* `horizontal` (the default): the block array is built horizontally (i.e., row by row).
+* `vertical`: the block array is built vertically (i.e., column by column).
+
+The array orientation affects the processing order of the blocks.
+
+When the block array resolves to an empty area, an error is reported. When the block array resolves to a single block (for example, `@switch at (3, 5) * (0, 0)`, or `@copper-wall-large at (2, 2) ... (4, 4)`), it is treated as a regular block and not a block array (the distinction is important when processing labels for the block).
+
+When an orientation or configuration is specified for a block array, it is applied to each block in the array.
+
+### Labels for block arrays
+
+One or more labels, including array labels, can be specified for a block array. The labels are assigned to the block in the array in the processing order, always starting at the anchor block. If there are more labels specified (array or regular) than is the total number of blocks in the array, an error is reported. If there are only regular arrays specified and their number is smaller than the total number of blocks in the array, the remaining blocks are left unlabeled.
+
+If the labels include at least one array label, the last such label in the list is repeated a number of times needed to assign a label to each block in the array. if the last label in the list is a regular label, it will always be assigned to the last block in the array. Example:
+
+```
+up, down, size#, volume#, left, right: @switch at (0, 8) * (1, -8) 
+```
+
+This will create an array of eight switches in the top-down order and assign them the following symbolic labels:
+
+* `up`
+* `down`
+* `size1`
+* `volume1`
+* `volume2`
+* `volume3`
+* `left`
+* `right`
+
+Note: the literal link names assigned to the symbolic link names depend on the order in which the symbolic labels are encountered in the Mindcode source file.   
 
 ## Block orientation
 

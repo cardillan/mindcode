@@ -26,6 +26,8 @@ public abstract class AbstractSchematicsTest {
     public static final Position P1_0 = new Position(1, 0);
     public static final Position P2_0 = new Position(2, 0);
     public static final Position P3_0 = new Position(3, 0);
+    public static final Position P0_2 = new Position(0, 2);
+    public static final Position P2_2 = new Position(2, 2);
 
     public static Position p(int x, int y) {
         return new Position(x, y);

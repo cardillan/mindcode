@@ -25,20 +25,7 @@ import java.util.function.Supplier;
 
 import static info.teksol.mc.mindcode.compiler.Modifier.*;
 
-/// This class resolves source code identifiers into variables represented by the ValueStore interface
-/// and tracks temporary variables used within AST nodes for stack management.
-///
-/// Types of source code identifiers:
-/// - processor variables
-///   - global
-///   - main/local
-///   - function parameters
-/// - external (memory-backed) variables
-///
-/// Features to be implemented:
-/// - variable declarations
-/// - namespaces
-/// - arrays, records and other complex types
+/// This class keeps track of variables defined in all active scopes of the program.
 @NullMarked
 public class Variables extends CompilerMessageEmitter {
     private final Set<AstMindcodeNode> reportedErrors = Collections.newSetFromMap(new IdentityHashMap<>());
@@ -302,7 +289,7 @@ public class Variables extends CompilerMessageEmitter {
 
         if (!verifyGlobalDeclaration(identifier, identifier)) {
             result = InternalArray.createInvalid(nameCreator, identifier, size);
-        } else if (modifiers.contains(CONST)) {
+        } else if (modifiers.contains(LINKED) || modifiers.contains(CONST)) {
             result = InternalArray.createConst(nameCreator, identifier, size, initialValues);
         } else if (modifiers.contains(EXTERNAL)) {
             result = getHeapTracker(modifiers).createArray(identifier, size);

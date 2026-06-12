@@ -35,7 +35,7 @@ public record AstCoordinates(SourcePosition sourcePosition, Position coordinates
 
     public Position evaluate(SchematicsBuilder builder, Position lastPosition) {
         if (relative) {
-            Position rel = relativeTo == null ? lastPosition : builder.getBlockPosition(this, relativeTo).position();
+            Position rel = relativeTo == null ? lastPosition : builder.getBlockPosition(this, relativeTo);
             return rel.add(coordinates);
         } else {
             return builder.getAnchor(coordinates());

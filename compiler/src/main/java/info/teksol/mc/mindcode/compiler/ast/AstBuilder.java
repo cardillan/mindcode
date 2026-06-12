@@ -436,7 +436,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                     identifier(ctx.id),
                     true,
                     visitAstExpressionIfNonNull(ctx.length),
-                    processInitialArrayValues(ctx.valueList()));
+                    processInitialArrayValues(ctx.initialValuesList()));
         } else {
             return new AstVariableSpecification(pos(ctx),
                     identifier(ctx.id),
@@ -450,8 +450,11 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return ctx == null ? List.of() : List.of(visitAstExpression(ctx));
     }
 
-    private List<AstExpression> processInitialArrayValues(@Nullable ValueListContext ctx) {
-        return ctx == null ? List.of() : processExpressionList(ctx.expressionList());
+    private List<AstExpression> processInitialArrayValues(@Nullable InitialValuesListContext ctx) {
+        if (ctx == null) return List.of();
+        return ctx.astRange() == null
+                ? processExpressionList(ctx.expressionList())
+                : List.of(visitAstExpression(ctx.astRange()));
     }
 
     @Override

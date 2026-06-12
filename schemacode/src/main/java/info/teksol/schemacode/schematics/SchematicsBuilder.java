@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SchematicsBuilder extends CompilerMessageEmitter {
+    public static final char INDEX_KEY_CHAR = '$';
+
     private final InputFiles inputFiles;
     private final CompilerProfile compilerProfile;
     private final AstDefinitions astDefinitions;
@@ -103,6 +105,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         labelCounts.entrySet().stream()
                 .filter(e -> e.getValue() > 1)
+                .filter(e -> e.getKey().charAt(e.getKey().length() - 1) != BlockPositionResolver.LABEL_ARRAY_CHAR)
                 .forEachOrdered(c -> addMessage(ToolMessage.error("Multiple definitions of block label '%s'.", c.getKey())));
 
         astSchematic.blocks().stream().filter(astBlock -> !SchematicsMetadata.getMetadata().isBlockNameValid(astBlock.type()))
@@ -114,21 +117,25 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         // Here are absolute positions of all blocks, stored as "#" + index
         // Labeled blocks are additionally stored under all their labels
         BlockPositionResolver positionResolver = new BlockPositionResolver(messageConsumer);
-        astLabelMap = positionResolver.resolveAllBlocks(astBlocks);
-        List<BlockPosition> blockPositions = astLabelMap.values().stream().distinct().toList();
+        BlockPositionResolver.ResolvedBlocks resolvedBlocks = positionResolver.resolveAllBlocks(astBlocks);
+        astLabelMap = resolvedBlocks.labelMap();
+        List<BlockPosition> blockPositions = astLabelMap.entrySet().stream()
+                .filter(e -> e.getKey().charAt(0) == SchematicsBuilder.INDEX_KEY_CHAR)
+                .map(Map.Entry::getValue)
+                .sorted(Comparator.comparing(BlockPosition::index))
+                .toList();
 
         astPositionMap = BlockPositionMap.forBuilder(messageConsumer, blockPositions);
 
         List<Block> blocks = new ArrayList<>();
-        for (int index = 0; index < astBlocks.size(); index++) {
-            AstBlock astBlock = astBlocks.get(index);
-            BlockPosition blockPos = getBlockPosition(index);
-            BlockType type = SchematicsMetadata.getMetadata().getBlockByName(astBlock.type());
+        for (AstBlockPosition definition : resolvedBlocks.definitions()) {
+            AstBlock astBlock = definition.astBlock();
+            BlockType type = definition.blockType();
             Direction direction = astBlock.direction() == null
                     ? Direction.EAST
                     : Direction.valueOf(astBlock.direction().direction().toUpperCase());
-            Configuration configuration = convertAstConfiguration(blockPos, astBlock.configuration());
-            Block block = new Block(astBlock.sourcePosition(), index, astBlock.labels(), type, blockPos.position(), direction,
+            Configuration configuration = convertAstConfiguration(definition, astBlock.configuration());
+            Block block = new Block(astBlock.sourcePosition(), definition.index(), astBlock.labels(), type, definition.position(), direction,
                     configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass()));
             configuration.validate(this, astBlock, block);
             blocks.add(block);
@@ -401,18 +408,13 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         return result;
     }
 
-    public BlockPosition getBlockPosition(int index) {
-        return requireNonNull(astLabelMap.get("#" + index),
-                () -> new SchematicsInternalError("Invalid block index %d.", index));
-    }
-
-    public BlockPosition getBlockPosition(SourceElement element, String name) {
+    public Position getBlockPosition(SourceElement element, String name) {
         BlockPosition blockPosition = astLabelMap.get(name);
         if (blockPosition != null) {
-            return blockPosition;
+            return blockPosition.position();
         }
         error(element, "Unknown block label '%s'", name);
-        return new AstBlockPosition(0, SchematicsMetadata.getMetadata().getBlockByName("@air"), Position.INVALID);
+        return Position.INVALID;
     }
 
     public Map<String, BlockPosition> getAstLabelMap() {
@@ -441,15 +443,17 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         }
     }
 
-    // Caches result of compiling Mindcode to mlog - avoid repeated recompilation of identical mindcode
-    // Maps the entire input string onto the output to avoid obtaining wrong cached version
-    private final Map<String, String> compilerCache = new HashMap<>();
+    public record MlogCacheEntry(String mlog, Map<String, String> symbolicNameMap) { }
 
-    public String getMlogFromCache(String mindcode) {
+    // Caches the results of compiling Mindcode to mlog - avoid repeated recompilation of identical mindcode
+    // Maps the entire input string onto the output to avoid obtaining the wrong cached version
+    private final Map<String, MlogCacheEntry> compilerCache = new HashMap<>();
+
+    public MlogCacheEntry getMlogFromCache(String mindcode) {
         return compilerCache.get(mindcode);
     }
 
-    public void storeMlogToCache(String mindcode, String mlog) {
-        compilerCache.put(mindcode, mlog);
+    public void storeMlogToCache(String mindcode, String mlog, Map<String, String> symbolicNameMap) {
+        compilerCache.put(mindcode, new MlogCacheEntry(mlog, symbolicNameMap));
     }
 }

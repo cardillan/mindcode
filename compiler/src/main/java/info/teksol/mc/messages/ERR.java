@@ -31,6 +31,9 @@ public class ERR {
     public static final String ARRAY_FORBIDDEN = "Invalid array reference.";
     public static final String ARRAY_INDEX_OUT_OF_BOUNDS = "Array index out of bounds (0 .. %d)";
     public static final String ARRAY_INVALID = "'%s' is not an array.'";
+    public static final String ARRAY_LINKED_NOT_INITIALIZED = "Linked block array must be initialized.";
+    public static final String ARRAY_LINKED_INVALID_RANGE = "Invalid link range (both link names must use identical base name, range must not be empty).";
+    public static final String ARRAY_LINKED_NOT_LINKS = "Value assigned to an element of a linked block array is not a link.";
     public static final String ARRAY_LOCAL = "Arrays must be declared in the global scope.";
     public static final String ARRAY_MUTABLE_SIZE = "Array size must be constant.";
     public static final String ARRAY_NON_INTEGER_INDEX = "Array index must be an integer.";
@@ -125,6 +128,7 @@ public class ERR {
     public static final String INVALID_LINKED_TYPE_SPEC = "Invalid linked block type specification ('%s' is not a block type).";
     public static final String INVALID_MLOG_KEYWORD = "Keyword only allowed as the only value of the 'mlog' modifier in array declaration.";
     public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic links. Please set 'symbolic-links' to 'false'.";
+    public static final String LINK_EXPECTED = "A literal or indexed symbolic link name expected.";
     public static final String LINK_TYPE_MISMATCH = "The expected block type '%s' differs from the actual block type '%s' as defined in the schematic.";
     public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals require language target 7 or higher.";
     public static final String LITERAL_INTEGER_TOO_LARGE = "Literal '%s' exceeds maximum possible value (%s).";
@@ -181,6 +185,7 @@ public class ERR {
     public static final String PARAMETER_REF_VARARGS = "Vararg parameter '%s' of function '%s' cannot be declared 'ref'.";
     public static final String PARAMETER_VARARGS_NOT_LAST = "Parameter '%s' of function '%s' is declared vararg, but is not last in the parameter list.";
     public static final String PROPERTY_UNKNOWN = "Unknown property '%s'.";
+    public static final String REMOTE_ARRAY_UNSUPPORTED_MODIFIER = "Remote arrays cannot be declared '%s'.";
     public static final String REMOTE_INVALID_USE = "Invalid use of remote function '%s' (specify one of output parameters to access function output values).";
     public static final String REMOTE_MULTIPLE_FUNCTIONS = "Cannot resolve remote function '%s'.";
     public static final String REMOTE_PROCESSOR_NOT_GLOBAL = "A global variable or a linked block required.";

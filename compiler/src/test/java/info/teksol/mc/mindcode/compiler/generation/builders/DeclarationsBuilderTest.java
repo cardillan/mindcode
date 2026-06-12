@@ -542,6 +542,33 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void compilesLinkedArrayDeclarations() {
+            assertCompiles("linked a[2] = (message1, message2);");
+        }
+
+        @Test
+        void compilesLinkedArrayDeclarationsRange() {
+            assertCompilesTo("linked a[5] = (message1 .. message5); print(a);",
+                    createInstruction(PRINT, "message1"),
+                    createInstruction(PRINT, "message2"),
+                    createInstruction(PRINT, "message3"),
+                    createInstruction(PRINT, "message4"),
+                    createInstruction(PRINT, "message5")
+            );
+        }
+
+        @Test
+        void compilesLinkedArrayDeclarationsSymbolicRange() {
+            assertCompilesTo(
+                    "linked(@switch) a[4] = (b1 ... b5); print(a);",
+                    createInstruction(PRINT, "switch1"),
+                    createInstruction(PRINT, "switch2"),
+                    createInstruction(PRINT, "switch3"),
+                    createInstruction(PRINT, "switch4")
+            );
+        }
+
+        @Test
         void reportsUnknownArraySize() {
             assertGeneratesMessage(
                     "Array size not specified.",
@@ -591,13 +618,6 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void refusesLinkedArray() {
-            assertGeneratesMessage(
-                    "Arrays cannot be declared 'linked'.",
-                    "linked a[10];");
-        }
-
-        @Test
         void refusesNoinitArray() {
             assertGeneratesMessage(
                     "Arrays cannot be declared 'noinit'.",
@@ -625,6 +645,52 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             .add("Arrays cannot be declared 'cached'.")
                             .add("Modifier 'cached' requires the 'external' or 'remote' modifier."),
                     "cached a[10];");
+        }
+
+        @Test
+        void refusesUninitializedLinkArray() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Array size not specified.")
+                            .add("Linked block array must be initialized."),
+                    "linked a[];");
+        }
+
+        @Test
+        void refusesInvalidLinkNames() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Value assigned to an element of a linked block array is not a link.").repeat(2),
+                    "linked a[] = (x + y, 3);");
+        }
+
+        @Test
+        void refusesInvalidLinkNamesRange() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Array size not specified.")
+                            .add("A literal or indexed symbolic link name expected.").repeat(2),
+                    "linked a[] = (x + y ... 3);");
+        }
+
+        @Test
+        void refusesIncompatibleLinkNamesRange() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Array size not specified.")
+                            .add("Invalid link range (both link names must use identical base name, range must not be empty)."),
+                    "linked(@switch) a[] = (button1 ... display5);");
+        }
+
+        @Test
+        void refusesEmptyLinkNamesRange() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Array size not specified.")
+                            .add("Invalid link range (both link names must use identical base name, range must not be empty)."),
+                    "linked(@switch) a[] = (button1 ... button1);");
+        }
+
+        @Test
+        void refusesConflictingLinkNamesRange() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Multiple declarations of 'switch3'."),
+                    "linked switch3, a[] = (switch1 .. switch5);");
         }
     }
 

@@ -373,11 +373,11 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVariableSpecification(MindcodeParser.VariableSpecificationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#valueList}.
+	 * Visit a parse tree produced by {@link MindcodeParser#initialValuesList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitValueList(MindcodeParser.ValueListContext ctx);
+	T visitInitialValuesList(MindcodeParser.InitialValuesListContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code astIdentifier}
 	 * labeled alternative in {@link MindcodeParser#lvalue}.

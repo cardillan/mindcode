@@ -158,22 +158,51 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
         Map<String, String> schematicLinks = links.stream()
                 .collect(Collectors.toMap(Link::name, link -> getLinkBlockType(builder, link)));
 
-        Map<String, String> symbolicNameMap = new HashMap<>();
-        String mlog = convertToMlog(builder, processor, ProcessorType.fromBlockType(blockPos.blockType()), schematicLinks, symbolicNameMap);
+        try {
+            Map<String, String> symbolicNameMap = new HashMap<>();
+            String mlog = convertToMlog(builder, processor, ProcessorType.fromBlockType(blockPos.blockType()), schematicLinks, symbolicNameMap);
 
-        // Translate names
-        links = links.stream().map(link -> link.withName(symbolicNameMap.getOrDefault(link.name(), link.name()))).toList();
+            // Translate names
+            links = links.stream().map(link -> link.withName(symbolicNameMap.getOrDefault(link.name(), link.name()))).toList();
 
-        // A set of names which were resolved by Mindcode and therefore have been type-checked already
-        Set<String> resolvedNames = new HashSet<>(symbolicNameMap.values());
+            // A set of names which were resolved by Mindcode and therefore have been type-checked already
+            Set<String> resolvedNames = new HashSet<>(symbolicNameMap.values());
 
-        // Verify link names
-        links.stream()
-                .filter(l -> !resolvedNames.contains(l.name) && !compatibleLinkName(builder, l))
-                .forEachOrdered(l -> builder.error(processor, "Incompatible link name '%s' for block type '%s'.", l.name,
-                        builder.getBlockPosition(l.position).blockType().name()));
+            Map<String, BitSet> usedNames = new HashMap<>();
 
-        return new ProcessorConfiguration(links, mlog);
+            // Verify link names and numerical gaps
+            // In consecutive sequence, the highest possible number is the number of links
+            // Prevents the bitset size from exploding when huge numbers (e.g., 'switch9999999') are used
+            final int maxValidNumber = links.size() + 1;
+            for (Link link : links) {
+                BlockPosition position = builder.getBlockPosition(link.position);
+                if (position == null) continue;
+
+                String baseName = position.blockType().getBaseLinkName();
+                String index = link.name.substring(Math.min(link.name.length(), baseName.length()));
+                if (link.name().startsWith(baseName) && index.matches("[1-9]\\d{0,8}")) {
+                    int number = Integer.parseInt(index);  // Can't fail - see regex
+                    usedNames.computeIfAbsent(baseName, _ -> new BitSet()).set(Math.min(number, maxValidNumber));
+                } else if (!resolvedNames.contains(link.name)) {
+                    // Do not report errors that have already been reported by Mindcode
+                    builder.error(processor, "Incompatible link name '%s' for block type '%s'.", link.name,
+                            builder.getBlockPosition(link.position).blockType().name());
+                }
+            }
+
+            usedNames.forEach((baseName, numbers) -> {
+                int length = numbers.length();
+                int firstUnused = numbers.nextClearBit(1);
+                if (firstUnused < length) {
+                    builder.error(builder.getCompilerProfile().allowLinkGaps(), processor,
+                            "Gaps in link numbers of block type '%s' (first missing link: '%s%d').",
+                            baseName, baseName, firstUnused);
+                }
+            });
+            return new ProcessorConfiguration(links, mlog);
+        } catch (CompileMindcodeException ex) {
+            return new ProcessorConfiguration(List.of(), "");
+        }
     }
 
     private static String getLinkBlockType(SchematicsBuilder builder, Link link) {
@@ -181,24 +210,19 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
         return position == null ? "" : position.blockType().name();
     }
 
-
-    private static boolean compatibleLinkName(SchematicsBuilder builder, Link link) {
-        BlockPosition position = builder.getBlockPosition(link.position);
-        if (position == null) return true;
-        String baseName = position.blockType().getBaseLinkName();
-        return link.name().startsWith(baseName) && link.name.substring(baseName.length()).matches("[1-9]\\d*");
-    }
+    private static class CompileMindcodeException extends Exception {}
 
     private static String convertToMlog(SchematicsBuilder builder, AstProcessor processor, ProcessorType type,
-            Map<String, String> schematicLinks, Map<String, String> symbolicNameMap) {
+            Map<String, String> schematicLinks, Map<String, String> symbolicNameMap) throws CompileMindcodeException {
         return switch (processor.language()) {
             case NONE -> "";
             case MLOG -> processor.program().getProgramText(builder);
             case MINDCODE -> {
                 String mindcode = processor.program().getProgramText(builder);
-                String cached = builder.getMlogFromCache(mindcode);
+                SchematicsBuilder.MlogCacheEntry cached = builder.getMlogFromCache(mindcode);
                 if (cached != null) {
-                    yield cached;
+                    symbolicNameMap.putAll(cached.symbolicNameMap());
+                    yield cached.mlog();
                 }
 
                 InputFile fileToCompile = builder.getInputFiles().registerSource(mindcode);
@@ -217,11 +241,11 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                 messages.forEach(builder::addMessage);
                 if (messages.stream().anyMatch(MindcodeMessage::isError)) {
                     builder.error(processor.program(), "Compile errors in Mindcode source code.");
-                    yield "";
+                    throw new CompileMindcodeException();
                 }
 
                 String mlog = compiler.getOutput();
-                builder.storeMlogToCache(mindcode, mlog);
+                builder.storeMlogToCache(mindcode, mlog, symbolicNameMap);
                 yield mlog;
             }
         };

@@ -63,9 +63,9 @@
     "runnable": false
   },
   {
-    "filename": "mandelbrot-generator.sdf",
+    "filename": "mandelbrot-generator-8.sdf",
     "title": "Mandelbrot Generator",
-    "minVersion": 6,
+    "minVersion": 8,
     "maxVersion": 8,
     "runnable": false
   }

@@ -51,35 +51,19 @@ schematic
     @liquid-source       at (17,  5) liquid @cryofluid
     @liquid-source       at (19,  3) liquid @cryofluid
 
-    @hyper-processor     at ( 0,  0) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 0,  3) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 0,  6) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 0,  9) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 0, 12) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 4,  0) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 4,  3) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 4,  6) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 4,  9) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 4, 12) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 7,  0) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 7,  3) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 7,  6) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 7,  9) processor links a-* end mindcode = compute end
-    @hyper-processor     at ( 7, 12) processor links a-* end mindcode = compute end
-    @hyper-processor     at (11,  0) processor links a-* end mindcode = compute end
-    @hyper-processor     at (11,  3) processor links a-* end mindcode = compute end
-    @hyper-processor     at (11,  6) processor links a-* end mindcode = compute end
-    @hyper-processor     at (11,  9) processor links a-* end mindcode = compute end
-    @hyper-processor     at (11, 12) processor links a-* end mindcode = compute end
-    @hyper-processor     at (14,  0) processor links a-* end mindcode = compute end
-    @hyper-processor     at (14,  6) processor links a-* end mindcode = compute end
-    @hyper-processor     at (17,  0) processor links a-* end mindcode = compute end
-    @hyper-processor     at (17,  6) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 0,  0) * (1, 5) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 4,  0) * (1, 5) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 7,  0) * (1, 5) processor links a-* end mindcode = compute end
+    @hyper-processor     at (11,  0) * (1, 5) processor links a-* end mindcode = compute end
+    @hyper-processor     at (14,  0)          processor links a-* end mindcode = compute end
+    @hyper-processor     at (14,  6)          processor links a-* end mindcode = compute end
+    @hyper-processor     at (17,  0)          processor links a-* end mindcode = compute end
+    @hyper-processor     at (17,  6)          processor links a-* end mindcode = compute end
 
-a-display1:
+a-display:
     @large-logic-display at (14,  9)
 
-a-bank1:
+a-memory:
     @memory-bank         at (15,  4)
 
 message1:
@@ -92,37 +76,21 @@ message3:
     @message             at (14, 15) text "Palette selection"
 
     // Movement switches
-    b-switch1:  @switch  at (17,  4)    // up
-    b-switch2:  @switch  at (16,  3)    // left
-    b-switch3:  @switch  at (18,  3)    // right
-    b-switch4:  @switch  at (17,  3)    // down
-    b-switch5:  @switch  at (14,  4)    // zoom out
-    b-switch6:  @switch  at (14,  3)    // zoom in
-    b-switch7:  @switch  at (10, 13)    // Julia switch
-    b-switch8:  @switch  at ( 3, 14)    // Load
-    b-switch9:  @switch  at ( 3, 13)    // Save
+    b-buttonUp:    @switch  at (17,  4)
+    b-buttonLeft:  @switch  at (16,  3)
+    b-buttonRight: @switch  at (18,  3)
+    b-buttonDown:  @switch  at (17,  3)
+    b-buttonPlus:  @switch  at (14,  4)
+    b-buttonMinus: @switch  at (14,  3)
+    b-buttonJulia: @switch  at (10, 13)
+    b-buttonLoad:  @switch  at ( 3, 14)
+    b-buttonSave:  @switch  at ( 3, 13)
 
     // Bookmark switches
-    c-switch40: @switch  at ( 1, 15)
-    c-switch41: @switch  at ( 2, 15)
-    c-switch42: @switch  at ( 3, 15)
-    c-switch43: @switch  at ( 4, 15)
-    c-switch44: @switch  at ( 5, 15)
-    c-switch45: @switch  at ( 6, 15)
-    c-switch46: @switch  at ( 7, 15)
-    c-switch47: @switch  at ( 8, 15)
-    c-switch48: @switch  at ( 9, 15)
-    c-switch49: @switch  at (10, 15)
-    c-switch50: @switch  at (11, 15)
-    c-switch51: @switch  at (12, 15)
-    c-switch52: @switch  at (13, 15)
+    c-switch#: @switch  at ( 1, 15) .. (13, 15)
 
     // Palette switches
-    c-switch54: @switch  at (15, 15)
-    c-switch55: @switch  at (16, 15)
-    c-switch56: @switch  at (17, 15)
-    c-switch57: @switch  at (18, 15)
-    c-switch58: @switch  at (19, 15)
+    c-switch#: @switch  at (15, 15) .. (19, 15)
 
     @logic-processor     at (18,  4) processor links * end mindcode = control end
 end
@@ -130,17 +98,20 @@ end
 control = """
     #set instruction-limit = 1500;
 
-    guarded linked message1, message2, message3, display1,
-        memory      = bank1,
-        buttonUp    = switch1,
-        buttonLeft  = switch2,
-        buttonRight = switch3,
-        buttonDown  = switch4,
-        buttonPlus  = switch5,
-        buttonMinus = switch6,
-        buttonJulia = switch7,
-        buttonLoad  = switch8,
-        buttonSave  = switch9;
+    guarded linked message1, message2, message3;
+    guarded linked(@memory-bank) memory;
+    guarded linked(@large-logic-display) display;
+
+    guarded linked(@switch)
+        buttonUp,
+        buttonLeft,
+        buttonRight,
+        buttonDown,
+        buttonPlus,
+        buttonMinus,
+        buttonJulia,
+        buttonLoad,
+        buttonSave;
 
     const DISPLAY_SIZE_LARGE = 176;
     const HALF_SIZE = DISPLAY_SIZE_LARGE / 2;
@@ -263,7 +234,7 @@ control = """
                 // Dim the current display
                 color(86, 86, 102, 204);
                 rect(0, 0, 176, 176);
-                drawflush(display1);
+                drawflush(display);
 
                 // Signal next round of computing to processors
                 START++;
@@ -499,7 +470,9 @@ compute = """
     const SLOTS = BOOKMARKS + BOOKMARK_COUNT * BOOKMARK_SIZE;
     const PROCESSORS = SLOTS + DISPLAY_SIZE_LARGE;
 
-    var display, memory;
+    guarded linked(@memory-bank) memory;
+    guarded linked(@large-logic-display) display;
+
     allocate heap in memory[VARIABLES ... BOOKMARKS];
 
     external $START;        // Start signal
@@ -528,11 +501,6 @@ compute = """
     var PROC_STATE_INDEX = PROCESSORS + 1;
 
     begin
-        findLinkedBlocks("Mandelbrot Generator", null,
-            @large-logic-display,   "Display",  out display,    true,
-            @memory-bank,           "Memory",   out memory,     true
-        );
-
         var start = 0, stop;
         while true do
             // Waiting for a start signal

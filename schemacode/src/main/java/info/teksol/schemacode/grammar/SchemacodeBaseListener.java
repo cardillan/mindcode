@@ -137,6 +137,30 @@ public class SchemacodeBaseListener implements SchemacodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNumber(SchemacodeParser.NumberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumber(SchemacodeParser.NumberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVersionNumber(SchemacodeParser.VersionNumberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVersionNumber(SchemacodeParser.VersionNumberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBlock(SchemacodeParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -149,6 +173,18 @@ public class SchemacodeBaseListener implements SchemacodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBlockId(SchemacodeParser.BlockIdContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlockId(SchemacodeParser.BlockIdContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLabelList(SchemacodeParser.LabelListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -156,6 +192,54 @@ public class SchemacodeBaseListener implements SchemacodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLabelList(SchemacodeParser.LabelListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSimplePosition(SchemacodeParser.SimplePositionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSimplePosition(SchemacodeParser.SimplePositionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInclusiveRangePosition(SchemacodeParser.InclusiveRangePositionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInclusiveRangePosition(SchemacodeParser.InclusiveRangePositionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExclusiveRangePosition(SchemacodeParser.ExclusiveRangePositionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExclusiveRangePosition(SchemacodeParser.ExclusiveRangePositionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAreaPosition(SchemacodeParser.AreaPositionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAreaPosition(SchemacodeParser.AreaPositionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

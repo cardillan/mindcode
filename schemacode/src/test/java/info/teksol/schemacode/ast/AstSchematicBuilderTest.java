@@ -211,7 +211,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void parsesTarget() {
         AstDefinitions actual = createDefinitions("""
                 schematic
-                    target = 7.1w
+                    target = 7.1
                 end
                 """
         );
@@ -220,7 +220,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 List.of(
                         new AstSchematic(pos(1, 1),
                                 List.of(
-                                        new AstSchemaAttribute(pos(2, 5), "target", new AstStringLiteral(pos(2, 13), "7.1w"))
+                                        new AstSchemaAttribute(pos(2, 5), "target", new AstStringLiteral(pos(2, 13), "7.1"))
                                 ),
                                 List.of()
                         )
@@ -777,7 +777,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void refusesProcessorVirtualLinkReference() {
         parseSchematicsExpectingMessages(
                 ExpectedMessages.create()
-                        .add("Parse error: extraneous input 'virtual' expecting {'end', '-', '+', '(', Id, Pattern}"),
+                        .addRegex("Parse error: extraneous input 'virtual' expecting .*"),
                 """
                         schematic
                             @micro-processor at (0, 0) processor
@@ -1026,7 +1026,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void refusesProcessorLinkPositionAbsoluteUnnamedVirtual() {
         parseSchematicsExpectingMessages(
                 ExpectedMessages.create()
-                        .add("Parse error: extraneous input 'virtual' expecting {'end', '-', '+', '(', Id, Pattern}"),
+                        .addRegex("Parse error: extraneous input 'virtual' expecting .*"),
                 """
                         schematic
                             @micro-processor at (0, 0) processor
@@ -1041,7 +1041,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void refusesProcessorLinkPositionRelativeUnnamedVirtual() {
         parseSchematicsExpectingMessages(
                 ExpectedMessages.create()
-                        .add("Parse error: extraneous input 'virtual' expecting {'end', '-', '+', '(', Id, Pattern}"),
+                        .addRegex("Parse error: extraneous input 'virtual' expecting .*"),
                 """
                         schematic
                             @micro-processor at (0, 0) processor

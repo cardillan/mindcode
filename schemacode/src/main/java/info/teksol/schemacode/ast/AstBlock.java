@@ -7,8 +7,17 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 @NullMarked
-public record AstBlock(SourcePosition sourcePosition, List<String>labels, String type, AstCoordinates position,
+public record AstBlock(SourcePosition sourcePosition, List<String> labels, String type, AstBlockPosition position,
                        @Nullable AstDirection direction, @Nullable AstConfiguration configuration) implements AstSchemaItem {
+
+    public AstBlock(SourcePosition sourcePosition, List<String> labels, String type, AstCoordinates anchor,
+            @Nullable AstDirection direction, @Nullable AstConfiguration configuration) {
+        this(sourcePosition, labels, type, new AstBlockPosition(anchor.sourcePosition(), anchor), direction, configuration);
+    }
+
+    public AstCoordinates anchor() {
+        return position.anchor();
+    }
 
     @Override
     public AstBlock withEmptyPosition() {
@@ -17,5 +26,4 @@ public record AstBlock(SourcePosition sourcePosition, List<String>labels, String
                 eraseNullablePosition(direction),
                 eraseNullablePosition(configuration));
     }
-
 }
