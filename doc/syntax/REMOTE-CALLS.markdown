@@ -107,6 +107,8 @@ Example of a module with a background process:
 
 module backgroundProcess;
 
+linked message1;
+
 // Start at -1, because the background process is run once after module initialization
 var invocations = -1;
 

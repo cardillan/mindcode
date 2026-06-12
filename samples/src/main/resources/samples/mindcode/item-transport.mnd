@@ -3,6 +3,8 @@
 // Wait until container1 and sorter1 are available
 guarded linked container1, sorter1;
 
+linked message1;
+
 begin
     message("Initializing");
 

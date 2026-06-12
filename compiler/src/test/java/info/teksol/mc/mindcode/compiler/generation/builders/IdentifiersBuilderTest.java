@@ -303,6 +303,22 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Nested
+    class Links {
+        @Test
+        void reportsUndeclaredLinksInStrictMode() {
+            assertGeneratesMessage("Variable 'message1' is not defined.",
+                    """
+                            #set syntax = strict;
+                            
+                            begin
+                                printflush(message1);
+                            end;
+                            """
+            );
+        }
+    }
+
+    @Nested
     class MemoryArrays {
         @Test
         void compilesSimpleArrayAccess() {

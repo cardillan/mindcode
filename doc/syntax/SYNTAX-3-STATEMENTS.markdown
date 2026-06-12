@@ -401,6 +401,9 @@ It is possible to easily create infinite loops using the `loop` keyword. The mai
 #set symbolic-labels = true;
 #set remarks = comments;
 
+// A linked variable
+linked message1;
+
 /// Initialization code (link guard)
 guarded linked switch1;
 

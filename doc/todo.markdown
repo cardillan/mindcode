@@ -18,18 +18,13 @@ Changes intended for the next regular release.
 
 * **Doing**
 
+* Schematic block arrays: a way to create a rectangular shape consisting of the same block at once, with the same settings and serially assigned names.
 
 * **Planned**
 
 * Converting arrays to const arrays when possible
 * Array code injection optimization
 * If expression telescoping optimization
-* Function argument substitution: when all function calls take the same argument, the argument may be substituted. If the argument is a variable, the following may happen:
-  * the argument is a global variable: no substitution
-  * the argument is a local variable:
-    * `in` parameter: if the function does not modify the parameter, substitute.
-    * `out` parameter: if the function always writes a value to the parameter, substitute.
-    * `in out` parameter: always substitute.
 * Internal stack
 * Local arrays
 
@@ -88,6 +83,12 @@ These are topics that I've spent some time thinking about and still want them, b
 * `fallthrough` and `yield` in case expressions
 * Memory model
 * Remote parameters. Or maybe not, needs figuring out how to enforce restarting dependent processors when updated??
+* Function argument substitution: when all function calls take the same argument, the argument may be substituted. If the argument is a variable, the following may happen:
+  * the argument is a global variable: no substitution
+  * the argument is a local variable:
+    * `in` parameter: if the function does not modify the parameter, substitute.
+    * `out` parameter: if the function always writes a value to the parameter, substitute.
+    * `in out` parameter: always substitute.
 
 # Issue details
 

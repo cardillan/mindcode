@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed the schemacode action not producing the log file when requested by a command-line argument.
+* Fixed the compiler evaluating undeclared link names even in strict mode ([#325](https://github.com/cardillan/mindcode/issues/325)).
 
 ### Added
 

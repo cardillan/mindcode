@@ -115,7 +115,7 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
     private AstMindcodeNode evaluateIdentifier(AstIdentifier node, boolean local) {
         if (!functionVariables.isEmpty() && functionVariables.getLast().containsKey(node)) {
             return functionVariables.getLast().get(node);
-        } else if (variables.resolveVariable(node, local, true) instanceof LogicLiteral literal) {
+        } else if (variables.resolveVariable(node, local, false) instanceof LogicLiteral literal) {
             return literal.asAstNode(node.sourcePosition());
         } else {
             return node;

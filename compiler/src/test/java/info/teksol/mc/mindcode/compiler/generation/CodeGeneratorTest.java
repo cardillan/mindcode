@@ -229,6 +229,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             module test;
                             
+                            linked message1;
                             var invocations = -1;
                             
                             export void foo(in a, out b)

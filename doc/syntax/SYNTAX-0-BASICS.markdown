@@ -12,7 +12,7 @@ Some declarations (such as function declarations or some compiler options) may o
 
 [Function declarations](SYNTAX-4-FUNCTIONS.markdown#user-defined-functions) may appear in any order and may be called from a place in the source code which precedes their definition. [Global variables and constants](SYNTAX-1-VARIABLES.markdown#mindcode-variables), as well as [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters), must be declared before their first use. If a function call accesses a global variable which has not been declared yet, the compiler generates an error, even if the function being called does not precede the declaration of the variable. Example:
 
-```Mindcode
+```
 increase(5);
 
 var level = 0;

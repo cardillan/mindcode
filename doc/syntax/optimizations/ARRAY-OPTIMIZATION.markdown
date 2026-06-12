@@ -167,6 +167,7 @@ Example of a lookup array:
 const SIZE = 10;
 param LIMIT = 100;
 
+linked message1;
 var array[SIZE];
 
 begin

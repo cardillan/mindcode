@@ -33,7 +33,7 @@ class SamplesTest {
         return DynamicContainer.dynamicContainer("Mindcode Samples",
                 samples.values().stream()
                         .map(sample -> DynamicTest.dynamicTest(sample.name(),
-                                Path.of(MINDCODE_DIRECTORY, sample.name() + ".sdf").toUri(),
+                                Path.of(MINDCODE_DIRECTORY, sample.name() + ".mnd").toUri(),
                                 () -> compileMindcode(sample)))
         );
     }
