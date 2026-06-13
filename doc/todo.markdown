@@ -71,6 +71,12 @@ These are relatively small tasks that might be slipped in when I feel like it.
     * Avoid repeated compilation
     * Add support for running tests for a predetermined time instead of a specific number of test cases.
 * Customizable variable naming schemes
+* Handling internal errors:
+* Web app:
+  * Store the source file in a separate table for errors
+  * Display message "The error has been logged and will be investigated."
+* Command line app: display message "An internal error occurred. Please report the error at ..."
+* Fix incorrect headings of Data Flow Optimization passes executed after applying selected speed optimization.
 
 ## Shelf
 

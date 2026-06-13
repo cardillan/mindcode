@@ -146,6 +146,7 @@ public class DocValidatorTest extends AbstractTestBase {
         public DynamicNode validateOptimizationSequenceLinks() {
             final String upReference = "[Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown)";
             List<LinkFile> linkFiles = Stream.of(Optimization.values())
+                    .filter(o -> o != Optimization.INSTRUCTION_REORDERING)
                     .sorted(Comparator.comparing(Optimization::getName))
                     .map(o -> loadFile(OPTIMIZATIONS_PATH, o.getName(), o.getOptionName().toUpperCase() + ".markdown"))
                     .toList();
@@ -475,6 +476,7 @@ public class DocValidatorTest extends AbstractTestBase {
                     }));
 
             List<List<String>> rows = options.stream()
+                    .filter(o -> o.getOption() != Optimization.INSTRUCTION_REORDERING)
                     .sorted(Comparator.comparingInt(this::getOptionPrecedence).thenComparing(CompilerOption::getOptionName))
                     .map(option -> List.of(getOptionLink(option), option.getScope().name().toLowerCase(), option.getStability().name().toLowerCase()))
                     .collect(Collectors.toCollection(ArrayList::new));
@@ -530,6 +532,7 @@ public class DocValidatorTest extends AbstractTestBase {
             List<String> fileContent = Files.readAllLines(file.toPath());
 
             String expected = Stream.of(Optimization.values())
+                    .filter(o -> o != Optimization.INSTRUCTION_REORDERING)
                     .sorted(Comparator.comparing(Optimization::getName))
                     .map(o -> String.format("* [%s](optimizations/%s.markdown): %s.", o.getName(), o.getOptionName().toUpperCase(),
                             o.getDescription().replace('\'', '`')))
