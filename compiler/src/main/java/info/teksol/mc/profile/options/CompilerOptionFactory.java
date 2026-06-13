@@ -76,6 +76,12 @@ public class CompilerOptionFactory {
                 OptionAvailability.COMMAND_LINE, category,
                 List.of()));
 
+        list.add(new BooleanCompilerOptionValue(SchematicOptions.ALLOW_LINK_GAPS, "",
+                "gaps in numerical sequences of linked block names only produce a warning",
+                OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                false).setConstValue(true));
+
         list.add(new BooleanCompilerOptionValue(SchematicOptions.ALLOW_UNSATISFIED_LINKS, "",
                 "linked blocks declared in Mindcode source code but not present in the schematic only produce a warning",
                 OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,

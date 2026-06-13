@@ -46,6 +46,10 @@ public interface GlobalCompilerProfile {
         return this.<String>getOption(SchematicOptions.ADD_TAG).getValues();
     }
 
+    default boolean allowLinkGaps() {
+        return getBooleanValue(SchematicOptions.ALLOW_LINK_GAPS);
+    }
+
     default boolean allowUnsatisfiedLinks() {
         return getBooleanValue(SchematicOptions.ALLOW_UNSATISFIED_LINKS);
     }

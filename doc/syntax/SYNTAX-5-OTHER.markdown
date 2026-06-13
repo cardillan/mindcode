@@ -1156,7 +1156,21 @@ Options that affect the way schematics are created.
 
 | Option                                                     | Scope  | Semantic stability |
 |------------------------------------------------------------|--------|--------------------|
+| [allow-link-gaps](#option-allow-link-gaps)                 | global | stable             |
 | [allow-unsatisfied-links](#option-allow-unsatisfied-links) | global | stable             |
+
+### Option `allow-link-gaps`
+
+**Option scope: [global](#global-scope)**
+
+Specifies whether gaps in link numbering are allowed when creating schematics. Possible values are:
+
+* `false` (the default value): gaps in link numbering cause build errors.
+* `true` (or omitted): gaps in link numbering are allowed and reported as warnings.
+
+A gap in link numbering occurs when link names of blocks linked to a single processor do not form a continuous numbered sequence starting at 1 (for example, switches linked to a processor under the names of `switch1`, `switch2` and `switch4` have a gap, as the `switch3` link is missing).
+
+Building schematics with link gaps may lead to incorrect link creation, causing the built schematic to malfunction.
 
 ### Option `allow-unsatisfied-links`
 

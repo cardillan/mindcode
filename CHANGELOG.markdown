@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added support for symbolic link names (affects both [Mindcode](/doc/syntax/SYNTAX-1-VARIABLES.markdown#symbolic-link-names) and [Schemacode](/doc/syntax/SCHEMACODE.markdown#linking-by-a-symbolic-name)). Makes handling links in complex schematics much easier ([#284](https://github.com/cardillan/mindcode/issues/284)).
 * Added support for block arrays (Schemacode) and link arrays (Mindcode) ([#324](https://github.com/cardillan/mindcode/issues/324)).
+* Added a validation that ensures a built schematic doesn't have link gaps ([#326](https://github.com/cardillan/mindcode/issues/326)). 
+* Added a new [`allow-link-gaps`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-allow-link-gaps) compiler option.
 * Added an error message indicating a variable or constant might be accessed via function call before its declaration gets processed ([#297](https://github.com/cardillan/mindcode/issues/297)).
 
 ## 3.16.3 – 2026-06-02

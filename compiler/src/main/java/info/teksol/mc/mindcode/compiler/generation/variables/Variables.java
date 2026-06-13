@@ -255,11 +255,7 @@ public class Variables extends CompilerMessageEmitter {
 
     private void validateExpectedLinkName(AstIdentifier identifier) {
         if (schematicLinks != null && !schematicLinks.containsKey(identifier.getName())) {
-            if (globalProfile.allowUnsatisfiedLinks()) {
-                warn(identifier, ERR.UNSATISFIED_LINK, identifier.getName());
-            } else {
-                error(identifier, ERR.UNSATISFIED_LINK, identifier.getName());
-            }
+            error(globalProfile.allowUnsatisfiedLinks(), identifier, ERR.UNSATISFIED_LINK, identifier.getName());
         }
     }
 
