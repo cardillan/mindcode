@@ -9,16 +9,15 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 @NullMarked
-public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicAddress {
+public class LogicBuiltIn extends LogicVariable {
     public static final LogicBuiltIn INVALID = create("@", false);
 
     public static final LogicBuiltIn COUNTER = create("@counter", true);
     public static final LogicBuiltIn LINKS = create("@links", true);
-    public static final LogicBuiltIn UNIT = create("@unit", true);
+    public static final LogicBuiltIn UNIT = create("@unit", false);
     public static final LogicBuiltIn THIS = create("@this", false);
     public static final LogicBuiltIn WAIT = create("@wait", false);
     public static final LogicBuiltIn NAME = create("@name", false);
@@ -30,14 +29,10 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicA
     public static final LogicBuiltIn TYPE = create("@type", false);
     public static final LogicBuiltIn SIZE = create("@size", false);
 
-    private final SourcePosition sourcePosition;
-    private final String name;
     private final @Nullable MindustryContent object;
 
     private LogicBuiltIn(SourcePosition sourcePosition, String name, @Nullable MindustryContent object, boolean isVolatile) {
-        super(ArgumentType.BUILT_IN, computeMutability(object, isVolatile));
-        this.sourcePosition = sourcePosition;
-        this.name = Objects.requireNonNull(name);
+        super(sourcePosition, computeMutability(name, object, isVolatile), name);
         this.object = object;
 
         if (!name.startsWith("@")) {
@@ -46,23 +41,15 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicA
     }
 
     protected LogicBuiltIn(SourcePosition sourcePosition, String name) {
-        super(ArgumentType.BUILT_IN, ValueMutability.CONSTANT);
-        this.sourcePosition = sourcePosition;
-        this.name = name;
+        super(sourcePosition, ValueMutability.CONSTANT, name);
         this.object = null;
     }
 
-    private static ValueMutability computeMutability(@Nullable Object object, boolean isVolatile) {
-        return isVolatile ? ValueMutability.VOLATILE : object == null ? ValueMutability.IMMUTABLE : ValueMutability.CONSTANT;
-    }
-
-    @Override
-    public SourcePosition sourcePosition() {
-        return sourcePosition;
-    }
-
-    public String getName() {
-        return name;
+    private static ValueMutability computeMutability(String name, @Nullable Object object, boolean isVolatile) {
+        return "@unit".equals(name) ? ValueMutability.MUTABLE
+                : isVolatile ? ValueMutability.VOLATILE
+                : object == null ? ValueMutability.IMMUTABLE
+                : ValueMutability.CONSTANT;
     }
 
     @Override
@@ -146,6 +133,6 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue, LogicA
 
     @Override
     public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
-        LogicValue.super.writeValue(creator, valueSetter);
+        throw new MindcodeInternalError("Writes to LogicBuiltIns are not supported.");
     }
 }

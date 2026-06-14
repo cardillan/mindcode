@@ -53,7 +53,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             NAMED_COLOR_LITERAL,
             NUMERIC_LITERAL,
             STRING_LITERAL,
-            BUILT_IN,
             BLOCK);
 
     private static final Set<ArgumentType> blockExpressionTypes = Set.of(
@@ -850,7 +849,9 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
     }
 
     private boolean isNonvolatileConstant(LogicValue value) {
-        return constantExpressionTypes.contains(value.getType()) && !value.isVolatile();
+        return value instanceof LogicBuiltIn builtIn
+                ? builtIn.getMutability() == ValueMutability.CONSTANT || builtIn.getMutability() == ValueMutability.IMMUTABLE
+                : constantExpressionTypes.contains(value.getType()) && !value.isVolatile();
     }
 
     private record Allocation(LogicVariable memory, int start, int end) {

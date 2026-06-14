@@ -583,15 +583,15 @@ compiles to:
             label_26:
             op add :active :active 1
             # Handle your unit here
-            op mul *tmp19 30 :active
-            op add :angle *tmp19 @tick
-            op sin *tmp21 :angle 0
-            op mul *tmp22 15 *tmp21
-            op add *tmp23 @thisx *tmp22
-            op cos *tmp24 :angle 0
-            op mul *tmp25 15 *tmp24
-            op add *tmp26 @thisy *tmp25
-            ucontrol move *tmp23 *tmp26 0 0 0
+            op mul *tmp18 30 :active
+            op add :angle *tmp18 @tick
+            op sin *tmp20 :angle 0
+            op mul *tmp21 15 *tmp20
+            op add *tmp22 @thisx *tmp21
+            op cos *tmp23 :angle 0
+            op mul *tmp24 15 *tmp23
+            op add *tmp25 @thisy *tmp24
+            ucontrol move *tmp22 *tmp25 0 0 0
             # End of unit handling
             jump label_3 always 0 0
 ```

@@ -82,6 +82,23 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.preserved = false;
     }
 
+    // For built-in
+    protected LogicVariable(SourcePosition sourcePosition, ValueMutability mutability, String name) {
+        super(BUILT_IN, mutability);
+        this.sourcePosition = sourcePosition;
+        this.functionPrefix = "";
+        this.name = Objects.requireNonNull(name);
+        this.mlog = Objects.requireNonNull(name);
+        this.fullName = name;
+        this.isVolatile = mutability == ValueMutability.VOLATILE;
+        this.noinit = true;
+        this.input = false;
+        this.output = false;
+        this.reference = false;
+        this.optional = false;
+        this.preserved = false;
+    }
+
     // Global/main
     protected LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String name, String mlog,
             boolean isVolatile, boolean noinit, boolean optional) {

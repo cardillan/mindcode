@@ -45,7 +45,6 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
         ValueStore valueStore = evaluateArrayAccess(node);
         return switch (valueStore) {
             case LogicVariable memory -> memoryArrayAccess(node, memory);
-            case LogicBuiltIn builtin -> memoryArrayAccess(node, builtin);
             case ArrayStore array -> storeArrayAccess(node, array);
             case null, default -> {
                 error(node.getArray(), ERR.ARRAY_INVALID, node.getArray().getName());

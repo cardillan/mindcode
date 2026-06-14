@@ -583,7 +583,8 @@ public class CaseExpression {
             }
 
             // Unsupported case expressions: no input variable, inconsistent types, no branches or range too large
-            if (variable == null || analyzer.getContentType() == null || caseExpression.isEmpty() || caseExpression.range() > MAX_CASE_RANGE) {
+            if (variable == null || variable.getType() == ArgumentType.BUILT_IN|| analyzer.getContentType() == null
+                    || caseExpression.isEmpty() || caseExpression.range() > MAX_CASE_RANGE) {
                 return null;
             }
 

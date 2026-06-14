@@ -53,6 +53,12 @@ public record SideEffects(List<LogicVariable> reads, List<LogicVariable> writes,
         return !writes.isEmpty() || !resets.isEmpty();
     }
 
+    SideEffects plusWrites(List<LogicVariable> writes) {
+        return this == SideEffects.NONE
+                ? new SideEffects(List.of(), writes, List.of(), writes)
+                : SideEffects.of(reads, this.writes.isEmpty() ? writes : union(this.writes, writes), resets);
+    }
+
     /// Creates a side effect which reads all variables from the list
     public static SideEffects reads(List<LogicVariable> variables) {
         return new SideEffects(variables, List.of(), List.of(), variables);
@@ -88,10 +94,16 @@ public record SideEffects(List<LogicVariable> reads, List<LogicVariable> writes,
         return new SideEffects(reads, writes, resets, union(reads, writes, resets));
     }
 
-    private static List<LogicVariable> union(List<LogicVariable> reads, List<LogicVariable> writes, List<LogicVariable> resets) {
-        List<LogicVariable> union = new java.util.ArrayList<>(reads);
-        union.addAll(writes);
-        union.addAll(resets);
+    private static List<LogicVariable> union(List<LogicVariable> list1, List<LogicVariable> list2) {
+        List<LogicVariable> union = new java.util.ArrayList<>(list1);
+        union.addAll(list2);
+        return union;
+    }
+
+    private static List<LogicVariable> union(List<LogicVariable> list1, List<LogicVariable> list2, List<LogicVariable> list3) {
+        List<LogicVariable> union = new java.util.ArrayList<>(list1);
+        union.addAll(list2);
+        union.addAll(list3);
         return union;
     }
 }

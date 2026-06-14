@@ -25,40 +25,40 @@ print *tmp7
 print "\n"
 ubind null
 jump 29 notEqual @unit null
-set *tmp18 null
+set *tmp17 null
 jump 55 always 0 0
 set :findClosestUnit:first_unit @unit
 set :findClosestUnit:best_unit null
 set :findClosestUnit:best_distance 10000000000
-sensor *tmp21 @unit @controlled
-jump 43 notEqual *tmp21 0
-sensor *tmp24 @unit @x
-op sub *tmp25 *tmp24 null
-sensor *tmp26 @unit @y
-op sub *tmp27 *tmp26 null
-op len :findClosestUnit:distance *tmp25 *tmp27
+sensor *tmp20 @unit @controlled
+jump 43 notEqual *tmp20 0
+sensor *tmp23 @unit @x
+op sub *tmp24 *tmp23 null
+sensor *tmp25 @unit @y
+op sub *tmp26 *tmp25 null
+op len :findClosestUnit:distance *tmp24 *tmp26
 jump 45 greaterThanEq :findClosestUnit:distance :findClosestUnit:best_distance
 set :findClosestUnit:best_distance :findClosestUnit:distance
 set :findClosestUnit:best_unit @unit
 jump 45 always 0 0
-sensor *tmp32 :findClosestUnit:first_unit @dead
-select :findClosestUnit:first_unit equal *tmp32 1 @unit :findClosestUnit:first_unit
+sensor *tmp30 :findClosestUnit:first_unit @dead
+select :findClosestUnit:first_unit equal *tmp30 1 @unit :findClosestUnit:first_unit
 ubind null
 jump 32 notEqual :findClosestUnit:first_unit @unit
 jump 50 notEqual :findClosestUnit:best_unit null
-set *tmp18 null
+set *tmp17 null
 jump 55 always 0 0
-sensor *tmp39 :findClosestUnit:best_unit @controlled
-jump 25 notEqual *tmp39 0
+sensor *tmp36 :findClosestUnit:best_unit @controlled
+jump 25 notEqual *tmp36 0
 ubind :findClosestUnit:best_unit
 ucontrol flag null 0 0 0 0
-set *tmp18 :findClosestUnit:best_unit
-print *tmp18
+set *tmp17 :findClosestUnit:best_unit
+print *tmp17
 print "\n"
 ubind null
 jump 57 equal @unit null
-sensor *tmp45 @unit @controlled
-jump 57 notEqual *tmp45 0
+sensor *tmp42 @unit @controlled
+jump 57 notEqual *tmp42 0
 ucontrol flag null 0 0 0 0
 print @unit
 print "\n"
@@ -67,8 +67,8 @@ jump 69 notEqual @unit null
 print "nullNo unit of type null found."
 printflush null
 jump 64 always 0 0
-sensor *tmp51 @unit @controlled
-jump 74 equal *tmp51 0
+sensor *tmp48 @unit @controlled
+jump 74 equal *tmp48 0
 print "nullLooking for a free null..."
 printflush null
 jump 64 always 0 0

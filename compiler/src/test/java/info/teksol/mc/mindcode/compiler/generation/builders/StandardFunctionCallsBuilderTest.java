@@ -1488,8 +1488,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             unit = ubind(@poly);
                             """,
                     createInstruction(UBIND, "@poly"),
-                    createInstruction(SET, tmp(0), "@unit"),
-                    createInstruction(SET, ":unit", tmp(0))
+                    createInstruction(SET, ":unit", "@unit")
             );
         }
 

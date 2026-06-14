@@ -191,6 +191,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             case SET         -> new SetInstruction(astContext, args, params);
             case SETADDR     -> new SetAddressInstruction(astContext, args, params);
             case STOP        -> new StopInstruction(astContext);
+            case UBIND       -> new UbindInstruction(astContext, args, params);
             case UNPACKCOLOR -> new UnpackColorInstruction(astContext, args, params);
             case WAIT        -> new WaitInstruction(astContext, args, params);
             case WRITE       -> new WriteInstruction(astContext, args, params);
@@ -390,6 +391,8 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     }
 
     private boolean hasNonvolatileArguments(LogicInstruction instruction) {
+        // Linked blocks are considered volatile, even when not explicitly created like that
+        // (Superfluous at the moment, as currently all linked blocks are volatile)
         return instruction.inputArgumentsStream().noneMatch(v -> v.getType() == ArgumentType.BLOCK || v.isVolatile());
     }
 

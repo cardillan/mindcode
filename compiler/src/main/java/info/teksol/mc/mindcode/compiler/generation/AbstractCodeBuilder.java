@@ -97,8 +97,8 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
             case StructuredValueStore s when allowStructured -> s;
             case LogicString s when allowStrings -> s;
             case InternalArrayElement e -> e;
-            case LogicVariable v -> v;
             case LogicBuiltIn b -> b;
+            case LogicVariable v -> v;
             default -> {
                 error(node, message, args);
                 yield LogicVariable.INVALID;

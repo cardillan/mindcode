@@ -20,6 +20,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added a new [`zero-wait-yields`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-zero-wait-yields) compiler option.
 * Added an error message indicating a variable or constant might be accessed via function call before its declaration gets processed ([#297](https://github.com/cardillan/mindcode/issues/297)).
 
+### Changed
+
+* Changed the `@unit` built-in variable to be considered non-volatile and added proper handling of side-effects by the `ubind` instruction. The change may allow some additional optimizations of unit handling code.  
+
 ## 3.16.3 – 2026-06-02
 
 ### Fixed

@@ -1790,15 +1790,17 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         void allowsCaseStatementInShortCircuiting() {
             // Make sure there isn't an error - see #296
             assertCompilesTo("""
-                            if @links < 1000 and @unit in (@flare, @poly, @mega) then
+                            param name = "alpha";
+                            if @links < 1000 and name in ("alpha", "beta", "gamma") then
                                 print("Yes");
                             end;
                             """,
                     createInstruction(LABEL, "__start__"),
+                    createInstruction(SET, "name", q("alpha")),
                     createInstruction(JUMP, "__start__", "greaterThanEq", "@links", "1000"),
-                    createInstruction(JUMP, label(6), "equal", "@unit", "@flare"),
-                    createInstruction(JUMP, label(6), "equal", "@unit", "@poly"),
-                    createInstruction(JUMP, label(5), "notEqual", "@unit", "@mega"),
+                    createInstruction(JUMP, label(6), "equal", "name", q("alpha")),
+                    createInstruction(JUMP, label(6), "equal", "name", q("beta")),
+                    createInstruction(JUMP, label(5), "notEqual", "name", q("gamma")),
                     createInstruction(LABEL, label(6)),
                     createInstruction(SET, tmp(1), "true"),
                     createInstruction(JUMP, label(4), "always"),
