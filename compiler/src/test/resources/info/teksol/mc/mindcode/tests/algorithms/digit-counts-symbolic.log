@@ -730,18 +730,18 @@ label *label25
 # "Function: void countDigits(in number)"
 set :countDigits:number :i
 label *label18
-op mod *tmp2 :countDigits:number 10
-lookup liquid *tmp10 *tmp2
-sensor .array*elem *tmp10 @name
-read *tmp3 @this .array*elem
-op add *tmp3 *tmp3 1
-write *tmp3 @this .array*elem
+op mod *tmp0 :countDigits:number 10
+lookup liquid *tmp3 *tmp0
+sensor .array*elem *tmp3 @name
+read *tmp1 @this .array*elem
+op add *tmp1 *tmp1 1
+write *tmp1 @this .array*elem
 op idiv :countDigits:number :countDigits:number 10
 jump *label18 greaterThan :countDigits:number 0
 op add :i :i 1
 jump *label25 lessThan :i LIMIT
 label *label16
-assertflush *tmp6
+assertflush *tmp2
 # "Function: void printArray()"
 print water
 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
@@ -754,4 +754,4 @@ format ozone
 format cyanogen
 format gallium
 print nitrogen
-assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
+assertprints *tmp2 "10-20-20-20-20-20-20-20-20-20" "digit counts"

@@ -60,12 +60,12 @@ compiles to:
 
 ```mlog
 set .index 0
-set *tmp2 .index
+set *tmp0 .index
 op add .index .index 1
-getlink .a *tmp2
+getlink .a *tmp0
 print .a
-op strictEqual *tmp4 .a null
-jump 1 equal *tmp4 false
+op strictEqual *tmp1 .a null
+jump 1 equal *tmp1 false
 print "Done!"
 ```
 
@@ -91,14 +91,14 @@ which produces:
 # Mlog code compiled with support for symbolic labels
 # You can safely add/remove instructions, in most parts of the program
 # Pay closer attention to sections of the program manipulating @counter
-    sensor *tmp1 switch1 @enabled
-    jump label_7 equal *tmp1 false
+    sensor *tmp0 switch1 @enabled
+    jump label_7 equal *tmp0 false
 label_2:
-    sensor *tmp3 switch2 @enabled
-    jump label_7 equal *tmp3 false
+    sensor *tmp1 switch2 @enabled
+    jump label_7 equal *tmp1 false
         print "Doing something."
-    sensor *tmp1 switch1 @enabled
-    jump label_2 notEqual *tmp1 false
+    sensor *tmp0 switch1 @enabled
+    jump label_2 notEqual *tmp0 false
     label_7:
     print "A switch has been reset."
 ```
@@ -137,10 +137,10 @@ label_4:
 label_6:
         print "In loop\n"
         op rand *tmp0 10 0
+        op rand *tmp1 10 0
+        op greaterThan :c *tmp1 5
         op rand *tmp2 10 0
-        op greaterThan :c *tmp2 5
-        op rand *tmp4 10 0
-        op greaterThan :e *tmp4 5
+        op greaterThan :e *tmp2 5
     jump label_2 greaterThan *tmp0 5
     jump label_2 notEqual :b false
     label_14:

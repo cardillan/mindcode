@@ -7771,34 +7771,34 @@ op add :wait :wait 150
 sensor :powerNetIn battery1 @powerNetIn
 sensor :powerNetOut battery1 @powerNetOut
 sensor :powerNetStored battery1 @powerNetStored
-read *tmp14 bank1 :index
-op sub .ACCU_CONS .ACCU_CONS *tmp14
+read *tmp0 bank1 :index
+op sub .ACCU_CONS .ACCU_CONS *tmp0
 op add .ACCU_CONS .ACCU_CONS :powerNetOut
 write :powerNetOut bank1 :index
-op div *tmp17 .ACCU_CONS 40
-op round :consumption *tmp17
+op div *tmp1 .ACCU_CONS 40
+op round :consumption *tmp1
 write :consumption bank1 508
 op add :tmp :index 100
-read *tmp25 bank1 :tmp
-op sub .ACCU_PROD .ACCU_PROD *tmp25
+read *tmp2 bank1 :tmp
+op sub .ACCU_PROD .ACCU_PROD *tmp2
 op add .ACCU_PROD .ACCU_PROD :powerNetIn
 write :powerNetIn bank1 :tmp
-op div *tmp28 .ACCU_PROD 40
-op round :production *tmp28
+op div *tmp3 .ACCU_PROD 40
+op round :production *tmp3
 write :production bank1 509
-op sub *tmp33 .ACCU_PROD .ACCU_CONS
-op div *tmp34 *tmp33 40
-op round :net_power *tmp34
+op sub *tmp4 .ACCU_PROD .ACCU_CONS
+op div *tmp5 *tmp4 40
+op round :net_power *tmp5
 write :net_power bank1 510
 op add :tmp :index 200
 read :last bank1 :tmp
 write :powerNetStored bank1 :tmp
 op sub :diff :powerNetStored :last
-op div *tmp46 :diff 6
-op round :battery_change *tmp46
+op div *tmp6 :diff 6
+op round :battery_change *tmp6
 write :battery_change bank1 511
-op add *tmp51 :index 1
-op mod :index *tmp51 40
+op add *tmp7 :index 1
+op mod :index *tmp7 40
 print "Measured interval: [green]6[] seconds\nConsumption: [green]{0}[]\nProduction: [green]{0}[]\nNet power: [green]{0}[]\nBattery change: [green]{0}[]"
 format :consumption
 format :production

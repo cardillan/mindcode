@@ -941,30 +941,30 @@ set .UNIT @mega
 set :first_unit null
 set :index 1
 label *label0
-sensor *tmp2 switch2 @enabled
-jump *label3 equal *tmp2 false
-sensor *tmp52 .UNIT @id
-multijump *tmp52 0 0
+sensor *tmp0 switch2 @enabled
+jump *label3 equal *tmp0 false
+sensor *tmp10 .UNIT @id
+multijump *tmp10 0 0
 multilabel *label60
 multilabel *label55
-set *tmp4 null                          # Origin: 6, keys: 0 .. 14, 16 .. 19
+set *tmp1 null                          # Origin: 6, keys: 0 .. 14, 16 .. 19
 jump *label5 always
 multilabel *label56
-set *tmp4 @mono                         # Origin: 6, keys: 15
+set *tmp1 @mono                         # Origin: 6, keys: 15
 jump *label5 always
 multilabel *label57
-set *tmp4 @poly                         # Origin: 6, keys: 20
+set *tmp1 @poly                         # Origin: 6, keys: 20
 jump *label5 always
 multilabel *label58
-set *tmp4 @mega                         # Origin: 6, keys: 21
+set *tmp1 @mega                         # Origin: 6, keys: 21
 jump *label5 always
 multilabel *label59
-set *tmp4 @flare                        # Origin: 6, keys: 22
+set *tmp1 @flare                        # Origin: 6, keys: 22
 label *label5
-set .UNIT *tmp4
+set .UNIT *tmp1
 set :first_unit null
 control enabled switch2 false
-print *tmp4
+print *tmp1
 print ": gathering information..."
 label *label3
 ubind .UNIT
@@ -981,8 +981,8 @@ printflush message1
 set :first_unit @unit
 set :index 1
 print .UNIT
-sensor *tmp13 switch1 @enabled
-jump *label20 equal *tmp13 false
+sensor *tmp2 switch1 @enabled
+jump *label20 equal *tmp2 false
 print " (cleanup active)"
 label *label20
 label *label16
@@ -990,13 +990,13 @@ sensor :controlled @unit @controlled
 sensor :flag @unit @flag
 sensor :items @unit @totalItems
 sensor :item @unit @firstItem
-sensor *tmp19 @unit @controller
-select :controlled equal *tmp19 @this 0 :controlled
+sensor *tmp3 @unit @controller
+select :controlled equal *tmp3 @this 0 :controlled
 jump *label26 notEqual :flag 0
 jump *label26 greaterThan :items 0
 jump *label24 equal :controlled 0
-sensor *tmp25 @unit @controller
-jump *label24 equal *tmp25 @this
+sensor *tmp4 @unit @controller
+jump *label24 equal *tmp4 @this
 label *label26
 print "\n"
 print :index
@@ -1006,10 +1006,10 @@ multilabel *label63
 jump *label30 always
 multilabel *label64
 sensor :controller @unit @controller    # Origin: 50, keys: 1
-sensor *tmp31 :controller @x
-op floor :x *tmp31
-sensor *tmp33 :controller @y
-op floor :y *tmp33
+sensor *tmp5 :controller @x
+op floor :x *tmp5
+sensor *tmp6 :controller @y
+op floor :y *tmp6
 print ", {0};"
 format :x
 print :y
@@ -1031,13 +1031,13 @@ print :item
 label *label39
 label *label24
 jump *label41 notEqual :controlled 0
-sensor *tmp40 switch1 @enabled
-jump *label41 equal *tmp40 false
+sensor *tmp7 switch1 @enabled
+jump *label41 equal *tmp7 false
 jump *label45 lessThanEq :items 0
 ucontrol flag 1
 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
-ucontrol within .CORE_X .CORE_Y 8 *tmp46
-jump *label47 equal *tmp46 false
+ucontrol within .CORE_X .CORE_Y 8 *tmp8
+jump *label47 equal *tmp8 false
 ucontrol itemDrop .CORE :items
 jump *label46 always
 label *label47
@@ -1045,8 +1045,8 @@ ucontrol approach .CORE_X .CORE_Y 4
 jump *label46 always
 label *label45
 jump *label49 equal :flag 0
-ucontrol within @thisx @thisy 8 *tmp50
-jump *label51 equal *tmp50 false
+ucontrol within @thisx @thisy 8 *tmp9
+jump *label51 equal *tmp9 false
 ucontrol flag 0
 jump *label52 always
 label *label51

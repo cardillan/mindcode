@@ -251,12 +251,12 @@ set :sorted true
 set :i 0
 jump *label5 greaterThanEq 0 :n
 label *label12
-op add *tmp1 :i 1
+op add *tmp0 :i 1
 read :testAndSwap:a ARRAY :i
-read :testAndSwap:b ARRAY *tmp1
+read :testAndSwap:b ARRAY *tmp0
 jump *label8 lessThanEq :testAndSwap:a :testAndSwap:b
 write :testAndSwap:b ARRAY :i
-write :testAndSwap:a ARRAY *tmp1
+write :testAndSwap:a ARRAY *tmp0
 set :sorted false
 label *label8
 op add :i :i 1
@@ -266,9 +266,9 @@ jump *label0 equal :sorted false
 set :i 0
 jump *label11 greaterThanEq 0 SIZE
 label *label13
-read *tmp20 FINAL :i
-read *tmp21 ARRAY :i
-assertequals *tmp20 *tmp21 "unexpected value"
+read *tmp1 FINAL :i
+read *tmp2 ARRAY :i
+assertequals *tmp1 *tmp2 "unexpected value"
 op add :i :i 1
 jump *label13 lessThan :i SIZE
 label *label11

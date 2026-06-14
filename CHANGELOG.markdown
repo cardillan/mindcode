@@ -22,7 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* Changed the `@unit` built-in variable to be considered non-volatile and added proper handling of side-effects by the `ubind` instruction. The change may allow some additional optimizations of unit handling code.  
+* Changed the `@unit` built-in variable to be considered non-volatile and added proper handling of side effects by the `ubind` instruction. The change may allow some additional optimizations of unit handling code.
+* Temporary variables are renumbered at the end of compilation, so that their names (`*tmp#`) start with 0 and the sequence doesn't contain gaps. 
 
 ## 3.16.3 – 2026-06-02
 

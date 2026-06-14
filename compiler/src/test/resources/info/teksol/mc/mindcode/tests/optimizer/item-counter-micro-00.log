@@ -1082,18 +1082,18 @@ set :n .LINKS
 label *label3
 op sub :n :n 1
 getlink :block :n
-sensor *tmp3 :block @type
-jump *label7 notEqual *tmp3 @memory-cell
+sensor *tmp0 :block @type
+jump *label7 notEqual *tmp0 @memory-cell
 set .MEMORY :block
 set :lastCell 63
 jump *label6 always
 label *label7
-jump *label9 notEqual *tmp3 @memory-bank
+jump *label9 notEqual *tmp0 @memory-bank
 set .MEMORY :block
 set :lastCell 511
 jump *label6 always
 label *label9
-jump *label11 notEqual *tmp3 @plastanium-conveyor
+jump *label11 notEqual *tmp0 @plastanium-conveyor
 set .CONV4 .CONV3
 set .CONV3 .CONV2
 set .CONV2 .CONV1
@@ -1119,10 +1119,10 @@ print "Item Counter\n[salmon]No memory attached."
 printflush message1
 jump *label0 always
 label *label2
-op idiv *tmp12 MIN_BATCH 10
-op max .EFF_MIN_BATCH *tmp12 1
-op idiv *tmp14 MAX_BATCH 10
-op max .EFF_MAX_BATCH *tmp14 MIN_BATCH
+op idiv *tmp1 MIN_BATCH 10
+op max .EFF_MIN_BATCH *tmp1 1
+op idiv *tmp2 MAX_BATCH 10
+op max .EFF_MAX_BATCH *tmp2 MIN_BATCH
 set .BATCH .EFF_MIN_BATCH
 op mul .BATCH_TXT .EFF_MIN_BATCH 10
 read :total .MEMORY 0
@@ -1135,8 +1135,8 @@ set :b2 0
 set :b1 0
 set :ratePerMin 0
 set :startTime @time
-sensor *tmp24 switch1 @enabled
-jump *label21 notEqual *tmp24 0
+sensor *tmp3 switch1 @enabled
+jump *label21 notEqual *tmp3 0
 label *label46
 set :start @time
 sensor :a1 .CONV1 @totalItems
@@ -1159,12 +1159,12 @@ jump *label30 lessThanEq :batches :limit
 op sub :duration @time :startTime
 set :startTime @time
 op div :rate .BATCH :duration
-op mul *tmp46 :rate 166.66666666666666
-write *tmp46 .MEMORY :lastCell
+op mul *tmp4 :rate 166.66666666666666
+write *tmp4 .MEMORY :lastCell
 op idiv :ratePerMin :rate 0.0000016666666666666667
 jump *label32 greaterThan :duration 2000
-op add *tmp51 .BATCH 1
-op min .BATCH *tmp51 .EFF_MAX_BATCH
+op add *tmp5 .BATCH 1
+op min .BATCH *tmp5 .EFF_MAX_BATCH
 op mul .BATCH_TXT .BATCH 10
 label *label32
 op add :limit :limit .BATCH
@@ -1191,11 +1191,11 @@ sensor :b4 .CONV4 @totalItems
 jump *label40 greaterThanEq :b4 :a4
 op add :batches :batches 1
 label *label40
-op sub *tmp68 @time :startTime
-op floor :elapsed *tmp68
+op sub *tmp6 @time :startTime
+op floor :elapsed *tmp6
 jump *label42 lessThan :elapsed 10000
-op idiv *tmp72 .BATCH 5
-op max .BATCH *tmp72 .EFF_MIN_BATCH
+op idiv *tmp7 .BATCH 5
+op max .BATCH *tmp7 .EFF_MIN_BATCH
 op mul .BATCH_TXT .BATCH 10
 op add :limit :batches .BATCH
 write 0 .MEMORY :lastCell
@@ -1205,15 +1205,15 @@ label *label42
 print "Batch size: [green]{0}[]\nBatch time: [gold]{0}[] ms\n[lightgray]Loop time: {0} ms"
 format .BATCH_TXT
 format :elapsed
-op sub *tmp79 @time :start
-op idiv *tmp81 *tmp79 2
-format *tmp81
+op sub *tmp8 @time :start
+op idiv *tmp9 *tmp8 2
+format *tmp9
 printflush message1
 jump *label44 equal .LINKS @links
 end
 label *label44
-sensor *tmp24 switch1 @enabled
-jump *label46 equal *tmp24 0
+sensor *tmp3 switch1 @enabled
+jump *label46 equal *tmp3 0
 label *label21
 control enabled switch1 0
 write 0 .MEMORY :lastCell

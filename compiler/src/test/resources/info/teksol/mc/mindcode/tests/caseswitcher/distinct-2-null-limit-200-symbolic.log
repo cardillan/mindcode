@@ -804,10 +804,10 @@ set :i -1
 label *label58
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
-sensor *tmp8 :block @id
-jump *label61 greaterThanEq *tmp8 203
-jump *label59 greaterThanEq *tmp8 35
-multijump *label63 *tmp8 0
+sensor *tmp2 :block @id
+jump *label61 greaterThanEq *tmp2 203
+jump *label59 greaterThanEq *tmp2 35
+multijump *label63 *tmp2 0
 multilabel *label63
 jump *label60 always
 multilabel *label64
@@ -877,12 +877,12 @@ jump *label35 always
 multilabel *label96
 jump *label37 always
 multilabel *label97
-set *tmp2 18
+set *tmp0 18
 jump *label5 always
 label *label61
-jump *label59 greaterThanEq *tmp8 235
-jump *label41 lessThan *tmp8 204
-multijump *label99 *tmp8 204
+jump *label59 greaterThanEq *tmp2 235
+jump *label41 lessThan *tmp2 204
+multijump *label99 *tmp2 204
 multilabel *label99
 jump *label43 always
 multilabel *label100
@@ -944,85 +944,85 @@ jump *label59 always
 multilabel *label128
 jump *label59 always
 multilabel *label129
-set *tmp2 26
+set *tmp0 26
 jump *label5 always
 label *label7
-set *tmp2 1
+set *tmp0 1
 jump *label5 always
 label *label9
-set *tmp2 3
+set *tmp0 3
 jump *label5 always
 label *label11
-set *tmp2 4
+set *tmp0 4
 jump *label5 always
 label *label13
-set *tmp2 5
+set *tmp0 5
 jump *label5 always
 label *label15
-set *tmp2 6
+set *tmp0 6
 jump *label5 always
 label *label17
-set *tmp2 7
+set *tmp0 7
 jump *label5 always
 label *label19
-set *tmp2 8
+set *tmp0 8
 jump *label5 always
 label *label21
-set *tmp2 9
+set *tmp0 9
 jump *label5 always
 label *label23
-set *tmp2 10
+set *tmp0 10
 jump *label5 always
 label *label25
-set *tmp2 11
+set *tmp0 11
 jump *label5 always
 label *label27
-set *tmp2 12
+set *tmp0 12
 jump *label5 always
 label *label29
-set *tmp2 13
+set *tmp0 13
 jump *label5 always
 label *label31
-set *tmp2 14
+set *tmp0 14
 jump *label5 always
 label *label33
-set *tmp2 15
+set *tmp0 15
 jump *label5 always
 label *label35
-set *tmp2 16
+set *tmp0 16
 jump *label5 always
 label *label37
-set *tmp2 17
+set *tmp0 17
 jump *label5 always
 label *label41
-set *tmp2 19
+set *tmp0 19
 jump *label5 always
 label *label43
-set *tmp2 20
+set *tmp0 20
 jump *label5 always
 label *label45
-set *tmp2 21
+set *tmp0 21
 jump *label5 always
 label *label47
-set *tmp2 22
+set *tmp0 22
 jump *label5 always
 label *label49
-set *tmp2 23
+set *tmp0 23
 jump *label5 always
 label *label51
-set *tmp2 24
+set *tmp0 24
 jump *label5 always
 label *label53
-set *tmp2 25
+set *tmp0 25
 jump *label5 always
 label *label60
-jump *label7 strictEqual *tmp8 null
+jump *label7 strictEqual *tmp2 null
 label *label59
-set *tmp2 0
+set *tmp0 0
 label *label5
-op shl :bit 1 *tmp2
-op and *tmp5 :total :bit
-jump *label56 lessThanEq *tmp5 1
+op shl :bit 1 *tmp0
+op and *tmp1 :total :bit
+jump *label56 lessThanEq *tmp1 1
 op or :total :total 0x1000000000
 jump *label57 always
 label *label56

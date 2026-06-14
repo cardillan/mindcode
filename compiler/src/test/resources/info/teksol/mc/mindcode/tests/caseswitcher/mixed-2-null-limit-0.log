@@ -342,74 +342,74 @@ lookup block :identifyBlock:block :printAll:i
 jump *label8 strictEqual :identifyBlock:block null
 jump *label7 always
 label *label8
-set *tmp3 65
+set *tmp1 65
 jump *label6 always
 label *label7
 jump *label10 equal :identifyBlock:block @kiln
 jump *label9 always
 label *label10
-set *tmp3 66
+set *tmp1 66
 jump *label6 always
 label *label9
 jump *label12 equal :identifyBlock:block @plastanium-compressor
 jump *label11 always
 label *label12
-set *tmp3 67
+set *tmp1 67
 jump *label6 always
 label *label11
 jump *label14 equal :identifyBlock:block @phase-weaver
 jump *label13 always
 label *label14
-set *tmp3 68
+set *tmp1 68
 jump *label6 always
 label *label13
 jump *label16 equal :identifyBlock:block @cryofluid-mixer
 jump *label15 always
 label *label16
-set *tmp3 69
+set *tmp1 69
 jump *label6 always
 label *label15
 jump *label18 equal :identifyBlock:block @pyratite-mixer
 jump *label17 always
 label *label18
-set *tmp3 70
+set *tmp1 70
 jump *label6 always
 label *label17
 jump *label20 equal :identifyBlock:block @blast-mixer
 jump *label19 always
 label *label20
-set *tmp3 71
+set *tmp1 71
 jump *label6 always
 label *label19
 jump *label22 equal :identifyBlock:block @melter
 jump *label21 always
 label *label22
-set *tmp3 72
+set *tmp1 72
 jump *label6 always
 label *label21
 jump *label24 equal :identifyBlock:block @separator
 jump *label23 always
 label *label24
-set *tmp3 73
+set *tmp1 73
 jump *label6 always
 label *label23
 jump *label26 equal :identifyBlock:block @disassembler
 jump *label25 always
 label *label26
-set *tmp3 74
+set *tmp1 74
 jump *label6 always
 label *label25
 jump *label28 equal :identifyBlock:block @spore-press
 jump *label27 always
 label *label28
-set *tmp3 75
+set *tmp1 75
 jump *label6 always
 label *label27
 jump *label30 equal :identifyBlock:block @door
 jump *label30 equal :identifyBlock:block @door-large
 jump *label29 always
 label *label30
-set *tmp3 76
+set *tmp1 76
 jump *label6 always
 label *label29
 jump *label32 equal :identifyBlock:block @scrap-wall
@@ -418,7 +418,7 @@ jump *label32 equal :identifyBlock:block @scrap-wall-huge
 jump *label32 equal :identifyBlock:block @scrap-wall-gigantic
 jump *label31 always
 label *label32
-set *tmp3 77
+set *tmp1 77
 jump *label6 always
 label *label31
 jump *label34 equal :identifyBlock:block @conveyor
@@ -427,7 +427,7 @@ jump *label34 equal :identifyBlock:block @plastanium-conveyor
 jump *label34 equal :identifyBlock:block @armored-conveyor
 jump *label33 always
 label *label34
-set *tmp3 78
+set *tmp1 78
 jump *label6 always
 label *label33
 jump *label36 equal :identifyBlock:block @conduit
@@ -436,7 +436,7 @@ jump *label36 equal :identifyBlock:block @plated-conduit
 jump *label36 equal :identifyBlock:block @liquid-router
 jump *label35 always
 label *label36
-set *tmp3 79
+set *tmp1 79
 jump *label6 always
 label *label35
 jump *label38 equal :identifyBlock:block @liquid-tank
@@ -444,73 +444,73 @@ jump *label38 equal :identifyBlock:block @liquid-junction
 jump *label38 equal :identifyBlock:block @liquid-container
 jump *label37 always
 label *label38
-set *tmp3 80
+set *tmp1 80
 jump *label6 always
 label *label37
 jump *label40 equal :identifyBlock:block @disperse
 jump *label39 always
 label *label40
-set *tmp3 81
+set *tmp1 81
 jump *label6 always
 label *label39
 jump *label42 equal :identifyBlock:block @unit-repair-tower
 jump *label41 always
 label *label42
-set *tmp3 82
+set *tmp1 82
 jump *label6 always
 label *label41
 jump *label44 equal :identifyBlock:block @diffuse
 jump *label43 always
 label *label44
-set *tmp3 83
+set *tmp1 83
 jump *label6 always
 label *label43
 jump *label46 equal :identifyBlock:block @prime-refabricator
 jump *label45 always
 label *label46
-set *tmp3 84
+set *tmp1 84
 jump *label6 always
 label *label45
 jump *label48 equal :identifyBlock:block @tank-refabricator
 jump *label47 always
 label *label48
-set *tmp3 85
+set *tmp1 85
 jump *label6 always
 label *label47
 jump *label50 equal :identifyBlock:block @mech-refabricator
 jump *label49 always
 label *label50
-set *tmp3 86
+set *tmp1 86
 jump *label6 always
 label *label49
 jump *label52 equal :identifyBlock:block @ship-refabricator
 jump *label51 always
 label *label52
-set *tmp3 87
+set *tmp1 87
 jump *label6 always
 label *label51
 jump *label54 equal :identifyBlock:block @slag-heater
 jump *label53 always
 label *label54
-set *tmp3 88
+set *tmp1 88
 jump *label6 always
 label *label53
 jump *label56 equal :identifyBlock:block @lustre
 jump *label55 always
 label *label56
-set *tmp3 89
+set *tmp1 89
 jump *label6 always
 label *label55
 jump *label58 equal :identifyBlock:block @scathe
 jump *label57 always
 label *label58
-set *tmp3 90
+set *tmp1 90
 jump *label6 always
 label *label57
-set *tmp3 48
+set *tmp1 48
 label *label6
-jump *label59 equal *tmp3 48
-printchar *tmp3
+jump *label59 equal *tmp1 48
+printchar *tmp1
 jump *label60 always
 label *label59
 label *label60

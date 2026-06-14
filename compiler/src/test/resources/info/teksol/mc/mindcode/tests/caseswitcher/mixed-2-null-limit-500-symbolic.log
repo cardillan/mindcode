@@ -1261,8 +1261,8 @@ set :printAll:i -1
 label *label61
 lookup block *tmp1 :printAll:i
 # "Function: def identifyBlock(in block)"
-sensor *tmp7 *tmp1 @id
-multijump *label65 *tmp7 0
+sensor *tmp3 *tmp1 @id
+multijump *label65 *tmp3 0
 multilabel *label65
 jump *label63 always
 multilabel *label66
@@ -1786,90 +1786,90 @@ jump *label62 always
 multilabel *label325
 jump *label62 always
 label *label8
-set *tmp3 65
+set *tmp2 65
 jump *label6 always
 label *label10
-set *tmp3 66
+set *tmp2 66
 jump *label6 always
 label *label12
-set *tmp3 67
+set *tmp2 67
 jump *label6 always
 label *label14
-set *tmp3 68
+set *tmp2 68
 jump *label6 always
 label *label16
-set *tmp3 69
+set *tmp2 69
 jump *label6 always
 label *label18
-set *tmp3 70
+set *tmp2 70
 jump *label6 always
 label *label20
-set *tmp3 71
+set *tmp2 71
 jump *label6 always
 label *label22
-set *tmp3 72
+set *tmp2 72
 jump *label6 always
 label *label24
-set *tmp3 73
+set *tmp2 73
 jump *label6 always
 label *label26
-set *tmp3 74
+set *tmp2 74
 jump *label6 always
 label *label28
-set *tmp3 75
+set *tmp2 75
 jump *label6 always
 label *label30
-set *tmp3 76
+set *tmp2 76
 jump *label6 always
 label *label32
-set *tmp3 77
+set *tmp2 77
 jump *label6 always
 label *label34
-set *tmp3 78
+set *tmp2 78
 jump *label6 always
 label *label36
-set *tmp3 79
+set *tmp2 79
 jump *label6 always
 label *label38
-set *tmp3 80
+set *tmp2 80
 jump *label6 always
 label *label40
-set *tmp3 81
+set *tmp2 81
 jump *label6 always
 label *label42
-set *tmp3 82
+set *tmp2 82
 jump *label6 always
 label *label44
-set *tmp3 83
+set *tmp2 83
 jump *label6 always
 label *label46
-set *tmp3 84
+set *tmp2 84
 jump *label6 always
 label *label48
-set *tmp3 85
+set *tmp2 85
 jump *label6 always
 label *label50
-set *tmp3 86
+set *tmp2 86
 jump *label6 always
 label *label52
-set *tmp3 87
+set *tmp2 87
 jump *label6 always
 label *label54
-set *tmp3 88
+set *tmp2 88
 jump *label6 always
 label *label56
-set *tmp3 89
+set *tmp2 89
 jump *label6 always
 label *label58
-set *tmp3 90
+set *tmp2 90
 jump *label6 always
 label *label63
-jump *label8 strictEqual *tmp7 null
+jump *label8 strictEqual *tmp3 null
 label *label62
-set *tmp3 48
+set *tmp2 48
 label *label6
-jump *label59 equal *tmp3 48
-printchar *tmp3
+jump *label59 equal *tmp2 48
+printchar *tmp2
 jump *label60 always
 label *label59
 label *label60

@@ -1791,46 +1791,46 @@ set EXPECTED_BOOST 1.5
 draw clear 0 0 80
 select .BAR_LENGTH notEqual bank1 null 53 61
 select .BAR_SPACE notEqual bank1 null 74 88
-select *tmp3 notEqual bank1 null 156 176
-set *tmp5 0
+select *tmp0 notEqual bank1 null 156 176
+set *tmp1 0
 jump *label5 equal FROM_INDEX 0
-op mul *tmp6 FROM_INDEX 22
-op add *tmp5 4 *tmp6
+op mul *tmp2 FROM_INDEX 22
+op add *tmp1 4 *tmp2
 label *label5
-set *tmp9 176
+set *tmp3 176
 jump *label7 greaterThanEq TO_INDEX 8
-op mul *tmp10 TO_INDEX 22
-op add *tmp9 4 *tmp10
+op mul *tmp4 TO_INDEX 22
+op add *tmp3 4 *tmp4
 label *label7
-op sub :clh *tmp9 *tmp5
+op sub :clh *tmp3 *tmp1
 set :showa null
 set :lastRate null
 set :flow_str null
 set :expected_flow_str null
 set :icon null
 control enabled switch1 0
-sensor *tmp15 switch1 @enabled
-jump __start__ notEqual *tmp15 0
+sensor *tmp5 switch1 @enabled
+jump __start__ notEqual *tmp5 0
 label *label73
 set :start @time
 print "Silicon Factory Monitor"
 set :factories 0
 draw color 0 0 80 255
-draw rect 0 *tmp5 *tmp3 :clh
+draw rect 0 *tmp1 *tmp0 :clh
 draw stroke 2
 set :index FROM_INDEX
 set :n 0
 jump *label13 greaterThanEq 0 @links
 label *label71
 getlink :smelter :n
-sensor *tmp20 :smelter @type
-jump *label14 notEqual *tmp20 @silicon-crucible
+sensor *tmp6 :smelter @type
+jump *label14 notEqual *tmp6 @silicon-crucible
 set :minimum 31
 sensor :s :smelter @sand
 sensor :c :smelter @coal
 sensor :p :smelter @pyratite
-sensor *tmp26 :smelter @silicon
-op min :a *tmp26 30
+sensor *tmp7 :smelter @silicon
+op min :a *tmp7 30
 sensor :e :smelter @enabled
 sensor :power :smelter @totalPower
 sensor :boost :smelter @timescale
@@ -1846,53 +1846,53 @@ jump *label20 greaterThanEq :p :minimum
 set :minimum :p
 set :icon @pyratite
 label *label20
-op greaterThan *tmp37 :a 10
-op sub *tmp38 31 :a
-op lessThan *tmp39 *tmp38 :minimum
-op land :showa *tmp37 *tmp39
+op greaterThan *tmp8 :a 10
+op sub *tmp9 31 :a
+op lessThan *tmp10 *tmp9 :minimum
+op land :showa *tmp8 *tmp10
 select :icon notEqual :showa false @silicon :icon
-op mul *tmp44 :index 22
-op add :y 4 *tmp44
+op mul *tmp11 :index 22
+op add :y 4 *tmp11
 draw color 0 0 80 255
-op sub *tmp47 :y 1
-draw rect 4 *tmp47 .BAR_SPACE 16
-op greaterThan *tmp48 :minimum 26
-op equal *tmp49 :showa 0
-op land *tmp50 *tmp48 *tmp49
-select :icon notEqual *tmp50 false @silicon-crucible :icon
+op sub *tmp12 :y 1
+draw rect 4 *tmp12 .BAR_SPACE 16
+op greaterThan *tmp13 :minimum 26
+op equal *tmp14 :showa 0
+op land *tmp15 *tmp13 *tmp14
+select :icon notEqual *tmp15 false @silicon-crucible :icon
 draw color 255 255 255 255
 jump *label26 equal :e false
 jump *label28 lessThanEq :power 0
-op add *tmp56 :y 7
-draw image 12 *tmp56 :icon 16 0
+op add *tmp16 :y 7
+draw image 12 *tmp16 :icon 16 0
 jump *label27 always
 label *label28
 draw color 255 80 80 255
-op add *tmp57 :y 3
-draw rect 5 *tmp57 14 8
+op add *tmp17 :y 3
+draw rect 5 *tmp17 14 8
 draw color 0 0 0 255
-op add *tmp59 :y 5
-draw rect 7 *tmp59 8 4
-draw rect 17 *tmp57 2 2
-op add *tmp63 :y 9
-draw rect 17 *tmp63 2 2
+op add *tmp18 :y 5
+draw rect 7 *tmp18 8 4
+draw rect 17 *tmp17 2 2
+op add *tmp19 :y 9
+draw rect 17 *tmp19 2 2
 draw color 255 80 80 255
-op add *tmp65 :y 6
-draw rect 9 *tmp65 2 2
+op add *tmp20 :y 6
+draw rect 9 *tmp20 2 2
 jump *label27 always
 label *label26
 draw color 255 80 80 255
 draw stroke 3
-op add *tmp67 :y 12
-op add *tmp69 :y 2
-draw line 7 *tmp67 17 *tmp69
-draw line 7 *tmp69 17 *tmp67
+op add *tmp21 :y 12
+op add *tmp22 :y 2
+draw line 7 *tmp21 17 *tmp22
+draw line 7 *tmp22 17 *tmp21
 draw color 0 0 0 255
-draw lineRect 4 *tmp47 16 16
+draw lineRect 4 *tmp12 16 16
 draw stroke 2
 label *label27
-op mul *tmp77 :power :e
-jump *label30 notEqual *tmp77 0
+op mul *tmp23 :power :e
+jump *label30 notEqual *tmp23 0
 set :red 255
 set :green 0
 set :blue 0
@@ -1905,10 +1905,10 @@ set :blue 255
 set :minimum :a
 jump *label33 always
 label *label32
-op greaterThan *tmp81 :minimum 20
-op greaterThanEq *tmp82 :boost EXPECTED_BOOST
-op land *tmp83 *tmp81 *tmp82
-select :red notEqual *tmp83 false 0 255
+op greaterThan *tmp24 :minimum 20
+op greaterThanEq *tmp25 :boost EXPECTED_BOOST
+op land *tmp26 *tmp24 *tmp25
+select :red notEqual *tmp26 false 0 255
 select :green greaterThan :minimum 10 255 0
 set :blue 0
 label *label33
@@ -1919,12 +1919,12 @@ op max :green 192 :green
 op max :blue 192 :blue
 set :boost EXPECTED_BOOST
 label *label38
-op mul *tmp92 .BAR_LENGTH :boost
-op idiv :length *tmp92 EXPECTED_BOOST
+op mul *tmp27 .BAR_LENGTH :boost
+op idiv :length *tmp27 EXPECTED_BOOST
 draw color :red :green :blue 128
-op mul *tmp94 :minimum :length
-op idiv *tmp95 *tmp94 30
-draw rect 21 :y *tmp95 14
+op mul *tmp28 :minimum :length
+op idiv *tmp29 *tmp28 30
+draw rect 21 :y *tmp29 14
 draw color :red :green :blue 255
 draw lineRect 21 :y :length 14
 op add :index :index 1
@@ -1938,8 +1938,8 @@ set :n 0
 jump *label42 greaterThanEq 0 @links
 label *label72
 getlink :smelter :n
-sensor *tmp101 :smelter @type
-jump *label43 notEqual *tmp101 @pyratite-mixer
+sensor *tmp30 :smelter @type
+jump *label43 notEqual *tmp30 @pyratite-mixer
 set :minimum 11
 sensor :s :smelter @sand
 sensor :c :smelter @coal
@@ -1960,64 +1960,64 @@ set :minimum :l
 set :icon @lead
 label *label49
 op add :x 5 .BAR_SPACE
-op mul *tmp119 :index 22
-op add :y 4 *tmp119
+op mul *tmp31 :index 22
+op add :y 4 *tmp31
 draw color 0 0 80 255
-op sub *tmp121 :x 1
-op sub *tmp122 :y 1
-draw rect *tmp121 *tmp122 .BAR_SPACE 16
-op greaterThan *tmp123 :minimum 6
-op equal *tmp124 :showa 0
-op land *tmp125 *tmp123 *tmp124
-select :icon notEqual *tmp125 false @pyratite-mixer :icon
+op sub *tmp32 :x 1
+op sub *tmp33 :y 1
+draw rect *tmp32 *tmp33 .BAR_SPACE 16
+op greaterThan *tmp34 :minimum 6
+op equal *tmp35 :showa 0
+op land *tmp36 *tmp34 *tmp35
+select :icon notEqual *tmp36 false @pyratite-mixer :icon
 draw color 255 255 255 255
 jump *label53 equal :e false
 jump *label55 lessThanEq :power 0
-op add *tmp130 :x 7
-op add *tmp131 :y 7
-draw image *tmp130 *tmp131 :icon 16 0
+op add *tmp37 :x 7
+op add *tmp38 :y 7
+draw image *tmp37 *tmp38 :icon 16 0
 jump *label54 always
 label *label55
 draw color 255 80 80 255
-op add *tmp132 :y 3
-draw rect :x *tmp132 14 8
+op add *tmp39 :y 3
+draw rect :x *tmp39 14 8
 draw color 0 0 0 255
-op add *tmp133 :x 2
-op add *tmp134 :y 5
-draw rect *tmp133 *tmp134 8 4
-op add *tmp135 :x 12
-draw rect *tmp135 *tmp132 2 2
-op add *tmp138 :y 9
-draw rect *tmp135 *tmp138 2 2
+op add *tmp40 :x 2
+op add *tmp41 :y 5
+draw rect *tmp40 *tmp41 8 4
+op add *tmp42 :x 12
+draw rect *tmp42 *tmp39 2 2
+op add *tmp43 :y 9
+draw rect *tmp42 *tmp43 2 2
 draw color 255 80 80 255
-op add *tmp139 :x 4
-op add *tmp140 :y 6
-draw rect *tmp139 *tmp140 2 2
+op add *tmp44 :x 4
+op add *tmp45 :y 6
+draw rect *tmp44 *tmp45 2 2
 jump *label54 always
 label *label53
 draw color 255 80 80 255
 draw stroke 3
-op add *tmp141 :x 2
-op add *tmp142 :y 12
-op add *tmp143 :x 12
-op add *tmp144 :y 2
-draw line *tmp141 *tmp142 *tmp143 *tmp144
-draw line *tmp141 *tmp144 *tmp143 *tmp142
+op add *tmp46 :x 2
+op add *tmp47 :y 12
+op add *tmp48 :x 12
+op add *tmp49 :y 2
+draw line *tmp46 *tmp47 *tmp48 *tmp49
+draw line *tmp46 *tmp49 *tmp48 *tmp47
 draw color 0 0 0 255
-draw lineRect *tmp121 *tmp122 16 16
+draw lineRect *tmp32 *tmp33 16 16
 draw stroke 2
 label *label54
 op add :x .BAR_SPACE 21
-op mul *tmp152 :power :e
-jump *label57 notEqual *tmp152 0
+op mul *tmp50 :power :e
+jump *label57 notEqual *tmp50 0
 set :red 255
 set :green 0
 set :blue 0
 jump *label58 always
 label *label57
-op greaterThanEq *tmp156 :boost EXPECTED_BOOST
-op land *tmp157 *tmp123 *tmp156
-select :red notEqual *tmp157 false 0 255
+op greaterThanEq *tmp51 :boost EXPECTED_BOOST
+op land *tmp52 *tmp34 *tmp51
+select :red notEqual *tmp52 false 0 255
 select :green greaterThan :minimum 3 255 0
 set :blue 0
 label *label58
@@ -2027,12 +2027,12 @@ op max :green 192 :green
 op max :blue 192 0
 set :boost EXPECTED_BOOST
 label *label63
-op mul *tmp166 .BAR_LENGTH :boost
-op idiv :length *tmp166 EXPECTED_BOOST
+op mul *tmp53 .BAR_LENGTH :boost
+op idiv :length *tmp53 EXPECTED_BOOST
 draw color :red :green :blue 128
-op mul *tmp168 :minimum :length
-op idiv *tmp169 *tmp168 10
-draw rect :x :y *tmp169 14
+op mul *tmp54 :minimum :length
+op idiv *tmp55 *tmp54 10
+draw rect :x :y *tmp55 14
 draw color :red :green :blue 255
 draw lineRect :x :y :length 14
 op add :index :index 1
@@ -2044,8 +2044,8 @@ jump *label65 equal bank1 null
 jump *label67 notEqual FROM_INDEX 0
 read :rate bank1 511
 jump *label69 equal :lastRate :rate
-op mul *tmp180 EXPECTED_BOOST :factories
-op div :expected_flow *tmp180 11.25
+op mul *tmp56 EXPECTED_BOOST :factories
+op div :expected_flow *tmp56 11.25
 op idiv :expected_flow_str :expected_flow 0.0002777777777777778
 set :lastRate :rate
 draw color 0 0 80 255
@@ -2061,12 +2061,12 @@ draw color 0 255 0 255
 draw lineRect 164 89 8 84
 draw color 0 0 80 255
 draw rect 164 4 2 170
-op sub *tmp184 :rate :expected_flow
-op mul *tmp185 84 *tmp184
-op div *tmp186 *tmp185 :expected_flow
-op add :pos 88 *tmp186
-op max *tmp188 :pos 4
-op min :pos *tmp188 170
+op sub *tmp57 :rate :expected_flow
+op mul *tmp58 84 *tmp57
+op div *tmp59 *tmp58 :expected_flow
+op add :pos 88 *tmp59
+op max *tmp60 :pos 4
+op min :pos *tmp60 170
 op add :pos1 :pos 7
 op sub :pos2 :pos 7
 draw color 255 255 16 255
@@ -2079,10 +2079,10 @@ format :expected_flow_str
 format :flow_str
 label *label65
 drawflush display1
-op sub *tmp194 @time :start
-op floor *tmp195 *tmp194
+op sub *tmp61 @time :start
+op floor *tmp62 *tmp61
 print "\nUpdate time: {0} ms"
-format *tmp195
+format *tmp62
 printflush message1
-sensor *tmp15 switch1 @enabled
-jump *label73 equal *tmp15 0
+sensor *tmp5 switch1 @enabled
+jump *label73 equal *tmp5 0

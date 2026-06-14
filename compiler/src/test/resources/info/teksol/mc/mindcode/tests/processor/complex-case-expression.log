@@ -348,21 +348,21 @@ set :d:n 1
 setaddr :d*retaddr *label2
 call *label0 *invalid :d*retval
 label *label2
-set *tmp2 :d*retval
+set *tmp1 :d*retval
 set :d:n 10
 setaddr :d*retaddr *label3
 call *label0 *invalid :d*retval
 label *label3
-set *tmp4 :d*retval
-set :test:i *tmp2
-jump *label6 greaterThan *tmp2 :d*retval
+set *tmp2 :d*retval
+set :test:i *tmp1
+jump *label6 greaterThan *tmp1 :d*retval
 label *label25
 set :d:n 1
 setaddr :d*retaddr *label10
 call *label0 *invalid :d*retval
 label *label10
 jump *label8 notEqual :test:i :d*retval
-set *tmp5 "A"
+set *tmp3 "A"
 jump *label7 always
 label *label8
 set :d:n 2
@@ -377,7 +377,7 @@ label *label14
 jump *label12 equal :test:i :d*retval
 jump *label11 notEqual :test:i 4
 label *label12
-set *tmp5 "B"
+set *tmp3 "B"
 jump *label7 always
 label *label11
 jump *label5 equal :test:i 5
@@ -391,16 +391,16 @@ setaddr :d*retaddr *label21
 call *label0 *invalid :d*retval
 label *label21
 jump *label17 greaterThan :test:i :d*retval
-set *tmp5 "C"
+set *tmp3 "C"
 jump *label7 always
 label *label17
 jump *label6 equal :test:i 10
-set *tmp5 "D"
+set *tmp3 "D"
 label *label7
-print *tmp5
+print *tmp3
 label *label5
 op add :test:i :test:i 1
-jump *label25 lessThanEq :test:i *tmp4
+jump *label25 lessThanEq :test:i *tmp2
 label *label6
 assertprints *tmp0 "ABBBCCCD" "complex-case-expression"
 stop

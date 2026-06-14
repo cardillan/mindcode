@@ -261,9 +261,9 @@ set :revert:num :num
 set :revert:res 0
 jump *label20 lessThanEq :num 0
 label *label18
-op mul *tmp5 10 :revert:res
-op mod *tmp6 :revert:num 10
-op add :revert:res *tmp5 *tmp6
+op mul *tmp0 10 :revert:res
+op mod *tmp1 :revert:num 10
+op add :revert:res *tmp0 *tmp1
 op idiv :revert:num :revert:num 10
 jump *label18 greaterThan :revert:num 0
 label *label20

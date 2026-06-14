@@ -186,12 +186,12 @@ the entire square root is evaluated only once:
 ```mlog
 op rand :a 10 0
 op rand :b 10 0
-op mul *tmp2 :a :a
-op mul *tmp3 :b :b
-op add *tmp4 *tmp2 *tmp3
-op sqrt *tmp5 *tmp4 0
-op add :x 1 *tmp5
-op add :y 2 *tmp5
+op mul *tmp0 :a :a
+op mul *tmp1 :b :b
+op add *tmp2 *tmp0 *tmp1
+op sqrt *tmp3 *tmp2 0
+op add :x 1 *tmp3
+op add :y 2 *tmp3
 print :x
 print :y
 ```

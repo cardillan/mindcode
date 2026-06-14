@@ -22,11 +22,11 @@ produces this code:
 ```mlog
 jump 4 greaterThanEq :x 0
 op add :negative :negative 1
-op sub *tmp1 0 :x
+op sub *tmp0 0 :x
 jump 6 always 0 0
 op add :positive :positive 1
-set *tmp1 :x
-print *tmp1
+set *tmp0 :x
+print *tmp0
 ```
 
 As the example demonstrates, value propagation works on more than just the `set` instruction. All instructions having exactly one output parameter (based on instruction metadata) are handled.
@@ -184,13 +184,13 @@ print("value is ", y);
 produces
 
 ```mlog
-set *tmp1 "negative"
+set *tmp0 "negative"
 jump 5 lessThan :x 0
-set *tmp1 "zero"
+set *tmp0 "zero"
 jump 5 lessThanEq :x 0
-set *tmp1 "positive"
+set *tmp0 "positive"
 print "value is "
-print *tmp1
+print *tmp0
 ```
 
 saving three instructions over the code without if statement optimization:

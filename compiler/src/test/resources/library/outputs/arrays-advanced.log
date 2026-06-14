@@ -5,7 +5,7 @@
      6 instructions eliminated by Condition Optimization (2 passes, 10 iterations).
     13 instructions eliminated by Single Step Elimination (4 passes, 12 iterations).
    450 instructions eliminated by Expression Optimization (6 iterations).
-   205 instructions eliminated by Data Flow Optimization (10 passes, 45 iterations).
+   205 instructions eliminated by Data Flow Optimization (10 passes, 44 iterations).
        7 loop conditions were partially rotated.
    809 instructions added by Loop Unrolling (13 iterations).
      7 loops unrolled by Loop Unrolling.
@@ -59,52 +59,52 @@ Pass 3: speed optimization selection (cost limit 161):
 Final code before resolving virtual instructions:
 
     0:  set p 0
-    1:  assertflush *tmp2
+    1:  assertflush *tmp0
     2:  print "xxxxx"
-    3:  assertprints *tmp2 "xxxxx" "Array fill"
+    3:  assertprints *tmp0 "xxxxx" "Array fill"
     4:  set .b*9 p
     5:  set .c*0 p
-    6:  op add *tmp5 p 1
-    7:  set .b*8 *tmp5
-    8:  set .c*1 *tmp5
-    9:  op add *tmp5 p 2
-   10:  set .b*7 *tmp5
-   11:  set .c*2 *tmp5
-   12:  op add *tmp5 p 3
-   13:  set .b*6 *tmp5
-   14:  set .c*3 *tmp5
-   15:  op add *tmp5 p 4
-   16:  set :reverse:t *tmp5
-   17:  set .c*4 *tmp5
-   18:  op add *tmp5 p 5
-   19:  set *tmp15 *tmp5
-   20:  set .c*5 *tmp5
-   21:  op add *tmp5 p 6
-   22:  set .b*3 *tmp5
-   23:  set .c*6 *tmp5
-   24:  op add *tmp5 p 7
-   25:  set .b*2 *tmp5
-   26:  set .c*7 *tmp5
-   27:  op add *tmp5 p 8
-   28:  set .b*1 *tmp5
-   29:  set .c*8 *tmp5
-   30:  op add *tmp5 p 9
-   31:  set .b*0 *tmp5
-   32:  set .c*9 *tmp5
-   33:  set .b*4 *tmp15
+    6:  op add *tmp1 p 1
+    7:  set .b*8 *tmp1
+    8:  set .c*1 *tmp1
+    9:  op add *tmp1 p 2
+   10:  set .b*7 *tmp1
+   11:  set .c*2 *tmp1
+   12:  op add *tmp1 p 3
+   13:  set .b*6 *tmp1
+   14:  set .c*3 *tmp1
+   15:  op add *tmp1 p 4
+   16:  set :reverse:t *tmp1
+   17:  set .c*4 *tmp1
+   18:  op add *tmp1 p 5
+   19:  set *tmp2 *tmp1
+   20:  set .c*5 *tmp1
+   21:  op add *tmp1 p 6
+   22:  set .b*3 *tmp1
+   23:  set .c*6 *tmp1
+   24:  op add *tmp1 p 7
+   25:  set .b*2 *tmp1
+   26:  set .c*7 *tmp1
+   27:  op add *tmp1 p 8
+   28:  set .b*1 *tmp1
+   29:  set .c*8 *tmp1
+   30:  op add *tmp1 p 9
+   31:  set .b*0 *tmp1
+   32:  set .c*9 *tmp1
+   33:  set .b*4 *tmp2
    34:  set .b*5 :reverse:t
-   35:  assertflush *tmp18
-   36:  print *tmp5
+   35:  assertflush *tmp3
+   36:  print *tmp1
    37:  print .b*1
    38:  print .b*2
    39:  print .b*3
-   40:  print *tmp15
+   40:  print *tmp2
    41:  print :reverse:t
    42:  print .b*6
    43:  print .b*7
    44:  print .b*8
    45:  print p
-   46:  assertprints *tmp18 "9876543210" "Array reverse"
+   46:  assertprints *tmp3 "9876543210" "Array reverse"
         label *label13
    47:  set :bubblesort:flag false
    48:  set :bubblesort:a .b*0
@@ -250,7 +250,7 @@ Final code before resolving virtual instructions:
         label *label154
   155:  jump *label13 notEqual :bubblesort:flag false
         label *label12
-  156:  assertflush *tmp43
+  156:  assertflush *tmp4
   157:  print .b*0
   158:  print .b*1
   159:  print .b*2
@@ -261,7 +261,7 @@ Final code before resolving virtual instructions:
   164:  print .b*7
   165:  print .b*8
   166:  print .b*9
-  167:  assertprints *tmp43 "0123456789" "Array sort 1"
+  167:  assertprints *tmp4 "0123456789" "Array sort 1"
         label *label33
   168:  set :bubblesort.1:flag false
   169:  set :bubblesort.1:a .b*0
@@ -461,7 +461,7 @@ Final code before resolving virtual instructions:
         label *label246
   330:  jump *label33 notEqual :bubblesort.1:flag false
         label *label32
-  331:  assertflush *tmp88
+  331:  assertflush *tmp5
   332:  print .c*0
   333:  print .c*1
   334:  print .c*2
@@ -472,4 +472,4 @@ Final code before resolving virtual instructions:
   339:  print .c*7
   340:  print .c*8
   341:  print .c*9
-  342:  assertprints *tmp88 "9876543210" "Array sort 2"
+  342:  assertprints *tmp5 "9876543210" "Array sort 2"

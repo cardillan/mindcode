@@ -806,8 +806,8 @@ set :i -1
 label *label10
 lookup block :block :i
 # "Function: def isWall(in block)"
-sensor *tmp9 :block @id
-multijump *label14 *tmp9 0
+sensor *tmp4 :block @id
+multijump *label14 *tmp4 0
 multilabel *label14
 jump *label12 always
 multilabel *label15
@@ -1331,18 +1331,18 @@ jump *label11 always
 multilabel *label274
 jump *label11 always
 label *label12
-jump *label11 strictEqual *tmp9 null
+jump *label11 strictEqual *tmp4 null
 label *label9
-set *tmp2 true
+set *tmp0 true
 jump *label7 always
 label *label11
-set *tmp2 false
+set *tmp0 false
 label *label7
-jump *label4 equal *tmp2 false
-op mul *tmp5 :hash 31
-op add *tmp6 *tmp5 :i
-op add *tmp7 *tmp6 251
-op and :hash *tmp7 0xFFFFFFFF
+jump *label4 equal *tmp0 false
+op mul *tmp1 :hash 31
+op add *tmp2 *tmp1 :i
+op add *tmp3 *tmp2 251
+op and :hash *tmp3 0xFFFFFFFF
 jump *label5 always
 label *label4
 label *label5

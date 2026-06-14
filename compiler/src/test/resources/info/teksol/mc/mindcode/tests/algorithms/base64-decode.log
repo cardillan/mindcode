@@ -930,28 +930,28 @@ label *label51
 op add :decode64:index :decode64:index 1
 remark "Reading character number 1 from input data quartet"
 read :charToInt:ch data :decode64:index
-op shl *tmp2 :charToInt*retval 6
+op shl *tmp1 :charToInt*retval 6
 setaddr :charToInt*retaddr *label53
 call *label0 *invalid :charToInt*retval
 label *label53
-op or :decode64:bytes *tmp2 :charToInt*retval
+op or :decode64:bytes *tmp1 :charToInt*retval
 op add :decode64:index :decode64:index 1
 remark "Reading character number 2 from input data quartet"
 read :charToInt:ch data :decode64:index
-op shl *tmp2 :decode64:bytes 6
+op shl *tmp1 :decode64:bytes 6
 setaddr :charToInt*retaddr *label55
 call *label0 *invalid :charToInt*retval
 label *label55
-op or :decode64:bytes *tmp2 :charToInt*retval
+op or :decode64:bytes *tmp1 :charToInt*retval
 op add :decode64:index :decode64:index 1
 remark "Reading character number 3 from input data quartet"
 read :decode64:src data :decode64:index
-op shl *tmp2 :decode64:bytes 6
+op shl *tmp1 :decode64:bytes 6
 set :charToInt:ch :decode64:src
 setaddr :charToInt*retaddr *label57
 call *label0 *invalid :charToInt*retval
 label *label57
-op or :decode64:bytes *tmp2 :charToInt*retval
+op or :decode64:bytes *tmp1 :charToInt*retval
 op add :decode64:index :decode64:index 1
 remark "Printing text"
 op shr :printbyte:byte :decode64:bytes 16

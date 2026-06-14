@@ -75,10 +75,10 @@ compiles to:
 ```mlog
 op add *tmp0 .y 1
 op greaterThanEq .x *tmp0 2
-op sub *tmp2 .y 1
+op sub *tmp1 .y 1
+op greaterThanEq .x *tmp1 2
+op sub *tmp2 1 .y
 op greaterThanEq .x *tmp2 2
-op sub *tmp4 1 .y
-op greaterThanEq .x *tmp4 2
 ```
 
 The following example demonstrates constant folding applied to multiplication and division, as well as the detection of a precision loss (which typically occurs when handing decimal numbers):
@@ -102,8 +102,8 @@ op greaterThanEq .x .y 2
 op greaterThanEq .x .y 8
 op lessThanEq .x .y 0.5
 # Precision error
-op sub *tmp6 .y 0.1
-op greaterThanEq .x *tmp6 0.2
+op sub *tmp0 .y 0.1
+op greaterThanEq .x *tmp0 0.2
 ```
 
 ## Condition Streamlining

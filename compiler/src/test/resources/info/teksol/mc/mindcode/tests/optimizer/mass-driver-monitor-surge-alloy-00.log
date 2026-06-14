@@ -753,10 +753,10 @@ jump *label5 lessThanEq :n 0
 label *label30
 op sub :n :n 1
 getlink :block :n
-sensor *tmp5 :block @type
-sensor *tmp36 *tmp5 @id
-jump *label32 greaterThanEq *tmp36 145
-multijump *tmp36 0 0
+sensor *tmp0 :block @type
+sensor *tmp13 *tmp0 @id
+jump *label32 greaterThanEq *tmp13 145
+multijump *tmp13 0 0
 multilabel *label36
 set .MESSAGE :block                     # Origin: 15, keys: 137
 jump *label6 always
@@ -764,9 +764,9 @@ multilabel *label37
 set .SWITCH :block                      # Origin: 15, keys: 138
 jump *label6 always
 multilabel *label35
-sensor *tmp8 :block @firstItem          # Origin: 15, keys: 54
-sensor *tmp37 *tmp8 @id
-multijump *tmp37 0 0
+sensor *tmp1 :block @firstItem          # Origin: 15, keys: 54
+sensor *tmp14 *tmp1 @id
+multijump *tmp14 0 0
 multilabel *label47
 multilabel *label44
 jump *label6 always
@@ -777,7 +777,7 @@ multilabel *label46
 set .SILICON :block                     # Origin: 22, keys: 9
 jump *label6 always
 multilabel *label42
-jump *label6 strictEqual *tmp37 null
+jump *label6 strictEqual *tmp14 null
 set .COPPER :block
 jump *label6 always
 multilabel *label43
@@ -808,8 +808,8 @@ jump *label0 equal .SILICON null
 jump *label0 equal .COPPER null
 jump *label0 equal .LEAD null
 control enabled .SWITCH 0
-sensor *tmp23 .SWITCH @enabled
-jump __start__ notEqual *tmp23 0
+sensor *tmp2 .SWITCH @enabled
+jump __start__ notEqual *tmp2 0
 label *label31
 set :start @time
 draw clear 0 0 80
@@ -819,18 +819,18 @@ draw image 11 49 @silicon 16 0
 draw image 11 30 @copper 16 0
 draw image 11 11 @lead 16 0
 draw color 0 128 0 255
-sensor *tmp26 .TITANIUM @totalItems
-op mul *tmp27 *tmp26 0.28
-draw rect 20 61 *tmp27 14
-sensor *tmp28 .SILICON @totalItems
-op mul *tmp29 *tmp28 0.28
-draw rect 20 42 *tmp29 14
-sensor *tmp30 .COPPER @totalItems
-op mul *tmp31 *tmp30 0.28
-draw rect 20 23 *tmp31 14
-sensor *tmp32 .LEAD @totalItems
-op mul *tmp33 *tmp32 0.28
-draw rect 20 4 *tmp33 14
+sensor *tmp3 .TITANIUM @totalItems
+op mul *tmp4 *tmp3 0.28
+draw rect 20 61 *tmp4 14
+sensor *tmp5 .SILICON @totalItems
+op mul *tmp6 *tmp5 0.28
+draw rect 20 42 *tmp6 14
+sensor *tmp7 .COPPER @totalItems
+op mul *tmp8 *tmp7 0.28
+draw rect 20 23 *tmp8 14
+sensor *tmp9 .LEAD @totalItems
+op mul *tmp10 *tmp9 0.28
+draw rect 20 4 *tmp10 14
 draw color 0 255 0 255
 draw lineRect 20 61 56 14
 draw lineRect 20 42 56 14
@@ -838,9 +838,9 @@ draw lineRect 20 23 56 14
 draw lineRect 20 4 56 14
 drawflush .DISPLAY
 print "Surge Alloy Factory Driver Monitor\nElapsed (ms): "
-op sub *tmp34 @time :start
-op floor *tmp35 *tmp34
-print *tmp35
+op sub *tmp11 @time :start
+op floor *tmp12 *tmp11
+print *tmp12
 printflush .MESSAGE
-sensor *tmp23 .SWITCH @enabled
-jump *label31 equal *tmp23 0
+sensor *tmp2 .SWITCH @enabled
+jump *label31 equal *tmp2 0

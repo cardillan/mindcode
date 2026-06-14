@@ -3959,63 +3959,63 @@ Modifications by Final phase, Print Merging, iteration 1 (-39 instructions):
 Final code before resolving virtual instructions:
 
 set A 0
+assertflush *tmp0
+print "TFFT"
+assertprints *tmp0 "TFFT" "comparison 1"
 assertflush *tmp1
+print "FTFT"
+assertprints *tmp1 "FTFT" "comparison 2"
+assertflush *tmp2
+print "FTFT"
+assertprints *tmp2 "FTFT" "comparison 3"
+assertflush *tmp3
+print "FTFT"
+assertprints *tmp3 "FTFT" "comparison 4"
+assertflush *tmp4
 print "TFFT"
-assertprints *tmp1 "TFFT" "comparison 1"
-assertflush *tmp15
+assertprints *tmp4 "TFFT" "comparison 5"
+assertflush *tmp5
 print "FTFT"
-assertprints *tmp15 "FTFT" "comparison 2"
-assertflush *tmp29
+assertprints *tmp5 "FTFT" "comparison 6"
+assertflush *tmp6
 print "FTFT"
-assertprints *tmp29 "FTFT" "comparison 3"
-assertflush *tmp43
-print "FTFT"
-assertprints *tmp43 "FTFT" "comparison 4"
-assertflush *tmp57
-print "TFFT"
-assertprints *tmp57 "TFFT" "comparison 5"
-assertflush *tmp71
-print "FTFT"
-assertprints *tmp71 "FTFT" "comparison 6"
-assertflush *tmp85
-print "FTFT"
-assertprints *tmp85 "FTFT" "comparison 7"
-assertflush *tmp99
+assertprints *tmp6 "FTFT" "comparison 7"
+assertflush *tmp7
 print "TFTF"
-assertprints *tmp99 "TFTF" "comparison 8"
-assertflush *tmp113
-select *tmp116 equal A 0 "T" "F"
-select *tmp119 notEqual A 0 "T" "F"
-select *tmp122 strictEqual A 0 "T" "F"
-select *tmp125 strictNotEqual A 0 "T" "F"
-print *tmp116
-print *tmp119
-print *tmp122
-print *tmp125
-assertprints *tmp113 "TFTF" "comparison 9"
-assertflush *tmp127
-select *tmp130 equal A 1 "T" "F"
-select *tmp133 notEqual A 1 "T" "F"
-select *tmp136 strictEqual A 1 "T" "F"
-select *tmp139 strictNotEqual A 1 "T" "F"
-print *tmp130
-print *tmp133
-print *tmp136
-print *tmp139
-assertprints *tmp127 "FTFT" "comparison 10"
-assertflush *tmp141
+assertprints *tmp7 "TFTF" "comparison 8"
+assertflush *tmp8
+select *tmp9 equal A 0 "T" "F"
+select *tmp10 notEqual A 0 "T" "F"
+select *tmp11 strictEqual A 0 "T" "F"
+select *tmp12 strictNotEqual A 0 "T" "F"
+print *tmp9
+print *tmp10
+print *tmp11
+print *tmp12
+assertprints *tmp8 "TFTF" "comparison 9"
+assertflush *tmp13
+select *tmp14 equal A 1 "T" "F"
+select *tmp15 notEqual A 1 "T" "F"
+select *tmp16 strictEqual A 1 "T" "F"
+select *tmp17 strictNotEqual A 1 "T" "F"
+print *tmp14
+print *tmp15
+print *tmp16
+print *tmp17
+assertprints *tmp13 "FTFT" "comparison 10"
+assertflush *tmp18
 print "FTFT"
-assertprints *tmp141 "FTFT" "comparison 11"
-assertflush *tmp155
+assertprints *tmp18 "FTFT" "comparison 11"
+assertflush *tmp19
 print "TFFT"
-assertprints *tmp155 "TFFT" "comparison 12"
-assertflush *tmp169
+assertprints *tmp19 "TFFT" "comparison 12"
+assertflush *tmp20
 print "FTFT"
-assertprints *tmp169 "FTFT" "comparison 13"
-assertflush *tmp183
+assertprints *tmp20 "FTFT" "comparison 13"
+assertflush *tmp21
 print "FTFT"
-assertprints *tmp183 "FTFT" "comparison 14"
-assertflush *tmp197
+assertprints *tmp21 "FTFT" "comparison 14"
+assertflush *tmp22
 print "TFTF"
-assertprints *tmp197 "TFTF" "comparison 15"
+assertprints *tmp22 "TFTF" "comparison 15"
 stop

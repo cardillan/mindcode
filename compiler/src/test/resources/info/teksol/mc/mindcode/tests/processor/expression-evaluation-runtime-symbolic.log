@@ -2954,284 +2954,284 @@ Final code before resolving virtual instructions:
 set NULL null
 set zero 0
 # "Function: inline def d(in n)"
-op add *tmp2 zero 5
-assertequals 5 *tmp2 "add"
+op add *tmp0 zero 5
+assertequals 5 *tmp0 "add"
 # "Function: inline def d(in n)"
-op add *tmp3 zero 6
-op sub *tmp5 1 zero
-assertequals 1 *tmp5 "sub"
+op add *tmp1 zero 6
+op sub *tmp2 1 zero
+assertequals 1 *tmp2 "sub"
 # "Function: inline def d(in n)"
-op add *tmp6 zero 2
-op mul *tmp8 3 *tmp6
-assertequals 6 *tmp8 "mul"
+op add *tmp3 zero 2
+op mul *tmp4 3 *tmp3
+assertequals 6 *tmp4 "mul"
 # "Function: inline def d(in n)"
-op add *tmp9 zero 4
-op div *tmp11 6 *tmp9
-assertequals 1.5 *tmp11 "div"
+op add *tmp5 zero 4
+op div *tmp6 6 *tmp5
+assertequals 1.5 *tmp6 "div"
 # "Function: inline def d(in n)"
-op add *tmp12 zero 100000
-op div *tmp14 1 *tmp12
-assertequals 0.00001 *tmp14 "div exp"
+op add *tmp7 zero 100000
+op div *tmp8 1 *tmp7
+assertequals 0.00001 *tmp8 "div exp"
 # "Function: inline def d(in n)"
-op idiv *tmp17 6 *tmp9
-assertequals 1 *tmp17 "idiv"
+op idiv *tmp9 6 *tmp5
+assertequals 1 *tmp9 "idiv"
 # "Function: inline def d(in n)"
-op mod *tmp20 6 *tmp9
-assertequals 2 *tmp20 "mod"
+op mod *tmp10 6 *tmp5
+assertequals 2 *tmp10 "mod"
 # "Function: inline def d(in n)"
-op add *tmp21 zero 8
-op emod *tmp23 -3 *tmp21
-assertequals 5 *tmp23 "emod"
+op add *tmp11 zero 8
+op emod *tmp12 -3 *tmp11
+assertequals 5 *tmp12 "emod"
 # "Function: inline def d(in n)"
-op pow *tmp26 2 *tmp9
-assertequals 16 *tmp26 "pow"
+op pow *tmp13 2 *tmp5
+assertequals 16 *tmp13 "pow"
 # "Function: inline def d(in n)"
-op equal *tmp29 zero 0
-assertequals true *tmp29 "equal 1"
+op equal *tmp14 zero 0
+assertequals true *tmp14 "equal 1"
 # "Function: inline def d(in n)"
-op equal *tmp32 zero -1
-assertequals false *tmp32 "equal 2"
+op equal *tmp15 zero -1
+assertequals false *tmp15 "equal 2"
 # "Function: inline def d(in n)"
-assertequals true *tmp29 "equal null"
+assertequals true *tmp14 "equal null"
 # "Function: inline def d(in n)"
-op notEqual *tmp38 zero 0
-assertequals false *tmp38 "notEqual 1"
+op notEqual *tmp16 zero 0
+assertequals false *tmp16 "notEqual 1"
 # "Function: inline def d(in n)"
-op notEqual *tmp41 zero -1
-assertequals true *tmp41 "notEqual 2"
+op notEqual *tmp17 zero -1
+assertequals true *tmp17 "notEqual 2"
 # "Function: inline def d(in n)"
-assertequals false *tmp38 "notEqual null"
+assertequals false *tmp16 "notEqual null"
 # "Function: inline def d(in n)"
-op land *tmp47 1 zero
-assertequals false *tmp47 "land 1"
+op land *tmp18 1 zero
+assertequals false *tmp18 "land 1"
 # "Function: inline def d(in n)"
-op land *tmp50 1 *tmp6
-assertequals true *tmp50 "land 2"
+op land *tmp19 1 *tmp3
+assertequals true *tmp19 "land 2"
 # "Function: inline def d(in n)"
-op add *tmp51 zero 1
-op greaterThan *tmp53 zero -1
-assertequals true *tmp53 "lessThan 1"
+op add *tmp20 zero 1
+op greaterThan *tmp21 zero -1
+assertequals true *tmp21 "lessThan 1"
 # "Function: inline def d(in n)"
-op lessThan *tmp56 1 zero
-assertequals false *tmp56 "lessThan 2"
+op lessThan *tmp22 1 zero
+assertequals false *tmp22 "lessThan 2"
 # "Function: inline def d(in n)"
-op greaterThanEq *tmp59 zero 0
-assertequals true *tmp59 "lessThanEq 1"
+op greaterThanEq *tmp23 zero 0
+assertequals true *tmp23 "lessThanEq 1"
 # "Function: inline def d(in n)"
-op lessThanEq *tmp62 1 zero
-assertequals false *tmp62 "lessThanEq 2"
+op lessThanEq *tmp24 1 zero
+assertequals false *tmp24 "lessThanEq 2"
 # "Function: inline def d(in n)"
-op lessThan *tmp65 zero 1
-assertequals true *tmp65 "greaterThan 1"
+op lessThan *tmp25 zero 1
+assertequals true *tmp25 "greaterThan 1"
 # "Function: inline def d(in n)"
-op lessThan *tmp68 zero -1
-assertequals false *tmp68 "greaterThan 2"
+op lessThan *tmp26 zero -1
+assertequals false *tmp26 "greaterThan 2"
 # "Function: inline def d(in n)"
-op lessThanEq *tmp71 zero 0
-assertequals true *tmp71 "greaterThanEq 1"
+op lessThanEq *tmp27 zero 0
+assertequals true *tmp27 "greaterThanEq 1"
 # "Function: inline def d(in n)"
-op lessThanEq *tmp74 zero -1
-assertequals false *tmp74 "greaterThanEq 2"
-op strictEqual *tmp75 0 NULL
-assertequals false *tmp75 "strictEqual 1"
-op strictEqual *tmp76 null NULL
-assertequals true *tmp76 "strictEqual 2"
+op lessThanEq *tmp28 zero -1
+assertequals false *tmp28 "greaterThanEq 2"
+op strictEqual *tmp29 0 NULL
+assertequals false *tmp29 "strictEqual 1"
+op strictEqual *tmp30 null NULL
+assertequals true *tmp30 "strictEqual 2"
 # "Function: inline def d(in n)"
-op shl *tmp79 1 *tmp6
-assertequals 4 *tmp79 "shl"
+op shl *tmp31 1 *tmp3
+assertequals 4 *tmp31 "shl"
 # "Function: inline def d(in n)"
-op shr *tmp82 9 *tmp6
-assertequals 2 *tmp82 "shr"
+op shr *tmp32 9 *tmp3
+assertequals 2 *tmp32 "shr"
 # "Function: inline def d(in n)"
-op add *tmp83 zero 61
-op ushr *tmp85 -1 *tmp83
-assertequals 7 *tmp85 "ushr"
+op add *tmp33 zero 61
+op ushr *tmp34 -1 *tmp33
+assertequals 7 *tmp34 "ushr"
 # "Function: inline def d(in n)"
-op or *tmp88 1 *tmp6
-assertequals 3 *tmp88 "or"
+op or *tmp35 1 *tmp3
+assertequals 3 *tmp35 "or"
 # "Function: inline def d(in n)"
-op and *tmp91 3 *tmp6
-assertequals 2 *tmp91 "and"
+op and *tmp36 3 *tmp3
+assertequals 2 *tmp36 "and"
 # "Function: inline def d(in n)"
-op xor *tmp94 3 *tmp6
-assertequals 1 *tmp94 "xor"
+op xor *tmp37 3 *tmp3
+assertequals 1 *tmp37 "xor"
 # "Function: inline def d(in n)"
-op not *tmp97 zero
-assertequals -1 *tmp97 "not 1"
+op not *tmp38 zero
+assertequals -1 *tmp38 "not 1"
 # "Function: inline def d(in n)"
-op add *tmp98 zero 65535
-op not *tmp100 *tmp98
-assertequals -65536 *tmp100 "not 2"
+op add *tmp39 zero 65535
+op not *tmp40 *tmp39
+assertequals -65536 *tmp40 "not 2"
 # "Function: inline def d(in n)"
-op add *tmp103 zero 0xabcdefabcdef
-op not *tmp105 *tmp103
-assertequals -188900977659376 *tmp105 "not 3"
+op add *tmp41 zero 0xabcdefabcdef
+op not *tmp42 *tmp41
+assertequals -188900977659376 *tmp42 "not 3"
 # "Function: inline def d(in n)"
-op max *tmp108 2 *tmp9
-assertequals 4 *tmp108 "max"
+op max *tmp43 2 *tmp5
+assertequals 4 *tmp43 "max"
 # "Function: inline def d(in n)"
-op min *tmp111 2 *tmp9
-assertequals 2 *tmp111 "min"
+op min *tmp44 2 *tmp5
+assertequals 2 *tmp44 "min"
 # "Function: inline def d(in n)"
-op add *tmp112 zero -2
-op abs *tmp114 *tmp112
-assertequals 2 *tmp114 "abs"
-# "Function: inline def d(in n)"
-# "Function: inline def sign(in x)"
-op greaterThan *tmp118 zero 2
-op lessThan *tmp119 zero 2
-op sub *tmp117 *tmp118 *tmp119
-assertequals -1 *tmp117 "sign(-2)"
+op add *tmp45 zero -2
+op abs *tmp46 *tmp45
+assertequals 2 *tmp46 "abs"
 # "Function: inline def d(in n)"
 # "Function: inline def sign(in x)"
-op greaterThan *tmp124 zero -2
-op lessThan *tmp125 zero -2
-op sub *tmp123 *tmp124 *tmp125
-assertequals 1 *tmp123 "sign(2)"
+op greaterThan *tmp48 zero 2
+op lessThan *tmp49 zero 2
+op sub *tmp47 *tmp48 *tmp49
+assertequals -1 *tmp47 "sign(-2)"
 # "Function: inline def d(in n)"
 # "Function: inline def sign(in x)"
-op greaterThan *tmp130 zero 0
-op lessThan *tmp131 zero 0
-op sub *tmp129 *tmp130 *tmp131
-assertequals 0 *tmp129 "sign(0)"
+op greaterThan *tmp51 zero -2
+op lessThan *tmp52 zero -2
+op sub *tmp50 *tmp51 *tmp52
+assertequals 1 *tmp50 "sign(2)"
 # "Function: inline def d(in n)"
-op add *tmp133 zero 2.718281828459045
-op log *tmp135 *tmp133
-assertequals 1 *tmp135 "log"
+# "Function: inline def sign(in x)"
+op greaterThan *tmp54 zero 0
+op lessThan *tmp55 zero 0
+op sub *tmp53 *tmp54 *tmp55
+assertequals 0 *tmp53 "sign(0)"
 # "Function: inline def d(in n)"
-op add *tmp136 zero 10
-op log10 *tmp138 *tmp136
-assertequals 1 *tmp138 "log10"
+op add *tmp56 zero 2.718281828459045
+op log *tmp57 *tmp56
+assertequals 1 *tmp57 "log"
+# "Function: inline def d(in n)"
+op add *tmp58 zero 10
+op log10 *tmp59 *tmp58
+assertequals 1 *tmp59 "log10"
 # "Function: inline def d(in n)"
 # "Function: inline def logn(in number, in base)"
-op log *tmp143 *tmp6
-op div *tmp141 2.772588722239781 *tmp143
-assertequals 4 *tmp141 "logn"
+op log *tmp61 *tmp3
+op div *tmp60 2.772588722239781 *tmp61
+assertequals 4 *tmp60 "logn"
 # "Function: inline def d(in n)"
-op add *tmp145 zero 2.5
-op floor *tmp147 *tmp145
-assertequals 2 *tmp147 "floor"
+op add *tmp62 zero 2.5
+op floor *tmp63 *tmp62
+assertequals 2 *tmp63 "floor"
 # "Function: inline def d(in n)"
-op ceil *tmp150 *tmp145
-assertequals 3 *tmp150 "ceil"
+op ceil *tmp64 *tmp62
+assertequals 3 *tmp64 "ceil"
 # "Function: inline def d(in n)"
 # "Function: inline def round(in x)"
-op add *tmp154 zero 3
-op floor *tmp153 *tmp154
-assertequals 3 *tmp153 "round"
+op add *tmp66 zero 3
+op floor *tmp65 *tmp66
+assertequals 3 *tmp65 "round"
 # "Function: inline def d(in n)"
-op add *tmp156 zero 16
-op sqrt *tmp158 *tmp156
-assertequals 4 *tmp158 "sqrt"
+op add *tmp67 zero 16
+op sqrt *tmp68 *tmp67
+assertequals 4 *tmp68 "sqrt"
 # "Function: inline def d(in n)"
-op angle *tmp161 1 *tmp51
-assertequals 45 *tmp161 "angle"
+op angle *tmp69 1 *tmp20
+assertequals 45 *tmp69 "angle"
 # "Function: inline def d(in n)"
-op add *tmp162 zero 135
-op angleDiff *tmp164 45 *tmp162
-assertequals 90 *tmp164 "angleDiff"
+op add *tmp70 zero 135
+op angleDiff *tmp71 45 *tmp70
+assertequals 90 *tmp71 "angleDiff"
 # "Function: inline def d(in n)"
-op len *tmp167 3 *tmp9
-assertequals 5 *tmp167 "len"
+op len *tmp72 3 *tmp5
+assertequals 5 *tmp72 "len"
 # "Function: inline def d(in n)"
-op add *tmp168 zero 90
-op sin *tmp170 *tmp168
+op add *tmp73 zero 90
+op sin *tmp74 *tmp73
 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-op mul *tmp231 *tmp170 100000000
+op mul *tmp87 *tmp74 100000000
 # "Function: inline def round(in x)"
-op round *tmp232 *tmp231
-op div *tmp235 *tmp232 100000000
-assertequals 1 *tmp235 "sin"
+op round *tmp88 *tmp87
+op div *tmp89 *tmp88 100000000
+assertequals 1 *tmp89 "sin"
 # "Function: inline def d(in n)"
-op add *tmp171 zero 180
-op cos *tmp173 *tmp171
+op add *tmp75 zero 180
+op cos *tmp76 *tmp75
 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-op mul *tmp231 *tmp173 100000000
+op mul *tmp87 *tmp76 100000000
 # "Function: inline def round(in x)"
-op round *tmp232 *tmp231
-op div *tmp235 *tmp232 100000000
-assertequals -1 *tmp235 "cos"
+op round *tmp88 *tmp87
+op div *tmp89 *tmp88 100000000
+assertequals -1 *tmp89 "cos"
 # "Function: inline def d(in n)"
-op add *tmp174 zero 45
-op tan *tmp176 *tmp174
+op add *tmp77 zero 45
+op tan *tmp78 *tmp77
 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-op mul *tmp231 *tmp176 100000000
+op mul *tmp87 *tmp78 100000000
 # "Function: inline def round(in x)"
-op round *tmp232 *tmp231
-op div *tmp235 *tmp232 100000000
-assertequals 1 *tmp235 "tan"
+op round *tmp88 *tmp87
+op div *tmp89 *tmp88 100000000
+assertequals 1 *tmp89 "tan"
 # "Function: inline def d(in n)"
-op asin *tmp179 *tmp51
+op asin *tmp79 *tmp20
 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-op mul *tmp231 *tmp179 100000000
+op mul *tmp87 *tmp79 100000000
 # "Function: inline def round(in x)"
-op round *tmp232 *tmp231
-op div *tmp235 *tmp232 100000000
-assertequals 90 *tmp235 "asin"
+op round *tmp88 *tmp87
+op div *tmp89 *tmp88 100000000
+assertequals 90 *tmp89 "asin"
 # "Function: inline def d(in n)"
-op acos *tmp182 *tmp51
+op acos *tmp80 *tmp20
 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-op mul *tmp231 *tmp182 100000000
+op mul *tmp87 *tmp80 100000000
 # "Function: inline def round(in x)"
-op round *tmp232 *tmp231
-op div *tmp235 *tmp232 100000000
-assertequals 0 *tmp235 "acos"
+op round *tmp88 *tmp87
+op div *tmp89 *tmp88 100000000
+assertequals 0 *tmp89 "acos"
 # "Function: inline def d(in n)"
-op atan *tmp185 *tmp51
+op atan *tmp81 *tmp20
 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-op mul *tmp231 *tmp185 100000000
+op mul *tmp87 *tmp81 100000000
 # "Function: inline def round(in x)"
-op round *tmp232 *tmp231
-op div *tmp235 *tmp232 100000000
-assertequals 45 *tmp235 "atan"
+op round *tmp88 *tmp87
+op div *tmp89 *tmp88 100000000
+assertequals 45 *tmp89 "atan"
 # "Function: inline def d(in n)"
-op sub *tmp188 -8 zero
-assertequals -8 *tmp188 "unary minus"
+op sub *tmp82 -8 zero
+assertequals -8 *tmp82 "unary minus"
 # "Function: inline def d(in n)"
-op equal *tmp191 zero false
-assertequals 1 *tmp191 "boolean negation 1"
+op equal *tmp83 zero false
+assertequals 1 *tmp83 "boolean negation 1"
 # "Function: inline def d(in n)"
-assertequals 0 *tmp32 "boolean negation 2"
+assertequals 0 *tmp15 "boolean negation 2"
 # "Function: inline def d(in n)"
-op equal *tmp197 zero -2
-assertequals 0 *tmp197 "boolean negation 3"
+op equal *tmp84 zero -2
+assertequals 0 *tmp84 "boolean negation 3"
 # "Function: inline def d(in n)"
-assertequals 16 *tmp26 "**="
+assertequals 16 *tmp13 "**="
 # "Function: inline def d(in n)"
-op mul :a 2 *tmp9
+op mul :a 2 *tmp5
 assertequals 8 :a "*="
 # "Function: inline def d(in n)"
-assertequals 1.5 *tmp11 "/="
+assertequals 1.5 *tmp6 "/="
 # "Function: inline def d(in n)"
-assertequals 1 *tmp17 "\="
+assertequals 1 *tmp9 "\="
 # "Function: inline def d(in n)"
-assertequals 2 *tmp20 "%="
+assertequals 2 *tmp10 "%="
 # "Function: inline def d(in n)"
-assertequals 6 *tmp3 "+="
+assertequals 6 *tmp1 "+="
 # "Function: inline def d(in n)"
 op sub :a 2 zero
 assertequals 2 :a "-="
 # "Function: inline def d(in n)"
-assertequals 4 *tmp79 "<<="
+assertequals 4 *tmp31 "<<="
 # "Function: inline def d(in n)"
-assertequals 2 *tmp82 ">>="
+assertequals 2 *tmp32 ">>="
 # "Function: inline def d(in n)"
-assertequals 3 *tmp88 "|="
+assertequals 3 *tmp35 "|="
 # "Function: inline def d(in n)"
-assertequals 2 *tmp91 "&="
+assertequals 2 *tmp36 "&="
 # "Function: inline def d(in n)"
-assertequals 1 *tmp94 "^="
+assertequals 1 *tmp37 "^="
 # "Function: inline def d(in n)"
-assertequals false *tmp47 "&&="
+assertequals false *tmp18 "&&="
 # "Function: inline def d(in n)"
-assertequals true *tmp50 "&&="
+assertequals true *tmp19 "&&="
 # "Function: inline def d(in n)"
 op notEqual :a zero -2
 assertequals true :a "||="
 assertequals %ff0000ff %ff0000 "short color literals"
 assertequals %ffffffff %[white] "named color literals"
 # "Function: inline def o(in n)"
-select *tmp229 notEqual zero false null @copper-wall
-sensor *tmp230 *tmp229 @id
-assertequals 17 *tmp230 "Logic ID"
+select *tmp85 notEqual zero false null @copper-wall
+sensor *tmp86 *tmp85 @id
+assertequals 17 *tmp86 "Logic ID"
 stop

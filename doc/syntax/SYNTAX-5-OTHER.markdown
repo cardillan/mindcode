@@ -541,8 +541,8 @@ compiles to:
     label_3:
             ubind type
             # Remember first unit we found to be aware we're looping again
-            sensor *tmp1 :firstUnit @dead
-            jump label_10 equal *tmp1 false
+            sensor *tmp0 :firstUnit @dead
+            jump label_10 equal *tmp0 false
                 set :firstUnit @unit
                 set :active 0
                 set :change 0
@@ -583,15 +583,15 @@ compiles to:
             label_26:
             op add :active :active 1
             # Handle your unit here
-            op mul *tmp18 30 :active
-            op add :angle *tmp18 @tick
-            op sin *tmp20 :angle 0
-            op mul *tmp21 15 *tmp20
-            op add *tmp22 @thisx *tmp21
-            op cos *tmp23 :angle 0
-            op mul *tmp24 15 *tmp23
-            op add *tmp25 @thisy *tmp24
-            ucontrol move *tmp22 *tmp25 0 0 0
+            op mul *tmp1 30 :active
+            op add :angle *tmp1 @tick
+            op sin *tmp2 :angle 0
+            op mul *tmp3 15 *tmp2
+            op add *tmp4 @thisx *tmp3
+            op cos *tmp5 :angle 0
+            op mul *tmp6 15 *tmp5
+            op add *tmp7 @thisy *tmp6
+            ucontrol move *tmp4 *tmp7 0 0 0
             # End of unit handling
             jump label_3 always 0 0
 ```
@@ -785,9 +785,9 @@ op add *tmp0 *tmp1 1
 write *tmp0 cell1 0                     # The last atomic section instruction
 setrate 1000
 wait 0.00007                            # 0.004 ticks for atomic execution of 4 steps at 1000 ipt
-read *tmp4 cell1 1
-op add *tmp3 *tmp4 1
-write *tmp3 cell1 1                     # The last atomic section instruction
+read *tmp3 cell1 1
+op add *tmp2 *tmp3 1
+write *tmp2 cell1 1                     # The last atomic section instruction
 ```
 
 An alternative way to specify the processor speed is the [`setrate` compiler option](#option-setrate), however, this option also generates a `setrate` instruction to apply the specified speed to the processor. 

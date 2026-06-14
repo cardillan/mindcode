@@ -200,7 +200,7 @@ jump 2 always 0 0
 draw triangle MAX MIN .A :i :foo:n 0
 set MIN 10
 set MAX 50
-select *tmp1 equal .A null "first" "not first"
+select *tmp0 equal .A null "first" "not first"
 set :i MIN
 jump 14 greaterThan MIN MAX
 print :i
@@ -211,7 +211,7 @@ op add .A .A 1
 op add :i :i 1
 jump 7 lessThanEq :i MAX
 print "\n{0}: {0}\n"
-format *tmp1
+format *tmp0
 format .A
 ```
 

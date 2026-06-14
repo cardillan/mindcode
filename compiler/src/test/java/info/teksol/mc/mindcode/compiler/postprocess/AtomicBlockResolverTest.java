@@ -34,9 +34,9 @@ class AtomicBlockResolverTest {
                             read *tmp1 cell1 0
                             op add *tmp0 *tmp1 1
                             write *tmp0 cell1 0
-                            read *tmp4 cell1 1
-                            op add *tmp3 *tmp4 1
-                            write *tmp3 cell1 1                     # The last atomic section instruction
+                            read *tmp3 cell1 1
+                            op add *tmp2 *tmp3 1
+                            write *tmp2 cell1 1                     # The last atomic section instruction
                             """
             );
         }
@@ -55,9 +55,9 @@ class AtomicBlockResolverTest {
                             write *tmp0 cell1 0
                             print *tmp1
                             print "\\n"
-                            read *tmp4 cell1 1
-                            op add *tmp3 *tmp4 1
-                            write *tmp3 cell1 1                     # The last atomic section instruction
+                            read *tmp3 cell1 1
+                            op add *tmp2 *tmp3 1
+                            write *tmp2 cell1 1                     # The last atomic section instruction
                             """
             );
         }
@@ -72,31 +72,31 @@ class AtomicBlockResolverTest {
                     """
                             setrate 10
                             wait 0.03167                            # 1.900 ticks for atomic execution of 19 steps at 10 ipt
-                            read *tmp2 cell1 0
-                            op add *tmp1 *tmp2 1
-                            write *tmp1 cell1 0
-                            read *tmp2 cell1 1
-                            op add *tmp1 *tmp2 1
-                            write *tmp1 cell1 1
-                            read *tmp2 cell1 2
-                            op add *tmp1 *tmp2 1
-                            write *tmp1 cell1 2
-                            read *tmp2 cell1 3
-                            op add *tmp1 *tmp2 1
-                            write *tmp1 cell1 3
-                            read *tmp2 cell1 4
-                            op add *tmp1 *tmp2 1
-                            write *tmp1 cell1 4
-                            read *tmp2 cell1 5
-                            op add *tmp1 *tmp2 1
-                            write *tmp1 cell1 5                     # The last atomic section instruction
+                            read *tmp1 cell1 0
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 0
+                            read *tmp1 cell1 1
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 1
+                            read *tmp1 cell1 2
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 2
+                            read *tmp1 cell1 3
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 3
+                            read *tmp1 cell1 4
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 4
+                            read *tmp1 cell1 5
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 5                     # The last atomic section instruction
                             wait 0.01167                            # 0.700 ticks for atomic execution of 7 steps at 10 ipt
-                            read *tmp2 cell1 6
-                            op add *tmp1 *tmp2 1
-                            write *tmp1 cell1 6
-                            read *tmp2 cell1 7
-                            op add *tmp1 *tmp2 1
-                            write *tmp1 cell1 7                     # The last atomic section instruction
+                            read *tmp1 cell1 6
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 6
+                            read *tmp1 cell1 7
+                            op add *tmp0 *tmp1 1
+                            write *tmp0 cell1 7                     # The last atomic section instruction
                             """
             );
         }
@@ -116,9 +116,9 @@ class AtomicBlockResolverTest {
                             op add *tmp0 *tmp1 1
                             write *tmp0 cell1 0
                             jump 9 equal *tmp1 false
-                            read *tmp5 cell1 1
-                            op add *tmp4 *tmp5 1
-                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            read *tmp3 cell1 1
+                            op add *tmp2 *tmp3 1
+                            write *tmp2 cell1 1                     # The last atomic section instruction
                             print "Done"
                             """
             );
@@ -146,9 +146,9 @@ class AtomicBlockResolverTest {
                             write *tmp0 cell1 0
                             jump 8 equal p false
                             print "Hooray!"
-                            read *tmp5 cell1 1
-                            op add *tmp4 *tmp5 1
-                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            read *tmp3 cell1 1
+                            op add *tmp2 *tmp3 1
+                            write *tmp2 cell1 1                     # The last atomic section instruction
                             print "Done"
                             """
             );
@@ -206,9 +206,9 @@ class AtomicBlockResolverTest {
                             print p
                             print p
                             wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
-                            read *tmp5 cell1 1
-                            op add *tmp4 *tmp5 1
-                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            read *tmp3 cell1 1
+                            op add *tmp2 *tmp3 1
+                            write *tmp2 cell1 1                     # The last atomic section instruction
                             print "Done"
                             """
             );
@@ -233,9 +233,9 @@ class AtomicBlockResolverTest {
                             op add *tmp0 *tmp1 1
                             write *tmp0 cell1 0
                             jump 10 equal p false
-                            read *tmp5 cell1 1
-                            op add *tmp4 *tmp5 1
-                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            read *tmp3 cell1 1
+                            op add *tmp2 *tmp3 1
+                            write *tmp2 cell1 1                     # The last atomic section instruction
                             jump 10 lessThan @time 100
                             print "Done"
                             """
@@ -258,9 +258,9 @@ class AtomicBlockResolverTest {
                             write *tmp0 cell1 0                     # The last atomic section instruction
                             jump 5 lessThan @time 100
                             wait 0.00667                            # 0.400 ticks for atomic execution of 4 steps at 10 ipt
-                            read *tmp5 cell1 1
-                            op add *tmp4 *tmp5 1
-                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            read *tmp3 cell1 1
+                            op add *tmp2 *tmp3 1
+                            write *tmp2 cell1 1                     # The last atomic section instruction
                             print "Done"
                             """
             );
@@ -285,9 +285,9 @@ class AtomicBlockResolverTest {
                             op add *tmp0 *tmp1 1
                             write *tmp0 cell1 0
                             jump 10 equal p false
-                            read *tmp5 cell1 1
-                            op add *tmp4 *tmp5 1
-                            write *tmp4 cell1 1                     # The last atomic section instruction
+                            read *tmp3 cell1 1
+                            op add *tmp2 *tmp3 1
+                            write *tmp2 cell1 1                     # The last atomic section instruction
                             wait 1
                             print "Done"
                             """
@@ -310,9 +310,9 @@ class AtomicBlockResolverTest {
                             write *tmp0 cell1 0                     # The last atomic section instruction
                             wait 1
                             wait 0.00667                            # 0.400 ticks for atomic execution of 4 steps at 10 ipt
-                            read *tmp4 cell1 1
-                            op add *tmp3 *tmp4 1
-                            write *tmp3 cell1 1                     # The last atomic section instruction
+                            read *tmp3 cell1 1
+                            op add *tmp2 *tmp3 1
+                            write *tmp2 cell1 1                     # The last atomic section instruction
                             print "Done"
                             """
             );
@@ -574,9 +574,9 @@ class AtomicBlockResolverTest {
                             """,
                     """
                             wait 0.01667                            # 1.000 ticks for atomic execution of 2 steps at 2 ipt
-                            read *tmp1 cell1 0
-                            op shl *tmp5 *tmp1 1
-                            op add @counter *tmp5 4
+                            read *tmp0 cell1 0
+                            op shl *tmp2 *tmp0 1
+                            op add @counter *tmp2 4
                             set .x*elem ".x*0"
                             jump 13 always 0 0
                             set .x*elem ".x*1"
@@ -586,9 +586,9 @@ class AtomicBlockResolverTest {
                             set .x*elem ".x*3"
                             jump 13 always 0 0
                             set .x*elem ".x*4"
-                            read *tmp3 @this .x*elem
-                            op add *tmp3 *tmp3 1
-                            write *tmp3 @this .x*elem               # The last atomic section instruction
+                            read *tmp1 @this .x*elem
+                            op add *tmp1 *tmp1 1
+                            write *tmp1 @this .x*elem               # The last atomic section instruction
                             print .x*0
                             end
                             draw triangle .x*1 .x*2 .x*3 .x*4 0 0
@@ -615,21 +615,21 @@ class AtomicBlockResolverTest {
                     """
                             set p 0
                             wait 0.01667                            # 1.000 ticks for atomic execution of 2 steps at 2 ipt
-                            read *tmp1 cell1 0
+                            read *tmp0 cell1 0
                             set .x*ret 7
-                            op shl .x*ind *tmp1 1
-                            op mod *tmp7 .x*ind 6
-                            op add @counter 18 *tmp7
-                            read *tmp3 @this .x*elem
-                            op add *tmp3 *tmp3 1
-                            write *tmp3 @this .x*elem               # The last atomic section instruction
+                            op shl .x*ind *tmp0 1
+                            op mod *tmp3 .x*ind 6
+                            op add @counter 18 *tmp3
+                            read *tmp1 @this .x*elem
+                            op add *tmp1 *tmp1 1
+                            write *tmp1 @this .x*elem               # The last atomic section instruction
                             set .x*ret 14
                             op shl .x*ind p 1
-                            op mod *tmp8 .x*ind 6
-                            op add @counter 18 *tmp8
-                            read *tmp5 @this .x*elem
-                            op add *tmp5 *tmp5 1
-                            write *tmp5 @this .x*elem
+                            op mod *tmp4 .x*ind 6
+                            op add @counter 18 *tmp4
+                            read *tmp2 @this .x*elem
+                            op add *tmp2 *tmp2 1
+                            write *tmp2 @this .x*elem
                             end
                             select .x*elem lessThan .x*ind 6 ".x*0" ".x*3"
                             set @counter .x*ret
@@ -799,9 +799,9 @@ class AtomicBlockResolverTest {
                             """,
                     """
                             wait 0.075                              # 4.500 ticks for atomic execution of 9 steps at 2 ipt
-                            read *tmp1 cell1 0
-                            op shl *tmp5 *tmp1 1
-                            op add @counter *tmp5 4
+                            read *tmp0 cell1 0
+                            op shl *tmp2 *tmp0 1
+                            op add @counter *tmp2 4
                             set .x*elem ".x*0"
                             jump 13 always 0 0
                             set .x*elem ".x*1"
@@ -811,9 +811,9 @@ class AtomicBlockResolverTest {
                             set .x*elem ".x*3"
                             jump 13 always 0 0
                             set .x*elem ".x*4"
-                            read *tmp3 @this .x*elem
-                            op add *tmp3 *tmp3 1
-                            write *tmp3 @this .x*elem               # The last atomic section instruction
+                            read *tmp1 @this .x*elem
+                            op add *tmp1 *tmp1 1
+                            write *tmp1 @this .x*elem               # The last atomic section instruction
                             print .x*0
                             end
                             draw triangle .x*1 .x*2 .x*3 .x*4 0 0
@@ -841,21 +841,21 @@ class AtomicBlockResolverTest {
                     """
                             set p 0
                             wait 0.02292                            # 1.375 ticks for atomic execution of 11 steps at 8 ipt
-                            read *tmp1 cell1 0
+                            read *tmp0 cell1 0
                             set .x*ret 7
-                            op shl .x*ind *tmp1 1
-                            op mod *tmp7 .x*ind 6
-                            op add @counter 18 *tmp7
-                            read *tmp3 @this .x*elem
-                            op add *tmp3 *tmp3 1
-                            write *tmp3 @this .x*elem               # The last atomic section instruction
+                            op shl .x*ind *tmp0 1
+                            op mod *tmp3 .x*ind 6
+                            op add @counter 18 *tmp3
+                            read *tmp1 @this .x*elem
+                            op add *tmp1 *tmp1 1
+                            write *tmp1 @this .x*elem               # The last atomic section instruction
                             set .x*ret 14
                             op shl .x*ind p 1
-                            op mod *tmp8 .x*ind 6
-                            op add @counter 18 *tmp8
-                            read *tmp5 @this .x*elem
-                            op add *tmp5 *tmp5 1
-                            write *tmp5 @this .x*elem
+                            op mod *tmp4 .x*ind 6
+                            op add @counter 18 *tmp4
+                            read *tmp2 @this .x*elem
+                            op add *tmp2 *tmp2 1
+                            write *tmp2 @this .x*elem
                             end
                             select .x*elem lessThan .x*ind 6 ".x*0" ".x*3"
                             set @counter .x*ret

@@ -155,12 +155,12 @@ op sub :fib:n :fib:n 1
 callrec bank1 *label0 *label5 :fib*retval
 label *label5
 pop bank1 :fib:n
-set *tmp4 :fib*retval
-push bank1 *tmp4
+set *tmp0 :fib*retval
+push bank1 *tmp0
 op sub :fib:n :fib:n 2
 callrec bank1 *label0 *label6 :fib*retval
 label *label6
-pop bank1 *tmp4
-op add :fib*retval *tmp4 :fib*retval
+pop bank1 *tmp0
+op add :fib*retval *tmp0 :fib*retval
 label *label4
 returnrec bank1

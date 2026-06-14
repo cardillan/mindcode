@@ -3212,22 +3212,22 @@ op sub :n :n 1
 getlink :block :n
 print "Found: {0}\n"
 format :block
-sensor *tmp5 :block @type
-jump *label7 notEqual *tmp5 @impact-reactor
+sensor *tmp0 :block @type
+jump *label7 notEqual *tmp0 @impact-reactor
 set .START :n
 op add :reactors :reactors 1
 jump *label6 always
 label *label7
-jump *label10 equal *tmp5 @overdrive-projector
-jump *label9 notEqual *tmp5 @overdrive-dome
+jump *label10 equal *tmp0 @overdrive-projector
+jump *label9 notEqual *tmp0 @overdrive-dome
 label *label10
 set .START :n
 label *label9
 label *label6
 jump *label157 greaterThan :n 0
 label *label5
-read *tmp8 cell2 1
-op add :reactors :reactors *tmp8
+read *tmp1 cell2 1
+op add :reactors :reactors *tmp1
 jump *label11 notEqual :reactors 0
 print "No reactor."
 label *label11
@@ -3246,18 +3246,18 @@ read .RESETS cell1 9
 read .COMMITS cell1 10
 set :reactors .REACTORS_ON
 select .REASON equal .MODE 0 "Processor reset" "Reason unknown -- out of power?"
-op notEqual *tmp37 .MODE 0
-control enabled switch1 *tmp37
+op notEqual *tmp2 .MODE 0
+control enabled switch1 *tmp2
 set :failure_cnt 0
 set :boosts 0
 set :nextStart 0
 op add :nextDecommit @time 6000
 label *label15
-sensor *tmp39 battery1 @totalPower
-op floor :battery_level *tmp39
+sensor *tmp3 battery1 @totalPower
+op floor :battery_level *tmp3
 op idiv :battery_level_str :battery_level 1000
-sensor *tmp42 battery1 @powerNetStored
-op floor :total_battery *tmp42
+sensor *tmp4 battery1 @powerNetStored
+op floor :total_battery *tmp4
 op idiv :total_battery_str :total_battery 1000
 sensor :consumption battery1 @powerNetOut
 read :production bank1 509
@@ -3266,29 +3266,29 @@ read :battery_change bank1 511
 sensor :total_capacity battery1 @powerNetCapacity
 op idiv :total_capacity_str :total_capacity 1000
 op mul :required_capacity 100000 :reactors
-op sub *tmp56 :required_capacity :total_capacity
-op div *tmp57 *tmp56 1000
-op ceil :missing_battery *tmp57
+op sub *tmp5 :required_capacity :total_capacity
+op div *tmp6 *tmp5 1000
+op ceil :missing_battery *tmp6
 jump *label18 equal .MODE 0
-sensor *tmp61 switch1 @enabled
-jump *label20 notEqual *tmp61 false
+sensor *tmp7 switch1 @enabled
+jump *label20 notEqual *tmp7 false
 set .MODE 0
 set .REASON "Manual power off"
 jump *label21 always
 label *label20
 op mul :min_consumption .REACTORS_ON 1200
-set *tmp69 false
+set *tmp8 false
 jump *label23 notEqual :battery_level 0
 jump *label23 lessThanEq :consumption 0
-op equal *tmp69 :production 0
+op equal *tmp8 :production 0
 label *label23
 jump *label29 lessThan :consumption :min_consumption
-jump *label27 equal *tmp69 false
+jump *label27 equal *tmp8 false
 label *label29
 op add :failure_cnt :failure_cnt 1
-read *tmp73 cell2 1
-op add *tmp72 10 *tmp73
-jump *label28 lessThanEq :failure_cnt *tmp72
+read *tmp10 cell2 1
+op add *tmp9 10 *tmp10
+jump *label28 lessThanEq :failure_cnt *tmp9
 set .MODE 0
 control enabled switch1 false
 set .REASON "Unknown -- out of power?"
@@ -3303,38 +3303,38 @@ label *label28
 label *label21
 label *label18
 jump *label34 notEqual .MODE 0
-set *tmp78 "[salmon]SHUTDOWN[]"
+set *tmp11 "[salmon]SHUTDOWN[]"
 jump *label33 always
 label *label34
 jump *label36 notEqual .MODE 1
-set *tmp78 "[gold]STARTUP[]"
+set *tmp11 "[gold]STARTUP[]"
 jump *label33 always
 label *label36
 jump *label38 notEqual .MODE 2
-set *tmp78 "[green]RUNNING[]"
+set *tmp11 "[green]RUNNING[]"
 jump *label33 always
 label *label38
-set *tmp78 null
+set *tmp11 null
 label *label33
-print *tmp78
+print *tmp11
 print ", reactors [green]{0}/{0}[]"
 format .REACTORS_ON
 format :reactors
 jump *label40 equal .OVERDRIVE false
-op mul *tmp81 100 :boosts
-op div *tmp82 *tmp81 .REACTORS_ON
-op round *tmp84 *tmp82
-op div :multiplier *tmp84 100
+op mul *tmp12 100 :boosts
+op div *tmp13 *tmp12 .REACTORS_ON
+op round *tmp14 *tmp13
+op div :multiplier *tmp14 100
 print " ([gold]{0}x[])"
 format :multiplier
 label *label40
 print "\n=================================="
-sensor *tmp86 tank1 @totalLiquids
-jump *label42 greaterThanEq *tmp86 750
+sensor *tmp15 tank1 @totalLiquids
+jump *label42 greaterThanEq *tmp15 750
 print "\n[salmon]Cryofluid level critical![]"
 label *label42
-sensor *tmp89 vault1 @blast-compound
-jump *label44 greaterThanEq *tmp89 700
+sensor *tmp16 vault1 @blast-compound
+jump *label44 greaterThanEq *tmp16 700
 print "\n[salmon]Blast compound level critical![]"
 label *label44
 jump *label46 greaterThanEq :total_capacity :required_capacity
@@ -3353,13 +3353,13 @@ set .OVERDRIVE 0
 set .OUTPUT_1 0
 set .OUTPUT_2 0
 set .OUTPUT_3 0
-op greaterThanEq *tmp96 :net_power -150
-op lessThan *tmp97 :total_battery 47500
-op land .GENERATOR *tmp96 *tmp97
+op greaterThanEq *tmp17 :net_power -150
+op lessThan *tmp18 :total_battery 47500
+op land .GENERATOR *tmp17 *tmp18
 print "\nShutdown reason: [gold]{0}[]"
 format .REASON
-sensor *tmp99 switch1 @enabled
-jump *label48 equal *tmp99 false
+sensor *tmp19 switch1 @enabled
+jump *label48 equal *tmp19 false
 set .MODE 1
 op add .STARTUPS .STARTUPS 1
 set :nextStart 0
@@ -3369,11 +3369,11 @@ set .REASON "Unknown -- out of power?"
 jump *label48 always
 label *label49
 jump *label53 notEqual .MODE 1
-select *tmp102 notEqual .OUTPUT_2 false battery4 battery3
-select *tmp101 notEqual .OUTPUT_1 false *tmp102 battery2
-sensor *tmp103 *tmp101 @powerNetOut
-op idiv *tmp105 *tmp103 0.9523809523809523
-op max :neededPower *tmp105 1000
+select *tmp21 notEqual .OUTPUT_2 false battery4 battery3
+select *tmp20 notEqual .OUTPUT_1 false *tmp21 battery2
+sensor *tmp22 *tmp20 @powerNetOut
+op idiv *tmp23 *tmp22 0.9523809523809523
+op max :neededPower *tmp23 1000
 jump *label59 notEqual .REACTORS_ON 0
 jump *label61 lessThan :total_battery 25000
 set .REACTORS_ON 1
@@ -3383,8 +3383,8 @@ label *label61
 print "\nRequired startup energy: [gold]25 K[]"
 jump *label48 always
 label *label59
-op add *tmp112 .OUTPUT_1 .OUTPUT_2
-op add :outputs *tmp112 .OUTPUT_3
+op add *tmp24 .OUTPUT_1 .OUTPUT_2
+op add :outputs *tmp24 .OUTPUT_3
 print "\n[gold]{0}[] surge tower(s) online"
 format :outputs
 jump *label63 notEqual .OUTPUT_3 0
@@ -3392,10 +3392,10 @@ print "\nRequired power level: [gold]{0}[]"
 format :neededPower
 label *label63
 select .OVERDRIVE greaterThan :net_power 100 true .OVERDRIVE
-set *tmp121 false
+set *tmp25 false
 jump *label68 greaterThanEq .REACTORS_ON :reactors
 jump *label68 lessThanEq :net_power 1000
-op greaterThanEq *tmp121 :total_battery 25000
+op greaterThanEq *tmp25 :total_battery 25000
 label *label68
 jump *label72 lessThan :net_power :neededPower
 set .OUTPUT_3 .OUTPUT_2
@@ -3409,12 +3409,12 @@ jump *label76 greaterThanEq :ratio 1
 op add :nextStart @time 2000
 label *label76
 label *label74
-jump *label78 equal *tmp121 false
+jump *label78 equal *tmp25 false
 jump *label78 lessThanEq @time :nextStart
-op idiv *tmp239 :total_battery 25000
-select *tmp133 notEqual FAST_START false *tmp239 1
-op add *tmp135 .REACTORS_ON *tmp133
-op min .REACTORS_ON *tmp135 :reactors
+op idiv *tmp47 :total_battery 25000
+select *tmp26 notEqual FAST_START false *tmp47 1
+op add *tmp27 .REACTORS_ON *tmp26
+op min .REACTORS_ON *tmp27 :reactors
 op add :nextStart @time 2000
 label *label78
 jump *label48 lessThan .REACTORS_ON :reactors
@@ -3429,15 +3429,15 @@ jump *label48 always
 label *label53
 jump *label89 notEqual .MODE 2
 jump *label91 equal .COOLANT_FLAG false
-sensor *tmp143 tank1 @totalLiquids
-jump *label91 greaterThanEq *tmp143 750
+sensor *tmp28 tank1 @totalLiquids
+jump *label91 greaterThanEq *tmp28 750
 set .MODE 0
 control enabled switch1 false
 set .REASON "Cryo level too low"
 label *label91
 jump *label95 equal .FUEL_FLAG false
-sensor *tmp148 vault1 @blast-compound
-jump *label95 greaterThanEq *tmp148 700
+sensor *tmp29 vault1 @blast-compound
+jump *label95 greaterThanEq *tmp29 700
 set .MODE 0
 control enabled switch1 false
 set .REASON "Blast compound level too low"
@@ -3446,46 +3446,46 @@ jump *label99 equal .COOLANT_FLAG false
 set .COOLANT_FLAG true
 jump *label100 always
 label *label99
-sensor *tmp153 tank1 @totalLiquids
-op greaterThan .COOLANT_FLAG *tmp153 1000
+sensor *tmp30 tank1 @totalLiquids
+op greaterThan .COOLANT_FLAG *tmp30 1000
 label *label100
 jump *label103 equal .FUEL_FLAG false
 set .FUEL_FLAG true
 jump *label104 always
 label *label103
-sensor *tmp156 vault1 @blast-compound
-op greaterThan .FUEL_FLAG *tmp156 800
+sensor *tmp31 vault1 @blast-compound
+op greaterThan .FUEL_FLAG *tmp31 800
 label *label104
 jump *label107 lessThan :total_capacity :required_capacity
-sensor *tmp159 switch2 @enabled
-jump *label107 equal *tmp159 false
+sensor *tmp32 switch2 @enabled
+jump *label107 equal *tmp32 false
 op mul :min_level :reactors 50000
 set :commit_level 0
 jump *label111 equal .CAN_COMMIT false
 jump *label111 greaterThanEq :battery_change 0
 jump *label111 greaterThanEq .REACTORS_ON :reactors
 op sub :p :battery_change 2500
-op mul *tmp167 :p 0.00472972972972973
-op add *tmp168 -5 *tmp167
-op mul *tmp169 :p *tmp168
-op add :commit_margin 25000 *tmp169
+op mul *tmp33 :p 0.00472972972972973
+op add *tmp34 -5 *tmp33
+op mul *tmp35 :p *tmp34
+op add :commit_margin 25000 *tmp35
 op add :commit_level :min_level :commit_margin
-op idiv *tmp172 :commit_level 1000
+op idiv *tmp36 :commit_level 1000
 print "\nCommit threshold:   [gold]"
-print *tmp172
+print *tmp36
 label *label111
 jump *label116 notEqual :commit_level 0
-op idiv *tmp175 :min_level 1000
+op idiv *tmp37 :min_level 1000
 print "\nRestart threshold: [gold]"
-print *tmp175
+print *tmp37
 label *label116
 print "[] K"
 jump *label120 lessThan :total_battery :min_level
-op mul *tmp177 .REACTORS_ON -2500
-jump *label118 greaterThanEq :battery_change *tmp177
+op mul *tmp38 .REACTORS_ON -2500
+jump *label118 greaterThanEq :battery_change *tmp38
 label *label120
-op equal *tmp180 .OVERDRIVE false
-op add .RESETS .RESETS *tmp180
+op equal *tmp39 .OVERDRIVE false
+op add .RESETS .RESETS *tmp39
 set .OVERDRIVE true
 set .REACTORS_ON :reactors
 op add :nextDecommit @time 6000
@@ -3501,8 +3501,8 @@ jump *label128 equal .OVERDRIVE false
 set .OVERDRIVE false
 jump *label129 always
 label *label128
-op sub *tmp189 .REACTORS_ON 1
-op max .REACTORS_ON *tmp189 1
+op sub *tmp40 .REACTORS_ON 1
+op max .REACTORS_ON *tmp40 1
 set .CAN_COMMIT true
 label *label129
 op add :nextDecommit @time 6000
@@ -3514,8 +3514,8 @@ op add .COMMITS .COMMITS 1
 set .CAN_COMMIT false
 jump *label108 always
 label *label107
-sensor *tmp194 switch2 @enabled
-jump *label132 equal *tmp194 false
+sensor *tmp41 switch2 @enabled
+jump *label132 equal *tmp41 false
 print "\n[salmon]Load adapting not possible.[]"
 jump *label133 always
 label *label132
@@ -3524,8 +3524,8 @@ label *label133
 set .REACTORS_ON :reactors
 set .OVERDRIVE true
 label *label108
-op mul *tmp196 PLANT_PROTECTION 47500
-jump *label134 greaterThanEq :total_battery *tmp196
+op mul *tmp42 PLANT_PROTECTION 47500
+jump *label134 greaterThanEq :total_battery *tmp42
 set .OUTPUT_2 0
 set .OUTPUT_3 0
 label *label134
@@ -3557,10 +3557,10 @@ set :n .START
 jump *label142 greaterThanEq .START @links
 label *label158
 getlink :block :n
-sensor *tmp216 :block @type
-sensor *tmp240 *tmp216 @id
-jump *label161 greaterThanEq *tmp240 83
-multijump *label163 *tmp240 0
+sensor *tmp43 :block @type
+sensor *tmp48 *tmp43 @id
+jump *label161 greaterThanEq *tmp48 83
+multijump *label163 *tmp48 0
 multilabel *label163
 jump *label161 always
 multilabel *label164
@@ -3730,8 +3730,8 @@ op add :reactors :reactors 1
 op lessThanEq :enabled :reactors .REACTORS_ON
 control enabled :block :enabled
 jump *label143 greaterThan :reactors .REACTORS_ON
-sensor *tmp222 :block @timescale
-op add :boosts :boosts *tmp222
+sensor *tmp44 :block @timescale
+op add :boosts :boosts *tmp44
 jump *label143 always
 label *label149
 control enabled :block .OVERDRIVE
@@ -3747,10 +3747,10 @@ jump *label152 equal cell2 null
 write :reactors cell2 0
 write .REACTORS_ON cell2 2
 write .OVERDRIVE cell2 3
-read *tmp233 cell2 1
-op add :reactors :reactors *tmp233
-read *tmp235 cell2 4
-op add :boosts :boosts *tmp235
+read *tmp45 cell2 1
+op add :reactors :reactors *tmp45
+read *tmp46 cell2 4
+op add :boosts :boosts *tmp46
 label *label152
 op min .REACTORS_ON .REACTORS_ON :reactors
 jump *label154 notEqual cell1 null

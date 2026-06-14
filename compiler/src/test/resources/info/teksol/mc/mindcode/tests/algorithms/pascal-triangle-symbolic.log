@@ -287,35 +287,35 @@ set water 1
 set :j 1
 jump *label6 greaterThan 1 :lineLength
 label *label11
-op sub *tmp4 :j 1
-lookup item *tmp19 *tmp4
-sensor .previousLine*elem *tmp19 @name
-read *tmp5 @this .previousLine*elem
-lookup item *tmp20 :j
-sensor .previousLine*elem *tmp20 @name
-read *tmp7 @this .previousLine*elem
-op add *tmp8 *tmp5 *tmp7
-lookup liquid *tmp21 :j
-sensor .currentLine*elem *tmp21 @name
-write *tmp8 @this .currentLine*elem
+op sub *tmp0 :j 1
+lookup item *tmp6 *tmp0
+sensor .previousLine*elem *tmp6 @name
+read *tmp1 @this .previousLine*elem
+lookup item *tmp7 :j
+sensor .previousLine*elem *tmp7 @name
+read *tmp2 @this .previousLine*elem
+op add *tmp3 *tmp1 *tmp2
+lookup liquid *tmp8 :j
+sensor .currentLine*elem *tmp8 @name
+write *tmp3 @this .currentLine*elem
 op add :j :j 1
 jump *label11 lessThanEq :j :lineLength
 label *label6
-lookup liquid *tmp22 :lineLength
-sensor .currentLine*elem *tmp22 @name
+lookup liquid *tmp9 :lineLength
+sensor .currentLine*elem *tmp9 @name
 write 1 @this .currentLine*elem
 op add :lineLength :lineLength 1
 set :c 0
 jump *label9 greaterThanEq 0 :lineLength
 label *label12
-lookup liquid *tmp23 :c
-sensor .currentLine*elem *tmp23 @name
-read *tmp14 @this .currentLine*elem
-op add :total :total *tmp14
-read *tmp18 @this .currentLine*elem
-lookup item *tmp25 :c
-sensor .previousLine*elem *tmp25 @name
-write *tmp18 @this .previousLine*elem
+lookup liquid *tmp10 :c
+sensor .currentLine*elem *tmp10 @name
+read *tmp4 @this .currentLine*elem
+op add :total :total *tmp4
+read *tmp5 @this .currentLine*elem
+lookup item *tmp11 :c
+sensor .previousLine*elem *tmp11 @name
+write *tmp5 @this .previousLine*elem
 op add :c :c 1
 jump *label12 lessThan :c :lineLength
 label *label9

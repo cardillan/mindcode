@@ -1082,7 +1082,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                                                 new Link("unloader1", 2, 0),
                                                 new Link("switch1", 1, 0)
                                         ),
-                                        "sensor *tmp3 switch1 @enabled\ncontrol enabled unloader1 *tmp3 0 0 0\n"
+                                        "sensor *tmp0 switch1 @enabled\ncontrol enabled unloader1 *tmp0 0 0 0\n"
                                 )
                         ),
                         block(pos(10, 1), List.of("onOff"), "@switch", P1_0, Direction.EAST, BooleanConfiguration.FALSE),

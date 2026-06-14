@@ -441,12 +441,12 @@ label_0:
         control enabled switch1 false 0 0 0
     # The main code: an infinite loop
     label_3:
-        set *tmp2 .counter
+        set *tmp0 .counter
         op add .counter .counter 1
-        print *tmp2
+        print *tmp0
         printflush message1
-        sensor *tmp4 switch1 @enabled
-        jump label_3 equal *tmp4 false
+        sensor *tmp1 switch1 @enabled
+        jump label_3 equal *tmp1 false
             control enabled switch1 false 0 0 0
             set .counter 0
         jump label_3 always 0 0

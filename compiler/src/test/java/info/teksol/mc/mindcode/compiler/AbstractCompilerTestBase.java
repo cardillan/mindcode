@@ -147,7 +147,7 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
     }
 
     // Instruction creation
-    protected final NameCreator nameCreator = new StandardNameCreator(false);
+    protected static final NameCreator nameCreator = new StandardNameCreator(false);
 
     protected final CompilerProfile profile = createCompilerProfile();
     protected final InstructionProcessor ip = InstructionProcessorFactory.getInstructionProcessorNoValidate(
@@ -297,10 +297,10 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
             foo         = main("foo"),
             result      = main("result"),
             ast0        = LogicVariable.ast("*ast0"),
-            tmp0        = LogicVariable.temporary("*tmp0"),
-            tmp1        = LogicVariable.temporary("*tmp1"),
-            tmp2        = LogicVariable.temporary("*tmp2"),
-            tmp3        = LogicVariable.temporary("*tmp3"),
+            tmp0        = LogicVariable.temporary(nameCreator, 0),
+            tmp1        = LogicVariable.temporary(nameCreator, 1),
+            tmp2        = LogicVariable.temporary(nameCreator, 2),
+            tmp3        = LogicVariable.temporary(nameCreator, 3),
             fn0retval   = LogicVariable.fnRetVal("foo", ":fn0");
 
     protected static final LogicBuiltIn

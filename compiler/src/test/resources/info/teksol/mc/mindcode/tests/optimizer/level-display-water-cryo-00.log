@@ -550,9 +550,9 @@ op sub :n :n 1
 getlink :block :n
 print "\nFound: "
 print :block
-sensor *tmp8 :block @type
-sensor *tmp38 *tmp8 @id
-multijump *tmp38 0 0
+sensor *tmp0 :block @type
+sensor *tmp13 *tmp0 @id
+multijump *tmp13 0 0
 multilabel *label36
 multilabel *label31
 jump *label9 always
@@ -587,8 +587,8 @@ jump *label3 equal .TANK_CRYO null
 jump *label3 equal .TANK_WATER null
 jump *label26 equal .DISPLAY null
 control enabled .SWITCH 0
-sensor *tmp16 .SWITCH @enabled
-jump __start__ notEqual *tmp16 0
+sensor *tmp1 .SWITCH @enabled
+jump __start__ notEqual *tmp1 0
 label *label28
 set :start_time @time
 draw clear 0 0 0
@@ -599,32 +599,32 @@ draw color 90 100 170 255
 draw rect 14 20 12 55
 draw color 255 255 16 255
 sensor :water .TANK_WATER @totalLiquids
-op mul *tmp20 :water 0.03666666666666667
-op add :pos *tmp20 20
-op add *tmp22 :pos 7
-op sub *tmp23 :pos 7
-draw triangle 6 *tmp22 14 :pos 6 *tmp23
-draw triangle 34 *tmp22 26 :pos 34 *tmp23
+op mul *tmp2 :water 0.03666666666666667
+op add :pos *tmp2 20
+op add *tmp3 :pos 7
+op sub *tmp4 :pos 7
+draw triangle 6 *tmp3 14 :pos 6 *tmp4
+draw triangle 34 *tmp3 26 :pos 34 *tmp4
 draw color 110 200 230 255
 draw rect 54 20 12 55
 draw color 255 255 16 255
 sensor :cryo .TANK_CRYO @totalLiquids
-op mul *tmp27 :cryo 0.03666666666666667
-op add :pos *tmp27 20
-op add *tmp29 :pos 7
-op sub *tmp30 :pos 7
-draw triangle 46 *tmp29 54 :pos 46 *tmp30
-draw triangle 74 *tmp29 66 :pos 74 *tmp30
+op mul *tmp5 :cryo 0.03666666666666667
+op add :pos *tmp5 20
+op add *tmp6 :pos 7
+op sub *tmp7 :pos 7
+draw triangle 46 *tmp6 54 :pos 46 *tmp7
+draw triangle 74 *tmp6 66 :pos 74 *tmp7
 drawflush .DISPLAY
 print "Water and Cryofluid Level Meter\nWater level: {0}\nCryofluid level: {0}\nElapsed: "
-op mul *tmp33 100 :water
-op idiv *tmp34 *tmp33 100
-format *tmp34
-op mul *tmp35 100 :cryo
-op idiv *tmp36 *tmp35 100
-format *tmp36
-op sub *tmp37 @time :start_time
-print *tmp37
+op mul *tmp8 100 :water
+op idiv *tmp9 *tmp8 100
+format *tmp9
+op mul *tmp10 100 :cryo
+op idiv *tmp11 *tmp10 100
+format *tmp11
+op sub *tmp12 @time :start_time
+print *tmp12
 printflush .MESSAGE
-sensor *tmp16 .SWITCH @enabled
-jump *label28 equal *tmp16 0
+sensor *tmp1 .SWITCH @enabled
+jump *label28 equal *tmp1 0

@@ -425,20 +425,20 @@ set :foo:b 0
 callrec bank1 *label0 *label3 :foo*retval
 label *label3
 assertprints *tmp0 "0001111223221211" "foo"
-assertflush *tmp2
+assertflush *tmp1
 set :bar:n 3
 set :bar:a 0
 set :bar:b 0
 callrec bank1 *label1 *label4 :bar*retval
 label *label4
-assertprints *tmp2 "0001111223333444" "bar"
-assertflush *tmp4
+assertprints *tmp1 "0001111223333444" "bar"
+assertflush *tmp2
 set :baz:n 3
 set :baz:a 0
 set :baz:b 0
 callrec bank1 *label2 *label5 :baz*retval
 label *label5
-assertprints *tmp4 "0001111223221211" "baz"
+assertprints *tmp2 "0001111223221211" "baz"
 stop
 end
 label *label0
@@ -448,10 +448,10 @@ op add :foo:a :foo:a 1
 jump *label7 lessThanEq :foo:n 0
 push bank1 :foo:a
 push bank1 :foo:b
-set *tmp11 :foo:a
+set *tmp3 :foo:a
 op sub :foo:n :foo:n 1
 set :foo:a :foo:b
-set :foo:b *tmp11
+set :foo:b *tmp3
 callrec bank1 *label0 *label9 :foo*retval
 label *label9
 pop bank1 :foo:b
@@ -466,15 +466,15 @@ print :bar:a
 print :bar:b
 op add :bar:a :bar:a 1
 jump *label11 lessThanEq :bar:n 0
-set *tmp19 :bar:a
+set *tmp4 :bar:a
 op sub :bar:n :bar:n 1
 set :bar:a :bar:b
-set :bar:b *tmp19
+set :bar:b *tmp4
 callrec bank1 *label1 *label13 :bar*retval
 label *label13
-set *tmp21 :bar:b
+set *tmp5 :bar:b
 set :bar:b :bar:a
-set :bar:a *tmp21
+set :bar:a *tmp5
 label *label11
 op add :bar:b :bar:b 1
 print :bar:a
@@ -487,10 +487,10 @@ op add :baz:a :baz:a 1
 jump *label15 lessThanEq :baz:n 0
 push bank1 :baz:b
 push bank1 :baz:a
-set *tmp29 :baz:a
+set *tmp6 :baz:a
 op sub :baz:n :baz:n 1
 set :baz:a :baz:b
-set :baz:b *tmp29
+set :baz:b *tmp6
 callrec bank1 *label2 *label17 :baz*retval
 label *label17
 pop bank1 :baz:a

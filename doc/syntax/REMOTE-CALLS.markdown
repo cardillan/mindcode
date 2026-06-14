@@ -420,13 +420,13 @@ compiles to:
 
 ```mlog
 # Remote variables named using Mindcode's naming convention
-read *tmp2 processor1 ".x"
-print *tmp2
-read *tmp3 processor1 ".y"
-print *tmp3
+read *tmp0 processor1 ".x"
+print *tmp0
+read *tmp1 processor1 ".y"
+print *tmp1
 # Remote variable named using the specified name
-read *tmp5 processor1 "foo"
-print *tmp5
+read *tmp2 processor1 "foo"
+print *tmp2
 ```
 
 # Atomic code execution
@@ -490,10 +490,10 @@ compiles to
 
 ```mlog
 wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
-read *tmp2 :cell 0
-op add *tmp1 *tmp2 1
-write *tmp1 :cell 0                     # The last atomic section instruction
-write *tmp2 cell1 1
+read *tmp1 :cell 0
+op add *tmp0 *tmp1 1
+write *tmp0 :cell 0                     # The last atomic section instruction
+write *tmp1 cell1 1
 ```
 
 As seen in the above example, instructions needed to store the result aren't part of the atomic section.    
@@ -516,10 +516,10 @@ compiles to:
 
 ```mlog
 wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
-read *tmp2 cell1 0
-op add *tmp1 *tmp2 1
-write *tmp1 cell1 0                     # The last atomic section instruction
-print *tmp2
+read *tmp1 cell1 0
+op add *tmp0 *tmp1 1
+write *tmp0 cell1 0                     # The last atomic section instruction
+print *tmp1
 ```
 
 > [!TIP]
@@ -544,8 +544,8 @@ As can be seen, access to `x` (stored in `cell1[0]`) is part of the atomic secti
 ```mlog
 read :foo:b cell1 1
 wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
-read *tmp4 cell1 0
-op add *tmp0 *tmp4 1
+read *tmp1 cell1 0
+op add *tmp0 *tmp1 1
 write *tmp0 cell1 0
 op add :foo:b :foo:b 1                  # The last atomic section instruction
 write :foo:b cell1 1
@@ -653,11 +653,11 @@ compiles to:
 label_0:
     jump label_0 equal cell1 null
         wait 0.03334                            # 2.000 ticks for atomic execution of 4 steps at 2 ipt
-        read *tmp1 cell1 0
-        op add *tmp2 *tmp1 1
-        write *tmp2 cell1 0                     # The last atomic section instruction
+        read *tmp0 cell1 0
+        op add *tmp1 *tmp0 1
+        write *tmp1 cell1 0                     # The last atomic section instruction
     label_5:
-        print *tmp2
+        print *tmp1
         printflush message1
         jump label_5 always 0 0
 ```

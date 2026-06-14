@@ -218,22 +218,22 @@ jump *label5 lessThan :i 1
 label *label12
 read :a ARRAY :j
 jump *label5 lessThanEq :a :item
-op add *tmp10 :j 1
-write :a ARRAY *tmp10
+op add *tmp0 :j 1
+write :a ARRAY *tmp0
 op sub :j :j 1
 jump *label12 greaterThanEq :j 0
 label *label5
-op add *tmp14 :j 1
-write :item ARRAY *tmp14
+op add *tmp1 :j 1
+write :item ARRAY *tmp1
 op add :i :i 1
 jump *label11 lessThan :i SIZE
 label *label2
 set :i 0
 jump *label10 greaterThanEq 0 SIZE
 label *label13
-read *tmp20 FINAL :i
-read *tmp21 ARRAY :i
-assertequals *tmp20 *tmp21 "unexpected value"
+read *tmp2 FINAL :i
+read *tmp3 ARRAY :i
+assertequals *tmp2 *tmp3 "unexpected value"
 op add :i :i 1
 jump *label13 lessThan :i SIZE
 label *label10

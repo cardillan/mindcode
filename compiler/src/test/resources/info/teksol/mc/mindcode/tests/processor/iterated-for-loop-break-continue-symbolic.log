@@ -241,10 +241,10 @@ set :test:i 0
 set :test:j 10
 set :d:n 0
 call *label0 :d*retaddr :d*retval
-set *tmp2 :d*retval
+set *tmp1 :d*retval
 set :d:n 10
 call *label0 :d*retaddr :d*retval
-jump *label4 greaterThan *tmp2 :d*retval
+jump *label4 greaterThan *tmp1 :d*retval
 label *label10
 set :d:n :test:i
 call *label0 :d*retaddr :d*retval
@@ -260,10 +260,10 @@ op add :test:i :test:i 2
 op add :test:j :test:j 1
 set :d:n :test:i
 call *label0 :d*retaddr :d*retval
-set *tmp2 :d*retval
+set *tmp1 :d*retval
 set :d:n :test:j
 call *label0 :d*retaddr :d*retval
-jump *label10 lessThanEq *tmp2 :d*retval
+jump *label10 lessThanEq *tmp1 :d*retval
 label *label4
 assertprints *tmp0 "0|10|2|11|6|13|8|14|10|15|" "iterated-for-loop-break-continue"
 stop

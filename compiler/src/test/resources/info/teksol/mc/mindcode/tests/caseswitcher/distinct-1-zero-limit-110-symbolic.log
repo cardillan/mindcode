@@ -742,120 +742,120 @@ set :i -1
 label *label58
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
-sensor *tmp8 :block @id
-jump *label61 greaterThanEq *tmp8 203
-jump *label59 greaterThanEq *tmp8 35
-jump *label62 greaterThanEq *tmp8 17
-jump *label59 greaterThanEq *tmp8 1
-jump *label59 strictEqual *tmp8 null
-set *tmp2 2
+sensor *tmp2 :block @id
+jump *label61 greaterThanEq *tmp2 203
+jump *label59 greaterThanEq *tmp2 35
+jump *label62 greaterThanEq *tmp2 17
+jump *label59 greaterThanEq *tmp2 1
+jump *label59 strictEqual *tmp2 null
+set *tmp0 2
 jump *label5 always
 label *label62
-jump *label63 greaterThanEq *tmp8 26
-jump *label64 greaterThanEq *tmp8 21
-jump *label65 greaterThanEq *tmp8 19
-jump *label11 greaterThanEq *tmp8 18
-set *tmp2 3
+jump *label63 greaterThanEq *tmp2 26
+jump *label64 greaterThanEq *tmp2 21
+jump *label65 greaterThanEq *tmp2 19
+jump *label11 greaterThanEq *tmp2 18
+set *tmp0 3
 jump *label5 always
 label *label65
-jump *label15 greaterThanEq *tmp8 20
-set *tmp2 5
+jump *label15 greaterThanEq *tmp2 20
+set *tmp0 5
 jump *label5 always
 label *label64
-jump *label66 greaterThanEq *tmp8 23
-jump *label19 greaterThanEq *tmp8 22
-set *tmp2 7
+jump *label66 greaterThanEq *tmp2 23
+jump *label19 greaterThanEq *tmp2 22
+set *tmp0 7
 jump *label5 always
 label *label66
-jump *label21 lessThan *tmp8 24
-jump *label25 greaterThanEq *tmp8 25
-set *tmp2 10
+jump *label21 lessThan *tmp2 24
+jump *label25 greaterThanEq *tmp2 25
+set *tmp0 10
 jump *label5 always
 label *label63
-jump *label67 greaterThanEq *tmp8 29
-jump *label27 lessThan *tmp8 27
-jump *label31 greaterThanEq *tmp8 28
-set *tmp2 13
+jump *label67 greaterThanEq *tmp2 29
+jump *label27 lessThan *tmp2 27
+jump *label31 greaterThanEq *tmp2 28
+set *tmp0 13
 jump *label5 always
 label *label67
-jump *label68 greaterThanEq *tmp8 32
-jump *label59 lessThan *tmp8 31
-set *tmp2 15
+jump *label68 greaterThanEq *tmp2 32
+jump *label59 lessThan *tmp2 31
+set *tmp0 15
 jump *label5 always
 label *label68
-jump *label35 lessThan *tmp8 33
-jump *label39 greaterThanEq *tmp8 34
-set *tmp2 17
+jump *label35 lessThan *tmp2 33
+jump *label39 greaterThanEq *tmp2 34
+set *tmp0 17
 jump *label5 always
 label *label61
-jump *label69 greaterThanEq *tmp8 234
-jump *label70 greaterThanEq *tmp8 220
-jump *label59 greaterThanEq *tmp8 208
-jump *label71 greaterThanEq *tmp8 205
-jump *label43 greaterThanEq *tmp8 204
-set *tmp2 19
+jump *label69 greaterThanEq *tmp2 234
+jump *label70 greaterThanEq *tmp2 220
+jump *label59 greaterThanEq *tmp2 208
+jump *label71 greaterThanEq *tmp2 205
+jump *label43 greaterThanEq *tmp2 204
+set *tmp0 19
 jump *label5 always
 label *label71
-jump *label59 lessThan *tmp8 206
-jump *label47 greaterThanEq *tmp8 207
-set *tmp2 21
+jump *label59 lessThan *tmp2 206
+jump *label47 greaterThanEq *tmp2 207
+set *tmp0 21
 jump *label5 always
 label *label70
-jump *label59 greaterThanEq *tmp8 226
-jump *label72 greaterThanEq *tmp8 222
-jump *label51 greaterThanEq *tmp8 221
-set *tmp2 23
+jump *label59 greaterThanEq *tmp2 226
+jump *label72 greaterThanEq *tmp2 222
+jump *label51 greaterThanEq *tmp2 221
+set *tmp0 23
 jump *label5 always
 label *label72
-jump *label59 lessThan *tmp8 225
-set *tmp2 25
+jump *label59 lessThan *tmp2 225
+set *tmp0 25
 jump *label5 always
 label *label69
-jump *label59 greaterThanEq *tmp8 235
-set *tmp2 26
+jump *label59 greaterThanEq *tmp2 235
+set *tmp0 26
 jump *label5 always
 label *label11
-set *tmp2 4
+set *tmp0 4
 jump *label5 always
 label *label15
-set *tmp2 6
+set *tmp0 6
 jump *label5 always
 label *label19
-set *tmp2 8
+set *tmp0 8
 jump *label5 always
 label *label21
-set *tmp2 9
+set *tmp0 9
 jump *label5 always
 label *label25
-set *tmp2 11
+set *tmp0 11
 jump *label5 always
 label *label27
-set *tmp2 12
+set *tmp0 12
 jump *label5 always
 label *label31
-set *tmp2 14
+set *tmp0 14
 jump *label5 always
 label *label35
-set *tmp2 16
+set *tmp0 16
 jump *label5 always
 label *label39
-set *tmp2 18
+set *tmp0 18
 jump *label5 always
 label *label43
-set *tmp2 20
+set *tmp0 20
 jump *label5 always
 label *label47
-set *tmp2 22
+set *tmp0 22
 jump *label5 always
 label *label51
-set *tmp2 24
+set *tmp0 24
 jump *label5 always
 label *label59
-set *tmp2 0
+set *tmp0 0
 label *label5
-op shl :bit 1 *tmp2
-op and *tmp5 :total :bit
-jump *label56 lessThanEq *tmp5 1
+op shl :bit 1 *tmp0
+op and *tmp1 :total :bit
+jump *label56 lessThanEq *tmp1 1
 op or :total :total 0x1000000000
 jump *label57 always
 label *label56

@@ -598,9 +598,9 @@ op sub :n :n 1
 getlink :block :n
 print "\nFound: "
 print :block
-sensor *tmp7 :block @type
-sensor *tmp47 *tmp7 @id
-multijump *tmp47 0 0
+sensor *tmp0 :block @type
+sensor *tmp5 *tmp0 @id
+multijump *tmp5 0 0
 multilabel *label46
 multilabel *label40
 jump *label8 always
@@ -642,8 +642,8 @@ read .R1 .MEMORY 6
 read .G1 .MEMORY 7
 read .B1 .MEMORY 8
 draw stroke 1
-sensor *tmp26 .SWITCH @enabled
-jump *label25 notEqual *tmp26 0
+sensor *tmp1 .SWITCH @enabled
+jump *label25 notEqual *tmp1 0
 label *label37
 set :start @time
 print "Item/Liquid/Energy Level Display\nIndex: {0}\nValue: "
@@ -666,12 +666,12 @@ set :last :value
 jump *label35 greaterThan :x1 10
 draw color 255 255 255 255
 draw lineRect 10 10 156 156
-op sub *tmp40 @time :start
+op sub *tmp2 @time :start
 print "\nTime: "
-print *tmp40
-op div *tmp41 @time FREQ
-op ceil *tmp42 *tmp41
-op mul :wait FREQ *tmp42
+print *tmp2
+op div *tmp3 @time FREQ
+op ceil *tmp4 *tmp3
+op mul :wait FREQ *tmp4
 set :loops 0
 jump *label31 greaterThanEq @time :wait
 label *label36
@@ -682,7 +682,7 @@ drawflush .DISPLAY
 print "\nWait loops: "
 print :loops
 printflush .MESSAGE
-sensor *tmp26 .SWITCH @enabled
-jump *label37 equal *tmp26 0
+sensor *tmp1 .SWITCH @enabled
+jump *label37 equal *tmp1 0
 label *label25
 control enabled switch1 0

@@ -7288,433 +7288,433 @@ Final code before resolving virtual instructions:
 
 set BITMAP bank1
 set :sumPrimesUpTo:sum 5
-read *tmp25 BITMAP 0
-op and :getBit*retval *tmp25 4
+read *tmp3 BITMAP 0
+op and :getBit*retval *tmp3 4
 jump *label75 notEqual :getBit*retval false
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 4096
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 131072
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 4194304
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 134217728
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 4294967296
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 137438953472
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 4398046511104
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 140737488355328
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 16
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 512
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 16384
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 524288
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 16777216
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 536870912
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 17179869184
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 549755813888
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 17592186044416
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 2
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 64
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 2048
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 65536
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 2097152
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 67108864
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 2147483648
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 68719476736
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 2199023255552
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 70368744177664
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 8
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 256
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 8192
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 262144
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 8388608
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 268435456
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 8589934592
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 274877906944
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 8796093022208
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 1
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 32
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 1024
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 32768
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 1048576
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 33554432
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 1073741824
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 34359738368
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 1099511627776
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 35184372088832
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 5
-op or *tmp40 *tmp39 4
-write *tmp40 BITMAP 5
-read *tmp39 BITMAP 5
-op or *tmp40 *tmp39 128
-write *tmp40 BITMAP 5
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 4096
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 131072
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 4194304
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 134217728
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 4294967296
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 137438953472
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 4398046511104
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 140737488355328
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 16
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 512
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 16384
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 524288
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 16777216
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 536870912
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 17179869184
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 549755813888
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 17592186044416
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 2
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 64
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 2048
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 65536
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 2097152
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 67108864
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 2147483648
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 68719476736
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 2199023255552
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 70368744177664
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 8
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 256
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 8192
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 262144
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 8388608
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 268435456
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 8589934592
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 274877906944
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 8796093022208
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 1
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 32
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 1024
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 32768
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 1048576
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 33554432
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 1073741824
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 34359738368
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 1099511627776
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 35184372088832
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 5
+op or *tmp5 *tmp4 4
+write *tmp5 BITMAP 5
+read *tmp4 BITMAP 5
+op or *tmp5 *tmp4 128
+write *tmp5 BITMAP 5
 op add :sumPrimesUpTo:sum 5 5
 label *label75
-read *tmp25 BITMAP 0
-op and :getBit*retval *tmp25 8
+read *tmp3 BITMAP 0
+op and :getBit*retval *tmp3 8
 jump *label88 notEqual :getBit*retval false
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 16777216
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 2147483648
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 274877906944
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 0
-op or *tmp40 *tmp39 35184372088832
-write *tmp40 BITMAP 0
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 16
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 2048
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 262144
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 33554432
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 4294967296
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 549755813888
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 70368744177664
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 32
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 4096
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 524288
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 67108864
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 8589934592
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 1099511627776
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 140737488355328
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 64
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 8192
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 1048576
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 134217728
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 17179869184
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 2199023255552
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 1
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 128
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 16384
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 2097152
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 268435456
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 34359738368
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 4398046511104
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 5
-op or *tmp40 *tmp39 2
-write *tmp40 BITMAP 5
-read *tmp39 BITMAP 5
-op or *tmp40 *tmp39 256
-write *tmp40 BITMAP 5
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 16777216
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 2147483648
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 274877906944
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 0
+op or *tmp5 *tmp4 35184372088832
+write *tmp5 BITMAP 0
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 16
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 2048
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 262144
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 33554432
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 4294967296
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 549755813888
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 70368744177664
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 32
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 4096
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 524288
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 67108864
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 8589934592
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 1099511627776
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 140737488355328
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 64
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 8192
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 1048576
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 134217728
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 17179869184
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 2199023255552
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 1
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 128
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 16384
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 2097152
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 268435456
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 34359738368
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 4398046511104
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 5
+op or *tmp5 *tmp4 2
+write *tmp5 BITMAP 5
+read *tmp4 BITMAP 5
+op or *tmp5 *tmp4 256
+write *tmp5 BITMAP 5
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 7
 label *label88
-read *tmp25 BITMAP 0
-op and :getBit*retval *tmp25 32
+read *tmp3 BITMAP 0
+op and :getBit*retval *tmp3 32
 jump *label102 notEqual :getBit*retval false
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 4096
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 8388608
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 17179869184
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 35184372088832
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 256
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 524288
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 1073741824
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 2199023255552
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 16
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 32768
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 67108864
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 137438953472
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 1
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 2048
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 4194304
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 8589934592
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 17592186044416
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 5
-op or *tmp40 *tmp39 128
-write *tmp40 BITMAP 5
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 4096
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 8388608
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 17179869184
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 35184372088832
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 256
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 524288
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 1073741824
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 2199023255552
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 16
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 32768
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 67108864
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 137438953472
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 1
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 2048
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 4194304
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 8589934592
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 17592186044416
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 5
+op or *tmp5 *tmp4 128
+write *tmp5 BITMAP 5
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 11
 label *label102
-read *tmp25 BITMAP 0
-op and :getBit*retval *tmp25 64
+read *tmp3 BITMAP 0
+op and :getBit*retval *tmp3 64
 jump *label115 notEqual :getBit*retval false
-read *tmp39 BITMAP 1
-op or *tmp40 *tmp39 68719476736
-write *tmp40 BITMAP 1
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 2
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 16384
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 134217728
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 2
-op or *tmp40 *tmp39 1099511627776
-write *tmp40 BITMAP 2
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 32
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 262144
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 2147483648
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 17592186044416
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 512
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 4194304
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 34359738368
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 5
-op or *tmp40 *tmp39 1
-write *tmp40 BITMAP 5
+read *tmp4 BITMAP 1
+op or *tmp5 *tmp4 68719476736
+write *tmp5 BITMAP 1
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 2
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 16384
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 134217728
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 2
+op or *tmp5 *tmp4 1099511627776
+write *tmp5 BITMAP 2
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 32
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 262144
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 2147483648
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 17592186044416
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 512
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 4194304
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 34359738368
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 5
+op or *tmp5 *tmp4 1
+write *tmp5 BITMAP 5
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 13
 label *label115
-read *tmp25 BITMAP 0
-op and :getBit*retval *tmp25 256
+read *tmp3 BITMAP 0
+op and :getBit*retval *tmp3 256
 jump *label129 notEqual :getBit*retval false
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 1
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 131072
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 17179869184
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 8
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 1048576
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 137438953472
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 5
-op or *tmp40 *tmp39 64
-write *tmp40 BITMAP 5
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 1
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 131072
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 17179869184
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 8
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 1048576
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 137438953472
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 5
+op or *tmp5 *tmp4 64
+write *tmp5 BITMAP 5
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 17
 label *label129
-read *tmp25 BITMAP 0
-op and :getBit*retval *tmp25 512
+read *tmp3 BITMAP 0
+op and :getBit*retval *tmp3 512
 jump *label142 notEqual :getBit*retval false
-read *tmp39 BITMAP 3
-op or *tmp40 *tmp39 68719476736
-write *tmp40 BITMAP 3
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 128
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 67108864
-write *tmp40 BITMAP 4
-read *tmp39 BITMAP 4
-op or *tmp40 *tmp39 35184372088832
-write *tmp40 BITMAP 4
+read *tmp4 BITMAP 3
+op or *tmp5 *tmp4 68719476736
+write *tmp5 BITMAP 3
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 128
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 67108864
+write *tmp5 BITMAP 4
+read *tmp4 BITMAP 4
+op or *tmp5 *tmp4 35184372088832
+write *tmp5 BITMAP 4
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 19
 label *label142
-read *tmp25 BITMAP 0
-op and :getBit*retval *tmp25 2048
+read *tmp3 BITMAP 0
+op and :getBit*retval *tmp3 2048
 jump *label156 notEqual :getBit*retval false
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 23
 label *label156
-read *tmp25 BITMAP 0
-op and :getBit*retval *tmp25 4096
+read *tmp3 BITMAP 0
+op and :getBit*retval *tmp3 4096
 jump *label169 notEqual :getBit*retval false
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum 25
 label *label169
 op add :sumPrimesUpTo:i 25 4
 label *label33
 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
-op idiv *tmp20 :getBit:bitIndex 48
-op mod *tmp22 :getBit:bitIndex 48
-op shl *tmp23 1 *tmp22
-read *tmp25 BITMAP *tmp20
-op and :getBit*retval *tmp25 *tmp23
+op idiv *tmp0 :getBit:bitIndex 48
+op mod *tmp1 :getBit:bitIndex 48
+op shl *tmp2 1 *tmp1
+read *tmp3 BITMAP *tmp0
+op and :getBit*retval *tmp3 *tmp2
 jump *label15 notEqual :getBit*retval false
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i
 label *label15
 op add :sumPrimesUpTo:i :sumPrimesUpTo:i 2
 op idiv :getBit:bitIndex :sumPrimesUpTo:i 2
-op idiv *tmp20 :getBit:bitIndex 48
-op mod *tmp22 :getBit:bitIndex 48
-op shl *tmp23 1 *tmp22
-read *tmp25 BITMAP *tmp20
-op and :getBit*retval *tmp25 *tmp23
+op idiv *tmp0 :getBit:bitIndex 48
+op mod *tmp1 :getBit:bitIndex 48
+op shl *tmp2 1 *tmp1
+read *tmp3 BITMAP *tmp0
+op and :getBit*retval *tmp3 *tmp2
 jump *label18 notEqual :getBit*retval false
 jump *label21 greaterThan :sumPrimesUpTo:i 500
 op add :sumPrimesUpTo:sum :sumPrimesUpTo:sum :sumPrimesUpTo:i

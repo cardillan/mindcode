@@ -209,12 +209,12 @@ set nitrogen 0
 set :i 0
 jump 24 greaterThanEq 0 LIMIT
 set :countDigits:number :i
-op mod *tmp2 :countDigits:number 10
-lookup liquid *tmp9 *tmp2
-sensor .array*elem *tmp9 @name
-read *tmp3 @this .array*elem
-op add *tmp3 *tmp3 1
-write *tmp3 @this .array*elem
+op mod *tmp0 :countDigits:number 10
+lookup liquid *tmp2 *tmp0
+sensor .array*elem *tmp2 @name
+read *tmp1 @this .array*elem
+op add *tmp1 *tmp1 1
+write *tmp1 @this .array*elem
 op idiv :countDigits:number :countDigits:number 10
 jump 14 greaterThan :countDigits:number 0
 op add :i :i 1

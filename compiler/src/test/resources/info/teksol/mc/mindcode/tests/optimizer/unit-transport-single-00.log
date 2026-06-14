@@ -2326,16 +2326,16 @@ set REMOTE_LIMIT 100
 op max .EFF_LOCAL_LIMIT LOCAL_LIMIT 20
 op max .EFF_REMOTE_LIMIT REMOTE_LIMIT 20
 set .MSG null
-sensor *tmp2 switch1 @enabled
-jump *label2 notEqual *tmp2 false
+sensor *tmp0 switch1 @enabled
+jump *label2 notEqual *tmp0 false
 label *label147
 print "Unit Transport - Single\nActivate switch to start.\n"
 printflush message1
-sensor *tmp2 switch1 @enabled
-jump *label147 equal *tmp2 false
+sensor *tmp0 switch1 @enabled
+jump *label147 equal *tmp0 false
 label *label2
-sensor *tmp4 @unit @dead
-jump *label5 strictEqual *tmp4 0
+sensor *tmp1 @unit @dead
+jump *label5 strictEqual *tmp1 0
 label *label148
 set :rebindUnit:first_unit null
 label *label7
@@ -2350,14 +2350,14 @@ printflush message1
 jump *label7 always
 label *label9
 label *label12
-sensor *tmp9 @unit @controller
-jump *label6 equal *tmp9 @this
+sensor *tmp2 @unit @controller
+jump *label6 equal *tmp2 @this
 ubind UNIT
 print "[gold]Looking for old unit..."
 printflush message1
 jump *label14 equal @unit :rebindUnit:first_unit
-sensor *tmp13 :rebindUnit:first_unit @dead
-jump *label12 strictEqual *tmp13 0
+sensor *tmp3 :rebindUnit:first_unit @dead
+jump *label12 strictEqual *tmp3 0
 label *label14
 label *label19
 ubind UNIT
@@ -2366,8 +2366,8 @@ print "[salmon]No unit of type {0} found. 2"
 format UNIT
 jump *label23 always
 label *label22
-sensor *tmp18 @unit @controlled
-jump *label18 equal *tmp18 0
+sensor *tmp4 @unit @controlled
+jump *label18 equal *tmp4 0
 print "[salmon]Looking for a free {0}..."
 format UNIT
 label *label23
@@ -2375,12 +2375,12 @@ printflush message1
 jump *label19 always
 label *label18
 label *label6
-sensor *tmp4 @unit @dead
-jump *label148 strictNotEqual *tmp4 0
+sensor *tmp1 @unit @dead
+jump *label148 strictNotEqual *tmp1 0
 label *label5
 sensor .UNIT_CAPACITY @unit @itemCapacity
-sensor *tmp22 @unit @speed
-op div .SPEED_SEC *tmp22 10
+sensor *tmp5 @unit @speed
+op div .SPEED_SEC *tmp5 10
 ucontrol flag 1
 label *label26
 set .CONTAINER null
@@ -2390,8 +2390,8 @@ jump *label31 lessThanEq :n 0
 label *label143
 op sub :n :n 1
 getlink :block :n
-sensor *tmp28 :block @itemCapacity
-jump *label32 lessThanEq *tmp28 0
+sensor *tmp6 :block @itemCapacity
+jump *label32 lessThanEq *tmp6 0
 set .DROP_TARGET .CONTAINER
 set .CONTAINER :block
 label *label32
@@ -2402,8 +2402,8 @@ print "[salmon]No destination.\n"
 jump *label35 always
 label *label34
 jump *label28 equal .DROP_TARGET null
-sensor *tmp34 .DROP_TARGET @itemCapacity
-jump *label28 greaterThanEq *tmp34 300
+sensor *tmp7 .DROP_TARGET @itemCapacity
+jump *label28 greaterThanEq *tmp7 300
 print "Destination: {0}\nItem dump: {0}\n[salmon]Item dump must be a container or a vault!"
 format .CONTAINER
 format .DROP_TARGET
@@ -2427,8 +2427,8 @@ op add .QUERY_FLAG 99999900 LINK_ID
 set :flag .QUERY_FLAG
 ucontrol flag .QUERY_FLAG
 label *label144
-sensor *tmp43 @unit @dead
-jump *label44 strictNotEqual *tmp43 0
+sensor *tmp8 @unit @dead
+jump *label44 strictNotEqual *tmp8 0
 ucontrol stop
 sensor :flag @unit @flag
 jump *label144 equal :flag .QUERY_FLAG
@@ -2437,14 +2437,14 @@ jump *label47 equal :flag .QUERY_FLAG
 op idiv :position :flag 100
 op mod .CORE_X :position @mapw
 op idiv .CORE_Y :position @mapw
-ucontrol within .CORE_X .CORE_Y 8 *tmp51
-jump *label51 notEqual *tmp51 false
+ucontrol within .CORE_X .CORE_Y 8 *tmp9
+jump *label51 notEqual *tmp9 false
 label *label151
-sensor *tmp53 @unit @dead
-jump *label51 notEqual *tmp53 0
+sensor *tmp10 @unit @dead
+jump *label51 notEqual *tmp10 0
 ucontrol approach .CORE_X .CORE_Y 6
-ucontrol within .CORE_X .CORE_Y 8 *tmp51
-jump *label151 equal *tmp51 false
+ucontrol within .CORE_X .CORE_Y 8 *tmp9
+jump *label151 equal *tmp9 false
 label *label51
 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE 0
 select .CORE notEqual :b_type @vault null .CORE
@@ -2474,11 +2474,11 @@ set .SRC .CORE
 set .DST .CONTAINER
 sensor :src_capacity .CORE @itemCapacity
 sensor :dst_capacity .CONTAINER @itemCapacity
-op sub *tmp71 100 .EFF_REMOTE_LIMIT
-op mul *tmp72 :src_capacity *tmp71
-op idiv .LOAD_LEVEL *tmp72 100
-op mul *tmp74 :dst_capacity .EFF_LOCAL_LIMIT
-op idiv .DROP_LEVEL *tmp74 100
+op sub *tmp11 100 .EFF_REMOTE_LIMIT
+op mul *tmp12 :src_capacity *tmp11
+op idiv .LOAD_LEVEL *tmp12 100
+op mul *tmp13 :dst_capacity .EFF_LOCAL_LIMIT
+op idiv .DROP_LEVEL *tmp13 100
 set .LOCAL_MARGIN .DROP_LEVEL
 set .REMOTE_MARGIN .LOAD_LEVEL
 select .DIRECTION equal LINK_ID 0 "[] from core" "[] from vault #"
@@ -2489,19 +2489,19 @@ set .SRC .CONTAINER
 set .DST .CORE
 sensor :src_capacity .CONTAINER @itemCapacity
 sensor :dst_capacity .CORE @itemCapacity
-op sub *tmp81 100 .EFF_LOCAL_LIMIT
-op mul *tmp82 :src_capacity *tmp81
-op idiv .LOAD_LEVEL *tmp82 100
-op mul *tmp84 :dst_capacity .EFF_REMOTE_LIMIT
-op idiv *tmp85 *tmp84 100
-op equal *tmp86 LINK_ID 0
-op mul *tmp87 *tmp86 .UNIT_CAPACITY
-op add .DROP_LEVEL *tmp85 *tmp87
+op sub *tmp14 100 .EFF_LOCAL_LIMIT
+op mul *tmp15 :src_capacity *tmp14
+op idiv .LOAD_LEVEL *tmp15 100
+op mul *tmp16 :dst_capacity .EFF_REMOTE_LIMIT
+op idiv *tmp17 *tmp16 100
+op equal *tmp18 LINK_ID 0
+op mul *tmp19 *tmp18 .UNIT_CAPACITY
+op add .DROP_LEVEL *tmp17 *tmp19
 set .LOCAL_MARGIN .LOAD_LEVEL
 set .REMOTE_MARGIN .DROP_LEVEL
 select .DIRECTION equal LINK_ID 0 "[] to core" "[] to vault #"
 label *label66
-select *tmp92 equal LINK_ID 0 "" LINK_ID
+select *tmp20 equal LINK_ID 0 "" LINK_ID
 sensor .SRC_X .SRC @x
 sensor .SRC_Y .SRC @y
 sensor .DST_X .DST @x
@@ -2522,11 +2522,11 @@ set :state 1
 ucontrol stop
 label *label75
 set :start @time
-sensor *tmp102 @unit @dead
-op strictEqual *tmp103 *tmp102 0
-sensor *tmp104 @unit @controller
-op notEqual *tmp105 *tmp104 @this
-jump *label78 greaterThan *tmp103 *tmp105
+sensor *tmp21 @unit @dead
+op strictEqual *tmp22 *tmp21 0
+sensor *tmp23 @unit @controller
+op notEqual *tmp24 *tmp23 @this
+jump *label78 greaterThan *tmp22 *tmp24
 label *label81
 ubind UNIT
 jump *label84 notEqual @unit null
@@ -2534,8 +2534,8 @@ print "[salmon]No unit of type {0} found. 2"
 format UNIT
 jump *label85 always
 label *label84
-sensor *tmp111 @unit @controlled
-jump *label80 equal *tmp111 0
+sensor *tmp25 @unit @controlled
+jump *label80 equal *tmp25 0
 print "[salmon]Looking for a free {0}..."
 format UNIT
 label *label85
@@ -2559,35 +2559,35 @@ set :state 1
 label *label88
 set :show_state 0
 jump *label93 notEqual :state 1
-sensor *tmp121 @unit @firstItem
-jump *label95 notEqual *tmp121 .ITEM
+sensor *tmp26 @unit @firstItem
+jump *label95 notEqual *tmp26 .ITEM
 set :state 3
 jump *label96 always
 label *label95
-sensor *tmp124 @unit @totalItems
-jump *label97 notEqual *tmp124 0
+sensor *tmp27 @unit @totalItems
+jump *label97 notEqual *tmp27 0
 set :state 2
 jump *label98 always
 label *label97
 set .MSG "\nUnloading previous items: [green]"
 ucontrol approach .DROP_X .DROP_Y 6
-ucontrol within .DROP_X .DROP_Y 8 *tmp127
-jump *label99 equal *tmp127 false
+ucontrol within .DROP_X .DROP_Y 8 *tmp28
+jump *label99 equal *tmp28 false
 ucontrol itemDrop .DROP_TARGET .UNIT_CAPACITY
 label *label99
 label *label98
 label *label96
 label *label93
 jump *label101 notEqual :state 2
-ucontrol within .SRC_X .SRC_Y 8 *tmp131
-jump *label103 equal *tmp131 false
-sensor *tmp133 .SRC .ITEM
-op sub *tmp134 *tmp133 .LOAD_LEVEL
-op max :max_load *tmp134 0
+ucontrol within .SRC_X .SRC_Y 8 *tmp29
+jump *label103 equal *tmp29 false
+sensor *tmp30 .SRC .ITEM
+op sub *tmp31 *tmp30 .LOAD_LEVEL
+op max :max_load *tmp31 0
 ucontrol itemTake .SRC .ITEM :max_load
-sensor *tmp136 @unit @totalItems
-select :state greaterThanEq *tmp136 .UNIT_CAPACITY 3 :state
-select .MSG greaterThanEq *tmp136 .UNIT_CAPACITY .MSG "\nLoading items: [green]"
+sensor *tmp32 @unit @totalItems
+select :state greaterThanEq *tmp32 .UNIT_CAPACITY 3 :state
+select .MSG greaterThanEq *tmp32 .UNIT_CAPACITY .MSG "\nLoading items: [green]"
 jump *label104 always
 label *label103
 ucontrol approach .SRC_X .SRC_Y 6
@@ -2596,14 +2596,14 @@ set :show_state 2
 label *label104
 label *label101
 jump *label107 notEqual :state 3
-ucontrol within .DST_X .DST_Y 8 *tmp141
-jump *label109 equal *tmp141 false
-sensor *tmp143 .DST .ITEM
-op sub *tmp144 .DROP_LEVEL *tmp143
-op max :max_drop *tmp144 0
+ucontrol within .DST_X .DST_Y 8 *tmp33
+jump *label109 equal *tmp33 false
+sensor *tmp34 .DST .ITEM
+op sub *tmp35 .DROP_LEVEL *tmp34
+op max :max_drop *tmp35 0
 ucontrol itemDrop .DST :max_drop
-sensor *tmp146 @unit @totalItems
-jump *label111 greaterThan *tmp146 0
+sensor *tmp36 @unit @totalItems
+jump *label111 greaterThan *tmp36 0
 set :state 2
 ucontrol approach .SRC_X .SRC_Y 6
 jump *label110 always
@@ -2621,62 +2621,62 @@ set :iter 0
 print "Moving [green]{0}{0}{0}\nLocal items: [gold]{0}[]"
 format .ITEM
 format .DIRECTION
-format *tmp92
-sensor *tmp151 .CONTAINER .ITEM
-format *tmp151
+format *tmp20
+sensor *tmp37 .CONTAINER .ITEM
+format *tmp37
 jump *label115 greaterThanEq .EFF_LOCAL_LIMIT 100
 print " (limit [orange]{0}[])"
 format .LOCAL_MARGIN
 label *label115
 jump *label117 equal .SHOW_REMOTE_LEVEL false
-sensor *tmp155 .CORE .ITEM
+sensor *tmp38 .CORE .ITEM
 print "\nRemote items: [gold]{0}[]"
-format *tmp155
+format *tmp38
 jump *label119 greaterThanEq .EFF_REMOTE_LIMIT 100
 print " (limit [orange]{0}[])"
 format .REMOTE_MARGIN
 label *label119
 label *label117
-sensor *tmp158 @unit @totalItems
+sensor *tmp39 @unit @totalItems
 print .MSG
-print *tmp158
+print *tmp39
 print "[]\n"
 jump *label121 notEqual :show_state 2
-sensor *tmp161 @unit @x
-op sub *tmp162 .SRC_X *tmp161
-sensor *tmp163 @unit @y
-op sub *tmp164 .SRC_Y *tmp163
-op len *tmp165 *tmp162 *tmp164
-op idiv *tmp166 *tmp165 .SPEED_SEC
-op div *tmp167 *tmp166 10
+sensor *tmp40 @unit @x
+op sub *tmp41 .SRC_X *tmp40
+sensor *tmp42 @unit @y
+op sub *tmp43 .SRC_Y *tmp42
+op len *tmp44 *tmp41 *tmp43
+op idiv *tmp45 *tmp44 .SPEED_SEC
+op div *tmp46 *tmp45 10
 print "[]  arriving in [gold]{0} sec[]\n"
-format *tmp167
+format *tmp46
 jump *label122 always
 label *label121
 jump *label123 notEqual :show_state 3
-sensor *tmp170 @unit @x
-op sub *tmp171 .DST_X *tmp170
-sensor *tmp172 @unit @y
-op sub *tmp173 .DST_Y *tmp172
-op len *tmp174 *tmp171 *tmp173
-op idiv *tmp175 *tmp174 .SPEED_SEC
-op div *tmp176 *tmp175 10
+sensor *tmp47 @unit @x
+op sub *tmp48 .DST_X *tmp47
+sensor *tmp49 @unit @y
+op sub *tmp50 .DST_Y *tmp49
+op len *tmp51 *tmp48 *tmp50
+op idiv *tmp52 *tmp51 .SPEED_SEC
+op div *tmp53 *tmp52 10
 print "[]  arriving in [gold]{0} sec[]\n"
-format *tmp176
+format *tmp53
 label *label123
 label *label122
-op floor *tmp177 :loop_time
+op floor *tmp54 :loop_time
 print "[lightgray]Loop time: {0} ms[]\n"
-format *tmp177
+format *tmp54
 printflush message1
-sensor *tmp178 switch1 @enabled
-jump *label77 equal *tmp178 0
-sensor *tmp181 .SRC @dead
-jump *label77 notEqual *tmp181 0
-sensor *tmp184 .DST @dead
-jump *label77 notEqual *tmp184 0
-sensor *tmp187 .SORTER @dead
-jump *label77 notEqual *tmp187 0
+sensor *tmp55 switch1 @enabled
+jump *label77 equal *tmp55 0
+sensor *tmp56 .SRC @dead
+jump *label77 notEqual *tmp56 0
+sensor *tmp57 .DST @dead
+jump *label77 notEqual *tmp57 0
+sensor *tmp58 .SORTER @dead
+jump *label77 notEqual *tmp58 0
 jump *label114 always
 label *label113
 op add :iter :iter 1
@@ -2684,27 +2684,27 @@ label *label114
 op sub :loop_time @time :start
 jump *label75 always
 label *label77
-sensor *tmp191 .SORTER @dead
-jump *label135 equal *tmp191 false
+sensor *tmp59 .SORTER @dead
+jump *label135 equal *tmp59 false
 label *label149
 print "[salmon]sorter1 is missing!\n[gold]Please place and link sorter or inverted sorter to the processor.\n"
 printflush message1
 printflush message2
 set .SORTER sorter1
-sensor *tmp191 .SORTER @dead
-jump *label149 notEqual *tmp191 false
+sensor *tmp59 .SORTER @dead
+jump *label149 notEqual *tmp59 false
 label *label135
-sensor *tmp192 .SRC @dead
-jump *label138 notEqual *tmp192 false
-sensor *tmp193 .DST @dead
-jump __start__ equal *tmp193 false
+sensor *tmp60 .SRC @dead
+jump *label138 notEqual *tmp60 false
+sensor *tmp61 .DST @dead
+jump __start__ equal *tmp61 false
 label *label138
 control enabled switch1 false
-sensor *tmp197 switch1 @enabled
-jump __start__ notEqual *tmp197 false
+sensor *tmp62 switch1 @enabled
+jump __start__ notEqual *tmp62 false
 label *label150
 print "[salmon]Local or remote container became invalid.\n[gold]Please fix and press button to reinitialize.\n"
 printflush message1
 printflush message2
-sensor *tmp197 switch1 @enabled
-jump *label150 equal *tmp197 false
+sensor *tmp62 switch1 @enabled
+jump *label150 equal *tmp62 false

@@ -1614,6 +1614,6 @@ Modifications by Final phase, Print Merging, iteration 1 (-9 instructions):
 
 Final code before resolving virtual instructions:
 
-assertflush *tmp6
+assertflush *tmp0
 print "9876543210"
-assertprints *tmp6 "9876543210" "reverse array"
+assertprints *tmp0 "9876543210" "reverse array"

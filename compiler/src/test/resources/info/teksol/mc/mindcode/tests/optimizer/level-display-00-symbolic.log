@@ -548,24 +548,24 @@ op sub :n :n 1
 getlink :block :n
 print "\nFound: "
 print :block
-sensor *tmp7 :block @type
-jump *label9 notEqual *tmp7 @large-logic-display
+sensor *tmp0 :block @type
+jump *label9 notEqual *tmp0 @large-logic-display
 set .DISPLAY :block
 jump *label8 always
 label *label9
-jump *label11 notEqual *tmp7 @message
+jump *label11 notEqual *tmp0 @message
 set .MESSAGE :block
 jump *label8 always
 label *label11
-jump *label13 notEqual *tmp7 @switch
+jump *label13 notEqual *tmp0 @switch
 set .SWITCH :block
 jump *label8 always
 label *label13
-jump *label15 notEqual *tmp7 @memory-bank
+jump *label15 notEqual *tmp0 @memory-bank
 set .MEMORY :block
 jump *label8 always
 label *label15
-jump *label17 notEqual *tmp7 @memory-cell
+jump *label17 notEqual *tmp0 @memory-cell
 set .MEMORY :block
 label *label17
 label *label8
@@ -592,8 +592,8 @@ read .R1 .MEMORY 6
 read .G1 .MEMORY 7
 read .B1 .MEMORY 8
 draw stroke 1
-sensor *tmp26 .SWITCH @enabled
-jump *label25 notEqual *tmp26 0
+sensor *tmp1 .SWITCH @enabled
+jump *label25 notEqual *tmp1 0
 label *label37
 set :start @time
 print "Item/Liquid/Energy Level Display\nIndex: {0}\nValue: "
@@ -616,12 +616,12 @@ set :last :value
 jump *label35 greaterThan :x1 10
 draw color 255 255 255 255
 draw lineRect 10 10 156 156
-op sub *tmp40 @time :start
+op sub *tmp2 @time :start
 print "\nTime: "
-print *tmp40
-op div *tmp41 @time FREQ
-op ceil *tmp42 *tmp41
-op mul :wait FREQ *tmp42
+print *tmp2
+op div *tmp3 @time FREQ
+op ceil *tmp4 *tmp3
+op mul :wait FREQ *tmp4
 set :loops 0
 jump *label31 greaterThanEq @time :wait
 label *label36
@@ -632,7 +632,7 @@ drawflush .DISPLAY
 print "\nWait loops: "
 print :loops
 printflush .MESSAGE
-sensor *tmp26 .SWITCH @enabled
-jump *label37 equal *tmp26 0
+sensor *tmp1 .SWITCH @enabled
+jump *label37 equal *tmp1 0
 label *label25
 control enabled switch1 0

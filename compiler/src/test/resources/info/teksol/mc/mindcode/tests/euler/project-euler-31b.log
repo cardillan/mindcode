@@ -3360,466 +3360,466 @@ Final code before resolving virtual instructions:
 write 1 bank2 0
 set :j 1
 label *label17
-op sub *tmp5 :j 1
-read *tmp7 bank2 *tmp5
-read *tmp8 bank2 :j
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 :j
+op sub *tmp0 :j 1
+read *tmp1 bank2 *tmp0
+read *tmp2 bank2 :j
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 :j
 op add :j :j 1
 jump *label17 lessThanEq :j 200
 set :j 2
 label *label25
-op sub *tmp5 :j 2
-read *tmp7 bank2 *tmp5
-read *tmp8 bank2 :j
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 :j
+op sub *tmp0 :j 2
+read *tmp1 bank2 *tmp0
+read *tmp2 bank2 :j
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 :j
 op add :j :j 1
 jump *label25 lessThanEq :j 200
 set :j 5
 label *label33
-op sub *tmp5 :j 5
-read *tmp7 bank2 *tmp5
-read *tmp8 bank2 :j
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 :j
+op sub *tmp0 :j 5
+read *tmp1 bank2 *tmp0
+read *tmp2 bank2 :j
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 :j
 op add :j :j 1
 jump *label33 lessThanEq :j 200
 set :j 10
 label *label41
-op sub *tmp5 :j 10
-read *tmp7 bank2 *tmp5
-read *tmp8 bank2 :j
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 :j
+op sub *tmp0 :j 10
+read *tmp1 bank2 *tmp0
+read *tmp2 bank2 :j
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 :j
 op add :j :j 1
 jump *label41 lessThanEq :j 200
 set :j 20
 label *label49
-op sub *tmp5 :j 20
-read *tmp7 bank2 *tmp5
-read *tmp8 bank2 :j
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 :j
+op sub *tmp0 :j 20
+read *tmp1 bank2 *tmp0
+read *tmp2 bank2 :j
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 :j
 op add :j :j 1
 jump *label49 lessThanEq :j 200
 set :j 50
 label *label57
-op sub *tmp5 :j 50
-read *tmp7 bank2 *tmp5
-read *tmp8 bank2 :j
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 :j
+op sub *tmp0 :j 50
+read *tmp1 bank2 *tmp0
+read *tmp2 bank2 :j
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 :j
 op add :j :j 1
 jump *label57 lessThanEq :j 200
-read *tmp7 bank2 0
-read *tmp8 bank2 100
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 100
-read *tmp7 bank2 1
-read *tmp8 bank2 101
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 101
-read *tmp7 bank2 2
-read *tmp8 bank2 102
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 102
-read *tmp7 bank2 3
-read *tmp8 bank2 103
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 103
-read *tmp7 bank2 4
-read *tmp8 bank2 104
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 104
-read *tmp7 bank2 5
-read *tmp8 bank2 105
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 105
-read *tmp7 bank2 6
-read *tmp8 bank2 106
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 106
-read *tmp7 bank2 7
-read *tmp8 bank2 107
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 107
-read *tmp7 bank2 8
-read *tmp8 bank2 108
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 108
-read *tmp7 bank2 9
-read *tmp8 bank2 109
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 109
-read *tmp7 bank2 10
-read *tmp8 bank2 110
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 110
-read *tmp7 bank2 11
-read *tmp8 bank2 111
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 111
-read *tmp7 bank2 12
-read *tmp8 bank2 112
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 112
-read *tmp7 bank2 13
-read *tmp8 bank2 113
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 113
-read *tmp7 bank2 14
-read *tmp8 bank2 114
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 114
-read *tmp7 bank2 15
-read *tmp8 bank2 115
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 115
-read *tmp7 bank2 16
-read *tmp8 bank2 116
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 116
-read *tmp7 bank2 17
-read *tmp8 bank2 117
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 117
-read *tmp7 bank2 18
-read *tmp8 bank2 118
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 118
-read *tmp7 bank2 19
-read *tmp8 bank2 119
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 119
-read *tmp7 bank2 20
-read *tmp8 bank2 120
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 120
-read *tmp7 bank2 21
-read *tmp8 bank2 121
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 121
-read *tmp7 bank2 22
-read *tmp8 bank2 122
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 122
-read *tmp7 bank2 23
-read *tmp8 bank2 123
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 123
-read *tmp7 bank2 24
-read *tmp8 bank2 124
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 124
-read *tmp7 bank2 25
-read *tmp8 bank2 125
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 125
-read *tmp7 bank2 26
-read *tmp8 bank2 126
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 126
-read *tmp7 bank2 27
-read *tmp8 bank2 127
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 127
-read *tmp7 bank2 28
-read *tmp8 bank2 128
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 128
-read *tmp7 bank2 29
-read *tmp8 bank2 129
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 129
-read *tmp7 bank2 30
-read *tmp8 bank2 130
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 130
-read *tmp7 bank2 31
-read *tmp8 bank2 131
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 131
-read *tmp7 bank2 32
-read *tmp8 bank2 132
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 132
-read *tmp7 bank2 33
-read *tmp8 bank2 133
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 133
-read *tmp7 bank2 34
-read *tmp8 bank2 134
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 134
-read *tmp7 bank2 35
-read *tmp8 bank2 135
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 135
-read *tmp7 bank2 36
-read *tmp8 bank2 136
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 136
-read *tmp7 bank2 37
-read *tmp8 bank2 137
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 137
-read *tmp7 bank2 38
-read *tmp8 bank2 138
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 138
-read *tmp7 bank2 39
-read *tmp8 bank2 139
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 139
-read *tmp7 bank2 40
-read *tmp8 bank2 140
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 140
-read *tmp7 bank2 41
-read *tmp8 bank2 141
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 141
-read *tmp7 bank2 42
-read *tmp8 bank2 142
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 142
-read *tmp7 bank2 43
-read *tmp8 bank2 143
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 143
-read *tmp7 bank2 44
-read *tmp8 bank2 144
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 144
-read *tmp7 bank2 45
-read *tmp8 bank2 145
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 145
-read *tmp7 bank2 46
-read *tmp8 bank2 146
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 146
-read *tmp7 bank2 47
-read *tmp8 bank2 147
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 147
-read *tmp7 bank2 48
-read *tmp8 bank2 148
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 148
-read *tmp7 bank2 49
-read *tmp8 bank2 149
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 149
-read *tmp7 bank2 50
-read *tmp8 bank2 150
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 150
-read *tmp7 bank2 51
-read *tmp8 bank2 151
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 151
-read *tmp7 bank2 52
-read *tmp8 bank2 152
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 152
-read *tmp7 bank2 53
-read *tmp8 bank2 153
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 153
-read *tmp7 bank2 54
-read *tmp8 bank2 154
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 154
-read *tmp7 bank2 55
-read *tmp8 bank2 155
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 155
-read *tmp7 bank2 56
-read *tmp8 bank2 156
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 156
-read *tmp7 bank2 57
-read *tmp8 bank2 157
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 157
-read *tmp7 bank2 58
-read *tmp8 bank2 158
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 158
-read *tmp7 bank2 59
-read *tmp8 bank2 159
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 159
-read *tmp7 bank2 60
-read *tmp8 bank2 160
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 160
-read *tmp7 bank2 61
-read *tmp8 bank2 161
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 161
-read *tmp7 bank2 62
-read *tmp8 bank2 162
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 162
-read *tmp7 bank2 63
-read *tmp8 bank2 163
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 163
-read *tmp7 bank2 64
-read *tmp8 bank2 164
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 164
-read *tmp7 bank2 65
-read *tmp8 bank2 165
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 165
-read *tmp7 bank2 66
-read *tmp8 bank2 166
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 166
-read *tmp7 bank2 67
-read *tmp8 bank2 167
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 167
-read *tmp7 bank2 68
-read *tmp8 bank2 168
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 168
-read *tmp7 bank2 69
-read *tmp8 bank2 169
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 169
-read *tmp7 bank2 70
-read *tmp8 bank2 170
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 170
-read *tmp7 bank2 71
-read *tmp8 bank2 171
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 171
-read *tmp7 bank2 72
-read *tmp8 bank2 172
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 172
-read *tmp7 bank2 73
-read *tmp8 bank2 173
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 173
-read *tmp7 bank2 74
-read *tmp8 bank2 174
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 174
-read *tmp7 bank2 75
-read *tmp8 bank2 175
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 175
-read *tmp7 bank2 76
-read *tmp8 bank2 176
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 176
-read *tmp7 bank2 77
-read *tmp8 bank2 177
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 177
-read *tmp7 bank2 78
-read *tmp8 bank2 178
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 178
-read *tmp7 bank2 79
-read *tmp8 bank2 179
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 179
-read *tmp7 bank2 80
-read *tmp8 bank2 180
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 180
-read *tmp7 bank2 81
-read *tmp8 bank2 181
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 181
-read *tmp7 bank2 82
-read *tmp8 bank2 182
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 182
-read *tmp7 bank2 83
-read *tmp8 bank2 183
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 183
-read *tmp7 bank2 84
-read *tmp8 bank2 184
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 184
-read *tmp7 bank2 85
-read *tmp8 bank2 185
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 185
-read *tmp7 bank2 86
-read *tmp8 bank2 186
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 186
-read *tmp7 bank2 87
-read *tmp8 bank2 187
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 187
-read *tmp7 bank2 88
-read *tmp8 bank2 188
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 188
-read *tmp7 bank2 89
-read *tmp8 bank2 189
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 189
-read *tmp7 bank2 90
-read *tmp8 bank2 190
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 190
-read *tmp7 bank2 91
-read *tmp8 bank2 191
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 191
-read *tmp7 bank2 92
-read *tmp8 bank2 192
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 192
-read *tmp7 bank2 93
-read *tmp8 bank2 193
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 193
-read *tmp7 bank2 94
-read *tmp8 bank2 194
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 194
-read *tmp7 bank2 95
-read *tmp8 bank2 195
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 195
-read *tmp7 bank2 96
-read *tmp8 bank2 196
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 196
-read *tmp7 bank2 97
-read *tmp8 bank2 197
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 197
-read *tmp7 bank2 98
-read *tmp8 bank2 198
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 198
-read *tmp7 bank2 99
-read *tmp8 bank2 199
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 199
-read *tmp7 bank2 100
-read *tmp8 bank2 200
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 200
-read *tmp7 bank2 0
-read *tmp8 bank2 200
-op add *tmp9 *tmp8 *tmp7
-write *tmp9 bank2 200
-read *tmp11 bank2 200
-assertequals 73682 *tmp11 "Project Euler 31b"
+read *tmp1 bank2 0
+read *tmp2 bank2 100
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 100
+read *tmp1 bank2 1
+read *tmp2 bank2 101
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 101
+read *tmp1 bank2 2
+read *tmp2 bank2 102
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 102
+read *tmp1 bank2 3
+read *tmp2 bank2 103
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 103
+read *tmp1 bank2 4
+read *tmp2 bank2 104
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 104
+read *tmp1 bank2 5
+read *tmp2 bank2 105
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 105
+read *tmp1 bank2 6
+read *tmp2 bank2 106
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 106
+read *tmp1 bank2 7
+read *tmp2 bank2 107
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 107
+read *tmp1 bank2 8
+read *tmp2 bank2 108
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 108
+read *tmp1 bank2 9
+read *tmp2 bank2 109
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 109
+read *tmp1 bank2 10
+read *tmp2 bank2 110
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 110
+read *tmp1 bank2 11
+read *tmp2 bank2 111
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 111
+read *tmp1 bank2 12
+read *tmp2 bank2 112
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 112
+read *tmp1 bank2 13
+read *tmp2 bank2 113
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 113
+read *tmp1 bank2 14
+read *tmp2 bank2 114
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 114
+read *tmp1 bank2 15
+read *tmp2 bank2 115
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 115
+read *tmp1 bank2 16
+read *tmp2 bank2 116
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 116
+read *tmp1 bank2 17
+read *tmp2 bank2 117
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 117
+read *tmp1 bank2 18
+read *tmp2 bank2 118
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 118
+read *tmp1 bank2 19
+read *tmp2 bank2 119
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 119
+read *tmp1 bank2 20
+read *tmp2 bank2 120
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 120
+read *tmp1 bank2 21
+read *tmp2 bank2 121
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 121
+read *tmp1 bank2 22
+read *tmp2 bank2 122
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 122
+read *tmp1 bank2 23
+read *tmp2 bank2 123
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 123
+read *tmp1 bank2 24
+read *tmp2 bank2 124
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 124
+read *tmp1 bank2 25
+read *tmp2 bank2 125
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 125
+read *tmp1 bank2 26
+read *tmp2 bank2 126
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 126
+read *tmp1 bank2 27
+read *tmp2 bank2 127
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 127
+read *tmp1 bank2 28
+read *tmp2 bank2 128
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 128
+read *tmp1 bank2 29
+read *tmp2 bank2 129
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 129
+read *tmp1 bank2 30
+read *tmp2 bank2 130
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 130
+read *tmp1 bank2 31
+read *tmp2 bank2 131
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 131
+read *tmp1 bank2 32
+read *tmp2 bank2 132
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 132
+read *tmp1 bank2 33
+read *tmp2 bank2 133
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 133
+read *tmp1 bank2 34
+read *tmp2 bank2 134
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 134
+read *tmp1 bank2 35
+read *tmp2 bank2 135
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 135
+read *tmp1 bank2 36
+read *tmp2 bank2 136
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 136
+read *tmp1 bank2 37
+read *tmp2 bank2 137
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 137
+read *tmp1 bank2 38
+read *tmp2 bank2 138
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 138
+read *tmp1 bank2 39
+read *tmp2 bank2 139
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 139
+read *tmp1 bank2 40
+read *tmp2 bank2 140
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 140
+read *tmp1 bank2 41
+read *tmp2 bank2 141
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 141
+read *tmp1 bank2 42
+read *tmp2 bank2 142
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 142
+read *tmp1 bank2 43
+read *tmp2 bank2 143
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 143
+read *tmp1 bank2 44
+read *tmp2 bank2 144
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 144
+read *tmp1 bank2 45
+read *tmp2 bank2 145
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 145
+read *tmp1 bank2 46
+read *tmp2 bank2 146
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 146
+read *tmp1 bank2 47
+read *tmp2 bank2 147
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 147
+read *tmp1 bank2 48
+read *tmp2 bank2 148
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 148
+read *tmp1 bank2 49
+read *tmp2 bank2 149
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 149
+read *tmp1 bank2 50
+read *tmp2 bank2 150
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 150
+read *tmp1 bank2 51
+read *tmp2 bank2 151
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 151
+read *tmp1 bank2 52
+read *tmp2 bank2 152
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 152
+read *tmp1 bank2 53
+read *tmp2 bank2 153
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 153
+read *tmp1 bank2 54
+read *tmp2 bank2 154
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 154
+read *tmp1 bank2 55
+read *tmp2 bank2 155
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 155
+read *tmp1 bank2 56
+read *tmp2 bank2 156
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 156
+read *tmp1 bank2 57
+read *tmp2 bank2 157
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 157
+read *tmp1 bank2 58
+read *tmp2 bank2 158
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 158
+read *tmp1 bank2 59
+read *tmp2 bank2 159
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 159
+read *tmp1 bank2 60
+read *tmp2 bank2 160
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 160
+read *tmp1 bank2 61
+read *tmp2 bank2 161
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 161
+read *tmp1 bank2 62
+read *tmp2 bank2 162
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 162
+read *tmp1 bank2 63
+read *tmp2 bank2 163
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 163
+read *tmp1 bank2 64
+read *tmp2 bank2 164
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 164
+read *tmp1 bank2 65
+read *tmp2 bank2 165
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 165
+read *tmp1 bank2 66
+read *tmp2 bank2 166
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 166
+read *tmp1 bank2 67
+read *tmp2 bank2 167
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 167
+read *tmp1 bank2 68
+read *tmp2 bank2 168
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 168
+read *tmp1 bank2 69
+read *tmp2 bank2 169
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 169
+read *tmp1 bank2 70
+read *tmp2 bank2 170
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 170
+read *tmp1 bank2 71
+read *tmp2 bank2 171
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 171
+read *tmp1 bank2 72
+read *tmp2 bank2 172
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 172
+read *tmp1 bank2 73
+read *tmp2 bank2 173
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 173
+read *tmp1 bank2 74
+read *tmp2 bank2 174
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 174
+read *tmp1 bank2 75
+read *tmp2 bank2 175
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 175
+read *tmp1 bank2 76
+read *tmp2 bank2 176
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 176
+read *tmp1 bank2 77
+read *tmp2 bank2 177
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 177
+read *tmp1 bank2 78
+read *tmp2 bank2 178
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 178
+read *tmp1 bank2 79
+read *tmp2 bank2 179
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 179
+read *tmp1 bank2 80
+read *tmp2 bank2 180
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 180
+read *tmp1 bank2 81
+read *tmp2 bank2 181
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 181
+read *tmp1 bank2 82
+read *tmp2 bank2 182
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 182
+read *tmp1 bank2 83
+read *tmp2 bank2 183
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 183
+read *tmp1 bank2 84
+read *tmp2 bank2 184
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 184
+read *tmp1 bank2 85
+read *tmp2 bank2 185
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 185
+read *tmp1 bank2 86
+read *tmp2 bank2 186
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 186
+read *tmp1 bank2 87
+read *tmp2 bank2 187
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 187
+read *tmp1 bank2 88
+read *tmp2 bank2 188
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 188
+read *tmp1 bank2 89
+read *tmp2 bank2 189
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 189
+read *tmp1 bank2 90
+read *tmp2 bank2 190
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 190
+read *tmp1 bank2 91
+read *tmp2 bank2 191
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 191
+read *tmp1 bank2 92
+read *tmp2 bank2 192
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 192
+read *tmp1 bank2 93
+read *tmp2 bank2 193
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 193
+read *tmp1 bank2 94
+read *tmp2 bank2 194
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 194
+read *tmp1 bank2 95
+read *tmp2 bank2 195
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 195
+read *tmp1 bank2 96
+read *tmp2 bank2 196
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 196
+read *tmp1 bank2 97
+read *tmp2 bank2 197
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 197
+read *tmp1 bank2 98
+read *tmp2 bank2 198
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 198
+read *tmp1 bank2 99
+read *tmp2 bank2 199
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 199
+read *tmp1 bank2 100
+read *tmp2 bank2 200
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 200
+read *tmp1 bank2 0
+read *tmp2 bank2 200
+op add *tmp3 *tmp2 *tmp1
+write *tmp3 bank2 200
+read *tmp4 bank2 200
+assertequals 73682 *tmp4 "Project Euler 31b"
 stop

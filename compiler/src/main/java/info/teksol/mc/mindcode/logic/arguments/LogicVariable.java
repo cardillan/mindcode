@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionParameter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import org.jspecify.annotations.NullMarked;
@@ -242,7 +243,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public String toString() {
         return "LogicVariable{" +
                 "argumentType=" + argumentType +
-                ", fullName='" + fullName + '\'' +
+                ", fullName='" + getFullName() + '\'' +
                 ", functionPrefix='" + functionPrefix + '\'' +
                 ", isVolatile=" + isVolatile +
                 ", input=" + input +
@@ -297,8 +298,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 false, parameter.isInput(), parameter.isOutput(), parameter.isReference(), preserved);
     }
 
-    public static LogicVariable temporary(String name) {
-        return new LogicVariable(EMPTY, TMP_VARIABLE, ValueMutability.MUTABLE, name, name);
+    public static LogicVariable temporary(NameCreator nameCreator, int index) {
+        return new LogicTemp(nameCreator, ArgumentType.TMP_VARIABLE, index, nameCreator.temp(index));
     }
 
     public static LogicVariable fnRetVal(MindcodeFunction function, String mlog) {
@@ -389,5 +390,46 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public LogicVariable withType(ArgumentType argumentType) {
         return new LogicVariable(sourcePosition, argumentType, mutability, functionPrefix, name, fullName, mlog,
                 isVolatile, noinit, input, output, reference);
+    }
+
+    public static class LogicTemp extends LogicVariable {
+        private final NameCreator nameCreator;
+        private String name;
+        private int index;
+
+        LogicTemp(NameCreator nameCreator, ArgumentType argumentType, int index, String name) {
+            super(EMPTY, argumentType, ValueMutability.MUTABLE, name, name);
+            this.nameCreator = nameCreator;
+            this.name = name;
+            this.index = index;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+            this.name = nameCreator.temp(index);
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String getFullName() {
+            return name;
+        }
+
+        @Override
+        public String toMlog() {
+            return name;
+        }
+
+        public LogicVariable withType(ArgumentType argumentType) {
+            return new LogicTemp(nameCreator, argumentType, index, name);
+        }
     }
 }

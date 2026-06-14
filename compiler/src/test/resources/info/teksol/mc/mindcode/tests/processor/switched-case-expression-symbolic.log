@@ -603,28 +603,28 @@ label *label29
 set :processNumber:n :i
 jump *label6 lessThanEq :i 0
 label *label30
-op mod *tmp2 :processNumber:n 10
+op mod *tmp0 :processNumber:n 10
 # "Function: def processDigit(in n)"
-jump *label32 greaterThanEq *tmp2 5
-jump *label33 greaterThanEq *tmp2 2
-jump *label31 lessThan *tmp2 0
-jump *label12 greaterThanEq *tmp2 1
+jump *label32 greaterThanEq *tmp0 5
+jump *label33 greaterThanEq *tmp0 2
+jump *label31 lessThan *tmp0 0
+jump *label12 greaterThanEq *tmp0 1
 op add .S0 .S0 1
 jump *label8 always
 label *label33
-jump *label14 lessThan *tmp2 3
-jump *label18 greaterThanEq *tmp2 4
+jump *label14 lessThan *tmp0 3
+jump *label18 greaterThanEq *tmp0 4
 op add .S3 .S3 1
 jump *label8 always
 label *label32
-jump *label34 greaterThanEq *tmp2 8
-jump *label20 lessThan *tmp2 6
-jump *label24 greaterThanEq *tmp2 7
+jump *label34 greaterThanEq *tmp0 8
+jump *label20 lessThan *tmp0 6
+jump *label24 greaterThanEq *tmp0 7
 op add .S6 .S6 1
 jump *label8 always
 label *label34
-jump *label26 lessThan *tmp2 9
-jump *label28 lessThan *tmp2 10
+jump *label26 lessThan *tmp0 9
+jump *label28 lessThan *tmp0 10
 jump *label31 always
 label *label12
 op add .S1 .S1 1

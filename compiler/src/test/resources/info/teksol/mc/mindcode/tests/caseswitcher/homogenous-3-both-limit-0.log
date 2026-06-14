@@ -264,16 +264,16 @@ jump *label9 equal :block @carbide-wall
 jump *label9 equal :block @carbide-wall-large
 jump *label8 always
 label *label9
-set *tmp2 true
+set *tmp0 true
 jump *label7 always
 label *label8
-set *tmp2 false
+set *tmp0 false
 label *label7
-jump *label4 equal *tmp2 false
-op mul *tmp5 :hash 31
-op add *tmp6 *tmp5 :i
-op add *tmp7 *tmp6 251
-op and :hash *tmp7 0xFFFFFFFF
+jump *label4 equal *tmp0 false
+op mul *tmp1 :hash 31
+op add *tmp2 *tmp1 :i
+op add *tmp3 *tmp2 251
+op and :hash *tmp3 0xFFFFFFFF
 jump *label5 always
 label *label4
 label *label5

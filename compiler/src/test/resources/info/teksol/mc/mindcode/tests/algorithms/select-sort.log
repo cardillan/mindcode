@@ -213,7 +213,7 @@ Final code before resolving virtual instructions:
 set SIZE 128
 set ARRAY bank2
 set FINAL bank3
-op sub *tmp1 SIZE 1
+op sub *tmp0 SIZE 1
 set :i 0
 jump *label2 lessThanEq SIZE 1
 label *label11
@@ -230,18 +230,18 @@ label *label6
 op add :j :j 1
 jump *label12 lessThan :j SIZE
 label *label5
-read *tmp15 ARRAY :i
-write *tmp15 ARRAY :min_index
+read *tmp1 ARRAY :i
+write *tmp1 ARRAY :min_index
 write :min ARRAY :i
 op add :i :i 1
-jump *label11 lessThan :i *tmp1
+jump *label11 lessThan :i *tmp0
 label *label2
 set :i 0
 jump *label10 greaterThanEq 0 SIZE
 label *label13
-read *tmp22 FINAL :i
-read *tmp23 ARRAY :i
-assertequals *tmp22 *tmp23 "unexpected value"
+read *tmp2 FINAL :i
+read *tmp3 ARRAY :i
+assertequals *tmp2 *tmp3 "unexpected value"
 op add :i :i 1
 jump *label13 lessThan :i SIZE
 label *label10

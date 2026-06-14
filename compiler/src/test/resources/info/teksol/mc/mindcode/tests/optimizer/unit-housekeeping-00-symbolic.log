@@ -845,30 +845,30 @@ set .UNIT @mega
 set :first_unit null
 set :index 1
 label *label0
-sensor *tmp2 switch2 @enabled
-jump *label3 equal *tmp2 false
+sensor *tmp0 switch2 @enabled
+jump *label3 equal *tmp0 false
 jump *label6 notEqual .UNIT @flare
-set *tmp4 @mono
+set *tmp1 @mono
 jump *label5 always
 label *label6
 jump *label8 notEqual .UNIT @mono
-set *tmp4 @poly
+set *tmp1 @poly
 jump *label5 always
 label *label8
 jump *label10 notEqual .UNIT @poly
-set *tmp4 @mega
+set *tmp1 @mega
 jump *label5 always
 label *label10
 jump *label12 notEqual .UNIT @mega
-set *tmp4 @flare
+set *tmp1 @flare
 jump *label5 always
 label *label12
-set *tmp4 null
+set *tmp1 null
 label *label5
-set .UNIT *tmp4
+set .UNIT *tmp1
 set :first_unit null
 control enabled switch2 false
-print *tmp4
+print *tmp1
 print ": gathering information..."
 label *label3
 ubind .UNIT
@@ -879,15 +879,15 @@ printflush message1
 jump *label0 always
 label *label14
 jump *label18 strictEqual @unit :first_unit
-op strictEqual *tmp11 :first_unit null
-jump *label16 equal *tmp11 false
+op strictEqual *tmp2 :first_unit null
+jump *label16 equal *tmp2 false
 label *label18
 printflush message1
 set :first_unit @unit
 set :index 1
 print .UNIT
-sensor *tmp13 switch1 @enabled
-jump *label20 equal *tmp13 false
+sensor *tmp3 switch1 @enabled
+jump *label20 equal *tmp3 false
 print " (cleanup active)"
 label *label20
 label *label16
@@ -895,22 +895,22 @@ sensor :controlled @unit @controlled
 sensor :flag @unit @flag
 sensor :items @unit @totalItems
 sensor :item @unit @firstItem
-sensor *tmp19 @unit @controller
-select :controlled equal *tmp19 @this 0 :controlled
+sensor *tmp4 @unit @controller
+select :controlled equal *tmp4 @this 0 :controlled
 jump *label26 notEqual :flag 0
 jump *label26 greaterThan :items 0
 jump *label24 equal :controlled 0
-sensor *tmp25 @unit @controller
-jump *label24 equal *tmp25 @this
+sensor *tmp5 @unit @controller
+jump *label24 equal *tmp5 @this
 label *label26
 print "\n"
 print :index
 jump *label31 notEqual :controlled @ctrlProcessor
 sensor :controller @unit @controller
-sensor *tmp31 :controller @x
-op floor :x *tmp31
-sensor *tmp33 :controller @y
-op floor :y *tmp33
+sensor *tmp6 :controller @x
+op floor :x *tmp6
+sensor *tmp7 :controller @y
+op floor :y *tmp7
 print ", {0};"
 format :x
 print :y
@@ -935,13 +935,13 @@ print :item
 label *label39
 label *label24
 jump *label41 notEqual :controlled 0
-sensor *tmp40 switch1 @enabled
-jump *label41 equal *tmp40 false
+sensor *tmp8 switch1 @enabled
+jump *label41 equal *tmp8 false
 jump *label45 lessThanEq :items 0
 ucontrol flag 1
 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
-ucontrol within .CORE_X .CORE_Y 8 *tmp46
-jump *label47 equal *tmp46 false
+ucontrol within .CORE_X .CORE_Y 8 *tmp9
+jump *label47 equal *tmp9 false
 ucontrol itemDrop .CORE :items
 jump *label46 always
 label *label47
@@ -949,8 +949,8 @@ ucontrol approach .CORE_X .CORE_Y 4
 jump *label46 always
 label *label45
 jump *label49 equal :flag 0
-ucontrol within @thisx @thisy 8 *tmp50
-jump *label51 equal *tmp50 false
+ucontrol within @thisx @thisy 8 *tmp10
+jump *label51 equal *tmp10 false
 ucontrol flag 0
 jump *label52 always
 label *label51

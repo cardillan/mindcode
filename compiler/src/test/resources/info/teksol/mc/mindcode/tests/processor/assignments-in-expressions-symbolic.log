@@ -123,12 +123,12 @@ op add .A a 1
 op add *tmp0 .A .A
 assertequals 4 *tmp0 "A + (A += 1)"
 assertequals 4 *tmp0 "(B += 1) + B"
-assertflush *tmp2
+assertflush *tmp1
 # "Function: def test()"
 op lessThan :test:res a b
 jump *label1 greaterThanEq a b
 print "yes"
 label *label1
 print :test:res
-assertprints *tmp2 "yes1" "assignments in conditions"
+assertprints *tmp1 "yes1" "assignments in conditions"
 stop

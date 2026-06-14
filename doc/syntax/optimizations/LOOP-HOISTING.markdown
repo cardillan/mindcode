@@ -80,10 +80,10 @@ produces
     set :i 1
     jump label_9 greaterThanEq 1 MAX
     op mod *tmp0 MAX 2
-    select *tmp2 equal *tmp0 0 "Even" "Odd"
+    select *tmp1 equal *tmp0 0 "Even" "Odd"
 label_5:
         print :i
-        print *tmp2
+        print *tmp1
     op add :i :i 1
     jump label_5 lessThan :i MAX
     label_9:
@@ -196,9 +196,9 @@ compiles to:
     set :status "Not entered"
     set :i 0
     jump label_22 lessThanEq A 0
-    op mul *tmp3 2 B
-    op mul *tmp5 2 C
-    op mul *tmp6 3 A
+    op mul *tmp1 2 B
+    op mul *tmp2 2 C
+    op mul *tmp3 3 A
     op mul *tmp0 2 A
 label_10:
         set :j 0
@@ -208,12 +208,12 @@ label_10:
             jump label_18 lessThanEq C 0
             set :status "Entered"
         label_15:
-                print *tmp6
+                print *tmp3
             op add :k :k 1
-            jump label_15 lessThan :k *tmp5
+            jump label_15 lessThan :k *tmp2
             label_18:
         op add :j :j 1
-        jump label_12 lessThan :j *tmp3
+        jump label_12 lessThan :j *tmp1
         label_20:
         op add :i :i 1
     jump label_10 lessThan :i *tmp0
@@ -258,24 +258,24 @@ compiles to:
     set :status "Not entered"
     set :i 0
     jump label_22 lessThanEq A 0
-    op mul *tmp3 2 B
+    op mul *tmp1 2 B
     op mul *tmp0 2 A
 label_8:
         set :j 0
         jump label_20 lessThanEq B 0
     label_10:
             jump label_18 lessThanEq C 0
-                op mul *tmp7 2 C
+                op mul *tmp2 2 C
                 set :k 0
                 set :status "Entered"
-                op mul *tmp8 3 A
+                op mul *tmp3 3 A
             label_15:
-                    print *tmp8
+                    print *tmp3
                 op add :k :k 1
-                jump label_15 lessThan :k *tmp7
+                jump label_15 lessThan :k *tmp2
             label_18:
         op add :j :j 1
-        jump label_10 lessThan :j *tmp3
+        jump label_10 lessThan :j *tmp1
         label_20:
         op add :i :i 1
     jump label_8 lessThan :i *tmp0
@@ -317,14 +317,14 @@ compiles to:
     op equal .b x false
     set :i 0
     jump label_14 greaterThanEq 0 x
-    op mul *tmp3 2 x
+    op mul *tmp0 2 x
 label_6:
         jump label_8 notEqual .a false
         jump label_12 equal .b false
     label_8:
             op sub .a .a 1
             op add .b .b 1
-            print *tmp3
+            print *tmp0
             jump label_6 always 0 0
         label_12:
     op add :i :i 1

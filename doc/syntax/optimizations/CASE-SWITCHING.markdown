@@ -165,14 +165,14 @@ end;
 produces
 
 ```mlog
-sensor *tmp2 .value @id
-read *tmp3 "9:8880888;" *tmp2
-op sub *tmp4 *tmp3 48
-select *tmp5 strictEqual *tmp2 null 1 *tmp4
-select *tmp6 equal *tmp3 58 null *tmp5
-select *tmp7 strictEqual *tmp3 null 8 *tmp6
-lookup item *tmp8 *tmp7
-select .value equal *tmp3 59 .value *tmp8
+sensor *tmp0 .value @id
+read *tmp1 "9:8880888;" *tmp0
+op sub *tmp2 *tmp1 48
+select *tmp3 strictEqual *tmp0 null 1 *tmp2
+select *tmp4 equal *tmp1 58 null *tmp3
+select *tmp5 strictEqual *tmp1 null 8 *tmp4
+lookup item *tmp6 *tmp5
+select .value equal *tmp1 59 .value *tmp6
 ```
 
 **Multiple value translations**
@@ -196,10 +196,10 @@ end;
 compiles to:
 ```mlog
 set :a 48
-read *tmp2 "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!abc" :a
-select :b lessThanEq *tmp2 33 :b *tmp2
-read *tmp4 "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!120" :a
-select :a lessThanEq *tmp4 33 :a *tmp4
+read *tmp0 "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!abc" :a
+select :b lessThanEq *tmp0 33 :b *tmp0
+read *tmp1 "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!120" :a
+select :a lessThanEq *tmp1 33 :a *tmp1
 printchar :a
 printchar :b
 jump 1 always 0 0
@@ -332,10 +332,10 @@ The above case expression is transformed to this:
 # Pay closer attention to sections of the program manipulating @counter
     getlink *tmp1 0
     sensor *tmp2 *tmp1 @type
-    sensor *tmp4 *tmp2 @id
-        jump label_21 greaterThanEq *tmp4 230
-        jump label_45 greaterThanEq *tmp4 14
-        op add @counter @counter *tmp4
+    sensor *tmp3 *tmp2 @id
+        jump label_21 greaterThanEq *tmp3 230
+        jump label_45 greaterThanEq *tmp3 14
+        op add @counter @counter *tmp3
         jump label_44 always 0 0
         jump label_45 always 0 0
         jump label_45 always 0 0
@@ -353,14 +353,14 @@ The above case expression is transformed to this:
         set *tmp0 "B"
         jump label_46 always 0 0
     label_21:
-        jump label_45 greaterThanEq *tmp4 243
-        jump label_26 greaterThanEq *tmp4 232
-        jump label_38 lessThan *tmp4 231
+        jump label_45 greaterThanEq *tmp3 243
+        jump label_26 greaterThanEq *tmp3 232
+        jump label_38 lessThan *tmp3 231
     label_24:
         set *tmp0 "D"
         jump label_46 always 0 0
     label_26:
-        op sub *tmp5 *tmp4 232
+        op sub *tmp5 *tmp3 232
         op add @counter @counter *tmp5
         jump label_38 always 0 0
         jump label_45 always 0 0
@@ -382,7 +382,7 @@ The above case expression is transformed to this:
         set *tmp0 "A"
         jump label_46 always 0 0
 label_44:
-    jump label_40 strictEqual *tmp4 null
+    jump label_40 strictEqual *tmp3 null
 label_45:
     set *tmp0 "E"
     label_46:

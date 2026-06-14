@@ -451,12 +451,12 @@ Final code before resolving virtual instructions:
 label __start__
 set UNIT @flare
 op sub .DY @maph 10
-op sub *tmp2 .DY 10
-op len *tmp3 0 *tmp2
-op mul *tmp4 100 *tmp3
-op round *tmp6 *tmp4
-op div *tmp7 *tmp6 100
-op sub :distance *tmp7 2
+op sub *tmp0 .DY 10
+op len *tmp1 0 *tmp0
+op mul *tmp2 100 *tmp1
+op round *tmp3 *tmp2
+op div *tmp4 *tmp3 100
+op sub :distance *tmp4 2
 ubind UNIT
 jump *label2 notEqual @unit null
 label *label18
@@ -466,59 +466,59 @@ printflush message1
 ubind UNIT
 jump *label18 equal @unit null
 label *label2
-sensor *tmp10 switch1 @enabled
-jump *label5 notEqual *tmp10 false
+sensor *tmp5 switch1 @enabled
+jump *label5 notEqual *tmp5 false
 label *label19
 print "Press button to start measuring {0} speed."
 format UNIT
 printflush message1
-sensor *tmp10 switch1 @enabled
-jump *label19 equal *tmp10 false
+sensor *tmp5 switch1 @enabled
+jump *label19 equal *tmp5 false
 label *label5
 control enabled switch1 false
-sensor *tmp14 @unit @controlled
-jump *label8 equal *tmp14 0
+sensor *tmp6 @unit @controlled
+jump *label8 equal *tmp6 0
 label *label20
 print "Searching free "
 print UNIT
 printflush message1
 ubind UNIT
-sensor *tmp14 @unit @controlled
-jump *label20 notEqual *tmp14 0
+sensor *tmp6 @unit @controlled
+jump *label20 notEqual *tmp6 0
 label *label8
 ucontrol flag 1
-ucontrol within 10 10 1 *tmp16
-jump *label11 notEqual *tmp16 false
+ucontrol within 10 10 1 *tmp7
+jump *label11 notEqual *tmp7 false
 label *label21
 print "Moving to start"
 printflush message1
 ucontrol move 10 10
-ucontrol within 10 10 1 *tmp16
-jump *label21 equal *tmp16 false
+ucontrol within 10 10 1 *tmp7
+jump *label21 equal *tmp7 false
 label *label11
 print "Moving to destination"
 printflush message1
 set :start @time
 ucontrol move 10 .DY
-ucontrol within 10 .DY 1 *tmp19
-jump *label14 notEqual *tmp19 false
+ucontrol within 10 .DY 1 *tmp8
+jump *label14 notEqual *tmp8 false
 label *label22
 ucontrol move 10 .DY
-ucontrol within 10 .DY 1 *tmp19
-jump *label22 equal *tmp19 false
+ucontrol within 10 .DY 1 *tmp8
+jump *label22 equal *tmp8 false
 label *label14
 set :finish @time
-op sub *tmp25 10 .DY
-op abs *tmp26 *tmp25
-op div *tmp27 *tmp26 2
-ucontrol move 0 *tmp27
+op sub *tmp9 10 .DY
+op abs *tmp10 *tmp9
+op div *tmp11 *tmp10 2
+ucontrol move 0 *tmp11
 ucontrol flag 0
 op sub :elapsed :finish :start
-op div *tmp29 :distance :elapsed
-op idiv *tmp31 *tmp29 0.00001
-op div :speed *tmp31 100
-sensor *tmp33 switch1 @enabled
-jump __start__ notEqual *tmp33 false
+op div *tmp12 :distance :elapsed
+op idiv *tmp13 *tmp12 0.00001
+op div :speed *tmp13 100
+sensor *tmp14 switch1 @enabled
+jump __start__ notEqual *tmp14 false
 label *label23
 print "Measurement results ({0}):\nMap dimensions: {0}x{0}\nElapsed time: {0}ms\nDistance travelled: {0}\nSpeed: {0}tiles/s\nPress button to repeat"
 format UNIT
@@ -528,5 +528,5 @@ format :elapsed
 format :distance
 format :speed
 printflush message1
-sensor *tmp33 switch1 @enabled
-jump *label23 equal *tmp33 false
+sensor *tmp14 switch1 @enabled
+jump *label23 equal *tmp14 false

@@ -923,9 +923,9 @@ op sub :n :n 1
 getlink :block :n
 print "\nFound: "
 print :block
-sensor *tmp6 :block @type
-sensor *tmp59 *tmp6 @id
-multijump *tmp59 0 0
+sensor *tmp0 :block @type
+sensor *tmp9 *tmp0 @id
+multijump *tmp9 0 0
 multilabel *label50
 multilabel *label46
 jump *label6 always
@@ -953,35 +953,35 @@ printflush .MESSAGE
 jump *label40 equal .SOURCE_MEMORY null
 select .TARGET_MEMORY equal .TARGET_MEMORY null .SOURCE_MEMORY .TARGET_MEMORY
 set :startIndex 0
-sensor *tmp13 .TARGET_MEMORY @type
-jump *label18 notEqual *tmp13 @memory-cell
-set *tmp12 64
+sensor *tmp2 .TARGET_MEMORY @type
+jump *label18 notEqual *tmp2 @memory-cell
+set *tmp1 64
 jump *label17 always
 label *label18
-jump *label20 notEqual *tmp13 @memory-bank
-set *tmp12 512
+jump *label20 notEqual *tmp2 @memory-bank
+set *tmp1 512
 jump *label17 always
 label *label20
-set *tmp12 0
+set *tmp1 0
 label *label17
-set :memSize *tmp12
+set :memSize *tmp1
 jump *label22 notEqual .SOURCE_MEMORY .TARGET_MEMORY
-op idiv :startIndex *tmp12 2
-op sub :memSize *tmp12 1
+op idiv :startIndex *tmp1 2
+op sub :memSize *tmp1 1
 label *label22
 set :prevTick @tick
 read :prev .SOURCE_MEMORY 0
 set :currTick :prevTick
 set :curr :prev
-read *tmp24 .TARGET_MEMORY :startIndex
-op max :index :startIndex *tmp24
+read *tmp3 .TARGET_MEMORY :startIndex
+op max :index :startIndex *tmp3
 set :nextTick :prevTick
-sensor *tmp25 switch1 @enabled
-jump *label26 notEqual *tmp25 0
+sensor *tmp4 switch1 @enabled
+jump *label26 notEqual *tmp4 0
 label *label43
 op add :nextTick :nextTick TICKS
-op add *tmp28 :nextTick TICKS
-jump *label27 lessThanEq @tick *tmp28
+op add *tmp5 :nextTick TICKS
+jump *label27 lessThanEq @tick *tmp5
 set :prevTick @tick
 op add :nextTick :prevTick TICKS
 set :currTick :prevTick
@@ -1002,8 +1002,8 @@ op sub :amount :curr :prev
 op sub :time :currTick :prevTick
 set :rate 0
 jump *label37 equal :amount 0
-op div *tmp45 :amount :time
-op max :rate *tmp45 0
+op div *tmp6 :amount :time
+op max :rate *tmp6 0
 label *label37
 op add :index :index 1
 jump *label38 lessThan :index :memSize
@@ -1013,16 +1013,16 @@ write :index .TARGET_MEMORY :startIndex
 write :rate .TARGET_MEMORY :index
 print "Item Rate Meter\nTotal items: [gold]{0}[]\nCurrent rate [green]{0}[]/min\n  memory start: [gold]{0}[]\n  memory index: [gold]{0}[]\n[lightgray]Loop time: {0} ms"
 format :curr
-op idiv *tmp55 :rate 0.0002777777777777778
-format *tmp55
+op idiv *tmp7 :rate 0.0002777777777777778
+format *tmp7
 format :startIndex
 format :index
-op floor *tmp56 :time
-format *tmp56
+op floor *tmp8 :time
+format *tmp8
 printflush message1
 set :prevTick :currTick
 set :prev :curr
-sensor *tmp25 switch1 @enabled
-jump *label43 equal *tmp25 0
+sensor *tmp4 switch1 @enabled
+jump *label43 equal *tmp4 0
 label *label26
 control enabled switch1 0

@@ -116,7 +116,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
 
     @Override
     public LogicVariable nextTemp() {
-        return LogicVariable.temporary(nameCreator.temp(tmpIndex++));
+        return LogicVariable.temporary(nameCreator, tmpIndex++);
     }
 
     @Override

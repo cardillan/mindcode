@@ -4173,137 +4173,137 @@ Final code before resolving virtual instructions:
 
 set A 0
 # "Function: inline def compare(in title, in a, in b, in expected)"
+assertflush *tmp0
+# "Function: inline def eval(in b)"
+# "Function: inline def eval(in b)"
+# "Function: inline def eval(in b)"
+# "Function: inline def eval(in b)"
+print "TFFT"
+assertprints *tmp0 "TFFT" "comparison 1"
+# "Function: inline def compare(in title, in a, in b, in expected)"
 assertflush *tmp1
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
-print "TFFT"
-assertprints *tmp1 "TFFT" "comparison 1"
+print "FTFT"
+assertprints *tmp1 "FTFT" "comparison 2"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp15
+assertflush *tmp2
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 print "FTFT"
-assertprints *tmp15 "FTFT" "comparison 2"
+assertprints *tmp2 "FTFT" "comparison 3"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp29
+assertflush *tmp3
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 print "FTFT"
-assertprints *tmp29 "FTFT" "comparison 3"
+assertprints *tmp3 "FTFT" "comparison 4"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp43
-# "Function: inline def eval(in b)"
-# "Function: inline def eval(in b)"
-# "Function: inline def eval(in b)"
-# "Function: inline def eval(in b)"
-print "FTFT"
-assertprints *tmp43 "FTFT" "comparison 4"
-# "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp57
+assertflush *tmp4
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 print "TFFT"
-assertprints *tmp57 "TFFT" "comparison 5"
+assertprints *tmp4 "TFFT" "comparison 5"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp71
+assertflush *tmp5
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 print "FTFT"
-assertprints *tmp71 "FTFT" "comparison 6"
+assertprints *tmp5 "FTFT" "comparison 6"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp85
+assertflush *tmp6
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 print "FTFT"
-assertprints *tmp85 "FTFT" "comparison 7"
+assertprints *tmp6 "FTFT" "comparison 7"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp99
+assertflush *tmp7
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 print "TFTF"
-assertprints *tmp99 "TFTF" "comparison 8"
+assertprints *tmp7 "TFTF" "comparison 8"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp113
+assertflush *tmp8
 # "Function: inline def eval(in b)"
-select *tmp116 equal A 0 "T" "F"
+select *tmp9 equal A 0 "T" "F"
 # "Function: inline def eval(in b)"
-select *tmp119 notEqual A 0 "T" "F"
+select *tmp10 notEqual A 0 "T" "F"
 # "Function: inline def eval(in b)"
-select *tmp122 strictEqual A 0 "T" "F"
+select *tmp11 strictEqual A 0 "T" "F"
 # "Function: inline def eval(in b)"
-select *tmp125 strictNotEqual A 0 "T" "F"
-print *tmp116
-print *tmp119
-print *tmp122
-print *tmp125
-assertprints *tmp113 "TFTF" "comparison 9"
+select *tmp12 strictNotEqual A 0 "T" "F"
+print *tmp9
+print *tmp10
+print *tmp11
+print *tmp12
+assertprints *tmp8 "TFTF" "comparison 9"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp127
+assertflush *tmp13
 # "Function: inline def eval(in b)"
-select *tmp130 equal A 1 "T" "F"
+select *tmp14 equal A 1 "T" "F"
 # "Function: inline def eval(in b)"
-select *tmp133 notEqual A 1 "T" "F"
+select *tmp15 notEqual A 1 "T" "F"
 # "Function: inline def eval(in b)"
-select *tmp136 strictEqual A 1 "T" "F"
+select *tmp16 strictEqual A 1 "T" "F"
 # "Function: inline def eval(in b)"
-select *tmp139 strictNotEqual A 1 "T" "F"
-print *tmp130
-print *tmp133
-print *tmp136
-print *tmp139
-assertprints *tmp127 "FTFT" "comparison 10"
+select *tmp17 strictNotEqual A 1 "T" "F"
+print *tmp14
+print *tmp15
+print *tmp16
+print *tmp17
+assertprints *tmp13 "FTFT" "comparison 10"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp141
+assertflush *tmp18
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 print "FTFT"
-assertprints *tmp141 "FTFT" "comparison 11"
+assertprints *tmp18 "FTFT" "comparison 11"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp155
+assertflush *tmp19
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 print "TFFT"
-assertprints *tmp155 "TFFT" "comparison 12"
+assertprints *tmp19 "TFFT" "comparison 12"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp169
+assertflush *tmp20
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 print "FTFT"
-assertprints *tmp169 "FTFT" "comparison 13"
+assertprints *tmp20 "FTFT" "comparison 13"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp183
+assertflush *tmp21
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 print "FTFT"
-assertprints *tmp183 "FTFT" "comparison 14"
+assertprints *tmp21 "FTFT" "comparison 14"
 # "Function: inline def compare(in title, in a, in b, in expected)"
-assertflush *tmp197
+assertflush *tmp22
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 # "Function: inline def eval(in b)"
 print "TFTF"
-assertprints *tmp197 "TFTF" "comparison 15"
+assertprints *tmp22 "TFTF" "comparison 15"
 stop

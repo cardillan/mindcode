@@ -507,164 +507,164 @@ lookup block :block :i
 jump *label7 strictEqual :block null
 jump *label6 always
 label *label7
-set *tmp2 1
+set *tmp0 1
 jump *label5 always
 label *label6
 jump *label9 equal :block @graphite-press
 jump *label8 always
 label *label9
-set *tmp2 2
+set *tmp0 2
 jump *label5 always
 label *label8
 jump *label11 equal :block @copper-wall
 jump *label10 always
 label *label11
-set *tmp2 3
+set *tmp0 3
 jump *label5 always
 label *label10
 jump *label13 equal :block @copper-wall-large
 jump *label12 always
 label *label13
-set *tmp2 4
+set *tmp0 4
 jump *label5 always
 label *label12
 jump *label15 equal :block @titanium-wall
 jump *label14 always
 label *label15
-set *tmp2 5
+set *tmp0 5
 jump *label5 always
 label *label14
 jump *label17 equal :block @titanium-wall-large
 jump *label16 always
 label *label17
-set *tmp2 6
+set *tmp0 6
 jump *label5 always
 label *label16
 jump *label19 equal :block @plastanium-wall
 jump *label18 always
 label *label19
-set *tmp2 7
+set *tmp0 7
 jump *label5 always
 label *label18
 jump *label21 equal :block @plastanium-wall-large
 jump *label20 always
 label *label21
-set *tmp2 8
+set *tmp0 8
 jump *label5 always
 label *label20
 jump *label23 equal :block @thorium-wall
 jump *label22 always
 label *label23
-set *tmp2 9
+set *tmp0 9
 jump *label5 always
 label *label22
 jump *label25 equal :block @thorium-wall-large
 jump *label24 always
 label *label25
-set *tmp2 10
+set *tmp0 10
 jump *label5 always
 label *label24
 jump *label27 equal :block @phase-wall
 jump *label26 always
 label *label27
-set *tmp2 11
+set *tmp0 11
 jump *label5 always
 label *label26
 jump *label29 equal :block @phase-wall-large
 jump *label28 always
 label *label29
-set *tmp2 12
+set *tmp0 12
 jump *label5 always
 label *label28
 jump *label31 equal :block @surge-wall
 jump *label30 always
 label *label31
-set *tmp2 13
+set *tmp0 13
 jump *label5 always
 label *label30
 jump *label33 equal :block @surge-wall-large
 jump *label32 always
 label *label33
-set *tmp2 14
+set *tmp0 14
 jump *label5 always
 label *label32
 jump *label35 equal :block @scrap-wall
 jump *label34 always
 label *label35
-set *tmp2 15
+set *tmp0 15
 jump *label5 always
 label *label34
 jump *label37 equal :block @scrap-wall-large
 jump *label36 always
 label *label37
-set *tmp2 16
+set *tmp0 16
 jump *label5 always
 label *label36
 jump *label39 equal :block @scrap-wall-huge
 jump *label38 always
 label *label39
-set *tmp2 17
+set *tmp0 17
 jump *label5 always
 label *label38
 jump *label41 equal :block @scrap-wall-gigantic
 jump *label40 always
 label *label41
-set *tmp2 18
+set *tmp0 18
 jump *label5 always
 label *label40
 jump *label43 equal :block @tungsten-wall
 jump *label42 always
 label *label43
-set *tmp2 19
+set *tmp0 19
 jump *label5 always
 label *label42
 jump *label45 equal :block @tungsten-wall-large
 jump *label44 always
 label *label45
-set *tmp2 20
+set *tmp0 20
 jump *label5 always
 label *label44
 jump *label47 equal :block @beryllium-wall
 jump *label46 always
 label *label47
-set *tmp2 21
+set *tmp0 21
 jump *label5 always
 label *label46
 jump *label49 equal :block @beryllium-wall-large
 jump *label48 always
 label *label49
-set *tmp2 22
+set *tmp0 22
 jump *label5 always
 label *label48
 jump *label51 equal :block @carbide-wall
 jump *label50 always
 label *label51
-set *tmp2 23
+set *tmp0 23
 jump *label5 always
 label *label50
 jump *label53 equal :block @carbide-wall-large
 jump *label52 always
 label *label53
-set *tmp2 24
+set *tmp0 24
 jump *label5 always
 label *label52
 jump *label55 equal :block @reinforced-surge-wall
 jump *label54 always
 label *label55
-set *tmp2 25
+set *tmp0 25
 jump *label5 always
 label *label54
 jump *label57 equal :block @reinforced-surge-wall-large
 jump *label56 always
 label *label57
-set *tmp2 26
+set *tmp0 26
 jump *label5 always
 label *label56
-set *tmp2 0
+set *tmp0 0
 label *label5
-op shl :bit 1 *tmp2
-op and *tmp5 :total :bit
-jump *label58 lessThanEq *tmp5 1
+op shl :bit 1 *tmp0
+op and *tmp1 :total :bit
+jump *label58 lessThanEq *tmp1 1
 op or :total :total 0x1000000000
 jump *label59 always
 label *label58

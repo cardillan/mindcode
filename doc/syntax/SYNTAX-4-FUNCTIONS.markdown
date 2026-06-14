@@ -372,8 +372,8 @@ compiles to
 
 ```mlog
 write 63539 cell1 0
-read *tmp1 cell1 0
-printchar *tmp1
+read *tmp0 cell1 0
+printchar *tmp0
 ```
 
 ## The `char()` function
@@ -412,8 +412,8 @@ jump 7 notEqual :ch null
 printflush message1
 set :index 0
 jump 2 always 0 0
-op sub *tmp3 :ch 1
-printchar *tmp3
+op sub *tmp0 :ch 1
+printchar *tmp0
 op add :index :index 1
 jump 2 always 0 0
 ```
@@ -472,15 +472,15 @@ printflush(message1);
 compiles into
 
 ```mlog
-sensor *tmp1 "#$%(-7U" @size
+sensor *tmp0 "#$%(-7U" @size
 set :i 0
-jump 9 greaterThanEq 0 *tmp1
-read *tmp2 "#$%(-7U" :i
-op sub *tmp3 *tmp2 35
-print *tmp3
+jump 9 greaterThanEq 0 *tmp0
+read *tmp1 "#$%(-7U" :i
+op sub *tmp2 *tmp1 35
+print *tmp2
 print "\n"
 op add :i :i 1
-jump 3 lessThan :i *tmp1
+jump 3 lessThan :i *tmp0
 printflush message1
 ```
 

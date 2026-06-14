@@ -3831,8 +3831,8 @@ print "Item Rate Display\n[gold]Initializing...[]\n"
 printflush message1
 draw stroke 1
 op mul .SHIFT POSITION 30
-read *tmp6 MEMORY 256
-op sub :ptr *tmp6 .SHIFT
+read *tmp0 MEMORY 256
+op sub :ptr *tmp0 .SHIFT
 jump *label0 greaterThanEq :ptr 256
 op add :ptr :ptr 254
 label *label0
@@ -3841,184 +3841,184 @@ op sub :ptr :ptr 1
 jump *label187 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label187
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label190 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label190
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label193 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label193
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label196 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label196
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label199 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label199
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label202 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label202
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label205 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label205
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label208 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label208
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label211 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label211
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label214 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label214
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label217 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label217
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label220 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label220
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label223 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label223
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label226 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label226
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label229 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label229
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label232 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label232
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label235 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label235
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label238 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label238
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label241 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label241
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label244 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label244
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label247 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label247
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label250 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label250
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label253 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label253
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label256 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label256
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label259 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label259
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label262 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label262
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label265 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label265
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label268 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label268
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op sub :ptr :ptr 1
 jump *label271 greaterThan :ptr 256
 op sub :ptr 511 1
 label *label271
-read *tmp19 MEMORY :ptr
-op max :maximum :maximum *tmp19
+read *tmp1 MEMORY :ptr
+op max :maximum :maximum *tmp1
 op mul :maximum :maximum SMOOTH
-sensor *tmp21 switch1 @enabled
-jump *label9 notEqual *tmp21 0
+sensor *tmp2 switch1 @enabled
+jump *label9 notEqual *tmp2 0
 label *label39
 print "Item Rate Display"
 set :start @time
-sensor *tmp24 COORD @dead
-jump *label10 notEqual *tmp24 0
+sensor *tmp3 COORD @dead
+jump *label10 notEqual *tmp3 0
 set :n 0
 jump *label14 greaterThanEq 0 TOTAL
 label *label35
@@ -4031,16 +4031,16 @@ jump *label35 lessThan :n TOTAL
 label *label14
 label *label10
 op div :scale 150 :maximum
-op ceil *tmp33 :maximum
+op ceil *tmp4 :maximum
 print "\nMaximum: [green]{0}[]\nScale: [green]{0}[]"
-format *tmp33
-op floor *tmp34 :scale
-format *tmp34
+format *tmp4
+op floor *tmp5 :scale
+format *tmp5
 draw clear 0 0 80
 draw color 0 80 0 255
 draw rect 10 10 156 156
-read *tmp38 MEMORY 256
-op sub :head *tmp38 .SHIFT
+read *tmp6 MEMORY 256
+op sub :head *tmp6 .SHIFT
 jump *label15 greaterThanEq :head 256
 op add :head :head 254
 label *label15
@@ -4049,8 +4049,8 @@ set :value 0
 set :i 0
 jump *label19 greaterThanEq 0 SMOOTH
 label *label36
-read *tmp44 MEMORY :head
-op add :value :value *tmp44
+read *tmp7 MEMORY :head
+op add :value :value *tmp7
 op sub :head :head 1
 jump *label20 greaterThan :head 256
 op sub :head 511 1
@@ -4058,14 +4058,14 @@ label *label20
 op add :i :i 1
 jump *label36 lessThan :i SMOOTH
 label *label19
-op mul *tmp48 :value :scale
-op add :last 10 *tmp48
+op mul *tmp8 :value :scale
+op add :last 10 *tmp8
 set :newMax :value
 draw color 80 255 80 255
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label41 greaterThan :head 256
 op sub :head 511 1
@@ -4074,15 +4074,15 @@ op sub :tail :tail 1
 jump *label43 greaterThan :tail 256
 op sub :tail 511 1
 label *label43
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 159 :last 154 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label46 greaterThan :head 256
 op sub :head 511 1
@@ -4091,15 +4091,15 @@ op sub :tail :tail 1
 jump *label48 greaterThan :tail 256
 op sub :tail 511 1
 label *label48
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 154 :last 149 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label51 greaterThan :head 256
 op sub :head 511 1
@@ -4108,15 +4108,15 @@ op sub :tail :tail 1
 jump *label53 greaterThan :tail 256
 op sub :tail 511 1
 label *label53
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 149 :last 144 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label56 greaterThan :head 256
 op sub :head 511 1
@@ -4125,15 +4125,15 @@ op sub :tail :tail 1
 jump *label58 greaterThan :tail 256
 op sub :tail 511 1
 label *label58
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 144 :last 139 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label61 greaterThan :head 256
 op sub :head 511 1
@@ -4142,15 +4142,15 @@ op sub :tail :tail 1
 jump *label63 greaterThan :tail 256
 op sub :tail 511 1
 label *label63
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 139 :last 134 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label66 greaterThan :head 256
 op sub :head 511 1
@@ -4159,15 +4159,15 @@ op sub :tail :tail 1
 jump *label68 greaterThan :tail 256
 op sub :tail 511 1
 label *label68
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 134 :last 129 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label71 greaterThan :head 256
 op sub :head 511 1
@@ -4176,15 +4176,15 @@ op sub :tail :tail 1
 jump *label73 greaterThan :tail 256
 op sub :tail 511 1
 label *label73
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 129 :last 124 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label76 greaterThan :head 256
 op sub :head 511 1
@@ -4193,15 +4193,15 @@ op sub :tail :tail 1
 jump *label78 greaterThan :tail 256
 op sub :tail 511 1
 label *label78
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 124 :last 119 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label81 greaterThan :head 256
 op sub :head 511 1
@@ -4210,15 +4210,15 @@ op sub :tail :tail 1
 jump *label83 greaterThan :tail 256
 op sub :tail 511 1
 label *label83
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 119 :last 114 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label86 greaterThan :head 256
 op sub :head 511 1
@@ -4227,15 +4227,15 @@ op sub :tail :tail 1
 jump *label88 greaterThan :tail 256
 op sub :tail 511 1
 label *label88
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 114 :last 109 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label91 greaterThan :head 256
 op sub :head 511 1
@@ -4244,15 +4244,15 @@ op sub :tail :tail 1
 jump *label93 greaterThan :tail 256
 op sub :tail 511 1
 label *label93
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 109 :last 104 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label96 greaterThan :head 256
 op sub :head 511 1
@@ -4261,15 +4261,15 @@ op sub :tail :tail 1
 jump *label98 greaterThan :tail 256
 op sub :tail 511 1
 label *label98
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 104 :last 99 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label101 greaterThan :head 256
 op sub :head 511 1
@@ -4278,15 +4278,15 @@ op sub :tail :tail 1
 jump *label103 greaterThan :tail 256
 op sub :tail 511 1
 label *label103
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 99 :last 94 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label106 greaterThan :head 256
 op sub :head 511 1
@@ -4295,15 +4295,15 @@ op sub :tail :tail 1
 jump *label108 greaterThan :tail 256
 op sub :tail 511 1
 label *label108
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 94 :last 89 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label111 greaterThan :head 256
 op sub :head 511 1
@@ -4312,15 +4312,15 @@ op sub :tail :tail 1
 jump *label113 greaterThan :tail 256
 op sub :tail 511 1
 label *label113
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 89 :last 84 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label116 greaterThan :head 256
 op sub :head 511 1
@@ -4329,15 +4329,15 @@ op sub :tail :tail 1
 jump *label118 greaterThan :tail 256
 op sub :tail 511 1
 label *label118
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 84 :last 79 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label121 greaterThan :head 256
 op sub :head 511 1
@@ -4346,15 +4346,15 @@ op sub :tail :tail 1
 jump *label123 greaterThan :tail 256
 op sub :tail 511 1
 label *label123
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 79 :last 74 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label126 greaterThan :head 256
 op sub :head 511 1
@@ -4363,15 +4363,15 @@ op sub :tail :tail 1
 jump *label128 greaterThan :tail 256
 op sub :tail 511 1
 label *label128
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 74 :last 69 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label131 greaterThan :head 256
 op sub :head 511 1
@@ -4380,15 +4380,15 @@ op sub :tail :tail 1
 jump *label133 greaterThan :tail 256
 op sub :tail 511 1
 label *label133
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 69 :last 64 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label136 greaterThan :head 256
 op sub :head 511 1
@@ -4397,15 +4397,15 @@ op sub :tail :tail 1
 jump *label138 greaterThan :tail 256
 op sub :tail 511 1
 label *label138
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 64 :last 59 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label141 greaterThan :head 256
 op sub :head 511 1
@@ -4414,15 +4414,15 @@ op sub :tail :tail 1
 jump *label143 greaterThan :tail 256
 op sub :tail 511 1
 label *label143
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 59 :last 54 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label146 greaterThan :head 256
 op sub :head 511 1
@@ -4431,15 +4431,15 @@ op sub :tail :tail 1
 jump *label148 greaterThan :tail 256
 op sub :tail 511 1
 label *label148
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 54 :last 49 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label151 greaterThan :head 256
 op sub :head 511 1
@@ -4448,15 +4448,15 @@ op sub :tail :tail 1
 jump *label153 greaterThan :tail 256
 op sub :tail 511 1
 label *label153
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 49 :last 44 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label156 greaterThan :head 256
 op sub :head 511 1
@@ -4465,15 +4465,15 @@ op sub :tail :tail 1
 jump *label158 greaterThan :tail 256
 op sub :tail 511 1
 label *label158
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 44 :last 39 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label161 greaterThan :head 256
 op sub :head 511 1
@@ -4482,15 +4482,15 @@ op sub :tail :tail 1
 jump *label163 greaterThan :tail 256
 op sub :tail 511 1
 label *label163
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 39 :last 34 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label166 greaterThan :head 256
 op sub :head 511 1
@@ -4499,15 +4499,15 @@ op sub :tail :tail 1
 jump *label168 greaterThan :tail 256
 op sub :tail 511 1
 label *label168
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 34 :last 29 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label171 greaterThan :head 256
 op sub :head 511 1
@@ -4516,15 +4516,15 @@ op sub :tail :tail 1
 jump *label173 greaterThan :tail 256
 op sub :tail 511 1
 label *label173
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 29 :last 24 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
 op sub :head :head 1
 jump *label176 greaterThan :head 256
 op sub :head 511 1
@@ -4533,34 +4533,34 @@ op sub :tail :tail 1
 jump *label178 greaterThan :tail 256
 op sub :tail 511 1
 label *label178
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 24 :last 19 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
 read :h MEMORY :head
-op sub *tmp56 :value :t
-op add :value *tmp56 :h
-op mul *tmp64 :value :scale
-op add :y 10 *tmp64
+op sub *tmp9 :value :t
+op add :value *tmp9 :h
+op mul *tmp10 :value :scale
+op add :y 10 *tmp10
 draw line 19 :last 14 :y
 op max :newMax :newMax :value
 draw color 255 255 255 255
 draw lineRect 10 10 156 156
 op max :maximum :newMax :maximum
-op mul *tmp69 3 :newMax
-jump *label29 greaterThanEq *tmp69 :maximum
+op mul *tmp11 3 :newMax
+jump *label29 greaterThanEq *tmp11 :maximum
 op mul :maximum 1.5 :newMax
 label *label29
 write :maximum COORD POSITION
-op sub *tmp74 @time :start
-op floor *tmp75 *tmp74
+op sub *tmp12 @time :start
+op floor *tmp13 *tmp12
 print "\n[lightgray]Loop time: {0} ms"
-format *tmp75
-op div *tmp76 @time FREQ
-op ceil *tmp77 *tmp76
-op mul :wait FREQ *tmp77
+format *tmp13
+op div *tmp14 @time FREQ
+op ceil *tmp15 *tmp14
+op mul :wait FREQ *tmp15
 set :loops 0
 jump *label33 greaterThanEq @time :wait
 label *label38
@@ -4571,7 +4571,7 @@ drawflush display1
 print "\nLoops: "
 print :loops
 printflush message1
-sensor *tmp21 switch1 @enabled
-jump *label39 equal *tmp21 0
+sensor *tmp2 switch1 @enabled
+jump *label39 equal *tmp2 0
 label *label9
 control enabled switch1 0

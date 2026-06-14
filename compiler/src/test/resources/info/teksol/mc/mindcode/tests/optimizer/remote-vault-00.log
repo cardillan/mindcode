@@ -720,80 +720,80 @@ Final code before resolving virtual instructions:
 
 set LINK_ID 1
 op add .QUERY_FLAG 99999900 LINK_ID
-sensor *tmp1 vault1 @x
-sensor *tmp2 vault1 @y
-op mul *tmp3 @mapw *tmp2
-op add *tmp4 *tmp1 *tmp3
-op mul :position 100 *tmp4
+sensor *tmp0 vault1 @x
+sensor *tmp1 vault1 @y
+op mul *tmp2 @mapw *tmp1
+op add *tmp3 *tmp0 *tmp2
+op mul :position 100 *tmp3
 op add .ANSWER_FLAG :position LINK_ID
 set .SERVICED 0
 label *label0
 set :start @time
 ubind @mono
-sensor *tmp9 @unit @flag
-jump *label4 notEqual *tmp9 .QUERY_FLAG
+sensor *tmp4 @unit @flag
+jump *label4 notEqual *tmp4 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label4
 ubind @poly
-sensor *tmp13 @unit @flag
-jump *label7 notEqual *tmp13 .QUERY_FLAG
+sensor *tmp5 @unit @flag
+jump *label7 notEqual *tmp5 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label7
 ubind @mega
-sensor *tmp17 @unit @flag
-jump *label10 notEqual *tmp17 .QUERY_FLAG
+sensor *tmp6 @unit @flag
+jump *label10 notEqual *tmp6 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label10
 ubind @quad
-sensor *tmp21 @unit @flag
-jump *label13 notEqual *tmp21 .QUERY_FLAG
+sensor *tmp7 @unit @flag
+jump *label13 notEqual *tmp7 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label13
 ubind @oct
-sensor *tmp25 @unit @flag
-jump *label16 notEqual *tmp25 .QUERY_FLAG
+sensor *tmp8 @unit @flag
+jump *label16 notEqual *tmp8 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label16
 ubind @flare
-sensor *tmp29 @unit @flag
-jump *label19 notEqual *tmp29 .QUERY_FLAG
+sensor *tmp9 @unit @flag
+jump *label19 notEqual *tmp9 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label19
 ubind @horizon
-sensor *tmp33 @unit @flag
-jump *label22 notEqual *tmp33 .QUERY_FLAG
+sensor *tmp10 @unit @flag
+jump *label22 notEqual *tmp10 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label22
 ubind @zenith
-sensor *tmp37 @unit @flag
-jump *label25 notEqual *tmp37 .QUERY_FLAG
+sensor *tmp11 @unit @flag
+jump *label25 notEqual *tmp11 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label25
 ubind @antumbra
-sensor *tmp41 @unit @flag
-jump *label28 notEqual *tmp41 .QUERY_FLAG
+sensor *tmp12 @unit @flag
+jump *label28 notEqual *tmp12 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label28
 ubind @eclipse
-sensor *tmp45 @unit @flag
-jump *label31 notEqual *tmp45 .QUERY_FLAG
+sensor *tmp13 @unit @flag
+jump *label31 notEqual *tmp13 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label31
 print "Remote vault [gold]#{0}[]\nQueries serviced: [green]{0}[]\n[lightgray]Loop time: {0} ms\n"
 format LINK_ID
 format .SERVICED
-op sub *tmp48 @time :start
-op floor *tmp49 *tmp48
-format *tmp49
+op sub *tmp14 @time :start
+op floor *tmp15 *tmp14
+format *tmp15
 printflush message1
 jump *label0 always

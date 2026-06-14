@@ -524,8 +524,8 @@ label *label29
 set :up:index :i
 jump *label6 lessThanEq :i 0
 label *label30
-op sub *tmp2 :up:index 1
-op idiv :up:parent *tmp2 2
+op sub *tmp0 :up:index 1
+op idiv :up:parent *tmp0 2
 read :up:iv ARRAY :up:index
 read :up:pv ARRAY :up:parent
 jump *label6 greaterThanEq :up:pv :up:iv
@@ -541,22 +541,22 @@ op sub :index SIZE 1
 jump *label11 lessThanEq SIZE 1
 label *label31
 read :x ARRAY 0
-read *tmp23 ARRAY :index
-write *tmp23 ARRAY 0
+read *tmp1 ARRAY :index
+write *tmp1 ARRAY 0
 write :x ARRAY :index
 op sub :index :index 1
 # "Function: def down(in index)"
 set :down:parent 0
-set *tmp27 0
+set *tmp2 0
 set :down:child 1
 jump *label15 greaterThan 1 :index
 label *label33
 read :down:cv ARRAY :down:child
 jump *label16 greaterThanEq :down:child :index
-op add *tmp36 :down:child 1
-read *tmp39 ARRAY *tmp36
-jump *label18 greaterThanEq :down:cv *tmp39
-op add :down:child *tmp27 2
+op add *tmp3 :down:child 1
+read *tmp4 ARRAY *tmp3
+jump *label18 greaterThanEq :down:cv *tmp4
+op add :down:child *tmp2 2
 read :down:cv ARRAY :down:child
 label *label18
 label *label16
@@ -565,8 +565,8 @@ jump *label15 greaterThanEq :down:pv :down:cv
 write :down:cv ARRAY :down:parent
 write :down:pv ARRAY :down:child
 set :down:parent :down:child
-op mul *tmp27 :down:child 2
-op add :down:child *tmp27 1
+op mul *tmp2 :down:child 2
+op add :down:child *tmp2 1
 jump *label33 lessThanEq :down:child :index
 label *label15
 jump *label31 greaterThan :index 0
@@ -574,9 +574,9 @@ label *label11
 set :i 0
 jump *label24 greaterThanEq 0 SIZE
 label *label32
-read *tmp57 FINAL :i
-read *tmp58 ARRAY :i
-assertequals *tmp57 *tmp58 "unexpected value"
+read *tmp5 FINAL :i
+read *tmp6 ARRAY :i
+assertequals *tmp5 *tmp6 "unexpected value"
 op add :i :i 1
 jump *label32 lessThan :i SIZE
 label *label24

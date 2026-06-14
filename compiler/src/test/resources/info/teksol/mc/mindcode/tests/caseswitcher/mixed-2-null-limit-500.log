@@ -553,93 +553,93 @@ assertflush *tmp0
 set :printAll:i -1
 label *label61
 lookup block :identifyBlock:block :printAll:i
-sensor *tmp7 :identifyBlock:block @id
-multijump *tmp7 0 0
+sensor *tmp2 :identifyBlock:block @id
+multijump *tmp2 0 0
 label *label8
-set *tmp3 65
+set *tmp1 65
 jump *label6 always
 multilabel *label67
-set *tmp3 66                            # Origin: 4, keys: 4
+set *tmp1 66                            # Origin: 4, keys: 4
 jump *label6 always
 multilabel *label68
-set *tmp3 67                            # Origin: 4, keys: 5
+set *tmp1 67                            # Origin: 4, keys: 5
 jump *label6 always
 multilabel *label69
-set *tmp3 68                            # Origin: 4, keys: 6
+set *tmp1 68                            # Origin: 4, keys: 6
 jump *label6 always
 multilabel *label70
-set *tmp3 69                            # Origin: 4, keys: 7
+set *tmp1 69                            # Origin: 4, keys: 7
 jump *label6 always
 multilabel *label71
-set *tmp3 70                            # Origin: 4, keys: 8
+set *tmp1 70                            # Origin: 4, keys: 8
 jump *label6 always
 multilabel *label72
-set *tmp3 71                            # Origin: 4, keys: 9
+set *tmp1 71                            # Origin: 4, keys: 9
 jump *label6 always
 multilabel *label73
-set *tmp3 72                            # Origin: 4, keys: 10
+set *tmp1 72                            # Origin: 4, keys: 10
 jump *label6 always
 multilabel *label74
-set *tmp3 73                            # Origin: 4, keys: 11
+set *tmp1 73                            # Origin: 4, keys: 11
 jump *label6 always
 multilabel *label75
-set *tmp3 74                            # Origin: 4, keys: 12
+set *tmp1 74                            # Origin: 4, keys: 12
 jump *label6 always
 multilabel *label76
-set *tmp3 75                            # Origin: 4, keys: 13
+set *tmp1 75                            # Origin: 4, keys: 13
 jump *label6 always
 multilabel *label77
-set *tmp3 76                            # Origin: 4, keys: 29, 30
+set *tmp1 76                            # Origin: 4, keys: 29, 30
 jump *label6 always
 multilabel *label78
-set *tmp3 77                            # Origin: 4, keys: 31 .. 34
+set *tmp1 77                            # Origin: 4, keys: 31 .. 34
 jump *label6 always
 multilabel *label79
-set *tmp3 78                            # Origin: 4, keys: 41 .. 44
+set *tmp1 78                            # Origin: 4, keys: 41 .. 44
 jump *label6 always
 multilabel *label80
-set *tmp3 79                            # Origin: 4, keys: 60 .. 63
+set *tmp1 79                            # Origin: 4, keys: 60 .. 63
 jump *label6 always
 multilabel *label81
-set *tmp3 80                            # Origin: 4, keys: 64, 65, 146
+set *tmp1 80                            # Origin: 4, keys: 64, 65, 146
 jump *label6 always
 multilabel *label82
-set *tmp3 81                            # Origin: 4, keys: 216
+set *tmp1 81                            # Origin: 4, keys: 216
 jump *label6 always
 multilabel *label83
-set *tmp3 82                            # Origin: 4, keys: 230
+set *tmp1 82                            # Origin: 4, keys: 230
 jump *label6 always
 multilabel *label84
-set *tmp3 83                            # Origin: 4, keys: 231
+set *tmp1 83                            # Origin: 4, keys: 231
 jump *label6 always
 multilabel *label85
-set *tmp3 84                            # Origin: 4, keys: 232
+set *tmp1 84                            # Origin: 4, keys: 232
 jump *label6 always
 multilabel *label86
-set *tmp3 85                            # Origin: 4, keys: 235
+set *tmp1 85                            # Origin: 4, keys: 235
 jump *label6 always
 multilabel *label87
-set *tmp3 86                            # Origin: 4, keys: 236
+set *tmp1 86                            # Origin: 4, keys: 236
 jump *label6 always
 multilabel *label88
-set *tmp3 87                            # Origin: 4, keys: 237
+set *tmp1 87                            # Origin: 4, keys: 237
 jump *label6 always
 multilabel *label89
-set *tmp3 88                            # Origin: 4, keys: 238
+set *tmp1 88                            # Origin: 4, keys: 238
 jump *label6 always
 multilabel *label90
-set *tmp3 89                            # Origin: 4, keys: 241
+set *tmp1 89                            # Origin: 4, keys: 241
 jump *label6 always
 multilabel *label91
-set *tmp3 90                            # Origin: 4, keys: 242
+set *tmp1 90                            # Origin: 4, keys: 242
 jump *label6 always
 multilabel *label65
-jump *label8 strictEqual *tmp7 null
+jump *label8 strictEqual *tmp2 null
 multilabel *label66
-set *tmp3 48                            # Origin: 4, keys: 1 .. 3, 14 .. 28, 35 .. 40, 45 .. 59, 66 .. 145, 147 .. 215, 217 .. 229, 233, 234, 239, 240, 243 .. 260
+set *tmp1 48                            # Origin: 4, keys: 1 .. 3, 14 .. 28, 35 .. 40, 45 .. 59, 66 .. 145, 147 .. 215, 217 .. 229, 233, 234, 239, 240, 243 .. 260
 label *label6
-jump *label59 equal *tmp3 48
-printchar *tmp3
+jump *label59 equal *tmp1 48
+printchar *tmp1
 jump *label60 always
 label *label59
 label *label60

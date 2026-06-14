@@ -606,13 +606,13 @@ set :last_total :shipped
 set :index 0
 set .MILLIS 0
 set :wait 0
-sensor *tmp14 .SORTER @dead
-jump __start__ strictNotEqual *tmp14 0
+sensor *tmp0 .SORTER @dead
+jump __start__ strictNotEqual *tmp0 0
 label *label20
-sensor *tmp16 .VAULT @dead
-jump __start__ strictNotEqual *tmp16 0
-read *tmp21 .BANK 509
-jump __start__ strictNotEqual .SESSION_KEY *tmp21
+sensor *tmp1 .VAULT @dead
+jump __start__ strictNotEqual *tmp1 0
+read *tmp2 .BANK 509
+jump __start__ strictNotEqual .SESSION_KEY *tmp2
 set :start @time
 op add :wait :wait 1000
 jump *label12 lessThanEq :start :wait
@@ -629,12 +629,12 @@ label *label14
 read :last_total .BANK :index
 label *label15
 write :shipped .BANK :index
-op sub *tmp40 :shipped :last_total
-op div :flow_rate *tmp40 .SIGN_MILLIS
+op sub *tmp3 :shipped :last_total
+op div :flow_rate *tmp3 .SIGN_MILLIS
 write :flow_rate .BANK 507
 write @time .BANK 508
-op add *tmp47 :index 1
-op mod :index *tmp47 10
+op add *tmp4 :index 1
+op mod :index *tmp4 10
 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
 op div :seconds .MILLIS 1000
 op sub :elapsed @time :start
@@ -654,5 +654,5 @@ label *label19
 op add :loops :loops 1
 jump *label19 lessThan @time :wait
 label *label18
-sensor *tmp14 .SORTER @dead
-jump *label20 strictEqual *tmp14 0
+sensor *tmp0 .SORTER @dead
+jump *label20 strictEqual *tmp0 0

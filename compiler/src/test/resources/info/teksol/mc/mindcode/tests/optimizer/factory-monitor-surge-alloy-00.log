@@ -938,8 +938,8 @@ set :lastRate null
 set :icon null
 set :flow_str null
 control enabled switch1 0
-sensor *tmp8 switch1 @enabled
-jump __start__ notEqual *tmp8 0
+sensor *tmp0 switch1 @enabled
+jump __start__ notEqual *tmp0 0
 label *label43
 print "Surge Alloy Factory Monitor"
 jump *label5 equal bank1 null
@@ -961,12 +961,12 @@ draw color 0 255 0 255
 draw lineRect 164 89 8 84
 draw color 0 0 80 255
 draw rect 164 4 2 170
-op sub *tmp18 :rate .EXPECTED_FLOW
-op mul *tmp19 84 *tmp18
-op div *tmp20 *tmp19 .EXPECTED_FLOW
-op add :pos 88 *tmp20
-op max *tmp22 :pos 4
-op min :pos *tmp22 170
+op sub *tmp1 :rate .EXPECTED_FLOW
+op mul *tmp2 84 *tmp1
+op div *tmp3 *tmp2 .EXPECTED_FLOW
+op add :pos 88 *tmp3
+op max *tmp4 :pos 4
+op min :pos *tmp4 170
 op add :pos1 :pos 7
 op sub :pos2 :pos 7
 draw color 255 255 16 255
@@ -989,8 +989,8 @@ set :n 0
 jump *label13 greaterThanEq 0 @links
 label *label42
 getlink :smelter :n
-sensor *tmp31 :smelter @type
-jump *label14 notEqual *tmp31 @surge-smelter
+sensor *tmp5 :smelter @type
+jump *label14 notEqual *tmp5 @surge-smelter
 set :minimum 21
 sensor :t :smelter @titanium
 sensor :c :smelter @copper
@@ -1016,31 +1016,31 @@ jump *label22 greaterThanEq :t :minimum
 set :minimum :t
 set :icon @titanium
 label *label22
-op greaterThan *tmp50 :a 5
-op sub *tmp51 21 :a
-op lessThan *tmp52 *tmp51 :minimum
-op land :showa *tmp50 *tmp52
+op greaterThan *tmp6 :a 5
+op sub *tmp7 21 :a
+op lessThan *tmp8 *tmp7 :minimum
+op land :showa *tmp6 *tmp8
 select :icon notEqual :showa false @surge-alloy :icon
 op mod :column :index 2
 op idiv :row :index 2
-op mul *tmp57 :column .BAR_SPACE
-op add :x 5 *tmp57
-op mul *tmp59 :row 22
-op add :y 4 *tmp59
+op mul *tmp9 :column .BAR_SPACE
+op add :x 5 *tmp9
+op mul *tmp10 :row 22
+op add :y 4 *tmp10
 op sub :xm1 :x 1
 op sub :ym1 :y 1
 draw color 0 0 80 255
 draw rect :xm1 :ym1 .BAR_SPACE 16
-op greaterThan *tmp63 :minimum 16
-op equal *tmp64 :showa 0
-op land *tmp65 *tmp63 *tmp64
-select :icon notEqual *tmp65 false @surge-smelter :icon
+op greaterThan *tmp11 :minimum 16
+op equal *tmp12 :showa 0
+op land *tmp13 *tmp11 *tmp12
+select :icon notEqual *tmp13 false @surge-smelter :icon
 draw color 255 255 255 255
 jump *label28 equal :e false
 jump *label30 lessThanEq :power 0
-op add *tmp70 :x 7
-op add *tmp71 :y 7
-draw image *tmp70 *tmp71 :icon 16 0
+op add *tmp14 :x 7
+op add *tmp15 :y 7
+draw image *tmp14 *tmp15 :icon 16 0
 jump *label29 always
 label *label30
 op add :x12 :x 12
@@ -1048,16 +1048,16 @@ op add :y3 :y 3
 draw color 255 80 80 255
 draw rect :x :y3 14 8
 draw color 0 0 0 255
-op add *tmp74 :x 2
-op add *tmp75 :y 5
-draw rect *tmp74 *tmp75 8 4
+op add *tmp16 :x 2
+op add *tmp17 :y 5
+draw rect *tmp16 *tmp17 8 4
 draw rect :x12 :y3 2 2
-op add *tmp76 :y 9
-draw rect :x12 *tmp76 2 2
+op add *tmp18 :y 9
+draw rect :x12 *tmp18 2 2
 draw color 255 80 80 255
-op add *tmp77 :x 4
-op add *tmp78 :y 6
-draw rect *tmp77 *tmp78 2 2
+op add *tmp19 :x 4
+op add *tmp20 :y 6
+draw rect *tmp19 *tmp20 2 2
 jump *label29 always
 label *label28
 op add :x2 :x 2
@@ -1072,9 +1072,9 @@ draw color 0 0 0 255
 draw lineRect :xm1 :ym1 16 16
 draw stroke 2
 label *label29
-op add :x *tmp57 21
-op mul *tmp84 :power :e
-jump *label32 notEqual *tmp84 0
+op add :x *tmp9 21
+op mul *tmp21 :power :e
+jump *label32 notEqual *tmp21 0
 set :red 255
 set :green 0
 set :blue 0
@@ -1087,10 +1087,10 @@ set :blue 255
 set :minimum :a
 jump *label35 always
 label *label34
-op greaterThan *tmp88 :minimum 14
-op greaterThanEq *tmp89 :boost EXPECTED_BOOST
-op land *tmp90 *tmp88 *tmp89
-select :red notEqual *tmp90 false 0 255
+op greaterThan *tmp22 :minimum 14
+op greaterThanEq *tmp23 :boost EXPECTED_BOOST
+op land *tmp24 *tmp22 *tmp23
+select :red notEqual *tmp24 false 0 255
 select :green greaterThan :minimum 7 255 0
 set :blue 0
 label *label35
@@ -1101,12 +1101,12 @@ op max :green 192 :green
 op max :blue 192 :blue
 set :boost EXPECTED_BOOST
 label *label40
-op mul *tmp99 .BAR_LENGTH :boost
-op idiv :length *tmp99 EXPECTED_BOOST
+op mul *tmp25 .BAR_LENGTH :boost
+op idiv :length *tmp25 EXPECTED_BOOST
 draw color :red :green :blue 128
-op mul *tmp101 :minimum :length
-op idiv *tmp102 *tmp101 20
-draw rect :x :y *tmp102 14
+op mul *tmp26 :minimum :length
+op idiv *tmp27 *tmp26 20
+draw rect :x :y *tmp27 14
 draw color :red :green :blue 255
 draw lineRect :x :y :length 14
 op add :index :index 1
@@ -1115,10 +1115,10 @@ op add :n :n 1
 jump *label42 lessThan :n @links
 label *label13
 drawflush display1
-op sub *tmp105 @time :start
-op floor *tmp106 *tmp105
+op sub *tmp28 @time :start
+op floor *tmp29 *tmp28
 print "\nUpdate time: {0} ms"
-format *tmp106
+format *tmp29
 printflush message1
-sensor *tmp8 switch1 @enabled
-jump *label43 equal *tmp8 0
+sensor *tmp0 switch1 @enabled
+jump *label43 equal *tmp0 0

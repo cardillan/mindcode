@@ -1179,10 +1179,10 @@ op sub :n :n 1
 getlink :block :n
 print "\nFound: "
 print :block
-sensor *tmp5 :block @type
-sensor *tmp52 *tmp5 @id
-jump *label42 greaterThanEq *tmp52 147
-multijump *label44 *tmp52 0
+sensor *tmp0 :block @type
+sensor *tmp9 *tmp0 @id
+jump *label42 greaterThanEq *tmp9 147
+multijump *label44 *tmp9 0
 multilabel *label44
 jump *label42 always
 multilabel *label45
@@ -1562,19 +1562,19 @@ write .B0 .MEMORY 5
 write .R1 .MEMORY 6
 write .G1 .MEMORY 7
 write .B1 .MEMORY 8
-read *tmp20 .MEMORY 1
-op max *tmp19 .START_INDEX *tmp20
-op min :index *tmp19 .END_INDEX
+read *tmp2 .MEMORY 1
+op max *tmp1 .START_INDEX *tmp2
+op min :index *tmp1 .END_INDEX
 set :nextTick @tick
 control enabled .SWITCH 0
-sensor *tmp25 .SWITCH @enabled
-jump __start__ notEqual *tmp25 0
+sensor *tmp3 .SWITCH @enabled
+jump __start__ notEqual *tmp3 0
 label *label41
 set :startTime @time
 set :prevTick :nextTick
 op add :nextTick :nextTick TICKS
-op add *tmp29 :nextTick TICKS
-jump *label30 lessThanEq @tick *tmp29
+op add *tmp4 :nextTick TICKS
+jump *label30 lessThanEq @tick *tmp4
 set :prevTick @tick
 op add :nextTick :prevTick TICKS
 label *label30
@@ -1587,22 +1587,22 @@ jump *label40 lessThan @tick :nextTick
 label *label34
 sensor :amount .CONTAINER .SENSOR
 sensor :max .CONTAINER .MAXIMUM
-op mul *tmp39 :amount 150
-op div *tmp40 *tmp39 :max
-op add :scaled 10 *tmp40
+op mul *tmp5 :amount 150
+op div *tmp6 *tmp5 :max
+op add :scaled 10 *tmp6
 op add :index :index 1
 select :index greaterThan :index .END_INDEX .START_INDEX :index
 write :index .MEMORY 0
 write :scaled .MEMORY :index
-op sub *tmp49 :index .SIZE
-write :scaled .MEMORY *tmp49
+op sub *tmp7 :index .SIZE
+write :scaled .MEMORY *tmp7
 print "Item/Liquid/Energy Level Meter\nStartIndex: {0}\nIndex: {0}\nAmount: {0}\nScaled: {0}\nElapsed: {0}\n"
 format .START_INDEX
 format :index
 format :amount
 format :scaled
-op sub *tmp51 @time :startTime
-format *tmp51
+op sub *tmp8 @time :startTime
+format *tmp8
 printflush .MESSAGE
-sensor *tmp25 .SWITCH @enabled
-jump *label41 equal *tmp25 0
+sensor *tmp3 .SWITCH @enabled
+jump *label41 equal *tmp3 0

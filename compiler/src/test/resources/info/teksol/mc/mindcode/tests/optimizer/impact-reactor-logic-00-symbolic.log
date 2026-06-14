@@ -5760,16 +5760,16 @@ sensor *tmp1 node1 @powerNetOut
 op sub *tmp2 *tmp0 *tmp1
 op floor :surplus *tmp2
 jump *label5 lessThanEq :surplus 10000
-op sub *tmp5 @tick 3600
+op sub *tmp3 @tick 3600
 jump *label6 always
 label *label5
-set *tmp5 @tick
+set *tmp3 @tick
 label *label6
-set :t_startup1 *tmp5
-set :t_startup2 *tmp5
-set :t_startup3 *tmp5
-set :t_startup4 *tmp5
-set :t_startup5 *tmp5
+set :t_startup1 *tmp3
+set :t_startup2 *tmp3
+set :t_startup3 *tmp3
+set :t_startup4 *tmp3
+set :t_startup5 *tmp3
 set .REACTORS_DESIRED 5
 set .AVG_SURPLUS 500
 label *label7
@@ -5809,119 +5809,119 @@ set :check_radar*retval false
 label *label170
 # "Function: def check_manual_shutdown()"
 jump *label11 equal switch1 null
-sensor *tmp10 switch1 @enabled
-jump *label11 notEqual *tmp10 false
+sensor *tmp5 switch1 @enabled
+jump *label11 notEqual *tmp5 false
 print "User has disabled emergency switch"
 print "\n"
-set *tmp8 true
+set *tmp4 true
 jump *label10 always
 label *label11
-set *tmp8 false
+set *tmp4 false
 label *label10
-op or :emerg_shutdown :check_radar*retval *tmp8
+op or :emerg_shutdown :check_radar*retval *tmp4
 set :calc_charge_req:reactor reactor1
 # "Function: def calc_charge_req(in reactor, in time)"
-op sub *tmp98 @tick :t_startup1
-op idiv :calc_charge_req:secs *tmp98 60
+op sub *tmp20 @tick :t_startup1
+op idiv :calc_charge_req:secs *tmp20 60
 jump *label139 greaterThan :calc_charge_req:secs 30
-sensor *tmp101 :calc_charge_req:reactor @enabled
-jump *label140 notEqual *tmp101 false
+sensor *tmp21 :calc_charge_req:reactor @enabled
+jump *label140 notEqual *tmp21 false
 label *label139
 set :calc_charge_req*retval 0
 jump *label142 always
 label *label140
 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
-op mul *tmp105 :calc_charge_req:time_left :calc_charge_req:time_left
-op idiv :calc_charge_req:charge_req *tmp105 0.04
+op mul *tmp22 :calc_charge_req:time_left :calc_charge_req:time_left
+op idiv :calc_charge_req:charge_req *tmp22 0.04
 set :calc_charge_req*retval :calc_charge_req:charge_req
 label *label142
 set .START_POWER_REQ :calc_charge_req*retval
 set :calc_charge_req:reactor reactor2
 # "Function: def calc_charge_req(in reactor, in time)"
-op sub *tmp98 @tick :t_startup2
-op idiv :calc_charge_req:secs *tmp98 60
+op sub *tmp20 @tick :t_startup2
+op idiv :calc_charge_req:secs *tmp20 60
 jump *label144 greaterThan :calc_charge_req:secs 30
-sensor *tmp101 :calc_charge_req:reactor @enabled
-jump *label145 notEqual *tmp101 false
+sensor *tmp21 :calc_charge_req:reactor @enabled
+jump *label145 notEqual *tmp21 false
 label *label144
 set :calc_charge_req*retval 0
 jump *label147 always
 label *label145
 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
-op mul *tmp105 :calc_charge_req:time_left :calc_charge_req:time_left
-op idiv :calc_charge_req:charge_req *tmp105 0.04
+op mul *tmp22 :calc_charge_req:time_left :calc_charge_req:time_left
+op idiv :calc_charge_req:charge_req *tmp22 0.04
 set :calc_charge_req*retval :calc_charge_req:charge_req
 label *label147
 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req*retval
 set :calc_charge_req:reactor reactor3
 # "Function: def calc_charge_req(in reactor, in time)"
-op sub *tmp98 @tick :t_startup3
-op idiv :calc_charge_req:secs *tmp98 60
+op sub *tmp20 @tick :t_startup3
+op idiv :calc_charge_req:secs *tmp20 60
 jump *label149 greaterThan :calc_charge_req:secs 30
-sensor *tmp101 :calc_charge_req:reactor @enabled
-jump *label150 notEqual *tmp101 false
+sensor *tmp21 :calc_charge_req:reactor @enabled
+jump *label150 notEqual *tmp21 false
 label *label149
 set :calc_charge_req*retval 0
 jump *label152 always
 label *label150
 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
-op mul *tmp105 :calc_charge_req:time_left :calc_charge_req:time_left
-op idiv :calc_charge_req:charge_req *tmp105 0.04
+op mul *tmp22 :calc_charge_req:time_left :calc_charge_req:time_left
+op idiv :calc_charge_req:charge_req *tmp22 0.04
 set :calc_charge_req*retval :calc_charge_req:charge_req
 label *label152
 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req*retval
 set :calc_charge_req:reactor reactor4
 # "Function: def calc_charge_req(in reactor, in time)"
-op sub *tmp98 @tick :t_startup4
-op idiv :calc_charge_req:secs *tmp98 60
+op sub *tmp20 @tick :t_startup4
+op idiv :calc_charge_req:secs *tmp20 60
 jump *label154 greaterThan :calc_charge_req:secs 30
-sensor *tmp101 :calc_charge_req:reactor @enabled
-jump *label155 notEqual *tmp101 false
+sensor *tmp21 :calc_charge_req:reactor @enabled
+jump *label155 notEqual *tmp21 false
 label *label154
 set :calc_charge_req*retval 0
 jump *label157 always
 label *label155
 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
-op mul *tmp105 :calc_charge_req:time_left :calc_charge_req:time_left
-op idiv :calc_charge_req:charge_req *tmp105 0.04
+op mul *tmp22 :calc_charge_req:time_left :calc_charge_req:time_left
+op idiv :calc_charge_req:charge_req *tmp22 0.04
 set :calc_charge_req*retval :calc_charge_req:charge_req
 label *label157
 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req*retval
 set :calc_charge_req:reactor reactor5
 # "Function: def calc_charge_req(in reactor, in time)"
-op sub *tmp98 @tick :t_startup5
-op idiv :calc_charge_req:secs *tmp98 60
+op sub *tmp20 @tick :t_startup5
+op idiv :calc_charge_req:secs *tmp20 60
 jump *label159 greaterThan :calc_charge_req:secs 30
-sensor *tmp101 :calc_charge_req:reactor @enabled
-jump *label160 notEqual *tmp101 false
+sensor *tmp21 :calc_charge_req:reactor @enabled
+jump *label160 notEqual *tmp21 false
 label *label159
 set :calc_charge_req*retval 0
 jump *label162 always
 label *label160
 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
-op mul *tmp105 :calc_charge_req:time_left :calc_charge_req:time_left
-op idiv :calc_charge_req:charge_req *tmp105 0.04
+op mul *tmp22 :calc_charge_req:time_left :calc_charge_req:time_left
+op idiv :calc_charge_req:charge_req *tmp22 0.04
 set :calc_charge_req*retval :calc_charge_req:charge_req
 label *label162
 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req*retval
 set :start_reactor:reactor reactor1
 # "Function: def start_reactor(in reactor, in reactor_num, in emerg_shutdown, in fuel_on, in t_startup)"
 set .RET_T_STARTUP :t_startup1
-op sub *tmp108 @tick :t_startup1
-op idiv :start_reactor:secs *tmp108 60
+op sub *tmp23 @tick :t_startup1
+op idiv :start_reactor:secs *tmp23 60
 sensor :start_reactor:fuel :start_reactor:reactor @blast-compound
 set :start_reactor:supply_fuel true
 sensor :start_reactor:fuel_stored .CONTAINER @blast-compound
 sensor :start_reactor:cryo :start_reactor:reactor @cryofluid
-sensor *tmp113 .NODE @powerNetStored
-op floor :start_reactor:charge *tmp113
-sensor *tmp115 .NODE @powerNetIn
-sensor *tmp116 .NODE @powerNetOut
-op sub *tmp117 *tmp115 *tmp116
-op floor :start_reactor:surplus *tmp117
-op mul *tmp119 .AVG_SURPLUS 0.8
-op mul *tmp120 :start_reactor:surplus 0.2
-op add .AVG_SURPLUS *tmp119 *tmp120
+sensor *tmp24 .NODE @powerNetStored
+op floor :start_reactor:charge *tmp24
+sensor *tmp25 .NODE @powerNetIn
+sensor *tmp26 .NODE @powerNetOut
+op sub *tmp27 *tmp25 *tmp26
+op floor :start_reactor:surplus *tmp27
+op mul *tmp28 .AVG_SURPLUS 0.8
+op mul *tmp29 :start_reactor:surplus 0.2
+op add .AVG_SURPLUS *tmp28 *tmp29
 sensor :start_reactor:enabled :start_reactor:reactor @enabled
 print "#1 - "
 jump *label177 equal :emerg_shutdown false
@@ -5948,22 +5948,22 @@ jump *label210 always
 label *label181
 jump *label189 greaterThanEq :start_reactor:secs 30
 # "Function: def calc_charge_req(in reactor, in time)"
-op sub *tmp98 @tick :t_startup1
-op idiv :calc_charge_req:secs *tmp98 60
+op sub *tmp20 @tick :t_startup1
+op idiv :calc_charge_req:secs *tmp20 60
 jump *label183 greaterThan :calc_charge_req:secs 30
-sensor *tmp101 :start_reactor:reactor @enabled
-jump *label184 notEqual *tmp101 false
+sensor *tmp21 :start_reactor:reactor @enabled
+jump *label184 notEqual *tmp21 false
 label *label183
 set :calc_charge_req*retval 0
 jump *label186 always
 label *label184
 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
-op mul *tmp105 :calc_charge_req:time_left :calc_charge_req:time_left
-op idiv :calc_charge_req:charge_req *tmp105 0.04
+op mul *tmp22 :calc_charge_req:time_left :calc_charge_req:time_left
+op idiv :calc_charge_req:charge_req *tmp22 0.04
 set :calc_charge_req*retval :calc_charge_req:charge_req
 label *label186
-op sub *tmp147 :start_reactor:charge :calc_charge_req*retval
-jump *label187 greaterThanEq *tmp147 5000
+op sub *tmp31 :start_reactor:charge :calc_charge_req*retval
+jump *label187 greaterThanEq *tmp31 5000
 jump *label187 greaterThanEq :start_reactor:surplus -500
 control enabled :start_reactor:reactor false
 print "START FAIL battery\n"
@@ -5992,25 +5992,25 @@ print :start_reactor:mins
 print " mins\n"
 jump *label210 always
 label *label197
-op sub *tmp161 :start_reactor:charge .START_POWER_REQ
-op sub *tmp162 *tmp161 5000
-op div *tmp163 *tmp162 23000
-op div :start_reactor:charge_units *tmp162 38333.333333333336
-op div *tmp165 :start_reactor:surplus 2000
-op max :start_reactor:flow_units -0.1 *tmp165
-op mul *tmp167 2 1
+op sub *tmp32 :start_reactor:charge .START_POWER_REQ
+op sub *tmp33 *tmp32 5000
+op div *tmp34 *tmp33 23000
+op div :start_reactor:charge_units *tmp33 38333.333333333336
+op div *tmp35 :start_reactor:surplus 2000
+op max :start_reactor:flow_units -0.1 *tmp35
+op mul *tmp36 2 1
 op add :start_reactor:cryo_req 3 2
 jump *label198 greaterThanEq .REACTORS_DESIRED 1
 print "IDLE\n"
 set :start_reactor:supply_fuel false
 jump *label209 always
 label *label198
-op add *tmp171 :start_reactor:flow_units :start_reactor:charge_units
-jump *label199 greaterThanEq *tmp171 1
-op idiv *tmp175 :start_reactor:flow_units 0.001
-op div :start_reactor:flow *tmp175 10
-op idiv *tmp178 :start_reactor:charge_units 0.001
-op div :start_reactor:charge *tmp178 10
+op add *tmp37 :start_reactor:flow_units :start_reactor:charge_units
+jump *label199 greaterThanEq *tmp37 1
+op idiv *tmp38 :start_reactor:flow_units 0.001
+op div :start_reactor:flow *tmp38 10
+op idiv *tmp39 :start_reactor:charge_units 0.001
+op div :start_reactor:charge *tmp39 10
 print "WAIT power. (%"
 print :start_reactor:charge
 print "J + %"
@@ -6021,15 +6021,15 @@ jump *label208 always
 label *label199
 jump *label202 equal :fuel_1 false
 jump *label202 greaterThanEq :start_reactor:fuel 10
-op add *tmp182 :start_reactor:fuel :start_reactor:fuel_stored
-jump *label200 lessThanEq *tmp182 10
+op add *tmp40 :start_reactor:fuel :start_reactor:fuel_stored
+jump *label200 lessThanEq *tmp40 10
 print "WAIT fuel\n"
 jump *label207 always
 label *label200
 print "WAIT system fuel\n"
 jump *label207 always
 label *label202
-op mul *tmp185 45 1
+op mul *tmp41 45 1
 jump *label203 greaterThanEq :start_reactor:fuel_stored 45
 print "WAIT buffer fuel\n"
 jump *label206 always
@@ -6048,8 +6048,8 @@ label *label208
 label *label209
 label *label210
 label *label211
-sensor *tmp192 :start_reactor:reactor @enabled
-jump *label212 equal :start_reactor:enabled *tmp192
+sensor *tmp42 :start_reactor:reactor @enabled
+jump *label212 equal :start_reactor:enabled *tmp42
 set .RET_T_STARTUP @tick
 label *label212
 set :fuel_1 :start_reactor:supply_fuel
@@ -6070,21 +6070,21 @@ label *label124
 set :start_reactor:reactor reactor2
 # "Function: def start_reactor(in reactor, in reactor_num, in emerg_shutdown, in fuel_on, in t_startup)"
 set .RET_T_STARTUP :t_startup2
-op sub *tmp108 @tick :t_startup2
-op idiv :start_reactor:secs *tmp108 60
+op sub *tmp23 @tick :t_startup2
+op idiv :start_reactor:secs *tmp23 60
 sensor :start_reactor:fuel :start_reactor:reactor @blast-compound
 set :start_reactor:supply_fuel true
 sensor :start_reactor:fuel_stored .CONTAINER @blast-compound
 sensor :start_reactor:cryo :start_reactor:reactor @cryofluid
-sensor *tmp113 .NODE @powerNetStored
-op floor :start_reactor:charge *tmp113
-sensor *tmp115 .NODE @powerNetIn
-sensor *tmp116 .NODE @powerNetOut
-op sub *tmp117 *tmp115 *tmp116
-op floor :start_reactor:surplus *tmp117
-op mul *tmp119 .AVG_SURPLUS 0.8
-op mul *tmp120 :start_reactor:surplus 0.2
-op add .AVG_SURPLUS *tmp119 *tmp120
+sensor *tmp24 .NODE @powerNetStored
+op floor :start_reactor:charge *tmp24
+sensor *tmp25 .NODE @powerNetIn
+sensor *tmp26 .NODE @powerNetOut
+op sub *tmp27 *tmp25 *tmp26
+op floor :start_reactor:surplus *tmp27
+op mul *tmp28 .AVG_SURPLUS 0.8
+op mul *tmp29 :start_reactor:surplus 0.2
+op add .AVG_SURPLUS *tmp28 *tmp29
 sensor :start_reactor:enabled :start_reactor:reactor @enabled
 print "#2 - "
 jump *label216 equal :emerg_shutdown false
@@ -6099,7 +6099,7 @@ control enabled :start_reactor:reactor false
 print "STOP unwanted\n"
 jump *label249 always
 label *label217
-op mul *tmp132 15 2
+op mul *tmp30 15 2
 jump *label218 greaterThanEq :start_reactor:fuel_stored 30
 control enabled :start_reactor:reactor false
 print "STOP system fuel low\n"
@@ -6117,22 +6117,22 @@ jump *label249 always
 label *label220
 jump *label228 greaterThanEq :start_reactor:secs 30
 # "Function: def calc_charge_req(in reactor, in time)"
-op sub *tmp98 @tick :t_startup2
-op idiv :calc_charge_req:secs *tmp98 60
+op sub *tmp20 @tick :t_startup2
+op idiv :calc_charge_req:secs *tmp20 60
 jump *label222 greaterThan :calc_charge_req:secs 30
-sensor *tmp101 :start_reactor:reactor @enabled
-jump *label223 notEqual *tmp101 false
+sensor *tmp21 :start_reactor:reactor @enabled
+jump *label223 notEqual *tmp21 false
 label *label222
 set :calc_charge_req*retval 0
 jump *label225 always
 label *label223
 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
-op mul *tmp105 :calc_charge_req:time_left :calc_charge_req:time_left
-op idiv :calc_charge_req:charge_req *tmp105 0.04
+op mul *tmp22 :calc_charge_req:time_left :calc_charge_req:time_left
+op idiv :calc_charge_req:charge_req *tmp22 0.04
 set :calc_charge_req*retval :calc_charge_req:charge_req
 label *label225
-op sub *tmp147 :start_reactor:charge :calc_charge_req*retval
-jump *label226 greaterThanEq *tmp147 5000
+op sub *tmp31 :start_reactor:charge :calc_charge_req*retval
+jump *label226 greaterThanEq *tmp31 5000
 jump *label226 greaterThanEq :start_reactor:surplus -500
 control enabled :start_reactor:reactor false
 print "START FAIL battery\n"
@@ -6161,25 +6161,25 @@ print :start_reactor:mins
 print " mins\n"
 jump *label249 always
 label *label236
-op sub *tmp161 :start_reactor:charge .START_POWER_REQ
-op sub *tmp162 *tmp161 5000
-op div *tmp163 *tmp162 23000
-op div :start_reactor:charge_units *tmp162 38333.333333333336
-op div *tmp165 :start_reactor:surplus 2000
-op max :start_reactor:flow_units -0.1 *tmp165
-op mul *tmp167 2 2
+op sub *tmp32 :start_reactor:charge .START_POWER_REQ
+op sub *tmp33 *tmp32 5000
+op div *tmp34 *tmp33 23000
+op div :start_reactor:charge_units *tmp33 38333.333333333336
+op div *tmp35 :start_reactor:surplus 2000
+op max :start_reactor:flow_units -0.1 *tmp35
+op mul *tmp36 2 2
 op add :start_reactor:cryo_req 3 4
 jump *label237 greaterThanEq .REACTORS_DESIRED 2
 print "IDLE\n"
 set :start_reactor:supply_fuel false
 jump *label248 always
 label *label237
-op add *tmp171 :start_reactor:flow_units :start_reactor:charge_units
-jump *label238 greaterThanEq *tmp171 1
-op idiv *tmp175 :start_reactor:flow_units 0.001
-op div :start_reactor:flow *tmp175 10
-op idiv *tmp178 :start_reactor:charge_units 0.001
-op div :start_reactor:charge *tmp178 10
+op add *tmp37 :start_reactor:flow_units :start_reactor:charge_units
+jump *label238 greaterThanEq *tmp37 1
+op idiv *tmp38 :start_reactor:flow_units 0.001
+op div :start_reactor:flow *tmp38 10
+op idiv *tmp39 :start_reactor:charge_units 0.001
+op div :start_reactor:charge *tmp39 10
 print "WAIT power. (%"
 print :start_reactor:charge
 print "J + %"
@@ -6190,15 +6190,15 @@ jump *label247 always
 label *label238
 jump *label241 equal :fuel_2 false
 jump *label241 greaterThanEq :start_reactor:fuel 10
-op add *tmp182 :start_reactor:fuel :start_reactor:fuel_stored
-jump *label239 lessThanEq *tmp182 10
+op add *tmp40 :start_reactor:fuel :start_reactor:fuel_stored
+jump *label239 lessThanEq *tmp40 10
 print "WAIT fuel\n"
 jump *label246 always
 label *label239
 print "WAIT system fuel\n"
 jump *label246 always
 label *label241
-op mul *tmp185 45 2
+op mul *tmp41 45 2
 jump *label242 greaterThanEq :start_reactor:fuel_stored 90
 print "WAIT buffer fuel\n"
 jump *label245 always
@@ -6217,8 +6217,8 @@ label *label247
 label *label248
 label *label249
 label *label250
-sensor *tmp192 :start_reactor:reactor @enabled
-jump *label251 equal :start_reactor:enabled *tmp192
+sensor *tmp42 :start_reactor:reactor @enabled
+jump *label251 equal :start_reactor:enabled *tmp42
 set .RET_T_STARTUP @tick
 label *label251
 set :fuel_2 :start_reactor:supply_fuel
@@ -6264,21 +6264,21 @@ op or :emerg_shutdown :emerg_shutdown :check_radar*retval
 set :start_reactor:reactor reactor3
 # "Function: def start_reactor(in reactor, in reactor_num, in emerg_shutdown, in fuel_on, in t_startup)"
 set .RET_T_STARTUP :t_startup3
-op sub *tmp108 @tick :t_startup3
-op idiv :start_reactor:secs *tmp108 60
+op sub *tmp23 @tick :t_startup3
+op idiv :start_reactor:secs *tmp23 60
 sensor :start_reactor:fuel :start_reactor:reactor @blast-compound
 set :start_reactor:supply_fuel true
 sensor :start_reactor:fuel_stored .CONTAINER @blast-compound
 sensor :start_reactor:cryo :start_reactor:reactor @cryofluid
-sensor *tmp113 .NODE @powerNetStored
-op floor :start_reactor:charge *tmp113
-sensor *tmp115 .NODE @powerNetIn
-sensor *tmp116 .NODE @powerNetOut
-op sub *tmp117 *tmp115 *tmp116
-op floor :start_reactor:surplus *tmp117
-op mul *tmp119 .AVG_SURPLUS 0.8
-op mul *tmp120 :start_reactor:surplus 0.2
-op add .AVG_SURPLUS *tmp119 *tmp120
+sensor *tmp24 .NODE @powerNetStored
+op floor :start_reactor:charge *tmp24
+sensor *tmp25 .NODE @powerNetIn
+sensor *tmp26 .NODE @powerNetOut
+op sub *tmp27 *tmp25 *tmp26
+op floor :start_reactor:surplus *tmp27
+op mul *tmp28 .AVG_SURPLUS 0.8
+op mul *tmp29 :start_reactor:surplus 0.2
+op add .AVG_SURPLUS *tmp28 *tmp29
 sensor :start_reactor:enabled :start_reactor:reactor @enabled
 print "#3 - "
 jump *label255 equal :emerg_shutdown false
@@ -6293,7 +6293,7 @@ control enabled :start_reactor:reactor false
 print "STOP unwanted\n"
 jump *label288 always
 label *label256
-op mul *tmp132 15 3
+op mul *tmp30 15 3
 jump *label257 greaterThanEq :start_reactor:fuel_stored 45
 control enabled :start_reactor:reactor false
 print "STOP system fuel low\n"
@@ -6311,22 +6311,22 @@ jump *label288 always
 label *label259
 jump *label267 greaterThanEq :start_reactor:secs 30
 # "Function: def calc_charge_req(in reactor, in time)"
-op sub *tmp98 @tick :t_startup3
-op idiv :calc_charge_req:secs *tmp98 60
+op sub *tmp20 @tick :t_startup3
+op idiv :calc_charge_req:secs *tmp20 60
 jump *label261 greaterThan :calc_charge_req:secs 30
-sensor *tmp101 :start_reactor:reactor @enabled
-jump *label262 notEqual *tmp101 false
+sensor *tmp21 :start_reactor:reactor @enabled
+jump *label262 notEqual *tmp21 false
 label *label261
 set :calc_charge_req*retval 0
 jump *label264 always
 label *label262
 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
-op mul *tmp105 :calc_charge_req:time_left :calc_charge_req:time_left
-op idiv :calc_charge_req:charge_req *tmp105 0.04
+op mul *tmp22 :calc_charge_req:time_left :calc_charge_req:time_left
+op idiv :calc_charge_req:charge_req *tmp22 0.04
 set :calc_charge_req*retval :calc_charge_req:charge_req
 label *label264
-op sub *tmp147 :start_reactor:charge :calc_charge_req*retval
-jump *label265 greaterThanEq *tmp147 5000
+op sub *tmp31 :start_reactor:charge :calc_charge_req*retval
+jump *label265 greaterThanEq *tmp31 5000
 jump *label265 greaterThanEq :start_reactor:surplus -500
 control enabled :start_reactor:reactor false
 print "START FAIL battery\n"
@@ -6355,25 +6355,25 @@ print :start_reactor:mins
 print " mins\n"
 jump *label288 always
 label *label275
-op sub *tmp161 :start_reactor:charge .START_POWER_REQ
-op sub *tmp162 *tmp161 5000
-op div *tmp163 *tmp162 23000
-op div :start_reactor:charge_units *tmp162 38333.333333333336
-op div *tmp165 :start_reactor:surplus 2000
-op max :start_reactor:flow_units -0.1 *tmp165
-op mul *tmp167 2 3
+op sub *tmp32 :start_reactor:charge .START_POWER_REQ
+op sub *tmp33 *tmp32 5000
+op div *tmp34 *tmp33 23000
+op div :start_reactor:charge_units *tmp33 38333.333333333336
+op div *tmp35 :start_reactor:surplus 2000
+op max :start_reactor:flow_units -0.1 *tmp35
+op mul *tmp36 2 3
 op add :start_reactor:cryo_req 3 6
 jump *label276 greaterThanEq .REACTORS_DESIRED 3
 print "IDLE\n"
 set :start_reactor:supply_fuel false
 jump *label287 always
 label *label276
-op add *tmp171 :start_reactor:flow_units :start_reactor:charge_units
-jump *label277 greaterThanEq *tmp171 1
-op idiv *tmp175 :start_reactor:flow_units 0.001
-op div :start_reactor:flow *tmp175 10
-op idiv *tmp178 :start_reactor:charge_units 0.001
-op div :start_reactor:charge *tmp178 10
+op add *tmp37 :start_reactor:flow_units :start_reactor:charge_units
+jump *label277 greaterThanEq *tmp37 1
+op idiv *tmp38 :start_reactor:flow_units 0.001
+op div :start_reactor:flow *tmp38 10
+op idiv *tmp39 :start_reactor:charge_units 0.001
+op div :start_reactor:charge *tmp39 10
 print "WAIT power. (%"
 print :start_reactor:charge
 print "J + %"
@@ -6384,15 +6384,15 @@ jump *label286 always
 label *label277
 jump *label280 equal :fuel_3 false
 jump *label280 greaterThanEq :start_reactor:fuel 10
-op add *tmp182 :start_reactor:fuel :start_reactor:fuel_stored
-jump *label278 lessThanEq *tmp182 10
+op add *tmp40 :start_reactor:fuel :start_reactor:fuel_stored
+jump *label278 lessThanEq *tmp40 10
 print "WAIT fuel\n"
 jump *label285 always
 label *label278
 print "WAIT system fuel\n"
 jump *label285 always
 label *label280
-op mul *tmp185 45 3
+op mul *tmp41 45 3
 jump *label281 greaterThanEq :start_reactor:fuel_stored 135
 print "WAIT buffer fuel\n"
 jump *label284 always
@@ -6411,8 +6411,8 @@ label *label286
 label *label287
 label *label288
 label *label289
-sensor *tmp192 :start_reactor:reactor @enabled
-jump *label290 equal :start_reactor:enabled *tmp192
+sensor *tmp42 :start_reactor:reactor @enabled
+jump *label290 equal :start_reactor:enabled *tmp42
 set .RET_T_STARTUP @tick
 label *label290
 set :fuel_3 :start_reactor:supply_fuel
@@ -6433,30 +6433,30 @@ set :start_reactor:t_startup :t_startup5
 call *label3 :start_reactor*retaddr :start_reactor*retval
 set :fuel_5 :start_reactor*retval
 set :t_startup5 .RET_T_STARTUP
-op or *tmp231 :start_reactor:supply_fuel :fuel_4
-op or *tmp26 *tmp231 :start_reactor*retval
+op or *tmp43 :start_reactor:supply_fuel :fuel_4
+op or *tmp6 *tmp43 :start_reactor*retval
 # "Function: def update_fuel(in fuel, in uld_in, in uld_out)"
-jump *label133 equal *tmp26 false
+jump *label133 equal *tmp6 false
 control config .ULD_IN_MANY @blast-compound
 jump *label134 always
 label *label133
 control config .ULD_IN_MANY @scrap
 label *label134
-jump *label135 notEqual *tmp26 false
+jump *label135 notEqual *tmp6 false
 control config .ULD_OUT_MANY @blast-compound
 jump *label136 always
 label *label135
 control config .ULD_OUT_MANY @scrap
 label *label136
-op or *tmp232 :fuel_1 :fuel_2
-op or *tmp28 *tmp232 *tmp26
+op or *tmp44 :fuel_1 :fuel_2
+op or *tmp7 *tmp44 *tmp6
 # "Function: def throttle_blast(in reactors_fueled, in emerg_shutdown)"
-sensor *tmp30 .NODE @powerNetStored
-op floor :throttle_blast:charge *tmp30
-sensor *tmp32 .NODE @powerNetIn
-sensor *tmp33 .NODE @powerNetOut
-op sub *tmp34 *tmp32 *tmp33
-op floor :throttle_blast:surplus *tmp34
+sensor *tmp8 .NODE @powerNetStored
+op floor :throttle_blast:charge *tmp8
+sensor *tmp9 .NODE @powerNetIn
+sensor *tmp10 .NODE @powerNetOut
+op sub *tmp11 *tmp9 *tmp10
+op floor :throttle_blast:surplus *tmp11
 sensor :throttle_blast:fuel_stored .CONTAINER @blast-compound
 jump *label29 greaterThanEq :throttle_blast:charge 5000
 jump *label28 lessThan :throttle_blast:surplus -500
@@ -6474,7 +6474,7 @@ label *label31
 print " Critical power.\n"
 jump *label27 always
 label *label26
-jump *label33 notEqual *tmp28 false
+jump *label33 notEqual *tmp7 false
 set :throttle_blast:limit 150
 print "Fuel "
 print :throttle_blast:fuel_stored
@@ -6494,9 +6494,9 @@ label *label35
 control config .ULD_MIXER @scrap
 label *label36
 # "Function: def diff_generators()"
-sensor *tmp48 .NODE @powerNetStored
-sensor *tmp49 .NODE @powerNetCapacity
-op div :diff_generators:stored_pc *tmp48 *tmp49
+sensor *tmp12 .NODE @powerNetStored
+sensor *tmp13 .NODE @powerNetCapacity
+op div :diff_generators:stored_pc *tmp12 *tmp13
 jump *label38 lessThanEq :diff_generators:stored_pc 0.9
 jump *label38 greaterThanEq .START_POWER_REQ 10
 print "Differential now idle.\n"
@@ -6508,17 +6508,17 @@ control enabled generator1 true
 control enabled generator2 true
 label *label39
 # "Function: def kilo(in val)"
-op idiv *tmp89 .AVG_SURPLUS 100
-op div :surplus *tmp89 10
+op idiv *tmp19 .AVG_SURPLUS 100
+op div :surplus *tmp19 10
 sensor :kilo:val .NODE @powerNetStored
 # "Function: def kilo(in val)"
-op idiv *tmp89 :kilo:val 100
-op div :kilo*retval *tmp89 10
+op idiv *tmp19 :kilo:val 100
+op div :kilo*retval *tmp19 10
 set :charge :kilo*retval
 jump *label42 lessThanEq .START_POWER_REQ 0
 # "Function: def kilo(in val)"
-op idiv *tmp89 .START_POWER_REQ 100
-op div :kilo*retval *tmp89 10
+op idiv *tmp19 .START_POWER_REQ 100
+op div :kilo*retval *tmp19 10
 print "Req "
 print :kilo*retval
 print "kJ / "
@@ -6534,9 +6534,9 @@ print "kW, "
 print :kilo*retval
 print "kJ\n"
 # "Function: def update_reactors_desired()"
-sensor *tmp69 .NODE @powerNetStored
-sensor *tmp70 .NODE @powerNetCapacity
-op div :update_reactors_desired:stored *tmp69 *tmp70
+sensor *tmp14 .NODE @powerNetStored
+sensor *tmp15 .NODE @powerNetCapacity
+op div :update_reactors_desired:stored *tmp14 *tmp15
 jump *label45 lessThanEq :update_reactors_desired:stored 0.98
 jump *label45 lessThanEq .AVG_SURPLUS 16500
 jump *label49 lessThanEq .REACTORS_DESIRED 2
@@ -6546,11 +6546,11 @@ label *label49
 label *label45
 jump *label51 greaterThanEq :update_reactors_desired:stored 0.8
 jump *label51 greaterThanEq .AVG_SURPLUS 8000
-op sub *tmp82 .AVG_SURPLUS 10000
-op idiv *tmp83 *tmp82 6500
-op max :update_reactors_desired:needed 1 *tmp83
-op add *tmp85 :update_reactors_desired:needed .REACTORS_DESIRED
-op min .REACTORS_DESIRED 5 *tmp85
+op sub *tmp16 .AVG_SURPLUS 10000
+op idiv *tmp17 *tmp16 6500
+op max :update_reactors_desired:needed 1 *tmp17
+op add *tmp18 :update_reactors_desired:needed .REACTORS_DESIRED
+op min .REACTORS_DESIRED 5 *tmp18
 label *label51
 label *label43
 jump *label55 equal .REACTORS_DESIRED 5
@@ -6563,21 +6563,21 @@ jump *label7 always
 label *label3
 # "Function: def start_reactor(in reactor, in reactor_num, in emerg_shutdown, in fuel_on, in t_startup)"
 set .RET_T_STARTUP :start_reactor:t_startup
-op sub *tmp108 @tick :start_reactor:t_startup
-op idiv :start_reactor:secs *tmp108 60
+op sub *tmp23 @tick :start_reactor:t_startup
+op idiv :start_reactor:secs *tmp23 60
 sensor :start_reactor:fuel :start_reactor:reactor @blast-compound
 set :start_reactor*retval true
 sensor :start_reactor:fuel_stored .CONTAINER @blast-compound
 sensor :start_reactor:cryo :start_reactor:reactor @cryofluid
-sensor *tmp113 .NODE @powerNetStored
-op floor :start_reactor:charge *tmp113
-sensor *tmp115 .NODE @powerNetIn
-sensor *tmp116 .NODE @powerNetOut
-op sub *tmp117 *tmp115 *tmp116
-op floor :start_reactor:surplus *tmp117
-op mul *tmp119 .AVG_SURPLUS 0.8
-op mul *tmp120 :start_reactor:surplus 0.2
-op add .AVG_SURPLUS *tmp119 *tmp120
+sensor *tmp24 .NODE @powerNetStored
+op floor :start_reactor:charge *tmp24
+sensor *tmp25 .NODE @powerNetIn
+sensor *tmp26 .NODE @powerNetOut
+op sub *tmp27 *tmp25 *tmp26
+op floor :start_reactor:surplus *tmp27
+op mul *tmp28 .AVG_SURPLUS 0.8
+op mul *tmp29 :start_reactor:surplus 0.2
+op add .AVG_SURPLUS *tmp28 *tmp29
 sensor :start_reactor:enabled :start_reactor:reactor @enabled
 print "#"
 print :start_reactor:reactor_num
@@ -6595,8 +6595,8 @@ print "STOP unwanted\n"
 jump *label72 always
 label *label73
 jump *label75 lessThanEq :start_reactor:reactor_num 1
-op mul *tmp132 .FUEL_TOT_ABORT :start_reactor:reactor_num
-jump *label75 greaterThanEq :start_reactor:fuel_stored *tmp132
+op mul *tmp30 .FUEL_TOT_ABORT :start_reactor:reactor_num
+jump *label75 greaterThanEq :start_reactor:fuel_stored *tmp30
 control enabled :start_reactor:reactor false
 print "STOP system fuel low\n"
 jump *label72 always
@@ -6613,22 +6613,22 @@ jump *label72 always
 label *label81
 jump *label83 greaterThanEq :start_reactor:secs 30
 # "Function: def calc_charge_req(in reactor, in time)"
-op sub *tmp98 @tick :start_reactor:t_startup
-op idiv :calc_charge_req:secs *tmp98 60
+op sub *tmp20 @tick :start_reactor:t_startup
+op idiv :calc_charge_req:secs *tmp20 60
 jump *label164 greaterThan :calc_charge_req:secs 30
-sensor *tmp101 :start_reactor:reactor @enabled
-jump *label165 notEqual *tmp101 false
+sensor *tmp21 :start_reactor:reactor @enabled
+jump *label165 notEqual *tmp21 false
 label *label164
 set :calc_charge_req*retval 0
 jump *label167 always
 label *label165
 op sub :calc_charge_req:time_left 30 :calc_charge_req:secs
-op mul *tmp105 :calc_charge_req:time_left :calc_charge_req:time_left
-op idiv :calc_charge_req:charge_req *tmp105 0.04
+op mul *tmp22 :calc_charge_req:time_left :calc_charge_req:time_left
+op idiv :calc_charge_req:charge_req *tmp22 0.04
 set :calc_charge_req*retval :calc_charge_req:charge_req
 label *label167
-op sub *tmp147 :start_reactor:charge :calc_charge_req*retval
-jump *label85 greaterThanEq *tmp147 .PWR_ABORT
+op sub *tmp31 :start_reactor:charge :calc_charge_req*retval
+jump *label85 greaterThanEq *tmp31 .PWR_ABORT
 jump *label85 greaterThanEq :start_reactor:surplus .FLOW_ABORT
 control enabled :start_reactor:reactor false
 print "START FAIL battery\n"
@@ -6657,25 +6657,25 @@ print :start_reactor:mins
 print " mins\n"
 jump *label72 always
 label *label71
-op sub *tmp161 :start_reactor:charge .START_POWER_REQ
-op sub *tmp162 *tmp161 .PWR_ABORT
-op div *tmp163 *tmp162 .PWR_REQ
-op mul :start_reactor:charge_units *tmp163 .PWR_RESERVE
-op div *tmp165 :start_reactor:surplus .FLOW_REQ
-op max :start_reactor:flow_units -0.1 *tmp165
-op mul *tmp167 .CRYO_REQ_EA :start_reactor:reactor_num
-op add :start_reactor:cryo_req .CRYO_REQ *tmp167
+op sub *tmp32 :start_reactor:charge .START_POWER_REQ
+op sub *tmp33 *tmp32 .PWR_ABORT
+op div *tmp34 *tmp33 .PWR_REQ
+op mul :start_reactor:charge_units *tmp34 .PWR_RESERVE
+op div *tmp35 :start_reactor:surplus .FLOW_REQ
+op max :start_reactor:flow_units -0.1 *tmp35
+op mul *tmp36 .CRYO_REQ_EA :start_reactor:reactor_num
+op add :start_reactor:cryo_req .CRYO_REQ *tmp36
 jump *label93 greaterThanEq .REACTORS_DESIRED :start_reactor:reactor_num
 print "IDLE\n"
 set :start_reactor*retval false
 jump *label94 always
 label *label93
-op add *tmp171 :start_reactor:flow_units :start_reactor:charge_units
-jump *label95 greaterThanEq *tmp171 1
-op idiv *tmp175 :start_reactor:flow_units 0.001
-op div :start_reactor:flow *tmp175 10
-op idiv *tmp178 :start_reactor:charge_units 0.001
-op div :start_reactor:charge *tmp178 10
+op add *tmp37 :start_reactor:flow_units :start_reactor:charge_units
+jump *label95 greaterThanEq *tmp37 1
+op idiv *tmp38 :start_reactor:flow_units 0.001
+op div :start_reactor:flow *tmp38 10
+op idiv *tmp39 :start_reactor:charge_units 0.001
+op div :start_reactor:charge *tmp39 10
 print "WAIT power. (%"
 print :start_reactor:charge
 print "J + %"
@@ -6686,16 +6686,16 @@ jump *label96 always
 label *label95
 jump *label97 equal :start_reactor:fuel_on false
 jump *label97 greaterThanEq :start_reactor:fuel .FUEL_REQ
-op add *tmp182 :start_reactor:fuel :start_reactor:fuel_stored
-jump *label101 lessThanEq *tmp182 .FUEL_REQ
+op add *tmp40 :start_reactor:fuel :start_reactor:fuel_stored
+jump *label101 lessThanEq *tmp40 .FUEL_REQ
 print "WAIT fuel\n"
 jump *label98 always
 label *label101
 print "WAIT system fuel\n"
 jump *label98 always
 label *label97
-op mul *tmp185 .FUEL_TOT_REQ :start_reactor:reactor_num
-jump *label103 greaterThanEq :start_reactor:fuel_stored *tmp185
+op mul *tmp41 .FUEL_TOT_REQ :start_reactor:reactor_num
+jump *label103 greaterThanEq :start_reactor:fuel_stored *tmp41
 print "WAIT buffer fuel\n"
 jump *label104 always
 label *label103
@@ -6713,8 +6713,8 @@ label *label96
 label *label94
 label *label72
 label *label70
-sensor *tmp192 :start_reactor:reactor @enabled
-jump *label107 equal :start_reactor:enabled *tmp192
+sensor *tmp42 :start_reactor:reactor @enabled
+jump *label107 equal :start_reactor:enabled *tmp42
 set .RET_T_STARTUP @tick
 label *label107
 return :start_reactor*retaddr

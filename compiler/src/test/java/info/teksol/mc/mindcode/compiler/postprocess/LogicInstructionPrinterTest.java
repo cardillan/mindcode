@@ -80,8 +80,8 @@ class LogicInstructionPrinterTest extends AbstractCodeOutputTest {
                         sensor *tmp11 nucleus1 :resource
                         set :level *tmp11
                         set *tmp12 :building
-                        op lessThan *tmp14 :level :capacity
-                        control enabled *tmp12 *tmp14 0 0 0
+                        op lessThan *tmp13 :level :capacity
+                        control enabled *tmp12 *tmp13 0 0 0
                         print "\\n"
                         print :n
                         print ": "

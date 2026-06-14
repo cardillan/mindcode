@@ -2528,10 +2528,10 @@ jump *label7 lessThanEq :n 0
 label *label91
 op sub :n :n 1
 getlink :block :n
-sensor *tmp7 :block @type
-sensor *tmp175 *tmp7 @id
-jump *label94 greaterThanEq *tmp175 146
-multijump *label96 *tmp175 0
+sensor *tmp0 :block @type
+sensor *tmp55 *tmp0 @id
+jump *label94 greaterThanEq *tmp55 146
+multijump *label96 *tmp55 0
 multilabel *label96
 jump *label94 always
 multilabel *label97
@@ -2906,8 +2906,8 @@ set .RES2 @oil
 set .RES3 @itemCapacity
 op div .MUL3 100 .CAPACITY
 set .MUL1 .MUL3
-sensor *tmp23 :block @liquidCapacity
-op div .MUL2 250 *tmp23
+sensor *tmp1 :block @liquidCapacity
+op div .MUL2 250 *tmp1
 set .OUTPUT @plastanium
 jump *label8 always
 label *label94
@@ -2934,8 +2934,8 @@ label *label29
 printflush .MESSAGE
 jump *label3 equal .DISPLAY null
 jump *label90 equal .TYPE null
-sensor *tmp28 .DISPLAY @type
-jump *label33 notEqual *tmp28 @logic-display
+sensor *tmp2 .DISPLAY @type
+jump *label33 notEqual *tmp2 @logic-display
 set .OFFSET_X 2
 set .OFFSET_Y 2
 set .BAR_SPACE 80
@@ -2944,19 +2944,19 @@ set :clx 0
 set :crx 0
 op sub :clw 82 2
 set :crw 80
-set *tmp34 0
+set *tmp3 0
 jump *label36 equal FROM_INDEX 0
-op mul *tmp35 FROM_INDEX 20
-op add *tmp34 2 *tmp35
+op mul *tmp4 FROM_INDEX 20
+op add *tmp3 2 *tmp4
 label *label36
-set :cly *tmp34
-set :cry *tmp34
-set *tmp38 176
+set :cly *tmp3
+set :cry *tmp3
+set *tmp5 176
 jump *label38 greaterThanEq TO_INDEX 8
-op mul *tmp39 TO_INDEX 20
-op add *tmp38 2 *tmp39
+op mul *tmp6 TO_INDEX 20
+op add *tmp5 2 *tmp6
 label *label38
-op sub :clh *tmp38 *tmp34
+op sub :clh *tmp5 *tmp3
 set :crh :clh
 jump *label34 always
 label *label33
@@ -2967,61 +2967,61 @@ set .BAR_GAP 22
 jump *label39 lessThan FROM_INDEX 8
 op sub :crx 93 2
 op add :crw 83 1
-set *tmp51 0
-op mod *tmp49 FROM_INDEX 8
-jump *label42 equal *tmp49 0
-op mul *tmp53 *tmp49 22
-op add *tmp51 4 *tmp53
+set *tmp8 0
+op mod *tmp7 FROM_INDEX 8
+jump *label42 equal *tmp7 0
+op mul *tmp9 *tmp7 22
+op add *tmp8 4 *tmp9
 label *label42
-set :cry *tmp51
-set *tmp56 176
+set :cry *tmp8
+set *tmp10 176
 jump *label44 greaterThanEq TO_INDEX 16
-op mod *tmp57 TO_INDEX 8
-op mul *tmp58 *tmp57 22
-op add *tmp56 4 *tmp58
+op mod *tmp11 TO_INDEX 8
+op mul *tmp12 *tmp11 22
+op add *tmp10 4 *tmp12
 label *label44
-op sub :crh *tmp56 *tmp51
+op sub :crh *tmp10 *tmp8
 set :clx 91
 set :clw 84
-set :cly *tmp51
+set :cly *tmp8
 set :clh :crh
 jump *label40 always
 label *label39
 set :clx 0
 op sub :clw 93 2
-set *tmp64 0
+set *tmp13 0
 jump *label46 equal FROM_INDEX 0
-op mul *tmp65 FROM_INDEX 22
-op add *tmp64 4 *tmp65
+op mul *tmp14 FROM_INDEX 22
+op add *tmp13 4 *tmp14
 label *label46
-set :cly *tmp64
-set *tmp68 176
+set :cly *tmp13
+set *tmp15 176
 jump *label48 greaterThanEq TO_INDEX 8
-op mul *tmp69 TO_INDEX 22
-op add *tmp68 4 *tmp69
+op mul *tmp16 TO_INDEX 22
+op add *tmp15 4 *tmp16
 label *label48
-op sub :clh *tmp68 *tmp64
+op sub :clh *tmp15 *tmp13
 jump *label49 lessThan TO_INDEX 8
 op sub :crx 93 2
 op add :crw 83 1
 set :cry 0
 set :crh 176
 jump *label50 greaterThanEq TO_INDEX 16
-op mod *tmp81 TO_INDEX 8
-op mul *tmp82 *tmp81 22
-op add :crh 4 *tmp82
+op mod *tmp17 TO_INDEX 8
+op mul *tmp18 *tmp17 22
+op add :crh 4 *tmp18
 jump *label50 always
 label *label49
 set :crx 0
 set :crw 91
-set :cry *tmp64
+set :cry *tmp13
 set :crh :clh
 label *label50
 label *label40
 label *label34
 control enabled .SWITCH 0
-sensor *tmp87 .SWITCH @enabled
-jump __start__ notEqual *tmp87 0
+sensor *tmp19 .SWITCH @enabled
+jump __start__ notEqual *tmp19 0
 label *label93
 set :start @time
 print "Universal Factory Monitor\nMonitoring: "
@@ -3036,17 +3036,17 @@ jump *label58 greaterThanEq 0 @links
 label *label92
 jump *label58 greaterThanEq :index TO_INDEX
 getlink :factory :n
-sensor *tmp93 :factory @type
-jump *label61 notEqual *tmp93 .TYPE
+sensor *tmp20 :factory @type
+jump *label61 notEqual *tmp20 .TYPE
 set :minimum 101
-sensor *tmp96 :factory .RES1
-op mul :r1 .MUL1 *tmp96
-sensor *tmp98 :factory .RES2
-op mul :r2 .MUL2 *tmp98
-sensor *tmp100 :factory .RES3
-op mul :r3 .MUL3 *tmp100
-sensor *tmp102 :factory .OUTPUT
-op mul :output .MUL1 *tmp102
+sensor *tmp21 :factory .RES1
+op mul :r1 .MUL1 *tmp21
+sensor *tmp22 :factory .RES2
+op mul :r2 .MUL2 *tmp22
+sensor *tmp23 :factory .RES3
+op mul :r3 .MUL3 *tmp23
+sensor *tmp24 :factory .OUTPUT
+op mul :output .MUL1 *tmp24
 sensor :e :factory @enabled
 sensor :power :factory @totalPower
 sensor :boost :factory @timescale
@@ -3062,58 +3062,58 @@ jump *label67 greaterThanEq :r3 :minimum
 set :minimum :r3
 set :icon .RES3
 label *label67
-op greaterThan *tmp113 :output 33
-op sub *tmp114 100 :output
-op lessThan *tmp115 *tmp114 :minimum
-op land :showout *tmp113 *tmp115
+op greaterThan *tmp25 :output 33
+op sub *tmp26 100 :output
+op lessThan *tmp27 *tmp26 :minimum
+op land :showout *tmp25 *tmp27
 select :icon notEqual :showout false .OUTPUT :icon
 op idiv :column :index 8
 op mod :row :index 8
-op mul *tmp120 :column .BAR_SPACE
-op add :x .OFFSET_X *tmp120
-op mul *tmp122 :row .BAR_GAP
-op add :y .OFFSET_Y *tmp122
-op greaterThan *tmp124 :minimum 66
-op equal *tmp125 :showout false
-op land *tmp126 *tmp124 *tmp125
-select :icon notEqual *tmp126 false .TYPE :icon
+op mul *tmp28 :column .BAR_SPACE
+op add :x .OFFSET_X *tmp28
+op mul *tmp29 :row .BAR_GAP
+op add :y .OFFSET_Y *tmp29
+op greaterThan *tmp30 :minimum 66
+op equal *tmp31 :showout false
+op land *tmp32 *tmp30 *tmp31
+select :icon notEqual *tmp32 false .TYPE :icon
 draw color 255 255 255 255
 jump *label73 equal :e false
 jump *label75 lessThanEq :power 0
-op add *tmp131 :x 7
-op add *tmp132 :y 7
-draw image *tmp131 *tmp132 :icon 16 0
+op add *tmp33 :x 7
+op add *tmp34 :y 7
+draw image *tmp33 *tmp34 :icon 16 0
 jump *label74 always
 label *label75
 draw color 255 80 80 255
-op add *tmp133 :y 3
-draw rect :x *tmp133 14 8
+op add *tmp35 :y 3
+draw rect :x *tmp35 14 8
 draw color 0 0 0 255
-op add *tmp134 :x 2
-op add *tmp135 :y 5
-draw rect *tmp134 *tmp135 8 4
-op add *tmp136 :x 12
-draw rect *tmp136 *tmp133 2 2
-op add *tmp139 :y 9
-draw rect *tmp136 *tmp139 2 2
+op add *tmp36 :x 2
+op add *tmp37 :y 5
+draw rect *tmp36 *tmp37 8 4
+op add *tmp38 :x 12
+draw rect *tmp38 *tmp35 2 2
+op add *tmp39 :y 9
+draw rect *tmp38 *tmp39 2 2
 draw color 255 80 80 255
-op add *tmp140 :x 4
-op add *tmp141 :y 6
-draw rect *tmp140 *tmp141 2 2
+op add *tmp40 :x 4
+op add *tmp41 :y 6
+draw rect *tmp40 *tmp41 2 2
 jump *label74 always
 label *label73
 draw color 255 80 80 255
 draw stroke 3
-op add *tmp142 :x 2
-op add *tmp143 :y 12
-op add *tmp144 :x 12
-op add *tmp145 :y 2
-draw line *tmp142 *tmp143 *tmp144 *tmp145
-draw line *tmp142 *tmp145 *tmp144 *tmp143
+op add *tmp42 :x 2
+op add *tmp43 :y 12
+op add *tmp44 :x 12
+op add *tmp45 :y 2
+draw line *tmp42 *tmp43 *tmp44 *tmp45
+draw line *tmp42 *tmp45 *tmp44 *tmp43
 draw color 0 0 0 255
-op sub *tmp150 :x 1
-op sub *tmp151 :y 1
-draw lineRect *tmp150 *tmp151 16 16
+op sub *tmp46 :x 1
+op sub *tmp47 :y 1
+draw lineRect *tmp46 *tmp47 16 16
 draw stroke 2
 label *label74
 op add :x :x 16
@@ -3131,9 +3131,9 @@ set :blue 255
 set :minimum :output
 jump *label82 always
 label *label81
-op greaterThanEq *tmp158 :boost EXPECTED_BOOST
-op land *tmp159 *tmp124 *tmp158
-select :red notEqual *tmp159 false 0 255
+op greaterThanEq *tmp48 :boost EXPECTED_BOOST
+op land *tmp49 *tmp30 *tmp48
+select :red notEqual *tmp49 false 0 255
 select :green greaterThan :minimum 33 255 0
 set :blue 0
 label *label82
@@ -3144,12 +3144,12 @@ op max :green 192 :green
 op max :blue 192 :blue
 set :boost EXPECTED_BOOST
 label *label87
-op mul *tmp168 61 :boost
-op idiv :length *tmp168 EXPECTED_BOOST
+op mul *tmp50 61 :boost
+op idiv :length *tmp50 EXPECTED_BOOST
 draw color :red :green :blue 128
-op mul *tmp170 :minimum :length
-op idiv *tmp171 *tmp170 100
-draw rect :x :y *tmp171 14
+op mul *tmp51 :minimum :length
+op idiv *tmp52 *tmp51 100
+draw rect :x :y *tmp52 14
 draw color :red :green :blue 255
 draw lineRect :x :y :length 14
 op add :index :index 1
@@ -3158,10 +3158,10 @@ op add :n :n 1
 jump *label92 lessThan :n @links
 label *label58
 drawflush .DISPLAY
-op sub *tmp173 @time :start
-op floor *tmp174 *tmp173
+op sub *tmp53 @time :start
+op floor *tmp54 *tmp53
 print "\nDraw time: {0} ms"
-format *tmp174
+format *tmp54
 printflush .MESSAGE
-sensor *tmp87 .SWITCH @enabled
-jump *label93 equal *tmp87 0
+sensor *tmp19 .SWITCH @enabled
+jump *label93 equal *tmp19 0

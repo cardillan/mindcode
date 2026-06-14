@@ -640,62 +640,62 @@ Final code before resolving virtual instructions:
   129:  set :_median:bestDif 10000000000
   130:  set :_median:best null
   131:  set :_median:count 1
-  132:  setaddr *tmp66 *label49
+  132:  setaddr *tmp1 *label49
   133:  jump *label55 always 0 0
         multilabel *label49
-  134:  setaddr *tmp66 *label50
+  134:  setaddr *tmp1 *label50
   135:  jump *label55 always 0 0
         multilabel *label50
-  136:  setaddr *tmp66 *label51
+  136:  setaddr *tmp1 *label51
   137:  jump *label55 always 0 0
         multilabel *label51
-  138:  setaddr *tmp66 *label52
+  138:  setaddr *tmp1 *label52
   139:  jump *label55 always 0 0
         multilabel *label52
-  140:  setaddr *tmp66 *label53
+  140:  setaddr *tmp1 *label53
   141:  jump *label55 always 0 0
         multilabel *label53
-  142:  setaddr *tmp66 *label54
+  142:  setaddr *tmp1 *label54
         label *label55
   143:  jump *label73 greaterThanEq 0 :_median:bestDif
   144:  set :_median:bestDif 0
   145:  set :_median:best 1
   146:  set :_median:count 1
-  147:  multijump *tmp66 0 0
+  147:  multijump *tmp1 0 0
         label *label73
   148:  jump *label75 greaterThan 0 :_median:bestDif
   149:  op add :_median:best :_median:best 1
   150:  op add :_median:count :_median:count 1
         label *label75
-  151:  multijump *tmp66 0 0
+  151:  multijump *tmp1 0 0
         multilabel *label54
-  152:  op div *tmp65 :_median:best :_median:count
-  153:  assertequals 1 *tmp65 "median(1,1,1,1,1,1)"
+  152:  op div *tmp0 :_median:best :_median:count
+  153:  assertequals 1 *tmp0 "median(1,1,1,1,1,1)"
   154:  set :_median.1:bestDif 10000000000
   155:  set :_median.1:best null
   156:  set :_median.1:count 1
   157:  set :_median.1:i 1
-  158:  setaddr *tmp88 *label82
+  158:  setaddr *tmp3 *label82
   159:  jump *label79 always 0 0
         multilabel *label82
   160:  set :_median.1:i 1
-  161:  setaddr *tmp88 *label83
+  161:  setaddr *tmp3 *label83
   162:  jump *label79 always 0 0
         multilabel *label83
   163:  set :_median.1:i 1
-  164:  setaddr *tmp88 *label84
+  164:  setaddr *tmp3 *label84
   165:  jump *label79 always 0 0
         multilabel *label84
   166:  set :_median.1:i 1
-  167:  setaddr *tmp88 *label85
+  167:  setaddr *tmp3 *label85
   168:  jump *label79 always 0 0
         multilabel *label85
   169:  set :_median.1:i 1
-  170:  setaddr *tmp88 *label86
+  170:  setaddr *tmp3 *label86
   171:  jump *label79 always 0 0
         multilabel *label86
   172:  set :_median.1:i 5
-  173:  setaddr *tmp88 *label87
+  173:  setaddr *tmp3 *label87
         label *label79
   174:  set :_isMedian.1:lt 0
   175:  set :_isMedian.1:gt 0
@@ -745,437 +745,437 @@ Final code before resolving virtual instructions:
   204:  op add :_isMedian.1:gt :_isMedian.1:gt 1
         label *label863
         label *label865
-  205:  op sub *tmp95 :_isMedian.1:gt :_isMedian.1:lt
-  206:  op abs :_isMedian.1:dif *tmp95 0
-  207:  op add *tmp97 :_isMedian.1:gt :_isMedian.1:lt
-  208:  op equal *tmp362 :_isMedian.1:gt :_isMedian.1:lt
-  209:  select *tmp100 greaterThanEq *tmp97 5 *tmp362 false
-  210:  jump *label88 equal *tmp100 false
-  211:  set *tmp87 :_median.1:i
+  205:  op sub *tmp4 :_isMedian.1:gt :_isMedian.1:lt
+  206:  op abs :_isMedian.1:dif *tmp4 0
+  207:  op add *tmp5 :_isMedian.1:gt :_isMedian.1:lt
+  208:  op equal *tmp65 :_isMedian.1:gt :_isMedian.1:lt
+  209:  select *tmp6 greaterThanEq *tmp5 5 *tmp65 false
+  210:  jump *label88 equal *tmp6 false
+  211:  set *tmp2 :_median.1:i
   212:  jump *label78 always 0 0
         label *label88
   213:  jump *label106 greaterThanEq :_isMedian.1:dif :_median.1:bestDif
   214:  set :_median.1:bestDif :_isMedian.1:dif
   215:  set :_median.1:best :_median.1:i
   216:  set :_median.1:count 1
-  217:  multijump *tmp88 0 0
+  217:  multijump *tmp3 0 0
         label *label106
   218:  jump *label108 greaterThan :_isMedian.1:dif :_median.1:bestDif
   219:  op add :_median.1:best :_median.1:best :_median.1:i
   220:  op add :_median.1:count :_median.1:count 1
         label *label108
-  221:  multijump *tmp88 0 0
+  221:  multijump *tmp3 0 0
         multilabel *label87
-  222:  op div *tmp87 :_median.1:best :_median.1:count
+  222:  op div *tmp2 :_median.1:best :_median.1:count
         label *label78
-  223:  assertequals 1 *tmp87 "median(1,1,1,1,1,5)"
+  223:  assertequals 1 *tmp2 "median(1,1,1,1,1,5)"
   224:  set :_median.2:bestDif 10000000000
   225:  set :_median.2:best null
   226:  set :_median.2:count 1
   227:  set :_median.2:i 1
-  228:  setaddr *tmp110 *label115
+  228:  setaddr *tmp8 *label115
   229:  jump *label112 always 0 0
         multilabel *label115
   230:  set :_median.2:i 1
-  231:  setaddr *tmp110 *label116
+  231:  setaddr *tmp8 *label116
   232:  jump *label112 always 0 0
         multilabel *label116
   233:  set :_median.2:i 1
-  234:  setaddr *tmp110 *label117
+  234:  setaddr *tmp8 *label117
   235:  jump *label112 always 0 0
         multilabel *label117
   236:  set :_median.2:i 1
-  237:  setaddr *tmp110 *label118
+  237:  setaddr *tmp8 *label118
   238:  jump *label112 always 0 0
         multilabel *label118
   239:  set :_median.2:i 5
-  240:  setaddr *tmp110 *label119
+  240:  setaddr *tmp8 *label119
   241:  jump *label112 always 0 0
         multilabel *label119
   242:  set :_median.2:i 5
-  243:  setaddr *tmp110 *label120
+  243:  setaddr *tmp8 *label120
         label *label112
   244:  set :_isMedian.2:lt 0
   245:  set :_isMedian.2:gt 0
   246:  set :_isMedian.2:i 1
-  247:  setaddr *tmp112 *label127
+  247:  setaddr *tmp9 *label127
   248:  jump *label124 always 0 0
         multilabel *label127
   249:  set :_isMedian.2:i 1
-  250:  setaddr *tmp112 *label128
+  250:  setaddr *tmp9 *label128
   251:  jump *label124 always 0 0
         multilabel *label128
   252:  set :_isMedian.2:i 1
-  253:  setaddr *tmp112 *label129
+  253:  setaddr *tmp9 *label129
   254:  jump *label124 always 0 0
         multilabel *label129
   255:  set :_isMedian.2:i 1
-  256:  setaddr *tmp112 *label130
+  256:  setaddr *tmp9 *label130
   257:  jump *label124 always 0 0
         multilabel *label130
   258:  set :_isMedian.2:i 5
-  259:  setaddr *tmp112 *label131
+  259:  setaddr *tmp9 *label131
   260:  jump *label124 always 0 0
         multilabel *label131
   261:  set :_isMedian.2:i 5
-  262:  setaddr *tmp112 *label132
+  262:  setaddr *tmp9 *label132
         label *label124
   263:  jump *label133 greaterThanEq :_isMedian.2:i :_median.2:i
   264:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  265:  multijump *tmp112 0 0
+  265:  multijump *tmp9 0 0
         label *label133
   266:  jump *label135 lessThanEq :_isMedian.2:i :_median.2:i
   267:  op add :_isMedian.2:gt :_isMedian.2:gt 1
         label *label135
-  268:  multijump *tmp112 0 0
+  268:  multijump *tmp9 0 0
         multilabel *label132
-  269:  op sub *tmp117 :_isMedian.2:gt :_isMedian.2:lt
-  270:  op abs :_isMedian.2:dif *tmp117 0
-  271:  op add *tmp119 :_isMedian.2:gt :_isMedian.2:lt
-  272:  op equal *tmp363 :_isMedian.2:gt :_isMedian.2:lt
-  273:  select *tmp122 greaterThanEq *tmp119 5 *tmp363 false
-  274:  jump *label121 equal *tmp122 false
-  275:  set *tmp109 :_median.2:i
+  269:  op sub *tmp10 :_isMedian.2:gt :_isMedian.2:lt
+  270:  op abs :_isMedian.2:dif *tmp10 0
+  271:  op add *tmp11 :_isMedian.2:gt :_isMedian.2:lt
+  272:  op equal *tmp66 :_isMedian.2:gt :_isMedian.2:lt
+  273:  select *tmp12 greaterThanEq *tmp11 5 *tmp66 false
+  274:  jump *label121 equal *tmp12 false
+  275:  set *tmp7 :_median.2:i
   276:  jump *label111 always 0 0
         label *label121
   277:  jump *label139 greaterThanEq :_isMedian.2:dif :_median.2:bestDif
   278:  set :_median.2:bestDif :_isMedian.2:dif
   279:  set :_median.2:best :_median.2:i
   280:  set :_median.2:count 1
-  281:  multijump *tmp110 0 0
+  281:  multijump *tmp8 0 0
         label *label139
   282:  jump *label141 greaterThan :_isMedian.2:dif :_median.2:bestDif
   283:  op add :_median.2:best :_median.2:best :_median.2:i
   284:  op add :_median.2:count :_median.2:count 1
         label *label141
-  285:  multijump *tmp110 0 0
+  285:  multijump *tmp8 0 0
         multilabel *label120
-  286:  op div *tmp109 :_median.2:best :_median.2:count
+  286:  op div *tmp7 :_median.2:best :_median.2:count
         label *label111
-  287:  assertequals 1 *tmp109 "median(1,1,1,1,5,5)"
+  287:  assertequals 1 *tmp7 "median(1,1,1,1,5,5)"
   288:  set :_median.3:bestDif 10000000000
   289:  set :_median.3:best null
   290:  set :_median.3:count 1
   291:  set :_median.3:i 1
-  292:  setaddr *tmp132 *label148
+  292:  setaddr *tmp14 *label148
   293:  jump *label145 always 0 0
         multilabel *label148
   294:  set :_median.3:i 1
-  295:  setaddr *tmp132 *label149
+  295:  setaddr *tmp14 *label149
   296:  jump *label145 always 0 0
         multilabel *label149
   297:  set :_median.3:i 1
-  298:  setaddr *tmp132 *label150
+  298:  setaddr *tmp14 *label150
   299:  jump *label145 always 0 0
         multilabel *label150
   300:  set :_median.3:i 5
-  301:  setaddr *tmp132 *label151
+  301:  setaddr *tmp14 *label151
   302:  jump *label145 always 0 0
         multilabel *label151
   303:  set :_median.3:i 5
-  304:  setaddr *tmp132 *label152
+  304:  setaddr *tmp14 *label152
   305:  jump *label145 always 0 0
         multilabel *label152
   306:  set :_median.3:i 5
-  307:  setaddr *tmp132 *label153
+  307:  setaddr *tmp14 *label153
         label *label145
   308:  set :_isMedian.3:lt 0
   309:  set :_isMedian.3:gt 0
   310:  set :_isMedian.3:i 1
-  311:  setaddr *tmp134 *label160
+  311:  setaddr *tmp15 *label160
   312:  jump *label157 always 0 0
         multilabel *label160
   313:  set :_isMedian.3:i 1
-  314:  setaddr *tmp134 *label161
+  314:  setaddr *tmp15 *label161
   315:  jump *label157 always 0 0
         multilabel *label161
   316:  set :_isMedian.3:i 1
-  317:  setaddr *tmp134 *label162
+  317:  setaddr *tmp15 *label162
   318:  jump *label157 always 0 0
         multilabel *label162
   319:  set :_isMedian.3:i 5
-  320:  setaddr *tmp134 *label163
+  320:  setaddr *tmp15 *label163
   321:  jump *label157 always 0 0
         multilabel *label163
   322:  set :_isMedian.3:i 5
-  323:  setaddr *tmp134 *label164
+  323:  setaddr *tmp15 *label164
   324:  jump *label157 always 0 0
         multilabel *label164
   325:  set :_isMedian.3:i 5
-  326:  setaddr *tmp134 *label165
+  326:  setaddr *tmp15 *label165
         label *label157
   327:  jump *label166 greaterThanEq :_isMedian.3:i :_median.3:i
   328:  op add :_isMedian.3:lt :_isMedian.3:lt 1
-  329:  multijump *tmp134 0 0
+  329:  multijump *tmp15 0 0
         label *label166
   330:  jump *label168 lessThanEq :_isMedian.3:i :_median.3:i
   331:  op add :_isMedian.3:gt :_isMedian.3:gt 1
         label *label168
-  332:  multijump *tmp134 0 0
+  332:  multijump *tmp15 0 0
         multilabel *label165
-  333:  op sub *tmp139 :_isMedian.3:gt :_isMedian.3:lt
-  334:  op abs :_isMedian.3:dif *tmp139 0
-  335:  op add *tmp141 :_isMedian.3:gt :_isMedian.3:lt
-  336:  op equal *tmp364 :_isMedian.3:gt :_isMedian.3:lt
-  337:  select *tmp144 greaterThanEq *tmp141 5 *tmp364 false
-  338:  jump *label154 equal *tmp144 false
-  339:  set *tmp131 :_median.3:i
+  333:  op sub *tmp16 :_isMedian.3:gt :_isMedian.3:lt
+  334:  op abs :_isMedian.3:dif *tmp16 0
+  335:  op add *tmp17 :_isMedian.3:gt :_isMedian.3:lt
+  336:  op equal *tmp67 :_isMedian.3:gt :_isMedian.3:lt
+  337:  select *tmp18 greaterThanEq *tmp17 5 *tmp67 false
+  338:  jump *label154 equal *tmp18 false
+  339:  set *tmp13 :_median.3:i
   340:  jump *label144 always 0 0
         label *label154
   341:  jump *label172 greaterThanEq :_isMedian.3:dif :_median.3:bestDif
   342:  set :_median.3:bestDif :_isMedian.3:dif
   343:  set :_median.3:best :_median.3:i
   344:  set :_median.3:count 1
-  345:  multijump *tmp132 0 0
+  345:  multijump *tmp14 0 0
         label *label172
   346:  jump *label174 greaterThan :_isMedian.3:dif :_median.3:bestDif
   347:  op add :_median.3:best :_median.3:best :_median.3:i
   348:  op add :_median.3:count :_median.3:count 1
         label *label174
-  349:  multijump *tmp132 0 0
+  349:  multijump *tmp14 0 0
         multilabel *label153
-  350:  op div *tmp131 :_median.3:best :_median.3:count
+  350:  op div *tmp13 :_median.3:best :_median.3:count
         label *label144
-  351:  assertequals 3 *tmp131 "median(1,1,1,5,5,5)"
+  351:  assertequals 3 *tmp13 "median(1,1,1,5,5,5)"
   352:  set :_median.4:bestDif 10000000000
   353:  set :_median.4:best null
   354:  set :_median.4:count 1
   355:  set :_median.4:i 1
-  356:  setaddr *tmp154 *label181
+  356:  setaddr *tmp20 *label181
   357:  jump *label178 always 0 0
         multilabel *label181
   358:  set :_median.4:i 1
-  359:  setaddr *tmp154 *label182
+  359:  setaddr *tmp20 *label182
   360:  jump *label178 always 0 0
         multilabel *label182
   361:  set :_median.4:i 5
-  362:  setaddr *tmp154 *label183
+  362:  setaddr *tmp20 *label183
   363:  jump *label178 always 0 0
         multilabel *label183
   364:  set :_median.4:i 5
-  365:  setaddr *tmp154 *label184
+  365:  setaddr *tmp20 *label184
   366:  jump *label178 always 0 0
         multilabel *label184
   367:  set :_median.4:i 5
-  368:  setaddr *tmp154 *label185
+  368:  setaddr *tmp20 *label185
   369:  jump *label178 always 0 0
         multilabel *label185
   370:  set :_median.4:i 5
-  371:  setaddr *tmp154 *label186
+  371:  setaddr *tmp20 *label186
         label *label178
   372:  set :_isMedian.4:lt 0
   373:  set :_isMedian.4:gt 0
   374:  set :_isMedian.4:i 1
-  375:  setaddr *tmp156 *label193
+  375:  setaddr *tmp21 *label193
   376:  jump *label190 always 0 0
         multilabel *label193
   377:  set :_isMedian.4:i 1
-  378:  setaddr *tmp156 *label194
+  378:  setaddr *tmp21 *label194
   379:  jump *label190 always 0 0
         multilabel *label194
   380:  set :_isMedian.4:i 5
-  381:  setaddr *tmp156 *label195
+  381:  setaddr *tmp21 *label195
   382:  jump *label190 always 0 0
         multilabel *label195
   383:  set :_isMedian.4:i 5
-  384:  setaddr *tmp156 *label196
+  384:  setaddr *tmp21 *label196
   385:  jump *label190 always 0 0
         multilabel *label196
   386:  set :_isMedian.4:i 5
-  387:  setaddr *tmp156 *label197
+  387:  setaddr *tmp21 *label197
   388:  jump *label190 always 0 0
         multilabel *label197
   389:  set :_isMedian.4:i 5
-  390:  setaddr *tmp156 *label198
+  390:  setaddr *tmp21 *label198
         label *label190
   391:  jump *label199 greaterThanEq :_isMedian.4:i :_median.4:i
   392:  op add :_isMedian.4:lt :_isMedian.4:lt 1
-  393:  multijump *tmp156 0 0
+  393:  multijump *tmp21 0 0
         label *label199
   394:  jump *label201 lessThanEq :_isMedian.4:i :_median.4:i
   395:  op add :_isMedian.4:gt :_isMedian.4:gt 1
         label *label201
-  396:  multijump *tmp156 0 0
+  396:  multijump *tmp21 0 0
         multilabel *label198
-  397:  op sub *tmp161 :_isMedian.4:gt :_isMedian.4:lt
-  398:  op abs :_isMedian.4:dif *tmp161 0
-  399:  op add *tmp163 :_isMedian.4:gt :_isMedian.4:lt
-  400:  op equal *tmp365 :_isMedian.4:gt :_isMedian.4:lt
-  401:  select *tmp166 greaterThanEq *tmp163 5 *tmp365 false
-  402:  jump *label187 equal *tmp166 false
-  403:  set *tmp153 :_median.4:i
+  397:  op sub *tmp22 :_isMedian.4:gt :_isMedian.4:lt
+  398:  op abs :_isMedian.4:dif *tmp22 0
+  399:  op add *tmp23 :_isMedian.4:gt :_isMedian.4:lt
+  400:  op equal *tmp68 :_isMedian.4:gt :_isMedian.4:lt
+  401:  select *tmp24 greaterThanEq *tmp23 5 *tmp68 false
+  402:  jump *label187 equal *tmp24 false
+  403:  set *tmp19 :_median.4:i
   404:  jump *label177 always 0 0
         label *label187
   405:  jump *label205 greaterThanEq :_isMedian.4:dif :_median.4:bestDif
   406:  set :_median.4:bestDif :_isMedian.4:dif
   407:  set :_median.4:best :_median.4:i
   408:  set :_median.4:count 1
-  409:  multijump *tmp154 0 0
+  409:  multijump *tmp20 0 0
         label *label205
   410:  jump *label207 greaterThan :_isMedian.4:dif :_median.4:bestDif
   411:  op add :_median.4:best :_median.4:best :_median.4:i
   412:  op add :_median.4:count :_median.4:count 1
         label *label207
-  413:  multijump *tmp154 0 0
+  413:  multijump *tmp20 0 0
         multilabel *label186
-  414:  op div *tmp153 :_median.4:best :_median.4:count
+  414:  op div *tmp19 :_median.4:best :_median.4:count
         label *label177
-  415:  assertequals 5 *tmp153 "median(1,1,5,5,5,5)"
+  415:  assertequals 5 *tmp19 "median(1,1,5,5,5,5)"
   416:  set :_median.5:bestDif 10000000000
   417:  set :_median.5:best null
   418:  set :_median.5:count 1
   419:  set :_median.5:i 1
-  420:  setaddr *tmp176 *label214
+  420:  setaddr *tmp26 *label214
   421:  jump *label211 always 0 0
         multilabel *label214
   422:  set :_median.5:i 5
-  423:  setaddr *tmp176 *label215
+  423:  setaddr *tmp26 *label215
   424:  jump *label211 always 0 0
         multilabel *label215
   425:  set :_median.5:i 5
-  426:  setaddr *tmp176 *label216
+  426:  setaddr *tmp26 *label216
   427:  jump *label211 always 0 0
         multilabel *label216
   428:  set :_median.5:i 5
-  429:  setaddr *tmp176 *label217
+  429:  setaddr *tmp26 *label217
   430:  jump *label211 always 0 0
         multilabel *label217
   431:  set :_median.5:i 5
-  432:  setaddr *tmp176 *label218
+  432:  setaddr *tmp26 *label218
   433:  jump *label211 always 0 0
         multilabel *label218
   434:  set :_median.5:i 5
-  435:  setaddr *tmp176 *label219
+  435:  setaddr *tmp26 *label219
         label *label211
   436:  set :_isMedian.5:lt 0
   437:  set :_isMedian.5:gt 0
   438:  set :_isMedian.5:i 1
-  439:  setaddr *tmp178 *label226
+  439:  setaddr *tmp27 *label226
   440:  jump *label223 always 0 0
         multilabel *label226
   441:  set :_isMedian.5:i 5
-  442:  setaddr *tmp178 *label227
+  442:  setaddr *tmp27 *label227
   443:  jump *label223 always 0 0
         multilabel *label227
   444:  set :_isMedian.5:i 5
-  445:  setaddr *tmp178 *label228
+  445:  setaddr *tmp27 *label228
   446:  jump *label223 always 0 0
         multilabel *label228
   447:  set :_isMedian.5:i 5
-  448:  setaddr *tmp178 *label229
+  448:  setaddr *tmp27 *label229
   449:  jump *label223 always 0 0
         multilabel *label229
   450:  set :_isMedian.5:i 5
-  451:  setaddr *tmp178 *label230
+  451:  setaddr *tmp27 *label230
   452:  jump *label223 always 0 0
         multilabel *label230
   453:  set :_isMedian.5:i 5
-  454:  setaddr *tmp178 *label231
+  454:  setaddr *tmp27 *label231
         label *label223
   455:  jump *label232 greaterThanEq :_isMedian.5:i :_median.5:i
   456:  op add :_isMedian.5:lt :_isMedian.5:lt 1
-  457:  multijump *tmp178 0 0
+  457:  multijump *tmp27 0 0
         label *label232
   458:  jump *label234 lessThanEq :_isMedian.5:i :_median.5:i
   459:  op add :_isMedian.5:gt :_isMedian.5:gt 1
         label *label234
-  460:  multijump *tmp178 0 0
+  460:  multijump *tmp27 0 0
         multilabel *label231
-  461:  op sub *tmp183 :_isMedian.5:gt :_isMedian.5:lt
-  462:  op abs :_isMedian.5:dif *tmp183 0
-  463:  op add *tmp185 :_isMedian.5:gt :_isMedian.5:lt
-  464:  op equal *tmp366 :_isMedian.5:gt :_isMedian.5:lt
-  465:  select *tmp188 greaterThanEq *tmp185 5 *tmp366 false
-  466:  jump *label220 equal *tmp188 false
-  467:  set *tmp175 :_median.5:i
+  461:  op sub *tmp28 :_isMedian.5:gt :_isMedian.5:lt
+  462:  op abs :_isMedian.5:dif *tmp28 0
+  463:  op add *tmp29 :_isMedian.5:gt :_isMedian.5:lt
+  464:  op equal *tmp69 :_isMedian.5:gt :_isMedian.5:lt
+  465:  select *tmp30 greaterThanEq *tmp29 5 *tmp69 false
+  466:  jump *label220 equal *tmp30 false
+  467:  set *tmp25 :_median.5:i
   468:  jump *label210 always 0 0
         label *label220
   469:  jump *label238 greaterThanEq :_isMedian.5:dif :_median.5:bestDif
   470:  set :_median.5:bestDif :_isMedian.5:dif
   471:  set :_median.5:best :_median.5:i
   472:  set :_median.5:count 1
-  473:  multijump *tmp176 0 0
+  473:  multijump *tmp26 0 0
         label *label238
   474:  jump *label240 greaterThan :_isMedian.5:dif :_median.5:bestDif
   475:  op add :_median.5:best :_median.5:best :_median.5:i
   476:  op add :_median.5:count :_median.5:count 1
         label *label240
-  477:  multijump *tmp176 0 0
+  477:  multijump *tmp26 0 0
         multilabel *label219
-  478:  op div *tmp175 :_median.5:best :_median.5:count
+  478:  op div *tmp25 :_median.5:best :_median.5:count
         label *label210
-  479:  assertequals 5 *tmp175 "median(1,5,5,5,5,5)"
+  479:  assertequals 5 *tmp25 "median(1,5,5,5,5,5)"
   480:  set :_median.6:bestDif 10000000000
   481:  set :_median.6:best null
   482:  set :_median.6:count 1
-  483:  setaddr *tmp198 *label247
+  483:  setaddr *tmp32 *label247
   484:  jump *label253 always 0 0
         multilabel *label247
-  485:  setaddr *tmp198 *label248
+  485:  setaddr *tmp32 *label248
   486:  jump *label253 always 0 0
         multilabel *label248
-  487:  setaddr *tmp198 *label249
+  487:  setaddr *tmp32 *label249
   488:  jump *label253 always 0 0
         multilabel *label249
-  489:  setaddr *tmp198 *label250
+  489:  setaddr *tmp32 *label250
   490:  jump *label253 always 0 0
         multilabel *label250
-  491:  setaddr *tmp198 *label251
+  491:  setaddr *tmp32 *label251
   492:  jump *label253 always 0 0
         multilabel *label251
-  493:  setaddr *tmp198 *label252
+  493:  setaddr *tmp32 *label252
         label *label253
   494:  jump *label271 greaterThanEq 0 :_median.6:bestDif
   495:  set :_median.6:bestDif 0
   496:  set :_median.6:best 5
   497:  set :_median.6:count 1
-  498:  multijump *tmp198 0 0
+  498:  multijump *tmp32 0 0
         label *label271
   499:  jump *label273 greaterThan 0 :_median.6:bestDif
   500:  op add :_median.6:best :_median.6:best 5
   501:  op add :_median.6:count :_median.6:count 1
         label *label273
-  502:  multijump *tmp198 0 0
+  502:  multijump *tmp32 0 0
         multilabel *label252
-  503:  op div *tmp197 :_median.6:best :_median.6:count
-  504:  assertequals 5 *tmp197 "median(5,5,5,5,5,5)"
+  503:  op div *tmp31 :_median.6:best :_median.6:count
+  504:  assertequals 5 *tmp31 "median(5,5,5,5,5,5)"
   505:  set :_median.7:bestDif 10000000000
   506:  set :_median.7:best null
   507:  set :_median.7:count 1
   508:  set :_median.7:i 1
-  509:  setaddr *tmp220 *label280
+  509:  setaddr *tmp34 *label280
   510:  jump *label277 always 0 0
         multilabel *label280
   511:  set :_median.7:i 2
-  512:  setaddr *tmp220 *label281
+  512:  setaddr *tmp34 *label281
   513:  jump *label277 always 0 0
         multilabel *label281
   514:  set :_median.7:i 3
-  515:  setaddr *tmp220 *label282
+  515:  setaddr *tmp34 *label282
   516:  jump *label277 always 0 0
         multilabel *label282
   517:  set :_median.7:i 4
-  518:  setaddr *tmp220 *label283
+  518:  setaddr *tmp34 *label283
   519:  jump *label277 always 0 0
         multilabel *label283
   520:  set :_median.7:i 5
-  521:  setaddr *tmp220 *label284
+  521:  setaddr *tmp34 *label284
   522:  jump *label277 always 0 0
         multilabel *label284
   523:  set :_median.7:i 6
-  524:  setaddr *tmp220 *label285
+  524:  setaddr *tmp34 *label285
   525:  jump *label277 always 0 0
         multilabel *label285
   526:  set :_median.7:i 7
-  527:  setaddr *tmp220 *label286
+  527:  setaddr *tmp34 *label286
   528:  jump *label277 always 0 0
         multilabel *label286
   529:  set :_median.7:i 8
-  530:  setaddr *tmp220 *label287
+  530:  setaddr *tmp34 *label287
   531:  jump *label277 always 0 0
         multilabel *label287
   532:  set :_median.7:i 9
-  533:  setaddr *tmp220 *label288
+  533:  setaddr *tmp34 *label288
         label *label277
   534:  set :_isMedian.7:lt 0
   535:  set :_isMedian.7:gt 0
@@ -1249,67 +1249,67 @@ Final code before resolving virtual instructions:
   579:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label668
         label *label670
-  580:  op sub *tmp227 :_isMedian.7:gt :_isMedian.7:lt
-  581:  op abs :_isMedian.7:dif *tmp227 0
-  582:  op add *tmp229 :_isMedian.7:gt :_isMedian.7:lt
-  583:  op equal *tmp367 :_isMedian.7:gt :_isMedian.7:lt
-  584:  select *tmp232 greaterThanEq *tmp229 8 *tmp367 false
-  585:  jump *label289 equal *tmp232 false
-  586:  set *tmp219 :_median.7:i
+  580:  op sub *tmp35 :_isMedian.7:gt :_isMedian.7:lt
+  581:  op abs :_isMedian.7:dif *tmp35 0
+  582:  op add *tmp36 :_isMedian.7:gt :_isMedian.7:lt
+  583:  op equal *tmp70 :_isMedian.7:gt :_isMedian.7:lt
+  584:  select *tmp37 greaterThanEq *tmp36 8 *tmp70 false
+  585:  jump *label289 equal *tmp37 false
+  586:  set *tmp33 :_median.7:i
   587:  jump *label276 always 0 0
         label *label289
   588:  jump *label310 greaterThanEq :_isMedian.7:dif :_median.7:bestDif
   589:  set :_median.7:bestDif :_isMedian.7:dif
   590:  set :_median.7:best :_median.7:i
   591:  set :_median.7:count 1
-  592:  multijump *tmp220 0 0
+  592:  multijump *tmp34 0 0
         label *label310
   593:  jump *label312 greaterThan :_isMedian.7:dif :_median.7:bestDif
   594:  op add :_median.7:best :_median.7:best :_median.7:i
   595:  op add :_median.7:count :_median.7:count 1
         label *label312
-  596:  multijump *tmp220 0 0
+  596:  multijump *tmp34 0 0
         multilabel *label288
-  597:  op div *tmp219 :_median.7:best :_median.7:count
+  597:  op div *tmp33 :_median.7:best :_median.7:count
         label *label276
-  598:  assertequals 5 *tmp219 "median(1,2,3,4,5,6,7,8,9)"
+  598:  assertequals 5 *tmp33 "median(1,2,3,4,5,6,7,8,9)"
   599:  set :_median.8:bestDif 10000000000
   600:  set :_median.8:best null
   601:  set :_median.8:count 1
   602:  set :_median.8:i 9
-  603:  setaddr *tmp242 *label319
+  603:  setaddr *tmp39 *label319
   604:  jump *label316 always 0 0
         multilabel *label319
   605:  set :_median.8:i 8
-  606:  setaddr *tmp242 *label320
+  606:  setaddr *tmp39 *label320
   607:  jump *label316 always 0 0
         multilabel *label320
   608:  set :_median.8:i 7
-  609:  setaddr *tmp242 *label321
+  609:  setaddr *tmp39 *label321
   610:  jump *label316 always 0 0
         multilabel *label321
   611:  set :_median.8:i 6
-  612:  setaddr *tmp242 *label322
+  612:  setaddr *tmp39 *label322
   613:  jump *label316 always 0 0
         multilabel *label322
   614:  set :_median.8:i 5
-  615:  setaddr *tmp242 *label323
+  615:  setaddr *tmp39 *label323
   616:  jump *label316 always 0 0
         multilabel *label323
   617:  set :_median.8:i 4
-  618:  setaddr *tmp242 *label324
+  618:  setaddr *tmp39 *label324
   619:  jump *label316 always 0 0
         multilabel *label324
   620:  set :_median.8:i 3
-  621:  setaddr *tmp242 *label325
+  621:  setaddr *tmp39 *label325
   622:  jump *label316 always 0 0
         multilabel *label325
   623:  set :_median.8:i 2
-  624:  setaddr *tmp242 *label326
+  624:  setaddr *tmp39 *label326
   625:  jump *label316 always 0 0
         multilabel *label326
   626:  set :_median.8:i 1
-  627:  setaddr *tmp242 *label327
+  627:  setaddr *tmp39 *label327
         label *label316
   628:  set :_isMedian.8:lt 0
   629:  set :_isMedian.8:gt 0
@@ -1383,67 +1383,67 @@ Final code before resolving virtual instructions:
   673:  op add :_isMedian.8:gt :_isMedian.8:gt 1
         label *label741
         label *label743
-  674:  op sub *tmp249 :_isMedian.8:gt :_isMedian.8:lt
-  675:  op abs :_isMedian.8:dif *tmp249 0
-  676:  op add *tmp251 :_isMedian.8:gt :_isMedian.8:lt
-  677:  op equal *tmp368 :_isMedian.8:gt :_isMedian.8:lt
-  678:  select *tmp254 greaterThanEq *tmp251 8 *tmp368 false
-  679:  jump *label328 equal *tmp254 false
-  680:  set *tmp241 :_median.8:i
+  674:  op sub *tmp40 :_isMedian.8:gt :_isMedian.8:lt
+  675:  op abs :_isMedian.8:dif *tmp40 0
+  676:  op add *tmp41 :_isMedian.8:gt :_isMedian.8:lt
+  677:  op equal *tmp71 :_isMedian.8:gt :_isMedian.8:lt
+  678:  select *tmp42 greaterThanEq *tmp41 8 *tmp71 false
+  679:  jump *label328 equal *tmp42 false
+  680:  set *tmp38 :_median.8:i
   681:  jump *label315 always 0 0
         label *label328
   682:  jump *label349 greaterThanEq :_isMedian.8:dif :_median.8:bestDif
   683:  set :_median.8:bestDif :_isMedian.8:dif
   684:  set :_median.8:best :_median.8:i
   685:  set :_median.8:count 1
-  686:  multijump *tmp242 0 0
+  686:  multijump *tmp39 0 0
         label *label349
   687:  jump *label351 greaterThan :_isMedian.8:dif :_median.8:bestDif
   688:  op add :_median.8:best :_median.8:best :_median.8:i
   689:  op add :_median.8:count :_median.8:count 1
         label *label351
-  690:  multijump *tmp242 0 0
+  690:  multijump *tmp39 0 0
         multilabel *label327
-  691:  op div *tmp241 :_median.8:best :_median.8:count
+  691:  op div *tmp38 :_median.8:best :_median.8:count
         label *label315
-  692:  assertequals 5 *tmp241 "median(9,8,7,6,5,4,3,2,1)"
+  692:  assertequals 5 *tmp38 "median(9,8,7,6,5,4,3,2,1)"
   693:  set :_median.9:bestDif 10000000000
   694:  set :_median.9:best null
   695:  set :_median.9:count 1
   696:  set :_median.9:i 1
-  697:  setaddr *tmp264 *label358
+  697:  setaddr *tmp44 *label358
   698:  jump *label355 always 0 0
         multilabel *label358
   699:  set :_median.9:i 3
-  700:  setaddr *tmp264 *label359
+  700:  setaddr *tmp44 *label359
   701:  jump *label355 always 0 0
         multilabel *label359
   702:  set :_median.9:i 5
-  703:  setaddr *tmp264 *label360
+  703:  setaddr *tmp44 *label360
   704:  jump *label355 always 0 0
         multilabel *label360
   705:  set :_median.9:i 7
-  706:  setaddr *tmp264 *label361
+  706:  setaddr *tmp44 *label361
   707:  jump *label355 always 0 0
         multilabel *label361
   708:  set :_median.9:i 9
-  709:  setaddr *tmp264 *label362
+  709:  setaddr *tmp44 *label362
   710:  jump *label355 always 0 0
         multilabel *label362
   711:  set :_median.9:i 2
-  712:  setaddr *tmp264 *label363
+  712:  setaddr *tmp44 *label363
   713:  jump *label355 always 0 0
         multilabel *label363
   714:  set :_median.9:i 4
-  715:  setaddr *tmp264 *label364
+  715:  setaddr *tmp44 *label364
   716:  jump *label355 always 0 0
         multilabel *label364
   717:  set :_median.9:i 6
-  718:  setaddr *tmp264 *label365
+  718:  setaddr *tmp44 *label365
   719:  jump *label355 always 0 0
         multilabel *label365
   720:  set :_median.9:i 8
-  721:  setaddr *tmp264 *label366
+  721:  setaddr *tmp44 *label366
         label *label355
   722:  set :_isMedian.9:lt 0
   723:  set :_isMedian.9:gt 0
@@ -1517,267 +1517,267 @@ Final code before resolving virtual instructions:
   767:  op add :_isMedian.9:gt :_isMedian.9:gt 1
         label *label814
         label *label816
-  768:  op sub *tmp271 :_isMedian.9:gt :_isMedian.9:lt
-  769:  op abs :_isMedian.9:dif *tmp271 0
-  770:  op add *tmp273 :_isMedian.9:gt :_isMedian.9:lt
-  771:  op equal *tmp369 :_isMedian.9:gt :_isMedian.9:lt
-  772:  select *tmp276 greaterThanEq *tmp273 8 *tmp369 false
-  773:  jump *label367 equal *tmp276 false
-  774:  set *tmp263 :_median.9:i
+  768:  op sub *tmp45 :_isMedian.9:gt :_isMedian.9:lt
+  769:  op abs :_isMedian.9:dif *tmp45 0
+  770:  op add *tmp46 :_isMedian.9:gt :_isMedian.9:lt
+  771:  op equal *tmp72 :_isMedian.9:gt :_isMedian.9:lt
+  772:  select *tmp47 greaterThanEq *tmp46 8 *tmp72 false
+  773:  jump *label367 equal *tmp47 false
+  774:  set *tmp43 :_median.9:i
   775:  jump *label354 always 0 0
         label *label367
   776:  jump *label388 greaterThanEq :_isMedian.9:dif :_median.9:bestDif
   777:  set :_median.9:bestDif :_isMedian.9:dif
   778:  set :_median.9:best :_median.9:i
   779:  set :_median.9:count 1
-  780:  multijump *tmp264 0 0
+  780:  multijump *tmp44 0 0
         label *label388
   781:  jump *label390 greaterThan :_isMedian.9:dif :_median.9:bestDif
   782:  op add :_median.9:best :_median.9:best :_median.9:i
   783:  op add :_median.9:count :_median.9:count 1
         label *label390
-  784:  multijump *tmp264 0 0
+  784:  multijump *tmp44 0 0
         multilabel *label366
-  785:  op div *tmp263 :_median.9:best :_median.9:count
+  785:  op div *tmp43 :_median.9:best :_median.9:count
         label *label354
-  786:  assertequals 5 *tmp263 "median(1,3,5,7,9,2,4,6,8)"
+  786:  assertequals 5 *tmp43 "median(1,3,5,7,9,2,4,6,8)"
   787:  set :_median.10:bestDif 10000000000
   788:  set :_median.10:best null
   789:  set :_median.10:count 1
   790:  set :_median.10:i 7
-  791:  setaddr *tmp286 *label397
+  791:  setaddr *tmp49 *label397
   792:  jump *label394 always 0 0
         multilabel *label397
   793:  set :_median.10:i 4
-  794:  setaddr *tmp286 *label398
+  794:  setaddr *tmp49 *label398
   795:  jump *label394 always 0 0
         multilabel *label398
   796:  set :_median.10:i 2
-  797:  setaddr *tmp286 *label399
+  797:  setaddr *tmp49 *label399
   798:  jump *label394 always 0 0
         multilabel *label399
   799:  set :_median.10:i 8
-  800:  setaddr *tmp286 *label400
+  800:  setaddr *tmp49 *label400
   801:  jump *label394 always 0 0
         multilabel *label400
   802:  set :_median.10:i 1
-  803:  setaddr *tmp286 *label401
+  803:  setaddr *tmp49 *label401
   804:  jump *label394 always 0 0
         multilabel *label401
   805:  set :_median.10:i 5
-  806:  setaddr *tmp286 *label402
+  806:  setaddr *tmp49 *label402
   807:  jump *label394 always 0 0
         multilabel *label402
   808:  set :_median.10:i 6
-  809:  setaddr *tmp286 *label403
+  809:  setaddr *tmp49 *label403
   810:  jump *label394 always 0 0
         multilabel *label403
   811:  set :_median.10:i 9
-  812:  setaddr *tmp286 *label404
+  812:  setaddr *tmp49 *label404
   813:  jump *label394 always 0 0
         multilabel *label404
   814:  set :_median.10:i 3
-  815:  setaddr *tmp286 *label405
+  815:  setaddr *tmp49 *label405
         label *label394
   816:  set :_isMedian.10:lt 0
   817:  set :_isMedian.10:gt 0
   818:  set :_isMedian.10:i 7
-  819:  setaddr *tmp288 *label412
+  819:  setaddr *tmp50 *label412
   820:  jump *label409 always 0 0
         multilabel *label412
   821:  set :_isMedian.10:i 4
-  822:  setaddr *tmp288 *label413
+  822:  setaddr *tmp50 *label413
   823:  jump *label409 always 0 0
         multilabel *label413
   824:  set :_isMedian.10:i 2
-  825:  setaddr *tmp288 *label414
+  825:  setaddr *tmp50 *label414
   826:  jump *label409 always 0 0
         multilabel *label414
   827:  set :_isMedian.10:i 8
-  828:  setaddr *tmp288 *label415
+  828:  setaddr *tmp50 *label415
   829:  jump *label409 always 0 0
         multilabel *label415
   830:  set :_isMedian.10:i 1
-  831:  setaddr *tmp288 *label416
+  831:  setaddr *tmp50 *label416
   832:  jump *label409 always 0 0
         multilabel *label416
   833:  set :_isMedian.10:i 5
-  834:  setaddr *tmp288 *label417
+  834:  setaddr *tmp50 *label417
   835:  jump *label409 always 0 0
         multilabel *label417
   836:  set :_isMedian.10:i 6
-  837:  setaddr *tmp288 *label418
+  837:  setaddr *tmp50 *label418
   838:  jump *label409 always 0 0
         multilabel *label418
   839:  set :_isMedian.10:i 9
-  840:  setaddr *tmp288 *label419
+  840:  setaddr *tmp50 *label419
   841:  jump *label409 always 0 0
         multilabel *label419
   842:  set :_isMedian.10:i 3
-  843:  setaddr *tmp288 *label420
+  843:  setaddr *tmp50 *label420
         label *label409
   844:  jump *label421 greaterThanEq :_isMedian.10:i :_median.10:i
   845:  op add :_isMedian.10:lt :_isMedian.10:lt 1
-  846:  multijump *tmp288 0 0
+  846:  multijump *tmp50 0 0
         label *label421
   847:  jump *label423 lessThanEq :_isMedian.10:i :_median.10:i
   848:  op add :_isMedian.10:gt :_isMedian.10:gt 1
         label *label423
-  849:  multijump *tmp288 0 0
+  849:  multijump *tmp50 0 0
         multilabel *label420
-  850:  op sub *tmp293 :_isMedian.10:gt :_isMedian.10:lt
-  851:  op abs :_isMedian.10:dif *tmp293 0
-  852:  op add *tmp295 :_isMedian.10:gt :_isMedian.10:lt
-  853:  op equal *tmp370 :_isMedian.10:gt :_isMedian.10:lt
-  854:  select *tmp298 greaterThanEq *tmp295 8 *tmp370 false
-  855:  jump *label406 equal *tmp298 false
-  856:  set *tmp285 :_median.10:i
+  850:  op sub *tmp51 :_isMedian.10:gt :_isMedian.10:lt
+  851:  op abs :_isMedian.10:dif *tmp51 0
+  852:  op add *tmp52 :_isMedian.10:gt :_isMedian.10:lt
+  853:  op equal *tmp73 :_isMedian.10:gt :_isMedian.10:lt
+  854:  select *tmp53 greaterThanEq *tmp52 8 *tmp73 false
+  855:  jump *label406 equal *tmp53 false
+  856:  set *tmp48 :_median.10:i
   857:  jump *label393 always 0 0
         label *label406
   858:  jump *label427 greaterThanEq :_isMedian.10:dif :_median.10:bestDif
   859:  set :_median.10:bestDif :_isMedian.10:dif
   860:  set :_median.10:best :_median.10:i
   861:  set :_median.10:count 1
-  862:  multijump *tmp286 0 0
+  862:  multijump *tmp49 0 0
         label *label427
   863:  jump *label429 greaterThan :_isMedian.10:dif :_median.10:bestDif
   864:  op add :_median.10:best :_median.10:best :_median.10:i
   865:  op add :_median.10:count :_median.10:count 1
         label *label429
-  866:  multijump *tmp286 0 0
+  866:  multijump *tmp49 0 0
         multilabel *label405
-  867:  op div *tmp285 :_median.10:best :_median.10:count
+  867:  op div *tmp48 :_median.10:best :_median.10:count
         label *label393
-  868:  assertequals 5 *tmp285 "median(7,4,2,8,1,5,6,9,3)"
+  868:  assertequals 5 *tmp48 "median(7,4,2,8,1,5,6,9,3)"
   869:  set :_median.11:bestDif 10000000000
   870:  set :_median.11:best null
   871:  set :_median.11:count 1
   872:  set :_median.11:i 1
-  873:  setaddr *tmp308 *label436
+  873:  setaddr *tmp55 *label436
   874:  jump *label433 always 0 0
         multilabel *label436
   875:  set :_median.11:i 1
-  876:  setaddr *tmp308 *label437
+  876:  setaddr *tmp55 *label437
   877:  jump *label433 always 0 0
         multilabel *label437
   878:  set :_median.11:i 1
-  879:  setaddr *tmp308 *label438
+  879:  setaddr *tmp55 *label438
   880:  jump *label433 always 0 0
         multilabel *label438
   881:  set :_median.11:i 1
-  882:  setaddr *tmp308 *label439
+  882:  setaddr *tmp55 *label439
   883:  jump *label433 always 0 0
         multilabel *label439
   884:  set :_median.11:i 9
-  885:  setaddr *tmp308 *label440
+  885:  setaddr *tmp55 *label440
   886:  jump *label433 always 0 0
         multilabel *label440
   887:  set :_median.11:i 9
-  888:  setaddr *tmp308 *label441
+  888:  setaddr *tmp55 *label441
   889:  jump *label433 always 0 0
         multilabel *label441
   890:  set :_median.11:i 9
-  891:  setaddr *tmp308 *label442
+  891:  setaddr *tmp55 *label442
   892:  jump *label433 always 0 0
         multilabel *label442
   893:  set :_median.11:i 9
-  894:  setaddr *tmp308 *label443
+  894:  setaddr *tmp55 *label443
   895:  jump *label433 always 0 0
         multilabel *label443
   896:  set :_median.11:i 5
-  897:  setaddr *tmp308 *label444
+  897:  setaddr *tmp55 *label444
         label *label433
   898:  set :_isMedian.11:lt 0
   899:  set :_isMedian.11:gt 0
   900:  set :_isMedian.11:i 1
-  901:  setaddr *tmp310 *label451
+  901:  setaddr *tmp56 *label451
   902:  jump *label448 always 0 0
         multilabel *label451
   903:  set :_isMedian.11:i 1
-  904:  setaddr *tmp310 *label452
+  904:  setaddr *tmp56 *label452
   905:  jump *label448 always 0 0
         multilabel *label452
   906:  set :_isMedian.11:i 1
-  907:  setaddr *tmp310 *label453
+  907:  setaddr *tmp56 *label453
   908:  jump *label448 always 0 0
         multilabel *label453
   909:  set :_isMedian.11:i 1
-  910:  setaddr *tmp310 *label454
+  910:  setaddr *tmp56 *label454
   911:  jump *label448 always 0 0
         multilabel *label454
   912:  set :_isMedian.11:i 9
-  913:  setaddr *tmp310 *label455
+  913:  setaddr *tmp56 *label455
   914:  jump *label448 always 0 0
         multilabel *label455
   915:  set :_isMedian.11:i 9
-  916:  setaddr *tmp310 *label456
+  916:  setaddr *tmp56 *label456
   917:  jump *label448 always 0 0
         multilabel *label456
   918:  set :_isMedian.11:i 9
-  919:  setaddr *tmp310 *label457
+  919:  setaddr *tmp56 *label457
   920:  jump *label448 always 0 0
         multilabel *label457
   921:  set :_isMedian.11:i 9
-  922:  setaddr *tmp310 *label458
+  922:  setaddr *tmp56 *label458
   923:  jump *label448 always 0 0
         multilabel *label458
   924:  set :_isMedian.11:i 5
-  925:  setaddr *tmp310 *label459
+  925:  setaddr *tmp56 *label459
         label *label448
   926:  jump *label460 greaterThanEq :_isMedian.11:i :_median.11:i
   927:  op add :_isMedian.11:lt :_isMedian.11:lt 1
-  928:  multijump *tmp310 0 0
+  928:  multijump *tmp56 0 0
         label *label460
   929:  jump *label462 lessThanEq :_isMedian.11:i :_median.11:i
   930:  op add :_isMedian.11:gt :_isMedian.11:gt 1
         label *label462
-  931:  multijump *tmp310 0 0
+  931:  multijump *tmp56 0 0
         multilabel *label459
-  932:  op sub *tmp315 :_isMedian.11:gt :_isMedian.11:lt
-  933:  op abs :_isMedian.11:dif *tmp315 0
-  934:  op add *tmp317 :_isMedian.11:gt :_isMedian.11:lt
-  935:  op equal *tmp371 :_isMedian.11:gt :_isMedian.11:lt
-  936:  select *tmp320 greaterThanEq *tmp317 8 *tmp371 false
-  937:  jump *label445 equal *tmp320 false
-  938:  set *tmp307 :_median.11:i
+  932:  op sub *tmp57 :_isMedian.11:gt :_isMedian.11:lt
+  933:  op abs :_isMedian.11:dif *tmp57 0
+  934:  op add *tmp58 :_isMedian.11:gt :_isMedian.11:lt
+  935:  op equal *tmp74 :_isMedian.11:gt :_isMedian.11:lt
+  936:  select *tmp59 greaterThanEq *tmp58 8 *tmp74 false
+  937:  jump *label445 equal *tmp59 false
+  938:  set *tmp54 :_median.11:i
   939:  jump *label432 always 0 0
         label *label445
   940:  jump *label466 greaterThanEq :_isMedian.11:dif :_median.11:bestDif
   941:  set :_median.11:bestDif :_isMedian.11:dif
   942:  set :_median.11:best :_median.11:i
   943:  set :_median.11:count 1
-  944:  multijump *tmp308 0 0
+  944:  multijump *tmp55 0 0
         label *label466
   945:  jump *label468 greaterThan :_isMedian.11:dif :_median.11:bestDif
   946:  op add :_median.11:best :_median.11:best :_median.11:i
   947:  op add :_median.11:count :_median.11:count 1
         label *label468
-  948:  multijump *tmp308 0 0
+  948:  multijump *tmp55 0 0
         multilabel *label444
-  949:  op div *tmp307 :_median.11:best :_median.11:count
+  949:  op div *tmp54 :_median.11:best :_median.11:count
         label *label432
-  950:  assertequals 5 *tmp307 "median(1,1,1,1,9,9,9,9,5)"
+  950:  assertequals 5 *tmp54 "median(1,1,1,1,9,9,9,9,5)"
   951:  stop
   952:  end
         label *label1
   953:  op max :median:y2 :median:x1 :median:x2
   954:  op min :median:y3 :median:x3 :median:x4
   955:  jump *label471 greaterThan :median:y2 :median:y3
-  956:  op add *tmp332 :median:y2 :median:y3
-  957:  op div :median*retval *tmp332 2
+  956:  op add *tmp60 :median:y2 :median:y3
+  957:  op div :median*retval *tmp60 2
   958:  return :median*retaddr
         label *label471
   959:  op min :median:y1 :median:x1 :median:x2
   960:  op max :median:y4 :median:x3 :median:x4
   961:  jump *label473 lessThan :median:y1 :median:y4
-  962:  op add *tmp338 :median:y1 :median:y4
-  963:  op div :median*retval *tmp338 2
+  962:  op add *tmp61 :median:y1 :median:y4
+  963:  op div :median*retval *tmp61 2
   964:  return :median*retaddr
         label *label473
-  965:  op max *tmp340 :median:y1 :median:y3
-  966:  op min *tmp341 :median:y2 :median:y4
-  967:  op add *tmp342 *tmp340 *tmp341
-  968:  op div :median*retval *tmp342 2
+  965:  op max *tmp62 :median:y1 :median:y3
+  966:  op min *tmp63 :median:y2 :median:y4
+  967:  op add *tmp64 *tmp62 *tmp63
+  968:  op div :median*retval *tmp64 2
   969:  return :median*retaddr
         label *label2
   970:  op min :median.1:y1 :median.1:x1 :median.1:x2
@@ -1827,164 +1827,164 @@ Final code before resolving virtual instructions:
 :_median:bestDif: 0.0
 :_median:best: 6.0
 :_median:count: 6.0
-*tmp66: 152.0
-*tmp65: 1.0
+*tmp1: 152.0
+*tmp0: 1.0
 :_median.1:bestDif: 1.0
 :_median.1:best: 5.0
 :_median.1:count: 5.0
 :_median.1:i: 5.0
-*tmp88: 222.0
+*tmp3: 222.0
 :_isMedian.1:lt: 5.0
 :_isMedian.1:gt: 0.0
-*tmp95: -5.0
+*tmp4: -5.0
 :_isMedian.1:dif: 5.0
-*tmp97: 5.0
-*tmp362: 0.0
-*tmp100: 0.0
-*tmp87: 1.0
+*tmp5: 5.0
+*tmp65: 0.0
+*tmp6: 0.0
+*tmp2: 1.0
 :_median.2:bestDif: 2.0
 :_median.2:best: 4.0
 :_median.2:count: 4.0
 :_median.2:i: 5.0
-*tmp110: 286.0
+*tmp8: 286.0
 :_isMedian.2:lt: 4.0
 :_isMedian.2:gt: 0.0
 :_isMedian.2:i: 5.0
-*tmp112: 269.0
-*tmp117: -4.0
+*tmp9: 269.0
+*tmp10: -4.0
 :_isMedian.2:dif: 4.0
-*tmp119: 4.0
-*tmp363: 0.0
-*tmp122: 0.0
-*tmp109: 1.0
+*tmp11: 4.0
+*tmp66: 0.0
+*tmp12: 0.0
+*tmp7: 1.0
 :_median.3:bestDif: 3.0
 :_median.3:best: 18.0
 :_median.3:count: 6.0
 :_median.3:i: 5.0
-*tmp132: 350.0
+*tmp14: 350.0
 :_isMedian.3:lt: 3.0
 :_isMedian.3:gt: 0.0
 :_isMedian.3:i: 5.0
-*tmp134: 333.0
-*tmp139: -3.0
+*tmp15: 333.0
+*tmp16: -3.0
 :_isMedian.3:dif: 3.0
-*tmp141: 3.0
-*tmp364: 0.0
-*tmp144: 0.0
-*tmp131: 3.0
+*tmp17: 3.0
+*tmp67: 0.0
+*tmp18: 0.0
+*tmp13: 3.0
 :_median.4:bestDif: 2.0
 :_median.4:best: 20.0
 :_median.4:count: 4.0
 :_median.4:i: 5.0
-*tmp154: 414.0
+*tmp20: 414.0
 :_isMedian.4:lt: 2.0
 :_isMedian.4:gt: 0.0
 :_isMedian.4:i: 5.0
-*tmp156: 397.0
-*tmp161: -2.0
+*tmp21: 397.0
+*tmp22: -2.0
 :_isMedian.4:dif: 2.0
-*tmp163: 2.0
-*tmp365: 0.0
-*tmp166: 0.0
-*tmp153: 5.0
+*tmp23: 2.0
+*tmp68: 0.0
+*tmp24: 0.0
+*tmp19: 5.0
 :_median.5:bestDif: 1.0
 :_median.5:best: 25.0
 :_median.5:count: 5.0
 :_median.5:i: 5.0
-*tmp176: 478.0
+*tmp26: 478.0
 :_isMedian.5:lt: 1.0
 :_isMedian.5:gt: 0.0
 :_isMedian.5:i: 5.0
-*tmp178: 461.0
-*tmp183: -1.0
+*tmp27: 461.0
+*tmp28: -1.0
 :_isMedian.5:dif: 1.0
-*tmp185: 1.0
-*tmp366: 0.0
-*tmp188: 0.0
-*tmp175: 5.0
+*tmp29: 1.0
+*tmp69: 0.0
+*tmp30: 0.0
+*tmp25: 5.0
 :_median.6:bestDif: 0.0
 :_median.6:best: 30.0
 :_median.6:count: 6.0
-*tmp198: 503.0
-*tmp197: 5.0
+*tmp32: 503.0
+*tmp31: 5.0
 :_median.7:bestDif: 2.0
 :_median.7:best: 4.0
 :_median.7:count: 1.0
 :_median.7:i: 5.0
-*tmp220: 523.0
+*tmp34: 523.0
 :_isMedian.7:lt: 4.0
 :_isMedian.7:gt: 4.0
-*tmp227: 0.0
+*tmp35: 0.0
 :_isMedian.7:dif: 0.0
-*tmp229: 8.0
-*tmp367: 1.0
-*tmp232: 1.0
-*tmp219: 5.0
+*tmp36: 8.0
+*tmp70: 1.0
+*tmp37: 1.0
+*tmp33: 5.0
 :_median.8:bestDif: 2.0
 :_median.8:best: 6.0
 :_median.8:count: 1.0
 :_median.8:i: 5.0
-*tmp242: 617.0
+*tmp39: 617.0
 :_isMedian.8:lt: 4.0
 :_isMedian.8:gt: 4.0
-*tmp249: 0.0
+*tmp40: 0.0
 :_isMedian.8:dif: 0.0
-*tmp251: 8.0
-*tmp368: 1.0
-*tmp254: 1.0
-*tmp241: 5.0
+*tmp41: 8.0
+*tmp71: 1.0
+*tmp42: 1.0
+*tmp38: 5.0
 :_median.9:bestDif: 4.0
 :_median.9:best: 3.0
 :_median.9:count: 1.0
 :_median.9:i: 5.0
-*tmp264: 705.0
+*tmp44: 705.0
 :_isMedian.9:lt: 4.0
 :_isMedian.9:gt: 4.0
-*tmp271: 0.0
+*tmp45: 0.0
 :_isMedian.9:dif: 0.0
-*tmp273: 8.0
-*tmp369: 1.0
-*tmp276: 1.0
-*tmp263: 5.0
+*tmp46: 8.0
+*tmp72: 1.0
+*tmp47: 1.0
+*tmp43: 5.0
 :_median.10:bestDif: 2.0
 :_median.10:best: 4.0
 :_median.10:count: 1.0
 :_median.10:i: 5.0
-*tmp286: 808.0
+*tmp49: 808.0
 :_isMedian.10:lt: 4.0
 :_isMedian.10:gt: 4.0
 :_isMedian.10:i: 3.0
-*tmp288: 850.0
-*tmp293: 0.0
+*tmp50: 850.0
+*tmp51: 0.0
 :_isMedian.10:dif: 0.0
-*tmp295: 8.0
-*tmp370: 1.0
-*tmp298: 1.0
-*tmp285: 5.0
+*tmp52: 8.0
+*tmp73: 1.0
+*tmp53: 1.0
+*tmp48: 5.0
 :_median.11:bestDif: 5.0
 :_median.11:best: 40.0
 :_median.11:count: 8.0
 :_median.11:i: 5.0
-*tmp308: 949.0
+*tmp55: 949.0
 :_isMedian.11:lt: 4.0
 :_isMedian.11:gt: 4.0
 :_isMedian.11:i: 5.0
-*tmp310: 932.0
-*tmp315: 0.0
+*tmp56: 932.0
+*tmp57: 0.0
 :_isMedian.11:dif: 0.0
-*tmp317: 8.0
-*tmp371: 1.0
-*tmp320: 1.0
-*tmp307: 5.0
+*tmp58: 8.0
+*tmp74: 1.0
+*tmp59: 1.0
+*tmp54: 5.0
 :median:y2: 6.0
 :median:y3: 4.0
-*tmp332: 10.0
+*tmp60: 10.0
 :median:y1: 2.0
 :median:y4: 8.0
-*tmp338: 10.0
-*tmp340: 4.0
-*tmp341: 6.0
-*tmp342: 10.0
+*tmp61: 10.0
+*tmp62: 4.0
+*tmp63: 6.0
+*tmp64: 10.0
 :median.1:y1: 5.0
 :median.1:y2: 5.0
 :median.1:y4: 5.0

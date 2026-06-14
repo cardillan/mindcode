@@ -208,17 +208,17 @@ compiles to:
 ```mlog
 op rand *tmp0 100 0
 op floor :x *tmp0 0
-op rand *tmp2 200 0
-op floor :y *tmp2 0
-op add *tmp4 :x 1
-op add *tmp5 :y 1
-ucontrol getBlock *tmp4 *tmp5 :type :building :floor
+op rand *tmp1 200 0
+op floor :y *tmp1 0
+op add *tmp2 :x 1
+op add *tmp3 :y 1
+ucontrol getBlock *tmp2 *tmp3 :type :building :floor
 print :building
 print :type
 print :floor
-op sub *tmp7 :x 1
-op sub *tmp8 :y 1
-ucontrol getBlock *tmp7 *tmp8 :getBlock2:type :getBlock2:building :getBlock2:floor
+op sub *tmp4 :x 1
+op sub *tmp5 :y 1
+ucontrol getBlock *tmp4 *tmp5 :getBlock2:type :getBlock2:building :getBlock2:floor
 print :getBlock2:building
 print :getBlock2:type
 print :getBlock2:floor

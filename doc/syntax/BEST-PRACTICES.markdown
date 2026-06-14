@@ -209,8 +209,8 @@ set thorium @ore-thorium
 set sand @sand-floor
 # Lookup:
 sensor .ore sorter1 @config
-sensor *tmp1 .ore @name
-read .floorOre @this *tmp1
+sensor *tmp0 .ore @name
+read .floorOre @this *tmp0
 print .floorOre
 ```
 
@@ -252,8 +252,8 @@ set sand-floor @sand
 set darksand @sand
 # Lookup:
 ucontrol getBlock 10 20 0 0 :floor
-sensor *tmp2 :floor @name
-read .ore @this *tmp2
+sensor *tmp0 :floor @name
+read .ore @this *tmp0
 print .ore
 ```
 
@@ -311,8 +311,8 @@ compiles to:
 
 ```mlog
 ucontrol getBlock 10 20 0 0 :floor
-sensor *tmp2 :floor @name
-read .ore processor1 *tmp2
+sensor *tmp0 :floor @name
+read .ore processor1 *tmp0
 print .ore
 ```
 
@@ -397,17 +397,17 @@ end
         # Function: noinline void build(in cfg)
         # Function: void unpackCfg(in cfg, out type, out x, out y, out rotation, out ind)
 label_10:
-            read *tmp1 :build:cfg 1
-            op sub *tmp2 *tmp1 74
-            lookup block :buildBlock:type *tmp2
-            read *tmp5 :build:cfg 2
-            op sub *tmp6 *tmp5 74
-            op div :unpackCfg:x *tmp6 2
-            read *tmp9 :build:cfg 3
-            op sub *tmp10 *tmp9 74
-            op div :unpackCfg:y *tmp10 2
-            read *tmp13 :build:cfg 4
-            op sub :buildBlock:rotation *tmp13 74
+            read *tmp0 :build:cfg 1
+            op sub *tmp1 *tmp0 74
+            lookup block :buildBlock:type *tmp1
+            read *tmp2 :build:cfg 2
+            op sub *tmp3 *tmp2 74
+            op div :unpackCfg:x *tmp3 2
+            read *tmp4 :build:cfg 3
+            op sub *tmp5 *tmp4 74
+            op div :unpackCfg:y *tmp5 2
+            read *tmp6 :build:cfg 4
+            op sub :buildBlock:rotation *tmp6 74
         op add :buildBlock:x @thisx :unpackCfg:x
         op add :buildBlock:y @thisy :unpackCfg:y
         op add :buildBlock*retaddr @counter 1
@@ -571,11 +571,11 @@ produces
 ```mlog
 op add .array*0 .array*0 1
 op add .array*1 .array*1 1
-op add *tmp1 .array*2 1
+op add *tmp0 .array*2 1
 op add .array*2 .array*2 1
 print .array*0
 print .array*1
-print *tmp1
+print *tmp0
 ```
 
 The long-term goal is to produce identical, optimal code in both of these cases. At this moment, there's room for improvement in both approaches, but index-based loops may produce better code in some circumstances.
@@ -634,10 +634,10 @@ produces
     # Index-based access (6 instructions per iteration)
     set :i 0
 label_16:
-            lookup team *tmp3 :i
-            sensor .array*elem *tmp3 @name
-            read *tmp2 @this .array*elem
-        op add .y .y *tmp2
+            lookup team *tmp2 :i
+            sensor .array*elem *tmp2 @name
+            read *tmp1 @this .array*elem
+        op add .y .y *tmp1
     op add :i :i 1
     jump label_16 lessThan :i 4
     print .x
@@ -698,16 +698,16 @@ produces
     # Index-based access (12 instructions per iteration)
     set :i 0
 label_22:
-            lookup liquid *tmp9 :i
-            sensor .b*elem *tmp9 @name
-            read *tmp5 @this .b*elem
-            lookup item *tmp10 :i
-            sensor .c*elem *tmp10 @name
-            read *tmp7 @this .c*elem
-        op add *tmp8 *tmp5 *tmp7
-            lookup team *tmp11 :i
-            sensor .a*elem *tmp11 @name
-            write *tmp8 @this .a*elem
+            lookup liquid *tmp4 :i
+            sensor .b*elem *tmp4 @name
+            read *tmp1 @this .b*elem
+            lookup item *tmp5 :i
+            sensor .c*elem *tmp5 @name
+            read *tmp2 @this .c*elem
+        op add *tmp3 *tmp1 *tmp2
+            lookup team *tmp6 :i
+            sensor .a*elem *tmp6 @name
+            write *tmp3 @this .a*elem
     op add :i :i 1
     jump label_22 lessThan :i 4
     print derelict
@@ -814,22 +814,22 @@ produces
     # Looping through half of the array: subarray
 label_34:
     set :a.1 .array*0
-    op add *tmp3 @counter 1
+    op add *tmp1 @counter 1
     jump label_48 always 0 0
     set :a.1 .array*1
-    op add *tmp3 @counter 1
+    op add *tmp1 @counter 1
     jump label_48 always 0 0
     set :a.1 .array*2
-    op add *tmp3 @counter 1
+    op add *tmp1 @counter 1
     jump label_48 always 0 0
     set :a.1 .array*3
-    op add *tmp3 @counter 1
+    op add *tmp1 @counter 1
     jump label_48 always 0 0
     set :a.1 .array*4
-    set *tmp3 null
+    set *tmp1 null
     label_48:
         print :a.1
-        set @counter *tmp3
+        set @counter *tmp1
 ```
 
 ---

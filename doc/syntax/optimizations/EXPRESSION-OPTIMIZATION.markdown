@@ -20,10 +20,10 @@ compiles to:
 
 ```mlog
 op rand *tmp0 6 0
-lookup team *tmp4 *tmp0
-sensor .a*elem *tmp4 @name
-read *tmp3 @this .a*elem
-printchar *tmp3
+lookup team *tmp2 *tmp0
+sensor .a*elem *tmp2 @name
+read *tmp1 @this .a*elem
+printchar *tmp1
 end
 draw triangle derelict sharded crux malis green blue
 ```
@@ -90,8 +90,8 @@ volatile x = a || b;
 compiles to:
 
 ```mlog
-op or *tmp1 :a :b
-op notEqual .x *tmp1 false
+op or *tmp0 :a :b
+op notEqual .x *tmp0 false
 ```
 
 This additional instruction can be removed in either of the following cases: 
@@ -120,15 +120,15 @@ compiles to:
 ```mlog
 # a || b is computed first, and as it is used in another `op or` instruction, the additional instruction is removed
 op or *tmp0 :b :c
-op or *tmp7 :a *tmp0
-op notEqual .x *tmp7 false
+op or *tmp4 :a *tmp0
+op notEqual .x *tmp4 false
 # The && and ! operators (op land/op equal) are guaranteed to produce 0 or 1
-op land *tmp2 :a :b
-op equal *tmp3 :c false
-op or .y *tmp2 *tmp3
+op land *tmp1 :a :b
+op equal *tmp2 :c false
+op or .y *tmp1 *tmp2
 # When used in an if, the value need not to be normalized
-op or *tmp5 :a :b
-select .z notEqual *tmp5 false "yes" "no"
+op or *tmp3 :a :b
+select .z notEqual *tmp3 false "yes" "no"
 ```
 
 ### Simplifying complex expressions
@@ -176,8 +176,8 @@ set b "y"
 write 1 @this a
 write 1 @this b
 print x
-read *tmp1 @this b
-print *tmp1
+read *tmp0 @this b
+print *tmp0
 ```
 
 This program outputs `1null`. Since the name of variable `y` is not a compile-time constant, the optimization is not applied for it, and the value read from `y` is `null`. `x`, on the other hand, is a compile-time constant, so the optimization is applied, and the value is actually written to the variable.

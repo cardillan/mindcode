@@ -29,8 +29,8 @@ compiles to:
 
 ```mlog
 op rand *tmp0 10 0
-select *tmp2 lessThan *tmp0 5 "low" "high"
-print *tmp2
+select *tmp1 lessThan *tmp0 5 "low" "high"
+print *tmp1
 ```
 
 The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch.
@@ -56,12 +56,12 @@ print(a, b, c);
 compiles to:
 
 ```mlog
-sensor *tmp1 switch1 @enabled
-select :a notEqual *tmp1 false "on" "off"
-select :b notEqual *tmp1 false @coal :b
-select :c notEqual *tmp1 false 50 :c
-sensor *tmp4 switch2 @enabled
-select :a notEqual *tmp4 false "paused" :a
+sensor *tmp0 switch1 @enabled
+select :a notEqual *tmp0 false "on" "off"
+select :b notEqual *tmp0 false @coal :b
+select :c notEqual *tmp0 false 50 :c
+sensor *tmp1 switch2 @enabled
+select :a notEqual *tmp1 false "paused" :a
 print :a
 print :b
 print :c
@@ -85,12 +85,12 @@ col(a > 0 ? packcolor(0, b, b, 1) : %[red]);
 compiles to:
 
 ```mlog
-op lessThanEq *tmp5 .a .b
-select .a equal *tmp5 false 10 20
-select .b equal *tmp5 false 20 10
-packcolor *tmp6 0 .b .b 1
-select *tmp3 greaterThan .a 0 *tmp6 %[red]
-draw col *tmp3 0 0 0 0 0
+op lessThanEq *tmp1 .a .b
+select .a equal *tmp1 false 10 20
+select .b equal *tmp1 false 20 10
+packcolor *tmp2 0 .b .b 1
+select *tmp0 greaterThan .a 0 *tmp2 %[red]
+draw col *tmp0 0 0 0 0 0
 ```
 
 ## Short-circuit expressions
@@ -162,10 +162,10 @@ print(x, y);
 compiles to:
 
 ```mlog
-sensor *tmp1 switch1 @enabled
-op land *tmp3 *tmp1 :a
-select :x notEqual *tmp3 false 10 5
-select :y notEqual *tmp3 false 20 7
+sensor *tmp0 switch1 @enabled
+op land *tmp1 *tmp0 :a
+select :x notEqual *tmp1 false 10 5
+select :y notEqual *tmp1 false 20 7
 print :x
 print :y
 ```
@@ -186,8 +186,8 @@ compiles to:
 
 ```mlog
 jump 6 equal :a false
-sensor *tmp1 switch1 @enabled
-jump 6 equal *tmp1 false
+sensor *tmp0 switch1 @enabled
+jump 6 equal *tmp0 false
 set :x 10
 set :y 20
 jump 8 always 0 0
@@ -209,9 +209,9 @@ print(a > 0 or b > 0 ? 10 : 20);
 compiles to:
 
 ```mlog
-select *tmp3 greaterThan :a 0 10 20
-select *tmp2 greaterThan :b 0 10 *tmp3
-print *tmp2
+select *tmp1 greaterThan :a 0 10 20
+select *tmp0 greaterThan :b 0 10 *tmp1
+print *tmp0
 ```
 
 This optimization only happens when the short-circuit condition can be converted to full evaluation without any side effects, and the result is compatible with the optimization goal:
@@ -230,10 +230,10 @@ volatile x = (switch1.enabled and sorter1.config == @coal);
 compiles to:
 
 ```mlog
-sensor *tmp1 switch1 @enabled
-op notEqual *tmp6 *tmp1 false
-sensor *tmp3 sorter1 @config
-select .x equal *tmp3 @coal *tmp6 false
+sensor *tmp0 switch1 @enabled
+op notEqual *tmp2 *tmp0 false
+sensor *tmp1 sorter1 @config
+select .x equal *tmp1 @coal *tmp2 false
 ```
 
 ### Last jump conversion
@@ -250,10 +250,10 @@ volatile x = switch1.enabled and !@unit.@dead and amount > 0 ? "yes" : "no";
 compiles to:
 
 ```mlog
-sensor *tmp1 switch1 @enabled
-jump 6 equal *tmp1 false
-sensor *tmp2 @unit @dead
-jump 6 notEqual *tmp2 false
+sensor *tmp0 switch1 @enabled
+jump 6 equal *tmp0 false
+sensor *tmp1 @unit @dead
+jump 6 notEqual *tmp1 false
 select .x lessThanEq :amount 0 "no" "yes"
 jump 0 always 0 0
 set .x "no"
@@ -270,10 +270,10 @@ volatile x = switch1.enabled and !@unit.@dead and amount > 0 ? "yes" : "no";
 compiles to:
 
 ```mlog
-sensor *tmp1 switch1 @enabled
-jump 7 equal *tmp1 false
-sensor *tmp2 @unit @dead
-jump 7 notEqual *tmp2 false
+sensor *tmp0 switch1 @enabled
+jump 7 equal *tmp0 false
+sensor *tmp1 @unit @dead
+jump 7 notEqual *tmp1 false
 jump 7 lessThanEq :amount 0
 set .x "yes"
 jump 0 always 0 0

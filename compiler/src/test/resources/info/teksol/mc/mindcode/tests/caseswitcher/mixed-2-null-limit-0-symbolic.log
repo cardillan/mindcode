@@ -549,74 +549,74 @@ lookup block *tmp1 :printAll:i
 jump *label8 strictEqual *tmp1 null
 jump *label7 always
 label *label8
-set *tmp3 65
+set *tmp2 65
 jump *label6 always
 label *label7
 jump *label10 equal *tmp1 @kiln
 jump *label9 always
 label *label10
-set *tmp3 66
+set *tmp2 66
 jump *label6 always
 label *label9
 jump *label12 equal *tmp1 @plastanium-compressor
 jump *label11 always
 label *label12
-set *tmp3 67
+set *tmp2 67
 jump *label6 always
 label *label11
 jump *label14 equal *tmp1 @phase-weaver
 jump *label13 always
 label *label14
-set *tmp3 68
+set *tmp2 68
 jump *label6 always
 label *label13
 jump *label16 equal *tmp1 @cryofluid-mixer
 jump *label15 always
 label *label16
-set *tmp3 69
+set *tmp2 69
 jump *label6 always
 label *label15
 jump *label18 equal *tmp1 @pyratite-mixer
 jump *label17 always
 label *label18
-set *tmp3 70
+set *tmp2 70
 jump *label6 always
 label *label17
 jump *label20 equal *tmp1 @blast-mixer
 jump *label19 always
 label *label20
-set *tmp3 71
+set *tmp2 71
 jump *label6 always
 label *label19
 jump *label22 equal *tmp1 @melter
 jump *label21 always
 label *label22
-set *tmp3 72
+set *tmp2 72
 jump *label6 always
 label *label21
 jump *label24 equal *tmp1 @separator
 jump *label23 always
 label *label24
-set *tmp3 73
+set *tmp2 73
 jump *label6 always
 label *label23
 jump *label26 equal *tmp1 @disassembler
 jump *label25 always
 label *label26
-set *tmp3 74
+set *tmp2 74
 jump *label6 always
 label *label25
 jump *label28 equal *tmp1 @spore-press
 jump *label27 always
 label *label28
-set *tmp3 75
+set *tmp2 75
 jump *label6 always
 label *label27
 jump *label30 equal *tmp1 @door
 jump *label30 equal *tmp1 @door-large
 jump *label29 always
 label *label30
-set *tmp3 76
+set *tmp2 76
 jump *label6 always
 label *label29
 jump *label32 equal *tmp1 @scrap-wall
@@ -625,7 +625,7 @@ jump *label32 equal *tmp1 @scrap-wall-huge
 jump *label32 equal *tmp1 @scrap-wall-gigantic
 jump *label31 always
 label *label32
-set *tmp3 77
+set *tmp2 77
 jump *label6 always
 label *label31
 jump *label34 equal *tmp1 @conveyor
@@ -634,7 +634,7 @@ jump *label34 equal *tmp1 @plastanium-conveyor
 jump *label34 equal *tmp1 @armored-conveyor
 jump *label33 always
 label *label34
-set *tmp3 78
+set *tmp2 78
 jump *label6 always
 label *label33
 jump *label36 equal *tmp1 @conduit
@@ -643,7 +643,7 @@ jump *label36 equal *tmp1 @plated-conduit
 jump *label36 equal *tmp1 @liquid-router
 jump *label35 always
 label *label36
-set *tmp3 79
+set *tmp2 79
 jump *label6 always
 label *label35
 jump *label38 equal *tmp1 @liquid-tank
@@ -651,73 +651,73 @@ jump *label38 equal *tmp1 @liquid-junction
 jump *label38 equal *tmp1 @liquid-container
 jump *label37 always
 label *label38
-set *tmp3 80
+set *tmp2 80
 jump *label6 always
 label *label37
 jump *label40 equal *tmp1 @disperse
 jump *label39 always
 label *label40
-set *tmp3 81
+set *tmp2 81
 jump *label6 always
 label *label39
 jump *label42 equal *tmp1 @unit-repair-tower
 jump *label41 always
 label *label42
-set *tmp3 82
+set *tmp2 82
 jump *label6 always
 label *label41
 jump *label44 equal *tmp1 @diffuse
 jump *label43 always
 label *label44
-set *tmp3 83
+set *tmp2 83
 jump *label6 always
 label *label43
 jump *label46 equal *tmp1 @prime-refabricator
 jump *label45 always
 label *label46
-set *tmp3 84
+set *tmp2 84
 jump *label6 always
 label *label45
 jump *label48 equal *tmp1 @tank-refabricator
 jump *label47 always
 label *label48
-set *tmp3 85
+set *tmp2 85
 jump *label6 always
 label *label47
 jump *label50 equal *tmp1 @mech-refabricator
 jump *label49 always
 label *label50
-set *tmp3 86
+set *tmp2 86
 jump *label6 always
 label *label49
 jump *label52 equal *tmp1 @ship-refabricator
 jump *label51 always
 label *label52
-set *tmp3 87
+set *tmp2 87
 jump *label6 always
 label *label51
 jump *label54 equal *tmp1 @slag-heater
 jump *label53 always
 label *label54
-set *tmp3 88
+set *tmp2 88
 jump *label6 always
 label *label53
 jump *label56 equal *tmp1 @lustre
 jump *label55 always
 label *label56
-set *tmp3 89
+set *tmp2 89
 jump *label6 always
 label *label55
 jump *label58 equal *tmp1 @scathe
 jump *label57 always
 label *label58
-set *tmp3 90
+set *tmp2 90
 jump *label6 always
 label *label57
-set *tmp3 48
+set *tmp2 48
 label *label6
-jump *label59 equal *tmp3 48
-printchar *tmp3
+jump *label59 equal *tmp2 48
+printchar *tmp2
 jump *label60 always
 label *label59
 label *label60

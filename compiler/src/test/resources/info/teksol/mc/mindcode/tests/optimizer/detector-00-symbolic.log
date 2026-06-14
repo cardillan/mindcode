@@ -971,70 +971,70 @@ set :page 0
 label *label0
 getlink .BLOCK 2
 op max :page :page 1
-sensor *tmp2 switch1 @enabled
-jump *label3 equal *tmp2 false
-op mod *tmp4 :page 7
-op add :page *tmp4 1
+sensor *tmp0 switch1 @enabled
+jump *label3 equal *tmp0 false
+op mod *tmp1 :page 7
+op add :page *tmp1 1
 control enabled switch1 false
 label *label3
 print "Property detector - page {0}/7\n"
 format :page
-sensor *tmp8 .BLOCK @dead
-op strictEqual *tmp9 *tmp8 0
-jump *label5 equal *tmp9 false
-sensor *tmp11 .BLOCK @type
-print *tmp11
+sensor *tmp2 .BLOCK @dead
+op strictEqual *tmp3 *tmp2 0
+jump *label5 equal *tmp3 false
+sensor *tmp4 .BLOCK @type
+print *tmp4
 print " - "
 jump *label23 greaterThanEq :page 4
 jump *label24 greaterThanEq :page 2
 jump *label6 lessThan :page 1
 print "contents:\ntotalItems: {0}\nfirstItem: {0}\nitemCapacity: {0}\ntotalLiquids: {0}\nliquidCapacity: {0}\n"
-sensor *tmp14 .BLOCK @totalItems
-format *tmp14
-sensor *tmp15 .BLOCK @firstItem
-format *tmp15
-sensor *tmp16 .BLOCK @itemCapacity
-format *tmp16
-sensor *tmp17 .BLOCK @totalLiquids
-op floor *tmp18 *tmp17
-format *tmp18
-sensor *tmp19 .BLOCK @liquidCapacity
-format *tmp19
+sensor *tmp5 .BLOCK @totalItems
+format *tmp5
+sensor *tmp6 .BLOCK @firstItem
+format *tmp6
+sensor *tmp7 .BLOCK @itemCapacity
+format *tmp7
+sensor *tmp8 .BLOCK @totalLiquids
+op floor *tmp9 *tmp8
+format *tmp9
+sensor *tmp10 .BLOCK @liquidCapacity
+format *tmp10
 jump *label6 always
 label *label24
 jump *label13 greaterThanEq :page 3
 print "power:\ntotalPower: {0}\npowerCapacity: {0}\npowerNetStored: {0}\npowerNetCapacity: {0}\npowerNetIn: {0}\npowerNetOut: {0}\n"
-sensor *tmp20 .BLOCK @totalPower
-op floor *tmp21 *tmp20
-format *tmp21
-sensor *tmp22 .BLOCK @powerCapacity
-format *tmp22
-sensor *tmp23 .BLOCK @powerNetStored
-op floor *tmp24 *tmp23
-format *tmp24
-sensor *tmp25 .BLOCK @powerNetCapacity
-format *tmp25
-sensor *tmp26 .BLOCK @powerNetIn
-op floor *tmp27 *tmp26
-format *tmp27
-sensor *tmp28 .BLOCK @powerNetOut
-op floor *tmp29 *tmp28
-format *tmp29
+sensor *tmp11 .BLOCK @totalPower
+op floor *tmp12 *tmp11
+format *tmp12
+sensor *tmp13 .BLOCK @powerCapacity
+format *tmp13
+sensor *tmp14 .BLOCK @powerNetStored
+op floor *tmp15 *tmp14
+format *tmp15
+sensor *tmp16 .BLOCK @powerNetCapacity
+format *tmp16
+sensor *tmp17 .BLOCK @powerNetIn
+op floor *tmp18 *tmp17
+format *tmp18
+sensor *tmp19 .BLOCK @powerNetOut
+op floor *tmp20 *tmp19
+format *tmp20
 jump *label6 always
 label *label23
 jump *label25 greaterThanEq :page 6
 jump *label17 greaterThanEq :page 5
 print "status:\nheat: {0}\nefficiency: {0}\ntimescale: {0}\ndead: {0}\nrange: {0}\n"
-sensor *tmp34 .BLOCK @heat
-format *tmp34
-sensor *tmp35 .BLOCK @efficiency
-format *tmp35
-sensor *tmp36 .BLOCK @timescale
-format *tmp36
-sensor *tmp37 .BLOCK @dead
-format *tmp37
-sensor *tmp38 .BLOCK @range
-format *tmp38
+sensor *tmp25 .BLOCK @heat
+format *tmp25
+sensor *tmp26 .BLOCK @efficiency
+format *tmp26
+sensor *tmp27 .BLOCK @timescale
+format *tmp27
+sensor *tmp28 .BLOCK @dead
+format *tmp28
+sensor *tmp29 .BLOCK @range
+format *tmp29
 jump *label6 always
 label *label25
 jump *label19 lessThan :page 7
@@ -1042,64 +1042,64 @@ jump *label21 lessThan :page 8
 jump *label6 always
 label *label13
 print "combat:\nammo: {0}\nammoCapacity: {0}\nhealth: {0}\nmaxHealth: {0}\n"
-sensor *tmp30 .BLOCK @ammo
-format *tmp30
-sensor *tmp31 .BLOCK @ammoCapacity
-format *tmp31
-sensor *tmp32 .BLOCK @health
-format *tmp32
-sensor *tmp33 .BLOCK @maxHealth
-format *tmp33
+sensor *tmp21 .BLOCK @ammo
+format *tmp21
+sensor *tmp22 .BLOCK @ammoCapacity
+format *tmp22
+sensor *tmp23 .BLOCK @health
+format *tmp23
+sensor *tmp24 .BLOCK @maxHealth
+format *tmp24
 jump *label6 always
 label *label17
 print "position:\nrotation: {0}\nx: {0}\ny: {0}\nsize: {0}\n"
-sensor *tmp39 .BLOCK @rotation
-format *tmp39
-sensor *tmp40 .BLOCK @x
-format *tmp40
-sensor *tmp41 .BLOCK @y
-format *tmp41
-sensor *tmp42 .BLOCK @size
-format *tmp42
+sensor *tmp30 .BLOCK @rotation
+format *tmp30
+sensor *tmp31 .BLOCK @x
+format *tmp31
+sensor *tmp32 .BLOCK @y
+format *tmp32
+sensor *tmp33 .BLOCK @size
+format *tmp33
 jump *label6 always
 label *label19
 print "unit:\nshootX: {0}\nshootY: {0}\nshooting: {0}\nboosting: {0}\nmineX: {0}\nmineY: {0}\nmining: {0}\npayloadCount: {0}\npayloadType: {0}\ncontrolled: {0}\ncontroller: {0}\n"
-sensor *tmp43 .BLOCK @shootX
+sensor *tmp34 .BLOCK @shootX
+format *tmp34
+sensor *tmp35 .BLOCK @shootY
+format *tmp35
+sensor *tmp36 .BLOCK @shooting
+format *tmp36
+sensor *tmp37 .BLOCK @boosting
+format *tmp37
+sensor *tmp38 .BLOCK @mineX
+format *tmp38
+sensor *tmp39 .BLOCK @mineY
+format *tmp39
+sensor *tmp40 .BLOCK @mining
+format *tmp40
+sensor *tmp41 .BLOCK @payloadCount
+format *tmp41
+sensor *tmp42 .BLOCK @payloadType
+format *tmp42
+sensor *tmp43 .BLOCK @controlled
 format *tmp43
-sensor *tmp44 .BLOCK @shootY
+sensor *tmp44 .BLOCK @controller
 format *tmp44
-sensor *tmp45 .BLOCK @shooting
-format *tmp45
-sensor *tmp46 .BLOCK @boosting
-format *tmp46
-sensor *tmp47 .BLOCK @mineX
-format *tmp47
-sensor *tmp48 .BLOCK @mineY
-format *tmp48
-sensor *tmp49 .BLOCK @mining
-format *tmp49
-sensor *tmp50 .BLOCK @payloadCount
-format *tmp50
-sensor *tmp51 .BLOCK @payloadType
-format *tmp51
-sensor *tmp52 .BLOCK @controlled
-format *tmp52
-sensor *tmp53 .BLOCK @controller
-format *tmp53
 jump *label6 always
 label *label21
 print "other:\nteam: {0}\ntype: {0}\nflag: {0}\nname: {0}\nconfig: {0}\nenabled: {0}\n"
-sensor *tmp54 .BLOCK @team
-format *tmp54
-format *tmp11
-sensor *tmp56 .BLOCK @flag
-format *tmp56
-sensor *tmp57 .BLOCK @name
-format *tmp57
-sensor *tmp58 .BLOCK @config
-format *tmp58
-sensor *tmp59 .BLOCK @enabled
-format *tmp59
+sensor *tmp45 .BLOCK @team
+format *tmp45
+format *tmp4
+sensor *tmp46 .BLOCK @flag
+format *tmp46
+sensor *tmp47 .BLOCK @name
+format *tmp47
+sensor *tmp48 .BLOCK @config
+format *tmp48
+sensor *tmp49 .BLOCK @enabled
+format *tmp49
 jump *label6 always
 label *label5
 print "No linked block found.\n"

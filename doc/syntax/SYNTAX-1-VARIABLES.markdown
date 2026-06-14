@@ -675,18 +675,18 @@ compiles into
 op rand *tmp0 5 0
 op rand *tmp1 5 0
 op rand *tmp2 5 0
-op shl *tmp7 *tmp0 1
-op add @counter *tmp7 5
-set *tmp6 "[red]"
+op shl *tmp4 *tmp0 1
+op add @counter *tmp4 5
+set *tmp3 "[red]"
 jump 14 always 0 0
-set *tmp6 "[green]"
+set *tmp3 "[green]"
 jump 14 always 0 0
-set *tmp6 "[blue]"
+set *tmp3 "[blue]"
 jump 14 always 0 0
-set *tmp6 "[crimson]"
+set *tmp3 "[crimson]"
 jump 14 always 0 0
-set *tmp6 "[gold]"
-print *tmp6
+set *tmp3 "[gold]"
+print *tmp3
 print *tmp0
 print *tmp1
 print *tmp2
@@ -1573,8 +1573,8 @@ op add .c .a 10
 write .c bank1 0
 print .c
 # Here's the additional instruction for computing the array offset 
-op add *tmp260 .c 256
-write 10 bank1 *tmp260
+op add *tmp0 .c 256
+write 10 bank1 *tmp0
 ```
 
 ## Exported variables

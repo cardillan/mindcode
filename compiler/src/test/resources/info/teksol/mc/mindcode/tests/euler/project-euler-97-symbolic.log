@@ -86,12 +86,12 @@ Final code before resolving virtual instructions:
 set :result 28433
 set :count 57862
 label *label3
-op shl *tmp1 :result 20
-op mod :result *tmp1 10000000000
+op shl *tmp0 :result 20
+op mod :result *tmp0 10000000000
 op sub :count :count 20
 jump *label3 greaterThan :count 20
-op shl *tmp3 :result :count
-op add *tmp4 *tmp3 1
-op mod :result *tmp4 10000000000
+op shl *tmp1 :result :count
+op add *tmp2 *tmp1 1
+op mod :result *tmp2 10000000000
 assertequals 7075090433 :result "Project Euler 97"
 stop

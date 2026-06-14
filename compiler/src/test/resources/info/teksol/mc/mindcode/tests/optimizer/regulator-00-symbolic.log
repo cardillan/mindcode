@@ -1602,10 +1602,10 @@ op sub :n :n 1
 getlink :block :n
 print "Found: {0}\n"
 format :block
-sensor *tmp5 :block @type
-sensor *tmp55 *tmp5 @id
-jump *label57 greaterThanEq *tmp55 147
-multijump *label59 *tmp55 0
+sensor *tmp0 :block @type
+sensor *tmp6 *tmp0 @id
+jump *label57 greaterThanEq *tmp6 147
+multijump *label59 *tmp6 0
 multilabel *label59
 jump *label57 always
 multilabel *label60
@@ -1945,16 +1945,16 @@ print "No container.\n"
 label *label21
 printflush .MESSAGE
 jump *label0 equal .CONTAINER null
-sensor *tmp14 .SORTER @type
-op strictEqual .INVERTED *tmp14 @inverted-sorter
+sensor *tmp1 .SORTER @type
+op strictEqual .INVERTED *tmp1 @inverted-sorter
 # "Function: inline def setState(in newState)"
 set .STATE true
 set .CYCLES 1
 op xor .ON .INVERTED true
 select .ACTIVE_TEXT notEqual .ON false "\nCurrently active:[green]" "\nCurrently inactive:[salmon]"
 control enabled .SWITCH 0
-sensor *tmp23 .SWITCH @enabled
-jump __start__ notEqual *tmp23 0
+sensor *tmp2 .SWITCH @enabled
+jump __start__ notEqual *tmp2 0
 label *label56
 set :start @time
 sensor :item .SORTER @config
@@ -1972,8 +1972,8 @@ print .CONTAINER
 label *label32
 sensor :max .CONTAINER .MAXIMUM
 sensor :amount .CONTAINER :item
-op mul *tmp32 100 :amount
-op idiv :pct *tmp32 :max
+op mul *tmp3 100 :amount
+op idiv :pct *tmp3 :max
 jump *label35 greaterThan :pct PCT_LOW
 # "Function: inline def setState(in newState)"
 jump *label36 equal .STATE true
@@ -2018,9 +2018,9 @@ jump *label55 lessThan :n @links
 label *label53
 print "[]\n# of cycles: {0}\n[lightgray]Loop: {0} ms"
 format .CYCLES
-op sub *tmp53 @time :start
-op floor *tmp54 *tmp53
-format *tmp54
+op sub *tmp4 @time :start
+op floor *tmp5 *tmp4
+format *tmp5
 printflush .MESSAGE
-sensor *tmp23 .SWITCH @enabled
-jump *label56 equal *tmp23 0
+sensor *tmp2 .SWITCH @enabled
+jump *label56 equal *tmp2 0

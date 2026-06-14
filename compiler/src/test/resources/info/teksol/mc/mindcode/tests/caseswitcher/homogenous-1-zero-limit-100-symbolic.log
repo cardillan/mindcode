@@ -307,44 +307,44 @@ set :i -1
 label *label10
 lookup block :block :i
 # "Function: def isWall(in block)"
-sensor *tmp9 :block @id
-jump *label13 greaterThanEq *tmp9 203
-jump *label11 greaterThanEq *tmp9 35
-jump *label14 greaterThanEq *tmp9 17
-jump *label11 greaterThanEq *tmp9 1
+sensor *tmp4 :block @id
+jump *label13 greaterThanEq *tmp4 203
+jump *label11 greaterThanEq *tmp4 35
+jump *label14 greaterThanEq *tmp4 17
+jump *label11 greaterThanEq *tmp4 1
 jump *label12 always
 label *label14
-jump *label9 lessThan *tmp9 29
-jump *label9 greaterThanEq *tmp9 31
+jump *label9 lessThan *tmp4 29
+jump *label9 greaterThanEq *tmp4 31
 jump *label11 always
 label *label13
-jump *label15 greaterThanEq *tmp9 234
-jump *label16 greaterThanEq *tmp9 220
-jump *label11 greaterThanEq *tmp9 208
-jump *label9 lessThan *tmp9 205
-jump *label9 greaterThanEq *tmp9 206
+jump *label15 greaterThanEq *tmp4 234
+jump *label16 greaterThanEq *tmp4 220
+jump *label11 greaterThanEq *tmp4 208
+jump *label9 lessThan *tmp4 205
+jump *label9 greaterThanEq *tmp4 206
 jump *label11 always
 label *label16
-jump *label11 greaterThanEq *tmp9 226
-jump *label9 lessThan *tmp9 222
-jump *label11 lessThan *tmp9 225
+jump *label11 greaterThanEq *tmp4 226
+jump *label9 lessThan *tmp4 222
+jump *label11 lessThan *tmp4 225
 jump *label9 always
 label *label15
-jump *label11 greaterThanEq *tmp9 235
+jump *label11 greaterThanEq *tmp4 235
 jump *label9 always
 label *label12
-jump *label11 strictEqual *tmp9 null
+jump *label11 strictEqual *tmp4 null
 label *label9
-set *tmp2 true
+set *tmp0 true
 jump *label7 always
 label *label11
-set *tmp2 false
+set *tmp0 false
 label *label7
-jump *label4 equal *tmp2 false
-op mul *tmp5 :hash 31
-op add *tmp6 *tmp5 :i
-op add *tmp7 *tmp6 251
-op and :hash *tmp7 0xFFFFFFFF
+jump *label4 equal *tmp0 false
+op mul *tmp1 :hash 31
+op add *tmp2 *tmp1 :i
+op add *tmp3 *tmp2 251
+op and :hash *tmp3 0xFFFFFFFF
 jump *label5 always
 label *label4
 label *label5

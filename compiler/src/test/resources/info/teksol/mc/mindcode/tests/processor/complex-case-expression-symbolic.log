@@ -334,17 +334,17 @@ assertflush *tmp0
 # "Function: def test()"
 set :d:n 1
 call *label0 :d*retaddr :d*retval
-set *tmp2 :d*retval
+set *tmp1 :d*retval
 set :d:n 10
 call *label0 :d*retaddr :d*retval
-set *tmp4 :d*retval
-set :test:i *tmp2
-jump *label4 greaterThan *tmp2 :d*retval
+set *tmp2 :d*retval
+set :test:i *tmp1
+jump *label4 greaterThan *tmp1 :d*retval
 label *label18
 set :d:n 1
 call *label0 :d*retaddr :d*retval
 jump *label6 notEqual :test:i :d*retval
-set *tmp5 "A"
+set *tmp3 "A"
 jump *label5 always
 label *label6
 set :d:n 2
@@ -355,7 +355,7 @@ call *label0 :d*retaddr :d*retval
 jump *label9 equal :test:i :d*retval
 jump *label8 notEqual :test:i 4
 label *label9
-set *tmp5 "B"
+set *tmp3 "B"
 jump *label5 always
 label *label8
 jump *label3 equal :test:i 5
@@ -365,16 +365,16 @@ jump *label12 lessThan :test:i :d*retval
 set :d:n 8
 call *label0 :d*retaddr :d*retval
 jump *label12 greaterThan :test:i :d*retval
-set *tmp5 "C"
+set *tmp3 "C"
 jump *label5 always
 label *label12
 jump *label4 equal :test:i 10
-set *tmp5 "D"
+set *tmp3 "D"
 label *label5
-print *tmp5
+print *tmp3
 label *label3
 op add :test:i :test:i 1
-jump *label18 lessThanEq :test:i *tmp4
+jump *label18 lessThanEq :test:i *tmp2
 label *label4
 assertprints *tmp0 "ABBBCCCD" "complex-case-expression"
 stop

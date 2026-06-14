@@ -548,9 +548,9 @@ label *label1
 set :i 0
 jump *label4 greaterThanEq 0 SIZE
 label *label22
-read *tmp5 FINAL :i
-read *tmp6 ARRAY :i
-assertequals *tmp5 *tmp6 "unexpected value"
+read *tmp1 FINAL :i
+read *tmp2 ARRAY :i
+assertequals *tmp1 *tmp2 "unexpected value"
 op add :i :i 1
 jump *label22 lessThan :i SIZE
 label *label4
@@ -558,13 +558,13 @@ stop
 end
 label *label0
 jump *label6 lessThanEq :quicksort:right :quicksort:left
-op sub *tmp9 :quicksort:right :quicksort:left
-op idiv *tmp10 *tmp9 2
-op add :quicksort:pivot_index :quicksort:left *tmp10
+op sub *tmp3 :quicksort:right :quicksort:left
+op idiv *tmp4 *tmp3 2
+op add :quicksort:pivot_index :quicksort:left *tmp4
 read :partition:pivot ARRAY :quicksort:pivot_index
 jump *label9 equal :quicksort:pivot_index :quicksort:right
-read *tmp22 ARRAY :quicksort:right
-write *tmp22 ARRAY :quicksort:pivot_index
+read *tmp5 ARRAY :quicksort:right
+write *tmp5 ARRAY :quicksort:pivot_index
 write :partition:pivot ARRAY :quicksort:right
 label *label9
 set :partition:index :quicksort:left
@@ -574,8 +574,8 @@ label *label23
 read :partition:curr ARRAY :partition:i
 jump *label14 greaterThanEq :partition:curr :partition:pivot
 jump *label16 equal :partition:i :partition:index
-read *tmp37 ARRAY :partition:index
-write *tmp37 ARRAY :partition:i
+read *tmp6 ARRAY :partition:index
+write *tmp6 ARRAY :partition:i
 write :partition:curr ARRAY :partition:index
 label *label16
 op add :partition:index :partition:index 1
@@ -584,21 +584,21 @@ op add :partition:i :partition:i 1
 jump *label23 lessThan :partition:i :quicksort:right
 label *label13
 jump *label18 equal :partition:index :quicksort:right
-read *tmp46 ARRAY :partition:index
-write *tmp46 ARRAY :quicksort:right
+read *tmp7 ARRAY :partition:index
+write *tmp7 ARRAY :quicksort:right
 write :partition:pivot ARRAY :partition:index
 label *label18
 set :quicksort:new_pivot_index :partition:index
-op sub *tmp49 :partition:index 1
+op sub *tmp8 :partition:index 1
 push bank1 :quicksort:right
 push bank1 :quicksort:new_pivot_index
-set :quicksort:right *tmp49
+set :quicksort:right *tmp8
 callrec bank1 *label0 *label20 :quicksort*retval
 label *label20
 pop bank1 :quicksort:new_pivot_index
 pop bank1 :quicksort:right
-op add *tmp50 :quicksort:new_pivot_index 1
-set :quicksort:left *tmp50
+op add *tmp9 :quicksort:new_pivot_index 1
+set :quicksort:left *tmp9
 callrec bank1 *label0 *label21 :quicksort*retval
 label *label21
 label *label6

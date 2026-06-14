@@ -284,22 +284,22 @@ set :hash 0
 set :i -1
 label *label10
 lookup block :block :i
-sensor *tmp9 :block @id
-multijump *tmp9 0 0
+sensor *tmp4 :block @id
+multijump *tmp4 0 0
 multilabel *label14
-jump *label11 strictEqual *tmp9 null
+jump *label11 strictEqual *tmp4 null
 multilabel *label16
-set *tmp2 true                          # Origin: 4, keys: 17 .. 28, 31 .. 34, 203, 204, 206, 207, 220, 221, 225, 234
+set *tmp0 true                          # Origin: 4, keys: 17 .. 28, 31 .. 34, 203, 204, 206, 207, 220, 221, 225, 234
 jump *label7 always
 multilabel *label15
 label *label11
-set *tmp2 false                         # Origin: 4, keys: 1 .. 16, 29, 30, 35 .. 202, 205, 208 .. 219, 222 .. 224, 226 .. 233, 235 .. 260
+set *tmp0 false                         # Origin: 4, keys: 1 .. 16, 29, 30, 35 .. 202, 205, 208 .. 219, 222 .. 224, 226 .. 233, 235 .. 260
 label *label7
-jump *label4 equal *tmp2 false
-op mul *tmp5 :hash 31
-op add *tmp6 *tmp5 :i
-op add *tmp7 *tmp6 251
-op and :hash *tmp7 0xFFFFFFFF
+jump *label4 equal *tmp0 false
+op mul *tmp1 :hash 31
+op add *tmp2 *tmp1 :i
+op add *tmp3 *tmp2 251
+op and :hash *tmp3 0xFFFFFFFF
 jump *label5 always
 label *label4
 label *label5

@@ -45,6 +45,7 @@ import info.teksol.mc.mindcode.compiler.preprocess.PreprocessorContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable.LogicTemp;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructorContext;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
@@ -340,6 +341,9 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
                 warn(WARN.ABSOLUTE_ADDRESSING);
             }
         }
+
+        // Renumber temps
+        renumberTemporary(instructions);
 
         // Sort variables
         LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(globalProfile, instructionProcessor, rootAstContext);
@@ -714,5 +718,22 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
     }
 
     private record ModulePlacement(InputFile inputFile, SortedSet<AstIdentifier> remoteProcessors) {
+    }
+
+    private void renumberTemporary(List<LogicInstruction> instructions) {
+        IdentityHashMap<LogicTemp, LogicTemp> map = new IdentityHashMap<>();
+        for (LogicInstruction instruction : instructions) {
+            instruction.typedArgumentsStream().forEach(arg -> {
+                if (arg.argument() instanceof LogicTemp tmp) {
+                    map.putIfAbsent(tmp, tmp);
+                }
+            });
+        }
+
+        List<LogicTemp> temps = map.keySet().stream().sorted(Comparator.comparingInt(LogicTemp::getIndex)).toList();
+        int index = 0;
+        for (LogicTemp temp : temps) {
+            temp.setIndex(index++);
+        }
     }
 }

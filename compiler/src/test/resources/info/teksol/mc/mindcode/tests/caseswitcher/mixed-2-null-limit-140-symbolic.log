@@ -819,129 +819,129 @@ set :printAll:i -1
 label *label61
 lookup block *tmp1 :printAll:i
 # "Function: def identifyBlock(in block)"
-sensor *tmp7 *tmp1 @id
-jump *label64 greaterThanEq *tmp7 146
-jump *label62 greaterThanEq *tmp7 66
-jump *label65 greaterThanEq *tmp7 31
-jump *label66 greaterThanEq *tmp7 14
-jump *label67 greaterThanEq *tmp7 7
-jump *label63 lessThan *tmp7 4
-jump *label10 lessThan *tmp7 5
-jump *label14 greaterThanEq *tmp7 6
-set *tmp3 67
+sensor *tmp3 *tmp1 @id
+jump *label64 greaterThanEq *tmp3 146
+jump *label62 greaterThanEq *tmp3 66
+jump *label65 greaterThanEq *tmp3 31
+jump *label66 greaterThanEq *tmp3 14
+jump *label67 greaterThanEq *tmp3 7
+jump *label63 lessThan *tmp3 4
+jump *label10 lessThan *tmp3 5
+jump *label14 greaterThanEq *tmp3 6
+set *tmp2 67
 jump *label6 always
 label *label67
-jump *label68 greaterThanEq *tmp7 10
-jump *label16 lessThan *tmp7 8
-jump *label20 greaterThanEq *tmp7 9
-set *tmp3 70
+jump *label68 greaterThanEq *tmp3 10
+jump *label16 lessThan *tmp3 8
+jump *label20 greaterThanEq *tmp3 9
+set *tmp2 70
 jump *label6 always
 label *label68
-jump *label69 greaterThanEq *tmp7 12
-jump *label24 greaterThanEq *tmp7 11
-set *tmp3 72
+jump *label69 greaterThanEq *tmp3 12
+jump *label24 greaterThanEq *tmp3 11
+set *tmp2 72
 jump *label6 always
 label *label69
-jump *label28 greaterThanEq *tmp7 13
-set *tmp3 74
+jump *label28 greaterThanEq *tmp3 13
+set *tmp2 74
 jump *label6 always
 label *label66
-jump *label62 lessThan *tmp7 29
-set *tmp3 76
+jump *label62 lessThan *tmp3 29
+set *tmp2 76
 jump *label6 always
 label *label65
-jump *label70 greaterThanEq *tmp7 45
-jump *label32 lessThan *tmp7 35
-jump *label62 lessThan *tmp7 41
-set *tmp3 78
+jump *label70 greaterThanEq *tmp3 45
+jump *label32 lessThan *tmp3 35
+jump *label62 lessThan *tmp3 41
+set *tmp2 78
 jump *label6 always
 label *label70
-jump *label62 lessThan *tmp7 60
-jump *label36 lessThan *tmp7 64
-set *tmp3 80
+jump *label62 lessThan *tmp3 60
+jump *label36 lessThan *tmp3 64
+set *tmp2 80
 jump *label6 always
 label *label64
-jump *label71 greaterThanEq *tmp7 216
-jump *label62 greaterThanEq *tmp7 147
-set *tmp3 80
+jump *label71 greaterThanEq *tmp3 216
+jump *label62 greaterThanEq *tmp3 147
+set *tmp2 80
 jump *label6 always
 label *label71
-jump *label72 greaterThanEq *tmp7 238
-jump *label73 greaterThanEq *tmp7 230
-jump *label62 greaterThanEq *tmp7 217
-set *tmp3 81
+jump *label72 greaterThanEq *tmp3 238
+jump *label73 greaterThanEq *tmp3 230
+jump *label62 greaterThanEq *tmp3 217
+set *tmp2 81
 jump *label6 always
 label *label73
-jump *label74 greaterThanEq *tmp7 233
-jump *label42 lessThan *tmp7 231
-jump *label46 greaterThanEq *tmp7 232
-set *tmp3 83
+jump *label74 greaterThanEq *tmp3 233
+jump *label42 lessThan *tmp3 231
+jump *label46 greaterThanEq *tmp3 232
+set *tmp2 83
 jump *label6 always
 label *label74
-jump *label62 lessThan *tmp7 235
-jump *label48 lessThan *tmp7 236
-jump *label52 greaterThanEq *tmp7 237
-set *tmp3 86
+jump *label62 lessThan *tmp3 235
+jump *label48 lessThan *tmp3 236
+jump *label52 greaterThanEq *tmp3 237
+set *tmp2 86
 jump *label6 always
 label *label72
-jump *label62 greaterThanEq *tmp7 243
-jump *label54 lessThan *tmp7 239
-jump *label62 lessThan *tmp7 241
-jump *label58 greaterThanEq *tmp7 242
-set *tmp3 89
+jump *label62 greaterThanEq *tmp3 243
+jump *label54 lessThan *tmp3 239
+jump *label62 lessThan *tmp3 241
+jump *label58 greaterThanEq *tmp3 242
+set *tmp2 89
 jump *label6 always
 label *label8
-set *tmp3 65
+set *tmp2 65
 jump *label6 always
 label *label10
-set *tmp3 66
+set *tmp2 66
 jump *label6 always
 label *label14
-set *tmp3 68
+set *tmp2 68
 jump *label6 always
 label *label16
-set *tmp3 69
+set *tmp2 69
 jump *label6 always
 label *label20
-set *tmp3 71
+set *tmp2 71
 jump *label6 always
 label *label24
-set *tmp3 73
+set *tmp2 73
 jump *label6 always
 label *label28
-set *tmp3 75
+set *tmp2 75
 jump *label6 always
 label *label32
-set *tmp3 77
+set *tmp2 77
 jump *label6 always
 label *label36
-set *tmp3 79
+set *tmp2 79
 jump *label6 always
 label *label42
-set *tmp3 82
+set *tmp2 82
 jump *label6 always
 label *label46
-set *tmp3 84
+set *tmp2 84
 jump *label6 always
 label *label48
-set *tmp3 85
+set *tmp2 85
 jump *label6 always
 label *label52
-set *tmp3 87
+set *tmp2 87
 jump *label6 always
 label *label54
-set *tmp3 88
+set *tmp2 88
 jump *label6 always
 label *label58
-set *tmp3 90
+set *tmp2 90
 jump *label6 always
 label *label63
-jump *label8 strictEqual *tmp7 null
+jump *label8 strictEqual *tmp3 null
 label *label62
-set *tmp3 48
+set *tmp2 48
 label *label6
-jump *label59 equal *tmp3 48
-printchar *tmp3
+jump *label59 equal *tmp2 48
+printchar *tmp2
 jump *label60 always
 label *label59
 label *label60

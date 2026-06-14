@@ -250,12 +250,12 @@ set :d:n 0
 setaddr :d*retaddr *label5
 call *label0 *invalid :d*retval
 label *label5
-set *tmp2 :d*retval
+set *tmp1 :d*retval
 set :d:n 10
 setaddr :d*retaddr *label6
 call *label0 *invalid :d*retval
 label *label6
-jump *label4 greaterThan *tmp2 :d*retval
+jump *label4 greaterThan *tmp1 :d*retval
 label *label16
 set :d:n :test:i
 setaddr :d*retaddr *label9
@@ -277,12 +277,12 @@ set :d:n :test:i
 setaddr :d*retaddr *label14
 call *label0 *invalid :d*retval
 label *label14
-set *tmp2 :d*retval
+set *tmp1 :d*retval
 set :d:n :test:j
 setaddr :d*retaddr *label15
 call *label0 *invalid :d*retval
 label *label15
-jump *label16 lessThanEq *tmp2 :d*retval
+jump *label16 lessThanEq *tmp1 :d*retval
 label *label4
 assertprints *tmp0 "0|10|2|11|6|13|8|14|10|15|" "iterated-for-loop-break-continue"
 stop

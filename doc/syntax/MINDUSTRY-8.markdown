@@ -220,8 +220,8 @@ compiles into
 ```mlog
 read :x processor1 "x"
 read :y processor1 "y"
-op add *tmp2 :x :y
-write *tmp2 processor1 "z"
+op add *tmp0 :x :y
+write *tmp0 processor1 "z"
 ```
 
 Unlike external variables, access to another processor's variables is not limited to numeric values. All possible variable values are correctly transferred using these new instructions.    
