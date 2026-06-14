@@ -9,4 +9,5 @@ public enum EnvironmentOptions {
     NULL_COUNTER_IS_NOOP,
     PROCESSOR_SIZE_LIMIT,
     TARGET,
+    ZERO_WAIT_YIELDS,
 }

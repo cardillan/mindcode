@@ -94,13 +94,14 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [-l [LOG]] [--output-directory OUTPUT-DIRECTORY] [--file-references {path,uri,windows-uri}]
                 [-a FILE [FILE ...]] [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
-                [--processor-size-limit {1..1000000}] [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}]
-                [--no-argument-padding [{true,false}]] [--function-prefix {short,long}] [--author author [author ...]]
-                [--no-signature] [--processor-id processor_ID] [--program-name program_name]
-                [--program-version program_version] [--encode-zero-characters [{true,false}]]
-                [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
-                [--setrate {1..1000}] [--ipt {1..1000}] [--atomic-full-protection [{true,false}]]
-                [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
+                [--processor-size-limit {1..1000000}] [--zero-wait-yields {true,false}]
+                [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
+                [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
+                [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
+                [--encode-zero-characters [{true,false}]] [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}]
+                [--target-guard [{true,false}]] [--setrate {1..1000}] [--ipt {1..1000}]
+                [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
+                [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
                 [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
                 [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
                 [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
@@ -187,6 +188,8 @@ Environment options:
                          may produce code depending on this behavior
   --processor-size-limit {1..1000000}
                          sets the maximum supported size of the processor's configuration in the game (in bytes)
+  --zero-wait-yields {true,false}
+                         when active, Mindcode assumes executing 'wait 0' yields the execution
 
 Mlog formatting options:
   Options determining how the mlog code  is  generated  and  formatted,  including  instructions generated to carry over
@@ -550,13 +553,14 @@ usage: mindcode cs [-h] [-c] [-w [{update,add}]] [--watcher-version {v0,v1}] [--
                 [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]] [--allow-link-gaps [{true,false}]]
                 [--allow-unsatisfied-links [{true,false}]] [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
                 [-i {1..100000}] [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
-                [--processor-size-limit {1..1000000}] [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}]
-                [--no-argument-padding [{true,false}]] [--function-prefix {short,long}] [--author author [author ...]]
-                [--no-signature] [--processor-id processor_ID] [--program-name program_name]
-                [--program-version program_version] [--encode-zero-characters [{true,false}]]
-                [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
-                [--setrate {1..1000}] [--ipt {1..1000}] [--atomic-full-protection [{true,false}]]
-                [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
+                [--processor-size-limit {1..1000000}] [--zero-wait-yields {true,false}]
+                [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
+                [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
+                [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
+                [--encode-zero-characters [{true,false}]] [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}]
+                [--target-guard [{true,false}]] [--setrate {1..1000}] [--ipt {1..1000}]
+                [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
+                [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
                 [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
                 [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
                 [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
@@ -645,6 +649,8 @@ Environment options:
                          may produce code depending on this behavior
   --processor-size-limit {1..1000000}
                          sets the maximum supported size of the processor's configuration in the game (in bytes)
+  --zero-wait-yields {true,false}
+                         when active, Mindcode assumes executing 'wait 0' yields the execution
 
 Mlog formatting options:
   Options determining how the mlog code  is  generated  and  formatted,  including  instructions generated to carry over

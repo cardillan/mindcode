@@ -82,6 +82,11 @@ public interface GlobalCompilerProfile {
     ProcessorType getProcessorType();
 
     Target getTarget();
+
+    default boolean isZeroWaitYields() {
+        return isDefault(EnvironmentOptions.ZERO_WAIT_YIELDS)
+                ? getTarget().version().atLeast(ProcessorVersion.V8B) : getBooleanValue(EnvironmentOptions.ZERO_WAIT_YIELDS);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Mlog FormatOptions">

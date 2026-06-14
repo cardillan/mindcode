@@ -129,6 +129,12 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 1, 1_000_000, Globals.MAX_PROCESSOR_CFG_SIZE - Globals.CFG_SIZE_SAFETY_MARGIN));
+
+        list.add(new BooleanCompilerOptionValue(EnvironmentOptions.ZERO_WAIT_YIELDS, "",
+                "when active, Mindcode assumes executing 'wait 0' yields the execution",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
     }
 
     private static void addMlogFormatOptions(List<CompilerOptionValue<?>> list, boolean webApp) {

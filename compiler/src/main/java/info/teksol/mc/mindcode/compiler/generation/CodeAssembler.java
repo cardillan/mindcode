@@ -18,6 +18,7 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.WAIT;
 /// Labels and temporary variables may also be generated through CodeAssembler.
 @NullMarked
 public class CodeAssembler extends CompilerMessageEmitter implements ContextfulInstructionCreator, Consumer<LogicInstruction> {
+    private final GlobalCompilerProfile globalCompilerProfile;
     private final InstructionProcessor processor;
     private final Variables variables;
     private final List<LogicInstruction> instructions = new ArrayList<>();
@@ -45,6 +47,7 @@ public class CodeAssembler extends CompilerMessageEmitter implements ContextfulI
 
     public CodeAssembler(CodeAssemblerContext context) {
         super(context.messageConsumer());
+        globalCompilerProfile = context.globalCompilerProfile();
         processor = context.instructionProcessor();
         variables = context.variables();
         astContext = context.rootAstContext();
@@ -268,7 +271,7 @@ public class CodeAssembler extends CompilerMessageEmitter implements ContextfulI
     /// or provide results.
     public void createYieldExecution() {
         if (processor.isSupported(WAIT)) {
-            createWait( LogicNumber.create(processor, "1e-15"));
+            createWait(globalCompilerProfile.isZeroWaitYields() ? LogicNumber.ZERO : LogicNumber.create(processor, "1e-15"));
         }
     }
 

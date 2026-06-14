@@ -63,6 +63,7 @@ as well as prescribing which specific processor features may or may not be used.
 | [null-counter-is-noop](#option-null-counter-is-noop) | global | stable             |
 | [processor-size-limit](#option-processor-size-limit) | global | stable             |
 | [target](#option-target)                             | module | stable             |
+| [zero-wait-yields](#option-zero-wait-yields)         | global | stable             |
 
 ### Option `builtin-evaluation`
 
@@ -229,6 +230,17 @@ Target compatibility matrix:
 Note: the incompatibility between 7.0 and 7.1 is caused by different instruction mappings.
 
 Generally, a module target is compatible with the same or higher global target, unless a backwards-incompatible feature is introduced to Mindustry Logic or Mindcode.
+
+### Option `zero-wait-yields`
+
+**Option scope: [global](#global-scope)**
+
+Informs Mindcode how the `wait` instruction handles a wait time of zero. Possible values are:
+
+* `false` (the default value for target 8.0 and lower): `wait 0` doesn't yield the execution.
+* `true` (the default value for target 8.1 and higher): `wait 0` yields the execution.
+
+When `wait 0` does yield the execution, it provides a slightly better performance of remote calls, especially on microprocessors. This change came about in Mindustry v8 Build 155. For builds between v8 Build 150 and v8 Build 154.3, you need to explicitly set the value of this option to `false`; for all other releases, the default value of this option matches the corresponding Mindcode target.
 
 ## Mlog formatting options
 
