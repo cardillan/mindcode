@@ -70,7 +70,8 @@ export const schemacodeLanguage = LRLanguage.define({
 			}),
 			styleTags({
 				Identifier: t.variableName,
-				LinkPattern: t.regexp,
+				IdentifierTemplate: t.special(t.variableName),
+				'LinkPattern!': t.regexp,
 				Ref: t.string,
 				String: t.string,
 				StringContent: t.string,
@@ -83,12 +84,12 @@ export const schemacodeLanguage = LRLanguage.define({
 				'name description tag filename dimensions target': t.propertyName,
 				'at facing virtual color connected to block command item liquid unit text enabled disabled processor mindcode mlog file links as':
 					t.keyword,
-				'north south east west rgba': t.atom,
+				'north south east west rgba horizontal vertical': t.atom,
 
 				LineComment: t.lineComment,
 				BlockComment: t.blockComment,
 				'( )': t.paren,
-				', : . .. ...': t.punctuation,
+				', : . .. ... "*"': t.punctuation,
 				'=': t.operator
 			})
 		]

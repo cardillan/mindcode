@@ -31,13 +31,24 @@ Attribute {
 }
 
 BlockItem {
-  (commaSep<Identifier> ":")? Ref kw<"at"> position Direction? Configuration?
+  (commaSep<Identifier | IdentifierTemplate> ":")? Ref kw<"at"> blockPosition Direction? Configuration?
 }
 
 position {
   Coordinates |
   RelativeCoordinates |
   CoordinatesRelativeTo
+}
+
+orientation {
+  kw<"horizontal"> | kw<"vertical">
+}
+
+blockPosition {
+  position |
+  position ".." Coordinates orientation? |
+  position "..." Coordinates orientation? |
+  position "*" Coordinates orientation?
 }
 
 Coordinates {
@@ -102,6 +113,7 @@ processorSourceSnippet {
 }
 
 LinkDef {
+  LinkPattern { "*" } |
   LinkPattern | 
   connection (kw<"as"> Identifier kw<"virtual">?)?
 }
@@ -148,6 +160,7 @@ TextBlock { multilineSingleQuoteString | multilineDoubleQuoteString }
   // LinkPattern can contain an asterisk, so the external specializer
   // handles that for us
   Identifier { $[a-zA-Z_*] $[a-zA-Z0-9_\-*]* }
+  IdentifierTemplate { $[a-zA-Z_] $[a-zA-Z0-9_\-]* "#" }
   Ref { "@" $[a-zA-Z_] $[a-zA-Z0-9_\-]* }
   
   Int { ("+" | "-")? $[0-9]+ }
@@ -159,8 +172,14 @@ TextBlock { multilineSingleQuoteString | multilineDoubleQuoteString }
     Version,
     Int
   }
-  
-  "(" ")" "," ":" "." ".." "..." "+" "-" "="
+
+  @precedence {
+    "*",
+    IdentifierTemplate,
+    Identifier
+  }
+
+  "(" ")" "," ":" "." ".." "..." "+" "-" "=" "*"
 }
 
 @external specialize { Identifier } specializeIdentifier from "./schemacode_tokens" {

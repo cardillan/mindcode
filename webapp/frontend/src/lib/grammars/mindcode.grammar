@@ -148,7 +148,7 @@ VariableDeclaration {
 
 VariableDeclarationItem {
   Identifier ("=" expression)? |
-  Identifier "[" expression? "]" ("=" ValueList)?
+  Identifier "[" expression? "]" ("=" ValueList | Range)?
 }
 
 ValueList {
