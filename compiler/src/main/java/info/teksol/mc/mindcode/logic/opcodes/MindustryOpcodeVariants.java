@@ -328,6 +328,8 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, W, FUNC, Opcode.PLAYSOUND, scope("true"),  sound("sound"), in("volume"), in("pitch"), unused("0"), in("x"), in("y"), bool("limit"));
         add(list, V8A, MAX, W, FUNC, Opcode.PLAYSOUND, scope("false"), sound("sound"), in("volume"), in("pitch"), in("pan"), unused("0"), unused("0"), bool("limit"));
 
+        add(list, V8B, MAX, W, FUNC, Opcode.PLAYMUSIC, in("name"),     bool("interrupt"));
+
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("remove"),      in("id"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("world"),       in("id"), in("boolean"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("minimap"),     in("id"), in("boolean"));

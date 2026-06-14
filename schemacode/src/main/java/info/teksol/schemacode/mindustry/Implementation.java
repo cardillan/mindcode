@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@SuppressWarnings({"unused", "SpellCheckingInspection"})
+@SuppressWarnings("unused")
 public enum Implementation {
     ACCELERATOR,
     AIRBLOCK,
@@ -124,6 +124,7 @@ public enum Implementation {
     SPAWNBLOCK,
     STACKCONVEYOR,
     STACKROUTER(ConfigurationType.ITEM),
+    STATICPROP,
     STATICTREE,
     STATICWALL,
     STEAMVENT,

@@ -74,6 +74,7 @@ public enum Opcode {
     SETFLAG         (WRITES, "setflag",          "SetFlag"),
     SETPROP         (WRITES, "setprop",          "SetProp"),
     PLAYSOUND       (WRITES, "playsound",        "PlaySound"),
+    PLAYMUSIC       (WRITES, "playmusic",        "PlayMusic"),
     SETMARKER       (WRITES, "setmarker",        "SetMarker"),
     MAKEMARKER      (WRITES, "makemarker",       "MakeMarker"),
     LOCALEPRINT     (WRITES, "localeprint",      "LocalePrint"),
