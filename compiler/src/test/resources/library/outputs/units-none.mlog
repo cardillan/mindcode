@@ -174,4 +174,4 @@ set *tmp45 null
 print *tmp45
 print "\n"
 end
-print "Compiled by Mindcode - github.com/cardillan/mindcode"
+print "Compiled by Mindcode 3.16.3 - github.com/cardillan/mindcode"

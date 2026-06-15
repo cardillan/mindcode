@@ -53,6 +53,12 @@ These are topics that I'm spending time thinking about. Some of these should app
   * Local arrays/structures
   * Function pointers/array pointers
 
+## New quick ideas
+
+* Supersized arrays. Stores parts of the array in different lookup variables, and the rest in a regular `@counter` table. Needs a text-based jump table, might require extension of text-based jump tables for label-enabled mlog.
+* Shared element name tables. All arrays in a remote module would use the same naming convention for all elements (say, `*arr` + index). When accessing remote arrays from different modules, a shared table might be built in the local processor, maybe even without an overhead.
+* Segmented arrays. Parts of the same array would be stored in different processors. Needs a specific remote module, but it could be part of the system library. The array access would compute the index of the processor to read the data from.  
+
 ## Active
 
 These are topics that I'm currently planning to implement.

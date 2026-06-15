@@ -53,9 +53,9 @@ This requires adding a code only used for the actual debugging process. Mindcode
 
 By setting the [`debug` compiler option](SYNTAX-5-OTHER.markdown#option-debug) to `true`, the code gets compiled with debug support. The compiler ensures the following: 
  
-* All user-defined variables are preserved and not removed by optimizations. It is possible to inspect all variables on the Vars screen.
-* Statements in debug blocks are included in the compiled code.
-* Calls to debug functions are compiled.
+* All user-defined variables are preserved and not removed by optimizations. It is possible to inspect all variables on the **Vars** screen.
+* Statements in `debug` blocks are included in the compiled code.
+* Calls to `debug` functions are compiled.
 
 Compiling code with debug support enabled may result in larger code (both due to additional code in debug blocks and debug functions, and due to some optimizations not being performed to preserve user-defined variables). If the new code size exceeds the mlog code size limit (1000 instructions), you can use the [MlogAssertions mod](https://github.com/cardillan/MlogAssertions) to increase the instruction limit (up to 2000 instructions) to be able to still run the compiled code.
 
@@ -76,7 +76,7 @@ debug void pause(in switch)
     // Pauses the execution of the program until the switch passed in is deactivated - clicked by the user
     // Allows the user to inspect the state of the program - the variables at the place where it was called.  
     switch.enabled = true;
-    do while not switch1.enabled;
+    do while not switch.enabled;
 end;
 
 begin

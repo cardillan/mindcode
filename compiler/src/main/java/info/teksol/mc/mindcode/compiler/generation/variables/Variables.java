@@ -248,7 +248,7 @@ public class Variables extends CompilerMessageEmitter {
             }
         }
 
-        LogicVariable result = LogicVariable.block(identifier, linkedName);
+        LogicVariable result = LogicVariable.block(identifier, linkedName, modifiers.contains(VOLATILE));
         putVariableIfAbsent(identifier.getName(), result);
         return result;
     }
@@ -286,7 +286,9 @@ public class Variables extends CompilerMessageEmitter {
         if (!verifyGlobalDeclaration(identifier, identifier)) {
             result = InternalArray.createInvalid(nameCreator, identifier, size);
         } else if (modifiers.contains(LINKED) || modifiers.contains(CONST)) {
-            result = InternalArray.createConst(nameCreator, identifier, size, initialValues);
+            result = initialValues.isEmpty()
+                    ? InternalArray.createInvalid(nameCreator, identifier, size)
+                    : InternalArray.createConst(nameCreator, identifier, size, initialValues);
         } else if (modifiers.contains(EXTERNAL)) {
             result = getHeapTracker(modifiers).createArray(identifier, size);
         } else {

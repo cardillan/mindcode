@@ -962,7 +962,8 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
                     valueReplacements.put(variable, constantValue);
                 } else {
                     LogicVariable equivalent = variableStates.findEquivalent(variable);
-                    if (equivalent != null && !equivalent.equals(variable)) {
+                    if (equivalent != null && !equivalent.equals(variable)
+                            && (equivalent.getType() != ArgumentType.BLOCK || canReplaceBlockValue(instruction))) {
                         valueReplacements.put(variable, equivalent);
                     }
                 }
@@ -1020,6 +1021,10 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
 
         indentDec();
         return variableStates;
+    }
+
+    private boolean canReplaceBlockValue(LogicInstruction instruction) {
+        return !(instruction instanceof ConditionalInstruction c) || c.isUnconditional();
     }
 
     // Try to evaluate the instruction

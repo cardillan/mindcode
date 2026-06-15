@@ -163,4 +163,4 @@ set *tmp32 *tmp34
 set :displaySize*retval *tmp32
 set @counter :displaySize*retaddr
 end
-print "Compiled by Mindcode - github.com/cardillan/mindcode"
+print "Compiled by Mindcode 3.16.3 - github.com/cardillan/mindcode"

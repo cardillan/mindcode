@@ -658,7 +658,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesInvalidLinkNames() {
             assertGeneratesMessages(expectedMessages()
-                            .add("Value assigned to an element of a linked block array is not a link.").repeat(2),
+                            .add("A literal or symbolic link name expected.").repeat(2),
                     "linked a[] = (x + y, 3);");
         }
 
@@ -666,7 +666,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         void refusesInvalidLinkNamesRange() {
             assertGeneratesMessages(expectedMessages()
                             .add("Array size not specified.")
-                            .add("A literal or indexed symbolic link name expected.").repeat(2),
+                            .add("A literal or symbolic link name expected.").repeat(2),
                     "linked a[] = (x + y ... 3);");
         }
 
@@ -1316,10 +1316,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(JUMP, label(0), "equal", "message1", "null"),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "message2", "null"),
-                    createInstruction(SET, tmp(0), "switch1"),
-                    createInstruction(SET, tmp(2), "switch2"),
-                    createInstruction(SENSOR, tmp(3), tmp(2), "@enabled"),
-                    createInstruction(CONTROL, "enabled", tmp(0), tmp(3))
+                    createInstruction(SENSOR, tmp(1), "switch2", "@enabled"),
+                    createInstruction(CONTROL, "enabled", "switch1", tmp(1))
             );
         }
 

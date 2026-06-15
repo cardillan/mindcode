@@ -520,7 +520,7 @@ When used with the `linked` modifier, the `noinit` modifier suppresses the "unsa
 
 ### `volatile` modifier
 
-Can be used with the `export` modifier, or without a storage modifier. Variables declared `export` are automatically volatile, so this modifier has no effect on `export` variables.
+Can be used with the `export` modifier, `linked` modifier, or without a storage modifier. Variables declared `export` are automatically volatile, so this modifier has no effect on `export` variables.
 
 The compiler assumes that volatile variables or array can be changed externally (for example, by other processors, or via the `sync` instruction) or indirectly (via the `read` or `write` using `@this` as the processor) and handles them accordingly. A volatile variable is guaranteed to exist in the processor (and can be accessed remotely or indirectly), even if it is not directly accessed by an mlog instruction.
 
@@ -572,7 +572,7 @@ A constant declaration must specify an initial value for the variable/array. The
 * linked blocks (only in relaxed syntax mode),
 * built-in variables, except built-in variables known not to be constant.
 
-The following values can be assigned to constant variables, but not to arrays:
+The following values can be assigned to constant variables but not to constant arrays:
 
 * formattable string literals (mlog-incompatible),
 * mlog keywords (mlog-incompatible).
@@ -613,6 +613,9 @@ end;
 
 the entire `if DEBUG then ... end` statement will be skipped and not included in the compiled code.
 
+> [!TIP]
+> It may be more convenient to use [`debug` code blocks or functions](TROUBLESHOOTING.markdown#debug-specific-code) to include debug code conditionally. 
+
 ### Constant expressions
 
 Expressions that have constant arguments and are deterministic (i.e., they give the same result for the same input) are constant expressions. This also applies to deterministic logic functions, such as `sin()` or `sqrt()`, and some built-in functions, such as `length()` and `encode()`.
@@ -626,7 +629,7 @@ User-defined functions can also be used in constant expressions. Currently, only
 * the function doesn't have a vararg parameter,
 * the function returns a value and doesn't have other output parameters,
 * the function consists of a single, constant expression (a `return` statement may or may not be used),
-* any global constants used in the function must be declared not only before the function itself, but also before the place where the function is used as a constant expression.
+* any global constants used in the function must be declared prior to the place where the constant expression is specified.
 
 An example of a constant expression using a user-defined function:
 
@@ -1418,12 +1421,13 @@ Linked variables represent blocks directly linked to the processor. A guard code
 
 When an initial value is not assigned to a linked variable, the variable identifier is the name of the linked block: `linked cell1;` declares a `cell1` variable representing the `cell1` block linked to the processor. When an initial value is assigned to the variable, the assigned value must be a name of the linked block, while the variable identifier will be used to represent the variable in the program: `linked up = switch1, down = switch2;`. This is useful to assign meaningful names to linked blocks.
 
-A warning is generated if the name of the linked block used in the linked variable declaration is not recognized, however, the linked variable is nevertheless created. This way, it is possible to use linked blocks unrecognized by Mindcode, for example, blocks provided by a mod. (The warning can be suppressed using the [`#declare` directive](SYNTAX-EXTENSIONS.markdown#declaring-new-linked-block-names)). 
+A warning is generated if the name of the linked block used in the linked variable declaration is not recognized. This way, it is possible to use linked blocks unrecognized by Mindcode, for example, blocks provided by a mod. The warning can be suppressed using the [`#declare` directive](SYNTAX-EXTENSIONS.markdown#declaring-new-linked-block-names).
 
 When declaring linked variables, these additional modifiers can be used:
 
 * [`guarded`](#guarded-modifier)
 * [`noinit`](#noinit-modifier)
+* [`volatile`](#volatile-modifier)
 
 Example:
 
@@ -1441,9 +1445,11 @@ end;
 > [!IMPORTANT]
 > Linked variables (both implicit and explicit ones) reflect the changes made to linked blocks during the execution of the program. For example, when `switch1` is linked to the processor, but then is destroyed, the value of `switch1` turns to `null`. If the switch is then rebuilt by the user and linked to the processor under the same name, the linked variable will automatically reconnect to the new instance of the switch when it becomes available.
 > 
-> It is important to consider that in some cases the new block linked to the processor under the same name as a previously linked and subsequently destroyed block may be of a different type (e.g., replacing sorter `sorter1` with inverted sorter will link the inverted sorter also under the name `sorter1`).  
+> It is important to consider that in some cases the new block linked to the processor under the same name as a previously linked and subsequently destroyed block may even be of a different type (e.g., replacing sorter `sorter1` with an inverted sorter will link the inverted sorter also under the name of `sorter1`).  
 > 
-> When a linked block is stored in a regular variable or program parameter, the variable will always refer to the same instance of the block that was assigned to it. When such a block gets destroyed, it still appears to be present (doesn't become `null`), and can only be recognized as destroyed by querying the `@dead` property.
+> When a linked block is stored in a regular variable or program parameter, the variable will always refer to the same instance of the block that has been assigned to it. When such a block gets destroyed, it still appears to be present (the variable doesn't become `null`), and can only be recognized as destroyed by querying the `@dead` property.
+>
+> The behavior described above implies that linked variables are essentially volatile: their value may change at any time (when a block is linked or unlinked to/from the current processor). Mindustry takes this into account and adds some limited protection to help with typical use-cases that would otherwise be affected by this behavior. In case you specifically design a schematic where named linked blocks are expected to be added, removed, or replaced on the fly, it is advisable to declare these variables `volatile` for extended protection. Doing so may increase the code size slightly, due to the additional checks performed by Mindcode.
 
 ### Symbolic link names
 
@@ -1485,14 +1491,14 @@ When compiling Mindcode as part of Schemacode building, the results of symbolic 
 
 ### Linked arrays
 
-Linked array is an array of linked variables. A linked array must be initialized, and its elements cannot be modified after initialization. Processor variables are not allocated for linked array elements; the linked blocks themselves are used instead.
+A _linked array_ is an array of linked variables. A linked array must be initialized, and its elements cannot be modified after initialization. Processor variables are not allocated for linked array elements; the linked variables themselves are used instead.
 
 There are two ways to initialize a linked array:
 
 * By listing the linked blocks: the array consists of the blocks listed. Either literal or symbolic names (or both) can be used; when using symbolic names, the actual type of the linked block must be specified by the parameter to the `linked` modifier; therefore, all symbolic block names in the array must refer to the same block type.
 * By specifying a range of linked blocks: the range must contain linked block names for both lower and upper bounds, the base block name must be the same in both link names, and the numerical index must be higher in the upper bound than in the lower bound. The array contains all linked blocks identified by the links in the given range. Both symbolic and literal names can be used.
 
-Linked arrays create both the array variable, and variables for each element of the array, even when specified by a range operator. The individual elements of the array are also available as individual variables in the program. When an exclusive range is used in the declaration, the block represented by the upper bound is not part of the array and is not created/declared by the declaration.
+Linked arrays create both the array variable and linked variables for each element of the array, even when specified by a range operator. The individual elements of the array are also available as individual variables in the program. When an exclusive range is used in the declaration, the linked variable corresponding to the upper bound is not part of the array and is not created by the declaration.
 
 Example:
 
@@ -1581,7 +1587,7 @@ write 10 bank1 *tmp0
 
 Target 8 or higher is required to use exported variables. 
 
-Exported variables are created in the current processor and are available through remote access in code which imports the module. Exported variables/arrays may or may not be initialized. When some exported variables or array elements are unused within the module (and the corresponding mlog variables would therefore not be created when parsing the code by the logic processor), the missing variables are explicitly created using `draw triangle` instruction(s), so that they may be accessed remotely. These instructions are placed at the end of the generated code and are never executed. See the [`require remote` statement](REMOTE-CALLS.markdown#main-processor-code).
+Exported variables are created in the current processor and are available through remote access in code which imports the module. Exported variables/arrays may or may not be initialized. Mindcode ensures all exported variables can always be accessed remotely, regardless of whether they are also used locally.
 
 Exported variables and arrays are declared using the [`export` storage modifier](#storage-modifiers). When declaring exported variables, these additional modifiers can be used:
 
@@ -1611,7 +1617,7 @@ export mlog(:liquid) array1[10];
 
 Target 8 or higher is required to use remote variables.
 
-External variables and arrays are stored in another processor. They are declared using the [`remote` storage modifier](#storage-modifiers). The `remote` modifier specifies the processor the variable is stored in, and it may be specified as a linked variable, linked block, or a regular variable:
+Remote variables and arrays, stored in another processor, can also be declared using the [`remote` storage modifier](#storage-modifiers). The `remote` modifier specifies the processor the variable is stored in, and it may be specified as a linked variable, linked block, or a regular variable:
 
 ```Mindcode
 #set target = 8m;

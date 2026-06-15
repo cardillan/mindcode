@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed the schemacode action not producing the log file when requested by a command-line argument.
 * Fixed the compiler evaluating undeclared link names even in strict mode ([#325](https://github.com/cardillan/mindcode/issues/325)).
+* Fixed incorrect array declarations possibly crashing the compiler ([#328](https://github.com/cardillan/mindcode/issues/328)).
 
 ### Added
 
@@ -23,7 +24,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * Changed the `@unit` built-in variable to be considered non-volatile and added proper handling of side effects by the `ubind` instruction. The change may allow some additional optimizations of unit handling code.
-* Temporary variables are renumbered at the end of compilation, so that their names (`*tmp#`) start with 0 and the sequence doesn't contain gaps. 
+* Changed linked variables to no longer be volatile while still protecting them in conditions. Explicitly declaring linked variables and arrays `volatile` is possible ([#327](https://github.com/cardillan/mindcode/issues/327)).
+* Temporary variables are renumbered at the end of compilation, so that their names (`*tmp#`) start with 0 and the sequence doesn't contain gaps.
+* Changed the program signature to include Mindcode version number.
 
 ## 3.16.3 – 2026-06-02
 

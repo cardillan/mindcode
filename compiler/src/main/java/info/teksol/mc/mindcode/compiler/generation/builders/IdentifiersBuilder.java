@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
+import info.teksol.mc.common.Globals;
 import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.generated.ast.visitors.*;
@@ -111,7 +112,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
     }
 
     private ValueStore memorySubarrayAccess(AstSubarray node, LogicVariable memory) {
-        IntRange range = parseSubarrayRange(node, DeclarationsBuilder.MAX_EXTERNAL_ARRAY_SIZE);
+        IntRange range = parseSubarrayRange(node, Globals.MAX_EXTERNAL_ARRAY_SIZE);
         if (range == null) {
             return LogicVariable.INVALID;
         }

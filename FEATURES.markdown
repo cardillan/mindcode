@@ -117,8 +117,9 @@ This file contains a list of Mindcode features.
 
 ### Code generation
  
-* Powerful compile-time evaluation
-  * Includes support for string expressions
+* Powerful compile-time evaluation, including:
+  * String expressions
+  * Simple user-defined functions
 * Output code formatting
   * Absolute addressing (uses instruction numbers in `jump` instructions)
   * Symbolic labels and indentation

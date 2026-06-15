@@ -1280,8 +1280,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             end;
                             bar(switch1);
                             """,
-                    createInstruction(SET, ":bar:n", "switch1"),
-                    createInstruction(PRINT, ":bar:n")
+                    createInstruction(PRINT, "switch1")
             );
         }
 
@@ -1862,8 +1861,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             b = x.@type;
                             print(a, b);
                             """,
-                    createInstruction(SET, ":x", "message1"),
-                    createInstruction(SENSOR, ":a", ":x", "@type"),
+                    createInstruction(SENSOR, ":a", "message1", "@type"),
                     createInstruction(PRINT, ":a"),
                     createInstruction(PRINT, ":a")
             );
@@ -1896,9 +1894,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             b = x.@dead;
                             print(a, b);
                             """,
-                    createInstruction(SET, ":x", "message1"),
-                    createInstruction(SENSOR, ":a", ":x", "@dead"),
-                    createInstruction(SENSOR, ":b", ":x", "@dead"),
+                    createInstruction(SENSOR, ":a", "message1", "@dead"),
+                    createInstruction(SENSOR, ":b", "message1", "@dead"),
                     createInstruction(PRINT, ":a"),
                     createInstruction(PRINT, ":b")
             );

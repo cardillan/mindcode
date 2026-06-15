@@ -21,7 +21,7 @@ public enum Modifier {
     GUARDED         (MindcodeLexer.GUARDED, NONE, LINKED),
     MLOG            (MindcodeLexer.MLOG, NONE, EXPORT, REMOTE),
     NOINIT          (MindcodeLexer.NOINIT, NONE, LINKED, EXPORT, EXTERNAL, REMOTE),
-    VOLATILE        (MindcodeLexer.VOLATILE, NONE, EXPORT),
+    VOLATILE        (MindcodeLexer.VOLATILE, NONE, LINKED, EXPORT),
     ;
 
     private final int token;

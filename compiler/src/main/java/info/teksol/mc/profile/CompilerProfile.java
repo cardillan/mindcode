@@ -1,5 +1,6 @@
 package info.teksol.mc.profile;
 
+import info.teksol.mc.Version;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 /// Variables holding instances of this interface should be named "profile".
 @NullMarked
 public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProfile {
-    public static final String SIGNATURE = "Compiled by Mindcode - github.com/cardillan/mindcode";
+    public static final String SIGNATURE = "Compiled by Mindcode " + Version.getVersion() + " - github.com/cardillan/mindcode";
 
     private final boolean schematic;
     private final boolean webApplication;

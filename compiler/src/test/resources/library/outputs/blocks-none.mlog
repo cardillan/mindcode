@@ -146,4 +146,4 @@ op equal *tmp11 :findLinkedBlocks:foundAll false
 jump 2 notEqual *tmp11 false
 assertequals :message message1 "Located message1 block"
 end
-print "Compiled by Mindcode - github.com/cardillan/mindcode"
+print "Compiled by Mindcode 3.16.3 - github.com/cardillan/mindcode"

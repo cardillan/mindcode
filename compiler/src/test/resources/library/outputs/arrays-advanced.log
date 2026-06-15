@@ -5,7 +5,7 @@
      6 instructions eliminated by Condition Optimization (2 passes, 10 iterations).
     13 instructions eliminated by Single Step Elimination (4 passes, 12 iterations).
    450 instructions eliminated by Expression Optimization (6 iterations).
-   205 instructions eliminated by Data Flow Optimization (10 passes, 44 iterations).
+   205 instructions eliminated by Data Flow Optimization (10 passes, 45 iterations).
        7 loop conditions were partially rotated.
    809 instructions added by Loop Unrolling (13 iterations).
      7 loops unrolled by Loop Unrolling.

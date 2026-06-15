@@ -30,6 +30,7 @@ public class ERR {
     public static final String ARRAY_EXPRESSION_NOT_MEMORY = "'%s' is not an external memory.";
     public static final String ARRAY_FORBIDDEN = "Invalid array reference.";
     public static final String ARRAY_INDEX_OUT_OF_BOUNDS = "Array index out of bounds (0 .. %d)";
+    public static final String ARRAY_INIT_INVALID_RANGE = "Range in array initialization is only supported for linked linked block arrays.";
     public static final String ARRAY_INVALID = "'%s' is not an array.'";
     public static final String ARRAY_LINKED_NOT_INITIALIZED = "Linked block array must be initialized.";
     public static final String ARRAY_LINKED_INVALID_RANGE = "Invalid link range (both link names must use identical base name, range must not be empty).";
@@ -128,7 +129,7 @@ public class ERR {
     public static final String INVALID_LINKED_TYPE_SPEC = "Invalid linked block type specification ('%s' is not a block type).";
     public static final String INVALID_MLOG_KEYWORD = "Keyword only allowed as the only value of the 'mlog' modifier in array declaration.";
     public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic links. Please set 'symbolic-links' to 'false'.";
-    public static final String LINK_EXPECTED = "A literal or indexed symbolic link name expected.";
+    public static final String LINK_EXPECTED = "A literal or symbolic link name expected.";
     public static final String LINK_TYPE_MISMATCH = "The expected block type '%s' differs from the actual block type '%s' as defined in the schematic.";
     public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals require language target 7 or higher.";
     public static final String LITERAL_INTEGER_TOO_LARGE = "Literal '%s' exceeds maximum possible value (%s).";

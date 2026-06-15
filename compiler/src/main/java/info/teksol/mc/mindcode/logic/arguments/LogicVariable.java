@@ -254,15 +254,16 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     // CREATION
 
     public static LogicVariable block(SourcePosition sourcePosition, String name) {
-        return new LogicVariable(sourcePosition, BLOCK, ValueMutability.VOLATILE, name, name);
+        return new LogicVariable(sourcePosition, BLOCK, ValueMutability.IMMUTABLE, name, name);
     }
 
     public static LogicVariable block(AstIdentifier identifier) {
-        return new LogicVariable(identifier.sourcePosition(), BLOCK, ValueMutability.VOLATILE, identifier.getName(), identifier.getName());
+        return new LogicVariable(identifier.sourcePosition(), BLOCK, ValueMutability.IMMUTABLE, identifier.getName(), identifier.getName());
     }
 
-    public static LogicVariable block(AstIdentifier identifier, String mlog) {
-        return new LogicVariable(identifier.sourcePosition(), BLOCK, ValueMutability.VOLATILE, identifier.getName(), mlog);
+    public static LogicVariable block(AstIdentifier identifier, String mlog, boolean isVolatile) {
+        return new LogicVariable(identifier.sourcePosition(), BLOCK,
+                isVolatile ? ValueMutability.VOLATILE : ValueMutability.IMMUTABLE, identifier.getName(), mlog);
     }
 
     public static LogicVariable global(AstIdentifier identifier, String mlog) {
