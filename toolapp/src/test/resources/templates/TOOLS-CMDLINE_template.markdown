@@ -47,6 +47,13 @@ When compiling Mindcode or building a schematic, the `-c` or `--clipboard` argum
 * _Compile Mindcode_ action: clipboard contains mlog instructions which can be pasted into a processor on the processor configuration screen, by using **Edit/Import from clipboard** command.
 * _Compile Schematic_ action: clipboard contains a schematic encoded into Mindustry Schematic string, which can be pasted as a new schematic on the Schematics screen, by using **Import schematic.../Import from clipboard** command. 
 
+## Parallel processing
+
+The Compile Schematic action supports parallel compilation of Mindcode source files when building schematics. Parallel processing is activated using the `-p` or `--parallel` command line option. It is possible to specify the maximal number of processor cores to use; if the level is not specified or is higher than the actual number of cores in your system, all existing cores may be used.
+
+> [!NOTE]
+> Parallel processing brings significant overhead over single-threaded processing. This option is only beneficial when multiple source files in your schematics take significant time to compile (several seconds).
+
 ## Running mlog code or schematics
 
 It is possible to use the `--run` command line option to run mlog code or schematic on a built-in processor/schematic emulator. The processor is much faster than Mindustry Logic processors but supports only very few operations that interact with the Mindustry World.

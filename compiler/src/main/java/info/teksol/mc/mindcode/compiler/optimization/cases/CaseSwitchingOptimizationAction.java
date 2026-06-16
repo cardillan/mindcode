@@ -466,7 +466,7 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
         LogicLabel marker = instructionProcessor.nextLabel();
 
         if (segment.from() == 0 && param.context().getLocalProfile().useTextJumpTables()) {
-            // The when bodies have normal labels now. We need multilabels.
+            // The 'when' bodies have normal labels now. We need multilabels.
             // We keep the original labels since they might be in use elsewhere.
             // Thus, we need to create new ones and maintain a map.
             List<LogicLabel> labels = new ArrayList<>();

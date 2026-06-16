@@ -5,7 +5,6 @@ import info.teksol.schemacode.AbstractSchematicsTest;
 import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration;
-import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -87,7 +86,7 @@ class BlockPositionMapTest extends AbstractSchematicsTest {
         Schematic expected = new Schematic("", "", "", List.of(), 5, 3,
                 List.of(
                         block(pos(2, 5), "@micro-processor", P0_0, Direction.EAST,
-                                new ProcessorConfiguration(List.of(new Link("battery1", 2, 0)), "")
+                                new ProcessorConfiguration(List.of(new ProcessorConfiguration.Link("battery1", 2, 0)), "")
                         ),
                         block(pos(5, 5), "@battery-large", P2_0, Direction.EAST, EmptyConfiguration.EMPTY)
                 )

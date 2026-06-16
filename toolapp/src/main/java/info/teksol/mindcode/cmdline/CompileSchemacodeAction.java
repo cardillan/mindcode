@@ -39,6 +39,8 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .description("Compile a schematic definition file into binary msch file.")
                 .help("Compile a schematic definition file into binary msch file.");
 
+        addParallelismOptions(subparser);
+
         subparser.addArgument("-c", "--clipboard")
                 .help("encode the created schematic into text representation and paste into clipboard")
                 .action(Arguments.storeTrue());

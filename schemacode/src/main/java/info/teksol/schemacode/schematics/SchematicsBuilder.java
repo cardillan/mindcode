@@ -28,6 +28,8 @@ import java.util.stream.Stream;
 public class SchematicsBuilder extends CompilerMessageEmitter {
     public static final char INDEX_KEY_CHAR = '$';
 
+    private final ProcessorConfigurationBuilder processorConfigurationBuilder;
+
     private final InputFiles inputFiles;
     private final CompilerProfile compilerProfile;
     private final AstDefinitions astDefinitions;
@@ -43,6 +45,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
     public SchematicsBuilder(InputFiles inputFiles, CompilerProfile compilerProfile,
             MessageConsumer messageConsumer, AstDefinitions astDefinitions) {
         super(messageConsumer);
+        this.processorConfigurationBuilder = new ProcessorConfigurationBuilder(this);
         this.inputFiles = inputFiles;
         this.compilerProfile = compilerProfile;
         this.astDefinitions = astDefinitions;
@@ -54,7 +57,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
     }
 
     @Override
-    public void addMessage(@NonNull MindcodeMessage message) {
+    public synchronized void addMessage(@NonNull MindcodeMessage message) {
         super.addMessage(message);
         error |= message.isError();
     }
@@ -127,6 +130,9 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         astPositionMap = BlockPositionMap.forBuilder(messageConsumer, blockPositions);
 
+        Map<AstBlockPosition, UnresolvedConfiguration> configurations = resolvedBlocks.definitions().stream()
+                .collect(Collectors.toMap(d -> d, this::getConfiguration));
+
         List<Block> blocks = new ArrayList<>();
         for (AstBlockPosition definition : resolvedBlocks.definitions()) {
             AstBlock astBlock = definition.astBlock();
@@ -134,7 +140,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
             Direction direction = astBlock.direction() == null
                     ? Direction.EAST
                     : Direction.valueOf(astBlock.direction().direction().toUpperCase());
-            Configuration configuration = convertAstConfiguration(definition, astBlock.configuration());
+            Configuration configuration = checkType(definition, configurations.get(definition));
             Block block = new Block(astBlock.sourcePosition(), definition.index(), astBlock.labels(), type, definition.position(), direction,
                     configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass()));
             configuration.validate(this, astBlock, block);
@@ -156,6 +162,21 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         BridgeSolver.solve(this, blocks);
 
         return createSchematic(name, filename, description, labels, blocks);
+    }
+
+    private Configuration checkType(AstBlockPosition definition, UnresolvedConfiguration configuration) {
+        Configuration resolvedConfiguration = configuration.resolve();
+
+        if (!definition.configurationType().isCompatible(resolvedConfiguration)) {
+            if (definition.astBlock().configuration() != null) {
+                error(definition.astBlock().configuration(), "Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
+                        definition.blockType().name(), definition.position().toStringAbsolute(),
+                        definition.configurationType(), ConfigurationType.fromInstance(resolvedConfiguration));
+            }
+            return EmptyConfiguration.EMPTY; // Ignore the wrong configuration but keep processing the block
+        } else {
+            return resolvedConfiguration;
+        }
     }
 
     private void processTarget() {
@@ -221,7 +242,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         Schematic schematic = new Schematic(name, filename, description, labels, dim.x(), dim.y(), repositioned);
         if (!error) {
-            addMessage(ToolMessage.info("Created schematic '%s' with dimensions %s.", name, dim.toStringAbsolute()));
+            addMessage(ToolMessage.info("%nCreated schematic '%s' with dimensions %s.", name, dim.toStringAbsolute()));
         }
         return schematic;
     }
@@ -268,21 +289,8 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         }
     }
 
-    private Configuration convertAstConfiguration(BlockPosition blockPos, AstConfiguration astConfiguration) {
-        Configuration configuration = getConfiguration(blockPos, astConfiguration);
-
-        if (!blockPos.configurationType().isCompatible(configuration)) {
-            error(astConfiguration, "Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
-                    blockPos.blockType().name(), blockPos.position().toStringAbsolute(),
-                    blockPos.configurationType(), ConfigurationType.fromInstance(configuration));
-            return EmptyConfiguration.EMPTY; // Ignore the wrong configuration but keep processing the block
-        } else {
-            return configuration;
-        }
-    }
-
-    private Configuration getConfiguration(BlockPosition blockPos, AstConfiguration astConfiguration) {
-        return switch (astConfiguration) {
+    private UnresolvedConfiguration getConfiguration(AstBlockPosition blockPos) {
+        return switch (blockPos.astBlock().configuration()) {
             case AstBlockReference r -> verifyConfiguration(r, blockPos, "block");
             case AstBoolean b -> BooleanConfiguration.of(b.value());
             case AstConnection c -> c.evaluate(this, blockPos.position());
@@ -290,7 +298,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
                     new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
             case AstItemReference r -> verifyConfiguration(r, blockPos, "item");
             case AstLiquidReference r -> verifyConfiguration(r, blockPos, "liquid");
-            case AstProcessor p -> ProcessorConfiguration.fromAstConfiguration(this, p, blockPos);
+            case AstProcessor p -> processorConfigurationBuilder.fromAstConfiguration(p, blockPos);
             case AstRgbaValue rgb -> convertToRgbValue(blockPos, rgb);
             case AstText t -> new TextConfiguration(t.getText(this));
             case AstUnitCommandReference r -> verifyConfiguration(r, blockPos, "command");
@@ -441,19 +449,5 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         } else {
             return object;
         }
-    }
-
-    public record MlogCacheEntry(String mlog, Map<String, String> symbolicNameMap) { }
-
-    // Caches the results of compiling Mindcode to mlog - avoid repeated recompilation of identical mindcode
-    // Maps the entire input string onto the output to avoid obtaining the wrong cached version
-    private final Map<String, MlogCacheEntry> compilerCache = new HashMap<>();
-
-    public MlogCacheEntry getMlogFromCache(String mindcode) {
-        return compilerCache.get(mindcode);
-    }
-
-    public void storeMlogToCache(String mindcode, String mlog, Map<String, String> symbolicNameMap) {
-        compilerCache.put(mindcode, new MlogCacheEntry(mlog, symbolicNameMap));
     }
 }

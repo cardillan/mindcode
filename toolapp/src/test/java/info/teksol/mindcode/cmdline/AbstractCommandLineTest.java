@@ -531,12 +531,6 @@ public abstract class AbstractCommandLineTest {
         @Nested
         class ParseTreeArgumentTest {
             @Test
-            public void shortArgument() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("-p 1");
-                assertEquals(1, profile.getParseTreeLevel());
-            }
-
-            @Test
             public void longArgument() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("--parse-tree 1");
                 assertEquals(1, profile.getParseTreeLevel());

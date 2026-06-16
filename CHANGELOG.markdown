@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added a new [`allow-link-gaps`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-allow-link-gaps) compiler option.
 * Added a new [`zero-wait-yields`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-zero-wait-yields) compiler option.
 * Added an error message indicating a variable or constant might be accessed via function call before its declaration gets processed ([#297](https://github.com/cardillan/mindcode/issues/297)).
+* Added a new command-line option `-p` or `--parallel` to enable [parallel processing of Mindcode source files](/doc/syntax/TOOLS-CMDLINE.markdown#parallel-processing) in the Schematic builder. 
 
 ### Changed
 

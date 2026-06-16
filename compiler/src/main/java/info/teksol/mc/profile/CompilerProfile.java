@@ -148,8 +148,9 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return positionTranslator;
     }
 
-    public void setPositionTranslator(SourcePositionTranslator positionTranslator) {
+    public CompilerProfile setPositionTranslator(SourcePositionTranslator positionTranslator) {
         this.positionTranslator = positionTranslator;
+        return this;
     }
 
     @Override

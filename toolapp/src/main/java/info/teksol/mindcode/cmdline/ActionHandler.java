@@ -125,6 +125,17 @@ abstract class ActionHandler {
                 .type(Arguments.fileType().verifyIsDirectory());
     }
 
+    void addParallelismOptions(ArgumentContainer container) {
+        container.addArgument("-p", "--parallel")
+                .help("enables parallel processing where possible and specifies the level of parallelism" +
+                        " (uses up to all available processors when the level is not specified)")
+                .choices(Arguments.range(1, 256))
+                .type(Integer.class)
+                .nargs("?")
+                .setDefault(1)
+                .setConst(0);
+    }
+
     void addMlogWatcherOptions(ArgumentContainer container, ToolAppAction action) {
         String description = switch (action) {
             case COMPILE_MINDCODE -> """

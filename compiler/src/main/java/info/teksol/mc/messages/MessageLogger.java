@@ -12,7 +12,7 @@ public class MessageLogger implements MessageConsumer {
     }
 
     @Override
-    public void addMessage(MindcodeMessage message) {
+    public synchronized void addMessage(MindcodeMessage message) {
         if (message.isError()) error = true;
         delegate.accept(message);
     }

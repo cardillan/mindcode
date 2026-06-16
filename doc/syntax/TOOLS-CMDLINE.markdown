@@ -47,6 +47,13 @@ When compiling Mindcode or building a schematic, the `-c` or `--clipboard` argum
 * _Compile Mindcode_ action: clipboard contains mlog instructions which can be pasted into a processor on the processor configuration screen, by using **Edit/Import from clipboard** command.
 * _Compile Schematic_ action: clipboard contains a schematic encoded into Mindustry Schematic string, which can be pasted as a new schematic on the Schematics screen, by using **Import schematic.../Import from clipboard** command. 
 
+## Parallel processing
+
+The Compile Schematic action supports parallel compilation of Mindcode source files when building schematics. Parallel processing is activated using the `-p` or `--parallel` command line option. It is possible to specify the maximal number of processor cores to use; if the level is not specified or is higher than the actual number of cores in your system, all existing cores may be used.
+
+> [!NOTE]
+> Parallel processing brings significant overhead over single-threaded processing. This option is only beneficial when multiple source files in your schematics take significant time to compile (several seconds).
+
 ## Running mlog code or schematics
 
 It is possible to use the `--run` command line option to run mlog code or schematic on a built-in processor/schematic emulator. The processor is much faster than Mindustry Logic processors but supports only very few operations that interact with the Mindustry World.
@@ -118,7 +125,7 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
-                [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
+                [--parse-tree {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
@@ -357,8 +364,7 @@ Debugging options:
                          order, and then  alphabetically.   Category  ALL  represents  all  remaining, not-yet processed
                          variables. When --sort-variables  is  given  without  specifying  any  category,  LINKED PARAMS
                          GLOBALS MAIN LOCALS are used.
-  -p, --parse-tree {0..2}
-                         sets the detail level of parse tree output into the log file, 0 = off
+  --parse-tree {0..2}    sets the detail level of parse tree output into the log file, 0 = off
   --debug [{true,false}]
                          activates or deactivates generation of debug code
   -d, --debug-messages {0..3}
@@ -548,7 +554,7 @@ Emulator options:
 ## Compile Schematic action help
 
 ```
-usage: mindcode cs [-h] [-c] [-w [{update,add}]] [--watcher-version {v0,v1}] [--watcher-port {0..65535}]
+usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-version {v0,v1}] [--watcher-port {0..65535}]
                 [--watcher-timeout {0..3600000}] [-o [OUTPUT]] [-l [LOG]] [--output-directory OUTPUT-DIRECTORY]
                 [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]] [--allow-link-gaps [{true,false}]]
                 [--allow-unsatisfied-links [{true,false}]] [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
@@ -577,7 +583,7 @@ usage: mindcode cs [-h] [-c] [-w [{update,add}]] [--watcher-version {v0,v1}] [--
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
-                [-p {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
+                [--parse-tree {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
@@ -598,6 +604,9 @@ Compile a schematic definition file into binary msch file.
 
 named arguments:
   -h, --help             show this help message and exit
+  -p, --parallel [{1..256}]
+                         enables parallel processing where possible and specifies  the  level of parallelism (uses up to
+                         all available processors when the level is not specified)
   -c, --clipboard        encode the created schematic into text representation and paste into clipboard
   -w, --watcher [{update,add}]
                          invoke an specific Mlog Watcher operation on the created schematic (default: update)
@@ -818,8 +827,7 @@ Debugging options:
                          order, and then  alphabetically.   Category  ALL  represents  all  remaining, not-yet processed
                          variables. When --sort-variables  is  given  without  specifying  any  category,  LINKED PARAMS
                          GLOBALS MAIN LOCALS are used.
-  -p, --parse-tree {0..2}
-                         sets the detail level of parse tree output into the log file, 0 = off
+  --parse-tree {0..2}    sets the detail level of parse tree output into the log file, 0 = off
   --debug [{true,false}]
                          activates or deactivates generation of debug code
   -d, --debug-messages {0..3}

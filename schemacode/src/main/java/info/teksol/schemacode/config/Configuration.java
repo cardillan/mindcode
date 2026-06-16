@@ -8,7 +8,12 @@ import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.util.function.UnaryOperator;
 
-public interface Configuration {
+public interface Configuration extends UnresolvedConfiguration {
+
+    @Override
+    default Configuration resolve() {
+        return this;
+    }
 
     default <T extends Configuration> T as (Class<T> type) {
         if (type.isInstance(this)) {
