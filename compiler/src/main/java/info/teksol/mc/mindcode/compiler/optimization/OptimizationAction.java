@@ -7,21 +7,20 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public interface OptimizationAction {
-    /// The goal matched by this optimization
+    /// The goal applicable for the code region containing this action. The action is only selected
+    /// when it matches the goal.
     GenerationGoal goal();
 
     /// The optimization that generates this action.
     Optimization optimization();
 
     /// AST context being processed by this optimization. On any given AST context, only one optimization may be
-    /// performed. Optimizations of child contexts may be affected by optimizations on parent context.
+    /// performed. Optimizations of child contexts may be affected by optimizations of their parent context(s).
     ///
     /// @return context containing the construct being optimized.
     AstContext astContext();
 
-    /// Cost of the optimization in terms of additional instructions that will be generated (real, not virtual). The
-    /// cost of non-inlining optimization must be positive -- optimizations with negative costs should be done
-    /// automatically.
+    /// Cost of the optimization in terms of additional instructions that will be generated (real, not virtual size).
     ///
     /// If the optimization adds some instructions and removes others, this value is the net difference between the
     /// two values.
@@ -33,10 +32,10 @@ public interface OptimizationAction {
         return Math.max(cost(), 0);
     }
 
-    /// Total benefit from realizing this optimization. Computed as sum of weights (from the AstContext) of all
-    /// instructions multiplied by real instruction size that will be eliminated/avoided. Benefit computed this way may
-    /// be altered to factor-in specific circumstances of given optimization, but ultimately needs to be based on
-    /// instruction weights to remain compatible with other implementations.
+    /// Total benefit from realizing this optimization. Computed as a sum of weights (from the AstContext) of all
+    /// instructions multiplied by real instruction size that will be eliminated/avoided. Benefit computed this way
+    /// may be altered to factor-in specific circumstances of a given optimization, but ultimately needs to be based
+    /// on instruction weights to remain compatible with other implementations.
     ///
     /// @return benefit of realizing this optimization
     double benefit();
@@ -71,18 +70,28 @@ public interface OptimizationAction {
         return -cost() * benefit();
     }
 
-    /// Returns `true` if the action is better in at least one metric, and not worse in the other.
+    /// Returns the value of the metric relevant to this optimization's goal.
+    default double efficiency() {
+        return switch (goal()) {
+            case SIZE -> sizeEfficiency();
+            case NEUTRAL -> neutralEfficiency();
+            case SPEED -> speedEfficiency();
+        };
+
+    }
+    /// Returns `true` if the action improves at least one metric, and doesn't worsen the other.
     /// Such optimization should always be applied.
     default boolean totalImprovement() {
         return cost() <= 0 && benefit() >= 0.0 && improvement();
     }
 
-    /// Returns `true` if the action improves at least one metric.
-    /// Such optimization can be applied.
+    /// Returns `true` if the action improves at least one metric. Non-improving optimizations should not be applied.
     default boolean improvement() {
         return cost() < 0 || benefit() > 0.0;
     }
 
+    /// Returns `true` if this action is better than the other in at least one metric, and not worse in the other.
+    /// There's no point considering an optimization if there exists a mutually exclusive, strictly better one.
     default boolean isStrictlyBetterThan(OptimizationAction otherAction) {
         return cost() <= otherAction.cost() && benefit() > otherAction.benefit() ||
                 cost() < otherAction.cost() && benefit() >= otherAction.benefit();

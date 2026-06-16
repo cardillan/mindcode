@@ -24,7 +24,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Function;
 
 import static info.teksol.mc.mindcode.compiler.optimization.OptimizationPhase.*;
 
@@ -197,6 +196,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
             int costLimit = Math.max(0, globalProfile.getInstructionLimit() - initialSize);
             int expandedCostLimit = 500 + costLimit;
 
+            optimizationContext.setSizeGoalForced(initialSize > globalProfile.getInstructionLimit());
             optimizationContext.prepare();
             List<OptimizationAction> possibleOptimizations = phase.optimizations.stream()
                     .map(optimizers::get)
@@ -214,13 +214,11 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
 
             Set<OptimizationAction> considered = Collections.newSetFromMap(new IdentityHashMap<>());
             OptimizationAction selectedAction = selectAction(goal, possibleOptimizations, costLimit, considered);
-            int firstPhaseSize = 0;
             if (selectedAction != null) {
                 optimizationContext.prepare();
                 optimizationContext.debugPrintProgram(String.format("%n*** Performing optimization %s ***%n", selectedAction), true);
                 OptimizationResult result = selectedAction.apply(costLimit);
                 optimizationContext.finish();
-                firstPhaseSize = codeSize();
 
                 if (result == OptimizationResult.REALIZED) {
                     optimizationContext.debugPrintProgram(String.format("%n*** Performing Data Flow optimization after %s ***%n", selectedAction), true);
@@ -238,7 +236,6 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
             }
 
             int difference = codeSize() - initialSize;
-            //int difference = firstPhaseSize - initialSize;
             optimizationStatistics.add(CompilerMessage.debug(
                     "\nPass %d: %s optimization selection (cost limit %d):", pass, goal.toString().toLowerCase(), costLimit));
             possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference, considered));
@@ -254,7 +251,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
     private boolean acceptOptimization(OptimizationAction action) {
         return switch (action.goal()) {
             case SIZE    -> action.cost() < 0;
-            case NEUTRAL -> action.cost() <= 0 && action.benefit() >= 0 && (action.cost() < 0 || action.benefit() > 0);
+            case NEUTRAL -> action.totalImprovement();
             case SPEED   -> action.benefit() > 0;
         };
     }
@@ -270,17 +267,17 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
     }
 
     private static final Comparator<OptimizationAction> SIZE_GOAL_COMPARATOR =
-            Comparator.comparingInt(OptimizationAction::cost)
-                    .thenComparing(Comparator.comparingDouble(OptimizationAction::benefit).reversed());
+            Comparator.comparingDouble(OptimizationAction::sizeEfficiency)
+                    .thenComparingDouble(OptimizationAction::benefit);
 
     /// Selects an optimization action, taking action groups into account.
     private @Nullable OptimizationAction selectActionForSize(List<OptimizationAction> possibleOptimizations) {
-        return possibleOptimizations.stream().filter(a -> a.goal() == GenerationGoal.SIZE).min(SIZE_GOAL_COMPARATOR).orElse(null);
+        return possibleOptimizations.stream().filter(a -> a.goal() == GenerationGoal.SIZE).max(SIZE_GOAL_COMPARATOR).orElse(null);
     }
 
     // We're maximizing the effect of the optimization: instructions saved times execution benefit.
     private static final Comparator<OptimizationAction> NEUTRAL_GOAL_COMPARATOR =
-            Comparator.comparingDouble(a -> -a.cost() * a.benefit());
+            Comparator.comparingDouble(OptimizationAction::neutralEfficiency);
 
     /// Selects an optimization action, taking action groups into account.
     private @Nullable OptimizationAction selectActionNeutral(List<OptimizationAction> possibleOptimizations) {
@@ -326,21 +323,16 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
 
     private void outputPossibleOptimization(OptimizationAction opt, int costLimit, @Nullable OptimizationAction selected, int difference,
             Set<OptimizationAction> considered) {
-        Function<OptimizationAction, Double> efficiency = switch (opt.goal()) {
-            case SIZE -> OptimizationAction::sizeEfficiency;
-            case NEUTRAL -> OptimizationAction::neutralEfficiency;
-            case SPEED -> OptimizationAction::speedEfficiency;
-        };
 
         if (opt == selected) {
             optimizationStatistics.add(
                     CompilerMessage.debug("  * %-60s size %+5d, benefit %10.1f, efficiency %10.3f (%+d instructions)",
-                            opt, opt.cost(), opt.benefit(), efficiency.apply(opt), difference));
+                            opt, opt.cost(), opt.benefit(), opt.efficiency(), difference));
         } else {
             optimizationStatistics.add(
                     CompilerMessage.debug("  %s %-60s size %+5d, benefit %10.1f, efficiency %10.3f",
                             opt.cost() > costLimit ? "!" : considered.contains(opt) ? "o" : " ",
-                            opt, opt.cost(), opt.benefit(), efficiency.apply(opt)));
+                            opt, opt.cost(), opt.benefit(), opt.efficiency()));
         }
     }
 }

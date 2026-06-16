@@ -80,6 +80,10 @@ public class OptimizationContext extends CompilerMessageEmitter {
     /// Tracks instructions in which variables appear (including side effects).
     private final Map<LogicVariable, List<LogicInstruction>> variableReferences = new HashMap<>();
 
+    /// When true, the size goal is imposed for all optimizers. Used whenever the instruction limit has been exceeded
+    /// to attempt to bring the code size down.
+    private boolean sizeGoalForced = false;
+
     private int currentRun = 0;
     private int modifications = 0;
     private int insertions = 0;
@@ -209,6 +213,14 @@ public class OptimizationContext extends CompilerMessageEmitter {
         if (!iterators.isEmpty()) {
             throw new IllegalStateException("Unclosed iterators.");
         }
+    }
+
+    public boolean isSizeGoalForced() {
+        return sizeGoalForced;
+    }
+
+    public void setSizeGoalForced(boolean sizeGoalForced) {
+        this.sizeGoalForced = sizeGoalForced;
     }
 
     public void outputUninitializedVariables(MessageConsumer messageConsumer) {

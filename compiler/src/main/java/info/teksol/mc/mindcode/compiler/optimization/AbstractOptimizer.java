@@ -159,7 +159,7 @@ abstract class AbstractOptimizer extends CompilerMessageEmitter implements Optim
         protected final double benefit;
 
         public AbstractOptimizationAction(AstContext astContext, int cost, double benefit) {
-            this.goal = astContext.getLocalProfile().getGoal();
+            this.goal = optimizationContext.isSizeGoalForced() ? GenerationGoal.SIZE : astContext.getLocalProfile().getGoal();
             this.astContext = astContext;
             this.cost = cost;
             this.benefit = benefit;

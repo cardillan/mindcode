@@ -16,6 +16,7 @@ Changes intended for the next regular release.
 * Exporting schematics to Mlog Watcher from the web app.
 * Detect unused variables/constants/functions from AST analysis and report them as warnings.
 * Schematic block arrays: a way to create a rectangular shape consisting of the same block at once, with the same settings and serially assigned names.
+* When code size exceeds the instruction limit, perform optimizations using the size goal.
 
 * **Doing**
 
