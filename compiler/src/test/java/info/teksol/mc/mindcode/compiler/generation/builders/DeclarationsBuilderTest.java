@@ -1308,16 +1308,16 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void assignsSymbolicLinks() {
             assertCompilesTo("""
-                            guarded linked(@message) one, two;
-                            linked(@switch) s1, s2;
+                            guarded linked(@message) one, two = message1;
+                            linked(@switch) s1 = switch3, s2;
                             s1.enabled = s2.enabled;
                             """,
                     createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "message1", "null"),
+                    createInstruction(JUMP, label(0), "equal", "message2", "null"),
                     createInstruction(LABEL, label(1)),
-                    createInstruction(JUMP, label(1), "equal", "message2", "null"),
-                    createInstruction(SENSOR, tmp(1), "switch2", "@enabled"),
-                    createInstruction(CONTROL, "enabled", "switch1", tmp(1))
+                    createInstruction(JUMP, label(1), "equal", "message1", "null"),
+                    createInstruction(SENSOR, tmp(1), "switch1", "@enabled"),
+                    createInstruction(CONTROL, "enabled", "switch3", tmp(1))
             );
         }
 
@@ -1371,17 +1371,33 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void refusesInitializedLinks() {
-            assertGeneratesMessage(
-                    "Initial value not supported for symbolic links.",
-                    "linked(@message) foo = message2;");
-        }
-
-        @Test
         void reportsMultipleDeclarations() {
             assertGeneratesMessage(
                     "Multiple module declarations in one source file are not allowed.",
                     "module a; module b;");
+        }
+
+        @Test
+        void refusesIncompatibleBlockTypes() {
+            assertGeneratesMessage(
+                    "The literal link name 'switch1' doesn't match the declared block type '@message'.",
+                    "linked(@message) x = switch1;");
+        }
+
+        @Test
+        void refusesInvalidLiteralNames1() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Linked variable name 'message' doesn't correspond to any known linked block name.")
+                            .add("The literal link name 'message' doesn't match the declared block type '@message'."),
+                    "linked(@message) x = message;");
+        }
+
+        @Test
+        void refusesInvalidLiteralNames2() {
+            assertGeneratesMessages(expectedMessages()
+                            .add("Linked variable name 'message01' doesn't correspond to any known linked block name.")
+                            .add("The literal link name 'message01' doesn't match the declared block type '@message'."),
+                    "linked(@message) x = message01;");
         }
     }
 }

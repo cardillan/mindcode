@@ -34,7 +34,6 @@ public class ERR {
     public static final String ARRAY_INVALID = "'%s' is not an array.'";
     public static final String ARRAY_LINKED_NOT_INITIALIZED = "Linked block array must be initialized.";
     public static final String ARRAY_LINKED_INVALID_RANGE = "Invalid link range (both link names must use identical base name, range must not be empty).";
-    public static final String ARRAY_LINKED_NOT_LINKS = "Value assigned to an element of a linked block array is not a link.";
     public static final String ARRAY_LOCAL = "Arrays must be declared in the global scope.";
     public static final String ARRAY_MUTABLE_SIZE = "Array size must be constant.";
     public static final String ARRAY_NON_INTEGER_INDEX = "Array index must be an integer.";
@@ -128,13 +127,14 @@ public class ERR {
     public static final String INVALID_KEYWORD_USE = "Invalid use of mlog keyword.";
     public static final String INVALID_LINKED_TYPE_SPEC = "Invalid linked block type specification ('%s' is not a block type).";
     public static final String INVALID_MLOG_KEYWORD = "Keyword only allowed as the only value of the 'mlog' modifier in array declaration.";
-    public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic links. Please set 'symbolic-links' to 'false'.";
+    public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic labels. Please set 'symbolic-labels' to 'false'.";
     public static final String LINK_EXPECTED = "A literal or symbolic link name expected.";
     public static final String LINK_TYPE_MISMATCH = "The expected block type '%s' differs from the actual block type '%s' as defined in the schematic.";
     public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals require language target 7 or higher.";
     public static final String LITERAL_INTEGER_TOO_LARGE = "Literal '%s' exceeds maximum possible value (%s).";
     public static final String LITERAL_INVALID_CHAR_FORMAT = "Invalid format of character literal.";
     public static final String LITERAL_INVALID_COLOR_FORMAT = "Invalid format of color literal (supported formats are %%rrggbb or %%rrggbbaa).";
+    public static final String LITERAL_LINK_TYPE_MISMATCH = "The literal link name '%s' doesn't match the declared block type '%s'.";
     public static final String LITERAL_NAMED_COLOR_REQUIRES_TARGET_8 = "Named color literals require language target 8 or higher.";
     public static final String LITERAL_NO_VALID_REPRESENTATION = "Value '%s' does not have a valid mlog representation.";
     public static final String LITERAL_NO_VALID_REPRESENTATION_PARAM = "Value assigned to parameter '%s' (%s) does not have a valid mlog representation.";
@@ -215,7 +215,6 @@ public class ERR {
     public static final String UNRESOLVED_GLOBAL = "This function call may execute code accessing a global variable or constant '%s', which has not been created yet.";
     public static final String UNSATISFIED_LINK = "No block is linked to the processor as '%s' in the schematic definition.";
     public static final String UNSUPPORTED_LINK_NAME = "Symbolic link name is required ('%s' denotes a literal link name).";
-    public static final String UNSUPPORTED_INITIAL_LINK_VALUE = "Initial value not supported for symbolic links.";
     public static final String UNSUPPORTED_STRING_EXPRESSION = "Unsupported string expression.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIER = "Modifier '%s' cannot be used with '%s'.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIERS = "Modifiers %s are mutually exclusive.";

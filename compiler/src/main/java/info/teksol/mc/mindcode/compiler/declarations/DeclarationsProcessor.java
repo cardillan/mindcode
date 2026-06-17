@@ -8,6 +8,8 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
 
+import static info.teksol.mc.mindcode.compiler.generation.builders.DeclarationsBuilder.createLinkedIdentifiersList;
+
 @NullMarked
 public class DeclarationsProcessor extends CompilerMessageEmitter {
     private final AstProgram program;
@@ -40,21 +42,28 @@ public class DeclarationsProcessor extends CompilerMessageEmitter {
             declaration.getVariables().stream().map(AstVariableSpecification::getName).forEach(variables::addUnresolvedGlobal);
 
             if (declaration.getModifiers().stream().map(AstVariableModifier::getModifier).anyMatch(LINKED_MODIFIERS::contains)) {
-                declaration.getVariables().forEach(this::processLinkedVariableSpecification);
+                // Process initial values when not compiling for schematics, or there's no symbolic link declaration
+                boolean processInitialValues = !variables.hasSchematicLinks() || declaration.getModifiers().stream().noneMatch(
+                        m -> m.getModifier() == Modifier.LINKED && m.getParametrization() != null);
+                declaration.getVariables().forEach(specification -> processLinkedVariableSpecification(specification, processInitialValues));
             }
         }
 
         node.getChildren().forEach(this::visit);
     }
 
-    private void processLinkedVariableSpecification(AstVariableSpecification specification) {
+    private void processLinkedVariableSpecification(AstVariableSpecification specification, boolean processInitialValues) {
         if (specification.getExpressions().isEmpty()) {
-            variables.addLinkedName(specification.getName());
-        } else {
-            specification.getExpressions().stream()
-                    .filter(AstIdentifier.class::isInstance)
-                    .map(AstIdentifier.class::cast)
-                    .forEach(identifier -> variables.addLinkedName(identifier.getName()));
+            variables.addLinkedName(specification.getIdentifier());
+        } else if (processInitialValues) {
+            for (AstExpression expression : specification.getExpressions()) {
+                switch (expression) {
+                    case AstIdentifier identifier -> variables.addLinkedName(identifier);
+                    case AstRange range -> createLinkedIdentifiersList(CompilerMessageEmitter.DISCARD, range)
+                            .forEach(variables::addLinkedName);
+                    default -> {}
+                }
+            }
         }
     }
 

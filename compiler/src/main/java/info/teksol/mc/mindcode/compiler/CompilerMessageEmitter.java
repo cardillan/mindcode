@@ -11,6 +11,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class CompilerMessageEmitter extends AbstractMessageEmitter {
+    public static final CompilerMessageEmitter DISCARD = new CompilerMessageEmitter(_ -> {});
 
     public CompilerMessageEmitter(MessageConsumer messageConsumer) {
         super(messageConsumer);

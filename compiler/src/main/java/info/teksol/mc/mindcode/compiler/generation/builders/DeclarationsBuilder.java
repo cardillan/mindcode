@@ -5,6 +5,7 @@ import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.generated.ast.visitors.*;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
@@ -365,65 +366,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         return expressions.stream().anyMatch(AstRange.class::isInstance);
     }
 
-    private @Nullable AstIdentifier getLinkIdentifier(AstExpression expression) {
-        if (expression instanceof AstIdentifier identifier) return identifier;
-        error(expression, ERR.LINK_EXPECTED);
-        return null;
-    }
-
-    private @Nullable Tuple2<String, Integer> extractIndex(@Nullable AstIdentifier identifier) {
-        if (identifier == null) return null;
-
-        String name = identifier.getName();
-        int index = name.length();
-        while (index > 0 && Character.isDigit(name.charAt(index - 1))) index--;
-
-        if (index > 0 && index < name.length()) {
-            String base = name.substring(0, index);
-            String number = name.substring(index);
-
-            if (!number.startsWith("0")) {
-                try {
-                    // All is okay here: the parsed number can't be zero or negative
-                    return new Tuple2<>(base, Integer.parseInt(number));
-                } catch (NumberFormatException ex) {
-                    // Ignore - will be reported as the link error
-                }
-            }
-        }
-
-        error(identifier, ERR.LINK_EXPECTED);
-        return null;
-    }
-
-    private List<AstIdentifier> createLinkedIdentifiersList(AstVariableSpecification specification) {
-        if (specification.getExpressions().size() != 1 || !(specification.getExpressions().getFirst() instanceof AstRange range)) {
-            throw new MindcodeInternalError("A single range is expected.");
-        }
-
-        AstIdentifier firstId = getLinkIdentifier(range.getFirstValue());
-        AstIdentifier lastId = getLinkIdentifier(range.getLastValue());
-        Tuple2<String, Integer> first = extractIndex(firstId);
-        Tuple2<String, Integer> last = extractIndex(lastId);
-        if (first == null || last == null) return List.of();  // Error already reported
-
-        if (first.e1().equals(last.e1())) {
-            String base = first.e1();
-            int start = first.e2();
-            int end = last.e2() - (range.isExclusive() ? 1 : 0);
-            if (start <= end) {
-                List<AstIdentifier> list = new ArrayList<>(end - start + 1);
-                for (int i = start; i <= end; i++) {
-                    list.add((i < end ? firstId : lastId).withName(base + i));
-                }
-                return list;
-            }
-        }
-
-        error(specification.getExpressions().getFirst(), ERR.ARRAY_LINKED_INVALID_RANGE);
-        return List.of();
-    }
-
     private int getDeclaredArraySize(AstVariableSpecification specification, Modifiers modifiers) {
         AstExpression arraySize = specification.getArraySize();
         if (arraySize == null) return 0;
@@ -459,15 +401,18 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             return List.of();
         }
 
-        List<ValueStore> resul;
         if (containsRange(specification.getExpressions())) {
+            if (specification.getExpressions().size() != 1 || !(specification.getExpressions().getFirst() instanceof AstRange range)) {
+                throw new MindcodeInternalError("A single range is expected.");
+            }
+
             // We know all the identifiers in the list are valid
-            return createLinkedIdentifiersList(specification).stream()
+            return createLinkedIdentifiersList(this, range).stream()
                     .map(identifier -> createLinkedVariable(identifier, modifiers)).toList();
         } else {
             return specification.getExpressions().stream()
                     .map(node -> {
-                        if (getLinkIdentifier(node) instanceof AstIdentifier identifier) {
+                        if (getLinkIdentifier(this, node) instanceof AstIdentifier identifier) {
                             return createLinkedVariable(identifier, modifiers);
                         } else {
                             processInLocalScope(() -> evaluate(node));  // To report errors in expressions
@@ -660,10 +605,22 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         LogicVariable variable;
 
         if (specification.getExpressions().isEmpty()) {
-            variable = variables.createLinkedVariable(specification.getIdentifier(), modifiers, specification.getIdentifier());
+            AstIdentifier identifier = specification.getIdentifier();
+            variable = variables.createLinkedVariable(identifier, modifiers, identifier);
         } else if (specification.getExpressions().size() == 1) {
             if (specification.getExpressions().getFirst() instanceof AstIdentifier linkedTo) {
-                variable = variables.createLinkedVariable(specification.getIdentifier(), modifiers, linkedTo);
+                // Is it symbolic?
+                if (modifiers.getParameters(LINKED) instanceof String blockName) {
+                    // Verify the name is compatible
+                    String baseName = BlockType.getBaseLinkName(blockName);
+                    if (!linkedTo.getName().startsWith(baseName) || !linkedTo.getName().substring(baseName.length()).matches("[1-9]\\d{0,8}")) {
+                        error(linkedTo, ERR.LITERAL_LINK_TYPE_MISMATCH, linkedTo.getName(), blockName);
+                    }
+                    variable = variables.createLinkedVariable(specification.getIdentifier(), modifiers,
+                            variables.hasSchematicLinks() ? specification.getIdentifier() : linkedTo);
+                } else {
+                    variable = variables.createLinkedVariable(specification.getIdentifier(), modifiers, linkedTo);
+                }
             } else {
                 error(specification.getExpressions().getFirst(), ERR.IDENTIFIER_EXPECTED);
                 compile(specification.getExpressions().getFirst());
@@ -892,5 +849,60 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         public HeapTracker createTracker(CodeGeneratorContext context) {
             return HeapTracker.createTracker(context, memory, start, end);
         }
+    }
+
+    private static @Nullable AstIdentifier getLinkIdentifier(CompilerMessageEmitter messageEmitter, AstExpression value) {
+        if (value instanceof AstIdentifier identifier) return identifier;
+        messageEmitter.error(value, ERR.LINK_EXPECTED);
+        return null;
+    }
+
+    private static @Nullable Tuple2<String, Integer> extractIndex(CompilerMessageEmitter messageEmitter, @Nullable AstIdentifier identifier) {
+        if (identifier == null) return null;
+
+        String name = identifier.getName();
+        int index = name.length();
+        while (index > 0 && Character.isDigit(name.charAt(index - 1))) index--;
+
+        if (index > 0 && index < name.length()) {
+            String base = name.substring(0, index);
+            String number = name.substring(index);
+
+            if (!number.startsWith("0")) {
+                try {
+                    // All is okay here: the parsed number can't be zero or negative
+                    return new Tuple2<>(base, Integer.parseInt(number));
+                } catch (NumberFormatException ex) {
+                    // Ignore - will be reported as the link error
+                }
+            }
+        }
+
+        messageEmitter.error(identifier, ERR.LINK_EXPECTED);
+        return null;
+    }
+
+    public static List<AstIdentifier> createLinkedIdentifiersList(CompilerMessageEmitter messageEmitter, AstRange range) {
+        AstIdentifier firstId = getLinkIdentifier(messageEmitter, range.getFirstValue());
+        AstIdentifier lastId = getLinkIdentifier(messageEmitter, range.getLastValue());
+        Tuple2<String, Integer> first = extractIndex(messageEmitter, firstId);
+        Tuple2<String, Integer> last = extractIndex(messageEmitter, lastId);
+        if (first == null || last == null) return List.of();  // Error already reported
+
+        if (first.e1().equals(last.e1())) {
+            String base = first.e1();
+            int start = first.e2();
+            int end = last.e2() - (range.isExclusive() ? 1 : 0);
+            if (start <= end) {
+                List<AstIdentifier> list = new ArrayList<>(end - start + 1);
+                for (int i = start; i <= end; i++) {
+                    list.add((i < end ? firstId : lastId).withName(base + i));
+                }
+                return list;
+            }
+        }
+
+        messageEmitter.error(range, ERR.ARRAY_LINKED_INVALID_RANGE);
+        return List.of();
     }
 }

@@ -127,7 +127,7 @@ cell1, cell2: @memory-cell at (3, 5)
 
 creates a memory cell at coordinates (3, 5) and assigns labels `cell1` and `cell2` to it.
 
-Labels are useful for creating references to labeled blocks. As labels may be used directly as link names when specifying [processor links](#processor-links), it is often desirable to use a literal or symbolic link name for a block label. 
+Labels are useful for creating references to labeled blocks. As labels may be used directly as link names when specifying [processor links](#processor-links), it is often desirable to use a literal or a symbolic link name for a block label. 
 
 > [!NOTE]
 > For more complex schematic, using [symbolic link names](#linking-by-a-symbolic-name) as labels is strongly recommended. Symbolic names can describe the function of the block in the schematic, and using them leaves the task of assigning literal link names to blocks in different processors to the compiler, simplifying the link management and maintenance significantly.    
@@ -565,7 +565,7 @@ When an orientation or configuration is specified for a block array, it is appli
 
 One or more labels, including array labels, can be specified for a block array. The labels are assigned to the block in the array in the processing order, always starting at the anchor block. If there are more labels specified (array or regular) than is the total number of blocks in the array, an error is reported. If there are only regular arrays specified and their number is smaller than the total number of blocks in the array, the remaining blocks are left unlabeled.
 
-If the labels include at least one array label, the last such label in the list is repeated a number of times needed to assign a label to each block in the array. if the last label in the list is a regular label, it will always be assigned to the last block in the array. Example:
+If the labels include at least one array label, the last such label in the list is repeated a number of times needed to assign a label to each block in the array. If the last label in the list is a regular label, it will always be assigned to the last block in the array. Example:
 
 ```
 up, down, size#, volume#, left, right: @switch at (0, 8) * (1, -8) 
@@ -1058,16 +1058,28 @@ schematic
 end
 ```
 
+Linking by position may be especially useful when using block arrays. In this example, an array of switches is linked to an array of processors one-to-one:  
+
+```
+schematic
+    @switch          at (0, 1) * (8, 1)
+    @micro-processor at (0, 0) * (8, 1) processor
+        links
+            +(0, 1) as switch1 
+        end
+    end
+end
+```
+
+
 #### Link name requirements
 
 Link names must meet the following conditions:
 
-* A link name must correspond to the last part of the block type name (e.g., `drill` for `@laser-drill`, `cell` for 
-  `@memory-cell` and so on; if the last part is `large`, the next-to-last is used as in `node` for 
-  `@power-node-large`), followed by a number.
+* A literal link name must correspond to the last part of the block type name (e.g., `drill` for `@laser-drill`, `cell` for `@memory-cell`, and so on; if the last part is `large`, the next-to-last is used as in `node` for `@power-node-large`), followed by a number.
+* A symbolic link name must be a valid [Mindcode identifier](SYNTAX-0-BASICS.markdown#identifiers). Symbolic link names must be different from any possible literal link name (`switch1` is a literal link name and therefore is disallowed; `switch` is not a literal link name and therefore is allowed). Mindcode resolves symbolic link names to literal link names when compiling code or building a schematic.
 * Link names must be unique, no two linked blocks can share a link name in a single processor.
-* Each block can be linked at most once, it is not possible to link the same block twice under different names in a 
-  single processor.
+* Each block can be linked at most once, it is not possible to link the same block twice under different names in a single processor.
 
 ### Processor code
 
@@ -1129,14 +1141,15 @@ A string value identifier allows moving the code away from the processor definit
 ```
 schematic
     @micro-processor at (0, 0) processor
-        links switch1 end
+        links button end
         mindcode = source-code
     end
-    switch1: @switch at +(1, 0)
+    button: @switch at +(1, 0)
 end
 
 source-code = """
-    on = switch1.enabled;
+    linked(@switch) button;
+    on = button.enabled;
     // Starting at 1, we want to skip the switch
     for link in 1 ... @links do
         device = getlink(link);

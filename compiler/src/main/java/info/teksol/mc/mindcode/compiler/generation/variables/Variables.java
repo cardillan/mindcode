@@ -60,6 +60,10 @@ public class Variables extends CompilerMessageEmitter {
         putVariable("@@PROCESSOR_TYPE", LogicString.create(globalProfile.getProcessorType().code()));
     }
 
+    public boolean hasSchematicLinks() {
+        return schematicLinks != null;
+    }
+
     public void addUnresolvedGlobal(String name) {
         unresolvedGlobals.add(name);
     }
@@ -147,8 +151,8 @@ public class Variables extends CompilerMessageEmitter {
         functionContext.replaceFunctionVariable(identifier, variable);
     }
 
-    public void addLinkedName(String name) {
-        linkedNames.add(name);
+    public void addLinkedName(AstIdentifier identifier) {
+        linkedNames.add(identifier.getName());
     }
 
     public Map<String, String> getSymbolicNameMap() {
@@ -212,35 +216,37 @@ public class Variables extends CompilerMessageEmitter {
         }
 
         String linkedName;
-        if (modifiers.getParameters(LINKED) instanceof String typeName) {
-            if (identifier != linkedTo) {
-                error(linkedTo, ERR.UNSUPPORTED_INITIAL_LINK_VALUE);
-            }
+        resolveName: {
+            if (modifiers.getParameters(LINKED) instanceof String typeName) {
+                if (processor.isBlockName(identifier.getName())) {
+                    error(identifier, ERR.UNSUPPORTED_LINK_NAME, identifier.getName());
+                }
 
-            if (processor.isBlockName(identifier.getName())) {
-                error(identifier, ERR.UNSUPPORTED_LINK_NAME, identifier.getName());
-            }
+                if (identifier == linkedTo) {
+                    if (schematicLinks != null) {
+                        String schematicType = schematicLinks.getOrDefault(identifier.getName(), "");
+                        if (!schematicType.isEmpty() && !schematicType.equals(typeName)) {
+                            error(identifier, ERR.LINK_TYPE_MISMATCH, typeName, schematicType);
+                        }
+                    }
 
-            if (schematicLinks != null) {
-                 String schematicType = schematicLinks.getOrDefault(identifier.getName(), "");
-                 if (!schematicType.isEmpty() && !schematicType.equals(typeName)) {
-                     error(identifier, ERR.LINK_TYPE_MISMATCH, typeName, schematicType);
-                 }
-            }
+                    // Symbolic linked block name
+                    // Devised from the provided block type even when not recognized
+                    String linkName = BlockType.getBaseLinkName(typeName);
+                    for (int i = 1; ; i++) {
+                        String test = linkName + i;
+                        if (!linkedNames.contains(test)) {
+                            linkedNames.add(test);
+                            linkedName = test;
+                            break;
+                        }
+                    }
 
-            // Symbolic linked block name
-            // Devised from the provided block type even when not recognized
-            String linkName = BlockType.getBaseLinkName(typeName);
-            for (int i = 1; ; i++) {
-                String test = linkName + i;
-                if (!linkedNames.contains(test)) {
-                    linkedNames.add(test);
-                    linkedName = test;
-                    break;
+                    symbolicNameMap.put(identifier.getName(), linkedName);
+                    break resolveName;
                 }
             }
-            symbolicNameMap.put(identifier.getName(), linkedName);
-        } else {
+
             linkedName = linkedTo.getName();
 
             if (!isLinkedVariableName(linkedTo)) {
