@@ -1,8 +1,7 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.common.TextFilePosition;
-import info.teksol.mc.messages.SourcePositionTranslator;
+import info.teksol.mc.common.TextOffset;
 import org.jspecify.annotations.NullMarked;
 
 import java.text.ParseException;
@@ -43,12 +42,12 @@ public record ExcerptSpecification(TextFilePosition start, TextFilePosition end)
         return String.join("\n", list);
     }
 
-    public SourcePositionTranslator toPositionTranslator() {
-        final int lineOffset = start.line() - 1;
-        final int columnOffset = start.column() - 1;
-        return p -> new SourcePosition(p.inputFile(), p.line() + lineOffset, p.column() + columnOffset);
+    public TextOffset toTextOffset() {
+        return TextOffset.of(start.line() - 1, start.column() - 1, 0);
     }
 
+    // Called by reflection when parsing command line arguments
+    @SuppressWarnings("unused")
     public static ExcerptSpecification valueOf(String value) throws ParseException {
         if (value.isEmpty()) {
             throw new ParseException("Cannot parse empty string.", 0);

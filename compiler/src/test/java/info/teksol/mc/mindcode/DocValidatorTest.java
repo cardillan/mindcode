@@ -4,6 +4,7 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.emulator.ExecutionFlag;
 import info.teksol.mc.messages.ListMessageLogger;
 import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
@@ -296,7 +297,7 @@ public class DocValidatorTest extends AbstractTestBase {
         private void validateCode(File file, int line, String source, @Nullable String mlog) {
             ListMessageLogger messageConsumer = new ListMessageLogger();
             InputFiles inputFiles = InputFiles.create();
-            inputFiles.registerFile(file.toPath(), source);
+            inputFiles.registerFile(file.toPath(), source, SourcePositionTranslator.EMPTY);
             CompilerProfile profile = createCompilerProfile();
             MindcodeCompiler compiler = new MindcodeCompiler(messageConsumer, profile, inputFiles);
             try {

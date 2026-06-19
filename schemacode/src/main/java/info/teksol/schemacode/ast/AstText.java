@@ -1,6 +1,7 @@
 package info.teksol.schemacode.ast;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.common.TextOffset;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 import org.jspecify.annotations.NullMarked;
 
@@ -16,5 +17,10 @@ public interface AstText extends AstConfiguration {
 
     default int getIndent(SchematicsBuilder builder) {
         return 0;
+    }
+
+    default TextOffset getTextOffset(SchematicsBuilder builder) {
+        SourcePosition textPosition = getTextPosition(builder);
+        return TextOffset.of(textPosition.line() - 1, textPosition.column() - 1, getIndent(builder));
     }
 }

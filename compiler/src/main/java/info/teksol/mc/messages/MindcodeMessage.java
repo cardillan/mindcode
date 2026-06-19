@@ -11,10 +11,6 @@ public interface MindcodeMessage {
         return SourcePosition.EMPTY;
     }
 
-    default MindcodeMessage translatePosition(SourcePositionTranslator translator) {
-        return this;
-    }
-
     /// Unstable messages may change from run to run, and therefore aren't suitable for storing
     /// in log files which are under version control.
     default boolean isStable() {

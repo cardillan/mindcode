@@ -82,7 +82,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         extractConstants();
 
         // Add constants as modules
-        constants.forEach((k, v) -> inputFiles.addPackagedFile(k, v.getText(this)));
+        constants.forEach((k, v) -> inputFiles.addPackagedFile(k, v.getText(this), v.getTextOffset(this)));
 
         List<AstSchematic> schematicsList = astDefinitions.definitions().stream()
                 .filter(AstSchematic.class::isInstance)

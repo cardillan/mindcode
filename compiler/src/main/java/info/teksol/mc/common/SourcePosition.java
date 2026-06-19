@@ -21,64 +21,7 @@ public record SourcePosition(InputFile inputFile,
                              TextFilePosition end,
                              TextFilePosition token) implements Comparable<SourcePosition> {
 
-    private static final InputFile EMPTY_INPUT_FILE = new InputFile() {
-        @Override
-        public int getId() {
-            return Integer.MIN_VALUE;
-        }
-
-        @Override
-        public boolean isStandaloneSource() {
-            return false;
-        }
-
-        @Override
-        public boolean isLibrary() {
-            return false;
-        }
-
-        @Override
-        public String getCode() {
-            return "";
-        }
-
-        @Override
-        public int getNumberOfLines() {
-            return 1;
-        }
-
-        @Override
-        public Path getPath() {
-            return Path.of("");
-        }
-
-        @Override
-        public Path getRelativePath() {
-            return Path.of("");
-        }
-
-        @Override
-        public String getAbsolutePath() {
-            return "";
-        }
-
-        @Override
-        public String getDistinctPath() {
-            return "";
-        }
-
-        @Override
-        public String getDistinctTitle() {
-            return "";
-        }
-
-        @Override
-        public String toString() {
-            return "EMPTY_INPUT_FILE";
-        }
-    };
-
-    public static final SourcePosition EMPTY = new SourcePosition(EMPTY_INPUT_FILE, 1, 1);
+    public static final SourcePosition EMPTY = new SourcePosition(InputFile.EMPTY, 1, 1);
 
     public SourcePosition(InputFile inputFile, int line, int column) {
         this(inputFile, new TextFilePosition(line, column), new TextFilePosition(line, column),
@@ -104,8 +47,12 @@ public record SourcePosition(InputFile inputFile,
     }
 
     public String formatForIde(FileReferences fileReferences) {
-        return ((inputFile == EMPTY_INPUT_FILE || inputFile.getPath() == InputFiles.EMPTY_PATH ? "" : reference(fileReferences, inputFile.getPath())) + ":")
-               + line() + ":" + column();
+        return inputFile.getPositionTranslator().apply(this).formatForIdeTranslated(fileReferences);
+    }
+
+    private String formatForIdeTranslated(FileReferences fileReferences) {
+        return ((inputFile == InputFile.EMPTY || inputFile.getPath() == InputFiles.EMPTY_PATH ? "" : reference(fileReferences, inputFile.getPath())) + ":")
+                + line() + ":" + column();
     }
 
     private String reference(FileReferences fileReferences, Path path) {
@@ -127,12 +74,12 @@ public record SourcePosition(InputFile inputFile,
     }
 
     public String formatForLog() {
-        String distinctPath = inputFile == EMPTY_INPUT_FILE ? "" : inputFile.getDistinctPath();
+        String distinctPath = inputFile == InputFile.EMPTY ? "" : inputFile.getDistinctPath();
         return distinctPath.isEmpty() ? "line " + line() + ":" + column() : distinctPath + ":" + line() + ":" + column();
     }
 
     public String formatForMlog() {
-        String distinctPath = inputFile == EMPTY_INPUT_FILE ? "" : inputFile.getDistinctPath();
+        String distinctPath = inputFile == InputFile.EMPTY ? "" : inputFile.getDistinctPath();
         return distinctPath.isEmpty() ? "position " + line() + ":" + column() : distinctPath + ":" + line() + ":" + column();
     }
 
@@ -151,11 +98,11 @@ public record SourcePosition(InputFile inputFile,
     }
 
     public boolean isEmpty() {
-        return inputFile == EMPTY_INPUT_FILE;
+        return inputFile == InputFile.EMPTY;
     }
 
     public String getDistinctPath() {
-        return inputFile == EMPTY_INPUT_FILE ? "" : inputFile.getDistinctPath();
+        return inputFile == InputFile.EMPTY ? "" : inputFile.getDistinctPath();
     }
 
     public boolean isLibrary() {

@@ -138,8 +138,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
     public MindcodeCompiler(CompilationPhase targetPhase, MessageConsumer messageConsumer,
             CompilerProfile globalProfile, InputFiles inputFiles) {
-        super(new ListMessageLogger(
-                new TranslatingMessageConsumer(messageConsumer, globalProfile.getPositionTranslator())));
+        super(new ListMessageLogger(messageConsumer));
         this.messageLogger = (ListMessageLogger) super.messageConsumer();
         this.targetPhase = targetPhase;
         this.globalProfile = globalProfile;

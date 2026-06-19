@@ -4,6 +4,7 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.EmulatorMessageEmitter;
 import info.teksol.mc.emulator.ExecutorResults;
+import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.mc.mindcode.compiler.ToolMessageEmitter;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.CompilerProfile;
@@ -285,13 +286,14 @@ abstract class ActionHandler {
     static void readFile(InputFiles inputFiles, File file) {
         String source = readInput(file);
         Path path = isStdInOut(file) ? Path.of("") : file.toPath();
-        inputFiles.registerFile(path, source);
+        inputFiles.registerFile(path, source, SourcePositionTranslator.EMPTY);
     }
 
     static void readFile(InputFiles inputFiles, File file, @Nullable ExcerptSpecification excerpt) {
         String source = readInput(file);
         Path path = isStdInOut(file) ? Path.of("") : file.toPath();
-        inputFiles.registerFile(path, excerpt == null ? source : excerpt.apply(source));
+        inputFiles.registerFile(path, excerpt == null ? source : excerpt.apply(source),
+                excerpt == null ? SourcePositionTranslator.EMPTY : excerpt.toTextOffset()::apply);
     }
 
     static String readInput(File inputFile) {

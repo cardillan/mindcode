@@ -17,13 +17,17 @@ Changes intended for the next regular release.
 * Detect unused variables/constants/functions from AST analysis and report them as warnings.
 * Schematic block arrays: a way to create a rectangular shape consisting of the same block at once, with the same settings and serially assigned names.
 * When code size exceeds the instruction limit, perform optimizations using the size goal.
+* Initialized symbolic links
 
 * **Doing**
 
-* Internal stack
+* Compiler options in schematics
+* Mlog parametrization in schematics
 
 * **Planned**
 
+* Schematic regions
+* Internal stack
 * Local arrays
 * If expression telescoping optimization
 * Array code injection optimization
@@ -31,14 +35,6 @@ Changes intended for the next regular release.
 
 * **Quick ideas**
 
-* Initialized symbolic links
-* Compiler options in schematics (named configuration?)
-  * `mindcode = "source" using <name of compiler configuration> 
-* Mlog parametrization in schematics
-  * Part of processor configuration, `param name = value name = value end`
-  * Looks for `set param x` in processor's mlog and replaces `x` with `value` (mlog formatting!)
-  * Unused parameters would be reported
-  * Global param block in schematics definition for schematic-wide parameters.
 
 ## Next releases
 

@@ -100,9 +100,6 @@ public class CompileMindcodeAction extends ActionHandler {
         File inputFile = arguments.get("input");
         List<File> others = arguments.get("append");
         ExcerptSpecification excerpt = arguments.get("excerpt");
-        if (excerpt != null) {
-            globalProfile.setPositionTranslator(excerpt.toPositionTranslator());
-        }
 
         final Path basePath = isStdInOut(inputFile) ? Paths.get("") : inputFile.toPath().toAbsolutePath().normalize().getParent();
         final InputFiles inputFiles = InputFiles.create(basePath);

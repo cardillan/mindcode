@@ -5,6 +5,7 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.emulator.Assertion;
 import info.teksol.mc.messages.ListMessageLogger;
 import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
@@ -89,16 +90,16 @@ public class SystemLibraryTest {
         if (testFile.toFile().exists()) {
             // Manually written testing code
             executableTest = true;
-            inputFile = inputFiles.registerSource( Files.readString(testFile));
+            inputFile = inputFiles.registerSource( Files.readString(testFile), SourcePositionTranslator.EMPTY);
         } else if (templateFile.toFile().exists()) {
             // Generate test code from a template
             executableTest = true;
-            inputFile = inputFiles.registerSource(generateCodeFromTemplate(Files.readString(templateFile)));
+            inputFile = inputFiles.registerSource(generateCodeFromTemplate(Files.readString(templateFile)), SourcePositionTranslator.EMPTY);
         } else {
             // Generate test code from a library source
             // No reason to execute it at all, just verify it compiles
             executableTest = false;
-            inputFile = inputFiles.registerSource(generateCodeFromSource(libraryName));
+            inputFile = inputFiles.registerSource(generateCodeFromSource(libraryName), SourcePositionTranslator.EMPTY);
         }
 
         Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, libraryName + ".mnd"),

@@ -5,6 +5,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public interface SourcePositionTranslator {
+    SourcePositionTranslator EMPTY = position -> position;
 
     SourcePosition apply(SourcePosition position);
 }

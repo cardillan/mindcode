@@ -3,7 +3,6 @@ package info.teksol.mc.mindcode.compiler;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.messages.MindcodeMessage;
-import info.teksol.mc.messages.SourcePositionTranslator;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
@@ -17,17 +16,6 @@ public record PositionalMessage(MessageLevel level, SourcePosition sourcePositio
         Objects.requireNonNull(level);
         Objects.requireNonNull(sourcePosition);
         Objects.requireNonNull(message);
-    }
-
-    @Override
-    public MindcodeMessage translatePosition(SourcePositionTranslator translator) {
-        if (!sourcePosition.isEmpty()) {
-            SourcePosition translated = translator.apply(sourcePosition);
-            if (translated != sourcePosition) {
-                return new PositionalMessage(level, translated, message);
-            }
-        }
-        return this;
     }
 
     public static PositionalMessage message(MessageLevel level, SourcePosition sourcePosition, @PrintFormat String format, Object... args) {

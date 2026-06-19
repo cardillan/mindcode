@@ -2,7 +2,6 @@ package info.teksol.mc.profile;
 
 import info.teksol.mc.Version;
 import info.teksol.mc.emulator.ExecutionFlag;
-import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
@@ -40,9 +39,6 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     // Only used to generate library documentation
     private boolean libraryPrecedence = false;
 
-    // Schematics Builder
-    private SourcePositionTranslator positionTranslator = p -> p;
-
     /// Constructs a new instance of the CompilerProfile class.
     ///
     /// @param webApplication a boolean indicating whether the profile is intended for a web application.
@@ -61,7 +57,6 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         this.schematic = other.schematic;
         this.webApplication = other.webApplication;
         this.libraryPrecedence = other.libraryPrecedence;
-        this.positionTranslator = other.positionTranslator;
         this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
         for (CompilerOptionValue<?> option : other.options.values()) {
             if (option.option != OptimizationOptions.OPTIMIZATION && (includeUnstable || option.stability == SemanticStability.STABLE)) {
@@ -141,15 +136,6 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
 
     public CompilerProfile setLibraryPrecedence(boolean libraryPrecedence) {
         this.libraryPrecedence = libraryPrecedence;
-        return this;
-    }
-
-    public SourcePositionTranslator getPositionTranslator() {
-        return positionTranslator;
-    }
-
-    public CompilerProfile setPositionTranslator(SourcePositionTranslator positionTranslator) {
-        this.positionTranslator = positionTranslator;
         return this;
     }
 
@@ -541,7 +527,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         if (o == null || getClass() != o.getClass()) return false;
 
         CompilerProfile that = (CompilerProfile) o;
-        return webApplication == that.webApplication && libraryPrecedence == that.libraryPrecedence && options.equals(that.options) && positionTranslator.equals(that.positionTranslator);
+        return webApplication == that.webApplication && libraryPrecedence == that.libraryPrecedence && options.equals(that.options);
     }
 
     @Override
@@ -549,7 +535,6 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         int result = Boolean.hashCode(webApplication);
         result = 31 * result + options.hashCode();
         result = 31 * result + Boolean.hashCode(libraryPrecedence);
-        result = 31 * result + positionTranslator.hashCode();
         return result;
     }
 

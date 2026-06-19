@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed the schemacode action not producing the log file when requested by a command-line argument.
 * Fixed the compiler evaluating undeclared link names even in strict mode ([#325](https://github.com/cardillan/mindcode/issues/325)).
 * Fixed incorrect array declarations possibly crashing the compiler ([#328](https://github.com/cardillan/mindcode/issues/328)).
+* Fixed a wrong position being reported for errors and warnings in code snippets included as a module via the `require` directive. 
 
 ### Added
 

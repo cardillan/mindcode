@@ -1,5 +1,6 @@
 package info.teksol.mc.common;
 
+import info.teksol.mc.messages.SourcePositionTranslator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -7,7 +8,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/// This class hold all input files used in a compilation.
+/// This class holds all input files used in a compilation.
 @NullMarked
 public class InputFiles {
     public static final Path EMPTY_PATH = Path.of("");
@@ -31,6 +32,9 @@ public class InputFiles {
     /// Additional files packaged in by external process.
     private final Map<String, String> packagedFiles = new HashMap<>();
 
+    /// Text positions within the containing file for packaged files
+    private final Map<String, TextOffset> packagedOffsets = new HashMap<>();
+
     private InputFiles(Path basePath) {
         this.basePath = basePath;
     }
@@ -49,11 +53,11 @@ public class InputFiles {
 
     public static InputFiles fromSource(String source) {
         InputFiles inputFiles = new InputFiles(EMPTY_PATH);
-        inputFiles.registerFile(EMPTY_PATH, source);
+        inputFiles.registerFile(EMPTY_PATH, source, p -> p);
         return inputFiles;
     }
 
-    public InputFile registerFile(Path path, String code) {
+    public InputFile registerFile(Path path, String code, SourcePositionTranslator sourcePositionTranslator) {
         Path absolute = path.toAbsolutePath().normalize();
         if (standardFiles.containsKey(absolute)) {
             InputFile existing = standardFiles.get(absolute);
@@ -64,18 +68,18 @@ public class InputFiles {
             throw new IllegalArgumentException("File already registered with different content: " + absolute);
         }
 
-        InputFileImpl inputFile = createFile(path, false, code);
+        InputFileImpl inputFile = createFile(path, false, code, sourcePositionTranslator);
         fileNames.computeIfAbsent(inputFile.getFileName(), k -> new AtomicInteger()).incrementAndGet();
         standardFiles.put(absolute, inputFile);
         return inputFile;
     }
 
     public InputFile registerLibraryFile(Path path, String code) {
-        return createFile(path, true, code);
+        return createFile(path, true, code, SourcePositionTranslator.EMPTY);
     }
 
-    public InputFile registerSource(String code) {
-        return createFile(EMPTY_PATH, false, code);
+    public InputFile registerSource(String code, SourcePositionTranslator sourcePositionTranslator) {
+        return createFile(EMPTY_PATH, false, code, sourcePositionTranslator);
     }
 
     public Path getBasePath() {
@@ -98,12 +102,17 @@ public class InputFiles {
         return packagedFiles.get(name);
     }
 
-    public void addPackagedFile(String name, String code) {
-        packagedFiles.put(name, code);
+    public TextOffset getPackagedTextOffset(String name) {
+        return packagedOffsets.get(name);
     }
 
-    private InputFileImpl createFile(Path path, boolean library, String code) {
-        InputFileImpl inputFile = new InputFileImpl(fileContents.size(), library, path);
+    public void addPackagedFile(String name, String code, TextOffset textOffset) {
+        packagedFiles.put(name, code);
+        packagedOffsets.put(name, textOffset);
+    }
+
+    private InputFileImpl createFile(Path path, boolean library, String code, SourcePositionTranslator sourcePositionTranslator) {
+        InputFileImpl inputFile = new InputFileImpl(fileContents.size(), library, path, sourcePositionTranslator);
         inputFiles.add(inputFile);
         fileContents.add(code);
         return inputFile;
@@ -124,13 +133,16 @@ public class InputFiles {
 
         private final String absolutePath;
 
+        private final SourcePositionTranslator sourcePositionTranslator;
+
         ///  Number of lines, computed on demand
         private int numberOfLines = -1;
 
-        private InputFileImpl(int id, boolean library, Path path) {
+        private InputFileImpl(int id, boolean library, Path path, SourcePositionTranslator sourcePositionTranslator) {
             this.id = id;
             this.library = library;
             this.path = path;
+            this.sourcePositionTranslator = sourcePositionTranslator;
             fileName = path.getFileName().toString();
             absolutePath = library ? "*" + path : path.toAbsolutePath().normalize().toString();
         }
@@ -155,6 +167,11 @@ public class InputFiles {
             return path;
         }
 
+        @Override
+        public SourcePositionTranslator getPositionTranslator() {
+            return sourcePositionTranslator;
+        }
+
         public String getFileName() {
             return fileName;
         }
@@ -174,16 +191,6 @@ public class InputFiles {
                     : library ? "System library " + fileName
                     : fileNames.get(fileName).get() <= 1 ? "File " + fileName
                     : "File " + absolutePath;
-        }
-
-        @Override
-        public String getAbsolutePath() {
-            return absolutePath;
-        }
-
-        @Override
-        public Path getRelativePath() {
-            return library ? path : path.relativize(basePath);
         }
 
         @Override

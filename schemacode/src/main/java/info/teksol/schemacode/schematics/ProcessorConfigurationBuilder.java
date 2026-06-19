@@ -132,11 +132,11 @@ public class ProcessorConfigurationBuilder {
             }
 
             // Set up a separate compiler environment
-            InputFile fileToCompile = builder.getInputFiles().registerSource(mindcode);
+            InputFile fileToCompile = builder.getInputFiles().registerSource(mindcode,
+                    processor.program().createPositionTranslator(builder));
 
             CompilerProfile compilerProfile = builder.getCompilerProfile()
                     .duplicate(true)
-                    .setPositionTranslator(processor.program().createPositionTranslator(builder))
                     .setRun(false);
 
             ProcessorType processorType = ProcessorType.fromBlockType(blockPos.blockType());

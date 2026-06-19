@@ -2,8 +2,10 @@ package info.teksol.mc.mindcode.compiler;
 
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.common.TextOffset;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstRequire;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstRequireFile;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstRequireLibrary;
@@ -44,8 +46,10 @@ public class RequirementsProcessor extends CompilerMessageEmitter {
         if (requirement.isLibrary()) {
             return loadLibrary((AstRequireLibrary) requirement);
         } else if (inputFiles.hasPackagedFile(requirement.getName())) {
-            return inputFiles.registerFile(inputFiles.getBasePath().resolve(requirement.getName()),
-                    inputFiles.getPackagedFile(requirement.getName()));
+            // A packaged file is stored as a code snippet(s) in the main file
+            String name = requirement.getName();
+            return inputFiles.registerFile(inputFiles.getBasePath().resolve(name),
+                    inputFiles.getPackagedFile(name), packagedFileTranslator(name));
         } else if (profile.isWebApplication()) {
             error(requirement, ERR.REQUIRE_WEBAPP_EXT_UNSUPPORTED);
             return null;
@@ -54,10 +58,15 @@ public class RequirementsProcessor extends CompilerMessageEmitter {
         }
     }
 
+    private SourcePositionTranslator packagedFileTranslator(String name) {
+        TextOffset textOffset = inputFiles.getPackagedTextOffset(name);
+        return p -> textOffset.apply(p, inputFiles.getMainInputFile());
+    }
+
     private @Nullable InputFile loadFile(AstRequireFile requirement, Path path) {
         try {
             String code = Files.readString(path, StandardCharsets.UTF_8);
-            return inputFiles.registerFile(path, code);
+            return inputFiles.registerFile(path, code, SourcePositionTranslator.EMPTY);
         } catch (IOException e) {
             error(requirement.getFile(), ERR.REQUIRE_ERROR_READING_FILE, path);
             return null;

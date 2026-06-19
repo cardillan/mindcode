@@ -2,6 +2,7 @@ package info.teksol.schemacode.ast;
 
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 import org.jspecify.annotations.NullMarked;
 
@@ -23,7 +24,7 @@ public record AstProgramSnippetFile(SourcePosition sourcePosition, AstText fileN
             Path path = builder.getBasePath().resolve(fileName.getText(builder));
             try {
                 String source = Files.readString(path);
-                builder.getInputFiles().registerFile(path, source);
+                builder.getInputFiles().registerFile(path, source, SourcePositionTranslator.EMPTY);
                 return source;
             } catch (IOException ex) {
                 builder.error(this, "Error reading file '%s'.", path.toString());

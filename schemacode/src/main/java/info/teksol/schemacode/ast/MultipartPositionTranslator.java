@@ -92,11 +92,8 @@ class MultipartPositionTranslator implements SourcePositionTranslator {
 
     private static SourcePositionTranslator createSimpleTranslator(SchematicsBuilder builder, AstProgramSnippet snippet) {
         final SourcePosition source = snippet.getSourcePosition(builder);
-        final InputFile inputFile = source.inputFile();
         final int lineOffset = source.line() - 1;
         final int columnOffset = snippet.getIndent(builder) + source.column() - 1;
-        return p ->
-                new SourcePosition(source.inputFile(), p.line() + lineOffset,
-                p.column() + columnOffset);
+        return p -> new SourcePosition(source.inputFile(), p.line() + lineOffset, p.column() + columnOffset);
     }
 }

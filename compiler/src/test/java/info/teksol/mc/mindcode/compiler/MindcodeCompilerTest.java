@@ -1,9 +1,9 @@
 package info.teksol.mc.mindcode.compiler;
 
-import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.messages.ListMessageLogger;
 import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.FinalCodeOutput;
@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @NullMarked
 class MindcodeCompilerTest  {
+    private final SourcePositionTranslator emptySourcePositionTranslator = SourcePositionTranslator.EMPTY;
 
     @Nested
     class CompilerTests extends AbstractCodeGeneratorTest {
@@ -121,8 +122,8 @@ class MindcodeCompilerTest  {
         @Test
         public void requiresModuleDeclaration() {
             InputFiles inputFiles = InputFiles.create();
-            InputFile file1 = inputFiles.registerFile(Path.of("file1.mnd"), "begin print(\"File1\"); end;");
-            InputFile file2 = inputFiles.registerFile(Path.of("file2.mnd"), "begin print(\"File2\"); end;");
+            inputFiles.registerFile(Path.of("file1.mnd"), "begin print(\"File1\"); end;", emptySourcePositionTranslator);
+            inputFiles.registerFile(Path.of("file2.mnd"), "begin print(\"File2\"); end;", emptySourcePositionTranslator);
             compile(expectedMessages().add("Module declaration not found in source file."), inputFiles, c -> {});
         }
 
@@ -177,8 +178,8 @@ class MindcodeCompilerTest  {
         @Test
         public void compilesMultipleFiles() {
             InputFiles inputFiles = InputFiles.create();
-            InputFile file1 = inputFiles.registerFile(Path.of("file1.mnd"), "begin print(\"File1\"); end;");
-            InputFile file2 = inputFiles.registerFile(Path.of("file2.mnd"), "module foo; begin print(\"File2\"); end;");
+            inputFiles.registerFile(Path.of("file1.mnd"), "begin print(\"File1\"); end;", emptySourcePositionTranslator);
+            inputFiles.registerFile(Path.of("file2.mnd"), "module foo; begin print(\"File2\"); end;", emptySourcePositionTranslator);
 
             ListMessageLogger messageLogger = new ListMessageLogger();
             process(expectedMessages().setLogger(messageLogger), inputFiles,

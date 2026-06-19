@@ -13,24 +13,9 @@ public record TextFilePosition(int line, int column) implements Comparable<TextF
         }
     }
 
-    @Override
-    public int line() {
-        return line;
+    public TextFilePosition offset(int lineOffset, int columnOffset) {
+        return new TextFilePosition(line + lineOffset, column + columnOffset);
     }
-
-    @Override
-    public int column() {
-        return column;
-    }
-
-    public TextFilePosition withColumn(int column) {
-        return new TextFilePosition(line, column);
-    }
-
-    public TextFilePosition nextLine() {
-        return new TextFilePosition(line + 1, 1);
-    }
-
 
     @Override
     public int compareTo(TextFilePosition o) {

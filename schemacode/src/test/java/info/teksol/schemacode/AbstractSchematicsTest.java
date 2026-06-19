@@ -5,6 +5,7 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.messages.SourcePositionTranslator;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.config.Configuration;
@@ -93,12 +94,12 @@ public abstract class AbstractSchematicsTest {
     }
 
     protected AstDefinitions createDefinitions(String source) {
-        inputFiles.registerSource(source);
+        inputFiles.registerSource(source, SourcePositionTranslator.EMPTY);
         return createDefinitions(inputFiles);
     }
 
     protected Schematic buildSchematics(String source) {
-        inputFiles.registerSource(source);
+        inputFiles.registerSource(source, SourcePositionTranslator.EMPTY);
         AstDefinitions definitions = createDefinitions(source).withEmptyPosition();
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false, false);
         return SchemacodeCompiler.buildSchematic(inputFiles, definitions, compilerProfile, messageListener("buildSchematics"));

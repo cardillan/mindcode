@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
 import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.common.TextOffset;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,8 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             print("After foo");
                             result;
                         end;
-                        """);
+                        """,
+                TextOffset.ZERO_OFFSET);
 
         inputFiles.addPackagedFile(
                 "remote.mnd",
@@ -45,7 +47,8 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                         export void bar(in a, out b)
                             b = sin(a);
                         end;
-                        """);
+                        """,
+                TextOffset.ZERO_OFFSET);
 
         inputFiles.addPackagedFile(
                 "remote2.mnd",
@@ -57,7 +60,8 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                         export def baz(a, b, c)
                             return len(len(a * a + b * b), c * c);
                         end;
-                        """);
+                        """,
+                TextOffset.ZERO_OFFSET);
 
         inputFiles.addPackagedFile(
                 "conflict.mnd",
@@ -67,14 +71,16 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                         export def foo()
                             print("Hey!");
                         end;
-                        """);
+                        """,
+                TextOffset.ZERO_OFFSET);
 
         inputFiles.addPackagedFile(
                 "relaxed1.mnd",
                 """
                         module test;
                         print("foo");
-                        """);
+                        """,
+                TextOffset.ZERO_OFFSET);
 
         inputFiles.addPackagedFile(
                 "relaxed2.mnd",
@@ -82,7 +88,8 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                         #set syntax = relaxed;
                         module test;
                         print("foo");
-                        """);
+                        """,
+                TextOffset.ZERO_OFFSET);
 
         inputFiles.addPackagedFile(
                 "target.mnd",
@@ -90,7 +97,8 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                         #set target = 8.0w;
                         module test;
                         void foo() print("foo"); end;
-                        """);
+                        """,
+                TextOffset.ZERO_OFFSET);
 
         return inputFiles;
     }
