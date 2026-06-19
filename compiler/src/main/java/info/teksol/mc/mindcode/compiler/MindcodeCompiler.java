@@ -176,6 +176,19 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
     }
 
     private void compile(List<InputFile> files) {
+        try {
+            compileFiles(files);
+        } catch (Throwable t) {
+            error("The code to be compiled is too complex (%s).",
+                    switch (t) {
+                        case OutOfMemoryError _ -> "out of memory";
+                        case StackOverflowError _ -> "stack overflow";
+                        default -> t.getClass().getSimpleName();
+                    });
+        }
+    }
+
+    private void compileFiles(List<InputFile> files) {
         Queue<ModulePlacement> inputs = files.stream()
                 .map(f -> new ModulePlacement(f, Collections.emptySortedSet()))
                 .collect(Collectors.toCollection(LinkedList::new));
