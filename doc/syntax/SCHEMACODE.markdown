@@ -1,28 +1,19 @@
 # Schemacode
 
-Schemacode is a specialized definition language designed to describe the structure of Mindustry Schematics. Schemacode 
-definitions can be compiled into Mindustry schematic, either as a binary `.msch` file, or as a text.
+Schemacode is a specialized definition language designed to describe the structure of Mindustry Schematics. Schemacode definitions can be compiled into Mindustry schematic, either as a binary `.msch` file, or as a text.
 
-While simple schematics can be easily created in Schemacode from scratch, a better method for creating more 
-complicated designs is to build the schematic in Mindustry, export it to a `.msch` file or copy it to the clipboard 
-as a text and get a valid Schemacode representation by decompiling. To decompile a `.msch` file, the 
-[command line tool](TOOLS-CMDLINE.markdown) has to be used; decompiling a text representation obtained via clipboard is 
-possible through the [web application](http://mindcode.herokuapp.com/decompiler).
+While simple schematics can be easily created in Schemacode from scratch, a better method for creating more complicated designs is to build the schematic in Mindustry, export it to a `.msch` file or copy it to the clipboard as a text and get a valid Schemacode representation by decompiling. To decompile a
+`.msch` file, the [command line tool](TOOLS-CMDLINE.markdown) has to be used; decompiling a text representation obtained via clipboard is possible through the [web application](http://mindcode.herokuapp.com/decompiler).
 
-Schemacode supports almost all existing features of Mindustry schematics. Specifically, all features employed by 
-Serpulo technology are fully supported. Features specific to Erekir (such as canvas pictures) are unavailable.
+Schemacode supports almost all existing features of Mindustry schematics. Specifically, all features employed by Serpulo technology are fully supported. Features specific to Erekir (such as canvas pictures) are unavailable.
 
-Most importantly, logic processors can be fully configured using Schemacode. When specifying the code to be embedded 
-in a given processor, it is possible to use either the native mlog language or Mindcode. The source code (both mlog 
-and Mindcode) can also be injected into the schematic from an external file when building it using the command line tool.
+Most importantly, logic processors can be fully configured using Schemacode. When specifying the code to be embedded in a given processor, it is possible to use either the native mlog language or Mindcode. The source code (both mlog and Mindcode) can also be injected into the schematic from an external file when building it using the command line tool.
 
-It might be useful to have a look at existing Schemacode samples at http://mindcode.herokuapp.com/schematics before 
-going on with this documentation.
+It might be useful to have a look at existing Schemacode samples at http://mindcode.herokuapp.com/schematics before going on with this documentation.
 
 # Whitespace and comments
 
-Whitespace is used to separate all tokes in Schemacode. End-of-line characters have no special meaning (except in text 
-blocks, where they're preserved). There's no character (such as `;`) separating commands in Schemacode.
+Whitespace is used to separate all tokes in Schemacode. End-of-line characters have no special meaning (except in text blocks, where they're preserved). There's no character (such as `;`) separating commands in Schemacode.
 
 Schemacode supports line comments using the `//` characters: everything after `//` is ignored.
 
@@ -33,8 +24,7 @@ On the topmost level, the Schemacode source may contain two kinds of definitions
 * String value definition
 * Schematic definition
 
-The Schemacode source must contain exactly one schematic definition, and zero or more string value definitions, in 
-any order.
+The Schemacode source must contain exactly one schematic definition, and zero or more string value definitions, in any order.
 
 # String value definition
 
@@ -62,11 +52,9 @@ id = '''
     '''
 ```
 
-No escape characters are recognized in either kind of string values. To encode line endings into string values, 
-the text block version must be used. It is possible to use triple double quotes in string literals when they're 
-defined as text blocks marked by triple single quotes (and vice versa). 
+No escape characters are recognized in either kind of string values. To encode line endings into string values, the text block version must be used. It is possible to use triple double quotes in string literals when they're defined as text blocks marked by triple single quotes (and vice versa).
 
-Text blocks indents are removed when interpreting the value of the literal. 
+Text blocks indents are removed when interpreting the value of the literal.
 
 # Schematic definition
 
@@ -80,8 +68,7 @@ schematic
 end
 ```
 
-where definition is either an attribute definition or a block definition, in any order. By convention, the attribute 
-definitions should come first. 
+where definition is either an attribute definition or a block definition, in any order. By convention, the attribute definitions should come first.
 
 # Attribute definition
 
@@ -93,25 +80,16 @@ attribute = value
 
 The following attributes are recognized:
 
-* `name`: specifies the name of the schematic. The value of the attribute is String (a string text value, a string 
-  literal, or a text block). Can be specified at most once.
+* `name`: specifies the name of the schematic. The value of the attribute is String (a string text value, a string literal, or a text block). Can be specified at most once.
 * `filename`: specifies the output file name for the schematic. The value of the attribute is String. Can be specified at most once.
-* `description`: specifies the description of the schematic. The value of the attribute is String (a string text 
-  value, a string literal, or a text block). In the case of text block, single newline characters are removed; an empty
-  line must be used to define a line break. Can be specified at most once.
-* `dimensions`: specifies the dimensions of the schematic, given as `(width, height)`, where `width` and `height` 
-  are positive numbers. Can be specified at most once. When not specified, the dimensions are calculated from 
-  schematic definition. Must not be smaller than calculated dimensions when specified. (In the future, specifying 
-  dimensions different from calculated ones might serve some specific purpose.)  
-* `tag`: assigns a tag to the schematic. The tag can be either a String value or a predefined icon (see
-  [Icons](SYNTAX-1-VARIABLES.markdown#constants-representing-built-in-icons)). `tag` attribute can be specified more than once; all 
-  specified tags are attached to the schematic.
+* `description`: specifies the description of the schematic. The value of the attribute is String (a string text value, a string literal, or a text block). In the case of text block, single newline characters are removed; an empty line must be used to define a line break. Can be specified at most once.
+* `dimensions`: specifies the dimensions of the schematic, given as `(width, height)`, where `width` and `height` are positive numbers. Can be specified at most once. When not specified, the dimensions are calculated from schematic definition. Must not be smaller than calculated dimensions when specified. (In the future, specifying dimensions different from calculated ones might serve some specific purpose.)
+* `tag`: assigns a tag to the schematic. The tag can be either a String value or a predefined icon (see [Icons](SYNTAX-1-VARIABLES.markdown#constants-representing-built-in-icons)). `tag` attribute can be specified more than once; all specified tags are attached to the schematic.
 * `target`: specifies the target of the schematic. The assigned value must match one of the [existing Mindustry versions](SYNTAX-5-OTHER.markdown#option-target). The target is also applied when compiling Mindcode assigned to processors (although it is possible to override the target within the Mindcode source code using the `#set target` directive). Can be specified at most once.
 
 # Block definition
 
-Block definition specifies the type and configuration of a block placed at certain coordinates within the schematic. 
-The syntax of the block definition is:
+Block definition specifies the type and configuration of a block placed at certain coordinates within the schematic. The syntax of the block definition is:
 
 ```
 [labels] <block-type> at <block-position> [block-array-specification] [facing <direction>] [configuration]
@@ -127,10 +105,10 @@ cell1, cell2: @memory-cell at (3, 5)
 
 creates a memory cell at coordinates (3, 5) and assigns labels `cell1` and `cell2` to it.
 
-Labels are useful for creating references to labeled blocks. As labels may be used directly as link names when specifying [processor links](#processor-links), it is often desirable to use a literal or a symbolic link name for a block label. 
+Labels are useful for creating references to labeled blocks. As labels may be used directly as link names when specifying [processor links](#processor-links), it is often desirable to use a literal or a symbolic link name for a block label.
 
 > [!NOTE]
-> For more complex schematic, using [symbolic link names](#linking-by-a-symbolic-name) as labels is strongly recommended. Symbolic names can describe the function of the block in the schematic, and using them leaves the task of assigning literal link names to blocks in different processors to the compiler, simplifying the link management and maintenance significantly.    
+> For more complex schematic, using [symbolic link names](#linking-by-a-symbolic-name) as labels is strongly recommended. Symbolic names can describe the function of the block in the schematic, and using them leaves the task of assigning literal link names to blocks in different processors to the compiler, simplifying the link management and maintenance significantly.
 
 ### Array labels
 
@@ -142,9 +120,8 @@ Array labels may be either symbolic (e.g., `button#`) or literal (`switch#`). Li
 
 ## Block type
 
-To specify a block type, a Mindustry built-in block type must be specified, including the `@` sign at the beginning,
-for example `@switch`, `@micro-processor` or `@battery-large`. Only built-in block types are supported at this 
-moment, blocks added by mods cannot be used.
+To specify a block type, a Mindustry built-in block type must be specified, including the `@` sign at the beginning, for example `@switch`, `@micro-processor` or
+`@battery-large`. Only built-in block types are supported at this moment, blocks added by mods cannot be used.
 
 All supported block types are listed below.
 
@@ -480,19 +457,15 @@ All supported block types are listed below.
 
 ## Block position
 
-Block position can be specified as relative or absolute. The first block defined by the schematic must use an absolute 
-position, but all following blocks can use absolute or relative positions. Relative position always relates to the 
-previous block, as defined by the schematic.
+Block position can be specified as relative or absolute. The first block defined by the schematic must use an absolute position, but all following blocks can use absolute or relative positions. Relative position always relates to the previous block, as defined by the schematic.
 
-Block position can be specified using this syntax: 
+Block position can be specified using this syntax:
 
 ```
 [+-] (x, y)
 ```
 
-The `+` or `-` sign, if used, specifies relative position, in which case the `x` and `y` coordinates are added to or 
-subtracted from previous block position. When no plus or minus sign is used, the coordinates specify an absolute 
-position for the block.
+The `+` or `-` sign, if used, specifies relative position, in which case the `x` and `y` coordinates are added to or subtracted from previous block position. When no plus or minus sign is used, the coordinates specify an absolute position for the block.
 
 It is also possible to specify a position relative to another block using this syntax:
 
@@ -517,9 +490,7 @@ end
 
 Blocks in the schematic must not overlap. Overlapping blocks are detected and cause compilation error.
 
-Blocks larger than 1x1 are placed into the schematic in such a way that their lower-left corner is at the given 
-coordinates. This makes it quite natural to design schematic starting in the lower left corner, i.e., from coordinates
-(0, 0), and building right and up (or up and right). 
+Blocks larger than 1x1 are placed into the schematic in such a way that their lower-left corner is at the given coordinates. This makes it quite natural to design schematic starting in the lower left corner, i.e., from coordinates (0, 0), and building right and up (or up and right).
 
 Block position may also be negative (see [Origin and dimensions calculation](#origin-and-dimensions-calculation)).
 
@@ -582,13 +553,11 @@ This will create an array of eight switches in the top-down order and assign the
 * `left`
 * `right`
 
-Note: the literal link names assigned to the symbolic link names depend on the order in which the symbolic labels are encountered in the Mindcode source file.   
+Note: the literal link names assigned to the symbolic link names depend on the order in which the symbolic labels are encountered in the Mindcode source file.
 
 ## Block orientation
 
-Each block in the schematic has an orientation, although specific orientation affects only some types of blocks (such as 
-conveyors or unit factories). Orientation can take four values - `east`, `west`, `north` or `south` - and is 
-specified using this syntax:
+Each block in the schematic has an orientation, although specific orientation affects only some types of blocks (such as conveyors or unit factories). Orientation can take four values - `east`, `west`, `north` or `south` - and is specified using this syntax:
 
 ```
 facing <orientation>
@@ -596,13 +565,11 @@ facing <orientation>
 
 e.g., `@conveyor at (2, 4) facing west`.
 
-The cardinal directions are related to the coordinate system of the schematic, i.e., conveyor facing east is moving 
-items from left to right.
+The cardinal directions are related to the coordinate system of the schematic, i.e., conveyor facing east is moving items from left to right.
 
 ## Block configuration
 
-Some blocks are stored with specific configurations: connection for bridges or power nodes, item type for unloaders,
-text for messages or links, and code for processors. Schemacode supports the following types of configuration:
+Some blocks are stored with specific configurations: connection for bridges or power nodes, item type for unloaders, text for messages or links, and code for processors. Schemacode supports the following types of configuration:
 
 * [Block type](#block-type-configuration): block type selected in a constructor or a payload source (a sandbox-only block), or a payload router.
 * [Boolean](#boolean-configuration): on/off or open/close, for switches and doors.
@@ -615,8 +582,7 @@ text for messages or links, and code for processors. Schemacode supports the fol
 * [Unit command](#unit-command-configuration): unit command selected in a reconstructor.
 * [Text](#text-configuration): text contents for message blocks.
 * [Processor](#processor-configuration): links and code for logic processors.
-* Virtual: a specific configuration marking blocks that aren't part of the schematic but can be used as link 
-  targets. The keyword is accepted by Schematic Builder but has no meaning at the moment.  
+* Virtual: a specific configuration marking blocks that aren't part of the schematic but can be used as link targets. The keyword is accepted by Schematic Builder but has no meaning at the moment.
 
 ## Block type configuration
 
@@ -650,13 +616,9 @@ The following block types can have boolean configuration specified:
 
 ## Color configuration
 
-Color configuration is specified as `color rgba(<red>, <green>, <blue>, <alpha>)`, where `<red>`, `<green>` and 
-`<blue>` are the value if individual color components, while `<alpha>` is the value of the alpha channel. All these 
-values must be given as a number between `0` and `255`, inclusive. Alpha specifies the opacity, `0` is not opaque at 
-all (i.e., fully transparent), `255` is fully opaque. The exact handling of the alpha channel is done by the 
-illuminator block; generally speaking, higher values of alpha make the illuminator lightning more prominent.
+Color configuration is specified as `color rgba(<red>, <green>, <blue>, <alpha>)`, where `<red>`, `<green>` and `<blue>` are the value if individual color components, while `<alpha>` is the value of the alpha channel. All these values must be given as a number between `0` and `255`, inclusive. Alpha specifies the opacity, `0` is not opaque at all (i.e., fully transparent), `255` is fully opaque. The exact handling of the alpha channel is done by the illuminator block; generally speaking, higher values of alpha make the illuminator lightning more prominent.
 
-This example specifies an illuminator block emitting intense green color: 
+This example specifies an illuminator block emitting intense green color:
 
 ```
     @illuminator at (0, 0) color rgba(0, 255, 0, 255)
@@ -668,8 +630,7 @@ The following block types can have color configuration specified:
 
 ## Connection configuration
 
-Connection configuration is specified as `connected to` followed by a comma-separated list of absolute or relative 
-positions; relative positions are related to the block being configured. It is also possible to specify a block label:
+Connection configuration is specified as `connected to` followed by a comma-separated list of absolute or relative positions; relative positions are related to the block being configured. It is also possible to specify a block label:
 
 ```
     @bridge-conveyor     at (0, 0) connected to (0, 2)    // Connects to the bridge at (0, 2)
@@ -684,16 +645,11 @@ Multiple connections are separated by commas, and it is possible to mix differen
     @power-node at (5, 5) connected to (1, 1), -(2, 3), +(1, -1), node2, reactor4
 ```
 
-The node is connected to blocks at positions (1, 1), (3, 2), (6, 4) and `node2` and `reactor4`, whatever their 
-positions are.
+The node is connected to blocks at positions (1, 1), (3, 2), (6, 4) and `node2` and `reactor4`, whatever their positions are.
 
-When connecting to blocks larger than 1x1 by their position, it is sufficient to specify any position occupied by 
-the block, it is not necessary to target the lower left corner.
+When connecting to blocks larger than 1x1 by their position, it is sufficient to specify any position occupied by the block, it is not necessary to target the lower left corner.
 
-Connection specified by position may lead to a place not occupied by any block, or even to a place outside the 
-schematic. Such a connection - called a "virtual connection" - is allowed and will be compiled into the schematic. 
-When the schematic is built in the Mindustry map and later a compatible block is added at the position of the 
-virtual connection, the connection will be automatically made.    
+Connection specified by position may lead to a place not occupied by any block, or even to a place outside the schematic. Such a connection - called a "virtual connection" - is allowed and will be compiled into the schematic. When the schematic is built in the Mindustry map and later a compatible block is added at the position of the virtual connection, the connection will be automatically made.
 
 The following block types can be connected to at most one block:
 
@@ -705,8 +661,7 @@ The following block types can be connected to at most one block:
 * `@phase-conduit`
 * `@phase-conveyor`
 
-The following block types can be connected to several blocks (the number of available connections depends on the block 
-type):
+The following block types can be connected to several blocks (the number of available connections depends on the block type):
 
 * `@power-node`
 * `@power-node-large`
@@ -720,15 +675,12 @@ Both normal and phase bridge connections must conform to the following criteria,
 
 * At most one connection is allowed.
 * The connection must not lead to the same block (no connection to itself).
-* The connections must lead to a block of the same type; it is not possible to connect e.g., a `@bridge-conveyor` to 
-  a `@phase-conveyor`.
-* No circular connections: if a block is connected to another block, the other block must not be connected to the 
-  original block.
+* The connections must lead to a block of the same type; it is not possible to connect e.g., a `@bridge-conveyor` to a `@phase-conveyor`.
+* No circular connections: if a block is connected to another block, the other block must not be connected to the original block.
 * The connection must be either vertical or horizontal; diagonal connections of any kind are disallowed.
 * The connection distance must not exceed the bridge range.
 
-Connections to empty positions are allowed, and no warnings are generated. When the schematic is built in a Mindustry 
-world and later a bridge of the same type is placed at the target position, the bridge is automatically connected.
+Connections to empty positions are allowed, and no warnings are generated. When the schematic is built in a Mindustry world and later a bridge of the same type is placed at the target position, the bridge is automatically connected.
 
 ### Connecting mass drivers
 
@@ -736,8 +688,7 @@ Mass driver connections must conform to the following criteria, otherwise a comp
 
 * At most one connection is allowed.
 * The connection must not lead to the same block (no connection to itself).
-* The connections must lead to a block of the same type; it is not possible to connect e.g., a `@payload-mass-driver` to
-  a `@large-payload-mass-driver`.
+* The connections must lead to a block of the same type; it is not possible to connect e.g., a `@payload-mass-driver` to a `@large-payload-mass-driver`.
 * The connection distance must not exceed the mass driver range.
 
 Connections to empty positions are allowed, and no warnings are generated.
@@ -750,12 +701,9 @@ Several different blocks in Mindustry represent power nodes: `@power-node`, `@po
 Power node connections must conform to the following criteria, otherwise a compilation error occurs:
 
 * The connection must not lead to the same block (no connection to itself).
-* The connection must connect to a block which produces or consumes power, or to another power node. (Note: a diode 
-  isn't such a block, power node cannot connect to a diode.)
-* The connection distance must not exceed the power node range. When linking two power nodes, the larger of the two 
-  power node ranges is used.
-* The number of connections (including incoming connections from other power nodes) must not exceed the maximum number 
-  of connections for a given type of power node.
+* The connection must connect to a block which produces or consumes power, or to another power node. (Note: a diode isn't such a block, power node cannot connect to a diode.)
+* The connection distance must not exceed the power node range. When linking two power nodes, the larger of the two power node ranges is used.
+* The number of connections (including incoming connections from other power nodes) must not exceed the maximum number of connections for a given type of power node.
 
 When the following situations are detected, a warning is produced and the connection is ignored:
 
@@ -764,11 +712,11 @@ When the following situations are detected, a warning is produced and the connec
 
 Connecting two power nodes `N1` and `N2` is possible in any of these ways:
 
-* declaring connection from `N1` to `N2` only, 
-* declaring connection from `N2` to `N1` only, 
+* declaring connection from `N1` to `N2` only,
+* declaring connection from `N2` to `N1` only,
 * declaring connection in both directions.
 
-In all these cases both the `N1` to `N2` and `N2` to `N1` connections are written to the compiled schematic. 
+In all these cases both the `N1` to `N2` and `N2` to `N1` connections are written to the compiled schematic.
 
 ## Item configuration
 
@@ -849,8 +797,7 @@ The applicability of a command depends on the type of unit processed by the reco
 
 ## Text configuration
 
-Text configuration assigns a text content to blocks. It is specified as `text` followed by a string literal,
-text block literal, or string value identifier:
+Text configuration assigns a text content to blocks. It is specified as `text` followed by a string literal, text block literal, or string value identifier:
 
 ```
 schematic
@@ -878,9 +825,7 @@ The following block types can have text configuration specified:
 
 ## Processor configuration
 
-Processor configuration is the most complex one. It can specify both the code embedded to the processor and 
-links to blocks in the schematic (and even outside the schematic) to the processor. The configuration is specified 
-using the `processor` syntax:
+Processor configuration is the most complex one. It can specify both the code embedded to the processor and links to blocks in the schematic (and even outside the schematic) to the processor. The configuration is specified using the `processor` syntax:
 
 ```
     @micro-processor at (0, 0) processor
@@ -906,9 +851,7 @@ There are several ways to specify blocks linked to the processor.
 
 #### Linking by pattern
 
-By specifying a link pattern, it is possible to link to the processor all blocks whose labels are matching the 
-given pattern. The pattern is specified using "wildcard" convention: a string where the `*` character matches any 
-part of a block label (the `?` matching a single character is **not** supported). The simplest use is this
+By specifying a link pattern, it is possible to link to the processor all blocks whose labels are matching the given pattern. The pattern is specified using "wildcard" convention: a string where the `*` character matches any part of a block label (the `?` matching a single character is **not** supported). The simplest use is this:
 
 ```
     links
@@ -916,8 +859,7 @@ part of a block label (the `?` matching a single character is **not** supported)
     end
 ```
 
-This definition matches all labeled blocks, which will be linked to the processor using their labels as link names.
-This is the easiest way that can be used when every linked block is assigned the correct label:
+This definition matches all labeled blocks, which will be linked to the processor using their labels as link names. This is the easiest way that can be used when every linked block is assigned the correct label:
 
 ```
 schematic
@@ -930,10 +872,9 @@ schematic
 end
 ```
 
-The switch and message blocks are linked to the processor as `switch1` and `message1`, respectively. 
+The switch and message blocks are linked to the processor as `switch1` and `message1`, respectively.
 
-A more complicated way uses prefixes to group block labels. It allows linking blocks to more than one processor 
-using pattern matching:
+A more complicated way uses prefixes to group block labels. It allows linking blocks to more than one processor using pattern matching:
 
 ```
 schematic
@@ -952,16 +893,13 @@ schematic
 end
 ```
 
-When the block label contains a dash character (`-`), only the part of the label after the first dash character is 
-used as a link name. The above example therefore links the switch to both processors as `switch1`, while each 
-message block is linked to separate processor as `message1`.
+When the block label contains a dash character (`-`), only the part of the label after the first dash character is used as a link name. The above example therefore links the switch to both processors as `switch1`, while each message block is linked to separate processor as `message1`.
 
 It is also possible to use patterns and prefixes together with [symbolic link names](#linking-by-a-symbolic-name), although this is typically not needed.
 
 #### Linking by a literal name
 
-Named links allow linking blocks to the processor directly using the block labels. It is possible to specify a link 
-name for the label; if it isn't specified, the label is used as a link name. Any prefix is stripped away again:
+Named links allow linking blocks to the processor directly using the block labels. It is possible to specify a link name for the label; if it isn't specified, the label is used as a link name. Any prefix is stripped away again:
 
 ```
 schematic
@@ -983,7 +921,7 @@ end
 
 Linking by a symbolic name works similarly to linking by a literal name, except the actual link names are assigned by the Mindcode compiler when compiling the code. This makes it much easier to link the same block to different processors using the same symbolic name, without having to readjust the link indexes in case a conflict arises.
 
-A symbolic link name corresponding to each linked block must be declared in the Mindcode source code so that the Mindcode compiler can assign the correct link names. When a corresponding symbolic link name is not declared in the Mindcode source, an error is generated, as the unresolved symbolic link name cannot be used to create the link in the schematic.  
+A symbolic link name corresponding to each linked block must be declared in the Mindcode source code so that the Mindcode compiler can assign the correct link names. When a corresponding symbolic link name is not declared in the Mindcode source, an error is generated, as the unresolved symbolic link name cannot be used to create the link in the schematic.
 
 ```
 schematic
@@ -1011,8 +949,7 @@ code = """
 
 #### Linking by position
 
-Finally, it is possible to specify linked blocks by their positions. In this case, a name must be assigned explicitly 
-(Schematic Builder doesn't generate link names automatically yet):
+Finally, it is possible to specify linked blocks by their positions. In this case, a name must be assigned explicitly (Schematic Builder doesn't generate link names automatically yet):
 
 ```
 schematic
@@ -1031,13 +968,9 @@ end
 
 Relative coordinates evaluate against the processor block.
 
-Pay attention to the `message4` block: its coordinates are (2, 0), which is inside the schematic, but there's no 
-block at these coordinates. The link is created, nevertheless, and when the schematic is built in the Mindustry world, any 
-block placed subsequently on the tile corresponding to the position (2, 0) in the schematic will be automatically 
-linked to the processor. If it is a message, it will be linked as `message4`.
+Pay attention to the `message4` block: its coordinates are (2, 0), which is inside the schematic, but there's no block at these coordinates. The link is created, nevertheless, and when the schematic is built in the Mindustry world, any block placed subsequently on the tile corresponding to the position (2, 0) in the schematic will be automatically linked to the processor. If it is a message, it will be linked as `message4`.
 
-Virtual links can be placed outside the schematic as well. The keyword `virtual` marks such virtual links. It is 
-optional now, but it will become compulsory for virtual blocks in the future.
+Virtual links can be placed outside the schematic as well. The keyword `virtual` marks such virtual links. It is optional now, but it will become compulsory for virtual blocks in the future.
 
 All the ways to specify processor links can be mixed, for example:
 
@@ -1058,7 +991,7 @@ schematic
 end
 ```
 
-Linking by position may be especially useful when using block arrays. In this example, an array of switches is linked to an array of processors one-to-one:  
+Linking by position may be especially useful when using block arrays. In this example, an array of switches is linked to an array of processors one-to-one:
 
 ```
 schematic
@@ -1070,7 +1003,6 @@ schematic
     end
 end
 ```
-
 
 #### Link name requirements
 
@@ -1095,11 +1027,9 @@ To specify Mindcode, use
 mindcode = <code>
 ```
 
-At most one of `mlog` or `mindcode` can be specified. If neither of these options is specified, the processor created 
-will not contain any instructions.
+At most one of `mlog` or `mindcode` can be specified. If neither of these options is specified, the processor created will not contain any instructions.
 
-`<code>` is one or more code snippets joined together using a `+` (plus) operator. A code snippet can be specified in 
-one of these ways:
+`<code>` is one or more code snippets joined together using a `+` (plus) operator. A code snippet can be specified in one of these ways:
 
 * as a string literal,
 * as a text block,
@@ -1171,17 +1101,14 @@ schematic
 end
 ```
 
-The relative file path is evaluated from the directory containing the file being compiled; if the compiled code is 
-read from standard input, it is evaluated from the current directory.
+The relative file path is evaluated from the directory containing the file being compiled; if the compiled code is read from standard input, it is evaluated from the current directory.
 
 > [!IMPORTANT]
-> Only command line tool allows you to use code from an external file. The web application cannot access your local 
-> files by specified path, and the `file` option is therefore disabled there.
+> Only the command line tool allows you to use code from an external file. The web application cannot access your local files by specified path, and the `file` option is therefore disallowed there.
 
 ### Combining code snippets
 
-A program will typically consist of just one code snippet. Using multiple code snippets is primarily used to 
-parametrize a common code shared between multiple processors, for example:
+A program will typically consist of just one code snippet. Using multiple code snippets is primarily used to parametrize a common code shared between multiple processors, for example:
 
 ```
 schematic
@@ -1194,18 +1121,13 @@ schematic
 end
 ```
 
-It is assumed that the code stored in `fractal.mnd` uses the `pos_x` and `pos_y` constants, specifically the values 
-assigned to them in the preceding code snippet.
+It is assumed that the code stored in `fractal.mnd` uses the `pos_x` and `pos_y` constants, specifically the values assigned to them in the preceding code snippet.
 
-This feature may be especially useful for parametrizing Mindcode. Since the code for each processor is compiled 
-independently, different values assigned to each processor may lead to different mlog code due to optimizations, 
-specifically constant folding and constant propagation.   
+This feature may be especially useful for parametrizing Mindcode. Since the code for each processor is compiled independently, different values assigned to each processor may lead to different mlog code due to optimizations, specifically constant folding and constant propagation.
 
 # Origin and dimensions calculation
 
-Schematic Builder automatically calculates schematic boundaries. If the lower-left corner of the compiled schematic
-isn't positioned at (0, 0), all block and connection positions of the schematic are shifted to compensate for the 
-non-zero origin. Note that the adjusted position (0, 0) can be still left empty:
+Schematic Builder automatically calculates schematic boundaries. If the lower-left corner of the compiled schematic isn't positioned at (0, 0), all block and connection positions of the schematic are shifted to compensate for the non-zero origin. Note that the adjusted position (0, 0) can be still left empty:
 
 ```
 schematic
@@ -1214,14 +1136,11 @@ schematic
 end
 ```
 
-The positions in this schematic will be adjusted to (0, 1) for switch and (1, 0) for message block. 
+The positions in this schematic will be adjusted to (0, 1) for switch and (1, 0) for message block.
 
-Block positions can be negative as well. It is therefore possible to easily extend an existing schematic to the left 
-or down without having to manually reposition all blocks.
+Block positions can be negative as well. It is therefore possible to easily extend an existing schematic to the left or down without having to manually reposition all blocks.
 
-Similarly, the dimensions of the schematic are calculated as the dimensions of the smallest rectangle containing all 
-blocks of the schematic. These dimensions are written to the compiled schematic. If dimensions smaller than computed 
-dimensions are specified as an attribute, a compilation error occurs.
+Similarly, the dimensions of the schematic are calculated as the dimensions of the smallest rectangle containing all blocks of the schematic. These dimensions are written to the compiled schematic. If dimensions smaller than computed dimensions are specified as an attribute, a compilation error occurs.
 
 ---
 
