@@ -18,6 +18,7 @@ import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.schematics.BlockPositionResolver.AstBlockPosition;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -355,7 +356,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         };
     }
 
-    private <T> T getAttribute(String name, Class<T> expectedType) {
+    public <T> @Nullable T getAttribute(String name, Class<T> expectedType) {
         List<AstSchemaAttribute> list = astSchematic.attributes().stream().filter(a -> a.attribute().equals(name)).toList();
         if (list.isEmpty()) {
             return null;
@@ -371,7 +372,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         }
     }
 
-    private <T> List<T> getAttributes(String name, Class<T> expectedType) {
+    public <T> List<T> getAttributes(String name, Class<T> expectedType) {
         List<AstSchemaItem> list = astSchematic.attributes().stream()
                 .filter(a -> a.attribute().equals(name))
                 .map(AstSchemaAttribute::value)

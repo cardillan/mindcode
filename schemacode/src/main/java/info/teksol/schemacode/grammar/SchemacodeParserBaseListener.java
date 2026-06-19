@@ -137,6 +137,30 @@ public class SchemacodeParserBaseListener implements SchemacodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMindcodePrologue(SchemacodeParser.MindcodePrologueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMindcodePrologue(SchemacodeParser.MindcodePrologueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMlogPrologue(SchemacodeParser.MlogPrologueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMlogPrologue(SchemacodeParser.MlogPrologueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNumber(SchemacodeParser.NumberContext ctx) { }
 	/**
 	 * {@inheritDoc}

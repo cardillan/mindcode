@@ -103,6 +103,18 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
                 new AstStringLiteral(pos(ctx.versionNumber().getStart()), ctx.versionNumber().getText()));
     }
 
+    @Override
+    public AstSchemaItem visitMindcodePrologue(MindcodePrologueContext ctx) {
+        return new AstSchemaAttribute(pos(ctx.getStart()), "mindcode",
+                new AstProgramSnippetText(pos(ctx.tag.getStart()), (AstText) visit(ctx.tag)));
+    }
+
+    @Override
+    public AstSchemaItem visitMlogPrologue(MlogPrologueContext ctx) {
+        return new AstSchemaAttribute(pos(ctx.getStart()), "mlog",
+                new AstProgramSnippetText(pos(ctx.tag.getStart()), (AstText) visit(ctx.tag)));
+    }
+
     // Blocks
 
     @Override

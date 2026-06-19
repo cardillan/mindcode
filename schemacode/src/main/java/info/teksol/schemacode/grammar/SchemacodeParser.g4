@@ -27,6 +27,8 @@ attribute
     | TAG ASSIGN tag=textDef                        # schemaTag
     | FILENAME ASSIGN filename=simpleStringLiteral  # filename
     | TARGET ASSIGN version=versionNumber           # target
+    | MINDCODE ASSIGN tag=textDef                   # mindcodePrologue
+    | MLOG ASSIGN tag=textDef                       # mlogPrologue
     ;
 
 number : (INT | SIGNEDINT);

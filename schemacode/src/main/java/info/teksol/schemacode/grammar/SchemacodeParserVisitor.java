@@ -77,6 +77,20 @@ public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTarget(SchemacodeParser.TargetContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code mindcodePrologue}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMindcodePrologue(SchemacodeParser.MindcodePrologueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code mlogPrologue}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMlogPrologue(SchemacodeParser.MlogPrologueContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#number}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

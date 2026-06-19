@@ -120,6 +120,30 @@ public interface SchemacodeParserListener extends ParseTreeListener {
 	 */
 	void exitTarget(SchemacodeParser.TargetContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code mindcodePrologue}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 */
+	void enterMindcodePrologue(SchemacodeParser.MindcodePrologueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code mindcodePrologue}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 */
+	void exitMindcodePrologue(SchemacodeParser.MindcodePrologueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code mlogPrologue}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 */
+	void enterMlogPrologue(SchemacodeParser.MlogPrologueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code mlogPrologue}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 */
+	void exitMlogPrologue(SchemacodeParser.MlogPrologueContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#number}.
 	 * @param ctx the parse tree
 	 */

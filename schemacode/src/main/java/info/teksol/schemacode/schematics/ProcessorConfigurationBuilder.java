@@ -26,6 +26,9 @@ import java.util.stream.Collectors;
 
 @NullMarked
 public class ProcessorConfigurationBuilder {
+    private static final String MINDCODE = "mindcode";
+    private static final String MLOG = "mlog";
+
     private final SchematicsBuilder builder;
     private boolean startAnnounced;
 
@@ -44,7 +47,7 @@ public class ProcessorConfigurationBuilder {
         if (processor.language() == Language.MINDCODE) {
             return buildMindcodeConfiguration(processor, blockPos, links);
         } else {
-            String mlog = processor.language() == Language.MLOG ? processor.program().getProgramText(builder) : "";
+            String mlog = processor.language() == Language.MLOG ? processor.program().getProgramText(builder, MLOG) : "";
             return buildConfiguration(processor, links, mlog, Map.of());
         }
     }
@@ -122,7 +125,7 @@ public class ProcessorConfigurationBuilder {
         Map<String, String> schematicLinks = links.stream()
                 .collect(Collectors.toMap(ProcessorConfiguration.Link::name, this::getLinkBlockType));
 
-        String mindcode = processor.program().getProgramText(builder);
+        String mindcode = processor.program().getProgramText(builder, MINDCODE);
         CompletableFuture<CompilerCacheEntry> compilation = getFromCompilerCache(mindcode);
 
         if (compilation == null) {
@@ -133,7 +136,7 @@ public class ProcessorConfigurationBuilder {
 
             // Set up a separate compiler environment
             InputFile fileToCompile = builder.getInputFiles().registerSource(mindcode,
-                    processor.program().createPositionTranslator(builder));
+                    processor.program().createPositionTranslator(builder, MINDCODE));
 
             CompilerProfile compilerProfile = builder.getCompilerProfile()
                     .duplicate(true)
@@ -164,7 +167,7 @@ public class ProcessorConfigurationBuilder {
 
         boolean hasErrors = messages.stream().anyMatch(MindcodeMessage::isError);
         synchronized (builder) {
-            builder.addMessage(ToolMessage.info("%nFinished compiling %s", processor.program().getProgramId(builder)));
+            builder.addMessage(ToolMessage.info("%nFinished compiling %s", processor.program().getProgramId(builder, MINDCODE)));
             messages.forEach(builder::addMessage);
             if (hasErrors) {
                 builder.error(processor.program(), "Compile errors in Mindcode source code.");
