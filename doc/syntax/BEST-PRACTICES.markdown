@@ -90,7 +90,6 @@ Mindcode provides a very powerful optimization for `case` expressions, if all th
 As an extreme example, in target `8.0` or higher Mindcode may be capable of converting the entire case expression into a single instruction:
 
 ```Mindcode
-#set target = 8m;
 volatile output = case input
     when 0 then 'A';
     when 1 then 'B';
@@ -159,7 +158,6 @@ Mindustry 8 allows reading a variable from a processor (including the current pr
 Mindcode supports specifying mlog variable names when declaring variables, using constant expressions (not just string literals). A variable to be accessed indirectly by its name must be declared `volatile`, for example:
 
 ```Mindcode
-#set target = 8m;
 volatile mlog("foo") var foo = 10;
 param variable = "foo";
 @this.write(20, variable);
@@ -178,7 +176,6 @@ print foo
 This mechanism can be used to build custom lookups, where the named variable holds the lookup value. At the same time, the `@name` property is compile-time evaluated and thus can be used to define the variable name:
 
 ```Mindcode
-#set target = 8m;
 #set remarks = comments;
 
 /// Initialization:
@@ -219,7 +216,6 @@ There's a potential problem, though: sand can be mined on both `@sand-floor` and
 Since the `@name` property is defined even for Mindustry content which doesn't have a logic ID assigned, a reverse lookup would also be possible:
 
 ```Mindcode
-#set target = 8m;
 #set remarks = comments;
 
 /// Initialization:
@@ -265,8 +261,6 @@ print .ore
 As this technique depends on the values of variables with static names, each content type can be handled by at most one lookup table. It is, however, possible to create the variables in another processor. The remote processor needs to have the variables defined. A Mindcode remote module could be used for that:
 
 ```Mindcode
-#set target = 8m;
-
 module lookup;
 
 volatile mlog(@ore-copper.@name)    var floorCopper = @copper;
@@ -298,8 +292,6 @@ jump 9 always 0 0
 This module could be used in a program like this:
 
 ```Mindcode
-#set target = 8m;
-
 linked lookup = processor1;
 
 getBlock(10, 20, , out floor);
@@ -326,7 +318,6 @@ Mindustry 8 allows reading individual characters from a string, resulting in a U
 To illustrate this technique, consider this excerpt from the [Base Builder project](https://github.com/cardillan/golem/tree/main/base-builder):
 
 ```Mindcode
-#set target = 8m;
 #set symbolic-labels = true;
 
 // The encoded values will be shifted by this offset to avoid unsupported characters in the resulting string

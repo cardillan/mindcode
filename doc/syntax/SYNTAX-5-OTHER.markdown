@@ -271,7 +271,6 @@ The `author` directive can be specified multiple times, and can be included in a
 Example:
 
 ```Mindcode
-#set target = 8m;
 #set author = cardillan, "Mickey Mouse";
 #set author = "Rameses Niblick the Third";
 
@@ -679,8 +678,6 @@ Allows or disallows using the `select` instruction to emulate a `jump strictNotE
 Example:
 
 ```Mindcode
-#set target = 8m;
-
 while @unit.@dead === 1 do
     ubind(@mono);
 end;

@@ -42,7 +42,6 @@ Keywords are declared using `#declare` statement:
 Example: if the `ulocate building` instruction was extended to accept additional block groups, the new keywords could be declared like this:
 
 ```Mindcode
-#set target = 8m;
 #declare blockGroup :conveyor, :processor;
 
 var x, y;

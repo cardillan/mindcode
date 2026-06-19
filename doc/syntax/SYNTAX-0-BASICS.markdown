@@ -371,8 +371,6 @@ Character literals have a numeric value equal to the ASCII value of the enclosed
 Character literals are most useful when combined with the Mindustry Logic 8 `printchar` instruction:
 
 ```Mindcode
-#set target = 8m;
-
 // Prints ABCDEFGHIJKLMNOPQRSTUVWXYZ
 for ch in 'A' .. 'Z' do
    printchar(ch);

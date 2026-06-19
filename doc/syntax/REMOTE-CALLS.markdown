@@ -66,8 +66,6 @@ Variables to be accessed remotely must be declared using the [`export` keyword](
 Function to be called remotely must be declared using the `export` keyword:
 
 ```Mindcode
-#set target = 8m;
-
 module library;
 
 export def foo(x, y, out z)
@@ -103,8 +101,6 @@ It is possible to call the `backgroundProcess()` function explicitly. In this ca
 Example of a module with a background process:
 
 ```Mindcode
-#set target = 8m;
-
 module backgroundProcess;
 
 linked message1;
@@ -368,7 +364,6 @@ Local call of an exported function also sets the function's `:functionName*finis
 To access arbitrary remote processor variables using the `read` and `write` instructions., `read(variable)`  and `write(value, variable)` methods must be used, to be called on processors:
 
 ```Mindcode
-#set target = 8m;
 print(processor1.read("foo"));
 processor2.write(@coal, "bar");
 ```
@@ -404,7 +399,6 @@ The following restrictions apply to remote variables declared with storage speci
 * When the mlog name is present, only one variable can be specified per declaration (as otherwise multiple variables would share the same mlog name and would be redundant).
 
 ```Mindcode
-#set target = 8m;
 #set remarks = comments;
 
 /// Remote variables named using Mindcode's naming convention
@@ -457,7 +451,7 @@ The following constructs must not be contained (directly or indirectly) in an at
 * a recursive function call,
 * a loop.
 
-Mindcode recognizes most kinds of loops including loops in mlog blocks, but it doesn't recognize jumps or loops resulting from `@counter` manipuation. Such jumps and loops may cause malfunction of the atomic section containing such code.
+Mindcode recognizes most kinds of loops including loops in mlog blocks, but it doesn't recognize jumps or loops resulting from `@counter` manipulation. Such jumps and loops may cause malfunction of the atomic section containing such code.
 
 > [!IMPORTANT]
 > The [Loop unrolling optimization](optimizations/LOOP-UNROLLING.markdown) may unroll a loop inside an atomic section, essentially removing the loop and making the code compatible with an atomic section. However, when the optimization doesn't take place, either because of space constraints or because the optimization is disabled, the atomic section will no longer compile. Use loops within atomic sections with caution.
@@ -469,8 +463,6 @@ Atomic sections may be nested and may contain calls to atomic functions (both in
 The atomic block has the following syntax:
 
 ```Mindcode
-#set target = 8m;
-
 atomic
     // Atomic section of code
 end;
@@ -481,8 +473,6 @@ end;
 The `atomic()` function is used to execute a single expression atomically, returning its value:
 
 ```Mindcode
-#set target = 8m;
-
 cell1[1] = atomic(cell[0]++);
 ```
 
@@ -503,8 +493,6 @@ As seen in the above example, instructions needed to store the result aren't par
 A function can be declared using the `atomic` keyword, in which case the function body is executed atomically:
 
 ```Mindcode
-#set target = 8m;
-
 atomic def increment()
     cell1[0]++;
 end;
@@ -526,8 +514,6 @@ print *tmp1
 > Inline atomic functions guarantee that access to the arguments passed by reference is protected by the atomic section, but other arguments aren't. Example:
  
 ```Mindcode
-#set target = 8m;
-
 external(cell1[0]) x;
 external(cell1[1]) y;
 

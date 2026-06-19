@@ -10,7 +10,6 @@ Currently, only array indexes are handled in this way. When a `floor()` function
 
 ```Mindcode
 #set use-text-jump-tables = false;
-#set target = 8.0;
 
 volatile var a[6];
 printchar(a[floor(rand(length(a)))]);
@@ -102,7 +101,6 @@ This additional instruction can be removed in either of the following cases:
 Examples:
 
 ```Mindcode
-#set target = 8m;
 #set remarks = comments;
 
 /// a || b is computed first, and as it is used in another `op or` instruction, the additional instruction is removed
@@ -158,8 +156,6 @@ The `read` and `write` instructions accessing variables in current processor usi
 Example:
 
 ```Mindcode
-#set target = 8m;
-
 param a = "x";
 param b = "y";
 @this.write(1, a);

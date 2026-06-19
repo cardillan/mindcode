@@ -142,7 +142,6 @@ Example of the variable dump:
 
 ```Mindcode
 #set sort-variables;
-#set target = 8m;
 #set trace-execution = true;
 
 require printing;
