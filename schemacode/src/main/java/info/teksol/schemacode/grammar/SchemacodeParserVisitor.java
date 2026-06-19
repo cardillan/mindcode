@@ -1,4 +1,4 @@
-// Generated from Schemacode.g4 by ANTLR 4.13.1
+// Generated from SchemacodeParser.g4 by ANTLR 4.13.1
 package info.teksol.schemacode.grammar;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  * @param <T> The return type of the visit operation. Use {@link Void} for
  * operations with no return type.
  */
-public interface SchemacodeVisitor<T> extends ParseTreeVisitor<T> {
+public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#definitions}.
 	 * @param ctx the parse tree

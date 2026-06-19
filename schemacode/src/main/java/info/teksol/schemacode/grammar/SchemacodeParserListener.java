@@ -1,4 +1,4 @@
-// Generated from Schemacode.g4 by ANTLR 4.13.1
+// Generated from SchemacodeParser.g4 by ANTLR 4.13.1
 package info.teksol.schemacode.grammar;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  * This interface defines a complete listener for a parse tree produced by
  * {@link SchemacodeParser}.
  */
-public interface SchemacodeListener extends ParseTreeListener {
+public interface SchemacodeParserListener extends ParseTreeListener {
 	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#definitions}.
 	 * @param ctx the parse tree

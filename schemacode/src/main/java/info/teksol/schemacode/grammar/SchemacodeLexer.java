@@ -1,4 +1,4 @@
-// Generated from Schemacode.g4 by ANTLR 4.13.1
+// Generated from SchemacodeLexer.g4 by ANTLR 4.13.1
 package info.teksol.schemacode.grammar;
 
 import org.antlr.v4.runtime.*;
@@ -16,15 +16,15 @@ public class SchemacodeLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		As=1, At=2, Block=3, Connected=4, Command=5, Color=6, Description=7, Dimensions=8, 
-		Disabled=9, Enabled=10, End=11, Facing=12, File=13, Filename=14, Horizontal=15, 
-		Item=16, Links=17, Liquid=18, Logic=19, Mindcode=20, Mlog=21, Name=22, 
-		Processor=23, Rgba=24, Schematic=25, Tag=26, Target=27, Text=28, To=29, 
-		Unit=30, Vertical=31, Virtual=32, Assign=33, Colon=34, Comma=35, Dot=36, 
-		Dot2=37, Dot3=38, Minus=39, Mul=40, Plus=41, North=42, South=43, East=44, 
-		West=45, LeftParen=46, RightParen=47, TextBlock1=48, TextBlock2=49, TextLine=50, 
-		Int=51, SignedInt=52, Id=53, BlockId=54, Ref=55, Pattern=56, Version=57, 
-		Comment=58, SLComment=59, Ws=60, Any=61;
+		AS=1, AT=2, BLOCK=3, CONNECTED=4, COMMAND=5, COLOR=6, DESCRIPTION=7, DIMENSIONS=8, 
+		DISABLED=9, ENABLED=10, END=11, FACING=12, FILE=13, FILENAME=14, HORIZONTAL=15, 
+		ITEM=16, LINKS=17, LIQUID=18, LOGIC=19, MINDCODE=20, MLOG=21, NAME=22, 
+		PROCESSOR=23, RGBA=24, SCHEMATIC=25, TAG=26, TARGET=27, TEXT=28, TO=29, 
+		UNIT=30, VERTICAL=31, VIRTUAL=32, ASSIGN=33, COLON=34, COMMA=35, DOT=36, 
+		DOT2=37, DOT3=38, MINUS=39, MUL=40, PLUS=41, NORTH=42, SOUTH=43, EAST=44, 
+		WEST=45, LEFTPAREN=46, RIGHTPAREN=47, TEXTBLOCK1=48, TEXTBLOCK2=49, TEXTLINE=50, 
+		INT=51, SIGNEDINT=52, ID=53, BLOCKID=54, REF=55, PATTERN=56, VERSION=57, 
+		COMMENT=58, SLCOMMENT=59, WS=60, ANY=61;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
@@ -35,15 +35,15 @@ public class SchemacodeLexer extends Lexer {
 
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"As", "At", "Block", "Connected", "Command", "Color", "Description", 
-			"Dimensions", "Disabled", "Enabled", "End", "Facing", "File", "Filename", 
-			"Horizontal", "Item", "Links", "Liquid", "Logic", "Mindcode", "Mlog", 
-			"Name", "Processor", "Rgba", "Schematic", "Tag", "Target", "Text", "To", 
-			"Unit", "Vertical", "Virtual", "Assign", "Colon", "Comma", "Dot", "Dot2", 
-			"Dot3", "Minus", "Mul", "Plus", "North", "South", "East", "West", "LeftParen", 
-			"RightParen", "TextBlock1", "TextBlock2", "TextLine", "Int", "SignedInt", 
-			"Id", "BlockId", "Ref", "Pattern", "Version", "Comment", "SLComment", 
-			"Ws", "Any"
+			"AS", "AT", "BLOCK", "CONNECTED", "COMMAND", "COLOR", "DESCRIPTION", 
+			"DIMENSIONS", "DISABLED", "ENABLED", "END", "FACING", "FILE", "FILENAME", 
+			"HORIZONTAL", "ITEM", "LINKS", "LIQUID", "LOGIC", "MINDCODE", "MLOG", 
+			"NAME", "PROCESSOR", "RGBA", "SCHEMATIC", "TAG", "TARGET", "TEXT", "TO", 
+			"UNIT", "VERTICAL", "VIRTUAL", "ASSIGN", "COLON", "COMMA", "DOT", "DOT2", 
+			"DOT3", "MINUS", "MUL", "PLUS", "NORTH", "SOUTH", "EAST", "WEST", "LEFTPAREN", 
+			"RIGHTPAREN", "TEXTBLOCK1", "TEXTBLOCK2", "TEXTLINE", "INT", "SIGNEDINT", 
+			"ID", "BLOCKID", "REF", "PATTERN", "VERSION", "COMMENT", "SLCOMMENT", 
+			"WS", "ANY"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -63,15 +63,15 @@ public class SchemacodeLexer extends Lexer {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "As", "At", "Block", "Connected", "Command", "Color", "Description", 
-			"Dimensions", "Disabled", "Enabled", "End", "Facing", "File", "Filename", 
-			"Horizontal", "Item", "Links", "Liquid", "Logic", "Mindcode", "Mlog", 
-			"Name", "Processor", "Rgba", "Schematic", "Tag", "Target", "Text", "To", 
-			"Unit", "Vertical", "Virtual", "Assign", "Colon", "Comma", "Dot", "Dot2", 
-			"Dot3", "Minus", "Mul", "Plus", "North", "South", "East", "West", "LeftParen", 
-			"RightParen", "TextBlock1", "TextBlock2", "TextLine", "Int", "SignedInt", 
-			"Id", "BlockId", "Ref", "Pattern", "Version", "Comment", "SLComment", 
-			"Ws", "Any"
+			null, "AS", "AT", "BLOCK", "CONNECTED", "COMMAND", "COLOR", "DESCRIPTION", 
+			"DIMENSIONS", "DISABLED", "ENABLED", "END", "FACING", "FILE", "FILENAME", 
+			"HORIZONTAL", "ITEM", "LINKS", "LIQUID", "LOGIC", "MINDCODE", "MLOG", 
+			"NAME", "PROCESSOR", "RGBA", "SCHEMATIC", "TAG", "TARGET", "TEXT", "TO", 
+			"UNIT", "VERTICAL", "VIRTUAL", "ASSIGN", "COLON", "COMMA", "DOT", "DOT2", 
+			"DOT3", "MINUS", "MUL", "PLUS", "NORTH", "SOUTH", "EAST", "WEST", "LEFTPAREN", 
+			"RIGHTPAREN", "TEXTBLOCK1", "TEXTBLOCK2", "TEXTLINE", "INT", "SIGNEDINT", 
+			"ID", "BLOCKID", "REF", "PATTERN", "VERSION", "COMMENT", "SLCOMMENT", 
+			"WS", "ANY"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -115,7 +115,7 @@ public class SchemacodeLexer extends Lexer {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Schemacode.g4"; }
+	public String getGrammarFileName() { return "SchemacodeLexer.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }

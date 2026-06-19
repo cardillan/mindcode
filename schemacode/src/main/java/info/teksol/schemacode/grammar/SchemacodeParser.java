@@ -1,4 +1,4 @@
-// Generated from Schemacode.g4 by ANTLR 4.13.1
+// Generated from SchemacodeParser.g4 by ANTLR 4.13.1
 package info.teksol.schemacode.grammar;
 
 import org.antlr.v4.runtime.*;
@@ -21,15 +21,15 @@ public class SchemacodeParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		As=1, At=2, Block=3, Connected=4, Command=5, Color=6, Description=7, Dimensions=8, 
-		Disabled=9, Enabled=10, End=11, Facing=12, File=13, Filename=14, Horizontal=15, 
-		Item=16, Links=17, Liquid=18, Logic=19, Mindcode=20, Mlog=21, Name=22, 
-		Processor=23, Rgba=24, Schematic=25, Tag=26, Target=27, Text=28, To=29, 
-		Unit=30, Vertical=31, Virtual=32, Assign=33, Colon=34, Comma=35, Dot=36, 
-		Dot2=37, Dot3=38, Minus=39, Mul=40, Plus=41, North=42, South=43, East=44, 
-		West=45, LeftParen=46, RightParen=47, TextBlock1=48, TextBlock2=49, TextLine=50, 
-		Int=51, SignedInt=52, Id=53, BlockId=54, Ref=55, Pattern=56, Version=57, 
-		Comment=58, SLComment=59, Ws=60, Any=61;
+		AS=1, AT=2, BLOCK=3, CONNECTED=4, COMMAND=5, COLOR=6, DESCRIPTION=7, DIMENSIONS=8, 
+		DISABLED=9, ENABLED=10, END=11, FACING=12, FILE=13, FILENAME=14, HORIZONTAL=15, 
+		ITEM=16, LINKS=17, LIQUID=18, LOGIC=19, MINDCODE=20, MLOG=21, NAME=22, 
+		PROCESSOR=23, RGBA=24, SCHEMATIC=25, TAG=26, TARGET=27, TEXT=28, TO=29, 
+		UNIT=30, VERTICAL=31, VIRTUAL=32, ASSIGN=33, COLON=34, COMMA=35, DOT=36, 
+		DOT2=37, DOT3=38, MINUS=39, MUL=40, PLUS=41, NORTH=42, SOUTH=43, EAST=44, 
+		WEST=45, LEFTPAREN=46, RIGHTPAREN=47, TEXTBLOCK1=48, TEXTBLOCK2=49, TEXTLINE=50, 
+		INT=51, SIGNEDINT=52, ID=53, BLOCKID=54, REF=55, PATTERN=56, VERSION=57, 
+		COMMENT=58, SLCOMMENT=59, WS=60, ANY=61;
 	public static final int
 		RULE_definitions = 0, RULE_definition = 1, RULE_schematic = 2, RULE_schematicItem = 3, 
 		RULE_attribute = 4, RULE_number = 5, RULE_versionNumber = 6, RULE_block = 7, 
@@ -66,15 +66,15 @@ public class SchemacodeParser extends Parser {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "As", "At", "Block", "Connected", "Command", "Color", "Description", 
-			"Dimensions", "Disabled", "Enabled", "End", "Facing", "File", "Filename", 
-			"Horizontal", "Item", "Links", "Liquid", "Logic", "Mindcode", "Mlog", 
-			"Name", "Processor", "Rgba", "Schematic", "Tag", "Target", "Text", "To", 
-			"Unit", "Vertical", "Virtual", "Assign", "Colon", "Comma", "Dot", "Dot2", 
-			"Dot3", "Minus", "Mul", "Plus", "North", "South", "East", "West", "LeftParen", 
-			"RightParen", "TextBlock1", "TextBlock2", "TextLine", "Int", "SignedInt", 
-			"Id", "BlockId", "Ref", "Pattern", "Version", "Comment", "SLComment", 
-			"Ws", "Any"
+			null, "AS", "AT", "BLOCK", "CONNECTED", "COMMAND", "COLOR", "DESCRIPTION", 
+			"DIMENSIONS", "DISABLED", "ENABLED", "END", "FACING", "FILE", "FILENAME", 
+			"HORIZONTAL", "ITEM", "LINKS", "LIQUID", "LOGIC", "MINDCODE", "MLOG", 
+			"NAME", "PROCESSOR", "RGBA", "SCHEMATIC", "TAG", "TARGET", "TEXT", "TO", 
+			"UNIT", "VERTICAL", "VIRTUAL", "ASSIGN", "COLON", "COMMA", "DOT", "DOT2", 
+			"DOT3", "MINUS", "MUL", "PLUS", "NORTH", "SOUTH", "EAST", "WEST", "LEFTPAREN", 
+			"RIGHTPAREN", "TEXTBLOCK1", "TEXTBLOCK2", "TEXTLINE", "INT", "SIGNEDINT", 
+			"ID", "BLOCKID", "REF", "PATTERN", "VERSION", "COMMENT", "SLCOMMENT", 
+			"WS", "ANY"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -112,7 +112,7 @@ public class SchemacodeParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "Schemacode.g4"; }
+	public String getGrammarFileName() { return "SchemacodeParser.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -143,15 +143,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_definitions; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterDefinitions(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterDefinitions(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitDefinitions(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitDefinitions(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitDefinitions(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitDefinitions(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -176,7 +176,7 @@ public class SchemacodeParser extends Parser {
 				setState(61); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( _la==Schematic || _la==Id );
+			} while ( _la==SCHEMATIC || _la==ID );
 			setState(63);
 			match(EOF);
 			}
@@ -206,15 +206,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_definition; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterDefinition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterDefinition(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitDefinition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitDefinition(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitDefinition(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitDefinition(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -257,10 +257,10 @@ public class SchemacodeParser extends Parser {
 	public static class SchematicContext extends ParserRuleContext {
 		public Token name;
 		public SchematicItemContext items;
-		public TerminalNode Schematic() { return getToken(SchemacodeParser.Schematic, 0); }
-		public TerminalNode End() { return getToken(SchemacodeParser.End, 0); }
-		public TerminalNode Colon() { return getToken(SchemacodeParser.Colon, 0); }
-		public TerminalNode Id() { return getToken(SchemacodeParser.Id, 0); }
+		public TerminalNode SCHEMATIC() { return getToken(SchemacodeParser.SCHEMATIC, 0); }
+		public TerminalNode END() { return getToken(SchemacodeParser.END, 0); }
+		public TerminalNode COLON() { return getToken(SchemacodeParser.COLON, 0); }
+		public TerminalNode ID() { return getToken(SchemacodeParser.ID, 0); }
 		public List<SchematicItemContext> schematicItem() {
 			return getRuleContexts(SchematicItemContext.class);
 		}
@@ -273,15 +273,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_schematic; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterSchematic(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterSchematic(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitSchematic(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitSchematic(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitSchematic(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitSchematic(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -296,17 +296,17 @@ public class SchemacodeParser extends Parser {
 			setState(71);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==Id) {
+			if (_la==ID) {
 				{
 				setState(69);
-				((SchematicContext)_localctx).name = match(Id);
+				((SchematicContext)_localctx).name = match(ID);
 				setState(70);
-				match(Colon);
+				match(COLON);
 				}
 			}
 
 			setState(73);
-			match(Schematic);
+			match(SCHEMATIC);
 			setState(75); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -322,7 +322,7 @@ public class SchemacodeParser extends Parser {
 				_la = _input.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 63050394988724608L) != 0) );
 			setState(79);
-			match(End);
+			match(END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -350,15 +350,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_schematicItem; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterSchematicItem(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterSchematicItem(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitSchematicItem(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitSchematicItem(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitSchematicItem(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitSchematicItem(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -370,21 +370,21 @@ public class SchemacodeParser extends Parser {
 			setState(83);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case Description:
-			case Dimensions:
-			case Filename:
-			case Name:
-			case Tag:
-			case Target:
+			case DESCRIPTION:
+			case DIMENSIONS:
+			case FILENAME:
+			case NAME:
+			case TAG:
+			case TARGET:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(81);
 				attribute();
 				}
 				break;
-			case Id:
-			case BlockId:
-			case Ref:
+			case ID:
+			case BLOCKID:
+			case REF:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(82);
@@ -421,137 +421,137 @@ public class SchemacodeParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class FilenameContext extends AttributeContext {
 		public SimpleStringLiteralContext filename;
-		public TerminalNode Filename() { return getToken(SchemacodeParser.Filename, 0); }
-		public TerminalNode Assign() { return getToken(SchemacodeParser.Assign, 0); }
+		public TerminalNode FILENAME() { return getToken(SchemacodeParser.FILENAME, 0); }
+		public TerminalNode ASSIGN() { return getToken(SchemacodeParser.ASSIGN, 0); }
 		public SimpleStringLiteralContext simpleStringLiteral() {
 			return getRuleContext(SimpleStringLiteralContext.class,0);
 		}
 		public FilenameContext(AttributeContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterFilename(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterFilename(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitFilename(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitFilename(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitFilename(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitFilename(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class NameContext extends AttributeContext {
 		public TextDefContext name;
-		public TerminalNode Name() { return getToken(SchemacodeParser.Name, 0); }
-		public TerminalNode Assign() { return getToken(SchemacodeParser.Assign, 0); }
+		public TerminalNode NAME() { return getToken(SchemacodeParser.NAME, 0); }
+		public TerminalNode ASSIGN() { return getToken(SchemacodeParser.ASSIGN, 0); }
 		public TextDefContext textDef() {
 			return getRuleContext(TextDefContext.class,0);
 		}
 		public NameContext(AttributeContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterName(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterName(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitName(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitName(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitName(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitName(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class SchemaTagContext extends AttributeContext {
 		public TextDefContext tag;
-		public TerminalNode Tag() { return getToken(SchemacodeParser.Tag, 0); }
-		public TerminalNode Assign() { return getToken(SchemacodeParser.Assign, 0); }
+		public TerminalNode TAG() { return getToken(SchemacodeParser.TAG, 0); }
+		public TerminalNode ASSIGN() { return getToken(SchemacodeParser.ASSIGN, 0); }
 		public TextDefContext textDef() {
 			return getRuleContext(TextDefContext.class,0);
 		}
 		public SchemaTagContext(AttributeContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterSchemaTag(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterSchemaTag(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitSchemaTag(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitSchemaTag(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitSchemaTag(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitSchemaTag(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class DescriptionContext extends AttributeContext {
 		public TextDefContext description;
-		public TerminalNode Description() { return getToken(SchemacodeParser.Description, 0); }
-		public TerminalNode Assign() { return getToken(SchemacodeParser.Assign, 0); }
+		public TerminalNode DESCRIPTION() { return getToken(SchemacodeParser.DESCRIPTION, 0); }
+		public TerminalNode ASSIGN() { return getToken(SchemacodeParser.ASSIGN, 0); }
 		public TextDefContext textDef() {
 			return getRuleContext(TextDefContext.class,0);
 		}
 		public DescriptionContext(AttributeContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterDescription(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterDescription(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitDescription(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitDescription(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitDescription(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitDescription(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class DimensionsContext extends AttributeContext {
-		public TerminalNode Dimensions() { return getToken(SchemacodeParser.Dimensions, 0); }
-		public TerminalNode Assign() { return getToken(SchemacodeParser.Assign, 0); }
+		public TerminalNode DIMENSIONS() { return getToken(SchemacodeParser.DIMENSIONS, 0); }
+		public TerminalNode ASSIGN() { return getToken(SchemacodeParser.ASSIGN, 0); }
 		public CoordinatesContext coordinates() {
 			return getRuleContext(CoordinatesContext.class,0);
 		}
 		public DimensionsContext(AttributeContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterDimensions(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterDimensions(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitDimensions(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitDimensions(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitDimensions(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitDimensions(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TargetContext extends AttributeContext {
 		public VersionNumberContext version;
-		public TerminalNode Target() { return getToken(SchemacodeParser.Target, 0); }
-		public TerminalNode Assign() { return getToken(SchemacodeParser.Assign, 0); }
+		public TerminalNode TARGET() { return getToken(SchemacodeParser.TARGET, 0); }
+		public TerminalNode ASSIGN() { return getToken(SchemacodeParser.ASSIGN, 0); }
 		public VersionNumberContext versionNumber() {
 			return getRuleContext(VersionNumberContext.class,0);
 		}
 		public TargetContext(AttributeContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterTarget(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterTarget(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitTarget(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitTarget(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitTarget(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitTarget(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -563,74 +563,74 @@ public class SchemacodeParser extends Parser {
 			setState(103);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case Name:
+			case NAME:
 				_localctx = new NameContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(85);
-				match(Name);
+				match(NAME);
 				setState(86);
-				match(Assign);
+				match(ASSIGN);
 				setState(87);
 				((NameContext)_localctx).name = textDef();
 				}
 				break;
-			case Description:
+			case DESCRIPTION:
 				_localctx = new DescriptionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(88);
-				match(Description);
+				match(DESCRIPTION);
 				setState(89);
-				match(Assign);
+				match(ASSIGN);
 				setState(90);
 				((DescriptionContext)_localctx).description = textDef();
 				}
 				break;
-			case Dimensions:
+			case DIMENSIONS:
 				_localctx = new DimensionsContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(91);
-				match(Dimensions);
+				match(DIMENSIONS);
 				setState(92);
-				match(Assign);
+				match(ASSIGN);
 				setState(93);
 				coordinates();
 				}
 				break;
-			case Tag:
+			case TAG:
 				_localctx = new SchemaTagContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(94);
-				match(Tag);
+				match(TAG);
 				setState(95);
-				match(Assign);
+				match(ASSIGN);
 				setState(96);
 				((SchemaTagContext)_localctx).tag = textDef();
 				}
 				break;
-			case Filename:
+			case FILENAME:
 				_localctx = new FilenameContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(97);
-				match(Filename);
+				match(FILENAME);
 				setState(98);
-				match(Assign);
+				match(ASSIGN);
 				setState(99);
 				((FilenameContext)_localctx).filename = simpleStringLiteral();
 				}
 				break;
-			case Target:
+			case TARGET:
 				_localctx = new TargetContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(100);
-				match(Target);
+				match(TARGET);
 				setState(101);
-				match(Assign);
+				match(ASSIGN);
 				setState(102);
 				((TargetContext)_localctx).version = versionNumber();
 				}
@@ -652,23 +652,23 @@ public class SchemacodeParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class NumberContext extends ParserRuleContext {
-		public TerminalNode Int() { return getToken(SchemacodeParser.Int, 0); }
-		public TerminalNode SignedInt() { return getToken(SchemacodeParser.SignedInt, 0); }
+		public TerminalNode INT() { return getToken(SchemacodeParser.INT, 0); }
+		public TerminalNode SIGNEDINT() { return getToken(SchemacodeParser.SIGNEDINT, 0); }
 		public NumberContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_number; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterNumber(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterNumber(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitNumber(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitNumber(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitNumber(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitNumber(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -682,7 +682,7 @@ public class SchemacodeParser extends Parser {
 			{
 			setState(105);
 			_la = _input.LA(1);
-			if ( !(_la==Int || _la==SignedInt) ) {
+			if ( !(_la==INT || _la==SIGNEDINT) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -705,23 +705,23 @@ public class SchemacodeParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class VersionNumberContext extends ParserRuleContext {
-		public TerminalNode Int() { return getToken(SchemacodeParser.Int, 0); }
-		public TerminalNode Version() { return getToken(SchemacodeParser.Version, 0); }
+		public TerminalNode INT() { return getToken(SchemacodeParser.INT, 0); }
+		public TerminalNode VERSION() { return getToken(SchemacodeParser.VERSION, 0); }
 		public VersionNumberContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_versionNumber; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterVersionNumber(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterVersionNumber(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitVersionNumber(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitVersionNumber(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitVersionNumber(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitVersionNumber(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -735,7 +735,7 @@ public class SchemacodeParser extends Parser {
 			{
 			setState(107);
 			_la = _input.LA(1);
-			if ( !(_la==Int || _la==Version) ) {
+			if ( !(_la==INT || _la==VERSION) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -763,8 +763,8 @@ public class SchemacodeParser extends Parser {
 		public BlockPositionContext pos;
 		public DirectionContext dir;
 		public ConfigurationContext cfg;
-		public TerminalNode At() { return getToken(SchemacodeParser.At, 0); }
-		public TerminalNode Ref() { return getToken(SchemacodeParser.Ref, 0); }
+		public TerminalNode AT() { return getToken(SchemacodeParser.AT, 0); }
+		public TerminalNode REF() { return getToken(SchemacodeParser.REF, 0); }
 		public BlockPositionContext blockPosition() {
 			return getRuleContext(BlockPositionContext.class,0);
 		}
@@ -783,15 +783,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_block; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterBlock(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterBlock(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitBlock(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitBlock(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitBlock(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitBlock(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -806,7 +806,7 @@ public class SchemacodeParser extends Parser {
 			setState(110);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==Id || _la==BlockId) {
+			if (_la==ID || _la==BLOCKID) {
 				{
 				setState(109);
 				((BlockContext)_localctx).labels = labelList();
@@ -814,15 +814,15 @@ public class SchemacodeParser extends Parser {
 			}
 
 			setState(112);
-			((BlockContext)_localctx).type = match(Ref);
+			((BlockContext)_localctx).type = match(REF);
 			setState(113);
-			match(At);
+			match(AT);
 			setState(114);
 			((BlockContext)_localctx).pos = blockPosition();
 			setState(116);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==Facing) {
+			if (_la==FACING) {
 				{
 				setState(115);
 				((BlockContext)_localctx).dir = direction();
@@ -854,23 +854,23 @@ public class SchemacodeParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class BlockIdContext extends ParserRuleContext {
-		public TerminalNode Id() { return getToken(SchemacodeParser.Id, 0); }
-		public TerminalNode BlockId() { return getToken(SchemacodeParser.BlockId, 0); }
+		public TerminalNode ID() { return getToken(SchemacodeParser.ID, 0); }
+		public TerminalNode BLOCKID() { return getToken(SchemacodeParser.BLOCKID, 0); }
 		public BlockIdContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_blockId; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterBlockId(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterBlockId(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitBlockId(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitBlockId(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitBlockId(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitBlockId(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -884,7 +884,7 @@ public class SchemacodeParser extends Parser {
 			{
 			setState(121);
 			_la = _input.LA(1);
-			if ( !(_la==Id || _la==BlockId) ) {
+			if ( !(_la==ID || _la==BLOCKID) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -913,10 +913,10 @@ public class SchemacodeParser extends Parser {
 		public BlockIdContext blockId(int i) {
 			return getRuleContext(BlockIdContext.class,i);
 		}
-		public TerminalNode Colon() { return getToken(SchemacodeParser.Colon, 0); }
-		public List<TerminalNode> Comma() { return getTokens(SchemacodeParser.Comma); }
-		public TerminalNode Comma(int i) {
-			return getToken(SchemacodeParser.Comma, i);
+		public TerminalNode COLON() { return getToken(SchemacodeParser.COLON, 0); }
+		public List<TerminalNode> COMMA() { return getTokens(SchemacodeParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(SchemacodeParser.COMMA, i);
 		}
 		public LabelListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -924,15 +924,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_labelList; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterLabelList(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterLabelList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitLabelList(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitLabelList(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitLabelList(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitLabelList(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -949,11 +949,11 @@ public class SchemacodeParser extends Parser {
 			setState(128);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==Comma) {
+			while (_la==COMMA) {
 				{
 				{
 				setState(124);
-				match(Comma);
+				match(COMMA);
 				setState(125);
 				blockId();
 				}
@@ -963,7 +963,7 @@ public class SchemacodeParser extends Parser {
 				_la = _input.LA(1);
 			}
 			setState(131);
-			match(Colon);
+			match(COLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -998,15 +998,15 @@ public class SchemacodeParser extends Parser {
 		public SimplePositionContext(BlockPositionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterSimplePosition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterSimplePosition(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitSimplePosition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitSimplePosition(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitSimplePosition(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitSimplePosition(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1015,27 +1015,27 @@ public class SchemacodeParser extends Parser {
 		public PositionContext start;
 		public CoordinatesContext end;
 		public Token orientation;
-		public TerminalNode Dot2() { return getToken(SchemacodeParser.Dot2, 0); }
+		public TerminalNode DOT2() { return getToken(SchemacodeParser.DOT2, 0); }
 		public PositionContext position() {
 			return getRuleContext(PositionContext.class,0);
 		}
 		public CoordinatesContext coordinates() {
 			return getRuleContext(CoordinatesContext.class,0);
 		}
-		public TerminalNode Horizontal() { return getToken(SchemacodeParser.Horizontal, 0); }
-		public TerminalNode Vertical() { return getToken(SchemacodeParser.Vertical, 0); }
+		public TerminalNode HORIZONTAL() { return getToken(SchemacodeParser.HORIZONTAL, 0); }
+		public TerminalNode VERTICAL() { return getToken(SchemacodeParser.VERTICAL, 0); }
 		public InclusiveRangePositionContext(BlockPositionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterInclusiveRangePosition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterInclusiveRangePosition(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitInclusiveRangePosition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitInclusiveRangePosition(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitInclusiveRangePosition(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitInclusiveRangePosition(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1044,27 +1044,27 @@ public class SchemacodeParser extends Parser {
 		public PositionContext start;
 		public CoordinatesContext end;
 		public Token orientation;
-		public TerminalNode Dot3() { return getToken(SchemacodeParser.Dot3, 0); }
+		public TerminalNode DOT3() { return getToken(SchemacodeParser.DOT3, 0); }
 		public PositionContext position() {
 			return getRuleContext(PositionContext.class,0);
 		}
 		public CoordinatesContext coordinates() {
 			return getRuleContext(CoordinatesContext.class,0);
 		}
-		public TerminalNode Horizontal() { return getToken(SchemacodeParser.Horizontal, 0); }
-		public TerminalNode Vertical() { return getToken(SchemacodeParser.Vertical, 0); }
+		public TerminalNode HORIZONTAL() { return getToken(SchemacodeParser.HORIZONTAL, 0); }
+		public TerminalNode VERTICAL() { return getToken(SchemacodeParser.VERTICAL, 0); }
 		public ExclusiveRangePositionContext(BlockPositionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterExclusiveRangePosition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterExclusiveRangePosition(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitExclusiveRangePosition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitExclusiveRangePosition(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitExclusiveRangePosition(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitExclusiveRangePosition(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1073,27 +1073,27 @@ public class SchemacodeParser extends Parser {
 		public PositionContext start;
 		public CoordinatesContext size;
 		public Token orientation;
-		public TerminalNode Mul() { return getToken(SchemacodeParser.Mul, 0); }
+		public TerminalNode MUL() { return getToken(SchemacodeParser.MUL, 0); }
 		public PositionContext position() {
 			return getRuleContext(PositionContext.class,0);
 		}
 		public CoordinatesContext coordinates() {
 			return getRuleContext(CoordinatesContext.class,0);
 		}
-		public TerminalNode Horizontal() { return getToken(SchemacodeParser.Horizontal, 0); }
-		public TerminalNode Vertical() { return getToken(SchemacodeParser.Vertical, 0); }
+		public TerminalNode HORIZONTAL() { return getToken(SchemacodeParser.HORIZONTAL, 0); }
+		public TerminalNode VERTICAL() { return getToken(SchemacodeParser.VERTICAL, 0); }
 		public AreaPositionContext(BlockPositionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterAreaPosition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterAreaPosition(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitAreaPosition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitAreaPosition(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitAreaPosition(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitAreaPosition(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1121,18 +1121,18 @@ public class SchemacodeParser extends Parser {
 				setState(134);
 				((InclusiveRangePositionContext)_localctx).start = position();
 				setState(135);
-				match(Dot2);
+				match(DOT2);
 				setState(136);
 				((InclusiveRangePositionContext)_localctx).end = coordinates();
 				setState(138);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if (_la==Horizontal || _la==Vertical) {
+				if (_la==HORIZONTAL || _la==VERTICAL) {
 					{
 					setState(137);
 					((InclusiveRangePositionContext)_localctx).orientation = _input.LT(1);
 					_la = _input.LA(1);
-					if ( !(_la==Horizontal || _la==Vertical) ) {
+					if ( !(_la==HORIZONTAL || _la==VERTICAL) ) {
 						((InclusiveRangePositionContext)_localctx).orientation = (Token)_errHandler.recoverInline(this);
 					}
 					else {
@@ -1152,18 +1152,18 @@ public class SchemacodeParser extends Parser {
 				setState(140);
 				((ExclusiveRangePositionContext)_localctx).start = position();
 				setState(141);
-				match(Dot3);
+				match(DOT3);
 				setState(142);
 				((ExclusiveRangePositionContext)_localctx).end = coordinates();
 				setState(144);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if (_la==Horizontal || _la==Vertical) {
+				if (_la==HORIZONTAL || _la==VERTICAL) {
 					{
 					setState(143);
 					((ExclusiveRangePositionContext)_localctx).orientation = _input.LT(1);
 					_la = _input.LA(1);
-					if ( !(_la==Horizontal || _la==Vertical) ) {
+					if ( !(_la==HORIZONTAL || _la==VERTICAL) ) {
 						((ExclusiveRangePositionContext)_localctx).orientation = (Token)_errHandler.recoverInline(this);
 					}
 					else {
@@ -1183,18 +1183,18 @@ public class SchemacodeParser extends Parser {
 				setState(146);
 				((AreaPositionContext)_localctx).start = position();
 				setState(147);
-				match(Mul);
+				match(MUL);
 				setState(148);
 				((AreaPositionContext)_localctx).size = coordinates();
 				setState(150);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if (_la==Horizontal || _la==Vertical) {
+				if (_la==HORIZONTAL || _la==VERTICAL) {
 					{
 					setState(149);
 					((AreaPositionContext)_localctx).orientation = _input.LT(1);
 					_la = _input.LA(1);
-					if ( !(_la==Horizontal || _la==Vertical) ) {
+					if ( !(_la==HORIZONTAL || _la==VERTICAL) ) {
 						((AreaPositionContext)_localctx).orientation = (Token)_errHandler.recoverInline(this);
 					}
 					else {
@@ -1237,15 +1237,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_position; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterPosition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterPosition(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitPosition(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitPosition(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitPosition(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitPosition(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1257,22 +1257,22 @@ public class SchemacodeParser extends Parser {
 			setState(157);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case LeftParen:
+			case LEFTPAREN:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(154);
 				coordinates();
 				}
 				break;
-			case Minus:
-			case Plus:
+			case MINUS:
+			case PLUS:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(155);
 				relativeCoordinates();
 				}
 				break;
-			case Id:
+			case ID:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(156);
@@ -1298,9 +1298,9 @@ public class SchemacodeParser extends Parser {
 	public static class CoordinatesContext extends ParserRuleContext {
 		public NumberContext x;
 		public NumberContext y;
-		public TerminalNode LeftParen() { return getToken(SchemacodeParser.LeftParen, 0); }
-		public TerminalNode Comma() { return getToken(SchemacodeParser.Comma, 0); }
-		public TerminalNode RightParen() { return getToken(SchemacodeParser.RightParen, 0); }
+		public TerminalNode LEFTPAREN() { return getToken(SchemacodeParser.LEFTPAREN, 0); }
+		public TerminalNode COMMA() { return getToken(SchemacodeParser.COMMA, 0); }
+		public TerminalNode RIGHTPAREN() { return getToken(SchemacodeParser.RIGHTPAREN, 0); }
 		public List<NumberContext> number() {
 			return getRuleContexts(NumberContext.class);
 		}
@@ -1313,15 +1313,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_coordinates; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterCoordinates(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterCoordinates(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitCoordinates(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitCoordinates(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitCoordinates(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitCoordinates(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1333,15 +1333,15 @@ public class SchemacodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(159);
-			match(LeftParen);
+			match(LEFTPAREN);
 			setState(160);
 			((CoordinatesContext)_localctx).x = number();
 			setState(161);
-			match(Comma);
+			match(COMMA);
 			setState(162);
 			((CoordinatesContext)_localctx).y = number();
 			setState(163);
-			match(RightParen);
+			match(RIGHTPAREN);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1362,23 +1362,23 @@ public class SchemacodeParser extends Parser {
 		public CoordinatesContext coordinates() {
 			return getRuleContext(CoordinatesContext.class,0);
 		}
-		public TerminalNode Plus() { return getToken(SchemacodeParser.Plus, 0); }
-		public TerminalNode Minus() { return getToken(SchemacodeParser.Minus, 0); }
+		public TerminalNode PLUS() { return getToken(SchemacodeParser.PLUS, 0); }
+		public TerminalNode MINUS() { return getToken(SchemacodeParser.MINUS, 0); }
 		public RelativeCoordinatesContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_relativeCoordinates; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterRelativeCoordinates(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterRelativeCoordinates(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitRelativeCoordinates(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitRelativeCoordinates(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitRelativeCoordinates(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitRelativeCoordinates(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1393,7 +1393,7 @@ public class SchemacodeParser extends Parser {
 			setState(165);
 			((RelativeCoordinatesContext)_localctx).op = _input.LT(1);
 			_la = _input.LA(1);
-			if ( !(_la==Minus || _la==Plus) ) {
+			if ( !(_la==MINUS || _la==PLUS) ) {
 				((RelativeCoordinatesContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 			}
 			else {
@@ -1420,7 +1420,7 @@ public class SchemacodeParser extends Parser {
 	public static class CoordinatesRelativeToContext extends ParserRuleContext {
 		public Token label;
 		public RelativeCoordinatesContext relCoord;
-		public TerminalNode Id() { return getToken(SchemacodeParser.Id, 0); }
+		public TerminalNode ID() { return getToken(SchemacodeParser.ID, 0); }
 		public RelativeCoordinatesContext relativeCoordinates() {
 			return getRuleContext(RelativeCoordinatesContext.class,0);
 		}
@@ -1430,15 +1430,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_coordinatesRelativeTo; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterCoordinatesRelativeTo(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterCoordinatesRelativeTo(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitCoordinatesRelativeTo(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitCoordinatesRelativeTo(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitCoordinatesRelativeTo(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitCoordinatesRelativeTo(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1450,7 +1450,7 @@ public class SchemacodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(168);
-			((CoordinatesRelativeToContext)_localctx).label = match(Id);
+			((CoordinatesRelativeToContext)_localctx).label = match(ID);
 			setState(169);
 			((CoordinatesRelativeToContext)_localctx).relCoord = relativeCoordinates();
 			}
@@ -1469,26 +1469,26 @@ public class SchemacodeParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class DirectionContext extends ParserRuleContext {
 		public Token dir;
-		public TerminalNode Facing() { return getToken(SchemacodeParser.Facing, 0); }
-		public TerminalNode North() { return getToken(SchemacodeParser.North, 0); }
-		public TerminalNode South() { return getToken(SchemacodeParser.South, 0); }
-		public TerminalNode East() { return getToken(SchemacodeParser.East, 0); }
-		public TerminalNode West() { return getToken(SchemacodeParser.West, 0); }
+		public TerminalNode FACING() { return getToken(SchemacodeParser.FACING, 0); }
+		public TerminalNode NORTH() { return getToken(SchemacodeParser.NORTH, 0); }
+		public TerminalNode SOUTH() { return getToken(SchemacodeParser.SOUTH, 0); }
+		public TerminalNode EAST() { return getToken(SchemacodeParser.EAST, 0); }
+		public TerminalNode WEST() { return getToken(SchemacodeParser.WEST, 0); }
 		public DirectionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_direction; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterDirection(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterDirection(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitDirection(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitDirection(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitDirection(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitDirection(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1501,7 +1501,7 @@ public class SchemacodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(171);
-			match(Facing);
+			match(FACING);
 			setState(172);
 			((DirectionContext)_localctx).dir = _input.LT(1);
 			_la = _input.LA(1);
@@ -1540,177 +1540,177 @@ public class SchemacodeParser extends Parser {
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class VirtualContext extends ConfigurationContext {
-		public TerminalNode Virtual() { return getToken(SchemacodeParser.Virtual, 0); }
+		public TerminalNode VIRTUAL() { return getToken(SchemacodeParser.VIRTUAL, 0); }
 		public VirtualContext(ConfigurationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterVirtual(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterVirtual(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitVirtual(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitVirtual(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitVirtual(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitVirtual(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ItemContext extends ConfigurationContext {
-		public TerminalNode Item() { return getToken(SchemacodeParser.Item, 0); }
-		public TerminalNode Ref() { return getToken(SchemacodeParser.Ref, 0); }
+		public TerminalNode ITEM() { return getToken(SchemacodeParser.ITEM, 0); }
+		public TerminalNode REF() { return getToken(SchemacodeParser.REF, 0); }
 		public ItemContext(ConfigurationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterItem(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterItem(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitItem(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitItem(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitItem(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitItem(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class UnitContext extends ConfigurationContext {
-		public TerminalNode Unit() { return getToken(SchemacodeParser.Unit, 0); }
-		public TerminalNode Ref() { return getToken(SchemacodeParser.Ref, 0); }
+		public TerminalNode UNIT() { return getToken(SchemacodeParser.UNIT, 0); }
+		public TerminalNode REF() { return getToken(SchemacodeParser.REF, 0); }
 		public UnitContext(ConfigurationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterUnit(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterUnit(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitUnit(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitUnit(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitUnit(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitUnit(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class UnitcommandContext extends ConfigurationContext {
-		public TerminalNode Command() { return getToken(SchemacodeParser.Command, 0); }
-		public TerminalNode Ref() { return getToken(SchemacodeParser.Ref, 0); }
+		public TerminalNode COMMAND() { return getToken(SchemacodeParser.COMMAND, 0); }
+		public TerminalNode REF() { return getToken(SchemacodeParser.REF, 0); }
 		public UnitcommandContext(ConfigurationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterUnitcommand(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterUnitcommand(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitUnitcommand(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitUnitcommand(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitUnitcommand(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitUnitcommand(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class BooleanContext extends ConfigurationContext {
 		public Token status;
-		public TerminalNode Enabled() { return getToken(SchemacodeParser.Enabled, 0); }
-		public TerminalNode Disabled() { return getToken(SchemacodeParser.Disabled, 0); }
+		public TerminalNode ENABLED() { return getToken(SchemacodeParser.ENABLED, 0); }
+		public TerminalNode DISABLED() { return getToken(SchemacodeParser.DISABLED, 0); }
 		public BooleanContext(ConfigurationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterBoolean(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterBoolean(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitBoolean(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitBoolean(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitBoolean(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitBoolean(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ColorContext extends ConfigurationContext {
-		public TerminalNode Color() { return getToken(SchemacodeParser.Color, 0); }
+		public TerminalNode COLOR() { return getToken(SchemacodeParser.COLOR, 0); }
 		public ColorDefContext colorDef() {
 			return getRuleContext(ColorDefContext.class,0);
 		}
 		public ColorContext(ConfigurationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterColor(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterColor(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitColor(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitColor(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitColor(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitColor(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class LiquidContext extends ConfigurationContext {
-		public TerminalNode Liquid() { return getToken(SchemacodeParser.Liquid, 0); }
-		public TerminalNode Ref() { return getToken(SchemacodeParser.Ref, 0); }
+		public TerminalNode LIQUID() { return getToken(SchemacodeParser.LIQUID, 0); }
+		public TerminalNode REF() { return getToken(SchemacodeParser.REF, 0); }
 		public LiquidContext(ConfigurationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterLiquid(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterLiquid(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitLiquid(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitLiquid(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitLiquid(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitLiquid(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class BlocktypeContext extends ConfigurationContext {
-		public TerminalNode Block() { return getToken(SchemacodeParser.Block, 0); }
-		public TerminalNode Ref() { return getToken(SchemacodeParser.Ref, 0); }
+		public TerminalNode BLOCK() { return getToken(SchemacodeParser.BLOCK, 0); }
+		public TerminalNode REF() { return getToken(SchemacodeParser.REF, 0); }
 		public BlocktypeContext(ConfigurationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterBlocktype(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterBlocktype(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitBlocktype(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitBlocktype(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitBlocktype(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitBlocktype(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TextContext extends ConfigurationContext {
 		public TextDefContext text;
-		public TerminalNode Text() { return getToken(SchemacodeParser.Text, 0); }
+		public TerminalNode TEXT() { return getToken(SchemacodeParser.TEXT, 0); }
 		public TextDefContext textDef() {
 			return getRuleContext(TextDefContext.class,0);
 		}
 		public TextContext(ConfigurationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterText(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterText(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitText(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitText(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitText(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitText(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1723,37 +1723,37 @@ public class SchemacodeParser extends Parser {
 		public LogicContext(ConfigurationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterLogic(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterLogic(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitLogic(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitLogic(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitLogic(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitLogic(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ConnectionsContext extends ConfigurationContext {
-		public TerminalNode Connected() { return getToken(SchemacodeParser.Connected, 0); }
-		public TerminalNode To() { return getToken(SchemacodeParser.To, 0); }
+		public TerminalNode CONNECTED() { return getToken(SchemacodeParser.CONNECTED, 0); }
+		public TerminalNode TO() { return getToken(SchemacodeParser.TO, 0); }
 		public ConnectionListContext connectionList() {
 			return getRuleContext(ConnectionListContext.class,0);
 		}
 		public ConnectionsContext(ConfigurationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterConnections(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterConnections(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitConnections(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitConnections(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitConnections(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitConnections(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1766,105 +1766,105 @@ public class SchemacodeParser extends Parser {
 			setState(194);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case Virtual:
+			case VIRTUAL:
 				_localctx = new VirtualContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(174);
-				match(Virtual);
+				match(VIRTUAL);
 				}
 				break;
-			case Color:
+			case COLOR:
 				_localctx = new ColorContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(175);
-				match(Color);
+				match(COLOR);
 				setState(176);
 				colorDef();
 				}
 				break;
-			case Connected:
+			case CONNECTED:
 				_localctx = new ConnectionsContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(177);
-				match(Connected);
+				match(CONNECTED);
 				setState(178);
-				match(To);
+				match(TO);
 				setState(179);
 				connectionList();
 				}
 				break;
-			case Block:
+			case BLOCK:
 				_localctx = new BlocktypeContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(180);
-				match(Block);
+				match(BLOCK);
 				setState(181);
-				match(Ref);
+				match(REF);
 				}
 				break;
-			case Command:
+			case COMMAND:
 				_localctx = new UnitcommandContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(182);
-				match(Command);
+				match(COMMAND);
 				setState(183);
-				match(Ref);
+				match(REF);
 				}
 				break;
-			case Item:
+			case ITEM:
 				_localctx = new ItemContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(184);
-				match(Item);
+				match(ITEM);
 				setState(185);
-				match(Ref);
+				match(REF);
 				}
 				break;
-			case Liquid:
+			case LIQUID:
 				_localctx = new LiquidContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
 				setState(186);
-				match(Liquid);
+				match(LIQUID);
 				setState(187);
-				match(Ref);
+				match(REF);
 				}
 				break;
-			case Unit:
+			case UNIT:
 				_localctx = new UnitContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
 				setState(188);
-				match(Unit);
+				match(UNIT);
 				setState(189);
-				match(Ref);
+				match(REF);
 				}
 				break;
-			case Text:
+			case TEXT:
 				_localctx = new TextContext(_localctx);
 				enterOuterAlt(_localctx, 9);
 				{
 				setState(190);
-				match(Text);
+				match(TEXT);
 				setState(191);
 				((TextContext)_localctx).text = textDef();
 				}
 				break;
-			case Disabled:
-			case Enabled:
+			case DISABLED:
+			case ENABLED:
 				_localctx = new BooleanContext(_localctx);
 				enterOuterAlt(_localctx, 10);
 				{
 				setState(192);
 				((BooleanContext)_localctx).status = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !(_la==Disabled || _la==Enabled) ) {
+				if ( !(_la==DISABLED || _la==ENABLED) ) {
 					((BooleanContext)_localctx).status = (Token)_errHandler.recoverInline(this);
 				}
 				else {
@@ -1874,7 +1874,7 @@ public class SchemacodeParser extends Parser {
 				}
 				}
 				break;
-			case Processor:
+			case PROCESSOR:
 				_localctx = new LogicContext(_localctx);
 				enterOuterAlt(_localctx, 11);
 				{
@@ -1903,13 +1903,13 @@ public class SchemacodeParser extends Parser {
 		public NumberContext green;
 		public NumberContext blue;
 		public NumberContext alpha;
-		public TerminalNode Rgba() { return getToken(SchemacodeParser.Rgba, 0); }
-		public TerminalNode LeftParen() { return getToken(SchemacodeParser.LeftParen, 0); }
-		public List<TerminalNode> Comma() { return getTokens(SchemacodeParser.Comma); }
-		public TerminalNode Comma(int i) {
-			return getToken(SchemacodeParser.Comma, i);
+		public TerminalNode RGBA() { return getToken(SchemacodeParser.RGBA, 0); }
+		public TerminalNode LEFTPAREN() { return getToken(SchemacodeParser.LEFTPAREN, 0); }
+		public List<TerminalNode> COMMA() { return getTokens(SchemacodeParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(SchemacodeParser.COMMA, i);
 		}
-		public TerminalNode RightParen() { return getToken(SchemacodeParser.RightParen, 0); }
+		public TerminalNode RIGHTPAREN() { return getToken(SchemacodeParser.RIGHTPAREN, 0); }
 		public List<NumberContext> number() {
 			return getRuleContexts(NumberContext.class);
 		}
@@ -1922,15 +1922,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_colorDef; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterColorDef(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterColorDef(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitColorDef(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitColorDef(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitColorDef(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitColorDef(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1942,25 +1942,25 @@ public class SchemacodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(196);
-			match(Rgba);
+			match(RGBA);
 			setState(197);
-			match(LeftParen);
+			match(LEFTPAREN);
 			setState(198);
 			((ColorDefContext)_localctx).red = number();
 			setState(199);
-			match(Comma);
+			match(COMMA);
 			setState(200);
 			((ColorDefContext)_localctx).green = number();
 			setState(201);
-			match(Comma);
+			match(COMMA);
 			setState(202);
 			((ColorDefContext)_localctx).blue = number();
 			setState(203);
-			match(Comma);
+			match(COMMA);
 			setState(204);
 			((ColorDefContext)_localctx).alpha = number();
 			setState(205);
-			match(RightParen);
+			match(RIGHTPAREN);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1982,9 +1982,9 @@ public class SchemacodeParser extends Parser {
 		public ConnectionContext connection(int i) {
 			return getRuleContext(ConnectionContext.class,i);
 		}
-		public List<TerminalNode> Comma() { return getTokens(SchemacodeParser.Comma); }
-		public TerminalNode Comma(int i) {
-			return getToken(SchemacodeParser.Comma, i);
+		public List<TerminalNode> COMMA() { return getTokens(SchemacodeParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(SchemacodeParser.COMMA, i);
 		}
 		public ConnectionListContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1992,15 +1992,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_connectionList; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterConnectionList(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterConnectionList(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitConnectionList(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitConnectionList(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitConnectionList(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitConnectionList(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2017,11 +2017,11 @@ public class SchemacodeParser extends Parser {
 			setState(212);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==Comma) {
+			while (_la==COMMA) {
 				{
 				{
 				setState(208);
-				match(Comma);
+				match(COMMA);
 				setState(209);
 				connection();
 				}
@@ -2063,33 +2063,33 @@ public class SchemacodeParser extends Parser {
 		public ConnAbsContext(ConnectionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterConnAbs(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterConnAbs(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitConnAbs(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitConnAbs(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitConnAbs(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitConnAbs(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ConnNameContext extends ConnectionContext {
-		public TerminalNode Id() { return getToken(SchemacodeParser.Id, 0); }
+		public TerminalNode ID() { return getToken(SchemacodeParser.ID, 0); }
 		public ConnNameContext(ConnectionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterConnName(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterConnName(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitConnName(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitConnName(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitConnName(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitConnName(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2101,15 +2101,15 @@ public class SchemacodeParser extends Parser {
 		public ConnRelContext(ConnectionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterConnRel(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterConnRel(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitConnRel(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitConnRel(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitConnRel(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitConnRel(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2121,7 +2121,7 @@ public class SchemacodeParser extends Parser {
 			setState(218);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case LeftParen:
+			case LEFTPAREN:
 				_localctx = new ConnAbsContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
@@ -2129,8 +2129,8 @@ public class SchemacodeParser extends Parser {
 				coordinates();
 				}
 				break;
-			case Minus:
-			case Plus:
+			case MINUS:
+			case PLUS:
 				_localctx = new ConnRelContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
@@ -2138,12 +2138,12 @@ public class SchemacodeParser extends Parser {
 				relativeCoordinates();
 				}
 				break;
-			case Id:
+			case ID:
 				_localctx = new ConnNameContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(217);
-				match(Id);
+				match(ID);
 				}
 				break;
 			default:
@@ -2166,11 +2166,11 @@ public class SchemacodeParser extends Parser {
 		public ProcessorLinksContext links;
 		public ProgramContext mindcode;
 		public ProgramContext mlog;
-		public TerminalNode Processor() { return getToken(SchemacodeParser.Processor, 0); }
-		public TerminalNode End() { return getToken(SchemacodeParser.End, 0); }
-		public TerminalNode Mindcode() { return getToken(SchemacodeParser.Mindcode, 0); }
-		public TerminalNode Assign() { return getToken(SchemacodeParser.Assign, 0); }
-		public TerminalNode Mlog() { return getToken(SchemacodeParser.Mlog, 0); }
+		public TerminalNode PROCESSOR() { return getToken(SchemacodeParser.PROCESSOR, 0); }
+		public TerminalNode END() { return getToken(SchemacodeParser.END, 0); }
+		public TerminalNode MINDCODE() { return getToken(SchemacodeParser.MINDCODE, 0); }
+		public TerminalNode ASSIGN() { return getToken(SchemacodeParser.ASSIGN, 0); }
+		public TerminalNode MLOG() { return getToken(SchemacodeParser.MLOG, 0); }
 		public ProcessorLinksContext processorLinks() {
 			return getRuleContext(ProcessorLinksContext.class,0);
 		}
@@ -2183,15 +2183,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_processor; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterProcessor(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterProcessor(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitProcessor(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitProcessor(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitProcessor(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitProcessor(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2204,11 +2204,11 @@ public class SchemacodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(220);
-			match(Processor);
+			match(PROCESSOR);
 			setState(222);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==Links) {
+			if (_la==LINKS) {
 				{
 				setState(221);
 				((ProcessorContext)_localctx).links = processorLinks();
@@ -2218,33 +2218,33 @@ public class SchemacodeParser extends Parser {
 			setState(230);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case Mindcode:
+			case MINDCODE:
 				{
 				setState(224);
-				match(Mindcode);
+				match(MINDCODE);
 				setState(225);
-				match(Assign);
+				match(ASSIGN);
 				setState(226);
 				((ProcessorContext)_localctx).mindcode = program();
 				}
 				break;
-			case Mlog:
+			case MLOG:
 				{
 				setState(227);
-				match(Mlog);
+				match(MLOG);
 				setState(228);
-				match(Assign);
+				match(ASSIGN);
 				setState(229);
 				((ProcessorContext)_localctx).mlog = program();
 				}
 				break;
-			case End:
+			case END:
 				break;
 			default:
 				break;
 			}
 			setState(232);
-			match(End);
+			match(END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2260,8 +2260,8 @@ public class SchemacodeParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ProcessorLinksContext extends ParserRuleContext {
-		public TerminalNode Links() { return getToken(SchemacodeParser.Links, 0); }
-		public TerminalNode End() { return getToken(SchemacodeParser.End, 0); }
+		public TerminalNode LINKS() { return getToken(SchemacodeParser.LINKS, 0); }
+		public TerminalNode END() { return getToken(SchemacodeParser.END, 0); }
 		public List<LinkDefContext> linkDef() {
 			return getRuleContexts(LinkDefContext.class);
 		}
@@ -2274,15 +2274,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_processorLinks; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterProcessorLinks(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterProcessorLinks(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitProcessorLinks(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitProcessorLinks(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitProcessorLinks(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitProcessorLinks(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2295,7 +2295,7 @@ public class SchemacodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(234);
-			match(Links);
+			match(LINKS);
 			setState(238);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -2311,7 +2311,7 @@ public class SchemacodeParser extends Parser {
 				_la = _input.LA(1);
 			}
 			setState(241);
-			match(End);
+			match(END);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2340,20 +2340,20 @@ public class SchemacodeParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class LinkPatternContext extends LinkDefContext {
 		public Token linkPattern;
-		public TerminalNode Mul() { return getToken(SchemacodeParser.Mul, 0); }
-		public TerminalNode Pattern() { return getToken(SchemacodeParser.Pattern, 0); }
+		public TerminalNode MUL() { return getToken(SchemacodeParser.MUL, 0); }
+		public TerminalNode PATTERN() { return getToken(SchemacodeParser.PATTERN, 0); }
 		public LinkPatternContext(LinkDefContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterLinkPattern(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterLinkPattern(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitLinkPattern(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitLinkPattern(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitLinkPattern(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitLinkPattern(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2365,21 +2365,21 @@ public class SchemacodeParser extends Parser {
 		public ConnectionContext connection() {
 			return getRuleContext(ConnectionContext.class,0);
 		}
-		public TerminalNode As() { return getToken(SchemacodeParser.As, 0); }
-		public TerminalNode Id() { return getToken(SchemacodeParser.Id, 0); }
-		public TerminalNode Virtual() { return getToken(SchemacodeParser.Virtual, 0); }
+		public TerminalNode AS() { return getToken(SchemacodeParser.AS, 0); }
+		public TerminalNode ID() { return getToken(SchemacodeParser.ID, 0); }
+		public TerminalNode VIRTUAL() { return getToken(SchemacodeParser.VIRTUAL, 0); }
 		public LinkPosContext(LinkDefContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterLinkPos(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterLinkPos(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitLinkPos(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitLinkPos(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitLinkPos(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitLinkPos(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2392,15 +2392,15 @@ public class SchemacodeParser extends Parser {
 			setState(252);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case Mul:
-			case Pattern:
+			case MUL:
+			case PATTERN:
 				_localctx = new LinkPatternContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(243);
 				((LinkPatternContext)_localctx).linkPattern = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !(_la==Mul || _la==Pattern) ) {
+				if ( !(_la==MUL || _la==PATTERN) ) {
 					((LinkPatternContext)_localctx).linkPattern = (Token)_errHandler.recoverInline(this);
 				}
 				else {
@@ -2410,10 +2410,10 @@ public class SchemacodeParser extends Parser {
 				}
 				}
 				break;
-			case Minus:
-			case Plus:
-			case LeftParen:
-			case Id:
+			case MINUS:
+			case PLUS:
+			case LEFTPAREN:
+			case ID:
 				_localctx = new LinkPosContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
@@ -2422,19 +2422,19 @@ public class SchemacodeParser extends Parser {
 				setState(250);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if (_la==As) {
+				if (_la==AS) {
 					{
 					setState(245);
-					match(As);
+					match(AS);
 					setState(246);
-					((LinkPosContext)_localctx).alias = match(Id);
+					((LinkPosContext)_localctx).alias = match(ID);
 					setState(248);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-					if (_la==Virtual) {
+					if (_la==VIRTUAL) {
 						{
 						setState(247);
-						((LinkPosContext)_localctx).virtual = match(Virtual);
+						((LinkPosContext)_localctx).virtual = match(VIRTUAL);
 						}
 					}
 
@@ -2466,9 +2466,9 @@ public class SchemacodeParser extends Parser {
 		public ProgramSnippetContext programSnippet(int i) {
 			return getRuleContext(ProgramSnippetContext.class,i);
 		}
-		public List<TerminalNode> Plus() { return getTokens(SchemacodeParser.Plus); }
-		public TerminalNode Plus(int i) {
-			return getToken(SchemacodeParser.Plus, i);
+		public List<TerminalNode> PLUS() { return getTokens(SchemacodeParser.PLUS); }
+		public TerminalNode PLUS(int i) {
+			return getToken(SchemacodeParser.PLUS, i);
 		}
 		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2476,15 +2476,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_program; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterProgram(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterProgram(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitProgram(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitProgram(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitProgram(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitProgram(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2501,11 +2501,11 @@ public class SchemacodeParser extends Parser {
 			setState(259);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==Plus) {
+			while (_la==PLUS) {
 				{
 				{
 				setState(255);
-				match(Plus);
+				match(PLUS);
 				setState(256);
 				programSnippet();
 				}
@@ -2548,37 +2548,37 @@ public class SchemacodeParser extends Parser {
 		public ProgramStringContext(ProgramSnippetContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterProgramString(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterProgramString(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitProgramString(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitProgramString(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitProgramString(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitProgramString(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ProgramFileContext extends ProgramSnippetContext {
 		public TextDefContext file;
-		public TerminalNode File() { return getToken(SchemacodeParser.File, 0); }
+		public TerminalNode FILE() { return getToken(SchemacodeParser.FILE, 0); }
 		public TextDefContext textDef() {
 			return getRuleContext(TextDefContext.class,0);
 		}
 		public ProgramFileContext(ProgramSnippetContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterProgramFile(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterProgramFile(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitProgramFile(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitProgramFile(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitProgramFile(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitProgramFile(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2590,10 +2590,10 @@ public class SchemacodeParser extends Parser {
 			setState(265);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case TextBlock1:
-			case TextBlock2:
-			case TextLine:
-			case Id:
+			case TEXTBLOCK1:
+			case TEXTBLOCK2:
+			case TEXTLINE:
+			case ID:
 				_localctx = new ProgramStringContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
@@ -2601,12 +2601,12 @@ public class SchemacodeParser extends Parser {
 				((ProgramStringContext)_localctx).text = textDef();
 				}
 				break;
-			case File:
+			case FILE:
 				_localctx = new ProgramFileContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(263);
-				match(File);
+				match(FILE);
 				setState(264);
 				((ProgramFileContext)_localctx).file = textDef();
 				}
@@ -2641,19 +2641,19 @@ public class SchemacodeParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class TextIdContext extends TextDefContext {
 		public Token name;
-		public TerminalNode Id() { return getToken(SchemacodeParser.Id, 0); }
+		public TerminalNode ID() { return getToken(SchemacodeParser.ID, 0); }
 		public TextIdContext(TextDefContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterTextId(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterTextId(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitTextId(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitTextId(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitTextId(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitTextId(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2666,15 +2666,15 @@ public class SchemacodeParser extends Parser {
 		public TextLiteralContext(TextDefContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterTextLiteral(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterTextLiteral(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitTextLiteral(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitTextLiteral(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitTextLiteral(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitTextLiteral(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2686,9 +2686,9 @@ public class SchemacodeParser extends Parser {
 			setState(269);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case TextBlock1:
-			case TextBlock2:
-			case TextLine:
+			case TEXTBLOCK1:
+			case TEXTBLOCK2:
+			case TEXTLINE:
 				_localctx = new TextLiteralContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
@@ -2696,12 +2696,12 @@ public class SchemacodeParser extends Parser {
 				((TextLiteralContext)_localctx).reference = stringLiteral();
 				}
 				break;
-			case Id:
+			case ID:
 				_localctx = new TextIdContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(268);
-				((TextIdContext)_localctx).name = match(Id);
+				((TextIdContext)_localctx).name = match(ID);
 				}
 				break;
 			default:
@@ -2723,8 +2723,8 @@ public class SchemacodeParser extends Parser {
 	public static class StringValueContext extends ParserRuleContext {
 		public Token name;
 		public StringLiteralContext string;
-		public TerminalNode Assign() { return getToken(SchemacodeParser.Assign, 0); }
-		public TerminalNode Id() { return getToken(SchemacodeParser.Id, 0); }
+		public TerminalNode ASSIGN() { return getToken(SchemacodeParser.ASSIGN, 0); }
+		public TerminalNode ID() { return getToken(SchemacodeParser.ID, 0); }
 		public StringLiteralContext stringLiteral() {
 			return getRuleContext(StringLiteralContext.class,0);
 		}
@@ -2734,15 +2734,15 @@ public class SchemacodeParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_stringValue; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterStringValue(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterStringValue(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitStringValue(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitStringValue(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitStringValue(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitStringValue(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2754,9 +2754,9 @@ public class SchemacodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(271);
-			((StringValueContext)_localctx).name = match(Id);
+			((StringValueContext)_localctx).name = match(ID);
 			setState(272);
-			match(Assign);
+			match(ASSIGN);
 			setState(273);
 			((StringValueContext)_localctx).string = stringLiteral();
 			}
@@ -2786,38 +2786,38 @@ public class SchemacodeParser extends Parser {
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TextLineContext extends StringLiteralContext {
-		public TerminalNode TextLine() { return getToken(SchemacodeParser.TextLine, 0); }
+		public TerminalNode TEXTLINE() { return getToken(SchemacodeParser.TEXTLINE, 0); }
 		public TextLineContext(StringLiteralContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterTextLine(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterTextLine(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitTextLine(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitTextLine(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitTextLine(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitTextLine(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TextBlockContext extends StringLiteralContext {
-		public TerminalNode TextBlock1() { return getToken(SchemacodeParser.TextBlock1, 0); }
-		public TerminalNode TextBlock2() { return getToken(SchemacodeParser.TextBlock2, 0); }
+		public TerminalNode TEXTBLOCK1() { return getToken(SchemacodeParser.TEXTBLOCK1, 0); }
+		public TerminalNode TEXTBLOCK2() { return getToken(SchemacodeParser.TEXTBLOCK2, 0); }
 		public TextBlockContext(StringLiteralContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterTextBlock(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterTextBlock(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitTextBlock(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitTextBlock(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitTextBlock(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitTextBlock(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2830,22 +2830,22 @@ public class SchemacodeParser extends Parser {
 			setState(277);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case TextLine:
+			case TEXTLINE:
 				_localctx = new TextLineContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(275);
-				match(TextLine);
+				match(TEXTLINE);
 				}
 				break;
-			case TextBlock1:
-			case TextBlock2:
+			case TEXTBLOCK1:
+			case TEXTBLOCK2:
 				_localctx = new TextBlockContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(276);
 				_la = _input.LA(1);
-				if ( !(_la==TextBlock1 || _la==TextBlock2) ) {
+				if ( !(_la==TEXTBLOCK1 || _la==TEXTBLOCK2) ) {
 				_errHandler.recoverInline(this);
 				}
 				else {
@@ -2884,19 +2884,19 @@ public class SchemacodeParser extends Parser {
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class SimpleTextLineContext extends SimpleStringLiteralContext {
-		public TerminalNode TextLine() { return getToken(SchemacodeParser.TextLine, 0); }
+		public TerminalNode TEXTLINE() { return getToken(SchemacodeParser.TEXTLINE, 0); }
 		public SimpleTextLineContext(SimpleStringLiteralContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterSimpleTextLine(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).enterSimpleTextLine(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitSimpleTextLine(this);
+			if ( listener instanceof SchemacodeParserListener ) ((SchemacodeParserListener)listener).exitSimpleTextLine(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitSimpleTextLine(this);
+			if ( visitor instanceof SchemacodeParserVisitor ) return ((SchemacodeParserVisitor<? extends T>)visitor).visitSimpleTextLine(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2909,7 +2909,7 @@ public class SchemacodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(279);
-			match(TextLine);
+			match(TEXTLINE);
 			}
 		}
 		catch (RecognitionException re) {

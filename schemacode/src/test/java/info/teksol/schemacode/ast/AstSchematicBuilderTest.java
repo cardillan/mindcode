@@ -525,7 +525,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void refusesItemNonRef() {
         parseSchematicsExpectingMessages(
                 ExpectedMessages.create()
-                        .add("Parse error: missing Ref at 'coal'")
+                        .add("Parse error: missing REF at 'coal'")
                         .add("Parse error: 'end': mismatched input 'end' expecting {':', ','}"),
                 """
                         schematic
@@ -560,7 +560,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void refusesLiquidNonRef() {
         parseSchematicsExpectingMessages(
                 ExpectedMessages.create()
-                        .add("Parse error: missing Ref at 'water'")
+                        .add("Parse error: missing REF at 'water'")
                         .add("Parse error: 'end': mismatched input 'end' expecting {':', ','}"),
                 """
                         schematic

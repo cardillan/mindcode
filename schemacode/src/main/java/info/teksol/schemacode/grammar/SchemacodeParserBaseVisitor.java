@@ -1,9 +1,9 @@
-// Generated from Schemacode.g4 by ANTLR 4.13.1
+// Generated from SchemacodeParser.g4 by ANTLR 4.13.1
 package info.teksol.schemacode.grammar;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
- * This class provides an empty implementation of {@link SchemacodeVisitor},
+ * This class provides an empty implementation of {@link SchemacodeParserVisitor},
  * which can be extended to create a visitor which only needs to handle a subset
  * of the available methods.
  *
@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * operations with no return type.
  */
 @SuppressWarnings("CheckReturnValue")
-public class SchemacodeBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements SchemacodeVisitor<T> {
+public class SchemacodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements SchemacodeParserVisitor<T> {
 	/**
 	 * {@inheritDoc}
 	 *
