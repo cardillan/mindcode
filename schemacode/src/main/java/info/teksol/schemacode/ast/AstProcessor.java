@@ -7,13 +7,15 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 
 @NullMarked
-public record AstProcessor(SourcePosition sourcePosition, List<AstLink> links, AstProgram program, Language language) implements AstConfiguration {
+public record AstProcessor(SourcePosition sourcePosition, List<AstLink> links, AstProgram program, Language language,
+                           List<AstParameter> parameters) implements AstConfiguration {
 
     @Override
     public AstProcessor withEmptyPosition() {
         return new AstProcessor(SourcePosition.EMPTY,
                 erasePositions(links),
                 erasePosition(program),
-                language);
+                language,
+                erasePositions(parameters));
     }
 }

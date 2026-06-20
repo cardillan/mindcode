@@ -238,7 +238,13 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
             language = Language.NONE;
         }
 
-        return new AstProcessor(pos(ctx.getStart()), links, program, language);
+        List<AstParameter> parameters = ctx.parameters == null ? List.of()
+                 : ctx.parameters.parameter().stream()
+                .map(this::visit)
+                .map(AstParameter.class::cast)
+                .toList();
+
+        return new AstProcessor(pos(ctx.getStart()), links, program, language, parameters);
     }
 
     @Override
@@ -272,6 +278,17 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
     @Override
     public AstSchemaItem visitProgramFile(SchemacodeParser.ProgramFileContext ctx) {
         return new AstProgramSnippetFile(pos(ctx.getStart()), (AstText) visit(ctx.file));
+    }
+
+    @Override
+    public AstSchemaItem visitParameter(ParameterContext ctx) {
+        return new AstParameter(pos(ctx.getStart()),
+                visitParameterToken(ctx.variable),
+                visitParameterToken(ctx.strValue == null ? ctx.value : ctx.strValue));
+    }
+
+    private AstToken visitParameterToken(Token token) {
+        return new AstToken(pos(token), token.getText());
     }
 
     // Coordinates & direction

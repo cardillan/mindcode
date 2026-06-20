@@ -836,7 +836,11 @@ Processor configuration is the most complex one. It can specify both the code em
         end
         
         mlog = <mlog code>
-        mindcode = <mindcode>    
+        mindcode = <mindcode>
+        
+        param
+            <code parametrization>
+        end    
     end 
 ```
 
@@ -1038,7 +1042,7 @@ At most one of `mlog` or `mindcode` can be specified. If neither of these option
 * as a string value identifier,
 * as a reference to an external file.
 
-A string literal is only useful for small snippets of code:
+A string literal is only useful for really small snippets of code:
 
 ```
 schematic
@@ -1108,7 +1112,7 @@ The relative file path is evaluated from the directory containing the file being
 > [!IMPORTANT]
 > Only the command line tool allows you to use code from an external file. The web application cannot access your local files by specified path, and the `file` option is therefore disallowed there.
 
-### Combining code snippets
+#### Combining code snippets
 
 A program will typically consist of just one code snippet. Using multiple code snippets is primarily used to parametrize a common code shared between multiple processors, for example:
 
@@ -1126,6 +1130,63 @@ end
 It is assumed that the code stored in `fractal.mnd` uses the `pos_x` and `pos_y` constants, specifically the values assigned to them in the preceding code snippet.
 
 This feature may be especially useful for parametrizing Mindcode. Since the code for each processor is compiled independently, different values assigned to each processor may lead to different mlog code due to optimizations, specifically constant folding and constant propagation.
+
+The `mindcode` or `mlog` [attributes](#attribute-definition), if defined, get automatically prepended as the first code snippet to the code specified in the processor definition as `mindcode` or `mlog` respectively.
+
+### Code parametrization
+
+The code provided to the processor by the `mindcode` or `mlog` directives may be further modified by _parametrization_. Parametrization is specified as pairs of parameters and their values:
+
+```
+param
+    UNIT_TYPE = @flare
+    MAX_UNITS = 8
+end
+```
+
+For each parameter-value pair, the following processing is performed:
+
+- A `set <parameter> <value>` instruction is searched in the code, where `<parameter>` matches a name specified in the parametrizaation.
+- If such instruction is found, the `<value>` used in the instruction is replaced with the value specified in the parameter-value pair. Only the first instruction encountered in the code is modified. All other aspects of the code (formatting, whitespace, comments) are left untouched.
+- If such an instruction is not found, an error is generated.
+- If the mlog code comes from a Mindcode compiler, it is further required that the name of the parameter matches one of the parameters declared in the program.
+- No reformatting is applied to the value of the parameters. When using numeric literals, care must be taken for the literals to match the format accepted by mlog (`1.5e3`, for example, isn't accepted, but `15e2` is).
+- Any mlog-compatible token can be used as a parameter name or value; only string literals are not allowed as parameter names. 
+
+Example:
+
+```
+schematic
+    @micro-processor at (0, 0) processor
+        mindcode = main
+        param
+            UNIT_TYPE = @flare
+            MAX_UNITS = 8
+        end
+    end
+
+    @micro-processor at (1, 0) processor
+        mindcode = main
+        param
+            UNIT_TYPE = @poly
+            MAX_UNITS = 4
+        end
+    end
+end
+
+main = """
+    param UNIT_TYPE = @mono;
+    param MAX_UNITS = 10;
+    print($"$UNIT_TYPE: $MAX_UNITS");
+    """
+```
+
+Here, the `UNIT_TYPE` and `MAX_UNITS` are the variables (or parameters) and  `@flare` and `8` are the values to be assigned to these variables in the code in the first processor, and `@poly` and `4` in the second processor.
+
+Similar effect to parametrization can be achieved by combining code snippets described above, but parametrization offers the following advantages:
+
+- The original code, when stored in a standalone file, can be compiled or run independently of the schematic definition. Prepending code to an existing Mindcodeor mlog code is troublesome.
+- When the same Mindcode is used by several processors, it is compiled only once and then parametrized. For large schematic with many processors sharing the same complex code, this may provide significant speedup when building the schematic.
 
 # Origin and dimensions calculation
 

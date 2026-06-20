@@ -10,12 +10,15 @@ import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.Target;
 import info.teksol.schemacode.ast.AstLink;
+import info.teksol.schemacode.ast.AstParameter;
 import info.teksol.schemacode.ast.AstProcessor;
+import info.teksol.schemacode.ast.AstToken;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.config.UnresolvedConfiguration;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration;
+import info.teksol.schemacode.schematics.ParameterReplacer.ReplacementException;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -48,7 +51,7 @@ public class ProcessorConfigurationBuilder {
             return buildMindcodeConfiguration(processor, blockPos, links);
         } else {
             String mlog = processor.language() == Language.MLOG ? processor.program().getProgramText(builder, MLOG) : "";
-            return buildConfiguration(processor, links, mlog, Map.of());
+            return buildConfiguration(processor, links, mlog, Map.of(), Set.of());
         }
     }
 
@@ -75,8 +78,8 @@ public class ProcessorConfigurationBuilder {
         return links;
     }
 
-    private ProcessorConfiguration buildConfiguration(AstProcessor processor,
-            List<ProcessorConfiguration.Link> processorLinks, String mlog, Map<String, String> symbolicNameMap) {
+    private ProcessorConfiguration buildConfiguration(AstProcessor processor, List<ProcessorConfiguration.Link> processorLinks,
+            String mlog, Map<String, String> symbolicNameMap, Set<String> parameterNames) {
 
         // Translate names
         List<ProcessorConfiguration.Link> links = processorLinks.stream()
@@ -116,7 +119,60 @@ public class ProcessorConfigurationBuilder {
                         baseName, baseName, firstUnused);
             }
         });
-        return new ProcessorConfiguration(links, mlog);
+
+        return new ProcessorConfiguration(links, processParametrization(processor, mlog, parameterNames));
+    }
+
+    private String processParametrization(AstProcessor processor, String mlog, Set<String> parameterNames) {
+        Map<String, AstToken> tokenMap = new HashMap<>();
+        Map<String, String> replacements = new HashMap<>();
+
+        for (AstParameter parameter : processor.parameters()) {
+            if (validateToken(parameter.name(), false) & validateToken(parameter.value(), true)) {
+                if (replacements.put(parameter.name().tokenValue(), parameter.value().tokenValue()) != null) {
+                    builder.error(parameter.name(), "The value of parameter '%s' is already defined.", parameter.name().tokenValue());
+                } else if (processor.language() == Language.MINDCODE && !parameterNames.contains(parameter.name().tokenValue())) {
+                    builder.error(parameter.name(), "Parameter '%s' is not defined in Mindcode.", parameter.name().tokenValue());
+                } else {
+                    tokenMap.put(parameter.name().tokenValue(), parameter.name());
+                }
+            }
+        }
+
+        if (replacements.isEmpty() || mlog.isEmpty()) return mlog;
+
+        try {
+            ParameterReplacer replacer = new ParameterReplacer(mlog, replacements);
+            replacer.replace();
+            replacer.getAbsentParameters().stream()
+                    .map(tokenMap::get)
+                    .filter(Objects::nonNull)
+                    .sorted(Comparator.comparing(AstToken::sourcePosition))
+                    .forEach(token -> builder.error(token, "Parameter '%s' not found in the mlog code.", token.tokenValue()));
+            return replacer.getResult();
+        } catch (ReplacementException e) {
+            builder.error(processor.program(), "Error trying to update program parameters: %s",e.getMessage());
+            return mlog;
+        }
+    }
+
+    private boolean validateToken(AstToken token, boolean allowString) {
+        String str = token.tokenValue();
+        boolean valid;
+        if (str.startsWith("\"")) {
+            valid = str.endsWith("\"") && str.indexOf('"', 1, str.length() - 1) == -1;
+            if (valid && !allowString) {
+                builder.error(token, "Parameter names cannot be strings.");
+                return false;
+            }
+        } else {
+            valid = str.indexOf('#') == -1 && str.indexOf(';') == -1;
+        }
+
+        if (!valid) {
+            builder.error(token, "Invalid mlog token: %s.", str);
+        }
+        return valid;
     }
 
     private UnresolvedConfiguration buildMindcodeConfiguration(AstProcessor processor,
@@ -174,7 +230,7 @@ public class ProcessorConfigurationBuilder {
             }
         }
 
-        return new CompilerCacheEntry(compiler.getOutput(), compiler.getSymbolicNameMap(), hasErrors);
+        return new CompilerCacheEntry(compiler.getOutput(), compiler.getSymbolicNameMap(), compiler.getParameterNames(), hasErrors);
     }
 
     // Class responsible for constructing the final processor configuration whem Mindcode compilation completes
@@ -194,7 +250,8 @@ public class ProcessorConfigurationBuilder {
         public Configuration resolve() {
             try {
                 CompilerCacheEntry result = compilation.get();
-                return result.hasErrors ? EmptyConfiguration.EMPTY : buildConfiguration(processor, links, result.mlog(), result.symbolicNameMap());
+                return result.hasErrors ? EmptyConfiguration.EMPTY : buildConfiguration(processor, links, result.mlog(),
+                        result.symbolicNameMap(), result.parameterNames());
             } catch (Exception ex) {
                 throw new MindcodeInternalError(ex, "Error compiling Mindcode source code.");
             }
@@ -202,7 +259,7 @@ public class ProcessorConfigurationBuilder {
     }
 
 
-    public record CompilerCacheEntry(String mlog, Map<String, String> symbolicNameMap, boolean hasErrors) { }
+    public record CompilerCacheEntry(String mlog, Map<String, String> symbolicNameMap, Set<String> parameterNames, boolean hasErrors) { }
 
     // Caches the results of compiling Mindcode to mlog - avoid repeated recompilation of identical mindcode
     // Maps the entire input string onto the output to avoid obtaining the wrong cached version

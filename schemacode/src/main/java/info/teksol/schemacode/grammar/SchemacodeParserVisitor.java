@@ -349,6 +349,18 @@ public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTextId(SchemacodeParser.TextIdContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#parametrization}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParametrization(SchemacodeParser.ParametrizationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#parameter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameter(SchemacodeParser.ParameterContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#stringValue}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

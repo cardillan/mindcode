@@ -103,7 +103,7 @@ connection
     ;
 
 processor
-    : PROCESSOR links=processorLinks? ( MINDCODE ASSIGN mindcode=program | MLOG ASSIGN mlog=program) ? END
+    : PROCESSOR links=processorLinks? ( MINDCODE ASSIGN mindcode=program | MLOG ASSIGN mlog=program) ? parameters=parametrization? END
     ;
 
 processorLinks
@@ -127,6 +127,15 @@ programSnippet
 textDef
     : reference=stringLiteral       # textLiteral
     | name=ID                       # textId
+    ;
+
+parametrization
+    : PARAM parameter* PARAMEND
+    ;
+
+parameter
+    : variable=PARAMTOKEN PARAMASSIGN strValue=PARAMSTRING
+    | variable=PARAMTOKEN PARAMASSIGN value=PARAMTOKEN
     ;
 
 stringValue

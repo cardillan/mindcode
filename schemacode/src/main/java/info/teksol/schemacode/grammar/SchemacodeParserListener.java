@@ -582,6 +582,26 @@ public interface SchemacodeParserListener extends ParseTreeListener {
 	 */
 	void exitTextId(SchemacodeParser.TextIdContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#parametrization}.
+	 * @param ctx the parse tree
+	 */
+	void enterParametrization(SchemacodeParser.ParametrizationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#parametrization}.
+	 * @param ctx the parse tree
+	 */
+	void exitParametrization(SchemacodeParser.ParametrizationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#parameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterParameter(SchemacodeParser.ParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#parameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitParameter(SchemacodeParser.ParameterContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#stringValue}.
 	 * @param ctx the parse tree
 	 */

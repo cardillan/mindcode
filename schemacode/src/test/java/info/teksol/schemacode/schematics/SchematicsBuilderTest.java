@@ -1,6 +1,7 @@
 package info.teksol.schemacode.schematics;
 
 import info.teksol.mc.messages.ExpectedMessages;
+import info.teksol.mc.messages.MessageLevel;
 import info.teksol.schemacode.AbstractSchematicsTest;
 import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.config.BooleanConfiguration;
@@ -9,6 +10,7 @@ import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.config.TextConfiguration;
 import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -1066,7 +1068,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                         output:
                             @unloader at +(1, 0)
                         end
-
+                
                         code = \"""
                             linked(@switch) onOff;
                             linked(@unloader) output;
@@ -1099,12 +1101,12 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 ExpectedMessages.create()
                         .add("Incompatible link name 'onOff' for block type '@switch'."),
                 """
-                        schematic
-                            @micro-processor at (0, 0) processor links * end mlog = "" end
-                        onOff:
-                            @switch at +(1, 0)
-                        end
-                """);
+                                schematic
+                                    @micro-processor at (0, 0) processor links * end mlog = "" end
+                                onOff:
+                                    @switch at +(1, 0)
+                                end
+                        """);
     }
 
     @Test
@@ -1158,5 +1160,120 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                         end
                         """
         );
+    }
+
+    @Nested
+    class Parametrization {
+
+        @Test
+        void appliesParametrization() {
+            Schematic actual = buildSchematics("""
+                    schematic
+                        @micro-processor at (0, 0) processor
+                            mindcode = main
+                            param
+                                foo = @flare
+                                bar = "10"
+                            end
+                        end
+                    end
+                    
+                    main = '''
+                        #set auto-printflush = false;
+                        param foo = @mono;
+                        param bar = 5;
+                        print(foo, bar);
+                        '''
+                    """);
+
+            Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
+                    List.of(
+                            block(pos(2, 5), "@micro-processor", P0_0, Direction.EAST,
+                                    new ProcessorConfiguration(
+                                            List.of(),
+                                            """
+                                                    set foo @flare
+                                                    set bar "10"
+                                                    print foo
+                                                    print bar
+                                                    """
+                                    )
+                            )
+                    )
+            );
+
+            assertAstEquals(expected, actual);
+        }
+
+        @Test
+        void reportsMissingMindcodeParameters() {
+            assertGeneratesErrors(ExpectedMessages.create()
+                            .add("Parameter 'fooz' is not defined in Mindcode.")
+                            .addLevelsUpTo(MessageLevel.INFO).ignored(),
+                    """
+                            schematic
+                                @micro-processor at(0, 0) processor
+                                    mindcode = code
+                                    param
+                                        fooz = @flare
+                                        bar = "10"
+                                    end
+                                end
+                            end
+                            
+                            code = '''
+                                #set auto-printflush = false;
+                                param foo = @mono;
+                                param bar = 5;
+                                print(foo, bar);
+                                '''
+                            """);
+        }
+
+        @Test
+        void reportsMissingMlogParameters() {
+            assertGeneratesErrors(ExpectedMessages.create()
+                            .add("Parameter 'fooz' not found in the mlog code.")
+                            .addLevelsUpTo(MessageLevel.INFO).ignored(),
+                    """
+                            schematic
+                                @micro-processor at(0, 0) processor
+                                    mlog = code
+                                    param
+                                        fooz = @flare
+                                        bar = "10"
+                                    end
+                                end
+                            end
+                            
+                            code = '''
+                                set foo @mono
+                                set bar 10
+                                print foo
+                                print bar
+                                '''
+                            """);
+        }
+
+
+        @Test
+        void reportsinvalidParameterNames() {
+            assertGeneratesErrors(ExpectedMessages.create()
+                            .add("Invalid mlog token: fo;o.")
+                            .add("Invalid mlog token: \"bar.")
+                            .add("Invalid mlog token: ba#r.")
+                            .add("Invalid mlog token: \"b\"a\"z\".")
+                            .addLevelsUpTo(MessageLevel.INFO).ignored(),
+                    """
+                            schematic
+                                @micro-processor at(0, 0) processor
+                                    param
+                                        fo;o = "bar
+                                        ba#r = "b"a"z"
+                                    end
+                                end
+                            end
+                            """);
+        }
     }
 }

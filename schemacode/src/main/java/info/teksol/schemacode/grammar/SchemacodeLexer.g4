@@ -22,6 +22,7 @@ LOGIC           : 'logic';
 MINDCODE        : 'mindcode';
 MLOG            : 'mlog';
 NAME            : 'name';
+PARAM           : 'param' -> pushMode(InParam);
 PROCESSOR       : 'processor';
 RGBA            : 'rgba';
 SCHEMATIC       : 'schematic';
@@ -70,3 +71,19 @@ WS              : (' ' | '\t' | '\r' | '\n')+ -> skip;
 
 // Must be at the very end
 ANY: . ;
+
+// MODES
+
+mode InParam;
+
+PARAMEND        : 'end' -> popMode;
+PARAMASSIGN     : '=';
+
+PARAMCOMMENT    : '/*' .*? '*/' -> skip;
+PARAMSLCOMMENT  : ('//' ~('\r' | '\n')* '\r'? '\n') -> skip;
+PARAMWHITESPACE : [ \t\n\r]+ -> skip;
+
+PARAMSTRING     : '"' ~[\r\n"]* '"' ;
+
+// Anything whitespace separated is a token
+PARAMTOKEN      : ~[ \t\r\n]+ ;

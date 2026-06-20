@@ -40,6 +40,7 @@ public class Variables extends CompilerMessageEmitter {
     private final Map<String, List<SourcePosition>> mlogNames = new HashMap<>();
     private final Set<String> linkedNames = new HashSet<>();
     private final Map<String, String> symbolicNameMap = new HashMap<>();
+    private final Set<String> parameterNames = new HashSet<>();
     private FunctionContext functionContext = new GlobalContext();
 
     private HeapTracker heapTracker;
@@ -159,6 +160,10 @@ public class Variables extends CompilerMessageEmitter {
         return symbolicNameMap;
     }
 
+    public Set<String> getParameterNames() {
+        return parameterNames;
+    }
+
     /// Creates an implicit variable. Used in the relaxed syntax setting only. Analyzes the identifier to create
     ///  the correct variable type and put it into the correct variable list.
     ///
@@ -200,6 +205,7 @@ public class Variables extends CompilerMessageEmitter {
                 : LogicParameter.parameter(new AstIdentifier(SourcePosition.EMPTY, "invalid"), value);
 
         putVariableIfAbsent(parameter.getParameterName(), result);
+        parameterNames.add(parameter.getParameterName());
         return result;
     }
 

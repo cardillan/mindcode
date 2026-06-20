@@ -614,6 +614,10 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         return variables == null ? Map.of() : variables.getSymbolicNameMap();
     }
 
+    public Set<String> getParameterNames() {
+        return variables == null ? Set.of() : variables.getParameterNames();
+    }
+
     // Context implementations
     @Override
     public MessageConsumer messageConsumer() {

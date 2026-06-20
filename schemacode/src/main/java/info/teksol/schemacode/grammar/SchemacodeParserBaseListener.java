@@ -629,6 +629,30 @@ public class SchemacodeParserBaseListener implements SchemacodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterParametrization(SchemacodeParser.ParametrizationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParametrization(SchemacodeParser.ParametrizationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParameter(SchemacodeParser.ParameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParameter(SchemacodeParser.ParameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStringValue(SchemacodeParser.StringValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
