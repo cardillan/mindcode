@@ -17,8 +17,8 @@ import static info.teksol.mindcode.cmdline.mlogwatcher.api.Response.*;
 public class MlogWatcherClientImpl extends MlogWatcherClientBase {
     protected final ObjectMapper mapper = new ObjectMapper();
 
-    public MlogWatcherClientImpl(ToolMessageEmitter messageEmitter, int port, long timeout, boolean printStackTrace) {
-        super(messageEmitter, port, timeout, "/v1", printStackTrace);
+    public MlogWatcherClientImpl(ToolMessageEmitter messageEmitter, int port, int retries, long timeout, boolean printStackTrace) {
+        super(messageEmitter, port, retries, timeout, "/v1", printStackTrace);
     }
 
     @Override

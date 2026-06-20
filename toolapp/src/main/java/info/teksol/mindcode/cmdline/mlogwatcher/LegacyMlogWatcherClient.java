@@ -7,8 +7,8 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class LegacyMlogWatcherClient extends MlogWatcherClientBase implements MlogWatcherClient {
 
-    public LegacyMlogWatcherClient(ToolMessageEmitter messageEmitter, int port, long timeout, boolean printStackTrace) {
-        super(messageEmitter, port, timeout, "", printStackTrace);
+    public LegacyMlogWatcherClient(ToolMessageEmitter messageEmitter, int port, int retries, long timeout, boolean printStackTrace) {
+        super(messageEmitter, port, retries, timeout, "", printStackTrace);
     }
 
     protected void onTimeout() {

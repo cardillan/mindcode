@@ -181,11 +181,17 @@ abstract class ActionHandler {
                 .type(Integer.class)
                 .setDefault(9992);
 
+        container.addArgument("--watcher-retries")
+                .help("number of retries to attempt when establishing a connection to Mlog Watcher")
+                .choices(Arguments.range(0, 10))
+                .type(Integer.class)
+                .setDefault(3);
+
         container.addArgument("--watcher-timeout")
-                .help("timeout in milliseconds when trying to establish a connection to Mlog Watcher")
+                .help("timeout in milliseconds when trying to establish a connection to Mlog Watcher (per attempt)")
                 .choices(Arguments.range(0, 3_600_000))
                 .type(Integer.class)
-                .setDefault(500);
+                .setDefault(100);
     }
 
     void addCompilerOptions(ArgumentContainer container, Map<Enum<?>, CompilerOptionValue<?>> options, OptionCategory category,
@@ -397,10 +403,11 @@ abstract class ActionHandler {
         if (value instanceof MlogWatcherCommand) {
             MlogWatcherVersion version = arguments.get("watcher_version");
             int port = arguments.getInt("watcher_port");
+            int retries = arguments.getInt("watcher_retries");
             int timeout = arguments.getInt("watcher_timeout");
             MlogWatcherClient client = switch (version) {
-                case V0 -> new LegacyMlogWatcherClient(messageEmitter, port, timeout, false);
-                case V1 -> new MlogWatcherClientImpl(messageEmitter, port, timeout, false);
+                case V0 -> new LegacyMlogWatcherClient(messageEmitter, port, retries, timeout, false);
+                case V1 -> new MlogWatcherClientImpl(messageEmitter, port, retries, timeout, false);
             };
             return client.connect() ? client : null;
         } else {

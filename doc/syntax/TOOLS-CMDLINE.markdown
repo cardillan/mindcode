@@ -97,9 +97,10 @@ Actions:
 
 ```
 usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-all}]] [--watcher-version {v0,v1}]
-                [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [--excerpt [EXCERPT]] [-o [OUTPUT]]
-                [-l [LOG]] [--output-directory OUTPUT-DIRECTORY] [--file-references {path,uri,windows-uri}]
-                [-a FILE [FILE ...]] [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
+                [--watcher-port {0..65535}] [--watcher-retries {0..10}] [--watcher-timeout {0..3600000}]
+                [--excerpt [EXCERPT]] [-o [OUTPUT]] [-l [LOG]] [--output-directory OUTPUT-DIRECTORY]
+                [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
+                [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
                 [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--processor-size-limit {1..1000000}] [--zero-wait-yields {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
@@ -157,8 +158,10 @@ named arguments:
                          specifies the version of the Mlog Watcher mod
   --watcher-port {0..65535}
                          port number for communication with Mlog Watcher
+  --watcher-retries {0..10}
+                         number of retries to attempt when establishing a connection to Mlog Watcher
   --watcher-timeout {0..3600000}
-                         timeout in milliseconds when trying to establish a connection to Mlog Watcher
+                         timeout in milliseconds when trying to establish a connection to Mlog Watcher (per attempt)
 
 Input/output files:
   input                  Mindcode file to be compiled into an mlog file; uses stdin when not specified
@@ -445,7 +448,8 @@ Emulator options:
 ```
 usage: mindcode pm [-h] [--output-mlog [OUTPUT_MLOG]] [--output-decompiled [OUTPUT_DECOMPILED]]
                 [--output-directory OUTPUT-DIRECTORY] [-w [{update,update-all,upgrade-all,force-update-all,extract}]]
-                [--watcher-version {v0,v1}] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}]
+                [--watcher-version {v0,v1}] [--watcher-port {0..65535}] [--watcher-retries {0..10}]
+                [--watcher-timeout {0..3600000}]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
                 [--output-profiling [{true,false}]] [--trace-execution {true,false}]
@@ -484,8 +488,10 @@ Input/output:
                          specifies the version of the Mlog Watcher mod
   --watcher-port {0..65535}
                          port number for communication with Mlog Watcher
+  --watcher-retries {0..10}
+                         number of retries to attempt when establishing a connection to Mlog Watcher
   --watcher-timeout {0..3600000}
-                         timeout in milliseconds when trying to establish a connection to Mlog Watcher
+                         timeout in milliseconds when trying to establish a connection to Mlog Watcher (per attempt)
 
 Emulator options:
   Options to specify whether and how to run the code  or schematic in an emulated environment. The emulated processor is
@@ -555,10 +561,11 @@ Emulator options:
 
 ```
 usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-version {v0,v1}] [--watcher-port {0..65535}]
-                [--watcher-timeout {0..3600000}] [-o [OUTPUT]] [-l [LOG]] [--output-directory OUTPUT-DIRECTORY]
-                [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]] [--allow-link-gaps [{true,false}]]
-                [--allow-unsatisfied-links [{true,false}]] [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]
-                [-i {1..100000}] [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
+                [--watcher-retries {0..10}] [--watcher-timeout {0..3600000}] [-o [OUTPUT]] [-l [LOG]]
+                [--output-directory OUTPUT-DIRECTORY] [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]]
+                [--allow-link-gaps [{true,false}]] [--allow-unsatisfied-links [{true,false}]]
+                [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
+                [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--processor-size-limit {1..1000000}] [--zero-wait-yields {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
@@ -616,8 +623,10 @@ named arguments:
                          specifies the version of the Mlog Watcher mod
   --watcher-port {0..65535}
                          port number for communication with Mlog Watcher
+  --watcher-retries {0..10}
+                         number of retries to attempt when establishing a connection to Mlog Watcher
   --watcher-timeout {0..3600000}
-                         timeout in milliseconds when trying to establish a connection to Mlog Watcher
+                         timeout in milliseconds when trying to establish a connection to Mlog Watcher (per attempt)
 
 Input/output files:
   input                  Schematic definition file  to  be  compiled  into  a  binary  msch  file;  uses  stdin when not
@@ -908,8 +917,8 @@ Emulator options:
 ```
 usage: mindcode ps [-h] [--output-msch [OUTPUT_MSCH]] [--output-decompiled [OUTPUT_DECOMPILED]]
                 [--output-directory OUTPUT-DIRECTORY] [-w [{update,extract,add}]] [--watcher-version {v0,v1}]
-                [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [-p] [-P] [-c] [-C] [-l] [-L]
-                [-s {original,horizontal,vertical}] [-d {rotatable,non-default,all}]
+                [--watcher-port {0..65535}] [--watcher-retries {0..10}] [--watcher-timeout {0..3600000}] [-p] [-P] [-c]
+                [-C] [-l] [-L] [-s {original,horizontal,vertical}] [-d {rotatable,non-default,all}]
                 [--emulator-target [{6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}]]
                 [--emulator-fps {1.0..240.0}] [--run [{true,false}]] [--run-steps {0..1000000000}]
                 [--output-profiling [{true,false}]] [--trace-execution {true,false}]
@@ -949,8 +958,10 @@ Input/output:
                          specifies the version of the Mlog Watcher mod
   --watcher-port {0..65535}
                          port number for communication with Mlog Watcher
+  --watcher-retries {0..10}
+                         number of retries to attempt when establishing a connection to Mlog Watcher
   --watcher-timeout {0..3600000}
-                         timeout in milliseconds when trying to establish a connection to Mlog Watcher
+                         timeout in milliseconds when trying to establish a connection to Mlog Watcher (per attempt)
 
 Decompilation options:
   -p, --relative-positions
