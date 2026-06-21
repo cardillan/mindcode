@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 public class SchematicsBuilder extends CompilerMessageEmitter {
     public static final char INDEX_KEY_CHAR = '$';
+    public static final int MAX_SCHEMATIC_SIZE = 65;
 
     private final ProcessorConfigurationBuilder processorConfigurationBuilder;
 
@@ -239,6 +240,11 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
                             dim.toStringAbsolute(), sourceDim.coordinates().toStringAbsolute());
                 }
             }
+        }
+
+        if (dim.x() > MAX_SCHEMATIC_SIZE || dim.y() > MAX_SCHEMATIC_SIZE) {
+            warn("Schematic dimensions %s are larger than the maximum size creatable in Mindustry (%d, %d).",
+                    dim.toStringAbsolute(), MAX_SCHEMATIC_SIZE, MAX_SCHEMATIC_SIZE);
         }
 
         Schematic schematic = new Schematic(name, filename, description, labels, dim.x(), dim.y(), repositioned);
