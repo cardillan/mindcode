@@ -57,6 +57,67 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Nested
+    class EmitLogFunction {
+        @Test
+        void compilesFormattableEmitLogFunctionAssert() {
+            assertCompilesTo("""
+                            #set error-reporting = assert;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            emitLog(:info, $"Index $i out of bounds ($min, $max)!");
+                            """,
+                    createInstruction(SET, "max", "8"),
+                    createInstruction(SET, "i", "10"),
+                    createInstruction(LOG, "info", q("Index [[1] out of bounds (0, [[2])!"), "i", "max", "null", "null", "null", "null", "null", "null", "null")
+            );
+        }
+
+        @Test
+        void compilesNormalEmitLogFunctionAssert() {
+            assertCompilesTo("""
+                            #set error-reporting = assert;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            emitLog(:warn, "Index out of bounds: ", i, min, max);
+                            """,
+                    createInstruction(SET, "max", "8"),
+                    createInstruction(SET, "i", "10"),
+                    createInstruction(LOG, "warn", q("Index out of bounds: "), "i", "0", "max", "null", "null", "null", "null", "null", "null")
+            );
+        }
+
+        @Test
+        void refusesTooFewValues() {
+            assertGeneratesMessage(
+                    "Not enough arguments for formattable placeholders.",
+                    "emitLog(:info, $\"First: $, second: $.\", first);");
+        }
+
+        @Test
+        void refusesTooManyValues() {
+            assertGeneratesMessage(
+                    "Too many arguments for formattable placeholders.",
+                    "emitLog(:info, $\"First: $, second: $.\", first, second, third);");
+        }
+
+        @Test
+        void refusesSecondFormattable() {
+            assertGeneratesMessageRegex(
+                    "A formattable string literal can only be used as a first argument to the .* functions\\.",
+                    "emitLog(:info, $\"Hello, $\", $\"Hello $name\");");
+        }
+
+        @Test
+        void refusesWrongLevel() {
+            assertGeneratesMessage(
+                    "Invalid value ':cocoa' for keyword parameter: allowed values are ':err', ':warn', ':info', ':debug'.",
+                    "emitLog(:cocoa, @counter);");
+        }
+    }
+
+    @Nested
     class ErrorFunction {
         @Test
         void compilesFormattableErrorFunctionSimple() {
@@ -87,7 +148,7 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, "max", "8"),
                     createInstruction(SET, "i", "10"),
-                    createInstruction(ERROR, q("Index [[1] out of bounds (0, [[2])!"), "i", "max", q(""), q(""), q(""), q(""), q(""), q(""), q(""))
+                    createInstruction(ERROR, q("Index [[1] out of bounds (0, [[2])!"), "i", "max", "null", "null", "null", "null", "null", "null", "null")
             );
         }
 
@@ -121,7 +182,8 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, "max", "8"),
                     createInstruction(SET, "i", "10"),
-                    createInstruction(ERROR, q("Index out of bounds: "), "i", "0", "max", q(""), q(""), q(""), q(""), q(""), q(""))            );
+                    createInstruction(ERROR, q("Index out of bounds: "), "i", "0", "max", "null", "null", "null", "null", "null", "null")
+            );
         }
 
         @Test

@@ -423,7 +423,8 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
         }
     }
 
-    protected @Nullable OpcodeVariant getOpcodeVariant(Opcode opcode, List<? extends LogicArgument> arguments) {
+    @Override
+    public @Nullable OpcodeVariant getOpcodeVariant(Opcode opcode, List<? extends LogicArgument> arguments) {
         List<OpcodeVariant> variants = variantsByOpcode.get(opcode);
         if (variants == null) {
             return null;
@@ -439,12 +440,13 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
         }
     }
 
-    /// Returns list of argument types based on instruction opcode and instruction variant. The variant of the
+    /// Returns a list of argument types based on instruction opcode and instruction variant. The variant of the
     /// instruction is determined by inspecting its arguments.
     ///
     /// @param opcode opcode of the instruction
     /// @param args arguments to the instruction
     /// @return list of types of given arguments
+    @Override
     public @Nullable List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> args) {
         OpcodeVariant opcodeVariant = getOpcodeVariant(opcode, args);
         return opcodeVariant == null ? null : opcodeVariant.parameterTypes();

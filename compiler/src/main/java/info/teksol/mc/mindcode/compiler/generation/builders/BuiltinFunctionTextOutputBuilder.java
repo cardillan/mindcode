@@ -13,12 +13,15 @@ import info.teksol.mc.mindcode.compiler.generation.variables.MissingValue;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.profile.RuntimeErrorReporting;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
@@ -107,6 +110,40 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         return result;
     }
 
+    public ValueStore handleEmitLog(AstFunctionCall call) {
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        List<FunctionArgument> arguments = new ArrayList<>(processArguments(call));
+        FunctionArgument.validateAsInput(messageConsumer(), arguments);
+
+        if (arguments.isEmpty()) {
+            error(call, FUNCTION_CALL_NOT_ENOUGH_ARGS, call.getFunctionName(), 2, call.getArguments().size());
+        } else {
+            assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            OpcodeVariant opcodeVariant = Objects.requireNonNull(processor.getOpcodeVariant(Opcode.LOG, List.of()));
+            FunctionArgument levelArg = arguments.removeFirst();
+            LogicKeyword level = assembler.validateKeyword(opcodeVariant.namedParameters().getFirst(), levelArg, true);
+
+            List<LogicValue> finalArgs = arguments.getFirst().unwrap() instanceof FormattableContent formattable
+                    ? createFormattableErrorOutput(
+                    evaluateExpressionsUncached(formattable.getParts()), arguments.subList(1, arguments.size()))
+                    : createPlainErrorOutput(arguments);
+
+            if (call.getProfile().getErrorReporting() == RuntimeErrorReporting.ASSERT) {
+                List<LogicArgument> list = new ArrayList<>(Collections.nCopies(10, LogicNull.NULL));
+                for (int index = 0; index < 10; index++) {
+                    if (index >= finalArgs.size()) break;
+                    list.set(index, finalArgs.get(index));
+                }
+
+                list.addFirst(level);
+                assembler.createInstruction(Opcode.LOG, list);
+            }
+        }
+
+        assembler.clearSubcontextType();
+        return LogicVoid.VOID;
+    }
+
     public ValueStore handleError(AstFunctionCall call) {
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         List<FunctionArgument> arguments = processArguments(call);
@@ -190,7 +227,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
     private Consumer<List<LogicValue>> mlogAssertionsErrorAssembler() {
         return values -> {
-            List<LogicArgument> list = new ArrayList<>(Collections.nCopies(10, LogicString.create("")));
+            List<LogicArgument> list = new ArrayList<>(Collections.nCopies(10, LogicNull.NULL));
             for (int index = 0; index < 10; index++) {
                 if (index >= values.size()) break;
                 list.set(index, values.get(index));

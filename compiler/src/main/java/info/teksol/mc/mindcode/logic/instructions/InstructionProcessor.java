@@ -63,6 +63,8 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     @Nullable
     List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments);
 
+    @Nullable OpcodeVariant getOpcodeVariant(Opcode opcode, List<? extends LogicArgument> arguments);
+
     Collection<String> getParameterValues(InstructionParameterType type);
 
     /// Determines a proper initial array organization for a given array

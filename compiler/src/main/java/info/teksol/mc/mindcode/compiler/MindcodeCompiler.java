@@ -185,6 +185,10 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
                         case StackOverflowError _ -> "stack overflow";
                         default -> t.getClass().getSimpleName();
                     });
+
+            if (globalProfile.isPrintStackTrace()) {
+                t.printStackTrace(System.err);
+            }
         }
     }
 

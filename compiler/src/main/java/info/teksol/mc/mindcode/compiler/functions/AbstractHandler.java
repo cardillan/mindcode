@@ -1,14 +1,11 @@
 package info.teksol.mc.mindcode.compiler.functions;
 
-import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
-import info.teksol.mc.mindcode.compiler.generation.variables.IdentifierFunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -22,7 +19,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -143,48 +139,8 @@ public abstract class AbstractHandler extends CompilerMessageEmitter implements 
         return argument.unwrap() instanceof LogicVariable variable && variable.isVolatile();
     }
 
-    private LogicKeyword toKeyword(FunctionArgument argument, boolean requireValidKeyword) {
-        if (argument.unwrap() instanceof LogicKeyword keyword) {
-            return keyword;
-        } else if (argument instanceof IdentifierFunctionArgument ifa) {
-            if (requireValidKeyword) {
-                warn(argument.sourcePosition(), WARN.MISSING_MLOG_KEYWORD_PREFIX, ifa.getIdentifier().getName());
-            }
-            return ifa.getKeyword();
-        } else if (argument.unwrap() instanceof LogicBoolean bool) {
-            return LogicKeyword.create(argument.unwrap().sourcePosition(), bool.toMlog());
-        } else {
-            return LogicKeyword.INVALID;
-        }
-    }
-
-
     protected LogicKeyword validateKeyword(NamedParameter parameter, FunctionArgument argument, boolean requireValidKeyword) {
-        if (argument.hasInModifier() || argument.hasOutModifier()) {
-            error(argument, ERR.ARGUMENT_KEYWORD_IN_OUT_NOT_ALLOWED);
-            return LogicKeyword.INVALID;
-        }
-
-        Collection<String> parameterValues = functionMapper.processor.getParameterValues(parameter.type());
-
-        LogicKeyword keyword = toKeyword(argument, requireValidKeyword);
-        if (!keyword.getKeyword().isEmpty()) {
-            if (!parameterValues.contains(keyword.getKeyword())) {
-                error(argument, ERR.ARGUMENT_KEYWORD_INVALID_VALUE, keyword.getKeywordLiteral(),
-                        ":" + String.join("', ':", parameterValues));
-                // Fill in one of the valid keywords to avoid further errors
-                return requireValidKeyword ? LogicKeyword.create(SourcePosition.EMPTY,
-                        parameterValues.iterator().next()) : LogicKeyword.INVALID;
-            }
-
-            return keyword;
-        } else {
-            error(argument, ERR.ARGUMENT_KEYWORD_UNSPECIFIED_VALUE,
-                    ":" + String.join("', ':", parameterValues));
-            // Fill in one of the valid keywords to avoid further errors
-            return requireValidKeyword ? LogicKeyword.create(SourcePosition.EMPTY,
-                    parameterValues.iterator().next()) : LogicKeyword.INVALID;
-        }
+        return assembler().validateKeyword(parameter, argument, requireValidKeyword);
     }
 
     protected FunctionArgument validateInput(NamedParameter parameter, FunctionArgument argument) {

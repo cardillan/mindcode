@@ -88,6 +88,7 @@ public enum Opcode {
     /// Instruction supported by the Mlog Assertions mod.
     ASSERT_BOUNDS   (NONE,   "assertbounds",    1),
     ERROR           (NONE,   "error",           1),
+    LOG             (NONE,   "log",             1),
 
     // Virtual instructions - resolved when the final code is generated
     

@@ -416,26 +416,6 @@ op add :index :index 1
 jump 2 always 0 0
 ```
 
-## The `strlen()` function
-
-The `strlen()` function returns the length of a string passed in as an argument. The function requires target `8` or higher.
-
-```Mindcode
-param data = "Dbftbs!djqifs";
-println(strlen(data));
-printflush(message1);
-```
-
-compiles to:
-
-```mlog
-set data "Dbftbs!djqifs"
-sensor *tmp0 data @size
-print *tmp0
-print "\n"
-printflush message1
-```
-
 ## The `encode()` function
 
 The `encode()` function allows encoding numeric values into a string, so that they can be later retrieved through the `char()` function. Values encoded to a string can be stored in variables or internal arrays and passed around to functions or remote functions. The string value is created at compile-time, meaning all function arguments must be compile-time constants.
@@ -486,6 +466,10 @@ printflush message1
 
 The `error()` function, which can be used to report errors detected at runtime, is described [here](TROUBLESHOOTING.markdown#the-error-function).
 
+## The `emitLog()` function
+
+The `emitLog()` function, which can be used to write information into the Mindustry log file using the Mlog Assertions mod, is described [here](TROUBLESHOOTING.markdown#the-emitlog-function).
+
 ## The `length()` function
 
 A `length()` function determines the length of an array passed in as an argument, or the number [vararg](#vararg-functions) elements. `0` is returned when the vararg contains no elements.
@@ -501,6 +485,26 @@ foo(1, 2, 3, 4, 5);         // 5
 ```
 
 The function always takes just one argument. When the argument passed in is not an array or a vararg, the function returns `1`.
+
+## The `strlen()` function
+
+The `strlen()` function returns the length of a string passed in as an argument. The function requires target `8` or higher.
+
+```Mindcode
+param data = "Dbftbs!djqifs";
+println(strlen(data));
+printflush(message1);
+```
+
+compiles to:
+
+```mlog
+set data "Dbftbs!djqifs"
+sensor *tmp0 data @size
+print *tmp0
+print "\n"
+printflush message1
+```
 
 ## Remote calls
 

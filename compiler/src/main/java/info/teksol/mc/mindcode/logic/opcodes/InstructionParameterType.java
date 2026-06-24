@@ -69,6 +69,9 @@ public enum InstructionParameterType {
     /// Selector for the `ulocate` instruction. No `Flags.FUNCTION`!
     LOCATE          ("locate", Flags.SELECTOR, MindustryMetadata::getLocateTypes),
 
+    /// Selector for the `jump` instruction.
+    LOG_LEVEL       (Flags.KEYWORD, _ -> List.of("err", "warn", "info", "debug")),
+
     /// Specifies lookup category.
     LOOKUP          ("itemType", Flags.KEYWORD, MindustryMetadata::getLookableContents, lookupType),
 

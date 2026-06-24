@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for [code parametrization in schematics](/doc/syntax/SCHEMACODE.markdown#code-parametrization) ([#330](https://github.com/cardillan/mindcode/issues/330)).
 * Added support for specifying schematic-wide compiler options Mindcode ([#332](https://github.com/cardillan/mindcode/issues/332)).
 * Added a warning when the created schematic size exceeds the maximum size of a schematic that can be created in the game.
+* Added a new [`emitLog()` function](/doc/syntax/TROUBLESHOOTING.markdown#the-emitlog-function).
 * Added a new [`allow-link-gaps`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-allow-link-gaps) compiler option.
 * Added a new [`zero-wait-yields`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-zero-wait-yields) compiler option.
 * Added an error message indicating a variable or constant might be accessed via function call before its declaration gets processed ([#297](https://github.com/cardillan/mindcode/issues/297)).
