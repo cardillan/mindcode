@@ -20,7 +20,7 @@ but is slower. If you already control the current unit, use `within()` instead.
 
 ### findFreeUnit
 
-**Definition:** `def findFreeUnit(unit_type, initial_flag)`
+**Definition:** `def findFreeUnit(unitType, initialFlag)`
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
@@ -34,15 +34,15 @@ the function returns immediately.
 
 **Inputs and outputs:**
 
-- `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
-- `initial_flag`: initial flag to set to the freshly bound unit.
+- `unitType`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+- `initialFlag`: initial flag to set to the freshly bound unit.
 - Returns the freshly bound unit, or `null` if no free unit of the given type exists.
 
 The function doesn't use units that are controlled by a player or a different processor.
 
 ### findClosestUnit
 
-**Definition:** `def findClosestUnit(x, y, unit_type, initial_flag)`
+**Definition:** `def findClosestUnit(x, y, unitType, initialFlag)`
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
@@ -57,20 +57,20 @@ are occupied), the function returns immediately.
 **Inputs and outputs:**
 
 - `x`, `y`: position of the map to compute unit distance relative to
-- `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
-- `initial_flag`: initial flag to set to the freshly bound unit.
+- `unitType`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+- `initialFlag`: initial flag to set to the freshly bound unit.
 - Returns the freshly bound unit closest to given coordinates, or `null` if no free unit of the given type exists.
 
 The function doesn't use units that are controlled by a player or a different processor.
 
 ### waitForFreeUnit
 
-**Definition:** `def waitForFreeUnit(unit_type, initial_flag)`
+**Definition:** `def waitForFreeUnit(unitType, initialFlag)`
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                   5 |                  5 |
-| Function body                            |                   6 |                  6 |
+| Inlined function                         |                   4 |                  4 |
+| Function body                            |                   5 |                  5 |
 | Function call                            |                   5 |                  5 |
 
 Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
@@ -78,15 +78,15 @@ The function doesn't return until a free unit of the given type can be found.
 
 **Inputs and outputs:**
 
-- `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
-- `initial_flag`: initial flag to set to the freshly bound unit.
+- `unitType`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+- `initialFlag`: initial flag to set to the freshly bound unit.
 - Returns the freshly bound unit.
 
 The function doesn't use units that are controlled by a player or a different processor.
 
 ### waitForFreeUnit
 
-**Definition:** `def waitForFreeUnit(message, preface, unit_type, initial_flag)`
+**Definition:** `def waitForFreeUnit(message, preface, unitType, initialFlag)`
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
@@ -105,8 +105,8 @@ information about the search onto a message block—one of two messages:
 
 - `message`: message block to receive status information about the search.
 - `preface`: additional text to output before the status message, e.g., description of the processor.
-- `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
-- `initial_flag`: initial flag to set to the freshly bound unit.
+- `unitType`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+- `initialFlag`: initial flag to set to the freshly bound unit.
 - Returns the freshly bound unit.
 
 The function doesn't use units that are controlled by a player or a different processor.

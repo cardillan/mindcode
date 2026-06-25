@@ -2,18 +2,18 @@ require units;
 
 begin
 
-    var initial_flag = null;
+    var initialFlag = null;
     var message = null;
     var preface = null;
     var radius = null;
-    var unit_type = null;
+    var unitType = null;
     var x = null;
     var y = null;
 
     println(noControlWithin(x, y, radius));
-    println(findFreeUnit(unit_type, initial_flag));
-    println(findClosestUnit(x, y, unit_type, initial_flag));
-    println(waitForFreeUnit(unit_type, initial_flag));
-    println(waitForFreeUnit(message, preface, unit_type, initial_flag));
+    println(findFreeUnit(unitType, initialFlag));
+    println(findClosestUnit(x, y, unitType, initialFlag));
+    println(waitForFreeUnit(unitType, initialFlag));
+    println(waitForFreeUnit(message, preface, unitType, initialFlag));
 
 end;

@@ -3,23 +3,23 @@ op sub *tmp2 null *tmp1
 sensor *tmp3 @unit @y
 op sub *tmp4 null *tmp3
 op len *tmp5 *tmp2 *tmp4
-op lessThan *tmp0 *tmp5 null
+op lessThanEq *tmp0 *tmp5 null
 print *tmp0
 print "\n"
 ubind null
 jump 12 notEqual @unit null
 set *tmp6 null
 jump 23 always 0 0
-set :findFreeUnit:first_unit @unit
+set :findFreeUnit:anchor @unit
 sensor *tmp7 @unit @controlled
 jump 18 notEqual *tmp7 0
 ucontrol flag null 0 0 0 0
 set *tmp6 @unit
 jump 23 always 0 0
-sensor *tmp8 :findFreeUnit:first_unit @dead
-select :findFreeUnit:first_unit equal *tmp8 1 @unit :findFreeUnit:first_unit
+sensor *tmp8 :findFreeUnit:anchor @dead
+select :findFreeUnit:anchor notEqual *tmp8 false @unit :findFreeUnit:anchor
 ubind null
-jump 13 notEqual :findFreeUnit:first_unit @unit
+jump 13 notEqual :findFreeUnit:anchor @unit
 set *tmp6 null
 print *tmp6
 print "\n"
@@ -27,9 +27,9 @@ ubind null
 jump 29 notEqual @unit null
 set *tmp9 null
 jump 55 always 0 0
-set :findClosestUnit:first_unit @unit
-set :findClosestUnit:best_unit null
-set :findClosestUnit:best_distance 10000000000
+set :findClosestUnit:anchor @unit
+set :findClosestUnit:bestUnit null
+set :findClosestUnit:bestDist 10000000000
 sensor *tmp10 @unit @controlled
 jump 43 notEqual *tmp10 0
 sensor *tmp11 @unit @x
@@ -37,41 +37,40 @@ op sub *tmp12 *tmp11 null
 sensor *tmp13 @unit @y
 op sub *tmp14 *tmp13 null
 op len :findClosestUnit:distance *tmp12 *tmp14
-jump 45 greaterThanEq :findClosestUnit:distance :findClosestUnit:best_distance
-set :findClosestUnit:best_distance :findClosestUnit:distance
-set :findClosestUnit:best_unit @unit
+jump 45 greaterThanEq :findClosestUnit:distance :findClosestUnit:bestDist
+set :findClosestUnit:bestDist :findClosestUnit:distance
+set :findClosestUnit:bestUnit @unit
 jump 45 always 0 0
-sensor *tmp15 :findClosestUnit:first_unit @dead
-select :findClosestUnit:first_unit equal *tmp15 1 @unit :findClosestUnit:first_unit
+sensor *tmp15 :findClosestUnit:anchor @dead
+select :findClosestUnit:anchor equal *tmp15 1 @unit :findClosestUnit:anchor
 ubind null
-jump 32 notEqual :findClosestUnit:first_unit @unit
-jump 50 notEqual :findClosestUnit:best_unit null
+jump 32 notEqual :findClosestUnit:anchor @unit
+jump 50 notEqual :findClosestUnit:bestUnit null
 set *tmp9 null
 jump 55 always 0 0
-sensor *tmp16 :findClosestUnit:best_unit @controlled
+sensor *tmp16 :findClosestUnit:bestUnit @controlled
 jump 25 notEqual *tmp16 0
-ubind :findClosestUnit:best_unit
+ubind :findClosestUnit:bestUnit
 ucontrol flag null 0 0 0 0
-set *tmp9 :findClosestUnit:best_unit
+set *tmp9 :findClosestUnit:bestUnit
 print *tmp9
 print "\n"
 ubind null
-jump 57 equal @unit null
-sensor *tmp17 @unit @controlled
-jump 57 notEqual *tmp17 0
+sensor *tmp17 @unit @controller
+jump 57 notEqual *tmp17 @unit
 ucontrol flag null 0 0 0 0
 print @unit
 print "\n"
 ubind null
-jump 69 notEqual @unit null
+jump 68 notEqual @unit null
 print "nullNo unit of type null found."
 printflush null
-jump 64 always 0 0
+jump 63 always 0 0
 sensor *tmp18 @unit @controlled
-jump 74 equal *tmp18 0
+jump 73 equal *tmp18 0
 print "nullLooking for a free null..."
 printflush null
-jump 64 always 0 0
+jump 63 always 0 0
 ucontrol flag null 0 0 0 0
 print @unit
 print "\n"

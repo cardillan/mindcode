@@ -11,7 +11,7 @@ module units;
  * but is slower. If you already control the current unit, use `within()` instead.
  */
 def noControlWithin(x, y, radius)
-    len(x - @unit.@x, y - @unit.@y) < radius;
+    len(x - @unit.@x, y - @unit.@y) <= radius;
 end;
 
 /**
@@ -21,31 +21,31 @@ end;
  *
  * **Inputs and outputs:**
  *
- * - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
- * - `initial_flag`: initial flag to set to the freshly bound unit.
+ * - `unitType`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+ * - `initialFlag`: initial flag to set to the freshly bound unit.
  * - Returns the freshly bound unit, or `null` if no free unit of the given type exists.
  *
  * The function doesn't use units that are controlled by a player or a different processor.
  */
-def findFreeUnit(unit_type, initial_flag)
-    ubind(unit_type);
+def findFreeUnit(unitType, initialFlag)
+    ubind(unitType);
     // No unit of this type exists
     if @unit == null then return null; end;
 
-    var first_unit = @unit;
+    var anchor = @unit;
     do
         if @unit.@controlled == 0 then
-            flag(initial_flag);        // Mark unit as active
+            flag(initialFlag);        // Mark unit as active
             return @unit;
-        elsif first_unit.@dead == 1 then
-            // first_unit got killed. It won't be served by ubind anymore
+        elsif anchor.@dead then
+            // anchor got killed. It won't be served by ubind anymore
             // Replace with the current one
-            first_unit = @unit;
+            anchor = @unit;
         end;
 
         // Try the next one. If it is the same as the first one, we've seen them all
-        ubind(unit_type);
-    while first_unit != @unit;
+        ubind(unitType);
+    while anchor != @unit;
 
     return null;
 end;
@@ -58,48 +58,48 @@ end;
  * **Inputs and outputs:**
  *
  * - `x`, `y`: position of the map to compute unit distance relative to
- * - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
- * - `initial_flag`: initial flag to set to the freshly bound unit.
+ * - `unitType`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+ * - `initialFlag`: initial flag to set to the freshly bound unit.
  * - Returns the freshly bound unit closest to given coordinates, or `null` if no free unit of the given type exists.
  *
  * The function doesn't use units that are controlled by a player or a different processor.
 */
-def findClosestUnit(x, y, unit_type, initial_flag)
+def findClosestUnit(x, y, unitType, initialFlag)
     loop
-        ubind(unit_type);
+        ubind(unitType);
         // No unit of this type exists
         if @unit == null then return null; end;
 
-        var first_unit = @unit;
-        var best_unit = null;
-        var best_distance = 1e10;
+        var anchor = @unit;
+        var bestUnit = null;
+        var bestDist = 1e10;
         do
             if @unit.@controlled == 0 then
                 var distance = len(@unit.@x - x, @unit.@y - y);
-                if distance < best_distance then
-                    best_distance = distance;
-                    best_unit = @unit;
+                if distance < bestDist then
+                    bestDist = distance;
+                    bestUnit = @unit;
                 end;
-            elsif first_unit.@dead == 1 then
-                // first_unit got killed. It won't be served by ubind anymore
+            elsif anchor.@dead == 1 then
+                // The anchor got killed. It won't be served by ubind anymore
                 // Replace with the current one
-                first_unit = @unit;
+                anchor = @unit;
             end;
 
             // Try the next one. If it is the same as the first one, we've seen them all
-            ubind(unit_type);
-        while first_unit != @unit;
+            ubind(unitType);
+        while anchor != @unit;
 
         // No free unit at all
-        if best_unit == null then
+        if bestUnit == null then
             return null;
         end;
 
         // If the best unit is still not controlled, flag it and return
-        if best_unit.@controlled == 0 then
-            ubind(best_unit);
-            flag(initial_flag);
-            return best_unit;
+        if bestUnit.@controlled == 0 then
+            ubind(bestUnit);
+            flag(initialFlag);
+            return bestUnit;
         end;
     end;
 end;
@@ -110,23 +110,20 @@ end;
  *
  * **Inputs and outputs:**
  *
- * - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
- * - `initial_flag`: initial flag to set to the freshly bound unit.
+ * - `unitType`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+ * - `initialFlag`: initial flag to set to the freshly bound unit.
  * - Returns the freshly bound unit.
  *
  * The function doesn't use units that are controlled by a player or a different processor.
  */
-def waitForFreeUnit(unit_type, initial_flag)
-    // Keep looking for unit until one is found
-    loop
-        ubind(unit_type);
-        if @unit != null then
-            if @unit.@controlled == 0 then
-                flag(initial_flag);        // Mark unit as active
-                return @unit;
-            end;
-        end;
-    end;
+def waitForFreeUnit(unitType, initialFlag)
+    // Keep looking for a free unit until one is found
+    do
+        ubind(unitType);
+    while @unit.@controller != @unit;
+
+    flag(initialFlag);        // Also marks the unit as active
+    return @unit;
 end;
 
 /**
@@ -141,24 +138,24 @@ end;
  *
  * - `message`: message block to receive status information about the search.
  * - `preface`: additional text to output before the status message, e.g., description of the processor.
- * - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
- * - `initial_flag`: initial flag to set to the freshly bound unit.
+ * - `unitType`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
+ * - `initialFlag`: initial flag to set to the freshly bound unit.
  * - Returns the freshly bound unit.
  *
  * The function doesn't use units that are controlled by a player or a different processor.
  */
-def waitForFreeUnit(message, preface, unit_type, initial_flag)
+def waitForFreeUnit(message, preface, unitType, initialFlag)
     // Keep looking for unit until one is found
     loop
-        ubind(unit_type);
+        ubind(unitType);
         if @unit == null then
-            print($"${preface}No unit of type $unit_type found.");
+            print($"${preface}No unit of type $unitType found.");
             printflush(message);
         elsif @unit.@controlled != 0 then
-            print($"${preface}Looking for a free $unit_type...");
+            print($"${preface}Looking for a free $unitType...");
             printflush(message);
         else
-            flag(initial_flag);        // Mark unit as active
+            flag(initialFlag);        // Mark unit as active
             return @unit;
         end;
     end;

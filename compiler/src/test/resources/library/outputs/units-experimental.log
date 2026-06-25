@@ -1,15 +1,15 @@
-   176 instructions before optimizations.
+   166 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination (2 passes, 7 iterations).
-    26 instructions eliminated by Dead Code Elimination (6 iterations).
-    15 instructions eliminated by Condition Optimization (7 iterations).
-    14 instructions eliminated by Single Step Elimination (4 passes, 10 iterations).
+    22 instructions eliminated by Dead Code Elimination (6 iterations).
+    13 instructions eliminated by Condition Optimization (7 iterations).
+    12 instructions eliminated by Single Step Elimination (4 passes, 10 iterations).
      2 instructions eliminated by Boolean Optimization (7 iterations).
        2 fully-evaluated expressions optimized using selects.
-    23 instructions eliminated by Data Flow Optimization (6 iterations).
-     6 instructions updated by Jump Threading.
-     7 instructions eliminated by Unreachable Code Elimination (2 passes, 3 iterations).
+    24 instructions eliminated by Data Flow Optimization (6 iterations).
+     4 instructions updated by Jump Threading.
+     5 instructions eliminated by Unreachable Code Elimination (2 passes, 3 iterations).
      8 instructions eliminated by Print Merging.
-    77 instructions after optimizations.
+    76 instructions after optimizations.
 
 Final code before resolving virtual instructions:
 
@@ -18,7 +18,7 @@ Final code before resolving virtual instructions:
     2:  sensor *tmp3 @unit @y
     3:  op sub *tmp4 null *tmp3
     4:  op len *tmp5 *tmp2 *tmp4
-    5:  op lessThan *tmp0 *tmp5 null
+    5:  op lessThanEq *tmp0 *tmp5 null
     6:  print *tmp0
     7:  print "\n"
     8:  ubind null
@@ -26,7 +26,7 @@ Final code before resolving virtual instructions:
    10:  set *tmp6 null
    11:  jump *label2 always 0 0
         label *label3
-   12:  set :findFreeUnit:first_unit @unit
+   12:  set :findFreeUnit:anchor @unit
         label *label5
    13:  sensor *tmp7 @unit @controlled
    14:  jump *label8 notEqual *tmp7 0
@@ -34,10 +34,10 @@ Final code before resolving virtual instructions:
    16:  set *tmp6 @unit
    17:  jump *label2 always 0 0
         label *label8
-   18:  sensor *tmp8 :findFreeUnit:first_unit @dead
-   19:  select :findFreeUnit:first_unit equal *tmp8 1 @unit :findFreeUnit:first_unit
+   18:  sensor *tmp8 :findFreeUnit:anchor @dead
+   19:  select :findFreeUnit:anchor notEqual *tmp8 false @unit :findFreeUnit:anchor
    20:  ubind null
-   21:  jump *label5 notEqual :findFreeUnit:first_unit @unit
+   21:  jump *label5 notEqual :findFreeUnit:anchor @unit
    22:  set *tmp6 null
         label *label2
    23:  print *tmp6
@@ -48,9 +48,9 @@ Final code before resolving virtual instructions:
    27:  set *tmp9 null
    28:  jump *label12 always 0 0
         label *label16
-   29:  set :findClosestUnit:first_unit @unit
-   30:  set :findClosestUnit:best_unit null
-   31:  set :findClosestUnit:best_distance 10000000000
+   29:  set :findClosestUnit:anchor @unit
+   30:  set :findClosestUnit:bestUnit null
+   31:  set :findClosestUnit:bestDist 10000000000
         label *label18
    32:  sensor *tmp10 @unit @controlled
    33:  jump *label21 notEqual *tmp10 0
@@ -59,49 +59,48 @@ Final code before resolving virtual instructions:
    36:  sensor *tmp13 @unit @y
    37:  op sub *tmp14 *tmp13 null
    38:  op len :findClosestUnit:distance *tmp12 *tmp14
-   39:  jump *label22 greaterThanEq :findClosestUnit:distance :findClosestUnit:best_distance
-   40:  set :findClosestUnit:best_distance :findClosestUnit:distance
-   41:  set :findClosestUnit:best_unit @unit
+   39:  jump *label22 greaterThanEq :findClosestUnit:distance :findClosestUnit:bestDist
+   40:  set :findClosestUnit:bestDist :findClosestUnit:distance
+   41:  set :findClosestUnit:bestUnit @unit
    42:  jump *label22 always 0 0
         label *label21
-   43:  sensor *tmp15 :findClosestUnit:first_unit @dead
-   44:  select :findClosestUnit:first_unit equal *tmp15 1 @unit :findClosestUnit:first_unit
+   43:  sensor *tmp15 :findClosestUnit:anchor @dead
+   44:  select :findClosestUnit:anchor equal *tmp15 1 @unit :findClosestUnit:anchor
         label *label22
    45:  ubind null
-   46:  jump *label18 notEqual :findClosestUnit:first_unit @unit
-   47:  jump *label27 notEqual :findClosestUnit:best_unit null
+   46:  jump *label18 notEqual :findClosestUnit:anchor @unit
+   47:  jump *label27 notEqual :findClosestUnit:bestUnit null
    48:  set *tmp9 null
    49:  jump *label12 always 0 0
         label *label27
-   50:  sensor *tmp16 :findClosestUnit:best_unit @controlled
+   50:  sensor *tmp16 :findClosestUnit:bestUnit @controlled
    51:  jump *label13 notEqual *tmp16 0
-   52:  ubind :findClosestUnit:best_unit
+   52:  ubind :findClosestUnit:bestUnit
    53:  ucontrol flag null 0 0 0 0
-   54:  set *tmp9 :findClosestUnit:best_unit
+   54:  set *tmp9 :findClosestUnit:bestUnit
         label *label12
    55:  print *tmp9
    56:  print "\n"
         label *label32
    57:  ubind null
-   58:  jump *label32 equal @unit null
-   59:  sensor *tmp17 @unit @controlled
-   60:  jump *label32 notEqual *tmp17 0
-   61:  ucontrol flag null 0 0 0 0
-   62:  print @unit
-   63:  print "\n"
-        label *label40
-   64:  ubind null
-   65:  jump *label43 notEqual @unit null
-   66:  print "nullNo unit of type null found."
-   67:  printflush null
-   68:  jump *label40 always 0 0
-        label *label43
-   69:  sensor *tmp18 @unit @controlled
-   70:  jump *label45 equal *tmp18 0
-   71:  print "nullLooking for a free null..."
-   72:  printflush null
-   73:  jump *label40 always 0 0
-        label *label45
-   74:  ucontrol flag null 0 0 0 0
-   75:  print @unit
-   76:  print "\n"
+   58:  sensor *tmp17 @unit @controller
+   59:  jump *label32 notEqual *tmp17 @unit
+   60:  ucontrol flag null 0 0 0 0
+   61:  print @unit
+   62:  print "\n"
+        label *label36
+   63:  ubind null
+   64:  jump *label39 notEqual @unit null
+   65:  print "nullNo unit of type null found."
+   66:  printflush null
+   67:  jump *label36 always 0 0
+        label *label39
+   68:  sensor *tmp18 @unit @controlled
+   69:  jump *label41 equal *tmp18 0
+   70:  print "nullLooking for a free null..."
+   71:  printflush null
+   72:  jump *label36 always 0 0
+        label *label41
+   73:  ucontrol flag null 0 0 0 0
+   74:  print @unit
+   75:  print "\n"
