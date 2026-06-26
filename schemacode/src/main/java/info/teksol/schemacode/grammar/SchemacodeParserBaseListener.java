@@ -185,13 +185,13 @@ public class SchemacodeParserBaseListener implements SchemacodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRegionDef(SchemacodeParser.RegionDefContext ctx) { }
+	@Override public void enterRegion(SchemacodeParser.RegionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRegionDef(SchemacodeParser.RegionDefContext ctx) { }
+	@Override public void exitRegion(SchemacodeParser.RegionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

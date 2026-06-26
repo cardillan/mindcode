@@ -17,7 +17,7 @@ schematic : (name=ID COLON)? SCHEMATIC items=schematicItem+ END ;
 
 schematicItem
     : attribute
-    | regionDef
+    | region
     | block
     ;
 
@@ -36,14 +36,14 @@ number : (INT | SIGNEDINT);
 
 versionNumber : ( INT | VERSION );
 
-regionDef
+region
     : name=ID ASSIGN REGION blocks=block* END
     ;
 
 block
-    : labels=labelList? type=REF AT pos=blockPosition dir=direction? cfg=configuration?
-    | labels=labelList? region=REGION blocks=block* END AT pos=blockPosition dir=direction? cfg=configuration?
-    | labels=labelList? regionId=ID AT pos=blockPosition dir=direction? cfg=configuration?
+    : labels=labelList? elementType=REF AT pos=blockPosition dir=direction? cfg=configuration?
+    | labels=labelList? elementId=ID AT pos=blockPosition dir=direction? cfg=configuration?
+    | labels=labelList? REGION blocks=block* END AT pos=blockPosition dir=direction? cfg=configuration?
     ;
 
 blockId : (ID | BLOCKID);

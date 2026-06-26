@@ -16,7 +16,7 @@ import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.mindustry.*;
-import info.teksol.schemacode.schematics.BlockPositionResolver.AstBlockPosition;
+import info.teksol.schemacode.schematics.BlockPositionResolver.AstBlockWithPosition;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -113,17 +113,19 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
                 .filter(e -> e.getKey().charAt(e.getKey().length() - 1) != BlockPositionResolver.LABEL_ARRAY_CHAR)
                 .forEachOrdered(c -> addMessage(ToolMessage.error("Multiple definitions of block label '%s'.", c.getKey())));
 
-        astSchematic.blocks().stream().filter(astBlock -> !SchematicsMetadata.getMetadata().isBlockNameValid(astBlock.type()))
+        MindustryMetadata metadata = SchematicsMetadata.getMetadata();
+
+        astSchematic.blocks().stream().filter(astBlock -> !astBlock.isCluster() && !metadata.isBlockNameValid(astBlock.type()))
                 .forEachOrdered(astBlock -> error(astBlock, "Unknown block type '%s'.", astBlock.type()));
 
         List<AstBlock> astBlocks = astSchematic.blocks().stream()
-                .filter(astBlock -> SchematicsMetadata.getMetadata().isBlockNameValid(astBlock.type())).toList();
+                .filter(astBlock -> astBlock.isCluster() || metadata.isBlockNameValid(astBlock.type())).toList();
 
         // Here are absolute positions of all blocks, stored as "#" + index
         // Labeled blocks are additionally stored under all their labels
         BlockPositionResolver positionResolver = new BlockPositionResolver(messageConsumer);
-        BlockPositionResolver.ResolvedBlocks resolvedBlocks = positionResolver.resolveAllBlocks(astBlocks);
-        astLabelMap = resolvedBlocks.labelMap();
+        BlockPositionResolver.Region region = positionResolver.resolveRegion(astBlocks);
+        astLabelMap = region.labelMap();
         List<BlockPosition> blockPositions = astLabelMap.entrySet().stream()
                 .filter(e -> e.getKey().charAt(0) == SchematicsBuilder.INDEX_KEY_CHAR)
                 .map(Map.Entry::getValue)
@@ -132,11 +134,11 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         astPositionMap = BlockPositionMap.forBuilder(messageConsumer, blockPositions);
 
-        Map<AstBlockPosition, UnresolvedConfiguration> configurations = resolvedBlocks.definitions().stream()
+        Map<AstBlockWithPosition, UnresolvedConfiguration> configurations = region.definitions().stream()
                 .collect(Collectors.toMap(d -> d, this::getConfiguration));
 
         List<Block> blocks = new ArrayList<>();
-        for (AstBlockPosition definition : resolvedBlocks.definitions()) {
+        for (AstBlockWithPosition definition : region.definitions()) {
             AstBlock astBlock = definition.astBlock();
             BlockType type = definition.blockType();
             Direction direction = astBlock.direction() == null
@@ -154,7 +156,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         String description = unwrap(getStringAttribute("description", ""));
 
         List<String> schemaLabels = getAttributes("label", AstText.class).stream().map(text -> text.getText(this)).toList();
-        Icons icons = SchematicsMetadata.getMetadata().getIcons();
+        Icons icons = metadata.getIcons();
         List<String> additionalLabels = compilerProfile.getAdditionalTags().stream().map(icons::translateIcon).toList();
         List<String> labels = Stream.concat(schemaLabels.stream(), additionalLabels.stream()).distinct().toList();
 
@@ -166,7 +168,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         return createSchematic(name, filename, description, labels, blocks);
     }
 
-    private Configuration checkType(AstBlockPosition definition, UnresolvedConfiguration configuration) {
+    private Configuration checkType(AstBlockWithPosition definition, UnresolvedConfiguration configuration) {
         Configuration resolvedConfiguration = configuration.resolve();
 
         if (!definition.configurationType().isCompatible(resolvedConfiguration)) {
@@ -296,7 +298,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         }
     }
 
-    private UnresolvedConfiguration getConfiguration(AstBlockPosition blockPos) {
+    private UnresolvedConfiguration getConfiguration(AstBlockWithPosition blockPos) {
         return switch (blockPos.astBlock().configuration()) {
             case AstBlockReference r -> verifyConfiguration(r, blockPos, "block");
             case AstBoolean b -> BooleanConfiguration.of(b.value());

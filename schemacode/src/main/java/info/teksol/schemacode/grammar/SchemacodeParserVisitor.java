@@ -103,11 +103,11 @@ public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVersionNumber(SchemacodeParser.VersionNumberContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SchemacodeParser#regionDef}.
+	 * Visit a parse tree produced by {@link SchemacodeParser#region}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRegionDef(SchemacodeParser.RegionDefContext ctx);
+	T visitRegion(SchemacodeParser.RegionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#block}.
 	 * @param ctx the parse tree

@@ -164,15 +164,15 @@ public interface SchemacodeParserListener extends ParseTreeListener {
 	 */
 	void exitVersionNumber(SchemacodeParser.VersionNumberContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SchemacodeParser#regionDef}.
+	 * Enter a parse tree produced by {@link SchemacodeParser#region}.
 	 * @param ctx the parse tree
 	 */
-	void enterRegionDef(SchemacodeParser.RegionDefContext ctx);
+	void enterRegion(SchemacodeParser.RegionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SchemacodeParser#regionDef}.
+	 * Exit a parse tree produced by {@link SchemacodeParser#region}.
 	 * @param ctx the parse tree
 	 */
-	void exitRegionDef(SchemacodeParser.RegionDefContext ctx);
+	void exitRegion(SchemacodeParser.RegionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#block}.
 	 * @param ctx the parse tree

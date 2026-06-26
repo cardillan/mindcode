@@ -115,19 +115,25 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
                 new AstProgramSnippetText(pos(ctx.tag.getStart()), (AstText) visit(ctx.tag)));
     }
 
-    // Blocks
+    // Blocks and regions
 
     @Override
-    public AstSchemaItem visitBlock(SchemacodeParser.BlockContext ctx) {
+    public AstBlock visitBlock(SchemacodeParser.BlockContext ctx) {
         List<String> labels = processLabels(ctx.labels);
-        String type = ctx.type.getText();
+        AstSchemaElement element = ctx.elementType != null ? new AstSchemaBlock(pos(ctx.elementType), ctx.elementType.getText())
+                : ctx.elementId != null ? new AstSchemaRegionRef(pos(ctx.elementId), ctx.elementId.getText())
+                : new AstSchemaRegion(pos(ctx.getStart()), processBlocks(ctx.block()));
+
         AstBlockPosition position = (AstBlockPosition) visit(ctx.blockPosition());
         AstDirection direction = maybeVisit(ctx.direction());
         AstConfiguration configuration = maybeVisit(ctx.configuration());
 
-        return new AstBlock(pos(ctx.getStart()), labels, type, position, direction, configuration);
+        return new AstBlock(pos(ctx.getStart()), labels, element, position, direction, configuration);
     }
 
+    private List<AstBlock> processBlocks(List<BlockContext> blocks) {
+        return blocks.stream().map(this::visitBlock).toList();
+    }
 
     // Configuration
 
