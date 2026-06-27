@@ -29,11 +29,25 @@ export class MlogWatcherStore {
 			channel.ready.catch((error) => {
 				this.channel = new Completer();
 				this.#initialized = false;
+
 				toast.error(
 					'Mlog Watcher connection failed. Please ensure the Mlog Watcher server is running and the port is correct.'
 				);
 				if (!isMlogWatcherChannelError(error)) {
 					console.error('Mlog Watcher connection error:', error);
+				}
+			});
+
+			channel.closed.then((e) => {
+				if (!e.wasOpen) return;
+
+				this.channel = new Completer();
+				this.#initialized = false;
+
+				if (e.code !== 1000) {
+					toast.error(
+						`Mlog Watcher connection closed unexpectedly. Websocket close code: ${e.code}`
+					);
 				}
 			});
 
