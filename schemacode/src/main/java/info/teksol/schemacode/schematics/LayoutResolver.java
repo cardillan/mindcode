@@ -31,7 +31,9 @@ public class LayoutResolver {
     }
 
     public SchematicElement resolve(List<AstBlock> blocks) {
-        return createRegion(null, blocks, Map.of(), "");
+        SchematicElement schematic = createRegion(null, blocks, Map.of(), "");
+        schematic.updateOrigin(Position.ORIGIN);
+        return schematic;
     }
 
     private SchematicElement createBlock(AstBlock definition, AstSchemaBlock block, Map<String, SchematicElement> labelMap, String lastReference) {
@@ -54,7 +56,7 @@ public class LayoutResolver {
             index++;
         }
 
-        // Resolve positions/dimensions
+        // Region structure complete. Resolve positions/dimensions
         Context context = new Context();
         int width = 0, height = 0;
         for (SchematicElement element : elements) {
@@ -64,7 +66,9 @@ public class LayoutResolver {
         }
 
         Position dimensions = new Position(width, height);
-        return SchematicElement.create(definition, dimensions, elements, currentLabelMap, enclosingLabelMap, lastReference);
+        SchematicElement region = SchematicElement.create(definition, dimensions, elements, currentLabelMap, enclosingLabelMap, lastReference);
+        elements.forEach(e -> e.setParent(region));
+        return region;
     }
 
     private SchematicElement convert(AstBlock definition, Map<String, SchematicElement> labelMap, String lastReference) {

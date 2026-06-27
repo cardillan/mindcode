@@ -10,7 +10,7 @@ public interface BlockPosition {
     int index();
     BlockType blockType();
     Position position();
-    
+
     default String name() {
         return blockType().name();
     }
