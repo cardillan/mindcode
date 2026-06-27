@@ -19,17 +19,25 @@ export type MlogWatcherChannelError = {
 	[mlogWatcherChannelErrorTag]: true;
 } & ({ type: 'disconnected' } | { type: 'connectionError' });
 
+export interface MlogWatcherChannelClosedEvent {
+	code: number;
+	wasOpen: boolean;
+}
+
 export class MlogWatcherChannel {
 	private nextId = 0;
 	private pendingInvocations = new Map<number, Completer<unknown>>();
 	private socket: WebSocket;
+	private isOpen = false;
 	ready: Promise<void>;
+	closed: Promise<MlogWatcherChannelClosedEvent>;
 
 	constructor(port: number) {
 		this.socket = new WebSocket(`ws://localhost:${port}/v1`);
 
 		this.ready = new Promise((resolve, reject) => {
 			this.socket.onopen = () => {
+				this.isOpen = true;
 				resolve();
 			};
 
@@ -42,7 +50,6 @@ export class MlogWatcherChannel {
 			};
 
 			this.socket.onmessage = (event) => {
-				console.log(event.data);
 				const response: MlogWatcherResponse<unknown, unknown> = JSON.parse(event.data);
 				const completer = this.pendingInvocations.get(response.invocation_id);
 				if (!completer) {
@@ -53,6 +60,15 @@ export class MlogWatcherChannel {
 				completer.complete(response);
 				this.pendingInvocations.delete(response.invocation_id);
 			};
+		});
+
+		this.closed = new Promise((resolve) => {
+			this.socket.addEventListener('close', (event) => {
+				resolve({
+					code: event.code,
+					wasOpen: this.isOpen
+				});
+			});
 		});
 	}
 
@@ -78,7 +94,6 @@ export class MlogWatcherChannel {
 		const completer = new Completer();
 		this.pendingInvocations.set(invocation.invocation_id, completer);
 		const content = JSON.stringify(invocation);
-		console.log('Sending invocation:', content);
 		this.socket.send(content);
 		return completer.promise as Promise<Response>;
 	}
