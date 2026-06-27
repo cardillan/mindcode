@@ -128,7 +128,7 @@ public class BlockPositionResolver {
         public RelativeBlockPosition(int index, AstBlock astBlock, String lastBlock, Position position) {
             this(index, astBlock, SchematicsMetadata.getMetadata().getBlockByName(astBlock.type()),
                     astBlock.anchor().relative()
-                            ? astBlock.anchor().getRelativeTo() == null ? lastBlock : astBlock.anchor().getRelativeTo()
+                            ? astBlock.anchor().relativeTo() == null ? lastBlock : astBlock.anchor().relativeTo()
                             : null,
                     position);
         }

@@ -42,10 +42,6 @@ public record AstCoordinates(SourcePosition sourcePosition, Position coordinates
         }
     }
 
-    public @Nullable String getRelativeTo() {
-        return relativeTo;
-    }
-
     public AstCoordinates relative(boolean negate) {
         return negate ? new AstCoordinates(sourcePosition, -getX(), -getY(), true) : new AstCoordinates(sourcePosition, getX(), getY(), true);
     }

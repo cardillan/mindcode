@@ -12,20 +12,18 @@ import java.util.stream.Collectors;
 
 class PowerGridSolver {
     private final SchematicsBuilder builder;
-    private final List<Block> blocks;
     private final BlockPositionMap<Block> positionMap;
 
-    private PowerGridSolver(SchematicsBuilder builder, List<Block> blocks) {
+    private PowerGridSolver(SchematicsBuilder builder) {
         this.builder = builder;
-        this.blocks = blocks;
         this.positionMap = builder.getPositionMap();
     }
 
-    static List<Block> solve(SchematicsBuilder builder, List<Block> blocks) {
-        return new PowerGridSolver(builder, blocks).solve();
+    static void solve(SchematicsBuilder builder, List<Block> blocks) {
+        new PowerGridSolver(builder).solve(blocks);
     }
 
-    private List<Block> solve() {
+    private void solve(List<Block> blocks) {
         Map<Block, Set<Block>> powerNodes = blocks.stream().filter(this::isPowerNode)
                 .collect(Collectors.toMap(b -> b, this::collectLinks));
 
@@ -48,8 +46,7 @@ class PowerGridSolver {
                 .forEachOrdered(b -> builder.error(b.sourcePosition(), "Block '%s' at %s has more than %d connection(s).",
                         b.name(), b.position().toStringAbsolute(), b.blockType().maxNodes()));
 
-        // Rebuild block list
-        return blocks.stream().map(block -> replaceLinks(block, powerNodes.get(block))).toList();
+        blocks.replaceAll(block -> replaceLinks(block, powerNodes.get(block)));
     }
 
     private Block replaceLinks(Block block, Set<Block> links) {
