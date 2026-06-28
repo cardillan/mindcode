@@ -10,7 +10,6 @@ import info.teksol.schemacode.schematics.SchematicsBuilder.ResolverContext;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,26 +31,23 @@ public class LayoutResolver {
     }
 
     public SchematicElement resolve(List<AstBlock> blocks) {
-        SchematicElement schematic = createRegion(null, blocks);
-        schematic.updateOrigin(Position.ORIGIN);
-        return schematic;
+        return createRegion(null, null, blocks);
     }
 
-    private SchematicElement createBlock(AstBlock definition, AstSchemaBlock block) {
-        return SchematicElement.createBlock(definition, block.type(), blockIndex++);
+    private SchematicElement createBlock(@Nullable SchematicElement parent, AstBlock definition, AstSchemaBlock block) {
+        return SchematicElement.createBlock(parent, definition, block.type(), blockIndex++);
     }
 
-    private SchematicElement createRegion(@Nullable AstBlock definition, List<AstBlock> blocks) {
-        Map<String, SchematicElement> currentLabelMap = new HashMap<>();
-        List<SchematicElement> elements = new ArrayList<>();
+    private SchematicElement createRegion(@Nullable SchematicElement parent, @Nullable AstBlock definition, List<AstBlock> blocks) {
+        SchematicElement region = SchematicElement.createRegion(parent, definition, blockIndex++);
         SchematicElement last = null;
 
         // Create the basic structure
         // TODO: no arrays yet
         for (AstBlock block : blocks) {
-            SchematicElement element = convert(block);
-            elements.add(element);
-            block.labels().forEach(label -> currentLabelMap.put(label, element));
+            SchematicElement element = convert(region, block);
+            region.addElement(element);
+            block.labels().forEach(label -> region.addLabel(label, element));
             element.setAnchor(last);
             last = element;
         }
@@ -59,22 +55,21 @@ public class LayoutResolver {
         // Region structure complete. Resolve positions/dimensions
         ResolverContext context = builder.trackingResolverContext();
         int width = 0, height = 0;
-        for (SchematicElement element : elements) {
+        for (SchematicElement element : region.elements) {
             Position position = element.resolvePosition(context);
             width = Math.max(width, position.x() + element.dimensions().x());
             height = Math.max(height, position.y() + element.dimensions().y());
+            element.updateOrigin();
         }
 
-        Position dimensions = new Position(width, height);
-        SchematicElement region = SchematicElement.createRegion(definition, dimensions, blockIndex++, elements, currentLabelMap);
-        elements.forEach(e -> e.setParent(region));
+        region.setDimensions(new Position(width, height));
         return region;
     }
 
-    private SchematicElement convert(AstBlock definition) {
+    private SchematicElement convert(SchematicElement parent, AstBlock definition) {
         return switch (definition.element()) {
-            case AstSchemaBlock b -> createBlock(definition, b);
-            case AstSchemaRegion r -> createRegion(definition, r.blocks());
+            case AstSchemaBlock b -> createBlock(parent, definition, b);
+            case AstSchemaRegion r -> createRegion(parent, definition, r.blocks());
             //case AstSchemaRegionRef r -> resolve(List.of());
             default -> throw new SchematicsInternalError("Unexpected block type: %s", definition.element());
         };

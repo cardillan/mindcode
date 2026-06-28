@@ -40,13 +40,9 @@ public record AstCoordinates(SourcePosition sourcePosition, Position coordinates
             if (anchor == null) return Position.INVALID;
             return coordinates.add(anchor.position());
         } else {
-            // Absolute position is evaluated against the enclosing region's origin
-            SchematicElement region = element.parent();
-            Position position = region == null ? coordinates : coordinates.add(region.position());
-
             // Translate the position to the proper connection point of the target block
-            SchematicElement anchor = context.getElement(position);
-            return anchor == null ? position : anchor.position();
+            SchematicElement anchor = context.getElement(coordinates);
+            return anchor == null ? coordinates : anchor.position();
         }
     }
 
