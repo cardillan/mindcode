@@ -57,7 +57,7 @@ labelId
     ;
 
 pattern
-    : (ID DOT)* (MUL | PATTERN)
+    : (ID DOT)* match=(MUL | PATTERN)
     ;
 
 blockPosition

@@ -42,7 +42,8 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
     private BlockPositionMap<SchematicElement> astPositionMap;
     private BlockPositionMap<Block> positionMap;
 
-    private final ResolverContext untrackingContext = new ResolverContext(false);
+    // Context used to resolve configuration references. There's no danger of circular references here.
+    private final ResolverContext configurationContext = new ResolverContext(false);
 
     // Elements reported for circular reference errors
     private final Set<SchematicElement> reported = new HashSet<>();
@@ -305,65 +306,65 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
     private UnresolvedConfiguration getConfiguration(SchematicElement element) {
         return switch (element.definition().configuration()) {
-            case AstBlockReference r -> verifyConfiguration(r, element, "block");
+            case AstBlockReference reference -> verifyConfiguration(reference, element, "block");
             case AstBoolean b -> BooleanConfiguration.of(b.value());
-            case AstConnection c -> c.evaluate(untrackingContext, element);
+            case AstConnection c -> c.evaluate(configurationContext, element);
             case AstConnections c ->
-                    new PositionArray(c.connections().stream().map(p -> p.evaluate(untrackingContext, element)).toList());
-            case AstItemReference r -> verifyConfiguration(r, element, "item");
-            case AstLiquidReference r -> verifyConfiguration(r, element, "liquid");
-            case AstProcessor p -> processorConfigurationBuilder.fromAstConfiguration(p, element);
+                    new PositionArray(c.connections().stream().map(p -> p.evaluate(configurationContext, element)).toList());
+            case AstItemReference reference -> verifyConfiguration(reference, element, "item");
+            case AstLiquidReference reference -> verifyConfiguration(reference, element, "liquid");
+            case AstProcessor processor -> processorConfigurationBuilder.fromAstConfiguration(configurationContext, processor, element);
             case AstRgbaValue rgb -> convertToRgbValue(element, rgb);
             case AstText t -> new TextConfiguration(t.getText(this));
-            case AstUnitCommandReference r -> verifyConfiguration(r, element, "command");
-            case AstUnitReference r -> decodeUnitConfiguration(element, r);
+            case AstUnitCommandReference reference -> verifyConfiguration(reference, element, "command");
+            case AstUnitReference reference -> decodeUnitConfiguration(reference, element);
             case null, default -> EmptyConfiguration.EMPTY;
         };
     }
 
-    private Color convertToRgbValue(BlockPosition blockPos, AstRgbaValue rgb) {
+    private Color convertToRgbValue(SchematicElement element, AstRgbaValue rgb) {
         return new Color(
-                clamp(rgb, blockPos, "red", rgb.red()),
-                clamp(rgb, blockPos, "green", rgb.green()),
-                clamp(rgb, blockPos, "blue", rgb.blue()),
-                clamp(rgb, blockPos, "alpha", rgb.alpha())
+                clamp(rgb, element, "red", rgb.red()),
+                clamp(rgb, element, "green", rgb.green()),
+                clamp(rgb, element, "blue", rgb.blue()),
+                clamp(rgb, element, "alpha", rgb.alpha())
         );
     }
 
-    private Configuration verifyConfiguration(AstContentsReference reference, BlockPosition blockPos, String valueName) {
+    private Configuration verifyConfiguration(AstContentsReference reference, SchematicElement element, String valueName) {
         Configuration value = reference.getConfiguration();
         if (value == null) {
             error(reference, "Block '%s' at %s: unknown or unsupported %s '%s'.",
-                    blockPos.name(), blockPos.position().toStringAbsolute(), valueName, reference.getConfigurationText());
-            return EmptyConfiguration.EMPTY; // Ignore wrong configuration but keep processing the block
+                    element.name(), element.position().toStringAbsolute(), valueName, reference.getConfigurationText());
+            return EmptyConfiguration.EMPTY; // Ignore the wrong configuration but keep processing the block
         } else {
             return value;
         }
     }
 
-    private int clamp(SourceElement element, BlockPosition blockPos, String component, int value) {
+    private int clamp(AstRgbaValue rgb, SchematicElement element, String component, int value) {
         if (value < 0 || value > 255) {
-            error(element, "Block '%s' at %s: value %d of color component '%s' outside valid range <0, 255>.",
-                    blockPos.name(), blockPos.position().toStringAbsolute(), value, component);
+            error(rgb, "Block '%s' at %s: value %d of color component '%s' outside valid range <0, 255>.",
+                    element.name(), element.position().toStringAbsolute(), value, component);
         }
         return Math.max(Math.min(value, 255), 0);
     }
 
-    private Configuration decodeUnitConfiguration(BlockPosition blockPos, AstUnitReference ref) {
-        return switch (blockPos.configurationType()) {
-            case UNIT_OR_BLOCK -> verifyConfiguration(ref, blockPos, "ref");
+    private Configuration decodeUnitConfiguration(AstUnitReference reference, SchematicElement element) {
+        return switch (element.configurationType()) {
+            case UNIT_OR_BLOCK -> verifyConfiguration(reference, element, "ref");
             case UNIT_PLAN -> {
-                if (blockPos.blockType().unitPlans().contains(ref.unit())) {
-                    yield new UnitPlan(ref.unit());
+                if (element.blockType().unitPlans().contains(reference.unit())) {
+                    yield new UnitPlan(reference.unit());
                 } else {
-                    error(ref, "Block '%s' at %s: unknown or unsupported unit type '%s'.",
-                            blockPos.name(), blockPos.position().toStringAbsolute(), ref.unit());
+                    error(reference, "Block '%s' at %s: unknown or unsupported unit type '%s'.",
+                            element.name(), element.position().toStringAbsolute(), reference.unit());
                     yield EmptyConfiguration.EMPTY;
                 }
             }
             default -> {
-                error(ref, "Block '%s' at %s: unknown or unsupported configuration type '%s'.",
-                        blockPos.name(), blockPos.position().toStringAbsolute(), blockPos.configurationType());
+                error(reference, "Block '%s' at %s: unknown or unsupported configuration type '%s'.",
+                        element.name(), element.position().toStringAbsolute(), element.configurationType());
                 yield EmptyConfiguration.EMPTY;
             }
         };

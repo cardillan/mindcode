@@ -44,20 +44,20 @@ public class ProcessorConfigurationBuilder {
         return position == null ? "" : position.blockType().name();
     }
 
-    public UnresolvedConfiguration fromAstConfiguration(AstProcessor processor, BlockPosition blockPos) {
-        List<ProcessorConfiguration.Link> links = processorLinks(processor, blockPos);
+    public UnresolvedConfiguration fromAstConfiguration(SchematicsBuilder.ResolverContext context, AstProcessor processor, SchematicElement element) {
+        List<ProcessorConfiguration.Link> links = processorLinks(context, processor, element);
 
         if (processor.language() == Language.MINDCODE) {
-            return buildMindcodeConfiguration(processor, blockPos, links);
+            return buildMindcodeConfiguration(processor, element, links);
         } else {
             String mlog = processor.language() == Language.MLOG ? processor.program().getProgramText(builder, MLOG) : "";
             return buildConfiguration(processor, links, mlog, Map.of(), Set.of());
         }
     }
 
-    private List<ProcessorConfiguration.Link> processorLinks(AstProcessor processor, BlockPosition blockPos) {
+    private List<ProcessorConfiguration.Link> processorLinks(SchematicsBuilder.ResolverContext context, AstProcessor processor, SchematicElement element) {
         List<ProcessorConfiguration.Link> links = processor.links().stream()
-                .mapMulti((AstLink l, Consumer<ProcessorConfiguration.Link> c) -> l.getProcessorLinks(c, builder, blockPos.position()))
+                .mapMulti((AstLink l, Consumer<ProcessorConfiguration.Link> consumer) -> l.getProcessorLinks(consumer, context, element))
                 .distinct()
                 .toList();
 

@@ -256,7 +256,12 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
 
     @Override
     public AstLinkPattern visitLinkPattern(SchemacodeParser.LinkPatternContext ctx) {
-        return new AstLinkPattern(pos(ctx.getStart()), visitPattern(ctx.pattern()));
+        List<AstLabelSegment> segments = ctx.pattern().ID().stream()
+                .map(t -> new AstLabelSegment(pos(t.getSymbol()), t.getText()))
+                .collect(Collectors.toCollection(ArrayList::new));
+        AstLabel prefix = new AstLabel(pos(ctx.pattern().getStart()), segments);
+
+        return new AstLinkPattern(pos(ctx.getStart()), prefix, ctx.pattern().match.getText());
     }
 
     @Override

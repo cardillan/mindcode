@@ -14,6 +14,10 @@ public record AstLabel(SourcePosition sourcePosition, List<AstLabelSegment> segm
         return new AstLabel(SourcePosition.EMPTY, erasePositions(segments));
     }
 
+    public static AstLabel of(SourcePosition sourcePosition) {
+        return new AstLabel(sourcePosition, List.of());
+    }
+
     public static AstLabel of(SourcePosition sourcePosition, String label) {
         return new AstLabel(sourcePosition, List.of(AstLabelSegment.of(sourcePosition, label)));
     }

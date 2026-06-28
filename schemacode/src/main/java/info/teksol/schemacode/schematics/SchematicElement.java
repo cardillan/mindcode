@@ -194,7 +194,7 @@ public class SchematicElement implements BlockPosition {
         Position offset = definition.anchor().coordinates();
 
         if (reference != null) {
-            SchematicElement target = resolveReference(context, reference);
+            SchematicElement target = resolveReference(context, reference, false);
 
             if (target == null) {
                 context.error(definition.position().anchor(), "Unknown block name '%s'.", reference.fullName());
@@ -222,14 +222,14 @@ public class SchematicElement implements BlockPosition {
         return Position.INVALID;
     }
 
-    public @Nullable SchematicElement resolveReference(SchematicsBuilder.ResolverContext context, AstLabel reference) {
+    public @Nullable SchematicElement resolveReference(SchematicsBuilder.ResolverContext context, AstLabel reference, boolean blockOnly) {
         String lead = reference.getSegment(0);
         SchematicElement current = parent;
         while (current != null) {
             SchematicElement element = current.labelMap.get(lead);
             if (element != null) {
                 // We've matched the lead. The rest needs to be resolved in this namespace
-                return element.resolveRemaining(context, reference);
+                return element.resolveRemaining(context, reference, blockOnly);
             }
             current = current.parent;
         }
@@ -238,7 +238,7 @@ public class SchematicElement implements BlockPosition {
         return null;
     }
 
-    private @Nullable SchematicElement resolveRemaining(SchematicsBuilder.ResolverContext context, AstLabel reference) {
+    private @Nullable SchematicElement resolveRemaining(SchematicsBuilder.ResolverContext context, AstLabel reference, boolean blockOnly) {
         SchematicElement current = this;
 
         for (int index = 1; index < reference.getSegmentCount(); index++) {
@@ -256,7 +256,7 @@ public class SchematicElement implements BlockPosition {
             current = element;
         }
 
-        if (!current.isBlock()) {
+        if (blockOnly && !current.isBlock()) {
             context.error(reference, "Block label '%s' doesn't denote a block.", reference.fullName());
             return null;
         }

@@ -48,7 +48,7 @@ public record AstConnection(SourcePosition sourcePosition, @Nullable AstCoordina
         if (position != null) {
             return position.evaluate(context, element);
         } else if (id != null) {
-            SchematicElement target = element.resolveReference(context, id);
+            SchematicElement target = element.resolveReference(context, id, true);
             return target == null ? Position.INVALID : target.position();
         } else {
             throw new SchematicsInternalError("Connection has neither position nor reference.");

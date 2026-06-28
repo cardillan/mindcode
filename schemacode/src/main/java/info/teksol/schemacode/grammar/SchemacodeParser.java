@@ -1314,6 +1314,7 @@ public class SchemacodeParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class PatternContext extends ParserRuleContext {
+		public Token match;
 		public TerminalNode MUL() { return getToken(SchemacodeParser.MUL, 0); }
 		public TerminalNode PATTERN() { return getToken(SchemacodeParser.PATTERN, 0); }
 		public List<TerminalNode> ID() { return getTokens(SchemacodeParser.ID); }
@@ -1367,9 +1368,10 @@ public class SchemacodeParser extends Parser {
 				_la = _input.LA(1);
 			}
 			setState(210);
+			((PatternContext)_localctx).match = _input.LT(1);
 			_la = _input.LA(1);
 			if ( !(_la==MUL || _la==PATTERN) ) {
-			_errHandler.recoverInline(this);
+				((PatternContext)_localctx).match = (Token)_errHandler.recoverInline(this);
 			}
 			else {
 				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
