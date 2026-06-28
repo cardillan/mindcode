@@ -204,6 +204,26 @@ public interface SchemacodeParserListener extends ParseTreeListener {
 	 */
 	void exitLabelList(SchemacodeParser.LabelListContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#labelId}.
+	 * @param ctx the parse tree
+	 */
+	void enterLabelId(SchemacodeParser.LabelIdContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#labelId}.
+	 * @param ctx the parse tree
+	 */
+	void exitLabelId(SchemacodeParser.LabelIdContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#pattern}.
+	 * @param ctx the parse tree
+	 */
+	void enterPattern(SchemacodeParser.PatternContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#pattern}.
+	 * @param ctx the parse tree
+	 */
+	void exitPattern(SchemacodeParser.PatternContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code simplePosition}
 	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
 	 * @param ctx the parse tree

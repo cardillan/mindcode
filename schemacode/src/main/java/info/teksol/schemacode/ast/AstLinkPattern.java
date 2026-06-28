@@ -10,11 +10,12 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 @NullMarked
-public record AstLinkPattern(SourcePosition sourcePosition, String match) implements AstLink {
+public record AstLinkPattern(SourcePosition sourcePosition, AstLabel match) implements AstLink {
 
+    // TODO: needs to be moved into SchematicElement
     @Override
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder builder, Position processorPosition) {
-        Pattern pattern = Pattern.compile(match.replace("*", ".*"));
+        Pattern pattern = Pattern.compile(match.segments().getLast().name().replace ("*", ".*"));
         builder.getAstLabelMap().entrySet().stream()
                 .filter(e -> e.getKey().charAt(0) != SchematicsBuilder.INDEX_KEY_CHAR)
                 .filter(e -> pattern.matcher(e.getKey()).matches())

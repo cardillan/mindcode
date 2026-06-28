@@ -16,6 +16,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NullMarked
 public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaItem> {
@@ -183,7 +184,7 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
 
     @Override
     public AstConnection visitConnName(SchemacodeParser.ConnNameContext ctx) {
-        return new AstConnection(pos(ctx.getStart()), ctx.ID().getSymbol().getText());
+        return new AstConnection(pos(ctx.getStart()), visitLabelId(ctx.labelId()));
     }
 
     @Override
@@ -255,7 +256,7 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
 
     @Override
     public AstLinkPattern visitLinkPattern(SchemacodeParser.LinkPatternContext ctx) {
-        return new AstLinkPattern(pos(ctx.getStart()), ctx.linkPattern.getText());
+        return new AstLinkPattern(pos(ctx.getStart()), visitPattern(ctx.pattern()));
     }
 
     @Override
@@ -351,8 +352,7 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
     @Override
     public AstCoordinates visitCoordinatesRelativeTo(SchemacodeParser.CoordinatesRelativeToContext ctx) {
         AstCoordinates coordinates = (AstCoordinates) visit(ctx.relativeCoordinates());
-        String id = ctx.label.getText();
-        return coordinates.relativeTo(id);
+        return coordinates.relativeTo(visitLabelId(ctx.labelId()));
     }
 
     @Override
@@ -368,6 +368,21 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
                 : labels.blockId().stream()
                 .map(RuleContext::getText)
                 .toList();
+    }
+
+    @Override
+    public AstLabel visitLabelId(LabelIdContext ctx) {
+        List<AstLabelSegment> segments = ctx.ID().stream().map(t -> new AstLabelSegment(pos(t.getSymbol()), t.getText())).toList();
+        return new AstLabel(pos(ctx.getStart()), segments);
+    }
+
+    @Override
+    public AstLabel visitPattern(PatternContext ctx) {
+        List<AstLabelSegment> segments = ctx.ID().stream().map(t -> new AstLabelSegment(pos(t.getSymbol()), t.getText()))
+                .collect(Collectors.toCollection(ArrayList::new));
+        if (ctx.MUL() != null) segments.add(new AstLabelSegment(pos(ctx.MUL().getSymbol()), ctx.MUL().getText()));
+        if (ctx.PATTERN() != null) segments.add(new AstLabelSegment(pos(ctx.PATTERN().getSymbol()), ctx.PATTERN().getText()));
+        return new AstLabel(pos(ctx.getStart()), segments);
     }
 
     // Texts

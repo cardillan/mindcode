@@ -2,14 +2,15 @@ package info.teksol.schemacode.ast;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.schemacode.mindustry.Position;
+import info.teksol.schemacode.schematics.SchematicElement;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public record AstCoordinates(SourcePosition sourcePosition, Position coordinates, boolean relative, @Nullable String relativeTo) implements AstSchemaItem {
+public record AstCoordinates(SourcePosition sourcePosition, Position coordinates, boolean relative, @Nullable AstLabel relativeTo) implements AstSchemaItem {
 
-    public AstCoordinates(SourcePosition sourcePosition, int x, int y, String relativeTo) {
+    public AstCoordinates(SourcePosition sourcePosition, int x, int y, AstLabel relativeTo) {
         this(sourcePosition,new Position(x, y), true, relativeTo);
     }
 
@@ -33,12 +34,19 @@ public record AstCoordinates(SourcePosition sourcePosition, Position coordinates
         return coordinates.y();
     }
 
-    public Position evaluate(SchematicsBuilder builder, Position lastPosition) {
+    public Position evaluate(SchematicsBuilder.ResolverContext context, SchematicElement element) {
         if (relative) {
-            Position rel = relativeTo == null ? lastPosition : builder.getBlockPosition(this, relativeTo);
-            return rel.add(coordinates);
+            SchematicElement anchor = relativeTo == null ? element : element.resolveReference(context, relativeTo);
+            if (anchor == null) return Position.INVALID;
+            return coordinates.add(anchor.position());
         } else {
-            return builder.getAnchor(coordinates());
+            // Absolute position is evaluated against the enclosing region's origin
+            SchematicElement region = element.parent();
+            Position position = region == null ? coordinates : coordinates.add(region.position());
+
+            // Translate the position to the proper connection point of the target block
+            SchematicElement anchor = context.getElement(position);
+            return anchor == null ? position : anchor.position();
         }
     }
 
@@ -46,7 +54,7 @@ public record AstCoordinates(SourcePosition sourcePosition, Position coordinates
         return negate ? new AstCoordinates(sourcePosition, -getX(), -getY(), true) : new AstCoordinates(sourcePosition, getX(), getY(), true);
     }
 
-    public AstCoordinates relativeTo(String id) {
+    public AstCoordinates relativeTo(AstLabel id) {
         return new AstCoordinates(sourcePosition, getX(), getY(), id);
     }
 

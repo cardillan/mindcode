@@ -52,6 +52,14 @@ labelList
     : blockId (COMMA blockId)* COLON
     ;
 
+labelId
+    : (ID DOT)* ID
+    ;
+
+pattern
+    : (ID DOT)* (MUL | PATTERN)
+    ;
+
 blockPosition
     : start=position                                                                # simplePosition
     | start=position DOT2 end=coordinates ( orientation=(HORIZONTAL | VERTICAL) )?  # inclusiveRangePosition
@@ -74,7 +82,7 @@ relativeCoordinates
     ;
 
 coordinatesRelativeTo
-    : label=ID relCoord=relativeCoordinates
+    : label=labelId relCoord=relativeCoordinates
     ;
 
 direction
@@ -106,7 +114,7 @@ connectionList
 connection
     : coordinates                   # connAbs
     | relativeCoordinates           # connRel
-    | ID                            # connName
+    | labelId                       # connName
     ;
 
 processor
@@ -118,7 +126,7 @@ processorLinks
     ;
 
 linkDef
-    : linkPattern=(MUL | PATTERN)                           # linkPattern
+    : linkPattern=pattern                                   # linkPattern
     | linkPos=connection ( AS alias=ID virtual=VIRTUAL? )?  # linkPos
     ;
 

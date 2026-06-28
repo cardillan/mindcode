@@ -301,7 +301,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 new AstBlock(pos(2, 5),
                         List.of(),
                         new AstSchemaBlock(pos(2, 5), "@switch"),
-                        new AstCoordinates(pos(2, 25), new Position(1, 1), true, "block1"),
+                        new AstCoordinates(pos(2, 25), new Position(1, 1), true, AstLabel.of(pos(2, 15), "block1")),
                         null,
                         null
                 )
@@ -724,7 +724,8 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         new AstSchemaBlock(pos(2, 5), "@micro-processor"),
                         new AstCoordinates(pos(2, 25), 0, 0),
                         null,
-                        new AstProcessor(pos(2, 32), List.of(new AstLinkPattern(pos(3, 15), "*-p-*")), AstProgram.EMPTY, Language.NONE, List.of())
+                        new AstProcessor(pos(2, 32), List.of(new AstLinkPattern(pos(3, 15), AstLabel.of(pos(3, 14), "*-p-*"))),
+                                AstProgram.EMPTY, Language.NONE, List.of())
                 )
         );
 
@@ -1060,7 +1061,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         new AstCoordinates(pos(2, 25), 0, 0),
                         null,
                         new AstProcessor(pos(2, 32), List.of(
-                                new AstLinkPattern(pos(4, 13), "p1-*"),
+                                new AstLinkPattern(pos(4, 13), AstLabel.of(pos(4, 12), "p1-*")),
                                 new AstLinkPos(pos(5, 13), new AstConnection(pos(5, 13), "switch1"), null, false),
                                 new AstLinkPos(pos(6, 13), new AstConnection(pos(6, 13), "cell1"), "cell2", false),
                                 new AstLinkPos(pos(7, 13), new AstConnection(pos(7, 13), 1, 1), null, false),

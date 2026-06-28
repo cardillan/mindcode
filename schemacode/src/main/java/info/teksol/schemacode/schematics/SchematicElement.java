@@ -3,7 +3,7 @@ package info.teksol.schemacode.schematics;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.AstBlock;
-import info.teksol.schemacode.ast.AstCoordinates;
+import info.teksol.schemacode.ast.AstLabel;
 import info.teksol.schemacode.mindustry.Position;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -37,25 +37,25 @@ public class SchematicElement implements BlockPosition {
 
     /// The origin of this region within the enclosing region
     /// Relative positions get resolved to absolute eventually
-    private RegionPosition origin = ORIGIN;
+    private RegionPosition origin = new RelativePosition();
 
+    /// The parent region of this element, `null` for the top-level region
     private @Nullable SchematicElement parent;
 
-    public static SchematicElement createBlock(AstBlock definition, String type, int index, Map<String, SchematicElement> enclosingLabelMap, String lastReference) {
+    /// The default anchor for this element: the previously placed element within the current region,
+    /// or `null` if this is the first element within a region.
+    private @Nullable SchematicElement anchor;
+
+    public static SchematicElement createBlock(AstBlock definition, String type, int index) {
         BlockType blockType = SchematicsMetadata.getMetadata().getBlockByName(type);
         int size = blockType == null ? 1 : blockType.size();            // Must not happen
         Position dimensions = new Position(size, size);
-        SchematicElement element = new SchematicElement(definition, blockType, index, dimensions, List.of(), Map.of());
-        element.origin = element.createPosition(definition, lastReference);
-        return element;
+        return new SchematicElement(definition, blockType, index, dimensions, List.of(), Map.of());
     }
 
-    public static SchematicElement create(@Nullable AstBlock definition, Position dimensions,
-            List<SchematicElement> elements, Map<String, SchematicElement> currentLabelMap,
-            Map<String, SchematicElement> enclosingLabelMap, String lastReference) {
-        SchematicElement element = new SchematicElement(definition, null, -1, dimensions, elements, currentLabelMap);
-        element.origin = element.createPosition(definition, lastReference);
-        return element;
+    public static SchematicElement createRegion(@Nullable AstBlock definition, Position dimensions, int index, List<SchematicElement> elements,
+            Map<String, SchematicElement> currentLabelMap) {
+        return new SchematicElement(definition, null, index, dimensions, elements, currentLabelMap);
     }
 
     private SchematicElement(@Nullable AstBlock definition, @Nullable BlockType blockType, int index, Position dimensions,
@@ -114,6 +114,14 @@ public class SchematicElement implements BlockPosition {
         this.parent = parent;
     }
 
+    public @Nullable SchematicElement anchor() {
+        return anchor;
+    }
+
+    public void setAnchor(@Nullable SchematicElement anchor) {
+        this.anchor = anchor;
+    }
+
     public List<SchematicElement> getBlocks() {
         List<SchematicElement> blocks = new ArrayList<>();
         forEachBlock(blocks::add);
@@ -130,7 +138,7 @@ public class SchematicElement implements BlockPosition {
         }
     }
 
-    public Position resolvePosition(LayoutResolver.Context context) {
+    public Position resolvePosition(SchematicsBuilder.ResolverContext context) {
         if (origin instanceof AbsolutePosition(Position pos)) return pos;
 
         AbsolutePosition absolute = origin.resolve(context);
@@ -139,14 +147,14 @@ public class SchematicElement implements BlockPosition {
     }
 
     public void updateOrigin(Position offset) {
-        AbsolutePosition newOrigin = origin.add(offset);
+        AbsolutePosition newOrigin = definition == null ? new AbsolutePosition(Position.ORIGIN) : origin.add(offset);
         origin = newOrigin;
         elements.forEach(e -> e.updateOrigin(newOrigin.position()));
     }
 
-    public @Nullable SchematicElement resolveReference(String reference) {
+    public @Nullable SchematicElement resolveReference(SchematicsBuilder.ResolverContext context, AstLabel reference) {
         // TODO: many more!!!
-        return labelMap.get(reference);
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -158,21 +166,10 @@ public class SchematicElement implements BlockPosition {
                 '}';
     }
 
-    private RegionPosition createPosition(@Nullable AstBlock definition, String lastReference) {
-        if (definition == null) return new AbsolutePosition(Position.ORIGIN);
-        AstCoordinates anchor = definition.position().anchor();
-        return anchor.relative()
-                ? new RelativePosition(definition, Objects.requireNonNullElse(anchor.relativeTo(), lastReference), anchor.coordinates())
-                : new AbsolutePosition(anchor.coordinates());
-    }
-
     private interface RegionPosition {
         AbsolutePosition add(Position offset);
-
-        AbsolutePosition resolve(LayoutResolver.Context context);
+        AbsolutePosition resolve(SchematicsBuilder.ResolverContext context);
     }
-
-    private static final AbsolutePosition ORIGIN = new AbsolutePosition(Position.ORIGIN);
 
     private record AbsolutePosition(Position position) implements RegionPosition {
         @Override
@@ -181,21 +178,13 @@ public class SchematicElement implements BlockPosition {
         }
 
         @Override
-        public AbsolutePosition resolve(LayoutResolver.Context context) {
+        public AbsolutePosition resolve(SchematicsBuilder.ResolverContext context) {
             return this;
         }
     }
 
+    // This class in an inner class of the enclosing SchematicElement. It takes all the information it needs from it.
     private class RelativePosition implements RegionPosition {
-        private final AstBlock definition;
-        private final String reference;
-        private final Position offset;
-
-        private RelativePosition(AstBlock definition, String reference, Position offset) {
-            this.definition = definition;
-            this.reference = reference;
-            this.offset = offset;
-        }
 
         @Override
         public AbsolutePosition add(Position offset) {
@@ -204,42 +193,33 @@ public class SchematicElement implements BlockPosition {
         }
 
         @Override
-        public AbsolutePosition resolve(LayoutResolver.Context context) {
-            SchematicElement region = resolveReference(reference);
-            if (region == null) {
-                context.error(definition.position().anchor(), "Unknown block name '%s'.", reference);
-                return new AbsolutePosition(Position.INVALID);
-            } else if (context.visited(reference)) {
-                if (context.unreported(reference)) {
-                    context.error(definition.position().anchor(), "Circular definition of block '%s' position.", reference);
+        public AbsolutePosition resolve(SchematicsBuilder.ResolverContext context) {
+            Objects.requireNonNull(definition);
+            if (!definition.anchor().relative()) return new AbsolutePosition(definition.position().anchor().coordinates());
+
+            AstLabel reference = definition.anchor().relativeTo();
+            Position offset = definition.anchor().coordinates();
+
+            if (reference != null) {
+                SchematicElement region = resolveReference(context, reference);
+
+                if (region == null) {
+                    context.error(definition.position().anchor(), "Unknown block name '%s'.", reference);
+                } else if (context.visited(region)) {
+                    if (context.unreported(region)) {
+                        context.error(definition.position().anchor(), "Circular definition of block '%s' position.", reference);
+                    }
+                } else {
+                    return new AbsolutePosition(region.resolvePosition(context).add(offset));
                 }
-                return new AbsolutePosition(Position.INVALID);
             } else {
-                return new AbsolutePosition(region.resolvePosition(context).add(offset));
+                if (anchor != null) {
+                    return new AbsolutePosition(anchor.resolvePosition(context).add(offset));
+                }
+                context.error(definition, "No anchor defined for block.");
             }
-        }
 
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) return true;
-            if (obj == null || obj.getClass() != this.getClass()) return false;
-            var that = (RelativePosition) obj;
-            return Objects.equals(this.definition, that.definition) &&
-                    Objects.equals(this.reference, that.reference) &&
-                    Objects.equals(this.offset, that.offset);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(definition, reference, offset);
-        }
-
-        @Override
-        public String toString() {
-            return "RelativePosition[" +
-                    "definition=" + definition + ", " +
-                    "reference=" + reference + ", " +
-                    "offset=" + offset + ']';
+            return new AbsolutePosition(Position.INVALID);
         }
     }
 }

@@ -127,6 +127,18 @@ public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLabelList(SchemacodeParser.LabelListContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#labelId}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLabelId(SchemacodeParser.LabelIdContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#pattern}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPattern(SchemacodeParser.PatternContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code simplePosition}
 	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
 	 * @param ctx the parse tree

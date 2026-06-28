@@ -6,6 +6,7 @@ import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
+import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.Icons;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
@@ -16,12 +17,12 @@ import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.mindustry.*;
+import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,8 +39,13 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
     private AstSchematic astSchematic;
     private Map<String, AstText> constants;
     private Map<String, SchematicElement> astLabelMap;
-    private BlockPositionMap<BlockPosition> astPositionMap;
+    private BlockPositionMap<SchematicElement> astPositionMap;
     private BlockPositionMap<Block> positionMap;
+
+    private final ResolverContext untrackingContext = new ResolverContext(false);
+
+    // Elements reported for circular reference errors
+    private final Set<SchematicElement> reported = new HashSet<>();
 
     private boolean error = false;
 
@@ -122,14 +128,13 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         // Here are absolute positions of all blocks, stored as "#" + index
         // Labeled blocks are additionally stored under all their labels
-        LayoutResolver layoutResolver = new LayoutResolver(messageConsumer);
+        LayoutResolver layoutResolver = new LayoutResolver(this);
         SchematicElement schematic = layoutResolver.resolve(astBlocks);
         astLabelMap = schematic.getLabelMap();
-        List<BlockPosition> blockPositions = astLabelMap.entrySet().stream()
-                .filter(e -> e.getKey().charAt(0) == LayoutResolver.INDEX_KEY_CHAR)
-                .map(e -> (BlockPosition) e.getValue())
-                .sorted(Comparator.comparing(BlockPosition::index))
-                .toList();
+
+        List<SchematicElement> blockPositions = new ArrayList<>();
+        schematic.forEachBlock(blockPositions::add);
+        blockPositions.sort(Comparator.comparing(BlockPosition::index));
 
         astPositionMap = BlockPositionMap.forBuilder(messageConsumer, blockPositions);
 
@@ -159,7 +164,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         List<String> additionalLabels = compilerProfile.getAdditionalTags().stream().map(icons::translateIcon).toList();
         List<String> labels = Stream.concat(schemaLabels.stream(), additionalLabels.stream()).distinct().toList();
 
-        positionMap = BlockPositionMap.forBuilder(m -> {}, blocks);
+        positionMap = BlockPositionMap.forBuilder(_ -> {}, blocks);
 
         PowerGridSolver.solve(this, blocks);
         BridgeSolver.solve(this, blocks);
@@ -302,9 +307,9 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         return switch (element.definition().configuration()) {
             case AstBlockReference r -> verifyConfiguration(r, element, "block");
             case AstBoolean b -> BooleanConfiguration.of(b.value());
-            case AstConnection c -> c.evaluate(this, element.position());
+            case AstConnection c -> c.evaluate(untrackingContext, element);
             case AstConnections c ->
-                    new PositionArray(c.connections().stream().map(p -> p.evaluate(this, element.position())).toList());
+                    new PositionArray(c.connections().stream().map(p -> p.evaluate(untrackingContext, element)).toList());
             case AstItemReference r -> verifyConfiguration(r, element, "item");
             case AstLiquidReference r -> verifyConfiguration(r, element, "liquid");
             case AstProcessor p -> processorConfigurationBuilder.fromAstConfiguration(p, element);
@@ -434,29 +439,44 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         return Position.INVALID;
     }
 
-    public Map<String, SchematicElement> getAstLabelMap() {
-        return astLabelMap;
-    }
-
-
     public BlockPosition getBlockPosition(Position position) {
         return astPositionMap.at(position);
     }
 
-    public Position getAnchor(Position position) {
-        BlockPosition anchor = getBlockPosition(position);
-        return anchor == null ? position : anchor.position();
+    public Map<String, SchematicElement> getAstLabelMap() {
+        return astLabelMap;
     }
 
     public BlockPositionMap<Block> getPositionMap() {
         return positionMap;
     }
 
-    private static <T, E extends Throwable> T requireNonNull(T object, Supplier<E> exception) throws E {
-        if (object == null) {
-            throw exception.get();
-        } else {
-            return object;
+    public ResolverContext trackingResolverContext() {
+        return new ResolverContext(true);
+    }
+
+    public class ResolverContext {
+        private final boolean trackCircularReferences;
+        private final Set<SchematicElement> visited = new HashSet<>();
+
+        public ResolverContext(boolean trackCircularReferences) {
+            this.trackCircularReferences = trackCircularReferences;
+        }
+
+        public boolean visited(SchematicElement reference) {
+            return trackCircularReferences && !visited.add(reference);
+        }
+
+        public boolean unreported(SchematicElement reference) {
+            return reported.add(reference);
+        }
+
+        public SchematicElement getElement(Position position) {
+            return astPositionMap.at(position);
+        }
+
+        public void error(SourceElement node, @PrintFormat String format, Object... args) {
+            messageConsumer.accept(PositionalMessage.error(node.sourcePosition(), format, args));
         }
     }
 }

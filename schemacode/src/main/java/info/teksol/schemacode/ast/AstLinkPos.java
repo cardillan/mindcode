@@ -12,9 +12,11 @@ import java.util.function.Consumer;
 @NullMarked
 public record AstLinkPos(SourcePosition sourcePosition, AstConnection connection, @Nullable String name, boolean virtual) implements AstLink {
 
+    // TODO: needs to be moved into SchematicElement
     @Override
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder builder, Position processorPosition) {
-        linkConsumer.accept(new Link(stripPrefix(trueLinkName(builder)), connection.evaluate(builder, processorPosition)));
+        //linkConsumer.accept(new Link(stripPrefix(trueLinkName(builder)), connection.evaluate(builder, processorPosition)));
+        throw new UnsupportedOperationException();
     }
 
     private String trueLinkName(SchematicsBuilder builder) {
@@ -23,7 +25,7 @@ public record AstLinkPos(SourcePosition sourcePosition, AstConnection connection
                 builder.error(sourcePosition, "A link name was not specified.");
                 return "link1";
             }
-            return connection().id();
+            return connection().id().segments().getLast().name();
         } else {
             return name;
         }
