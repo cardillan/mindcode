@@ -44,8 +44,8 @@ public class ProcessorConfigurationBuilder {
         return position == null ? "" : position.blockType().name();
     }
 
-    public UnresolvedConfiguration fromAstConfiguration(SchematicsBuilder.ResolverContext context, AstProcessor processor, SchematicElement element) {
-        List<ProcessorConfiguration.Link> links = processorLinks(context, processor, element);
+    public UnresolvedConfiguration fromAstConfiguration(AstProcessor processor, SchematicElement element) {
+        List<ProcessorConfiguration.Link> links = processorLinks(processor, element);
 
         if (processor.language() == Language.MINDCODE) {
             return buildMindcodeConfiguration(processor, element, links);
@@ -55,9 +55,9 @@ public class ProcessorConfigurationBuilder {
         }
     }
 
-    private List<ProcessorConfiguration.Link> processorLinks(SchematicsBuilder.ResolverContext context, AstProcessor processor, SchematicElement element) {
+    private List<ProcessorConfiguration.Link> processorLinks(AstProcessor processor, SchematicElement element) {
         List<ProcessorConfiguration.Link> links = processor.links().stream()
-                .mapMulti((AstLink l, Consumer<ProcessorConfiguration.Link> consumer) -> l.getProcessorLinks(consumer, context, element))
+                .mapMulti((AstLink l, Consumer<ProcessorConfiguration.Link> consumer) -> l.getProcessorLinks(consumer, builder.configurationContext, element))
                 .distinct()
                 .toList();
 

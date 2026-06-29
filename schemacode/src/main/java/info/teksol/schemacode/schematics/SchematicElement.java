@@ -10,18 +10,20 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @NullMarked
 public class SchematicElement implements BlockPosition {
+
+    /// The parent region of this element, `null` for the top-level region
+    private final @Nullable SchematicElement parent;
+
     /// The AST node that defines this region
     /// `null` for the top-level (implicit) region
     private final @Nullable AstBlock definition;
 
     /// Type of the block (if this is a block and not a region)
     private final @Nullable BlockType blockType;
-
-    /// The parent region of this element, `null` for the top-level region
-    private final @Nullable SchematicElement parent;
 
     /// Unique block index
     private final int index;
@@ -45,20 +47,22 @@ public class SchematicElement implements BlockPosition {
     /// The absolute position of this element within the schematic
     private @Nullable Position absolutePosition;
 
+    /// An offset to be added to the computed position, used when constructing region arrays
+    private final Position offset;
+
     public static SchematicElement createBlock(@Nullable SchematicElement parent, AstBlock definition, String type, int index) {
         BlockType blockType = SchematicsMetadata.getMetadata().getBlockByName(type);
         int size = blockType == null ? 1 : blockType.size();            // Must not happen
         Position dimensions = new Position(size, size);
-        return new SchematicElement(parent, definition, blockType, index, dimensions, List.of(), Map.of());
+        return new SchematicElement(parent, definition, blockType, index, dimensions, List.of(), Map.of(), Position.ORIGIN);
     }
 
     public static SchematicElement createRegion(@Nullable SchematicElement parent, @Nullable AstBlock definition, int index) {
-        return new SchematicElement(parent, definition, null, index, null, new ArrayList<>(), new HashMap<>());
+        return new SchematicElement(parent, definition, null, index, null, new ArrayList<>(), new HashMap<>(), Position.ORIGIN);
     }
 
     private SchematicElement(@Nullable SchematicElement parent, @Nullable AstBlock definition, @Nullable BlockType blockType,
-            int index, @Nullable Position dimensions,
-            List<SchematicElement> elements, Map<String, SchematicElement> labelMap) {
+            int index, @Nullable Position dimensions, List<SchematicElement> elements, Map<String, SchematicElement> labelMap, Position offset) {
         this.parent = parent;
         this.definition = definition;
         this.blockType = blockType;
@@ -66,6 +70,22 @@ public class SchematicElement implements BlockPosition {
         this.dimensions = dimensions;
         this.elements = elements;
         this.labelMap = labelMap;
+        this.offset = offset;
+    }
+
+    public SchematicElement duplicate(Position offset, Supplier<Integer> indexSupplier) {
+        SchematicElement copy = new SchematicElement(parent, definition, blockType, indexSupplier.get(), dimensions,
+                duplicateElements(offset, indexSupplier), labelMap, offset);
+        if (origin != null) {
+            assert absolutePosition != null;
+            copy.origin = origin;
+            copy.absolutePosition = absolutePosition.add(offset);
+        }
+        return copy;
+    }
+
+    private List<SchematicElement> duplicateElements(Position offset, Supplier<Integer> indexSupplier) {
+        return elements.stream().map(e -> e.duplicate(offset, indexSupplier)).toList();
     }
 
     void addElement(SchematicElement element) {
@@ -91,10 +111,14 @@ public class SchematicElement implements BlockPosition {
         return origin;
     }
 
-    @Override
-    public Position position() {
+    public Position absolutePosition() {
         if (absolutePosition == null) throw new IllegalStateException("Position not resolved yet");
         return absolutePosition;
+    }
+
+    @Override
+    public Position position() {
+        return absolutePosition();
     }
 
     /// Returns true if this instance represents a block
@@ -155,18 +179,19 @@ public class SchematicElement implements BlockPosition {
         if (origin != null) return origin;
 
         Objects.requireNonNull(definition);
-        absolutePosition = origin = definition.anchor().relative()
+        origin = definition.anchor().relative()
                 ? resolveRelativePosition(context)
                 : definition.position().anchor().coordinates();
+        absolutePosition = origin.add(offset);
 
-        return origin;
+        return absolutePosition;
     }
 
     public void updateOrigin() {
         if (origin == null) throw new IllegalStateException("Position not resolved yet");
 
         if (!origin.zero()) {
-            elements.forEach(element -> element.absolutePosition = element.position().add(origin));
+            elements.forEach(element -> element.absolutePosition = element.absolutePosition().add(origin));
         }
     }
 

@@ -38,12 +38,11 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
     private AstSchematic astSchematic;
     private Map<String, AstText> constants;
-    private Map<String, SchematicElement> astLabelMap;
     private BlockPositionMap<SchematicElement> astPositionMap;
     private BlockPositionMap<Block> positionMap;
 
     // Context used to resolve configuration references. There's no danger of circular references here.
-    private final ResolverContext configurationContext = new ResolverContext(false);
+    final ResolverContext configurationContext = new ResolverContext(false);
 
     // Elements reported for circular reference errors
     private final Set<SchematicElement> reported = new HashSet<>();
@@ -116,7 +115,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         labelCounts.entrySet().stream()
                 .filter(e -> e.getValue() > 1)
-                .filter(e -> e.getKey().charAt(e.getKey().length() - 1) != BlockPositionResolver.LABEL_ARRAY_CHAR)
+                .filter(e -> e.getKey().charAt(e.getKey().length() - 1) != LayoutResolver.LABEL_ARRAY_CHAR)
                 .forEachOrdered(c -> addMessage(ToolMessage.error("Multiple definitions of block label '%s'.", c.getKey())));
 
         MindustryMetadata metadata = SchematicsMetadata.getMetadata();
@@ -127,17 +126,12 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         List<AstBlock> astBlocks = astSchematic.blocks().stream()
                 .filter(astBlock -> astBlock.isCluster() || metadata.isBlockNameValid(astBlock.type())).toList();
 
-        // Here are absolute positions of all blocks, stored as "#" + index
-        // Labeled blocks are additionally stored under all their labels
-        LayoutResolver layoutResolver = new LayoutResolver(this);
-        SchematicElement schematic = layoutResolver.resolve(astBlocks);
-        astLabelMap = schematic.getLabelMap();
+        SchematicElement schematic = LayoutResolver.resolve(this, astBlocks);
+        List<SchematicElement> elements = new ArrayList<>();
+        schematic.forEachBlock(elements::add);
+        elements.sort(Comparator.comparing(BlockPosition::index));
 
-        List<SchematicElement> blockPositions = new ArrayList<>();
-        schematic.forEachBlock(blockPositions::add);
-        blockPositions.sort(Comparator.comparing(BlockPosition::index));
-
-        astPositionMap = BlockPositionMap.forBuilder(messageConsumer, blockPositions);
+        astPositionMap = BlockPositionMap.forBuilder(messageConsumer, elements);
 
         Map<SchematicElement, UnresolvedConfiguration> configurations = new HashMap<>();
         schematic.forEachBlock(b -> configurations.put(b, getConfiguration(b)));
@@ -313,7 +307,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
                     new PositionArray(c.connections().stream().map(p -> p.evaluate(configurationContext, element)).toList());
             case AstItemReference reference -> verifyConfiguration(reference, element, "item");
             case AstLiquidReference reference -> verifyConfiguration(reference, element, "liquid");
-            case AstProcessor processor -> processorConfigurationBuilder.fromAstConfiguration(configurationContext, processor, element);
+            case AstProcessor processor -> processorConfigurationBuilder.fromAstConfiguration(processor, element);
             case AstRgbaValue rgb -> convertToRgbValue(element, rgb);
             case AstText t -> new TextConfiguration(t.getText(this));
             case AstUnitCommandReference reference -> verifyConfiguration(reference, element, "command");
@@ -431,21 +425,8 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         return result;
     }
 
-    public Position getBlockPosition(SourceElement element, String name) {
-        BlockPosition blockPosition = astLabelMap.get(name);
-        if (blockPosition != null) {
-            return blockPosition.position();
-        }
-        error(element, "Unknown block label '%s'", name);
-        return Position.INVALID;
-    }
-
     public BlockPosition getBlockPosition(Position position) {
         return astPositionMap.at(position);
-    }
-
-    public Map<String, SchematicElement> getAstLabelMap() {
-        return astLabelMap;
     }
 
     public BlockPositionMap<Block> getPositionMap() {
