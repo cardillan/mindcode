@@ -107,7 +107,7 @@ Does not display anything until Draw Flush is used.
 |`linePoly(x, y, sides, radius, rotation)`|`draw linePoly x y sides radius rotation 0`|
 |`triangle(x, y, x2, y2, x3, y3)`|`draw triangle x y x2 y2 x3 y3`|
 |`image(x, y, image, size, rotation)`|`draw image x y image size rotation 0`|
-|`drawPrint(x, y, align)`<br/>`align` - accepts `center`, `top`, `bottom`, `left`, `right`, `topLeft`, `topRight`, `bottomLeft`, `bottomRight`.|`draw print x y align 0 0 0`|
+|`drawPrint(x, y, align)`<br/>`align` - accepts `bottom`, `bottomLeft`, `bottomRight`, `center`, `left`, `right`, `top`, `topLeft`, `topRight`.|`draw print x y align 0 0 0`|
 |`translate(x, y)`|`draw translate x y 0 0 0 0`|
 |`scale(x, y)`|`draw scale x y 0 0 0 0`|
 |`rotate(degrees)`|`draw rotate 0 0 degrees 0 0 0`|
@@ -211,8 +211,8 @@ Locate units around a building with range.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = turret.radar(attr1, attr2, attr3, sort, order)`<br/>`attr1` - one of `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`.<br/>`attr2` - one of `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`.<br/>`attr3` - one of `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`.<br/>`sort` - one of `:distance`, `:health`, `:shield`, `:armor`, `:maxHealth`.|`radar attr1 attr2 attr3 sort turret order result`|
-|`result = radar(attr1, attr2, attr3, sort, turret, order)`<br/>`attr1` - one of `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`.<br/>`attr2` - one of `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`.<br/>`attr3` - one of `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`.<br/>`sort` - one of `:distance`, `:health`, `:shield`, `:armor`, `:maxHealth`.|`radar attr1 attr2 attr3 sort turret order result`|
+|`result = turret.radar(attr1, attr2, attr3, sort, order)`<br/>`attr1` - one of `:ally`, `:any`, `:attacker`, `:boss`, `:enemy`, `:flying`, `:ground`, `:player`.<br/>`attr2` - one of `:ally`, `:any`, `:attacker`, `:boss`, `:enemy`, `:flying`, `:ground`, `:player`.<br/>`attr3` - one of `:ally`, `:any`, `:attacker`, `:boss`, `:enemy`, `:flying`, `:ground`, `:player`.<br/>`sort` - one of `:armor`, `:distance`, `:health`, `:maxHealth`, `:shield`.|`radar attr1 attr2 attr3 sort turret order result`|
+|`result = radar(attr1, attr2, attr3, sort, turret, order)`<br/>`attr1` - one of `:ally`, `:any`, `:attacker`, `:boss`, `:enemy`, `:flying`, `:ground`, `:player`.<br/>`attr2` - one of `:ally`, `:any`, `:attacker`, `:boss`, `:enemy`, `:flying`, `:ground`, `:player`.<br/>`attr3` - one of `:ally`, `:any`, `:attacker`, `:boss`, `:enemy`, `:flying`, `:ground`, `:player`.<br/>`sort` - one of `:armor`, `:distance`, `:health`, `:maxHealth`, `:shield`.|`radar attr1 attr2 attr3 sort turret order result`|
 
 ## Instruction `Sensor`
 
@@ -222,7 +222,7 @@ Get data from a building or unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = object.sensor(property)`<br/>`property` - accepts `@totalItems`, `@firstItem`, `@totalLiquids`, `@totalPower`, `@itemCapacity`, `@liquidCapacity`, `@powerCapacity`, `@powerNetStored`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@ammo`, `@ammoCapacity`, `@currentAmmoType`, `@memoryCapacity`, `@health`, `@maxHealth`, `@heat`, `@shield`, `@armor`, `@efficiency`, `@progress`, `@timescale`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@shootX`, `@shootY`, `@cameraX`, `@cameraY`, `@cameraWidth`, `@cameraHeight`, `@displayWidth`, `@displayHeight`, `@bufferUsage`, `@size`, `@solid`, `@dead`, `@range`, `@shooting`, `@boosting`, `@mineX`, `@mineY`, `@mining`, `@speed`, `@team`, `@type`, `@flag`, `@controlled`, `@controller`, `@name`, `@payloadCount`, `@payloadType`, `@totalPayload`, `@payloadCapacity`, `@id`, `@enabled`, `@config`, `@color`.|`sensor result object property`|
+|`result = object.sensor(property)`<br/>`property` - accepts `@ammo`, `@ammoCapacity`, `@armor`, `@boosting`, `@bufferUsage`, `@cameraHeight`, `@cameraWidth`, `@cameraX`, `@cameraY`, `@color`, `@config`, `@controlled`, `@controller`, `@currentAmmoType`, `@dead`, `@displayHeight`, `@displayWidth`, `@efficiency`, `@enabled`, `@firstItem`, `@flag`, `@health`, `@heat`, `@id`, `@itemCapacity`, `@liquidCapacity`, `@maxHealth`, `@memoryCapacity`, `@mineX`, `@mineY`, `@mining`, `@name`, `@payloadCapacity`, `@payloadCount`, `@payloadType`, `@powerCapacity`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@powerNetStored`, `@progress`, `@range`, `@rotation`, `@shield`, `@shootX`, `@shootY`, `@shooting`, `@size`, `@solid`, `@speed`, `@team`, `@timescale`, `@totalItems`, `@totalLiquids`, `@totalPayload`, `@totalPower`, `@type`, `@velocityX`, `@velocityY`, `@x`, `@y`.|`sensor result object property`|
 
 ## Instruction `Operation`
 
@@ -263,7 +263,7 @@ For the inverse operation, sense `@id` of the object.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = lookup(type, index)`<br/>`type` - one of `:item`, `:block`, `:liquid`, `:unit`, `:team`.|`lookup type result index`|
+|`result = lookup(type, index)`<br/>`type` - one of `:block`, `:item`, `:liquid`, `:team`, `:unit`.|`lookup type result index`|
 
 ## Instruction `Pack Color`
 
@@ -313,7 +313,7 @@ Bind to the next unit of a type, and store it in `@unit`.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`unit = ubind(type)`<br/>`type` - accepts `@dagger`, `@mace`, `@fortress`, `@scepter`, `@reign`, `@nova`, `@pulsar`, `@quasar`, `@vela`, `@corvus`, `@crawler`, `@atrax`, `@spiroct`, `@arkyid`, `@toxopid`, `@flare`, `@horizon`, `@zenith`, `@antumbra`, `@eclipse`, `@mono`, `@poly`, `@mega`, `@quad`, `@oct`, `@risso`, `@minke`, `@bryde`, `@sei`, `@omura`, `@retusa`, `@oxynoe`, `@cyerce`, `@aegires`, `@navanax`, `@alpha`, `@beta`, `@gamma`, `@stell`, `@locus`, `@precept`, `@vanquish`, `@conquer`, `@merui`, `@cleroi`, `@anthicus`, `@anthicus-missile`, `@tecta`, `@collaris`, `@elude`, `@avert`, `@obviate`, `@quell`, `@quell-missile`, `@disrupt`, `@disrupt-missile`, `@renale`, `@latum`, `@evoke`, `@incite`, `@emanate`, `@block`, `@manifold`, `@assembly-drone`, `@scathe-missile`, `@scathe-missile-phase`, `@scathe-missile-surge`, `@scathe-missile-surge-split`, `@turret-unit-build-tower`.|`ubind type`|
+|`unit = ubind(type)`<br/>`type` - accepts `@aegires`, `@alpha`, `@anthicus`, `@anthicus-missile`, `@antumbra`, `@arkyid`, `@assembly-drone`, `@atrax`, `@avert`, `@beta`, `@block`, `@bryde`, `@cleroi`, `@collaris`, `@conquer`, `@corvus`, `@crawler`, `@cyerce`, `@dagger`, `@disrupt`, `@disrupt-missile`, `@eclipse`, `@elude`, `@emanate`, `@evoke`, `@flare`, `@fortress`, `@gamma`, `@horizon`, `@incite`, `@latum`, `@locus`, `@mace`, `@manifold`, `@mega`, `@merui`, `@minke`, `@mono`, `@navanax`, `@nova`, `@obviate`, `@oct`, `@omura`, `@oxynoe`, `@poly`, `@precept`, `@pulsar`, `@quad`, `@quasar`, `@quell`, `@quell-missile`, `@reign`, `@renale`, `@retusa`, `@risso`, `@scathe-missile`, `@scathe-missile-phase`, `@scathe-missile-surge`, `@scathe-missile-surge-split`, `@scepter`, `@sei`, `@spiroct`, `@stell`, `@tecta`, `@toxopid`, `@turret-unit-build-tower`, `@vanquish`, `@vela`, `@zenith`.|`ubind type`|
 
 ## Instruction `Unit Control`
 
@@ -333,7 +333,7 @@ Control the currently bound unit.
 |`target(x, y, shoot)`|`ucontrol target x y shoot 0 0`|
 |`targetp(unit, shoot)`|`ucontrol targetp unit shoot 0 0 0`|
 |`itemDrop(to, amount)`|`ucontrol itemDrop to amount 0 0 0`|
-|`itemTake(from, item, amount)`<br/>`item` - accepts `@copper`, `@lead`, `@metaglass`, `@graphite`, `@sand`, `@coal`, `@titanium`, `@thorium`, `@scrap`, `@silicon`, `@plastanium`, `@phase-fabric`, `@surge-alloy`, `@spore-pod`, `@blast-compound`, `@pyratite`, `@beryllium`, `@tungsten`, `@oxide`, `@carbide`, `@fissile-matter`, `@dormant-cyst`.|`ucontrol itemTake from item amount 0 0`|
+|`itemTake(from, item, amount)`<br/>`item` - accepts `@beryllium`, `@blast-compound`, `@carbide`, `@coal`, `@copper`, `@dormant-cyst`, `@fissile-matter`, `@graphite`, `@lead`, `@metaglass`, `@oxide`, `@phase-fabric`, `@plastanium`, `@pyratite`, `@sand`, `@scrap`, `@silicon`, `@spore-pod`, `@surge-alloy`, `@thorium`, `@titanium`, `@tungsten`.|`ucontrol itemTake from item amount 0 0`|
 |`payDrop()`|`ucontrol payDrop 0 0 0 0 0`|
 |`payTake(takeUnits)`|`ucontrol payTake takeUnits 0 0 0 0`|
 |`payEnter()`|`ucontrol payEnter 0 0 0 0 0`|
@@ -352,7 +352,7 @@ Locate units around the currently bound unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = uradar(attr1, attr2, attr3, sort, order)`<br/>`attr1` - one of `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`.<br/>`attr2` - one of `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`.<br/>`attr3` - one of `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`.<br/>`sort` - one of `:distance`, `:health`, `:shield`, `:armor`, `:maxHealth`.|`uradar attr1 attr2 attr3 sort 0 order result`|
+|`result = uradar(attr1, attr2, attr3, sort, order)`<br/>`attr1` - one of `:ally`, `:any`, `:attacker`, `:boss`, `:enemy`, `:flying`, `:ground`, `:player`.<br/>`attr2` - one of `:ally`, `:any`, `:attacker`, `:boss`, `:enemy`, `:flying`, `:ground`, `:player`.<br/>`attr3` - one of `:ally`, `:any`, `:attacker`, `:boss`, `:enemy`, `:flying`, `:ground`, `:player`.<br/>`sort` - one of `:armor`, `:distance`, `:health`, `:maxHealth`, `:shield`.|`uradar attr1 attr2 attr3 sort 0 order result`|
 
 ## Instruction `Unit Locate`
 
@@ -363,8 +363,8 @@ Requires a bound unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`found = ulocate(:ore, oreType, out outx, out outy)`<br/>`oreType` - accepts `@copper`, `@lead`, `@metaglass`, `@graphite`, `@sand`, `@coal`, `@titanium`, `@thorium`, `@scrap`, `@silicon`, `@plastanium`, `@phase-fabric`, `@surge-alloy`, `@spore-pod`, `@blast-compound`, `@pyratite`, `@beryllium`, `@tungsten`, `@oxide`, `@carbide`, `@fissile-matter`, `@dormant-cyst`.|`ulocate ore core true oreType outx outy found 0`|
-|`building = ulocate(:building, group, enemy, out outx, out outy, out found)`<br/>`group` - one of `:core`, `:storage`, `:generator`, `:turret`, `:factory`, `:repair`, `:battery`, `:reactor`, `:drill`, `:shield`.|`ulocate building group enemy @copper outx outy found building`|
+|`found = ulocate(:ore, oreType, out outx, out outy)`<br/>`oreType` - accepts `@beryllium`, `@blast-compound`, `@carbide`, `@coal`, `@copper`, `@dormant-cyst`, `@fissile-matter`, `@graphite`, `@lead`, `@metaglass`, `@oxide`, `@phase-fabric`, `@plastanium`, `@pyratite`, `@sand`, `@scrap`, `@silicon`, `@spore-pod`, `@surge-alloy`, `@thorium`, `@titanium`, `@tungsten`.|`ulocate ore core true oreType outx outy found 0`|
+|`building = ulocate(:building, group, enemy, out outx, out outy, out found)`<br/>`group` - one of `:battery`, `:core`, `:drill`, `:factory`, `:generator`, `:reactor`, `:repair`, `:shield`, `:storage`, `:turret`.|`ulocate building group enemy @copper outx outy found building`|
 |`building = ulocate(:spawn, out outx, out outy, out found)`|`ulocate spawn core true @copper outx outy found building`|
 |`building = ulocate(:damaged, out outx, out outy, out found)`|`ulocate damaged core true @copper outx outy found building`|
 
@@ -382,7 +382,7 @@ Get tile data at any location.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = getblock(layer, x, y)`<br/>`layer` - one of `:floor`, `:ore`, `:block`, `:building`.|`getblock layer result x y`|
+|`result = getblock(layer, x, y)`<br/>`layer` - one of `:block`, `:building`, `:floor`, `:ore`.|`getblock layer result x y`|
 
 ## Instruction `Set Block`
 
@@ -393,7 +393,7 @@ Set tile data at any location.
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
 |`setblock(:floor, to, x, y)`|`setblock floor to x y 0 0`|
-|`setblock(:ore, to, x, y)`<br/>`to` - accepts `@copper`, `@lead`, `@metaglass`, `@graphite`, `@sand`, `@coal`, `@titanium`, `@thorium`, `@scrap`, `@silicon`, `@plastanium`, `@phase-fabric`, `@surge-alloy`, `@spore-pod`, `@blast-compound`, `@pyratite`, `@beryllium`, `@tungsten`, `@oxide`, `@carbide`, `@fissile-matter`, `@dormant-cyst`.|`setblock ore to x y 0 0`|
+|`setblock(:ore, to, x, y)`<br/>`to` - accepts `@beryllium`, `@blast-compound`, `@carbide`, `@coal`, `@copper`, `@dormant-cyst`, `@fissile-matter`, `@graphite`, `@lead`, `@metaglass`, `@oxide`, `@phase-fabric`, `@plastanium`, `@pyratite`, `@sand`, `@scrap`, `@silicon`, `@spore-pod`, `@surge-alloy`, `@thorium`, `@titanium`, `@tungsten`.|`setblock ore to x y 0 0`|
 |`setblock(:block, to, x, y, team, rotation)`|`setblock block to x y team rotation`|
 
 ## Instruction `Spawn Unit`
@@ -404,7 +404,7 @@ Spawn unit at a location.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = spawn(unit, x, y, rotation, team)`<br/>`unit` - accepts `@dagger`, `@mace`, `@fortress`, `@scepter`, `@reign`, `@nova`, `@pulsar`, `@quasar`, `@vela`, `@corvus`, `@crawler`, `@atrax`, `@spiroct`, `@arkyid`, `@toxopid`, `@flare`, `@horizon`, `@zenith`, `@antumbra`, `@eclipse`, `@mono`, `@poly`, `@mega`, `@quad`, `@oct`, `@risso`, `@minke`, `@bryde`, `@sei`, `@omura`, `@retusa`, `@oxynoe`, `@cyerce`, `@aegires`, `@navanax`, `@alpha`, `@beta`, `@gamma`, `@stell`, `@locus`, `@precept`, `@vanquish`, `@conquer`, `@merui`, `@cleroi`, `@anthicus`, `@anthicus-missile`, `@tecta`, `@collaris`, `@elude`, `@avert`, `@obviate`, `@quell`, `@quell-missile`, `@disrupt`, `@disrupt-missile`, `@renale`, `@latum`, `@evoke`, `@incite`, `@emanate`, `@block`, `@manifold`, `@assembly-drone`, `@scathe-missile`, `@scathe-missile-phase`, `@scathe-missile-surge`, `@scathe-missile-surge-split`, `@turret-unit-build-tower`.|`spawn unit x y rotation team result`|
+|`result = spawn(unit, x, y, rotation, team)`<br/>`unit` - accepts `@aegires`, `@alpha`, `@anthicus`, `@anthicus-missile`, `@antumbra`, `@arkyid`, `@assembly-drone`, `@atrax`, `@avert`, `@beta`, `@block`, `@bryde`, `@cleroi`, `@collaris`, `@conquer`, `@corvus`, `@crawler`, `@cyerce`, `@dagger`, `@disrupt`, `@disrupt-missile`, `@eclipse`, `@elude`, `@emanate`, `@evoke`, `@flare`, `@fortress`, `@gamma`, `@horizon`, `@incite`, `@latum`, `@locus`, `@mace`, `@manifold`, `@mega`, `@merui`, `@minke`, `@mono`, `@navanax`, `@nova`, `@obviate`, `@oct`, `@omura`, `@oxynoe`, `@poly`, `@precept`, `@pulsar`, `@quad`, `@quasar`, `@quell`, `@quell-missile`, `@reign`, `@renale`, `@retusa`, `@risso`, `@scathe-missile`, `@scathe-missile-phase`, `@scathe-missile-surge`, `@scathe-missile-surge-split`, `@scepter`, `@sei`, `@spiroct`, `@stell`, `@tecta`, `@toxopid`, `@turret-unit-build-tower`, `@vanquish`, `@vela`, `@zenith`.|`spawn unit x y rotation team result`|
 
 ## Instruction `Apply Status`
 
@@ -414,8 +414,8 @@ Apply or clear a status effect from a unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`applyStatus(status, unit, duration)`<br/>`status` - one of `:burning`, `:freezing`, `:unmoving`, `:wet`, `:melting`, `:sapped`, `:electrified`, `:spore-slowed`, `:tarred`, `:overdrive`, `:overclock`, `:boss`, `:shocked`, `:blasted`.|`status false status unit duration`|
-|`clearStatus(status, unit)`<br/>`status` - one of `:burning`, `:freezing`, `:unmoving`, `:wet`, `:melting`, `:sapped`, `:electrified`, `:spore-slowed`, `:tarred`, `:overdrive`, `:overclock`, `:boss`, `:shocked`, `:blasted`.|`status true status unit 0`|
+|`applyStatus(status, unit, duration)`<br/>`status` - one of `:blasted`, `:boss`, `:burning`, `:corroded`, `:disarmed`, `:dynamic`, `:electrified`, `:fast`, `:freezing`, `:invincible`, `:melting`, `:muddy`, `:none`, `:overclock`, `:overdrive`, `:sapped`, `:shielded`, `:shocked`, `:slow`, `:spore-slowed`, `:tarred`, `:unmoving`, `:wet`.|`status false status unit duration`|
+|`clearStatus(status, unit)`<br/>`status` - one of `:blasted`, `:boss`, `:burning`, `:corroded`, `:disarmed`, `:dynamic`, `:electrified`, `:fast`, `:freezing`, `:invincible`, `:melting`, `:muddy`, `:none`, `:overclock`, `:overdrive`, `:sapped`, `:shielded`, `:shocked`, `:slow`, `:spore-slowed`, `:tarred`, `:unmoving`, `:wet`.|`status true status unit 0`|
 
 ## Instruction `Weather Sense`
 
@@ -425,7 +425,7 @@ Check if a type of weather is active.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = weathersense(weather)`<br/>`weather` - accepts `@snowing`, `@rain`, `@sandstorm`, `@sporestorm`, `@fog`, `@suspend-particles`.|`weathersense result weather`|
+|`result = weathersense(weather)`<br/>`weather` - accepts `@fog`, `@rain`, `@sandstorm`, `@snowing`, `@sporestorm`, `@suspend-particles`.|`weathersense result weather`|
 
 ## Instruction `Weather Set`
 
@@ -435,7 +435,7 @@ Set the current state of a type of weather.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`weatherset(weather, active)`<br/>`weather` - accepts `@snowing`, `@rain`, `@sandstorm`, `@sporestorm`, `@fog`, `@suspend-particles`.|`weatherset weather active`|
+|`weatherset(weather, active)`<br/>`weather` - accepts `@fog`, `@rain`, `@sandstorm`, `@snowing`, `@sporestorm`, `@suspend-particles`.|`weatherset weather active`|
 
 ## Instruction `Spawn Wave`
 
@@ -631,7 +631,7 @@ Sets a property of a unit or building.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`object.setprop(property, value)`<br/>`property` - accepts `@totalPower`, `@health`, `@shield`, `@armor`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@speed`, `@team`, `@flag`, `@payloadType`.|`setprop property object value`|
+|`object.setprop(property, value)`<br/>`property` - accepts `@armor`, `@flag`, `@health`, `@payloadType`, `@rotation`, `@shield`, `@speed`, `@team`, `@totalPower`, `@velocityX`, `@velocityY`, `@x`, `@y`.|`setprop property object value`|
 
 ## Instruction `Play Sound`
 
@@ -688,7 +688,7 @@ Markers currently limited to 20,000 per world.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`makemarker(marker, id, x, y, replace)`<br/>`marker` - one of `:shapeText`, `:point`, `:shape`, `:text`, `:line`, `:texture`, `:quad`.|`makemarker marker id x y replace`|
+|`makemarker(marker, id, x, y, replace)`<br/>`marker` - one of `:line`, `:point`, `:quad`, `:shape`, `:shapeText`, `:text`, `:texture`.|`makemarker marker id x y replace`|
 
 ## Instruction `Locale Print`
 

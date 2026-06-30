@@ -384,8 +384,7 @@ public class MindustryMetadata {
     }
 
     public Set<String> getStatusEffects() {
-        return cacheInstance(statusEffects, () -> new NamedReader("mimex-status-effects.txt",
-                "hidden", "false"::equalsIgnoreCase).createFromResource());
+        return cacheInstance(statusEffects, () -> new NamedReader("mimex-status-effects.txt").createFromResource());
     }
 
     public Set<String> getTileLayers() {

@@ -203,7 +203,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
     }
 
     private void printPossibleValues(InstructionProcessor processor, PrintWriter w, TypedArgument arg) {
-        Collection<String> values = arg.type().getVersionKeywords(processor.getProcessorVersion());
+        Collection<String> values = arg.type().getVersionKeywords(processor.getProcessorVersion()).stream().sorted().toList();
         if (arg.type().isKeyword()) {
             w.print("<br/>`");
             w.print(arg.argument().toMlog());
