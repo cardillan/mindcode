@@ -58,6 +58,7 @@ public record AstConnection(SourcePosition sourcePosition, @Nullable AstCoordina
 
     @Override
     public AstConnection withEmptyPosition() {
-        return new AstConnection(SourcePosition.EMPTY, eraseNullablePosition(position), id);
+        return new AstConnection(SourcePosition.EMPTY, eraseNullablePosition(position),
+                eraseNullablePosition(id));
     }
 }

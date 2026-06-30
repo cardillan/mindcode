@@ -37,9 +37,4 @@ public record AstLabel(SourcePosition sourcePosition, List<AstLabelSegment> segm
     public String fullName(int upTo) {
         return segments.stream().limit(upTo + 1).map(AstLabelSegment::name).collect(Collectors.joining("."));
     }
-
-    @Override
-    public String toString() {
-        return fullName();
-    }
 }

@@ -220,12 +220,14 @@ public class SchematicElement implements BlockPosition {
 
         if (reference != null) {
             SchematicElement target = resolveReference(context, reference, false);
+            if (target == null) return Position.INVALID;
 
-            if (target == null) {
-                context.error(definition.position().anchor(), "Unknown block name '%s'.", reference.fullName());
-            } else if (context.visited(target)) {
-                if (context.unreported(target)) {
-                    context.error(definition.position().anchor(), "Circular definition of block '%s' position.", reference.fullName());
+            if (context.visited(target)) {
+                for (SchematicElement element : context.visitedSince(target)) {
+                    if (context.unreported(element)) {
+                        context.error(definition.position().anchor(), "Circular definition of block '%s' position.",
+                                Objects.requireNonNull(element.definition().anchor().relativeTo()).fullName());
+                    }
                 }
             } else {
                 target.resolvePosition(context);
@@ -259,7 +261,7 @@ public class SchematicElement implements BlockPosition {
             current = current.parent;
         }
 
-        context.error(reference, "Unknown block label '%s'.", reference.getSegment(0));
+        context.error(reference, "Unknown block name '%s'.", reference.getSegment(0));
         return null;
     }
 

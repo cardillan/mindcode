@@ -24,6 +24,8 @@ public record BlockPositionMap<T extends BlockPosition>(Map<Integer, T> blockMap
         Map<Integer, T> blockMap = new HashMap<>();
         Map<Integer, Position> positionMap = new HashMap<>();
         for (T block : blocks) {
+            if (block.position().invalid()) continue;
+
             if (block.size() == 1) {
                 // No transformation
                 int key = block.position().pack();

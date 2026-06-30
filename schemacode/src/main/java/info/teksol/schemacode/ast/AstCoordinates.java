@@ -56,6 +56,6 @@ public record AstCoordinates(SourcePosition sourcePosition, Position coordinates
 
     @Override
     public AstCoordinates withEmptyPosition() {
-        return new AstCoordinates(SourcePosition.EMPTY, coordinates, relative, relativeTo);
+        return new AstCoordinates(SourcePosition.EMPTY, coordinates, relative, eraseNullablePosition(relativeTo));
     }
 }

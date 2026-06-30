@@ -131,7 +131,6 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     void refusesCircularPositionDefinition() {
         assertGeneratesErrors(
                 ExpectedMessages.create()
-                        .addRegex("Overlapping blocks: #\\d '@switch' at \\(0, 0\\) and #\\d '@switch' at \\(0, 0\\).").repeat(2)
                         .addRegex("Circular definition of block 'switch2' position.")
                         .addRegex("Circular definition of block 'switch3' position."),
                 """
@@ -151,8 +150,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     void refusesUnknownBlockReference() {
         assertGeneratesErrors(
                 ExpectedMessages.create()
-                        .add("Unknown block name 'switch3'.").atLeast(1)
-                        .add("Overlapping blocks: #0 '@switch' at (0, 0) and #1 '@switch' at (0, 0)."),
+                        .add("Unknown block name 'switch3'.").atLeast(1),
                 """
                         schematic
                         switch1:

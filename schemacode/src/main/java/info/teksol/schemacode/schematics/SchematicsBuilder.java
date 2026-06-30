@@ -6,12 +6,12 @@ import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
-import info.teksol.mc.mindcode.compiler.PositionalMessage;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.Icons;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.Target;
+import info.teksol.mc.util.CollectionUtils;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.*;
@@ -203,8 +203,8 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         if (blocks.isEmpty()) {
             return Position.ORIGIN;
         } else {
-            int x = blocks.stream().mapToInt(Block::x).min().orElse(0);
-            int y = blocks.stream().mapToInt(Block::y).min().orElse(0);
+            int x = blocks.stream().filter(b -> !b.position().invalid()).mapToInt(Block::x).min().orElse(0);
+            int y = blocks.stream().filter(b -> !b.position().invalid()).mapToInt(Block::y).min().orElse(0);
             return new Position(x, y);
         }
     }
@@ -439,7 +439,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
     public class ResolverContext {
         private final boolean trackCircularReferences;
-        private final Set<SchematicElement> visited = new HashSet<>();
+        private final Set<SchematicElement> visited = new LinkedHashSet<>();
 
         public ResolverContext(boolean trackCircularReferences) {
             this.trackCircularReferences = trackCircularReferences;
@@ -447,6 +447,12 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         public boolean visited(SchematicElement reference) {
             return trackCircularReferences && !visited.add(reference);
+        }
+
+        public List<SchematicElement> visitedSince(SchematicElement reference) {
+            ArrayList<SchematicElement> result = new ArrayList<>(visited);
+            int index = CollectionUtils.indexOf(result, e -> e == reference);
+            return index == -1 ? Collections.emptyList() : result.subList(index, result.size());
         }
 
         public boolean unreported(SchematicElement reference) {
@@ -458,7 +464,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         }
 
         public void error(SourceElement node, @PrintFormat String format, Object... args) {
-            messageConsumer.accept(PositionalMessage.error(node.sourcePosition(), format, args));
+            SchematicsBuilder.this.error(node, format, args);
         }
     }
 }

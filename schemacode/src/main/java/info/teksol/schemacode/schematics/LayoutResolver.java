@@ -47,7 +47,7 @@ public class LayoutResolver {
     }
 
     private SchematicElement createRegion(@Nullable SchematicElement parent, @Nullable AstBlock definition, List<AstBlock> blocks) {
-        SchematicElement region = SchematicElement.createRegion(parent, definition, blockIndex++);
+        SchematicElement region = SchematicElement.createRegion(parent, definition, parent == null ? 0 : blockIndex++);
         SchematicElement last = null;
 
         // Create the basic structure
@@ -70,7 +70,7 @@ public class LayoutResolver {
                     region.addElement(element);
                     element.setAnchor(last);
                     if (!labels.isEmpty()) {
-                        region.addLabel(resolveLabel(labels.removeFirst()), masterElement);
+                        region.addLabel(resolveLabel(labels.removeFirst()), element);
                     }
                 }
             }
