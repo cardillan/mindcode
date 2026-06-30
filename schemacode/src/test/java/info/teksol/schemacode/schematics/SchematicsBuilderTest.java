@@ -980,11 +980,9 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     void refusesUnknownBlocks() {
         assertGeneratesErrors(
                 ExpectedMessages.create()
-                        .add("Unknown block type '@fluffyBunny'.")
-                        .add("Actual schematic dimensions ( 0,  0) are smaller than specified dimensions ( 1,  1)."),
+                        .add("Unknown block type '@fluffyBunny'."),
                 """
                         schematic
-                            dimensions = (1, 1)
                             @fluffyBunny at (0, 0)
                         end
                         """

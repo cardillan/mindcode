@@ -174,6 +174,16 @@ public interface SchemacodeParserListener extends ParseTreeListener {
 	 */
 	void exitRegion(SchemacodeParser.RegionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#regionDimensions}.
+	 * @param ctx the parse tree
+	 */
+	void enterRegionDimensions(SchemacodeParser.RegionDimensionsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#regionDimensions}.
+	 * @param ctx the parse tree
+	 */
+	void exitRegionDimensions(SchemacodeParser.RegionDimensionsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#block}.
 	 * @param ctx the parse tree
 	 */

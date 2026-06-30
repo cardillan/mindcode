@@ -24,6 +24,7 @@ MLOG            : 'mlog';
 NAME            : 'name';
 PARAM           : 'param' -> pushMode(InParam);
 PROCESSOR       : 'processor';
+RANDOM          : 'random';
 REGION          : 'region';
 RGBA            : 'rgba';
 SCHEMATIC       : 'schematic';

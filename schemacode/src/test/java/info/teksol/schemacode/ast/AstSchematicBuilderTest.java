@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     protected AstDefinitions definitionWithBlocks(AstBlock... blocks) {
-        return new AstDefinitions(pos(1, 1), List.of(new AstSchematic(pos(1, 1), List.of(), List.of(blocks)))).withEmptyPosition();
+        return new AstDefinitions(pos(1, 1), List.of(new AstSchematic(pos(1, 1), List.of(), List.of(), List.of(blocks)))).withEmptyPosition();
     }
 
     @Test
@@ -62,6 +62,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                                         new AstSchemaAttribute(pos(5, 5), "label", AstStringLiteral.fromText(pos(5, 12), "label2")),
                                         new AstSchemaAttribute(pos(6, 5), "dimensions", new AstCoordinates(pos(6, 18), 2, 1))
                                 ),
+                                List.of(),
                                 List.of(
                                         new AstBlock(pos(7, 1),
                                                 List.of("switch1"),
@@ -151,6 +152,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                                 List.of(
                                         new AstSchemaAttribute(pos(2, 5), "name", AstStringLiteral.fromText(pos(2, 13), "Name"))
                                 ),
+                                List.of(),
                                 List.of()
                         )
                 ));
@@ -175,6 +177,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                                 List.of(
                                         new AstSchemaAttribute(pos(2, 5), "name", new AstStringRef(pos(2, 12), "str_Name"))
                                 ),
+                                List.of(),
                                 List.of()
                         ),
                         new AstStringConstant(pos(5, 1), "str_Name", AstStringLiteral.fromText(pos(5, 13), "Name"))
@@ -199,6 +202,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                                 List.of(
                                         new AstSchemaAttribute(pos(2, 5), "dimensions", new AstCoordinates(pos(2, 18), 4, 5))
                                 ),
+                                List.of(),
                                 List.of()
                         )
                 )
@@ -222,6 +226,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                                 List.of(
                                         new AstSchemaAttribute(pos(2, 5), "target", new AstStringLiteral(pos(2, 13), "7.1"))
                                 ),
+                                List.of(),
                                 List.of()
                         )
                 )
@@ -372,7 +377,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void refusesInvalidDirection() {
         parseSchematicsExpectingMessages(
                 ExpectedMessages.create()
-                        .add("Parse error: missing {'north', 'south', 'east', 'west'} at 'middle'"),
+                        .add("Parse error: missing {'random', 'north', 'south', 'east', 'west'} at 'middle'"),
                 """
                         schematic
                             @conveyor at ( 0,  0) facing middle

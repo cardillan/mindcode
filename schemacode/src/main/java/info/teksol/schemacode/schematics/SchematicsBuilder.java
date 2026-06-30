@@ -120,13 +120,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         MindustryMetadata metadata = SchematicsMetadata.getMetadata();
 
-        astSchematic.blocks().stream().filter(astBlock -> !astBlock.isCluster() && !metadata.isBlockNameValid(astBlock.type()))
-                .forEachOrdered(astBlock -> error(astBlock, "Unknown block type '%s'.", astBlock.type()));
-
-        List<AstBlock> astBlocks = astSchematic.blocks().stream()
-                .filter(astBlock -> astBlock.isCluster() || metadata.isBlockNameValid(astBlock.type())).toList();
-
-        SchematicElement schematic = LayoutResolver.resolve(this, astBlocks);
+        SchematicElement schematic = LayoutResolver.resolve(this, astSchematic);
         List<SchematicElement> elements = new ArrayList<>();
         schematic.forEachBlock(elements::add);
         elements.sort(Comparator.comparing(BlockPosition::index));
@@ -140,9 +134,10 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         schematic.forEachBlock(element -> {
             AstBlock astBlock = element.definition();
             BlockType type = element.blockType();
-            Direction direction = astBlock.direction() == null
-                    ? Direction.EAST
-                    : Direction.valueOf(astBlock.direction().direction().toUpperCase());
+            Direction direction =
+                    astBlock.direction() == null ? Direction.EAST :
+                    astBlock.direction().direction().equals("random") ? randomDirection() :
+                    Direction.valueOf(astBlock.direction().direction().toUpperCase());
             Configuration configuration = checkType(element, configurations.get(element));
             Block block = new Block(astBlock.sourcePosition(), element.index(), astBlock.labels(), type, element.position(), direction,
                     configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass()));
@@ -165,6 +160,11 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         BridgeSolver.solve(this, blocks);
 
         return createSchematic(name, filename, description, labels, blocks);
+    }
+
+    private static final Random random = new Random();
+    private Direction randomDirection() {
+        return Direction.convert((byte) random.nextInt(4));
     }
 
     private Configuration checkType(SchematicElement element, UnresolvedConfiguration configuration) {

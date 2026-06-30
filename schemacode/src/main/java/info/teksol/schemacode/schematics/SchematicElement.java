@@ -1,7 +1,6 @@
 package info.teksol.schemacode.schematics;
 
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
-import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.AstBlock;
 import info.teksol.schemacode.ast.AstLabel;
 import info.teksol.schemacode.mindustry.Position;
@@ -10,7 +9,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.IntSupplier;
 
 @NullMarked
 public class SchematicElement implements BlockPosition {
@@ -50,9 +49,8 @@ public class SchematicElement implements BlockPosition {
     /// An offset to be added to the computed position, used when constructing region arrays
     private final Position offset;
 
-    public static SchematicElement createBlock(@Nullable SchematicElement parent, AstBlock definition, String type, int index) {
-        BlockType blockType = SchematicsMetadata.getMetadata().getBlockByName(type);
-        int size = blockType == null ? 1 : blockType.size();            // Must not happen
+    public static SchematicElement createBlock(@Nullable SchematicElement parent, AstBlock definition, BlockType blockType, int index) {
+        int size = blockType.size();
         Position dimensions = new Position(size, size);
         return new SchematicElement(parent, definition, blockType, index, dimensions, List.of(), Map.of(), Position.ORIGIN);
     }
@@ -73,19 +71,40 @@ public class SchematicElement implements BlockPosition {
         this.offset = offset;
     }
 
-    public SchematicElement duplicate(Position offset, Supplier<Integer> indexSupplier) {
-        SchematicElement copy = new SchematicElement(parent, definition, blockType, indexSupplier.get(), dimensions,
-                duplicateElements(offset, indexSupplier), labelMap, offset);
+    public SchematicElement duplicateAt(Position position, IntSupplier indexSupplier) {
+        return duplicate(parent, definition, position, indexSupplier);
+    }
+
+    public SchematicElement duplicateInto(SchematicElement parent, @Nullable AstBlock definition, IntSupplier indexSupplier) {
+        return duplicate(parent, definition, Position.ORIGIN, indexSupplier);
+    }
+
+    private SchematicElement duplicate(@Nullable SchematicElement parent, @Nullable AstBlock definition, Position offset, IntSupplier indexSupplier) {
+        boolean isRegion = isRegion();
+        SchematicElement copy = new SchematicElement(parent, definition, blockType, indexSupplier.getAsInt(), dimensions,
+                isRegion ? new ArrayList<>() : List.of(), isRegion ? new HashMap<>() : Map.of(), offset);
+
+        if (isRegion) {
+            // Copy elements
+            IdentityHashMap<SchematicElement, SchematicElement> copies = new IdentityHashMap<>(elements.size());
+            for (SchematicElement element : elements) {
+                SchematicElement elementCopy = element.duplicate(copy, element.definition, offset, indexSupplier);
+                copy.elements.add(elementCopy);
+                copies.put(element, elementCopy);
+            }
+
+            // Remap labels
+            for (Map.Entry<String, SchematicElement> entry : labelMap.entrySet()) {
+                copy.labelMap.put(entry.getKey(), copies.get(entry.getValue()));
+            }
+        }
+
         if (origin != null) {
             assert absolutePosition != null;
             copy.origin = origin;
             copy.absolutePosition = absolutePosition.add(offset);
         }
         return copy;
-    }
-
-    private List<SchematicElement> duplicateElements(Position offset, Supplier<Integer> indexSupplier) {
-        return elements.stream().map(e -> e.duplicate(offset, indexSupplier)).toList();
     }
 
     void addElement(SchematicElement element) {
@@ -178,10 +197,9 @@ public class SchematicElement implements BlockPosition {
     public Position resolvePosition(SchematicsBuilder.ResolverContext context) {
         if (origin != null) return origin;
 
-        Objects.requireNonNull(definition);
-        origin = definition.anchor().relative()
-                ? resolveRelativePosition(context)
-                : definition.position().anchor().coordinates();
+        origin = definition == null ? Position.ORIGIN :
+                definition.anchor().relative() ? resolveRelativePosition(context) :
+                        definition.position().anchor().coordinates();
         absolutePosition = origin.add(offset);
 
         return absolutePosition;

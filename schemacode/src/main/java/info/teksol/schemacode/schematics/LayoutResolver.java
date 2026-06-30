@@ -1,17 +1,18 @@
 package info.teksol.schemacode.schematics;
 
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.util.CollectionUtils;
 import info.teksol.mc.util.MutableInteger;
 import info.teksol.schemacode.SchematicsInternalError;
-import info.teksol.schemacode.ast.AstBlock;
-import info.teksol.schemacode.ast.AstSchemaBlock;
-import info.teksol.schemacode.ast.AstSchemaRegion;
+import info.teksol.schemacode.SchematicsMetadata;
+import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.SchematicsBuilder.ResolverContext;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.IntSupplier;
 
 @NullMarked
 public class LayoutResolver {
@@ -19,40 +20,70 @@ public class LayoutResolver {
 
     private final SchematicsBuilder builder;
 
-    private final Map<String, SchematicElement> indexedBlocks = new HashMap<>();
-
+    private final Map<String, SchematicElement> namedRegions = new HashMap<>();
     private final Map<String, MutableInteger> arrayLabels = new HashMap<>();
 
     private int blockIndex = 0;
 
-    public static SchematicElement resolve(SchematicsBuilder builder, List<AstBlock> blocks) {
-        return new LayoutResolver(builder).createRegion(null, null, blocks);
+    public static SchematicElement resolve(SchematicsBuilder builder, AstSchematic astSchematic) {
+        return new LayoutResolver(builder).createSchematic(astSchematic);
     }
 
     private LayoutResolver(SchematicsBuilder builder) {
         this.builder = builder;
     }
 
-    private SchematicElement convert(SchematicElement parent, AstBlock definition) {
+    private SchematicElement createSchematic(AstSchematic astSchematic) {
+        for (AstRegionDefinition def : astSchematic.regions()) {
+            AstSchemaRegion astSchemaRegion = def.region();
+            SchematicElement region = createRegion(null, null, null, astSchemaRegion.blocks(), () -> 0);
+            namedRegions.put(def.name(), region);
+        }
+
+        return createRegion(null, null, null, astSchematic.blocks(), () -> blockIndex++);
+    }
+
+    private SchematicElement convert(SchematicElement parent, AstBlock definition, IntSupplier indexSupplier) {
         return switch (definition.element()) {
-            case AstSchemaBlock b -> createBlock(parent, definition, b);
-            case AstSchemaRegion r -> createRegion(parent, definition, r.blocks());
-            //case AstSchemaRegionRef r -> resolve(List.of());
+            case AstSchemaBlock b -> createBlock(parent, definition, b.type(), indexSupplier);
+            case AstSchemaRegion r -> createRegion(parent, definition, r.dimensions(), r.blocks(), indexSupplier);
+            case AstSchemaRegionRef r -> copyNamedRegion(parent, definition, r);
             default -> throw new SchematicsInternalError("Unexpected block type: %s", definition.element());
         };
     }
 
-    private SchematicElement createBlock(@Nullable SchematicElement parent, AstBlock definition, AstSchemaBlock block) {
-        return SchematicElement.createBlock(parent, definition, block.type(), blockIndex++);
+    private BlockType defaultBlockType() {
+        return Objects.requireNonNull(SchematicsMetadata.getMetadata().getBlockByName("@copper-wall"));
     }
 
-    private SchematicElement createRegion(@Nullable SchematicElement parent, @Nullable AstBlock definition, List<AstBlock> blocks) {
+    private SchematicElement copyNamedRegion(SchematicElement parent, AstBlock definition, AstSchemaRegionRef r) {
+        SchematicElement region = namedRegions.get(r.regionReference());
+        if (region == null) {
+            builder.error(definition, "Unknown named region '%s'.", r.regionReference());
+            return SchematicElement.createBlock(parent, definition, defaultBlockType(), 0);
+        } else {
+            return region.duplicateInto(parent, definition, () -> blockIndex++);
+        }
+    }
+
+    private SchematicElement createBlock(@Nullable SchematicElement parent, AstBlock definition, String type, IntSupplier indexSupplier) {
+        BlockType blockType = SchematicsMetadata.getMetadata().getBlockByName(type);
+        if (blockType == null) {
+            builder.error(definition, "Unknown block type '%s'.", type);
+            blockType = defaultBlockType();
+        }
+
+        return SchematicElement.createBlock(parent, definition, blockType, indexSupplier.getAsInt());
+    }
+
+    private SchematicElement createRegion(@Nullable SchematicElement parent, @Nullable AstBlock definition,
+            @Nullable AstDimensions dimensions, List<AstBlock> blocks, IntSupplier indexSupplier) {
         SchematicElement region = SchematicElement.createRegion(parent, definition, parent == null ? 0 : blockIndex++);
         SchematicElement last = null;
 
         // Create the basic structure
         for (AstBlock block : blocks) {
-            SchematicElement masterElement = convert(region, block);
+            SchematicElement masterElement = convert(region, block, indexSupplier);
 
             List<Position> areaPositions = getAreaPositions(block, masterElement.dimensions());
             List<String> labels = generateLabels(block, areaPositions);
@@ -64,7 +95,7 @@ public class LayoutResolver {
             } else {
                 boolean first = true;
                 for (Position position : areaPositions) {
-                    SchematicElement element = first ? masterElement : masterElement.duplicate(position, () -> blockIndex++);
+                    SchematicElement element = first ? masterElement : masterElement.duplicateAt(position, indexSupplier);
                     first = false;
 
                     region.addElement(element);
@@ -88,7 +119,7 @@ public class LayoutResolver {
             element.updateOrigin();
         }
 
-        region.setDimensions(new Position(width, height));
+        region.setDimensions(dimensions == null ? new Position(width, height) : dimensions.toPosition());
         return region;
     }
 

@@ -37,13 +37,17 @@ number : (INT | SIGNEDINT);
 versionNumber : ( INT | VERSION );
 
 region
-    : name=ID ASSIGN REGION blocks=block* END
+    : name=ID ASSIGN REGION dimensions=regionDimensions? blocks=block* END
+    ;
+
+regionDimensions
+    : LEFTPAREN width = number COMMA height = number RIGHTPAREN
     ;
 
 block
     : labels=labelList? elementType=REF AT pos=blockPosition dir=direction? cfg=configuration?
     | labels=labelList? elementId=ID AT pos=blockPosition dir=direction? cfg=configuration?
-    | labels=labelList? REGION blocks=block* END AT pos=blockPosition dir=direction? cfg=configuration?
+    | labels=labelList? REGION dimensions=regionDimensions? blocks=block* END AT pos=blockPosition dir=direction? cfg=configuration?
     ;
 
 blockId : (ID | BLOCKID);
@@ -86,7 +90,7 @@ coordinatesRelativeTo
     ;
 
 direction
-    : FACING dir=( NORTH | SOUTH | EAST | WEST )
+    : FACING dir=( NORTH | SOUTH | EAST | WEST | RANDOM)
     ;
 
 configuration

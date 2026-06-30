@@ -109,6 +109,12 @@ public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRegion(SchemacodeParser.RegionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#regionDimensions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRegionDimensions(SchemacodeParser.RegionDimensionsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
