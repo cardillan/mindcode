@@ -55,6 +55,21 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
         return invalid() || offset == 0 ? this : new Position(x - offset, y - offset);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
+    public Position transpose() {
+        return x == y ? this : new Position(y, x);
+    }
+
+    @SuppressWarnings("SuspiciousNameCombination")
+    public Position rotate(Direction direction) {
+        return switch (direction) {
+            case EAST -> this;
+            case NORTH -> new Position(-y, x);
+            case WEST -> new Position(-x, -y);
+            case SOUTH -> new Position(y, -x);
+        };
+    }
+
     public Position remap(UnaryOperator<Position> mapping) {
         return mapping.apply(this);
     }
@@ -65,6 +80,10 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
 
     public boolean zero() {
         return x == 0 && y == 0;
+    }
+
+    public int  area() {
+        return x * y;
     }
 
     public boolean emptyArea() {

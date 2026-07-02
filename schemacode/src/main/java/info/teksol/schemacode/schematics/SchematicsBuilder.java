@@ -16,7 +16,10 @@ import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
-import info.teksol.schemacode.mindustry.*;
+import info.teksol.schemacode.mindustry.Color;
+import info.teksol.schemacode.mindustry.ConfigurationType;
+import info.teksol.schemacode.mindustry.Position;
+import info.teksol.schemacode.mindustry.UnitPlan;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -134,12 +137,8 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         schematic.forEachBlock(element -> {
             AstBlock astBlock = element.definition();
             BlockType type = element.blockType();
-            Direction direction =
-                    astBlock.direction() == null ? Direction.EAST :
-                    astBlock.direction().direction().equals("random") ? randomDirection() :
-                    Direction.valueOf(astBlock.direction().direction().toUpperCase());
             Configuration configuration = checkType(element, configurations.get(element));
-            Block block = new Block(astBlock.sourcePosition(), element.index(), astBlock.labels(), type, element.position(), direction,
+            Block block = new Block(astBlock.sourcePosition(), element.index(), element.labels(), type, element.position(), element.direction(),
                     configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass()));
             configuration.validate(this, astBlock, block);
             blocks.add(block);
@@ -160,11 +159,6 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         BridgeSolver.solve(this, blocks);
 
         return createSchematic(name, filename, description, labels, blocks);
-    }
-
-    private static final Random random = new Random();
-    private Direction randomDirection() {
-        return Direction.convert((byte) random.nextInt(4));
     }
 
     private Configuration checkType(SchematicElement element, UnresolvedConfiguration configuration) {

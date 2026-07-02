@@ -3,6 +3,7 @@ package info.teksol.schemacode.schematics;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.schemacode.ast.AstBlock;
 import info.teksol.schemacode.ast.AstLabel;
+import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -30,15 +31,21 @@ public class SchematicElement implements BlockPosition {
     /// The contained regions (empty for leaf blocks)
     final List<SchematicElement> elements;
 
+    /// The labels of this block/region
+    final List<String> labels = new ArrayList<>();
+
     /// The label map for blocs in this region
     final Map<String, SchematicElement> labelMap;
+
+    /// The direction of the block or region
+    private final Direction originalDirection;
 
     /// The dimensions of this region
     private @Nullable Position dimensions;
 
     /// The default anchor for this element: the previously placed element within the current region,
     /// or `null` if this is the first element within a region.
-    private @Nullable SchematicElement anchor;
+    private @Nullable SchematicElement defaultAnchor;
 
     /// The position relative to the enclosing region
     private @Nullable Position origin;
@@ -46,25 +53,42 @@ public class SchematicElement implements BlockPosition {
     /// The absolute position of this element within the schematic
     private @Nullable Position absolutePosition;
 
-    /// An offset to be added to the computed position, used when constructing region arrays
-    private final Position offset;
+    /// An offset to be added to the computed position, used when constructing region arrays and rotating regions
+    private Position offset;
+
+    /// An additional rotation since the block's creation
+    private Direction rotation = Direction.EAST;
 
     public static SchematicElement createBlock(@Nullable SchematicElement parent, AstBlock definition, BlockType blockType, int index) {
         int size = blockType.size();
         Position dimensions = new Position(size, size);
-        return new SchematicElement(parent, definition, blockType, index, dimensions, List.of(), Map.of(), Position.ORIGIN);
+        return new SchematicElement(parent, definition, blockType, index, direction(definition), dimensions,
+                List.of(), Map.of(), Position.ORIGIN);
     }
 
+    // Note: a region is always created with the 'east' direction and rotated after construction
     public static SchematicElement createRegion(@Nullable SchematicElement parent, @Nullable AstBlock definition, int index) {
-        return new SchematicElement(parent, definition, null, index, null, new ArrayList<>(), new HashMap<>(), Position.ORIGIN);
+        return new SchematicElement(parent, definition, null, index, Direction.EAST, null,
+                new ArrayList<>(), new HashMap<>(), Position.ORIGIN);
+    }
+
+    private static final Random random = new Random();
+    public static Direction direction(@Nullable AstBlock definition) {
+        if (definition == null || definition.direction() == null) return Direction.EAST;
+        String d = definition.direction().direction();
+        return d.equals("random")
+                ? Direction.convert(random.nextInt(4))
+                : Direction.valueOf(d.toUpperCase());
     }
 
     private SchematicElement(@Nullable SchematicElement parent, @Nullable AstBlock definition, @Nullable BlockType blockType,
-            int index, @Nullable Position dimensions, List<SchematicElement> elements, Map<String, SchematicElement> labelMap, Position offset) {
+            int index, Direction originalDirection, @Nullable Position dimensions, List<SchematicElement> elements, Map<String, SchematicElement> labelMap,
+            Position offset) {
         this.parent = parent;
         this.definition = definition;
         this.blockType = blockType;
         this.index = index;
+        this.originalDirection = originalDirection;
         this.dimensions = dimensions;
         this.elements = elements;
         this.labelMap = labelMap;
@@ -81,7 +105,7 @@ public class SchematicElement implements BlockPosition {
 
     private SchematicElement duplicate(@Nullable SchematicElement parent, @Nullable AstBlock definition, Position offset, IntSupplier indexSupplier) {
         boolean isRegion = isRegion();
-        SchematicElement copy = new SchematicElement(parent, definition, blockType, indexSupplier.getAsInt(), dimensions,
+        SchematicElement copy = new SchematicElement(parent, definition, blockType, indexSupplier.getAsInt(), originalDirection, dimensions,
                 isRegion ? new ArrayList<>() : List.of(), isRegion ? new HashMap<>() : Map.of(), offset);
 
         if (isRegion) {
@@ -89,13 +113,13 @@ public class SchematicElement implements BlockPosition {
             IdentityHashMap<SchematicElement, SchematicElement> copies = new IdentityHashMap<>(elements.size());
             for (SchematicElement element : elements) {
                 SchematicElement elementCopy = element.duplicate(copy, element.definition, offset, indexSupplier);
-                copy.elements.add(elementCopy);
+                copy.addElement(elementCopy);
                 copies.put(element, elementCopy);
             }
 
             // Remap labels
             for (Map.Entry<String, SchematicElement> entry : labelMap.entrySet()) {
-                copy.labelMap.put(entry.getKey(), copies.get(entry.getValue()));
+                copy.addLabel(entry.getKey(), copies.get(entry.getValue()));
             }
         }
 
@@ -113,6 +137,7 @@ public class SchematicElement implements BlockPosition {
 
     void addLabel(String label, SchematicElement element) {
         labelMap.put(label, element);
+        element.labels.add(label);
     }
 
     @Override
@@ -154,12 +179,20 @@ public class SchematicElement implements BlockPosition {
         return Objects.requireNonNull(definition);
     }
 
+    public Direction direction() {
+        return originalDirection.rotate(rotation);
+    }
+
     public Position dimensions() {
         return Objects.requireNonNull(dimensions);
     }
 
     public void setDimensions(Position dimensions) {
         this.dimensions = dimensions;
+    }
+
+    public List<String> labels() {
+        return labels;
     }
 
     public Map<String, SchematicElement> getLabelMap() {
@@ -170,12 +203,8 @@ public class SchematicElement implements BlockPosition {
         return parent;
     }
 
-    public @Nullable SchematicElement anchor() {
-        return anchor;
-    }
-
-    public void setAnchor(@Nullable SchematicElement anchor) {
-        this.anchor = anchor;
+    public void setDefaultAnchor(@Nullable SchematicElement defaultAnchor) {
+        this.defaultAnchor = defaultAnchor;
     }
 
     public List<SchematicElement> getBlocks() {
@@ -194,6 +223,65 @@ public class SchematicElement implements BlockPosition {
         }
     }
 
+    // Rotates the element.
+    // For blocks, nothing needs to be made, although we do process the dimensions in case non-square blocks
+    // get ever introduced into the game.
+    // For regions, the following is done
+    // 1. All contained elements are rotated.
+    // 2. All contained elements are moved around the region's origin
+    // 3. As a result of the rotation, the region's origin needs to be shifted to remain in the lower-left corner.
+    //    This is against ensured by moving the elements around, taking the region's new dimensions into account.
+    //
+    // The origin of this element within the enclosing region remains unaffected.
+    public void rotate(Direction rotateDirection) {
+        if (rotateDirection == Direction.EAST) return;
+        Objects.requireNonNull(dimensions);
+
+        System.out.println("Rotating " + this + " to " + rotateDirection);
+        rotation = rotation.rotate(rotateDirection);
+        if (rotateDirection != Direction.WEST) dimensions = dimensions.transpose();
+
+        if (isRegion()) {
+            int rw = dimensions.x() - 1, rh = dimensions.y() - 1;
+
+            for (SchematicElement element : elements) {
+                element.rotate(rotateDirection);
+                int x = element.origin().x();
+                int y = element.origin().y();
+                int ew = element.dimensions().x() - 1, eh = element.dimensions().y() - 1;
+
+                switch (rotateDirection) {
+                    case NORTH -> element.move(rw - y - x - ew, x - y);
+                    case WEST -> element.move(rw - 2*x - ew, rh - 2*y - eh);
+                    case SOUTH -> element.move(y - x, rh - x - y + eh);
+                    default -> throw new IllegalStateException("Unexpected value: " + rotateDirection);
+                }
+            }
+        }
+        System.out.println("Finished rotating " + this + " to " + rotateDirection);
+    }
+
+    // Moves the element within the region
+    private void move(int offsetX, int offsetY) {
+        if (offsetX == 0 && offsetY == 0) return;
+        System.out.println("Moving " + this + " by " + offsetX + ", " + offsetY);
+
+        if (origin != null) {
+            assert absolutePosition != null;
+            origin = origin.add(offsetX, offsetY);
+            absolutePosition = absolutePosition.add(offsetX, offsetY);
+        } else {
+            offset = offset.add(offsetX, offsetY);
+        }
+
+        // For contained elements, we move just the absolute position
+        for (SchematicElement e : elements) {
+            e.updateAbsolutePosition(offsetX, offsetY);
+        }
+
+        System.out.println("Finished moving " + this);
+    }
+
     public Position resolvePosition(SchematicsBuilder.ResolverContext context) {
         if (origin != null) return origin;
 
@@ -205,11 +293,21 @@ public class SchematicElement implements BlockPosition {
         return absolutePosition;
     }
 
+    private void updateAbsolutePosition(int offsetX, int offsetY) {
+        System.out.println("Moving position of " + this + " by " + offsetX + ", " + offsetY);
+        assert absolutePosition != null;
+        absolutePosition = absolutePosition.add(offsetX, offsetY);
+        for (SchematicElement e : elements) {
+            e.updateAbsolutePosition(offsetX, offsetY);
+        }
+    }
+
     public void updateOrigin() {
         if (origin == null) throw new IllegalStateException("Position not resolved yet");
+        System.out.println("Updating origin of " + this);
 
         if (!origin.zero()) {
-            elements.forEach(element -> element.absolutePosition = element.absolutePosition().add(origin));
+            elements.forEach( e -> e.updateAbsolutePosition(origin.x(), origin.y()));
         }
     }
 
@@ -258,8 +356,8 @@ public class SchematicElement implements BlockPosition {
                 }
             }
         } else {
-            if (anchor != null) {
-                return anchor.resolvePosition(context).add(offset);
+            if (defaultAnchor != null) {
+                return defaultAnchor.resolvePosition(context).add(offset);
             }
             context.error(definition, "No anchor defined for block.");
         }
@@ -310,10 +408,14 @@ public class SchematicElement implements BlockPosition {
 
     @Override
     public String toString() {
-        return "SchematicElement{" +
-                "blockType=" + blockType +
-                ", origin=" + origin +
-                ", dimensions=" + dimensions +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        if (!labels.isEmpty()) sb.append(labels.getFirst()).append(": ");
+        sb.append(blockType == null ? "region" : blockType.name());
+        if (origin == null || absolutePosition == null) {
+            sb.append(": unresolved, offset ").append(offset.toStringAbsolute());
+        } else {
+            sb.append(": origin ").append(origin.toStringAbsolute()).append(", position ").append(absolutePosition.toStringAbsolute());
+        }
+        return sb.toString();
     }
 }

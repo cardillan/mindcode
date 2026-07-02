@@ -62,7 +62,9 @@ public class LayoutResolver {
             builder.error(definition, "Unknown named region '%s'.", r.regionReference());
             return SchematicElement.createBlock(parent, definition, defaultBlockType(), 0);
         } else {
-            return region.duplicateInto(parent, definition, () -> blockIndex++);
+            SchematicElement copy = region.duplicateInto(parent, definition, () -> blockIndex++);
+            copy.rotate(SchematicElement.direction(definition));
+            return copy;
         }
     }
 
@@ -90,7 +92,7 @@ public class LayoutResolver {
 
             if (areaPositions.size() == 1) {
                 region.addElement(masterElement);
-                masterElement.setAnchor(last);
+                masterElement.setDefaultAnchor(last);
                 labels.forEach(label -> region.addLabel(resolveLabel(label), masterElement));
             } else {
                 boolean first = true;
@@ -99,7 +101,7 @@ public class LayoutResolver {
                     first = false;
 
                     region.addElement(element);
-                    element.setAnchor(last);
+                    element.setDefaultAnchor(last);
                     if (!labels.isEmpty()) {
                         region.addLabel(resolveLabel(labels.removeFirst()), element);
                     }
@@ -120,6 +122,7 @@ public class LayoutResolver {
         }
 
         region.setDimensions(dimensions == null ? new Position(width, height) : dimensions.toPosition());
+        region.rotate(SchematicElement.direction(definition));
         return region;
     }
 
