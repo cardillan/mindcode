@@ -53,8 +53,11 @@ public class SchematicElement implements BlockPosition {
     /// The absolute position of this element within the schematic
     private @Nullable Position absolutePosition;
 
-    /// An offset to be added to the computed position, used when constructing region arrays and rotating regions
-    private Position offset;
+    /// An offset to be added to the origin AND computed position; used when constructing region arrays
+    private final Position originOffset;
+
+    /// An offset to be added to the computed position only; used when rotating regions
+    private Position positionOffset = Position.ORIGIN;
 
     /// An additional rotation since the block's creation
     private Direction rotation = Direction.EAST;
@@ -83,7 +86,7 @@ public class SchematicElement implements BlockPosition {
 
     private SchematicElement(@Nullable SchematicElement parent, @Nullable AstBlock definition, @Nullable BlockType blockType,
             int index, Direction originalDirection, @Nullable Position dimensions, List<SchematicElement> elements, Map<String, SchematicElement> labelMap,
-            Position offset) {
+            Position originOffset) {
         this.parent = parent;
         this.definition = definition;
         this.blockType = blockType;
@@ -92,7 +95,7 @@ public class SchematicElement implements BlockPosition {
         this.dimensions = dimensions;
         this.elements = elements;
         this.labelMap = labelMap;
-        this.offset = offset;
+        this.originOffset = originOffset;
     }
 
     public SchematicElement duplicateAt(Position position, IntSupplier indexSupplier) {
@@ -103,16 +106,18 @@ public class SchematicElement implements BlockPosition {
         return duplicate(parent, definition, Position.ORIGIN, indexSupplier);
     }
 
-    private SchematicElement duplicate(@Nullable SchematicElement parent, @Nullable AstBlock definition, Position offset, IntSupplier indexSupplier) {
+    private SchematicElement duplicate(@Nullable SchematicElement parent, @Nullable AstBlock definition,
+            Position originOffset, IntSupplier indexSupplier) {
         boolean isRegion = isRegion();
         SchematicElement copy = new SchematicElement(parent, definition, blockType, indexSupplier.getAsInt(), originalDirection, dimensions,
-                isRegion ? new ArrayList<>() : List.of(), isRegion ? new HashMap<>() : Map.of(), offset);
+                isRegion ? new ArrayList<>() : List.of(), isRegion ? new HashMap<>() : Map.of(), originOffset);
+        copy.rotation = rotation;
 
         if (isRegion) {
             // Copy elements
             IdentityHashMap<SchematicElement, SchematicElement> copies = new IdentityHashMap<>(elements.size());
             for (SchematicElement element : elements) {
-                SchematicElement elementCopy = element.duplicate(copy, element.definition, offset, indexSupplier);
+                SchematicElement elementCopy = element.duplicate(copy, element.definition, originOffset, indexSupplier);
                 copy.addElement(elementCopy);
                 copies.put(element, elementCopy);
             }
@@ -126,7 +131,7 @@ public class SchematicElement implements BlockPosition {
         if (origin != null) {
             assert absolutePosition != null;
             copy.origin = origin;
-            copy.absolutePosition = absolutePosition.add(offset);
+            copy.absolutePosition = absolutePosition;
         }
         return copy;
     }
@@ -237,7 +242,7 @@ public class SchematicElement implements BlockPosition {
         if (rotateDirection == Direction.EAST) return;
         Objects.requireNonNull(dimensions);
 
-        System.out.println("Rotating " + this + " to " + rotateDirection);
+        //System.out.println("Rotating " + this + " to " + rotateDirection);
         rotation = rotation.rotate(rotateDirection);
         if (rotateDirection != Direction.WEST) dimensions = dimensions.transpose();
 
@@ -258,20 +263,20 @@ public class SchematicElement implements BlockPosition {
                 }
             }
         }
-        System.out.println("Finished rotating " + this + " to " + rotateDirection);
+        //System.out.println("Finished rotating " + this + " to " + rotateDirection);
     }
 
     // Moves the element within the region
     private void move(int offsetX, int offsetY) {
         if (offsetX == 0 && offsetY == 0) return;
-        System.out.println("Moving " + this + " by " + offsetX + ", " + offsetY);
+        //System.out.println("Moving " + this + " by " + offsetX + ", " + offsetY);
 
         if (origin != null) {
             assert absolutePosition != null;
             origin = origin.add(offsetX, offsetY);
             absolutePosition = absolutePosition.add(offsetX, offsetY);
         } else {
-            offset = offset.add(offsetX, offsetY);
+            positionOffset = positionOffset.add(offsetX, offsetY);
         }
 
         // For contained elements, we move just the absolute position
@@ -279,22 +284,23 @@ public class SchematicElement implements BlockPosition {
             e.updateAbsolutePosition(offsetX, offsetY);
         }
 
-        System.out.println("Finished moving " + this);
+        //System.out.println("Finished moving " + this);
     }
 
     public Position resolvePosition(SchematicsBuilder.ResolverContext context) {
         if (origin != null) return origin;
 
-        origin = definition == null ? Position.ORIGIN :
+        Position pos = definition == null ? Position.ORIGIN :
                 definition.anchor().relative() ? resolveRelativePosition(context) :
                         definition.position().anchor().coordinates();
-        absolutePosition = origin.add(offset);
+        origin = pos.add(originOffset);
+        absolutePosition = origin.add(positionOffset);
 
         return absolutePosition;
     }
 
     private void updateAbsolutePosition(int offsetX, int offsetY) {
-        System.out.println("Moving position of " + this + " by " + offsetX + ", " + offsetY);
+        //System.out.println("Moving position of " + this + " by " + offsetX + ", " + offsetY);
         assert absolutePosition != null;
         absolutePosition = absolutePosition.add(offsetX, offsetY);
         for (SchematicElement e : elements) {
@@ -304,7 +310,7 @@ public class SchematicElement implements BlockPosition {
 
     public void updateOrigin() {
         if (origin == null) throw new IllegalStateException("Position not resolved yet");
-        System.out.println("Updating origin of " + this);
+        //System.out.println("Updating origin of " + this);
 
         if (!origin.zero()) {
             elements.forEach( e -> e.updateAbsolutePosition(origin.x(), origin.y()));
@@ -412,7 +418,7 @@ public class SchematicElement implements BlockPosition {
         if (!labels.isEmpty()) sb.append(labels.getFirst()).append(": ");
         sb.append(blockType == null ? "region" : blockType.name());
         if (origin == null || absolutePosition == null) {
-            sb.append(": unresolved, offset ").append(offset.toStringAbsolute());
+            sb.append(": unresolved, origin offset ").append(originOffset.toStringAbsolute()).append(", position offset ").append(positionOffset.toStringAbsolute());
         } else {
             sb.append(": origin ").append(origin.toStringAbsolute()).append(", position ").append(absolutePosition.toStringAbsolute());
         }

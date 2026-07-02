@@ -36,7 +36,7 @@ public class LayoutResolver {
     private SchematicElement createSchematic(AstSchematic astSchematic) {
         for (AstRegionDefinition def : astSchematic.regions()) {
             AstSchemaRegion astSchemaRegion = def.region();
-            SchematicElement region = createRegion(null, null, null, astSchemaRegion.blocks(), () -> 0);
+            SchematicElement region = createRegion(null, null, astSchemaRegion.dimensions(), astSchemaRegion.blocks(), () -> 0);
             namedRegions.put(def.name(), region);
         }
 
