@@ -8,8 +8,16 @@ import org.jspecify.annotations.Nullable;
 public record AstBlockPosition(SourcePosition sourcePosition, AstCoordinates coordinates, BlockArray blockArrayType,
                                @Nullable AstCoordinates extension, boolean horizontal) implements AstSchemaItem {
 
+    public AstBlockPosition(AstCoordinates coordinates, BlockArray blockArrayType, @Nullable AstCoordinates extension, boolean horizontal) {
+        this(SourcePosition.EMPTY, coordinates, blockArrayType, extension, horizontal);
+    }
+
     public AstBlockPosition(SourcePosition sourcePosition, AstCoordinates anchor) {
         this(sourcePosition, anchor, BlockArray.SINGLE, null, false);
+    }
+
+    public AstBlockPosition(AstCoordinates anchor) {
+        this(SourcePosition.EMPTY, anchor, BlockArray.SINGLE, null, false);
     }
 
     @Override

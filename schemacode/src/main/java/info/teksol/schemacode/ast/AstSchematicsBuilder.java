@@ -128,8 +128,7 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
                 new AstSchemaRegion(pos(ctx.REGION().getSymbol()), maybeVisit(ctx.dimensions), processBlocks(ctx.block())));
     }
 
-    private static final AstBlockPosition ZERO_POSITION = new AstBlockPosition(SourcePosition.EMPTY,
-            new AstCoordinates(SourcePosition.EMPTY, 0, 0));
+    private static final AstBlockPosition ZERO_POSITION = new AstBlockPosition(new AstCoordinates(0, 0));
 
     @Override
     public AstBlock visitBlock(SchemacodeParser.BlockContext ctx) {

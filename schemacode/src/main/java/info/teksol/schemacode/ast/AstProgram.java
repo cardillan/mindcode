@@ -13,8 +13,12 @@ import java.util.stream.Collectors;
 public record AstProgram(SourcePosition sourcePosition, List<AstProgramSnippet> snippets) implements AstSchemaItem {
     public static AstProgram EMPTY = new AstProgram(SourcePosition.EMPTY, List.of());
 
-    public AstProgram(SourcePosition sourcePosition, AstProgramSnippet... snippets) {
-        this(sourcePosition, List.of(snippets));
+    public AstProgram(List<AstProgramSnippet> snippets) {
+        this(SourcePosition.EMPTY, snippets);
+    }
+
+    public AstProgram(AstProgramSnippet... snippets) {
+        this(List.of(snippets));
     }
 
     public String getProgramText(SchematicsBuilder builder, String prologueName) {

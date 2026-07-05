@@ -12,6 +12,10 @@ import java.util.function.Consumer;
 @NullMarked
 public record AstLinkPattern(SourcePosition sourcePosition, AstLabel pattern) implements AstLink {
 
+    public AstLinkPattern(AstLabel pattern) {
+        this(SourcePosition.EMPTY, pattern);
+    }
+
     @Override
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder.ResolverContext context, SchematicElement element) {
         SchematicElement region = element.parent();

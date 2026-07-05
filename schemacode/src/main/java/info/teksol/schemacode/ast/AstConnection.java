@@ -28,20 +28,18 @@ public record AstConnection(SourcePosition sourcePosition, @Nullable AstCoordina
     }
 
     // Test only
-    public AstConnection(SourcePosition sourcePosition, int x, int y) {
-        this(sourcePosition, new AstCoordinates(sourcePosition, x, y), null);
+    public AstConnection(int x, int y) {
+        this(SourcePosition.EMPTY, new AstCoordinates(x, y), null);
     }
 
     // Test only
-    public AstConnection(SourcePosition sourcePosition, int x, int y, boolean relative) {
-        this(sourcePosition, new AstCoordinates(
-                sourcePosition.withColumn(sourcePosition.column() + 1),
-                x, y, relative), null);
+    public AstConnection(int x, int y, boolean relative) {
+        this(SourcePosition.EMPTY, new AstCoordinates(x, y, relative), null);
     }
 
     // Test only
-    public AstConnection(SourcePosition pos, String label) {
-        this(pos, null, new AstLabel(pos, List.of(new AstLabelSegment(pos, label))));
+    public AstConnection(String label) {
+        this(SourcePosition.EMPTY, new AstLabel(List.of(new AstLabelSegment(label))));
     }
 
     public Position evaluate(SchematicsBuilder.ResolverContext context, SchematicElement element) {

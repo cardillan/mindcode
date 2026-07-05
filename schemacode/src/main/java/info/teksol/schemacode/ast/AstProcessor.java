@@ -10,6 +10,10 @@ import java.util.List;
 public record AstProcessor(SourcePosition sourcePosition, List<AstLink> links, AstProgram program, Language language,
                            List<AstParameter> parameters) implements AstConfiguration {
 
+    public AstProcessor(List<AstLink> links, AstProgram program, Language language, List<AstParameter> parameters) {
+        this(SourcePosition.EMPTY, links, program, language, parameters);
+    }
+
     @Override
     public AstProcessor withEmptyPosition() {
         return new AstProcessor(SourcePosition.EMPTY,

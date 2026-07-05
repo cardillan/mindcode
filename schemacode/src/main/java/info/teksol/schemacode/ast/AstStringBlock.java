@@ -7,6 +7,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public record AstStringBlock(SourcePosition sourcePosition, String text, int indent) implements AstText {
 
+    public AstStringBlock(String text, int indent) {
+        this(SourcePosition.EMPTY, text, indent);
+    }
+
     @Override
     public SourcePosition getTextPosition(SchematicsBuilder builder) {
         return sourcePosition;

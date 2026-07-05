@@ -9,6 +9,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public record AstStringLiteral(SourcePosition sourcePosition, String text) implements AstText {
 
+    public AstStringLiteral(String text) {
+        this(SourcePosition.EMPTY, text);
+    }
+
     @Override
     public SourcePosition getTextPosition(SchematicsBuilder builder) {
         return sourcePosition;

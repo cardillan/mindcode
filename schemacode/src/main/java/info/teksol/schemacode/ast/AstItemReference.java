@@ -8,6 +8,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public record AstItemReference(SourcePosition sourcePosition, String item) implements AstContentsReference {
 
+    public AstItemReference(String item) {
+        this(SourcePosition.EMPTY, item);
+    }
+
     @Override
     public String getConfigurationText() {
         return item;

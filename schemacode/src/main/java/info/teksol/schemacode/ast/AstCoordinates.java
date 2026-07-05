@@ -10,17 +10,30 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public record AstCoordinates(SourcePosition sourcePosition, Position coordinates, boolean relative, @Nullable AstLabel relativeTo) implements AstSchemaItem {
 
+    public AstCoordinates(SourcePosition sourcePosition, int x, int y, boolean relative) {
+        this(sourcePosition,new Position(x, y), relative, null);
+    }
+
+    public AstCoordinates(SourcePosition sourcePosition, int x, int y) {
+        this(sourcePosition, new Position(x, y), false, null);
+    }
+
+    public AstCoordinates(Position coordinates, boolean relative, @Nullable AstLabel relativeTo) {
+        this(SourcePosition.EMPTY, coordinates, relative, relativeTo);
+    }
+
     public AstCoordinates(SourcePosition sourcePosition, int x, int y, AstLabel relativeTo) {
         this(sourcePosition,new Position(x, y), true, relativeTo);
     }
 
-    public AstCoordinates(SourcePosition sourcePosition, int x, int y) {
-        this(sourcePosition,new Position(x, y), false, null);
+    public AstCoordinates(int x, int y) {
+        this(new Position(x, y), false, null);
     }
 
-    public AstCoordinates(SourcePosition sourcePosition, int x, int y, boolean relative) {
-        this(sourcePosition,new Position(x, y), relative, null);
+    public AstCoordinates(int x, int y, boolean relative) {
+        this(new Position(x, y), relative, null);
     }
+
 
     public Position coordinates() {
         return coordinates;

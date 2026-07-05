@@ -9,6 +9,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public record AstBlockReference(SourcePosition sourcePosition, String block) implements AstContentsReference {
 
+    public AstBlockReference(String block) {
+        this(SourcePosition.EMPTY, block);
+    }
+
     @Override
     public String getConfigurationText() {
         return block;

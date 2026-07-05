@@ -12,6 +12,10 @@ import java.util.function.Consumer;
 @NullMarked
 public record AstLinkPos(SourcePosition sourcePosition, AstConnection connection, @Nullable String name, boolean virtual) implements AstLink {
 
+    public AstLinkPos(AstConnection connection, @Nullable String name, boolean virtual) {
+        this(SourcePosition.EMPTY, connection, name, virtual);
+    }
+
     @Override
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder.ResolverContext context, SchematicElement element) {
         linkConsumer.accept(new Link(stripPrefix(trueLinkName(context)), connection.evaluate(context, element)));

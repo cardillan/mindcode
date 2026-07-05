@@ -12,14 +12,9 @@ public record AstBlock(SourcePosition sourcePosition, List<String> labels, AstSc
                        AstBlockPosition position, @Nullable AstDirection direction, @Nullable AstConfiguration configuration)
         implements AstSchemaItem {
 
-    public AstBlock(SourcePosition sourcePosition, List<String> labels, AstSchemaElement element,
+    public AstBlock(List<String> labels, AstSchemaElement element,
             AstCoordinates anchor, @Nullable AstDirection direction, @Nullable AstConfiguration configuration) {
         this(SourcePosition.EMPTY, labels, element, PlacementMode.DEFAULT, new AstBlockPosition(anchor.sourcePosition(), anchor), direction, configuration);
-    }
-
-    public AstBlock(SourcePosition sourcePosition, List<String> labels, AstSchemaElement element, PlacementMode placementMode,
-            AstCoordinates anchor, @Nullable AstDirection direction, @Nullable AstConfiguration configuration) {
-        this(sourcePosition, labels, element, placementMode, new AstBlockPosition(anchor.sourcePosition(), anchor), direction, configuration);
     }
 
     public AstCoordinates coordinates() {
