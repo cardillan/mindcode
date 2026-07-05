@@ -134,8 +134,8 @@ processorLinks
     ;
 
 linkDef
-    : linkPattern=pattern                              # linkPattern
-    | linkPos=connection AS alias=ID virtual=VIRTUAL?  # linkPos
+    : linkPattern=pattern                                 # linkPattern
+    | linkPos=connection (AS alias=ID virtual=VIRTUAL?)?  # linkPos
     ;
 
 program

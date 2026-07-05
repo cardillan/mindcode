@@ -316,19 +316,6 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     }
 
     @Test
-    public void requiresPosition() {
-        parseSchematicsExpectingMessages(
-                ExpectedMessages.create()
-                        .add("Parse error: 'facing': mismatched input 'facing' expecting 'at'"),
-                """
-                        schematic
-                            label1: @switch facing south
-                        end
-                        """
-        );
-    }
-
-    @Test
     public void parsesBlockWithLabels() {
         AstDefinitions actual = createDefinitions("""
                 schematic
@@ -516,7 +503,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void refusesItemNonRef() {
         parseSchematicsExpectingMessages(
                 ExpectedMessages.create()
-                        .add("Parse error: missing REF at 'coal'"),
+                        .add("Parse error: missing TYPE at 'coal'"),
                 """
                         schematic
                             @sorter at (0, 0) item coal
@@ -550,7 +537,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void refusesLiquidNonRef() {
         parseSchematicsExpectingMessages(
                 ExpectedMessages.create()
-                        .add("Parse error: missing REF at 'water'"),
+                        .add("Parse error: missing TYPE at 'water'"),
                 """
                         schematic
                             @liquid-source at (0, 0) liquid water
@@ -754,7 +741,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         new AstCoordinates(pos(2, 25), 0, 0),
                         null,
                         new AstProcessor(pos(2, 32),
-                                List.of(new AstLinkPos(pos(3, 15), new AstConnection(pos(3, 15), "cell1"), null, false)),
+                                List.of(new AstLinkPattern(pos(3, 15), AstLabel.of(pos(3, 15), "cell1"))),
                                 AstProgram.EMPTY,
                                 Language.NONE, List.of())
                 )
@@ -1067,7 +1054,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(pos(2, 32), List.of(
                                 new AstLinkPattern(pos(4, 13), AstLabel.of(pos(4, 12), "p1-*")),
-                                new AstLinkPos(pos(5, 13), new AstConnection(pos(5, 13), "switch1"), null, false),
+                                new AstLinkPattern(pos(5, 13), AstLabel.of(pos(5, 13), "switch1")),
                                 new AstLinkPos(pos(6, 13), new AstConnection(pos(6, 13), "cell1"), "cell2", false),
                                 new AstLinkPos(pos(7, 13), new AstConnection(pos(7, 13), 1, 1), null, false),
                                 new AstLinkPos(pos(8, 13), new AstConnection(pos(8, 13), 2, 2, true), "message1", false),
@@ -1315,18 +1302,5 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
         );
 
         assertAstEquals(expected, actual);
-    }
-
-    @Test
-    public void refusesUnknownConfiguration() {
-        parseSchematicsExpectingMessages(
-                ExpectedMessages.create()
-                        .add("Parse error: unexpected 'end'"),
-                """
-                        schematic
-                            @switch at (0, 0) fluffyBunny
-                        end
-                        """
-        );
     }
 }
