@@ -41,6 +41,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
     private AstSchematic astSchematic;
     private Map<String, AstText> constants;
+    private SchematicElement schematic;
     private BlockPositionMap<SchematicElement> astPositionMap;
     private BlockPositionMap<Block> positionMap;
 
@@ -123,7 +124,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         MindustryMetadata metadata = SchematicsMetadata.getMetadata();
 
-        SchematicElement schematic = LayoutResolver.resolve(this, astSchematic);
+        schematic = LayoutResolver.resolve(this, astSchematic);
         List<SchematicElement> elements = new ArrayList<>();
         schematic.forEachBlock(elements::add);
         elements.sort(Comparator.comparing(BlockPosition::index));
@@ -455,6 +456,10 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         public SchematicElement getElement(Position position) {
             return astPositionMap.at(position);
+        }
+
+        public SchematicElement getSchematic() {
+            return Objects.requireNonNull(schematic);
         }
 
         public void error(SourceElement node, @PrintFormat String format, Object... args) {

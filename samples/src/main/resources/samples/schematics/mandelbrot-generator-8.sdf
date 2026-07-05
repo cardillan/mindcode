@@ -2,6 +2,10 @@ schematic
     name = "Mandelbrot Generator"
     tag = "Cardillan"
 
+    COMPUTING = region
+        processor#: @hyper-processor processor mindcode = compute end
+    end
+
     @liquid-source       at ( 3,  0) liquid @cryofluid
     @pulse-conduit       at ( 3,  1) facing north
     @pulse-conduit       at ( 3,  2) facing north
@@ -35,14 +39,14 @@ schematic
     @liquid-source       at (17,  5) liquid @cryofluid
     @liquid-source       at (19,  3) liquid @cryofluid
 
-    processor#: @hyper-processor at ( 0,  0) * (1, 5) processor mindcode = compute end
-    processor#: @hyper-processor at ( 4,  0) * (1, 5) processor mindcode = compute end
-    processor#: @hyper-processor at ( 7,  0) * (1, 5) processor mindcode = compute end
-    processor#: @hyper-processor at (11,  0) * (1, 5) processor mindcode = compute end
-    processor#: @hyper-processor at (14,  0)          processor mindcode = compute end
-    processor#: @hyper-processor at (14,  6)          processor mindcode = compute end
-    processor#: @hyper-processor at (17,  0)          processor mindcode = compute end
-    processor#: @hyper-processor at (17,  6)          processor mindcode = compute end
+    COMPUTING at ( 0,  0) * (1, 5)
+    COMPUTING at ( 4,  0) * (1, 5)
+    COMPUTING at ( 7,  0) * (1, 5)
+    COMPUTING at (11,  0) * (1, 5)
+    COMPUTING at (14,  0)
+    COMPUTING at (14,  6)
+    COMPUTING at (17,  0)
+    COMPUTING at (17,  6)
 
 display:
     @large-logic-display at (14,  9)
@@ -76,7 +80,7 @@ message3:
     // Palette switches
     palette#: @switch  at (15, 15) * (5, 1)
 
-    @logic-processor     at (18,  4) processor links * end mindcode = control end
+    @logic-processor     at (18,  4) processor links ** end mindcode = control end
 end
 
 common = """
@@ -84,7 +88,7 @@ common = """
 
     module common;
 
-    // Display bufer size, for checking whether there'S capacity for another batch
+    // Display buffer size, for checking whether there's capacity for another batch
     const DISPLAY_BUFFER = 1024;
 
     // Display size

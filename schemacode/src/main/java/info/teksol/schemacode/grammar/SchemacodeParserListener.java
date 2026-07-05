@@ -164,15 +164,15 @@ public interface SchemacodeParserListener extends ParseTreeListener {
 	 */
 	void exitVersionNumber(SchemacodeParser.VersionNumberContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SchemacodeParser#region}.
+	 * Enter a parse tree produced by {@link SchemacodeParser#regionDefinition}.
 	 * @param ctx the parse tree
 	 */
-	void enterRegion(SchemacodeParser.RegionContext ctx);
+	void enterRegionDefinition(SchemacodeParser.RegionDefinitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SchemacodeParser#region}.
+	 * Exit a parse tree produced by {@link SchemacodeParser#regionDefinition}.
 	 * @param ctx the parse tree
 	 */
-	void exitRegion(SchemacodeParser.RegionContext ctx);
+	void exitRegionDefinition(SchemacodeParser.RegionDefinitionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#regionDimensions}.
 	 * @param ctx the parse tree
@@ -194,6 +194,52 @@ public interface SchemacodeParserListener extends ParseTreeListener {
 	 */
 	void exitBlock(SchemacodeParser.BlockContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#placementMode}.
+	 * @param ctx the parse tree
+	 */
+	void enterPlacementMode(SchemacodeParser.PlacementModeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#placementMode}.
+	 * @param ctx the parse tree
+	 */
+	void exitPlacementMode(SchemacodeParser.PlacementModeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code blockElement}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlockElement(SchemacodeParser.BlockElementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code blockElement}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlockElement(SchemacodeParser.BlockElementContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code namedRegion}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 */
+	void enterNamedRegion(SchemacodeParser.NamedRegionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code namedRegion}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 */
+	void exitNamedRegion(SchemacodeParser.NamedRegionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code inlinedRegion}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 */
+	void enterInlinedRegion(SchemacodeParser.InlinedRegionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code inlinedRegion}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 */
+	void exitInlinedRegion(SchemacodeParser.InlinedRegionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#blockId}.
 	 * @param ctx the parse tree
 	 */
@@ -213,26 +259,6 @@ public interface SchemacodeParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLabelList(SchemacodeParser.LabelListContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SchemacodeParser#labelId}.
-	 * @param ctx the parse tree
-	 */
-	void enterLabelId(SchemacodeParser.LabelIdContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SchemacodeParser#labelId}.
-	 * @param ctx the parse tree
-	 */
-	void exitLabelId(SchemacodeParser.LabelIdContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SchemacodeParser#pattern}.
-	 * @param ctx the parse tree
-	 */
-	void enterPattern(SchemacodeParser.PatternContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SchemacodeParser#pattern}.
-	 * @param ctx the parse tree
-	 */
-	void exitPattern(SchemacodeParser.PatternContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code simplePosition}
 	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
@@ -463,6 +489,26 @@ public interface SchemacodeParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLogic(SchemacodeParser.LogicContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#pattern}.
+	 * @param ctx the parse tree
+	 */
+	void enterPattern(SchemacodeParser.PatternContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#pattern}.
+	 * @param ctx the parse tree
+	 */
+	void exitPattern(SchemacodeParser.PatternContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#patternSegment}.
+	 * @param ctx the parse tree
+	 */
+	void enterPatternSegment(SchemacodeParser.PatternSegmentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#patternSegment}.
+	 * @param ctx the parse tree
+	 */
+	void exitPatternSegment(SchemacodeParser.PatternSegmentContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#colorDef}.
 	 * @param ctx the parse tree

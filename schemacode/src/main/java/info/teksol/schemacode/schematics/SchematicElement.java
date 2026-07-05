@@ -1,16 +1,21 @@
 package info.teksol.schemacode.schematics;
 
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.schemacode.ast.AstBlock;
 import info.teksol.schemacode.ast.AstLabel;
+import info.teksol.schemacode.ast.AstSchemaBlock;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.IntSupplier;
+import java.util.regex.Pattern;
 
 @NullMarked
 public class SchematicElement implements BlockPosition {
@@ -102,8 +107,26 @@ public class SchematicElement implements BlockPosition {
         return duplicate(parent, definition, position, indexSupplier);
     }
 
-    public SchematicElement duplicateInto(SchematicElement parent, @Nullable AstBlock definition, IntSupplier indexSupplier) {
+    public SchematicElement duplicateInto(SchematicElement parent, @Nullable AstBlock definition, IntSupplier indexSupplier,
+            Function<String, String> labelResolver) {
         return duplicate(parent, definition, Position.ORIGIN, indexSupplier);
+    }
+
+    public void resolveLabels(Function<String, String> labelResolver) {
+        for (SchematicElement element : elements) {
+            element.resolveLabels(labelResolver);
+            if (element.labels.isEmpty()) continue;
+
+            for (int index = 0; index < element.labels.size(); index++) {
+                String label = element.labels.get(index);
+                String resolvedLabel = labelResolver.apply(label);
+                if (!label.equals(resolvedLabel)) {
+                    labelMap.put(resolvedLabel, element);
+                    labelMap.remove(label);
+                    element.labels.set(index, resolvedLabel);
+                }
+            }
+        }
     }
 
     private SchematicElement duplicate(@Nullable SchematicElement parent, @Nullable AstBlock definition,
@@ -172,12 +195,16 @@ public class SchematicElement implements BlockPosition {
 
     /// Returns true if this instance represents a block
     public boolean isBlock() {
-        return elements.isEmpty();
+        return definition != null && definition.element() instanceof AstSchemaBlock;
     }
 
     /// Returns true if this instance represents a region
     public boolean isRegion() {
-        return !elements.isEmpty();
+        return !isBlock();
+    }
+
+    public boolean matches(boolean blocks, boolean regions) {
+        return isBlock() ? blocks : regions;
     }
 
     public AstBlock definition() {
@@ -225,6 +252,13 @@ public class SchematicElement implements BlockPosition {
             } else {
                 element.forEachBlock(consumer);
             }
+        }
+    }
+
+    public void forEachElement(Consumer<SchematicElement> consumer) {
+        for (SchematicElement element : elements) {
+            consumer.accept(element);
+            element.forEachElement(consumer);
         }
     }
 
@@ -291,8 +325,8 @@ public class SchematicElement implements BlockPosition {
         if (origin != null) return origin;
 
         Position pos = definition == null ? Position.ORIGIN :
-                definition.anchor().relative() ? resolveRelativePosition(context) :
-                        definition.position().anchor().coordinates();
+                definition.coordinates().relative() ? resolveRelativePosition(context) :
+                        definition.position().coordinates().coordinates();
         origin = pos.add(originOffset);
         absolutePosition = origin.add(positionOffset);
 
@@ -337,8 +371,8 @@ public class SchematicElement implements BlockPosition {
         assert definition != null;
 
         // Relative position
-        AstLabel reference = definition.anchor().relativeTo();
-        Position offset = definition.anchor().coordinates();
+        AstLabel reference = definition.coordinates().relativeTo();
+        Position offset = definition.coordinates().coordinates();
 
         if (reference != null) {
             SchematicElement target = resolveReference(context, reference, false);
@@ -347,15 +381,15 @@ public class SchematicElement implements BlockPosition {
             if (context.visited(target)) {
                 for (SchematicElement element : context.visitedSince(target)) {
                     if (context.unreported(element)) {
-                        context.error(definition.position().anchor(), "Circular definition of block '%s' position.",
-                                Objects.requireNonNull(element.definition().anchor().relativeTo()).fullName());
+                        context.error(definition.position().coordinates(), "Circular definition of block '%s' position.",
+                                Objects.requireNonNull(element.definition().coordinates().relativeTo()).fullName());
                     }
                 }
             } else {
                 target.resolvePosition(context);
                 Position position = target.positionIn(context, Objects.requireNonNull(parent));
                 if (position == null) {
-                    context.error(definition.position().anchor(), "Block '%s' is not within the current region.", reference.fullName());
+                    context.error(definition.position().coordinates(), "Block '%s' is not within the current region.", reference.fullName());
                     return Position.INVALID;
                 } else {
                     return position.add(offset);
@@ -372,44 +406,126 @@ public class SchematicElement implements BlockPosition {
     }
 
     public @Nullable SchematicElement resolveReference(SchematicsBuilder.ResolverContext context, AstLabel reference, boolean blockOnly) {
-        String lead = reference.getSegment(0);
-        SchematicElement current = parent;
-        while (current != null) {
-            SchematicElement element = current.labelMap.get(lead);
-            if (element != null) {
-                // We've matched the lead. The rest needs to be resolved in this namespace
-                return element.resolveRemaining(context, reference, blockOnly);
-            }
-            current = current.parent;
+        List<SchematicElement> matches = new ArrayList<>();
+        if (parent == null) throw new MindcodeInternalError("No parent");
+        parent.resolvePattern((e, _) -> matches.add(e), context, reference, blockOnly, 0, false);
+
+        if (matches.isEmpty()) {
+            context.error(reference, "Cannot resolve block reference '%s'.", reference.fullName());
+            return null;
+        } else if (matches.size() > 1) {
+            context.error(reference, "Ambiguous block reference '%s'.", reference.fullName());
         }
 
-        context.error(reference, "Unknown block name '%s'.", reference.getSegment(0));
-        return null;
+        return matches.getFirst();
     }
 
-    private @Nullable SchematicElement resolveRemaining(SchematicsBuilder.ResolverContext context, AstLabel reference, boolean blockOnly) {
-        SchematicElement current = this;
+    public void resolvePattern(BiConsumer<SchematicElement, String> blockConsumer, SchematicsBuilder.ResolverContext context,
+            AstLabel astPattern, boolean blockOnly, int index, boolean multiMatch) {
+        boolean last = index == astPattern.getSegmentCount() - 1;
+        String pattern = astPattern.getSegment(index);
 
-        for (int index = 1; index < reference.getSegmentCount(); index++) {
-            SchematicElement element = current.labelMap.get(reference.getSegment(index));
-
-            if (element == null) {
-                context.error(reference, "Unknown block label '%s'.", reference.fullName(index));
-                return null;
-            } else if (element.isBlock() && index < reference.getSegmentCount() - 1) {
-                context.error(reference, "Cannot resolve block label: '%s' is not a region.",
-                        reference.fullName(index));
-                return null;
+        // Solve special cases
+        switch (pattern) {
+            case "global" -> {
+                if (index > 0) context.error(astPattern, "'global' must be used at the beginning of the pattern.");
+                if (last) {
+                    context.error(astPattern, "No block matching pattern specified.");
+                } else {
+                    context.getSchematic().resolvePattern(blockConsumer, context, astPattern, blockOnly, index + 1, false);
+                }
             }
 
-            current = element;
+            case "local" -> {
+                if (index > 0) context.error(astPattern, "'local' must be used at the beginning of the pattern.");
+                if (last) {
+                    context.error(astPattern, "No block matching pattern specified.");
+                } else {
+                    resolvePattern(blockConsumer, context, astPattern, blockOnly, index + 1, false);
+                }
+            }
+
+            case "parent" -> {
+                if (parent == null) {
+                    context.error(astPattern, "No parent region exists (top of region hierarchy reached).");
+                } else if (last) {
+                    context.error(astPattern, "No block matching pattern specified.");
+                } else {
+                    parent.resolvePattern(blockConsumer, context, astPattern, blockOnly, index + 1, false);
+                }
+            }
+
+            case "*" -> {
+                if (last) {
+                    labelMap.forEach((l, e) -> {
+                        if (!blockOnly || e.isBlock()) blockConsumer.accept(e, l);
+                    });
+                } else {
+                    for (SchematicElement element : elements) {
+                        if (element.isRegion()) {
+                            element.resolvePattern(blockConsumer, context, astPattern, blockOnly, index + 1, false);
+                        }
+                    }
+                }
+            }
+
+            case "**" -> {
+                if (last) {
+                    if (blockOnly) {
+                        forEachBlock(e -> e.labels.forEach(l -> blockConsumer.accept(e, l)));
+                    } else {
+                        forEachElement(e -> e.labels.forEach(l -> blockConsumer.accept(e, l)));
+                    }
+                } else {
+                    for (SchematicElement element : elements) {
+                        if (element.isRegion()) {
+                            element.resolvePattern(blockConsumer, context, astPattern, blockOnly, index + 1, true);
+                        }
+                    }
+                }
+            }
+
+            default -> {
+                if (last) {
+                    findElements(pattern, true, !blockOnly, blockConsumer);
+                } else {
+                    if (index == 0 && !pattern.contains("*")) {
+                        SchematicElement scope = this;
+                        while (scope != null && !scope.labelMap.containsKey(pattern)) {
+                            scope = scope.parent;
+                        }
+                        if (scope == null) {
+                            context.error(astPattern, "No region matching '%s' found.", pattern);
+                        } else {
+                            scope.labelMap.get(pattern).resolvePattern(blockConsumer, context, astPattern, blockOnly, index + 1, false);
+                        }
+                    } else {
+                        findElements(pattern, false, true, (e, _) ->
+                                e.resolvePattern(blockConsumer, context, astPattern, blockOnly, index + 1, false));
+                    }
+                }
+            }
         }
 
-        if (blockOnly && !current.isBlock()) {
-            context.error(reference, "Block label '%s' doesn't denote a block.", reference.fullName());
-            return null;
+        if (multiMatch) {
+            for (SchematicElement element : elements) {
+                if (element.isRegion()) {
+                    element.resolvePattern(blockConsumer, context, astPattern, blockOnly, index, true);
+                }
+            }
         }
-        return current;
+    }
+
+    private void findElements(String strPattern, boolean blocks, boolean regions, BiConsumer<SchematicElement, String> blockConsumer) {
+        if (strPattern.contains("*")) {
+            Pattern pattern = Pattern.compile(strPattern.replace ("*", ".*"));
+            labelMap.entrySet().stream()
+                    .filter(e -> pattern.matcher(e.getKey()).matches() && e.getValue().matches(blocks, regions))
+                    .forEach(e -> blockConsumer.accept(e.getValue(), e.getKey()));
+        } else {
+            SchematicElement element = labelMap.get(strPattern);
+            if (element != null && element.matches(blocks, regions)) blockConsumer.accept(element, strPattern);
+        }
     }
 
     @Override

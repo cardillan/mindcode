@@ -103,11 +103,11 @@ public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVersionNumber(SchemacodeParser.VersionNumberContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SchemacodeParser#region}.
+	 * Visit a parse tree produced by {@link SchemacodeParser#regionDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRegion(SchemacodeParser.RegionContext ctx);
+	T visitRegionDefinition(SchemacodeParser.RegionDefinitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#regionDimensions}.
 	 * @param ctx the parse tree
@@ -121,6 +121,33 @@ public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock(SchemacodeParser.BlockContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#placementMode}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPlacementMode(SchemacodeParser.PlacementModeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blockElement}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockElement(SchemacodeParser.BlockElementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code namedRegion}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNamedRegion(SchemacodeParser.NamedRegionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code inlinedRegion}
+	 * labeled alternative in {@link SchemacodeParser#element}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInlinedRegion(SchemacodeParser.InlinedRegionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#blockId}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -132,18 +159,6 @@ public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLabelList(SchemacodeParser.LabelListContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SchemacodeParser#labelId}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLabelId(SchemacodeParser.LabelIdContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SchemacodeParser#pattern}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPattern(SchemacodeParser.PatternContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code simplePosition}
 	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
@@ -279,6 +294,18 @@ public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLogic(SchemacodeParser.LogicContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#pattern}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPattern(SchemacodeParser.PatternContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#patternSegment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPatternSegment(SchemacodeParser.PatternSegmentContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#colorDef}.
 	 * @param ctx the parse tree

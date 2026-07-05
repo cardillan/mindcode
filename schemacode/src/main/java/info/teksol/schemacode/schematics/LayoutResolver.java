@@ -40,7 +40,9 @@ public class LayoutResolver {
             namedRegions.put(def.name(), region);
         }
 
-        return createRegion(null, null, null, astSchematic.blocks(), () -> blockIndex++);
+        SchematicElement region = createRegion(null, null, null, astSchematic.blocks(), () -> blockIndex++);
+        region.resolveLabels(this::resolveLabel);
+        return region;
     }
 
     private SchematicElement convert(SchematicElement parent, AstBlock definition, IntSupplier indexSupplier) {
@@ -62,7 +64,7 @@ public class LayoutResolver {
             builder.error(definition, "Unknown named region '%s'.", r.regionReference());
             return SchematicElement.createBlock(parent, definition, defaultBlockType(), 0);
         } else {
-            SchematicElement copy = region.duplicateInto(parent, definition, () -> blockIndex++);
+            SchematicElement copy = region.duplicateInto(parent, definition, () -> blockIndex++, this::resolveLabel);
             copy.rotate(SchematicElement.direction(definition));
             return copy;
         }
@@ -93,9 +95,11 @@ public class LayoutResolver {
             if (areaPositions.size() == 1) {
                 region.addElement(masterElement);
                 masterElement.setDefaultAnchor(last);
-                labels.forEach(label -> region.addLabel(resolveLabel(label), masterElement));
+                masterElement.resolveLabels(this::resolveLabel);
+                labels.forEach(label -> region.addLabel(label, masterElement));
             } else {
                 boolean first = true;
+                ArrayList<SchematicElement> placedElements = new ArrayList<>();
                 for (Position position : areaPositions) {
                     SchematicElement element = first ? masterElement : masterElement.duplicateAt(position, indexSupplier);
                     first = false;
@@ -103,9 +107,15 @@ public class LayoutResolver {
                     region.addElement(element);
                     element.setDefaultAnchor(last);
                     if (!labels.isEmpty()) {
-                        region.addLabel(resolveLabel(labels.removeFirst()), element);
+                        region.addLabel(labels.removeFirst(), element);
+                    }
+
+                    if (element.isRegion()) {
+                        placedElements.add(element);
                     }
                 }
+
+                placedElements.forEach(e -> e.resolveLabels(this::resolveLabel));
             }
 
             last = masterElement;
@@ -156,7 +166,7 @@ public class LayoutResolver {
 
     private List<Position> getAreaPositions(AstBlock block, Position dimensions) {
         List<Position> result = switch (block.position().blockArrayType()) {
-            case SINGLE -> List.of(block.anchor().coordinates());
+            case SINGLE -> List.of(block.coordinates().coordinates());
             case INCLUSIVE -> computeRange(block, dimensions, true);
             case EXCLUSIVE -> computeRange(block, dimensions, false);
             case AREA -> computeArea(block, dimensions, Objects.requireNonNull(block.position().extension()).coordinates());
@@ -170,7 +180,7 @@ public class LayoutResolver {
     }
 
     private List<Position> computeRange(AstBlock astBlock, Position dimensions, boolean inclusive) {
-        Position start = Objects.requireNonNull(astBlock.position().anchor()).coordinates();
+        Position start = Objects.requireNonNull(astBlock.position().coordinates()).coordinates();
         Position end = Objects.requireNonNull(astBlock.position().extension()).coordinates();
 
         int signX = end.x() < start.x() ? -1 : 1;
@@ -188,7 +198,7 @@ public class LayoutResolver {
         int height = Math.abs(area.y());
         int stepX = area.x() < 0 ? -dimensions.x() : dimensions.x();
         int stepY = area.y() < 0 ? -dimensions.y() : dimensions.y();
-        Position anchor = astBlock.anchor().coordinates();
+        Position anchor = astBlock.coordinates().coordinates();
 
         List<Position> result = new ArrayList<>();
         if (astBlock.position().horizontal()) {

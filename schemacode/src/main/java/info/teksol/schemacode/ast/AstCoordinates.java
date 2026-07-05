@@ -36,7 +36,7 @@ public record AstCoordinates(SourcePosition sourcePosition, Position coordinates
 
     public Position evaluate(SchematicsBuilder.ResolverContext context, SchematicElement element) {
         if (relative) {
-            SchematicElement anchor = relativeTo == null ? element : element.resolveReference(context, relativeTo, true);
+            SchematicElement anchor = relativeTo == null ? element : element.resolveReference(context, relativeTo, false);
             if (anchor == null) return Position.INVALID;
             return coordinates.add(anchor.position());
         } else {

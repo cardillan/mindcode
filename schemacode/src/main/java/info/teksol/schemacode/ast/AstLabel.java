@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
 @NullMarked
 public record AstLabel(SourcePosition sourcePosition, List<AstLabelSegment> segments) implements AstSchemaItem {
 
+    public AstLabel(List<AstLabelSegment> segments) {
+        this(SourcePosition.EMPTY, segments);
+    }
+
     @Override
     public AstLabel withEmptyPosition() {
         return new AstLabel(SourcePosition.EMPTY, erasePositions(segments));

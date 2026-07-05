@@ -8,16 +8,22 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 @NullMarked
-public record AstBlock(SourcePosition sourcePosition, List<String> labels, AstSchemaElement element, AstBlockPosition position,
-                       @Nullable AstDirection direction, @Nullable AstConfiguration configuration) implements AstSchemaItem {
+public record AstBlock(SourcePosition sourcePosition, List<String> labels, AstSchemaElement element, PlacementMode placementMode,
+                       AstBlockPosition position, @Nullable AstDirection direction, @Nullable AstConfiguration configuration)
+        implements AstSchemaItem {
 
-    public AstBlock(SourcePosition sourcePosition, List<String> labels, AstSchemaElement element, AstCoordinates anchor,
-            @Nullable AstDirection direction, @Nullable AstConfiguration configuration) {
-        this(sourcePosition, labels, element, new AstBlockPosition(anchor.sourcePosition(), anchor), direction, configuration);
+    public AstBlock(SourcePosition sourcePosition, List<String> labels, AstSchemaElement element,
+            AstCoordinates anchor, @Nullable AstDirection direction, @Nullable AstConfiguration configuration) {
+        this(SourcePosition.EMPTY, labels, element, PlacementMode.DEFAULT, new AstBlockPosition(anchor.sourcePosition(), anchor), direction, configuration);
     }
 
-    public AstCoordinates anchor() {
-        return position.anchor();
+    public AstBlock(SourcePosition sourcePosition, List<String> labels, AstSchemaElement element, PlacementMode placementMode,
+            AstCoordinates anchor, @Nullable AstDirection direction, @Nullable AstConfiguration configuration) {
+        this(sourcePosition, labels, element, placementMode, new AstBlockPosition(anchor.sourcePosition(), anchor), direction, configuration);
+    }
+
+    public AstCoordinates coordinates() {
+        return position.coordinates();
     }
 
     public boolean isCluster() {
@@ -33,6 +39,7 @@ public record AstBlock(SourcePosition sourcePosition, List<String> labels, AstSc
     public AstBlock withEmptyPosition() {
         return new AstBlock(SourcePosition.EMPTY, labels,
                 erasePosition(element),
+                placementMode,
                 erasePosition(position),
                 eraseNullablePosition(direction),
                 eraseNullablePosition(configuration));

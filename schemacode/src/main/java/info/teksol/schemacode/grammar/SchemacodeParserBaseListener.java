@@ -185,13 +185,13 @@ public class SchemacodeParserBaseListener implements SchemacodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRegion(SchemacodeParser.RegionContext ctx) { }
+	@Override public void enterRegionDefinition(SchemacodeParser.RegionDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRegion(SchemacodeParser.RegionContext ctx) { }
+	@Override public void exitRegionDefinition(SchemacodeParser.RegionDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -221,6 +221,54 @@ public class SchemacodeParserBaseListener implements SchemacodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterPlacementMode(SchemacodeParser.PlacementModeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPlacementMode(SchemacodeParser.PlacementModeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBlockElement(SchemacodeParser.BlockElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlockElement(SchemacodeParser.BlockElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNamedRegion(SchemacodeParser.NamedRegionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNamedRegion(SchemacodeParser.NamedRegionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInlinedRegion(SchemacodeParser.InlinedRegionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInlinedRegion(SchemacodeParser.InlinedRegionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBlockId(SchemacodeParser.BlockIdContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -240,30 +288,6 @@ public class SchemacodeParserBaseListener implements SchemacodeParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLabelList(SchemacodeParser.LabelListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLabelId(SchemacodeParser.LabelIdContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLabelId(SchemacodeParser.LabelIdContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPattern(SchemacodeParser.PatternContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPattern(SchemacodeParser.PatternContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -504,6 +528,30 @@ public class SchemacodeParserBaseListener implements SchemacodeParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLogic(SchemacodeParser.LogicContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPattern(SchemacodeParser.PatternContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPattern(SchemacodeParser.PatternContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPatternSegment(SchemacodeParser.PatternSegmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPatternSegment(SchemacodeParser.PatternSegmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
