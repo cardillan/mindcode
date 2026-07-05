@@ -9,12 +9,12 @@ import java.util.List;
 
 @NullMarked
 public record AstBlock(SourcePosition sourcePosition, List<String> labels, AstSchemaElement element, PlacementMode placementMode,
-                       AstBlockPosition position, @Nullable AstDirection direction, @Nullable AstConfiguration configuration)
-        implements AstSchemaItem {
+                       AstBlockPosition position, @Nullable AstTranslation translation, @Nullable AstDirection direction,
+                       @Nullable AstConfiguration configuration) implements AstSchemaItem {
 
     public AstBlock(List<String> labels, AstSchemaElement element,
             AstCoordinates anchor, @Nullable AstDirection direction, @Nullable AstConfiguration configuration) {
-        this(SourcePosition.EMPTY, labels, element, PlacementMode.DEFAULT, new AstBlockPosition(anchor.sourcePosition(), anchor), direction, configuration);
+        this(SourcePosition.EMPTY, labels, element, PlacementMode.DEFAULT, new AstBlockPosition(anchor.sourcePosition(), anchor), null, direction, configuration);
     }
 
     public AstCoordinates coordinates() {
@@ -36,6 +36,7 @@ public record AstBlock(SourcePosition sourcePosition, List<String> labels, AstSc
                 erasePosition(element),
                 placementMode,
                 erasePosition(position),
+                eraseNullablePosition(translation),
                 eraseNullablePosition(direction),
                 eraseNullablePosition(configuration));
     }

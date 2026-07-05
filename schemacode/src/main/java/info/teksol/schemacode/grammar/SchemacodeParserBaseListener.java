@@ -389,6 +389,18 @@ public class SchemacodeParserBaseListener implements SchemacodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTranslation(SchemacodeParser.TranslationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTranslation(SchemacodeParser.TranslationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDirection(SchemacodeParser.DirectionContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -80,6 +80,12 @@ public class SchematicElement implements BlockPosition {
                 new ArrayList<>(), new HashMap<>(), Position.ORIGIN);
     }
 
+    public enum Translation { NONE, HORIZONTAL, VERTICAL }
+    public static Translation translation(@Nullable AstBlock definition) {
+        if (definition == null || definition.translation() == null) return Translation.NONE;
+        return definition.translation().horizontal() ? Translation.HORIZONTAL : Translation.VERTICAL;
+    }
+
     private static final Random random = new Random();
     public static Direction direction(@Nullable AstBlock definition) {
         if (definition == null || definition.direction() == null) return Direction.EAST;
@@ -259,6 +265,29 @@ public class SchematicElement implements BlockPosition {
         for (SchematicElement element : elements) {
             consumer.accept(element);
             element.forEachElement(consumer);
+        }
+    }
+
+    public void translate(Translation translation) {
+        if (translation == Translation.NONE || isBlock()) return;
+
+        Objects.requireNonNull(dimensions);
+        switch (translation) {
+            case HORIZONTAL -> {
+                int rw = dimensions.x();
+                for (SchematicElement element : elements) {
+                    element.translate(translation);
+                    element.move(rw - 2 * element.origin().x() - element.dimensions().x(), 0);
+                }
+            }
+            case VERTICAL -> {
+                int rh = dimensions.y();
+                for (SchematicElement element : elements) {
+                    element.translate(translation);
+                    element.move(0, rh - 2 * element.origin().y() - element.dimensions().y());
+                }
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + translation);
         }
     }
 

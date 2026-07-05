@@ -15,6 +15,7 @@ FACING          : 'facing';
 FILE            : 'file';
 FILENAME        : 'filename';
 FILL            : 'fill';
+FLIP            : 'flip';
 GLOBAL          : 'global';
 HORIZONTAL      : 'horizontal';
 ITEM            : 'item';

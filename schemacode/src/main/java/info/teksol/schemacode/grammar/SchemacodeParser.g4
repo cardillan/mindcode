@@ -45,7 +45,7 @@ regionDimensions
     ;
 
 block
-    : labels=labelList? content=element placeMode=placementMode? (AT pos=blockPosition)? dir=direction? cfg=configuration?
+    : labels=labelList? content=element placeMode=placementMode? (AT pos=blockPosition)? flip=translation? dir=direction? cfg=configuration?
     ;
 
 placementMode : (FILL | REPLACE);
@@ -87,8 +87,12 @@ coordinatesRelativeTo
     : label=pattern relCoord=relativeCoordinates
     ;
 
+translation
+    : FLIP axis=( HORIZONTAL | VERTICAL )
+    ;
+
 direction
-    : FACING dir=( NORTH | SOUTH | EAST | WEST | RANDOM)
+    : FACING dir=( NORTH | SOUTH | EAST | WEST | RANDOM )
     ;
 
 configuration

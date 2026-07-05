@@ -65,6 +65,7 @@ public class LayoutResolver {
             return SchematicElement.createBlock(parent, definition, defaultBlockType(), 0);
         } else {
             SchematicElement copy = region.duplicateInto(parent, definition, () -> blockIndex++, this::resolveLabel);
+            copy.translate(SchematicElement.translation(definition));
             copy.rotate(SchematicElement.direction(definition));
             return copy;
         }
@@ -132,6 +133,7 @@ public class LayoutResolver {
         }
 
         region.setDimensions(dimensions == null ? new Position(width, height) : dimensions.toPosition());
+        region.translate(SchematicElement.translation(definition));
         region.rotate(SchematicElement.direction(definition));
         return region;
     }

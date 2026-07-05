@@ -348,6 +348,16 @@ public interface SchemacodeParserListener extends ParseTreeListener {
 	 */
 	void exitCoordinatesRelativeTo(SchemacodeParser.CoordinatesRelativeToContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#translation}.
+	 * @param ctx the parse tree
+	 */
+	void enterTranslation(SchemacodeParser.TranslationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#translation}.
+	 * @param ctx the parse tree
+	 */
+	void exitTranslation(SchemacodeParser.TranslationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#direction}.
 	 * @param ctx the parse tree
 	 */

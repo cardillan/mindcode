@@ -136,11 +136,12 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
         AstSchemaElement element = (AstSchemaElement) visit(ctx.content);
         PlacementMode placementMode = ctx.placeMode == null ? PlacementMode.DEFAULT : decode(ctx.placeMode.getText());
         AstBlockPosition position = maybeVisit(ctx.blockPosition());
+        AstTranslation translation = maybeVisit(ctx.translation());
         AstDirection direction = maybeVisit(ctx.direction());
         AstConfiguration configuration = maybeVisit(ctx.configuration());
 
         return new AstBlock(pos(ctx.getStart()), labels, element, placementMode,
-                position == null ? ZERO_POSITION : position, direction, configuration);
+                position == null ? ZERO_POSITION : position, translation, direction, configuration);
     }
 
     @Override
@@ -397,6 +398,11 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
     @Override
     public AstDirection visitDirection(SchemacodeParser.DirectionContext ctx) {
         return new AstDirection(pos(ctx.getStart()), ctx.dir.getText());
+    }
+
+    @Override
+    public AstTranslation visitTranslation(SchemacodeParser.TranslationContext ctx) {
+        return new AstTranslation(pos(ctx.getStart()), ctx.VERTICAL() == null);
     }
     //</editor-fold>
 

@@ -212,6 +212,12 @@ public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCoordinatesRelativeTo(SchemacodeParser.CoordinatesRelativeToContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#translation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTranslation(SchemacodeParser.TranslationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#direction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
