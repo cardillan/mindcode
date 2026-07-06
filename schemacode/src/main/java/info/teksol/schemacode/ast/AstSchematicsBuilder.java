@@ -391,7 +391,8 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
 
     @Override
     public AstCoordinates visitCoordinatesRelativeTo(SchemacodeParser.CoordinatesRelativeToContext ctx) {
-        AstCoordinates coordinates = (AstCoordinates) visit(ctx.relativeCoordinates());
+        AstCoordinates coordinates = ctx.relativeCoordinates() == null
+                ? new AstCoordinates(0, 0) : (AstCoordinates) visit(ctx.relativeCoordinates());
         return coordinates.relativeTo(visitPattern(ctx.pattern()));
     }
 

@@ -84,7 +84,7 @@ relativeCoordinates
     ;
 
 coordinatesRelativeTo
-    : label=pattern relCoord=relativeCoordinates
+    : label=pattern relCoord=relativeCoordinates?
     ;
 
 translation

@@ -16,7 +16,8 @@ import java.util.function.IntSupplier;
 
 @NullMarked
 public class LayoutResolver {
-    public static final char LABEL_ARRAY_CHAR = '#';
+    public static final char GLOBAL_LABEL_ARRAY_CHAR = '#';
+    public static final char LOCAL_LABEL_ARRAY_CHAR = '$';
 
     private final SchematicsBuilder builder;
 
@@ -64,7 +65,7 @@ public class LayoutResolver {
             builder.error(definition, "Unknown named region '%s'.", r.regionReference());
             return SchematicElement.createBlock(parent, definition, defaultBlockType(), 0);
         } else {
-            SchematicElement copy = region.duplicateInto(parent, definition, () -> blockIndex++, this::resolveLabel);
+            SchematicElement copy = region.duplicateInto(parent, definition, () -> blockIndex++);
             copy.translate(SchematicElement.translation(definition));
             copy.rotate(SchematicElement.direction(definition));
             return copy;
@@ -86,6 +87,8 @@ public class LayoutResolver {
         SchematicElement region = SchematicElement.createRegion(parent, definition, parent == null ? 0 : blockIndex++);
         SchematicElement last = null;
 
+        Map<String, MutableInteger> localLabels = new HashMap<>();
+
         // Create the basic structure
         for (AstBlock block : blocks) {
             SchematicElement masterElement = convert(region, block, indexSupplier);
@@ -96,7 +99,7 @@ public class LayoutResolver {
             if (areaPositions.size() == 1) {
                 region.addElement(masterElement);
                 masterElement.setDefaultAnchor(last);
-                masterElement.resolveLabels(this::resolveLabel);
+                masterElement.resolveLabels(label -> resolveLocalLabel(localLabels, label));
                 labels.forEach(label -> region.addLabel(label, masterElement));
             } else {
                 boolean first = true;
@@ -116,11 +119,13 @@ public class LayoutResolver {
                     }
                 }
 
-                placedElements.forEach(e -> e.resolveLabels(this::resolveLabel));
+                placedElements.forEach(e -> e.resolveLabels(label -> resolveLocalLabel(localLabels, label)));
             }
 
             last = masterElement;
         }
+
+        region.resolveLabels(label -> resolveLocalLabel(localLabels, label));
 
         // Region structure complete. Resolve positions/dimensions
         ResolverContext context = builder.trackingResolverContext();
@@ -139,7 +144,16 @@ public class LayoutResolver {
     }
 
     private String resolveLabel(String label) {
-        if (label.charAt(label.length() - 1) == LABEL_ARRAY_CHAR) {
+        if (label.charAt(label.length() - 1) == GLOBAL_LABEL_ARRAY_CHAR) {
+            MutableInteger current = arrayLabels.computeIfAbsent(label, k -> MutableInteger.zero());
+            return label.substring(0, label.length() - 1) + current.incrementAndGet();
+        } else {
+            return label;
+        }
+    }
+
+    private String resolveLocalLabel(Map<String, MutableInteger> arrayLabels, String label) {
+        if (label.charAt(label.length() - 1) == LOCAL_LABEL_ARRAY_CHAR) {
             MutableInteger current = arrayLabels.computeIfAbsent(label, k -> MutableInteger.zero());
             return label.substring(0, label.length() - 1) + current.incrementAndGet();
         } else {
@@ -154,7 +168,8 @@ public class LayoutResolver {
                 builder.error(block, "Too many labels defined for block array (array size: %d, assigned labels: %d).",
                         areaPositions.size(), labels.size());
             } else if (labels.size() < areaPositions.size()) {
-                int pos = CollectionUtils.lastIndexOf(labels, l -> l.charAt(l.length() - 1) == LABEL_ARRAY_CHAR);
+                int pos = CollectionUtils.lastIndexOf(labels,
+                        l -> l.charAt(l.length() - 1) == GLOBAL_LABEL_ARRAY_CHAR || l.charAt(l.length() - 1) == LOCAL_LABEL_ARRAY_CHAR);
                 if (pos >= 0) {
                     int count = areaPositions.size() - labels.size();
                     labels.addAll(pos, Collections.nCopies(count, labels.get(pos)));

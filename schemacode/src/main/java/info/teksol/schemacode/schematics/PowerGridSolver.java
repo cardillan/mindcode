@@ -59,7 +59,7 @@ class PowerGridSolver {
         for (Position pos : powerNodeBlock.configuration().as(PositionArray.class).positions()) {
             Block linkedBlock = positionMap.at(pos);
 
-            if (linkedBlock == null) {
+            if (linkedBlock == null || linkedBlock.blockType().isAir()) {
                 builder.warn(powerNodeBlock.sourcePosition(), "Block '%s' at %s has a connection to a nonexistent block at %s.",
                         powerNodeBlock.name(), powerNodeBlock.position().toStringAbsolute(), pos.toStringAbsolute());
             } else if (linkedBlock == powerNodeBlock) {

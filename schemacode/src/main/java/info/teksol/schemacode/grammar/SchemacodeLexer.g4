@@ -69,7 +69,7 @@ fragment Id     : [_a-zA-Z] [-a-zA-Z_0-9]*;
 INT             : [0-9]+;
 SIGNEDINT       : ( '+' | '-' ) [0-9]+;
 ID              : Id;
-ID_ARRAY        : Id '#';
+ID_ARRAY        : Id ('#' | '$');
 TYPE            : '@' Id;
 PATTERN         : [_a-zA-Z*] [-a-zA-Z_0-9*]*;
 VERSION         : [0-9]+ '.' [0-9]+;

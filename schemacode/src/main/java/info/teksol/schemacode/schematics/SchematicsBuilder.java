@@ -119,7 +119,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         labelCounts.entrySet().stream()
                 .filter(e -> e.getValue() > 1)
-                .filter(e -> e.getKey().charAt(e.getKey().length() - 1) != LayoutResolver.LABEL_ARRAY_CHAR)
+                .filter(e -> e.getKey().charAt(e.getKey().length() - 1) != LayoutResolver.GLOBAL_LABEL_ARRAY_CHAR)
                 .forEachOrdered(c -> addMessage(ToolMessage.error("Multiple definitions of block label '%s'.", c.getKey())));
 
         MindustryMetadata metadata = SchematicsMetadata.getMetadata();
@@ -138,7 +138,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         List<Block> blocks = new ArrayList<>();
         schematic.forEachBlock(element -> {
-            if (element.valid()) {
+            if (element.valid() && !element.blockType().isAir()) {
                 AstBlock astBlock = element.definition();
                 BlockType type = element.blockType();
                 Configuration configuration = checkType(element, configurations.get(element));

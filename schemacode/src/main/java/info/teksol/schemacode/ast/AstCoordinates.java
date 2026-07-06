@@ -7,8 +7,10 @@ import info.teksol.schemacode.schematics.SchematicsBuilder;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
+
 @NullMarked
-public record AstCoordinates(SourcePosition sourcePosition, Position coordinates, boolean relative, @Nullable AstLabel relativeTo) implements AstSchemaItem {
+public record AstCoordinates(SourcePosition sourcePosition, @Nullable Position coordinates, boolean relative, @Nullable AstLabel relativeTo) implements AstSchemaItem {
 
     public AstCoordinates(SourcePosition sourcePosition, int x, int y, boolean relative) {
         this(sourcePosition,new Position(x, y), relative, null);
@@ -36,26 +38,26 @@ public record AstCoordinates(SourcePosition sourcePosition, Position coordinates
 
 
     public Position coordinates() {
-        return coordinates;
+        return Objects.requireNonNullElse(coordinates, Position.ORIGIN);
     }
 
     public int getX() {
-        return coordinates.x();
+        return coordinates().x();
     }
 
     public int getY() {
-        return coordinates.y();
+        return coordinates().y();
     }
 
     public Position evaluate(SchematicsBuilder.ResolverContext context, SchematicElement element) {
         if (relative) {
             SchematicElement anchor = relativeTo == null ? element : element.resolveReference(context, relativeTo, false);
             if (anchor == null) return Position.INVALID;
-            return coordinates.add(anchor.position());
+            return coordinates().add(anchor.position());
         } else {
             // Translate the position to the proper connection point of the target block
             SchematicElement anchor = context.getElement(coordinates);
-            return anchor == null ? coordinates : anchor.position();
+            return anchor == null ? coordinates() : anchor.position();
         }
     }
 

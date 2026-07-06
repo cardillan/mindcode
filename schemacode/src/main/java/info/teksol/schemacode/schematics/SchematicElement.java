@@ -120,8 +120,7 @@ public class SchematicElement implements BlockPosition {
         return duplicate(parent, definition, position, indexSupplier);
     }
 
-    public SchematicElement duplicateInto(SchematicElement parent, @Nullable AstBlock definition, IntSupplier indexSupplier,
-            Function<String, String> labelResolver) {
+    public SchematicElement duplicateInto(SchematicElement parent, @Nullable AstBlock definition, IntSupplier indexSupplier) {
         return duplicate(parent, definition, Position.ORIGIN, indexSupplier);
     }
 
@@ -255,7 +254,7 @@ public class SchematicElement implements BlockPosition {
     @Override
     public PlacementMode placementMode() {
         if (placementMode == null) {
-            placementMode = definition != null ? definition.placementMode()
+            placementMode = definition != null && definition.placementMode() != PlacementMode.DEFAULT ? definition.placementMode()
                     : parent != null ? parent.placementMode()
                     : PlacementMode.DEFAULT;
         }
@@ -264,7 +263,7 @@ public class SchematicElement implements BlockPosition {
 
     @Override
     public boolean valid() {
-        return valid;
+        return blockType != null && valid;
     }
 
     @Override
