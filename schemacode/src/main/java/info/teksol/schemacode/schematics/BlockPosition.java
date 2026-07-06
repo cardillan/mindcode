@@ -1,6 +1,7 @@
 package info.teksol.schemacode.schematics;
 
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.schemacode.ast.PlacementMode;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.mindustry.ConfigurationType;
 import info.teksol.schemacode.mindustry.Implementation;
@@ -49,5 +50,18 @@ public interface BlockPosition {
 
     default String area() {
         return size() == 1 ? "(%d, %d)".formatted(x(), y()) : "(%d, %d) - (%d, %d)".formatted(x(), y(), xMax(), yMax());
+    }
+
+    default PlacementMode placementMode() {
+        return PlacementMode.DEFAULT;
+    }
+
+    default boolean valid() {
+        return true;
+    }
+
+    /// Called when this block is invalidated due to its placement mode
+    default void invalidate() {
+        throw new UnsupportedOperationException();
     }
 }

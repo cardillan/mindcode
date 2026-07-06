@@ -132,17 +132,21 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         astPositionMap = BlockPositionMap.forBuilder(messageConsumer, elements);
 
         Map<SchematicElement, UnresolvedConfiguration> configurations = new HashMap<>();
-        schematic.forEachBlock(b -> configurations.put(b, getConfiguration(b)));
+        schematic.forEachBlock(element -> {
+            if (element.valid()) configurations.put(element, getConfiguration(element));
+        });
 
         List<Block> blocks = new ArrayList<>();
         schematic.forEachBlock(element -> {
-            AstBlock astBlock = element.definition();
-            BlockType type = element.blockType();
-            Configuration configuration = checkType(element, configurations.get(element));
-            Block block = new Block(astBlock.sourcePosition(), element.index(), element.labels(), type, element.position(), element.direction(),
-                    configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass()));
-            configuration.validate(this, astBlock, block);
-            blocks.add(block);
+            if (element.valid()) {
+                AstBlock astBlock = element.definition();
+                BlockType type = element.blockType();
+                Configuration configuration = checkType(element, configurations.get(element));
+                Block block = new Block(astBlock.sourcePosition(), element.index(), element.labels(), type, element.position(), element.direction(),
+                        configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass()));
+                configuration.validate(this, astBlock, block);
+                blocks.add(block);
+            }
         });
 
         String name = getStringAttribute("name", "");

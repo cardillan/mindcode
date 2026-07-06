@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.schemacode.ast.AstBlock;
 import info.teksol.schemacode.ast.AstLabel;
 import info.teksol.schemacode.ast.AstSchemaBlock;
+import info.teksol.schemacode.ast.PlacementMode;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
 import org.jspecify.annotations.NullMarked;
@@ -66,6 +67,12 @@ public class SchematicElement implements BlockPosition {
 
     /// An additional rotation since the block's creation
     private Direction rotation = Direction.EAST;
+
+    /// Once the placement mode is determined, it is cached here
+    private @Nullable PlacementMode placementMode;
+
+    /// The block is valid
+    private boolean valid = true;
 
     public static SchematicElement createBlock(@Nullable SchematicElement parent, AstBlock definition, BlockType blockType, int index) {
         int size = blockType.size();
@@ -243,6 +250,26 @@ public class SchematicElement implements BlockPosition {
 
     public void setDefaultAnchor(@Nullable SchematicElement defaultAnchor) {
         this.defaultAnchor = defaultAnchor;
+    }
+
+    @Override
+    public PlacementMode placementMode() {
+        if (placementMode == null) {
+            placementMode = definition != null ? definition.placementMode()
+                    : parent != null ? parent.placementMode()
+                    : PlacementMode.DEFAULT;
+        }
+        return placementMode;
+    }
+
+    @Override
+    public boolean valid() {
+        return valid;
+    }
+
+    @Override
+    public void invalidate() {
+        valid = false;
     }
 
     public List<SchematicElement> getBlocks() {
