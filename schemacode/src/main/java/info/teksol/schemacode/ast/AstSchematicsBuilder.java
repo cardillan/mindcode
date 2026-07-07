@@ -172,7 +172,13 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
     }
 
     private PlacementMode decode(@Nullable String mode) {
-        return mode == null ? PlacementMode.DEFAULT : PlacementMode.valueOf(mode.toUpperCase());
+        return switch (mode) {
+            case "replace" -> PlacementMode.REPLACE;
+            case "fill" -> PlacementMode.FILL;
+            case "at" -> PlacementMode.DEFAULT;
+            case null -> PlacementMode.DEFAULT;
+            default -> throw new SchematicsInternalError("Unknown placement mode " + mode);
+        };
     }
     //</editor-fold>
 

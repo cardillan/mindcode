@@ -216,7 +216,7 @@ public class SchematicElement implements BlockPosition {
     }
 
     public boolean matches(boolean blocks, boolean regions) {
-        return isBlock() ? blocks : regions;
+        return valid() && (isBlock() ? blocks : regions);
     }
 
     public AstBlock definition() {
@@ -271,16 +271,11 @@ public class SchematicElement implements BlockPosition {
         valid = false;
     }
 
-    public List<SchematicElement> getBlocks() {
-        List<SchematicElement> blocks = new ArrayList<>();
-        forEachBlock(blocks::add);
-        return blocks;
-    }
-
+    // Processes only valid blocks
     public void forEachBlock(Consumer<SchematicElement> consumer) {
         for (SchematicElement element : elements) {
             if (element.isBlock()) {
-                consumer.accept(element);
+                if (element.valid()) consumer.accept(element);
             } else {
                 element.forEachBlock(consumer);
             }
@@ -289,7 +284,7 @@ public class SchematicElement implements BlockPosition {
 
     public void forEachElement(Consumer<SchematicElement> consumer) {
         for (SchematicElement element : elements) {
-            consumer.accept(element);
+            if (element.valid()) consumer.accept(element);
             element.forEachElement(consumer);
         }
     }
@@ -347,7 +342,7 @@ public class SchematicElement implements BlockPosition {
                 switch (rotateDirection) {
                     case NORTH -> element.move(rw - y - x - ew, x - y);
                     case WEST -> element.move(rw - 2*x - ew, rh - 2*y - eh);
-                    case SOUTH -> element.move(y - x, rh - x - y + eh);
+                    case SOUTH -> element.move(y - x, rh - x - y - eh);
                     default -> throw new IllegalStateException("Unexpected value: " + rotateDirection);
                 }
             }
@@ -475,6 +470,20 @@ public class SchematicElement implements BlockPosition {
         return matches.getFirst();
     }
 
+    public void resolveReferences(Consumer<SchematicElement> blockConsumer, SchematicsBuilder.ResolverContext context, AstLabel reference,
+            boolean blockOnly) {
+        if (parent == null) throw new MindcodeInternalError("No parent");
+        boolean[] found = new boolean[1];
+        parent.resolvePattern((e, _) -> {
+            found[0] = true;
+            blockConsumer.accept(e);
+        }, context, reference, blockOnly, 0, false);
+
+        if (!found[0]) {
+            context.error(reference, "Cannot resolve block reference '%s'.", reference.fullName());
+        }
+    }
+
     public void resolvePattern(BiConsumer<SchematicElement, String> blockConsumer, SchematicsBuilder.ResolverContext context,
             AstLabel astPattern, boolean blockOnly, int index, boolean multiMatch) {
         boolean last = index == astPattern.getSegmentCount() - 1;
@@ -513,7 +522,7 @@ public class SchematicElement implements BlockPosition {
             case "*" -> {
                 if (last) {
                     labelMap.forEach((l, e) -> {
-                        if (!blockOnly || e.isBlock()) blockConsumer.accept(e, l);
+                        if (e.valid() && (!blockOnly || e.isBlock())) blockConsumer.accept(e, l);
                     });
                 } else {
                     for (SchematicElement element : elements) {

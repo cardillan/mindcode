@@ -77,6 +77,9 @@ public class LayoutResolver {
         if (blockType == null) {
             builder.error(definition, "Unknown block type '%s'.", type);
             blockType = defaultBlockType();
+        } else if ("hidden".equals(blockType.visibility()) && !blockType.isAir()) {
+            builder.error(definition, "Block type '%s' cannot be built.", type);
+            blockType = defaultBlockType();
         }
 
         return SchematicElement.createBlock(parent, definition, blockType, indexSupplier.getAsInt());

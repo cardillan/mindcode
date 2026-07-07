@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @NullMarked
 public record AstConnection(SourcePosition sourcePosition, @Nullable AstCoordinates position, @Nullable AstLabel id) implements AstConfiguration {
@@ -53,6 +54,15 @@ public record AstConnection(SourcePosition sourcePosition, @Nullable AstCoordina
         }
     }
 
+    public void evaluateMultiple(Consumer<Position> consumer, SchematicsBuilder.ResolverContext context, SchematicElement element) {
+        if (position != null) {
+            consumer.accept(position.evaluate(context, element));
+        } else if (id != null) {
+            element.resolveReferences(e -> consumer.accept(e.position()), context, id, true);
+        } else {
+            throw new SchematicsInternalError("Connection has neither position nor reference.");
+        }
+    }
 
     @Override
     public AstConnection withEmptyPosition() {

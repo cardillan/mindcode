@@ -15,9 +15,6 @@ public class MultiJumpInstruction extends BaseInstruction implements MultiTarget
 
     MultiJumpInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.MULTIJUMP, args, params);
-        if (!(getArg(0) instanceof LogicAddress)) {
-            System.out.println("Ha!");
-        }
     }
 
     protected MultiJumpInstruction(BaseInstruction other, AstContext astContext) {

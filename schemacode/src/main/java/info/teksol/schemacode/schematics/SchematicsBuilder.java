@@ -26,6 +26,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -132,13 +133,11 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         astPositionMap = BlockPositionMap.forBuilder(messageConsumer, elements);
 
         Map<SchematicElement, UnresolvedConfiguration> configurations = new HashMap<>();
-        schematic.forEachBlock(element -> {
-            if (element.valid()) configurations.put(element, getConfiguration(element));
-        });
+        schematic.forEachBlock(element -> configurations.put(element, getConfiguration(element)));
 
         List<Block> blocks = new ArrayList<>();
         schematic.forEachBlock(element -> {
-            if (element.valid() && !element.blockType().isAir()) {
+            if (!element.blockType().isAir()) {
                 AstBlock astBlock = element.definition();
                 BlockType type = element.blockType();
                 Configuration configuration = checkType(element, configurations.get(element));
@@ -302,8 +301,8 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
             case AstBlockReference reference -> verifyConfiguration(reference, element, "block");
             case AstBoolean b -> BooleanConfiguration.of(b.value());
             case AstConnection c -> c.evaluate(configurationContext, element);
-            case AstConnections c ->
-                    new PositionArray(c.connections().stream().map(p -> p.evaluate(configurationContext, element)).toList());
+            case AstConnections c -> new PositionArray(c.connections().stream().mapMulti(
+                    (AstConnection cc, Consumer<Position > consumer) -> cc.evaluateMultiple(consumer, configurationContext, element)).toList());
             case AstItemReference reference -> verifyConfiguration(reference, element, "item");
             case AstLiquidReference reference -> verifyConfiguration(reference, element, "liquid");
             case AstProcessor processor -> processorConfigurationBuilder.fromAstConfiguration(processor, element);
