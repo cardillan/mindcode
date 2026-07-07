@@ -92,7 +92,7 @@ translation
     ;
 
 direction
-    : FACING dir=( NORTH | SOUTH | EAST | WEST | RANDOM )
+    : FACING dir=( NORTH | SOUTH | EAST | WEST )
     ;
 
 configuration
@@ -138,8 +138,8 @@ processorLinks
     ;
 
 linkDef
-    : linkPattern=pattern                                 # linkPattern
-    | linkPos=connection (AS alias=ID virtual=VIRTUAL?)?  # linkPos
+    : linkPattern=pattern                                       # linkPattern
+    | linkPos=connection (AS alias=ID_ARRAY virtual=VIRTUAL?)?  # linkPos
     ;
 
 program

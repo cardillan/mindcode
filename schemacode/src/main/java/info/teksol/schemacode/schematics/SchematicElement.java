@@ -13,8 +13,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.regex.Pattern;
 
@@ -124,14 +124,14 @@ public class SchematicElement implements BlockPosition {
         return duplicate(parent, definition, Position.ORIGIN, indexSupplier);
     }
 
-    public void resolveLabels(Function<String, String> labelResolver) {
+    public void resolveLabels(BiFunction<SchematicElement, String, String> labelResolver) {
         for (SchematicElement element : elements) {
             element.resolveLabels(labelResolver);
             if (element.labels.isEmpty()) continue;
 
             for (int index = 0; index < element.labels.size(); index++) {
                 String label = element.labels.get(index);
-                String resolvedLabel = labelResolver.apply(label);
+                String resolvedLabel = labelResolver.apply(element,label);
                 if (!label.equals(resolvedLabel)) {
                     labelMap.put(resolvedLabel, element);
                     labelMap.remove(label);
@@ -150,16 +150,12 @@ public class SchematicElement implements BlockPosition {
 
         if (isRegion) {
             // Copy elements
-            IdentityHashMap<SchematicElement, SchematicElement> copies = new IdentityHashMap<>(elements.size());
             for (SchematicElement element : elements) {
                 SchematicElement elementCopy = element.duplicate(copy, element.definition, originOffset, indexSupplier);
                 copy.addElement(elementCopy);
-                copies.put(element, elementCopy);
-            }
-
-            // Remap labels
-            for (Map.Entry<String, SchematicElement> entry : labelMap.entrySet()) {
-                copy.addLabel(entry.getKey(), copies.get(entry.getValue()));
+                for (String label : element.labels) {
+                    copy.addLabel(label, elementCopy);
+                }
             }
         }
 

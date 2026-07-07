@@ -125,12 +125,14 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         MindustryMetadata metadata = SchematicsMetadata.getMetadata();
 
-        schematic = LayoutResolver.resolve(this, astSchematic);
+        LayoutResolver layoutResolver = new LayoutResolver(this);
+        schematic = layoutResolver.resolve(astSchematic);
         List<SchematicElement> elements = new ArrayList<>();
         schematic.forEachBlock(elements::add);
         elements.sort(Comparator.comparing(BlockPosition::index));
 
         astPositionMap = BlockPositionMap.forBuilder(messageConsumer, elements);
+        schematic.resolveLabels(layoutResolver.globalLabelResolver());
 
         Map<SchematicElement, UnresolvedConfiguration> configurations = new HashMap<>();
         schematic.forEachBlock(element -> configurations.put(element, getConfiguration(element)));

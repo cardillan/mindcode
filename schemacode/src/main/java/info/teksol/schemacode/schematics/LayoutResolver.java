@@ -12,6 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.IntSupplier;
 
 @NullMarked
@@ -26,24 +27,22 @@ public class LayoutResolver {
 
     private int blockIndex = 0;
 
-    public static SchematicElement resolve(SchematicsBuilder builder, AstSchematic astSchematic) {
-        return new LayoutResolver(builder).createSchematic(astSchematic);
-    }
-
-    private LayoutResolver(SchematicsBuilder builder) {
+    public LayoutResolver(SchematicsBuilder builder) {
         this.builder = builder;
     }
 
-    private SchematicElement createSchematic(AstSchematic astSchematic) {
+    public SchematicElement resolve(AstSchematic astSchematic) {
         for (AstRegionDefinition def : astSchematic.regions()) {
             AstSchemaRegion astSchemaRegion = def.region();
             SchematicElement region = createRegion(null, null, astSchemaRegion.dimensions(), astSchemaRegion.blocks(), () -> 0);
             namedRegions.put(def.name(), region);
         }
 
-        SchematicElement region = createRegion(null, null, null, astSchematic.blocks(), () -> blockIndex++);
-        region.resolveLabels(this::resolveLabel);
-        return region;
+        return createRegion(null, null, null, astSchematic.blocks(), () -> blockIndex++);
+    }
+
+    public BiFunction<SchematicElement, String, String> globalLabelResolver() {
+        return this::resolveLabel;
     }
 
     private SchematicElement convert(SchematicElement parent, AstBlock definition, IntSupplier indexSupplier) {
@@ -102,7 +101,7 @@ public class LayoutResolver {
             if (areaPositions.size() == 1) {
                 region.addElement(masterElement);
                 masterElement.setDefaultAnchor(last);
-                masterElement.resolveLabels(label -> resolveLocalLabel(localLabels, label));
+                masterElement.resolveLabels((_, label) -> resolveLocalLabel(localLabels, label));
                 labels.forEach(label -> region.addLabel(label, masterElement));
             } else {
                 boolean first = true;
@@ -122,13 +121,13 @@ public class LayoutResolver {
                     }
                 }
 
-                placedElements.forEach(e -> e.resolveLabels(label -> resolveLocalLabel(localLabels, label)));
+                placedElements.forEach(e -> e.resolveLabels((_, label) -> resolveLocalLabel(localLabels, label)));
             }
 
             last = masterElement;
         }
 
-        region.resolveLabels(label -> resolveLocalLabel(localLabels, label));
+        region.resolveLabels((_, label) -> resolveLocalLabel(localLabels, label));
 
         // Region structure complete. Resolve positions/dimensions
         ResolverContext context = builder.trackingResolverContext();
@@ -146,10 +145,10 @@ public class LayoutResolver {
         return region;
     }
 
-    private String resolveLabel(String label) {
+    private String resolveLabel(SchematicElement element, String label) {
         if (label.charAt(label.length() - 1) == GLOBAL_LABEL_ARRAY_CHAR) {
             MutableInteger current = arrayLabels.computeIfAbsent(label, k -> MutableInteger.zero());
-            return label.substring(0, label.length() - 1) + current.incrementAndGet();
+            return label.substring(0, label.length() - 1) + (element.valid() ? current.incrementAndGet() : current.get());
         } else {
             return label;
         }

@@ -29,7 +29,6 @@ NAME            : 'name';
 PARAM           : 'param' -> pushMode(InParam);
 PARENT          : 'parent';
 PROCESSOR       : 'processor';
-RANDOM          : 'random';
 REPLACE         : 'replace';
 REGION          : 'region';
 RGBA            : 'rgba';

@@ -365,7 +365,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void refusesInvalidDirection() {
         parseSchematicsExpectingMessages(
                 ExpectedMessages.create()
-                        .add("Parse error: missing {'random', 'north', 'south', 'east', 'west'} at 'middle'"),
+                        .add("Parse error: missing {'north', 'south', 'east', 'west'} at 'middle'"),
                 """
                         schematic
                             @conveyor at ( 0,  0) facing middle
