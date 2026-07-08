@@ -138,8 +138,8 @@ processorLinks
     ;
 
 linkDef
-    : linkPattern=pattern                                       # linkPattern
-    | linkPos=connection (AS alias=ID_ARRAY virtual=VIRTUAL?)?  # linkPos
+    : linkPattern=pattern                                               # linkPattern
+    | linkPos=connection (AS alias=(ID | ID_ARRAY) virtual=VIRTUAL?)?   # linkPos
     ;
 
 program

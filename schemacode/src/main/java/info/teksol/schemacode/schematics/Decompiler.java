@@ -26,6 +26,8 @@ public class Decompiler {
     private final List<ProcessorConfiguration> processors;
     private final boolean useProcessorPrefix;
 
+    private final List<String> codes = new ArrayList<>();
+
     public boolean isRelativePositions() {
         return relativePositions;
     }
@@ -130,12 +132,14 @@ public class Decompiler {
         nl().append("end");
         nl();
 
-        for (int index = 0; index < processors.size(); index++) {
+        int index = 0;
+        for (String code : codes) {
             nl().append("mlog-").append(index).append(" = \"\"\"");
             indentInc();
-            nl().append(processors.get(index).code().replaceAll("\n", strIndent)).append("\"\"\"");
+            nl().append(codes.get(index).replaceAll("\n", strIndent)).append("\"\"\"");
             indentDec();
             nl();
+            index++;
         }
 
         return sbr.toString();
@@ -236,21 +240,33 @@ public class Decompiler {
         int index = processors.indexOf(processor);
         sbr.append(" processor");
         indentInc();
-        nl().append("links");
-        indentInc();
-        if (orderedLinks) {
-            processor.links().forEach(l -> writeLink(block, processor, l));
-        } else {
-            nl().append(useProcessorPrefix ? "p" + index + "-*" : "*");
-            processor.links().stream()
-                    .filter(l -> !blocks.containsKey(l.position()))
-                    .forEach(l -> nl().append(l.position().toString(relativeLinks ? block.position() : null))
-                            .append(" as ").append(l.name()).append(" virtual"));
-        }
-        indentDec();
-        nl().append("end");
 
-        nl().append("mlog = mlog-").append(processors.indexOf(processor));
+        if (!processor.links().isEmpty()) {
+            nl().append("links");
+            indentInc();
+            if (orderedLinks) {
+                processor.links().forEach(l -> writeLink(block, processor, l));
+            } else {
+                nl().append(useProcessorPrefix ? "p" + index + "-*" : "*");
+                processor.links().stream()
+                        .filter(l -> !blocks.containsKey(l.position()))
+                        .forEach(l -> nl().append(l.position().toString(relativeLinks ? block.position() : null))
+                                .append(" as ").append(l.name()).append(" virtual"));
+            }
+            indentDec();
+            nl().append("end");
+        }
+
+        if (!processor.code().isBlank()) {
+            int codeIndex = codes.indexOf(processor.code());
+            if (codeIndex < 0) {
+                codeIndex = codes.size();
+                codes.add(processor.code());
+            }
+            if (!processor.code().isBlank()) {
+                nl().append("mlog = mlog-").append(codeIndex);
+            }
+        }
 
         indentDec();
         nl().append("end");

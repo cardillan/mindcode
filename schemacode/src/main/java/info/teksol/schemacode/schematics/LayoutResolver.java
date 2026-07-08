@@ -202,10 +202,12 @@ public class LayoutResolver {
         Position start = Objects.requireNonNull(astBlock.position().coordinates()).coordinates();
         Position end = Objects.requireNonNull(astBlock.position().extension()).coordinates();
 
+        int corrX = end.x() < start.x() ? dimensions.x() -1 : 0;
+        int corrY = end.y() < start.y() ? dimensions.y() -1 : 0;
         int signX = end.x() < start.x() ? -1 : 1;
         int signY = end.y() < start.y() ? -1 : 1;
-        int width = (end.x() - start.x()) / dimensions.x() + (inclusive ? signX : 0);
-        int height = (end.y() - start.y()) / dimensions.y() + (inclusive ? signY : 0);
+        int width = (end.x() - start.x() - corrX) / dimensions.x() + (inclusive ? signX : 0);
+        int height = (end.y() - start.y() - corrY) / dimensions.y() + (inclusive ? signY : 0);
 
         return computeArea(astBlock, dimensions, new Position(width, height));
     }
@@ -217,7 +219,6 @@ public class LayoutResolver {
         int height = Math.abs(area.y());
         int stepX = area.x() < 0 ? -dimensions.x() : dimensions.x();
         int stepY = area.y() < 0 ? -dimensions.y() : dimensions.y();
-        Position anchor = astBlock.coordinates().coordinates();
 
         List<Position> result = new ArrayList<>();
         if (astBlock.position().horizontal()) {
