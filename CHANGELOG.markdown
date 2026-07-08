@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.16.4 – 2026-07-08
+
+### Fixed
+ 
+* Fixed Data Flow Optimizer incorrectly removing a function call ([#340](https://github.com/cardillan/mindcode/issues/340)).
+
 ## 3.16.3 – 2026-06-02
 
 ### Fixed

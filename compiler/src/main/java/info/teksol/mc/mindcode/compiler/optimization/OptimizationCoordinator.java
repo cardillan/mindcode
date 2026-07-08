@@ -192,6 +192,8 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
             return modified;
         }
 
+        List<Optimization> disabledOptimizations = new ArrayList<>();
+
         while (true) {
             int initialSize = codeSize();
             int costLimit = Math.max(0, globalProfile.getInstructionLimit() - initialSize);
@@ -199,6 +201,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
 
             optimizationContext.prepare();
             List<OptimizationAction> possibleOptimizations = phase.optimizations.stream()
+                    .filter(o -> !disabledOptimizations.contains(o))
                     .map(optimizers::get)
                     .filter(Objects::nonNull)
                     .flatMap(o -> o.getPossibleOptimizations(expandedCostLimit).stream())
@@ -232,6 +235,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
                     }
                     modified = true;
                 } else {
+                    disabledOptimizations.add(selectedAction.optimization());
                     error(ERR.INTERNAL_ERROR_OPTIMIZER_ACTION, selectedAction.optimization().getName(), selectedAction.optimization().getOptionName());
                     throw new MindcodeInternalError("Error applying dynamic optimization: " + selectedAction);
                 }

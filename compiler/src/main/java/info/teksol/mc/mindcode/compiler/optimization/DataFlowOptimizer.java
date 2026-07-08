@@ -165,7 +165,8 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
                 .forEachOrdered(this::replaceInstruction);
 
         for (LogicInstruction instruction : defines) {
-            if (instruction.isSafe() && (!keep.contains(instruction) || useless.contains(instruction)) &&
+            if (instruction.getOpcode() != Opcode.CALL && instruction.getOpcode() != Opcode.CALLREC &&
+                    instruction.isSafe() && (!keep.contains(instruction) || useless.contains(instruction)) &&
                     instruction.getAllWrites().noneMatch(var -> isVolatile(instruction, var))) {
                 int index = instructionIndex(instruction);
                 if (index >= 0) {
