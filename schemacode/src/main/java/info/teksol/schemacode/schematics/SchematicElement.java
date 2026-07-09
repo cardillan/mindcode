@@ -547,7 +547,8 @@ public class SchematicElement implements BlockPosition {
 
             default -> {
                 if (last) {
-                    findElements(pattern, true, !blockOnly, blockConsumer);
+                    findElements(context.resolveGlobalLabel(astPattern.segments().get(index), pattern),
+                            true, !blockOnly, blockConsumer);
                 } else {
                     if (index == 0 && !pattern.contains("*")) {
                         SchematicElement scope = this;

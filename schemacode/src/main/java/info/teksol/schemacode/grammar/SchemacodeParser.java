@@ -1751,6 +1751,7 @@ public class SchemacodeParser extends Parser {
 			case PARENT:
 			case MUL:
 			case ID:
+			case ID_ARRAY:
 			case PATTERN:
 				enterOuterAlt(_localctx, 3);
 				{
@@ -2523,6 +2524,7 @@ public class SchemacodeParser extends Parser {
 		public TerminalNode LOCAL() { return getToken(SchemacodeParser.LOCAL, 0); }
 		public TerminalNode PARENT() { return getToken(SchemacodeParser.PARENT, 0); }
 		public TerminalNode ID() { return getToken(SchemacodeParser.ID, 0); }
+		public TerminalNode ID_ARRAY() { return getToken(SchemacodeParser.ID_ARRAY, 0); }
 		public TerminalNode MUL() { return getToken(SchemacodeParser.MUL, 0); }
 		public TerminalNode PATTERN() { return getToken(SchemacodeParser.PATTERN, 0); }
 		public PatternSegmentContext(ParserRuleContext parent, int invokingState) {
@@ -2554,7 +2556,7 @@ public class SchemacodeParser extends Parser {
 			setState(279);
 			((PatternSegmentContext)_localctx).text = _input.LT(1);
 			_la = _input.LA(1);
-			if ( !(((((_la - 17)) & ~0x3f) == 0 && ((1L << (_la - 17)) & 158331821885473L) != 0)) ) {
+			if ( !(((((_la - 17)) & ~0x3f) == 0 && ((1L << (_la - 17)) & 193516193974305L) != 0)) ) {
 				((PatternSegmentContext)_localctx).text = (Token)_errHandler.recoverInline(this);
 			}
 			else {
@@ -2823,6 +2825,7 @@ public class SchemacodeParser extends Parser {
 			case PARENT:
 			case MUL:
 			case ID:
+			case ID_ARRAY:
 			case PATTERN:
 				_localctx = new ConnNameContext(_localctx);
 				enterOuterAlt(_localctx, 3);
@@ -2999,7 +3002,7 @@ public class SchemacodeParser extends Parser {
 			setState(326);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (((((_la - 17)) & ~0x3f) == 0 && ((1L << (_la - 17)) & 158474629548065L) != 0)) {
+			while (((((_la - 17)) & ~0x3f) == 0 && ((1L << (_la - 17)) & 193659001636897L) != 0)) {
 				{
 				{
 				setState(323);
@@ -3823,7 +3826,7 @@ public class SchemacodeParser extends Parser {
 		"\n\u0001\u0000;<\u0002\u0000;;AA\u0003\u0000\u0002\u0002\u000f\u000f\u001e"+
 		"\u001e\u0001\u0000=>\u0002\u0000\u0012\u0012\'\'\u0002\u0000//11\u0001"+
 		"\u000025\u0001\u0000\t\n\u0006\u0000\u0011\u0011\u0016\u0016\u001c\u001c"+
-		"00==@@\u0001\u000089\u019b\u0000M\u0001\u0000\u0000\u0000\u0002U\u0001"+
+		"00=>@@\u0001\u000089\u019b\u0000M\u0001\u0000\u0000\u0000\u0002U\u0001"+
 		"\u0000\u0000\u0000\u0004Y\u0001\u0000\u0000\u0000\u0006f\u0001\u0000\u0000"+
 		"\u0000\b\u0080\u0001\u0000\u0000\u0000\n\u0082\u0001\u0000\u0000\u0000"+
 		"\f\u0084\u0001\u0000\u0000\u0000\u000e\u0086\u0001\u0000\u0000\u0000\u0010"+

@@ -18,7 +18,9 @@ public record AstLinkPos(SourcePosition sourcePosition, AstConnection connection
 
     @Override
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder.ResolverContext context, SchematicElement element) {
-        linkConsumer.accept(new Link(stripPrefix(trueLinkName(context)), connection.evaluate(context, element)));
+        connection.evaluateMultiple(
+                position -> linkConsumer.accept(new Link(stripPrefix(trueLinkName(context)), position)),
+                context, element);
     }
 
     private String trueLinkName(SchematicsBuilder.ResolverContext context) {

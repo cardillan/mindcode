@@ -12,6 +12,7 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.Target;
 import info.teksol.mc.util.CollectionUtils;
+import info.teksol.mc.util.MutableInteger;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.*;
@@ -50,7 +51,11 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
     final ResolverContext configurationContext = new ResolverContext(false);
 
     // Elements reported for circular reference errors
-    private final Set<SchematicElement> reported = new HashSet<>();
+    private final Set<SchematicElement> reportedCircular = new HashSet<>();
+
+    // Global array labels for processor links
+    private final Map<String, MutableInteger> arrayLabels = new HashMap<>();
+    private final Map<String, Set<AstSchemaItem>> reportedErrors = new HashMap<>();
 
     private boolean error = false;
 
@@ -165,6 +170,12 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         BridgeSolver.solve(this, blocks);
 
         return createSchematic(name, filename, description, labels, blocks);
+    }
+
+    public void errorOnce(AstSchemaItem node, @PrintFormat String format, Object... args) {
+        if (reportedErrors.computeIfAbsent(format, _ -> new HashSet<>()).add(node)) {
+            error(node, format, args);
+        }
     }
 
     private Configuration checkType(SchematicElement element, UnresolvedConfiguration configuration) {
@@ -456,7 +467,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         }
 
         public boolean unreported(SchematicElement reference) {
-            return reported.add(reference);
+            return reportedCircular.add(reference);
         }
 
         public SchematicElement getElement(Position position) {
@@ -469,6 +480,26 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         public void error(SourceElement node, @PrintFormat String format, Object... args) {
             SchematicsBuilder.this.error(node, format, args);
+        }
+
+        private final Set<AstSchemaItem> reportedNodes = new HashSet<>();
+        public String resolveGlobalLabel(AstSchemaItem node, String label) {
+            if (label == null || label.isEmpty()) return label;
+
+            return switch (label.charAt(label.length() - 1)) {
+                case LayoutResolver.LOCAL_LABEL_ARRAY_CHAR -> {
+                    if (reportedNodes.add(node)) {
+                        error(node, "Local label array '%s' is not supported as a reference.", label);
+                    }
+                    MutableInteger current = arrayLabels.computeIfAbsent(label, _ -> MutableInteger.zero());
+                    yield label.substring(0, label.length() - 1) + current.incrementAndGet();
+                }
+                case LayoutResolver.GLOBAL_LABEL_ARRAY_CHAR -> {
+                    MutableInteger current = arrayLabels.computeIfAbsent(label, _ -> MutableInteger.zero());
+                    yield label.substring(0, label.length() - 1) + current.incrementAndGet();
+                }
+                default -> label;
+            };
         }
     }
 }

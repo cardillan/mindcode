@@ -113,7 +113,7 @@ pattern
     : (patternSegment DOT)* patternSegment
     ;
 
-patternSegment : text=(GLOBAL | LOCAL | PARENT | ID | MUL | PATTERN);
+patternSegment : text=(GLOBAL | LOCAL | PARENT | ID | ID_ARRAY | MUL | PATTERN);
 
 colorDef
     : RGBA LEFTPAREN red=number COMMA green=number COMMA blue=number COMMA alpha=number RIGHTPAREN
