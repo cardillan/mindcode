@@ -84,7 +84,7 @@ public class SchematicElement implements BlockPosition {
     // Note: a region is always created with the 'east' direction and rotated after construction
     public static SchematicElement createRegion(@Nullable SchematicElement parent, @Nullable AstBlock definition, int index) {
         return new SchematicElement(parent, definition, null, index, Direction.EAST, null,
-                new ArrayList<>(), new HashMap<>(), Position.ORIGIN);
+                new ArrayList<>(), new LinkedHashMap<>(), Position.ORIGIN);
     }
 
     public enum Translation { NONE, HORIZONTAL, VERTICAL }
@@ -145,7 +145,7 @@ public class SchematicElement implements BlockPosition {
             Position originOffset, IntSupplier indexSupplier) {
         boolean isRegion = isRegion();
         SchematicElement copy = new SchematicElement(parent, definition, blockType, indexSupplier.getAsInt(), originalDirection, dimensions,
-                isRegion ? new ArrayList<>() : List.of(), isRegion ? new HashMap<>() : Map.of(), originOffset);
+                isRegion ? new ArrayList<>() : List.of(), isRegion ? new LinkedHashMap<>() : Map.of(), originOffset);
         copy.rotation = rotation;
 
         if (isRegion) {

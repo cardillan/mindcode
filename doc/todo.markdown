@@ -39,6 +39,7 @@ Changes intended for the next regular release.
   * Mlog keywords without the `:` prefix
   * Using `remote` to mark variables/functions for export
   * Modifier '%s' requires parentheses around its arguments
+* Button for copying code from the Mindcode panel in the web app
 * Internal stack
 * Local arrays
 * If expression telescoping optimization

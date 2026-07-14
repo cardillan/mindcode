@@ -39,10 +39,10 @@ class LayoutResolverTest extends AbstractSchematicsTest {
                     
                         @micro-processor     at ( 0,  0) processor
                             links
-                                message4 as message4
-                                message3 as message3
-                                message2 as message2
                                 message1 as message1
+                                message2 as message2
+                                message3 as message3
+                                message4 as message4
                             end
                         end
                     message1:
@@ -77,10 +77,10 @@ class LayoutResolverTest extends AbstractSchematicsTest {
                     
                         @micro-processor     at ( 0,  0) processor
                             links
-                                message4 as message4
-                                message3 as message3
-                                message2 as message2
                                 message1 as message1
+                                message2 as message2
+                                message3 as message3
+                                message4 as message4
                             end
                         end
                     message1:
@@ -162,9 +162,9 @@ class LayoutResolverTest extends AbstractSchematicsTest {
                     
                         @micro-processor     at ( 0,  0) processor
                             links
+                                bank1 as bank1
                                 bank2 as bank2
                                 bank3 as bank3
-                                bank1 as bank1
                                 bank4 as bank4
                             end
                         end
@@ -199,9 +199,9 @@ class LayoutResolverTest extends AbstractSchematicsTest {
                     
                         @micro-processor     at ( 0,  0) processor
                             links
+                                bank1 as bank1
                                 bank2 as bank2
                                 bank3 as bank3
-                                bank1 as bank1
                                 bank4 as bank4
                             end
                         end
@@ -361,8 +361,8 @@ class LayoutResolverTest extends AbstractSchematicsTest {
                     
                         @micro-processor     at ( 0,  0) processor
                             links
-                                p0-switch1 as switch1
                                 p0-cell1 as cell1
+                                p0-switch1 as switch1
                             end
                         end
                     p0-cell1:
@@ -371,8 +371,8 @@ class LayoutResolverTest extends AbstractSchematicsTest {
                         @switch              at ( 2,  2) disabled
                         @micro-processor     at ( 1,  0) processor
                             links
-                                p1-switch1 as switch1
                                 p1-cell1 as cell1
+                                p1-switch1 as switch1
                             end
                         end
                     p1-cell1:
@@ -381,8 +381,8 @@ class LayoutResolverTest extends AbstractSchematicsTest {
                         @switch              at ( 3,  2) disabled
                         @micro-processor     at ( 0,  3) processor
                             links
-                                p2-switch1 as switch1
                                 p2-cell1 as cell1
+                                p2-switch1 as switch1
                             end
                         end
                     p2-cell1:
@@ -391,8 +391,8 @@ class LayoutResolverTest extends AbstractSchematicsTest {
                         @switch              at ( 2,  5) disabled
                         @micro-processor     at ( 1,  3) processor
                             links
-                                p3-switch1 as switch1
                                 p3-cell1 as cell1
+                                p3-switch1 as switch1
                             end
                         end
                     p3-cell1:
@@ -884,6 +884,150 @@ class LayoutResolverTest extends AbstractSchematicsTest {
                         @titanium-wall       at ( 1,  3)
                         @titanium-wall       at ( 2,  3)
                         @titanium-wall       at ( 3,  3)
+                    end
+                    """;
+
+            String actual = recompile(original);
+            assertEquals(expected, actual);
+        }
+    }
+
+    @Nested
+    class Labels {
+
+        @Test
+        void buildsGlobalProcessorLinks() {
+            String original = """
+                    schematic
+                        name = "Dev Test"
+                        message#: @message at (3, 1) * (1, 5)
+                        @micro-processor at (1, 0) * (5, 1) processor
+                            links
+                                message# as message1
+                            end
+                        end
+                    end
+                    """;
+
+            String expected = """
+                    schematic
+                        name = "Dev Test"
+                    
+                    p0-message1:
+                        @message             at ( 2,  1) text ""
+                    p1-message1:
+                        @message             at ( 2,  2) text ""
+                    p2-message1:
+                        @message             at ( 2,  3) text ""
+                    p3-message1:
+                        @message             at ( 2,  4) text ""
+                    p4-message1:
+                        @message             at ( 2,  5) text ""
+                        @micro-processor     at ( 0,  0) processor
+                            links
+                                p0-message1 as message1
+                            end
+                        end
+                        @micro-processor     at ( 1,  0) processor
+                            links
+                                p1-message1 as message1
+                            end
+                        end
+                        @micro-processor     at ( 2,  0) processor
+                            links
+                                p2-message1 as message1
+                            end
+                        end
+                        @micro-processor     at ( 3,  0) processor
+                            links
+                                p3-message1 as message1
+                            end
+                        end
+                        @micro-processor     at ( 4,  0) processor
+                            links
+                                p4-message1 as message1
+                            end
+                        end
+                    end
+                    """;
+
+            String actual = recompile(original);
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        void buildsLocalProcessorLinks() {
+            String original = """
+                    schematic
+                        name = "Dev Test"
+                        message#: @message at (3, 1) * (1, 5)
+                        @micro-processor at (1, 0) * (5, 1) processor
+                            links
+                                message*
+                            end
+                        end
+                    end
+                    """;
+
+            String expected = """
+                    schematic
+                        name = "Dev Test"
+                    
+                    p0-message1, p0-message1, p0-message1, p0-message1, p0-message1:
+                        @message             at ( 2,  1) text ""
+                    p0-message2, p0-message2, p0-message2, p0-message2, p0-message2:
+                        @message             at ( 2,  2) text ""
+                    p0-message3, p0-message3, p0-message3, p0-message3, p0-message3:
+                        @message             at ( 2,  3) text ""
+                    p0-message4, p0-message4, p0-message4, p0-message4, p0-message4:
+                        @message             at ( 2,  4) text ""
+                    p0-message5, p0-message5, p0-message5, p0-message5, p0-message5:
+                        @message             at ( 2,  5) text ""
+                        @micro-processor     at ( 0,  0) processor
+                            links
+                                p0-message1 as message1
+                                p0-message2 as message2
+                                p0-message3 as message3
+                                p0-message4 as message4
+                                p0-message5 as message5
+                            end
+                        end
+                        @micro-processor     at ( 1,  0) processor
+                            links
+                                p0-message1 as message1
+                                p0-message2 as message2
+                                p0-message3 as message3
+                                p0-message4 as message4
+                                p0-message5 as message5
+                            end
+                        end
+                        @micro-processor     at ( 2,  0) processor
+                            links
+                                p0-message1 as message1
+                                p0-message2 as message2
+                                p0-message3 as message3
+                                p0-message4 as message4
+                                p0-message5 as message5
+                            end
+                        end
+                        @micro-processor     at ( 3,  0) processor
+                            links
+                                p0-message1 as message1
+                                p0-message2 as message2
+                                p0-message3 as message3
+                                p0-message4 as message4
+                                p0-message5 as message5
+                            end
+                        end
+                        @micro-processor     at ( 4,  0) processor
+                            links
+                                p0-message1 as message1
+                                p0-message2 as message2
+                                p0-message3 as message3
+                                p0-message4 as message4
+                                p0-message5 as message5
+                            end
+                        end
                     end
                     """;
 

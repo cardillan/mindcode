@@ -1077,8 +1077,8 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                         block("@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(
                                         List.of(
-                                                new Link("unloader1", 2, 0),
-                                                new Link("switch1", 1, 0)
+                                                new Link("switch1", 1, 0),
+                                                new Link("unloader1", 2, 0)
                                         ),
                                         "sensor *tmp0 switch1 @enabled\ncontrol enabled unloader1 *tmp0 0 0 0\n"
                                 )
