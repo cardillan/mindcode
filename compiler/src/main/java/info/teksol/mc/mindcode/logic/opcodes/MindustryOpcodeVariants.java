@@ -215,7 +215,8 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, W, FUNC, Opcode.SETBLOCK, layerset("ore"),  ore("to"), in("x"), in("y"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETBLOCK, layerset("block"), in("to"), in("x"), in("y"), in("team"), in("rotation"));
 
-        add(list, V7,  MAX, W, FUNC, Opcode.SPAWN, unit("unit"), in("x"), in("y"), in("rotation"), in("team"), result());
+        add(list, V7,  V8A, W, FUNC, Opcode.SPAWN, unit("unit"), in("x"), in("y"), in("rotation"), in("team"), result());
+        add(list, V8B, MAX, W, FUNC, Opcode.SPAWN, unit("unit"), in("x"), in("y"), in("rotation"), in("team"), result(), bool("effect"));
 
         add(list, V8B, MAX, W, FUNC, Opcode.BULLET, result(), in("from"), in("index"), in("x"), in("y"), in("rotation"), in("team"),
                                                                                                  in("owner"), in("damage"), in("velocityScl"), in("lifeScl"), in("aimX"), in("aimY"));
@@ -247,6 +248,7 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("ban"),                   in("value"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("unban"),                 in("value"));
         add(list, V8B, MAX, W, FUNC, Opcode.SETRULE,   rule("pauseDisabled"),         in("value"));
+        add(list, V8B, MAX, W, FUNC, Opcode.SETRULE,   rule("musicVolume"),           in("value"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("buildSpeed"),            in("value"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("unitHealth"),            in("value"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("unitBuildSpeed"),        in("value"), in("team"));

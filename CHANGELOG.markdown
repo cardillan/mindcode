@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.16.5 – 2026-07-15
+
+### Added
+
+* Added support for the latest Mindustry release (v8 Build 159.5):
+  * new mlog variables `@clientCurrentMusic`, `@clientMusicPlaying`
+  * new sensable property `@flying`
+  * new `spawn` instruction parameter `effect`
+  * new `setrule` keyword `:musicVolume` 
+
 ## 3.16.4 – 2026-07-08
 
 ### Fixed

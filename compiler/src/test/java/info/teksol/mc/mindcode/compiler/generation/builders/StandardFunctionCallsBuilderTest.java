@@ -1927,9 +1927,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesSpawn() {
             assertCompilesTo("""
-                            result = spawn(unit, x, y, rotation, team);
+                            result = spawn(unit, x, y, rotation, team, false);
                             """,
-                    createInstruction(SPAWN, ":unit", ":x", ":y", ":rotation", ":team", tmp(0)),
+                    createInstruction(SPAWN, ":unit", ":x", ":y", ":rotation", ":team", tmp(0), "false"),
                     createInstruction(SET, ":result", tmp(0))
             );
         }

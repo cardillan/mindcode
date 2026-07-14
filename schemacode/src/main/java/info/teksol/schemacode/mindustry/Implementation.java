@@ -124,6 +124,7 @@ public enum Implementation {
     SPAWNBLOCK,
     STACKCONVEYOR,
     STACKROUTER(ConfigurationType.ITEM),
+    STATICPROP,
     STATICTREE,
     STATICWALL,
     STEAMVENT,

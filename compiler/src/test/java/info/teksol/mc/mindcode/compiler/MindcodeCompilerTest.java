@@ -112,9 +112,9 @@ class MindcodeCompilerTest  {
         @Test
         void compilesSpawnInstruction() {
             assertCompilesTo("""
-                            spawn(@flare, @thisx, @thisy, 0, @sharded);
+                            spawn(@flare, @thisx, @thisy, 0, @sharded, true);
                             """,
-                    createInstruction(SPAWN, "@flare", "@thisx", "@thisy", "0", "@sharded", "0")
+                    createInstruction(SPAWN, "@flare", "@thisx", "@thisy", "0", "@sharded", "0", "true")
             );
         }
 
