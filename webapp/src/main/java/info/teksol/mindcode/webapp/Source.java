@@ -16,25 +16,31 @@ public class Source {
     @Id
     @GeneratedValue
     private final UUID id;
+    private final String type;
     private final String source;
+    private final int useCount;
     @CreatedDate
     private final Instant createdAt;
 
-    public Source(String source, Instant createdAt) {
+    public Source(String type, String source, Instant createdAt) {
         this.id = null;
+        this.type = type;
         this.source = source;
+        this.useCount = 1;
         this.createdAt = createdAt;
     }
 
-    public Source(UUID id, String source, Instant createdAt) {
+    public Source(UUID id, String type, String source, int useCount, Instant createdAt) {
         this.id = id;
+        this.type = type;
         this.source = source;
+        this.useCount = useCount;
         this.createdAt = createdAt;
     }
 
     @PersistenceCreator
-    public static Source create(UUID id, String source, Instant createdAt) {
-        return new Source(id, source, createdAt);
+    public static Source create(UUID id, String type, String source, int useCount, Instant createdAt) {
+        return new Source(id, type, source, useCount, createdAt);
     }
 
     public UUID getId() {
@@ -45,16 +51,16 @@ public class Source {
         return source;
     }
 
+    public int getUseCount() {
+        return useCount;
+    }
+
     public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public Source withId(UUID newId) {
-        return new Source(newId, source, createdAt);
-    }
-
     public Source withSource(String newSource) {
-        return new Source(id, newSource, createdAt);
+        return new Source(id, type, newSource, useCount + 1, createdAt);
     }
 
     @Override

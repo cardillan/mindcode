@@ -222,6 +222,7 @@ public class ApiController {
 
     private ApiSource getApiSource(String id, String source, CompilerMode mode) {
         ApiSource apiSource;
+        int useCount = 0;
         if (mode == CompilerMode.compileMindcode && mindcodeSamples.containsKey(id)) {
             apiSource = new ApiSource(id, source);
         } else if (mode == CompilerMode.compileSchemacode && schemacodeSamples.containsKey(id)) {
@@ -230,16 +231,18 @@ public class ApiController {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
             final Source newSource = dto
                     .map(sdto -> sdto.withSource(source))
-                    .orElseGet(() -> new Source(source, Instant.now()));
+                    .orElseGet(() -> new Source(mode.name(), source, Instant.now()));
 
             final Source sourceDto = sourceRepository.save(newSource);
+            useCount = sourceDto.getUseCount();
             apiSource = new ApiSource(sourceDto.getId().toString(), source);
         } else {
-            Source sourceDto = sourceRepository.save(new Source(source, Instant.now()));
+            Source sourceDto = sourceRepository.save(new Source(mode.name(), source, Instant.now()));
+            useCount = sourceDto.getUseCount();
             apiSource = new ApiSource(sourceDto.getId().toString(), source);
         }
 
-        logger.info("compile request: mode={}, id={}, source_length={}", mode, apiSource.id, apiSource.content.length());
+        logger.info("compile request: mode={}, id={}, useCount={}, source_length={}", mode, apiSource.id, useCount, apiSource.content.length());
         return apiSource;
     }
 

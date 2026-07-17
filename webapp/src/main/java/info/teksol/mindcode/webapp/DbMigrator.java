@@ -12,6 +12,8 @@ public class DbMigrator {
                 )""");
 
         template.execute("ALTER TABLE public.sources ALTER COLUMN id SET DEFAULT gen_random_uuid()");
+        template.execute("ALTER TABLE public.sources ADD COLUMN IF NOT EXISTS type text");
+        template.execute("ALTER TABLE public.sources ADD COLUMN IF NOT EXISTS use_count integer not null default 1");
 
         template.execute("""
                 CREATE TABLE IF NOT EXISTS public.errors (
