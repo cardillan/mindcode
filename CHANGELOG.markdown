@@ -41,6 +41,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Changed the program signature to include Mindcode version number.
 * Changed the syntax of the [remote require](/doc/syntax/REMOTE-CALLS.markdown#main-processor-code) directive. The old syntax has been deprecated.
 
+## 3.16.5 – 2026-07-15
+
+### Added
+
+* Added support for the latest Mindustry release (v8 Build 159.5):
+    * new mlog variables `@clientCurrentMusic`, `@clientMusicPlaying`
+    * new sensable property `@flying`
+    * new `spawn` instruction parameter `effect`
+    * new `setrule` keyword `:musicVolume`
+
+## 3.16.4 – 2026-07-08
+
+### Fixed
+
+* Fixed Data Flow Optimizer incorrectly removing a function call ([#340](https://github.com/cardillan/mindcode/issues/340)).
+
 ## 3.16.3 – 2026-06-02
 
 ### Fixed

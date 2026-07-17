@@ -13,9 +13,9 @@ public enum ProcessorVersion {
     V6      (0, 6, 0, "v126.2"),
     V7      (0, 7, 0, "v146"),
     V7A     (1, 7, 1, "v146"),
-    V8A     (1,8, 0, "v149"),
+    V8A     (1, 8, 0, "v149"),
     V8B     (1, 8, 1, "be"),
-    MAX     (1, 8, 0, "be"),
+    MAX     (1, 8, 1, "be"),
     ;
 
     // A change in the generation number reflects differences in mappings from Mindcode to mlog.
