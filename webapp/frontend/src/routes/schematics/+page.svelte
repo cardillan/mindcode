@@ -1,19 +1,13 @@
 <script lang="ts">
-	import { tick, untrack } from 'svelte';
-	import { Code, Play, Trash2 } from '@lucide/svelte';
+	import {tick, untrack} from 'svelte';
+	import {Code, Play, Trash2} from '@lucide/svelte';
 
-	import {
-		ApiHandler,
-		type CompileResponseMessage,
-		type RunResult,
-		type Sample,
-		type SourceRange
-	} from '$lib/api';
-	import { schemacode } from '$lib/grammars/schemacode_language';
-	import type { PageProps } from './$types';
-	import { setDiagnostics } from '@codemirror/lint';
-	import { compileMessagesToDiagnostics, jumpToRange, updateEditor } from '$lib/codemirror';
-	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
+	import {ApiHandler, type CompileResponseMessage, type RunResult, type Sample, type SourceRange} from '$lib/api';
+	import {schemacode} from '$lib/grammars/schemacode_language';
+	import type {PageProps} from './$types';
+	import {setDiagnostics} from '@codemirror/lint';
+	import {compileMessagesToDiagnostics, jumpToRange, updateEditor} from '$lib/codemirror';
+	import {getThemeContext, LocalCompilerTarget, syncUrl} from '$lib/stores.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
 	import ControlBar from '$lib/components/ControlBar.svelte';
@@ -21,11 +15,13 @@
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
-	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
-	import { getSettingsContext } from '$lib/settings.svelte';
-	import { EditorView } from 'codemirror';
-	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
+	import {InputEditorStore, OutputEditorStore} from '$lib/editors.svelte';
+	import {getSettingsContext} from '$lib/settings.svelte';
+	import {EditorView} from 'codemirror';
+	import type {OutputTabName} from '$lib/components/TabsOutput.svelte';
 	import PageInfoCard from '$lib/components/PageInfoCard.svelte';
+	import {MlogWatcherStore} from '$lib/mlog_watcher';
+	import MlogWatcherButton from '$lib/components/MlogWatcherButton.svelte';
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
@@ -40,6 +36,7 @@
 		extensions: [schemacode()],
 		settings
 	});
+	const channel = new MlogWatcherStore(() => settings.mlogWatcherPort);
 	const encodedEditor = new OutputEditorStore(theme, [EditorView.lineWrapping], settings);
 
 	let runResults = $state<RunResult[]>([]);
@@ -187,6 +184,14 @@
 			<EditorActionButton tooltip="Erase schemacode" onClick={cleanEditors}>
 				<Trash2 class="size-4" />
 			</EditorActionButton>
+		{/snippet}
+		{#snippet outputActions(showingCode)}
+			<MlogWatcherButton
+					{channel}
+					getText={() => encodedEditor.view?.state.doc.toString() ?? ''}
+					disabled={!showingCode}
+					schematic={true}
+			/>
 		{/snippet}
 	</EditorLayout>
 
