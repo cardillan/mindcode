@@ -40,7 +40,7 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
     }
 
     private void processDirective(MessageConsumer messageConsumer, CompilerProfile profile, String option, String... values) {
-        DirectivePreprocessor.processGlobalDirectives(new PreprocessorContextImpl(messageConsumer), profile,
+        DirectivePreprocessor.processGlobalDirectives(new PreprocessorContextImpl(messageConsumer, profile), profile,
                 directive(option, values));
     }
 

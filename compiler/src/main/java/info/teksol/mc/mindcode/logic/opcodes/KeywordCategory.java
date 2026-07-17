@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 public enum KeywordCategory {
     linkedBlock,
     builtin,
+    color,
 
     alignment,
     blockGroup,

@@ -46,7 +46,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         draw triangle .v .a*0 .a*1 .a*2 .a*3 .a*4
                         draw triangle .a*5 .a*6 .a*7 .a*8 .a*9 0
                         print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE)
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
         );
     }
 
@@ -64,7 +64,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         jump 0 always 0 0
                         end
                         print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE)
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
         );
     }
 
@@ -88,7 +88,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         print :i
                         end
                         print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE)
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
         );
     }
 
@@ -120,7 +120,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         jump 6 always 0 0
                         end
                         print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE)
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
         );
     }
 
@@ -135,7 +135,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         print "Hello"
                         end
                         print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE)
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
         );
     }
 
@@ -152,7 +152,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         print "Hello"
                         end
                         print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE)
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
         );
     }
 
@@ -168,7 +168,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         print "Hello"
                         end
                         print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE)
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
         );
     }
 
@@ -190,7 +190,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         # Finish
                         end
                         print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE)
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
         );
     }
 
@@ -209,7 +209,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                 createInstruction(READ, "*tmp0", "cell1", "*sp"),
                 createInstruction(SET, "@counter", "*tmp0"),
                 createInstruction(END),
-                createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
+                createInstruction(PRINT, q(CompilerProfile.SIGNATURE_STATIC))
         ).map(LogicInstruction::toMlog).collect(Collectors.joining("\n"));
 
         String actual = LogicInstructionLabelResolver.resolve(

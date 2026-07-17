@@ -12,7 +12,6 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SortCategory;
 import info.teksol.mc.util.CollectionUtils;
@@ -190,7 +189,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
         }
 
         if (addSignature && profile.isSignature() && program.size() < profile.getInstructionLimit()) {
-            program.add(processor.createPrint(last.getAstContext(), LogicString.create(CompilerProfile.SIGNATURE)));
+            program.add(processor.createPrint(last.getAstContext(), LogicString.create(profile.getSignature())));
         }
 
         return program;

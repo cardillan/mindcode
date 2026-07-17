@@ -372,7 +372,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     @Test
     void generatesWarningForUnrecognizedColors() {
         assertGeneratesMessage(
-                "Named color 'fluffybunny' not recognized.",
+                "Unknown named color 'fluffybunny'.",
                 "a = %[fluffybunny];");
     }
 }

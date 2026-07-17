@@ -100,8 +100,8 @@ public class LiteralsBuilder extends AbstractCodeBuilder implements
 
         if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
             error(node, ERR.LITERAL_NAMED_COLOR_REQUIRES_TARGET_8);
-        } else if (!metadata.isValidColorName(color)) {
-            warn(node, WARN.NAMED_COLOR_NOT_RECOGNIZED, color);
+        } else if (!processor.isValidColorName(color)) {
+            strictError(node, ERR.NAMED_COLOR_NOT_RECOGNIZED, color);
         }
 
         return LogicNamedColor.create(node.sourcePosition(), node.getLiteral());

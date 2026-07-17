@@ -57,6 +57,9 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// Adds a custom-defined builtin value.
     void addBuiltin(String name);
 
+    /// Adds a custom-defined color name
+    void addColorName(String name);
+
     /// Adds a custom keyword. Returns true if the category is valid for the current target.
     boolean addKeyword(KeywordCategory keywordCategory, String keyword);
 
@@ -158,8 +161,14 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// Determines whether this identifier corresponds to a known built-in value.
     ///
     /// @param builtin name of the built-in variable including `@` prefix
-    /// @return true if the built-in variable is volatile.
+    /// @return true if the built-in variable is valid
     boolean isValidBuiltIn(String builtin);
+
+    /// Determines whether this identifier corresponds to a known color name.
+    ///
+    /// @param colorName name of the color (no prefix)
+    /// @return true if the color name is valid
+    boolean isValidColorName(String colorName);
 
     /// Determines whether this identifier corresponds to a volatile built-in value.
     ///

@@ -37,13 +37,14 @@ public class CompilerMessageEmitter extends AbstractMessageEmitter {
         }
     }
 
-    public void error(boolean warningOnly, SourcePosition position, @PrintFormat String format, Object... args) {
-        if (warningOnly) {
-            warn(position, format, args);
+    public void strictError(SourceElement node, @PrintFormat String format, Object... args) {
+        if (ContextFactory.getMessageContext().globalCompilerProfile().isStrict()) {
+            error(node, format, args);
         } else {
-            error(position, format, args);
+            warn(node, format, args);
         }
     }
+
 
     public void warn(SourceElement element, @PrintFormat String format, Object... args) {
         addMessage(PositionalMessage.warn(element.sourcePosition(), format, args));

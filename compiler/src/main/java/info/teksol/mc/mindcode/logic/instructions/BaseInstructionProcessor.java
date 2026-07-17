@@ -53,6 +53,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     private final Map<Opcode, Integer> opcodeKeywordPosition;
     private final Map<InstructionParameterType, Collection<String>> validArgumentValues;
     private final Set<String> additionalBuiltins = new HashSet<>();
+    private final Set<String> additionalColors = new HashSet<>();
     private int tmpIndex = 0;
     private int labelIndex = 0;
     private int markerIndex = 0;
@@ -465,6 +466,11 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     }
 
     @Override
+    public void addColorName(String name) {
+        additionalColors.add(name);
+    }
+
+    @Override
     public boolean addKeyword(KeywordCategory keywordCategory, String keyword) {
         if (keyword.startsWith(":")) {
             throw new IllegalArgumentException("Keyword must not start with ':'");
@@ -593,6 +599,11 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     @Override
     public boolean isValidBuiltIn(String builtin) {
         return getMetadata().isValidBuiltIn(builtin) || additionalBuiltins.contains(builtin);
+    }
+
+    @Override
+    public boolean isValidColorName(String colorName) {
+        return getMetadata().isValidColorName(colorName) || additionalColors.contains(colorName);
     }
 
     private static final Set<String> VOLATILE_NAMES = Set.of("@counter", "@time", "@tick", "@second",

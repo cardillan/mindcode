@@ -46,7 +46,7 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void warnsAtUnknownBuiltIns() {
             assertGeneratesMessages(expectedMessages()
-                            .add("Built-in variable '@fluffy-bunny' not recognized."),
+                            .add("Unknown built-in variable '@fluffy-bunny'."),
                     """
                             print(@fluffy-bunny);
                             """);

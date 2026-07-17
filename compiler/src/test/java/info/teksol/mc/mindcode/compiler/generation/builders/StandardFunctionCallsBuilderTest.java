@@ -1810,7 +1810,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesWeatherInstructions() {
             assertCompilesTo(
-                    expectedMessages().add("Built-in variable '@fluffyBunny' not recognized."),
+                    expectedMessages().add("Unknown built-in variable '@fluffyBunny'."),
                     """
                             active = weathersense(@snow);
                             weatherset(@rain, true);

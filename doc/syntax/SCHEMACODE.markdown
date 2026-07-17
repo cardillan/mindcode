@@ -537,7 +537,7 @@ The titanium wall is only placed on tiles that are free in the entire schematics
 
 When a region containing empty tiles is placed in the replacement mode, the original blocks at the empty tiles don't get erased. However, putting `@air` explicitly in the region does erase underlying blocks when using `replace` with the entire region.
 
-> ![TIP]
+> [!TIP]
 > The replacement mode allows making changes to block arrays created with blocks or regions – for example, a factory constructed by repeating a region containing a basic unit may be customized on the input/output edges.
 > 
 > The fill mode allows creating rectangular walls around compact regions, or filling empty areas in the schematic with filler blocks (such as batteries, solar panels, or walls).

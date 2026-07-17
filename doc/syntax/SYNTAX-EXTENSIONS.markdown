@@ -11,6 +11,7 @@ Mindcode offers these options to extend its basic syntax:
 * [declaring new mlog keywords (function keywords)](#declaring-new-mlog-keywords),
 * [declaring new builtin variables](#declaring-new-built-in-variables),
 * [declaring new linked block names](#declaring-new-linked-block-names),
+* [declaring new color names](#declaring-new-color-names),
 * [defining new mlog instructions](#defining-new-mlog-instructions),
 * [embedding blocks of mlog code](#mlog-blocks). 
 
@@ -88,6 +89,36 @@ fridge1.enabled = false;
 
 ```mlog
 control enabled fridge1 false 0 0 0
+```
+
+## Declaring new color names
+
+Named color literals and built-in color names require an existing color name to be used (such as `%[salmon]` and `@salmon`). It is possible to add a new color name literal and the corresponding built-in constant by using the `#declare` command with a `color` category:
+
+```Mindcode
+// Say a new Mindustry version adds new colors named 'puce', 'verdigris' and 'sarcoline':
+#declare color puce, verdigris, sarcoline;
+
+// We can now use these colors when drawing
+clear(0, 0, 0);
+col(%[puce]);
+rect(0, 0, 10, 10);
+
+col(%[verdigris]);
+rect(10, 0, 10, 10);
+
+col(%[sarcoline]);
+rect(0, 10, 10, 20);
+```
+
+```mlog
+draw clear 0 0 0 0 0 0
+draw col %[puce] 0 0 0 0 0
+draw rect 0 0 10 10 0 0
+draw col %[verdigris] 0 0 0 0 0
+draw rect 10 0 10 10 0 0
+draw col %[sarcoline] 0 0 0 0 0
+draw rect 0 10 10 20 0 0
 ```
 
 ## Defining new mlog instructions

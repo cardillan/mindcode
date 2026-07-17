@@ -298,7 +298,7 @@ public class DocValidatorTest extends AbstractTestBase {
             ListMessageLogger messageConsumer = new ListMessageLogger();
             InputFiles inputFiles = InputFiles.create();
             inputFiles.registerFile(file.toPath(), source, SourcePositionTranslator.EMPTY);
-            CompilerProfile profile = createCompilerProfile();
+            CompilerProfile profile = createCompilerProfile();//.setSignature(false);
             MindcodeCompiler compiler = new MindcodeCompiler(messageConsumer, profile, inputFiles);
             try {
                 compiler.compile();
@@ -316,7 +316,7 @@ public class DocValidatorTest extends AbstractTestBase {
             assertTrue(message.isEmpty(), "Found errors or warnings in " + uriString(file, line) + ":\n" + message);
 
             if (mlog != null) {
-                String signature = "\nprint \"" + CompilerProfile.SIGNATURE + '"';
+                String signature = "\nprint \"" + CompilerProfile.SIGNATURE_STATIC + '"';
                 String strippedMlog = mlog.endsWith(signature) ? mlog.substring(0, mlog.length() - signature.length()) : mlog;
                 assertEquals(strippedMlog, compiler.getOutput().trim(),
                         "Compiler output doesn't match mlog block in " + uriString(file, line));

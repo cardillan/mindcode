@@ -29,7 +29,11 @@ import java.util.stream.Collectors;
 /// Variables holding instances of this interface should be named "profile".
 @NullMarked
 public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProfile {
-    public static final String SIGNATURE = "Compiled by Mindcode " + Version.getVersion() + " - github.com/cardillan/mindcode";
+    public static final String SIGNATURE_VERSION = "Compiled by Mindcode " + Version.getVersion() + " - github.com/cardillan/mindcode";
+    public static final String SIGNATURE_STATIC = "Compiled by Mindcode - github.com/cardillan/mindcode";
+
+    // Generate static signature: for unit tests
+    private static final boolean staticSignature = isJUnitTest();
 
     private final boolean schematic;
     private final boolean webApplication;
@@ -128,6 +132,11 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
 
     public boolean isSchematic() {
         return schematic;
+    }
+
+    @Override
+    public String getSignature() {
+        return staticSignature ? SIGNATURE_STATIC : SIGNATURE_VERSION;
     }
 
     public boolean isLibraryPrecedence() {
@@ -542,5 +551,14 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     public String toString() {
         return "CompilerProfile:\n" +
                options.values().stream().map(CompilerOptionValue::toString).collect(Collectors.joining("\n"));
+    }
+
+    private static boolean isJUnitTest() {
+        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+            if (element.getClassName().startsWith("org.junit.")) {
+                return true;
+            }
+        }
+        return false;
     }
 }

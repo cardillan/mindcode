@@ -29,6 +29,7 @@ Changes intended for the next regular release.
 
 * **Planned**
 
+* Declare named color
 
 * **Quick ideas**
 

@@ -349,4 +349,4 @@ jump 350 equal :printExactFast:exp 0
 print "E"
 print :printExactFast:exp
 set @counter :printExactFast*retaddr
-print "Compiled by Mindcode 3.16.3 - github.com/cardillan/mindcode"
+print "Compiled by Mindcode - github.com/cardillan/mindcode"

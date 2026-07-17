@@ -22,7 +22,7 @@ class LogicInstructionPrinterTest extends AbstractCodeOutputTest {
                         draw triangle *tmp0 *tmp1 *tmp2 *tmp3 *tmp4 *tmp5
                         end
                         print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE));
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC));
     }
 
     @Test
@@ -99,6 +99,6 @@ class LogicInstructionPrinterTest extends AbstractCodeOutputTest {
                         printflush .MSG
                         end
                         print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE));
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC));
     }
 }

@@ -172,7 +172,7 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category, List.of()).setAdditive());
 
         list.add(new BooleanCompilerOptionValue(MlogFormatOptions.SIGNATURE, "no-signature", "",
-                "prevents appending a signature '" + CompilerProfile.SIGNATURE + "' at the end of the final code",
+                "prevents appending a signature '" + CompilerProfile.SIGNATURE_VERSION + "' at the end of the final code",
                 OptionMultiplicity.ZERO, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.COMMAND_LINE, category,
                 true).setConstValue(false));

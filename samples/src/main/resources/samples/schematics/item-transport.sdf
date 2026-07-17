@@ -2,12 +2,12 @@ schematic
     name = "Item Transport"
     target = 8
     description = """
-        Simple item transport schematics. Requires Mindustry 8 Beta.
+        Simple item transport schematics.
 
         Uses one of five predefined types of units for transport. Utilizes a separate processor
-        and a new Mindcode remote call mechanism to switch to a more preferred unit type
-        once it becomes available. The task to find a better unit runs in parallel on the second processor,
-        allowing the item transport to run uninterrupted.
+        and the remote call mechanism to switch to a more preferred unit type once it becomes available.
+        The task to find a better unit runs in parallel on another processor, allowing the item transport
+        to run uninterrupted.
         """
     tag = "Schematic Builder"
     tag = BLOCK-MICRO-PROCESSOR

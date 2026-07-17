@@ -56,6 +56,7 @@ public class ERR {
     public static final String ATOMIC_BLOCK_WAIT = "The atomic block executes a 'wait' instruction.";
     public static final String ATOMIC_REQUIRES_PROCESSOR = "'atomic' requires a processor to be specified in the 'target' compiler option.";
     public static final String ATOMIC_REQUIRES_TARGET_81 = "'atomic' requires target 8.1 or higher.";
+    public static final String BUILT_IN_VARIABLE_UNKNOWN = "Unknown built-in variable '%s'.";
     public static final String BREAK_OUTSIDE_LOOP = "'break' statement outside of a do/while/for loop or a labeled code block.";
     public static final String BREAK_OUTSIDE_LOOP_NO_LABEL = "'break' statement without a label outside of a do/while/for loop.";
     public static final String CONTINUE_OUTSIDE_LOOP = "'continue' statement outside of a do/while/for loop.";
@@ -68,6 +69,7 @@ public class ERR {
     public static final String DECLARE_BLOCK_NAME_EXPECTED = "A custom block name is expected.";
     public static final String DECLARE_BUILTIN_EXPECTED = "A custom built-in identifier is expected.";
     public static final String DECLARE_KEYWORD_EXPECTED = "A custom keyword is expected.";
+    public static final String DECLARE_COLOR_NAME_EXPECTED = "A custom color name is expected.";
     public static final String DECLARE_UNKNOWN_CATEGORY = "Unknown keyword category '%s'.";
     public static final String DECLARE_UNSUPPORTED_CATEGORY = "Keyword category '%s' is not available in current language target.";
     public static final String DIRECTIVE_INVALID_VALUE = "Invalid value '%s' of compiler directive '%s'.";
@@ -178,6 +180,7 @@ public class ERR {
     public static final String MULTIPLE_MODULE_DECLARATIONS = "Multiple module declarations in one source file are not allowed.";
     public static final String MULTIPLE_MODULE_REQUESTS = "Multiple requests for file or library '%s'.";
     public static final String MULTIPLE_PROCESSOR_BINDINGS = "Multiple bindings of processor '%s'.";
+    public static final String NAMED_COLOR_NOT_RECOGNIZED = "Unknown named color '%s'.";
     public static final String OPERATOR_REQUIRES_SPECIFIC_TARGET = "The '%s' operator requires language target %s or higher.";
     public static final String PARAMETER_NAME_RESERVED_GLOBAL = "Parameter '%s' of function '%s' uses name reserved for global variables.";
     public static final String PARAMETER_NAME_RESERVED_LINKED = "Parameter '%s' of function '%s' uses name reserved for linked blocks.";

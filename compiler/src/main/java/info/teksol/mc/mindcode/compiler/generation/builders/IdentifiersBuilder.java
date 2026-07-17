@@ -5,7 +5,6 @@ import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.generated.ast.visitors.*;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
@@ -57,7 +56,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
     @Override
     public ValueStore visitBuiltInIdentifier(AstBuiltInIdentifier node) {
         if (!processor.isValidBuiltIn(node.getName())) {
-            warn(node, WARN.BUILT_IN_VARIABLE_NOT_RECOGNIZED, node.getName());
+            strictError(node, ERR.BUILT_IN_VARIABLE_UNKNOWN, node.getName());
         }
 
         // Full evaluation: evaluate all numerical builtins

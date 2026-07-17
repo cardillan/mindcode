@@ -289,7 +289,7 @@ end
 print "foo"
 set @counter :foo*retaddr
 print "Created by cardillan, Mickey Mouse and Rameses Niblick the Third"
-print "Compiled by Mindcode 3.16.3 - github.com/cardillan/mindcode"
+print "Compiled by Mindcode - github.com/cardillan/mindcode"
 ```
 
 ### Option `encode-zero-characters`

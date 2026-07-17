@@ -165,7 +165,7 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
     class PropertyErrors {
         @Test
         void refusesUnknownProperty() {
-            assertGeneratesMessages(expectedMessages().add("Built-in variable '@foo' not recognized."),
+            assertGeneratesMessages(expectedMessages().add("Unknown built-in variable '@foo'."),
                     """
                             a = vault1.@foo;
                             """);

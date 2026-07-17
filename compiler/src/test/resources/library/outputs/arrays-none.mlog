@@ -328,4 +328,4 @@ select .c*elem lessThan .c*ind 5 ".c*3" ".c*8" # Origin: 30, 198, 206, ..., keys
 set @counter .c*ret
 select .c*elem lessThan .c*ind 5 ".c*4" ".c*9" # Origin: 30, 198, 206, ..., keys: 4, 9
 set @counter .c*ret
-print "Compiled by Mindcode 3.16.3 - github.com/cardillan/mindcode"
+print "Compiled by Mindcode - github.com/cardillan/mindcode"

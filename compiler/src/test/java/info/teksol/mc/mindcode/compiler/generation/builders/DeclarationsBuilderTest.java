@@ -11,7 +11,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
 
     @Nested
-    class BuiltinDeclarations {
+    class CustomDeclarations {
         @Test
         void compilesBuiltinDeclaration() {
             assertCompiles("#declare builtin @fluffy-bunny;");
@@ -22,6 +22,20 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompiles("""
                     #declare builtin @fluffy-bunny;
                     print(@fluffy-bunny);
+                    """);
+        }
+
+        @Test
+        void compilesColorDeclaration() {
+            assertCompiles("#declare color fluffyBunny;");
+        }
+
+        @Test
+        void compilesCustomColor() {
+            assertCompiles("""
+                    #declare color fluffyBunny;
+                    col(%[fluffyBunny]);
+                    col(@fluffyBunny);
                     """);
         }
 
@@ -45,7 +59,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void reportsUnknownBuiltins() {
             assertGeneratesMessage(
-                    "Built-in variable '@fluffy-bunny' not recognized.",
+                    "Unknown built-in variable '@fluffy-bunny'.",
                     "print(@fluffy-bunny);");
         }
 
@@ -68,6 +82,13 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessage(
                     "A custom built-in identifier is expected.",
                     "#declare builtin fluffyBunny;");
+        }
+
+        @Test
+        void reportsWrongColorNames() {
+            assertGeneratesMessage(
+                    "A custom color name is expected.",
+                    "#declare color @fluffyBunny;");
         }
 
         @Test

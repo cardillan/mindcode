@@ -16,6 +16,7 @@ import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -33,14 +34,17 @@ public class AbstractFunctionMapperTest {
     }
 
     protected static BaseFunctionMapper createFunctionMapper(InstructionProcessor instructionProcessor) {
+        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations(false, false);
+
         CodeAssemblerContext codeAssemblerContext = new CodeAssemblerContextImpl(
                 s -> {},
-                CompilerProfile.fullOptimizations(false, false),
+                compilerProfile,
                 instructionProcessor,
                 AstContext.createStaticRootNode());
 
         FunctionMapperContext functionMapperContext = new FunctionMapperContextImpl(
                 s -> {},
+                compilerProfile,
                 instructionProcessor,
                 new CodeAssembler(codeAssemblerContext));
 
@@ -117,12 +121,19 @@ public class AbstractFunctionMapperTest {
     }
 
     protected static class FunctionMapperContextImpl extends AbstractMessageEmitter implements FunctionMapperContext {
+        private final GlobalCompilerProfile globalCompilerProfile;
         private final InstructionProcessor instructionProcessor;
         private final CodeAssembler assembler;
 
-        public FunctionMapperContextImpl(MessageConsumer messageConsumer, InstructionProcessor instructionProcessor,
-                CodeAssembler assembler) {
+        @Override
+        public GlobalCompilerProfile globalCompilerProfile() {
+            return globalCompilerProfile;
+        }
+
+        public FunctionMapperContextImpl(MessageConsumer messageConsumer, GlobalCompilerProfile globalCompilerProfile,
+                InstructionProcessor instructionProcessor, CodeAssembler assembler) {
             super(messageConsumer);
+            this.globalCompilerProfile = globalCompilerProfile;
             this.instructionProcessor = instructionProcessor;
             this.assembler = assembler;
         }

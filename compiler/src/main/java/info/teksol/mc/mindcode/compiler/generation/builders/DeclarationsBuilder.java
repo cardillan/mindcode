@@ -130,6 +130,15 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                     error(element, ERR.DECLARE_BUILTIN_EXPECTED);
                 }
             }
+        } else if (category == KeywordCategory.color) {
+            for (AstMindcodeNode element : directive.getElements()) {
+                if (element instanceof AstIdentifier name) {
+                    processor.addColorName(name.getName());
+                    processor.addBuiltin("@" + name.getName());
+                } else {
+                    error(element, ERR.DECLARE_COLOR_NAME_EXPECTED);
+                }
+            }
         } else {
             boolean reported = false;
             for (AstMindcodeNode element : directive.getElements()) {

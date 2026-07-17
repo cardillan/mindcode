@@ -529,7 +529,7 @@ class AtomicBlockResolverTest {
                             print :foo:x
                             set @counter :foo*retaddr
                             print "%s"
-                            """.formatted(CompilerProfile.SIGNATURE)
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
 
@@ -555,7 +555,7 @@ class AtomicBlockResolverTest {
                             write *tmp0 cell1 0
                             set @counter :foo*retaddr
                             print "%s"
-                            """.formatted(CompilerProfile.SIGNATURE)
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
 
@@ -593,7 +593,7 @@ class AtomicBlockResolverTest {
                             end
                             draw triangle .x*1 .x*2 .x*3 .x*4 0 0
                             print "%s"
-                            """.formatted(CompilerProfile.SIGNATURE)
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
 
@@ -639,7 +639,7 @@ class AtomicBlockResolverTest {
                             set @counter .x*ret
                             draw triangle .x*0 .x*1 .x*2 .x*3 .x*4 0
                             print "%s"
-                            """.formatted(CompilerProfile.SIGNATURE)
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
 
@@ -756,7 +756,7 @@ class AtomicBlockResolverTest {
                             print :foo:x
                             set @counter :foo*retaddr
                             print "%s"
-                            """.formatted(CompilerProfile.SIGNATURE)
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
 
@@ -781,7 +781,7 @@ class AtomicBlockResolverTest {
                             write *tmp0 cell1 0
                             set @counter :foo*retaddr
                             print "%s"
-                            """.formatted(CompilerProfile.SIGNATURE)
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
 
@@ -818,7 +818,7 @@ class AtomicBlockResolverTest {
                             end
                             draw triangle .x*1 .x*2 .x*3 .x*4 0 0
                             print "%s"
-                            """.formatted(CompilerProfile.SIGNATURE)
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
 
@@ -865,7 +865,7 @@ class AtomicBlockResolverTest {
                             set @counter .x*ret
                             draw triangle .x*0 .x*1 .x*2 .x*3 .x*4 0
                             print "%s"
-                            """.formatted(CompilerProfile.SIGNATURE)
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
 

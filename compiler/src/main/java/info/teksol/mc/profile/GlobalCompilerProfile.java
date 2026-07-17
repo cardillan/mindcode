@@ -35,6 +35,8 @@ public interface GlobalCompilerProfile {
 
     boolean isSchematic();
 
+    String getSignature();
+
     //<editor-fold desc="Input/output options">
     default FileReferences getFileReferences() {
         return getEnumValue(InputOutputOptions.FILE_REFERENCES);
@@ -154,6 +156,14 @@ public interface GlobalCompilerProfile {
     boolean useEmulatedStrictNotEqual();
 
     SyntacticMode getSyntacticMode();
+
+    default boolean isStrict() {
+        return getSyntacticMode() == SyntacticMode.STRICT;
+    }
+
+    default boolean isNonStrict() {
+        return getSyntacticMode() != SyntacticMode.STRICT;
+    }
 
     default int getSetrate() {
         return getIntValue(CompilerOptions.SETRATE);

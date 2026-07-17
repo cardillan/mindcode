@@ -5,7 +5,6 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class WARN {
     public static final String ABSOLUTE_ADDRESSING = "Unable to meet the requirement for symbolic links. Some portions of the program still depend on absolute addressing.";
-    public static final String BUILT_IN_VARIABLE_NOT_RECOGNIZED = "Built-in variable '%s' not recognized.";
     public static final String DEPRECATED_USE_OF_REQUIRE_REMOTE = "Using the 'remote' directive after 'require' is deprecated. Move the 'remote' directive in front of 'require'.";
     public static final String DEPRECATED_USE_OF_REMOTE = "Using `remote` to mark variables/functions for export is deprecated. Use `export` instead.";
     public static final String FORMAT_PRECLUDED_BY_STRING_LITERAL = "A string literal precludes using 'format' instruction for print merging.";
@@ -17,7 +16,6 @@ public class WARN {
     public static final String MISSING_MLOG_KEYWORD_PREFIX = "Using mlog keywords without the ':' prefix is deprecated (use ':%s' instead).";
     public static final String MISSING_MODIFIER_PARENS = "Modifier '%s' requires parentheses around its arguments.";
     public static final String MISSING_PRINTFLUSH_ADDED = "Automatically added missing 'printflush(message1);' call to the end of the program.";
-    public static final String NAMED_COLOR_NOT_RECOGNIZED = "Named color '%s' not recognized.";
     public static final String OPTIMIZATION_PASSES_LIMIT_REACHED = "Optimization passes limit (%d) reached.";
     public static final String PRINTF_NOT_ENOUGH_ARGUMENTS = "The 'printf' function doesn't have enough arguments for placeholders: %d placeholder(s), %d argument(s).";
     public static final String PRINTF_NO_PLACEHOLDERS = "The 'printf' function is called with a literal format string which doesn't contain any format placeholders.";

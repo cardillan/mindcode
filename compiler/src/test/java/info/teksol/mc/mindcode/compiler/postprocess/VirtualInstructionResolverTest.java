@@ -78,7 +78,7 @@ class VirtualInstructionResolverTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, "@counter", ".a*wret"),
                     createInstruction(SET, ".a*2", ".a*w"),
                     createInstruction(SET, "@counter", ".a*wret"),
-                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
+                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE_STATIC))
             );
         }
 
@@ -120,7 +120,7 @@ class VirtualInstructionResolverTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, "@counter", ".a*wret"),
                     createInstruction(SET, ".a*2", ".a*w"),
                     createInstruction(SET, "@counter", ".a*wret"),
-                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
+                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE_STATIC))
             );
         }
 
@@ -164,7 +164,7 @@ class VirtualInstructionResolverTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, "@counter", ".a*wret"),
                     createInstruction(SET, ".a*2", ".a*w"),
                     createInstruction(SET, "@counter", ".a*wret"),
-                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
+                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE_STATIC))
             );
         }
 
@@ -210,7 +210,7 @@ class VirtualInstructionResolverTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, "@counter", ".a*wret"),
                     createInstruction(SET, ".a*2", ".a*w"),
                     createInstruction(SET, "@counter", ".a*wret"),
-                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
+                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE_STATIC))
             );
         }
 
@@ -258,7 +258,7 @@ class VirtualInstructionResolverTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, "@counter", ".a*wret"),
                     createInstruction(SET, ".a*2", ".a*w"),
                     createInstruction(SET, "@counter", ".a*wret"),
-                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
+                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE_STATIC))
             );
         }
     }
@@ -481,7 +481,7 @@ class VirtualInstructionResolverTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, "@counter", ".a*wret"),
                     createInstruction(SET, ".a*3", ".a*w"),
                     createInstruction(SET, "@counter", ".a*wret"),
-                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
+                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE_STATIC))
             );
         }
     }
