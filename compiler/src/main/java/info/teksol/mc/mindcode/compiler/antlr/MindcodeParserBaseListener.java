@@ -413,6 +413,30 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAstRequireFileDeprecated(MindcodeParser.AstRequireFileDeprecatedContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstRequireFileDeprecated(MindcodeParser.AstRequireFileDeprecatedContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAstRequireLibraryDeprecated(MindcodeParser.AstRequireLibraryDeprecatedContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstRequireLibraryDeprecated(MindcodeParser.AstRequireLibraryDeprecatedContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAstFunctionDeclaration(MindcodeParser.AstFunctionDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}

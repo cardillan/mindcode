@@ -1312,14 +1312,14 @@ class MindcodeParserTest extends AbstractParserTest {
         @Test
         void parsesRemoteFileRequire() {
             assertParses("""
-                    require "file.mnd" remote processor1;
+                    remote(processor1) require "file.mnd";
                     """);
         }
 
         @Test
         void parsesMultipleRemoteFileRequire() {
             assertParses("""
-                    require "file.mnd" remote processor1, processor2, processor3;
+                    remote(processor1, processor2, processor3) require "file.mnd";
                     """);
         }
     }

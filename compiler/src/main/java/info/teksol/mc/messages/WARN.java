@@ -6,6 +6,7 @@ import org.jspecify.annotations.NullMarked;
 public class WARN {
     public static final String ABSOLUTE_ADDRESSING = "Unable to meet the requirement for symbolic links. Some portions of the program still depend on absolute addressing.";
     public static final String BUILT_IN_VARIABLE_NOT_RECOGNIZED = "Built-in variable '%s' not recognized.";
+    public static final String DEPRECATED_USE_OF_REQUIRE_REMOTE = "Using the 'remote' directive after 'require' is deprecated. Move the 'remote' directive in front of 'require'.";
     public static final String DEPRECATED_USE_OF_REMOTE = "Using `remote` to mark variables/functions for export is deprecated. Use `export` instead.";
     public static final String FORMAT_PRECLUDED_BY_STRING_LITERAL = "A string literal precludes using 'format' instruction for print merging.";
     public static final String FUNCTION_NO_LONGER_SUPPORTED = "Function '%s' is no longer supported in Mindustry Logic version %s; using '%s' instead.";

@@ -138,10 +138,10 @@ jump 4 always 0 0
 
 ## Main processor code
 
-All remote modules must be declared in the main processor code using the `require ... remote` statement. This declaration specifies which remote processor contains the module's functions and variables:
+All remote modules must be declared in the main processor code using the `remote(...) require ...` directive. This declaration specifies which remote processor contains the module's functions and variables:
 
 ```
-require "library.mnd" remote processor1;
+remote(processor1) require "library.mnd";
 ```
 
 > [!NOTE]
@@ -162,7 +162,7 @@ All variables and arrays [declared as `export`](SYNTAX-1-VARIABLES.markdown#expo
 Exported variables are accessed as properties on bound processors, for example:
 
 ```
-require "library.mnd" remote processor1, processor2;
+remote(processor1, processor2) require "library.mnd";
 
 print(processor1.variable);
 processor2.array[10]++;
@@ -173,7 +173,7 @@ processor2.array[10]++;
 The same remote module might be compiled into two or more different remote processors. In this case, remote functions can be run concurrently in any number of remote processors. This is done by including more than one processor in the `remote` clause:
 
 ```
-require "library.mnd" remote processor1, processor2, processor3;
+remote(processor1, processor2, processor3) require "library.mnd";
 
 async(processor1.foo(1));
 async(processor2.foo(2));
@@ -244,7 +244,7 @@ A processor containing the remote code can also be located dynamically. In this 
 
 ```
 var proc;
-require "remote.mnd" remote proc;
+ remote(proc) require "remote.mnd";
 ```
 
 The compiler doesn't automatically generate code to verify the module signature for dynamically bound processors. It is possible to verify the signature using a `verifySignature()` built-in function. This function takes a processor as an argument, and returns `true` if the processor contains the expected module code.  
@@ -270,7 +270,7 @@ Processor references can also be stored in an array. However, individual array e
 
 ```
 var p1, p2;
-require "remote.mnd" remote p1, p2;
+remote(p1, p2) require "remote.mnd";
 
 var processors[10];
 
@@ -659,7 +659,7 @@ All [string values](SCHEMACODE.markdown#string-value-definition) defined in a Sc
 ```
 schematic
     name = "Parallel processing"
-    target = 8;
+    target = 8
 
 a-message1:
     @message            at  (0, 0)
@@ -671,19 +671,19 @@ b-processor1:
 end
 
 Main = """
-    require "RemoteTest" remote processor1;
+    remote(processor1) require "RemoteTest";
 
-    greeting = name(out another);
+    greeting = processor1.name(out another);
     println($"Hello, $greeting $another!");
     printflush(message1);
     """
 
 RemoteTest = """
     module RemoteTest;
-    require "RemoteTest2" remote processor1;
+    remote(processor1) require "RemoteTest2";
 
     export def name(out another)
-        another = anotherName();
+        another = processor1.anotherName();
         return "Dolly";
     end;
     """

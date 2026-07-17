@@ -386,6 +386,30 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAstRequireLibrary(MindcodeParser.AstRequireLibraryContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code astRequireFileDeprecated}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstRequireFileDeprecated(MindcodeParser.AstRequireFileDeprecatedContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astRequireFileDeprecated}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstRequireFileDeprecated(MindcodeParser.AstRequireFileDeprecatedContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astRequireLibraryDeprecated}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstRequireLibraryDeprecated(MindcodeParser.AstRequireLibraryDeprecatedContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astRequireLibraryDeprecated}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstRequireLibraryDeprecated(MindcodeParser.AstRequireLibraryDeprecatedContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astFunctionDeclaration}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree

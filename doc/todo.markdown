@@ -20,16 +20,15 @@ Changes intended for the next regular release.
 * Initialized symbolic links
 * Compiler options in schematics
 * Mlog parametrization in schematics
-
+* Schematic regions
+* Update the `require remote` directive
 
 * **Doing**
 
-* Schematic regions
+* Unknown built-ins will cause a compiler error in strict mode
 
 * **Planned**
 
-* Unknown built-ins will cause a compiler error in strict mode
-* Update the `require remote` directive
 
 * **Quick ideas**
 

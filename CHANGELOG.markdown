@@ -39,6 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Changed the dynamic optimization process: when the current instruction count exceeds the limit, `neutral` and `speed` optimization goals are overriden to `size`. 
 * Temporary variables are renumbered at the end of compilation, so that their names (`*tmp#`) start with 0 and the sequence doesn't contain gaps.
 * Changed the program signature to include Mindcode version number.
+* Changed the syntax of the [remote require](/doc/syntax/REMOTE-CALLS.markdown#main-processor-code) directive. The old syntax has been deprecated.
 
 ## 3.16.3 – 2026-06-02
 

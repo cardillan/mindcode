@@ -233,6 +233,20 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstRequireLibrary(MindcodeParser.AstRequireLibraryContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astRequireFileDeprecated}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstRequireFileDeprecated(MindcodeParser.AstRequireFileDeprecatedContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astRequireLibraryDeprecated}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstRequireLibraryDeprecated(MindcodeParser.AstRequireLibraryDeprecatedContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astFunctionDeclaration}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree

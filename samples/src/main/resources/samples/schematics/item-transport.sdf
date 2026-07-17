@@ -71,7 +71,7 @@ UnitMonitor = """
 Main = """
     #set syntax = strict;
 
-    require "UnitMonitor" remote processor1;
+    remote(processor1) require "UnitMonitor";
 
     // This declaration ensures all these blocks are available before the code continues
     guarded linked sorter1, message1;

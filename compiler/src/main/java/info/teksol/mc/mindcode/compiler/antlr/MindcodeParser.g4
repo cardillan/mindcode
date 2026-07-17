@@ -99,8 +99,10 @@ statement
     | ENHANCEDCOMMENT formattableContents*                                              # astEnhancedComment
     | ALLOCATE allocations                                                              # astAllocations
     | PARAM name = IDENTIFIER ASSIGN value = expression                                 # astParameter
-    | REQUIRE file = STRING (REMOTE processors = identifierList)?                       # astRequireFile
-    | REQUIRE library = IDENTIFIER (REMOTE processors = identifierList)?                # astRequireLibrary
+    | (REMOTE LPAREN processors = identifierList RPAREN)? REQUIRE file = STRING         # astRequireFile
+    | (REMOTE LPAREN processors = identifierList RPAREN)? REQUIRE library = IDENTIFIER  # astRequireLibrary
+    | REQUIRE file = STRING REMOTE processors = identifierList                          # astRequireFileDeprecated
+    | REQUIRE library = IDENTIFIER REMOTE processors = identifierList                   # astRequireLibraryDeprecated
     | modifiers = functionModifier* type = (VOID | DEF) name = IDENTIFIER
         params = parameterList body = astStatementList? END                             # astFunctionDeclaration
     | (label = IDENTIFIER COLON)? FOR iterators = iteratorsValuesGroups

@@ -397,10 +397,29 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
+    public AstMindcodeNode visitAstRequireFileDeprecated(AstRequireFileDeprecatedContext ctx) {
+        AstRequireFile requirement = new AstRequireFile(pos(ctx), literalString(ctx.file),
+                ctx.processors == null ? List.of() : identifiers(ctx.processors.IDENTIFIER()));
+        context.addRequirement(requirement);
+        compilerMessages.warn(pos(ctx.REMOTE()), WARN.DEPRECATED_USE_OF_REQUIRE_REMOTE);
+
+        return requirement;
+    }
+
+    @Override
     public AstRequireLibrary visitAstRequireLibrary(MindcodeParser.AstRequireLibraryContext ctx) {
         AstRequireLibrary requirement = new AstRequireLibrary(pos(ctx), identifier(ctx.library),
                 ctx.processors == null ? List.of() : identifiers(ctx.processors.IDENTIFIER()));
         context.addRequirement(requirement);
+        return requirement;
+    }
+
+    @Override
+    public AstRequireLibrary visitAstRequireLibraryDeprecated(MindcodeParser.AstRequireLibraryDeprecatedContext ctx) {
+        AstRequireLibrary requirement = new AstRequireLibrary(pos(ctx), identifier(ctx.library),
+                ctx.processors == null ? List.of() : identifiers(ctx.processors.IDENTIFIER()));
+        context.addRequirement(requirement);
+        compilerMessages.warn(pos(ctx.REMOTE()), WARN.DEPRECATED_USE_OF_REQUIRE_REMOTE);
         return requirement;
     }
 

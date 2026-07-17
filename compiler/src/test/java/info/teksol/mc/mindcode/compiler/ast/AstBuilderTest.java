@@ -2297,8 +2297,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
             final String fileName = "s6zoH0%IbSsQH4!MOmpu%eDO-H!#Z81dr2xSYGds6xhTzx^V#ie7UNikF$xtYUAi";
 
             assertBuildsTo(
-                    expectedMessages().add(1, 9, "Error reading file '" + fileName + "'."),
-                    "require \"" + fileName + "\" remote processor1;",
+                    expectedMessages().add("Error reading file '" + fileName + "'."),
+                    "remote(processor1) require \"" + fileName + "\";",
                     List.of(
                             new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, fileName),
                                     ids("processor1"))
@@ -2312,8 +2312,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
             final String fileName = "s6zoH0%IbSsQH4!MOmpu%eDO-H!#Z81dr2xSYGds6xhTzx^V#ie7UNikF$xtYUAi";
 
             assertBuildsTo(
-                    expectedMessages().add(1, 9, "Error reading file '" + fileName + "'."),
-                    "require \"" + fileName + "\" remote processor1, processor2, processor3;",
+                    expectedMessages().add("Error reading file '" + fileName + "'."),
+                    "remote(processor1, processor2, processor3) require \"" + fileName + "\";",
                     List.of(
                             new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, fileName),
                                     ids("processor1", "processor2", "processor3"))
