@@ -11,18 +11,23 @@ import info.teksol.mc.mindcode.logic.mimex.Icons;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.Target;
+import info.teksol.mc.util.CollectionUtils;
+import info.teksol.mc.util.MutableInteger;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
-import info.teksol.schemacode.mindustry.*;
-import info.teksol.schemacode.schematics.BlockPositionResolver.AstBlockPosition;
+import info.teksol.schemacode.mindustry.Color;
+import info.teksol.schemacode.mindustry.ConfigurationType;
+import info.teksol.schemacode.mindustry.Position;
+import info.teksol.schemacode.mindustry.UnitPlan;
+import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,9 +43,19 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
     private AstSchematic astSchematic;
     private Map<String, AstText> constants;
-    private Map<String, BlockPosition> astLabelMap;
-    private BlockPositionMap<BlockPosition> astPositionMap;
+    private SchematicElement schematic;
+    private BlockPositionMap<SchematicElement> astPositionMap;
     private BlockPositionMap<Block> positionMap;
+
+    // Context used to resolve configuration references. There's no danger of circular references here.
+    final ResolverContext configurationContext = new ResolverContext(false);
+
+    // Elements reported for circular reference errors
+    private final Set<SchematicElement> reportedCircular = new HashSet<>();
+
+    // Global array labels for processor links
+    private final Map<String, MutableInteger> arrayLabels = new HashMap<>();
+    private final Map<String, Set<AstSchemaItem>> reportedErrors = new HashMap<>();
 
     private boolean error = false;
 
@@ -110,70 +125,68 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         labelCounts.entrySet().stream()
                 .filter(e -> e.getValue() > 1)
-                .filter(e -> e.getKey().charAt(e.getKey().length() - 1) != BlockPositionResolver.LABEL_ARRAY_CHAR)
+                .filter(e -> e.getKey().charAt(e.getKey().length() - 1) != LayoutResolver.GLOBAL_LABEL_ARRAY_CHAR)
                 .forEachOrdered(c -> addMessage(ToolMessage.error("Multiple definitions of block label '%s'.", c.getKey())));
 
-        astSchematic.blocks().stream().filter(astBlock -> !SchematicsMetadata.getMetadata().isBlockNameValid(astBlock.type()))
-                .forEachOrdered(astBlock -> error(astBlock, "Unknown block type '%s'.", astBlock.type()));
+        MindustryMetadata metadata = SchematicsMetadata.getMetadata();
 
-        List<AstBlock> astBlocks = astSchematic.blocks().stream()
-                .filter(astBlock -> SchematicsMetadata.getMetadata().isBlockNameValid(astBlock.type())).toList();
+        LayoutResolver layoutResolver = new LayoutResolver(this);
+        schematic = layoutResolver.resolve(astSchematic);
+        List<SchematicElement> elements = new ArrayList<>();
+        schematic.forEachBlock(elements::add);
+        elements.sort(Comparator.comparing(BlockPosition::index));
 
-        // Here are absolute positions of all blocks, stored as "#" + index
-        // Labeled blocks are additionally stored under all their labels
-        BlockPositionResolver positionResolver = new BlockPositionResolver(messageConsumer);
-        BlockPositionResolver.ResolvedBlocks resolvedBlocks = positionResolver.resolveAllBlocks(astBlocks);
-        astLabelMap = resolvedBlocks.labelMap();
-        List<BlockPosition> blockPositions = astLabelMap.entrySet().stream()
-                .filter(e -> e.getKey().charAt(0) == SchematicsBuilder.INDEX_KEY_CHAR)
-                .map(Map.Entry::getValue)
-                .sorted(Comparator.comparing(BlockPosition::index))
-                .toList();
+        astPositionMap = BlockPositionMap.forBuilder(messageConsumer, elements);
+        schematic.resolveLabels(layoutResolver.globalLabelResolver());
 
-        astPositionMap = BlockPositionMap.forBuilder(messageConsumer, blockPositions);
-
-        Map<AstBlockPosition, UnresolvedConfiguration> configurations = resolvedBlocks.definitions().stream()
-                .collect(Collectors.toMap(d -> d, this::getConfiguration));
+        Map<SchematicElement, UnresolvedConfiguration> configurations = new HashMap<>();
+        schematic.forEachBlock(element -> configurations.put(element, getConfiguration(element)));
 
         List<Block> blocks = new ArrayList<>();
-        for (AstBlockPosition definition : resolvedBlocks.definitions()) {
-            AstBlock astBlock = definition.astBlock();
-            BlockType type = definition.blockType();
-            Direction direction = astBlock.direction() == null
-                    ? Direction.EAST
-                    : Direction.valueOf(astBlock.direction().direction().toUpperCase());
-            Configuration configuration = checkType(definition, configurations.get(definition));
-            Block block = new Block(astBlock.sourcePosition(), definition.index(), astBlock.labels(), type, definition.position(), direction,
-                    configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass()));
-            configuration.validate(this, astBlock, block);
-            blocks.add(block);
-        }
+        schematic.forEachBlock(element -> {
+            if (!element.blockType().isAir()) {
+                AstBlock astBlock = element.definition();
+                BlockType type = element.blockType();
+                Configuration configuration = checkType(element, configurations.get(element));
+                Block block = new Block(astBlock.sourcePosition(), element.index(), element.labels(), type, element.position(), element.direction(),
+                        configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass()));
+                configuration.validate(this, astBlock, block);
+                blocks.add(block);
+            }
+        });
 
         String name = getStringAttribute("name", "");
         String filename = getStringAttribute("filename", "");
         String description = unwrap(getStringAttribute("description", ""));
 
         List<String> schemaLabels = getAttributes("label", AstText.class).stream().map(text -> text.getText(this)).toList();
-        Icons icons = SchematicsMetadata.getMetadata().getIcons();
+        Icons icons = metadata.getIcons();
         List<String> additionalLabels = compilerProfile.getAdditionalTags().stream().map(icons::translateIcon).toList();
         List<String> labels = Stream.concat(schemaLabels.stream(), additionalLabels.stream()).distinct().toList();
 
-        positionMap = BlockPositionMap.forBuilder(m -> {}, blocks);
+        positionMap = BlockPositionMap.forBuilder(_ -> {}, blocks);
 
-        blocks = PowerGridSolver.solve(this, blocks);
+        PowerGridSolver.solve(this, blocks);
         BridgeSolver.solve(this, blocks);
 
         return createSchematic(name, filename, description, labels, blocks);
     }
 
-    private Configuration checkType(AstBlockPosition definition, UnresolvedConfiguration configuration) {
+    public void errorOnce(AstSchemaItem node, @PrintFormat String format, Object... args) {
+        if (reportedErrors.computeIfAbsent(format, _ -> new HashSet<>()).add(node)) {
+            error(node, format, args);
+        }
+    }
+
+    private Configuration checkType(SchematicElement element, UnresolvedConfiguration configuration) {
         Configuration resolvedConfiguration = configuration.resolve();
 
-        if (!definition.configurationType().isCompatible(resolvedConfiguration)) {
-            if (definition.astBlock().configuration() != null) {
-                error(definition.astBlock().configuration(), "Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
-                        definition.blockType().name(), definition.position().toStringAbsolute(),
-                        definition.configurationType(), ConfigurationType.fromInstance(resolvedConfiguration));
+        if (!element.configurationType().isCompatible(resolvedConfiguration)) {
+            AstConfiguration astConfiguration = element.definition().configuration();
+            if (astConfiguration != null) {
+                error(astConfiguration, "Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
+                        element.blockType().name(), element.position().toStringAbsolute(),
+                        element.configurationType(), ConfigurationType.fromInstance(resolvedConfiguration));
             }
             return EmptyConfiguration.EMPTY; // Ignore the wrong configuration but keep processing the block
         } else {
@@ -201,8 +214,8 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         if (blocks.isEmpty()) {
             return Position.ORIGIN;
         } else {
-            int x = blocks.stream().mapToInt(Block::x).min().orElse(0);
-            int y = blocks.stream().mapToInt(Block::y).min().orElse(0);
+            int x = blocks.stream().filter(b -> !b.position().invalid()).mapToInt(Block::x).min().orElse(0);
+            int y = blocks.stream().filter(b -> !b.position().invalid()).mapToInt(Block::y).min().orElse(0);
             return new Position(x, y);
         }
     }
@@ -296,67 +309,67 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         }
     }
 
-    private UnresolvedConfiguration getConfiguration(AstBlockPosition blockPos) {
-        return switch (blockPos.astBlock().configuration()) {
-            case AstBlockReference r -> verifyConfiguration(r, blockPos, "block");
+    private UnresolvedConfiguration getConfiguration(SchematicElement element) {
+        return switch (element.definition().configuration()) {
+            case AstBlockReference reference -> verifyConfiguration(reference, element, "block");
             case AstBoolean b -> BooleanConfiguration.of(b.value());
-            case AstConnection c -> c.evaluate(this, blockPos.position());
-            case AstConnections c ->
-                    new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
-            case AstItemReference r -> verifyConfiguration(r, blockPos, "item");
-            case AstLiquidReference r -> verifyConfiguration(r, blockPos, "liquid");
-            case AstProcessor p -> processorConfigurationBuilder.fromAstConfiguration(p, blockPos);
-            case AstRgbaValue rgb -> convertToRgbValue(blockPos, rgb);
+            case AstConnection c -> c.evaluate(configurationContext, element);
+            case AstConnections c -> new PositionArray(c.connections().stream().mapMulti(
+                    (AstConnection cc, Consumer<Position > consumer) -> cc.evaluateMultiple(consumer, configurationContext, element)).toList());
+            case AstItemReference reference -> verifyConfiguration(reference, element, "item");
+            case AstLiquidReference reference -> verifyConfiguration(reference, element, "liquid");
+            case AstProcessor processor -> processorConfigurationBuilder.fromAstConfiguration(processor, element);
+            case AstRgbaValue rgb -> convertToRgbValue(element, rgb);
             case AstText t -> new TextConfiguration(t.getText(this));
-            case AstUnitCommandReference r -> verifyConfiguration(r, blockPos, "command");
-            case AstUnitReference r -> decodeUnitConfiguration(blockPos, r);
+            case AstUnitCommandReference reference -> verifyConfiguration(reference, element, "command");
+            case AstUnitReference reference -> decodeUnitConfiguration(reference, element);
             case null, default -> EmptyConfiguration.EMPTY;
         };
     }
 
-    private Color convertToRgbValue(BlockPosition blockPos, AstRgbaValue rgb) {
+    private Color convertToRgbValue(SchematicElement element, AstRgbaValue rgb) {
         return new Color(
-                clamp(rgb, blockPos, "red", rgb.red()),
-                clamp(rgb, blockPos, "green", rgb.green()),
-                clamp(rgb, blockPos, "blue", rgb.blue()),
-                clamp(rgb, blockPos, "alpha", rgb.alpha())
+                clamp(rgb, element, "red", rgb.red()),
+                clamp(rgb, element, "green", rgb.green()),
+                clamp(rgb, element, "blue", rgb.blue()),
+                clamp(rgb, element, "alpha", rgb.alpha())
         );
     }
 
-    private Configuration verifyConfiguration(AstContentsReference reference, BlockPosition blockPos, String valueName) {
+    private Configuration verifyConfiguration(AstContentsReference reference, SchematicElement element, String valueName) {
         Configuration value = reference.getConfiguration();
         if (value == null) {
             error(reference, "Block '%s' at %s: unknown or unsupported %s '%s'.",
-                    blockPos.name(), blockPos.position().toStringAbsolute(), valueName, reference.getConfigurationText());
-            return EmptyConfiguration.EMPTY; // Ignore wrong configuration but keep processing the block
+                    element.name(), element.position().toStringAbsolute(), valueName, reference.getConfigurationText());
+            return EmptyConfiguration.EMPTY; // Ignore the wrong configuration but keep processing the block
         } else {
             return value;
         }
     }
 
-    private int clamp(SourceElement element, BlockPosition blockPos, String component, int value) {
+    private int clamp(AstRgbaValue rgb, SchematicElement element, String component, int value) {
         if (value < 0 || value > 255) {
-            error(element, "Block '%s' at %s: value %d of color component '%s' outside valid range <0, 255>.",
-                    blockPos.name(), blockPos.position().toStringAbsolute(), value, component);
+            error(rgb, "Block '%s' at %s: value %d of color component '%s' outside valid range <0, 255>.",
+                    element.name(), element.position().toStringAbsolute(), value, component);
         }
         return Math.max(Math.min(value, 255), 0);
     }
 
-    private Configuration decodeUnitConfiguration(BlockPosition blockPos, AstUnitReference ref) {
-        return switch (blockPos.configurationType()) {
-            case UNIT_OR_BLOCK -> verifyConfiguration(ref, blockPos, "ref");
+    private Configuration decodeUnitConfiguration(AstUnitReference reference, SchematicElement element) {
+        return switch (element.configurationType()) {
+            case UNIT_OR_BLOCK -> verifyConfiguration(reference, element, "ref");
             case UNIT_PLAN -> {
-                if (blockPos.blockType().unitPlans().contains(ref.unit())) {
-                    yield new UnitPlan(ref.unit());
+                if (element.blockType().unitPlans().contains(reference.unit())) {
+                    yield new UnitPlan(reference.unit());
                 } else {
-                    error(ref, "Block '%s' at %s: unknown or unsupported unit type '%s'.",
-                            blockPos.name(), blockPos.position().toStringAbsolute(), ref.unit());
+                    error(reference, "Block '%s' at %s: unknown or unsupported unit type '%s'.",
+                            element.name(), element.position().toStringAbsolute(), reference.unit());
                     yield EmptyConfiguration.EMPTY;
                 }
             }
             default -> {
-                error(ref, "Block '%s' at %s: unknown or unsupported configuration type '%s'.",
-                        blockPos.name(), blockPos.position().toStringAbsolute(), blockPos.configurationType());
+                error(reference, "Block '%s' at %s: unknown or unsupported configuration type '%s'.",
+                        element.name(), element.position().toStringAbsolute(), element.configurationType());
                 yield EmptyConfiguration.EMPTY;
             }
         };
@@ -423,38 +436,70 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
         return result;
     }
 
-    public Position getBlockPosition(SourceElement element, String name) {
-        BlockPosition blockPosition = astLabelMap.get(name);
-        if (blockPosition != null) {
-            return blockPosition.position();
-        }
-        error(element, "Unknown block label '%s'", name);
-        return Position.INVALID;
-    }
-
-    public Map<String, BlockPosition> getAstLabelMap() {
-        return astLabelMap;
-    }
-
-
     public BlockPosition getBlockPosition(Position position) {
         return astPositionMap.at(position);
-    }
-
-    public Position getAnchor(Position position) {
-        BlockPosition anchor = getBlockPosition(position);
-        return anchor == null ? position : anchor.position();
     }
 
     public BlockPositionMap<Block> getPositionMap() {
         return positionMap;
     }
 
-    private static <T, E extends Throwable> T requireNonNull(T object, Supplier<E> exception) throws E {
-        if (object == null) {
-            throw exception.get();
-        } else {
-            return object;
+    public ResolverContext trackingResolverContext() {
+        return new ResolverContext(true);
+    }
+
+    public class ResolverContext {
+        private final boolean trackCircularReferences;
+        private final Set<SchematicElement> visited = new LinkedHashSet<>();
+
+        public ResolverContext(boolean trackCircularReferences) {
+            this.trackCircularReferences = trackCircularReferences;
+        }
+
+        public boolean visited(SchematicElement reference) {
+            return trackCircularReferences && !visited.add(reference);
+        }
+
+        public List<SchematicElement> visitedSince(SchematicElement reference) {
+            ArrayList<SchematicElement> result = new ArrayList<>(visited);
+            int index = CollectionUtils.indexOf(result, e -> e == reference);
+            return index == -1 ? Collections.emptyList() : result.subList(index, result.size());
+        }
+
+        public boolean unreported(SchematicElement reference) {
+            return reportedCircular.add(reference);
+        }
+
+        public SchematicElement getElement(Position position) {
+            return astPositionMap.at(position);
+        }
+
+        public SchematicElement getSchematic() {
+            return Objects.requireNonNull(schematic);
+        }
+
+        public void error(SourceElement node, @PrintFormat String format, Object... args) {
+            SchematicsBuilder.this.error(node, format, args);
+        }
+
+        private final Set<AstSchemaItem> reportedNodes = new HashSet<>();
+        public String resolveGlobalLabel(AstSchemaItem node, String label) {
+            if (label == null || label.isEmpty()) return label;
+
+            return switch (label.charAt(label.length() - 1)) {
+                case LayoutResolver.LOCAL_LABEL_ARRAY_CHAR -> {
+                    if (reportedNodes.add(node)) {
+                        error(node, "Local label array '%s' is not supported as a reference.", label);
+                    }
+                    MutableInteger current = arrayLabels.computeIfAbsent(label, _ -> MutableInteger.zero());
+                    yield label.substring(0, label.length() - 1) + current.incrementAndGet();
+                }
+                case LayoutResolver.GLOBAL_LABEL_ARRAY_CHAR -> {
+                    MutableInteger current = arrayLabels.computeIfAbsent(label, _ -> MutableInteger.zero());
+                    yield label.substring(0, label.length() - 1) + current.incrementAndGet();
+                }
+                default -> label;
+            };
         }
     }
 }

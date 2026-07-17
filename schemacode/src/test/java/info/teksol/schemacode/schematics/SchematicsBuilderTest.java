@@ -131,7 +131,6 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     void refusesCircularPositionDefinition() {
         assertGeneratesErrors(
                 ExpectedMessages.create()
-                        .addRegex("Overlapping blocks: #\\d '@switch' at \\(0, 0\\) and #\\d '@switch' at \\(0, 0\\).").repeat(2)
                         .addRegex("Circular definition of block 'switch2' position.")
                         .addRegex("Circular definition of block 'switch3' position."),
                 """
@@ -151,8 +150,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     void refusesUnknownBlockReference() {
         assertGeneratesErrors(
                 ExpectedMessages.create()
-                        .add("Unknown block name 'switch3'.").atLeast(1)
-                        .add("Overlapping blocks: #0 '@switch' at (0, 0) and #1 '@switch' at (0, 0)."),
+                        .add("Cannot resolve block reference 'switch3'.").atLeast(1),
                 """
                         schematic
                         switch1:
@@ -302,8 +300,8 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 5, 7,
                 List.of(
-                        block(pos(3, 5), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
-                        block(pos(4, 5), "@message", p(4, 6), Direction.EAST, TextConfiguration.EMPTY)
+                        block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
+                        block("@message", p(4, 6), Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
 
@@ -320,7 +318,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(2, 5), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
+                        block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
 
@@ -337,7 +335,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(2, 5), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
+                        block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
 
@@ -355,7 +353,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 5), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
+                        block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
 
@@ -373,7 +371,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 5), "@switch", P0_0, Direction.EAST, BooleanConfiguration.FALSE)
+                        block("@switch", P0_0, Direction.EAST, BooleanConfiguration.FALSE)
                 )
         );
 
@@ -390,7 +388,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(2, 5), "@power-node", P0_0, Direction.EAST, PositionArray.EMPTY)
+                        block("@power-node", P0_0, Direction.EAST, PositionArray.EMPTY)
                 )
         );
 
@@ -407,7 +405,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(2, 5), "@bridge-conveyor", P0_0, Direction.EAST, PositionArray.EMPTY)
+                        block("@bridge-conveyor", P0_0, Direction.EAST, PositionArray.EMPTY)
                 )
         );
 
@@ -424,7 +422,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(2, 5), "@unloader", P0_0, Direction.EAST, EmptyConfiguration.EMPTY)
+                        block("@unloader", P0_0, Direction.EAST, EmptyConfiguration.EMPTY)
                 )
         );
 
@@ -441,7 +439,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(2, 5), "@liquid-source", P0_0, Direction.EAST, EmptyConfiguration.EMPTY)
+                        block("@liquid-source", P0_0, Direction.EAST, EmptyConfiguration.EMPTY)
                 )
         );
 
@@ -458,7 +456,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(2, 5), "@micro-processor", P0_0, Direction.EAST, ProcessorConfiguration.EMPTY)
+                        block("@micro-processor", P0_0, Direction.EAST, ProcessorConfiguration.EMPTY)
                 )
         );
 
@@ -477,7 +475,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 1), List.of("message1"), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
+                        block(List.of("message1"), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
 
@@ -496,7 +494,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 1), List.of("message1", "message2"), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
+                        block(List.of("message1", "message2"), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
 
@@ -514,8 +512,8 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 2, 1,
                 List.of(
-                        block(pos(2, 5), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
-                        block(pos(3, 5), "@message", P1_0, Direction.EAST, TextConfiguration.EMPTY)
+                        block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
+                        block("@message", P1_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
 
@@ -535,8 +533,8 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 2, 1,
                 List.of(
-                        block(pos(3, 1), List.of("message1"), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
-                        block(pos(5, 5), "@message", P1_0, Direction.EAST, TextConfiguration.EMPTY)
+                        block(List.of("message1"), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
+                        block("@message", P1_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
 
@@ -557,10 +555,10 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 4, 1,
                 List.of(
-                        block(pos(3, 5), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
-                        block(pos(4, 5), "@message", P1_0, Direction.WEST, TextConfiguration.EMPTY),
-                        block(pos(5, 5), "@message", P2_0, Direction.NORTH, TextConfiguration.EMPTY),
-                        block(pos(6, 5), "@message", P3_0, Direction.SOUTH, TextConfiguration.EMPTY)
+                        block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
+                        block("@message", P1_0, Direction.WEST, TextConfiguration.EMPTY),
+                        block("@message", P2_0, Direction.NORTH, TextConfiguration.EMPTY),
+                        block("@message", P3_0, Direction.SOUTH, TextConfiguration.EMPTY)
                 )
         );
 
@@ -578,7 +576,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 5), "@message", P0_0, Direction.EAST, new TextConfiguration("This is a message"))
+                        block("@message", P0_0, Direction.EAST, new TextConfiguration("This is a message"))
                 )
         );
 
@@ -600,7 +598,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 5), "@message", P0_0, Direction.EAST, new TextConfiguration("This is a message\n"))
+                        block("@message", P0_0, Direction.EAST, new TextConfiguration("This is a message\n"))
                 )
         );
 
@@ -618,7 +616,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 5), "@switch", P0_0, Direction.EAST, BooleanConfiguration.TRUE)
+                        block("@switch", P0_0, Direction.EAST, BooleanConfiguration.TRUE)
                 )
         );
 
@@ -636,8 +634,8 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 2, 1,
                 List.of(
-                        block(pos(2, 5), "@power-node", P0_0, Direction.EAST, pa(P1_0)),
-                        block(pos(3, 5), "@power-node", P1_0, Direction.EAST, pa(P0_0))
+                        block("@power-node", P0_0, Direction.EAST, pa(P1_0)),
+                        block("@power-node", P1_0, Direction.EAST, pa(P0_0))
                 )
         );
 
@@ -655,7 +653,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 5), "@bridge-conveyor", P0_0, Direction.EAST, pa(P1_0))
+                        block("@bridge-conveyor", P0_0, Direction.EAST, pa(P1_0))
                 )
         );
 
@@ -675,8 +673,8 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 2, 1,
                 List.of(
-                        block(pos(3, 5), List.of(), "@bridge-conveyor", P0_0, Direction.EAST, pa(P1_0)),
-                        block(pos(4, 1), List.of("bridge1"), "@bridge-conveyor", P1_0, Direction.EAST, pa())
+                        block(List.of(), "@bridge-conveyor", P0_0, Direction.EAST, pa(P1_0)),
+                        block(List.of("bridge1"), "@bridge-conveyor", P1_0, Direction.EAST, pa())
                 )
         );
 
@@ -694,7 +692,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 5), "@unloader", P0_0, Direction.EAST, ItemConfiguration.forName("@coal"))
+                        block("@unloader", P0_0, Direction.EAST, ItemConfiguration.forName("@coal"))
                 )
         );
 
@@ -725,7 +723,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 5), "@liquid-source", P0_0, Direction.EAST, LiquidConfiguration.forName("@cryofluid"))
+                        block("@liquid-source", P0_0, Direction.EAST, LiquidConfiguration.forName("@cryofluid"))
                 )
         );
 
@@ -768,7 +766,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 4, 1,
                 List.of(
-                        block(pos(2, 5), "@micro-processor", P0_0, Direction.EAST,
+                        block("@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(
                                         List.of(
                                                 new Link("switch1", 1, 0),
@@ -778,9 +776,9 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                                         ""
                                 )
                         ),
-                        block(pos(10, 1), List.of("switch1"), "@switch", P1_0, Direction.EAST, BooleanConfiguration.FALSE),
-                        block(pos(12, 1), List.of("message1"), "@message", P2_0, Direction.EAST, TextConfiguration.EMPTY),
-                        block(pos(14, 1), List.of("p-message2"), "@message", P3_0, Direction.EAST, TextConfiguration.EMPTY)
+                        block(List.of("switch1"), "@switch", P1_0, Direction.EAST, BooleanConfiguration.FALSE),
+                        block(List.of("message1"), "@message", P2_0, Direction.EAST, TextConfiguration.EMPTY),
+                        block(List.of("p-message2"), "@message", P3_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
         );
 
@@ -825,7 +823,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 5), "@micro-processor", P0_0, Direction.EAST,
+                        block("@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(
                                         List.of(),
                                         "print @this"
@@ -850,7 +848,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(3, 5), "@micro-processor", P0_0, Direction.EAST,
+                        block("@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(
                                         List.of(),
                                         "print @this\nprintflush message1\n"
@@ -872,7 +870,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 3, 3,
                 List.of(
-                        block(pos(2, 5), "@air-factory", P0_0, Direction.EAST, new UnitPlan("@flare"))
+                        block("@air-factory", P0_0, Direction.EAST, new UnitPlan("@flare"))
                 )
         );
 
@@ -889,7 +887,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 3, 3,
                 List.of(
-                        block(pos(2, 5), "@air-factory", P0_0, Direction.EAST, new UnitPlan("@mono"))
+                        block("@air-factory", P0_0, Direction.EAST, new UnitPlan("@mono"))
                 )
         );
 
@@ -919,7 +917,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                 List.of(
-                        block(pos(2, 5), "@illuminator", P0_0, Direction.EAST, new Color(255, 0, 0, 127))
+                        block("@illuminator", P0_0, Direction.EAST, new Color(255, 0, 0, 127))
                 )
         );
 
@@ -982,11 +980,9 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     void refusesUnknownBlocks() {
         assertGeneratesErrors(
                 ExpectedMessages.create()
-                        .add("Unknown block type '@fluffyBunny'.")
-                        .add("Actual schematic dimensions ( 0,  0) are smaller than specified dimensions ( 1,  1)."),
+                        .add("Unknown block type '@fluffyBunny'."),
                 """
                         schematic
-                            dimensions = (1, 1)
                             @fluffyBunny at (0, 0)
                         end
                         """
@@ -1017,7 +1013,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 5, 5,
                 List.of(
-                        block(pos(2, 5), "@payload-source", P0_0, Direction.EAST, UnitConfiguration.forName("@mega"))
+                        block("@payload-source", P0_0, Direction.EAST, UnitConfiguration.forName("@mega"))
                 )
         );
 
@@ -1034,7 +1030,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 5, 5,
                 List.of(
-                        block(pos(2, 5), "@payload-source", P0_0, Direction.EAST, BlockConfiguration.forName("@vault"))
+                        block("@payload-source", P0_0, Direction.EAST, BlockConfiguration.forName("@vault"))
                 )
         );
 
@@ -1051,7 +1047,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 5, 5,
                 List.of(
-                        block(pos(2, 5), "@multiplicative-reconstructor", P0_0, Direction.EAST, UnitCommandConfiguration.forName("@repair"))
+                        block("@multiplicative-reconstructor", P0_0, Direction.EAST, UnitCommandConfiguration.forName("@repair"))
                 )
         );
 
@@ -1078,17 +1074,17 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 3, 1,
                 List.of(
-                        block(pos(2, 5), "@micro-processor", P0_0, Direction.EAST,
+                        block("@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(
                                         List.of(
-                                                new Link("unloader1", 2, 0),
-                                                new Link("switch1", 1, 0)
+                                                new Link("switch1", 1, 0),
+                                                new Link("unloader1", 2, 0)
                                         ),
                                         "sensor *tmp0 switch1 @enabled\ncontrol enabled unloader1 *tmp0 0 0 0\n"
                                 )
                         ),
-                        block(pos(10, 1), List.of("onOff"), "@switch", P1_0, Direction.EAST, BooleanConfiguration.FALSE),
-                        block(pos(12, 1), List.of("output"), "@unloader", P2_0, Direction.EAST, EmptyConfiguration.EMPTY)
+                        block(List.of("onOff"), "@switch", P1_0, Direction.EAST, BooleanConfiguration.FALSE),
+                        block(List.of("output"), "@unloader", P2_0, Direction.EAST, EmptyConfiguration.EMPTY)
                 )
         );
 
@@ -1119,10 +1115,10 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 4, 4,
                 List.of(
-                        block(pos(2, 5), "@copper-wall-large", P0_0, Direction.EAST, EmptyConfiguration.EMPTY),
-                        block(pos(2, 5), "@copper-wall-large", P2_0, Direction.EAST, EmptyConfiguration.EMPTY),
-                        block(pos(2, 5), "@copper-wall-large", P0_2, Direction.EAST, EmptyConfiguration.EMPTY),
-                        block(pos(2, 5), "@copper-wall-large", P2_2, Direction.EAST, EmptyConfiguration.EMPTY)
+                        block("@copper-wall-large", P0_0, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block("@copper-wall-large", P2_0, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block("@copper-wall-large", P0_2, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block("@copper-wall-large", P2_2, Direction.EAST, EmptyConfiguration.EMPTY)
                 )
         );
 
@@ -1139,10 +1135,10 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", "", List.of(), 4, 4,
                 List.of(
-                        block(pos(2, 5), "@copper-wall-large", P0_0, Direction.EAST, EmptyConfiguration.EMPTY),
-                        block(pos(2, 5), "@copper-wall-large", P0_2, Direction.EAST, EmptyConfiguration.EMPTY),
-                        block(pos(2, 5), "@copper-wall-large", P2_0, Direction.EAST, EmptyConfiguration.EMPTY),
-                        block(pos(2, 5), "@copper-wall-large", P2_2, Direction.EAST, EmptyConfiguration.EMPTY)
+                        block("@copper-wall-large", P0_0, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block("@copper-wall-large", P0_2, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block("@copper-wall-large", P2_0, Direction.EAST, EmptyConfiguration.EMPTY),
+                        block("@copper-wall-large", P2_2, Direction.EAST, EmptyConfiguration.EMPTY)
                 )
         );
 
@@ -1188,7 +1184,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
             Schematic expected = new Schematic("", "", "", List.of(), 1, 1,
                     List.of(
-                            block(pos(2, 5), "@micro-processor", P0_0, Direction.EAST,
+                            block("@micro-processor", P0_0, Direction.EAST,
                                     new ProcessorConfiguration(
                                             List.of(),
                                             """

@@ -18,25 +18,35 @@ Changes intended for the next regular release.
 * Schematic block arrays: a way to create a rectangular shape consisting of the same block at once, with the same settings and serially assigned names.
 * When code size exceeds the instruction limit, perform optimizations using the size goal.
 * Initialized symbolic links
-
-* **Doing**
-
 * Compiler options in schematics
 * Mlog parametrization in schematics
 
-* **Planned**
+
+* **Doing**
 
 * Schematic regions
+
+* **Planned**
+
+* Unknown built-ins will cause a compiler error in strict mode
+* Update the `require remote` directive
+
+* **Quick ideas**
+
+## Next release
+
+* Remove deprecated features:
+  * Mlog keywords without the `:` prefix
+  * Using `remote` to mark variables/functions for export
+  * Modifier '%s' requires parentheses around its arguments
+* Button for copying code from the Mindcode panel in the web app
 * Internal stack
 * Local arrays
 * If expression telescoping optimization
 * Array code injection optimization
 * Converting arrays to const arrays when possible
 
-* **Quick ideas**
-
-
-## Next releases
+## Further down the road
 
 These are topics that I'm spending time thinking about. Some of these should appear in the next release after the upcoming one.
 

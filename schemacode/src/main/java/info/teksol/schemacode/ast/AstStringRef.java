@@ -7,6 +7,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public record AstStringRef(SourcePosition sourcePosition, String reference) implements AstText {
 
+    public AstStringRef(String reference) {
+        this(SourcePosition.EMPTY, reference);
+    }
+
     @Override
     public String getText(SchematicsBuilder builder) {
         return builder.getText(this, reference).getText(builder);

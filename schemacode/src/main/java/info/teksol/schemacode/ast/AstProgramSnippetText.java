@@ -7,6 +7,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public record AstProgramSnippetText(SourcePosition sourcePosition, AstText programText) implements AstProgramSnippet {
 
+    public AstProgramSnippetText(AstText programText) {
+        this(SourcePosition.EMPTY, programText);
+    }
+
     @Override
     public String getProgramId(SchematicsBuilder builder) {
         return "embedded code";

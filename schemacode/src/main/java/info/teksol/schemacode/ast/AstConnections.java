@@ -8,8 +8,8 @@ import java.util.List;
 @NullMarked
 public record AstConnections(SourcePosition sourcePosition, List<AstConnection> connections) implements AstConfiguration {
 
-    public AstConnections(SourcePosition sourcePosition, AstConnection... connections) {
-        this(sourcePosition, List.of(connections));
+    public AstConnections(AstConnection... connections) {
+        this(SourcePosition.EMPTY, List.of(connections));
     }
 
     @Override

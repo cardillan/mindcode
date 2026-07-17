@@ -17,6 +17,7 @@ schematic : (name=ID COLON)? SCHEMATIC items=schematicItem+ END ;
 
 schematicItem
     : attribute
+    | regionDefinition
     | block
     ;
 
@@ -35,11 +36,27 @@ number : (INT | SIGNEDINT);
 
 versionNumber : ( INT | VERSION );
 
-block
-    : labels=labelList? type=REF AT pos=blockPosition dir=direction? cfg=configuration?
+regionDefinition
+    : name=ID ASSIGN REGION dimensions=regionDimensions? blocks=block* END
     ;
 
-blockId : (ID | BLOCKID);
+regionDimensions
+    : LEFTPAREN width = number COMMA height = number RIGHTPAREN
+    ;
+
+block
+    : labels=labelList? content=element (placeMode=placementMode pos=blockPosition?)? flip=translation? dir=direction? cfg=configuration?
+    ;
+
+placementMode : (AT | FILL | REPLACE);
+
+element
+    : elementType=TYPE                                          # blockElement
+    | elementId=ID                                              # namedRegion
+    | REGION dimensions=regionDimensions? blocks=block* END     # inlinedRegion
+    ;
+
+blockId : (ID | ID_ARRAY);
 
 labelList
     : blockId (COMMA blockId)* COLON
@@ -67,7 +84,11 @@ relativeCoordinates
     ;
 
 coordinatesRelativeTo
-    : label=ID relCoord=relativeCoordinates
+    : label=pattern relCoord=relativeCoordinates?
+    ;
+
+translation
+    : FLIP axis=( HORIZONTAL | VERTICAL )
     ;
 
 direction
@@ -78,15 +99,21 @@ configuration
     : VIRTUAL                       # virtual
     | COLOR colorDef                # color
     | CONNECTED TO connectionList   # connections
-    | BLOCK REF                     # blocktype
-    | COMMAND REF                   # unitcommand
-    | ITEM REF                      # item
-    | LIQUID REF                    # liquid
-    | UNIT REF                      # unit
+    | BLOCK TYPE                    # blocktype
+    | COMMAND TYPE                  # unitcommand
+    | ITEM TYPE                     # item
+    | LIQUID TYPE                   # liquid
+    | UNIT TYPE                     # unit
     | TEXT text=textDef             # text
     | status=( ENABLED | DISABLED ) # boolean
     | def=processor                 # logic
     ;
+
+pattern
+    : (patternSegment DOT)* patternSegment
+    ;
+
+patternSegment : text=(GLOBAL | LOCAL | PARENT | ID | ID_ARRAY | MUL | PATTERN);
 
 colorDef
     : RGBA LEFTPAREN red=number COMMA green=number COMMA blue=number COMMA alpha=number RIGHTPAREN
@@ -99,7 +126,7 @@ connectionList
 connection
     : coordinates                   # connAbs
     | relativeCoordinates           # connRel
-    | ID                            # connName
+    | pattern                       # connName
     ;
 
 processor
@@ -111,8 +138,8 @@ processorLinks
     ;
 
 linkDef
-    : linkPattern=(MUL | PATTERN)                           # linkPattern
-    | linkPos=connection ( AS alias=ID virtual=VIRTUAL? )?  # linkPos
+    : linkPattern=pattern                                               # linkPattern
+    | linkPos=connection (AS alias=(ID | ID_ARRAY) virtual=VIRTUAL?)?   # linkPos
     ;
 
 program

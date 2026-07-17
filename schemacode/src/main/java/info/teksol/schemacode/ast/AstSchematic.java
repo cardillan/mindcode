@@ -6,12 +6,18 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 
 @NullMarked
-public record AstSchematic(SourcePosition sourcePosition, List<AstSchemaAttribute> attributes, List<AstBlock> blocks) implements AstDefinition {
+public record AstSchematic(SourcePosition sourcePosition, List<AstSchemaAttribute> attributes,
+                           List<AstRegionDefinition> regions, List<AstBlock> blocks) implements AstDefinition {
+
+    public AstSchematic(List<AstSchemaAttribute> attributes, List<AstRegionDefinition> regions, List<AstBlock> blocks) {
+        this(SourcePosition.EMPTY, attributes, regions, blocks);
+    }
 
     @Override
     public AstSchematic withEmptyPosition() {
         return new AstSchematic(SourcePosition.EMPTY,
                 erasePositions(attributes),
+                erasePositions(regions),
                 erasePositions(blocks));
     }
 }

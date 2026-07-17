@@ -9,10 +9,8 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.options.Target;
-import info.teksol.schemacode.ast.AstLink;
-import info.teksol.schemacode.ast.AstParameter;
-import info.teksol.schemacode.ast.AstProcessor;
-import info.teksol.schemacode.ast.AstToken;
+import info.teksol.mc.util.MutableInteger;
+import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.config.UnresolvedConfiguration;
@@ -44,27 +42,33 @@ public class ProcessorConfigurationBuilder {
         return position == null ? "" : position.blockType().name();
     }
 
-    public UnresolvedConfiguration fromAstConfiguration(AstProcessor processor, BlockPosition blockPos) {
-        List<ProcessorConfiguration.Link> links = processorLinks(processor, blockPos);
+    public UnresolvedConfiguration fromAstConfiguration(AstProcessor processor, SchematicElement element) {
+        List<ProcessorConfiguration.Link> links = processorLinks(processor, element);
 
         if (processor.language() == Language.MINDCODE) {
-            return buildMindcodeConfiguration(processor, blockPos, links);
+            return buildMindcodeConfiguration(processor, element, links);
         } else {
             String mlog = processor.language() == Language.MLOG ? processor.program().getProgramText(builder, MLOG) : "";
             return buildConfiguration(processor, links, mlog, Map.of(), Set.of());
         }
     }
 
-    private List<ProcessorConfiguration.Link> processorLinks(AstProcessor processor, BlockPosition blockPos) {
+    private List<ProcessorConfiguration.Link> processorLinks(AstProcessor processor, SchematicElement element) {
+        for (AstLink link : processor.links()) {
+            if (link instanceof AstLinkPos posLink && isGlobalLabelArray(posLink.name())) {
+                builder.errorOnce(link, "Global label array '%s' is not supported as a link name in processor configuration.", posLink.name());
+            }
+        }
+
         List<ProcessorConfiguration.Link> links = processor.links().stream()
-                .mapMulti((AstLink l, Consumer<ProcessorConfiguration.Link> c) -> l.getProcessorLinks(c, builder, blockPos.position()))
+                .mapMulti((AstLink l, Consumer<ProcessorConfiguration.Link> consumer) -> l.getProcessorLinks(consumer, builder.configurationContext, element))
                 .distinct()
                 .toList();
 
         // Detect link names used more than once
         Map<String, List<ProcessorConfiguration.Link>> linksByName = links.stream().collect(Collectors.groupingBy(ProcessorConfiguration.Link::name));
         linksByName.values().stream()
-                .filter(v -> v.size() > 1)
+                .filter(v -> v.size() > 1 && !isLabelArray(v.getFirst().name()))
                 .forEachOrdered(l -> builder.error(processor, "Block link name '%s' used more than once.", l.getFirst().name()));
 
         // Detect blocks linked more than once
@@ -78,12 +82,34 @@ public class ProcessorConfigurationBuilder {
         return links;
     }
 
+    private boolean isGlobalLabelArray(@Nullable String label) {
+        return label != null && !label.isEmpty() && label.charAt(label.length() - 1) == LayoutResolver.GLOBAL_LABEL_ARRAY_CHAR;
+    }
+
+    private boolean isLabelArray(@Nullable String label) {
+        if (label == null || label.isEmpty()) return false;
+        char ch = label.charAt(label.length() - 1);
+        return ch == LayoutResolver.LOCAL_LABEL_ARRAY_CHAR || ch == LayoutResolver.GLOBAL_LABEL_ARRAY_CHAR;
+    }
+
+    private ProcessorConfiguration.Link resolveLabel(AstProcessor processor, Map<String, MutableInteger> arrayLabels, ProcessorConfiguration.Link link) {
+        if (!isLabelArray(link.name())) return link;
+
+        String label = link.name();
+        MutableInteger current = arrayLabels.computeIfAbsent(label, _ -> MutableInteger.zero());
+        return link.withName(label.substring(0, label.length() - 1) + current.incrementAndGet());
+    }
+
     private ProcessorConfiguration buildConfiguration(AstProcessor processor, List<ProcessorConfiguration.Link> processorLinks,
             String mlog, Map<String, String> symbolicNameMap, Set<String> parameterNames) {
 
-        // Translate names
+        Map<String, MutableInteger> arrayLabels = new HashMap<>();
+
+        // Resolve label arrays and translate names
         List<ProcessorConfiguration.Link> links = processorLinks.stream()
-                .map(link -> link.withName(symbolicNameMap.getOrDefault(link.name(), link.name()))).toList();
+                .map(l -> resolveLabel(processor, arrayLabels, l))
+                .map(link -> link.withName(symbolicNameMap.getOrDefault(link.name(), link.name())))
+                .toList();
 
         // A set of names which were resolved by Mindcode and therefore have been type-checked already
         Set<String> resolvedNames = new HashSet<>(symbolicNameMap.values());
@@ -151,7 +177,7 @@ public class ProcessorConfigurationBuilder {
                     .forEach(token -> builder.error(token, "Parameter '%s' not found in the mlog code.", token.tokenValue()));
             return replacer.getResult();
         } catch (ReplacementException e) {
-            builder.error(processor.program(), "Error trying to update program parameters: %s",e.getMessage());
+            builder.error(processor.program(), "Error trying to update program parameters: %s", e.getMessage());
             return mlog;
         }
     }
@@ -259,7 +285,8 @@ public class ProcessorConfigurationBuilder {
     }
 
 
-    public record CompilerCacheEntry(String mlog, Map<String, String> symbolicNameMap, Set<String> parameterNames, boolean hasErrors) { }
+    public record CompilerCacheEntry(String mlog, Map<String, String> symbolicNameMap, Set<String> parameterNames,
+                                     boolean hasErrors) {}
 
     // Caches the results of compiling Mindcode to mlog - avoid repeated recompilation of identical mindcode
     // Maps the entire input string onto the output to avoid obtaining the wrong cached version

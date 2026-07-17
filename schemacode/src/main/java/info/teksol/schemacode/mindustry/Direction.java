@@ -13,7 +13,7 @@ public enum Direction {
         schemacode = name().toLowerCase().concat(" ").substring(0, 5);
     }
 
-    public static Direction convert(byte code) {
+    public static Direction convert(int code) {
         return switch (code) {
             case 0 -> EAST;
             case 1 -> NORTH;
@@ -21,6 +21,10 @@ public enum Direction {
             case 3 -> SOUTH;
             default -> EAST; //throw new UnsupportedOperationException("Unknown rotation " + code);
         };
+    }
+
+    public Direction rotate(Direction direction) {
+        return convert((this.ordinal() + direction.ordinal()) % 4);
     }
 
     public String toSchemacode() {

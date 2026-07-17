@@ -48,6 +48,10 @@ public record BlockType(
         return name;
     }
 
+    public boolean isAir() {
+        return name.equals("@air");
+    }
+
     public static Set<String> getBaseLinkNames(MindustryMetadata metadata) {
         return metadata.getBlockMap().values().stream()
                 .filter(b -> !b.visibility.equals("hidden"))

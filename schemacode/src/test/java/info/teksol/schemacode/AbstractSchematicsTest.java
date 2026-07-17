@@ -35,7 +35,7 @@ public abstract class AbstractSchematicsTest {
     }
 
     protected static void assertAstEquals(AstDefinitions expected, AstDefinitions actual) {
-        Assertions.assertEquals(expected.withEmptyPosition(), actual.withEmptyPosition());
+        Assertions.assertEquals(expected, actual.withEmptyPosition());
     }
 
     protected static void assertAstEquals(Schematic expected, Schematic actual) {
@@ -46,25 +46,20 @@ public abstract class AbstractSchematicsTest {
         return positions.length == 0 ? PositionArray.EMPTY : new PositionArray(positions);
     }
 
-    protected SourcePosition pos(int line, int column) {
-        //return new SourcePosition(inputFiles.getMainInputFile(), line, column);
-        return SourcePosition.EMPTY;
-    }
-
     // Block index generator. Class is re-instantiated for each test, index always starts from zero.
     private int index = 0;
 
-    public Block block(SourcePosition pos, List<String> labels, String blockType, Position position, Direction direction, Configuration configuration) {
-        return new Block(pos, index++, labels, SchematicsMetadata.getMetadata().getBlockByName(blockType), position, direction, configuration);
+    public Block block(List<String> labels, String blockType, Position position, Direction direction, Configuration configuration) {
+        return new Block(SourcePosition.EMPTY, index++, labels, SchematicsMetadata.getMetadata().getBlockByName(blockType), position, direction, configuration);
     }
 
-    public Block block(SourcePosition pos, String blockType, Position position, Direction direction, Configuration configuration) {
-        return new Block(pos, index++, List.of(), SchematicsMetadata.getMetadata().getBlockByName(blockType), position, direction, configuration);
+    public Block block(String blockType, Position position, Direction direction, Configuration configuration) {
+        return new Block(SourcePosition.EMPTY, index++, List.of(), SchematicsMetadata.getMetadata().getBlockByName(blockType), position, direction, configuration);
     }
 
     /**
-     * Creates a message listener that throws error at the moment error message is generated. Used in unit tests where
-     * no errors or warnings are expected. Allows placing breakpoint here to break at the moment the error occurs.
+     * Creates a message listener that throws an error at the moment an error message is generated. Used in unit tests where
+     * no errors or warnings are expected. Allows placing a breakpoint here to break at the moment the error occurs.
      *
      * @param methodName name of the method being tested
      * @return message listener which throws on errors

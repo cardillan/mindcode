@@ -62,13 +62,13 @@ The schematic definition code has the following form:
 
 ```
 schematic
-    [definition]
-    [definition]
+    <definition>
+    <definition>
     ...
 end
 ```
 
-where definition is either an attribute definition or a block definition, in any order. By convention, the attribute definitions should come first.
+where _definition_ is either an _attribute definition_, a _region definition_, or an _element placement_, in any order. By convention, the attribute definitions should come first. Region definition needs to be declared before being used.
 
 # Attribute definition
 
@@ -89,13 +89,37 @@ The following attributes are recognized:
 * `mindcode`: specifies a snippet of Mindcode source code to be prepended to any Mindcode source code assigned to a processor in this schematic. The value of the attribute is String (a string text value, a string literal, or a text block). This attribute can be primarily used to specify compiler options for the entire schematics. 
 * `mlog`: like `mindcode`, specifies a snippet of mlog code to be prepended to any mlog code assigned to a processor in this schematic. The value of the attribute is String (a string text value, a string literal, or a text block). Note: if the specified code contains any actual mlog instructions, it may cause the code assigned to processors to become incorrect or invalid due to instruction addresses shifting.    
 
-# Block definition
+# Region definition
 
-Block definition specifies the type and configuration of a block placed at certain coordinates within the schematic. The syntax of the block definition is:
+Region definition creates a named, reusable region of blocks. A region has dimensions (either explicitly defined or computed) and can contain any number of blocks.
 
 ```
-[labels] <block-type> at <block-position> [block-array-specification] [facing <direction>] [configuration]
+<name> = region [(<width>, <height>)]
+    <element placement>
+    <element placement>
+    ...
+end
 ```
+
+- `<name>` is a name of the region. Region names are identifiers and should start with an upper-case letter.
+- `<width>` and `<height>` are optional dimensions of the region. When specified, they need to be enclosed in parentheses.
+- `element placement`: defines an element that will be part of a region.
+
+Named regions can be placed multiple times into the schematics, either as single elements or as an array of elements. A region has rectangular dimensions, which is either computed from the contents of the region or explicitly defined by the `width` and `height` attributes. The region dimensions are used when placing arrays of regions into the schematics.
+
+Regions may contain empty tiles not occupied by any blocks and may also place blocks outside the region's dimensions. This allows creating regions with irregular but tileable shapes which may be used as region arrays.
+
+It is possible to use any earlier defined named regions in the region definition.
+
+# Element placement
+
+Element placement places an element – a _block_, _named region_ or _anonymous region_ – at certain coordinates within the schematic. The syntax of the element placement is:
+
+```
+[labels] <element-type> [<placement-mode> [<element-position>]] [element-array-specification] [flip <axis>] [facing <direction>] [configuration]
+```
+
+All clauses except the _element_ clause are optional. When present, the clauses must be arranged in the specified order. 
 
 ## Labels
 
@@ -110,20 +134,32 @@ creates a memory cell at coordinates (3, 5) and assigns labels `cell1` and `cell
 Labels are useful for creating references to labeled blocks. As labels may be used directly as link names when specifying [processor links](#processor-links), it is often desirable to use a literal or a symbolic link name for a block label.
 
 > [!NOTE]
-> For more complex schematic, using [symbolic link names](#linking-by-a-symbolic-name) as labels is strongly recommended. Symbolic names can describe the function of the block in the schematic, and using them leaves the task of assigning literal link names to blocks in different processors to the compiler, simplifying the link management and maintenance significantly.
+> For more complex schematic, using [symbolic link names](#symbolic-link-names) as labels is strongly recommended. Symbolic names can describe the function of the block in the schematic, and using them leaves the task of assigning literal link names to blocks in different processors to the compiler, simplifying the link management and maintenance significantly.
 
 ### Array labels
 
-Block labels may end with a `#` character, representing an _array label_. In this case, Schemacode generates unique label for each new block by replacing the `#` character with an index starting at `1`, in the order they're encountered in the definition file. Array labels may be specified multiple times in the definition file, each occurrence being replaced with a unique label.
+Element labels may end with a `#` or `$` character, representing a _global array label_ or _local array label_ respectively. In this case, Schemacode generates unique label for each new block by replacing the `#` or `$` character with an index starting at `1`, in the order they're encountered in the definition file. Array labels may be specified multiple times in the definition file, each occurrence being replaced with a unique label. Global array labels use indexes unique within the entire schematic, while local array labels use indexes unique within the region they're defined in. 
 
-When used with a [block array](#block-array), names are generated from the label array for blocks that do not have a regular label assigned. The array label may be used stand-alone or in conjunction with regular labels, but at most one label array can be used per block array.
+When used with an [element array](#element-arrays), names are generated from the label array for elements that do not have a regular label assigned. The array label may be used stand-alone or in conjunction with regular labels, but at most one label array can be used per element array.
 
-Array labels may be either symbolic (e.g., `button#`) or literal (`switch#`). Literal link names must conform to the naming scheme of all the block types they represent. Symbolic names may represent blocks of different types, assuming they are properly resolved to the correct block type in the attached Mindcode source.
+Global and local array labels may be either symbolic (e.g., `button#`) or literal (`switch#`). Literal link names must conform to the naming scheme of all the block types they represent. Symbolic names may represent blocks of different types, assuming they are properly resolved to the correct block type in the attached Mindcode source.
 
-## Block type
+## Element type
 
-To specify a block type, a Mindustry built-in block type must be specified, including the `@` sign at the beginning, for example `@switch`, `@micro-processor` or
-`@battery-large`. Only built-in block types are supported at this moment, blocks added by mods cannot be used.
+There are three possible types of elements:
+
+- Mindustry blocks,
+- named regions,
+- anonymous regions.
+
+### Mindustry blocks
+
+A Mindustry block is specified as a built-in block type, including the `@` sign at the beginning, for example `@switch`, `@micro-processor` or `@battery-large`. Only built-in block types are supported at this moment, blocks added by mods cannot be used.
+
+Furthermore, `@air` can be used as a block name. There are two possible uses:
+
+- When used with [`replace`](#placement-mode), `@air` can be used to completely remove blocks from the schematics.
+- When used with a label, the label can be used to refer to the position of the block when specifying other element positions or configuration links (processor, nodes, or bridges).
 
 All supported block types are listed below.
 
@@ -457,17 +493,70 @@ All supported block types are listed below.
 
 </details>
 
-## Block position
+### Named regions
 
-Block position can be specified as relative or absolute. The first block defined by the schematic must use an absolute position, but all following blocks can use absolute or relative positions. Relative position always relates to the previous block, as defined by the schematic.
+A named region is specified using the region's name as defined by the region definition. It is always different from a Mindustry block, as it never starts with the `@` character.  
 
-Block position can be specified using this syntax:
+### Anonymous regions
+
+An anonymous region is specified similarly to the named region, except the name is omitted:
+
+```
+region [(<width>, <height>)]
+    <element placement>
+    <element placement>
+    ...
+end
+```
+
+Since anonymous regions can't be reused on another place in the schematic, they are usually used to define an element array. Alternatively, they might be used as a means to flip or rotate part of the schematic which was already written without having to rewrite the block coordinates manually.  
+
+## Placement mode
+
+The placement mode is specified using one of the following keywords:
+
+- `at`: regular placement mode. Blocks are placed at the specified position. When any earlier defined block overlaps the newly placed blocks, an error is reported.
+- `replace`: replacement mode. When a block is being placed in this mode, any earlier defined block that overlaps it - even partially - is completely removed from the schematic. Its label(s), if any, must not be reused and must not be referenced from any configuration. (It is, however, possible to use the label assigned to a block being replaced when replacing it.)
+- `fill`: fill mode. When a block is being placed in this mode, it is placed only on positions which do not overlap already defined blocks. Positions that would overlap a block are not used, and labels assigned to those blocks are not created.
+
+When a region is placed in the replacement or fill mode, all blocks instantiated by the region are handled in the mode defined by the enclosing region. All fill/replace operations are done on the final layout of blocks. So, for example, if there is a region containing fill-mode blocks, the fill operation isn't applied when the region is constructed, but when all blocks are placed. Example:
+
+```
+schematic
+    @plastanium-wall at (0, 0) * (2, 2)
+    REG: region
+        @copper-wall at (0, 0)
+        @titanium-wall fill (0, 0) * (2, 2)
+    end replace (1, 0)
+end
+```
+
+![Fill and replace demonstration](images/sc-region-fill-replace.png)
+
+The titanium wall is only placed on tiles that are free in the entire schematics, not on tiles that are free within the `REG` region.
+
+When a region containing empty tiles is placed in the replacement mode, the original blocks at the empty tiles don't get erased. However, putting `@air` explicitly in the region does erase underlying blocks when using `replace` with the entire region.
+
+> ![TIP]
+> The replacement mode allows making changes to block arrays created with blocks or regions – for example, a factory constructed by repeating a region containing a basic unit may be customized on the input/output edges.
+> 
+> The fill mode allows creating rectangular walls around compact regions, or filling empty areas in the schematic with filler blocks (such as batteries, solar panels, or walls).
+> 
+> Using `fill` or `replace` when placing regions is questionable practice and should be avoided.
+
+## Element position
+
+Element position can be specified as relative or absolute. When completely omitted, the position is assumed to be `(0, 0)`.  
+
+The first element defined by the schematic must use an absolute position (or can omit the position, placing it at the schematic origin), but all following blocks can use absolute or relative positions. Relative position always relates to the previous block, as defined by the schematic.
+
+Element position can be specified using this syntax:
 
 ```
 [+-] (x, y)
 ```
 
-The `+` or `-` sign, if used, specifies relative position, in which case the `x` and `y` coordinates are added to or subtracted from previous block position. When no plus or minus sign is used, the coordinates specify an absolute position for the block.
+The `+` or `-` sign, if used, specifies relative position, in which case the `x` and `y` coordinates are added to or subtracted from previous element position. When no plus or minus sign is used, the coordinates specify an absolute position for the element.
 
 It is also possible to specify a position relative to another block using this syntax:
 
@@ -475,9 +564,9 @@ It is also possible to specify a position relative to another block using this s
 label {+-} (x, y)
 ```
 
-In this case, the position is specified as an offset against the position of a block labeled as `label`.
+In this case, the position is specified as an offset against the position of a block labeled with `label`. When no regions are used within the schematic, the label simply corresponds to the block's label. Blocks placed in regions may be referenced using a [fully or partially specified path](#referencing-blocks).   
 
-All three ways of specifying a block position can be seen in this example:
+All three ways of specifying an element position can be seen in this example:
 
 ```
 schematic
@@ -492,15 +581,15 @@ end
 
 Blocks in the schematic must not overlap. Overlapping blocks are detected and cause compilation error.
 
-Blocks larger than 1x1 are placed into the schematic in such a way that their lower-left corner is at the given coordinates. This makes it quite natural to design schematic starting in the lower left corner, i.e., from coordinates (0, 0), and building right and up (or up and right).
+Elements larger than 1x1 are placed into the schematic in such a way that their lower-left corner is at the given coordinates. This makes it quite natural to design schematic starting in the lower left corner, i.e., from coordinates (0, 0), and building right and up (or up and right).
 
-Block position may also be negative (see [Origin and dimensions calculation](#origin-and-dimensions-calculation)).
+Element position may also be negative (see [Origin and dimensions calculation](#origin-and-dimensions-calculation)).
 
 Correctly positioning blocks, especially blocks larger than 1x1, can be a bit tricky. For more complex layouts, it is easier to create the schematic in Mindustry, decompile to Schemacode definition, and modify the resulting file.
 
-### Block array
+### Element arrays
 
-Block arrays are rectangular areas filled with blocks of the same type and configuration, without empty space. A block array always contains a block at the specified position (an _anchor block_). To create a block array, an array specification needs to be specified after the block position:
+Element arrays are rectangular areas filled with regions or blocks of the same type and configuration. An element array always contains the original element at the specified position (an _anchor element_). To create an element array, an array specification needs to be specified after the element position:
 
 ```
 <area-operator> (x, y) [<array-orientation>]
@@ -508,14 +597,14 @@ Block arrays are rectangular areas filled with blocks of the same type and confi
 
 where `<area-operator>` is one of the following:
 
-* `..` - inclusive range operator. The array will cover the smallest rectangular area which contains the anchor block and a block at the `(x, y)` coordinates.
-* `...` - exclusive range operator. The array will cover the largest rectangular area which contains the anchor block and no block at the `(x, y)` coordinates.
+* `..` - inclusive range operator. The array will cover the smallest rectangular area which contains the anchor element and an element at the `(x, y)` coordinates.
+* `...` - exclusive range operator. The array will cover the largest rectangular area which contains the anchor element and no element at the `(x, y)` coordinates.
 * `*` - area size operator. The array will start at the anchor block and extend `x` blocks horizontally and `y` blocks vertically.
 
 For range operators, the following rules apply:
 
-* The coordinates are interpreted using the same coordination system as the block position coordinates – that is, absolutely if the block position was specified absolutely, and relatively if the block position was specified relatively.
-* If the array coordinate is higher than the corresponding block coordinate, the array extends to the right or up from the anchor block. If the array coordinate is lower than the corresponding block coordinate, the array extends to the left or down from the anchor block.
+* The coordinates are interpreted using the same coordination system as the element position coordinates – that is, absolutely if the element position was specified absolutely, and relatively if the element position was specified relatively.
+* If the array coordinate is higher than the anchor element coordinate, the array extends to the right or up from the anchor block. If the array coordinate is lower than the anchor element coordinate, the array extends to the left or down from the anchor block.
 
 For area size operator, the following rules apply:
 
@@ -525,23 +614,27 @@ Area size operator is most useful when creating an aray of fixed size (e.g., a t
 
 The `<array-orientation>` is optional and can be one of the following:
 
-* `horizontal` (the default): the block array is built horizontally (i.e., row by row).
-* `vertical`: the block array is built vertically (i.e., column by column).
+* `horizontal` (the default): the element array is built horizontally (i.e., row by row).
+* `vertical`: the element array is built vertically (i.e., column by column).
 
-The array orientation affects the processing order of the blocks.
+The array orientation affects the processing order of the elements, which includes the order in which labels are assigned to the elements.
 
 When the block array resolves to an empty area, an error is reported. When the block array resolves to a single block (for example, `@switch at (3, 5) * (0, 0)`, or `@copper-wall-large at (2, 2) ... (4, 4)`), it is treated as a regular block and not a block array (the distinction is important when processing labels for the block).
 
 When an orientation or configuration is specified for a block array, it is applied to each block in the array.
 
-### Labels for block arrays
+### Region arrays
+
+When creating an array consisting of regions, the region dimensions are used to determine the spacing of individual regions. As regions may contain free space, as well as blocks outside their own dimensions, it is possible to create arrays consisting of elements that are not rectangular.
+
+### Labels for element arrays
 
 One or more labels, including array labels, can be specified for a block array. The labels are assigned to the block in the array in the processing order, always starting at the anchor block. If there are more labels specified (array or regular) than is the total number of blocks in the array, an error is reported. If there are only regular arrays specified and their number is smaller than the total number of blocks in the array, the remaining blocks are left unlabeled.
 
 If the labels include at least one array label, the last such label in the list is repeated a number of times needed to assign a label to each block in the array. If the last label in the list is a regular label, it will always be assigned to the last block in the array. Example:
 
 ```
-up, down, size#, volume#, left, right: @switch at (0, 8) * (1, -8) 
+up, down, size$, volume$, left, right: @switch at (0, 8) * (1, -8) 
 ```
 
 This will create an array of eight switches in the top-down order and assign them the following symbolic labels:
@@ -557,7 +650,26 @@ This will create an array of eight switches in the top-down order and assign the
 
 Note: the literal link names assigned to the symbolic link names depend on the order in which the symbolic labels are encountered in the Mindcode source file.
 
-## Block orientation
+## Transposition and rotation
+
+Transposition allows flipping elements horizontally or vertically, while rotation allows rotating elements by 90, 180, or 270 degrees.
+
+> [!IMPORTANT]
+> Transposition is always applied before rotation. 
+>
+> When rotation is applied to a region array, the region is rotated before the array is built.
+
+### Blocks
+
+Transposition is specified using the `flip` keyword:
+
+```
+flip <horizontal|vertical>
+```
+
+`horizontal` flips the element horizontally, `vertical` flips the element vertically. Transposing the element along both axes is not supported (such a transposition would be identical to rotating the element by 180 degrees, i.e., to the `west`).
+
+Transposition has a limited effect on blocks but may be more useful with regions. 
 
 Each block in the schematic has an orientation, although specific orientation affects only some types of blocks (such as conveyors or unit factories). Orientation can take four values - `east`, `west`, `north` or `south` - and is specified using this syntax:
 
@@ -568,6 +680,13 @@ facing <orientation>
 e.g., `@conveyor at (2, 4) facing west`.
 
 The cardinal directions are related to the coordinate system of the schematic, i.e., conveyor facing east is moving items from left to right.
+
+> [!NOTE]
+> When a block is flipped horizontally, the block's default orientation changes from `east` to `west`. Subsequent rotation is then compounded with the altered orientation; rotating a horizontally flipped block to `north` results in a block with the `south` orientation.
+
+### Regions
+
+The `flip` and `facing` clauses can be also applied to regions. In that case, the entire region is flipped and rotated to face the new cardinal directon (the original, non-rotated direction is `east`). When the region is flipped or rotated, all contained elements - both blocks and nested regions - are flipped and rotated accordingly. Nested regions themselves can be also flipped or rotated.
 
 ## Block configuration
 
@@ -632,7 +751,7 @@ The following block types can have color configuration specified:
 
 ## Connection configuration
 
-Connection configuration is specified as `connected to` followed by a comma-separated list of absolute or relative positions; relative positions are related to the block being configured. It is also possible to specify a block label:
+Connection configuration is specified as `connected to` followed by a comma-separated list of absolute or relative positions; relative positions are related to the block being configured. It is also possible to specify a [block reference](#referencing-blocks):
 
 ```
     @bridge-conveyor     at (0, 0) connected to (0, 2)    // Connects to the bridge at (0, 2)
@@ -855,17 +974,32 @@ The following block types can have processor configuration specified:
 
 There are several ways to specify blocks linked to the processor.
 
-#### Linking by pattern
+#### Linking by block references
 
-By specifying a link pattern, it is possible to link to the processor all blocks whose labels are matching the given pattern. The pattern is specified using "wildcard" convention: a string where the `*` character matches any part of a block label (the `?` matching a single character is **not** supported). The simplest use is this:
+By specifying a block reference, it is possible to link to the processor multiple blocks at once. The syntax for specifying block references is: 
 
 ```
     links
-        *
+        <block-reference> [as <link-name>]
     end
 ```
 
-This definition matches all labeled blocks, which will be linked to the processor using their labels as link names. This is the easiest way that can be used when every linked block is assigned the correct label:
+This links all blocks matched by the [block reference](#referencing-blocks) to the processor. The names under which the block(s) are linked to the processor are derived using these rules:
+
+- When a simple link name is specified, it is used as given. When the block reference resolves to multiple blocks, an error occurs.
+- When the link name is a [local array label](#array-labels), all blocks resolved by the block reference are assigned a link name generated from the array label. The same array label may be used multiple times in the same processor configuration, providing unique link names each time it is used.
+- When no link name is specified, the link name is derived from the linked block label matched by the block reference:
+  - When the block label contains a dash character (`-`), the part of the label after the first dash character is used as a link name.
+  - When the block label does not contain a dash character, the entire label is used as a link name.
+
+Additional notes:
+
+- When a block has multiple labels, the one matched by the block reference is used to derive the block name. If the block reference matches multiple labels of the same block, the block would end up being linked multiple times to the same processor, which is an error.
+- When a block has been assigned an array label, each instance of a block is labeled using a concrete value of the label. This is the label that gets matched by the block reference and subsequently used to generate the link name.
+- It is possible to use patterns and prefixes together with [symbolic link names](#symbolic-link-names).
+- The resulting link name must meet the [link name requirements](#link-name-requirements).
+
+Examples:
 
 ```
 schematic
@@ -899,63 +1033,11 @@ schematic
 end
 ```
 
-When the block label contains a dash character (`-`), only the part of the label after the first dash character is used as a link name. The above example therefore links the switch to both processors as `switch1`, while each message block is linked to separate processor as `message1`.
-
-It is also possible to use patterns and prefixes together with [symbolic link names](#linking-by-a-symbolic-name), although this is typically not needed.
-
-#### Linking by a literal name
-
-Named links allow linking blocks to the processor directly using the block labels. It is possible to specify a link name for the label; if it isn't specified, the label is used as a link name. Any prefix is stripped away again:
-
-```
-schematic
-    @micro-processor at (0, 0) processor
-        links 
-            switch1                   // linked as "switch1"       
-            a-message1                // linked as "message1", prefix stripped
-            b-message1 as message2    // linked as "message2"
-        end
-        mlog = ""
-    end
-    switch1:      @switch  at +(1, 0)
-    a-message1:   @message at +(1, 0)
-    b-message1:   @message at +(1, 0)
-end
-```
-
-#### Linking by a symbolic name
-
-Linking by a symbolic name works similarly to linking by a literal name, except the actual link names are assigned by the Mindcode compiler when compiling the code. This makes it much easier to link the same block to different processors using the same symbolic name, without having to readjust the link indexes in case a conflict arises.
-
-A symbolic link name corresponding to each linked block must be declared in the Mindcode source code so that the Mindcode compiler can assign the correct link names. When a corresponding symbolic link name is not declared in the Mindcode source, an error is generated, as the unresolved symbolic link name cannot be used to create the link in the schematic.
-
-```
-schematic
-    @micro-processor at (0, 0) processor
-        links 
-            onOff                     // linked using symbolic link name "onOff"       
-            a-mainMessage             // linked using symbolic link name "mainMessage", prefix stripped
-            a-status as statusMessage // linked using symbolic link name "statusMessage"
-        end
-        mindcode = code
-    end
-    onOff:          @switch  at +(1, 0)
-    a-mainMessage:  @message at +(1, 0)
-    a-status:       @message at +(1, 0)
-end
-
-code = """
-    linked(@switch) onOff;
-    linked(@message) mainMessage, statusMessage;
-    
-    print("Symbolic link demo"); printflush(mainMessage);
-    print("The status is " + onOff.@enabled ? "on" : "off"); printflush(statusMessage);
-    """
-```
+The above example links the switch to both processors as `switch1`, while each message block is linked to separate processor as `message1`.
 
 #### Linking by position
 
-Finally, it is possible to specify linked blocks by their positions. In this case, a name must be assigned explicitly (Schematic Builder doesn't generate link names automatically yet):
+It is also possible to specify linked blocks by their positions. In this case, a name must be assigned explicitly (Schematic Builder doesn't generate link names automatically yet):
 
 ```
 schematic
@@ -1008,6 +1090,36 @@ schematic
         end
     end
 end
+```
+
+#### Symbolic link names
+
+Linking by a symbolic name works similarly to linking by a literal name, except the actual link names are assigned by the Mindcode compiler when compiling the code. This makes it much easier to link the same block to different processors using the same symbolic name, without having to readjust the link indexes in case a conflict arises.
+
+A symbolic link name corresponding to each linked block must be declared in the Mindcode source code so that the Mindcode compiler can assign the correct link names. When a corresponding symbolic link name is not declared in the Mindcode source, an error is generated, as the unresolved symbolic link name cannot be used to create the link in the schematic.
+
+```
+schematic
+    @micro-processor at (0, 0) processor
+        links 
+            onOff                     // linked using symbolic link name "onOff"       
+            a-mainMessage             // linked using symbolic link name "mainMessage", prefix stripped
+            a-status as statusMessage // linked using symbolic link name "statusMessage"
+        end
+        mindcode = code
+    end
+    onOff:          @switch  at +(1, 0)
+    a-mainMessage:  @message at +(1, 0)
+    a-status:       @message at +(1, 0)
+end
+
+code = """
+    linked(@switch) onOff;
+    linked(@message) mainMessage, statusMessage;
+    
+    print("Symbolic link demo"); printflush(mainMessage);
+    print("The status is " + onOff.@enabled ? "on" : "off"); printflush(statusMessage);
+    """
 ```
 
 #### Link name requirements
@@ -1186,7 +1298,157 @@ Here, the `UNIT_TYPE` and `MAX_UNITS` are the variables (or parameters) and  `@f
 Similar effect to parametrization can be achieved by combining code snippets described above, but parametrization offers the following advantages:
 
 - The original code, when stored in a standalone file, can be compiled or run independently of the schematic definition. Prepending code to an existing Mindcodeor mlog code is troublesome.
-- When the same Mindcode is used by several processors, it is compiled only once and then parametrized. For large schematic with many processors sharing the same complex code, this may provide significant speedup when building the schematic.
+- When the same Mindcode is used by several processors, it is compiled only once and then parametrized. For a large schematic with many processors sharing the same complex code, this may provide significant speedup when building the schematic.
+
+# Referencing blocks
+
+Referencing other blocks within the schematic is done for two purposes:
+
+- to specify an element position relative to another block,
+- to specify a connection or a processor link to a block.
+
+For schematics without regions, referencing blocks is straightforward: the label of the block is used. When a label array is used in schematic definition, a block can be referenced using a specific instance of the assigned label array:
+
+```
+schematic
+    w$: @copper-wall at (0, 0) * (5, 1)
+    @copper-wall at w3 + (0, 1)
+end
+```
+
+When regions are used within the schematic, the situation is more complex. Simple block labels only match blocks within the region in which they're used:
+
+```
+schematic
+    region
+        il: @illuminator
+        @power-node at +(3, 0) connected to il 
+    end at (0, 0) * (1, 3)
+end
+```
+
+Here, each power node is connected to the illuminator in the same region.
+
+To specify a block enclosed in a different region, it is possible to specify region labels to refer to that region:
+
+```
+schematic
+    REG = region
+        il: @illuminator at (1, 1)
+        @copper-wall fill (0, 0) * (3, 3)
+    end
+    
+    A: REG at (0, 0)
+    B: REG at (0, 3)
+    
+    @power-node at A.il + (5, 0) connected to B.il
+    @power-node at B.il + (5, 0) connected to A.il
+end
+```
+
+The same principle can be used to refer to block enclosed in several nested regions: `A.B.C.x` refers to block labelled `x` stored in region `C` within region `B` within region `A`.
+
+> [!NOTE]
+> Only region labels can be used to refer to regions. Names of named regions are not recognized.
+ 
+## Referencing multiple blocks
+
+Sometimes it is necessary to specify multiple blocks at once (for example, when linking blocks to power nodes or processors). To do so, it is possible to use the `*` wildcard in the names of region or blocks labels. The `*` wildcard matches any number of characters, including none at all:
+
+```
+schematic
+    REG = region
+        il: @illuminator at (1, 1)
+        @copper-wall fill (0, 0) * (3, 3)
+    end
+    
+    A$: REG at (0, 0) * (1, 4)          // Creates regions A1, A2, A3, A4
+    B$: REG at (3, 0) * (1, 4)          // Creates regions B1, B2, B3, B4
+    
+    @power-node-large at (8, 5) connected to A*.il
+end
+```
+
+Here, the power node is connected to the illuminators in the four regions labeled `A1`, `A2`, `A3`, and `A4`.
+
+When just `*` is specified as a block label, only labeled blocks are matched. When used as a region label, all regions, including unlabeled ones, are matched:
+
+```
+schematic
+    REG = region
+        il: @illuminator at (0, 1)
+            @incinerator at (2, 1)
+            @copper-wall fill (0, 0) * (3, 3)
+    end
+
+    A$: REG at (0, 0) * (1, 4)          // Creates regions A1, A2, A3, A4
+        REG at (3, 0) * (1, 4)          // Creates four unlabeled regions
+
+    @power-node-large at (8, 5) connected to *.*
+end
+```
+
+Here, the power node is connected to all illuminators, as all regions are matched by `*`, but not to incinerators. To refer to an unlabeled block, the block position must be used. 
+
+It is also possible to use `**` as a region or block label wildcard:
+
+- When used as a block label, all labeled blocks in the entire schematics are matched.
+- When used as a region label, all regions, labeled or unlabeled, are matched, regardless of nesting depth.
+- When used in conjunction with other labels, the wildcard matches regions regardless of the nesting depth, but the following labels in the block reference must match exactly.
+
+```
+schematic
+    REG = region
+        il: @illuminator
+        ic: @incinerator at (1, 0)
+            @melter at (2, 0)
+    end
+
+    // These regions are nested, so the `**` wildcard matches them all
+    Level1: region
+        Level2a: REG at (0, 0) * (2, 1)
+        Level2b: REG at (8, 0)
+    end at (0, 3) * (1, 2)
+
+    @power-node-large at (6, 0) connected to **        // Connects to all illuminator and incinerators
+    @power-node-large at (6, 6) connected to **.ic     // Connects to all incinerators
+end
+```
+
+## Nested regions
+
+When the first label in the block reference doesn't contain a wildcard character and doesn't match any element in the current region, the search is repeated in the parent region until a match is found or the top-level region is reached.
+
+Specific keywords can be used instead of region labels to get better control over the resolution of nested regions:
+
+- `global`: the search starts at the top-level region.
+- `local`: the search starts at the current region; when a match is not found, the parent regions aren't seatched.
+- `parent`: the search continues in the parent region.
+
+The `global` and `local` keywords can only be used at the beginning of a block reference. The `parent` keyword can be used anywhere in the block reference, not just as the first label, and can be used repeatedly to reach regions placed higher in the nesting hierarchy.
+
+## Full block referencing rules
+
+1. The `global`, `local` and `parent` start the search in the indicated region and never go into parent regions.
+    1. `global` and `local` can only be used at the start of the block reference.
+    2. `parent` can be used anywhere in the block reference.
+2. When the first identifier of a pattern contains a matching character (`*`), the search starts in the current region and never continues into parent regions.
+3. When the first identifier of a pattern doesn't contain a matching character, the search starts in the current region; when no match is found, parent regions are recursively searched until a match is found or no parent region exists.
+4. Rules for the last identifier in the block reference:
+   1. `*` matches all labeled blocks directly contained in the current region.
+   2. `**` matches all labeled blocks directly or indirectly contained in the current region.
+   3. All other identifiers (with or without a wildcard) match only corresponding labeled blocks in the current region.
+5. Rules for all but the last identifier in the pattern:
+   1. `*` matches all regions (labeled or unlabeled) directly contained in the current region.
+   2. `**` matches any hierarchy of regions (labeled or unlabeled) starting at the current region.
+   3. All other identifiers (with or without a wildcard) match only corresponding labeled regions in the current region.
+
+Examples:
+- `*` matches all labeled blocks directly contained in the current region.
+- `**` matches all labeled blocks directly or indirectly contained in the current region.
+- `global.**` matches all labeled blocks inside the entire schematics.
+- `Reg.*` matches all blocks in a region labeled `Reg` placed in the current region or in any parent of the current region.
+- `parent.a*b.*` matches all blocks in regions whose labels match the `a*b` pattern and which are siblings to the current region. Other regions matching the `a*b` patern in the hierarchy are ignored.
 
 # Origin and dimensions calculation
 
@@ -1201,7 +1463,7 @@ end
 
 The positions in this schematic will be adjusted to (0, 1) for switch and (1, 0) for message block.
 
-Block positions can be negative as well. It is therefore possible to easily extend an existing schematic to the left or down without having to manually reposition all blocks.
+Element positions can be negative as well. It is therefore possible to easily extend an existing schematic to the left or down without having to manually reposition all blocks.
 
 Similarly, the dimensions of the schematic are calculated as the dimensions of the smallest rectangle containing all blocks of the schematic. These dimensions are written to the compiled schematic. If dimensions smaller than computed dimensions are specified as an attribute, a compilation error occurs.
 

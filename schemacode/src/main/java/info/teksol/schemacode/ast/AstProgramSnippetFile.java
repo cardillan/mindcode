@@ -13,6 +13,10 @@ import java.nio.file.Path;
 @NullMarked
 public record AstProgramSnippetFile(SourcePosition sourcePosition, AstText fileName) implements AstProgramSnippet {
 
+    public AstProgramSnippetFile(AstText fileName) {
+        this(SourcePosition.EMPTY, fileName);
+    }
+
     @Override
     public String getProgramId(SchematicsBuilder builder) {
         return "file " + fileName.getText(builder);

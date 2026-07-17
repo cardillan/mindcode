@@ -140,12 +140,8 @@ class DecompilerTest extends AbstractSchematicsTest {
                             ( 2,  1) as switch2 virtual
                             ( 3,  1) as switch3 virtual
                         end
-                        mlog = mlog-0
                     end
                 end
-
-                mlog-0 = '''
-                    '''
                 """.replaceAll("'''", "\"\"\"");
 
         String actual = recompile(expected, false, false, false);
@@ -166,12 +162,8 @@ class DecompilerTest extends AbstractSchematicsTest {
                             +(2, 1) as switch2 virtual
                             +(3, 1) as switch3 virtual
                         end
-                        mlog = mlog-0
                     end
                 end
-
-                mlog-0 = '''
-                    '''
                 """.replaceAll("'''", "\"\"\"");
 
         String actual = recompile(expected, false, false, true);
@@ -201,12 +193,8 @@ class DecompilerTest extends AbstractSchematicsTest {
                             switch3 as switch3
                             switch4 as switch4
                         end
-                        mlog = mlog-0
                     end
                 end
-
-                mlog-0 = '''
-                    '''
                 """.replaceAll("'''", "\"\"\"");
 
         String actual = recompile(expected, false, false, false);
@@ -234,22 +222,14 @@ class DecompilerTest extends AbstractSchematicsTest {
                             p0-switch1 as switch1
                             p0-switch2 as switch2
                         end
-                        mlog = mlog-0
                     end
                     @micro-processor     at ( 0,  2) processor
                         links
                             p1-switch1 as switch1
                             p1-switch2 as switch2
                         end
-                        mlog = mlog-1
                     end
                 end
-
-                mlog-0 = '''
-                    '''
-                
-                mlog-1 = '''
-                    '''
                 """.replaceAll("'''", "\"\"\"");
 
         String actual = recompile(expected, false, false, false);
@@ -353,6 +333,56 @@ class DecompilerTest extends AbstractSchematicsTest {
                 
                     @illuminator         at ( 0,  0) color rgba(255, 255, 0, 255)
                 end
+                """.replaceAll("'''", "\"\"\"");
+
+        String actual = recompile(expected, false, false, false);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void decompilesCode() {
+        String expected = """
+                schematic
+                    name = "Name"
+
+                    @micro-processor     at ( 0,  0) processor
+                        mlog = mlog-0
+                    end
+                    @micro-processor     at ( 0,  1) processor
+                        mlog = mlog-0
+                    end
+                end
+                
+                mlog-0 = '''
+                    print "frog"
+                    '''
+                """.replaceAll("'''", "\"\"\"");
+
+        String actual = recompile(expected, false, false, false);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void decompilesTwoCodes() {
+        String expected = """
+                schematic
+                    name = "Name"
+
+                    @micro-processor     at ( 0,  0) processor
+                        mlog = mlog-0
+                    end
+                    @micro-processor     at ( 0,  1) processor
+                        mlog = mlog-1
+                    end
+                end
+                
+                mlog-0 = '''
+                    print "frog"
+                    '''
+                
+                mlog-1 = '''
+                    print "toad"
+                    '''
                 """.replaceAll("'''", "\"\"\"");
 
         String actual = recompile(expected, false, false, false);

@@ -1,8 +1,8 @@
 package info.teksol.schemacode.ast;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
+import info.teksol.schemacode.schematics.SchematicElement;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -12,18 +12,24 @@ import java.util.function.Consumer;
 @NullMarked
 public record AstLinkPos(SourcePosition sourcePosition, AstConnection connection, @Nullable String name, boolean virtual) implements AstLink {
 
-    @Override
-    public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder builder, Position processorPosition) {
-        linkConsumer.accept(new Link(stripPrefix(trueLinkName(builder)), connection.evaluate(builder, processorPosition)));
+    public AstLinkPos(AstConnection connection, @Nullable String name, boolean virtual) {
+        this(SourcePosition.EMPTY, connection, name, virtual);
     }
 
-    private String trueLinkName(SchematicsBuilder builder) {
+    @Override
+    public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder.ResolverContext context, SchematicElement element) {
+        connection.evaluateMultiple(
+                position -> linkConsumer.accept(new Link(stripPrefix(trueLinkName(context)), position)),
+                context, element);
+    }
+
+    private String trueLinkName(SchematicsBuilder.ResolverContext context) {
         if (name == null) {
             if (connection().id() == null) {
-                builder.error(sourcePosition, "A link name was not specified.");
+                context.error(this, "A link name was not specified.");
                 return "link1";
             }
-            return connection().id();
+            return connection().id().segments().getLast().name();
         } else {
             return name;
         }

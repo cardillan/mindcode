@@ -5,8 +5,13 @@ import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.mindustry.BlockConfiguration;
 import org.jspecify.annotations.NullMarked;
 
+// Reference to a block type (e.g., in a factory configuration)
 @NullMarked
 public record AstBlockReference(SourcePosition sourcePosition, String block) implements AstContentsReference {
+
+    public AstBlockReference(String block) {
+        this(SourcePosition.EMPTY, block);
+    }
 
     @Override
     public String getConfigurationText() {

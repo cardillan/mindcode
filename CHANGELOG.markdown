@@ -16,11 +16,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added support for using symbolic link names in schematic definitions to both [Mindcode](/doc/syntax/SYNTAX-1-VARIABLES.markdown#symbolic-link-names) and [Schemacode](/doc/syntax/SCHEMACODE.markdown#linking-by-a-symbolic-name) ([#284](https://github.com/cardillan/mindcode/issues/284)).
-* Added support for block arrays (Schemacode) and link arrays (Mindcode) ([#324](https://github.com/cardillan/mindcode/issues/324)).
+* Added support for using symbolic link names in schematic definitions to both [Mindcode](/doc/syntax/SYNTAX-1-VARIABLES.markdown#symbolic-link-names) and [Schemacode](/doc/syntax/SCHEMACODE.markdown#symbolic-link-names) ([#284](https://github.com/cardillan/mindcode/issues/284)).
+* Added support for [regions](/doc/syntax/SCHEMACODE.markdown#region-definition) (reusable groups of blocks) in schematic definitions ([#331](https://github.com/cardillan/mindcode/issues/331)).
+* Added support for [block arrays](/doc/syntax/SCHEMACODE.markdown#element-arrays) (Schemacode) and [link arrays](/doc/syntax/SYNTAX-1-VARIABLES.markdown#linked-arrays) (Mindcode) ([#324](https://github.com/cardillan/mindcode/issues/324)).
+* Added support for [block replacement](/doc/syntax/SCHEMACODE.markdown#placement-mode) in schematic definitions ([#339](https://github.com/cardillan/mindcode/issues/339)).
 * Added a validation that ensures a built schematic doesn't have link gaps ([#326](https://github.com/cardillan/mindcode/issues/326)). 
+* Added an error message when an unsupported block type is included in a schematic definition. 
 * Added support for [code parametrization in schematics](/doc/syntax/SCHEMACODE.markdown#code-parametrization) ([#330](https://github.com/cardillan/mindcode/issues/330)).
-* Added support for specifying schematic-wide compiler options Mindcode ([#332](https://github.com/cardillan/mindcode/issues/332)).
+* Added support for specifying schematic-wide Mindcode compiler options ([#332](https://github.com/cardillan/mindcode/issues/332)).
 * Added a warning when the created schematic size exceeds the maximum size of a schematic that can be created in the game.
 * Added a new [`emitLog()` function](/doc/syntax/TROUBLESHOOTING.markdown#the-emitlog-function).
 * Added a new [`allow-link-gaps`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-allow-link-gaps) compiler option.
@@ -56,7 +59,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * **Breaking:** the `enforce-instruction-limit` option has been renamed to [`enforce-size-limits`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-size-limits).
 * Changed the web app to use the new MlogWatcher API.
 * Changed the [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) to handle integer division by one the same as the `op floor` instruction.
-* Changed the mlog parser to raise an error when the code contains duplicate labels, regardless of the processor version. This behavior matches the latest Mindustry version; in older Mindustry versions the code is still accepted. 
+* Changed the mlog parser to raise an error when the code contains duplicate labels, regardless of the processor version. This behavior matches the latest Mindustry version; in older Mindustry versions such code would still be accepted, despite being obviously incorrect.
 * Changed the [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) and [Array Optimization](doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) to [remove an `op floor` instruction when applied to the array index](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#handling-non-negative-implicit-integer-conversions).
 * Changed the [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown): when the `op round` instruction is available, a sequence of `op add` and `op floor` instructions (as in `floor(x + 0.5)`) is replaced with the `op round` instruction (as in `round(x)`).
 * The variable reference index is recreated before each optimization, potentially allowing more optimizations to be performed.
@@ -178,7 +181,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Deprecated
 
 * The `dm` (decompile mlog) and `ds` (decompile schematic) command-line arguments are deprecated. Use `pm` and `ps` instead ("p" stands for "process" as the command-line tool now allows more actions to be performed in addition to decompilation, such as running it on the internal emulator). 
-* The Schematics Refresher mod is deprecated and will be no longer maintained. The Mlog Watcher mod will provide better functionality for managing schematics in the game.
+* The Schematics Refresher mod is deprecated and will be no longer maintained. The Mlog Watcher mod provides better functionality for managing schematics in the game.
 
 ## 3.13.0 – 2026-01-18
 
@@ -236,9 +239,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * The optimizer gathers information to support the Loop Rotation optimization.
   * When a loop is fully rotated, an instruction can be hoisted in such a way that it's executed at most once, but only if the loop actually runs.  
   * When a loop is not known to execute at least once, an instruction affecting just the loop can still get hoisted entirely out of the loop if the loop is nested.
-* The [mlog processor emulator](/doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown) has been completely rewritten. The emulator now matches the behavior if a Mindustry processor of the version identified by the [`target`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target) or [`emulator-target`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-target) compiler options.
+* The [mlog processor emulator](/doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown) has been completely rewritten. The emulator now matches the behavior of a Mindustry processor of the version identified by the [`target`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target) or [`emulator-target`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-target) compiler options.
 * The [execution flags](/doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) have been updated to match the new processor emulator. Some flags have been removed, some have been added, and some have been renamed. 
-* The processor emulator is now able to execute supported instructions even when created using an `mlog()` fuction or an mlog block. This includes the code generated by the `compatibility` library.
+* The processor emulator is now able to execute supported instructions even when created using an `mlog()` function or an mlog block. This includes the code generated by the `compatibility` library.
 
 ## 3.11.0 – 2025-12-25
 
@@ -1776,7 +1779,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
   directive.
 * Added support for [color configuration](doc/syntax/SCHEMACODE.markdown#color-configuration) and
   [unit configuration](doc/syntax/SCHEMACODE.markdown#unit-configuration) in Schemacode.
-* Added [overlapping blocks detection](doc/syntax/SCHEMACODE.markdown#block-position). Overlapping blocks now cause
+* Added [overlapping blocks detection](doc/syntax/SCHEMACODE.markdown#element-position). Overlapping blocks now cause
   compilation errors.
 * Added support for [non-zero schematic origin](doc/syntax/SCHEMACODE.markdown#origin-and-dimensions-calculation).
 * Added validation of [bridge](doc/syntax/SCHEMACODE.markdown#connecting-bridges) and
