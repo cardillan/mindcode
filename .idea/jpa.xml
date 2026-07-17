@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit moduleName="mindcode-webapp" name="mindcode-webapp" framework="Spring Data JDBC" ormUnit="mindcode-webapp" defaultDataSourceId="f7b72fc7-eda9-4170-ba34-02246645265d" />
+    </persistence-units>
+  </component>
+</project>

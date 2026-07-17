@@ -167,6 +167,15 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         }
     }
 
+    public void safeCompile(InputFile file) {
+        try {
+            compile(file);
+        } catch (Exception e) {
+            internalError = true;
+            error(ERR.INTERNAL_ERROR);
+        }
+    }
+
     public void compile() {
         compile(inputFiles.getInputFiles());
     }

@@ -6,7 +6,10 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.EmulatorSchematic;
 import info.teksol.mc.emulator.mimex.BasicEmulator;
-import info.teksol.mc.messages.*;
+import info.teksol.mc.messages.ERR;
+import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.MessageLogger;
+import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.ast.AstSchematicsBuilder;
@@ -22,7 +25,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.List;
 
 public class SchemacodeCompiler {
 
@@ -111,9 +113,5 @@ public class SchemacodeCompiler {
             messageConsumer.addMessage(ToolMessage.error(ERR.INTERNAL_ERROR));
             return CompilerOutput.empty();
         }
-    }
-
-    private static boolean hasErrors(List<MindcodeMessage> messages) {
-        return messages.stream().anyMatch(MindcodeMessage::isError);
     }
 }

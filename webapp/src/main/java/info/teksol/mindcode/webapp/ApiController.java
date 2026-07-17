@@ -52,6 +52,9 @@ public class ApiController {
     @Autowired
     private SourceRepository sourceRepository;
 
+    @Autowired
+    private ErrorRepository errorRepository;
+
     @GetMapping("/source/{id}")
     public Source getSource(@PathVariable String id) {
         try {
@@ -66,7 +69,7 @@ public class ApiController {
     public CompileResponse compile(@RequestBody CompileRequest request) {
         Target target = Target.fromString(request.target);
         boolean run = request.run();
-        ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.compileMindcode);
+        ApiSource apiSource = getApiSource(request.sourceId, request.source, CompilerMode.compileMindcode);
 
         ListMessageLogger messageLogger = new ListMessageLogger();
         MindcodeCompiler compiler = new MindcodeCompiler(
@@ -79,7 +82,13 @@ public class ApiController {
         final long start = System.nanoTime();
         compiler.safeCompile();
         final long end = System.nanoTime();
-        logger.info("performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
+
+        if (compiler.hasInternalError()) {
+            logger.error("Mindcode internal error, uuid={}", apiSource.id);
+            errorRepository.save(new Error(CompilerMode.compileMindcode.name(), apiSource.content));
+        } else {
+            logger.info("Mindcode performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
+        }
 
         String compiled = getCompilationMessage(apiSource.content, compiler);
         boolean isText = compiled != null;
@@ -102,7 +111,7 @@ public class ApiController {
     public DecompileResponse decompileMlog(@RequestBody DecompileRequest request) {
         Target target = Target.fromString(request.target);
         boolean run = request.run();
-        ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.other);
+        ApiSource apiSource = getApiSource(request.sourceId, request.source, CompilerMode.decompileMindcode);
         String mlog = apiSource.content;
         final String decompiled = MlogDecompiler.decompile(mlog);
 
@@ -143,15 +152,24 @@ public class ApiController {
     @PostMapping("/schemacode/compile")
     public SchemacodeCompileResponse compileSchemacode(@RequestBody SchemacodeCompileRequest request) {
         Target target = Target.fromString(request.target);
-        ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.compileSchemacode);
+        ApiSource apiSource = getApiSource(request.sourceId, request.source, CompilerMode.compileSchemacode);
 
         ListMessageLogger messageLogger = new ListMessageLogger();
+        final long start = System.nanoTime();
         final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(
                 messageLogger,
                 InputFiles.fromSource(apiSource.content),
                 CompilerProfile.fullOptimizations(true, true)
                         .setTarget(target)
                         .setRun(request.run));
+        final long end = System.nanoTime();
+
+        if (hasInternalError(messageLogger)) {
+            logger.error("Schemacode internal error, uuid={}", apiSource.id);
+            errorRepository.save(new Error(CompilerMode.compileMindcode.name(), apiSource.content));
+        } else {
+            logger.info("Schemacode performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
+        }
 
         String compiledCode = result.getStringOutput();
         List<RunResult> runResults = result.emulator() instanceof Emulator emulator ? processEmulatorResults(emulator, messageLogger) : List.of();
@@ -166,9 +184,13 @@ public class ApiController {
         );
     }
 
+    private boolean hasInternalError(ListMessageLogger messageLogger) {
+        return messageLogger.getMessages().stream().anyMatch(m -> m.level() == MessageLevel.ERROR && m.message().equals(ERR.INTERNAL_ERROR));
+    }
+
     @PostMapping("/schemacode/decompile")
     public DecompileResponse decompileSchematic(@RequestBody DecompileRequest request) {
-        ApiSource apiSource = getApiSource(request.sourceId, request.source, GetSourceMode.other);
+        ApiSource apiSource = getApiSource(request.sourceId, request.source, CompilerMode.decompileSchemacode);
         ListMessageLogger messageLogger = new ListMessageLogger();
         final CompilerOutput<String> compilerOutput = SchematicsDecompiler.decompile(messageLogger, apiSource.content);
         List<RunResult> runResults = List.of();
@@ -198,11 +220,11 @@ public class ApiController {
         );
     }
 
-    private ApiSource getApiSource(String id, String source, GetSourceMode mode) {
+    private ApiSource getApiSource(String id, String source, CompilerMode mode) {
         ApiSource apiSource;
-        if (mode == GetSourceMode.compileMindcode && mindcodeSamples.containsKey(id)) {
+        if (mode == CompilerMode.compileMindcode && mindcodeSamples.containsKey(id)) {
             apiSource = new ApiSource(id, source);
-        } else if (mode == GetSourceMode.compileSchemacode && schemacodeSamples.containsKey(id)) {
+        } else if (mode == CompilerMode.compileSchemacode && schemacodeSamples.containsKey(id)) {
             apiSource = new ApiSource(id, source);
         } else if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
@@ -217,6 +239,7 @@ public class ApiController {
             apiSource = new ApiSource(sourceDto.getId().toString(), source);
         }
 
+        logger.info("compile request: mode={}, id={}, source_length={}", mode, apiSource.id, apiSource.content.length());
         return apiSource;
     }
 
@@ -372,10 +395,11 @@ public class ApiController {
     }
 
 
-    private enum GetSourceMode {
+    private enum CompilerMode {
         compileMindcode,
         compileSchemacode,
-        other,
+        decompileMindcode,
+        decompileSchemacode,
     }
 
     /**

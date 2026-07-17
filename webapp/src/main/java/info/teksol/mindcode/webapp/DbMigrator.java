@@ -3,8 +3,6 @@ package info.teksol.mindcode.webapp;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class DbMigrator {
-    public static final String USER_ID = "37cc9dec-0644-44d2-8f90-c40c3030d386";
-
     void migrate(JdbcTemplate template) {
         template.execute("""
                 CREATE TABLE IF NOT EXISTS public.sources (
@@ -16,8 +14,19 @@ public class DbMigrator {
         template.execute("ALTER TABLE public.sources ALTER COLUMN id SET DEFAULT gen_random_uuid()");
 
         template.execute("""
+                CREATE TABLE IF NOT EXISTS public.errors (
+                  id         uuid primary key,
+                  version    text                     not null,
+                  type       text                     not null,
+                  source     text                     not null,
+                  created_at timestamp with time zone not null default current_timestamp
+                )""");
+
+        template.execute("ALTER TABLE public.errors ALTER COLUMN id SET DEFAULT gen_random_uuid()");
+
+        template.execute("""
                 CREATE TABLE IF NOT EXISTS public.users (
-                  id              uuid primary key                  default gen_random_uuid(),
+                  id              uuid primary key         default gen_random_uuid(),
                   username        text                     not null unique check (username ~ '^[a-zA-Z][A-Za-z0-9]+$'),
                   hashed_password text                     not null,
                   registered_at   timestamp with time zone not null default current_timestamp
@@ -25,11 +34,11 @@ public class DbMigrator {
 
         template.execute("""
                 CREATE TABLE IF NOT EXISTS public.scripts (
-                  id             uuid primary key                  default gen_random_uuid(),
+                  id             uuid primary key         default gen_random_uuid(),
                   published      boolean                  not null default false,
                   name           text                     not null check(length(name) > 0),
                   source         text                     not null,
-                  forked_from_id uuid                         null references public.scripts on update cascade on delete set null,
+                  forked_from_id uuid                     null references public.scripts on update cascade on delete set null,
                   author_id      uuid                     not null references public.users on update cascade on delete cascade,
                   recorded_at    timestamp with time zone not null default current_timestamp
                 )""");

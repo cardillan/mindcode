@@ -22,10 +22,9 @@ Changes intended for the next regular release.
 * Mlog parametrization in schematics
 * Schematic regions
 * Update the `require remote` directive
+* Unknown built-ins will cause a compiler error in strict mode
 
 * **Doing**
-
-* Unknown built-ins will cause a compiler error in strict mode
 
 * **Planned**
 
@@ -35,6 +34,7 @@ Changes intended for the next regular release.
 
 ## Next release
 
+* Big arrays
 * Remove deprecated features:
   * Mlog keywords without the `:` prefix
   * Using `remote` to mark variables/functions for export

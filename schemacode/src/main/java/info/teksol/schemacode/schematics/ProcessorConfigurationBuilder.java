@@ -245,7 +245,7 @@ public class ProcessorConfigurationBuilder {
         List<MindcodeMessage> messages = new ArrayList<>();
         MindcodeCompiler compiler = new MindcodeCompiler(messages::add, compilerProfile, builder.getInputFiles());
         compiler.setSchematicLinks(schematicLinks);
-        compiler.compile(fileToCompile);
+        compiler.safeCompile(fileToCompile);
 
         boolean hasErrors = messages.stream().anyMatch(MindcodeMessage::isError);
         synchronized (builder) {
@@ -259,7 +259,7 @@ public class ProcessorConfigurationBuilder {
         return new CompilerCacheEntry(compiler.getOutput(), compiler.getSymbolicNameMap(), compiler.getParameterNames(), hasErrors);
     }
 
-    // Class responsible for constructing the final processor configuration whem Mindcode compilation completes
+    // Class responsible for constructing the final processor configuration when Mindcode compilation completes
     private final class FutureProcessorConfiguration implements UnresolvedConfiguration {
         private final AstProcessor processor;
         private final List<ProcessorConfiguration.Link> links;

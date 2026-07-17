@@ -8,8 +8,13 @@ import java.util.Properties;
 
 @NullMarked
 public class Version {
+    private static final String version = resolveVersion();
 
     public static String getVersion() {
+        return version;
+    }
+
+    private static String resolveVersion() {
         try (InputStream in = Version.class.getResourceAsStream("mindcode.properties")) {
             if (in == null) {
                 return "unknown";
