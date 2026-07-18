@@ -628,10 +628,14 @@ When an orientation or configuration is specified for a block array, it is appli
 It is also possible to add circular-shaped element arrays. These arrays fill a circular region around a position.
 
 ```
-[even | odd] radius r [<array-orientation>]
+[odd | even] radius r [<array-orientation>]
 ```
 
-Circular-shaped arrays are meant to be centered around a block. The `even` and `odd` keywords specify whether the block size is even or odd (a small correction needs to be applied to even-sized blocks). `r` is the radius of the circular region.
+Circular-shaped arrays are meant to be centered around a block. `r` is the radius of the circular region. The `even` and `odd` keywords specify the parity of block sizes (the central block versus the surrounding blocks):
+- `even`: both blocks' sizes are even or both blocks' sizes are odd.
+- `odd`: one block's size is even, and the other block's size is odd.
+
+When not specified, the default is `even`.
 
 If the block that should be placed at the center of the array is larger than 2 tiles, the anchor position of the array needs to be altered by adding half the block size to the coordinates.
 
@@ -1032,6 +1036,8 @@ The following block types can have processor configuration specified:
 
 ### Processor links
 
+Processor links are specified in the `links` section. All linked blocks or tiles must lie within the processor's range. 
+
 There are several ways to specify blocks linked to the processor.
 
 #### Linking by block references
@@ -1139,7 +1145,7 @@ schematic
 end
 ```
 
-Linking by position may be especially useful when using block arrays. In this example, an array of switches is linked to an array of processors one-to-one:
+Linking by position may be useful when using block arrays. In this example, an array of switches is linked to an array of processors one-to-one:
 
 ```
 schematic

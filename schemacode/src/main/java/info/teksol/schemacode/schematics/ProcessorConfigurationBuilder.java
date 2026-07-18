@@ -79,6 +79,11 @@ public class ProcessorConfigurationBuilder {
                         l.getKey().toStringAbsolute(),
                         l.getValue().stream().map(ProcessorConfiguration.Link::name).collect(Collectors.joining("', '"))));
 
+        // Detect out-of-range links
+        links.stream().filter(link -> !inRange(element, link))
+                .forEachOrdered(l -> builder.error(processor, "Link at position (%d, %d) is out of range.", l.x(), l.y()));
+
+
         return links;
     }
 
@@ -147,6 +152,20 @@ public class ProcessorConfigurationBuilder {
         });
 
         return new ProcessorConfiguration(links, processParametrization(processor, mlog, parameterNames));
+    }
+
+    private boolean inRange(SchematicElement processor, ProcessorConfiguration.Link link) {
+        BlockPosition blockPosition = builder.getBlockPosition(link.position());
+        int size = blockPosition == null ? 0 : blockPosition.blockType().size();
+
+        float radius = processor.blockType().range() + size / 2f;
+        float px = processor.position().x() + processor.blockType().size() / 2f;
+        float py = processor.position().y() + processor.blockType().size() / 2f;
+        float bx = link.x() + size / 2f;
+        float by = link.y() + size / 2f;
+        float x = bx - px;
+        float y = by - py;
+        return x * x + y * y < radius * radius;
     }
 
     private String processParametrization(AstProcessor processor, String mlog, Set<String> parameterNames) {

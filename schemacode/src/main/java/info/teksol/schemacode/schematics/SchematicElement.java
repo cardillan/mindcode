@@ -129,6 +129,8 @@ public class SchematicElement implements BlockPosition {
 
     public void resolveLabels(BiFunction<SchematicElement, String, String> labelResolver) {
         for (SchematicElement element : elements) {
+            if (!element.valid) continue;
+
             element.resolveLabels(labelResolver);
             if (element.labels.isEmpty()) continue;
 

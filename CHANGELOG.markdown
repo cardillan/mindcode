@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for [circular-shaped block arrays](/doc/syntax/SCHEMACODE.markdown#circular-element-arrays).
 * Added support for [block replacement](/doc/syntax/SCHEMACODE.markdown#placement-mode) in schematic definitions ([#339](https://github.com/cardillan/mindcode/issues/339)).
 * Added a validation that ensures a built schematic doesn't have link gaps ([#326](https://github.com/cardillan/mindcode/issues/326)). 
+* Added verification that all linked blocks or tiles lie within the processor's range. 
 * Added an error message when an unsupported block type is included in a schematic definition. 
 * Added support for [code parametrization in schematics](/doc/syntax/SCHEMACODE.markdown#code-parametrization) ([#330](https://github.com/cardillan/mindcode/issues/330)).
 * Added support for specifying schematic-wide Mindcode compiler options ([#332](https://github.com/cardillan/mindcode/issues/332)).
@@ -51,10 +52,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added support for the latest Mindustry release (v8 Build 159.5):
-    * new mlog variables `@clientCurrentMusic`, `@clientMusicPlaying`
-    * new sensable property `@flying`
-    * new `spawn` instruction parameter `effect`
-    * new `setrule` keyword `:musicVolume`
+  * new mlog variables `@clientCurrentMusic`, `@clientMusicPlaying`
+  * new sensable property `@flying`
+  * new `spawn` instruction parameter `effect`
+  * new `setrule` keyword `:musicVolume`
 
 ## 3.16.4 – 2026-07-08
 

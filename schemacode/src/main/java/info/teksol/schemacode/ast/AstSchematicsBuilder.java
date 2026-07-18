@@ -358,7 +358,7 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
     public AstSchemaItem visitAreaRadius(AreaRadiusContext ctx) {
         int radius = Integer.parseInt(ctx.radius.getText());
         return new AstBlockPosition(pos(ctx.getStart()), visitPosition(ctx.start),
-                ctx.EVEN() != null ? BlockArray.RADIUS_EVEN : BlockArray.RADIUS_ODD,
+                ctx.ODD() != null ? BlockArray.RADIUS_ODD : BlockArray.RADIUS_EVEN,
                 new AstCoordinates(pos(ctx.radius),radius, radius),
                 ctx.VERTICAL() == null);
     }

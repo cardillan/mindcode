@@ -192,8 +192,8 @@ public class LayoutResolver {
             case INCLUSIVE -> computeRange(block, dimensions, true);
             case EXCLUSIVE -> computeRange(block, dimensions, false);
             case AREA -> computeArea(block, dimensions, Objects.requireNonNull(block.position().extension()).coordinates());
-            case RADIUS_ODD -> computeRadius(block, dimensions, Objects.requireNonNull(block.position().extension()).coordinates().x(), false);
-            case RADIUS_EVEN -> computeRadius(block, dimensions, Objects.requireNonNull(block.position().extension()).coordinates().x(), true);
+            case RADIUS_EVEN -> computeRadius(block, dimensions, Objects.requireNonNull(block.position().extension()).coordinates().x(), false);
+            case RADIUS_ODD -> computeRadius(block, dimensions, Objects.requireNonNull(block.position().extension()).coordinates().x(), true);
         };
 
         if (result.isEmpty()) {
@@ -242,7 +242,8 @@ public class LayoutResolver {
         return result;
     }
 
-    private List<Position> computeRadius(AstBlock astBlock, Position dimensions, int radius, boolean even) {
+    // The radius computation matches the logic block ones, not power nodes
+    private List<Position> computeRadius(AstBlock astBlock, Position dimensions, int radius, boolean odd) {
         // Technically blocks touching radius might qualify, but...
         if (radius <= 0) return List.of();
 
@@ -252,15 +253,15 @@ public class LayoutResolver {
         int sizeY = (radius + dimensions.y() - 1) / dimensions.y();
         int squareRadius = (2 * radius + dimensions.x()) * (2 * radius + dimensions.y());
         boolean horizontal = astBlock.position().horizontal();
-        int evenCorrection = even ? 1 : 0;
+        int oddCorrection = odd ? 1 : 0;
 
         List<Position> result = new ArrayList<>();
         for (int i = -sizeY; i <= sizeY; i++) {
             for (int j = -sizeX; j <= sizeX; j++) {
                 int x = dimensions.x() * (horizontal ? j : i);
                 int y = dimensions.y() * (horizontal ? i : j);
-                int rx = 2 * x - evenCorrection;
-                int ry = 2 * y - evenCorrection;
+                int rx = 2 * x - oddCorrection;
+                int ry = 2 * y - oddCorrection;
 
                 if (rx * rx + ry * ry <= squareRadius) {
                     result.add(new Position(x, y));

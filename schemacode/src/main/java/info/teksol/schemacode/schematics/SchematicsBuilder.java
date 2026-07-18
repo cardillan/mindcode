@@ -144,7 +144,7 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
 
         List<Block> blocks = new ArrayList<>();
         schematic.forEachBlock(element -> {
-            if (!element.blockType().isAir()) {
+            if (element.valid() && !element.blockType().isAir()) {
                 AstBlock astBlock = element.definition();
                 BlockType type = element.blockType();
                 Configuration configuration = checkType(element, configurations.get(element));

@@ -1,5 +1,19 @@
 schematic
     name = "Mandelbrot Generator"
+    description = """
+        Draws the famous fractal on a large logic display using several hyperprocessors.
+        Supports basic navigation (zoom in/out, camera movement), bookmarks, palette selection
+        and showing a Julia set corresponding to the center of the displayed Mandelbrot fractal.
+
+        Bookmarks: use buttons on the left of the top row to select a bookmark slot.
+        Use buttons beneath the bookmark bar to load the bookmark/save current position to a bookmark.
+
+        Palette: use buttons on the right of the top row.
+
+        Julia set: an on/off switch below the message block showing current coordinates.
+
+        Navigation: buttons below the display.
+        """
     tag = "Cardillan"
 
     COMPUTING = region
