@@ -4,6 +4,7 @@ import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.schemacode.SchematicsInternalError;
+import info.teksol.schemacode.ast.AstBlockPosition.BlockArray;
 import info.teksol.schemacode.grammar.SchemacodeParser;
 import info.teksol.schemacode.grammar.SchemacodeParser.*;
 import info.teksol.schemacode.grammar.SchemacodeParserBaseVisitor;
@@ -349,28 +350,37 @@ public class AstSchematicsBuilder extends SchemacodeParserBaseVisitor<AstSchemaI
     @Override
     public AstSchemaItem visitAreaPosition(AreaPositionContext ctx) {
         return new AstBlockPosition(pos(ctx.getStart()), visitPosition(ctx.start),
-                AstBlockPosition.BlockArray.AREA, visitCoordinates(ctx.size),
+                BlockArray.AREA, visitCoordinates(ctx.size),
+                ctx.VERTICAL() == null);
+    }
+
+    @Override
+    public AstSchemaItem visitAreaRadius(AreaRadiusContext ctx) {
+        int radius = Integer.parseInt(ctx.radius.getText());
+        return new AstBlockPosition(pos(ctx.getStart()), visitPosition(ctx.start),
+                ctx.EVEN() != null ? BlockArray.RADIUS_EVEN : BlockArray.RADIUS_ODD,
+                new AstCoordinates(pos(ctx.radius),radius, radius),
                 ctx.VERTICAL() == null);
     }
 
     @Override
     public AstSchemaItem visitExclusiveRangePosition(ExclusiveRangePositionContext ctx) {
         return new AstBlockPosition(pos(ctx.getStart()), visitPosition(ctx.start),
-                AstBlockPosition.BlockArray.EXCLUSIVE, visitCoordinates(ctx.end),
+                BlockArray.EXCLUSIVE, visitCoordinates(ctx.end),
                 ctx.VERTICAL() == null);
     }
 
     @Override
     public AstSchemaItem visitInclusiveRangePosition(InclusiveRangePositionContext ctx) {
         return new AstBlockPosition(pos(ctx.getStart()), visitPosition(ctx.start),
-                AstBlockPosition.BlockArray.INCLUSIVE, visitCoordinates(ctx.end),
+                BlockArray.INCLUSIVE, visitCoordinates(ctx.end),
                 ctx.VERTICAL() == null);
     }
 
     @Override
     public AstSchemaItem visitSimplePosition(SimplePositionContext ctx) {
         return new AstBlockPosition(pos(ctx.getStart()), visitPosition(ctx.start),
-                AstBlockPosition.BlockArray.SINGLE, null, false);
+                BlockArray.SINGLE, null, false);
     }
 
     @Override

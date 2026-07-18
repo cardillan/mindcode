@@ -308,6 +308,18 @@ public interface SchemacodeParserListener extends ParseTreeListener {
 	 */
 	void exitAreaPosition(SchemacodeParser.AreaPositionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code areaRadius}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 */
+	void enterAreaRadius(SchemacodeParser.AreaRadiusContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code areaRadius}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 */
+	void exitAreaRadius(SchemacodeParser.AreaRadiusContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#position}.
 	 * @param ctx the parse tree
 	 */

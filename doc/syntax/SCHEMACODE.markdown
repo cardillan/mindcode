@@ -623,6 +623,66 @@ When the block array resolves to an empty area, an error is reported. When the b
 
 When an orientation or configuration is specified for a block array, it is applied to each block in the array.
 
+### Circular element arrays
+
+It is also possible to add circular-shaped element arrays. These arrays fill a circular region around a position.
+
+```
+[even | odd] radius r [<array-orientation>]
+```
+
+Circular-shaped arrays are meant to be centered around a block. The `even` and `odd` keywords specify whether the block size is even or odd (a small correction needs to be applied to even-sized blocks). `r` is the radius of the circular region.
+
+If the block that should be placed at the center of the array is larger than 2 tiles, the anchor position of the array needs to be altered by adding half the block size to the coordinates.
+
+There are two expected use-cases:
+- Putting as many blocks within the range of a processor as possible (e.g., memory cells or other processors for maximum storage).
+- Creating a circular wall around a region.
+
+```
+schematic
+    name "Example"
+
+    @micro-processor at (0, 0) processor
+        links a* as cell$ end
+    end
+    a$: @memory-cell fill (0, 0) radius 4
+
+    @logic-processor at (10, 0) processor
+        links b* as cell$ end
+    end
+    b$: @memory-cell fill (10, 0) even radius 4
+
+    @hyper-processor at (19, -1) processor
+        links c* as cell$ end
+    end
+    @liquid-source at +(3, 1) liquid @cryofluid
+    c$: @memory-cell fill (20, 0) radius 4
+end
+```
+
+Resulting schematic:
+
+![Circular block array example 1](images/sc-circular-array-1.png)
+
+Building a wall:
+
+```
+schematic
+    name "Example"
+
+    @thorium-reactor
+
+    // This ensures the wall won't fill empty tiles within this radius
+    @air fill (1, 1) radius 11
+    @thorium-wall fill (1, 1) radius 13
+end
+```
+
+Resulting schematic:
+
+![Circular block array example 2](images/sc-circular-array-2.png)
+
 ### Region arrays
 
 When creating an array consisting of regions, the region dimensions are used to determine the spacing of individual regions. As regions may contain free space, as well as blocks outside their own dimensions, it is possible to create arrays consisting of elements that are not rectangular.

@@ -207,6 +207,13 @@ public class SchemacodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitAreaRadius(SchemacodeParser.AreaRadiusContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitPosition(SchemacodeParser.PositionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

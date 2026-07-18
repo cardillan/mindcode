@@ -188,6 +188,13 @@ public interface SchemacodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAreaPosition(SchemacodeParser.AreaPositionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code areaRadius}
+	 * labeled alternative in {@link SchemacodeParser#blockPosition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAreaRadius(SchemacodeParser.AreaRadiusContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#position}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

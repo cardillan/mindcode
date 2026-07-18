@@ -63,10 +63,11 @@ labelList
     ;
 
 blockPosition
-    : start=position                                                                # simplePosition
-    | start=position DOT2 end=coordinates ( orientation=(HORIZONTAL | VERTICAL) )?  # inclusiveRangePosition
-    | start=position DOT3 end=coordinates ( orientation=(HORIZONTAL | VERTICAL) )?  # exclusiveRangePosition
-    | start=position MUL size=coordinates ( orientation=(HORIZONTAL | VERTICAL) )?  # areaPosition
+    : start=position                                                                                # simplePosition
+    | start=position DOT2 end=coordinates orientation=(HORIZONTAL | VERTICAL)?                      # inclusiveRangePosition
+    | start=position DOT3 end=coordinates orientation=(HORIZONTAL | VERTICAL)?                      # exclusiveRangePosition
+    | start=position MUL size=coordinates orientation=(HORIZONTAL | VERTICAL)?                      # areaPosition
+    | start=position alignment=(ODD | EVEN)? RADIUS radius=INT orientation=(HORIZONTAL | VERTICAL)? # areaRadius
     ;
 
 position

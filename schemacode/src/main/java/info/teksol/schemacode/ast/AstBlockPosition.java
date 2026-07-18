@@ -26,6 +26,6 @@ public record AstBlockPosition(SourcePosition sourcePosition, AstCoordinates coo
     }
 
     public enum BlockArray {
-        SINGLE, INCLUSIVE, EXCLUSIVE, AREA
+        SINGLE, INCLUSIVE, EXCLUSIVE, AREA, RADIUS_ODD, RADIUS_EVEN
     }
 }

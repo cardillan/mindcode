@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for using symbolic link names in schematic definitions to both [Mindcode](/doc/syntax/SYNTAX-1-VARIABLES.markdown#symbolic-link-names) and [Schemacode](/doc/syntax/SCHEMACODE.markdown#symbolic-link-names) ([#284](https://github.com/cardillan/mindcode/issues/284)).
 * Added support for [regions](/doc/syntax/SCHEMACODE.markdown#region-definition) (reusable groups of blocks) in schematic definitions ([#331](https://github.com/cardillan/mindcode/issues/331)).
 * Added support for [block arrays](/doc/syntax/SCHEMACODE.markdown#element-arrays) (Schemacode) and [link arrays](/doc/syntax/SYNTAX-1-VARIABLES.markdown#linked-arrays) (Mindcode) ([#324](https://github.com/cardillan/mindcode/issues/324)).
+* Added support for [circular-shaped block arrays](/doc/syntax/SCHEMACODE.markdown#circular-element-arrays).
 * Added support for [block replacement](/doc/syntax/SCHEMACODE.markdown#placement-mode) in schematic definitions ([#339](https://github.com/cardillan/mindcode/issues/339)).
 * Added a validation that ensures a built schematic doesn't have link gaps ([#326](https://github.com/cardillan/mindcode/issues/326)). 
 * Added an error message when an unsupported block type is included in a schematic definition. 

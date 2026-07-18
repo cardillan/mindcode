@@ -6,6 +6,7 @@ import info.teksol.mc.util.MutableInteger;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.*;
+import info.teksol.schemacode.ast.AstBlockPosition.BlockArray;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schematics.SchematicsBuilder.ResolverContext;
 import org.jspecify.annotations.NullMarked;
@@ -104,7 +105,9 @@ public class LayoutResolver {
                 masterElement.resolveLabels((_, label) -> resolveLocalLabel(localLabels, label));
                 labels.forEach(label -> region.addLabel(label, masterElement));
             } else {
-                boolean first = true;
+                // For radius, the first block in the list isn't the original block
+                BlockArray arrayType = block.position().blockArrayType();
+                boolean first = arrayType != BlockArray.RADIUS_ODD && arrayType != BlockArray.RADIUS_EVEN;
                 ArrayList<SchematicElement> placedElements = new ArrayList<>();
                 for (Position position : areaPositions) {
                     SchematicElement element = first ? masterElement : masterElement.duplicateAt(position, indexSupplier);
@@ -189,6 +192,8 @@ public class LayoutResolver {
             case INCLUSIVE -> computeRange(block, dimensions, true);
             case EXCLUSIVE -> computeRange(block, dimensions, false);
             case AREA -> computeArea(block, dimensions, Objects.requireNonNull(block.position().extension()).coordinates());
+            case RADIUS_ODD -> computeRadius(block, dimensions, Objects.requireNonNull(block.position().extension()).coordinates().x(), false);
+            case RADIUS_EVEN -> computeRadius(block, dimensions, Objects.requireNonNull(block.position().extension()).coordinates().x(), true);
         };
 
         if (result.isEmpty()) {
@@ -231,6 +236,34 @@ public class LayoutResolver {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     result.add(new Position(x * stepX, y * stepY));
+                }
+            }
+        }
+        return result;
+    }
+
+    private List<Position> computeRadius(AstBlock astBlock, Position dimensions, int radius, boolean even) {
+        // Technically blocks touching radius might qualify, but...
+        if (radius <= 0) return List.of();
+
+        // We assume the block we're centering this on has the same dimensions as the element being placed.
+        // It is possible to adjust this manually when centering smaller blocks on a larger one.
+        int sizeX = (radius + dimensions.x() - 1) / dimensions.x();
+        int sizeY = (radius + dimensions.y() - 1) / dimensions.y();
+        int squareRadius = (2 * radius + dimensions.x()) * (2 * radius + dimensions.y());
+        boolean horizontal = astBlock.position().horizontal();
+        int evenCorrection = even ? 1 : 0;
+
+        List<Position> result = new ArrayList<>();
+        for (int i = -sizeY; i <= sizeY; i++) {
+            for (int j = -sizeX; j <= sizeX; j++) {
+                int x = dimensions.x() * (horizontal ? j : i);
+                int y = dimensions.y() * (horizontal ? i : j);
+                int rx = 2 * x - evenCorrection;
+                int ry = 2 * y - evenCorrection;
+
+                if (rx * rx + ry * ry <= squareRadius) {
+                    result.add(new Position(x, y));
                 }
             }
         }

@@ -34,7 +34,7 @@ class PowerGridSolver {
                         if (linkedBlockLinks == null) {
                             throw new SchematicsInternalError("Linked power node not contained in powerNodes map.");
                         } else {
-                            // Ensure reciprocal link is there
+                            // Ensure the reciprocal link is there
                             linkedBlockLinks.add(block);
                         }
                     }

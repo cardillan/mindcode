@@ -341,6 +341,18 @@ public class SchemacodeParserBaseListener implements SchemacodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAreaRadius(SchemacodeParser.AreaRadiusContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAreaRadius(SchemacodeParser.AreaRadiusContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPosition(SchemacodeParser.PositionContext ctx) { }
 	/**
 	 * {@inheritDoc}
