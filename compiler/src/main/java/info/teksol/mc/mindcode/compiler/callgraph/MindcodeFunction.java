@@ -362,6 +362,11 @@ public class MindcodeFunction {
         return !recursiveCalls.isEmpty();
     }
 
+    /// @return true if the function is mutually recursive
+    public boolean isMutuallyRecursive() {
+        return !recursiveCalls.isEmpty() && recursiveCalls.stream().anyMatch(f -> f != this);
+    }
+
     /// Determines whether the call to calledFunction from this function is (potentially) recursive, that is
     /// it can lead to another invocation of this function. If it is, the local context of the function needs
     /// to be saved and restored using stack.

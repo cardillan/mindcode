@@ -1,0 +1,47 @@
+allocate stack in bank1;
+
+def f(n)
+    var a = n + 1;
+    var b = n + 2;
+
+    if n == 0 then
+        return a * b;
+    end;
+
+    var r = g(n - 1);
+    return (r * a) + b;
+end;
+
+def g(n)
+    var x = n + 3;
+    var y = n + 4;
+
+    if n == 0 then
+        return x * y;
+    end;
+
+    var r = f(n - 1);
+    return (r * x) + y;
+end;
+
+def f1(n)
+    for i in 0 ... n do
+        g1(i);
+    end;
+end;
+
+def g1(n)
+    f1(n - 1);
+    print(n);
+end;
+
+assertEquals(2, f(0), "f(0)");
+assertEquals(12, g(0), "g(0)");
+assertEquals(27, f(1), "f(1)");
+assertEquals(13, g(1), "g(1)");
+assertEquals(43, f(2), "f(2)");
+assertEquals(141, g(2), "g(2)");
+assertEquals(569, f(3), "f(3)");
+assertEquals(265, g(3), "g(3)");
+assertPrints("010201301024", f1(5), "f1(5)");
+stopProcessor();

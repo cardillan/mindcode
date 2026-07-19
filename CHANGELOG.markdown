@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed the schemacode action not producing the log file when requested by a command-line argument.
 * Fixed the compiler evaluating undeclared link names even in strict mode ([#325](https://github.com/cardillan/mindcode/issues/325)).
 * Fixed incorrect array declarations possibly crashing the compiler ([#328](https://github.com/cardillan/mindcode/issues/328)).
+* Fixed a wrong optimization of mutually recursive functions ([#342](https://github.com/cardillan/mindcode/issues/342)).
 * Fixed a wrong position being reported for errors and warnings in code snippets included as a module via the `require` directive.
 * Fixed the handling of stack overflow, out-of-memory, and other JVM exceptions so that the error is displayed in the web app.
 
@@ -30,9 +31,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added a new [`emitLog()` function](/doc/syntax/TROUBLESHOOTING.markdown#the-emitlog-function).
 * Added a new [`allow-link-gaps`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-allow-link-gaps) compiler option.
 * Added a new [`zero-wait-yields`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-zero-wait-yields) compiler option.
-* Added a button to send compiled schematic into Mlog Watcher from the web app schematic page.
 * Added an error message indicating a variable or constant might be accessed via function call before its declaration gets processed ([#297](https://github.com/cardillan/mindcode/issues/297)).
 * Added the possibility to [declare a new named color](/doc/syntax/SYNTAX-EXTENSIONS.markdown#declaring-new-color-names).
+* Added a button to send compiled schematic into Mlog Watcher from the web app schematic page.
 * Added a new command-line option `-p` or `--parallel` to enable [parallel processing of Mindcode source files](/doc/syntax/TOOLS-CMDLINE.markdown#parallel-processing) in the Schematic builder.
 * Added a new command-line option `--watcher-retries` allowing to make several attempts establishing a connection to the Mlog Watcher mod. The default value is `3`.
 * Added proper logging of internal compiler errors happening in the web app for later inspection.  

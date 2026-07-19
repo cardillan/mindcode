@@ -14,7 +14,6 @@ Changes intended for the next regular release.
 
 * Symbolic link names
 * Exporting schematics to Mlog Watcher from the web app.
-* Detect unused variables/constants/functions from AST analysis and report them as warnings.
 * Schematic block arrays: a way to create a rectangular shape consisting of the same block at once, with the same settings and serially assigned names.
 * When code size exceeds the instruction limit, perform optimizations using the size goal.
 * Initialized symbolic links
@@ -23,17 +22,23 @@ Changes intended for the next regular release.
 * Schematic regions
 * Update the `require remote` directive
 * Unknown built-ins will cause a compiler error in strict mode
+* Declare named color
 
 * **Doing**
 
 * **Planned**
 
-* Declare named color
-
 * **Quick ideas**
 
 ## Next release
 
+* Make the compiler inline recursive functions that are called only once from another recursive function, when code generation is active.
+* Allow the optimizer to inline mutually recursive functions when called from another function (recursive or otherwise).
+  * For simply recursive functions, this would be a bit too complex and wouldn't achieve much: a stack frame might be saved, but at the cost of increase in the code size; insternal stack will compete with the stack for space.
+* Optimize tail-call recursion?
+  * By modifying the AST tree (potentially making the function non-recursive)
+  * By converting the function call to a jump **after** all optimizations are applied.
+* Support for mlogls directives
 * Big arrays
 * Remove deprecated features:
   * Mlog keywords without the `:` prefix
@@ -50,6 +55,7 @@ Changes intended for the next regular release.
 
 These are topics that I'm spending time thinking about. Some of these should appear in the next release after the upcoming one.
 
+* Detect unused variables/constants/functions from AST analysis and report them as warnings.
 * Modules/namespaces (see #149)
   * Implement public/private modifiers for variables, functions, and constants.
   * [Refactoring of Mindustry Logic functions](#refactoring-of-mindustry-logic-functions)

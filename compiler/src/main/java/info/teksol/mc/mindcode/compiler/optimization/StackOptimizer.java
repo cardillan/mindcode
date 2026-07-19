@@ -25,11 +25,12 @@ import java.util.stream.Stream;
 /// independent optimizations are performed:
 /// - Eliminates push/pop instruction for variables that are not used anywhere else (after being eliminated
 ///   by other optimizers). The optimization is done globally, in a single pass across the entire program.
-/// - Removes variables from stack matching the following conditions (**Note:** a variable may be read
+/// - Removes variables matching the following conditions from the stack (**Note:** a variable may be read
 ///   implicitly by a recursive call):
 ///   - The variable isn't read by any instruction following the call instruction, up to the end of the function.
 ///   - The variable isn't read by any instruction in any loop shared with the call instruction.
-/// - Eliminates push/pop instruction for variables that are not modified at all by the function.
+/// - For functions that aren't mutually recursive, removes function parameters not modified by the function
+///   (these parameters are simply passed to recursive calls unchanged) from the stack.
 @NullMarked
 class StackOptimizer extends BaseOptimizer {
 
@@ -73,7 +74,7 @@ class StackOptimizer extends BaseOptimizer {
                     // Obtain entire function
                     AstContext functionContext = call.findSuperContextOfType(AstContextType.FUNCTION_DEF);
                     if (functionContext == null) {
-                        continue;   // If there's no function context, we're in main body. Skip call.
+                        continue;   // If there's no function context, we're in the main body. Skip call.
                     }
 
                     LogicList function = contextInstructions(functionContext);
@@ -86,7 +87,7 @@ class StackOptimizer extends BaseOptimizer {
                             .flatMap(this::readVariables)
                             .collect(Collectors.toCollection(HashSet::new));
 
-                    // 2. Preserve all variables which are part of the same loop as the call. As the loops are
+                    // 2. Preserve all variables that are part of the same loop as the call. As the loops are
                     // hierarchical, we can inspect just the topmost loop.
                     contextStream(call.findTopContextOfTypes(AstContextType.LOOP, AstContextType.EACH))
                             .filter(ix -> !(ix instanceof PushOrPopInstruction))
@@ -103,7 +104,17 @@ class StackOptimizer extends BaseOptimizer {
                             .map(LogicVariable.class::cast)
                             .collect(Collectors.toCollection(HashSet::new));
 
-                    // Only keep variables written to
+                    assert functionContext.function() != null;
+                    if (functionContext.function().isMutuallyRecursive()) {
+                        // For mutually recursive functions, any parameter can get modified by calls from other functions
+                        for (FunctionParameter parameter : functionContext.function().getParameters()) {
+                            if (parameter instanceof LogicVariable variable) {
+                                writtenVariables.add(variable);
+                            }
+                        }
+                    }
+
+                    // Only keep variables written to, and function parameters
                     preserveVariables.retainAll(writtenVariables);
 
                     // Remove instructions from the function

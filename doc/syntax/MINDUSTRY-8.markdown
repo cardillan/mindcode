@@ -342,6 +342,10 @@ The instruction has a new output parameter that says whether displaying the mess
 
 The instruction has a new parameter to specify whether the explosion triggers additional effects.
 
+### `playmusic`
+
+Plays a music file.
+
 ### `playsound`
 
 Plays a sound, either in a specific position on the world map or with a global volume and pan.

@@ -52,22 +52,21 @@ See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3
 The most important recent changes to Mindcode include:
 
 * Mindustry 8 specific features
-  * Complete support for [the current Mindustry 8 release](/doc/syntax/MINDUSTRY-8.markdown).
+  * Complete support for [the latest Mindustry 8 release (v8 Build 159.6)](/doc/syntax/MINDUSTRY-8.markdown).
   * [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) guaranteed to be executed atomically – without interruption.
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
   * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities. 
   * New string/character-based instructions and character literals.
 * Language/compiler features
+  * Enhanced Schemacode support (block regions/block arrays, symbolic processor link names).
   * Short-circuit evaluation of boolean expressions.
   * Improved [Loop Rotation](doc/syntax/optimizations/LOOP-ROTATION.markdown) and [Loop Hoisting](doc/syntax/optimizations/LOOP-HOISTING.markdown) optimizations.
   * The [`in` operator](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#rangelist-membership-operator) for testing range or list membership.
-  * Local compiler options.
   * Significantly improved optimization of `case` expressions.
 * Other functionality
+  * Sending built schematics directly from the web app to Mindustry via the Mlog Watcher mod.
   * Mobile-friendly [web application](http://mindcode.herokuapp.com/) with syntax highlighting.
   * [Processor emulator](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown) for all supported Mindcode targets, including schematic emulation.
-  * Reporting compiled code size broken down by function.  
-  * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
 
 See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 
