@@ -5,7 +5,7 @@
 
 <br>
 
-[![Static Badge](https://img.shields.io/badge/web%20app-blue?link=http%3A%2F%2Fmindcode.herokuapp.com%2F)](http://mindcode.herokuapp.com/)
+[![Static Badge](https://img.shields.io/badge/web%20app-blue?link=https%3A%2F%2Fmindcode.herokuapp.com%2F)](https://mindcode.herokuapp.com/)
 [![Static Badge](https://img.shields.io/badge/doc-mincdcode-green?link=doc%2Fsyntax%2FSYNTAX.markdown)](doc/syntax/SYNTAX.markdown)
 [![Static Badge](https://img.shields.io/badge/doc-mlog-green?link=doc%2Fsyntax%2FSYNTAX.markdown)](https://yrueii.github.io/Mlog%20Documentation/)
 [![GitHub issue custom search in repo](https://img.shields.io/github/issues-search/cardillan/mindcode?query=is%3Aopen%20label%3Abug&label=open%20bugs&color=red&link=https%3A%2F%2Fgithub.com%2Fcardillan%2Fmindcode%2Fissues%3Fq%3Dis%253Aissue%2520state%253Aopen%2520label%253Abug)](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug)
@@ -14,7 +14,7 @@
 </div>
 <br>
 
-**Mindcode** is a high-level procedural programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, internal and external arrays, conditional statements and loops, functions, modules, remote variables and function calls (synchronous and asynchronous), atomic code execution, system library, user libraries, debugging support, and others. Mindcode generates fairly well-optimized mlog code, using available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler) and provides means for integration both with various IDEs and Mindustry itself.
+**Mindcode** is a high-level procedural programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, internal and external arrays, conditional statements and loops, functions, modules, remote variables and function calls (synchronous and asynchronous), atomic code execution, system library, user libraries, debugging support, and others. Mindcode generates fairly well-optimized mlog code, using available instruction space to make the resulting code faster. It comes with a [web app](https://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler) and provides means for integration both with various IDEs and Mindustry itself.
 
 **Schemacode**, an extension built over Mindcode, is a specialized definition language designed for creating a complete Mindustry schematic from a text file. [Schematics Builder](doc/syntax/SCHEMACODE.markdown) compiles these definition files directly into Mindustry schematics, either into binary `.msch` file, or into the text representation. Processors can be included in these schematics, complete with the code (specified either in Mindcode or mlog) and linked blocks.
 
@@ -65,7 +65,7 @@ The most important recent changes to Mindcode include:
   * Significantly improved optimization of `case` expressions.
 * Other functionality
   * Sending built schematics directly from the web app to Mindustry via the Mlog Watcher mod.
-  * Mobile-friendly [web application](http://mindcode.herokuapp.com/) with syntax highlighting.
+  * Mobile-friendly [web application](https://mindcode.herokuapp.com/) with syntax highlighting.
   * [Processor emulator](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown) for all supported Mindcode targets, including schematic emulation.
 
 See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
@@ -74,7 +74,7 @@ See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 
 ### Online
 
-Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in the _Mindcode Source Code_ text area, then press the **Compile** button. The _Mlog Code_ text area will contain the mlog version of your Mindcode. Copy the mlog code into the clipboard. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. Select **Import from Clipboard**. Mindustry is now ready to execute your code.
+Mindcode is available at https://mindcode.herokuapp.com/. Write some Mindcode in the _Mindcode Source Code_ text area, then press the **Compile** button. The _Mlog Code_ text area will contain the mlog version of your Mindcode. Copy the mlog code into the clipboard. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. Select **Import from Clipboard**. Mindustry is now ready to execute your code.
 
 You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. The output produced by `print` instructions in your code will be displayed. Very limited interaction with an emulated Mindustry World is supported.
 

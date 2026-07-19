@@ -2,14 +2,14 @@
 
 Schemacode is a specialized definition language designed to describe the structure of Mindustry Schematics. Schemacode definitions can be compiled into Mindustry schematic, either as a binary `.msch` file, or as a text.
 
-While simple schematics can be easily created in Schemacode from scratch, a better method for creating more complicated designs is to build the schematic in Mindustry, export it to a `.msch` file or copy it to the clipboard as a text and get a valid Schemacode representation by decompiling. To decompile a
-`.msch` file, the [command line tool](TOOLS-CMDLINE.markdown) has to be used; decompiling a text representation obtained via clipboard is possible through the [web application](http://mindcode.herokuapp.com/decompiler).
+While simple schematics can be easily created in Schemacode from scratch, a better method for creating more complicated designs is this: build the schematic in Mindustry, export it to a `.msch` file or copy it to the clipboard as a text and get a valid Schemacode representation by decompiling the schematic. To decompile a
+`.msch` file, the [command line tool](TOOLS-CMDLINE.markdown) has to be used; decompiling a text representation obtained via clipboard is possible through the [web application](https://mindcode.herokuapp.com/schematics/decompiler).
 
 Schemacode supports almost all existing features of Mindustry schematics. Specifically, all features employed by Serpulo technology are fully supported. Features specific to Erekir (such as canvas pictures) are unavailable.
 
 Most importantly, logic processors can be fully configured using Schemacode. When specifying the code to be embedded in a given processor, it is possible to use either the native mlog language or Mindcode. The source code (both mlog and Mindcode) can also be injected into the schematic from an external file when building it using the command line tool.
 
-It might be useful to have a look at existing Schemacode samples at http://mindcode.herokuapp.com/schematics before going on with this documentation.
+It might be useful to have a look at existing Schemacode samples at https://mindcode.herokuapp.com/schematics before going on with this documentation.
 
 # Whitespace and comments
 

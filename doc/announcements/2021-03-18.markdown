@@ -14,7 +14,7 @@ I'm sorry, but I was unsatisfied with having to delimit block start and end. To 
 * Added case / when expressions
 * For loops
 * Added support for the ternary operator, a more compact form of if/else expression: `self = @unit == null ? bind(@unit) : @unit`
-* Added a new sample: [patrol around a building and heal any damaged ones](http://mindcode.herokuapp.com/?s=heal-damaged-building)
+* Added a new sample: [patrol around a building and heal any damaged ones](https://mindcode.herokuapp.com/?s=heal-damaged-building)
 
 ## Heaps and Global Variables
 
@@ -138,7 +138,7 @@ This is not the end! There is still more to come:
 
 As I have stated in the original announcement, Mindcode-the-webapp stores scripts to allow me to see how people use the language, and to analyze future direction. I have already seen a few real-life scripts, some even going to 20-30 lines. I'm very happy to see that!
 
-If you want to play around with Mindcode, please visit: http://mindcode.herokuapp.com/
+If you want to play around with Mindcode, please visit: https://mindcode.herokuapp.com/
 
 If you want to view the code, I encourage you to visit the repository, on GitHub: https://github.com/francois/mindcode
 

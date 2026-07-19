@@ -33,7 +33,7 @@ This file contains a list of Mindcode features.
     * Unary operators
     * Boolean/logical and/or operators
     * Range/list membership operator
-  * Array assignments (including subarrays)
+  * Array/subarray assignments
 * Variables
   * No data types
   * Variable scope (global/local)
@@ -56,13 +56,13 @@ This file contains a list of Mindcode features.
     * Arrays of (guarded) linked blocks
     * Subarrays
   * Volatile variables
-  * Storage specification for declared variables
+  * Storage specification for declared variables (remote processors or memory banks/cells)
   * Automatic allocation of external arrays/variables in a specified memory block
 * Literals
   * All mlog literal types supported
-  * Enhanced numeric literals (transcribed into mlog-supported representation when needed)
+  * Standard numeric literals (transcribed into mlog-compatible representation when needed)
   * Character literals (converted to numbers)
-  * Literals without mlog representation (can't be stored in processor variables)
+  * Literals without mlog representation (can't be stored in processor variables):
     * Formattable string literals (for string interpolation)
     * Mlog keyword literals
 * Functions
@@ -111,7 +111,7 @@ This file contains a list of Mindcode features.
   * Limited support for Mindustry 6
   * Existing target framework makes supporting future bleeding edge Mindustry versions easy
   * Selecting the target Mindustry version and processor type
-  * All mlog instructions from the selected target and processor type are supported and utilized
+  * All mlog instructions from the selected target and processor type are supported and can be used
 * Target guard (refuses execution of the code on a wrong version of Mindustry processor)
 * Uses mimex for loading information about the current target 
 
@@ -147,12 +147,13 @@ This file contains a list of Mindcode features.
 * Support for non-standard mlog features (mods adding logic capabilities or new Mindustry versions) 
   * User-defined mlog keywords
   * User-defined built-in variables
+  * User-defined named colors
   * User-defined linked block names
   * User-defined instructions
 * Support for embedding blocks of mlog code
   * Seamless integration with surrounding code
   * Symbolic labels and jumps
-  * Supports all Mindcode literals, including mlog compatible transcription
+  * Supports all Mindcode literals (transcribed into mlog-compatible representation when needed)
   * Mlog comments (propagated to the compiled code)
   * Line comments (not propagated to the compiled code)
 
@@ -160,9 +161,9 @@ This file contains a list of Mindcode features.
 
 * Optimizations respect the selected compilation target  
 * Optimization goals
-  * Speed
+  * Speed (faster but larger code, trades code size for speed up to the code size limit)
   * Neutral
-  * Size (trades code size for speed up to the code size limit)
+  * Size
 * Individually selectable optimizations
   * Array Optimization
   * Boolean Optimization
@@ -203,10 +204,15 @@ This file contains a list of Mindcode features.
     * Literal link specification for processors, including virtual links
     * Symbolic link specification shared by Schemacode and Mindcode
     * Supports both Mindcode and mlog code in processor configuration
+  * Support for reusable block patterns (regions)
+  * Support for filling rectangular or circular areas within schematics with blocks or regions
 * Error detection in schematic definition
   * Overlapping blocks
   * Unused/udefined block links
   * Gaps in link numbering schemes
+  * Unknown block types
+  * Blocks linked to bridges, power nodes or processors out of the block's range
+  * Exceeding maximum schematic dimensions or processor configuration sizes
 * Mindcode and mlog code storage
   * Embedded processor code (within the schematic definition file)
   * Externally stored processor code
@@ -220,7 +226,7 @@ This file contains a list of Mindcode features.
 * Limited IDE support
   * Syntax highlighting for IntelliJ IDEA
   * The command-line compiler can be integrated as an external tool into most IDEs 
-* MlogWatcher integration (web app/commnad-line tool)
+* MlogWatcher integration (web app/command-line tool)
   * Injecting the compiled code into the selected processor
   * Storing built schematics into the in-game schematic database
 * MlogWatcher integration (command-line tool only)
@@ -246,7 +252,7 @@ This file contains a list of Mindcode features.
 * Schematic decompiler
   * Decompiles an existing schematic into a Schemacode file
   * Supports all schematic features
-  * Produced file can be compiled back into schematic again
+  * Produced file can be compiled back into the same schematic again
 * Mlog decompiler
   * Partially decompiles mlog code into Mindcode source
   * Decompiles complex expressions
@@ -255,7 +261,11 @@ This file contains a list of Mindcode features.
 ### Mods
 
 * MlogAssertions mod
-  * Efficient implementation of runtime checks generated by Mindcode
-* MlogWatcher mod (note: not maintained by cardillan)
+  * Additional logic instructions:
+    * Efficient implementation of runtime checks generated by Mindcode
+    * Error-reporting and logging
+  * Visual indication of invalid processor states
+  * Visual indication of waiting processors
+* MlogWatcher mod (maintained by [Sharlottes](https://github.com/Sharlottes))
   * Allows sending compiled code into the selected processor
   * Displays processor ID in-game

@@ -32,6 +32,8 @@ Changes intended for the next regular release.
 
 ## Next release
 
+* Automatically make global variables accessed by a background process volatile.
+  * Might need a category for volatile, but removable variables.
 * Make the compiler inline recursive functions that are called only once from another recursive function, when code generation is active.
 * Allow the optimizer to inline mutually recursive functions when called from another function (recursive or otherwise).
   * For simply recursive functions, this would be a bit too complex and wouldn't achieve much: a stack frame might be saved, but at the cost of increase in the code size; insternal stack will compete with the stack for space.

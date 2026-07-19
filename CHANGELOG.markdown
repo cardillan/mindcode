@@ -852,7 +852,7 @@ The newly added features are fully functional. There's an unfinished support for
 * Added new [`mlogText()` function](doc/syntax/SYNTAX-EXTENSIONS.markdown#defining-new-mlog-instructions) for direct encoding of mlog instructions.
 * Added support for descending iteration order to [Range Iteration Loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) and [List Iteration Loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#descending-iteration-order) ([#174](https://github.com/cardillan/mindcode/issues/174)).
 * The description of the _storage clause_ added in Mindcode 3.1 was added to the [documentation](doc/syntax/SYNTAX-1-VARIABLES.markdown#external-variables).
-* Added a new [Item Transport sample](http://mindcode.herokuapp.com/schematics?s=item-transport). The sample demonstrates the use of a simple remote call scheme for acquiring units.
+* Added a new [Item Transport sample](https://mindcode.herokuapp.com/schematics?s=item-transport). The sample demonstrates the use of a simple remote call scheme for acquiring units.
 
 #### Experimental features
 
@@ -1235,7 +1235,7 @@ The newly added features are fully functional. There's an unfinished support for
 * Added support for declaring [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) using a new `param` keyword. Using global variables for program parametrization is deprecated, program parameters should be used instead. Support for program parametrization through global variables will be removed in a future release.
 * Added a new `noinline` keyword, which will prevent a function from being inlined even when called just once, and by the [Function Inlining](doc/syntax/optimizations/FUNCTION-INLINING.markdown) optimization. The keyword can only be used when declaring a function.
 * Added support for block comments, delimited by `/*` and `*/`. These comments can span multiple lines.
-* Added a new schematic sample with quite a sophisticated code [on the Schematics page](http://mindcode.herokuapp.com/?s=overdrive-dome-supply). It consists of an overdrive dome supplied by units controlled by a microprocessor. The microprocessor searches for available units among a list of supported types, switches to the preferred unit type when it becomes available, and rebinds units (possibly switching the type again) if units in use are destroyed or taken over by the player or a rogue processor.
+* Added a new schematic sample with quite a sophisticated code [on the Schematics page](https://mindcode.herokuapp.com/schematics?s=overdrive-dome-supply). It consists of an overdrive dome supplied by units controlled by a microprocessor. The microprocessor searches for available units among a list of supported types, switches to the preferred unit type when it becomes available, and rebinds units (possibly switching the type again) if units in use are destroyed or taken over by the player or a rogue processor.
 
 #### Experimental features
 
@@ -1827,8 +1827,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 * Added Schematics Builder tool with a new [Schemacode language](doc/syntax/SCHEMACODE.markdown).
 * Added a new [command-line interface](doc/syntax/TOOLS-CMDLINE.markdown) for the Mindcode Compiler, Schematic
   Builder, and Schematic Decompiler.
-* Added [Schematics Builder](http://mindcode.herokuapp.com/schematics) and
-  [Schematics Decompiler](http://mindcode.herokuapp.com/decompiler) interface to the web application.
+* Added [Schematics Builder](https://mindcode.herokuapp.com/schematics) and [Schematics Decompiler](https://mindcode.herokuapp.com/schematics/decompiler) interface to the web application.
 
 ### Changed
 
@@ -2009,7 +2008,7 @@ The full changelog wasn't kept for earlier releases. What we know is documented 
 * Added case / when expressions
 * For loops
 * Added support for the ternary operator, a more compact form of if/else expression: `self = @unit == null ? bind(@unit) : @unit`
-* Added a new sample: [patrol around a building and heal any damaged ones](http://mindcode.herokuapp.com/?s=heal-damaged-building)
+* Added a new sample: [patrol around a building and heal any damaged ones](https://mindcode.herokuapp.com/?s=heal-damaged-building)
 
 ### [2021-03-16](/doc/announcements/2021-03-16.markdown)
 

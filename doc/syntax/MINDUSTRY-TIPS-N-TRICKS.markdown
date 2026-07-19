@@ -423,7 +423,7 @@ Let's look at each argument here:
 
 If you don't need some arguments, just omit them: `getBlock(x, y, , out floor)`. If a unit is out of range, or if the block doesn’t exist, all return values are `null`.
 
-In the example code below, the flare finds the nearest enemy turret and approaches it. If the unit is within range of the turret, checks the building variable. If it's `null`, turret has been destroyed, if not, it still exists. If `ulocate` return 0, no enemy turret was found. Another example [here](http://mindcode.herokuapp.com/?s=upgrade-conveyors).
+In the example code below, the flare finds the nearest enemy turret and approaches it. If the unit is within range of the turret, checks the building variable. If it's `null`, turret has been destroyed, if not, it still exists. If `ulocate` return 0, no enemy turret was found. Another example [here](https://mindcode.herokuapp.com/?s=upgrade-conveyors).
 
 ```Mindcode
 // This example adheres to the strict syntax:

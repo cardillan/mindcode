@@ -6,7 +6,7 @@ Variable names used in mlog are converted to Mindcode variables by removing lead
 
 The decompiler is mainly useful to produce expressions and mlog function calls in the correct Mindcode syntax, saving some time and possibly helping to avoid some mistakes compared to a manual rewrite of the entire mlog code from scratch.
 
-Mlog can be decompiled by both the [command line tool](TOOLS-CMDLINE.markdown) and the [web application](http://mindcode.herokuapp.com/mlog-decompiler).
+Mlog can be decompiled by both the [command line tool](TOOLS-CMDLINE.markdown) and the [web application](https://mindcode.herokuapp.com/mlog-decompiler).
 
 ---
 
