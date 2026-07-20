@@ -130,6 +130,22 @@ These are topics that I've spent some time thinking about and still want them, b
 
 # Issue details
 
+## Internal stack
+
+* Old approach:
+  * Recursive call within a recursive function stores the current function's state on stack (this localizes the stack operations within the function).
+  * Only variables needed to be preserved around a particular function call are stored.
+  * If the called function ends the recursion, the variables were stored on the stack unnecessarily.
+* New approach:
+  * When performing a recursive call, the called function's state will be stored on the stack.
+  * A special routine (a _stack routine_) needs to be called to store/retrieve variables to/from the stack.
+  * The address of the stack routine changes with each call → needs a function pointer, plus its initialization.
+  * The set of variables to be stored will be determined as a union of all variables stored by individual recursive calls.
+  * The compiler will still generate and optimize the code using the old approach. A post-processing step will build the internal stack when required.
+  * Needs to be able to specify the stack storage per function. 
+
+The old approach will be kept for external stack.
+
 ## Namespaces
 
 From Discord:

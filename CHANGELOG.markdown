@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed incorrect array declarations possibly crashing the compiler ([#328](https://github.com/cardillan/mindcode/issues/328)).
 * Fixed a wrong optimization of mutually recursive functions ([#342](https://github.com/cardillan/mindcode/issues/342)).
 * Fixed a wrong position being reported for errors and warnings in code snippets included as a module via the `require` directive.
+* Fixed the web app not loading updated assets after a new version is deployed.
+* Fixed the connection to Mlog Watcher from the web app failing when the game or the Mlog Watcher mod get restarted. 
 * Fixed the handling of stack overflow, out-of-memory, and other JVM exceptions so that the error is displayed in the web app.
 
 ### Added
@@ -40,13 +42,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
+* Changed the syntax of the [remote require](/doc/syntax/REMOTE-CALLS.markdown#main-processor-code) directive. The old syntax has been deprecated.
 * Changed the `@unit` built-in variable to be considered non-volatile and added proper handling of side effects by the `ubind` instruction. The change may allow some additional optimizations of unit handling code.
 * Changed linked variables to no longer be volatile while still protecting them in conditions. Explicitly declaring linked variables and arrays `volatile` is possible ([#327](https://github.com/cardillan/mindcode/issues/327)).
 * Changed the dynamic optimization process: when the current instruction count exceeds the limit, `neutral` and `speed` optimization goals are overriden to `size`. 
-* Temporary variables are renumbered at the end of compilation, so that their names (`*tmp#`) start with 0 and the sequence doesn't contain gaps.
-* Changed the program signature to include Mindcode version number.
-* Changed the syntax of the [remote require](/doc/syntax/REMOTE-CALLS.markdown#main-processor-code) directive. The old syntax has been deprecated.
 * Changed the compiler to generate an error instead of a warning when an unknown built-in variable or named color literal are found in strict mode.  
+* Changed temporary variable generation: temporary variables are renumbered at the end of compilation, so that their names (`*tmp#`) start with 0 and the sequence doesn't contain gaps.
+* Changed the program signature to include Mindcode version number.
 
 ## 3.16.5 – 2026-07-15
 
@@ -157,13 +159,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* **Breaking**: the `loop` keyword has been reintroduced, to create [infinite loops](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#infinite-loops). Code that uses `loop` as a function or variable name will not compile, and the variable or function will have to be renamed.
+* **Breaking:** the `loop` keyword has been reintroduced, to create [infinite loops](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#infinite-loops). Code that uses `loop` as a function or variable name will not compile, and the variable or function will have to be renamed.
 * Added the possibility to use the `break` statement to [exit code blocks](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#break-in-a-code-block).
 * Added [implicit labels](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#implicit-labels) to loops and code blocks. 
 
 ### Changed
 
-* **Breaking**: Changed the meaning of the [`target` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target): when no processor type is specified, the compiler generates the code for a non-processor context. Privileged instructions are supported, but atomic sections and waits aren't.
+* **Breaking:** Changed the meaning of the [`target` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target): when no processor type is specified, the compiler generates the code for a non-processor context. Privileged instructions are supported, but atomic sections and waits aren't.
 
 ## 3.14.0 – 2026-02-08
 
@@ -281,7 +283,7 @@ Note: the new features in this release bring about [changes to the best practice
 
 ### Added
 
-* **Breaking**: new keywords have been added to the language: `public` and `private` and are reserved for future use. Code that uses any of these keywords as a function or variable name will not compile, and the variable or function will have to be renamed.
+* **Breaking:** new keywords have been added to the language: `public` and `private` and are reserved for future use. Code that uses any of these keywords as a function or variable name will not compile, and the variable or function will have to be renamed.
 * Added the [`no-argument-padding` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-no-argument-padding). When activated, instructions are not padded to the maximum number of arguments.
 * Added the [`author` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-author). The option adds an entry to the list of authors, which is then displayed alongside the usual compiler signature.
 * Added support for new instruction opcode (`ucontrol deconstruct`).
@@ -329,7 +331,7 @@ Note: the new features in this release bring about [changes to the best practice
 
 ### Changed
 
-* **Breaking**: the `text-tables` compiler option has been renamed (yet again – sorry) to [`use-text-jump-tables`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-text-jump-tables).
+* **Breaking:** the `text-tables` compiler option has been renamed (yet again – sorry) to [`use-text-jump-tables`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-text-jump-tables).
 * The [Case Switcher optimization](doc/syntax/optimizations/CASE-SWITCHING.markdown#null-values) was updated to fully support `null` values in `when` branches (even in integer expressions).
 * The Extended testing tool now accepts values for any compiler directive in the settings file.
 
@@ -345,7 +347,7 @@ Note: the new features in this release bring about [changes to the best practice
 
 ### Added
 
-* **Breaking**: new keywords have been added to the language: `debug` and `export`. Code that uses any of these keywords as a function or variable name will not compile, and the variable or function will have to be renamed.
+* **Breaking:** new keywords have been added to the language: `debug` and `export`. Code that uses any of these keywords as a function or variable name will not compile, and the variable or function will have to be renamed.
 * Added support for implementing the `!==` operator using a [`select stricEqual` instruction](/doc/syntax/MINDUSTRY-8.markdown#implementing-strict-nonequality-using-select) in target `8`.
 * Added the [`emulate-strict-not-equal` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulate-strict-not-equal) to allow/disallow using `select` instead of `jump strictNotEqual`.
 * Added new internal array implementations using new Mindustry 8 logic capabilities:
@@ -364,11 +366,11 @@ Note: the new features in this release bring about [changes to the best practice
 
 ### Changed
 
-* **Breaking**: change to options governing runtime check generation:
+* **Breaking:** change to options governing runtime check generation:
     * the `error-reporting` option now specifies the mechanism to be used by the compiler to report runtime errors. When set to `none`, no runtime checks occur, regardless of other settings. This was previously governed by the `boundary-checks` option.
     * the `boundary-checks` option now takes a value of `true` or `false`, activating/deactivating boundary checks on array accesses.
     * the `error-function` option takes a value of `true` or `false`. When `true`, the error is reported using the mechanism specified by `error-reporting`; when `false`, the `error()` function has no effect.
-* **Breaking**: specifying the mlog name of a variable using the `remote` modifier is no longer supported. The `remote` modifier now takes only the name of the remote processor as a parameter, enclosed in parentheses. Use the [`mlog` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#mlog-modifier) to specify the mlog name of the remote variable.
+* **Breaking:** specifying the mlog name of a variable using the `remote` modifier is no longer supported. The `remote` modifier now takes only the name of the remote processor as a parameter, enclosed in parentheses. Use the [`mlog` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#mlog-modifier) to specify the mlog name of the remote variable.
 * The `mlog` variable name must not match a linked block name.
 * The `mlog` modifier accepts multiple expressions, allowing to specify names for individual array elements.
 * The `mlog` modifier also accepts one of the lookup keywords (`:block`, `:unit`, `:item`, `:liquid` or `:team`) in array declarations, allowing to specify the lookup type used by the array.
@@ -400,9 +402,9 @@ Note: the new features in this release bring about [changes to the best practice
 
 ### Changed
 
-* **Breaking**: files included via the `require` directive or via the `-a` command-ine argument must contain a `module` declaration.
-* **Breaking**: modules must be compiled using the `strict` syntax mode. The `strict` mode is the default for any source file containing a `module` declaration, regardless of whether the module contains remote functionality or not.
-* **Breaking**: the `text-jump-tables` compiler option has been renamed to `text-tables`.
+* **Breaking:** files included via the `require` directive or via the `-a` command-ine argument must contain a `module` declaration.
+* **Breaking:** modules must be compiled using the `strict` syntax mode. The `strict` mode is the default for any source file containing a `module` declaration, regardless of whether the module contains remote functionality or not.
+* **Breaking:** the `text-jump-tables` compiler option has been renamed to `text-tables`.
 
 ### Miscellaneous
 
@@ -434,7 +436,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Changed
 
-* **Breaking**: mlog variable name specified using the `mlog` and `remote` specifier must be enclosed in parentheses. Any constant string expression is supported.
+* **Breaking:** mlog variable name specified using the `mlog` and `remote` specifier must be enclosed in parentheses. Any constant string expression is supported.
 
 ### Miscellaneous
 
@@ -458,7 +460,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Changed
 
-* **Breaking**: remote functions and variables/arrays must always be specified with a fully qualified name (e.g. `processor1.x` or `processor2.foo()`) when accessing or calling them from a main processor.
+* **Breaking:** remote functions and variables/arrays must always be specified with a fully qualified name (e.g. `processor1.x` or `processor2.foo()`) when accessing or calling them from a main processor.
 * Removed restrictions on requiring the same source files from different modules.
 * Remote variables are not reported as unused.
 
@@ -537,7 +539,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Added
 
-* **Breaking**: new keyword has been added to the language: `mlog`. Code that uses this keyword as a function or variable name will not compile, and the variable or function will have to be renamed.
+* **Breaking:** new keyword has been added to the language: `mlog`. Code that uses this keyword as a function or variable name will not compile, and the variable or function will have to be renamed.
 * Added [mlog blocks](/doc/syntax/SYNTAX-EXTENSIONS.markdown#mlog-blocks) for embedding complex mlog logic into Mindcode sources.
 * Added a [storage specification clause](/doc/syntax/SYNTAX-1-VARIABLES.markdown#remote-variables) to remote variables.
 * Added an [mlog clause](/doc/syntax/SYNTAX-1-VARIABLES.markdown#regular-variables) to regular variables, allowing to specify an mlog name for the variable to use.
@@ -671,7 +673,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Changed
 
-* **Breaking**: The system library was changed to accommodate the new logic instructions:
+* **Breaking:** The system library was changed to accommodate the new logic instructions:
   * The `sign` function in the `math` library was renamed to `signInexact`.
   * The `signExact` function in the `math` library was renamed to `sign`. This function corresponds to the Mindustry 8 instruction `op sign`, and when target 8 is selected, the instruction is used instead of the library implementation.
   * The order of parameters of the `unpackcolor` function in the `graphics` library was changed to match the `unpackcolor` instruction in Mindustry 8. When target 8 is selected, the instruction is used instead of the library implementation.
@@ -711,11 +713,11 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Changed
 
-* **Breaking**: changed the command-line arguments of the offline compiler:
+* **Breaking:** changed the command-line arguments of the offline compiler:
   * The `-o` command-line option no longer sets the optimization level, but specifies the name of the output file.
   * The output file needs to be specified using the `-o` or `--output` named argument.
   * There's a new `-O` option taking a numerical value (optimization level). Values `0` to `3` correspond to optimization levels `none`, `basic`, `advanced` and `experimental`.
-* **Breaking**: the remote call mechanism was redesigned. When recompiling code in a processor which uses remote calls, all related processors need to be recompiled too.
+* **Breaking:** the remote call mechanism was redesigned. When recompiling code in a processor which uses remote calls, all related processors need to be recompiled too.
 * The mlog decompiler replaces illegal characters in mlog variable names with underscores. If the names of some variables collide due to these conversions, a numeric index is appended to some of them until a unique name is found.
 
 ### Miscellaneous
@@ -809,7 +811,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Changed
 
-* **Breaking**: underscores in multi-word command-line options were changed to hyphens.
+* **Breaking:** underscores in multi-word command-line options were changed to hyphens.
 * The metadata used by Mindcode compiler and processor emulator now correspond to the compilation target. Schemacode still uses the latest version of the metadata for both building and decompiling schematics.
 * Compile-time evaluation cache is cleared when exiting a function context. This forces primarily the `length()` function to be reevaluated in each call to an inline function, as its value depends on the actual arguments passed to the function.
 * Improved optimization of jumps by making multiple passes over jump-related optimizers, up to the optimization passes limit.

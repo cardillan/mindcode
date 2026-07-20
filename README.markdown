@@ -52,7 +52,7 @@ See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3
 The most important recent changes to Mindcode include:
 
 * Mindustry 8 specific features
-  * Complete support for [the latest Mindustry 8 release (v8 Build 159.6)](/doc/syntax/MINDUSTRY-8.markdown).
+  * Complete support for [the latest Mindustry 8 release (v8 Build 159.7)](/doc/syntax/MINDUSTRY-8.markdown).
   * [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) guaranteed to be executed atomically – without interruption.
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
   * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities. 
