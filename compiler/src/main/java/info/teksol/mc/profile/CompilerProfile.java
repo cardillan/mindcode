@@ -32,6 +32,9 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     public static final String SIGNATURE_VERSION = "Compiled by Mindcode " + Version.getVersion() + " - github.com/cardillan/mindcode";
     public static final String SIGNATURE_STATIC = "Compiled by Mindcode - github.com/cardillan/mindcode";
 
+    // Web app time quota: 20 seconds
+    private static final long timeQuota = 20_000;
+
     // Generate static signature: for unit tests
     private static final boolean staticSignature = isJUnitTest();
 
@@ -43,6 +46,9 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     // Only used to generate library documentation
     private boolean libraryPrecedence = false;
 
+    // Start of compilation
+    private final long quotaFinish;
+
     /// Constructs a new instance of the CompilerProfile class.
     ///
     /// @param webApplication a boolean indicating whether the profile is intended for a web application.
@@ -52,6 +58,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     private CompilerProfile(boolean schematic, boolean webApplication, OptimizationLevel level) {
         this.schematic = schematic;
         this.webApplication = webApplication;
+        this.quotaFinish = System.currentTimeMillis() + timeQuota;
         this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
         setAllOptimizationLevels(level);
     }
@@ -60,6 +67,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     private CompilerProfile(CompilerProfile other, boolean includeUnstable) {
         this.schematic = other.schematic;
         this.webApplication = other.webApplication;
+        this.quotaFinish = other.quotaFinish;
         this.libraryPrecedence = other.libraryPrecedence;
         this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
         for (CompilerOptionValue<?> option : other.options.values()) {
@@ -67,6 +75,10 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
                 getOption(option.option).copyValues((List<Object>) option.getValues());
             }
         }
+    }
+
+    public boolean timeQuotaExhausted() {
+        return System.currentTimeMillis() > quotaFinish;
     }
 
     public CompilerProfile duplicate(boolean includeUnstable) {

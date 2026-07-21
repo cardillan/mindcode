@@ -45,6 +45,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class ApiController {
+    private static final int MAX_TEXT_LENGTH = 128 * 1024;
+
     private static final Logger logger = LoggerFactory.getLogger(ApiController.class);
     private static final Map<String, Sample> mindcodeSamples = Samples.loadMindcodeSamples();
     private static final Map<String, Sample> schemacodeSamples = Samples.loadSchemacodeSamples();
@@ -221,6 +223,10 @@ public class ApiController {
     }
 
     private ApiSource getApiSource(String id, String source, CompilerMode mode) {
+        if (source.length() > MAX_TEXT_LENGTH) {
+            throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, "Text exceeds the maximum allowed length of " + MAX_TEXT_LENGTH + " characters.");
+        }
+
         ApiSource apiSource;
         int useCount = 0;
         if (mode == CompilerMode.compileMindcode && mindcodeSamples.containsKey(id)) {

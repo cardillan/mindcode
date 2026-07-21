@@ -53,7 +53,13 @@
 	<ChevronDown />
 </template>
 
-<Toaster />
+<Toaster
+		richColors
+		position="top-center"
+		toastOptions={{
+    duration: 5000
+  }}
+/>
 
 <div class="flex min-h-screen flex-col bg-background text-foreground">
 	<header class="shrink-0 border-b bg-card">
@@ -94,7 +100,7 @@
 					{data.version}
 				</div>
 				<div class="max-w-xl text-muted-foreground">
-					<strong>PRIVACY POLICY</strong>: This website does not track its users. The Mindcode and
+					<strong>PRIVACY POLICY</strong>: This website does not track its users. The code and
 					schematics you submit for compilation/decompilation is kept for later analysis. No other
 					information is kept about you or your actions on the site.
 				</div>

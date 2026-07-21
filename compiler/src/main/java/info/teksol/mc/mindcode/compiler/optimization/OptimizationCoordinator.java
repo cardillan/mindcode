@@ -108,52 +108,63 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
 
             boolean modified = true;
 
-            // We reserve one pass for the phase after the expansion
-            while (modified && pass < globalProfile.getOptimizationPasses()) {
-                modified = optimizePhase(ITERATED, optimizers, pass++);
-            }
-
-            if (virtualInstructionResolver.analyze(program)) {
-                for (int index = 0; index < program.size(); index++) {
-                    LogicInstruction programIx = program.get(index);
-                    if (programIx instanceof ArrayAccessInstruction ix) {
-                        optimizationContext.removeInstruction(index);
-                        List<LogicInstruction> expanded = virtualInstructionResolver.expand(ix);
-                        for (LogicInstruction instruction : expanded) {
-                            optimizationContext.insertInstructionUnchecked(index++, instruction);
-                        }
-                        index--;
-                    } else if (programIx instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {
-                        optimizationContext.removeInstruction(index);
-                        List<LogicInstruction> expanded = virtualInstructionResolver.expand(op);
-                        for (LogicInstruction instruction : expanded) {
-                            optimizationContext.insertInstructionUnchecked(index++, instruction);
-                        }
-                        index--;
+            timedExecution:
+            {
+                // We reserve one pass for the phase after the expansion
+                while (modified && pass < globalProfile.getOptimizationPasses()) {
+                    if (globalProfile.timeQuotaExhausted()) {
+                        messageConsumer.accept(CompilerMessage.warn(WARN.TIME_QUOTA_EXCEEDED));
+                        break timedExecution;
                     }
+                    modified = optimizePhase(ITERATED, optimizers, pass++);
                 }
 
-                boolean generateEndSeparator = program.getLast().getOpcode() == Opcode.END;
-                for (LogicInstruction instruction : virtualInstructionResolver.getJumpTables(generateEndSeparator)) {
-                    optimizationContext.insertInstructionUnchecked(program.size(), instruction);
+                if (virtualInstructionResolver.analyze(program)) {
+                    for (int index = 0; index < program.size(); index++) {
+                        LogicInstruction programIx = program.get(index);
+                        if (programIx instanceof ArrayAccessInstruction ix) {
+                            optimizationContext.removeInstruction(index);
+                            List<LogicInstruction> expanded = virtualInstructionResolver.expand(ix);
+                            for (LogicInstruction instruction : expanded) {
+                                optimizationContext.insertInstructionUnchecked(index++, instruction);
+                            }
+                            index--;
+                        } else if (programIx instanceof OpInstruction op && op.getOperation() == Operation.BOOLEAN_OR) {
+                            optimizationContext.removeInstruction(index);
+                            List<LogicInstruction> expanded = virtualInstructionResolver.expand(op);
+                            for (LogicInstruction instruction : expanded) {
+                                optimizationContext.insertInstructionUnchecked(index++, instruction);
+                            }
+                            index--;
+                        }
+                    }
+
+                    boolean generateEndSeparator = program.getLast().getOpcode() == Opcode.END;
+                    for (LogicInstruction instruction : virtualInstructionResolver.getJumpTables(generateEndSeparator)) {
+                        optimizationContext.insertInstructionUnchecked(program.size(), instruction);
+                    }
+                    modified = true;
+
+                    debugPrinter.registerIteration(null, "Virtual Instruction Expansion", List.copyOf(program));
                 }
-                modified = true;
 
-                debugPrinter.registerIteration(null, "Virtual Instruction Expansion", List.copyOf(program));
-            }
+                while (modified && pass <= globalProfile.getOptimizationPasses()) {
+                    modified = optimizePhase(ITERATED, optimizers, pass++);
+                }
 
-            while (modified && pass <= globalProfile.getOptimizationPasses()) {
-                modified = optimizePhase(ITERATED, optimizers, pass++);
-            }
+                passesExceeded = modified;
 
-            passesExceeded = modified;
+                do {
+                    if (globalProfile.timeQuotaExhausted()) {
+                        messageConsumer.accept(CompilerMessage.warn(WARN.TIME_QUOTA_EXCEEDED));
+                        break timedExecution;
+                    }
+                    modified = optimizePhase(JUMPS, optimizers, pass++);
+                } while (modified && pass <= globalProfile.getOptimizationPasses());
 
-            do {
-                modified = optimizePhase(JUMPS, optimizers, pass++);
-            } while (modified && pass <= globalProfile.getOptimizationPasses());
-
-            if (passesExceeded || modified) {
-                messageConsumer.accept(CompilerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMIT_REACHED, globalProfile.getOptimizationPasses()));
+                if (passesExceeded || modified) {
+                    messageConsumer.accept(CompilerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMIT_REACHED, globalProfile.getOptimizationPasses()));
+                }
             }
 
             optimizePhase(FINAL, optimizers, 0);

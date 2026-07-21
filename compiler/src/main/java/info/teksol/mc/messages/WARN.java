@@ -21,6 +21,7 @@ public class WARN {
     public static final String PRINTF_NO_PLACEHOLDERS = "The 'printf' function is called with a literal format string which doesn't contain any format placeholders.";
     public static final String PRINTF_TOO_MANY_ARGUMENTS = "The 'printf' function has more arguments than placeholders: %d placeholder(s), %d argument(s).";
     public static final String PRINTF_WITH_LITERAL_FORMAT = "The 'printf' function is called with a literal format string. Using 'print' or 'println' with formattable string literals instead may produce better code.";
+    public static final String TIME_QUOTA_EXCEEDED = "Maximum optimization time exceeded. Using the command-line application might give you better results compiling this code.";
     public static final String VARIABLE_MLOG_CONFLICT = "The mlog name of the variable '%s' collides with another variable.";
     public static final String VARIABLE_NOT_DEFINED = "Variable '%s' is not defined.";
     public static final String VARIABLE_NOT_INITIALIZED = "Variable '%s' is not initialized.";

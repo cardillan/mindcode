@@ -2,7 +2,14 @@
 	import {tick, untrack} from 'svelte';
 	import {Code, Play, Trash2} from '@lucide/svelte';
 
-	import {ApiHandler, type CompileResponseMessage, type RunResult, type Sample, type SourceRange} from '$lib/api';
+	import {
+		ApiError,
+		ApiHandler,
+		type CompileResponseMessage,
+		type RunResult,
+		type Sample,
+		type SourceRange
+	} from '$lib/api';
 	import {schemacode} from '$lib/grammars/schemacode_language';
 	import type {PageProps} from './$types';
 	import {setDiagnostics} from '@codemirror/lint';
@@ -22,6 +29,7 @@
 	import PageInfoCard from '$lib/components/PageInfoCard.svelte';
 	import {MlogWatcherStore} from '$lib/mlog_watcher';
 	import MlogWatcherButton from '$lib/components/MlogWatcherButton.svelte';
+	import {toast} from "svelte-sonner";
 
 	let { data }: PageProps = $props();
 	const api = new ApiHandler();
@@ -91,6 +99,11 @@
 			}
 		} catch (e) {
 			console.error(e);
+			if (e instanceof ApiError && e.status == 413) {
+				tick().then(() => toast.error("The code to be compiled is too large."));
+			} else {
+				tick().then(() => toast.error(`Error compiling mindcode: ${e}`));
+			}
 		} finally {
 			loadingAction = null;
 		}

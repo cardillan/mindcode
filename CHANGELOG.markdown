@@ -49,6 +49,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Changed the compiler to generate an error instead of a warning when an unknown built-in variable or named color literal are found in strict mode.  
 * Changed temporary variable generation: temporary variables are renumbered at the end of compilation, so that their names (`*tmp#`) start with 0 and the sequence doesn't contain gaps.
 * Changed the program signature to include Mindcode version number.
+* Changed the web app to limit the maximum optimization time to 20 seconds to avoid the request timing out after 30 seconds.
+* Changed the web app to refuse texts exceeding a limit (128K characters) at the beginning of processing.
 
 ## 3.16.5 – 2026-07-15
 

@@ -1,38 +1,35 @@
 <script lang="ts">
-	import { mlogLanguageExtension } from '$lib/grammars/mlog_language';
-	import { setDiagnostics } from '@codemirror/lint';
-	import { tick, untrack } from 'svelte';
-	import { Play, Code, Trash2 } from '@lucide/svelte';
+	import {mlogLanguageExtension} from '$lib/grammars/mlog_language';
+	import {setDiagnostics} from '@codemirror/lint';
+	import {tick, untrack} from 'svelte';
+	import {Code, Play, Trash2} from '@lucide/svelte';
 
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
 	import ControlBar from '$lib/components/ControlBar.svelte';
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
 	import {
+		ApiError,
 		ApiHandler,
 		type CompileResponseMessage,
 		type RunResult,
 		type Sample,
 		type SourceRange
 	} from '$lib/api';
-	import { mindcode } from '$lib/grammars/mindcode_language';
-	import type { PageProps } from './$types';
-	import {
-		compileMessagesToDiagnostics,
-		jumpToRange,
-		updateDocId,
-		updateEditor
-	} from '$lib/codemirror';
-	import { LocalCompilerTarget, syncUrl, getThemeContext } from '$lib/stores.svelte';
-	import { getSettingsContext } from '$lib/settings.svelte';
+	import {mindcode} from '$lib/grammars/mindcode_language';
+	import type {PageProps} from './$types';
+	import {compileMessagesToDiagnostics, jumpToRange, updateDocId, updateEditor} from '$lib/codemirror';
+	import {getThemeContext, LocalCompilerTarget, syncUrl} from '$lib/stores.svelte';
+	import {getSettingsContext} from '$lib/settings.svelte';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
-	import { Compartment } from '@codemirror/state';
+	import {Compartment} from '@codemirror/state';
 	import SamplePicker from '$lib/components/SamplePicker.svelte';
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
-	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
-	import { MlogWatcherStore } from '$lib/mlog_watcher';
+	import {InputEditorStore, OutputEditorStore} from '$lib/editors.svelte';
+	import {MlogWatcherStore} from '$lib/mlog_watcher';
 	import MlogWatcherButton from '$lib/components/MlogWatcherButton.svelte';
-	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
+	import type {OutputTabName} from '$lib/components/TabsOutput.svelte';
+	import {toast} from "svelte-sonner";
 
 	let { data }: PageProps = $props();
 
@@ -125,6 +122,11 @@
 			}
 		} catch (e) {
 			console.error(e);
+			if (e instanceof ApiError && e.status == 413) {
+				tick().then(() => toast.error("The code to be compiled is too large."));
+			} else {
+				tick().then(() => toast.error(`Error compiling mindcode: ${e}`));
+			}
 			runResults = [];
 		} finally {
 			loadingAction = null;

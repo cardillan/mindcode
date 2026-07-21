@@ -1,25 +1,22 @@
 <script lang="ts">
-	import { Code, Play, Trash2 } from '@lucide/svelte';
-	import {
-		ApiHandler,
-		type CompileResponseMessage,
-		type SourceRange,
-		type RunResult
-	} from '$lib/api';
-	import { schemacode } from '$lib/grammars/schemacode_language';
-	import { getThemeContext, LocalCompilerTarget, syncUrl } from '$lib/stores.svelte';
+	import {Code, Play, Trash2} from '@lucide/svelte';
+	import {ApiError, ApiHandler, type CompileResponseMessage, type RunResult, type SourceRange} from '$lib/api';
+	import {schemacode} from '$lib/grammars/schemacode_language';
+	import {getThemeContext, LocalCompilerTarget, syncUrl} from '$lib/stores.svelte';
 	import ProjectLinks from '$lib/components/ProjectLinks.svelte';
-	import { jumpToRange, updateEditor } from '$lib/codemirror';
+	import {jumpToRange, updateEditor} from '$lib/codemirror';
 	import TargetPicker from '$lib/components/TargetPicker.svelte';
 	import ControlBar from '$lib/components/ControlBar.svelte';
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
 	import EditorLayout from '$lib/components/EditorLayout.svelte';
 	import EditorActionButton from '$lib/components/EditorActionButton.svelte';
-	import { InputEditorStore, OutputEditorStore } from '$lib/editors.svelte';
-	import { getSettingsContext } from '$lib/settings.svelte';
-	import { EditorView } from 'codemirror';
-	import type { OutputTabName } from '$lib/components/TabsOutput.svelte';
+	import {InputEditorStore, OutputEditorStore} from '$lib/editors.svelte';
+	import {getSettingsContext} from '$lib/settings.svelte';
+	import {EditorView} from 'codemirror';
+	import type {OutputTabName} from '$lib/components/TabsOutput.svelte';
 	import PageInfoCard from '$lib/components/PageInfoCard.svelte';
+	import {tick} from "svelte";
+	import {toast} from "svelte-sonner";
 
 	const theme = getThemeContext();
 	const settings = getSettingsContext();
@@ -81,6 +78,11 @@
 			await syncUrl({ sourceId: encodedEditor.sourceId, compilerTarget: compilerTarget.value });
 		} catch (e) {
 			console.error(e);
+			if (e instanceof ApiError && e.status == 413) {
+				tick().then(() => toast.error("The code to be processed is too large."));
+			} else {
+				tick().then(() => toast.error(`Error compiling mindcode: ${e}`));
+			}
 			runResults = [];
 		} finally {
 			loadingAction = null;

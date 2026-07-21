@@ -46,9 +46,7 @@
 						// by any case body
 						errorCode satisfies never;
 				}
-				toast.error(`Failed to send to MlogWatcher: ${description} (Error code: ${errorCode})`, {
-					duration: 8000
-				});
+				toast.error(`Failed to send to MlogWatcher: ${description} (Error code: ${errorCode})`);
 			}
 		} catch (e) {
 			status = 'error';
@@ -88,9 +86,7 @@
 						// by any case body
 						errorCode satisfies never;
 				}
-				toast.error(`Failed to send to MlogWatcher: ${description} (Error code: ${errorCode})`, {
-					duration: 8000
-				});
+				toast.error(`Failed to send to MlogWatcher: ${description} (Error code: ${errorCode})`);
 			}
 		} catch (e) {
 			status = 'error';

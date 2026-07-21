@@ -49,4 +49,11 @@ public interface AstMindcodeNode extends SourceElement {
     void setDocComment(@Nullable AstDocComment docComment);
 
     List<AstMindcodeNode> getChildren();
+
+    /// @return the number of nodes in the subtree rooted at this node.
+    default int nodes() {
+        int nodes = 1;
+        for (AstMindcodeNode child : getChildren()) nodes += child.nodes();
+        return nodes;
+    }
 }
