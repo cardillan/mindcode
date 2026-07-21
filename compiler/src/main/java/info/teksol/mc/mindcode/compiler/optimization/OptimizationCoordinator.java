@@ -46,6 +46,8 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
     private DebugPrinter debugPrinter = new NullDebugPrinter();
     private @Nullable OptimizationContext optimizationContext;
 
+    private int passes = 0;
+
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile globalProfile,
             MessageConsumer messageConsumer, OptimizerContext optimizerContext,
             VirtualInstructionResolver virtualInstructionResolver, boolean remoteLibrary) {
@@ -101,22 +103,20 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
 
             optimizePhase(INITIAL, optimizers, 0);
 
-            int pass = 1;
-
             // Always two passes
-            optimizePhase(ITERATED, optimizers, pass++);
+            optimizePhase(ITERATED, optimizers, ++passes);
 
             boolean modified = true;
 
             timedExecution:
             {
                 // We reserve one pass for the phase after the expansion
-                while (modified && pass < globalProfile.getOptimizationPasses()) {
+                while (modified && passes < globalProfile.getOptimizationPasses()) {
                     if (globalProfile.timeQuotaExhausted()) {
                         messageConsumer.accept(CompilerMessage.warn(WARN.TIME_QUOTA_EXCEEDED));
                         break timedExecution;
                     }
-                    modified = optimizePhase(ITERATED, optimizers, pass++);
+                    modified = optimizePhase(ITERATED, optimizers, ++passes);
                 }
 
                 if (virtualInstructionResolver.analyze(program)) {
@@ -148,8 +148,8 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
                     debugPrinter.registerIteration(null, "Virtual Instruction Expansion", List.copyOf(program));
                 }
 
-                while (modified && pass <= globalProfile.getOptimizationPasses()) {
-                    modified = optimizePhase(ITERATED, optimizers, pass++);
+                while (modified && passes <= globalProfile.getOptimizationPasses()) {
+                    modified = optimizePhase(ITERATED, optimizers, ++passes);
                 }
 
                 passesExceeded = modified;
@@ -159,8 +159,8 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
                         messageConsumer.accept(CompilerMessage.warn(WARN.TIME_QUOTA_EXCEEDED));
                         break timedExecution;
                     }
-                    modified = optimizePhase(JUMPS, optimizers, pass++);
-                } while (modified && pass <= globalProfile.getOptimizationPasses());
+                    modified = optimizePhase(JUMPS, optimizers, ++passes);
+                } while (modified && passes <= globalProfile.getOptimizationPasses());
 
                 if (passesExceeded || modified) {
                     messageConsumer.accept(CompilerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMIT_REACHED, globalProfile.getOptimizationPasses()));
@@ -180,6 +180,10 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
 
             return List.copyOf(program);
         }
+    }
+
+    public int getPasses() {
+        return passes;
     }
 
     private boolean optimizePhase(OptimizationPhase phase, Map<Optimization, Optimizer> optimizers, int pass) {

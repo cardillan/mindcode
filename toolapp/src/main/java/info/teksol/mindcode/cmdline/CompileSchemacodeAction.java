@@ -102,7 +102,7 @@ public class CompileSchemacodeAction extends ActionHandler {
         EmulatorMessageEmitter emulatorMessages = new EmulatorMessageEmitter(messageLogger);
         ToolMessageEmitter toolMessages = new ToolMessageEmitter(messageLogger);
 
-        final CompilerOutput<byte[]> result = SchemacodeCompiler.compile(messageLogger, inputFiles, compilerProfile);
+        final CompilerOutput<byte[]> result = new SchemacodeCompiler(messageLogger).compile(inputFiles, compilerProfile);
 
         final File outputFile = resolveSdfOutputFile(arguments.get("output"), result.fileName());
         final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".msch");

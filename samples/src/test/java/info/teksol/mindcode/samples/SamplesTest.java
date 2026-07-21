@@ -65,7 +65,7 @@ class SamplesTest {
 
     private void buildSchematic(Sample sample) {
         List<MindcodeMessage> messages = new ArrayList<>();
-        SchemacodeCompiler.compile(messages::add,
+        new SchemacodeCompiler(messages::add).compile(
                 InputFiles.fromSource(sample.source()),
                 CompilerProfile.fullOptimizations(false, true));
         evaluateOutput(sample, messages);

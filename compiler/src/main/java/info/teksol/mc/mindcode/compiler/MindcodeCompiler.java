@@ -1,9 +1,6 @@
 package info.teksol.mc.mindcode.compiler;
 
-import info.teksol.mc.common.Globals;
-import info.teksol.mc.common.InputFile;
-import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.common.*;
 import info.teksol.mc.emulator.Assertion;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.EmulatorMessage;
@@ -132,6 +129,19 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
     // Diagnostic data
     private final Map<Class<?>, List<Object>> diagnosticData = new HashMap<>();
 
+    // Statistics
+    private int nodeCount;
+    private int moduleCount;
+    private int unoptimizedCount;
+    private int optimizedCount;
+    private int parseTime;
+    private int compileTime;
+    private int optimizeTime;
+    private int runTime;
+    private int passes;
+    private int errorCount;
+    private int warningCount;
+
     public MindcodeCompiler(MessageConsumer messageConsumer, CompilerProfile globalProfile, InputFiles inputFiles) {
         this(CompilationPhase.ALL, messageConsumer, globalProfile, inputFiles);
     }
@@ -156,6 +166,14 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
     public void setDebugPrinterProvider(Function<Integer, DebugPrinter> debugPrinterProvider) {
         this.debugPrinterProvider = debugPrinterProvider;
+    }
+
+    @Override
+    public void addMessage(MindcodeMessage message) {
+        // Track errors and warnings on the fly so that the numbers are accurate even when aborted
+        if (message.isError()) errorCount++;
+        if (message.isWarning()) warningCount++;
+        super.addMessage(message);
     }
 
     public void safeCompile() {
@@ -210,7 +228,6 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         RequirementsProcessor requirementsProcessor = new RequirementsProcessor(messageConsumer, globalProfile, inputFiles);
         Map<AstIdentifier, List<AstIdentifier>> foundProcessors = new HashMap<>();
 
-        long parseTime = 0;
         // Process all input files including files discovered through the `require` directive.
         // The first processed module is the main one
         try {
@@ -236,7 +253,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
                         error(new SourcePosition(input.inputFile, 1, 1), ERR.MISSING_MODULE_DECLARATION);
                     }
                     moduleList.addFirst(module);
-                    parseTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
+                    parseTime += (int) TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 
                     Set<InputFile> inputFilesInModule = new HashSet<>();
 
@@ -276,6 +293,8 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
         if (!modules.isEmpty()) {
             astProgram = new AstProgram(globalProfile, new SourcePosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
+            nodeCount = astProgram.nodes();
+            moduleCount = moduleList.size();
         }
         if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.AST_BUILDER) <= 0) return;
 
@@ -322,8 +341,10 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
             throw new MindcodeInternalError("Internal error encountered.");
         }
         unoptimized = assembler.getInstructions();
+        unoptimizedCount = unoptimized.stream().mapToInt(LogicInstruction::getRealSize).sum();
+
         instructions = unoptimized;
-        long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
+        compileTime = (int) TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
         if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.COMPILER) <= 0) return;
 
         VirtualInstructionResolver virtualInstructionResolver = new VirtualInstructionResolver(instructionProcessor);
@@ -337,10 +358,11 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
                     this, virtualInstructionResolver, !astProgram.isMainProgram());
             optimizer.setDebugPrinter(debugPrinter);
             instructions = optimizer.optimize(callGraph, instructions, rootAstContext);
+            passes = optimizer.getPasses();
             debugPrinter.print(this::debug);
         }
         unresolved = instructions;
-        long optimizeTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
+        optimizeTime = (int) TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
 
         if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.OPTIMIZER) <= 0) return;
 
@@ -383,6 +405,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         // Label resolving
         instructions = resolver.resolveLabels(instructions, forcedVariables);
         executableInstructions = instructions.stream().filter(ix -> !(ix instanceof CommentInstruction)).toList();
+        optimizedCount = executableInstructions.size();
 
         if (globalProfile.isPrintCodeSize()) {
             outputFunctionSizes();
@@ -423,12 +446,12 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         if (globalProfile.isRun()) {
             long runStart = System.nanoTime();
             run();
-            long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
-            addMessage(TimingMessage.info("Size: %d instructions, performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
-                    executableInstructions.size(), parseTime, compileTime, optimizeTime, runTime));
+            runTime = (int) TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
+            addMessage(TimingMessage.info("Mindcode: %,d AST nodes, instructions: %,d unoptimized, %,d optimized, performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
+                    nodeCount, unoptimizedCount, executableInstructions.size(), parseTime, compileTime, optimizeTime, runTime));
         } else {
-            addMessage(TimingMessage.info("Size: %d instructions, performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
-                    executableInstructions.size(), parseTime, compileTime, optimizeTime));
+            addMessage(TimingMessage.info("Mindcode: %,d AST nodes, instructions: %,d unoptimized, %,d optimized, performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
+                    nodeCount, unoptimizedCount, executableInstructions.size(), parseTime, compileTime, optimizeTime));
         }
     }
 
@@ -764,5 +787,10 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         for (LogicTemp temp : temps) {
             temp.setIndex(index++);
         }
+    }
+
+    public Statistics getStatistics() {
+        return new Statistics(nodeCount, moduleCount, unoptimizedCount, optimizedCount, parseTime, compileTime,
+                optimizeTime, runTime, passes, errorCount, warningCount);
     }
 }

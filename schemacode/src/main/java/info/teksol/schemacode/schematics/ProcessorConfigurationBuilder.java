@@ -265,6 +265,7 @@ public class ProcessorConfigurationBuilder {
         MindcodeCompiler compiler = new MindcodeCompiler(messages::add, compilerProfile, builder.getInputFiles());
         compiler.setSchematicLinks(schematicLinks);
         compiler.safeCompile(fileToCompile);
+        builder.addStatistics(compiler.getStatistics());
 
         boolean hasErrors = messages.stream().anyMatch(MindcodeMessage::isError);
         synchronized (builder) {

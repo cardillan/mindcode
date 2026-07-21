@@ -2,6 +2,7 @@ package info.teksol.mindcode.webapp;
 
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.common.Statistics;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.EmulatorMessage;
 import info.teksol.mc.emulator.EmulatorSchematic;
@@ -57,6 +58,9 @@ public class ApiController {
     @Autowired
     private ErrorRepository errorRepository;
 
+    @Autowired
+    private ExecutionRepository executionRepository;
+
     @GetMapping("/source/{id}")
     public Source getSource(@PathVariable String id) {
         try {
@@ -86,10 +90,11 @@ public class ApiController {
         final long end = System.nanoTime();
 
         if (compiler.hasInternalError()) {
-            logger.error("Mindcode internal error, uuid={}", apiSource.id);
+            logger.error("Mindcode internal error, uuid={}", apiSource.strId);
             errorRepository.save(new Error(CompilerMode.compileMindcode.name(), apiSource.content));
         } else {
             logger.info("Mindcode performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
+            apiSource.store(executionRepository, compiler.getStatistics());
         }
 
         String compiled = getCompilationMessage(apiSource.content, compiler);
@@ -99,7 +104,7 @@ public class ApiController {
         }
 
         return new CompileResponse(
-                apiSource.id,
+                apiSource.strId,
                 compiled,
                 errors(messageLogger),
                 warnings(messageLogger),
@@ -141,8 +146,10 @@ public class ApiController {
             runResults = processEmulatorResults(emulator, messageLogger);
         }
 
+        apiSource.store(executionRepository);
+
         return new DecompileResponse(
-                apiSource.id,
+                apiSource.strId,
                 decompiled,
                 errors(messageLogger),
                 warnings(messageLogger),
@@ -158,7 +165,8 @@ public class ApiController {
 
         ListMessageLogger messageLogger = new ListMessageLogger();
         final long start = System.nanoTime();
-        final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(
+        SchemacodeCompiler compiler = new SchemacodeCompiler(messageLogger);
+        final CompilerOutput<String> result = compiler.compileAndEncode(
                 messageLogger,
                 InputFiles.fromSource(apiSource.content),
                 CompilerProfile.fullOptimizations(true, true)
@@ -167,17 +175,18 @@ public class ApiController {
         final long end = System.nanoTime();
 
         if (hasInternalError(messageLogger)) {
-            logger.error("Schemacode internal error, uuid={}", apiSource.id);
+            logger.error("Schemacode internal error, uuid={}", apiSource.strId);
             errorRepository.save(new Error(CompilerMode.compileMindcode.name(), apiSource.content));
         } else {
             logger.info("Schemacode performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
+            apiSource.store(executionRepository, compiler.getStatistics());
         }
 
         String compiledCode = result.getStringOutput();
         List<RunResult> runResults = result.emulator() instanceof Emulator emulator ? processEmulatorResults(emulator, messageLogger) : List.of();
 
         return new SchemacodeCompileResponse(
-                apiSource.id,
+                apiSource.strId,
                 compiledCode,
                 errors(messageLogger),
                 warnings(messageLogger),
@@ -212,8 +221,10 @@ public class ApiController {
             runResults = processEmulatorResults(emulator, messageLogger);
         }
 
+        apiSource.store(executionRepository);
+
         return new DecompileResponse(
-                apiSource.id,
+                apiSource.strId,
                 compilerOutput.output(),
                 errors(messageLogger),
                 warnings(messageLogger),
@@ -230,9 +241,9 @@ public class ApiController {
         ApiSource apiSource;
         int useCount = 0;
         if (mode == CompilerMode.compileMindcode && mindcodeSamples.containsKey(id)) {
-            apiSource = new ApiSource(id, source);
+            apiSource = new ApiSource(null, id, source, mode);
         } else if (mode == CompilerMode.compileSchemacode && schemacodeSamples.containsKey(id)) {
-            apiSource = new ApiSource(id, source);
+            apiSource = new ApiSource(null, id, source, mode);
         } else if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
             final Source newSource = dto
@@ -240,15 +251,13 @@ public class ApiController {
                     .orElseGet(() -> new Source(mode.name(), source, Instant.now()));
 
             final Source sourceDto = sourceRepository.save(newSource);
-            useCount = sourceDto.getUseCount();
-            apiSource = new ApiSource(sourceDto.getId().toString(), source);
+            apiSource = new ApiSource(sourceDto.getId(), sourceDto.getId().toString(), source, mode);
         } else {
             Source sourceDto = sourceRepository.save(new Source(mode.name(), source, Instant.now()));
-            useCount = sourceDto.getUseCount();
-            apiSource = new ApiSource(sourceDto.getId().toString(), source);
+            apiSource = new ApiSource(sourceDto.getId(), sourceDto.getId().toString(), source, mode);
         }
 
-        logger.info("compile request: mode={}, id={}, useCount={}, source_length={}", mode, apiSource.id, useCount, apiSource.content.length());
+        logger.info("compile request: mode={}, id={}, source_length={}", mode, apiSource.strId, apiSource.content.length());
         return apiSource;
     }
 
@@ -421,7 +430,19 @@ public class ApiController {
      *     are not compatible with the sample ids.
      * </p>
      */
-    private record ApiSource(String id, String content) {}
+    private record ApiSource(UUID id, String strId, String content, CompilerMode mode) {
+        public void store(ExecutionRepository repository, Statistics statistics) {
+            if (id != null) {
+                repository.save(new Execution(id, mode.name(), content, statistics));
+            }
+        }
+
+        public void store(ExecutionRepository repository) {
+            if (id != null) {
+                repository.save(new Execution(id, mode.name(), content, new Statistics()));
+            }
+        }
+    }
 
     public record CompileRequest(String sourceId, String source, String target, boolean run) {}
     public record CompileResponse(

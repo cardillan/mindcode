@@ -38,7 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added a button to send compiled schematic into Mlog Watcher from the web app schematic page.
 * Added a new command-line option `-p` or `--parallel` to enable [parallel processing of Mindcode source files](/doc/syntax/TOOLS-CMDLINE.markdown#parallel-processing) in the Schematic builder.
 * Added a new command-line option `--watcher-retries` allowing to make several attempts establishing a connection to the Mlog Watcher mod. The default value is `3`.
-* Added proper logging of internal compiler errors happening in the web app for later inspection.  
+* Added logging of compiler activity and internal compiler errors happening in the web app for later inspection.  
 
 ### Changed
 

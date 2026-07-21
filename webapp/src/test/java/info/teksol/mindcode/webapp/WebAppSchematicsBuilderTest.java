@@ -1,6 +1,5 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.profile.CompilerProfile;
@@ -27,7 +26,7 @@ public class WebAppSchematicsBuilderTest {
                 """;
 
         List<MindcodeMessage> messages = new ArrayList<>();
-        CompilerOutput<byte[]> output = SchemacodeCompiler.compile(messages::add,
+        new SchemacodeCompiler(messages::add).compile(
                 InputFiles.fromSource(definition),
                 CompilerProfile.fullOptimizations(true, true));
         assertRegex("Loading code from external file not supported in web application.", messages);

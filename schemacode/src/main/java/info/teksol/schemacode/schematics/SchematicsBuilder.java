@@ -2,6 +2,7 @@ package info.teksol.schemacode.schematics;
 
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.SourceElement;
+import info.teksol.mc.common.Statistics;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.messages.ToolMessage;
@@ -32,7 +33,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SchematicsBuilder extends CompilerMessageEmitter {
-    public static final char INDEX_KEY_CHAR = '$';
     public static final int MAX_SCHEMATIC_SIZE = 65;
 
     private final ProcessorConfigurationBuilder processorConfigurationBuilder;
@@ -58,6 +58,8 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
     private final Map<String, Set<AstSchemaItem>> reportedErrors = new HashMap<>();
 
     private boolean error = false;
+
+    private Statistics statistics = new Statistics();
 
     public SchematicsBuilder(InputFiles inputFiles, CompilerProfile compilerProfile,
             MessageConsumer messageConsumer, AstDefinitions astDefinitions) {
@@ -501,5 +503,13 @@ public class SchematicsBuilder extends CompilerMessageEmitter {
                 default -> label;
             };
         }
+    }
+
+    void addStatistics(Statistics otherStatistics) {
+        statistics = statistics.add(otherStatistics);
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
     }
 }

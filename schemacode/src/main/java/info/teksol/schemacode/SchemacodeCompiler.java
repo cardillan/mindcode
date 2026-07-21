@@ -3,6 +3,7 @@ package info.teksol.schemacode;
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.common.Statistics;
 import info.teksol.mc.emulator.Emulator;
 import info.teksol.mc.emulator.EmulatorSchematic;
 import info.teksol.mc.emulator.mimex.BasicEmulator;
@@ -27,11 +28,11 @@ import java.io.IOException;
 import java.util.Base64;
 
 public class SchemacodeCompiler {
+    private final MessageLogger messageConsumer;
+    private Statistics statistics;
 
-    private static final ThreadLocal<CompilerProfile> compilerProfile = new ThreadLocal<>();
-
-    static CompilerProfile getCompilerProfile() {
-        return compilerProfile.get();
+    public SchemacodeCompiler(MessageConsumer messageConsumer) {
+        this.messageConsumer = new MessageLogger(messageConsumer);
     }
 
     /**
@@ -65,24 +66,23 @@ public class SchemacodeCompiler {
         return builder.buildSchematics();
     }
 
-    public static CompilerOutput<byte[]> compile(MessageConsumer messageConsumer, InputFiles inputFiles,
-            CompilerProfile compilerProfile) {
-        SchemacodeCompiler.compilerProfile.set(compilerProfile);
-        MessageLogger messageLogger = new MessageLogger(messageConsumer);
+    public CompilerOutput<byte[]> compile(InputFiles inputFiles, CompilerProfile compilerProfile) {
 
         InputFile inputFile = inputFiles.getMainInputFile();
         if (inputFile.getCode().isBlank()) {
             return new CompilerOutput<>(new byte[0]);
         }
 
-        DefinitionsContext parseTree = parseSchematics(messageLogger, inputFiles);
-        if (messageLogger.hasErrors()) return CompilerOutput.empty();
+        DefinitionsContext parseTree = parseSchematics(messageConsumer, inputFiles);
+        if (messageConsumer.hasErrors()) return CompilerOutput.empty();
 
-        AstDefinitions astDefinitions = createDefinitions(inputFile, parseTree, messageLogger);
-        if (messageLogger.hasErrors()) return CompilerOutput.empty();
+        AstDefinitions astDefinitions = createDefinitions(inputFile, parseTree, messageConsumer);
+        if (messageConsumer.hasErrors()) return CompilerOutput.empty();
 
-        Schematic schematic = buildSchematic(inputFiles, astDefinitions, compilerProfile, messageLogger);
-        if (messageLogger.hasErrors()) return CompilerOutput.empty();
+        SchematicsBuilder builder = SchematicsBuilder.create(inputFiles, compilerProfile, astDefinitions, messageConsumer);
+        Schematic schematic = builder.buildSchematics();
+        statistics = builder.getStatistics();
+        if (messageConsumer.hasErrors()) return CompilerOutput.empty();
 
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -91,7 +91,7 @@ public class SchemacodeCompiler {
             Emulator emulator = null;
             if (compilerProfile.isRun()) {
                 EmulatorSchematic emulatorSchematic = schematic.toEmulatorSchematic(SchematicsMetadata.getMetadata());
-                emulator = new BasicEmulator(messageLogger, compilerProfile, emulatorSchematic);
+                emulator = new BasicEmulator(messageConsumer, compilerProfile, emulatorSchematic);
                 emulator.run(compilerProfile.getStepLimit());
             }
 
@@ -101,10 +101,10 @@ public class SchemacodeCompiler {
         }
     }
 
-    public static CompilerOutput<String> compileAndEncode(MessageConsumer messageConsumer, InputFiles inputFiles,
+    public CompilerOutput<String> compileAndEncode(MessageConsumer messageConsumer, InputFiles inputFiles,
             CompilerProfile compilerProfile) {
         try {
-            CompilerOutput<byte[]> binaryOutput = compile(messageConsumer, inputFiles, compilerProfile);
+            CompilerOutput<byte[]> binaryOutput = compile(inputFiles, compilerProfile);
 
             String encoded = binaryOutput.output() != null
                     ? Base64.getEncoder().encodeToString(binaryOutput.output()) : "";
@@ -113,5 +113,10 @@ public class SchemacodeCompiler {
             messageConsumer.addMessage(ToolMessage.error(ERR.INTERNAL_ERROR));
             return CompilerOutput.empty();
         }
+    }
+
+    public Statistics getStatistics() {
+        Statistics stats = statistics == null ? new Statistics() : statistics;
+        return stats.add(messageConsumer.getErrorCount(), messageConsumer.getWarningCount());
     }
 }

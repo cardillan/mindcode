@@ -3,5 +3,6 @@
   <component name="DataSourcePerFileMappings">
     <file url="file://$PROJECT_DIR$/webapp/src/main/java/info/teksol/mindcode/webapp/DbMigrator.java" value="f7b72fc7-eda9-4170-ba34-02246645265d" />
     <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/0e779019-3df9-4e80-a976-344f433f27dd/console.sql" value="0e779019-3df9-4e80-a976-344f433f27dd" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/f7b72fc7-eda9-4170-ba34-02246645265d/console.sql" value="f7b72fc7-eda9-4170-ba34-02246645265d" />
   </component>
 </project>
