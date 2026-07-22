@@ -6,22 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NullMarked
-public class ListMessageLogger implements MessageConsumer {
-    private final MessageConsumer messageConsumer;
+public class ListMessageLogger extends MessageLogger {
     protected final List<MindcodeMessage> messages = new ArrayList<>();
 
     public ListMessageLogger() {
-        this.messageConsumer = s -> {};
+        super(s -> {});
     }
 
     public ListMessageLogger(MessageConsumer messageConsumer) {
-        this.messageConsumer = messageConsumer;
+        super(messageConsumer);
     }
 
     @Override
     public void addMessage(MindcodeMessage message) {
         messages.add(message);
-        messageConsumer.accept(message);
+        super.addMessage(message);
     }
 
     public List<MindcodeMessage> getMessages() {

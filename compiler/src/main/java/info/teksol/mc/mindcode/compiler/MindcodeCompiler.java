@@ -139,8 +139,6 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
     private int optimizeTime;
     private int runTime;
     private int passes;
-    private int errorCount;
-    private int warningCount;
 
     public MindcodeCompiler(MessageConsumer messageConsumer, CompilerProfile globalProfile, InputFiles inputFiles) {
         this(CompilationPhase.ALL, messageConsumer, globalProfile, inputFiles);
@@ -166,14 +164,6 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
     public void setDebugPrinterProvider(Function<Integer, DebugPrinter> debugPrinterProvider) {
         this.debugPrinterProvider = debugPrinterProvider;
-    }
-
-    @Override
-    public void addMessage(MindcodeMessage message) {
-        // Track errors and warnings on the fly so that the numbers are accurate even when aborted
-        if (message.isError()) errorCount++;
-        if (message.isWarning()) warningCount++;
-        super.addMessage(message);
     }
 
     public void safeCompile() {
@@ -791,6 +781,6 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
     public Statistics getStatistics() {
         return new Statistics(nodeCount, moduleCount, unoptimizedCount, optimizedCount, parseTime, compileTime,
-                optimizeTime, runTime, passes, errorCount, warningCount);
+                optimizeTime, runTime, passes, messageLogger.getErrorCount(), messageLogger.getWarningCount());
     }
 }
