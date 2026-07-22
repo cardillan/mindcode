@@ -49,6 +49,9 @@ public interface FunctionContext {
     /// Returns all function variables (user and compiler generated) active at this moment.
     Collection<ValueStore> getActiveVariables();
 
+    /// Collects all function variables (user and compiler generated) active at this moment.
+    void gatherActiveVariables(Collection<ValueStore> variables);
+
     /// Called when entering a new AST node. For tracking variables used within a node
     void enterAstNode();
 

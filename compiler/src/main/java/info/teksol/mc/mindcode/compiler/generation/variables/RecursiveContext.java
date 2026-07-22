@@ -14,9 +14,9 @@ public class RecursiveContext extends LocalContext {
     private List<LogicVariable> parentVariables = new ArrayList<>();
     private final Deque<List<LogicVariable>> nodeStack = new ArrayDeque<>();
 
-    public RecursiveContext(MessageConsumer messageConsumer, NameCreator nameCreator, MindcodeFunction function,
-            List<FunctionArgument> varargs) {
-        super(messageConsumer, nameCreator, function, varargs);
+    public RecursiveContext(MessageConsumer messageConsumer, NameCreator nameCreator, FunctionContext parentContext,
+            MindcodeFunction function, List<FunctionArgument> varargs) {
+        super(messageConsumer, nameCreator, parentContext, function, varargs);
     }
 
     @Override
@@ -42,12 +42,20 @@ public class RecursiveContext extends LocalContext {
     }
 
     @Override
+    public void gatherActiveVariables(Collection<ValueStore> variables) {
+        super.gatherActiveVariables(variables);
+        variables.addAll(nodeVariables);
+    }
+
+    @Override
     public void registerNodeVariable(LogicVariable variable) {
+        parentContext.registerNodeVariable(variable);
         nodeVariables.add(variable);
     }
 
     @Override
     public void registerParentNodeVariable(LogicVariable variable) {
+        parentContext.registerParentNodeVariable(variable);
         parentVariables.add(variable);
     }
 

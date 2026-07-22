@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 
 @NullMarked
 public class LocalContext extends CompilerMessageEmitter implements FunctionContext {
+    protected final FunctionContext parentContext;
     private final NameCreator nameCreator;
     private final MindcodeFunction function;
     private final List<FunctionArgument> varargs;
@@ -37,10 +38,11 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
     /// Keeps starting positions inside the nodeVariables list for all active (nested) nodes.
     private final Deque<Integer> nodeStack = new ArrayDeque<>(50);
 
-    public LocalContext(MessageConsumer messageConsumer, NameCreator nameCreator, MindcodeFunction function,
-            List<FunctionArgument> varargs) {
+    public LocalContext(MessageConsumer messageConsumer, NameCreator nameCreator, FunctionContext parentContext,
+            MindcodeFunction function, List<FunctionArgument> varargs) {
         super(messageConsumer);
         this.nameCreator = nameCreator;
+        this.parentContext = parentContext;
         this.function = Objects.requireNonNull(function);
         this.varargs = Objects.requireNonNull(varargs);
         this.loopStack = new LoopStack(messageConsumer);
@@ -68,6 +70,12 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
     @Override
     public Collection<ValueStore> getActiveVariables() {
         return variables.values();
+    }
+
+    @Override
+    public void gatherActiveVariables(Collection<ValueStore> variables) {
+        parentContext.gatherActiveVariables(variables);
+        variables.addAll(this.variables.values());
     }
 
     public void replaceFunctionVariable(AstIdentifier identifier, ValueStore variable) {
