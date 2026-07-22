@@ -476,7 +476,6 @@ public class SchematicElement implements BlockPosition {
         parent.resolvePattern((e, _) -> matches.add(e), context, reference, blockOnly, 0, false);
 
         if (matches.isEmpty()) {
-            context.error(reference, "Cannot resolve block reference '%s'.", reference.fullName());
             return null;
         } else if (matches.size() > 1) {
             context.error(reference, "Ambiguous block reference '%s'.", reference.fullName());
@@ -485,13 +484,13 @@ public class SchematicElement implements BlockPosition {
         return matches.getFirst();
     }
 
-    public void resolveReferences(Consumer<SchematicElement> blockConsumer, SchematicsBuilder.ResolverContext context, AstLabel reference,
+    public void resolveReferences(BiConsumer<SchematicElement, String> blockConsumer, SchematicsBuilder.ResolverContext context, AstLabel reference,
             boolean blockOnly) {
         if (parent == null) throw new MindcodeInternalError("No parent");
         boolean[] found = new boolean[1];
-        parent.resolvePattern((e, _) -> {
+        parent.resolvePattern((t, u) -> {
             found[0] = true;
-            blockConsumer.accept(e);
+            blockConsumer.accept(t, u);
         }, context, reference, blockOnly, 0, false);
 
         if (!found[0]) {
@@ -565,24 +564,30 @@ public class SchematicElement implements BlockPosition {
             }
 
             default -> {
-                if (last) {
+                if (pattern.charAt(pattern.length() - 1) == LayoutResolver.GLOBAL_LABEL_ARRAY_CHAR) {
                     findElements(context.resolveGlobalLabel(astPattern.segments().get(index), pattern),
                             true, !blockOnly, blockConsumer);
-                } else {
-                    if (index == 0 && !pattern.contains("*")) {
-                        SchematicElement scope = this;
-                        while (scope != null && !scope.labelMap.containsKey(pattern)) {
-                            scope = scope.parent;
-                        }
-                        if (scope == null) {
-                            context.error(astPattern, "No region matching '%s' found.", pattern);
+                } else if (index == 0 && !pattern.contains("*")) {
+                    SchematicElement scope = this;
+                    while (scope != null && !scope.labelMap.containsKey(pattern)) {
+                        scope = scope.parent;
+                    }
+                    if (scope == null) {
+                        context.error(astPattern, "No element matching '%s' found.", pattern);
+                    } else {
+                        if (last) {
+                            scope.findElements(context.resolveGlobalLabel(astPattern.segments().get(index), pattern),
+                                    true, !blockOnly, blockConsumer);
                         } else {
                             scope.labelMap.get(pattern).resolvePattern(blockConsumer, context, astPattern, blockOnly, index + 1, false);
                         }
-                    } else {
-                        findElements(pattern, false, true, (e, _) ->
-                                e.resolvePattern(blockConsumer, context, astPattern, blockOnly, index + 1, false));
                     }
+                } else if (last) {
+                    findElements(context.resolveGlobalLabel(astPattern.segments().get(index), pattern),
+                            true, !blockOnly, blockConsumer);
+                } else {
+                    findElements(pattern, false, true, (e, _) ->
+                            e.resolvePattern(blockConsumer, context, astPattern, blockOnly, index + 1, false));
                 }
             }
         }

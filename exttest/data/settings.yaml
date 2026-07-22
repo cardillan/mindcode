@@ -277,7 +277,7 @@ all-sources:
   - source: "C:\Home\golem\overdrive\overdrive-dome.mnd"
     samples: 100
 
-  - source: "C:\Home\golem-old\mindcode\instant-overdrive-projector.mnd"
+  - source: "C:\Home\golem\overdrive\overdrive-projector.mnd"
     samples: 100
 
 #  - source: "C:\Home\golem\mandelbrot\mandelbrot-compute.mnd"

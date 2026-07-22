@@ -1,7 +1,6 @@
 package info.teksol.schemacode.ast;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
 import info.teksol.schemacode.schematics.SchematicElement;
 import info.teksol.schemacode.schematics.SchematicsBuilder;
@@ -18,10 +17,8 @@ public record AstLinkPattern(SourcePosition sourcePosition, AstLabel pattern) im
 
     @Override
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder.ResolverContext context, SchematicElement element) {
-        SchematicElement region = element.parent();
-        if (region == null) throw new MindcodeInternalError("No region to resolve link pattern in");
-        region.resolvePattern((e, label) -> linkConsumer.accept(new Link(stripPrefix(label), e.position())),
-                context, pattern, true, 0, false);
+        element.resolveReferences((e, label) -> linkConsumer.accept(new Link(stripPrefix(label), e.position())),
+                context, pattern, true);
     }
 
     @Override

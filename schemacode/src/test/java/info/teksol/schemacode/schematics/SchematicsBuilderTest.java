@@ -150,7 +150,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     void refusesUnknownBlockReference() {
         assertGeneratesErrors(
                 ExpectedMessages.create()
-                        .add("Cannot resolve block reference 'switch3'.").atLeast(1),
+                        .add("No element matching 'switch3' found.").atLeast(1),
                 """
                         schematic
                         switch1:

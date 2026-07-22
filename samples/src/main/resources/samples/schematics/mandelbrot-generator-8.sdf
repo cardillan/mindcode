@@ -14,70 +14,30 @@ schematic
 
         Navigation: buttons below the display.
         """
-    tag = "Cardillan"
+    tag = "Schematic Builder"
 
-    COMPUTING = region
-        processor#: @hyper-processor processor mindcode = compute end
-    end
+    // Creates all conduits/routers at once
+    // The region leaves empty space on the left and right for hyper-processors
+    region(7, 3)
+        @pulse-conduit       at ( 3,  0) facing north
+        @pulse-conduit       at ( 3,  1) facing north
+        @liquid-router       at ( 3,  2)
+    end at (0, 1) * (2, 4)
 
-    @liquid-source       at ( 3,  0) liquid @cryofluid
-    @pulse-conduit       at ( 3,  1) facing north
-    @pulse-conduit       at ( 3,  2) facing north
-    @liquid-router       at ( 3,  3)
-    @pulse-conduit       at ( 3,  4) facing north
-    @pulse-conduit       at ( 3,  5) facing north
-    @liquid-router       at ( 3,  6)
-    @pulse-conduit       at ( 3,  7) facing north
-    @pulse-conduit       at ( 3,  8) facing north
-    @liquid-router       at ( 3,  9)
-    @pulse-conduit       at ( 3, 10) facing north
-    @pulse-conduit       at ( 3, 11) facing north
-    @liquid-router       at ( 3, 12)
+    @liquid-source at ( 3,  0) liquid @cryofluid
+    @liquid-source at (10,  0) liquid @cryofluid
+    @liquid-source at (14,  5) liquid @cryofluid
+    @liquid-source at (15,  3) liquid @cryofluid
+    @liquid-source at (17,  5) liquid @cryofluid
+    @liquid-source at (19,  3) liquid @cryofluid
 
-    @liquid-source       at (10,  0) liquid @cryofluid
-    @pulse-conduit       at (10,  1) facing north
-    @pulse-conduit       at (10,  2) facing north
-    @liquid-router       at (10,  3)
-    @pulse-conduit       at (10,  4) facing north
-    @pulse-conduit       at (10,  5) facing north
-    @liquid-router       at (10,  6)
-    @pulse-conduit       at (10,  7) facing north
-    @pulse-conduit       at (10,  8) facing north
-    @liquid-router       at (10,  9)
-    @pulse-conduit       at (10, 10) facing north
-    @pulse-conduit       at (10, 11) facing north
-    @liquid-router       at (10, 12)
+    display:    @large-logic-display at (14,  9)
+    memory:     @memory-bank         at (15,  4)
+    message1:   @message             at (10, 14) text "Mandelbrot Mania! v3.1"
+    message2:   @message             at ( 0, 15) text "Bookmarks"
+    message3:   @message             at (14, 15) text "Palette selection"
 
-    @liquid-source       at (14,  5) liquid @cryofluid
-    @liquid-source       at (15,  3) liquid @cryofluid
-    @liquid-source       at (17,  5) liquid @cryofluid
-    @liquid-source       at (19,  3) liquid @cryofluid
-
-    COMPUTING at ( 0,  0) * (1, 5)
-    COMPUTING at ( 4,  0) * (1, 5)
-    COMPUTING at ( 7,  0) * (1, 5)
-    COMPUTING at (11,  0) * (1, 5)
-    COMPUTING at (14,  0)
-    COMPUTING at (14,  6)
-    COMPUTING at (17,  0)
-    COMPUTING at (17,  6)
-
-display:
-    @large-logic-display at (14,  9)
-
-memory:
-    @memory-bank         at (15,  4)
-
-message1:
-    @message             at (10, 14) text "Mandelbrot Mania! v3.1"
-
-message2:
-    @message             at ( 0, 15) text "Bookmarks"
-
-message3:
-    @message             at (14, 15) text "Palette selection"
-
-    // Movement switches
+    // Movement switches (using symbolic link names)
     buttonUp:    @switch  at (17,  4)
     buttonLeft:  @switch  at (16,  3)
     buttonRight: @switch  at (18,  3)
@@ -88,13 +48,19 @@ message3:
     buttonLoad:  @switch  at ( 3, 14)
     buttonSave:  @switch  at ( 3, 13)
 
-    // Bookmark switches
-    bookmark#: @switch  at ( 1, 15) * (13, 1)
+    // Bookmark switches (using symbolic link names)
+    bookmark#: @switch at (1, 15) * (13, 1)
 
-    // Palette switches
-    palette#: @switch  at (15, 15) * (5, 1)
+    // Palette switches (using symbolic link names)
+    palette#: @switch at (15, 15) * (5, 1)
 
-    @logic-processor     at (18,  4) processor links ** end mindcode = control end
+    // Hyper-processors as three discontinuous regions due to the cryofluid plumbing
+    processor#: @hyper-processor fill  (0, 0) * (1, 5) processor mindcode = compute end
+    processor#: @hyper-processor fill  (4, 0) * (2, 5) processor mindcode = compute end
+    processor#: @hyper-processor fill (11, 0) * (3, 5) processor mindcode = compute end
+
+    // The controller. It links to everything.
+    @logic-processor at (18, 4) processor links * end mindcode = control end
 end
 
 common = """

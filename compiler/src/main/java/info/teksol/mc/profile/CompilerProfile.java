@@ -78,7 +78,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     }
 
     public boolean timeQuotaExhausted() {
-        return System.currentTimeMillis() > quotaFinish;
+        return webApplication && System.currentTimeMillis() > quotaFinish;
     }
 
     public CompilerProfile duplicate(boolean includeUnstable) {

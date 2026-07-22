@@ -138,7 +138,10 @@ Labels are useful for creating references to labeled blocks. As labels may be us
 
 ### Array labels
 
-Element labels may end with a `#` or `$` character, representing a _global array label_ or _local array label_ respectively. In this case, Schemacode generates unique label for each new block by replacing the `#` or `$` character with an index starting at `1`, in the order they're encountered in the definition file. Array labels may be specified multiple times in the definition file, each occurrence being replaced with a unique label. Global array labels use indexes unique within the entire schematic, while local array labels use indexes unique within the region they're defined in. 
+Element labels may end with a `#` or `$` character, representing a _global array label_ or _local array label_ respectively. In this case, Schemacode generates unique label for each new block by replacing the `#` or `$` character with an index starting at `1`, in the order they're encountered in the definition file. Array labels may be specified multiple times in the definition file, each occurrence being replaced with a unique label. Global array labels use indexes unique within the entire schematic, while local array labels use indexes unique within the region they're defined in.
+
+> [!NOTE]
+> Global label arrays are resolved twice: once when resolving block labels, and once when resolving processor links and connections. On both occasions, the indexing starts at `1`. 
 
 When used with an [element array](#element-arrays), names are generated from the label array for elements that do not have a regular label assigned. The array label may be used stand-alone or in conjunction with regular labels, but at most one label array can be used per element array.
 
@@ -1498,8 +1501,8 @@ The `global` and `local` keywords can only be used at the beginning of a block r
 1. The `global`, `local` and `parent` start the search in the indicated region and never go into parent regions.
     1. `global` and `local` can only be used at the start of the block reference.
     2. `parent` can be used anywhere in the block reference.
-2. When the first identifier of a pattern contains a matching character (`*`), the search starts in the current region and never continues into parent regions.
-3. When the first identifier of a pattern doesn't contain a matching character, the search starts in the current region; when no match is found, parent regions are recursively searched until a match is found or no parent region exists.
+2. When the first identifier of a pattern contains a matching character (`*`), or is a global label array, the search starts in the current region and never continues into parent regions.
+3. When the first identifier of a pattern doesn't contain a matching character and isn't a global label array, the search starts in the current region; when no match is found, parent regions are recursively searched until a match is found or no parent region exists.
 4. Rules for the last identifier in the block reference:
    1. `*` matches all labeled blocks directly contained in the current region.
    2. `**` matches all labeled blocks directly or indirectly contained in the current region.
