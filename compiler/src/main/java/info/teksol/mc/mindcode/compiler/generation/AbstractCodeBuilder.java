@@ -97,6 +97,7 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
             case StructuredValueStore s when allowStructured -> s;
             case LogicString s when allowStrings -> s;
             case InternalArrayElement e -> e;
+            case InternalArray.ConstantArrayElement e -> e;
             case LogicBuiltIn b -> b;
             case LogicVariable v -> v;
             default -> {

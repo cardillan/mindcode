@@ -159,6 +159,28 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(LABEL, label(2))
             );
         }
+
+        @Test
+        void compilesConstantArrayElementPropertyAccess() {
+            assertCompilesTo("""
+                            linked a[2] = (cell1, bank1);
+                            for i in 0 ... 2 do
+                                print(a[i].@type);
+                            end;
+                            """,
+                    createInstruction(SET, ":i", "0"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "greaterThanEq", ":i", "2"),
+                    createInstruction(SET, tmp(0), ":i"),
+                    createInstruction(READARR, tmp(1), ".a[]", tmp(0)),
+                    createInstruction(SENSOR, tmp(2), tmp(1), "@type"),
+                    createInstruction(PRINT, tmp(2)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
     }
 
     @Nested

@@ -12,34 +12,21 @@ Changes intended for the next regular release.
 
 **Done**
 
-* Symbolic link names
-* Exporting schematics to Mlog Watcher from the web app.
-* Schematic block arrays: a way to create a rectangular shape consisting of the same block at once, with the same settings and serially assigned names.
-* When code size exceeds the instruction limit, perform optimizations using the size goal.
-* Initialized symbolic links
-* Compiler options in schematics
-* Mlog parametrization in schematics
-* Schematic regions
-* Update the `require remote` directive
-* Unknown built-ins will cause a compiler error in strict mode
-* Declare named color
+* Invoke properties on any expression, including arrays.
 
 * **Doing**
 
-* **Planned**
-
-* **Quick ideas**
-
-## Next release
-
-* Automatically make global variables accessed by a background process volatile.
-  * Might need a category for volatile, but removable variables.
 * Make the compiler inline recursive functions that are called only once from another recursive function, when code generation is active.
 * Allow the optimizer to inline mutually recursive functions when called from another function (recursive or otherwise).
-  * For simply recursive functions, this would be a bit too complex and wouldn't achieve much: a stack frame might be saved, but at the cost of increase in the code size; insternal stack will compete with the stack for space.
+  * For simply recursive functions, this would be a bit too complex and wouldn't achieve much: a stack frame might be saved, but at the cost of increase in the code size; internal stack will compete with the stack for space.
 * Optimize tail-call recursion?
   * By modifying the AST tree (potentially making the function non-recursive)
   * By converting the function call to a jump **after** all optimizations are applied.
+
+* **Planned**
+
+* Automatically make global variables accessed by a background process volatile.
+  * Might need a category for volatile, but removable variables.
 * Support for mlogls directives
 * Big arrays
 * Remove deprecated features:
@@ -53,6 +40,10 @@ Changes intended for the next regular release.
 * Array code injection optimization
 * Converting arrays to const arrays when possible
 
+* **Quick ideas**
+
+## Next release
+
 ## Further down the road
 
 These are topics that I'm spending time thinking about. Some of these should appear in the next release after the upcoming one.
@@ -64,8 +55,10 @@ These are topics that I'm spending time thinking about. Some of these should app
 * [Variable types](https://github.com/cardillan/mindcode/issues/232)
   * "Natural" types
   * Structures/records, including arrays of structures
+  * Modules as objects/classes
+  * Allow using linked arrays in the `remote require` clause.
   * Enums
-  * Local arrays/structures
+  * Local structures
   * Function pointers/array pointers
 
 ## New quick ideas
