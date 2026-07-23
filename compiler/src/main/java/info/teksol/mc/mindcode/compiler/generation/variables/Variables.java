@@ -97,6 +97,10 @@ public class Variables extends CompilerMessageEmitter {
         return functionContext.getActiveVariables();
     }
 
+    public void gatherActiveVariables(Collection<ValueStore> variables) {
+        functionContext.gatherActiveVariables(variables);
+    }
+
     public LoopStack getLoopStack() {
         return functionContext.loopStack();
     }
@@ -451,8 +455,8 @@ public class Variables extends CompilerMessageEmitter {
     public void enterFunction(MindcodeFunction function, List<FunctionArgument> varargs) {
         contextStack.push(functionContext);
         functionContext = function.isRecursive()
-                ? new RecursiveContext(messageConsumer, nameCreator, function, varargs)
-                : new LocalContext(messageConsumer, nameCreator, function, varargs);
+                ? new RecursiveContext(messageConsumer, nameCreator, functionContext, function, varargs)
+                : new LocalContext(messageConsumer, nameCreator, functionContext, function, varargs);
     }
 
     /// Called when function processing is finished. The previous function context is restored from the stack.

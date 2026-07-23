@@ -279,7 +279,10 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     }
 
     private List<LogicVariable> getStackVariables(MindcodeFunction function, List<FunctionArgument> arguments) {
-        LinkedHashSet<LogicVariable> result = variables.getActiveVariables().stream()
+        List<ValueStore> functionVariables = new ArrayList<>();
+        variables.gatherActiveVariables(functionVariables);
+
+        LinkedHashSet<LogicVariable> result = functionVariables.stream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
                 .filter(function::isNotOutputFunctionParameter)

@@ -1090,8 +1090,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             guarded bank1;
                             allocate stack in bank1[0...512];
-                            def bar(n) 1 - foo(n); end;
-                            def foo(n) 1 + bar(n); end;
+                            noinline def bar(n) 1 - foo(n); end;
+                            noinline def foo(n) 1 + bar(n); end;
                             print(foo(4));
                             """,
                     // Setting up

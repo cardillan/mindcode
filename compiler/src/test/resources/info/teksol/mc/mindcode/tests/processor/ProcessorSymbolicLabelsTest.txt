@@ -10,7 +10,7 @@ for-each-loop-break-continue.mnd:                  83       95      83.1%   DB8B
 function-inlining.mnd:                            884      884     100.0%   B3AB880177C19FDA   FD313BE5D3502CDF
 iterated-for-loop-break-continue.mnd:              37      168      97.3%   80825B23266F8FF3   52593B6273BCEAC2
 loops-in-conditions.mnd:                            4        4     100.0%   25F777AD40847D3B   AAF96C472A38F04C
-mutually-recursive-calls.mnd:                     144      790      99.3%   61B36E3FE17E9278   EF540F92FB1E527B
+mutually-recursive-calls.mnd:                     137      707      99.3%   61B36E3FE17E9278   D9CED1E72F484320
 prints-values.mnd:                                 42       42     100.0%   810146F338C25648   817A42B7D39B78BF
 processesAssertBounds:                              5        5     100.0%   95377598091542AF   0F743E6A74607BC3
 processesBasicCode2:                                3        3     100.0%   B406896E6E3CDCB7   295C15253DC5C1B9

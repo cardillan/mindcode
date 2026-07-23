@@ -64,7 +64,7 @@ public class MindcodeFunction {
     /// All functions need to be visited to detect possible recursions among unused functions.
     private boolean visited = false;
 
-    /// Inlined for any reason: declaration, compiler or optimizer
+    /// Inlined for any reason: declaration, compiler, or optimizer
     private boolean inlined = false;
 
     /// Indicates the function has been successfully evaluated at compile-time.
@@ -194,8 +194,12 @@ public class MindcodeFunction {
 
     /// @return true if this function should be inlined
     public boolean isInline() {
-        // Automatically inline all non-recursive functions called just once
-        return !isRecursive() && !isExport() && !hasModifier(NOINLINE) && (inlined || hasModifier(INLINE) || getPlacementCount() == 1);
+        // Directly recursive: can't be inlined
+        if (directCalls.contains(this)) return false;
+
+        // Automatically inline all functions called just once
+        // Includes mutually recursive functions
+        return !isExport() && !hasModifier(NOINLINE) && (inlined || hasModifier(INLINE) || getPlacementCount() == 1);
     }
 
     /// @return true if this function is declared `remote`
