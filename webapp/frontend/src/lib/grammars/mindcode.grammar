@@ -47,7 +47,8 @@ statement {
   kw<"module"> Identifier |
   kw<"allocate"> commaSep<allocation> |
   kw<"param"> Identifier "=" expression |
-  kw<"require"> (String | Identifier) (kw<"remote"> commaSep<Identifier>)? |
+  (kw<"remote"> "(" commaSep<Identifier ~remoteDeclareRequireAmbig>  ")")? kw<"require"> (String | Identifier) |
+  kw<"require"> (String | Identifier) kw<"remote"> commaSep<Identifier> |
   FunctionDefinition | 
   LabeledStatement |
   Loop |
@@ -164,7 +165,7 @@ declarationModifier {
   kw<"linked"> ("(" Identifier ")")? |
   kw<"mlog"> "(" commaSep<expression ~mlogAmbig> ")" |
   kw<"noinit"> |
-  kw<"remote"> ~sharedModifier ("(" Identifier? ")")? |
+  kw<"remote"> ~sharedModifier ("(" Identifier? ~remoteDeclareRequireAmbig ")")? |
   kw<"volatile">
 }
 
