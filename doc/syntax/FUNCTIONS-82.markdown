@@ -1,4 +1,4 @@
-# Function reference for target 7.1
+# Function reference for target 8.2
 
 This document contains function reference for all built-in Mindcode functions. Functions are grouped by the
 instruction they encapsulate so that functions with similar logic are listed together. The Mindcode source
@@ -18,8 +18,12 @@ generated code use mlog opcodes.
 # Index
 
 * Micro Processor, Logic Processor and Hyper Processor
+  * [Instruction `Read`](#instruction-read)
+  * [Instruction `Write`](#instruction-write)
   * [Instruction `Draw`](#instruction-draw)
   * [Instruction `Print`](#instruction-print)
+  * [Instruction `Print Char`](#instruction-print-char)
+  * [Instruction `Format`](#instruction-format)
   * [Instruction `Draw Flush`](#instruction-draw-flush)
   * [Instruction `Print Flush`](#instruction-print-flush)
   * [Instruction `Get Link`](#instruction-get-link)
@@ -29,6 +33,7 @@ generated code use mlog opcodes.
   * [Instruction `Operation`](#instruction-operation)
   * [Instruction `Lookup`](#instruction-lookup)
   * [Instruction `Pack Color`](#instruction-pack-color)
+  * [Instruction `Unpack Color`](#instruction-unpack-color)
   * [Instruction `Wait`](#instruction-wait)
   * [Instruction `Stop`](#instruction-stop)
   * [Instruction `End`](#instruction-end)
@@ -37,10 +42,14 @@ generated code use mlog opcodes.
   * [Instruction `Unit Radar`](#instruction-unit-radar)
   * [Instruction `Unit Locate`](#instruction-unit-locate)
 * World Processor
+  * [Instruction `Query`](#instruction-query)
   * [Instruction `Get Block`](#instruction-get-block)
   * [Instruction `Set Block`](#instruction-set-block)
   * [Instruction `Spawn Unit`](#instruction-spawn-unit)
+  * [Instruction `Spawn Bullet`](#instruction-spawn-bullet)
   * [Instruction `Apply Status`](#instruction-apply-status)
+  * [Instruction `Weather Sense`](#instruction-weather-sense)
+  * [Instruction `Weather Set`](#instruction-weather-set)
   * [Instruction `Spawn Wave`](#instruction-spawn-wave)
   * [Instruction `Set Rule`](#instruction-set-rule)
   * [Instruction `Flush Message`](#instruction-flush-message)
@@ -53,9 +62,36 @@ generated code use mlog opcodes.
   * [Instruction `Get Flag`](#instruction-get-flag)
   * [Instruction `Set Flag`](#instruction-set-flag)
   * [Instruction `Set Prop`](#instruction-set-prop)
+  * [Instruction `Play Sound`](#instruction-play-sound)
+  * [Instruction `Play Music`](#instruction-play-music)
+  * [Instruction `Set Marker`](#instruction-set-marker)
+  * [Instruction `Make Marker`](#instruction-make-marker)
+  * [Instruction `Locale Print`](#instruction-locale-print)
 
 # Micro Processor, Logic Processor and Hyper Processor
 
+
+## Instruction `Read`
+
+Read a number from a linked memory cell.
+Can also read from variables in other processors.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#read)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`result = processor1.read(name)`|`read result processor1 name`|
+
+## Instruction `Write`
+
+Write a number to a linked memory cell.
+Can also write to variables in other processors.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#write)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`processor1.write(value, name)`|`write value processor1 name`|
 
 ## Instruction `Draw`
 
@@ -77,6 +113,11 @@ Does not display anything until Draw Flush is used.
 |`linePoly(x, y, sides, radius, rotation)`|`draw linePoly x y sides radius rotation 0`|
 |`triangle(x, y, x2, y2, x3, y3)`|`draw triangle x y x2 y2 x3 y3`|
 |`image(x, y, image, size, rotation)`|`draw image x y image size rotation 0`|
+|`drawPrint(x, y, align)`<br/>`align` - accepts `bottom`, `bottomLeft`, `bottomRight`, `center`, `left`, `right`, `top`, `topLeft`, `topRight`.|`draw print x y align 0 0 0`|
+|`translate(x, y)`|`draw translate x y 0 0 0 0`|
+|`scale(x, y)`|`draw scale x y 0 0 0 0`|
+|`rotate(degrees)`|`draw rotate 0 0 degrees 0 0 0`|
+|`reset()`|`draw reset 0 0 0 0 0 0`|
 
 ## Instruction `Print`
 
@@ -88,6 +129,34 @@ Does not display anything until Print Flush is used.
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
 |`print(what)`|`print what`|
+
+## Instruction `Print Char`
+
+Add a UTF-16 character or content icon to the print buffer.
+Does not display anything until Print Flush is used.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`printchar(value)`|`printchar value`|
+
+## Instruction `Format`
+
+Replace next placeholder in text buffer with a value.
+Does not do anything if placeholder pattern is invalid.
+Placeholder pattern: "{number 0-9}"
+Example:
+```
+print "test {0}"
+format "example"
+```
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`format(value)`|`format value`|
 
 ## Instruction `Draw Flush`
 
@@ -159,8 +228,8 @@ Get data from a building or unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = object.sensor(property)`<br/>`property` - accepts `@ammo`, `@ammoCapacity`, `@boosting`, `@color`, `@config`, `@controlled`, `@controller`, `@dead`, `@efficiency`, `@enabled`, `@firstItem`, `@flag`, `@health`, `@heat`, `@id`, `@itemCapacity`, `@liquidCapacity`, `@maxHealth`, `@mineX`, `@mineY`, `@mining`, `@name`, `@payloadCount`, `@payloadType`, `@powerCapacity`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@powerNetStored`, `@progress`, `@range`, `@rotation`, `@shield`, `@shootX`, `@shootY`, `@shooting`, `@size`, `@speed`, `@team`, `@timescale`, `@totalItems`, `@totalLiquids`, `@totalPower`, `@type`, `@x`, `@y`.|`sensor result object property`|
-|`result = sensor(object, property)`<br/>`property` - accepts `@ammo`, `@ammoCapacity`, `@boosting`, `@color`, `@config`, `@controlled`, `@controller`, `@dead`, `@efficiency`, `@enabled`, `@firstItem`, `@flag`, `@health`, `@heat`, `@id`, `@itemCapacity`, `@liquidCapacity`, `@maxHealth`, `@mineX`, `@mineY`, `@mining`, `@name`, `@payloadCount`, `@payloadType`, `@powerCapacity`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@powerNetStored`, `@progress`, `@range`, `@rotation`, `@shield`, `@shootX`, `@shootY`, `@shooting`, `@size`, `@speed`, `@team`, `@timescale`, `@totalItems`, `@totalLiquids`, `@totalPower`, `@type`, `@x`, `@y`.|`sensor result object property`|
+|`result = object.sensor(property)`<br/>`property` - accepts `@ammo`, `@ammoCapacity`, `@armor`, `@boosting`, `@breaking`, `@bufferSize`, `@buildX`, `@buildY`, `@building`, `@bulletLifetime`, `@bulletTime`, `@cameraHeight`, `@cameraWidth`, `@cameraX`, `@cameraY`, `@color`, `@config`, `@controlled`, `@controller`, `@currentAmmoType`, `@dead`, `@displayHeight`, `@displayWidth`, `@efficiency`, `@enabled`, `@firstItem`, `@flag`, `@flying`, `@health`, `@heat`, `@id`, `@itemCapacity`, `@liquidCapacity`, `@maxHealth`, `@maxUnits`, `@memoryCapacity`, `@mineX`, `@mineY`, `@mining`, `@name`, `@operations`, `@payloadCapacity`, `@payloadCount`, `@payloadType`, `@pingText`, `@pingX`, `@pingY`, `@powerCapacity`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@powerNetStored`, `@progress`, `@range`, `@rotation`, `@selectedBlock`, `@selectedRotation`, `@shield`, `@shootX`, `@shootY`, `@shooting`, `@size`, `@solid`, `@speed`, `@team`, `@timescale`, `@totalItems`, `@totalLiquids`, `@totalPayload`, `@totalPower`, `@type`, `@velocityX`, `@velocityY`, `@x`, `@y`.|`sensor result object property`|
+|`result = sensor(object, property)`<br/>`property` - accepts `@ammo`, `@ammoCapacity`, `@armor`, `@boosting`, `@breaking`, `@bufferSize`, `@buildX`, `@buildY`, `@building`, `@bulletLifetime`, `@bulletTime`, `@cameraHeight`, `@cameraWidth`, `@cameraX`, `@cameraY`, `@color`, `@config`, `@controlled`, `@controller`, `@currentAmmoType`, `@dead`, `@displayHeight`, `@displayWidth`, `@efficiency`, `@enabled`, `@firstItem`, `@flag`, `@flying`, `@health`, `@heat`, `@id`, `@itemCapacity`, `@liquidCapacity`, `@maxHealth`, `@maxUnits`, `@memoryCapacity`, `@mineX`, `@mineY`, `@mining`, `@name`, `@operations`, `@payloadCapacity`, `@payloadCount`, `@payloadType`, `@pingText`, `@pingX`, `@pingY`, `@powerCapacity`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@powerNetStored`, `@progress`, `@range`, `@rotation`, `@selectedBlock`, `@selectedRotation`, `@shield`, `@shootX`, `@shootY`, `@shooting`, `@size`, `@solid`, `@speed`, `@team`, `@timescale`, `@totalItems`, `@totalLiquids`, `@totalPayload`, `@totalPower`, `@type`, `@velocityX`, `@velocityY`, `@x`, `@y`.|`sensor result object property`|
 
 ## Instruction `Operation`
 
@@ -177,10 +246,13 @@ Perform an operation on 1-2 variables.
 |`result = len(a, b)`|`op len result a b`|
 |`result = noise(a, b)`|`op noise result a b`|
 |`result = abs(a)`|`op abs result a 0`|
+|`result = sign(a)`|`op sign result a 0`|
 |`result = log(a)`|`op log result a 0`|
+|`result = logn(a, b)`|`op logn result a b`|
 |`result = log10(a)`|`op log10 result a 0`|
 |`result = floor(a)`|`op floor result a 0`|
 |`result = ceil(a)`|`op ceil result a 0`|
+|`result = round(a)`|`op round result a 0`|
 |`result = sqrt(a)`|`op sqrt result a 0`|
 |`result = rand(a)`|`op rand result a 0`|
 |`result = sin(a)`|`op sin result a 0`|
@@ -201,7 +273,7 @@ For the inverse operation, sense `@id` of the object.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = lookup(type, index)`<br/>`type` - one of `:block`, `:item`, `:liquid`, `:unit`.|`lookup type result index`|
+|`result = lookup(type, index)`<br/>`type` - one of `:block`, `:item`, `:liquid`, `:team`, `:unit`.|`lookup type result index`|
 
 ## Instruction `Pack Color`
 
@@ -212,6 +284,16 @@ Pack [0, 1] RGBA components into a single number for drawing or rule-setting.
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
 |`result = packcolor(r, g, b, a)`|`packcolor result r g b a`|
+
+## Instruction `Unpack Color`
+
+Unpack RGBA components from a color that was packed using Pack Color.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`unpackcolor(out r, out g, out b, out a, color)`|`unpackcolor r g b a color`|
 
 ## Instruction `Wait`
 
@@ -251,7 +333,7 @@ Bind to the next unit of a type, and store it in `@unit`.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`unit = ubind(type)`<br/>`type` - accepts `@aegires`, `@alpha`, `@anthicus`, `@anthicus-missile`, `@antumbra`, `@arkyid`, `@assembly-drone`, `@atrax`, `@avert`, `@beta`, `@block`, `@bryde`, `@cleroi`, `@collaris`, `@conquer`, `@corvus`, `@crawler`, `@cyerce`, `@dagger`, `@disrupt`, `@disrupt-missile`, `@eclipse`, `@elude`, `@emanate`, `@evoke`, `@flare`, `@fortress`, `@gamma`, `@horizon`, `@incite`, `@latum`, `@locus`, `@mace`, `@manifold`, `@mega`, `@merui`, `@minke`, `@mono`, `@navanax`, `@nova`, `@obviate`, `@oct`, `@omura`, `@oxynoe`, `@poly`, `@precept`, `@pulsar`, `@quad`, `@quasar`, `@quell`, `@quell-missile`, `@reign`, `@renale`, `@retusa`, `@risso`, `@scathe-missile`, `@scepter`, `@sei`, `@spiroct`, `@stell`, `@tecta`, `@toxopid`, `@turret-unit-build-tower`, `@vanquish`, `@vela`, `@zenith`.|`ubind type`|
+|`unit = ubind(type)`<br/>`type` - accepts `@aegires`, `@alpha`, `@anthicus`, `@anthicus-missile`, `@antumbra`, `@arkyid`, `@assembly-drone`, `@atrax`, `@avert`, `@beta`, `@block`, `@bryde`, `@cleroi`, `@collaris`, `@conquer`, `@corvus`, `@crawler`, `@cyerce`, `@dagger`, `@disrupt`, `@disrupt-missile`, `@eclipse`, `@elude`, `@emanate`, `@evoke`, `@flare`, `@fortress`, `@gamma`, `@horizon`, `@incite`, `@latum`, `@locus`, `@mace`, `@manifold`, `@mega`, `@merui`, `@minke`, `@mono`, `@navanax`, `@nova`, `@obviate`, `@oct`, `@omura`, `@oxynoe`, `@poly`, `@precept`, `@pulsar`, `@quad`, `@quasar`, `@quell`, `@quell-missile`, `@reign`, `@renale`, `@retusa`, `@risso`, `@scathe-missile`, `@scathe-missile-phase`, `@scathe-missile-surge`, `@scathe-missile-surge-split`, `@scepter`, `@sei`, `@spiroct`, `@stell`, `@tecta`, `@toxopid`, `@turret-unit-build-tower`, `@vanquish`, `@vela`, `@zenith`.|`ubind type`|
 
 ## Instruction `Unit Control`
 
@@ -278,6 +360,7 @@ Control the currently bound unit.
 |`mine(x, y)`|`ucontrol mine x y 0 0 0`|
 |`flag(value)`|`ucontrol flag value 0 0 0 0`|
 |`build(x, y, block, rotation, config)`|`ucontrol build x y block rotation config`|
+|`deconstruct(x, y)`|`ucontrol deconstruct x y 0 0 0`|
 |`building = getBlock(x, y, out type, out floor)`|`ucontrol getBlock x y type building floor`|
 |`result = within(x, y, radius)`|`ucontrol within x y radius result 0`|
 |`unbind()`|`ucontrol unbind 0 0 0 0 0`|
@@ -302,7 +385,7 @@ Requires a bound unit.
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
 |`found = ulocate(:ore, oreType, out outx, out outy)`<br/>`oreType` - accepts `@beryllium`, `@blast-compound`, `@carbide`, `@coal`, `@copper`, `@dormant-cyst`, `@fissile-matter`, `@graphite`, `@lead`, `@metaglass`, `@oxide`, `@phase-fabric`, `@plastanium`, `@pyratite`, `@sand`, `@scrap`, `@silicon`, `@spore-pod`, `@surge-alloy`, `@thorium`, `@titanium`, `@tungsten`.|`ulocate ore core true oreType outx outy found 0`|
-|`building = ulocate(:building, group, enemy, out outx, out outy, out found)`<br/>`group` - one of `:battery`, `:core`, `:factory`, `:generator`, `:reactor`, `:repair`, `:storage`, `:turret`.|`ulocate building group enemy @copper outx outy found building`|
+|`building = ulocate(:building, group, enemy, out outx, out outy, out found)`<br/>`group` - one of `:battery`, `:core`, `:drill`, `:factory`, `:generator`, `:reactor`, `:repair`, `:shield`, `:storage`, `:turret`.|`ulocate building group enemy @copper outx outy found building`|
 |`building = ulocate(:spawn, out outx, out outy, out found)`|`ulocate spawn core true @copper outx outy found building`|
 |`building = ulocate(:damaged, out outx, out outy, out found)`|`ulocate damaged core true @copper outx outy found building`|
 
@@ -311,6 +394,20 @@ Requires a bound unit.
 These instructions are only available to the World Processor,
 which can be placed in custom-created levels in Mindustry 7 or higher.
 
+
+## Instruction `Query`
+
+Queries units/buildings in a specified area.
+Results are outputted into `@queries`.
+Results can be read from `@queries` using the Read instruction and an index.
+Length of `@queries` can be sensed using `@size` as a parameter.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`query(:circle, type, team, x, y, radius)`<br/>`type` - one of `:building`, `:unit`.|`query circle type team x y radius 0`|
+|`query(:rect, type, team, x, y, width, height)`<br/>`type` - one of `:building`, `:unit`.|`query rect type team x y width height`|
 
 ## Instruction `Get Block`
 
@@ -342,7 +439,17 @@ Spawn unit at a location.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = spawn(unit, x, y, rotation, team)`<br/>`unit` - accepts `@aegires`, `@alpha`, `@anthicus`, `@anthicus-missile`, `@antumbra`, `@arkyid`, `@assembly-drone`, `@atrax`, `@avert`, `@beta`, `@block`, `@bryde`, `@cleroi`, `@collaris`, `@conquer`, `@corvus`, `@crawler`, `@cyerce`, `@dagger`, `@disrupt`, `@disrupt-missile`, `@eclipse`, `@elude`, `@emanate`, `@evoke`, `@flare`, `@fortress`, `@gamma`, `@horizon`, `@incite`, `@latum`, `@locus`, `@mace`, `@manifold`, `@mega`, `@merui`, `@minke`, `@mono`, `@navanax`, `@nova`, `@obviate`, `@oct`, `@omura`, `@oxynoe`, `@poly`, `@precept`, `@pulsar`, `@quad`, `@quasar`, `@quell`, `@quell-missile`, `@reign`, `@renale`, `@retusa`, `@risso`, `@scathe-missile`, `@scepter`, `@sei`, `@spiroct`, `@stell`, `@tecta`, `@toxopid`, `@turret-unit-build-tower`, `@vanquish`, `@vela`, `@zenith`.|`spawn unit x y rotation team result`|
+|`result = spawn(unit, x, y, rotation, team, effect)`<br/>`unit` - accepts `@aegires`, `@alpha`, `@anthicus`, `@anthicus-missile`, `@antumbra`, `@arkyid`, `@assembly-drone`, `@atrax`, `@avert`, `@beta`, `@block`, `@bryde`, `@cleroi`, `@collaris`, `@conquer`, `@corvus`, `@crawler`, `@cyerce`, `@dagger`, `@disrupt`, `@disrupt-missile`, `@eclipse`, `@elude`, `@emanate`, `@evoke`, `@flare`, `@fortress`, `@gamma`, `@horizon`, `@incite`, `@latum`, `@locus`, `@mace`, `@manifold`, `@mega`, `@merui`, `@minke`, `@mono`, `@navanax`, `@nova`, `@obviate`, `@oct`, `@omura`, `@oxynoe`, `@poly`, `@precept`, `@pulsar`, `@quad`, `@quasar`, `@quell`, `@quell-missile`, `@reign`, `@renale`, `@retusa`, `@risso`, `@scathe-missile`, `@scathe-missile-phase`, `@scathe-missile-surge`, `@scathe-missile-surge-split`, `@scepter`, `@sei`, `@spiroct`, `@stell`, `@tecta`, `@toxopid`, `@turret-unit-build-tower`, `@vanquish`, `@vela`, `@zenith`.|`spawn unit x y rotation team result effect`|
+
+## Instruction `Spawn Bullet`
+
+Spawns a bullet at a location.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`result = bullet(from, index, x, y, rotation, team, owner, damage, velocityScl, lifeScl, aimX, aimY)`|`bullet result from index x y rotation team owner damage velocityScl lifeScl aimX aimY`|
 
 ## Instruction `Apply Status`
 
@@ -352,8 +459,28 @@ Apply or clear a status effect from a unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`applyStatus(status, unit, duration)`<br/>`status` - one of `:blasted`, `:boss`, `:burning`, `:corroded`, `:disarmed`, `:electrified`, `:fast`, `:freezing`, `:invincible`, `:melting`, `:muddy`, `:none`, `:overclock`, `:overdrive`, `:sapped`, `:shielded`, `:shocked`, `:slow`, `:spore-slowed`, `:tarred`, `:unmoving`, `:wet`.|`status false status unit duration`|
-|`clearStatus(status, unit)`<br/>`status` - one of `:blasted`, `:boss`, `:burning`, `:corroded`, `:disarmed`, `:electrified`, `:fast`, `:freezing`, `:invincible`, `:melting`, `:muddy`, `:none`, `:overclock`, `:overdrive`, `:sapped`, `:shielded`, `:shocked`, `:slow`, `:spore-slowed`, `:tarred`, `:unmoving`, `:wet`.|`status true status unit 0`|
+|`applyStatus(status, unit, duration)`<br/>`status` - accepts `@status-blasted`, `@status-boss`, `@status-burning`, `@status-corroded`, `@status-disarmed`, `@status-dynamic`, `@status-electrified`, `@status-fast`, `@status-freezing`, `@status-invincible`, `@status-melting`, `@status-muddy`, `@status-none`, `@status-overclock`, `@status-overdrive`, `@status-sapped`, `@status-shielded`, `@status-shocked`, `@status-slow`, `@status-spore-slowed`, `@status-tarred`, `@status-unmoving`, `@status-wet`.|`status false status unit duration`|
+|`clearStatus(status, unit)`<br/>`status` - accepts `@status-blasted`, `@status-boss`, `@status-burning`, `@status-corroded`, `@status-disarmed`, `@status-dynamic`, `@status-electrified`, `@status-fast`, `@status-freezing`, `@status-invincible`, `@status-melting`, `@status-muddy`, `@status-none`, `@status-overclock`, `@status-overdrive`, `@status-sapped`, `@status-shielded`, `@status-shocked`, `@status-slow`, `@status-spore-slowed`, `@status-tarred`, `@status-unmoving`, `@status-wet`.|`status true status unit 0`|
+
+## Instruction `Weather Sense`
+
+Check if a type of weather is active.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`result = weathersense(weather)`<br/>`weather` - accepts `@fog`, `@rain`, `@sandstorm`, `@snowing`, `@sporestorm`, `@suspend-particles`.|`weathersense result weather`|
+
+## Instruction `Weather Set`
+
+Set the current state of a type of weather.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`weatherset(weather, active)`<br/>`weather` - accepts `@fog`, `@rain`, `@sandstorm`, `@snowing`, `@sporestorm`, `@suspend-particles`.|`weatherset weather active`|
 
 ## Instruction `Spawn Wave`
 
@@ -385,11 +512,18 @@ Set a game rule.
 |`setrule(:unitCap, value)`|`setrule unitCap value 0 0 0 0`|
 |`setrule(:mapArea, x, y, width, height)`|`setrule mapArea 0 x y width height`|
 |`setrule(:lighting, value)`|`setrule lighting value 0 0 0 0`|
+|`setrule(:canGameOver, value)`|`setrule canGameOver value 0 0 0 0`|
 |`setrule(:ambientLight, value)`|`setrule ambientLight value 0 0 0 0`|
 |`setrule(:solarMultiplier, value)`|`setrule solarMultiplier value 0 0 0 0`|
+|`setrule(:dragMultiplier, value)`|`setrule dragMultiplier value 0 0 0 0`|
+|`setrule(:ban, value)`|`setrule ban value 0 0 0 0`|
+|`setrule(:unban, value)`|`setrule unban value 0 0 0 0`|
+|`setrule(:pauseDisabled, value)`|`setrule pauseDisabled value 0 0 0 0`|
+|`setrule(:musicVolume, value)`|`setrule musicVolume value 0 0 0 0`|
 |`setrule(:buildSpeed, value, team)`|`setrule buildSpeed value team 0 0 0`|
 |`setrule(:unitHealth, value, team)`|`setrule unitHealth value team 0 0 0`|
 |`setrule(:unitBuildSpeed, value, team)`|`setrule unitBuildSpeed value team 0 0 0`|
+|`setrule(:unitMineSpeed, value, team)`|`setrule unitMineSpeed value team 0 0 0`|
 |`setrule(:unitCost, value, team)`|`setrule unitCost value team 0 0 0`|
 |`setrule(:unitDamage, value, team)`|`setrule unitDamage value team 0 0 0`|
 |`setrule(:blockHealth, value, team)`|`setrule blockHealth value team 0 0 0`|
@@ -400,16 +534,18 @@ Set a game rule.
 ## Instruction `Flush Message`
 
 Display a message on the screen from the text buffer.
-Will wait until the previous message finishes.
+If the success result variable is `@wait`,
+will wait until the previous message finishes.
+Otherwise, outputs whether displaying the message succeeded.
 
 [Yruei's documentation](https://yrueii.github.io/MlogDocs/#flush-message)
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`message(:notify)`|`message notify 0`|
-|`message(:mission)`|`message mission 0`|
-|`message(:announce, duration)`|`message announce duration`|
-|`message(:toast, duration)`|`message toast duration`|
+|`message(:notify, out success)`|`message notify 0 success`|
+|`message(:mission, out success)`|`message mission 0 success`|
+|`message(:announce, duration, out success)`|`message announce duration success`|
+|`message(:toast, duration, out success)`|`message toast duration success`|
 
 ## Instruction `Cutscene`
 
@@ -473,7 +609,7 @@ Create an explosion at a location.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`explosion(team, x, y, radius, damage, air, ground, pierce)`|`explosion team x y radius damage air ground pierce`|
+|`explosion(team, x, y, radius, damage, air, ground, pierce, effect)`|`explosion team x y radius damage air ground pierce effect`|
 
 ## Instruction `Set Rate`
 
@@ -542,8 +678,93 @@ Sets a property of a unit or building.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`object.setprop(property, value)`<br/>`property` - accepts `@flag`, `@health`, `@payloadType`, `@rotation`, `@team`, `@totalPower`, `@x`, `@y`.|`setprop property object value`|
+|`object.setprop(property, value)`<br/>`property` - accepts `@armor`, `@bulletLifetime`, `@bulletTime`, `@flag`, `@health`, `@payloadType`, `@rotation`, `@shield`, `@speed`, `@team`, `@totalPower`, `@velocityX`, `@velocityY`, `@x`, `@y`.|`setprop property object value`|
+
+## Instruction `Play Sound`
+
+Plays a sound.
+Volume and pan can be a global value, or calculated based on position.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`playsound(:true, sound, volume, pitch, x, y, limit)`<br/>`sound` - accepts `@sfx-acceleratorCharge`, `@sfx-acceleratorConstruct`, `@sfx-acceleratorLaunch`, `@sfx-acceleratorLightning1`, `@sfx-acceleratorLightning2`, `@sfx-beamHeal`, `@sfx-beamLustre`, `@sfx-beamMeltdown`, `@sfx-beamParallax`, `@sfx-beamPlasma`, `@sfx-beamPlasmaSmall`, `@sfx-blockBreak1`, `@sfx-blockBreak2`, `@sfx-blockBreak3`, `@sfx-blockExplode1`, `@sfx-blockExplode1Alt`, `@sfx-blockExplode2`, `@sfx-blockExplode2Alt`, `@sfx-blockExplode3`, `@sfx-blockExplodeElectric`, `@sfx-blockExplodeElectricBig`, `@sfx-blockExplodeExplosive`, `@sfx-blockExplodeExplosiveAlt`, `@sfx-blockExplodeFlammable`, `@sfx-blockExplodeWall`, `@sfx-blockHeal`, `@sfx-blockPlace1`, `@sfx-blockPlace2`, `@sfx-blockPlace3`, `@sfx-blockRepair`, `@sfx-blockRotate`, `@sfx-chargeCorvus`, `@sfx-chargeLancer`, `@sfx-chargeVela`, `@sfx-click`, `@sfx-coreLand`, `@sfx-coreLaunch`, `@sfx-door`, `@sfx-drillCharge`, `@sfx-drillImpact`, `@sfx-explosion`, `@sfx-explosionAfflict`, `@sfx-explosionArtillery`, `@sfx-explosionArtilleryShock`, `@sfx-explosionArtilleryShockBig`, `@sfx-explosionCleroi`, `@sfx-explosionCore`, `@sfx-explosionCrawler`, `@sfx-explosionDull`, `@sfx-explosionMissile`, `@sfx-explosionNavanax`, `@sfx-explosionObviate`, `@sfx-explosionPlasmaSmall`, `@sfx-explosionQuad`, `@sfx-explosionReactor`, `@sfx-explosionReactor2`, `@sfx-explosionReactorNeoplasm`, `@sfx-explosionTitan`, `@sfx-healWave`, `@sfx-loopBio`, `@sfx-loopBuild`, `@sfx-loopCircuit`, `@sfx-loopCombustion`, `@sfx-loopConveyor`, `@sfx-loopCultivator`, `@sfx-loopCutter`, `@sfx-loopDifferential`, `@sfx-loopDrill`, `@sfx-loopElectricHum`, `@sfx-loopExtract`, `@sfx-loopFire`, `@sfx-loopFlux`, `@sfx-loopGlow`, `@sfx-loopGrind`, `@sfx-loopHover`, `@sfx-loopHover2`, `@sfx-loopHum`, `@sfx-loopMachine`, `@sfx-loopMachine2`, `@sfx-loopMachineSpin`, `@sfx-loopMalign`, `@sfx-loopMineBeam`, `@sfx-loopMissileTrail`, `@sfx-loopPulse`, `@sfx-loopRegen`, `@sfx-loopShield`, `@sfx-loopSmelter`, `@sfx-loopSpray`, `@sfx-loopSteam`, `@sfx-loopTech`, `@sfx-loopThoriumReactor`, `@sfx-loopThruster`, `@sfx-loopUnitBuilding`, `@sfx-massdriver`, `@sfx-massdriverReceive`, `@sfx-mechStep`, `@sfx-mechStepHeavy`, `@sfx-mechStepSmall`, `@sfx-padLand`, `@sfx-padLaunch`, `@sfx-payloadDrop1`, `@sfx-payloadDrop2`, `@sfx-payloadDrop3`, `@sfx-payloadPickup`, `@sfx-plantBreak`, `@sfx-rain`, `@sfx-rockBreak`, `@sfx-shieldBreak`, `@sfx-shieldBreakSmall`, `@sfx-shieldHit`, `@sfx-shieldWave`, `@sfx-shipMove`, `@sfx-shipMoveBig`, `@sfx-shockBullet`, `@sfx-shockwaveTower`, `@sfx-shoot`, `@sfx-shootAfflict`, `@sfx-shootAlpha`, `@sfx-shootArc`, `@sfx-shootArtillery`, `@sfx-shootArtillerySap`, `@sfx-shootArtillerySapBig`, `@sfx-shootArtillerySmall`, `@sfx-shootAtrax`, `@sfx-shootAvert`, `@sfx-shootBeamPlasma`, `@sfx-shootBeamPlasmaSmall`, `@sfx-shootBreach`, `@sfx-shootBreachCarbide`, `@sfx-shootCleroi`, `@sfx-shootCollaris`, `@sfx-shootConquer`, `@sfx-shootCorvus`, `@sfx-shootCyclone`, `@sfx-shootDiffuse`, `@sfx-shootDisperse`, `@sfx-shootDuo`, `@sfx-shootEclipse`, `@sfx-shootElude`, `@sfx-shootEnergyField`, `@sfx-shootFlame`, `@sfx-shootFlamePlasma`, `@sfx-shootForeshadow`, `@sfx-shootFuse`, `@sfx-shootHorizon`, `@sfx-shootLancer`, `@sfx-shootLaser`, `@sfx-shootLocus`, `@sfx-shootMalign`, `@sfx-shootMeltdown`, `@sfx-shootMerui`, `@sfx-shootMissile`, `@sfx-shootMissileLarge`, `@sfx-shootMissileLong`, `@sfx-shootMissilePlasma`, `@sfx-shootMissilePlasmaShort`, `@sfx-shootMissileShort`, `@sfx-shootMissileSmall`, `@sfx-shootNavanax`, `@sfx-shootOmura`, `@sfx-shootPayload`, `@sfx-shootPulsar`, `@sfx-shootQuad`, `@sfx-shootReign`, `@sfx-shootRetusa`, `@sfx-shootRipple`, `@sfx-shootSalvo`, `@sfx-shootSap`, `@sfx-shootScathe`, `@sfx-shootScatter`, `@sfx-shootScepter`, `@sfx-shootScepterSecondary`, `@sfx-shootSegment`, `@sfx-shootSmite`, `@sfx-shootSpectre`, `@sfx-shootStell`, `@sfx-shootSublimate`, `@sfx-shootTank`, `@sfx-shootToxopidShotgun`, `@sfx-stepMud`, `@sfx-stepWater`, `@sfx-tankMove`, `@sfx-tankMoveHeavy`, `@sfx-tankMoveSmall`, `@sfx-uiBack`, `@sfx-uiButton`, `@sfx-uiChat`, `@sfx-uiFavorite`, `@sfx-uiNotify`, `@sfx-uiUnlock`, `@sfx-unitCreate`, `@sfx-unitCreateBig`, `@sfx-unitExplode1`, `@sfx-unitExplode2`, `@sfx-unitExplode3`, `@sfx-walkerStep`, `@sfx-walkerStepSmall`, `@sfx-walkerStepTiny`, `@sfx-waveSpawn`, `@sfx-wind`, `@sfx-wind2`, `@sfx-wind3`, `@sfx-windHowl`, `@sfx-wreckFall`, `@sfx-wreckFallBig`.|`playsound true sound volume pitch 0 x y limit`|
+|`playsound(:false, sound, volume, pitch, pan, limit)`<br/>`sound` - accepts `@sfx-acceleratorCharge`, `@sfx-acceleratorConstruct`, `@sfx-acceleratorLaunch`, `@sfx-acceleratorLightning1`, `@sfx-acceleratorLightning2`, `@sfx-beamHeal`, `@sfx-beamLustre`, `@sfx-beamMeltdown`, `@sfx-beamParallax`, `@sfx-beamPlasma`, `@sfx-beamPlasmaSmall`, `@sfx-blockBreak1`, `@sfx-blockBreak2`, `@sfx-blockBreak3`, `@sfx-blockExplode1`, `@sfx-blockExplode1Alt`, `@sfx-blockExplode2`, `@sfx-blockExplode2Alt`, `@sfx-blockExplode3`, `@sfx-blockExplodeElectric`, `@sfx-blockExplodeElectricBig`, `@sfx-blockExplodeExplosive`, `@sfx-blockExplodeExplosiveAlt`, `@sfx-blockExplodeFlammable`, `@sfx-blockExplodeWall`, `@sfx-blockHeal`, `@sfx-blockPlace1`, `@sfx-blockPlace2`, `@sfx-blockPlace3`, `@sfx-blockRepair`, `@sfx-blockRotate`, `@sfx-chargeCorvus`, `@sfx-chargeLancer`, `@sfx-chargeVela`, `@sfx-click`, `@sfx-coreLand`, `@sfx-coreLaunch`, `@sfx-door`, `@sfx-drillCharge`, `@sfx-drillImpact`, `@sfx-explosion`, `@sfx-explosionAfflict`, `@sfx-explosionArtillery`, `@sfx-explosionArtilleryShock`, `@sfx-explosionArtilleryShockBig`, `@sfx-explosionCleroi`, `@sfx-explosionCore`, `@sfx-explosionCrawler`, `@sfx-explosionDull`, `@sfx-explosionMissile`, `@sfx-explosionNavanax`, `@sfx-explosionObviate`, `@sfx-explosionPlasmaSmall`, `@sfx-explosionQuad`, `@sfx-explosionReactor`, `@sfx-explosionReactor2`, `@sfx-explosionReactorNeoplasm`, `@sfx-explosionTitan`, `@sfx-healWave`, `@sfx-loopBio`, `@sfx-loopBuild`, `@sfx-loopCircuit`, `@sfx-loopCombustion`, `@sfx-loopConveyor`, `@sfx-loopCultivator`, `@sfx-loopCutter`, `@sfx-loopDifferential`, `@sfx-loopDrill`, `@sfx-loopElectricHum`, `@sfx-loopExtract`, `@sfx-loopFire`, `@sfx-loopFlux`, `@sfx-loopGlow`, `@sfx-loopGrind`, `@sfx-loopHover`, `@sfx-loopHover2`, `@sfx-loopHum`, `@sfx-loopMachine`, `@sfx-loopMachine2`, `@sfx-loopMachineSpin`, `@sfx-loopMalign`, `@sfx-loopMineBeam`, `@sfx-loopMissileTrail`, `@sfx-loopPulse`, `@sfx-loopRegen`, `@sfx-loopShield`, `@sfx-loopSmelter`, `@sfx-loopSpray`, `@sfx-loopSteam`, `@sfx-loopTech`, `@sfx-loopThoriumReactor`, `@sfx-loopThruster`, `@sfx-loopUnitBuilding`, `@sfx-massdriver`, `@sfx-massdriverReceive`, `@sfx-mechStep`, `@sfx-mechStepHeavy`, `@sfx-mechStepSmall`, `@sfx-padLand`, `@sfx-padLaunch`, `@sfx-payloadDrop1`, `@sfx-payloadDrop2`, `@sfx-payloadDrop3`, `@sfx-payloadPickup`, `@sfx-plantBreak`, `@sfx-rain`, `@sfx-rockBreak`, `@sfx-shieldBreak`, `@sfx-shieldBreakSmall`, `@sfx-shieldHit`, `@sfx-shieldWave`, `@sfx-shipMove`, `@sfx-shipMoveBig`, `@sfx-shockBullet`, `@sfx-shockwaveTower`, `@sfx-shoot`, `@sfx-shootAfflict`, `@sfx-shootAlpha`, `@sfx-shootArc`, `@sfx-shootArtillery`, `@sfx-shootArtillerySap`, `@sfx-shootArtillerySapBig`, `@sfx-shootArtillerySmall`, `@sfx-shootAtrax`, `@sfx-shootAvert`, `@sfx-shootBeamPlasma`, `@sfx-shootBeamPlasmaSmall`, `@sfx-shootBreach`, `@sfx-shootBreachCarbide`, `@sfx-shootCleroi`, `@sfx-shootCollaris`, `@sfx-shootConquer`, `@sfx-shootCorvus`, `@sfx-shootCyclone`, `@sfx-shootDiffuse`, `@sfx-shootDisperse`, `@sfx-shootDuo`, `@sfx-shootEclipse`, `@sfx-shootElude`, `@sfx-shootEnergyField`, `@sfx-shootFlame`, `@sfx-shootFlamePlasma`, `@sfx-shootForeshadow`, `@sfx-shootFuse`, `@sfx-shootHorizon`, `@sfx-shootLancer`, `@sfx-shootLaser`, `@sfx-shootLocus`, `@sfx-shootMalign`, `@sfx-shootMeltdown`, `@sfx-shootMerui`, `@sfx-shootMissile`, `@sfx-shootMissileLarge`, `@sfx-shootMissileLong`, `@sfx-shootMissilePlasma`, `@sfx-shootMissilePlasmaShort`, `@sfx-shootMissileShort`, `@sfx-shootMissileSmall`, `@sfx-shootNavanax`, `@sfx-shootOmura`, `@sfx-shootPayload`, `@sfx-shootPulsar`, `@sfx-shootQuad`, `@sfx-shootReign`, `@sfx-shootRetusa`, `@sfx-shootRipple`, `@sfx-shootSalvo`, `@sfx-shootSap`, `@sfx-shootScathe`, `@sfx-shootScatter`, `@sfx-shootScepter`, `@sfx-shootScepterSecondary`, `@sfx-shootSegment`, `@sfx-shootSmite`, `@sfx-shootSpectre`, `@sfx-shootStell`, `@sfx-shootSublimate`, `@sfx-shootTank`, `@sfx-shootToxopidShotgun`, `@sfx-stepMud`, `@sfx-stepWater`, `@sfx-tankMove`, `@sfx-tankMoveHeavy`, `@sfx-tankMoveSmall`, `@sfx-uiBack`, `@sfx-uiButton`, `@sfx-uiChat`, `@sfx-uiFavorite`, `@sfx-uiNotify`, `@sfx-uiUnlock`, `@sfx-unitCreate`, `@sfx-unitCreateBig`, `@sfx-unitExplode1`, `@sfx-unitExplode2`, `@sfx-unitExplode3`, `@sfx-walkerStep`, `@sfx-walkerStepSmall`, `@sfx-walkerStepTiny`, `@sfx-waveSpawn`, `@sfx-wind`, `@sfx-wind2`, `@sfx-wind3`, `@sfx-windHowl`, `@sfx-wreckFall`, `@sfx-wreckFallBig`.|`playsound false sound volume pitch pan 0 0 limit`|
+
+## Instruction `Play Music`
+
+Plays a music track by name, e.g. "game1".
+If interrupt is `true`, the previously playing music will be stopped.
+Playing with `null` music and interrupt set to `true` will stop the current track.
+Note that music from data patches must be prefixed with dp-.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`playmusic(name, interrupt)`|`playmusic name interrupt`|
+
+## Instruction `Set Marker`
+
+Set a property for a marker.
+The ID used must be the same as in the Make Marker instruction.
+`null` values are ignored.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`setmarker(:remove, id)`|`setmarker remove id 0 0 0`|
+|`setmarker(:world, id, boolean)`|`setmarker world id boolean 0 0`|
+|`setmarker(:minimap, id, boolean)`|`setmarker minimap id boolean 0 0`|
+|`setmarker(:autoscale, id, boolean)`|`setmarker autoscale id boolean 0 0`|
+|`setmarker(:pos, id, x, y)`|`setmarker pos id x y 0`|
+|`setmarker(:endPos, id, x, y)`|`setmarker endPos id x y 0`|
+|`setmarker(:drawLayer, id, layer)`|`setmarker drawLayer id layer 0 0`|
+|`setmarker(:color, id, color)`|`setmarker color id color 0 0`|
+|`setmarker(:radius, id, radius)`|`setmarker radius id radius 0 0`|
+|`setmarker(:stroke, id, stroke)`|`setmarker stroke id stroke 0 0`|
+|`setmarker(:outline, id, outline)`|`setmarker outline id outline 0 0`|
+|`setmarker(:rotation, id, rotation)`|`setmarker rotation id rotation 0 0`|
+|`setmarker(:shape, id, sides, fill, outline)`|`setmarker shape id sides fill outline`|
+|`setmarker(:arc, id, from, to)`|`setmarker arc id from to 0`|
+|`setmarker(:flushText, id, fetch)`|`setmarker flushText id fetch 0 0`|
+|`setmarker(:fontSize, id, size)`|`setmarker fontSize id size 0 0`|
+|`setmarker(:textHeight, id, height)`|`setmarker textHeight id height 0 0`|
+|`setmarker(:textAlign, id, alignment)`<br/>`alignment` - accepts `bottom`, `bottomLeft`, `bottomRight`, `center`, `left`, `right`, `top`, `topLeft`, `topRight`.|`setmarker textAlign id alignment 0 0`|
+|`setmarker(:lineAlign, id, alignment)`<br/>`alignment` - accepts `bottom`, `bottomLeft`, `bottomRight`, `center`, `left`, `right`, `top`, `topLeft`, `topRight`.|`setmarker lineAlign id alignment 0 0`|
+|`setmarker(:labelFlags, id, background, outline)`|`setmarker labelFlags id background outline 0`|
+|`setmarker(:texture, id, printFlush, name)`|`setmarker texture id printFlush name 0`|
+|`setmarker(:textureSize, id, width, height)`|`setmarker textureSize id width height 0`|
+|`setmarker(:posi, id, index, x, y)`|`setmarker posi id index x y`|
+|`setmarker(:uvi, id, index, x, y)`|`setmarker uvi id index x y`|
+|`setmarker(:colori, id, index, color)`|`setmarker colori id index color 0`|
+
+## Instruction `Make Marker`
+
+Create a new logic marker in the world.
+An ID to identify this marker must be provided.
+Markers currently limited to 20,000 per world.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`makemarker(marker, id, x, y, replace)`<br/>`marker` - one of `:line`, `:point`, `:quad`, `:shape`, `:shapeText`, `:text`, `:texture`.|`makemarker marker id x y replace`|
+
+## Instruction `Locale Print`
+
+Add map locale property value to the text buffer.
+To set map locale bundles in map editor, check Map Info > Locale Bundles.
+If client is a mobile device, tries to print a property ending in ".mobile" first.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#bleeding-edge)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`localeprint(property)`|`localeprint property`|
 
 ---
 
-[&#xAB; Previous: Function reference for target 7.0](FUNCTIONS-70.markdown) &nbsp; | &nbsp; [Up: Logic functions](FUNCTIONS.markdown) &nbsp; [Next: Function reference for target 8.0 &#xBB;](FUNCTIONS-80.markdown)
+[&#xAB; Previous: Function reference for target 8.1](FUNCTIONS-81.markdown) &nbsp; | &nbsp; [Up: Logic functions](FUNCTIONS.markdown)

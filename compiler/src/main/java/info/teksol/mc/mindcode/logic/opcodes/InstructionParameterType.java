@@ -126,8 +126,11 @@ public enum InstructionParameterType {
     /// Sound to play 
     SOUND           ("sound", Flags.INPUT, MindustryMetadata::getSoundNames),
 
-    /// Unit status in `status` instruction.
-    STATUS          ("status", Flags.KEYWORD, MindustryMetadata::getStatusEffects, statusEffect),
+    /// Unit status in a `status` instruction.
+    STATUS          ("status", Flags.INPUT, MindustryMetadata::getStatusEffectVars),
+
+    /// Unit status in a `status` instruction (old version).
+    STATUS_KEYWORD  ("status", Flags.KEYWORD, MindustryMetadata::getStatusEffects, statusEffect),
 
     /// Expected type of value
     TYPE            ("valueType", Flags.KEYWORD, _ -> List.of("any", "notNull", "decimal", "integer", "multiple")),

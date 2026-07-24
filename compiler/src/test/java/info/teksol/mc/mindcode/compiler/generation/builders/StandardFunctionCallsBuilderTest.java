@@ -1971,11 +1971,23 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesStatus() {
             assertCompilesTo("""
+                            #set target = 8.1;
                             applyStatus(:burning, unit, duration);
                             clearStatus(:freezing, unit);
                             """,
                     createInstruction(STATUS, "false", "burning", ":unit", ":duration"),
                     createInstruction(STATUS, "true", "freezing", ":unit")
+            );
+        }
+
+        @Test
+        void compilesStatusTarget82() {
+            assertCompilesTo("""
+                            applyStatus(@status-burning, unit, duration);
+                            clearStatus(@status-freezing, unit);
+                            """,
+                    createInstruction(STATUS, "false", "@status-burning", ":unit", ":duration"),
+                    createInstruction(STATUS, "true", "@status-freezing", ":unit")
             );
         }
 

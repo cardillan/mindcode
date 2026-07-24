@@ -8,6 +8,7 @@ import info.teksol.mc.emulator.mimex.target60.LExecutor60;
 import info.teksol.mc.emulator.mimex.target70.LExecutor70;
 import info.teksol.mc.emulator.mimex.target80.LExecutor80;
 import info.teksol.mc.emulator.mimex.target81.LExecutor81;
+import info.teksol.mc.emulator.mimex.target82.LExecutor82;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -35,7 +36,8 @@ public interface LExecutor extends ExecutorResults {
             case V6         -> new LExecutor60(metadata, assembler, emulator, logicBlock);
             case V7, V7A    -> new LExecutor70(metadata, assembler, emulator, logicBlock);
             case V8A        -> new LExecutor80(metadata, assembler, emulator, logicBlock);
-            case V8B, MAX   -> new LExecutor81(metadata, assembler, emulator, logicBlock);
+            case V8B        -> new LExecutor81(metadata, assembler, emulator, logicBlock);
+            case V8C, MAX   -> new LExecutor82(metadata, assembler, emulator, logicBlock);
         };
     }
 }

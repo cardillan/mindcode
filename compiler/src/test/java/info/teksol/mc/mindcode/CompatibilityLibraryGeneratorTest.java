@@ -108,6 +108,9 @@ public class CompatibilityLibraryGeneratorTest {
             
             inline void _compatibilityTest81()
             %send;
+            
+            inline void _compatibilityTest82()
+            %send;
             """;
 
     public static final String CODE = """
@@ -160,7 +163,8 @@ public class CompatibilityLibraryGeneratorTest {
                 formatMethod(MindustryMetadata.forVersion(ProcessorVersion.V6)),
                 formatMethod(MindustryMetadata.forVersion(ProcessorVersion.V7)),
                 formatMethod(MindustryMetadata.forVersion(ProcessorVersion.V8A)),
-                formatMethod(MindustryMetadata.forVersion(ProcessorVersion.V8B))
+                formatMethod(MindustryMetadata.forVersion(ProcessorVersion.V8B)),
+                formatMethod(MindustryMetadata.forVersion(ProcessorVersion.V8C))
         );
 
         Files.writeString(Path.of(LIBRARY_DIRECTORY, TARGET_FILE), StringUtils.normalizeLineEndings(text));

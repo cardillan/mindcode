@@ -87,7 +87,7 @@ public class MindustryOpcodeVariants {
 
         add(list, V6,  MAX, S, BOTH, Opcode.RADAR,      radar("attr1"), radar("attr2"), radar("attr3"), radarSort("sort"), block("turret"), in("order"), result());
 
-        add(list, V6,  MAX, S, PROP, Opcode.SENSOR,     result(),      block("object"), sensor("property"));
+        add(list, V6,  MAX, S, BOTH, Opcode.SENSOR,     result(),      block("object"), sensor("property"));
 
         add(list, V6,  MAX, S, NONE, Opcode.SET,        result(),      block("value"));
 
@@ -221,8 +221,10 @@ public class MindustryOpcodeVariants {
         add(list, V8B, MAX, W, FUNC, Opcode.BULLET, result(), in("from"), in("index"), in("x"), in("y"), in("rotation"), in("team"),
                                                                                                  in("owner"), in("damage"), in("velocityScl"), in("lifeScl"), in("aimX"), in("aimY"));
 
-        add(list, V7,  MAX, W, FUNC, Opcode.STATUS, clear("false"), status("status"), in("unit"), in("duration"));
-        add(list, V7,  MAX, W, FUNC, Opcode.STATUS, clear("true"),  status("status"), in("unit"));
+        add(list, V7,  V8B, W, FUNC, Opcode.STATUS, clear("false"), status_keyword("status"), in("unit"), in("duration"));
+        add(list, V7,  V8B, W, FUNC, Opcode.STATUS, clear("true"),  status_keyword("status"), in("unit"));
+        add(list, V8C, MAX, W, FUNC, Opcode.STATUS, clear("false"), status("status"), in("unit"), in("duration"));
+        add(list, V8C, MAX, W, FUNC, Opcode.STATUS, clear("true"),  status("status"), in("unit"));
 
         add(list, V8A, MAX, W, FUNC, Opcode.WEATHERSENSE, result(),  weather("weather"));
         add(list, V8A, MAX, W, FUNC, Opcode.WEATHERSET,   weather("weather"),  bool("active"));
@@ -548,6 +550,10 @@ public class MindustryOpcodeVariants {
 
     public static NamedParameter status(String name) {
         return new NamedParameter(InstructionParameterType.STATUS, name);
+    }
+
+    public static NamedParameter status_keyword(String name) {
+        return new NamedParameter(InstructionParameterType.STATUS_KEYWORD, name);
     }
 
     public static NamedParameter type(String name) {

@@ -5,6 +5,7 @@ import info.teksol.mc.emulator.mimex.target60.LGlobalVars60;
 import info.teksol.mc.emulator.mimex.target70.LGlobalVars70;
 import info.teksol.mc.emulator.mimex.target80.LGlobalVars80;
 import info.teksol.mc.emulator.mimex.target81.LGlobalVars81;
+import info.teksol.mc.emulator.mimex.target82.LGlobalVars82;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -23,7 +24,8 @@ public interface LGlobalVars {
             case V6         -> new LGlobalVars60(metadata);
             case V7, V7A    -> new LGlobalVars70(metadata);
             case V8A        -> new LGlobalVars80(metadata);
-            case V8B, MAX   -> new LGlobalVars81(metadata);
+            case V8B        -> new LGlobalVars81(metadata);
+            case V8C, MAX   -> new LGlobalVars82(metadata);
         };
     }
 }

@@ -391,6 +391,36 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(LABEL, label(0)),
                     createInstruction(JUMP, label(0), "strictEqual", "@bufferSize", "null"),
+                    createInstruction(JUMP, label(0), "notEqual", "@status-wet", "null"),
+                    createInstruction(PRINT, q("Hello"))
+            );
+        }
+
+        @Test
+        void compilesGuardForTarget82Compatible() {
+            assertCompilesTo("""
+                            #set target-guard = true;
+                            #set target = 8.2m;
+                            
+                            print("Hello");
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "strictEqual", "@status-wet", "null"),
+                    createInstruction(PRINT, q("Hello"))
+            );
+        }
+
+        @Test
+        void compilesGuardForTarget82Specific() {
+            assertCompilesTo("""
+                            #set target-guard = true;
+                            #set builtin-evaluation = full;
+                            #set target = 8.2m;
+                            
+                            print("Hello");
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "strictEqual", "@status-wet", "null"),
                     createInstruction(PRINT, q("Hello"))
             );
         }

@@ -4,6 +4,7 @@ import info.teksol.mc.emulator.mimex.target60.LStrings60;
 import info.teksol.mc.emulator.mimex.target70.LStrings70;
 import info.teksol.mc.emulator.mimex.target80.LStrings80;
 import info.teksol.mc.emulator.mimex.target81.LStrings81;
+import info.teksol.mc.emulator.mimex.target82.LStrings82;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 
@@ -30,7 +31,8 @@ public interface LStrings {
             case V6         -> new LStrings60();
             case V7, V7A    -> new LStrings70();
             case V8A        -> new LStrings80();
-            case V8B, MAX   -> new LStrings81();
+            case V8B        -> new LStrings81();
+            case V8C, MAX   -> new LStrings82();
         };
     }
 }

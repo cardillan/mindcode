@@ -20,6 +20,7 @@ Mindcode provides access to most mlog instructions via Logic functions:
 
 * [Function reference for target 7.1](FUNCTIONS-71.markdown) (for the latest Mindustry 7 release)
 * [Function reference for target 8.1](FUNCTIONS-81.markdown) (for the latest Mindustry 8 release)
+* [Function reference for target 8.2](FUNCTIONS-82.markdown) (for the bleeding edge version of Mindustry)
 * See [Logic functions](FUNCTIONS.markdown) for all existing targets.
 
 A [System Library](SYSTEM-LIBRARY.markdown), consisting of several separate modules, is available:

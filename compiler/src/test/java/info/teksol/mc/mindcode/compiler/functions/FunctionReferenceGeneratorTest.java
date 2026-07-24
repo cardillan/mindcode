@@ -54,6 +54,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
             "Function reference for target 7.1", "FUNCTIONS-71.markdown",
             "Function reference for target 8.0", "FUNCTIONS-80.markdown",
             "Function reference for target 8.1", "FUNCTIONS-81.markdown",
+            "Function reference for target 8.2", "FUNCTIONS-82.markdown",
     };
 
     private static final Set<Opcode> RELEASED_OPCODES =
@@ -85,6 +86,11 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
     @Test
     void createFunctionReferenceForV8B() throws IOException {
         createFunctionReference(ProcessorVersion.V8B);
+    }
+
+    @Test
+    void createFunctionReferenceForV8C() throws IOException {
+        createFunctionReference(ProcessorVersion.V8C);
     }
 
     private void createFunctionReference(ProcessorVersion version) throws IOException {

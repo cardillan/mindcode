@@ -17,22 +17,22 @@ Mindcode offers these options to extend its basic syntax:
 
 ## Declaring new mlog keywords
 
-[Mlog keywords](SYNTAX-0-BASICS.markdown#mlog-keywords) are used as arguments in some mlog instructions. The instructions only accept a limited set of keywords, and those keywords cannot be stored in variables; they need to be used explicitly with the instruction. Using a keyword not defined for the given instruction argument by mlog standard is not supported and leads to compilation errors.
+[Mlog keywords](SYNTAX-0-BASICS.markdown#mlog-keywords) are used as arguments in some mlog instructions. The instructions only accept a limited set of keywords, and those keywords cannot be stored in variables; they need to be used explicitly with the instruction. Using a keyword not defined for the given instruction argument by the mlog standard is not supported and leads to compilation errors.
 
-While mods probably cannot specify a new keyword, a custom Mindustry client could. In this case, it is possible to declare the new keyword. A category into which the new keyword belongs must be specified. The category tells Mindcode which instruction/parameter accepts the new keyword. These keyword categories are supported:
+While mods probably cannot create a new keyword for an existing instruction, a custom Mindustry client could. In this case, it is possible to declare the new keyword. A category into which the new keyword belongs must be specified. The category tells Mindcode which instruction/parameter accepts the new keyword. These keyword categories are supported:
 
-| Category          | Meaning                                                           |
-|-------------------|-------------------------------------------------------------------|
-| blockGroup        | group of blocks to look for in the `ulocate building` instruction |
-| lookupType        | the content type in the `lookup` instruction                      |
-| markerType        | type of marker to create in the `makemarker` instruction          |
-| queryShape        | shape of the area used by the `query` instruction                 |
-| queryType         | type of objects searched for by the `query` instruction           |
-| radarSort         | sort order for the `radar` and `uradar` instructions              |
-| radarTarget       | targeting flags for the `radar` and `uradar` instructions         |
-| settableTileLayer | layer to update in the `setblock` world-processor instruction     |
-| statusEffect      | status to set in the `status` instruction                         |
-| tileLayer         | layer to inspect in the `getblock` world-processor instruction    |
+| Category          | Meaning                                                            |
+|-------------------|--------------------------------------------------------------------|
+| blockGroup        | group of blocks to look for in the `ulocate building` instruction  |
+| lookupType        | the content type in the `lookup` instruction                       |
+| markerType        | type of marker to create in the `makemarker` instruction           |
+| queryShape        | shape of the area used by the `query` instruction                  |
+| queryType         | type of objects searched for by the `query` instruction            |
+| radarSort         | sort order for the `radar` and `uradar` instructions               |
+| radarTarget       | targeting flags for the `radar` and `uradar` instructions          |
+| settableTileLayer | layer to update in the `setblock` world-processor instruction      |
+| statusEffect      | status to set in the `status` instruction (target 8.1 and earlier) |
+| tileLayer         | layer to inspect in the `getblock` world-processor instruction     |
 
 Keywords are declared using `#declare` statement:
 
