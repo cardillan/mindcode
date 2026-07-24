@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
@@ -122,8 +121,8 @@ abstract class AbstractOptimizer extends CompilerMessageEmitter implements Optim
         return level == OptimizationLevel.EXPERIMENTAL;
     }
 
-    protected void emitMessage(MessageLevel level, @PrintFormat String format, Object... args) {
-        addMessage(new CompilerMessage(level, String.format(format, args)));
+    protected void emitMessage(@PrintFormat String format, Object... args) {
+        optimizationContext.emitMessage(format, args);
     }
 
     @Override

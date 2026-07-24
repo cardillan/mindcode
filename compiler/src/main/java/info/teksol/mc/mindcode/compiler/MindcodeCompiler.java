@@ -196,12 +196,11 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         try {
             compileFiles(files);
         } catch (Throwable t) {
-            error("The code to be compiled is too complex (%s).",
-                    switch (t) {
-                        case OutOfMemoryError _ -> "out of memory";
-                        case StackOverflowError _ -> "stack overflow";
-                        default -> t.getClass().getSimpleName();
-                    });
+            error("%s", switch (t) {
+                case OutOfMemoryError _ -> "The code to be compiled is too complex (out of memory).";
+                case StackOverflowError _ -> "The code to be compiled is too complex (stack overflow).";
+                default -> "An internal error has occurred. Please report the error at https://github.com/cardillan/mindcode/issues.";
+            });
 
             if (globalProfile.isPrintStackTrace()) {
                 t.printStackTrace(System.err);

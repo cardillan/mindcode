@@ -47,8 +47,8 @@ class LoopRotator extends AbstractConditionalOptimizer {
     @Override
     public void generateFinalMessages() {
         super.generateFinalMessages();
-        outputActions("%d loop conditions were fully rotated.", fullRotations);
-        outputActions("%d loop conditions were partially rotated.", partialRotations);
+        outputActions("%d loop condition§ were fully rotated.", fullRotations);
+        outputActions("%d loop condition§ were partially rotated.", partialRotations);
     }
 
     @Override

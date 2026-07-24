@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
@@ -41,7 +40,7 @@ class FunctionInliner extends BaseOptimizer {
         iterations = invocations;
         super.generateFinalMessages();
         if (count > 0) {
-            emitMessage(MessageLevel.INFO, "%6d function calls inlined by %s.", count, getName());
+            emitMessage("%6d function call§ inlined by %s.", count, getName());
         }
     }
 

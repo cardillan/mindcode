@@ -1,9 +1,9 @@
     40 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination (6 iterations).
+     1 instruction eliminated by Temp Variables Elimination (6 iterations).
      8 instructions eliminated by Jump Normalization (5 iterations).
-     1 instructions eliminated by Single Step Elimination (6 iterations).
+     1 instruction eliminated by Single Step Elimination (6 iterations).
    215 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
-       1 loop conditions were partially rotated.
+       1 loop condition was partially rotated.
    645 instructions added by Loop Unrolling (6 iterations).
      3 loops unrolled by Loop Unrolling.
    460 instructions after optimizations.

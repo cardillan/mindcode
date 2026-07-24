@@ -5,13 +5,13 @@
      3 instructions eliminated by Condition Optimization (7 iterations).
      2 instructions eliminated by Single Step Elimination (7 iterations).
      4 instructions modified by Expression Optimization (4 iterations).
-     1 instructions eliminated by Boolean Optimization (7 iterations).
-       1 fully-evaluated expressions optimized using selects.
+     1 instruction eliminated by Boolean Optimization (7 iterations).
+       1 fully-evaluated expression optimized using 'select'.
    530 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
        2 loop conditions were partially rotated.
   1021 instructions added by Loop Unrolling (5 iterations).
-     1 loops unrolled by Loop Unrolling.
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 loop unrolled by Loop Unrolling.
+     1 instruction eliminated by Unreachable Code Elimination (2 iterations).
     20 instructions eliminated by Print Merging.
    568 instructions after optimizations.
 

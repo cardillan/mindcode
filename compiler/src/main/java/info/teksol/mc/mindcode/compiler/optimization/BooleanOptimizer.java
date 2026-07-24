@@ -40,11 +40,11 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
     @Override
     public void generateFinalMessages() {
         super.generateFinalMessages();
-        outputActions("%d short-circuited expressions turned to full evaluations.", fullExpressions);
-        outputActions("%d short-circuited conditions turned to full evaluations.", fullConditions);
-        outputActions("%d short-circuited expressions optimized using selects.", shortSelectSequence);
-        outputActions("%d final jumps of a short-circuited expression optimized.", lastJumps);
-        outputActions("%d fully-evaluated expressions optimized using selects.", fullSelectSequence);
+        outputActions("%d short-circuited expression§ turned to full evaluation§.", fullExpressions);
+        outputActions("%d short-circuited condition§ turned to full evaluation§.", fullConditions);
+        outputActions("%d short-circuited expression§ optimized using 'select'§.", shortSelectSequence);
+        outputActions("%d final jump§ of a short-circuited expression optimized.", lastJumps);
+        outputActions("%d fully-evaluated expression§ optimized using 'select'§.", fullSelectSequence);
     }
 
     @Override

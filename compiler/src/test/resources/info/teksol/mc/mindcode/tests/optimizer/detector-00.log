@@ -1,16 +1,16 @@
    248 instructions before optimizations.
      3 instructions eliminated by Temp Variables Elimination (5 iterations).
-     1 instructions eliminated by Case Expression Optimization.
+     1 instruction eliminated by Case Expression Optimization.
     12 instructions eliminated by Dead Code Elimination (5 iterations).
-     1 instructions eliminated by Jump Normalization (4 iterations).
-     1 instructions eliminated by Condition Optimization (5 iterations).
+     1 instruction eliminated by Jump Normalization (4 iterations).
+     1 instruction eliminated by Condition Optimization (5 iterations).
      2 instructions eliminated by Single Step Elimination (5 iterations).
-     1 instructions eliminated by Data Flow Optimization (5 iterations).
+     1 instruction eliminated by Data Flow Optimization (5 iterations).
      5 instructions eliminated by Case Switching (3 iterations).
-     1 case expressions converted to fast dispatch by Case Switching.
+     1 case expression converted to fast dispatch by Case Switching.
      7 instructions eliminated by Jump Straightening (5 iterations).
      7 instructions updated by Jump Threading.
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instruction eliminated by Unreachable Code Elimination (2 iterations).
     94 instructions eliminated by Print Merging.
    120 instructions after optimizations.
 

@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
@@ -102,10 +101,10 @@ class JumpThreading extends BaseOptimizer {
     @Override
     public void generateFinalMessages() {
         if (count > 0) {
-            emitMessage(MessageLevel.INFO, "%6d instructions updated by %s.", count, getName());
+            emitMessage("%6d instruction§ updated by %s.", count, getName());
         }
         if (callCount > 0) {
-            emitMessage(MessageLevel.INFO, "%6d calls threaded by %s.", callCount, getName());
+            emitMessage("%6d call§ threaded by %s.", callCount, getName());
         }
     }
 

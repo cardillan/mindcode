@@ -1,9 +1,9 @@
     40 instructions before optimizations.
-     1 instructions eliminated by Dead Code Elimination (4 iterations).
+     1 instruction eliminated by Dead Code Elimination (4 iterations).
      3 instructions eliminated by Jump Normalization (2 passes, 7 iterations).
-     1 instructions eliminated by Condition Optimization (8 iterations).
+     1 instruction eliminated by Condition Optimization (8 iterations).
      4 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
-     1 instructions modified by If Expression Optimization (5 iterations).
+     1 instruction modified by If Expression Optimization (5 iterations).
     39 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
        2 loop conditions were partially rotated.
     18 instructions added by Loop Unrolling (7 iterations).

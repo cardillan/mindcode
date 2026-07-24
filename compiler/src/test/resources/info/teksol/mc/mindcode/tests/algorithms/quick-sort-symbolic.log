@@ -6,7 +6,7 @@
      2 instructions eliminated by Expression Optimization (3 iterations).
     11 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
        2 loop conditions were partially rotated.
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instruction eliminated by Unreachable Code Elimination (2 iterations).
     24 instructions eliminated by Stack Optimization.
     69 instructions after optimizations.
 

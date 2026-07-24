@@ -95,7 +95,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
                     optimizerContext, program, callGraph, rootAstContext, remoteLibrary);
 
             int count = codeSize();
-            messageConsumer.accept(CompilerMessage.info("%6d instructions before optimizations.", count));
+            optimizationContext.emitMessage("%6d instruction§ before optimizations.", count);
 
             debugPrinter.registerIteration(null, "", List.copyOf(program));
 
@@ -171,7 +171,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
 
             optimizers.values().forEach(Optimizer::generateFinalMessages);
             int newCount = codeSize();
-            messageConsumer.accept(CompilerMessage.info("%6d instructions after optimizations.", newCount));
+            optimizationContext.emitMessage("%6d instruction§ after optimizations.", newCount);
 
             optimizationContext.removeInactiveInstructions();
             optimizationStatistics.forEach(messageConsumer);

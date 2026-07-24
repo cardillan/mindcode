@@ -1,13 +1,13 @@
    128 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination (6 iterations).
-     1 instructions eliminated by Case Expression Optimization.
+     1 instruction eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Jump Normalization (4 iterations).
-     1 instructions eliminated by Condition Optimization (5 iterations).
+     1 instruction eliminated by Jump Normalization (4 iterations).
+     1 instruction eliminated by Condition Optimization (5 iterations).
      2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
-       1 loop conditions were partially rotated.
+       1 loop condition was partially rotated.
     49 instructions eliminated by Case Switching (4 iterations).
-     1 case expressions converted to switched jumps by Case Switching.
+     1 case expression converted to switched jump by Case Switching.
     70 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 380):

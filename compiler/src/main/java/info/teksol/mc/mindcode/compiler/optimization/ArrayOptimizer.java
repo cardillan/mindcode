@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
@@ -37,7 +36,7 @@ class ArrayOptimizer extends BaseOptimizer {
         iterations = invocations;
         super.generateFinalMessages();
         if (!updatedArrays.isEmpty()) {
-            emitMessage(MessageLevel.INFO, "%6d array(s) improved by %s.", updatedArrays.size(), getName());
+            emitMessage("%6d array§ improved by %s.", updatedArrays.size(), getName());
         }
     }
 

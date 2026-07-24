@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
@@ -33,7 +32,7 @@ class LoopHoisting extends BaseOptimizer {
     public void generateFinalMessages() {
         super.generateFinalMessages();
         if (count > 0) {
-            emitMessage(MessageLevel.INFO, "%6d loops improved by %s.", count, getName());
+            emitMessage("%6d loop§ improved by %s.", count, getName());
         }
     }
 

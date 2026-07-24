@@ -1,10 +1,10 @@
     16 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination (7 iterations).
-     1 instructions eliminated by Jump Normalization (6 iterations).
-     1 instructions eliminated by Condition Optimization (7 iterations).
-     1 instructions eliminated by Single Step Elimination (7 iterations).
-     1 instructions modified by Data Flow Optimization (5 iterations).
-       1 loop conditions were partially rotated.
+     1 instruction eliminated by Jump Normalization (6 iterations).
+     1 instruction eliminated by Condition Optimization (7 iterations).
+     1 instruction eliminated by Single Step Elimination (7 iterations).
+     1 instruction modified by Data Flow Optimization (5 iterations).
+       1 loop condition was partially rotated.
     11 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):

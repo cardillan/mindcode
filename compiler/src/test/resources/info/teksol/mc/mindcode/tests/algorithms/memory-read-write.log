@@ -1,5 +1,5 @@
      5 instructions before optimizations.
-     1 instructions eliminated by Single Step Elimination (5 iterations).
+     1 instruction eliminated by Single Step Elimination (5 iterations).
      4 instructions after optimizations.
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):

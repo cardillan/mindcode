@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstCaseExpression;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
@@ -79,13 +78,13 @@ public class CaseSwitcher extends BaseOptimizer {
         iterations = invocations;
         super.generateFinalMessages();
         if (switchedCount > 0) {
-            emitMessage(MessageLevel.INFO, "%6d case expressions converted to switched jumps by %s.", switchedCount, getName());
+            emitMessage("%6d case expression§ converted to switched jump§ by %s.", switchedCount, getName());
         }
         if (translatedCount > 0) {
-            emitMessage(MessageLevel.INFO, "%6d case expressions converted to value translations by %s.", translatedCount, getName());
+            emitMessage("%6d case expression§ converted to value translation§ by %s.", translatedCount, getName());
         }
         if (fastDispatchedCount > 0) {
-            emitMessage(MessageLevel.INFO, "%6d case expressions converted to fast dispatch by %s.", fastDispatchedCount, getName());
+            emitMessage("%6d case expression§ converted to fast dispatch§§ by %s.", fastDispatchedCount, getName());
         }
     }
 

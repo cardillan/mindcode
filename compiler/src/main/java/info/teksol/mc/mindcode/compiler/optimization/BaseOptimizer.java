@@ -2,7 +2,6 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.emulator.MlogReadable;
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -145,13 +144,12 @@ abstract class BaseOptimizer extends AbstractOptimizer {
             String visits = passes > 1 ? " (" + passes + " passes, " + iterations + " iterations)"
                     : iterations > 1 ? " (" + iterations + " iterations)" : "";
 
-            emitMessage(MessageLevel.INFO, "%6d instructions %s by %s%s.",
-                    count, verb, getName(), visits);
+            emitMessage("%6d instruction§ %s by %s%s.", count, verb, getName(), visits);
         }
     }
 
     protected void outputActions(@PrintFormat String format, int count) {
-        if (count > 0) emitMessage(MessageLevel.INFO, "       " + format, count);
+        if (count > 0) emitMessage("       " + format, count);
     }
 
     /**

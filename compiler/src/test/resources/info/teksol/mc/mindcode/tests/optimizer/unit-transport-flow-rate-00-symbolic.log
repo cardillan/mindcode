@@ -3,11 +3,11 @@
      4 instructions eliminated by Dead Code Elimination (4 iterations).
      6 instructions eliminated by Condition Optimization (5 iterations).
      5 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions eliminated by Expression Optimization (2 iterations).
+     1 instruction eliminated by Expression Optimization (2 iterations).
     11 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      4 instructions added by Loop Rotation (2 iterations).
        3 loop conditions were partially rotated.
-     1 instructions eliminated by Jump Straightening (5 iterations).
+     1 instruction eliminated by Jump Straightening (5 iterations).
      3 instructions updated by Jump Threading.
     11 instructions eliminated by Print Merging.
     70 instructions after optimizations.

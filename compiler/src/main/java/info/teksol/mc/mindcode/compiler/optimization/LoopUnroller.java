@@ -1,7 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.emulator.LVar;
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstForEachLoopStatement;
@@ -40,7 +39,7 @@ class LoopUnroller extends BaseOptimizer {
         iterations = invocations;
         super.generateFinalMessages();
         if (count > 0) {
-            emitMessage(MessageLevel.INFO, "%6d loops unrolled by %s.", count, getName());
+            emitMessage("%6d loop§ unrolled by %s.", count, getName());
         }
     }
 

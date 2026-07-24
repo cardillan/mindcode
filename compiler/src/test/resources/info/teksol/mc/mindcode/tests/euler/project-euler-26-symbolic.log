@@ -1,5 +1,5 @@
     54 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination (6 iterations).
+     1 instruction eliminated by Temp Variables Elimination (6 iterations).
      6 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Jump Normalization (5 iterations).
      5 instructions eliminated by Condition Optimization (6 iterations).
@@ -8,7 +8,7 @@
      2 instructions added by Loop Rotation (3 iterations).
        4 loop conditions were partially rotated.
    587 instructions added by Loop Unrolling (6 iterations).
-     1 loops unrolled by Loop Unrolling.
+     1 loop unrolled by Loop Unrolling.
    520 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 964):

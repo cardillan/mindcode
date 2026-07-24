@@ -5,7 +5,7 @@
     50 instructions eliminated by Condition Optimization (7 iterations).
     30 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
     12 instructions eliminated by Boolean Optimization (7 iterations).
-       5 fully-evaluated expressions optimized using selects.
+       5 fully-evaluated expressions optimized using 'select's.
      2 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
      6 instructions added by Loop Rotation (3 iterations).
        9 loop conditions were partially rotated.

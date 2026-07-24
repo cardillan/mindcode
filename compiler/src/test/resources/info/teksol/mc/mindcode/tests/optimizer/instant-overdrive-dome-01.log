@@ -6,7 +6,7 @@
    101 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
     20 instructions eliminated by Boolean Optimization (2 passes, 8 iterations).
        2 final jumps of a short-circuited expression optimized.
-       6 fully-evaluated expressions optimized using selects.
+       6 fully-evaluated expressions optimized using 'select's.
      4 instructions eliminated by If Expression Optimization (3 iterations).
     89 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
      2 instructions added by Loop Rotation (3 iterations).

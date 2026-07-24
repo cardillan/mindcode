@@ -1,10 +1,10 @@
    135 instructions before optimizations.
-     1 instructions eliminated by Case Expression Optimization.
+     1 instruction eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Jump Normalization (5 iterations).
-     1 instructions eliminated by Condition Optimization (6 iterations).
+     1 instruction eliminated by Jump Normalization (5 iterations).
+     1 instruction eliminated by Condition Optimization (6 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
-       1 loop conditions were partially rotated.
+       1 loop condition was partially rotated.
    127 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):

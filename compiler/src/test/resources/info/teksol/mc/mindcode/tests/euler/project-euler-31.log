@@ -4,12 +4,12 @@
      2 instructions eliminated by Condition Optimization (5 iterations).
      2 instructions eliminated by Single Step Elimination (5 iterations).
     18 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
-       1 loop conditions were partially rotated.
+       1 loop condition was partially rotated.
      2 instructions eliminated by Loop Unrolling (4 iterations).
-     1 loops unrolled by Loop Unrolling.
+     1 loop unrolled by Loop Unrolling.
      2 instructions added by Return Optimization (4 iterations).
-     1 return statements optimized by Return Optimization.
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 return statement optimized by Return Optimization.
+     1 instruction eliminated by Unreachable Code Elimination (2 iterations).
      4 instructions eliminated by Stack Optimization.
     59 instructions after optimizations.
 

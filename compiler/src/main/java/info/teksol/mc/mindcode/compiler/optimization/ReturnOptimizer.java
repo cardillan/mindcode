@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -30,7 +29,7 @@ class ReturnOptimizer extends BaseOptimizer {
         iterations = invocations;
         super.generateFinalMessages();
         if (count > 0) {
-            emitMessage(MessageLevel.INFO, "%6d return statements optimized by %s.", count, getName());
+            emitMessage("%6d return statement§ optimized by %s.", count, getName());
         }
     }
 

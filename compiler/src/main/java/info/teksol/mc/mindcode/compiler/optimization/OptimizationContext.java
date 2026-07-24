@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.emulator.MlogReadable;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
@@ -22,6 +23,7 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.util.CollectionUtils;
 import info.teksol.mc.util.TraceFile;
+import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -193,6 +195,21 @@ public class OptimizationContext extends CompilerMessageEmitter {
             traceFile.outputProgram(getProgramText());
         }
     }
+
+    protected void emitMessage(@PrintFormat String format, Object... args) {
+        String fmt;
+        if (args.length > 0 && args[0] instanceof Integer num) {
+            if (num == 1) {
+                fmt = format.replace("§", "").replace(" were ", " was ");
+            } else {
+                fmt = format.replace("§§", "es").replace("§", "s");
+            }
+        } else {
+            fmt = format;
+        }
+        addMessage(new CompilerMessage(MessageLevel.INFO, String.format(fmt, args)));
+    }
+
 
     /// Prepares the instance for the next round of program modification/optimization.
     public int prepare() {

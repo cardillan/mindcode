@@ -1,11 +1,11 @@
     70 instructions before optimizations.
      6 instructions eliminated by Temp Variables Elimination (6 iterations).
-     1 instructions eliminated by Case Expression Optimization.
-     1 instructions eliminated by Dead Code Elimination (5 iterations).
+     1 instruction eliminated by Case Expression Optimization.
+     1 instruction eliminated by Dead Code Elimination (5 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-       1 loop conditions were partially rotated.
+       1 loop condition was partially rotated.
      7 instructions eliminated by Jump Straightening (3 passes, 9 iterations).
-     1 instructions updated by Jump Threading.
+     1 instruction updated by Jump Threading.
      3 instructions eliminated by Unreachable Code Elimination (3 iterations).
     49 instructions after optimizations.
 
