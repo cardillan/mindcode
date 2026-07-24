@@ -10,12 +10,13 @@ import java.util.Set;
 
 @NullMarked
 public enum ProcessorVersion {
-    V6      (0, 6, 0, "v126.2"),
+    V6      (0, 6, 0, "v126.2", true),
     V7      (0, 7, 0, "v146"),
-    V7A     (1, 7, 1, "v146"),
+    V7A     (1, 7, 1, "v146", true),
     V8A     (1, 8, 0, "v149"),
-    V8B     (1, 8, 1, "be"),
-    MAX     (1, 8, 1, "be"),
+    V8B     (1, 8, 1, "v159.7", true),
+    V8C     (1, 8, 2, "be"),
+    MAX     (1, 8, 2, "be"),
     ;
 
     // A change in the generation number reflects differences in mappings from Mindcode to mlog.
@@ -24,12 +25,22 @@ public enum ProcessorVersion {
     public final int major;
     public final int minor;
     public final String mimexVersion;
+    public final boolean defaultMinor;
+
+    ProcessorVersion(int generation, int major, int minor, String mimexVersion, boolean defaultMinor) {
+        this.generation = generation;
+        this.major = major;
+        this.minor = minor;
+        this.mimexVersion = mimexVersion;
+        this.defaultMinor = defaultMinor;
+    }
 
     ProcessorVersion(int generation, int major, int minor, String mimexVersion) {
         this.generation = generation;
         this.major = major;
         this.minor = minor;
         this.mimexVersion = mimexVersion;
+        this.defaultMinor = false;
     }
 
     public boolean atLeast(ProcessorVersion min) {
@@ -67,7 +78,7 @@ public enum ProcessorVersion {
         Map<String, ProcessorVersion> result = new LinkedHashMap<>();
         for (ProcessorVersion version : ALL) {
             if (version != MAX) {
-                result.put(version.major + "", version);
+                if (version.defaultMinor) result.put(version.major + "", version);
                 result.put(version.major + "." + version.minor, version);
             }
         }

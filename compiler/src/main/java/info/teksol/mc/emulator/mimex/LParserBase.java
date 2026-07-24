@@ -13,26 +13,26 @@ import java.util.Map;
 
 @NullMarked
 public abstract class LParserBase implements LParser {
-    private final ParserMessageHandler errorHandler;
-    private final MindustryMetadata metadata;
-    private final LStrings strings;
-    private final Map<String, String> opNameChanges = opNameChanges();
-    private final Map<String, String> tokenChanges = tokenChanges();
+    protected final ParserMessageHandler errorHandler;
+    protected final MindustryMetadata metadata;
+    protected final LStrings strings;
+    protected final Map<String, String> opNameChanges = opNameChanges();
+    protected final Map<String, String> tokenChanges = tokenChanges();
 
-    private final String[] tokens = new String[16];
-    private final List<JumpIndex> jumps = new ArrayList<>();
-    private final Map<String, Integer> jumpLocations = new HashMap<>();
-    private final List<LStatement> statements = new ArrayList<>();
-    private final boolean enforceInstructionLimit;
-    private final boolean privileged;
-    private final char[] chars;
+    protected final String[] tokens = new String[16];
+    protected final List<JumpIndex> jumps = new ArrayList<>();
+    protected final Map<String, Integer> jumpLocations = new HashMap<>();
+    protected final List<LStatement> statements = new ArrayList<>();
+    protected final boolean enforceInstructionLimit;
+    protected final boolean privileged;
+    protected final char[] chars;
 
     // An error was encountered (and reported) during parsing
-    private boolean includeComments = false;
-    private boolean includeLabels = false;
-    private boolean error;
-    private int pos;
-    private int line;
+    protected boolean includeComments = false;
+    protected boolean includeLabels = false;
+    protected boolean error;
+    protected int pos;
+    protected int line;
 
     public LParserBase(ParserMessageHandler errorHandler, MindustryMetadata metadata, LStrings strings, String code,
             boolean privileged, boolean enforceInstructionLimit) {
@@ -104,7 +104,7 @@ public abstract class LParserBase implements LParser {
     /**
      * Apply changes after reading a list of tokens.
      */
-    void checkRead() {
+    protected void checkRead() {
         if (tokens[0].equals("op")) {
             //legacy name change
             tokens[1] = opNameChanges.getOrDefault(tokens[1], tokens[1]);
@@ -248,6 +248,6 @@ public abstract class LParserBase implements LParser {
         return error;
     }
 
-    record JumpIndex(JumpStatement jump, String location) {
+    protected record JumpIndex(JumpStatement jump, String location) {
     }
 }

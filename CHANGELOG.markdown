@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.17.2 – 2026-07-24
+
+### Added
+
+* Added target `8.2` corresponding to the new format of the `status` instruction in the latest BE build. The default target is still `8.1`.
+* Added a mapping of the `sensor` instruction to a function: `result = sensor(object, property);` is now a valid syntax.  
+
 ## 3.17.1 – 2026-07-23
 
 ### Fixed

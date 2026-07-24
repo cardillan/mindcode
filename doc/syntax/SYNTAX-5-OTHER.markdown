@@ -173,15 +173,21 @@ The code generation isn't affected by the processor size limit in any way, only 
 
 Use the `target` option to specify the Mindcode/Mindustry Logic version and the processor type to be used by the compiler and processor emulator. Compiler will generate code compatible with the selected processor version and type, and both the compiler and processor emulator recognize Mindustry objects, built-in variables, and other elements available in a given Mindustry Logic version. The default value is `8m`.
 
-The target versions consist of a major and minor version number. As of now, these versions exist:
+The target versions consist of a major and minor version number. Individual targets correspond to the following Mindustry versions:
 
-| Version | Description                                                  |
-|:-------:|:-------------------------------------------------------------|
-|   6.0   | Mindustry Logic for the latest release of Mindustry 6.       |
-|   7.0   | Mindustry Logic for the latest release of Mindustry 7.       |
-|   7.1   | As above, with slightly revised syntax of some functions.    |
-|   8.0   | Mindustry Logic for the v8 Build 149 Beta Mindustry release. |
-|   8.1   | Mindustry Logic for the latest release of Mindustry 8.       |
+| Version | Earlies release     | Latest release      |
+|:-------:|:--------------------|:--------------------|
+|   6.0   | 6.0 Build 126.2     | 6.0 Build 126.2     |
+|   7.0   | 7.0 Build 146       | 7.0 Build 146       |
+|   7.1   | 7.0 Build 146       | 7.0 Build 146       |
+|   8.0   | v8 Build 147 - Beta | v8 Build 149 - Beta |
+|   8.1   | v8 Build 150 - Beta | v8 Build 159.7      |
+|   8.2   | Bleeding edge       | -                   |
+
+> [!NOTE]
+> Mindcode defines logic functions for all instructions that are available in the latest corresponding Mindustry release corresponding to the chosen target. Some instructions may not be available in earlier Mindustry releases that correspond to the chosen target. In this case, a syntax error ("unknown function") is generated. It is not reasonable to specify a separate target for each intermediate Mindustry release that adds new instructions or built-in variables. New targets are only created when incompatible or very significant changes to the logic system are added.    
+
+The `7.0` and `7.1` targets differ in the way they map some instructions to Logic functions. 
 
 The target can be set using either just a major or both major and minor version numbers. When specifying both numbers, the specified version is used. When specifying just the major version, the most recent minor version in the given major category is used. Example:
 

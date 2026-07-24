@@ -22,16 +22,9 @@ See [Mindcode Features](FEATURES.markdown) for a more detailed list of features.
 
 ## Supported Mindustry versions
 
-Mindcode can generate code for several Mindustry versions and different types of processors. The target can be selected in the web app using a combobox or by including one of the following commands in the source code: 
+Mindcode can generate code for several Mindustry versions and different types of processors. The target can be selected in the web app using a combobox or by including the `#set target` directive in the source code. See the list of [supported targets and their corresponding Mindustry versions](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target).  
 
-* **6.0 Build 126.2**: use `#set target = 6m;` to select it (`m` denotes a micro-processor, use `l`, `h` or `w` for a logic-, hyper- or world-processor).
-* **7.0 Build 146**: use `#set target = 7m;` to select it.  
-* **v8 Build 149 Beta**: use `#set target = 8.0m;` to select it.
-* **v8 Build 157.4** or later (the default one): use `#set target = 8m;` (or `8.1m`) to explicitly select it.
-
-At this moment, target `8` (or `8.1`) is also fully compatible with the latest Mindustry BE version.
-
-[Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality in Mindustry 8.
+Currently, the default target is `8.1m`, corresponding to the latest official Mindustry 8 release (v8 Build 159.7).
 
 ## Mindcode Syntax
 

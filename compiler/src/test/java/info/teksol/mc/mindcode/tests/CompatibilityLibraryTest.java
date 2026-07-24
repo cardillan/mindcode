@@ -37,7 +37,14 @@ public class CompatibilityLibraryTest extends AbstractProcessorTest {
         return profile;
     }
 
-    String expectedOutput(ProcessorVersion compiler, ProcessorVersion emulator) {
+    private ProcessorVersion minimalCompatibleVersion(ProcessorVersion version) {
+        return version == V8C ? V8B : version;
+    }
+
+    String expectedOutput(ProcessorVersion compilerVersion, ProcessorVersion emulatorVersion) {
+        ProcessorVersion compiler = minimalCompatibleVersion(compilerVersion);
+        ProcessorVersion emulator = minimalCompatibleVersion(emulatorVersion);
+
         if (compiler == emulator) {
             return "[green]No compatibility issues encountered. Mindcode is fully compatible with this Mindustry version.";
         } else if (emulator.atLeast(compiler)) {
@@ -45,7 +52,7 @@ public class CompatibilityLibraryTest extends AbstractProcessorTest {
                     [salmon]Mindcode metadata of unstable built-ins are not compatible with this Mindustry version.[]
                     Please report the problem, and use [gold]#set builtin-evaluation = compatible;[]
                     to avoid incompatibility issues.""";
-        } else if (compiler.atLeast(V8B)) {
+        } else if (compiler.atLeast(V8B) && emulator.atMost(V8A)) {
             return """
                     [salmon]Cannot evaluate processor compatibility - the [gold]select[] instruction is missing.[]
                     Use the correct target for this Mindustry version when compiling your code.""";

@@ -97,6 +97,7 @@ public class MindustryMetadata {
     private final AtomicReference<@Nullable Set<String>> radarTargets = new AtomicReference<>();
     private final AtomicReference<@Nullable Set<String>> soundNames = new AtomicReference<>();
     private final AtomicReference<@Nullable Set<String>> statusEffects = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> statusEffectVars = new AtomicReference<>();
     private final AtomicReference<@Nullable Set<String>> tileLayers = new AtomicReference<>();
     private final AtomicReference<@Nullable Set<String>> tileLayersSettable = new AtomicReference<>();
     private final AtomicReference<@Nullable Set<String>> unitControls = new AtomicReference<>();
@@ -385,6 +386,10 @@ public class MindustryMetadata {
 
     public Set<String> getStatusEffects() {
         return cacheInstance(statusEffects, () -> new NamedReader("mimex-status-effects.txt").createFromResource());
+    }
+
+    public Set<String> getStatusEffectVars() {
+        return cacheInstance(statusEffectVars, () -> new NamedReader("mimex-status-effects.txt", s -> "@status-" + s).createFromResource());
     }
 
     public Set<String> getTileLayers() {

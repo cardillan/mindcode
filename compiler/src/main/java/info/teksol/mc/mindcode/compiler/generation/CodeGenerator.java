@@ -283,8 +283,18 @@ public class CodeGenerator extends CompilerMessageEmitter {
                 }
             }
             case V8B -> {
-                // No distinction between full and compatible: there are no other compatible versions besides V8
-                assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("@bufferSize"), LogicNull.NULL).setTargetGuard(true);
+                if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                    // V8B only
+                    assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("@bufferSize"), LogicNull.NULL).setTargetGuard(true);
+                    assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@status-wet"), LogicNull.NULL).setTargetGuard(true);
+                } else {
+                    // V8B and above
+                    assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("@bufferSize"), LogicNull.NULL).setTargetGuard(true);
+                }
+            }
+            case V8C -> {
+                // No distinction between full and compatible: we don't know what the future will look like
+                assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("@status-wet"), LogicNull.NULL).setTargetGuard(true);
             }
             default -> throw new MindcodeInternalError("Unhandled processor version " + globalProfile.getProcessorVersion());
         }
