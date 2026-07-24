@@ -22,7 +22,7 @@ See [Mindcode Features](FEATURES.markdown) for a more detailed list of features.
 
 ## Supported Mindustry versions
 
-Mindcode can generate code for several Mindustry versions and different types of processors. The target can be selected in the web app using a combobox or by including the `#set target` directive in the source code. See the list of [supported targets and their corresponding Mindustry versions](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target).  
+Mindcode can generate code for all major Mindustry versions and different types of processors. The target can be selected in the web app using a combobox or by including the `#set target` directive in the source code. See the list of [supported targets and their corresponding Mindustry versions](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target).  
 
 Currently, the default target is `8.1m`, corresponding to the latest official Mindustry 8 release (v8 Build 159.7).
 

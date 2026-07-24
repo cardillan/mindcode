@@ -175,26 +175,25 @@ Use the `target` option to specify the Mindcode/Mindustry Logic version and the 
 
 The target versions consist of a major and minor version number. Individual targets correspond to the following Mindustry versions:
 
-| Version | Earlies release     | Latest release      |
-|:-------:|:--------------------|:--------------------|
-|   6.0   | 6.0 Build 126.2     | 6.0 Build 126.2     |
-|   7.0   | 7.0 Build 146       | 7.0 Build 146       |
-|   7.1   | 7.0 Build 146       | 7.0 Build 146       |
-|   8.0   | v8 Build 147 - Beta | v8 Build 149 - Beta |
-|   8.1   | v8 Build 150 - Beta | v8 Build 159.7      |
-|   8.2   | Bleeding edge       | -                   |
+|   Version    | Earlies release     | Latest release      |
+|:------------:|:--------------------|:--------------------|
+|   **6.0**    | 6.0 Build 126.2     | 6.0 Build 126.2     |
+| 7.0, **7.1** | 7.0 Build 146       | 7.0 Build 146       |
+|     8.0      | v8 Build 147 - Beta | v8 Build 149 - Beta |
+|   **8.1**    | v8 Build 150 - Beta | v8 Build 159.7      |
+|    8.2       | Bleeding edge       | -                   |
+
+The `7.0` and `7.1` targets differ in the way they map some instructions to Logic functions.
+
+The target can be set using either just a major or both major and minor version numbers. When specifying both numbers, the specified version is used. When specifying just the major version, the highlighted minor version in the table above is used. Example:
+
+```
+#set target = 8m;        // Selects target 8.1m
+#set target = 8.0m;      // Selects target 8.0m
+```
 
 > [!NOTE]
 > Mindcode defines logic functions for all instructions that are available in the latest corresponding Mindustry release corresponding to the chosen target. Some instructions may not be available in earlier Mindustry releases that correspond to the chosen target. In this case, a syntax error ("unknown function") is generated. It is not reasonable to specify a separate target for each intermediate Mindustry release that adds new instructions or built-in variables. New targets are only created when incompatible or very significant changes to the logic system are added.    
-
-The `7.0` and `7.1` targets differ in the way they map some instructions to Logic functions. 
-
-The target can be set using either just a major or both major and minor version numbers. When specifying both numbers, the specified version is used. When specifying just the major version, the most recent minor version in the given major category is used. Example:
-
-```
-#set target = 7m;        // Sets version 7.1
-#set target = 7.0m;      // Sets version 7.0
-```
 
 The processor type is specified by appending a one-letter suffix to the version number:
 
@@ -232,6 +231,7 @@ Target compatibility matrix:
 | 7.1           | 7.1 or higher             |
 | 8.0           | 8.0 or higher             |
 | 8.1           | 8.1 or higher             |
+| 8.2           | 8.2 or higher             |
 
 Note: the incompatibility between 7.0 and 7.1 is caused by different instruction mappings.
 
