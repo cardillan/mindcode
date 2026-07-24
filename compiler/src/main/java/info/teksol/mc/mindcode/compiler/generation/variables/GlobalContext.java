@@ -27,8 +27,8 @@ public class GlobalContext implements FunctionContext {
     }
 
     @Override
-    public MindcodeFunction function() {
-        throw new MindcodeInternalError("Function not available in global context");
+    public @Nullable MindcodeFunction function() {
+        return null;
     }
 
     @Override

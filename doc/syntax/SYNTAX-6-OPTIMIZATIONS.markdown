@@ -69,7 +69,7 @@ Individual optimizations are described in separate documents:
 * [Data Flow Optimization](optimizations/DATA-FLOW-OPTIMIZATION.markdown): improving variable assignments and expressions, analyzing data flow for other optimizations.
 * [Dead Code Elimination](optimizations/DEAD-CODE-ELIMINATION.markdown): eliminating writes to compiler- or user-defined variables that are not used.
 * [Expression Optimization](optimizations/EXPRESSION-OPTIMIZATION.markdown): optimizing some common mathematical expressions.
-* [Function Inlining](optimizations/FUNCTION-INLINING.markdown): inlining stackless function calls.
+* [Function Inlining](optimizations/FUNCTION-INLINING.markdown): inlining functions or function calls.
 * [If Expression Optimization](optimizations/IF-EXPRESSION-OPTIMIZATION.markdown): improving ternary/if expressions.
 * [Jump Normalization](optimizations/JUMP-NORMALIZATION.markdown): replacing always true conditional jumps with unconditional ones, removing always false jumps.
 * [Jump Straightening](optimizations/JUMP-STRAIGHTENING.markdown): simplifying sequences of intertwined jumps.

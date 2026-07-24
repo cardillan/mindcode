@@ -1,22 +1,124 @@
    189 instructions before optimizations.
     18 instructions eliminated by Temp Variables Elimination (6 iterations).
      8 instructions eliminated by Dead Code Elimination (5 iterations).
-     2 instructions eliminated by Condition Optimization (6 iterations).
-     4 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     5 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+     4 instructions eliminated by Jump Normalization (5 iterations).
+     2 instructions eliminated by Condition Optimization (2 passes, 7 iterations).
+    28 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+     4 instructions modified by Expression Optimization (3 iterations).
+    39 instructions eliminated by Data Flow Optimization (13 passes, 45 iterations).
        1 loop condition was partially rotated.
-     4 instructions added by Return Optimization (5 iterations).
+   406 instructions added by Function Inlining (15 iterations).
+    10 function calls inlined by Function Inlining.
+     4 instructions added by Return Optimization (15 iterations).
      2 return statements optimized by Return Optimization.
-     3 instructions eliminated by Unreachable Code Elimination (2 iterations).
-    28 instructions eliminated by Stack Optimization.
-   125 instructions after optimizations.
+   143 instructions eliminated by Unreachable Code Elimination (2 iterations).
+   112 instructions eliminated by Stack Optimization.
+   245 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 846):
+    Inline function call at line 38:17                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 39:18                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 40:18                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 41:18                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 42:18                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 43:19                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 44:19                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 45:19                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 46:30                           size   +26, benefit        3.5, efficiency      0.135
+    Inline function call at line 11:13                           size   +32, benefit       35.0, efficiency      1.094
+    Inline function call at line 23:13                           size   +32, benefit       35.0, efficiency      1.094
   * Optimize return at line 8:9                                  size    +2, benefit        5.0, efficiency      2.500 (+2 instructions)
     Optimize return at line 20:9                                 size    +2, benefit        5.0, efficiency      2.500
 
 Pass 1: speed optimization selection (cost limit 844):
+    Inline function call at line 38:17                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 39:18                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 40:18                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 41:18                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 42:18                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 43:19                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 44:19                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 45:19                           size   +32, benefit        3.5, efficiency      0.109
+    Inline function call at line 46:30                           size   +26, benefit        3.5, efficiency      0.135
+    Inline function call at line 11:13                           size   +32, benefit       35.0, efficiency      1.094
+    Inline function call at line 23:13                           size   +34, benefit       35.0, efficiency      1.029
   * Optimize return at line 20:9                                 size    +2, benefit        5.0, efficiency      2.500 (+2 instructions)
+
+Pass 1: speed optimization selection (cost limit 842):
+    Inline function call at line 38:17                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 39:18                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 40:18                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 41:18                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 42:18                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 43:19                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 44:19                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 45:19                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 46:30                           size   +26, benefit        3.5, efficiency      0.135
+  * Inline function call at line 11:13                           size   +34, benefit       35.0, efficiency      1.029 (+30 instructions)
+    Inline function call at line 23:13                           size   +34, benefit       35.0, efficiency      1.029
+
+Pass 1: speed optimization selection (cost limit 812):
+    Inline function call at line 38:17                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 39:18                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 40:18                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 41:18                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 42:18                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 43:19                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 44:19                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 45:19                           size   +34, benefit        3.5, efficiency      0.103
+  * Inline function call at line 46:30                           size   +26, benefit        3.5, efficiency      0.135 (+24 instructions)
+
+Pass 1: speed optimization selection (cost limit 788):
+    Inline function call at line 38:17                           size   +64, benefit        3.5, efficiency      0.055
+  * Inline function call at line 39:18                           size   +34, benefit        3.5, efficiency      0.103 (+28 instructions)
+    Inline function call at line 40:18                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 41:18                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 42:18                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 43:19                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 44:19                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 45:19                           size   +34, benefit        3.5, efficiency      0.103
+
+Pass 1: speed optimization selection (cost limit 760):
+    Inline function call at line 38:17                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 40:18                           size   +64, benefit        3.5, efficiency      0.055
+  * Inline function call at line 41:18                           size   +34, benefit        3.5, efficiency      0.103 (+29 instructions)
+    Inline function call at line 42:18                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 43:19                           size   +34, benefit        3.5, efficiency      0.103
+    Inline function call at line 44:19                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 45:19                           size   +34, benefit        3.5, efficiency      0.103
+
+Pass 1: speed optimization selection (cost limit 731):
+    Inline function call at line 38:17                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 40:18                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 42:18                           size   +64, benefit        3.5, efficiency      0.055
+  * Inline function call at line 43:19                           size   +34, benefit        3.5, efficiency      0.103 (+29 instructions)
+    Inline function call at line 44:19                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 45:19                           size   +34, benefit        3.5, efficiency      0.103
+
+Pass 1: speed optimization selection (cost limit 702):
+    Inline function call at line 38:17                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 40:18                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 42:18                           size   +64, benefit        3.5, efficiency      0.055
+    Inline function call at line 44:19                           size   +64, benefit        3.5, efficiency      0.055
+  * Inline function call at line 45:19                           size   +34, benefit        3.5, efficiency      0.103 (+17 instructions)
+
+Pass 1: speed optimization selection (cost limit 685):
+  * Inline function call at line 38:17                           size   +62, benefit        3.5, efficiency      0.056 (+53 instructions)
+    Inline function call at line 40:18                           size   +62, benefit        3.5, efficiency      0.056
+    Inline function call at line 42:18                           size   +62, benefit        3.5, efficiency      0.056
+    Inline function call at line 44:19                           size   +62, benefit        3.5, efficiency      0.056
+
+Pass 1: speed optimization selection (cost limit 632):
+  * Inline function call at line 40:18                           size   +62, benefit        3.5, efficiency      0.056 (+55 instructions)
+    Inline function call at line 42:18                           size   +62, benefit        3.5, efficiency      0.056
+    Inline function call at line 44:19                           size   +62, benefit        3.5, efficiency      0.056
+
+Pass 1: speed optimization selection (cost limit 577):
+  * Inline function call at line 42:18                           size   +62, benefit        3.5, efficiency      0.056 (+56 instructions)
+    Inline function call at line 44:19                           size   +62, benefit        3.5, efficiency      0.056
+
+Pass 1: speed optimization selection (cost limit 521):
+  * Inline function call at line 44:19                           size   +62, benefit        3.5, efficiency      0.056 (+56 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-7 instructions):
  
@@ -349,171 +451,2086 @@ Modifications by Optimize return at line 20:9 (+2 instructions):
     75 label *label18
     76 op sub *tmp24 :g:n 1
 
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
+Modifications by Inline function call at line 11:13 (+30 instructions):
  
-    61 pop bank1 :f:n
-    62 op mul *tmp17 :g*retval :f:a
-    63 op add :f*retval *tmp17 :f:b
+    52 push bank1 :f:r
+    53 push bank1 *tmp13
+    54 set :g:n *tmp15
+-    * callrec bank1 *label1 *label15 :g*retval
+-    * label *label15
++   55 op add :g:x :g:n 3
++   56 op add :g:y :g:n 4
++   57 jump *label27 notEqual :g:n 0
++   58 op mul :g*retval :g:x :g:y
++   59 jump *label30 always
++   60 label *label27
++   61 label *label28
++   62 op sub *tmp24 :g:n 1
++   63 push bank1 :g:n
++   64 push bank1 :g:x
++   65 push bank1 :g:y
++   66 push bank1 :g:r
++   67 push bank1 *tmp22
++   68 set :f:n *tmp24
++   69 callrec bank1 *label0 *label29 :f*retval
++   70 label *label29
++   71 pop bank1 *tmp22
++   72 pop bank1 :g:r
++   73 pop bank1 :g:y
++   74 pop bank1 :g:x
++   75 pop bank1 :g:n
++   76 op mul *tmp26 :f*retval :g:x
++   77 op add :g*retval *tmp26 :g:y
++   78 jump *label30 always
++   79 label *label30
+    80 pop bank1 *tmp13
+    81 pop bank1 :f:r
+    82 pop bank1 :f:b
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    52 push bank1 :f:r
+    53 push bank1 *tmp13
+    54 set :g:n *tmp15
+-    * op add :g:x :g:n 3
+-    * op add :g:y :g:n 4
+-    * jump *label27 notEqual :g:n 0
++   55 op add :g:x *tmp15 3
++   56 op add :g:y *tmp15 4
++   57 jump *label27 notEqual *tmp15 0
+    58 op mul :g*retval :g:x :g:y
+    59 jump *label30 always
+    60 label *label27
+    61 label *label28
+-    * op sub *tmp24 :g:n 1
++   62 op sub *tmp24 *tmp15 1
+    63 push bank1 :g:n
+    64 push bank1 :g:x
+    65 push bank1 :g:y
+
+Modifications by Inline function call at line 46:30 (+24 instructions):
+ 
+    32 assertequals 265 :g*retval "g(3)"
+    33 assertflush *tmp8
+    34 set :f1:n 5
+-    * callrec bank1 *label2 *label11 :f1*retval
+-    * label *label11
++   35 set *tmp28 :f1:n
++   36 set :f1:i 0
++   37 label *label31
++   38 jump *label36 greaterThanEq 0 :f1:n
++   39 label *label32
++   40 op sub *tmp30 :f1:i 1
++   41 push bank1 :f1:n
++   42 push bank1 :f1:i
++   43 push bank1 *tmp28
++   44 push bank1 :g1:n
++   45 set :f1:n *tmp30
++   46 callrec bank1 *label2 *label33 :f1*retval
++   47 label *label33
++   48 pop bank1 :g1:n
++   49 pop bank1 *tmp28
++   50 pop bank1 :f1:i
++   51 pop bank1 :f1:n
++   52 print :f1:i
++   53 label *label34
++   54 label *label35
++   55 op add :f1:i :f1:i 1
++   56 jump *label32 lessThan :f1:i *tmp28
++   57 label *label36
++   58 label *label37
+    59 assertprints *tmp8 "010201301024" "f1(5)"
+    60 stop
+    61 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    32 assertequals 265 :g*retval "g(3)"
+    33 assertflush *tmp8
+    34 set :f1:n 5
+-    * set *tmp28 :f1:n
++   35 set *tmp28 5
+    36 set :f1:i 0
+    37 label *label31
+-    * jump *label36 greaterThanEq 0 :f1:n
++   38 jump *label36 greaterThanEq 0 5
+    39 label *label32
+    40 op sub *tmp30 :f1:i 1
+    41 push bank1 :f1:n
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
+ 
+    53 label *label34
+    54 label *label35
+    55 op add :f1:i :f1:i 1
+-    * jump *label32 lessThan :f1:i *tmp28
++   56 jump *label32 lessThan :f1:i 5
+    57 label *label36
+    58 label *label37
+    59 assertprints *tmp8 "010201301024" "f1(5)"
+
+Modifications by Inline function call at line 39:18 (+30 instructions):
+ 
+     3 label *label3
+     4 assertequals 2 :f*retval "f(0)"
+     5 set :g:n 0
+-    * callrec bank1 *label1 *label4 :g*retval
+-    * label *label4
++    6 op add :g:x :g:n 3
++    7 op add :g:y :g:n 4
++    8 jump *label38 notEqual :g:n 0
++    9 op mul :g*retval :g:x :g:y
++   10 jump *label41 always
++   11 label *label38
++   12 label *label39
++   13 op sub *tmp24 :g:n 1
++   14 push bank1 :g:n
++   15 push bank1 :g:x
++   16 push bank1 :g:y
++   17 push bank1 :g:r
++   18 push bank1 *tmp22
++   19 set :f:n *tmp24
++   20 callrec bank1 *label0 *label40 :f*retval
++   21 label *label40
++   22 pop bank1 *tmp22
++   23 pop bank1 :g:r
++   24 pop bank1 :g:y
++   25 pop bank1 :g:x
++   26 pop bank1 :g:n
++   27 op mul *tmp26 :f*retval :g:x
++   28 op add :g*retval *tmp26 :g:y
++   29 jump *label41 always
++   30 label *label41
+    31 assertequals 12 :g*retval "g(0)"
+    32 set :f:n 1
+    33 callrec bank1 *label0 *label5 :f*retval
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     3 label *label3
+     4 assertequals 2 :f*retval "f(0)"
+     5 set :g:n 0
+-    * op add :g:x :g:n 3
+-    * op add :g:y :g:n 4
+-    * jump *label38 notEqual :g:n 0
+-    * op mul :g*retval :g:x :g:y
++    6 op add :g:x 0 3
++    7 op add :g:y 0 4
++    8 jump *label38 notEqual 0 0
++    9 op mul :g*retval 3 4
+    10 jump *label41 always
+    11 label *label38
+    12 label *label39
+-    * op sub *tmp24 :g:n 1
++   13 op sub *tmp24 0 1
+    14 push bank1 :g:n
+    15 push bank1 :g:x
+    16 push bank1 :g:y
+    17 push bank1 :g:r
+    18 push bank1 *tmp22
+-    * set :f:n *tmp24
++   19 set :f:n -1
+    20 callrec bank1 *label0 *label40 :f*retval
+    21 label *label40
+    22 pop bank1 *tmp22
+ 
+    24 pop bank1 :g:y
+    25 pop bank1 :g:x
+    26 pop bank1 :g:n
+-    * op mul *tmp26 :f*retval :g:x
+-    * op add :g*retval *tmp26 :g:y
++   27 op mul *tmp26 :f*retval 3
++   28 op add :g*retval *tmp26 4
+    29 jump *label41 always
+    30 label *label41
+    31 assertequals 12 :g*retval "g(0)"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+    25 pop bank1 :g:x
+    26 pop bank1 :g:n
+    27 op mul *tmp26 :f*retval 3
+-    * op add :g*retval *tmp26 4
+    28 jump *label41 always
+    29 label *label41
+-    * assertequals 12 :g*retval "g(0)"
++   30 assertequals 12 12 "g(0)"
+    31 set :f:n 1
+    32 callrec bank1 *label0 *label5 :f*retval
+    33 label *label5
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+ 
+    24 pop bank1 :g:y
+    25 pop bank1 :g:x
+    26 pop bank1 :g:n
+-    * op mul *tmp26 :f*retval 3
+    27 jump *label41 always
+    28 label *label41
+    29 assertequals 12 12 "g(0)"
+
+Modifications by Inline function call at line 41:18 (+30 instructions):
+ 
+    32 label *label5
+    33 assertequals 27 :f*retval "f(1)"
+    34 set :g:n 1
+-    * callrec bank1 *label1 *label6 :g*retval
+-    * label *label6
++   35 op add :g:x :g:n 3
++   36 op add :g:y :g:n 4
++   37 jump *label42 notEqual :g:n 0
++   38 op mul :g*retval :g:x :g:y
++   39 jump *label45 always
++   40 label *label42
++   41 label *label43
++   42 op sub *tmp24 :g:n 1
++   43 push bank1 :g:n
++   44 push bank1 :g:x
++   45 push bank1 :g:y
++   46 push bank1 :g:r
++   47 push bank1 *tmp22
++   48 set :f:n *tmp24
++   49 callrec bank1 *label0 *label44 :f*retval
++   50 label *label44
++   51 pop bank1 *tmp22
++   52 pop bank1 :g:r
++   53 pop bank1 :g:y
++   54 pop bank1 :g:x
++   55 pop bank1 :g:n
++   56 op mul *tmp26 :f*retval :g:x
++   57 op add :g*retval *tmp26 :g:y
++   58 jump *label45 always
++   59 label *label45
+    60 assertequals 13 :g*retval "g(1)"
+    61 set :f:n 2
+    62 callrec bank1 *label0 *label7 :f*retval
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    32 label *label5
+    33 assertequals 27 :f*retval "f(1)"
+    34 set :g:n 1
+-    * op add :g:x :g:n 3
+-    * op add :g:y :g:n 4
+-    * jump *label42 notEqual :g:n 0
+-    * op mul :g*retval :g:x :g:y
++   35 op add :g:x 1 3
++   36 op add :g:y 1 4
++   37 jump *label42 notEqual 1 0
++   38 op mul :g*retval 4 5
+    39 jump *label45 always
+    40 label *label42
+    41 label *label43
+-    * op sub *tmp24 :g:n 1
++   42 op sub *tmp24 1 1
+    43 push bank1 :g:n
+    44 push bank1 :g:x
+    45 push bank1 :g:y
+    46 push bank1 :g:r
+    47 push bank1 *tmp22
+-    * set :f:n *tmp24
++   48 set :f:n 0
+    49 callrec bank1 *label0 *label44 :f*retval
+    50 label *label44
+    51 pop bank1 *tmp22
+ 
+    53 pop bank1 :g:y
+    54 pop bank1 :g:x
+    55 pop bank1 :g:n
+-    * op mul *tmp26 :f*retval :g:x
+-    * op add :g*retval *tmp26 :g:y
++   56 op mul *tmp26 :f*retval 4
++   57 op add :g*retval *tmp26 5
+    58 jump *label45 always
+    59 label *label45
+    60 assertequals 13 :g*retval "g(1)"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+    35 op add :g:x 1 3
+    36 op add :g:y 1 4
+    37 jump *label42 notEqual 1 0
+-    * op mul :g*retval 4 5
+    38 jump *label45 always
+    39 label *label42
+    40 label *label43
+
+Modifications by Inline function call at line 43:19 (+30 instructions):
+ 
+    62 label *label7
+    63 assertequals 43 :f*retval "f(2)"
+    64 set :g:n 2
+-    * callrec bank1 *label1 *label8 :g*retval
+-    * label *label8
++   65 op add :g:x :g:n 3
++   66 op add :g:y :g:n 4
++   67 jump *label46 notEqual :g:n 0
++   68 op mul :g*retval :g:x :g:y
++   69 jump *label49 always
++   70 label *label46
++   71 label *label47
++   72 op sub *tmp24 :g:n 1
++   73 push bank1 :g:n
++   74 push bank1 :g:x
++   75 push bank1 :g:y
++   76 push bank1 :g:r
++   77 push bank1 *tmp22
++   78 set :f:n *tmp24
++   79 callrec bank1 *label0 *label48 :f*retval
++   80 label *label48
++   81 pop bank1 *tmp22
++   82 pop bank1 :g:r
++   83 pop bank1 :g:y
++   84 pop bank1 :g:x
++   85 pop bank1 :g:n
++   86 op mul *tmp26 :f*retval :g:x
++   87 op add :g*retval *tmp26 :g:y
++   88 jump *label49 always
++   89 label *label49
+    90 assertequals 141 :g*retval "g(2)"
+    91 set :f:n 3
+    92 callrec bank1 *label0 *label9 :f*retval
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    62 label *label7
+    63 assertequals 43 :f*retval "f(2)"
+    64 set :g:n 2
+-    * op add :g:x :g:n 3
+-    * op add :g:y :g:n 4
+-    * jump *label46 notEqual :g:n 0
+-    * op mul :g*retval :g:x :g:y
++   65 op add :g:x 2 3
++   66 op add :g:y 2 4
++   67 jump *label46 notEqual 2 0
++   68 op mul :g*retval 5 6
+    69 jump *label49 always
+    70 label *label46
+    71 label *label47
+-    * op sub *tmp24 :g:n 1
++   72 op sub *tmp24 2 1
+    73 push bank1 :g:n
+    74 push bank1 :g:x
+    75 push bank1 :g:y
+    76 push bank1 :g:r
+    77 push bank1 *tmp22
+-    * set :f:n *tmp24
++   78 set :f:n 1
+    79 callrec bank1 *label0 *label48 :f*retval
+    80 label *label48
+    81 pop bank1 *tmp22
+ 
+    83 pop bank1 :g:y
+    84 pop bank1 :g:x
+    85 pop bank1 :g:n
+-    * op mul *tmp26 :f*retval :g:x
+-    * op add :g*retval *tmp26 :g:y
++   86 op mul *tmp26 :f*retval 5
++   87 op add :g*retval *tmp26 6
+    88 jump *label49 always
+    89 label *label49
+    90 assertequals 141 :g*retval "g(2)"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+    65 op add :g:x 2 3
+    66 op add :g:y 2 4
+    67 jump *label46 notEqual 2 0
+-    * op mul :g*retval 5 6
+    68 jump *label49 always
+    69 label *label46
+    70 label *label47
+
+Modifications by Inline function call at line 45:19 (+30 instructions):
+ 
+    92 label *label9
+    93 assertequals 569 :f*retval "f(3)"
+    94 set :g:n 3
+-    * callrec bank1 *label1 *label10 :g*retval
+-    * label *label10
++   95 op add :g:x :g:n 3
++   96 op add :g:y :g:n 4
++   97 jump *label50 notEqual :g:n 0
++   98 op mul :g*retval :g:x :g:y
++   99 jump *label53 always
++  100 label *label50
++  101 label *label51
++  102 op sub *tmp24 :g:n 1
++  103 push bank1 :g:n
++  104 push bank1 :g:x
++  105 push bank1 :g:y
++  106 push bank1 :g:r
++  107 push bank1 *tmp22
++  108 set :f:n *tmp24
++  109 callrec bank1 *label0 *label52 :f*retval
++  110 label *label52
++  111 pop bank1 *tmp22
++  112 pop bank1 :g:r
++  113 pop bank1 :g:y
++  114 pop bank1 :g:x
++  115 pop bank1 :g:n
++  116 op mul *tmp26 :f*retval :g:x
++  117 op add :g*retval *tmp26 :g:y
++  118 jump *label53 always
++  119 label *label53
+   120 assertequals 265 :g*retval "g(3)"
+   121 assertflush *tmp8
+   122 set :f1:n 5
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-5 instructions):
+ 
+     2 callrec bank1 *label0 *label3 :f*retval
+     3 label *label3
+     4 assertequals 2 :f*retval "f(0)"
+-    * set :g:n 0
+     5 op add :g:x 0 3
+     6 op add :g:y 0 4
+     7 jump *label38 notEqual 0 0
+ 
+    30 callrec bank1 *label0 *label5 :f*retval
+    31 label *label5
+    32 assertequals 27 :f*retval "f(1)"
+-    * set :g:n 1
+    33 op add :g:x 1 3
+    34 op add :g:y 1 4
+    35 jump *label42 notEqual 1 0
+ 
+    59 callrec bank1 *label0 *label7 :f*retval
+    60 label *label7
+    61 assertequals 43 :f*retval "f(2)"
+-    * set :g:n 2
+    62 op add :g:x 2 3
+    63 op add :g:y 2 4
+    64 jump *label46 notEqual 2 0
+ 
+    89 label *label9
+    90 assertequals 569 :f*retval "f(3)"
+    91 set :g:n 3
+-    * op add :g:x :g:n 3
+-    * op add :g:y :g:n 4
+-    * jump *label50 notEqual :g:n 0
+-    * op mul :g*retval :g:x :g:y
++   92 op add :g:x 3 3
++   93 op add :g:y 3 4
++   94 jump *label50 notEqual 3 0
++   95 op mul :g*retval 6 7
+    96 jump *label53 always
+    97 label *label50
+    98 label *label51
+-    * op sub *tmp24 :g:n 1
++   99 op sub *tmp24 3 1
+   100 push bank1 :g:n
+   101 push bank1 :g:x
+   102 push bank1 :g:y
+   103 push bank1 :g:r
+   104 push bank1 *tmp22
+-    * set :f:n *tmp24
++  105 set :f:n 2
+   106 callrec bank1 *label0 *label52 :f*retval
+   107 label *label52
+   108 pop bank1 *tmp22
+ 
+   110 pop bank1 :g:y
+   111 pop bank1 :g:x
+   112 pop bank1 :g:n
+-    * op mul *tmp26 :f*retval :g:x
+-    * op add :g*retval *tmp26 :g:y
++  113 op mul *tmp26 :f*retval 6
++  114 op add :g*retval *tmp26 7
+   115 jump *label53 always
+   116 label *label53
+   117 assertequals 265 :g*retval "g(3)"
+ 
+   158 push bank1 :f:b
+   159 push bank1 :f:r
+   160 push bank1 *tmp13
+-    * set :g:n *tmp15
+   161 op add :g:x *tmp15 3
+   162 op add :g:y *tmp15 4
+   163 jump *label27 notEqual *tmp15 0
+ 
+   216 pop bank1 :g:y
+   217 pop bank1 :g:x
+   218 pop bank1 :g:n
+-    * op mul *tmp26 :f*retval :g:x
+   219 op add :g*retval *tmp26 :g:y
+   220 jump *label16 always
+   221 label *label16
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+ 
+    88 callrec bank1 *label0 *label9 :f*retval
+    89 label *label9
+    90 assertequals 569 :f*retval "f(3)"
+-    * set :g:n 3
+    91 op add :g:x 3 3
+    92 op add :g:y 3 4
+    93 jump *label50 notEqual 3 0
+-    * op mul :g*retval 6 7
+    94 jump *label53 always
+    95 label *label50
+    96 label *label51
+ 
+   156 push bank1 :f:b
+   157 push bank1 :f:r
+   158 push bank1 *tmp13
+-    * op add :g:x *tmp15 3
+-    * op add :g:y *tmp15 4
++  159 op add :g:x :f:n 2
++  160 op add :g:y :f:n 3
+   161 jump *label27 notEqual *tmp15 0
+   162 op mul :g*retval :g:x :g:y
+   163 jump *label30 always
+   164 label *label27
+   165 label *label28
+-    * op sub *tmp24 *tmp15 1
++  166 op sub *tmp24 :f:n 2
+   167 push bank1 :g:n
+   168 push bank1 :g:x
+   169 push bank1 :g:y
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
+ 
+   159 op add :g:x :f:n 2
+   160 op add :g:y :f:n 3
+   161 jump *label27 notEqual *tmp15 0
+-    * op mul :g*retval :g:x :g:y
++  162 op mul :g*retval :f:b :g:y
+   163 jump *label30 always
+   164 label *label27
+   165 label *label28
+ 
+   169 push bank1 :g:y
+   170 push bank1 :g:r
+   171 push bank1 *tmp22
+-    * set :f:n *tmp24
++  172 op sub :f:n :f:n 2
+   173 callrec bank1 *label0 *label29 :f*retval
+   174 label *label29
+   175 pop bank1 *tmp22
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-6 instructions):
+ 
+     9 jump *label41 always
+    10 label *label38
+    11 label *label39
+-    * op sub *tmp24 0 1
+    12 push bank1 :g:n
+    13 push bank1 :g:x
+    14 push bank1 :g:y
+ 
+    35 jump *label45 always
+    36 label *label42
+    37 label *label43
+-    * op sub *tmp24 1 1
+    38 push bank1 :g:n
+    39 push bank1 :g:x
+    40 push bank1 :g:y
+ 
+    63 jump *label49 always
+    64 label *label46
+    65 label *label47
+-    * op sub *tmp24 2 1
+    66 push bank1 :g:n
+    67 push bank1 :g:x
+    68 push bank1 :g:y
+ 
+    91 jump *label53 always
+    92 label *label50
+    93 label *label51
+-    * op sub *tmp24 3 1
+    94 push bank1 :g:n
+    95 push bank1 :g:x
+    96 push bank1 :g:y
+ 
+   159 jump *label30 always
+   160 label *label27
+   161 label *label28
+-    * op sub *tmp24 :f:n 2
+   162 push bank1 :g:n
+   163 push bank1 :g:x
+   164 push bank1 :g:y
+ 
+   195 returnrec bank1
+   196 label *label17
+   197 label *label18
+-    * op sub *tmp24 :g:n 1
+   198 push bank1 :g:n
+   199 push bank1 :g:x
+   200 push bank1 :g:y
+
+Modifications by Inline function call at line 38:17 (+58 instructions):
+     0 set *sp 0
+     1 set :f:n 0
+-    * callrec bank1 *label0 *label3 :f*retval
+-    * label *label3
++    2 op add :f:a :f:n 1
++    3 op add :f:b :f:n 2
++    4 jump *label54 notEqual :f:n 0
++    5 op mul :f*retval :f:a :f:b
++    6 jump *label60 always
++    7 label *label54
++    8 label *label55
++    9 op sub *tmp15 :f:n 1
++   10 push bank1 :f:n
++   11 push bank1 :f:a
++   12 push bank1 :f:b
++   13 push bank1 :f:r
++   14 push bank1 *tmp13
++   15 op add :g:x :f:n 2
++   16 op add :g:y :f:n 3
++   17 jump *label56 notEqual *tmp15 0
++   18 op mul :g*retval :f:b :g:y
++   19 jump *label59 always
++   20 label *label56
++   21 label *label57
++   22 push bank1 :g:n
++   23 push bank1 :g:x
++   24 push bank1 :g:y
++   25 push bank1 :g:r
++   26 push bank1 *tmp22
++   27 op sub :f:n :f:n 2
++   28 callrec bank1 *label0 *label58 :f*retval
++   29 label *label58
++   30 pop bank1 *tmp22
++   31 pop bank1 :g:r
++   32 pop bank1 :g:y
++   33 pop bank1 :g:x
++   34 pop bank1 :g:n
++   35 op mul *tmp26 :f*retval :g:x
++   36 op add :g*retval *tmp26 :g:y
++   37 jump *label59 always
++   38 label *label59
++   39 pop bank1 *tmp13
++   40 pop bank1 :f:r
++   41 pop bank1 :f:b
++   42 pop bank1 :f:a
++   43 pop bank1 :f:n
++   44 op mul *tmp17 :g*retval :f:a
++   45 op add :f*retval *tmp17 :f:b
++   46 jump *label60 always
++   47 label *label60
+    48 assertequals 2 :f*retval "f(0)"
+    49 op add :g:x 0 3
+    50 op add :g:y 0 4
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+     0 set *sp 0
+     1 set :f:n 0
+-    * op add :f:a :f:n 1
+-    * op add :f:b :f:n 2
+-    * jump *label54 notEqual :f:n 0
+-    * op mul :f*retval :f:a :f:b
++    2 op add :f:a 0 1
++    3 op add :f:b 0 2
++    4 jump *label54 notEqual 0 0
++    5 op mul :f*retval 1 2
+     6 jump *label60 always
+     7 label *label54
+     8 label *label55
+-    * op sub *tmp15 :f:n 1
++    9 op sub *tmp15 0 1
+    10 push bank1 :f:n
+    11 push bank1 :f:a
+    12 push bank1 :f:b
+ 
+    14 push bank1 *tmp13
+    15 op add :g:x :f:n 2
+    16 op add :g:y :f:n 3
+-    * jump *label56 notEqual *tmp15 0
++   17 jump *label56 notEqual -1 0
+    18 op mul :g*retval :f:b :g:y
+    19 jump *label59 always
+    20 label *label56
+ 
+    41 pop bank1 :f:b
+    42 pop bank1 :f:a
+    43 pop bank1 :f:n
+-    * op mul *tmp17 :g*retval :f:a
+-    * op add :f*retval *tmp17 :f:b
++   44 op mul *tmp17 :g*retval 1
++   45 op add :f*retval *tmp17 2
+    46 jump *label60 always
+    47 label *label60
+    48 assertequals 2 :f*retval "f(0)"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+    42 pop bank1 :f:a
+    43 pop bank1 :f:n
+    44 op mul *tmp17 :g*retval 1
+-    * op add :f*retval *tmp17 2
+    45 jump *label60 always
+    46 label *label60
+-    * assertequals 2 :f*retval "f(0)"
++   47 assertequals 2 2 "f(0)"
+    48 op add :g:x 0 3
+    49 op add :g:y 0 4
+    50 jump *label38 notEqual 0 0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2 instructions):
+ 
+     2 op add :f:a 0 1
+     3 op add :f:b 0 2
+     4 jump *label54 notEqual 0 0
+-    * op mul :f*retval 1 2
+     5 jump *label60 always
+     6 label *label54
+     7 label *label55
+ 
+    40 pop bank1 :f:b
+    41 pop bank1 :f:a
+    42 pop bank1 :f:n
+-    * op mul *tmp17 :g*retval 1
+    43 jump *label60 always
+    44 label *label60
+    45 assertequals 2 2 "f(0)"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
+ 
+    32 pop bank1 :g:x
+    33 pop bank1 :g:n
+    34 op mul *tmp26 :f*retval :g:x
+-    * op add :g*retval *tmp26 :g:y
+    35 jump *label59 always
+    36 label *label59
+    37 pop bank1 *tmp13
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1 instructions):
+ 
+    31 pop bank1 :g:y
+    32 pop bank1 :g:x
+    33 pop bank1 :g:n
+-    * op mul *tmp26 :f*retval :g:x
+    34 jump *label59 always
+    35 label *label59
+    36 pop bank1 *tmp13
+
+Modifications by Inline function call at line 40:18 (+58 instructions):
+ 
+    65 label *label41
+    66 assertequals 12 12 "g(0)"
+    67 set :f:n 1
+-    * callrec bank1 *label0 *label5 :f*retval
+-    * label *label5
++   68 op add :f:a :f:n 1
++   69 op add :f:b :f:n 2
++   70 jump *label61 notEqual :f:n 0
++   71 op mul :f*retval :f:a :f:b
++   72 jump *label67 always
++   73 label *label61
++   74 label *label62
++   75 op sub *tmp15 :f:n 1
++   76 push bank1 :f:n
++   77 push bank1 :f:a
++   78 push bank1 :f:b
++   79 push bank1 :f:r
++   80 push bank1 *tmp13
++   81 op add :g:x :f:n 2
++   82 op add :g:y :f:n 3
++   83 jump *label63 notEqual *tmp15 0
++   84 op mul :g*retval :f:b :g:y
++   85 jump *label66 always
++   86 label *label63
++   87 label *label64
++   88 push bank1 :g:n
++   89 push bank1 :g:x
++   90 push bank1 :g:y
++   91 push bank1 :g:r
++   92 push bank1 *tmp22
++   93 op sub :f:n :f:n 2
++   94 callrec bank1 *label0 *label65 :f*retval
++   95 label *label65
++   96 pop bank1 *tmp22
++   97 pop bank1 :g:r
++   98 pop bank1 :g:y
++   99 pop bank1 :g:x
++  100 pop bank1 :g:n
++  101 op mul *tmp26 :f*retval :g:x
++  102 op add :g*retval *tmp26 :g:y
++  103 jump *label66 always
++  104 label *label66
++  105 pop bank1 *tmp13
++  106 pop bank1 :f:r
++  107 pop bank1 :f:b
++  108 pop bank1 :f:a
++  109 pop bank1 :f:n
++  110 op mul *tmp17 :g*retval :f:a
++  111 op add :f*retval *tmp17 :f:b
++  112 jump *label67 always
++  113 label *label67
+   114 assertequals 27 :f*retval "f(1)"
+   115 op add :g:x 1 3
+   116 op add :g:y 1 4
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    65 label *label41
+    66 assertequals 12 12 "g(0)"
+    67 set :f:n 1
+-    * op add :f:a :f:n 1
+-    * op add :f:b :f:n 2
+-    * jump *label61 notEqual :f:n 0
+-    * op mul :f*retval :f:a :f:b
++   68 op add :f:a 1 1
++   69 op add :f:b 1 2
++   70 jump *label61 notEqual 1 0
++   71 op mul :f*retval 2 3
+    72 jump *label67 always
+    73 label *label61
+    74 label *label62
+-    * op sub *tmp15 :f:n 1
++   75 op sub *tmp15 1 1
+    76 push bank1 :f:n
+    77 push bank1 :f:a
+    78 push bank1 :f:b
+ 
+    80 push bank1 *tmp13
+    81 op add :g:x :f:n 2
+    82 op add :g:y :f:n 3
+-    * jump *label63 notEqual *tmp15 0
++   83 jump *label63 notEqual 0 0
+    84 op mul :g*retval :f:b :g:y
+    85 jump *label66 always
+    86 label *label63
+ 
+   107 pop bank1 :f:b
+   108 pop bank1 :f:a
+   109 pop bank1 :f:n
+-    * op mul *tmp17 :g*retval :f:a
+-    * op add :f*retval *tmp17 :f:b
++  110 op mul *tmp17 :g*retval 2
++  111 op add :f*retval *tmp17 3
+   112 jump *label67 always
+   113 label *label67
+   114 assertequals 27 :f*retval "f(1)"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+ 
+    68 op add :f:a 1 1
+    69 op add :f:b 1 2
+    70 jump *label61 notEqual 1 0
+-    * op mul :f*retval 2 3
+    71 jump *label67 always
+    72 label *label61
+    73 label *label62
+ 
+    98 pop bank1 :g:x
+    99 pop bank1 :g:n
+   100 op mul *tmp26 :f*retval :g:x
+-    * op add :g*retval *tmp26 :g:y
+   101 jump *label66 always
+   102 label *label66
+   103 pop bank1 *tmp13
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+ 
+    97 pop bank1 :g:y
+    98 pop bank1 :g:x
+    99 pop bank1 :g:n
+-    * op mul *tmp26 :f*retval :g:x
+   100 jump *label66 always
+   101 label *label66
+   102 pop bank1 *tmp13
+
+Modifications by Inline function call at line 42:18 (+58 instructions):
+ 
+   134 label *label45
+   135 assertequals 13 :g*retval "g(1)"
+   136 set :f:n 2
+-    * callrec bank1 *label0 *label7 :f*retval
+-    * label *label7
++  137 op add :f:a :f:n 1
++  138 op add :f:b :f:n 2
++  139 jump *label68 notEqual :f:n 0
++  140 op mul :f*retval :f:a :f:b
++  141 jump *label74 always
++  142 label *label68
++  143 label *label69
++  144 op sub *tmp15 :f:n 1
++  145 push bank1 :f:n
++  146 push bank1 :f:a
++  147 push bank1 :f:b
++  148 push bank1 :f:r
++  149 push bank1 *tmp13
++  150 op add :g:x :f:n 2
++  151 op add :g:y :f:n 3
++  152 jump *label70 notEqual *tmp15 0
++  153 op mul :g*retval :f:b :g:y
++  154 jump *label73 always
++  155 label *label70
++  156 label *label71
++  157 push bank1 :g:n
++  158 push bank1 :g:x
++  159 push bank1 :g:y
++  160 push bank1 :g:r
++  161 push bank1 *tmp22
++  162 op sub :f:n :f:n 2
++  163 callrec bank1 *label0 *label72 :f*retval
++  164 label *label72
++  165 pop bank1 *tmp22
++  166 pop bank1 :g:r
++  167 pop bank1 :g:y
++  168 pop bank1 :g:x
++  169 pop bank1 :g:n
++  170 op mul *tmp26 :f*retval :g:x
++  171 op add :g*retval *tmp26 :g:y
++  172 jump *label73 always
++  173 label *label73
++  174 pop bank1 *tmp13
++  175 pop bank1 :f:r
++  176 pop bank1 :f:b
++  177 pop bank1 :f:a
++  178 pop bank1 :f:n
++  179 op mul *tmp17 :g*retval :f:a
++  180 op add :f*retval *tmp17 :f:b
++  181 jump *label74 always
++  182 label *label74
+   183 assertequals 43 :f*retval "f(2)"
+   184 op add :g:x 2 3
+   185 op add :g:y 2 4
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+   134 label *label45
+   135 assertequals 13 :g*retval "g(1)"
+   136 set :f:n 2
+-    * op add :f:a :f:n 1
+-    * op add :f:b :f:n 2
+-    * jump *label68 notEqual :f:n 0
+-    * op mul :f*retval :f:a :f:b
++  137 op add :f:a 2 1
++  138 op add :f:b 2 2
++  139 jump *label68 notEqual 2 0
++  140 op mul :f*retval 3 4
+   141 jump *label74 always
+   142 label *label68
+   143 label *label69
+-    * op sub *tmp15 :f:n 1
++  144 op sub *tmp15 2 1
+   145 push bank1 :f:n
+   146 push bank1 :f:a
+   147 push bank1 :f:b
+ 
+   149 push bank1 *tmp13
+   150 op add :g:x :f:n 2
+   151 op add :g:y :f:n 3
+-    * jump *label70 notEqual *tmp15 0
++  152 jump *label70 notEqual 1 0
+   153 op mul :g*retval :f:b :g:y
+   154 jump *label73 always
+   155 label *label70
+ 
+   176 pop bank1 :f:b
+   177 pop bank1 :f:a
+   178 pop bank1 :f:n
+-    * op mul *tmp17 :g*retval :f:a
+-    * op add :f*retval *tmp17 :f:b
++  179 op mul *tmp17 :g*retval 3
++  180 op add :f*retval *tmp17 4
+   181 jump *label74 always
+   182 label *label74
+   183 assertequals 43 :f*retval "f(2)"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+ 
+   137 op add :f:a 2 1
+   138 op add :f:b 2 2
+   139 jump *label68 notEqual 2 0
+-    * op mul :f*retval 3 4
+   140 jump *label74 always
+   141 label *label68
+   142 label *label69
+ 
+   149 op add :g:x :f:n 2
+   150 op add :g:y :f:n 3
+   151 jump *label70 notEqual 1 0
+-    * op mul :g*retval :f:b :g:y
+   152 jump *label73 always
+   153 label *label70
+   154 label *label71
+
+Modifications by Inline function call at line 44:19 (+58 instructions):
+ 
+   204 label *label49
+   205 assertequals 141 :g*retval "g(2)"
+   206 set :f:n 3
+-    * callrec bank1 *label0 *label9 :f*retval
+-    * label *label9
++  207 op add :f:a :f:n 1
++  208 op add :f:b :f:n 2
++  209 jump *label75 notEqual :f:n 0
++  210 op mul :f*retval :f:a :f:b
++  211 jump *label81 always
++  212 label *label75
++  213 label *label76
++  214 op sub *tmp15 :f:n 1
++  215 push bank1 :f:n
++  216 push bank1 :f:a
++  217 push bank1 :f:b
++  218 push bank1 :f:r
++  219 push bank1 *tmp13
++  220 op add :g:x :f:n 2
++  221 op add :g:y :f:n 3
++  222 jump *label77 notEqual *tmp15 0
++  223 op mul :g*retval :f:b :g:y
++  224 jump *label80 always
++  225 label *label77
++  226 label *label78
++  227 push bank1 :g:n
++  228 push bank1 :g:x
++  229 push bank1 :g:y
++  230 push bank1 :g:r
++  231 push bank1 *tmp22
++  232 op sub :f:n :f:n 2
++  233 callrec bank1 *label0 *label79 :f*retval
++  234 label *label79
++  235 pop bank1 *tmp22
++  236 pop bank1 :g:r
++  237 pop bank1 :g:y
++  238 pop bank1 :g:x
++  239 pop bank1 :g:n
++  240 op mul *tmp26 :f*retval :g:x
++  241 op add :g*retval *tmp26 :g:y
++  242 jump *label80 always
++  243 label *label80
++  244 pop bank1 *tmp13
++  245 pop bank1 :f:r
++  246 pop bank1 :f:b
++  247 pop bank1 :f:a
++  248 pop bank1 :f:n
++  249 op mul *tmp17 :g*retval :f:a
++  250 op add :f*retval *tmp17 :f:b
++  251 jump *label81 always
++  252 label *label81
+   253 assertequals 569 :f*retval "f(3)"
+   254 op add :g:x 3 3
+   255 op add :g:y 3 4
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+   204 label *label49
+   205 assertequals 141 :g*retval "g(2)"
+   206 set :f:n 3
+-    * op add :f:a :f:n 1
+-    * op add :f:b :f:n 2
+-    * jump *label75 notEqual :f:n 0
+-    * op mul :f*retval :f:a :f:b
++  207 op add :f:a 3 1
++  208 op add :f:b 3 2
++  209 jump *label75 notEqual 3 0
++  210 op mul :f*retval 4 5
+   211 jump *label81 always
+   212 label *label75
+   213 label *label76
+-    * op sub *tmp15 :f:n 1
++  214 op sub *tmp15 3 1
+   215 push bank1 :f:n
+   216 push bank1 :f:a
+   217 push bank1 :f:b
+ 
+   219 push bank1 *tmp13
+   220 op add :g:x :f:n 2
+   221 op add :g:y :f:n 3
+-    * jump *label77 notEqual *tmp15 0
++  222 jump *label77 notEqual 2 0
+   223 op mul :g*retval :f:b :g:y
+   224 jump *label80 always
+   225 label *label77
+ 
+   246 pop bank1 :f:b
+   247 pop bank1 :f:a
+   248 pop bank1 :f:n
+-    * op mul *tmp17 :g*retval :f:a
+-    * op add :f*retval *tmp17 :f:b
++  249 op mul *tmp17 :g*retval 4
++  250 op add :f*retval *tmp17 5
+   251 jump *label81 always
+   252 label *label81
+   253 assertequals 569 :f*retval "f(3)"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+ 
+   207 op add :f:a 3 1
+   208 op add :f:b 3 2
+   209 jump *label75 notEqual 3 0
+-    * op mul :f*retval 4 5
+   210 jump *label81 always
+   211 label *label75
+   212 label *label76
+ 
+   219 op add :g:x :f:n 2
+   220 op add :g:y :f:n 3
+   221 jump *label77 notEqual 2 0
+-    * op mul :g*retval :f:b :g:y
+   222 jump *label80 always
+   223 label *label77
+   224 label *label78
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-4 instructions):
+ 
+     1 set :f:n 0
+     2 op add :f:a 0 1
+     3 op add :f:b 0 2
+-    * jump *label54 notEqual 0 0
+     4 jump *label60 always
+     5 label *label54
+     6 label *label55
+ 
+    12 push bank1 *tmp13
+    13 op add :g:x :f:n 2
+    14 op add :g:y :f:n 3
+-    * jump *label56 notEqual -1 0
++   15 jump *label56 always
+    16 op mul :g*retval :f:b :g:y
+    17 jump *label59 always
+    18 label *label56
+ 
+    42 assertequals 2 2 "f(0)"
+    43 op add :g:x 0 3
+    44 op add :g:y 0 4
+-    * jump *label38 notEqual 0 0
+    45 op mul :g*retval 3 4
+    46 jump *label41 always
+    47 label *label38
+ 
+    65 set :f:n 1
+    66 op add :f:a 1 1
+    67 op add :f:b 1 2
+-    * jump *label61 notEqual 1 0
++   68 jump *label61 always
+    69 jump *label67 always
+    70 label *label61
+    71 label *label62
+ 
+    77 push bank1 *tmp13
+    78 op add :g:x :f:n 2
+    79 op add :g:y :f:n 3
+-    * jump *label63 notEqual 0 0
+    80 op mul :g*retval :f:b :g:y
+    81 jump *label66 always
+    82 label *label63
+ 
+   108 assertequals 27 :f*retval "f(1)"
+   109 op add :g:x 1 3
+   110 op add :g:y 1 4
+-    * jump *label42 notEqual 1 0
++  111 jump *label42 always
+   112 jump *label45 always
+   113 label *label42
+   114 label *label43
+ 
+   133 set :f:n 2
+   134 op add :f:a 2 1
+   135 op add :f:b 2 2
+-    * jump *label68 notEqual 2 0
++  136 jump *label68 always
+   137 jump *label74 always
+   138 label *label68
+   139 label *label69
+ 
+   145 push bank1 *tmp13
+   146 op add :g:x :f:n 2
+   147 op add :g:y :f:n 3
+-    * jump *label70 notEqual 1 0
++  148 jump *label70 always
+   149 jump *label73 always
+   150 label *label70
+   151 label *label71
+ 
+   178 assertequals 43 :f*retval "f(2)"
+   179 op add :g:x 2 3
+   180 op add :g:y 2 4
+-    * jump *label46 notEqual 2 0
++  181 jump *label46 always
+   182 jump *label49 always
+   183 label *label46
+   184 label *label47
+ 
+   203 set :f:n 3
+   204 op add :f:a 3 1
+   205 op add :f:b 3 2
+-    * jump *label75 notEqual 3 0
++  206 jump *label75 always
+   207 jump *label81 always
+   208 label *label75
+   209 label *label76
+ 
+   215 push bank1 *tmp13
+   216 op add :g:x :f:n 2
+   217 op add :g:y :f:n 3
+-    * jump *label77 notEqual 2 0
++  218 jump *label77 always
+   219 jump *label80 always
+   220 label *label77
+   221 label *label78
+ 
+   248 assertequals 569 :f*retval "f(3)"
+   249 op add :g:x 3 3
+   250 op add :g:y 3 4
+-    * jump *label50 notEqual 3 0
++  251 jump *label50 always
+   252 jump *label53 always
+   253 label *label50
+   254 label *label51
+ 
+   275 set *tmp28 5
+   276 set :f1:i 0
+   277 label *label31
+-    * jump *label36 greaterThanEq 0 5
+   278 label *label32
+   279 op sub *tmp30 :f1:i 1
+   280 push bank1 :f1:n
+
+Modifications by Iterated phase, Condition Optimization, pass 2, iteration 1:
+ 
+   314 push bank1 *tmp13
+   315 op add :g:x :f:n 2
+   316 op add :g:y :f:n 3
+-    * jump *label27 notEqual *tmp15 0
++  317 jump *label27 notEqual :f:n 1
+   318 op mul :g*retval :f:b :g:y
+   319 jump *label30 always
+   320 label *label27
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-15 instructions):
+ 
+    30 pop bank1 :g:y
+    31 pop bank1 :g:x
+    32 pop bank1 :g:n
+-    * jump *label59 always
+    33 label *label59
+    34 pop bank1 *tmp13
+    35 pop bank1 :f:r
+    36 pop bank1 :f:b
+    37 pop bank1 :f:a
+    38 pop bank1 :f:n
+-    * jump *label60 always
+    39 label *label60
+    40 assertequals 2 2 "f(0)"
+    41 op add :g:x 0 3
+ 
+    57 pop bank1 :g:y
+    58 pop bank1 :g:x
+    59 pop bank1 :g:n
+-    * jump *label41 always
+    60 label *label41
+    61 assertequals 12 12 "g(0)"
+    62 set :f:n 1
+ 
+    91 pop bank1 :g:y
+    92 pop bank1 :g:x
+    93 pop bank1 :g:n
+-    * jump *label66 always
+    94 label *label66
+    95 pop bank1 *tmp13
+    96 pop bank1 :f:r
+ 
+    99 pop bank1 :f:n
+   100 op mul *tmp17 :g*retval 2
+   101 op add :f*retval *tmp17 3
+-    * jump *label67 always
+   102 label *label67
+   103 assertequals 27 :f*retval "f(1)"
+   104 op add :g:x 1 3
+ 
+   122 pop bank1 :g:n
+   123 op mul *tmp26 :f*retval 4
+   124 op add :g*retval *tmp26 5
+-    * jump *label45 always
+   125 label *label45
+   126 assertequals 13 :g*retval "g(1)"
+   127 set :f:n 2
+ 
+   158 pop bank1 :g:n
+   159 op mul *tmp26 :f*retval :g:x
+   160 op add :g*retval *tmp26 :g:y
+-    * jump *label73 always
+   161 label *label73
+   162 pop bank1 *tmp13
+   163 pop bank1 :f:r
+ 
+   166 pop bank1 :f:n
+   167 op mul *tmp17 :g*retval 3
+   168 op add :f*retval *tmp17 4
+-    * jump *label74 always
+   169 label *label74
+   170 assertequals 43 :f*retval "f(2)"
+   171 op add :g:x 2 3
+ 
+   189 pop bank1 :g:n
+   190 op mul *tmp26 :f*retval 5
+   191 op add :g*retval *tmp26 6
+-    * jump *label49 always
+   192 label *label49
+   193 assertequals 141 :g*retval "g(2)"
+   194 set :f:n 3
+ 
+   225 pop bank1 :g:n
+   226 op mul *tmp26 :f*retval :g:x
+   227 op add :g*retval *tmp26 :g:y
+-    * jump *label80 always
+   228 label *label80
+   229 pop bank1 *tmp13
+   230 pop bank1 :f:r
+ 
+   233 pop bank1 :f:n
+   234 op mul *tmp17 :g*retval 4
+   235 op add :f*retval *tmp17 5
+-    * jump *label81 always
+   236 label *label81
+   237 assertequals 569 :f*retval "f(3)"
+   238 op add :g:x 3 3
+ 
+   256 pop bank1 :g:n
+   257 op mul *tmp26 :f*retval 6
+   258 op add :g*retval *tmp26 7
+-    * jump *label53 always
+   259 label *label53
+   260 assertequals 265 :g*retval "g(3)"
+   261 assertflush *tmp8
+ 
+   322 pop bank1 :g:n
+   323 op mul *tmp26 :f*retval :g:x
+   324 op add :g*retval *tmp26 :g:y
+-    * jump *label30 always
+   325 label *label30
+   326 pop bank1 *tmp13
+   327 pop bank1 :f:r
+ 
+   330 pop bank1 :f:n
+   331 op mul *tmp17 :g*retval :f:a
+   332 op add :f*retval *tmp17 :f:b
 -    * jump *label12 always
-    64 label *label12
-    65 returnrec bank1
-    66 end
+   333 label *label12
+   334 returnrec bank1
+   335 end
  
-    88 pop bank1 :g:n
-    89 op mul *tmp26 :f*retval :g:x
-    90 op add :g*retval *tmp26 :g:y
+   355 pop bank1 :g:x
+   356 pop bank1 :g:n
+   357 op add :g*retval *tmp26 :g:y
 -    * jump *label16 always
-    91 label *label16
-    92 returnrec bank1
-    93 end
+   358 label *label16
+   359 returnrec bank1
+   360 end
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-3 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-5 instructions):
  
-    44 op mul :f*retval :f:a :f:b
-    45 returnrec bank1
-    46 label *label13
--    * label *label14
-    47 op sub *tmp15 :f:n 1
-    48 push bank1 :f:n
-    49 push bank1 :f:a
+     4 jump *label60 always
+     5 label *label54
+     6 label *label55
+-    * op sub *tmp15 0 1
+     7 push bank1 :f:n
+     8 push bank1 :f:a
+     9 push bank1 :f:b
  
-    60 pop bank1 :f:n
-    61 op mul *tmp17 :g*retval :f:a
-    62 op add :f*retval *tmp17 :f:b
--    * label *label12
-    63 returnrec bank1
--    * end
-    64 label *label1
-    65 op add :g:x :g:n 3
-    66 op add :g:y :g:n 4
+    65 jump *label67 always
+    66 label *label61
+    67 label *label62
+-    * op sub *tmp15 1 1
+    68 push bank1 :f:n
+    69 push bank1 :f:a
+    70 push bank1 :f:b
  
-    68 op mul :g*retval :g:x :g:y
-    69 returnrec bank1
-    70 label *label17
--    * label *label18
-    71 op sub *tmp24 :g:n 1
-    72 push bank1 :g:n
-    73 push bank1 :g:x
+   129 jump *label74 always
+   130 label *label68
+   131 label *label69
+-    * op sub *tmp15 2 1
+   132 push bank1 :f:n
+   133 push bank1 :f:a
+   134 push bank1 :f:b
  
-    84 pop bank1 :g:n
-    85 op mul *tmp26 :f*retval :g:x
-    86 op add :g*retval *tmp26 :g:y
--    * label *label16
-    87 returnrec bank1
--    * end
-    88 label *label2
-    89 set *tmp28 :f1:n
-    90 set :f1:i 0
--    * label *label21
-    91 jump *label23 greaterThanEq 0 :f1:n
-    92 label *label26
-    93 op sub *tmp30 :f1:i 1
+   195 jump *label81 always
+   196 label *label75
+   197 label *label76
+-    * op sub *tmp15 3 1
+   198 push bank1 :f:n
+   199 push bank1 :f:a
+   200 push bank1 :f:b
  
-   103 pop bank1 :f1:i
-   104 pop bank1 :f1:n
-   105 print :f1:i
--    * label *label24
--    * label *label22
-   106 op add :f1:i :f1:i 1
-   107 jump *label26 lessThan :f1:i *tmp28
-   108 label *label23
--    * label *label20
-   109 returnrec bank1
--    * end
+   290 returnrec bank1
+   291 label *label13
+   292 label *label14
+-    * op sub *tmp15 :f:n 1
+   293 push bank1 :f:n
+   294 push bank1 :f:a
+   295 push bank1 :f:b
 
-Modifications by Final phase, Stack Optimization, iteration 1 (-28 instructions):
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
+     0 set *sp 0
+     1 set :f:n 0
+-    * op add :f:a 0 1
+-    * op add :f:b 0 2
++    2 set :f:a 1
++    3 set :f:b 2
+     4 jump *label60 always
+     5 label *label54
+     6 label *label55
  
-    45 returnrec bank1
-    46 label *label13
-    47 op sub *tmp15 :f:n 1
+    37 pop bank1 :f:n
+    38 label *label60
+    39 assertequals 2 2 "f(0)"
+-    * op add :g:x 0 3
+-    * op add :g:y 0 4
++   40 set :g:x 3
++   41 set :g:y 4
+    42 op mul :g*retval 3 4
+    43 jump *label41 always
+    44 label *label38
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-143 instructions):
+ 
+     2 set :f:a 1
+     3 set :f:b 2
+     4 jump *label60 always
+-    * label *label54
+-    * label *label55
 -    * push bank1 :f:n
-    48 push bank1 :f:a
-    49 push bank1 :f:b
+-    * push bank1 :f:a
+-    * push bank1 :f:b
 -    * push bank1 :f:r
 -    * push bank1 *tmp13
-    50 set :g:n *tmp15
-    51 callrec bank1 *label1 *label15 :g*retval
-    52 label *label15
+-    * op add :g:x :f:n 2
+-    * op add :g:y :f:n 3
+-    * jump *label56 always
+-    * op mul :g*retval :f:b :g:y
+-    * jump *label59 always
+-    * label *label56
+-    * label *label57
+-    * push bank1 :g:n
+-    * push bank1 :g:x
+-    * push bank1 :g:y
+-    * push bank1 :g:r
+-    * push bank1 *tmp22
+-    * op sub :f:n :f:n 2
+-    * callrec bank1 *label0 *label58 :f*retval
+-    * label *label58
+-    * pop bank1 *tmp22
+-    * pop bank1 :g:r
+-    * pop bank1 :g:y
+-    * pop bank1 :g:x
+-    * pop bank1 :g:n
+-    * label *label59
+-    * pop bank1 *tmp13
+-    * pop bank1 :f:r
+-    * pop bank1 :f:b
+-    * pop bank1 :f:a
+-    * pop bank1 :f:n
+     5 label *label60
+     6 assertequals 2 2 "f(0)"
+     7 set :g:x 3
+     8 set :g:y 4
+     9 op mul :g*retval 3 4
+    10 jump *label41 always
+-    * label *label38
+-    * label *label39
+-    * push bank1 :g:n
+-    * push bank1 :g:x
+-    * push bank1 :g:y
+-    * push bank1 :g:r
+-    * push bank1 *tmp22
+-    * set :f:n -1
+-    * callrec bank1 *label0 *label40 :f*retval
+-    * label *label40
+-    * pop bank1 *tmp22
+-    * pop bank1 :g:r
+-    * pop bank1 :g:y
+-    * pop bank1 :g:x
+-    * pop bank1 :g:n
+    11 label *label41
+    12 assertequals 12 12 "g(0)"
+    13 set :f:n 1
+    14 op add :f:a 1 1
+    15 op add :f:b 1 2
+    16 jump *label61 always
+-    * jump *label67 always
+    17 label *label61
+-    * label *label62
+    18 push bank1 :f:n
+    19 push bank1 :f:a
+    20 push bank1 :f:b
+ 
+    24 op add :g:y :f:n 3
+    25 op mul :g*retval :f:b :g:y
+    26 jump *label66 always
+-    * label *label63
+-    * label *label64
+-    * push bank1 :g:n
+-    * push bank1 :g:x
+-    * push bank1 :g:y
+-    * push bank1 :g:r
+-    * push bank1 *tmp22
+-    * op sub :f:n :f:n 2
+-    * callrec bank1 *label0 *label65 :f*retval
+-    * label *label65
+-    * pop bank1 *tmp22
+-    * pop bank1 :g:r
+-    * pop bank1 :g:y
+-    * pop bank1 :g:x
+-    * pop bank1 :g:n
+    27 label *label66
+    28 pop bank1 *tmp13
+    29 pop bank1 :f:r
+ 
+    37 op add :g:x 1 3
+    38 op add :g:y 1 4
+    39 jump *label42 always
+-    * jump *label45 always
+    40 label *label42
+-    * label *label43
+    41 push bank1 :g:n
+    42 push bank1 :g:x
+    43 push bank1 :g:y
+ 
+    59 op add :f:a 2 1
+    60 op add :f:b 2 2
+    61 jump *label68 always
+-    * jump *label74 always
+    62 label *label68
+-    * label *label69
+    63 push bank1 :f:n
+    64 push bank1 :f:a
+    65 push bank1 :f:b
+ 
+    68 op add :g:x :f:n 2
+    69 op add :g:y :f:n 3
+    70 jump *label70 always
+-    * jump *label73 always
+    71 label *label70
+-    * label *label71
+    72 push bank1 :g:n
+    73 push bank1 :g:x
+    74 push bank1 :g:y
+ 
+    97 op add :g:x 2 3
+    98 op add :g:y 2 4
+    99 jump *label46 always
+-    * jump *label49 always
+   100 label *label46
+-    * label *label47
+   101 push bank1 :g:n
+   102 push bank1 :g:x
+   103 push bank1 :g:y
+ 
+   119 op add :f:a 3 1
+   120 op add :f:b 3 2
+   121 jump *label75 always
+-    * jump *label81 always
+   122 label *label75
+-    * label *label76
+   123 push bank1 :f:n
+   124 push bank1 :f:a
+   125 push bank1 :f:b
+ 
+   128 op add :g:x :f:n 2
+   129 op add :g:y :f:n 3
+   130 jump *label77 always
+-    * jump *label80 always
+   131 label *label77
+-    * label *label78
+   132 push bank1 :g:n
+   133 push bank1 :g:x
+   134 push bank1 :g:y
+ 
+   157 op add :g:x 3 3
+   158 op add :g:y 3 4
+   159 jump *label50 always
+-    * jump *label53 always
+   160 label *label50
+-    * label *label51
+   161 push bank1 :g:n
+   162 push bank1 :g:x
+   163 push bank1 :g:y
+ 
+   179 set :f1:n 5
+   180 set *tmp28 5
+   181 set :f1:i 0
+-    * label *label31
+   182 label *label32
+   183 op sub *tmp30 :f1:i 1
+   184 push bank1 :f1:n
+ 
+   193 pop bank1 :f1:i
+   194 pop bank1 :f1:n
+   195 print :f1:i
+-    * label *label34
+-    * label *label35
+   196 op add :f1:i :f1:i 1
+   197 jump *label32 lessThan :f1:i 5
+-    * label *label36
+-    * label *label37
+   198 assertprints *tmp8 "010201301024" "f1(5)"
+   199 stop
+   200 end
+ 
+   205 op mul :f*retval :f:a :f:b
+   206 returnrec bank1
+   207 label *label13
+-    * label *label14
+   208 push bank1 :f:n
+   209 push bank1 :f:a
+   210 push bank1 :f:b
+ 
+   216 op mul :g*retval :f:b :g:y
+   217 jump *label30 always
+   218 label *label27
+-    * label *label28
+   219 push bank1 :g:n
+   220 push bank1 :g:x
+   221 push bank1 :g:y
+ 
+   239 pop bank1 :f:n
+   240 op mul *tmp17 :g*retval :f:a
+   241 op add :f*retval *tmp17 :f:b
+-    * label *label12
+   242 returnrec bank1
+-    * end
+-    * label *label1
+-    * op add :g:x :g:n 3
+-    * op add :g:y :g:n 4
+-    * jump *label17 notEqual :g:n 0
+-    * op mul :g*retval :g:x :g:y
+-    * returnrec bank1
+-    * label *label17
+-    * label *label18
+-    * push bank1 :g:n
+-    * push bank1 :g:x
+-    * push bank1 :g:y
+-    * push bank1 :g:r
+-    * push bank1 *tmp22
+-    * set :f:n *tmp24
+-    * callrec bank1 *label0 *label19 :f*retval
+-    * label *label19
+-    * pop bank1 *tmp22
+-    * pop bank1 :g:r
+-    * pop bank1 :g:y
+-    * pop bank1 :g:x
+-    * pop bank1 :g:n
+-    * op add :g*retval *tmp26 :g:y
+-    * label *label16
+-    * returnrec bank1
+-    * end
+   243 label *label2
+   244 set *tmp28 :f1:n
+   245 set :f1:i 0
+-    * label *label21
+   246 jump *label23 greaterThanEq 0 :f1:n
+   247 label *label26
+   248 op sub *tmp30 :f1:i 1
+ 
+   258 pop bank1 :f1:i
+   259 pop bank1 :f1:n
+   260 print :f1:i
+-    * label *label24
+-    * label *label22
+   261 op add :f1:i :f1:i 1
+   262 jump *label26 lessThan :f1:i *tmp28
+   263 label *label23
+-    * label *label20
+   264 returnrec bank1
+-    * end
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-11 instructions):
+ 
+     1 set :f:n 0
+     2 set :f:a 1
+     3 set :f:b 2
+-    * jump *label60 always
+     4 label *label60
+     5 assertequals 2 2 "f(0)"
+     6 set :g:x 3
+     7 set :g:y 4
+     8 op mul :g*retval 3 4
+-    * jump *label41 always
+     9 label *label41
+    10 assertequals 12 12 "g(0)"
+    11 set :f:n 1
+    12 op add :f:a 1 1
+    13 op add :f:b 1 2
+-    * jump *label61 always
+    14 label *label61
+    15 push bank1 :f:n
+    16 push bank1 :f:a
+ 
+    20 op add :g:x :f:n 2
+    21 op add :g:y :f:n 3
+    22 op mul :g*retval :f:b :g:y
+-    * jump *label66 always
+    23 label *label66
+    24 pop bank1 *tmp13
+    25 pop bank1 :f:r
+ 
+    31 assertequals 27 :f*retval "f(1)"
+    32 op add :g:x 1 3
+    33 op add :g:y 1 4
+-    * jump *label42 always
+    34 label *label42
+    35 push bank1 :g:n
+    36 push bank1 :g:x
+ 
+    51 set :f:n 2
+    52 op add :f:a 2 1
+    53 op add :f:b 2 2
+-    * jump *label68 always
+    54 label *label68
+    55 push bank1 :f:n
+    56 push bank1 :f:a
+ 
+    59 push bank1 *tmp13
+    60 op add :g:x :f:n 2
+    61 op add :g:y :f:n 3
+-    * jump *label70 always
+    62 label *label70
+    63 push bank1 :g:n
+    64 push bank1 :g:x
+ 
+    85 assertequals 43 :f*retval "f(2)"
+    86 op add :g:x 2 3
+    87 op add :g:y 2 4
+-    * jump *label46 always
+    88 label *label46
+    89 push bank1 :g:n
+    90 push bank1 :g:x
+ 
+   105 set :f:n 3
+   106 op add :f:a 3 1
+   107 op add :f:b 3 2
+-    * jump *label75 always
+   108 label *label75
+   109 push bank1 :f:n
+   110 push bank1 :f:a
+ 
+   113 push bank1 *tmp13
+   114 op add :g:x :f:n 2
+   115 op add :g:y :f:n 3
+-    * jump *label77 always
+   116 label *label77
+   117 push bank1 :g:n
+   118 push bank1 :g:x
+ 
+   139 assertequals 569 :f*retval "f(3)"
+   140 op add :g:x 3 3
+   141 op add :g:y 3 4
+-    * jump *label50 always
+   142 label *label50
+   143 push bank1 :g:n
+   144 push bank1 :g:x
+
+Modifications by Final phase, Stack Optimization, iteration 1 (-112 instructions):
+ 
+    12 push bank1 :f:n
+    13 push bank1 :f:a
+    14 push bank1 :f:b
+-    * push bank1 :f:r
+-    * push bank1 *tmp13
+    15 op add :g:x :f:n 2
+    16 op add :g:y :f:n 3
+    17 op mul :g*retval :f:b :g:y
+-    * pop bank1 *tmp13
+-    * pop bank1 :f:r
+    18 pop bank1 :f:b
+    19 pop bank1 :f:a
+    20 pop bank1 :f:n
+ 
+    23 assertequals 27 :f*retval "f(1)"
+    24 op add :g:x 1 3
+    25 op add :g:y 1 4
+-    * push bank1 :g:n
+    26 push bank1 :g:x
+    27 push bank1 :g:y
+-    * push bank1 :g:r
+-    * push bank1 *tmp22
+    28 set :f:n 0
+    29 callrec bank1 *label0 *label44 :f*retval
+    30 label *label44
+-    * pop bank1 *tmp22
+-    * pop bank1 :g:r
+    31 pop bank1 :g:y
+    32 pop bank1 :g:x
+-    * pop bank1 :g:n
+    33 op mul *tmp26 :f*retval 4
+    34 op add :g*retval *tmp26 5
+    35 assertequals 13 :g*retval "g(1)"
+ 
+    39 push bank1 :f:n
+    40 push bank1 :f:a
+    41 push bank1 :f:b
+-    * push bank1 :f:r
+-    * push bank1 *tmp13
+    42 op add :g:x :f:n 2
+    43 op add :g:y :f:n 3
+-    * push bank1 :g:n
+    44 push bank1 :g:x
+    45 push bank1 :g:y
+-    * push bank1 :g:r
+-    * push bank1 *tmp22
+    46 op sub :f:n :f:n 2
+    47 callrec bank1 *label0 *label72 :f*retval
+    48 label *label72
+-    * pop bank1 *tmp22
+-    * pop bank1 :g:r
+    49 pop bank1 :g:y
+    50 pop bank1 :g:x
+-    * pop bank1 :g:n
+    51 op mul *tmp26 :f*retval :g:x
+    52 op add :g*retval *tmp26 :g:y
 -    * pop bank1 *tmp13
 -    * pop bank1 :f:r
     53 pop bank1 :f:b
     54 pop bank1 :f:a
--    * pop bank1 :f:n
-    55 op mul *tmp17 :g*retval :f:a
-    56 op add :f*retval *tmp17 :f:b
-    57 returnrec bank1
+    55 pop bank1 :f:n
  
-    63 returnrec bank1
-    64 label *label17
-    65 op sub *tmp24 :g:n 1
+    58 assertequals 43 :f*retval "f(2)"
+    59 op add :g:x 2 3
+    60 op add :g:y 2 4
 -    * push bank1 :g:n
-    66 push bank1 :g:x
-    67 push bank1 :g:y
+    61 push bank1 :g:x
+    62 push bank1 :g:y
 -    * push bank1 :g:r
 -    * push bank1 *tmp22
-    68 set :f:n *tmp24
-    69 callrec bank1 *label0 *label19 :f*retval
-    70 label *label19
+    63 set :f:n 1
+    64 callrec bank1 *label0 *label48 :f*retval
+    65 label *label48
 -    * pop bank1 *tmp22
 -    * pop bank1 :g:r
-    71 pop bank1 :g:y
-    72 pop bank1 :g:x
+    66 pop bank1 :g:y
+    67 pop bank1 :g:x
 -    * pop bank1 :g:n
-    73 op mul *tmp26 :f*retval :g:x
-    74 op add :g*retval *tmp26 :g:y
-    75 returnrec bank1
+    68 op mul *tmp26 :f*retval 5
+    69 op add :g*retval *tmp26 6
+    70 assertequals 141 :g*retval "g(2)"
  
-    82 push bank1 :f1:n
-    83 push bank1 :f1:i
-    84 push bank1 *tmp28
+    74 push bank1 :f:n
+    75 push bank1 :f:a
+    76 push bank1 :f:b
+-    * push bank1 :f:r
+-    * push bank1 *tmp13
+    77 op add :g:x :f:n 2
+    78 op add :g:y :f:n 3
+-    * push bank1 :g:n
+    79 push bank1 :g:x
+    80 push bank1 :g:y
+-    * push bank1 :g:r
+-    * push bank1 *tmp22
+    81 op sub :f:n :f:n 2
+    82 callrec bank1 *label0 *label79 :f*retval
+    83 label *label79
+-    * pop bank1 *tmp22
+-    * pop bank1 :g:r
+    84 pop bank1 :g:y
+    85 pop bank1 :g:x
+-    * pop bank1 :g:n
+    86 op mul *tmp26 :f*retval :g:x
+    87 op add :g*retval *tmp26 :g:y
+-    * pop bank1 *tmp13
+-    * pop bank1 :f:r
+    88 pop bank1 :f:b
+    89 pop bank1 :f:a
+    90 pop bank1 :f:n
+ 
+    93 assertequals 569 :f*retval "f(3)"
+    94 op add :g:x 3 3
+    95 op add :g:y 3 4
+-    * push bank1 :g:n
+    96 push bank1 :g:x
+    97 push bank1 :g:y
+-    * push bank1 :g:r
+-    * push bank1 *tmp22
+    98 set :f:n 2
+    99 callrec bank1 *label0 *label52 :f*retval
+   100 label *label52
+-    * pop bank1 *tmp22
+-    * pop bank1 :g:r
+   101 pop bank1 :g:y
+   102 pop bank1 :g:x
+-    * pop bank1 :g:n
+   103 op mul *tmp26 :f*retval 6
+   104 op add :g*retval *tmp26 7
+   105 assertequals 265 :g*retval "g(3)"
+ 
+   112 push bank1 :f1:n
+   113 push bank1 :f1:i
+   114 push bank1 *tmp28
 -    * push bank1 :g1:n
-    85 set :f1:n *tmp30
-    86 callrec bank1 *label2 *label25 :f1*retval
-    87 label *label25
+   115 set :f1:n *tmp30
+   116 callrec bank1 *label2 *label33 :f1*retval
+   117 label *label33
 -    * pop bank1 :g1:n
-    88 pop bank1 *tmp28
-    89 pop bank1 :f1:i
-    90 pop bank1 :f1:n
+   118 pop bank1 *tmp28
+   119 pop bank1 :f1:i
+   120 pop bank1 :f1:n
+ 
+   134 push bank1 :f:n
+   135 push bank1 :f:a
+   136 push bank1 :f:b
+-    * push bank1 :f:r
+-    * push bank1 *tmp13
+   137 op add :g:x :f:n 2
+   138 op add :g:y :f:n 3
+   139 jump *label27 notEqual :f:n 1
+   140 op mul :g*retval :f:b :g:y
+   141 jump *label30 always
+   142 label *label27
+-    * push bank1 :g:n
+   143 push bank1 :g:x
+   144 push bank1 :g:y
+-    * push bank1 :g:r
+-    * push bank1 *tmp22
+   145 op sub :f:n :f:n 2
+   146 callrec bank1 *label0 *label29 :f*retval
+   147 label *label29
+-    * pop bank1 *tmp22
+-    * pop bank1 :g:r
+   148 pop bank1 :g:y
+   149 pop bank1 :g:x
+-    * pop bank1 :g:n
+   150 op mul *tmp26 :f*retval :g:x
+   151 op add :g*retval *tmp26 :g:y
+   152 label *label30
+-    * pop bank1 *tmp13
+-    * pop bank1 :f:r
+   153 pop bank1 :f:b
+   154 pop bank1 :f:a
+   155 pop bank1 :f:n
+ 
+   165 push bank1 :f1:n
+   166 push bank1 :f1:i
+   167 push bank1 *tmp28
+-    * push bank1 :g1:n
+   168 set :f1:n *tmp30
+   169 callrec bank1 *label2 *label25 :f1*retval
+   170 label *label25
+-    * pop bank1 :g1:n
+   171 pop bank1 *tmp28
+   172 pop bank1 :f1:i
+   173 pop bank1 :f1:n
 
 Final code before resolving virtual instructions:
 
 set *sp 0
 set :f:n 0
-callrec bank1 *label0 *label3 :f*retval
-label *label3
-assertequals 2 :f*retval "f(0)"
-set :g:n 0
-callrec bank1 *label1 *label4 :g*retval
-label *label4
-assertequals 12 :g*retval "g(0)"
+set :f:a 1
+set :f:b 2
+assertequals 2 2 "f(0)"
+set :g:x 3
+set :g:y 4
+op mul :g*retval 3 4
+assertequals 12 12 "g(0)"
 set :f:n 1
-callrec bank1 *label0 *label5 :f*retval
-label *label5
+op add :f:a 1 1
+op add :f:b 1 2
+push bank1 :f:n
+push bank1 :f:a
+push bank1 :f:b
+op add :g:x :f:n 2
+op add :g:y :f:n 3
+op mul :g*retval :f:b :g:y
+pop bank1 :f:b
+pop bank1 :f:a
+pop bank1 :f:n
+op mul *tmp1 :g*retval 2
+op add :f*retval *tmp1 3
 assertequals 27 :f*retval "f(1)"
-set :g:n 1
-callrec bank1 *label1 *label6 :g*retval
-label *label6
+op add :g:x 1 3
+op add :g:y 1 4
+push bank1 :g:x
+push bank1 :g:y
+set :f:n 0
+callrec bank1 *label0 *label44 :f*retval
+label *label44
+pop bank1 :g:y
+pop bank1 :g:x
+op mul *tmp2 :f*retval 4
+op add :g*retval *tmp2 5
 assertequals 13 :g*retval "g(1)"
 set :f:n 2
-callrec bank1 *label0 *label7 :f*retval
-label *label7
+op add :f:a 2 1
+op add :f:b 2 2
+push bank1 :f:n
+push bank1 :f:a
+push bank1 :f:b
+op add :g:x :f:n 2
+op add :g:y :f:n 3
+push bank1 :g:x
+push bank1 :g:y
+op sub :f:n :f:n 2
+callrec bank1 *label0 *label72 :f*retval
+label *label72
+pop bank1 :g:y
+pop bank1 :g:x
+op mul *tmp2 :f*retval :g:x
+op add :g*retval *tmp2 :g:y
+pop bank1 :f:b
+pop bank1 :f:a
+pop bank1 :f:n
+op mul *tmp1 :g*retval 3
+op add :f*retval *tmp1 4
 assertequals 43 :f*retval "f(2)"
-set :g:n 2
-callrec bank1 *label1 *label8 :g*retval
-label *label8
+op add :g:x 2 3
+op add :g:y 2 4
+push bank1 :g:x
+push bank1 :g:y
+set :f:n 1
+callrec bank1 *label0 *label48 :f*retval
+label *label48
+pop bank1 :g:y
+pop bank1 :g:x
+op mul *tmp2 :f*retval 5
+op add :g*retval *tmp2 6
 assertequals 141 :g*retval "g(2)"
 set :f:n 3
-callrec bank1 *label0 *label9 :f*retval
-label *label9
+op add :f:a 3 1
+op add :f:b 3 2
+push bank1 :f:n
+push bank1 :f:a
+push bank1 :f:b
+op add :g:x :f:n 2
+op add :g:y :f:n 3
+push bank1 :g:x
+push bank1 :g:y
+op sub :f:n :f:n 2
+callrec bank1 *label0 *label79 :f*retval
+label *label79
+pop bank1 :g:y
+pop bank1 :g:x
+op mul *tmp2 :f*retval :g:x
+op add :g*retval *tmp2 :g:y
+pop bank1 :f:b
+pop bank1 :f:a
+pop bank1 :f:n
+op mul *tmp1 :g*retval 4
+op add :f*retval *tmp1 5
 assertequals 569 :f*retval "f(3)"
-set :g:n 3
-callrec bank1 *label1 *label10 :g*retval
-label *label10
+op add :g:x 3 3
+op add :g:y 3 4
+push bank1 :g:x
+push bank1 :g:y
+set :f:n 2
+callrec bank1 *label0 *label52 :f*retval
+label *label52
+pop bank1 :g:y
+pop bank1 :g:x
+op mul *tmp2 :f*retval 6
+op add :g*retval *tmp2 7
 assertequals 265 :g*retval "g(3)"
 assertflush *tmp0
 set :f1:n 5
-callrec bank1 *label2 *label11 :f1*retval
-label *label11
+set *tmp3 5
+set :f1:i 0
+label *label32
+op sub *tmp4 :f1:i 1
+push bank1 :f1:n
+push bank1 :f1:i
+push bank1 *tmp3
+set :f1:n *tmp4
+callrec bank1 *label2 *label33 :f1*retval
+label *label33
+pop bank1 *tmp3
+pop bank1 :f1:i
+pop bank1 :f1:n
+print :f1:i
+op add :f1:i :f1:i 1
+jump *label32 lessThan :f1:i 5
 assertprints *tmp0 "010201301024" "f1(5)"
 stop
 end
@@ -524,52 +2541,48 @@ jump *label13 notEqual :f:n 0
 op mul :f*retval :f:a :f:b
 returnrec bank1
 label *label13
-op sub *tmp1 :f:n 1
+push bank1 :f:n
 push bank1 :f:a
 push bank1 :f:b
-set :g:n *tmp1
-callrec bank1 *label1 *label15 :g*retval
-label *label15
-pop bank1 :f:b
-pop bank1 :f:a
-op mul *tmp2 :g*retval :f:a
-op add :f*retval *tmp2 :f:b
-returnrec bank1
-label *label1
-op add :g:x :g:n 3
-op add :g:y :g:n 4
-jump *label17 notEqual :g:n 0
-op mul :g*retval :g:x :g:y
-returnrec bank1
-label *label17
-op sub *tmp3 :g:n 1
+op add :g:x :f:n 2
+op add :g:y :f:n 3
+jump *label27 notEqual :f:n 1
+op mul :g*retval :f:b :g:y
+jump *label30 always
+label *label27
 push bank1 :g:x
 push bank1 :g:y
-set :f:n *tmp3
-callrec bank1 *label0 *label19 :f*retval
-label *label19
+op sub :f:n :f:n 2
+callrec bank1 *label0 *label29 :f*retval
+label *label29
 pop bank1 :g:y
 pop bank1 :g:x
-op mul *tmp4 :f*retval :g:x
-op add :g*retval *tmp4 :g:y
+op mul *tmp2 :f*retval :g:x
+op add :g*retval *tmp2 :g:y
+label *label30
+pop bank1 :f:b
+pop bank1 :f:a
+pop bank1 :f:n
+op mul *tmp1 :g*retval :f:a
+op add :f*retval *tmp1 :f:b
 returnrec bank1
 label *label2
-set *tmp5 :f1:n
+set *tmp3 :f1:n
 set :f1:i 0
 jump *label23 greaterThanEq 0 :f1:n
 label *label26
-op sub *tmp6 :f1:i 1
+op sub *tmp4 :f1:i 1
 push bank1 :f1:n
 push bank1 :f1:i
-push bank1 *tmp5
-set :f1:n *tmp6
+push bank1 *tmp3
+set :f1:n *tmp4
 callrec bank1 *label2 *label25 :f1*retval
 label *label25
-pop bank1 *tmp5
+pop bank1 *tmp3
 pop bank1 :f1:i
 pop bank1 :f1:n
 print :f1:i
 op add :f1:i :f1:i 1
-jump *label26 lessThan :f1:i *tmp5
+jump *label26 lessThan :f1:i *tmp3
 label *label23
 returnrec bank1

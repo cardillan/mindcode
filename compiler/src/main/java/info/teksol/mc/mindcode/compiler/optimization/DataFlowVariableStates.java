@@ -229,7 +229,7 @@ class DataFlowVariableStates {
             equivalences.values().removeIf(invalids::contains);
         }
 
-        /// Called when a variable has been stored on stack.
+        /// Called when a variable has been stored on a stack.
         ///
         /// @param variable variable to be stored
         /// @return this
@@ -564,8 +564,8 @@ class DataFlowVariableStates {
             print("This");
             other.print("Other");
 
-            if (!onStack.isEmpty() || !other.onStack.isEmpty()) {
-                throw new MindcodeInternalError("Trying to merge variable states having variables on stack.");
+            if (!onStack.equals(other.onStack)) {
+                throw new MindcodeInternalError("Trying to merge variable states having different variables on stack.");
             }
 
             if (other.dead || !other.reachable) {

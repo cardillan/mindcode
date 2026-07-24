@@ -120,7 +120,7 @@ class StackOptimizer extends BaseOptimizer {
                     // Remove instructions from the function
                     function.stream()
                             .filter(in -> in instanceof PushOrPopInstruction ix &&
-                                    ix.getAstContext().belongsTo(call.getAstContext()) &&
+                                    ix.getAstContext().belongsTo(call.getAstContext().parent()) &&
                                     !preserveVariables.contains(ix.getVariable()))
                             .forEachOrdered(this::removeInstruction);
                 }
@@ -150,7 +150,7 @@ class StackOptimizer extends BaseOptimizer {
                 .map(LogicVariable.class::cast)
                 .collect(Collectors.toSet());
 
-        contextStream(subcontext)
+        contextStream(subcontext.parent())
                 .filter(SetInstruction.class::isInstance)
                 .map(SetInstruction.class::cast)
                 .map(SetInstruction::getResult)

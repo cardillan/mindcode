@@ -90,7 +90,7 @@ public class Variables extends CompilerMessageEmitter {
     }
 
     public MindcodeFunction currentFunction() {
-        return functionContext.function();
+        return Objects.requireNonNull(functionContext.function());
     }
 
     public Collection<ValueStore> getActiveVariables() {

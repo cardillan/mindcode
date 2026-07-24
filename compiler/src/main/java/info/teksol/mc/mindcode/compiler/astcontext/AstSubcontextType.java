@@ -60,8 +60,11 @@ public enum AstSubcontextType {
     ///  A call to an out-of-line (but stackless) function.
     OUT_OF_LINE_CALL("OCAL", false),
 
-    /// A recursive function call, includes stack operations.
+    /// A recursive function call (excludes stack operations).
     RECURSIVE_CALL  ("RCAL", false),
+
+    /// Stack manipulation in a recursive call.
+    STACK           ("STCK", false),
 
     /// A remote function call.
     REMOTE_CALL     ("RMCL", false),

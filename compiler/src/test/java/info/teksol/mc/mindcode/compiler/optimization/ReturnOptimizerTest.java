@@ -31,7 +31,7 @@ class ReturnOptimizerTest extends AbstractOptimizerTest<ReturnOptimizer> {
     void optimizesRecursiveReturn() {
         assertCompilesTo("""
                         allocate stack in cell1;
-                        def fib(n)
+                        noinline def fib(n)
                             if n < 2 then
                                 return n;
                             end;

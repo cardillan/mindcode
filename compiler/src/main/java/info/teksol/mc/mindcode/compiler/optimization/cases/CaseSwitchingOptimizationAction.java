@@ -547,8 +547,8 @@ public class CaseSwitchingOptimizationAction implements ConvertCaseOptimizationA
         }
 
         // We're duplicating the contexts to ensure no AST context collision after moving.
-        OptimizationContext.LogicList body = branch.body.duplicate(true);
-        OptimizationContext.LogicList jump = branch.jump.duplicate(false);
+        OptimizationContext.LogicList body = branch.body.duplicate(_ -> true);
+        OptimizationContext.LogicList jump = branch.jump.duplicate(_ -> false);
 
         body.forEach(this::insertInstruction);
         insertInstruction(Objects.requireNonNull(jump.getFirst()));

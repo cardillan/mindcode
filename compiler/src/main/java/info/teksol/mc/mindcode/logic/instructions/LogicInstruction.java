@@ -13,6 +13,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -203,6 +204,16 @@ public interface LogicInstruction extends MlogInstruction {
 
     default LogicInstruction setCallReturn(LogicLabel callReturn) {
         return setInfo(InstructionInfo.CALL_RETURN, callReturn);
+    }
+
+    default Optional<LogicInstruction> getJumpToReturn() {
+        //noinspection unchecked
+        return (Optional<LogicInstruction>) getInfo(InstructionInfo.JUMP_TO_RETURN);
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    default LogicInstruction setJumpToReturn(Optional<LogicInstruction> jumpToReturn) {
+        return setInfo(InstructionInfo.JUMP_TO_RETURN, jumpToReturn);
     }
 
     default boolean isSelectOperation() {

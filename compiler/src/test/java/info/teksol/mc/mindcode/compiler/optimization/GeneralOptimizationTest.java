@@ -63,7 +63,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
     void correctlyOptimizesFunctionCallAndReturn() {
         assertCompilesTo("""
                         allocate stack in cell1[33..48], heap in cell2[3...7];
-                        def fn(n)
+                        noinline def fn(n)
                             fn(n - 1);
                             2 * n;
                         end;

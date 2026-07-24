@@ -12,6 +12,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.BODY;
 
@@ -97,7 +98,8 @@ class ReturnOptimizer extends BaseOptimizer {
             return OptimizationResult.INVALID;
         }
 
-        LogicInstruction replacement = action.replacement.withContext(action.original.getAstContext());
+        LogicInstruction replacement = action.replacement.withContext(action.original.getAstContext())
+                .setJumpToReturn(Optional.of(action.original));
         replaceInstruction(index, replacement);
         count++;
         return OptimizationResult.REALIZED;

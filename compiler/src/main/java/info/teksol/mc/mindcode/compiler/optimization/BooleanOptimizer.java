@@ -228,7 +228,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
     private void replaceExpression(AstContext ifExpression, LogicList condition, OpInstruction op1, OpInstruction op2) {
         AstContext targetContext = requireNonNull(ifExpression.parent()).createChild(ifExpression.existingNode(), OPERATOR);
         LogicList instructions = createLogicList(targetContext);
-        LogicList duplicated = condition.duplicateToContext(targetContext, false);
+        LogicList duplicated = condition.duplicateToContext(targetContext);
 
         for (LogicInstruction ix : duplicated) {
             if (ix instanceof JumpInstruction) {
@@ -352,7 +352,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
             BranchContent trueContent, BranchContent falseContent, LogicVariable result) {
         AstContext targetContext = requireNonNull(ifExpression.parent()).createChild(ifExpression.existingNode(), OPERATOR);
         LogicList instructions = createLogicList(targetContext);
-        LogicList duplicated = condition.duplicateToContext(targetContext, false);
+        LogicList duplicated = condition.duplicateToContext(targetContext);
 
         LogicValue trueValue = requireNonNull(trueContent.assignments.get(result));
         LogicValue falseValue = requireNonNull(falseContent.assignments.get(result));
@@ -397,7 +397,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
     private void convertToFullEvaluation(AstContext conditionContext, LogicList condition, ShortCircuitAnalysis analysis) {
         AstContext targetContext = conditionContext.createChild(conditionContext.existingNode(), OPERATOR);
         LogicList instructions = createLogicList(targetContext);
-        LogicList duplicated = condition.duplicateToContext(targetContext, false);
+        LogicList duplicated = condition.duplicateToContext(targetContext);
 
         List<LogicValue> values = new ArrayList<>();
         LogicLabel falseLabel = null;
@@ -452,7 +452,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
                     analysis.lastJump().getTarget(), finalJump.getCondition().inverse(getGlobalProfile()), finalJump.getX(), finalJump.getY()));
         }
 
-        LogicList transformed = condition.duplicateToContext(targetContext, false);
+        LogicList transformed = condition.duplicateToContext(targetContext);
         int size = 0;
         for (int i = index + 1; i < transformed.size(); i++) {
             size++;
@@ -503,7 +503,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
             BranchContent falseContent, SequencedSet<LogicVariable> results, JumpInstruction jump, ConditionJumpHandling jumpHandling) {
         AstContext targetContext = requireNonNull(ifExpression.parent()).createChild(ifExpression.existingNode(), OPERATOR);
         int index = findJumpFromEnd(condition, 1);
-        LogicList instructions = condition.subList(0, index).duplicateToContext(targetContext, false);
+        LogicList instructions = condition.subList(0, index).duplicateToContext(targetContext);
         if (condition.getLast() instanceof LabelInstruction label) {
             instructions.addToContext(label);
         }

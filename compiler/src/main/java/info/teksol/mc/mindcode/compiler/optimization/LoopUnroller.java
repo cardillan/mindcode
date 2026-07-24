@@ -435,14 +435,14 @@ class LoopUnroller extends BaseOptimizer {
         AstContext newContext = loop.existingParent().createChild(loop.existingNode(), AstContextType.CODE);
         int insertionPoint = firstInstructionIndex(loop);
         for (LogicList list : initContexts) {
-            insertInstructions(insertionPoint, list.duplicateToContext(newContext, false));
+            insertInstructions(insertionPoint, list.duplicateToContext(newContext));
             insertionPoint += list.size();
         }
 
         // Put in copies of the body
         for (int i = 0; i < loops; i++) {
             for (LogicList list : iterationContexts) {
-                insertInstructions(insertionPoint, list.duplicateToContext(newContext, false));
+                insertInstructions(insertionPoint, list.duplicateToContext(newContext));
                 insertionPoint += list.size();
             }
         }
@@ -484,10 +484,10 @@ class LoopUnroller extends BaseOptimizer {
         for (int i = 0; i < leading.size(); i++) {
             LogicList leadingCtx = removeLeadingIteratorInstructions(contextInstructions(leading.get(i)));
 
-            insertInstructions(insertionPoint, leadingCtx.duplicateToContext(newContext, false));
+            insertInstructions(insertionPoint, leadingCtx.duplicateToContext(newContext));
             insertionPoint += leadingCtx.size();
 
-            insertInstructions(insertionPoint, body.duplicateToContext(newContext, false));
+            insertInstructions(insertionPoint, body.duplicateToContext(newContext));
             insertionPoint += body.size();
 
             LogicList trailingCtx = contextInstructions(trailing.get(i));

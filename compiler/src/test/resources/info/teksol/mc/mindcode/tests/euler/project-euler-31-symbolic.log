@@ -1,24 +1,32 @@
     97 instructions before optimizations.
-     5 instructions eliminated by Temp Variables Elimination (5 iterations).
+     5 instructions eliminated by Temp Variables Elimination (6 iterations).
      4 instructions eliminated by Dead Code Elimination (4 iterations).
-     2 instructions eliminated by Condition Optimization (5 iterations).
-     2 instructions eliminated by Single Step Elimination (5 iterations).
-    18 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+     1 instruction eliminated by Jump Normalization (5 iterations).
+     2 instructions eliminated by Condition Optimization (6 iterations).
+     3 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+    20 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
        1 loop condition was partially rotated.
-     2 instructions eliminated by Loop Unrolling (4 iterations).
+     2 instructions eliminated by Loop Unrolling (6 iterations).
      1 loop unrolled by Loop Unrolling.
-     2 instructions added by Return Optimization (4 iterations).
+    38 instructions added by Function Inlining (6 iterations).
+     1 function call inlined by Function Inlining.
+     2 instructions added by Return Optimization (6 iterations).
      1 return statement optimized by Return Optimization.
-     1 instruction eliminated by Unreachable Code Elimination (2 iterations).
-     4 instructions eliminated by Stack Optimization.
-    61 instructions after optimizations.
+     2 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     8 instructions eliminated by Stack Optimization.
+    90 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 917):
   * Unroll iteration loop at line 4:1                            size   -15, benefit       31.0, efficiency   Infinity (-19 instructions)
+    Inline function call at line 9:18                            size   +41, benefit        4.0, efficiency      0.098
     Optimize return at line 14:9                                 size    +2, benefit       13.0, efficiency      6.500
 
 Pass 1: speed optimization selection (cost limit 936):
+    Inline function call at line 9:18                            size   +41, benefit        4.0, efficiency      0.098
   * Optimize return at line 14:9                                 size    +2, benefit       13.0, efficiency      6.500 (+2 instructions)
+
+Pass 1: speed optimization selection (cost limit 934):
+  * Inline function call at line 9:18                            size   +43, benefit        4.0, efficiency      0.093 (+36 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
@@ -380,7 +388,128 @@ Modifications by Optimize return at line 14:9 (+2 instructions):
     39 label *label15
     40 set :ways:result 0
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Inline function call at line 9:18 (+38 instructions):
+ 
+    25 label *label3
+    26 set :ways:amount 20
+    27 set :ways:index 1
+-    * callrec bank1 *label0 *label12 :ways*retval
+-    * label *label12
++   28 # "Function: def ways(in amount, in index)"
++   29 jump *label56 notEqual :ways:amount 0
++   30 set :ways*retval 1
++   31 jump *label65 always
++   32 label *label56
++   33 label *label57
++   34 set :ways:result 0
++   35 set :ways:i :ways:index
++   36 label *label58
++   37 jump *label64 greaterThanEq :ways:index 8
++   38 label *label59
++   39 read :ways:p bank1 :ways:i
++   40 jump *label61 greaterThan :ways:p :ways:amount
++   41 push bank1 :ways:amount
++   42 push bank1 :ways:index
++   43 push bank1 :ways:result
++   44 push bank1 :ways:i
++   45 push bank1 :ways:p
++   46 push bank1 *tmp5
++   47 op sub :ways:amount :ways:amount :ways:p
++   48 set :ways:index :ways:i
++   49 callrec bank1 *label0 *label60 :ways*retval
++   50 label *label60
++   51 pop bank1 *tmp5
++   52 pop bank1 :ways:p
++   53 pop bank1 :ways:i
++   54 pop bank1 :ways:result
++   55 pop bank1 :ways:index
++   56 pop bank1 :ways:amount
++   57 op add :ways:result :ways:result :ways*retval
++   58 label *label61
++   59 label *label62
++   60 label *label63
++   61 op add :ways:i :ways:i 1
++   62 jump *label59 lessThan :ways:i 8
++   63 label *label64
++   64 set :ways*retval :ways:result
++   65 label *label65
+    66 assertequals 41 :ways*retval "Project Euler 31"
+    67 stop
+    68 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    26 set :ways:amount 20
+    27 set :ways:index 1
+    28 # "Function: def ways(in amount, in index)"
+-    * jump *label56 notEqual :ways:amount 0
++   29 jump *label56 notEqual 20 0
+    30 set :ways*retval 1
+    31 jump *label65 always
+    32 label *label56
+    33 label *label57
+    34 set :ways:result 0
+-    * set :ways:i :ways:index
++   35 set :ways:i 1
+    36 label *label58
+-    * jump *label64 greaterThanEq :ways:index 8
++   37 jump *label64 greaterThanEq 1 8
+    38 label *label59
+    39 read :ways:p bank1 :ways:i
+-    * jump *label61 greaterThan :ways:p :ways:amount
++   40 jump *label61 greaterThan :ways:p 20
+    41 push bank1 :ways:amount
+    42 push bank1 :ways:index
+    43 push bank1 :ways:result
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+    27 set :ways:index 1
+    28 # "Function: def ways(in amount, in index)"
+    29 jump *label56 notEqual 20 0
+-    * set :ways*retval 1
+    30 jump *label65 always
+    31 label *label56
+    32 label *label57
+ 
+    62 label *label64
+    63 set :ways*retval :ways:result
+    64 label *label65
+-    * assertequals 41 :ways*retval "Project Euler 31"
++   65 assertequals 41 :ways:result "Project Euler 31"
+    66 stop
+    67 end
+    68 label *label0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+ 
+    60 op add :ways:i :ways:i 1
+    61 jump *label59 lessThan :ways:i 8
+    62 label *label64
+-    * set :ways*retval :ways:result
+    63 label *label65
+    64 assertequals 41 :ways:result "Project Euler 31"
+    65 stop
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
+ 
+    26 set :ways:amount 20
+    27 set :ways:index 1
+    28 # "Function: def ways(in amount, in index)"
+-    * jump *label56 notEqual 20 0
++   29 jump *label56 always
+    30 jump *label65 always
+    31 label *label56
+    32 label *label57
+    33 set :ways:result 0
+    34 set :ways:i 1
+    35 label *label58
+-    * jump *label64 greaterThanEq 1 8
+    36 label *label59
+    37 read :ways:p bank1 :ways:i
+    38 jump *label61 greaterThan :ways:p 20
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-2 instructions):
      0 set *sp 16
 -    * label *label23
      1 write 200 bank1 0
@@ -409,46 +538,91 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
 -    * label *label3
      9 set :ways:amount 20
     10 set :ways:index 1
-    11 callrec bank1 *label0 *label12 :ways*retval
+    11 # "Function: def ways(in amount, in index)"
+    12 jump *label56 always
+-    * jump *label65 always
+    13 label *label56
+-    * label *label57
+    14 set :ways:result 0
+    15 set :ways:i 1
+-    * label *label58
+    16 label *label59
+    17 read :ways:p bank1 :ways:i
+    18 jump *label61 greaterThan :ways:p 20
  
-    19 set :ways*retval 1
-    20 returnrec bank1
-    21 label *label14
+    34 pop bank1 :ways:amount
+    35 op add :ways:result :ways:result :ways*retval
+    36 label *label61
+-    * label *label62
+-    * label *label63
+    37 op add :ways:i :ways:i 1
+    38 jump *label59 lessThan :ways:i 8
+-    * label *label64
+    39 label *label65
+    40 assertequals 41 :ways:result "Project Euler 31"
+    41 stop
+ 
+    46 set :ways*retval 1
+    47 returnrec bank1
+    48 label *label14
 -    * label *label15
-    22 set :ways:result 0
-    23 set :ways:i :ways:index
+    49 set :ways:result 0
+    50 set :ways:i :ways:index
 -    * label *label16
-    24 jump *label18 greaterThanEq :ways:index 8
-    25 label *label22
-    26 read :ways:p bank1 :ways:i
+    51 jump *label18 greaterThanEq :ways:index 8
+    52 label *label22
+    53 read :ways:p bank1 :ways:i
  
-    43 pop bank1 :ways:amount
-    44 op add :ways:result :ways:result :ways*retval
-    45 label *label19
+    70 pop bank1 :ways:amount
+    71 op add :ways:result :ways:result :ways*retval
+    72 label *label19
 -    * label *label20
 -    * label *label17
-    46 op add :ways:i :ways:i 1
-    47 jump *label22 lessThan :ways:i 8
-    48 label *label18
-    49 set :ways*retval :ways:result
+    73 op add :ways:i :ways:i 1
+    74 jump *label22 lessThan :ways:i 8
+    75 label *label18
+    76 set :ways*retval :ways:result
 -    * label *label13
-    50 returnrec bank1
+    77 returnrec bank1
 -    * end
 
-Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-    30 push bank1 :ways:result
-    31 push bank1 :ways:i
-    32 push bank1 :ways:p
+     9 set :ways:amount 20
+    10 set :ways:index 1
+    11 # "Function: def ways(in amount, in index)"
+-    * jump *label56 always
+    12 label *label56
+    13 set :ways:result 0
+    14 set :ways:i 1
+
+Modifications by Final phase, Stack Optimization, iteration 1 (-8 instructions):
+ 
+    19 push bank1 :ways:result
+    20 push bank1 :ways:i
+    21 push bank1 :ways:p
 -    * push bank1 *tmp5
-    33 op sub :ways:amount :ways:amount :ways:p
-    34 set :ways:index :ways:i
-    35 callrec bank1 *label0 *label21 :ways*retval
-    36 label *label21
+    22 op sub :ways:amount :ways:amount :ways:p
+    23 set :ways:index :ways:i
+    24 callrec bank1 *label0 *label60 :ways*retval
+    25 label *label60
 -    * pop bank1 *tmp5
-    37 pop bank1 :ways:p
-    38 pop bank1 :ways:i
-    39 pop bank1 :ways:result
+    26 pop bank1 :ways:p
+    27 pop bank1 :ways:i
+    28 pop bank1 :ways:result
+ 
+    52 push bank1 :ways:result
+    53 push bank1 :ways:i
+    54 push bank1 :ways:p
+-    * push bank1 *tmp5
+    55 op sub :ways:amount :ways:amount :ways:p
+    56 set :ways:index :ways:i
+    57 callrec bank1 *label0 *label21 :ways*retval
+    58 label *label21
+-    * pop bank1 *tmp5
+    59 pop bank1 :ways:p
+    60 pop bank1 :ways:i
+    61 pop bank1 :ways:result
 
 Final code before resolving virtual instructions:
 
@@ -463,9 +637,31 @@ write 2 bank1 6
 write 1 bank1 7
 set :ways:amount 20
 set :ways:index 1
-callrec bank1 *label0 *label12 :ways*retval
-label *label12
-assertequals 41 :ways*retval "Project Euler 31"
+# "Function: def ways(in amount, in index)"
+set :ways:result 0
+set :ways:i 1
+label *label59
+read :ways:p bank1 :ways:i
+jump *label61 greaterThan :ways:p 20
+push bank1 :ways:amount
+push bank1 :ways:index
+push bank1 :ways:result
+push bank1 :ways:i
+push bank1 :ways:p
+op sub :ways:amount :ways:amount :ways:p
+set :ways:index :ways:i
+callrec bank1 *label0 *label60 :ways*retval
+label *label60
+pop bank1 :ways:p
+pop bank1 :ways:i
+pop bank1 :ways:result
+pop bank1 :ways:index
+pop bank1 :ways:amount
+op add :ways:result :ways:result :ways*retval
+label *label61
+op add :ways:i :ways:i 1
+jump *label59 lessThan :ways:i 8
+assertequals 41 :ways:result "Project Euler 31"
 stop
 end
 label *label0

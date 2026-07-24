@@ -235,7 +235,7 @@ class LoopRotator extends AbstractConditionalOptimizer {
             LogicLabel repeatLabel = null;
             LogicLabel enterLabel = null;
 
-            LogicList copy = conditionEvaluation.duplicate(true);
+            LogicList copy = conditionEvaluation.duplicate(l -> true);
             // Invert the label map (new -> old)
             Map<LogicLabel, LogicLabel> labelMap = CollectionUtils.invert(copy.getLabelMap());
 

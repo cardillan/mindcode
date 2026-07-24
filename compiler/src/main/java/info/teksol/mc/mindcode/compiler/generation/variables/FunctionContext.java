@@ -23,7 +23,7 @@ public interface FunctionContext {
     /// Provides the current function. Returns null in the global context.
     ///
     /// @return function associated with the context
-    MindcodeFunction function();
+    @Nullable MindcodeFunction function();
 
     /// Determines whether there is a call to the current function at a point where an unresolved global variable
     /// of the given name exists; if it does, returns the position of the function call and removes the variable

@@ -294,9 +294,9 @@ public class FastDispatchOptimizationAction implements ConvertCaseOptimizationAc
         optimizationContext.removeMatchingInstructions(ix -> ix.belongsTo(labelContext));
         optimizationContext.removeMatchingInstructions(ix -> ix.belongsTo(bodyContext));
 
-        labelInstructions.duplicate(false).stream().skip(1).forEach(this::insertInstruction);
+        labelInstructions.duplicate(l -> false).stream().skip(1).forEach(this::insertInstruction);
         AstContext newBodyContext = param.context().createSubcontext(ELSE, bodyContext.weight());
-        LogicList newBody = bodyInstructions.duplicateToContext(newBodyContext, false, false);
+        LogicList newBody = bodyInstructions.duplicateToContext(newBodyContext, l -> false);
         newBody.forEach(this::insertInstruction);
 
         AstContext newFlowContext = param.context().createSubcontext(FLOW_CONTROL, bodyContext.weight());

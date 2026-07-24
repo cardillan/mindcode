@@ -2110,13 +2110,13 @@ public class OptimizationContext extends CompilerMessageEmitter {
         /// child contexts might not be.
         ///
         /// @return LogicList containing duplicated code.
-        public LogicList duplicate(boolean remapLabels) {
+        public LogicList duplicate(Predicate<LogicLabel> labelRemapFilter) {
             if (astContext == null) {
                 throw new MindcodeInternalError("No astContext");
             }
 
             // Duplicate labels
-            Map<LogicLabel, LogicLabel> labelMap = remapLabels ? duplicateLabels() : Map.of();
+            Map<LogicLabel, LogicLabel> labelMap = duplicateLabels(labelRemapFilter);
 
             Map<AstContext, AstContext> contextMap = astContext.createDeepCopy();
             return new LogicList(contextMap.get(astContext), stream()
@@ -2124,32 +2124,34 @@ public class OptimizationContext extends CompilerMessageEmitter {
                     .toList(), labelMap);
         }
 
-        public LogicList duplicateToContext(AstContext newContext, boolean functionInlining) {
-            return transformToContext(newContext, functionInlining, ix -> ix);
+        public LogicList duplicateToContext(AstContext newContext) {
+            return transformToContext(newContext, false, ix -> ix);
         }
 
-        public LogicList duplicateToContext(AstContext newContext, boolean remapLabels, boolean functionInlining) {
-            return transformToContext(newContext, remapLabels, functionInlining, ix -> ix);
+        public LogicList duplicateToContext(AstContext newContext, Predicate<LogicLabel> labelRemapFilter) {
+            return transformToContext(newContext, labelRemapFilter, false, ix -> ix);
         }
 
-        public @Nullable LogicList duplicateToContext(AstContext newContext, boolean functionInlining,
-                Predicate<LogicInstruction> matcher) {
-            return transformToContext(newContext, functionInlining, ix -> matcher.test(ix) ? ix : null);
+        // Note: when used on recursive functions, this undoes any return optimizations performed earlier.
+        public LogicList duplicateToContextForInlining(AstContext newContext, Predicate<LogicLabel> labelRemapFilter) {
+            return transformToContext(newContext, labelRemapFilter, true,
+                    ix -> (ix instanceof LabelInstruction lbl) && !labelRemapFilter.test(lbl.getLabel())
+                            ? null : ix.getJumpToReturn().orElse(ix));
         }
 
         public LogicList transformToContext(AstContext newContext, boolean functionInlining,
                 Function<LogicInstruction, @Nullable LogicInstruction> transformer) {
-            return transformToContext(newContext, true, functionInlining, transformer);
+            return transformToContext(newContext, l -> true, functionInlining, transformer);
         }
 
-        public LogicList transformToContext(AstContext newContext, boolean remapLabels,
+        public LogicList transformToContext(AstContext newContext, Predicate<LogicLabel> labelRemapFilter,
                 boolean functionInlining, Function<LogicInstruction, @Nullable LogicInstruction> transformer) {
             if (astContext == null) {
                 throw new MindcodeInternalError("No astContext");
             }
 
             // Duplicate labels?
-            Map<LogicLabel, LogicLabel> labelMap = remapLabels ? duplicateLabels() : Map.of();
+            Map<LogicLabel, LogicLabel> labelMap = duplicateLabels(labelRemapFilter);
 
             Map<AstContext, AstContext> contextMap = astContext.copyChildrenTo(newContext, functionInlining);
             return new LogicList(contextMap.get(astContext), stream()
@@ -2159,7 +2161,7 @@ public class OptimizationContext extends CompilerMessageEmitter {
                     .toList(), labelMap);
         }
 
-        private Map<LogicLabel, LogicLabel> duplicateLabels() {
+        private Map<LogicLabel, LogicLabel> duplicateLabels(Predicate<LogicLabel> labelRemapFilter) {
             return Stream.concat(
                             stream()
                                     .filter(LabeledInstruction.class::isInstance)
@@ -2171,6 +2173,7 @@ public class OptimizationContext extends CompilerMessageEmitter {
                                     .map(MultiLabelInstruction::getMarker)
                                     .distinct()
                     )
+                    .filter(labelRemapFilter)
                     .collect(Collectors.toMap(l -> l, l -> instructionProcessor.nextLabel()));
         }
 

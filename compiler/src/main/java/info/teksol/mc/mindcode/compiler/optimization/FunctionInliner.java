@@ -7,10 +7,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.mindcode.logic.instructions.EmptyInstruction;
-import info.teksol.mc.mindcode.logic.instructions.EndInstruction;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.ReturnInstruction;
+import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -56,7 +53,7 @@ class FunctionInliner extends BaseOptimizer {
         if (this.optimizations < LIMIT) {
             actions.addAll(forEachContext(AstContextType.FUNCTION_DEF, BODY,
                     context -> findPossibleInlining(context, costLimit)));
-            actions.addAll(forEachContext(c -> c.matches(OUT_OF_LINE_CALL),
+            actions.addAll(forEachContext(c -> c.matches(OUT_OF_LINE_CALL, RECURSIVE_CALL),
                     context -> findPossibleCallInlining(context, costLimit)));
         }
         return actions;
@@ -77,7 +74,7 @@ class FunctionInliner extends BaseOptimizer {
 
     private @Nullable OptimizationAction findPossibleInlining(AstContext context, int costLimit) {
         if (context.function() == null) {
-            // The function is declared, but not used.
+            // The function is declared but not used.
             return null;
         }
         MindcodeFunction function = context.function();
@@ -90,7 +87,7 @@ class FunctionInliner extends BaseOptimizer {
 
         double benefit = calls.stream().mapToDouble(this::computeInliningBenefit).sum();
 
-        // Cost: body size minus one (return) times number of calls minus body size (we'll remove the original)
+        // Cost: body size minus one (return) times the number of calls minus body size (we'll remove the original)
         LogicList body = stripReturnInstructions(contextInstructions(context));
         if (body == null) {
             return null;
@@ -114,7 +111,7 @@ class FunctionInliner extends BaseOptimizer {
 
         if (index <= 0) {
             return null;
-        } else if (!(body.get(index) instanceof ReturnInstruction)) {
+        } else if (!(body.get(index) instanceof ReturnInstruction) && !(body.get(index) instanceof ReturnRecInstruction)) {
             throw new MindcodeInternalError("Unexpected function body structure.");
         }
 
@@ -154,7 +151,7 @@ class FunctionInliner extends BaseOptimizer {
             assert call.parent() != null;
             AstContext newContext = call.parent().createSubcontext(INLINE_CALL, 1.0);
             int insertionPoint = firstInstructionIndex(call);
-            LogicList newBody = body.duplicateToContext(newContext, true);
+            LogicList newBody = body.duplicateToContextForInlining(newContext, l -> true);
             insertInstructions(insertionPoint, newBody);
             // Remove original call instructions
             removeMatchingInstructions(ix -> ix.belongsTo(call));
@@ -163,7 +160,7 @@ class FunctionInliner extends BaseOptimizer {
             }
         }
 
-        // Remove original function
+        // Remove the original function
         removeMatchingInstructions(ix -> ix.belongsTo(context));
 
         function.setInlined();
@@ -194,7 +191,10 @@ class FunctionInliner extends BaseOptimizer {
 
     private @Nullable OptimizationAction findPossibleCallInlining(AstContext call, int costLimit) {
         MindcodeFunction function = call.function();
-        if (function == null || function.isRecursive() || function.isInline() || function.cannotInline()) {
+        MindcodeFunction from = call.existingParent().function();
+        if (function == null || function.isInline() || function.cannotInline()
+                || function.isRecursive() && !advanced(call)
+                || call.existingParent().matchesRecursively(c -> c.function() == function)) {
             return null;
         }
 
@@ -209,9 +209,10 @@ class FunctionInliner extends BaseOptimizer {
                         )
                 )
         );
-        if (body == null) {
+        if (body == null || body.stream().anyMatch(ix -> !ix.getAstContext().matches(AstContextType.CALL) && ix.getAstContext().function() == from)) {
             return null;
         }
+
         // Cost: body size minus one (return) times the number of calls minus body size (we'll remove the original)
         int cost = body.realSize() - 1;
         return cost <= costLimit ? new InlineFunctionCallAction(call, cost, benefit) : null;
@@ -220,9 +221,10 @@ class FunctionInliner extends BaseOptimizer {
     private OptimizationResult inlineFunctionCall(AstContext call, int costLimit) {
         optimizations++;
         Optional<LogicInstruction> cix = contextStream(call.parent())
-                .filter(ix -> ix.getOpcode() == Opcode.CALL && ix.getAstContext() == call).findFirst();
+                .filter(ix -> ix.getAstContext() == call && (ix.getOpcode() == Opcode.CALL || ix.getOpcode() == Opcode.CALLREC)).findFirst();
         MindcodeFunction function = call.existingFunction();
-        if (cix.isEmpty() || function.isRecursive() || function.isInline()) {
+        MindcodeFunction from = call.existingParent().function();
+        if (cix.isEmpty() || function.isInline() || call.existingParent().matchesRecursively(c -> c.function() == function)) {
             return OptimizationResult.INVALID;
         }
 
@@ -233,16 +235,20 @@ class FunctionInliner extends BaseOptimizer {
                         )
                 )
         );
-        if (body == null) {
+        if (body == null || body.stream().anyMatch(ix -> !ix.getAstContext().matches(AstContextType.CALL) && ix.getAstContext().function() == from)) {
             return OptimizationResult.INVALID;
         }
 
-        trace(() -> "Inlining call " + call + " of function " + function.getName());
+        trace(() -> "Inlining call " + call + " of function " + function.getName() + " at " + call.sourcePosition());
+
+        CallRecInstruction callRecInstruction = (CallRecInstruction) optimizationContext.firstInstruction(
+                ix -> ix.getOpcode() == Opcode.CALLREC && ix.belongsTo(call));
+        LogicLabel callLabel = callRecInstruction == null ? null : callRecInstruction.getCallAddr();
 
         AstContext newContext = Objects.requireNonNull(call.parent())
                 .createSubcontext(INLINE_CALL, 1.0);
         int insertionPoint = firstInstructionIndex(call);
-        LogicList newBody = body.duplicateToContext(newContext, true);
+        LogicList newBody = body.duplicateToContextForInlining(newContext, l -> !l.equals(callLabel));
         insertInstructions(insertionPoint, newBody);
         // Remove original call instructions, including hoisted ones
         removeMatchingInstructions(ix -> ix.belongsTo(call));

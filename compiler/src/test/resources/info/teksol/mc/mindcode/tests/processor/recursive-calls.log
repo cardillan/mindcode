@@ -1,12 +1,29 @@
    146 instructions before optimizations.
-     6 instructions eliminated by Temp Variables Elimination (5 iterations).
+     6 instructions eliminated by Temp Variables Elimination (6 iterations).
     15 instructions eliminated by Dead Code Elimination (6 iterations).
-     3 instructions eliminated by Condition Optimization (5 iterations).
-     3 instructions eliminated by Single Step Elimination (5 iterations).
-     7 instructions eliminated by Data Flow Optimization (4 iterations).
+     3 instructions eliminated by Jump Normalization (5 iterations).
+     3 instructions eliminated by Condition Optimization (6 iterations).
+     3 instructions eliminated by Single Step Elimination (6 iterations).
+     2 instructions modified by Expression Optimization (3 iterations).
+    16 instructions eliminated by Data Flow Optimization (4 passes, 17 iterations).
+    64 instructions added by Function Inlining (6 iterations).
+     3 function calls inlined by Function Inlining.
      3 instructions eliminated by Unreachable Code Elimination (2 iterations).
     12 instructions eliminated by Stack Optimization.
-    97 instructions after optimizations.
+     5 instructions eliminated by Print Merging.
+   144 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 888):
+    Inline function call at line 33:34                           size   +25, benefit        4.5, efficiency      0.180
+  * Inline function call at line 34:34                           size   +20, benefit        4.5, efficiency      0.225 (+13 instructions)
+    Inline function call at line 35:34                           size   +25, benefit        4.5, efficiency      0.180
+
+Pass 1: speed optimization selection (cost limit 875):
+  * Inline function call at line 33:34                           size   +25, benefit        4.5, efficiency      0.180 (+21 instructions)
+    Inline function call at line 35:34                           size   +25, benefit        4.5, efficiency      0.180
+
+Pass 1: speed optimization selection (cost limit 854):
+  * Inline function call at line 35:34                           size   +25, benefit        4.5, efficiency      0.180 (+21 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-9 instructions):
  
@@ -324,120 +341,561 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     82 op sub :baz:n :baz:n 1
     83 set :baz:a :baz:b
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-3 instructions):
+Modifications by Inline function call at line 34:34 (+18 instructions):
  
-    39 pop bank1 :foo:a
-    40 pop bank1 :foo:n
-    41 label *label7
+     9 set :bar:n 3
+    10 set :bar:a 0
+    11 set :bar:b 0
+-    * callrec bank1 *label1 *label4 :bar*retval
+-    * label *label4
++   12 print :bar:a
++   13 print :bar:b
++   14 op add :bar:a :bar:a 1
++   15 jump *label19 lessThanEq :bar:n 0
++   16 push bank1 :bar:n
++   17 set *tmp19 :bar:a
++   18 op sub :bar:n :bar:n 1
++   19 set :bar:a :bar:b
++   20 set :bar:b *tmp19
++   21 callrec bank1 *label1 *label18 :bar*retval
++   22 label *label18
++   23 set *tmp21 :bar:b
++   24 set :bar:b :bar:a
++   25 set :bar:a *tmp21
++   26 pop bank1 :bar:n
++   27 label *label19
++   28 label *label20
++   29 op add :bar:b :bar:b 1
++   30 print :bar:a
++   31 print :bar:b
++   32 label *label21
+    33 assertprints *tmp2 "0001111223333444" "bar"
+    34 assertflush *tmp4
+    35 set :baz:n 3
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     9 set :bar:n 3
+    10 set :bar:a 0
+    11 set :bar:b 0
+-    * print :bar:a
+-    * print :bar:b
+-    * op add :bar:a :bar:a 1
+-    * jump *label19 lessThanEq :bar:n 0
++   12 print 0
++   13 print 0
++   14 op add :bar:a 0 1
++   15 jump *label19 lessThanEq 3 0
+    16 push bank1 :bar:n
+-    * set *tmp19 :bar:a
++   17 set *tmp19 1
+    18 op sub :bar:n :bar:n 1
+-    * set :bar:a :bar:b
++   19 set :bar:a 0
+    20 set :bar:b *tmp19
+    21 callrec bank1 *label1 *label18 :bar*retval
+    22 label *label18
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
+ 
+     7 assertprints *tmp0 "0001111223221211" "foo"
+     8 assertflush *tmp2
+     9 set :bar:n 3
+-    * set :bar:a 0
+-    * set :bar:b 0
+    10 print 0
+    11 print 0
+-    * op add :bar:a 0 1
+    12 jump *label19 lessThanEq 3 0
+    13 push bank1 :bar:n
+    14 set *tmp19 1
+    15 op sub :bar:n :bar:n 1
+    16 set :bar:a 0
+-    * set :bar:b *tmp19
++   17 set :bar:b 1
+    18 callrec bank1 *label1 *label18 :bar*retval
+    19 label *label18
+    20 set *tmp21 :bar:b
+ 
+    24 label *label19
+    25 label *label20
+    26 op add :bar:b :bar:b 1
+-    * print :bar:a
++   27 print *tmp21
+    28 print :bar:b
+    29 label *label21
+    30 assertprints *tmp2 "0001111223333444" "bar"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+ 
+    19 label *label18
+    20 set *tmp21 :bar:b
+    21 set :bar:b :bar:a
+-    * set :bar:a *tmp21
+    22 pop bank1 :bar:n
+    23 label *label19
+    24 label *label20
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4:
+ 
+    22 pop bank1 :bar:n
+    23 label *label19
+    24 label *label20
+-    * op add :bar:b :bar:b 1
++   25 op add :bar:b :bar:a 1
+    26 print *tmp21
+    27 print :bar:b
+    28 label *label21
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1 instructions):
+ 
+    18 callrec bank1 *label1 *label18 :bar*retval
+    19 label *label18
+    20 set *tmp21 :bar:b
+-    * set :bar:b :bar:a
+    21 pop bank1 :bar:n
+    22 label *label19
+    23 label *label20
+
+Modifications by Inline function call at line 33:34 (+23 instructions):
+ 
+     2 set :foo:n 3
+     3 set :foo:a 0
+     4 set :foo:b 0
+-    * callrec bank1 *label0 *label3 :foo*retval
+-    * label *label3
++    5 print :foo:a
++    6 print :foo:b
++    7 op add :foo:a :foo:a 1
++    8 jump *label23 lessThanEq :foo:n 0
++    9 push bank1 :foo:n
++   10 push bank1 :foo:a
++   11 push bank1 :foo:b
++   12 set *tmp11 :foo:a
++   13 op sub :foo:n :foo:n 1
++   14 set :foo:a :foo:b
++   15 set :foo:b *tmp11
++   16 callrec bank1 *label0 *label22 :foo*retval
++   17 label *label22
++   18 pop bank1 :foo:b
++   19 pop bank1 :foo:a
++   20 pop bank1 :foo:n
++   21 label *label23
++   22 label *label24
++   23 op add :foo:b :foo:b 1
++   24 print :foo:a
++   25 print :foo:b
++   26 label *label25
+    27 assertprints *tmp0 "0001111223221211" "foo"
+    28 assertflush *tmp2
+    29 set :bar:n 3
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     2 set :foo:n 3
+     3 set :foo:a 0
+     4 set :foo:b 0
+-    * print :foo:a
+-    * print :foo:b
+-    * op add :foo:a :foo:a 1
+-    * jump *label23 lessThanEq :foo:n 0
++    5 print 0
++    6 print 0
++    7 op add :foo:a 0 1
++    8 jump *label23 lessThanEq 3 0
+     9 push bank1 :foo:n
+    10 push bank1 :foo:a
+    11 push bank1 :foo:b
+ 
+    20 pop bank1 :foo:n
+    21 label *label23
+    22 label *label24
+-    * op add :foo:b :foo:b 1
+-    * print :foo:a
+-    * print :foo:b
++   23 op add :foo:b 0 1
++   24 print 1
++   25 print 1
+    26 label *label25
+    27 assertprints *tmp0 "0001111223221211" "foo"
+    28 assertflush *tmp2
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+     0 set *sp 0
+     1 assertflush *tmp0
+     2 set :foo:n 3
+-    * set :foo:a 0
+     3 set :foo:b 0
+     4 print 0
+     5 print 0
+ 
+    19 pop bank1 :foo:n
+    20 label *label23
+    21 label *label24
+-    * op add :foo:b 0 1
+    22 print 1
+    23 print 1
+    24 label *label25
+
+Modifications by Inline function call at line 35:34 (+23 instructions):
+ 
+    48 set :baz:n 3
+    49 set :baz:a 0
+    50 set :baz:b 0
+-    * callrec bank1 *label2 *label5 :baz*retval
+-    * label *label5
++   51 print :baz:a
++   52 print :baz:b
++   53 op add :baz:a :baz:a 1
++   54 jump *label27 lessThanEq :baz:n 0
++   55 push bank1 :baz:n
++   56 push bank1 :baz:b
++   57 push bank1 :baz:a
++   58 set *tmp29 :baz:a
++   59 op sub :baz:n :baz:n 1
++   60 set :baz:a :baz:b
++   61 set :baz:b *tmp29
++   62 callrec bank1 *label2 *label26 :baz*retval
++   63 label *label26
++   64 pop bank1 :baz:a
++   65 pop bank1 :baz:b
++   66 pop bank1 :baz:n
++   67 label *label27
++   68 label *label28
++   69 op add :baz:b :baz:b 1
++   70 print :baz:a
++   71 print :baz:b
++   72 label *label29
+    73 assertprints *tmp4 "0001111223221211" "baz"
+    74 stop
+    75 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    48 set :baz:n 3
+    49 set :baz:a 0
+    50 set :baz:b 0
+-    * print :baz:a
+-    * print :baz:b
+-    * op add :baz:a :baz:a 1
+-    * jump *label27 lessThanEq :baz:n 0
++   51 print 0
++   52 print 0
++   53 op add :baz:a 0 1
++   54 jump *label27 lessThanEq 3 0
+    55 push bank1 :baz:n
+    56 push bank1 :baz:b
+    57 push bank1 :baz:a
+ 
+    66 pop bank1 :baz:n
+    67 label *label27
+    68 label *label28
+-    * op add :baz:b :baz:b 1
+-    * print :baz:a
+-    * print :baz:b
++   69 op add :baz:b 0 1
++   70 print 1
++   71 print 1
+    72 label *label29
+    73 assertprints *tmp4 "0001111223221211" "baz"
+    74 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+ 
+    46 assertprints *tmp2 "0001111223333444" "bar"
+    47 assertflush *tmp4
+    48 set :baz:n 3
+-    * set :baz:a 0
+    49 set :baz:b 0
+    50 print 0
+    51 print 0
+ 
+    65 pop bank1 :baz:n
+    66 label *label27
+    67 label *label28
+-    * op add :baz:b 0 1
+    68 print 1
+    69 print 1
+    70 label *label29
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-3 instructions):
+ 
+     4 print 0
+     5 print 0
+     6 op add :foo:a 0 1
+-    * jump *label23 lessThanEq 3 0
+     7 push bank1 :foo:n
+     8 push bank1 :foo:a
+     9 push bank1 :foo:b
+ 
+    26 set :bar:n 3
+    27 print 0
+    28 print 0
+-    * jump *label19 lessThanEq 3 0
+    29 push bank1 :bar:n
+    30 set *tmp19 1
+    31 op sub :bar:n :bar:n 1
+ 
+    48 print 0
+    49 print 0
+    50 op add :baz:a 0 1
+-    * jump *label27 lessThanEq 3 0
+    51 push bank1 :baz:n
+    52 push bank1 :baz:b
+    53 push bank1 :baz:a
+
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
+ 
+     3 set :foo:b 0
+     4 print 0
+     5 print 0
+-    * op add :foo:a 0 1
++    6 set :foo:a 1
+     7 push bank1 :foo:n
+     8 push bank1 :foo:a
+     9 push bank1 :foo:b
+ 
+    47 set :baz:b 0
+    48 print 0
+    49 print 0
+-    * op add :baz:a 0 1
++   50 set :baz:a 1
+    51 push bank1 :baz:n
+    52 push bank1 :baz:b
+    53 push bank1 :baz:a
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-3 instructions):
+ 
+    16 pop bank1 :foo:b
+    17 pop bank1 :foo:a
+    18 pop bank1 :foo:n
+-    * label *label23
+-    * label *label24
+    19 print 1
+    20 print 1
+-    * label *label25
+    21 assertprints *tmp0 "0001111223221211" "foo"
+    22 assertflush *tmp2
+    23 set :bar:n 3
+ 
+    32 label *label18
+    33 set *tmp21 :bar:b
+    34 pop bank1 :bar:n
+-    * label *label19
+-    * label *label20
+    35 op add :bar:b :bar:a 1
+    36 print *tmp21
+    37 print :bar:b
+-    * label *label21
+    38 assertprints *tmp2 "0001111223333444" "bar"
+    39 assertflush *tmp4
+    40 set :baz:n 3
+ 
+    54 pop bank1 :baz:a
+    55 pop bank1 :baz:b
+    56 pop bank1 :baz:n
+-    * label *label27
+-    * label *label28
+    57 print 1
+    58 print 1
+-    * label *label29
+    59 assertprints *tmp4 "0001111223221211" "baz"
+    60 stop
+    61 end
+ 
+    77 pop bank1 :foo:a
+    78 pop bank1 :foo:n
+    79 label *label7
 -    * label *label8
-    42 op add :foo:b :foo:b 1
-    43 print :foo:a
-    44 print :foo:b
+    80 op add :foo:b :foo:b 1
+    81 print :foo:a
+    82 print :foo:b
 -    * label *label6
-    45 returnrec bank1
+    83 returnrec bank1
 -    * end
-    46 label *label1
-    47 print :bar:a
-    48 print :bar:b
+    84 label *label1
+    85 print :bar:a
+    86 print :bar:b
  
-    60 set :bar:a *tmp21
-    61 pop bank1 :bar:n
-    62 label *label11
+    98 set :bar:a *tmp21
+    99 pop bank1 :bar:n
+   100 label *label11
 -    * label *label12
-    63 op add :bar:b :bar:b 1
-    64 print :bar:a
-    65 print :bar:b
+   101 op add :bar:b :bar:b 1
+   102 print :bar:a
+   103 print :bar:b
 -    * label *label10
-    66 returnrec bank1
+   104 returnrec bank1
 -    * end
-    67 label *label2
-    68 print :baz:a
-    69 print :baz:b
+   105 label *label2
+   106 print :baz:a
+   107 print :baz:b
  
-    82 pop bank1 :baz:b
-    83 pop bank1 :baz:n
-    84 label *label15
+   120 pop bank1 :baz:b
+   121 pop bank1 :baz:n
+   122 label *label15
 -    * label *label16
-    85 op add :baz:b :baz:b 1
-    86 print :baz:a
-    87 print :baz:b
+   123 op add :baz:b :baz:b 1
+   124 print :baz:a
+   125 print :baz:b
 -    * label *label14
-    88 returnrec bank1
+   126 returnrec bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-12 instructions):
  
-    26 print :foo:b
-    27 op add :foo:a :foo:a 1
-    28 jump *label7 lessThanEq :foo:n 0
+    64 print :foo:b
+    65 op add :foo:a :foo:a 1
+    66 jump *label7 lessThanEq :foo:n 0
 -    * push bank1 :foo:n
-    29 push bank1 :foo:a
-    30 push bank1 :foo:b
-    31 set *tmp11 :foo:a
+    67 push bank1 :foo:a
+    68 push bank1 :foo:b
+    69 set *tmp11 :foo:a
  
-    36 label *label9
-    37 pop bank1 :foo:b
-    38 pop bank1 :foo:a
+    74 label *label9
+    75 pop bank1 :foo:b
+    76 pop bank1 :foo:a
 -    * pop bank1 :foo:n
-    39 label *label7
-    40 op add :foo:b :foo:b 1
-    41 print :foo:a
+    77 label *label7
+    78 op add :foo:b :foo:b 1
+    79 print :foo:a
  
-    46 print :bar:b
-    47 op add :bar:a :bar:a 1
-    48 jump *label11 lessThanEq :bar:n 0
+    84 print :bar:b
+    85 op add :bar:a :bar:a 1
+    86 jump *label11 lessThanEq :bar:n 0
 -    * push bank1 :bar:n
-    49 set *tmp19 :bar:a
-    50 op sub :bar:n :bar:n 1
-    51 set :bar:a :bar:b
+    87 set *tmp19 :bar:a
+    88 op sub :bar:n :bar:n 1
+    89 set :bar:a :bar:b
  
-    55 set *tmp21 :bar:b
-    56 set :bar:b :bar:a
-    57 set :bar:a *tmp21
+    93 set *tmp21 :bar:b
+    94 set :bar:b :bar:a
+    95 set :bar:a *tmp21
 -    * pop bank1 :bar:n
-    58 label *label11
-    59 op add :bar:b :bar:b 1
-    60 print :bar:a
+    96 label *label11
+    97 op add :bar:b :bar:b 1
+    98 print :bar:a
  
-    65 print :baz:b
-    66 op add :baz:a :baz:a 1
-    67 jump *label15 lessThanEq :baz:n 0
+   103 print :baz:b
+   104 op add :baz:a :baz:a 1
+   105 jump *label15 lessThanEq :baz:n 0
 -    * push bank1 :baz:n
-    68 push bank1 :baz:b
-    69 push bank1 :baz:a
-    70 set *tmp29 :baz:a
+   106 push bank1 :baz:b
+   107 push bank1 :baz:a
+   108 set *tmp29 :baz:a
  
-    75 label *label17
-    76 pop bank1 :baz:a
-    77 pop bank1 :baz:b
+   113 label *label17
+   114 pop bank1 :baz:a
+   115 pop bank1 :baz:b
 -    * pop bank1 :baz:n
-    78 label *label15
-    79 op add :baz:b :baz:b 1
-    80 print :baz:a
+   116 label *label15
+   117 op add :baz:b :baz:b 1
+   118 print :baz:a
+
+Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
+ 
+     1 assertflush *tmp0
+     2 set :foo:n 3
+     3 set :foo:b 0
+-    * print 0
+-    * print 0
++    4 print "00"
+     5 set :foo:a 1
+     6 push bank1 :foo:n
+     7 push bank1 :foo:a
+ 
+    15 pop bank1 :foo:b
+    16 pop bank1 :foo:a
+    17 pop bank1 :foo:n
+-    * print 1
+-    * print 1
++   18 print "11"
+    19 assertprints *tmp0 "0001111223221211" "foo"
+    20 assertflush *tmp2
+    21 set :bar:n 3
+-    * print 0
+-    * print 0
++   22 print "00"
+    23 push bank1 :bar:n
+    24 set *tmp19 1
+    25 op sub :bar:n :bar:n 1
+ 
+    36 assertflush *tmp4
+    37 set :baz:n 3
+    38 set :baz:b 0
+-    * print 0
+-    * print 0
++   39 print "00"
+    40 set :baz:a 1
+    41 push bank1 :baz:n
+    42 push bank1 :baz:b
+ 
+    50 pop bank1 :baz:a
+    51 pop bank1 :baz:b
+    52 pop bank1 :baz:n
+-    * print 1
+-    * print 1
++   53 print "11"
+    54 assertprints *tmp4 "0001111223221211" "baz"
+    55 stop
+    56 end
 
 Final code before resolving virtual instructions:
 
 set *sp 0
 assertflush *tmp0
 set :foo:n 3
-set :foo:a 0
 set :foo:b 0
-callrec bank1 *label0 *label3 :foo*retval
-label *label3
+print "00"
+set :foo:a 1
+push bank1 :foo:n
+push bank1 :foo:a
+push bank1 :foo:b
+set *tmp3 :foo:a
+op sub :foo:n :foo:n 1
+set :foo:a :foo:b
+set :foo:b *tmp3
+callrec bank1 *label0 *label22 :foo*retval
+label *label22
+pop bank1 :foo:b
+pop bank1 :foo:a
+pop bank1 :foo:n
+print "11"
 assertprints *tmp0 "0001111223221211" "foo"
 assertflush *tmp1
 set :bar:n 3
+print "00"
+push bank1 :bar:n
+set *tmp4 1
+op sub :bar:n :bar:n 1
 set :bar:a 0
-set :bar:b 0
-callrec bank1 *label1 *label4 :bar*retval
-label *label4
+set :bar:b 1
+callrec bank1 *label1 *label18 :bar*retval
+label *label18
+set *tmp5 :bar:b
+pop bank1 :bar:n
+op add :bar:b :bar:a 1
+print *tmp5
+print :bar:b
 assertprints *tmp1 "0001111223333444" "bar"
 assertflush *tmp2
 set :baz:n 3
-set :baz:a 0
 set :baz:b 0
-callrec bank1 *label2 *label5 :baz*retval
-label *label5
+print "00"
+set :baz:a 1
+push bank1 :baz:n
+push bank1 :baz:b
+push bank1 :baz:a
+set *tmp6 :baz:a
+op sub :baz:n :baz:n 1
+set :baz:a :baz:b
+set :baz:b *tmp6
+callrec bank1 *label2 *label26 :baz*retval
+label *label26
+pop bank1 :baz:a
+pop bank1 :baz:b
+pop bank1 :baz:n
+print "11"
 assertprints *tmp2 "0001111223221211" "baz"
 stop
 end

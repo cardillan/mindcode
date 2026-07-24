@@ -68,7 +68,7 @@ public enum Optimization {
 
     FUNCTION_INLINING("Function Inlining",
             FunctionInliner::new,
-            "inlining stackless function calls"),
+            "inlining functions or function calls"),
 
     ARRAY_OPTIMIZATION("Array Optimization",
             ArrayOptimizer::new,

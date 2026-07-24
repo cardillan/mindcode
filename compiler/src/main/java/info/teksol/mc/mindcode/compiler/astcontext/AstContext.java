@@ -226,6 +226,10 @@ public final class AstContext {
         return this.contextType == contextType && this.subcontextType == subcontextType;
     }
 
+    public boolean matches(AstContextType contextType, AstSubcontextType... subcontextTypes) {
+        return this.contextType == contextType && matches(subcontextTypes);
+    }
+
     public boolean matches(AstSubcontextType subcontextType) {
         return this.subcontextType == subcontextType;
     }
@@ -253,6 +257,14 @@ public final class AstContext {
             }
         }
         return parent != null && parent.matchesRecursively(contextTypes);
+    }
+
+    public boolean matchesRecursively(Predicate<AstContext> matcher) {
+        AstContext current = this;
+        while (current != null && !matcher.test(current)) {
+            current = current.parent;
+        }
+        return current != null;
     }
 
     public Optional<AstContext> findSuperContextOfType(Predicate<AstContext> matcher) {
