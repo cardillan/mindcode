@@ -1,8 +1,3 @@
-@precedence {
-  position,
-  block
-}
-
 @top Program { definition* }
 
 @skip { space | LineComment | BlockComment }
@@ -52,9 +47,9 @@ RegionDefinition {
 }
 
 BlockItem {
-  !block (commaSep<Identifier | ArrayIdentifier> ":")?
+  (commaSep<Identifier | ArrayIdentifier> ":")?
     blockElement
-    (placementMode (!position blockPosition))?
+    (placementMode blockPosition)?
     Reflection?
     Direction?
     Configuration?
