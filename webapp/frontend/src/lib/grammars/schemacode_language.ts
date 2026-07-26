@@ -19,6 +19,9 @@ interface LookupData {
 
 const lookupCache = new WeakMap<SyntaxNode, LookupData>();
 
+const singleQuoteTextIndent = delimitedIndent({ closing: "'''", align: false });
+const doubleQuoteTextIndent = delimitedIndent({ closing: '"""', align: false });
+
 export const schemacodeLanguage = LRLanguage.define({
 	name: 'schemacode',
 	parser: parser.configure({
@@ -58,24 +61,41 @@ export const schemacodeLanguage = LRLanguage.define({
 		props: [
 			indentNodeProp.add({
 				SchematicDefinition: delimitedIndent({ closing: 'end', align: false }),
-				BlockItem: delimitedIndent({ closing: 'end', align: false }),
 				ProcessorConfiguration: delimitedIndent({ closing: 'end', align: false }),
-				ProcessorLinks: delimitedIndent({ closing: 'end', align: false })
+				ProcessorLinks: delimitedIndent({ closing: 'end', align: false }),
+				Region: delimitedIndent({ closing: 'end', align: false }),
+				ProcessorParametrization: delimitedIndent({ closing: 'end', align: false }),
+				TextBlock(context) {
+					console.log(context.textAfter);
+					const indent = context.textAfter.startsWith("'''")
+						? singleQuoteTextIndent(context)
+						: doubleQuoteTextIndent(context);
+
+					return indent;
+				}
 			}),
 			foldNodeProp.add({
 				'SchematicDefinition ProcessorConfiguration ProcessorLinks': foldInside,
+				'Region ProcessorParametrization': foldInside,
 				TextBlock(node, state) {
 					const len = state.doc.length;
 					// fold everything between the """ delimiters
 					const from = Math.min(node.from + 3, len);
 					const to = Math.min(node.to - 3, len);
 					return { from, to };
+				},
+				BlockComment(node, state) {
+					const len = state.doc.length;
+					// fold everything between the /* */ delimiters
+					const from = Math.min(node.from + 2, len);
+					const to = Math.min(node.to - 2, len);
+					return { from, to };
 				}
 			}),
 			styleTags({
 				Identifier: t.variableName,
-				IdentifierTemplate: t.special(t.variableName),
-				'LinkPattern!': t.regexp,
+				ArrayIdentifier: t.special(t.variableName),
+				LinkPattern: t.regexp,
 				Type: t.typeName,
 				String: t.string,
 				StringContent: t.string,

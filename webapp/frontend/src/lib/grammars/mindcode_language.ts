@@ -79,8 +79,70 @@ export const mindcodeLanguage = LRLanguage.define({
 				MlogBlock: delimitedIndent({ closing: '}', align: false })
 			}),
 			foldNodeProp.add({
-				'Block IfExpression CaseExpression AtomicBlock DebugBlock ForLoop Loop WhileLoop':
-					foldInside,
+				'Block AtomicBlock DebugBlock Loop': foldInside,
+				BlockComment(node, state) {
+					const len = state.doc.length;
+					// fold everything between the /* */ delimiters
+					const from = Math.min(node.from + 2, len);
+					const to = Math.min(node.to - 2, len);
+					return { from, to };
+				},
+				IfExpression(node) {
+					const first = node.getChild('if')?.nextSibling;
+					if (!first) return null;
+
+					const continuation = node.getChild('Elsif') || node.getChild('Else');
+					if (continuation) {
+						return {
+							from: first.to,
+							to: continuation.prevSibling?.to ?? continuation.from
+						};
+					}
+
+					const last = node.getChild('end');
+					if (!last) return null;
+					return { from: first.to, to: last.from };
+				},
+				Elsif(node) {
+					const first = node.getChild('elsif')?.nextSibling;
+					const last = node.lastChild;
+					if (!first || !last) return null;
+					return { from: first.to, to: last.to };
+				},
+				Else(node) {
+					const first = node.getChild('else');
+					const last = node.lastChild;
+					if (!first || !last) return null;
+					return { from: first.to, to: last.to };
+				},
+				CaseExpression(node) {
+					const first = node.getChild('case')?.nextSibling;
+					const last = node.getChild('end');
+					if (!first || !last) return null;
+
+					return { from: first.to, to: last.from };
+				},
+				CaseAlternative(node) {
+					const first = node.getChild('when')?.nextSibling;
+					const last = node.lastChild;
+					if (!first || !last) return null;
+					return { from: first.to, to: last.to };
+				},
+				ValueList(node) {
+					return { from: node.from + 1, to: node.to - 1 };
+				},
+				ForLoop(node) {
+					const first = node.getChild('do');
+					const last = node.getChild('end');
+					if (!first || !last) return null;
+					return { from: first.to, to: last.from };
+				},
+				WhileLoop(node) {
+					const first = node.getChild('do');
+					const last = node.getChild('end');
+					if (!first || !last) return null;
+					return { from: first.to, to: last.from };
+				},
 				DoWhileLoop(node) {
 					const firstChild = node.getChild('do');
 					const lastChild = node.getChild('while') || node.lastChild;

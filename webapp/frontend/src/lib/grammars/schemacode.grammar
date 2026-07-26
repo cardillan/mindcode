@@ -111,7 +111,6 @@ Pattern {
     kw<"parent"> |
     Identifier |
     ArrayIdentifier |
-    LinkPattern { mul } |
     LinkPattern
   >
 }
