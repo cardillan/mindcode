@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.17.3 – 2026-07-26
+
+### Fixed
+
+* Fixed a small bug in the Schemacode grammar.
+
+### Changed
+
+* Updated the web app grammar to reflect the latest Mindcode and Schemacode changes. 
+
 ## 3.17.2 – 2026-07-24
 
 ### Added

@@ -1,9 +1,16 @@
+@precedence {
+  position,
+  block
+}
+
 @top Program { definition* }
 
 @skip { space | LineComment | BlockComment }
 
 commaSep<term> { term ("," term)* }
+dotSep<term> { term ("." term)* }
 kw<term> { @specialize[@name={term}]<Identifier, term> }
+mul { @specialize[@name="*"]<Identifier, "*"> }
 
 definition {
   SchematicDefinition |
@@ -16,7 +23,9 @@ SchematicDefinition {
 
 schematicItem {
   Attribute |
-  BlockItem
+  BlockItem |
+  SchematicPrologue |
+  RegionDefinition
 }
 
 StringAssignment {
@@ -26,12 +35,43 @@ StringAssignment {
 Attribute {
   (kw<"name"> | kw<"description"> | kw<"tag">) "=" (String | TextBlock | Identifier) |
   kw<"filename"> "=" String |
-  kw<"dimensions"> "=" Coordinates |
+  kw<"dimensions"> "=" Dimensions |
   kw<"target"> "=" (Int | Version)
 }
 
+SchematicPrologue {
+  (kw<"mindcode"> | kw<"mlog">) "=" (String | TextBlock | Identifier)
+}
+
+Region {
+  kw<"region"> Dimensions? BlockItem* kw<"end">
+}
+
+RegionDefinition {
+  Identifier "=" Region
+}
+
 BlockItem {
-  (commaSep<Identifier | IdentifierTemplate> ":")? Ref kw<"at"> blockPosition Direction? Configuration?
+  !block (commaSep<Identifier | ArrayIdentifier> ":")?
+    blockElement
+    (placementMode (!position blockPosition))?
+    Reflection?
+    Direction?
+    Configuration?
+}
+
+blockElement {
+  Type |
+  Identifier |
+  Region
+}
+
+Reflection {
+  kw<"flip"> orientation
+}
+
+placementMode {
+  kw<"at"> | kw<"fill"> | kw<"replace">
 }
 
 position {
@@ -48,7 +88,13 @@ blockPosition {
   position |
   position ".." Coordinates orientation? |
   position "..." Coordinates orientation? |
-  position "*" Coordinates orientation?
+  position mul Coordinates orientation? |
+  position (kw<"odd"> | kw<"even">)? kw<"radius"> Int orientation?
+}
+
+// two names just for better code readability
+Dimensions {
+  "(" Int "," Int ")"
 }
 
 Coordinates {
@@ -60,7 +106,19 @@ RelativeCoordinates {
 }
 
 CoordinatesRelativeTo {
-  Identifier RelativeCoordinates
+  Pattern RelativeCoordinates?
+}
+
+Pattern {
+  dotSep<
+    kw<"global"> |
+    kw<"local"> |
+    kw<"parent"> |
+    Identifier |
+    ArrayIdentifier |
+    LinkPattern { mul } |
+    LinkPattern
+  >
 }
 
 Direction {
@@ -71,11 +129,11 @@ Configuration {
   kw<"virtual"> |
   kw<"color"> kw<"rgba"> "(" commaSep<Int> ")" |
   kw<"connected"> kw<"to"> ConnectionList |
-  kw<"block"> Ref |
-  kw<"command"> Ref |
-  kw<"item"> Ref |
-  kw<"liquid"> Ref |
-  kw<"unit"> Ref |
+  kw<"block"> Type |
+  kw<"command"> Type |
+  kw<"item"> Type |
+  kw<"liquid"> Type |
+  kw<"unit"> Type |
   kw<"text"> (String | TextBlock | Identifier) |
   kw<"enabled"> |
   kw<"disabled"> |
@@ -89,11 +147,11 @@ ConnectionList {
 connection {
   Coordinates |
   RelativeCoordinates |
-  Identifier
+  Pattern
 }
 
 ProcessorConfiguration {
-  kw<"processor"> ProcessorLinks? ProcessorSourceAssignment? kw<"end">
+  kw<"processor"> ProcessorLinks? ProcessorSourceAssignment? ProcessorParametrization? kw<"end">
 }
 
 ProcessorSourceAssignment {
@@ -113,10 +171,41 @@ processorSourceSnippet {
 }
 
 LinkDef {
-  LinkPattern { "*" } |
-  LinkPattern | 
-  connection (kw<"as"> Identifier kw<"virtual">?)?
+  connection (kw<"as"> (Identifier | ArrayIdentifier) kw<"virtual">?)?
 }
+
+@skip {} {
+  paramEnd { @specialize[@name="end"]<paramToken, "end"> }
+
+  paramIgnore { paramWhitespace | paramLineComment | paramBlockComment }
+
+  ProcessorParametrization {
+    kw<"param"> (processorParameter | paramIgnore)* paramEnd
+  }
+
+  processorParameter {
+    paramToken paramIgnore* paramAssign paramIgnore* (paramString | paramToken)
+  }
+}
+
+@local tokens {
+  paramAssign[@name="="] { "=" }
+  paramBlockComment[@name=BlockComment] { "/*" (![*] | "*" ![/])* "*/" }
+  paramLineComment[@name=LineComment] { "//" ![\r\n]* }
+  paramWhitespace { @whitespace+ }
+  paramString[@name=String] { '"' ![\r\n"]* '"' }
+  paramToken[@name=Identifier] { ![ \r\n\t]+ }
+
+  @precedence {
+    paramWhitespace,
+    paramBlockComment,
+    paramLineComment,
+    paramAssign,
+    paramString,
+    paramToken
+  }
+}
+
 
 
 
@@ -152,16 +241,14 @@ TextBlock { multilineSingleQuoteString | multilineDoubleQuoteString }
 @tokens {
   space { @whitespace+ }
   LineComment { "//" ![\n]* }
-  BlockComment { "/*" blockCommentRest }
-  blockCommentRest { ![*] blockCommentRest | "*" blockCommentAfterStar }
-  blockCommentAfterStar { "/" | "*" blockCommentAfterStar | ![/*] blockCommentRest }
+  BlockComment { "/*" (![*] | "*" ![/])* "*/" }
   
   // the only difference between an Identifier and a LinkPattern is that 
   // LinkPattern can contain an asterisk, so the external specializer
   // handles that for us
   Identifier { $[a-zA-Z_*] $[a-zA-Z0-9_\-*]* }
-  IdentifierTemplate { $[a-zA-Z_] $[a-zA-Z0-9_\-]* "#" }
-  Ref { "@" $[a-zA-Z_] $[a-zA-Z0-9_\-]* }
+  ArrayIdentifier { $[a-zA-Z_] $[a-zA-Z0-9_\-]* ("#" | "$") }
+  Type { "@" $[a-zA-Z_] $[a-zA-Z0-9_\-]* }
   
   Int { ("+" | "-")? $[0-9]+ }
   // Still preserving processor specification support to not break
@@ -174,12 +261,11 @@ TextBlock { multilineSingleQuoteString | multilineDoubleQuoteString }
   }
 
   @precedence {
-    "*",
-    IdentifierTemplate,
+    ArrayIdentifier,
     Identifier
   }
 
-  "(" ")" "," ":" "." ".." "..." "+" "-" "=" "*"
+  "(" ")" "," ":" "." ".." "..." "+" "-" "="
 }
 
 @external specialize { Identifier } specializeIdentifier from "./schemacode_tokens" {

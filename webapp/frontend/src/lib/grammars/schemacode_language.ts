@@ -35,6 +35,10 @@ export const schemacodeLanguage = LRLanguage.define({
 				if (parent.parent?.getChild('mindcode')) return { parser: mindcodeLanguage.parser };
 				return { parser: mlogLanguage.parser };
 			}
+			if (parent?.name === 'SchematicPrologue') {
+				if (parent.getChild('mindcode')) return { parser: mindcodeLanguage.parser };
+				return { parser: mlogLanguage.parser };
+			}
 			if (parent?.name === 'StringAssignment') {
 				let root = ref.node;
 				while (root.parent) {
@@ -72,7 +76,7 @@ export const schemacodeLanguage = LRLanguage.define({
 				Identifier: t.variableName,
 				IdentifierTemplate: t.special(t.variableName),
 				'LinkPattern!': t.regexp,
-				Ref: t.string,
+				Type: t.typeName,
 				String: t.string,
 				StringContent: t.string,
 				TextBlock: t.string,
@@ -82,8 +86,10 @@ export const schemacodeLanguage = LRLanguage.define({
 
 				'schematic end': t.keyword,
 				'name description tag filename dimensions target': t.propertyName,
-				'at facing virtual color connected to block command item liquid unit text enabled disabled processor mindcode mlog file links as':
-					t.keyword,
+				'at facing virtual color connected to block command item': t.keyword,
+				'liquid unit text enabled disabled processor mindcode mlog': t.keyword,
+				'file links as param region flip fill replace': t.keyword,
+				'global local parent': t.keyword,
 				'north south east west rgba horizontal vertical': t.atom,
 
 				LineComment: t.lineComment,
@@ -110,6 +116,9 @@ function getLookupData(root: SyntaxNode, input: Input): LookupData {
 		return cached;
 	}
 
+	// using angle brackets to avoid name collisions
+	const mindcodeKey = '<mindcode>';
+	const mlogKey = '<mlog>';
 	const consumers = new Map<string, Set<string>>();
 
 	const cursor = root.cursor();
@@ -121,16 +130,18 @@ function getLookupData(root: SyntaxNode, input: Input): LookupData {
 			if (!sourceNode) return;
 
 			const children = sourceNode.getChildren('Identifier');
-			// using angle brackets to avoid name collisions
-			const target = node.getChild('mindcode') ? '<mindcode>' : '<mlog>';
+			const consumer = node.getChild('mindcode') ? mindcodeKey : mlogKey;
 
 			for (const child of children) {
-				let set = consumers.get(target);
-				if (!set) {
-					set = new Set<string>();
-					consumers.set(target, set);
-				}
-				set.add(input.read(child.from, child.to));
+				addConsumer(consumer, child);
+			}
+		}
+		if (node.name === 'SchematicPrologue') {
+			const children = node.getChildren('Identifier');
+			const consumer = node.getChild('mindcode') ? mindcodeKey : mlogKey;
+
+			for (const child of children) {
+				addConsumer(consumer, child);
 			}
 		}
 		if (node.name === 'StringAssignment') {
@@ -138,15 +149,18 @@ function getLookupData(root: SyntaxNode, input: Input): LookupData {
 			if (!variable || !value) return;
 
 			const consumer = input.read(variable.from, variable.to);
-			const consumed = input.read(value.from, value.to);
-			let set = consumers.get(consumer);
-			if (!set) {
-				set = new Set<string>();
-				consumers.set(consumer, set);
-			}
-			set.add(consumed);
+			addConsumer(consumer, value);
 		}
 	});
+
+	function addConsumer(consumer: string, node: SyntaxNode) {
+		let set = consumers.get(consumer);
+		if (!set) {
+			set = new Set<string>();
+			consumers.set(consumer, set);
+		}
+		set.add(input.read(node.from, node.to));
+	}
 
 	function traverse(consumer: string, visited: Set<string>, root = false) {
 		if (visited.has(consumer)) return;
@@ -161,8 +175,8 @@ function getLookupData(root: SyntaxNode, input: Input): LookupData {
 
 	const mindcode = new Set<string>();
 	const mlog = new Set<string>();
-	traverse('<mindcode>', mindcode, true);
-	traverse('<mlog>', mlog, true);
+	traverse(mindcodeKey, mindcode, true);
+	traverse(mlogKey, mlog, true);
 
 	const data = { mindcode, mlog };
 	lookupCache.set(root, data);

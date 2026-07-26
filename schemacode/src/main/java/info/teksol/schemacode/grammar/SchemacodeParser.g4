@@ -45,7 +45,7 @@ regionDimensions
     ;
 
 block
-    : labels=labelList? content=element (placeMode=placementMode pos=blockPosition?)? flip=translation? dir=direction? cfg=configuration?
+    : labels=labelList? content=element (placeMode=placementMode pos=blockPosition)? flip=translation? dir=direction? cfg=configuration?
     ;
 
 placementMode : (AT | FILL | REPLACE);
