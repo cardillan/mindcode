@@ -197,17 +197,16 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
     @Test
     void resolvesVirtualInstructions() {
         String expected = Stream.of(
-                createInstruction(JUMP, "11", "always"),
+                createInstruction(JUMP, "10", "always"),
                 createInstruction(WRITE, ":a", "cell1", "*sp"),
                 createInstruction(OP, "add", "*sp", "*sp", "1"),
                 createInstruction(OP, "sub", "*sp", "*sp", "1"),
                 createInstruction(READ, ":a", "cell1", "*sp"),
-                createInstruction(WRITE, "11", "cell1", "*sp"),
+                createInstruction(WRITE, "10", "cell1", "*sp"),
                 createInstruction(OP, "add", "*sp", "*sp", "1"),
                 createInstruction(JUMP, "8", "always"),
                 createInstruction(OP, "sub", "*sp", "*sp", "1"),
-                createInstruction(READ, "*tmp0", "cell1", "*sp"),
-                createInstruction(SET, "@counter", "*tmp0"),
+                createInstruction(READ, "@counter", "cell1", "*sp"),
                 createInstruction(END),
                 createInstruction(PRINT, q(CompilerProfile.SIGNATURE_STATIC))
         ).map(LogicInstruction::toMlog).collect(Collectors.joining("\n"));

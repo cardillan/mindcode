@@ -10,7 +10,7 @@ for-each-loop-break-continue.mnd:                  83       95      83.1%   DB8B
 function-inlining.mnd:                            884      884     100.0%   B3AB880177C19FDA   FD313BE5D3502CDF
 iterated-for-loop-break-continue.mnd:              37      168      97.3%   80825B23266F8FF3   52593B6273BCEAC2
 loops-in-conditions.mnd:                            4        4     100.0%   25F777AD40847D3B   AAF96C472A38F04C
-mutually-recursive-calls.mnd:                     253      593      99.6%   61B36E3FE17E9278   2FA77C5A4819BFB8
+mutually-recursive-calls.mnd:                     250      575      99.6%   61B36E3FE17E9278   A24EBBFEBC93E2E3
 prints-values.mnd:                                 42       42     100.0%   810146F338C25648   817A42B7D39B78BF
 processesAssertBounds:                              5        5     100.0%   95377598091542AF   0F743E6A74607BC3
 processesBasicCode2:                                3        3     100.0%   B406896E6E3CDCB7   295C15253DC5C1B9
@@ -19,8 +19,8 @@ processesCaseExpressions:                           6        4      66.7%   0A6F
 processesGlobalVariableDataFlow:                   24       24     100.0%   A117AFBA99D093C8   F60E1625820060DF
 processesTranslatedCaseExpressions:                 6        4      66.7%   5324DB4ECE283002   381E5D60588F2DF8
 ranged-for-loop-break-continue.mnd:                25       62      96.0%   0E564BDD58072C70   51B79385B240C3C0
-recursive-calls.mnd:                              150      252      99.3%   9CB0965E0E62F089   C2DB25B69E68C455
-recursive-function-condition.mnd:                  24       18      75.0%   02C171DDB1F56F08   D1ACB517DA3755F0
+recursive-calls.mnd:                              147      243      99.3%   9CB0965E0E62F089   036BDE679AE75B43
+recursive-function-condition.mnd:                  23       17      73.9%   02C171DDB1F56F08   D85B126DDB6702F3
 switched-case-expression.mnd:                      60     2070      98.3%   D8AE9E78FC18AFFC   1C950CE211A9F746
 testSuiteRecognizesUnexpectedWarnings:              1        1     100.0%   002B7E6873B65270   76B4E6E157F76749
 while-loop.mnd:                                    20       66      95.0%   D881ACAA07A1E8A0   C4899C077A515177

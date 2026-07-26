@@ -1,4 +1,4 @@
-    97 instructions before optimizations.
+    96 instructions before optimizations.
      5 instructions eliminated by Temp Variables Elimination (6 iterations).
      4 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instruction eliminated by Jump Normalization (5 iterations).
@@ -10,23 +10,23 @@
      1 loop unrolled by Loop Unrolling.
     38 instructions added by Function Inlining (6 iterations).
      1 function call inlined by Function Inlining.
-     2 instructions added by Return Optimization (6 iterations).
+     1 instruction added by Return Optimization (6 iterations).
      1 return statement optimized by Return Optimization.
      2 instructions eliminated by Unreachable Code Elimination (2 iterations).
      8 instructions eliminated by Stack Optimization.
-    90 instructions after optimizations.
+    88 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 917):
+Pass 1: speed optimization selection (cost limit 918):
   * Unroll iteration loop at line 4:1                            size   -15, benefit       31.0, efficiency   Infinity (-19 instructions)
     Inline function call at line 9:18                            size   +41, benefit        4.0, efficiency      0.098
-    Optimize return at line 14:9                                 size    +2, benefit       13.0, efficiency      6.500
+    Optimize return at line 14:9                                 size    +1, benefit       13.0, efficiency     13.000
+
+Pass 1: speed optimization selection (cost limit 937):
+    Inline function call at line 9:18                            size   +41, benefit        4.0, efficiency      0.098
+  * Optimize return at line 14:9                                 size    +1, benefit       13.0, efficiency     13.000 (+1 instructions)
 
 Pass 1: speed optimization selection (cost limit 936):
-    Inline function call at line 9:18                            size   +41, benefit        4.0, efficiency      0.098
-  * Optimize return at line 14:9                                 size    +2, benefit       13.0, efficiency      6.500 (+2 instructions)
-
-Pass 1: speed optimization selection (cost limit 934):
-  * Inline function call at line 9:18                            size   +43, benefit        4.0, efficiency      0.093 (+36 instructions)
+  * Inline function call at line 9:18                            size   +42, benefit        4.0, efficiency      0.095 (+36 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
@@ -377,7 +377,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     25 label *label3
     26 set :ways:amount 20
 
-Modifications by Optimize return at line 14:9 (+2 instructions):
+Modifications by Optimize return at line 14:9 (+1 instructions):
  
     34 # "Function: def ways(in amount, in index)"
     35 jump *label14 notEqual :ways:amount 0

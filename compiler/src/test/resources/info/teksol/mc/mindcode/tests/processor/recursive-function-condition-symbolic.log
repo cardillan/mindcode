@@ -1,4 +1,4 @@
-    31 instructions before optimizations.
+    30 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instruction eliminated by Jump Normalization (5 iterations).
      1 instruction eliminated by Condition Optimization (6 iterations).
@@ -10,9 +10,9 @@
      1 function call inlined by Function Inlining.
      1 instruction eliminated by Unreachable Code Elimination (2 iterations).
      4 instructions eliminated by Stack Optimization.
-    24 instructions after optimizations.
+    23 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 974):
+Pass 1: speed optimization selection (cost limit 975):
   * Inline function call at line 7:18                            size   +12, benefit        3.5, efficiency      0.292 (+8 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):

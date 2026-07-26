@@ -296,10 +296,8 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
                 consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()).copyComment(ix));
             }
             case ReturnRecInstruction ix -> {
-                LogicVariable retAddr = nextTemp();
                 consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createRead(astContext, retAddr, ix.getStack(), stackPointer()));
-                consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, retAddr).copyComment(ix));
+                consumer.accept(createRead(astContext, LogicBuiltIn.COUNTER, ix.getStack(), stackPointer()).copyComment(ix));
             }
             case CallInstruction ix -> {
                 if (profile.isSymbolicLabels()) {

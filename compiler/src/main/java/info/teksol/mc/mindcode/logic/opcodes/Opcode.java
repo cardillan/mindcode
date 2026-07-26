@@ -115,8 +115,8 @@ public enum Opcode {
     CALLREC         (NONE,   "callrec",         3),
 
     /// Return from a recursive function. Replaced by instructions which retrieve the return address from the stack
-    /// and jump there (using `set @counter address`, since the target is dynamic).
-    RETURNREC       (NONE,   "returnrec",       3),
+    /// and jump there (using `read @counter`).
+    RETURNREC       (NONE,   "returnrec",       2),
 
     /// A target for the MULTIJUMP instruction. Removed from the final code.
     /// One MULTIJUMP instruction can target multiple MULTILABELs, choosing the right one at runtime.

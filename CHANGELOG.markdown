@@ -4,12 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.18.0 – Unreleased
+
+### Changed
+
+* The implementation of a return from a recursive function call has been improved.
+
 ## 3.17.4 – 2026-07-26
 
 ### Fixed
 
 * Fixed invalid array access code ([#350](https://github.com/cardillan/mindcode/issues/350)).
-
 
 ## 3.17.3 – 2026-07-26
 

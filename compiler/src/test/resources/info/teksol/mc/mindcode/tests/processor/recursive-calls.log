@@ -1,4 +1,4 @@
-   146 instructions before optimizations.
+   143 instructions before optimizations.
      6 instructions eliminated by Temp Variables Elimination (6 iterations).
     15 instructions eliminated by Dead Code Elimination (6 iterations).
      3 instructions eliminated by Jump Normalization (5 iterations).
@@ -11,18 +11,18 @@
      3 instructions eliminated by Unreachable Code Elimination (2 iterations).
     12 instructions eliminated by Stack Optimization.
      5 instructions eliminated by Print Merging.
-   144 instructions after optimizations.
+   141 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 888):
+Pass 1: speed optimization selection (cost limit 891):
     Inline function call at line 33:34                           size   +25, benefit        4.5, efficiency      0.180
   * Inline function call at line 34:34                           size   +20, benefit        4.5, efficiency      0.225 (+13 instructions)
     Inline function call at line 35:34                           size   +25, benefit        4.5, efficiency      0.180
 
-Pass 1: speed optimization selection (cost limit 875):
+Pass 1: speed optimization selection (cost limit 878):
   * Inline function call at line 33:34                           size   +25, benefit        4.5, efficiency      0.180 (+21 instructions)
     Inline function call at line 35:34                           size   +25, benefit        4.5, efficiency      0.180
 
-Pass 1: speed optimization selection (cost limit 854):
+Pass 1: speed optimization selection (cost limit 857):
   * Inline function call at line 35:34                           size   +25, benefit        4.5, efficiency      0.180 (+21 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-9 instructions):
