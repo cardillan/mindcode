@@ -54,7 +54,7 @@ RegionDefinition {
 BlockItem {
   !block (commaSep<Identifier | ArrayIdentifier> ":")?
     blockElement
-    (placementMode (!position blockPosition)?)?
+    (placementMode (!position blockPosition))?
     Reflection?
     Direction?
     Configuration?
