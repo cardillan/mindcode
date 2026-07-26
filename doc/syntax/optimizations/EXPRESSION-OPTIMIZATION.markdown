@@ -4,6 +4,9 @@ This optimization looks for certain expressions that can be performed more effic
 
 ## Handling non-negative implicit integer conversions
 
+> [!NOTE]
+> This optimization is faulty nd has been disabled until fixed.
+
 Some instructions perform implicit integer conversions on their argument(s). When the expected values passed to the instructions are known to be non-negative, it is possible to remove a preceding `floor` operation, because the implicit integer conversion has the same effect. When this situation is detected, the argument in question is replaced by the operand of the `op floor` instruction instead of its result.
 
 Currently, only array indexes are handled in this way. When a `floor()` function is used on an array index, the corresponding `op floor` instruction may be removed (assuming the value isn't used anywhere else). Example:
@@ -19,10 +22,11 @@ compiles to:
 
 ```mlog
 op rand *tmp0 6 0
-lookup team *tmp2 *tmp0
-sensor .a*elem *tmp2 @name
-read *tmp1 @this .a*elem
-printchar *tmp1
+op floor *tmp1 *tmp0 0
+lookup team *tmp3 *tmp1
+sensor .a*elem *tmp3 @name
+read *tmp2 @this .a*elem
+printchar *tmp2
 end
 draw triangle derelict sharded crux malis green blue
 ```

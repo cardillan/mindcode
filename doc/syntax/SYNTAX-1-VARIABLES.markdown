@@ -676,18 +676,19 @@ compiles into
 op rand *tmp0 5 0
 op rand *tmp1 5 0
 op rand *tmp2 5 0
-op shl *tmp4 *tmp0 1
-op add @counter *tmp4 5
-set *tmp3 "[red]"
-jump 14 always 0 0
-set *tmp3 "[green]"
-jump 14 always 0 0
-set *tmp3 "[blue]"
-jump 14 always 0 0
-set *tmp3 "[crimson]"
-jump 14 always 0 0
-set *tmp3 "[gold]"
-print *tmp3
+op floor *tmp3 *tmp0 0
+op shl *tmp5 *tmp3 1
+op add @counter *tmp5 6
+set *tmp4 "[red]"
+jump 15 always 0 0
+set *tmp4 "[green]"
+jump 15 always 0 0
+set *tmp4 "[blue]"
+jump 15 always 0 0
+set *tmp4 "[crimson]"
+jump 15 always 0 0
+set *tmp4 "[gold]"
+print *tmp4
 print *tmp0
 print *tmp1
 print *tmp2
