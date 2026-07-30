@@ -10,11 +10,11 @@ import java.util.List;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
-class ReturnOptimizerTest extends AbstractOptimizerTest<ReturnOptimizer> {
+class RecursiveOptimizerTest extends AbstractOptimizerTest<RecursiveOptimizer> {
 
     @Override
-    protected Class<ReturnOptimizer> getTestedClass() {
-        return ReturnOptimizer.class;
+    protected Class<RecursiveOptimizer> getTestedClass() {
+        return RecursiveOptimizer.class;
     }
 
     @Override

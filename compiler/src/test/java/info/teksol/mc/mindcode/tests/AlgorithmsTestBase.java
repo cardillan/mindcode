@@ -97,7 +97,7 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
         List<Optimization> optimizations = List.of(
                 Optimization.UNREACHABLE_CODE_ELIMINATION,
                 Optimization.PRINT_MERGING,
-                Optimization.RETURN_OPTIMIZATION,
+                Optimization.RECURSIVE_OPTIMIZATION,
                 Optimization.STACK_OPTIMIZATION,
                 Optimization.EXPRESSION_OPTIMIZATION,
                 Optimization.JUMP_NORMALIZATION,

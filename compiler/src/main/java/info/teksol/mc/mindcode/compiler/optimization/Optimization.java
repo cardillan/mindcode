@@ -78,9 +78,9 @@ public enum Optimization {
             CaseSwitcher::new,
             "modifying suitable case expressions to use jump tables or value translations"),
 
-    RETURN_OPTIMIZATION("Return Optimization",
-            ReturnOptimizer::new,
-            "speeding up return statements in recursive and stackless functions"),
+    RECURSIVE_OPTIMIZATION("Recursive Optimization",
+            RecursiveOptimizer::new,
+            "optimization of recursive calls (return statement inlining, tail-call elimination)"),
 
     JUMP_STRAIGHTENING("Jump Straightening",
             JumpStraightening::new,

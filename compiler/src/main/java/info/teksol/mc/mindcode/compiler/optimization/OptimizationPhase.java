@@ -35,7 +35,7 @@ public enum OptimizationPhase {
             BOOLEAN_OPTIMIZATION,
             IF_EXPRESSION_OPTIMIZATION,
             CASE_SWITCHING,
-            RETURN_OPTIMIZATION
+            RECURSIVE_OPTIMIZATION
     ),
 
     /// Jump-specific optimizations. Several passes might be needed to iron out all jump paths.

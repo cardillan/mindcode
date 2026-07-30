@@ -9,8 +9,8 @@
        1 loop condition was partially rotated.
    406 instructions added by Function Inlining (15 iterations).
     10 function calls inlined by Function Inlining.
-     2 instructions added by Return Optimization (15 iterations).
-     2 return statements optimized by Return Optimization.
+     2 instructions added by Recursive Optimization (15 iterations).
+     2 return statements optimized by Recursive Optimization.
    145 instructions eliminated by Unreachable Code Elimination (2 iterations).
    112 instructions eliminated by Stack Optimization.
    250 instructions after optimizations.

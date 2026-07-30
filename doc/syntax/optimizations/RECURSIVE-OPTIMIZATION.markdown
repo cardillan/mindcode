@@ -1,6 +1,6 @@
-# Return Optimization
+# Recursive Optimization
 
-Return Optimization is a [dynamic optimization](../SYNTAX-6-OPTIMIZATIONS.markdown#static-and-dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
+Some optimizations provided by Recursive Optimization are [dynamic optimizations](../SYNTAX-6-OPTIMIZATIONS.markdown#static-and-dynamic-optimizations) and are only applied when compatible with the optimization goal.
 
 The Return Optimization replaces unconditional jumps to the final sequence of instructions representing a return from a recursive function (which is always three instructions long) with the entire return sequence. The jump execution is avoided at the price of two additional instructions.
 

@@ -1025,7 +1025,7 @@ when not explicitly set. Available optimization levels are {none, basic, advance
 | [loop-rotation](optimizations/LOOP-ROTATION.markdown)                               | local | stable             |
 | [loop-unrolling](optimizations/LOOP-UNROLLING.markdown)                             | local | stable             |
 | [print-merging](optimizations/PRINT-MERGING.markdown)                               | local | stable             |
-| [return-optimization](optimizations/RETURN-OPTIMIZATION.markdown)                   | local | stable             |
+| [recursive-optimization](optimizations/RECURSIVE-OPTIMIZATION.markdown)             | local | stable             |
 | [single-step-elimination](optimizations/SINGLE-STEP-ELIMINATION.markdown)           | local | stable             |
 | [stack-optimization](optimizations/STACK-OPTIMIZATION.markdown)                     | local | stable             |
 | [temp-variables-elimination](optimizations/TEMP-VARIABLES-ELIMINATION.markdown)     | local | stable             |

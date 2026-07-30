@@ -16,4 +16,4 @@ Note: this optimization does not affect jumps that are part of a larger structur
 
 ---
 
-[&#xAB; Previous: Return Optimization](RETURN-OPTIMIZATION.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Stack Optimization &#xBB;](STACK-OPTIMIZATION.markdown)
+[&#xAB; Previous: Recursive Optimization](RECURSIVE-OPTIMIZATION.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Stack Optimization &#xBB;](STACK-OPTIMIZATION.markdown)

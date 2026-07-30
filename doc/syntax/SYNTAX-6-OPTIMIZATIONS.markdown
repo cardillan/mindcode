@@ -78,7 +78,7 @@ Individual optimizations are described in separate documents:
 * [Loop Rotation](optimizations/LOOP-ROTATION.markdown): rotating a front loop condition to the bottom of the loop.
 * [Loop Unrolling](optimizations/LOOP-UNROLLING.markdown): unrolling loops with a fixed number of iterations.
 * [Print Merging](optimizations/PRINT-MERGING.markdown): merging consecutive print statements outputting constant values.
-* [Return Optimization](optimizations/RETURN-OPTIMIZATION.markdown): speeding up return statements in recursive and stackless functions.
+* [Recursive Optimization](optimizations/RECURSIVE-OPTIMIZATION.markdown): optimization of recursive calls (return statement inlining, tail-call elimination).
 * [Single Step Elimination](optimizations/SINGLE-STEP-ELIMINATION.markdown): eliminating jumps to the next instruction.
 * [Stack Optimization](optimizations/STACK-OPTIMIZATION.markdown): optimizing variable storage on the stack.
 * [Temp Variables Elimination](optimizations/TEMP-VARIABLES-ELIMINATION.markdown): eliminating temporary variables created to extract values from instructions.

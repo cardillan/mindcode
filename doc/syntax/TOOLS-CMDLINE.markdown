@@ -122,7 +122,7 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--boolean-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
                 [--instruction-reordering LEVEL] [--loop-hoisting LEVEL] [--loop-rotation LEVEL]
                 [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
+                [--case-switching LEVEL] [--recursive-optimization LEVEL] [--jump-straightening LEVEL]
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
@@ -344,9 +344,9 @@ Optimization levels:
   --case-switching LEVEL
                          sets the optimization level of modifying suitable case  expressions to use jump tables or value
                          translations
-  --return-optimization LEVEL
-                         sets the optimization  level  of  speeding  up  return  statements  in  recursive and stackless
-                         functions
+  --recursive-optimization LEVEL
+                         sets the optimization level  of  optimization  of  recursive  calls (return statement inlining,
+                         tail-call elimination)
   --jump-straightening LEVEL
                          sets the optimization level of simplifying sequences of intertwined jumps
   --jump-threading LEVEL
@@ -586,7 +586,7 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--boolean-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
                 [--instruction-reordering LEVEL] [--loop-hoisting LEVEL] [--loop-rotation LEVEL]
                 [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
+                [--case-switching LEVEL] [--recursive-optimization LEVEL] [--jump-straightening LEVEL]
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
@@ -813,9 +813,9 @@ Optimization levels:
   --case-switching LEVEL
                          sets the optimization level of modifying suitable case  expressions to use jump tables or value
                          translations
-  --return-optimization LEVEL
-                         sets the optimization  level  of  speeding  up  return  statements  in  recursive and stackless
-                         functions
+  --recursive-optimization LEVEL
+                         sets the optimization level  of  optimization  of  recursive  calls (return statement inlining,
+                         tail-call elimination)
   --jump-straightening LEVEL
                          sets the optimization level of simplifying sequences of intertwined jumps
   --jump-threading LEVEL

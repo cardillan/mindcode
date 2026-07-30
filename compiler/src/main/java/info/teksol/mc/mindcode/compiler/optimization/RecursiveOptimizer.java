@@ -17,9 +17,9 @@ import java.util.Optional;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.BODY;
 
 @NullMarked
-class ReturnOptimizer extends BaseOptimizer {
-    public ReturnOptimizer(OptimizationContext optimizationContext) {
-        super(Optimization.RETURN_OPTIMIZATION, optimizationContext);
+class RecursiveOptimizer extends BaseOptimizer {
+    public RecursiveOptimizer(OptimizationContext optimizationContext) {
+        super(Optimization.RECURSIVE_OPTIMIZATION, optimizationContext);
     }
 
     private int invocations = 0;

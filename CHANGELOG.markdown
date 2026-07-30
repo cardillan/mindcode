@@ -1518,7 +1518,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 * Added [Case Switching](doc/syntax/optimizations/CASE-SWITCHING.markdown) optimization. This optimization converts
   suitable case expressions to use jump tables.
-* Added [Return Optimization](doc/syntax/optimizations/RETURN-OPTIMIZATION.markdown) improving some very specific
+* Added [Return Optimization](doc/syntax/optimizations/RECURSIVE-OPTIMIZATION.markdown) improving some very specific
   cases sometimes arising in recursive functions.
 * Added [compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-instruction-limit) to alter the instruction limit
   for speed optimizations.

@@ -101,4 +101,4 @@ If the print merging optimization is not active, instructions from `remark()` fu
 
 ---
 
-[&#xAB; Previous: Loop Unrolling](LOOP-UNROLLING.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Return Optimization &#xBB;](RETURN-OPTIMIZATION.markdown)
+[&#xAB; Previous: Loop Unrolling](LOOP-UNROLLING.markdown) &nbsp; | &nbsp; [Up: Code optimization](../SYNTAX-6-OPTIMIZATIONS.markdown) &nbsp; | &nbsp; [Next: Recursive Optimization &#xBB;](RECURSIVE-OPTIMIZATION.markdown)

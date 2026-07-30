@@ -10,8 +10,8 @@
      1 loop unrolled by Loop Unrolling.
     38 instructions added by Function Inlining (6 iterations).
      1 function call inlined by Function Inlining.
-     1 instruction added by Return Optimization (6 iterations).
-     1 return statement optimized by Return Optimization.
+     1 instruction added by Recursive Optimization (6 iterations).
+     1 return statement optimized by Recursive Optimization.
      2 instructions eliminated by Unreachable Code Elimination (2 iterations).
      8 instructions eliminated by Stack Optimization.
     88 instructions after optimizations.
