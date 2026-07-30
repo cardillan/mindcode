@@ -125,12 +125,12 @@ callArgument {
 
 IfExpression {
   kw<"if"> expression kw<"then"> statementList
-  (kw<"elsif"> expression kw<"then"> statementList)* 
-  (kw<"else"> statementList)? end
+  Elsif { kw<"elsif"> expression kw<"then"> statementList }* 
+  Else { kw<"else"> statementList }? end
 }
 
 CaseExpression {
-  kw<"case"> expression CaseAlternative* (kw<"else"> statementList)? end
+  kw<"case"> expression CaseAlternative* Else { kw<"else"> statementList }? end
 }
 
 CaseAlternative {
@@ -346,9 +346,7 @@ number {
   enhancedCommentStart { "///" }
   LineComment { "//" ![\n]* }
   doubleLineComment[@name=LineComment] { "////" ![\n]* }
-  BlockComment { "/*" blockCommentRest }
-  blockCommentRest { ![*] blockCommentRest | "*" blockCommentAfterStar }
-  blockCommentAfterStar { "/" | "*" blockCommentAfterStar | ![/*] blockCommentRest }
+  BlockComment { "/*" (![*] | "*" ![/])* "*/" }
   @precedence {
     doubleLineComment,
     enhancedCommentStart,
