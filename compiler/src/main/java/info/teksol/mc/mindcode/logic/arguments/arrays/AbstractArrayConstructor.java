@@ -199,7 +199,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     }
 
     protected void generateFoldedJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
-            LogicValue index, LogicValue limit, LogicVariable target, Runnable createExit, boolean inlined, List<LogicLabel> branchLabels) {
+            LogicValue index, LogicValue limit, LogicVariable target, Runnable createExit, boolean inlined, List<LogicLabel> branchLabels,
+            Consumer<LogicInstruction> decorator) {
         BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> valueExtractor = elementValueExtractor();
         LogicLabel nextLabel = firstLabel;
 
@@ -214,7 +215,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
             LogicValue element1 = valueExtractor.apply(creator, elements.get(branch));
             if (branch + count < elements.size()) {
                 LogicValue element2 = valueExtractor.apply(creator, elements.get(branch + count));
-                creator.createSelect(target, Condition.LESS_THAN, index, limit, element1, element2);
+                decorator.accept(creator.createSelect(target, Condition.LESS_THAN, index, limit, element1, element2));
                 branchLabels.set(branch, nextLabel);
                 branchLabels.set(branch + count, nextLabel);
             } else {
@@ -272,13 +273,15 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
             LogicVariable arrayElem) {
         switch (instruction) {
             case ReadArrInstruction rix -> creator
-                    .withEffects(ix -> ix.setSideEffects(SideEffects.reads(arrayElements())).setNonNegativeInt(arrayElem))
                     .createRead(rix.getResult(), storageProcessor, arrayElem)
+                    .setSideEffects(SideEffects.reads(arrayElements()))
+                    .setNonNegativeInt(arrayElem)
                     .setIndirectVariables(arrayElements());
 
             case WriteArrInstruction wix -> creator
-                    .withEffects(ix -> ix.setSideEffects(SideEffects.resets(arrayElements())).setNonNegativeInt(arrayElem))
                     .createWrite(wix.getValue(), storageProcessor, arrayElem)
+                    .setSideEffects(SideEffects.resets(arrayElements()))
+                    .setNonNegativeInt(arrayElem)
                     .setIndirectVariables(arrayElements());
 
             default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");

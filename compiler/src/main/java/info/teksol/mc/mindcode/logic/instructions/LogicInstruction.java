@@ -256,6 +256,14 @@ public interface LogicInstruction extends MlogInstruction {
         return setInfo(InstructionInfo.NON_NEGATIVE_INT, nonNegative);
     }
 
+    default LogicValue getNonNegativeIntTable() {
+        return (LogicValue) getInfo(InstructionInfo.NON_NEGATIVE_INT_TABLE);
+    }
+
+    default LogicInstruction setNonNegativeIntTable(LogicValue nonNegative) {
+        return setInfo(InstructionInfo.NON_NEGATIVE_INT_TABLE, nonNegative);
+    }
+
     default LocalCompilerProfile getLocalProfile() {
         return getAstContext().getLocalProfile();
     }

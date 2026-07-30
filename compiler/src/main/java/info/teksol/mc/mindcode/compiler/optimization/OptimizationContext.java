@@ -1377,6 +1377,9 @@ public class OptimizationContext extends CompilerMessageEmitter {
         return replaceInstruction(instruction, instructionProcessor.replaceArgs(instruction, newArgs));
     }
 
+    public void replaceAllInstructionArguments(Predicate<LogicInstruction> filter, LogicArgument oldArg, LogicArgument newArg) {
+        program.replaceAll(ix -> filter.test(ix) ? instructionProcessor.replaceAllArgs(ix, oldArg, newArg) : ix);
+    }
 
     /// Removes an existing instruction from the program. If the instruction isn't found, an exception is thrown.
     ///
@@ -1897,12 +1900,6 @@ public class OptimizationContext extends CompilerMessageEmitter {
             this.astContext = astContext;
             this.instructions = new ArrayList<>(instructions);
             this.labelMap = labelMap;
-        }
-
-        @Override
-        public LogicList withEffects(Consumer<LogicInstruction> decorator) {
-            instructionProcessor.withEffects(decorator);
-            return this;
         }
 
         public Map<LogicLabel, LogicLabel> getLabelMap() {

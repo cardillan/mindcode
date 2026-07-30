@@ -71,8 +71,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
                 LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
                 creator.createOp(Operation.MOD, jumpValue, arrayInd, modulo);
             }
-            creator.withEffects(ix -> ix.setNonNegativeInt(jumpValue))
-                    .createMultiJump(firstLabel, jumpValue, LogicNumber.ZERO, marker);
+            creator.createMultiJump(firstLabel, jumpValue, LogicNumber.ZERO, marker);
         }
 
         Runnable createExit = () -> creator.createReturn(arrayRet);
@@ -82,7 +81,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
                     ? LogicNumber.create((arrayStore.getSize() + 1) / 2)
                     : LogicNumber.create(roundUpToEven(arrayStore.getSize()));
             generateFoldedJumpTable(creator, firstLabel, marker,
-                    arrayInd, limit, arrayElem, createExit, false, branchLabels);
+                    arrayInd, limit, arrayElem, createExit, false, branchLabels, _ -> {});
         } else {
             generateJumpTable(creator, firstLabel, marker, createExit, false, branchLabels);
         }
@@ -110,11 +109,9 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
 
         if (!skipCompactLookup()) {
             prepareTableCall(creator);
-            creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
-                    .createOp(Operation.SHL, arrayInd, instruction.getIndex(), LogicNumber.ONE);
+            creator.createOp(Operation.SHL, arrayInd, instruction.getIndex(), LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
             generateBoundsCheck(astContext, consumer, arrayInd, 2);
-            creator.withEffects(ix -> ix.setSideEffects(createCallSideEffects()))
-                    .createCallStackless(jumpTable.label(), arrayRet, LogicVariable.INVALID);
+            creator.createCallStackless(jumpTable.label(), arrayRet, LogicVariable.INVALID).setSideEffects(createCallSideEffects());
         }
 
         finishTableCall(creator);
@@ -132,16 +129,15 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             prepareTableCall(creator);
             creator.createSetAddress(arrayRet, returnLabel).setHoistId(marker2);
             LogicVariable index = folded ? arrayInd : processor.nextTemp();
-            creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
-                    .createOp(Operation.SHL, index, instruction.getIndex(), LogicNumber.ONE);
+            creator.createOp(Operation.SHL, index, instruction.getIndex(), LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
             generateBoundsCheck(astContext, consumer, index, 2);
             LogicVariable branch = folded ? creator.nextTemp() : index;
             if (folded) {
                 LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
                 creator.createOp(Operation.MOD, branch, index, modulo);
             }
-            creator.withEffects(ix -> ix.setSideEffects(createCallSideEffects()))
-                    .createMultiCall(jumpTable.label(), branch, jumpTable.marker())
+            creator.createMultiCall(jumpTable.label(), branch, jumpTable.marker())
+                    .setSideEffects(createCallSideEffects())
                     .setHoistId(marker2);
             creator.createLabel(returnLabel);
         }
@@ -163,9 +159,10 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             if (folded) {
                 creator.createSet(arrayInd, instruction.getIndex());
             }
-            creator.withEffects(ix -> ix.setSideEffects(createCallSideEffects()))
-                    .createMultiCall(instruction.getIndex(), jumpTable.marker())
-                    .setHoistId(marker2).setJumpTable(jumpTable.branchLabels());
+            creator.createMultiCall(instruction.getIndex(), jumpTable.marker())
+                    .setSideEffects(createCallSideEffects())
+                    .setHoistId(marker2)
+                    .setJumpTable(jumpTable.branchLabels());
             creator.createLabel(returnLabel);
         }
 

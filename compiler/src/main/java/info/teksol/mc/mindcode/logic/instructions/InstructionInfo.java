@@ -85,8 +85,12 @@ public enum InstructionInfo {
     ATOMIC_WAIT(Boolean.FALSE),
 
     /// This instruction performs an integer conversion on the given argument, and the argument is expected
-    /// to be non-negative values. A preceding floor operation may be removed.
+    /// to be a non-negative value. A preceding floor operation may be removed.
     NON_NEGATIVE_INT(LogicVariable.INVALID),
+
+    /// This instruction is part of a jump table affected by the integer conversion of one of its argument.
+    /// When the floor optimization is applied, these instructions need to be modified as well.
+    NON_NEGATIVE_INT_TABLE(LogicVariable.INVALID),
     ;
 
     public final Object defaultValue;

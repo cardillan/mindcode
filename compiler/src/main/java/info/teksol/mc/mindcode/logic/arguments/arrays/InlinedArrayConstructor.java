@@ -52,8 +52,7 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
                 tmp = LogicVariable.INVALID;  // Won't be used
             } else if (folded()) {
                 LogicVariable tmp1 = creator.nextTemp();
-                creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
-                        .createOp(Operation.SHL, tmp1, instruction.getIndex(), LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
+                creator.createOp(Operation.SHL, tmp1, instruction.getIndex(), LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
                 generateBoundsCheck(astContext, consumer, tmp1, 2);
                 LogicVariable tmp2 = creator.nextTemp();
                 LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
@@ -61,8 +60,7 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
                 tmp = tmp2;
             } else {
                 tmp = creator.nextTemp();
-                creator.withEffects(ix -> ix.setNonNegativeInt(instruction.getIndex()))
-                        .createOp(Operation.SHL, tmp, instruction.getIndex(), LogicNumber.ONE);
+                creator.createOp(Operation.SHL, tmp, instruction.getIndex(), LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
                 generateBoundsCheck(astContext, consumer, tmp, 2);
             }
 
@@ -71,18 +69,17 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
 
             List<LogicLabel> branchLabels = new ArrayList<>();
             if (useTextTables) {
-                creator.withEffects(ix -> ix.setSideEffects(createSideEffects()).setNonNegativeInt(instruction.getIndex()))
-                        .createMultiJump(instruction.getIndex(), marker).setJumpTable(branchLabels);
+                creator.createMultiJump(instruction.getIndex(), marker).setJumpTable(branchLabels)
+                        .setSideEffects(createSideEffects()).setNonNegativeInt(instruction.getIndex());
             } else {
-                creator.withEffects(ix -> ix.setSideEffects(createSideEffects()).setNonNegativeInt(instruction.getIndex()))
-                        .createMultiJump(firstLabel, tmp, LogicNumber.ZERO, marker);
+                creator.createMultiJump(firstLabel, tmp, LogicNumber.ZERO, marker).setSideEffects(createSideEffects());
             }
 
             Runnable createExit = () -> creator.createJumpUnconditional(finalLabel);
             if (folded()) {
                 LogicNumber limit = LogicNumber.create((arrayStore.getSize() + 1) / 2);
                 generateFoldedJumpTable(creator, firstLabel, marker, instruction.getIndex(), limit, arrayElem,
-                        createExit, true, branchLabels);
+                        createExit, true, branchLabels, ix -> ix.setNonNegativeIntTable(instruction.getIndex()));
             } else {
                 generateJumpTable(creator, firstLabel, marker, createExit, true, branchLabels);
             }

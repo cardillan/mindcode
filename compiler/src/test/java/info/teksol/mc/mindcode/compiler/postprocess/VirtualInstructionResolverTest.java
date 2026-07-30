@@ -412,8 +412,7 @@ class VirtualInstructionResolverTest extends AbstractCodeGeneratorTest {
     @Nested
     class LoopHoistingTest {
 
-        //FIXME
-        //@Test
+        @Test
         void expandsLoopWithArrayAccess() {
             // This test is set up to perform loop hoisting first (which hoists the instructions setting
             // return addresses for the array element access), and loop unrolling second. The loop unrolling

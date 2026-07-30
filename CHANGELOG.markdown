@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.18.0 – Unreleased
 
+### Fixed
+
+* Fixed the `op floor` removal optimization after it has been deactivated in 3.17.4.
+
 ### Changed
 
 * The implementation of a return from a recursive function call has been improved.

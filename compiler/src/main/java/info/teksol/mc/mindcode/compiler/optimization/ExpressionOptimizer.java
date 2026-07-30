@@ -39,12 +39,13 @@ class ExpressionOptimizer extends BaseOptimizer {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
                 LogicInstruction next = it.next();
-//                if (next.getNonNegativeInt() instanceof LogicVariable variable && variable != LogicVariable.INVALID
-//                        && optimizationContext.findDefiningInstruction(next, variable) instanceof OpInstruction op
-//                        && op.getOperation() == Operation.FLOOR
-//                        && op.getResult().equals(variable)) {
-//                    it.set(next = instructionProcessor.replaceAllArgs(next, variable, op.getX()));
-//                }
+                if (next.getNonNegativeInt() instanceof LogicVariable variable && variable != LogicVariable.INVALID
+                        && optimizationContext.findDefiningInstruction(next, variable) instanceof OpInstruction op
+                        && op.getOperation() == Operation.FLOOR
+                        && op.getResult().equals(variable)) {
+                    it.set(next = instructionProcessor.replaceAllArgs(next, variable, op.getX()));
+                    optimizationContext.replaceAllInstructionArguments(ix -> variable.equals(ix.getNonNegativeIntTable()), variable, op.getX());
+                }
 
                 switch (next) {
                     case LookupInstruction ix       -> processLookupInstruction(it, ix);

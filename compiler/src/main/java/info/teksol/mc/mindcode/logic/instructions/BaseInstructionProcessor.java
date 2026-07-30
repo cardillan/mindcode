@@ -58,8 +58,6 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     private int labelIndex = 0;
     private int markerIndex = 0;
 
-    private @Nullable Consumer<LogicInstruction> decorator = null;
-
     record InstructionProcessorParameters(
             MessageConsumer messageConsumer,
             ProcessorVersion version,
@@ -144,12 +142,6 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             CompilerProfile.fullOptimizations(false, false));
 
     @Override
-    public ContextlessInstructionCreator withEffects(Consumer<LogicInstruction> decorator) {
-        this.decorator = decorator;
-        return this;
-    }
-
-    @Override
     public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments) {
         return validate(createInstructionUnchecked(astContext, opcode, arguments));
     }
@@ -158,7 +150,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     public LogicInstruction createInstructionUnchecked(AstContext astContext, Opcode opcode, List<LogicArgument> args) {
         List<InstructionParameterType> params = getParameters(opcode, args);
 
-        LogicInstruction instruction = switch (opcode) {
+        return switch (opcode) {
             case CALL        -> new CallInstruction(astContext, args, params);
             case CALLREC     -> new CallRecInstruction(astContext, args, params);
             case COMMENT     -> new CommentInstruction(astContext, args, params);
@@ -199,13 +191,6 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             case WRITEARR    -> new WriteArrInstruction(astContext, args, params);
             default          ->  createGenericInstruction(astContext, opcode, args, params);
         };
-
-        if (decorator != null) {
-            decorator.accept(instruction);
-            decorator = null;
-        }
-
-        return instruction;
     }
 
     @Override
@@ -337,6 +322,8 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
 
     @Override
     public <T extends LogicInstruction> T replaceAllArgs(T instruction, LogicArgument oldArg, LogicArgument newArg) {
+        if (!instruction.getArgs().contains(oldArg)) return instruction;
+
         List<LogicArgument> args = instruction.getArgs().stream()
                 .map(arg -> arg.equals(oldArg) ? newArg : arg)
                 .toList();
