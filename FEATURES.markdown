@@ -179,7 +179,7 @@ This file contains a list of Mindcode features.
   * Loop Rotation
   * Loop Unrolling
   * Print Merging
-  * Return Optimization
+  * Recursive Functions Optimization
   * Stack Optimization
   * Temp Variables Elimination
   * Unreachable Code Elimination

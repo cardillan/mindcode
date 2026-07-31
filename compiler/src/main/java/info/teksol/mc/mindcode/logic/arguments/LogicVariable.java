@@ -306,7 +306,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable fnRetVal(MindcodeFunction function, String mlog) {
         return new LogicVariable(function.getSourcePosition(), FUNCTION_RETVAL,
                 function.getName(), function.getPrefix(), function.getPrefix() + RETURN_VALUE_NAME,
-                mlog, false, false, true, false, function.isExport());
+                mlog, true, false, true, false, function.isExport());
     }
 
     public static LogicVariable fnRetAddr(MindcodeFunction function, String mlog) {
@@ -361,7 +361,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable fnRetVal(String functionName, String functionPrefix) {
         return new LogicVariable(EMPTY, FUNCTION_RETVAL,
                 functionName, functionPrefix, functionPrefix + RETURN_VALUE_NAME,
-                functionPrefix + RETURN_VALUE_NAME, false, false, true, false, false);
+                functionPrefix + RETURN_VALUE_NAME, true, false, true, false, false);
     }
 
     // ValueStore methods

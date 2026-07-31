@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.ContextlessInstructionCreator;
@@ -93,6 +94,11 @@ abstract class AbstractOptimizer extends CompilerMessageEmitter implements Optim
 
     protected boolean isDebugOutput() {
         return debugOutput;
+    }
+
+    protected boolean advanced(MindcodeFunction function) {
+        OptimizationLevel level = function.getProfile().getOptimizationLevel(optimization);
+        return level == OptimizationLevel.ADVANCED || level == OptimizationLevel.EXPERIMENTAL;
     }
 
     protected boolean advanced(AstContext context) {

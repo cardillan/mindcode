@@ -493,6 +493,21 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
         int loopStart = currentContext;
         int startIndex = firstInstructionIndex(children.get(loopStart));
 
+//        DataFlowInstructionProcessor loopProcessor = dfProcessor;
+//
+//        if (children.getLast().subcontextType() == FLOW_CONTROL) {
+//            List<JumpInstruction> jumps = contextStream(children.getLast()).filter(JumpInstruction.class::isInstance).map(JumpInstruction.class::cast).toList();
+//            if (jumps.size() == 1 && jumps.getFirst().isUnconditional()) {
+//                JumpInstruction jump = jumps.getFirst();
+//                loopProcessor = (localContext1, context, variableStates1, instruction) -> {
+//                    VariableStates vs = dfProcessor.processInstruction(localContext1, context, variableStates1, instruction);
+//                    if (instruction == jump) {
+//                        vs.setDead(false);
+//                    }
+//                    return vs;
+//                };
+//            }
+//        }
 
         // The remaining CONDITION and BODY contexts are processed here.
         // We'll visit the entire loop twice. The second pass will generate reaches to values generated in the first pass.
@@ -517,7 +532,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
                     if (j + 1 < children.size()) {
                         seek(children.get(j + 1));
                     }
-                } else if (!children.get(j).matches(ITR_TRAILING)) {
+                } else {
                     // Do not modify instructions on the first iteration
                     variableStates = processContext(localContext, children.get(j), variableStates,
                             pass > 0, dfProcessor);
@@ -540,7 +555,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
     /// @param localContext       context to process (must be an `EACH` context)
     /// @param variableStates     variable states at the beginning of the context
     /// @param modifyInstructions true if instructions may be modified in this run based on known variable states.
-    ///                           Set to true when doing the second pass through current loop
+    ///                           Set to true when doing the second pass through the current loop
     /// @return the resulting variable states
     private VariableStates processIterationLoopContext(AstContext localContext, VariableStates variableStates,
             boolean modifyInstructions, DataFlowInstructionProcessor dfProcessor) {
@@ -1039,7 +1054,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
     }
 
     public void addUninitialized(LogicVariable variable) {
-        if (variable.getType().isCompiler()) {
+        if (variable.getType().reportUninitialized()) {
             if (OptimizationCoordinator.IGNORE_UNINITIALIZED) {
                 warn("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
             } else {

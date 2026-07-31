@@ -4,14 +4,14 @@
      1 instruction eliminated by Condition Optimization (6 iterations).
      2 instructions eliminated by If Expression Optimization (3 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
-    21 instructions added by Function Inlining (4 iterations).
+    17 instructions added by Function Inlining (4 iterations).
      1 function call inlined by Function Inlining.
      1 instruction eliminated by Unreachable Code Elimination (2 iterations).
-     4 instructions eliminated by Stack Optimization.
-    49 instructions after optimizations.
+     4 instructions eliminated by Stack Optimization (4 iterations).
+    45 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 965):
-  * Inline function call at line 7:18                            size   +23, benefit        3.5, efficiency      0.152 (+20 instructions)
+Pass 1: speed optimization selection (cost limit 969):
+  * Inline function call at line 7:18                            size   +19, benefit        3.5, efficiency      0.184 (+16 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  
@@ -110,7 +110,23 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     27 returnrec bank1
     28 end
 
-Modifications by Inline function call at line 7:18 (+21 instructions):
+Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-4 instructions):
+ 
+    14 label *label5
+    15 pop bank1 :fib:n
+    16 set *tmp4 :fib*retval
+-    * push bank1 :fib:n
+    17 push bank1 *tmp4
+    18 op sub :fib:n :fib:n 2
+    19 callrec bank1 *label0 *label6 :fib*retval
+    20 label *label6
+    21 pop bank1 *tmp4
+-    * pop bank1 :fib:n
+    22 op add :fib*retval *tmp4 :fib*retval
+    23 label *label4
+    24 label *label2
+
+Modifications by Inline function call at line 7:18 (+17 instructions):
      0 set *sp 0
      1 set :fib:n 10
 -    * callrec bank1 *label0 *label1 :fib*retval
@@ -124,19 +140,17 @@ Modifications by Inline function call at line 7:18 (+21 instructions):
 +    8 label *label8
 +    9 pop bank1 :fib:n
 +   10 set *tmp4 :fib*retval
-+   11 push bank1 :fib:n
-+   12 push bank1 *tmp4
-+   13 op sub :fib:n :fib:n 2
-+   14 callrec bank1 *label0 *label9 :fib*retval
-+   15 label *label9
-+   16 pop bank1 *tmp4
-+   17 pop bank1 :fib:n
-+   18 op add :fib*retval *tmp4 :fib*retval
-+   19 label *label10
-+   20 label *label11
-    21 assertequals 55 :fib*retval "fib(10)"
-    22 stop
-    23 end
++   11 push bank1 *tmp4
++   12 op sub :fib:n :fib:n 2
++   13 callrec bank1 *label0 *label9 :fib*retval
++   14 label *label9
++   15 pop bank1 *tmp4
++   16 op add :fib*retval *tmp4 :fib*retval
++   17 label *label10
++   18 label *label11
+    19 assertequals 55 :fib*retval "fib(10)"
+    20 stop
+    21 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set *sp 0
@@ -148,6 +162,15 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      4 label *label7
      5 push bank1 :fib:n
      6 op sub :fib:n :fib:n 1
+ 
+     9 pop bank1 :fib:n
+    10 set *tmp4 :fib*retval
+    11 push bank1 *tmp4
+-    * op sub :fib:n :fib:n 2
++   12 op sub :fib:n 10 2
+    13 callrec bank1 *label0 *label9 :fib*retval
+    14 label *label9
+    15 pop bank1 *tmp4
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
      0 set *sp 0
@@ -173,44 +196,28 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
      3 op sub :fib:n :fib:n 1
      4 callrec bank1 *label0 *label8 :fib*retval
  
-    13 pop bank1 *tmp4
-    14 pop bank1 :fib:n
-    15 op add :fib*retval *tmp4 :fib*retval
+    11 label *label9
+    12 pop bank1 *tmp4
+    13 op add :fib*retval *tmp4 :fib*retval
 -    * label *label10
 -    * label *label11
-    16 assertequals 55 :fib*retval "fib(10)"
-    17 stop
-    18 end
-    19 label *label0
-    20 set :fib*retval :fib:n
-    21 jump *label4 lessThan :fib:n 2
+    14 assertequals 55 :fib*retval "fib(10)"
+    15 stop
+    16 end
+    17 label *label0
+    18 set :fib*retval :fib:n
+    19 jump *label4 lessThan :fib:n 2
 -    * label *label3
-    22 push bank1 :fib:n
-    23 op sub :fib:n :fib:n 1
-    24 callrec bank1 *label0 *label5 :fib*retval
+    20 push bank1 :fib:n
+    21 op sub :fib:n :fib:n 1
+    22 callrec bank1 *label0 *label5 :fib*retval
  
-    34 pop bank1 :fib:n
-    35 op add :fib*retval *tmp4 :fib*retval
-    36 label *label4
+    30 pop bank1 *tmp4
+    31 op add :fib*retval *tmp4 :fib*retval
+    32 label *label4
 -    * label *label2
-    37 returnrec bank1
+    33 returnrec bank1
 -    * end
-
-Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
- 
-    25 label *label5
-    26 pop bank1 :fib:n
-    27 set *tmp4 :fib*retval
--    * push bank1 :fib:n
-    28 push bank1 *tmp4
-    29 op sub :fib:n :fib:n 2
-    30 callrec bank1 *label0 *label6 :fib*retval
-    31 label *label6
-    32 pop bank1 *tmp4
--    * pop bank1 :fib:n
-    33 op add :fib*retval *tmp4 :fib*retval
-    34 label *label4
-    35 returnrec bank1
 
 Final code before resolving virtual instructions:
 
@@ -222,13 +229,11 @@ callrec bank1 *label0 *label8 :fib*retval
 label *label8
 pop bank1 :fib:n
 set *tmp0 :fib*retval
-push bank1 :fib:n
 push bank1 *tmp0
-op sub :fib:n :fib:n 2
+op sub :fib:n 10 2
 callrec bank1 *label0 *label9 :fib*retval
 label *label9
 pop bank1 *tmp0
-pop bank1 :fib:n
 op add :fib*retval *tmp0 :fib*retval
 assertequals 55 :fib*retval "fib(10)"
 stop

@@ -2,18 +2,22 @@
      2 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instruction eliminated by Jump Normalization (5 iterations).
      1 instruction eliminated by Condition Optimization (6 iterations).
-     2 instructions eliminated by Single Step Elimination (6 iterations).
+     3 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      2 instructions eliminated by Expression Optimization (3 iterations).
      1 instruction eliminated by If Expression Optimization (3 iterations).
-     2 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
-     9 instructions added by Function Inlining (4 iterations).
-     1 function call inlined by Function Inlining.
-     1 instruction eliminated by Unreachable Code Elimination (2 iterations).
-     4 instructions eliminated by Stack Optimization.
-    21 instructions after optimizations.
+     3 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+     1 instruction added by Function Inlining (5 iterations).
+     2 function calls inlined by Function Inlining.
+     4 instructions eliminated by Recursive Optimization (5 iterations).
+     1 tail call eliminated by Recursive Optimization.
+     4 instructions eliminated by Stack Optimization (4 iterations).
+     8 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 977):
-  * Inline function call at line 7:18                            size   +11, benefit        3.5, efficiency      0.318 (+8 instructions)
+Pass 1: speed optimization selection (cost limit 981):
+  * Inline function call at line 7:18                            size    +7, benefit        3.5, efficiency      0.500 (+3 instructions)
+
+Pass 2: speed optimization selection (cost limit 987):
+  * Inline function 'foo' defined at line 3:1                    size    -1, benefit        1.8, efficiency   Infinity (-4 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
  
@@ -94,136 +98,183 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     19 returnrec bank1
     20 end
 
-Modifications by Inline function call at line 7:18 (+9 instructions):
+Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-4 instructions):
+ 
+     7 label *label0
+     8 set :foo*retval 10
+     9 jump *label4 lessThanEq :foo:n 0
+-    * push bank1 :foo:n
+    10 op sub :foo:n :foo:n 1
+    11 callrec bank1 *label0 *label5 :foo*retval
+    12 label *label5
+-    * pop bank1 :foo:n
+    13 set :foo*retval :foo*retval
+    14 jump *label4 always
+    15 label *label4
+
+Modifications by Inline function call at line 7:18 (+5 instructions):
      0 set *sp 0
      1 set :foo:n 1
 -    * callrec bank1 *label0 *label1 :foo*retval
 -    * label *label1
 +    2 set :foo*retval 10
 +    3 jump *label7 lessThanEq :foo:n 0
-+    4 push bank1 :foo:n
-+    5 op sub :foo:n :foo:n 1
-+    6 callrec bank1 *label0 *label6 :foo*retval
-+    7 label *label6
-+    8 pop bank1 :foo:n
-+    9 set :foo*retval :foo*retval
-+   10 jump *label7 always
-+   11 label *label7
-+   12 label *label8
-    13 assertequals 10 :foo*retval "recursive-function-condition"
-    14 stop
-    15 end
++    4 op sub :foo:n :foo:n 1
++    5 callrec bank1 *label0 *label6 :foo*retval
++    6 label *label6
++    7 set :foo*retval :foo*retval
++    8 jump *label7 always
++    9 label *label7
++   10 label *label8
+    11 assertequals 10 :foo*retval "recursive-function-condition"
+    12 stop
+    13 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set *sp 0
      1 set :foo:n 1
      2 set :foo*retval 10
 -    * jump *label7 lessThanEq :foo:n 0
+-    * op sub :foo:n :foo:n 1
 +    3 jump *label7 lessThanEq 1 0
-     4 push bank1 :foo:n
-     5 op sub :foo:n :foo:n 1
-     6 callrec bank1 *label0 *label6 :foo*retval
++    4 op sub :foo:n 1 1
+     5 callrec bank1 *label0 *label6 :foo*retval
+     6 label *label6
+     7 set :foo*retval :foo*retval
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
      0 set *sp 0
-     1 set :foo:n 1
+-    * set :foo:n 1
 -    * set :foo*retval 10
-     2 jump *label7 lessThanEq 1 0
-     3 push bank1 :foo:n
-     4 op sub :foo:n :foo:n 1
+     1 jump *label7 lessThanEq 1 0
+     2 op sub :foo:n 1 1
+     3 callrec bank1 *label0 *label6 :foo*retval
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
      0 set *sp 0
-     1 set :foo:n 1
 -    * jump *label7 lessThanEq 1 0
-     2 push bank1 :foo:n
-     3 op sub :foo:n :foo:n 1
-     4 callrec bank1 *label0 *label6 :foo*retval
+     1 op sub :foo:n 1 1
+     2 callrec bank1 *label0 *label6 :foo*retval
+     3 label *label6
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
  
-     5 label *label6
-     6 pop bank1 :foo:n
-     7 set :foo*retval :foo*retval
+     2 callrec bank1 *label0 *label6 :foo*retval
+     3 label *label6
+     4 set :foo*retval :foo*retval
 -    * jump *label7 always
-     8 label *label7
-     9 label *label8
-    10 assertequals 10 :foo*retval "recursive-function-condition"
+     5 label *label7
+     6 label *label8
+     7 assertequals 10 :foo*retval "recursive-function-condition"
  
-    19 label *label5
-    20 pop bank1 :foo:n
-    21 set :foo*retval :foo*retval
+    14 callrec bank1 *label0 *label5 :foo*retval
+    15 label *label5
+    16 set :foo*retval :foo*retval
 -    * jump *label4 always
-    22 label *label4
-    23 label *label2
-    24 returnrec bank1
+    17 label *label4
+    18 label *label2
+    19 returnrec bank1
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-2 instructions):
  
-     4 callrec bank1 *label0 *label6 :foo*retval
-     5 label *label6
-     6 pop bank1 :foo:n
+     1 op sub :foo:n 1 1
+     2 callrec bank1 *label0 *label6 :foo*retval
+     3 label *label6
 -    * set :foo*retval :foo*retval
-     7 label *label7
-     8 label *label8
-     9 assertequals 10 :foo*retval "recursive-function-condition"
+     4 label *label7
+     5 label *label8
+     6 assertequals 10 :foo*retval "recursive-function-condition"
  
-    17 callrec bank1 *label0 *label5 :foo*retval
-    18 label *label5
-    19 pop bank1 :foo:n
+    12 op sub :foo:n :foo:n 1
+    13 callrec bank1 *label0 *label5 :foo*retval
+    14 label *label5
 -    * set :foo*retval :foo*retval
-    20 label *label4
-    21 label *label2
-    22 returnrec bank1
+    15 label *label4
+    16 label *label2
+    17 returnrec bank1
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
- 
-     4 callrec bank1 *label0 *label6 :foo*retval
-     5 label *label6
-     6 pop bank1 :foo:n
--    * label *label7
--    * label *label8
+Modifications by Iterated phase, Recursive Optimization, pass 2, iteration 1 (-4 instructions):
+     0 set *sp 0
+     1 op sub :foo:n 1 1
+-    * callrec bank1 *label0 *label6 :foo*retval
+-    * label *label6
++    2 setaddr :foo*retaddr *label6 (h:*label6)
++    3 call *label0 *invalid :foo*retval (m:*label6) (h:*label6)
++    4 label *label6
+     5 label *label7
+     6 label *label8
      7 assertequals 10 :foo*retval "recursive-function-condition"
      8 stop
      9 end
- 
-    16 label *label5
-    17 pop bank1 :foo:n
-    18 label *label4
+    10 label *label0
+-    * set :foo*retval 10
+-    * jump *label4 lessThanEq :foo:n 0
+-    * op sub :foo:n :foo:n 1
+-    * callrec bank1 *label0 *label5 :foo*retval
+-    * label *label5
+-    * label *label4
 -    * label *label2
-    19 returnrec bank1
+-    * returnrec bank1
+-    * end
++   11 label *label12
++   12 set :foo*retval 10
++   13 jump *label10 lessThanEq :foo:n 0
++   14 op sub :foo:n :foo:n 1
++   15 jump *label12 always
++   16 label *label9
++   17 label *label10
++   18 label *label11
++   19 return :foo*retaddr
++   20 end
+
+Modifications by Inline function 'foo' defined at line 3:1 (-4 instructions):
+     0 set *sp 0
+     1 op sub :foo:n 1 1
+-    * setaddr :foo*retaddr *label6 (h:*label6)
+-    * call *label0 *invalid :foo*retval (m:*label6) (h:*label6)
+-    * label *label6
++    2 label *label13
++    3 label *label14
++    4 set :foo*retval 10
++    5 jump *label16 lessThanEq :foo:n 0
++    6 op sub :foo:n :foo:n 1
++    7 jump *label14 always
++    8 label *label15
++    9 label *label16
++   10 label *label17
+    11 label *label7
+    12 label *label8
+    13 assertequals 10 :foo*retval "recursive-function-condition"
+    14 stop
+    15 end
+-    * label *label0
+-    * label *label12
+-    * set :foo*retval 10
+-    * jump *label10 lessThanEq :foo:n 0
+-    * op sub :foo:n :foo:n 1
+-    * jump *label12 always
+-    * label *label9
+-    * label *label10
+-    * label *label11
+-    * return :foo*retaddr
 -    * end
 
-Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-    10 label *label0
-    11 set :foo*retval 10
-    12 jump *label4 lessThanEq :foo:n 0
--    * push bank1 :foo:n
-    13 op sub :foo:n :foo:n 1
-    14 callrec bank1 *label0 *label5 :foo*retval
-    15 label *label5
--    * pop bank1 :foo:n
-    16 label *label4
-    17 returnrec bank1
+     7 label *label16
+     8 assertequals 10 :foo*retval "recursive-function-condition"
+     9 stop
+-    * end
 
 Final code before resolving virtual instructions:
 
 set *sp 0
-set :foo:n 1
-push bank1 :foo:n
+op sub :foo:n 1 1
+label *label14
+set :foo*retval 10
+jump *label16 lessThanEq :foo:n 0
 op sub :foo:n :foo:n 1
-callrec bank1 *label0 *label6 :foo*retval
-label *label6
-pop bank1 :foo:n
+jump *label14 always
+label *label16
 assertequals 10 :foo*retval "recursive-function-condition"
 stop
-end
-label *label0
-set :foo*retval 10
-jump *label4 lessThanEq :foo:n 0
-op sub :foo:n :foo:n 1
-callrec bank1 *label0 *label5 :foo*retval
-label *label5
-label *label4
-returnrec bank1

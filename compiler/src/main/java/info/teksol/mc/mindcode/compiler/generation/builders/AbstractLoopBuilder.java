@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public abstract class AbstractLoopBuilder extends AbstractCodeBuilder {
-    protected static final int LOOP_REPETITIONS = 25;             // Estimated number of repetitions for normal loops
+    public static final int LOOP_REPETITIONS = 25;             // Estimated number of repetitions for normal loops
 
     protected AbstractLoopBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);

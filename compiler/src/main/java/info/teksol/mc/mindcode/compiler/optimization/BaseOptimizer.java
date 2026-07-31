@@ -504,8 +504,8 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     /// @param index where to place the instructions
     /// @param instructions instructions to add
     /// @throws MindcodeInternalError when any of the new instructions is already present elsewhere in the program
-    protected void insertInstructions(int index, LogicList instructions) {
-        optimizationContext.insertInstructions(index, instructions);
+    protected int insertInstructions(int index, LogicList instructions) {
+        return optimizationContext.insertInstructions(index, instructions);
     }
 
     /// Replaces an instruction at a given index. The replaced instruction should either reuse the AST context

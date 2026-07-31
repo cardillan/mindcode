@@ -71,7 +71,7 @@ public class FunctionCallsBuilder extends AbstractCodeBuilder implements
             return LogicVoid.VOID;
         }
 
-        if (returnRecord.value() instanceof LogicVariable target) {
+        if (returnRecord.value() instanceof LogicVariable) {
             if (node.getReturnValue() == null) {
                 error(node, ERR.RETURN_MISSING_VALUE);
             } else {

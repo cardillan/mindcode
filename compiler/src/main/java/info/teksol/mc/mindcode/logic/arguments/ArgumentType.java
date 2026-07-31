@@ -52,7 +52,7 @@ public enum ArgumentType {
     UNSPECIFIED,
     ;
 
-    public boolean isCompiler() {
-        return ordinal() >= GLOBAL_PRESERVED.ordinal();
+    public boolean reportUninitialized() {
+        return ordinal() >= GLOBAL_PRESERVED.ordinal() && this != FUNCTION_RETVAL;
     }
 }

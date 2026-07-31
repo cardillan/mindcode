@@ -401,12 +401,12 @@ class AtomicBlockResolverTest {
                     """
                             allocate stack in cell1;
                             
-                            void foo()
-                                foo();
+                            def foo()
+                                1 + foo();
                             end;
                             
                             atomic
-                                foo();
+                                print(foo());
                             end;
                             """);
         }

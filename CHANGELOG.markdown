@@ -8,11 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed the `op floor` removal optimization after it has been deactivated in 3.17.4.
+* Fixed and reactivated the `op floor` removal optimization after it has been deactivated in 3.17.4.
+
+### Added
+
+* Added the capability to inline recursive function calls. Recursive functions called from just a single place are inlined by the compiler, the rest may be inlined by the [Function Inlining](/doc/syntax/optimizations/FUNCTION-INLINING.markdown) as well.
+* Added tail call optimization to [Recursive Optimization](/doc/syntax/optimizations/RECURSIVE-OPTIMIZATION.markdown#tail-call-optimization).
 
 ### Changed
 
-* The implementation of a return from a recursive function call has been improved.
+* **Breaking:** the `return-optimization` compiler directive and command-line parameter have been renamed to `recursive-optimization`, as part of renaming _Return Optimization_ to _Recursive Optimization_.  
+* Improved the implementation of a return from a recursive function call.
+* Improved code folding in the web app's source code editor.
 
 ## 3.17.4 – 2026-07-26
 

@@ -193,7 +193,7 @@ class FunctionInliner extends BaseOptimizer {
         MindcodeFunction function = call.function();
         MindcodeFunction from = call.existingParent().function();
         if (function == null || function.isInline() || function.cannotInline()
-                || function.isRecursive() && !advanced(call)
+                || function.isRecursive() && (!advanced(call) || !advanced(function))
                 || call.existingParent().matchesRecursively(c -> c.function() == function)) {
             return null;
         }

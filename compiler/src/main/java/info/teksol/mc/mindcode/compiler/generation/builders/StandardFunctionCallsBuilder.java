@@ -267,7 +267,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
             // We're putting INVALID as retAddr: in absolute addressing mode, the CALL instruction doesn't
             // set function return address, it is set up separately by the previous instruction
-            assembler.createCallStackless(label, LogicVariable.INVALID,function.getFnRetVal())
+            assembler.createCallStackless(label, LogicVariable.INVALID, function.getFnRetVal())
                     .setMarker(returnLabel).setHoistId(returnLabel);
             // Mark the position where the function must return
             assembler.createLabel(returnLabel);

@@ -373,7 +373,7 @@ public class MindcodeFunction {
 
     /// Determines whether the call to calledFunction from this function is (potentially) recursive, that is
     /// it can lead to another invocation of this function. If it is, the local context of the function needs
-    /// to be saved and restored using stack.
+    /// to be saved and restored using stack before/after the call.
     ///
     /// @param calledFunction a name of the function being called from this function
     /// @return true if this function call might be recursive
@@ -470,6 +470,11 @@ public class MindcodeFunction {
     // was detected.
     void addRecursiveCall(MindcodeFunction calledFunction) {
         recursiveCalls.add(calledFunction);
+    }
+
+    // A tail-call optimization might turn a recursive function into a non-recursive one.
+    public void removeRecursiveCall(MindcodeFunction calledFunction) {
+        recursiveCalls.remove(calledFunction);
     }
 
     public void updatePlacement(int count) {

@@ -176,8 +176,8 @@ class DataFlowVariableStates {
         /// or by the END instruction). The context will be ignored upon merging. If the path was terminated by a jump,
         /// a copy of this context must have been created to be joined at the target label.
         ///
-        /// @param markRead when set to true, all active definitions of user defined variables will be preserved.
-        ///                 To be used with the END instruction to make sure the assignments to user defined variables
+        /// @param markRead when set to true, all active definitions of user-defined variables will be preserved.
+        ///                 To be used with the END instruction to make sure the assignments to user-defined variables
         ///                 won't be removed.
         /// @return this instance marked as dead.
         public VariableStates setDead(boolean markRead) {

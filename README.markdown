@@ -51,6 +51,7 @@ The most important recent changes to Mindcode include:
   * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities. 
   * New string/character-based instructions and character literals.
 * Language/compiler features
+  * Recursive function inlining and tail call optimization.
   * Enhanced Schemacode support (block regions/block arrays, symbolic processor link names).
   * Short-circuit evaluation of boolean expressions.
   * Improved [Loop Rotation](doc/syntax/optimizations/LOOP-ROTATION.markdown) and [Loop Hoisting](doc/syntax/optimizations/LOOP-HOISTING.markdown) optimizations.

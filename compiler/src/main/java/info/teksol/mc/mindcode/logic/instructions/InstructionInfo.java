@@ -64,7 +64,7 @@ public enum InstructionInfo {
     /// MultiLabel target of a text-based jump table. Needs alignment handling
     JUMP_TARGET(Boolean.FALSE),
 
-    /// Marks jumps replaced with RETURNREC by the ReturnOptimizer. The original target of the jump is stored here.
+    /// Marks jumps replaced with RETURNREC by the ReturnOptimizer. The original jump is stored here.
     JUMP_TO_RETURN(Optional.empty()),
 
     /// Either a call instruction's return address that has been redirected via jump threading

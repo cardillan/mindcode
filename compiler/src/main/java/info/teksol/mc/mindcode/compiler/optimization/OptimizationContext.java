@@ -667,7 +667,7 @@ public class OptimizationContext extends CompilerMessageEmitter {
     }
 
     public void addUninitializedVariable(LogicVariable variable) {
-        if (variable.getType().isCompiler()) {
+        if (variable.getType().reportUninitialized()) {
              if (OptimizationCoordinator.IGNORE_UNINITIALIZED) {
                  warn("Internal error: compiler-generated variable '%s' is uninitialized.", variable.toMlog());
              } else {
@@ -1271,10 +1271,11 @@ public class OptimizationContext extends CompilerMessageEmitter {
     /// @param index where to place the instructions
     /// @param instructions instructions to add
     /// @throws MindcodeInternalError when any of the new instructions is already present elsewhere in the program
-    public void insertInstructions(int index, LogicList instructions) {
+    public int insertInstructions(int index, LogicList instructions) {
         for (LogicInstruction instruction : instructions) {
             insertInstruction(index++, instruction);
         }
+        return index;
     }
 
     /// Replaces an instruction at the given index. The replacement instruction should either reuse the AST context
@@ -1817,7 +1818,7 @@ public class OptimizationContext extends CompilerMessageEmitter {
         if (contexts.size() == 1) {
             return contexts.getFirst();
         } else {
-            throw new MindcodeInternalError("More than one context found.");
+            throw new MindcodeInternalError("None or more than one contexts found.");
         }
     }
 
@@ -1850,8 +1851,8 @@ public class OptimizationContext extends CompilerMessageEmitter {
         return firstInstruction(ix -> ix.belongsTo(astContext));
     }
 
-    public int firstInstructionIndex(AstContext astContext) {
-        return firstInstructionIndex(ix -> ix.belongsTo(astContext));
+    public int firstInstructionIndex(AstContext context) {
+        return firstInstructionIndex(ix -> ix.belongsTo(context));
     }
 
     public @Nullable LogicInstruction lastInstruction(AstContext astContext) {

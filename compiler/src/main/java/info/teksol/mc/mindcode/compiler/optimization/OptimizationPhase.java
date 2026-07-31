@@ -35,6 +35,7 @@ public enum OptimizationPhase {
             BOOLEAN_OPTIMIZATION,
             IF_EXPRESSION_OPTIMIZATION,
             CASE_SWITCHING,
+            STACK_OPTIMIZATION,
             RECURSIVE_OPTIMIZATION
     ),
 

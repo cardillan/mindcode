@@ -866,6 +866,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
             // in situations where arguments in recursive calls are swapped. This test ensures all the unnecessary
             // variables are properly eliminated.
             assertCompilesTo("""
+                            #set recursive-optimization = basic;
                             allocate stack in bank1;
                             def foo(n, a, b, c, d)
                                 if n == 0 then
@@ -964,6 +965,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         @Test
         public void preservesVariableStateAcrossPushAndPop() {
             assertCompilesTo("""
+                            #set recursive-optimization = basic;
                             allocate stack in bank1[0...512];
                             def foo(n)
                                 if n > 0 then
