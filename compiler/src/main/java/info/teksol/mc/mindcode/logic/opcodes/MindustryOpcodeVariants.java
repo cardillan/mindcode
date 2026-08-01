@@ -272,9 +272,13 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, W, FUNC, Opcode.MESSAGE,   message("announce"), in("duration"), out("success"));
         add(list, V8A, MAX, W, FUNC, Opcode.MESSAGE,   message("toast"),    in("duration"), out("success"));
 
-        add(list, V7,  MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("pan"),  in("x"), in("y"), in("speed"));
-        add(list, V7,  MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("zoom"), in("level"));
+        add(list, V8C, MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("active"),  result());
+        add(list, V7,  MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("pan"),     in("x"), in("y"), in("speed"));
+        add(list, V7,  MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("zoom"),    in("level"));
         add(list, V7,  MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("stop"));
+        add(list, V8C, MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("shake"),   in("amount"), in("duration"));
+        add(list, V8C, MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("getHud"),  result());
+        add(list, V8C, MAX, W, FUNC, Opcode.CUTSCENE,  cutscene("setHud"),  in("shown"));
 
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("warn"),            in("x"), in("y"));
         add(list, V7,  MAX, W, FUNC, Opcode.EFFECT,  effect("cross"),           in("x"), in("y"));
