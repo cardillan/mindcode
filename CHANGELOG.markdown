@@ -21,6 +21,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Improved the implementation of a return from a recursive function call.
 * Improved code folding in the web app's source code editor.
 
+## 3.17.5 – 2026-08-01
+
+### Added
+
+* Added support for the updated [`cutscene` instruction](/doc/syntax/FUNCTIONS-82.markdown#instruction-cutscene) in target `8.2`.
+
 ## 3.17.4 – 2026-07-26
 
 ### Fixed
