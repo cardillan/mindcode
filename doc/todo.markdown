@@ -15,14 +15,15 @@ Changes intended for the next regular release.
 * Make the compiler inline recursive functions that are called only once from another recursive function, when code generation is active.
 * Allow the optimizer to inline mutually recursive functions when called from another function (recursive or otherwise).
   * For simply recursive functions, this would be a bit too complex and wouldn't achieve much: a stack frame might be saved, but at the cost of increase in the code size; internal stack will compete with the stack for space.
-
-* **Doing**
-
 * Allow declaring recursive function inline. All calls that can be inlined (i.e., all calls that aren't directly recursive) will be inlined by the compiler. Example:
   * Functions `foo` -> `bar` -> `baz` -> `foo`. `foo` is called first.
   * The first call to `foo` gets inlined, as well as `bar` and `baz` calls. The `foo` call from `baz` won't get inlined, because it is now directly recursive in `foo`.
 * Optimize tail-call recursion
   * When a tail call is detected, an infinite loop is generated, and the last call including push/pop is eliminated. Argument assignments remain.
+
+* **Doing**
+
+* Internal stack
 
 * **Planned**
 
@@ -36,7 +37,6 @@ Changes intended for the next regular release.
   * Using `remote` to mark variables/functions for export
   * Modifier '%s' requires parentheses around its arguments
 * Button for copying code from the Mindcode panel in the web app
-* Internal stack
 * Local arrays
 * If expression telescoping optimization
 * Array code injection optimization (?)

@@ -16,6 +16,7 @@ public interface NameCreator extends ArrayNameCreator {
     String parameter(MindcodeFunction function, String parameterName);
     String retval(MindcodeFunction function);
     String retaddr(MindcodeFunction function);
+    String stackframe(MindcodeFunction function);
     String finished(MindcodeFunction function);
 
     String arrayAccess(String baseName, String suffix);

@@ -171,7 +171,7 @@ public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssign
             copyArraysUsingLoop(node, target, source);
         } else {
             for (int i = 0; i < size; i++) {
-                target.getElements().get(i).setValue(assembler, source.getElements().get(i).getValue(assembler));
+                target.getElements().get(i).copyFrom(assembler, source.getElements().get(i));
             }
         }
 
@@ -183,12 +183,12 @@ public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssign
         if (target.getStartOffset() <= source.getStartOffset()) {
             // Forward direction
             for (int i = 0; i < size; i++) {
-                target.getElements().get(i).setValue(assembler, source.getElements().get(i).getValue(assembler));
+                target.getElements().get(i).copyFrom(assembler, source.getElements().get(i));
             }
         } else {
             // Reverse direction
             for (int i = size - 1; i >= 0; i--) {
-                target.getElements().get(i).setValue(assembler, source.getElements().get(i).getValue(assembler));
+                target.getElements().get(i).copyFrom(assembler, source.getElements().get(i));
             }
         }
     }
@@ -213,7 +213,7 @@ public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssign
         assembler.createLabel(beginLabel);
 
         // Copy
-        target.getElement(assembler, node, index).setValue(assembler, source.getElement(assembler, node, index).getValue(assembler));
+        target.getElement(assembler, node, index).copyFrom(assembler, source.getElement(assembler, node, index));
         assembler.createOp(reverse ? Operation.SUB : Operation.ADD, index, index, LogicNumber.ONE);
 
         // Condition

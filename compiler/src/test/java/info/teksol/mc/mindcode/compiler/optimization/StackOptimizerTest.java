@@ -34,9 +34,9 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                         end;
                         print(foo(5));
                         """,
+                createInstruction(SET, "*sp", "0"),
                 createInstruction(LABEL, label(1)),
                 createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                createInstruction(SET, "*sp", "0"),
                 createInstruction(SET, ":foo:x", "5"),
                 createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
                 createInstruction(LABEL, label(2)),
@@ -137,9 +137,9 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                         end;
                         foo(5);
                         """,
+                createInstruction(SET, "*sp", "0"),
                 createInstruction(LABEL, label(1)),
                 createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                createInstruction(SET, "*sp", "0"),
                 createInstruction(SET, ":foo:x", "5"),
                 createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
                 createInstruction(LABEL, label(2)),
@@ -184,9 +184,9 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                         end;
                         foo(5);
                         """,
+                createInstruction(SET, "*sp", "0"),
                 createInstruction(LABEL, label(1)),
                 createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                createInstruction(SET, "*sp", "0"),
                 createInstruction(SET, ":foo:x", "5"),
                 createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
                 createInstruction(LABEL, label(2)),
@@ -224,9 +224,9 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                         end;
                         foo(message1, 10);
                         """,
+                createInstruction(SET, "*sp", "0"),
                 createInstruction(LABEL, label(1)),
                 createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                createInstruction(SET, "*sp", "0"),
                 createInstruction(SET, ":foo:m", "message1"),
                 createInstruction(SET, ":foo:n", "10"),
                 createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),

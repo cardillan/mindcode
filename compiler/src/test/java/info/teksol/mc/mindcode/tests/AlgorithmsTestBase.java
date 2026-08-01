@@ -58,7 +58,8 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
                 "bubble-sort.mnd", 64,
                 "heap-sort.mnd", 512,
                 "insert-sort.mnd", 128,
-                "quick-sort.mnd", 512,
+                "quick-sort-ext.mnd", 512,
+                "quick-sort-int.mnd", 512,
                 "select-sort.mnd", 128
         );
 

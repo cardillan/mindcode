@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
@@ -8,9 +9,10 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 @NullMarked
-public class PushInstruction extends BaseInstruction implements PushOrPopInstruction {
+public class PushInstruction extends PushOrPopInstruction {
 
     PushInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.PUSH, args, params);
@@ -25,4 +27,9 @@ public class PushInstruction extends BaseInstruction implements PushOrPopInstruc
         return this.astContext == astContext ? this : new PushInstruction(this, astContext);
     }
 
+    @Override
+    public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
+        return externalStack() ? super.getSharedSize(sharedStructures)
+                : getVariable().getType() == ArgumentType.FUNCTION_PARAMETER ? 1 : 0;
+    }
 }

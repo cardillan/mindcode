@@ -191,7 +191,7 @@ Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-4 ins
     70 pop bank1 :ways:result
 
 Modifications by Unroll iteration loop at line 4:1 (-2 instructions):
-     0 set *sp 16
+     0 set *sp 0
      1 set :index 0
 -    * set :value 200
 -    * setaddr *tmp0 *label4
@@ -347,7 +347,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     62 jump *label19 greaterThan :ways:p :ways:amount
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-17 instructions):
-     0 set *sp 16
+     0 set *sp 0
 -    * set :index 0
 -    * set :value 200
      1 label *label23
@@ -522,7 +522,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
     37 jump *label61 greaterThan :ways:p 20
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-2 instructions):
-     0 set *sp 16
+     0 set *sp 0
 -    * label *label23
      1 write 200 bank1 0
 -    * label *label24
@@ -609,7 +609,7 @@ Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 i
 
 Final code before resolving virtual instructions:
 
-set *sp 16
+set *sp 0
 write 200 bank1 0
 write 100 bank1 1
 write 50 bank1 2

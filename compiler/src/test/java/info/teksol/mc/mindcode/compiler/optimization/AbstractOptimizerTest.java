@@ -7,7 +7,6 @@ import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
-import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import info.teksol.mc.mindcode.compiler.postprocess.VirtualInstructionResolver;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -90,7 +89,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         final List<LogicInstruction> result;
         final OptimizationCoordinator optimizer = createMindcodeOptimizer(messageConsumer);
         optimizer.setDebugPrinter(debugPrinter);
-        result = optimizer.optimize(CallGraph.createEmpty(MAIN_MODULE), instructions, mockAstRootContext);
+        result = optimizer.optimize(EMPTY_CALL_GRAPH, instructions, mockAstRootContext);
         debugPrinter.print(s -> messageConsumer.addMessage(new CompilerMessage(MessageLevel.INFO, s)));
         return result;
     }

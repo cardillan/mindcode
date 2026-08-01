@@ -1,0 +1,43 @@
+#set stack-depth = 20;
+param ARRAY = bank2;
+param FINAL = bank3;
+
+void quicksort(left, right)
+    if right > left then
+        pivot_index = left + (right - left) \ 2;
+        new_pivot_index = partition(left, right, pivot_index);
+        quicksort(left, new_pivot_index - 1);
+        quicksort(new_pivot_index + 1, right);
+    end;
+end;
+
+inline def partition(left, right, pivot_index)
+    pivot = ARRAY[pivot_index];
+    if pivot_index != right then
+        ARRAY[pivot_index] = ARRAY[right];
+        ARRAY[right] = pivot;
+    end;
+    index = left;
+    for i in left ... right do
+        curr = ARRAY[i];
+        if curr < pivot then
+            if i != index then
+                ARRAY[i] = ARRAY[index];
+                ARRAY[index] = curr;
+            end;
+            index += 1;
+        end;
+    end;
+    if index != right then
+        ARRAY[right] = ARRAY[index];
+        ARRAY[index] = pivot;
+    end;
+    return index;
+end;
+
+quicksort(0, SIZE - 1);
+
+for i in 0 ... SIZE do
+    assertEquals(FINAL[i], ARRAY[i], "unexpected value");
+end;
+stopProcessor();

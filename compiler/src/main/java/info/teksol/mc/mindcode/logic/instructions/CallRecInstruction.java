@@ -41,6 +41,8 @@ public class CallRecInstruction extends BaseInstruction implements CallingInstru
     }
 
     public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
-        return super.getSharedSize(sharedStructures) + (astContext.getGlobalProfile().isSymbolicLabels() ? 1 : 0);
+        return externalStack()
+                ? super.getSharedSize(sharedStructures) + (astContext.getGlobalProfile().isSymbolicLabels() ? 1 : 0)
+                : 2;
     }
 }

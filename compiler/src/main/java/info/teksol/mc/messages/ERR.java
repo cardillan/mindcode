@@ -209,6 +209,7 @@ public class ERR {
     public static final String SCOPE_CODE_OUTSIDE_CODE_BLOCK = "Code outside a main code block or function.";
     public static final String SCOPE_DECLARATION_WITHIN_CODE_BLOCK = "Statement or declaration not allowed within a main code block or function.";
     public static final String SETLOCAL_NOT_USED = "The '#setlocal' directive must precede a statement or an expression.";
+    public static final String STACK_SIZE_LIMIT_EXCEEDED = "The internal stack size of %,d instructions exceeds the available instruction space of %,d.";
     public static final String STRING_SIZE_LIMIT_EXCEEDED = "The string size limit of %,d bytes has been exceeded by %,d bytes.";
     public static final String SUBARRAY_INDEX_OUT_OF_BOUNDS = "Subarray index %d out of range %d .. %d.";
     public static final String SUBARRAY_INVALID_RANGE = "Empty or invalid subarray range.";

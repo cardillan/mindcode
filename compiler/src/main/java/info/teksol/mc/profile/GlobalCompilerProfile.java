@@ -85,6 +85,8 @@ public interface GlobalCompilerProfile {
 
     Target getTarget();
 
+    boolean isUseTextJumpTables();
+
     default boolean isZeroWaitYields() {
         return isDefault(EnvironmentOptions.ZERO_WAIT_YIELDS)
                 ? getTarget().version().atLeast(ProcessorVersion.V8B) : getBooleanValue(EnvironmentOptions.ZERO_WAIT_YIELDS);
@@ -136,6 +138,16 @@ public interface GlobalCompilerProfile {
 
     default boolean isReformatMlog() {
         return getBooleanValue(MlogFormatOptions.REFORMAT_MLOG);
+    }
+
+    default StackOrganization getStackOrganization() {
+        if (isSymbolicLabels()) {
+            return StackOrganization.SYMBOLIC_LABELS;
+        } else if (isUseTextJumpTables()) {
+            return StackOrganization.TEXT_JUMP_TABLES;
+        } else {
+            return StackOrganization.DIRECT_ADDRESSING;
+        }
     }
     //</editor-fold>
 

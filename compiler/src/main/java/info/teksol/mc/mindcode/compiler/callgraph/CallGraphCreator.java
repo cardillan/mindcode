@@ -182,6 +182,14 @@ public class CallGraphCreator extends CompilerMessageEmitter {
 
         functions.stream().filter(MindcodeFunction::isExport).forEach(this::setupOutOfLineFunction);
         functions.stream().filter(f -> f.isBackgroundProcess() || !f.isExport() && !f.isMain() && !f.isInline()).forEach(this::setupOutOfLineFunction);
+
+        functions.stream().filter(f -> f.isInline() && f.isRecursive()).forEach(f ->
+            functions.stream().filter(f2 -> f2.getDirectCalls().contains(f)).forEach(f2 -> {
+                f2.getDirectCalls().addAll(f.getDirectCalls());
+                f2.getIndirectCalls().addAll(f.getIndirectCalls());
+                f2.getRecursiveCalls().addAll(f.getRecursiveCalls());
+            })
+        );
     }
 
     void buildCallTreeAtRoot(List<MindcodeFunction> entryPoints, boolean trackUsages) {

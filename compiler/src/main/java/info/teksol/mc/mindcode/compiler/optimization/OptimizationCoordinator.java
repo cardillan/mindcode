@@ -7,15 +7,17 @@ import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.StackParameters;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
+import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
 import info.teksol.mc.mindcode.compiler.postprocess.VirtualInstructionResolver;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
-import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
-import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
+import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
@@ -38,10 +40,13 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
     public static final boolean IGNORE_UNKNOWN_LABELS = false;
 
     private final List<LogicInstruction> program = new ArrayList<>();
+    private final CallGraph callGraph;
     private final InstructionProcessor instructionProcessor;
+    private final AstContext rootAstContext;
     private final OptimizerContext optimizerContext;
     private final VirtualInstructionResolver virtualInstructionResolver;
     private final boolean remoteLibrary;
+    private final boolean externalStack;
     private final CompilerProfile globalProfile;
     private DebugPrinter debugPrinter = new NullDebugPrinter();
     private @Nullable OptimizationContext optimizationContext;
@@ -52,11 +57,14 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
             MessageConsumer messageConsumer, OptimizerContext optimizerContext,
             VirtualInstructionResolver virtualInstructionResolver, boolean remoteLibrary) {
         super(messageConsumer);
+        this.callGraph = optimizerContext.callGraph();
         this.instructionProcessor = instructionProcessor;
+        this.rootAstContext = optimizerContext.rootAstContext();
         this.optimizerContext = optimizerContext;
         this.globalProfile = globalProfile;
         this.virtualInstructionResolver = virtualInstructionResolver;
         this.remoteLibrary = remoteLibrary;
+        this.externalStack = optimizerContext.stackTracker().externalStack();
     }
 
     public static boolean isDebugOn() {
@@ -82,6 +90,10 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
         }
 
         return result;
+    }
+
+    public CompilerProfile getGlobalProfile() {
+        return globalProfile;
     }
 
     private final List<MindcodeMessage> optimizationStatistics = new ArrayList<>();
@@ -210,10 +222,12 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
 
         while (true) {
             int initialSize = codeSize();
-            int costLimit = Math.max(0, globalProfile.getInstructionLimit() - initialSize);
+            int stackRequirement = externalStack ? 0 : computeStackRequirement();
+            int availableSpace = globalProfile.getInstructionLimit() - initialSize - stackRequirement;
+            int costLimit = Math.max(0, availableSpace);
             int expandedCostLimit = 500 + costLimit;
 
-            optimizationContext.setSizeGoalForced(initialSize > globalProfile.getInstructionLimit());
+            optimizationContext.setSizeGoalForced(availableSpace < 0);
             optimizationContext.prepare();
             List<OptimizationAction> possibleOptimizations = phase.optimizations.stream()
                     .filter(o -> !disabledOptimizations.contains(o))
@@ -265,6 +279,53 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
         }
 
         return modified;
+    }
+
+    private int computeStackRequirement() {
+        int stackSize = callGraph.getFunctions().stream().filter(MindcodeFunction::isRecursive)
+                .map(this::computeStackParameters)
+                .filter(Objects::nonNull)
+                .mapToInt(StackParameters::totalSize).sum();
+
+        return stackSize > 0 && globalProfile.isSymbolicLabels() ? stackSize + 1 : stackSize;
+    }
+
+    public @Nullable StackParameters computeStackParameters(MindcodeFunction function) {
+        AstContext functionContext = rootAstContext.findContext(ctx -> ctx.function() == function &&
+                ctx.matches(AstContextType.FUNCTION_DEF, AstSubcontextType.BODY));
+        if (functionContext == null) return null;
+
+        List<LogicVariable> variables = program.stream()
+                .filter(ix -> ix.getAstContext().belongsTo(functionContext) && ix instanceof PushInstruction)
+                .map(ix -> ((PushInstruction) ix).getVariable())
+                .distinct()
+                .toList();
+        boolean fixedDepth = !isFullyRecursive(function);
+        int depth = fixedDepth ? 1 : function.getProfile().getStackDepth();
+        int frameSize = 2 * variables.size() + 3;
+        int returnOffset = variables.size() + 1;
+
+        int stackOverflowCheck = switch (function.getProfile().getErrorReporting()) {
+            case NONE -> 0;
+            case ASSERT -> 1;
+            case MINIMAL, SIMPLE, DESCRIBED -> 2;
+        };
+        int additionalSize = stackOverflowCheck
+                + 1     // function decoration
+                + 1;    // initialization
+
+        return new StackParameters(function, variables, depth, fixedDepth, frameSize, returnOffset, additionalSize);
+    }
+
+    private boolean isRecursiveCall(CallRecInstruction call) {
+        MindcodeFunction callee = Objects.requireNonNull(call.getAstContext().function());
+        MindcodeFunction caller = call.getAstContext().existingParent().function();
+        return caller != null && caller.isRecursiveCall(callee);
+    }
+
+    private boolean isFullyRecursive(MindcodeFunction function) {
+        return program.stream().anyMatch(ix -> ix instanceof CallRecInstruction call
+                && call.getAstContext().function() == function && isRecursiveCall(call));
     }
 
     private boolean acceptOptimization(OptimizationAction action) {

@@ -17,7 +17,6 @@ import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import info.teksol.mc.profile.CompilerProfile;
-import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.util.Utf8Utils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -26,14 +25,11 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static info.teksol.mc.mindcode.logic.arguments.Operation.ADD;
-import static info.teksol.mc.mindcode.logic.arguments.Operation.STRICT_NOT_EQUAL;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 import static info.teksol.mc.util.CollectionUtils.indexOf;
 
@@ -158,6 +154,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             case DRAW        -> new DrawInstruction(astContext, args, params);
             case DRAWFLUSH   -> new DrawflushInstruction(astContext, args, params);
             case END         -> new EndInstruction(astContext);
+            case ERROR       -> new ErrorInstruction(astContext, args, params);
             case FORMAT      -> new FormatInstruction(astContext, args, params);
             case GETLINK     -> new GetlinkInstruction(astContext, args, params);
             case JUMP        -> new JumpInstruction(astContext, args, params);
@@ -227,81 +224,11 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     }
 
     private @Nullable LogicVariable stackPointer;
-    private LogicVariable stackPointer() {
+    public LogicVariable stackPointer() {
         if (stackPointer == null) {
             stackPointer = LogicVariable.preserved(nameCreator.stackPointer());
         }
         return stackPointer;
-    }
-
-    @Override
-    public void resolve(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
-        AstContext astContext = instruction.getAstContext();
-        GlobalCompilerProfile profile = astContext.getGlobalProfile();
-
-        switch (instruction) {
-            case EmptyInstruction ix -> { }
-            case JumpInstruction ix -> {
-                consumer.accept(ix.getCondition() == Condition.STRICT_NOT_EQUAL
-                        ? createSelect(astContext, LogicBuiltIn.COUNTER, Condition.STRICT_EQUAL,
-                        ix.getX(), ix.getY(), LogicBuiltIn.COUNTER, ix.getTarget()).copyComment(ix)
-                        : ix);
-            }
-            case OpInstruction ix -> {
-                consumer.accept(ix.getOperation() == STRICT_NOT_EQUAL
-                        ? createSelect(astContext, ix.getResult(), Condition.STRICT_EQUAL,
-                        ix.getX(), ix.getY(), LogicBoolean.FALSE, LogicBoolean.TRUE).copyComment(ix)
-                        : ix);
-            }
-            case SelectInstruction ix -> {
-                consumer.accept(ix.getCondition() == Condition.STRICT_NOT_EQUAL
-                        ? createSelect(astContext, ix.getResult(), Condition.STRICT_EQUAL,
-                        ix.getX(), ix.getY(), ix.getFalseValue(), ix.getTrueValue()).copyComment(ix)
-                        : ix);
-            }
-            case MultiLabelInstruction ix -> { }
-            case LabelInstruction ix -> { }
-            case PushInstruction ix -> {
-                consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
-                consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE).copyComment(ix));
-            }
-            case PopInstruction ix -> {
-                consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createRead(astContext, ix.getVariable(), ix.getMemory(), stackPointer()).copyComment(ix));
-            }
-            case CallRecInstruction ix -> {
-                if (profile.isSymbolicLabels()) {
-                    LogicVariable returnAddress = nextTemp();
-                    consumer.accept(createOp(astContext, ADD, returnAddress, LogicBuiltIn.COUNTER, LogicNumber.THREE));
-                    consumer.accept(createInstruction(astContext, WRITE, returnAddress, ix.getStack(), stackPointer()));
-                } else {
-                    consumer.accept(createInstruction(astContext, WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
-                }
-                consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()).copyComment(ix));
-            }
-            case ReturnRecInstruction ix -> {
-                consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createRead(astContext, LogicBuiltIn.COUNTER, ix.getStack(), stackPointer()).copyComment(ix));
-            }
-            case CallInstruction ix -> {
-                if (profile.isSymbolicLabels()) {
-                    consumer.accept(createOp(astContext, ADD, ix.getReturnAddr(), LogicBuiltIn.COUNTER, LogicNumber.ONE));
-                }
-                consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()).copyComment(ix));
-            }
-            case SetAddressInstruction ix -> {
-                consumer.accept(createInstruction(astContext, SET, ix.getResult(), ix.getLabel()).copyComment(ix));
-            }
-            case ReturnInstruction ix -> {
-                consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()).copyComment(ix));
-            }
-
-            // Note: MULTIJUMP / MULTICALL Instructions are handled by LabelResolver, as the actual label value needs to be known
-            default -> {
-                consumer.accept(instruction);
-            }
-        }
     }
 
     @Override
@@ -473,9 +400,16 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             throw new MindcodeInternalError("Invalid or version incompatible instruction " + instruction);
         }
 
-        if (instruction.getArgs().size() != opcodeVariant.namedParameters().size()) {
-            throw new MindcodeInternalError("Wrong number of arguments of instruction " + instruction.getMlogOpcode()
-                    + " (expected " + opcodeVariant.namedParameters().size() + "). " + instruction);
+        if (instruction.getOpcode() == ERROR) {
+            if (instruction.getArgs().size() > opcodeVariant.namedParameters().size()) {
+                throw new MindcodeInternalError("Wrong number of arguments of instruction " + instruction.getMlogOpcode()
+                        + " (expected at most " + opcodeVariant.namedParameters().size() + "). " + instruction);
+            }
+        } else {
+            if (instruction.getArgs().size() != opcodeVariant.namedParameters().size()) {
+                throw new MindcodeInternalError("Wrong number of arguments of instruction " + instruction.getMlogOpcode()
+                        + " (expected " + opcodeVariant.namedParameters().size() + "). " + instruction);
+            }
         }
 
         for (int i = 0; i < instruction.getArgs().size(); i++) {

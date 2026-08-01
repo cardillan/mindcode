@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.postprocess;
 
 import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
+import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.LogicParameter;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
@@ -12,6 +13,7 @@ import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SortCategory;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -29,6 +31,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
     @BeforeEach
     void setupContext() {
         ContextFactory.setArrayConstructorContext(this);
+        ContextFactory.setStackContext(StackTracker::withExternalStack);
     }
 
     @Test
@@ -212,7 +215,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
         ).map(LogicInstruction::toMlog).collect(Collectors.joining("\n"));
 
         String actual = LogicInstructionLabelResolver.resolve(
-                profile, ip, mockAstRootContext,
+                profile, ip, ContextFactory.getStackContext().stackTracker(), mockAstRootContext,
                 List.of(
                         createInstruction(JUMP, label0, Condition.ALWAYS),
                         createInstruction(PUSH, cell1, a),
@@ -243,4 +246,91 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
 
         assertEquals(expected, actual);
     }
+
+    @Nested
+    class ErrorFunction {
+        @Test
+        void compilesFormattableErrorFunctionSimple() {
+            assertOutputs("""
+                            #set error-reporting = simple;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            error($"Index $i out of bounds ($min, $max)!");
+                            """,
+                    """
+                        set max 8
+                        set i 10
+                        set *ERROR_0 "Index [[1] out of bounds (0, [[2])!"
+                        set *ERROR_1 i
+                        set *ERROR_2 max
+                        stop
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+            );
+        }
+
+        @Test
+        void compilesFormattableErrorFunctionAssert() {
+            assertOutputs("""
+                            #set error-reporting = assert;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            error($"Index $i out of bounds ($min, $max)!");
+                            """,
+                    """
+                        set max 8
+                        set i 10
+                        error "Index [[1] out of bounds (0, [[2])!" i max null null null null null null null
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+            );
+        }
+
+        @Test
+        void compilesNormalErrorFunctionSimple() {
+            assertOutputs("""
+                            #set error-reporting = simple;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            error("Index out of bounds: ", i, min, max);
+                            """,
+                    """
+                        set max 8
+                        set i 10
+                        set *ERROR_0 "Index out of bounds: "
+                        set *ERROR_1 i
+                        set *ERROR_2 0
+                        set *ERROR_3 max
+                        stop
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+            );
+        }
+
+        @Test
+        void compilesNormalErrorFunctionAssert() {
+            assertOutputs("""
+                            #set error-reporting = assert;
+                            const min = 0;
+                            param max = 8;
+                            param i = 10;
+                            error("Index out of bounds: ", i, min, max);
+                            """,
+                    """
+                        set max 8
+                        set i 10
+                        error "Index out of bounds: " i 0 max null null null null null null
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+            );
+        }
+    }
+
 }

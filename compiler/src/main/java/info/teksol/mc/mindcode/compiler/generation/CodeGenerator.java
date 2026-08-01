@@ -178,6 +178,7 @@ public class CodeGenerator extends CompilerMessageEmitter {
         generateProcessorId();
         generateTargetGuard();
         generateSetrate();
+        initializeStack();
 
         callGraph.getMain().setGenerated();
         variables.enterFunction(callGraph.getMain(), List.of());
@@ -185,12 +186,6 @@ public class CodeGenerator extends CompilerMessageEmitter {
         visit(program, false);
         assembler.exitAstNode(program);
         variables.exitFunction(callGraph.getMain());
-
-        // Check stack allocations
-        if (!context.stackTracker().isValid()) {
-            callGraph.recursiveFunctions().filter(MindcodeFunction::isUsed).forEach(f -> error(f.getDeclaration().getIdentifier(),
-                    ERR.FUNCTION_RECURSIVE_NO_STACK, f.getName()));
-        }
 
         // Separate the main program from function declarations
         assembler.createCompilerEnd();
@@ -306,6 +301,13 @@ public class CodeGenerator extends CompilerMessageEmitter {
             assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.INIT);
             assembler.createInstruction(Opcode.SETRATE, LogicNumber.create(globalProfile.getSetrate()));
             assembler.clearContextType(program);
+        }
+    }
+
+    private void initializeStack() {
+        if (callGraph.containsRecursiveFunction()) {
+            assembler.setContextType(program, AstContextType.STACK, AstSubcontextType.INIT);
+            assembler.createSet(assembler.getProcessor().stackPointer(), LogicNumber.ZERO);
         }
     }
 

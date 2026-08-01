@@ -43,12 +43,14 @@ public interface LocalCompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Compiler Options">
-    default boolean isBoundaryChecks() {
-        return getBooleanValue(CompilerOptions.BOUNDARY_CHECKS);
+    boolean isUseTextJumpTables();
+
+    default int getAtomicMergeLevel() {
+        return getIntValue(CompilerOptions.ATOMIC_MERGE_LEVEL);
     }
 
-    default boolean isErrorFunction() {
-        return getBooleanValue(CompilerOptions.ERROR_FUNCTION);
+    default double getAtomicSafetyMargin() {
+        return getDoubleValue(CompilerOptions.ATOMIC_SAFETY_MARGIN);
     }
 
     default RuntimeErrorReporting getErrorReporting() {
@@ -59,23 +61,27 @@ public interface LocalCompilerProfile {
         return isDefault(CompilerOptions.IPT) ? getIntValue(CompilerOptions.SETRATE) : getIntValue(CompilerOptions.IPT);
     }
 
-    default boolean isAtomicFullProtection() {
-        return getBooleanValue(CompilerOptions.ATOMIC_FULL_PROTECTION);
-    }
-
-    default int getAtomicMergeLevel() {
-        return getIntValue(CompilerOptions.ATOMIC_MERGE_LEVEL);
-    }
-
-    default double getAtomicSafetyMargin() {
-        return getDoubleValue(CompilerOptions.ATOMIC_SAFETY_MARGIN);
-    }
-
     default Remarks getRemarks() {
         return getEnumValue(CompilerOptions.REMARKS);
     }
 
+    default int getStackDepth() {
+        return getIntValue(CompilerOptions.STACK_DEPTH);
+    }
+
     SyntacticMode getSyntacticMode();
+
+    default boolean isAtomicFullProtection() {
+        return getBooleanValue(CompilerOptions.ATOMIC_FULL_PROTECTION);
+    }
+
+    default boolean isBoundaryChecks() {
+        return getBooleanValue(CompilerOptions.BOUNDARY_CHECKS);
+    }
+
+    default boolean isErrorFunction() {
+        return getBooleanValue(CompilerOptions.ERROR_FUNCTION);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Optimizations Options">
@@ -97,10 +103,6 @@ public interface LocalCompilerProfile {
 
     default boolean isUnsafeCaseOptimization() {
         return getBooleanValue(OptimizationOptions.UNSAFE_CASE_OPTIMIZATION);
-    }
-
-    default boolean isUseTextJumpTables() {
-        return getBooleanValue(OptimizationOptions.USE_TEXT_JUMP_TABLES);
     }
 
     default boolean isUseTextTranslations() {

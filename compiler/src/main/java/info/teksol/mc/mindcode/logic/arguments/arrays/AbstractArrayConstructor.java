@@ -40,7 +40,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     public AbstractArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
         this.processor = context.instructionProcessor();
         this.profile = instruction.getAstContext().getCompilerProfile();
-        this.rootAstContext = context.getRootAstContext();
+        this.rootAstContext = context.rootAstContext();
         this.instruction = instruction;
         this.arrayConstruction = instruction.getArrayConstruction();
         this.accessType = instruction.getAccessType();

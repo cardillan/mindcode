@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import static info.teksol.mc.messages.ERR.*;
@@ -123,7 +122,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
             FunctionArgument levelArg = arguments.removeFirst();
             LogicKeyword level = assembler.validateKeyword(opcodeVariant.namedParameters().getFirst(), levelArg, true);
 
-            List<LogicValue> finalArgs = arguments.getFirst().unwrap() instanceof FormattableContent formattable
+            List<LogicArgument> finalArgs = arguments.getFirst().unwrap() instanceof FormattableContent formattable
                     ? createFormattableErrorOutput(
                     evaluateExpressionsUncached(formattable.getParts()), arguments.subList(1, arguments.size()))
                     : createPlainErrorOutput(arguments);
@@ -153,30 +152,22 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
             error(call, FUNCTION_CALL_NOT_ENOUGH_ARGS, call.getFunctionName(), 1, call.getArguments().size());
         } else {
             assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
-            List<LogicValue> finalArgs = arguments.getFirst().unwrap() instanceof FormattableContent formattable
+            List<LogicArgument> finalArgs = arguments.getFirst().unwrap() instanceof FormattableContent formattable
                     ? createFormattableErrorOutput(
                     evaluateExpressionsUncached(formattable.getParts()), arguments.subList(1, arguments.size()))
                     : createPlainErrorOutput(arguments);
 
-            if (call.getProfile().isErrorFunction()) {
-                Consumer<List<LogicValue>> errorAssembler = switch (call.getProfile().getErrorReporting()) {
-                    case NONE -> _ -> {};
-                    case ASSERT -> mlogAssertionsErrorAssembler();
-                    case MINIMAL, SIMPLE, DESCRIBED -> builtinErrorAssembler();
-                };
-
-                errorAssembler.accept(finalArgs);
-            }
+            assembler.createError(finalArgs);
         }
 
         assembler.clearSubcontextType();
         return LogicVoid.VOID;
     }
 
-    private List<LogicValue> createFormattableErrorOutput(List<ValueStore> parts, List<FunctionArgument> arguments) {
+    private List<LogicArgument> createFormattableErrorOutput(List<ValueStore> parts, List<FunctionArgument> arguments) {
         int index = 0;
         StringBuilder sbr = new StringBuilder();
-        List<LogicValue> values = new ArrayList<>();
+        List<LogicArgument> values = new ArrayList<>();
         for (ValueStore part : parts) {
             if (part instanceof LogicString str) {
                 sbr.append(str.getValue());
@@ -209,31 +200,8 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         return values;
     }
 
-
-
-
-    private List<LogicValue> createPlainErrorOutput(List<FunctionArgument> arguments) {
-        return arguments.stream().map(argument -> argument.getValue(assembler)).toList();
-    }
-
-    private Consumer<List<LogicValue>> builtinErrorAssembler() {
-        return values -> {
-            for (int index = 0; index < values.size(); index++) {
-                assembler.createSet(LogicVariable.error(index), values.get(index));
-            }
-            assembler.createStop();
-        };
-    }
-
-    private Consumer<List<LogicValue>> mlogAssertionsErrorAssembler() {
-        return values -> {
-            List<LogicArgument> list = new ArrayList<>(Collections.nCopies(10, LogicNull.NULL));
-            for (int index = 0; index < 10; index++) {
-                if (index >= values.size()) break;
-                list.set(index, values.get(index));
-            }
-            assembler.createInstruction(Opcode.ERROR, list);
-        };
+    private List<LogicArgument> createPlainErrorOutput(List<FunctionArgument> arguments) {
+        return arguments.stream().map(argument -> (LogicArgument)argument.getValue(assembler)).toList();
     }
 
     public ValueStore handlePrintf(AstFunctionCall call) {

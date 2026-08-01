@@ -6,7 +6,6 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
-import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.FunctionDefinitions;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.profile.CompilerProfile;
@@ -28,7 +27,6 @@ class AstContextTest {
 
     private final CompilerProfile profile = CompilerProfile.fullOptimizations(false, false);
     private final AstContext root = AstContext.createRootNode(profile);
-    private final CallGraph callGraph = CallGraph.createEmpty(MAIN_MODULE);
     private final AstFunctionDeclaration functionDeclaration1 = new AstFunctionDeclaration( EMPTY, null,
             new AstIdentifier(EMPTY, "test1"), DataType.VAR,
             List.of(), List.of(), List.of());

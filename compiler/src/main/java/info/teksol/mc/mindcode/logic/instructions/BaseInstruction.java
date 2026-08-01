@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
+import info.teksol.mc.mindcode.compiler.ContextFactory;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
@@ -62,5 +63,13 @@ public class BaseInstruction extends AbstractInstruction {
     @Override
     public int hashCode() {
         return Objects.hash(opcode, args);
+    }
+
+    private @Nullable Boolean externalStack = null;
+    protected boolean externalStack() {
+        if (externalStack == null) {
+            externalStack = ContextFactory.getStackContext().stackTracker().externalStack();
+        }
+        return externalStack;
     }
 }

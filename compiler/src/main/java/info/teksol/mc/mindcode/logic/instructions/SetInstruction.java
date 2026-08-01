@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
@@ -20,6 +21,11 @@ public class SetInstruction extends BaseResultInstruction {
 
     protected SetInstruction(BaseInstruction other, AstContext astContext) {
         super(other, astContext);
+    }
+
+    @Override
+    public boolean endsCodePath() {
+        return getResult() == LogicBuiltIn.COUNTER;
     }
 
     @Override

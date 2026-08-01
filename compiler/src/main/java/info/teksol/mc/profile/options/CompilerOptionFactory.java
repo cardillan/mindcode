@@ -226,6 +226,12 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 false).setConstValue(true));
 
+        list.add(new IntegerCompilerOptionValue(CompilerOptions.STACK_DEPTH, "",
+                "number of stack frames to reserve for recursive functions on the internal stack",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, 512, 10));
+
         list.add(new IntegerCompilerOptionValue(CompilerOptions.SETRATE, "",
                 "generates a 'setrate' instruction with the specified value in the initialization code," +
                         " and sets the IPT value for the compiler to use",

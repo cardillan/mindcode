@@ -10,6 +10,7 @@ import info.teksol.mc.emulator.mimex.BasicEmulator;
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.compiler.optimization.DiffDebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.Optimizer;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionLabelResolver;
@@ -60,7 +61,7 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
 
         private Emulator runProgram(List<LogicInstruction> program) {
             LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(compiler.globalCompilerProfile(),
-                    ip, getRootAstContext());
+                    ip, new StackTracker(), rootAstContext());
             List<LogicInstruction> instructions = resolver.resolve(program);
             String code = LogicInstructionPrinter.toString(ip, instructions,
                     compiler.globalCompilerProfile().isSymbolicLabels(), compiler.globalCompilerProfile().getMlogIndent(), true);

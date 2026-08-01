@@ -33,10 +33,7 @@ import info.teksol.mc.mindcode.compiler.optimization.DebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.DiffDebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
-import info.teksol.mc.mindcode.compiler.postprocess.AtomicBlockResolver;
-import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionLabelResolver;
-import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
-import info.teksol.mc.mindcode.compiler.postprocess.VirtualInstructionResolver;
+import info.teksol.mc.mindcode.compiler.postprocess.*;
 import info.teksol.mc.mindcode.compiler.preprocess.DirectivePreprocessor;
 import info.teksol.mc.mindcode.compiler.preprocess.PreprocessorContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
@@ -73,7 +70,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 @NullMarked
 public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuilderContext, PreprocessorContext,
         ArrayConstructorContext, CallGraphCreatorContext, DeclarationsProcessorContext, CompileTimeEvaluatorContext,
-        CodeGeneratorContext, VariablesContext, ForcedVariableContext, OptimizerContext {
+        CodeGeneratorContext, VariablesContext, ForcedVariableContext, OptimizerContext, StackContext {
 
     public static final String REMOTE_PROTOCOL_VERSION = "v1";
 
@@ -340,18 +337,23 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
         // OPTIMIZE
         long optimizeStart = System.nanoTime();
+        final DebugPrinter debugPrinter = globalProfile.getDebugMessages() > 0 && globalProfile.optimizationsActive()
+                ? debugPrinterProvider.apply(globalProfile.getDebugMessages()) : new NullDebugPrinter();
+        OptimizationCoordinator optimizationCoordinator = new OptimizationCoordinator(instructionProcessor, globalProfile, messageConsumer,
+                this, virtualInstructionResolver, !astProgram.isMainProgram());
+        optimizationCoordinator.setDebugPrinter(debugPrinter);
+
         if (globalProfile.optimizationsActive() && instructions.size() > 1) {
-            final DebugPrinter debugPrinter = globalProfile.getDebugMessages() > 0 && globalProfile.optimizationsActive()
-                    ? debugPrinterProvider.apply(globalProfile.getDebugMessages()) : new NullDebugPrinter();
-            OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, globalProfile, messageConsumer,
-                    this, virtualInstructionResolver, !astProgram.isMainProgram());
-            optimizer.setDebugPrinter(debugPrinter);
-            instructions = optimizer.optimize(callGraph, instructions, rootAstContext);
-            passes = optimizer.getPasses();
+            instructions = optimizationCoordinator.optimize(callGraph, instructions, rootAstContext);
+            passes = optimizationCoordinator.getPasses();
             debugPrinter.print(this::debug);
         }
-        unresolved = instructions;
         optimizeTime = (int) TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
+
+        unresolved = instructions;
+        if (hasCompilerErrors()) return;
+
+        instructions = StackBuilder.buildStack(instructionProcessor, rootAstContext, callGraph, optimizationCoordinator, stackTracker, instructions);
 
         if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.OPTIMIZER) <= 0) return;
 
@@ -378,11 +380,10 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
             }
         }
 
-        // Renumber temps
         renumberTemporary(instructions);
 
         // Sort variables
-        LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(globalProfile, instructionProcessor, rootAstContext);
+        LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(globalProfile, instructionProcessor, stackTracker, rootAstContext);
         instructions = resolver.sortVariables(instructions);
 
         // Print unresolved code
@@ -568,10 +569,6 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
     public CallGraph getCallGraph() {
         return Objects.requireNonNull(callGraph);
-    }
-
-    public AstContext getRootAstContext() {
-        return Objects.requireNonNull(rootAstContext);
     }
 
     public List<MindcodeMessage> getMessages() {

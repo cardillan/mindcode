@@ -74,7 +74,7 @@ public interface ValueStore extends SourceElement {
     /// @return value maintained by this instance
     LogicValue getValue(ContextfulInstructionCreator creator);
 
-    /// Writes a value represented by this instance into given target variable.
+    /// Writes a value represented by this instance into the given target variable.
     ///
     /// Some node values might not be R-values (formattable strings or vararg identifiers, for example.)
     /// These values should emit errors when they're being read. They need special handling based on their
@@ -89,6 +89,14 @@ public interface ValueStore extends SourceElement {
     /// @param creator assembler instance used to produce code for setting the value, if needed
     /// @param value   value to set
     void setValue(ContextfulInstructionCreator creator, LogicValue value);
+
+    /// Copies the given value into the l-value represented by this instance.
+    ///
+    /// @param creator assembler instance used to produce code for setting the value, if needed
+    /// @param value   value to set
+    default void copyFrom(ContextfulInstructionCreator creator, ValueStore value) {
+        setValue(creator, value.getValue(creator));
+    }
 
     /// Writes the value into the l-value represented by this instance.
     ///

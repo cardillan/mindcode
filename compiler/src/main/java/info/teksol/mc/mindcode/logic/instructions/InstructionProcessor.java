@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /// The InstructionProcessor interface is responsible for creating, manipulating, and analyzing logic instructions.
 /// It provides methods for generating instructions, managing labels and variables, and inspecting or transforming
@@ -74,13 +73,6 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     void setupArrayAccessInstruction(ArrayAccessInstruction instruction);
 
     LogicInstruction createInstructionUnchecked(AstContext context, Opcode opcode, List<LogicArgument> arguments);
-
-    /// Provides real Mindustry Logic instructions as a replacement for given virtual instruction.
-    /// Non-virtual instructions are passed as-is.
-    ///
-    /// @param instruction instruction to process
-    /// @param consumer    consumer accepting resolved instructions
-    void resolve(LogicInstruction instruction, Consumer<LogicInstruction> consumer);
 
     /// Creates a copy of the instruction, to be modified using info.
     <T extends LogicInstruction> T copy(T instruction);
@@ -195,6 +187,8 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     Optional<String> mlogRewrite(SourcePosition sourcePosition, String literal, boolean allowPrecisionLoss);
 
     Optional<LogicLiteral> createLiteral(SourcePosition sourcePosition, double value, boolean allowPrecisionLoss);
+
+    LogicVariable stackPointer();
 
     /// Formats number for text output
     ///

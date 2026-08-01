@@ -50,6 +50,7 @@ public class MindcodeFunction {
     private LogicVariable fnRetVal = LogicVariable.INVALID;
     private LogicVariable fnRetAddr = LogicVariable.INVALID;
     private LogicVariable fnFinished = LogicVariable.INVALID;
+    private LogicVariable fnStackFrame = LogicVariable.INVALID;
 
     private final Map<String, SourcePosition> unresolvedGlobals;
 
@@ -87,6 +88,9 @@ public class MindcodeFunction {
     private final Set<MindcodeFunction> directCalls = new HashSet<>();
     private final Set<MindcodeFunction> recursiveCalls = new HashSet<>();
     private final Set<MindcodeFunction> indirectCalls = new HashSet<>();
+
+    private int stackFrameSize = 0;
+    private int returnOffset = 0;
 
     /// Keeps the number of copies of this function
     private AtomicInteger copyNumber = new AtomicInteger();
@@ -298,16 +302,14 @@ public class MindcodeFunction {
     }
 
     public boolean isInputFunctionParameter(LogicVariable variable) {
-        return variable.getType() == ArgumentType.LOCAL_VARIABLE
+        return variable.getType() == ArgumentType.FUNCTION_PARAMETER
                 && prefix.equals(variable.getFunctionPrefix())
-                && parameterMap.containsKey(variable.getName())
                 && parameterMap.get(variable.getName()).isInput();
     }
 
     public boolean isOutputFunctionParameter(LogicVariable variable) {
-        return variable.getType() == ArgumentType.LOCAL_VARIABLE
+        return variable.getType() == ArgumentType.FUNCTION_PARAMETER
                 && prefix.equals(variable.getFunctionPrefix())
-                && parameterMap.containsKey(variable.getName())
                 && parameterMap.get(variable.getName()).isOutput();
     }
 
@@ -316,9 +318,8 @@ public class MindcodeFunction {
     }
 
     public boolean isVarargFunctionParameter(LogicVariable variable) {
-        return variable.getType() == ArgumentType.LOCAL_VARIABLE
+        return variable.getType() == ArgumentType.FUNCTION_PARAMETER
                && prefix.equals(variable.getFunctionPrefix())
-               && parameterMap.containsKey(variable.getName())
                && parameterMap.get(variable.getName()).isVarargs();
     }
 
@@ -336,6 +337,10 @@ public class MindcodeFunction {
 
     public Set<MindcodeFunction> getIndirectCalls() {
         return indirectCalls;
+    }
+
+    public Set<MindcodeFunction> getRecursiveCalls() {
+        return recursiveCalls;
     }
 
     Map<MindcodeFunction, Integer> getCallCardinality() {
@@ -458,6 +463,10 @@ public class MindcodeFunction {
         return fnRetAddr;
     }
 
+    public LogicVariable getFnStackFrame() {
+        return fnStackFrame;
+    }
+
     public LogicVariable getFnFinished() {
         return fnFinished;
     }
@@ -527,10 +536,27 @@ public class MindcodeFunction {
         this.generated = true;
     }
 
+    public int getStackFrameSize() {
+        return stackFrameSize;
+    }
+
+    public void setStackFrameSize(int stackFrameSize) {
+        this.stackFrameSize = stackFrameSize;
+    }
+
+    public int getReturnOffset() {
+        return returnOffset;
+    }
+
+    public void setReturnOffset(int returnOffset) {
+        this.returnOffset = returnOffset;
+    }
+
     void createVariables(NameCreator nameCreator) {
         fnRetVal = LogicVariable.fnRetVal(this, nameCreator.retval(this));
         fnRetAddr = LogicVariable.fnRetAddr(this, nameCreator.retaddr(this));
         fnFinished = LogicVariable.fnFinished(this, nameCreator.finished(this));
+        fnStackFrame = LogicVariable.fnStackFrame(this, nameCreator.stackframe(this));
 
         parameterMap = getDeclaredParameters().stream().collect(
                Collectors.toMap(AstFunctionParameter::getName, v -> v,

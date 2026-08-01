@@ -633,9 +633,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             def a(n) a(n + 1); end;
                             print(a(a(a(4))));
                             """,
+                    createInstruction(SET, "*sp", "0"),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                    createInstruction(SET, "*sp", "0"),
                     createInstruction(SET, ":a.0:n", "4"),
                     createInstruction(CALLREC, "bank1", label(0), label(2), ":a*retval"),
                     createInstruction(LABEL, label(2)),
@@ -904,9 +904,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             end;
                             print(foo(out z), z);
                             """,
+                    createInstruction(SET, "*sp", "0"),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                    createInstruction(SET, "*sp", "0"),
                     createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(SET, ":z", ":foo:n"),
@@ -1095,9 +1095,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             print(foo(4));
                             """,
                     // Setting up
+                    createInstruction(SET, "*sp", "0"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(JUMP, label(2), "equal", "bank1", "null"),
-                    createInstruction(SET, "*sp", "0"),
                     // call foo
                     createInstruction(SET, ":foo:n", "4"),
                     createInstruction(CALLREC, "bank1", label(1), label(3), ":foo*retval"),
@@ -1202,9 +1202,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             print(gdc(115, 78));
                             """,
                     // Setting up
+                    createInstruction(SET, "*sp", "0"),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                    createInstruction(SET, "*sp", "0"),
                     // call gdc
                     createInstruction(SET, ":gdc:a", "115"),
                     createInstruction(SET, ":gdc:b", "78"),
@@ -1243,19 +1243,6 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, ":gdc*retval", tmp(2)),
                     createInstruction(LABEL, label(3)),
                     createInstruction(RETURNREC, "bank1")
-            );
-        }
-
-        @Test
-        void refusesToDeclareRecursiveFunctionsWhenNoStackAround() {
-            assertGeneratesMessages(
-                    expectedMessages().add("Function 'foo' is recursive and no stack was allocated."),
-                    """
-                            def foo()
-                                foo();
-                            end;
-                            foo();
-                            """
             );
         }
 
@@ -1434,9 +1421,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             
                             print(foo(rand(10)));
                             """,
+                    createInstruction(SET, "*sp", "0"),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                    createInstruction(SET, "*sp", "0"),
                     createInstruction(OP, "rand", tmp(0), "10"),
                     createInstruction(SET, ":foo:x", tmp(0)),
                     createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
@@ -2363,9 +2350,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(out a);
                             foo();
                             """,
+                    createInstruction(SET, "*sp", "0"),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                    createInstruction(SET, "*sp", "0"),
                     createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(SET, ":b", ":foo:m"),
@@ -2482,9 +2469,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(out a, in b);
                             foo(in a, out b);
                             """,
+                    createInstruction(SET, "*sp", "0"),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                    createInstruction(SET, "*sp", "0"),
                     createInstruction(SET, ":b", "1"),
                     createInstruction(SET, ":a", ":b"),
                     createInstruction(SET, ":foo:n", ":a"),
@@ -2677,9 +2664,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             end;
                             foo();
                             """,
+                    createInstruction(SET, "*sp", "0"),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                    createInstruction(SET, "*sp", "0"),
                     createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(END),

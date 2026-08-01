@@ -107,7 +107,7 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
                 [--encode-zero-characters [{true,false}]] [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}]
-                [--target-guard [{true,false}]] [--setrate {1..1000}] [--ipt {1..1000}]
+                [--target-guard [{true,false}]] [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}]
                 [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
                 [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
                 [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
@@ -240,6 +240,8 @@ Compiler options:
   --target-guard [{true,false}]
                          generates guard code at  the  beginning  of  the  program  ensuring  the  processor runs in the
                          Mindustry version compatible with the 'target' and 'builtin-evaluation' options
+  --stack-depth {1..512}
+                         number of stack frames to reserve for recursive functions on the internal stack
   --setrate {1..1000}    generates a 'setrate' instruction with  the  specified  value  in  the initialization code, and
                          sets the IPT value for the compiler to use
   --ipt {1..1000}        sets the IPT value for the compiler to use without generating the 'setrate' instruction
@@ -571,7 +573,7 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
                 [--encode-zero-characters [{true,false}]] [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}]
-                [--target-guard [{true,false}]] [--setrate {1..1000}] [--ipt {1..1000}]
+                [--target-guard [{true,false}]] [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}]
                 [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
                 [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
                 [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
@@ -709,6 +711,8 @@ Compiler options:
   --target-guard [{true,false}]
                          generates guard code at  the  beginning  of  the  program  ensuring  the  processor runs in the
                          Mindustry version compatible with the 'target' and 'builtin-evaluation' options
+  --stack-depth {1..512}
+                         number of stack frames to reserve for recursive functions on the internal stack
   --setrate {1..1000}    generates a 'setrate' instruction with  the  specified  value  in  the initialization code, and
                          sets the IPT value for the compiler to use
   --ipt {1..1000}        sets the IPT value for the compiler to use without generating the 'setrate' instruction

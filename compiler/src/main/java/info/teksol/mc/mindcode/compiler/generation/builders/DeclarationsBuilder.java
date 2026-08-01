@@ -57,7 +57,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
     private static final Set<ArgumentType> blockExpressionTypes = Set.of(
             GLOBAL_VARIABLE,
-            PARAMETER,
+            PROGRAM_PARAMETER,
             BLOCK);
 
     private final Set<String> guardedBlockNames = new HashSet<>();
@@ -76,15 +76,11 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
     public ValueStore visitAllocation(AstAllocation node) {
         switch (node.getType()) {
             case STACK -> {
-                if (context.stackTracker().isValid()) {
+                if (context.stackTracker().externalStack()) {
                     error(node, ERR.ALLOCATION_MULTIPLE_STACK);
                 } else {
                     final Allocation allocation = resolveExternalStorage(node);
-                    context.stackTracker().setStackMemory(allocation.memory);
-                    if (callGraph.containsRecursiveFunction()) {
-                        assembler.createSet(LogicVariable.preserved(nameCreator.stackPointer()),
-                                LogicNumber.create(node.sourcePosition(), allocation.start));
-                    }
+                    context.stackTracker().setStackMemory(allocation.memory, allocation.start, allocation.end);
                 }
             }
             case HEAP -> {

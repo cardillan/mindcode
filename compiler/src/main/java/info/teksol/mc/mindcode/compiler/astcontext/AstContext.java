@@ -359,6 +359,19 @@ public final class AstContext {
         return false;
     }
 
+    public @Nullable AstContext findContext(Predicate<AstContext> matcher) {
+        if (matcher.test(this)) return this;
+
+        for (AstContext child : children) {
+            AstContext found = child.findContext(matcher);
+            if (found != null) {
+                return found;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Determines whether the instruction is executed exactly once within a context - i.e. isn't part o any embedded
      * control flow structure, such as if, loop or case statements/expressions.

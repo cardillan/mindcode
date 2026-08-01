@@ -352,7 +352,7 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         end;
                         """,
                 compiler -> {
-                    List<Double> weights = compiler.getRootAstContext().children().stream()
+                    List<Double> weights = compiler.rootAstContext().children().stream()
                             .filter(ctx -> ctx.function() != null)
                             .map(AstContext::weight).toList();
                     assertEquals(List.of(2d, 50d, 100d), weights, "Computed function weights differ from expected.");

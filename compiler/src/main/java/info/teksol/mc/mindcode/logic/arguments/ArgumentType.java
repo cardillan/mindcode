@@ -30,8 +30,9 @@ public enum ArgumentType {
     // User variables
 
     BLOCK,
-    PARAMETER,                      // Program parameter
+    PROGRAM_PARAMETER,
     GLOBAL_VARIABLE,                // Also array elements
+    FUNCTION_PARAMETER,
     LOCAL_VARIABLE,
 
     MLOG_VARIABLE,                  // Created from an mlog expression
@@ -47,6 +48,7 @@ public enum ArgumentType {
     AST_VARIABLE,
     FUNCTION_RETVAL,
     FUNCTION_RETADDR,
+    FUNCTION_STACKFRAME,
 
     // No information about type - for creating instructions without metadata
     UNSPECIFIED,

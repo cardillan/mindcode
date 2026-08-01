@@ -170,6 +170,9 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default LogicInstruction setComment(String comment) {
+        if (!comment.isEmpty() && comment.charAt(0) != '#') {
+            throw new IllegalArgumentException("Comment must start with #");
+        }
         return setInfo(InstructionInfo.COMMENT, comment);
     }
 

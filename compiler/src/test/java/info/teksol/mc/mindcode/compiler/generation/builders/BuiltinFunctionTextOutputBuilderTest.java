@@ -120,9 +120,8 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
     @Nested
     class ErrorFunction {
         @Test
-        void compilesFormattableErrorFunctionSimple() {
+        void compilesFormattableErrorFunction() {
             assertCompilesTo("""
-                            #set error-reporting = simple;
                             const min = 0;
                             param max = 8;
                             param i = 10;
@@ -130,32 +129,13 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, "max", "8"),
                     createInstruction(SET, "i", "10"),
-                    createInstruction(SET, "*ERROR_0", q("Index [[1] out of bounds (0, [[2])!")),
-                    createInstruction(SET, "*ERROR_1", "i"),
-                    createInstruction(SET, "*ERROR_2", "max"),
-                    createInstruction(STOP)
+                    createInstruction(ERROR, q("Index [[1] out of bounds (0, [[2])!"), "i", "max")
             );
         }
 
         @Test
-        void compilesFormattableErrorFunctionAssert() {
+        void compilesNormalErrorFunction() {
             assertCompilesTo("""
-                            #set error-reporting = assert;
-                            const min = 0;
-                            param max = 8;
-                            param i = 10;
-                            error($"Index $i out of bounds ($min, $max)!");
-                            """,
-                    createInstruction(SET, "max", "8"),
-                    createInstruction(SET, "i", "10"),
-                    createInstruction(ERROR, q("Index [[1] out of bounds (0, [[2])!"), "i", "max", "null", "null", "null", "null", "null", "null", "null")
-            );
-        }
-
-        @Test
-        void compilesNormalErrorFunctionSimple() {
-            assertCompilesTo("""
-                            #set error-reporting = simple;
                             const min = 0;
                             param max = 8;
                             param i = 10;
@@ -163,26 +143,7 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(SET, "max", "8"),
                     createInstruction(SET, "i", "10"),
-                    createInstruction(SET, "*ERROR_0", q("Index out of bounds: ")),
-                    createInstruction(SET, "*ERROR_1", "i"),
-                    createInstruction(SET, "*ERROR_2", "0"),
-                    createInstruction(SET, "*ERROR_3", "max"),
-                    createInstruction(STOP)
-            );
-        }
-
-        @Test
-        void compilesNormalErrorFunctionAssert() {
-            assertCompilesTo("""
-                            #set error-reporting = assert;
-                            const min = 0;
-                            param max = 8;
-                            param i = 10;
-                            error("Index out of bounds: ", i, min, max);
-                            """,
-                    createInstruction(SET, "max", "8"),
-                    createInstruction(SET, "i", "10"),
-                    createInstruction(ERROR, q("Index out of bounds: "), "i", "0", "max", "null", "null", "null", "null", "null", "null")
+                    createInstruction(ERROR, q("Index out of bounds: "), "i", "0", "max")
             );
         }
 

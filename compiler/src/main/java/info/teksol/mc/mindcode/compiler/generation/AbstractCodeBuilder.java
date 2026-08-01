@@ -278,9 +278,9 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
 
     private void reportVariableError(AstExpression targetNode, LogicVariable variable) {
         switch (variable.getType()) {
-            case BLOCK      -> error(targetNode, ERR.LVALUE_ASSIGNMENT_TO_LINKED_NOT_ALLOWED, variable.getName());
-            case PARAMETER  -> error(targetNode, ERR.LVALUE_ASSIGNMENT_TO_PARAM_NOT_ALLOWED);
-            default         -> error(targetNode, ERR.LVALUE_CANNOT_ASSIGN_TO_EXPRESSION);
+            case BLOCK              -> error(targetNode, ERR.LVALUE_ASSIGNMENT_TO_LINKED_NOT_ALLOWED, variable.getName());
+            case PROGRAM_PARAMETER  -> error(targetNode, ERR.LVALUE_ASSIGNMENT_TO_PARAM_NOT_ALLOWED);
+            default                 -> error(targetNode, ERR.LVALUE_CANNOT_ASSIGN_TO_EXPRESSION);
         }
     }
 

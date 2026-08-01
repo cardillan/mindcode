@@ -8,6 +8,8 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -21,32 +23,38 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static info.teksol.mc.mindcode.logic.arguments.Operation.ADD;
+import static info.teksol.mc.mindcode.logic.arguments.Operation.SUB;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
 public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
     private final GlobalCompilerProfile profile;
     private final InstructionProcessor processor;
+    private final StackTracker stackTracker;
     private final AstContext rootAstContext;
 
     private final Map<LogicLabel, LogicInstruction> labelInstructions = new HashMap<>();
-    private final Map<LogicLabel, LogicLabel> addresses = new HashMap<>();
+    private final Map<String, LogicLabel> addresses = new HashMap<>();
     private final Map<Integer, AstContext> addressContexts = new HashMap<>();
     private final Map<Integer, Set<LogicInstruction>> textJumpOrigins = new HashMap<>();
     private final Map<Integer, Set<Integer>> textJumpKeys = new HashMap<>();
 
-    public LogicInstructionLabelResolver(GlobalCompilerProfile profile, InstructionProcessor processor, AstContext rootAstContext) {
+    public LogicInstructionLabelResolver(GlobalCompilerProfile profile, InstructionProcessor processor, StackTracker stackTracker,
+            AstContext rootAstContext) {
         super(processor.messageConsumer());
         this.processor = processor;
         this.profile = profile;
+        this.stackTracker = stackTracker;
         this.rootAstContext = rootAstContext;
     }
     
     public static List<LogicInstruction> resolve(GlobalCompilerProfile profile, InstructionProcessor processor,
-            AstContext rootAstContext, List<LogicInstruction> program) {
-        return new LogicInstructionLabelResolver(profile, processor, rootAstContext).resolve(program);
+            StackTracker stackTracker, AstContext rootAstContext, List<LogicInstruction> program) {
+        return new LogicInstructionLabelResolver(profile, processor, stackTracker, rootAstContext).resolve(program);
     }
 
     public List<LogicInstruction> resolve(List<LogicInstruction> program) {
@@ -72,7 +80,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
 
         List<LogicVariable> order = orderVariables(allVariables, categories);
 
-        AstContext astContext = ContextFactory.getMasterContext().getRootAstContext()
+        AstContext astContext = ContextFactory.getMasterContext().rootAstContext()
                 .createSubcontext(AstContextType.CREATE_VARS, AstSubcontextType.BASIC, 1.0);
         List<LogicInstruction> variables = createVariables(astContext, order);
 
@@ -137,7 +145,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
     private static boolean matches(LogicArgument logicVariable, SortCategory category) {
         return switch (category) {
             case LINKED     -> logicVariable.getType() == ArgumentType.BLOCK;
-            case PARAMS     -> logicVariable.getType() == ArgumentType.PARAMETER;
+            case PARAMS     -> logicVariable.getType() == ArgumentType.PROGRAM_PARAMETER;
             case GLOBALS    -> logicVariable.getType() == ArgumentType.GLOBAL_VARIABLE;
             case MAIN       -> logicVariable.isMainVariable();
             case LOCALS     -> logicVariable.isLocalVariable();
@@ -147,7 +155,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
     }
 
     public List<LogicInstruction> resolveLabels(List<LogicInstruction> program, Set<LogicVariable> forcedVariables) {
-        AstContext astContext = ContextFactory.getArrayConstructorContext().getRootAstContext()
+        AstContext astContext = ContextFactory.getArrayConstructorContext().rootAstContext()
                 .createSubcontext(AstContextType.CREATE_VARS, AstSubcontextType.BASIC, 1.0);
 
         if (program.isEmpty()) {
@@ -210,11 +218,11 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
 
             instructionPointer += instruction.getRealSize();
             if (instruction instanceof LabeledInstruction ix) {
-                if (addresses.containsKey(ix.getLabel())) {
+                if (addresses.containsKey(ix.getLabel().getLabel())) {
                     throw new MindcodeInternalError("Duplicate label detected: '%s' reused at least twice in %s", ix.getLabel(), program);
                 }
 
-                addresses.put(ix.getLabel(), LogicLabel.absolute(instructionPointer));
+                addresses.put(ix.getLabel().getLabel(), LogicLabel.absolute(instructionPointer));
                 labelInstructions.put(ix.getLabel(), instruction);
 
                 addressContexts.compute(instructionPointer, (_, v) -> v == null ? ix.getAstContext()
@@ -225,7 +233,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
 
     private LogicArgument resolveLabel(LogicArgument argument) {
         if (argument instanceof LogicLabel label) {
-            if (!addresses.containsKey(label)) {
+            if (!addresses.containsKey(label.getLabel())) {
                 if (OptimizationCoordinator.IGNORE_UNKNOWN_LABELS) {
                     System.out.println("Unknown label " + label);
                     return LogicLabel.absolute(10000);
@@ -233,7 +241,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
                     throw new MindcodeInternalError("Unknown jump label target: '%s' was not previously discovered in program.", label);
                 }
             }
-            return addresses.get(label);
+            return addresses.get(label.getLabel()).withOffset(label.getOffset());
         } else {
             return argument;
         }
@@ -274,7 +282,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
                         if (offset != 0) {
                             counterOffset = processor.nextTemp();
                             result.add(processor.createInstruction(ix.getAstContext(),
-                                    OP, Operation.SUB, counterOffset, ix.getValue(), ix.getOffset()));
+                                    OP, SUB, counterOffset, ix.getValue(), ix.getOffset()));
                         } else {
                             counterOffset = ix.getValue();
                         }
@@ -285,7 +293,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
                         if (labelInstructions.entrySet().stream()
                                 .filter(e -> e.getValue().getMarker().equals(ix.getMarker()))
                                 //.peek(e -> System.out.println("    " + e.getKey().toMlog() + " -> " + e.getValue() + " @ " + addresses.get(e.getKey()).getAddress()))
-                                .noneMatch(e -> addresses.get(e.getKey()).getAddress() == currentIndex)) {
+                                .noneMatch(e -> addresses.get(e.getKey().getLabel()).getAddress() == currentIndex)) {
                             //System.out.println("Missing label at index " + currentIndex);
                             wrongAddress = true;
                         } else {
@@ -350,7 +358,116 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
     }
 
     private List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {
-        return program.stream().mapMulti(processor::resolve).toList();
+        return program.stream().mapMulti(this::resolveVirtualInstruction).toList();
+    }
+
+    private void resolveVirtualInstruction(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
+        AstContext astContext = instruction.getAstContext();
+        GlobalCompilerProfile profile = astContext.getGlobalProfile();
+        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
+
+        LogicVariable stackPointer = processor.stackPointer();
+        boolean externalStack = stackTracker.externalStack();
+
+        switch (instruction) {
+            case EmptyInstruction ix -> { }
+            case MultiLabelInstruction ix -> { }
+            case LabelInstruction ix -> { }
+
+            case JumpInstruction ix when ix.getCondition() == Condition.STRICT_NOT_EQUAL ->
+                    creator.createSelect(LogicBuiltIn.COUNTER, Condition.STRICT_EQUAL,
+                            ix.getX(), ix.getY(), LogicBuiltIn.COUNTER, ix.getTarget()).copyComment(ix);
+
+            case OpInstruction ix when ix.getCondition() == Condition.STRICT_NOT_EQUAL ->
+                    creator.createSelect(ix.getResult(), Condition.STRICT_EQUAL,
+                            ix.getX(), ix.getY(), LogicBoolean.FALSE, LogicBoolean.TRUE).copyComment(ix);
+
+            case SelectInstruction ix when ix.getCondition() == Condition.STRICT_NOT_EQUAL ->
+                        creator.createSelect(ix.getResult(), Condition.STRICT_EQUAL,
+                        ix.getX(), ix.getY(), ix.getFalseValue(), ix.getTrueValue()).copyComment(ix);
+
+            case ErrorInstruction ix -> {
+                switch (ix.getLocalProfile().getErrorReporting()) {
+                    case NONE -> {}
+                    case ASSERT -> {
+                        if (ix.getArgs().size() == 10) {
+                            consumer.accept(ix);
+                        } else {
+                            ArrayList<LogicArgument> messages = new ArrayList<>(ix.getArgs());
+                            messages.addAll(Collections.nCopies(10 - ix.getArgs().size(), LogicNull.NULL));
+                            creator.createError(messages);
+                        }
+                    }
+                    case MINIMAL, SIMPLE, DESCRIBED -> {
+                        for (int index = 0; index < ix.getArgs().size(); index++) {
+                            creator.createSet(LogicVariable.error(index), (LogicValue) ix.getArg(index));
+                        }
+                        creator.createStop();
+                    }
+                }
+            }
+
+            case SetAddressInstruction ix ->
+                creator.createInstruction(SET, ix.getResult(), ix.getLabel()).copyComment(ix);
+
+            case PushInstruction ix -> {
+                if (externalStack) {
+                    creator.createWrite(ix.getVariable(), ix.getMemory(), stackPointer);
+                    creator.createOp(ADD, stackPointer, stackPointer, LogicNumber.ONE).copyComment(ix);
+                } else if (ix.getVariable().getType() == ArgumentType.FUNCTION_PARAMETER) {
+                    creator.createSet(ix.getVariable().stackFrame(0), ix.getVariable());
+                }
+            }
+            case PopInstruction ix -> {
+                if (externalStack) {
+                    creator.createOp(SUB, stackPointer, stackPointer, LogicNumber.ONE);
+                    creator.createRead(ix.getVariable(), ix.getMemory(), stackPointer).copyComment(ix);
+                }
+            }
+
+            case CallRecInstruction ix -> {
+                if (externalStack) {
+                    if (profile.isSymbolicLabels()) {
+                        LogicVariable returnAddress = processor.nextTemp();
+                        creator.createOp(ADD, returnAddress, LogicBuiltIn.COUNTER, LogicNumber.THREE);
+                        creator.createInstruction(WRITE, returnAddress, ix.getStack(), stackPointer);
+                    } else {
+                        creator.createInstruction(WRITE, ix.getRetAddr(), ix.getStack(), stackPointer);
+                    }
+                    creator.createOp(ADD, stackPointer, stackPointer, LogicNumber.ONE);
+                    creator.createJumpUnconditional(ix.getCallAddr()).copyComment(ix);
+                } else {
+                    MindcodeFunction function = ix.getAstContext().existingFunction();
+                    creator.createInstruction(SET, function.getFnRetAddr(), ix.getRetAddr());
+                    creator.createSet(LogicBuiltIn.COUNTER, function.getFnStackFrame());
+                }
+            }
+            case ReturnRecInstruction ix -> {
+                if (externalStack) {
+                    creator.createOp(SUB, stackPointer, stackPointer, LogicNumber.ONE);
+                    creator.createRead(LogicBuiltIn.COUNTER, ix.getStack(), stackPointer).copyComment(ix);
+                } else {
+                    MindcodeFunction function = ix.getAstContext().existingFunction();
+                    creator.createOp(SUB, function.getFnStackFrame(), function.getFnStackFrame(), LogicNumber.create(function.getStackFrameSize()));
+                    creator.createOp(ADD, LogicBuiltIn.COUNTER, function.getFnStackFrame(), LogicNumber.create(function.getStackFrameSize() - function.getReturnOffset()));
+                }
+            }
+
+            case CallInstruction ix -> {
+                if (profile.isSymbolicLabels()) {
+                    creator.createOp(ADD, ix.getReturnAddr(), LogicBuiltIn.COUNTER, LogicNumber.ONE);
+                }
+                creator.createJumpUnconditional(ix.getCallAddr()).copyComment(ix);
+            }
+            case ReturnInstruction ix -> {
+                creator.createInstruction(SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()).copyComment(ix);
+            }
+
+            // Note: MULTIJUMP / MULTICALL Instructions are handled by LabelResolver, as the actual label value needs to be known
+            default -> {
+                consumer.accept(instruction);
+            }
+        }
     }
 
     private List<LogicInstruction> createVariables(AstContext astContext, Collection<LogicVariable> variables) {

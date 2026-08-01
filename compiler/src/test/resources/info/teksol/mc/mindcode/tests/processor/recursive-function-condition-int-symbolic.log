@@ -1,0 +1,290 @@
+    30 instructions before optimizations.
+     2 instructions eliminated by Temp Variables Elimination (6 iterations).
+     1 instruction eliminated by Jump Normalization (5 iterations).
+     1 instruction eliminated by Condition Optimization (6 iterations).
+     3 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+     2 instructions eliminated by Expression Optimization (3 iterations).
+     1 instruction eliminated by If Expression Optimization (3 iterations).
+     3 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+     1 instruction added by Function Inlining (5 iterations).
+     2 function calls inlined by Function Inlining.
+     6 instructions eliminated by Recursive Optimization (5 iterations).
+     1 tail call eliminated by Recursive Optimization.
+     4 instructions eliminated by Stack Optimization (4 iterations).
+     8 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 979):
+  * Inline function call at line 7:18                            size    +8, benefit        3.5, efficiency      0.438 (+3 instructions)
+
+Pass 2: speed optimization selection (cost limit 987):
+  * Inline function 'foo' defined at line 3:1                    size    -1, benefit        1.8, efficiency   Infinity (-4 instructions)
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
+ 
+     1 set :foo:n 1
+     2 callrec bank1 *label0 *label1 :foo*retval
+     3 label *label1
+-    * set *tmp0 :foo*retval
+-    * assertequals 10 *tmp0 "recursive-function-condition"
++    4 assertequals 10 :foo*retval "recursive-function-condition"
+     5 stop
+     6 end
+     7 label *label0
+ 
+    14 callrec bank1 *label0 *label5 :foo*retval
+    15 label *label5
+    16 pop bank1 :foo:n
+-    * set *tmp4 :foo*retval
+-    * set *tmp2 *tmp4
++   17 set *tmp2 :foo*retval
+    18 jump *label4 always
+    19 label *label3
+    20 set *tmp2 10
+
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     6 end
+     7 label *label0
+     8 # "Function: def foo(in n)"
+-    * op greaterThan *tmp1 :foo:n 0
+-    * jump *label3 equal *tmp1 false
++    9 jump *label3 lessThanEq :foo:n 0
+    10 op sub *tmp3 :foo:n 1
+    11 push bank1 :foo:n
+    12 set :foo:n *tmp3
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     9 jump *label3 lessThanEq :foo:n 0
+    10 op sub *tmp3 :foo:n 1
+    11 push bank1 :foo:n
+-    * set :foo:n *tmp3
++   12 op sub :foo:n :foo:n 1
+    13 callrec bank1 *label0 *label5 :foo*retval
+    14 label *label5
+    15 pop bank1 :foo:n
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+     7 label *label0
+     8 # "Function: def foo(in n)"
+     9 jump *label3 lessThanEq :foo:n 0
+-    * op sub *tmp3 :foo:n 1
+    10 push bank1 :foo:n
+    11 op sub :foo:n :foo:n 1
+    12 callrec bank1 *label0 *label5 :foo*retval
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     6 end
+     7 label *label0
+     8 # "Function: def foo(in n)"
+-    * jump *label3 lessThanEq :foo:n 0
++    9 set :foo*retval 10
++   10 jump *label4 lessThanEq :foo:n 0
+    11 push bank1 :foo:n
+    12 op sub :foo:n :foo:n 1
+    13 callrec bank1 *label0 *label5 :foo*retval
+    14 label *label5
+    15 pop bank1 :foo:n
+-    * set *tmp2 :foo*retval
++   16 set :foo*retval :foo*retval
+    17 jump *label4 always
+-    * label *label3
+-    * set *tmp2 10
+    18 label *label4
+-    * set :foo*retval *tmp2
+    19 label *label2
+    20 returnrec bank1
+    21 end
+
+Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-4 instructions):
+ 
+     8 # "Function: def foo(in n)"
+     9 set :foo*retval 10
+    10 jump *label4 lessThanEq :foo:n 0
+-    * push bank1 :foo:n
+    11 op sub :foo:n :foo:n 1
+    12 callrec bank1 *label0 *label5 :foo*retval
+    13 label *label5
+-    * pop bank1 :foo:n
+    14 set :foo*retval :foo*retval
+    15 jump *label4 always
+    16 label *label4
+
+Modifications by Inline function call at line 7:18 (+5 instructions):
+     0 set *sp 0
+     1 set :foo:n 1
+-    * callrec bank1 *label0 *label1 :foo*retval
+-    * label *label1
++    2 # "Function: def foo(in n)"
++    3 set :foo*retval 10
++    4 jump *label7 lessThanEq :foo:n 0
++    5 op sub :foo:n :foo:n 1
++    6 callrec bank1 *label0 *label6 :foo*retval
++    7 label *label6
++    8 set :foo*retval :foo*retval
++    9 jump *label7 always
++   10 label *label7
++   11 label *label8
+    12 assertequals 10 :foo*retval "recursive-function-condition"
+    13 stop
+    14 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     1 set :foo:n 1
+     2 # "Function: def foo(in n)"
+     3 set :foo*retval 10
+-    * jump *label7 lessThanEq :foo:n 0
+-    * op sub :foo:n :foo:n 1
++    4 jump *label7 lessThanEq 1 0
++    5 op sub :foo:n 1 1
+     6 callrec bank1 *label0 *label6 :foo*retval
+     7 label *label6
+     8 set :foo*retval :foo*retval
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+     0 set *sp 0
+-    * set :foo:n 1
+     1 # "Function: def foo(in n)"
+-    * set :foo*retval 10
+     2 jump *label7 lessThanEq 1 0
+     3 op sub :foo:n 1 1
+     4 callrec bank1 *label0 *label6 :foo*retval
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
+     0 set *sp 0
+     1 # "Function: def foo(in n)"
+-    * jump *label7 lessThanEq 1 0
+     2 op sub :foo:n 1 1
+     3 callrec bank1 *label0 *label6 :foo*retval
+     4 label *label6
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
+ 
+     3 callrec bank1 *label0 *label6 :foo*retval
+     4 label *label6
+     5 set :foo*retval :foo*retval
+-    * jump *label7 always
+     6 label *label7
+     7 label *label8
+     8 assertequals 10 :foo*retval "recursive-function-condition"
+ 
+    16 callrec bank1 *label0 *label5 :foo*retval
+    17 label *label5
+    18 set :foo*retval :foo*retval
+-    * jump *label4 always
+    19 label *label4
+    20 label *label2
+    21 returnrec bank1
+
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-2 instructions):
+ 
+     2 op sub :foo:n 1 1
+     3 callrec bank1 *label0 *label6 :foo*retval
+     4 label *label6
+-    * set :foo*retval :foo*retval
+     5 label *label7
+     6 label *label8
+     7 assertequals 10 :foo*retval "recursive-function-condition"
+ 
+    14 op sub :foo:n :foo:n 1
+    15 callrec bank1 *label0 *label5 :foo*retval
+    16 label *label5
+-    * set :foo*retval :foo*retval
+    17 label *label4
+    18 label *label2
+    19 returnrec bank1
+
+Modifications by Iterated phase, Recursive Optimization, pass 2, iteration 1 (-6 instructions):
+     0 set *sp 0
+     1 # "Function: def foo(in n)"
+     2 op sub :foo:n 1 1
+-    * callrec bank1 *label0 *label6 :foo*retval
+-    * label *label6
++    3 call *label0 :foo*retaddr :foo*retval
++    4 label *label6
+     5 label *label7
+     6 label *label8
+     7 assertequals 10 :foo*retval "recursive-function-condition"
+     8 stop
+     9 end
+    10 label *label0
+-    * # "Function: def foo(in n)"
+-    * set :foo*retval 10
+-    * jump *label4 lessThanEq :foo:n 0
+-    * op sub :foo:n :foo:n 1
+-    * callrec bank1 *label0 *label5 :foo*retval
+-    * label *label5
+-    * label *label4
+-    * label *label2
+-    * returnrec bank1
+-    * end
++   11 label *label12
++   12 # "Function: def foo(in n)"
++   13 set :foo*retval 10
++   14 jump *label10 lessThanEq :foo:n 0
++   15 op sub :foo:n :foo:n 1
++   16 jump *label12 always
++   17 label *label9
++   18 label *label10
++   19 label *label11
++   20 return :foo*retaddr
++   21 end
+
+Modifications by Inline function 'foo' defined at line 3:1 (-4 instructions):
+     0 set *sp 0
+     1 # "Function: def foo(in n)"
+     2 op sub :foo:n 1 1
+-    * call *label0 :foo*retaddr :foo*retval
+-    * label *label6
++    3 label *label13
++    4 label *label14
++    5 # "Function: def foo(in n)"
++    6 set :foo*retval 10
++    7 jump *label16 lessThanEq :foo:n 0
++    8 op sub :foo:n :foo:n 1
++    9 jump *label14 always
++   10 label *label15
++   11 label *label16
++   12 label *label17
+    13 label *label7
+    14 label *label8
+    15 assertequals 10 :foo*retval "recursive-function-condition"
+    16 stop
+    17 end
+-    * label *label0
+-    * label *label12
+-    * # "Function: def foo(in n)"
+-    * set :foo*retval 10
+-    * jump *label10 lessThanEq :foo:n 0
+-    * op sub :foo:n :foo:n 1
+-    * jump *label12 always
+-    * label *label9
+-    * label *label10
+-    * label *label11
+-    * return :foo*retaddr
+-    * end
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+     9 label *label16
+    10 assertequals 10 :foo*retval "recursive-function-condition"
+    11 stop
+-    * end
+
+Final code before resolving virtual instructions:
+
+set *sp 0
+# "Function: def foo(in n)"
+op sub :foo:n 1 1
+label *label14
+# "Function: def foo(in n)"
+set :foo*retval 10
+jump *label16 lessThanEq :foo:n 0
+op sub :foo:n :foo:n 1
+jump *label14 always
+label *label16
+assertequals 10 :foo*retval "recursive-function-condition"
+stop

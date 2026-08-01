@@ -371,6 +371,10 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     //</editor-fold>
 
     //<editor-fold desc="Optimizations Options">
+    public boolean isUseTextJumpTables() {
+        return getBooleanValue(OptimizationOptions.USE_TEXT_JUMP_TABLES);
+    }
+
     public CompilerProfile setCaseOptimizationStrength(int caseOptimizationStrength) {
         getOption(OptimizationOptions.CASE_OPTIMIZATION_STRENGTH).setValue(caseOptimizationStrength);
         return this;

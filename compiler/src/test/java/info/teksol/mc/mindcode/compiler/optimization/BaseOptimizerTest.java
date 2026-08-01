@@ -6,7 +6,6 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstStatementList;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
-import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
@@ -49,7 +48,7 @@ class BaseOptimizerTest extends AbstractCompilerTestBase {
     private final List<LogicInstruction> program = new ArrayList<>(List.of(ix0, ix1, ix2));
     private final OptimizationContext oc = new OptimizationContext(TraceFile.NULL_TRACE, m -> {},
             profile, ip, new TestOptimizerContext(m -> {}),
-            program, CallGraph.createEmpty(MAIN_MODULE), AstContext.createRootNode(profile), false);
+            program, EMPTY_CALL_GRAPH, AstContext.createRootNode(profile), false);
     private final DummyOptimizer test = new DummyOptimizer(oc);
 
     @Test

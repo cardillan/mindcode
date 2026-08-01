@@ -33,7 +33,8 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
             BUILT_IN,
             GLOBAL_VARIABLE,
             LOCAL_VARIABLE,
-            PARAMETER,
+            FUNCTION_PARAMETER,
+            PROGRAM_PARAMETER,
             BLOCK);
 
     public IdentifiersBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {

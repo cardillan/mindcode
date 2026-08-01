@@ -188,12 +188,19 @@ class FunctionInliner extends BaseOptimizer {
     }
 
 
+    private boolean canInlineRecursive(AstContext call, MindcodeFunction function) {
+        if (!advanced(call) || !advanced(function)) return false;
+        if (optimizationContext.getStackTracker().externalStack()) return true;
+
+        MindcodeFunction enclosingFunction = call.existingParent().function();
+        return enclosingFunction != null && enclosingFunction.isRecursiveCall(function);
+    }
 
     private @Nullable OptimizationAction findPossibleCallInlining(AstContext call, int costLimit) {
         MindcodeFunction function = call.function();
         MindcodeFunction from = call.existingParent().function();
         if (function == null || function.isInline() || function.cannotInline()
-                || function.isRecursive() && (!advanced(call) || !advanced(function))
+                || function.isRecursive() && !canInlineRecursive(call, function)
                 || call.existingParent().matchesRecursively(c -> c.function() == function)) {
             return null;
         }

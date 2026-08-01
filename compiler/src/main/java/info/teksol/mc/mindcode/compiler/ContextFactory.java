@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler;
 
+import info.teksol.mc.mindcode.compiler.generation.variables.StackContext;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructorContext;
 import org.jspecify.annotations.Nullable;
 
@@ -81,5 +82,19 @@ public class ContextFactory {
 
     public static void clearForcedVariableContext() {
         removeContext(ForcedVariableContext.class);
+    }
+
+
+
+    public static StackContext getStackContext() {
+        return getContext(StackContext.class);
+    }
+
+    public static void setStackContext(StackContext context) {
+        setContext(StackContext.class, context);
+    }
+
+    public static void clearStackContext() {
+        removeContext(StackContext.class);
     }
 }

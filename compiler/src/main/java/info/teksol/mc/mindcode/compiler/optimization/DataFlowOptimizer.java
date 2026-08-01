@@ -1078,9 +1078,9 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
         if (instruction.getAstContext().matches(AstContextType.MLOG) && !instruction.getLocalProfile().isMlogBlockOptimization()) return false;
 
         return switch (variable.getType()) {
-            case MLOG_VARIABLE, PRESERVED, GLOBAL_PRESERVED, FUNCTION_RETADDR, PARAMETER -> false;
+            case MLOG_VARIABLE, PRESERVED, GLOBAL_PRESERVED, FUNCTION_RETADDR, PROGRAM_PARAMETER -> false;
 
-            case LOCAL_VARIABLE, FUNCTION_RETVAL -> {
+            case FUNCTION_PARAMETER, LOCAL_VARIABLE, FUNCTION_RETVAL -> {
                 if (variable.isPreserved()) yield false;
 
                 // Function output variables cannot be eliminated inside their functions - at this point we have no

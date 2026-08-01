@@ -14,7 +14,9 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.astcontext.TestNode;
+import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
+import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.StandardNameCreator;
@@ -59,6 +61,8 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
 
     protected static final AstModule MAIN_MODULE = new AstModule(EMPTY,
             null, List.of(), Collections.emptySortedSet(), true);
+
+    protected static final CallGraph EMPTY_CALL_GRAPH = CallGraph.createEmpty(MAIN_MODULE);
 
     protected abstract CompilationPhase getTargetPhase();
 
@@ -156,7 +160,6 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
     protected final TestNode testNode = new TestNode(profile, AstContextType.ROOT, AstSubcontextType.BASIC);
 
     protected final AstContext mockAstRootContext = AstContext.createRootNode(profile);
-    //protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.MOCK, 1.0);
     protected final AstContext mockAstContext = mockAstRootContext.createChild(testNode, AstContextType.CODE);
 
     protected static LogicArgument _logic(String str) {
@@ -207,7 +210,7 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
         return '"' + str.replace("\n", "\\n") + '"';
     }
 
-    protected static class TestOptimizerContext extends AbstractMessageEmitter implements OptimizerContext {
+    protected class TestOptimizerContext extends AbstractMessageEmitter implements OptimizerContext {
         public TestOptimizerContext(MessageConsumer messageConsumer) {
             super(messageConsumer);
         }
@@ -223,6 +226,25 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
 
         @Override
         public <T> void addDiagnosticData(Class<T> dataClass, List<T> data) {
+        }
+
+        @Override
+        public AstContext rootAstContext() {
+            return mockAstRootContext;
+        }
+
+        @Override
+        public StackTracker stackTracker() {
+            return new StackTracker();
+        }
+
+        @Override
+        public CallGraph callGraph() {
+            return EMPTY_CALL_GRAPH;
+        }
+
+        public NameCreator nameCreator() {
+            return nameCreator;
         }
     }
 
@@ -340,7 +362,7 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
     }
 
     @Override
-    public AstContext getRootAstContext() {
+    public AstContext rootAstContext() {
         return mockAstRootContext;
     }
 }

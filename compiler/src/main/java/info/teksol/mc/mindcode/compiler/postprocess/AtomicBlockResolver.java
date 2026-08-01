@@ -152,7 +152,7 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
     private int ipt;
 
     private List<LogicInstruction> resolve(int startNode) {
-        this.start = startNode;
+        start = startNode;
         do {
             if (!(program.get(start) instanceof WaitInstruction waitIx)) {
                 // Can't happen

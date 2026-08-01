@@ -16,6 +16,7 @@ public enum CompilerOptions {
     IPT,
     REMARKS,
     SETRATE,
+    STACK_DEPTH,
     SYNTAX,
     TARGET_GUARD,
 }

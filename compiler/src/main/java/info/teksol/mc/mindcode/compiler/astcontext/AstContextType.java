@@ -28,8 +28,9 @@ public enum AstContextType {
     ASSIGNMENT      ("ASGN"),
     OPERATOR        ("OPER"),
     PROPERTY        ("PROP"),
-    ARRAY_ACCESS    ("HEAP"),
+    ARRAY_ACCESS    ("ARRA"),
     ALLOCATION      ("ALOC"),
+    STACK           ("STCK"),
 
     // A jump table. Not to be optimized.
     // The jump table effects are expressed as side effects of the first instruction.

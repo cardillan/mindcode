@@ -7,11 +7,12 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 /// Convenience interface for instruction creation. To be implemented by classes which manage their AST contexts,
-/// which is therefore not provided for individual instruction creation.
+/// which therefore are not provided for individual instruction creation.
 ///
 /// The implementing class only needs to implement the non-specific instruction creation method. All the specific
 /// methods are inherited from the interface.
@@ -73,12 +74,20 @@ public interface ContextfulInstructionCreator {
         return (ControlInstruction) createInstruction(CONTROL, property, target, value);
     }
 
+    default EmptyInstruction createEmpty() {
+        return (EmptyInstruction) createInstruction(EMPTY);
+    }
+
     default EndInstruction createEnd() {
         return (EndInstruction) createInstruction(END);
     }
 
-    default EmptyInstruction createEmpty() {
-        return (EmptyInstruction) createInstruction(EMPTY);
+    default ErrorInstruction createError(List<LogicArgument> messages) {
+        return (ErrorInstruction) createInstruction(ERROR, messages);
+    }
+
+    default ErrorInstruction createError(String... messages) {
+        return createError(Stream.of(messages).map(m -> (LogicArgument)LogicString.create(m)).toList());
     }
 
     default FormatInstruction createFormat(LogicValue what) {
@@ -176,6 +185,10 @@ public interface ContextfulInstructionCreator {
     }
 
     default SelectInstruction createSelect(LogicVariable result, Condition condition, LogicValue x, LogicValue y, LogicValue valueIfTrue, LogicValue valueIfFalse) {
+        return (SelectInstruction) createInstruction(SELECT, result, condition, x, y, valueIfTrue, valueIfFalse);
+    }
+
+    default SelectInstruction createSelect(LogicVariable result, Condition condition, LogicValue x, LogicValue y, LogicArgument valueIfTrue, LogicArgument valueIfFalse) {
         return (SelectInstruction) createInstruction(SELECT, result, condition, x, y, valueIfTrue, valueIfFalse);
     }
 

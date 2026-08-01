@@ -44,7 +44,7 @@ compiles to
 # Mlog code compiled with support for symbolic labels
 # You can safely add/remove instructions, in most parts of the program
 # Pay closer attention to sections of the program manipulating @counter
-    set *sp 0
+set *sp 0
         # Function: def f(in n)
         print "f: 10\n"
         set :g:n 9

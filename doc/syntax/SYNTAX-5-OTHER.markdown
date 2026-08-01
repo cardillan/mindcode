@@ -619,6 +619,7 @@ Options which affect the way the source code is compiled.
 | [ipt](#option-ipt)                                           | local  | stable             |
 | [remarks](#option-remarks)                                   | local  | stable             |
 | [setrate](#option-setrate)                                   | global | stable             |
+| [stack-depth](#option-stack-depth)                           | local  | stable             |
 | [syntax](#option-syntax)                                     | module | stable             |
 | [target-guard](#option-target-guard)                         | global | stable             |
 

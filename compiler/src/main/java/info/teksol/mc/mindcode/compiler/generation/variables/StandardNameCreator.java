@@ -17,6 +17,7 @@ public class StandardNameCreator implements NameCreator {
 
     public static final String RETURN_VALUE = "retval";
     public static final String RETURN_ADDRESS = "retaddr";
+    public static final String STACK_FRAME_POINTER = "sfp";
     public static final String FUNCTION_FINISHED = "finished";
 
     public static final String GLOBAL_PREFIX = ".";
@@ -139,6 +140,11 @@ public class StandardNameCreator implements NameCreator {
         return function.isExport()
                 ?  withPrefix(FUNCTION_PREFIX, function.getPrefix(), function.getPrefixIndex()) + COMPILER_PREFIX + RETURN_ADDRESS
                 :  withPrefix(functionPrefix, function.getPrefix(), function.getPrefixIndex()) + compilerPrefix + RETURN_ADDRESS;
+    }
+
+    @Override
+    public String stackframe(MindcodeFunction function) {
+        return withPrefix(functionPrefix, function.getPrefix(), function.getPrefixIndex()) + compilerPrefix + STACK_FRAME_POINTER;
     }
 
     @Override

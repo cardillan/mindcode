@@ -322,15 +322,14 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         assembler.createCallRecursive(stack, function.getLabel(), returnLabel, function.getFnRetVal());
         assembler.createLabel(returnLabel); // where the function must return
 
-        assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
-        retrieveFunctionParameters(function, function.getParameters(), arguments, recursiveCall);
-
         if (recursiveCall) {
             // Restore all local variables (both user-defined and temporary) from the stack
             assembler.setSubcontextType(function, AstSubcontextType.STACK);
-            Collections.reverse(variables);
-            variables.forEach(v -> assembler.createPop(stack, v));
+            variables.reversed().forEach(v -> assembler.createPop(stack, v));
         }
+
+        assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
+        retrieveFunctionParameters(function, function.getParameters(), arguments, recursiveCall);
 
         return passReturnValue(function, null);
     }

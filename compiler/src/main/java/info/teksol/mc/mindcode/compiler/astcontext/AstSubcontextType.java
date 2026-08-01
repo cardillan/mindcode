@@ -27,7 +27,7 @@ public enum AstSubcontextType {
     /// Jumps between blocks, or labels for such jumps.
     FLOW_CONTROL    ("FLOW", false),
 
-    /// Initialization code for a control structure (only loops at this moment).
+    /// Initialization code for a control structure or the program.
     INIT            ("INIT"),
 
     /// Hoisting context withing a fully rotated loop (placed between the initial condition and the loop body)

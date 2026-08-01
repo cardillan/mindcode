@@ -14,6 +14,8 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.generation.StackTracker;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
@@ -43,8 +45,10 @@ public class OptimizationContext extends CompilerMessageEmitter {
     private final InstructionProcessor instructionProcessor;
     private final OptimizerContext optimizerContext;
     private final List<LogicInstruction> program;
-    private final CallGraph callGraph;
     private final AstContext rootContext;
+    private final NameCreator nameCreator;
+    private final CallGraph callGraph;
+    private final StackTracker stackTracker;
     private final boolean remoteLibrary;
 
     private @Nullable FunctionDataFlow functionDataFlow;
@@ -103,8 +107,10 @@ public class OptimizationContext extends CompilerMessageEmitter {
         this.instructionProcessor = instructionProcessor;
         this.optimizerContext = optimizerContext;
         this.program = program;
-        this.callGraph = callGraph;
         this.rootContext = rootAstContext;
+        this.nameCreator = optimizerContext.nameCreator();
+        this.callGraph = callGraph;
+        this.stackTracker = optimizerContext.stackTracker();
         this.remoteLibrary = remoteLibrary;
 
         expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
@@ -148,12 +154,20 @@ public class OptimizationContext extends CompilerMessageEmitter {
         return program;
     }
 
+    AstContext getRootContext() {
+        return rootContext;
+    }
+
+    public NameCreator getNameCreator() {
+        return nameCreator;
+    }
+
     CallGraph getCallGraph() {
         return callGraph;
     }
 
-    AstContext getRootContext() {
-        return rootContext;
+    public StackTracker getStackTracker() {
+        return stackTracker;
     }
 
     public boolean isRemoteLibrary() {

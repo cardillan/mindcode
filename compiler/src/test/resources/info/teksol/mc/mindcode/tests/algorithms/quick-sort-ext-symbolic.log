@@ -795,8 +795,8 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 
 Final code before resolving virtual instructions:
 
-set SIZE 512
 set *sp 0
+set SIZE 512
 set ARRAY bank2
 set FINAL bank3
 op sub *tmp0 SIZE 1

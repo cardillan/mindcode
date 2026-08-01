@@ -29,6 +29,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static final String RETURN_VALUE_NAME = "*retval";
     public static final String RETURN_ADDRESS_NAME = "*retaddr";
+    public static final String STACK_FRAME_POINTER = "*sfp";
     public static final String FUNCTION_FINISHED_NAME = "*finished";
     public static final String REMOTE_WAIT_ADDRESS_NAME = "*waitaddr";
     public static final String PROGRAM_ID_NAME = "*id";
@@ -155,17 +156,17 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public boolean isUserVariable() {
-        return getType() == PARAMETER || getType() == GLOBAL_VARIABLE || getType() == LOCAL_VARIABLE;
+        return getType() == PROGRAM_PARAMETER || isUserWritable();
     }
 
     @Override
     public boolean isUserWritable() {
-        return getType() == GLOBAL_VARIABLE || getType() == LOCAL_VARIABLE;
+        return getType() == GLOBAL_VARIABLE || getType() == FUNCTION_PARAMETER || getType() == LOCAL_VARIABLE;
     }
 
     @Override
     public boolean isGlobalVariable() {
-        return getType() == PARAMETER || getType() == GLOBAL_VARIABLE || getType() == GLOBAL_PRESERVED;
+        return getType() == PROGRAM_PARAMETER || getType() == GLOBAL_VARIABLE || getType() == GLOBAL_PRESERVED;
     }
 
     @Override
@@ -180,7 +181,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public boolean isLocalVariable() {
-        return getType() == LOCAL_VARIABLE && functionPrefix.isEmpty();
+        return getType() == FUNCTION_PARAMETER || getType() == LOCAL_VARIABLE && !functionPrefix.isEmpty();
     }
 
     @Override
@@ -294,7 +295,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable parameter(AstFunctionParameter parameter, MindcodeFunction function, String mlog, boolean preserved) {
         AstIdentifier identifier = parameter.getIdentifier();
-        return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE, function.getName(),
+        return new LogicVariable(identifier.sourcePosition(), FUNCTION_PARAMETER, function.getName(),
                 function.getPrefix(), identifier.getName(), mlog,
                 false, parameter.isInput(), parameter.isOutput(), parameter.isReference(), preserved);
     }
@@ -311,6 +312,10 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable fnRetAddr(MindcodeFunction function, String mlog) {
         return new LogicVariable(function.getSourcePosition(), FUNCTION_RETADDR, ValueMutability.MUTABLE, function.getPrefix() + RETURN_ADDRESS_NAME, mlog);
+    }
+
+    public static LogicVariable fnStackFrame(MindcodeFunction function, String mlog) {
+        return new LogicVariable(function.getSourcePosition(), FUNCTION_STACKFRAME, ValueMutability.MUTABLE, function.getPrefix() + STACK_FRAME_POINTER, mlog);
     }
 
     public static LogicVariable fnFinished(MindcodeFunction function, String mlog) {
@@ -344,6 +349,15 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable error(int index) {
         return new LogicVariable(EMPTY, GLOBAL_PRESERVED, ValueMutability.MUTABLE,
                 "ERROR_" + index, "*ERROR_" + index);
+    }
+
+    //
+    //  Variable modifications
+    //
+    /////////////////////////////////////////////////////////////////////////////////
+
+    public LogicVariable stackFrame(int frame) {
+        return new LogicVariable(sourcePosition, FUNCTION_STACKFRAME, ValueMutability.MUTABLE, name + "*" + frame + "F", mlog + "*" + frame + "F");
     }
 
     /// Return the variable passed as an argument to unused instruction parameters.

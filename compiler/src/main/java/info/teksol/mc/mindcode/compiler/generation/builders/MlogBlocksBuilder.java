@@ -100,8 +100,9 @@ public class MlogBlocksBuilder extends AbstractCodeBuilder implements
                      STRING_LITERAL,
                      BUILT_IN,
                      BLOCK,
-                     PARAMETER,
+                     PROGRAM_PARAMETER,
                      GLOBAL_VARIABLE,
+                     FUNCTION_PARAMETER,
                      LOCAL_VARIABLE -> argument;
                 default -> null;
             };
