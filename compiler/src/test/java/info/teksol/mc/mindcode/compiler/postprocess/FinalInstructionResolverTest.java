@@ -26,7 +26,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @NullMarked
-class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
+class FinalInstructionResolverTest extends AbstractCodeOutputTest {
 
     @BeforeEach
     void setupContext() {
@@ -214,7 +214,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                 createInstruction(PRINT, q(CompilerProfile.SIGNATURE_STATIC))
         ).map(LogicInstruction::toMlog).collect(Collectors.joining("\n"));
 
-        String actual = LogicInstructionLabelResolver.resolve(
+        String actual = FinalInstructionResolver.resolve(
                 profile, ip, ContextFactory.getStackContext().stackTracker(), mockAstRootContext,
                 List.of(
                         createInstruction(JUMP, label0, Condition.ALWAYS),
@@ -242,7 +242,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
         Set<LogicVariable> variables = new HashSet<>(List.of(global1, global2, main1, main2, param));
 
         List<LogicVariable> expected = List.of(main1, main2, global1, global2, param);
-        List<LogicVariable> actual = LogicInstructionLabelResolver.orderVariables(variables, List.of(SortCategory.ALL, SortCategory.PARAMS));
+        List<LogicVariable> actual = FinalInstructionResolver.orderVariables(variables, List.of(SortCategory.ALL, SortCategory.PARAMS));
 
         assertEquals(expected, actual);
     }

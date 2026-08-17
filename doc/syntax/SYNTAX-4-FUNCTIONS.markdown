@@ -741,8 +741,6 @@ foo(1, 2, 3);
 Functions calling themselves, or two (or more) functions calling each other are _recursive_. Recursive functions require a stack to keep track of the calls in progress and for storing local variables from different invocations of the function.
 
 ```Mindcode
-allocate stack in bank1;
-
 def fib(n)
     return n < 2 ? max(n, 0) : fib(n - 1) + fib(n - 2);
 end;
@@ -761,13 +759,15 @@ println(fib(8)); // 21
 
 Declaring a recursive function inline leads to a compilation error.
 
-Mindcode detects the presence of recursive functions and only requires the stack when at least one is found in the program. A significant limitation is imposed on recursive functions: parameters and local variables may end up being stored on the stack. As the stack itself is stored in a memory bank or memory cell, any non-numeric value of these variables will get lost.
-
 ### Stack
 
-When using recursive functions, some of their local variables and parameters may have to be stored on a stack. As Mindustry Logic doesn't provide a built-in stack, external memory is used instead. This places the same limitations on local variables and parameters of recursive functions as on arrays and external variables (that is, only numeric values are supported).
+Recursive functions require a stack to keep track of the calls in progress and for storing local variables from different invocations of the function. Mindcode supports internal and external implementations of a stack.
 
-Stack needs to be allocated similarly to heap:
+When a function is not recursive, it won't store anything on a stack, even when it is called from a recursive function or it itself calls a recursive function. The stack size requirements of recursive functions may be greatly reduced by optimizations (especially [Function Inlining](optimizations/FUNCTION-INLINING.markdown), [Recursive Optimization](optimizations/RECURSIVE-OPTIMIZATION.markdown) and [Stack Optimization](optimizations/STACK-OPTIMIZATION.markdown)), so it is essential to have these optimizations enabled when using recursive functions.  
+
+#### External stack
+
+To use an external stack, use the `allocate stack` declaration:
 
 ```Mindcode
 allocate stack in bank1[256...512];
@@ -776,7 +776,14 @@ allocate stack in bank1[256...512];
 > [!NOTE]
 > When no range is given (e.g., `allocate stack in cell1`), full range of the given memory block is assumed.
 
-When a function is not recursive, it won't store anything on a stack, even when it is called from or it itself calls a recursive function. If your code contains a recursive function, it won't compile unless the stack is allocated. Therefore, if your code compiles without the `allocate stack` statement, you don't need to worry about your functions not supporting non-numeric variables or parameters.
+> [!WARN]
+> External stack can only store numerical values. When a recursive function needs to store non-numerical values on the stack, the program will not execute correctly. At this point, Mindcode is not able to detect and report this situation.
+> 
+> Note that parameters that are not modified by the function and are passed unchanged to the recursive calls are not stored on the stack.  
+
+#### Internal stack
+
+Mindcode builds an internal stack when an external one is not declared. The internal stack is superior in supporting both numerical and non-numerical values, but it may occupy a significant amount of instruction space. When using an internal stack, it may be necessary to use the [`stack-depth` option](SYNTAX-5-OTHER.markdown#option-stack-depth) to specify the maximum depth of the stack to build.
 
 ## Atomic functions
 

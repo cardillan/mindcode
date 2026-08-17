@@ -1,5 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
+import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
 import org.jspecify.annotations.NullMarked;
@@ -28,7 +30,7 @@ class RecursiveOptimizerTest extends AbstractOptimizerTest<RecursiveOptimizer> {
     }
 
     @Test
-    void optimizesRecursiveReturn() {
+    void optimizesRecursiveReturnExt() {
         assertCompilesTo("""
                         allocate stack in cell1;
                         noinline def fib(n)
@@ -47,6 +49,7 @@ class RecursiveOptimizerTest extends AbstractOptimizerTest<RecursiveOptimizer> {
                 createInstruction(PRINT, ":fib*retval"),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
+                createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "64", q("position 2:1: stack overflow error")),
                 createInstruction(JUMP, label(3), "greaterThanEq", ":fib:n", "2"),
                 createInstruction(SET, ":fib*retval", ":fib:n"),
                 createInstruction(RETURNREC, "cell1"),
@@ -64,6 +67,48 @@ class RecursiveOptimizerTest extends AbstractOptimizerTest<RecursiveOptimizer> {
                 createInstruction(POP, "cell1", tmp(4)),
                 createInstruction(OP, "add", ":fib*retval", tmp(4), ":fib*retval"),
                 createInstruction(RETURNREC, "cell1")
+        );
+    }
+
+    @Test
+    void optimizesRecursiveReturnInt() {
+        assertCompilesTo("""
+                        noinline def fib(n)
+                            if n < 2 then
+                                return n;
+                            end;
+                        
+                            fib(n - 1) + fib(n - 2);
+                        end;
+                        print(fib(10));
+                        """,
+                ix -> !ix.getAstContext().matches(AstContextType.STACK, AstSubcontextType.BASIC),
+
+                createInstruction(SETADDR, ":fib*sfp", label(8)),
+                createInstruction(SET, ":fib:n", "10"),
+                createInstruction(CALLREC, "bank0", label(0), label(1), ":fib*retval"),
+                createInstruction(LABEL, label(1)),
+                createInstruction(PRINT, ":fib*retval"),
+                createInstruction(END),
+                createInstruction(LABEL, label(0)),
+                createInstruction(OP, "add", ":fib*sfp", ":fib*sfp", "7"),
+                createInstruction(JUMP, label(3), "greaterThanEq", ":fib:n", "2"),
+                createInstruction(SET, ":fib*retval", ":fib:n"),
+                createInstruction(RETURNREC, "bank0"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(PUSH, "bank0", ":fib:n"),
+                createInstruction(OP, "sub", ":fib:n", ":fib:n", "1"),
+                createInstruction(CALLREC, "bank0", label(0), label(5), ":fib*retval"),
+                createInstruction(LABEL, label(5)),
+                createInstruction(POP, "bank0", ":fib:n"),
+                createInstruction(SET, tmp(4), ":fib*retval"),
+                createInstruction(PUSH, "bank0", tmp(4)),
+                createInstruction(OP, "sub", ":fib:n", ":fib:n", "2"),
+                createInstruction(CALLREC, "bank0", label(0), label(6), ":fib*retval"),
+                createInstruction(LABEL, label(6)),
+                createInstruction(POP, "bank0", tmp(4)),
+                createInstruction(OP, "add", ":fib*retval", tmp(4), ":fib*retval"),
+                createInstruction(RETURNREC, "bank0")
         );
     }
 }

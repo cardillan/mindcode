@@ -38,7 +38,7 @@ public class SingleElementArrayConstructor extends TablelessArrayConstructor {
     @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
         AstContext astContext = instruction.getAstContext();
-        generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1 );
+        generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
 
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
         ValueStore element = arrayStore.getElements().getFirst();

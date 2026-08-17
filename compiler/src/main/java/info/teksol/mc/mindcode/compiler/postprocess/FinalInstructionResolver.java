@@ -15,6 +15,7 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.GlobalCompilerProfile;
+import info.teksol.mc.profile.RuntimeErrorReporting;
 import info.teksol.mc.profile.SortCategory;
 import info.teksol.mc.util.CollectionUtils;
 import info.teksol.mc.util.StringUtils;
@@ -31,7 +32,7 @@ import static info.teksol.mc.mindcode.logic.arguments.Operation.SUB;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
-public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
+public class FinalInstructionResolver extends CompilerMessageEmitter {
     private final GlobalCompilerProfile profile;
     private final InstructionProcessor processor;
     private final StackTracker stackTracker;
@@ -43,7 +44,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
     private final Map<Integer, Set<LogicInstruction>> textJumpOrigins = new HashMap<>();
     private final Map<Integer, Set<Integer>> textJumpKeys = new HashMap<>();
 
-    public LogicInstructionLabelResolver(GlobalCompilerProfile profile, InstructionProcessor processor, StackTracker stackTracker,
+    public FinalInstructionResolver(GlobalCompilerProfile profile, InstructionProcessor processor, StackTracker stackTracker,
             AstContext rootAstContext) {
         super(processor.messageConsumer());
         this.processor = processor;
@@ -54,7 +55,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
     
     public static List<LogicInstruction> resolve(GlobalCompilerProfile profile, InstructionProcessor processor,
             StackTracker stackTracker, AstContext rootAstContext, List<LogicInstruction> program) {
-        return new LogicInstructionLabelResolver(profile, processor, stackTracker, rootAstContext).resolve(program);
+        return new FinalInstructionResolver(profile, processor, stackTracker, rootAstContext).resolve(program);
     }
 
     public List<LogicInstruction> resolve(List<LogicInstruction> program) {
@@ -165,9 +166,9 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
         // Save the last instruction before it is resolved
         LogicInstruction last = program.getLast();
 
-        program = resolveRemarks(program);
+        program = resolveVirtualInstructions(resolveRemarks(program));
         calculateAddresses(program);
-        program = resolveAddresses(resolveVirtualInstructions(program));
+        program = resolveAddresses(program);
 
         addTargetComments(program);
 
@@ -257,6 +258,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
         boolean wrongAddress = false;
 
         for (final LogicInstruction instruction : program) {
+            if (instruction instanceof LabelInstruction || instruction instanceof MultiLabelInstruction) continue;
             if (instruction instanceof CommentInstruction) comments++;
 
             List<LogicLabel> jumpTable = instruction.getJumpTable();
@@ -358,7 +360,7 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
     }
 
     private List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {
-        return program.stream().mapMulti(this::resolveVirtualInstruction).toList();
+        return program.stream().mapMulti(this::resolveVirtualInstruction).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private void resolveVirtualInstruction(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
@@ -371,8 +373,6 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
 
         switch (instruction) {
             case EmptyInstruction ix -> { }
-            case MultiLabelInstruction ix -> { }
-            case LabelInstruction ix -> { }
 
             case JumpInstruction ix when ix.getCondition() == Condition.STRICT_NOT_EQUAL ->
                     creator.createSelect(LogicBuiltIn.COUNTER, Condition.STRICT_EQUAL,
@@ -385,6 +385,45 @@ public class LogicInstructionLabelResolver extends CompilerMessageEmitter {
             case SelectInstruction ix when ix.getCondition() == Condition.STRICT_NOT_EQUAL ->
                         creator.createSelect(ix.getResult(), Condition.STRICT_EQUAL,
                         ix.getX(), ix.getY(), ix.getFalseValue(), ix.getTrueValue()).copyComment(ix);
+
+            case AssertBoundsInstruction ix -> {
+                switch (ix.getLocalProfile().getErrorReporting()) {
+                    case NONE -> {}
+                    case ASSERT -> consumer.accept(ix);
+                    case MINIMAL -> {
+                        if (ix.hasLowerBound()) {
+                            LogicLabel label = processor.nextLabel();
+                            creator.createLabel(label);
+                            creator.createJump(label, ix.getLowerCondition().inverse(false), ix.getLowerBound(), ix.getValue());
+                        }
+                        if (ix.hasUpperBound()) {
+                            LogicLabel label = processor.nextLabel();
+                            creator.createLabel(label);
+                            creator.createJump(label, ix.getUpperCondition().inverse(false), ix.getValue(), ix.getUpperBound());
+                        }
+                    }
+                    case SIMPLE, DESCRIBED -> {
+                        LogicLabel logicLabelStop = processor.nextLabel();
+                        LogicLabel logicLabelRun = processor.nextLabel();
+
+                        if (!ix.hasUpperBound()) {
+                            creator.createJump(logicLabelRun, ix.getLowerCondition(), ix.getLowerBound(), ix.getValue());
+                        } else {
+                            if (ix.hasLowerBound()) {
+                                creator.createJump(logicLabelStop, ix.getLowerCondition().inverse(false), ix.getLowerBound(), ix.getValue());
+                            }
+                            creator.createJump(logicLabelRun, ix.getUpperCondition(), ix.getValue(), ix.getUpperBound());
+                        }
+
+                        creator.createLabel(logicLabelStop);
+                        if (ix.getLocalProfile().getErrorReporting() == RuntimeErrorReporting.DESCRIBED) {
+                            creator.createPrint(ix.getMessage());
+                        }
+                        creator.createStop();
+                        creator.createLabel(logicLabelRun);
+                    }
+                }
+            }
 
             case ErrorInstruction ix -> {
                 switch (ix.getLocalProfile().getErrorReporting()) {

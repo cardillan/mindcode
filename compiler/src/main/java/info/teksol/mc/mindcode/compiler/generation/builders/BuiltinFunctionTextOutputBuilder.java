@@ -144,6 +144,9 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
     }
 
     public ValueStore handleError(AstFunctionCall call) {
+        boolean active = assembler.isActive();
+        assembler.setActive(call.getProfile().isErrorFunction());
+
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         List<FunctionArgument> arguments = processArguments(call);
         FunctionArgument.validateAsInput(messageConsumer(), arguments);
@@ -161,6 +164,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         }
 
         assembler.clearSubcontextType();
+        assembler.setActive(active);
         return LogicVoid.VOID;
     }
 

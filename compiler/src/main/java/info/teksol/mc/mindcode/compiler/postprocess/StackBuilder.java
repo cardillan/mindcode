@@ -155,8 +155,18 @@ public class StackBuilder extends CompilerMessageEmitter {
             creator.createSet(LogicBuiltIn.COUNTER, function.getFnRetAddr().stackFrame(frame));
         }
 
-        String message = String.format("Stack overflow calling function %s (call depth %d)", function.getName(), stack.depth() + 1);
-        creator.createError(message);
+        if (function.getProfile().isStackOverflowChecks()) {
+            String message = String.format("Stack overflow calling function %s (call depth %d)", function.getName(), stack.depth() + 1);
+            switch (function.getProfile().getErrorReporting()) {
+                case ASSERT -> creator.createError(message);
+                case MINIMAL, SIMPLE -> creator.createStop();
+                case DESCRIBED -> {
+                    creator.createPrint(LogicString.create(message));
+                    creator.createStop();
+                }
+            }
+            creator.createError(message);
+        }
 
         // Decorate the function itself
         int index = CollectionUtils.indexOf(program, 0, ix -> ix instanceof LabelInstruction l && l.getLabel().equals(functionLabel));

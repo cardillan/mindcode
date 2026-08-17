@@ -109,22 +109,22 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--encode-zero-characters [{true,false}]] [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}]
                 [--target-guard [{true,false}]] [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}]
                 [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
-                [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
-                [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
-                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
-                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
-                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
-                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
-                [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
-                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
-                [--condition-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
-                [--boolean-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
-                [--instruction-reordering LEVEL] [--loop-hoisting LEVEL] [--loop-rotation LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--recursive-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL]
+                [--atomic-safety-margin {0.0..4.0}] [--emulate-strict-not-equal {true,false}]
+                [--enforce-size-limits {true,false}] [-r {none,comments,passive,active}]
+                [--auto-printflush {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
+                [--error-function {true,false}] [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}]
+                [-g {size,neutral,speed}] [-e {1..1000}] [--unsafe-case-optimization [{true,false}]]
+                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}]
+                [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}]
+                [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
+                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--condition-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--boolean-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--instruction-reordering LEVEL]
+                [--loop-hoisting LEVEL] [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-optimization LEVEL] [--case-switching LEVEL] [--recursive-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
+                [--stack-optimization LEVEL] [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [--parse-tree {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
@@ -252,18 +252,10 @@ Compiler options:
                          sections
   --atomic-safety-margin {0.0..4.0}
                          number of ticks to add to the wait duration at the beginning of an atomic section
-  --boundary-checks {true,false}
-                         activates or deactivates runtime checks  to  catch  indexes  being  out of range when accessing
-                         arrays
   --emulate-strict-not-equal {true,false}
                          use the 'select' instruction to emulate jump with the !== (strict not equal) condition
   --enforce-size-limits {true,false}
                          generate compilation error when the instruction or size limits are exceeded
-  --error-function {true,false}
-                         activates or deactivates the  error()  function  (when  set  to  'false', error() function does
-                         nothing)
-  --error-reporting {none,assert,minimal,simple,described}
-                         specifies the mechanism used by the compiler when generating runtime checks
   -r, --remarks {none,comments,passive,active}
                          controls remarks propagation  to  the  compiled  code:  none  (remarks  are  removed), comments
                          (included as mlog comments), passive  (included  as  'print'  but  not not executed), or active
@@ -271,6 +263,20 @@ Compiler options:
   --auto-printflush {true,false}
                          automatically add a 'printflush message1'  instruction  at  the  end  of  the program if one is
                          missing
+
+Runtime checks options:
+  Options which govern whether and how Mindcode generates runtime checks.
+
+  --error-reporting {none,assert,minimal,simple,described}
+                         specifies the mechanism used by the compiler when generating runtime checks
+  --error-function {true,false}
+                         activates or deactivates the  error()  function  (when  set  to  'false', error() function does
+                         nothing)
+  --boundary-checks {true,false}
+                         activates or deactivates runtime checks  to  catch  indexes  being  out of range when accessing
+                         arrays
+  --stack-overflow-checks {true,false}
+                         activates or deactivates runtime checks to catch stack overflow
 
 Optimization options:
   Options guiding the  overall  optimization  of  the  compiled  code  or  activating/deactivating specific optimization
@@ -575,22 +581,22 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--encode-zero-characters [{true,false}]] [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}]
                 [--target-guard [{true,false}]] [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}]
                 [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
-                [--atomic-safety-margin {0.0..4.0}] [--boundary-checks {true,false}]
-                [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
-                [--error-function {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
-                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-g {size,neutral,speed}]
-                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
-                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
-                [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
-                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
-                [--condition-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
-                [--boolean-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
-                [--instruction-reordering LEVEL] [--loop-hoisting LEVEL] [--loop-rotation LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--recursive-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL]
+                [--atomic-safety-margin {0.0..4.0}] [--emulate-strict-not-equal {true,false}]
+                [--enforce-size-limits {true,false}] [-r {none,comments,passive,active}]
+                [--auto-printflush {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
+                [--error-function {true,false}] [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}]
+                [-g {size,neutral,speed}] [-e {1..1000}] [--unsafe-case-optimization [{true,false}]]
+                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}]
+                [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}]
+                [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
+                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--condition-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--boolean-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--instruction-reordering LEVEL]
+                [--loop-hoisting LEVEL] [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-optimization LEVEL] [--case-switching LEVEL] [--recursive-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
+                [--stack-optimization LEVEL] [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [--parse-tree {0..2}] [--debug [{true,false}]] [-d {0..3}] [--print-code-size {true,false}]
                 [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
@@ -723,18 +729,10 @@ Compiler options:
                          sections
   --atomic-safety-margin {0.0..4.0}
                          number of ticks to add to the wait duration at the beginning of an atomic section
-  --boundary-checks {true,false}
-                         activates or deactivates runtime checks  to  catch  indexes  being  out of range when accessing
-                         arrays
   --emulate-strict-not-equal {true,false}
                          use the 'select' instruction to emulate jump with the !== (strict not equal) condition
   --enforce-size-limits {true,false}
                          generate compilation error when the instruction or size limits are exceeded
-  --error-function {true,false}
-                         activates or deactivates the  error()  function  (when  set  to  'false', error() function does
-                         nothing)
-  --error-reporting {none,assert,minimal,simple,described}
-                         specifies the mechanism used by the compiler when generating runtime checks
   -r, --remarks {none,comments,passive,active}
                          controls remarks propagation  to  the  compiled  code:  none  (remarks  are  removed), comments
                          (included as mlog comments), passive  (included  as  'print'  but  not not executed), or active
@@ -742,6 +740,20 @@ Compiler options:
   --auto-printflush {true,false}
                          automatically add a 'printflush message1'  instruction  at  the  end  of  the program if one is
                          missing
+
+Runtime checks options:
+  Options which govern whether and how Mindcode generates runtime checks.
+
+  --error-reporting {none,assert,minimal,simple,described}
+                         specifies the mechanism used by the compiler when generating runtime checks
+  --error-function {true,false}
+                         activates or deactivates the  error()  function  (when  set  to  'false', error() function does
+                         nothing)
+  --boundary-checks {true,false}
+                         activates or deactivates runtime checks  to  catch  indexes  being  out of range when accessing
+                         arrays
+  --stack-overflow-checks {true,false}
+                         activates or deactivates runtime checks to catch stack overflow
 
 Optimization options:
   Options guiding the  overall  optimization  of  the  compiled  code  or  activating/deactivating specific optimization

@@ -8,6 +8,7 @@ Final code before resolving virtual instructions:
     3:  jump *label4 greaterThanEq :fill:i 5
     4:  set *tmp0 :fill:i
     5:  setaddr .a*ret *label65
+    6:  assertbounds multiple 1 0 lessThanEq *tmp0 lessThanEq 4 "*arrays:24:9: index out of bounds (0 to 4)"
     6:  set .a*ind *tmp0
     7:  multicall *tmp0 0
         label *label65
@@ -30,6 +31,7 @@ Final code before resolving virtual instructions:
    20:  set *tmp2 :i
    21:  op add *tmp3 p :i
    22:  setaddr .b*ret *label66
+   23:  assertbounds multiple 1 0 lessThanEq *tmp2 lessThanEq 9 "position 13:9: index out of bounds (0 to 9)"
    23:  set .b*ind *tmp2
    24:  multicall *tmp2 0
         label *label66
@@ -37,6 +39,7 @@ Final code before resolving virtual instructions:
    26:  set *tmp4 :i
    27:  op add *tmp5 p :i
    28:  setaddr .c*ret *label67
+   29:  assertbounds multiple 1 0 lessThanEq *tmp4 lessThanEq 9 "position 14:9: index out of bounds (0 to 9)"
    29:  set .c*ind *tmp4
    30:  multicall *tmp4 0
         label *label67
@@ -52,6 +55,7 @@ Final code before resolving virtual instructions:
    37:  set :reverse:j *tmp6
    38:  set *tmp7 :reverse:i
    39:  setaddr .b*ret *label68
+   40:  assertbounds multiple 1 0 lessThanEq *tmp7 lessThanEq 9 "*arrays:41:9: index out of bounds (0 to 9)"
    40:  set .b*ind *tmp7
    41:  multicall *tmp7 0
         label *label68
@@ -60,17 +64,20 @@ Final code before resolving virtual instructions:
    44:  set *tmp9 :reverse:i
    45:  set *tmp10 :reverse:j
    46:  setaddr .b*ret *label69
+   47:  assertbounds multiple 1 0 lessThanEq *tmp10 lessThanEq 9 "*arrays:42:9: index out of bounds (0 to 9)"
    47:  set .b*ind *tmp10
    48:  multicall *tmp10 0
         label *label69
    49:  read *tmp11 @this .b*elem
    50:  setaddr .b*ret *label70
+   51:  assertbounds multiple 1 0 lessThanEq *tmp9 lessThanEq 9 "*arrays:42:9: index out of bounds (0 to 9)"
    51:  set .b*ind *tmp9
    52:  multicall *tmp9 0
         label *label70
    53:  write *tmp11 @this .b*elem
    54:  set *tmp12 :reverse:j
    55:  setaddr .b*ret *label71
+   56:  assertbounds multiple 1 0 lessThanEq *tmp12 lessThanEq 9 "*arrays:43:9: index out of bounds (0 to 9)"
    56:  set .b*ind *tmp12
    57:  multicall *tmp12 0
         label *label71
@@ -101,6 +108,7 @@ Final code before resolving virtual instructions:
    77:  jump *label18 greaterThanEq :bubblesort:i 10
    78:  set *tmp14 :bubblesort:i
    79:  setaddr .b*ret *label72
+   80:  assertbounds multiple 1 0 lessThanEq *tmp14 lessThanEq 9 "*arrays:64:13: index out of bounds (0 to 9)"
    80:  set .b*ind *tmp14
    81:  multicall *tmp14 0
         label *label72
@@ -119,12 +127,14 @@ Final code before resolving virtual instructions:
    92:  op sub *tmp20 :bubblesort:i 1
    93:  set *tmp21 *tmp20
    94:  setaddr .b*ret *label73
+   95:  assertbounds multiple 1 0 lessThanEq *tmp21 lessThanEq 9 "*arrays:67:17: index out of bounds (0 to 9)"
    95:  set .b*ind *tmp21
    96:  multicall *tmp21 0
         label *label73
    97:  write :bubblesort:b @this .b*elem
    98:  set *tmp22 :bubblesort:i
    99:  setaddr .b*ret *label74
+  100:  assertbounds multiple 1 0 lessThanEq *tmp22 lessThanEq 9 "*arrays:68:17: index out of bounds (0 to 9)"
   100:  set .b*ind *tmp22
   101:  multicall *tmp22 0
         label *label74
@@ -154,6 +164,7 @@ Final code before resolving virtual instructions:
   118:  jump *label27 lessThan :bubblesort:i.1 0
   119:  set *tmp25 :bubblesort:i.1
   120:  setaddr .b*ret *label75
+  121:  assertbounds multiple 1 0 lessThanEq *tmp25 lessThanEq 9 "*arrays:79:13: index out of bounds (0 to 9)"
   121:  set .b*ind *tmp25
   122:  multicall *tmp25 0
         label *label75
@@ -172,12 +183,14 @@ Final code before resolving virtual instructions:
   133:  op add *tmp31 :bubblesort:i.1 1
   134:  set *tmp32 *tmp31
   135:  setaddr .b*ret *label76
+  136:  assertbounds multiple 1 0 lessThanEq *tmp32 lessThanEq 9 "*arrays:82:17: index out of bounds (0 to 9)"
   136:  set .b*ind *tmp32
   137:  multicall *tmp32 0
         label *label76
   138:  write :bubblesort:b.1 @this .b*elem
   139:  set *tmp33 :bubblesort:i.1
   140:  setaddr .b*ret *label77
+  141:  assertbounds multiple 1 0 lessThanEq *tmp33 lessThanEq 9 "*arrays:83:17: index out of bounds (0 to 9)"
   141:  set .b*ind *tmp33
   142:  multicall *tmp33 0
         label *label77
@@ -218,6 +231,7 @@ Final code before resolving virtual instructions:
   168:  jump *label38 greaterThanEq :bubblesort.1:i 10
   169:  set *tmp35 :bubblesort.1:i
   170:  setaddr .b*ret *label78
+  171:  assertbounds multiple 1 0 lessThanEq *tmp35 lessThanEq 9 "*arrays:110:13: index out of bounds (0 to 9)"
   171:  set .b*ind *tmp35
   172:  multicall *tmp35 0
         label *label78
@@ -236,12 +250,14 @@ Final code before resolving virtual instructions:
   183:  op sub *tmp41 :bubblesort.1:i 1
   184:  set *tmp42 *tmp41
   185:  setaddr .b*ret *label79
+  186:  assertbounds multiple 1 0 lessThanEq *tmp42 lessThanEq 9 "*arrays:113:17: index out of bounds (0 to 9)"
   186:  set .b*ind *tmp42
   187:  multicall *tmp42 0
         label *label79
   188:  write :bubblesort.1:b @this .b*elem
   189:  set *tmp43 :bubblesort.1:i
   190:  setaddr .b*ret *label80
+  191:  assertbounds multiple 1 0 lessThanEq *tmp43 lessThanEq 9 "*arrays:114:17: index out of bounds (0 to 9)"
   191:  set .b*ind *tmp43
   192:  multicall *tmp43 0
         label *label80
@@ -249,6 +265,7 @@ Final code before resolving virtual instructions:
   194:  op sub *tmp44 :bubblesort.1:i 1
   195:  set *tmp45 *tmp44
   196:  setaddr .c*ret *label81
+  197:  assertbounds multiple 1 0 lessThanEq *tmp45 lessThanEq 9 "*arrays:115:17: index out of bounds (0 to 9)"
   197:  set .c*ind *tmp45
   198:  multicall *tmp45 0
         label *label81
@@ -258,17 +275,20 @@ Final code before resolving virtual instructions:
   202:  set *tmp48 *tmp47
   203:  set *tmp49 :bubblesort.1:i
   204:  setaddr .c*ret *label82
+  205:  assertbounds multiple 1 0 lessThanEq *tmp49 lessThanEq 9 "*arrays:116:17: index out of bounds (0 to 9)"
   205:  set .c*ind *tmp49
   206:  multicall *tmp49 0
         label *label82
   207:  read *tmp50 @this .c*elem
   208:  setaddr .c*ret *label83
+  209:  assertbounds multiple 1 0 lessThanEq *tmp48 lessThanEq 9 "*arrays:116:17: index out of bounds (0 to 9)"
   209:  set .c*ind *tmp48
   210:  multicall *tmp48 0
         label *label83
   211:  write *tmp50 @this .c*elem
   212:  set *tmp51 :bubblesort.1:i
   213:  setaddr .c*ret *label84
+  214:  assertbounds multiple 1 0 lessThanEq *tmp51 lessThanEq 9 "*arrays:117:17: index out of bounds (0 to 9)"
   214:  set .c*ind *tmp51
   215:  multicall *tmp51 0
         label *label84
@@ -298,6 +318,7 @@ Final code before resolving virtual instructions:
   232:  jump *label47 lessThan :bubblesort.1:i.1 0
   233:  set *tmp54 :bubblesort.1:i.1
   234:  setaddr .b*ret *label85
+  235:  assertbounds multiple 1 0 lessThanEq *tmp54 lessThanEq 9 "*arrays:128:13: index out of bounds (0 to 9)"
   235:  set .b*ind *tmp54
   236:  multicall *tmp54 0
         label *label85
@@ -316,12 +337,14 @@ Final code before resolving virtual instructions:
   247:  op add *tmp60 :bubblesort.1:i.1 1
   248:  set *tmp61 *tmp60
   249:  setaddr .b*ret *label86
+  250:  assertbounds multiple 1 0 lessThanEq *tmp61 lessThanEq 9 "*arrays:131:17: index out of bounds (0 to 9)"
   250:  set .b*ind *tmp61
   251:  multicall *tmp61 0
         label *label86
   252:  write :bubblesort.1:b.1 @this .b*elem
   253:  set *tmp62 :bubblesort.1:i.1
   254:  setaddr .b*ret *label87
+  255:  assertbounds multiple 1 0 lessThanEq *tmp62 lessThanEq 9 "*arrays:132:17: index out of bounds (0 to 9)"
   255:  set .b*ind *tmp62
   256:  multicall *tmp62 0
         label *label87
@@ -329,6 +352,7 @@ Final code before resolving virtual instructions:
   258:  op add *tmp63 :bubblesort.1:i.1 1
   259:  set *tmp64 *tmp63
   260:  setaddr .c*ret *label88
+  261:  assertbounds multiple 1 0 lessThanEq *tmp64 lessThanEq 9 "*arrays:133:17: index out of bounds (0 to 9)"
   261:  set .c*ind *tmp64
   262:  multicall *tmp64 0
         label *label88
@@ -338,17 +362,20 @@ Final code before resolving virtual instructions:
   266:  set *tmp67 *tmp66
   267:  set *tmp68 :bubblesort.1:i.1
   268:  setaddr .c*ret *label89
+  269:  assertbounds multiple 1 0 lessThanEq *tmp68 lessThanEq 9 "*arrays:134:17: index out of bounds (0 to 9)"
   269:  set .c*ind *tmp68
   270:  multicall *tmp68 0
         label *label89
   271:  read *tmp69 @this .c*elem
   272:  setaddr .c*ret *label90
+  273:  assertbounds multiple 1 0 lessThanEq *tmp67 lessThanEq 9 "*arrays:134:17: index out of bounds (0 to 9)"
   273:  set .c*ind *tmp67
   274:  multicall *tmp67 0
         label *label90
   275:  write *tmp69 @this .c*elem
   276:  set *tmp70 :bubblesort.1:i.1
   277:  setaddr .c*ret *label91
+  278:  assertbounds multiple 1 0 lessThanEq *tmp70 lessThanEq 9 "*arrays:135:17: index out of bounds (0 to 9)"
   278:  set .c*ind *tmp70
   279:  multicall *tmp70 0
         label *label91

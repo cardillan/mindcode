@@ -61,7 +61,7 @@ public class LookupArrayConstructor extends TablelessArrayConstructor {
 
     @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
-        generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1 );
+        generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1);
         LogicKeyword type = instruction.getArrayLookupType();
 
         AstContextType contextType = AstContextType.CODE;

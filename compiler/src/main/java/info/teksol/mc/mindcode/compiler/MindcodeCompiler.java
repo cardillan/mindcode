@@ -383,7 +383,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         renumberTemporary(instructions);
 
         // Sort variables
-        LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(globalProfile, instructionProcessor, stackTracker, rootAstContext);
+        FinalInstructionResolver resolver = new FinalInstructionResolver(globalProfile, instructionProcessor, stackTracker, rootAstContext);
         instructions = resolver.sortVariables(instructions);
 
         // Print unresolved code

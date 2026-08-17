@@ -4,13 +4,17 @@ This document contains some tips on writing a better-performing code in Mindcode
 
 As Mindcode undergoes development, the beast practices may change as new versions are released. Significant changes to the best practices are therefore described here.
 
+## Mindcode 3.18
+
+Mindcode 3.18 supports an internal stack for recursive functions. The internal stack allows storing values of any type, not just numerical ones, and as a result, recursive functions can use parameters and local variables of all types without any restrictions. With the internal stack, all recursive functions compile and execute correctly, although it may be necessary to [manually set stack sizes](SYNTAX-5-OTHER.markdown#option-stack-depth) to support the desired recursion depth.  
+
 ## Mindcode 3.17
 
-Mindcode 3.17 introduces a new feature: symbolic names for schematic links. Instead of assigning literal link names to processor links in Schemacode, which then need to be used in the corresponding processor's code, Mindcode 3.17 allows assigning symbolic names to links, both [in Schemacode](SCHEMACODE.markdown#linking-by-a-symbolic-name) and [in Mindcode](SYNTAX-1-VARIABLES.markdown#symbolic-link-names). Using symbolic link names is strongly suggested, as it brings the following benefits:
+Mindcode 3.17 introduces a new feature: symbolic names for schematic links. Instead of assigning literal link names to processor links in Schemacode, which then need to be used in the corresponding processor's code, Mindcode 3.17 allows assigning symbolic names to links, both [in Schemacode](SCHEMACODE.markdown#symbolic-link-names) and [in Mindcode](SYNTAX-1-VARIABLES.markdown#symbolic-link-names). Using symbolic link names is strongly suggested, as it brings the following benefits:
 
 * A well-chosen symbolic block name carries additional information about the purpose or meaning of the block.
 * The chosen symbolic link name is the same in Schemacode and Mindcode, allowing to easily find all references to the given block in a more complex code-base.
-* Literal link names are assigned by the Mindcode compiler, using numerical indexes starting at one without any gaps, avoiding potential link mixup when the schematic is built due to an existing (at the time of this writing) [Mindustry bug](https://github.com/Anuken/Mindustry/issues/12185).
+* Literal link names are assigned by the Mindcode compiler, using numerical indexes starting at one without any gaps, avoiding potential link mix-up when the schematic is built due to an existing (at the time of this writing) [Mindustry bug](https://github.com/Anuken/Mindustry/issues/12185).
 * Symbolic link names avoid the need to manually handle different indexes assigned to the same block in different processors, or to link all blocks to all processors trying to keep a consistent naming convention while avoiding the aforementioned bug.
 
 For a complex schematic using symbolic link names to a great benefit, see the [Base Builder project](https://github.com/cardillan/golem/tree/main/base-builder#base-builder).
@@ -28,8 +32,8 @@ The most important change in the 3.11 release comes with the ability to short-ci
 > Short-circuited boolean expressions cannot be reused. In previous versions, the following code
 >
 > ```Mindcode
-> x = a > 0 or b > 0 ? "positive": "negative";
-> y = a > 0 or b > 0 ? 1: -1;
+> x = a > 0 or b > 0 ? "positive" : "negative";
+> y = a > 0 or b > 0 ? 1 : -1;
 > ```
 >
 > would evaluate the condition `a > 0 or b > 0` only once, reusing it in the second statement. This is no longer the case with short-circuited conditions; in similar situations, use a single `if` statement instead:
@@ -81,7 +85,7 @@ Note: an optimization which would replace the sequence of the four instructions 
 
 # Absolute addressing
 
-Mindcode provides an [option](SYNTAX-5-OTHER.markdown#option-symbolic-labels) for generating the mlog code with symbolic labels. Even though this option ensures the resulting code is more readable and can also be modified manually, it also precludes the compiler from using absolute addressing in the code and (in taget `8.0` or higher) text-encoded jump tables. This causes the compiler to generate a slower code, a larger code or both. Especially case expressions can be seriously affected, and to a lesser extent internal arrays.        
+Mindcode provides an [option](SYNTAX-5-OTHER.markdown#option-symbolic-labels) for generating the mlog code with symbolic labels. Even though this option ensures the resulting code is more readable and can also be modified manually, it also precludes the compiler from using absolute addressing in the code and (in taget `8.0` or higher) text-encoded jump tables. This causes the compiler to generate less optimal (slower, or larger) code. Especially case expressions can be seriously affected, and to a lesser extent, internal arrays.        
 
 # The `case` expressions
 
@@ -108,7 +112,7 @@ The following measures may help produce the most efficient code:
 * When using Mindustry objects as `when` values, set the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) to `full`. This means the compiler only considers the Mindustry objects which exist in the given target and doesn't need to produce code for handling unknown objects. On the other hand, the compiled code is only guaranteed to run correctly on Mindustry versions compatible with the chosen target. Consider using the [`target-guard` option](SYNTAX-5-OTHER.markdown#option-target-guard) to ensure the program won't run on incompatible Mindustry versions.
 * If possible, use printable characters as `when` values. For example, if your case expression produces a few categories, consider assigning each category a value using character literals (e.g. `'A'`, `'B'` or `'0'`, `'1'` and so on). If you need to perform additional computations on the resulting values, though, use the natural values in the `when` clause and let Mindcode perform the necessary conversions.  
 
-An `in` operator applied to a list of values uses `case`expression internally, so it benefits from the same optimizations.
+An `in` operator applied to a list of values uses `case` expression internally, so it benefits from the same optimizations.
 
 # Conditional expressions
 
@@ -161,7 +165,7 @@ Mindcode supports specifying mlog variable names when declaring variables, using
 volatile mlog("foo") var foo = 10;
 param variable = "foo";
 @this.write(20, variable);
-print(@this.read("foo"));       // Mindcode resolves this to variable 'foo' 
+print(@this.read("foo"));       // Resolved by Mindcode into the variable 'foo' 
 ```
 
 compiles to:
@@ -358,7 +362,7 @@ noinline void build(in cfg)
 end;
 
 noinline def buildBlock(type, x, y, rotation)
-    // Builds and returns the block
+    // The code to actually build and return the block is omitted for brevity
     print(type, x, y, rotation);
     return null;
 end;
@@ -573,7 +577,7 @@ The long-term goal is to produce identical, optimal code in both of these cases.
 
 ## Arrays in non-unrolled loops
 
-When the loop cannot get unrolled for some reason, list iteration loops are generally a little faster than loops using index-based array access. When more than one loop variable is used, or when the array is modified in the loop, list iteration loops may provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space.  
+When the loop cannot get unrolled for some reason, list iteration loops are generally a little faster than loops using index-based array access. When more than one loop variable is used, or when the array is modified in the loop, list iteration loops may provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space. 
 
 Example of simple array access:
 
@@ -822,6 +826,10 @@ label_34:
         print :a.1
         set @counter *tmp1
 ```
+
+# Recursive functions
+
+Recursive functions are fully supported in Mindcode when using an internal stack. However, an internal stack can take up a lot of instruction space. A possible approach is to split the code between two (or more) processors, implementing the recursion itself in one processor and perform all (non-recursive) computations in another processor, freeing up space in the main processor for the internal stack.  
 
 ---
 

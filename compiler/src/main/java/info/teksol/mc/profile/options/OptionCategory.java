@@ -28,6 +28,10 @@ public enum OptionCategory {
             Options which affect the way the source code is compiled.
             """),
 
+    RUNTIME_CHECKS("Runtime checks options", """
+            Options which govern whether and how Mindcode generates runtime checks.
+            """),
+
     OPTIMIZATIONS("Optimization options", """
             Options guiding the overall optimization of the compiled code or activating/deactivating specific
             optimization actions.

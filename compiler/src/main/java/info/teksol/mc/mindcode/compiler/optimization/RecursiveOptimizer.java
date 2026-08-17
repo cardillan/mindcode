@@ -99,7 +99,7 @@ class RecursiveOptimizer extends BaseOptimizer {
             boolean nonRecursive = body.stream().noneMatch(ix -> ix instanceof CallRecInstruction c && c != call && c.getAstContext().function() == function);
 
             if (nonRecursive) {
-                // The function is no longer recursive. Replace all recursive calls with non-recursive ones.
+                // The function is no longer recursive. Replace all recursive calls with non-recursive ones, remove the stack overflow check
                 function.removeRecursiveCall(function);
 
                 List<AstContext> rebuildCalls = new ArrayList<>();
@@ -107,6 +107,11 @@ class RecursiveOptimizer extends BaseOptimizer {
                 try (LogicIterator it = optimizationContext.createIteratorAtIndex(0)) {
                     while (it.hasNext()) {
                         switch (it.next()) {
+                            case AssertBoundsInstruction a when a.getValue() == instructionProcessor.stackPointer()
+                                    && a.getAstContext().function() == function -> {
+                                it.remove();
+                            }
+
                             case CallRecInstruction c when c.getAstContext().function() == function -> {
                                 rebuildCalls.add(c.getAstContext().existingParent());
                             }

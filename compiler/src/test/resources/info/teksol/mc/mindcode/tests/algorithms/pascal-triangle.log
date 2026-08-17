@@ -227,50 +227,57 @@ Modifications by Virtual Instruction Expansion:
     14 op sub *tmp4 :j 1
 -    * readarr<lookup:item> *tmp5 .previousLine[] *tmp4
 -    * readarr<lookup:item> *tmp7 .previousLine[] :j
-+   15 lookup item *tmp19 *tmp4
-+   16 sensor .previousLine*elem *tmp19 @name
-+   17 read *tmp5 @this .previousLine*elem
-+   18 lookup item *tmp20 :j
-+   19 sensor .previousLine*elem *tmp20 @name
-+   20 read *tmp7 @this .previousLine*elem
-    21 op add *tmp8 *tmp5 *tmp7
++   15 assertbounds multiple 1 0 lessThanEq *tmp4 lessThanEq 9 "position 18:50: index out of bounds (0 to 9)"
++   16 lookup item *tmp19 *tmp4
++   17 sensor .previousLine*elem *tmp19 @name
++   18 read *tmp5 @this .previousLine*elem
++   19 assertbounds multiple 1 0 lessThanEq :j lessThanEq 9 "position 18:50: index out of bounds (0 to 9)"
++   20 lookup item *tmp20 :j
++   21 sensor .previousLine*elem *tmp20 @name
++   22 read *tmp7 @this .previousLine*elem
+    23 op add *tmp8 *tmp5 *tmp7
 -    * writearr<lookup:liquid> *tmp8 .currentLine[] :j
-+   22 lookup liquid *tmp21 :j
-+   23 sensor .currentLine*elem *tmp21 @name
-+   24 write *tmp8 @this .currentLine*elem
-    25 label *label5
-    26 op add :j :j 1
-    27 jump *label11 lessThanEq :j :lineLength
-    28 label *label6
++   24 assertbounds multiple 1 0 lessThanEq :j lessThanEq 9 "position 18:13: index out of bounds (0 to 9)"
++   25 lookup liquid *tmp21 :j
++   26 sensor .currentLine*elem *tmp21 @name
++   27 write *tmp8 @this .currentLine*elem
+    28 label *label5
+    29 op add :j :j 1
+    30 jump *label11 lessThanEq :j :lineLength
+    31 label *label6
 -    * writearr<lookup:liquid> 1 .currentLine[] :lineLength
-+   29 lookup liquid *tmp22 :lineLength
-+   30 sensor .currentLine*elem *tmp22 @name
-+   31 write 1 @this .currentLine*elem
-    32 op add :lineLength :lineLength 1
-    33 set :c 0
-    34 label *label7
-    35 jump *label9 greaterThanEq 0 :lineLength
-    36 label *label12
++   32 assertbounds multiple 1 0 lessThanEq :lineLength lessThanEq 9 "position 20:9: index out of bounds (0 to 9)"
++   33 lookup liquid *tmp22 :lineLength
++   34 sensor .currentLine*elem *tmp22 @name
++   35 write 1 @this .currentLine*elem
+    36 op add :lineLength :lineLength 1
+    37 set :c 0
+    38 label *label7
+    39 jump *label9 greaterThanEq 0 :lineLength
+    40 label *label12
 -    * readarr<lookup:liquid> *tmp14 .currentLine[] :c
-+   37 lookup liquid *tmp23 :c
-+   38 sensor .currentLine*elem *tmp23 @name
-+   39 read *tmp14 @this .currentLine*elem
-    40 op add :total :total *tmp14
++   41 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 24:13: index out of bounds (0 to 9)"
++   42 lookup liquid *tmp23 :c
++   43 sensor .currentLine*elem *tmp23 @name
++   44 read *tmp14 @this .currentLine*elem
+    45 op add :total :total *tmp14
 -    * readarr<lookup:liquid> *tmp18 .currentLine[] :c
 -    * writearr<lookup:item> *tmp18 .previousLine[] :c
-+   41 read *tmp18 @this .currentLine*elem
-+   42 lookup item *tmp25 :c
-+   43 sensor .previousLine*elem *tmp25 @name
-+   44 write *tmp18 @this .previousLine*elem
-    45 label *label8
-    46 op add :c :c 1
-    47 jump *label12 lessThan :c :lineLength
++   46 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
++   47 read *tmp18 @this .currentLine*elem
++   48 assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
++   49 lookup item *tmp25 :c
++   50 sensor .previousLine*elem *tmp25 @name
++   51 write *tmp18 @this .previousLine*elem
+    52 label *label8
+    53 op add :c :c 1
+    54 jump *label12 lessThan :c :lineLength
 
 Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
-    46 label *label3
-    47 assertequals 1023 :total "Sum of Pascal triangle"
-    48 stop
+    53 label *label3
+    54 assertequals 1023 :total "Sum of Pascal triangle"
+    55 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -288,19 +295,23 @@ set :j 1
 jump *label6 greaterThan 1 :lineLength
 label *label11
 op sub *tmp0 :j 1
+assertbounds multiple 1 0 lessThanEq *tmp0 lessThanEq 9 "position 18:50: index out of bounds (0 to 9)"
 lookup item *tmp6 *tmp0
 sensor .previousLine*elem *tmp6 @name
 read *tmp1 @this .previousLine*elem
+assertbounds multiple 1 0 lessThanEq :j lessThanEq 9 "position 18:50: index out of bounds (0 to 9)"
 lookup item *tmp7 :j
 sensor .previousLine*elem *tmp7 @name
 read *tmp2 @this .previousLine*elem
 op add *tmp3 *tmp1 *tmp2
+assertbounds multiple 1 0 lessThanEq :j lessThanEq 9 "position 18:13: index out of bounds (0 to 9)"
 lookup liquid *tmp8 :j
 sensor .currentLine*elem *tmp8 @name
 write *tmp3 @this .currentLine*elem
 op add :j :j 1
 jump *label11 lessThanEq :j :lineLength
 label *label6
+assertbounds multiple 1 0 lessThanEq :lineLength lessThanEq 9 "position 20:9: index out of bounds (0 to 9)"
 lookup liquid *tmp9 :lineLength
 sensor .currentLine*elem *tmp9 @name
 write 1 @this .currentLine*elem
@@ -308,11 +319,14 @@ op add :lineLength :lineLength 1
 set :c 0
 jump *label9 greaterThanEq 0 :lineLength
 label *label12
+assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 24:13: index out of bounds (0 to 9)"
 lookup liquid *tmp10 :c
 sensor .currentLine*elem *tmp10 @name
 read *tmp4 @this .currentLine*elem
 op add :total :total *tmp4
+assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
 read *tmp5 @this .currentLine*elem
+assertbounds multiple 1 0 lessThanEq :c lessThanEq 9 "position 25:13: index out of bounds (0 to 9)"
 lookup item *tmp11 :c
 sensor .previousLine*elem *tmp11 @name
 write *tmp5 @this .previousLine*elem

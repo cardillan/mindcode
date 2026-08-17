@@ -84,7 +84,7 @@ class PrintMerger extends BaseOptimizer {
                                 reset();
                             }
                         }
-                        case PRINTFLUSH, FORMAT, MESSAGE, LOCALEPRINT,
+                        case PRINTFLUSH, ERROR, FORMAT, MESSAGE, LOCALEPRINT,
                              JUMP, CALL, RETURN, CALLREC, RETURNREC, MULTILABEL,
                              MULTIJUMP, MULTICALL, ASSERT_PRINTS, ASSERT_FLUSH -> reset();
                     }

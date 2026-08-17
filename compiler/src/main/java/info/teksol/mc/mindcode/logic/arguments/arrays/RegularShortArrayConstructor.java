@@ -59,7 +59,7 @@ public class RegularShortArrayConstructor extends TablelessArrayConstructor {
     }
 
     protected LocalContextfulInstructionsCreator prepareExpansion(Consumer<LogicInstruction> consumer) {
-        generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1 );
+        generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1);
 
         AstContextType contextType = useSelects ? AstContextType.CODE :  AstContextType.IF;
         AstContext astContext = this.instruction.getAstContext().createChild(instruction.getAstContext().existingNode(),
@@ -151,11 +151,11 @@ public class RegularShortArrayConstructor extends TablelessArrayConstructor {
         }
     }
 
-    protected void expandAccess(LocalContextfulInstructionsCreator creator, Consumer<ValueStore> operation) {
-        createIfElse(creator, operation, 0, arraySize - 1);
+    protected void expandAccess(LocalContextfulInstructionsCreator creator, Consumer<ValueStore> valueExtractor) {
+        createIfElse(creator, valueExtractor, 0, arraySize - 1);
     }
 
-    private void createIfElse(LocalContextfulInstructionsCreator creator, Consumer<ValueStore> operation, int startIndex, int endIndex) {
+    private void createIfElse(LocalContextfulInstructionsCreator creator, Consumer<ValueStore> valueExtractor, int startIndex, int endIndex) {
         creator.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
         LogicLabel elseLabel = processor.nextLabel();
         LogicLabel endLabel = processor.nextLabel();
@@ -164,17 +164,17 @@ public class RegularShortArrayConstructor extends TablelessArrayConstructor {
                 .setNonNegativeInt(instruction.getIndex());
 
         creator.setSubcontextType(AstSubcontextType.BODY, 0.5);
-        operation.accept(arrayStore.getElements().get(startIndex));
+        valueExtractor.accept(arrayStore.getElements().get(startIndex));
         creator.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
         creator.createJumpUnconditional(endLabel);
         creator.createLabel(elseLabel);
 
         creator.setSubcontextType(AstSubcontextType.BODY, 0.5);
         if (endIndex == startIndex + 1) {
-            operation.accept(arrayStore.getElements().get(endIndex));
+            valueExtractor.accept(arrayStore.getElements().get(endIndex));
         } else {
             creator.pushContext(AstContextType.IF, AstSubcontextType.BASIC);
-            createIfElse(creator, operation, startIndex + 1, endIndex);
+            createIfElse(creator, valueExtractor, startIndex + 1, endIndex);
             creator.popContext();
         }
         creator.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);

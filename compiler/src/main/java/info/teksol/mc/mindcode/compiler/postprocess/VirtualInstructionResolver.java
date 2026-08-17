@@ -16,7 +16,9 @@ import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.arguments.Operation.NOT_EQUAL;
 
-/// Expands virtual instructions (READARR, WRITEARR) into real code.
+/// Expands virtual instructions into full code:
+/// - array access instructions (READARR, WRITEARR)
+/// - Boolean OR ('||')
 @NullMarked
 public class VirtualInstructionResolver {
     private final InstructionProcessor processor;

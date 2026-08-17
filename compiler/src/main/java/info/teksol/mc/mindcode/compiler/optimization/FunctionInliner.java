@@ -220,12 +220,22 @@ class FunctionInliner extends BaseOptimizer {
             return null;
         }
 
+        int runtimeChecksRemoved = from == null || !from.isRecursiveCall(function)
+                ? body.stream()
+                    .filter(ix -> ix instanceof AssertBoundsInstruction abi
+                            && abi.getValue() == instructionProcessor.stackPointer()
+                            && ix.getAstContext().function() == function)
+                    .limit(1)
+                    .mapToInt(LogicInstruction::getRealSize)
+                    .sum()
+                : 0;
+
         // Cost: body size minus one (return) times the number of calls minus body size (we'll remove the original)
-        int cost = body.realSize() - 1;
-        return cost <= costLimit ? new InlineFunctionCallAction(call, cost, benefit) : null;
+        int cost = body.realSize() - 1 - runtimeChecksRemoved;
+        return cost <= costLimit ? new InlineFunctionCallAction(call, cost, benefit, runtimeChecksRemoved > 0) : null;
     }
 
-    private OptimizationResult inlineFunctionCall(AstContext call, int costLimit) {
+    private OptimizationResult inlineFunctionCall(AstContext call, boolean removeOverflowCheck) {
         optimizations++;
         Optional<LogicInstruction> cix = contextStream(call.parent())
                 .filter(ix -> ix.getAstContext() == call && (ix.getOpcode() == Opcode.CALL || ix.getOpcode() == Opcode.CALLREC)).findFirst();
@@ -256,6 +266,11 @@ class FunctionInliner extends BaseOptimizer {
                 .createSubcontext(INLINE_CALL, 1.0);
         int insertionPoint = firstInstructionIndex(call);
         LogicList newBody = body.duplicateToContextForInlining(newContext, l -> !l.equals(callLabel));
+        if (removeOverflowCheck) {
+            newBody.removeIf(ix -> ix instanceof AssertBoundsInstruction abi
+                            && abi.getValue() == instructionProcessor.stackPointer()
+                            && ix.getAstContext().function() == function);
+        }
         insertInstructions(insertionPoint, newBody);
         // Remove original call instructions, including hoisted ones
         removeMatchingInstructions(ix -> ix.belongsTo(call));
@@ -268,15 +283,18 @@ class FunctionInliner extends BaseOptimizer {
     }
 
     private class InlineFunctionCallAction extends AbstractOptimizationAction {
-        public InlineFunctionCallAction(AstContext astContext, int cost, double benefit) {
+        private final boolean removeOverflowCheck;
+
+        public InlineFunctionCallAction(AstContext astContext, int cost, double benefit, boolean removeOverflowCheck) {
             super(astContext, cost, benefit);
+            this.removeOverflowCheck = removeOverflowCheck;
             debugOutput("Created action: " + this);
         }
 
         @Override
         public OptimizationResult apply(int costLimit) {
             debugOutput("Applying action: " + this + "\n\n");
-            return applyOptimization(() -> inlineFunctionCall(astContext(), costLimit), toString());
+            return applyOptimization(() -> inlineFunctionCall(astContext(), removeOverflowCheck), toString());
         }
 
         @Override

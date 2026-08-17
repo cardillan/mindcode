@@ -71,9 +71,6 @@ public enum InstructionInfo {
     /// or a return address for a jump instruction which replaces the original call
     CALL_RETURN(LogicLabel.EMPTY),
 
-    /// This operation instruction was already processed by a select optimization
-    SELECT_OPERATION(Boolean.FALSE),
-
     /// This is a fall-through multijump or multicall instruction. It must not be jump-threaded.
     FALL_THROUGH(Boolean.FALSE),
 
@@ -91,6 +88,9 @@ public enum InstructionInfo {
     /// This instruction is part of a jump table affected by the integer conversion of one of its argument.
     /// When the floor optimization is applied, these instructions need to be modified as well.
     NON_NEGATIVE_INT_TABLE(LogicVariable.INVALID),
+
+    /// This is an AssertBounds instruction checking a stack overflow. No lower bounds check is necessary.
+    STACK_OVERFLOW_CHECK(Boolean.FALSE),
     ;
 
     public final Object defaultValue;

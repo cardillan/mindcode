@@ -314,6 +314,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
             function.getParameters().stream().filter(FunctionParameter::isInput).map(LogicVariable.class::cast)
                     .forEach(variableStates::markInitialized);
             variableStates.markInitialized(function.getFnRetAddr());
+            variableStates.markInitialized(instructionProcessor.stackPointer());
         }
 
         iterator = createIteratorAtContext(context);

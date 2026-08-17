@@ -46,6 +46,7 @@ public class CompilerOptionFactory {
         addEnvironmentOptions(list, webApp);
         addMlogFormatOptions(list, webApp);
         addCompilerOptions(list, webApp);
+        addRuntimeChecksOptions(list, webApp);
         addOptimizationsOptions(list, webApp);
         addOptimizationLevels(list, webApp);
         addDebuggingOptions(list, webApp);
@@ -263,12 +264,6 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 0, 4, 0));
 
-        list.add(new BooleanCompilerOptionValue(CompilerOptions.BOUNDARY_CHECKS, "",
-                "activates or deactivates runtime checks to catch indexes being out of range when accessing arrays",
-                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
-                OptionAvailability.UNIVERSAL, category,
-                true));
-
         list.add(new BooleanCompilerOptionValue(CompilerOptions.EMULATE_STRICT_NOT_EQUAL, "",
                 "use the 'select' instruction to emulate jump with the !== (strict not equal) condition",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
@@ -280,19 +275,6 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 false));
-
-        list.add(new BooleanCompilerOptionValue(CompilerOptions.ERROR_FUNCTION, "",
-                "activates or deactivates the error() function (when set to 'false', error() function does nothing)",
-                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
-                OptionAvailability.UNIVERSAL, category,
-                true));
-
-        list.add(new EnumCompilerOptionValue<>(CompilerOptions.ERROR_REPORTING, "",
-                "specifies the mechanism used by the compiler when generating runtime checks",
-                RuntimeErrorReporting.class,
-                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
-                OptionAvailability.UNIVERSAL, category,
-                RuntimeErrorReporting.NONE));
 
         list.add(new EnumCompilerOptionValue<>(CompilerOptions.REMARKS, "r",
                 "controls remarks propagation to the compiled code: none (remarks are removed), " +
@@ -306,6 +288,35 @@ public class CompilerOptionFactory {
         list.add(new BooleanCompilerOptionValue(CompilerOptions.AUTO_PRINTFLUSH, "",
                 "automatically add a 'printflush message1' instruction at the end of the program if one is missing",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+    }
+
+    private static void addRuntimeChecksOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
+        final OptionCategory category = OptionCategory.RUNTIME_CHECKS;
+
+        list.add(new EnumCompilerOptionValue<>(RuntimeChecksOptions.ERROR_REPORTING, "",
+                "specifies the mechanism used by the compiler when generating runtime checks",
+                RuntimeErrorReporting.class,
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                RuntimeErrorReporting.NONE));
+
+        list.add(new BooleanCompilerOptionValue(RuntimeChecksOptions.ERROR_FUNCTION, "",
+                "activates or deactivates the error() function (when set to 'false', error() function does nothing)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(RuntimeChecksOptions.BOUNDARY_CHECKS, "",
+                "activates or deactivates runtime checks to catch indexes being out of range when accessing arrays",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(RuntimeChecksOptions.STACK_OVERFLOW_CHECKS, "",
+                "activates or deactivates runtime checks to catch stack overflow",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                 OptionAvailability.UNIVERSAL, category,
                 true));
     }

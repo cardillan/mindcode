@@ -86,6 +86,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 OptionCategory.ENVIRONMENT,
                 OptionCategory.MLOG_FORMAT,
                 OptionCategory.COMPILER,
+                OptionCategory.RUNTIME_CHECKS,
                 OptionCategory.OPTIMIZATIONS,
                 OptionCategory.OPTIMIZATION_LEVELS,
                 OptionCategory.DEBUGGING,

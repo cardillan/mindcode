@@ -106,6 +106,16 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
             assert function.getAtomicLabel() != null;
             assembler.createLabel(function.getAtomicLabel());
         }
+        if (function.isRecursive() && function.getProfile().isStackOverflowChecks() && context.stackTracker().externalStack()) {
+            String errorMessage = String.format("%s: stack overflow error", function.getDeclaration().sourcePosition().formatForMlog());
+            assembler.setSubcontextType(AstSubcontextType.STACK, 1.0);
+            assembler.createAssertBounds(LogicKeyword.create("decimal"), LogicNumber.ONE,
+                    LogicNumber.create(context.stackTracker().getAllocationStart()), Condition.LESS_THAN_EQ,
+                    assembler.getProcessor().stackPointer(),
+                    Condition.LESS_THAN, LogicNumber.create(context.stackTracker().getAllocationEnd()),
+                    LogicString.create(errorMessage)).setStackOverflowCheck();
+            assembler.clearSubcontextType();
+        }
         ValueStore valueStore = function.isVoid()
                 ? visitBody(function.getBody())
                 : evaluateBody(function.getBody());

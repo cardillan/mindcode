@@ -161,6 +161,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             }
             creator.createMultiCall(instruction.getIndex(), jumpTable.marker())
                     .setSideEffects(createCallSideEffects())
+                    .setNonNegativeInt(instruction.getIndex())
                     .setHoistId(marker2)
                     .setJumpTable(jumpTable.branchLabels());
             creator.createLabel(returnLabel);

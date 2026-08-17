@@ -611,11 +611,8 @@ Options which affect the way the source code is compiled.
 | [atomic-merge-level](#option-atomic-merge-level)             | local  | stable             |
 | [atomic-safety-margin](#option-atomic-safety-margin)         | local  | stable             |
 | [auto-printflush](#option-auto-printflush)                   | global | stable             |
-| [boundary-checks](#option-boundary-checks)                   | local  | stable             |
 | [emulate-strict-not-equal](#option-emulate-strict-not-equal) | global | stable             |
 | [enforce-size-limits](#option-enforce-size-limits)           | global | stable             |
-| [error-function](#option-error-function)                     | local  | stable             |
-| [error-reporting](#option-error-reporting)                   | local  | stable             |
 | [ipt](#option-ipt)                                           | local  | stable             |
 | [remarks](#option-remarks)                                   | local  | stable             |
 | [setrate](#option-setrate)                                   | global | stable             |
@@ -660,18 +657,6 @@ Activates/deactivates automatic flushing of print output. Possible values are:
 * `true` (the default value): When the program contains at least one `print` or `printchar` instruction, and no `printflush` or `draw print` instructions, Mindcode adds a `printflush message1` instruction at the end of the main program body, and generates a warning.
 
 This feature is meant for small, test scripts, where a call to `printflush()` is easily missed. This situation would otherwise require new compilation and code injection into the mlog processor when detected.
-
-### Option `boundary-checks`
-
-**Option scope: [local](#local-scope)**
-
-This option activates/deactivates runtime checks when accessing an internal or external array by index.
-
-* `false`: no boundary checks are performed.
-* `true` (the default value): boundary checks are performed according to the error-reporting mechanism, unless `error-reporting` is set to `none`, in which case no runtime checks are performed.
-
-> [!NOTE]
-> No runtime checks are generated when accessing memory block directly without a declared array, for example `cell1[index]` or `memory[index]` (where `memory` is a variable and not an external array) do not have runtime checks generated.
 
 ### Option `emulate-strict-not-equal`
 
@@ -724,36 +709,6 @@ Possible values for the `enforce-size-limits` option are:
 
 > [!NOTE]
 > The number of instructions is checked against the Mindustry limit of 1000 instructions, disregarding the value possibly specified using the [`instruction-limit` compiler option](#option-instruction-limit). The processor configuration is checked against the value specified by the [`processor-size-limit` option](#option-processor-size-limit).
-
-### Option `error-function`
-
-**Option scope: [local](#local-scope)**
-
-Specifies how calls to the [`error()` function](TROUBLESHOOTING.markdown#the-error-function) are handled:
-
-* `false`: calls to `error()` are ignored.
-* `true` (the default value): calls to `error()` are reported according to the error-reporting mechanism, unless `error-reporting` is set to `none`, in which case the calls are also ignored. 
-
-### Option `error-reporting`
-
-**Option scope: [local](#local-scope)**
-
-This option specifies the mechanism to be used by the compiler to report failing runtime checks. Runtime checks are a debug feature and should be only active when developing/debugging your scripts, as they make the code larger and slower.
-
-Which runtime checks are performed is governed by other compiler options. Only when `error-reporting` is set to `none`, no runtime checks are performed, regardless of other option values.  
-
-The following compiler options govern which runtime checks are performed:
-
-* `boundary-checks`: when accessing an element of an internal or external array by index, a runtime-check is generated to make sure the index lies within bounds.
-* `error-function`: when a call to the [`error()` function](TROUBLESHOOTING.markdown#the-error-function) is made, this option specifies how the error is reported.
-
-Possible values for the `error-reporting` option are:
-
-* `none` (the default value): no runtime checks are generated.
-* `assert`: runtime checks are generated using instructions provided by the [MlogAssertions mod](https://github.com/cardillan/MlogAssertions). The mod is available for Mindustry 7 and Mindustry 8. If the mod is not installed, no runtime checks are performed, but otherwise the code runs as expected. Each runtime check takes one instruction. When the runtime check fails, the mod displays an error message over the processor for easier detection.
-* `minimal`: when the runtime check fails, the program execution stops on a `jump` instruction (this instruction permanently jumps to itself, which can be determined by inspecting the `@counter` variable in the **Vars** screen). Each runtime check takes two instructions.
-* `simple`: when the runtime check fails, the program execution stops on a `stop` instruction (again, this can be determined by inspecting the `@counter` variable). Each runtime check takes three instructions.
-* `described`: when the runtime check fails, the program execution stops on a `stop` instruction. However, a `print` instruction containing an error message is generated just before the `stop` instruction; after locating the faulting `stop` instruction, the error message can be read. Each runtime check takes four instructions.
 
 ### Option `ipt`
 
@@ -842,6 +797,14 @@ write *tmp0 cell1 0                     # The last atomic section instruction
 
 An alternative way to specify the processor speed is the [`ipt` compiler option](#option-ipt), however, this option does not generate a `setrate` instruction to apply the specified speed to the processor.
 
+### Option `stack-depth`
+
+**Option scope: [local](#local-scope)**
+
+Specifies the maximum nesting level of recursive function calls. The compiler uses this information when creating local arrays in recursive functions and internal stack. Allowed values are in the range of `1` to `512` (inclusive). The default value is `10`.
+
+As this option's scope is local, it is possible to specify a different stack depth for different functions. Mindcode may also perform optimizations which reduce or remove the stack requirements of individual functions, in this case the stack depth of these functions is overridden by the compiler. 
+
 ### Option `syntax`
 
 **Option scope: [module](#module-scope)**
@@ -877,6 +840,71 @@ The guard code is always a single `jump` instruction which jumps back to itself 
 | 8.1    | full                | `jump 0 strictEqual @bufferSize null`  |
 
 The jump target (`0`) is replaced with proper instruction address when it's not the first in the compiled code.
+
+## Runtime checks options
+
+Options which govern whether and how Mindcode generates runtime checks.
+
+| Option                                                 | Scope | Semantic stability |
+|--------------------------------------------------------|-------|--------------------|
+| [boundary-checks](#option-boundary-checks)             | local | stable             |
+| [error-function](#option-error-function)               | local | stable             |
+| [error-reporting](#option-error-reporting)             | local | stable             |
+| [stack-overflow-checks](#option-stack-overflow-checks) | local | stable             |
+
+### Option `boundary-checks`
+
+**Option scope: [local](#local-scope)**
+
+This option activates/deactivates runtime checks when accessing an internal or external array by index.
+
+* `false`: no boundary checks are performed.
+* `true` (the default value): boundary checks are performed according to the error-reporting mechanism, unless `error-reporting` is set to `none`, in which case no runtime checks are performed.
+
+> [!NOTE]
+> No runtime checks are generated when accessing memory block directly without a declared array, for example `cell1[index]` or `memory[index]` (where `memory` is a variable and not an array) do not have runtime checks generated.
+
+### Option `error-function`
+
+**Option scope: [local](#local-scope)**
+
+Specifies how calls to the [`error()` function](TROUBLESHOOTING.markdown#the-error-function) are handled:
+
+* `false`: calls to `error()` are ignored.
+* `true` (the default value): calls to `error()` are reported according to the error-reporting mechanism, unless `error-reporting` is set to `none`, in which case the calls are also ignored.
+
+### Option `error-reporting`
+
+**Option scope: [local](#local-scope)**
+
+This option specifies the mechanism to be used by the compiler to report failing runtime checks. Runtime checks are a debug feature and should be only active when developing/debugging your scripts, as they make the code larger and slower.
+
+Which runtime checks are performed is governed by other compiler options. Only when `error-reporting` is set to `none`, no runtime checks are performed, regardless of other option values.
+
+The following compiler options govern which runtime checks are performed:
+
+* `boundary-checks`: when accessing an element of an internal or external array by index, a runtime-check is generated to make sure the index lies within bounds.
+* `error-function`: when a call to the [`error()` function](TROUBLESHOOTING.markdown#the-error-function) is made, this option specifies how the error is reported.
+
+Possible values for the `error-reporting` option are:
+
+* `none` (the default value): no runtime checks are generated.
+* `assert`: runtime checks are generated using instructions provided by the [MlogAssertions mod](https://github.com/cardillan/MlogAssertions). The mod is available for Mindustry 7 and Mindustry 8. If the mod is not installed, no runtime checks are performed, but otherwise the code runs as expected. Each runtime check takes one instruction. When the runtime check fails, the mod displays an error message over the processor for easier detection.
+* `minimal`: when the runtime check fails, the program execution stops on a `jump` instruction (this instruction permanently jumps to itself, which can be determined by inspecting the `@counter` variable in the **Vars** screen). Each runtime check takes two instructions.
+* `simple`: when the runtime check fails, the program execution stops on a `stop` instruction (again, this can be determined by inspecting the `@counter` variable). Each runtime check takes three instructions.
+* `described`: when the runtime check fails, the program execution stops on a `stop` instruction. However, a `print` instruction containing an error message is generated just before the `stop` instruction; after locating the faulting `stop` instruction, the error message can be read. Each runtime check takes four instructions.
+
+### Option `stack-overflow-checks`
+
+**Option scope: [local](#local-scope)**
+
+This option activates/deactivates stack overflow runtime checks.
+
+* `false`: no stack overflow checks are performed.
+* `true` (the default value): stack overflow checks are performed according to the error-reporting mechanism, unless `error-reporting` is set to `none`, in which case no runtime checks are performed.
+
+> [!NOTE]
+> For [internal stack](SYNTAX-4-FUNCTIONS.markdown#internal-stack), the runtime checks are built into the stack itself. For [external stack](SYNTAX-4-FUNCTIONS.markdown#external-stack), the runtime checks are performed at the beginning of each recursive function. When using an external stack, the program may overwrite data in the external memory outside the stack before the error is detected and the program execution stops. To prevent this, make sure the external stack extends to the end of the memory block which contains it.
 
 ## Optimization options
 

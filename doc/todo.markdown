@@ -24,9 +24,12 @@ Changes intended for the next regular release.
 * **Doing**
 
 * Internal stack
+  * NameCreator refactoring 
 
 * **Planned**
 
+* Local arrays
+* Converting arrays to const arrays when possible
 * Migrate to the Heroku-26 stack (Java 25 required)
 * Automatically make global variables accessed by a background process volatile.
   * Might need a category for volatile, but removable variables.
@@ -37,10 +40,8 @@ Changes intended for the next regular release.
   * Using `remote` to mark variables/functions for export
   * Modifier '%s' requires parentheses around its arguments
 * Button for copying code from the Mindcode panel in the web app
-* Local arrays
 * If expression telescoping optimization
 * Array code injection optimization (?)
-* Converting arrays to const arrays when possible
 
 * **Quick ideas**
 

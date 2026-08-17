@@ -321,21 +321,6 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return this;
     }
 
-    public CompilerProfile setBoundaryChecks(boolean boundaryChecks) {
-        getOption(CompilerOptions.BOUNDARY_CHECKS).setValue(boundaryChecks);
-        return this;
-    }
-
-    public CompilerProfile setErrorFunction(boolean errorFunction) {
-        getOption(CompilerOptions.ERROR_FUNCTION).setValue(errorFunction);
-        return this;
-    }
-
-    public CompilerProfile setErrorReporting(RuntimeErrorReporting errorReporting) {
-        getOption(CompilerOptions.ERROR_REPORTING).setValue(errorReporting);
-        return this;
-    }
-
     public CompilerProfile setEmulateStrictNotEqual(boolean emulateStrictNotEqual) {
         getOption(CompilerOptions.EMULATE_STRICT_NOT_EQUAL).setValue(emulateStrictNotEqual);
         return this;
@@ -366,6 +351,23 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
 
     public CompilerProfile setTargetGuard(boolean targetGuard) {
         getOption(CompilerOptions.TARGET_GUARD).setValue(targetGuard);
+        return this;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Runtime Checks Options">
+    public CompilerProfile setBoundaryChecks(boolean boundaryChecks) {
+        getOption(RuntimeChecksOptions.BOUNDARY_CHECKS).setValue(boundaryChecks);
+        return this;
+    }
+
+    public CompilerProfile setErrorFunction(boolean errorFunction) {
+        getOption(RuntimeChecksOptions.ERROR_FUNCTION).setValue(errorFunction);
+        return this;
+    }
+
+    public CompilerProfile setErrorReporting(RuntimeErrorReporting errorReporting) {
+        getOption(RuntimeChecksOptions.ERROR_REPORTING).setValue(errorReporting);
         return this;
     }
     //</editor-fold>

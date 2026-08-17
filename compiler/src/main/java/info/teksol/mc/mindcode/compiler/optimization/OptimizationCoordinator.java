@@ -307,8 +307,8 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
 
         int stackOverflowCheck = switch (function.getProfile().getErrorReporting()) {
             case NONE -> 0;
-            case ASSERT -> 1;
-            case MINIMAL, SIMPLE, DESCRIBED -> 2;
+            case ASSERT, MINIMAL, SIMPLE -> 1;
+            case DESCRIBED -> 2;
         };
         int additionalSize = stackOverflowCheck
                 + 1     // function decoration

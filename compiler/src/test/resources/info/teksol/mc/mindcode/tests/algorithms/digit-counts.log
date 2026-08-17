@@ -659,28 +659,30 @@ Modifications by Virtual Instruction Expansion:
     37 label *label18
     38 op mod *tmp2 :countDigits:number 10
 -    * readarr<lookup:liquid> *tmp3 .array[] *tmp2
-+   39 lookup liquid *tmp10 *tmp2
-+   40 sensor .array*elem *tmp10 @name
-+   41 read *tmp3 @this .array*elem
-    42 op add *tmp3 *tmp3 1
++   39 assertbounds multiple 1 0 lessThanEq *tmp2 lessThanEq 9 "position 17:5: index out of bounds (0 to 9)"
++   40 lookup liquid *tmp10 *tmp2
++   41 sensor .array*elem *tmp10 @name
++   42 read *tmp3 @this .array*elem
+    43 op add *tmp3 *tmp3 1
 -    * writearr<lookup:liquid> *tmp3 .array[] *tmp2
-+   43 write *tmp3 @this .array*elem
-    44 op idiv :countDigits:number :countDigits:number 10
-    45 label *label19
-    46 jump *label18 greaterThan :countDigits:number 0
++   44 assertbounds multiple 1 0 lessThanEq *tmp2 lessThanEq 9 "position 17:5: index out of bounds (0 to 9)"
++   45 write *tmp3 @this .array*elem
+    46 op idiv :countDigits:number :countDigits:number 10
+    47 label *label19
+    48 jump *label18 greaterThan :countDigits:number 0
 
 Modifications by Jumps phase, Single Step Elimination, pass 7, iteration 1 (-1 instructions):
  
-    45 print "-"
-    46 print nitrogen
-    47 assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
+    47 print "-"
+    48 print nitrogen
+    49 assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-8 instructions):
  
-    26 label *label16
-    27 assertflush *tmp6
-    28 print water
+    28 label *label16
+    29 assertflush *tmp6
+    30 print water
 -    * print "-"
 -    * print slag
 -    * print "-"
@@ -698,17 +700,17 @@ Modifications by Final phase, Print Merging, iteration 1 (-8 instructions):
 -    * print "-"
 -    * print gallium
 -    * print "-"
-+   29 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
-+   30 format slag
-+   31 format oil
-+   32 format cryofluid
-+   33 format neoplasm
-+   34 format hydrogen
-+   35 format ozone
-+   36 format cyanogen
-+   37 format gallium
-    38 print nitrogen
-    39 assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
++   31 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
++   32 format slag
++   33 format oil
++   34 format cryofluid
++   35 format neoplasm
++   36 format hydrogen
++   37 format ozone
++   38 format cyanogen
++   39 format gallium
+    40 print nitrogen
+    41 assertprints *tmp6 "10-20-20-20-20-20-20-20-20-20" "digit counts"
 
 Final code before resolving virtual instructions:
 
@@ -729,10 +731,12 @@ label *label25
 set :countDigits:number :i
 label *label18
 op mod *tmp0 :countDigits:number 10
+assertbounds multiple 1 0 lessThanEq *tmp0 lessThanEq 9 "position 17:5: index out of bounds (0 to 9)"
 lookup liquid *tmp3 *tmp0
 sensor .array*elem *tmp3 @name
 read *tmp1 @this .array*elem
 op add *tmp1 *tmp1 1
+assertbounds multiple 1 0 lessThanEq *tmp0 lessThanEq 9 "position 17:5: index out of bounds (0 to 9)"
 write *tmp1 @this .array*elem
 op idiv :countDigits:number :countDigits:number 10
 jump *label18 greaterThan :countDigits:number 0

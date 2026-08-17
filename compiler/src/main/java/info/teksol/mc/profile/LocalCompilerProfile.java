@@ -53,10 +53,6 @@ public interface LocalCompilerProfile {
         return getDoubleValue(CompilerOptions.ATOMIC_SAFETY_MARGIN);
     }
 
-    default RuntimeErrorReporting getErrorReporting() {
-        return getEnumValue(CompilerOptions.ERROR_REPORTING);
-    }
-
     default int getIpt() {
         return isDefault(CompilerOptions.IPT) ? getIntValue(CompilerOptions.SETRATE) : getIntValue(CompilerOptions.IPT);
     }
@@ -74,13 +70,23 @@ public interface LocalCompilerProfile {
     default boolean isAtomicFullProtection() {
         return getBooleanValue(CompilerOptions.ATOMIC_FULL_PROTECTION);
     }
+    //</editor-fold>
 
-    default boolean isBoundaryChecks() {
-        return getBooleanValue(CompilerOptions.BOUNDARY_CHECKS);
+    //<editor-fold desc="Runtime Checks Options">
+    default RuntimeErrorReporting getErrorReporting() {
+        return getEnumValue(RuntimeChecksOptions.ERROR_REPORTING);
     }
 
     default boolean isErrorFunction() {
-        return getBooleanValue(CompilerOptions.ERROR_FUNCTION);
+        return getBooleanValue(RuntimeChecksOptions.ERROR_FUNCTION);
+    }
+
+    default boolean isBoundaryChecks() {
+        return getBooleanValue(RuntimeChecksOptions.BOUNDARY_CHECKS);
+    }
+
+    default boolean isStackOverflowChecks() {
+        return getBooleanValue(RuntimeChecksOptions.STACK_OVERFLOW_CHECKS);
     }
     //</editor-fold>
 

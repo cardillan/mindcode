@@ -9,16 +9,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed and reactivated the `op floor` removal optimization after it has been deactivated in 3.17.4.
+* Fixed the `error()` function being compiled even when the `error-function` option was set to `false`.
+* Fixed the `assertbounds` instruction not being properly handled when the [implicit integer conversions optimization](/doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#handling-non-negative-implicit-integer-conversions) was applied, potentially leading to compiler errors or mistakenly reported runtime errors.
 
 ### Added
 
 * Added the capability to inline recursive function calls. Recursive functions called from just a single place are inlined by the compiler, the rest may be inlined by the [Function Inlining](/doc/syntax/optimizations/FUNCTION-INLINING.markdown) as well.
 * Added tail call optimization to [Recursive Optimization](/doc/syntax/optimizations/RECURSIVE-OPTIMIZATION.markdown#tail-call-optimization).
+* Added an [internal stack implementation](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#internal-stack), which supports storing non-numerical values in parameters and variables of recursive functions without restrictions.
+* Added stack overflow runtime check for both internal and external stack, govedned by the [`stack-overflow-checks` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-stack-overflow-checks).
 
 ### Changed
 
-* **Breaking:** the `return-optimization` compiler directive and command-line parameter have been renamed to `recursive-optimization`, as part of renaming _Return Optimization_ to _Recursive Optimization_.  
-* Improved the implementation of a return from a recursive function call.
+* **Breaking:** the `return-optimization` compiler directive and command-line parameter have been renamed to `recursive-optimization`, as part of renaming _Return Optimization_ to _Recursive Optimization_.
+* Improved the implementation of a return from a recursive function call using an external stack.
 * Improved code folding in the web app's source code editor.
 
 ## 3.17.5 – 2026-08-01
@@ -41,14 +45,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* Updated the web app grammar to reflect the latest Mindcode and Schemacode changes. 
+* Updated the web app grammar to reflect the latest Mindcode and Schemacode changes.
 
 ## 3.17.2 – 2026-07-24
 
 ### Added
 
 * Added target `8.2` corresponding to the new format of the `status` instruction in the latest BE build. The default target is still `8.1`.
-* Added a mapping of the `sensor` instruction to a function: `result = sensor(object, property);` is now a valid syntax.  
+* Added a mapping of the `sensor` instruction to a function: `result = sensor(object, property);` is now a valid syntax.
 
 ## 3.17.1 – 2026-07-23
 
@@ -66,7 +70,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed a wrong optimization of mutually recursive functions ([#342](https://github.com/cardillan/mindcode/issues/342)).
 * Fixed a wrong position being reported for errors and warnings in code snippets included as a module via the `require` directive.
 * Fixed the web app not loading updated assets after a new version is deployed.
-* Fixed the connection to Mlog Watcher from the web app failing when the game or the Mlog Watcher mod get restarted. 
+* Fixed the connection to Mlog Watcher from the web app failing when the game or the Mlog Watcher mod get restarted.
 * Fixed the handling of stack overflow, out-of-memory, and other JVM exceptions so that the error is displayed in the web app.
 
 ### Added
@@ -76,9 +80,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for [block arrays](/doc/syntax/SCHEMACODE.markdown#element-arrays) (Schemacode) and [link arrays](/doc/syntax/SYNTAX-1-VARIABLES.markdown#linked-arrays) (Mindcode) ([#324](https://github.com/cardillan/mindcode/issues/324)).
 * Added support for [circular-shaped block arrays](/doc/syntax/SCHEMACODE.markdown#circular-element-arrays).
 * Added support for [block replacement](/doc/syntax/SCHEMACODE.markdown#placement-mode) in schematic definitions ([#339](https://github.com/cardillan/mindcode/issues/339)).
-* Added a validation that ensures a built schematic doesn't have link gaps ([#326](https://github.com/cardillan/mindcode/issues/326)). 
-* Added verification that all linked blocks or tiles lie within the processor's range. 
-* Added an error message when an unsupported block type is included in a schematic definition. 
+* Added a validation that ensures a built schematic doesn't have link gaps ([#326](https://github.com/cardillan/mindcode/issues/326)).
+* Added verification that all linked blocks or tiles lie within the processor's range.
+* Added an error message when an unsupported block type is included in a schematic definition.
 * Added support for [code parametrization in schematics](/doc/syntax/SCHEMACODE.markdown#code-parametrization) ([#330](https://github.com/cardillan/mindcode/issues/330)).
 * Added support for specifying schematic-wide Mindcode compiler options ([#332](https://github.com/cardillan/mindcode/issues/332)).
 * Added a warning when the created schematic size exceeds the maximum size of a schematic that can be created in the game.
@@ -90,15 +94,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added a button to send compiled schematic into Mlog Watcher from the web app schematic page.
 * Added a new command-line option `-p` or `--parallel` to enable [parallel processing of Mindcode source files](/doc/syntax/TOOLS-CMDLINE.markdown#parallel-processing) in the Schematic builder.
 * Added a new command-line option `--watcher-retries` allowing to make several attempts establishing a connection to the Mlog Watcher mod. The default value is `3`.
-* Added logging of compiler activity and internal compiler errors happening in the web app for later inspection.  
+* Added logging of compiler activity and internal compiler errors happening in the web app for later inspection.
 
 ### Changed
 
 * Changed the syntax of the [remote require](/doc/syntax/REMOTE-CALLS.markdown#main-processor-code) directive. The old syntax has been deprecated.
 * Changed the `@unit` built-in variable to be considered non-volatile and added proper handling of side effects by the `ubind` instruction. The change may allow some additional optimizations of unit handling code.
 * Changed linked variables to no longer be volatile while still protecting them in conditions. Explicitly declaring linked variables and arrays `volatile` is possible ([#327](https://github.com/cardillan/mindcode/issues/327)).
-* Changed the dynamic optimization process: when the current instruction count exceeds the limit, `neutral` and `speed` optimization goals are overriden to `size`. 
-* Changed the compiler to generate an error instead of a warning when an unknown built-in variable or named color literal are found in strict mode.  
+* Changed the dynamic optimization process: when the current instruction count exceeds the limit, `neutral` and `speed` optimization goals are overriden to `size`.
+* Changed the compiler to generate an error instead of a warning when an unknown built-in variable or named color literal are found in strict mode.
 * Changed temporary variable generation: temporary variables are renumbered at the end of compilation, so that their names (`*tmp#`) start with 0 and the sequence doesn't contain gaps.
 * Changed the program signature to include Mindcode version number.
 * Changed the web app to limit the maximum optimization time to 20 seconds to avoid the request timing out after 30 seconds.
@@ -163,7 +167,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed incorrect Condition Optimization ([#307](https://github.com/cardillan/mindcode/issues/307)).  
+* Fixed incorrect Condition Optimization ([#307](https://github.com/cardillan/mindcode/issues/307)).
 
 ### Added
 
@@ -174,7 +178,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * The new version of the Mlog Watcher mod is now used by default by the tool app.
-* Updated the Mindustry metadata to the latest version, adding the new `@large-canvas` block.  
+* Updated the Mindustry metadata to the latest version, adding the new `@large-canvas` block.
 
 ## 3.16.0 – 2026-03-06
 
@@ -197,7 +201,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed wrong handling of linked blocks by the DFO ([#303](https://github.com/cardillan/mindcode/issues/303)).
 * Fixed Boolean Optimization bugs ([#304](https://github.com/cardillan/mindcode/issues/304)):
   * The optimization may crash when compiling for targets 8.0 and lower.
-  * The optimization incorrectly processes some noninteger values. 
+  * The optimization incorrectly processes some noninteger values.
 
 ## 3.15.0 – 2026-02-22
 
@@ -209,13 +213,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed a possible error in the tool app handling command-line parameters ([#302](https://github.com/cardillan/mindcode/issues/302)).  
+* Fixed a possible error in the tool app handling command-line parameters ([#302](https://github.com/cardillan/mindcode/issues/302)).
 
 ### Added
 
 * **Breaking:** the `loop` keyword has been reintroduced, to create [infinite loops](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#infinite-loops). Code that uses `loop` as a function or variable name will not compile, and the variable or function will have to be renamed.
 * Added the possibility to use the `break` statement to [exit code blocks](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#break-in-a-code-block).
-* Added [implicit labels](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#implicit-labels) to loops and code blocks. 
+* Added [implicit labels](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#implicit-labels) to loops and code blocks.
 
 ### Changed
 
@@ -227,7 +231,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 > [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) are only guaranteed to execute correctly in the latest BE version (build 26658 or later). The latest beta release (v154.3) doesn't provide necessary support for atomic code execution.
 
 > [!NOTE]
-> The new [Mlog Watcher functionality](doc/syntax/TOOLS-MLOG-WATCHER.markdown) available with the tool app requires a new version of the Mlog Watcher mod. The new version has not yet been released, but a Mindustry 8-compatible binary is available [here](https://github.com/Sharlottes/MlogWatcher/actions/runs/21562595822). To use that version, the `--watcher-version v1` command line argument must be specified.   
+> The new [Mlog Watcher functionality](doc/syntax/TOOLS-MLOG-WATCHER.markdown) available with the tool app requires a new version of the Mlog Watcher mod. The new version has not yet been released, but a Mindustry 8-compatible binary is available [here](https://github.com/Sharlottes/MlogWatcher/actions/runs/21562595822). To use that version, the `--watcher-version v1` command line argument must be specified.
 
 ### Fixed
 
@@ -245,7 +249,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added a [`atomic-safety-margin` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-atomic-safety-margin). No safety margin is necessary with the latest Mindustry BE build, though.
 * Added new tool app functionalities:
   * Support for the new version of [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown), providing several useful new ways to send or extract mlog code and schematics to/from a running game. To use the new Mlog Watcher mod, the `--watcher-version v1` command-line argument needs to be specified.
-  * Ability to execute mlog code loaded from a file on the processor emulator and for sending it to the Mlog Watcher. Use the new `pm` or `process-mlog` command-line argument.  
+  * Ability to execute mlog code loaded from a file on the processor emulator and for sending it to the Mlog Watcher. Use the new `pm` or `process-mlog` command-line argument.
   * Ability to execute schematics loaded from a file on the processor emulator and for sending it to the new version of the Mlog Watcher. Use the new `ps` or `process-schematic` command-line argument.
 * Added a validation step to the compiler to verify the generated code doesn't exceed the maximum number of instructions. The [`enforce-size-limits` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-enforce-size-limits) can be used to control this behavior.
 
@@ -260,7 +264,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Deprecated
 
-* The `dm` (decompile mlog) and `ds` (decompile schematic) command-line arguments are deprecated. Use `pm` and `ps` instead ("p" stands for "process" as the command-line tool now allows more actions to be performed in addition to decompilation, such as running it on the internal emulator). 
+* The `dm` (decompile mlog) and `ds` (decompile schematic) command-line arguments are deprecated. Use `pm` and `ps` instead ("p" stands for "process" as the command-line tool now allows more actions to be performed in addition to decompilation, such as running it on the internal emulator).
 * The Schematics Refresher mod is deprecated and will be no longer maintained. The Mlog Watcher mod provides better functionality for managing schematics in the game.
 
 ## 3.13.0 – 2026-01-18
@@ -270,7 +274,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed incorrect emulation of the instruction accumulator for targets 6 and 7 affecting instruction scheduling.  
+* Fixed incorrect emulation of the instruction accumulator for targets 6 and 7 affecting instruction scheduling.
 
 ### Added
 
@@ -282,20 +286,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added the [`emulator-fps` compiler options](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-fps) to specify the frame rate to be emulated by the processor emulator. While frames are always emulated fully by Mindcode emulator, the change in instruction scheduling caused by different frame rate only affects situations where an interaction between two or more processors is being emulated.
 * Added the ability to run the compiled schematics on the schematics emulator to the tool app.
 * Added support for sensing `@x` and `@y` in blocks when emulating schematics.
-* Added the [`encode-zero-characters` compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-encode-zero-characters), which allows encoding zero characters in string literals. Use with caution: resulting code cannot be edited or passed via clipboard. Option has no effect when used in the web app. 
+* Added the [`encode-zero-characters` compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-encode-zero-characters), which allows encoding zero characters in string literals. Use with caution: resulting code cannot be edited or passed via clipboard. Option has no effect when used in the web app.
 
 ### Changed
 
 * Runtime errors generated when running the code in the processor emulator no longer prevent outputting the compiled code in the tool app.
 * Changed the format of the [`target` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target). Instead of a processor edition (standard or world), a particular processor type is now specified, using the first letter of the type name (i.e., `m` for micro-, `l` for logic-, `h` for hyper-, and `w` for world-processor, case-insensitive), for example, `#set target = 8L;`.
-* When compiling Mindcode for a processor in a schematic, the target type of the processor is determined by the block type in the schematic.  
+* When compiling Mindcode for a processor in a schematic, the target type of the processor is determined by the block type in the schematic.
 * [Compiler-defined constants](/doc/syntax/SYNTAX-1-VARIABLES.markdown#compiler-defined-constants) now follow the `@@VARIABLE` pattern, instead of earlier `__VARIABLE__` (for example, `@@MINDUSTRY_VERSION`).
 * Changed the emulator handling of the `wait` instruction with zero argument to match the latest Mindustry BE behavior.
 
 ### Miscellaneous
 
 * The system of compiler options has been updated to allow determining whether a given option has been set. This allows the default values of unset options to be derived from the values of other options.
-* The transfer variable, defined for uncached external and remote variables, is no longer used for reads. Instead, a fresh new temporary variable is used each time. This may increase the number of temporary variables generated but avoids unnecessary instructions when using postfix operators on these variables. This became quite important with atomic sections.  
+* The transfer variable, defined for uncached external and remote variables, is no longer used for reads. Instead, a fresh new temporary variable is used each time. This may increase the number of temporary variables generated but avoids unnecessary instructions when using postfix operators on these variables. This became quite important with atomic sections.
 
 ## 3.12.1 – 2026-01-12
 
@@ -314,18 +318,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * The [Loop Rotation optimization](/doc/syntax/optimizations/LOOP-ROTATION.markdown) has been updated:
   * Full loop rotation is performed even for conditions which contain complex code (such as nested loops or function calls).
-  * A full loop rotation is also considered alongside a partial rotation if it could be beneficial to Loop Hoisting.   
+  * A full loop rotation is also considered alongside a partial rotation if it could be beneficial to Loop Hoisting.
 * The [Loop Hoisting optimization](/doc/syntax/optimizations/LOOP-HOISTING.markdown) has been extended:
   * The optimizer gathers information to support the Loop Rotation optimization.
-  * When a loop is fully rotated, an instruction can be hoisted in such a way that it's executed at most once, but only if the loop actually runs.  
+  * When a loop is fully rotated, an instruction can be hoisted in such a way that it's executed at most once, but only if the loop actually runs.
   * When a loop is not known to execute at least once, an instruction affecting just the loop can still get hoisted entirely out of the loop if the loop is nested.
 * The [mlog processor emulator](/doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown) has been completely rewritten. The emulator now matches the behavior of a Mindustry processor of the version identified by the [`target`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target) or [`emulator-target`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-emulator-target) compiler options.
-* The [execution flags](/doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) have been updated to match the new processor emulator. Some flags have been removed, some have been added, and some have been renamed. 
+* The [execution flags](/doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) have been updated to match the new processor emulator. Some flags have been removed, some have been added, and some have been renamed.
 * The processor emulator is now able to execute supported instructions even when created using an `mlog()` function or an mlog block. This includes the code generated by the `compatibility` library.
 
 ## 3.11.0 – 2025-12-25
 
-Note: the new features in this release bring about [changes to the best practices](doc/syntax/BEST-PRACTICES.markdown#mindcode-311) for writing Mindcode. 
+Note: the new features in this release bring about [changes to the best practices](doc/syntax/BEST-PRACTICES.markdown#mindcode-311) for writing Mindcode.
 
 ### Fixed
 
@@ -341,7 +345,7 @@ Note: the new features in this release bring about [changes to the best practice
 * Added the [`no-argument-padding` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-no-argument-padding). When activated, instructions are not padded to the maximum number of arguments.
 * Added the [`author` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-author). The option adds an entry to the list of authors, which is then displayed alongside the usual compiler signature.
 * Added support for new instruction opcode (`ucontrol deconstruct`).
-* Added a binary [`in` operator](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#rangelist-membership-operator) for testing whether a value is contained in a given range or a list of values. 
+* Added a binary [`in` operator](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#rangelist-membership-operator) for testing whether a value is contained in a given range or a list of values.
 
 ### Changed
 
@@ -355,27 +359,27 @@ Note: the new features in this release bring about [changes to the best practice
 * **Breaking:** The `loop-optimization` compiler option has been renamed to `loop-rotation`.
 * The [Boolean Optimization](doc/syntax/optimizations/BOOLEAN-OPTIMIZATION.markdown), previously included in the If Expression Optimization as a _Select Optimization_, has been extracted into a separate optimization class and enhanced:
   * Several optimizations aimed at short-circuited conditional expressions were added.
-  * Where possible, an `op` instruction is used instead of `select`. This allows applying some optimizations even when the compilation target doesn't support `select`.  
+  * Where possible, an `op` instruction is used instead of `select`. This allows applying some optimizations even when the compilation target doesn't support `select`.
 * The [Expression Optimization](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown) has been updated:
   * More cases where a [`select` instruction](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#the-select-instruction) can be replaced with a `set` instruction are now supported.
   * When the resulting values of `select` are `0` and `1` and the condition allows it, the instruction is replaced with an `op` instruction.
-  * The instruction normalizing the result of an `||` operator to `0` or `1` is removed when not needed. 
+  * The instruction normalizing the result of an `||` operator to `0` or `1` is removed when not needed.
   * Added an optimization turning a [`read` instruction](doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#the-readwrite-instructions) with a constant string and a constant index into a `set` instruction setting the character value directly.
-* When evaluating `jump` and `select` conditions during optimizations, cases where the operands of the condition are identical (the same variable) are handled.   
+* When evaluating `jump` and `select` conditions during optimizations, cases where the operands of the condition are identical (the same variable) are handled.
 * The [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY-COMPATIBILITY.markdown) now also performs a test to find out whether assigning `null` to `@counter` is ignored by the processor.
-* The mimex metadata have been updated to match the current BE version. The most significant change is a new set of sound constants. 
+* The mimex metadata have been updated to match the current BE version. The most significant change is a new set of sound constants.
 * The documentation has been restructured. Individual optimizers are described in [separate files](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#individual-mindcode-optimizations), and the description of Logic functions with links to the Function reference was also moved to a [separate file](doc/syntax/FUNCTIONS.markdown).
 
 ### Miscellaneous
 
 * A new optimization, Instruction Reordering, is being developed. The corresponding compiler directive is already present, but the optimization, even when explicitly enabled, is not yet functional.
-* All experimental features are now considered standard. The default optimization level is now advanced. Going forward, only features controllable via compiler options will be marked experimental, and the default optimization level will be `advanced`. Note that Mindcode is a live system and features may be modified to support new functionalities. A reasonable effort will be spent to ensure smooth conversion or backwards compatibility, but all features, both well-established and relatively recent, can be changed or removed in a new release. 
+* All experimental features are now considered standard. The default optimization level is now advanced. Going forward, only features controllable via compiler options will be marked experimental, and the default optimization level will be `advanced`. Note that Mindcode is a live system and features may be modified to support new functionalities. A reasonable effort will be spent to ensure smooth conversion or backwards compatibility, but all features, both well-established and relatively recent, can be changed or removed in a new release.
 
 ## 3.10.0 – 2025-11-17
 
 ### Fixed
 
-* Fixed an error in the Single Step Elimination optimization causing some superfluous jumps not being removed. 
+* Fixed an error in the Single Step Elimination optimization causing some superfluous jumps not being removed.
 
 ### Added
 

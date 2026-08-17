@@ -107,6 +107,11 @@ public interface LogicInstruction extends MlogInstruction {
         return getSharedSize(null);
     }
 
+    default LocalCompilerProfile getLocalProfile() {
+        return getAstContext().getLocalProfile();
+    }
+
+    //<editor-fold desc="Instruction Info getters/setters">
     default LogicLabel getMarker() {
         return (LogicLabel) getInfo(InstructionInfo.MARKER);
     }
@@ -219,14 +224,6 @@ public interface LogicInstruction extends MlogInstruction {
         return setInfo(InstructionInfo.JUMP_TO_RETURN, jumpToReturn);
     }
 
-    default boolean isSelectOperation() {
-        return (boolean) getInfo(InstructionInfo.SELECT_OPERATION);
-    }
-
-    default LogicInstruction setSelectOperation() {
-        return setInfo(InstructionInfo.SELECT_OPERATION, true);
-    }
-
     default boolean isFallThrough() {
         return (boolean) getInfo(InstructionInfo.FALL_THROUGH);
     }
@@ -267,7 +264,12 @@ public interface LogicInstruction extends MlogInstruction {
         return setInfo(InstructionInfo.NON_NEGATIVE_INT_TABLE, nonNegative);
     }
 
-    default LocalCompilerProfile getLocalProfile() {
-        return getAstContext().getLocalProfile();
+    default boolean isStackOverflowCheck() {
+        return (boolean) getInfo(InstructionInfo.STACK_OVERFLOW_CHECK);
     }
+
+    default LogicInstruction setStackOverflowCheck() {
+        return setInfo(InstructionInfo.STACK_OVERFLOW_CHECK, true);
+    }
+    //</editor-fold>
 }
