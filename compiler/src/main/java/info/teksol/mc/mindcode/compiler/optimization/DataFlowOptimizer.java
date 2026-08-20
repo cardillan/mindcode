@@ -60,7 +60,7 @@ class DataFlowOptimizer extends AbstractConditionalOptimizer {
     final Map<LogicVariable, List<LogicInstruction>> references = new HashMap<>();
 
     /// Holds all variable definitions and their uses.
-    final Set<Definition> definitions = Collections.newSetFromMap(new IdentityHashMap<>());
+    final Set<Definition> definitions = new HashSet<>();
 
     /// When a jump outside its context is encountered, current variable state is copied and assigned to the target
     /// label. Upon encountering the target label all stored states are merged and flushed.

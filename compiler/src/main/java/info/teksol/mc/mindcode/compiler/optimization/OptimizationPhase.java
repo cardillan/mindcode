@@ -27,7 +27,6 @@ public enum OptimizationPhase {
             EXPRESSION_OPTIMIZATION,
             ARRAY_OPTIMIZATION,
             TEMP_VARIABLES_ELIMINATION,
-            //INSTRUCTION_REORDERING,
             LOOP_HOISTING,
             LOOP_ROTATION,
             LOOP_UNROLLING,

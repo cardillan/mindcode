@@ -927,6 +927,24 @@ class DataFlowVariableStates {
         }
 
         @Override
+        public boolean equals(Object o) {
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Definition that = (Definition) o;
+            return counter == that.counter
+                    && inexact == that.inexact
+                    && killOnMerge == that.killOnMerge
+                    && variable.equals(that.variable)
+                    && instructions.equals(that.instructions)
+                    && references.equals(that.references);
+        }
+
+        @Override
+        public int hashCode() {
+            return Integer.hashCode(counter);
+        }
+
+        @Override
         public String toString() {
             return "Definition{" +
                     "variable=" + variable +

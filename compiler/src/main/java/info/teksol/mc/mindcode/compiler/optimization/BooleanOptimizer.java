@@ -25,10 +25,12 @@ import static java.util.Objects.requireNonNullElse;
 @NullMarked
 class BooleanOptimizer extends AbstractConditionalOptimizer {
     private final boolean hasSelect;
+    private final OptimizerExpressionEvaluator expressionEvaluator;
 
     public BooleanOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.BOOLEAN_OPTIMIZATION, optimizationContext);
         hasSelect = getProcessor().isSupported(Opcode.SELECT);
+        expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
     }
 
     private int fullConditions = 0;
@@ -388,7 +390,17 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
     private void createSelect(LogicList instructions, boolean swap, LogicVariable result, Condition condition, LogicValue x, LogicValue y,
             LogicValue valueIfTrue, LogicValue valueIfFalse) {
         if (condition == Condition.STRICT_NOT_EQUAL || swap && condition != Condition.STRICT_EQUAL) {
-            instructions.createSelect(result, condition.inverse(getGlobalProfile()), x, y, valueIfFalse, valueIfTrue);
+            createSelect(instructions, result, condition.inverse(getGlobalProfile()), x, y, valueIfFalse, valueIfTrue);
+        } else {
+            createSelect(instructions, result, condition, x, y, valueIfTrue, valueIfFalse);
+        }
+    }
+
+    private void createSelect(LogicList instructions, LogicVariable result, Condition condition, LogicValue x, LogicValue y,
+            LogicValue valueIfTrue, LogicValue valueIfFalse) {
+        if (x.isConstant() && y.isConstant()
+                && expressionEvaluator.evaluate(instructions.getExistingAstContext().sourcePosition(), condition.toOperation(), x, y) instanceof LogicBoolean b) {
+            instructions.createSet(result, b.getBooleanValue() ? valueIfTrue : valueIfFalse);
         } else {
             instructions.createSelect(result, condition, x, y, valueIfTrue, valueIfFalse);
         }
@@ -468,7 +480,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
                     Condition adjusted = t.isZero() ? newCondition.inverse(false) : newCondition;
                     instructions.createOp(adjusted.toOperation(), result, jumpIx.getX(), jumpIx.getY());
                 } else if (hasSelect) {
-                    instructions.createSelect(result, newCondition, jumpIx.getX(), jumpIx.getY(), t, f);
+                    createSelect(instructions, result, newCondition, jumpIx.getX(), jumpIx.getY(), t, f);
                 } else {
                     return false;
                 }
@@ -609,7 +621,7 @@ class BooleanOptimizer extends AbstractConditionalOptimizer {
                 instructions.createOp(adjusted.toOperation(), result, x, y);
                 replaced = true;
             } else if (hasSelect) {
-                instructions.createSelect(result, condition, x, y, t, f);
+                createSelect(instructions, result, condition, x, y, t, f);
                 replaced = true;
             }
         }

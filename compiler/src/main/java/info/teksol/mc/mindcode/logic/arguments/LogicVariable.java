@@ -241,6 +241,22 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        LogicVariable that = (LogicVariable) o;
+        return mlog.equals(that.mlog);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + mlog.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "LogicVariable{" +
                 "argumentType=" + argumentType +

@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed and reactivated the `op floor` removal optimization after it has been deactivated in 3.17.4.
 * Fixed the `error()` function being compiled even when the `error-function` option was set to `false`.
 * Fixed the `assertbounds` instruction not being properly handled when the [implicit integer conversions optimization](/doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#handling-non-negative-implicit-integer-conversions) was applied, potentially leading to compiler errors or mistakenly reported runtime errors.
+* Fixed a possible internal optimization error when using a non-standard combination of optimizations.  
 
 ### Added
 

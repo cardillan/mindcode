@@ -49,6 +49,10 @@ public enum LogicBoolean implements LogicLiteral {
         return this == TRUE ? 1 : 0;
     }
 
+    public boolean getBooleanValue() {
+        return this == TRUE;
+    }
+
     @Override
     public @Nullable Object getObject() {
         return null;
