@@ -10,15 +10,14 @@
     </parent>
 
     <artifactId>mindcode-webapp</artifactId>
-    <version>${revision}</version>
 
     <name>mindcode-webapp</name>
     <description>Mindcode's web application: online compilation, storage and retrieval of your scripts</description>
 
     <properties>
-        <java.version>22</java.version>
-        <maven.compiler.source>22</maven.compiler.source>
-        <maven.compiler.target>22</maven.compiler.target>
+        <java.version>25</java.version>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>3.4.0</spring.version>
         <skipFrontend>false</skipFrontend>

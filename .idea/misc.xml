@@ -65,7 +65,7 @@
     <option name="enabled" value="true" />
     <option name="wasEnabledAtLeastOnce" value="true" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" project-jdk-name="temurin-22" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_25" project-jdk-name="temurin-25" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
