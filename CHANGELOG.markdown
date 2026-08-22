@@ -26,6 +26,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Improved the implementation of a return from a recursive function call using an external stack.
 * Improved code folding in the web app's source code editor.
 
+### Removed
+
+* Removed the deprecated support for using the `remote` modifier to mark functions and variables to be accessible remotely.
+* Removed the deprecated support for using parameters with the [`external`](doc/syntax/SYNTAX-1-VARIABLES.markdown#external-variables) or [`remote` modifiers](doc/syntax/SYNTAX-1-VARIABLES.markdown#remote-variables) without parentheses.
+* Removed the deprecated support for specifying mlog keywords without the `:` prefix.
+  
 ## 3.17.5 – 2026-08-01
 
 ### Added

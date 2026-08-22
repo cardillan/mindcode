@@ -430,15 +430,9 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     private @Nullable AstMindcodeNode createModifierParametrization(Modifier modifier, DeclModifierContext ctx) {
         if (modifier == Modifier.EXTERNAL && ctx.memory != null) {
-            if (ctx.LPAREN() == null) {
-                compilerMessages.warn(pos(ctx), WARN.MISSING_MODIFIER_PARENS, ctx.modifier.getText());
-            }
             return new AstExternalParameters(pos(ctx), identifier(ctx.memory),
                     visitAstRangeIfNonNull(ctx.astRange()), visitAstExpressionIfNonNull(ctx.index));
-        } else if (modifier == Modifier.REMOTE && ctx.processor != null) {
-            if (ctx.LPAREN() == null) {
-                compilerMessages.warn(pos(ctx), WARN.MISSING_MODIFIER_PARENS, ctx.modifier.getText());
-            }
+        } else if (modifier == Modifier.REMOTE) {
             return new AstRemoteParameters(pos(ctx), identifier(ctx.processor));
         } else if (modifier == Modifier.MLOG) {
             return new AstMlogParameters(pos(ctx), processExpressionList(ctx.mlog));

@@ -16,9 +16,6 @@ public enum FunctionModifier {
     EXPORT          (MindcodeLexer.EXPORT),
     ATOMIC          (MindcodeLexer.ATOMIC),
     DEBUG           (MindcodeLexer.DEBUG),
-
-    // Deprecated - equivalent to EXPORT
-    REMOTE          (MindcodeLexer.REMOTE),
     ;
 
     private final int token;
@@ -29,11 +26,10 @@ public enum FunctionModifier {
 
     public boolean compatible(FunctionModifier other) {
         return switch (this) {
-            case INLINE -> other != NOINLINE && other != EXPORT && other != REMOTE;
+            case INLINE -> other != NOINLINE && other != EXPORT;
             case NOINLINE -> other != INLINE;
-            case EXPORT -> other != INLINE && other != DEBUG && other != REMOTE;
-            case DEBUG -> other != EXPORT && other != REMOTE;
-            case REMOTE -> other != INLINE && other != DEBUG && other != EXPORT;
+            case EXPORT -> other != INLINE && other != DEBUG;
+            case DEBUG -> other != EXPORT;
             default -> true;
         };
     }

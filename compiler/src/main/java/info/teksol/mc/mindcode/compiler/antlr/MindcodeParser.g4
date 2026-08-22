@@ -146,10 +146,8 @@ declModifier
     : modifier = CONST
     | modifier = CACHED
     | modifier = EXPORT
-    | modifier = EXTERNAL memory = IDENTIFIER?
-    | modifier = EXTERNAL memory = IDENTIFIER LBRACKET index = expression RBRACKET
-    | modifier = EXTERNAL memory = IDENTIFIER LBRACKET range = astRange RBRACKET
-    | modifier = EXTERNAL LPAREN memory = IDENTIFIER? RPAREN
+    | modifier = EXTERNAL
+    | modifier = EXTERNAL LPAREN memory = IDENTIFIER RPAREN
     | modifier = EXTERNAL LPAREN memory = IDENTIFIER LBRACKET index = expression RBRACKET RPAREN
     | modifier = EXTERNAL LPAREN memory = IDENTIFIER LBRACKET range = astRange RBRACKET RPAREN
     | modifier = GUARDED
@@ -157,8 +155,7 @@ declModifier
     | modifier = LINKED LPAREN type = BUILTINIDENTIFIER RPAREN
     | modifier = MLOG LPAREN mlog = expressionList RPAREN
     | modifier = NOINIT
-    | modifier = REMOTE processor = IDENTIFIER?
-    | modifier = REMOTE LPAREN processor = IDENTIFIER? RPAREN
+    | modifier = REMOTE LPAREN processor = IDENTIFIER RPAREN
     | modifier = VOLATILE
     ;
 
@@ -169,7 +166,6 @@ functionModifier
     | modifier = INLINE
     | modifier = NOINLINE
     | modifier = EXPORT
-    | modifier = REMOTE
     ;
 
 // To be extended in the future with more types

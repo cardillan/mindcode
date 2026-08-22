@@ -22,9 +22,14 @@ Changes intended for the next regular release.
   * When a tail call is detected, an infinite loop is generated, and the last call including push/pop is eliminated. Argument assignments remain.
 * Internal stack
 * Migrate to the Heroku-26 stack (Java 25 required)
+* Remove deprecated features:
+  * Mlog keywords without the `:` prefix
+  * Using `remote` to mark variables/functions for export
+  * Modifier '%s' requires parentheses around its arguments
 
 * **Doing**
 
+* Check variable names specified using the `mlog` directive are valid mlog variable names (needsto use the acual parser implementation).
 * Local arrays
 
 * **Planned**
@@ -34,10 +39,6 @@ Changes intended for the next regular release.
   * Might need a category for volatile, but removable variables.
 * Support for mlogls directives
 * Big arrays
-* Remove deprecated features:
-  * Mlog keywords without the `:` prefix
-  * Using `remote` to mark variables/functions for export
-  * Modifier '%s' requires parentheses around its arguments
 * Button for copying code from the Mindcode panel in the web app
 * If expression telescoping optimization
 * Array code injection optimization (?)

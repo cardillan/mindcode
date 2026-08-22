@@ -1,7 +1,6 @@
 package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.FunctionModifier;
@@ -113,18 +112,10 @@ public class CallGraphCreator extends CompilerMessageEmitter {
                 }
             }
 
-            if (modifier == FunctionModifier.REMOTE) {
-                warn(astModifier, WARN.DEPRECATED_USE_OF_REMOTE);
-            }
-
             allModifiers.add(modifier);
             if (!invalid) {
                 modifiers.add(modifier);
             }
-        }
-
-        if (modifiers.remove(FunctionModifier.REMOTE)) {
-            modifiers.add(FunctionModifier.EXPORT);
         }
 
         return modifiers;

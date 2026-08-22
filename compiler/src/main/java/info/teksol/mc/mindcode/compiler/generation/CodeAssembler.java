@@ -2,7 +2,6 @@ package info.teksol.mc.mindcode.compiler.generation;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
@@ -319,7 +318,7 @@ public class CodeAssembler extends CompilerMessageEmitter implements ContextfulI
             return keyword;
         } else if (argument instanceof IdentifierFunctionArgument ifa) {
             if (requireValidKeyword) {
-                warn(argument.sourcePosition(), WARN.MISSING_MLOG_KEYWORD_PREFIX, ifa.getIdentifier().getName());
+                error(argument.sourcePosition(), ERR.MISSING_MLOG_KEYWORD_PREFIX, ifa.getIdentifier().getName());
             }
             return ifa.getKeyword();
         } else if (argument.unwrap() instanceof LogicBoolean bool) {

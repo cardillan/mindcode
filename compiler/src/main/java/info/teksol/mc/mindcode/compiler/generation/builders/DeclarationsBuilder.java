@@ -319,7 +319,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
     private void visitRemoteVariablesDeclaration(AstModule module, AstVariablesDeclaration node, LogicVariable processor,
             boolean shared, boolean suppressMessages, Map<String, ValueStore> structureMembers) {
-
         runWithMessageFilter(_ -> !suppressMessages, () -> {
             Modifiers modifiers = getEffectiveModifiers(node);
 
@@ -332,10 +331,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                     error(specification.getIdentifier(), ERR.VARIABLE_INTRINSIC_IDENTIFIER, specification.getName());
                 } else if (specification.isArray()) {
                     node.getModifiers().forEach(this::validateRemoteArrayModifiers);
-                    if (isLocalContext()) {
-                        error(specification, ERR.ARRAY_LOCAL);
-                    }
-
                     int arraySize = processArrayDeclaration(specification, modifiers, true);
 
                     ArrayNameCreator arrayNameCreator = variables.processArrayMlogModifier(modifiers, arraySize, nameCreator);
@@ -660,12 +655,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
         if (firstPrimary == REMOTE || firstPrimary == EXPORT) {
             verifyMinimalRemoteTarget(modifiers.get(firstPrimary).node());
-        }
-
-        if (firstPrimary == REMOTE && modifiers.get(REMOTE).parametrization() == null) {
-            warn(modifiers.get(REMOTE).node(), WARN.DEPRECATED_USE_OF_REMOTE);
-            if (!modifiers.containsKey(EXPORT)) modifiers.put(EXPORT, modifiers.remove(REMOTE));
-            firstPrimary = EXPORT;
         }
 
         primaryModifiers.retainAll(modifiers.keySet());
