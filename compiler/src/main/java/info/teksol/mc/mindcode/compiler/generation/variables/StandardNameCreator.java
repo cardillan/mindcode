@@ -29,6 +29,7 @@ public class StandardNameCreator implements NameCreator {
     public static final String ARRAY_PREFIX = ".";
     public static final String PROCESSOR_ARRAY_PREFIX = ".";
     public static final String ELEMENT_PREFIX = "*";
+    public static final String STACK_FRAME_PREFIX = "*s";
 
     private final boolean shortFunctionPrefix;
     private final Map<String, AtomicInteger> functionPrefixCounter = new HashMap<>();
@@ -44,6 +45,7 @@ public class StandardNameCreator implements NameCreator {
     private final String arrayPrefix;
     private final String processorArrayPrefix;
     private final String elementPrefix;
+    private final String stackFramePrefix;
 
     public StandardNameCreator(boolean shortFunctionPrefix) {
         this.shortFunctionPrefix = shortFunctionPrefix;
@@ -56,6 +58,7 @@ public class StandardNameCreator implements NameCreator {
         arrayPrefix = ARRAY_PREFIX;
         processorArrayPrefix = PROCESSOR_ARRAY_PREFIX;
         elementPrefix = ELEMENT_PREFIX;
+        stackFramePrefix = STACK_FRAME_PREFIX;
     }
 
     public StandardNameCreator(CompilerProfile compilerProfile) {
@@ -69,6 +72,7 @@ public class StandardNameCreator implements NameCreator {
         arrayPrefix = ARRAY_PREFIX;
         processorArrayPrefix = PROCESSOR_ARRAY_PREFIX;
         elementPrefix = ELEMENT_PREFIX;
+        stackFramePrefix = STACK_FRAME_PREFIX;
     }
 
     public StandardNameCreator() {
@@ -82,17 +86,17 @@ public class StandardNameCreator implements NameCreator {
         arrayPrefix = "[salmon]";
         processorArrayPrefix = "[salmon].";
         elementPrefix = "[sky]*";
+        stackFramePrefix = "[lightgray]*";
     }
 
     @Override
-    public MindcodeFunction setupFunctionPrefix(MindcodeFunction function) {
+    public void setupFunctionPrefix(MindcodeFunction function) {
         if (shortFunctionPrefix) {
             function.setPrefixAndIndex(SHORT_FUNCTION_PREFIX + functionIndex++, 0);
         } else {
             AtomicInteger counter = functionPrefixCounter.computeIfAbsent(function.getName(), k -> new AtomicInteger(0));
             function.setPrefixAndIndex(function.getName(), counter.getAndIncrement());
         }
-        return function;
     }
 
     @Override
@@ -143,7 +147,7 @@ public class StandardNameCreator implements NameCreator {
     }
 
     @Override
-    public String stackframe(MindcodeFunction function) {
+    public String stackFrame(MindcodeFunction function) {
         return withPrefix(functionPrefix, function.getPrefix(), function.getPrefixIndex()) + compilerPrefix + STACK_FRAME_POINTER;
     }
 
@@ -180,6 +184,11 @@ public class StandardNameCreator implements NameCreator {
     @Override
     public String temp(int index) {
         return compilerPrefix + "tmp" + index;
+    }
+
+    @Override
+    public String stackFrameSuffix(int frameIndex) {
+        return stackFramePrefix + frameIndex;
     }
 
     @Override

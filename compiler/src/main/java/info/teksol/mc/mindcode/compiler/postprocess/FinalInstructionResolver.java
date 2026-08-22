@@ -10,6 +10,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -37,6 +38,7 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
     private final InstructionProcessor processor;
     private final StackTracker stackTracker;
     private final AstContext rootAstContext;
+    private final NameCreator nameCreator;
 
     private final Map<LogicLabel, LogicInstruction> labelInstructions = new HashMap<>();
     private final Map<String, LogicLabel> addresses = new HashMap<>();
@@ -45,17 +47,18 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
     private final Map<Integer, Set<Integer>> textJumpKeys = new HashMap<>();
 
     public FinalInstructionResolver(GlobalCompilerProfile profile, InstructionProcessor processor, StackTracker stackTracker,
-            AstContext rootAstContext) {
+            AstContext rootAstContext, NameCreator nameCreator) {
         super(processor.messageConsumer());
         this.processor = processor;
         this.profile = profile;
         this.stackTracker = stackTracker;
         this.rootAstContext = rootAstContext;
+        this.nameCreator = nameCreator;
     }
     
     public static List<LogicInstruction> resolve(GlobalCompilerProfile profile, InstructionProcessor processor,
-            StackTracker stackTracker, AstContext rootAstContext, List<LogicInstruction> program) {
-        return new FinalInstructionResolver(profile, processor, stackTracker, rootAstContext).resolve(program);
+            StackTracker stackTracker, AstContext rootAstContext, NameCreator nameCreator, List<LogicInstruction> program) {
+        return new FinalInstructionResolver(profile, processor, stackTracker, rootAstContext, nameCreator).resolve(program);
     }
 
     public List<LogicInstruction> resolve(List<LogicInstruction> program) {
@@ -454,7 +457,7 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
                     creator.createWrite(ix.getVariable(), ix.getMemory(), stackPointer);
                     creator.createOp(ADD, stackPointer, stackPointer, LogicNumber.ONE).copyComment(ix);
                 } else if (ix.getVariable().getType() == ArgumentType.FUNCTION_PARAMETER) {
-                    creator.createSet(ix.getVariable().stackFrame(0), ix.getVariable());
+                    creator.createSet(ix.getVariable().stackFrame(nameCreator.stackFrameSuffix(0)), ix.getVariable());
                 }
             }
             case PopInstruction ix -> {

@@ -215,7 +215,7 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
         ).map(LogicInstruction::toMlog).collect(Collectors.joining("\n"));
 
         String actual = FinalInstructionResolver.resolve(
-                profile, ip, ContextFactory.getStackContext().stackTracker(), mockAstRootContext,
+                profile, ip, ContextFactory.getStackContext().stackTracker(), mockAstRootContext, nameCreator(),
                 List.of(
                         createInstruction(JUMP, label0, Condition.ALWAYS),
                         createInstruction(PUSH, cell1, a),

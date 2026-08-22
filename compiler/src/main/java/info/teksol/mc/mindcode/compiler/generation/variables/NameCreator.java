@@ -8,7 +8,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public interface NameCreator extends ArrayNameCreator {
-    MindcodeFunction setupFunctionPrefix(MindcodeFunction function);
+    void setupFunctionPrefix(MindcodeFunction function);
 
     String global(String name);
     String main(String variableName, int variableIndex);
@@ -16,7 +16,7 @@ public interface NameCreator extends ArrayNameCreator {
     String parameter(MindcodeFunction function, String parameterName);
     String retval(MindcodeFunction function);
     String retaddr(MindcodeFunction function);
-    String stackframe(MindcodeFunction function);
+    String stackFrame(MindcodeFunction function);
     String finished(MindcodeFunction function);
 
     String arrayAccess(String baseName, String suffix);
@@ -25,6 +25,7 @@ public interface NameCreator extends ArrayNameCreator {
     String remoteParameter(MindcodeFunction function, String parameterName);
 
     String temp(int index);
+    String stackFrameSuffix(int frameIndex);
     String stackPointer();
     String remoteSignature();
     String programId();

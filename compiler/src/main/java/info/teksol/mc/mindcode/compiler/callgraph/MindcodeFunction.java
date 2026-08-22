@@ -556,7 +556,7 @@ public class MindcodeFunction {
         fnRetVal = LogicVariable.fnRetVal(this, nameCreator.retval(this));
         fnRetAddr = LogicVariable.fnRetAddr(this, nameCreator.retaddr(this));
         fnFinished = LogicVariable.fnFinished(this, nameCreator.finished(this));
-        fnStackFrame = LogicVariable.fnStackFrame(this, nameCreator.stackframe(this));
+        fnStackFrame = LogicVariable.fnStackFrame(this, nameCreator.stackFrame(this));
 
         parameterMap = getDeclaredParameters().stream().collect(
                Collectors.toMap(AstFunctionParameter::getName, v -> v,

@@ -10,6 +10,6 @@ sorting with bubble-sort.mnd:                      26    15476     100.0%   09F1
 sorting with heap-sort.mnd:                        53    64558     100.0%   0CEFC91051987EFB   53DDEE9795DA7DF1
 sorting with insert-sort.mnd:                      26    26063     100.0%   0AF6F57A5EBA45E2   51DF283BB6DAF739
 sorting with quick-sort-ext.mnd:                  104    46760      99.0%   24EED06D28A2DCC0   941A6B54B96A4218
-sorting with quick-sort-int.mnd:                  196    46098      70.9%   3891B37AF8DBC540   C5CEEEE7C66F0997
+sorting with quick-sort-int.mnd:                  196    46098      70.9%   3891B37AF8DBC540   F5D33DEB65898C97
 sorting with select-sort.mnd:                      29    35152     100.0%   3F4EE1C8DB9B8B18   A482BAFBF0C5C8D8
 storage-display.mnd:                              698     1057      28.2%   FD4E7E3F60CEF5E4   1B489B9B74E46320

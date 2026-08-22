@@ -255,10 +255,10 @@ printflush(message1);
 
 This code displays `20, 5` on the `message1` block in the Mindustry world, since both `x` and `local` in the `foo` function are local variables and therefore distinct from `x` and `local` in the main code block.
 
-In `relaxed` syntax, using global variables as function parameters (e.g., `def foo(Z) ... end`) is not allowed. In `strict` syntax, such parameters are allowed.
+In `relaxed` syntax, using upper-case variables as function parameters (e.g., `def foo(Z) ... end`) is not allowed.
 
 > [!NOTE]
-> In previous versions of Mindcode, global variables also served as program parameters [described below](#program-parameters). This usage of global variables is no longer supported.
+> In previous versions of Mindcode, global variables also served as _program parameters_ [described below](#program-parameters). This usage of global variables is no longer supported.
 
 ## Explicit variables
 
@@ -325,7 +325,7 @@ As implicit arrays are stored in memory blocks, they can only hold numeric value
 External arrays are explicitly declared and are allocated on the [heap](#heap) similarly to other external variables. The array size is specified when declaring the array. 
 Accessing an element outside the bounds of an external array may cause other elements or variables stored on the heap to be accessed instead.
 
-When the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) is set to some other value than `none`, Mindcode generates runtime checks using the metod specified by the compiler option to detect out-of-bounds array accesses.
+When the [`boundary-checks` compiler options](SYNTAX-5-OTHER.markdown#option-boundary-checks) is activated, Mindcode generates runtime checks using the metod specified by the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) to detect out-of-bounds array accesses.
 
 As external arrays are stored in memory blocks, they can only hold numeric values.
 
@@ -333,7 +333,7 @@ As external arrays are stored in memory blocks, they can only hold numeric value
 
 Mindustry Logic doesn't provide a specialized mechanism for creating arrays out of internal variables. However, it is possible to create a reasonably efficient implementation of random access arrays using _`@counter` arrays_, named as such since accessing an element of such arrays involves manipulating the `@counter` variable. Individual elements of such arrays are stored in processor variables (one variable per array element), and therefore can hold non-numerical values as well, such as unit or block references, items, liquids, strings, and so on.
 
-When the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) is set to some other value than `none`, Mindcode generates runtime checks using the metod specified by the compiler option to detect out-of-bounds array accesses.
+When the [`boundary-checks` compiler options](SYNTAX-5-OTHER.markdown#option-boundary-checks) is activated, Mindcode generates runtime checks using the metod specified by the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) to detect out-of-bounds array accesses.
 
 Accessing individual elements of internal arrays is slower than accessing elements of external arrays and consumes additional instruction space for `@counter` tables. However, when Mindcode is able to resolve the index during compilation to a numeric value, the variable corresponding to the element is accessed directly, with a performance better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g., when unrolling all loops in the program), the `@counter` tables might be eliminated entirely, keeping only the individual element variables in the resulting code.
 
@@ -424,7 +424,7 @@ Other modifiers are compatible only with specific storage modifiers. This table 
 
 Can be used with the `external` and `remote` modifiers. This modifier cannot be used when declaring arrays.
 
-The value of a cached variable is read from the external memory or processor just once at the variable creation and is kept in a dedicated processor variable (a _cache variable_). When reading a cached variable, Variable reads are served using the cache variable. Writes update the cache variable and also write the new value to the memory/processor.
+The value of a cached variable is read from the external memory or processor just once at the variable creation and is kept in a dedicated processor variable (a _cache variable_). When reading a cached variable, the value from the cache variable is used, avoiding the need to access the external/remote storage. Writes update the cache variable and also write the new value to the memory/processor.
 
 If an initial value was specified in the declaration, the external/remote value is not read at all, and the initial value is written to the memory or processor. 
 
@@ -1768,7 +1768,10 @@ Implicit and explicit variable names used in source code are translated to mlog 
 * array elements: `.array*index` (index corresponds to the numeric index of the element within the array)
 * temporary variables: `*tmpX` (`*tmp` + counter)
 * function return address/value: `:fnX*retaddr`/`:fnX*retval`
-* stack pointer: `*sp`
+* stack pointer (external stack): `*sp`
+* stack frame pointer (internal stack, per function): `:fnX*sfp`/`:fnX*sfp`
+* stack frame transfer variable (internal stack): `:fnX:variable*s0`
+* stack frame variable (internal stack): `:fnX:variable*s` + stack frame index (starting at 1)
 * remote function parameters: `:function:parameter` (using actual function and parameter name)
 * remote function internal variables (e.g., address or finished flag): `:function*variable`
 

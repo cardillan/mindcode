@@ -70,7 +70,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 @NullMarked
 public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuilderContext, PreprocessorContext,
         ArrayConstructorContext, CallGraphCreatorContext, DeclarationsProcessorContext, CompileTimeEvaluatorContext,
-        CodeGeneratorContext, VariablesContext, ForcedVariableContext, OptimizerContext, StackContext {
+        CodeGeneratorContext, VariablesContext, ForcedVariableContext, OptimizerContext, StackContext, StackBuilderContext {
 
     public static final String REMOTE_PROTOCOL_VERSION = "v1";
 
@@ -353,7 +353,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         unresolved = instructions;
         if (hasCompilerErrors()) return;
 
-        instructions = StackBuilder.buildStack(instructionProcessor, rootAstContext, callGraph, optimizationCoordinator, stackTracker, instructions);
+        instructions = StackBuilder.buildStack(this, optimizationCoordinator, instructions);
 
         if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.OPTIMIZER) <= 0) return;
 
@@ -383,7 +383,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         renumberTemporary(instructions);
 
         // Sort variables
-        FinalInstructionResolver resolver = new FinalInstructionResolver(globalProfile, instructionProcessor, stackTracker, rootAstContext);
+        FinalInstructionResolver resolver = new FinalInstructionResolver(globalProfile, instructionProcessor, stackTracker, rootAstContext, nameCreator);
         instructions = resolver.sortVariables(instructions);
 
         // Print unresolved code

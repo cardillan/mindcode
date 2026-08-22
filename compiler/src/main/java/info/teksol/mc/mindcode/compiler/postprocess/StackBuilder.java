@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -23,11 +24,11 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 @NullMarked
 public class StackBuilder extends CompilerMessageEmitter {
     private final InstructionProcessor processor;
+    private final NameCreator nameCreator;
     private final CallGraph callGraph;
     private final OptimizationCoordinator optimizationCoordinator;
     private final List<LogicInstruction> program;
@@ -39,12 +40,13 @@ public class StackBuilder extends CompilerMessageEmitter {
     private LogicLabel nextInitLabel;
     private int initializationIndex = 0;
 
-    public StackBuilder(InstructionProcessor processor, AstContext rootAstContext, CallGraph callGraph,
-            OptimizationCoordinator optimizationCoordinator, List<LogicInstruction> program, int initializationIndex) {
-        super(processor.messageConsumer());
-        this.processor = processor;
-        this.rootAstContext = rootAstContext;
-        this.callGraph = callGraph;
+    public StackBuilder(StackBuilderContext stackBuilderContext, OptimizationCoordinator optimizationCoordinator,
+            List<LogicInstruction> program, int initializationIndex) {
+        super(stackBuilderContext.messageConsumer());
+        this.processor = stackBuilderContext.instructionProcessor();
+        this.nameCreator = stackBuilderContext.nameCreator();
+        this.rootAstContext = stackBuilderContext.rootAstContext();
+        this.callGraph = stackBuilderContext.callGraph();
         this.optimizationCoordinator = optimizationCoordinator;
         this.program = program;
         this.initializationContext = program.get(initializationIndex).getAstContext();
@@ -55,9 +57,14 @@ public class StackBuilder extends CompilerMessageEmitter {
         program.remove(initializationIndex);
     }
 
-    public static List<LogicInstruction> buildStack(InstructionProcessor processor, AstContext rootAstContext, CallGraph callGraph,
-            OptimizationCoordinator optimizationCoordinator, StackTracker stackTracker, List<LogicInstruction> instructions) {
+    public static List<LogicInstruction> buildStack(StackBuilderContext stackBuilderContext, OptimizationCoordinator optimizationCoordinator,
+            List<LogicInstruction> instructions) {
+        CallGraph callGraph = stackBuilderContext.callGraph();
         if (callGraph.containsRecursiveFunction()) {
+            StackTracker stackTracker = stackBuilderContext.stackTracker();
+            InstructionProcessor processor = stackBuilderContext.instructionProcessor();
+            AstContext rootAstContext = stackBuilderContext.rootAstContext();
+
             List<LogicInstruction> program = new ArrayList<>(instructions);
             int index = CollectionUtils.indexOf(program, 0, ix -> ix.getAstContext().matches(AstContextType.STACK));
             if (index < 0) {
@@ -69,7 +76,7 @@ public class StackBuilder extends CompilerMessageEmitter {
                 program.set(index, processor.createSet(instructions.get(index).getAstContext(), processor.stackPointer(), LogicNumber.create(stackTracker.getAllocationStart())));
                 return program;
             } else {
-                return new StackBuilder(processor, rootAstContext, callGraph, optimizationCoordinator, program, index).buildStack();
+                return new StackBuilder(stackBuilderContext, optimizationCoordinator, program, index).buildStack();
             }
         } else {
             return instructions.stream().filter(ix -> !ix.getAstContext().matches(AstContextType.STACK)).toList();
@@ -134,25 +141,20 @@ public class StackBuilder extends CompilerMessageEmitter {
         }
 
         creator.createLabel(firstStackFrame);
+        String transferSuffix = nameCreator.stackFrameSuffix(0);
 
-        for (int f = 1; f <= stack.depth(); f++) {
-            int frame = f;
-            Supplier<String> commentSupplier = new Supplier<>() {
-                final String comment = "# Stack frame " + frame;
-                int counter = 0;
+        for (int frame = 1; frame <= stack.depth(); frame++) {
+            String frameSuffix = nameCreator.stackFrameSuffix(frame);
+            LogicVariable returnAddress = function.getFnRetAddr().stackFrame(frameSuffix);
+            List<StackVariable> stackVariables = stack.variables().stream().map(v ->
+                    new StackVariable(v, v.stackFrame(frameSuffix))).toList();
 
-                @Override
-                public String get() {
-                    return counter++ == 0 ? comment : "";
-                }
-            };
-
-            stack.variables().forEach(v -> creator.createSet(v.stackFrame(frame),
-                    v.getType() == ArgumentType.FUNCTION_PARAMETER ? v.stackFrame(0) : v).setComment(commentSupplier.get()));
-            creator.createSet(function.getFnRetAddr().stackFrame(frame), function.getFnRetAddr()).setComment(commentSupplier.get());
+            creator.createSet(returnAddress, function.getFnRetAddr()).setComment("# Stack frame " + frame);
+            stackVariables.forEach(v -> creator.createSet(v.stackFrame,
+                    v.isParameter() ? v.original.stackFrame(transferSuffix) : v.original));
             creator.createJumpUnconditional(functionLabel);
-            stack.variables().forEach(v -> creator.createSet(v, v.stackFrame(frame)));
-            creator.createSet(LogicBuiltIn.COUNTER, function.getFnRetAddr().stackFrame(frame));
+            stackVariables.forEach(v -> creator.createSet(v.original, v.stackFrame));
+            creator.createSet(LogicBuiltIn.COUNTER, returnAddress);
         }
 
         if (function.getProfile().isStackOverflowChecks()) {
@@ -172,5 +174,11 @@ public class StackBuilder extends CompilerMessageEmitter {
         int index = CollectionUtils.indexOf(program, 0, ix -> ix instanceof LabelInstruction l && l.getLabel().equals(functionLabel));
         program.add(index + 1, processor.createOp(program.get(index).getAstContext(), Operation.ADD,
                 function.getFnStackFrame(), function.getFnStackFrame(), LogicNumber.create(stack.frameSize())));
+    }
+
+    private record StackVariable(LogicVariable original, LogicVariable stackFrame) {
+        boolean isParameter() {
+            return original.getType() == ArgumentType.FUNCTION_PARAMETER;
+        }
     }
 }

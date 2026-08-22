@@ -372,8 +372,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     //
     /////////////////////////////////////////////////////////////////////////////////
 
-    public LogicVariable stackFrame(int frame) {
-        return new LogicVariable(sourcePosition, FUNCTION_STACKFRAME, ValueMutability.MUTABLE, name + "*" + frame + "F", mlog + "*" + frame + "F");
+    public LogicVariable stackFrame(String suffix) {
+        return new LogicVariable(sourcePosition, FUNCTION_STACKFRAME, ValueMutability.MUTABLE, name + suffix, mlog + suffix);
     }
 
     /// Return the variable passed as an argument to unused instruction parameters.

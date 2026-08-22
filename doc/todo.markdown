@@ -20,17 +20,16 @@ Changes intended for the next regular release.
   * The first call to `foo` gets inlined, as well as `bar` and `baz` calls. The `foo` call from `baz` won't get inlined, because it is now directly recursive in `foo`.
 * Optimize tail-call recursion
   * When a tail call is detected, an infinite loop is generated, and the last call including push/pop is eliminated. Argument assignments remain.
+* Internal stack
+* Migrate to the Heroku-26 stack (Java 25 required)
 
 * **Doing**
 
-* Internal stack
-  * NameCreator refactoring 
+* Local arrays
 
 * **Planned**
 
-* Local arrays
 * Converting arrays to const arrays when possible
-* Migrate to the Heroku-26 stack (Java 25 required)
 * Automatically make global variables accessed by a background process volatile.
   * Might need a category for volatile, but removable variables.
 * Support for mlogls directives
