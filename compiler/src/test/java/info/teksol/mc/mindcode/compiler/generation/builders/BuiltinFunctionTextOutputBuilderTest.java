@@ -45,12 +45,16 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesCharFunction() {
             assertCompilesTo("""
-                            a = char("AA", 0);
-                            b = char("BB", 1);
+                            param A = "AA";
+                            param B = "BB";
+                            a = char(A, 0);
+                            b = char(B, 1);
                             """,
-                    createInstruction(READ, tmp(0), q("AA"), "0"),
+                    createInstruction(SET, "A", q("AA")),
+                    createInstruction(SET, "B", q("BB")),
+                    createInstruction(READ, tmp(0), "A", "0"),
                     createInstruction(SET, ":a", tmp(0)),
-                    createInstruction(READ, tmp(1), q("BB"), "1"),
+                    createInstruction(READ, tmp(1), "B", "1"),
                     createInstruction(SET, ":b", tmp(1))
             );
         }

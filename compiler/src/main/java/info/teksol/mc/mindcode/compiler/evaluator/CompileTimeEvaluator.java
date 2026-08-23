@@ -4,7 +4,6 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.evaluator.ExpressionEvaluator;
 import info.teksol.mc.evaluator.LogicOperation;
-import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.CompilerMessageEmitter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
@@ -22,7 +21,6 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -289,8 +287,17 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
     private AstMindcodeNode evaluateFunctionCall(AstFunctionCall node, boolean local) {
         switch (node.getFunctionName()) {
             case "packcolor":   return processor.isSupported(Opcode.PACKCOLOR) ? evaluatePackColor(node, local) : node;
+
+            // Varargs
             case "length":      return evaluateLength(node, local);
+            case "min":         return evaluateMinMax(node, local, true);
+            case "max":         return evaluateMinMax(node, local, false);
+
+            // Text
+            case "ascii":       return evaluateAscii(node, local);
+            case "char":        return evaluateChar(node, local);
             case "encode":      return evaluateEncode(node, local);
+            case "strlen":      return evaluateStrlen(node, local);
         }
 
         Operation operation = Operation.fromMindcode(node.getFunctionName());
@@ -372,13 +379,68 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
     }
 
     private AstMindcodeNode evaluateLength(AstFunctionCall node, boolean local) {
-        if (node.getArguments().size() == 1) {
-            AstFunctionArgument argument = node.getArgument(0);
-            if (argument.hasExpression() && argument.getExpression() instanceof AstIdentifier identifier) {
-                ValueStore valueStore = variables.resolveVariable(identifier, local, true);
-                if (valueStore instanceof ArrayStore array) {
-                    return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(array.getSize()));
+        if (node.getArguments().size() == 1 && node.getArgument(0).getExpression() instanceof AstIdentifier identifier) {
+            ValueStore valueStore = variables.resolveVariable(identifier, local, true);
+            if (valueStore instanceof ArrayStore array) {
+                return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(array.getSize()));
+            }
+        }
+
+        return node;
+    }
+
+    private AstMindcodeNode evaluateMinMax(AstFunctionCall node, boolean local, boolean min) {
+        if (node.getArguments().size() > 1) {
+            List<AstLiteral> evaluated = evaluateArguments(node, local, AstLiteral.class);
+            if (evaluated.stream().anyMatch(AstLiteralString.class::isInstance)) {
+                error(node, ERR.UNSUPPORTED_STRING_EXPRESSION);
+            } else if (evaluated.size() == node.getArguments().size()) {
+                OptionalDouble d = min
+                        ? evaluated.stream().mapToDouble(AstLiteral::getDoubleValue).min()
+                        : evaluated.stream().mapToDouble(AstLiteral::getDoubleValue).max();
+                if (d.isPresent()) {
+                    Result result = new Result();
+                    result.setDoubleValue(d.getAsDouble());
+                    return result.toAstMindcodeNode(processor, node);
                 }
+            }
+        }
+
+        return node;
+    }
+
+
+    private AstMindcodeNode evaluateAscii(AstFunctionCall node, boolean local) {
+        if (node.getArguments().size() == 1) {
+            List<AstLiteral> evaluated = evaluateArguments(node, local, AstLiteral.class);
+            if (evaluated.size() == 1 && evaluated.getFirst() instanceof AstLiteralString s && !s.getValue().isEmpty()) {
+                return new AstLiteralDecimal(node.sourcePosition(), String.valueOf((long) s.getValue().charAt(0)));
+            }
+        }
+
+        return node;
+    }
+
+    private AstMindcodeNode evaluateChar(AstFunctionCall node, boolean local) {
+        if (node.getArguments().size() == 2) {
+            List<AstLiteral> evaluated = evaluateArguments(node, local, AstLiteral.class);
+            if (evaluated.size() == 2 && evaluated.getFirst() instanceof AstLiteralString s && evaluated.getLast() instanceof AstLiteralNumeric i) {
+                String string = s.getValue();
+                int index = i.getIntValue();
+                if (index >= 0 && index < string.length()) {
+                    return new AstLiteralDecimal(node.sourcePosition(), String.valueOf((long) string.charAt(index)));
+                }
+            }
+        }
+
+        return node;
+    }
+
+    private AstMindcodeNode evaluateStrlen(AstFunctionCall node, boolean local) {
+        if (node.getArguments().size() == 1) {
+            List<AstLiteral> evaluated = evaluateArguments(node, local, AstLiteral.class);
+            if (evaluated.size() == 1 && evaluated.getFirst() instanceof AstLiteralString s) {
+                return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(s.getValue().length()));
             }
         }
 
@@ -457,14 +519,5 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
         }
 
         return result;
-    }
-
-    private boolean isString(@Nullable LogicReadable variable) {
-        return variable != null && variable.getObject() instanceof String;
-    }
-
-    private String print(LogicReadable variable) {
-        return variable.getObject() instanceof String string ? string
-                : processor.formatNumber(variable.getDoubleValue());
     }
 }

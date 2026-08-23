@@ -435,7 +435,7 @@ Example:
 
 ```Mindcode
 const offset = 35;
-const data = encode(offset, 0, 1, 2, 5, 10, 20, 50);
+param data = encode(offset, 0, 1, 2, 5, 10, 20, 50);
 
 for i in 0 ... strlen(data) do
     println(char(data, i) - offset);
@@ -447,15 +447,16 @@ printflush(message1);
 compiles into
 
 ```mlog
-sensor *tmp0 "#$%(-7U" @size
+set data "#$%(-7U"
+sensor *tmp0 data @size
 set :i 0
-jump 9 greaterThanEq 0 *tmp0
-read *tmp1 "#$%(-7U" :i
+jump 10 greaterThanEq 0 *tmp0
+read *tmp1 data :i
 op sub *tmp2 *tmp1 35
 print *tmp2
 print "\n"
 op add :i :i 1
-jump 3 lessThan :i *tmp0
+jump 4 lessThan :i *tmp0
 printflush message1
 ```
 

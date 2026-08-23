@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.evaluator;
 
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import org.jspecify.annotations.NullMarked;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
@@ -45,31 +46,6 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                         print('Z' - 'A');
                         """,
                 createInstruction(PRINT, "25")
-        );
-    }
-
-    @Test
-    void evaluatesEncode() {
-        assertCompilesTo("""
-                        const a = encode('A', 0, 1, 2, 3, @copper.@id, @graphite-press.@id, @mega.@id);
-                        print(a);
-                        """,
-                createInstruction(PRINT, q("ABCDAAW"))
-        );
-    }
-
-
-    @Test
-    void evaluatesEncodeInFunction() {
-        assertCompilesTo("""
-                        def foo(type, a, b)
-                            encode('A', type.@id, a + 10, b * 2) + " (" + type.@name + ")";
-                        end;
-                        
-                        const a = foo(@lead, 2, 4);
-                        print(a);
-                        """,
-                createInstruction(PRINT, q("BMI (lead)"))
         );
     }
 
@@ -139,7 +115,6 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                 createInstruction(PRINT, "%00224466")
         );
     }
-
 
     @Test
     void evaluatesStringConcatenation() {
@@ -312,5 +287,96 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                 createInstruction(OP, "shl", tmp(0), "1", "63"),
                 createInstruction(PRINT, tmp(0))
         );
+    }
+
+    @Nested
+    class Functions {
+        @Test
+        void evaluatesPackColor() {
+            assertCompilesTo("""
+                        const x = packcolor(0.5, 0.5, 0.5, 0.5);
+                        print(x);
+                        """,
+                    createInstruction(PRINT, "%7f7f7f7f")
+            );
+        }
+
+        @Test
+        void evaluatesLength() {
+            assertCompilesTo("""
+                        var a[5];
+                        const x = length(a);
+                        print(x);
+                        """,
+                    createInstruction(PRINT, "5")
+            );
+        }
+
+        @Test
+        void evaluatesMinMax() {
+            assertCompilesTo("""
+                        const x = min(4, 3, 2);
+                        const y = max(1.234e-50, 1.234e50, -1.234e-50);
+                        print(x, y);
+                        """,
+                    createInstruction(PRINT, "2"),
+                    createInstruction(PRINT, "1234E47")
+            );
+        }
+
+        @Test
+        void evaluatesAscii() {
+            assertCompilesTo("""
+                        const x = ascii("ABCD");
+                        print(x);
+                        """,
+                    createInstruction(PRINT, "65")
+            );
+        }
+
+        @Test
+        void evaluatesChar() {
+            assertCompilesTo("""
+                            a = char("AA", 0);
+                            b = char("BB", 1);
+                            """,
+                    createInstruction(SET, ":a", "65"),
+                    createInstruction(SET, ":b", "66")
+            );
+        }
+
+        @Test
+        void evaluatesEncode() {
+            assertCompilesTo("""
+                        const a = encode('A', 0, 1, 2, 3, @copper.@id, @graphite-press.@id, @mega.@id);
+                        print(a);
+                        """,
+                    createInstruction(PRINT, q("ABCDAAW"))
+            );
+        }
+
+        @Test
+        void evaluatesEncodeInFunction() {
+            assertCompilesTo("""
+                        def foo(type, a, b)
+                            encode('A', type.@id, a + 10, b * 2) + " (" + type.@name + ")";
+                        end;
+                        
+                        const a = foo(@lead, 2, 4);
+                        print(a);
+                        """,
+                    createInstruction(PRINT, q("BMI (lead)"))
+            );
+        }
+
+        @Test
+        void evaluatesStrlen() {
+            assertCompilesTo("""
+                            const x = strlen("ABCD");
+                            print(x);
+                            """,
+                    createInstruction(PRINT, "4")
+            );
+        }
     }
 }
