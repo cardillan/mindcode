@@ -93,10 +93,6 @@ public class Variables extends CompilerMessageEmitter {
         return Objects.requireNonNull(functionContext.function());
     }
 
-    public Collection<ValueStore> getActiveVariables() {
-        return functionContext.getActiveVariables();
-    }
-
     public void gatherActiveVariables(Collection<ValueStore> variables) {
         functionContext.gatherActiveVariables(variables);
     }
@@ -182,8 +178,8 @@ public class Variables extends CompilerMessageEmitter {
         } else if (isGlobalVariableName(identifier)) {
             return registerGlobalVariable(identifier, LogicVariable.global(identifier, nameCreator.global(identifier.getName())));
         } else {
-            return verifyMlogConflicts(functionContext.registerFunctionVariable(identifier,
-                    VariableScope.FUNCTION, false,true));
+            return verifyMlogConflicts(functionContext.registerFunctionVariable(identifier, VariableScope.FUNCTION,
+                    functionContext.createFunctionVariable(identifier, false, true)));
         }
     }
 
@@ -296,26 +292,43 @@ public class Variables extends CompilerMessageEmitter {
     /// Registers an array. Scope is always global.
     ///
     /// @return ValueStore instance representing the created variable
-    public ArrayStore createArray(AstIdentifier identifier, Modifiers modifiers, int size, List<ValueStore> initialValues) {
+    public ArrayStore createArray(boolean local, AstIdentifier identifier, Modifiers modifiers, int size, List<ValueStore> initialValues) {
+        String name = identifier.getName();
         ArrayStore result;
 
-        if (!verifyGlobalDeclaration(identifier, identifier)) {
-            result = InternalArray.createInvalid(nameCreator, identifier, size);
-        } else if (modifiers.contains(LINKED) || modifiers.contains(CONST)) {
-            result = initialValues.isEmpty()
-                    ? InternalArray.createInvalid(nameCreator, identifier, size)
-                    : InternalArray.createConst(nameCreator, identifier, size, initialValues);
-        } else if (modifiers.contains(EXTERNAL)) {
-            result = getHeapTracker(modifiers).createArray(identifier, size);
+        if (local) {
+            if (functionContext.variables().containsKey(name)) {
+                error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, name);
+                result = InternalArray.createInvalid(nameCreator, identifier, size);
+            } else {
+                int index = functionContext.getVariableReuseCount(identifier);
+                ArrayNameCreator arrayNameCreator = processArrayMlogModifier(modifiers, size, nameCreator);
+                result = InternalArray.create(processor, arrayNameCreator, functionContext.function(), identifier, index,
+                        size, false, false, null, false);
+                verifyMlogConflicts(result);
+                functionContext.registerFunctionVariable(identifier, VariableScope.PARENT_NODE, result);
+            }
         } else {
-            boolean declaredRemote = modifiers.containsAny(REMOTE, EXPORT);
-            boolean isVolatile = modifiers.contains(VOLATILE) || declaredRemote;
-            LogicVariable storageProcessor = modifiers.getParameters(REMOTE) instanceof LogicVariable p ? p : null;
-            ArrayNameCreator arrayNameCreator = processArrayMlogModifier(modifiers, size, nameCreator);
-            result = InternalArray.create(processor, arrayNameCreator, identifier, size, isVolatile, declaredRemote, storageProcessor, false);
+            if (!verifyGlobalDeclaration(identifier, identifier)) {
+                result = InternalArray.createInvalid(nameCreator, identifier, size);
+            } else if (modifiers.contains(LINKED) || modifiers.contains(CONST)) {
+                result = initialValues.isEmpty()
+                        ? InternalArray.createInvalid(nameCreator, identifier, size)
+                        : InternalArray.createConst(nameCreator, identifier, size, initialValues);
+            } else if (modifiers.contains(EXTERNAL)) {
+                result = getHeapTracker(modifiers).createArray(identifier, size);
+            } else {
+                boolean declaredRemote = modifiers.containsAny(REMOTE, EXPORT);
+                boolean isVolatile = modifiers.contains(VOLATILE) || declaredRemote;
+                LogicVariable storageProcessor = modifiers.getParameters(REMOTE) instanceof LogicVariable p ? p : null;
+                ArrayNameCreator arrayNameCreator = processArrayMlogModifier(modifiers, size, nameCreator);
+                result = InternalArray.create(processor, arrayNameCreator, null, identifier, 0,
+                        size, isVolatile, declaredRemote, storageProcessor, false);
+            }
+
+            putVariableIfAbsent(name, result);
         }
 
-        putVariableIfAbsent(identifier.getName(), result);
         return result;
     }
 
@@ -335,7 +348,7 @@ public class Variables extends CompilerMessageEmitter {
                 return Objects.requireNonNull(functionContext.variables().get(identifier.getName()));
             }
             return verifyMlogConflicts(functionContext.registerFunctionVariable(identifier, scope,
-                    modifiers.contains(NOINIT), false));
+                    functionContext.createFunctionVariable(identifier, modifiers.contains(NOINIT), false)));
         } else {
             if (globalVariables.containsKey(name)) {
                 error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, name);
@@ -588,18 +601,18 @@ public class Variables extends CompilerMessageEmitter {
 
                 return new ArrayNameCreator() {
                     @Override
-                    public String arrayBase(String processorName, String arrayName) {
-                        return standardNameCreator.arrayBase(processorName, arrayName);
+                    public String arrayBase(@Nullable MindcodeFunction function, String processorName, String arrayName, int variableindex) {
+                        return standardNameCreator.arrayBase(function, processorName, arrayName, variableindex);
                     }
 
                     @Override
-                    public String arrayElement(String arrayName, int index) {
-                        return lookupMap.get(index).contentName();
+                    public String arrayElement(@Nullable MindcodeFunction function, String arrayName, int variableindex, int elementIndex) {
+                        return lookupMap.get(elementIndex).contentName();
                     }
 
                     @Override
                     public String remoteArrayElement(String arrayName, int index) {
-                        return arrayElement(arrayName, index);
+                        return arrayElement(null, arrayName, 0, index);
                     }
 
                     @Override
@@ -619,20 +632,20 @@ public class Variables extends CompilerMessageEmitter {
 
                 return new ArrayNameCreator() {
                     @Override
-                    public String arrayBase(String processorName, String arrayName) {
-                        return standardNameCreator.arrayBase(processorName, arrayName);
+                    public String arrayBase(@Nullable MindcodeFunction function, String processorName, String arrayName, int variableindex) {
+                        return standardNameCreator.arrayBase(function, processorName, arrayName, variableindex);
                     }
 
                     @Override
-                    public String arrayElement(String arrayName, int index) {
-                        return index >= mlogNameList.size() ? "invalid"
-                                : mlogNameList.get(index) instanceof LogicString str ? str.getValue()
-                                : standardNameCreator.arrayElement(arrayName, index);
+                    public String arrayElement(@Nullable MindcodeFunction function, String arrayName, int variableindex, int elementIndex) {
+                        return elementIndex >= mlogNameList.size() ? "invalid"
+                                : mlogNameList.get(elementIndex) instanceof LogicString str ? str.getValue()
+                                : standardNameCreator.arrayElement(function, arrayName, variableindex, elementIndex);
                     }
 
                     @Override
                     public String remoteArrayElement(String arrayName, int index) {
-                        return arrayElement(arrayName, index);
+                        return arrayElement(null, arrayName, 0, index);
                     }
                 };
             }

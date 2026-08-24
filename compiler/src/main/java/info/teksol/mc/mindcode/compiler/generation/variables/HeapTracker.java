@@ -83,6 +83,6 @@ public class HeapTracker extends CompilerMessageEmitter {
                 heapMemory, LogicNumber.create(currentHeapIndex++), processor.nextTemp())).toList();
 
         return new ExternalArray(identifier.sourcePosition(),
-                nameCreator.arrayBase("", identifier.getName()), heapMemory, baseIndex, elements);
+                nameCreator.arrayBase(null, "", identifier.getName(), 0), heapMemory, baseIndex, elements);
     }
 }

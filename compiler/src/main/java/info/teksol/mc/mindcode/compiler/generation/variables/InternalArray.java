@@ -4,6 +4,7 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -49,11 +50,11 @@ public class InternalArray extends AbstractArrayStore {
     }
 
     public static InternalArray create(InstructionProcessor instructionProcessor, ArrayNameCreator nameCreator,
-            AstIdentifier identifier, int size, boolean isVolatile, boolean declaredRemote, @Nullable LogicVariable processor,
-            boolean shared) {
+            @Nullable MindcodeFunction function, AstIdentifier identifier, int variableIndex, int size, boolean isVolatile,
+            boolean declaredRemote, @Nullable LogicVariable processor, boolean shared) {
         if (processor != null) {
             return new InternalArray(identifier.sourcePosition(), nameCreator.arrayLookupType(),
-                    nameCreator.arrayBase(shared ? "" : processor.getName(), identifier.getName()),
+                    nameCreator.arrayBase(null, shared ? "" : processor.getName(), identifier.getName(), variableIndex),
                     declaredRemote, processor,
                     IntStream.range(0, size)
                             .mapToObj(index -> (ValueStore) new RemoteVariable(identifier.sourcePosition(), processor,
@@ -63,11 +64,11 @@ public class InternalArray extends AbstractArrayStore {
                     shared ? ArrayType.REMOTE_SHARED : ArrayType.REMOTE);
         } else {
             return new InternalArray(identifier.sourcePosition(), nameCreator.arrayLookupType(),
-                    nameCreator.arrayBase("", identifier.getName()),
+                    nameCreator.arrayBase(function, "", identifier.getName(), variableIndex),
                     declaredRemote, null,
                     IntStream.range(0, size)
                             .mapToObj(index -> (ValueStore) LogicArrayElement.arrayElement(identifier, index,
-                                    nameCreator.arrayElement(identifier.getName(), index), isVolatile)).toList(),
+                                    nameCreator.arrayElement(function, identifier.getName(), variableIndex, index), isVolatile)).toList(),
                     ArrayType.INTERNAL);
         }
     }
@@ -75,18 +76,23 @@ public class InternalArray extends AbstractArrayStore {
     public static InternalArray createConst(NameCreator nameCreator, AstIdentifier identifier, int size, List<ValueStore> elements) {
         List<ValueStore> wrappedElements = elements.stream().map(InternalArray::constantWrap).toList();
         return new InternalArray(identifier.sourcePosition(), LogicKeyword.INVALID,
-                nameCreator.arrayBase("", identifier.getName()),
+                nameCreator.arrayBase(null, "", identifier.getName(), 0),
                 false, null, wrappedElements, ArrayType.CONSTANT);
     }
 
     public static InternalArray createInvalid(NameCreator nameCreator, AstIdentifier identifier, int size) {
         return new InternalArray(identifier.sourcePosition(), LogicKeyword.INVALID,
-                nameCreator.arrayBase("", identifier.getName()), false, null,
+                nameCreator.arrayBase(null, "", identifier.getName(), 0), false, null,
                 IntStream.of(size).mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList(), ArrayType.INTERNAL);
     }
 
     public LogicKeyword getLookupType() {
         return lookupType;
+    }
+
+    @Override
+    public boolean valid() {
+        return elements.getFirst() != LogicVariable.INVALID;
     }
 
     @Override

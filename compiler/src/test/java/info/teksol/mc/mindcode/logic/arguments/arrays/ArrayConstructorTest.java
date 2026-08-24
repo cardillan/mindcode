@@ -35,20 +35,20 @@ class ArrayConstructorTest extends AbstractCodeGeneratorTest {
             }).toList();
 
     private LogicArray createLocalArray(int size) {
-        InternalArray array = InternalArray.create(ip, nameCreator, new AstIdentifier(EMPTY, "a"),
-                size, false, false, null, false);
+        InternalArray array = InternalArray.create(ip, nameCreator, null, new AstIdentifier(EMPTY, "a"),
+                0, size, false, false, null, false);
         return LogicArray.create(array);
     }
 
     private LogicArray createRemoteArray(int size) {
-        InternalArray array = InternalArray.create(ip, nameCreator, new AstIdentifier(EMPTY, "a"),
-                size, false, true, a, false);
+        InternalArray array = InternalArray.create(ip, nameCreator, null, new AstIdentifier(EMPTY, "a"),
+                0, size, false, true, a, false);
         return LogicArray.create(array);
     }
 
     private LogicArray createSharedArray(int size) {
-        InternalArray array = InternalArray.create(ip, nameCreator, new AstIdentifier(EMPTY, "a"),
-                size, false, true, a, true);
+        InternalArray array = InternalArray.create(ip, nameCreator, null, new AstIdentifier(EMPTY, "a"),
+                0, size, false, true, a, true);
         return LogicArray.create(array);
     }
 

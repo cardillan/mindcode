@@ -47,23 +47,28 @@ public class GlobalContext implements FunctionContext {
     }
 
     @Override
-    public Collection<ValueStore> getActiveVariables() {
-        return List.of();
-    }
-
-    @Override
     public void gatherActiveVariables(Collection<ValueStore> variables) {
         // Do nothing
     }
 
     @Override
-    public void replaceFunctionVariable(AstIdentifier identifier, ValueStore variable) {
-        throw new MindcodeInternalError("Trying to replace a local variable in global context:" + identifier);
+    public int getVariableReuseCount(AstIdentifier identifier) {
+        throw new MindcodeInternalError("Trying to create a local variable in global context:" + identifier);
     }
 
     @Override
-    public ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, boolean noinit, boolean allowRedefinition) {
+    public ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean implicitDeclaration) {
+        throw new MindcodeInternalError("Trying to create a local variable in global context:" + identifier);
+    }
+
+    @Override
+    public ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, ValueStore variable) {
         throw new MindcodeInternalError("Trying to register a local variable in global context:" + identifier);
+    }
+
+    @Override
+    public void replaceFunctionVariable(AstIdentifier identifier, ValueStore variable) {
+        throw new MindcodeInternalError("Trying to replace a local variable in global context:" + identifier);
     }
 
     @Override

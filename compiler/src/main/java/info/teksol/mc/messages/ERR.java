@@ -34,7 +34,6 @@ public class ERR {
     public static final String ARRAY_INVALID = "'%s' is not an array.'";
     public static final String ARRAY_LINKED_NOT_INITIALIZED = "Linked block array must be initialized.";
     public static final String ARRAY_LINKED_INVALID_RANGE = "Invalid link range (both link names must use identical base name, range must not be empty).";
-    public static final String ARRAY_LOCAL = "Arrays must be declared in the global scope.";
     public static final String ARRAY_MUTABLE_SIZE = "Array size must be constant.";
     public static final String ARRAY_NON_INTEGER_INDEX = "Array index must be an integer.";
     public static final String ARRAY_NON_INTEGER_SIZE = "Array size must be an integer.";

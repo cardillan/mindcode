@@ -9,11 +9,11 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.util.MutableInteger;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 @NullMarked
@@ -27,7 +27,7 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
 
     /// Keeps the number of times a variable with the same name is declared within the function
     /// (in non-overlapping nodes)
-    private final Map<String, AtomicInteger> variableReuses = new HashMap<>();
+    private final Map<String, MutableInteger> variableReuses = new HashMap<>();
 
     /// List of active variables allocated within the function, in order of allocation.
     private final List<String> nodeVariables = new ArrayList<>();
@@ -68,11 +68,6 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
     }
 
     @Override
-    public Collection<ValueStore> getActiveVariables() {
-        return variables.values();
-    }
-
-    @Override
     public void gatherActiveVariables(Collection<ValueStore> variables) {
         parentContext.gatherActiveVariables(variables);
         variables.addAll(this.variables.values());
@@ -82,9 +77,25 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
         putVariable(identifier.getName(), variable);
     }
 
+    public int getVariableReuseCount(AstIdentifier identifier) {
+        return variableReuses.computeIfAbsent(identifier.getName(), _ -> MutableInteger.zero()).getAndIncrement();
+    }
+
+    public ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean implicitDeclaration) {
+        int index = getVariableReuseCount(identifier);
+        if (implicitDeclaration && index > 0) {
+            error(identifier, ERR.VARIABLE_NOT_RESOLVED, identifier.getName());
+        }
+
+        if (function.isMain()) {
+            return LogicVariable.main(identifier, nameCreator.main(identifier.getName(), index), noinit);
+        } else {
+            return LogicVariable.local(identifier, function, nameCreator.local(function, identifier.getName(), index), noinit);
+        }
+    }
+
     @Override
-    public ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, boolean noinit, boolean implicitDeclaration) {
-        ValueStore variable = createFunctionVariable(identifier, noinit, implicitDeclaration);
+    public ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, ValueStore variable) {
         ValueStore existing = putVariable(identifier.getName(), variable);
         if (existing != null) {
             throw new MindcodeInternalError("Repeated registration of function variable (existing variable: %s, AST identifier: %s).",
@@ -103,26 +114,6 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
         }
 
         return variable;
-    }
-
-    private String getMlogName(ValueStore valueStore) {
-        if (valueStore instanceof LogicVariable var) {
-            return var.toMlog();
-        }
-        throw new MindcodeInternalError("Unsupported local variable type");
-    }
-
-    private ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean implicitDeclaration) {
-        int index = variableReuses.computeIfAbsent(identifier.getName(), k -> new AtomicInteger(0)).getAndIncrement();
-        if (implicitDeclaration && index > 0) {
-            error(identifier, ERR.VARIABLE_NOT_RESOLVED, identifier.getName());
-        }
-
-        if (function.isMain()) {
-            return LogicVariable.main(identifier, nameCreator.main(identifier.getName(), index), noinit);
-        } else {
-            return LogicVariable.local(identifier, function, nameCreator.local(function, identifier.getName(), index), noinit);
-        }
     }
 
     @Override

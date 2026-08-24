@@ -13,14 +13,12 @@ import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.GLOBAL_VARIAB
 public class LogicArrayElement extends LogicVariable {
     private @Nullable String elementName;
 
-    protected LogicArrayElement(SourcePosition sourcePosition, ArgumentType argumentType, String name, String mlog,
-            boolean isVolatile) {
-        super(sourcePosition, argumentType, name, mlog, isVolatile, true, false);
+    protected LogicArrayElement(SourcePosition sourcePosition, ArgumentType argumentType, String name, String mlog, boolean isVolatile) {
+        super(sourcePosition, argumentType, name, mlog, isVolatile, true, true);
     }
 
     public static LogicArrayElement arrayElement(AstIdentifier identifier, int index, String mlog, boolean isVolatile) {
-        return new LogicArrayElement(identifier.sourcePosition(), GLOBAL_VARIABLE,
-                identifier.getName() + "[" + index + "]", mlog, isVolatile);
+        return new LogicArrayElement(identifier.sourcePosition(), GLOBAL_VARIABLE, identifier.getName() + "[" + index + "]", mlog, isVolatile);
     }
 
     @Override

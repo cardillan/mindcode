@@ -27,6 +27,11 @@ public class ExternalArray extends AbstractArrayStore {
     }
 
     @Override
+    public boolean valid() {
+        return true;
+    }
+
+    @Override
     public boolean isDeclaredRemote() {
         return false;
     }

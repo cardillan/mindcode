@@ -4,6 +4,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -159,16 +160,20 @@ public class StandardNameCreator implements NameCreator {
                 :  withPrefix(functionPrefix, function.getPrefix(), function.getPrefixIndex()) + compilerPrefix + FUNCTION_FINISHED;
     }
 
-    @Override
-    public String arrayBase(String processorName, String arrayName) {
-        return processorName.isEmpty()
-                ? arrayPrefix + arrayName
-                : globalPrefix + processorName + processorArrayPrefix + arrayName;
+    private String localArrayBaseName(MindcodeFunction function, String arrayName, int variableIndex) {
+        return withPrefix(functionPrefix, function.getPrefix(), function.getPrefixIndex()) + withPrefix(localPrefix, arrayName, variableIndex);
     }
 
     @Override
-    public String arrayElement(String arrayName, int index) {
-        return arrayPrefix + arrayName + elementPrefix + index;
+    public String arrayBase(@Nullable MindcodeFunction function, String processorName, String arrayName, int variableIndex) {
+        return !processorName.isEmpty() ? globalPrefix + processorName + processorArrayPrefix + arrayName
+                : function != null ? localArrayBaseName(function, arrayName, variableIndex)
+                : arrayPrefix + arrayName;
+    }
+
+    @Override
+    public String arrayElement(@Nullable MindcodeFunction function, String arrayName, int variableIndex, int elementIndex) {
+        return (function != null ? localArrayBaseName(function, arrayName, variableIndex) : arrayPrefix + arrayName) + elementPrefix + elementIndex;
     }
 
     @Override

@@ -240,13 +240,10 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                 Consumer<AstVariableModifier> validator = modifiers.contains(LINKED)
                         ? this::validateLinkedArrayModifiers : this::validateRegularArrayModifiers;
                 node.getModifiers().forEach(validator);
-                if (isLocalContext()) {
-                    error(specification, ERR.ARRAY_LOCAL);
-                }
 
                 processArrayDeclaration(specification, modifiers, false);
             } else {
-                processVariable(specification, modifiers);
+                processVariableDeclaration(specification, modifiers);
             }
 
             variables.removeUnresolvedGlobal(specification.getName());
@@ -334,8 +331,8 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                     int arraySize = processArrayDeclaration(specification, modifiers, true);
 
                     ArrayNameCreator arrayNameCreator = variables.processArrayMlogModifier(modifiers, arraySize, nameCreator);
-                    InternalArray array = InternalArray.create(this.processor, arrayNameCreator, identifier, arraySize, true,
-                            true, processor, shared);
+                    InternalArray array = InternalArray.create(this.processor, arrayNameCreator, null, identifier,
+                            0, arraySize, true, true, processor, shared);
                     structureMembers.put(name, array);
                 } else {
                     RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), processor, name,
@@ -491,9 +488,9 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
         // Skip actual array creation for remote declarations
         if (!remoteDeclaration) {
-            ArrayStore array = variables.createArray(specification.getIdentifier(), modifiers, arraySize, initialValues);
+            ArrayStore array = variables.createArray(isLocalContext(), specification.getIdentifier(), modifiers, arraySize, initialValues);
 
-            if (!modifiers.contains(CONST) && !modifiers.contains(LINKED)) {
+            if (array.valid() && !modifiers.contains(CONST) && !modifiers.contains(LINKED)) {
                 for (int i = 0; i < initialValues.size(); i++) {
                     array.getElements().get(i).setValue(assembler, initialValues.get(i).getValue(assembler));
                 }
@@ -530,7 +527,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         }
     }
 
-    private void processVariable(AstVariableSpecification specification, Modifiers modifiers) {
+    private void processVariableDeclaration(AstVariableSpecification specification, Modifiers modifiers) {
         ValueStore variable = createVariable(specification, modifiers);
 
         if (modifiers.getMain() == LINKED) {

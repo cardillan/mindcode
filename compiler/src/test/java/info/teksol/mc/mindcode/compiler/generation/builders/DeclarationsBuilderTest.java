@@ -366,10 +366,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesLocalArray() {
-            assertGeneratesMessages(expectedMessages()
-                            .add("The 'external' modifier cannot be used to declare local variables.")
-                            .add("Arrays must be declared in the global scope.")
-                            .add("No heap allocated for external variables."),
+            assertGeneratesMessage("The 'external' modifier cannot be used to declare local variables.",
                     """
                             begin
                                 external a[10];
@@ -632,13 +629,6 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void refusesLocalArray() {
-            assertGeneratesMessage(
-                    "Arrays must be declared in the global scope.",
-                    "begin var a[10]; end;");
-        }
-
-        @Test
         void refusesNoinitArray() {
             assertGeneratesMessage(
                     "Arrays cannot be declared 'noinit'.",
@@ -712,6 +702,41 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessages(expectedMessages()
                             .add("Multiple declarations of 'switch3'."),
                     "linked switch3, a[] = (switch1 .. switch5);");
+        }
+    }
+
+    @Nested
+    class LocalArrayDeclarations {
+        @Test
+        void compilesLocalArrayDeclarations() {
+            assertCompilesTo("""
+                            void foo()
+                                begin
+                                    var a[] = (1);
+                                    print(a);
+                                end;
+                                var a[] = (2);
+                                print(a);
+                            end;
+                            
+                            void bar()
+                                var a[] = (3);
+                                print(a);
+                            end;
+                            
+                            foo();
+                            bar();
+                            """,
+                    createInstruction(SET, ":foo:a*0", "1"),
+                    createInstruction(PRINT, ":foo:a*0"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, ":foo:a.1*0", "2"),
+                    createInstruction(PRINT, ":foo:a.1*0"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":bar:a*0", "3"),
+                    createInstruction(PRINT, ":bar:a*0"),
+                    createInstruction(LABEL, label(2))
+            );
         }
     }
 

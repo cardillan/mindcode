@@ -30,8 +30,14 @@ public interface FunctionContext {
     /// from the unresolved list (to prevent multiple reporting).
     @Nullable SourcePosition testUnresolvedGlobal(String name);
 
+    /// Returns the number of times the variable has already been defined within the function (in different scopes)
+    int getVariableReuseCount(AstIdentifier identifier);
+
+    ///  Creates a new variable in the current function context
+    ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean implicitDeclaration);
+
     /// Registers a new function variable.
-    ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, boolean noinit, boolean allowRedefinition);
+    ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, ValueStore variable);
 
     /// Replaces an existing function variable with a different definition. Used in inline function calls
     /// to inject compound value stores into the function.
@@ -45,9 +51,6 @@ public interface FunctionContext {
 
     /// Returns the list of function arguments passed as varargs to the current function.
     List<FunctionArgument> getVarargs();
-
-    /// Returns all function variables (user and compiler generated) active at this moment.
-    Collection<ValueStore> getActiveVariables();
 
     /// Collects all function variables (user and compiler generated) active at this moment.
     void gatherActiveVariables(Collection<ValueStore> variables);

@@ -17,6 +17,8 @@ public interface ArrayStore extends ValueStore {
 
     int getSize();
 
+    boolean valid();
+
     /// True when declared remote, even if the actual array type is INTERNAL
     boolean isDeclaredRemote();
 
@@ -39,7 +41,6 @@ public interface ArrayStore extends ValueStore {
     default LogicVariable getProcessor() {
         throw new UnsupportedOperationException("Not supported for class " + getClass().getSimpleName());
     }
-
 
     /// Provides a start offset against the backing store. For internal arrays, it is always 0. For internal subarrays,
     /// it is the offset inside the backing array. For external arrays, it is always the offset inside the external
