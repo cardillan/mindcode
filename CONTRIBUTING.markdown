@@ -1,17 +1,17 @@
 # Contributing
 
-There's currently a bunch of issues marked with the [`help wanted`](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22help%20wanted%22) label. You can also have a look [here](https://github.com/cardillan/mindcode/discussions/167). 
+There's currently a bunch of issues marked with the [`help wanted`](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22help%20wanted%22) label. You can also have a look [here](https://github.com/cardillan/mindcode/discussions/167).
 
 ## Guidelines
 
-Mindcode uses JDK22, Maven and Spring Boot. 
+Mindcode uses JDK22, Maven and Spring Boot.
 
 The project consists of separate modules:
 * `mindcode-annotations` contains annotation preprocessor used for automatic code generation.
 * `mindcode-compiler` contains several independent parts:
   * Mindcode compiler, itself consisting of the grammar definition, parser, AST builder, code generator and optimizer.
   * Processor emulator, capable of running mlog code in an emulated environment with limited support for Mindustry World interaction.
-* `mindcode-exttest` tool for testing Mindcode compiler/processor emulator under various compiler settings. 
+* `mindcode-exttest` tool for testing Mindcode compiler/processor emulator under various compiler settings.
 * `mindcode-samples`: contains Mindcode and Schemacode samples for the web application.
 * `mindcode-schemacode`: contains the grammar definition, compiler and decompiler for Schemacode.
 * `mindcode-toolapp`: contains the command-line interface.
@@ -21,7 +21,7 @@ Unit tests are used primarily to verify that source code gets compiled, optimize
 
 Please do not make large changes before discussing them first. Especially do not alter existing syntax without prior agreement.
 
-The grammar, AST builder and code generator were recently completely rewritten and should be quite accessible. The optimizers, on the other hand, do not adhere to usual CS compiler standards, are not well documented and appear to be somewhat fragile. A comprehensive refactoring of the optimizers would be great, but is not planned for near future.         
+The grammar, AST builder and code generator were recently completely rewritten and should be quite accessible. The optimizers, on the other hand, do not adhere to usual CS compiler standards, are not well documented and appear to be somewhat fragile. A comprehensive refactoring of the optimizers would be great, but is not planned for near future.
 
 ### System library
 

@@ -53,6 +53,11 @@ public class LogicBuiltIn extends LogicVariable {
     }
 
     @Override
+    public boolean isConstantValue() {
+        return mutability == ValueMutability.CONSTANT || mutability == ValueMutability.IMMUTABLE;
+    }
+
+    @Override
     public double getDoubleValue() {
         return 1.0;
     }

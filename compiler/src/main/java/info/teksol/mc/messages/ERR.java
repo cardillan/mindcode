@@ -12,6 +12,7 @@ public class ERR {
     public static final String ARGUMENT_KEYWORD_INVALID_VALUE = "Invalid value '%s' for keyword parameter: allowed values are '%s'.";
     public static final String ARGUMENT_KEYWORD_IN_OUT_NOT_ALLOWED = "Parameter is an mlog keyword, no 'in' or 'out' modifiers allowed.";
     public static final String ARGUMENT_KEYWORD_UNSPECIFIED_VALUE = "Invalid or unspecified value for keyword parameter: allowed values are '%s'.";
+    public static final String ARGUMENT_NOT_CONST = "Argument assigned to constant parameter '%s' is not a compile-time constant.";
     public static final String ARGUMENT_NOT_LVALUE = "Argument assigned to output parameter '%s' is not writable.";
     public static final String ARGUMENT_NOT_OPTIONAL = "Parameter '%s' isn't optional, a value must be provided.";
     public static final String ARGUMENT_OUT_MODIFIER_DISALLOWED = "Parameter '%s' isn't output, 'out' argument modifier not allowed.";
@@ -117,7 +118,6 @@ public class ERR {
     public static final String FUNCTION_EXPORT_MAIN = "Function in a main program cannot be declared 'export'.";
     public static final String FUNCTION_INCOMPATIBLE_MODIFIER = "Modifier '%s' conflicts with '%s'.";
     public static final String FUNCTION_RECURSIVE_INLINE = "Recursive function '%s' declared 'inline'.";
-    public static final String FUNCTION_RECURSIVE_NO_STACK = "Function '%s' is recursive and no stack was allocated.";
     public static final String FUNCTION_REQUIRES_TARGET_8 = "The '%s' function requires language target 8 or higher.";
     public static final String FUNCTION_VARARGS_NOT_INLINE = "Varargs function '%s' must be declared 'inline'.";
     public static final String IDENTIFIER_EXPECTED = "Identifier expected.";
@@ -182,6 +182,7 @@ public class ERR {
     public static final String MULTIPLE_PROCESSOR_BINDINGS = "Multiple bindings of processor '%s'.";
     public static final String NAMED_COLOR_NOT_RECOGNIZED = "Unknown named color '%s'.";
     public static final String OPERATOR_REQUIRES_SPECIFIC_TARGET = "The '%s' operator requires language target %s or higher.";
+    public static final String PARAMETER_CONST_NOT_INLINE = "Parameter '%s' of function '%s' cannot be declared 'const' unless the function is declared 'inline'.";
     public static final String PARAMETER_NAME_RESERVED_GLOBAL = "Parameter '%s' of function '%s' uses name reserved for global variables.";
     public static final String PARAMETER_NAME_RESERVED_LINKED = "Parameter '%s' of function '%s' uses name reserved for linked blocks.";
     public static final String PARAMETER_REF_IDENTIFIER_REQUESTED = "Parameter '%s' is a reference and can only accept variables or arrays as an argument.";

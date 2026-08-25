@@ -530,6 +530,8 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             FunctionArgument argument = arguments.get(index);
             if (function.getDeclaredParameter(index).isReference()) {
                 argumentValues.offer(argument);
+            } else if (function.getDeclaredParameter(index).isConstant()) {
+                argumentValues.offer(argument);
             } else if (function.getDeclaredParameter(index).isInput()) {
                 if (misplacedInput(function, argument, parameters.get(index))) {
                     LogicVariable temp = assembler.unprotectedTemp();
@@ -548,6 +550,18 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             if (parameter.isReference()) {
                 ValueStore argument = argumentValues.remove();
                 variables.replaceFunctionVariable(parameter.getIdentifier(), argument.unwrap());
+            } else if (parameter.isConstant()) {
+                ValueStore argument = argumentValues.remove();
+                ValueStore value = argument instanceof IdentifierFunctionArgument idArgument
+                        ? variables.findVariable(idArgument.getIdentifier().getName(), true)
+                        : argument.unwrap();
+
+                if (value != null && value.isConstantValue()) {
+                    variables.replaceFunctionVariable(parameter.getIdentifier(), value);
+                } else {
+                    error(argument.sourcePosition(), ERR.ARGUMENT_NOT_CONST, parameter.getName());
+                    variables.replaceFunctionVariable(parameter.getIdentifier(), LogicNull.NULL);
+                }
             } else if (parameter.isInput()) {
                 ValueStore argument = argumentValues.remove();
                 if (function.isDeclaredInline() && !argument.unwrap().isMlogRepresentable()) {

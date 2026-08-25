@@ -6,13 +6,13 @@ The Mindustry Logic v8 instruction set and corresponding Mindcode functions are 
 
 # New functionality in Mindustry 8
 
-The changes that affect Mindcode the most are described here. For a comprehensive list of changes to Mindustry Logic, see [Changes to Mindustry Logic](https://github.com/cardillan/mindcode/wiki/Changes-to-Mindustry-Logic).  
+The changes that affect Mindcode the most are described here. For a comprehensive list of changes to Mindustry Logic, see [Changes to Mindustry Logic](https://github.com/cardillan/mindcode/wiki/Changes-to-Mindustry-Logic).
 
 ## Literals and properties
 
 ### Numeric literals
 
-Mindustry now handles the numeric literals with double precision. Loss of precision, and the inability to encode some numeric constants into mlog, no longer happen.  
+Mindustry now handles the numeric literals with double precision. Loss of precision, and the inability to encode some numeric constants into mlog, no longer happen.
 
 ### Named color literals
 
@@ -20,7 +20,7 @@ Color literals for named colors (e.g., `%[red]`), are also supported by Mindcode
 
 ### Properties
 
-A number of properties to be used with the `sensor` instructions were added. Mindcode supports using new properties out of the box, so no special support for these was needed.  
+A number of properties to be used with the `sensor` instructions were added. Mindcode supports using new properties out of the box, so no special support for these was needed.
 
 ## Text output
 
@@ -115,7 +115,7 @@ To prevent the new Print Merging optimization interfering with custom uses of th
 
 ```Mindcode
 param a = 10;               // prevent a from being propagated as a constant
-println("{2} {1}");         // if you use "{1} {0}" instead, the output will be the same, but different optimization will happen 
+println("{2} {1}");         // if you use "{1} {0}" instead, the output will be the same, but different optimization will happen
 format("Before");
 println($"Value: $a");
 format("After");
@@ -174,7 +174,7 @@ format :amount
 printflush message1
 ```
 
-To make using the `printchar()` function easier, [character literals](SYNTAX-0-BASICS.markdown#character-literals) were added to Mindcode. 
+To make using the `printchar()` function easier, [character literals](SYNTAX-0-BASICS.markdown#character-literals) were added to Mindcode.
 
 ## `select` instruction
 
@@ -219,11 +219,11 @@ op add *tmp0 :x :y
 write *tmp0 processor1 "z"
 ```
 
-Unlike external variables, access to another processor's variables is not limited to numeric values. All possible variable values are correctly transferred using these new instructions.    
+Unlike external variables, access to another processor's variables is not limited to numeric values. All possible variable values are correctly transferred using these new instructions.
 
 #### Remote functions and variables
 
-Thanks to the ability to access other processors' variables, Mindcode now supports remote functions and variables, as described [here](REMOTE-CALLS.markdown).   
+Thanks to the ability to access other processors' variables, Mindcode now supports remote functions and variables, as described [here](REMOTE-CALLS.markdown).
 
 ### Reading characters from strings
 
@@ -247,7 +247,7 @@ println(char(message1, 0));
 printflush(message2);
 ```
 
-#### Data storage using strings 
+#### Data storage using strings
 
 The ability to access individual characters of string values is a convenient way to store data. Mindcode provides the [`encode()` function](SYNTAX-4-FUNCTIONS.markdown#the-encode-function) to easily encode data into strings, and also uses the functionality internally to implement [very space-efficient jump tables](SYNTAX-5-OTHER.markdown#option-use-text-jump-tables).
 
@@ -264,7 +264,7 @@ In the latest BE, a small but important change was made to the `wait` instructio
 
 The important change is the second one: when an instruction waits for a specified amount of time, it is guaranteed that the accumulator will have enough capacity to execute at least the number of instructions corresponding to the wait time (and the processor's current instructions-per-tick value) uninterrupted during the next update.
 
-This can be used to ensure that a section of code will be executed atomically (without interruption). Mindcode provides [atomic code blocks](REMOTE-CALLS.markdown#atomic-code-execution) for this purpose. 
+This can be used to ensure that a section of code will be executed atomically (without interruption). Mindcode provides [atomic code blocks](REMOTE-CALLS.markdown#atomic-code-execution) for this purpose.
 
 ## Graphic output
 
@@ -272,7 +272,7 @@ This can be used to ensure that a section of code will be executed atomically (w
 
 This instruction prints the contents of the text buffer onto the display. So, instead of `printflush(message1);` you'll use `drawPrint(x, y, alignment); drawflush(display1);` to output the text on the display instead of a message block.
 
-The new `draw print` instruction is represented by the `drawPrint()` function, as `print()` is already taken. 
+The new `draw print` instruction is represented by the `drawPrint()` function, as `print()` is already taken.
 
 The text is drawn using a monospace font. Each character being printed represents one graphical operation. The graphics buffer has a capacity of 256 operations, after which it doesn't accept new ones and must be applied using `drawflush`.
 
@@ -285,18 +285,18 @@ These instructions are represented by `rotate()`, `translate()`, `scale()` and `
 Figuring out the correct transformations isn't always easy. Issuing incorrect ones may result in all the output being drawn off-screen, which might be challenging to diagnose. For this reason, the following functions in the [`graphics` library](SYSTEM-LIBRARY-GRAPHICS.markdown) are defined:
 
 * `rotateLeftLarge()`, `rotateRightLarge()`, `upsideDownLarge()`: ensures the output to the large display will be rotated left, right or upside down by issuing `reset()`, `rotate()` and `translate()` as needed.
-* `flipVerticalLarge()`, `flipHorizontalLarge()`: flips output to the large display vertically or horizontally.   
+* `flipVerticalLarge()`, `flipHorizontalLarge()`: flips output to the large display vertically or horizontally.
 * `rotateLeftSmall()` and so on: the same, but intended for drawing on a small display.
 * `rotateLeft(display)`: will inspect the display and apply the correct transformation for small/large ones.
 * `smallToLarge()`, `largeToSmall()`: will set up scaling so that output to a small display will be mapped completely to the large one or vice versa. Especially the `largeToSmall()` transformation results into a graphics which is still nicely readable on a smaller display.
 
 ## Other standard processor instructions
 
-Note: these new instructions map either to functions or to operators. When compiling for Mindustry 7, the new operators are available by default, and the new functions are available through system libraries `graphics` and `math`, implemented in a backwards compatible way. When the function is provided by the target processor, it is used instead of the library implementation. This way you can start using these operators and functions when compiling for Mindustry 7 and seamlessly transition to Mindustry 8 without having to update your code. 
+Note: these new instructions map either to functions or to operators. When compiling for Mindustry 7, the new operators are available by default, and the new functions are available through system libraries `graphics` and `math`, implemented in a backwards compatible way. When the function is provided by the target processor, it is used instead of the library implementation. This way you can start using these operators and functions when compiling for Mindustry 7 and seamlessly transition to Mindustry 8 without having to update your code.
 
 ### `unpackcolor`
 
-Reverses the `packcolor` instruction. Prior to version 8, the same operation may be performed by the `unpackcolor()` function from the [`graphics` library](SYSTEM-LIBRARY-GRAPHICS.markdown).  
+Reverses the `packcolor` instruction. Prior to version 8, the same operation may be performed by the `unpackcolor()` function from the [`graphics` library](SYSTEM-LIBRARY-GRAPHICS.markdown).
 
 ### `op emod`
 
@@ -564,7 +564,7 @@ Plays a sound, either in a specific position on the world map or with a global v
 
 ### `setmarker`, `makemarker`
 
-These instructions serve for displaying markers on the map or minimap, as part of creating interactive map objectives.  
+These instructions serve for displaying markers on the map or minimap, as part of creating interactive map objectives.
 
 ### `localeprint`
 

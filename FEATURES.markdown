@@ -41,7 +41,7 @@ This file contains a list of Mindcode features.
     * Constants
     * Program parameters
     * Linked blocks
-    * Guarded linked blocks 
+    * Guarded linked blocks
     * Internal variables (stored in processor variables, support all values)
     * External variables (stored in memory banks/memory cells, only numerical values)
     * Remote variables (stored in a different processor)
@@ -68,11 +68,15 @@ This file contains a list of Mindcode features.
 * Functions
   * Inline functions
   * Stackless function (non-inlined and non-recursive)
-  * Recursive functions (limited support)
+  * Recursive functions
+    * Full support with an internal stack (backed by processor variables)
+    * Partial support with an external stack (backed by memory banks/cells)
+    * Tail-call optimization available
   * Input, output and input/output function parameters
   * Optional output-only function parameters
   * Additional inline function features
     * Passing arguments by reference, including mlog keywords and formattable string literals
+    * Constant parameters
     * Vararg parameters
   * Function overloading
   * Functions with and without a return value (procedures)
@@ -80,7 +84,7 @@ This file contains a list of Mindcode features.
     * Complete function reference for each supported target
   * Remote functions
 * String interpolation (in printing functions only)
-* Block, line and enhanced comments 
+* Block, line and enhanced comments
 
 ### Modules
 
@@ -96,7 +100,7 @@ This file contains a list of Mindcode features.
   * Asynchronous remote function calls
   * Remote variables
   * Background process (executed between remote function calls)
-  
+
 ### Inter-processor communication
 
 * Arbitrary access to other processors' variables
@@ -113,10 +117,10 @@ This file contains a list of Mindcode features.
   * Selecting the target Mindustry version and processor type
   * All mlog instructions from the selected target and processor type are supported and can be used
 * Target guard (refuses execution of the code on a wrong version of Mindustry processor)
-* Uses mimex for loading information about the current target 
+* Uses mimex for loading information about the current target
 
 ### Code generation
- 
+
 * Powerful compile-time evaluation, including:
   * String expressions
   * Simple user-defined functions
@@ -134,17 +138,18 @@ This file contains a list of Mindcode features.
   * Folded `@counter` arrays
   * Compact/lookup arrays
   * Separate implementation for small arrays
-  * Out-of-bounds array access runtime checks (optional)
+* Optional runtime checks
+  * Out-of-bounds array access
+  * Stack overflow
 
 ### Compiler options
 
-* Wide array of compiler options
-* Settable from the command line or via compiler directives
+* Wide array of compiler options, settable from the command line or via compiler directives
 * Local compiler options for finer control
 
 ### Extensibility
 
-* Support for non-standard mlog features (mods adding logic capabilities or new Mindustry versions) 
+* Support for non-standard mlog features (mods adding logic capabilities or new Mindustry versions)
   * User-defined mlog keywords
   * User-defined built-in variables
   * User-defined named colors
@@ -159,7 +164,7 @@ This file contains a list of Mindcode features.
 
 ## Optimizer
 
-* Optimizations respect the selected compilation target  
+* Optimizations respect the selected compilation target
 * Optimization goals
   * Speed (faster but larger code, trades code size for speed up to the code size limit)
   * Neutral
@@ -216,8 +221,8 @@ This file contains a list of Mindcode features.
 * Mindcode and mlog code storage
   * Embedded processor code (within the schematic definition file)
   * Externally stored processor code
-  * Combining code snippets even from different sources
-  
+  * Combining code snippets even from different source files
+
 ## Development tools
 
 * Web application
@@ -225,7 +230,7 @@ This file contains a list of Mindcode features.
 * Command-line tool
 * Limited IDE support
   * Syntax highlighting for IntelliJ IDEA
-  * The command-line compiler can be integrated as an external tool into most IDEs 
+  * The command-line compiler can be integrated as an external tool into most IDEs
 * MlogWatcher integration (web app/command-line tool)
   * Injecting the compiled code into the selected processor
   * Storing built schematics into the in-game schematic database
@@ -243,9 +248,9 @@ This file contains a list of Mindcode features.
   * Emulates all instructions not interacting with the map
   * Emulates all read/write operations within the schematics (from/to processors and memory blocks)
   * Emulates print operations
-* Detects and reports error states (even those ignored by the in-game processor)
+* Detects and reports error states (even some of those ignored by the in-game processor)
 * Runs code and schematics built by Mindcode directly
-* Runs code and schematics loaded from external sources 
+* Runs code and schematics loaded from external sources
 
 ### Decompiler
 

@@ -69,9 +69,9 @@ What happened here is this: the loop was unrolled to individual instructions in 
 set :sum 0
 set :i 0
 op add :sum :sum :i
-op add :i :i 1 
+op add :i :i 1
 op add :sum :sum :i
-op add :i :i 1 
+op add :i :i 1
 ...
 ```
 
@@ -162,7 +162,7 @@ end;
 
 // This loop is unrolled, but the number of iterations is 11!
 // The code produces the same output as if it wasn't unrolled.
-// This is because of rounding errors when evaluating floating-point expressions 
+// This is because of rounding errors when evaluating floating-point expressions
 for k = 0; k < 1; k += 0.1 do
     println(k);
 end;
@@ -194,7 +194,7 @@ for i = 0, j = 10; i < j; i += 1, j -= 1 do
 end;
 
 // The expression changing the loop control variable is too complex.
-// (Rewriting the assignment to i *= 2; i += 1; would allow unrolling) 
+// (Rewriting the assignment to i *= 2; i += 1; would allow unrolling)
 i = 0;
 while i < 1000 do
   i = 2 * i + 1;
@@ -202,7 +202,7 @@ while i < 1000 do
 end;
 
 // This loop won't be unrolled. We know it ends after 5 iterations due to the break statement,
-// but Mindcode assumes 2000 iterations, always reaching the instruction limit.  
+// but Mindcode assumes 2000 iterations, always reaching the instruction limit.
 for i in 0 ... 2000 do
     if i > 5 then break; end;
     print(i);
@@ -217,7 +217,7 @@ Nested loops can also be unrolled, and the optimizer prefers unrolling the inner
 k = 0;
 for i in 0 ... 100 do
     for j in 0 ... 100 do
-        k = k + rand(j); // Prevents collapsing the loop by Data Flow Optimization 
+        k = k + rand(j); // Prevents collapsing the loop by Data Flow Optimization
     end;
 end;
 ```

@@ -22,15 +22,15 @@ See [Mindcode Features](FEATURES.markdown) for a more detailed list of features.
 
 ## Supported Mindustry versions
 
-Mindcode can generate code for all major Mindustry versions and different types of processors. The target can be selected in the web app using a combobox or by including the `#set target` directive in the source code. See the list of [supported targets and their corresponding Mindustry versions](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target).  
+Mindcode can generate code for all major Mindustry versions and different types of processors. The target can be selected in the web app using a combobox or by including the `#set target` directive in the source code. See the list of [supported targets and their corresponding Mindustry versions](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target).
 
 Currently, the default target is `8.1m`, corresponding to the latest official Mindustry 8 release (v8 Build 159.7).
 
 ## Mindcode Syntax
 
-Please refer to the [documentation](doc/syntax/SYNTAX.markdown) for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.  
+Please refer to the [documentation](doc/syntax/SYNTAX.markdown) for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.
 
-Additionally, the following repositories contain Mindcode projects, which may also serve as an example of how to use Mindcode: 
+Additionally, the following repositories contain Mindcode projects, which may also serve as an example of how to use Mindcode:
 
 * Maintained by the author
   * [golem](https://github.com/cardillan/golem), a collection of more complex Mindcode and Schemacode scripts.
@@ -40,7 +40,7 @@ Additionally, the following repositories contain Mindcode projects, which may al
 
 ## Latest development
 
-See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug) for open bugs and possible workarounds. 
+See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug) for open bugs and possible workarounds.
 
 The most important recent changes to Mindcode include:
 
@@ -48,7 +48,7 @@ The most important recent changes to Mindcode include:
   * Complete support for [the latest Mindustry 8 release (v8 Build 159.7)](/doc/syntax/MINDUSTRY-8.markdown).
   * [Atomic code sections](doc/syntax/REMOTE-CALLS.markdown#atomic-code-execution) guaranteed to be executed atomically – without interruption.
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
-  * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities. 
+  * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities.
   * New string/character-based instructions and character literals.
 * Language/compiler features
   * Recursive function inlining and tail call optimization.
@@ -64,7 +64,7 @@ The most important recent changes to Mindcode include:
 
 See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 
-## Using Mindcode 
+## Using Mindcode
 
 ### Online
 
@@ -83,7 +83,7 @@ Alternatively, you can download the command-line compiler and use Mindcode [from
 
 Mindcode can interface with the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) to inject the compiled code into the selected processor in Mindustry World directly, avoiding the use of the clipboard. Both the online and offline versions of Mindcode support this feature.
 
-The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), available for Mindustry 7/8, allows efficient [array-bounds checking](/doc/syntax/SYNTAX-5-OTHER.markdown#option-error-reporting) for both internal and external arrays, making this kind of bugs easier to detect. 
+The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), available for Mindustry 7/8, allows efficient [array-bounds checking](/doc/syntax/SYNTAX-5-OTHER.markdown#option-error-reporting) for both internal and external arrays, making this kind of bugs easier to detect.
 
 ## Mindustry Logic References
 

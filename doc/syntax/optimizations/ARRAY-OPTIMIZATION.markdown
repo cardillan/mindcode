@@ -151,8 +151,8 @@ The following Mindustry content types can be used for lookup arrays:
 | block        |      260 |
 | unit         |       56 |
 | item         |       20 |
-| liquid       |       11 |     
-| team         |        7 |     
+| liquid       |       11 |
+| team         |        7 |
 
 If a declared variable conflicts with a content name, the capacity of the corresponding content type is shortened to contain only the elements up to the first conflicting element found.
 
@@ -286,19 +286,19 @@ The "setup index" instruction either multiplies the index by two or passes it as
 |------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | set return address     |   1   |   1   |       |   1   |   1   |       |
 | setup index            |       |   1   |   1   |   1   |   1   |   1   |
-| compute branch address |       |       |       |       |   1   |       |      
-| call to branch/table   |   1   |   1   |   2   |   1   |   1   |   2   |      
-| read/write element     |   1   |   1   |   1   |   1   |   1   |   1   |      
-| **TOTAL**              | **3** | **4** | **4** | **4** | **5** | **4** |      
+| compute branch address |       |       |       |       |   1   |       |
+| call to branch/table   |   1   |   1   |   2   |   1   |   1   |   2   |
+| read/write element     |   1   |   1   |   1   |   1   |   1   |   1   |
+| **TOTAL**              | **3** | **4** | **4** | **4** | **5** | **4** |
 
 **Shared jump table code size**
 
 | Instruction            |  U/T   |  U/A   |   U/S    |  F/T  |  F/A  |   F/S   |
 |------------------------|:------:|:------:|:--------:|:-----:|:-----:|:-------:|
 | compute branch address |        |        |          |       |       |    1    |
-| jump to branch         |        |        |    1     |       |       |    1    |      
-| branches (set+return)  |   2n   |   2n   |    2n    |   n   |   n   |    n    |      
-| **TOTAL**              | **2n** | **2n** | **2n+1** | **n** | **n** | **n+2** |      
+| jump to branch         |        |        |    1     |       |       |    1    |
+| branches (set+return)  |   2n   |   2n   |    2n    |   n   |   n   |    n    |
+| **TOTAL**              | **2n** | **2n** | **2n+1** | **n** | **n** | **n+2** |
 
 **Instructions executed**
 
@@ -306,13 +306,13 @@ The "setup index" instruction either multiplies the index by two or passes it as
 |------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | set return address     |   1   |   1   |       |   1   |   1   |       |
 | setup index            |       |   1   |   1   |   1   |   1   |   1   |
-| compute branch address |       |       |       |       |   1   |       |      
-| call to branch/table   |   1   |   1   |   2   |   1   |   1   |   2   |      
+| compute branch address |       |       |       |       |   1   |       |
+| call to branch/table   |   1   |   1   |   2   |   1   |   1   |   2   |
 | compute branch address |       |       |       |       |       |   1   |
-| jump to branch         |       |       |   1   |       |       |   1   |      
-| branch (set+return)    |   2   |   2   |   2   |   2   |   2   |   2   |      
-| read/write element     |   1   |   1   |   1   |   1   |   1   |   1   |      
-| **TOTAL**              | **5** | **6** | **7** | **6** | **7** | **8** |      
+| jump to branch         |       |       |   1   |       |       |   1   |
+| branch (set+return)    |   2   |   2   |   2   |   2   |   2   |   2   |
+| read/write element     |   1   |   1   |   1   |   1   |   1   |   1   |
+| **TOTAL**              | **5** | **6** | **7** | **6** | **7** | **8** |
 
 ### Inlined compact tables
 
@@ -321,22 +321,22 @@ The "setup index" instruction either multiplies the index by two or passes it as
 | Instruction            |   U/T    |   U/A    |   U/S    |   F/T   |   F/A   |   F/S   |
 |------------------------|:--------:|:--------:|:--------:|:-------:|:-------:|:-------:|
 | setup index            |          |    1     |    1     |         |    1    |    1    |
-| compute branch address |          |          |          |         |    1    |    1    |      
-| jump to branch         |    1     |    1     |    1     |    1    |    1    |    1    |      
-| branches (set+exit)    |   2n-1   |   2n-1   |   2n-1   |   n-1   |   n-1   |   n-1   |      
-| read/write element     |    1     |    1     |    1     |    1    |    1    |    1    |      
-| **TOTAL**              | **2n+1** | **2n+2** | **2n+2** | **n+1** | **n+3** | **n+3** |      
+| compute branch address |          |          |          |         |    1    |    1    |
+| jump to branch         |    1     |    1     |    1     |    1    |    1    |    1    |
+| branches (set+exit)    |   2n-1   |   2n-1   |   2n-1   |   n-1   |   n-1   |   n-1   |
+| read/write element     |    1     |    1     |    1     |    1    |    1    |    1    |
+| **TOTAL**              | **2n+1** | **2n+2** | **2n+2** | **n+1** | **n+3** | **n+3** |
 
 **Instructions executed**
 
 | Instruction            |  U/T  |  U/A  |  U/S  |  F/T  |  F/A  |  F/S  |
 |------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | setup index            |       |   1   |   1   |       |   1   |   1   |
-| compute branch address |       |       |       |       |   1   |   1   |      
-| jump to branch         |   1   |   1   |   1   |   1   |   1   |   1   |      
-| branch (set+exit)      |   2   |   2   |   2   |   2   |   2   |   2   |      
-| read/write element     |   1   |   1   |   1   |   1   |   1   |   1   |      
-| **TOTAL**              | **4** | **5** | **5** | **4** | **6** | **6** |      
+| compute branch address |       |       |       |       |   1   |   1   |
+| jump to branch         |   1   |   1   |   1   |   1   |   1   |   1   |
+| branch (set+exit)      |   2   |   2   |   2   |   2   |   2   |   2   |
+| read/write element     |   1   |   1   |   1   |   1   |   1   |   1   |
+| **TOTAL**              | **4** | **5** | **5** | **4** | **6** | **6** |
 
 ### Non-inlined regular tables
 
@@ -348,12 +348,12 @@ In the case of regular arrays, the table accessing the elements for reading may 
 |-------------------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | set remote processor                |       |       |       |   1   |   1   |   1   |       |       |       |
 | set return address                  |   1   |   1   |       |   1   |   1   |       |   1   |   1   |       |
-| transfer write variable<sup>1</sup> |   1   |   1   |   1   |   1   |   1   |   1   |   1   |   1   |   1   |      
+| transfer write variable<sup>1</sup> |   1   |   1   |   1   |   1   |   1   |   1   |   1   |   1   |   1   |
 | setup index                         |       |   1   |   1   |       |   1   |   1   |   1   |   1   |   1   |
-| compute branch address              |       |       |       |       |       |       |       |   1   |       |      
-| call to branch/table                |   1   |   1   |   2   |   1   |   1   |   2   |   1   |   1   |   2   |      
-| transfer read variable<sup>1</sup>  |   -   |   -   |   -   |   -   |   -   |   -   |   -   |   -   |   -   |      
-| **TOTAL**                           | **3** | **4** | **4** | **4** | **5** | **5** | **4** | **5** | **4** |      
+| compute branch address              |       |       |       |       |       |       |       |   1   |       |
+| call to branch/table                |   1   |   1   |   2   |   1   |   1   |   2   |   1   |   1   |   2   |
+| transfer read variable<sup>1</sup>  |   -   |   -   |   -   |   -   |   -   |   -   |   -   |   -   |   -   |
+| **TOTAL**                           | **3** | **4** | **4** | **4** | **5** | **5** | **4** | **5** | **4** |
 
 <sup>1</sup>&nbsp;Either the _transfer read variable_ or the _transfer write variable_ instruction is generated, depending on the access type. In this table, they're accounted for in the _transfer write variable_ row.
 
@@ -362,9 +362,9 @@ In the case of regular arrays, the table accessing the elements for reading may 
 | Instruction            |  U/T   |  U/A   |   U/S    |  M/T   |  M/A   |   M/S    |  F/T  |  F/A  |   F/S   |
 |------------------------|:------:|:------:|:--------:|:------:|:------:|:--------:|:-----:|:-----:|:-------:|
 | compute branch address |        |        |          |        |        |          |       |       |    1    |
-| jump to branch         |        |        |    1     |        |        |    1     |       |       |    1    |      
-| branches (set+return)  |   2n   |   2n   |    2n    |   2n   |   2n   |    2n    |   n   |   n   |    n    |      
-| **TOTAL**              | **2n** | **2n** | **2n+1** | **2n** | **2n** | **2n+1** | **n** | **n** | **n+2** |      
+| jump to branch         |        |        |    1     |        |        |    1     |       |       |    1    |
+| branches (set+return)  |   2n   |   2n   |    2n    |   2n   |   2n   |    2n    |   n   |   n   |    n    |
+| **TOTAL**              | **2n** | **2n** | **2n+1** | **2n** | **2n** | **2n+1** | **n** | **n** | **n+2** |
 
 **Instructions executed**
 
@@ -372,15 +372,15 @@ In the case of regular arrays, the table accessing the elements for reading may 
 |---------------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
 | set remote processor                  |         |         |         |    1    |    1    |    1    |         |         |         |
 | set return address                    |    1    |    1    |         |    1    |    1    |         |    1    |    1    |         |
-| transfer write variable<sup>1,2</sup> |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |      
+| transfer write variable<sup>1,2</sup> |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |
 | setup index                           |         |    1    |    1    |         |    1    |    1    |    1    |    1    |    1    |
-| compute branch address (local)        |         |         |         |         |         |         |         |    1    |         |      
-| call to branch/table                  |    1    |    1    |    2    |    1    |    1    |    2    |    1    |    1    |    2    |      
+| compute branch address (local)        |         |         |         |         |         |         |         |    1    |         |
+| call to branch/table                  |    1    |    1    |    2    |    1    |    1    |    2    |    1    |    1    |    2    |
 | compute branch address (table)        |         |         |         |         |         |         |         |         |    1    |
-| jump to branch                        |         |         |    1    |         |         |    1    |         |         |    1    |      
+| jump to branch                        |         |         |    1    |         |         |    1    |         |         |    1    |
 | branch (set+return)                   |    2    |    2    |    2    |    2    |    2    |    2    |    2    |    2    |    2    |
-| transfer read variable<sup>1</sup>    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |      
-| **TOTAL**                             | **4.8** | **5.8** | **6.8** | **5.8** | **6.8** | **7.8** | **5.8** | **6.8** | **7.8** |      
+| transfer read variable<sup>1</sup>    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |
+| **TOTAL**                             | **4.8** | **5.8** | **6.8** | **5.8** | **6.8** | **7.8** | **5.8** | **6.8** | **7.8** |
 
 <sup>1</sup>&nbsp;Either the _transfer read variable_ or the _transfer write variable_ instruction is generated, depending on the access type. In this table, they're accounted for in the _transfer write variable_ row.<br>
 <sup>2</sup>&nbsp;Depending on the code structure, the _transfer write/read variable_ instruction might be eliminated by the Data Flow Optimizer. Since Array Optimizer doesn't know whether the instruction will be actually eliminated, it must be fully accounted for regarding the code size. The expected execution speed of the regular array is lowered a bit to express this possible optimization. As a result, the optimizer might choose to convert a compact array to a regular array if there's enough instruction space.
@@ -394,20 +394,20 @@ Note: multiplexed remote arrays are handled equally to simple remote arrays, as 
 | Instruction            |  U/T   |   U/A    |   U/S    |  F/T  |   F/A   |   F/S   |
 |------------------------|:------:|:--------:|:--------:|:-----:|:-------:|:-------:|
 | setup index            |        |    1     |    1     |       |    1    |    1    |
-| compute branch address |        |          |          |       |    1    |    1    |      
-| jump to branch         |   1    |    1     |    1     |   1   |    1    |    1    |      
-| branches (set+exit)    |  2n-1  |   2n-1   |   2n-1   |  n-1  |   n-1   |   n-1   |      
-| **TOTAL**              | **2n** | **2n+1** | **2n+1** | **n** | **n+2** | **n+2** |      
+| compute branch address |        |          |          |       |    1    |    1    |
+| jump to branch         |   1    |    1     |    1     |   1   |    1    |    1    |
+| branches (set+exit)    |  2n-1  |   2n-1   |   2n-1   |  n-1  |   n-1   |   n-1   |
+| **TOTAL**              | **2n** | **2n+1** | **2n+1** | **n** | **n+2** | **n+2** |
 
 **Instructions executed**
 
 | Instruction            |  U/T  |  U/A  |  U/S  |  F/T  |  F/A  |  F/S  |
 |------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | setup index            |       |   1   |   1   |       |   1   |   1   |
-| compute branch address |       |       |       |       |   1   |   1   |      
-| jump to branch         |   1   |   1   |   1   |   1   |   1   |   1   |      
-| branch (set+exit)      |   2   |   2   |   2   |   2   |   2   |   2   |      
-| **TOTAL**              | **3** | **4** | **4** | **3** | **5** | **5** |      
+| compute branch address |       |       |       |       |   1   |   1   |
+| jump to branch         |   1   |   1   |   1   |   1   |   1   |   1   |
+| branch (set+exit)      |   2   |   2   |   2   |   2   |   2   |   2   |
+| **TOTAL**              | **3** | **4** | **4** | **3** | **5** | **5** |
 
 ### Special cases
 
@@ -431,10 +431,10 @@ This table sums up the execution times of different array implementations:
 
 | Array implementation | U/T | U/A | U/S | M/T | M/A | M/S | F/T | F/A | F/S |
 |----------------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| Non-inlined compact  |  5  |  6  |  7  |  5  |  6  |  7  |  6  |  7  |  8  |      
-| Non-inlined regular  | 4.8 | 5.8 | 6.8 | 5.8 | 6.8 | 7.8 | 5.8 | 6.8 | 7.8 |      
-| Inlined compact      |  4  |  5  |  5  |  4  |  5  |  5  |  4  |  6  |  6  |      
-| Inlined regular      |  3  |  4  |  4  |  3  |  4  |  4  |  3  |  5  |  5  |      
+| Non-inlined compact  |  5  |  6  |  7  |  5  |  6  |  7  |  6  |  7  |  8  |
+| Non-inlined regular  | 4.8 | 5.8 | 6.8 | 5.8 | 6.8 | 7.8 | 5.8 | 6.8 | 7.8 |
+| Inlined compact      |  4  |  5  |  5  |  4  |  5  |  5  |  4  |  6  |  6  |
+| Inlined regular      |  3  |  4  |  4  |  3  |  4  |  4  |  3  |  5  |  5  |
 
 Code size can't be meaningfully compared, as it depends on the number of times the array access is performed.
 

@@ -1,4 +1,4 @@
-This file Lists the issues and ideas being actively worked or pondered upon. Updated occasionally. 
+This file Lists the issues and ideas being actively worked or pondered upon. Updated occasionally.
 
 # Roadmap
 
@@ -72,7 +72,7 @@ These are topics that I'm spending time thinking about. Some of these should app
 
 * Supersized arrays. Stores parts of the array in different lookup variables, and the rest in a regular `@counter` table. Needs a text-based jump table, might require extension of text-based jump tables for label-enabled mlog.
 * Shared element name tables. All arrays in a remote module would use the same naming convention for all elements (say, `*arr` + index). When accessing remote arrays from different modules, a shared table might be built in the local processor, maybe even without an overhead.
-* Segmented arrays. Parts of the same array would be stored in different processors. Needs a specific remote module, but it could be part of the system library. The array access would compute the index of the processor to read the data from.  
+* Segmented arrays. Parts of the same array would be stored in different processors. Needs a specific remote module, but it could be part of the system library. The array access would compute the index of the processor to read the data from.
 
 ## Active
 
@@ -90,7 +90,7 @@ These are topics that I'm currently planning to implement.
   * Array operation injection
   * Linear transformation of loop control variables and conditions (induction variables)
 
-## Small tasks backlog 
+## Small tasks backlog
 
 These are relatively small tasks that might be slipped in when I feel like it.
 
@@ -142,7 +142,7 @@ These are topics that I've spent some time thinking about and still want them, b
   * The address of the stack routine changes with each call → needs a function pointer, plus its initialization.
   * The set of variables to be stored will be determined as a union of all variables stored by individual recursive calls.
   * The compiler will still generate and optimize the code using the old approach. A post-processing step will build the internal stack when required.
-  * Needs to be able to specify the stack storage per function. 
+  * Needs to be able to specify the stack storage per function.
 
 The old approach will be kept for external stack.
 
@@ -232,7 +232,7 @@ The `fallthrough` keyword can be used in a `when` branch in
 
 ```
 case number
-    when 1 then 
+    when 1 then
         print "one";
         fallthrough;
     when 2 then
@@ -254,7 +254,7 @@ output = case number
             yield "even";
         end;
         print("not even\n");
-        "odd"; 
+        "odd";
     else
         "too big";
 end;
@@ -322,13 +322,13 @@ end;
 
 fptr1 = foo;                // Note: no parentheses
 
-fptr2 = def bar() 
+fptr2 = def bar()
     print("bar");
 end;
 
 // Lambda syntax
 fptr3 = () -> print("baz");
-fptr4 = n -> print("n");    // No parentheses required for lambdas with single parameter 
+fptr4 = n -> print("n");    // No parentheses required for lambdas with single parameter
 fptr5 = (x, y) -> x + y;
 
 // Code block needs to be used if the lambda is more than one expression
@@ -353,7 +353,7 @@ fptr3();
 fptr4("Hello");
 print(fptr5(5, 7));
 
-// Will print numbers 10 to 1 in descending order and then null, as loops always returns null.  
+// Will print numbers 10 to 1 in descending order and then null, as loops always returns null.
 print(fptr7(10));
 
 // Mindcode lambdas will probably have read-only access to the outside variables:

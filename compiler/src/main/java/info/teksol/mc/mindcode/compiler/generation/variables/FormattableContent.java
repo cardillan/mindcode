@@ -21,6 +21,11 @@ public class FormattableContent extends CompoundValueStore  {
     }
 
     @Override
+    public boolean isConstantValue() {
+        return true;
+    }
+
+    @Override
     public FormattableContent withSourcePosition(SourcePosition sourcePosition) {
         return new FormattableContent(sourcePosition, parts);
     }

@@ -64,6 +64,11 @@ public class LogicKeyword extends AbstractArgument implements ValueStore {
     }
 
     @Override
+    public boolean isConstantValue() {
+        return true;
+    }
+
+    @Override
     public boolean isMlogRepresentable() {
         return false;
     }

@@ -21,7 +21,7 @@ To decide which dynamic optimizations to apply given the optimization goal, thre
 * **Efficiency**: this measure gives the overall value of the optimization, which allows it to be compared with other optimizations. The **Efficiency** computation depends on the optimization goal:
   * `speed`: the **Efficiency** of the optimization is computed by dividing the **Benefit** by the **Size**, providing a measure of execution speed improvement per additional instruction of code. When the **Size** is zero or negative, the **Efficiency** is infinite.
   * `neutral`: the **Efficiency** of the optimization is computed as a negative product of the **Size** and the **Benefit**. As **Size** is guaranteed to be non-positive, and **Benefit** is guaranteed to be non-negative, the **Efficiency** is always positive.
-  * `size`: in this case, the optimizer always chooses the smallest code, so the **Efficiency** equals to the negative **Size** (i.e., code size savings) of the optimization.  
+  * `size`: in this case, the optimizer always chooses the smallest code, so the **Efficiency** equals to the negative **Size** (i.e., code size savings) of the optimization.
 
 ### Optimization benefit
 
@@ -45,15 +45,15 @@ The benefit of an optimization is then computed as the total weight of instructi
 
 When the optimization goal is `speed`, there is a constraint on the total code size (1000 instructions by default). The optimizations are applied in the order of effectiveness until the total code size reaches the constraint, or all optimization opportunities are exhausted.
 
-Some optimizers (e.g., [Case Switching](optimizations/CASE-SWITCHING.markdown)) can produce several different ways to optimize the same portion of code, of which one needs to be selected. For the `speed` optimization goal, the entire group of mutually exclusive optimizations is evaluated against other possible optimizations, choosing the most effective optimization while respecting the total code size constraint. 
+Some optimizers (e.g., [Case Switching](optimizations/CASE-SWITCHING.markdown)) can produce several different ways to optimize the same portion of code, of which one needs to be selected. For the `speed` optimization goal, the entire group of mutually exclusive optimizations is evaluated against other possible optimizations, choosing the most effective optimization while respecting the total code size constraint.
 
-Oftentimes, after an optimization is applied, opportunities for further optimizations crop up. The additional static optimizations might even reduce the code size again, providing space for further speed optimizations. Mindcode is unable to include the effects of these static optimizations when computing dynamic optimization effects, but uses the additional instruction space when applying any remaining optimizations.     
+Oftentimes, after an optimization is applied, opportunities for further optimizations crop up. The additional static optimizations might even reduce the code size again, providing space for further speed optimizations. Mindcode is unable to include the effects of these static optimizations when computing dynamic optimization effects, but uses the additional instruction space when applying any remaining optimizations.
 
-Mindcode writes the possible optimizations it considers to the log file. For better understanding, this includes optimizations exceeding the total code size constraint by a small margin. It is possible to let Mindcode perform additional optimizations by changing the value of the total code size constraint, using the  [`instruction-limit` option](SYNTAX-5-OTHER.markdown#option-instruction-limit). Sometimes, increasing the instruction limit a bit can produce a code which still fits into the total code size constraint, due to the optimizer being too pessimistic about the code size required to perform an optimization. Here's a [demonstration](https://github.com/cardillan/mindcode/discussions/106) of this approach being applied to a real-life code example.  
+Mindcode writes the possible optimizations it considers to the log file. For better understanding, this includes optimizations exceeding the total code size constraint by a small margin. It is possible to let Mindcode perform additional optimizations by changing the value of the total code size constraint, using the  [`instruction-limit` option](SYNTAX-5-OTHER.markdown#option-instruction-limit). Sometimes, increasing the instruction limit a bit can produce a code which still fits into the total code size constraint, due to the optimizer being too pessimistic about the code size required to perform an optimization. Here's a [demonstration](https://github.com/cardillan/mindcode/discussions/106) of this approach being applied to a real-life code example.
 
 ### Optimization for size and neutral optimization
 
-These two optimization goals do not increase code size and therefore aren't subject to the total code size constraint. In these cases, all possible optimizations are eventually applied. If there's a group of mutually exclusive optimizations, the best one according to the optimization goal is always selected. 
+These two optimization goals do not increase code size and therefore aren't subject to the total code size constraint. In these cases, all possible optimizations are eventually applied. If there's a group of mutually exclusive optimizations, the best one according to the optimization goal is always selected.
 
 ## Individual Mindcode optimizations
 

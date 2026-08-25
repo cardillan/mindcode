@@ -199,7 +199,7 @@ public class Variables extends CompilerMessageEmitter {
     /// @param parameter parameter declaration to process.
     /// @param value value assigned to the parameter
     /// @return ValueStore instance representing the parameter's variable
-    public ValueStore createParameter(AstParameter parameter, LogicValue value) {
+    public ValueStore createProgramParameter(AstParameter parameter, LogicValue value) {
         ValueStore result = verifyGlobalDeclaration(parameter.getName(), parameter.getName())
                 ? LogicParameter.parameter(parameter.getName(), value)
                 : LogicParameter.parameter(new AstIdentifier(SourcePosition.EMPTY, "invalid"), value);

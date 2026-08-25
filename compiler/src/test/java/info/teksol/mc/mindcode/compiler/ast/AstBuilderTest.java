@@ -1750,8 +1750,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     b,
                                     DataType.VAR,
                                     List.of(
-                                            new AstFunctionParameter(EMPTY, a, false, false, true, false),
-                                            new AstFunctionParameter(EMPTY, b, false, false, false, true)
+                                            new AstFunctionParameter(EMPTY, a, false, false, true, false, false),
+                                            new AstFunctionParameter(EMPTY, b, false, false, false, false, true)
                                     ),
                                     List.of(b),
                                     List.of(new AstFunctionModifier(EMPTY, FunctionModifier.INLINE))
@@ -1761,10 +1761,10 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     c,
                                     DataType.VOID,
                                     List.of(
-                                            new AstFunctionParameter(EMPTY, a, true, false, false, false),
-                                            new AstFunctionParameter(EMPTY, b, false, true, false, false),
-                                            new AstFunctionParameter(EMPTY, c, true, true, false, false),
-                                            new AstFunctionParameter(EMPTY, d, true, true, false, false)
+                                            new AstFunctionParameter(EMPTY, a, true, false, false, false, false),
+                                            new AstFunctionParameter(EMPTY, b, false, true, false, false, false),
+                                            new AstFunctionParameter(EMPTY, c, true, true, false, false, false),
+                                            new AstFunctionParameter(EMPTY, d, true, true, false, false, false)
                                     ),
                                     List.of(new AstOperatorBinary(EMPTY, ADD, a, b)),
                                     List.of(

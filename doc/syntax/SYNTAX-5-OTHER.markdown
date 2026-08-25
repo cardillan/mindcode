@@ -1,6 +1,6 @@
 # Compiler Options
 
-Mindcode allows you to alter some compiler options in the source code using special `#set` and `#setlocal` directives. The basic syntax is: 
+Mindcode allows you to alter some compiler options in the source code using special `#set` and `#setlocal` directives. The basic syntax is:
 
 ```
 #set option = value;
@@ -16,7 +16,7 @@ When the same option is set multiple times (either on the command line or in the
 
 ## Option scope
 
-Each compiler option resides in a certain _scope_, which determines where the option values can be specified and how they are applied. 
+Each compiler option resides in a certain _scope_, which determines where the option values can be specified and how they are applied.
 
 ### Global scope
 
@@ -28,7 +28,7 @@ Options in the module scope can be set on the command line or using the `#set` d
 
 ### Local scope
 
-Options in the local scope can be set on the command line or using the `#set` or `#setlocal` directives. Options set using the `#set` directive are inherited by modules in the same way as options in the  `module` scope.   
+Options in the local scope can be set on the command line or using the `#set` or `#setlocal` directives. Options set using the `#set` directive are inherited by modules in the same way as options in the  `module` scope.
 
 The `#setlocal` directives only apply to the next statement. Multiple `#setlocal` directives can precede a single statement, in which case all are applied. To apply the directive to more statements in succession, it is possible to use a code block (`begin ... end`). The `#setlocal` directive can precede a function declaration, in which case it sets the option for the entire function body.
 
@@ -98,12 +98,12 @@ The `full` setting ensures even the unstable built-in variables will be compile-
 var items[@itemCount];
 
 for var i in 17 ... @itemCount do
-    items[i] = lookup(:item, i); 
+    items[i] = lookup(:item, i);
 end;
 
 for var item in items[17 ... length(items)] do
     println(item);
-end; 
+end;
 
 printflush(message1);
 ```
@@ -163,7 +163,7 @@ The default value of this option is 15,000 bytes. This is less than the actual l
 - to accommodate the compression used by the game possibly generating slightly larger output than the one used by Mindcode,
 - to provide additional space for processor links.
 
-When building a schematic, existing links are already taken into account when computing the configuration size. If no additional processor links are planned, it is possible to include a processor whose configuration is just below the actual limit of 16,000 bytes. 
+When building a schematic, existing links are already taken into account when computing the configuration size. If no additional processor links are planned, it is possible to include a processor whose configuration is just below the actual limit of 16,000 bytes.
 
 The code generation isn't affected by the processor size limit in any way, only the resulting code is checked against it.
 
@@ -193,7 +193,7 @@ The target can be set using either just a major or both major and minor version 
 ```
 
 > [!NOTE]
-> Mindcode defines logic functions for all instructions that are available in the latest corresponding Mindustry release corresponding to the chosen target. Some instructions may not be available in earlier Mindustry releases that correspond to the chosen target. In this case, a syntax error ("unknown function") is generated. It is not reasonable to specify a separate target for each intermediate Mindustry release that adds new instructions or built-in variables. New targets are only created when incompatible or very significant changes to the logic system are added.    
+> Mindcode defines logic functions for all instructions that are available in the latest corresponding Mindustry release corresponding to the chosen target. Some instructions may not be available in earlier Mindustry releases that correspond to the chosen target. In this case, a syntax error ("unknown function") is generated. It is not reasonable to specify a separate target for each intermediate Mindustry release that adds new instructions or built-in variables. New targets are only created when incompatible or very significant changes to the logic system are added.
 
 The processor type is specified by appending a one-letter suffix to the version number:
 
@@ -212,7 +212,7 @@ When no processor type is specified (e.g., `#set target = 8;`), the code is comp
 * a logic filter in the map generation screen,
 * a logic code run on Map Objective completion.
 
-Some optimizations are avoided for the non-processor context, as the code might not naturally loop in such a context, and [atomic sections](REMOTE-CALLS.markdown#atomic-sections) are unavailable completely – there's no support for the `wait` instruction, and the entire code effectively runs atomically anyway. 
+Some optimizations are avoided for the non-processor context, as the code might not naturally loop in such a context, and [atomic sections](REMOTE-CALLS.markdown#atomic-sections) are unavailable completely – there's no support for the `wait` instruction, and the entire code effectively runs atomically anyway.
 
 Note that when the Mindcode is compiled to configure a schematic-defined processor when building a schematic, the processor type is taken from the schematic definition and the target version is ignored. When the processor type specified by the `target` option is more powerful than the processor type specified in the schematic definition (e.g., the code specifies a world processor, but the schematic specifies a logic processor), an error is produced. A non-processor context is compatible with any processor type specified by the schematic.
 
@@ -307,18 +307,18 @@ Allows encoding zero characters into mlog string literals. Possible values are:
 * `false` (the default value): mlog string literals containing zero characters are never created.
 * `true`: when needed, mlog string literals containing zero characters can be created.
 
-Zero characters represent zero and `false` values in string literals and may allow more efficient encoding of some expressions. 
+Zero characters represent zero and `false` values in string literals and may allow more efficient encoding of some expressions.
 
 > [!WARNING]
 > Texts containing zero characters cannot be transferred via clipboard at all and oftentimes pose a challenge to text editors.
-> 
+>
 > The only way to insert code containing zero characters into Mindustry processors is via the MlogWatcher mod, or by generating and importing a schematic (a schematic can be imported via clipboard, even when the encoded code contains zero characters).
-> 
+>
 > The only way to copy the original mlog code from a processor in this situation is by creating and exporting a schematic containing the processor and extracting the mlog code from the schematic.
-> 
+>
 > Use this option with caution. We only recommend using it when creating a schematic that won't be subsequently edited.
 
-In the web app, setting this option to `true` has no effect. When an mlog code containing zero characters is created in the command-line tool, and copying the resulting mlog code into a clipboard is requested, the code won't be copied to clipboard and an error message will be displayed instead. 
+In the web app, setting this option to `true` has no effect. When an mlog code containing zero characters is created in the command-line tool, and copying the resulting mlog code into a clipboard is requested, the code won't be copied to clipboard and an error message will be displayed instead.
 
 ### Option `function-prefix`
 
@@ -371,7 +371,7 @@ set *id "id: Main\nname: A sample program\nversion: v0.1.0"
 print "id: Main\nname: A sample program\nversion: v0.1.0\n"
 ```
 
-The processor ID is used by the [processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown) to identify the processor used to run the compiled program. Since the `set *id ...` instruction is always the first (or almost first) instruction in the compiled program, it can also be easily inspected in the game just by looking at the code. Hopefully, mods will also be developed which will display processor ID in a more convenient way.  
+The processor ID is used by the [processor emulator](TOOLS-PROCESSOR-EMULATOR.markdown) to identify the processor used to run the compiled program. Since the `set *id ...` instruction is always the first (or almost first) instruction in the compiled program, it can also be easily inspected in the game just by looking at the code. Hopefully, mods will also be developed which will display processor ID in a more convenient way.
 
 ### Option `program-name`
 
@@ -428,7 +428,7 @@ Activates/deactivates outputting a reformatted mlog code, i.e., the code as if i
 * `false` (the default value): the compiler's output is generated according the other options in this section. Comments, labels, and indentations (if any) are preserved.
 * `true`: the compiler's output is generated as if it was reformatted by in-game processors. Comments, labels, and indentations are removed. The output might not match a code obtained from the in-game processor entirely if there are mods defining new logic instructions in the game.
 
-This option should only be used when the size of the generated mlog nears or exceeds the processor configuration size limit (see the [`processor-size-limit` option](#option-processor-size-limit)) due to the usage of labels and/or comments. Activating this option may decrease the code size and help observe the size limit.     
+This option should only be used when the size of the generated mlog nears or exceeds the processor configuration size limit (see the [`processor-size-limit` option](#option-processor-size-limit)) due to the usage of labels and/or comments. Activating this option may decrease the code size and help observe the size limit.
 
 ### Option `symbolic-labels`
 
@@ -645,7 +645,7 @@ The value of `0` means no atomic sections will ever be merged. Nonzero values sp
 
 This option specifies the length of time (expressed in ticks or fractions of ticks) added to the wait time of the initial `wait` instruction in an [atomic section](REMOTE-CALLS.markdown#atomic-code-execution). Possible values are decimal numbers in the range of `0` to `4` (inclusive). The default value is `0`.
 
-Depending on the Mindustry version being run and the environment used, the `wait` instruction might not fully guarantee the atomicity of the atomic section. Increasing the wait time by some safety margin might help to reduce failure rates. Values over `0.5` probably aren't reasonable in most situations.  
+Depending on the Mindustry version being run and the environment used, the `wait` instruction might not fully guarantee the atomicity of the atomic section. Increasing the wait time by some safety margin might help to reduce failure rates. Values over `0.5` probably aren't reasonable in most situations.
 
 ### Option `auto-printflush`
 
@@ -695,12 +695,12 @@ print "Found!"
 This option specifies how the compiler and emulator handle a situation where the instruction limit or code size limit has been exceeded. When inserting a code into a processor in Mindustry, the following limits are enforced:
 - The total number of instructions must be less than or equal to 1000. Instructions over this limit are silently discarded; when this happens to an mlog code generated by Mindcode, the program will malfunction.
 - The total size of the mlog program stored using the UTF-8 encoding must be less than or equal to 102,400 bytes. Code larger than this limit cannot be injected into the processor.
-- The total size of the processor configuration must be less than 16,000 bytes. The processor configuration contains compressed mlog code and compressed links configuration. When creating a schematic using Mindcode, the limit must not be exceeded both with the original mlog code and with the code as formatted after it is imported into the processor. Typically, the reformatted code is smaller than the original code (as labels, comments, and indentation are removed), but the code size may also increase due to the default values of omitted instruction arguments being filled out.      
+- The total size of the processor configuration must be less than 16,000 bytes. The processor configuration contains compressed mlog code and compressed links configuration. When creating a schematic using Mindcode, the limit must not be exceeded both with the original mlog code and with the code as formatted after it is imported into the processor. Typically, the reformatted code is smaller than the original code (as labels, comments, and indentation are removed), but the code size may also increase due to the default values of omitted instruction arguments being filled out.
 
 > [!NOTE]
-> The size limits are enforced as they exist in the latest Mindustry version. Different size limits have been in effect in previous versions. If the size limits happen to be further modified in the future, proper handling of the new size limits will be tied to the corresponding target version.  
-> 
-> In Mindustry versions before [v8 Build 152 – Beta](https://github.com/Anuken/Mindustry/releases/tag/v152), there was an additional limit of 64 KB for the maximum size of a chunk stored in a map file. A processor, its compressed mlog code, and its variables (uncompressed) were all stored as a single chunk. When the size of the chunk was exceeded, the save operation would fail. This limit is not tracked or enforced by Mindcode.     
+> The size limits are enforced as they exist in the latest Mindustry version. Different size limits have been in effect in previous versions. If the size limits happen to be further modified in the future, proper handling of the new size limits will be tied to the corresponding target version.
+>
+> In Mindustry versions before [v8 Build 152 – Beta](https://github.com/Anuken/Mindustry/releases/tag/v152), there was an additional limit of 64 KB for the maximum size of a chunk stored in a map file. A processor, its compressed mlog code, and its variables (uncompressed) were all stored as a single chunk. When the size of the chunk was exceeded, the save operation would fail. This limit is not tracked or enforced by Mindcode.
 
 Possible values for the `enforce-size-limits` option are:
 
@@ -749,7 +749,7 @@ op add *tmp2 *tmp3 1
 write *tmp2 cell1 1                     # The last atomic section instruction
 ```
 
-An alternative way to specify the processor speed is the [`setrate` compiler option](#option-setrate), however, this option also generates a `setrate` instruction to apply the specified speed to the processor. 
+An alternative way to specify the processor speed is the [`setrate` compiler option](#option-setrate), however, this option also generates a `setrate` instruction to apply the specified speed to the processor.
 
 ### Option `remarks`
 
@@ -803,7 +803,7 @@ An alternative way to specify the processor speed is the [`ipt` compiler option]
 
 Specifies the maximum nesting level of recursive function calls. The compiler uses this information when creating local arrays in recursive functions and internal stack. Allowed values are in the range of `1` to `512` (inclusive). The default value is `10`.
 
-As this option's scope is local, it is possible to specify a different stack depth for different functions. Mindcode may also perform optimizations which reduce or remove the stack requirements of individual functions, in this case the stack depth of these functions is overridden by the compiler. 
+As this option's scope is local, it is possible to specify a different stack depth for different functions. Mindcode may also perform optimizations which reduce or remove the stack requirements of individual functions, in this case the stack depth of these functions is overridden by the compiler.
 
 ### Option `syntax`
 
@@ -979,7 +979,7 @@ A more complex code can usually benefit from more optimization passes. On the ot
 This option instructs the compiler to drop range checking when performing case expression optimization. For more information, see [Range check elimination](optimizations/CASE-SWITCHING.markdown#range-check-elimination).
 
 > [!NOTE]
-> The `unsafe-case-optimization` is _semantically unstable_: when applied to an unsuitable case expression, the compiler may generate incorrect code. It is recommended to always use the option locally, by using `#setlocal` immediately before the case expression on which it is meant to be applied. 
+> The `unsafe-case-optimization` is _semantically unstable_: when applied to an unsuitable case expression, the compiler may generate incorrect code. It is recommended to always use the option locally, by using `#setlocal` immediately before the case expression on which it is meant to be applied.
 
 ### Option `use-lookup-arrays`
 
@@ -1016,7 +1016,7 @@ Text-based jump tables allow very efficient encoding of jump tables used by inte
 
 **Option scope: [local](#local-scope)**
 
-This option specifies whether the compiler may create strings (potentially containing unprintable characters) to implement [value translations](optimizations/CASE-SWITCHING.markdown#value-translation). Possible values are:  
+This option specifies whether the compiler may create strings (potentially containing unprintable characters) to implement [value translations](optimizations/CASE-SWITCHING.markdown#value-translation). Possible values are:
 
 * `false`: value translations won't be used.
 * `true` (the default value): the compiler generates value translations where possible.
@@ -1084,7 +1084,7 @@ Optimization levels are handled specifically:
 * Activating/deactivating an optimizer is only allowed at a global level. For example, when `optimization` is set to `none` at the global level, no optimizations will happen regardless of module or local scope compiler directives. Similarly, it is not possible to turn of an optimization entirely by setting it to `none` at the local level: using `#setlocal` directive with a value of `none` causes an error.
 * At the local level, it is possible to switch between optimization levels (i.e. `basic`, `advanced` or `experimental`) if the given optimization is active.
 
-Some optimizations performed on the `experimental` level have a global scope and can't be turned off locally. These optimizations are performed if and only if the global setting for the given optimizer is set to `experimental`.  
+Some optimizations performed on the `experimental` level have a global scope and can't be turned off locally. These optimizations are performed if and only if the global setting for the given optimizer is set to `experimental`.
 
 ## Debugging options
 
@@ -1104,7 +1104,7 @@ Options to activate debugging features or additional output from the compiler.
 **Option scope: [local](#local-scope)**
 
 This option controls whether the code is compiled with debug support. Possible values are:
-* 
+*
 * `false` (the default value): no debug support.
 * `true` or omitted: the code is compiled with debug support.
 
@@ -1117,7 +1117,7 @@ Code compiled with debug support enabled has these properties:
 The `debug` option is local. It is therefore possible to activate debugging for some parts of code only (e.g., for a specific function).
 
 > [!NOTE]
-> Currently, activating the debug support may preclude loops from being unrolled. 
+> Currently, activating the debug support may preclude loops from being unrolled.
 
 ### Option `debug-messages`
 
@@ -1135,7 +1135,7 @@ This option sets the detail level of parse tree output into the log file, 0 = of
 
 **Option scope: [global](#global-scope)**
 
-This option activates or deactivates printing the final code size broken down by function. 
+This option activates or deactivates printing the final code size broken down by function.
 
 * `false`: don't output the code size.
 * `true` (the default value): output the final code size.
@@ -1162,12 +1162,12 @@ Code size and number of instantiations by function:
 
 This option governs how the unresolved code (i.e., code containing unresolved virtual instructions including labels) is written to the log file. Possible values are:
 
-* `none` (the default value): unresolved code is not written. 
+* `none` (the default value): unresolved code is not written.
 * `plain`: just the instructions are output.
 * `flat-ast`: a flattened AST structure is included in the output.
 * `deep-ast`: a non-flattened AST structure is included in the output.
 * `source`: the source code is included in the output. The entire line of source code is included if it can be matched to the instruction. Some optimizations may prevent locating the proper source code line.
- 
+
 ### Option `sort-variables`
 
 **Option scope: [global](#global-scope)**
@@ -1225,7 +1225,7 @@ Specifies whether unsatisfied links are allowed when creating schematics. Possib
 * `false` (the default value): unsatisfied links cause build errors.
 * `true` (or omitted): unsatisfied links are allowed and reported as warnings.
 
-An unsatisfied link is a literal or symbolic link name declared in Mindcode, which doesn't have a corrsponding link set up in the enclosing processor's configuration in the schematic.  
+An unsatisfied link is a literal or symbolic link name declared in Mindcode, which doesn't have a corrsponding link set up in the enclosing processor's configuration in the schematic.
 
 ## Emulator options
 
@@ -1298,7 +1298,7 @@ For more information on running the compiled Mindcode, see [Processor emulator](
 
 Sets the maximum number of steps (individual instructions) to be executed by the processor emulator. If the program doesn't stop by itself (e.g., by running to its natural end, or by using the stop instruction), the emulator will stop the execution when the specified number of steps is reached.
 
-When multiple processors get emulated, the step limit is applied to the aggregate of the instructions executed by all processors. 
+When multiple processors get emulated, the step limit is applied to the aggregate of the instructions executed by all processors.
 
 ### Execution flags
 

@@ -10,7 +10,7 @@ A more relevant list of ideas and planned changes to Mindcode found [here](https
 
 * Handling internal errors:
   * Web app:
-    * Store the source file in a separate table for errors  
+    * Store the source file in a separate table for errors
     * Display message "The error has been logged and will be investigated."
   * Command line app: display message "An internal error occurred. Please report the error at ..."
 * Fix incorrect headings of Data Flow Optimization passes executed after applying selected speed optimization.
@@ -34,12 +34,12 @@ A more relevant list of ideas and planned changes to Mindcode found [here](https
   * Assigning the function definition: `fptr = def foo(n) print(n) end`. Not sure about this, but why not?
   * Lambda/anonymous function syntax: `fptr = n -> print(n)` or `fptr = (m, n) -> (x = m * n; print(x))`
 * Global analysis of function assignments
-  * If a variable is assigned a function address, it must not be assigned anything which is not a function 
+  * If a variable is assigned a function address, it must not be assigned anything which is not a function
     address (global analysis).
   * All function addresses assigned to a single function pointer variable must belong to functions having the same
     number of arguments.
   * Assignments between function pointers are tracked too. An alias graph will be created, each connected
-    segment in the graph must be assigned compatible functions (same number of parameters). Each segment - **function 
+    segment in the graph must be assigned compatible functions (same number of parameters). Each segment - **function
     group** - gets its own set of transfer variables.
   * Function call must use the correct number of arguments for the given function.
   * Only stackless/recursive user defined functions can be assigned to function pointers.
@@ -54,11 +54,11 @@ A more relevant list of ideas and planned changes to Mindcode found [here](https
   * A function callable through a function pointer will be prepended a header that copies the `__fgN` arguments and
     return variable to actual `__fnX` arguments and return variable. If it is a recursive function, the header
     will store `__fgN_retaddr` on stack to emulate a recursive call.
-  * Return address will be set to a code region after the function body which copies the `__fnN` variables to the 
-    `_fgN` ones and then returns to the caller. 
+  * Return address will be set to a code region after the function body which copies the `__fnN` variables to the
+    `_fgN` ones and then returns to the caller.
   * Specific optimizers for function pointer calls
-    * If the return value is not used, the function return address will be set directly to the caller's return address. 
-    * If the function is only called through a function pointer, copying `__fgN` variables to `__fpN` variables 
+    * If the return value is not used, the function return address will be set directly to the caller's return address.
+    * If the function is only called through a function pointer, copying `__fgN` variables to `__fpN` variables
       might be avoided, if the values are preserved.
   * Function call graph will need to be built upon function groups too.
 * Possible handling of calling a null function pointer:
@@ -152,11 +152,11 @@ Stack stored in processor variables, similar to internal arrays.
     instruction and the second one containing a constant, move the constant to the first instruction. Would facilitate
     constant folding for more complex expressions.
   * Add factoring-out capability to more complex expressions.
-* Correctly resolve case expressions (both jump table based and condition based) when the input value is effectively 
+* Correctly resolve case expressions (both jump table based and condition based) when the input value is effectively
   constant.
-* Recognize dead writes inside loops: `i = 0; while switch1.enabled i += 1 end`: writes to `i` are dead, but not 
-  recognized as such. 
-* Identify uninitialized global variables (now only reported when they are never written to; use the same logic as 
+* Recognize dead writes inside loops: `i = 0; while switch1.enabled i += 1 end`: writes to `i` are dead, but not
+  recognized as such.
+* Identify uninitialized global variables (now only reported when they are never written to; use the same logic as
   for main/local variables instead).
 * Pulling invariant code out of if branches.
 * Generalized constant folding on expression tree, including factoring constants out of complex expressions.
@@ -171,8 +171,8 @@ Stack stored in processor variables, similar to internal arrays.
   * Could be used to create more versions of a function, possibly inlining some of them, based on (dis)similarities
     of variable states between visits (probably quite complex.)
 * Code path splitting
-  * If a variable is known to take on several distinct values and is part of several control statements or complex 
-    expressions, create a jump table targeting specialized code for some or all of the values the 
+  * If a variable is known to take on several distinct values and is part of several control statements or complex
+    expressions, create a jump table targeting specialized code for some or all of the values the
     variable can attain.
   * Needs to create metric for the complexity to use this only when appropriate.
   * Example: `bar = foo ? 5 : 10; for i in 1 ... bar cell1[i] = 0 end` - after the code path splitting optimization,
@@ -200,7 +200,7 @@ Stack stored in processor variables, similar to internal arrays.
 
 * When just one of the parameters passed to the function is variable with a few discrete values and the others are
   fixed, create a switched expression and inline the function separately for each value (???)
-  * Code path splitting handles this in a general manner 
+  * Code path splitting handles this in a general manner
 * If there are several combinations of argument values, each used more than once, it might make sense to create a
   copy of the function for each distinct combination of the argument values and applying the above optimization to
   it.
@@ -268,7 +268,7 @@ Typed variables, parameters and function return values.
 
 # Schematics Builder
 
-* Improve error reporting: pass tokens through AST tree/schematic components and provide file and line/column numbers  
+* Improve error reporting: pass tokens through AST tree/schematic components and provide file and line/column numbers
   when reporting errors, as in Mindcode.
 * Validate mlog code included in processor configuration against given processor target.
 * Automatically generate names for unnamed processor links
@@ -280,14 +280,14 @@ Typed variables, parameters and function return values.
   * determine item flow and unbalanced factory production/consumption ratios
 * Automatically connect blocks to power nodes
   * by specifying an area in which all blocks will be connected,
-  * by searching for optimal-ish distribution of connections among nodes. 
+  * by searching for optimal-ish distribution of connections among nodes.
 * Support for iterative block placement:
   * `<@block> rightwards` places the block to the right of the last placed block
   * `<@block> upwards from <label>` places the block upwards from labeled blocks
   * already existing blocks (typically blocks 2x2 or bigger placed in previous row/column) are skipped
 * Automatically add tags based on categories or types of contained blocks
-  * Allow loading configuration/tag mapping for categories from file so that it can be shared among schematics 
-* Make decompiler assign labels to all blocks and use the labels for all block references (e.g., in bridge or power 
+  * Allow loading configuration/tag mapping for categories from file so that it can be shared among schematics
+* Make decompiler assign labels to all blocks and use the labels for all block references (e.g., in bridge or power
   node connections).
 * Support for schematics reuse by:
   * placing schematic into schematic
@@ -303,7 +303,7 @@ Typed variables, parameters and function return values.
 
 # Musings
 
-Things that would be cool, that might be doable in some way given existing constraints, but where the exact way of 
+Things that would be cool, that might be doable in some way given existing constraints, but where the exact way of
 doing them isn't clear yet.
 
 * [Parallel comparison](#parallel-comparison)
@@ -322,7 +322,7 @@ case (a, b)
     when (x5, ), (, y5)         // a == x5 or b == y5
     when (x6, y6) .. (x7, y7)   // a in x6 .. x7 and b in y6 .. y7
     when (,)                    // the same as else, wouldn't be allowed
-end  
+end
 ```
 
 Possibly in boolean expressions in general, although in those the utility is doubtful:
@@ -340,16 +340,16 @@ There are no plans to do any of these. We keep them around just in case.
 
 # Refused
 
-* Implement recursive calls by storing function return variable on stack like other variables, instead of pushing it 
+* Implement recursive calls by storing function return variable on stack like other variables, instead of pushing it
   on the stack at the time of the call
   * Pro: storing return address is avoided on non-recursive calls (such as the first call of the function)
-  * Pro: it would be possible to eliminate callrec and return instruction, making stackless and recursive calls more 
+  * Pro: it would be possible to eliminate callrec and return instruction, making stackless and recursive calls more
     similar.
   * Con: recursive calls are costlier (callrec + return has 6 instructions in total, while call + push + pop + goto has 8).
-  * In the case of recursive-heavy algorithms (e.g., quicksort), the penalty is significant. Recursive functions are 
-    generally not very useful, and if someone is compelled to use them anyway, let's make them as efficient as 
-    possible. 
+  * In the case of recursive-heavy algorithms (e.g., quicksort), the penalty is significant. Recursive functions are
+    generally not very useful, and if someone is compelled to use them anyway, let's make them as efficient as
+    possible.
 * Make EOL an expression separator in addition to a semicolon and make expression separator compulsory.
-  * Pro: removes ambiguity in function calls and perhaps other expressions, without having to put semicolon at the 
+  * Pro: removes ambiguity in function calls and perhaps other expressions, without having to put semicolon at the
     end of the lines
   * Con: it would no longer be possible to split longer expressions on several lines without escaping EOLs.

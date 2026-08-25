@@ -23,6 +23,10 @@ public interface LogicValue extends LogicArgument, ValueStore {
     String format(@Nullable InstructionProcessor instructionProcessor);
 
     // ValueStore methods
+    @Override
+    default boolean isConstantValue() {
+        return isConstant();
+    }
 
     @Override
     default LogicValue getValue(ContextfulInstructionCreator creator) {

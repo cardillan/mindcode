@@ -519,6 +519,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 ctx.modifier_in != null,
                 ctx.modifier_out != null,
                 ctx.modifier_ref != null,
+                ctx.modifier_const != null,
                 ctx.varargs != null);
     }
     //</editor-fold>

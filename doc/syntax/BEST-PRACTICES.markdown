@@ -6,7 +6,7 @@ As Mindcode undergoes development, the beast practices may change as new version
 
 ## Mindcode 3.18
 
-Mindcode 3.18 supports an internal stack for recursive functions. The internal stack allows storing values of any type, not just numerical ones, and as a result, recursive functions can use parameters and local variables of all types without any restrictions. With the internal stack, all recursive functions compile and execute correctly, although it may be necessary to [manually set stack sizes](SYNTAX-5-OTHER.markdown#option-stack-depth) to support the desired recursion depth.  
+Mindcode 3.18 supports an internal stack for recursive functions. The internal stack allows storing values of any type, not just numerical ones, and as a result, recursive functions can use parameters and local variables of all types without any restrictions. With the internal stack, all recursive functions compile and execute correctly, although it may be necessary to [manually set stack sizes](SYNTAX-5-OTHER.markdown#option-stack-depth) to support the desired recursion depth.
 
 ## Mindcode 3.17
 
@@ -25,10 +25,10 @@ The most important change in the 3.11 release comes with the ability to short-ci
 
 * It is no longer necessary or advisable to avoid boolean operators in conditions. When using the `and` and `or` operators, which are short-circuiting, the conditions are often compiled using fewer instructions than a fully evaluated condition right off the bat. Furthermore, the evaluation of the condition is terminated as soon as the value of the condition is known. This may result in significant performance improvements.
 * The `&&` and `||` operators are analogous to the `and` and `or` operators, except they still perform full evaluations. In cases where full evaluation of an expression is for some reason preferred, these operators may be used. The `||` operator also ensures the resulting value is always normalized (either `1` or `0`), which requires an additional instruction to perform the normalization. However, a new optimization removes these additional instructions where possible. Furthermore, it is possible to use the `|` operator instead of the `||` one, as it also performs full evaluation, but doesn't normalize the result.
-* The `in range` operator is also short-circuited (the lower bound is always tested first) and can be efficiently used in boolean expressions involving `and` or `or` operators. The value is guaranteed to be evaluated only once. When testing the upper bound first is more desirable for some reason, it is necessary to express the condition as two separate tests, putting the upper bound first.   
+* The `in range` operator is also short-circuited (the lower bound is always tested first) and can be efficiently used in boolean expressions involving `and` or `or` operators. The value is guaranteed to be evaluated only once. When testing the upper bound first is more desirable for some reason, it is necessary to express the condition as two separate tests, putting the upper bound first.
 * The `in (list)` operator is implemented as a `case` expression and benefits from the same optimizations. Its most effective when used as a sole condition in an `if` expression.
 
-> [!NOTE] 
+> [!NOTE]
 > Short-circuited boolean expressions cannot be reused. In previous versions, the following code
 >
 > ```Mindcode
@@ -85,7 +85,7 @@ Note: an optimization which would replace the sequence of the four instructions 
 
 # Absolute addressing
 
-Mindcode provides an [option](SYNTAX-5-OTHER.markdown#option-symbolic-labels) for generating the mlog code with symbolic labels. Even though this option ensures the resulting code is more readable and can also be modified manually, it also precludes the compiler from using absolute addressing in the code and (in taget `8.0` or higher) text-encoded jump tables. This causes the compiler to generate less optimal (slower, or larger) code. Especially case expressions can be seriously affected, and to a lesser extent, internal arrays.        
+Mindcode provides an [option](SYNTAX-5-OTHER.markdown#option-symbolic-labels) for generating the mlog code with symbolic labels. Even though this option ensures the resulting code is more readable and can also be modified manually, it also precludes the compiler from using absolute addressing in the code and (in taget `8.0` or higher) text-encoded jump tables. This causes the compiler to generate less optimal (slower, or larger) code. Especially case expressions can be seriously affected, and to a lesser extent, internal arrays.
 
 # The `case` expressions
 
@@ -110,7 +110,7 @@ read .output "ABC" :input
 The following measures may help produce the most efficient code:
 
 * When using Mindustry objects as `when` values, set the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) to `full`. This means the compiler only considers the Mindustry objects which exist in the given target and doesn't need to produce code for handling unknown objects. On the other hand, the compiled code is only guaranteed to run correctly on Mindustry versions compatible with the chosen target. Consider using the [`target-guard` option](SYNTAX-5-OTHER.markdown#option-target-guard) to ensure the program won't run on incompatible Mindustry versions.
-* If possible, use printable characters as `when` values. For example, if your case expression produces a few categories, consider assigning each category a value using character literals (e.g. `'A'`, `'B'` or `'0'`, `'1'` and so on). If you need to perform additional computations on the resulting values, though, use the natural values in the `when` clause and let Mindcode perform the necessary conversions.  
+* If possible, use printable characters as `when` values. For example, if your case expression produces a few categories, consider assigning each category a value using character literals (e.g. `'A'`, `'B'` or `'0'`, `'1'` and so on). If you need to perform additional computations on the resulting values, though, use the natural values in the `when` clause and let Mindcode perform the necessary conversions.
 
 An `in` operator applied to a list of values uses `case` expression internally, so it benefits from the same optimizations.
 
@@ -119,17 +119,17 @@ An `in` operator applied to a list of values uses `case` expression internally, 
 The `and` and `or` operators in Mindcode provide short-circuited evaluation. This provides two benefits:
 
 * The evaluation of a condition ends up as soon as its final value is known, avoiding the need to evaluate the remaining condition terms.
-* Relational operators can be evaluated using just one instruction (`jump` or `select`). Compare short-circuited and full evaluation of the same condition: 
+* Relational operators can be evaluated using just one instruction (`jump` or `select`). Compare short-circuited and full evaluation of the same condition:
 
 ```Mindcode
 #set remarks = comments;
 
-/// Full evaluation 
+/// Full evaluation
 if a > 0 || b > 0 then
     print("Positive");
 end;
 
-/// Short-circuit evaluation 
+/// Short-circuit evaluation
 if a > 0 or b > 0 then
     print("Positive");
 end;
@@ -140,13 +140,13 @@ printflush(message1);
 compiles to:
 
 ```mlog
-# Full evaluation 
+# Full evaluation
 op greaterThan *tmp0 :a 0
 op greaterThan *tmp1 :b 0
 op or *tmp2 *tmp0 *tmp1
 jump 5 equal *tmp2 false
 print "Positive"
-# Short-circuit evaluation 
+# Short-circuit evaluation
 jump 7 greaterThan :a 0
 jump 8 lessThanEq :b 0
 print "Positive"
@@ -165,7 +165,7 @@ Mindcode supports specifying mlog variable names when declaring variables, using
 volatile mlog("foo") var foo = 10;
 param variable = "foo";
 @this.write(20, variable);
-print(@this.read("foo"));       // Resolved by Mindcode into the variable 'foo' 
+print(@this.read("foo"));       // Resolved by Mindcode into the variable 'foo'
 ```
 
 compiles to:
@@ -257,7 +257,7 @@ read .ore @this *tmp0
 print .ore
 ```
 
-`ore` will be set to null if the floor type is not included among the lookup variables. 
+`ore` will be set to null if the floor type is not included among the lookup variables.
 
 > [!TIP]
 > This technique is especially useful for Mindcode objects which don't have a logic ID assigned, as it is not possible to create efficient `case` expressions for them.
@@ -459,7 +459,7 @@ i = 0;
 do
     if not switch1.enabled then break; end;
     print(i++);
-while i <= 10; 
+while i <= 10;
 ```
 
 ## Using just one loop control variable
@@ -577,7 +577,7 @@ The long-term goal is to produce identical, optimal code in both of these cases.
 
 ## Arrays in non-unrolled loops
 
-When the loop cannot get unrolled for some reason, list iteration loops are generally a little faster than loops using index-based array access. When more than one loop variable is used, or when the array is modified in the loop, list iteration loops may provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space. 
+When the loop cannot get unrolled for some reason, list iteration loops are generally a little faster than loops using index-based array access. When more than one loop variable is used, or when the array is modified in the loop, list iteration loops may provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space.
 
 Example of simple array access:
 
@@ -749,19 +749,19 @@ List-iteration loops are always generated for the entire array. If you want to i
 
 var array[10];
 
-/// Looping through half of the array: break 
+/// Looping through half of the array: break
 var i = 0;
 for var a in array do
     print(a);
     if ++i >= length(array) \ 2 then
         break;
     end;
-end; 
+end;
 
 /// Looping through half of the array: subarray
 for var a in array[0 ... length(array) \ 2] do
     print(a);
-end; 
+end;
 ```
 
 produces
@@ -770,7 +770,7 @@ produces
 # Mlog code compiled with support for symbolic labels
 # You can safely add/remove instructions, in most parts of the program
 # Pay closer attention to sections of the program manipulating @counter
-    # Looping through half of the array: break 
+    # Looping through half of the array: break
     set .i 0
     set :a .array*0
     op add *tmp0 @counter 1
@@ -829,7 +829,7 @@ label_34:
 
 # Recursive functions
 
-Recursive functions are fully supported in Mindcode when using an internal stack. However, an internal stack can take up a lot of instruction space. A possible approach is to split the code between two (or more) processors, implementing the recursion itself in one processor and perform all (non-recursive) computations in another processor, freeing up space in the main processor for the internal stack.  
+Recursive functions are fully supported in Mindcode when using an internal stack. However, an internal stack can take up a lot of instruction space. A possible approach is to split the code between two (or more) processors, implementing the recursion itself in one processor and perform all (non-recursive) computations in another processor, freeing up space in the main processor for the internal stack.
 
 ---
 

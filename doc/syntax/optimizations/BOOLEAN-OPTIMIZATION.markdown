@@ -9,9 +9,9 @@ Available optimizations depend on the expression evaluation (full or short-circu
 
 ## Fully evaluated expressions
 
-In fully evaluated expressions, the value of the condition is fully computed before the conditional statement is executed. Such expressions can be optimized by replacing the true and false branches with a sequence of `select` instructions based on the final value of the condition; one `select` instruction is needed for each output variable of the conditional expressions. When additional computations are needed to produce a final value of any output variable in either branch, these computations are kept in the optimized code and are executed regardless of the actual value of the condition.    
+In fully evaluated expressions, the value of the condition is fully computed before the conditional statement is executed. Such expressions can be optimized by replacing the true and false branches with a sequence of `select` instructions based on the final value of the condition; one `select` instruction is needed for each output variable of the conditional expressions. When additional computations are needed to produce a final value of any output variable in either branch, these computations are kept in the optimized code and are executed regardless of the actual condition evaluation.
 
-When this optimization is applied, it always decreases the code size, as it avoids any jumps, and it replaces two separate assignments to the same variable in each branch with a single `select` instruction.  
+When this optimization is applied, it always decreases the code size, as it avoids any jumps, and it replaces two separate assignments to the same variable in each branch with a single `select` instruction.
 
 Whether the optimization is applied depends on the optimization goal:
 
@@ -90,7 +90,7 @@ draw col *tmp0 0 0 0 0 0
 
 ## Short-circuit expressions
 
-Three different optimizations are available for short-circuited expressions. Unless specified otherwise, all of these optimizations are only supported when the condition can be expressed as a sequence of `and` or `or` operators (not both). 
+Three different optimizations are available for short-circuited expressions. Unless specified otherwise, all of these optimizations are only supported when the condition can be expressed as a sequence of `and` or `or` operators (not both).
 
 ### Pure boolean expressions
 
@@ -129,7 +129,7 @@ op or *tmp5 *tmp11 .c
 print *tmp5
 ```
 
-Notes: 
+Notes:
 * Pure boolean expression optimization doesn't depend on the optimization goal or the selected target.
 * When a pure boolean expression is used as a condition in a conditional statement, this optimization is not applied.
 

@@ -127,14 +127,14 @@ Instructions corresponding to the above cases (in the order in which they're gen
 |  -   | `read origOutput "translation" input`                                          |                      |
 |  2   | `op sub output origOutput offset`                                              |                      |
 | 3.1  | `select output strictEqual input null nullOutput prevOutput`                   |                      |
-| 4.1  | `select output equal origOutput nullPlaceholder null prevOutput`               |                      | 
-| 5.1  | `select output strictEqual origOutput null elseValue prevOutput`               |                      | 
-| 6.1  | `select output lessThanEq origOutput nullPlaceholder elseValue prevOutput`     | Combines 4.1 and 5.1 | 
+| 4.1  | `select output equal origOutput nullPlaceholder null prevOutput`               |                      |
+| 5.1  | `select output strictEqual origOutput null elseValue prevOutput`               |                      |
+| 6.1  | `select output lessThanEq origOutput nullPlaceholder elseValue prevOutput`     | Combines 4.1 and 5.1 |
 |  7   | `lookup <contentType> output prevOutput`                                       |                      |
 | 3.2  | `select output strictEqual input null initialOutput prevOutput`                |                      |
-| 4.2  | `select output equal origOutput voidPlaceholder initialOutput prevOutput`      |                      | 
-| 5.2  | `select output strictEqual origOutput null initialOutput prevOutput`           |                      | 
-| 6.2  | `select output lessThanEq origOutput voidPlaceholder initialOutput prevOutput` | Combines 4.2 and 5.2 | 
+| 4.2  | `select output equal origOutput voidPlaceholder initialOutput prevOutput`      |                      |
+| 5.2  | `select output strictEqual origOutput null initialOutput prevOutput`           |                      |
+| 6.2  | `select output lessThanEq origOutput voidPlaceholder initialOutput prevOutput` | Combines 4.2 and 5.2 |
 
 Description of the variable names used in the table above:
 * `initialOutput`: the original value of the output variable,

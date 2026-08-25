@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed and reactivated the `op floor` removal optimization after it has been deactivated in 3.17.4.
 * Fixed the `error()` function being compiled even when the `error-function` option was set to `false`.
 * Fixed the `assertbounds` instruction not being properly handled when the [implicit integer conversions optimization](/doc/syntax/optimizations/EXPRESSION-OPTIMIZATION.markdown#handling-non-negative-implicit-integer-conversions) was applied, potentially leading to compiler errors or mistakenly reported runtime errors.
-* Fixed a possible internal optimization error when using a non-standard combination of optimizations.  
+* Fixed a possible internal optimization error when using a non-standard combination of optimizations.
 
 ### Added
 
@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added stack overflow runtime check for both internal and external stack, govedned by the [`stack-overflow-checks` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-stack-overflow-checks).
 * Added support for declaring arrays in functions (as local variables).
 * Added support for compile-time evaluation of the `min` and `max` varargs functions, and the `ascii`, `char` and `strlen` built-in functions. These functions now can be used in constant expressions.
+* Added support for constant parameters of inline functions (declared using `const`). Only compile-time constants can be passed into these parameters, and they can be used within the function as constant expressions (allowing compile-time evaluation).
 
 ### Changed
 
@@ -33,7 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Removed the deprecated support for using the `remote` modifier to mark functions and variables to be accessible remotely.
 * Removed the deprecated support for using parameters with the [`external`](doc/syntax/SYNTAX-1-VARIABLES.markdown#external-variables) or [`remote` modifiers](doc/syntax/SYNTAX-1-VARIABLES.markdown#remote-variables) without parentheses.
 * Removed the deprecated support for specifying mlog keywords without the `:` prefix.
-  
+
 ## 3.17.5 – 2026-08-01
 
 ### Added

@@ -14,7 +14,7 @@ The command line tool supports three different actions. The action is specified 
 * `cs` or `compile-schematic`: builds a schematic from a Schemacode source into a binary `.msch` file.
 * `ps` or `process-schematic`: loads schematic from a binary `.msch` file or the in-game Schematics Library for further processing (decompiling into a Schemacode definition file, running on the internal emulator or sending to the in-game library).
 
-Command-line arguments (e.g., `--remarks`) are case-sensitive. Values of command-line options (e.g., `none`) are generally case-insensitive. It is possible to use both `--remarks none` and `--remarks NONE`, although the lower-case specification is preferred. All multi-word command-ine options use _kebab-case_ convention. 
+Command-line arguments (e.g., `--remarks`) are case-sensitive. Values of command-line options (e.g., `none`) are generally case-insensitive. It is possible to use both `--remarks none` and `--remarks NONE`, although the lower-case specification is preferred. All multi-word command-ine options use _kebab-case_ convention.
 
 ## Input/output files
 
@@ -45,7 +45,7 @@ The command-line tool can send the compiled code or schematic directly into a pr
 When compiling Mindcode or building a schematic, the `-c` or `--clipboard` argument can be used. In this case, if the action was successful, the output is copied to the clipboard and can be pasted directly into Mindustry:
 
 * _Compile Mindcode_ action: clipboard contains mlog instructions which can be pasted into a processor on the processor configuration screen, by using **Edit/Import from clipboard** command.
-* _Compile Schematic_ action: clipboard contains a schematic encoded into Mindustry Schematic string, which can be pasted as a new schematic on the Schematics screen, by using **Import schematic.../Import from clipboard** command. 
+* _Compile Schematic_ action: clipboard contains a schematic encoded into Mindustry Schematic string, which can be pasted as a new schematic on the Schematics screen, by using **Import schematic.../Import from clipboard** command.
 
 ## Parallel processing
 

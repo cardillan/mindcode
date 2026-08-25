@@ -18,11 +18,12 @@ There are several types of functions in Mindcode:
 There are several kinds of parameters a function can have:
 
 1. _Input parameter_: serve to pass an argument to the function by the caller.
-2. _Output parameter_: serve to return an output value from the function to the caller, in addition to a value possibly returned by the function itself. Arguments corresponding to output parameters are optional when calling a function. When output arguments are specified, they need to correspond to a global, main, or local variable, and need to be marked with an `out` modifier to express the intention to receive the output value from the function. Variables passed as arguments to output parameters need not be initialized, as they're initialized by the function call.  
+2. _Output parameter_: serve to return an output value from the function to the caller, in addition to a value possibly returned by the function itself. Arguments corresponding to output parameters are optional when calling a function. When output arguments are specified, they need to correspond to a global, main, or local variable, and need to be marked with an `out` modifier to express the intention to receive the output value from the function. Variables passed as arguments to output parameters need not be initialized, as they're initialized by the function call.
 3. _Input/output parameter_: serve both to pass a value into the function and to retrieve the value back. Input/output parameters aren't optional. It is possible to use an `in` modifier when passing an argument to input/output parameter, meaning the caller isn't interested in the output value of the argument, or an `out` modifier to also receive the output value from the function. When using the `in` modifier, any expression may be provided, but for the `out` modifier, a global, main, or local variable needs to be used. Variables passed as arguments to input/output parameters should be initialized. Using `in out` modifiers is identical to using just the `out` modifier, as it is not possible to opt out from passing the input value to the function.
-4. _Reference parameter_: instead of an argument value, a reference to the argument is passed into the function. Reference parameters are declared using the `ref` modifier, and must not use either `in` or `out` modifier at the same time. Arguments passed to the reference parameters also need to be marked with the `ref` keyword. Only functions declared inline may have reference parameters, and only a variable may be passed. It is possible to pass an array (internal, external, or remote) of any length as a reference and access its elements by index from within the function.     
-5. _Keyword parameter_: these parameters can be passed to Logic functions and inline functions. They require one of the predefined mlog keywords as an argument. For example, the `uradar` functions requires one of the following keywords for each of its first three arguments: `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`. The colon is stripped from keywords when converting them to mlog. It is not possible to store one of these values in a variable and pass the variable instead; an inline function can only use the keyword as an argument to another inline function or Logic function. Passing a value different to one of the supported values for a given function argument causes an error.
-6. _Formattable string literal_: specific built-in functions and inline functions may also accept a [formattable string literal](SYNTAX-0-BASICS.markdown#formattable-string-literals) as an argument. An inline function can only use the formattable string literal as an argument to another inline function or a text output built-in function.
+4. _Constant parameter_: declared using the `const` modifier. Only functions declared inline may have constant parameters. [Constant values and compile-time constant expressions](SYNTAX-1-VARIABLES.markdown#constants) can be used as arguments of constant parameters. Constant parameters may be used in constant expressions within the function.
+5. _Reference parameter_: instead of an argument value, a reference to the argument is passed into the function. Reference parameters are declared using the `ref` modifier, and must not use either `in` or `out` modifier at the same time. Arguments passed to the reference parameters also need to be marked with the `ref` keyword. Only functions declared inline may have reference parameters, and only a variable may be passed. It is possible to pass an array (internal, external, or remote) of any length as a reference and access its elements by index from within the function.
+6. _Keyword parameter_: these parameters can be passed to Logic functions and inline functions. They require one of the predefined mlog keywords as an argument. For example, the `uradar` functions requires one of the following keywords for each of its first three arguments: `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`. The colon is stripped from keywords when converting them to mlog. It is not possible to store one of these values in a variable and pass the variable instead; an inline function can only use the keyword as an argument to another inline function or Logic function. Passing a value different to one of the supported values for a given function argument causes an error.
+7. _Formattable string literal_: specific built-in functions and inline functions may also accept a [formattable string literal](SYNTAX-0-BASICS.markdown#formattable-string-literals) as an argument. An inline function can only use the formattable string literal as an argument to another inline function or a text output built-in function.
 
 Examples of function definitions and function calls:
 
@@ -42,7 +43,7 @@ end;
 
 var y = 10;
 foo(20, out x, out y);    // Passing y as an input value for c, and obtaining return values from b and c
-foo(20, , in y * 2);      // Not obtaining the value of b and c, but passing y * 2 as an input value for c   
+foo(20, , in y * 2);      // Not obtaining the value of b and c, but passing y * 2 as an input value for c
 bar();                    // Calling a function with no parameters
 ```
 
@@ -63,7 +64,7 @@ println("global1: ", global1);
 println("global2: ", global2);
 ```
 
-outputs 
+outputs
 
 ```
 x: 10
@@ -82,7 +83,7 @@ The change to the `global1` variable only happens when the function call is fini
 
 # Built-in functions
 
-Mindcode defines several built-in functions that enhance plain Mindustry Logic. Built-in functions typically generate specialized code which is not possible to express using the standard Mindcode syntax.  
+Mindcode defines several built-in functions that enhance plain Mindustry Logic. Built-in functions typically generate specialized code which is not possible to express using the standard Mindcode syntax.
 
 ## Text output
 
@@ -92,7 +93,7 @@ There are several functions that can be used to send output to the text buffer, 
 
 Printing text, variables, and expressions just as they are is possible using the `print()` and `println()` functions. These functions take any number of arguments and generate a `print` instruction for each of them. The `println()` function outputs one additional `print` instruction containing just the `"\n"` string, creating a new line in the text to be printed.
 
-The value returned by functions performing plain text output corresponds to the value of the last argument in the argument list. If there were no arguments in the list (e.g., `println()`), the returned value is `null`.  
+The value returned by functions performing plain text output corresponds to the value of the last argument in the argument list. If there were no arguments in the list (e.g., `println()`), the returned value is `null`.
 
 ### Compile-time formatting
 
@@ -105,9 +106,9 @@ If the first argument passed to the `print()` or `println()` function is a [form
 * The `\` character can be used to escape the `\` and `$` characters:
   * `print($"a\$b");` outputs `a$b`,
   * `print($"a\\$b");` outputs `a\` followed by the value of `b`.
-* The `\n` sequence is translated to a newline as usual, while no other characters use the escape character:  
+* The `\n` sequence is translated to a newline as usual, while no other characters use the escape character:
   * `print($"a\nb");` outputs `a\nb` (`\n` in the text creates a newline when output),
-  * `print($"a\b\\c");` outputs `a\b\c`: the first `\` is kept as is, while the second one is used to escape the third one. 
+  * `print($"a\b\\c");` outputs `a\b\c`: the first `\` is kept as is, while the second one is used to escape the third one.
 
 | `print()` call                                                         | is the same as                                                         |
 |------------------------------------------------------------------------|------------------------------------------------------------------------|
@@ -117,7 +118,7 @@ If the first argument passed to the `print()` or `println()` function is a [form
 | `print($"Price: \$$price");`                                           | `print("Price: $", price)`                                             |
 | `print($"Speed: ${distance / time}m/s");`                              | `print("Speed: ", distance / time, "m/s")`                             |
 
-The `println()` function works the same, but outputs an additional newline character to the text buffer.  
+The `println()` function works the same, but outputs an additional newline character to the text buffer.
 
 The function was inspired by string interpolation in Ruby, but there is an important difference: the first argument to the printing function must be a formattable string literal or a constant string expression, as the formatting takes place at compile time (Mindustry Logic doesn't provide the means to do it at runtime).
 
@@ -131,9 +132,9 @@ println($"Position: $, $", x, y);     // Will be formatted and will ultimately o
 println($"Distance: $", len(x, y));   // Will output "Distance: 5\n"
                                       // The expression for $ is taken from the list
 println($"Distance: ${len(x, y)}");   // The same as above
-                                      
-const format = $"Position: $x, $y"; 
-println(format);                      // The formattable string can be assigned to a constant                                      
+
+const format = $"Position: $x, $y";
+println(format);                      // The formattable string can be assigned to a constant
 ```
 
 Compile-time formatting is supported by the `print()` and `println()` functions. The value returned by these functions performing compile-time formatting is always `null`.
@@ -150,11 +151,11 @@ void foo(x, y)
     println(format);      // Uses function parameters x, y
 end;
 
-void bar(y)        
+void bar(y)
     println(format);      // Uses global variable x and parameter y
 end;
 
-void baz(x)        
+void baz(x)
     println(format);      // Uses parameter x and undeclared local variable y
 end;
 
@@ -165,7 +166,7 @@ begin
 end;
 ```
 
-When compiled in strict syntax, the above code produces the error "Variable 'y' is not defined." The error is located in the definition of the constant `format`, which makes identifying the cause of the error difficult. Use formattable string literal constants with caution. 
+When compiled in strict syntax, the above code produces the error "Variable 'y' is not defined." The error is located in the definition of the constant `format`, which makes identifying the cause of the error difficult. Use formattable string literal constants with caution.
 
 ### Run-time formatting
 
@@ -178,21 +179,21 @@ print fmt
 format a
 format b
 format c
-```  
+```
 
 The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of such a placeholder is then replaced by the value supplied to the `format` instruction. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. This opens up the possibility for building outputs incrementally.
 
 Apart from the `printf()`, Mindcode supports a new `format()` function, which just outputs the `format` instruction for each of its arguments. The `printf(fmt, value1, value2)` function call is therefore just shorthand for `print(fmt); format(value1, value2);`.
 
 > [!TIP]
-> Since the `format` instruction allows decoupling the formatting template from the values being applied to the template, Mindcode is unable to apply the print merging optimizations to the `format` instruction with constant values. Use compile-time formatting instead of run-time formatting whenever possible for more efficient code.      
+> Since the `format` instruction allows decoupling the formatting template from the values being applied to the template, Mindcode is unable to apply the print merging optimizations to the `format` instruction with constant values. Use compile-time formatting instead of run-time formatting whenever possible for more efficient code.
 
 > [!TIP]
 > Print merging optimizations can use the `format` instruction for more effective optimizations. To make sure the optimizations do not interfere with the `format` instructions placed into the code by the user, the optimizer only uses the `{0}` placeholder for its own formatting. This leaves the remaining nine placeholders, `{1}` to `{9}`, for use in the code itself. If you do use the `{0}` placeholder in your own code, the more efficient optimization using the `format` instruction will be disabled.
 
 > [!NOTE]
 > The `printf()` function is only supported in Mindustry Logic 8.
-> 
+>
 > In older versions of Mindcode, `printf()` function performed compile-time formatting, and could take both formattable string literal and a standard string literal as the format argument. This version of the function is no longer available. Use `print()`/`println()` functions instead.
 
 ## Remarks
@@ -367,7 +368,7 @@ external(cell1) a = ascii(ITEM_COAL);
 printchar(a);
 ```
 
-compiles to 
+compiles to
 
 ```mlog
 write 63539 cell1 0
@@ -461,7 +462,7 @@ printflush message1
 ```
 
 > [!NOTE]
-> Data encoded with the `encode()` function may not be easily readable in a text editor or the game interface. Some text editors may not be able to display the encoded data correctly or may even damage the data when copying them to the clipboard. If you suspect this is happening, use the Mlog Watcher mod or create schematics containing a processor with your code to avoid the clipboard. 
+> Data encoded with the `encode()` function may not be easily readable in a text editor or the game interface. Some text editors may not be able to display the encoded data correctly or may even damage the data when copying them to the clipboard. If you suspect this is happening, use the Mlog Watcher mod or create schematics containing a processor with your code to avoid the clipboard.
 
 ## The `error()` function
 
@@ -481,8 +482,8 @@ inline void foo(args...)
 end;
 
 foo();                      // 0
-foo(10);                    // 1 
-foo(1, 2, 3, 4, 5);         // 5 
+foo(10);                    // 1
+foo(1, 2, 3, 4, 5);         // 5
 ```
 
 The function always takes just one argument. When the argument passed in is not an array or a vararg, the function returns `1`.
@@ -509,7 +510,7 @@ printflush message1
 
 ## Remote calls
 
-The intrinsic functions `async()`, `finished()`, `await()` and `atomic()` are part of the Parallel Processing framework and are described [here](REMOTE-CALLS.markdown#asynchronous-remote-calls) and [here](REMOTE-CALLS.markdown#atomic-functions).   
+The intrinsic functions `async()`, `finished()`, `await()` and `atomic()` are part of the Parallel Processing framework and are described [here](REMOTE-CALLS.markdown#asynchronous-remote-calls) and [here](REMOTE-CALLS.markdown#atomic-functions).
 
 # System library functions
 
@@ -522,7 +523,7 @@ You may declare your own functions using the `def` keyword:
 ```Mindcode
 def sum(x, y)
     x + y;
-end;    
+end;
 ```
 
 Functions not returning any value must be declared using the `void` keyword:
@@ -541,9 +542,9 @@ Functions that do return a value must be declared using the `def` keyword, and t
 def foo(number)
     if number < 0 then
         println("negative");
-        return -1;         // Directly provides the return value, terminating the code path 
+        return -1;         // Directly provides the return value, terminating the code path
     end;
-    
+
     // The if expression always has a value
     if number = 0 then
         println("zero");
@@ -552,7 +553,7 @@ def foo(number)
         println("positive");
         1;    // Provides value of the false branch
     end;
-    
+
     // At this point the return value of the function is the value of the above if expression
 end;
 ```
@@ -563,7 +564,7 @@ Loops are statements, not expressions, and provide a value of `null`:
 def foo(count)
     sum = 0;
     while count > 0 do
-        sum += count--;        
+        sum += count--;
     end;
 end;
 
@@ -575,10 +576,10 @@ As has been described above, function parameters in a user function can be input
 ```Mindcode
 def function(in x, out y, in out z)
     // ...
-end; 
+end;
 ```
 
-The `in` modifier to mark input parameters is optional—function parameters are input by default. 
+The `in` modifier to mark input parameters is optional—function parameters are input by default.
 
 ## Function parameters and local variables
 
@@ -693,12 +694,12 @@ The vararg parameter may be passed to standard functions as well. For example
 inline void foo(args...)
     println(min(args));
     println(max(args));
-    println($"Values: $, $, $, $", args); 
+    println($"Values: $, $, $, $", args);
 end;
 
 foo(1, 2, 3, 4);
 
-// foo(1, 2, 3, 4, 5);         // Causes error in the call to println($"Values...") function, as it expects exactly 4 arguments 
+// foo(1, 2, 3, 4, 5);         // Causes error in the call to println($"Values...") function, as it expects exactly 4 arguments
 ```
 
 An `out` argument may also be passed via vararg to a function that accepts it:
@@ -725,7 +726,7 @@ The vararg parameter may be mixed with ordinary variables or expressions and use
 
 ```Mindcode
 inline void foo(arg...)
-    bar(10, arg, 20, arg); 
+    bar(10, arg, 20, arg);
 end;
 
 inline void bar(a, b, c...)
@@ -764,7 +765,7 @@ Declaring a recursive function inline leads to a compilation error.
 
 Recursive functions require a stack to keep track of the calls in progress and for storing local variables from different invocations of the function. Mindcode supports internal and external implementations of a stack.
 
-When a function is not recursive, it won't store anything on a stack, even when it is called from a recursive function or it itself calls a recursive function. The stack size requirements of recursive functions may be greatly reduced by optimizations (especially [Function Inlining](optimizations/FUNCTION-INLINING.markdown), [Recursive Optimization](optimizations/RECURSIVE-OPTIMIZATION.markdown) and [Stack Optimization](optimizations/STACK-OPTIMIZATION.markdown)), so it is essential to have these optimizations enabled when using recursive functions.  
+When a function is not recursive, it won't store anything on a stack, even when it is called from a recursive function or it itself calls a recursive function. The stack size requirements of recursive functions may be greatly reduced by optimizations (especially [Function Inlining](optimizations/FUNCTION-INLINING.markdown), [Recursive Optimization](optimizations/RECURSIVE-OPTIMIZATION.markdown) and [Stack Optimization](optimizations/STACK-OPTIMIZATION.markdown)), so it is essential to have these optimizations enabled when using recursive functions.
 
 #### External stack
 
@@ -779,8 +780,8 @@ allocate stack in bank1[256...512];
 
 > [!WARN]
 > External stack can only store numerical values. When a recursive function needs to store non-numerical values on the stack, the program will not execute correctly. At this point, Mindcode is not able to detect and report this situation.
-> 
-> Note that parameters that are not modified by the function and are passed unchanged to the recursive calls are not stored on the stack.  
+>
+> Note that parameters that are not modified by the function and are passed unchanged to the recursive calls are not stored on the stack.
 
 #### Internal stack
 
@@ -788,7 +789,7 @@ Mindcode builds an internal stack when an external one is not declared. The inte
 
 ## Atomic functions
 
-An atomic function guarantees the function body will be executed atomically. See [Atomic functions](REMOTE-CALLS.markdown#atomic-functions) for more details. 
+An atomic function guarantees the function body will be executed atomically. See [Atomic functions](REMOTE-CALLS.markdown#atomic-functions) for more details.
 
 ## Debugging functions
 
@@ -797,15 +798,13 @@ It is possible to declare a function as `debug`. In this case, calls to the func
 ```Mindcode
 debug inline void pause(in switch)
     // Pauses the execution of the program until the switch passed in is deactivated - clicked by the user
-    // Allows the user to inspect the state of the program - the variables at the place where it was called.  
+    // Allows the user to inspect the state of the program - the variables at the place where it was called.
     switch.enabled = true;
     do while not switch1.enabled;
 end;
 ```
 
-A debug function must not return a value - must be declared `void` - and must not contain any parameter declared `out`. Other modifiers (`in`, `in out` and `ref`) are allowed.
-
-The `debug` keyword must precede the `inline`, `noinline`, or `export` keywords (when used) and the `void` keyword. 
+A debug function must not return a value - must be declared `void` - and must not contain any parameter declared `out`. Other modifiers (`in`, `in out`, `const` and `ref`) are allowed.
 
 ## Function overloading
 
@@ -821,7 +820,7 @@ void foo(x, y)
 end;
 
 foo(1);     // Calls foo(x)
-foo(1, 1);  // Calls foo(x, y) 
+foo(1, 1);  // Calls foo(x, y)
 ```
 
 To match a function call with function declaration, the number and types (input, output or input/output) of function call arguments must match the number and types of function parameters. Optional and vararg arguments are taken into account when evaluating the match.

@@ -14,11 +14,11 @@ You can install the mod directly from Mindustry using the mod browser:
 - Click on the **MlogWatcher** mod in the list.
 - Click on the **Install** button at the bottom of the screen.
 
-After installing the mod, the game will exit so that the newly installed mod can be loaded on the next start. Just start the game again. 
+After installing the mod, the game will exit so that the newly installed mod can be loaded on the next start. Just start the game again.
 
 # Selecting a processor
 
-Mlog Watcher injects the received code into a processor which is selected. 
+Mlog Watcher injects the received code into a processor which is selected.
 
 A processor becomes selected by tapping or clicking on it. Mlog Watcher indicates the selected status by drawing a diamond over/around the processor. Tapping the processor again hides the highlights over the blocks that are linked to the processor but keeps the processor selected to Mlog Watcher. This is useful when your code produces a graphical output to a display, as the display is unobstructed by the link highlights.
 
@@ -57,12 +57,12 @@ Use command-lie arguments, such as `--output-directory`, to let the command-line
 Mlog Watcher runs a WebSocket server on your machine on port `9992` (the port number can be changed in settings). Mindcode compiler can perform various operations through this interface via the `-w` command-line option (for exmaple, `-w update-all`). Possible operations are:
 
 * `update`: send the created or processed mlog code or schematic to the Mlog Watcher mod. For mlog code, the code is injected into the selected processor; when no processor is selected, an error message is displayed. For schematics, the schematic is stored in the library; storing a schematic in the library should never fail and happens regardless of the state of the game (menu, paused, running). If a schematic with the same name that was also added via Mlog Watcher already exists, it will be overwritten by the new schematic, otherwise it is added to the library.
-* `update-all`: sends the compiled mlog code into Mlog Watcher, which then injects the received code into all processors on the map with a matching [program ID](#program-id). Only processors having the exact same version number in the program ID are processed.  
-* `upgrade-all`: sends the compiled mlog code into Mlog Watcher, which then injects the received code into all processors on the map with a matching [program ID](#program-id). Only processors having equal or lower version number in the program ID are processed. 
+* `update-all`: sends the compiled mlog code into Mlog Watcher, which then injects the received code into all processors on the map with a matching [program ID](#program-id). Only processors having the exact same version number in the program ID are processed.
+* `upgrade-all`: sends the compiled mlog code into Mlog Watcher, which then injects the received code into all processors on the map with a matching [program ID](#program-id). Only processors having equal or lower version number in the program ID are processed.
 * `force-update-all`: sends the compiled mlog code into Mlog Watcher, which then injects the received code into all processors on the map with a matching [program ID](#program-id), regardless of the actual verison number. This operation can be used to downgrade the program stored in the processors on the map.
 * `add`: adds a schematic to the library, even if a Mlog Watcher managed schematic with the same name already exists in the library.
 * `extract`: extracts the mlog code from the selected processor (when used with the `pm` action) or schematic currently displayed on screen (when used with the `ps` action). Note that extracting schematics from the library may fail when the Schematics screen was entered from the main menu; enter the Schematics screen from a running game to successfully extract a schematic from the library.
- 
+
 Note that `update-all`, `upgrade-all` and `force-update-all` operations can't be used with the `pm` (process mlog) action, as the program ID is only created when compiling programs from Mindcode. Also, when no map is loaded, no processors are updated and an error message is displayed.
 
 ### Program ID

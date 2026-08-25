@@ -32,6 +32,12 @@ public interface ValueStore extends SourceElement {
         return this;
     }
 
+    /// Determines whether this value can be used as a constant expression in constant declarations and arguments
+    /// to constant function parameters.
+    default boolean isConstantValue() {
+        return false;
+    }
+
     /// Indicates the value can be represented by an mlog variable. Compound values (e.g., formattable string literal
     /// or a keyword) cannot be represented.
     default boolean isMlogRepresentable() {

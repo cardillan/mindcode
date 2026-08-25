@@ -8,7 +8,7 @@ The `8.0` and `8.1` targets represent the pre-released and development [Mindustr
 
 At this point, `7.1` is still the default target for both command line tool and web application. `8.1` will become the default target when Mindustry 8 is released.
 
-All supported functions and their respective Mindustry Logic instruction counterparts can be found in the function reference: 
+All supported functions and their respective Mindustry Logic instruction counterparts can be found in the function reference:
 
 * [Function reference for target 6.0](FUNCTIONS-60.markdown)
 * [Function reference for target 7.0](FUNCTIONS-70.markdown)

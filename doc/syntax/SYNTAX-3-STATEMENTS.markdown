@@ -33,7 +33,7 @@ while @unit == null;
 ```
 
 > [!NOTE]
-> In version 3.0.0, the `loop` keyword became optional. The keyword will be deprecated and then removed in a future release. 
+> In version 3.0.0, the `loop` keyword became optional. The keyword will be deprecated and then removed in a future release.
 
 ## Range Iteration Loops
 
@@ -69,13 +69,13 @@ for var n in firstIndex + 1 .. lastIndex - 1 do
 end;
 ```
 
-> [!NOTE] 
+> [!NOTE]
 > The range is evaluated before the loop begins. If the value of the upper bound changes while the loop executes, it isn't reflected while the loop executes. To have the condition fully evaluated on each iteration, use a [C-style loop](#c-style-loops) or a [while loop](#while-loops).
-> 
+>
 > However, if a volatile built-in is used as a bound (such as `@links`), no defensive copy will be created and the variable will be used in the condition directly. This doesn't apply to expressions involving volatile built-ins: `for n in 0 .. @links - 1` causes `@links - 1` to be evaluated and stored in a temporary variable.
-> 
+>
 > The suggested way to loop over all linked blocks is
-> 
+>
 > ```
 > for n = 0 ... @links do
 >     block = getlink(n);
@@ -97,7 +97,7 @@ printflush(message1);
 The `descending` keyword just reverses the order of loop iterations. The range still needs to specify the lower bound first and the upper bound second. If the range is exclusive (as in the example above), the iteration starts at the upper bound value decreased by one.
 
 > [!IMPORTANT]
-> Currently, range iteration loops can only increment/decrement the value by 1. If the start value is greater than the end value, the loop body won't get executed at all, both in ascending and descending iteration order. 
+> Currently, range iteration loops can only increment/decrement the value by 1. If the start value is greater than the end value, the loop body won't get executed at all, both in ascending and descending iteration order.
 
 ## List Iteration Loops
 
@@ -135,7 +135,7 @@ The list iterator loop can use more loop variables to process several items from
 
 ```Mindcode
 for var unit, count in
-    @mono, 5, 
+    @mono, 5,
     @poly, 4,
     @mega, 2
 do
@@ -177,19 +177,19 @@ println();
 // Prints 12342345
 for var i in a[0 .. 3], a[1 .. 4] do
     print(i);
-end;  
+end;
 println();
 
 // Prints 3 7 5 13 17
 for var i, j in a, 0, b do
     println(i + j);
-end;  
+end;
 ```
 
 > [!TIP]
 > It is generally more efficient to use list iteration loop rather than other forms of loops (e.g., range iteration loop combined with index access) for internal arrays. For external arrays, index access is about as effective as list iteration loop, but produces smaller code.
-> 
-> When loop unrolling optimization is applied, the resulting code is identical regardless of the type of loop used.  
+>
+> When loop unrolling optimization is applied, the resulting code is identical regardless of the type of loop used.
 
 ### Modifications of variables in the list
 
@@ -247,7 +247,7 @@ end;
 
 ### Parallel iteration
 
-It is possible to specify multiple iterators and their values in the loop. In each iteration, all iterators are assigned values from their respective lists. Iterators/values groups are separated using a semicolon. Iterators in each group may be declared `out`, and each group can have different number of iterators. The only requirement is that all iterator groups must be provided with data for the same number of iterations. 
+It is possible to specify multiple iterators and their values in the loop. In each iteration, all iterators are assigned values from their respective lists. Iterators/values groups are separated using a semicolon. Iterators in each group may be declared `out`, and each group can have different number of iterators. The only requirement is that all iterator groups must be provided with data for the same number of iterations.
 
 ```Mindcode
 var a[20], b[10];
@@ -297,7 +297,7 @@ do
     for var out i in a[0 ... 9]; var out j in a[1 ... 10] do
         if i > j then
             var x = i; i = j; j = x;
-            swapped = true; 
+            swapped = true;
         end;
     end;
 while swapped;
@@ -359,7 +359,7 @@ begin
     end;
 
     reverse(out array);
-    
+
     print(array);
     printflush(message1);
 end;
@@ -545,11 +545,11 @@ end;
 
 If the `when null` clause is not used, or the `when` clause contains an expression that evaluates to `null` or zero (as opposed to a `null` or zero literal), `null` and zero are not distinguished by the case statement.
 
-While the [Case Switching optimization](optimizations/CASE-SWITCHING.markdown) can alter case expressions heavily, the original behavior described here is preserved. 
+While the [Case Switching optimization](optimizations/CASE-SWITCHING.markdown) can alter case expressions heavily, the original behavior described here is preserved.
 
 ### Additional considerations
 
-* Some expressions after the `when` keyword might or might not get evaluated, depending on the value of the case expression. Do not use expressions with side effects (such as a function call that would modify some global variable). 
+* Some expressions after the `when` keyword might or might not get evaluated, depending on the value of the case expression. Do not use expressions with side effects (such as a function call that would modify some global variable).
 * Avoid having several `when` branches matching the same value -- currently the first matching branch gets executed, but the behavior might change in the future.
 
 # Code blocks
@@ -665,13 +665,13 @@ end;
 
 # The `end()` function
 
-The `end()` function maps to the `end` instruction, and as such has a special meaning – it resets the execution of the program and starts it from the beginning again. In this sense, the `end()` function is one of control flow statements. The function may be called from anywhere, even from a recursive function. The following rules apply when the function is invoked: 
+The `end()` function maps to the `end` instruction, and as such has a special meaning – it resets the execution of the program and starts it from the beginning again. In this sense, the `end()` function is one of control flow statements. The function may be called from anywhere, even from a recursive function. The following rules apply when the function is invoked:
 
 * the processor starts executing the program from the beginning,
 * values of existing variables are preserved (the last value written to any uninitialized[^1] global or main variable before `end()` is called is preserved),
 * the call stack is reset – calling recursive functions starts from the topmost level again.
 
-[^1]: Only uninitialized variables are handled this way. Any value assigned to an initialized variable before calling `end()` would get overwritten with whatever value the variable is initialized to when the program execution is restarted.  
+[^1]: Only uninitialized variables are handled this way. Any value assigned to an initialized variable before calling `end()` would get overwritten with whatever value the variable is initialized to when the program execution is restarted.
 
 ---
 

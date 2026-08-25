@@ -125,6 +125,69 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Nested
+    class ConstantParameters {
+        @Test
+        void compilesSimpleConstArguments() {
+            assertCompilesTo("""
+                            inline void foo(const a, const b)
+                                println(a + " " + b);
+                            end;
+                            
+                            foo("bring " + "me", 10 + " " + @copper.@name);
+                            """,
+                    createInstruction(PRINT, q("bring me 10 copper")),
+                    createInstruction(PRINT, q("\n")),
+                    createInstruction(LABEL, label(0))
+            );
+        }
+
+        @Test
+        void compilesCompoundConstArguments() {
+            // Verifies that locals inside inline functions (which by definition are limited to the function scope)
+            // aren't pushed to the stack in recursive functions
+            assertCompilesTo("""
+                            inline void foo(const y, const z, const b)
+                                println(y, "Johny");
+                                println(lookup(z, 10));
+                                println(b);
+                            end;
+                            
+                            foo($"Whoa, $!", :item, bank1);
+                            """,
+                    createInstruction(PRINT, q("Whoa, ")),
+                    createInstruction(PRINT, q("Johny")),
+                    createInstruction(PRINT, q("!")),
+                    createInstruction(PRINT, q("\n")),
+                    createInstruction(LOOKUP, "item", tmp(0), "10"),
+                    createInstruction(PRINT, tmp(0)),
+                    createInstruction(PRINT, q("\n")),
+                    createInstruction(PRINT, "bank1"),
+                    createInstruction(PRINT, q("\n")),
+                    createInstruction(LABEL, label(0))
+            );
+        }
+
+        @Test
+        void refusesNoConstants() {
+            // Verifies that locals inside inline functions (which by definition are limited to the function scope)
+            // aren't pushed to the stack in recursive functions
+            assertGeneratesMessages(expectedMessages()
+                            .add("Argument assigned to constant parameter 'x' is not a compile-time constant.")
+                            .add("Argument assigned to constant parameter 'y' is not a compile-time constant.")
+                            .add("Argument assigned to constant parameter 'z' is not a compile-time constant."),
+                    """
+                            param p = 0;
+                            var q = p;
+                            
+                            inline void foo(const x, const y, const z)
+                            end;
+                            
+                            foo(p, q, rand(15));
+                            """);
+        }
+    }
+
+    @Nested
     class DebugFunctions {
         @Test
         void compilesDebugFunctionWithDebug() {
@@ -1038,7 +1101,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Nested
-    class ReferenceFunctions {
+    class ReferenceParameters {
         @Test
         void compilesReferenceArgument() {
             assertCompilesTo("""

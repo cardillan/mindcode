@@ -2,7 +2,7 @@
 
 ## Dealing with syntax errors
 
-In earlier versions of Mindcode, syntax errors were reported very poorly. As of version 2.3.0, the error reporting got much better. In most cases, the position of the error in source code is correctly identified and displayed. In the web application, clicking on the position given with the error message places the cursor at the occurrence of the error in the source panel. Of course, if the source code gets edited (especially when lines are added or deleted), the positions will no longer be valid, and you need to compile the code again. When using an IDE to edit and compile the code offline, it should be possible to [set up the IDE](TOOLS-IDE-INTEGRATION.markdown) to provide navigation from the error messages to the occurrence of the error in the source code as well.  
+In earlier versions of Mindcode, syntax errors were reported very poorly. As of version 2.3.0, the error reporting got much better. In most cases, the position of the error in source code is correctly identified and displayed. In the web application, clicking on the position given with the error message places the cursor at the occurrence of the error in the source panel. Of course, if the source code gets edited (especially when lines are added or deleted), the positions will no longer be valid, and you need to compile the code again. When using an IDE to edit and compile the code offline, it should be possible to [set up the IDE](TOOLS-IDE-INTEGRATION.markdown) to provide navigation from the error messages to the occurrence of the error in the source code as well.
 
 When encountering more complicated situations, one of these tips might help.
 
@@ -15,7 +15,7 @@ When an error is encountered in the source code, the parser tries to recover and
 ### Always look at the preceding code
 
 Quite often the error is caused by some problem in the statement immediately preceding the position on which it is reported. It's always a good idea to inspect the previous statement. Remember the true source of error might be separated from the reported error by a lengthy comment.
-- Sometimes the cause for the error lies within the same expression, just earlier: `print[rand(i));`. The error is caused by typing a left square bracket instead of opening parenthesis, but is reported at the closing parenthesis.   
+- Sometimes the cause for the error lies within the same expression, just earlier: `print[rand(i));`. The error is caused by typing a left square bracket instead of opening parenthesis, but is reported at the closing parenthesis.
 - Special handling has been implemented for missing semicolons to be reported at the end of the previous statements, which is typically the correct place. If your code doesn't contain any other error but missing semicolons, they should all be reported accurately.
 
 ### Unexpected input
@@ -36,7 +36,7 @@ A particularly challenging error is a missing `end` keyword. As it is not possib
 
 There's always a possibility that Mindcode contains some bug that is causing the error you're encountering. When in trouble, don't hesitate to ask for help by [creating an issue](https://github.com/cardillan/mindcode/issues/new).
 
-You can ask for help here even if you don't suspect there's an error in Mindcode. All questions are welcome.  
+You can ask for help here even if you don't suspect there's an error in Mindcode. All questions are welcome.
 
 ## Debugging the compiled code
 
@@ -51,8 +51,8 @@ This requires adding a code only used for the actual debugging process. Mindcode
 * A debug code block: `debug <some code> end;`. Debug block is not compiled, unless `debug` is set to `true`.
 * A debug function: `debug void foo() <some code> end;`. Calls to debug functions are not compiled, unless `debug` is set to `true`.
 
-By setting the [`debug` compiler option](SYNTAX-5-OTHER.markdown#option-debug) to `true`, the code gets compiled with debug support. The compiler ensures the following: 
- 
+By setting the [`debug` compiler option](SYNTAX-5-OTHER.markdown#option-debug) to `true`, the code gets compiled with debug support. The compiler ensures the following:
+
 * All user-defined variables are preserved and not removed by optimizations. It is possible to inspect all variables on the **Vars** screen.
 * Statements in `debug` blocks are included in the compiled code.
 * Calls to `debug` functions are compiled.
@@ -63,7 +63,7 @@ When entering the processor screen while the program is running doesn't stop pro
 
 * By pausing the game. In this case, it might be challenging to stop the program at a well-defined time.
 * By including a `stop` instruction in the program (provided by the `stopProcessor()` or `error()` functions, or by compiler-generated [runtime checks](SYNTAX-5-OTHER.markdown#option-error-reporting)). However, once stopped, the program execution can't be resumed; the whole processor needs to be restarted.
-* By implementing a pause functionality. The program might wait for some user-interaction, for example, until the user presses a switch. This allows stopping the program at a well-defined point while maintaining the ability to resume its execution. The easiest way for this is to declare the function performing the pause as `debug` - this way the program will only pause when compiled with debug support enabled. 
+* By implementing a pause functionality. The program might wait for some user-interaction, for example, until the user presses a switch. This allows stopping the program at a well-defined point while maintaining the ability to resume its execution. The easiest way for this is to declare the function performing the pause as `debug` - this way the program will only pause when compiled with debug support enabled.
 
 Example:
 
@@ -74,14 +74,14 @@ require units;
 
 debug void pause(in switch)
     // Pauses the execution of the program until the switch passed in is deactivated - clicked by the user
-    // Allows the user to inspect the state of the program - the variables at the place where it was called.  
+    // Allows the user to inspect the state of the program - the variables at the place where it was called.
     switch.enabled = true;
     do while not switch.enabled;
 end;
 
 begin
     unit = findFreeUnit(@flare, 10);
-    
+
     debug
         // Debug code - will only be compiled in debug
         if unit == null then
@@ -90,11 +90,11 @@ begin
             pause(switch1);
         end;
     end;
-    
+
     do
         move(@thisx, @thisy);
     while !within(@thisx, @thisy, 1);
-    
+
     print("Unit moved to processor");
     printflush(message1);
     pause(switch1);

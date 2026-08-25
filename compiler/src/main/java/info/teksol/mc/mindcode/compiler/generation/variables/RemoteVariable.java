@@ -58,6 +58,11 @@ public class RemoteVariable implements FunctionParameter {
     }
 
     @Override
+    public boolean isConstant() {
+        return false;
+    }
+
+    @Override
     public SourcePosition sourcePosition() {
         return sourcePosition;
     }

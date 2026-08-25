@@ -12,15 +12,17 @@ public class AstFunctionParameter extends AstFragment {
     private final boolean inModifier;
     private final boolean outModifier;
     private final boolean refModifier;
+    private final boolean constModifier;
     private final boolean varargs;
 
     public AstFunctionParameter(SourcePosition sourcePosition, AstIdentifier identifier, boolean inModifier,
-            boolean outModifier, boolean refModifier, boolean varargs) {
+            boolean outModifier, boolean refModifier, boolean constModifier, boolean varargs) {
         super(sourcePosition, children(identifier));
         this.identifier = identifier;
         this.inModifier = inModifier;
         this.outModifier = outModifier;
         this.refModifier = refModifier;
+        this.constModifier = constModifier;
         this.varargs = varargs;
     }
 
@@ -44,12 +46,16 @@ public class AstFunctionParameter extends AstFragment {
         return refModifier;
     }
 
+    public boolean hasConstModifier() {
+        return constModifier;
+    }
+
     public boolean isVarargs() {
         return varargs;
     }
 
     public boolean isInput() {
-        return !refModifier && (inModifier || !outModifier);
+        return !refModifier && !constModifier && (inModifier || !outModifier);
     }
 
     public boolean isOutput() {
@@ -58,6 +64,10 @@ public class AstFunctionParameter extends AstFragment {
 
     public boolean isReference() {
         return refModifier;
+    }
+
+    public boolean isConstant() {
+        return constModifier;
     }
 
     public boolean isInputOutput() {
@@ -69,7 +79,7 @@ public class AstFunctionParameter extends AstFragment {
     }
 
     public boolean isOptional() {
-        return !isInput() && !isReference();
+        return !isInput() && !isReference() & !isConstant();
     }
 
     public int callSize() {
@@ -84,8 +94,8 @@ public class AstFunctionParameter extends AstFragment {
         } else if (argument.hasOutModifier()) {
             return argument.hasInModifier() ? isInputOutput() : isOutput();
         } else {
-            // No ref or out modifier: must be input
-            return isInput();
+            // No ref or out modifier: must be a constant or an input
+            return isConstant() || isInput();
         }
     }
 

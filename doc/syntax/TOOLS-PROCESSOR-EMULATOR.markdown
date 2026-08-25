@@ -8,7 +8,7 @@ The emulation is frame-based, and all instructions, as well as instruction sched
 
 ## Linked blocks
 
-When running a compiled schematic in the emulator, the linked blocks are set up as specified by the schematic. When running only the compiled code, independent of a schematic, the following blocks are created automatically: 
+When running a compiled schematic in the emulator, the linked blocks are set up as specified by the schematic. When running only the compiled code, independent of a schematic, the following blocks are created automatically:
 
 * memory cells `cell1` to `cell9`,
 * memory banks `bank1` to `bank9`,
@@ -90,13 +90,13 @@ Notes
     * `@x`, `@y`: returns the block position if the object is a block created from a schematic, otherwise `0` or `null`.
   * Version 8.0+:
     * `@size`, `@bufferSize`: returns the length when invoked on a string.
-* The `wait` instruction's effect on processor scheduling and time variables is emulated, but the instruction doesn't pause the emulation. 
+* The `wait` instruction's effect on processor scheduling and time variables is emulated, but the instruction doesn't pause the emulation.
 
 ## Irregular situation handling
 
 Except the `stop` instruction, Mindustry processors never stop executing a program. Upon encountering an instruction which cannot be executed, the instruction simply isn't executed. For example, when the `read` instruction tries to read from memory which doesn't exist, it skips the execution without changing the variable which would receive the value read from the memory.
 
-While mlog programs, and to a certain extent Mindcode programs, can sometimes put this mechanism to good use, in most cases such situations indicate a bug in the program. The processor emulator, therefore, by default, stops when encountering an irregularity. It is, however, possible to set up the emulated processor to ignore the error and continue executing the program, just like the Mindustry processor would. This configuration is done through _execution flags_.       
+While mlog programs, and to a certain extent Mindcode programs, can sometimes put this mechanism to good use, in most cases such situations indicate a bug in the program. The processor emulator, therefore, by default, stops when encountering an irregularity. It is, however, possible to set up the emulated processor to ignore the error and continue executing the program, just like the Mindustry processor would. This configuration is done through _execution flags_.
 
 ## Execution flags
 
@@ -130,7 +130,7 @@ All flags are described in the following table:
 | err-graphics-buffer-overflow    | true    | stop execution when the graphics buffer size (256 operations) is exceeded                     |
 | err-runtime-check-failed        | true    | stop execution when a compiler-generated runtime check fails.                                 |
 
-Some flags are `false` by default. It is expected that these events can happen even in an otherwise sound program. Setting them to `true` enforces even stricter standards in your programs.   
+Some flags are `false` by default. It is expected that these events can happen even in an otherwise sound program. Setting them to `true` enforces even stricter standards in your programs.
 
 ## Inspecting program state
 
@@ -174,7 +174,7 @@ number: 1.00000008976
 *tmp21: 0.6000009930373835
 ```
 
-Note that the `sort-variables` directive ensures the variables are sorted meaningfully. Without this directive, the variables are printed in the encountered order, which is identical to the order on the **Vars** screen in the game.  
+Note that the `sort-variables` directive ensures the variables are sorted meaningfully. Without this directive, the variables are printed in the encountered order, which is identical to the order on the **Vars** screen in the game.
 
 Secondly, when the `trace-execution` flag is set, each instruction and the prior values of its arguments are printed to the message log at each step. The values of arguments changed by the instruction are also printed after the instruction is executed. The size of the output produced by this mechanism can be quite sizable, but it can be used to inspect the program flow in detail.
 
@@ -224,7 +224,7 @@ Step 11, instruction #16: op mul :printExactFast:base :printExactFast:n *tmp10
     :printExactFast:base <-- 1.00000008976
 ```
 
-In the web app, the number of messages output by either of these two mechanisms is limited to 1000; in the command-line application, the limit is 10,000. 
+In the web app, the number of messages output by either of these two mechanisms is limited to 1000; in the command-line application, the limit is 10,000.
 
 ---
 

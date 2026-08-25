@@ -49,7 +49,7 @@ Schemacode, a schematic definition language, is covered here:
 
 * [Schemacode](SCHEMACODE.markdown)
 
-Supporting tools: 
+Supporting tools:
 
 * [Command line tool](TOOLS-CMDLINE.markdown)
 * [IDE Integration](TOOLS-IDE-INTEGRATION.markdown)

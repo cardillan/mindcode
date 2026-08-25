@@ -134,7 +134,7 @@ The state is [alarm]
 
 In the second case, the doubling of square bracket is not strictly necessary, because `alarm` isn't recognized as a color name.
 
-### Displaying icons 
+### Displaying icons
 
 It is also possible to use built-in Mindustry icons in the `print` instruction, for example
 
@@ -143,7 +143,7 @@ println(ITEM_COAL, ": ", vault1.@coal);
 println(ITEM_LEAD, ": ", vault1.@lead);
 println(ITEM_SAND, ": ", vault1.@sand);
 
-print($"Using $UNIT_MEGA to transport items...\n"); 
+print($"Using $UNIT_MEGA to transport items...\n");
 ```
 
 Supported Mindustry icons are available through built-in String constants containing them. For a complete list of available icons, see [Built-in icons](SYNTAX-1-VARIABLES.markdown#constants-representing-built-in-icons), for a possibility of embedding icons into string constant see [String concatenation](SYNTAX-2-EXPRESSIONS.markdown#string-concatenation).
@@ -170,7 +170,7 @@ Mindustry allows your processors to control existing units. Among other things, 
 Here are the basic principles governing units:
 
 * Each processor can control at most one unit at a time; this unit is acquired through `ubind()` an is available as the `@unit` variable.
-* The `ubind()` function, when run repeatedly, returns units of the given type one by one; after cycling through all units, it starts again from the first one. 
+* The `ubind()` function, when run repeatedly, returns units of the given type one by one; after cycling through all units, it starts again from the first one.
 * It is possible to store a bound unit in a variable and bind it again later: `savedUnit = @unit; ...; ubind(savedUnit);`. This way, several units can be stored in variables (or an [internal array](SYNTAX-1-VARIABLES.markdown#internal-arrays)).
 * On the other hand, it is not possible to store units in memory cells and memory banks.
 * Binding a unit doesn't make that unit controlled by the processor. This only happens after using one of unit-related instructions: [`ucontrol`](FUNCTIONS-80.markdown#instruction-unit-control), [`ulocate`](FUNCTIONS-80.markdown#instruction-unit-locate) or [`uradar`](FUNCTIONS-80.markdown#instruction-unit-radar).
@@ -209,7 +209,7 @@ print($"There are $count active poly(s).");
 printflush(message1);
 ```
 
-This code counts the current number of active polys by binding all of them; as soon as the first one is encountered again, we know we've seen them all. There is a slight problem with this code: if the unit stored in `firstUnit` is destroyed, it will never be bound again, and we'll end up in an infinite loop. More on detecting destroyed units 
+This code counts the current number of active polys by binding all of them; as soon as the first one is encountered again, we know we've seen them all. There is a slight problem with this code: if the unit stored in `firstUnit` is destroyed, it will never be bound again, and we'll end up in an infinite loop. More on detecting destroyed units
 later.
 
 There's one additional, crucial thing you can do with a unit stored in a variable: it can be used to bind that unit again. For example:
@@ -242,10 +242,10 @@ Each unit has a flag, which can hold a numeric value (integer or decimal values)
 def findFreeUnit(unitType, markFlag)
     do
         ubind(unitType);
-    while @unit.@flag !== 0;      
+    while @unit.@flag !== 0;
 
-    // If no unit was found, @unit would be null and so would be @unit.@flag. 
-    // The strict comparison (!==) ensures the loop will only end when a live unit with zero flag is found  
+    // If no unit was found, @unit would be null and so would be @unit.@flag.
+    // The strict comparison (!==) ensures the loop will only end when a live unit with zero flag is found
 
     flag(markFlag);
     return @unit;
@@ -261,7 +261,7 @@ There are two downsides to this arrangement:
 
 * If a processor for some reason stops controlling the unit without clearing its flag, all other processors will consider that unit used and won't reuse it, potentially leading to a shortage of available units.
 * The flag actually allows you to store various information about the unit state, for example, which particular task it was assigned to. It is possible to encode the flag and the state into one numeric value, although it requires more computations and makes the code at least a bit slower.
-  
+
 ### Unit controllers
 
 The alternative to using flags is querying the unit to see whether it is free or actively controlled. When a unit is free, the `@unit.@controlled` property returns `0`. When the value is nonzero, the unit is controlled, either by a processor, or directly by a player, or by being part of the units commanded indirectly by the player (different values are assigned to each of these possibilities).
@@ -364,7 +364,7 @@ while true do
 end;
 ```
 
-The above program keeps issuing the `move` command, until the unit is within one tile from the intended destination. Issuing the command repeatedly, instead of just waiting is important: if you don't issue a command to a unit for ten seconds, the unit stops executing the last logic-issued action and becomes AI-controlled instead.   
+The above program keeps issuing the `move` command, until the unit is within one tile from the intended destination. Issuing the command repeatedly, instead of just waiting is important: if you don't issue a command to a unit for ten seconds, the unit stops executing the last logic-issued action and becomes AI-controlled instead.
 
 ### Discarding unwanted items
 
@@ -374,7 +374,7 @@ Units can carry only one type of items at a time. It might therefore be sometime
 itemDrop(@air, @unit.@totalItems);
 ```
 
-In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still suggest specifying the correct amount, just in case something will change in the future.     
+In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still suggest specifying the correct amount, just in case something will change in the future.
 
 ## Using buildings
 
@@ -388,7 +388,7 @@ One of the first things you'll probably want to do is to locate your core, as it
 found = ulocate(:building, :core, false, out core_x, out core_y, out core);
 ```
 
-Let's look at each argument here: 
+Let's look at each argument here:
 
 * `found` is a variable that will receive the result of the operation, `true` if the code was found, `false` if it wasn't.  If you don't need it, use just `ulocate(:building, :core, false, out core_x, out core_y, out core)`.
 * `ulocate` is the name of the function we're calling.
@@ -415,7 +415,7 @@ building = getBlock(x, y, out type, out floor);
 ```
 
 Let's look at each argument here:
-* `getBlock` it’s a function that itself returns nothing, but the arguments are returned with a value 
+* `getBlock` it’s a function that itself returns nothing, but the arguments are returned with a value
 * `building` variable which receives the building at given location. If there is no building, it will become `null`.
 * `x` and `y` coordinates
 * `type` variable which receives the block type. If it’s a building, it receives the proper type, such as `@vault`. If there is free space, receives `@air`. If it's a solid environmental block, receives `@solid`

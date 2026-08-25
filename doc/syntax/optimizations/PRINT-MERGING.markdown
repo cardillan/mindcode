@@ -61,7 +61,7 @@ If the `{0}` placeholder is avoided, the formatting mechanism can be used freely
 
 ```Mindcode
 param a = 10;               // prevent a from being propagated as a constant
-println("{2} {1}");         // if you use "{0} {1}" instead - different optimization will happen 
+println("{2} {1}");         // if you use "{0} {1}" instead - different optimization will happen
 format("Before");
 println($"Value: $a");
 format("After");

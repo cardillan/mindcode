@@ -288,7 +288,7 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
         createClass(GENERATED_PACKAGE_NAME, visitorClassBuilder);
     }
 
-    private final Set<String> accessorPrefixHas = Set.of("inModifier", "outModifier", "refModifier", "declaration");
+    private final Set<String> accessorPrefixHas = Set.of("inModifier", "outModifier", "refModifier", "constModifier", "declaration");
     private final Set<String> ignoredFields = Set.of("profile", "sourcePosition", "children", "docComment");
 
     private String getAccessorMethod(VariableElement field) {

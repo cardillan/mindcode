@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
+import info.teksol.mc.mindcode.logic.arguments.LogicNull;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.util.MutableInteger;
 import org.jspecify.annotations.NullMarked;
@@ -46,7 +47,7 @@ public class LocalContext extends CompilerMessageEmitter implements FunctionCont
         this.function = Objects.requireNonNull(function);
         this.varargs = Objects.requireNonNull(varargs);
         this.loopStack = new LoopStack(messageConsumer);
-        function.getParameters().forEach(p -> putVariable(p.getName(), p));
+        function.getParameters().forEach(p -> putVariable(p.getName(), p.isConstant() ? LogicNull.NULL : p));
     }
 
     private @Nullable ValueStore putVariable(String name, ValueStore variable) {

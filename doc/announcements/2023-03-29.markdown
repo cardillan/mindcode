@@ -64,7 +64,7 @@ allocate stack in cell1
 def foo(n)
     foo(n - 1)
 end
-    
+
 print(foo(4))
 ```
 
@@ -78,7 +78,7 @@ allocate stack in memory
 def foo(n)
     foo(n - 1)
 end
-    
+
 print(foo(4))
 ```
 
@@ -95,7 +95,7 @@ although resulting instructions would be converted to an `Invalid` instruction w
 
 Mindustry Logic version 7 (as of release 142) is now fully supported, including the World Processor instruction set.
 
-The web app compiler targets Version 7 with the World Processor instruction set. The command-line compiler can set the target 
+The web app compiler targets Version 7 with the World Processor instruction set. The command-line compiler can set the target
 platform to Version 6, Version 7 and Version 7 + World Processor.
 
 Check out [Function reference for Mindustry Logic 7.1](../syntax/FUNCTIONS-71.markdown) for a list of all supported functions in Version 7.
@@ -104,7 +104,7 @@ Code developed and compiled using previous Mindcode versions should compile just
 (with or without the World Processor instruction set), except when trying to use instructions that were explicitly removed from
 Version 7 Logic:
 * `ucontrol pathfind` (mapped to the `pathfind()` function)
-* `rally` and `resupply` can no longer be used as a `group` argument in `ulocate` instruction (mapped to the 
+* `rally` and `resupply` can no longer be used as a `group` argument in `ulocate` instruction (mapped to the
 [`ulocate(...)`](../syntax/FUNCTIONS-71.markdown#instruction-unit-locate) function).
 
 If you want to continue developing for Mindustry Logic V6, the best way now is to use the command line compiler.
@@ -116,7 +116,7 @@ For a more comprehensive description of current custom function support, see [Cu
 
 ### Stack usage and stack allocation
 
-Only recursive custom functions now require stack allocation. Non-recursive functions are compiled without a stack 
+Only recursive custom functions now require stack allocation. Non-recursive functions are compiled without a stack
 and can handle all types of variables as arguments (unlike recursive functions, which can only handle numeric parameters and variables).
 
 When no range is given in `allocate stack` clause (e.g., `allocate stack in bank1`), the memory is inspected at runtime

@@ -314,15 +314,12 @@ public class CallGraphCreator extends CompilerMessageEmitter {
             // Ref but not inline
             if (!function.isDeclaredInline()) {
                 params.stream()
+                        .filter(AstFunctionParameter::isConstant)
+                        .forEach(p -> error(function.getSourcePosition(), ERR.PARAMETER_CONST_NOT_INLINE, p.getName(),  function.getName()));
+                params.stream()
                         .filter(AstFunctionParameter::isReference)
                         .forEach(p -> error(function.getSourcePosition(), ERR.PARAMETER_REF_NOT_INLINE, p.getName(),  function.getName()));
             }
-
-
-            // Ref cannot be in or out (prevented by syntax, but checked anyway)
-            params.stream()
-                    .filter(p -> p.hasRefModifier() && (p.hasInModifier() || p.hasOutModifier()))
-                    .forEach(p -> error(function.getSourcePosition(), ERR.PARAMETER_REF_NOT_INLINE, p.getName(),  function.getName()));
         }
 
         // When the module is not the main one, the syntax mode must be strict

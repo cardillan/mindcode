@@ -327,6 +327,7 @@ astFunctionParameter
     : modifier_in = IN?  modifier_out = OUT? name = IDENTIFIER varargs = DOT3?
     | modifier_out = OUT modifier_in = IN    name = IDENTIFIER varargs = DOT3?
     | modifier_ref = REF                     name = IDENTIFIER varargs = DOT3?
+    | modifier_const = CONST                 name = IDENTIFIER varargs = DOT3?
     ;
 
 // Function calls

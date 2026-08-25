@@ -28,7 +28,7 @@ Precision loss is detected by reversing the folding operation and retrieving bac
 Example:
 
 ```Mindcode
-volatile x, y; 
+volatile x, y;
 x = y + 1 >= 2;
 x = y - 1 >= 2;
 x = 1 - y >= 2;
@@ -110,7 +110,7 @@ op greaterThanEq .x *tmp0 0.2
 
 Condition streamlining is performed when the condition compares a variable to `false` using an `equal`/`notEqual` comparison (this effectively determines whether the value stored in the variable represents `true` or `false`), and the `op` instruction has a relational operator. In these cases, which may be produced directly by the compiler, or are a result of boolean operators in expressions, the condition can be evaluated directly by the conditional instruction.
 
-The optimization doesn't happen when the resulting condition requires strict inequality and emulating the strict inequality with a `select` is not possible, or when one of the condition operands is identical to the result variable in a `select` instruction.  
+The optimization doesn't happen when the resulting condition requires strict inequality and emulating the strict inequality with a `select` is not possible, or when one of the condition operands is identical to the result variable in a `select` instruction.
 
 A typical example of a streamlined condition is:
 

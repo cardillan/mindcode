@@ -27,9 +27,9 @@ As Mindustry Logic limits the program size to 1,000 instructions, the compiled s
 - all output values provided by the function are used,
 - the target is the latest supported target (might be different from a default target),
 - the optimization level is set to `experimental`,
-- for internal arrays, the array jump table is not included in the measurement. The size of the jump table corresponds to the number of elements in the array, and is not related to the function itself.
+- for internal arrays, the array jump table is not included in the measurement. The size of the jump table corresponds to the number of elements in the array and is not related to the function itself.
 
-If a function just returns its input parameter as the return value and does nothing else, it doesn't produce any instruction—its size is zero. The system libraries sometimes use these functions for consistency, for example, as a special case for a vararg function.  
+If a function just returns its input parameter as the return value and does nothing else, it doesn't produce any instruction—its size is zero. The system libraries sometimes use these functions for consistency, for example, as a special case for a vararg function.
 
 The following types of function calls are measured:
 
@@ -41,7 +41,7 @@ The following types of function calls are measured:
 There are several factors that might cause the size of a function used in an actual program to differ from the measurement above:
 
 - Optimizations might remove instructions setting up input parameters or receiving output values from the function.
-- When constant values are used as input parameters in inlined functions, optimizations might make the resulting code significantly smaller, as constants in expressions can sometimes be optimized away. 
+- When constant values are used as input parameters in inlined functions, optimizations might make the resulting code significantly smaller, as constants in expressions can sometimes be optimized away.
 - If the output value of an output parameter isn't used in the entire program, the output parameter might get removed from the function body.
 
 > [!NOTE]

@@ -103,7 +103,7 @@ Therefore, when a variable value is displayed as an integer by Mindustry, it is 
 To display a value of a variable without rounding, it is possible to use the [`printExactFast()`](SYSTEM-LIBRARY-PRINTING.markdown#printexactfast) or [`printExactSlow()`](SYSTEM-LIBRARY-PRINTING.markdown#printexactslow) functions from the [`printing` system library](SYSTEM-LIBRARY-PRINTING.markdown): `printExactSlow(1.2345e-15);` outputs `1.2345000000000002e-15`. Note that it takes several instructions to print the exact value, and also that the manipulations used to produce the output may introduce some numerical error into the value being outputted.
 
 > [!NOTE]
-> Mindustry 7 doesn't apply the above transformation to values that are slightly smaller than an integer value: `print(0.99999999);` outputs `0.99999999` and not `1`. In Mindustry 8 this is fixed, and both slightly smaller and slightly larger values are rounded to integers for display. Mindcode compile-time evaluation and emulator match the actual behavior depending on the language target. 
+> Mindustry 7 doesn't apply the above transformation to values that are slightly smaller than an integer value: `print(0.99999999);` outputs `0.99999999` and not `1`. In Mindustry 8 this is fixed, and both slightly smaller and slightly larger values are rounded to integers for display. Mindcode compile-time evaluation and emulator match the actual behavior depending on the language target.
 
 # Mindcode
 
@@ -222,11 +222,11 @@ Exponentiation works as usual: `2**4` is `2 * 2 * 2 * 2`, or 16.
 * `%` (modulo): remainder after division; `10 % 7` gives `3`. Defined both for integers and floating point numbers,
 * `%%` (positive modulo): modulo which preserves the sign of the divisor: when the divisor is positive and the dividend is negative, it still returns a positive number.
 
-Note: the positive modulo operator (`%%`) is natively supported in Mindustry Logic 8 or higher. For targets preceding `8`, the operator is compiled into three instructions.  
+Note: the positive modulo operator (`%%`) is natively supported in Mindustry Logic 8 or higher. For targets preceding `8`, the operator is compiled into three instructions.
 
 ## Additive operators
 
-Addition and subtraction on numeric values work as usual. 
+Addition and subtraction on numeric values work as usual.
 
 ### String concatenation
 
@@ -307,7 +307,7 @@ FFFFFFFFFFFFFFFF
 4000000000000000
 ```
 
-The exact result, without precision loss, would be `7FFFFFFFFFFFFFFF` and `3FFFFFFFFFFFFFFF` respectively. In the first case, no precision loss occurs. In the second case, the double conversion, while introducing a small difference in terms of absolute value, changes the binary representation dramatically. 
+The exact result, without precision loss, would be `7FFFFFFFFFFFFFFF` and `3FFFFFFFFFFFFFFF` respectively. In the first case, no precision loss occurs. In the second case, the double conversion, while introducing a small difference in terms of absolute value, changes the binary representation dramatically.
 
 ## Bitwise AND, OR, XOR operators
 
@@ -346,7 +346,7 @@ The list membership operator is compiled as a [case expression](SYNTAX-3-STATEME
 This has the following consequences:
 
 * The list membership operator benefits from the same optimizations as case expressions (especially [case switching](optimizations/CASE-SWITCHING.markdown)).
-* When all values in the list are integers, Mindcode assumes the input value is integer as well.  
+* When all values in the list are integers, Mindcode assumes the input value is integer as well.
 * It is possible to use ranges in the list of values as well, for example `a in (1 .. 3, 7 .. 9)`.
 
 > [!NOTE]
@@ -428,7 +428,7 @@ printflush(message1);
 
 ## Boolean and logical AND, OR operators
 
-* `&&` and `and` represent boolean and logical AND operation, 
+* `&&` and `and` represent boolean and logical AND operation,
 * `||` and `or` represent boolean and logical OR operation.
 
 Logical operators may return any numeric value or `null`. `null` and zero represent `false`, any other value represents `true`. Logical operators always perform a [short-circuit evaluation](https://en.wikipedia.org/wiki/Short-circuit_evaluation), i.e., skip evaluating the second operand if the value of the operation is decided by the first operand alone:
@@ -436,7 +436,7 @@ Logical operators may return any numeric value or `null`. `null` and zero repres
 * when evaluating `and`: the value of the first operand is false.
 
 > [!NOTE]
-> The [Select Optimization](optimizations/BOOLEAN-OPTIMIZATION.markdown) may turn a short-circuit operation into a full evaluation, if it doesn't change the semantics of the operation and the result is compatible with the optimization goal. 
+> The [Select Optimization](optimizations/BOOLEAN-OPTIMIZATION.markdown) may turn a short-circuit operation into a full evaluation, if it doesn't change the semantics of the operation and the result is compatible with the optimization goal.
 
 Boolean operators are guaranteed to always return `0` or `1`. They're always evaluated fully. Boolean operators may be a little bit less effective, as additional operations might need to be performed to ensure the resulting value is always `0` or `1`.
 
@@ -451,7 +451,7 @@ Ternary operator is a conditional operator and is equivalent to an `if` expressi
 var message = value <= limit ? "ok" : "too high";
 ```
 
-The true branch is executed if the conditional expression (`value <= limit` in our case) [is not equal to zero](#equality-operations). When it is equal to zero, the false branch is executed. 
+The true branch is executed if the conditional expression (`value <= limit` in our case) [is not equal to zero](#equality-operations). When it is equal to zero, the false branch is executed.
 
 ## Assignment operators
 
@@ -491,20 +491,20 @@ To use a memory cell/bank in array assignments, it is necessary to use subarrays
 ```Mindcode
 var a[64];
 a = cell1[0 ... 64];        // Copies the entire memory cell into the array
-// a = cell1;               // Error - not supported                    
+// a = cell1;               // Error - not supported
 ```
 
 By using subarrays, it is possible to copy overlapping regions of arrays, effectively shifting the array content up or down:
 
 ```Mindcode
 var a[10];
-a[0 ... 9] = a[1 ... 10];   // Shifts towards array start  
+a[0 ... 9] = a[1 ... 10];   // Shifts towards array start
 a[1 ... 10] = a[0 ... 9];   // Shifts towards array end
 ```
 
 When overlapping regions of arrays are copied, Mindcode makes sure to perform the operation in correct order to prevent array elements from being overwritten before their content is read.
 
-If one or both of the arrays being assigned is internal, the assignment is compiled as a series of `set` instructions without loops. Assignments between two external arrays are compiled as a loop. 
+If one or both of the arrays being assigned is internal, the assignment is compiled as a series of `set` instructions without loops. Assignments between two external arrays are compiled as a loop.
 
 # Constant expressions
 
@@ -519,7 +519,7 @@ Furthermore, expressions that contain some constant subexpressions (e.g., `ticks
 
 ## Constant expressions in Mindustry Logic 7 and earlier
 
-If the result of a constant expression is a value that [cannot be encoded into an mlog literal](SYNTAX-0-BASICS.markdown#specifics-of-numeric-literals-in-mindustry-logic), the expression isn't evaluated at compile time, but rather computed at runtime. If the resulting value can only be encoded to mlog with loss of precision, the expression isn't evaluated at compile time, unless the value is assigned to a constant or program parameter. In such a case, a warning is issued.   
+If the result of a constant expression is a value that [cannot be encoded into an mlog literal](SYNTAX-0-BASICS.markdown#specifics-of-numeric-literals-in-mindustry-logic), the expression isn't evaluated at compile time, but rather computed at runtime. If the resulting value can only be encoded to mlog with loss of precision, the expression isn't evaluated at compile time, unless the value is assigned to a constant or program parameter. In such a case, a warning is issued.
 
 When evaluating expressions, it isn't required that all the intermediate values can also be encoded to mlog, just the final ones:
 

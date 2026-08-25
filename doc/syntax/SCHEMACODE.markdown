@@ -86,8 +86,8 @@ The following attributes are recognized:
 * `dimensions`: specifies the dimensions of the schematic, given as `(width, height)`, where `width` and `height` are positive numbers. Can be specified at most once. When not specified, the dimensions are calculated from schematic definition. Must not be smaller than calculated dimensions when specified. (In the future, specifying dimensions different from calculated ones might serve some specific purpose.)
 * `tag`: assigns a tag to the schematic. The tag can be either a String value or a predefined icon (see [Icons](SYNTAX-1-VARIABLES.markdown#constants-representing-built-in-icons)). `tag` attribute can be specified more than once; all specified tags are attached to the schematic.
 * `target`: specifies the target of the schematic. The assigned value must match one of the [existing Mindustry versions](SYNTAX-5-OTHER.markdown#option-target). The target is also applied when compiling Mindcode assigned to processors (although it is possible to override the target within the Mindcode source code using the `#set target` directive). Can be specified at most once.
-* `mindcode`: specifies a snippet of Mindcode source code to be prepended to any Mindcode source code assigned to a processor in this schematic. The value of the attribute is String (a string text value, a string literal, or a text block). This attribute can be primarily used to specify compiler options for the entire schematics. 
-* `mlog`: like `mindcode`, specifies a snippet of mlog code to be prepended to any mlog code assigned to a processor in this schematic. The value of the attribute is String (a string text value, a string literal, or a text block). Note: if the specified code contains any actual mlog instructions, it may cause the code assigned to processors to become incorrect or invalid due to instruction addresses shifting.    
+* `mindcode`: specifies a snippet of Mindcode source code to be prepended to any Mindcode source code assigned to a processor in this schematic. The value of the attribute is String (a string text value, a string literal, or a text block). This attribute can be primarily used to specify compiler options for the entire schematics.
+* `mlog`: like `mindcode`, specifies a snippet of mlog code to be prepended to any mlog code assigned to a processor in this schematic. The value of the attribute is String (a string text value, a string literal, or a text block). Note: if the specified code contains any actual mlog instructions, it may cause the code assigned to processors to become incorrect or invalid due to instruction addresses shifting.
 
 # Region definition
 
@@ -119,7 +119,7 @@ Element placement places an element – a _block_, _named region_ or _anonymous 
 [labels] <element-type> [<placement-mode> [<element-position>]] [element-array-specification] [flip <axis>] [facing <direction>] [configuration]
 ```
 
-All clauses except the _element_ clause are optional. When present, the clauses must be arranged in the specified order. 
+All clauses except the _element_ clause are optional. When present, the clauses must be arranged in the specified order.
 
 ## Labels
 
@@ -141,7 +141,7 @@ Labels are useful for creating references to labeled blocks. As labels may be us
 Element labels may end with a `#` or `$` character, representing a _global array label_ or _local array label_ respectively. In this case, Schemacode generates unique label for each new block by replacing the `#` or `$` character with an index starting at `1`, in the order they're encountered in the definition file. Array labels may be specified multiple times in the definition file, each occurrence being replaced with a unique label. Global array labels use indexes unique within the entire schematic, while local array labels use indexes unique within the region they're defined in.
 
 > [!NOTE]
-> Global label arrays are resolved twice: once when resolving block labels, and once when resolving processor links and connections. On both occasions, the indexing starts at `1`. 
+> Global label arrays are resolved twice: once when resolving block labels, and once when resolving processor links and connections. On both occasions, the indexing starts at `1`.
 
 When used with an [element array](#element-arrays), names are generated from the label array for elements that do not have a regular label assigned. The array label may be used stand-alone or in conjunction with regular labels, but at most one label array can be used per element array.
 
@@ -498,7 +498,7 @@ All supported block types are listed below.
 
 ### Named regions
 
-A named region is specified using the region's name as defined by the region definition. It is always different from a Mindustry block, as it never starts with the `@` character.  
+A named region is specified using the region's name as defined by the region definition. It is always different from a Mindustry block, as it never starts with the `@` character.
 
 ### Anonymous regions
 
@@ -512,7 +512,7 @@ region [(<width>, <height>)]
 end
 ```
 
-Since anonymous regions can't be reused on another place in the schematic, they are usually used to define an element array. Alternatively, they might be used as a means to flip or rotate part of the schematic which was already written without having to rewrite the block coordinates manually.  
+Since anonymous regions can't be reused on another place in the schematic, they are usually used to define an element array. Alternatively, they might be used as a means to flip or rotate part of the schematic which was already written without having to rewrite the block coordinates manually.
 
 ## Placement mode
 
@@ -542,14 +542,14 @@ When a region containing empty tiles is placed in the replacement mode, the orig
 
 > [!TIP]
 > The replacement mode allows making changes to block arrays created with blocks or regions – for example, a factory constructed by repeating a region containing a basic unit may be customized on the input/output edges.
-> 
+>
 > The fill mode allows creating rectangular walls around compact regions, or filling empty areas in the schematic with filler blocks (such as batteries, solar panels, or walls).
-> 
+>
 > Using `fill` or `replace` when placing regions is questionable practice and should be avoided.
 
 ## Element position
 
-Element position can be specified as relative or absolute. When completely omitted, the position is assumed to be `(0, 0)`.  
+Element position can be specified as relative or absolute. When completely omitted, the position is assumed to be `(0, 0)`.
 
 The first element defined by the schematic must use an absolute position (or can omit the position, placing it at the schematic origin), but all following blocks can use absolute or relative positions. Relative position always relates to the previous block, as defined by the schematic.
 
@@ -567,7 +567,7 @@ It is also possible to specify a position relative to another block using this s
 label {+-} (x, y)
 ```
 
-In this case, the position is specified as an offset against the position of a block labeled with `label`. When no regions are used within the schematic, the label simply corresponds to the block's label. Blocks placed in regions may be referenced using a [fully or partially specified path](#referencing-blocks).   
+In this case, the position is specified as an offset against the position of a block labeled with `label`. When no regions are used within the schematic, the label simply corresponds to the block's label. Blocks placed in regions may be referenced using a [fully or partially specified path](#referencing-blocks).
 
 All three ways of specifying an element position can be seen in this example:
 
@@ -577,7 +577,7 @@ schematic
 message1:
   @message at (1, 0)                      // Places block at (1, 0)
 switch1:
-  @switch at +(1, 0)                      // Places block at (2, 0)              
+  @switch at +(1, 0)                      // Places block at (2, 0)
   @micro-processor at switch1 - (2, 0)    // Places block at (0, 0)
 end
 ```
@@ -701,7 +701,7 @@ One or more labels, including array labels, can be specified for a block array. 
 If the labels include at least one array label, the last such label in the list is repeated a number of times needed to assign a label to each block in the array. If the last label in the list is a regular label, it will always be assigned to the last block in the array. Example:
 
 ```
-up, down, size$, volume$, left, right: @switch at (0, 8) * (1, -8) 
+up, down, size$, volume$, left, right: @switch at (0, 8) * (1, -8)
 ```
 
 This will create an array of eight switches in the top-down order and assign them the following symbolic labels:
@@ -722,7 +722,7 @@ Note: the literal link names assigned to the symbolic link names depend on the o
 Transposition allows flipping elements horizontally or vertically, while rotation allows rotating elements by 90, 180, or 270 degrees.
 
 > [!IMPORTANT]
-> Transposition is always applied before rotation. 
+> Transposition is always applied before rotation.
 >
 > When rotation is applied to a region array, the region is rotated before the array is built.
 
@@ -736,7 +736,7 @@ flip <horizontal|vertical>
 
 `horizontal` flips the element horizontally, `vertical` flips the element vertically. Transposing the element along both axes is not supported (such a transposition would be identical to rotating the element by 180 degrees, i.e., to the `west`).
 
-Transposition has a limited effect on blocks but may be more useful with regions. 
+Transposition has a limited effect on blocks but may be more useful with regions.
 
 Each block in the schematic has an orientation, although specific orientation affects only some types of blocks (such as conveyors or unit factories). Orientation can take four values - `east`, `west`, `north` or `south` - and is specified using this syntax:
 
@@ -1020,14 +1020,14 @@ Processor configuration is the most complex one. It can specify both the code em
         links
             <link specifications>
         end
-        
+
         mlog = <mlog code>
         mindcode = <mindcode>
-        
+
         param
             <code parametrization>
-        end    
-    end 
+        end
+    end
 ```
 
 The following block types can have processor configuration specified:
@@ -1039,13 +1039,13 @@ The following block types can have processor configuration specified:
 
 ### Processor links
 
-Processor links are specified in the `links` section. All linked blocks or tiles must lie within the processor's range. 
+Processor links are specified in the `links` section. All linked blocks or tiles must lie within the processor's range.
 
 There are several ways to specify blocks linked to the processor.
 
 #### Linking by block references
 
-By specifying a block reference, it is possible to link to the processor multiple blocks at once. The syntax for specifying block references is: 
+By specifying a block reference, it is possible to link to the processor multiple blocks at once. The syntax for specifying block references is:
 
 ```
     links
@@ -1093,7 +1093,7 @@ schematic
     end
     p1-message1:            @message at +(1, 0)
     p1-switch1, p2-switch1: @switch  at +(1, 0)
-    
+
     @micro-processor at (0, 1) processor
         links p2-* end
         mlog = ""
@@ -1111,10 +1111,10 @@ It is also possible to specify linked blocks by their positions. In this case, a
 ```
 schematic
     @micro-processor at (0, 0) processor
-        links 
+        links
              (1, 0) as switch1
             +(2, 0) as message4 virtual
-            +(3, 0) as message1    
+            +(3, 0) as message1
         end
         mlog = ""
     end
@@ -1138,7 +1138,7 @@ schematic
             p-*
             message1
             (4, 0) as cell1
-            (2, 0) as cell2 virtual    
+            (2, 0) as cell2 virtual
         end
         mlog = ""
     end
@@ -1155,7 +1155,7 @@ schematic
     @switch          at (0, 1) * (8, 1)
     @micro-processor at (0, 0) * (8, 1) processor
         links
-            +(0, 1) as switch1 
+            +(0, 1) as switch1
         end
     end
 end
@@ -1170,8 +1170,8 @@ A symbolic link name corresponding to each linked block must be declared in the 
 ```
 schematic
     @micro-processor at (0, 0) processor
-        links 
-            onOff                     // linked using symbolic link name "onOff"       
+        links
+            onOff                     // linked using symbolic link name "onOff"
             a-mainMessage             // linked using symbolic link name "mainMessage", prefix stripped
             a-status as statusMessage // linked using symbolic link name "statusMessage"
         end
@@ -1185,7 +1185,7 @@ end
 code = """
     linked(@switch) onOff;
     linked(@message) mainMessage, statusMessage;
-    
+
     print("Symbolic link demo"); printflush(mainMessage);
     print("The status is " + onOff.@enabled ? "on" : "off"); printflush(statusMessage);
     """
@@ -1332,7 +1332,7 @@ For each parameter-value pair, the following processing is performed:
 - If such an instruction is not found, an error is generated.
 - If the mlog code comes from a Mindcode compiler, it is further required that the name of the parameter matches one of the parameters declared in the program.
 - No reformatting is applied to the value of the parameters. When using numeric literals, care must be taken for the literals to match the format accepted by mlog (`1.5e3`, for example, isn't accepted, but `15e2` is).
-- Any mlog-compatible token can be used as a parameter name or value; only string literals are not allowed as parameter names. 
+- Any mlog-compatible token can be used as a parameter name or value; only string literals are not allowed as parameter names.
 
 Example:
 
@@ -1391,7 +1391,7 @@ When regions are used within the schematic, the situation is more complex. Simpl
 schematic
     region
         il: @illuminator
-        @power-node at +(3, 0) connected to il 
+        @power-node at +(3, 0) connected to il
     end at (0, 0) * (1, 3)
 end
 ```
@@ -1406,10 +1406,10 @@ schematic
         il: @illuminator at (1, 1)
         @copper-wall fill (0, 0) * (3, 3)
     end
-    
+
     A: REG at (0, 0)
     B: REG at (0, 3)
-    
+
     @power-node at A.il + (5, 0) connected to B.il
     @power-node at B.il + (5, 0) connected to A.il
 end
@@ -1419,7 +1419,7 @@ The same principle can be used to refer to block enclosed in several nested regi
 
 > [!NOTE]
 > Only region labels can be used to refer to regions. Names of named regions are not recognized.
- 
+
 ## Referencing multiple blocks
 
 Sometimes it is necessary to specify multiple blocks at once (for example, when linking blocks to power nodes or processors). To do so, it is possible to use the `*` wildcard in the names of region or blocks labels. The `*` wildcard matches any number of characters, including none at all:
@@ -1430,10 +1430,10 @@ schematic
         il: @illuminator at (1, 1)
         @copper-wall fill (0, 0) * (3, 3)
     end
-    
+
     A$: REG at (0, 0) * (1, 4)          // Creates regions A1, A2, A3, A4
     B$: REG at (3, 0) * (1, 4)          // Creates regions B1, B2, B3, B4
-    
+
     @power-node-large at (8, 5) connected to A*.il
 end
 ```
@@ -1457,7 +1457,7 @@ schematic
 end
 ```
 
-Here, the power node is connected to all illuminators, as all regions are matched by `*`, but not to incinerators. To refer to an unlabeled block, the block position must be used. 
+Here, the power node is connected to all illuminators, as all regions are matched by `*`, but not to incinerators. To refer to an unlabeled block, the block position must be used.
 
 It is also possible to use `**` as a region or block label wildcard:
 

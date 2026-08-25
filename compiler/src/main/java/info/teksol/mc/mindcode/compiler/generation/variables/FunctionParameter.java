@@ -10,4 +10,6 @@ public interface FunctionParameter extends ValueStore {
     boolean isInput();
 
     boolean isOutput();
+
+    boolean isConstant();
 }

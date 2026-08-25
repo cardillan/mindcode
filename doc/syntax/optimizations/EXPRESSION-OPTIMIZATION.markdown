@@ -41,7 +41,7 @@ Whether the optimization will be applied or not depends on the value of the [`bu
 
 Several optimizations are available for the `op` instruction.
 
-### Known value of an operand 
+### Known value of an operand
 
 In some cases, the operation result doesn't depend on the other operand (a multiplication by zero is always zero regardless of the other operand). In other cases, the result is equal to the other operand (a multiplication by one or a subtraction of zero). All the performed replacements are listed in this table:
 
@@ -93,7 +93,7 @@ op or *tmp0 :a :b
 op notEqual .x *tmp0 false
 ```
 
-This additional instruction can be removed in either of the following cases: 
+This additional instruction can be removed in either of the following cases:
 
 * the output of `||` is used in a context where any nonzero value can be used to represent `true` (i.e., any other boolean/logical operator, or a condition comparing the result to `0` or `false`),
 * both inputs of `||` are guaranteed to be 0 or 1.
@@ -134,7 +134,7 @@ select .z notEqual *tmp3 false "yes" "no"
 In some cases, an expression consisting of several instructions can be simplified to use fewer instructions, while producing identical results.
 
 * The `op floor` instruction (or the `op idiv output input 1` instruction, which has the same effect) applied to a result of a multiplication or a division by a constant: the optimization combines the two operations into one integer division (`idiv`) operation. In the case of multiplication, the constant operand is inverted to become the divisor in the `idiv` operation.
-* When the `op round` instruction is available, a sequence of `op add` and `op floor` instructions (as in `floor(x + 0.5)`) is replaced with the `op round` instruction (as in `round(x)`). 
+* When the `op round` instruction is available, a sequence of `op add` and `op floor` instructions (as in `floor(x + 0.5)`) is replaced with the `op round` instruction (as in `round(x)`).
 
 ## The `packcolor` instruction
 
@@ -146,12 +146,12 @@ The `readarr`/`writearr` instruction is a virtual instruction which represents i
 
 ## The `read`/`write` instructions
 
-When the `read` instruction accesses a character in a constant string at a constant index, the instruction is replaced by a `set` instruction setting the character value directly. 
+When the `read` instruction accesses a character in a constant string at a constant index, the instruction is replaced by a `set` instruction setting the character value directly.
 
 The `read` and `write` instructions accessing variables in current processor using a constant name are replaced with a `set` instruction accessing the processor variable directly.
 
 > [!IMPORTANT]
-> This optimization causes the creation of the corresponding processor variable, as it includes its name in the `set` instruction. Since the `read` and `write` instructions' behavior depends on whether the target variable exists in the processor or not, this optimization may alter the behavior of the program. For this reason, this optimization is only performed on `advanced` level.       
+> This optimization causes the creation of the corresponding processor variable, as it includes its name in the `set` instruction. Since the `read` and `write` instructions' behavior depends on whether the target variable exists in the processor or not, this optimization may alter the behavior of the program. For this reason, this optimization is only performed on `advanced` level.
 
 Example:
 
@@ -183,8 +183,8 @@ This program outputs `1null`. Since the name of variable `y` is not a compile-ti
 Several optimizations are applied to the `select` instruction:
 
 * `select` instruction with a constant condition is replaced by a `set` instruction assigning the resulting value determined by the condition to the target variable. Note that in cases where the condition has identical operands, its value is also constant (see [above](#binary-operation-on-identical-operands)).
-* `select` instruction with identical true and false values is replaced by a `set` instruction assigning the true value to the target variable, as the resulting value doesn't depend on the condition. 
-* `select` instruction with true/false values of `1`/`0` or `0`/`1` is replaced by an `op` instruction with the same condition (this is done not just for better readability/shorter code, but also to allow further optimizations involving the created `op` instruction). If the true value is equal to zero, the condition is inverted to produce the correct result. The optimization doesn't happen for the `strictEqual` conditions in that case, as it can't be inverted. 
+* `select` instruction with identical true and false values is replaced by a `set` instruction assigning the true value to the target variable, as the resulting value doesn't depend on the condition.
+* `select` instruction with true/false values of `1`/`0` or `0`/`1` is replaced by an `op` instruction with the same condition (this is done not just for better readability/shorter code, but also to allow further optimizations involving the created `op` instruction). If the true value is equal to zero, the condition is inverted to produce the correct result. The optimization doesn't happen for the `strictEqual` conditions in that case, as it can't be inverted.
 
 ## The `sensor` instruction
 

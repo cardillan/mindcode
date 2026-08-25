@@ -3,7 +3,7 @@
 In Mindustry 8, the logic system has been significantly extended, allowing close cooperation between multiple processors. Mindcode provides access to these new functionalities in the following ways:
 
 * [Remote functions and variables](#remote-functions-and-variables): a function or a variable declared in a remote module can be accessed from a different processor which uses the remote module. Remote functions and variables are fully supported by the Mindcode's syntax; calling a remote function, or accessing a remote variable, is possible using the usual syntax for method calls and variables. Asynchronous calls, resulting in parallel execution of code on different processors, are also supported.
-* [Arbitrary access to remote variables](#arbitrary-access-to-remote-variables): Mindcode provides a way to access arbitrary variables in remote processors, possibly interfacing with code that wasn't created by Mindcode. 
+* [Arbitrary access to remote variables](#arbitrary-access-to-remote-variables): Mindcode provides a way to access arbitrary variables in remote processors, possibly interfacing with code that wasn't created by Mindcode.
 * [Atomic code execution](#atomic-code-execution): atomic code execution guarantees that a section of code will be fully processed during a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including other processor variables, contents of memory banks or cells, or unit and block states.
 
 # Remote functions and variables
@@ -33,7 +33,7 @@ During compilation, a CRC64 value, based on all exported function declarations, 
 
 A remote processor is successfully initialized only when the signature stored in the remote processor matches the signature expected by its main processor. This ensures that the remote code won't be called if it is not compatible with the main processor. The signature changes when any function's signature is altered, or exported functions are added or removed from the module. In this case the code in the processor that binds to the remote processor needs to be recompiled too. Similarly, if a new Mindcode version which uses a different remote call protocol is used to recompile some processor's code, all processors related to the altered one through the remote call mechanism need to be recompiled too.
 
-Exported variables and arrays are not included in module signatures. If a variable used by the main processor gets removed from the remote module, and the remote processor's code is updated with the new code, access to the exported variable from the main processor will be broken (writes to the removed variable will be ignored, while reads from the removed variable will always return `null`).    
+Exported variables and arrays are not included in module signatures. If a variable used by the main processor gets removed from the remote module, and the remote processor's code is updated with the new code, access to the exported variable from the main processor will be broken (writes to the removed variable will be ignored, while reads from the removed variable will always return `null`).
 
 ## Remote processors code
 
@@ -74,7 +74,7 @@ export def foo(x, y, out z)
 end;
 ```
 
-Function parameters may be input or output (as usual). An exported function is never inlined and can be declared neither `inline` nor `noinline`. Varags and `ref` parameters aren't supported. Exported functions cannot be overloaded, although it is possible to overload an exported function with non-exported ones. Exported functions must not be recursive, but otherwise can be directly called by other functions in the same module, with only a very slight overhead over the standard out-of-line function call.
+Function parameters may be input or output (as usual). An exported function is never inlined and can be declared neither `inline` nor `noinline`. Varags, `ref` and `const` parameters aren't supported. Exported functions cannot be overloaded, although it is possible to overload an exported function with non-exported ones. Exported functions must not be recursive, but otherwise can be directly called by other functions in the same module, with only a very slight overhead over the standard out-of-line function call.
 
 All exported functions are active entry points for the compiler and thus are always included in the compiled code.
 
@@ -240,14 +240,14 @@ This call functions waits for `foo` completion, and then returns its return valu
 A processor containing the remote code can also be located dynamically. In this case, the `remote` clause in the `require` directive contains a variable, not a linked block reference.
 
 > [!NOTE]
-> Variable which holds the reference to a dynamically bound processor needs to be global. The best way to ensure this is to declare the variable before the `require` clause, which works in both strict and relaxed syntax modes. It is possible to use an implicitly declared global variable in relaxed syntax mode, in which case the variable needs to be named in the upper case. The recommended solution is to explicitly declare the variable regardless of the syntax mode.   
+> Variable which holds the reference to a dynamically bound processor needs to be global. The best way to ensure this is to declare the variable before the `require` clause, which works in both strict and relaxed syntax modes. It is possible to use an implicitly declared global variable in relaxed syntax mode, in which case the variable needs to be named in the upper case. The recommended solution is to explicitly declare the variable regardless of the syntax mode.
 
 ```
 var proc;
  remote(proc) require "remote.mnd";
 ```
 
-The compiler doesn't automatically generate code to verify the module signature for dynamically bound processors. It is possible to verify the signature using a `verifySignature()` built-in function. This function takes a processor as an argument, and returns `true` if the processor contains the expected module code.  
+The compiler doesn't automatically generate code to verify the module signature for dynamically bound processors. It is possible to verify the signature using a `verifySignature()` built-in function. This function takes a processor as an argument, and returns `true` if the processor contains the expected module code.
 
 ```
 for var i in 0 ... @links do
@@ -262,7 +262,7 @@ Using `verifySignature` ensures it is safe to call a remote function in the give
 
 * the block being inspected is not a processor,
 * the processor doesn't contain code corresponding to the remote module, or the code is not compatible with an expected version (module signatures differ),
-* the processor contains the correct remote module code, but the initialization hasn't completed yet. 
+* the processor contains the correct remote module code, but the initialization hasn't completed yet.
 
 It is possible to use several variables in the `remote` clause, in which case the remote module can be accessed though any of them. Mindcode doesn't make any assumptions about the identity of these processors (particularly whether they point to the same processor or not).
 
@@ -353,7 +353,7 @@ Code in a remote processor accrues execution quota when waiting for a remote cal
 
 Note: the execution quota only increases when `wait` instruction are being executed. If there is a background process defined, no execution quota accrues while it is being run (unless the background process itself contains some `wait` instructions).
 
-## Local calls to exported functions 
+## Local calls to exported functions
 
 Exported function may be also called locally. Doing so incurs a slight penalty to remote calls of the function (one additional instruction per remote call). However, exported functions cannot be called recursively (either directly or indirectly).
 
@@ -376,8 +376,8 @@ print *tmp0
 write @coal processor2 "bar"
 ```
 
-> [!NOTE] 
-> The variable names need to be specified as they appear in mlog. To access Mindcode variables, the `remote` and `export` variable declarations are preferred, as it automatically uses the mlog variable name generated by Mindcode.     
+> [!NOTE]
+> The variable names need to be specified as they appear in mlog. To access Mindcode variables, the `remote` and `export` variable declarations are preferred, as it automatically uses the mlog variable name generated by Mindcode.
 
 ## Explicitly declared remote variables
 
@@ -402,11 +402,11 @@ The following restrictions apply to remote variables declared with storage speci
 #set remarks = comments;
 
 /// Remote variables named using Mindcode's naming convention
-remote(processor1) x, y;         
+remote(processor1) x, y;
 print(x, y);
 
 /// Remote variable named using the specified name
-remote(processor1) mlog("foo") z;       
+remote(processor1) mlog("foo") z;
 print(z);
 ```
 
@@ -426,14 +426,14 @@ print *tmp2
 # Atomic code execution
 
 > [!IMPORTANT]
-> Atomic code execution is only supported for targets 8.1 or higher and requires Mindustry Beta 155 or later for proper functioning.    
+> Atomic code execution is only supported for targets 8.1 or higher and requires Mindustry Beta 155 or later for proper functioning.
 
 Atomic code execution ensures that a section of code will execute in a single frame update. This means that no other processor may meanwhile modify the state of the Mindustry world, including processor variables, contents of memory banks or cells, or unit and building states. This guarantee is valid universally, regardless of the actual FPS rate of the game.
 
 Mindcode uses the following mechanism to make sure a section of code will be executed atomically: the maximum possible number of steps required to execute the section is calculated, and a `wait` instruction is inserted at the beginning of the section with a duration which guarantees that enough instruction quota will accumulate during the wait. This ensures that the longest code path gets executed in a single frame on the next update.
 
 > [!NOTE]
-> The atomic code execution mechanism is guaranteed to work properly under different FPS rates, after map reloads, and generally under any condition that may arise in the game, except hyper-processors with insufficient cryofluid. 
+> The atomic code execution mechanism is guaranteed to work properly under different FPS rates, after map reloads, and generally under any condition that may arise in the game, except hyper-processors with insufficient cryofluid.
 
 ## Atomic sections
 
@@ -445,7 +445,7 @@ Mindcode provides the following constructs for creating atomic sections:
 
 The following constructs must not be contained (directly or indirectly) in an atomic section of code:
 
-* a call to an out-of-line, non-atomic function containing another atomic section,  
+* a call to an out-of-line, non-atomic function containing another atomic section,
 * a `wait` instruction (this also precludes synchronous remote function calls and waiting for the result of an asynchronous remote call),
 * a `setrate` instruction,
 * a recursive function call,
@@ -486,7 +486,7 @@ write *tmp0 :cell 0                     # The last atomic section instruction
 write *tmp1 cell1 1
 ```
 
-As seen in the above example, instructions needed to store the result aren't part of the atomic section.    
+As seen in the above example, instructions needed to store the result aren't part of the atomic section.
 
 ### Atomic functions
 
@@ -512,7 +512,7 @@ print *tmp1
 
 > [!TIP]
 > Inline atomic functions guarantee that access to the arguments passed by reference is protected by the atomic section, but other arguments aren't. Example:
- 
+
 ```Mindcode
 external(cell1[0]) x;
 external(cell1[1]) y;
@@ -525,7 +525,7 @@ end;
 foo(ref x, in out y);
 ```
 
-As can be seen, access to `x` (stored in `cell1[0]`) is part of the atomic section, but access to `y` (stored in `cell1[1]`) isn't: 
+As can be seen, access to `x` (stored in `cell1[0]`) is part of the atomic section, but access to `y` (stored in `cell1[1]`) isn't:
 
 ```mlog
 read :foo:b cell1 1
@@ -556,11 +556,11 @@ Notes:
 Use the [`target` compiler option](SYNTAX-5-OTHER.markdown#option-target) to inform the compiler about the type of the processor that will be used. When the source code is being compiled as part of building a schematic, the actual type of the processor is determined by the schematic definition.
 
 > [!NOTE]
-> When the `target` compiler option doesn't specify a processor type, Mindcode generates code for a non-processor environment (e.g., code to be run by a Map Objective). This code is run all at once, without any time delays, and atomic sections are not supported.  
+> When the `target` compiler option doesn't specify a processor type, Mindcode generates code for a non-processor environment (e.g., code to be run by a Map Objective). This code is run all at once, without any time delays, and atomic sections are not supported.
 
 > [!WARNING]
 > Running the compiled code on a processor slower than the compilation target or the declared IPT rate will cause the atomic sections not to be executed atomically. This is true even when the code section is short, because at frame rates higher than 60 FPS instructions are executed in bursts shorter than the processor's IPT. Mindcode computes the wait duration to exactly cover the execution time of the atomic section, which means there isn't any margin to accommodate slower processor speeds.
-> 
+>
 > Running the code on a faster or overdriven processor preserves the atomicity of atomic sections, but may result in degraded performance.
 
 If you really don't know what kind of processor your code will be running on, using the micro-processor as a target (which is also the default) is the safest option.
@@ -581,7 +581,7 @@ By default, the atomic section does not protect instructions which cannot be aff
 * The instruction doesn't have a volatile avariable as an operand (while `@counter` is technically volatile, it is allowed).
 * The instruction is not a custom instruction (created in an mlog block on using one of `mlog()`, `mlogSafe()` or `mlogText()` functions).
 
-When computing the wait duration, the compiler doesn't consider unprotected instructions at the end of the execution path. Only the steps leading up to and including the last protected instruction are counted. The goal is not to protect instructions such as unconditional jumps or instructions performing returns from functions. Not protecting these instructions may allow for longer atomic sections than would be otherwise possible, especially on microprocessors. 
+When computing the wait duration, the compiler doesn't consider unprotected instructions at the end of the execution path. Only the steps leading up to and including the last protected instruction are counted. The goal is not to protect instructions such as unconditional jumps or instructions performing returns from functions. Not protecting these instructions may allow for longer atomic sections than would be otherwise possible, especially on microprocessors.
 
 It is possible to activate protection for all instructions by setting the [`atomic-full-protection`](SYNTAX-5-OTHER.markdown#option-atomic-full-protection) compiler option to `true`.
 
@@ -591,9 +591,9 @@ Consecutive atomic sections may be merged into a single section, resulting in ju
 
 It is not required for the atomic section to immediately follow the previous one to be eligible for merging. Therefore, a merged section may also contain instructions that are surrounded by atomic sections without being included in them, or atomic sections which are only executed conditionally.
 
-Merging is possible when the last encountered section is known to be always executed before the next section, and all possible code paths leading from the first section to the next section are atomic-compatible. Stackless function calls inside or between two atomic sections also preclude these sections from being merged, even though a stackless function call inside an atomic section is supported when it is atomic-compatible. This limitation includes uninlined access to internal arrays implemented as `@counter` tables. 
+Merging is possible when the last encountered section is known to be always executed before the next section, and all possible code paths leading from the first section to the next section are atomic-compatible. Stackless function calls inside or between two atomic sections also preclude these sections from being merged, even though a stackless function call inside an atomic section is supported when it is atomic-compatible. This limitation includes uninlined access to internal arrays implemented as `@counter` tables.
 
-The `atomic-merge-level` compiler option specifies the limit for merging atomic sections (expressed in ticks). The default value is one tick. When multiple possibilities to merge additional sections exist (e.g., one, two, or three ticks long), the one that has the least amount of instruction quota potentially unused in the final tick of the merged section is chosen.  
+The `atomic-merge-level` compiler option specifies the limit for merging atomic sections (expressed in ticks). The default value is one tick. When multiple possibilities to merge additional sections exist (e.g., one, two, or three ticks long), the one that has the least amount of instruction quota potentially unused in the final tick of the merged section is chosen.
 
 ```Mindcode
 #set target = 8l;
@@ -604,7 +604,7 @@ end;
 ```
 
 > [!NOTE]
-> Atomic section may be merged with a previous one even when it is executed conditionally. When setting the `atomic-merge-level` option to a value greater than one, the final merged section may execute a `wait` several ticks longer than the actual duration of the atomic section due to the execution of the merged section(s) being skipped. Consider this possbility and the consequences for instruction scheduling when setting the `atomic-merge-level` option to a value greater than one.  
+> Atomic section may be merged with a previous one even when it is executed conditionally. When setting the `atomic-merge-level` option to a value greater than one, the final merged section may execute a `wait` several ticks longer than the actual duration of the atomic section due to the execution of the merged section(s) being skipped. Consider this possbility and the consequences for instruction scheduling when setting the `atomic-merge-level` option to a value greater than one.
 
 ## Example
 
@@ -612,8 +612,8 @@ The following code assigns each processor a different value, using a memory cell
 
 ```Mindcode
 // Using a microprocessor
-#set target = 8m;      
-#set symbolic-labels = true;    
+#set target = 8m;
+#set symbolic-labels = true;
 
 // Make sure the cell is linked up before proceeding
 guarded linked cell1;

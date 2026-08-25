@@ -46,15 +46,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         AstRequireLibraryVisitor<ValueStore>,
         AstVariablesDeclarationVisitor<ValueStore> {
 
-    private static final Set<ArgumentType> constantExpressionTypes = Set.of(
-            NULL_LITERAL,
-            BOOLEAN_LITERAL,
-            COLOR_LITERAL,
-            NAMED_COLOR_LITERAL,
-            NUMERIC_LITERAL,
-            STRING_LITERAL,
-            BLOCK);
-
     private static final Set<ArgumentType> blockExpressionTypes = Set.of(
             GLOBAL_VARIABLE,
             PROGRAM_PARAMETER,
@@ -192,14 +183,14 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             error(node, ERR.LITERAL_NO_VALID_REPRESENTATION_PARAM,
                     node.getParameterName(), value.getLiteral());
             parameterValue = LogicNull.NULL;
-        } else if (valueStore instanceof LogicValue value && isNonvolatileConstant(value)) {
+        } else if (valueStore instanceof LogicValue value && value.isConstantValue()) {
             parameterValue = value;
         } else {
             error(node.getValue(), ERR.EXPRESSION_NOT_CONSTANT_PARAM, node.getParameterName());
             parameterValue = LogicNull.NULL;
         }
 
-        ValueStore parameter = variables.createParameter(node, parameterValue);
+        ValueStore parameter = variables.createProgramParameter(node, parameterValue);
         parameter.setValue(assembler, parameterValue);
 
         variables.removeUnresolvedGlobal(node.getParameterName());
@@ -419,7 +410,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         }
     }
 
-    private List<ValueStore> processInitialValuesConst(AstVariableSpecification specification) {
+    private List<ValueStore> processInitialArrayValuesConst(AstVariableSpecification specification) {
         if (specification.getExpressions().isEmpty()) {
             error(specification, ERR.ARRAY_CONST_NOT_INITIALIZED);
             return List.of();
@@ -431,7 +422,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         return specification.getExpressions().stream()
                 .map(node -> {
                     ValueStore value = processInLocalScope(() -> evaluate(node));
-                    if (value instanceof LogicValue val && isNonvolatileConstant(val)) {
+                    if (value.isConstantValue() && value.isMlogRepresentable()) {
                         return value;
                     } else {
                         error(node, ERR.ARRAY_CONST_NOT_CONSTANT);
@@ -458,7 +449,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         List<ValueStore> initialValues =
                 remoteDeclaration ? Collections.nCopies(specification.getExpressions().size(), LogicVariable.INVALID)
                         : modifiers.getMain() == LINKED ? processInitialValuesLinked(specification, modifiers)
-                        : modifiers.getMain() == CONST ? processInitialValuesConst(specification)
+                        : modifiers.getMain() == CONST ? processInitialArrayValuesConst(specification)
                         : processInitialValuesExpr(specification);
 
         int arraySize;
@@ -563,9 +554,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             ValueStore valueStore = processInLocalScope(() -> evaluate(expression));
 
             if (modifiers.contains(CONST)) {
-                if (valueStore instanceof LogicValue value && isNonvolatileConstant(value)
-                        || valueStore instanceof FormattableContent
-                        || valueStore instanceof LogicKeyword) {
+                if (valueStore.isConstantValue()) {
                     variables.createConstant(specification, valueStore);
                 } else {
                     error(expression, ERR.EXPRESSION_NOT_CONSTANT_CONST, specification.getName());
@@ -828,12 +817,6 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
             }
         }
         return defaultValue;
-    }
-
-    private boolean isNonvolatileConstant(LogicValue value) {
-        return value instanceof LogicBuiltIn builtIn
-                ? builtIn.getMutability() == ValueMutability.CONSTANT || builtIn.getMutability() == ValueMutability.IMMUTABLE
-                : constantExpressionTypes.contains(value.getType()) && !value.isVolatile();
     }
 
     private record Allocation(LogicVariable memory, int start, int end) {

@@ -13,7 +13,7 @@ Mindcode offers these options to extend its basic syntax:
 * [declaring new linked block names](#declaring-new-linked-block-names),
 * [declaring new color names](#declaring-new-color-names),
 * [defining new mlog instructions](#defining-new-mlog-instructions),
-* [embedding blocks of mlog code](#mlog-blocks). 
+* [embedding blocks of mlog code](#mlog-blocks).
 
 ## Declaring new mlog keywords
 
@@ -49,7 +49,7 @@ var x, y;
 var building = ulocate(:building, :conveyor, false, out x, out y);
 print($"Found $building at $x, $y.");
 ```
-  
+
 ```mlog
 ulocate building conveyor false @copper .x .y 0 .building
 print "Found {0} at {0}, {0}."
@@ -130,15 +130,15 @@ Mindcode provides a mechanism of encoding entire instructions not known to Mindc
 
 Custom instructions are created using one of these functions:
 
-* `mlog()`: creates a standard instruction. Mindcode assumes the instruction has some effect on the Mindustry world and will not remove the instruction during optimizations.  
-* `mlogSafe()`: creates an instruction which doesn't affect the Mindustry world (for example, `set`, `packcolor` or `sensor` are such instructions). Mindcode may remove the instruction if the value or values it produces are not used by the rest of the program.   
+* `mlog()`: creates a standard instruction. Mindcode assumes the instruction has some effect on the Mindustry world and will not remove the instruction during optimizations.
+* `mlogSafe()`: creates an instruction which doesn't affect the Mindustry world (for example, `set`, `packcolor` or `sensor` are such instructions). Mindcode may remove the instruction if the value or values it produces are not used by the rest of the program.
 * `mlogText()`: creates an instruction which manipulates the text buffer. Mindcode never removes the instruction, and furthermore, handles it correctly during Print Merging optimizations.
 
 Each of these functions takes the following arguments:
 
 * The first argument to the function needs to be a string literal. This literal is the instruction code.
 * All other arguments must be either keywords, literals, or user variables.
-  * Keyword: the keyword is used as an instruction argument (the Mindcode specific `:` prefix is stripped before writing it to mlog). No `in` or `out` modifiers may be used. 
+  * Keyword: the keyword is used as an instruction argument (the Mindcode specific `:` prefix is stripped before writing it to mlog). No `in` or `out` modifiers may be used.
   * String literal: the text represented by the string literal is used as an instruction argument.
     * Without any modifier, a string literal can be used to encode keywords containing characters illegal in Mindcode keywords.
     * When the `in` modifier is used, the string literal will be used as an argument including the enclosing double quotes.
@@ -149,12 +149,12 @@ Each of these functions takes the following arguments:
     * `in out`: the argument represents an input/output value—the instruction reads the input value, and/or updates the variable with a new value. With a possible exception to the `sync` instruction, no mlog instruction currently takes an input/output argument.
 
 > [!TIP]
-> Keywords can be encoded either using the Mindcode keyword syntax (e.g., `:keyword`), or as a string literal (`"keyword"`). Only if the keyword contains characters unsupported by Mindcode syntax, it can only be encoded as a string literal (e.g., `"unsupported:keyword"`). This is the only way to encode such a keyword to mlog, apart from mlog blocks.  
+> Keywords can be encoded either using the Mindcode keyword syntax (e.g., `:keyword`), or as a string literal (`"keyword"`). Only if the keyword contains characters unsupported by Mindcode syntax, it can only be encoded as a string literal (e.g., `"unsupported:keyword"`). This is the only way to encode such a keyword to mlog, apart from mlog blocks.
 
 > [!TIP]
 > Although not strictly required, it is recommended to create an inline function with proper input/output parameters for each custom-generated instruction. This way, the requirement that the `mlog()` functions always use user variables as arguments can be easily met, while allowing to use expressions for input parameters in the call to the enclosing function—see the examples below. It is also possible to use keywords as function arguments to inline functions, making this approach suitable even for instructions taking keywords as arguments.
- 
-For better understanding, the creation of custom instructions will be demonstrated on existing instructions. 
+
+For better understanding, the creation of custom instructions will be demonstrated on existing instructions.
 
 ### The `format` instruction
 
@@ -209,7 +209,7 @@ Considerations:
 
 * The instruction created in this example corresponds to the `draw print` instruction compatible with Mindustry 149 Beta. Later releases use different way to specify alignment (i.e., by using built-in constants instead of keywords).
 * The `draw print` instruction manipulates the text buffer, so the `mlogText()` function is used.
-* The function expects a keyword as an argument. It is possible to create custom instructions expecting several keywords this way. However, Mindcode is unable to enforce that the keywords are passed as arguments at the right places.  
+* The function expects a keyword as an argument. It is possible to create custom instructions expecting several keywords this way. However, Mindcode is unable to enforce that the keywords are passed as arguments at the right places.
 
 ### The `ucontrol getBlock` instruction
 
@@ -257,11 +257,11 @@ printflush message1
 
 ## Mlog blocks
 
-Mindcode supports embedding larger pieces of mlog code, potentially containing complex logic, through _mlog blocks_. An mlog block may contain any mlog instructions, including instructions unknown to Mindcode, and is compiled mostly as-is into the final code. Mindcode variables can be accessed from an mlog block, allowing it to interact with the rest of the code. Mlog code inside an mlog block has syntax mostly similar to pure mlog, although Mindcode provides some features and imposes some restrictions not present in pure mlog.              
+Mindcode supports embedding larger pieces of mlog code, potentially containing complex logic, through _mlog blocks_. An mlog block may contain any mlog instructions, including instructions unknown to Mindcode, and is compiled mostly as-is into the final code. Mindcode variables can be accessed from an mlog block, allowing it to interact with the rest of the code. Mlog code inside an mlog block has syntax mostly similar to pure mlog, although Mindcode provides some features and imposes some restrictions not present in pure mlog.
 
 ### Mlog block declaration
 
-An mlog block represents executable code and may be placed wherever normal Mindcode code can be placed. The block may access Mindcode variables which are declared in the mlog block header:  
+An mlog block represents executable code and may be placed wherever normal Mindcode code can be placed. The block may access Mindcode variables which are declared in the mlog block header:
 
 ```
 mlog (in input, out output, in out inputOutput) {
@@ -274,13 +274,13 @@ The variable declaration is similar to the declaration of function parameters, b
 Variables declared with the `in` keyword may be read by the mlog block instructions (the `in` keyword may be omitted). Variables declared with the `out` keyword are expected to be written to by the mlog block, and variables declared `in out` may be both read and written.
 
 > [!IMPORTANT]
-> Correct declaration of the input and output variables is essential for proper handling of these variables outside the mlog block by various optimizations. 
+> Correct declaration of the input and output variables is essential for proper handling of these variables outside the mlog block by various optimizations.
 
 When no input or output variables are declared for the mlog block, the parentheses may be left empty or omitted altogether.
 
 ### Mlog block syntax
 
-The mlog code is placed within the curly braces. The code consists of labels and instructions. Individual instructions and labels must be separated by newlines or semicolons. 
+The mlog code is placed within the curly braces. The code consists of labels and instructions. Individual instructions and labels must be separated by newlines or semicolons.
 
 A label consists of a single token, which must start with a letter and may contain alphanumerical characters and ends with a colon. A label name must be different from the names of declared input/output variables.
 
@@ -290,10 +290,10 @@ An instruction consists of one or more tokens, separated by one or more tabs or 
 
 2. A literal. Literals are handled according to Mindcode rules: when the literal isn't compatible with pure mlog (e.g., `1.5e3`), it is rewritten so that it is mlog compatible (in this case, to `1500`). When the literals do not conform to Mindcode rules (e.g., a value is too large, or the literal isn't recognized by the target Mindustry version), the usual warnings or errors are emitted. The following literals are supported:
    * [null](SYNTAX-0-BASICS.markdown#null-literal) and [boolean literals](SYNTAX-0-BASICS.markdown#boolean-literals),
-   * [decimal literals](SYNTAX-0-BASICS.markdown#decimal-literals), 
-   * [binary and hexadecimal literals](SYNTAX-0-BASICS.markdown#binary-and-hexadecimal-literals), 
-   * [color literals](SYNTAX-0-BASICS.markdown#color-literals), 
-   * [named color literals](SYNTAX-0-BASICS.markdown#named-color-literals), 
+   * [decimal literals](SYNTAX-0-BASICS.markdown#decimal-literals),
+   * [binary and hexadecimal literals](SYNTAX-0-BASICS.markdown#binary-and-hexadecimal-literals),
+   * [color literals](SYNTAX-0-BASICS.markdown#color-literals),
+   * [named color literals](SYNTAX-0-BASICS.markdown#named-color-literals),
    * [character literals](SYNTAX-0-BASICS.markdown#character-literals),
    * [string literals](SYNTAX-0-BASICS.markdown#string-literals).
 
@@ -305,7 +305,7 @@ An instruction consists of one or more tokens, separated by one or more tabs or 
 
 6. A _raw token_. Any token starting with a `:` (just like [mlog keywords in Mindcode](SYNTAX-0-BASICS.markdown#mlog-keywords)) is written into the mlog exactly as it is after stripping the leading colon. This allows encoding those tokens into mlog that would otherwise be interpreted by Mindcode, such as `:1.5e3` or `:$index`, or which couldn't be encoded, such as tokens ending with a `}`. If the desired token itself starts with a colon, it can be also encoded this way by prepending an additional colon (e.g., `::token`). All tokens valid in pure mlog may be entered as a raw token.
 
-7. An ordinary token. Any sequence of characters not matching any of the above token types is encoded into mlog as is. Even tokens that would produce an error in Mindcode source code (such as `1ee10`) are accepted as ordinary tokens. The only exception is that ordinary tokens may not contain single or double quotes (`'` or `"`), and must not end with a right brace (`}`). However, even those tokens may be encoded into mlog as raw tokens, e.g. `:{}`. 
+7. An ordinary token. Any sequence of characters not matching any of the above token types is encoded into mlog as is. Even tokens that would produce an error in Mindcode source code (such as `1ee10`) are accepted as ordinary tokens. The only exception is that ordinary tokens may not contain single or double quotes (`'` or `"`), and must not end with a right brace (`}`). However, even those tokens may be encoded into mlog as raw tokens, e.g. `:{}`.
 
 Tokens that would be invalid in pure mlog, such as unclosed string literals (`"text`), or string literals not followed by a space (`"abc"def`) cause compilation errors in Mindcode too.
 
@@ -332,7 +332,7 @@ Any variables used in the mlog block are used as-is. It is possible to use the s
 It is the responsibility of the user to use the variables in an mlog block in a way compatible with the declaration. Mindcode currently doesn't even attempt to verify that known instructions use the variables in accordance with the declaration and can't do so in case of unknown instructions in principle. The following actions therefore lead to undefined behavior:
 * Reading a value from a variable not declared as input.
 * Writing to a variable not declared as output (this includes changing values of [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters), which cannot be declared as output variables at all).
-* Accessing Mindcode's variables using their mlog names, bypassing the standard mechanism for accessing variables entirely. 
+* Accessing Mindcode's variables using their mlog names, bypassing the standard mechanism for accessing variables entirely.
 
 ### Comments
 
@@ -348,12 +348,12 @@ The code in an mlog block is generally not optimized. Optimizations such as unre
 
 * A completely unreachable mlog block is removed by [Unreachable Code elimination](optimizations/UNREACHABLE-CODE-ELIMINATION.markdown). However, Mindcode can't detect when an mlog block itself makes the code following it unreachable (e.g., by using an infinite loop or the `end` instruction), and doesn't ever remove the code following an mlog block.
 * If the mlog block contains an `end` instruction, Mindcode assumes the instruction may or may not be executed and updates the surrounding code accordingly.
-* The mlog block is always treated as if it manipulates the text buffer: no print merging across the block will occur. 
+* The mlog block is always treated as if it manipulates the text buffer: no print merging across the block will occur.
 * A limited [Data Flow optimization](optimizations/DATA-FLOW-OPTIMIZATION.markdown) is applied to mlog blocks. Currently, the optimization is only able to propagate constant values to the mlog block. This optimization can be turned off by setting `mlog-block-optimization` to `false`.
 
 ### Example
 
-#### Basic mlog code 
+#### Basic mlog code
 
 ```Mindcode
 const message = "Time measurement\n" +
