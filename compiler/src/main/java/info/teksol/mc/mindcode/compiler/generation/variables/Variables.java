@@ -187,9 +187,18 @@ public class Variables extends CompilerMessageEmitter {
     ///
     /// @param specification constant declaration to process
     /// @param value compile-time value associated with the specification
-    public void createConstant(AstVariableSpecification specification, ValueStore value) {
-        verifyGlobalDeclaration(specification, specification.getIdentifier());
-        putVariableIfAbsent(specification.getName(), value);
+    public void createConstant(boolean local, AstVariableSpecification specification, ValueStore value) {
+        AstIdentifier identifier = specification.getIdentifier();
+        if (local) {
+            if (functionContext.variables().containsKey(identifier.getName())) {
+                error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, identifier);
+            } else {
+                functionContext.registerFunctionVariable(identifier, VariableScope.PARENT_NODE, value);
+            }
+        } else {
+            verifyGlobalDeclaration(specification, identifier);
+            putVariableIfAbsent(specification.getName(), value);
+        }
     }
 
     /// Registers a parameter. Reports possible name clashes.

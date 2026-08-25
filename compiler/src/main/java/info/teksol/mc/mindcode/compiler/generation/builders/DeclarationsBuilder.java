@@ -555,10 +555,10 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
             if (modifiers.contains(CONST)) {
                 if (valueStore.isConstantValue()) {
-                    variables.createConstant(specification, valueStore);
+                    variables.createConstant(isLocalContext(), specification, valueStore);
                 } else {
                     error(expression, ERR.EXPRESSION_NOT_CONSTANT_CONST, specification.getName());
-                    variables.createConstant(specification, LogicNull.NULL);
+                    variables.createConstant(isLocalContext(), specification, LogicNull.NULL);
                 }
             } else {
                 // Produces a warning when the variable is a linked block
