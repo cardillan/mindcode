@@ -1,0 +1,583 @@
+
+Final code before resolving virtual instructions:
+
+    0:  set graphite-press "AA"
+        label *label1
+    1:  set graphite-press "AA"
+        label *label3
+    2:  set multi-press "AB"
+        label *label4
+    3:  set silicon-smelter "AC"
+        label *label5
+    4:  set silicon-crucible "AD"
+        label *label6
+    5:  set kiln "AE"
+        label *label7
+    6:  set plastanium-compressor "AF"
+        label *label8
+    7:  set phase-weaver "AG"
+        label *label9
+    8:  set cryofluid-mixer "AH"
+        label *label10
+    9:  set pyratite-mixer "AI"
+        label *label11
+   10:  set blast-mixer "AJ"
+        label *label12
+   11:  set melter "AK"
+        label *label13
+   12:  set separator "AL"
+        label *label14
+   13:  set disassembler "AM"
+        label *label15
+   14:  set spore-press "AN"
+        label *label16
+   15:  set pulverizer "AO"
+        label *label17
+   16:  set coal-centrifuge "AP"
+        label *label18
+        label *label2
+   17:  op greaterThanEq *tmp0 null 0
+   18:  jump *label20 equal *tmp0 false
+        label *label23
+   19:  op lessThan *tmp1 null 16
+   20:  jump *label20 equal *tmp1 false
+   21:  jump *label22 always 0 0
+        label *label22
+   22:  set graphite-press "AA"
+        label *label25
+   23:  set multi-press "AB"
+        label *label26
+   24:  set silicon-smelter "AC"
+        label *label27
+   25:  set silicon-crucible "AD"
+        label *label28
+   26:  set kiln "AE"
+        label *label29
+   27:  set plastanium-compressor "AF"
+        label *label30
+   28:  set phase-weaver "AG"
+        label *label31
+   29:  set cryofluid-mixer "AH"
+        label *label32
+   30:  set pyratite-mixer "AI"
+        label *label33
+   31:  set blast-mixer "AJ"
+        label *label34
+   32:  set melter "AK"
+        label *label35
+   33:  set separator "AL"
+        label *label36
+   34:  set disassembler "AM"
+        label *label37
+   35:  set spore-press "AN"
+        label *label38
+   36:  set pulverizer "AO"
+        label *label39
+   37:  set coal-centrifuge "AP"
+        label *label40
+        label *label24
+   38:  set incinerator "AQ"
+        label *label42
+   39:  set copper-wall "AR"
+        label *label43
+   40:  set copper-wall-large "AS"
+        label *label44
+   41:  set titanium-wall "AT"
+        label *label45
+   42:  set titanium-wall-large "AU"
+        label *label46
+   43:  set plastanium-wall "AV"
+        label *label47
+   44:  set plastanium-wall-large "AW"
+        label *label48
+   45:  set thorium-wall "AX"
+        label *label49
+   46:  set thorium-wall-large "AY"
+        label *label50
+   47:  set phase-wall "AZ"
+        label *label51
+   48:  set phase-wall-large "Aa"
+        label *label52
+   49:  set surge-wall "Ab"
+        label *label53
+   50:  set surge-wall-large "Ac"
+        label *label54
+   51:  set door "Ad"
+        label *label55
+   52:  set door-large "Ae"
+        label *label56
+   53:  set scrap-wall "Af"
+        label *label57
+        label *label41
+   54:  set scrap-wall-large "Ag"
+        label *label59
+   55:  set scrap-wall-huge "Ah"
+        label *label60
+   56:  set scrap-wall-gigantic "Ai"
+        label *label61
+   57:  set mender "Aj"
+        label *label62
+   58:  set mend-projector "Ak"
+        label *label63
+   59:  set overdrive-projector "Al"
+        label *label64
+   60:  set overdrive-dome "Am"
+        label *label65
+   61:  set force-projector "An"
+        label *label66
+   62:  set shock-mine "Ao"
+        label *label67
+   63:  set conveyor "Ap"
+        label *label68
+   64:  set titanium-conveyor "Aq"
+        label *label69
+   65:  set plastanium-conveyor "Ar"
+        label *label70
+   66:  set armored-conveyor "As"
+        label *label71
+   67:  set junction "At"
+        label *label72
+   68:  set bridge-conveyor "Au"
+        label *label73
+   69:  set phase-conveyor "Av"
+        label *label74
+        label *label58
+   70:  set sorter "Aw"
+        label *label76
+   71:  set inverted-sorter "Ax"
+        label *label77
+   72:  set router "Ay"
+        label *label78
+   73:  set distributor "Az"
+        label *label79
+   74:  set overflow-gate "A?"
+        label *label80
+   75:  set underflow-gate "A$"
+        label *label81
+   76:  set mass-driver "A&"
+        label *label82
+   77:  set duct "A("
+        label *label83
+   78:  set duct-router "A)"
+        label *label84
+   79:  set duct-bridge "A<"
+        label *label85
+   80:  set mechanical-pump "A="
+        label *label86
+   81:  set rotary-pump "A>"
+        label *label87
+   82:  set conduit "A["
+        label *label88
+   83:  set pulse-conduit "A]"
+        label *label89
+   84:  set plated-conduit "A^"
+        label *label90
+   85:  set liquid-router "A_"
+        label *label91
+        label *label75
+   86:  set liquid-tank "BA"
+        label *label93
+   87:  set liquid-junction "BB"
+        label *label94
+   88:  set bridge-conduit "BC"
+        label *label95
+   89:  set phase-conduit "BD"
+        label *label96
+   90:  set power-node "BE"
+        label *label97
+   91:  set power-node-large "BF"
+        label *label98
+   92:  set surge-tower "BG"
+        label *label99
+   93:  set diode "BH"
+        label *label100
+   94:  set battery "BI"
+        label *label101
+   95:  set battery-large "BJ"
+        label *label102
+   96:  set combustion-generator "BK"
+        label *label103
+   97:  set thermal-generator "BL"
+        label *label104
+   98:  set steam-generator "BM"
+        label *label105
+   99:  set differential-generator "BN"
+        label *label106
+  100:  set rtg-generator "BO"
+        label *label107
+  101:  set solar-panel "BP"
+        label *label108
+        label *label92
+  102:  set solar-panel-large "BQ"
+        label *label110
+  103:  set thorium-reactor "BR"
+        label *label111
+  104:  set impact-reactor "BS"
+        label *label112
+  105:  set mechanical-drill "BT"
+        label *label113
+  106:  set pneumatic-drill "BU"
+        label *label114
+  107:  set laser-drill "BV"
+        label *label115
+  108:  set blast-drill "BW"
+        label *label116
+  109:  set water-extractor "BX"
+        label *label117
+  110:  set cultivator "BY"
+        label *label118
+  111:  set oil-extractor "BZ"
+        label *label119
+  112:  set core-shard "Ba"
+        label *label120
+  113:  set core-foundation "Bb"
+        label *label121
+  114:  set core-nucleus "Bc"
+        label *label122
+  115:  set vault "Bd"
+        label *label123
+  116:  set container "Be"
+        label *label124
+  117:  set unloader "Bf"
+        label *label125
+        label *label109
+  118:  set duo "Bg"
+        label *label127
+  119:  set scatter "Bh"
+        label *label128
+  120:  set scorch "Bi"
+        label *label129
+  121:  set hail "Bj"
+        label *label130
+  122:  set wave "Bk"
+        label *label131
+  123:  set lancer "Bl"
+        label *label132
+  124:  set arc "Bm"
+        label *label133
+  125:  set parallax "Bn"
+        label *label134
+  126:  set swarmer "Bo"
+        label *label135
+  127:  set salvo "Bp"
+        label *label136
+  128:  set segment "Bq"
+        label *label137
+  129:  set tsunami "Br"
+        label *label138
+  130:  set fuse "Bs"
+        label *label139
+  131:  set ripple "Bt"
+        label *label140
+  132:  set cyclone "Bu"
+        label *label141
+  133:  set foreshadow "Bv"
+        label *label142
+        label *label126
+  134:  set spectre "Bw"
+        label *label144
+  135:  set meltdown "Bx"
+        label *label145
+  136:  set command-center "By"
+        label *label146
+  137:  set ground-factory "Bz"
+        label *label147
+  138:  set air-factory "B?"
+        label *label148
+  139:  set naval-factory "B$"
+        label *label149
+  140:  set additive-reconstructor "B&"
+        label *label150
+  141:  set multiplicative-reconstructor "B("
+        label *label151
+  142:  set exponential-reconstructor "B)"
+        label *label152
+  143:  set tetrative-reconstructor "B<"
+        label *label153
+  144:  set repair-point "B="
+        label *label154
+  145:  set repair-turret "B>"
+        label *label155
+  146:  set payload-conveyor "B["
+        label *label156
+  147:  set payload-router "B]"
+        label *label157
+  148:  set power-source "B^"
+        label *label158
+  149:  set power-void "B_"
+        label *label159
+        label *label143
+  150:  set item-source "CA"
+        label *label161
+  151:  set item-void "CB"
+        label *label162
+  152:  set liquid-source "CC"
+        label *label163
+  153:  set liquid-void "CD"
+        label *label164
+  154:  set payload-void "CE"
+        label *label165
+  155:  set payload-source "CF"
+        label *label166
+  156:  set illuminator "CG"
+        label *label167
+  157:  set launch-pad "CH"
+        label *label168
+  158:  set interplanetary-accelerator "CI"
+        label *label169
+  159:  set message "CJ"
+        label *label170
+  160:  set switch "CK"
+        label *label171
+  161:  set micro-processor "CL"
+        label *label172
+  162:  set logic-processor "CM"
+        label *label173
+  163:  set hyper-processor "CN"
+        label *label174
+  164:  set memory-cell "CO"
+        label *label175
+  165:  set memory-bank "CP"
+        label *label176
+        label *label160
+  166:  set logic-display "CQ"
+        label *label178
+  167:  set large-logic-display "CR"
+        label *label179
+  168:  set liquid-container "CS"
+        label *label180
+  169:  set deconstructor "CT"
+        label *label181
+  170:  set constructor "CU"
+        label *label182
+  171:  set thruster "CV"
+        label *label183
+  172:  set large-constructor "CW"
+        label *label184
+  173:  set payload-loader "CX"
+        label *label185
+  174:  set payload-unloader "CY"
+        label *label186
+  175:  set silicon-arc-furnace "CZ"
+        label *label187
+  176:  set cliff-crusher "Ca"
+        label *label188
+  177:  set plasma-bore "Cb"
+        label *label189
+  178:  set reinforced-liquid-junction "Cc"
+        label *label190
+  179:  set breach "Cd"
+        label *label191
+  180:  set core-bastion "Ce"
+        label *label192
+  181:  set turbine-condenser "Cf"
+        label *label193
+        label *label177
+  182:  set beam-node "Cg"
+        label *label195
+  183:  set beam-tower "Ch"
+        label *label196
+  184:  set build-tower "Ci"
+        label *label197
+  185:  set impact-drill "Cj"
+        label *label198
+  186:  set carbide-crucible "Ck"
+        label *label199
+  187:  set surge-conveyor "Cl"
+        label *label200
+  188:  set duct-unloader "Cm"
+        label *label201
+  189:  set surge-router "Cn"
+        label *label202
+  190:  set reinforced-conduit "Co"
+        label *label203
+  191:  set reinforced-liquid-router "Cp"
+        label *label204
+  192:  set reinforced-liquid-container "Cq"
+        label *label205
+  193:  set reinforced-liquid-tank "Cr"
+        label *label206
+  194:  set reinforced-bridge-conduit "Cs"
+        label *label207
+  195:  set core-citadel "Ct"
+        label *label208
+  196:  set core-acropolis "Cu"
+        label *label209
+  197:  set heat-reactor "Cv"
+        label *label210
+        label *label194
+  198:  set impulse-pump "Cw"
+        label *label212
+  199:  set reinforced-pump "Cx"
+        label *label213
+  200:  set electrolyzer "Cy"
+        label *label214
+  201:  set oxidation-chamber "Cz"
+        label *label215
+  202:  set surge-smelter "C?"
+        label *label216
+  203:  set surge-crucible "C$"
+        label *label217
+  204:  set overflow-duct "C&"
+        label *label218
+  205:  set large-plasma-bore "C("
+        label *label219
+  206:  set cyanogen-synthesizer "C)"
+        label *label220
+  207:  set slag-centrifuge "C<"
+        label *label221
+  208:  set electric-heater "C="
+        label *label222
+  209:  set slag-incinerator "C>"
+        label *label223
+  210:  set phase-synthesizer "C["
+        label *label224
+  211:  set sublimate "C]"
+        label *label225
+  212:  set reinforced-container "C^"
+        label *label226
+  213:  set reinforced-vault "C_"
+        label *label227
+        label *label211
+  214:  set atmospheric-concentrator "DA"
+        label *label229
+  215:  set unit-cargo-loader "DB"
+        label *label230
+  216:  set unit-cargo-unload-point "DC"
+        label *label231
+  217:  set chemical-combustion-chamber "DD"
+        label *label232
+  218:  set pyrolysis-generator "DE"
+        label *label233
+  219:  set regen-projector "DF"
+        label *label234
+  220:  set titan "DG"
+        label *label235
+  221:  set small-deconstructor "DH"
+        label *label236
+  222:  set vent-condenser "DI"
+        label *label237
+  223:  set phase-heater "DJ"
+        label *label238
+  224:  set heat-redirector "DK"
+        label *label239
+  225:  set tungsten-wall "DL"
+        label *label240
+  226:  set tungsten-wall-large "DM"
+        label *label241
+  227:  set tank-assembler "DN"
+        label *label242
+  228:  set beryllium-wall "DO"
+        label *label243
+  229:  set beryllium-wall-large "DP"
+        label *label244
+        label *label228
+  230:  set eruption-drill "DQ"
+        label *label246
+  231:  set ship-assembler "DR"
+        label *label247
+  232:  set mech-assembler "DS"
+        label *label248
+  233:  set shield-projector "DT"
+        label *label249
+  234:  set beam-link "DU"
+        label *label250
+  235:  set world-processor "DV"
+        label *label251
+  236:  set reinforced-payload-conveyor "DW"
+        label *label252
+  237:  set reinforced-payload-router "DX"
+        label *label253
+  238:  set disperse "DY"
+        label *label254
+  239:  set large-shield-projector "DZ"
+        label *label255
+  240:  set payload-mass-driver "Da"
+        label *label256
+  241:  set world-cell "Db"
+        label *label257
+  242:  set carbide-wall "Dc"
+        label *label258
+  243:  set carbide-wall-large "Dd"
+        label *label259
+  244:  set tank-fabricator "De"
+        label *label260
+  245:  set mech-fabricator "Df"
+        label *label261
+        label *label245
+  246:  set ship-fabricator "Dg"
+        label *label263
+  247:  set reinforced-surge-wall "Dh"
+        label *label264
+  248:  set radar "Di"
+        label *label265
+  249:  set blast-door "Dj"
+        label *label266
+  250:  set canvas "Dk"
+        label *label267
+  251:  set armored-duct "Dl"
+        label *label268
+  252:  set unit-repair-tower "Dm"
+        label *label269
+  253:  set diffuse "Dn"
+        label *label270
+  254:  set prime-refabricator "Do"
+        label *label271
+  255:  set basic-assembler-module "Dp"
+        label *label272
+  256:  set reinforced-surge-wall-large "Dq"
+        label *label273
+  257:  set tank-refabricator "Dr"
+        label *label274
+  258:  set mech-refabricator "Ds"
+        label *label275
+  259:  set ship-refabricator "Dt"
+        label *label276
+  260:  set slag-heater "Du"
+        label *label277
+  261:  set afflict "Dv"
+        label *label278
+        label *label262
+  262:  set shielded-wall "Dw"
+        label *label280
+  263:  set lustre "Dx"
+        label *label281
+  264:  set scathe "Dy"
+        label *label282
+  265:  set smite "Dz"
+        label *label283
+  266:  set underflow-duct "D?"
+        label *label284
+  267:  set malign "D$"
+        label *label285
+  268:  set shockwave-tower "D&"
+        label *label286
+  269:  set heat-source "D("
+        label *label287
+  270:  set flux-reactor "D)"
+        label *label288
+  271:  set neoplasia-reactor "D<"
+        label *label289
+  272:  set heat-router "D="
+        label *label290
+  273:  set large-payload-mass-driver "D>"
+        label *label291
+  274:  set reinforced-message "D["
+        label *label292
+  275:  set world-message "D]"
+        label *label293
+  276:  set world-switch "D^"
+        label *label294
+  277:  set small-heat-redirector "D_"
+        label *label295
+        label *label279
+  278:  set *tmp2 null
+  279:  jump *label21 always 0 0
+        label *label20
+  280:  set *tmp2 null
+        label *label21
+  281:  set .initialized true
+  282:  wait 1000000000000
+        label *label19
+        label *label0
+  283:  end

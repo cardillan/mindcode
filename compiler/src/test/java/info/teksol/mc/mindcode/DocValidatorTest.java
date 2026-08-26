@@ -77,6 +77,7 @@ public class DocValidatorTest extends AbstractTestBase {
 
     private static final String[] LIBRARY_SEQUENCE = {
             "SYSTEM-LIBRARY-ARRAYS.markdown",
+            "SYSTEM-LIBRARY-BIGARRAY.markdown",
             "SYSTEM-LIBRARY-BLOCKS.markdown",
             "SYSTEM-LIBRARY-COMPATIBILITY.markdown",
             "SYSTEM-LIBRARY-GRAPHICS.markdown",

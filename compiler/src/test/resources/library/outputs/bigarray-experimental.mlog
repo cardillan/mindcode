@@ -1,0 +1,960 @@
+set graphite-press "AA"
+set graphite-press "AA"
+set multi-press "AB"
+set silicon-smelter "AC"
+set silicon-crucible "AD"
+set kiln "AE"
+set plastanium-compressor "AF"
+set phase-weaver "AG"
+set cryofluid-mixer "AH"
+set pyratite-mixer "AI"
+set blast-mixer "AJ"
+set melter "AK"
+set separator "AL"
+set disassembler "AM"
+set spore-press "AN"
+set pulverizer "AO"
+set coal-centrifuge "AP"
+set graphite-press "AA"
+set multi-press "AB"
+set silicon-smelter "AC"
+set silicon-crucible "AD"
+set kiln "AE"
+set plastanium-compressor "AF"
+set phase-weaver "AG"
+set cryofluid-mixer "AH"
+set pyratite-mixer "AI"
+set blast-mixer "AJ"
+set melter "AK"
+set separator "AL"
+set disassembler "AM"
+set spore-press "AN"
+set pulverizer "AO"
+set coal-centrifuge "AP"
+set incinerator "AQ"
+set copper-wall "AR"
+set copper-wall-large "AS"
+set titanium-wall "AT"
+set titanium-wall-large "AU"
+set plastanium-wall "AV"
+set plastanium-wall-large "AW"
+set thorium-wall "AX"
+set thorium-wall-large "AY"
+set phase-wall "AZ"
+set phase-wall-large "Aa"
+set surge-wall "Ab"
+set surge-wall-large "Ac"
+set door "Ad"
+set door-large "Ae"
+set scrap-wall "Af"
+set scrap-wall-large "Ag"
+set scrap-wall-huge "Ah"
+set scrap-wall-gigantic "Ai"
+set mender "Aj"
+set mend-projector "Ak"
+set overdrive-projector "Al"
+set overdrive-dome "Am"
+set force-projector "An"
+set shock-mine "Ao"
+set conveyor "Ap"
+set titanium-conveyor "Aq"
+set plastanium-conveyor "Ar"
+set armored-conveyor "As"
+set junction "At"
+set bridge-conveyor "Au"
+set phase-conveyor "Av"
+set sorter "Aw"
+set inverted-sorter "Ax"
+set router "Ay"
+set distributor "Az"
+set overflow-gate "A?"
+set underflow-gate "A$"
+set mass-driver "A&"
+set duct "A("
+set duct-router "A)"
+set duct-bridge "A<"
+set mechanical-pump "A="
+set rotary-pump "A>"
+set conduit "A["
+set pulse-conduit "A]"
+set plated-conduit "A^"
+set liquid-router "A_"
+set liquid-tank "BA"
+set liquid-junction "BB"
+set bridge-conduit "BC"
+set phase-conduit "BD"
+set power-node "BE"
+set power-node-large "BF"
+set surge-tower "BG"
+set diode "BH"
+set battery "BI"
+set battery-large "BJ"
+set combustion-generator "BK"
+set thermal-generator "BL"
+set steam-generator "BM"
+set differential-generator "BN"
+set rtg-generator "BO"
+set solar-panel "BP"
+set solar-panel-large "BQ"
+set thorium-reactor "BR"
+set impact-reactor "BS"
+set mechanical-drill "BT"
+set pneumatic-drill "BU"
+set laser-drill "BV"
+set blast-drill "BW"
+set water-extractor "BX"
+set cultivator "BY"
+set oil-extractor "BZ"
+set core-shard "Ba"
+set core-foundation "Bb"
+set core-nucleus "Bc"
+set vault "Bd"
+set container "Be"
+set unloader "Bf"
+set duo "Bg"
+set scatter "Bh"
+set scorch "Bi"
+set hail "Bj"
+set wave "Bk"
+set lancer "Bl"
+set arc "Bm"
+set parallax "Bn"
+set swarmer "Bo"
+set salvo "Bp"
+set segment "Bq"
+set tsunami "Br"
+set fuse "Bs"
+set ripple "Bt"
+set cyclone "Bu"
+set foreshadow "Bv"
+set spectre "Bw"
+set meltdown "Bx"
+set command-center "By"
+set ground-factory "Bz"
+set air-factory "B?"
+set naval-factory "B$"
+set additive-reconstructor "B&"
+set multiplicative-reconstructor "B("
+set exponential-reconstructor "B)"
+set tetrative-reconstructor "B<"
+set repair-point "B="
+set repair-turret "B>"
+set payload-conveyor "B["
+set payload-router "B]"
+set power-source "B^"
+set power-void "B_"
+set item-source "CA"
+set item-void "CB"
+set liquid-source "CC"
+set liquid-void "CD"
+set payload-void "CE"
+set payload-source "CF"
+set illuminator "CG"
+set launch-pad "CH"
+set interplanetary-accelerator "CI"
+set message "CJ"
+set switch "CK"
+set micro-processor "CL"
+set logic-processor "CM"
+set hyper-processor "CN"
+set memory-cell "CO"
+set memory-bank "CP"
+set logic-display "CQ"
+set large-logic-display "CR"
+set liquid-container "CS"
+set deconstructor "CT"
+set constructor "CU"
+set thruster "CV"
+set large-constructor "CW"
+set payload-loader "CX"
+set payload-unloader "CY"
+set silicon-arc-furnace "CZ"
+set cliff-crusher "Ca"
+set plasma-bore "Cb"
+set reinforced-liquid-junction "Cc"
+set breach "Cd"
+set core-bastion "Ce"
+set turbine-condenser "Cf"
+set beam-node "Cg"
+set beam-tower "Ch"
+set build-tower "Ci"
+set impact-drill "Cj"
+set carbide-crucible "Ck"
+set surge-conveyor "Cl"
+set duct-unloader "Cm"
+set surge-router "Cn"
+set reinforced-conduit "Co"
+set reinforced-liquid-router "Cp"
+set reinforced-liquid-container "Cq"
+set reinforced-liquid-tank "Cr"
+set reinforced-bridge-conduit "Cs"
+set core-citadel "Ct"
+set core-acropolis "Cu"
+set heat-reactor "Cv"
+set impulse-pump "Cw"
+set reinforced-pump "Cx"
+set electrolyzer "Cy"
+set oxidation-chamber "Cz"
+set surge-smelter "C?"
+set surge-crucible "C$"
+set overflow-duct "C&"
+set large-plasma-bore "C("
+set cyanogen-synthesizer "C)"
+set slag-centrifuge "C<"
+set electric-heater "C="
+set slag-incinerator "C>"
+set phase-synthesizer "C["
+set sublimate "C]"
+set reinforced-container "C^"
+set reinforced-vault "C_"
+set atmospheric-concentrator "DA"
+set unit-cargo-loader "DB"
+set unit-cargo-unload-point "DC"
+set chemical-combustion-chamber "DD"
+set pyrolysis-generator "DE"
+set regen-projector "DF"
+set titan "DG"
+set small-deconstructor "DH"
+set vent-condenser "DI"
+set phase-heater "DJ"
+set heat-redirector "DK"
+set tungsten-wall "DL"
+set tungsten-wall-large "DM"
+set tank-assembler "DN"
+set beryllium-wall "DO"
+set beryllium-wall-large "DP"
+set eruption-drill "DQ"
+set ship-assembler "DR"
+set mech-assembler "DS"
+set shield-projector "DT"
+set beam-link "DU"
+set world-processor "DV"
+set reinforced-payload-conveyor "DW"
+set reinforced-payload-router "DX"
+set disperse "DY"
+set large-shield-projector "DZ"
+set payload-mass-driver "Da"
+set world-cell "Db"
+set carbide-wall "Dc"
+set carbide-wall-large "Dd"
+set tank-fabricator "De"
+set mech-fabricator "Df"
+set ship-fabricator "Dg"
+set reinforced-surge-wall "Dh"
+set radar "Di"
+set blast-door "Dj"
+set canvas "Dk"
+set armored-duct "Dl"
+set unit-repair-tower "Dm"
+set diffuse "Dn"
+set prime-refabricator "Do"
+set basic-assembler-module "Dp"
+set reinforced-surge-wall-large "Dq"
+set tank-refabricator "Dr"
+set mech-refabricator "Ds"
+set ship-refabricator "Dt"
+set slag-heater "Du"
+set afflict "Dv"
+set shielded-wall "Dw"
+set lustre "Dx"
+set scathe "Dy"
+set smite "Dz"
+set underflow-duct "D?"
+set malign "D$"
+set shockwave-tower "D&"
+set heat-source "D("
+set flux-reactor "D)"
+set neoplasia-reactor "D<"
+set heat-router "D="
+set large-payload-mass-driver "D>"
+set reinforced-message "D["
+set world-message "D]"
+set world-switch "D^"
+set small-heat-redirector "D_"
+set .initialized true
+wait 1000000000000
+end
+draw triangle AA AB AC AD AE AF
+draw triangle AG AH AI AJ AK AL
+draw triangle AM AN AO AP AQ AR
+draw triangle AS AT AU AV AW AX
+draw triangle AY AZ Aa Ab Ac Ad
+draw triangle Ae Af Ag Ah Ai Aj
+draw triangle Ak Al Am An Ao Ap
+draw triangle Aq Ar As At Au Av
+draw triangle Aw Ax Ay Az A? A$
+draw triangle A& A( A) A< A= A>
+draw triangle A[ A] A^ A_ BA BB
+draw triangle BC BD BE BF BG BH
+draw triangle BI BJ BK BL BM BN
+draw triangle BO BP BQ BR BS BT
+draw triangle BU BV BW BX BY BZ
+draw triangle Ba Bb Bc Bd Be Bf
+draw triangle Bg Bh Bi Bj Bk Bl
+draw triangle Bm Bn Bo Bp Bq Br
+draw triangle Bs Bt Bu Bv Bw Bx
+draw triangle By Bz B? B$ B& B(
+draw triangle B) B< B= B> B[ B]
+draw triangle B^ B_ CA CB CC CD
+draw triangle CE CF CG CH CI CJ
+draw triangle CK CL CM CN CO CP
+draw triangle CQ CR CS CT CU CV
+draw triangle CW CX CY CZ Ca Cb
+draw triangle Cc Cd Ce Cf Cg Ch
+draw triangle Ci Cj Ck Cl Cm Cn
+draw triangle Co Cp Cq Cr Cs Ct
+draw triangle Cu Cv Cw Cx Cy Cz
+draw triangle C? C$ C& C( C) C<
+draw triangle C= C> C[ C] C^ C_
+draw triangle DA DB DC DD DE DF
+draw triangle DG DH DI DJ DK DL
+draw triangle DM DN DO DP DQ DR
+draw triangle DS DT DU DV DW DX
+draw triangle DY DZ Da Db Dc Dd
+draw triangle De Df Dg Dh Di Dj
+draw triangle Dk Dl Dm Dn Do Dp
+draw triangle Dq Dr Ds Dt Du Dv
+draw triangle Dw Dx Dy Dz D? D$
+draw triangle D& D( D) D< D= D>
+draw triangle D[ D] D^ D_ EA EB
+draw triangle EC ED EE EF EG EH
+draw triangle EI EJ EK EL EM EN
+draw triangle EO EP EQ ER ES ET
+draw triangle EU EV EW EX EY EZ
+draw triangle Ea Eb Ec Ed Ee Ef
+draw triangle Eg Eh Ei Ej Ek El
+draw triangle Em En Eo Ep Eq Er
+draw triangle Es Et Eu Ev Ew Ex
+draw triangle Ey Ez E? E$ E& E(
+draw triangle E) E< E= E> E[ E]
+draw triangle E^ E_ FA FB FC FD
+draw triangle FE FF FG FH FI FJ
+draw triangle FK FL FM FN FO FP
+draw triangle FQ FR FS FT FU FV
+draw triangle FW FX FY FZ Fa Fb
+draw triangle Fc Fd Fe Ff Fg Fh
+draw triangle Fi Fj Fk Fl Fm Fn
+draw triangle Fo Fp Fq Fr Fs Ft
+draw triangle Fu Fv Fw Fx Fy Fz
+draw triangle F? F$ F& F( F) F<
+draw triangle F= F> F[ F] F^ F_
+draw triangle GA GB GC GD GE GF
+draw triangle GG GH GI GJ GK GL
+draw triangle GM GN GO GP GQ GR
+draw triangle GS GT GU GV GW GX
+draw triangle GY GZ Ga Gb Gc Gd
+draw triangle Ge Gf Gg Gh Gi Gj
+draw triangle Gk Gl Gm Gn Go Gp
+draw triangle Gq Gr Gs Gt Gu Gv
+draw triangle Gw Gx Gy Gz G? G$
+draw triangle G& G( G) G< G= G>
+draw triangle G[ G] G^ G_ HA HB
+draw triangle HC HD HE HF HG HH
+draw triangle HI HJ HK HL HM HN
+draw triangle HO HP HQ HR HS HT
+draw triangle HU HV HW HX HY HZ
+draw triangle Ha Hb Hc Hd He Hf
+draw triangle Hg Hh Hi Hj Hk Hl
+draw triangle Hm Hn Ho Hp Hq Hr
+draw triangle Hs Ht Hu Hv Hw Hx
+draw triangle Hy Hz H? H$ H& H(
+draw triangle H) H< H= H> H[ H]
+draw triangle H^ H_ IA IB IC ID
+draw triangle IE IF IG IH II IJ
+draw triangle IK IL IM IN IO IP
+draw triangle IQ IR IS IT IU IV
+draw triangle IW IX IY IZ Ia Ib
+draw triangle Ic Id Ie If Ig Ih
+draw triangle Ii Ij Ik Il Im In
+draw triangle Io Ip Iq Ir Is It
+draw triangle Iu Iv Iw Ix Iy Iz
+draw triangle I? I$ I& I( I) I<
+draw triangle I= I> I[ I] I^ I_
+draw triangle JA JB JC JD JE JF
+draw triangle JG JH JI JJ JK JL
+draw triangle JM JN JO JP JQ JR
+draw triangle JS JT JU JV JW JX
+draw triangle JY JZ Ja Jb Jc Jd
+draw triangle Je Jf Jg Jh Ji Jj
+draw triangle Jk Jl Jm Jn Jo Jp
+draw triangle Jq Jr Js Jt Ju Jv
+draw triangle Jw Jx Jy Jz J? J$
+draw triangle J& J( J) J< J= J>
+draw triangle J[ J] J^ J_ KA KB
+draw triangle KC KD KE KF KG KH
+draw triangle KI KJ KK KL KM KN
+draw triangle KO KP KQ KR KS KT
+draw triangle KU KV KW KX KY KZ
+draw triangle Ka Kb Kc Kd Ke Kf
+draw triangle Kg Kh Ki Kj Kk Kl
+draw triangle Km Kn Ko Kp Kq Kr
+draw triangle Ks Kt Ku Kv Kw Kx
+draw triangle Ky Kz K? K$ K& K(
+draw triangle K) K< K= K> K[ K]
+draw triangle K^ K_ LA LB LC LD
+draw triangle LE LF LG LH LI LJ
+draw triangle LK LL LM LN LO LP
+draw triangle LQ LR LS LT LU LV
+draw triangle LW LX LY LZ La Lb
+draw triangle Lc Ld Le Lf Lg Lh
+draw triangle Li Lj Lk Ll Lm Ln
+draw triangle Lo Lp Lq Lr Ls Lt
+draw triangle Lu Lv Lw Lx Ly Lz
+draw triangle L? L$ L& L( L) L<
+draw triangle L= L> L[ L] L^ L_
+draw triangle MA MB MC MD ME MF
+draw triangle MG MH MI MJ MK ML
+draw triangle MM MN MO MP MQ MR
+draw triangle MS MT MU MV MW MX
+draw triangle MY MZ Ma Mb Mc Md
+draw triangle Me Mf Mg Mh Mi Mj
+draw triangle Mk Ml Mm Mn Mo Mp
+draw triangle Mq Mr Ms Mt Mu Mv
+draw triangle Mw Mx My Mz M? M$
+draw triangle M& M( M) M< M= M>
+draw triangle M[ M] M^ M_ NA NB
+draw triangle NC ND NE NF NG NH
+draw triangle NI NJ NK NL NM NN
+draw triangle NO NP NQ NR NS NT
+draw triangle NU NV NW NX NY NZ
+draw triangle Na Nb Nc Nd Ne Nf
+draw triangle Ng Nh Ni Nj Nk Nl
+draw triangle Nm Nn No Np Nq Nr
+draw triangle Ns Nt Nu Nv Nw Nx
+draw triangle Ny Nz N? N$ N& N(
+draw triangle N) N< N= N> N[ N]
+draw triangle N^ N_ OA OB OC OD
+draw triangle OE OF OG OH OI OJ
+draw triangle OK OL OM ON OO OP
+draw triangle OQ OR OS OT OU OV
+draw triangle OW OX OY OZ Oa Ob
+draw triangle Oc Od Oe Of Og Oh
+draw triangle Oi Oj Ok Ol Om On
+draw triangle Oo Op Oq Or Os Ot
+draw triangle Ou Ov Ow Ox Oy Oz
+draw triangle O? O$ O& O( O) O<
+draw triangle O= O> O[ O] O^ O_
+draw triangle PA PB PC PD PE PF
+draw triangle PG PH PI PJ PK PL
+draw triangle PM PN PO PP PQ PR
+draw triangle PS PT PU PV PW PX
+draw triangle PY PZ Pa Pb Pc Pd
+draw triangle Pe Pf Pg Ph Pi Pj
+draw triangle Pk Pl Pm Pn Po Pp
+draw triangle Pq Pr Ps Pt Pu Pv
+draw triangle Pw Px Py Pz P? P$
+draw triangle P& P( P) P< P= P>
+draw triangle P[ P] P^ P_ QA QB
+draw triangle QC QD QE QF QG QH
+draw triangle QI QJ QK QL QM QN
+draw triangle QO QP QQ QR QS QT
+draw triangle QU QV QW QX QY QZ
+draw triangle Qa Qb Qc Qd Qe Qf
+draw triangle Qg Qh Qi Qj Qk Ql
+draw triangle Qm Qn Qo Qp Qq Qr
+draw triangle Qs Qt Qu Qv Qw Qx
+draw triangle Qy Qz Q? Q$ Q& Q(
+draw triangle Q) Q< Q= Q> Q[ Q]
+draw triangle Q^ Q_ RA RB RC RD
+draw triangle RE RF RG RH RI RJ
+draw triangle RK RL RM RN RO RP
+draw triangle RQ RR RS RT RU RV
+draw triangle RW RX RY RZ Ra Rb
+draw triangle Rc Rd Re Rf Rg Rh
+draw triangle Ri Rj Rk Rl Rm Rn
+draw triangle Ro Rp Rq Rr Rs Rt
+draw triangle Ru Rv Rw Rx Ry Rz
+draw triangle R? R$ R& R( R) R<
+draw triangle R= R> R[ R] R^ R_
+draw triangle SA SB SC SD SE SF
+draw triangle SG SH SI SJ SK SL
+draw triangle SM SN SO SP SQ SR
+draw triangle SS ST SU SV SW SX
+draw triangle SY SZ Sa Sb Sc Sd
+draw triangle Se Sf Sg Sh Si Sj
+draw triangle Sk Sl Sm Sn So Sp
+draw triangle Sq Sr Ss St Su Sv
+draw triangle Sw Sx Sy Sz S? S$
+draw triangle S& S( S) S< S= S>
+draw triangle S[ S] S^ S_ TA TB
+draw triangle TC TD TE TF TG TH
+draw triangle TI TJ TK TL TM TN
+draw triangle TO TP TQ TR TS TT
+draw triangle TU TV TW TX TY TZ
+draw triangle Ta Tb Tc Td Te Tf
+draw triangle Tg Th Ti Tj Tk Tl
+draw triangle Tm Tn To Tp Tq Tr
+draw triangle Ts Tt Tu Tv Tw Tx
+draw triangle Ty Tz T? T$ T& T(
+draw triangle T) T< T= T> T[ T]
+draw triangle T^ T_ UA UB UC UD
+draw triangle UE UF UG UH UI UJ
+draw triangle UK UL UM UN UO UP
+draw triangle UQ UR US UT UU UV
+draw triangle UW UX UY UZ Ua Ub
+draw triangle Uc Ud Ue Uf Ug Uh
+draw triangle Ui Uj Uk Ul Um Un
+draw triangle Uo Up Uq Ur Us Ut
+draw triangle Uu Uv Uw Ux Uy Uz
+draw triangle U? U$ U& U( U) U<
+draw triangle U= U> U[ U] U^ U_
+draw triangle VA VB VC VD VE VF
+draw triangle VG VH VI VJ VK VL
+draw triangle VM VN VO VP VQ VR
+draw triangle VS VT VU VV VW VX
+draw triangle VY VZ Va Vb Vc Vd
+draw triangle Ve Vf Vg Vh Vi Vj
+draw triangle Vk Vl Vm Vn Vo Vp
+draw triangle Vq Vr Vs Vt Vu Vv
+draw triangle Vw Vx Vy Vz V? V$
+draw triangle V& V( V) V< V= V>
+draw triangle V[ V] V^ V_ WA WB
+draw triangle WC WD WE WF WG WH
+draw triangle WI WJ WK WL WM WN
+draw triangle WO WP WQ WR WS WT
+draw triangle WU WV WW WX WY WZ
+draw triangle Wa Wb Wc Wd We Wf
+draw triangle Wg Wh Wi Wj Wk Wl
+draw triangle Wm Wn Wo Wp Wq Wr
+draw triangle Ws Wt Wu Wv Ww Wx
+draw triangle Wy Wz W? W$ W& W(
+draw triangle W) W< W= W> W[ W]
+draw triangle W^ W_ XA XB XC XD
+draw triangle XE XF XG XH XI XJ
+draw triangle XK XL XM XN XO XP
+draw triangle XQ XR XS XT XU XV
+draw triangle XW XX XY XZ Xa Xb
+draw triangle Xc Xd Xe Xf Xg Xh
+draw triangle Xi Xj Xk Xl Xm Xn
+draw triangle Xo Xp Xq Xr Xs Xt
+draw triangle Xu Xv Xw Xx Xy Xz
+draw triangle X? X$ X& X( X) X<
+draw triangle X= X> X[ X] X^ X_
+draw triangle YA YB YC YD YE YF
+draw triangle YG YH YI YJ YK YL
+draw triangle YM YN YO YP YQ YR
+draw triangle YS YT YU YV YW YX
+draw triangle YY YZ Ya Yb Yc Yd
+draw triangle Ye Yf Yg Yh Yi Yj
+draw triangle Yk Yl Ym Yn Yo Yp
+draw triangle Yq Yr Ys Yt Yu Yv
+draw triangle Yw Yx Yy Yz Y? Y$
+draw triangle Y& Y( Y) Y< Y= Y>
+draw triangle Y[ Y] Y^ Y_ ZA ZB
+draw triangle ZC ZD ZE ZF ZG ZH
+draw triangle ZI ZJ ZK ZL ZM ZN
+draw triangle ZO ZP ZQ ZR ZS ZT
+draw triangle ZU ZV ZW ZX ZY ZZ
+draw triangle Za Zb Zc Zd Ze Zf
+draw triangle Zg Zh Zi Zj Zk Zl
+draw triangle Zm Zn Zo Zp Zq Zr
+draw triangle Zs Zt Zu Zv Zw Zx
+draw triangle Zy Zz Z? Z$ Z& Z(
+draw triangle Z) Z< Z= Z> Z[ Z]
+draw triangle Z^ Z_ aA aB aC aD
+draw triangle aE aF aG aH aI aJ
+draw triangle aK aL aM aN aO aP
+draw triangle aQ aR aS aT aU aV
+draw triangle aW aX aY aZ aa ab
+draw triangle ac ad ae af ag ah
+draw triangle ai aj ak al am an
+draw triangle ao ap aq ar as at
+draw triangle au av aw ax ay az
+draw triangle a? a$ a& a( a) a<
+draw triangle a= a> a[ a] a^ a_
+draw triangle bA bB bC bD bE bF
+draw triangle bG bH bI bJ bK bL
+draw triangle bM bN bO bP bQ bR
+draw triangle bS bT bU bV bW bX
+draw triangle bY bZ ba bb bc bd
+draw triangle be bf bg bh bi bj
+draw triangle bk bl bm bn bo bp
+draw triangle bq br bs bt bu bv
+draw triangle bw bx by bz b? b$
+draw triangle b& b( b) b< b= b>
+draw triangle b[ b] b^ b_ cA cB
+draw triangle cC cD cE cF cG cH
+draw triangle cI cJ cK cL cM cN
+draw triangle cO cP cQ cR cS cT
+draw triangle cU cV cW cX cY cZ
+draw triangle ca cb cc cd ce cf
+draw triangle cg ch ci cj ck cl
+draw triangle cm cn co cp cq cr
+draw triangle cs ct cu cv cw cx
+draw triangle cy cz c? c$ c& c(
+draw triangle c) c< c= c> c[ c]
+draw triangle c^ c_ dA dB dC dD
+draw triangle dE dF dG dH dI dJ
+draw triangle dK dL dM dN dO dP
+draw triangle dQ dR dS dT dU dV
+draw triangle dW dX dY dZ da db
+draw triangle dc dd de df dg dh
+draw triangle di dj dk dl dm dn
+draw triangle do dp dq dr ds dt
+draw triangle du dv dw dx dy dz
+draw triangle d? d$ d& d( d) d<
+draw triangle d= d> d[ d] d^ d_
+draw triangle eA eB eC eD eE eF
+draw triangle eG eH eI eJ eK eL
+draw triangle eM eN eO eP eQ eR
+draw triangle eS eT eU eV eW eX
+draw triangle eY eZ ea eb ec ed
+draw triangle ee ef eg eh ei ej
+draw triangle ek el em en eo ep
+draw triangle eq er es et eu ev
+draw triangle ew ex ey ez e? e$
+draw triangle e& e( e) e< e= e>
+draw triangle e[ e] e^ e_ fA fB
+draw triangle fC fD fE fF fG fH
+draw triangle fI fJ fK fL fM fN
+draw triangle fO fP fQ fR fS fT
+draw triangle fU fV fW fX fY fZ
+draw triangle fa fb fc fd fe ff
+draw triangle fg fh fi fj fk fl
+draw triangle fm fn fo fp fq fr
+draw triangle fs ft fu fv fw fx
+draw triangle fy fz f? f$ f& f(
+draw triangle f) f< f= f> f[ f]
+draw triangle f^ f_ gA gB gC gD
+draw triangle gE gF gG gH gI gJ
+draw triangle gK gL gM gN gO gP
+draw triangle gQ gR gS gT gU gV
+draw triangle gW gX gY gZ ga gb
+draw triangle gc gd ge gf gg gh
+draw triangle gi gj gk gl gm gn
+draw triangle go gp gq gr gs gt
+draw triangle gu gv gw gx gy gz
+draw triangle g? g$ g& g( g) g<
+draw triangle g= g> g[ g] g^ g_
+draw triangle hA hB hC hD hE hF
+draw triangle hG hH hI hJ hK hL
+draw triangle hM hN hO hP hQ hR
+draw triangle hS hT hU hV hW hX
+draw triangle hY hZ ha hb hc hd
+draw triangle he hf hg hh hi hj
+draw triangle hk hl hm hn ho hp
+draw triangle hq hr hs ht hu hv
+draw triangle hw hx hy hz h? h$
+draw triangle h& h( h) h< h= h>
+draw triangle h[ h] h^ h_ iA iB
+draw triangle iC iD iE iF iG iH
+draw triangle iI iJ iK iL iM iN
+draw triangle iO iP iQ iR iS iT
+draw triangle iU iV iW iX iY iZ
+draw triangle ia ib ic id ie if
+draw triangle ig ih ii ij ik il
+draw triangle im in io ip iq ir
+draw triangle is it iu iv iw ix
+draw triangle iy iz i? i$ i& i(
+draw triangle i) i< i= i> i[ i]
+draw triangle i^ i_ jA jB jC jD
+draw triangle jE jF jG jH jI jJ
+draw triangle jK jL jM jN jO jP
+draw triangle jQ jR jS jT jU jV
+draw triangle jW jX jY jZ ja jb
+draw triangle jc jd je jf jg jh
+draw triangle ji jj jk jl jm jn
+draw triangle jo jp jq jr js jt
+draw triangle ju jv jw jx jy jz
+draw triangle j? j$ j& j( j) j<
+draw triangle j= j> j[ j] j^ j_
+draw triangle kA kB kC kD kE kF
+draw triangle kG kH kI kJ kK kL
+draw triangle kM kN kO kP kQ kR
+draw triangle kS kT kU kV kW kX
+draw triangle kY kZ ka kb kc kd
+draw triangle ke kf kg kh ki kj
+draw triangle kk kl km kn ko kp
+draw triangle kq kr ks kt ku kv
+draw triangle kw kx ky kz k? k$
+draw triangle k& k( k) k< k= k>
+draw triangle k[ k] k^ k_ lA lB
+draw triangle lC lD lE lF lG lH
+draw triangle lI lJ lK lL lM lN
+draw triangle lO lP lQ lR lS lT
+draw triangle lU lV lW lX lY lZ
+draw triangle la lb lc ld le lf
+draw triangle lg lh li lj lk ll
+draw triangle lm ln lo lp lq lr
+draw triangle ls lt lu lv lw lx
+draw triangle ly lz l? l$ l& l(
+draw triangle l) l< l= l> l[ l]
+draw triangle l^ l_ mA mB mC mD
+draw triangle mE mF mG mH mI mJ
+draw triangle mK mL mM mN mO mP
+draw triangle mQ mR mS mT mU mV
+draw triangle mW mX mY mZ ma mb
+draw triangle mc md me mf mg mh
+draw triangle mi mj mk ml mm mn
+draw triangle mo mp mq mr ms mt
+draw triangle mu mv mw mx my mz
+draw triangle m? m$ m& m( m) m<
+draw triangle m= m> m[ m] m^ m_
+draw triangle nA nB nC nD nE nF
+draw triangle nG nH nI nJ nK nL
+draw triangle nM nN nO nP nQ nR
+draw triangle nS nT nU nV nW nX
+draw triangle nY nZ na nb nc nd
+draw triangle ne nf ng nh ni nj
+draw triangle nk nl nm nn no np
+draw triangle nq nr ns nt nu nv
+draw triangle nw nx ny nz n? n$
+draw triangle n& n( n) n< n= n>
+draw triangle n[ n] n^ n_ oA oB
+draw triangle oC oD oE oF oG oH
+draw triangle oI oJ oK oL oM oN
+draw triangle oO oP oQ oR oS oT
+draw triangle oU oV oW oX oY oZ
+draw triangle oa ob oc od oe of
+draw triangle og oh oi oj ok ol
+draw triangle om on oo op oq or
+draw triangle os ot ou ov ow ox
+draw triangle oy oz o? o$ o& o(
+draw triangle o) o< o= o> o[ o]
+draw triangle o^ o_ pA pB pC pD
+draw triangle pE pF pG pH pI pJ
+draw triangle pK pL pM pN pO pP
+draw triangle pQ pR pS pT pU pV
+draw triangle pW pX pY pZ pa pb
+draw triangle pc pd pe pf pg ph
+draw triangle pi pj pk pl pm pn
+draw triangle po pp pq pr ps pt
+draw triangle pu pv pw px py pz
+draw triangle p? p$ p& p( p) p<
+draw triangle p= p> p[ p] p^ p_
+draw triangle qA qB qC qD qE qF
+draw triangle qG qH qI qJ qK qL
+draw triangle qM qN qO qP qQ qR
+draw triangle qS qT qU qV qW qX
+draw triangle qY qZ qa qb qc qd
+draw triangle qe qf qg qh qi qj
+draw triangle qk ql qm qn qo qp
+draw triangle qq qr qs qt qu qv
+draw triangle qw qx qy qz q? q$
+draw triangle q& q( q) q< q= q>
+draw triangle q[ q] q^ q_ rA rB
+draw triangle rC rD rE rF rG rH
+draw triangle rI rJ rK rL rM rN
+draw triangle rO rP rQ rR rS rT
+draw triangle rU rV rW rX rY rZ
+draw triangle ra rb rc rd re rf
+draw triangle rg rh ri rj rk rl
+draw triangle rm rn ro rp rq rr
+draw triangle rs rt ru rv rw rx
+draw triangle ry rz r? r$ r& r(
+draw triangle r) r< r= r> r[ r]
+draw triangle r^ r_ sA sB sC sD
+draw triangle sE sF sG sH sI sJ
+draw triangle sK sL sM sN sO sP
+draw triangle sQ sR sS sT sU sV
+draw triangle sW sX sY sZ sa sb
+draw triangle sc sd se sf sg sh
+draw triangle si sj sk sl sm sn
+draw triangle so sp sq sr ss st
+draw triangle su sv sw sx sy sz
+draw triangle s? s$ s& s( s) s<
+draw triangle s= s> s[ s] s^ s_
+draw triangle tA tB tC tD tE tF
+draw triangle tG tH tI tJ tK tL
+draw triangle tM tN tO tP tQ tR
+draw triangle tS tT tU tV tW tX
+draw triangle tY tZ ta tb tc td
+draw triangle te tf tg th ti tj
+draw triangle tk tl tm tn to tp
+draw triangle tq tr ts tt tu tv
+draw triangle tw tx ty tz t? t$
+draw triangle t& t( t) t< t= t>
+draw triangle t[ t] t^ t_ uA uB
+draw triangle uC uD uE uF uG uH
+draw triangle uI uJ uK uL uM uN
+draw triangle uO uP uQ uR uS uT
+draw triangle uU uV uW uX uY uZ
+draw triangle ua ub uc ud ue uf
+draw triangle ug uh ui uj uk ul
+draw triangle um un uo up uq ur
+draw triangle us ut uu uv uw ux
+draw triangle uy uz u? u$ u& u(
+draw triangle u) u< u= u> u[ u]
+draw triangle u^ u_ vA vB vC vD
+draw triangle vE vF vG vH vI vJ
+draw triangle vK vL vM vN vO vP
+draw triangle vQ vR vS vT vU vV
+draw triangle vW vX vY vZ va vb
+draw triangle vc vd ve vf vg vh
+draw triangle vi vj vk vl vm vn
+draw triangle vo vp vq vr vs vt
+draw triangle vu vv vw vx vy vz
+draw triangle v? v$ v& v( v) v<
+draw triangle v= v> v[ v] v^ v_
+draw triangle wA wB wC wD wE wF
+draw triangle wG wH wI wJ wK wL
+draw triangle wM wN wO wP wQ wR
+draw triangle wS wT wU wV wW wX
+draw triangle wY wZ wa wb wc wd
+draw triangle we wf wg wh wi wj
+draw triangle wk wl wm wn wo wp
+draw triangle wq wr ws wt wu wv
+draw triangle ww wx wy wz w? w$
+draw triangle w& w( w) w< w= w>
+draw triangle w[ w] w^ w_ xA xB
+draw triangle xC xD xE xF xG xH
+draw triangle xI xJ xK xL xM xN
+draw triangle xO xP xQ xR xS xT
+draw triangle xU xV xW xX xY xZ
+draw triangle xa xb xc xd xe xf
+draw triangle xg xh xi xj xk xl
+draw triangle xm xn xo xp xq xr
+draw triangle xs xt xu xv xw xx
+draw triangle xy xz x? x$ x& x(
+draw triangle x) x< x= x> x[ x]
+draw triangle x^ x_ yA yB yC yD
+draw triangle yE yF yG yH yI yJ
+draw triangle yK yL yM yN yO yP
+draw triangle yQ yR yS yT yU yV
+draw triangle yW yX yY yZ ya yb
+draw triangle yc yd ye yf yg yh
+draw triangle yi yj yk yl ym yn
+draw triangle yo yp yq yr ys yt
+draw triangle yu yv yw yx yy yz
+draw triangle y? y$ y& y( y) y<
+draw triangle y= y> y[ y] y^ y_
+draw triangle zA zB zC zD zE zF
+draw triangle zG zH zI zJ zK zL
+draw triangle zM zN zO zP zQ zR
+draw triangle zS zT zU zV zW zX
+draw triangle zY zZ za zb zc zd
+draw triangle ze zf zg zh zi zj
+draw triangle zk zl zm zn zo zp
+draw triangle zq zr zs zt zu zv
+draw triangle zw zx zy zz z? z$
+draw triangle z& z( z) z< z= z>
+draw triangle z[ z] z^ z_ ?A ?B
+draw triangle ?C ?D ?E ?F ?G ?H
+draw triangle ?I ?J ?K ?L ?M ?N
+draw triangle ?O ?P ?Q ?R ?S ?T
+draw triangle ?U ?V ?W ?X ?Y ?Z
+draw triangle ?a ?b ?c ?d ?e ?f
+draw triangle ?g ?h ?i ?j ?k ?l
+draw triangle ?m ?n ?o ?p ?q ?r
+draw triangle ?s ?t ?u ?v ?w ?x
+draw triangle ?y ?z ?? ?$ ?& ?(
+draw triangle ?) ?< ?= ?> ?[ ?]
+draw triangle ?^ ?_ $A $B $C $D
+draw triangle $E $F $G $H $I $J
+draw triangle $K $L $M $N $O $P
+draw triangle $Q $R $S $T $U $V
+draw triangle $W $X $Y $Z $a $b
+draw triangle $c $d $e $f $g $h
+draw triangle $i $j $k $l $m $n
+draw triangle $o $p $q $r $s $t
+draw triangle $u $v $w $x $y $z
+draw triangle $? $$ $& $( $) $<
+draw triangle $= $> $[ $] $^ $_
+draw triangle &A &B &C &D &E &F
+draw triangle &G &H &I &J &K &L
+draw triangle &M &N &O &P &Q &R
+draw triangle &S &T &U &V &W &X
+draw triangle &Y &Z &a &b &c &d
+draw triangle &e &f &g &h &i &j
+draw triangle &k &l &m &n &o &p
+draw triangle &q &r &s &t &u &v
+draw triangle &w &x &y &z &? &$
+draw triangle && &( &) &< &= &>
+draw triangle &[ &] &^ &_ (A (B
+draw triangle (C (D (E (F (G (H
+draw triangle (I (J (K (L (M (N
+draw triangle (O (P (Q (R (S (T
+draw triangle (U (V (W (X (Y (Z
+draw triangle (a (b (c (d (e (f
+draw triangle (g (h (i (j (k (l
+draw triangle (m (n (o (p (q (r
+draw triangle (s (t (u (v (w (x
+draw triangle (y (z (? ($ (& ((
+draw triangle () (< (= (> ([ (]
+draw triangle (^ (_ )A )B )C )D
+draw triangle )E )F )G )H )I )J
+draw triangle )K )L )M )N )O )P
+draw triangle )Q )R )S )T )U )V
+draw triangle )W )X )Y )Z )a )b
+draw triangle )c )d )e )f )g )h
+draw triangle )i )j )k )l )m )n
+draw triangle )o )p )q )r )s )t
+draw triangle )u )v )w )x )y )z
+draw triangle )? )$ )& )( )) )<
+draw triangle )= )> )[ )] )^ )_
+draw triangle <A <B <C <D <E <F
+draw triangle <G <H <I <J <K <L
+draw triangle <M <N <O <P <Q <R
+draw triangle <S <T <U <V <W <X
+draw triangle <Y <Z <a <b <c <d
+draw triangle <e <f <g <h <i <j
+draw triangle <k <l <m <n <o <p
+draw triangle <q <r <s <t <u <v
+draw triangle <w <x <y <z <? <$
+draw triangle <& <( <) << <= <>
+draw triangle <[ <] <^ <_ =A =B
+draw triangle =C =D =E =F =G =H
+draw triangle =I =J =K =L =M =N
+draw triangle =O =P =Q =R =S =T
+draw triangle =U =V =W =X =Y =Z
+draw triangle =a =b =c =d =e =f
+draw triangle =g =h =i =j =k =l
+draw triangle =m =n =o =p =q =r
+draw triangle =s =t =u =v =w =x
+draw triangle =y =z =? =$ =& =(
+draw triangle =) =< == => =[ =]
+draw triangle =^ =_ >A >B >C >D
+draw triangle >E >F >G >H >I >J
+draw triangle >K >L >M >N >O >P
+draw triangle >Q >R >S >T >U >V
+draw triangle >W >X >Y >Z >a >b
+draw triangle >c >d >e >f >g >h
+draw triangle >i >j >k >l >m >n
+draw triangle >o >p >q >r >s >t
+draw triangle >u >v >w >x >y >z
+draw triangle >? >$ >& >( >) ><
+draw triangle >= >> >[ >] >^ >_
+draw triangle [A [B [C [D [E [F
+draw triangle [G [H [I [J [K [L
+draw triangle [M [N [O [P [Q [R
+draw triangle [S [T [U [V [W [X
+draw triangle [Y [Z [a [b [c [d
+draw triangle [e [f [g [h [i [j
+draw triangle [k [l [m [n [o [p
+draw triangle [q [r [s [t [u [v
+draw triangle [w [x [y [z [? [$
+draw triangle [& [( [) [< [= [>
+draw triangle [[ [] [^ [_ ]A ]B
+draw triangle ]C ]D ]E ]F ]G ]H
+draw triangle ]I ]J ]K ]L ]M ]N
+draw triangle ]O ]P ]Q ]R ]S ]T
+draw triangle ]U ]V ]W ]X ]Y ]Z
+draw triangle ]a ]b ]c ]d ]e ]f
+draw triangle ]g ]h ]i ]j ]k ]l
+draw triangle ]m ]n ]o ]p ]q ]r
+draw triangle ]s ]t ]u ]v ]w ]x
+draw triangle ]y ]z ]? ]$ ]& ](
+draw triangle ]) ]< ]= ]> ][ ]]
+draw triangle ]^ ]_ ^A ^B ^C ^D
+draw triangle ^E ^F ^G ^H ^I ^J
+draw triangle ^K ^L ^M ^N ^O ^P
+draw triangle ^Q ^R ^S ^T ^U ^V
+draw triangle ^W ^X ^Y ^Z ^a ^b
+draw triangle ^c ^d ^e ^f ^g ^h
+draw triangle ^i ^j ^k ^l ^m ^n
+draw triangle ^o ^p ^q ^r ^s ^t
+draw triangle ^u ^v ^w ^x ^y ^z
+draw triangle ^? ^$ ^& ^( ^) ^<
+draw triangle ^= ^> ^[ ^] ^^ ^_
+draw triangle _A _B _C _D _E _F
+draw triangle _G _H _I _J _K _L
+draw triangle _M _N _O _P _Q _R
+draw triangle _S _T _U _V _W _X
+draw triangle _Y _Z _a _b _c _d
+draw triangle _e _f _g _h _i _j
+draw triangle _k _l _m _n _o _p
+draw triangle _q _r _s _t _u _v
+draw triangle _w _x _y _z _? _$
+draw triangle _& _( _) _< _= _>
+draw triangle _[ _] _^ __ 0 0
+print "Compiled by Mindcode - github.com/cardillan/mindcode"

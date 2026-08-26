@@ -1,0 +1,361 @@
+// Mindcode system library for Mindustry Logic version 8
+// BigArray
+//
+//* Used internally by the Mindcode compiler/Schemacode builder to create processors for large storage.
+
+module bigarray;
+
+const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz?$&()<=>[]^_";
+
+/**
+ * Set to true when code initialization is complete.
+ */
+export initialized;
+
+volatile mlog(:block) names[256];
+
+inline void _setupName(const index)
+    if index < 4096 then
+        names[index % 256] = encode(0, char(chars, index \ 64), char(chars, index % 64));
+    end;
+end;
+
+inline void _setupNames(const i)
+    _setupName(i + 0);
+    _setupName(i + 1);
+    _setupName(i + 2);
+    _setupName(i + 3);
+    _setupName(i + 4);
+    _setupName(i + 5);
+    _setupName(i + 6);
+    _setupName(i + 7);
+    _setupName(i + 8);
+    _setupName(i + 9);
+    _setupName(i + 10);
+    _setupName(i + 11);
+    _setupName(i + 12);
+    _setupName(i + 13);
+    _setupName(i + 14);
+    _setupName(i + 15);
+end;
+
+/**
+ * Creates the code for a BigArray storage processor at the given index. When the index is greater than 15,
+ * no name setup code is generated, as such processors only contain data and not a variable name index.
+ *
+ * @footprint2  Basic usage:      initializeBigArray(0);
+ */
+inline void initializeBigArray(const index)
+    if index in 0 ... 16 then
+        const i = 256 * index;
+        _setupNames(i + 0);
+        _setupNames(i + 16);
+        _setupNames(i + 32);
+        _setupNames(i + 48);
+        _setupNames(i + 64);
+        _setupNames(i + 80);
+        _setupNames(i + 96);
+        _setupNames(i + 112);
+        _setupNames(i + 128);
+        _setupNames(i + 144);
+        _setupNames(i + 160);
+        _setupNames(i + 176);
+        _setupNames(i + 192);
+        _setupNames(i + 208);
+        _setupNames(i + 224);
+        _setupNames(i + 240);
+    end;
+
+    initialized = true;
+    wait(1e12);
+end;
+
+// These arrays ensure the creation of the storage variables. They're split into eight segments
+// to avoid the internal array size limit (1000 elements).
+
+volatile mlog(
+    "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP",
+    "AQ", "AR", "AS", "AT", "AU", "AV", "AW", "AX", "AY", "AZ", "Aa", "Ab", "Ac", "Ad", "Ae", "Af",
+    "Ag", "Ah", "Ai", "Aj", "Ak", "Al", "Am", "An", "Ao", "Ap", "Aq", "Ar", "As", "At", "Au", "Av",
+    "Aw", "Ax", "Ay", "Az", "A?", "A$", "A&", "A(", "A)", "A<", "A=", "A>", "A[", "A]", "A^", "A_",
+    "BA", "BB", "BC", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BK", "BL", "BM", "BN", "BO", "BP",
+    "BQ", "BR", "BS", "BT", "BU", "BV", "BW", "BX", "BY", "BZ", "Ba", "Bb", "Bc", "Bd", "Be", "Bf",
+    "Bg", "Bh", "Bi", "Bj", "Bk", "Bl", "Bm", "Bn", "Bo", "Bp", "Bq", "Br", "Bs", "Bt", "Bu", "Bv",
+    "Bw", "Bx", "By", "Bz", "B?", "B$", "B&", "B(", "B)", "B<", "B=", "B>", "B[", "B]", "B^", "B_",
+    "CA", "CB", "CC", "CD", "CE", "CF", "CG", "CH", "CI", "CJ", "CK", "CL", "CM", "CN", "CO", "CP",
+    "CQ", "CR", "CS", "CT", "CU", "CV", "CW", "CX", "CY", "CZ", "Ca", "Cb", "Cc", "Cd", "Ce", "Cf",
+    "Cg", "Ch", "Ci", "Cj", "Ck", "Cl", "Cm", "Cn", "Co", "Cp", "Cq", "Cr", "Cs", "Ct", "Cu", "Cv",
+    "Cw", "Cx", "Cy", "Cz", "C?", "C$", "C&", "C(", "C)", "C<", "C=", "C>", "C[", "C]", "C^", "C_",
+    "DA", "DB", "DC", "DD", "DE", "DF", "DG", "DH", "DI", "DJ", "DK", "DL", "DM", "DN", "DO", "DP",
+    "DQ", "DR", "DS", "DT", "DU", "DV", "DW", "DX", "DY", "DZ", "Da", "Db", "Dc", "Dd", "De", "Df",
+    "Dg", "Dh", "Di", "Dj", "Dk", "Dl", "Dm", "Dn", "Do", "Dp", "Dq", "Dr", "Ds", "Dt", "Du", "Dv",
+    "Dw", "Dx", "Dy", "Dz", "D?", "D$", "D&", "D(", "D)", "D<", "D=", "D>", "D[", "D]", "D^", "D_",
+    "EA", "EB", "EC", "ED", "EE", "EF", "EG", "EH", "EI", "EJ", "EK", "EL", "EM", "EN", "EO", "EP",
+    "EQ", "ER", "ES", "ET", "EU", "EV", "EW", "EX", "EY", "EZ", "Ea", "Eb", "Ec", "Ed", "Ee", "Ef",
+    "Eg", "Eh", "Ei", "Ej", "Ek", "El", "Em", "En", "Eo", "Ep", "Eq", "Er", "Es", "Et", "Eu", "Ev",
+    "Ew", "Ex", "Ey", "Ez", "E?", "E$", "E&", "E(", "E)", "E<", "E=", "E>", "E[", "E]", "E^", "E_",
+    "FA", "FB", "FC", "FD", "FE", "FF", "FG", "FH", "FI", "FJ", "FK", "FL", "FM", "FN", "FO", "FP",
+    "FQ", "FR", "FS", "FT", "FU", "FV", "FW", "FX", "FY", "FZ", "Fa", "Fb", "Fc", "Fd", "Fe", "Ff",
+    "Fg", "Fh", "Fi", "Fj", "Fk", "Fl", "Fm", "Fn", "Fo", "Fp", "Fq", "Fr", "Fs", "Ft", "Fu", "Fv",
+    "Fw", "Fx", "Fy", "Fz", "F?", "F$", "F&", "F(", "F)", "F<", "F=", "F>", "F[", "F]", "F^", "F_",
+    "GA", "GB", "GC", "GD", "GE", "GF", "GG", "GH", "GI", "GJ", "GK", "GL", "GM", "GN", "GO", "GP",
+    "GQ", "GR", "GS", "GT", "GU", "GV", "GW", "GX", "GY", "GZ", "Ga", "Gb", "Gc", "Gd", "Ge", "Gf",
+    "Gg", "Gh", "Gi", "Gj", "Gk", "Gl", "Gm", "Gn", "Go", "Gp", "Gq", "Gr", "Gs", "Gt", "Gu", "Gv",
+    "Gw", "Gx", "Gy", "Gz", "G?", "G$", "G&", "G(", "G)", "G<", "G=", "G>", "G[", "G]", "G^", "G_",
+    "HA", "HB", "HC", "HD", "HE", "HF", "HG", "HH", "HI", "HJ", "HK", "HL", "HM", "HN", "HO", "HP",
+    "HQ", "HR", "HS", "HT", "HU", "HV", "HW", "HX", "HY", "HZ", "Ha", "Hb", "Hc", "Hd", "He", "Hf",
+    "Hg", "Hh", "Hi", "Hj", "Hk", "Hl", "Hm", "Hn", "Ho", "Hp", "Hq", "Hr", "Hs", "Ht", "Hu", "Hv",
+    "Hw", "Hx", "Hy", "Hz", "H?", "H$", "H&", "H(", "H)", "H<", "H=", "H>", "H[", "H]", "H^", "H_"
+) var elements0[512];
+
+
+volatile mlog(
+    "IA", "IB", "IC", "ID", "IE", "IF", "IG", "IH", "II", "IJ", "IK", "IL", "IM", "IN", "IO", "IP",
+    "IQ", "IR", "IS", "IT", "IU", "IV", "IW", "IX", "IY", "IZ", "Ia", "Ib", "Ic", "Id", "Ie", "If",
+    "Ig", "Ih", "Ii", "Ij", "Ik", "Il", "Im", "In", "Io", "Ip", "Iq", "Ir", "Is", "It", "Iu", "Iv",
+    "Iw", "Ix", "Iy", "Iz", "I?", "I$", "I&", "I(", "I)", "I<", "I=", "I>", "I[", "I]", "I^", "I_",
+    "JA", "JB", "JC", "JD", "JE", "JF", "JG", "JH", "JI", "JJ", "JK", "JL", "JM", "JN", "JO", "JP",
+    "JQ", "JR", "JS", "JT", "JU", "JV", "JW", "JX", "JY", "JZ", "Ja", "Jb", "Jc", "Jd", "Je", "Jf",
+    "Jg", "Jh", "Ji", "Jj", "Jk", "Jl", "Jm", "Jn", "Jo", "Jp", "Jq", "Jr", "Js", "Jt", "Ju", "Jv",
+    "Jw", "Jx", "Jy", "Jz", "J?", "J$", "J&", "J(", "J)", "J<", "J=", "J>", "J[", "J]", "J^", "J_",
+    "KA", "KB", "KC", "KD", "KE", "KF", "KG", "KH", "KI", "KJ", "KK", "KL", "KM", "KN", "KO", "KP",
+    "KQ", "KR", "KS", "KT", "KU", "KV", "KW", "KX", "KY", "KZ", "Ka", "Kb", "Kc", "Kd", "Ke", "Kf",
+    "Kg", "Kh", "Ki", "Kj", "Kk", "Kl", "Km", "Kn", "Ko", "Kp", "Kq", "Kr", "Ks", "Kt", "Ku", "Kv",
+    "Kw", "Kx", "Ky", "Kz", "K?", "K$", "K&", "K(", "K)", "K<", "K=", "K>", "K[", "K]", "K^", "K_",
+    "LA", "LB", "LC", "LD", "LE", "LF", "LG", "LH", "LI", "LJ", "LK", "LL", "LM", "LN", "LO", "LP",
+    "LQ", "LR", "LS", "LT", "LU", "LV", "LW", "LX", "LY", "LZ", "La", "Lb", "Lc", "Ld", "Le", "Lf",
+    "Lg", "Lh", "Li", "Lj", "Lk", "Ll", "Lm", "Ln", "Lo", "Lp", "Lq", "Lr", "Ls", "Lt", "Lu", "Lv",
+    "Lw", "Lx", "Ly", "Lz", "L?", "L$", "L&", "L(", "L)", "L<", "L=", "L>", "L[", "L]", "L^", "L_",
+    "MA", "MB", "MC", "MD", "ME", "MF", "MG", "MH", "MI", "MJ", "MK", "ML", "MM", "MN", "MO", "MP",
+    "MQ", "MR", "MS", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "Ma", "Mb", "Mc", "Md", "Me", "Mf",
+    "Mg", "Mh", "Mi", "Mj", "Mk", "Ml", "Mm", "Mn", "Mo", "Mp", "Mq", "Mr", "Ms", "Mt", "Mu", "Mv",
+    "Mw", "Mx", "My", "Mz", "M?", "M$", "M&", "M(", "M)", "M<", "M=", "M>", "M[", "M]", "M^", "M_",
+    "NA", "NB", "NC", "ND", "NE", "NF", "NG", "NH", "NI", "NJ", "NK", "NL", "NM", "NN", "NO", "NP",
+    "NQ", "NR", "NS", "NT", "NU", "NV", "NW", "NX", "NY", "NZ", "Na", "Nb", "Nc", "Nd", "Ne", "Nf",
+    "Ng", "Nh", "Ni", "Nj", "Nk", "Nl", "Nm", "Nn", "No", "Np", "Nq", "Nr", "Ns", "Nt", "Nu", "Nv",
+    "Nw", "Nx", "Ny", "Nz", "N?", "N$", "N&", "N(", "N)", "N<", "N=", "N>", "N[", "N]", "N^", "N_",
+    "OA", "OB", "OC", "OD", "OE", "OF", "OG", "OH", "OI", "OJ", "OK", "OL", "OM", "ON", "OO", "OP",
+    "OQ", "OR", "OS", "OT", "OU", "OV", "OW", "OX", "OY", "OZ", "Oa", "Ob", "Oc", "Od", "Oe", "Of",
+    "Og", "Oh", "Oi", "Oj", "Ok", "Ol", "Om", "On", "Oo", "Op", "Oq", "Or", "Os", "Ot", "Ou", "Ov",
+    "Ow", "Ox", "Oy", "Oz", "O?", "O$", "O&", "O(", "O)", "O<", "O=", "O>", "O[", "O]", "O^", "O_",
+    "PA", "PB", "PC", "PD", "PE", "PF", "PG", "PH", "PI", "PJ", "PK", "PL", "PM", "PN", "PO", "PP",
+    "PQ", "PR", "PS", "PT", "PU", "PV", "PW", "PX", "PY", "PZ", "Pa", "Pb", "Pc", "Pd", "Pe", "Pf",
+    "Pg", "Ph", "Pi", "Pj", "Pk", "Pl", "Pm", "Pn", "Po", "Pp", "Pq", "Pr", "Ps", "Pt", "Pu", "Pv",
+    "Pw", "Px", "Py", "Pz", "P?", "P$", "P&", "P(", "P)", "P<", "P=", "P>", "P[", "P]", "P^", "P_"
+) var elements1[512];
+
+
+volatile mlog(
+    "QA", "QB", "QC", "QD", "QE", "QF", "QG", "QH", "QI", "QJ", "QK", "QL", "QM", "QN", "QO", "QP",
+    "QQ", "QR", "QS", "QT", "QU", "QV", "QW", "QX", "QY", "QZ", "Qa", "Qb", "Qc", "Qd", "Qe", "Qf",
+    "Qg", "Qh", "Qi", "Qj", "Qk", "Ql", "Qm", "Qn", "Qo", "Qp", "Qq", "Qr", "Qs", "Qt", "Qu", "Qv",
+    "Qw", "Qx", "Qy", "Qz", "Q?", "Q$", "Q&", "Q(", "Q)", "Q<", "Q=", "Q>", "Q[", "Q]", "Q^", "Q_",
+    "RA", "RB", "RC", "RD", "RE", "RF", "RG", "RH", "RI", "RJ", "RK", "RL", "RM", "RN", "RO", "RP",
+    "RQ", "RR", "RS", "RT", "RU", "RV", "RW", "RX", "RY", "RZ", "Ra", "Rb", "Rc", "Rd", "Re", "Rf",
+    "Rg", "Rh", "Ri", "Rj", "Rk", "Rl", "Rm", "Rn", "Ro", "Rp", "Rq", "Rr", "Rs", "Rt", "Ru", "Rv",
+    "Rw", "Rx", "Ry", "Rz", "R?", "R$", "R&", "R(", "R)", "R<", "R=", "R>", "R[", "R]", "R^", "R_",
+    "SA", "SB", "SC", "SD", "SE", "SF", "SG", "SH", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SP",
+    "SQ", "SR", "SS", "ST", "SU", "SV", "SW", "SX", "SY", "SZ", "Sa", "Sb", "Sc", "Sd", "Se", "Sf",
+    "Sg", "Sh", "Si", "Sj", "Sk", "Sl", "Sm", "Sn", "So", "Sp", "Sq", "Sr", "Ss", "St", "Su", "Sv",
+    "Sw", "Sx", "Sy", "Sz", "S?", "S$", "S&", "S(", "S)", "S<", "S=", "S>", "S[", "S]", "S^", "S_",
+    "TA", "TB", "TC", "TD", "TE", "TF", "TG", "TH", "TI", "TJ", "TK", "TL", "TM", "TN", "TO", "TP",
+    "TQ", "TR", "TS", "TT", "TU", "TV", "TW", "TX", "TY", "TZ", "Ta", "Tb", "Tc", "Td", "Te", "Tf",
+    "Tg", "Th", "Ti", "Tj", "Tk", "Tl", "Tm", "Tn", "To", "Tp", "Tq", "Tr", "Ts", "Tt", "Tu", "Tv",
+    "Tw", "Tx", "Ty", "Tz", "T?", "T$", "T&", "T(", "T)", "T<", "T=", "T>", "T[", "T]", "T^", "T_",
+    "UA", "UB", "UC", "UD", "UE", "UF", "UG", "UH", "UI", "UJ", "UK", "UL", "UM", "UN", "UO", "UP",
+    "UQ", "UR", "US", "UT", "UU", "UV", "UW", "UX", "UY", "UZ", "Ua", "Ub", "Uc", "Ud", "Ue", "Uf",
+    "Ug", "Uh", "Ui", "Uj", "Uk", "Ul", "Um", "Un", "Uo", "Up", "Uq", "Ur", "Us", "Ut", "Uu", "Uv",
+    "Uw", "Ux", "Uy", "Uz", "U?", "U$", "U&", "U(", "U)", "U<", "U=", "U>", "U[", "U]", "U^", "U_",
+    "VA", "VB", "VC", "VD", "VE", "VF", "VG", "VH", "VI", "VJ", "VK", "VL", "VM", "VN", "VO", "VP",
+    "VQ", "VR", "VS", "VT", "VU", "VV", "VW", "VX", "VY", "VZ", "Va", "Vb", "Vc", "Vd", "Ve", "Vf",
+    "Vg", "Vh", "Vi", "Vj", "Vk", "Vl", "Vm", "Vn", "Vo", "Vp", "Vq", "Vr", "Vs", "Vt", "Vu", "Vv",
+    "Vw", "Vx", "Vy", "Vz", "V?", "V$", "V&", "V(", "V)", "V<", "V=", "V>", "V[", "V]", "V^", "V_",
+    "WA", "WB", "WC", "WD", "WE", "WF", "WG", "WH", "WI", "WJ", "WK", "WL", "WM", "WN", "WO", "WP",
+    "WQ", "WR", "WS", "WT", "WU", "WV", "WW", "WX", "WY", "WZ", "Wa", "Wb", "Wc", "Wd", "We", "Wf",
+    "Wg", "Wh", "Wi", "Wj", "Wk", "Wl", "Wm", "Wn", "Wo", "Wp", "Wq", "Wr", "Ws", "Wt", "Wu", "Wv",
+    "Ww", "Wx", "Wy", "Wz", "W?", "W$", "W&", "W(", "W)", "W<", "W=", "W>", "W[", "W]", "W^", "W_",
+    "XA", "XB", "XC", "XD", "XE", "XF", "XG", "XH", "XI", "XJ", "XK", "XL", "XM", "XN", "XO", "XP",
+    "XQ", "XR", "XS", "XT", "XU", "XV", "XW", "XX", "XY", "XZ", "Xa", "Xb", "Xc", "Xd", "Xe", "Xf",
+    "Xg", "Xh", "Xi", "Xj", "Xk", "Xl", "Xm", "Xn", "Xo", "Xp", "Xq", "Xr", "Xs", "Xt", "Xu", "Xv",
+    "Xw", "Xx", "Xy", "Xz", "X?", "X$", "X&", "X(", "X)", "X<", "X=", "X>", "X[", "X]", "X^", "X_"
+) var elements2[512];
+
+
+volatile mlog(
+    "YA", "YB", "YC", "YD", "YE", "YF", "YG", "YH", "YI", "YJ", "YK", "YL", "YM", "YN", "YO", "YP",
+    "YQ", "YR", "YS", "YT", "YU", "YV", "YW", "YX", "YY", "YZ", "Ya", "Yb", "Yc", "Yd", "Ye", "Yf",
+    "Yg", "Yh", "Yi", "Yj", "Yk", "Yl", "Ym", "Yn", "Yo", "Yp", "Yq", "Yr", "Ys", "Yt", "Yu", "Yv",
+    "Yw", "Yx", "Yy", "Yz", "Y?", "Y$", "Y&", "Y(", "Y)", "Y<", "Y=", "Y>", "Y[", "Y]", "Y^", "Y_",
+    "ZA", "ZB", "ZC", "ZD", "ZE", "ZF", "ZG", "ZH", "ZI", "ZJ", "ZK", "ZL", "ZM", "ZN", "ZO", "ZP",
+    "ZQ", "ZR", "ZS", "ZT", "ZU", "ZV", "ZW", "ZX", "ZY", "ZZ", "Za", "Zb", "Zc", "Zd", "Ze", "Zf",
+    "Zg", "Zh", "Zi", "Zj", "Zk", "Zl", "Zm", "Zn", "Zo", "Zp", "Zq", "Zr", "Zs", "Zt", "Zu", "Zv",
+    "Zw", "Zx", "Zy", "Zz", "Z?", "Z$", "Z&", "Z(", "Z)", "Z<", "Z=", "Z>", "Z[", "Z]", "Z^", "Z_",
+    "aA", "aB", "aC", "aD", "aE", "aF", "aG", "aH", "aI", "aJ", "aK", "aL", "aM", "aN", "aO", "aP",
+    "aQ", "aR", "aS", "aT", "aU", "aV", "aW", "aX", "aY", "aZ", "aa", "ab", "ac", "ad", "ae", "af",
+    "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap", "aq", "ar", "as", "at", "au", "av",
+    "aw", "ax", "ay", "az", "a?", "a$", "a&", "a(", "a)", "a<", "a=", "a>", "a[", "a]", "a^", "a_",
+    "bA", "bB", "bC", "bD", "bE", "bF", "bG", "bH", "bI", "bJ", "bK", "bL", "bM", "bN", "bO", "bP",
+    "bQ", "bR", "bS", "bT", "bU", "bV", "bW", "bX", "bY", "bZ", "ba", "bb", "bc", "bd", "be", "bf",
+    "bg", "bh", "bi", "bj", "bk", "bl", "bm", "bn", "bo", "bp", "bq", "br", "bs", "bt", "bu", "bv",
+    "bw", "bx", "by", "bz", "b?", "b$", "b&", "b(", "b)", "b<", "b=", "b>", "b[", "b]", "b^", "b_",
+    "cA", "cB", "cC", "cD", "cE", "cF", "cG", "cH", "cI", "cJ", "cK", "cL", "cM", "cN", "cO", "cP",
+    "cQ", "cR", "cS", "cT", "cU", "cV", "cW", "cX", "cY", "cZ", "ca", "cb", "cc", "cd", "ce", "cf",
+    "cg", "ch", "ci", "cj", "ck", "cl", "cm", "cn", "co", "cp", "cq", "cr", "cs", "ct", "cu", "cv",
+    "cw", "cx", "cy", "cz", "c?", "c$", "c&", "c(", "c)", "c<", "c=", "c>", "c[", "c]", "c^", "c_",
+    "dA", "dB", "dC", "dD", "dE", "dF", "dG", "dH", "dI", "dJ", "dK", "dL", "dM", "dN", "dO", "dP",
+    "dQ", "dR", "dS", "dT", "dU", "dV", "dW", "dX", "dY", "dZ", "da", "db", "dc", "dd", "de", "df",
+    "dg", "dh", "di", "dj", "dk", "dl", "dm", "dn", "do", "dp", "dq", "dr", "ds", "dt", "du", "dv",
+    "dw", "dx", "dy", "dz", "d?", "d$", "d&", "d(", "d)", "d<", "d=", "d>", "d[", "d]", "d^", "d_",
+    "eA", "eB", "eC", "eD", "eE", "eF", "eG", "eH", "eI", "eJ", "eK", "eL", "eM", "eN", "eO", "eP",
+    "eQ", "eR", "eS", "eT", "eU", "eV", "eW", "eX", "eY", "eZ", "ea", "eb", "ec", "ed", "ee", "ef",
+    "eg", "eh", "ei", "ej", "ek", "el", "em", "en", "eo", "ep", "eq", "er", "es", "et", "eu", "ev",
+    "ew", "ex", "ey", "ez", "e?", "e$", "e&", "e(", "e)", "e<", "e=", "e>", "e[", "e]", "e^", "e_",
+    "fA", "fB", "fC", "fD", "fE", "fF", "fG", "fH", "fI", "fJ", "fK", "fL", "fM", "fN", "fO", "fP",
+    "fQ", "fR", "fS", "fT", "fU", "fV", "fW", "fX", "fY", "fZ", "fa", "fb", "fc", "fd", "fe", "ff",
+    "fg", "fh", "fi", "fj", "fk", "fl", "fm", "fn", "fo", "fp", "fq", "fr", "fs", "ft", "fu", "fv",
+    "fw", "fx", "fy", "fz", "f?", "f$", "f&", "f(", "f)", "f<", "f=", "f>", "f[", "f]", "f^", "f_"
+) var elements3[512];
+
+
+volatile mlog(
+    "gA", "gB", "gC", "gD", "gE", "gF", "gG", "gH", "gI", "gJ", "gK", "gL", "gM", "gN", "gO", "gP",
+    "gQ", "gR", "gS", "gT", "gU", "gV", "gW", "gX", "gY", "gZ", "ga", "gb", "gc", "gd", "ge", "gf",
+    "gg", "gh", "gi", "gj", "gk", "gl", "gm", "gn", "go", "gp", "gq", "gr", "gs", "gt", "gu", "gv",
+    "gw", "gx", "gy", "gz", "g?", "g$", "g&", "g(", "g)", "g<", "g=", "g>", "g[", "g]", "g^", "g_",
+    "hA", "hB", "hC", "hD", "hE", "hF", "hG", "hH", "hI", "hJ", "hK", "hL", "hM", "hN", "hO", "hP",
+    "hQ", "hR", "hS", "hT", "hU", "hV", "hW", "hX", "hY", "hZ", "ha", "hb", "hc", "hd", "he", "hf",
+    "hg", "hh", "hi", "hj", "hk", "hl", "hm", "hn", "ho", "hp", "hq", "hr", "hs", "ht", "hu", "hv",
+    "hw", "hx", "hy", "hz", "h?", "h$", "h&", "h(", "h)", "h<", "h=", "h>", "h[", "h]", "h^", "h_",
+    "iA", "iB", "iC", "iD", "iE", "iF", "iG", "iH", "iI", "iJ", "iK", "iL", "iM", "iN", "iO", "iP",
+    "iQ", "iR", "iS", "iT", "iU", "iV", "iW", "iX", "iY", "iZ", "ia", "ib", "ic", "id", "ie", "if",
+    "ig", "ih", "ii", "ij", "ik", "il", "im", "in", "io", "ip", "iq", "ir", "is", "it", "iu", "iv",
+    "iw", "ix", "iy", "iz", "i?", "i$", "i&", "i(", "i)", "i<", "i=", "i>", "i[", "i]", "i^", "i_",
+    "jA", "jB", "jC", "jD", "jE", "jF", "jG", "jH", "jI", "jJ", "jK", "jL", "jM", "jN", "jO", "jP",
+    "jQ", "jR", "jS", "jT", "jU", "jV", "jW", "jX", "jY", "jZ", "ja", "jb", "jc", "jd", "je", "jf",
+    "jg", "jh", "ji", "jj", "jk", "jl", "jm", "jn", "jo", "jp", "jq", "jr", "js", "jt", "ju", "jv",
+    "jw", "jx", "jy", "jz", "j?", "j$", "j&", "j(", "j)", "j<", "j=", "j>", "j[", "j]", "j^", "j_",
+    "kA", "kB", "kC", "kD", "kE", "kF", "kG", "kH", "kI", "kJ", "kK", "kL", "kM", "kN", "kO", "kP",
+    "kQ", "kR", "kS", "kT", "kU", "kV", "kW", "kX", "kY", "kZ", "ka", "kb", "kc", "kd", "ke", "kf",
+    "kg", "kh", "ki", "kj", "kk", "kl", "km", "kn", "ko", "kp", "kq", "kr", "ks", "kt", "ku", "kv",
+    "kw", "kx", "ky", "kz", "k?", "k$", "k&", "k(", "k)", "k<", "k=", "k>", "k[", "k]", "k^", "k_",
+    "lA", "lB", "lC", "lD", "lE", "lF", "lG", "lH", "lI", "lJ", "lK", "lL", "lM", "lN", "lO", "lP",
+    "lQ", "lR", "lS", "lT", "lU", "lV", "lW", "lX", "lY", "lZ", "la", "lb", "lc", "ld", "le", "lf",
+    "lg", "lh", "li", "lj", "lk", "ll", "lm", "ln", "lo", "lp", "lq", "lr", "ls", "lt", "lu", "lv",
+    "lw", "lx", "ly", "lz", "l?", "l$", "l&", "l(", "l)", "l<", "l=", "l>", "l[", "l]", "l^", "l_",
+    "mA", "mB", "mC", "mD", "mE", "mF", "mG", "mH", "mI", "mJ", "mK", "mL", "mM", "mN", "mO", "mP",
+    "mQ", "mR", "mS", "mT", "mU", "mV", "mW", "mX", "mY", "mZ", "ma", "mb", "mc", "md", "me", "mf",
+    "mg", "mh", "mi", "mj", "mk", "ml", "mm", "mn", "mo", "mp", "mq", "mr", "ms", "mt", "mu", "mv",
+    "mw", "mx", "my", "mz", "m?", "m$", "m&", "m(", "m)", "m<", "m=", "m>", "m[", "m]", "m^", "m_",
+    "nA", "nB", "nC", "nD", "nE", "nF", "nG", "nH", "nI", "nJ", "nK", "nL", "nM", "nN", "nO", "nP",
+    "nQ", "nR", "nS", "nT", "nU", "nV", "nW", "nX", "nY", "nZ", "na", "nb", "nc", "nd", "ne", "nf",
+    "ng", "nh", "ni", "nj", "nk", "nl", "nm", "nn", "no", "np", "nq", "nr", "ns", "nt", "nu", "nv",
+    "nw", "nx", "ny", "nz", "n?", "n$", "n&", "n(", "n)", "n<", "n=", "n>", "n[", "n]", "n^", "n_"
+) var elements4[512];
+
+
+volatile mlog(
+    "oA", "oB", "oC", "oD", "oE", "oF", "oG", "oH", "oI", "oJ", "oK", "oL", "oM", "oN", "oO", "oP",
+    "oQ", "oR", "oS", "oT", "oU", "oV", "oW", "oX", "oY", "oZ", "oa", "ob", "oc", "od", "oe", "of",
+    "og", "oh", "oi", "oj", "ok", "ol", "om", "on", "oo", "op", "oq", "or", "os", "ot", "ou", "ov",
+    "ow", "ox", "oy", "oz", "o?", "o$", "o&", "o(", "o)", "o<", "o=", "o>", "o[", "o]", "o^", "o_",
+    "pA", "pB", "pC", "pD", "pE", "pF", "pG", "pH", "pI", "pJ", "pK", "pL", "pM", "pN", "pO", "pP",
+    "pQ", "pR", "pS", "pT", "pU", "pV", "pW", "pX", "pY", "pZ", "pa", "pb", "pc", "pd", "pe", "pf",
+    "pg", "ph", "pi", "pj", "pk", "pl", "pm", "pn", "po", "pp", "pq", "pr", "ps", "pt", "pu", "pv",
+    "pw", "px", "py", "pz", "p?", "p$", "p&", "p(", "p)", "p<", "p=", "p>", "p[", "p]", "p^", "p_",
+    "qA", "qB", "qC", "qD", "qE", "qF", "qG", "qH", "qI", "qJ", "qK", "qL", "qM", "qN", "qO", "qP",
+    "qQ", "qR", "qS", "qT", "qU", "qV", "qW", "qX", "qY", "qZ", "qa", "qb", "qc", "qd", "qe", "qf",
+    "qg", "qh", "qi", "qj", "qk", "ql", "qm", "qn", "qo", "qp", "qq", "qr", "qs", "qt", "qu", "qv",
+    "qw", "qx", "qy", "qz", "q?", "q$", "q&", "q(", "q)", "q<", "q=", "q>", "q[", "q]", "q^", "q_",
+    "rA", "rB", "rC", "rD", "rE", "rF", "rG", "rH", "rI", "rJ", "rK", "rL", "rM", "rN", "rO", "rP",
+    "rQ", "rR", "rS", "rT", "rU", "rV", "rW", "rX", "rY", "rZ", "ra", "rb", "rc", "rd", "re", "rf",
+    "rg", "rh", "ri", "rj", "rk", "rl", "rm", "rn", "ro", "rp", "rq", "rr", "rs", "rt", "ru", "rv",
+    "rw", "rx", "ry", "rz", "r?", "r$", "r&", "r(", "r)", "r<", "r=", "r>", "r[", "r]", "r^", "r_",
+    "sA", "sB", "sC", "sD", "sE", "sF", "sG", "sH", "sI", "sJ", "sK", "sL", "sM", "sN", "sO", "sP",
+    "sQ", "sR", "sS", "sT", "sU", "sV", "sW", "sX", "sY", "sZ", "sa", "sb", "sc", "sd", "se", "sf",
+    "sg", "sh", "si", "sj", "sk", "sl", "sm", "sn", "so", "sp", "sq", "sr", "ss", "st", "su", "sv",
+    "sw", "sx", "sy", "sz", "s?", "s$", "s&", "s(", "s)", "s<", "s=", "s>", "s[", "s]", "s^", "s_",
+    "tA", "tB", "tC", "tD", "tE", "tF", "tG", "tH", "tI", "tJ", "tK", "tL", "tM", "tN", "tO", "tP",
+    "tQ", "tR", "tS", "tT", "tU", "tV", "tW", "tX", "tY", "tZ", "ta", "tb", "tc", "td", "te", "tf",
+    "tg", "th", "ti", "tj", "tk", "tl", "tm", "tn", "to", "tp", "tq", "tr", "ts", "tt", "tu", "tv",
+    "tw", "tx", "ty", "tz", "t?", "t$", "t&", "t(", "t)", "t<", "t=", "t>", "t[", "t]", "t^", "t_",
+    "uA", "uB", "uC", "uD", "uE", "uF", "uG", "uH", "uI", "uJ", "uK", "uL", "uM", "uN", "uO", "uP",
+    "uQ", "uR", "uS", "uT", "uU", "uV", "uW", "uX", "uY", "uZ", "ua", "ub", "uc", "ud", "ue", "uf",
+    "ug", "uh", "ui", "uj", "uk", "ul", "um", "un", "uo", "up", "uq", "ur", "us", "ut", "uu", "uv",
+    "uw", "ux", "uy", "uz", "u?", "u$", "u&", "u(", "u)", "u<", "u=", "u>", "u[", "u]", "u^", "u_",
+    "vA", "vB", "vC", "vD", "vE", "vF", "vG", "vH", "vI", "vJ", "vK", "vL", "vM", "vN", "vO", "vP",
+    "vQ", "vR", "vS", "vT", "vU", "vV", "vW", "vX", "vY", "vZ", "va", "vb", "vc", "vd", "ve", "vf",
+    "vg", "vh", "vi", "vj", "vk", "vl", "vm", "vn", "vo", "vp", "vq", "vr", "vs", "vt", "vu", "vv",
+    "vw", "vx", "vy", "vz", "v?", "v$", "v&", "v(", "v)", "v<", "v=", "v>", "v[", "v]", "v^", "v_"
+) var elements5[512];
+
+
+volatile mlog(
+    "wA", "wB", "wC", "wD", "wE", "wF", "wG", "wH", "wI", "wJ", "wK", "wL", "wM", "wN", "wO", "wP",
+    "wQ", "wR", "wS", "wT", "wU", "wV", "wW", "wX", "wY", "wZ", "wa", "wb", "wc", "wd", "we", "wf",
+    "wg", "wh", "wi", "wj", "wk", "wl", "wm", "wn", "wo", "wp", "wq", "wr", "ws", "wt", "wu", "wv",
+    "ww", "wx", "wy", "wz", "w?", "w$", "w&", "w(", "w)", "w<", "w=", "w>", "w[", "w]", "w^", "w_",
+    "xA", "xB", "xC", "xD", "xE", "xF", "xG", "xH", "xI", "xJ", "xK", "xL", "xM", "xN", "xO", "xP",
+    "xQ", "xR", "xS", "xT", "xU", "xV", "xW", "xX", "xY", "xZ", "xa", "xb", "xc", "xd", "xe", "xf",
+    "xg", "xh", "xi", "xj", "xk", "xl", "xm", "xn", "xo", "xp", "xq", "xr", "xs", "xt", "xu", "xv",
+    "xw", "xx", "xy", "xz", "x?", "x$", "x&", "x(", "x)", "x<", "x=", "x>", "x[", "x]", "x^", "x_",
+    "yA", "yB", "yC", "yD", "yE", "yF", "yG", "yH", "yI", "yJ", "yK", "yL", "yM", "yN", "yO", "yP",
+    "yQ", "yR", "yS", "yT", "yU", "yV", "yW", "yX", "yY", "yZ", "ya", "yb", "yc", "yd", "ye", "yf",
+    "yg", "yh", "yi", "yj", "yk", "yl", "ym", "yn", "yo", "yp", "yq", "yr", "ys", "yt", "yu", "yv",
+    "yw", "yx", "yy", "yz", "y?", "y$", "y&", "y(", "y)", "y<", "y=", "y>", "y[", "y]", "y^", "y_",
+    "zA", "zB", "zC", "zD", "zE", "zF", "zG", "zH", "zI", "zJ", "zK", "zL", "zM", "zN", "zO", "zP",
+    "zQ", "zR", "zS", "zT", "zU", "zV", "zW", "zX", "zY", "zZ", "za", "zb", "zc", "zd", "ze", "zf",
+    "zg", "zh", "zi", "zj", "zk", "zl", "zm", "zn", "zo", "zp", "zq", "zr", "zs", "zt", "zu", "zv",
+    "zw", "zx", "zy", "zz", "z?", "z$", "z&", "z(", "z)", "z<", "z=", "z>", "z[", "z]", "z^", "z_",
+    "?A", "?B", "?C", "?D", "?E", "?F", "?G", "?H", "?I", "?J", "?K", "?L", "?M", "?N", "?O", "?P",
+    "?Q", "?R", "?S", "?T", "?U", "?V", "?W", "?X", "?Y", "?Z", "?a", "?b", "?c", "?d", "?e", "?f",
+    "?g", "?h", "?i", "?j", "?k", "?l", "?m", "?n", "?o", "?p", "?q", "?r", "?s", "?t", "?u", "?v",
+    "?w", "?x", "?y", "?z", "??", "?$", "?&", "?(", "?)", "?<", "?=", "?>", "?[", "?]", "?^", "?_",
+    "$A", "$B", "$C", "$D", "$E", "$F", "$G", "$H", "$I", "$J", "$K", "$L", "$M", "$N", "$O", "$P",
+    "$Q", "$R", "$S", "$T", "$U", "$V", "$W", "$X", "$Y", "$Z", "$a", "$b", "$c", "$d", "$e", "$f",
+    "$g", "$h", "$i", "$j", "$k", "$l", "$m", "$n", "$o", "$p", "$q", "$r", "$s", "$t", "$u", "$v",
+    "$w", "$x", "$y", "$z", "$?", "$$", "$&", "$(", "$)", "$<", "$=", "$>", "$[", "$]", "$^", "$_",
+    "&A", "&B", "&C", "&D", "&E", "&F", "&G", "&H", "&I", "&J", "&K", "&L", "&M", "&N", "&O", "&P",
+    "&Q", "&R", "&S", "&T", "&U", "&V", "&W", "&X", "&Y", "&Z", "&a", "&b", "&c", "&d", "&e", "&f",
+    "&g", "&h", "&i", "&j", "&k", "&l", "&m", "&n", "&o", "&p", "&q", "&r", "&s", "&t", "&u", "&v",
+    "&w", "&x", "&y", "&z", "&?", "&$", "&&", "&(", "&)", "&<", "&=", "&>", "&[", "&]", "&^", "&_",
+    "(A", "(B", "(C", "(D", "(E", "(F", "(G", "(H", "(I", "(J", "(K", "(L", "(M", "(N", "(O", "(P",
+    "(Q", "(R", "(S", "(T", "(U", "(V", "(W", "(X", "(Y", "(Z", "(a", "(b", "(c", "(d", "(e", "(f",
+    "(g", "(h", "(i", "(j", "(k", "(l", "(m", "(n", "(o", "(p", "(q", "(r", "(s", "(t", "(u", "(v",
+    "(w", "(x", "(y", "(z", "(?", "($", "(&", "((", "()", "(<", "(=", "(>", "([", "(]", "(^", "(_"
+) var elements6[512];
+
+
+volatile mlog(
+    ")A", ")B", ")C", ")D", ")E", ")F", ")G", ")H", ")I", ")J", ")K", ")L", ")M", ")N", ")O", ")P",
+    ")Q", ")R", ")S", ")T", ")U", ")V", ")W", ")X", ")Y", ")Z", ")a", ")b", ")c", ")d", ")e", ")f",
+    ")g", ")h", ")i", ")j", ")k", ")l", ")m", ")n", ")o", ")p", ")q", ")r", ")s", ")t", ")u", ")v",
+    ")w", ")x", ")y", ")z", ")?", ")$", ")&", ")(", "))", ")<", ")=", ")>", ")[", ")]", ")^", ")_",
+    "<A", "<B", "<C", "<D", "<E", "<F", "<G", "<H", "<I", "<J", "<K", "<L", "<M", "<N", "<O", "<P",
+    "<Q", "<R", "<S", "<T", "<U", "<V", "<W", "<X", "<Y", "<Z", "<a", "<b", "<c", "<d", "<e", "<f",
+    "<g", "<h", "<i", "<j", "<k", "<l", "<m", "<n", "<o", "<p", "<q", "<r", "<s", "<t", "<u", "<v",
+    "<w", "<x", "<y", "<z", "<?", "<$", "<&", "<(", "<)", "<<", "<=", "<>", "<[", "<]", "<^", "<_",
+    "=A", "=B", "=C", "=D", "=E", "=F", "=G", "=H", "=I", "=J", "=K", "=L", "=M", "=N", "=O", "=P",
+    "=Q", "=R", "=S", "=T", "=U", "=V", "=W", "=X", "=Y", "=Z", "=a", "=b", "=c", "=d", "=e", "=f",
+    "=g", "=h", "=i", "=j", "=k", "=l", "=m", "=n", "=o", "=p", "=q", "=r", "=s", "=t", "=u", "=v",
+    "=w", "=x", "=y", "=z", "=?", "=$", "=&", "=(", "=)", "=<", "==", "=>", "=[", "=]", "=^", "=_",
+    ">A", ">B", ">C", ">D", ">E", ">F", ">G", ">H", ">I", ">J", ">K", ">L", ">M", ">N", ">O", ">P",
+    ">Q", ">R", ">S", ">T", ">U", ">V", ">W", ">X", ">Y", ">Z", ">a", ">b", ">c", ">d", ">e", ">f",
+    ">g", ">h", ">i", ">j", ">k", ">l", ">m", ">n", ">o", ">p", ">q", ">r", ">s", ">t", ">u", ">v",
+    ">w", ">x", ">y", ">z", ">?", ">$", ">&", ">(", ">)", "><", ">=", ">>", ">[", ">]", ">^", ">_",
+    "[A", "[B", "[C", "[D", "[E", "[F", "[G", "[H", "[I", "[J", "[K", "[L", "[M", "[N", "[O", "[P",
+    "[Q", "[R", "[S", "[T", "[U", "[V", "[W", "[X", "[Y", "[Z", "[a", "[b", "[c", "[d", "[e", "[f",
+    "[g", "[h", "[i", "[j", "[k", "[l", "[m", "[n", "[o", "[p", "[q", "[r", "[s", "[t", "[u", "[v",
+    "[w", "[x", "[y", "[z", "[?", "[$", "[&", "[(", "[)", "[<", "[=", "[>", "[[", "[]", "[^", "[_",
+    "]A", "]B", "]C", "]D", "]E", "]F", "]G", "]H", "]I", "]J", "]K", "]L", "]M", "]N", "]O", "]P",
+    "]Q", "]R", "]S", "]T", "]U", "]V", "]W", "]X", "]Y", "]Z", "]a", "]b", "]c", "]d", "]e", "]f",
+    "]g", "]h", "]i", "]j", "]k", "]l", "]m", "]n", "]o", "]p", "]q", "]r", "]s", "]t", "]u", "]v",
+    "]w", "]x", "]y", "]z", "]?", "]$", "]&", "](", "])", "]<", "]=", "]>", "][", "]]", "]^", "]_",
+    "^A", "^B", "^C", "^D", "^E", "^F", "^G", "^H", "^I", "^J", "^K", "^L", "^M", "^N", "^O", "^P",
+    "^Q", "^R", "^S", "^T", "^U", "^V", "^W", "^X", "^Y", "^Z", "^a", "^b", "^c", "^d", "^e", "^f",
+    "^g", "^h", "^i", "^j", "^k", "^l", "^m", "^n", "^o", "^p", "^q", "^r", "^s", "^t", "^u", "^v",
+    "^w", "^x", "^y", "^z", "^?", "^$", "^&", "^(", "^)", "^<", "^=", "^>", "^[", "^]", "^^", "^_",
+    "_A", "_B", "_C", "_D", "_E", "_F", "_G", "_H", "_I", "_J", "_K", "_L", "_M", "_N", "_O", "_P",
+    "_Q", "_R", "_S", "_T", "_U", "_V", "_W", "_X", "_Y", "_Z", "_a", "_b", "_c", "_d", "_e", "_f",
+    "_g", "_h", "_i", "_j", "_k", "_l", "_m", "_n", "_o", "_p", "_q", "_r", "_s", "_t", "_u", "_v",
+    "_w", "_x", "_y", "_z", "_?", "_$", "_&", "_(", "_)", "_<", "_=", "_>", "_[", "_]", "_^", "__"
+) var elements7[512];

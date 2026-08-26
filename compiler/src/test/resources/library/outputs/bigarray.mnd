@@ -1,0 +1,13 @@
+require bigarray;
+
+begin
+
+    const i = 0;
+    const index = 0;
+
+
+
+    _setupName(index);
+    _setupNames(i);
+    initializeBigArray(index);
+end;

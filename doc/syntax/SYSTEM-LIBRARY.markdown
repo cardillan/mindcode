@@ -12,6 +12,7 @@ The order in which system libraries are imported doesn't matter.
 System libraries contain functions and sometimes constants that can be used by a Mindcode program. The following library modules are provided:
 
 * [Module `arrays`](SYSTEM-LIBRARY-ARRAYS.markdown). Functions for basic array manipulations.
+* [Module `bigarray`](SYSTEM-LIBRARY-BIGARRAY.markdown). Used internally by the Mindcode compiler/Schemacode builder to create processors for large storage.
 * [Module `blocks`](SYSTEM-LIBRARY-BLOCKS.markdown). Block-related functions (just the `findLinkedBlocks` function at this moment).
 * [Module `compatibility`](SYSTEM-LIBRARY-COMPATIBILITY.markdown). A special-purpose library for testing Mindcode's compatibility with a specific Mindustry version.
 * [Module `graphics`](SYSTEM-LIBRARY-GRAPHICS.markdown). Additional graphics functions. Functions related to display transformations require the Mindustry Logic 8 instruction set.

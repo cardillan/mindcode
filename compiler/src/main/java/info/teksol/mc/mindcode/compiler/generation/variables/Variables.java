@@ -312,8 +312,10 @@ public class Variables extends CompilerMessageEmitter {
             } else {
                 int index = functionContext.getVariableReuseCount(identifier);
                 ArrayNameCreator arrayNameCreator = processArrayMlogModifier(modifiers, size, nameCreator);
-                result = InternalArray.create(processor, arrayNameCreator, functionContext.function(), identifier, index,
-                        size, false, false, null, false);
+                result = modifiers.contains(CONST)
+                        ? InternalArray.createConst(nameCreator, functionContext.function(), identifier, initialValues)
+                        : InternalArray.create(processor, arrayNameCreator, functionContext.function(), identifier, index,
+                            size, false, false, null, false);
                 verifyMlogConflicts(result);
                 functionContext.registerFunctionVariable(identifier, VariableScope.PARENT_NODE, result);
             }
@@ -323,7 +325,7 @@ public class Variables extends CompilerMessageEmitter {
             } else if (modifiers.contains(LINKED) || modifiers.contains(CONST)) {
                 result = initialValues.isEmpty()
                         ? InternalArray.createInvalid(nameCreator, identifier, size)
-                        : InternalArray.createConst(nameCreator, identifier, size, initialValues);
+                        : InternalArray.createConst(nameCreator, null, identifier, initialValues);
             } else if (modifiers.contains(EXTERNAL)) {
                 result = getHeapTracker(modifiers).createArray(identifier, size);
             } else {

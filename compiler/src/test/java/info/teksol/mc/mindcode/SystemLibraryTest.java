@@ -194,7 +194,7 @@ public class SystemLibraryTest {
                 .flatMap(SystemLibraryTest::extractVariables)
                 .distinct()
                 .sorted()
-                .map(s -> "    var " + s + " = null;")
+                .map(s -> s.startsWith("const") ? "    " + s + " = 0;" : "    var " + s + " = null;")
                 .collect(Collectors.joining("\n"));
 
         String functionCalls = lines.stream()
@@ -204,10 +204,10 @@ public class SystemLibraryTest {
 
         String procedureCalls = lines.stream()
                 .filter(line -> line.startsWith("void "))
-                .map(line -> "    " + line.substring(5) + ";")
+                .map(line -> "    " + line.substring(5).replace("const ", "") + ";")
                 .collect(Collectors.joining("\n"));
 
-        return initializations + "\n" + variables + "\n\n" + functionCalls + "\n\n" + procedureCalls + "end;";
+        return initializations + "\n" + variables + "\n\n" + functionCalls + "\n\n" + procedureCalls + "\nend;";
     }
 
     private static Stream<String> extractVariables(String declaration) {

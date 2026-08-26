@@ -73,10 +73,10 @@ public class InternalArray extends AbstractArrayStore {
         }
     }
 
-    public static InternalArray createConst(NameCreator nameCreator, AstIdentifier identifier, int size, List<ValueStore> elements) {
+    public static InternalArray createConst(NameCreator nameCreator, @Nullable MindcodeFunction function, AstIdentifier identifier, List<ValueStore> elements) {
         List<ValueStore> wrappedElements = elements.stream().map(InternalArray::constantWrap).toList();
         return new InternalArray(identifier.sourcePosition(), LogicKeyword.INVALID,
-                nameCreator.arrayBase(null, "", identifier.getName(), 0),
+                nameCreator.arrayBase(function, "", identifier.getName(), 0),
                 false, null, wrappedElements, ArrayType.CONSTANT);
     }
 

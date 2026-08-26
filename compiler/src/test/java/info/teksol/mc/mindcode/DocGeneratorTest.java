@@ -189,8 +189,14 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
     private void processNode(AstMindcodeNode node) {
         switch (node) {
             case AstParameter n -> parameters.add(n);
-            case AstFunctionDeclaration n -> functions.add(n);
+            case AstFunctionDeclaration n -> {
+                functions.add(n);
+                return;
+            }
             case AstVariablesDeclaration n when n.isConstantDeclaration() -> constants.add(n);
+            case AstCodeBlock _ -> {
+                return;
+            }
             default -> {
             }
         }
@@ -199,8 +205,18 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
     }
 
     private void printValue(PrintWriter writer, AstMindcodeNode node) {
-        if (node instanceof AstLiteral literal) {
-            writer.print(literal.getLiteral());
+        switch (node) {
+            case AstLiteralString literal -> {
+                writer.print('"');
+                writer.print(literal.getLiteral());
+                writer.print('"');
+            }
+            case AstLiteral literal -> {
+                writer.print(literal.getLiteral());
+            }
+            default -> {
+                throw new IllegalArgumentException();
+            }
         }
     }
 
