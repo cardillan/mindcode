@@ -165,7 +165,7 @@ declarationModifier {
   kw<"linked"> ("(" Identifier ")")? |
   kw<"mlog"> "(" commaSep<expression ~mlogAmbig> ")" |
   kw<"noinit"> |
-  kw<"remote"> ~sharedModifier ("(" Identifier? ~remoteDeclareRequireAmbig ")")? |
+  kw<"remote"> ("(" Identifier ~remoteDeclareRequireAmbig ")")? |
   kw<"volatile">
 }
 
@@ -212,11 +212,15 @@ FunctionDefinition {
 }
 
 functionParameter {
-  (kw<"in"> | kw<"out"> | kw<"ref">)* Identifier "..."?
+  (kw<"in"> | kw<"out"> | kw<"ref"> | kw<"const">)* Identifier "..."?
 }
 
 functionModifier {
-  kw<"atomic"> ~sharedModifier | kw<"debug"> ~sharedModifier | kw<"inline"> | kw<"noinline"> | kw<"export"> ~sharedModifier | kw<"remote"> ~sharedModifier
+  kw<"atomic"> ~sharedModifier |
+  kw<"debug"> ~sharedModifier |
+  kw<"inline"> |
+  kw<"noinline"> |
+  kw<"export"> ~sharedModifier
 }
 
 LabeledStatement {
