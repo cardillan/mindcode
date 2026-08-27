@@ -1182,10 +1182,26 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void reportsInvalidMlogName() {
+        void reportsInvalidMlogName1() {
             assertGeneratesMessage("Mlog name 'cell1' collides with a linked block name.",
                     """
                             mlog("cell1") var a;
+                            """);
+        }
+
+        @Test
+        void reportsInvalidMlogName2() {
+            assertGeneratesMessage("Symbol 'a#' is not a valid name for an mlog variable.",
+                    """
+                            mlog("a#") var a;
+                            """);
+        }
+
+        @Test
+        void reportsInvalidMlogName3() {
+            assertGeneratesMessage("Symbol '1E1' is not a valid name for an mlog variable.",
+                    """
+                            mlog("1E1") var a;
                             """);
         }
     }

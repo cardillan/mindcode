@@ -128,6 +128,7 @@ public class ERR {
     public static final String INVALID_KEYWORD_USE = "Invalid use of mlog keyword.";
     public static final String INVALID_LINKED_TYPE_SPEC = "Invalid linked block type specification ('%s' is not a block type).";
     public static final String INVALID_MLOG_KEYWORD = "Keyword only allowed as the only value of the 'mlog' modifier in array declaration.";
+    public static final String INVALID_MLOG_SYMBOL = "Symbol '%s' is not a valid name for an mlog variable.";
     public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic labels. Please set 'symbolic-labels' to 'false'.";
     public static final String LINK_EXPECTED = "A literal or symbolic link name expected.";
     public static final String LINK_TYPE_MISMATCH = "The expected block type '%s' differs from the actual block type '%s' as defined in the schematic.";

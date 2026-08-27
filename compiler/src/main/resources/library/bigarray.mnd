@@ -5,6 +5,9 @@
 
 module bigarray;
 
+/**
+ * A list of characters used to generate the variable names.
+ */
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz?$&()<=>[]^_";
 
 /**

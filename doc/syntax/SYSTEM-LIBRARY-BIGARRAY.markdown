@@ -8,6 +8,8 @@ Used internally by the Mindcode compiler/Schemacode builder to create processors
 
 **Definition:** `const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz?$&()<=>[]^_";`
 
+A list of characters used to generate the variable names.
+
 ## Functions
 
 ### initializeBigArray

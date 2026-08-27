@@ -1,6 +1,10 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.emulator.LVar;
+import info.teksol.mc.emulator.mimex.EmulatorMessageHandler;
+import info.teksol.mc.emulator.mimex.LAssembler;
+import info.teksol.mc.emulator.mimex.LGlobalVars;
 import info.teksol.mc.emulator.mimex.LStrings;
 import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.messages.MessageConsumer;
@@ -40,6 +44,8 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     private final NameCreator nameCreator;
     private final LStrings strings;
     private @Nullable MindustryMetadata metadata;
+    private @Nullable LGlobalVars globalVars;
+    private @Nullable LAssembler assembler;
     private final boolean instructionValidation;
     private final boolean noArgumentPadding;
     private final boolean encodeZeroCharacters;
@@ -97,6 +103,21 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             metadata = MindustryMetadata.forVersion(processorVersion);
         }
         return metadata;
+    }
+
+    public LGlobalVars getGlobalVars() {
+        if (globalVars == null) {
+            globalVars = LGlobalVars.create(getMetadata());
+        }
+        return globalVars;
+    }
+
+    public LAssembler getAssembler() {
+        if (assembler == null) {
+            EmulatorMessageHandler handler = new EmulatorMessageHandler(_ -> {}, Set.of(), 0);
+            assembler = LAssembler.create(handler, getMetadata(), strings, getGlobalVars(), processorType.privileged());
+        }
+        return assembler;
     }
 
     @Override
@@ -527,11 +548,22 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     }
 
     private static final Set<String> VOLATILE_NAMES = Set.of("@counter", "@time", "@tick", "@second",
-            "@minute", "@waveNumber", "@waveTime", "@unit", "@links");
+            "@minute", "@waveNumber", "@waveTime", "@links");
 
     @Override
     public boolean isVolatileBuiltIn(String builtin) {
         return VOLATILE_NAMES.contains(builtin);
+    }
+
+    @Override
+    public boolean isValidMlogName(String symbol) {
+        for (int pos = 0; pos < symbol.length(); pos++) {
+            char c = symbol.charAt(pos);
+            if (c == '\n' || c == ' ' || c == '#' || c == '\t' || c == ';') return false;
+        }
+
+        LVar var = getAssembler().var(symbol);
+        return !var.constant;
     }
 
     @Override

@@ -176,6 +176,10 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// This method identifies supported and unsupported integer literals.
     boolean isValidIntegerLiteral(long value);
 
+    /// Determines whether the given mlog name is valid for a variable. A name is valid unless it is resolved
+    /// as a constant value: an mlog literal or a built-in constant variable.
+    boolean isValidMlogName(String symbol);
+
     /// Rewrites the literal to conform to mlog limitations. If such a conversion isn't possible, an empty optional
     /// is returned.
     ///

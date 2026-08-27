@@ -668,16 +668,21 @@ public class Variables extends CompilerMessageEmitter {
     private void verifyMlogConflict(LogicVariable variable, SourcePosition position) {
         if (variable.getType() == ArgumentType.BLOCK) return;
 
-        List<SourcePosition> list = mlogNames.computeIfAbsent(variable.toMlog(), k -> new ArrayList<>());
+        String symbol = variable.toMlog();
+        if (processor.isValidMlogName(symbol)) {
+            List<SourcePosition> list = mlogNames.computeIfAbsent(symbol, _ -> new ArrayList<>());
 
-        if (list.size() == 1) {
-            warn(list.getFirst(), WARN.VARIABLE_MLOG_CONFLICT, variable.toMlog());
-        }
-        if (!list.isEmpty()) {
-            warn(position, WARN.VARIABLE_MLOG_CONFLICT, variable.toMlog());
-        }
+            if (list.size() == 1) {
+                warn(list.getFirst(), WARN.VARIABLE_MLOG_CONFLICT, symbol);
+            }
+            if (!list.isEmpty()) {
+                warn(position, WARN.VARIABLE_MLOG_CONFLICT, symbol);
+            }
 
-        list.add(position);
+            list.add(position);
+        } else if (!(variable instanceof LogicBuiltIn)){
+            error(position, ERR.INVALID_MLOG_SYMBOL, symbol);
+        }
     }
 
     private ValueStore verifyMlogConflicts(ValueStore valueStore) {

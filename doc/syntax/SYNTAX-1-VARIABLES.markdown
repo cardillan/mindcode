@@ -459,7 +459,7 @@ stop
 
 Can be used with the `export` or `remote` modifier, or without a storage modifier.
 
-By using the `mlog` modifier, it is possible to specify the mlog name of the variable or array elements, as stored in the current or remote processor. The name(s) must be specified as a list of constant string expressions enclosed in parentheses, or as a single specification of a lookup type (in case of arrays).
+By using the `mlog` modifier, it is possible to specify the mlog name of the variable or array elements, as stored in the current or remote processor. The name(s) must be specified as a list of constant string expressions enclosed in parentheses, or as a single specification of a lookup type (in case of arrays). Only names representing valid mlog variables according to the compilation target are allowed.
 
 Specifying an mlog name is useful when accessing the variable indirectly, by the current or other processors.
 
