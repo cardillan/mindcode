@@ -19,6 +19,7 @@ public class StandardNameCreator implements NameCreator {
     public static final String RETURN_VALUE = "retval";
     public static final String RETURN_ADDRESS = "retaddr";
     public static final String STACK_FRAME_POINTER = "sfp";
+    public static final String ARRAY_OFFSET = "arroffset";
     public static final String FUNCTION_FINISHED = "finished";
 
     public static final String GLOBAL_PREFIX = ".";
@@ -179,6 +180,11 @@ public class StandardNameCreator implements NameCreator {
     @Override
     public String remoteArrayElement(String arrayName, int index) {
         return ARRAY_PREFIX + arrayName + ELEMENT_PREFIX + index;
+    }
+
+    @Override
+    public String arrayOffset(MindcodeFunction function, String arrayName, int variableIndex) {
+        return localArrayBaseName(function, arrayName, variableIndex) + compilerPrefix + ARRAY_OFFSET;
     }
 
     @Override

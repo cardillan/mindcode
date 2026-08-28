@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -106,15 +107,18 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
             assert function.getAtomicLabel() != null;
             assembler.createLabel(function.getAtomicLabel());
         }
-        if (function.isRecursive() && function.getProfile().isStackOverflowChecks() && context.stackTracker().externalStack()) {
-            String errorMessage = String.format("%s: stack overflow error", function.getDeclaration().sourcePosition().formatForMlog());
-            assembler.setSubcontextType(AstSubcontextType.STACK, 1.0);
-            assembler.createAssertBounds(LogicKeyword.create("decimal"), LogicNumber.ONE,
-                    LogicNumber.create(context.stackTracker().getAllocationStart()), Condition.LESS_THAN_EQ,
-                    assembler.getProcessor().stackPointer(),
-                    Condition.LESS_THAN, LogicNumber.create(context.stackTracker().getAllocationEnd()),
-                    LogicString.create(errorMessage)).setStackOverflowCheck();
-            assembler.clearSubcontextType();
+        if (function.isRecursive()) {
+            if (function.getProfile().isStackOverflowChecks() && context.stackTracker().externalStack()) {
+                String errorMessage = String.format("%s: stack overflow error", function.getDeclaration().sourcePosition().formatForMlog());
+                assembler.setSubcontextType(AstSubcontextType.STACK, 1.0);
+                assembler.createAssertBounds(LogicKeyword.create("decimal"), LogicNumber.ONE,
+                        LogicNumber.create(context.stackTracker().getAllocationStart()), Condition.LESS_THAN_EQ,
+                        assembler.getProcessor().stackPointer(),
+                        Condition.LESS_THAN, LogicNumber.create(context.stackTracker().getAllocationEnd()),
+                        LogicString.create(errorMessage)).setStackOverflowCheck();
+                assembler.clearSubcontextType();
+            }
+            assembler.createInstruction(Opcode.INITREC);
         }
         ValueStore valueStore = function.isVoid()
                 ? visitBody(function.getBody())

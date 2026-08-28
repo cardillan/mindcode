@@ -51,346 +51,346 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-9 instructi
     22 stop
     23 end
  
-    45 pop bank1 :foo:a
-    46 pop bank1 :foo:n
-    47 set *tmp12 :foo*retval
+    46 pop bank1 :foo:a
+    47 pop bank1 :foo:n
+    48 set *tmp12 :foo*retval
 -    * set *tmp8 *tmp12
-    48 jump *label8 always
-    49 label *label7
+    49 jump *label8 always
+    50 label *label7
 -    * set *tmp8 null
-    50 label *label8
-    51 op add *tmp13 :foo:b 1
-    52 set :foo:b *tmp13
+    51 label *label8
+    52 op add *tmp13 :foo:b 1
+    53 set :foo:b *tmp13
  
-    80 set :bar:b *tmp20
-    81 set :bar:a *tmp21
-    82 set *tmp22 :bar*retval
+    82 set :bar:b *tmp20
+    83 set :bar:a *tmp21
+    84 set *tmp22 :bar*retval
 -    * set *tmp16 *tmp22
-    83 jump *label12 always
-    84 label *label11
+    85 jump *label12 always
+    86 label *label11
 -    * set *tmp16 null
-    85 label *label12
-    86 op add *tmp23 :bar:b 1
-    87 set :bar:b *tmp23
+    87 label *label12
+    88 op add *tmp23 :bar:b 1
+    89 set :bar:b *tmp23
  
-   115 pop bank1 :baz:b
-   116 pop bank1 :baz:n
-   117 set *tmp30 :baz*retval
+   118 pop bank1 :baz:b
+   119 pop bank1 :baz:n
+   120 set *tmp30 :baz*retval
 -    * set *tmp26 *tmp30
-   118 jump *label16 always
-   119 label *label15
+   121 jump *label16 always
+   122 label *label15
 -    * set *tmp26 null
-   120 label *label16
-   121 op add *tmp31 :baz:b 1
-   122 set :baz:b *tmp31
+   123 label *label16
+   124 op add *tmp31 :baz:b 1
+   125 set :baz:b *tmp31
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-3 instructions):
  
-    44 pop bank1 :foo:b
-    45 pop bank1 :foo:a
-    46 pop bank1 :foo:n
+    45 pop bank1 :foo:b
+    46 pop bank1 :foo:a
+    47 pop bank1 :foo:n
 -    * set *tmp12 :foo*retval
-    47 jump *label8 always
-    48 label *label7
-    49 label *label8
+    48 jump *label8 always
+    49 label *label7
+    50 label *label8
  
-    78 set *tmp21 :bar:b
-    79 set :bar:b *tmp20
-    80 set :bar:a *tmp21
+    80 set *tmp21 :bar:b
+    81 set :bar:b *tmp20
+    82 set :bar:a *tmp21
 -    * set *tmp22 :bar*retval
-    81 jump *label12 always
-    82 label *label11
-    83 label *label12
+    83 jump *label12 always
+    84 label *label11
+    85 label *label12
  
-   112 pop bank1 :baz:a
-   113 pop bank1 :baz:b
-   114 pop bank1 :baz:n
+   115 pop bank1 :baz:a
+   116 pop bank1 :baz:b
+   117 pop bank1 :baz:n
 -    * set *tmp30 :baz*retval
-   115 jump *label16 always
-   116 label *label15
-   117 label *label16
+   118 jump *label16 always
+   119 label *label15
+   120 label *label16
 
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-3 instructions):
  
-    51 set :foo:b *tmp13
-    52 print :foo:a
-    53 print :foo:b
+    52 set :foo:b *tmp13
+    53 print :foo:a
+    54 print :foo:b
 -    * set :foo*retval :foo:b
-    54 label *label6
-    55 returnrec bank1
-    56 end
+    55 label *label6
+    56 returnrec bank1
+    57 end
  
-    84 set :bar:b *tmp23
-    85 print :bar:a
-    86 print :bar:b
+    86 set :bar:b *tmp23
+    87 print :bar:a
+    88 print :bar:b
 -    * set :bar*retval :bar:b
-    87 label *label10
-    88 returnrec bank1
-    89 end
+    89 label *label10
+    90 returnrec bank1
+    91 end
  
-   117 set :baz:b *tmp31
-   118 print :baz:a
-   119 print :baz:b
+   120 set :baz:b *tmp31
+   121 print :baz:a
+   122 print :baz:b
 -    * set :baz*retval :baz:b
-   120 label *label14
-   121 returnrec bank1
-   122 end
+   123 label *label14
+   124 returnrec bank1
+   125 end
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 instructions):
  
-    26 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
-    27 print :foo:a
-    28 print :foo:b
+    27 initrec
+    28 print :foo:a
+    29 print :foo:b
 -    * op add *tmp6 :foo:a 1
 -    * set :foo:a *tmp6
-+   29 op add :foo:a :foo:a 1
-    30 op greaterThan *tmp7 :foo:n 0
-    31 jump *label7 equal *tmp7 false
-    32 op sub *tmp9 :foo:n 1
++   30 op add :foo:a :foo:a 1
+    31 op greaterThan *tmp7 :foo:n 0
+    32 jump *label7 equal *tmp7 false
+    33 op sub *tmp9 :foo:n 1
  
-    46 jump *label8 always
-    47 label *label7
-    48 label *label8
+    47 jump *label8 always
+    48 label *label7
+    49 label *label8
 -    * op add *tmp13 :foo:b 1
 -    * set :foo:b *tmp13
-+   49 op add :foo:b :foo:b 1
-    50 print :foo:a
-    51 print :foo:b
-    52 label *label6
++   50 op add :foo:b :foo:b 1
+    51 print :foo:a
+    52 print :foo:b
+    53 label *label6
  
-    57 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
-    58 print :bar:a
-    59 print :bar:b
+    59 initrec
+    60 print :bar:a
+    61 print :bar:b
 -    * op add *tmp14 :bar:a 1
 -    * set :bar:a *tmp14
-+   60 op add :bar:a :bar:a 1
-    61 op greaterThan *tmp15 :bar:n 0
-    62 jump *label11 equal *tmp15 false
-    63 op sub *tmp17 :bar:n 1
++   62 op add :bar:a :bar:a 1
+    63 op greaterThan *tmp15 :bar:n 0
+    64 jump *label11 equal *tmp15 false
+    65 op sub *tmp17 :bar:n 1
  
-    77 jump *label12 always
-    78 label *label11
-    79 label *label12
+    79 jump *label12 always
+    80 label *label11
+    81 label *label12
 -    * op add *tmp23 :bar:b 1
 -    * set :bar:b *tmp23
-+   80 op add :bar:b :bar:b 1
-    81 print :bar:a
-    82 print :bar:b
-    83 label *label10
++   82 op add :bar:b :bar:b 1
+    83 print :bar:a
+    84 print :bar:b
+    85 label *label10
  
-    88 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
-    89 print :baz:a
-    90 print :baz:b
+    91 initrec
+    92 print :baz:a
+    93 print :baz:b
 -    * op add *tmp24 :baz:a 1
 -    * set :baz:a *tmp24
-+   91 op add :baz:a :baz:a 1
-    92 op greaterThan *tmp25 :baz:n 0
-    93 jump *label15 equal *tmp25 false
-    94 op sub *tmp27 :baz:n 1
++   94 op add :baz:a :baz:a 1
+    95 op greaterThan *tmp25 :baz:n 0
+    96 jump *label15 equal *tmp25 false
+    97 op sub *tmp27 :baz:n 1
  
-   108 jump *label16 always
-   109 label *label15
-   110 label *label16
+   111 jump *label16 always
+   112 label *label15
+   113 label *label16
 -    * op add *tmp31 :baz:b 1
 -    * set :baz:b *tmp31
-+  111 op add :baz:b :baz:b 1
-   112 print :baz:a
-   113 print :baz:b
-   114 label *label14
++  114 op add :baz:b :baz:b 1
+   115 print :baz:a
+   116 print :baz:b
+   117 label *label14
 
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-3 instructions):
  
-    27 print :foo:a
-    28 print :foo:b
-    29 op add :foo:a :foo:a 1
+    28 print :foo:a
+    29 print :foo:b
+    30 op add :foo:a :foo:a 1
 -    * op greaterThan *tmp7 :foo:n 0
 -    * jump *label7 equal *tmp7 false
-+   30 jump *label7 lessThanEq :foo:n 0
-    31 op sub *tmp9 :foo:n 1
-    32 push bank1 :foo:n
-    33 push bank1 :foo:a
++   31 jump *label7 lessThanEq :foo:n 0
+    32 op sub *tmp9 :foo:n 1
+    33 push bank1 :foo:n
+    34 push bank1 :foo:a
  
-    57 print :bar:a
-    58 print :bar:b
-    59 op add :bar:a :bar:a 1
+    59 print :bar:a
+    60 print :bar:b
+    61 op add :bar:a :bar:a 1
 -    * op greaterThan *tmp15 :bar:n 0
 -    * jump *label11 equal *tmp15 false
-+   60 jump *label11 lessThanEq :bar:n 0
-    61 op sub *tmp17 :bar:n 1
-    62 push bank1 :bar:n
-    63 set *tmp18 :bar:b
++   62 jump *label11 lessThanEq :bar:n 0
+    63 op sub *tmp17 :bar:n 1
+    64 push bank1 :bar:n
+    65 set *tmp18 :bar:b
  
-    87 print :baz:a
-    88 print :baz:b
-    89 op add :baz:a :baz:a 1
+    90 print :baz:a
+    91 print :baz:b
+    92 op add :baz:a :baz:a 1
 -    * op greaterThan *tmp25 :baz:n 0
 -    * jump *label15 equal *tmp25 false
-+   90 jump *label15 lessThanEq :baz:n 0
-    91 op sub *tmp27 :baz:n 1
-    92 push bank1 :baz:n
-    93 push bank1 :baz:b
++   93 jump *label15 lessThanEq :baz:n 0
+    94 op sub *tmp27 :baz:n 1
+    95 push bank1 :baz:n
+    96 push bank1 :baz:b
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-3 instructions):
  
-    42 pop bank1 :foo:b
-    43 pop bank1 :foo:a
-    44 pop bank1 :foo:n
+    43 pop bank1 :foo:b
+    44 pop bank1 :foo:a
+    45 pop bank1 :foo:n
 -    * jump *label8 always
-    45 label *label7
-    46 label *label8
-    47 op add :foo:b :foo:b 1
+    46 label *label7
+    47 label *label8
+    48 op add :foo:b :foo:b 1
  
-    71 set *tmp21 :bar:b
-    72 set :bar:b *tmp20
-    73 set :bar:a *tmp21
+    73 set *tmp21 :bar:b
+    74 set :bar:b *tmp20
+    75 set :bar:a *tmp21
 -    * jump *label12 always
-    74 label *label11
-    75 label *label12
-    76 op add :bar:b :bar:b 1
+    76 label *label11
+    77 label *label12
+    78 op add :bar:b :bar:b 1
  
-   100 pop bank1 :baz:a
-   101 pop bank1 :baz:b
-   102 pop bank1 :baz:n
+   103 pop bank1 :baz:a
+   104 pop bank1 :baz:b
+   105 pop bank1 :baz:n
 -    * jump *label16 always
-   103 label *label15
-   104 label *label16
-   105 op add :baz:b :baz:b 1
+   106 label *label15
+   107 label *label16
+   108 op add :baz:b :baz:b 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    34 push bank1 :foo:b
-    35 set *tmp10 :foo:b
-    36 set *tmp11 :foo:a
+    35 push bank1 :foo:b
+    36 set *tmp10 :foo:b
+    37 set *tmp11 :foo:a
 -    * set :foo:n *tmp9
 -    * set :foo:a *tmp10
-+   37 op sub :foo:n :foo:n 1
-+   38 set :foo:a :foo:b
-    39 set :foo:b *tmp11
-    40 callrec bank1 *label0 *label9 :foo*retval
-    41 label *label9
++   38 op sub :foo:n :foo:n 1
++   39 set :foo:a :foo:b
+    40 set :foo:b *tmp11
+    41 callrec bank1 *label0 *label9 :foo*retval
+    42 label *label9
  
-    61 push bank1 :bar:n
-    62 set *tmp18 :bar:b
-    63 set *tmp19 :bar:a
+    63 push bank1 :bar:n
+    64 set *tmp18 :bar:b
+    65 set *tmp19 :bar:a
 -    * set :bar:n *tmp17
 -    * set :bar:a *tmp18
-+   64 op sub :bar:n :bar:n 1
-+   65 set :bar:a :bar:b
-    66 set :bar:b *tmp19
-    67 callrec bank1 *label1 *label13 :bar*retval
-    68 label *label13
-    69 pop bank1 :bar:n
-    70 set *tmp20 :bar:a
-    71 set *tmp21 :bar:b
++   66 op sub :bar:n :bar:n 1
++   67 set :bar:a :bar:b
+    68 set :bar:b *tmp19
+    69 callrec bank1 *label1 *label13 :bar*retval
+    70 label *label13
+    71 pop bank1 :bar:n
+    72 set *tmp20 :bar:a
+    73 set *tmp21 :bar:b
 -    * set :bar:b *tmp20
-+   72 set :bar:b :bar:a
-    73 set :bar:a *tmp21
-    74 label *label11
-    75 label *label12
++   74 set :bar:b :bar:a
+    75 set :bar:a *tmp21
+    76 label *label11
+    77 label *label12
  
-    92 push bank1 :baz:a
-    93 set *tmp28 :baz:b
-    94 set *tmp29 :baz:a
+    95 push bank1 :baz:a
+    96 set *tmp28 :baz:b
+    97 set *tmp29 :baz:a
 -    * set :baz:n *tmp27
 -    * set :baz:a *tmp28
-+   95 op sub :baz:n :baz:n 1
-+   96 set :baz:a :baz:b
-    97 set :baz:b *tmp29
-    98 callrec bank1 *label2 *label17 :baz*retval
-    99 label *label17
++   98 op sub :baz:n :baz:n 1
++   99 set :baz:a :baz:b
+   100 set :baz:b *tmp29
+   101 callrec bank1 *label2 *label17 :baz*retval
+   102 label *label17
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7 instructions):
  
-    28 print :foo:b
-    29 op add :foo:a :foo:a 1
-    30 jump *label7 lessThanEq :foo:n 0
+    29 print :foo:b
+    30 op add :foo:a :foo:a 1
+    31 jump *label7 lessThanEq :foo:n 0
 -    * op sub *tmp9 :foo:n 1
-    31 push bank1 :foo:n
+    32 push bank1 :foo:n
+    33 push bank1 :foo:a
+    34 push bank1 :foo:b
+-    * set *tmp10 :foo:b
+    35 set *tmp11 :foo:a
+    36 op sub :foo:n :foo:n 1
+    37 set :foo:a :foo:b
+ 
+    57 print :bar:b
+    58 op add :bar:a :bar:a 1
+    59 jump *label11 lessThanEq :bar:n 0
+-    * op sub *tmp17 :bar:n 1
+    60 push bank1 :bar:n
+-    * set *tmp18 :bar:b
+    61 set *tmp19 :bar:a
+    62 op sub :bar:n :bar:n 1
+    63 set :bar:a :bar:b
+ 
+    65 callrec bank1 *label1 *label13 :bar*retval
+    66 label *label13
+    67 pop bank1 :bar:n
+-    * set *tmp20 :bar:a
+    68 set *tmp21 :bar:b
+    69 set :bar:b :bar:a
+    70 set :bar:a *tmp21
+ 
+    84 print :baz:b
+    85 op add :baz:a :baz:a 1
+    86 jump *label15 lessThanEq :baz:n 0
+-    * op sub *tmp27 :baz:n 1
+    87 push bank1 :baz:n
+    88 push bank1 :baz:b
+    89 push bank1 :baz:a
+-    * set *tmp28 :baz:b
+    90 set *tmp29 :baz:a
+    91 op sub :baz:n :baz:n 1
+    92 set :baz:a :baz:b
+
+Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-12 instructions):
+ 
+    29 print :foo:b
+    30 op add :foo:a :foo:a 1
+    31 jump *label7 lessThanEq :foo:n 0
+-    * push bank1 :foo:n
     32 push bank1 :foo:a
     33 push bank1 :foo:b
--    * set *tmp10 :foo:b
     34 set *tmp11 :foo:a
-    35 op sub :foo:n :foo:n 1
-    36 set :foo:a :foo:b
+ 
+    39 label *label9
+    40 pop bank1 :foo:b
+    41 pop bank1 :foo:a
+-    * pop bank1 :foo:n
+    42 label *label7
+    43 label *label8
+    44 op add :foo:b :foo:b 1
  
     55 print :bar:b
     56 op add :bar:a :bar:a 1
     57 jump *label11 lessThanEq :bar:n 0
--    * op sub *tmp17 :bar:n 1
-    58 push bank1 :bar:n
--    * set *tmp18 :bar:b
-    59 set *tmp19 :bar:a
-    60 op sub :bar:n :bar:n 1
-    61 set :bar:a :bar:b
- 
-    63 callrec bank1 *label1 *label13 :bar*retval
-    64 label *label13
-    65 pop bank1 :bar:n
--    * set *tmp20 :bar:a
-    66 set *tmp21 :bar:b
-    67 set :bar:b :bar:a
-    68 set :bar:a *tmp21
- 
-    81 print :baz:b
-    82 op add :baz:a :baz:a 1
-    83 jump *label15 lessThanEq :baz:n 0
--    * op sub *tmp27 :baz:n 1
-    84 push bank1 :baz:n
-    85 push bank1 :baz:b
-    86 push bank1 :baz:a
--    * set *tmp28 :baz:b
-    87 set *tmp29 :baz:a
-    88 op sub :baz:n :baz:n 1
-    89 set :baz:a :baz:b
-
-Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-12 instructions):
- 
-    28 print :foo:b
-    29 op add :foo:a :foo:a 1
-    30 jump *label7 lessThanEq :foo:n 0
--    * push bank1 :foo:n
-    31 push bank1 :foo:a
-    32 push bank1 :foo:b
-    33 set *tmp11 :foo:a
- 
-    38 label *label9
-    39 pop bank1 :foo:b
-    40 pop bank1 :foo:a
--    * pop bank1 :foo:n
-    41 label *label7
-    42 label *label8
-    43 op add :foo:b :foo:b 1
- 
-    53 print :bar:b
-    54 op add :bar:a :bar:a 1
-    55 jump *label11 lessThanEq :bar:n 0
 -    * push bank1 :bar:n
-    56 set *tmp19 :bar:a
-    57 op sub :bar:n :bar:n 1
-    58 set :bar:a :bar:b
-    59 set :bar:b *tmp19
-    60 callrec bank1 *label1 *label13 :bar*retval
-    61 label *label13
+    58 set *tmp19 :bar:a
+    59 op sub :bar:n :bar:n 1
+    60 set :bar:a :bar:b
+    61 set :bar:b *tmp19
+    62 callrec bank1 *label1 *label13 :bar*retval
+    63 label *label13
 -    * pop bank1 :bar:n
-    62 set *tmp21 :bar:b
-    63 set :bar:b :bar:a
-    64 set :bar:a *tmp21
+    64 set *tmp21 :bar:b
+    65 set :bar:b :bar:a
+    66 set :bar:a *tmp21
  
-    77 print :baz:b
-    78 op add :baz:a :baz:a 1
-    79 jump *label15 lessThanEq :baz:n 0
+    80 print :baz:b
+    81 op add :baz:a :baz:a 1
+    82 jump *label15 lessThanEq :baz:n 0
 -    * push bank1 :baz:n
-    80 push bank1 :baz:b
-    81 push bank1 :baz:a
-    82 set *tmp29 :baz:a
+    83 push bank1 :baz:b
+    84 push bank1 :baz:a
+    85 set *tmp29 :baz:a
  
-    87 label *label17
-    88 pop bank1 :baz:a
-    89 pop bank1 :baz:b
+    90 label *label17
+    91 pop bank1 :baz:a
+    92 pop bank1 :baz:b
 -    * pop bank1 :baz:n
-    90 label *label15
-    91 label *label16
-    92 op add :baz:b :baz:b 1
+    93 label *label15
+    94 label *label16
+    95 op add :baz:b :baz:b 1
 
 Modifications by Inline function call at line 34:34 (+14 instructions):
  
@@ -401,34 +401,35 @@ Modifications by Inline function call at line 34:34 (+14 instructions):
 -    * label *label4
 +   12 # "Function: def bar(in n, in out a, in out b)"
 +   13 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
-+   14 print :bar:a
-+   15 print :bar:b
-+   16 op add :bar:a :bar:a 1
-+   17 jump *label19 lessThanEq :bar:n 0
-+   18 set *tmp19 :bar:a
-+   19 op sub :bar:n :bar:n 1
-+   20 set :bar:a :bar:b
-+   21 set :bar:b *tmp19
-+   22 callrec bank1 *label1 *label18 :bar*retval
-+   23 label *label18
-+   24 set *tmp21 :bar:b
-+   25 set :bar:b :bar:a
-+   26 set :bar:a *tmp21
-+   27 label *label19
-+   28 label *label20
-+   29 op add :bar:b :bar:b 1
-+   30 print :bar:a
-+   31 print :bar:b
-+   32 label *label21
-    33 assertprints *tmp2 "0001111223333444" "bar"
-    34 assertflush *tmp4
-    35 set :baz:n 3
++   14 initrec
++   15 print :bar:a
++   16 print :bar:b
++   17 op add :bar:a :bar:a 1
++   18 jump *label19 lessThanEq :bar:n 0
++   19 set *tmp19 :bar:a
++   20 op sub :bar:n :bar:n 1
++   21 set :bar:a :bar:b
++   22 set :bar:b *tmp19
++   23 callrec bank1 *label1 *label18 :bar*retval
++   24 label *label18
++   25 set *tmp21 :bar:b
++   26 set :bar:b :bar:a
++   27 set :bar:a *tmp21
++   28 label *label19
++   29 label *label20
++   30 op add :bar:b :bar:b 1
++   31 print :bar:a
++   32 print :bar:b
++   33 label *label21
+    34 assertprints *tmp2 "0001111223333444" "bar"
+    35 assertflush *tmp4
+    36 set :baz:n 3
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    11 set :bar:b 0
     12 # "Function: def bar(in n, in out a, in out b)"
     13 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    14 initrec
 -    * print :bar:a
 -    * print :bar:b
 -    * op add :bar:a :bar:a 1
@@ -436,16 +437,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * set *tmp19 :bar:a
 -    * op sub :bar:n :bar:n 1
 -    * set :bar:a :bar:b
-+   14 print 0
 +   15 print 0
-+   16 op add :bar:a 0 1
-+   17 jump *label19 lessThanEq 3 0
-+   18 set *tmp19 1
-+   19 op sub :bar:n 3 1
-+   20 set :bar:a 0
-    21 set :bar:b *tmp19
-    22 callrec bank1 *label1 *label18 :bar*retval
-    23 label *label18
++   16 print 0
++   17 op add :bar:a 0 1
++   18 jump *label19 lessThanEq 3 0
++   19 set *tmp19 1
++   20 op sub :bar:n 3 1
++   21 set :bar:a 0
+    22 set :bar:b *tmp19
+    23 callrec bank1 *label1 *label18 :bar*retval
+    24 label *label18
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
  
@@ -457,58 +458,59 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :bar:b 0
      9 # "Function: def bar(in n, in out a, in out b)"
     10 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
-    11 print 0
+    11 initrec
     12 print 0
+    13 print 0
 -    * op add :bar:a 0 1
-    13 jump *label19 lessThanEq 3 0
-    14 set *tmp19 1
-    15 op sub :bar:n 3 1
-    16 set :bar:a 0
+    14 jump *label19 lessThanEq 3 0
+    15 set *tmp19 1
+    16 op sub :bar:n 3 1
+    17 set :bar:a 0
 -    * set :bar:b *tmp19
-+   17 set :bar:b 1
-    18 callrec bank1 *label1 *label18 :bar*retval
-    19 label *label18
-    20 set *tmp21 :bar:b
++   18 set :bar:b 1
+    19 callrec bank1 *label1 *label18 :bar*retval
+    20 label *label18
+    21 set *tmp21 :bar:b
  
-    23 label *label19
-    24 label *label20
-    25 op add :bar:b :bar:b 1
+    24 label *label19
+    25 label *label20
+    26 op add :bar:b :bar:b 1
 -    * print :bar:a
-+   26 print *tmp21
-    27 print :bar:b
-    28 label *label21
-    29 assertprints *tmp2 "0001111223333444" "bar"
++   27 print *tmp21
+    28 print :bar:b
+    29 label *label21
+    30 assertprints *tmp2 "0001111223333444" "bar"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
  
-    19 label *label18
-    20 set *tmp21 :bar:b
-    21 set :bar:b :bar:a
+    20 label *label18
+    21 set *tmp21 :bar:b
+    22 set :bar:b :bar:a
 -    * set :bar:a *tmp21
-    22 label *label19
-    23 label *label20
-    24 op add :bar:b :bar:b 1
+    23 label *label19
+    24 label *label20
+    25 op add :bar:b :bar:b 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4:
  
-    21 set :bar:b :bar:a
-    22 label *label19
-    23 label *label20
+    22 set :bar:b :bar:a
+    23 label *label19
+    24 label *label20
 -    * op add :bar:b :bar:b 1
-+   24 op add :bar:b :bar:a 1
-    25 print *tmp21
-    26 print :bar:b
-    27 label *label21
++   25 op add :bar:b :bar:a 1
+    26 print *tmp21
+    27 print :bar:b
+    28 label *label21
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1 instructions):
  
-    18 callrec bank1 *label1 *label18 :bar*retval
-    19 label *label18
-    20 set *tmp21 :bar:b
+    19 callrec bank1 *label1 *label18 :bar*retval
+    20 label *label18
+    21 set *tmp21 :bar:b
 -    * set :bar:b :bar:a
-    21 label *label19
-    22 label *label20
-    23 op add :bar:b :bar:a 1
+    22 label *label19
+    23 label *label20
+    24 op add :bar:b :bar:a 1
 
 Modifications by Inline function call at line 33:34 (+19 instructions):
  
@@ -519,64 +521,65 @@ Modifications by Inline function call at line 33:34 (+19 instructions):
 -    * label *label3
 +    5 # "Function: def foo(in n, in a, in b)"
 +    6 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
-+    7 print :foo:a
-+    8 print :foo:b
-+    9 op add :foo:a :foo:a 1
-+   10 jump *label23 lessThanEq :foo:n 0
-+   11 push bank1 :foo:a
-+   12 push bank1 :foo:b
-+   13 set *tmp11 :foo:a
-+   14 op sub :foo:n :foo:n 1
-+   15 set :foo:a :foo:b
-+   16 set :foo:b *tmp11
-+   17 callrec bank1 *label0 *label22 :foo*retval
-+   18 label *label22
-+   19 pop bank1 :foo:b
-+   20 pop bank1 :foo:a
-+   21 label *label23
-+   22 label *label24
-+   23 op add :foo:b :foo:b 1
-+   24 print :foo:a
-+   25 print :foo:b
-+   26 label *label25
-    27 assertprints *tmp0 "0001111223221211" "foo"
-    28 assertflush *tmp2
-    29 # "Function: def bar(in n, in out a, in out b)"
++    7 initrec
++    8 print :foo:a
++    9 print :foo:b
++   10 op add :foo:a :foo:a 1
++   11 jump *label23 lessThanEq :foo:n 0
++   12 push bank1 :foo:a
++   13 push bank1 :foo:b
++   14 set *tmp11 :foo:a
++   15 op sub :foo:n :foo:n 1
++   16 set :foo:a :foo:b
++   17 set :foo:b *tmp11
++   18 callrec bank1 *label0 *label22 :foo*retval
++   19 label *label22
++   20 pop bank1 :foo:b
++   21 pop bank1 :foo:a
++   22 label *label23
++   23 label *label24
++   24 op add :foo:b :foo:b 1
++   25 print :foo:a
++   26 print :foo:b
++   27 label *label25
+    28 assertprints *tmp0 "0001111223221211" "foo"
+    29 assertflush *tmp2
+    30 # "Function: def bar(in n, in out a, in out b)"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     4 set :foo:b 0
      5 # "Function: def foo(in n, in a, in b)"
      6 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     7 initrec
 -    * print :foo:a
 -    * print :foo:b
 -    * op add :foo:a :foo:a 1
 -    * jump *label23 lessThanEq :foo:n 0
-+    7 print 0
 +    8 print 0
-+    9 op add :foo:a 0 1
-+   10 jump *label23 lessThanEq 3 0
-    11 push bank1 :foo:a
-    12 push bank1 :foo:b
-    13 set *tmp11 :foo:a
++    9 print 0
++   10 op add :foo:a 0 1
++   11 jump *label23 lessThanEq 3 0
+    12 push bank1 :foo:a
+    13 push bank1 :foo:b
+    14 set *tmp11 :foo:a
 -    * op sub :foo:n :foo:n 1
-+   14 op sub :foo:n 3 1
-    15 set :foo:a :foo:b
-    16 set :foo:b *tmp11
-    17 callrec bank1 *label0 *label22 :foo*retval
++   15 op sub :foo:n 3 1
+    16 set :foo:a :foo:b
+    17 set :foo:b *tmp11
+    18 callrec bank1 *label0 *label22 :foo*retval
  
-    20 pop bank1 :foo:a
-    21 label *label23
-    22 label *label24
+    21 pop bank1 :foo:a
+    22 label *label23
+    23 label *label24
 -    * op add :foo:b :foo:b 1
 -    * print :foo:a
 -    * print :foo:b
-+   23 op add :foo:b 0 1
-+   24 print 1
++   24 op add :foo:b 0 1
 +   25 print 1
-    26 label *label25
-    27 assertprints *tmp0 "0001111223221211" "foo"
-    28 assertflush *tmp2
++   26 print 1
+    27 label *label25
+    28 assertprints *tmp0 "0001111223221211" "foo"
+    29 assertflush *tmp2
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
      0 set *sp 0
@@ -587,273 +590,275 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
      3 # "Function: def foo(in n, in a, in b)"
      4 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
  
-    18 pop bank1 :foo:a
-    19 label *label23
-    20 label *label24
+    19 pop bank1 :foo:a
+    20 label *label23
+    21 label *label24
 -    * op add :foo:b 0 1
-    21 print 1
     22 print 1
-    23 label *label25
+    23 print 1
+    24 label *label25
 
 Modifications by Inline function call at line 35:34 (+19 instructions):
  
-    46 set :baz:n 3
-    47 set :baz:a 0
-    48 set :baz:b 0
+    48 set :baz:n 3
+    49 set :baz:a 0
+    50 set :baz:b 0
 -    * callrec bank1 *label2 *label5 :baz*retval
 -    * label *label5
-+   49 # "Function: def baz(in n, in out a, in out b)"
-+   50 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
-+   51 print :baz:a
-+   52 print :baz:b
-+   53 op add :baz:a :baz:a 1
-+   54 jump *label27 lessThanEq :baz:n 0
-+   55 push bank1 :baz:b
-+   56 push bank1 :baz:a
-+   57 set *tmp29 :baz:a
-+   58 op sub :baz:n :baz:n 1
-+   59 set :baz:a :baz:b
-+   60 set :baz:b *tmp29
-+   61 callrec bank1 *label2 *label26 :baz*retval
-+   62 label *label26
-+   63 pop bank1 :baz:a
-+   64 pop bank1 :baz:b
-+   65 label *label27
-+   66 label *label28
-+   67 op add :baz:b :baz:b 1
-+   68 print :baz:a
-+   69 print :baz:b
-+   70 label *label29
-    71 assertprints *tmp4 "0001111223221211" "baz"
-    72 stop
-    73 end
++   51 # "Function: def baz(in n, in out a, in out b)"
++   52 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
++   53 initrec
++   54 print :baz:a
++   55 print :baz:b
++   56 op add :baz:a :baz:a 1
++   57 jump *label27 lessThanEq :baz:n 0
++   58 push bank1 :baz:b
++   59 push bank1 :baz:a
++   60 set *tmp29 :baz:a
++   61 op sub :baz:n :baz:n 1
++   62 set :baz:a :baz:b
++   63 set :baz:b *tmp29
++   64 callrec bank1 *label2 *label26 :baz*retval
++   65 label *label26
++   66 pop bank1 :baz:a
++   67 pop bank1 :baz:b
++   68 label *label27
++   69 label *label28
++   70 op add :baz:b :baz:b 1
++   71 print :baz:a
++   72 print :baz:b
++   73 label *label29
+    74 assertprints *tmp4 "0001111223221211" "baz"
+    75 stop
+    76 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    48 set :baz:b 0
-    49 # "Function: def baz(in n, in out a, in out b)"
-    50 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+    51 # "Function: def baz(in n, in out a, in out b)"
+    52 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+    53 initrec
 -    * print :baz:a
 -    * print :baz:b
 -    * op add :baz:a :baz:a 1
 -    * jump *label27 lessThanEq :baz:n 0
-+   51 print 0
-+   52 print 0
-+   53 op add :baz:a 0 1
-+   54 jump *label27 lessThanEq 3 0
-    55 push bank1 :baz:b
-    56 push bank1 :baz:a
-    57 set *tmp29 :baz:a
++   54 print 0
++   55 print 0
++   56 op add :baz:a 0 1
++   57 jump *label27 lessThanEq 3 0
+    58 push bank1 :baz:b
+    59 push bank1 :baz:a
+    60 set *tmp29 :baz:a
 -    * op sub :baz:n :baz:n 1
-+   58 op sub :baz:n 3 1
-    59 set :baz:a :baz:b
-    60 set :baz:b *tmp29
-    61 callrec bank1 *label2 *label26 :baz*retval
++   61 op sub :baz:n 3 1
+    62 set :baz:a :baz:b
+    63 set :baz:b *tmp29
+    64 callrec bank1 *label2 *label26 :baz*retval
  
-    64 pop bank1 :baz:b
-    65 label *label27
-    66 label *label28
+    67 pop bank1 :baz:b
+    68 label *label27
+    69 label *label28
 -    * op add :baz:b :baz:b 1
 -    * print :baz:a
 -    * print :baz:b
-+   67 op add :baz:b 0 1
-+   68 print 1
-+   69 print 1
-    70 label *label29
-    71 assertprints *tmp4 "0001111223221211" "baz"
-    72 stop
++   70 op add :baz:b 0 1
++   71 print 1
++   72 print 1
+    73 label *label29
+    74 assertprints *tmp4 "0001111223221211" "baz"
+    75 stop
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
  
-    43 label *label21
-    44 assertprints *tmp2 "0001111223333444" "bar"
-    45 assertflush *tmp4
+    45 label *label21
+    46 assertprints *tmp2 "0001111223333444" "bar"
+    47 assertflush *tmp4
 -    * set :baz:n 3
 -    * set :baz:a 0
-    46 set :baz:b 0
-    47 # "Function: def baz(in n, in out a, in out b)"
-    48 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+    48 set :baz:b 0
+    49 # "Function: def baz(in n, in out a, in out b)"
+    50 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
  
-    62 pop bank1 :baz:b
-    63 label *label27
-    64 label *label28
+    65 pop bank1 :baz:b
+    66 label *label27
+    67 label *label28
 -    * op add :baz:b 0 1
-    65 print 1
-    66 print 1
-    67 label *label29
+    68 print 1
+    69 print 1
+    70 label *label29
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-3 instructions):
  
-     5 print 0
      6 print 0
-     7 op add :foo:a 0 1
+     7 print 0
+     8 op add :foo:a 0 1
 -    * jump *label23 lessThanEq 3 0
-     8 push bank1 :foo:a
-     9 push bank1 :foo:b
-    10 set *tmp11 :foo:a
+     9 push bank1 :foo:a
+    10 push bank1 :foo:b
+    11 set *tmp11 :foo:a
  
-    26 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
-    27 print 0
-    28 print 0
+    28 initrec
+    29 print 0
+    30 print 0
 -    * jump *label19 lessThanEq 3 0
-    29 set *tmp19 1
-    30 op sub :bar:n 3 1
-    31 set :bar:a 0
+    31 set *tmp19 1
+    32 op sub :bar:n 3 1
+    33 set :bar:a 0
  
-    47 print 0
-    48 print 0
-    49 op add :baz:a 0 1
+    50 print 0
+    51 print 0
+    52 op add :baz:a 0 1
 -    * jump *label27 lessThanEq 3 0
-    50 push bank1 :baz:b
-    51 push bank1 :baz:a
-    52 set *tmp29 :baz:a
+    53 push bank1 :baz:b
+    54 push bank1 :baz:a
+    55 set *tmp29 :baz:a
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
-     4 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
-     5 print 0
+     5 initrec
      6 print 0
+     7 print 0
 -    * op add :foo:a 0 1
-+    7 set :foo:a 1
-     8 push bank1 :foo:a
-     9 push bank1 :foo:b
-    10 set *tmp11 :foo:a
++    8 set :foo:a 1
+     9 push bank1 :foo:a
+    10 push bank1 :foo:b
+    11 set *tmp11 :foo:a
  
-    46 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
-    47 print 0
-    48 print 0
+    49 initrec
+    50 print 0
+    51 print 0
 -    * op add :baz:a 0 1
-+   49 set :baz:a 1
-    50 push bank1 :baz:b
-    51 push bank1 :baz:a
-    52 set *tmp29 :baz:a
++   52 set :baz:a 1
+    53 push bank1 :baz:b
+    54 push bank1 :baz:a
+    55 set *tmp29 :baz:a
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-3 instructions):
  
-    15 label *label22
-    16 pop bank1 :foo:b
-    17 pop bank1 :foo:a
+    16 label *label22
+    17 pop bank1 :foo:b
+    18 pop bank1 :foo:a
 -    * label *label23
 -    * label *label24
-    18 print 1
     19 print 1
+    20 print 1
 -    * label *label25
-    20 assertprints *tmp0 "0001111223221211" "foo"
-    21 assertflush *tmp2
-    22 # "Function: def bar(in n, in out a, in out b)"
+    21 assertprints *tmp0 "0001111223221211" "foo"
+    22 assertflush *tmp2
+    23 # "Function: def bar(in n, in out a, in out b)"
  
-    30 callrec bank1 *label1 *label18 :bar*retval
-    31 label *label18
-    32 set *tmp21 :bar:b
+    32 callrec bank1 *label1 *label18 :bar*retval
+    33 label *label18
+    34 set *tmp21 :bar:b
 -    * label *label19
 -    * label *label20
-    33 op add :bar:b :bar:a 1
-    34 print *tmp21
-    35 print :bar:b
+    35 op add :bar:b :bar:a 1
+    36 print *tmp21
+    37 print :bar:b
 -    * label *label21
-    36 assertprints *tmp2 "0001111223333444" "bar"
-    37 assertflush *tmp4
-    38 set :baz:b 0
+    38 assertprints *tmp2 "0001111223333444" "bar"
+    39 assertflush *tmp4
+    40 set :baz:b 0
  
-    51 label *label26
-    52 pop bank1 :baz:a
-    53 pop bank1 :baz:b
+    54 label *label26
+    55 pop bank1 :baz:a
+    56 pop bank1 :baz:b
 -    * label *label27
 -    * label *label28
-    54 print 1
-    55 print 1
+    57 print 1
+    58 print 1
 -    * label *label29
-    56 assertprints *tmp4 "0001111223221211" "baz"
-    57 stop
-    58 end
+    59 assertprints *tmp4 "0001111223221211" "baz"
+    60 stop
+    61 end
  
-    74 pop bank1 :foo:b
-    75 pop bank1 :foo:a
-    76 label *label7
+    78 pop bank1 :foo:b
+    79 pop bank1 :foo:a
+    80 label *label7
 -    * label *label8
-    77 op add :foo:b :foo:b 1
-    78 print :foo:a
-    79 print :foo:b
+    81 op add :foo:b :foo:b 1
+    82 print :foo:a
+    83 print :foo:b
 -    * label *label6
-    80 returnrec bank1
+    84 returnrec bank1
 -    * end
-    81 label *label1
-    82 # "Function: def bar(in n, in out a, in out b)"
-    83 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    85 label *label1
+    86 # "Function: def bar(in n, in out a, in out b)"
+    87 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
  
-    95 set :bar:b :bar:a
-    96 set :bar:a *tmp21
-    97 label *label11
+   100 set :bar:b :bar:a
+   101 set :bar:a *tmp21
+   102 label *label11
 -    * label *label12
-    98 op add :bar:b :bar:b 1
-    99 print :bar:a
-   100 print :bar:b
+   103 op add :bar:b :bar:b 1
+   104 print :bar:a
+   105 print :bar:b
 -    * label *label10
-   101 returnrec bank1
+   106 returnrec bank1
 -    * end
-   102 label *label2
-   103 # "Function: def baz(in n, in out a, in out b)"
-   104 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+   107 label *label2
+   108 # "Function: def baz(in n, in out a, in out b)"
+   109 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
  
-   117 pop bank1 :baz:a
-   118 pop bank1 :baz:b
-   119 label *label15
+   123 pop bank1 :baz:a
+   124 pop bank1 :baz:b
+   125 label *label15
 -    * label *label16
-   120 op add :baz:b :baz:b 1
-   121 print :baz:a
-   122 print :baz:b
+   126 op add :baz:b :baz:b 1
+   127 print :baz:a
+   128 print :baz:b
 -    * label *label14
-   123 returnrec bank1
+   129 returnrec bank1
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
  
-     2 set :foo:b 0
      3 # "Function: def foo(in n, in a, in b)"
      4 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     5 initrec
 -    * print 0
 -    * print 0
-+    5 print "00"
-     6 set :foo:a 1
-     7 push bank1 :foo:a
-     8 push bank1 :foo:b
++    6 print "00"
+     7 set :foo:a 1
+     8 push bank1 :foo:a
+     9 push bank1 :foo:b
  
-    14 label *label22
-    15 pop bank1 :foo:b
-    16 pop bank1 :foo:a
+    15 label *label22
+    16 pop bank1 :foo:b
+    17 pop bank1 :foo:a
 -    * print 1
 -    * print 1
-+   17 print "11"
-    18 assertprints *tmp0 "0001111223221211" "foo"
-    19 assertflush *tmp2
-    20 # "Function: def bar(in n, in out a, in out b)"
-    21 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
++   18 print "11"
+    19 assertprints *tmp0 "0001111223221211" "foo"
+    20 assertflush *tmp2
+    21 # "Function: def bar(in n, in out a, in out b)"
+    22 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+    23 initrec
 -    * print 0
 -    * print 0
-+   22 print "00"
-    23 set *tmp19 1
-    24 op sub :bar:n 3 1
-    25 set :bar:a 0
++   24 print "00"
+    25 set *tmp19 1
+    26 op sub :bar:n 3 1
+    27 set :bar:a 0
  
-    35 set :baz:b 0
-    36 # "Function: def baz(in n, in out a, in out b)"
-    37 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+    38 # "Function: def baz(in n, in out a, in out b)"
+    39 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+    40 initrec
 -    * print 0
 -    * print 0
-+   38 print "00"
-    39 set :baz:a 1
-    40 push bank1 :baz:b
-    41 push bank1 :baz:a
++   41 print "00"
+    42 set :baz:a 1
+    43 push bank1 :baz:b
+    44 push bank1 :baz:a
  
-    47 label *label26
-    48 pop bank1 :baz:a
-    49 pop bank1 :baz:b
+    50 label *label26
+    51 pop bank1 :baz:a
+    52 pop bank1 :baz:b
 -    * print 1
 -    * print 1
-+   50 print "11"
-    51 assertprints *tmp4 "0001111223221211" "baz"
-    52 stop
-    53 end
++   53 print "11"
+    54 assertprints *tmp4 "0001111223221211" "baz"
+    55 stop
+    56 end
 
 Final code before resolving virtual instructions:
 
@@ -862,6 +867,7 @@ assertflush *tmp0
 set :foo:b 0
 # "Function: def foo(in n, in a, in b)"
 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+initrec
 print "00"
 set :foo:a 1
 push bank1 :foo:a
@@ -879,6 +885,7 @@ assertprints *tmp0 "0001111223221211" "foo"
 assertflush *tmp1
 # "Function: def bar(in n, in out a, in out b)"
 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+initrec
 print "00"
 set *tmp4 1
 op sub :bar:n 3 1
@@ -895,6 +902,7 @@ assertflush *tmp2
 set :baz:b 0
 # "Function: def baz(in n, in out a, in out b)"
 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+initrec
 print "00"
 set :baz:a 1
 push bank1 :baz:b
@@ -914,6 +922,7 @@ end
 label *label0
 # "Function: def foo(in n, in a, in b)"
 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+initrec
 print :foo:a
 print :foo:b
 op add :foo:a :foo:a 1
@@ -936,6 +945,7 @@ returnrec bank1
 label *label1
 # "Function: def bar(in n, in out a, in out b)"
 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 13:1: stack overflow error"
+initrec
 print :bar:a
 print :bar:b
 op add :bar:a :bar:a 1
@@ -957,6 +967,7 @@ returnrec bank1
 label *label2
 # "Function: def baz(in n, in out a, in out b)"
 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 23:1: stack overflow error"
+initrec
 print :baz:a
 print :baz:b
 op add :baz:a :baz:a 1

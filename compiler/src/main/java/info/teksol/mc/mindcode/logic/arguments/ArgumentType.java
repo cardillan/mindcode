@@ -49,12 +49,13 @@ public enum ArgumentType {
     FUNCTION_RETVAL,
     FUNCTION_RETADDR,
     FUNCTION_STACKFRAME,
+    FUNCTION_ARRAYOFFSET,
 
     // No information about type - for creating instructions without metadata
     UNSPECIFIED,
     ;
 
     public boolean reportUninitialized() {
-        return ordinal() >= GLOBAL_PRESERVED.ordinal() && this != FUNCTION_RETVAL;
+        return ordinal() >= GLOBAL_PRESERVED.ordinal() && this != FUNCTION_RETVAL && this != FUNCTION_ARRAYOFFSET;
     }
 }

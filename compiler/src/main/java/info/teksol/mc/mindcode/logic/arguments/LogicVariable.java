@@ -30,6 +30,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static final String RETURN_VALUE_NAME = "*retval";
     public static final String RETURN_ADDRESS_NAME = "*retaddr";
     public static final String STACK_FRAME_POINTER = "*sfp";
+    public static final String ARRAY_OFFSET = "*arroffset";
     public static final String FUNCTION_FINISHED_NAME = "*finished";
     public static final String REMOTE_WAIT_ADDRESS_NAME = "*waitaddr";
     public static final String PROGRAM_ID_NAME = "*id";
@@ -348,6 +349,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable fnStackFrame(MindcodeFunction function, String mlog) {
         return new LogicVariable(function.getSourcePosition(), FUNCTION_STACKFRAME, ValueMutability.MUTABLE, function.getPrefix() + STACK_FRAME_POINTER, mlog);
+    }
+
+    public static LogicVariable fnArrayOffset(MindcodeFunction function, AstIdentifier identifier, String mlog) {
+        return new LogicVariable(identifier.sourcePosition(), FUNCTION_ARRAYOFFSET, function.getName(),
+                function.getPrefix(), identifier.getName() + ARRAY_OFFSET, mlog, true, false, false, false, false, false);
     }
 
     public static LogicVariable fnFinished(MindcodeFunction function, String mlog) {

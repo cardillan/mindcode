@@ -41,8 +41,8 @@ public class CompactInlinedArrayConstructor extends InlinedArrayConstructor {
 
         int checkSize = boundsCheckSize();
         return folded()
-                ? checkSize + inlinedTableSize() + 4 - 2 * flag(useTextTables)
-                : checkSize + inlinedTableSize() + 3 - flag(useTextTables);
+                ? offsetInstructions() + checkSize + inlinedTableSize() + 4 - 2 * flag(useTextTables)
+                : offsetInstructions() + checkSize + inlinedTableSize() + 3 - flag(useTextTables);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CompactInlinedArrayConstructor extends InlinedArrayConstructor {
         if (skipCompactLookup()) return 1;
 
         int checkSteps = boundsCheckExecutionSteps();
-        return checkSteps + (useTextTables ? 4 : 5 + flag(folded())) - inlinedTableStepsSavings();
+        return checkSteps + offsetInstructions() + (useTextTables ? 4 : 5 + flag(folded())) - inlinedTableStepsSavings();
     }
 
     @Override

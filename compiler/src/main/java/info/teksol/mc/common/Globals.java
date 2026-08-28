@@ -9,4 +9,7 @@ public class Globals {
 
     public static final int MAX_INTERNAL_ARRAY_SIZE = 1000;
     public static final int MAX_EXTERNAL_ARRAY_SIZE = 2048;
+
+    // Arrays larger than this are always copied using loops
+    public static final int DIRECT_ARRAY_COPY_SIZE_LIMIT = 25;
 }

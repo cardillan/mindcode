@@ -13,6 +13,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
 import info.teksol.mc.mindcode.compiler.postprocess.VirtualInstructionResolver;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -26,6 +27,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.compiler.optimization.OptimizationPhase.*;
 
@@ -52,6 +54,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
     private @Nullable OptimizationContext optimizationContext;
 
     private int passes = 0;
+    private boolean arraysResolved = false;
 
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile globalProfile,
             MessageConsumer messageConsumer, OptimizerContext optimizerContext,
@@ -156,6 +159,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
                         optimizationContext.insertInstructionUnchecked(program.size(), instruction);
                     }
                     modified = true;
+                    arraysResolved = true;
 
                     debugPrinter.registerIteration(null, "Virtual Instruction Expansion", List.copyOf(program));
                 }
@@ -221,6 +225,8 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
         List<Optimization> disabledOptimizations = new ArrayList<>();
 
         while (true) {
+            updateFunctionArrays();
+
             int initialSize = codeSize();
             int stackRequirement = externalStack ? 0 : computeStackRequirement();
             int availableSpace = globalProfile.getInstructionLimit() - initialSize - stackRequirement;
@@ -281,6 +287,26 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
         return modified;
     }
 
+    private void updateFunctionArrays() {
+        if (!arraysResolved) {
+            @SuppressWarnings("NullableProblems")
+            Map<MindcodeFunction, Set<ArrayStore>> arrays = program.stream()
+                    .filter(ArrayAccessInstruction.class::isInstance)
+                    .map(ix -> ((ArrayAccessInstruction) ix).getArray().getArrayStore())
+                    .filter(a -> a.getFunction() != null)
+                    .collect(Collectors.groupingBy(ArrayStore::getFunction,
+                            Collectors.toCollection(() -> Collections.newSetFromMap(new IdentityHashMap<>()))));
+
+            arrays.forEach(MindcodeFunction::setArrays);
+        }
+    }
+
+    public @Nullable StackParameters computeStackParameters(MindcodeFunction function, List<LogicInstruction> instructions) {
+        program.clear();
+        program.addAll(instructions);
+        return computeStackParameters(function);
+    }
+
     private int computeStackRequirement() {
         int stackSize = callGraph.getFunctions().stream().filter(MindcodeFunction::isRecursive)
                 .map(this::computeStackParameters)
@@ -290,7 +316,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
         return stackSize > 0 && globalProfile.isSymbolicLabels() ? stackSize + 1 : stackSize;
     }
 
-    public @Nullable StackParameters computeStackParameters(MindcodeFunction function) {
+    private @Nullable StackParameters computeStackParameters(MindcodeFunction function) {
         AstContext functionContext = rootAstContext.findContext(ctx -> ctx.function() == function &&
                 ctx.matches(AstContextType.FUNCTION_DEF, AstSubcontextType.BODY));
         if (functionContext == null) return null;

@@ -5,8 +5,8 @@ import info.teksol.mc.generated.ast.visitors.AstForEachLoopStatementVisitor;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.AbstractStandaloneBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
@@ -20,10 +20,7 @@ import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -38,8 +35,108 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
     @Override
     public ValueStore visitForEachLoopStatement(AstForEachLoopStatement node) {
-        new ForEachLoopBuilder(this, node).build();
+        int iterations = computeRangedForLoopIterations(node);
+        if (iterations > 0) {
+            buildRangedForLoop(node, iterations);
+        } else {
+            new ForEachLoopBuilder(node).build();
+        }
         return VOID;
+    }
+
+    private int computeRangedForLoopIterations(AstForEachLoopStatement node) {
+        int[] sizes = node.getIteratorGroups().stream().mapToInt(this::iteratorGroupFixedRange).toArray();
+        return sizes.length == 1 ? sizes[0] : 0;
+    }
+
+    // if this iterator group should be replaced by a ranged loop, returns the number of iterations.
+    // Returns 0 otherwise.
+    private int iteratorGroupFixedRange(AstIteratorsValuesGroup group) {
+        if (group.getIterators().size() != 1 || group.getValues().getExpressions().size() != 1) return 0;
+
+        // TODO support subarrays
+        if (group.getValues().getExpressions().getFirst() instanceof AstIdentifier id) {
+            ValueStore expression = variables.findVariable(id.getName(), true);
+            if (expression instanceof ArrayStore arrayStore && arrayStore.hasArrayOffset()) {
+                return arrayStore.getSize();
+            }
+        }
+        return 0;
+    }
+
+    private void buildRangedForLoop(AstForEachLoopStatement node, int iterations) {
+        // We need to switch contexts
+        assembler.exitAstNode(node);
+        assembler.enterAstNode(node, AstContextType.LOOP);
+
+        // Initialization
+        assembler.setSubcontextType(AstSubcontextType.INIT, iterations);
+
+        // Creates all variables as needed
+        List<Iterator> iterators = new ArrayList<>();
+        List<ArrayStore> arrays = new ArrayList<>();
+
+        node.getIteratorGroups().forEach(group -> {
+            iterators.add(processIterator(group, group.getIterators().getFirst()));
+            AstIdentifier id = (AstIdentifier) group.getValues().getExpressions().getFirst();
+            arrays.add((ArrayStore) Objects.requireNonNull(variables.findVariable(id.getName(), true)));
+        });
+
+        LogicNumber upperBound = LogicNumber.create(iterations);
+        LogicVariable loopControlVariable = assembler.nextTemp();
+        loopControlVariable.setValue(assembler, LogicNumber.ZERO);
+
+        final LogicLabel beginLabel = assembler.nextLabel();
+        LoopLabels loopLabels = enterLoop(node, "for");
+
+        // Condition
+        assembler.setSubcontextType(AstSubcontextType.CONDITION, iterations);
+        assembler.createLabel(beginLabel);
+        assembler.createJump(loopLabels.breakLabel(), Condition.GREATER_THAN_EQ, loopControlVariable, upperBound);
+
+        // Loop body
+        assembler.setSubcontextType(AstSubcontextType.BODY, iterations);
+
+        // Set up iterators
+        for (int i = 0; i < iterators.size(); i++) {
+            Iterator iterator = iterators.get(i);
+            ArrayStore array = arrays.get(i);
+            iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(), loopControlVariable));
+        }
+        visitBody(node.getBody());
+
+        // Set up iterators
+        for (int i = 0; i < iterators.size(); i++) {
+            Iterator iterator = iterators.get(i);
+            ArrayStore array = arrays.get(i);
+            iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(), loopControlVariable));
+        }
+
+        // Continue label
+        // The label needs to be part of the loop body so that it gets copied on loop unrolling
+        assembler.createLabel(loopLabels.continueLabel());
+
+        // Copy iterator values back
+        for (int i = 0; i < iterators.size(); i++) {
+            Iterator iterator = iterators.get(i);
+            if (iterator.out) {
+                ArrayStore array = arrays.get(i);
+                array.getElement(assembler, array.sourcePosition(), loopControlVariable).copyFrom(assembler, iterator.var);
+            }
+        }
+
+        // Update
+        assembler.setSubcontextType(AstSubcontextType.UPDATE, iterations);
+        assembler.createOp(Operation.ADD, loopControlVariable, loopControlVariable, LogicNumber.ONE);
+
+        // Flow control
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, iterations);
+        assembler.createJumpUnconditional(beginLabel);
+
+        // Exit
+        assembler.createLabel(loopLabels.breakLabel());
+        assembler.clearSubcontextType();
+        exitLoop(loopLabels);
     }
 
     private class ForEachLoopBuilder extends AbstractStandaloneBuilder<AstForEachLoopStatement> {
@@ -51,8 +148,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         private final boolean symbolicLabels;
         private final boolean nullCounterNoop;
 
-        public ForEachLoopBuilder(AbstractCodeBuilder builder, AstForEachLoopStatement node) {
-            super(builder, node);
+        public ForEachLoopBuilder(AstForEachLoopStatement node) {
+            super(ForEachLoopStatementsBuilder.this, node);
             symbolicLabels = node.getProfile().isSymbolicLabels();
             nullCounterNoop = node.getProfile().isNullCounterIsNoop();
             iterationGroups = node.getIteratorGroups().stream().map(this::processIteratorGroup).toList();
@@ -68,18 +165,6 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                             .collect(Collectors.toCollection(ArrayList::new)),
                     group.isDescending()
             );
-        }
-
-        private Iterator processIterator(AstIteratorsValuesGroup group, AstIterator iterator) {
-            if (group.hasDeclaration()) {
-                if (iterator.getIterator() instanceof AstIdentifier identifier) {
-                    variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Modifiers.EMPTY);
-                } else {
-                    // Probably can't happen due to grammar
-                    error(iterator.getIterator(), ERR.IDENTIFIER_EXPECTED);
-                }
-            }
-            return new Iterator(iterator.hasOutModifier(), resolveLValue(iterator.getIterator()));
         }
 
         private void processValue(AstExpression expression, Consumer<ValueStore> consumer) {
@@ -181,7 +266,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             visitBody(node.getBody());
 
             // Continue label
-            // The label needs to be part of loop body so that it gets copied on loop unrolling
+            // The label needs to be part of the loop body so that it gets copied on loop unrolling
             assembler.createLabel(loopLabels.continueLabel());
 
             // Jumps to the iteration trailing block
@@ -317,10 +402,15 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                     omitErrors = true;
                     return INACTIVE_VALUE;
                 } else if (evaluated instanceof ArrayStore arrayStore) {
-                    if (descending) {
-                        values.addAll(0, reverse(new ArrayList<>(arrayStore.getElements())));
+                    if (arrayStore.hasArrayOffset()) {
+                        int n = arrayStore.getSize();
+                        values.addAll(0, Collections.nCopies(n, LogicVariable.INVALID));
+                        for (int i = 0; i < n; i++) {
+                            int index = descending ? n - 1 - i : i;
+                            values.set(i, arrayStore.getElement(assembler, value.sourcePosition(), LogicNumber.create(index)));
+                        }
                     } else {
-                        values.addAll(0, arrayStore.getElements());
+                        values.addAll(0, descending ? arrayStore.getElements().reversed() : arrayStore.getElements());
                     }
                     return values.removeFirst();
                 }
@@ -351,6 +441,18 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
     }
 
     private record IterationElement(Iterator iterator, ValueStore value) {
+    }
+
+    private Iterator processIterator(AstIteratorsValuesGroup group, AstIterator iterator) {
+        if (group.hasDeclaration()) {
+            if (iterator.getIterator() instanceof AstIdentifier identifier) {
+                variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Modifiers.EMPTY);
+            } else {
+                // Probably can't happen due to grammar
+                error(iterator.getIterator(), ERR.IDENTIFIER_EXPECTED);
+            }
+        }
+        return new Iterator(iterator.hasOutModifier(), resolveLValue(iterator.getIterator()));
     }
 
     ///  Represents an iterator variable in the loop

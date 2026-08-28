@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.FunctionModifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
@@ -89,6 +90,8 @@ public class MindcodeFunction {
     private final Set<MindcodeFunction> recursiveCalls = new HashSet<>();
     private final Set<MindcodeFunction> indirectCalls = new HashSet<>();
 
+    // Recursive function properties
+    private final Map<LogicVariable, ArrayStore> arrays = new HashMap<>();
     private int stackFrameSize = 0;
     private int returnOffset = 0;
 
@@ -121,6 +124,10 @@ public class MindcodeFunction {
         directCalls.addAll(other.directCalls);
         recursiveCalls.addAll(other.recursiveCalls);
         indirectCalls.addAll(other.indirectCalls);
+
+        arrays.putAll(other.arrays);
+        stackFrameSize = other.stackFrameSize;
+        returnOffset = other.returnOffset;
 
         nameCreator.setupFunctionPrefix(this);
         createVariables(nameCreator);
@@ -534,6 +541,19 @@ public class MindcodeFunction {
 
     public void setGenerated() {
         this.generated = true;
+    }
+
+    public Collection<ArrayStore> getArrays() {
+        return arrays.values();
+    }
+
+    public void addArray(ArrayStore array) {
+        if (array.getArrayOffset() instanceof LogicVariable var) arrays.put(var, array);
+    }
+
+    public void setArrays(Collection<ArrayStore> arrays) {
+        this.arrays.clear();
+        arrays.forEach(this::addArray);
     }
 
     public int getStackFrameSize() {

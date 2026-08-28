@@ -43,8 +43,8 @@ public class CompactSharedArrayConstructor extends SharedArrayConstructor {
         computeSharedJumpTableSize(sharedStructures);
         int checkSize = boundsCheckSize();
         return useTextTables
-                ? checkSize + 3 + flag(folded())
-                : checkSize + 4 + flag(folded() && !profile.isSymbolicLabels());
+                ? offsetInstructions() + checkSize + 3 + flag(folded())
+                : offsetInstructions() + checkSize + 4 + flag(folded() && !profile.isSymbolicLabels());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CompactSharedArrayConstructor extends SharedArrayConstructor {
         if (skipCompactLookup()) return 1;
 
         int checkSize = boundsCheckExecutionSteps();
-        return checkSize + 6 - flag(useTextTables) + flag(folded()) + flag(profile.isSymbolicLabels());
+        return checkSize + offsetInstructions() + 6 - flag(useTextTables) + flag(folded()) + flag(profile.isSymbolicLabels());
     }
 
     @Override

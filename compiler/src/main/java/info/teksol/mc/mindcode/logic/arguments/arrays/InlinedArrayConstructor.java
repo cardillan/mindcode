@@ -5,10 +5,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.arguments.Operation;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -46,22 +43,23 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
             LogicLabel finalLabel = processor.nextLabel();
             LogicLabel firstLabel = processor.nextLabel();
             LogicLabel marker = processor.nextMarker();
+            LogicValue index = computeIndex(creator);
             LogicVariable tmp;
             if (useTextTables) {
                 generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
                 tmp = LogicVariable.INVALID;  // Won't be used
             } else if (folded()) {
                 LogicVariable tmp1 = creator.nextTemp();
-                creator.createOp(Operation.SHL, tmp1, instruction.getIndex(), LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
-                generateBoundsCheck(astContext, consumer, tmp1, 2);
+                generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+                creator.createOp(Operation.SHL, tmp1, index, LogicNumber.ONE).setNonNegativeInt(index);
                 LogicVariable tmp2 = creator.nextTemp();
-                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getFullSize()));
                 creator.createOp(Operation.MOD, tmp2, tmp1, modulo);
                 tmp = tmp2;
             } else {
                 tmp = creator.nextTemp();
-                creator.createOp(Operation.SHL, tmp, instruction.getIndex(), LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
-                generateBoundsCheck(astContext, consumer, tmp, 2);
+                generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+                creator.createOp(Operation.SHL, tmp, index, LogicNumber.ONE).setNonNegativeInt(index);
             }
 
             creator.pushContext(AstContextType.JUMPS, AstSubcontextType.BASIC);
@@ -69,17 +67,17 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
 
             List<LogicLabel> branchLabels = new ArrayList<>();
             if (useTextTables) {
-                creator.createMultiJump(instruction.getIndex(), marker).setJumpTable(branchLabels)
-                        .setSideEffects(createSideEffects()).setNonNegativeInt(instruction.getIndex());
+                creator.createMultiJump(index, marker).setJumpTable(branchLabels)
+                        .setSideEffects(createSideEffects()).setNonNegativeInt(index);
             } else {
                 creator.createMultiJump(firstLabel, tmp, LogicNumber.ZERO, marker).setSideEffects(createSideEffects());
             }
 
             Runnable createExit = () -> creator.createJumpUnconditional(finalLabel);
             if (folded()) {
-                LogicNumber limit = LogicNumber.create((arrayStore.getSize() + 1) / 2);
-                generateFoldedJumpTable(creator, firstLabel, marker, instruction.getIndex(), limit, arrayElem,
-                        createExit, true, branchLabels, ix -> ix.setNonNegativeIntTable(instruction.getIndex()));
+                LogicNumber limit = LogicNumber.create((arrayStore.getFullSize() + 1) / 2);
+                generateFoldedJumpTable(creator, firstLabel, marker, index, limit, arrayElem,
+                        createExit, true, branchLabels, ix -> ix.setNonNegativeIntTable(index));
             } else {
                 generateJumpTable(creator, firstLabel, marker, createExit, true, branchLabels);
             }
@@ -92,13 +90,13 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
     }
 
     protected final int inlinedTableSize() {
-        return (folded() ? roundUpToEven(arrayStore.getSize()) : 2 * arrayStore.getSize()) - 1;
+        return (folded() ? roundUpToEven(arrayStore.getFullSize()) : 2 * arrayStore.getFullSize()) - 1;
     }
 
     protected final double inlinedTableStepsSavings() {
         // The last jump in an inlined jump table is eliminated
         // Hit twice as often for even-sized folded arrays, or with text tables
-        boolean even = arrayStore.getSize() % 2 == 0;
-        return (folded() && (even || useTextTables) ? 2.0 : 1.0) / arrayStore.getSize();
+        boolean even = arrayStore.getFullSize() % 2 == 0;
+        return (folded() && (even || useTextTables) ? 2.0 : 1.0) / arrayStore.getFullSize();
     }
 }

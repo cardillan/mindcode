@@ -89,7 +89,7 @@ class ArrayConstructorTest extends AbstractCodeGeneratorTest {
                 + jumpTableInstructions.stream().filter(i -> i.getOpcode() == Opcode.MULTILABEL).count();
 
         boolean inlined = ix.getArrayOrganization() == ArrayOrganization.INLINED;
-        boolean singleBranch = ix.getArray().getSize() <= (ix.isArrayFolded() ? 2 : 1);
+        boolean singleBranch = ix.getArray().getFullSize() <= (ix.isArrayFolded() ? 2 : 1);
         long generatedSteps = multiLabels > 0
                 ? generatedSize + generatedSharedSize - 2 * (multiLabels - 1) + (inlined && !singleBranch ? 1 : 0) // Compensate for the missing last jump in an inlined table
                 : generatedSize + generatedSharedSize;
@@ -106,10 +106,10 @@ class ArrayConstructorTest extends AbstractCodeGeneratorTest {
         }
         ContextFactory.clearArrayConstructorContext();
     }
-    
+
     private Consumer<ArrayAccessInstruction> decorator(ArrayOrganization organization, ArrayConstruction construction, boolean folded) {
         return ix -> ix.setArrayOrganization(organization, construction).setArrayFolded(folded);
-    } 
+    }
 
     @Test
     void checkInternalCompactUnfolded() {

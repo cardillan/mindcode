@@ -14,204 +14,204 @@
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instructions):
  
-    41 write *tmp22 ARRAY *tmp18
-    42 set *tmp23 :partition:right
-    43 write :partition:pivot ARRAY *tmp23
+    42 write *tmp22 ARRAY *tmp18
+    43 set *tmp23 :partition:right
+    44 write :partition:pivot ARRAY *tmp23
 -    * set *tmp17 :partition:pivot
-    44 jump *label10 always
-    45 label *label9
+    45 jump *label10 always
+    46 label *label9
 -    * set *tmp17 null
-    46 label *label10
-    47 set :partition:index :partition:left
-    48 set *tmp25 :partition:right
+    47 label *label10
+    48 set :partition:index :partition:left
+    49 set *tmp25 :partition:right
  
-    62 write *tmp37 ARRAY *tmp33
-    63 set *tmp38 :partition:index
-    64 write :partition:curr ARRAY *tmp38
+    63 write *tmp37 ARRAY *tmp33
+    64 set *tmp38 :partition:index
+    65 write :partition:curr ARRAY *tmp38
 -    * set *tmp32 :partition:curr
-    65 jump *label17 always
-    66 label *label16
+    66 jump *label17 always
+    67 label *label16
 -    * set *tmp32 null
-    67 label *label17
-    68 op add :partition:index :partition:index 1
+    68 label *label17
+    69 op add :partition:index :partition:index 1
 -    * set *tmp30 :partition:index
-    69 jump *label15 always
-    70 label *label14
+    70 jump *label15 always
+    71 label *label14
 -    * set *tmp30 null
-    71 label *label15
-    72 label *label12
-    73 op add :partition:i :partition:i 1
+    72 label *label15
+    73 label *label12
+    74 op add :partition:i :partition:i 1
  
-    81 write *tmp46 ARRAY *tmp42
-    82 set *tmp47 :partition:index
-    83 write :partition:pivot ARRAY *tmp47
+    82 write *tmp46 ARRAY *tmp42
+    83 set *tmp47 :partition:index
+    84 write :partition:pivot ARRAY *tmp47
 -    * set *tmp41 :partition:pivot
-    84 jump *label19 always
-    85 label *label18
+    85 jump *label19 always
+    86 label *label18
 -    * set *tmp41 null
-    86 label *label19
-    87 set *tmp12 :partition:index
-    88 jump *label8 always
+    87 label *label19
+    88 set *tmp12 :partition:index
+    89 jump *label8 always
  
-   115 pop bank0 :quicksort:pivot_index
-   116 pop bank0 :quicksort:right
-   117 pop bank0 :quicksort:left
+   116 pop bank0 :quicksort:pivot_index
+   117 pop bank0 :quicksort:right
+   118 pop bank0 :quicksort:left
 -    * set *tmp8 null
-   118 jump *label7 always
-   119 label *label6
+   119 jump *label7 always
+   120 label *label6
 -    * set *tmp8 null
-   120 label *label7
-   121 label *label5
-   122 returnrec bank0
+   121 label *label7
+   122 label *label5
+   123 returnrec bank0
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 instructions):
  
-    25 jump *label6 equal *tmp7 false
-    26 op sub *tmp9 :quicksort:right :quicksort:left
-    27 op idiv *tmp10 *tmp9 2
+    26 jump *label6 equal *tmp7 false
+    27 op sub *tmp9 :quicksort:right :quicksort:left
+    28 op idiv *tmp10 *tmp9 2
 -    * op add *tmp11 :quicksort:left *tmp10
 -    * set :quicksort:pivot_index *tmp11
-+   28 op add :quicksort:pivot_index :quicksort:left *tmp10
-    29 set :partition:left :quicksort:left
-    30 set :partition:right :quicksort:right
-    31 set :partition:pivot_index :quicksort:pivot_index
++   29 op add :quicksort:pivot_index :quicksort:left *tmp10
+    30 set :partition:left :quicksort:left
+    31 set :partition:right :quicksort:right
+    32 set :partition:pivot_index :quicksort:pivot_index
 -    * set *tmp13 :partition:pivot_index
 -    * read *tmp15 ARRAY *tmp13
 -    * set :partition:pivot *tmp15
-+   32 read :partition:pivot ARRAY :partition:pivot_index
-    33 op notEqual *tmp16 :partition:pivot_index :partition:right
-    34 jump *label9 equal *tmp16 false
-    35 set *tmp18 :partition:pivot_index
++   33 read :partition:pivot ARRAY :partition:pivot_index
+    34 op notEqual *tmp16 :partition:pivot_index :partition:right
+    35 jump *label9 equal *tmp16 false
+    36 set *tmp18 :partition:pivot_index
 -    * set *tmp20 :partition:right
 -    * read *tmp22 ARRAY *tmp20
-+   36 read *tmp22 ARRAY :partition:right
-    37 write *tmp22 ARRAY *tmp18
++   37 read *tmp22 ARRAY :partition:right
+    38 write *tmp22 ARRAY *tmp18
 -    * set *tmp23 :partition:right
 -    * write :partition:pivot ARRAY *tmp23
-+   38 write :partition:pivot ARRAY :partition:right
-    39 jump *label10 always
-    40 label *label9
-    41 label *label10
++   39 write :partition:pivot ARRAY :partition:right
+    40 jump *label10 always
+    41 label *label9
+    42 label *label10
  
-    44 set :partition:i :partition:left
-    45 label *label11
-    46 jump *label13 greaterThanEq :partition:i *tmp25
+    45 set :partition:i :partition:left
+    46 label *label11
+    47 jump *label13 greaterThanEq :partition:i *tmp25
 -    * set *tmp26 :partition:i
 -    * read *tmp28 ARRAY *tmp26
 -    * set :partition:curr *tmp28
-+   47 read :partition:curr ARRAY :partition:i
-    48 op lessThan *tmp29 :partition:curr :partition:pivot
-    49 jump *label14 equal *tmp29 false
-    50 op notEqual *tmp31 :partition:i :partition:index
-    51 jump *label16 equal *tmp31 false
-    52 set *tmp33 :partition:i
++   48 read :partition:curr ARRAY :partition:i
+    49 op lessThan *tmp29 :partition:curr :partition:pivot
+    50 jump *label14 equal *tmp29 false
+    51 op notEqual *tmp31 :partition:i :partition:index
+    52 jump *label16 equal *tmp31 false
+    53 set *tmp33 :partition:i
 -    * set *tmp35 :partition:index
 -    * read *tmp37 ARRAY *tmp35
-+   53 read *tmp37 ARRAY :partition:index
-    54 write *tmp37 ARRAY *tmp33
++   54 read *tmp37 ARRAY :partition:index
+    55 write *tmp37 ARRAY *tmp33
 -    * set *tmp38 :partition:index
 -    * write :partition:curr ARRAY *tmp38
-+   55 write :partition:curr ARRAY :partition:index
-    56 jump *label17 always
-    57 label *label16
-    58 label *label17
++   56 write :partition:curr ARRAY :partition:index
+    57 jump *label17 always
+    58 label *label16
+    59 label *label17
  
-    67 op notEqual *tmp40 :partition:index :partition:right
-    68 jump *label18 equal *tmp40 false
-    69 set *tmp42 :partition:right
+    68 op notEqual *tmp40 :partition:index :partition:right
+    69 jump *label18 equal *tmp40 false
+    70 set *tmp42 :partition:right
 -    * set *tmp44 :partition:index
 -    * read *tmp46 ARRAY *tmp44
-+   70 read *tmp46 ARRAY :partition:index
-    71 write *tmp46 ARRAY *tmp42
++   71 read *tmp46 ARRAY :partition:index
+    72 write *tmp46 ARRAY *tmp42
 -    * set *tmp47 :partition:index
 -    * write :partition:pivot ARRAY *tmp47
-+   72 write :partition:pivot ARRAY :partition:index
-    73 jump *label19 always
-    74 label *label18
-    75 label *label19
++   73 write :partition:pivot ARRAY :partition:index
+    74 jump *label19 always
+    75 label *label18
+    76 label *label19
 
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-5 instructions):
  
-    21 stop
     22 end
     23 label *label0
+    24 initrec
 -    * op greaterThan *tmp7 :quicksort:right :quicksort:left
 -    * jump *label6 equal *tmp7 false
-+   24 jump *label6 lessThanEq :quicksort:right :quicksort:left
-    25 op sub *tmp9 :quicksort:right :quicksort:left
-    26 op idiv *tmp10 *tmp9 2
-    27 op add :quicksort:pivot_index :quicksort:left *tmp10
++   25 jump *label6 lessThanEq :quicksort:right :quicksort:left
+    26 op sub *tmp9 :quicksort:right :quicksort:left
+    27 op idiv *tmp10 *tmp9 2
+    28 op add :quicksort:pivot_index :quicksort:left *tmp10
  
-    29 set :partition:right :quicksort:right
-    30 set :partition:pivot_index :quicksort:pivot_index
-    31 read :partition:pivot ARRAY :partition:pivot_index
+    30 set :partition:right :quicksort:right
+    31 set :partition:pivot_index :quicksort:pivot_index
+    32 read :partition:pivot ARRAY :partition:pivot_index
 -    * op notEqual *tmp16 :partition:pivot_index :partition:right
 -    * jump *label9 equal *tmp16 false
-+   32 jump *label9 equal :partition:pivot_index :partition:right
-    33 set *tmp18 :partition:pivot_index
-    34 read *tmp22 ARRAY :partition:right
-    35 write *tmp22 ARRAY *tmp18
++   33 jump *label9 equal :partition:pivot_index :partition:right
+    34 set *tmp18 :partition:pivot_index
+    35 read *tmp22 ARRAY :partition:right
+    36 write *tmp22 ARRAY *tmp18
  
-    43 label *label11
-    44 jump *label13 greaterThanEq :partition:i *tmp25
-    45 read :partition:curr ARRAY :partition:i
+    44 label *label11
+    45 jump *label13 greaterThanEq :partition:i *tmp25
+    46 read :partition:curr ARRAY :partition:i
 -    * op lessThan *tmp29 :partition:curr :partition:pivot
 -    * jump *label14 equal *tmp29 false
 -    * op notEqual *tmp31 :partition:i :partition:index
 -    * jump *label16 equal *tmp31 false
-+   46 jump *label14 greaterThanEq :partition:curr :partition:pivot
-+   47 jump *label16 equal :partition:i :partition:index
-    48 set *tmp33 :partition:i
-    49 read *tmp37 ARRAY :partition:index
-    50 write *tmp37 ARRAY *tmp33
++   47 jump *label14 greaterThanEq :partition:curr :partition:pivot
++   48 jump *label16 equal :partition:i :partition:index
+    49 set *tmp33 :partition:i
+    50 read *tmp37 ARRAY :partition:index
+    51 write *tmp37 ARRAY *tmp33
  
-    60 op add :partition:i :partition:i 1
-    61 jump *label11 always
-    62 label *label13
+    61 op add :partition:i :partition:i 1
+    62 jump *label11 always
+    63 label *label13
 -    * op notEqual *tmp40 :partition:index :partition:right
 -    * jump *label18 equal *tmp40 false
-+   63 jump *label18 equal :partition:index :partition:right
-    64 set *tmp42 :partition:right
-    65 read *tmp46 ARRAY :partition:index
-    66 write *tmp46 ARRAY *tmp42
++   64 jump *label18 equal :partition:index :partition:right
+    65 set *tmp42 :partition:right
+    66 read *tmp46 ARRAY :partition:index
+    67 write *tmp46 ARRAY *tmp42
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-5 instructions):
  
-    34 read *tmp22 ARRAY :partition:right
-    35 write *tmp22 ARRAY *tmp18
-    36 write :partition:pivot ARRAY :partition:right
+    35 read *tmp22 ARRAY :partition:right
+    36 write *tmp22 ARRAY *tmp18
+    37 write :partition:pivot ARRAY :partition:right
 -    * jump *label10 always
-    37 label *label9
-    38 label *label10
-    39 set :partition:index :partition:left
+    38 label *label9
+    39 label *label10
+    40 set :partition:index :partition:left
  
-    48 read *tmp37 ARRAY :partition:index
-    49 write *tmp37 ARRAY *tmp33
-    50 write :partition:curr ARRAY :partition:index
+    49 read *tmp37 ARRAY :partition:index
+    50 write *tmp37 ARRAY *tmp33
+    51 write :partition:curr ARRAY :partition:index
 -    * jump *label17 always
-    51 label *label16
-    52 label *label17
-    53 op add :partition:index :partition:index 1
+    52 label *label16
+    53 label *label17
+    54 op add :partition:index :partition:index 1
 -    * jump *label15 always
-    54 label *label14
-    55 label *label15
-    56 label *label12
+    55 label *label14
+    56 label *label15
+    57 label *label12
  
-    62 read *tmp46 ARRAY :partition:index
-    63 write *tmp46 ARRAY *tmp42
-    64 write :partition:pivot ARRAY :partition:index
+    63 read *tmp46 ARRAY :partition:index
+    64 write *tmp46 ARRAY *tmp42
+    65 write :partition:pivot ARRAY :partition:index
 -    * jump *label19 always
-    65 label *label18
-    66 label *label19
-    67 set *tmp12 :partition:index
+    66 label *label18
+    67 label *label19
+    68 set *tmp12 :partition:index
  
-    95 pop bank0 :quicksort:pivot_index
-    96 pop bank0 :quicksort:right
-    97 pop bank0 :quicksort:left
+    96 pop bank0 :quicksort:pivot_index
+    97 pop bank0 :quicksort:right
+    98 pop bank0 :quicksort:left
 -    * jump *label7 always
-    98 label *label6
-    99 label *label7
-   100 label *label5
+    99 label *label6
+   100 label *label7
+   101 label *label5
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -226,67 +226,67 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     17 label *label3
     18 op add :i :i 1
  
-    28 set :partition:left :quicksort:left
-    29 set :partition:right :quicksort:right
-    30 set :partition:pivot_index :quicksort:pivot_index
+    29 set :partition:left :quicksort:left
+    30 set :partition:right :quicksort:right
+    31 set :partition:pivot_index :quicksort:pivot_index
 -    * read :partition:pivot ARRAY :partition:pivot_index
 -    * jump *label9 equal :partition:pivot_index :partition:right
 -    * set *tmp18 :partition:pivot_index
 -    * read *tmp22 ARRAY :partition:right
 -    * write *tmp22 ARRAY *tmp18
 -    * write :partition:pivot ARRAY :partition:right
-+   31 read :partition:pivot ARRAY :quicksort:pivot_index
-+   32 jump *label9 equal :quicksort:pivot_index :quicksort:right
-+   33 set *tmp18 :quicksort:pivot_index
-+   34 read *tmp22 ARRAY :quicksort:right
-+   35 write *tmp22 ARRAY :partition:pivot_index
-+   36 write :partition:pivot ARRAY :quicksort:right
-    37 label *label9
-    38 label *label10
++   32 read :partition:pivot ARRAY :quicksort:pivot_index
++   33 jump *label9 equal :quicksort:pivot_index :quicksort:right
++   34 set *tmp18 :quicksort:pivot_index
++   35 read *tmp22 ARRAY :quicksort:right
++   36 write *tmp22 ARRAY :partition:pivot_index
++   37 write :partition:pivot ARRAY :quicksort:right
+    38 label *label9
+    39 label *label10
 -    * set :partition:index :partition:left
 -    * set *tmp25 :partition:right
 -    * set :partition:i :partition:left
-+   39 set :partition:index :quicksort:left
-+   40 set *tmp25 :quicksort:right
-+   41 set :partition:i :quicksort:left
-    42 label *label11
++   40 set :partition:index :quicksort:left
++   41 set *tmp25 :quicksort:right
++   42 set :partition:i :quicksort:left
+    43 label *label11
 -    * jump *label13 greaterThanEq :partition:i *tmp25
-+   43 jump *label13 greaterThanEq :partition:i :partition:right
-    44 read :partition:curr ARRAY :partition:i
-    45 jump *label14 greaterThanEq :partition:curr :partition:pivot
-    46 jump *label16 equal :partition:i :partition:index
-    47 set *tmp33 :partition:i
-    48 read *tmp37 ARRAY :partition:index
++   44 jump *label13 greaterThanEq :partition:i :partition:right
+    45 read :partition:curr ARRAY :partition:i
+    46 jump *label14 greaterThanEq :partition:curr :partition:pivot
+    47 jump *label16 equal :partition:i :partition:index
+    48 set *tmp33 :partition:i
+    49 read *tmp37 ARRAY :partition:index
 -    * write *tmp37 ARRAY *tmp33
-+   49 write *tmp37 ARRAY :partition:i
-    50 write :partition:curr ARRAY :partition:index
-    51 label *label16
-    52 label *label17
++   50 write *tmp37 ARRAY :partition:i
+    51 write :partition:curr ARRAY :partition:index
+    52 label *label16
+    53 label *label17
  
-    57 op add :partition:i :partition:i 1
-    58 jump *label11 always
-    59 label *label13
+    58 op add :partition:i :partition:i 1
+    59 jump *label11 always
+    60 label *label13
 -    * jump *label18 equal :partition:index :partition:right
 -    * set *tmp42 :partition:right
-+   60 jump *label18 equal :partition:index :quicksort:right
-+   61 set *tmp42 :quicksort:right
-    62 read *tmp46 ARRAY :partition:index
++   61 jump *label18 equal :partition:index :quicksort:right
++   62 set *tmp42 :quicksort:right
+    63 read *tmp46 ARRAY :partition:index
 -    * write *tmp46 ARRAY *tmp42
-+   63 write *tmp46 ARRAY :partition:right
-    64 write :partition:pivot ARRAY :partition:index
-    65 label *label18
-    66 label *label19
-    67 set *tmp12 :partition:index
-    68 jump *label8 always
++   64 write *tmp46 ARRAY :partition:right
+    65 write :partition:pivot ARRAY :partition:index
+    66 label *label18
+    67 label *label19
+    68 set *tmp12 :partition:index
+    69 jump *label8 always
 -    * set *tmp12 null
-    69 label *label8
+    70 label *label8
 -    * set :quicksort:new_pivot_index *tmp12
 -    * op sub *tmp49 :quicksort:new_pivot_index 1
-+   70 set :quicksort:new_pivot_index :partition:index
-+   71 op sub *tmp49 *tmp12 1
-    72 push bank0 :quicksort:left
-    73 push bank0 :quicksort:right
-    74 push bank0 :quicksort:pivot_index
++   71 set :quicksort:new_pivot_index :partition:index
++   72 op sub *tmp49 *tmp12 1
+    73 push bank0 :quicksort:left
+    74 push bank0 :quicksort:right
+    75 push bank0 :quicksort:pivot_index
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7 instructions):
  
@@ -299,91 +299,91 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     13 read *tmp6 ARRAY :i
     14 assertequals *tmp5 *tmp6 "unexpected value"
  
-    23 op sub *tmp9 :quicksort:right :quicksort:left
-    24 op idiv *tmp10 *tmp9 2
-    25 op add :quicksort:pivot_index :quicksort:left *tmp10
+    24 op sub *tmp9 :quicksort:right :quicksort:left
+    25 op idiv *tmp10 *tmp9 2
+    26 op add :quicksort:pivot_index :quicksort:left *tmp10
 -    * set :partition:left :quicksort:left
-    26 set :partition:right :quicksort:right
-    27 set :partition:pivot_index :quicksort:pivot_index
-    28 read :partition:pivot ARRAY :quicksort:pivot_index
-    29 jump *label9 equal :quicksort:pivot_index :quicksort:right
+    27 set :partition:right :quicksort:right
+    28 set :partition:pivot_index :quicksort:pivot_index
+    29 read :partition:pivot ARRAY :quicksort:pivot_index
+    30 jump *label9 equal :quicksort:pivot_index :quicksort:right
 -    * set *tmp18 :quicksort:pivot_index
-    30 read *tmp22 ARRAY :quicksort:right
+    31 read *tmp22 ARRAY :quicksort:right
 -    * write *tmp22 ARRAY :partition:pivot_index
-+   31 write *tmp22 ARRAY :quicksort:pivot_index
-    32 write :partition:pivot ARRAY :quicksort:right
-    33 label *label9
-    34 label *label10
-    35 set :partition:index :quicksort:left
++   32 write *tmp22 ARRAY :quicksort:pivot_index
+    33 write :partition:pivot ARRAY :quicksort:right
+    34 label *label9
+    35 label *label10
+    36 set :partition:index :quicksort:left
 -    * set *tmp25 :quicksort:right
-    36 set :partition:i :quicksort:left
-    37 label *label11
+    37 set :partition:i :quicksort:left
+    38 label *label11
 -    * jump *label13 greaterThanEq :partition:i :partition:right
-+   38 jump *label13 greaterThanEq :partition:i :quicksort:right
-    39 read :partition:curr ARRAY :partition:i
-    40 jump *label14 greaterThanEq :partition:curr :partition:pivot
-    41 jump *label16 equal :partition:i :partition:index
++   39 jump *label13 greaterThanEq :partition:i :quicksort:right
+    40 read :partition:curr ARRAY :partition:i
+    41 jump *label14 greaterThanEq :partition:curr :partition:pivot
+    42 jump *label16 equal :partition:i :partition:index
 -    * set *tmp33 :partition:i
-    42 read *tmp37 ARRAY :partition:index
-    43 write *tmp37 ARRAY :partition:i
-    44 write :partition:curr ARRAY :partition:index
+    43 read *tmp37 ARRAY :partition:index
+    44 write *tmp37 ARRAY :partition:i
+    45 write :partition:curr ARRAY :partition:index
  
-    52 jump *label11 always
-    53 label *label13
-    54 jump *label18 equal :partition:index :quicksort:right
+    53 jump *label11 always
+    54 label *label13
+    55 jump *label18 equal :partition:index :quicksort:right
 -    * set *tmp42 :quicksort:right
-    55 read *tmp46 ARRAY :partition:index
+    56 read *tmp46 ARRAY :partition:index
 -    * write *tmp46 ARRAY :partition:right
-+   56 write *tmp46 ARRAY :quicksort:right
-    57 write :partition:pivot ARRAY :partition:index
-    58 label *label18
-    59 label *label19
++   57 write *tmp46 ARRAY :quicksort:right
+    58 write :partition:pivot ARRAY :partition:index
+    59 label *label18
+    60 label *label19
  
-    61 jump *label8 always
-    62 label *label8
-    63 set :quicksort:new_pivot_index :partition:index
+    62 jump *label8 always
+    63 label *label8
+    64 set :quicksort:new_pivot_index :partition:index
 -    * op sub *tmp49 *tmp12 1
-+   64 op sub *tmp49 :partition:index 1
-    65 push bank0 :quicksort:left
-    66 push bank0 :quicksort:right
-    67 push bank0 :quicksort:pivot_index
++   65 op sub *tmp49 :partition:index 1
+    66 push bank0 :quicksort:left
+    67 push bank0 :quicksort:right
+    68 push bank0 :quicksort:pivot_index
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3 instructions):
  
-    23 op sub *tmp9 :quicksort:right :quicksort:left
-    24 op idiv *tmp10 *tmp9 2
-    25 op add :quicksort:pivot_index :quicksort:left *tmp10
+    24 op sub *tmp9 :quicksort:right :quicksort:left
+    25 op idiv *tmp10 *tmp9 2
+    26 op add :quicksort:pivot_index :quicksort:left *tmp10
 -    * set :partition:right :quicksort:right
 -    * set :partition:pivot_index :quicksort:pivot_index
-    26 read :partition:pivot ARRAY :quicksort:pivot_index
-    27 jump *label9 equal :quicksort:pivot_index :quicksort:right
-    28 read *tmp22 ARRAY :quicksort:right
+    27 read :partition:pivot ARRAY :quicksort:pivot_index
+    28 jump *label9 equal :quicksort:pivot_index :quicksort:right
+    29 read *tmp22 ARRAY :quicksort:right
  
-    55 write :partition:pivot ARRAY :partition:index
-    56 label *label18
-    57 label *label19
+    56 write :partition:pivot ARRAY :partition:index
+    57 label *label18
+    58 label *label19
 -    * set *tmp12 :partition:index
-    58 jump *label8 always
-    59 label *label8
-    60 set :quicksort:new_pivot_index :partition:index
+    59 jump *label8 always
+    60 label *label8
+    61 set :quicksort:new_pivot_index :partition:index
 
 Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
-    63 push bank0 :quicksort:right
-    64 push bank0 :quicksort:pivot_index
-    65 push bank0 :quicksort:new_pivot_index
+    64 push bank0 :quicksort:right
+    65 push bank0 :quicksort:pivot_index
+    66 push bank0 :quicksort:new_pivot_index
 -    * set :quicksort:left :quicksort:left
-    66 set :quicksort:right *tmp49
-    67 callrec bank0 *label0 *label20 :quicksort*retval
-    68 label *label20
+    67 set :quicksort:right *tmp49
+    68 callrec bank0 *label0 *label20 :quicksort*retval
+    69 label *label20
  
-    76 push bank0 :quicksort:pivot_index
-    77 push bank0 :quicksort:new_pivot_index
-    78 set :quicksort:left *tmp50
+    77 push bank0 :quicksort:pivot_index
+    78 push bank0 :quicksort:new_pivot_index
+    79 set :quicksort:left *tmp50
 -    * set :quicksort:right :quicksort:right
-    79 callrec bank0 *label0 *label21 :quicksort*retval
-    80 label *label21
-    81 pop bank0 :quicksort:new_pivot_index
+    80 callrec bank0 *label0 *label21 :quicksort*retval
+    81 label *label21
+    82 pop bank0 :quicksort:new_pivot_index
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
@@ -402,60 +402,61 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     20 stop
     21 end
  
-    35 set :partition:i :quicksort:left
-    36 label *label11
-    37 jump *label13 greaterThanEq :partition:i :quicksort:right
-+   38 label *label23
-    39 read :partition:curr ARRAY :partition:i
-    40 jump *label14 greaterThanEq :partition:curr :partition:pivot
-    41 jump *label16 equal :partition:i :partition:index
+    36 set :partition:i :quicksort:left
+    37 label *label11
+    38 jump *label13 greaterThanEq :partition:i :quicksort:right
++   39 label *label23
+    40 read :partition:curr ARRAY :partition:i
+    41 jump *label14 greaterThanEq :partition:curr :partition:pivot
+    42 jump *label16 equal :partition:i :partition:index
  
-    49 label *label15
-    50 label *label12
-    51 op add :partition:i :partition:i 1
+    50 label *label15
+    51 label *label12
+    52 op add :partition:i :partition:i 1
 -    * jump *label11 always
-+   52 jump *label23 lessThan :partition:i :quicksort:right
-    53 label *label13
-    54 jump *label18 equal :partition:index :quicksort:right
-    55 read *tmp46 ARRAY :partition:index
++   53 jump *label23 lessThan :partition:i :quicksort:right
+    54 label *label13
+    55 jump *label18 equal :partition:index :quicksort:right
+    56 read *tmp46 ARRAY :partition:index
 
 Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-3 instructions):
  
-    61 label *label8
-    62 set :quicksort:new_pivot_index :partition:index
-    63 op sub *tmp49 :partition:index 1
+    62 label *label8
+    63 set :quicksort:new_pivot_index :partition:index
+    64 op sub *tmp49 :partition:index 1
 -    * push bank0 :quicksort:left
-    64 push bank0 :quicksort:right
+    65 push bank0 :quicksort:right
 -    * push bank0 :quicksort:pivot_index
-    65 push bank0 :quicksort:new_pivot_index
-    66 set :quicksort:right *tmp49
-    67 callrec bank0 *label0 *label20 :quicksort*retval
-    68 label *label20
-    69 pop bank0 :quicksort:new_pivot_index
+    66 push bank0 :quicksort:new_pivot_index
+    67 set :quicksort:right *tmp49
+    68 callrec bank0 *label0 *label20 :quicksort*retval
+    69 label *label20
+    70 pop bank0 :quicksort:new_pivot_index
 -    * pop bank0 :quicksort:pivot_index
-    70 pop bank0 :quicksort:right
+    71 pop bank0 :quicksort:right
 -    * pop bank0 :quicksort:left
-    71 op add *tmp50 :quicksort:new_pivot_index 1
+    72 op add *tmp50 :quicksort:new_pivot_index 1
 -    * push bank0 :quicksort:left
 -    * push bank0 :quicksort:right
 -    * push bank0 :quicksort:pivot_index
 -    * push bank0 :quicksort:new_pivot_index
-    72 set :quicksort:left *tmp50
-    73 callrec bank0 *label0 *label21 :quicksort*retval
-    74 label *label21
+    73 set :quicksort:left *tmp50
+    74 callrec bank0 *label0 *label21 :quicksort*retval
+    75 label *label21
 -    * pop bank0 :quicksort:new_pivot_index
 -    * pop bank0 :quicksort:pivot_index
 -    * pop bank0 :quicksort:right
 -    * pop bank0 :quicksort:left
-    75 label *label6
-    76 label *label7
-    77 label *label5
+    76 label *label6
+    77 label *label7
+    78 label *label5
 
 Modifications by Iterated phase, Recursive Optimization, pass 1, iteration 1 (-1 instructions):
  
     20 stop
     21 end
     22 label *label0
+-    * initrec
 -    * jump *label6 lessThanEq :quicksort:right :quicksort:left
 -    * op sub *tmp9 :quicksort:right :quicksort:left
 -    * op idiv *tmp10 *tmp9 2
@@ -514,73 +515,74 @@ Modifications by Iterated phase, Recursive Optimization, pass 1, iteration 1 (-1
 -    * returnrec bank0
 -    * end
 +   23 label *label42
-+   24 jump *label39 lessThanEq :quicksort:right :quicksort:left
-+   25 op sub *tmp9 :quicksort:right :quicksort:left
-+   26 op idiv *tmp10 *tmp9 2
-+   27 op add :quicksort:pivot_index :quicksort:left *tmp10
-+   28 read :partition:pivot ARRAY :quicksort:pivot_index
-+   29 jump *label24 equal :quicksort:pivot_index :quicksort:right
-+   30 read *tmp22 ARRAY :quicksort:right
-+   31 write *tmp22 ARRAY :quicksort:pivot_index
-+   32 write :partition:pivot ARRAY :quicksort:right
-+   33 label *label24
-+   34 label *label25
-+   35 set :partition:index :quicksort:left
-+   36 set :partition:i :quicksort:left
-+   37 label *label26
-+   38 jump *label33 greaterThanEq :partition:i :quicksort:right
-+   39 label *label27
-+   40 read :partition:curr ARRAY :partition:i
-+   41 jump *label30 greaterThanEq :partition:curr :partition:pivot
-+   42 jump *label28 equal :partition:i :partition:index
-+   43 read *tmp37 ARRAY :partition:index
-+   44 write *tmp37 ARRAY :partition:i
-+   45 write :partition:curr ARRAY :partition:index
-+   46 label *label28
-+   47 label *label29
-+   48 op add :partition:index :partition:index 1
-+   49 label *label30
-+   50 label *label31
-+   51 label *label32
-+   52 op add :partition:i :partition:i 1
-+   53 jump *label27 lessThan :partition:i :quicksort:right
-+   54 label *label33
-+   55 jump *label34 equal :partition:index :quicksort:right
-+   56 read *tmp46 ARRAY :partition:index
-+   57 write *tmp46 ARRAY :quicksort:right
-+   58 write :partition:pivot ARRAY :partition:index
-+   59 label *label34
-+   60 label *label35
-+   61 jump *label36 always
-+   62 label *label36
-+   63 set :quicksort:new_pivot_index :partition:index
-+   64 op sub *tmp49 :partition:index 1
-+   65 push bank0 :quicksort:right
-+   66 push bank0 :quicksort:new_pivot_index
-+   67 set :quicksort:right *tmp49
-+   68 callrec bank0 *label0 *label37 :quicksort*retval
-+   69 label *label37
-+   70 pop bank0 :quicksort:new_pivot_index
-+   71 pop bank0 :quicksort:right
-+   72 op add *tmp50 :quicksort:new_pivot_index 1
-+   73 set :quicksort:left *tmp50
-+   74 jump *label42 always
-+   75 label *label38
-+   76 label *label39
-+   77 label *label40
-+   78 label *label41
-+   79 returnrec bank0
-+   80 end
++   24 initrec
++   25 jump *label39 lessThanEq :quicksort:right :quicksort:left
++   26 op sub *tmp9 :quicksort:right :quicksort:left
++   27 op idiv *tmp10 *tmp9 2
++   28 op add :quicksort:pivot_index :quicksort:left *tmp10
++   29 read :partition:pivot ARRAY :quicksort:pivot_index
++   30 jump *label24 equal :quicksort:pivot_index :quicksort:right
++   31 read *tmp22 ARRAY :quicksort:right
++   32 write *tmp22 ARRAY :quicksort:pivot_index
++   33 write :partition:pivot ARRAY :quicksort:right
++   34 label *label24
++   35 label *label25
++   36 set :partition:index :quicksort:left
++   37 set :partition:i :quicksort:left
++   38 label *label26
++   39 jump *label33 greaterThanEq :partition:i :quicksort:right
++   40 label *label27
++   41 read :partition:curr ARRAY :partition:i
++   42 jump *label30 greaterThanEq :partition:curr :partition:pivot
++   43 jump *label28 equal :partition:i :partition:index
++   44 read *tmp37 ARRAY :partition:index
++   45 write *tmp37 ARRAY :partition:i
++   46 write :partition:curr ARRAY :partition:index
++   47 label *label28
++   48 label *label29
++   49 op add :partition:index :partition:index 1
++   50 label *label30
++   51 label *label31
++   52 label *label32
++   53 op add :partition:i :partition:i 1
++   54 jump *label27 lessThan :partition:i :quicksort:right
++   55 label *label33
++   56 jump *label34 equal :partition:index :quicksort:right
++   57 read *tmp46 ARRAY :partition:index
++   58 write *tmp46 ARRAY :quicksort:right
++   59 write :partition:pivot ARRAY :partition:index
++   60 label *label34
++   61 label *label35
++   62 jump *label36 always
++   63 label *label36
++   64 set :quicksort:new_pivot_index :partition:index
++   65 op sub *tmp49 :partition:index 1
++   66 push bank0 :quicksort:right
++   67 push bank0 :quicksort:new_pivot_index
++   68 set :quicksort:right *tmp49
++   69 callrec bank0 *label0 *label37 :quicksort*retval
++   70 label *label37
++   71 pop bank0 :quicksort:new_pivot_index
++   72 pop bank0 :quicksort:right
++   73 op add *tmp50 :quicksort:new_pivot_index 1
++   74 set :quicksort:left *tmp50
++   75 jump *label42 always
++   76 label *label38
++   77 label *label39
++   78 label *label40
++   79 label *label41
++   80 returnrec bank0
++   81 end
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  
-    58 write :partition:pivot ARRAY :partition:index
-    59 label *label34
-    60 label *label35
+    59 write :partition:pivot ARRAY :partition:index
+    60 label *label34
+    61 label *label35
 -    * jump *label36 always
-    61 label *label36
-    62 set :quicksort:new_pivot_index :partition:index
-    63 op sub *tmp49 :partition:index 1
+    62 label *label36
+    63 set :quicksort:new_pivot_index :partition:index
+    64 op sub *tmp49 :partition:index 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
@@ -593,26 +595,26 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     13 read *tmp5 FINAL :i
     14 read *tmp6 ARRAY :i
  
-    35 set :partition:index :quicksort:left
-    36 set :partition:i :quicksort:left
-    37 label *label26
+    36 set :partition:index :quicksort:left
+    37 set :partition:i :quicksort:left
+    38 label *label26
 -    * jump *label33 greaterThanEq :partition:i :quicksort:right
-+   38 jump *label33 greaterThanEq :quicksort:left :quicksort:right
-    39 label *label27
-    40 read :partition:curr ARRAY :partition:i
-    41 jump *label30 greaterThanEq :partition:curr :partition:pivot
++   39 jump *label33 greaterThanEq :quicksort:left :quicksort:right
+    40 label *label27
+    41 read :partition:curr ARRAY :partition:i
+    42 jump *label30 greaterThanEq :partition:curr :partition:pivot
 
 Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1 (-1 instructions):
  
-    68 label *label37
-    69 pop bank0 :quicksort:new_pivot_index
-    70 pop bank0 :quicksort:right
+    69 label *label37
+    70 pop bank0 :quicksort:new_pivot_index
+    71 pop bank0 :quicksort:right
 -    * op add *tmp50 :quicksort:new_pivot_index 1
 -    * set :quicksort:left *tmp50
-+   71 op add :quicksort:left :quicksort:new_pivot_index 1
-    72 jump *label42 always
-    73 label *label38
-    74 label *label39
++   72 op add :quicksort:left :quicksort:new_pivot_index 1
+    73 jump *label42 always
+    74 label *label38
+    75 label *label39
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
  
@@ -630,46 +632,46 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
     16 jump *label22 lessThan :i SIZE
     17 label *label4
  
-    29 write *tmp22 ARRAY :quicksort:pivot_index
-    30 write :partition:pivot ARRAY :quicksort:right
-    31 label *label24
+    30 write *tmp22 ARRAY :quicksort:pivot_index
+    31 write :partition:pivot ARRAY :quicksort:right
+    32 label *label24
 -    * label *label25
-    32 set :partition:index :quicksort:left
-    33 set :partition:i :quicksort:left
+    33 set :partition:index :quicksort:left
+    34 set :partition:i :quicksort:left
 -    * label *label26
-    34 jump *label33 greaterThanEq :quicksort:left :quicksort:right
-    35 label *label27
-    36 read :partition:curr ARRAY :partition:i
+    35 jump *label33 greaterThanEq :quicksort:left :quicksort:right
+    36 label *label27
+    37 read :partition:curr ARRAY :partition:i
  
-    40 write *tmp37 ARRAY :partition:i
-    41 write :partition:curr ARRAY :partition:index
-    42 label *label28
+    41 write *tmp37 ARRAY :partition:i
+    42 write :partition:curr ARRAY :partition:index
+    43 label *label28
 -    * label *label29
-    43 op add :partition:index :partition:index 1
-    44 label *label30
+    44 op add :partition:index :partition:index 1
+    45 label *label30
 -    * label *label31
 -    * label *label32
-    45 op add :partition:i :partition:i 1
-    46 jump *label27 lessThan :partition:i :quicksort:right
-    47 label *label33
+    46 op add :partition:i :partition:i 1
+    47 jump *label27 lessThan :partition:i :quicksort:right
+    48 label *label33
  
-    50 write *tmp46 ARRAY :quicksort:right
-    51 write :partition:pivot ARRAY :partition:index
-    52 label *label34
+    51 write *tmp46 ARRAY :quicksort:right
+    52 write :partition:pivot ARRAY :partition:index
+    53 label *label34
 -    * label *label35
 -    * label *label36
-    53 set :quicksort:new_pivot_index :partition:index
-    54 op sub *tmp49 :partition:index 1
-    55 push bank0 :quicksort:right
+    54 set :quicksort:new_pivot_index :partition:index
+    55 op sub *tmp49 :partition:index 1
+    56 push bank0 :quicksort:right
  
-    61 pop bank0 :quicksort:right
-    62 op add :quicksort:left :quicksort:new_pivot_index 1
-    63 jump *label42 always
+    62 pop bank0 :quicksort:right
+    63 op add :quicksort:left :quicksort:new_pivot_index 1
+    64 jump *label42 always
 -    * label *label38
-    64 label *label39
+    65 label *label39
 -    * label *label40
 -    * label *label41
-    65 returnrec bank0
+    66 returnrec bank0
 -    * end
 
 Final code before resolving virtual instructions:
@@ -696,6 +698,7 @@ stop
 end
 label *label0
 label *label42
+initrec
 jump *label39 lessThanEq :quicksort:right :quicksort:left
 op sub *tmp3 :quicksort:right :quicksort:left
 op idiv *tmp4 *tmp3 2

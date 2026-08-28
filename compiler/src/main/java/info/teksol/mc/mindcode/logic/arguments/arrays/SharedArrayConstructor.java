@@ -68,7 +68,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             creator.createLabel(startLabel).setMarker(startLabel);
             LogicVariable jumpValue = folded ? processor.nextTemp() : arrayInd;
             if (folded) {
-                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getFullSize()));
                 creator.createOp(Operation.MOD, jumpValue, arrayInd, modulo);
             }
             creator.createMultiJump(firstLabel, jumpValue, LogicNumber.ZERO, marker);
@@ -78,8 +78,8 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
         List<LogicLabel> branchLabels = new ArrayList<>();
         if (folded) {
             LogicNumber limit = useTextTables
-                    ? LogicNumber.create((arrayStore.getSize() + 1) / 2)
-                    : LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+                    ? LogicNumber.create((arrayStore.getFullSize() + 1) / 2)
+                    : LogicNumber.create(roundUpToEven(arrayStore.getFullSize()));
             generateFoldedJumpTable(creator, firstLabel, marker,
                     arrayInd, limit, arrayElem, createExit, false, branchLabels, _ -> {});
         } else {
@@ -109,8 +109,9 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
 
         if (!skipCompactLookup()) {
             prepareTableCall(creator);
-            creator.createOp(Operation.SHL, arrayInd, instruction.getIndex(), LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
-            generateBoundsCheck(astContext, consumer, arrayInd, 2);
+            generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+            LogicValue index = computeIndex(creator);
+            creator.createOp(Operation.SHL, arrayInd, index, LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
             creator.createCallStackless(jumpTable.label(), arrayRet, LogicVariable.INVALID).setSideEffects(createCallSideEffects());
         }
 
@@ -128,13 +129,14 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
 
             prepareTableCall(creator);
             creator.createSetAddress(arrayRet, returnLabel).setHoistId(marker2);
-            LogicVariable index = folded ? arrayInd : processor.nextTemp();
-            creator.createOp(Operation.SHL, index, instruction.getIndex(), LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
-            generateBoundsCheck(astContext, consumer, index, 2);
-            LogicVariable branch = folded ? creator.nextTemp() : index;
+            generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+            LogicValue index = computeIndex(creator);
+            LogicVariable branchIndex = folded ? arrayInd : processor.nextTemp();
+            creator.createOp(Operation.SHL, branchIndex, index, LogicNumber.ONE).setNonNegativeInt(instruction.getIndex());
+            LogicVariable branch = folded ? creator.nextTemp() : branchIndex;
             if (folded) {
-                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
-                creator.createOp(Operation.MOD, branch, index, modulo);
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getFullSize()));
+                creator.createOp(Operation.MOD, branch, branchIndex, modulo);
             }
             creator.createMultiCall(jumpTable.label(), branch, jumpTable.marker())
                     .setSideEffects(createCallSideEffects())
@@ -156,10 +158,11 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
             prepareTableCall(creator);
             creator.createSetAddress(arrayRet, returnLabel).setHoistId(marker2);
             generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+            LogicValue index = computeIndex(creator);
             if (folded) {
-                creator.createSet(arrayInd, instruction.getIndex());
+                creator.createSet(arrayInd, index);
             }
-            creator.createMultiCall(instruction.getIndex(), jumpTable.marker())
+            creator.createMultiCall(index, jumpTable.marker())
                     .setSideEffects(createCallSideEffects())
                     .setNonNegativeInt(instruction.getIndex())
                     .setHoistId(marker2)

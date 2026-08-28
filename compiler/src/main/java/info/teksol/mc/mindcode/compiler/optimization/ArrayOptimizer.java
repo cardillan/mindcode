@@ -118,7 +118,7 @@ class ArrayOptimizer extends BaseOptimizer {
                 .map(ArrayAccessInstruction.class::cast)
                 .filter(ix -> ix.getArray().getArrayStore().getArrayType() == ArrayStore.ArrayType.INTERNAL
                         && ix.getArrayOrganization().supportsLookup() && !ix.getArray().isDeclaredRemote()
-                        && ix.getArray().getArrayStore().getSize() >= MIN_LOOKUP_CAPACITY)
+                        && ix.getArray().getArrayStore().getFullSize() >= MIN_LOOKUP_CAPACITY)
                 .toList();
 
         if (arrayInstructions.isEmpty()) return;
@@ -148,9 +148,9 @@ class ArrayOptimizer extends BaseOptimizer {
             int capacity = lookupCapacity.remove(lookupType);
 
             String selected = arrays.entrySet().stream()
-                    .filter(e -> e.getValue().getFirst().getArray().getArrayStore().getSize() <= capacity)
+                    .filter(e -> e.getValue().getFirst().getArray().getArrayStore().getFullSize() <= capacity)
                     .max(Comparator.comparingInt(
-                            (Map.Entry<String, List<ArrayAccessInstruction>> e) -> e.getValue().getFirst().getArray().getSize())
+                            (Map.Entry<String, List<ArrayAccessInstruction>> e) -> e.getValue().getFirst().getArray().getFullSize())
                             .thenComparingDouble(e -> arrayWeights.get(e.getKey())))
                     .map(Map.Entry::getKey)
                     .orElse(null);
@@ -168,7 +168,7 @@ class ArrayOptimizer extends BaseOptimizer {
     }
 
     private ArrayConstruction computeArrayConstruction(ArrayAccessInstruction ix) {
-        if (ix.getArray().getArrayStore().getSize() == 1) {
+        if (ix.getArray().getArrayStore().getFullSize() == 1) {
             return ArrayConstruction.REGULAR;
         } else if (ix.getArrayOrganization().isInlined() && !ix.getArrayConstructor().folded()
                 && !ix.isCompactAccessSource() && !ix.isCompactAccessTarget()) {
@@ -179,7 +179,7 @@ class ArrayOptimizer extends BaseOptimizer {
     }
 
     private ArrayOrganization computeArrayOrganization(ArrayAccessInstruction ix) {
-        return switch (ix.getArray().getArrayStore().getSize()) {
+        return switch (ix.getArray().getArrayStore().getFullSize()) {
             case 1 -> ArrayOrganization.SINGLE;
             case 2 -> selectSupported && getGlobalProfile().useShortArrays() ? ArrayOrganization.SHORT : ix.getArrayOrganization();
             default -> ix.getArrayOrganization();
@@ -435,7 +435,7 @@ class ArrayOptimizer extends BaseOptimizer {
 
         @Override
         public boolean canApply(ArrayAccessInstruction instruction) {
-            return instruction.getArray().getSize() <= limit && instruction.getArrayOrganization().canInlineShort();
+            return instruction.getArray().getFullSize() <= limit && instruction.getArrayOrganization().canInlineShort();
         }
 
         @Override

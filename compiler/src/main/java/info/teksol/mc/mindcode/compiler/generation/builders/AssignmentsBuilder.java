@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
+import info.teksol.mc.common.Globals;
 import info.teksol.mc.generated.ast.visitors.AstAssignmentVisitor;
 import info.teksol.mc.generated.ast.visitors.AstOperatorIncDecVisitor;
 import info.teksol.mc.messages.ERR;
@@ -165,11 +166,13 @@ public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssign
             return target;
         }
 
-        if (source.getArrayType() == INTERNAL && target.getArrayType() == INTERNAL) {
-            copyInternalArrays(target, source);
-        } else if (source.getArrayType() == EXTERNAL && target.getArrayType() == EXTERNAL) {
+        if (size > Globals.DIRECT_ARRAY_COPY_SIZE_LIMIT || source.hasArrayOffset() || target.hasArrayOffset() ||
+                source.getArrayType() == EXTERNAL && target.getArrayType() == EXTERNAL) {
             copyArraysUsingLoop(node, target, source);
+        } else if (source.getArrayType() == INTERNAL && target.getArrayType() == INTERNAL) {
+            copyInternalArrays(target, source);
         } else {
+            // One external, one internal. Can't be the same array.
             for (int i = 0; i < size; i++) {
                 target.getElements().get(i).copyFrom(assembler, source.getElements().get(i));
             }
@@ -213,7 +216,8 @@ public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssign
         assembler.createLabel(beginLabel);
 
         // Copy
-        target.getElement(assembler, node, index).copyFrom(assembler, source.getElement(assembler, node, index));
+        target.getElement(assembler, node.sourcePosition(), index).copyFrom(assembler,
+                source.getElement(assembler, node.sourcePosition(), index));
         assembler.createOp(reverse ? Operation.SUB : Operation.ADD, index, index, LogicNumber.ONE);
 
         // Condition

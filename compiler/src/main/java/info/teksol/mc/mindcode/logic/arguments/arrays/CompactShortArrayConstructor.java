@@ -29,7 +29,7 @@ public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
 
         NameCreator nameCreator = context.nameCreator();
         String baseName = arrayStore.getName();
-        arraySize = arrayStore.getSize();
+        arraySize = arrayStore.getFullSize();
         useSelects = processor.isSupported(Opcode.SELECT);
         arrayElem = LogicVariable.arrayAccess(baseName, "*elem", nameCreator.arrayAccess(baseName, "elem"));
 
@@ -43,18 +43,18 @@ public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
         if (useSelects) {
             // It's always a "read" select list, plus one instruction for actual variable access
-            return boundsCheckSize() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
+            return boundsCheckSize() + offsetInstructions() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
         } else {
-            return boundsCheckSize() + (arraySize == 2 ? 5 : 8);
+            return boundsCheckSize() + offsetInstructions() + (arraySize == 2 ? 5 : 8);
         }
     }
 
     @Override
     public double getExecutionSteps() {
         if (useSelects) {
-            return boundsCheckExecutionSteps() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
+            return boundsCheckExecutionSteps() + offsetInstructions() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
         } else {
-            return boundsCheckExecutionSteps() + (arraySize == 2 ? 3.5 : (4 + 5 + 4) / 3.0);
+            return boundsCheckExecutionSteps() + offsetInstructions() + (arraySize == 2 ? 3.5 : (4 + 5 + 4) / 3.0);
         }
     }
 
@@ -74,12 +74,13 @@ public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
     @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
         LocalContextfulInstructionsCreator creator = prepareExpansion(consumer);
+        LogicValue index = computeIndex(creator);
 
         if (!instruction.isCompactAccessTarget()) {
             if (useSelects) {
-                createNameSelect(creator, arrayElem);
+                createNameSelect(creator, index, arrayElem);
             } else {
-                expandAccess(creator, element -> creator.createSet(arrayElem, element.getMlogVariableName()));
+                expandAccess(creator, index, element -> creator.createSet(arrayElem, element.getMlogVariableName()));
             }
         }
 

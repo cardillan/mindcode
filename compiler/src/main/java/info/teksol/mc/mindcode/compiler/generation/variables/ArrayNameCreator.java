@@ -11,6 +11,8 @@ public interface ArrayNameCreator {
     String arrayBase(@Nullable MindcodeFunction function, String processorName, String arrayName, int variableIndex);
     String arrayElement(@Nullable MindcodeFunction function, String arrayName, int variableIndex, int elementIndex);
     String remoteArrayElement(String arrayName, int index);
+    String arrayOffset(MindcodeFunction function, String arrayName, int variableIndex);
+
 
     default LogicKeyword arrayLookupType() {
         return LogicKeyword.INVALID;

@@ -9,12 +9,20 @@ import java.util.List;
 /// Represents an array (internal or external). Provides means for accessing array elements statically or dynamically.
 @NullMarked
 public abstract class AbstractArrayStore extends CompoundValueStore implements ArrayStore {
+    /// Name of the array
     protected final String name;
+
+    /// Size of the array. May be different from the number of elements if the array is a local array in a
+    /// recursive function, in which case the starting element is floating.
+    protected final int size;
+
+    /// Actual list of elements
     protected final List<ValueStore> elements;
 
-    public AbstractArrayStore(SourcePosition sourcePosition, String name, List<ValueStore> elements) {
+    public AbstractArrayStore(SourcePosition sourcePosition, String name, int size, List<ValueStore> elements) {
         super(sourcePosition, ERR.ARRAY_FORBIDDEN);
         this.name = name;
+        this.size = size;
         this.elements = elements;
     }
 
@@ -30,7 +38,7 @@ public abstract class AbstractArrayStore extends CompoundValueStore implements A
 
     @Override
     public int getSize() {
-        return elements.size();
+        return size;
     }
 
     @Override

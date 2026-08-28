@@ -30,27 +30,27 @@ Pass 1: speed optimization selection (cost limit 942):
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
-    51 jump *label14 equal *tmp4 false
-    52 set :ways*retval 1
-    53 jump *label13 always
+    52 jump *label14 equal *tmp4 false
+    53 set :ways*retval 1
+    54 jump *label13 always
 -    * set *tmp5 null
-    54 jump *label15 always
-    55 label *label14
+    55 jump *label15 always
+    56 label *label14
 -    * set *tmp5 null
-    56 label *label15
-    57 set :ways:result 0
-    58 set :ways:i :ways:index
+    57 label *label15
+    58 set :ways:result 0
+    59 set :ways:i :ways:index
  
-    82 pop bank1 :ways:amount
-    83 set *tmp12 :ways*retval
-    84 op add :ways:result :ways:result *tmp12
+    83 pop bank1 :ways:amount
+    84 set *tmp12 :ways*retval
+    85 op add :ways:result :ways:result *tmp12
 -    * set *tmp10 :ways:result
-    85 jump *label20 always
-    86 label *label19
+    86 jump *label20 always
+    87 label *label19
 -    * set *tmp10 null
-    87 label *label20
-    88 label *label17
-    89 op add :ways:i :ways:i 1
+    88 label *label20
+    89 label *label17
+    90 op add :ways:i :ways:i 1
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
  
@@ -74,121 +74,121 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
     45 end
     46 label *label0
  
-    56 set :ways:i :ways:index
-    57 label *label16
-    58 jump *label18 greaterThanEq :ways:i 8
+    57 set :ways:i :ways:index
+    58 label *label16
+    59 jump *label18 greaterThanEq :ways:i 8
 -    * set *tmp6 :ways:i
 -    * read *tmp8 bank1 *tmp6
 -    * set :ways:p *tmp8
-+   59 read :ways:p bank1 :ways:i
-    60 op lessThanEq *tmp9 :ways:p :ways:amount
-    61 jump *label19 equal *tmp9 false
-    62 op sub *tmp11 :ways:amount :ways:p
++   60 read :ways:p bank1 :ways:i
+    61 op lessThanEq *tmp9 :ways:p :ways:amount
+    62 jump *label19 equal *tmp9 false
+    63 op sub *tmp11 :ways:amount :ways:p
  
-    76 pop bank1 :ways:result
-    77 pop bank1 :ways:index
-    78 pop bank1 :ways:amount
+    77 pop bank1 :ways:result
+    78 pop bank1 :ways:index
+    79 pop bank1 :ways:amount
 -    * set *tmp12 :ways*retval
 -    * op add :ways:result :ways:result *tmp12
-+   79 op add :ways:result :ways:result :ways*retval
-    80 jump *label20 always
-    81 label *label19
-    82 label *label20
++   80 op add :ways:result :ways:result :ways*retval
+    81 jump *label20 always
+    82 label *label19
+    83 label *label20
 
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-2 instructions):
  
-    45 end
     46 label *label0
     47 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    48 initrec
 -    * op equal *tmp4 :ways:amount 0
 -    * jump *label14 equal *tmp4 false
-+   48 jump *label14 notEqual :ways:amount 0
-    49 set :ways*retval 1
-    50 jump *label13 always
-    51 jump *label15 always
++   49 jump *label14 notEqual :ways:amount 0
+    50 set :ways*retval 1
+    51 jump *label13 always
+    52 jump *label15 always
  
-    56 label *label16
-    57 jump *label18 greaterThanEq :ways:i 8
-    58 read :ways:p bank1 :ways:i
+    57 label *label16
+    58 jump *label18 greaterThanEq :ways:i 8
+    59 read :ways:p bank1 :ways:i
 -    * op lessThanEq *tmp9 :ways:p :ways:amount
 -    * jump *label19 equal *tmp9 false
-+   59 jump *label19 greaterThan :ways:p :ways:amount
-    60 op sub *tmp11 :ways:amount :ways:p
-    61 push bank1 :ways:amount
-    62 push bank1 :ways:index
++   60 jump *label19 greaterThan :ways:p :ways:amount
+    61 op sub *tmp11 :ways:amount :ways:p
+    62 push bank1 :ways:amount
+    63 push bank1 :ways:index
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
-    48 jump *label14 notEqual :ways:amount 0
-    49 set :ways*retval 1
-    50 jump *label13 always
+    49 jump *label14 notEqual :ways:amount 0
+    50 set :ways*retval 1
+    51 jump *label13 always
 -    * jump *label15 always
-    51 label *label14
-    52 label *label15
-    53 set :ways:result 0
+    52 label *label14
+    53 label *label15
+    54 set :ways:result 0
  
-    74 pop bank1 :ways:index
-    75 pop bank1 :ways:amount
-    76 op add :ways:result :ways:result :ways*retval
+    75 pop bank1 :ways:index
+    76 pop bank1 :ways:amount
+    77 op add :ways:result :ways:result :ways*retval
 -    * jump *label20 always
-    77 label *label19
-    78 label *label20
-    79 label *label17
+    78 label *label19
+    79 label *label20
+    80 label *label17
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    63 push bank1 :ways:i
-    64 push bank1 :ways:p
-    65 push bank1 *tmp5
+    64 push bank1 :ways:i
+    65 push bank1 :ways:p
+    66 push bank1 *tmp5
 -    * set :ways:amount *tmp11
-+   66 op sub :ways:amount :ways:amount :ways:p
-    67 set :ways:index :ways:i
-    68 callrec bank1 *label0 *label21 :ways*retval
-    69 label *label21
++   67 op sub :ways:amount :ways:amount :ways:p
+    68 set :ways:index :ways:i
+    69 callrec bank1 *label0 *label21 :ways*retval
+    70 label *label21
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-    56 jump *label18 greaterThanEq :ways:i 8
-    57 read :ways:p bank1 :ways:i
-    58 jump *label19 greaterThan :ways:p :ways:amount
+    57 jump *label18 greaterThanEq :ways:i 8
+    58 read :ways:p bank1 :ways:i
+    59 jump *label19 greaterThan :ways:p :ways:amount
 -    * op sub *tmp11 :ways:amount :ways:p
-    59 push bank1 :ways:amount
-    60 push bank1 :ways:index
-    61 push bank1 :ways:result
+    60 push bank1 :ways:amount
+    61 push bank1 :ways:index
+    62 push bank1 :ways:result
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
-    54 set :ways:i :ways:index
-    55 label *label16
-    56 jump *label18 greaterThanEq :ways:i 8
-+   57 label *label22
-    58 read :ways:p bank1 :ways:i
-    59 jump *label19 greaterThan :ways:p :ways:amount
-    60 push bank1 :ways:amount
+    55 set :ways:i :ways:index
+    56 label *label16
+    57 jump *label18 greaterThanEq :ways:i 8
++   58 label *label22
+    59 read :ways:p bank1 :ways:i
+    60 jump *label19 greaterThan :ways:p :ways:amount
+    61 push bank1 :ways:amount
  
-    78 label *label20
-    79 label *label17
-    80 op add :ways:i :ways:i 1
+    79 label *label20
+    80 label *label17
+    81 op add :ways:i :ways:i 1
 -    * jump *label16 always
-+   81 jump *label22 lessThan :ways:i 8
-    82 label *label18
-    83 set :ways*retval :ways:result
-    84 label *label13
++   82 jump *label22 lessThan :ways:i 8
+    83 label *label18
+    84 set :ways*retval :ways:result
+    85 label *label13
 
 Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-4 instructions):
  
-    62 push bank1 :ways:result
-    63 push bank1 :ways:i
-    64 push bank1 :ways:p
+    63 push bank1 :ways:result
+    64 push bank1 :ways:i
+    65 push bank1 :ways:p
 -    * push bank1 *tmp5
-    65 op sub :ways:amount :ways:amount :ways:p
-    66 set :ways:index :ways:i
-    67 callrec bank1 *label0 *label21 :ways*retval
-    68 label *label21
+    66 op sub :ways:amount :ways:amount :ways:p
+    67 set :ways:index :ways:i
+    68 callrec bank1 *label0 *label21 :ways*retval
+    69 label *label21
 -    * pop bank1 *tmp5
-    69 pop bank1 :ways:p
-    70 pop bank1 :ways:i
-    71 pop bank1 :ways:result
+    70 pop bank1 :ways:p
+    71 pop bank1 :ways:i
+    72 pop bank1 :ways:result
 
 Modifications by Unroll iteration loop at line 4:1 (-2 instructions):
      0 set *sp 0
@@ -337,14 +337,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     42 label *label3
     43 set :ways:amount 20
  
-    57 set :ways:result 0
-    58 set :ways:i :ways:index
-    59 label *label16
+    58 set :ways:result 0
+    59 set :ways:i :ways:index
+    60 label *label16
 -    * jump *label18 greaterThanEq :ways:i 8
-+   60 jump *label18 greaterThanEq :ways:index 8
-    61 label *label22
-    62 read :ways:p bank1 :ways:i
-    63 jump *label19 greaterThan :ways:p :ways:amount
++   61 jump *label18 greaterThanEq :ways:index 8
+    62 label *label22
+    63 read :ways:p bank1 :ways:i
+    64 jump *label19 greaterThan :ways:p :ways:amount
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-17 instructions):
      0 set *sp 0
@@ -394,14 +394,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 
 Modifications by Optimize return at line 14:9 (+1 instructions):
  
-    34 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
-    35 jump *label14 notEqual :ways:amount 0
-    36 set :ways*retval 1
+    35 initrec
+    36 jump *label14 notEqual :ways:amount 0
+    37 set :ways*retval 1
 -    * jump *label13 always
-+   37 returnrec bank1
-    38 label *label14
-    39 label *label15
-    40 set :ways:result 0
++   38 returnrec bank1
+    39 label *label14
+    40 label *label15
+    41 set :ways:result 0
 
 Modifications by Inline function call at line 9:18 (+34 instructions):
  
@@ -411,116 +411,117 @@ Modifications by Inline function call at line 9:18 (+34 instructions):
 -    * callrec bank1 *label0 *label12 :ways*retval
 -    * label *label12
 +   28 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
-+   29 jump *label56 notEqual :ways:amount 0
-+   30 set :ways*retval 1
-+   31 jump *label65 always
-+   32 label *label56
-+   33 label *label57
-+   34 set :ways:result 0
-+   35 set :ways:i :ways:index
-+   36 label *label58
-+   37 jump *label64 greaterThanEq :ways:index 8
-+   38 label *label59
-+   39 read :ways:p bank1 :ways:i
-+   40 jump *label61 greaterThan :ways:p :ways:amount
-+   41 push bank1 :ways:amount
-+   42 push bank1 :ways:index
-+   43 push bank1 :ways:result
-+   44 push bank1 :ways:i
-+   45 push bank1 :ways:p
-+   46 op sub :ways:amount :ways:amount :ways:p
-+   47 set :ways:index :ways:i
-+   48 callrec bank1 *label0 *label60 :ways*retval
-+   49 label *label60
-+   50 pop bank1 :ways:p
-+   51 pop bank1 :ways:i
-+   52 pop bank1 :ways:result
-+   53 pop bank1 :ways:index
-+   54 pop bank1 :ways:amount
-+   55 op add :ways:result :ways:result :ways*retval
-+   56 label *label61
-+   57 label *label62
-+   58 label *label63
-+   59 op add :ways:i :ways:i 1
-+   60 jump *label59 lessThan :ways:i 8
-+   61 label *label64
-+   62 set :ways*retval :ways:result
-+   63 label *label65
-    64 assertequals 41 :ways*retval "Project Euler 31"
-    65 stop
-    66 end
++   29 initrec
++   30 jump *label56 notEqual :ways:amount 0
++   31 set :ways*retval 1
++   32 jump *label65 always
++   33 label *label56
++   34 label *label57
++   35 set :ways:result 0
++   36 set :ways:i :ways:index
++   37 label *label58
++   38 jump *label64 greaterThanEq :ways:index 8
++   39 label *label59
++   40 read :ways:p bank1 :ways:i
++   41 jump *label61 greaterThan :ways:p :ways:amount
++   42 push bank1 :ways:amount
++   43 push bank1 :ways:index
++   44 push bank1 :ways:result
++   45 push bank1 :ways:i
++   46 push bank1 :ways:p
++   47 op sub :ways:amount :ways:amount :ways:p
++   48 set :ways:index :ways:i
++   49 callrec bank1 *label0 *label60 :ways*retval
++   50 label *label60
++   51 pop bank1 :ways:p
++   52 pop bank1 :ways:i
++   53 pop bank1 :ways:result
++   54 pop bank1 :ways:index
++   55 pop bank1 :ways:amount
++   56 op add :ways:result :ways:result :ways*retval
++   57 label *label61
++   58 label *label62
++   59 label *label63
++   60 op add :ways:i :ways:i 1
++   61 jump *label59 lessThan :ways:i 8
++   62 label *label64
++   63 set :ways*retval :ways:result
++   64 label *label65
+    65 assertequals 41 :ways*retval "Project Euler 31"
+    66 stop
+    67 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    26 set :ways:amount 20
     27 set :ways:index 1
     28 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    29 initrec
 -    * jump *label56 notEqual :ways:amount 0
-+   29 jump *label56 notEqual 20 0
-    30 set :ways*retval 1
++   30 jump *label56 notEqual 20 0
+    31 set :ways*retval 1
+    32 jump *label65 always
+    33 label *label56
+    34 label *label57
+    35 set :ways:result 0
+-    * set :ways:i :ways:index
++   36 set :ways:i 1
+    37 label *label58
+-    * jump *label64 greaterThanEq :ways:index 8
++   38 jump *label64 greaterThanEq 1 8
+    39 label *label59
+    40 read :ways:p bank1 :ways:i
+-    * jump *label61 greaterThan :ways:p :ways:amount
++   41 jump *label61 greaterThan :ways:p 20
+    42 push bank1 :ways:amount
+    43 push bank1 :ways:index
+    44 push bank1 :ways:result
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+    28 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    29 initrec
+    30 jump *label56 notEqual 20 0
+-    * set :ways*retval 1
+    31 jump *label65 always
+    32 label *label56
+    33 label *label57
+ 
+    61 label *label64
+    62 set :ways*retval :ways:result
+    63 label *label65
+-    * assertequals 41 :ways*retval "Project Euler 31"
++   64 assertequals 41 :ways:result "Project Euler 31"
+    65 stop
+    66 end
+    67 label *label0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+ 
+    59 op add :ways:i :ways:i 1
+    60 jump *label59 lessThan :ways:i 8
+    61 label *label64
+-    * set :ways*retval :ways:result
+    62 label *label65
+    63 assertequals 41 :ways:result "Project Euler 31"
+    64 stop
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
+ 
+    27 set :ways:index 1
+    28 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    29 initrec
+-    * jump *label56 notEqual 20 0
++   30 jump *label56 always
     31 jump *label65 always
     32 label *label56
     33 label *label57
     34 set :ways:result 0
--    * set :ways:i :ways:index
-+   35 set :ways:i 1
+    35 set :ways:i 1
     36 label *label58
--    * jump *label64 greaterThanEq :ways:index 8
-+   37 jump *label64 greaterThanEq 1 8
-    38 label *label59
-    39 read :ways:p bank1 :ways:i
--    * jump *label61 greaterThan :ways:p :ways:amount
-+   40 jump *label61 greaterThan :ways:p 20
-    41 push bank1 :ways:amount
-    42 push bank1 :ways:index
-    43 push bank1 :ways:result
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
- 
-    27 set :ways:index 1
-    28 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
-    29 jump *label56 notEqual 20 0
--    * set :ways*retval 1
-    30 jump *label65 always
-    31 label *label56
-    32 label *label57
- 
-    60 label *label64
-    61 set :ways*retval :ways:result
-    62 label *label65
--    * assertequals 41 :ways*retval "Project Euler 31"
-+   63 assertequals 41 :ways:result "Project Euler 31"
-    64 stop
-    65 end
-    66 label *label0
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
- 
-    58 op add :ways:i :ways:i 1
-    59 jump *label59 lessThan :ways:i 8
-    60 label *label64
--    * set :ways*retval :ways:result
-    61 label *label65
-    62 assertequals 41 :ways:result "Project Euler 31"
-    63 stop
-
-Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
- 
-    26 set :ways:amount 20
-    27 set :ways:index 1
-    28 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
--    * jump *label56 notEqual 20 0
-+   29 jump *label56 always
-    30 jump *label65 always
-    31 label *label56
-    32 label *label57
-    33 set :ways:result 0
-    34 set :ways:i 1
-    35 label *label58
 -    * jump *label64 greaterThanEq 1 8
-    36 label *label59
-    37 read :ways:p bank1 :ways:i
-    38 jump *label61 greaterThan :ways:p 20
+    37 label *label59
+    38 read :ways:p bank1 :ways:i
+    39 jump *label61 greaterThan :ways:p 20
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-2 instructions):
      0 set *sp 0
@@ -552,62 +553,63 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
      9 set :ways:amount 20
     10 set :ways:index 1
     11 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
-    12 jump *label56 always
+    12 initrec
+    13 jump *label56 always
 -    * jump *label65 always
-    13 label *label56
+    14 label *label56
 -    * label *label57
-    14 set :ways:result 0
-    15 set :ways:i 1
+    15 set :ways:result 0
+    16 set :ways:i 1
 -    * label *label58
-    16 label *label59
-    17 read :ways:p bank1 :ways:i
-    18 jump *label61 greaterThan :ways:p 20
+    17 label *label59
+    18 read :ways:p bank1 :ways:i
+    19 jump *label61 greaterThan :ways:p 20
  
-    32 pop bank1 :ways:amount
-    33 op add :ways:result :ways:result :ways*retval
-    34 label *label61
+    33 pop bank1 :ways:amount
+    34 op add :ways:result :ways:result :ways*retval
+    35 label *label61
 -    * label *label62
 -    * label *label63
-    35 op add :ways:i :ways:i 1
-    36 jump *label59 lessThan :ways:i 8
+    36 op add :ways:i :ways:i 1
+    37 jump *label59 lessThan :ways:i 8
 -    * label *label64
-    37 label *label65
-    38 assertequals 41 :ways:result "Project Euler 31"
-    39 stop
+    38 label *label65
+    39 assertequals 41 :ways:result "Project Euler 31"
+    40 stop
  
-    44 set :ways*retval 1
-    45 returnrec bank1
-    46 label *label14
+    46 set :ways*retval 1
+    47 returnrec bank1
+    48 label *label14
 -    * label *label15
-    47 set :ways:result 0
-    48 set :ways:i :ways:index
+    49 set :ways:result 0
+    50 set :ways:i :ways:index
 -    * label *label16
-    49 jump *label18 greaterThanEq :ways:index 8
-    50 label *label22
-    51 read :ways:p bank1 :ways:i
+    51 jump *label18 greaterThanEq :ways:index 8
+    52 label *label22
+    53 read :ways:p bank1 :ways:i
  
-    66 pop bank1 :ways:amount
-    67 op add :ways:result :ways:result :ways*retval
-    68 label *label19
+    68 pop bank1 :ways:amount
+    69 op add :ways:result :ways:result :ways*retval
+    70 label *label19
 -    * label *label20
 -    * label *label17
-    69 op add :ways:i :ways:i 1
-    70 jump *label22 lessThan :ways:i 8
-    71 label *label18
-    72 set :ways*retval :ways:result
+    71 op add :ways:i :ways:i 1
+    72 jump *label22 lessThan :ways:i 8
+    73 label *label18
+    74 set :ways*retval :ways:result
 -    * label *label13
-    73 returnrec bank1
+    75 returnrec bank1
 -    * end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-     9 set :ways:amount 20
     10 set :ways:index 1
     11 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+    12 initrec
 -    * jump *label56 always
-    12 label *label56
-    13 set :ways:result 0
-    14 set :ways:i 1
+    13 label *label56
+    14 set :ways:result 0
+    15 set :ways:i 1
 
 Final code before resolving virtual instructions:
 
@@ -623,6 +625,7 @@ write 1 bank1 7
 set :ways:amount 20
 set :ways:index 1
 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+initrec
 set :ways:result 0
 set :ways:i 1
 label *label59
@@ -651,6 +654,7 @@ stop
 end
 label *label0
 assertbounds decimal 1 16 lessThanEq *sp lessThan 512 "position 12:1: stack overflow error"
+initrec
 jump *label14 notEqual :ways:amount 0
 set :ways*retval 1
 returnrec bank1

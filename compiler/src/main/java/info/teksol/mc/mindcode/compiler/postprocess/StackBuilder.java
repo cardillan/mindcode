@@ -86,7 +86,7 @@ public class StackBuilder extends CompilerMessageEmitter {
     private List<LogicInstruction> buildStack() {
         @SuppressWarnings("NullableProblems")
         List<StackParameters> stacks = callGraph.getFunctions().stream().filter(f -> f.isRecursive() && f.isGenerated())
-                .map(optimizationCoordinator::computeStackParameters)
+                .map(function -> optimizationCoordinator.computeStackParameters(function, program))
                 .filter(Objects::nonNull)
                 .toList();
         if (stacks.isEmpty()) {
@@ -107,13 +107,19 @@ public class StackBuilder extends CompilerMessageEmitter {
             program.add(processor.createComment(rootAstContext, "Do not add or remove instructions below this point"));
         }
 
-        // TODO: increase stack sizes if possible
-
         stacks.forEach(this::buildStack);
 
         if (symbolicLabels) {
             program.add(initializationIndex++, processor.createLabel(initializationContext, nextInitLabel));
         }
+
+        // Add array initializations
+        callGraph.getFunctions().stream()
+                .filter(f -> f.isRecursive() && f.isGenerated())
+                .flatMap(f -> f.getArrays().stream())
+                .forEach(a -> program.add(initializationIndex++, processor.createSet(initializationContext,
+                        (LogicVariable) a.getArrayOffset(), LogicNumber.create(-a.getSize()))));
+
         return program;
     }
 

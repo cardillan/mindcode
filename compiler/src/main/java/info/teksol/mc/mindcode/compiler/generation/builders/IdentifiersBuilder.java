@@ -155,7 +155,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
         }
 
         // The ArrayStore implementation is responsible for making a defensive copy of the index if needed
-        return array.getElement(assembler, node, index);
+        return array.getElement(assembler, node.sourcePosition(), index);
     }
 
     private ValueStore storeSubarrayAccess(AstSubarray node, ArrayStore array) {

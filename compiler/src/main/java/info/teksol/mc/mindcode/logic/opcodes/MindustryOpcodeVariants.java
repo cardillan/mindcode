@@ -391,6 +391,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.POP,         block("memory"), out("value"));
         // §§§ retval is a side effect and needs to be handled as such
         add(list, V6,  MAX, S, NONE, Opcode.CALLREC,     block("memory"), label("callAddr"), label("retAddr"), out("retval"));
+        add(list, V6,  MAX, S, NONE, Opcode.INITREC);
         add(list, V6,  MAX, S, NONE, Opcode.RETURNREC,   block("memory"));
         add(list, V6,  MAX, S, NONE, Opcode.MULTILABEL,  label("address"));
         add(list, V6,  MAX, S, NONE, Opcode.MULTIJUMP,   label("address"), in("value"), in("offset"));

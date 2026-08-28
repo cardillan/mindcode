@@ -31,86 +31,86 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
      6 end
      7 label *label0
  
-    14 callrec bank1 *label0 *label5 :foo*retval
-    15 label *label5
-    16 pop bank1 :foo:n
+    15 callrec bank1 *label0 *label5 :foo*retval
+    16 label *label5
+    17 pop bank1 :foo:n
 -    * set *tmp4 :foo*retval
 -    * set *tmp2 *tmp4
-+   17 set *tmp2 :foo*retval
-    18 jump *label4 always
-    19 label *label3
-    20 set *tmp2 10
++   18 set *tmp2 :foo*retval
+    19 jump *label4 always
+    20 label *label3
+    21 set *tmp2 10
 
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
  
-     6 end
      7 label *label0
      8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     9 initrec
 -    * op greaterThan *tmp1 :foo:n 0
 -    * jump *label3 equal *tmp1 false
-+    9 jump *label3 lessThanEq :foo:n 0
-    10 op sub *tmp3 :foo:n 1
-    11 push bank1 :foo:n
-    12 set :foo:n *tmp3
++   10 jump *label3 lessThanEq :foo:n 0
+    11 op sub *tmp3 :foo:n 1
+    12 push bank1 :foo:n
+    13 set :foo:n *tmp3
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     9 jump *label3 lessThanEq :foo:n 0
-    10 op sub *tmp3 :foo:n 1
-    11 push bank1 :foo:n
+    10 jump *label3 lessThanEq :foo:n 0
+    11 op sub *tmp3 :foo:n 1
+    12 push bank1 :foo:n
 -    * set :foo:n *tmp3
-+   12 op sub :foo:n :foo:n 1
-    13 callrec bank1 *label0 *label5 :foo*retval
-    14 label *label5
-    15 pop bank1 :foo:n
++   13 op sub :foo:n :foo:n 1
+    14 callrec bank1 *label0 *label5 :foo*retval
+    15 label *label5
+    16 pop bank1 :foo:n
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-     7 label *label0
      8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
-     9 jump *label3 lessThanEq :foo:n 0
+     9 initrec
+    10 jump *label3 lessThanEq :foo:n 0
 -    * op sub *tmp3 :foo:n 1
-    10 push bank1 :foo:n
-    11 op sub :foo:n :foo:n 1
-    12 callrec bank1 *label0 *label5 :foo*retval
-
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-     6 end
-     7 label *label0
-     8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
--    * jump *label3 lessThanEq :foo:n 0
-+    9 set :foo*retval 10
-+   10 jump *label4 lessThanEq :foo:n 0
     11 push bank1 :foo:n
     12 op sub :foo:n :foo:n 1
     13 callrec bank1 *label0 *label5 :foo*retval
-    14 label *label5
-    15 pop bank1 :foo:n
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     7 label *label0
+     8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     9 initrec
+-    * jump *label3 lessThanEq :foo:n 0
++   10 set :foo*retval 10
++   11 jump *label4 lessThanEq :foo:n 0
+    12 push bank1 :foo:n
+    13 op sub :foo:n :foo:n 1
+    14 callrec bank1 *label0 *label5 :foo*retval
+    15 label *label5
+    16 pop bank1 :foo:n
 -    * set *tmp2 :foo*retval
-+   16 set :foo*retval :foo*retval
-    17 jump *label4 always
++   17 set :foo*retval :foo*retval
+    18 jump *label4 always
 -    * label *label3
 -    * set *tmp2 10
-    18 label *label4
+    19 label *label4
 -    * set :foo*retval *tmp2
-    19 label *label2
-    20 returnrec bank1
-    21 end
+    20 label *label2
+    21 returnrec bank1
+    22 end
 
 Modifications by Iterated phase, Stack Optimization, pass 1, iteration 1 (-4 instructions):
  
-     8 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
-     9 set :foo*retval 10
-    10 jump *label4 lessThanEq :foo:n 0
+     9 initrec
+    10 set :foo*retval 10
+    11 jump *label4 lessThanEq :foo:n 0
 -    * push bank1 :foo:n
-    11 op sub :foo:n :foo:n 1
-    12 callrec bank1 *label0 *label5 :foo*retval
-    13 label *label5
+    12 op sub :foo:n :foo:n 1
+    13 callrec bank1 *label0 *label5 :foo*retval
+    14 label *label5
 -    * pop bank1 :foo:n
-    14 set :foo*retval :foo*retval
-    15 jump *label4 always
-    16 label *label4
+    15 set :foo*retval :foo*retval
+    16 jump *label4 always
+    17 label *label4
 
 Modifications by Inline function call at line 7:18 (+5 instructions):
      0 set *sp 0
@@ -118,101 +118,106 @@ Modifications by Inline function call at line 7:18 (+5 instructions):
 -    * callrec bank1 *label0 *label1 :foo*retval
 -    * label *label1
 +    2 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
-+    3 set :foo*retval 10
-+    4 jump *label7 lessThanEq :foo:n 0
-+    5 op sub :foo:n :foo:n 1
-+    6 callrec bank1 *label0 *label6 :foo*retval
-+    7 label *label6
-+    8 set :foo*retval :foo*retval
-+    9 jump *label7 always
-+   10 label *label7
-+   11 label *label8
-    12 assertequals 10 :foo*retval "recursive-function-condition"
-    13 stop
-    14 end
++    3 initrec
++    4 set :foo*retval 10
++    5 jump *label7 lessThanEq :foo:n 0
++    6 op sub :foo:n :foo:n 1
++    7 callrec bank1 *label0 *label6 :foo*retval
++    8 label *label6
++    9 set :foo*retval :foo*retval
++   10 jump *label7 always
++   11 label *label7
++   12 label *label8
+    13 assertequals 10 :foo*retval "recursive-function-condition"
+    14 stop
+    15 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     1 set :foo:n 1
      2 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
-     3 set :foo*retval 10
+     3 initrec
+     4 set :foo*retval 10
 -    * jump *label7 lessThanEq :foo:n 0
 -    * op sub :foo:n :foo:n 1
-+    4 jump *label7 lessThanEq 1 0
-+    5 op sub :foo:n 1 1
-     6 callrec bank1 *label0 *label6 :foo*retval
-     7 label *label6
-     8 set :foo*retval :foo*retval
++    5 jump *label7 lessThanEq 1 0
++    6 op sub :foo:n 1 1
+     7 callrec bank1 *label0 *label6 :foo*retval
+     8 label *label6
+     9 set :foo*retval :foo*retval
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
      0 set *sp 0
 -    * set :foo:n 1
      1 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     2 initrec
 -    * set :foo*retval 10
-     2 jump *label7 lessThanEq 1 0
-     3 op sub :foo:n 1 1
-     4 callrec bank1 *label0 *label6 :foo*retval
+     3 jump *label7 lessThanEq 1 0
+     4 op sub :foo:n 1 1
+     5 callrec bank1 *label0 *label6 :foo*retval
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
      0 set *sp 0
      1 assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+     2 initrec
 -    * jump *label7 lessThanEq 1 0
-     2 op sub :foo:n 1 1
-     3 callrec bank1 *label0 *label6 :foo*retval
-     4 label *label6
+     3 op sub :foo:n 1 1
+     4 callrec bank1 *label0 *label6 :foo*retval
+     5 label *label6
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
  
-     3 callrec bank1 *label0 *label6 :foo*retval
-     4 label *label6
-     5 set :foo*retval :foo*retval
+     4 callrec bank1 *label0 *label6 :foo*retval
+     5 label *label6
+     6 set :foo*retval :foo*retval
 -    * jump *label7 always
+     7 label *label7
+     8 label *label8
+     9 assertequals 10 :foo*retval "recursive-function-condition"
+ 
+    18 callrec bank1 *label0 *label5 :foo*retval
+    19 label *label5
+    20 set :foo*retval :foo*retval
+-    * jump *label4 always
+    21 label *label4
+    22 label *label2
+    23 returnrec bank1
+
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-2 instructions):
+ 
+     3 op sub :foo:n 1 1
+     4 callrec bank1 *label0 *label6 :foo*retval
+     5 label *label6
+-    * set :foo*retval :foo*retval
      6 label *label7
      7 label *label8
      8 assertequals 10 :foo*retval "recursive-function-condition"
  
-    16 callrec bank1 *label0 *label5 :foo*retval
-    17 label *label5
-    18 set :foo*retval :foo*retval
--    * jump *label4 always
+    16 op sub :foo:n :foo:n 1
+    17 callrec bank1 *label0 *label5 :foo*retval
+    18 label *label5
+-    * set :foo*retval :foo*retval
     19 label *label4
     20 label *label2
     21 returnrec bank1
 
-Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-2 instructions):
- 
-     2 op sub :foo:n 1 1
-     3 callrec bank1 *label0 *label6 :foo*retval
-     4 label *label6
--    * set :foo*retval :foo*retval
-     5 label *label7
-     6 label *label8
-     7 assertequals 10 :foo*retval "recursive-function-condition"
- 
-    14 op sub :foo:n :foo:n 1
-    15 callrec bank1 *label0 *label5 :foo*retval
-    16 label *label5
--    * set :foo*retval :foo*retval
-    17 label *label4
-    18 label *label2
-    19 returnrec bank1
-
 Modifications by Iterated phase, Recursive Optimization, pass 2, iteration 1 (-4 instructions):
      0 set *sp 0
 -    * assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
-     1 op sub :foo:n 1 1
+     1 initrec
+     2 op sub :foo:n 1 1
 -    * callrec bank1 *label0 *label6 :foo*retval
 -    * label *label6
-+    2 setaddr :foo*retaddr *label6 (h:*label6)
-+    3 call *label0 *invalid :foo*retval (m:*label6) (h:*label6)
-+    4 label *label6
-     5 label *label7
-     6 label *label8
-     7 assertequals 10 :foo*retval "recursive-function-condition"
-     8 stop
-     9 end
-    10 label *label0
++    3 setaddr :foo*retaddr *label6 (h:*label6)
++    4 call *label0 *invalid :foo*retval (m:*label6) (h:*label6)
++    5 label *label6
+     6 label *label7
+     7 label *label8
+     8 assertequals 10 :foo*retval "recursive-function-condition"
+     9 stop
+    10 end
+    11 label *label0
 -    * assertbounds decimal 1 0 lessThanEq *sp lessThan 512 "position 3:1: stack overflow error"
+-    * initrec
 -    * set :foo*retval 10
 -    * jump *label4 lessThanEq :foo:n 0
 -    * op sub :foo:n :foo:n 1
@@ -222,39 +227,43 @@ Modifications by Iterated phase, Recursive Optimization, pass 2, iteration 1 (-4
 -    * label *label2
 -    * returnrec bank1
 -    * end
-+   11 label *label12
-+   12 set :foo*retval 10
-+   13 jump *label10 lessThanEq :foo:n 0
-+   14 op sub :foo:n :foo:n 1
-+   15 jump *label12 always
-+   16 label *label9
-+   17 label *label10
-+   18 label *label11
-+   19 return :foo*retaddr
-+   20 end
++   12 label *label12
++   13 initrec
++   14 set :foo*retval 10
++   15 jump *label10 lessThanEq :foo:n 0
++   16 op sub :foo:n :foo:n 1
++   17 jump *label12 always
++   18 label *label9
++   19 label *label10
++   20 label *label11
++   21 return :foo*retaddr
++   22 end
 
 Modifications by Inline function 'foo' defined at line 3:1 (-4 instructions):
      0 set *sp 0
-     1 op sub :foo:n 1 1
+     1 initrec
+     2 op sub :foo:n 1 1
 -    * setaddr :foo*retaddr *label6 (h:*label6)
 -    * call *label0 *invalid :foo*retval (m:*label6) (h:*label6)
 -    * label *label6
-+    2 label *label13
-+    3 label *label14
-+    4 set :foo*retval 10
-+    5 jump *label16 lessThanEq :foo:n 0
-+    6 op sub :foo:n :foo:n 1
-+    7 jump *label14 always
-+    8 label *label15
-+    9 label *label16
-+   10 label *label17
-    11 label *label7
-    12 label *label8
-    13 assertequals 10 :foo*retval "recursive-function-condition"
-    14 stop
-    15 end
++    3 label *label13
++    4 label *label14
++    5 initrec
++    6 set :foo*retval 10
++    7 jump *label16 lessThanEq :foo:n 0
++    8 op sub :foo:n :foo:n 1
++    9 jump *label14 always
++   10 label *label15
++   11 label *label16
++   12 label *label17
+    13 label *label7
+    14 label *label8
+    15 assertequals 10 :foo*retval "recursive-function-condition"
+    16 stop
+    17 end
 -    * label *label0
 -    * label *label12
+-    * initrec
 -    * set :foo*retval 10
 -    * jump *label10 lessThanEq :foo:n 0
 -    * op sub :foo:n :foo:n 1
@@ -267,16 +276,18 @@ Modifications by Inline function 'foo' defined at line 3:1 (-4 instructions):
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-     7 label *label16
-     8 assertequals 10 :foo*retval "recursive-function-condition"
-     9 stop
+     9 label *label16
+    10 assertequals 10 :foo*retval "recursive-function-condition"
+    11 stop
 -    * end
 
 Final code before resolving virtual instructions:
 
 set *sp 0
+initrec
 op sub :foo:n 1 1
 label *label14
+initrec
 set :foo*retval 10
 jump *label16 lessThanEq :foo:n 0
 op sub :foo:n :foo:n 1

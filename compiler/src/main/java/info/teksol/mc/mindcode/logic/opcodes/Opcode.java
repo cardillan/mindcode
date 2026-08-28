@@ -91,14 +91,14 @@ public enum Opcode {
     LOG             (NONE,   "log",             1),
 
     // Virtual instructions - resolved when the final code is generated
-    
+
     /// Empty instruction. When removing instructions, they can be replaced by this opcode to preserve the structure of the code.
     /// They are removed from the final code.
     EMPTY           (NONE,   "empty",           0),
-    
-    /// A target for jump, set address or goto instructions. Removed from the final code. 
+
+    /// A target for jump, set address or goto instructions. Removed from the final code.
     LABEL           (NONE,   "label",           0),
-    
+
     /// Simple call. Replaced by an unconditional jump in the final code.
     CALL            (NONE,   "call",            1),
 
@@ -113,6 +113,9 @@ public enum Opcode {
 
     /// Recursive call. Replaced by instructions that store the return address on the stack and then jump to the target
     CALLREC         (NONE,   "callrec",         3),
+
+    /// Initialize a recursive function.
+    INITREC         (NONE,   "initrec",         1),
 
     /// Return from a recursive function. Replaced by instructions which retrieve the return address from the stack
     /// and jump there (using `read @counter`).

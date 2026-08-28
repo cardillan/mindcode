@@ -38,12 +38,12 @@ public class LookupArrayConstructor extends TablelessArrayConstructor {
 
     @Override
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
-        return boundsCheckSize() + (instruction.isCompactAccessTarget() ? 1 : 3);
+        return boundsCheckSize() + offsetInstructions() + (instruction.isCompactAccessTarget() ? 1 : 3);
     }
 
     @Override
     public double getExecutionSteps() {
-        return boundsCheckExecutionSteps() + (instruction.isCompactAccessTarget() ? 1 : 3);
+        return boundsCheckExecutionSteps() + offsetInstructions() + (instruction.isCompactAccessTarget() ? 1 : 3);
     }
 
     @Override
@@ -68,11 +68,12 @@ public class LookupArrayConstructor extends TablelessArrayConstructor {
         AstContext astContext = this.instruction.getAstContext().createChild(instruction.getAstContext().existingNode(),
                 contextType, AstSubcontextType.BASIC);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
+        LogicValue index = computeIndex(creator);
         creator.setSubcontextType(AstSubcontextType.BODY, 1.0);
         LogicVariable tmp0 = creator.nextTemp();
 
         if (!instruction.isCompactAccessTarget()) {
-            creator.createLookup(type, tmp0, instruction.getIndex()).setNonNegativeInt(instruction.getIndex());
+            creator.createLookup(type, tmp0, index).setNonNegativeInt(instruction.getIndex());
             creator.createSensor(arrayElem, tmp0, LogicBuiltIn.NAME);
         }
 

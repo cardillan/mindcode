@@ -35,8 +35,8 @@ public abstract class RegularSharedArrayConstructor extends SharedArrayConstruct
         computeSharedJumpTableSize(sharedStructures);
         int checkSize = boundsCheckSize();
         return folded()
-                ? checkSize + 4 + flag(!useTextTables && !profile.isSymbolicLabels())
-                : checkSize + 4 - flag(useTextTables) + flag(shared);
+                ? checkSize + 4 + offsetInstructions() + flag(!useTextTables && !profile.isSymbolicLabels())
+                : checkSize + 4 +offsetInstructions() - flag(useTextTables) + flag(shared);
     }
 
     @Override
@@ -45,7 +45,7 @@ public abstract class RegularSharedArrayConstructor extends SharedArrayConstruct
         // saving at least one instruction and execution step. We can't discount the instruction size safely,
         // but we can at least discount the execution step; this will also cause the regular array to be preferred
         // over a compact array, if there's enough instruction space left.
-        return boundsCheckExecutionSteps() + 6
+        return boundsCheckExecutionSteps() + offsetInstructions() + 6
                - flag(useTextTables)
                + flag(folded() || shared)
                + flag(profile.isSymbolicLabels()) - 0.2;

@@ -1,10 +1,11 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -19,7 +20,7 @@ public class ExternalArray extends AbstractArrayStore {
     private final LogicArray logicArray;
 
     public ExternalArray(SourcePosition sourcePosition, String name, LogicVariable memory, int baseIndex, List<ValueStore> elements) {
-        super(sourcePosition, name, elements);
+        super(sourcePosition, name, elements.size(), elements);
         this.memory = memory;
         this.baseIndex = baseIndex;
         this.baseIndexNumber = LogicNumber.create(baseIndex);
@@ -46,6 +47,21 @@ public class ExternalArray extends AbstractArrayStore {
         return baseIndex;
     }
 
+    @Override
+    public @Nullable MindcodeFunction getFunction() {
+        return null;
+    }
+
+    @Override
+    public LogicValue getArrayOffset() {
+        return LogicNumber.ZERO;
+    }
+
+    @Override
+    public boolean optimizeElementAccess() {
+        return false;
+    }
+
     public LogicVariable getMemory() {
         return memory;
     }
@@ -56,14 +72,19 @@ public class ExternalArray extends AbstractArrayStore {
     }
 
     @Override
-    public ValueStore getElement(ContextfulInstructionCreator creator, AstExpression node, ValueStore index) {
+    public ValueStore getElement(ContextfulInstructionCreator creator, int index) {
+        return elements.get(index);
+    }
+
+    @Override
+    public ValueStore getElement(ContextfulInstructionCreator creator, SourcePosition sourcePosition, ValueStore index) {
         if (baseIndex == 0) {
             LogicValue fixedIndex = creator.defensiveCopy(index, TMP_VARIABLE);
-            return new ExternalArrayElement(node, fixedIndex, creator.nextTemp());
+            return new ExternalArrayElement(sourcePosition, fixedIndex, creator.nextTemp());
         } else {
             LogicVariable actualIndex = creator.nextTemp();
             creator.createOp(Operation.ADD, actualIndex, index.getValue(creator), baseIndexNumber);
-            return new ExternalArrayElement(node, actualIndex, creator.nextTemp());
+            return new ExternalArrayElement(sourcePosition, actualIndex, creator.nextTemp());
         }
     }
 
@@ -73,12 +94,12 @@ public class ExternalArray extends AbstractArrayStore {
     }
 
     private class ExternalArrayElement implements ValueStore {
-        private final AstExpression node;
+        private final SourcePosition sourcePosition;
         private final LogicValue index;
         private final LogicVariable transferVariable;
 
-        public ExternalArrayElement(AstExpression node, LogicValue index, LogicVariable transferVariable) {
-            this.node = node;
+        public ExternalArrayElement(SourcePosition sourcePosition, LogicValue index, LogicVariable transferVariable) {
+            this.sourcePosition = sourcePosition;
             this.index = index;
             this.transferVariable = transferVariable;
         }
@@ -111,7 +132,7 @@ public class ExternalArray extends AbstractArrayStore {
 
         @Override
         public SourcePosition sourcePosition() {
-            return node.sourcePosition();
+            return sourcePosition;
         }
 
         @Override

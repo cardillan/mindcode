@@ -35,6 +35,10 @@ public class LogicArray extends AbstractArgument {
         return array.getSize();
     }
 
+    public int getFullSize() {
+        return array.getFullSize();
+    }
+
     public boolean isDeclaredRemote() {
         return array.isDeclaredRemote();
     }

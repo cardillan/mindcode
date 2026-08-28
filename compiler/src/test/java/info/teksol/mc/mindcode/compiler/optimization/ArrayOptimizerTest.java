@@ -129,8 +129,8 @@ class ArrayOptimizerTest {
                             print(array);
                             """,
                     createInstruction(SET, "p", "0"),
+                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "3", q("position 1:1: index out of bounds (0 to 3)")),
                     createInstruction(OP, "shl", tmp(2), "p", "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "2", "0", "lessThanEq", tmp(2), "lessThanEq", "6", q("position 1:1: index out of bounds (0 to 3)")),
                     createInstruction(MULTIJUMP, label(1), tmp(2), "0"),
                     createInstruction(MULTILABEL, label(1)),
                     createInstruction(SET, tmp(0), ".array*0"),
@@ -145,7 +145,7 @@ class ArrayOptimizerTest {
                     createInstruction(SET, tmp(0), ".array*3"),
                     createInstruction(LABEL, label(0)),
                     createInstruction(OP, "add", tmp(1), tmp(0), "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "2", "0", "lessThanEq", tmp(2), "lessThanEq", "6", q("position 1:1: index out of bounds (0 to 3)")),
+                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "3", q("position 1:1: index out of bounds (0 to 3)")),
                     createInstruction(MULTIJUMP, label(6), tmp(2), "0"),
                     createInstruction(MULTILABEL, label(6)),
                     createInstruction(SET, ".array*0", tmp(1)),
@@ -183,8 +183,8 @@ class ArrayOptimizerTest {
                     createInstruction(SET, ".array*3", "4"),
                     createInstruction(SET, ".array*4", "5"),
                     createInstruction(SET, "p", "0"),
+                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 5:1: index out of bounds (0 to 4)")),
                     createInstruction(OP, "shl", tmp(10), "p", "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "2", "0", "lessThanEq", tmp(10), "lessThanEq", "8", q("position 5:1: index out of bounds (0 to 4)")),
                     createInstruction(MULTIJUMP, label(6), tmp(10), "0"),
                     createInstruction(MULTILABEL, label(6)),
                     createInstruction(SET, tmp(1), ".array*0"),
@@ -204,15 +204,15 @@ class ArrayOptimizerTest {
                     createInstruction(PRINT, tmp(1)),
                     createInstruction(OP, "add", tmp(2), "p", "1"),
                     createInstruction(SETADDR, ".array*rret", label(11)),
+                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", tmp(2), "lessThanEq", "4", q("position 6:1: index out of bounds (0 to 4)")),
                     createInstruction(OP, "shl", tmp(11), tmp(2), "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "2", "0", "lessThanEq", tmp(11), "lessThanEq", "8", q("position 6:1: index out of bounds (0 to 4)")),
                     createInstruction(MULTICALL, label(0), tmp(11)),
                     createInstruction(LABEL, label(11)),
                     createInstruction(PRINT, ".array*r"),
                     createInstruction(OP, "add", tmp(6), "p", "2"),
                     createInstruction(SETADDR, ".array*rret", label(12)),
+                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", tmp(6), "lessThanEq", "4", q("position 7:1: index out of bounds (0 to 4)")),
                     createInstruction(OP, "shl", tmp(12), tmp(6), "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "2", "0", "lessThanEq", tmp(12), "lessThanEq", "8", q("position 7:1: index out of bounds (0 to 4)")),
                     createInstruction(MULTICALL, label(0), tmp(12)),
                     createInstruction(LABEL, label(12)),
                     createInstruction(PRINT, ".array*r"),
@@ -232,6 +232,8 @@ class ArrayOptimizerTest {
                     createInstruction(MULTILABEL, label(4)),
                     createInstruction(SET, ".array*r", ".array*4"),
                     createInstruction(RETURN, ".array*rret")
+
+
             );
         }
 
@@ -285,8 +287,8 @@ class ArrayOptimizerTest {
                             print(array);
                             """,
                     createInstruction(SET, "p", "0"),
+                    createInstruction(ASSERT_BOUNDS, "multiple", "1", "0", "lessThanEq", "p", "lessThanEq", "4", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(OP, "shl", tmp(2), "p", "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "2", "0", "lessThanEq", tmp(2), "lessThanEq", "8", q("position 1:1: index out of bounds (0 to 4)")),
                     createInstruction(MULTIJUMP, label(1), tmp(2), "0"),
                     createInstruction(MULTILABEL, label(1)),
                     createInstruction(SET, ".array*elem", q(".array*0")),

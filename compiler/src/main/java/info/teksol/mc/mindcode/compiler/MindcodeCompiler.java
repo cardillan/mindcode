@@ -353,12 +353,12 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         unresolved = instructions;
         if (hasCompilerErrors()) return;
 
+        // Run the program through the array expander again, as optimizations might have been inactive.
+        instructions = virtualInstructionResolver.resolveVirtualInstructions(instructions);
+
         instructions = StackBuilder.buildStack(this, optimizationCoordinator, instructions);
 
         if (hasCompilerErrors() || targetPhase.compareTo(CompilationPhase.OPTIMIZER) <= 0) return;
-
-        // Run the program through the array expander again, as optimizations might have been inactive.
-        instructions = virtualInstructionResolver.resolveVirtualInstructions(instructions);
 
         instructions = AtomicBlockResolver.resolve(instructionProcessor, instructions);
 

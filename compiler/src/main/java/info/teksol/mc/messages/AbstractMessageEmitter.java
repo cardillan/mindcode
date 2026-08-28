@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 @NullMarked
 public abstract class AbstractMessageEmitter implements MessageEmitter {
     protected final MessageConsumer messageConsumer;
-    private Predicate<MindcodeMessage> filter = message -> true;
+    private Predicate<MindcodeMessage> filter = _ -> true;
 
     public AbstractMessageEmitter(MessageConsumer messageConsumer) {
         this.messageConsumer = messageConsumer;

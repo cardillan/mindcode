@@ -82,8 +82,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     @Override
     public final int getSharedTableSize() {
         return folded()
-                ? roundUpToEven(arrayStore.getSize()) + 2 * flag(profile.isSymbolicLabels())
-                : 2 * arrayStore.getSize() + flag(profile.isSymbolicLabels());
+                ? roundUpToEven(arrayStore.getFullSize()) + 2 * flag(profile.isSymbolicLabels())
+                : 2 * arrayStore.getFullSize() + flag(profile.isSymbolicLabels());
     }
 
     protected void computeSharedJumpTableSize(@Nullable Map<String, Integer> sharedStructures) {
@@ -97,12 +97,26 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     // ALL IMPLEMENTATIONS
     ////////////////////////////////////////////////////////////////
 
+    protected int offsetInstructions() {
+        return arrayStore.hasArrayOffset() ? 1 : 0;
+    }
+
     protected int boundsCheckSize() {
         return profile.isBoundaryChecks() ? profile.getErrorReporting().getSize() : 0;
     }
 
     protected int boundsCheckExecutionSteps() {
         return profile.isBoundaryChecks() ? profile.getErrorReporting().getExecutionSteps() : 0;
+    }
+
+    protected LogicValue computeIndex(LocalContextfulInstructionsCreator creator) {
+        if (arrayStore.hasArrayOffset()) {
+            LogicVariable ind = creator.nextTemp();
+            creator.createOp(Operation.ADD, ind, instruction.getIndex(), arrayStore.getArrayOffset());
+            return ind;
+        } else {
+            return instruction.getIndex();
+        }
     }
 
     protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index, int multiple) {

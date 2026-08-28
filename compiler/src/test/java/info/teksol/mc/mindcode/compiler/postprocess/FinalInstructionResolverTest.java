@@ -200,16 +200,14 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
     @Test
     void resolvesVirtualInstructions() {
         String expected = Stream.of(
-                createInstruction(JUMP, "10", "always"),
+                createInstruction(JUMP, "8", "always"),
                 createInstruction(WRITE, ":a", "cell1", "*sp"),
                 createInstruction(OP, "add", "*sp", "*sp", "1"),
                 createInstruction(OP, "sub", "*sp", "*sp", "1"),
                 createInstruction(READ, ":a", "cell1", "*sp"),
-                createInstruction(WRITE, "10", "cell1", "*sp"),
+                createInstruction(WRITE, "8", "cell1", "*sp"),
                 createInstruction(OP, "add", "*sp", "*sp", "1"),
                 createInstruction(JUMP, "8", "always"),
-                createInstruction(OP, "sub", "*sp", "*sp", "1"),
-                createInstruction(READ, "@counter", "cell1", "*sp"),
                 createInstruction(END),
                 createInstruction(PRINT, q(CompilerProfile.SIGNATURE_STATIC))
         ).map(LogicInstruction::toMlog).collect(Collectors.joining("\n"));
@@ -222,7 +220,6 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
                         createInstruction(POP, cell1, a),
                         createInstruction(CALLREC, cell1, label1, label2, fn0retval),
                         createInstruction(LABEL, label1),
-                        createInstruction(RETURNREC, cell1),
                         createInstruction(LABEL, label2),
                         createInstruction(LABEL, label0),
                         createInstruction(END)

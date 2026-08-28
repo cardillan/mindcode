@@ -627,6 +627,11 @@ public class Variables extends CompilerMessageEmitter {
                     }
 
                     @Override
+                    public String arrayOffset(MindcodeFunction function, String arrayName, int variableIndex) {
+                        return standardNameCreator.arrayOffset(function, arrayName, variableIndex);
+                    }
+
+                    @Override
                     public LogicKeyword arrayLookupType() {
                         return keyword;
                     }
@@ -652,6 +657,11 @@ public class Variables extends CompilerMessageEmitter {
                         return elementIndex >= mlogNameList.size() ? "invalid"
                                 : mlogNameList.get(elementIndex) instanceof LogicString str ? str.getValue()
                                 : standardNameCreator.arrayElement(function, arrayName, variableindex, elementIndex);
+                    }
+
+                    @Override
+                    public String arrayOffset(MindcodeFunction function, String arrayName, int variableIndex) {
+                        return standardNameCreator.arrayOffset(function, arrayName, variableIndex);
                     }
 
                     @Override

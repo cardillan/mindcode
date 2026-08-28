@@ -483,7 +483,7 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
             if (array.valid() && !modifiers.contains(CONST) && !modifiers.contains(LINKED)) {
                 for (int i = 0; i < initialValues.size(); i++) {
-                    array.getElements().get(i).setValue(assembler, initialValues.get(i).getValue(assembler));
+                    array.getElement(assembler, i).setValue(assembler, initialValues.get(i).getValue(assembler));
                 }
 
                 if (modifiers.containsAny(EXPORT, VOLATILE)) {

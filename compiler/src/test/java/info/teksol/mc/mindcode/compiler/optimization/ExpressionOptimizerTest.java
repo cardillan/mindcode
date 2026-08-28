@@ -692,8 +692,8 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
                             print(array[floor(p)]);
                             """,
                     createInstruction(SET, "p", "0.9999999"),
+                    createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "p", "lessThanEq", "5", q("position 5:1: index out of bounds (0 to 5)")),
                     createInstruction(OP, "shl", tmp(4), "p", "1"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "2", "0", "lessThanEq", tmp(4), "lessThanEq", "10", q("position 5:1: index out of bounds (0 to 5)")),
                     createInstruction(MULTIJUMP, label(1), tmp(4), "0"),
                     createInstruction(MULTILABEL, label(1)),
                     createInstruction(SET, tmp(3), ".array*0"),

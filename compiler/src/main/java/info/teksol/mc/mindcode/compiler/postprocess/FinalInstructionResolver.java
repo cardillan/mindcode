@@ -55,7 +55,7 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
         this.rootAstContext = rootAstContext;
         this.nameCreator = nameCreator;
     }
-    
+
     public static List<LogicInstruction> resolve(GlobalCompilerProfile profile, InstructionProcessor processor,
             StackTracker stackTracker, AstContext rootAstContext, NameCreator nameCreator, List<LogicInstruction> program) {
         return new FinalInstructionResolver(profile, processor, stackTracker, rootAstContext, nameCreator).resolve(program);
@@ -484,7 +484,19 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
                     creator.createSet(LogicBuiltIn.COUNTER, function.getFnStackFrame());
                 }
             }
+            case InitRecInstruction ix -> {
+                ix.getFunction().getArrays().forEach(array -> {
+                    if (array.getArrayOffset() instanceof LogicVariable offset) {
+                        creator.createOp(ADD, offset, offset, LogicNumber.create(array.getSize()));
+                    }
+                });
+            }
             case ReturnRecInstruction ix -> {
+                ix.getFunction().getArrays().forEach(array -> {
+                    if (array.getArrayOffset() instanceof LogicVariable offset) {
+                        creator.createOp(SUB, offset, offset, LogicNumber.create(array.getSize()));
+                    }
+                });
                 if (externalStack) {
                     creator.createOp(SUB, stackPointer, stackPointer, LogicNumber.ONE);
                     creator.createRead(LogicBuiltIn.COUNTER, ix.getStack(), stackPointer).copyComment(ix);
