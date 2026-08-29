@@ -372,6 +372,45 @@ inline void reverse(array...)
 end;
 ```
 
+### Iterating over large arrays
+
+When iterating over large arrays, Mindcode compiles the code as an indexed loop to save instruction space. For example, the following code:
+
+```Mindcode
+#set loop-unrolling = none;     // Prevent loop unrolling from removing the compiler-generated loop
+
+var array[30];
+
+sum = 0;
+for var a in array do
+    sum += a;
+end;
+
+print(sum);
+```
+
+compiles into:
+
+```mlog
+set :sum 0
+set *tmp0 0
+lookup unit *tmp1 *tmp0
+sensor .array*elem *tmp1 @name
+read :a @this .array*elem
+op add :sum :sum :a
+op add *tmp0 *tmp0 1
+jump 2 lessThan *tmp0 30
+print :sum
+end
+draw triangle dagger mace fortress scepter reign nova
+draw triangle pulsar quasar vela corvus crawler atrax
+draw triangle spiroct arkyid toxopid flare horizon zenith
+draw triangle antumbra eclipse mono poly mega quad
+draw triangle oct risso minke bryde sei omura
+```
+
+Indexed loops can only be used when iterating over an entire array using a single iterator, or several arrays in parallel. No subarray syntax is supported. The [`array-iteration-threshold` compiler option](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold) specifies the minimum array size for which indexed loops may be used.
+
 ## C-Style Loops
 
 The syntax is similar to C's, except for the absence of parenthesis and the `do` keyword:

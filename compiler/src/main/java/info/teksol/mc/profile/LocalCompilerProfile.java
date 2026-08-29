@@ -70,6 +70,10 @@ public interface LocalCompilerProfile {
     default boolean isAtomicFullProtection() {
         return getBooleanValue(CompilerOptions.ATOMIC_FULL_PROTECTION);
     }
+
+    default int getArrayIterationThreshold() {
+        return getIntValue(CompilerOptions.ARRAY_ITERATION_THRESHOLD);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Runtime Checks Options">

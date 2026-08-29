@@ -605,20 +605,29 @@ compiles to:
 
 Options which affect the way the source code is compiled.
 
-| Option                                                       | Scope  | Semantic stability |
-|--------------------------------------------------------------|--------|--------------------|
-| [atomic-full-protection](#option-atomic-full-protection)     | local  | stable             |
-| [atomic-merge-level](#option-atomic-merge-level)             | local  | stable             |
-| [atomic-safety-margin](#option-atomic-safety-margin)         | local  | stable             |
-| [auto-printflush](#option-auto-printflush)                   | global | stable             |
-| [emulate-strict-not-equal](#option-emulate-strict-not-equal) | global | stable             |
-| [enforce-size-limits](#option-enforce-size-limits)           | global | stable             |
-| [ipt](#option-ipt)                                           | local  | stable             |
-| [remarks](#option-remarks)                                   | local  | stable             |
-| [setrate](#option-setrate)                                   | global | stable             |
-| [stack-depth](#option-stack-depth)                           | local  | stable             |
-| [syntax](#option-syntax)                                     | module | stable             |
-| [target-guard](#option-target-guard)                         | global | stable             |
+| Option                                                         | Scope  | Semantic stability |
+|----------------------------------------------------------------|--------|--------------------|
+| [array-iteration-threshold](#option-array-iteration-threshold) | local  | stable             |
+| [atomic-full-protection](#option-atomic-full-protection)       | local  | stable             |
+| [atomic-merge-level](#option-atomic-merge-level)               | local  | stable             |
+| [atomic-safety-margin](#option-atomic-safety-margin)           | local  | stable             |
+| [auto-printflush](#option-auto-printflush)                     | global | stable             |
+| [emulate-strict-not-equal](#option-emulate-strict-not-equal)   | global | stable             |
+| [enforce-size-limits](#option-enforce-size-limits)             | global | stable             |
+| [ipt](#option-ipt)                                             | local  | stable             |
+| [remarks](#option-remarks)                                     | local  | stable             |
+| [setrate](#option-setrate)                                     | global | stable             |
+| [stack-depth](#option-stack-depth)                             | local  | stable             |
+| [syntax](#option-syntax)                                       | module | stable             |
+| [target-guard](#option-target-guard)                           | global | stable             |
+
+### Option `array-iteration-threshold`
+
+**Option scope: [local](#local-scope)**
+
+This option specifies the array size at which the compiler prefers using loop to perform array assignment instead of element-by-element assignment. The list iteration loops are also compiled into a ranged loop when the array size reaches the threshold, as explicit list iteration loops get very large (in terms of instruction size) otherwise.
+
+Possible values are integers in the range of `0` to `1000` (inclusive). The default value is `25`.
 
 ### Option `atomic-full-protection`
 

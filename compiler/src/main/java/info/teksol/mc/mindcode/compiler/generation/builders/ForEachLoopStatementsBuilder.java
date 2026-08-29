@@ -57,7 +57,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         // TODO support subarrays
         if (group.getValues().getExpressions().getFirst() instanceof AstIdentifier id) {
             ValueStore expression = variables.findVariable(id.getName(), true);
-            if (expression instanceof ArrayStore arrayStore && arrayStore.hasArrayOffset()) {
+            if (expression instanceof ArrayStore arrayStore &&
+                    (arrayStore.hasArrayOffset() || arrayStore.getSize() >= group.getProfile().getArrayIterationThreshold())) {
                 return arrayStore.getSize();
             }
         }
@@ -104,13 +105,6 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(), loopControlVariable));
         }
         visitBody(node.getBody());
-
-        // Set up iterators
-        for (int i = 0; i < iterators.size(); i++) {
-            Iterator iterator = iterators.get(i);
-            ArrayStore array = arrays.get(i);
-            iterator.var.copyFrom(assembler, array.getElement(assembler, array.sourcePosition(), loopControlVariable));
-        }
 
         // Continue label
         // The label needs to be part of the loop body so that it gets copied on loop unrolling

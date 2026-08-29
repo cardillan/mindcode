@@ -504,7 +504,7 @@ a[1 ... 10] = a[0 ... 9];   // Shifts towards array end
 
 When overlapping regions of arrays are copied, Mindcode makes sure to perform the operation in correct order to prevent array elements from being overwritten before their content is read.
 
-If one or both of the arrays being assigned is internal, the assignment is compiled as a series of `set` instructions without loops. Assignments between two external arrays are compiled as a loop.
+If one or both of the arrays being assigned is internal, and the array size is smaller than the value specified by the [`array-iteration-threshold` compiler option](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold), the assignment is compiled as a series of `set`, `read` or `write` instructions without loops. In other cases, the assignments between the arrays are compiled as a loop.
 
 # Constant expressions
 

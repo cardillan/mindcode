@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
-import info.teksol.mc.common.Globals;
 import info.teksol.mc.generated.ast.visitors.AstAssignmentVisitor;
 import info.teksol.mc.generated.ast.visitors.AstOperatorIncDecVisitor;
 import info.teksol.mc.messages.ERR;
@@ -166,7 +165,7 @@ public class AssignmentsBuilder extends AbstractCodeBuilder implements AstAssign
             return target;
         }
 
-        if (size > Globals.DIRECT_ARRAY_COPY_SIZE_LIMIT || source.hasArrayOffset() || target.hasArrayOffset() ||
+        if (size >= node.getProfile().getArrayIterationThreshold() || source.hasArrayOffset() || target.hasArrayOffset() ||
                 source.getArrayType() == EXTERNAL && target.getArrayType() == EXTERNAL) {
             copyArraysUsingLoop(node, target, source);
         } else if (source.getArrayType() == INTERNAL && target.getArrayType() == INTERNAL) {

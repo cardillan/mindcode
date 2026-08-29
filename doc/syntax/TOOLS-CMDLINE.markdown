@@ -108,20 +108,20 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
                 [--encode-zero-characters [{true,false}]] [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}]
                 [--target-guard [{true,false}]] [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}]
-                [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
-                [--atomic-safety-margin {0.0..4.0}] [--emulate-strict-not-equal {true,false}]
-                [--enforce-size-limits {true,false}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
-                [--error-function {true,false}] [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}]
-                [-g {size,neutral,speed}] [-e {1..1000}] [--unsafe-case-optimization [{true,false}]]
-                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}]
-                [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}]
-                [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
-                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
-                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--condition-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--boolean-optimization LEVEL]
-                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
-                [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-iteration-threshold {0..1000}] [--atomic-full-protection [{true,false}]]
+                [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}]
+                [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
+                [-r {none,comments,passive,active}] [--auto-printflush {true,false}]
+                [--error-reporting {none,assert,minimal,simple,described}] [--error-function {true,false}]
+                [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}] [-g {size,neutral,speed}]
+                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
+                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
+                [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
+                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
+                [--condition-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
+                [--boolean-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
+                [--loop-hoisting LEVEL] [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
                 [--array-optimization LEVEL] [--case-switching LEVEL] [--recursive-optimization LEVEL]
                 [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
                 [--stack-optimization LEVEL] [--print-merging LEVEL]
@@ -245,6 +245,9 @@ Compiler options:
   --setrate {1..1000}    generates a 'setrate' instruction with  the  specified  value  in  the initialization code, and
                          sets the IPT value for the compiler to use
   --ipt {1..1000}        sets the IPT value for the compiler to use without generating the 'setrate' instruction
+  --array-iteration-threshold {0..1000}
+                         specifies the minimum size of an array  for  which  iteration loops are preferred over expanded
+                         code
   --atomic-full-protection [{true,false}]
                          when set to 'false', nonvolatile variables are not protected by atomic blocks
   --atomic-merge-level {0..5}
@@ -577,20 +580,20 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
                 [--encode-zero-characters [{true,false}]] [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}]
                 [--target-guard [{true,false}]] [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}]
-                [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
-                [--atomic-safety-margin {0.0..4.0}] [--emulate-strict-not-equal {true,false}]
-                [--enforce-size-limits {true,false}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
-                [--error-function {true,false}] [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}]
-                [-g {size,neutral,speed}] [-e {1..1000}] [--unsafe-case-optimization [{true,false}]]
-                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}]
-                [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}]
-                [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
-                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
-                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--condition-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--boolean-optimization LEVEL]
-                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
-                [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-iteration-threshold {0..1000}] [--atomic-full-protection [{true,false}]]
+                [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}]
+                [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
+                [-r {none,comments,passive,active}] [--auto-printflush {true,false}]
+                [--error-reporting {none,assert,minimal,simple,described}] [--error-function {true,false}]
+                [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}] [-g {size,neutral,speed}]
+                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
+                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
+                [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
+                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
+                [--condition-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
+                [--boolean-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
+                [--loop-hoisting LEVEL] [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
                 [--array-optimization LEVEL] [--case-switching LEVEL] [--recursive-optimization LEVEL]
                 [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
                 [--stack-optimization LEVEL] [--print-merging LEVEL]
@@ -719,6 +722,9 @@ Compiler options:
   --setrate {1..1000}    generates a 'setrate' instruction with  the  specified  value  in  the initialization code, and
                          sets the IPT value for the compiler to use
   --ipt {1..1000}        sets the IPT value for the compiler to use without generating the 'setrate' instruction
+  --array-iteration-threshold {0..1000}
+                         specifies the minimum size of an array  for  which  iteration loops are preferred over expanded
+                         code
   --atomic-full-protection [{true,false}]
                          when set to 'false', nonvolatile variables are not protected by atomic blocks
   --atomic-merge-level {0..5}
