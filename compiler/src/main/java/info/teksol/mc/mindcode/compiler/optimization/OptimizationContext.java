@@ -90,6 +90,9 @@ public class OptimizationContext extends CompilerMessageEmitter {
     /// to attempt to bring the code size down.
     private boolean sizeGoalForced = false;
 
+    /// Indicates the virtual instructions have already been expanded.
+    private boolean expanded = false;
+
     private int currentRun = 0;
     private int modifications = 0;
     private int insertions = 0;
@@ -252,6 +255,14 @@ public class OptimizationContext extends CompilerMessageEmitter {
 
     public void setSizeGoalForced(boolean sizeGoalForced) {
         this.sizeGoalForced = sizeGoalForced;
+    }
+
+    public void setExpanded() {
+        expanded = true;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
     }
 
     public void outputUninitializedVariables(MessageConsumer messageConsumer) {
@@ -2147,8 +2158,11 @@ public class OptimizationContext extends CompilerMessageEmitter {
         // Note: when used on recursive functions, this undoes any return optimizations performed earlier.
         public LogicList duplicateToContextForInlining(AstContext newContext, Predicate<LogicLabel> labelRemapFilter) {
             return transformToContext(newContext, labelRemapFilter, true,
-                    ix -> (ix instanceof LabelInstruction lbl) && !labelRemapFilter.test(lbl.getLabel())
-                            ? null : ix.getJumpToReturn().orElse(ix));
+                    ix -> switch (ix) {
+                        case LabelInstruction lbl when !labelRemapFilter.test(lbl.getLabel()) -> null;
+                        case InitRecInstruction i -> i.withSkipStackSetup(LogicBoolean.TRUE);
+                        default -> ix.getJumpToReturn().orElse(ix);
+                    });
         }
 
         public LogicList transformToContext(AstContext newContext, boolean functionInlining,

@@ -30,8 +30,8 @@ public class InternalArray extends AbstractArrayStore {
 
     private InternalArray(SourcePosition sourcePosition, LogicKeyword lookupType, String name, boolean declaredRemote,
             @Nullable MindcodeFunction function, @Nullable LogicVariable processor, LogicValue arrayOffset, int startOffset, int size,
-            List<ValueStore> elements, boolean subarray, ArrayType arrayType) {
-        super(sourcePosition, name, size, elements);
+            List<ValueStore> elements, @Nullable ArrayStore masterArray, ArrayType arrayType, boolean subarray) {
+        super(sourcePosition, name, size, masterArray, elements);
         this.lookupType = lookupType;
         this.processor = processor;
         this.function = function;
@@ -58,7 +58,7 @@ public class InternalArray extends AbstractArrayStore {
                                     processor.getName() + "." + identifier.getName() + "[" + index + "]",
                                     LogicString.create(nameCreator.remoteArrayElement(identifier.getName(), index)),
                                     instructionProcessor.nextTemp(), false, false, false)).toList(),
-                    false, shared ? ArrayType.REMOTE_SHARED : ArrayType.REMOTE);
+                    null, shared ? ArrayType.REMOTE_SHARED : ArrayType.REMOTE, false);
         } else {
             // Compute the stack depth for recursive functions
             int stackDepth = function != null && function.isRecursive() ? function.getProfile().getStackDepth() : 1;
@@ -72,7 +72,7 @@ public class InternalArray extends AbstractArrayStore {
                     IntStream.range(0, size * stackDepth)
                             .mapToObj(index -> (ValueStore) LogicArrayElement.arrayElement(identifier, index,
                                     nameCreator.arrayElement(function, identifier.getName(), variableIndex, index), isVolatile)).toList(),
-                    false, ArrayType.INTERNAL);
+                    null, ArrayType.INTERNAL, false);
 
             if (function != null) {
                 function.addArray(array);
@@ -86,14 +86,16 @@ public class InternalArray extends AbstractArrayStore {
         List<ValueStore> wrappedElements = elements.stream().map(InternalArray::constantWrap).toList();
         return new InternalArray(identifier.sourcePosition(), LogicKeyword.INVALID,
                 nameCreator.arrayBase(function, "", identifier.getName(), 0),
-                false, null, null, LogicNumber.ZERO, 0, elements.size(), wrappedElements, false, ArrayType.CONSTANT);
+                false, null, null, LogicNumber.ZERO, 0, elements.size(),
+                wrappedElements, null, ArrayType.CONSTANT, false);
     }
 
     public static InternalArray createInvalid(NameCreator nameCreator, AstIdentifier identifier, int size) {
         return new InternalArray(identifier.sourcePosition(), LogicKeyword.INVALID,
                 nameCreator.arrayBase(null, "", identifier.getName(), 0),
                 false, null, null, LogicNumber.ZERO, 0, size,
-                IntStream.of(size).mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList(), false, ArrayType.INTERNAL);
+                IntStream.of(size).mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList(),
+                null, ArrayType.INTERNAL, false);
     }
 
     public LogicKeyword getLookupType() {
@@ -113,6 +115,11 @@ public class InternalArray extends AbstractArrayStore {
     @Override
     public ArrayType getArrayType() {
         return arrayType;
+    }
+
+    @Override
+    public LogicArray getLogicArray() {
+        return logicArray;
     }
 
     @Override
@@ -138,7 +145,15 @@ public class InternalArray extends AbstractArrayStore {
     @Override
     public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
         return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset, startOffset + start,
-                end - start, elements.subList(start, end), true, arrayType);
+                end - start, elements.subList(start, end), getMasterArray(), arrayType, true);
+    }
+
+    @Override
+    public ArrayStore nonrecursive() {
+        return hasArrayOffset()
+                ? new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, LogicNumber.ZERO, startOffset,
+                        size, elements.subList(0, size), getMasterArray(), arrayType, getMasterArray().getSize() != getSize())
+                : this;
     }
 
     public LogicVariable getProcessor() {
@@ -163,7 +178,7 @@ public class InternalArray extends AbstractArrayStore {
     @Override
     public InternalArray withSourcePosition(SourcePosition sourcePosition) {
         return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset,
-                startOffset, size, elements, false, arrayType);
+                startOffset, size, elements, masterArray, arrayType, getMasterArray().getSize() != getSize());
     }
 
     public class InternalArrayElement implements ValueStore {
@@ -189,27 +204,17 @@ public class InternalArray extends AbstractArrayStore {
 
         @Override
         public LogicValue getValue(ContextfulInstructionCreator creator) {
-            if (startOffset != 0) {
-                throw new MindcodeInternalError("Internal subarray random access is not supported");
-            }
-
             creator.createReadArr(transferVariable, logicArray, index);
             return transferVariable;
         }
 
         @Override
         public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
-            if (startOffset != 0) {
-                throw new MindcodeInternalError("Internal subarray random access is not supported");
-            }
             creator.createReadArr(target, logicArray, index);
         }
 
         @Override
         public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
-            if (startOffset != 0) {
-                throw new MindcodeInternalError("Internal subarray random access is not supported");
-            }
             creator.createWriteArr(value, logicArray, index);
         }
 
@@ -220,9 +225,6 @@ public class InternalArray extends AbstractArrayStore {
 
         @Override
         public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
-            if (startOffset != 0) {
-                throw new MindcodeInternalError("Internal subarray random access is not supported");
-            }
             valueSetter.accept(transferVariable);
             creator.createWriteArr(transferVariable, logicArray, index);
         }
@@ -234,9 +236,6 @@ public class InternalArray extends AbstractArrayStore {
 
         @Override
         public void storeValue(ContextfulInstructionCreator creator) {
-            if (startOffset != 0) {
-                throw new MindcodeInternalError("Internal subarray random access is not supported");
-            }
             creator.createWriteArr(transferVariable, logicArray, index);
         }
     }

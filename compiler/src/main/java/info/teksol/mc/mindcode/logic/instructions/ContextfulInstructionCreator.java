@@ -103,6 +103,14 @@ public interface ContextfulInstructionCreator {
         return (GetlinkInstruction) createInstruction(GETLINK, result, index);
     }
 
+    default InitRecInstruction createInitRec(LogicBoolean inlined) {
+        return (InitRecInstruction) createInstruction(INITREC, inlined);
+    }
+
+    default InitStackInstruction createInitStack(LogicLabel callLabel, LogicLabel returnLabel) {
+        return (InitStackInstruction) createInstruction(INITSTACK, callLabel, returnLabel);
+    }
+
     default JumpInstruction createJump(LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
         return (JumpInstruction) createInstruction(JUMP, target, condition, x, y);
     }

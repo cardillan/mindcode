@@ -118,7 +118,7 @@ class ArrayOptimizer extends BaseOptimizer {
                 .map(ArrayAccessInstruction.class::cast)
                 .filter(ix -> ix.getArray().getArrayStore().getArrayType() == ArrayStore.ArrayType.INTERNAL
                         && ix.getArrayOrganization().supportsLookup() && !ix.getArray().isDeclaredRemote()
-                        && ix.getArray().getArrayStore().getFullSize() >= MIN_LOOKUP_CAPACITY)
+                        && ix.getArray().getArrayStore().getMasterArray().getFullSize() >= MIN_LOOKUP_CAPACITY)
                 .toList();
 
         if (arrayInstructions.isEmpty()) return;
@@ -148,7 +148,7 @@ class ArrayOptimizer extends BaseOptimizer {
             int capacity = lookupCapacity.remove(lookupType);
 
             String selected = arrays.entrySet().stream()
-                    .filter(e -> e.getValue().getFirst().getArray().getArrayStore().getFullSize() <= capacity)
+                    .filter(e -> e.getValue().getFirst().getArray().getArrayStore().getMasterArray().getFullSize() <= capacity)
                     .max(Comparator.comparingInt(
                             (Map.Entry<String, List<ArrayAccessInstruction>> e) -> e.getValue().getFirst().getArray().getFullSize())
                             .thenComparingDouble(e -> arrayWeights.get(e.getKey())))

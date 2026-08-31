@@ -787,6 +787,12 @@ allocate stack in bank1[256...512];
 
 Mindcode builds an internal stack when an external one is not declared. The internal stack is superior in supporting both numerical and non-numerical values, but it may occupy a significant amount of instruction space. When using an internal stack, it may be necessary to use the [`stack-depth` option](SYNTAX-5-OTHER.markdown#option-stack-depth) to specify the maximum depth of the stack to build.
 
+### Arrays in recursive functions
+
+Local arrays declared in a recursive function are not shared between calls, each call gets its own copy of the array. The arrays aren't stored on the stack. Instead, the array length is multiplied by the [stack depth](SYNTAX-5-OTHER.markdown#option-stack-depth), and each invocation of the function uses a different portion of the array. That makes index-based access to the array a bit slower than usual (the starting offset for the current function call needs to be added each time), but no array copying to/from the stack is required.
+
+As a consequence, large arrays declared in recursive functions may require a lot of space. The default stack depth is 10, so creating a 20-element array requires 200 actual array elements. With greater stack depths, the requirements are even larger. 
+
 ## Atomic functions
 
 An atomic function guarantees the function body will be executed atomically. See [Atomic functions](REMOTE-CALLS.markdown#atomic-functions) for more details.

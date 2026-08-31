@@ -365,7 +365,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         // Check there are no direct access instructions
         if (globalProfile.isSymbolicLabels()) {
             boolean hasLabels = instructions.stream()
-                    .filter(CollectionUtils.resultIn(LogicInstruction::getOpcode, JUMP, CALL, CALLREC, LABEL, MULTIJUMP, MULTILABEL).negate())
+                    .filter(CollectionUtils.resultIn(LogicInstruction::getOpcode, JUMP, CALL, CALLREC, LABEL, MULTIJUMP, MULTILABEL, INITSTACK).negate())
                     .flatMap(MlogInstruction::inputArgumentsStream)
                     .anyMatch(LogicLabel.class::isInstance);
 
@@ -383,7 +383,8 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
         renumberTemporary(instructions);
 
         // Sort variables
-        FinalInstructionResolver resolver = new FinalInstructionResolver(globalProfile, instructionProcessor, stackTracker, rootAstContext, nameCreator);
+        FinalInstructionResolver resolver = new FinalInstructionResolver(globalProfile, instructionProcessor, callGraph,
+                stackTracker, rootAstContext, nameCreator);
         instructions = resolver.sortVariables(instructions);
 
         // Print unresolved code

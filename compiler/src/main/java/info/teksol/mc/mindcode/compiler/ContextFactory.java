@@ -42,7 +42,9 @@ public class ContextFactory {
         return Objects.requireNonNull(compilerContext.get());
     }
 
-
+    public static boolean isMasterContextSet() {
+        return compilerContext.get() != null;
+    }
 
     public static ArrayConstructorContext getArrayConstructorContext() {
         return getContext(ArrayConstructorContext.class);

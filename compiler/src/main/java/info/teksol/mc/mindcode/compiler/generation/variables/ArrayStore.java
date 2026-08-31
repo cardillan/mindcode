@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.logic.arguments.LogicArray;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -24,6 +25,10 @@ public interface ArrayStore extends ValueStore {
         return getElements().size();
     }
 
+    ArrayStore getMasterArray();
+
+    LogicArray getLogicArray();
+
     boolean valid();
 
     /// True when declared remote, even if the actual array type is INTERNAL
@@ -41,6 +46,8 @@ public interface ArrayStore extends ValueStore {
     List<ValueStore> getElements();
 
     ArrayStore subarray(SourcePosition sourcePosition, int start, int end);
+
+    ArrayStore nonrecursive();
 
     ValueStore getElement(ContextfulInstructionCreator creator, int index);
 

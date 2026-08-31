@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 @NullMarked
 public class ReturnRecInstruction extends BaseInstruction {
@@ -38,5 +39,10 @@ public class ReturnRecInstruction extends BaseInstruction {
     @Override
     public boolean endsCodePath() {
         return true;
+    }
+
+    @Override
+    public int getSharedSize(@Nullable Map<String, Integer> sharedStructures) {
+        return getFunction().getArrays().size() + 2;
     }
 }

@@ -307,7 +307,7 @@ public class CodeGenerator extends CompilerMessageEmitter {
     private void initializeStack() {
         if (callGraph.containsRecursiveFunction()) {
             assembler.setContextType(program, AstContextType.STACK, AstSubcontextType.INIT);
-            assembler.createSet(assembler.getProcessor().stackPointer(), LogicNumber.ZERO);
+            assembler.createInitStack(assembler.nextLabel(), assembler.nextLabel());
         }
     }
 

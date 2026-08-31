@@ -54,7 +54,6 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
     private @Nullable OptimizationContext optimizationContext;
 
     private int passes = 0;
-    private boolean arraysResolved = false;
 
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile globalProfile,
             MessageConsumer messageConsumer, OptimizerContext optimizerContext,
@@ -159,7 +158,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
                         optimizationContext.insertInstructionUnchecked(program.size(), instruction);
                     }
                     modified = true;
-                    arraysResolved = true;
+                    optimizationContext.setExpanded();
 
                     debugPrinter.registerIteration(null, "Virtual Instruction Expansion", List.copyOf(program));
                 }
@@ -288,7 +287,8 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
     }
 
     private void updateFunctionArrays() {
-        if (!arraysResolved) {
+        assert optimizationContext != null;
+        if (!optimizationContext.isExpanded()) {
             @SuppressWarnings("NullableProblems")
             Map<MindcodeFunction, Set<ArrayStore>> arrays = program.stream()
                     .filter(ArrayAccessInstruction.class::isInstance)
@@ -336,9 +336,7 @@ public class OptimizationCoordinator extends CompilerMessageEmitter {
             case ASSERT, MINIMAL, SIMPLE -> 1;
             case DESCRIBED -> 2;
         };
-        int additionalSize = stackOverflowCheck
-                + 1     // function decoration
-                + 1;    // initialization
+        int additionalSize = stackOverflowCheck + (function.getProfile().isSymbolicLabels() ? 2 : 0);
 
         return new StackParameters(function, variables, depth, fixedDepth, frameSize, returnOffset, additionalSize);
     }

@@ -6,17 +6,20 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
+import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
 @NullMarked
 public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
+    private final StackTracker stackTracker;
+
     public FunctionDeclarationsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
+        stackTracker = context.stackTracker();
     }
 
     private boolean shouldCompileFunction(MindcodeFunction function) {
@@ -108,17 +111,17 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
             assembler.createLabel(function.getAtomicLabel());
         }
         if (function.isRecursive()) {
-            if (function.getProfile().isStackOverflowChecks() && context.stackTracker().externalStack()) {
+            if (function.getProfile().isStackOverflowChecks() && stackTracker.externalStack()) {
                 String errorMessage = String.format("%s: stack overflow error", function.getDeclaration().sourcePosition().formatForMlog());
                 assembler.setSubcontextType(AstSubcontextType.STACK, 1.0);
                 assembler.createAssertBounds(LogicKeyword.create("decimal"), LogicNumber.ONE,
-                        LogicNumber.create(context.stackTracker().getAllocationStart()), Condition.LESS_THAN_EQ,
+                        LogicNumber.create(stackTracker.getAllocationStart()), Condition.LESS_THAN_EQ,
                         assembler.getProcessor().stackPointer(),
-                        Condition.LESS_THAN, LogicNumber.create(context.stackTracker().getAllocationEnd()),
+                        Condition.LESS_THAN, LogicNumber.create(stackTracker.getAllocationEnd()),
                         LogicString.create(errorMessage)).setStackOverflowCheck();
                 assembler.clearSubcontextType();
             }
-            assembler.createInstruction(Opcode.INITREC);
+            assembler.createInitRec(LogicBoolean.get(stackTracker.externalStack()));
         }
         ValueStore valueStore = function.isVoid()
                 ? visitBody(function.getBody())
@@ -134,7 +137,7 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
 
     private void appendRecursiveFunctionDeclaration(MindcodeFunction function) {
         compileFunctionBody(function);
-        assembler.createReturnRec(context.stackTracker().getStackMemory());
+        assembler.createReturnRec(stackTracker.getStackMemory());
     }
 
     private void appendRemoteFunctionDeclaration(MindcodeFunction function) {

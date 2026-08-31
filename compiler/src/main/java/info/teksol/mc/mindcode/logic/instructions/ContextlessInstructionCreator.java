@@ -66,6 +66,14 @@ public interface ContextlessInstructionCreator {
         return (GetlinkInstruction) createInstruction(astContext, GETLINK, result, index);
     }
 
+    default InitRecInstruction createInitRec(AstContext astContext, LogicBoolean inlined) {
+        return (InitRecInstruction) createInstruction(astContext, INITREC, inlined);
+    }
+
+    default InitStackInstruction createInitStack(AstContext astContext, LogicLabel callLabel, LogicLabel returnLabel) {
+        return (InitStackInstruction) createInstruction(astContext, INITSTACK, callLabel, returnLabel);
+    }
+
     default JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
         return (JumpInstruction) createInstruction(astContext, JUMP, target, condition, x, y);
     }

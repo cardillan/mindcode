@@ -121,7 +121,7 @@ public class IdentifiersBuilder extends AbstractCodeBuilder implements
                 .mapToObj(index -> (ValueStore) new ExternalVariable(node.sourcePosition(), memory,
                         LogicNumber.create(index), processor.nextTemp())).toList();
 
-        return new ExternalArray(node.sourcePosition(), memory.getName(), memory, range.min(), elements);
+        return new ExternalArray(node.sourcePosition(), memory.getName(), memory, range.min(), null, elements);
     }
 
     // TODO TYPES: type checking of the memory variable

@@ -98,7 +98,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     ////////////////////////////////////////////////////////////////
 
     protected int offsetInstructions() {
-        return arrayStore.hasArrayOffset() ? 1 : 0;
+        return (arrayStore.hasArrayOffset() ? 1 : 0) + (arrayStore.getStartOffset() != 0 ? 1 : 0);
     }
 
     protected int boundsCheckSize() {
@@ -110,10 +110,18 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     }
 
     protected LogicValue computeIndex(LocalContextfulInstructionsCreator creator) {
-        if (arrayStore.hasArrayOffset()) {
-            LogicVariable ind = creator.nextTemp();
-            creator.createOp(Operation.ADD, ind, instruction.getIndex(), arrayStore.getArrayOffset());
-            return ind;
+        if (arrayStore.hasArrayOffset() || arrayStore.getStartOffset() != 0) {
+            LogicVariable tmp = creator.nextTemp();
+            LogicValue index = instruction.getIndex();
+            if (arrayStore.getStartOffset() != 0) {
+                creator.createOp(Operation.ADD, tmp, index, LogicNumber.create(arrayStore.getStartOffset()));
+                index = tmp;
+            }
+            if (arrayStore.hasArrayOffset()) {
+                creator.createOp(Operation.ADD, tmp, index, arrayStore.getArrayOffset());
+                index = tmp;
+            }
+            return index;
         } else {
             return instruction.getIndex();
         }

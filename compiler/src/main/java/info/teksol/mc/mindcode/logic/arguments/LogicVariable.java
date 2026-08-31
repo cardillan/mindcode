@@ -268,9 +268,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + mlog.hashCode();
-        return result;
+        return mlog.hashCode();
     }
 
     @Override

@@ -13,8 +13,4 @@ public record StackParameters(MindcodeFunction function, List<LogicVariable> var
     public int totalSize() {
         return depth * frameSize + additionalSize;
     }
-
-    public StackParameters withDepth(int depth) {
-        return new StackParameters(function, variables, depth, fixedDepth, frameSize, returnOffset, additionalSize);
-    }
 }

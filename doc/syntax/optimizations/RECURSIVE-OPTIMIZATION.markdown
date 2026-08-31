@@ -58,7 +58,7 @@ set *sp 0
                 op add :g*retaddr @counter 1
                 jump label_11 always 0 0
 end
-            # Function: def g(in n)
+        # Function: def g(in n)
 label_11:
             jump label_18 lessThanEq :g:n 0
                 print "g: {0}\nf: {0}\n"

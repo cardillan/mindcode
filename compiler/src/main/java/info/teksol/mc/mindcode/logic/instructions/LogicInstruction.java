@@ -148,7 +148,7 @@ public interface LogicInstruction extends MlogInstruction {
     default LogicInstruction setSideEffects(SideEffects sideEffects) {
         return setInfo(InstructionInfo.SIDE_EFFECTS, sideEffects);
     }
-    
+
     @SuppressWarnings("unchecked")
     default List<LogicVariable> getIndirectVariables() {
         return (List<LogicVariable>) getInfo(InstructionInfo.INDIRECT_VARIABLES);

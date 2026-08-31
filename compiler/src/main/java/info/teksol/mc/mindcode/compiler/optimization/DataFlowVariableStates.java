@@ -279,9 +279,10 @@ class DataFlowVariableStates {
                         if (definition != null && definition.instructions.size() == 1) {
                             trace(() -> "+++ Repeated compact array access by variable: " + elementVariable.toMlog());
                             if (definition.instructions.getFirst() instanceof ArrayAccessInstruction prevIx
-                                && prevIx.getArrayConstruction().accessByName()
-                                && prevIx.getArrayConstructor().getElementNameVariable().equals(variable)
-                                && thisIx.getIndex() instanceof LogicVariable thisIndex && prevIx.getIndex() instanceof LogicVariable prevIndex
+                                    && prevIx.getArray().getStartOffset() == thisIx.getArray().getStartOffset()
+                                    && prevIx.getArrayConstruction().accessByName()
+                                    && prevIx.getArrayConstructor().getElementNameVariable().equals(variable)
+                                    && thisIx.getIndex() instanceof LogicVariable thisIndex && prevIx.getIndex() instanceof LogicVariable prevIndex
                             ) {
                                 boolean matchingIndex = false;
                                 if (thisIndex.equals(prevIndex)) {
@@ -462,7 +463,10 @@ class DataFlowVariableStates {
 
             // Do not report uninitialized reads in unreachable and dead states
             boolean report = reportUninitialized && !isolated && !dead && reachable && ixReachable;
-            if (report && !initialized.contains(variable) && variable.getType() != ArgumentType.BLOCK && variable.getType() != ArgumentType.BUILT_IN) {
+            if (report && !initialized.contains(variable)
+                    && variable.getType() != ArgumentType.BLOCK
+                    && variable.getType() != ArgumentType.BUILT_IN
+                    && variable.getType() != ArgumentType.PRESERVED) {
                 print("!!! Detected uninitialized read of " + variable.toMlog());
                 optimizer.addUninitialized(variable);
             }

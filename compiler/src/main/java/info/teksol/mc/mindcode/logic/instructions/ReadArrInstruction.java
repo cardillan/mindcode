@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicArray;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructor;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructorFactory;
@@ -65,6 +66,12 @@ public class ReadArrInstruction extends BaseResultInstruction implements ArrayAc
     public ReadArrInstruction withResult(LogicVariable result) {
         assert getArgumentTypes() != null;
         return new ReadArrInstruction(astContext, List.of(result, getArray(), getIndex()), getArgumentTypes()).copyInfo(this);
+    }
+
+    @Override
+    public ReadArrInstruction withArray(LogicArray array) {
+        assert getArgumentTypes() != null;
+        return new ReadArrInstruction(astContext, List.of(getResult(), array, getIndex()), getArgumentTypes()).copyInfo(this);
     }
 
     @Override

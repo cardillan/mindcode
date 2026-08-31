@@ -180,7 +180,8 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             case ERROR          -> new ErrorInstruction(astContext, args, params);
             case FORMAT         -> new FormatInstruction(astContext, args, params);
             case GETLINK        -> new GetlinkInstruction(astContext, args, params);
-            case INITREC        -> new InitRecInstruction(astContext);
+            case INITREC        -> new InitRecInstruction(astContext, args, params);
+            case INITSTACK      -> new InitStackInstruction(astContext, args, params);
             case JUMP           -> new JumpInstruction(astContext, args, params);
             case LABEL          -> new LabelInstruction(astContext, args, params);
             case LOOKUP         -> new LookupInstruction(astContext, args, params);

@@ -696,7 +696,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             def a(n) a(n + 1); end;
                             print(a(a(a(4))));
                             """,
-                    createInstruction(SET, "*sp", "0"),
+                    createInstruction(INITSTACK, label(1001), label(1002)),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
                     createInstruction(SET, ":a:n", "4"),
@@ -715,7 +715,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 3:1: stack overflow error")),
-                    createInstruction(INITREC),
+                    createInstruction(INITREC, "true"),
                     createInstruction(OP, "add", tmp(3), ":a:n", "1"),
                     createInstruction(PUSH, "bank1", ":a:n"),
                     createInstruction(SET, ":a:n", tmp(3)),
@@ -967,11 +967,11 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             end;
                             print(foo(out z), z);
                             """,
-                    createInstruction(SET, "*sp", "0"),
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(JUMP, label(1), "equal", "bank1", "null"),
-                    createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
-                    createInstruction(LABEL, label(2)),
+                    createInstruction(INITSTACK, label(1), label(2)),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(JUMP, label(3), "equal", "bank1", "null"),
+                    createInstruction(CALLREC, "bank1", label(0), label(4), ":foo*retval"),
+                    createInstruction(LABEL, label(4)),
                     createInstruction(SET, ":z", ":foo:n"),
                     createInstruction(SET, tmp(0), ":foo*retval"),
                     createInstruction(PRINT, tmp(0)),
@@ -979,13 +979,13 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 3:1: stack overflow error")),
-                    createInstruction(INITREC),
+                    createInstruction(INITREC, "true"),
                     createInstruction(SET, ":foo:n", "4"),
-                    createInstruction(CALLREC, "bank1", label(0), label(4), ":foo*retval"),
-                    createInstruction(LABEL, label(4)),
+                    createInstruction(CALLREC, "bank1", label(0), label(6), ":foo*retval"),
+                    createInstruction(LABEL, label(6)),
                     createInstruction(SET, tmp(1), ":foo*retval"),
                     createInstruction(SET, ":foo*retval", tmp(1)),
-                    createInstruction(LABEL, label(3)),
+                    createInstruction(LABEL, label(5)),
                     createInstruction(RETURNREC, "bank1")
             );
         }
@@ -1160,7 +1160,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             print(foo(4));
                             """,
                     // Setting up
-                    createInstruction(SET, "*sp", "0"),
+                    createInstruction(INITSTACK, label(1002), label(1003)),
                     createInstruction(LABEL, label(2)),
                     createInstruction(JUMP, label(2), "equal", "bank1", "null"),
                     // call foo
@@ -1173,7 +1173,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     // def foo
                     createInstruction(LABEL, label(1)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 4:1: stack overflow error")),
-                    createInstruction(INITREC),
+                    createInstruction(INITREC, "true"),
                     // call bar
                     createInstruction(PUSH, "bank1", ":foo:n"),
                     createInstruction(SET, ":bar:n", ":foo:n"),
@@ -1189,7 +1189,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     // def bar
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 3:1: stack overflow error")),
-                    createInstruction(INITREC),
+                    createInstruction(INITREC, "true"),
                     // call foo
                     createInstruction(PUSH, "bank1", ":bar:n"),
                     createInstruction(SET, ":foo:n", ":bar:n"),
@@ -1271,7 +1271,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             print(gdc(115, 78));
                             """,
                     // Setting up
-                    createInstruction(SET, "*sp", "0"),
+                    createInstruction(INITSTACK, label(1002), label(1003)),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
                     // call gdc
@@ -1285,7 +1285,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     // def gdc
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 3:1: stack overflow error")),
-                    createInstruction(INITREC),
+                    createInstruction(INITREC, "true"),
                     createInstruction(OP, "equal", tmp(1), ":gdc:b", "0"),
                     createInstruction(JUMP, label(4), "equal", tmp(1), "false"),
                     // return a
@@ -1492,7 +1492,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             
                             print(foo(rand(10)));
                             """,
-                    createInstruction(SET, "*sp", "0"),
+                    createInstruction(INITSTACK, label(1002), label(1003)),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
                     createInstruction(OP, "rand", tmp(0), "10"),
@@ -1504,7 +1504,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 4:1: stack overflow error")),
-                    createInstruction(INITREC),
+                    createInstruction(INITREC, "true"),
                     createInstruction(OP, "lessThanEq", tmp(2), ":foo:x", "0"),
                     createInstruction(JUMP, label(4), "equal", tmp(2), "false"),
                     createInstruction(SET, ":foo*retval", "10"),
@@ -2423,7 +2423,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(out a);
                             foo();
                             """,
-                    createInstruction(SET, "*sp", "0"),
+                    createInstruction(INITSTACK, label(1002), label(1003)),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
                     createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
@@ -2440,7 +2440,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 3:1: stack overflow error")),
-                    createInstruction(INITREC),
+                    createInstruction(INITREC, "true"),
                     createInstruction(SET, ":foo:n", "10"),
                     createInstruction(SET, ":foo:m", "20"),
                     createInstruction(CALLREC, "bank1", label(0), label(6), ":foo*retval"),
@@ -2544,7 +2544,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             foo(out a, in b);
                             foo(in a, out b);
                             """,
-                    createInstruction(SET, "*sp", "0"),
+                    createInstruction(INITSTACK, label(1002), label(1003)),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
                     createInstruction(SET, ":b", "1"),
@@ -2564,7 +2564,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 3:1: stack overflow error")),
-                    createInstruction(INITREC),
+                    createInstruction(INITREC, "true"),
                     createInstruction(PRINT, ":foo:m"),
                     createInstruction(PRINT, ":foo:n"),
                     createInstruction(OP, "mul", ":foo:n", ":foo:n", "2"),
@@ -2741,7 +2741,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             end;
                             foo();
                             """,
-                    createInstruction(SET, "*sp", "0"),
+                    createInstruction(INITSTACK, label(1002), label(1003)),
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "bank1", "null"),
                     createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
@@ -2749,7 +2749,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(ASSERT_BOUNDS, "decimal", "1", "0", "lessThanEq", "*sp", "lessThan", "512", q("position 3:1: stack overflow error")),
-                    createInstruction(INITREC),
+                    createInstruction(INITREC, "true"),
                     createInstruction(CALLREC, "bank1", label(0), label(4), ":foo*retval"),
                     createInstruction(LABEL, label(4)),
                     createInstruction(PRINT, q("foo")),

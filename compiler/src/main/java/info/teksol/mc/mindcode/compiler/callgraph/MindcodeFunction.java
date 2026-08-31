@@ -92,6 +92,7 @@ public class MindcodeFunction {
 
     // Recursive function properties
     private final Map<LogicVariable, ArrayStore> arrays = new HashMap<>();
+    private @Nullable LogicLabel stackFrameLabel;
     private int stackFrameSize = 0;
     private int returnOffset = 0;
 
@@ -126,6 +127,7 @@ public class MindcodeFunction {
         indirectCalls.addAll(other.indirectCalls);
 
         arrays.putAll(other.arrays);
+        stackFrameLabel = other.stackFrameLabel;
         stackFrameSize = other.stackFrameSize;
         returnOffset = other.returnOffset;
 
@@ -554,6 +556,14 @@ public class MindcodeFunction {
     public void setArrays(Collection<ArrayStore> arrays) {
         this.arrays.clear();
         arrays.forEach(this::addArray);
+    }
+
+    public LogicLabel getStackFrameLabel() {
+        return Objects.requireNonNull(stackFrameLabel);
+    }
+
+    public void setStackFrameLabel(LogicLabel stackFrameLabel) {
+        this.stackFrameLabel = stackFrameLabel;
     }
 
     public int getStackFrameSize() {

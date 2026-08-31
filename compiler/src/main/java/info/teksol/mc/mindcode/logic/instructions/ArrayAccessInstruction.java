@@ -29,6 +29,8 @@ public interface ArrayAccessInstruction extends LogicInstruction {
         return getArrayConstructor().getExecutionSteps();
     }
 
+    ArrayAccessInstruction withArray(LogicArray array);
+
     default ArrayOrganization getArrayOrganization() {
         return (ArrayOrganization) getInfo(InstructionInfo.ARRAY_ORGANIZATION);
     }

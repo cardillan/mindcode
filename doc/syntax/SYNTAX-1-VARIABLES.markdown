@@ -226,7 +226,7 @@ Variables are limited to a certain scope and are considered nonexistent outside 
 
 * Global: encompasses the entire program. Global variables are generally accessible from anywhere in the program.
 * Main: encompasses the main program body. The main program body generally consists of all code outside user-defined functions.
-* Local: encompasses a single user-defined function. Function parameters are also local to their function.
+* Local: encompasses a single user-defined function. Function parameters and arrays declared within a function are also local to their function.
 * Code block: encompasses a single body of statement, e.g., body of a while loop, a branch of the else statement, or an explicitly marked code block. If a code block contains nested code block(s), variables from an outer block are available in the inner block(s).
 
 ## Implicit variables
@@ -406,7 +406,7 @@ The following storage modifiers are available:
 * `export`: the variable is an [exported variable](#exported-variables): stored in the current processor, but made available to other processors.
 * `remote`: the variable is a [remote variable](#remote-variables) stored in another processor.
 
-Storage modifiers are only allowed in the global scope. At most one of the storage modifiers can be specified in a declaration. When no storage modifier is specified, the declaration creates [regular variables](#regular-variables) stored in the current processor.
+Storage modifiers except `const` are only allowed in the global scope. At most one of the storage modifiers can be specified in a declaration. When no storage modifier is specified, the declaration creates [regular variables](#regular-variables) stored in the current processor.
 
 ## Other modifiers
 
@@ -694,6 +694,8 @@ print *tmp2
 ```
 
 Note: the `floor` operation got replaced by `shl` in the compiled code, which implicitly performs `floor` in its input parameters.
+
+When the same constant array is declared multiple times, just a single copy gets created by the compiler.
 
 ### Constants representing built-in icons
 

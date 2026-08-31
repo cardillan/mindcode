@@ -80,10 +80,10 @@ public class LookupArrayConstructor extends TablelessArrayConstructor {
         LogicValue storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
         createCompactAccessInstruction(creator, storageProcessor, arrayElem);
 
-        List<ValueStore> elements = arrayStore.getElements();
         Map<Integer, ? extends MindustryContent> lookupMap = processor.getMetadata().getLookupMap(type.getKeyword());
         assert lookupMap != null;
 
+        List<ValueStore> elements = arrayStore.getMasterArray().getElements();
         for (int i = 0; i < elements.size(); i++) {
             elements.get(i).setArrayElementName(lookupMap.get(i).contentName());
         }

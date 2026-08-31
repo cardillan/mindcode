@@ -43,6 +43,10 @@ public class LogicArray extends AbstractArgument {
         return array.isDeclaredRemote();
     }
 
+    public int getStartOffset() {
+        return array.getStartOffset();
+    }
+
     public static LogicArray create(ArrayStore array) {
         return new LogicArray(array, "[]");
     }

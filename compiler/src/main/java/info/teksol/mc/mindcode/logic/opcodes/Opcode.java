@@ -111,6 +111,9 @@ public enum Opcode {
     /// Restores a variable from the stack. Used by recursive functions
     POP             (NONE,   "pop",             2),
 
+    /// Initialize a recursive function.
+    INITSTACK       (NONE,   "initstack",       1),
+
     /// Recursive call. Replaced by instructions that store the return address on the stack and then jump to the target
     CALLREC         (NONE,   "callrec",         3),
 

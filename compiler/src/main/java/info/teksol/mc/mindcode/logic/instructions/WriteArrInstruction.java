@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicArray;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructor;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructorFactory;
@@ -63,6 +64,12 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
     @Override
     public WriteArrInstruction withContext(AstContext astContext) {
         return this.astContext == astContext ? this : new WriteArrInstruction(this, astContext);
+    }
+
+    @Override
+    public WriteArrInstruction withArray(LogicArray array) {
+        assert getArgumentTypes() != null;
+        return new WriteArrInstruction(astContext, List.of(getValue(), array, getIndex()), getArgumentTypes()).copyInfo(this);
     }
 
     @Override

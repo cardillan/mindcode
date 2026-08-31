@@ -19,8 +19,9 @@ public class ExternalArray extends AbstractArrayStore {
     private final LogicNumber baseIndexNumber;
     private final LogicArray logicArray;
 
-    public ExternalArray(SourcePosition sourcePosition, String name, LogicVariable memory, int baseIndex, List<ValueStore> elements) {
-        super(sourcePosition, name, elements.size(), elements);
+    public ExternalArray(SourcePosition sourcePosition, String name, LogicVariable memory, int baseIndex,
+            @Nullable ArrayStore masterArray, List<ValueStore> elements) {
+        super(sourcePosition, name, elements.size(), masterArray, elements);
         this.memory = memory;
         this.baseIndex = baseIndex;
         this.baseIndexNumber = LogicNumber.create(baseIndex);
@@ -40,6 +41,11 @@ public class ExternalArray extends AbstractArrayStore {
     @Override
     public ArrayType getArrayType() {
         return ArrayType.EXTERNAL;
+    }
+
+    @Override
+    public LogicArray getLogicArray() {
+        return logicArray;
     }
 
     @Override
@@ -68,7 +74,12 @@ public class ExternalArray extends AbstractArrayStore {
 
     @Override
     public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
-        return new ExternalArray(sourcePosition, name, memory, baseIndex + start, elements.subList(start, end));
+        return new ExternalArray(sourcePosition, name, memory, baseIndex + start, getMasterArray(), elements.subList(start, end));
+    }
+
+    @Override
+    public ArrayStore nonrecursive() {
+        return this;
     }
 
     @Override
@@ -90,7 +101,7 @@ public class ExternalArray extends AbstractArrayStore {
 
     @Override
     public ExternalArray withSourcePosition(SourcePosition sourcePosition) {
-        return new ExternalArray(sourcePosition, name, memory, baseIndex, elements);
+        return new ExternalArray(sourcePosition, name, memory, baseIndex, getMasterArray(), elements);
     }
 
     private class ExternalArrayElement implements ValueStore {

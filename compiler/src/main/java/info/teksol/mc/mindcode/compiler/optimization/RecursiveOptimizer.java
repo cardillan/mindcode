@@ -8,11 +8,13 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.builders.AbstractLoopBuilder;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -47,10 +49,14 @@ class RecursiveOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        forEachContext(AstContextType.FUNCTION_DEF, BODY, context -> {
-            optimizeFunction(context);
-            return null;
-        });
+        // No tail recursion optimization after the arrays have been expanded, as the necessary fixes
+        // couldn't be applied.
+        if (!optimizationContext.isExpanded()) {
+            forEachContext(AstContextType.FUNCTION_DEF, BODY, context -> {
+                optimizeFunction(context);
+                return null;
+            });
+        }
 
         return false;
     }
@@ -75,10 +81,11 @@ class RecursiveOptimizer extends BaseOptimizer {
             boolean moveToCurrContext = false;
 
             try (LogicIterator it = optimizationContext.createIteratorAtContext(context)) {
-                it.next();  // Skip function label
+                int index = 0;
+                while (it.next().getOpcode() != Opcode.INITREC) index++;
                 it.add(instructionProcessor.createLabel(currContext, startLabel));
 
-                for (int index = 1; index < body.size(); index++) {
+                while (++index < body.size()) {
                     LogicInstruction original = it.next();
                     LogicInstruction replacement = Objects.requireNonNull(loop.get(index));
 
@@ -116,6 +123,10 @@ class RecursiveOptimizer extends BaseOptimizer {
                                 rebuildCalls.add(c.getAstContext().existingParent());
                             }
 
+                            case InitRecInstruction c when c.getAstContext().function() == function -> {
+                                it.remove();
+                            }
+
                             case ReturnRecInstruction r when r.getAstContext().function() == function -> {
                                 if (r.getJumpToReturn().isPresent()) {
                                     LogicLabel newTarget = loop.getLabelMap().get(((JumpInstruction)r.getJumpToReturn().get()).getTarget());
@@ -123,6 +134,13 @@ class RecursiveOptimizer extends BaseOptimizer {
                                     it.set(instructionProcessor.createJumpUnconditional(r.getAstContext(), newTarget));
                                 } else {
                                     it.set(instructionProcessor.createReturn(r.getAstContext(), function.getFnRetAddr()));
+                                }
+                            }
+
+                            case ArrayAccessInstruction a when a.getArray().getArrayStore().getFunction() == function -> {
+                                ArrayStore array = a.getArray().getArrayStore().nonrecursive();
+                                if (array != a.getArray().getArrayStore()) {
+                                    it.set(a.withArray(array.getLogicArray()));
                                 }
                             }
 

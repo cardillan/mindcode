@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
@@ -36,6 +37,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 public class FinalInstructionResolver extends CompilerMessageEmitter {
     private final GlobalCompilerProfile profile;
     private final InstructionProcessor processor;
+    private final CallGraph callGraph;
     private final StackTracker stackTracker;
     private final AstContext rootAstContext;
     private final NameCreator nameCreator;
@@ -46,19 +48,20 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
     private final Map<Integer, Set<LogicInstruction>> textJumpOrigins = new HashMap<>();
     private final Map<Integer, Set<Integer>> textJumpKeys = new HashMap<>();
 
-    public FinalInstructionResolver(GlobalCompilerProfile profile, InstructionProcessor processor, StackTracker stackTracker,
-            AstContext rootAstContext, NameCreator nameCreator) {
+    public FinalInstructionResolver(GlobalCompilerProfile profile, InstructionProcessor processor, CallGraph callGraph,
+            StackTracker stackTracker, AstContext rootAstContext, NameCreator nameCreator) {
         super(processor.messageConsumer());
-        this.processor = processor;
         this.profile = profile;
+        this.processor = processor;
+        this.callGraph = callGraph;
         this.stackTracker = stackTracker;
         this.rootAstContext = rootAstContext;
         this.nameCreator = nameCreator;
     }
 
-    public static List<LogicInstruction> resolve(GlobalCompilerProfile profile, InstructionProcessor processor,
+    public static List<LogicInstruction> resolve(GlobalCompilerProfile profile, InstructionProcessor processor, CallGraph callGraph,
             StackTracker stackTracker, AstContext rootAstContext, NameCreator nameCreator, List<LogicInstruction> program) {
-        return new FinalInstructionResolver(profile, processor, stackTracker, rootAstContext, nameCreator).resolve(program);
+        return new FinalInstructionResolver(profile, processor, callGraph, stackTracker, rootAstContext, nameCreator).resolve(program);
     }
 
     public List<LogicInstruction> resolve(List<LogicInstruction> program) {
@@ -366,7 +369,11 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
         return program.stream().mapMulti(this::resolveVirtualInstruction).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private void resolveVirtualInstruction(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
+    private int counter;
+    private void resolveVirtualInstruction(LogicInstruction instruction, Consumer<LogicInstruction> cons) {
+        counter = 0;
+        Consumer<LogicInstruction> consumer = ix -> { counter += ix.getRealSize(); cons.accept(ix); };
+
         AstContext astContext = instruction.getAstContext();
         GlobalCompilerProfile profile = astContext.getGlobalProfile();
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
@@ -467,6 +474,25 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
                 }
             }
 
+            case InitStackInstruction ix -> {
+                List<MindcodeFunction> recursiveFunctions = callGraph.getFunctions().stream()
+                        .filter(f -> f.isRecursive() && f.isGenerated()).toList();
+                if (!recursiveFunctions.isEmpty()) {
+                    if (stackTracker.externalStack()) {
+                        creator.createSet(stackPointer, LogicNumber.create(stackTracker.getAllocationStart()));
+                    } else if (profile.isSymbolicLabels()) {
+                        creator.createJumpUnconditional(ix.getCallLabel());
+                        creator.createLabel(ix.getReturnLabel());
+                    } else {
+                        recursiveFunctions.forEach(function -> creator.createInstruction(Opcode.SET,
+                                function.getFnStackFrame(), function.getStackFrameLabel()));
+                    }
+
+                    // Setup array indexes
+                    recursiveFunctions.stream().flatMap(f -> f.getArrays().stream())
+                            .forEach(a -> creator.createSet((LogicVariable) a.getArrayOffset(), LogicNumber.create(-a.getSize())));
+                }
+            }
             case CallRecInstruction ix -> {
                 if (externalStack) {
                     if (profile.isSymbolicLabels()) {
@@ -485,7 +511,11 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
                 }
             }
             case InitRecInstruction ix -> {
-                ix.getFunction().getArrays().forEach(array -> {
+                MindcodeFunction function = ix.getFunction();
+                if (!ix.getSkipStackSetup().getBooleanValue()) {
+                    creator.createOp(Operation.ADD, function.getFnStackFrame(), function.getFnStackFrame(), LogicNumber.create(function.getStackFrameSize()));
+                }
+                function.getArrays().forEach(array -> {
                     if (array.getArrayOffset() instanceof LogicVariable offset) {
                         creator.createOp(ADD, offset, offset, LogicNumber.create(array.getSize()));
                     }
@@ -521,6 +551,11 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
             default -> {
                 consumer.accept(instruction);
             }
+        }
+
+        if (counter != instruction.getRealSize()) {
+            throw new MindcodeInternalError("Instruction size mismatch: expected size %s, actual size %s, instruction %s",
+                    instruction.getRealSize(), counter, instruction);
         }
     }
 

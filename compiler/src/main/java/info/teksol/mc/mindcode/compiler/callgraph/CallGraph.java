@@ -9,7 +9,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /// Holds information about calls between individual user-defined functions. Information is gathered by inspecting
 /// function definitions, particularly calls made to other user-defined functions. Information is held by instances
@@ -73,10 +72,5 @@ public final class CallGraph {
     /// @return true if there's a recursive function
     public boolean containsRecursiveFunction() {
         return functions.stream().filter(MindcodeFunction::isUsed).anyMatch(MindcodeFunction::isRecursive);
-    }
-
-    /// @return a stream of active, recursive functions.
-    public Stream<MindcodeFunction> recursiveFunctions() {
-        return functions.stream().filter(MindcodeFunction::isUsed).filter(MindcodeFunction::isRecursive);
     }
 }
