@@ -257,15 +257,15 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
                             error($"Index $i out of bounds ($min, $max)!");
                             """,
                     """
-                        set max 8
-                        set i 10
-                        set *ERROR_0 "Index [[1] out of bounds (0, [[2])!"
-                        set *ERROR_1 i
-                        set *ERROR_2 max
-                        stop
-                        end
-                        print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+                            set max 8
+                            set i 10
+                            set *ERROR_0 "Index [[1] out of bounds (0, [[2])!"
+                            set *ERROR_1 i
+                            set *ERROR_2 max
+                            stop
+                            end
+                            print "%s"
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
 
@@ -279,12 +279,12 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
                             error($"Index $i out of bounds ($min, $max)!");
                             """,
                     """
-                        set max 8
-                        set i 10
-                        error "Index [[1] out of bounds (0, [[2])!" i max null null null null null null null
-                        end
-                        print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+                            set max 8
+                            set i 10
+                            error "Index [[1] out of bounds (0, [[2])!" i max null null null null null null null
+                            end
+                            print "%s"
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
 
@@ -298,16 +298,16 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
                             error("Index out of bounds: ", i, min, max);
                             """,
                     """
-                        set max 8
-                        set i 10
-                        set *ERROR_0 "Index out of bounds: "
-                        set *ERROR_1 i
-                        set *ERROR_2 0
-                        set *ERROR_3 max
-                        stop
-                        end
-                        print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+                            set max 8
+                            set i 10
+                            set *ERROR_0 "Index out of bounds: "
+                            set *ERROR_1 i
+                            set *ERROR_2 0
+                            set *ERROR_3 max
+                            stop
+                            end
+                            print "%s"
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
 
@@ -321,12 +321,12 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
                             error("Index out of bounds: ", i, min, max);
                             """,
                     """
-                        set max 8
-                        set i 10
-                        error "Index out of bounds: " i 0 max null null null null null null
-                        end
-                        print "%s"
-                        """.formatted(CompilerProfile.SIGNATURE_STATIC)
+                            set max 8
+                            set i 10
+                            error "Index out of bounds: " i 0 max null null null null null null
+                            end
+                            print "%s"
+                            """.formatted(CompilerProfile.SIGNATURE_STATIC)
             );
         }
     }

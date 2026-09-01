@@ -1,5 +1,5 @@
    133 instructions before optimizations.
-    28 instructions eliminated by Temp Variables Elimination (5 iterations).
+    28 instructions eliminated by Temp Variables Elimination (6 iterations).
      4 instructions eliminated by Dead Code Elimination (4 iterations).
      9 instructions eliminated by Condition Optimization (5 iterations).
      5 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
@@ -46,7 +46,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructi
     95 set *tmp38 :index
     96 write :total .BANK *tmp38
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-28 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-27 instructions):
  
      4 set .IND_SESSION_KEY 509
      5 set .IND_TIME 508
@@ -136,29 +136,41 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-28 ins
 -    * set :flow_rate *tmp41
 -    * set *tmp42 .IND_FLOW_RATE
 -    * write :flow_rate .BANK *tmp42
--    * set *tmp44 .IND_TIME
--    * set *tmp46 @time
--    * write *tmp46 .BANK *tmp44
 +   78 op div :flow_rate *tmp40 .SIGN_MILLIS
 +   79 write :flow_rate .BANK .IND_FLOW_RATE
-+   80 write @time .BANK .IND_TIME
-    81 op add *tmp47 :index 1
+    80 set *tmp44 .IND_TIME
+-    * set *tmp46 @time
+-    * write *tmp46 .BANK *tmp44
++   81 write @time .BANK *tmp44
+    82 op add *tmp47 :index 1
 -    * op mod *tmp48 *tmp47 .SAMPLES
 -    * set :index *tmp48
-+   82 op mod :index *tmp47 .SAMPLES
-    83 op mul *tmp49 60000 :flow_rate
++   83 op mod :index *tmp47 .SAMPLES
+    84 op mul *tmp49 60000 :flow_rate
 -    * op floor *tmp50 *tmp49
 -    * set :flow_rate_str *tmp50
 -    * op div *tmp51 .MILLIS 1000
 -    * set :seconds *tmp51
 -    * op sub *tmp52 @time :start
 -    * set :elapsed *tmp52
-+   84 op floor :flow_rate_str *tmp49
-+   85 op div :seconds .MILLIS 1000
-+   86 op sub :elapsed @time :start
-    87 print "Measured interval: "
-    88 print :seconds
-    89 print " sec"
++   85 op floor :flow_rate_str *tmp49
++   86 op div :seconds .MILLIS 1000
++   87 op sub :elapsed @time :start
+    88 print "Measured interval: "
+    89 print :seconds
+    90 print " sec"
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 2 (-1 instructions):
+ 
+    77 op sub *tmp40 :total :last_total
+    78 op div :flow_rate *tmp40 .SIGN_MILLIS
+    79 write :flow_rate .BANK .IND_FLOW_RATE
+-    * set *tmp44 .IND_TIME
+-    * write @time .BANK *tmp44
++   80 write @time .BANK .IND_TIME
+    81 op add *tmp47 :index 1
+    82 op mod :index *tmp47 .SAMPLES
+    83 op mul *tmp49 60000 :flow_rate
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-1 instructions):
  

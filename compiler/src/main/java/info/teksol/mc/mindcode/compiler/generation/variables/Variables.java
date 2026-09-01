@@ -17,6 +17,7 @@ import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
+import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -41,6 +42,7 @@ public class Variables extends CompilerMessageEmitter {
     private final Set<String> linkedNames = new HashSet<>();
     private final Map<String, String> symbolicNameMap = new HashMap<>();
     private final Set<String> parameterNames = new HashSet<>();
+    private final List<ArrayStore> constArrays = new ArrayList<>();
     private FunctionContext functionContext = new GlobalContext();
 
     private HeapTracker heapTracker;
@@ -313,7 +315,7 @@ public class Variables extends CompilerMessageEmitter {
                 int index = functionContext.getVariableReuseCount(identifier);
                 ArrayNameCreator arrayNameCreator = processArrayMlogModifier(modifiers, size, nameCreator);
                 result = modifiers.contains(CONST)
-                        ? InternalArray.createConst(nameCreator, functionContext.function(), identifier, initialValues)
+                        ? createConstArray(functionContext.function(), identifier, size, initialValues)
                         : InternalArray.create(processor, arrayNameCreator, functionContext.function(), identifier, index,
                             size, false, false, null, false);
                 verifyMlogConflicts(result);
@@ -323,9 +325,7 @@ public class Variables extends CompilerMessageEmitter {
             if (!verifyGlobalDeclaration(identifier, identifier)) {
                 result = InternalArray.createInvalid(nameCreator, identifier, size);
             } else if (modifiers.contains(LINKED) || modifiers.contains(CONST)) {
-                result = initialValues.isEmpty()
-                        ? InternalArray.createInvalid(nameCreator, identifier, size)
-                        : InternalArray.createConst(nameCreator, null, identifier, initialValues);
+                result = createConstArray(null, identifier, size, initialValues);
             } else if (modifiers.contains(EXTERNAL)) {
                 result = getHeapTracker(modifiers).createArray(identifier, size);
             } else {
@@ -341,6 +341,29 @@ public class Variables extends CompilerMessageEmitter {
         }
 
         return result;
+    }
+
+    private boolean matches(ArrayStore array, List<ValueStore> initialValues) {
+        if (array.getFullSize() != initialValues.size()) return false;
+        for (int i = 0; i < array.getFullSize(); i++) {
+            if (!array.getElements().get(i).unwrap().equals(initialValues.get(i))) return false;
+        }
+        return true;
+    }
+
+    private ArrayStore createConstArray(@Nullable MindcodeFunction function, AstIdentifier identifier, int size, List<ValueStore> initialValues) {
+        if (initialValues.isEmpty()) {
+            return InternalArray.createInvalid(nameCreator, identifier, size);
+        }
+
+        int index = CollectionUtils.indexOf(constArrays, 0, a -> matches(a, initialValues));
+        if (index >= 0) {
+            return constArrays.get(index);
+        }
+
+        InternalArray array = InternalArray.createConst(nameCreator, function, identifier, initialValues);
+        constArrays.add(array);
+        return array;
     }
 
     /// Registers a standard variable in a given scope. Reports possible name clashes.

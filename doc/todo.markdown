@@ -26,15 +26,14 @@ Changes intended for the next regular release.
   * Mlog keywords without the `:` prefix
   * Using `remote` to mark variables/functions for export
   * Modifier '%s' requires parentheses around its arguments
-
-* **Doing**
-
 * Local arrays
 * Check variable names specified using the `mlog` directive are valid mlog variable names (needsto use the acual parser implementation).
 * Support for `const` parameters in functions:
   * Will be treated as constants inside inline functions.
   * In other function calls, will make the parameter unmodifiable.
   * Calls will not require the const modifier.
+
+* **Doing**
 
 * **Planned**
 

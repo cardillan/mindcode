@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * **Breaking:** the `return-optimization` compiler directive and command-line parameter have been renamed to `recursive-optimization`, as part of renaming _Return Optimization_ to _Recursive Optimization_.
 * Improved the implementation of a return from a recursive function call using an external stack.
+* Identical constant arrays declared multiple times (either in the local or global scope) are now compiled into a common data structure. 
 * Improved code folding in the web app's source code editor.
 
 ### Removed
