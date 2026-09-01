@@ -10,10 +10,7 @@ import info.teksol.mc.profile.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.SequencedMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @NullMarked
@@ -37,6 +34,11 @@ public class CompilerOptionFactory {
     public static final int DEFAULT_STEP_LIMIT_WEBAPP = 1_000_000;
     public static final int MAX_STEP_LIMIT_CMDLINE = 1_000_000_000;
     public static final int MAX_STEP_LIMIT_WEBAPP = 100_000_000;
+
+    public static final Map<String, Enum<?>> DIRECTIVE_OPTION_MAP =
+            CompilerOptionFactory.createCompilerOptions(false).values().stream()
+                    .filter(value -> value.availability.isDirective())
+                    .collect(Collectors.toMap(CompilerOptionValue::getOptionName, CompilerOptionValue::getOption));
 
     public static SequencedMap<Enum<?>, CompilerOptionValue<?>> createCompilerOptions(boolean webApp) {
         List<CompilerOptionValue<?>> list = new ArrayList<>();

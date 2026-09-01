@@ -77,7 +77,7 @@ public class DirectivePreprocessor extends CompilerMessageEmitter {
     private @Nullable AstDocComment lastDocComment = null;
 
     private void visitNodeLocal(AstMindcodeNode node) {
-        if (node instanceof AstModule module) {
+        if (node instanceof AstModule _) {
             // All nodes within a module need to inherit the module setting, not the global setting.
             // This is to handle the syntax mode ("strict" by default for modules).
             profile = node.getProfile();

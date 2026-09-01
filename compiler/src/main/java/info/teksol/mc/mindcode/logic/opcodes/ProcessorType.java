@@ -6,22 +6,24 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public enum ProcessorType {
-    NO_PROCESSOR            (ProcessorVersion.V8A, "Micro Processor",  1,  true),
-    MICRO_PROCESSOR         (ProcessorVersion.V6,  "Micro Processor",  2, false),
-    LOGIC_PROCESSOR         (ProcessorVersion.V6,  "Logic Processor",  8, false),
-    HYPER_PROCESSOR         (ProcessorVersion.V6,  "Hyper Processor", 25, false),
-    WORLD_PROCESSOR         (ProcessorVersion.V7,  "World processor",  8,  true),
+    NO_PROCESSOR            (ProcessorVersion.V8A, "Micro Processor",  1,    1, true),
+    MICRO_PROCESSOR         (ProcessorVersion.V6,  "Micro Processor",  2,    2, false),
+    LOGIC_PROCESSOR         (ProcessorVersion.V6,  "Logic Processor",  8,    8, false),
+    HYPER_PROCESSOR         (ProcessorVersion.V6,  "Hyper Processor", 25,   25, false),
+    WORLD_PROCESSOR         (ProcessorVersion.V7,  "World processor",  8, 1000, true),
     ;
 
     private final ProcessorVersion minimalVersion;
     private final String title;
     private final int ipt;
+    private final int maxIpt;
     private final boolean privileged;
 
-    ProcessorType(ProcessorVersion minimalVersion, String title, int ipt, boolean privileged) {
+    ProcessorType(ProcessorVersion minimalVersion, String title, int ipt, int maxIpt, boolean privileged) {
         this.minimalVersion = minimalVersion;
         this.title = title;
         this.ipt = ipt;
+        this.maxIpt = maxIpt;
         this.privileged = privileged;
     }
 
@@ -39,6 +41,10 @@ public enum ProcessorType {
 
     public int ipt() {
         return ipt;
+    }
+
+    public int maxIpt() {
+        return maxIpt;
     }
 
     public boolean privileged() {

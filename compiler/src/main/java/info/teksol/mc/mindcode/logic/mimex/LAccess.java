@@ -7,6 +7,7 @@ public record LAccess(
         String contentName,
         String name,
         boolean sensor,
+        boolean privileged,
         boolean control,
         boolean setprop,
         String parameters

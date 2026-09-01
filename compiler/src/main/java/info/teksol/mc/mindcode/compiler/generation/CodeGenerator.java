@@ -23,7 +23,6 @@ import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PrintingInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.profile.GlobalCompilerProfile;
@@ -297,7 +296,7 @@ public class CodeGenerator extends CompilerMessageEmitter {
     }
 
     private void generateSetrate() {
-        if (globalProfile.getProcessorType() == ProcessorType.WORLD_PROCESSOR && !globalProfile.isDefault(CompilerOptions.SETRATE)) {
+        if (!globalProfile.isDefault(CompilerOptions.SETRATE)) {
             assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.INIT);
             assembler.createInstruction(Opcode.SETRATE, LogicNumber.create(globalProfile.getSetrate()));
             assembler.clearContextType(program);

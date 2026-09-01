@@ -37,6 +37,7 @@ Changes intended for the next regular release.
 
 * **Planned**
 
+* Add default/max IPT to mimex.
 * Converting arrays to const arrays when possible
 * Automatically make global variables accessed by a background process volatile.
   * Might need a category for volatile, but removable variables.

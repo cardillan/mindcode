@@ -12,14 +12,13 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static info.teksol.mc.profile.options.CompilerOptionFactory.DIRECTIVE_OPTION_MAP;
+
 @NullMarked
 public class DirectiveProcessor extends CompilerMessageEmitter {
-    private static final Map<String, Enum<?>> OPTION_MAP = createOptionMap();
-
     private OptionScope scopeLimit = OptionScope.GLOBAL;
 
     public DirectiveProcessor(MessageConsumer messageConsumer) {
@@ -72,23 +71,24 @@ public class DirectiveProcessor extends CompilerMessageEmitter {
         }
     }
 
-    public void processDirective(CompilerProfile profile, AstDirectiveSet directive) {
+    public boolean processDirective(CompilerProfile profile, AstDirectiveSet directive) {
         String directiveText = directive.getOption().getText();
-        Enum<?> optionEnum = OPTION_MAP.get(directiveText);
+        Enum<?> optionEnum = DIRECTIVE_OPTION_MAP.get(directiveText);
         if (optionEnum == null) {
             if (directiveText.equals("profile")) {
                 if (validateSingleValue(directive)) {
                     profile.decode(directive.getValues().getFirst().getText());
                 }
-                return;
+                return true;
             }
 
-            Optional<String> alternative = StringSimilarity.findBestAlternative(directiveText, OPTION_MAP.keySet());
+            Optional<String> alternative = StringSimilarity.findBestAlternative(directiveText, DIRECTIVE_OPTION_MAP.keySet());
             if (alternative.isPresent()) {
                 error(directive.getOption(), ERR.DIRECTIVE_UNKNOWN_WITH_SUGGESTION, directiveText, alternative.get());
             } else {
                 error(directive.getOption(), ERR.DIRECTIVE_UNKNOWN, directiveText);
             }
+            return false;
         } else {
             setOptionValue(profile.getOption(optionEnum), directive);
             if (optionEnum == EnvironmentOptions.TARGET && profile.isSpecified(SchematicOptions.SCHEMATIC_TARGET)) {
@@ -96,11 +96,13 @@ public class DirectiveProcessor extends CompilerMessageEmitter {
                 ProcessorType schematicProcessor = profile.getSchematicTarget().type();
                 if (!compilerProcessor.isCompatibleWith(schematicProcessor)) {
                     error(directive, ERR.COMPILER_TYPE_INCOMPATIBLE, schematicProcessor.code());
+                    return false;
                 }
             }
+            return true;
         }
     }
-        
+
     private boolean validateSingleValue(AstDirectiveSet node) {
         if (node.getValues().isEmpty()) {
             error(node.getOption(), ERR.DIRECTIVE_NO_VALUE, node.getOption().getText());
@@ -109,12 +111,6 @@ public class DirectiveProcessor extends CompilerMessageEmitter {
         }
 
         return !node.getValues().isEmpty();
-    }
-
-    private static Map<String, Enum<?>> createOptionMap() {
-        return CompilerOptionFactory.createCompilerOptions(false).values().stream()
-                .filter(value -> value.availability.isDirective())
-                .collect(Collectors.toMap(CompilerOptionValue::getOptionName, CompilerOptionValue::getOption));
     }
 
     private <E extends Enum<E>> void reportWrongOptionValue(AstDirectiveSet node,

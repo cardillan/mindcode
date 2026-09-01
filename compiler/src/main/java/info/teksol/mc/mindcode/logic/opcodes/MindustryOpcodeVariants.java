@@ -159,6 +159,9 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, S, FUNC, Opcode.STOP);
         add(list, V6,  MAX, S, FUNC, Opcode.END);
 
+        add(list, V7,  V8B, W, FUNC, Opcode.SETRATE, in("ipt"));
+        add(list, V8C, MAX, S, FUNC, Opcode.SETRATE, in("ipt"));
+
         add(list, V6,  MAX, S, NONE, Opcode.JUMP,       label("label"), cond("equal"),         in("x"), in("y"));
         add(list, V6,  MAX, S, NONE, Opcode.JUMP,       label("label"), cond("notEqual"),      in("x"), in("y"));
         add(list, V6,  MAX, S, NONE, Opcode.JUMP,       label("label"), cond("lessThan"),      in("x"), in("y"));
@@ -245,6 +248,7 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("lighting"),              in("value"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("canGameOver"),           in("value"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("ambientLight"),          in("value"));
+        add(list, V8C, MAX, W, FUNC, Opcode.SETRULE,   rule("unitLight"),             in("value"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("solarMultiplier"),       in("value"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("dragMultiplier"),        in("value"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("ban"),                   in("value"));
@@ -317,8 +321,6 @@ public class MindustryOpcodeVariants {
         add(list, V7,  V7A, W, FUNC, Opcode.EXPLOSION, in("team"), in("x"), in("y"), in("radius"), in("damage"), in("air"), in("ground"), in("pierce"));
         add(list, V8A, MAX, W, FUNC, Opcode.EXPLOSION, in("team"), in("x"), in("y"), in("radius"), in("damage"), in("air"), in("ground"), in("pierce"), bool("effect"));
 
-        add(list, V7,  MAX, W, FUNC, Opcode.SETRATE, in("ipt"));
-
         add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("unitCount"),   result(), in("team"), unused("0"), in("type"));
         add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("playerCount"), result(), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.FETCH, fetch("coreCount"),   result(), in("team"));
@@ -341,6 +343,7 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("remove"),      in("id"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("world"),       in("id"), in("boolean"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("minimap"),     in("id"), in("boolean"));
+        add(list, V8C, MAX, W, FUNC, Opcode.SETMARKER, setmarker("light"),       in("id"), in("boolean"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("autoscale"),   in("id"), in("boolean"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("pos"),         in("id"), in("x"), in("y"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("endPos"),      in("id"), in("x"), in("y"));

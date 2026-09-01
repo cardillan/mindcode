@@ -166,7 +166,7 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
                 }
                 ipt = context.getLocalProfile().getIpt();
             } else {
-                ipt = processor.getProcessorType().ipt();
+                ipt = context.getLocalProfile().getIpt(processor.getProcessorType().ipt());
             }
             int ips = 60 * ipt;
             int maxAllowedSteps = 5 * ipt;
@@ -230,7 +230,7 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
         assert context != null;
         AtomicBlock firstBlock = new AtomicBlock(start, findEndOfContext(context));
         firstBlock.steps = safetyMargin;
-        
+
         activeBlocks.clear();
         activeBlocks.add(firstBlock);
 

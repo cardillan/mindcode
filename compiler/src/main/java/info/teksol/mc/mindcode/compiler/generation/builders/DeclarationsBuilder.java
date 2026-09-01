@@ -18,7 +18,11 @@ import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.opcodes.KeywordCategory;
+import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.DirectiveProcessor;
 import info.teksol.mc.profile.SyntacticMode;
+import info.teksol.mc.profile.options.CompilerOptionFactory;
+import info.teksol.mc.profile.options.CompilerOptions;
 import info.teksol.mc.profile.options.Target;
 import info.teksol.mc.util.StringUtils;
 import info.teksol.mc.util.Tuple2;
@@ -89,9 +93,24 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
         return LogicVoid.VOID;
     }
 
+    private final DirectiveProcessor directiveProcessor = new DirectiveProcessor(_ -> {});
+    private final CompilerProfile dummyProfile = CompilerProfile.noOptimizations(false, false);
+
     @Override
-    public ValueStore visitDirectiveSet(AstDirectiveSet node) {
-        // Ignored - processed elsewhere
+    public ValueStore visitDirectiveSet(AstDirectiveSet directive) {
+        String directiveText = directive.getOption().getText();
+        Enum<?> optionEnum = CompilerOptionFactory.DIRECTIVE_OPTION_MAP.get(directiveText);
+
+        if ((optionEnum == CompilerOptions.IPT || optionEnum == CompilerOptions.SETRATE)
+                && directiveProcessor.processDirective(dummyProfile, directive)) {
+            // Checking these options here, when the processor type has already been set.
+            int ipt = dummyProfile.getIntValue(optionEnum);
+            if (ipt > globalProfile.getProcessorType().maxIpt()) {
+                warn(directive, WARN.MAXIMUM_IPT_EXCEEDED, ipt, globalProfile.getProcessorType().maxIpt());
+            }
+        }
+
+        // The rest is ignored - processed by the DirectivePreprocessor
         return LogicVoid.VOID;
     }
 

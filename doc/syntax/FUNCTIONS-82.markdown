@@ -41,6 +41,7 @@ generated code use mlog opcodes.
   * [Instruction `Unit Control`](#instruction-unit-control)
   * [Instruction `Unit Radar`](#instruction-unit-radar)
   * [Instruction `Unit Locate`](#instruction-unit-locate)
+  * [Instruction `Set Rate`](#instruction-set-rate)
 * World Processor
   * [Instruction `Query`](#instruction-query)
   * [Instruction `Get Block`](#instruction-get-block)
@@ -56,7 +57,6 @@ generated code use mlog opcodes.
   * [Instruction `Cutscene`](#instruction-cutscene)
   * [Instruction `Effect`](#instruction-effect)
   * [Instruction `Explosion`](#instruction-explosion)
-  * [Instruction `Set Rate`](#instruction-set-rate)
   * [Instruction `Fetch`](#instruction-fetch)
   * [Instruction `Sync`](#instruction-sync)
   * [Instruction `Get Flag`](#instruction-get-flag)
@@ -389,6 +389,17 @@ Requires a bound unit.
 |`building = ulocate(:spawn, out outx, out outy, out found)`|`ulocate spawn core true @copper outx outy found building`|
 |`building = ulocate(:damaged, out outx, out outy, out found)`|`ulocate damaged core true @copper outx outy found building`|
 
+## Instruction `Set Rate`
+
+Set processor execution speed in instructions/tick.
+Cannot surpass maximum execution speed.
+
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#set-rate)
+
+|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|-------------|---------------------|
+|`setrate(ipt)`|`setrate ipt`|
+
 # World Processor
 
 These instructions are only available to the World Processor,
@@ -514,6 +525,7 @@ Set a game rule.
 |`setrule(:lighting, value)`|`setrule lighting value 0 0 0 0`|
 |`setrule(:canGameOver, value)`|`setrule canGameOver value 0 0 0 0`|
 |`setrule(:ambientLight, value)`|`setrule ambientLight value 0 0 0 0`|
+|`setrule(:unitLight, value)`|`setrule unitLight value 0 0 0 0`|
 |`setrule(:solarMultiplier, value)`|`setrule solarMultiplier value 0 0 0 0`|
 |`setrule(:dragMultiplier, value)`|`setrule dragMultiplier value 0 0 0 0`|
 |`setrule(:ban, value)`|`setrule ban value 0 0 0 0`|
@@ -615,16 +627,6 @@ Create an explosion at a location.
 |-------------|---------------------|
 |`explosion(team, x, y, radius, damage, air, ground, pierce, effect)`|`explosion team x y radius damage air ground pierce effect`|
 
-## Instruction `Set Rate`
-
-Set processor execution speed in instructions/tick.
-
-[Yruei's documentation](https://yrueii.github.io/MlogDocs/#set-rate)
-
-|Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
-|-------------|---------------------|
-|`setrate(ipt)`|`setrate ipt`|
-
 ## Instruction `Fetch`
 
 Lookup units, cores, players or buildings by index.
@@ -722,6 +724,7 @@ The ID used must be the same as in the Make Marker instruction.
 |`setmarker(:remove, id)`|`setmarker remove id 0 0 0`|
 |`setmarker(:world, id, boolean)`|`setmarker world id boolean 0 0`|
 |`setmarker(:minimap, id, boolean)`|`setmarker minimap id boolean 0 0`|
+|`setmarker(:light, id, boolean)`|`setmarker light id boolean 0 0`|
 |`setmarker(:autoscale, id, boolean)`|`setmarker autoscale id boolean 0 0`|
 |`setmarker(:pos, id, x, y)`|`setmarker pos id x y 0`|
 |`setmarker(:endPos, id, x, y)`|`setmarker endPos id x y 0`|
@@ -755,7 +758,7 @@ Markers currently limited to 20,000 per world.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`makemarker(marker, id, x, y, replace)`<br/>`marker` - one of `:line`, `:point`, `:quad`, `:shape`, `:shapeText`, `:text`, `:texture`.|`makemarker marker id x y replace`|
+|`makemarker(marker, id, x, y, replace)`<br/>`marker` - one of `:light`, `:line`, `:point`, `:quad`, `:shape`, `:shapeText`, `:text`, `:texture`.|`makemarker marker id x y replace`|
 
 ## Instruction `Locale Print`
 

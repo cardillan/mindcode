@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Improved the implementation of a return from a recursive function call using an external stack.
 * Identical constant arrays declared multiple times (either in the local or global scope) are now compiled into a common data structure. 
 * Improved code folding in the web app's source code editor.
+* The target `8.2` has been updated to be compatible with build 27723. This includes the `setrate` instruction being available to non-privileged processors as well.
 
 ### Removed
 

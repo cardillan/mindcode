@@ -57,6 +57,12 @@ public interface LocalCompilerProfile {
         return isDefault(CompilerOptions.IPT) ? getIntValue(CompilerOptions.SETRATE) : getIntValue(CompilerOptions.IPT);
     }
 
+    default int getIpt(int defaultIpt) {
+        return isSpecified(CompilerOptions.IPT) ? getIntValue(CompilerOptions.IPT)
+                : isSpecified(CompilerOptions.SETRATE)? getIntValue(CompilerOptions.SETRATE)
+                : defaultIpt;
+    }
+
     default Remarks getRemarks() {
         return getEnumValue(CompilerOptions.REMARKS);
     }

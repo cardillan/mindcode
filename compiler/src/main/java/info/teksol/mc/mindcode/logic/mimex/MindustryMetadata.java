@@ -315,7 +315,7 @@ public class MindustryMetadata {
 
     public Set<String> getLAccessNames() {
         return cacheInstance(lAccessNames, () -> getLAccessMap().values().stream()
-                .filter(LAccess::sensor)
+                .filter(LAccess::privileged)
                 .map(LAccess::name)
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
@@ -510,7 +510,7 @@ public class MindustryMetadata {
         return getItemMap().values();
     }
     //</editor-fold>
-    
+
     //<editor-fold desc="Liquids">
     public int getLiquidCount() {
         return getLiquidLogicIdMap().size();
@@ -645,6 +645,14 @@ public class MindustryMetadata {
                 throw new IllegalStateException("Cannot locate column " + columnName + " in " + lines.getFirst());
             }
             return index;
+        }
+
+        protected int findColumn(String... columnNames) {
+            for (String columnName : columnNames) {
+                int index = header.indexOf(columnName);
+                if (index >= 0) return index;
+            }
+            throw new IllegalStateException("Cannot locate any of the columns " + Arrays.toString(columnNames) + " in " + lines.getFirst());
         }
     }
 
@@ -798,7 +806,7 @@ public class MindustryMetadata {
     }
 
     private class LAccessReader extends AbstractNamedContentReader<LAccess> {
-        private int name, sensor, control, setprop, parameters;
+        private int name, sensor, privileged, control, setprop, parameters;
 
         public LAccessReader(String resource) {
             super(resource);
@@ -808,6 +816,7 @@ public class MindustryMetadata {
         protected void parseHeader() {
             name = findColumn("name");
             sensor = findColumn("sensor");
+            privileged = findColumn("privileged", "sensor");
             control = findColumn("control");
             setprop = findColumn("setprop");
             parameters = findColumn("parameters");
@@ -819,6 +828,7 @@ public class MindustryMetadata {
                     columns[name],
                     "@" + columns[name],
                     Boolean.parseBoolean(columns[sensor]),
+                    Boolean.parseBoolean(columns[privileged]),
                     Boolean.parseBoolean(columns[control]),
                     Boolean.parseBoolean(columns[setprop]),
                     columns[parameters]);
