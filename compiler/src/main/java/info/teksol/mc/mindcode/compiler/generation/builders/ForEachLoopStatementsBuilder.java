@@ -45,7 +45,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
     }
 
     private int computeRangedForLoopIterations(AstForEachLoopStatement node) {
-        int[] sizes = node.getIteratorGroups().stream().mapToInt(this::iteratorGroupFixedRange).toArray();
+        int[] sizes = node.getIteratorGroups().stream().mapToInt(this::iteratorGroupFixedRange).distinct().toArray();
         return sizes.length == 1 ? sizes[0] : 0;
     }
 
@@ -58,7 +58,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         if (group.getValues().getExpressions().getFirst() instanceof AstIdentifier id) {
             ValueStore expression = variables.findVariable(id.getName(), true);
             if (expression instanceof ArrayStore arrayStore &&
-                    (arrayStore.hasArrayOffset() || arrayStore.getSize() >= group.getProfile().getArrayIterationThreshold())) {
+                    (!arrayStore.optimizeElementAccess() || arrayStore.getSize() >= group.getProfile().getArrayIterationThreshold())) {
                 return arrayStore.getSize();
             }
         }
@@ -83,9 +83,14 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             arrays.add((ArrayStore) Objects.requireNonNull(variables.findVariable(id.getName(), true)));
         });
 
-        LogicNumber upperBound = LogicNumber.create(iterations);
+        int offset = arrays.stream().mapToInt(ArrayStore::getStartOffset).min().orElse(0);
+        if (offset != 0) {
+            arrays.replaceAll(array -> array.offset(-offset));
+        }
+
+        LogicNumber upperBound = LogicNumber.create(iterations + offset);
         LogicVariable loopControlVariable = assembler.nextTemp();
-        loopControlVariable.setValue(assembler, LogicNumber.ZERO);
+        loopControlVariable.setValue(assembler, LogicNumber.create(offset));
 
         final LogicLabel beginLabel = assembler.nextLabel();
         LoopLabels loopLabels = enterLoop(node, "for");

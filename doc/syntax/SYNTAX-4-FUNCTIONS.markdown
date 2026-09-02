@@ -779,7 +779,7 @@ allocate stack in bank1[256...512];
 > When no range is given (e.g., `allocate stack in cell1`), full range of the given memory block is assumed.
 
 > [!WARN]
-> External stack can only store numerical values. When a recursive function needs to store non-numerical values on the stack, the program will not execute correctly. At this point, Mindcode is not able to detect and report this situation.
+> In older versions of Mindustry, external stack can only store numerical values. When a recursive function needs to store non-numerical values on the stack, the program will not execute correctly. At this point, Mindcode is not able to detect and report this situation.
 >
 > Note that parameters that are not modified by the function and are passed unchanged to the recursive calls are not stored on the stack.
 
@@ -871,4 +871,4 @@ It is not possible to call a Logic function if a matching user-defined function 
 
 ---
 
-[&#xAB; Previous: Control Flow Statements](SYNTAX-3-STATEMENTS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Logic functions &#xBB;](FUNCTIONS.markdown)
+[&#xAB; Previous: Control flow statements](SYNTAX-3-STATEMENTS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Logic functions &#xBB;](FUNCTIONS.markdown)

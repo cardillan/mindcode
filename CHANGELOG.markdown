@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## 3.18.0 – 2026-09-02
 
 > [!NOTE]
-> The command-line tool now requires Java 25 or later. See [Setting up the command-line compiler](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler).
+> The command-line compiler now requires Java 25 or later. See [Setting up the command-line compiler](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler).
 
 ### Fixed
 
@@ -27,16 +27,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for compile-time evaluation of the `min` and `max` varargs functions, and the `ascii`, `char` and `strlen` built-in functions. These functions now can be used in constant expressions.
 * Added support for constant parameters of inline functions (declared using `const`). Only compile-time constants can be passed into these parameters, and they can be used within the function as constant expressions (allowing compile-time evaluation).
 * Added new system library `bigarray`. The library provides code for storage processors backing large arrays planned in a future release.
-* Added new compiler option [`array-iteration-threshold` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-array-iteration-threshold). Array assignments and list iteration loops involving arrays larger than or equal to the specified value are implemented using ranged loops and index-based array access.
+* Added new compiler option [`array-iteration-threshold` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-array-iteration-threshold). Array assignments and some list iteration loops involving arrays larger than or equal to the specified value are implemented using ranged loops and index-based array access.
 * Added validation of mlog variable names supplied by the `mlog` modifier.
 
 ### Changed
 
-* **Breaking:** the `return-optimization` compiler directive and command-line parameter have been renamed to `recursive-optimization`, as part of renaming _Return Optimization_ to _Recursive Optimization_.
+* **Breaking:** the `return-optimization` compiler directive and command-line parameter have been renamed to `recursive-optimization`, as part of renaming _Return Optimization_ to [_Recursive Optimization_](/doc/syntax/optimizations/RECURSIVE-OPTIMIZATION.markdown).
 * Improved the implementation of a return from a recursive function call using an external stack.
+* List iteration loops may be [converted to range iteration loops](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#conversion-to-range-iteration-loops) to save instruction space or generate faster code. 
 * Identical constant arrays declared multiple times (either in the local or global scope) are now compiled into a common data structure. 
 * Improved code folding in the web app's source code editor.
-* The target `8.2` has been updated to be compatible with build 27723. This includes the `setrate` instruction being available to non-privileged processors as well.
+* The target `8.2` has been updated to be compatible with build 27727. This includes the `setrate` instruction being available to non-privileged processors as well.
 
 ### Removed
 

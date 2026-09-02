@@ -590,4 +590,4 @@ Not strictly equal to zero
 
 ---
 
-[&#xAB; Previous: Variables](SYNTAX-1-VARIABLES.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Control Flow Statements &#xBB;](SYNTAX-3-STATEMENTS.markdown)
+[&#xAB; Previous: Variables](SYNTAX-1-VARIABLES.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Control flow statements &#xBB;](SYNTAX-3-STATEMENTS.markdown)

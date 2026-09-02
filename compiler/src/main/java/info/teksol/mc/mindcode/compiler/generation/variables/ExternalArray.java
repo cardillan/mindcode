@@ -15,16 +15,14 @@ import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
 @NullMarked
 public class ExternalArray extends AbstractArrayStore {
     private final LogicVariable memory;
-    private final int baseIndex;
-    private final LogicNumber baseIndexNumber;
+    private final LogicNumber startOffsetNumber;
     private final LogicArray logicArray;
 
-    public ExternalArray(SourcePosition sourcePosition, String name, LogicVariable memory, int baseIndex,
+    public ExternalArray(SourcePosition sourcePosition, String name, LogicVariable memory, int startOffset,
             @Nullable ArrayStore masterArray, List<ValueStore> elements) {
-        super(sourcePosition, name, elements.size(), masterArray, elements);
+        super(sourcePosition, name, startOffset, elements.size(), masterArray, elements);
         this.memory = memory;
-        this.baseIndex = baseIndex;
-        this.baseIndexNumber = LogicNumber.create(baseIndex);
+        this.startOffsetNumber = LogicNumber.create(startOffset);
         logicArray = LogicArray.create(this);
     }
 
@@ -49,11 +47,6 @@ public class ExternalArray extends AbstractArrayStore {
     }
 
     @Override
-    public int getStartOffset() {
-        return baseIndex;
-    }
-
-    @Override
     public @Nullable MindcodeFunction getFunction() {
         return null;
     }
@@ -74,7 +67,12 @@ public class ExternalArray extends AbstractArrayStore {
 
     @Override
     public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
-        return new ExternalArray(sourcePosition, name, memory, baseIndex + start, getMasterArray(), elements.subList(start, end));
+        return new ExternalArray(sourcePosition, name, memory, startOffset + start, getMasterArray(), elements.subList(start, end));
+    }
+
+    @Override
+    public ArrayStore offset(int offset) {
+        return new ExternalArray(sourcePosition, name, memory, startOffset + offset, getMasterArray(), elements);
     }
 
     @Override
@@ -89,19 +87,19 @@ public class ExternalArray extends AbstractArrayStore {
 
     @Override
     public ValueStore getElement(ContextfulInstructionCreator creator, SourcePosition sourcePosition, ValueStore index) {
-        if (baseIndex == 0) {
+        if (startOffset == 0) {
             LogicValue fixedIndex = creator.defensiveCopy(index, TMP_VARIABLE);
             return new ExternalArrayElement(sourcePosition, fixedIndex, creator.nextTemp());
         } else {
             LogicVariable actualIndex = creator.nextTemp();
-            creator.createOp(Operation.ADD, actualIndex, index.getValue(creator), baseIndexNumber);
+            creator.createOp(Operation.ADD, actualIndex, index.getValue(creator), startOffsetNumber);
             return new ExternalArrayElement(sourcePosition, actualIndex, creator.nextTemp());
         }
     }
 
     @Override
     public ExternalArray withSourcePosition(SourcePosition sourcePosition) {
-        return new ExternalArray(sourcePosition, name, memory, baseIndex, getMasterArray(), elements);
+        return new ExternalArray(sourcePosition, name, memory, startOffset, getMasterArray(), elements);
     }
 
     private class ExternalArrayElement implements ValueStore {

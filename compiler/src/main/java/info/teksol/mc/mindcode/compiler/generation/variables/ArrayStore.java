@@ -47,6 +47,8 @@ public interface ArrayStore extends ValueStore {
 
     ArrayStore subarray(SourcePosition sourcePosition, int start, int end);
 
+    ArrayStore offset(int offset);
+
     ArrayStore nonrecursive();
 
     ValueStore getElement(ContextfulInstructionCreator creator, int index);

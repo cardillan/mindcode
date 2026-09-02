@@ -22,7 +22,6 @@ public class InternalArray extends AbstractArrayStore {
     private final LogicKeyword lookupType;
     private final ArrayType arrayType;
     private final LogicValue arrayOffset;
-    private final int startOffset;
     private final boolean declaredRemote;
     private final @Nullable MindcodeFunction function;
     private final @Nullable LogicVariable processor;      // Actual processor in case of shared arrays
@@ -31,14 +30,13 @@ public class InternalArray extends AbstractArrayStore {
     private InternalArray(SourcePosition sourcePosition, LogicKeyword lookupType, String name, boolean declaredRemote,
             @Nullable MindcodeFunction function, @Nullable LogicVariable processor, LogicValue arrayOffset, int startOffset, int size,
             List<ValueStore> elements, @Nullable ArrayStore masterArray, ArrayType arrayType, boolean subarray) {
-        super(sourcePosition, name, size, masterArray, elements);
+        super(sourcePosition, name, startOffset, size, masterArray, elements);
         this.lookupType = lookupType;
         this.processor = processor;
         this.function = function;
         this.declaredRemote = declaredRemote;
         this.arrayType = arrayType;
         this.arrayOffset = arrayOffset;
-        this.startOffset = startOffset;
         logicArray = subarray ? LogicArray.create(this, startOffset, startOffset + elements.size()) : LogicArray.create(this);
     }
 
@@ -123,11 +121,6 @@ public class InternalArray extends AbstractArrayStore {
     }
 
     @Override
-    public int getStartOffset() {
-        return startOffset;
-    }
-
-    @Override
     public @Nullable MindcodeFunction getFunction() {
         return function;
     }
@@ -146,6 +139,12 @@ public class InternalArray extends AbstractArrayStore {
     public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
         return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset, startOffset + start,
                 end - start, elements.subList(start, end), getMasterArray(), arrayType, true);
+    }
+
+    @Override
+    public ArrayStore offset(int offset) {
+        return new InternalArray(sourcePosition, lookupType, name, declaredRemote, function, processor, arrayOffset, startOffset + offset,
+                size, elements, getMasterArray(), arrayType, getMasterArray().getSize() != getSize());
     }
 
     @Override

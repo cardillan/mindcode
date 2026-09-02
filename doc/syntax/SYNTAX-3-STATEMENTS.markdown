@@ -1,18 +1,18 @@
-# Control Flow Statements
+# Control flow statements
 
 Control flow statements are statements that alter the flow of code. They either branch, i.e., execute one of several possible alternatives, or they loop, i.e., repeat part of the code one or more times.
 
 # Loops
 
 There are several types of loops:
-* [while loops](#while-loops)
-* [do-while loops](#do-while-loops)
-* [range iteration loops](#range-iteration-loops)
-* [list iteration loops](#list-iteration-loops)
+* [While loops](#while-loops)
+* [Do-while loops](#do-while-loops)
+* [Range iteration loops](#range-iteration-loops)
+* [List iteration loops](#list-iteration-loops)
 * [C-style loops](#c-style-loops)
 * [Infinite loops](#infinite-loops)
 
-## While Loops
+## While loops
 
 The `while` loop gets repeated as long as the condition remains true:
 
@@ -22,7 +22,7 @@ while @unit == null do
 end;
 ```
 
-## Do-While Loops
+## Do-while loops
 
 Similar to while loops, except the condition is placed at the end of the loop. Do-while loops therefore always execute at least once:
 
@@ -32,7 +32,7 @@ do
 while @unit == null;
 ```
 
-## Range Iteration Loops
+## Range iteration loops
 
 Loop over a range of values, in an inclusive or exclusive fashion. The `..` range operator indicates an inclusive range:
 
@@ -96,7 +96,7 @@ The `descending` keyword just reverses the order of loop iterations. The range s
 > [!IMPORTANT]
 > Currently, range iteration loops can only increment/decrement the value by 1. If the start value is greater than the end value, the loop body won't get executed at all, both in ascending and descending iteration order.
 
-## List Iteration Loops
+## List iteration loops
 
 Loop over a fixed collection of values or expressions:
 
@@ -372,21 +372,31 @@ inline void reverse(array...)
 end;
 ```
 
-### Iterating over large arrays
+### Conversion to range iteration loops
 
-When iterating over large arrays, Mindcode compiles the code as an indexed loop to save instruction space. For example, the following code:
+A range iteration loop may be preferable to a list iteration loop in these cases:
+
+* The array is so large that a list-iteration loop would take up a lot of instruction space. The [`array-iteration-threshold` compiler option](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold) specifies the minimum array size for which range iteration loops may be used. 
+* The array elements can't be accessed directly (i.e., the array is an external array or a local array in a recursive function), and index-based access needs to be used anyway.
+
+A list iteration loop can be converted to a range iteration loop when iterating over an entire array using a single iterator. When several iterators are used, each of them must iterate over an entire array, and all array sizes must be the same. Using a subarray, or iteration over an array plus some additional values, prevents using the range iteration loop.
+
+Example:
 
 ```Mindcode
 #set loop-unrolling = none;     // Prevent loop unrolling from removing the compiler-generated loop
 
-var array[30];
+external(cell1) var a[20], b[20];
 
-sum = 0;
-for var a in array do
-    sum += a;
+begin
+    var sum = 0;
+    for var x in a; var out y in b do
+        sum += x;
+        y = sum;
+    end;
+
+    print(sum);
 end;
-
-print(sum);
 ```
 
 compiles into:
@@ -394,24 +404,16 @@ compiles into:
 ```mlog
 set :sum 0
 set *tmp0 0
-lookup unit *tmp1 *tmp0
-sensor .array*elem *tmp1 @name
-read :a @this .array*elem
-op add :sum :sum :a
+read :x cell1 *tmp0
+op add *tmp1 *tmp0 20
+op add :sum :sum :x
+write :sum cell1 *tmp1
 op add *tmp0 *tmp0 1
-jump 2 lessThan *tmp0 30
+jump 2 lessThan *tmp0 20
 print :sum
-end
-draw triangle dagger mace fortress scepter reign nova
-draw triangle pulsar quasar vela corvus crawler atrax
-draw triangle spiroct arkyid toxopid flare horizon zenith
-draw triangle antumbra eclipse mono poly mega quad
-draw triangle oct risso minke bryde sei omura
 ```
 
-Indexed loops can only be used when iterating over an entire array using a single iterator, or several arrays in parallel. No subarray syntax is supported. The [`array-iteration-threshold` compiler option](SYNTAX-5-OTHER.markdown#option-array-iteration-threshold) specifies the minimum array size for which indexed loops may be used.
-
-## C-Style Loops
+## C-style loops
 
 The syntax is similar to C's, except for the absence of parenthesis and the `do` keyword:
 
@@ -428,7 +430,7 @@ for var x = SW_X, y = SW_Y; x < NE_X && j < NE_Y ; x += dx do
 end;
 ```
 
-## Infinite Loops
+## Infinite loops
 
 It is possible to easily create infinite loops using the `loop` keyword. The main advantage is that the infinite loop can be used in the global scope even with strict syntax. This supports easy creation of programs that have an initialization part and a main part which loops indefinitely, which is often the case in mlog programs:
 
@@ -492,7 +494,7 @@ label_0:
 
 Mindcode offers three types of conditionals: if/else expressions, the ternary operator, and case/when expressions. Ternary operator was described in the [previous chapter](SYNTAX-2-EXPRESSIONS.markdown#ternary-operator).
 
-## If/Else Expressions
+## If/else expressions
 
 In Mindcode, `if` is an expression, meaning it returns a value. The returned value is the last value of the branch. For example:
 
@@ -532,7 +534,7 @@ else
 end;
 ```
 
-## Case Expressions
+## Case expressions
 
 Case expression is another way of writing conditionals. Use case expression when you need to test a value against multiple different alternatives:
 
