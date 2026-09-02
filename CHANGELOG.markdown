@@ -7,7 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## 3.18.0 – 2026-09-02
 
 > [!NOTE]
-> The bleeding edge version of Mindustry now supports storing objects in memory blocks. No change is required in the compiler to use the feature. The emulator has been updated to support storing objects in memory blocks as well. 
+> The bleeding edge version of Mindustry now supports storing objects in memory blocks. No change is required in the compiler to use the feature. The emulator has been updated to support storing objects in memory blocks as well.
+> Currently, the documentation still states that memory blocks cannot store objects, which is true for the last official Mindustry release. The documentation will be properly updated when an official Mindustry release containing this change is made public.    
 
 > [!NOTE]
 > The command-line compiler now requires Java 25 or later. See [Setting up the command-line compiler](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler).
