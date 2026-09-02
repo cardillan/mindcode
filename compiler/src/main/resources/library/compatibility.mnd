@@ -53,8 +53,10 @@ inline void runCompatibilityTest()
         _compatibilityTest7();
     elsif @@MINDUSTRY_VERSION == "v149" then
         _compatibilityTest80();
-    else
+    elsif @@MINDUSTRY_VERSION == "v159.7" then
         _compatibilityTest81();
+    else
+        _compatibilityTest82();
     end;
 end;
 
@@ -3582,6 +3584,8 @@ inline void _compatibilityTest82()
         select e1 equal id 259 e1 "\n@tile-logic-display"
         sensor id @large-canvas @id
         select e1 equal id 260 e1 "\n@large-canvas"
+        sensor id @target-dummy @id
+        select e1 equal id 261 e1 "\n@target-dummy"
         sensor id @dagger @id
         select e1 equal id 0 e1 "\n@dagger"
         sensor id @mace @id
@@ -3751,7 +3755,7 @@ inline void _compatibilityTest82()
         sensor id @arkycite @id
         select e1 equal id 10 e1 "\n@arkycite"
 
-        select e2 strictEqual @blockCount 261 e2 "\n@blockCount"
+        select e2 strictEqual @blockCount 262 e2 "\n@blockCount"
         select e2 strictEqual @itemCount 20 e2 "\n@itemCount"
         select e2 strictEqual @liquidCount 11 e2 "\n@liquidCount"
         select e2 strictEqual @sfx-click 34 e2 "\n@sfx-click"

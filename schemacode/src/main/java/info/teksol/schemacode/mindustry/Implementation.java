@@ -131,6 +131,7 @@ public enum Implementation {
     STORAGEBLOCK,
     SWITCHBLOCK(ConfigurationType.BOOLEAN),
     TALLBLOCK,
+    TARGETDUMMY,
     THERMALGENERATOR,
     THRUSTER,
     TILEABLELOGICDISPLAY,

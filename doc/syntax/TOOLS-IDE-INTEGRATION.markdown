@@ -6,7 +6,7 @@ Thanks to the command-line compiler, it is possible to use an integrated develop
 
 The [command line tool](TOOLS-CMDLINE.markdown) allows you to compile your files, including the option to copy the compiled code into the clipboard automatically or even to send it to Mindustry through the Mlog Watcher mod. The command line compiler can be set up in the following way:
 
-1. Download and install [Eclipse Temurin version 22](https://adoptium.net/temurin/releases/?version=22).
+1. Download and install [Eclipse Temurin version 25](https://adoptium.net/temurin/releases/?version=25).
 2. Download `mindcode.jar` from the [Releases page](https://github.com/cardillan/mindcode/releases) and place it in a directory on your computer.
 3. To run the command line compiler, use `java.exe -jar mindcode.jar <arguments>`. Provide full paths to the `java.exe` file from the Eclipse Temurin installation created in the first step, and to the `mindcode.jar` file downloaded in the second step. `<arguments>` are the command line arguments passed to the Mindcode compiler.
 

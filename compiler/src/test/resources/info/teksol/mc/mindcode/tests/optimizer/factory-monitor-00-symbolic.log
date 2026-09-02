@@ -20,14 +20,14 @@
 
 Pass 1: speed optimization selection (cost limit 638):
   * Full loop rotation at line 160:1                             size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
-  o Convert case at line 20:9 (segments: 13)                     size    +4, benefit     4748.6, efficiency   1187.141
-  o Convert case at line 20:9 (segments: 5, padded low)          size    +8, benefit     4753.4, efficiency    594.169
-  o Convert case at line 20:9 (segments: 1, padded low)          size  +137, benefit     4796.5, efficiency     35.011
+  o Convert case at line 20:9 (segments: 13)                     size    +4, benefit     4749.5, efficiency   1187.381
+  o Convert case at line 20:9 (segments: 5, padded low)          size    +8, benefit     4754.3, efficiency    594.287
+  o Convert case at line 20:9 (segments: 1, padded low)          size  +137, benefit     4799.6, efficiency     35.034
 
 Pass 1: speed optimization selection (cost limit 637):
-  o Convert case at line 20:9 (segments: 13)                     size    +4, benefit     4748.6, efficiency   1187.141
-  o Convert case at line 20:9 (segments: 5, padded low)          size    +8, benefit     4753.4, efficiency    594.169
-  * Convert case at line 20:9 (segments: 1, padded low)          size  +137, benefit     4796.5, efficiency     35.011 (+137 instructions)
+  o Convert case at line 20:9 (segments: 13)                     size    +4, benefit     4749.5, efficiency   1187.381
+  o Convert case at line 20:9 (segments: 5, padded low)          size    +8, benefit     4754.3, efficiency    594.287
+  * Convert case at line 20:9 (segments: 1, padded low)          size  +137, benefit     4799.6, efficiency     35.034 (+137 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  

@@ -89,6 +89,7 @@ Since linked blocks are present as special processor variables, Mindcode makes s
 * `drill`
 * `driver`
 * `duct`
+* `dummy`
 * `duo`
 * `electrolyzer`
 * `extractor`
@@ -1157,6 +1158,7 @@ The list of all existing icons is quite huge:
 * `BLOCK_TANK_RECONSTRUCTOR`
 * `BLOCK_TANK_REFABRICATOR`
 * `BLOCK_TAR`
+* `BLOCK_TARGET_DUMMY`
 * `BLOCK_TAU_MECH_PAD`
 * `BLOCK_TENDRILS`
 * `BLOCK_TETRATIVE_RECONSTRUCTOR`
@@ -1313,6 +1315,7 @@ The list of all existing icons is quite huge:
 * `UNIT_DAGGER`
 * `UNIT_DISRUPT`
 * `UNIT_DISRUPT_MISSILE`
+* `UNIT_DUMMY`
 * `UNIT_ECLIPSE`
 * `UNIT_EFFECT_DRONE`
 * `UNIT_ELUDE`

@@ -343,6 +343,7 @@ All supported block types are listed below.
 * `@shielded-wall`
 * `@surge-wall`
 * `@surge-wall-large`
+* `@target-dummy`
 * `@thorium-wall`
 * `@thorium-wall-large`
 * `@thruster`

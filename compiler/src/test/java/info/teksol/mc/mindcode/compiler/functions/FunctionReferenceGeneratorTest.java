@@ -246,6 +246,6 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
     }
 
     private static String yrueiDocsLink(Opcode opcode) {
-        return "https://yrueii.github.io/MlogDocs/#" + (RELEASED_OPCODES.contains(opcode) ? linkify(opcode) : "bleeding-edge");
+        return "https://yrueii.github.io/MlogDocs/#" + linkify(opcode);
     }
 }

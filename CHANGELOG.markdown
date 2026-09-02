@@ -4,7 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.18.0 – Unreleased
+## 3.18.0 – 2026-09-02
+
+> [!NOTE]
+> The command-line tool now requires Java 25 or later. See [Setting up the command-line compiler](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler).
 
 ### Fixed
 
@@ -20,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added tail call optimization to [Recursive Optimization](/doc/syntax/optimizations/RECURSIVE-OPTIMIZATION.markdown#tail-call-optimization).
 * Added an [internal stack implementation](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#internal-stack), which supports storing non-numerical values in parameters and variables of recursive functions without restrictions.
 * Added stack overflow runtime check for both internal and external stack, governed by the [`stack-overflow-checks` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-stack-overflow-checks).
-* Added support for declaring arrays as local variables in functions, including recursive ones.
+* Added support for declaring arrays as local variables in functions, including [recursive ones](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#arrays-in-recursive-functions).
 * Added support for compile-time evaluation of the `min` and `max` varargs functions, and the `ascii`, `char` and `strlen` built-in functions. These functions now can be used in constant expressions.
 * Added support for constant parameters of inline functions (declared using `const`). Only compile-time constants can be passed into these parameters, and they can be used within the function as constant expressions (allowing compile-time evaluation).
 * Added new system library `bigarray`. The library provides code for storage processors backing large arrays planned in a future release.

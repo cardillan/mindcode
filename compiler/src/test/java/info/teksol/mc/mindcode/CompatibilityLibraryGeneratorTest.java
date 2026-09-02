@@ -76,8 +76,10 @@ public class CompatibilityLibraryGeneratorTest {
                     _compatibilityTest7();
                 elsif @@MINDUSTRY_VERSION == "v149" then
                     _compatibilityTest80();
-                else
+                elsif @@MINDUSTRY_VERSION == "v159.7" then
                     _compatibilityTest81();
+                else
+                    _compatibilityTest82();
                 end;
             end;
             

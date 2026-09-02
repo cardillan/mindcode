@@ -51,6 +51,7 @@ The most important recent changes to Mindcode include:
   * [Array implementations](/doc/syntax/optimizations/ARRAY-OPTIMIZATION.markdown) using the Mindustry 8 Logic capabilities.
   * New string/character-based instructions and character literals.
 * Language/compiler features
+  * Support for declaring arrays in a local scope.
   * Recursive function inlining and tail call optimization.
   * Enhanced Schemacode support (block regions/block arrays, symbolic processor link names).
   * Short-circuit evaluation of boolean expressions.
@@ -89,7 +90,7 @@ The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), availabl
 
 To learn more about Mindustry Logic, you can find more information about it here:
 
-* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated July 2026)
+* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated September 2026)
 
 You can also get help on these Discord servers:
 

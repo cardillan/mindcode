@@ -38,7 +38,8 @@ public class CompatibilityLibraryTest extends AbstractProcessorTest {
     }
 
     private ProcessorVersion minimalCompatibleVersion(ProcessorVersion version) {
-        return version == V8C ? V8B : version;
+        //return version == V8C ? V8B : version;
+        return version;
     }
 
     String expectedOutput(ProcessorVersion compilerVersion, ProcessorVersion emulatorVersion) {
