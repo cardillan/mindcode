@@ -35,6 +35,8 @@ Changes intended for the next regular release.
 
 * **Doing**
 
+* Reuse array offset variable for same-sized arrays.
+
 * **Planned**
 
 * Add default/max IPT to mimex.

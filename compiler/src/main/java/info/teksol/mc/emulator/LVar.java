@@ -38,6 +38,12 @@ public class LVar implements MlogReadable, MlogWritable {
         return new LVar(name, true, privileged);
     }
 
+    public static LVar createNull() {
+        LVar result = new LVar("", false, false);
+        result.setobj(null);
+        return result;
+    }
+
     public LVar link(MindustryBuilding block) {
         isobj = true;
         objval = block;

@@ -68,12 +68,16 @@ public class LExecutor60 extends LExecutorBase {
             error(ERR_MEMORY_ACCESS, "Memory access out of bounds: index %d, memory size %d.",
                     index, memory.size());
             setVar(output, 0);
+        } else if (memoryObjects) {
+            copyVar(output, memory.read(index));
         } else {
-            setVar(output, memory.read(index));
+            setVar(output, memory.read(index).num());
         }
 
         return true;
     }
+
+    private final LVar accessVar = LVar.create("");
 
     protected boolean memoryWrite(LVar input, Object object, LVar address) {
         if (!(object instanceof MemoryBlock memory)) {
@@ -84,8 +88,13 @@ public class LExecutor60 extends LExecutorBase {
             error(ERR_NOT_A_NUMBER, "Invalid numeric value in write address '%s'.", address);
         }
 
-        if (input.isobj && input.objval != null) {
-            error(ERR_MEMORY_OBJECT, "Attempting to store an object in memory: %s.", input);
+        if (memoryObjects) {
+            accessVar.set(input);
+        } else {
+            accessVar.setnum(input.num());
+            if (input.isobj && input.objval != null) {
+                error(ERR_MEMORY_OBJECT, "Attempting to store an object in memory: %s.", input);
+            }
         }
 
         int index = address.numi();
@@ -93,7 +102,7 @@ public class LExecutor60 extends LExecutorBase {
             error(ERR_MEMORY_ACCESS, "Memory access out of bounds: index %d, memory size %d.",
                     index, memory.size());
         } else {
-            memory.write(index, input.num());
+            memory.write(index, accessVar);
         }
 
         return true;

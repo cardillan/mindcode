@@ -1,40 +1,61 @@
 package info.teksol.mc.emulator.blocks;
 
+import info.teksol.mc.emulator.LVar;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 
 @NullMarked
 public class MemoryBlock extends MindustryBuilding {
-    private final double[] memory;
+    private static final Object NUMERIC_VALUE = new Object();
+    private final double[] numVals;
+    private final @Nullable Object[] objVals;
+    private final LVar accessVar = LVar.create("");
 
     private MemoryBlock(String name, BlockType type, BlockPosition position, double[] array) {
         super(name, type, position);
-        memory = array;
+        numVals = array;
+        objVals = new Object[array.length];
+        Arrays.fill(objVals, NUMERIC_VALUE);
     }
 
     public MemoryBlock(String name, BlockType type, BlockPosition position, int size) {
         super(name, type, position);
-        memory = new double[size];
+        numVals = new double[size];
+        objVals = new Object[size];
+        Arrays.fill(objVals, NUMERIC_VALUE);
     }
 
     public int size() {
-        return memory.length;
+        return numVals.length;
     }
 
-    public double read(int index) {
-        return memory[checkIndex(index)];
+    public LVar read(int index) {
+        checkIndex(index);
+        if (objVals[index] == NUMERIC_VALUE) {
+            accessVar.setnum(numVals[index]);
+        } else {
+            accessVar.setobj(objVals[index]);
+        }
+        return accessVar;
     }
 
-    public void write(int index, double value) {
-        memory[checkIndex(index)] = value;
+    public void write(int index, LVar value) {
+        checkIndex(index);
+        if (value.isobj) {
+            objVals[index] = value.objval;
+        } else {
+            objVals[index] = NUMERIC_VALUE;
+            numVals[index] = value.numval;
+        }
     }
 
     private int checkIndex(int index) {
-        if (index < 0 || index >= memory.length) {
-            throw new ArrayIndexOutOfBoundsException(String.format("Memory access out of bounds: index %d, memory size %d.", index, memory.length));
+        if (index < 0 || index >= numVals.length) {
+            throw new ArrayIndexOutOfBoundsException(String.format("Memory access out of bounds: index %d, memory size %d.", index, numVals.length));
         }
         return index;
     }

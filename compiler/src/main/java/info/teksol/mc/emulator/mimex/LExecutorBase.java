@@ -21,6 +21,8 @@ import static info.teksol.mc.emulator.ExecutionFlag.*;
 
 @NullMarked
 public abstract class LExecutorBase implements LExecutor {
+    protected static final LVar nullValue = LVar.createNull();
+
     private static final int maxInstructionScale = 5;
     private static final int maxGraphicsBuffer = 256;
     private static final int maxDisplayBuffer = 1024;
@@ -30,6 +32,8 @@ public abstract class LExecutorBase implements LExecutor {
     protected final BasicEmulator emulator;
     protected final LogicBlock logicBlock;
     protected final EmulatorMessageHandler messageHandler;
+
+    protected final boolean memoryObjects;
 
     protected final List<LInstruction> instructions = new ArrayList<>();
     protected final Map<String, LVar> vars = new LinkedHashMap<>();
@@ -86,6 +90,8 @@ public abstract class LExecutorBase implements LExecutor {
         this.emulator = emulator;
         this.logicBlock = logicBlock;
         this.messageHandler = emulator.getMessageHandler();
+
+        this.memoryObjects = metadata.getProcessorVersion().atLeast(ProcessorVersion.V8C);
 
         int maxTextBuffer = metadata.getProcessorVersion() == ProcessorVersion.V6 ? 256 : 400;
         textBuffer = new TextBuffer(messageHandler, 10000, maxTextBuffer);
@@ -274,7 +280,7 @@ public abstract class LExecutorBase implements LExecutor {
         }
         return id;
     }
-    
+
     private String extractId(String text) {
         return Arrays.stream(text.split("\\n"))
                 .filter(s -> s.startsWith("id: ") || s.startsWith("name: "))

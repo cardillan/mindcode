@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## 3.18.0 – 2026-09-02
 
 > [!NOTE]
+> The bleeding edge version of Mindustry now supports storing objects in memory blocks. No change is required in the compiler to use the feature. The emulator has been updated to support storing objects in memory blocks as well. 
+
+> [!NOTE]
 > The command-line compiler now requires Java 25 or later. See [Setting up the command-line compiler](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler).
 
 ### Fixed
@@ -38,6 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Identical constant arrays declared multiple times (either in the local or global scope) are now compiled into a common data structure. 
 * Improved code folding in the web app's source code editor.
 * The target `8.2` has been updated to be compatible with build 27727. This includes the `setrate` instruction being available to non-privileged processors as well.
+* The processor emulator now supports storing objects in memory blocks in emulator target `8.2` or higher. 
 
 ### Removed
 
