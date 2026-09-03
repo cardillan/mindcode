@@ -6,47 +6,30 @@ A broad plan for the next few releases. Everything may change, though.
 
 See [changelog in the development branch](https://github.com/cardillan/mindcode/blob/devel/CHANGELOG.markdown) for a list of features ready for the upcoming release.
 
-## 3.18.x
+## 3.19.x
 
 Changes intended for the next regular release.
 
 **Done**
 
-* Make the compiler inline recursive functions that are called only once from another recursive function, when code generation is active.
-* Allow the optimizer to inline mutually recursive functions when called from another function (recursive or otherwise).
-  * For simply recursive functions, this would be a bit too complex and wouldn't achieve much: a stack frame might be saved, but at the cost of increase in the code size; internal stack will compete with the stack for space.
-* Allow declaring recursive function inline. All calls that can be inlined (i.e., all calls that aren't directly recursive) will be inlined by the compiler. Example:
-  * Functions `foo` -> `bar` -> `baz` -> `foo`. `foo` is called first.
-  * The first call to `foo` gets inlined, as well as `bar` and `baz` calls. The `foo` call from `baz` won't get inlined, because it is now directly recursive in `foo`.
-* Optimize tail-call recursion
-  * When a tail call is detected, an infinite loop is generated, and the last call including push/pop is eliminated. Argument assignments remain.
-* Internal stack
-* Migrate to the Heroku-26 stack (Java 25 required)
-* Remove deprecated features:
-  * Mlog keywords without the `:` prefix
-  * Using `remote` to mark variables/functions for export
-  * Modifier '%s' requires parentheses around its arguments
-* Local arrays
-* Check variable names specified using the `mlog` directive are valid mlog variable names (needsto use the acual parser implementation).
-* Support for `const` parameters in functions:
-  * Will be treated as constants inside inline functions.
-  * In other function calls, will make the parameter unmodifiable.
-  * Calls will not require the const modifier.
+* Add default/max IPT to mimex.
 
 * **Doing**
 
-* Reuse array offset variable for same-sized arrays.
+* If expression telescoping optimization
+* Large stack
 
 * **Planned**
 
-* Add default/max IPT to mimex.
-* Converting arrays to const arrays when possible
+* Support for mlogls directives
 * Automatically make global variables accessed by a background process volatile.
   * Might need a category for volatile, but removable variables.
-* Support for mlogls directives
-* Big arrays
+* Large arrays
+* Large heap
+* Array storage optimization: the compiler will be free to store the arrays either on the heap, or internally. The optimizer will look for the most efficient way to store the arrays. 
+* Reuse array offset variable for same-sized arrays.
+* Converting arrays to const arrays when possible
 * Button for copying code from the Mindcode panel in the web app
-* If expression telescoping optimization
 * Array code injection optimization (?)
 
 * **Quick ideas**
@@ -57,6 +40,7 @@ Changes intended for the next regular release.
 
 These are topics that I'm spending time thinking about. Some of these should appear in the next release after the upcoming one.
 
+* Big arrays
 * Detect unused variables/constants/functions from AST analysis and report them as warnings.
 * Modules/namespaces (see #149)
   * Implement public/private modifiers for variables, functions, and constants.

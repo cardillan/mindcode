@@ -37,6 +37,8 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
 
     ProcessorType getProcessorType();
 
+    int getMaxIpt();
+
     /// @return list of all opcode variants available to this instruction processor
     List<OpcodeVariant> getOpcodeVariants();
 

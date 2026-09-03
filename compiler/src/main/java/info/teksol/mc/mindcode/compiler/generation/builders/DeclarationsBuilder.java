@@ -105,8 +105,8 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
                 && directiveProcessor.processDirective(dummyProfile, directive)) {
             // Checking these options here, when the processor type has already been set.
             int ipt = dummyProfile.getIntValue(optionEnum);
-            if (ipt > globalProfile.getProcessorType().maxIpt()) {
-                warn(directive, WARN.MAXIMUM_IPT_EXCEEDED, ipt, globalProfile.getProcessorType().maxIpt());
+            if (ipt > processor.getMaxIpt()) {
+                warn(directive, WARN.MAXIMUM_IPT_EXCEEDED, ipt, processor.getMaxIpt());
             }
         }
 

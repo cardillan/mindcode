@@ -29,8 +29,8 @@ public class LogicBlock extends MindustryBuilding {
     }
 
     public static LogicBlock createProcessor(MindustryMetadata metadata, ProcessorType processor, BlockPosition position, String code) {
-        return new LogicBlock("processor", metadata.getExistingBlock(processor.emulatorTypeName()), position,
-                processor.ipt(), processor.privileged(), code);
+        BlockType blockType = metadata.getExistingBlock(processor.blockTypeName());
+        return new LogicBlock("processor", blockType, position, blockType.iptDefault(), processor.privileged(), code);
     }
 
     public static LogicBlock createMicroProcessor(MindustryMetadata metadata, BlockPosition position, String code) {

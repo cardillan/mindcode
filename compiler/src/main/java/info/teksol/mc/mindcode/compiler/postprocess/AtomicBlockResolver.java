@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorType;
 import info.teksol.mc.mindcode.logic.opcodes.WorldAction;
@@ -159,6 +160,8 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
                 throw new MindcodeInternalError("No 'wait' instruction found in atomic block.");
             }
 
+            BlockType processorType = Objects.requireNonNull(processor.getMetadata().getBlockByName(processor.getProcessorType().blockTypeName()));
+
             context = waitIx.getAstContext();
             if (processor.getProcessorType() == ProcessorType.WORLD_PROCESSOR) {
                 if (context.getLocalProfile().isDefault(CompilerOptions.IPT) && context.getGlobalProfile().isDefault(CompilerOptions.SETRATE)) {
@@ -166,7 +169,7 @@ public class AtomicBlockResolver extends CompilerMessageEmitter {
                 }
                 ipt = context.getLocalProfile().getIpt();
             } else {
-                ipt = context.getLocalProfile().getIpt(processor.getProcessorType().ipt());
+                ipt = context.getLocalProfile().getIpt(processorType.iptDefault());
             }
             int ips = 60 * ipt;
             int maxAllowedSteps = 5 * ipt;

@@ -151,6 +151,13 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
     }
 
     @Override
+    public int getMaxIpt() {
+        BlockType blockType = getMetadata().getBlockByName(processorType.blockTypeName());
+        return blockType == null ? 0
+                : processorType == ProcessorType.WORLD_PROCESSOR ? blockType.iptLimit() : blockType.iptDefault();
+    }
+
+    @Override
     public List<OpcodeVariant> getOpcodeVariants() {
         return opcodeVariants;
     }

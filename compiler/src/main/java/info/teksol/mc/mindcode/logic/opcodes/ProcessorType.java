@@ -6,24 +6,20 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public enum ProcessorType {
-    NO_PROCESSOR            (ProcessorVersion.V8A, "Micro Processor",  1,    1, true),
-    MICRO_PROCESSOR         (ProcessorVersion.V6,  "Micro Processor",  2,    2, false),
-    LOGIC_PROCESSOR         (ProcessorVersion.V6,  "Logic Processor",  8,    8, false),
-    HYPER_PROCESSOR         (ProcessorVersion.V6,  "Hyper Processor", 25,   25, false),
-    WORLD_PROCESSOR         (ProcessorVersion.V7,  "World processor",  8, 1000, true),
+    NO_PROCESSOR            (ProcessorVersion.V8A, "Micro Processor", true),
+    MICRO_PROCESSOR         (ProcessorVersion.V6,  "Micro Processor", false),
+    LOGIC_PROCESSOR         (ProcessorVersion.V6,  "Logic Processor", false),
+    HYPER_PROCESSOR         (ProcessorVersion.V6,  "Hyper Processor", false),
+    WORLD_PROCESSOR         (ProcessorVersion.V7,  "World processor", true),
     ;
 
     private final ProcessorVersion minimalVersion;
     private final String title;
-    private final int ipt;
-    private final int maxIpt;
     private final boolean privileged;
 
-    ProcessorType(ProcessorVersion minimalVersion, String title, int ipt, int maxIpt, boolean privileged) {
+    ProcessorType(ProcessorVersion minimalVersion, String title, boolean privileged) {
         this.minimalVersion = minimalVersion;
         this.title = title;
-        this.ipt = ipt;
-        this.maxIpt = maxIpt;
         this.privileged = privileged;
     }
 
@@ -37,14 +33,6 @@ public enum ProcessorType {
 
     public String getTitle() {
         return title;
-    }
-
-    public int ipt() {
-        return ipt;
-    }
-
-    public int maxIpt() {
-        return maxIpt;
     }
 
     public boolean privileged() {
@@ -61,7 +49,7 @@ public enum ProcessorType {
         };
     }
 
-    public String emulatorTypeName() {
+    public String blockTypeName() {
         return switch (this) {
             case NO_PROCESSOR -> "@world-processor";            // Due to compatibility with world-processor instructions
             case MICRO_PROCESSOR -> "@micro-processor";

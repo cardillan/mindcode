@@ -22,7 +22,10 @@ public record BlockType(
         float range,
         int maxNodes,
         boolean rotate,
-        List<String> unitPlans
+        List<String> unitPlans,
+        int iptDefault,
+        int iptLimit,
+        int instructionScale
 ) implements MindustryContent {
 
     @Override

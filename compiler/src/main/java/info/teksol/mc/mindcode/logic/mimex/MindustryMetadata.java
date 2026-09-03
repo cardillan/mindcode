@@ -736,7 +736,8 @@ public class MindustryMetadata {
     }
 
     private class BlockTypeReader extends AbstractNamedContentReader<BlockType> {
-        private int name, id, visibility, implementation, legacy, size, hasPower, configurable, category, range, maxNodes, rotate, unitPlans;
+        private int name, id, visibility, implementation, legacy, size, hasPower, configurable, category, range, maxNodes,
+                rotate, unitPlans, iptDefault, iptLimit, instructionScale;
 
         public BlockTypeReader(String resource) {
             super(resource);
@@ -757,6 +758,9 @@ public class MindustryMetadata {
             range = findColumn("range");
             rotate = findColumn("rotate");
             unitPlans = findColumn("unitPlans");
+            iptDefault = findColumn("iptDefault");
+            iptLimit = findColumn("iptLimit");
+            instructionScale = findColumn("instructionScale");
         }
 
         @Override
@@ -776,7 +780,11 @@ public class MindustryMetadata {
                     Float.parseFloat(columns[range]),
                     Integer.parseInt(columns[maxNodes]),
                     Boolean.parseBoolean(columns[rotate]),
-                    parseUnitPlans(columns[unitPlans]));
+                    parseUnitPlans(columns[unitPlans]),
+                    Integer.parseInt(columns[iptDefault]),
+                    Integer.parseInt(columns[iptLimit]),
+                    Integer.parseInt(columns[instructionScale])
+            );
         }
 
         private List<String> parseUnitPlans(String unitPlans) {
