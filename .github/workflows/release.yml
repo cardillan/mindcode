@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7.0.1
+      with:
+        submodules: 'recursive'
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: 25
+        distribution: temurin
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v7
+      with:
+        node-version: 24
+
+    - name: Start PostgreSQL on Ubuntu
+      run: |
+        sudo systemctl start postgresql.service
+        pg_isready
+
+    - name: Setup DB
+      run: |
+        sudo -u postgres psql --command="CREATE USER mindcode PASSWORD 'mindcode'"
+        sudo -u postgres createdb --owner=mindcode mindcode_test
+
+    - name: Configure test database
+      run: |
+        rm webapp/src/test/resources/application.properties
+        echo "spring.datasource.url=jdbc:postgresql://localhost:5432/mindcode_test" >> webapp/src/test/resources/application.properties
+        echo "spring.datasource.username=mindcode" >> webapp/src/test/resources/application.properties
+        echo "spring.datasource.password=mindcode" >> webapp/src/test/resources/application.properties
+
+    - name: Cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: maven-v1
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Upload release artifact
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh release upload "${{ github.event.release.tag_name }}" \
+          toolapp/target/mindcode.jar \
+          --clobber
