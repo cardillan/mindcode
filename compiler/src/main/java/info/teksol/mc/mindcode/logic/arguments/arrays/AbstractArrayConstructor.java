@@ -136,7 +136,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
         LogicInstruction instruction = processor.createAssertBounds(astContext, LogicKeyword.create("multiple"), LogicNumber.create(multiple),
                 LogicNumber.ZERO, Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ,
-                LogicNumber.create(max), LogicString.create(errorMessage));
+                LogicNumber.create(max), LogicString.createRaw(errorMessage));
         if (multiple == 1) {
             instruction.setNonNegativeInt(index);
         }

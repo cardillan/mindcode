@@ -1,4 +1,4 @@
-   492 instructions before optimizations.
+   489 instructions before optimizations.
     11 instructions eliminated by Temp Variables Elimination (7 iterations).
      2 instructions eliminated by Case Expression Optimization.
     48 instructions eliminated by Dead Code Elimination (6 iterations).
@@ -15,28 +15,28 @@
     19 instructions eliminated by Jump Straightening (2 passes, 8 iterations).
      5 instructions updated by Jump Threading.
     21 instructions eliminated by Unreachable Code Elimination (2 iterations).
-    14 instructions eliminated by Print Merging.
+    11 instructions eliminated by Print Merging.
    531 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 681):
+Pass 1: speed optimization selection (cost limit 684):
   * Partial loop rotation at line 58:1                           size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
     Unroll iteration loop at line 71:5                           size   +81, benefit     1575.0, efficiency     19.444
   o Fast-dispatch case at line 17:9                              size    -7, benefit     1875.0, efficiency   Infinity
   o Fast-dispatch case at line 165:5                             size    -9, benefit    70312.5, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 680):
+Pass 1: speed optimization selection (cost limit 683):
   * Unroll iteration loop at line 71:5                           size   +81, benefit     1575.0, efficiency     19.444 (-12 instructions)
   o Fast-dispatch case at line 17:9                              size    -7, benefit     1875.0, efficiency   Infinity
   o Fast-dispatch case at line 165:5                             size    -9, benefit    70312.5, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 692):
+Pass 1: speed optimization selection (cost limit 695):
   o Fast-dispatch case at line 17:9                              size    -7, benefit     1875.0, efficiency   Infinity
   * Fast-dispatch case at line 165:5                             size    -9, benefit    70312.5, efficiency   Infinity (-8 instructions)
 
-Pass 1: speed optimization selection (cost limit 700):
+Pass 1: speed optimization selection (cost limit 703):
   * Fast-dispatch case at line 17:9                              size    -7, benefit     1875.0, efficiency   Infinity (-5 instructions)
 
-Pass 2: speed optimization selection (cost limit 710):
+Pass 2: speed optimization selection (cost limit 713):
   * Unroll loop at line 152:5                                    size  +305, benefit   156250.0, efficiency    512.295 (+303 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
@@ -575,9 +575,9 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 ins
 -    * op floor *tmp151 *tmp150
 -    * set :elapsed *tmp151
 +  536 op floor :elapsed *tmp150
-   537 print "Storage Display"
-   538 print "\n"
-   539 print "Elapsed: "
+   537 print "Storage Display\nElapsed: "
+   538 print :elapsed
+   539 print " ms"
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-15 instructions):
  
@@ -1766,14 +1766,14 @@ Modifications by Partial loop rotation at line 58:1 (+1 instructions):
     74 jump *label21 notEqual *tmp13 0
     75 jump *label21 notEqual .LINKS @links
  
-   429 print "ms"
-   430 printflush message1
-   431 label *label20
+   426 print " ms"
+   427 printflush message1
+   428 label *label20
 -    * jump *label19 always
-+  432 sensor *tmp11 .CONTAINER @dead
-+  433 jump *label119 equal *tmp11 0
-   434 label *label21
-   435 end
++  429 sensor *tmp11 .CONTAINER @dead
++  430 jump *label119 equal *tmp11 0
+   431 label *label21
+   432 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -4877,13 +4877,13 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 
    684 op sub *tmp150 @time :start
    685 op floor :elapsed *tmp150
  
-   690 print " "
-   691 print "ms"
-   692 printflush message1
+   687 print :elapsed
+   688 print " ms"
+   689 printflush message1
 -    * label *label20
-   693 sensor *tmp11 .CONTAINER @dead
-   694 jump *label119 equal *tmp11 0
-   695 label *label21
+   690 sensor *tmp11 .CONTAINER @dead
+   691 jump *label119 equal *tmp11 0
+   692 label *label21
 
 Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-4 instructions):
  
@@ -5039,12 +5039,12 @@ Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-20 
    649 draw rect 109 0 176 176
    650 label *label112
  
-   662 printflush message1
-   663 sensor *tmp11 .CONTAINER @dead
-   664 jump *label119 equal *tmp11 0
+   659 printflush message1
+   660 sensor *tmp11 .CONTAINER @dead
+   661 jump *label119 equal *tmp11 0
 -    * end
 
-Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
+Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
  
      3 set .MESSAGE null
      4 set .DISPLAY null
@@ -5100,12 +5100,9 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
    624 drawflush display1
    625 op sub *tmp150 @time :start
    626 op floor :elapsed *tmp150
--    * print "Storage Display"
--    * print "\n"
--    * print "Elapsed: "
+-    * print "Storage Display\nElapsed: "
 -    * print :elapsed
--    * print " "
--    * print "ms"
+-    * print " ms"
 +  627 print "Storage Display\nElapsed: {0} ms"
 +  628 format :elapsed
    629 printflush message1

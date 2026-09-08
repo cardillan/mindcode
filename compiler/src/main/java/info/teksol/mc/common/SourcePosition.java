@@ -109,8 +109,8 @@ public record SourcePosition(InputFile inputFile,
         return inputFile.isLibrary();
     }
 
-    public SourcePosition withColumn(int column) {
-        return new SourcePosition(inputFile, line(), column);
+    public SourcePosition columnOffset(int offset) {
+        return new SourcePosition(inputFile, line(), column() + offset);
     }
 
     public SourcePosition nextLine() {

@@ -146,7 +146,7 @@ public class StackBuilder extends CompilerMessageEmitter {
                 case ASSERT -> creator.createError(message);
                 case MINIMAL, SIMPLE -> creator.createStop();
                 case DESCRIBED -> {
-                    creator.createPrint(LogicString.create(message));
+                    creator.createPrint(LogicString.createRaw(message));
                     creator.createStop();
                 }
             }

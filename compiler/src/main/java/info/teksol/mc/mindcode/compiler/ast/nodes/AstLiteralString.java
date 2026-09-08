@@ -10,6 +10,9 @@ public class AstLiteralString extends AstLiteral {
 
     public AstLiteralString(SourcePosition sourcePosition, String literal) {
         super(sourcePosition, literal, false);
+        if (!literal.isEmpty() && literal.charAt(0) == '"') {
+            throw new IllegalArgumentException("String literal value must not be enclosed in quotes.");
+        }
     }
 
     public String getValue() {

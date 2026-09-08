@@ -15,7 +15,7 @@ import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
-import info.teksol.mc.util.Utf8Utils;
+import info.teksol.mc.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -285,8 +285,8 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
         int firstKey = paddingLow ? 0 : param.caseExpression().firstKey();
         int lastKey = paddingHigh ? param.caseExpression().getTotalSize() - 1 : param.caseExpression().lastKey();
 
-        String encoded = Utf8Utils.encode(IntStream.rangeClosed(firstKey, lastKey).map(this::mapKeyToValue));
-        return LogicString.create(encoded);
+        String encoded = optimizationContext.getInstructionProcessor().encode(IntStream.rangeClosed(firstKey, lastKey).map(this::mapKeyToValue).toArray());
+        return LogicString.createEscaped(encoded);
     }
 
     private int mapKeyToValue(int key) {
@@ -337,7 +337,7 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
                     b.setIntegerValue(variable, Integer.MAX_VALUE);
                 }
             });
-            if (analyzer.getContentType() == null || analyzer.getRange() >= Utf8Utils.MAX_SAFE_RANGE - 2)
+            if (analyzer.getContentType() == null || analyzer.getRange() >= UtfUtils.MAX_SAFE_RANGE - 2)
                 return Optional.empty();
 
             Translation t = new Translation(variable, analyzer);
@@ -368,7 +368,7 @@ public class TranslateCaseOptimizationAction implements ConvertCaseOptimizationA
 
             t.outputOffset = analyzer.getValues().stream().allMatch(optimizationContext.getInstructionProcessor()::canEncode) ? 0
                     : analyzer.getMin() >= 0 && analyzer.getMax() < 60 ? '0'
-                    : Utf8Utils.SAFE_START - analyzer.getMin();
+                    : UtfUtils.SAFE_START - analyzer.getMin();
         }
 
         // We can pad if nulls can't appear in the padding, or nulls in output are already handled.

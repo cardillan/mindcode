@@ -1,4 +1,4 @@
-   248 instructions before optimizations.
+   247 instructions before optimizations.
      3 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instruction eliminated by Case Expression Optimization.
     12 instructions eliminated by Dead Code Elimination (5 iterations).
@@ -11,77 +11,77 @@
      7 instructions eliminated by Jump Straightening (5 iterations).
      7 instructions updated by Jump Threading.
      1 instruction eliminated by Unreachable Code Elimination (2 iterations).
-    94 instructions eliminated by Print Merging.
+    93 instructions eliminated by Print Merging.
    120 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 780):
+Pass 1: speed optimization selection (cost limit 781):
   * Fast-dispatch case at line 17:9                              size    -6, benefit       37.5, efficiency   Infinity (-5 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
-    27 sensor *tmp10 .BLOCK @type
-    28 print *tmp10
-    29 print " - "
+    26 sensor *tmp10 .BLOCK @type
+    27 print *tmp10
+    28 print " - "
 -    * set *tmp12 :page
 -    * jump *label9 equal *tmp12 1
-+   30 jump *label9 equal :page 1
-    31 jump *label8 always
-    32 label *label9
-    33 print "contents:"
++   29 jump *label9 equal :page 1
+    30 jump *label8 always
+    31 label *label9
+    32 print "contents:"
  
-    56 set *tmp11 *tmp18
-    57 jump *label7 always
-    58 label *label8
+    55 set *tmp11 *tmp18
+    56 jump *label7 always
+    57 label *label8
 -    * jump *label11 equal *tmp12 2
-+   59 jump *label11 equal :page 2
-    60 jump *label10 always
-    61 label *label11
-    62 print "power:"
++   58 jump *label11 equal :page 2
+    59 jump *label10 always
+    60 label *label11
+    61 print "power:"
  
-    92 set *tmp11 *tmp28
-    93 jump *label7 always
-    94 label *label10
+    91 set *tmp11 *tmp28
+    92 jump *label7 always
+    93 label *label10
 -    * jump *label13 equal *tmp12 3
-+   95 jump *label13 equal :page 3
-    96 jump *label12 always
-    97 label *label13
-    98 print "combat:"
++   94 jump *label13 equal :page 3
+    95 jump *label12 always
+    96 label *label13
+    97 print "combat:"
  
-   116 set *tmp11 *tmp32
-   117 jump *label7 always
-   118 label *label12
+   115 set *tmp11 *tmp32
+   116 jump *label7 always
+   117 label *label12
 -    * jump *label15 equal *tmp12 4
-+  119 jump *label15 equal :page 4
-   120 jump *label14 always
-   121 label *label15
-   122 print "status:"
++  118 jump *label15 equal :page 4
+   119 jump *label14 always
+   120 label *label15
+   121 print "status:"
  
-   144 set *tmp11 *tmp37
-   145 jump *label7 always
-   146 label *label14
+   143 set *tmp11 *tmp37
+   144 jump *label7 always
+   145 label *label14
 -    * jump *label17 equal *tmp12 5
-+  147 jump *label17 equal :page 5
-   148 jump *label16 always
-   149 label *label17
-   150 print "position:"
++  146 jump *label17 equal :page 5
+   147 jump *label16 always
+   148 label *label17
+   149 print "position:"
  
-   168 set *tmp11 *tmp41
-   169 jump *label7 always
-   170 label *label16
+   167 set *tmp11 *tmp41
+   168 jump *label7 always
+   169 label *label16
 -    * jump *label19 equal *tmp12 6
-+  171 jump *label19 equal :page 6
-   172 jump *label18 always
-   173 label *label19
-   174 print "unit:"
++  170 jump *label19 equal :page 6
+   171 jump *label18 always
+   172 label *label19
+   173 print "unit:"
  
-   220 set *tmp11 *tmp52
-   221 jump *label7 always
-   222 label *label18
+   219 set *tmp11 *tmp52
+   220 jump *label7 always
+   221 label *label18
 -    * jump *label21 equal *tmp12 7
-+  223 jump *label21 equal :page 7
-   224 jump *label20 always
-   225 label *label21
-   226 print "other:"
++  222 jump *label21 equal :page 7
+   223 jump *label20 always
+   224 label *label21
+   225 print "other:"
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
@@ -96,79 +96,79 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructi
     16 print "Property detector - page "
     17 print :page
  
-   252 label *label20
-   253 set *tmp11 null
-   254 label *label7
+   251 label *label20
+   252 set *tmp11 null
+   253 label *label7
 -    * set *tmp9 *tmp11
-   255 jump *label6 always
-   256 label *label5
-   257 print "No linked block found."
-   258 print "\n"
+   254 jump *label6 always
+   255 label *label5
+   256 print "No linked block found."
+   257 print "\n"
 -    * set *tmp9 "No linked block found."
-   259 label *label6
-   260 printflush message1
-   261 label *label1
+   258 label *label6
+   259 printflush message1
+   260 label *label1
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-8 instructions):
  
-    51 print "liquidCapacity: "
-    52 print *tmp18
-    53 print "\n"
+    50 print "liquidCapacity: "
+    51 print *tmp18
+    52 print "\n"
 -    * set *tmp11 *tmp18
-    54 jump *label7 always
-    55 label *label8
-    56 jump *label11 equal :page 2
+    53 jump *label7 always
+    54 label *label8
+    55 jump *label11 equal :page 2
  
-    86 print "powerNetOut: "
-    87 print *tmp28
-    88 print "\n"
+    85 print "powerNetOut: "
+    86 print *tmp28
+    87 print "\n"
 -    * set *tmp11 *tmp28
-    89 jump *label7 always
-    90 label *label10
-    91 jump *label13 equal :page 3
+    88 jump *label7 always
+    89 label *label10
+    90 jump *label13 equal :page 3
  
-   109 print "maxHealth: "
-   110 print *tmp32
-   111 print "\n"
+   108 print "maxHealth: "
+   109 print *tmp32
+   110 print "\n"
 -    * set *tmp11 *tmp32
-   112 jump *label7 always
-   113 label *label12
-   114 jump *label15 equal :page 4
+   111 jump *label7 always
+   112 label *label12
+   113 jump *label15 equal :page 4
  
-   136 print "range: "
-   137 print *tmp37
-   138 print "\n"
+   135 print "range: "
+   136 print *tmp37
+   137 print "\n"
 -    * set *tmp11 *tmp37
-   139 jump *label7 always
-   140 label *label14
-   141 jump *label17 equal :page 5
+   138 jump *label7 always
+   139 label *label14
+   140 jump *label17 equal :page 5
  
-   159 print "size: "
-   160 print *tmp41
-   161 print "\n"
+   158 print "size: "
+   159 print *tmp41
+   160 print "\n"
 -    * set *tmp11 *tmp41
-   162 jump *label7 always
-   163 label *label16
-   164 jump *label19 equal :page 6
+   161 jump *label7 always
+   162 label *label16
+   163 jump *label19 equal :page 6
  
-   210 print "controller: "
-   211 print *tmp52
-   212 print "\n"
+   209 print "controller: "
+   210 print *tmp52
+   211 print "\n"
 -    * set *tmp11 *tmp52
-   213 jump *label7 always
-   214 label *label18
-   215 jump *label21 equal :page 7
+   212 jump *label7 always
+   213 label *label18
+   214 jump *label21 equal :page 7
  
-   241 print "enabled: "
-   242 print *tmp58
-   243 print "\n"
+   240 print "enabled: "
+   241 print *tmp58
+   242 print "\n"
 -    * set *tmp11 *tmp58
-   244 jump *label7 always
-   245 label *label20
+   243 jump *label7 always
+   244 label *label20
 -    * set *tmp11 null
-   246 label *label7
-   247 jump *label6 always
-   248 label *label5
+   245 label *label7
+   246 jump *label6 always
+   247 label *label5
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
      0 set :page 0
@@ -200,87 +200,87 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 ins
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-7 instructions):
  
-    21 sensor *tmp10 .BLOCK @type
-    22 print *tmp10
-    23 print " - "
--    * jump *label9 equal :page 1
--    * jump *label8 always
-+   24 jump *label8 notEqual :page 1
-    25 label *label9
-    26 print "contents:"
-    27 print "\n"
- 
-    48 print "\n"
-    49 jump *label7 always
-    50 label *label8
--    * jump *label11 equal :page 2
--    * jump *label10 always
-+   51 jump *label10 notEqual :page 2
-    52 label *label11
-    53 print "power:"
-    54 print "\n"
- 
-    82 print "\n"
-    83 jump *label7 always
-    84 label *label10
--    * jump *label13 equal :page 3
--    * jump *label12 always
-+   85 jump *label12 notEqual :page 3
-    86 label *label13
-    87 print "combat:"
-    88 print "\n"
- 
-   104 print "\n"
-   105 jump *label7 always
-   106 label *label12
--    * jump *label15 equal :page 4
--    * jump *label14 always
-+  107 jump *label14 notEqual :page 4
-   108 label *label15
-   109 print "status:"
-   110 print "\n"
- 
-   130 print "\n"
-   131 jump *label7 always
-   132 label *label14
--    * jump *label17 equal :page 5
--    * jump *label16 always
-+  133 jump *label16 notEqual :page 5
-   134 label *label17
-   135 print "position:"
-   136 print "\n"
- 
-   152 print "\n"
-   153 jump *label7 always
-   154 label *label16
--    * jump *label19 equal :page 6
--    * jump *label18 always
-+  155 jump *label18 notEqual :page 6
-   156 label *label19
-   157 print "unit:"
-   158 print "\n"
- 
-   202 print "\n"
-   203 jump *label7 always
-   204 label *label18
--    * jump *label21 equal :page 7
--    * jump *label20 always
-+  205 jump *label20 notEqual :page 7
-   206 label *label21
-   207 print "other:"
-   208 print "\n"
-
-Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
- 
-    16 print "\"
-    17 print "n"
-    18 sensor *tmp7 .BLOCK @dead
--    * op strictEqual *tmp8 *tmp7 0
--    * jump *label5 equal *tmp8 false
-+   19 jump *label5 strictNotEqual *tmp7 0
     20 sensor *tmp10 .BLOCK @type
     21 print *tmp10
     22 print " - "
+-    * jump *label9 equal :page 1
+-    * jump *label8 always
++   23 jump *label8 notEqual :page 1
+    24 label *label9
+    25 print "contents:"
+    26 print "\n"
+ 
+    47 print "\n"
+    48 jump *label7 always
+    49 label *label8
+-    * jump *label11 equal :page 2
+-    * jump *label10 always
++   50 jump *label10 notEqual :page 2
+    51 label *label11
+    52 print "power:"
+    53 print "\n"
+ 
+    81 print "\n"
+    82 jump *label7 always
+    83 label *label10
+-    * jump *label13 equal :page 3
+-    * jump *label12 always
++   84 jump *label12 notEqual :page 3
+    85 label *label13
+    86 print "combat:"
+    87 print "\n"
+ 
+   103 print "\n"
+   104 jump *label7 always
+   105 label *label12
+-    * jump *label15 equal :page 4
+-    * jump *label14 always
++  106 jump *label14 notEqual :page 4
+   107 label *label15
+   108 print "status:"
+   109 print "\n"
+ 
+   129 print "\n"
+   130 jump *label7 always
+   131 label *label14
+-    * jump *label17 equal :page 5
+-    * jump *label16 always
++  132 jump *label16 notEqual :page 5
+   133 label *label17
+   134 print "position:"
+   135 print "\n"
+ 
+   151 print "\n"
+   152 jump *label7 always
+   153 label *label16
+-    * jump *label19 equal :page 6
+-    * jump *label18 always
++  154 jump *label18 notEqual :page 6
+   155 label *label19
+   156 print "unit:"
+   157 print "\n"
+ 
+   201 print "\n"
+   202 jump *label7 always
+   203 label *label18
+-    * jump *label21 equal :page 7
+-    * jump *label20 always
++  204 jump *label20 notEqual :page 7
+   205 label *label21
+   206 print "other:"
+   207 print "\n"
+
+Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    15 print 7
+    16 print "\n"
+    17 sensor *tmp7 .BLOCK @dead
+-    * op strictEqual *tmp8 *tmp7 0
+-    * jump *label5 equal *tmp8 false
++   18 jump *label5 strictNotEqual *tmp7 0
+    19 sensor *tmp10 .BLOCK @type
+    20 print *tmp10
+    21 print " - "
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
@@ -292,112 +292,112 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     10 label *label4
     11 print "Property detector - page "
  
-   228 print "enabled: "
-   229 print *tmp58
-   230 print "\n"
+   227 print "enabled: "
+   228 print *tmp58
+   229 print "\n"
 -    * jump *label7 always
-   231 label *label20
-   232 label *label7
-   233 jump *label6 always
+   230 label *label20
+   231 label *label7
+   232 jump *label6 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   210 print "\n"
-   211 sensor *tmp54 .BLOCK @type
-   212 print "type: "
+   209 print "\n"
+   210 sensor *tmp54 .BLOCK @type
+   211 print "type: "
 -    * print *tmp54
-+  213 print *tmp10
-   214 print "\n"
-   215 sensor *tmp55 .BLOCK @flag
-   216 print "flag: "
++  212 print *tmp10
+   213 print "\n"
+   214 sensor *tmp55 .BLOCK @flag
+   215 print "flag: "
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-   208 print "team: "
-   209 print *tmp53
-   210 print "\n"
+   207 print "team: "
+   208 print *tmp53
+   209 print "\n"
 -    * sensor *tmp54 .BLOCK @type
-   211 print "type: "
-   212 print *tmp10
-   213 print "\n"
+   210 print "type: "
+   211 print *tmp10
+   212 print "\n"
 
 Modifications by Fast-dispatch case at line 17:9 (-5 instructions):
  
-    19 sensor *tmp10 .BLOCK @type
-    20 print *tmp10
-    21 print " - "
+    18 sensor *tmp10 .BLOCK @type
+    19 print *tmp10
+    20 print " - "
 -    * jump *label8 notEqual :page 1
-+   22 multijump :page 0 0 (m:*label23)
-+   23 multilabel *label32 (m:*label23)
-+   24 multilabel *label24 (m:*label23)
-+   25 label *label22
-+   26 jump *label7 always
-+   27 multilabel *label25 (m:*label23)
-    28 label *label9
-    29 print "contents:"
-    30 print "\n"
++   21 multijump :page 0 0 (m:*label23)
++   22 multilabel *label32 (m:*label23)
++   23 multilabel *label24 (m:*label23)
++   24 label *label22
++   25 jump *label7 always
++   26 multilabel *label25 (m:*label23)
+    27 label *label9
+    28 print "contents:"
+    29 print "\n"
  
-    51 print "\n"
-    52 jump *label7 always
-    53 label *label8
+    50 print "\n"
+    51 jump *label7 always
+    52 label *label8
 -    * jump *label10 notEqual :page 2
-+   54 multilabel *label26 (m:*label23)
-    55 label *label11
-    56 print "power:"
-    57 print "\n"
++   53 multilabel *label26 (m:*label23)
+    54 label *label11
+    55 print "power:"
+    56 print "\n"
  
-    85 print "\n"
-    86 jump *label7 always
-    87 label *label10
+    84 print "\n"
+    85 jump *label7 always
+    86 label *label10
 -    * jump *label12 notEqual :page 3
-+   88 multilabel *label27 (m:*label23)
-    89 label *label13
-    90 print "combat:"
-    91 print "\n"
++   87 multilabel *label27 (m:*label23)
+    88 label *label13
+    89 print "combat:"
+    90 print "\n"
  
-   107 print "\n"
-   108 jump *label7 always
-   109 label *label12
+   106 print "\n"
+   107 jump *label7 always
+   108 label *label12
 -    * jump *label14 notEqual :page 4
-+  110 multilabel *label28 (m:*label23)
-   111 label *label15
-   112 print "status:"
-   113 print "\n"
++  109 multilabel *label28 (m:*label23)
+   110 label *label15
+   111 print "status:"
+   112 print "\n"
  
-   133 print "\n"
-   134 jump *label7 always
-   135 label *label14
+   132 print "\n"
+   133 jump *label7 always
+   134 label *label14
 -    * jump *label16 notEqual :page 5
-+  136 multilabel *label29 (m:*label23)
-   137 label *label17
-   138 print "position:"
-   139 print "\n"
++  135 multilabel *label29 (m:*label23)
+   136 label *label17
+   137 print "position:"
+   138 print "\n"
  
-   155 print "\n"
-   156 jump *label7 always
-   157 label *label16
+   154 print "\n"
+   155 jump *label7 always
+   156 label *label16
 -    * jump *label18 notEqual :page 6
-+  158 multilabel *label30 (m:*label23)
-   159 label *label19
-   160 print "unit:"
-   161 print "\n"
++  157 multilabel *label30 (m:*label23)
+   158 label *label19
+   159 print "unit:"
+   160 print "\n"
  
-   205 print "\n"
-   206 jump *label7 always
-   207 label *label18
+   204 print "\n"
+   205 jump *label7 always
+   206 label *label18
 -    * jump *label20 notEqual :page 7
-+  208 multilabel *label31 (m:*label23)
-   209 label *label21
-   210 print "other:"
-   211 print "\n"
++  207 multilabel *label31 (m:*label23)
+   208 label *label21
+   209 print "other:"
+   210 print "\n"
  
-   232 print "enabled: "
-   233 print *tmp58
-   234 print "\n"
+   231 print "enabled: "
+   232 print *tmp58
+   233 print "\n"
 -    * label *label20
-   235 label *label7
-   236 jump *label6 always
-   237 label *label5
+   234 label *label7
+   235 jump *label6 always
+   236 label *label5
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
@@ -409,151 +409,151 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
     11 print :page
     12 print "/"
  
-    21 multijump :page 0 0 (m:*label23)
-    22 multilabel *label32 (m:*label23)
-    23 multilabel *label24 (m:*label23)
+    20 multijump :page 0 0 (m:*label23)
+    21 multilabel *label32 (m:*label23)
+    22 multilabel *label24 (m:*label23)
 -    * label *label22
-    24 jump *label7 always
-    25 multilabel *label25 (m:*label23)
+    23 jump *label7 always
+    24 multilabel *label25 (m:*label23)
 -    * label *label9
-    26 print "contents:"
-    27 print "\n"
-    28 sensor *tmp13 .BLOCK @totalItems
+    25 print "contents:"
+    26 print "\n"
+    27 sensor *tmp13 .BLOCK @totalItems
  
-    47 print *tmp18
-    48 print "\n"
-    49 jump *label7 always
+    46 print *tmp18
+    47 print "\n"
+    48 jump *label7 always
 -    * label *label8
-    50 multilabel *label26 (m:*label23)
+    49 multilabel *label26 (m:*label23)
 -    * label *label11
-    51 print "power:"
-    52 print "\n"
-    53 sensor *tmp19 .BLOCK @totalPower
+    50 print "power:"
+    51 print "\n"
+    52 sensor *tmp19 .BLOCK @totalPower
  
-    79 print *tmp28
-    80 print "\n"
-    81 jump *label7 always
+    78 print *tmp28
+    79 print "\n"
+    80 jump *label7 always
 -    * label *label10
-    82 multilabel *label27 (m:*label23)
+    81 multilabel *label27 (m:*label23)
 -    * label *label13
-    83 print "combat:"
-    84 print "\n"
-    85 sensor *tmp29 .BLOCK @ammo
+    82 print "combat:"
+    83 print "\n"
+    84 sensor *tmp29 .BLOCK @ammo
  
-    99 print *tmp32
-   100 print "\n"
-   101 jump *label7 always
+    98 print *tmp32
+    99 print "\n"
+   100 jump *label7 always
 -    * label *label12
-   102 multilabel *label28 (m:*label23)
+   101 multilabel *label28 (m:*label23)
 -    * label *label15
-   103 print "status:"
-   104 print "\n"
-   105 sensor *tmp33 .BLOCK @heat
+   102 print "status:"
+   103 print "\n"
+   104 sensor *tmp33 .BLOCK @heat
  
-   123 print *tmp37
-   124 print "\n"
-   125 jump *label7 always
+   122 print *tmp37
+   123 print "\n"
+   124 jump *label7 always
 -    * label *label14
-   126 multilabel *label29 (m:*label23)
+   125 multilabel *label29 (m:*label23)
 -    * label *label17
-   127 print "position:"
-   128 print "\n"
-   129 sensor *tmp38 .BLOCK @rotation
+   126 print "position:"
+   127 print "\n"
+   128 sensor *tmp38 .BLOCK @rotation
  
-   143 print *tmp41
-   144 print "\n"
-   145 jump *label7 always
+   142 print *tmp41
+   143 print "\n"
+   144 jump *label7 always
 -    * label *label16
-   146 multilabel *label30 (m:*label23)
+   145 multilabel *label30 (m:*label23)
 -    * label *label19
-   147 print "unit:"
-   148 print "\n"
-   149 sensor *tmp42 .BLOCK @shootX
+   146 print "unit:"
+   147 print "\n"
+   148 sensor *tmp42 .BLOCK @shootX
  
-   191 print *tmp52
-   192 print "\n"
-   193 jump *label7 always
+   190 print *tmp52
+   191 print "\n"
+   192 jump *label7 always
 -    * label *label18
-   194 multilabel *label31 (m:*label23)
+   193 multilabel *label31 (m:*label23)
 -    * label *label21
-   195 print "other:"
-   196 print "\n"
-   197 sensor *tmp53 .BLOCK @team
+   194 print "other:"
+   195 print "\n"
+   196 sensor *tmp53 .BLOCK @team
  
-   224 print "\n"
-   225 label *label6
-   226 printflush message1
+   223 print "\n"
+   224 label *label6
+   225 printflush message1
 -    * label *label1
-   227 jump *label0 always
+   226 jump *label0 always
 -    * label *label2
 -    * end
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  
-    21 multijump :page 0 0 (m:*label23)
-    22 multilabel *label32 (m:*label23)
-    23 multilabel *label24 (m:*label23)
+    20 multijump :page 0 0 (m:*label23)
+    21 multilabel *label32 (m:*label23)
+    22 multilabel *label24 (m:*label23)
 -    * jump *label7 always
-+   24 jump *label6 always
-    25 multilabel *label25 (m:*label23)
-    26 print "contents:"
-    27 print "\n"
++   23 jump *label6 always
+    24 multilabel *label25 (m:*label23)
+    25 print "contents:"
+    26 print "\n"
  
-    46 print "liquidCapacity: "
-    47 print *tmp18
-    48 print "\n"
+    45 print "liquidCapacity: "
+    46 print *tmp18
+    47 print "\n"
 -    * jump *label7 always
-+   49 jump *label6 always
-    50 multilabel *label26 (m:*label23)
-    51 print "power:"
-    52 print "\n"
++   48 jump *label6 always
+    49 multilabel *label26 (m:*label23)
+    50 print "power:"
+    51 print "\n"
  
-    78 print "powerNetOut: "
-    79 print *tmp28
-    80 print "\n"
+    77 print "powerNetOut: "
+    78 print *tmp28
+    79 print "\n"
 -    * jump *label7 always
-+   81 jump *label6 always
-    82 multilabel *label27 (m:*label23)
-    83 print "combat:"
-    84 print "\n"
++   80 jump *label6 always
+    81 multilabel *label27 (m:*label23)
+    82 print "combat:"
+    83 print "\n"
  
-    98 print "maxHealth: "
-    99 print *tmp32
-   100 print "\n"
+    97 print "maxHealth: "
+    98 print *tmp32
+    99 print "\n"
 -    * jump *label7 always
-+  101 jump *label6 always
-   102 multilabel *label28 (m:*label23)
-   103 print "status:"
-   104 print "\n"
++  100 jump *label6 always
+   101 multilabel *label28 (m:*label23)
+   102 print "status:"
+   103 print "\n"
  
-   122 print "range: "
-   123 print *tmp37
-   124 print "\n"
+   121 print "range: "
+   122 print *tmp37
+   123 print "\n"
 -    * jump *label7 always
-+  125 jump *label6 always
-   126 multilabel *label29 (m:*label23)
-   127 print "position:"
-   128 print "\n"
++  124 jump *label6 always
+   125 multilabel *label29 (m:*label23)
+   126 print "position:"
+   127 print "\n"
  
-   142 print "size: "
-   143 print *tmp41
-   144 print "\n"
+   141 print "size: "
+   142 print *tmp41
+   143 print "\n"
 -    * jump *label7 always
-+  145 jump *label6 always
-   146 multilabel *label30 (m:*label23)
-   147 print "unit:"
-   148 print "\n"
++  144 jump *label6 always
+   145 multilabel *label30 (m:*label23)
+   146 print "unit:"
+   147 print "\n"
  
-   190 print "controller: "
-   191 print *tmp52
-   192 print "\n"
+   189 print "controller: "
+   190 print *tmp52
+   191 print "\n"
 -    * jump *label7 always
-+  193 jump *label6 always
-   194 multilabel *label31 (m:*label23)
-   195 print "other:"
-   196 print "\n"
++  192 jump *label6 always
+   193 multilabel *label31 (m:*label23)
+   194 print "other:"
+   195 print "\n"
 
-Modifications by Final phase, Print Merging, iteration 1 (-94 instructions):
+Modifications by Final phase, Print Merging, iteration 1 (-93 instructions):
  
      7 op add :page *tmp4 1
      8 control enabled switch1 false
@@ -562,8 +562,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-94 instructions):
 -    * print :page
 -    * print "/"
 -    * print 7
--    * print "\"
--    * print "n"
+-    * print "\n"
 +   10 print "Property detector - page {0}/7\n"
 +   11 format :page
     12 sensor *tmp7 .BLOCK @dead

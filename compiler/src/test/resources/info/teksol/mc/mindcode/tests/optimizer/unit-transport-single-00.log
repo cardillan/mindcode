@@ -1,4 +1,4 @@
-   596 instructions before optimizations.
+   578 instructions before optimizations.
     39 instructions eliminated by Temp Variables Elimination (3 passes, 7 iterations).
     84 instructions eliminated by Dead Code Elimination (8 iterations).
      6 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
@@ -12,32 +12,32 @@
      7 instructions eliminated by Jump Straightening (2 passes, 8 iterations).
      7 instructions updated by Jump Threading.
      3 instructions eliminated by Unreachable Code Elimination (3 iterations).
-    50 instructions eliminated by Print Merging.
+    32 instructions eliminated by Print Merging.
    317 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 622):
+Pass 1: speed optimization selection (cost limit 640):
   * Full loop rotation at line 43:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
     Full loop rotation at line 51:1                              size    +1, benefit       26.0, efficiency     26.000
     Partial loop rotation at line 110:9                          size    +1, benefit        6.3, efficiency      6.250
     Full loop rotation at line 304:1                             size    +1, benefit       26.0, efficiency     26.000
     Full loop rotation at line 314:5                             size    +1, benefit       13.0, efficiency     13.000
 
-Pass 1: speed optimization selection (cost limit 621):
+Pass 1: speed optimization selection (cost limit 639):
   * Full loop rotation at line 51:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
     Partial loop rotation at line 110:9                          size    +1, benefit        6.3, efficiency      6.250
     Full loop rotation at line 304:1                             size    +1, benefit       26.0, efficiency     26.000
     Full loop rotation at line 314:5                             size    +1, benefit       13.0, efficiency     13.000
 
-Pass 1: speed optimization selection (cost limit 620):
+Pass 1: speed optimization selection (cost limit 638):
     Partial loop rotation at line 110:9                          size    +1, benefit        6.3, efficiency      6.250
   * Full loop rotation at line 304:1                             size    +1, benefit       26.0, efficiency     26.000 (+0 instructions)
     Full loop rotation at line 314:5                             size    +1, benefit       13.0, efficiency     13.000
 
-Pass 1: speed optimization selection (cost limit 620):
+Pass 1: speed optimization selection (cost limit 638):
     Partial loop rotation at line 110:9                          size    +1, benefit        6.3, efficiency      6.250
   * Full loop rotation at line 314:5                             size    +1, benefit       13.0, efficiency     13.000 (+1 instructions)
 
-Pass 1: speed optimization selection (cost limit 619):
+Pass 1: speed optimization selection (cost limit 637):
   * Partial loop rotation at line 110:9                          size    +1, benefit        6.3, efficiency      6.250 (+1 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-52 instructions):
@@ -53,501 +53,501 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-52 instruct
     36 print "[salmon]No unit of type "
     37 print UNIT
  
-    45 sensor *tmp9 @unit @controller
-    46 op equal *tmp10 *tmp9 @this
-    47 jump *label15 equal *tmp10 false
+    44 sensor *tmp9 @unit @controller
+    45 op equal *tmp10 *tmp9 @this
+    46 jump *label15 equal *tmp10 false
 -    * set *tmp6 null
-    48 jump *label6 always
+    47 jump *label6 always
 -    * set *tmp11 null
-    49 jump *label16 always
-    50 label *label15
+    48 jump *label16 always
+    49 label *label15
 -    * set *tmp11 null
-    51 label *label16
-    52 ubind UNIT
-    53 print "[gold]Looking for old unit..."
+    50 label *label16
+    51 ubind UNIT
+    52 print "[gold]Looking for old unit..."
  
-    70 print UNIT
-    71 print " "
-    72 print "found. 2"
+    68 print "[salmon]No unit of type "
+    69 print UNIT
+    70 print " found. 2"
 -    * set *tmp17 null
-    73 jump *label23 always
-    74 label *label22
-    75 sensor *tmp18 @unit @controlled
+    71 jump *label23 always
+    72 label *label22
+    73 sensor *tmp18 @unit @controlled
  
-    86 jump *label18 always
-    87 set *tmp20 null
-    88 label *label25
--    * set *tmp17 *tmp20
-    89 label *label23
-    90 printflush message1
-    91 label *label20
- 
-    93 label *label21
-    94 set *tmp15 null
-    95 label *label18
--    * set *tmp6 *tmp15
-    96 label *label6
-    97 label *label4
-    98 jump *label3 always
- 
-   121 jump *label32 equal *tmp29 false
-   122 set .DROP_TARGET .CONTAINER
-   123 set .CONTAINER :block
--    * set *tmp30 .CONTAINER
-   124 jump *label33 always
-   125 label *label32
--    * set *tmp30 null
-   126 label *label33
-   127 label *label30
-   128 jump *label29 always
- 
-   131 jump *label34 equal *tmp31 false
-   132 print "[salmon]No destination."
-   133 print "\n"
--    * set *tmp32 "[salmon]No destination."
-   134 jump *label35 always
-   135 label *label34
-   136 op notEqual *tmp33 .DROP_TARGET null
- 
-   156 jump *label28 always
-   157 set *tmp36 null
-   158 label *label37
--    * set *tmp32 *tmp36
-   159 label *label35
-   160 printflush message1
-   161 label *label27
- 
-   170 printflush message1
-   171 ulocate building core false @copper .CORE_X .CORE_Y *tmp40 *tmp39
-   172 set .CORE *tmp39
--    * set *tmp38 .CORE
-   173 jump *label41 always
-   174 label *label40
-   175 print "[gold]Locating vault #"
- 
-   233 label *label47
-   234 set *tmp47 null
-   235 label *label48
--    * set *tmp38 *tmp47
-   236 label *label41
-   237 op equal *tmp59 .CORE null
-   238 jump *label56 equal *tmp59 false
-   239 end
--    * set *tmp60 null
-   240 jump *label57 always
-   241 label *label56
--    * set *tmp60 null
-   242 label *label57
-   243 set .SORTER sorter1
-   244 sensor *tmp61 .SORTER @type
- 
-   257 jump *label63 equal *tmp64 false
-   258 print "Block found: "
-   259 print .SORTER
--    * set *tmp65 .SORTER
-   260 jump *label64 always
-   261 label *label63
--    * set *tmp65 null
-   262 label *label64
-   263 printflush message1
-   264 set .SORTER sorter1
- 
-   293 set *tmp77 "[] from vault #"
-   294 label *label68
-   295 set .DIRECTION *tmp77
--    * set *tmp68 .DIRECTION
-   296 jump *label66 always
-   297 label *label65
-   298 op greaterThan *tmp78 LINK_ID 0
- 
-   323 set *tmp90 "[] to vault #"
-   324 label *label70
-   325 set .DIRECTION *tmp90
--    * set *tmp68 .DIRECTION
-   326 label *label66
-   327 op equal *tmp91 LINK_ID 0
-   328 jump *label71 equal *tmp91 false
- 
-   345 set .DROP_TARGET .CORE
-   346 set .DROP_X .CORE_X
-   347 set .DROP_Y .CORE_Y
--    * set *tmp98 .DROP_Y
-   348 jump *label74 always
-   349 label *label73
-   350 sensor *tmp99 .DROP_TARGET @x
-   351 set .DROP_X *tmp99
-   352 sensor *tmp100 .DROP_TARGET @y
-   353 set .DROP_Y *tmp100
--    * set *tmp98 .DROP_Y
-   354 label *label74
-   355 set .LAST_ITEM @mono
-   356 set :iter 0
- 
-   376 print UNIT
-   377 print " "
-   378 print "found. 2"
--    * set *tmp110 null
-   379 jump *label85 always
-   380 label *label84
-   381 sensor *tmp111 @unit @controlled
- 
-   388 set *tmp113 null
-   389 jump *label87 always
-   390 label *label86
--    * set *tmp108 null
-   391 jump *label80 always
-   392 set *tmp113 null
-   393 label *label87
--    * set *tmp110 *tmp113
-   394 label *label85
-   395 printflush message1
-   396 label *label82
-   397 jump *label81 always
-   398 label *label83
--    * set *tmp108 null
-   399 label *label80
-   400 ucontrol flag 1
-   401 set :state 1
--    * set *tmp107 :state
-   402 jump *label79 always
-   403 label *label78
--    * set *tmp107 null
-   404 label *label79
-   405 sensor *tmp114 .SORTER @config
-   406 set .ITEM *tmp114
- 
-   418 label *label92
-   419 set .LAST_ITEM .ITEM
-   420 set :state 1
--    * set *tmp116 :state
-   421 jump *label89 always
-   422 label *label88
--    * set *tmp116 null
-   423 label *label89
-   424 set :show_state 0
-   425 op equal *tmp119 :state 1
- 
-   452 label *label98
-   453 set *tmp123 *tmp126
-   454 label *label96
--    * set *tmp120 *tmp123
-   455 jump *label94 always
-   456 label *label93
--    * set *tmp120 null
-   457 label *label94
-   458 op equal *tmp129 :state 2
-   459 jump *label101 equal *tmp129 false
- 
-   482 set :show_state 2
-   483 set *tmp132 :show_state
-   484 label *label104
--    * set *tmp130 *tmp132
-   485 jump *label102 always
-   486 label *label101
--    * set *tmp130 null
-   487 label *label102
-   488 op equal *tmp139 :state 3
-   489 jump *label107 equal *tmp139 false
- 
-   513 set :show_state 3
-   514 set *tmp142 :show_state
-   515 label *label110
--    * set *tmp140 *tmp142
-   516 jump *label108 always
-   517 label *label107
--    * set *tmp140 null
-   518 label *label108
-   519 op greaterThan *tmp149 :iter 3
-   520 jump *label113 equal *tmp149 false
- 
-   536 print .LOCAL_MARGIN
-   537 print "["
-   538 print "])"
--    * set *tmp153 null
-   539 jump *label116 always
-   540 label *label115
--    * set *tmp153 null
-   541 label *label116
-   542 jump *label117 equal .SHOW_REMOTE_LEVEL false
-   543 sensor *tmp155 .CORE .ITEM
- 
-   557 label *label119
-   558 set *tmp157 null
-   559 label *label120
--    * set *tmp154 *tmp157
-   560 jump *label118 always
-   561 label *label117
--    * set *tmp154 null
-   562 label *label118
-   563 sensor *tmp158 @unit @totalItems
-   564 print .MSG
- 
-   579 print " "
-   580 print "sec[]"
-   581 print "\n"
--    * set *tmp160 null
-   582 jump *label122 always
-   583 label *label121
-   584 op equal *tmp168 :show_state 3
- 
-   600 label *label123
-   601 set *tmp169 null
-   602 label *label124
--    * set *tmp160 *tmp169
-   603 label *label122
-   604 op floor *tmp177 :loop_time
-   605 print "[lightgray]Loop time: "
- 
-   611 op equal *tmp179 *tmp178 0
-   612 jump *label125 equal *tmp179 false
-   613 jump *label77 always
--    * set *tmp180 null
-   614 jump *label126 always
-   615 label *label125
--    * set *tmp180 null
-   616 label *label126
-   617 sensor *tmp181 .SRC @dead
-   618 op notEqual *tmp182 *tmp181 0
-   619 jump *label127 equal *tmp182 false
-   620 jump *label77 always
--    * set *tmp183 null
-   621 jump *label128 always
-   622 label *label127
--    * set *tmp183 null
-   623 label *label128
-   624 sensor *tmp184 .DST @dead
-   625 op notEqual *tmp185 *tmp184 0
-   626 jump *label129 equal *tmp185 false
-   627 jump *label77 always
--    * set *tmp186 null
-   628 jump *label130 always
-   629 label *label129
--    * set *tmp186 null
-   630 label *label130
-   631 sensor *tmp187 .SORTER @dead
-   632 op notEqual *tmp188 *tmp187 0
- 
-   637 label *label131
-   638 set *tmp189 null
-   639 label *label132
--    * set *tmp150 *tmp189
-   640 jump *label114 always
-   641 label *label113
-   642 op add :iter :iter 1
--    * set *tmp150 :iter
-   643 label *label114
-   644 op sub *tmp190 @time :start
-   645 set :loop_time *tmp190
- 
-   680 label *label141
-   681 jump *label140 always
-   682 label *label142
--    * set *tmp194 null
-   683 jump *label137 always
-   684 label *label136
--    * set *tmp194 null
-   685 label *label137
-   686 end
-
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-22 instructions):
- 
-    79 print UNIT
-    80 print "."
-    81 print ".."
--    * set *tmp20 null
-    82 jump *label25 always
-    83 label *label24
--    * set *tmp15 null
-    84 jump *label18 always
--    * set *tmp20 null
+    83 jump *label18 always
+    84 set *tmp20 null
     85 label *label25
+-    * set *tmp17 *tmp20
     86 label *label23
     87 printflush message1
     88 label *label20
-    89 jump *label19 always
+ 
     90 label *label21
--    * set *tmp15 null
-    91 label *label18
-    92 label *label6
-    93 label *label4
+    91 set *tmp15 null
+    92 label *label18
+-    * set *tmp6 *tmp15
+    93 label *label6
+    94 label *label4
+    95 jump *label3 always
  
-   146 print "\"
-   147 print "n"
-   148 print "[salmon]Item dump must be a container or a vault!"
--    * set *tmp36 null
-   149 jump *label37 always
-   150 label *label36
+   118 jump *label32 equal *tmp29 false
+   119 set .DROP_TARGET .CONTAINER
+   120 set .CONTAINER :block
+-    * set *tmp30 .CONTAINER
+   121 jump *label33 always
+   122 label *label32
+-    * set *tmp30 null
+   123 label *label33
+   124 label *label30
+   125 jump *label29 always
+ 
+   128 jump *label34 equal *tmp31 false
+   129 print "[salmon]No destination."
+   130 print "\n"
+-    * set *tmp32 "[salmon]No destination."
+   131 jump *label35 always
+   132 label *label34
+   133 op notEqual *tmp33 .DROP_TARGET null
+ 
    151 jump *label28 always
+   152 set *tmp36 null
+   153 label *label37
+-    * set *tmp32 *tmp36
+   154 label *label35
+   155 printflush message1
+   156 label *label27
+ 
+   165 printflush message1
+   166 ulocate building core false @copper .CORE_X .CORE_Y *tmp40 *tmp39
+   167 set .CORE *tmp39
+-    * set *tmp38 .CORE
+   168 jump *label41 always
+   169 label *label40
+   170 print "[gold]Locating vault #"
+ 
+   227 label *label47
+   228 set *tmp47 null
+   229 label *label48
+-    * set *tmp38 *tmp47
+   230 label *label41
+   231 op equal *tmp59 .CORE null
+   232 jump *label56 equal *tmp59 false
+   233 end
+-    * set *tmp60 null
+   234 jump *label57 always
+   235 label *label56
+-    * set *tmp60 null
+   236 label *label57
+   237 set .SORTER sorter1
+   238 sensor *tmp61 .SORTER @type
+ 
+   251 jump *label63 equal *tmp64 false
+   252 print "Block found: "
+   253 print .SORTER
+-    * set *tmp65 .SORTER
+   254 jump *label64 always
+   255 label *label63
+-    * set *tmp65 null
+   256 label *label64
+   257 printflush message1
+   258 set .SORTER sorter1
+ 
+   287 set *tmp77 "[] from vault #"
+   288 label *label68
+   289 set .DIRECTION *tmp77
+-    * set *tmp68 .DIRECTION
+   290 jump *label66 always
+   291 label *label65
+   292 op greaterThan *tmp78 LINK_ID 0
+ 
+   317 set *tmp90 "[] to vault #"
+   318 label *label70
+   319 set .DIRECTION *tmp90
+-    * set *tmp68 .DIRECTION
+   320 label *label66
+   321 op equal *tmp91 LINK_ID 0
+   322 jump *label71 equal *tmp91 false
+ 
+   339 set .DROP_TARGET .CORE
+   340 set .DROP_X .CORE_X
+   341 set .DROP_Y .CORE_Y
+-    * set *tmp98 .DROP_Y
+   342 jump *label74 always
+   343 label *label73
+   344 sensor *tmp99 .DROP_TARGET @x
+   345 set .DROP_X *tmp99
+   346 sensor *tmp100 .DROP_TARGET @y
+   347 set .DROP_Y *tmp100
+-    * set *tmp98 .DROP_Y
+   348 label *label74
+   349 set .LAST_ITEM @mono
+   350 set :iter 0
+ 
+   369 print "[salmon]No unit of type "
+   370 print UNIT
+   371 print " found. 2"
+-    * set *tmp110 null
+   372 jump *label85 always
+   373 label *label84
+   374 sensor *tmp111 @unit @controlled
+ 
+   380 set *tmp113 null
+   381 jump *label87 always
+   382 label *label86
+-    * set *tmp108 null
+   383 jump *label80 always
+   384 set *tmp113 null
+   385 label *label87
+-    * set *tmp110 *tmp113
+   386 label *label85
+   387 printflush message1
+   388 label *label82
+   389 jump *label81 always
+   390 label *label83
+-    * set *tmp108 null
+   391 label *label80
+   392 ucontrol flag 1
+   393 set :state 1
+-    * set *tmp107 :state
+   394 jump *label79 always
+   395 label *label78
+-    * set *tmp107 null
+   396 label *label79
+   397 sensor *tmp114 .SORTER @config
+   398 set .ITEM *tmp114
+ 
+   410 label *label92
+   411 set .LAST_ITEM .ITEM
+   412 set :state 1
+-    * set *tmp116 :state
+   413 jump *label89 always
+   414 label *label88
+-    * set *tmp116 null
+   415 label *label89
+   416 set :show_state 0
+   417 op equal *tmp119 :state 1
+ 
+   444 label *label98
+   445 set *tmp123 *tmp126
+   446 label *label96
+-    * set *tmp120 *tmp123
+   447 jump *label94 always
+   448 label *label93
+-    * set *tmp120 null
+   449 label *label94
+   450 op equal *tmp129 :state 2
+   451 jump *label101 equal *tmp129 false
+ 
+   474 set :show_state 2
+   475 set *tmp132 :show_state
+   476 label *label104
+-    * set *tmp130 *tmp132
+   477 jump *label102 always
+   478 label *label101
+-    * set *tmp130 null
+   479 label *label102
+   480 op equal *tmp139 :state 3
+   481 jump *label107 equal *tmp139 false
+ 
+   505 set :show_state 3
+   506 set *tmp142 :show_state
+   507 label *label110
+-    * set *tmp140 *tmp142
+   508 jump *label108 always
+   509 label *label107
+-    * set *tmp140 null
+   510 label *label108
+   511 op greaterThan *tmp149 :iter 3
+   512 jump *label113 equal *tmp149 false
+ 
+   525 print " (limit [orange]"
+   526 print .LOCAL_MARGIN
+   527 print "[])"
+-    * set *tmp153 null
+   528 jump *label116 always
+   529 label *label115
+-    * set *tmp153 null
+   530 label *label116
+   531 jump *label117 equal .SHOW_REMOTE_LEVEL false
+   532 sensor *tmp155 .CORE .ITEM
+ 
+   543 label *label119
+   544 set *tmp157 null
+   545 label *label120
+-    * set *tmp154 *tmp157
+   546 jump *label118 always
+   547 label *label117
+-    * set *tmp154 null
+   548 label *label118
+   549 sensor *tmp158 @unit @totalItems
+   550 print .MSG
+ 
+   563 print "[]  arriving in [gold]"
+   564 print *tmp167
+   565 print " sec[]\n"
+-    * set *tmp160 null
+   566 jump *label122 always
+   567 label *label121
+   568 op equal *tmp168 :show_state 3
+ 
+   582 label *label123
+   583 set *tmp169 null
+   584 label *label124
+-    * set *tmp160 *tmp169
+   585 label *label122
+   586 op floor *tmp177 :loop_time
+   587 print "[lightgray]Loop time: "
+ 
+   593 op equal *tmp179 *tmp178 0
+   594 jump *label125 equal *tmp179 false
+   595 jump *label77 always
+-    * set *tmp180 null
+   596 jump *label126 always
+   597 label *label125
+-    * set *tmp180 null
+   598 label *label126
+   599 sensor *tmp181 .SRC @dead
+   600 op notEqual *tmp182 *tmp181 0
+   601 jump *label127 equal *tmp182 false
+   602 jump *label77 always
+-    * set *tmp183 null
+   603 jump *label128 always
+   604 label *label127
+-    * set *tmp183 null
+   605 label *label128
+   606 sensor *tmp184 .DST @dead
+   607 op notEqual *tmp185 *tmp184 0
+   608 jump *label129 equal *tmp185 false
+   609 jump *label77 always
+-    * set *tmp186 null
+   610 jump *label130 always
+   611 label *label129
+-    * set *tmp186 null
+   612 label *label130
+   613 sensor *tmp187 .SORTER @dead
+   614 op notEqual *tmp188 *tmp187 0
+ 
+   619 label *label131
+   620 set *tmp189 null
+   621 label *label132
+-    * set *tmp150 *tmp189
+   622 jump *label114 always
+   623 label *label113
+   624 op add :iter :iter 1
+-    * set *tmp150 :iter
+   625 label *label114
+   626 op sub *tmp190 @time :start
+   627 set :loop_time *tmp190
+ 
+   662 label *label141
+   663 jump *label140 always
+   664 label *label142
+-    * set *tmp194 null
+   665 jump *label137 always
+   666 label *label136
+-    * set *tmp194 null
+   667 label *label137
+   668 end
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-22 instructions):
+ 
+    76 print "[salmon]Looking for a free "
+    77 print UNIT
+    78 print "..."
+-    * set *tmp20 null
+    79 jump *label25 always
+    80 label *label24
+-    * set *tmp15 null
+    81 jump *label18 always
+-    * set *tmp20 null
+    82 label *label25
+    83 label *label23
+    84 printflush message1
+    85 label *label20
+    86 jump *label19 always
+    87 label *label21
+-    * set *tmp15 null
+    88 label *label18
+    89 label *label6
+    90 label *label4
+ 
+   141 print .DROP_TARGET
+   142 print "\n"
+   143 print "[salmon]Item dump must be a container or a vault!"
 -    * set *tmp36 null
-   152 label *label37
-   153 label *label35
-   154 printflush message1
+   144 jump *label37 always
+   145 label *label36
+   146 jump *label28 always
+-    * set *tmp36 null
+   147 label *label37
+   148 label *label35
+   149 printflush message1
  
-   222 label *label54
-   223 set *tmp58 null
-   224 label *label55
+   216 label *label54
+   217 set *tmp58 null
+   218 label *label55
 -    * set *tmp47 *tmp58
-   225 jump *label48 always
-   226 label *label47
+   219 jump *label48 always
+   220 label *label47
 -    * set *tmp47 null
-   227 label *label48
-   228 label *label41
-   229 op equal *tmp59 .CORE null
+   221 label *label48
+   222 label *label41
+   223 op equal *tmp59 .CORE null
  
-   377 print UNIT
-   378 print "."
-   379 print ".."
+   369 print "[salmon]Looking for a free "
+   370 print UNIT
+   371 print "..."
 -    * set *tmp113 null
-   380 jump *label87 always
-   381 label *label86
-   382 jump *label80 always
+   372 jump *label87 always
+   373 label *label86
+   374 jump *label80 always
 -    * set *tmp113 null
-   383 label *label87
-   384 label *label85
-   385 printflush message1
+   375 label *label87
+   376 label *label85
+   377 printflush message1
  
-   418 op equal *tmp122 *tmp121 .ITEM
-   419 jump *label95 equal *tmp122 false
-   420 set :state 3
+   410 op equal *tmp122 *tmp121 .ITEM
+   411 jump *label95 equal *tmp122 false
+   412 set :state 3
 -    * set *tmp123 :state
-   421 jump *label96 always
-   422 label *label95
-   423 sensor *tmp124 @unit @totalItems
+   413 jump *label96 always
+   414 label *label95
+   415 sensor *tmp124 @unit @totalItems
  
-   439 label *label100
-   440 set *tmp126 *tmp128
-   441 label *label98
+   431 label *label100
+   432 set *tmp126 *tmp128
+   433 label *label98
 -    * set *tmp123 *tmp126
-   442 label *label96
-   443 jump *label94 always
-   444 label *label93
+   434 label *label96
+   435 jump *label94 always
+   436 label *label93
  
-   462 set .MSG "\nLoading items: [green]"
-   463 set *tmp138 .MSG
-   464 label *label106
+   454 set .MSG "\nLoading items: [green]"
+   455 set *tmp138 .MSG
+   456 label *label106
 -    * set *tmp132 *tmp138
-   465 jump *label104 always
-   466 label *label103
-   467 ucontrol approach .SRC_X .SRC_Y 6
-   468 set .MSG "\nGoing to source: [green]"
-   469 set :show_state 2
+   457 jump *label104 always
+   458 label *label103
+   459 ucontrol approach .SRC_X .SRC_Y 6
+   460 set .MSG "\nGoing to source: [green]"
+   461 set :show_state 2
 -    * set *tmp132 :show_state
-   470 label *label104
-   471 jump *label102 always
-   472 label *label101
+   462 label *label104
+   463 jump *label102 always
+   464 label *label101
  
-   491 set .MSG "\nDropping items: [green]"
-   492 set *tmp148 .MSG
-   493 label *label112
+   483 set .MSG "\nDropping items: [green]"
+   484 set *tmp148 .MSG
+   485 label *label112
 -    * set *tmp142 *tmp148
-   494 jump *label110 always
-   495 label *label109
-   496 ucontrol approach .DST_X .DST_Y 6
-   497 set .MSG "\nGoing to destination: [green]"
-   498 set :show_state 3
+   486 jump *label110 always
+   487 label *label109
+   488 ucontrol approach .DST_X .DST_Y 6
+   489 set .MSG "\nGoing to destination: [green]"
+   490 set :show_state 3
 -    * set *tmp142 :show_state
-   499 label *label110
-   500 jump *label108 always
-   501 label *label107
+   491 label *label110
+   492 jump *label108 always
+   493 label *label107
  
-   536 print .REMOTE_MARGIN
-   537 print "["
-   538 print "])"
+   522 print " (limit [orange]"
+   523 print .REMOTE_MARGIN
+   524 print "[])"
 -    * set *tmp157 null
-   539 jump *label120 always
-   540 label *label119
+   525 jump *label120 always
+   526 label *label119
 -    * set *tmp157 null
-   541 label *label120
-   542 jump *label118 always
-   543 label *label117
+   527 label *label120
+   528 jump *label118 always
+   529 label *label117
  
-   577 print " "
-   578 print "sec[]"
-   579 print "\n"
+   559 print "[]  arriving in [gold]"
+   560 print *tmp176
+   561 print " sec[]\n"
 -    * set *tmp169 null
-   580 jump *label124 always
-   581 label *label123
+   562 jump *label124 always
+   563 label *label123
 -    * set *tmp169 null
-   582 label *label124
-   583 label *label122
-   584 op floor *tmp177 :loop_time
+   564 label *label124
+   565 label *label122
+   566 op floor *tmp177 :loop_time
  
-   612 op notEqual *tmp188 *tmp187 0
-   613 jump *label131 equal *tmp188 false
-   614 jump *label77 always
+   594 op notEqual *tmp188 *tmp187 0
+   595 jump *label131 equal *tmp188 false
+   596 jump *label77 always
 -    * set *tmp189 null
-   615 jump *label132 always
-   616 label *label131
+   597 jump *label132 always
+   598 label *label131
 -    * set *tmp189 null
-   617 label *label132
-   618 jump *label114 always
-   619 label *label113
+   599 label *label132
+   600 jump *label114 always
+   601 label *label113
 
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-8 instructions):
  
-   217 op notEqual *tmp57 :b_type @vault
-   218 jump *label54 equal *tmp57 false
-   219 set .CORE null
+   211 op notEqual *tmp57 :b_type @vault
+   212 jump *label54 equal *tmp57 false
+   213 set .CORE null
 -    * set *tmp58 .CORE
-   220 jump *label55 always
-   221 label *label54
+   214 jump *label55 always
+   215 label *label54
 -    * set *tmp58 null
-   222 label *label55
-   223 jump *label48 always
-   224 label *label47
+   216 label *label55
+   217 jump *label48 always
+   218 label *label47
  
-   422 op equal *tmp125 *tmp124 0
-   423 jump *label97 equal *tmp125 false
-   424 set :state 2
+   414 op equal *tmp125 *tmp124 0
+   415 jump *label97 equal *tmp125 false
+   416 set :state 2
 -    * set *tmp126 :state
-   425 jump *label98 always
-   426 label *label97
-   427 set .MSG "\nUnloading previous items: [green]"
+   417 jump *label98 always
+   418 label *label97
+   419 set .MSG "\nUnloading previous items: [green]"
  
-   434 label *label99
-   435 set *tmp128 null
-   436 label *label100
+   426 label *label99
+   427 set *tmp128 null
+   428 label *label100
 -    * set *tmp126 *tmp128
-   437 label *label98
-   438 label *label96
-   439 jump *label94 always
+   429 label *label98
+   430 label *label96
+   431 jump *label94 always
  
-   452 op greaterThanEq *tmp137 *tmp136 .UNIT_CAPACITY
-   453 jump *label105 equal *tmp137 false
-   454 set :state 3
+   444 op greaterThanEq *tmp137 *tmp136 .UNIT_CAPACITY
+   445 jump *label105 equal *tmp137 false
+   446 set :state 3
 -    * set *tmp138 :state
-   455 jump *label106 always
-   456 label *label105
-   457 set .MSG "\nLoading items: [green]"
+   447 jump *label106 always
+   448 label *label105
+   449 set .MSG "\nLoading items: [green]"
 -    * set *tmp138 .MSG
-   458 label *label106
-   459 jump *label104 always
-   460 label *label103
+   450 label *label106
+   451 jump *label104 always
+   452 label *label103
  
-   479 jump *label111 equal *tmp147 false
-   480 set :state 2
-   481 ucontrol approach .SRC_X .SRC_Y 6
+   471 jump *label111 equal *tmp147 false
+   472 set :state 2
+   473 ucontrol approach .SRC_X .SRC_Y 6
 -    * set *tmp148 null
-   482 jump *label112 always
-   483 label *label111
-   484 set .MSG "\nDropping items: [green]"
+   474 jump *label112 always
+   475 label *label111
+   476 set .MSG "\nDropping items: [green]"
 -    * set *tmp148 .MSG
-   485 label *label112
-   486 jump *label110 always
-   487 label *label109
+   477 label *label112
+   478 jump *label110 always
+   479 label *label109
 
 Modifications by Initial phase, Dead Code Elimination, iteration 4 (-2 instructions):
  
-   429 ucontrol within .DROP_X .DROP_Y 8 *tmp127
-   430 jump *label99 equal *tmp127 false
-   431 ucontrol itemDrop .DROP_TARGET .UNIT_CAPACITY
+   421 ucontrol within .DROP_X .DROP_Y 8 *tmp127
+   422 jump *label99 equal *tmp127 false
+   423 ucontrol itemDrop .DROP_TARGET .UNIT_CAPACITY
 -    * set *tmp128 null
-   432 jump *label100 always
-   433 label *label99
+   424 jump *label100 always
+   425 label *label99
 -    * set *tmp128 null
-   434 label *label100
-   435 label *label98
-   436 label *label96
+   426 label *label100
+   427 label *label98
+   428 label *label96
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-37 instructions):
  
@@ -564,166 +564,165 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-37 ins
      7 label *label0
      8 sensor *tmp2 switch1 @enabled
  
-    91 label *label4
-    92 jump *label3 always
-    93 label *label5
+    88 label *label4
+    89 jump *label3 always
+    90 label *label5
 -    * sensor *tmp21 @unit @itemCapacity
 -    * set .UNIT_CAPACITY *tmp21
-+   94 sensor .UNIT_CAPACITY @unit @itemCapacity
-    95 sensor *tmp22 @unit @speed
++   91 sensor .UNIT_CAPACITY @unit @itemCapacity
+    92 sensor *tmp22 @unit @speed
 -    * op div *tmp23 *tmp22 10
 -    * set .SPEED_SEC *tmp23
-+   96 op div .SPEED_SEC *tmp22 10
-    97 ucontrol flag 1
-    98 label *label26
-    99 jump *label28 equal true false
-   100 set .CONTAINER null
-   101 set .DROP_TARGET null
++   93 op div .SPEED_SEC *tmp22 10
+    94 ucontrol flag 1
+    95 label *label26
+    96 jump *label28 equal true false
+    97 set .CONTAINER null
+    98 set .DROP_TARGET null
 -    * set *tmp24 @links
 -    * set :n *tmp24
-+  102 set :n @links
-   103 label *label29
-   104 op greaterThan *tmp25 :n 0
-   105 jump *label31 equal *tmp25 false
++   99 set :n @links
+   100 label *label29
+   101 op greaterThan *tmp25 :n 0
+   102 jump *label31 equal *tmp25 false
 -    * op sub *tmp26 :n 1
 -    * set :n *tmp26
 -    * getlink *tmp27 :n
 -    * set :block *tmp27
-+  106 op sub :n :n 1
-+  107 getlink :block :n
-   108 sensor *tmp28 :block @itemCapacity
-   109 op greaterThan *tmp29 *tmp28 0
-   110 jump *label32 equal *tmp29 false
++  103 op sub :n :n 1
++  104 getlink :block :n
+   105 sensor *tmp28 :block @itemCapacity
+   106 op greaterThan *tmp29 *tmp28 0
+   107 jump *label32 equal *tmp29 false
  
-   155 jump *label40 equal *tmp37 false
-   156 print "[gold]Locating core..."
-   157 printflush message1
+   150 jump *label40 equal *tmp37 false
+   151 print "[gold]Locating core..."
+   152 printflush message1
 -    * ulocate building core false @copper .CORE_X .CORE_Y *tmp40 *tmp39
 -    * set .CORE *tmp39
-+  158 ulocate building core false @copper .CORE_X .CORE_Y *tmp40 .CORE
-   159 jump *label41 always
-   160 label *label40
-   161 print "[gold]Locating vault #"
- 
-   163 print "."
-   164 print ".."
-   165 printflush message1
++  153 ulocate building core false @copper .CORE_X .CORE_Y *tmp40 .CORE
+   154 jump *label41 always
+   155 label *label40
+   156 print "[gold]Locating vault #"
+   157 print LINK_ID
+   158 print "..."
+   159 printflush message1
 -    * op add *tmp41 99999900 LINK_ID
 -    * set .QUERY_FLAG *tmp41
-+  166 op add .QUERY_FLAG 99999900 LINK_ID
-   167 set :flag .QUERY_FLAG
-   168 ucontrol flag :flag
-   169 label *label42
++  160 op add .QUERY_FLAG 99999900 LINK_ID
+   161 set :flag .QUERY_FLAG
+   162 ucontrol flag :flag
+   163 label *label42
  
-   176 jump *label45 always
-   177 label *label45
-   178 ucontrol stop
+   170 jump *label45 always
+   171 label *label45
+   172 ucontrol stop
 -    * sensor *tmp45 @unit @flag
 -    * set :flag *tmp45
-+  179 sensor :flag @unit @flag
-   180 label *label43
-   181 jump *label42 always
-   182 label *label44
-   183 op notEqual *tmp46 :flag .QUERY_FLAG
-   184 jump *label47 equal *tmp46 false
++  173 sensor :flag @unit @flag
+   174 label *label43
+   175 jump *label42 always
+   176 label *label44
+   177 op notEqual *tmp46 :flag .QUERY_FLAG
+   178 jump *label47 equal *tmp46 false
 -    * op idiv *tmp48 :flag 100
 -    * set :position *tmp48
 -    * op mod *tmp49 :position @mapw
 -    * set .CORE_X *tmp49
 -    * op idiv *tmp50 :position @mapw
 -    * set .CORE_Y *tmp50
-+  185 op idiv :position :flag 100
-+  186 op mod .CORE_X :position @mapw
-+  187 op idiv .CORE_Y :position @mapw
-   188 label *label49
-   189 ucontrol within .CORE_X .CORE_Y 8 *tmp51
-   190 op equal *tmp52 *tmp51 false
++  179 op idiv :position :flag 100
++  180 op mod .CORE_X :position @mapw
++  181 op idiv .CORE_Y :position @mapw
+   182 label *label49
+   183 ucontrol within .CORE_X .CORE_Y 8 *tmp51
+   184 op equal *tmp52 *tmp51 false
  
-   199 label *label50
-   200 jump *label49 always
-   201 label *label51
+   193 label *label50
+   194 jump *label49 always
+   195 label *label51
 -    * ucontrol getBlock .CORE_X .CORE_Y :b_type *tmp55 *tmp56
 -    * set .CORE *tmp55
-+  202 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE *tmp56
-   203 op notEqual *tmp57 :b_type @vault
-   204 jump *label54 equal *tmp57 false
-   205 set .CORE null
++  196 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE *tmp56
+   197 op notEqual *tmp57 :b_type @vault
+   198 jump *label54 equal *tmp57 false
+   199 set .CORE null
  
-   217 label *label56
-   218 label *label57
-   219 set .SORTER sorter1
+   211 label *label56
+   212 label *label57
+   213 set .SORTER sorter1
 -    * sensor *tmp61 .SORTER @type
 -    * set :sorter_type *tmp61
-+  220 sensor :sorter_type .SORTER @type
-   221 label *label58
-   222 op notEqual *tmp62 :sorter_type @sorter
-   223 jump *label60 equal *tmp62 false
++  214 sensor :sorter_type .SORTER @type
+   215 label *label58
+   216 op notEqual *tmp62 :sorter_type @sorter
+   217 jump *label60 equal *tmp62 false
  
-   237 label *label64
-   238 printflush message1
-   239 set .SORTER sorter1
+   231 label *label64
+   232 printflush message1
+   233 set .SORTER sorter1
 -    * sensor *tmp66 .SORTER @type
 -    * set :sorter_type *tmp66
-+  240 sensor :sorter_type .SORTER @type
-   241 label *label59
-   242 jump *label58 always
-   243 label *label60
++  234 sensor :sorter_type .SORTER @type
+   235 label *label59
+   236 jump *label58 always
+   237 label *label60
  
-   246 set .SHOW_REMOTE_LEVEL true
-   247 set .SRC .CORE
-   248 set .DST .CONTAINER
+   240 set .SHOW_REMOTE_LEVEL true
+   241 set .SRC .CORE
+   242 set .DST .CONTAINER
 -    * sensor *tmp69 .SRC @itemCapacity
 -    * set :src_capacity *tmp69
 -    * sensor *tmp70 .DST @itemCapacity
 -    * set :dst_capacity *tmp70
-+  249 sensor :src_capacity .SRC @itemCapacity
-+  250 sensor :dst_capacity .DST @itemCapacity
-   251 op sub *tmp71 100 .EFF_REMOTE_LIMIT
-   252 op mul *tmp72 :src_capacity *tmp71
++  243 sensor :src_capacity .SRC @itemCapacity
++  244 sensor :dst_capacity .DST @itemCapacity
+   245 op sub *tmp71 100 .EFF_REMOTE_LIMIT
+   246 op mul *tmp72 :src_capacity *tmp71
 -    * op idiv *tmp73 *tmp72 100
 -    * set .LOAD_LEVEL *tmp73
-+  253 op idiv .LOAD_LEVEL *tmp72 100
-   254 op mul *tmp74 :dst_capacity .EFF_LOCAL_LIMIT
++  247 op idiv .LOAD_LEVEL *tmp72 100
+   248 op mul *tmp74 :dst_capacity .EFF_LOCAL_LIMIT
 -    * op idiv *tmp75 *tmp74 100
 -    * set .DROP_LEVEL *tmp75
-+  255 op idiv .DROP_LEVEL *tmp74 100
-   256 set .LOCAL_MARGIN .DROP_LEVEL
-   257 set .REMOTE_MARGIN .LOAD_LEVEL
-   258 op equal *tmp76 LINK_ID 0
++  249 op idiv .DROP_LEVEL *tmp74 100
+   250 set .LOCAL_MARGIN .DROP_LEVEL
+   251 set .REMOTE_MARGIN .LOAD_LEVEL
+   252 op equal *tmp76 LINK_ID 0
  
-   265 set .DIRECTION *tmp77
-   266 jump *label66 always
-   267 label *label65
+   259 set .DIRECTION *tmp77
+   260 jump *label66 always
+   261 label *label65
 -    * op greaterThan *tmp78 LINK_ID 0
 -    * set .SHOW_REMOTE_LEVEL *tmp78
-+  268 op greaterThan .SHOW_REMOTE_LEVEL LINK_ID 0
-   269 set .SRC .CONTAINER
-   270 set .DST .CORE
++  262 op greaterThan .SHOW_REMOTE_LEVEL LINK_ID 0
+   263 set .SRC .CONTAINER
+   264 set .DST .CORE
 -    * sensor *tmp79 .SRC @itemCapacity
 -    * set :src_capacity *tmp79
 -    * sensor *tmp80 .DST @itemCapacity
 -    * set :dst_capacity *tmp80
-+  271 sensor :src_capacity .SRC @itemCapacity
-+  272 sensor :dst_capacity .DST @itemCapacity
-   273 op sub *tmp81 100 .EFF_LOCAL_LIMIT
-   274 op mul *tmp82 :src_capacity *tmp81
++  265 sensor :src_capacity .SRC @itemCapacity
++  266 sensor :dst_capacity .DST @itemCapacity
+   267 op sub *tmp81 100 .EFF_LOCAL_LIMIT
+   268 op mul *tmp82 :src_capacity *tmp81
 -    * op idiv *tmp83 *tmp82 100
 -    * set .LOAD_LEVEL *tmp83
-+  275 op idiv .LOAD_LEVEL *tmp82 100
-   276 op mul *tmp84 :dst_capacity .EFF_REMOTE_LIMIT
-   277 op idiv *tmp85 *tmp84 100
-   278 op equal *tmp86 LINK_ID 0
-   279 op mul *tmp87 *tmp86 .UNIT_CAPACITY
++  269 op idiv .LOAD_LEVEL *tmp82 100
+   270 op mul *tmp84 :dst_capacity .EFF_REMOTE_LIMIT
+   271 op idiv *tmp85 *tmp84 100
+   272 op equal *tmp86 LINK_ID 0
+   273 op mul *tmp87 *tmp86 .UNIT_CAPACITY
 -    * op add *tmp88 *tmp85 *tmp87
 -    * set .DROP_LEVEL *tmp88
-+  280 op add .DROP_LEVEL *tmp85 *tmp87
-   281 set .LOCAL_MARGIN .LOAD_LEVEL
-   282 set .REMOTE_MARGIN .DROP_LEVEL
-   283 op equal *tmp89 LINK_ID 0
++  274 op add .DROP_LEVEL *tmp85 *tmp87
+   275 set .LOCAL_MARGIN .LOAD_LEVEL
+   276 set .REMOTE_MARGIN .DROP_LEVEL
+   277 op equal *tmp89 LINK_ID 0
  
-   297 set *tmp92 LINK_ID
-   298 label *label72
-   299 set .LINK_TXT *tmp92
+   291 set *tmp92 LINK_ID
+   292 label *label72
+   293 set .LINK_TXT *tmp92
 -    * sensor *tmp93 .SRC @x
 -    * set .SRC_X *tmp93
 -    * sensor *tmp94 .SRC @y
@@ -732,86 +731,86 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-37 ins
 -    * set .DST_X *tmp95
 -    * sensor *tmp96 .DST @y
 -    * set .DST_Y *tmp96
-+  300 sensor .SRC_X .SRC @x
-+  301 sensor .SRC_Y .SRC @y
-+  302 sensor .DST_X .DST @x
-+  303 sensor .DST_Y .DST @y
-   304 op equal *tmp97 .DROP_TARGET null
-   305 jump *label73 equal *tmp97 false
-   306 set .DROP_TARGET .CORE
++  294 sensor .SRC_X .SRC @x
++  295 sensor .SRC_Y .SRC @y
++  296 sensor .DST_X .DST @x
++  297 sensor .DST_Y .DST @y
+   298 op equal *tmp97 .DROP_TARGET null
+   299 jump *label73 equal *tmp97 false
+   300 set .DROP_TARGET .CORE
  
-   308 set .DROP_Y .CORE_Y
-   309 jump *label74 always
-   310 label *label73
+   302 set .DROP_Y .CORE_Y
+   303 jump *label74 always
+   304 label *label73
 -    * sensor *tmp99 .DROP_TARGET @x
 -    * set .DROP_X *tmp99
 -    * sensor *tmp100 .DROP_TARGET @y
 -    * set .DROP_Y *tmp100
-+  311 sensor .DROP_X .DROP_TARGET @x
-+  312 sensor .DROP_Y .DROP_TARGET @y
-   313 label *label74
-   314 set .LAST_ITEM @mono
-   315 set :iter 0
++  305 sensor .DROP_X .DROP_TARGET @x
++  306 sensor .DROP_Y .DROP_TARGET @y
+   307 label *label74
+   308 set .LAST_ITEM @mono
+   309 set :iter 0
  
-   318 ucontrol stop
-   319 label *label75
-   320 jump *label77 equal true false
+   312 ucontrol stop
+   313 label *label75
+   314 jump *label77 equal true false
 -    * set *tmp101 @time
 -    * set :start *tmp101
-+  321 set :start @time
-   322 sensor *tmp102 @unit @dead
-   323 op strictEqual *tmp103 *tmp102 0
-   324 sensor *tmp104 @unit @controller
++  315 set :start @time
+   316 sensor *tmp102 @unit @dead
+   317 op strictEqual *tmp103 *tmp102 0
+   318 sensor *tmp104 @unit @controller
  
-   358 jump *label79 always
-   359 label *label78
-   360 label *label79
+   350 jump *label79 always
+   351 label *label78
+   352 label *label79
 -    * sensor *tmp114 .SORTER @config
 -    * set .ITEM *tmp114
-+  361 sensor .ITEM .SORTER @config
-   362 op notEqual *tmp115 .ITEM .LAST_ITEM
-   363 jump *label88 equal *tmp115 false
-   364 label *label90
++  353 sensor .ITEM .SORTER @config
+   354 op notEqual *tmp115 .ITEM .LAST_ITEM
+   355 jump *label88 equal *tmp115 false
+   356 label *label90
  
-   366 jump *label92 equal *tmp117 false
-   367 print "[salmon]No item type selected for transport."
-   368 printflush message1
+   358 jump *label92 equal *tmp117 false
+   359 print "[salmon]No item type selected for transport."
+   360 printflush message1
 -    * sensor *tmp118 .SORTER @config
 -    * set .ITEM *tmp118
-+  369 sensor .ITEM .SORTER @config
-   370 label *label91
-   371 jump *label90 always
-   372 label *label92
++  361 sensor .ITEM .SORTER @config
+   362 label *label91
+   363 jump *label90 always
+   364 label *label92
  
-   409 jump *label103 equal *tmp131 false
-   410 sensor *tmp133 .SRC .ITEM
-   411 op sub *tmp134 *tmp133 .LOAD_LEVEL
+   401 jump *label103 equal *tmp131 false
+   402 sensor *tmp133 .SRC .ITEM
+   403 op sub *tmp134 *tmp133 .LOAD_LEVEL
 -    * op max *tmp135 *tmp134 0
 -    * set :max_load *tmp135
-+  412 op max :max_load *tmp134 0
-   413 ucontrol itemTake .SRC .ITEM :max_load
-   414 sensor *tmp136 @unit @totalItems
-   415 op greaterThanEq *tmp137 *tmp136 .UNIT_CAPACITY
++  404 op max :max_load *tmp134 0
+   405 ucontrol itemTake .SRC .ITEM :max_load
+   406 sensor *tmp136 @unit @totalItems
+   407 op greaterThanEq *tmp137 *tmp136 .UNIT_CAPACITY
  
-   434 jump *label109 equal *tmp141 false
-   435 sensor *tmp143 .DST .ITEM
-   436 op sub *tmp144 .DROP_LEVEL *tmp143
+   426 jump *label109 equal *tmp141 false
+   427 sensor *tmp143 .DST .ITEM
+   428 op sub *tmp144 .DROP_LEVEL *tmp143
 -    * op max *tmp145 *tmp144 0
 -    * set :max_drop *tmp145
-+  437 op max :max_drop *tmp144 0
-   438 ucontrol itemDrop .DST :max_drop
-   439 sensor *tmp146 @unit @totalItems
-   440 op lessThanEq *tmp147 *tmp146 0
++  429 op max :max_drop *tmp144 0
+   430 ucontrol itemDrop .DST :max_drop
+   431 sensor *tmp146 @unit @totalItems
+   432 op lessThanEq *tmp147 *tmp146 0
  
-   573 label *label113
-   574 op add :iter :iter 1
-   575 label *label114
+   555 label *label113
+   556 op add :iter :iter 1
+   557 label *label114
 -    * op sub *tmp190 @time :start
 -    * set :loop_time *tmp190
-+  576 op sub :loop_time @time :start
-   577 label *label76
-   578 jump *label75 always
-   579 label *label77
++  558 op sub :loop_time @time :start
+   559 label *label76
+   560 jump *label75 always
+   561 label *label77
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-5 instructions):
  
@@ -823,59 +822,59 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-5 ins
     26 op notEqual *tmp7 @unit null
     27 jump *label10 equal *tmp7 false
  
-    59 jump *label12 always
-    60 label *label14
-    61 label *label19
+    58 jump *label12 always
+    59 label *label14
+    60 label *label19
 -    * jump *label21 equal true false
-    62 ubind UNIT
-    63 op equal *tmp16 @unit null
-    64 jump *label22 equal *tmp16 false
+    61 ubind UNIT
+    62 op equal *tmp16 @unit null
+    63 jump *label22 equal *tmp16 false
  
-    94 op div .SPEED_SEC *tmp22 10
-    95 ucontrol flag 1
-    96 label *label26
+    91 op div .SPEED_SEC *tmp22 10
+    92 ucontrol flag 1
+    93 label *label26
 -    * jump *label28 equal true false
-    97 set .CONTAINER null
-    98 set .DROP_TARGET null
-    99 set :n @links
+    94 set .CONTAINER null
+    95 set .DROP_TARGET null
+    96 set :n @links
  
-   314 set :state 1
-   315 ucontrol stop
-   316 label *label75
+   308 set :state 1
+   309 ucontrol stop
+   310 label *label75
 -    * jump *label77 equal true false
-   317 set :start @time
-   318 sensor *tmp102 @unit @dead
-   319 op strictEqual *tmp103 *tmp102 0
+   311 set :start @time
+   312 sensor *tmp102 @unit @dead
+   313 op strictEqual *tmp103 *tmp102 0
  
-   322 op lessThanEq *tmp106 *tmp103 *tmp105
-   323 jump *label78 equal *tmp106 false
-   324 label *label81
+   316 op lessThanEq *tmp106 *tmp103 *tmp105
+   317 jump *label78 equal *tmp106 false
+   318 label *label81
 -    * jump *label83 equal true false
-   325 ubind UNIT
-   326 op equal *tmp109 @unit null
-   327 jump *label84 equal *tmp109 false
+   319 ubind UNIT
+   320 op equal *tmp109 @unit null
+   321 jump *label84 equal *tmp109 false
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-2 instructions):
  
-    55 label *label17
-    56 sensor *tmp13 :rebindUnit:first_unit @dead
-    57 op strictEqual *tmp14 *tmp13 0
+    54 label *label17
+    55 sensor *tmp13 :rebindUnit:first_unit @dead
+    56 op strictEqual *tmp14 *tmp13 0
 -    * jump *label14 equal *tmp14 false
 -    * jump *label12 always
-+   58 jump *label12 notEqual *tmp14 false
-    59 label *label14
-    60 label *label19
-    61 ubind UNIT
++   57 jump *label12 notEqual *tmp14 false
+    58 label *label14
+    59 label *label19
+    60 ubind UNIT
  
-   588 jump *label138 notEqual *tmp192 false
-   589 label *label139
-   590 sensor *tmp193 .DST @dead
+   570 jump *label138 notEqual *tmp192 false
+   571 label *label139
+   572 sensor *tmp193 .DST @dead
 -    * jump *label138 notEqual *tmp193 false
 -    * jump *label136 always
-+  591 jump *label136 equal *tmp193 false
-   592 label *label138
-   593 control enabled switch1 false
-   594 label *label140
++  573 jump *label136 equal *tmp193 false
+   574 label *label138
+   575 control enabled switch1 false
+   576 label *label140
 
 Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-51 instructions):
  
@@ -905,417 +904,415 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-5
     26 jump *label9 always
     27 jump *label11 always
  
-    37 label *label9
-    38 label *label12
-    39 sensor *tmp9 @unit @controller
+    36 label *label9
+    37 label *label12
+    38 sensor *tmp9 @unit @controller
 -    * op equal *tmp10 *tmp9 @this
 -    * jump *label15 equal *tmp10 false
-+   40 jump *label15 notEqual *tmp9 @this
-    41 jump *label6 always
-    42 jump *label16 always
-    43 label *label15
++   39 jump *label15 notEqual *tmp9 @this
+    40 jump *label6 always
+    41 jump *label16 always
+    42 label *label15
  
-    46 print "[gold]Looking for old unit..."
-    47 printflush message1
-    48 label *label13
+    45 print "[gold]Looking for old unit..."
+    46 printflush message1
+    47 label *label13
 -    * op notEqual *tmp12 @unit :rebindUnit:first_unit
 -    * jump *label14 equal *tmp12 false
-+   49 jump *label14 equal @unit :rebindUnit:first_unit
-    50 label *label17
-    51 sensor *tmp13 :rebindUnit:first_unit @dead
++   48 jump *label14 equal @unit :rebindUnit:first_unit
+    49 label *label17
+    50 sensor *tmp13 :rebindUnit:first_unit @dead
 -    * op strictEqual *tmp14 *tmp13 0
 -    * jump *label12 notEqual *tmp14 false
-+   52 jump *label12 strictEqual *tmp13 0
-    53 label *label14
-    54 label *label19
-    55 ubind UNIT
++   51 jump *label12 strictEqual *tmp13 0
+    52 label *label14
+    53 label *label19
+    54 ubind UNIT
 -    * op equal *tmp16 @unit null
 -    * jump *label22 equal *tmp16 false
-+   56 jump *label22 notEqual @unit null
-    57 print "[salmon]No unit of type "
-    58 print UNIT
-    59 print " "
- 
-    61 jump *label23 always
-    62 label *label22
-    63 sensor *tmp18 @unit @controlled
++   55 jump *label22 notEqual @unit null
+    56 print "[salmon]No unit of type "
+    57 print UNIT
+    58 print " found. 2"
+    59 jump *label23 always
+    60 label *label22
+    61 sensor *tmp18 @unit @controlled
 -    * op notEqual *tmp19 *tmp18 0
 -    * jump *label24 equal *tmp19 false
-+   64 jump *label24 equal *tmp18 0
-    65 print "[salmon]Looking for a free "
-    66 print UNIT
-    67 print "."
++   62 jump *label24 equal *tmp18 0
+    63 print "[salmon]Looking for a free "
+    64 print UNIT
+    65 print "..."
  
-    89 set .DROP_TARGET null
-    90 set :n @links
-    91 label *label29
+    86 set .DROP_TARGET null
+    87 set :n @links
+    88 label *label29
 -    * op greaterThan *tmp25 :n 0
 -    * jump *label31 equal *tmp25 false
-+   92 jump *label31 lessThanEq :n 0
-    93 op sub :n :n 1
-    94 getlink :block :n
-    95 sensor *tmp28 :block @itemCapacity
++   89 jump *label31 lessThanEq :n 0
+    90 op sub :n :n 1
+    91 getlink :block :n
+    92 sensor *tmp28 :block @itemCapacity
 -    * op greaterThan *tmp29 *tmp28 0
 -    * jump *label32 equal *tmp29 false
-+   96 jump *label32 lessThanEq *tmp28 0
-    97 set .DROP_TARGET .CONTAINER
-    98 set .CONTAINER :block
-    99 jump *label33 always
++   93 jump *label32 lessThanEq *tmp28 0
+    94 set .DROP_TARGET .CONTAINER
+    95 set .CONTAINER :block
+    96 jump *label33 always
  
-   102 label *label30
-   103 jump *label29 always
-   104 label *label31
+    99 label *label30
+   100 jump *label29 always
+   101 label *label31
 -    * op equal *tmp31 .CONTAINER null
 -    * jump *label34 equal *tmp31 false
-+  105 jump *label34 notEqual .CONTAINER null
-   106 print "[salmon]No destination."
-   107 print "\n"
-   108 jump *label35 always
-   109 label *label34
++  102 jump *label34 notEqual .CONTAINER null
+   103 print "[salmon]No destination."
+   104 print "\n"
+   105 jump *label35 always
+   106 label *label34
 -    * op notEqual *tmp33 .DROP_TARGET null
 -    * jump *label36 equal *tmp33 false
-+  110 jump *label36 equal .DROP_TARGET null
-   111 label *label39
-   112 sensor *tmp34 .DROP_TARGET @itemCapacity
++  107 jump *label36 equal .DROP_TARGET null
+   108 label *label39
+   109 sensor *tmp34 .DROP_TARGET @itemCapacity
 -    * op lessThan *tmp35 *tmp34 300
 -    * jump *label36 equal *tmp35 false
-+  113 jump *label36 greaterThanEq *tmp34 300
-   114 jump *label38 always
-   115 label *label38
-   116 print "Destination: "
++  110 jump *label36 greaterThanEq *tmp34 300
+   111 jump *label38 always
+   112 label *label38
+   113 print "Destination: "
  
-   134 set .CORE_Y null
-   135 set .CORE_X .CORE_Y
-   136 set .CORE .CORE_X
+   129 set .CORE_Y null
+   130 set .CORE_X .CORE_Y
+   131 set .CORE .CORE_X
 -    * op equal *tmp37 LINK_ID 0
 -    * jump *label40 equal *tmp37 false
-+  137 jump *label40 notEqual LINK_ID 0
-   138 print "[gold]Locating core..."
-   139 printflush message1
-   140 ulocate building core false @copper .CORE_X .CORE_Y *tmp40 .CORE
++  132 jump *label40 notEqual LINK_ID 0
+   133 print "[gold]Locating core..."
+   134 printflush message1
+   135 ulocate building core false @copper .CORE_X .CORE_Y *tmp40 .CORE
  
-   149 set :flag .QUERY_FLAG
-   150 ucontrol flag :flag
-   151 label *label42
+   143 set :flag .QUERY_FLAG
+   144 ucontrol flag :flag
+   145 label *label42
 -    * op equal *tmp42 :flag .QUERY_FLAG
 -    * jump *label44 equal *tmp42 false
-+  152 jump *label44 notEqual :flag .QUERY_FLAG
-   153 label *label46
-   154 sensor *tmp43 @unit @dead
++  146 jump *label44 notEqual :flag .QUERY_FLAG
+   147 label *label46
+   148 sensor *tmp43 @unit @dead
 -    * op strictEqual *tmp44 *tmp43 0
 -    * jump *label44 equal *tmp44 false
-+  155 jump *label44 strictNotEqual *tmp43 0
-   156 jump *label45 always
-   157 label *label45
-   158 ucontrol stop
++  149 jump *label44 strictNotEqual *tmp43 0
+   150 jump *label45 always
+   151 label *label45
+   152 ucontrol stop
  
-   160 label *label43
-   161 jump *label42 always
-   162 label *label44
+   154 label *label43
+   155 jump *label42 always
+   156 label *label44
 -    * op notEqual *tmp46 :flag .QUERY_FLAG
 -    * jump *label47 equal *tmp46 false
-+  163 jump *label47 equal :flag .QUERY_FLAG
-   164 op idiv :position :flag 100
-   165 op mod .CORE_X :position @mapw
-   166 op idiv .CORE_Y :position @mapw
-   167 label *label49
-   168 ucontrol within .CORE_X .CORE_Y 8 *tmp51
++  157 jump *label47 equal :flag .QUERY_FLAG
+   158 op idiv :position :flag 100
+   159 op mod .CORE_X :position @mapw
+   160 op idiv .CORE_Y :position @mapw
+   161 label *label49
+   162 ucontrol within .CORE_X .CORE_Y 8 *tmp51
 -    * op equal *tmp52 *tmp51 false
 -    * jump *label51 equal *tmp52 false
-+  169 jump *label51 notEqual *tmp51 false
-   170 label *label53
-   171 sensor *tmp53 @unit @dead
++  163 jump *label51 notEqual *tmp51 false
+   164 label *label53
+   165 sensor *tmp53 @unit @dead
 -    * op equal *tmp54 *tmp53 0
 -    * jump *label51 equal *tmp54 false
-+  172 jump *label51 notEqual *tmp53 0
-   173 jump *label52 always
-   174 label *label52
-   175 ucontrol approach .CORE_X .CORE_Y 6
++  166 jump *label51 notEqual *tmp53 0
+   167 jump *label52 always
+   168 label *label52
+   169 ucontrol approach .CORE_X .CORE_Y 6
  
-   177 jump *label49 always
-   178 label *label51
-   179 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE *tmp56
+   171 jump *label49 always
+   172 label *label51
+   173 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE *tmp56
 -    * op notEqual *tmp57 :b_type @vault
 -    * jump *label54 equal *tmp57 false
-+  180 jump *label54 equal :b_type @vault
-   181 set .CORE null
-   182 jump *label55 always
-   183 label *label54
++  174 jump *label54 equal :b_type @vault
+   175 set .CORE null
+   176 jump *label55 always
+   177 label *label54
  
-   186 label *label47
-   187 label *label48
-   188 label *label41
+   180 label *label47
+   181 label *label48
+   182 label *label41
 -    * op equal *tmp59 .CORE null
 -    * jump *label56 equal *tmp59 false
-+  189 jump *label56 notEqual .CORE null
-   190 end
-   191 jump *label57 always
-   192 label *label56
++  183 jump *label56 notEqual .CORE null
+   184 end
+   185 jump *label57 always
+   186 label *label56
  
-   194 set .SORTER sorter1
-   195 sensor :sorter_type .SORTER @type
-   196 label *label58
+   188 set .SORTER sorter1
+   189 sensor :sorter_type .SORTER @type
+   190 label *label58
 -    * op notEqual *tmp62 :sorter_type @sorter
 -    * jump *label60 equal *tmp62 false
-+  197 jump *label60 equal :sorter_type @sorter
-   198 label *label62
++  191 jump *label60 equal :sorter_type @sorter
+   192 label *label62
 -    * op notEqual *tmp63 :sorter_type @inverted-sorter
 -    * jump *label60 equal *tmp63 false
-+  199 jump *label60 equal :sorter_type @inverted-sorter
-   200 jump *label61 always
-   201 label *label61
-   202 print "[salmon]Block sorter1 is neither a sorter, nor an inverted sorter."
-   203 print "\n"
++  193 jump *label60 equal :sorter_type @inverted-sorter
+   194 jump *label61 always
+   195 label *label61
+   196 print "[salmon]Block sorter1 is neither a sorter, nor an inverted sorter."
+   197 print "\n"
 -    * op notEqual *tmp64 .SORTER null
 -    * jump *label63 equal *tmp64 false
-+  204 jump *label63 equal .SORTER null
-   205 print "Block found: "
-   206 print .SORTER
-   207 jump *label64 always
++  198 jump *label63 equal .SORTER null
+   199 print "Block found: "
+   200 print .SORTER
+   201 jump *label64 always
  
-   213 label *label59
-   214 jump *label58 always
-   215 label *label60
+   207 label *label59
+   208 jump *label58 always
+   209 label *label60
 -    * op equal *tmp67 :sorter_type @sorter
 -    * jump *label65 equal *tmp67 false
-+  216 jump *label65 notEqual :sorter_type @sorter
-   217 set .SHOW_REMOTE_LEVEL true
-   218 set .SRC .CORE
-   219 set .DST .CONTAINER
++  210 jump *label65 notEqual :sorter_type @sorter
+   211 set .SHOW_REMOTE_LEVEL true
+   212 set .SRC .CORE
+   213 set .DST .CONTAINER
  
-   226 op idiv .DROP_LEVEL *tmp74 100
-   227 set .LOCAL_MARGIN .DROP_LEVEL
-   228 set .REMOTE_MARGIN .LOAD_LEVEL
+   220 op idiv .DROP_LEVEL *tmp74 100
+   221 set .LOCAL_MARGIN .DROP_LEVEL
+   222 set .REMOTE_MARGIN .LOAD_LEVEL
 -    * op equal *tmp76 LINK_ID 0
 -    * jump *label67 equal *tmp76 false
-+  229 jump *label67 notEqual LINK_ID 0
-   230 set *tmp77 "[] from core"
-   231 jump *label68 always
-   232 label *label67
++  223 jump *label67 notEqual LINK_ID 0
+   224 set *tmp77 "[] from core"
+   225 jump *label68 always
+   226 label *label67
  
-   250 op add .DROP_LEVEL *tmp85 *tmp87
-   251 set .LOCAL_MARGIN .LOAD_LEVEL
-   252 set .REMOTE_MARGIN .DROP_LEVEL
+   244 op add .DROP_LEVEL *tmp85 *tmp87
+   245 set .LOCAL_MARGIN .LOAD_LEVEL
+   246 set .REMOTE_MARGIN .DROP_LEVEL
 -    * op equal *tmp89 LINK_ID 0
 -    * jump *label69 equal *tmp89 false
-+  253 jump *label69 notEqual LINK_ID 0
-   254 set *tmp90 "[] to core"
-   255 jump *label70 always
-   256 label *label69
++  247 jump *label69 notEqual LINK_ID 0
+   248 set *tmp90 "[] to core"
+   249 jump *label70 always
+   250 label *label69
  
-   258 label *label70
-   259 set .DIRECTION *tmp90
-   260 label *label66
+   252 label *label70
+   253 set .DIRECTION *tmp90
+   254 label *label66
 -    * op equal *tmp91 LINK_ID 0
 -    * jump *label71 equal *tmp91 false
-+  261 jump *label71 notEqual LINK_ID 0
-   262 set *tmp92 ""
-   263 jump *label72 always
-   264 label *label71
++  255 jump *label71 notEqual LINK_ID 0
+   256 set *tmp92 ""
+   257 jump *label72 always
+   258 label *label71
  
-   269 sensor .SRC_Y .SRC @y
-   270 sensor .DST_X .DST @x
-   271 sensor .DST_Y .DST @y
+   263 sensor .SRC_Y .SRC @y
+   264 sensor .DST_X .DST @x
+   265 sensor .DST_Y .DST @y
 -    * op equal *tmp97 .DROP_TARGET null
 -    * jump *label73 equal *tmp97 false
-+  272 jump *label73 notEqual .DROP_TARGET null
-   273 set .DROP_TARGET .CORE
-   274 set .DROP_X .CORE_X
-   275 set .DROP_Y .CORE_Y
++  266 jump *label73 notEqual .DROP_TARGET null
+   267 set .DROP_TARGET .CORE
+   268 set .DROP_X .CORE_X
+   269 set .DROP_Y .CORE_Y
  
-   289 op strictEqual *tmp103 *tmp102 0
-   290 sensor *tmp104 @unit @controller
-   291 op notEqual *tmp105 *tmp104 @this
+   283 op strictEqual *tmp103 *tmp102 0
+   284 sensor *tmp104 @unit @controller
+   285 op notEqual *tmp105 *tmp104 @this
 -    * op lessThanEq *tmp106 *tmp103 *tmp105
 -    * jump *label78 equal *tmp106 false
-+  292 jump *label78 greaterThan *tmp103 *tmp105
-   293 label *label81
-   294 ubind UNIT
++  286 jump *label78 greaterThan *tmp103 *tmp105
+   287 label *label81
+   288 ubind UNIT
 -    * op equal *tmp109 @unit null
 -    * jump *label84 equal *tmp109 false
-+  295 jump *label84 notEqual @unit null
-   296 print "[salmon]No unit of type "
-   297 print UNIT
-   298 print " "
- 
-   300 jump *label85 always
-   301 label *label84
-   302 sensor *tmp111 @unit @controlled
++  289 jump *label84 notEqual @unit null
+   290 print "[salmon]No unit of type "
+   291 print UNIT
+   292 print " found. 2"
+   293 jump *label85 always
+   294 label *label84
+   295 sensor *tmp111 @unit @controlled
 -    * op notEqual *tmp112 *tmp111 0
 -    * jump *label86 equal *tmp112 false
-+  303 jump *label86 equal *tmp111 0
-   304 print "[salmon]Looking for a free "
-   305 print UNIT
-   306 print "."
++  296 jump *label86 equal *tmp111 0
+   297 print "[salmon]Looking for a free "
+   298 print UNIT
+   299 print "..."
  
-   321 label *label78
-   322 label *label79
-   323 sensor .ITEM .SORTER @config
+   313 label *label78
+   314 label *label79
+   315 sensor .ITEM .SORTER @config
 -    * op notEqual *tmp115 .ITEM .LAST_ITEM
 -    * jump *label88 equal *tmp115 false
-+  324 jump *label88 equal .ITEM .LAST_ITEM
-   325 label *label90
++  316 jump *label88 equal .ITEM .LAST_ITEM
+   317 label *label90
 -    * op equal *tmp117 .ITEM null
 -    * jump *label92 equal *tmp117 false
-+  326 jump *label92 notEqual .ITEM null
-   327 print "[salmon]No item type selected for transport."
-   328 printflush message1
-   329 sensor .ITEM .SORTER @config
++  318 jump *label92 notEqual .ITEM null
+   319 print "[salmon]No item type selected for transport."
+   320 printflush message1
+   321 sensor .ITEM .SORTER @config
  
-   336 label *label88
-   337 label *label89
-   338 set :show_state 0
+   328 label *label88
+   329 label *label89
+   330 set :show_state 0
 -    * op equal *tmp119 :state 1
 -    * jump *label93 equal *tmp119 false
-+  339 jump *label93 notEqual :state 1
-   340 sensor *tmp121 @unit @firstItem
++  331 jump *label93 notEqual :state 1
+   332 sensor *tmp121 @unit @firstItem
 -    * op equal *tmp122 *tmp121 .ITEM
 -    * jump *label95 equal *tmp122 false
-+  341 jump *label95 notEqual *tmp121 .ITEM
-   342 set :state 3
-   343 jump *label96 always
-   344 label *label95
-   345 sensor *tmp124 @unit @totalItems
++  333 jump *label95 notEqual *tmp121 .ITEM
+   334 set :state 3
+   335 jump *label96 always
+   336 label *label95
+   337 sensor *tmp124 @unit @totalItems
 -    * op equal *tmp125 *tmp124 0
 -    * jump *label97 equal *tmp125 false
-+  346 jump *label97 notEqual *tmp124 0
-   347 set :state 2
-   348 jump *label98 always
-   349 label *label97
++  338 jump *label97 notEqual *tmp124 0
+   339 set :state 2
+   340 jump *label98 always
+   341 label *label97
  
-   360 jump *label94 always
-   361 label *label93
-   362 label *label94
+   352 jump *label94 always
+   353 label *label93
+   354 label *label94
 -    * op equal *tmp129 :state 2
 -    * jump *label101 equal *tmp129 false
-+  363 jump *label101 notEqual :state 2
-   364 ucontrol within .SRC_X .SRC_Y 8 *tmp131
-   365 jump *label103 equal *tmp131 false
-   366 sensor *tmp133 .SRC .ITEM
++  355 jump *label101 notEqual :state 2
+   356 ucontrol within .SRC_X .SRC_Y 8 *tmp131
+   357 jump *label103 equal *tmp131 false
+   358 sensor *tmp133 .SRC .ITEM
  
-   368 op max :max_load *tmp134 0
-   369 ucontrol itemTake .SRC .ITEM :max_load
-   370 sensor *tmp136 @unit @totalItems
+   360 op max :max_load *tmp134 0
+   361 ucontrol itemTake .SRC .ITEM :max_load
+   362 sensor *tmp136 @unit @totalItems
 -    * op greaterThanEq *tmp137 *tmp136 .UNIT_CAPACITY
 -    * jump *label105 equal *tmp137 false
-+  371 jump *label105 lessThan *tmp136 .UNIT_CAPACITY
-   372 set :state 3
-   373 jump *label106 always
-   374 label *label105
++  363 jump *label105 lessThan *tmp136 .UNIT_CAPACITY
+   364 set :state 3
+   365 jump *label106 always
+   366 label *label105
  
-   383 jump *label102 always
-   384 label *label101
-   385 label *label102
+   375 jump *label102 always
+   376 label *label101
+   377 label *label102
 -    * op equal *tmp139 :state 3
 -    * jump *label107 equal *tmp139 false
-+  386 jump *label107 notEqual :state 3
-   387 ucontrol within .DST_X .DST_Y 8 *tmp141
-   388 jump *label109 equal *tmp141 false
-   389 sensor *tmp143 .DST .ITEM
++  378 jump *label107 notEqual :state 3
+   379 ucontrol within .DST_X .DST_Y 8 *tmp141
+   380 jump *label109 equal *tmp141 false
+   381 sensor *tmp143 .DST .ITEM
  
-   391 op max :max_drop *tmp144 0
-   392 ucontrol itemDrop .DST :max_drop
-   393 sensor *tmp146 @unit @totalItems
+   383 op max :max_drop *tmp144 0
+   384 ucontrol itemDrop .DST :max_drop
+   385 sensor *tmp146 @unit @totalItems
 -    * op lessThanEq *tmp147 *tmp146 0
 -    * jump *label111 equal *tmp147 false
-+  394 jump *label111 greaterThan *tmp146 0
-   395 set :state 2
-   396 ucontrol approach .SRC_X .SRC_Y 6
-   397 jump *label112 always
++  386 jump *label111 greaterThan *tmp146 0
+   387 set :state 2
+   388 ucontrol approach .SRC_X .SRC_Y 6
+   389 jump *label112 always
  
-   407 jump *label108 always
-   408 label *label107
-   409 label *label108
+   399 jump *label108 always
+   400 label *label107
+   401 label *label108
 -    * op greaterThan *tmp149 :iter 3
 -    * jump *label113 equal *tmp149 false
-+  410 jump *label113 lessThanEq :iter 3
-   411 set :iter 0
-   412 print "Moving [green]"
-   413 print .ITEM
++  402 jump *label113 lessThanEq :iter 3
+   403 set :iter 0
+   404 print "Moving [green]"
+   405 print .ITEM
  
-   420 print *tmp151
-   421 print "["
-   422 print "]"
+   410 print "Local items: [gold]"
+   411 print *tmp151
+   412 print "[]"
 -    * op lessThan *tmp152 .EFF_LOCAL_LIMIT 100
 -    * jump *label115 equal *tmp152 false
-+  423 jump *label115 greaterThanEq .EFF_LOCAL_LIMIT 100
-   424 print " (limit [orange]"
-   425 print .LOCAL_MARGIN
-   426 print "["
++  413 jump *label115 greaterThanEq .EFF_LOCAL_LIMIT 100
+   414 print " (limit [orange]"
+   415 print .LOCAL_MARGIN
+   416 print "[])"
  
-   435 print *tmp155
-   436 print "["
-   437 print "]"
+   422 print "\nRemote items: [gold]"
+   423 print *tmp155
+   424 print "[]"
 -    * op lessThan *tmp156 .EFF_REMOTE_LIMIT 100
 -    * jump *label119 equal *tmp156 false
-+  438 jump *label119 greaterThanEq .EFF_REMOTE_LIMIT 100
-   439 print " (limit [orange]"
-   440 print .REMOTE_MARGIN
-   441 print "["
++  425 jump *label119 greaterThanEq .EFF_REMOTE_LIMIT 100
+   426 print " (limit [orange]"
+   427 print .REMOTE_MARGIN
+   428 print "[])"
  
-   451 print *tmp158
-   452 print "[]"
-   453 print "\n"
+   437 print *tmp158
+   438 print "[]"
+   439 print "\n"
 -    * op equal *tmp159 :show_state 2
 -    * jump *label121 equal *tmp159 false
-+  454 jump *label121 notEqual :show_state 2
-   455 sensor *tmp161 @unit @x
-   456 op sub *tmp162 .SRC_X *tmp161
-   457 sensor *tmp163 @unit @y
++  440 jump *label121 notEqual :show_state 2
+   441 sensor *tmp161 @unit @x
+   442 op sub *tmp162 .SRC_X *tmp161
+   443 sensor *tmp163 @unit @y
  
-   466 print "\n"
-   467 jump *label122 always
-   468 label *label121
+   450 print " sec[]\n"
+   451 jump *label122 always
+   452 label *label121
 -    * op equal *tmp168 :show_state 3
 -    * jump *label123 equal *tmp168 false
-+  469 jump *label123 notEqual :show_state 3
-   470 sensor *tmp170 @unit @x
-   471 op sub *tmp171 .DST_X *tmp170
-   472 sensor *tmp172 @unit @y
++  453 jump *label123 notEqual :show_state 3
+   454 sensor *tmp170 @unit @x
+   455 op sub *tmp171 .DST_X *tmp170
+   456 sensor *tmp172 @unit @y
  
-   490 print "\n"
-   491 printflush message1
-   492 sensor *tmp178 switch1 @enabled
+   472 print "\n"
+   473 printflush message1
+   474 sensor *tmp178 switch1 @enabled
 -    * op equal *tmp179 *tmp178 0
 -    * jump *label125 equal *tmp179 false
-+  493 jump *label125 notEqual *tmp178 0
-   494 jump *label77 always
-   495 jump *label126 always
-   496 label *label125
-   497 label *label126
-   498 sensor *tmp181 .SRC @dead
++  475 jump *label125 notEqual *tmp178 0
+   476 jump *label77 always
+   477 jump *label126 always
+   478 label *label125
+   479 label *label126
+   480 sensor *tmp181 .SRC @dead
 -    * op notEqual *tmp182 *tmp181 0
 -    * jump *label127 equal *tmp182 false
-+  499 jump *label127 equal *tmp181 0
-   500 jump *label77 always
-   501 jump *label128 always
-   502 label *label127
-   503 label *label128
-   504 sensor *tmp184 .DST @dead
++  481 jump *label127 equal *tmp181 0
+   482 jump *label77 always
+   483 jump *label128 always
+   484 label *label127
+   485 label *label128
+   486 sensor *tmp184 .DST @dead
 -    * op notEqual *tmp185 *tmp184 0
 -    * jump *label129 equal *tmp185 false
-+  505 jump *label129 equal *tmp184 0
-   506 jump *label77 always
-   507 jump *label130 always
-   508 label *label129
-   509 label *label130
-   510 sensor *tmp187 .SORTER @dead
++  487 jump *label129 equal *tmp184 0
+   488 jump *label77 always
+   489 jump *label130 always
+   490 label *label129
+   491 label *label130
+   492 sensor *tmp187 .SORTER @dead
 -    * op notEqual *tmp188 *tmp187 0
 -    * jump *label131 equal *tmp188 false
-+  511 jump *label131 equal *tmp187 0
-   512 jump *label77 always
-   513 jump *label132 always
-   514 label *label131
++  493 jump *label131 equal *tmp187 0
+   494 jump *label77 always
+   495 jump *label132 always
+   496 label *label131
  
-   543 control enabled switch1 false
-   544 label *label140
-   545 sensor *tmp196 switch1 @enabled
+   525 control enabled switch1 false
+   526 label *label140
+   527 sensor *tmp196 switch1 @enabled
 -    * op equal *tmp197 *tmp196 false
 -    * jump *label142 equal *tmp197 false
-+  546 jump *label142 notEqual *tmp196 false
-   547 print "[salmon]Local or remote container became invalid."
-   548 print "\n"
-   549 print "[gold]Please fix and press button to reinitialize."
++  528 jump *label142 notEqual *tmp196 false
+   529 print "[salmon]Local or remote container became invalid."
+   530 print "\n"
+   531 print "[gold]Please fix and press button to reinitialize."
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-26 instructions):
  
@@ -1327,428 +1324,428 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     28 label *label11
     29 print "[salmon]No unit of type "
  
-    38 sensor *tmp9 @unit @controller
-    39 jump *label15 notEqual *tmp9 @this
-    40 jump *label6 always
+    37 sensor *tmp9 @unit @controller
+    38 jump *label15 notEqual *tmp9 @this
+    39 jump *label6 always
 -    * jump *label16 always
-    41 label *label15
-    42 label *label16
-    43 ubind UNIT
+    40 label *label15
+    41 label *label16
+    42 ubind UNIT
  
-    94 jump *label32 lessThanEq *tmp28 0
-    95 set .DROP_TARGET .CONTAINER
-    96 set .CONTAINER :block
+    91 jump *label32 lessThanEq *tmp28 0
+    92 set .DROP_TARGET .CONTAINER
+    93 set .CONTAINER :block
 -    * jump *label33 always
-    97 label *label32
-    98 label *label33
-    99 label *label30
+    94 label *label32
+    95 label *label33
+    96 label *label30
  
-   108 label *label39
-   109 sensor *tmp34 .DROP_TARGET @itemCapacity
-   110 jump *label36 greaterThanEq *tmp34 300
+   105 label *label39
+   106 sensor *tmp34 .DROP_TARGET @itemCapacity
+   107 jump *label36 greaterThanEq *tmp34 300
 -    * jump *label38 always
-   111 label *label38
-   112 print "Destination: "
-   113 print .CONTAINER
+   108 label *label38
+   109 print "Destination: "
+   110 print .CONTAINER
  
-   149 label *label46
-   150 sensor *tmp43 @unit @dead
-   151 jump *label44 strictNotEqual *tmp43 0
+   143 label *label46
+   144 sensor *tmp43 @unit @dead
+   145 jump *label44 strictNotEqual *tmp43 0
 -    * jump *label45 always
-   152 label *label45
-   153 ucontrol stop
-   154 sensor :flag @unit @flag
+   146 label *label45
+   147 ucontrol stop
+   148 sensor :flag @unit @flag
  
-   165 label *label53
-   166 sensor *tmp53 @unit @dead
-   167 jump *label51 notEqual *tmp53 0
+   159 label *label53
+   160 sensor *tmp53 @unit @dead
+   161 jump *label51 notEqual *tmp53 0
 -    * jump *label52 always
-   168 label *label52
-   169 ucontrol approach .CORE_X .CORE_Y 6
-   170 label *label50
+   162 label *label52
+   163 ucontrol approach .CORE_X .CORE_Y 6
+   164 label *label50
  
-   173 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE *tmp56
-   174 jump *label54 equal :b_type @vault
-   175 set .CORE null
+   167 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE *tmp56
+   168 jump *label54 equal :b_type @vault
+   169 set .CORE null
 -    * jump *label55 always
-   176 label *label54
-   177 label *label55
+   170 label *label54
+   171 label *label55
 -    * jump *label48 always
-   178 label *label47
-   179 label *label48
-   180 label *label41
-   181 jump *label56 notEqual .CORE null
-   182 end
+   172 label *label47
+   173 label *label48
+   174 label *label41
+   175 jump *label56 notEqual .CORE null
+   176 end
 -    * jump *label57 always
-   183 label *label56
-   184 label *label57
-   185 set .SORTER sorter1
+   177 label *label56
+   178 label *label57
+   179 set .SORTER sorter1
  
-   188 jump *label60 equal :sorter_type @sorter
-   189 label *label62
-   190 jump *label60 equal :sorter_type @inverted-sorter
+   182 jump *label60 equal :sorter_type @sorter
+   183 label *label62
+   184 jump *label60 equal :sorter_type @inverted-sorter
 -    * jump *label61 always
-   191 label *label61
-   192 print "[salmon]Block sorter1 is neither a sorter, nor an inverted sorter."
-   193 print "\n"
-   194 jump *label63 equal .SORTER null
-   195 print "Block found: "
-   196 print .SORTER
+   185 label *label61
+   186 print "[salmon]Block sorter1 is neither a sorter, nor an inverted sorter."
+   187 print "\n"
+   188 jump *label63 equal .SORTER null
+   189 print "Block found: "
+   190 print .SORTER
 -    * jump *label64 always
-   197 label *label63
-   198 label *label64
-   199 printflush message1
+   191 label *label63
+   192 label *label64
+   193 printflush message1
  
-   306 label *label80
-   307 ucontrol flag 1
-   308 set :state 1
+   298 label *label80
+   299 ucontrol flag 1
+   300 set :state 1
 -    * jump *label79 always
-   309 label *label78
-   310 label *label79
-   311 sensor .ITEM .SORTER @config
+   301 label *label78
+   302 label *label79
+   303 sensor .ITEM .SORTER @config
  
-   320 label *label92
-   321 set .LAST_ITEM .ITEM
-   322 set :state 1
+   312 label *label92
+   313 set .LAST_ITEM .ITEM
+   314 set :state 1
 -    * jump *label89 always
-   323 label *label88
-   324 label *label89
-   325 set :show_state 0
+   315 label *label88
+   316 label *label89
+   317 set :show_state 0
  
-   339 ucontrol within .DROP_X .DROP_Y 8 *tmp127
-   340 jump *label99 equal *tmp127 false
-   341 ucontrol itemDrop .DROP_TARGET .UNIT_CAPACITY
+   331 ucontrol within .DROP_X .DROP_Y 8 *tmp127
+   332 jump *label99 equal *tmp127 false
+   333 ucontrol itemDrop .DROP_TARGET .UNIT_CAPACITY
 -    * jump *label100 always
-   342 label *label99
-   343 label *label100
-   344 label *label98
-   345 label *label96
+   334 label *label99
+   335 label *label100
+   336 label *label98
+   337 label *label96
 -    * jump *label94 always
-   346 label *label93
-   347 label *label94
-   348 jump *label101 notEqual :state 2
+   338 label *label93
+   339 label *label94
+   340 jump *label101 notEqual :state 2
  
-   365 set .MSG "\nGoing to source: [green]"
-   366 set :show_state 2
-   367 label *label104
+   357 set .MSG "\nGoing to source: [green]"
+   358 set :show_state 2
+   359 label *label104
 -    * jump *label102 always
-   368 label *label101
-   369 label *label102
-   370 jump *label107 notEqual :state 3
+   360 label *label101
+   361 label *label102
+   362 jump *label107 notEqual :state 3
  
-   388 set .MSG "\nGoing to destination: [green]"
-   389 set :show_state 3
-   390 label *label110
+   380 set .MSG "\nGoing to destination: [green]"
+   381 set :show_state 3
+   382 label *label110
 -    * jump *label108 always
-   391 label *label107
-   392 label *label108
-   393 jump *label113 lessThanEq :iter 3
+   383 label *label107
+   384 label *label108
+   385 jump *label113 lessThanEq :iter 3
  
-   408 print .LOCAL_MARGIN
-   409 print "["
-   410 print "])"
+   397 print " (limit [orange]"
+   398 print .LOCAL_MARGIN
+   399 print "[])"
 -    * jump *label116 always
-   411 label *label115
-   412 label *label116
-   413 jump *label117 equal .SHOW_REMOTE_LEVEL false
+   400 label *label115
+   401 label *label116
+   402 jump *label117 equal .SHOW_REMOTE_LEVEL false
  
-   422 print .REMOTE_MARGIN
-   423 print "["
-   424 print "])"
+   408 print " (limit [orange]"
+   409 print .REMOTE_MARGIN
+   410 print "[])"
 -    * jump *label120 always
-   425 label *label119
-   426 label *label120
+   411 label *label119
+   412 label *label120
 -    * jump *label118 always
-   427 label *label117
-   428 label *label118
-   429 sensor *tmp158 @unit @totalItems
+   413 label *label117
+   414 label *label118
+   415 sensor *tmp158 @unit @totalItems
  
-   459 print " "
-   460 print "sec[]"
-   461 print "\n"
+   441 print "[]  arriving in [gold]"
+   442 print *tmp176
+   443 print " sec[]\n"
 -    * jump *label124 always
-   462 label *label123
-   463 label *label124
-   464 label *label122
+   444 label *label123
+   445 label *label124
+   446 label *label122
  
-   471 sensor *tmp178 switch1 @enabled
-   472 jump *label125 notEqual *tmp178 0
-   473 jump *label77 always
+   453 sensor *tmp178 switch1 @enabled
+   454 jump *label125 notEqual *tmp178 0
+   455 jump *label77 always
 -    * jump *label126 always
-   474 label *label125
-   475 label *label126
-   476 sensor *tmp181 .SRC @dead
-   477 jump *label127 equal *tmp181 0
-   478 jump *label77 always
+   456 label *label125
+   457 label *label126
+   458 sensor *tmp181 .SRC @dead
+   459 jump *label127 equal *tmp181 0
+   460 jump *label77 always
 -    * jump *label128 always
-   479 label *label127
-   480 label *label128
-   481 sensor *tmp184 .DST @dead
-   482 jump *label129 equal *tmp184 0
-   483 jump *label77 always
+   461 label *label127
+   462 label *label128
+   463 sensor *tmp184 .DST @dead
+   464 jump *label129 equal *tmp184 0
+   465 jump *label77 always
 -    * jump *label130 always
-   484 label *label129
-   485 label *label130
-   486 sensor *tmp187 .SORTER @dead
-   487 jump *label131 equal *tmp187 0
-   488 jump *label77 always
+   466 label *label129
+   467 label *label130
+   468 sensor *tmp187 .SORTER @dead
+   469 jump *label131 equal *tmp187 0
+   470 jump *label77 always
 -    * jump *label132 always
-   489 label *label131
-   490 label *label132
-   491 jump *label114 always
+   471 label *label131
+   472 label *label132
+   473 jump *label114 always
  
-   528 label *label141
-   529 jump *label140 always
-   530 label *label142
+   510 label *label141
+   511 jump *label140 always
+   512 label *label142
 -    * jump *label137 always
-   531 label *label136
-   532 label *label137
-   533 end
+   513 label *label136
+   514 label *label137
+   515 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   128 jump *label26 always
-   129 label *label28
-   130 set .CORE_Y null
+   123 jump *label26 always
+   124 label *label28
+   125 set .CORE_Y null
 -    * set .CORE_X .CORE_Y
 -    * set .CORE .CORE_X
-+  131 set .CORE_X null
-+  132 set .CORE .CORE_Y
-   133 jump *label40 notEqual LINK_ID 0
-   134 print "[gold]Locating core..."
-   135 printflush message1
++  126 set .CORE_X null
++  127 set .CORE .CORE_Y
+   128 jump *label40 notEqual LINK_ID 0
+   129 print "[gold]Locating core..."
+   130 printflush message1
  
-   143 printflush message1
-   144 op add .QUERY_FLAG 99999900 LINK_ID
-   145 set :flag .QUERY_FLAG
+   137 printflush message1
+   138 op add .QUERY_FLAG 99999900 LINK_ID
+   139 set :flag .QUERY_FLAG
 -    * ucontrol flag :flag
-+  146 ucontrol flag .QUERY_FLAG
-   147 label *label42
-   148 jump *label44 notEqual :flag .QUERY_FLAG
-   149 label *label46
++  140 ucontrol flag .QUERY_FLAG
+   141 label *label42
+   142 jump *label44 notEqual :flag .QUERY_FLAG
+   143 label *label46
  
-   183 label *label56
-   184 label *label57
-   185 set .SORTER sorter1
+   177 label *label56
+   178 label *label57
+   179 set .SORTER sorter1
 -    * sensor :sorter_type .SORTER @type
-+  186 sensor :sorter_type sorter1 @type
-   187 label *label58
-   188 jump *label60 equal :sorter_type @sorter
-   189 label *label62
++  180 sensor :sorter_type sorter1 @type
+   181 label *label58
+   182 jump *label60 equal :sorter_type @sorter
+   183 label *label62
  
-   198 label *label64
-   199 printflush message1
-   200 set .SORTER sorter1
+   192 label *label64
+   193 printflush message1
+   194 set .SORTER sorter1
 -    * sensor :sorter_type .SORTER @type
-+  201 sensor :sorter_type sorter1 @type
-   202 label *label59
-   203 jump *label58 always
-   204 label *label60
++  195 sensor :sorter_type sorter1 @type
+   196 label *label59
+   197 jump *label58 always
+   198 label *label60
  
-   206 set .SHOW_REMOTE_LEVEL true
-   207 set .SRC .CORE
-   208 set .DST .CONTAINER
+   200 set .SHOW_REMOTE_LEVEL true
+   201 set .SRC .CORE
+   202 set .DST .CONTAINER
 -    * sensor :src_capacity .SRC @itemCapacity
 -    * sensor :dst_capacity .DST @itemCapacity
-+  209 sensor :src_capacity .CORE @itemCapacity
-+  210 sensor :dst_capacity .CONTAINER @itemCapacity
-   211 op sub *tmp71 100 .EFF_REMOTE_LIMIT
-   212 op mul *tmp72 :src_capacity *tmp71
-   213 op idiv .LOAD_LEVEL *tmp72 100
++  203 sensor :src_capacity .CORE @itemCapacity
++  204 sensor :dst_capacity .CONTAINER @itemCapacity
+   205 op sub *tmp71 100 .EFF_REMOTE_LIMIT
+   206 op mul *tmp72 :src_capacity *tmp71
+   207 op idiv .LOAD_LEVEL *tmp72 100
  
-   227 op greaterThan .SHOW_REMOTE_LEVEL LINK_ID 0
-   228 set .SRC .CONTAINER
-   229 set .DST .CORE
+   221 op greaterThan .SHOW_REMOTE_LEVEL LINK_ID 0
+   222 set .SRC .CONTAINER
+   223 set .DST .CORE
 -    * sensor :src_capacity .SRC @itemCapacity
 -    * sensor :dst_capacity .DST @itemCapacity
-+  230 sensor :src_capacity .CONTAINER @itemCapacity
-+  231 sensor :dst_capacity .CORE @itemCapacity
-   232 op sub *tmp81 100 .EFF_LOCAL_LIMIT
-   233 op mul *tmp82 :src_capacity *tmp81
-   234 op idiv .LOAD_LEVEL *tmp82 100
++  224 sensor :src_capacity .CONTAINER @itemCapacity
++  225 sensor :dst_capacity .CORE @itemCapacity
+   226 op sub *tmp81 100 .EFF_LOCAL_LIMIT
+   227 op mul *tmp82 :src_capacity *tmp81
+   228 op idiv .LOAD_LEVEL *tmp82 100
  
-   395 print "Moving [green]"
-   396 print .ITEM
-   397 print .DIRECTION
+   387 print "Moving [green]"
+   388 print .ITEM
+   389 print .DIRECTION
 -    * print .LINK_TXT
-+  398 print *tmp92
-   399 print "\"
-   400 print "n"
-   401 sensor *tmp151 .CONTAINER .ITEM
++  390 print *tmp92
+   391 print "\n"
+   392 sensor *tmp151 .CONTAINER .ITEM
+   393 print "Local items: [gold]"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-   129 label *label28
-   130 set .CORE_Y null
-   131 set .CORE_X null
+   124 label *label28
+   125 set .CORE_Y null
+   126 set .CORE_X null
 -    * set .CORE .CORE_Y
-+  132 set .CORE null
-   133 jump *label40 notEqual LINK_ID 0
-   134 print "[gold]Locating core..."
-   135 printflush message1
++  127 set .CORE null
+   128 jump *label40 notEqual LINK_ID 0
+   129 print "[gold]Locating core..."
+   130 printflush message1
  
-   253 label *label71
-   254 set *tmp92 LINK_ID
-   255 label *label72
+   247 label *label71
+   248 set *tmp92 LINK_ID
+   249 label *label72
 -    * set .LINK_TXT *tmp92
-   256 sensor .SRC_X .SRC @x
-   257 sensor .SRC_Y .SRC @y
-   258 sensor .DST_X .DST @x
+   250 sensor .SRC_X .SRC @x
+   251 sensor .SRC_Y .SRC @y
+   252 sensor .DST_X .DST @x
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
-    45 printflush message1
-    46 label *label13
-    47 jump *label14 equal @unit :rebindUnit:first_unit
+    44 printflush message1
+    45 label *label13
+    46 jump *label14 equal @unit :rebindUnit:first_unit
 -    * label *label17
-    48 sensor *tmp13 :rebindUnit:first_unit @dead
-    49 jump *label12 strictEqual *tmp13 0
-    50 label *label14
+    47 sensor *tmp13 :rebindUnit:first_unit @dead
+    48 jump *label12 strictEqual *tmp13 0
+    49 label *label14
  
-    87 set :n @links
-    88 label *label29
-    89 jump *label31 lessThanEq :n 0
-+   90 label *label143
-    91 op sub :n :n 1
-    92 getlink :block :n
-    93 sensor *tmp28 :block @itemCapacity
+    84 set :n @links
+    85 label *label29
+    86 jump *label31 lessThanEq :n 0
++   87 label *label143
+    88 op sub :n :n 1
+    89 getlink :block :n
+    90 sensor *tmp28 :block @itemCapacity
  
-    97 label *label32
-    98 label *label33
-    99 label *label30
+    94 label *label32
+    95 label *label33
+    96 label *label30
 -    * jump *label29 always
-+  100 jump *label143 greaterThan :n 0
-   101 label *label31
-   102 jump *label34 notEqual .CONTAINER null
-   103 print "[salmon]No destination."
++   97 jump *label143 greaterThan :n 0
+    98 label *label31
+    99 jump *label34 notEqual .CONTAINER null
+   100 print "[salmon]No destination."
  
-   146 ucontrol flag .QUERY_FLAG
-   147 label *label42
-   148 jump *label44 notEqual :flag .QUERY_FLAG
+   140 ucontrol flag .QUERY_FLAG
+   141 label *label42
+   142 jump *label44 notEqual :flag .QUERY_FLAG
 -    * label *label46
-+  149 label *label144
-   150 sensor *tmp43 @unit @dead
-   151 jump *label44 strictNotEqual *tmp43 0
++  143 label *label144
+   144 sensor *tmp43 @unit @dead
+   145 jump *label44 strictNotEqual *tmp43 0
 -    * label *label45
-   152 ucontrol stop
-   153 sensor :flag @unit @flag
-   154 label *label43
+   146 ucontrol stop
+   147 sensor :flag @unit @flag
+   148 label *label43
 -    * jump *label42 always
-+  155 jump *label144 equal :flag .QUERY_FLAG
-   156 label *label44
-   157 jump *label47 equal :flag .QUERY_FLAG
-   158 op idiv :position :flag 100
++  149 jump *label144 equal :flag .QUERY_FLAG
+   150 label *label44
+   151 jump *label47 equal :flag .QUERY_FLAG
+   152 op idiv :position :flag 100
  
-   161 label *label49
-   162 ucontrol within .CORE_X .CORE_Y 8 *tmp51
-   163 jump *label51 notEqual *tmp51 false
+   155 label *label49
+   156 ucontrol within .CORE_X .CORE_Y 8 *tmp51
+   157 jump *label51 notEqual *tmp51 false
 -    * label *label53
-   164 sensor *tmp53 @unit @dead
-   165 jump *label51 notEqual *tmp53 0
+   158 sensor *tmp53 @unit @dead
+   159 jump *label51 notEqual *tmp53 0
 -    * label *label52
-   166 ucontrol approach .CORE_X .CORE_Y 6
-   167 label *label50
-   168 jump *label49 always
+   160 ucontrol approach .CORE_X .CORE_Y 6
+   161 label *label50
+   162 jump *label49 always
  
-   183 sensor :sorter_type sorter1 @type
-   184 label *label58
-   185 jump *label60 equal :sorter_type @sorter
+   177 sensor :sorter_type sorter1 @type
+   178 label *label58
+   179 jump *label60 equal :sorter_type @sorter
 -    * label *label62
-+  186 label *label145
-   187 jump *label60 equal :sorter_type @inverted-sorter
++  180 label *label145
+   181 jump *label60 equal :sorter_type @inverted-sorter
 -    * label *label61
-   188 print "[salmon]Block sorter1 is neither a sorter, nor an inverted sorter."
-   189 print "\n"
-   190 jump *label63 equal .SORTER null
+   182 print "[salmon]Block sorter1 is neither a sorter, nor an inverted sorter."
+   183 print "\n"
+   184 jump *label63 equal .SORTER null
  
-   196 set .SORTER sorter1
-   197 sensor :sorter_type sorter1 @type
-   198 label *label59
+   190 set .SORTER sorter1
+   191 sensor :sorter_type sorter1 @type
+   192 label *label59
 -    * jump *label58 always
-+  199 jump *label145 notEqual :sorter_type @sorter
-   200 label *label60
-   201 jump *label65 notEqual :sorter_type @sorter
-   202 set .SHOW_REMOTE_LEVEL true
++  193 jump *label145 notEqual :sorter_type @sorter
+   194 label *label60
+   195 jump *label65 notEqual :sorter_type @sorter
+   196 set .SHOW_REMOTE_LEVEL true
  
-   307 jump *label88 equal .ITEM .LAST_ITEM
-   308 label *label90
-   309 jump *label92 notEqual .ITEM null
-+  310 label *label146
-   311 print "[salmon]No item type selected for transport."
-   312 printflush message1
-   313 sensor .ITEM .SORTER @config
-   314 label *label91
+   299 jump *label88 equal .ITEM .LAST_ITEM
+   300 label *label90
+   301 jump *label92 notEqual .ITEM null
++  302 label *label146
+   303 print "[salmon]No item type selected for transport."
+   304 printflush message1
+   305 sensor .ITEM .SORTER @config
+   306 label *label91
 -    * jump *label90 always
-+  315 jump *label146 equal .ITEM null
-   316 label *label92
-   317 set .LAST_ITEM .ITEM
-   318 set :state 1
++  307 jump *label146 equal .ITEM null
+   308 label *label92
+   309 set .LAST_ITEM .ITEM
+   310 set :state 1
 
 Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-12 instructions):
  
-   105 jump *label35 always
-   106 label *label34
-   107 jump *label36 equal .DROP_TARGET null
+   102 jump *label35 always
+   103 label *label34
+   104 jump *label36 equal .DROP_TARGET null
 -    * label *label39
-   108 sensor *tmp34 .DROP_TARGET @itemCapacity
-   109 jump *label36 greaterThanEq *tmp34 300
+   105 sensor *tmp34 .DROP_TARGET @itemCapacity
+   106 jump *label36 greaterThanEq *tmp34 300
 -    * label *label38
-   110 print "Destination: "
-   111 print .CONTAINER
-   112 print "\"
+   107 print "Destination: "
+   108 print .CONTAINER
+   109 print "\n"
  
-   166 jump *label49 always
-   167 label *label51
-   168 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE *tmp56
+   160 jump *label49 always
+   161 label *label51
+   162 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE *tmp56
 -    * jump *label54 equal :b_type @vault
 -    * set .CORE null
 -    * label *label54
 -    * label *label55
-+  169 select .CORE notEqual :b_type @vault null .CORE
-   170 label *label47
-   171 label *label48
-   172 label *label41
++  163 select .CORE notEqual :b_type @vault null .CORE
+   164 label *label47
+   165 label *label48
+   166 label *label41
  
-   206 op idiv .DROP_LEVEL *tmp74 100
-   207 set .LOCAL_MARGIN .DROP_LEVEL
-   208 set .REMOTE_MARGIN .LOAD_LEVEL
+   200 op idiv .DROP_LEVEL *tmp74 100
+   201 set .LOCAL_MARGIN .DROP_LEVEL
+   202 set .REMOTE_MARGIN .LOAD_LEVEL
 -    * jump *label67 notEqual LINK_ID 0
 -    * set *tmp77 "[] from core"
 -    * jump *label68 always
 -    * label *label67
 -    * set *tmp77 "[] from vault #"
 -    * label *label68
-+  209 select *tmp77 equal LINK_ID 0 "[] from core" "[] from vault #"
-   210 set .DIRECTION *tmp77
-   211 jump *label66 always
-   212 label *label65
++  203 select *tmp77 equal LINK_ID 0 "[] from core" "[] from vault #"
+   204 set .DIRECTION *tmp77
+   205 jump *label66 always
+   206 label *label65
  
-   225 op add .DROP_LEVEL *tmp85 *tmp87
-   226 set .LOCAL_MARGIN .LOAD_LEVEL
-   227 set .REMOTE_MARGIN .DROP_LEVEL
+   219 op add .DROP_LEVEL *tmp85 *tmp87
+   220 set .LOCAL_MARGIN .LOAD_LEVEL
+   221 set .REMOTE_MARGIN .DROP_LEVEL
 -    * jump *label69 notEqual LINK_ID 0
 -    * set *tmp90 "[] to core"
 -    * jump *label70 always
 -    * label *label69
 -    * set *tmp90 "[] to vault #"
 -    * label *label70
-+  228 select *tmp90 equal LINK_ID 0 "[] to core" "[] to vault #"
-   229 set .DIRECTION *tmp90
-   230 label *label66
++  222 select *tmp90 equal LINK_ID 0 "[] to core" "[] to vault #"
+   223 set .DIRECTION *tmp90
+   224 label *label66
 -    * jump *label71 notEqual LINK_ID 0
 -    * set *tmp92 ""
 -    * jump *label72 always
 -    * label *label71
 -    * set *tmp92 LINK_ID
 -    * label *label72
-+  231 select *tmp92 equal LINK_ID 0 "" LINK_ID
-   232 sensor .SRC_X .SRC @x
-   233 sensor .SRC_Y .SRC @y
-   234 sensor .DST_X .DST @x
++  225 select *tmp92 equal LINK_ID 0 "" LINK_ID
+   226 sensor .SRC_X .SRC @x
+   227 sensor .SRC_Y .SRC @y
+   228 sensor .DST_X .DST @x
  
-   328 op sub *tmp134 *tmp133 .LOAD_LEVEL
-   329 op max :max_load *tmp134 0
-   330 ucontrol itemTake .SRC .ITEM :max_load
+   320 op sub *tmp134 *tmp133 .LOAD_LEVEL
+   321 op max :max_load *tmp134 0
+   322 ucontrol itemTake .SRC .ITEM :max_load
 -    * sensor *tmp136 @unit @totalItems
 -    * jump *label105 lessThan *tmp136 .UNIT_CAPACITY
 -    * set :state 3
@@ -1756,20 +1753,20 @@ Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-12 
 -    * label *label105
 -    * set .MSG "\nLoading items: [green]"
 -    * label *label106
-+  331 sensor *tmp136 @unit @totalItems
-+  332 select :state greaterThanEq *tmp136 .UNIT_CAPACITY 3 :state
-+  333 select .MSG greaterThanEq *tmp136 .UNIT_CAPACITY .MSG "\nLoading items: [green]"
-   334 jump *label104 always
-   335 label *label103
-   336 ucontrol approach .SRC_X .SRC_Y 6
++  323 sensor *tmp136 @unit @totalItems
++  324 select :state greaterThanEq *tmp136 .UNIT_CAPACITY 3 :state
++  325 select .MSG greaterThanEq *tmp136 .UNIT_CAPACITY .MSG "\nLoading items: [green]"
+   326 jump *label104 always
+   327 label *label103
+   328 ucontrol approach .SRC_X .SRC_Y 6
  
-   483 label *label135
-   484 sensor *tmp192 .SRC @dead
-   485 jump *label138 notEqual *tmp192 false
+   465 label *label135
+   466 sensor *tmp192 .SRC @dead
+   467 jump *label138 notEqual *tmp192 false
 -    * label *label139
-   486 sensor *tmp193 .DST @dead
-   487 jump *label136 equal *tmp193 false
-   488 label *label138
+   468 sensor *tmp193 .DST @dead
+   469 jump *label136 equal *tmp193 false
+   470 label *label138
 
 Modifications by Full loop rotation at line 43:1 (+1 instructions):
  
@@ -1792,14 +1789,14 @@ Modifications by Full loop rotation at line 43:1 (+1 instructions):
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   145 set :flag .QUERY_FLAG
-   146 ucontrol flag .QUERY_FLAG
-   147 label *label42
+   139 set :flag .QUERY_FLAG
+   140 ucontrol flag .QUERY_FLAG
+   141 label *label42
 -    * jump *label44 notEqual :flag .QUERY_FLAG
-+  148 jump *label44 notEqual .QUERY_FLAG .QUERY_FLAG
-   149 label *label144
-   150 sensor *tmp43 @unit @dead
-   151 jump *label44 strictNotEqual *tmp43 0
++  142 jump *label44 notEqual .QUERY_FLAG .QUERY_FLAG
+   143 label *label144
+   144 sensor *tmp43 @unit @dead
+   145 jump *label44 strictNotEqual *tmp43 0
 
 Modifications by Full loop rotation at line 51:1 (+1 instructions):
  
@@ -1811,162 +1808,162 @@ Modifications by Full loop rotation at line 51:1 (+1 instructions):
     25 label *label7
     26 ubind UNIT
  
-    78 label *label18
-    79 label *label6
-    80 label *label4
+    75 label *label18
+    76 label *label6
+    77 label *label4
 -    * jump *label3 always
-+   81 sensor *tmp4 @unit @dead
-+   82 jump *label148 strictNotEqual *tmp4 0
-    83 label *label5
-    84 sensor .UNIT_CAPACITY @unit @itemCapacity
-    85 sensor *tmp22 @unit @speed
++   78 sensor *tmp4 @unit @dead
++   79 jump *label148 strictNotEqual *tmp4 0
+    80 label *label5
+    81 sensor .UNIT_CAPACITY @unit @itemCapacity
+    82 sensor *tmp22 @unit @speed
 
 Modifications by Full loop rotation at line 304:1 (+1 instructions):
  
-   475 label *label133
-   476 sensor *tmp191 .SORTER @dead
-   477 jump *label135 equal *tmp191 false
-+  478 label *label149
-   479 print "[salmon]sorter1 is missing!"
-   480 print "\n"
-   481 print "[gold]Please place and link sorter or inverted sorter to the processor."
+   457 label *label133
+   458 sensor *tmp191 .SORTER @dead
+   459 jump *label135 equal *tmp191 false
++  460 label *label149
+   461 print "[salmon]sorter1 is missing!"
+   462 print "\n"
+   463 print "[gold]Please place and link sorter or inverted sorter to the processor."
  
-   484 printflush message2
-   485 set .SORTER sorter1
-   486 label *label134
+   466 printflush message2
+   467 set .SORTER sorter1
+   468 label *label134
 -    * jump *label133 always
-+  487 sensor *tmp191 .SORTER @dead
-+  488 jump *label149 notEqual *tmp191 false
-   489 label *label135
-   490 sensor *tmp192 .SRC @dead
-   491 jump *label138 notEqual *tmp192 false
++  469 sensor *tmp191 .SORTER @dead
++  470 jump *label149 notEqual *tmp191 false
+   471 label *label135
+   472 sensor *tmp192 .SRC @dead
+   473 jump *label138 notEqual *tmp192 false
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   484 printflush message2
-   485 set .SORTER sorter1
-   486 label *label134
+   466 printflush message2
+   467 set .SORTER sorter1
+   468 label *label134
 -    * sensor *tmp191 .SORTER @dead
-+  487 sensor *tmp191 sorter1 @dead
-   488 jump *label149 notEqual *tmp191 false
-   489 label *label135
-   490 sensor *tmp192 .SRC @dead
++  469 sensor *tmp191 sorter1 @dead
+   470 jump *label149 notEqual *tmp191 false
+   471 label *label135
+   472 sensor *tmp192 .SRC @dead
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-   482 print "\n"
-   483 printflush message1
-   484 printflush message2
+   464 print "\n"
+   465 printflush message1
+   466 printflush message2
 -    * set .SORTER sorter1
-   485 label *label134
-   486 sensor *tmp191 sorter1 @dead
-   487 jump *label149 notEqual *tmp191 false
+   467 label *label134
+   468 sensor *tmp191 sorter1 @dead
+   469 jump *label149 notEqual *tmp191 false
 
 Modifications by Full loop rotation at line 314:5 (+1 instructions):
  
-   495 label *label140
-   496 sensor *tmp196 switch1 @enabled
-   497 jump *label142 notEqual *tmp196 false
-+  498 label *label150
-   499 print "[salmon]Local or remote container became invalid."
-   500 print "\n"
-   501 print "[gold]Please fix and press button to reinitialize."
+   477 label *label140
+   478 sensor *tmp196 switch1 @enabled
+   479 jump *label142 notEqual *tmp196 false
++  480 label *label150
+   481 print "[salmon]Local or remote container became invalid."
+   482 print "\n"
+   483 print "[gold]Please fix and press button to reinitialize."
  
-   503 printflush message1
-   504 printflush message2
-   505 label *label141
+   485 printflush message1
+   486 printflush message2
+   487 label *label141
 -    * jump *label140 always
-+  506 sensor *tmp196 switch1 @enabled
-+  507 jump *label150 equal *tmp196 false
-   508 label *label142
-   509 label *label136
-   510 label *label137
++  488 sensor *tmp196 switch1 @enabled
++  489 jump *label150 equal *tmp196 false
+   490 label *label142
+   491 label *label136
+   492 label *label137
 
 Modifications by Partial loop rotation at line 110:9 (+1 instructions):
  
-   163 label *label49
-   164 ucontrol within .CORE_X .CORE_Y 8 *tmp51
-   165 jump *label51 notEqual *tmp51 false
-+  166 label *label151
-   167 sensor *tmp53 @unit @dead
-   168 jump *label51 notEqual *tmp53 0
-   169 ucontrol approach .CORE_X .CORE_Y 6
-   170 label *label50
+   157 label *label49
+   158 ucontrol within .CORE_X .CORE_Y 8 *tmp51
+   159 jump *label51 notEqual *tmp51 false
++  160 label *label151
+   161 sensor *tmp53 @unit @dead
+   162 jump *label51 notEqual *tmp53 0
+   163 ucontrol approach .CORE_X .CORE_Y 6
+   164 label *label50
 -    * jump *label49 always
-+  171 ucontrol within .CORE_X .CORE_Y 8 *tmp51
-+  172 jump *label151 equal *tmp51 false
-   173 label *label51
-   174 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE *tmp56
-   175 select .CORE notEqual :b_type @vault null .CORE
++  165 ucontrol within .CORE_X .CORE_Y 8 *tmp51
++  166 jump *label151 equal *tmp51 false
+   167 label *label51
+   168 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE *tmp56
+   169 select .CORE notEqual :b_type @vault null .CORE
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
  
-   147 set :flag .QUERY_FLAG
-   148 ucontrol flag .QUERY_FLAG
-   149 label *label42
+   141 set :flag .QUERY_FLAG
+   142 ucontrol flag .QUERY_FLAG
+   143 label *label42
 -    * jump *label44 notEqual .QUERY_FLAG .QUERY_FLAG
-   150 label *label144
-   151 sensor *tmp43 @unit @dead
-   152 jump *label44 strictNotEqual *tmp43 0
+   144 label *label144
+   145 sensor *tmp43 @unit @dead
+   146 jump *label44 strictNotEqual *tmp43 0
 
 Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1 (-2 instructions):
  
-   211 op idiv .DROP_LEVEL *tmp74 100
-   212 set .LOCAL_MARGIN .DROP_LEVEL
-   213 set .REMOTE_MARGIN .LOAD_LEVEL
+   205 op idiv .DROP_LEVEL *tmp74 100
+   206 set .LOCAL_MARGIN .DROP_LEVEL
+   207 set .REMOTE_MARGIN .LOAD_LEVEL
 -    * select *tmp77 equal LINK_ID 0 "[] from core" "[] from vault #"
 -    * set .DIRECTION *tmp77
-+  214 select .DIRECTION equal LINK_ID 0 "[] from core" "[] from vault #"
-   215 jump *label66 always
-   216 label *label65
-   217 op greaterThan .SHOW_REMOTE_LEVEL LINK_ID 0
++  208 select .DIRECTION equal LINK_ID 0 "[] from core" "[] from vault #"
+   209 jump *label66 always
+   210 label *label65
+   211 op greaterThan .SHOW_REMOTE_LEVEL LINK_ID 0
  
-   229 op add .DROP_LEVEL *tmp85 *tmp87
-   230 set .LOCAL_MARGIN .LOAD_LEVEL
-   231 set .REMOTE_MARGIN .DROP_LEVEL
+   223 op add .DROP_LEVEL *tmp85 *tmp87
+   224 set .LOCAL_MARGIN .LOAD_LEVEL
+   225 set .REMOTE_MARGIN .DROP_LEVEL
 -    * select *tmp90 equal LINK_ID 0 "[] to core" "[] to vault #"
 -    * set .DIRECTION *tmp90
-+  232 select .DIRECTION equal LINK_ID 0 "[] to core" "[] to vault #"
-   233 label *label66
-   234 select *tmp92 equal LINK_ID 0 "" LINK_ID
-   235 sensor .SRC_X .SRC @x
++  226 select .DIRECTION equal LINK_ID 0 "[] to core" "[] to vault #"
+   227 label *label66
+   228 select *tmp92 equal LINK_ID 0 "" LINK_ID
+   229 sensor .SRC_X .SRC @x
 
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-5 instructions):
  
-    34 label *label9
-    35 label *label12
-    36 sensor *tmp9 @unit @controller
+    33 label *label9
+    34 label *label12
+    35 sensor *tmp9 @unit @controller
 -    * jump *label15 notEqual *tmp9 @this
 -    * jump *label6 always
-+   37 jump *label6 equal *tmp9 @this
-    38 label *label15
-    39 ubind UNIT
-    40 print "[gold]Looking for old unit..."
++   36 jump *label6 equal *tmp9 @this
+    37 label *label15
+    38 ubind UNIT
+    39 print "[gold]Looking for old unit..."
  
-   406 print "\n"
-   407 printflush message1
-   408 sensor *tmp178 switch1 @enabled
+   388 print "\n"
+   389 printflush message1
+   390 sensor *tmp178 switch1 @enabled
 -    * jump *label125 notEqual *tmp178 0
 -    * jump *label77 always
-+  409 jump *label77 equal *tmp178 0
-   410 label *label125
-   411 sensor *tmp181 .SRC @dead
++  391 jump *label77 equal *tmp178 0
+   392 label *label125
+   393 sensor *tmp181 .SRC @dead
 -    * jump *label127 equal *tmp181 0
 -    * jump *label77 always
-+  412 jump *label77 notEqual *tmp181 0
-   413 label *label127
-   414 sensor *tmp184 .DST @dead
++  394 jump *label77 notEqual *tmp181 0
+   395 label *label127
+   396 sensor *tmp184 .DST @dead
 -    * jump *label129 equal *tmp184 0
 -    * jump *label77 always
-+  415 jump *label77 notEqual *tmp184 0
-   416 label *label129
-   417 sensor *tmp187 .SORTER @dead
++  397 jump *label77 notEqual *tmp184 0
+   398 label *label129
+   399 sensor *tmp187 .SORTER @dead
 -    * jump *label131 equal *tmp187 0
 -    * jump *label77 always
-+  418 jump *label77 notEqual *tmp187 0
-   419 label *label131
-   420 jump *label114 always
-   421 label *label113
++  400 jump *label77 notEqual *tmp187 0
+   401 label *label131
+   402 jump *label114 always
+   403 label *label113
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -1974,139 +1971,139 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
      2 set LINK_ID 0
      3 set LOCAL_LIMIT 100
  
-    53 jump *label23 always
-    54 label *label22
-    55 sensor *tmp18 @unit @controlled
+    51 jump *label23 always
+    52 label *label22
+    53 sensor *tmp18 @unit @controlled
 -    * jump *label24 equal *tmp18 0
-+   56 jump *label18 equal *tmp18 0
-    57 print "[salmon]Looking for a free "
-    58 print UNIT
-    59 print "."
++   54 jump *label18 equal *tmp18 0
+    55 print "[salmon]Looking for a free "
+    56 print UNIT
+    57 print "..."
  
-    94 print "\n"
-    95 jump *label35 always
-    96 label *label34
+    91 print "\n"
+    92 jump *label35 always
+    93 label *label34
 -    * jump *label36 equal .DROP_TARGET null
-+   97 jump *label28 equal .DROP_TARGET null
-    98 sensor *tmp34 .DROP_TARGET @itemCapacity
++   94 jump *label28 equal .DROP_TARGET null
+    95 sensor *tmp34 .DROP_TARGET @itemCapacity
 -    * jump *label36 greaterThanEq *tmp34 300
-+   99 jump *label28 greaterThanEq *tmp34 300
-   100 print "Destination: "
-   101 print .CONTAINER
-   102 print "\"
++   96 jump *label28 greaterThanEq *tmp34 300
+    97 print "Destination: "
+    98 print .CONTAINER
+    99 print "\n"
  
-   243 jump *label85 always
-   244 label *label84
-   245 sensor *tmp111 @unit @controlled
+   236 jump *label85 always
+   237 label *label84
+   238 sensor *tmp111 @unit @controlled
 -    * jump *label86 equal *tmp111 0
-+  246 jump *label80 equal *tmp111 0
-   247 print "[salmon]Looking for a free "
-   248 print UNIT
-   249 print "."
++  239 jump *label80 equal *tmp111 0
+   240 print "[salmon]Looking for a free "
+   241 print UNIT
+   242 print "..."
  
-   320 jump *label111 greaterThan *tmp146 0
-   321 set :state 2
-   322 ucontrol approach .SRC_X .SRC_Y 6
+   312 jump *label111 greaterThan *tmp146 0
+   313 set :state 2
+   314 ucontrol approach .SRC_X .SRC_Y 6
 -    * jump *label112 always
-+  323 jump *label110 always
-   324 label *label111
-   325 set .MSG "\nDropping items: [green]"
-   326 label *label112
++  315 jump *label110 always
+   316 label *label111
+   317 set .MSG "\nDropping items: [green]"
+   318 label *label112
  
-   435 sensor *tmp192 .SRC @dead
-   436 jump *label138 notEqual *tmp192 false
-   437 sensor *tmp193 .DST @dead
+   417 sensor *tmp192 .SRC @dead
+   418 jump *label138 notEqual *tmp192 false
+   419 sensor *tmp193 .DST @dead
 -    * jump *label136 equal *tmp193 false
-+  438 jump __start__ equal *tmp193 false
-   439 label *label138
-   440 control enabled switch1 false
-   441 sensor *tmp196 switch1 @enabled
++  420 jump __start__ equal *tmp193 false
+   421 label *label138
+   422 control enabled switch1 false
+   423 sensor *tmp196 switch1 @enabled
 -    * jump *label142 notEqual *tmp196 false
-+  442 jump __start__ notEqual *tmp196 false
-   443 label *label150
-   444 print "[salmon]Local or remote container became invalid."
-   445 print "\n"
++  424 jump __start__ notEqual *tmp196 false
+   425 label *label150
+   426 print "[salmon]Local or remote container became invalid."
+   427 print "\n"
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   445 printflush message2
-   446 sensor *tmp196 switch1 @enabled
-   447 jump *label150 equal *tmp196 false
+   427 printflush message2
+   428 sensor *tmp196 switch1 @enabled
+   429 jump *label150 equal *tmp196 false
 -    * end
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 (-3 instructions):
  
-    59 print "."
-    60 print ".."
-    61 jump *label25 always
+    56 print UNIT
+    57 print "..."
+    58 jump *label25 always
 -    * jump *label18 always
-    62 label *label25
-    63 label *label23
-    64 printflush message1
+    59 label *label25
+    60 label *label23
+    61 printflush message1
  
-   105 print "n"
-   106 print "[salmon]Item dump must be a container or a vault!"
-   107 jump *label37 always
+   100 print "\n"
+   101 print "[salmon]Item dump must be a container or a vault!"
+   102 jump *label37 always
 -    * jump *label28 always
-   108 label *label37
-   109 label *label35
-   110 printflush message1
+   103 label *label37
+   104 label *label35
+   105 printflush message1
  
-   245 print "."
-   246 print ".."
-   247 jump *label87 always
+   237 print UNIT
+   238 print "..."
+   239 jump *label87 always
 -    * jump *label80 always
-   248 label *label87
-   249 label *label85
-   250 printflush message1
+   240 label *label87
+   241 label *label85
+   242 printflush message1
 
 Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-3 instructions):
  
-    58 print UNIT
-    59 print "."
-    60 print ".."
+    55 print "[salmon]Looking for a free "
+    56 print UNIT
+    57 print "..."
 -    * jump *label25 always
-    61 label *label25
-    62 label *label23
-    63 printflush message1
+    58 label *label25
+    59 label *label23
+    60 printflush message1
  
-   103 print "\"
-   104 print "n"
-   105 print "[salmon]Item dump must be a container or a vault!"
+    98 print .DROP_TARGET
+    99 print "\n"
+   100 print "[salmon]Item dump must be a container or a vault!"
 -    * jump *label37 always
-   106 label *label37
-   107 label *label35
-   108 printflush message1
+   101 label *label37
+   102 label *label35
+   103 printflush message1
  
-   242 print UNIT
-   243 print "."
-   244 print ".."
+   234 print "[salmon]Looking for a free "
+   235 print UNIT
+   236 print "..."
 -    * jump *label87 always
-   245 label *label87
-   246 label *label85
-   247 printflush message1
+   237 label *label87
+   238 label *label85
+   239 printflush message1
 
 Modifications by Final phase, Temp Variables Elimination, iteration 1:
  
-   112 jump *label40 notEqual LINK_ID 0
-   113 print "[gold]Locating core..."
-   114 printflush message1
+   107 jump *label40 notEqual LINK_ID 0
+   108 print "[gold]Locating core..."
+   109 printflush message1
 -    * ulocate building core false @copper .CORE_X .CORE_Y *tmp40 .CORE
-+  115 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
-   116 jump *label41 always
-   117 label *label40
-   118 print "[gold]Locating vault #"
++  110 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
+   111 jump *label41 always
+   112 label *label40
+   113 print "[gold]Locating vault #"
  
-   143 ucontrol within .CORE_X .CORE_Y 8 *tmp51
-   144 jump *label151 equal *tmp51 false
-   145 label *label51
+   137 ucontrol within .CORE_X .CORE_Y 8 *tmp51
+   138 jump *label151 equal *tmp51 false
+   139 label *label51
 -    * ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE *tmp56
-+  146 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE 0
-   147 select .CORE notEqual :b_type @vault null .CORE
-   148 label *label47
-   149 label *label41
++  140 ucontrol getBlock .CORE_X .CORE_Y :b_type .CORE 0
+   141 select .CORE notEqual :b_type @vault null .CORE
+   142 label *label47
+   143 label *label41
 
-Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
+Modifications by Final phase, Print Merging, iteration 1 (-32 instructions):
  
      8 sensor *tmp2 switch1 @enabled
      9 jump *label2 notEqual *tmp2 false
@@ -2125,8 +2122,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
     25 label *label10
 -    * print "[salmon]No unit of type "
 -    * print UNIT
--    * print " "
--    * print "found. 1"
+-    * print " found. 1"
 +   26 print "[salmon]No unit of type {0} found. 1"
 +   27 format UNIT
     28 printflush message1
@@ -2138,8 +2134,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
     43 jump *label22 notEqual @unit null
 -    * print "[salmon]No unit of type "
 -    * print UNIT
--    * print " "
--    * print "found. 2"
+-    * print " found. 2"
 +   44 print "[salmon]No unit of type {0} found. 2"
 +   45 format UNIT
     46 jump *label23 always
@@ -2148,8 +2143,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
     49 jump *label18 equal *tmp18 0
 -    * print "[salmon]Looking for a free "
 -    * print UNIT
--    * print "."
--    * print ".."
+-    * print "..."
 +   50 print "[salmon]Looking for a free {0}..."
 +   51 format UNIT
     52 label *label23
@@ -2169,12 +2163,10 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
     85 jump *label28 greaterThanEq *tmp34 300
 -    * print "Destination: "
 -    * print .CONTAINER
--    * print "\"
--    * print "n"
+-    * print "\n"
 -    * print "Item dump: "
 -    * print .DROP_TARGET
--    * print "\"
--    * print "n"
+-    * print "\n"
 -    * print "[salmon]Item dump must be a container or a vault!"
 +   86 print "Destination: {0}\nItem dump: {0}\n[salmon]Item dump must be a container or a vault!"
 +   87 format .CONTAINER
@@ -2188,8 +2180,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
    101 label *label40
 -    * print "[gold]Locating vault #"
 -    * print LINK_ID
--    * print "."
--    * print ".."
+-    * print "..."
 +  102 print "[gold]Locating vault #{0}..."
 +  103 format LINK_ID
    104 printflush message1
@@ -2211,8 +2202,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
    211 jump *label84 notEqual @unit null
 -    * print "[salmon]No unit of type "
 -    * print UNIT
--    * print " "
--    * print "found. 2"
+-    * print " found. 2"
 +  212 print "[salmon]No unit of type {0} found. 2"
 +  213 format UNIT
    214 jump *label85 always
@@ -2221,8 +2211,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
    217 jump *label80 equal *tmp111 0
 -    * print "[salmon]Looking for a free "
 -    * print UNIT
--    * print "."
--    * print ".."
+-    * print "..."
 +  218 print "[salmon]Looking for a free {0}..."
 +  219 format UNIT
    220 label *label85
@@ -2236,8 +2225,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
 -    * print .ITEM
 -    * print .DIRECTION
 -    * print *tmp92
--    * print "\"
--    * print "n"
+-    * print "\n"
 +  300 print "Moving [green]{0}{0}{0}\nLocal items: [gold]{0}[]"
 +  301 format .ITEM
 +  302 format .DIRECTION
@@ -2245,31 +2233,26 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
    304 sensor *tmp151 .CONTAINER .ITEM
 -    * print "Local items: [gold]"
 -    * print *tmp151
--    * print "["
--    * print "]"
+-    * print "[]"
 +  305 format *tmp151
    306 jump *label115 greaterThanEq .EFF_LOCAL_LIMIT 100
 -    * print " (limit [orange]"
 -    * print .LOCAL_MARGIN
--    * print "["
--    * print "])"
+-    * print "[])"
 +  307 print " (limit [orange]{0}[])"
 +  308 format .LOCAL_MARGIN
    309 label *label115
    310 jump *label117 equal .SHOW_REMOTE_LEVEL false
    311 sensor *tmp155 .CORE .ITEM
--    * print "\n"
--    * print "Remote items: [gold]"
+-    * print "\nRemote items: [gold]"
 -    * print *tmp155
--    * print "["
--    * print "]"
+-    * print "[]"
 +  312 print "\nRemote items: [gold]{0}[]"
 +  313 format *tmp155
    314 jump *label119 greaterThanEq .EFF_REMOTE_LIMIT 100
 -    * print " (limit [orange]"
 -    * print .REMOTE_MARGIN
--    * print "["
--    * print "])"
+-    * print "[])"
 +  315 print " (limit [orange]{0}[])"
 +  316 format .REMOTE_MARGIN
    317 label *label119
@@ -2289,9 +2272,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
    330 op div *tmp167 *tmp166 10
 -    * print "[]  arriving in [gold]"
 -    * print *tmp167
--    * print " "
--    * print "sec[]"
--    * print "\n"
+-    * print " sec[]\n"
 +  331 print "[]  arriving in [gold]{0} sec[]\n"
 +  332 format *tmp167
    333 jump *label122 always
@@ -2303,9 +2284,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
    342 op div *tmp176 *tmp175 10
 -    * print "[]  arriving in [gold]"
 -    * print *tmp176
--    * print " "
--    * print "sec[]"
--    * print "\n"
+-    * print " sec[]\n"
 +  343 print "[]  arriving in [gold]{0} sec[]\n"
 +  344 format *tmp176
    345 label *label123

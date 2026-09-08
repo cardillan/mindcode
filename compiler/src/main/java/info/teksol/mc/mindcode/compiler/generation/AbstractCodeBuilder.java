@@ -49,6 +49,7 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
 
     protected final CodeGeneratorContext context;
     protected final GlobalCompilerProfile globalProfile;
+    protected final ProcessorVersion processorVersion;
     protected final InstructionProcessor processor;
     protected final NameCreator nameCreator;
     protected final MindustryMetadata metadata;
@@ -64,6 +65,7 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
         this.context = context;
 
         globalProfile = context.globalCompilerProfile();
+        processorVersion = context.instructionProcessor().getProcessorVersion();
         processor = context.instructionProcessor();
         nameCreator = context.nameCreator();
         metadata = context.metadata();
@@ -80,6 +82,7 @@ public abstract class AbstractCodeBuilder extends CompilerMessageEmitter {
         this.context = builder.context;
 
         globalProfile = context.globalCompilerProfile();
+        processorVersion = context.instructionProcessor().getProcessorVersion();
         processor = context.instructionProcessor();
         nameCreator = context.nameCreator();
         metadata = context.metadata();

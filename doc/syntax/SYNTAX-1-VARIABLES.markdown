@@ -177,7 +177,7 @@ Since linked blocks are present as special processor variables, Mindcode makes s
 
 ## External memory
 
-Mindustry provides special blocks that are capable of holding numeric values independently of the processor:
+Mindustry provides special blocks that are capable of holding values independently of the processor:
 
 * `@memory-cell`
 * `@memory-bank`
@@ -187,7 +187,7 @@ All these blocks consist of individual elements, which are identified by an inde
 
 Values written to the elements of these blocks are available to all processors that have a reference to the block (with possible exception to team rules) and can be used to communicate between processors. Once written, the values remain in the memory block until the block is destroyed.
 
-Only numeric values are supported by memory block elements. When the program attempts to write a non-numeric value to an element, the value actually written is 0 (for `null`) or 1 (for all other non-null objects).
+Memory block elements can store any value that a processor variable can.
 
 # Mindcode variables
 
@@ -319,16 +319,12 @@ begin
 end;
 ```
 
-As implicit arrays are stored in memory blocks, they can only hold numeric values.
-
 ## External arrays
 
 External arrays are explicitly declared and are allocated on the [heap](#heap) similarly to other external variables. The array size is specified when declaring the array.
 Accessing an element outside the bounds of an external array may cause other elements or variables stored on the heap to be accessed instead.
 
 When the [`boundary-checks` compiler options](SYNTAX-5-OTHER.markdown#option-boundary-checks) is activated, Mindcode generates runtime checks using the metod specified by the [`error-reporting` compiler option](SYNTAX-5-OTHER.markdown#option-error-reporting) to detect out-of-bounds array accesses.
-
-As external arrays are stored in memory blocks, they can only hold numeric values.
 
 ## Internal arrays
 
@@ -338,7 +334,7 @@ When the [`boundary-checks` compiler options](SYNTAX-5-OTHER.markdown#option-bou
 
 Accessing individual elements of internal arrays is slower than accessing elements of external arrays and consumes additional instruction space for `@counter` tables. However, when Mindcode is able to resolve the index during compilation to a numeric value, the variable corresponding to the element is accessed directly, with a performance better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g., when unrolling all loops in the program), the `@counter` tables might be eliminated entirely, keeping only the individual element variables in the resulting code.
 
-Several different implementations of internal arrays are available in target 8 or higher, some of them may perform better than normal `@counter` tables available in Mindustry 7. The [Array Optimization](optimizations/ARRAY-OPTIMIZATION.markdown) chooses the most efficient implementation for each array or individual array access.
+Several different implementations of internal arrays are available in target `8.0` or higher, some of them may perform better than normal `@counter` tables available in Mindustry 7. The [Array Optimization](optimizations/ARRAY-OPTIMIZATION.markdown) chooses the most efficient implementation for each array or individual array access.
 
 ## Remote arrays
 
@@ -386,7 +382,7 @@ Examples of variable declarations:
 var a, b[10], c = rand(10), d[3] = ("x", "y", "z");
 ```
 
-Variable modifiers are used to provide additional information of the variable. There are two kinds of variable modifiers:
+Modifiers provide additional information about the variable. There are two kinds of variable modifiers:
 
 * **Storage modifiers**: determine how the variable is stored or handled by Mindcode.
 * **Other modifiers**: provide additional specification or parametrization of the variable.
@@ -419,7 +415,7 @@ Other modifiers are compatible only with specific storage modifiers. This table 
 | `guarded`  | `linked` or none                                | global          |
 | `mlog`     | `export`, `remote` or none                      | global          |
 | `noinit`   | `export`, `external`, `linked`, remote` or none | global or local |
-| `volatile` | `export` or none                                | global          |
+| `volatile` | `export`, `linked` or none                      | global          |
 
 ### `cached` modifier
 
@@ -479,7 +475,7 @@ mlog(@coal.@name) var coal;
 * When declaring a variable, a single constant string expression must be specified.
 * When declaring an array, there are two possibilities:
   * A name as a constant string expression is specified for each array element. The number of names must be equal to the array size.
-  * A single lookup type is specified, creating a [lookup array](optimizations/ARRAY-OPTIMIZATION.markdown#lookup-arrays). Lookup arrays require target 8 or higher. The following lookup types are available:  `:block`, `:unit`, `:item`, `:liquid` or `:team`.
+  * A single lookup type is specified, creating a [lookup array](optimizations/ARRAY-OPTIMIZATION.markdown#lookup-arrays). Lookup arrays require target `8.0` or higher. The following lookup types are available:  `:block`, `:unit`, `:item`, `:liquid` or `:team`.
 * Names specified by mlog must not correspond to linked block names.
 * When a name specified by the `mlog` modifier collides with another user-defined variable or array element in the current processor, a warning is produced.
 
@@ -519,7 +515,7 @@ When used with the `linked` modifier, the `noinit` modifier suppresses the "unsa
 
 ### `volatile` modifier
 
-Can be used with the `export` modifier, `linked` modifier, or without a storage modifier. Variables declared `export` are automatically volatile, so this modifier has no effect on `export` variables.
+Can be used with the `export` modifier, `linked` modifier, or without a storage modifier. Variables declared `export` are automatically volatile, so this modifier has no effect on `export` variables, but can be used for better clarity. The only difference between `export` and `volatile` is that `volatile` variables aren't imported to modules which require the current module.
 
 The compiler assumes that volatile variables or array can be changed externally (for example, by other processors, or via the `sync` instruction) or indirectly (via the `read` or `write` using `@this` as the processor) and handles them accordingly. A volatile variable is guaranteed to exist in the processor (and can be accessed remotely or indirectly), even if it is not directly accessed by an mlog instruction.
 
@@ -706,7 +702,7 @@ Printing an icon is as easy as this:
 
 ```Mindcode
 println(ITEM_LEAD, " ", vault1.@lead);       // As a list of values
-println($"$ITEM_COAL ${vault1.@coal}");      // As formattable literal
+println($"$ITEM_COAL ${vault1.@coal}");      // As a formattable literal
 printflush(message1);
 ```
 Built-in icon constants are defined in the global scope. User-defined constants, parameters, and variables in the global scope must not use identifiers used by these constants.
@@ -1552,7 +1548,7 @@ When declaring external variables, these additional modifiers can be used:
 * [`noinit`](#noinit-modifier)
 
 > [!IMPORTANT]
-> Since external variables are stored in [external memory](#external-memory), they only support numeric values. At this moment, Mindcode is incapable of detecting situations when unsupported values are being written to external memory.
+> In targets `8.1` and earlier, external variables stored in [external memory](#external-memory) only support numeric values. At this moment, Mindcode is incapable of detecting situations when unsupported values are being written to external memory.
 
 > [!NOTE]
 > External arrays stored in memory cells or memory banks starting at an index different from `0` incur small performance penalty when accessing the array elements, since the offset needs to be added to the index to access the correct memory cell.
@@ -1594,7 +1590,7 @@ write 10 bank1 *tmp0
 
 ## Exported variables
 
-Target 8 or higher is required to use exported variables.
+Target `8.0` or higher is required to use exported variables.
 
 Exported variables are created in the current processor and are available through remote access in code which imports the module. Exported variables/arrays may or may not be initialized. Mindcode ensures all exported variables can always be accessed remotely, regardless of whether they are also used locally.
 
@@ -1604,7 +1600,7 @@ Exported variables and arrays are declared using the [`export` storage modifier]
 * [`noinit`](#noinit-modifier)
 * [`volatile`](#volatile-modifier)
 
-All exported variables are implicitly `volatile`, so the `volatile` modifier is superfluous, but can be used for better clarity. The only difference between `export` and `volatile` is that `volatile` variables aren't imported to modules which require the current module.
+All exported variables are implicitly `volatile`, so this modifier has no effect on `export` variables, but can be used for better clarity. The only difference between `export` and `volatile` is that `volatile` variables aren't imported to modules which require the current module.
 
 > [!NOTE]
 > Element names of an exported array are part of the module contract, and therefore cannot be changed by the optimizer. To use a lookup implementation of an exported array, the lookup type must be specified explicitly using the `mlog` modifier.
@@ -1622,7 +1618,7 @@ export mlog(:liquid) array1[10];
 
 ## Remote variables
 
-Target 8 or higher is required to use remote variables.
+Target `8.0` or higher is required to use remote variables.
 
 Remote variables and arrays, stored in another processor, can also be declared using the [`remote` storage modifier](#storage-modifiers). The `remote` modifier specifies the processor the variable is stored in, and it may be specified as a linked variable, linked block, or a regular variable:
 
@@ -1710,12 +1706,12 @@ set userName "Pete"
 end
 ```
 
- As we can see, values assigned through these instructions can be easily changed in the compiled code.
+As we can see, values assigned through these instructions can be easily changed in the compiled code.
 
 > [!TIP]
 > It is a good idea to _sanitize_ the values of program parameters to make sure that changes to the parameters in the compiled code do not break the program.
 
-For example, let's say that a parameter is created to specify the percentage of container capacity usage at which some action should happen. Constraining the parameter to a range of `0 .. 100` ensures parameter values outside this range do not break the code:
+For example, let's say that a parameter is created to specify the percentage of container capacity usage at which some action should happen. Constraining it to a range of `0 .. 100` ensures parameter values outside this range do not break the code:
 
 ```Mindcode
 param CUTOFF_PCT = 50;
@@ -1782,7 +1778,7 @@ Implicit and explicit variable names used in source code are translated to mlog 
 
 In short, global variables start with `.`, function names and local variables start with `:` and compiler-generated variables start with or contain `*`.
 
-If the same main or local variable is declared multiple times in the same function (in different, non-overlapping code blocks), they actually represent different variables within a program. In this case, a unique numeric suffix is appended to variables created in the second and further declarations, separated by `.` (a dot):
+If the same main or local variable is declared multiple times in the same function (e.g., in different, non-overlapping code blocks), they actually represent different variables within a program. In this case, a unique numeric suffix is appended to variables created in the second and further declarations, separated by a `.` (a dot):
 
 ```Mindcode
 #set optimization = none;

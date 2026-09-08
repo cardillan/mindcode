@@ -57,10 +57,10 @@ public class Variables extends CompilerMessageEmitter {
         heapTracker = HeapTracker.createDefaultTracker(context);
         globalVariables = context.metadata().getIcons().createIconMapAsValueStore();
         schematicLinks = context.schematicLinks();
-        putVariable("@@MINDUSTRY_VERSION", LogicString.create(globalProfile.getProcessorVersion().mimexVersion));
+        putVariable("@@MINDUSTRY_VERSION", LogicString.createSimple(globalProfile.getProcessorVersion().mimexVersion));
         putVariable("@@TARGET_MAJOR", LogicNumber.create(globalProfile.getProcessorVersion().major));
         putVariable("@@TARGET_MINOR", LogicNumber.create(globalProfile.getProcessorVersion().minor));
-        putVariable("@@PROCESSOR_TYPE", LogicString.create(globalProfile.getProcessorType().code()));
+        putVariable("@@PROCESSOR_TYPE", LogicString.createSimple(globalProfile.getProcessorType().code()));
     }
 
     public boolean hasSchematicLinks() {
@@ -396,7 +396,7 @@ public class Variables extends CompilerMessageEmitter {
                         ? LogicVariable.global(identifier, nameCreator.global(identifier.getName()))
                         : this.processor.nextTemp();
                 LogicString remoteName = mlogName == null ? nameCreator.remote(identifier)
-                        : LogicString.create(modifiers.getNode(REMOTE).sourcePosition(), mlogName);
+                        : LogicString.createRaw(modifiers.getNode(REMOTE).sourcePosition(), mlogName);
                 RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), storageProcessor,
                         name, remoteName, transferVariable, false, false,
                         modifiers.contains(CACHED));
@@ -560,8 +560,8 @@ public class Variables extends CompilerMessageEmitter {
     }
 
     private void verifyMlogName(LogicString mlogName) {
-        if (processor.isBlockName(mlogName.getValue())) {
-            error(mlogName, ERR.MLOG_NAME_IS_BLOCK, mlogName.getValue());
+        if (processor.isBlockName(mlogName.getStringValue())) {
+            error(mlogName, ERR.MLOG_NAME_IS_BLOCK, mlogName.getStringValue());
         }
     }
 
@@ -582,7 +582,7 @@ public class Variables extends CompilerMessageEmitter {
             switch (mlogNameList.getFirst()) {
                 case LogicString mlogName -> {
                     verifyMlogName(mlogName);
-                    return mlogName.getValue();
+                    return mlogName.getStringValue();
                 }
                 case LogicKeyword kw -> {
                     error(modifiers.getNode(MLOG), ERR.INVALID_MLOG_KEYWORD);
@@ -678,7 +678,7 @@ public class Variables extends CompilerMessageEmitter {
                     @Override
                     public String arrayElement(@Nullable MindcodeFunction function, String arrayName, int variableindex, int elementIndex) {
                         return elementIndex >= mlogNameList.size() ? "invalid"
-                                : mlogNameList.get(elementIndex) instanceof LogicString str ? str.getValue()
+                                : mlogNameList.get(elementIndex) instanceof LogicString str ? str.getStringValue()
                                 : standardNameCreator.arrayElement(function, arrayName, variableindex, elementIndex);
                     }
 

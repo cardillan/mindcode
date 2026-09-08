@@ -98,6 +98,10 @@ public interface GlobalCompilerProfile {
         return !isWebApplication() && getBooleanValue(MlogFormatOptions.ENCODE_ZERO_CHARACTERS);
     }
 
+    default boolean useUnicodeEscapes() {
+        return getBooleanValue(MlogFormatOptions.USE_UNICODE_ESCAPES);
+    }
+
     default boolean isNoArgumentPadding() {
         return getBooleanValue(MlogFormatOptions.NO_ARGUMENT_PADDING);
     }

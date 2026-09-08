@@ -102,7 +102,7 @@ assertEquals( 0,            !d(2),                      "boolean negation 3");
 a = 2; assertEquals(   16,  a **= d(4),                 "**=");
 a = 2; assertEquals(    8,  a *= d(4),                  "*=");
 a = 6; assertEquals(  1.5,  a /= d(4),                  "/=");
-a = 6; assertEquals(    1,  a \= d(4),                  "\=");
+a = 6; assertEquals(    1,  a \= d(4),                  "\\=");
 a = 6; assertEquals(    2,  a %= d(4),                  "%=");
 a = 4; assertEquals(    6,  a += d(2),                  "+=");
 a = 4; assertEquals(    2,  a -= d(2),                  "-=");

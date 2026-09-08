@@ -3,8 +3,8 @@ assignments-in-expressions.mnd:                    13       13     100.0%   3E55
 complex-case-expression.mnd:                       49      295      98.0%   E6AA465B5328A02F   7A1AB54E5E4158DC
 equality-comparisons.mnd:                          61       61     100.0%   16DB5681427420C5   3767E3C7C8A899A8
 executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   534AB72113DE153E
-expression-evaluation-compile-time.mnd:            79       79     100.0%   1CFFE222D3784C4B   C021187B6C2F80C9
-expression-evaluation-runtime.mnd:                191      191     100.0%   556E593ABBF7BE04   FF419CE3ACEB2801
+expression-evaluation-compile-time.mnd:            79       79     100.0%   8FB2004C6D89126D   3E92A882AB7821E2
+expression-evaluation-runtime.mnd:                191      191     100.0%   00FDDAB36D93107B   DD31ABB016617299
 fixed-bounds-ranged-for.mnd:                        9       36     100.0%   6CB678A2E1E09678   70911AEC39BECA9E
 for-each-loop-break-continue.mnd:                  83       95      83.1%   DB8BCD3905B56BCF   7B54DBED117142B2
 function-inlining.mnd:                            884      884     100.0%   B3AB880177C19FDA   FD313BE5D3502CDF
@@ -18,7 +18,7 @@ processesBasicCode2:                                3        3     100.0%   B406
 processesBasicCode:                                 4        4     100.0%   A4E4C088A4510A90   30633B28AE9D9EDA
 processesCaseExpressions:                           6        4      66.7%   0A6F2A75C193B958   381E5D60588F2DF8
 processesGlobalVariableDataFlow:                   24       24     100.0%   A117AFBA99D093C8   F60E1625820060DF
-processesTranslatedCaseExpressions:                 6        4      66.7%   5324DB4ECE283002   381E5D60588F2DF8
+processesTranslatedCaseExpressions:                 3        3     100.0%   5324DB4ECE283002   0D17E6361D558759
 ranged-for-loop-break-continue.mnd:                25       62      96.0%   0E564BDD58072C70   51B79385B240C3C0
 recursive-calls-ext.mnd:                          132      228      99.2%   9CB0965E0E62F089   C31676AEEE6E1000
 recursive-calls-int.mnd:                          255      292      59.6%   3DBF60E7A819C0E9   4C49FCE6AEFA0F45

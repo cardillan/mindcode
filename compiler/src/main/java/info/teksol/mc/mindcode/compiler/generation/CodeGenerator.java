@@ -232,7 +232,7 @@ public class CodeGenerator extends CompilerMessageEmitter {
         if (!globalProfile.getProgramName().isBlank()) lines.add("name: " + globalProfile.getProgramName());
         if (!globalProfile.getProgramVersion().isBlank()) lines.add("version: " + globalProfile.getProgramVersion());
         programId = String.join("\n", lines);
-        LogicString id = LogicString.create(programId.replace("\n", "\\n"));
+        LogicString id = LogicString.createRaw(programId);
         variables.putVariable("@@ID", id);
 
         if (!lines.isEmpty()) {
@@ -314,7 +314,7 @@ public class CodeGenerator extends CompilerMessageEmitter {
         List<MindcodeFunction> remoteFunctions = callGraph.getFunctions().stream().filter(f -> f.isExport() && f.isEntryPoint()).toList();
         assembler.setContextType(program, AstContextType.DECLARATION, AstSubcontextType.REMOTE_INIT);
         String remoteSignature = createRemoteSignature(remoteFunctions.stream().map(MindcodeFunction::getDeclaration));
-        assembler.createSet(LogicVariable.preserved(nameCreator().remoteSignature()), LogicString.create(remoteSignature));
+        assembler.createSet(LogicVariable.preserved(nameCreator().remoteSignature()), LogicString.createSimple(remoteSignature));
         assembler.clearContextType(program);
 
         assembler.setContextType(program, AstContextType.LOOP, AstSubcontextType.BASIC);

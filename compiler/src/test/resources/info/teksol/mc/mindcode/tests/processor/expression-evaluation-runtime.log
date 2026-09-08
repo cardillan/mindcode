@@ -527,7 +527,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-82 ins
 +  379 op add *tmp204 zero :d.63:n
    380 label *label78
    381 op idiv :a :a *tmp204
-   382 assertequals 1 :a "\="
+   382 assertequals 1 :a "\\="
    383 set :a 6
    384 set :d.64:n 4
 -    * op add *tmp207 zero :d.64:n
@@ -1083,7 +1083,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    380 label *label78
 -    * op idiv :a :a *tmp204
 +  381 op idiv :a 6 *tmp204
-   382 assertequals 1 :a "\="
+   382 assertequals 1 :a "\\="
    383 set :a 6
    384 set :d.64:n 4
 -    * op add *tmp206 zero :d.64:n
@@ -1620,11 +1620,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
    307 op add *tmp204 zero 4
    308 label *label78
 -    * op idiv :a 6 *tmp204
--    * assertequals 1 :a "\="
+-    * assertequals 1 :a "\\="
 -    * set :a 6
 -    * set :d.64:n 4
 +  309 op idiv :a 6 *tmp9
-+  310 assertequals 1 *tmp17 "\="
++  310 assertequals 1 *tmp17 "\\="
    311 op add *tmp206 zero 4
    312 label *label79
 -    * op mod :a 6 *tmp206
@@ -1992,7 +1992,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-7
 -    * op add *tmp204 zero 4
    257 label *label78
 -    * op idiv :a 6 *tmp9
-   258 assertequals 1 *tmp17 "\="
+   258 assertequals 1 *tmp17 "\\="
 -    * op add *tmp206 zero 4
    259 label *label79
 -    * op mod :a 6 *tmp9
@@ -2815,7 +2815,7 @@ assertequals 16 *tmp13 "**="
 op mul :a 2 *tmp5
 assertequals 8 :a "*="
 assertequals 1.5 *tmp6 "/="
-assertequals 1 *tmp9 "\="
+assertequals 1 *tmp9 "\\="
 assertequals 2 *tmp10 "%="
 assertequals 6 *tmp1 "+="
 op sub :a 2 zero

@@ -425,10 +425,11 @@ The first argument to the function is an _offset_. The remaining arguments are t
 
 The following integer values can be encoded into a string:
 
-* Integers in the range `1 .. 0xD7FF` (`1 .. 55295`), except 13 and 34 (note that `0` is not allowed either).
-* Integers in the range `0xE000 .. 0xFFFF` (`57344 .. 65535`).
-
-Furthermore, the encoded string must not contain the character sequence `\n` (`92` followed by `110`).
+* Targets `8.1` and lower:
+  * Integers in the range `1 .. 0xD7FF` (`1 .. 55295`), except 13, 34, and 92 (note that `0` is not allowed either).
+  * Integers in the range `0xE000 .. 0xFFFF` (`57344 .. 65535`).
+* Targets `8.2` and higher:
+  * Integers in the range `0 .. 0xFFFF`.
 
 When the function produces a string that cannot be encoded, a compilation error occurs.
 
@@ -490,7 +491,7 @@ The function always takes just one argument. When the argument passed in is not 
 
 ## The `strlen()` function
 
-The `strlen()` function returns the length of a string passed in as an argument. The function requires target `8` or higher.
+The `strlen()` function returns the length of a string passed in as an argument. The function requires target `8.0` or higher.
 
 ```Mindcode
 param data = "Dbftbs!djqifs";

@@ -21,7 +21,6 @@ import info.teksol.mc.profile.RuntimeErrorReporting;
 import info.teksol.mc.profile.SortCategory;
 import info.teksol.mc.util.CollectionUtils;
 import info.teksol.mc.util.StringUtils;
-import info.teksol.mc.util.Utf8Utils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -200,11 +199,11 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
 
         if (addSignature && !profile.getAuthors().isEmpty() && program.size() < profile.getInstructionLimit()) {
             String attribution = "Created by " + StringUtils.joinUsingAnd(profile.getAuthors());
-            program.add(processor.createPrint(last.getAstContext(), LogicString.create(attribution)));
+            program.add(processor.createPrint(last.getAstContext(), LogicString.createRaw(attribution)));
         }
 
         if (addSignature && profile.isSignature() && program.size() < profile.getInstructionLimit()) {
-            program.add(processor.createPrint(last.getAstContext(), LogicString.create(profile.getSignature())));
+            program.add(processor.createPrint(last.getAstContext(), LogicString.createSimple(profile.getSignature())));
         }
 
         return program;
@@ -352,7 +351,7 @@ public class FinalInstructionResolver extends CompilerMessageEmitter {
 
     private LogicInstruction buildTextTableJump(MultiTargetInstruction ix, List<LogicLabel> jumpTable) {
         int[] addresses = jumpTable.stream().mapToInt(this::resolveAddress).toArray();
-        LogicString jumpTableString = LogicString.create(ix.sourcePosition(), Utf8Utils.encode(addresses));
+        LogicString jumpTableString = LogicString.create(ix.sourcePosition(), processor.encode(addresses));
 
         LogicInstruction instruction = processor.createInstruction(ix.getAstContext(), READ, LogicBuiltIn.COUNTER,
                 jumpTableString, ix.getTarget());

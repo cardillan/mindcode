@@ -49,7 +49,7 @@ import info.teksol.mc.profile.FinalCodeOutput;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.options.Target;
 import info.teksol.mc.util.CollectionUtils;
-import info.teksol.mc.util.Utf8Utils;
+import info.teksol.mc.util.UtfUtils;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -417,7 +417,7 @@ public class MindcodeCompiler extends CompilerMessageEmitter implements AstBuild
 
         output = globalProfile.isReformatMlog() ? reformat(code) : code;
 
-        int mlogEncodedSize = Utf8Utils.utf8Length(output);
+        int mlogEncodedSize = UtfUtils.utf8Length(output);
         if (mlogEncodedSize > Globals.MAX_MLOG_BYTE_LENGTH) {
             if (globalProfile.isEnforceSizeLimits()) {
                 error(ERR.CODE_SIZE_LIMIT_EXCEEDED, Globals.MAX_MLOG_BYTE_LENGTH, mlogEncodedSize - Globals.MAX_MLOG_BYTE_LENGTH);

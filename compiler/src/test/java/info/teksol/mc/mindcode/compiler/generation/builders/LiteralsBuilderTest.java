@@ -4,6 +4,7 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.PRINT;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.SET;
 
 @NullMarked
@@ -40,9 +41,68 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
         assertCompilesTo("""
                         a = "";
                         a = "A string literal";
+                        a = "A string literal with \\"escaped\\" quotes";
                         """,
                 createInstruction(SET, ":a", q("")),
-                createInstruction(SET, ":a", q("A string literal"))
+                createInstruction(SET, ":a", q("A string literal")),
+                createInstruction(SET, ":a", q("A string literal with \\\"escaped\\\" quotes"))
+        );
+    }
+
+    @Test
+    void compilesFormattableStringLiterals() {
+        assertCompilesTo("""
+                        var value = "0";
+                        println("foo\\\\bar");
+                        println($"A\\\\$value\\\\B");
+                        println($"A\\"$value\\"B");
+                        println($"A\\u0028$value\\u0029B");
+                        println($"A\\$$value\\$B ");
+                        """,
+                createInstruction(SET, ".value", q("0")),
+                createInstruction(PRINT, q("foo\\\\bar")),
+                createInstruction(PRINT, q("\n")),
+                createInstruction(PRINT, q("A\\\\")),
+                createInstruction(PRINT, ".value"),
+                createInstruction(PRINT, q("\\\\B")),
+                createInstruction(PRINT, q("\n")),
+                createInstruction(PRINT, q("A\\\"")),
+                createInstruction(PRINT, ".value"),
+                createInstruction(PRINT, q("\\\"B")),
+                createInstruction(PRINT, q("\n")),
+                createInstruction(PRINT, q("A\\u0028")),
+                createInstruction(PRINT, ".value"),
+                createInstruction(PRINT, q("\\u0029B")),
+                createInstruction(PRINT, q("\n")),
+                createInstruction(PRINT, q("A$")),
+                createInstruction(PRINT, ".value"),
+                createInstruction(PRINT, q("$B ")),
+                createInstruction(PRINT, q("\n"))
+        );
+    }
+
+    @Test
+    void compilesFormattableStringLiterals81() {
+        assertCompilesTo("""
+                        #set target = 8.1;
+                        var value = "0";
+                        println("foo\\\\bar");
+                        println($"A\\\\$value\\\\B");
+                        println($"A\\$$value\\$B ");
+                        """,
+                // Note: the string literals are fully escaped
+                // The conversion to unescaped, target 8.1 compatible string is done later, in LogicInstructionPrinter
+                createInstruction(SET, ".value", q("0")),
+                createInstruction(PRINT, q("foo\\\\bar")),
+                createInstruction(PRINT, q("\n")),
+                createInstruction(PRINT, q("A\\\\")),
+                createInstruction(PRINT, ".value"),
+                createInstruction(PRINT, q("\\\\B")),
+                createInstruction(PRINT, q("\n")),
+                createInstruction(PRINT, q("A$")),
+                createInstruction(PRINT, ".value"),
+                createInstruction(PRINT, q("$B ")),
+                createInstruction(PRINT, q("\n"))
         );
     }
 
@@ -358,14 +418,14 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     @Test
     void refusesColorLiteralsIn6() {
         assertGeneratesMessage(
-                "Color literals require language target 7 or higher.",
+                "Color literals require language target '7.0' or higher.",
                 "#set target = 6m; a = %123456;");
     }
 
     @Test
     void refusesNamedColorLiteralsIn7() {
         assertGeneratesMessage(
-                "Named color literals require language target 8 or higher.",
+                "Named color literals require language target '8.0' or higher.",
                 "#set target = 7m; a = %[red];");
     }
 
@@ -374,5 +434,19 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessage(
                 "Unknown named color 'fluffybunny'.",
                 "a = %[fluffybunny];");
+    }
+
+    @Test
+    void refusesEscapedQuotesIn81() {
+        assertGeneratesMessages(expectedMessages()
+                        .add("Escape sequence '\\\"' requires language target '8.2' or higher.").repeat(2),
+                "#set target = 8.1m; a = \"Hello, \\\"friend\\\"\";");
+    }
+
+    @Test
+    void refusesInvalidEscapes() {
+        assertGeneratesMessage(
+                "Invalid unicode escape sequence: expected 4 hexadecimal digits following '\\u'.",
+                "a = \"\\uora\";");
     }
 }

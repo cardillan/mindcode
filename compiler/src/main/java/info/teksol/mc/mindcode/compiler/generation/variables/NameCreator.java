@@ -31,14 +31,14 @@ public interface NameCreator extends ArrayNameCreator {
     String programId();
 
     default LogicString global(AstIdentifier identifier) {
-        return LogicString.create(identifier.sourcePosition(), global(identifier.getName()));
+        return LogicString.createRaw(identifier.sourcePosition(), global(identifier.getName()));
     }
 
     default LogicString remote(AstIdentifier identifier) {
-        return LogicString.create(identifier.sourcePosition(), remote(identifier.getName()));
+        return LogicString.createRaw(identifier.sourcePosition(), remote(identifier.getName()));
     }
 
     default LogicString remoteParameter(MindcodeFunction function, AstFunctionParameter parameter) {
-        return LogicString.create(parameter.sourcePosition(), remoteParameter(function, parameter.getName()));
+        return LogicString.createRaw(parameter.sourcePosition(), remoteParameter(function, parameter.getName()));
     }
 }

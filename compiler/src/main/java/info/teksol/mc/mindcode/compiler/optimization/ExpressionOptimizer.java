@@ -328,14 +328,14 @@ class ExpressionOptimizer extends BaseOptimizer {
 
     private void processReadInstruction(LogicIterator logicIterator, ReadInstruction ix) {
         if (ix.getMemory() instanceof LogicString logicString && ix.getIndex().isNumericConstant()) {
-            String string = logicString.getValue();
+            String string = logicString.getStringValue();
             long index = ix.getIndex().getLongValue();
             LogicValue value = index >= 0 && index < string.length()
                     ? LogicNumber.create((long) string.charAt((int) index))
                     : LogicNull.NULL;
             logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), value));
         } else if (advanced(ix) && ix.getMemory().equals(LogicBuiltIn.THIS) && ix.getIndex() instanceof LogicString mlogName) {
-            logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicVariable.mlogVariable(mlogName.getValue())));
+            logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicVariable.mlogVariable(mlogName.getStringValue())));
         }
     }
 
@@ -375,7 +375,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                 }
             } else if (property.equals(LogicBuiltIn.NAME) && object.getObject() != null) {
                 logicIterator.set(createSet(ix.getAstContext(), ix.getResult(),
-                        LogicString.create(ix.sourcePosition(), object.getObject().contentName())));
+                        LogicString.createRaw(ix.sourcePosition(), object.getObject().contentName())));
             }
         }
     }
@@ -413,7 +413,7 @@ class ExpressionOptimizer extends BaseOptimizer {
 
     private void processWriteInstruction(LogicIterator logicIterator, WriteInstruction ix) {
         if (ix.getMemory().equals(LogicBuiltIn.THIS) && ix.getIndex() instanceof LogicString mlogName) {
-            logicIterator.set(createSet(ix.getAstContext(),LogicVariable.mlogVariable(mlogName.getValue()), ix.getValue()));
+            logicIterator.set(createSet(ix.getAstContext(),LogicVariable.mlogVariable(mlogName.getStringValue()), ix.getValue()));
         }
     }
 

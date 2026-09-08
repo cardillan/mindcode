@@ -1,4 +1,4 @@
-   318 instructions before optimizations.
+   317 instructions before optimizations.
     39 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instruction eliminated by Case Expression Optimization.
     25 instructions eliminated by Dead Code Elimination (6 iterations).
@@ -12,10 +12,10 @@
        5 loop conditions were partially rotated.
      4 instructions eliminated by Jump Straightening (6 iterations).
      1 instruction updated by Jump Threading.
-    14 instructions eliminated by Print Merging.
+    13 instructions eliminated by Print Merging.
    183 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 798):
+Pass 1: speed optimization selection (cost limit 799):
   * Full loop rotation at line 91:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -1248,14 +1248,14 @@ Modifications by Full loop rotation at line 91:1 (+1 instructions):
    180 draw color 0 0 80 255
    181 draw rect :clx :cly :clw :clh
  
-   255 print "ms"
-   256 printflush .MESSAGE
-   257 label *label43
+   254 print " ms"
+   255 printflush .MESSAGE
+   256 label *label43
 -    * jump *label42 always
-+  258 sensor *tmp76 .SWITCH @enabled
-+  259 jump *label62 equal *tmp76 0
-   260 label *label44
-   261 end
++  257 sensor *tmp76 .SWITCH @enabled
++  258 jump *label62 equal *tmp76 0
+   259 label *label44
+   260 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -1347,12 +1347,12 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   231 printflush .MESSAGE
-   232 sensor *tmp76 .SWITCH @enabled
-   233 jump *label62 equal *tmp76 0
+   230 printflush .MESSAGE
+   231 sensor *tmp76 .SWITCH @enabled
+   232 jump *label62 equal *tmp76 0
 -    * end
 
-Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
+Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
  
      6 set .SWITCH null
      7 set .MESSAGE null
@@ -1412,8 +1412,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
    215 op floor *tmp118 *tmp117
 -    * print "[lightgray]Draw time: "
 -    * print *tmp118
--    * print " "
--    * print "ms"
+-    * print " ms"
 +  216 format *tmp118
    217 printflush .MESSAGE
    218 sensor *tmp76 .SWITCH @enabled

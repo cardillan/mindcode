@@ -72,7 +72,7 @@ public interface ContextfulInstructionCreator {
     }
 
     default CommentInstruction createComment(String comment) {
-        return (CommentInstruction) createInstruction(COMMENT, LogicString.create(comment));
+        return (CommentInstruction) createInstruction(COMMENT, LogicString.createRaw(comment));
     }
 
     default ControlInstruction createControl(LogicKeyword property, LogicValue target, LogicValue value) {
@@ -92,7 +92,7 @@ public interface ContextfulInstructionCreator {
     }
 
     default ErrorInstruction createError(String... messages) {
-        return createError(Stream.of(messages).map(m -> (LogicArgument)LogicString.create(m)).toList());
+        return createError(Stream.of(messages).map(str -> (LogicArgument)LogicString.createRaw(str)).toList());
     }
 
     default FormatInstruction createFormat(LogicValue what) {

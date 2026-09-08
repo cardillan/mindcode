@@ -198,6 +198,12 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category, List.of("")));
 
+        list.add(new BooleanCompilerOptionValue(MlogFormatOptions.USE_UNICODE_ESCAPES, "",
+                "encode all unprintable characters using unicode escapes (has no effects for target lower than 8.2)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
         list.add(new BooleanCompilerOptionValue(MlogFormatOptions.ENCODE_ZERO_CHARACTERS, "",
                 "allow encoding zero characters into mlog string literals (WARNING: the resulting code " +
                         "can't be edited as a text or copied/pasted to/from the clipboard!)",
@@ -386,7 +392,7 @@ public class CompilerOptionFactory {
 
         list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_TEXT_JUMP_TABLES, "",
                 "when active, generates jump tables by encoding instruction addresses into a single String value, and uses " +
-                        "a single 'read' instruction to directly set the counter to the target address (target 8 or higher required)",
+                        "a single 'read' instruction to directly set the counter to the target address (target '8' or higher required)",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                 OptionAvailability.UNIVERSAL, category,
                 true));

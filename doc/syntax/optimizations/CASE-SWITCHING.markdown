@@ -102,7 +102,7 @@ Assuming the case statement can be implemented using value translation, several 
     3. `input` is an integer, and `min(keys)` is above zero:
         1. the translation table is padded by `else` values up to `min(keys)`, if possible, or
         2. `input` is offset by `- min(keys)`.
-2. Output values cannot be mapped to characters valid for a string literal: an offset is added to output values which must then be subtracted. (Unfortunately, this subtraction damages null values naturally produced by the `read` instruction, may need to be compensated for later on.)
+2. Output values cannot be mapped to characters valid for a string literal: an offset is added to output values which must then be subtracted. (Unfortunately, this subtraction damages null values naturally produced by the `read` instruction, may need to be compensated for later on.) Note that this is not an issue in target `8.2` or higher, as in these targets all characters can be encoded into a string literal, using Unicode escape sequences if necessary. 
 3. Keys contain `null` and the `null` key maps to a different value than the zero key (meaning a null value of `input` needs to be specifically handled):
     1. `null` maps to a non-null value: `null`-handling `select` will be added after translation.
     2. `null` maps to a branch which doesn't assign a new value: a `select` is used to restore the original value of the variable.

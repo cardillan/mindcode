@@ -148,7 +148,7 @@ It is also possible to decrease the instruction limit if you wish so. The valid 
 
 Informs Mindcode how operations assigning `null` to `@counter` are handled by the processor. Possible values are:
 
-* `false` (the default value for target 8.0): assigning `null` to `@counter` is interpreted by the processor (possibly by jumping to address #0).
+* `false` (the default value for target `8.0`): assigning `null` to `@counter` is interpreted by the processor (possibly by jumping to address #0).
 * `true` (the default value for all other targets): assigning `null` to `@counter` is ignored by the processor. Mindcode may generate code depending on this behavior.
 
 In the past, Mindustry processor behavior has been inconsistent when assigning `null` to `@counter`. To allow Mindcode to produce the correct code in case it gets changed again, this option has been added.
@@ -243,8 +243,8 @@ Generally, a module target is compatible with the same or higher global target, 
 
 Informs Mindcode how the `wait` instruction handles a wait time of zero. Possible values are:
 
-* `false` (the default value for target 8.0 and lower): `wait 0` doesn't yield the execution.
-* `true` (the default value for target 8.1 and higher): `wait 0` yields the execution.
+* `false` (the default value for target `8.0` or lower): `wait 0` doesn't yield the execution.
+* `true` (the default value for target `8.1` or higher): `wait 0` yields the execution.
 
 When `wait 0` does yield the execution, it provides a slightly better performance of remote calls, especially on microprocessors. This change came about in Mindustry v8 Build 155. For builds between v8 Build 150 and v8 Build 154.3, you need to explicitly set the value of this option to `false`; for all other releases, the default value of this option matches the corresponding Mindcode target.
 
@@ -265,6 +265,7 @@ carry over specific information into the compiled program (such as signature or 
 | [program-version](#option-program-version)               | global | stable             |
 | [reformat-mlog](#option-reformat-mlog)                   | global | stable             |
 | [symbolic-labels](#option-symbolic-labels)               | global | stable             |
+| [use-unicode-escapes](#option-use-unicode-escapes)       | global | stable             |
 
 ### Option `author`
 
@@ -600,6 +601,19 @@ compiles to:
             # End of unit handling
             jump label_3 always 0 0
 ```
+
+### Option `use-unicode-escapes`
+
+**Option scope: [global](#global-scope)**
+
+Activates/deactivates using Unicode escapes for nonprintable characters in compiler-generated strings in targets 8.2 or higher. Possible values are:
+
+* `false`: only characters which cannot be parsed by the in-game parser are encoded using Unicode escapes.
+* `true` (the default value): all non-printable characters are encoded using Unicode escapes.
+
+Using Unicode escapes for nonprintable characters makes the code more readable and precludes possible problems when processing the code in various text editors or sharing it on the web. The generated mlog size might get a bit larger.
+
+This option has no effect in targets 8.1 or earlier, as in these targets the Mindustry parser doesn't recognize Unicode escapes in string literals.
 
 ## Compiler options
 

@@ -139,8 +139,8 @@ See also [`formatBinaryNumber`](#formatbinarynumber)
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Inlined function                         |                  32 |                 32 |
-| Function body                            |                  33 |                 33 |
+| Inlined function                         |                  31 |                 31 |
+| Function body                            |                  32 |                 32 |
 | Function call                            |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
@@ -276,8 +276,8 @@ itself, except the conversion of the number from a `double` to a 64-bit integer 
 | Function body                            |                  65 |                 16 |
 | Function call                            |                   4 |                  4 |
 
-**Note:** Function can be compiled for all Mindustry Logic versions. The displayed statistics is valid for
-target 8, for earlier targets the code size may be higher.
+**Note:** Function can be compiled for all Mindustry Logic versions. The displayed statistic is valid for
+target `8`, for earlier targets the code size may be higher.
 
 Prints the number passed in as a parameter into the text buffer in a hexadecimal base, always outputting 16
 hexadecimal digits. No prefix (i.e., `0b`) is printed.

@@ -3,8 +3,8 @@ assignments-in-expressions.mnd:                    13       13     100.0%   3E55
 complex-case-expression.mnd:                       49      295      98.0%   E6AA465B5328A02F   43BDD2198854CACC
 equality-comparisons.mnd:                          61       61     100.0%   16DB5681427420C5   8552B9476E5B928A
 executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   271B7D3884AA7815
-expression-evaluation-compile-time.mnd:            79       79     100.0%   1CFFE222D3784C4B   754F69281A12ADE7
-expression-evaluation-runtime.mnd:                191      191     100.0%   556E593ABBF7BE04   AC1AE98FF35CC0FA
+expression-evaluation-compile-time.mnd:            79       79     100.0%   8FB2004C6D89126D   93D7A6B74644FA25
+expression-evaluation-runtime.mnd:                191      191     100.0%   00FDDAB36D93107B   279EB7B53303FD54
 fixed-bounds-ranged-for.mnd:                        9       36     100.0%   6CB678A2E1E09678   F27824FD4C9C2F3F
 for-each-loop-break-continue.mnd:                  83       95      83.1%   DB8BCD3905B56BCF   8F53D97FF8B20C70
 function-inlining.mnd:                            884      884     100.0%   B3AB880177C19FDA   BEF1D17B44D03B7F
@@ -18,12 +18,12 @@ processesBasicCode2:                                3        3     100.0%   B406
 processesBasicCode:                                 4        4     100.0%   A4E4C088A4510A90   EB7D6403850CF0B3
 processesCaseExpressions:                           6        4      66.7%   0A6F2A75C193B958   167C8B62ED30D771
 processesGlobalVariableDataFlow:                   24       24     100.0%   A117AFBA99D093C8   D3F45F2FC34580A3
-processesTranslatedCaseExpressions:                 6        4      66.7%   5324DB4ECE283002   167C8B62ED30D771
+processesTranslatedCaseExpressions:                 3        3     100.0%   5324DB4ECE283002   6D61BAC1117446CB
 ranged-for-loop-break-continue.mnd:                25       62      96.0%   0E564BDD58072C70   D9DA860765845E44
 recursive-calls-ext.mnd:                          126      219      99.2%   9CB0965E0E62F089   49074B60FEB1F5C7
 recursive-calls-int.mnd:                          251      288      59.0%   3DBF60E7A819C0E9   9315538AB8FD8BB0
 recursive-function-condition-ext.mnd:               7        5      71.4%   02C171DDB1F56F08   9692CDE091B49CD1
 recursive-function-condition-int.mnd:               7        5      71.4%   02C171DDB1F56F08   9692CDE091B49CD1
-switched-case-expression.mnd:                      51     1554      96.1%   D8AE9E78FC18AFFC   3B6977B65EF82DED
+switched-case-expression.mnd:                      50     1554      98.0%   D8AE9E78FC18AFFC   E3C8B0DC2D8C3B2A
 testSuiteRecognizesUnexpectedWarnings:              1        1     100.0%   002B7E6873B65270   4A3761D7B5564792
 while-loop.mnd:                                    20       66      95.0%   D881ACAA07A1E8A0   F03CA97B54767D2C

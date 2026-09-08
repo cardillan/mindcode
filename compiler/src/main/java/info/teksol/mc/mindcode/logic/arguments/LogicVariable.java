@@ -211,7 +211,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public LogicString getMlogVariableName() {
-        return LogicString.create(sourcePosition, toMlog());
+        return LogicString.createRaw(sourcePosition, toMlog());
     }
 
     /// @return true if the parameter is effectively input

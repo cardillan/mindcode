@@ -385,15 +385,44 @@ Finally, there are string literals, a sequence of characters enclosed in double 
 
 `"A string literal."`
 
-> [!NOTE]
-> It is not possible to include a double quote inside string literals because Mindustry Logic itself doesn't support them. Trying to include a double quote in a string literal using backslash escape, as is usual in other languages (e.g., `"This is an embedded \"quote\""`) leads to syntax error.
+The maximum size of an mlog string literal, when stored in UTF-8 encoding, is 65,535 bytes. Larger string literals cause compilation errors.
 
-> [!NOTE]
-> The maximum size of an mlog string literal, when stored in UTF-8 encoding, is 65,535 bytes. Larger string literals cause compilation errors.
+Depending on the selected target, the string literal may contain certain escape sequences.
+
+#### Target `8.1` or lower
+
+The only escape sequence supported by Mindustry Logic in this target is `\n` (newline). No other escape characters are supported. It might be possible to use nonprintable characters in string literals, but this is not recommended. These characters cannot be used in string literals at all:
+
+* double quote `"` (ASCII value 34)
+* carrier return (ASCII value 13)
+* a `\n` sequence (that is, `\` followed by `n`, this seqence will always be interpreted as a newline by Mindustry Logic).
+
+#### Target `8.2` or higher
+
+In target `8.2` or higher, it is possible to encode any character in a string literal, using one of the following escape sequences:
+
+* `\n`: newline
+* `\"`: double quote
+* `\\`: backslash
+* `\$`: dollar sign (note that `$` only needs to be escaped in formattable string literals, in plain string literals the escaping is optional)
+* `\uXXXX`: Unicode character with the specified hexadecimal value (e.g., `\u0020` for space). The `XXXX` part must be exactly four hexadecimal digits.
+
+A backslash followed by a character other than one of the above escape sequences is an illegal escape sequence and causes a compilation error.
+
+It is advisable to use the Unicode escape sequence to encode non-printable characters and Unicode surrogate characters, for example:
+
+```Mindcde
+#set target = 8.2;
+print(
+   "ASCII 0 character: \u0000\n" +
+   "ASCII 1 character: \u0001\n" +
+   "Double quote: \" (alternatively: \u0022)\n" +
+   "Backslash: \\ (alternatively: \u005c)");
+```
 
 ### Formattable string literals
 
-Formattable string literals are a special case of string literals which can only be used with [`print`, `println`, and `remark` functions](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). They are prepended by the `$` character:
+Formattable string literals are a special case of string literals which can only be used with [`print`, `println`, and `remark` functions](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). They are formed by prepending a normal string literal with the `$` character:
 
 `$"A formattable string literal."`
 

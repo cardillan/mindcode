@@ -141,6 +141,6 @@ public class RemoteVariable implements FunctionParameter {
 
     @Override
     public void setArrayElementName(String elementName) {
-        this.remoteNameOverride = LogicString.create(elementName);
+        this.remoteNameOverride = LogicString.createRaw(elementName);
     }
 }

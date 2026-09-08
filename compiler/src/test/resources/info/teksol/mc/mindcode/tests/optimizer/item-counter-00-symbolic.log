@@ -1,4 +1,4 @@
-   173 instructions before optimizations.
+   163 instructions before optimizations.
     25 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instruction eliminated by Case Expression Optimization.
     14 instructions eliminated by Dead Code Elimination (7 iterations).
@@ -10,10 +10,10 @@
        4 loop conditions were partially rotated.
      3 instructions eliminated by Jump Straightening (5 iterations).
      1 instruction updated by Jump Threading.
-    20 instructions eliminated by Print Merging.
+    10 instructions eliminated by Print Merging.
     90 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 890):
+Pass 1: speed optimization selection (cost limit 900):
   * Full loop rotation at line 39:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -93,8 +93,8 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructi
    148 label *label27
 -    * set *tmp53 null
    149 label *label28
-   150 print "Item Counter                  "
-   151 print "\n"
+   150 print "Item Counter                  \n"
+   151 print "Total items: [gold]"
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
  
@@ -269,22 +269,22 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-25 ins
    119 label *label27
    120 label *label28
  
-   151 jump *label13 always
-   152 label *label15
-   153 control enabled switch1 0
+   141 jump *label13 always
+   142 label *label15
+   143 control enabled switch1 0
 -    * set *tmp63 :lastCell
 -    * write 0 .MEMORY *tmp63
-+  154 write 0 .MEMORY :lastCell
-   155 set :n 0
-   156 label *label29
-   157 op lessThan *tmp65 :n @links
-   158 jump *label31 equal *tmp65 false
++  144 write 0 .MEMORY :lastCell
+   145 set :n 0
+   146 label *label29
+   147 op lessThan *tmp65 :n @links
+   148 jump *label31 equal *tmp65 false
 -    * set *tmp66 :n
 -    * write 0 .MEMORY *tmp66
-+  159 write 0 .MEMORY :n
-   160 op add :n :n 1
-   161 label *label30
-   162 jump *label29 always
++  149 write 0 .MEMORY :n
+   150 op add :n :n 1
+   151 label *label30
+   152 jump *label29 always
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-3 instructions):
  
@@ -389,15 +389,15 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-1
    101 op mul *tmp55 *tmp54 10
    102 op max :batch *tmp55 .EFF_MIN_BATCH
  
-   142 write 0 .MEMORY :lastCell
-   143 set :n 0
-   144 label *label29
+   132 write 0 .MEMORY :lastCell
+   133 set :n 0
+   134 label *label29
 -    * op lessThan *tmp65 :n @links
 -    * jump *label31 equal *tmp65 false
-+  145 jump *label31 greaterThanEq :n @links
-   146 write 0 .MEMORY :n
-   147 op add :n :n 1
-   148 label *label30
++  135 jump *label31 greaterThanEq :n @links
+   136 write 0 .MEMORY :n
+   137 op add :n :n 1
+   138 label *label30
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-6 instructions):
  
@@ -432,7 +432,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 -    * jump *label28 always
    101 label *label27
    102 label *label28
-   103 print "Item Counter                  "
+   103 print "Item Counter                  \n"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -533,17 +533,17 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     90 op sub *tmp50 @time :startTime
     91 op floor :elapsed *tmp50
  
-   135 set :n 0
-   136 label *label29
-   137 jump *label31 greaterThanEq :n @links
-+  138 label *label34
-   139 write 0 .MEMORY :n
-   140 op add :n :n 1
-   141 label *label30
+   125 set :n 0
+   126 label *label29
+   127 jump *label31 greaterThanEq :n @links
++  128 label *label34
+   129 write 0 .MEMORY :n
+   130 op add :n :n 1
+   131 label *label30
 -    * jump *label29 always
-+  142 jump *label34 lessThan :n @links
-   143 label *label31
-   144 end
++  132 jump *label34 lessThan :n @links
+   133 label *label31
+   134 end
 
 Modifications by Full loop rotation at line 39:1 (+1 instructions):
  
@@ -555,15 +555,15 @@ Modifications by Full loop rotation at line 39:1 (+1 instructions):
     55 set :n .FIRST_BLOCK
     56 label *label16
  
-   129 print "ms"
-   130 printflush message1
-   131 label *label14
+   119 print " ms"
+   120 printflush message1
+   121 label *label14
 -    * jump *label13 always
-+  132 sensor *tmp19 switch1 @enabled
-+  133 jump *label35 equal *tmp19 0
-   134 label *label15
-   135 control enabled switch1 0
-   136 write 0 .MEMORY :lastCell
++  122 sensor *tmp19 switch1 @enabled
++  123 jump *label35 equal *tmp19 0
+   124 label *label15
+   125 control enabled switch1 0
+   126 write 0 .MEMORY :lastCell
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -576,14 +576,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     59 getlink :block :n
     60 op add :n :n 1
  
-   136 write 0 .MEMORY :lastCell
-   137 set :n 0
-   138 label *label29
+   126 write 0 .MEMORY :lastCell
+   127 set :n 0
+   128 label *label29
 -    * jump *label31 greaterThanEq :n @links
-+  139 jump *label31 greaterThanEq 0 @links
-   140 label *label34
-   141 write 0 .MEMORY :n
-   142 op add :n :n 1
++  129 jump *label31 greaterThanEq 0 @links
+   130 label *label34
+   131 write 0 .MEMORY :n
+   132 op add :n :n 1
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
@@ -591,49 +591,40 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
      2 set MAX_BATCH 1000
      3 set :lastCell 0
  
-   120 control enabled switch1 0
-   121 write 0 .MEMORY :lastCell
-   122 set :n 0
+   110 control enabled switch1 0
+   111 write 0 .MEMORY :lastCell
+   112 set :n 0
 -    * jump *label31 greaterThanEq 0 @links
-+  123 jump __start__ greaterThanEq 0 @links
-   124 label *label34
-   125 write 0 .MEMORY :n
-   126 op add :n :n 1
++  113 jump __start__ greaterThanEq 0 @links
+   114 label *label34
+   115 write 0 .MEMORY :n
+   116 op add :n :n 1
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
-   125 write 0 .MEMORY :n
-   126 op add :n :n 1
-   127 jump *label34 lessThan :n @links
+   115 write 0 .MEMORY :n
+   116 op add :n :n 1
+   117 jump *label34 lessThan :n @links
 -    * end
 
-Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
+Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
  
     85 set :ratePerMin 0
     86 set :startTime @time
     87 label *label27
--    * print "Item Counter                  "
--    * print "\n"
+-    * print "Item Counter                  \n"
 -    * print "Total items: [gold]"
 -    * print :total
--    * print "["
--    * print "]"
--    * print "\n"
+-    * print "[]\n"
 -    * print "Rate: [green]"
 -    * print :ratePerMin
--    * print "["
--    * print "] items/min"
--    * print "\n"
+-    * print "[] items/min\n"
 -    * print "Batch size: [green]"
 -    * print :batch
--    * print "["
--    * print "]"
--    * print "\n"
+-    * print "[]\n"
 -    * print "Batch time: [gold]"
 -    * print :elapsed
--    * print "["
--    * print "] ms"
--    * print "\n"
+-    * print "[] ms\n"
 +   88 print "Item Counter                  \nTotal items: [gold]{0}[]\nRate: [green]{0}[] items/min\nBatch size: [green]{0}[]\nBatch time: [gold]{0}[] ms\n[lightgray]Loop time: {0} ms"
 +   89 format :total
 +   90 format :ratePerMin
@@ -643,8 +634,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
     94 op floor *tmp61 *tmp60
 -    * print "[lightgray]Loop time: "
 -    * print *tmp61
--    * print " "
--    * print "ms"
+-    * print " ms"
 +   95 format *tmp61
     96 printflush message1
     97 sensor *tmp19 switch1 @enabled

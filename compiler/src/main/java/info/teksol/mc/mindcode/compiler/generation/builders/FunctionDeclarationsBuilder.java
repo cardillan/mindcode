@@ -118,7 +118,7 @@ public class FunctionDeclarationsBuilder extends AbstractCodeBuilder {
                         LogicNumber.create(stackTracker.getAllocationStart()), Condition.LESS_THAN_EQ,
                         assembler.getProcessor().stackPointer(),
                         Condition.LESS_THAN, LogicNumber.create(stackTracker.getAllocationEnd()),
-                        LogicString.create(errorMessage)).setStackOverflowCheck();
+                        LogicString.createRaw(errorMessage)).setStackOverflowCheck();
                 assembler.clearSubcontextType();
             }
             assembler.createInitRec(LogicBoolean.get(stackTracker.externalStack()));

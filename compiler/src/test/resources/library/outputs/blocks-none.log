@@ -163,27 +163,26 @@ Final code before resolving virtual instructions:
         label *label28
   131:  print "\n"
   132:  print :findLinkedBlocks:name
-  133:  print ":"
-  134:  print " "
-  135:  print :findLinkedBlocks:variable
-  136:  jump *label36 equal :findLinkedBlocks:required false
-  137:  op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :findLinkedBlocks:variable
-  138:  set *tmp10 :findLinkedBlocks:foundAll
-  139:  jump *label37 always 0 0
+  133:  print ": "
+  134:  print :findLinkedBlocks:variable
+  135:  jump *label36 equal :findLinkedBlocks:required false
+  136:  op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :findLinkedBlocks:variable
+  137:  set *tmp10 :findLinkedBlocks:foundAll
+  138:  jump *label37 always 0 0
         label *label36
-  140:  set *tmp10 null
+  139:  set *tmp10 null
         label *label37
         label *label29
-  141:  multijump *tmp9 0 0
+  140:  multijump *tmp9 0 0
         multilabel *label35
-  142:  set :memory :findLinkedBlocks:variable
+  141:  set :memory :findLinkedBlocks:variable
         label *label30
-  143:  printflush :findLinkedBlocks:message
+  142:  printflush :findLinkedBlocks:message
         label *label3
-  144:  op equal *tmp11 :findLinkedBlocks:foundAll false
-  145:  jump *label2 notEqual *tmp11 false
+  143:  op equal *tmp11 :findLinkedBlocks:foundAll false
+  144:  jump *label2 notEqual *tmp11 false
         label *label4
         label *label1
-  146:  assertequals :message message1 "Located message1 block"
+  145:  assertequals :message message1 "Located message1 block"
         label *label0
-  147:  end
+  146:  end

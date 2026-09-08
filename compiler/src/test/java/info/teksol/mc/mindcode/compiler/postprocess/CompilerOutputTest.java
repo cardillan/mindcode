@@ -32,7 +32,7 @@ class CompilerOutputTest extends AbstractCodeOutputTest {
                         set *tmp1 :foo:x
                         set :foo:a*rret 6
                         set :foo:a*rind *tmp1
-                        read @counter "" *tmp1
+                        read @counter "\\u0013\\u0015\\u0017\\u0013\\u0015" *tmp1
                         set *tmp2 :foo:a*r
                         print *tmp2
                         print "\\n"
@@ -41,7 +41,7 @@ class CompilerOutputTest extends AbstractCodeOutputTest {
                         set *tmp4 :bar:x
                         set :foo:a*rret 15
                         set :foo:a*rind *tmp4
-                        read @counter "" *tmp4
+                        read @counter "\\u0013\\u0015\\u0017\\u0013\\u0015" *tmp4
                         set *tmp5 :foo:a*r
                         print *tmp5
                         print "\\n"

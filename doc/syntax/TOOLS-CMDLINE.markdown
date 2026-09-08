@@ -106,22 +106,23 @@ usage: mindcode cm [-h] [-c] [-w [{update,update-all,upgrade-all,force-update-al
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
-                [--encode-zero-characters [{true,false}]] [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}]
-                [--target-guard [{true,false}]] [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}]
-                [--array-iteration-threshold {0..1000}] [--atomic-full-protection [{true,false}]]
-                [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}]
-                [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
-                [-r {none,comments,passive,active}] [--auto-printflush {true,false}]
-                [--error-reporting {none,assert,minimal,simple,described}] [--error-function {true,false}]
-                [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}] [-g {size,neutral,speed}]
-                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
-                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
-                [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
-                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
-                [--condition-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
-                [--boolean-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
-                [--loop-hoisting LEVEL] [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--use-unicode-escapes {true,false}] [--encode-zero-characters [{true,false}]]
+                [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
+                [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}] [--array-iteration-threshold {0..1000}]
+                [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
+                [--atomic-safety-margin {0.0..4.0}] [--emulate-strict-not-equal {true,false}]
+                [--enforce-size-limits {true,false}] [-r {none,comments,passive,active}]
+                [--auto-printflush {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
+                [--error-function {true,false}] [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}]
+                [-g {size,neutral,speed}] [-e {1..1000}] [--unsafe-case-optimization [{true,false}]]
+                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}]
+                [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}]
+                [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
+                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--condition-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--boolean-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
+                [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
                 [--array-optimization LEVEL] [--case-switching LEVEL] [--recursive-optimization LEVEL]
                 [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
                 [--stack-optimization LEVEL] [--print-merging LEVEL]
@@ -225,6 +226,9 @@ Mlog formatting options:
                          sets the program name to be stored in the compiled code
   --program-version program_version
                          sets the program version to be stored in the compiled code
+  --use-unicode-escapes {true,false}
+                         encode all unprintable characters using unicode escapes  (has  no effects for target lower than
+                         8.2)
   --encode-zero-characters [{true,false}]
                          allow encoding zero characters into mlog string  literals (WARNING: the resulting code can't be
                          edited as a text or copied/pasted to/from the clipboard!)
@@ -305,7 +309,7 @@ Optimization options:
   --use-text-jump-tables {true,false}
                          when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
                          value, and uses a single 'read' instruction to  directly  set the counter to the target address
-                         (target 8 or higher required)
+                         (target '8' or higher required)
   --use-text-translations {true,false}
                          allows using 'read' instruction to implement simple case expressions
 
@@ -578,22 +582,23 @@ usage: mindcode cs [-h] [-p [{1..256}]] [-c] [-w [{update,add}]] [--watcher-vers
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--no-argument-padding [{true,false}]]
                 [--function-prefix {short,long}] [--author author [author ...]] [--no-signature]
                 [--processor-id processor_ID] [--program-name program_name] [--program-version program_version]
-                [--encode-zero-characters [{true,false}]] [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}]
-                [--target-guard [{true,false}]] [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}]
-                [--array-iteration-threshold {0..1000}] [--atomic-full-protection [{true,false}]]
-                [--atomic-merge-level {0..5}] [--atomic-safety-margin {0.0..4.0}]
-                [--emulate-strict-not-equal {true,false}] [--enforce-size-limits {true,false}]
-                [-r {none,comments,passive,active}] [--auto-printflush {true,false}]
-                [--error-reporting {none,assert,minimal,simple,described}] [--error-function {true,false}]
-                [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}] [-g {size,neutral,speed}]
-                [-e {1..1000}] [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization {true,false}] [--use-lookup-arrays {true,false}]
-                [--use-short-arrays {true,false}] [--use-text-jump-tables {true,false}]
-                [--use-text-translations {true,false}] [-O {0..4}] [--temp-variables-elimination LEVEL]
-                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
-                [--condition-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
-                [--boolean-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
-                [--loop-hoisting LEVEL] [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--use-unicode-escapes {true,false}] [--encode-zero-characters [{true,false}]]
+                [--reformat-mlog [{true,false}]] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
+                [--stack-depth {1..512}] [--setrate {1..1000}] [--ipt {1..1000}] [--array-iteration-threshold {0..1000}]
+                [--atomic-full-protection [{true,false}]] [--atomic-merge-level {0..5}]
+                [--atomic-safety-margin {0.0..4.0}] [--emulate-strict-not-equal {true,false}]
+                [--enforce-size-limits {true,false}] [-r {none,comments,passive,active}]
+                [--auto-printflush {true,false}] [--error-reporting {none,assert,minimal,simple,described}]
+                [--error-function {true,false}] [--boundary-checks {true,false}] [--stack-overflow-checks {true,false}]
+                [-g {size,neutral,speed}] [-e {1..1000}] [--unsafe-case-optimization [{true,false}]]
+                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}]
+                [--use-lookup-arrays {true,false}] [--use-short-arrays {true,false}]
+                [--use-text-jump-tables {true,false}] [--use-text-translations {true,false}] [-O {0..4}]
+                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--condition-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--boolean-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
+                [--loop-rotation LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
                 [--array-optimization LEVEL] [--case-switching LEVEL] [--recursive-optimization LEVEL]
                 [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
                 [--stack-optimization LEVEL] [--print-merging LEVEL]
@@ -702,6 +707,9 @@ Mlog formatting options:
                          sets the program name to be stored in the compiled code
   --program-version program_version
                          sets the program version to be stored in the compiled code
+  --use-unicode-escapes {true,false}
+                         encode all unprintable characters using unicode escapes  (has  no effects for target lower than
+                         8.2)
   --encode-zero-characters [{true,false}]
                          allow encoding zero characters into mlog string  literals (WARNING: the resulting code can't be
                          edited as a text or copied/pasted to/from the clipboard!)
@@ -782,7 +790,7 @@ Optimization options:
   --use-text-jump-tables {true,false}
                          when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
                          value, and uses a single 'read' instruction to  directly  set the counter to the target address
-                         (target 8 or higher required)
+                         (target '8' or higher required)
   --use-text-translations {true,false}
                          allows using 'read' instruction to implement simple case expressions
 

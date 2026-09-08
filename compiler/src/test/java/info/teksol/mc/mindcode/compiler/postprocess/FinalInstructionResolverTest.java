@@ -236,7 +236,7 @@ class FinalInstructionResolverTest extends AbstractCodeOutputTest {
         LogicVariable global2 = global("b2");
         LogicVariable main1 = main("a1");
         LogicVariable main2 = main("a2");
-        LogicVariable param = LogicParameter.parameter(new AstIdentifier(EMPTY, "p"), LogicString.create("x"));
+        LogicVariable param = LogicParameter.parameter(new AstIdentifier(EMPTY, "p"), LogicString.createSimple("x"));
         Set<LogicVariable> variables = new HashSet<>(List.of(global1, global2, main1, main2, param));
 
         List<LogicVariable> expected = List.of(main1, main2, global1, global2, param);

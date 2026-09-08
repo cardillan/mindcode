@@ -912,9 +912,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end);
                             """,
                     createInstruction(SET, "input", "0"),
-                    createInstruction(READ, tmp(1), q("210"), "input"),
-                    createInstruction(OP, "sub", tmp(2), tmp(1), "48"),
-                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "null", tmp(2)),
+                    createInstruction(READ, tmp(0), q("\\u0002\\u0001\\u0000"), "input"),
                     createInstruction(PRINT, tmp(0))
             );
         }
@@ -931,9 +929,8 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end);
                             """,
                     createInstruction(SET, "input", "0"),
-                    createInstruction(READ, tmp(1), q("210"), "input"),
-                    createInstruction(OP, "sub", tmp(2), tmp(1), "48"),
-                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "4", tmp(2)),
+                    createInstruction(READ, tmp(1), q("\\u0002\\u0001\\u0000"), "input"),
+                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "4", tmp(1)),
                     createInstruction(PRINT, tmp(0))
             );
         }
@@ -966,7 +963,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end);
                             """,
                     createInstruction(SET, "input", "0"),
-                    createInstruction(READ, tmp(1), q(""), "input"),
+                    createInstruction(READ, tmp(1), q("\\u0003\\u0002\\u0001"), "input"),
                     createInstruction(SELECT, tmp(0), "equal", tmp(1), "3", "null", tmp(1)),
                     createInstruction(PRINT, tmp(0))
             );
@@ -1002,9 +999,8 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end);
                             """,
                     createInstruction(SET, "input", "0"),
-                    createInstruction(READ, tmp(1), q("012"), "input"),
-                    createInstruction(OP, "sub", tmp(2), tmp(1), "48"),
-                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "3", tmp(2)),
+                    createInstruction(READ, tmp(1), q("\\u0000\\u0001\\u0002"), "input"),
+                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "3", tmp(1)),
                     createInstruction(PRINT, tmp(0))
             );
         }
@@ -1041,10 +1037,9 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end);
                             """,
                     createInstruction(SET, "input", "0"),
-                    createInstruction(READ, tmp(1), q("13002"), "input"),
-                    createInstruction(OP, "sub", tmp(2), tmp(1), "48"),
-                    createInstruction(SELECT, tmp(3), "equal", tmp(1), "51", "null", tmp(2)),
-                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "0", tmp(3)),
+                    createInstruction(READ, tmp(1), q("\\u0001\\u0003\\u0000\\u0000\\u0002"), "input"),
+                    createInstruction(SELECT, tmp(2), "equal", tmp(1), "3", "null", tmp(1)),
+                    createInstruction(SELECT, tmp(0), "strictEqual", tmp(1), "null", "0", tmp(2)),
                     createInstruction(PRINT, tmp(0))
             );
         }
@@ -1059,9 +1054,8 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end);
                             """,
                     createInstruction(SET, "input", "0"),
-                    createInstruction(READ, tmp(1), q("000!111"), "input"),
-                    createInstruction(OP, "sub", tmp(2), tmp(1), "48"),
-                    createInstruction(SELECT, tmp(0), "lessThanEq", tmp(1), "33", "null", tmp(2)),
+                    createInstruction(READ, tmp(1), q("\\u0000\\u0000\\u0000\\u0002\\u0001\\u0001\\u0001"), "input"),
+                    createInstruction(SELECT, tmp(0), "equal", tmp(1), "2", "null", tmp(1)),
                     createInstruction(PRINT, tmp(0))
             );
         }
@@ -1094,11 +1088,11 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end;
                             """,
                     createInstruction(SENSOR, tmp(2), ".a", "@id"),
-                    createInstruction(READ, tmp(3), q("120"), tmp(2)),
-                    createInstruction(OP, "sub", tmp(4), tmp(3), "48"),
-                    createInstruction(LOOKUP, "item", tmp(5), tmp(4)),
-                    createInstruction(SELECT, tmp(6), "strictEqual", tmp(2), "null", ".a", tmp(5)),
-                    createInstruction(SELECT, ".a", "lessThanEq", tmp(3), "33", ".a", tmp(6))
+                    createInstruction(READ, tmp(3), q("\\u0001\\u0002\\u0000"), tmp(2)),
+                    createInstruction(LOOKUP, "item", tmp(4), tmp(3)),
+                    createInstruction(SELECT, tmp(5), "strictEqual", tmp(2), "null", ".a", tmp(4)),
+                    createInstruction(SELECT, tmp(6), "equal", tmp(3), "4", ".a", tmp(5)),
+                    createInstruction(SELECT, ".a", "strictEqual", tmp(3), "null", ".a", tmp(6))
             );
         }
 
@@ -1116,12 +1110,11 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end;
                             """,
                     createInstruction(SENSOR, tmp(2), ".a", "@id"),
-                    createInstruction(READ, tmp(3), q("120"), tmp(2)),
-                    createInstruction(OP, "sub", tmp(4), tmp(3), "48"),
-                    createInstruction(SELECT, tmp(5), "strictEqual", tmp(3), "null", "9", tmp(4)),
-                    createInstruction(LOOKUP, "item", tmp(6), tmp(5)),
-                    createInstruction(SELECT, tmp(7), "strictEqual", tmp(2), "null", ".a", tmp(6)),
-                    createInstruction(SELECT, ".a", "equal", tmp(3), "59", ".a", tmp(7))
+                    createInstruction(READ, tmp(3), q("\\u0001\\u0002\\u0000"), tmp(2)),
+                    createInstruction(SELECT, tmp(4), "strictEqual", tmp(3), "null", "9", tmp(3)),
+                    createInstruction(LOOKUP, "item", tmp(5), tmp(4)),
+                    createInstruction(SELECT, tmp(6), "strictEqual", tmp(2), "null", ".a", tmp(5)),
+                    createInstruction(SELECT, ".a", "equal", tmp(3), "11", ".a", tmp(6))
             );
         }
 
@@ -1138,12 +1131,11 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end;
                             """,
                     createInstruction(SENSOR, tmp(2), ".a", "@id"),
-                    createInstruction(READ, tmp(3), q("1;0"), tmp(2)),
-                    createInstruction(OP, "sub", tmp(4), tmp(3), "48"),
-                    createInstruction(SELECT, tmp(5), "strictEqual", tmp(2), "null", "9", tmp(4)),
-                    createInstruction(SELECT, tmp(6), "strictEqual", tmp(3), "null", "9", tmp(5)),
-                    createInstruction(LOOKUP, "item", tmp(7), tmp(6)),
-                    createInstruction(SELECT, ".a", "equal", tmp(3), "59", ".a", tmp(7))
+                    createInstruction(READ, tmp(3), q("\\u0001\\u000b\\u0000"), tmp(2)),
+                    createInstruction(SELECT, tmp(4), "strictEqual", tmp(2), "null", "9", tmp(3)),
+                    createInstruction(SELECT, tmp(5), "strictEqual", tmp(3), "null", "9", tmp(4)),
+                    createInstruction(LOOKUP, "item", tmp(6), tmp(5)),
+                    createInstruction(SELECT, ".a", "equal", tmp(3), "11", ".a", tmp(6))
             );
         }
 
@@ -1159,11 +1151,11 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             end;
                             """,
                     createInstruction(SENSOR, tmp(2), ".a", "@id"),
-                    createInstruction(READ, tmp(3), q("1!0"), tmp(2)),
-                    createInstruction(OP, "sub", tmp(4), tmp(3), "48"),
-                    createInstruction(LOOKUP, "item", tmp(5), tmp(4)),
-                    createInstruction(SELECT, tmp(6), "strictEqual", tmp(2), "null", ".a", tmp(5)),
-                    createInstruction(SELECT, ".a", "lessThanEq", tmp(3), "33", ".a", tmp(6))
+                    createInstruction(READ, tmp(3), q("\\u0001\\u0003\\u0000"), tmp(2)),
+                    createInstruction(LOOKUP, "item", tmp(4), tmp(3)),
+                    createInstruction(SELECT, tmp(5), "strictEqual", tmp(2), "null", ".a", tmp(4)),
+                    createInstruction(SELECT, tmp(6), "equal", tmp(3), "3", ".a", tmp(5)),
+                    createInstruction(SELECT, ".a", "strictEqual", tmp(3), "null", ".a", tmp(6))
             );
         }
 

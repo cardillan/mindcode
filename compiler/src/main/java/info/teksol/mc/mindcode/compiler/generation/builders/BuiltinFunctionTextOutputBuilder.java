@@ -2,8 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.messages.WARN;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstEnhancedComment;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
+import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
@@ -16,6 +15,7 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.RuntimeErrorReporting;
+import info.teksol.mc.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -41,8 +41,8 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
         ValueStore result;
         if (validateStandardFunctionArguments(call, arguments, 1)) {
-            if (arguments.getFirst().unwrap() instanceof LogicString str && !str.getValue().isEmpty()) {
-                result = LogicNumber.create(str.getValue().charAt(0));
+            if (arguments.getFirst().unwrap() instanceof LogicString str && !str.getStringValue().isEmpty()) {
+                result = LogicNumber.create(str.getStringValue().charAt(0));
             } else {
                 error(call, ASCII_INVALID_ARGUMENT);
                 result = LogicVoid.VOID;
@@ -170,11 +170,12 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
     private List<LogicArgument> createFormattableErrorOutput(List<ValueStore> parts, List<FunctionArgument> arguments) {
         int index = 0;
+        // The value is built in escaped mode
         StringBuilder sbr = new StringBuilder();
         List<LogicArgument> values = new ArrayList<>();
         for (ValueStore part : parts) {
             if (part instanceof LogicString str) {
-                sbr.append(str.getValue());
+                sbr.append(str.getNakedLiteral());
             } else {
                 LogicValue value;
                 if (part instanceof MissingValue) {
@@ -188,7 +189,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
                 }
 
                 if (value instanceof LogicLiteral lit) {
-                    sbr.append(lit.format(processor));
+                    sbr.append(UtfUtils.escape(globalProfile.useUnicodeEscapes(), lit.format(processor)));
                 } else {
                     values.add(value);
                     sbr.append("[[").append(values.size()).append("]");
@@ -200,7 +201,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
             error(pos(arguments.get(index), arguments.getLast()), FORMATTABLE_TOO_MANY_ARGS);
         }
 
-        values.addFirst(LogicString.create(sbr.toString()));
+        values.addFirst(LogicString.createEscaped(sbr.toString()));
         return values;
     }
 
@@ -262,7 +263,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         ValueStore result = arguments.getFirst().unwrap() instanceof FormattableContent formattable
                 ? createFormattableOutput(formattable, false, formatter,
-                    evaluateExpressionsUncached(formattable.getParts()),
+                    evaluateExpressionsUncached(merge(formattable)),
                     arguments.subList(1, arguments.size()))
                 : createPlainOutput(0, formatter, arguments);
 
@@ -272,6 +273,34 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
         assembler.clearSubcontextType();
         return result;
+    }
+
+    private List<AstExpression> merge(FormattableContent formattable) {
+        List<AstExpression> parts = new ArrayList<>();
+        boolean wasString = false;
+        for (AstExpression part : formattable.getParts()) {
+            if (part instanceof AstLiteralString str) {
+                AstLiteralString string = handleEscapes(str);
+                if (wasString && parts.getLast() instanceof AstLiteralString lastString) {
+                    parts.set(parts.size() - 1, merge(lastString, string));
+                } else {
+                    parts.add(string);
+                    wasString = true;
+                }
+            } else {
+                parts.add(part);
+                wasString = false;
+            }
+        }
+        return parts;
+    }
+
+    private AstExpression merge(AstLiteralString lastString, AstLiteralString string) {
+        return new AstLiteralString(lastString.sourcePosition(), lastString.getValue() + string.getValue());
+    }
+
+    private AstLiteralString handleEscapes(AstLiteralString string) {
+        return string instanceof AstLiteralEscape escape ? new AstLiteralString(escape.sourcePosition(), "\\" + escape.getValue()) : string;
     }
 
     public void handleEnhancedComment(AstEnhancedComment comment) {

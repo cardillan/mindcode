@@ -416,11 +416,11 @@ compare("@coal", 0, @coal, 0);
 compare("@coal", 1, @coal, 1);
 compare("@coal", 2, @coal, 2);
 compare("@coal", "@lead", @coal, @lead);
-compare("A", 0);
-compare("A", 1);
-compare("A", 2);
-compare("A", "B");
-compare("A", "A");
+compare("\"A\"", "0", "A", 0);
+compare("\"A\"", "1", "A", 1);
+compare("\"A\"", "2", "A", 2);
+compare("\"A\"", "\"B\"", "A", "B");
+compare("\"A\"", "\"A\"", "A", "A");
 printflush(message1);
 ```
 

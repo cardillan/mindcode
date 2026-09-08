@@ -289,11 +289,11 @@ public class DeclarationsBuilder extends AbstractCodeBuilder implements
 
             // Generate guard code for the processor
             if (processor.getType() == BLOCK) {
-                LogicString initializedName = LogicString.create(nameCreator.remoteSignature());
+                LogicString initializedName = LogicString.createRaw(nameCreator.remoteSignature());
                 LogicVariable tmp = assembler.unprotectedTemp();
                 LogicLabel label = assembler.createNextLabel();
                 assembler.createRead(tmp, processor, initializedName);
-                assembler.createJump(label, Condition.NOT_EQUAL, tmp, LogicString.create(remoteSignature));
+                assembler.createJump(label, Condition.NOT_EQUAL, tmp, LogicString.createSimple(remoteSignature));
             }
 
             index++;

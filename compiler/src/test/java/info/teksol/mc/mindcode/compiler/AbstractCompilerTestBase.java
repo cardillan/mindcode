@@ -293,7 +293,7 @@ public abstract class AbstractCompilerTestBase extends AbstractTestBase implemen
             N11         = LogicNumber.create(-11);
 
     protected static final LogicString
-            message     = LogicString.create("message");
+            message     = LogicString.createSimple("message");
 
     protected static final LogicLabel
             label0      = LogicLabel.symbolic("label0"),

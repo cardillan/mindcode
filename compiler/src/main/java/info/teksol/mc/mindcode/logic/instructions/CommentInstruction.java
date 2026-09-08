@@ -34,7 +34,7 @@ public class CommentInstruction extends BaseInstruction {
     @Override
     public String toMlog() {
         if (getValue() instanceof LogicString str) {
-            String text = str.getValue();
+            String text = str.getStringValue();
             return text.startsWith("#") ? text : "# " + text;
         } else {
             return getValue().toMlog();

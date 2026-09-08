@@ -995,7 +995,7 @@ multilabel *label67
 multilabel *label63
 jump *label30 always
 multilabel *label64
-sensor :controller @unit @controller    # Origin: 50, keys: 1
+sensor :controller @unit @controller    # Origin: 49, keys: 1
 sensor *tmp5 :controller @x
 op floor :x *tmp5
 sensor *tmp6 :controller @y
@@ -1005,10 +1005,10 @@ format :x
 print :y
 jump *label30 always
 multilabel *label65
-print ", player"                        # Origin: 50, keys: 2
+print ", player"                        # Origin: 49, keys: 2
 jump *label30 always
 multilabel *label66
-print ", command"                       # Origin: 50, keys: 3
+print ", command"                       # Origin: 49, keys: 3
 label *label30
 jump *label37 equal :flag 0
 print ", F"

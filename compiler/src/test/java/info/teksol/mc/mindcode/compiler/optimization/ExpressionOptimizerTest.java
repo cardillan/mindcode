@@ -495,7 +495,7 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
                     ),
                     List.of(
                             createInstruction(SET, tmp0, P1),
-                            createInstruction(SET, tmp1, LogicString.create("ore-coal"))
+                            createInstruction(SET, tmp1, LogicString.createSimple("ore-coal"))
                     )
             );
         }

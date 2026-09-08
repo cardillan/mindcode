@@ -1,4 +1,4 @@
-   166 instructions before optimizations.
+   164 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination (2 passes, 7 iterations).
     22 instructions eliminated by Dead Code Elimination (6 iterations).
     13 instructions eliminated by Condition Optimization (7 iterations).
@@ -8,7 +8,7 @@
     24 instructions eliminated by Data Flow Optimization (6 iterations).
      4 instructions updated by Jump Threading.
      5 instructions eliminated by Unreachable Code Elimination (2 passes, 3 iterations).
-     8 instructions eliminated by Print Merging.
+     6 instructions eliminated by Print Merging.
     76 instructions after optimizations.
 
 Final code before resolving virtual instructions:

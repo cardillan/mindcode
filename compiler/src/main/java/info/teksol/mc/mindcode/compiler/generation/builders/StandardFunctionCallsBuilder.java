@@ -360,7 +360,8 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         LogicString mlogFinished = function.getFnFinished().getMlogVariableName();
         assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
         assembler.createWrite(LogicBoolean.FALSE, processor, mlogFinished);
-        assembler.createWrite(LogicNumber.create(function.getRemoteIndex()), processor, LogicString.create("@counter"));
+        assembler.createWrite(LogicNumber.create(function.getRemoteIndex()), processor,
+                LogicString.createSimple(LogicBuiltIn.COUNTER.toMlog()));
 
         if (async) return LogicVoid.VOID;
 
@@ -450,13 +451,13 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         String remoteSignature = createRemoteSignature(module.get());
-        LogicString initializedName = LogicString.create(nameCreator.remoteSignature());
+        LogicString initializedName = LogicString.createRaw(nameCreator.remoteSignature());
         LogicVariable tmp = assembler.unprotectedTemp();
         LogicLabel label = assembler.createNextLabel();
         assembler.createRead(tmp, remoteProcessor, initializedName);
         assembler.createJump(label, Condition.EQUAL, tmp, LogicNull.NULL);
         LogicVariable result = assembler.nextNodeResultTemp();
-        assembler.createOp(Operation.EQUAL, result, tmp, LogicString.create(remoteSignature));
+        assembler.createOp(Operation.EQUAL, result, tmp, LogicString.createSimple(remoteSignature));
         assembler.clearSubcontextType();
 
         return result;

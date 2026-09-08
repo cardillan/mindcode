@@ -588,7 +588,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-81 ins
 +  436 op add *tmp204 zero :d.63:n
    437 label *label72
    438 op idiv :a :a *tmp204
-   439 assertequals 1 :a "\="
+   439 assertequals 1 :a "\\="
    440 set :a 6
    441 # "Function: inline def d(in n)"
    442 set :d.64:n 4
@@ -1213,7 +1213,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    437 label *label72
 -    * op idiv :a :a *tmp204
 +  438 op idiv :a 6 *tmp204
-   439 assertequals 1 :a "\="
+   439 assertequals 1 :a "\\="
    440 set :a 6
    441 # "Function: inline def d(in n)"
    442 set :d.64:n 4
@@ -1830,10 +1830,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
    364 op add *tmp204 zero 4
    365 label *label72
 -    * op idiv :a 6 *tmp204
--    * assertequals 1 :a "\="
+-    * assertequals 1 :a "\\="
 -    * set :a 6
 +  366 op idiv :a 6 *tmp9
-+  367 assertequals 1 *tmp17 "\="
++  367 assertequals 1 *tmp17 "\\="
    368 # "Function: inline def d(in n)"
 -    * set :d.64:n 4
    369 op add *tmp206 zero 4
@@ -2256,7 +2256,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-7
 -    * op add *tmp204 zero 4
    314 label *label72
 -    * op idiv :a 6 *tmp9
-   315 assertequals 1 *tmp17 "\="
+   315 assertequals 1 *tmp17 "\\="
    316 # "Function: inline def d(in n)"
 -    * op add *tmp206 zero 4
    317 label *label73
@@ -3203,7 +3203,7 @@ assertequals 8 :a "*="
 # "Function: inline def d(in n)"
 assertequals 1.5 *tmp6 "/="
 # "Function: inline def d(in n)"
-assertequals 1 *tmp9 "\="
+assertequals 1 *tmp9 "\\="
 # "Function: inline def d(in n)"
 assertequals 2 *tmp10 "%="
 # "Function: inline def d(in n)"

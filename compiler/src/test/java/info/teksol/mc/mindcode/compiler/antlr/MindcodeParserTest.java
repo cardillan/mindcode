@@ -975,6 +975,7 @@ class MindcodeParserTest extends AbstractParserTest {
             assertParses("""
                     "";
                     "A string literal";
+                    "A string literal with \\"escaped\\" quotes";
                     """);
         }
 
@@ -1032,12 +1033,6 @@ class MindcodeParserTest extends AbstractParserTest {
                     'A';
                     '\\'';
                     """);
-        }
-
-        @Test
-        void refusesQuotesWithinLiterals() {
-            assertGeneratesMessageRegex(1, 12, "Parse error: .*",
-                    "a = \"Hi, \\\"friend\\\"\";");
         }
 
         @Test

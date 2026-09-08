@@ -1,4 +1,4 @@
-   145 instructions before optimizations.
+   142 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination (5 iterations).
     30 instructions eliminated by Dead Code Elimination (5 iterations).
      1 instruction eliminated by Jump Normalization (4 iterations).
@@ -6,7 +6,7 @@
     10 instructions eliminated by Single Step Elimination (5 iterations).
     10 instructions eliminated by Data Flow Optimization (4 iterations).
      1 instruction eliminated by Unreachable Code Elimination (2 iterations).
-    11 instructions eliminated by Print Merging.
+     8 instructions eliminated by Print Merging.
     68 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instructions):
@@ -677,30 +677,28 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
 -    * label *label30
     71 print "Remote vault [gold]#"
     72 print LINK_ID
-    73 print "["
+    73 print "[]"
  
-    86 print "ms"
-    87 print "\n"
-    88 printflush message1
+    83 print " ms"
+    84 print "\n"
+    85 printflush message1
 -    * label *label1
-    89 jump *label0 always
+    86 jump *label0 always
 -    * label *label2
 -    * end
 
-Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
+Modifications by Final phase, Print Merging, iteration 1 (-8 instructions):
  
     68 ucontrol flag .ANSWER_FLAG
     69 op add .SERVICED .SERVICED 1
     70 label *label31
 -    * print "Remote vault [gold]#"
 -    * print LINK_ID
--    * print "["
--    * print "]"
+-    * print "[]"
 -    * print "\n"
 -    * print "Queries serviced: [green]"
 -    * print .SERVICED
--    * print "["
--    * print "]"
+-    * print "[]"
 -    * print "\n"
 +   71 print "Remote vault [gold]#{0}[]\nQueries serviced: [green]{0}[]\n[lightgray]Loop time: {0} ms\n"
 +   72 format LINK_ID
@@ -709,8 +707,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
     75 op floor *tmp49 *tmp48
 -    * print "[lightgray]Loop time: "
 -    * print *tmp49
--    * print " "
--    * print "ms"
+-    * print " ms"
 -    * print "\n"
 +   76 format *tmp49
     77 printflush message1

@@ -1,4 +1,4 @@
-# Function reference for target 7.0
+# Function reference for target `7.0`
 
 This document contains function reference for all built-in Mindcode functions. Functions are grouped by the
 instruction they encapsulate so that functions with similar logic are listed together. The Mindcode source
@@ -546,4 +546,4 @@ Sets a property of a unit or building.
 
 ---
 
-[&#xAB; Previous: Function reference for target 6.0](FUNCTIONS-60.markdown) &nbsp; | &nbsp; [Up: Logic functions](FUNCTIONS.markdown) &nbsp; [Next: Function reference for target 7.1 &#xBB;](FUNCTIONS-71.markdown)
+[&#xAB; Previous: Function reference for target `6.0`](FUNCTIONS-60.markdown) &nbsp; | &nbsp; [Up: Logic functions](FUNCTIONS.markdown) &nbsp; [Next: Function reference for target `7.1` &#xBB;](FUNCTIONS-71.markdown)

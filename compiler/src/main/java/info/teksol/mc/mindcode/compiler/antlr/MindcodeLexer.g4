@@ -151,8 +151,8 @@ COLON                   : ':' ;
 COMMA                   : ',' ;
 DOLLAR                  : '$' ;
 DOT                     : '.' ;
-DOT2                    : '..' ;  
-DOT3                    : '...' ;  
+DOT2                    : '..' ;
+DOT3                    : '...' ;
 DOUBLEQUOTE             : '"' ;
 QUESTION                : '?' ;
 SEMICOLON               : ';' ;
@@ -167,6 +167,8 @@ fragment Letter         : [a-zA-Z_] ;
 fragment LetterOrDigit  : [a-zA-Z0-9_] ;
 fragment LetterDigitDash: [-a-zA-Z0-9_] ;
 
+fragment EscapedQuote   : '\\"';
+
 // Identifiers
 
 IDENTIFIER              : (AT AT)? Letter LetterOrDigit* ;
@@ -178,7 +180,7 @@ KEYWORD                 : COLON Letter
 
 // Literals
 
-STRING                  : '"' ~[\r\n"]* '"' ;
+STRING                  : '"' ( EscapedQuote | ~[\n\r"] )* '"' ;
 COLOR                   : '%'  HexDigit+ ;
 NAMEDCOLOR              : '%[' Letter+ ']';
 BINARY                  : '0b' BinDigit+ ;
@@ -280,9 +282,7 @@ DIRECTIVEWHITESPACE     : [ \t\r\n]+    -> skip;
 
 mode InFormattable;
 
-TEXT                    : ~[\r\n\\$"]+ ;
-
-// We would want to allow escaping only '\' and '$', but can't get it to work. Escapes will be universal and handled later.
+TEXT                    : ( EscapedQuote | ~[\r\n\\$"] )+ ;
 ESCAPESEQUENCE          : '\\' ~[\r\n"] ;
 EMPTYPLACEHOLDER        : '${' ' '* '}' ;
 INTERPOLATION           : '${' -> pushMode(DEFAULT_MODE) ;
@@ -295,8 +295,6 @@ mode InComment;
 // Map Enhanced comment lexer tokens to Formattable lexer tokens
 // Refuse double quotes
 COMMENTTEXT             : ~[\r\n\\$"]+      -> type(TEXT);
-
-// We would want to allow escaping only '\' and '$', but can't get it to work. Escapes will be universal and handled later.
 COMMENTESCAPESEQUENCE   : '\\' ~[\r\n"]     -> type(ESCAPESEQUENCE);
 
 // We don't want empty placeholders in enhanced comments, but the check will be done later
@@ -311,7 +309,8 @@ VARIABLE                : Letter LetterOrDigit* ;
 NEXTVARIABLE            : '$' -> type(VARIABLEPLACEHOLDER);
 FMTENDOFLINE            : [\r\n] {inFormat = false;} -> popMode, popMode;      // Pop out of InFormattable on error
 FMTCLOSINGDOUBLEQUOTE   : '"'    {inFormat = false;} -> type(DOUBLEQUOTE), popMode, popMode;
-ENDOFIDENTIFIER         :  .  -> type(TEXT), popMode;
+FMTESCAPESEQUENCE       : '\\' ["\\$] -> type(ESCAPESEQUENCE), popMode;
+ENDOFIDENTIFIER         :  .    -> type(TEXT), popMode;
 
 mode InCommentIdentifier;
 

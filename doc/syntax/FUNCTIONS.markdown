@@ -10,11 +10,12 @@ At this point, `7.1` is still the default target for both command line tool and 
 
 All supported functions and their respective Mindustry Logic instruction counterparts can be found in the function reference:
 
-* [Function reference for target 6.0](FUNCTIONS-60.markdown)
-* [Function reference for target 7.0](FUNCTIONS-70.markdown)
-* [Function reference for target 7.1](FUNCTIONS-71.markdown)
-* [Function reference for target 8.0](FUNCTIONS-80.markdown)
-* [Function reference for target 8.1](FUNCTIONS-81.markdown)
+* [Function reference for target `6.0`](FUNCTIONS-60.markdown)
+* [Function reference for target `7.0`](FUNCTIONS-70.markdown)
+* [Function reference for target `7.1`](FUNCTIONS-71.markdown)
+* [Function reference for target `8.0`](FUNCTIONS-80.markdown)
+* [Function reference for target `8.1`](FUNCTIONS-81.markdown)
+* [Function reference for target `8.2`](FUNCTIONS-82.markdown)
 
 > [!TIP]
 > The function reference serves just to document all existing functions and the way they are compiled to Mindustry Logic, but it does not aim to describe the behavior of the functions/instructions. To understand what effect a particular Mindcode function has, please refer to the [Yruei's Mlog Documentation](https://yrueii.github.io/MlogDocs/).

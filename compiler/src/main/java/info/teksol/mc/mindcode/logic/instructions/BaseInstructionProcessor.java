@@ -21,7 +21,7 @@ import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import info.teksol.mc.profile.CompilerProfile;
-import info.teksol.mc.util.Utf8Utils;
+import info.teksol.mc.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -39,26 +39,27 @@ import static info.teksol.mc.util.CollectionUtils.indexOf;
 
 @NullMarked
 public abstract class BaseInstructionProcessor extends CompilerMessageEmitter implements InstructionProcessor {
-    private final ProcessorVersion processorVersion;
-    private final ProcessorType processorType;
-    private final NameCreator nameCreator;
-    private final LStrings strings;
-    private @Nullable MindustryMetadata metadata;
-    private @Nullable LGlobalVars globalVars;
-    private @Nullable LAssembler assembler;
-    private final boolean instructionValidation;
-    private final boolean noArgumentPadding;
-    private final boolean encodeZeroCharacters;
-    private final List<OpcodeVariant> opcodeVariants;
-    private final Map<Opcode, List<OpcodeVariant>> variantsByOpcode;
-    private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
-    private final Map<Opcode, Integer> opcodeKeywordPosition;
-    private final Map<InstructionParameterType, Collection<String>> validArgumentValues;
-    private final Set<String> additionalBuiltins = new HashSet<>();
-    private final Set<String> additionalColors = new HashSet<>();
-    private int tmpIndex = 0;
-    private int labelIndex = 0;
-    private int markerIndex = 0;
+    protected final ProcessorVersion processorVersion;
+    protected final ProcessorType processorType;
+    protected final NameCreator nameCreator;
+    protected final LStrings strings;
+    protected @Nullable MindustryMetadata metadata;
+    protected @Nullable LGlobalVars globalVars;
+    protected @Nullable LAssembler assembler;
+    protected final boolean instructionValidation;
+    protected final boolean noArgumentPadding;
+    protected final boolean encodeZeroCharacters;
+    protected final boolean useUnicodeEscapes;
+    protected final List<OpcodeVariant> opcodeVariants;
+    protected final Map<Opcode, List<OpcodeVariant>> variantsByOpcode;
+    protected final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
+    protected final Map<Opcode, Integer> opcodeKeywordPosition;
+    protected final Map<InstructionParameterType, Collection<String>> validArgumentValues;
+    protected final Set<String> additionalBuiltins = new HashSet<>();
+    protected final Set<String> additionalColors = new HashSet<>();
+    protected int tmpIndex = 0;
+    protected int labelIndex = 0;
+    protected int markerIndex = 0;
 
     record InstructionProcessorParameters(
             MessageConsumer messageConsumer,
@@ -68,12 +69,14 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
             boolean instructionValidation,
             boolean noArgumentPadding,
             boolean encodeZeroCharacters,
+            boolean useUnicodeEscapes,
             List<OpcodeVariant> opcodeVariants) {
 
         public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version, ProcessorType type,
-                NameCreator nameCreator, boolean instructionValidation, boolean noArgumentPadding, boolean encodeZeroCharacters) {
+                NameCreator nameCreator, boolean instructionValidation, boolean noArgumentPadding, boolean encodeZeroCharacters,
+                boolean useUnicodeEscapes) {
             this(messageConsumer, version, type, nameCreator, instructionValidation, noArgumentPadding,
-                    encodeZeroCharacters, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, type));
+                    encodeZeroCharacters, useUnicodeEscapes, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, type));
         }
     }
 
@@ -86,6 +89,7 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
         this.instructionValidation = parameters.instructionValidation;
         this.noArgumentPadding = parameters.noArgumentPadding;
         this.encodeZeroCharacters = parameters.encodeZeroCharacters;
+        this.useUnicodeEscapes = parameters.useUnicodeEscapes && processorVersion.supportsUnicodeEscapes();
         this.opcodeVariants = parameters.opcodeVariants;
         variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode));
         opcodeKeywordPosition = variantsByOpcode.keySet().stream().collect(Collectors.toMap(k -> k,
@@ -695,6 +699,29 @@ public abstract class BaseInstructionProcessor extends CompilerMessageEmitter im
 
     @Override
     public boolean canEncode(int character) {
-        return character == 0 ? encodeZeroCharacters : Utf8Utils.canEncode(character);
+        return character == 0 ? encodeZeroCharacters : UtfUtils.canEncodeLegacy(character);
+    }
+
+    @Override
+    public void encode(StringBuilder stringBuilder, int value) {
+        UtfUtils.escape(stringBuilder, useUnicodeEscapes, value);
+    }
+
+    public String encode(int[] values) {
+        return UtfUtils.escape(useUnicodeEscapes, values);
+    }
+
+    @Override
+    public String toMlog(LogicArgument argument) {
+        return argument instanceof LogicString string
+                ? UtfUtils.legacyRecode(string.toMlog())
+                : argument.toMlog();
+    }
+
+    @Override
+    public String escapedString(LogicValue value) {
+        return value instanceof LogicString string
+                ? string.getNakedLiteral()
+                : UtfUtils.escape(useUnicodeEscapes, value.format(this));
     }
 }

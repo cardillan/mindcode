@@ -162,7 +162,7 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
                         }
                     } else if (operation == Operation.ADD && !left.isNull() && !right.isNull()) {
                         // Only the addition of a string and a non-null value is supported
-                        return new AstLiteralString(node.sourcePosition(), left.print() + right.print());
+                        return new AstLiteralString(node.sourcePosition(), left.toEscapedString() + right.toEscapedString());
                     } else {
                         error(node, ERR.UNSUPPORTED_STRING_EXPRESSION);
                         return node;
@@ -475,20 +475,14 @@ public class CompileTimeEvaluator extends CompilerMessageEmitter {
             int value = literal.getIntValue();
             index++;
             int charValue = value + offset;
-            if (charValue < 0 || charValue > 0xFFFF || (charValue >= 0xD800 && charValue <= 0xDFFF) || invalidCharacters.contains(charValue)) {
-                error(node.getArgument(index), ERR.ENCODE_INVALID_CHARACTER, charValue);
+            if (processor.canEncode(charValue)) {
+                processor.encode(sbr, charValue);
             } else {
-                sbr.appendCodePoint(charValue);
+                error(node.getArgument(index), ERR.ENCODE_INVALID_CHARACTER, charValue);
             }
         }
 
         String value = sbr.toString();
-        if (value.contains("\\n")) {
-            error(node.getArgument(index), ERR.ENCODE_INVALID_STRING, node.getFunctionName());
-            return new AstLiteralString(node.sourcePosition(), "");
-        }
-
-        value = value.replace("\n", "\\n");
         return new AstLiteralString(node.sourcePosition(), value);
     }
 

@@ -1,4 +1,4 @@
-# Function reference for target 8.2
+# Function reference for target `8.2`
 
 This document contains function reference for all built-in Mindcode functions. Functions are grouped by the
 instruction they encapsulate so that functions with similar logic are listed together. The Mindcode source
@@ -774,4 +774,4 @@ If client is a mobile device, tries to print a property ending in ".mobile" firs
 
 ---
 
-[&#xAB; Previous: Function reference for target 8.1](FUNCTIONS-81.markdown) &nbsp; | &nbsp; [Up: Logic functions](FUNCTIONS.markdown)
+[&#xAB; Previous: Function reference for target `8.1`](FUNCTIONS-81.markdown) &nbsp; | &nbsp; [Up: Logic functions](FUNCTIONS.markdown)

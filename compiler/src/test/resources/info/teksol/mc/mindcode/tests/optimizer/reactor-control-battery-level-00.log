@@ -1,4 +1,4 @@
-   136 instructions before optimizations.
+   126 instructions before optimizations.
     28 instructions eliminated by Temp Variables Elimination (7 iterations).
      2 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
@@ -12,10 +12,10 @@
   1021 instructions added by Loop Unrolling (5 iterations).
      1 loop unrolled by Loop Unrolling.
      1 instruction eliminated by Unreachable Code Elimination (2 iterations).
-    20 instructions eliminated by Print Merging.
+    10 instructions eliminated by Print Merging.
    568 instructions after optimizations.
 
-Pass 3: speed optimization selection (cost limit 919):
+Pass 3: speed optimization selection (cost limit 929):
   * Unroll loop at line 8:1                                      size  +508, benefit    25600.0, efficiency     50.394 (+508 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
@@ -151,17 +151,17 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-28 ins
 +   72 op mod :index *tmp51 .SAMPLES
     73 print "Measured interval: [green]"
     74 print .SECONDS
-    75 print "["
+    75 print "[] seconds\n"
  
-    95 print "["
-    96 print "]"
-    97 set :loops 0
+    86 print :battery_change
+    87 print "[]"
+    88 set :loops 0
 -    * set *tmp53 @time
 -    * set :start *tmp53
-+   98 set :start @time
-    99 label *label8
-   100 op greaterThanEq *tmp54 @time :start
-   101 jump *label10 equal *tmp54 false
++   89 set :start @time
+    90 label *label8
+    91 op greaterThanEq *tmp54 @time :start
+    92 jump *label10 equal *tmp54 false
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  
@@ -185,19 +185,19 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-3
     31 jump *label7 always
     32 label *label6
  
-    95 set :loops 0
-    96 set :start @time
-    97 label *label8
+    86 set :loops 0
+    87 set :start @time
+    88 label *label8
 -    * op greaterThanEq *tmp54 @time :start
 -    * jump *label10 equal *tmp54 false
-+   98 jump *label10 lessThan @time :start
-    99 label *label12
++   89 jump *label10 lessThan @time :start
+    90 label *label12
 -    * op lessThan *tmp55 @time :wait
 -    * jump *label10 equal *tmp55 false
-+  100 jump *label10 greaterThanEq @time :wait
-   101 jump *label11 always
-   102 label *label11
-   103 op add :loops :loops 1
++   91 jump *label10 greaterThanEq @time :wait
+    92 jump *label11 always
+    93 label *label11
+    94 op add :loops :loops 1
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
@@ -209,13 +209,13 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     32 label *label7
     33 op add :wait :wait .DELAY
  
-    97 jump *label10 lessThan @time :start
-    98 label *label12
-    99 jump *label10 greaterThanEq @time :wait
+    88 jump *label10 lessThan @time :start
+    89 label *label12
+    90 jump *label10 greaterThanEq @time :wait
 -    * jump *label11 always
-   100 label *label11
-   101 op add :loops :loops 1
-   102 label *label9
+    91 label *label11
+    92 op add :loops :loops 1
+    93 label *label9
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -296,9 +296,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     69 print "Measured interval: [green]"
 -    * print .SECONDS
 +   70 print 6
-    71 print "["
-    72 print "] seconds"
-    73 print "\n"
+    71 print "[] seconds\n"
+    72 print "Consumption: [green]"
+    73 print :consumption
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-12 instructions):
 -    * set .DELAY 150
@@ -392,20 +392,20 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     12 set .ACCU_CONS 0
     13 set .ACCU_PROD 0
  
-    83 set :start @time
-    84 label *label8
-    85 jump *label10 lessThan @time :start
+    74 set :start @time
+    75 label *label8
+    76 jump *label10 lessThan @time :start
 -    * label *label12
-+   86 label *label14
-    87 jump *label10 greaterThanEq @time :wait
++   77 label *label14
+    78 jump *label10 greaterThanEq @time :wait
 -    * label *label11
-    88 op add :loops :loops 1
-    89 label *label9
+    79 op add :loops :loops 1
+    80 label *label9
 -    * jump *label8 always
-+   90 jump *label14 greaterThanEq @time :start
-    91 label *label10
-    92 print "\n"
-    93 print "[lightgray]Loops: "
++   81 jump *label14 greaterThanEq @time :start
+    82 label *label10
+    83 print "\n[lightgray]Loops: "
+    84 print :loops
 
 Modifications by Iterated phase, Boolean Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -7175,55 +7175,45 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 
    516 set .ACCU_PROD 0
    517 set :index 0
  
-   577 print "]"
-   578 set :loops 0
-   579 set :start @time
+   568 print "[]"
+   569 set :loops 0
+   570 set :start @time
 -    * label *label8
-   580 jump *label10 lessThan @time :start
-   581 label *label14
-   582 jump *label10 greaterThanEq @time :wait
-   583 op add :loops :loops 1
+   571 jump *label10 lessThan @time :start
+   572 label *label14
+   573 jump *label10 greaterThanEq @time :wait
+   574 op add :loops :loops 1
 -    * label *label9
-   584 jump *label14 greaterThanEq @time :start
-   585 label *label10
-   586 print "\n"
-   587 print "[lightgray]Loops: "
-   588 print :loops
-   589 printflush message1
+   575 jump *label14 greaterThanEq @time :start
+   576 label *label10
+   577 print "\n[lightgray]Loops: "
+   578 print :loops
+   579 printflush message1
 -    * label *label4
-   590 jump *label3 always
+   580 jump *label3 always
 -    * label *label5
 -    * end
 
-Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
+Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
  
    551 write :battery_change bank1 511
    552 op add *tmp51 :index 1
    553 op mod :index *tmp51 40
 -    * print "Measured interval: [green]"
 -    * print 6
--    * print "["
--    * print "] seconds"
--    * print "\n"
+-    * print "[] seconds\n"
 -    * print "Consumption: [green]"
 -    * print :consumption
--    * print "["
--    * print "]"
--    * print "\n"
+-    * print "[]\n"
 -    * print "Production: [green]"
 -    * print :production
--    * print "["
--    * print "]"
--    * print "\n"
+-    * print "[]\n"
 -    * print "Net power: [green]"
 -    * print :net_power
--    * print "["
--    * print "]"
--    * print "\n"
+-    * print "[]\n"
 -    * print "Battery change: [green]"
 -    * print :battery_change
--    * print "["
--    * print "]"
+-    * print "[]"
 +  554 print "Measured interval: [green]6[] seconds\nConsumption: [green]{0}[]\nProduction: [green]{0}[]\nNet power: [green]{0}[]\nBattery change: [green]{0}[]"
 +  555 format :consumption
 +  556 format :production
@@ -7232,16 +7222,6 @@ Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
    559 set :loops 0
    560 set :start @time
    561 jump *label10 lessThan @time :start
- 
-   564 op add :loops :loops 1
-   565 jump *label14 greaterThanEq @time :start
-   566 label *label10
--    * print "\n"
--    * print "[lightgray]Loops: "
-+  567 print "\n[lightgray]Loops: "
-   568 print :loops
-   569 printflush message1
-   570 jump *label3 always
 
 Final code before resolving virtual instructions:
 

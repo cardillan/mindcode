@@ -43,7 +43,7 @@ public interface ContextlessInstructionCreator {
     }
 
     default CommentInstruction createComment(AstContext astContext, String comment) {
-        return (CommentInstruction) createInstruction(astContext, COMMENT, LogicString.create(comment));
+        return (CommentInstruction) createInstruction(astContext, COMMENT, LogicString.createRaw(comment));
     }
 
     default ControlInstruction createControl(AstContext astContext, LogicKeyword property, LogicValue target, LogicValue value) {

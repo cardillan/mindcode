@@ -55,7 +55,7 @@ public class ERR {
     public static final String ATOMIC_BLOCK_TOO_LONG = "The atomic block requires at least %d steps, exceeding the maximum allowed number of %d steps.";
     public static final String ATOMIC_BLOCK_WAIT = "The atomic block executes a 'wait' instruction.";
     public static final String ATOMIC_REQUIRES_PROCESSOR = "'atomic' requires a processor to be specified in the 'target' compiler option.";
-    public static final String ATOMIC_REQUIRES_TARGET_81 = "'atomic' requires target 8.1 or higher.";
+    public static final String ATOMIC_REQUIRES_TARGET_81 = "'atomic' requires language target '8.1' or higher.";
     public static final String BUILT_IN_VARIABLE_UNKNOWN = "Unknown built-in variable '%s'.";
     public static final String BREAK_OUTSIDE_LOOP = "'break' statement outside of a do/while/for loop or a labeled code block.";
     public static final String BREAK_OUTSIDE_LOOP_NO_LABEL = "'break' statement without a label outside of a do/while/for loop.";
@@ -85,7 +85,6 @@ public class ERR {
     public static final String DIRECTIVE_VALUE_IS_NOT_LOCAL = "Value '%s' cannot be used with #setlocal.";
     public static final String ENCODE_INVALID_ARGUMENT = "All arguments to the '%s' function must be compile-time integer constants.";
     public static final String ENCODE_INVALID_CHARACTER = "The value %d cannot be encoded into an mlog string literal.";
-    public static final String ENCODE_INVALID_STRING = "The string value produced by the '%s' function contains a sequence of '\\n'; which annot be encoded into a string literal.";
     public static final String ENHANCED_COMMENTS_NO_PLACEHOLDERS = "Formattable placeholders not supported in enhanced comments.";
     public static final String EXPRESSION_NOT_CONSTANT_CONST = "Value assigned to constant '%s' is not a constant expression.";
     public static final String EXPRESSION_NOT_CONSTANT_PARAM = "Value assigned to parameter '%s' is not a constant expression.";
@@ -118,7 +117,7 @@ public class ERR {
     public static final String FUNCTION_EXPORT_MAIN = "Function in a main program cannot be declared 'export'.";
     public static final String FUNCTION_INCOMPATIBLE_MODIFIER = "Modifier '%s' conflicts with '%s'.";
     public static final String FUNCTION_RECURSIVE_INLINE = "Recursive function '%s' declared 'inline'.";
-    public static final String FUNCTION_REQUIRES_TARGET_8 = "The '%s' function requires language target 8 or higher.";
+    public static final String FUNCTION_REQUIRES_TARGET_8 = "The '%s' function requires language target '8.0' or higher.";
     public static final String FUNCTION_VARARGS_NOT_INLINE = "Varargs function '%s' must be declared 'inline'.";
     public static final String IDENTIFIER_EXPECTED = "Identifier expected.";
     public static final String INTERNAL_AMBIGUOUS_CODE = "%s: ambiguous source code (%d ambiguities found).";
@@ -132,16 +131,20 @@ public class ERR {
     public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic labels. Please set 'symbolic-labels' to 'false'.";
     public static final String LINK_EXPECTED = "A literal or symbolic link name expected.";
     public static final String LINK_TYPE_MISMATCH = "The expected block type '%s' differs from the actual block type '%s' as defined in the schematic.";
-    public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals require language target 7 or higher.";
+    public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals require language target '7.0' or higher.";
     public static final String LITERAL_INTEGER_TOO_LARGE = "Literal '%s' exceeds maximum possible value (%s).";
     public static final String LITERAL_INVALID_CHAR_FORMAT = "Invalid format of character literal.";
     public static final String LITERAL_INVALID_COLOR_FORMAT = "Invalid format of color literal (supported formats are %%rrggbb or %%rrggbbaa).";
     public static final String LITERAL_LINK_TYPE_MISMATCH = "The literal link name '%s' doesn't match the declared block type '%s'.";
-    public static final String LITERAL_NAMED_COLOR_REQUIRES_TARGET_8 = "Named color literals require language target 8 or higher.";
+    public static final String LITERAL_NAMED_COLOR_REQUIRES_TARGET_8 = "Named color literals require language target '8.0' or higher.";
     public static final String LITERAL_NO_VALID_REPRESENTATION = "Value '%s' does not have a valid mlog representation.";
     public static final String LITERAL_NO_VALID_REPRESENTATION_PARAM = "Value assigned to parameter '%s' (%s) does not have a valid mlog representation.";
+    public static final String LITERAL_INVALID_ESCAPE = "Invalid escape character in string literal.";
+    public static final String LITERAL_INVALID_UNICODE_ESCAPE = "Invalid unicode escape sequence: expected 4 hexadecimal digits following '\\u'.";
+    public static final String LITERAL_UNSUPPORTED_ESCAPE = "Escape sequence '\\%c' requires language target '8.2' or higher.";
+    public static final String LITERAL_UNSUPPORTED_NEWLINE_ESCAPE = "String sequence '\\\\n' cannot be encoded in language target '8.1' and earlier.";
     public static final String LOOKUP_REQUIRES_BUILTIN_EVALUATION = "Lookup arrays not available when 'builtin-evaluation' is set to 'none'.";
-    public static final String LOOKUP_REQUIRES_TARGET_8 = "Lookup arrays require target 8 or higher.";
+    public static final String LOOKUP_REQUIRES_TARGET_8 = "Lookup arrays require language target '8.0' or higher.";
     public static final String LOOP_LABEL_ALREADY_IN_USE = "Loop label '%s' already in use.";
     public static final String LVALUE_ASSIGNMENT_TO_CONST_NOT_ALLOWED = "Assignment to constant or parameter '%s' not allowed.";
     public static final String LVALUE_ASSIGNMENT_TO_LINKED_NOT_ALLOWED = "Assignment to variable '%s' representing a linked block not allowed.";
@@ -182,7 +185,7 @@ public class ERR {
     public static final String MULTIPLE_MODULE_REQUESTS = "Multiple requests for file or library '%s'.";
     public static final String MULTIPLE_PROCESSOR_BINDINGS = "Multiple bindings of processor '%s'.";
     public static final String NAMED_COLOR_NOT_RECOGNIZED = "Unknown named color '%s'.";
-    public static final String OPERATOR_REQUIRES_SPECIFIC_TARGET = "The '%s' operator requires language target %s or higher.";
+    public static final String OPERATOR_REQUIRES_SPECIFIC_TARGET = "The '%s' operator requires language target '%s' or higher.";
     public static final String PARAMETER_CONST_NOT_INLINE = "Parameter '%s' of function '%s' cannot be declared 'const' unless the function is declared 'inline'.";
     public static final String PARAMETER_NAME_RESERVED_GLOBAL = "Parameter '%s' of function '%s' uses name reserved for global variables.";
     public static final String PARAMETER_NAME_RESERVED_LINKED = "Parameter '%s' of function '%s' uses name reserved for linked blocks.";
@@ -195,7 +198,7 @@ public class ERR {
     public static final String REMOTE_INVALID_USE = "Invalid use of remote function '%s' (specify one of output parameters to access function output values).";
     public static final String REMOTE_MULTIPLE_FUNCTIONS = "Cannot resolve remote function '%s'.";
     public static final String REMOTE_PROCESSOR_NOT_GLOBAL = "A global variable or a linked block required.";
-    public static final String REMOTE_REQUIRES_TARGET_8 = "Remote functionality requires target 8 or higher.";
+    public static final String REMOTE_REQUIRES_TARGET_8 = "Remote functionality requires language target '8.0' or higher.";
     public static final String REMOTE_STORAGE_INVALID_PROCESSOR = "Cannot use '%s' as a remote processor.";
     public static final String REMOTE_STORAGE_INVALID_PROCESSOR_VALUE = "Cannot use value assigned to parameter '%s' as a remote processor for remote storage.";
     public static final String REMOTE_UNKNOWN_PARAMETER = "Function '%s': unknown output parameter '%s'.";

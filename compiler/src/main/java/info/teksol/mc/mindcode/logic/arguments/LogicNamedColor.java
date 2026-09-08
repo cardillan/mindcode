@@ -30,7 +30,7 @@ public class LogicNamedColor extends AbstractArgument implements LogicValue {
 
     @Override
     public String format(@Nullable InstructionProcessor instructionProcessor) {
-        throw new UnsupportedOperationException();
+        return "0";
     }
 
     @Override

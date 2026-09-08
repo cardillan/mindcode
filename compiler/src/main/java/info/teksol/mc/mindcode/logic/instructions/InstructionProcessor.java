@@ -3,10 +3,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.MessageEmitter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import org.jspecify.annotations.NullMarked;
@@ -209,4 +206,16 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
 
     /// Indicates whether a character can be encoded into mlog
     boolean canEncode(int character);
+
+    /// Encodes the given character into a String Builder
+    void encode(StringBuilder stringBuilder, int character);
+
+    /// Encodes a list of int values into a string using proper escapes
+    String encode(int[] values);
+
+    /// Converts a literal to mlog representation
+    String toMlog(LogicArgument literal);
+
+    /// Converts the logic literal to a naked string value
+    String escapedString(LogicValue value);
 }

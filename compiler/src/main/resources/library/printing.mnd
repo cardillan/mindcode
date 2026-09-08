@@ -345,8 +345,8 @@ void printExactBinary(n)
 end;
 
 /**
- * **Note:** Function can be compiled for all Mindustry Logic versions. The displayed statistics is valid for
- * target 8, for earlier targets the code size may be higher.
+ * **Note:** Function can be compiled for all Mindustry Logic versions. The displayed statistic is valid for
+ * target `8`, for earlier targets the code size may be higher.
  *
  * Prints the number passed in as a parameter into the text buffer in a hexadecimal base, always outputting 16
  * hexadecimal digits. No prefix (i.e., `0b`) is printed.

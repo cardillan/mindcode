@@ -54,7 +54,7 @@ public class InternalArray extends AbstractArrayStore {
                     IntStream.range(0, size)
                             .mapToObj(index -> (ValueStore) new RemoteVariable(identifier.sourcePosition(), processor,
                                     processor.getName() + "." + identifier.getName() + "[" + index + "]",
-                                    LogicString.create(nameCreator.remoteArrayElement(identifier.getName(), index)),
+                                    LogicString.createRaw(nameCreator.remoteArrayElement(identifier.getName(), index)),
                                     instructionProcessor.nextTemp(), false, false, false)).toList(),
                     null, shared ? ArrayType.REMOTE_SHARED : ArrayType.REMOTE, false);
         } else {

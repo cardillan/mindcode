@@ -1,4 +1,4 @@
-   174 instructions before optimizations.
+   170 instructions before optimizations.
     12 instructions eliminated by Temp Variables Elimination (5 iterations).
      2 instructions eliminated by Case Expression Optimization.
     10 instructions eliminated by Dead Code Elimination (5 iterations).
@@ -12,21 +12,21 @@
      1 case expression converted to fast dispatch by Case Switching.
      8 instructions eliminated by Jump Straightening (5 iterations).
      6 instructions updated by Jump Threading.
-    26 instructions eliminated by Print Merging.
+    22 instructions eliminated by Print Merging.
     88 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 885):
+Pass 1: speed optimization selection (cost limit 889):
   * Full loop rotation at line 68:1                              size    +1, benefit       26.0, efficiency     26.000 (+1 instructions)
   o Fast-dispatch case at line 17:9                              size    -2, benefit      622.6, efficiency   Infinity
   o Convert case at line 17:9 (segments: 1, padded low)          size    -1, benefit      889.8, efficiency   Infinity
   o Fast-dispatch case at line 23:17                             size    -1, benefit       39.1, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 884):
+Pass 1: speed optimization selection (cost limit 888):
   o Fast-dispatch case at line 17:9                              size    -2, benefit      622.6, efficiency   Infinity
   * Convert case at line 17:9 (segments: 1, padded low)          size    -1, benefit      889.8, efficiency   Infinity (-1 instructions)
   o Fast-dispatch case at line 23:17                             size    -1, benefit       39.1, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 885):
+Pass 1: speed optimization selection (cost limit 889):
   * Fast-dispatch case at line 23:17                             size    -1, benefit       39.1, efficiency   Infinity (+0 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
@@ -131,8 +131,8 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructi
     80 print " is not supported."
 -    * set *tmp4 " is not supported."
     81 label *label6
-    82 print "\n"
-    83 print "Nominal production: "
+    82 print "\nNominal production: "
+    83 print .EXPECTED_FLOW_STR
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-5 instructions):
  
@@ -189,46 +189,46 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-12 ins
     21 jump *label8 equal *tmp5 @message
     22 jump *label7 always
  
-   127 set .ICON_SIZE 16
-   128 set .ICON_X 11
-   129 set .ICON_Y1 11
+   123 set .ICON_SIZE 16
+   124 set .ICON_X 11
+   125 set .ICON_Y1 11
 -    * op add *tmp14 .ICON_Y1 .ROW_HEIGHT
 -    * set .ICON_Y2 *tmp14
 -    * op add *tmp15 .ICON_Y2 .ROW_HEIGHT
 -    * set .ICON_Y3 *tmp15
 -    * op add *tmp16 .ICON_Y3 .ROW_HEIGHT
 -    * set .ICON_Y4 *tmp16
-+  130 op add .ICON_Y2 .ICON_Y1 .ROW_HEIGHT
-+  131 op add .ICON_Y3 .ICON_Y2 .ROW_HEIGHT
-+  132 op add .ICON_Y4 .ICON_Y3 .ROW_HEIGHT
-   133 set .BAR_X 20
-   134 set .BAR_Y1 4
++  126 op add .ICON_Y2 .ICON_Y1 .ROW_HEIGHT
++  127 op add .ICON_Y3 .ICON_Y2 .ROW_HEIGHT
++  128 op add .ICON_Y4 .ICON_Y3 .ROW_HEIGHT
+   129 set .BAR_X 20
+   130 set .BAR_Y1 4
 -    * op add *tmp17 .BAR_Y1 .ROW_HEIGHT
 -    * set .BAR_Y2 *tmp17
 -    * op add *tmp18 .BAR_Y2 .ROW_HEIGHT
 -    * set .BAR_Y3 *tmp18
 -    * op add *tmp19 .BAR_Y3 .ROW_HEIGHT
 -    * set .BAR_Y4 *tmp19
-+  135 op add .BAR_Y2 .BAR_Y1 .ROW_HEIGHT
-+  136 op add .BAR_Y3 .BAR_Y2 .ROW_HEIGHT
-+  137 op add .BAR_Y4 .BAR_Y3 .ROW_HEIGHT
-   138 set .BAR_LENGTH 56
++  131 op add .BAR_Y2 .BAR_Y1 .ROW_HEIGHT
++  132 op add .BAR_Y3 .BAR_Y2 .ROW_HEIGHT
++  133 op add .BAR_Y4 .BAR_Y3 .ROW_HEIGHT
+   134 set .BAR_LENGTH 56
 -    * op div *tmp20 .BAR_LENGTH 200
 -    * set .MULTIPLICATOR *tmp20
 -    * set *tmp21 .SWITCH
 -    * control enabled *tmp21 0
-+  139 op div .MULTIPLICATOR .BAR_LENGTH 200
-+  140 control enabled .SWITCH 0
-   141 label *label27
-   142 sensor *tmp23 .SWITCH @enabled
-   143 op equal *tmp24 *tmp23 0
-   144 jump *label29 equal *tmp24 false
++  135 op div .MULTIPLICATOR .BAR_LENGTH 200
++  136 control enabled .SWITCH 0
+   137 label *label27
+   138 sensor *tmp23 .SWITCH @enabled
+   139 op equal *tmp24 *tmp23 0
+   140 jump *label29 equal *tmp24 false
 -    * set *tmp25 @time
 -    * set :start *tmp25
-+  145 set :start @time
-   146 draw clear 0 0 80
-   147 draw color 255 255 255 255
-   148 draw image .ICON_X .ICON_Y4 @titanium .ICON_SIZE 0
++  141 set :start @time
+   142 draw clear 0 0 80
+   143 draw color 255 255 255 255
+   144 draw image .ICON_X .ICON_Y4 @titanium .ICON_SIZE 0
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-8 instructions):
  
@@ -304,39 +304,39 @@ Modifications by Iterated phase, Condition Optimization, pass 1, iteration 1 (-6
     18 getlink :block :n
     19 sensor *tmp5 :block @type
  
-    98 print "\n"
-    99 printflush .MESSAGE
-   100 label *label1
+    94 print "\n"
+    95 printflush .MESSAGE
+    96 label *label1
 -    * op equal *tmp10 .TITANIUM null
 -    * jump *label0 notEqual *tmp10 false
-+  101 jump *label0 equal .TITANIUM null
-   102 label *label26
++   97 jump *label0 equal .TITANIUM null
+    98 label *label26
 -    * op equal *tmp11 .SILICON null
 -    * jump *label0 notEqual *tmp11 false
-+  103 jump *label0 equal .SILICON null
-   104 jump *label25 always
-   105 label *label25
++   99 jump *label0 equal .SILICON null
+   100 jump *label25 always
+   101 label *label25
 -    * op equal *tmp12 .COPPER null
 -    * jump *label0 notEqual *tmp12 false
-+  106 jump *label0 equal .COPPER null
-   107 jump *label24 always
-   108 label *label24
++  102 jump *label0 equal .COPPER null
+   103 jump *label24 always
+   104 label *label24
 -    * op equal *tmp13 .LEAD null
 -    * jump *label0 notEqual *tmp13 false
-+  109 jump *label0 equal .LEAD null
-   110 jump *label2 always
-   111 label *label2
-   112 set .ROW_HEIGHT 19
++  105 jump *label0 equal .LEAD null
+   106 jump *label2 always
+   107 label *label2
+   108 set .ROW_HEIGHT 19
  
-   127 control enabled .SWITCH 0
-   128 label *label27
-   129 sensor *tmp23 .SWITCH @enabled
+   123 control enabled .SWITCH 0
+   124 label *label27
+   125 sensor *tmp23 .SWITCH @enabled
 -    * op equal *tmp24 *tmp23 0
 -    * jump *label29 equal *tmp24 false
-+  130 jump *label29 notEqual *tmp23 0
-   131 set :start @time
-   132 draw clear 0 0 80
-   133 draw color 255 255 255 255
++  126 jump *label29 notEqual *tmp23 0
+   127 set :start @time
+   128 draw clear 0 0 80
+   129 draw color 255 255 255 255
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-4 instructions):
  
@@ -348,19 +348,19 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     52 label *label13
     53 jump *label6 always
  
-   100 jump *label0 equal .TITANIUM null
-   101 label *label26
-   102 jump *label0 equal .SILICON null
+    96 jump *label0 equal .TITANIUM null
+    97 label *label26
+    98 jump *label0 equal .SILICON null
 -    * jump *label25 always
-   103 label *label25
-   104 jump *label0 equal .COPPER null
+    99 label *label25
+   100 jump *label0 equal .COPPER null
 -    * jump *label24 always
-   105 label *label24
-   106 jump *label0 equal .LEAD null
+   101 label *label24
+   102 jump *label0 equal .LEAD null
 -    * jump *label2 always
-   107 label *label2
-   108 set .ROW_HEIGHT 19
-   109 set .BAR_HEIGHT 14
+   103 label *label2
+   104 set .ROW_HEIGHT 19
+   105 set .BAR_HEIGHT 14
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set .EXPECTED_FLOW_STR null
@@ -374,89 +374,87 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      6 set .TITANIUM null
      7 set .SILICON null
  
+    62 print " is not supported."
     63 label *label6
-    64 print "\n"
-    65 print "Nominal production: "
+    64 print "\nNominal production: "
 -    * print .EXPECTED_FLOW_STR
-+   66 print null
-    67 print "/"
-    68 print "min"
-    69 print "\n"
-    70 print "Actual production: "
++   65 print null
+    66 print "/min"
+    67 print "\nActual production: "
 -    * print :flow_str
-+   71 print null
-    72 print "/"
-    73 print "min"
-    74 label *label4
++   68 print null
+    69 print "/min"
+    70 label *label4
+    71 jump *label3 always
  
-   110 set .ICON_SIZE 16
-   111 set .ICON_X 11
-   112 set .ICON_Y1 11
+   106 set .ICON_SIZE 16
+   107 set .ICON_X 11
+   108 set .ICON_Y1 11
 -    * op add .ICON_Y2 .ICON_Y1 .ROW_HEIGHT
 -    * op add .ICON_Y3 .ICON_Y2 .ROW_HEIGHT
 -    * op add .ICON_Y4 .ICON_Y3 .ROW_HEIGHT
-+  113 op add .ICON_Y2 11 19
-+  114 op add .ICON_Y3 30 19
-+  115 op add .ICON_Y4 49 19
-   116 set .BAR_X 20
-   117 set .BAR_Y1 4
++  109 op add .ICON_Y2 11 19
++  110 op add .ICON_Y3 30 19
++  111 op add .ICON_Y4 49 19
+   112 set .BAR_X 20
+   113 set .BAR_Y1 4
 -    * op add .BAR_Y2 .BAR_Y1 .ROW_HEIGHT
 -    * op add .BAR_Y3 .BAR_Y2 .ROW_HEIGHT
 -    * op add .BAR_Y4 .BAR_Y3 .ROW_HEIGHT
-+  118 op add .BAR_Y2 4 19
-+  119 op add .BAR_Y3 23 19
-+  120 op add .BAR_Y4 42 19
-   121 set .BAR_LENGTH 56
++  114 op add .BAR_Y2 4 19
++  115 op add .BAR_Y3 23 19
++  116 op add .BAR_Y4 42 19
+   117 set .BAR_LENGTH 56
 -    * op div .MULTIPLICATOR .BAR_LENGTH 200
-+  122 op div .MULTIPLICATOR 56 200
-   123 control enabled .SWITCH 0
-   124 label *label27
-   125 sensor *tmp23 .SWITCH @enabled
++  118 op div .MULTIPLICATOR 56 200
+   119 control enabled .SWITCH 0
+   120 label *label27
+   121 sensor *tmp23 .SWITCH @enabled
  
-   127 set :start @time
-   128 draw clear 0 0 80
-   129 draw color 255 255 255 255
+   123 set :start @time
+   124 draw clear 0 0 80
+   125 draw color 255 255 255 255
 -    * draw image .ICON_X .ICON_Y4 @titanium .ICON_SIZE 0
 -    * draw image .ICON_X .ICON_Y3 @silicon .ICON_SIZE 0
 -    * draw image .ICON_X .ICON_Y2 @copper .ICON_SIZE 0
 -    * draw image .ICON_X .ICON_Y1 @lead .ICON_SIZE 0
-+  130 draw image 11 68 @titanium 16 0
-+  131 draw image 11 49 @silicon 16 0
-+  132 draw image 11 30 @copper 16 0
-+  133 draw image 11 11 @lead 16 0
-   134 draw color 0 128 0 255
-   135 sensor *tmp26 .TITANIUM @totalItems
++  126 draw image 11 68 @titanium 16 0
++  127 draw image 11 49 @silicon 16 0
++  128 draw image 11 30 @copper 16 0
++  129 draw image 11 11 @lead 16 0
+   130 draw color 0 128 0 255
+   131 sensor *tmp26 .TITANIUM @totalItems
 -    * op mul *tmp27 *tmp26 .MULTIPLICATOR
 -    * draw rect .BAR_X .BAR_Y4 *tmp27 .BAR_HEIGHT
-+  136 op mul *tmp27 *tmp26 0.28
-+  137 draw rect 20 61 *tmp27 14
-   138 sensor *tmp28 .SILICON @totalItems
++  132 op mul *tmp27 *tmp26 0.28
++  133 draw rect 20 61 *tmp27 14
+   134 sensor *tmp28 .SILICON @totalItems
 -    * op mul *tmp29 *tmp28 .MULTIPLICATOR
 -    * draw rect .BAR_X .BAR_Y3 *tmp29 .BAR_HEIGHT
-+  139 op mul *tmp29 *tmp28 0.28
-+  140 draw rect 20 42 *tmp29 14
-   141 sensor *tmp30 .COPPER @totalItems
++  135 op mul *tmp29 *tmp28 0.28
++  136 draw rect 20 42 *tmp29 14
+   137 sensor *tmp30 .COPPER @totalItems
 -    * op mul *tmp31 *tmp30 .MULTIPLICATOR
 -    * draw rect .BAR_X .BAR_Y2 *tmp31 .BAR_HEIGHT
-+  142 op mul *tmp31 *tmp30 0.28
-+  143 draw rect 20 23 *tmp31 14
-   144 sensor *tmp32 .LEAD @totalItems
++  138 op mul *tmp31 *tmp30 0.28
++  139 draw rect 20 23 *tmp31 14
+   140 sensor *tmp32 .LEAD @totalItems
 -    * op mul *tmp33 *tmp32 .MULTIPLICATOR
 -    * draw rect .BAR_X .BAR_Y1 *tmp33 .BAR_HEIGHT
-+  145 op mul *tmp33 *tmp32 0.28
-+  146 draw rect 20 4 *tmp33 14
-   147 draw color 0 255 0 255
++  141 op mul *tmp33 *tmp32 0.28
++  142 draw rect 20 4 *tmp33 14
+   143 draw color 0 255 0 255
 -    * draw lineRect .BAR_X .BAR_Y4 .BAR_LENGTH .BAR_HEIGHT
 -    * draw lineRect .BAR_X .BAR_Y3 .BAR_LENGTH .BAR_HEIGHT
 -    * draw lineRect .BAR_X .BAR_Y2 .BAR_LENGTH .BAR_HEIGHT
 -    * draw lineRect .BAR_X .BAR_Y1 .BAR_LENGTH .BAR_HEIGHT
-+  148 draw lineRect 20 61 56 14
-+  149 draw lineRect 20 42 56 14
-+  150 draw lineRect 20 23 56 14
-+  151 draw lineRect 20 4 56 14
-   152 drawflush .DISPLAY
-   153 print "Surge Alloy Factory Driver Monitor\nElapsed (ms): "
-   154 op sub *tmp34 @time :start
++  144 draw lineRect 20 61 56 14
++  145 draw lineRect 20 42 56 14
++  146 draw lineRect 20 23 56 14
++  147 draw lineRect 20 4 56 14
+   148 drawflush .DISPLAY
+   149 print "Surge Alloy Factory Driver Monitor\nElapsed (ms): "
+   150 op sub *tmp34 @time :start
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-17 instructions):
 -    * set .EXPECTED_FLOW_STR null
@@ -469,9 +467,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
      4 set .TITANIUM null
      5 set .SILICON null
  
-   103 label *label24
-   104 jump *label0 equal .LEAD null
-   105 label *label2
+    99 label *label24
+   100 jump *label0 equal .LEAD null
+   101 label *label2
 -    * set .ROW_HEIGHT 19
 -    * set .BAR_HEIGHT 14
 -    * set .ICON_SIZE 16
@@ -487,9 +485,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op add .BAR_Y4 42 19
 -    * set .BAR_LENGTH 56
 -    * op div .MULTIPLICATOR 56 200
-   106 control enabled .SWITCH 0
-   107 label *label27
-   108 sensor *tmp23 .SWITCH @enabled
+   102 control enabled .SWITCH 0
+   103 label *label27
+   104 sensor *tmp23 .SWITCH @enabled
 
 Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
  
@@ -501,45 +499,45 @@ Modifications by Iterated phase, Loop Rotation, pass 1, iteration 1:
     17 getlink :block :n
     18 sensor *tmp5 :block @type
  
-    71 print "/"
-    72 print "min"
-    73 label *label4
+    67 print null
+    68 print "/min"
+    69 label *label4
 -    * jump *label3 always
-+   74 jump *label30 greaterThan :n 0
-    75 label *label5
-    76 print "Message: "
-    77 print .MESSAGE
++   70 jump *label30 greaterThan :n 0
+    71 label *label5
+    72 print "Message: "
+    73 print .MESSAGE
  
-    97 printflush .MESSAGE
-    98 label *label1
-    99 jump *label0 equal .TITANIUM null
+    93 printflush .MESSAGE
+    94 label *label1
+    95 jump *label0 equal .TITANIUM null
 -    * label *label26
-   100 jump *label0 equal .SILICON null
+    96 jump *label0 equal .SILICON null
 -    * label *label25
-   101 jump *label0 equal .COPPER null
+    97 jump *label0 equal .COPPER null
 -    * label *label24
-   102 jump *label0 equal .LEAD null
-   103 label *label2
-   104 control enabled .SWITCH 0
+    98 jump *label0 equal .LEAD null
+    99 label *label2
+   100 control enabled .SWITCH 0
 
 Modifications by Full loop rotation at line 68:1 (+1 instructions):
  
-   105 label *label27
-   106 sensor *tmp23 .SWITCH @enabled
-   107 jump *label29 notEqual *tmp23 0
-+  108 label *label31
-   109 set :start @time
-   110 draw clear 0 0 80
-   111 draw color 255 255 255 255
+   101 label *label27
+   102 sensor *tmp23 .SWITCH @enabled
+   103 jump *label29 notEqual *tmp23 0
++  104 label *label31
+   105 set :start @time
+   106 draw clear 0 0 80
+   107 draw color 255 255 255 255
  
-   138 print *tmp35
-   139 printflush .MESSAGE
-   140 label *label28
+   134 print *tmp35
+   135 printflush .MESSAGE
+   136 label *label28
 -    * jump *label27 always
-+  141 sensor *tmp23 .SWITCH @enabled
-+  142 jump *label31 equal *tmp23 0
-   143 label *label29
-   144 end
++  137 sensor *tmp23 .SWITCH @enabled
++  138 jump *label31 equal *tmp23 0
+   139 label *label29
+   140 end
 
 Modifications by Convert case at line 17:9 (segments: 1, padded low) (-1 instructions):
  
@@ -651,23 +649,23 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
     47 set .LEAD :block
     48 label *label13
  
-    96 jump *label0 equal .LEAD null
-    97 control enabled .SWITCH 0
-    98 sensor *tmp23 .SWITCH @enabled
+    92 jump *label0 equal .LEAD null
+    93 control enabled .SWITCH 0
+    94 sensor *tmp23 .SWITCH @enabled
 -    * jump *label29 notEqual *tmp23 0
-+   99 jump __start__ notEqual *tmp23 0
-   100 label *label31
-   101 set :start @time
-   102 draw clear 0 0 80
++   95 jump __start__ notEqual *tmp23 0
+    96 label *label31
+    97 set :start @time
+    98 draw clear 0 0 80
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
-   129 printflush .MESSAGE
-   130 sensor *tmp23 .SWITCH @enabled
-   131 jump *label31 equal *tmp23 0
+   125 printflush .MESSAGE
+   126 sensor *tmp23 .SWITCH @enabled
+   127 jump *label31 equal *tmp23 0
 -    * end
 
-Modifications by Final phase, Print Merging, iteration 1 (-26 instructions):
+Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
  
      6 set .SILICON null
      7 set .COPPER null
@@ -690,16 +688,12 @@ Modifications by Final phase, Print Merging, iteration 1 (-26 instructions):
 +   50 print "\n{0} is not supported."
 +   51 format :block
     52 label *label6
--    * print "\n"
--    * print "Nominal production: "
+-    * print "\nNominal production: "
 -    * print null
--    * print "/"
--    * print "min"
--    * print "\n"
--    * print "Actual production: "
+-    * print "/min"
+-    * print "\nActual production: "
 -    * print null
--    * print "/"
--    * print "min"
+-    * print "/min"
 +   53 print "\nNominal production: null/min\nActual production: null/min"
     54 jump *label30 greaterThan :n 0
     55 label *label5

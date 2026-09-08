@@ -128,16 +128,15 @@ set :findLinkedBlocks:requested @memory-cell
 set :findLinkedBlocks:name "Memory"
 set :findLinkedBlocks:variable :memory
 set :findLinkedBlocks:required true
-set *tmp9 142
+set *tmp9 141
 print "\n"
 print :findLinkedBlocks:name
-print ":"
-print " "
+print ": "
 print :findLinkedBlocks:variable
-jump 140 equal :findLinkedBlocks:required false
+jump 139 equal :findLinkedBlocks:required false
 op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :findLinkedBlocks:variable
 set *tmp10 :findLinkedBlocks:foundAll
-jump 141 always 0 0
+jump 140 always 0 0
 set *tmp10 null
 set @counter *tmp9
 set :memory :findLinkedBlocks:variable

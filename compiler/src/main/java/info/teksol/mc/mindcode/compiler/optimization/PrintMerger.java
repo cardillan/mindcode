@@ -8,7 +8,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import info.teksol.mc.util.Utf8Utils;
+import info.teksol.mc.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -106,22 +106,22 @@ class PrintMerger extends BaseOptimizer {
         printVars.clear();
     }
 
-    private @Nullable String printValue(PrintingInstruction ix) {
+    private @Nullable String escapeValue(PrintingInstruction ix) {
         if (!ix.getValue().isConstant()) return null;
 
         return switch (ix) {
-            case PrintInstruction p -> p.getValue().format(instructionProcessor);
-            case PrintCharInstruction p -> printCharValue(p);
+            case PrintInstruction p -> instructionProcessor.escapedString(p.getValue());
+            case PrintCharInstruction p -> escapeCharValue(p);
             default -> throw new MindcodeInternalError("Unhandled instruction type: " + ix.getClass().getSimpleName());
         };
     }
 
-    private @Nullable String printCharValue(PrintCharInstruction ix) {
+    private @Nullable String escapeCharValue(PrintCharInstruction ix) {
         return switch (ix.getValue()) {
             case LogicNumber number -> {
                 char ch = (char) Math.floor(number.getDoubleValue());
                 boolean isPrintable = !Character.isISOControl(ch) && !Character.isSurrogate(ch);
-                yield isPrintable && ch != '"' ? String.valueOf(ch) : null;
+                yield isPrintable && ch != '"' ? UtfUtils.escape(getGlobalProfile().useUnicodeEscapes(), String.valueOf(ch)) : null;
             }
 
             case LogicBuiltIn builtIn -> builtIn.getObject() != null ? builtIn.getObject().iconString(metadata) : null;
@@ -135,11 +135,11 @@ class PrintMerger extends BaseOptimizer {
     // If the merge is not possible, sets previous to current
     private void tryMergeUsingPrint(LogicIterator iterator, PrintingInstruction current) {
         if (previous instanceof PrintingInstruction prev && prev.getValue().isConstant() && current.getValue().isConstant()) {
-            String str1 = printValue(prev);
-            String str2 = printValue(current);
+            String str1 = escapeValue(prev);
+            String str2 = escapeValue(current);
             // Do not merge strings if the combined length is over 34, unless advanced
             if (str1 != null && str2 != null && (advanced(previous) && advanced(current) || str1.length() + str2.length() <= 34)
-                    && Utf8Utils.utf8Length(str1) + Utf8Utils.utf8Length(str2) <= LogicString.MAX_STRING_SIZE) {
+                    && UtfUtils.utf8EncodedLength(str1) + UtfUtils.utf8EncodedLength(str2) <= LogicString.MAX_STRING_SIZE) {
                 PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(prev.sourcePosition(), str1 + str2));
                 removeInstruction(this.previous);
                 iterator.set(merged);
@@ -155,23 +155,23 @@ class PrintMerger extends BaseOptimizer {
         void tryMerge(LogicIterator iterator, PrintingInstruction current);
     }
 
-    // Tries to merge previous and current format.
+    // Tries to merge the previous and current format.
     // When successful, updates instructions and sets previous to the newly merged instruction.
     // If the merge is not possible, sets previous to current
     private void tryMergeUsingFormat(LogicIterator iterator, PrintingInstruction current) {
         String previousStr, currentStr;
-        if (previous instanceof PrintingInstruction prev && (previousStr = printValue(prev)) != null) {
-            if (current.getValue().isConstant() && (currentStr = printValue(current)) != null) {
-                StringBuilder str = new StringBuilder(previousStr);
+        if (previous instanceof PrintingInstruction prev && (previousStr = escapeValue(prev)) != null) {
+            if (current.getValue().isConstant() && (currentStr = escapeValue(current)) != null) {
+                StringBuilder escaped = new StringBuilder(previousStr);
                 for (PrintingInstruction p : printVars) {
-                    str.append("{0}");
+                    escaped.append("{0}");
                     optimizationContext.replaceInstruction(p, createFormat(p.getAstContext(), p.getValue()));
                 }
                 printVars.clear();
-                str.append(currentStr);
+                escaped.append(currentStr);
                 iterator.remove();
 
-                PrintInstruction updated = createPrint(prev.getAstContext(), LogicString.create(str.toString()));
+                PrintInstruction updated = createPrint(prev.getAstContext(), LogicString.createEscaped(escaped.toString()));
                 optimizationContext.replaceInstruction(prev, updated);
                 previous = updated;
             } else if (current instanceof PrintCharInstruction) {
@@ -193,7 +193,7 @@ class PrintMerger extends BaseOptimizer {
         if (previous instanceof RemarkInstruction prev && prev.getAstContext() == current.getAstContext() &&
             prev.getValue().isConstant() && current.getValue().isConstant()) {
             RemarkInstruction merged = createRemark(current.getAstContext(),
-                    LogicString.create(prev.getValue().format(instructionProcessor) + current.getValue().format(instructionProcessor)));
+                    LogicString.createEscaped(instructionProcessor.escapedString(prev.getValue()) + instructionProcessor.escapedString(current.getValue())));
             removeInstruction(this.previous);
             iterator.set(merged);
             this.previous = merged;
@@ -212,7 +212,7 @@ class PrintMerger extends BaseOptimizer {
                 .flatMap(LogicInstruction::inputArgumentsStream)
                 .filter(LogicString.class::isInstance)
                 .map(LogicString.class::cast)
-                .filter(s -> containsDangerousStrings(s.getValue()))
+                .filter(s -> containsDangerousStrings(s.getStringValue()))
                 .toList();
 
         dangerousStrings.forEach(s -> warn(s.sourcePosition(), WARN.FORMAT_PRECLUDED_BY_STRING_LITERAL));

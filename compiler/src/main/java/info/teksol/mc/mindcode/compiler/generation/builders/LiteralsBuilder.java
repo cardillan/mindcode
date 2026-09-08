@@ -31,8 +31,7 @@ public class LiteralsBuilder extends AbstractCodeBuilder implements
         AstLiteralHexadecimalVisitor<ValueStore>,
         AstLiteralNamedColorVisitor<ValueStore>,
         AstLiteralNullVisitor<ValueStore>,
-        AstLiteralStringVisitor<ValueStore>
-{
+        AstLiteralStringVisitor<ValueStore> {
     private static final String INVALID_LONG_VALUE = "9223372036854775807";
 
     public LiteralsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
@@ -114,7 +113,73 @@ public class LiteralsBuilder extends AbstractCodeBuilder implements
 
     @Override
     public ValueStore visitLiteralString(AstLiteralString node) {
-        return LogicString.create(node.sourcePosition(), node.getValue());
+        boolean fullEscapes = processorVersion.supportsUnicodeEscapes();
+        StringBuilder sbr = new StringBuilder();
+        String chars = node.getValue();
+        boolean backslashEscape = false;
+
+        for (int pos = 0; pos < chars.length(); pos++) {
+            int start = pos;
+            if (chars.charAt(pos) == '\\') {
+                if (++pos >= chars.length()) {
+                    error(node.sourcePosition().columnOffset(start + 1), ERR.LITERAL_INVALID_ESCAPE);
+                    sbr.append("\\\\");
+                    break;
+                }
+
+                char c = chars.charAt(pos);
+                backslashEscape = false;
+                switch (c) {
+                    case 'u' -> {
+                        if (!fullEscapes) {
+                            error(node.sourcePosition().columnOffset(start + 1), ERR.LITERAL_UNSUPPORTED_ESCAPE, c);
+                            break;
+                        }
+                        if (pos + 4 >= chars.length()) {
+                            error(node.sourcePosition().columnOffset(start + 1), ERR.LITERAL_INVALID_UNICODE_ESCAPE);
+                            sbr.append("\\\\u");
+                            break;
+                        }
+                        for (int j = 0; j < 4; j++) {
+                            if (Character.digit(chars.charAt(pos + 1), 16) == -1) {
+                                error(node.sourcePosition().columnOffset(start + 1), ERR.LITERAL_INVALID_UNICODE_ESCAPE);
+                                sbr.append('\\');
+                                break;
+                            }
+                            pos++;
+                        }
+                        sbr.append(chars, start, pos + 1);
+                    }
+                    case '$' -> sbr.append('$');
+                    case 'n' -> sbr.append("\\n");
+                    case '\\' -> {
+                        backslashEscape = true;
+                        sbr.append("\\\\");
+                    }
+                    case '"' -> {
+                        if (!fullEscapes) {
+                            error(node.sourcePosition().columnOffset(start + 1), ERR.LITERAL_UNSUPPORTED_ESCAPE, c);
+                            sbr.append("''");
+                        } else {
+                            sbr.append('\\').append(c);
+                        }
+                    }
+                    default -> {
+                        error(node.sourcePosition().columnOffset(start + 1), ERR.LITERAL_INVALID_ESCAPE);
+                        sbr.append("\\\\");
+                        pos--;
+                    }
+                }
+            } else {
+                if (backslashEscape && !fullEscapes && chars.charAt(pos) == 'n') {
+                    error(node.sourcePosition().columnOffset(start), ERR.LITERAL_UNSUPPORTED_NEWLINE_ESCAPE);
+                }
+                backslashEscape = false;
+                sbr.append(chars.charAt(pos));
+            }
+        }
+
+        return LogicString.create(node.sourcePosition(), sbr.toString());
     }
 
     private LogicNumber visitIntegerLiteral(AstLiteral node, int start, int radix) {
@@ -147,7 +212,7 @@ public class LiteralsBuilder extends AbstractCodeBuilder implements
 
     private String getMaxLiteralValue(int radix) {
         return switch (radix) {
-            case  2 -> "0b" + Long.toString(Long.MAX_VALUE, radix);
+            case 2 -> "0b" + Long.toString(Long.MAX_VALUE, radix);
             case 10 -> Long.toString(Long.MAX_VALUE, radix);
             case 16 -> "0x" + Long.toString(Long.MAX_VALUE, radix);
             default -> throw new MindcodeInternalError("Invalid radix: " + radix);

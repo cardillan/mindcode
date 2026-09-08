@@ -134,29 +134,27 @@ set :waitForFreeUnit.1:unitType :unitType
 set :waitForFreeUnit.1:initialFlag :initialFlag
 ubind :waitForFreeUnit.1:unitType
 op equal *tmp42 @unit null
-jump 145 equal *tmp42 false
+jump 144 equal *tmp42 false
 print :waitForFreeUnit.1:preface
 print "No unit of type "
 print :waitForFreeUnit.1:unitType
-print " "
-print "found."
+print " found."
 printflush :waitForFreeUnit.1:message
 set *tmp43 null
-jump 161 always 0 0
+jump 159 always 0 0
 sensor *tmp44 @unit @controlled
 op notEqual *tmp45 *tmp44 0
-jump 156 equal *tmp45 false
+jump 154 equal *tmp45 false
 print :waitForFreeUnit.1:preface
 print "Looking for a free "
 print :waitForFreeUnit.1:unitType
-print "."
-print ".."
+print "..."
 printflush :waitForFreeUnit.1:message
 set *tmp46 null
-jump 160 always 0 0
+jump 158 always 0 0
 ucontrol flag :waitForFreeUnit.1:initialFlag 0 0 0 0
 set *tmp41 @unit
-jump 163 always 0 0
+jump 161 always 0 0
 set *tmp46 null
 set *tmp43 *tmp46
 jump 134 always 0 0

@@ -257,9 +257,29 @@ public class AbstractCodeGeneratorTest extends AbstractCompilerTestBase {
         } else if (value.startsWith("*label")) {
             return "label(" + value.substring(6) + ")";
         } else if (value.startsWith("\"") && value.endsWith("\"")) {
-            return "q(" + value.replace("\n", "\\n") + ")";
+            return "q(" + toLiteral(value, true) + ")";
         } else {
-            return q(value.replace("\\", "\\\\").replace("\"", "\\\""));
+            return toLiteral(value, false);
         }
+    }
+
+    private static String toLiteral(String s, boolean stripQuotes) {
+        StringBuilder result = new StringBuilder(s.length() + 2);
+        result.append('"');
+
+        for (int i = stripQuotes ? 1 : 0; i < s.length() - (stripQuotes ? 1 : 0); i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '\\' -> result.append("\\\\");
+                case '"'  -> result.append("\\\"");
+                case '\b' -> result.append("\\b");
+                case '\f' -> result.append("\\f");
+                case '\r' -> result.append("\\r");
+                case '\t' -> result.append("\\t");
+                default   -> result.append(c);
+            }
+        }
+
+        return result.append('"').toString().replace("\\\\n", "\\n");
     }
 }

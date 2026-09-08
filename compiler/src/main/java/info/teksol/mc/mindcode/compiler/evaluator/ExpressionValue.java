@@ -6,12 +6,12 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.LVariable;
 import info.teksol.mc.profile.BuiltinEvaluation;
+import info.teksol.mc.util.UtfUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /// The ExpressionValue class holds an immutable value that can be passed to the expression evaluator.
-/// Only nulls, numeric values and String objects are supported, and strings are contained as a plain
-/// string, not wrapped into `MindustryString` instance.
+/// Only nulls, numeric values, and String objects are supported, and strings are contained as plain strings.
 ///
 /// The class is not used outside the compile time evaluator.
 @NullMarked
@@ -41,7 +41,7 @@ class ExpressionValue implements LogicReadable {
                 case AstLiteralString n -> new ExpressionValue(processor, n.getValue(), null);
                 case AstLiteralChar n -> new ExpressionValue(processor, null, n.getLongValue());
                 case AstIdentifier n -> processor.getMetadata().getIcons().isIconName(n.getName())
-                        ? new ExpressionValue(processor, processor.getMetadata().getIcons().getIconValue(n.getName()).format(processor), null)
+                        ? new ExpressionValue(processor, processor.escapedString(processor.getMetadata().getIcons().getIconValue(n.getName())), null)
                         : new InvalidValue(processor);
                 case AstLiteral n ->
                         throw new MindcodeInternalError("Unhandled constant node " + node.getClass().getSimpleName());
@@ -112,8 +112,9 @@ class ExpressionValue implements LogicReadable {
         return object instanceof String;
     }
 
-    public String print() {
-        return isNull() ? "null" : object instanceof String string ? string : processor.formatNumber(getDoubleValue());
+    public String toEscapedString() {
+        return isNull() ? "null" : object instanceof String string ? string
+                : UtfUtils.escape(false, processor.formatNumber(getDoubleValue()));
     }
 
     private static class InvalidValue extends ExpressionValue {
@@ -157,7 +158,7 @@ class ExpressionValue implements LogicReadable {
         }
 
         @Override
-        public String print() {
+        public String toEscapedString() {
             throw new MindcodeInternalError("Trying to evaluate invalid value.");
         }
     }

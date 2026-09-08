@@ -1,4 +1,4 @@
-# Function reference for target 6.0
+# Function reference for target `6.0`
 
 This document contains function reference for all built-in Mindcode functions. Functions are grouped by the
 instruction they encapsulate so that functions with similar logic are listed together. The Mindcode source
@@ -233,4 +233,4 @@ Requires a bound unit.
 
 ---
 
-[Up: Logic functions](FUNCTIONS.markdown) &nbsp; [Next: Function reference for target 7.0 &#xBB;](FUNCTIONS-70.markdown)
+[Up: Logic functions](FUNCTIONS.markdown) &nbsp; [Next: Function reference for target `7.0` &#xBB;](FUNCTIONS-70.markdown)

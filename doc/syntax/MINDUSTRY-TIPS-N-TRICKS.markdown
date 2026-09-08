@@ -9,12 +9,22 @@ When a text is being printed into a message by using the `printflush` instructio
 * Line breaks
 * Setting text color
 
-### Line breaks
+### Character escapes
 
-When the `\n` sequence of characters is found in the string being printed, the `\n` sequence is replaced by a line break. For example:
+Mindustry recognizes some character escapes (a character escape is a backslash - `\` - followed by a character) and Unicode escape sequences. A character escape removes the first backslash and inserts the following character into the string as is. A Unicode escape sequence inserts the character corresponding to the Unicode code point specified by the sequence.
+
+The following character escapes are recognized by Mindustry:
+
+* `\n`: line break,
+* `\\`: backslash,
+* `\"`: double quote.
+
+A Unicode escape sequence is formed as `\uXXXX`, where `XXXX` is a hexadecimal number representing the Unicode code point. Any character that can be part of a string literal can be encoded using a Unicode escape sequence, including the three special characters mentioned above.
+
+The same escape characters can be used in Mindcode literals. Example:
 
 ```Mindcode
-print("One\nTwo");
+print("One\n\"Two\"\\\n\\Three\u000Au0022Four\u0022 (using Unicode escape sequences)");
 printflush(message1);
 ```
 
@@ -22,37 +32,13 @@ produces the following output:
 
 ```
 One
-Two
+"Two"\
+\Three
+"Four" (using Unicode escape sequences)
 ```
 
-Note that the backslash character is only recognized as part of the `\n` sequence, it is not otherwise specially handled. Specifically, it is not possible to encode it as `\\`, unlike many other programming languages. Therefore, the following code snippet
-
-```Mindcode
-print("One\\Two\\nThree");
-printflush(message1);
-```
-
-produces the following output:
-
-```
-One\\Two\
-Three
-```
-
-If you really want to output `\n` in the message block for whatever reason, you can use this trick:
-
-```Mindcode
-print("One\[red][]nTwo");
-printflush(message1);
-```
-
-which finally produces
-
-```
-One\nTwo
-```
-
-This is because the square brackets are used co encode color (see the next paragraph). The `[]` cancels `[red]`, and together they split apart `\` and `n` in such a way the message block doesn't recognize them anymore.
+> [!NOTE]
+> The escape sequences described above are recognized by Mindustry since **v8 Build 160**. In earlier releases, only `\n` was supported. Encoding double-quotes into a string literal was impossible, and `\n` was always interpreted as a line break, so `print "\\n"` produced a backslash followed by a line break.  
 
 ### Setting text color
 

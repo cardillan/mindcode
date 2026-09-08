@@ -93,4 +93,11 @@ public enum ProcessorVersion {
             }
         }).toList();
     }
+
+    // Processor capabilities
+
+    /// @return `true` if this processor supports Unicode escapes, as well as `\\` and `\"`.
+    public boolean supportsUnicodeEscapes() {
+        return atLeast(V8C);
+    }
 }

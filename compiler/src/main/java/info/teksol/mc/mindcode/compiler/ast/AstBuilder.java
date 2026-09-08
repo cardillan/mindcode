@@ -1039,7 +1039,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         char escaped = text.charAt(1);
         return escaped == '\\' || escaped == '$'
                 ? new AstLiteralEscape(pos(ctx), escaped + "")
-                : new AstLiteralString(pos(ctx), text);
+                : new AstLiteralString(pos(ctx).columnOffset(-1), text);
     }
 
     @Override

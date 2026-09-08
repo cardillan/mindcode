@@ -2,7 +2,7 @@ package info.teksol.mc.emulator.mimex;
 
 import info.teksol.mc.common.Globals;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
-import info.teksol.mc.util.Utf8Utils;
+import info.teksol.mc.util.UtfUtils;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
@@ -55,7 +55,7 @@ public abstract class LParserBase implements LParser {
         return Map.of();
     }
 
-    void comment() {
+    protected void comment() {
         int from = pos;
 
         //read until \n or eof
@@ -66,13 +66,13 @@ public abstract class LParserBase implements LParser {
         }
     }
 
-    void error(@PrintFormat String format, Object... args) {
+    protected void error(@PrintFormat String format, Object... args) {
         if (errorHandler.error(format, args)) {
             error = true;
         }
     }
 
-    String string() {
+    protected String string() {
         int from = pos;
 
         while (++pos < chars.length) {
@@ -89,7 +89,7 @@ public abstract class LParserBase implements LParser {
         return new String(chars, from, ++pos - from);
     }
 
-    String token() {
+    protected String token() {
         int from = pos;
 
         while (pos < chars.length) {
@@ -114,7 +114,7 @@ public abstract class LParserBase implements LParser {
     /**
      * Reads the next statement until EOL/EOF.
      */
-    void statement() {
+    protected void statement() {
         boolean expectNext = false;
         int tok = 0;
 
@@ -215,7 +215,7 @@ public abstract class LParserBase implements LParser {
         jumps.clear();
         jumpLocations.clear();
 
-        if (Utf8Utils.utf8Length(chars) > Globals.MAX_MLOG_BYTE_LENGTH) {
+        if (UtfUtils.utf8Length(chars) > Globals.MAX_MLOG_BYTE_LENGTH) {
             error("Mlog file too long. Max length: %,d bytes", Globals.MAX_MLOG_BYTE_LENGTH);
             return List.of();
         }

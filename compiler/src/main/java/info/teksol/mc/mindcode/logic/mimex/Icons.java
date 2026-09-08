@@ -41,7 +41,7 @@ public class Icons {
         return combinedIconMap.containsKey(name);
     }
 
-    public LogicLiteral getIconValue(String name) {
+    public LogicString getIconValue(String name) {
         return combinedIconMap.get(name);
     }
 
@@ -84,7 +84,7 @@ public class Icons {
                     .map(l -> l.split(";"))
                     .filter(s -> s.length == 3)
                     .collect(Collectors.toMap(s -> s[0],
-                            s -> LogicString.create(String.valueOf((char) Integer.parseInt(s[2])))));
+                            s -> LogicString.createRaw(String.valueOf((char) Integer.parseInt(s[2])))));
         } catch (IOException e) {
             throw new RuntimeException("Cannot read resource " + resourceName, e);
         } catch (Exception e) {
